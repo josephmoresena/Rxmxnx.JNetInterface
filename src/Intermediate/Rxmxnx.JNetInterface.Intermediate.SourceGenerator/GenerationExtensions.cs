@@ -5,7 +5,7 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 
-namespace Rxmxnx.Intermediate.SourceGenerator
+namespace Rxmxnx.JNetInterface.SourceGenerator
 {
     internal static class GenerationExtensions
     {

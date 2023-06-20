@@ -2,8 +2,6 @@
 
 using Microsoft.CodeAnalysis;
 
-using Rxmxnx.Intermediate.SourceGenerator;
-
 namespace Rxmxnx.JNetInterface.SourceGenerator
 {
     internal static class BaseGenerator
