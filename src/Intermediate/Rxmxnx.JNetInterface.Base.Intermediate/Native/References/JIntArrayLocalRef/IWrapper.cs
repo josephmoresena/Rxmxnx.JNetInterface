@@ -2,5 +2,5 @@
 
 public partial struct JIntArrayLocalRef : IWrapper<JArrayLocalRef>
 {
-	JArrayLocalRef IWrapper<JArrayLocalRef>.Value => this.ArrayValue;
+    JArrayLocalRef IWrapper<JArrayLocalRef>.Value => this.ArrayValue;
 }

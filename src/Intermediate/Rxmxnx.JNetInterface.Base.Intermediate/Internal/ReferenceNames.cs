@@ -2,10 +2,10 @@
 
 internal static class ReferenceNames
 {
-	/// <summary>
-	/// JNI name of Native Interface (<c>JNIEnv*</c>).
-	/// </summary>
-	public const String JEnvironmentRefName = "JNIEnv*";
+    /// <summary>
+    /// JNI name of Native Interface (<c>JNIEnv*</c>).
+    /// </summary>
+    public const String JEnvironmentRefName = "JNIEnv*";
     /// <summary>
     /// JNI name of Invocation Interface (<c>JavaVM*</c>).
     /// </summary>
@@ -15,10 +15,10 @@ internal static class ReferenceNames
     /// JNI name of <c>java.lang.Object</c> reference (<c>jobject</c>).
     /// </summary>
     public const String JObjectLocalRefName = "jobject";
-	/// <summary>
-	/// JNI name of <c>java.lang.Class&lt;?&gt;</c> reference (<c>jclass</c>).
-	/// </summary>
-	public const String JClassLocalRefName = "jclass";
+    /// <summary>
+    /// JNI name of <c>java.lang.Class&lt;?&gt;</c> reference (<c>jclass</c>).
+    /// </summary>
+    public const String JClassLocalRefName = "jclass";
     /// <summary>
     /// JNI name of <c>java.lang.String</c> reference (<c>jstring</c>).
     /// </summary>
@@ -47,49 +47,49 @@ internal static class ReferenceNames
     /// </summary>
     public const String JThrowableLocalRefName = "jthrowable";
 
-	/// <summary>
+    /// <summary>
     /// JNI name of array reference (<c>jbooleanArray</c>).
     /// </summary>
     public const String JBooleanArrayLocalRefName = "jbooleanArray";
-	/// <summary>
-	/// JNI name of array reference (<c>jbyteArray</c>).
-	/// </summary>
-	public const String JByteArrayLocalRefName = "jbyteArray";
-	/// <summary>
-	/// JNI name of array reference (<c>jcharArray</c>).
-	/// </summary>
-	public const String JCharArrayLocalRefName = "jcharArray";
-	/// <summary>
-	/// JNI name of array reference (<c>jdoubleArray</c>).
-	/// </summary>
-	public const String JDoubleArrayLocalRefName = "jdoubleArray";
-	/// <summary>
-	/// JNI name of array reference (<c>jfloatArray</c>).
-	/// </summary>
-	public const String JFloatArrayLocalRefName = "jfloatArray";
-	/// <summary>
-	/// JNI name of array reference (<c>jintArray</c>).
-	/// </summary>
-	public const String JIntArrayLocalRefName = "jintArray";
-	/// <summary>
-	/// JNI name of array reference (<c>jlongArray</c>).
-	/// </summary>
-	public const String JLongArrayLocalRefName = "jlongArray";
-	/// <summary>
-	/// JNI name of array reference (<c>jobjectArray</c>).
-	/// </summary>
-	public const String JObjectArrayLocalRefName = "jobjectArray";
-	/// <summary>
-	/// JNI name of array reference (<c>jshortArray</c>).
-	/// </summary>
-	public const String JShortArrayLocalRefName = "jshortArray";
+    /// <summary>
+    /// JNI name of array reference (<c>jbyteArray</c>).
+    /// </summary>
+    public const String JByteArrayLocalRefName = "jbyteArray";
+    /// <summary>
+    /// JNI name of array reference (<c>jcharArray</c>).
+    /// </summary>
+    public const String JCharArrayLocalRefName = "jcharArray";
+    /// <summary>
+    /// JNI name of array reference (<c>jdoubleArray</c>).
+    /// </summary>
+    public const String JDoubleArrayLocalRefName = "jdoubleArray";
+    /// <summary>
+    /// JNI name of array reference (<c>jfloatArray</c>).
+    /// </summary>
+    public const String JFloatArrayLocalRefName = "jfloatArray";
+    /// <summary>
+    /// JNI name of array reference (<c>jintArray</c>).
+    /// </summary>
+    public const String JIntArrayLocalRefName = "jintArray";
+    /// <summary>
+    /// JNI name of array reference (<c>jlongArray</c>).
+    /// </summary>
+    public const String JLongArrayLocalRefName = "jlongArray";
+    /// <summary>
+    /// JNI name of array reference (<c>jobjectArray</c>).
+    /// </summary>
+    public const String JObjectArrayLocalRefName = "jobjectArray";
+    /// <summary>
+    /// JNI name of array reference (<c>jshortArray</c>).
+    /// </summary>
+    public const String JShortArrayLocalRefName = "jshortArray";
 
-	/// <summary>
-	/// JNI name of weak global reference (<c>jweak</c>).
-	/// </summary>
-	public const String JWeakRefName = "jweak";
-	/// <summary>
-	/// Internal name of global <c>jobject</c> reference.
-	/// </summary>
-	public const String JGlobalRefName = "jobject-global";
+    /// <summary>
+    /// JNI name of weak global reference (<c>jweak</c>).
+    /// </summary>
+    public const String JWeakRefName = "jweak";
+    /// <summary>
+    /// Internal name of global <c>jobject</c> reference.
+    /// </summary>
+    public const String JGlobalRefName = "jobject-global";
 }

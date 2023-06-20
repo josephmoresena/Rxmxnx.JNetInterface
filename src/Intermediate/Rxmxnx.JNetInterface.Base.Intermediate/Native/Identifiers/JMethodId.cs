@@ -10,7 +10,7 @@ internal readonly struct JMethodId : IFixedPointer, INative<JMethodId>, IEquatab
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JMethod;
 
-	/// <summary>
+    /// <summary>
     /// Internal native signed integer
     /// </summary>
     private readonly IntPtr _value;
@@ -23,24 +23,24 @@ internal readonly struct JMethodId : IFixedPointer, INative<JMethodId>, IEquatab
     /// </summary>
     public JMethodId() => this._value = IntPtr.Zero;
 
-	#region Public Methods
-	/// <inheritdoc/>
-	public Boolean Equals(JMethodId other) => this._value.Equals(other._value);
-	#endregion
+    #region Public Methods
+    /// <inheritdoc/>
+    public Boolean Equals(JMethodId other) => this._value.Equals(other._value);
+    #endregion
 
-	#region Overrided Methods
-	/// <inheritdoc/>
-	public override String ToString() => INative.ToString(this);
-	/// <inheritdoc/>
-	public override Boolean Equals([NotNullWhen(true)] Object? obj) => obj is JMethodId other && this.Equals(other);
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this._value.GetHashCode();
-	#endregion
+    #region Overrided Methods
+    /// <inheritdoc/>
+    public override String ToString() => INative.ToString(this);
+    /// <inheritdoc/>
+    public override Boolean Equals([NotNullWhen(true)] Object? obj) => obj is JMethodId other && this.Equals(other);
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => this._value.GetHashCode();
+    #endregion
 
-	#region Operators
-	/// <inheritdoc/>
-	public static Boolean operator ==(JMethodId left, JMethodId right) => left.Equals(right);
-	/// <inheritdoc/>
-	public static Boolean operator !=(JMethodId left, JMethodId right) => !left.Equals(right);
-	#endregion
+    #region Operators
+    /// <inheritdoc/>
+    public static Boolean operator ==(JMethodId left, JMethodId right) => left.Equals(right);
+    /// <inheritdoc/>
+    public static Boolean operator !=(JMethodId left, JMethodId right) => !left.Equals(right);
+    #endregion
 }

@@ -26,10 +26,10 @@ internal readonly partial struct JValue : INative<JValue>
     /// </summary>
     public static readonly Boolean IsMemorySize = (NativeUtilities.SizeOf<JValue>() == NativeUtilities.SizeOf<IntPtr>());
 
-	/// <summary>
-	/// Indicates whether the current instance has the <see langword="default"/> value.
-	/// </summary>
-	public Boolean IsDefault => isDefault(this);
+    /// <summary>
+    /// Indicates whether the current instance has the <see langword="default"/> value.
+    /// </summary>
+    public Boolean IsDefault => isDefault(this);
 
     #region Overrided Methods
     /// <inheritdoc/>
@@ -44,29 +44,29 @@ internal readonly partial struct JValue : INative<JValue>
     /// <returns><see cref="JValue"/> value.</returns>
     /// <exception cref="InsufficientMemoryException"/>
     public static JValue Create<T>(in T value) where T : unmanaged
-	{
+    {
         if (NativeUtilities.SizeOf<T>() > JValue.Size)
             throw new InsufficientMemoryException();
 
-		JValue result = default;
-		ref JValue refResult = ref result;
-		Span<Byte> resultByte = result.AsBytes();
+        JValue result = default;
+        ref JValue refResult = ref result;
+        Span<Byte> resultByte = result.AsBytes();
         ReadOnlySpan<Byte> source = NativeUtilities.AsBytes(value);
-		source.CopyTo(resultByte);
+        source.CopyTo(resultByte);
         return result;
     }
-	/// <summary>
-	/// Interprests <paramref name="jValue"/> as <typeparamref name="T"/> reference.
-	/// </summary>
-	/// <typeparam name="T">Type of value.</typeparam>
-	/// <param name="jValue">A <see cref="JValue"/> reference.</param>
-	/// <returns>A <typeparamref name="T"/> reference.</returns>
-	/// <exception cref="InsufficientMemoryException"/>
-	public static ref T As<T>(ref JValue jValue) where T : unmanaged
-	{
-		if (NativeUtilities.SizeOf<T>() > JValue.Size)
-			throw new InsufficientMemoryException();
+    /// <summary>
+    /// Interprests <paramref name="jValue"/> as <typeparamref name="T"/> reference.
+    /// </summary>
+    /// <typeparam name="T">Type of value.</typeparam>
+    /// <param name="jValue">A <see cref="JValue"/> reference.</param>
+    /// <returns>A <typeparamref name="T"/> reference.</returns>
+    /// <exception cref="InsufficientMemoryException"/>
+    public static ref T As<T>(ref JValue jValue) where T : unmanaged
+    {
+        if (NativeUtilities.SizeOf<T>() > JValue.Size)
+            throw new InsufficientMemoryException();
 
-		return ref Unsafe.As<JValue, T>(ref jValue);
-	}
+        return ref Unsafe.As<JValue, T>(ref jValue);
+    }
 }

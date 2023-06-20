@@ -24,17 +24,17 @@ public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnviron
     /// </summary>
     public ref readonly JEnvironmentValue Reference => ref this._value.GetUnsafeReadOnlyReference<JEnvironmentValue>();
 
-	#region Public Methods
-	/// <inheritdoc/>
-	public Boolean Equals(JEnvironmentRef other) => this._value.Equals(other._value);
-	#endregion
+    #region Public Methods
+    /// <inheritdoc/>
+    public Boolean Equals(JEnvironmentRef other) => this._value.Equals(other._value);
+    #endregion
 
-	#region Overrided Methods
-	/// <inheritdoc/>
-	public override String ToString() => INative.ToString(this);
-	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => obj is JEnvironmentRef other && this.Equals(other);
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this._value.GetHashCode();
-	#endregion
+    #region Overrided Methods
+    /// <inheritdoc/>
+    public override String ToString() => INative.ToString(this);
+    /// <inheritdoc/>
+    public override Boolean Equals(Object? obj) => obj is JEnvironmentRef other && this.Equals(other);
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => this._value.GetHashCode();
+    #endregion
 }

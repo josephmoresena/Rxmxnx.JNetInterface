@@ -2,9 +2,9 @@
 
 public partial struct JClassLocalRef
 {
-	/// <summary>
-	/// Private constructor.
-	/// </summary>
-	/// <param name="objRef"><see cref="JObjectLocalRef"/> value.</param>
-	private JClassLocalRef(JObjectLocalRef objRef) => this._value = objRef;
+    /// <summary>
+    /// Private constructor.
+    /// </summary>
+    /// <param name="objRef"><see cref="JObjectLocalRef"/> value.</param>
+    private JClassLocalRef(JObjectLocalRef objRef) => this._value = objRef;
 }

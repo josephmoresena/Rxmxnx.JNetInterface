@@ -11,7 +11,7 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JObject;
 
-	/// <summary>
+    /// <summary>
     /// Internal native signed integer
     /// </summary>
     private readonly IntPtr _value;
@@ -24,17 +24,17 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
     /// </summary>
     public JObjectLocalRef() => this._value = IntPtr.Zero;
 
-	#region Public Methods
-	/// <inheritdoc/>
-	public Boolean Equals(JObjectLocalRef other) => this._value.Equals(other._value);
-	#endregion
+    #region Public Methods
+    /// <inheritdoc/>
+    public Boolean Equals(JObjectLocalRef other) => this._value.Equals(other._value);
+    #endregion
 
-	#region Overrided Methods
-	/// <inheritdoc/>
-	public override String ToString() => INative.ToString(this);
-	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => obj is JObjectLocalRef other && this.Equals(other);
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this._value.GetHashCode();
-	#endregion
+    #region Overrided Methods
+    /// <inheritdoc/>
+    public override String ToString() => INative.ToString(this);
+    /// <inheritdoc/>
+    public override Boolean Equals(Object? obj) => obj is JObjectLocalRef other && this.Equals(other);
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => this._value.GetHashCode();
+    #endregion
 }

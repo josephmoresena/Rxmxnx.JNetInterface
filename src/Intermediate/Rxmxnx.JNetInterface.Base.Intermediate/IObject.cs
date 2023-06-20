@@ -3,21 +3,21 @@
 /// <summary>
 /// This interface exposes a <c>java.lang.Object</c> instance.
 /// </summary>
-public partial interface IObject 
+public partial interface IObject
 {
-	/// <summary>
-	/// Class name of current instance.
-	/// </summary>
-	CString ClassName { get; }
-	/// <summary>
-	/// Class signature of current instance.
-	/// </summary>
-	CString Signature { get; }
+    /// <summary>
+    /// Class name of current instance.
+    /// </summary>
+    CString ClassName { get; }
+    /// <summary>
+    /// Class signature of current instance.
+    /// </summary>
+    CString Signature { get; }
 
-	/// <summary>
-	/// Indicates whether current instance is default value.
-	/// </summary>
-	internal Boolean IsDefault { get; }
+    /// <summary>
+    /// Indicates whether current instance is default value.
+    /// </summary>
+    internal Boolean IsDefault { get; }
 
     /// <summary>
     /// Copy the sequence of bytes of current instance to <paramref name="span"/> at specified 

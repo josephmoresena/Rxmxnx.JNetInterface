@@ -1,5 +1,8 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
+/// <summary>
+/// Unicode method names.
+/// </summary>
 #pragma warning disable CS8618
 public static partial class UnicodeMethodNames
 {

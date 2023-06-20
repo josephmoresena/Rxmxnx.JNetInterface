@@ -48,7 +48,7 @@ public interface INative
 /// This interface exposes a JNI native value.
 /// </summary>
 internal interface INative<TSelf> : INative
-	where TSelf : unmanaged, INative<TSelf>
+    where TSelf : unmanaged, INative<TSelf>
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     String INative.AsString() => String.Format(CommonConstants.NativeReferenceFormat, TSelf.Type.GetTypeName(), this.TextValue);

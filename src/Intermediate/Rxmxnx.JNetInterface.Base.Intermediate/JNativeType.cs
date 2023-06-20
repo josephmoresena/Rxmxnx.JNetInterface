@@ -5,10 +5,10 @@
 /// </summary>
 public enum JNativeType : Byte
 {
-	/// <summary>
-	/// <c>JNIEnv*</c>
-	/// </summary>
-	JEnvironmentRef = 0x01,
+    /// <summary>
+    /// <c>JNIEnv*</c>
+    /// </summary>
+    JEnvironmentRef = 0x01,
     /// <summary>
     /// <c>JavaVM*</c>
     /// </summary>
@@ -78,18 +78,18 @@ public enum JNativeType : Byte
     /// <c>jobject</c>
     /// </summary>
     JObject = 0x51,
-	/// <summary>
-	/// <c>jclass</c>
-	/// </summary>
-	JClass = 0x52,
-	/// <summary>
-	/// <c>jstring</c>
-	/// </summary>
-	JString = 0x53,
-	/// <summary>
-	/// <c>jarray</c>
-	/// </summary>
-	JArray = 0x54,
+    /// <summary>
+    /// <c>jclass</c>
+    /// </summary>
+    JClass = 0x52,
+    /// <summary>
+    /// <c>jstring</c>
+    /// </summary>
+    JString = 0x53,
+    /// <summary>
+    /// <c>jarray</c>
+    /// </summary>
+    JArray = 0x54,
     /// <summary>
     /// <c>jthrowable</c>
     /// </summary>
@@ -103,43 +103,43 @@ public enum JNativeType : Byte
     /// Global <c>jobject</c>
     /// </summary>
     JGlobal = 0x62,
-    
-	/// <summary>
-	/// <c>jbooleanArray</c>
-	/// </summary>
-	JBooleanArray = 0x71,
-	/// <summary>
-	/// <c>jbyteArray</c>
-	/// </summary>
-	JByteArray = 0x72,
-	/// <summary>
-	/// <c>jcharArray</c>
-	/// </summary>
-	JCharArray = 0x73,
-	/// <summary>
-	/// <c>jdoubleArray</c>
-	/// </summary>
-	JDoubleArray = 0x74,
-	/// <summary>
-	/// <c>jfloatArray</c>
-	/// </summary>
-	JFloatArray = 0x75,
-	/// <summary>
-	/// <c>jintArray</c>
-	/// </summary>
-	JIntArray = 0x76,
-	/// <summary>
-	/// <c>jlongArray</c>
-	/// </summary>
-	JLongArray = 0x77,
-	/// <summary>
-	/// <c>jshortArray</c>
-	/// </summary>
-	JShortArray = 0x78,
-	/// <summary>
-	/// <c>jobjectArray</c>
-	/// </summary>
-	JObjectArray = 0x79,
+
+    /// <summary>
+    /// <c>jbooleanArray</c>
+    /// </summary>
+    JBooleanArray = 0x71,
+    /// <summary>
+    /// <c>jbyteArray</c>
+    /// </summary>
+    JByteArray = 0x72,
+    /// <summary>
+    /// <c>jcharArray</c>
+    /// </summary>
+    JCharArray = 0x73,
+    /// <summary>
+    /// <c>jdoubleArray</c>
+    /// </summary>
+    JDoubleArray = 0x74,
+    /// <summary>
+    /// <c>jfloatArray</c>
+    /// </summary>
+    JFloatArray = 0x75,
+    /// <summary>
+    /// <c>jintArray</c>
+    /// </summary>
+    JIntArray = 0x76,
+    /// <summary>
+    /// <c>jlongArray</c>
+    /// </summary>
+    JLongArray = 0x77,
+    /// <summary>
+    /// <c>jshortArray</c>
+    /// </summary>
+    JShortArray = 0x78,
+    /// <summary>
+    /// <c>jobjectArray</c>
+    /// </summary>
+    JObjectArray = 0x79,
 
     /// <summary>
     /// <c>jvalue</c>
