@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.SourceGenerator
     {
         public const String AssemblyName = "Rxmxnx.JNetInterface.Base.Intermediate";
 
-        public static void Execute(GeneratorExecutionContext context)
+        public static void Execute(GeneratorExecutionContext context, INamedTypeSymbol[] symbols)
         {
             context.GenerateUnicodeConstructor("Rxmxnx.JNetInterface.Internal.UnicodeClassNames");
             context.GenerateUnicodeConstructor("Rxmxnx.JNetInterface.Internal.UnicodePrimitiveArraySignatures");

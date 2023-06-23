@@ -7,21 +7,22 @@ namespace Rxmxnx.JNetInterface.SourceGenerator
     [Generator]
     public class JNetInterfaceGenerator : ISourceGenerator
     {
-        public const String AbstractionsAssembly = "Rxmxnx.JNetInterface.Abstractions";
-        public const String ImplementationAssembly = "Rxmxnx.JNetInterface";
+        private const String abstractionsAssembly = "Rxmxnx.JNetInterface.Abstractions";
+        private const String implementationAssembly = "Rxmxnx.JNetInterface";
 
         public void Execute(GeneratorExecutionContext context)
         {
+            INamedTypeSymbol[] typeSymbols = context.GetSourceTypeSymbols();
             switch (context.Compilation.AssemblyName)
             {
                 case BaseGenerator.AssemblyName:
-                    BaseGenerator.Execute(context);
+                    BaseGenerator.Execute(context, typeSymbols);
                     break;
                 case NativeGenerator.AssemblyName:
                     NativeGenerator.Execute(context);
                     break;
-                case AbstractionsAssembly:
-                    BaseGenerator.Execute(context);
+                case abstractionsAssembly:
+                    BaseGenerator.Execute(context, typeSymbols);
                     NativeGenerator.Execute(context);
                     break;
             }

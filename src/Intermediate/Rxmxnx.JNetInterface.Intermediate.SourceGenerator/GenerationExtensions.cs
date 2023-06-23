@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -9,17 +10,11 @@ namespace Rxmxnx.JNetInterface.SourceGenerator
 {
     internal static class GenerationExtensions
     {
-        public static void GenerateUnicodeConstructor(this GeneratorExecutionContext context, String fullyQualifiedClassName)
+        public static INamedTypeSymbol[] GetSourceTypeSymbols(this GeneratorExecutionContext context)
         {
-            INamedTypeSymbol tClass = context.Compilation.GetTypeByMetadataName(fullyQualifiedClassName);
-            if (tClass != null)
-            {
-                StringBuilder strBuild = new StringBuilder();
-                foreach (ISymbol symbol in tClass.GetMembers())
-                    if (symbol.GetLiteralValue() is String value)
-                        strBuild.AppendLine($"\t\t{symbol.Name} = new(() => \"{value}\"u8);");
-                context.AddSource($"{tClass.Name}.g.cs", GetGeneratedUnicode(tClass, strBuild));
-            }
+            List<INamedTypeSymbol> result = new List<INamedTypeSymbol>();
+            AppendTypeSymbols(context.Compilation.SourceModule.GlobalNamespace, result);
+            return result.ToArray();
         }
         public static String GetLiteralValue(this ISymbol symbol)
         {
@@ -33,16 +28,29 @@ namespace Rxmxnx.JNetInterface.SourceGenerator
 
             return default;
         }
-        public static String GetOrdinalSuffix(this Int32 num)
+        public static String GetOrdinalSuffix(this Int32 numbert)
         {
-            String number = num.ToString();
-            if (number.EndsWith("11")) return "th";
-            if (number.EndsWith("12")) return "th";
-            if (number.EndsWith("13")) return "th";
-            if (number.EndsWith("1")) return "st";
-            if (number.EndsWith("2")) return "nd";
-            if (number.EndsWith("3")) return "rd";
+            String textNumber = numbert.ToString();
+            if (textNumber.EndsWith("11")) return "th";
+            if (textNumber.EndsWith("12")) return "th";
+            if (textNumber.EndsWith("13")) return "th";
+            if (textNumber.EndsWith("1")) return "st";
+            if (textNumber.EndsWith("2")) return "nd";
+            if (textNumber.EndsWith("3")) return "rd";
             return "th";
+        }
+
+        public static void GenerateUnicodeConstructor(this GeneratorExecutionContext context, String fullyQualifiedClassName)
+        {
+            INamedTypeSymbol tClass = context.Compilation.GetTypeByMetadataName(fullyQualifiedClassName);
+            if (tClass != null)
+            {
+                StringBuilder strBuild = new StringBuilder();
+                foreach (ISymbol symbol in tClass.GetMembers())
+                    if (symbol.GetLiteralValue() is String value)
+                        strBuild.AppendLine($"\t\t{symbol.Name} = new(() => \"{value}\"u8);");
+                context.AddSource($"{tClass.Name}.g.cs", GetGeneratedUnicode(tClass, strBuild));
+            }
         }
 
         private static String GetGeneratedUnicode(INamedTypeSymbol tClass, StringBuilder strBuild)
@@ -58,5 +66,13 @@ partial class {tClass.Name}
 	{{
 {strBuild}	}}
 }}";
+        private static void AppendTypeSymbols(INamespaceSymbol namespaceSymbol, IList<INamedTypeSymbol> list)
+        {
+            foreach (INamespaceOrTypeSymbol symbol in namespaceSymbol.GetMembers())
+                if (symbol.IsType)
+                    list.Add((INamedTypeSymbol)symbol);
+                else
+                    AppendTypeSymbols((INamespaceSymbol)symbol, list);
+        }
     }
 }
