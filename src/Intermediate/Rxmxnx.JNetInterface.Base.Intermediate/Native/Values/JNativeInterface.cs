@@ -1131,9 +1131,4 @@ public readonly partial struct JNativeInterface : INative<JNativeInterface>
     /// Pointer to <c>GetObjectRefType</c> function. Returns the type of the give reference.
     /// </summary>
     internal readonly IntPtr GetObjectRefTypePointer { get; init; }
-
-    #region Overrided Methods
-    /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
-    #endregion
 }

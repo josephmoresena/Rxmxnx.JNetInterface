@@ -34,9 +34,4 @@ public readonly partial struct JInvokeInterface : INative<JNativeInterface>
     /// newly-created <c>java.lang.Thread</c> instance is a daemon.
     /// </summary>
     internal readonly IntPtr AttachCurrentThreadAsDaemonPointer { get; init; }
-
-    #region Overrided Methods
-    /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
-    #endregion
 }
