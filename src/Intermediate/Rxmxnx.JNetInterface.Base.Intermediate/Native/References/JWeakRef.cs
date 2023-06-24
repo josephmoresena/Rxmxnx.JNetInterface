@@ -27,4 +27,10 @@ internal readonly partial struct JWeakRef : INative<JWeakRef>, IWrapper<JObjectL
     /// Parameterless constructor.
     /// </summary>
     public JWeakRef() => this._value = default;
+    
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => HashCode.Combine(this._value);
+    /// <inheritdoc/>
+    public override Boolean Equals([NotNullWhen(true)] Object? obj)
+        => obj is JWeakRef jWeakRef && this._value.Equals(jWeakRef._value);
 }

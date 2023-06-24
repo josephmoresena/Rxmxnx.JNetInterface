@@ -3,16 +3,16 @@
 /// <summary>
 /// This interface exposes a <c>java.lang.Object</c> instance.
 /// </summary>
-public partial interface IObject
+public interface IObject
 {
     /// <summary>
     /// Class name of current instance.
     /// </summary>
-    CString ClassName { get; }
+    CString ObjectClassName { get; }
     /// <summary>
     /// Class signature of current instance.
     /// </summary>
-    CString Signature { get; }
+    CString ObjectSignature { get; }
 
     /// <summary>
     /// Indicates whether current instance is default value.

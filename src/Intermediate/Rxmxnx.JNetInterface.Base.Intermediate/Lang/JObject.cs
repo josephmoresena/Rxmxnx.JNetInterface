@@ -3,7 +3,7 @@
 /// <summary>
 /// This class represents a <c>java.lang.Object</c> instance.
 /// </summary>
-public abstract partial class JObject : IObject, IEquatable<JObject>
+public abstract class JObject : IObject, IEquatable<JObject>
 {
     /// <summary>
     /// <c>java.lang.Object</c> class name.
@@ -53,8 +53,8 @@ public abstract partial class JObject : IObject, IEquatable<JObject>
     /// <param name="jValue">Internal <see cref="JValue"/> instance.</param>
     internal JObject(JValue jValue) => this._value = IMutableReference.Create(jValue);
 
-    CString IObject.ClassName => this.ObjectClassName;
-    CString IObject.Signature => this.ObjectSignature;
+    CString IObject.ObjectClassName => this.ObjectClassName;
+    CString IObject.ObjectSignature => this.ObjectSignature;
     Boolean IObject.IsDefault => this._value.Value.IsDefault;
 
     void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
@@ -69,7 +69,7 @@ public abstract partial class JObject : IObject, IEquatable<JObject>
     public virtual Boolean Equals(JObject? other) => this._value.Equals(other?._value);
 
     /// <inheritdoc/>
-    public override Int32 GetHashCode() => this._value.Value.GetHashCode();
+    public override Int32 GetHashCode() => HashCode.Combine(this._value.Value);
     /// <inheritdoc/>
     public override Boolean Equals(Object? obj) => obj is JObject jObj && this.Equals(jObj);
 

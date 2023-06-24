@@ -22,4 +22,10 @@ internal readonly partial struct JFieldId : IFixedPointer, INative<JFieldId>
     /// Parameterless constructor.
     /// </summary>
     public JFieldId() => this._value = IntPtr.Zero;
+
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => HashCode.Combine(this._value);
+    /// <inheritdoc/>
+    public override Boolean Equals([NotNullWhen(true)] Object? obj)
+	    => obj is JFieldId fieldId && this._value.Equals(fieldId._value);
 }

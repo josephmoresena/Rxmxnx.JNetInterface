@@ -13,15 +13,14 @@ public interface INative
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
-            if (this is IFixedPointer fprt)
-                return fprt.Pointer.ToString(CommonConstants.IntPtrToStringFormat);
-            if (this is JValue jValue)
-                return Convert.ToHexString(NativeUtilities.AsBytes(jValue));
-            if (this is JNativeInterface jNative)
-                return Convert.ToHexString(NativeUtilities.AsBytes(jNative));
-            if (this is JInvokeInterface jInvoke)
-                return Convert.ToHexString(NativeUtilities.AsBytes(jInvoke));
-            return this.ToString()!;
+            return this switch
+            {
+                IFixedPointer fPtr => fPtr.Pointer.ToString(CommonConstants.IntPtrToStringFormat),
+                JValue jValue => Convert.ToHexString(NativeUtilities.AsBytes(jValue)),
+                JNativeInterface jNative => Convert.ToHexString(NativeUtilities.AsBytes(jNative)),
+                JInvokeInterface jInvoke => Convert.ToHexString(NativeUtilities.AsBytes(jInvoke)),
+                _ => this.ToString()!
+            };
         }
     }
 

@@ -22,4 +22,10 @@ internal readonly partial struct JMethodId : IFixedPointer, INative<JMethodId>
     /// Parameterless constructor.
     /// </summary>
     public JMethodId() => this._value = IntPtr.Zero;
+    
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => HashCode.Combine(this._value);
+    /// <inheritdoc/>
+    public override Boolean Equals([NotNullWhen(true)] Object? obj)
+        => obj is JMethodId methodId && this._value.Equals(methodId._value);
 }

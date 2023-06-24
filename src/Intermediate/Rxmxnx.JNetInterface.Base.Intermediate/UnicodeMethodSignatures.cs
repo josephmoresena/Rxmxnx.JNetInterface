@@ -17,10 +17,10 @@ public static partial class UnicodeMethodSignatures
     [DefaultValue(MethodSignatures.MethodParameterPrefix)]
     public static readonly CString MethodParameterPrefix;
     /// <summary>
-    /// Sufix for the parameters declaration in the JNI signature for methods.
+    /// Suffix for the parameters declaration in the JNI signature for methods.
     /// </summary>
-    [DefaultValue(MethodSignatures.MethodParameterSufix)]
-    public static readonly CString MethodParameterSufix;
+    [DefaultValue(MethodSignatures.MethodParameterSuffix)]
+    public static readonly CString MethodParameterSuffix;
 
     /// <summary>
     /// JNI signature for <c>java.lang.Boolean(boolean value)</c> method.

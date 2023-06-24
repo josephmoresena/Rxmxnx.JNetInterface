@@ -27,4 +27,10 @@ internal readonly partial struct JGlobalRef : IFixedPointer, INative<JGlobalRef>
     /// Parameterless constructor.
     /// </summary>
     public JGlobalRef() => this._value = default;
+    
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => HashCode.Combine(this._value);
+    /// <inheritdoc/>
+    public override Boolean Equals([NotNullWhen(true)] Object? obj)
+        => obj is JGlobalRef jGlobalRef && this._value.Equals(jGlobalRef._value);
 }

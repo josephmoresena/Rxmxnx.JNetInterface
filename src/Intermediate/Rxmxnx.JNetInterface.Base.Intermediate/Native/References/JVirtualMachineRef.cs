@@ -12,12 +12,10 @@ public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirt
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JVirtualMachineRef;
 
-#pragma warning disable CS0649
     /// <summary>
     /// Internal pointer value.
     /// </summary>
     private readonly IntPtr _value;
-#pragma warning restore CS0649
 
     /// <summary>
     /// <see langword="readonly ref"/> <see cref="JVirtualMachineValue"/> from this pointer.
@@ -25,4 +23,15 @@ public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirt
     public ref readonly JVirtualMachineValue Reference => ref this._value.GetUnsafeReadOnlyReference<JVirtualMachineValue>();
     /// <inheritdoc/>
     public IntPtr Pointer => this._value;
+    
+    /// <summary>
+    /// Parameterless constructor.
+    /// </summary>
+    public JVirtualMachineRef() => this._value = IntPtr.Zero;
+    
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => HashCode.Combine(this._value);
+    /// <inheritdoc/>
+    public override Boolean Equals([NotNullWhen(true)] Object? obj)
+        => obj is JVirtualMachineRef jVirtualMRef && this._value.Equals(jVirtualMRef._value);
 }

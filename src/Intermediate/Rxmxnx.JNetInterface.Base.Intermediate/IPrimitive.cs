@@ -12,7 +12,7 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
     /// <summary>
     /// Primitive metadata.
     /// </summary>
-    static new abstract JPrimitiveMetadata PrimitiveMetadata { get; }
+    new static abstract JPrimitiveMetadata PrimitiveMetadata { get; }
 }
 
 /// <summary>

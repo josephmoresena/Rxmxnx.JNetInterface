@@ -20,4 +20,15 @@ public readonly partial struct JVirtualMachineValue : IFixedPointer, INative<JVi
     public ref readonly JInvokeInterface Reference => ref this._functions.GetUnsafeReadOnlyReference<JInvokeInterface>();
     /// <inheritdoc/>
     public IntPtr Pointer => this._functions;
+
+    /// <summary>
+    /// Parameterless constructor.
+    /// </summary>
+    public JVirtualMachineValue() => this._functions = IntPtr.Zero;
+    
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => HashCode.Combine(this._functions);
+    /// <inheritdoc/>
+    public override Boolean Equals([NotNullWhen(true)] Object? obj)
+        => obj is JVirtualMachineValue jVirtualMValue && this._functions.Equals(jVirtualMValue._functions);
 }

@@ -20,4 +20,15 @@ public readonly partial struct JEnvironmentValue : IFixedPointer, INative<JEnvir
     public ref readonly JNativeInterface Reference => ref this._functions.GetUnsafeReadOnlyReference<JNativeInterface>();
     /// <inheritdoc/>
     public IntPtr Pointer => this._functions;
+    
+    /// <summary>
+    /// Parameterless constructor.
+    /// </summary>
+    public JEnvironmentValue() => this._functions = IntPtr.Zero;
+    
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => HashCode.Combine(this._functions);
+    /// <inheritdoc/>
+    public override Boolean Equals([NotNullWhen(true)] Object? obj)
+        => obj is JEnvironmentValue jEnvValue && this._functions.Equals(jEnvValue._functions);
 }

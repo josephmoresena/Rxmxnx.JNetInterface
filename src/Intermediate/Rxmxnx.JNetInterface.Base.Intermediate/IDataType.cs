@@ -15,7 +15,7 @@ public interface IDataType
     static abstract CString Signature { get; }
 
     /// <summary>
-    /// Primitive matadata.
+    /// Primitive metadata.
     /// </summary>
     internal static abstract JPrimitiveMetadata? PrimitiveMetadata { get; }
 }
@@ -24,7 +24,7 @@ public interface IDataType
 /// This interface exposes a Java datatype.
 /// </summary>
 /// <typeparam name="TSelf">Type of current Java datatype.</typeparam>
-public interface IDataType<TSelf> : IDataType where TSelf : IDataType<TSelf>
+public interface IDataType<out TSelf> : IDataType where TSelf : IDataType<TSelf>
 {
     /// <summary>
     /// Creates a <typeparamref name="TSelf"/> instance from <paramref name="jObject"/>.

@@ -10,12 +10,10 @@ public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnviron
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JEnvironmentRef;
 
-#pragma warning disable CS0649
     /// <summary>
     /// Internal pointer value.
     /// </summary>
     private readonly IntPtr _value;
-#pragma warning restore CS0649
 
     /// <inheritdoc/>
     public IntPtr Pointer => this._value;
@@ -23,4 +21,15 @@ public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnviron
     /// <see langword="readonly ref"/> <see cref="JEnvironmentValue"/> from this pointer.
     /// </summary>
     public ref readonly JEnvironmentValue Reference => ref this._value.GetUnsafeReadOnlyReference<JEnvironmentValue>();
+    
+    /// <summary>
+    /// Parameterless constructor.
+    /// </summary>
+    public JEnvironmentRef() => this._value = IntPtr.Zero;
+    
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => HashCode.Combine(this._value);
+    /// <inheritdoc/>
+    public override Boolean Equals([NotNullWhen(true)] Object? obj)
+        => obj is JEnvironmentRef jEnvRef && this._value.Equals(jEnvRef._value);
 }
