@@ -6,7 +6,7 @@
 /// object. 
 /// </summary>
 /// <remarks>This identifier may be valid until it is explicitly unloaded.</remarks>
-internal readonly partial struct JWeakRef : INative<JWeakRef>, IWrapper<JObjectLocalRef>, IEquatable<JWeakRef>, IFixedPointer
+internal readonly partial struct JWeakRef : INative<JWeakRef>, IWrapper<JObjectLocalRef>, IFixedPointer
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JWeak;
@@ -28,17 +28,6 @@ internal readonly partial struct JWeakRef : INative<JWeakRef>, IWrapper<JObjectL
     /// </summary>
     public JWeakRef() => this._value = default;
 
-    #region Public Methods
     /// <inheritdoc/>
-    public Boolean Equals(JWeakRef other) => this._value.Equals(other._value);
-    #endregion
-
-    #region Overrided Methods
-    /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => obj is JWeakRef other && Equals(other);
-    /// <inheritdoc/>
-    public override Int32 GetHashCode() => this._value.GetHashCode();
-    #endregion
+    public override Boolean Equals(Object? obj) => JObjectLocalRef.ObjectEquals(this, obj);
 }

@@ -4,7 +4,7 @@
 /// <c>JNIEnv</c> struct. Contains a pointer to a <c>JNINativeInterface_</c> object.
 /// </summary>
 public readonly partial struct JEnvironmentValue : IFixedPointer, INative<JEnvironmentValue>,
-    IReadOnlyReferenceable<JNativeInterface>, IEquatable<JEnvironmentValue>
+    IReadOnlyReferenceable<JNativeInterface>
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JNativeInterface;
@@ -20,18 +20,4 @@ public readonly partial struct JEnvironmentValue : IFixedPointer, INative<JEnvir
     public ref readonly JNativeInterface Reference => ref this._functions.GetUnsafeReadOnlyReference<JNativeInterface>();
     /// <inheritdoc/>
     public IntPtr Pointer => this._functions;
-
-    #region Public Methods
-    /// <inheritdoc/>
-    public Boolean Equals(JEnvironmentValue other) => this._functions.Equals(other._functions);
-    #endregion
-
-    #region Overrided Methods
-    /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => obj is JEnvironmentValue other && this.Equals(other);
-    /// <inheritdoc/>
-    public override Int32 GetHashCode() => this._functions.GetHashCode();
-    #endregion
 }

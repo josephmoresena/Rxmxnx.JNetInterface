@@ -7,7 +7,7 @@
 /// This identifier will be valid until the library is unloaded or the JVM instance is destroyed.
 /// </remarks>
 public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirtualMachineRef>,
-    IReadOnlyReferenceable<JVirtualMachineValue>, IEquatable<JVirtualMachineRef>
+    IReadOnlyReferenceable<JVirtualMachineValue>
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JVirtualMachineRef;
@@ -25,18 +25,4 @@ public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirt
     public ref readonly JVirtualMachineValue Reference => ref this._value.GetUnsafeReadOnlyReference<JVirtualMachineValue>();
     /// <inheritdoc/>
     public IntPtr Pointer => this._value;
-
-    #region Public Methods
-    /// <inheritdoc/>
-    public Boolean Equals(JVirtualMachineRef other) => this._value.Equals(other._value);
-    #endregion
-
-    #region Overrided Methods
-    /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => obj is JVirtualMachineRef other && this.Equals(other);
-    /// <inheritdoc/>
-    public override Int32 GetHashCode() => this._value.GetHashCode();
-    #endregion
 }

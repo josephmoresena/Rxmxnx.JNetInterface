@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 public readonly partial struct JIntArrayLocalRef : IFixedPointer, INative<JIntArrayLocalRef>, IWrapper<JObjectLocalRef>,
-    IEquatable<JIntArrayLocalRef>, IEquatable<JArrayLocalRef>
+    IEquatable<JArrayLocalRef>
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JIntArray;
@@ -28,19 +28,9 @@ public readonly partial struct JIntArrayLocalRef : IFixedPointer, INative<JIntAr
     /// <inheritdoc/>
     public IntPtr Pointer => this._value.Value.Pointer;
 
-    #region Public Methods
-    /// <inheritdoc/>
-    public Boolean Equals(JIntArrayLocalRef other) => this._value.Equals(other._value);
     /// <inheritdoc/>
     public Boolean Equals(JArrayLocalRef other) => this._value.Equals(other);
-    #endregion
 
-    #region Overrided Methods
     /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => obj is JIntArrayLocalRef other && this.Equals(other);
-    /// <inheritdoc/>
-    public override Int32 GetHashCode() => this._value.GetHashCode();
-    #endregion
+    public override Boolean Equals(Object? obj) => JArrayLocalRef.ArrayEquals(this, obj);
 }

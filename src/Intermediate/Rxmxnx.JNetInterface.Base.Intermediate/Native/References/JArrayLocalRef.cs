@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanArrayLocalRef>,
-    IWrapper<JObjectLocalRef>, IEquatable<JArrayLocalRef>
+    IWrapper<JObjectLocalRef>
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JArray;
@@ -24,17 +24,54 @@ public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanA
     /// <inheritdoc/>
     public IntPtr Pointer => this._value.Pointer;
 
-    #region Public Methods
     /// <inheritdoc/>
-    public Boolean Equals(JArrayLocalRef other) => this._value.Equals(other._value);
-    #endregion
+    public override Boolean Equals(Object? obj) => Equals(this, obj);
 
-    #region Overrided Methods
-    /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => obj is JArrayLocalRef other && this.Equals(other);
-    /// <inheritdoc/>
-    public override Int32 GetHashCode() => this._value.GetHashCode();
-    #endregion
+    /// <summary>
+    /// Indicates wheter <paramref name="arr"/> and a <paramref name="obj"/> are equal.
+    /// </summary>
+    /// <typeparam name="TArray">The type of array reference.</typeparam>
+    /// <param name="arr">The array reference to compare with <paramref name="obj"/>.</param>
+    /// <param name="obj">The object to compare with <paramref name="arr"/>.</param>
+    /// <returns>
+    /// <see langword="true"/> if <paramref name="obj"/> and <paramref name="arr"/> represent the same value;
+    /// otherwise, <see langword="false"/>.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static Boolean ArrayEquals<TArray>(in TArray arr, Object? obj)
+        where TArray : unmanaged, IWrapper<JObjectLocalRef>, IEquatable<JArrayLocalRef>
+    {
+        if (obj is IEquatable<TArray> other)
+            return other.Equals(arr);
+        else if (obj is JArrayLocalRef otherArr)
+            return arr.Equals(otherArr);
+        else if (obj is JObjectLocalRef jobj)
+            return arr.Equals(jobj);
+
+        return JObjectLocalRef.ObjectEquals(arr, obj);
+    }
+
+    /// <summary>
+    /// Indicates wheter <paramref name="arr"/> and a <paramref name="obj"/> are equal.
+    /// </summary>
+    /// <typeparam name="TArray">The type of object reference.</typeparam>
+    /// <param name="arr">The object reference to compare with <paramref name="obj"/>.</param>
+    /// <param name="obj">The object to compare with <paramref name="arr"/>.</param>
+    /// <returns>
+    /// <see langword="true"/> if <paramref name="obj"/> and <paramref name="arr"/> represent the same value;
+    /// otherwise, <see langword="false"/>.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Boolean Equals<TArray>(in TArray arr, Object? obj)
+        where TArray : unmanaged, IWrapper<JObjectLocalRef>
+    {
+        if (obj is IEquatable<TArray> other)
+            return other.Equals(arr);
+        else if (obj is IEquatable<JArrayLocalRef> otherArr)
+            return otherArr.Equals(arr);
+        else if (obj is JObjectLocalRef jobj)
+            return arr.Equals(jobj);
+
+        return JObjectLocalRef.ObjectEquals(arr, obj);
+    }
 }

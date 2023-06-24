@@ -23,17 +23,9 @@ public readonly partial struct JClassLocalRef : IFixedPointer, INative<JClassLoc
     /// <inheritdoc/>
     public IntPtr Pointer => this._value.Pointer;
 
-    #region Public Methods
     /// <inheritdoc/>
     public Boolean Equals(JClassLocalRef other) => this._value.Equals(other._value);
-    #endregion
 
-    #region Overrided Methods
-    /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
     /// <inheritdoc/>
     public override Boolean Equals(Object? obj) => obj is JClassLocalRef other && this.Equals(other);
-    /// <inheritdoc/>
-    public override Int32 GetHashCode() => this._value.GetHashCode();
-    #endregion
 }

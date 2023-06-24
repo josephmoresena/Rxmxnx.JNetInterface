@@ -16,13 +16,13 @@ namespace Rxmxnx.JNetInterface.SourceGenerator
             switch (context.Compilation.AssemblyName)
             {
                 case BaseGenerator.AssemblyName:
-                    BaseGenerator.Execute(context, typeSymbols);
+                    BaseGenerator.Execute(context);
                     break;
                 case NativeGenerator.AssemblyName:
                     NativeGenerator.Execute(context);
                     break;
                 case abstractionsAssembly:
-                    BaseGenerator.Execute(context, typeSymbols);
+                    BaseGenerator.Execute(context);
                     NativeGenerator.Execute(context);
                     break;
             }

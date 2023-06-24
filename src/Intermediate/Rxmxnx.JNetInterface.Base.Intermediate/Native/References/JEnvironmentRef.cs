@@ -5,7 +5,7 @@
 /// </summary>
 /// <remarks>This references is valid only for the thread who owns the reference.</remarks>
 public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnvironmentRef>,
-    IReadOnlyReferenceable<JEnvironmentValue>, IEquatable<JEnvironmentRef>
+    IReadOnlyReferenceable<JEnvironmentValue>
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JEnvironmentRef;
@@ -23,18 +23,4 @@ public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnviron
     /// <see langword="readonly ref"/> <see cref="JEnvironmentValue"/> from this pointer.
     /// </summary>
     public ref readonly JEnvironmentValue Reference => ref this._value.GetUnsafeReadOnlyReference<JEnvironmentValue>();
-
-    #region Public Methods
-    /// <inheritdoc/>
-    public Boolean Equals(JEnvironmentRef other) => this._value.Equals(other._value);
-    #endregion
-
-    #region Overrided Methods
-    /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => obj is JEnvironmentRef other && this.Equals(other);
-    /// <inheritdoc/>
-    public override Int32 GetHashCode() => this._value.GetHashCode();
-    #endregion
 }

@@ -4,7 +4,7 @@
 /// <c>JavaVM</c> struct. Contains a pointer to a <c>JNIInvokeInterface_</c> object.
 /// </summary>
 public readonly partial struct JVirtualMachineValue : IFixedPointer, INative<JVirtualMachineValue>,
-    IReadOnlyReferenceable<JInvokeInterface>, IEquatable<JVirtualMachineValue>
+    IReadOnlyReferenceable<JInvokeInterface>
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JVirtualMachine;
@@ -20,18 +20,4 @@ public readonly partial struct JVirtualMachineValue : IFixedPointer, INative<JVi
     public ref readonly JInvokeInterface Reference => ref this._functions.GetUnsafeReadOnlyReference<JInvokeInterface>();
     /// <inheritdoc/>
     public IntPtr Pointer => this._functions;
-
-    #region Public Methods
-    /// <inheritdoc/>
-    public Boolean Equals(JVirtualMachineValue other) => this._functions.Equals(other._functions);
-    #endregion
-
-    #region Overrided Methods
-    /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => obj is JVirtualMachineValue other && this.Equals(other);
-    /// <inheritdoc/>
-    public override Int32 GetHashCode() => this._functions.GetHashCode();
-    #endregion
 }

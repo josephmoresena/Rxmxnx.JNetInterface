@@ -28,19 +28,9 @@ public readonly partial struct JDoubleArrayLocalRef : IFixedPointer, INative<JDo
     /// <inheritdoc/>
     public IntPtr Pointer => this._value.Value.Pointer;
 
-    #region Public Methods
-    /// <inheritdoc/>
-    public Boolean Equals(JDoubleArrayLocalRef other) => this._value.Equals(other._value);
     /// <inheritdoc/>
     public Boolean Equals(JArrayLocalRef other) => this._value.Equals(other);
-    #endregion
 
-    #region Overrided Methods
     /// <inheritdoc/>
-    public override String ToString() => INative.ToString(this);
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => obj is JDoubleArrayLocalRef other && this.Equals(other);
-    /// <inheritdoc/>
-    public override Int32 GetHashCode() => this._value.GetHashCode();
-    #endregion
+    public override Boolean Equals(Object? obj) => JArrayLocalRef.ArrayEquals(this, obj);
 }
