@@ -22,7 +22,4 @@ internal readonly partial struct JFieldId : IFixedPointer, INative<JFieldId>
     /// Parameterless constructor.
     /// </summary>
     public JFieldId() => this._value = IntPtr.Zero;
-
-    /// <inheritdoc/>
-    public override Boolean Equals([NotNullWhen(true)] Object? obj) => obj is JFieldId other && this.Equals(other);
 }

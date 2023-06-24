@@ -6,8 +6,8 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-public readonly partial struct JDoubleArrayLocalRef : IFixedPointer, INative<JDoubleArrayLocalRef>, IWrapper<JObjectLocalRef>,
-    IEquatable<JDoubleArrayLocalRef>, IEquatable<JArrayLocalRef>
+public readonly partial struct JDoubleArrayLocalRef : IFixedPointer,
+    INative<JDoubleArrayLocalRef>, IWrapper<JObjectLocalRef>, IEquatable<JArrayLocalRef>
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JDoubleArray;
@@ -30,7 +30,4 @@ public readonly partial struct JDoubleArrayLocalRef : IFixedPointer, INative<JDo
 
     /// <inheritdoc/>
     public Boolean Equals(JArrayLocalRef other) => this._value.Equals(other);
-
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => JArrayLocalRef.ArrayEquals(this, obj);
 }

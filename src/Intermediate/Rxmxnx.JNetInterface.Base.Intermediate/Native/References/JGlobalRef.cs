@@ -6,7 +6,7 @@
 /// object. 
 /// </summary>
 /// <remarks>This identifier will be valid until it is explicitly unloaded.</remarks>
-internal readonly partial struct JGlobalRef : IFixedPointer, INative<JGlobalRef>, IWrapper<JObjectLocalRef>, IEquatable<JGlobalRef>
+internal readonly partial struct JGlobalRef : IFixedPointer, INative<JGlobalRef>, IWrapper<JObjectLocalRef>
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JGlobal;
@@ -27,7 +27,4 @@ internal readonly partial struct JGlobalRef : IFixedPointer, INative<JGlobalRef>
     /// Parameterless constructor.
     /// </summary>
     public JGlobalRef() => this._value = default;
-
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => JObjectLocalRef.ObjectEquals(this, obj);
 }

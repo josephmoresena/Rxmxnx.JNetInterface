@@ -6,7 +6,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 public readonly partial struct JThrowableLocalRef : IFixedPointer, INative<JThrowableLocalRef>,
-    IWrapper<JObjectLocalRef> 
+    IWrapper<JObjectLocalRef>
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JThrowable;
@@ -22,13 +22,4 @@ public readonly partial struct JThrowableLocalRef : IFixedPointer, INative<JThro
     public JObjectLocalRef Value => this._value;
     /// <inheritdoc/>
     public IntPtr Pointer => this._value.Pointer;
-
-    /// <summary>
-    /// Private constructor.
-    /// </summary>
-    /// <param name="objRef"><see cref="JObjectLocalRef"/> value.</param>
-    private JThrowableLocalRef(JObjectLocalRef objRef) => this._value = objRef;
-
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => JObjectLocalRef.ObjectEquals(this, obj);
 }

@@ -25,6 +25,8 @@ public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanA
     public IntPtr Pointer => this._value.Pointer;
 
     /// <inheritdoc/>
+    public override Int32 GetHashCode() => this._value.GetHashCode();
+    /// <inheritdoc/>
     public override Boolean Equals(Object? obj) => Equals(this, obj);
 
     /// <summary>

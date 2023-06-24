@@ -22,13 +22,4 @@ public readonly partial struct JStringLocalRef : IFixedPointer, INative<JStringL
     public JObjectLocalRef Value => this._value;
     /// <inheritdoc/>
     public IntPtr Pointer => this._value.Pointer;
-
-    /// <summary>
-    /// Private constructor.
-    /// </summary>
-    /// <param name="objRef"><see cref="JObjectLocalRef"/> value.</param>
-    private JStringLocalRef(JObjectLocalRef objRef) => this._value = objRef;
-
-    /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => JObjectLocalRef.ObjectEquals(this, obj);
 }

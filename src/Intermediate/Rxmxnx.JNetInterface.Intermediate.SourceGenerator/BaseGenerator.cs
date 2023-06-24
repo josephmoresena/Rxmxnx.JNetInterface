@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Microsoft.CodeAnalysis;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator

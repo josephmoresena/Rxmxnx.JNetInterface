@@ -6,8 +6,8 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-public readonly partial struct JLongArrayLocalRef : IFixedPointer, INative<JObjectArrayLocalRef>, IWrapper<JObjectLocalRef>,
-    IEquatable<JArrayLocalRef>
+public readonly partial struct JLongArrayLocalRef : IFixedPointer,
+    INative<JObjectArrayLocalRef>, IWrapper<JObjectLocalRef>, IEquatable<JArrayLocalRef>
 {
     /// <inheritdoc/>
     public static JNativeType Type => JNativeType.JLongArray;
@@ -27,10 +27,7 @@ public readonly partial struct JLongArrayLocalRef : IFixedPointer, INative<JObje
     public JArrayLocalRef ArrayValue => this._value;
     /// <inheritdoc/>
     public IntPtr Pointer => this._value.Value.Pointer;
-        
-    /// <inheritdoc/>
-    public Boolean Equals(JArrayLocalRef other) => this._value.Equals(other);
 
     /// <inheritdoc/>
-    public override Boolean Equals(Object? obj) => JArrayLocalRef.ArrayEquals(this, obj);
+    public Boolean Equals(JArrayLocalRef other) => this._value.Equals(other);
 }

@@ -24,6 +24,13 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
     /// </summary>
     public JObjectLocalRef() => this._value = IntPtr.Zero;
 
+    /// <summary>
+    /// Internal constructor.
+    /// </summary>
+    internal JObjectLocalRef(JObjectLocalRef objRef) => this._value = objRef._value;
+
+    /// <inheritdoc/>
+    public override Int32 GetHashCode() => this._value.GetHashCode();
     /// <inheritdoc/>
     public override Boolean Equals(Object? obj) => Equals(this, obj);
 
