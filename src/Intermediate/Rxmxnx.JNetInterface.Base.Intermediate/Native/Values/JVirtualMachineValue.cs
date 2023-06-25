@@ -3,7 +3,7 @@
 /// <summary>
 /// <c>JavaVM</c> struct. Contains a pointer to a <c>JNIInvokeInterface_</c> object.
 /// </summary>
-public readonly partial struct JVirtualMachineValue : IFixedPointer, INative<JVirtualMachineValue>,
+internal readonly partial struct JVirtualMachineValue : IFixedPointer, INative<JVirtualMachineValue>,
 	IReadOnlyReferenceable<JInvokeInterface>
 {
 	/// <inheritdoc/>

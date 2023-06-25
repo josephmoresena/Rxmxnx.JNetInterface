@@ -6,8 +6,7 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-public readonly partial struct JFloatArrayLocalRef : IFixedPointer, INative<JFloatArrayLocalRef>,
-	IWrapper<JObjectLocalRef>, IEquatable<JArrayLocalRef>
+public readonly partial struct JFloatArrayLocalRef : IFixedPointer, IArrayLocalRef, INative<JFloatArrayLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloatArray;
@@ -21,9 +20,7 @@ public readonly partial struct JFloatArrayLocalRef : IFixedPointer, INative<JFlo
 	/// JNI local reference.
 	/// </summary>
 	public JObjectLocalRef Value => this._value.Value;
-	/// <summary>
-	/// JNI array local reference.
-	/// </summary>
+	/// <inheritdoc/>
 	public JArrayLocalRef ArrayValue => this._value;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;

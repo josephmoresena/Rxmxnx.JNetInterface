@@ -17,15 +17,18 @@ public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnviron
 
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value;
+	
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JEnvironmentValue"/> from this pointer.
 	/// </summary>
-	public ref readonly JEnvironmentValue Reference => ref this._value.GetUnsafeReadOnlyReference<JEnvironmentValue>();
+	internal ref readonly JEnvironmentValue Reference => ref this._value.GetUnsafeReadOnlyReference<JEnvironmentValue>();
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
 	public JEnvironmentRef() => this._value = IntPtr.Zero;
+
+	ref readonly JEnvironmentValue IReadOnlyReferenceable<JEnvironmentValue>.Reference => ref this.Reference;
 
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => HashCode.Combine(this._value);

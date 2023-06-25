@@ -16,19 +16,22 @@ public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirt
 	/// Internal pointer value.
 	/// </summary>
 	private readonly IntPtr _value;
-
+	
+	/// <inheritdoc/>
+	public IntPtr Pointer => this._value;
+	
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JVirtualMachineValue"/> from this pointer.
 	/// </summary>
-	public ref readonly JVirtualMachineValue Reference
+	internal ref readonly JVirtualMachineValue Reference
 		=> ref this._value.GetUnsafeReadOnlyReference<JVirtualMachineValue>();
-	/// <inheritdoc/>
-	public IntPtr Pointer => this._value;
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
 	public JVirtualMachineRef() => this._value = IntPtr.Zero;
+
+	ref readonly JVirtualMachineValue IReadOnlyReferenceable<JVirtualMachineValue>.Reference => ref this.Reference;
 
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => HashCode.Combine(this._value);

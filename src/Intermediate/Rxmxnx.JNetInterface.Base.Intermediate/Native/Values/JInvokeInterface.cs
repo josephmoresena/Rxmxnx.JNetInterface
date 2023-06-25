@@ -3,7 +3,7 @@
 /// <summary>
 /// <c>JNIInvokeInterface_</c> struct. Contains all pointers to the functions of the Invocation API.
 /// </summary>
-public readonly partial struct JInvokeInterface : INative<JNativeInterface>
+internal readonly partial struct JInvokeInterface : INative<JNativeInterface>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JNativeInterface;

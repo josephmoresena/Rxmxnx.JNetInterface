@@ -6,8 +6,7 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-public readonly partial struct JBooleanArrayLocalRef : IFixedPointer, INative<JBooleanArrayLocalRef>,
-	IWrapper<JObjectLocalRef>, IEquatable<JArrayLocalRef>
+public readonly partial struct JBooleanArrayLocalRef : IFixedPointer, IArrayLocalRef, INative<JBooleanArrayLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JBooleanArray;
@@ -21,9 +20,7 @@ public readonly partial struct JBooleanArrayLocalRef : IFixedPointer, INative<JB
 	/// JNI local reference.
 	/// </summary>
 	public JObjectLocalRef Value => this._value.Value;
-	/// <summary>
-	/// JNI array local reference.
-	/// </summary>
+	/// <inheritdoc/>
 	public JArrayLocalRef ArrayValue => this._value;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Value.Pointer;
