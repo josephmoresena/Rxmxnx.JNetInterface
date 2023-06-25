@@ -19,7 +19,7 @@ public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanA
 	/// <summary>
 	/// JNI local reference.
 	/// </summary>
-	public JObjectLocalRef Value  => this._value;
+	public JObjectLocalRef Value => this._value;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;
 

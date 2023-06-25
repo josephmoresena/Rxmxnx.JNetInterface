@@ -51,26 +51,14 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// Internal <see cref="JValue"/> value.
 	/// </summary>
-	internal virtual JValue Value
-	{
-		get => this._value.Value;
-	}
+	internal virtual JValue Value => this._value.Value;
 
 	/// <inheritdoc/>
 	public virtual Boolean Equals(JObject? other) => this._value.Equals(other?._value);
 
-	CString IObject.ObjectClassName
-	{
-		get => this.ObjectClassName;
-	}
-	CString IObject.ObjectSignature
-	{
-		get => this.ObjectSignature;
-	}
-	Boolean IObject.IsDefault
-	{
-		get => this._value.Value.IsDefault;
-	}
+	CString IObject.ObjectClassName => this.ObjectClassName;
+	CString IObject.ObjectSignature => this.ObjectSignature;
+	Boolean IObject.IsDefault => this._value.Value.IsDefault;
 
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
 	{

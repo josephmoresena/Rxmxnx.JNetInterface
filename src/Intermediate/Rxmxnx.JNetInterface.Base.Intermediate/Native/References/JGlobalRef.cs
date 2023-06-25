@@ -15,7 +15,7 @@ internal readonly partial struct JGlobalRef : IFixedPointer, INative<JGlobalRef>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
 	/// </summary>
 	private readonly JObjectLocalRef _value;
-	
+
 	/// <summary>
 	/// JNI value as local reference.
 	/// </summary>

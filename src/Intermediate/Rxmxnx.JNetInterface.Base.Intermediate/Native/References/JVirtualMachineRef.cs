@@ -20,7 +20,8 @@ public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirt
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JVirtualMachineValue"/> from this pointer.
 	/// </summary>
-	public ref readonly JVirtualMachineValue Reference => ref this._value.GetUnsafeReadOnlyReference<JVirtualMachineValue>();
+	public ref readonly JVirtualMachineValue Reference
+		=> ref this._value.GetUnsafeReadOnlyReference<JVirtualMachineValue>();
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value;
 

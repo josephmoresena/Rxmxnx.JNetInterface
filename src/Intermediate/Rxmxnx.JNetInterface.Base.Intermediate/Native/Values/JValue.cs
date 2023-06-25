@@ -40,10 +40,7 @@ internal readonly partial struct JValue : INative<JValue>
 	/// <summary>
 	/// Indicates whether the current instance has the <see langword="default"/> value.
 	/// </summary>
-	public Boolean IsDefault
-	{
-		get => JValue.isDefault(this);
-	}
+	public Boolean IsDefault => JValue.isDefault(this);
 
 	/// <summary>
 	/// Creates a new <see cref="JValue"/> value from a <paramref name="value"/>.

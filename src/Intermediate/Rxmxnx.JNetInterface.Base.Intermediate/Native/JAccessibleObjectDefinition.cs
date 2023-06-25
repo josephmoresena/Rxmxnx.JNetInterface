@@ -21,10 +21,7 @@ public abstract record JAccessibleObjectDefinition
 	/// <summary>
 	/// Accessible object information.
 	/// </summary>
-	internal CStringSequence Information
-	{
-		get => this._sequence;
-	}
+	internal CStringSequence Information => this._sequence;
 	/// <summary>
 	/// The format used for <see cref="JAccessibleObjectDefinition.ToString()"/> method.
 	/// </summary>

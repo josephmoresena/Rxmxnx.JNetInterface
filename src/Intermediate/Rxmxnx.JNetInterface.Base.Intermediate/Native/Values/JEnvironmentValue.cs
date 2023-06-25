@@ -17,7 +17,8 @@ public readonly partial struct JEnvironmentValue : IFixedPointer, INative<JEnvir
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JNativeInterface"/> from this value.
 	/// </summary>
-	public ref readonly JNativeInterface Reference => ref this._functions.GetUnsafeReadOnlyReference<JNativeInterface>();
+	public ref readonly JNativeInterface Reference
+		=> ref this._functions.GetUnsafeReadOnlyReference<JNativeInterface>();
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._functions;
 
