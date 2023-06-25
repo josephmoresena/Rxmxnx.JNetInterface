@@ -5,7 +5,7 @@
 /// as opaque identifier for a declared method in a <c>class</c>.
 /// </summary>
 /// <remarks>This handle will be valid until the associated <c>class</c> is unloaded.</remarks>
-internal readonly struct JMethodId : IFixedPointer, INative<JMethodId>
+internal readonly partial struct JMethodId : IFixedPointer, INative<JMethodId>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JMethod;

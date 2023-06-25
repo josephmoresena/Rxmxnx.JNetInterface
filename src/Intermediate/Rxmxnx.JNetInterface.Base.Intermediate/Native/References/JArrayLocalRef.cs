@@ -6,7 +6,7 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-public readonly struct JArrayLocalRef : IFixedPointer, INative<JBooleanArrayLocalRef>,
+public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanArrayLocalRef>,
 	IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>

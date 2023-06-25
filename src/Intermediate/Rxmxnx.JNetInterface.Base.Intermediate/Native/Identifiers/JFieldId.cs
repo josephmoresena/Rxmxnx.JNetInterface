@@ -5,7 +5,7 @@
 /// as opaque identifier for a declared field in a <c>class</c>.
 /// </summary>
 /// <remarks>This handle will be valid until the associated <c>class</c> is unloaded.</remarks>
-internal readonly struct JFieldId : IFixedPointer, INative<JFieldId>
+internal readonly partial struct JFieldId : IFixedPointer, INative<JFieldId>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JMethod;

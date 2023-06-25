@@ -3,8 +3,7 @@
 /// <summary>
 /// Unicode method signatures.
 /// </summary>
-#pragma warning disable CS8618
-public static class UnicodeMethodSignatures
+public static partial class UnicodeMethodSignatures
 {
 	/// <summary>
 	/// JNI signature for void return.

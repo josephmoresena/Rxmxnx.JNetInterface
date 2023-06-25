@@ -67,8 +67,6 @@ partial class {1}
 	/// <param name="strBuild">A builder with all UTF-8 constants initialization.</param>
 	/// <returns>The content of the generated source code.</returns>
 	private static String GenerateUtf8ContainerConstructor(INamedTypeSymbol utf8ContainerSymbol, StringBuilder strBuild)
-	{
-		return String.Format(GenerationExtensions.staticConstructorFormat,
-		                     utf8ContainerSymbol.ContainingNamespace.Name, utf8ContainerSymbol.Name, strBuild);
-	}
+		=> String.Format(GenerationExtensions.staticConstructorFormat, 
+			utf8ContainerSymbol.ContainingNamespace, utf8ContainerSymbol.Name, strBuild);
 }

@@ -6,7 +6,7 @@
 /// object.
 /// </summary>
 /// <remarks>This identifier may be valid until it is explicitly unloaded.</remarks>
-internal readonly struct JWeakRef : INative<JWeakRef>, IWrapper<JObjectLocalRef>, IFixedPointer
+internal readonly partial struct JWeakRef : INative<JWeakRef>, IWrapper<JObjectLocalRef>, IFixedPointer
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JWeak;

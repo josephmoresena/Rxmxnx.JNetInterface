@@ -4,7 +4,7 @@
 /// <c>JNIEnv</c> pointer. Represents a pointer to a <c>JNIEnv</c> object.
 /// </summary>
 /// <remarks>This references is valid only for the thread who owns the reference.</remarks>
-public readonly struct JEnvironmentRef : IFixedPointer, INative<JEnvironmentRef>,
+public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnvironmentRef>,
 	IReadOnlyReferenceable<JEnvironmentValue>
 {
 	/// <inheritdoc/>

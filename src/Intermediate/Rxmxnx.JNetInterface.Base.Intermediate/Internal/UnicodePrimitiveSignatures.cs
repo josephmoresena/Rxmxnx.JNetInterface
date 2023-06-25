@@ -1,7 +1,9 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
-#pragma warning disable CS8618
-internal static class UnicodePrimitiveSignatures
+/// <summary>
+/// Unicode primitives signatures.
+/// </summary>
+internal static partial class UnicodePrimitiveSignatures
 {
 	/// <summary>
 	/// JNI signature for primitive <c>boolean</c>.

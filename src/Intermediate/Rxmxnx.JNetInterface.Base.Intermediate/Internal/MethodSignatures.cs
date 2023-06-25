@@ -75,19 +75,19 @@ internal static class MethodSignatures
 	/// </summary>
 	public const String GetClassNameMethodSignature = MethodSignatures.MethodParameterPrefix +
 		MethodSignatures.MethodParameterSuffix + ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JStringObjectClassName + ObjectSignatures.ObjectSignatureSufix;
+		ClassNames.JStringObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
 	/// <summary>
 	/// JNI signature for <c>java.lang.Throwable.getMessage()</c> method.
 	/// </summary>
 	public const String GetThrowableMessageMethodSignature = MethodSignatures.MethodParameterPrefix +
 		MethodSignatures.MethodParameterSuffix + ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JStringObjectClassName + ObjectSignatures.ObjectSignatureSufix;
+		ClassNames.JStringObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
 	/// <summary>
 	/// JNI signature for <c>java.lang.System.getProperty(String key)</c> method.
 	/// </summary>
 	public const String GetPropertyMethodSignature = MethodSignatures.MethodParameterPrefix +
 		ObjectSignatures.ObjectSignaturePrefix + ClassNames.JStringObjectClassName +
-		ObjectSignatures.ObjectSignatureSufix + MethodSignatures.MethodParameterSuffix +
+		ObjectSignatures.ObjectSignatureSuffix + MethodSignatures.MethodParameterSuffix +
 		ObjectSignatures.ObjectSignaturePrefix + ClassNames.JStringObjectClassName +
-		ObjectSignatures.ObjectSignatureSufix;
+		ObjectSignatures.ObjectSignatureSuffix;
 }

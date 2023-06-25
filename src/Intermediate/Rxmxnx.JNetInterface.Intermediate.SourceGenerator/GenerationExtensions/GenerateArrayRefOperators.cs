@@ -83,6 +83,6 @@ partial struct {1} : IWrapper<JArrayLocalRef>
 	{
 		context.AddSource($"{arrayRefSymbol.Name}.ArrayRef.g.cs",
 		                  String.Format(GenerationExtensions.arrayRefFormat,
-		                                arrayRefSymbol.ContainingNamespace.Name, arrayRefSymbol.Name));
+		                                arrayRefSymbol.ContainingNamespace, arrayRefSymbol.Name));
 	}
 }

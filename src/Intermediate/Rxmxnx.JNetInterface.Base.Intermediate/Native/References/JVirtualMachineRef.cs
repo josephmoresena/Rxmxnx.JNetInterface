@@ -6,7 +6,7 @@
 /// <remarks>
 /// This identifier will be valid until the library is unloaded or the JVM instance is destroyed.
 /// </remarks>
-public readonly struct JVirtualMachineRef : IFixedPointer, INative<JVirtualMachineRef>,
+public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirtualMachineRef>,
 	IReadOnlyReferenceable<JVirtualMachineValue>
 {
 	/// <inheritdoc/>

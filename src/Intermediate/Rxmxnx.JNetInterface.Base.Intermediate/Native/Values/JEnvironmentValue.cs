@@ -3,7 +3,7 @@
 /// <summary>
 /// <c>JNIEnv</c> struct. Contains a pointer to a <c>JNINativeInterface_</c> object.
 /// </summary>
-public readonly struct JEnvironmentValue : IFixedPointer, INative<JEnvironmentValue>,
+public readonly partial struct JEnvironmentValue : IFixedPointer, INative<JEnvironmentValue>,
 	IReadOnlyReferenceable<JNativeInterface>
 {
 	/// <inheritdoc/>

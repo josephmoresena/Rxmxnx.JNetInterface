@@ -3,8 +3,7 @@
 /// <summary>
 /// Unicode method names.
 /// </summary>
-#pragma warning disable CS8618
-public static class UnicodeMethodNames
+public static partial class UnicodeMethodNames
 {
 	/// <summary>
 	/// JNI name for class constructors.

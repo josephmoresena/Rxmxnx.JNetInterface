@@ -6,7 +6,7 @@
 /// object.
 /// </summary>
 /// <remarks>This identifier will be valid until it is explicitly unloaded.</remarks>
-internal readonly struct JGlobalRef : IFixedPointer, INative<JGlobalRef>, IWrapper<JObjectLocalRef>
+internal readonly partial struct JGlobalRef : IFixedPointer, INative<JGlobalRef>, IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JGlobal;

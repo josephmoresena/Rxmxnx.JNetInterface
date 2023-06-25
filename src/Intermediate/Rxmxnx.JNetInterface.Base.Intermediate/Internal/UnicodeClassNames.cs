@@ -1,7 +1,9 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
-#pragma warning disable CS8618
-internal static class UnicodeClassNames
+/// <summary>
+/// Unicode classes names.
+/// </summary>
+internal static partial class UnicodeClassNames
 {
 	/// <summary>
 	/// JNI name of <c>java.lang.Object</c> class.

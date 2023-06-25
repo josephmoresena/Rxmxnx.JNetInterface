@@ -3,8 +3,7 @@
 /// <summary>
 /// Unicode object signatures.
 /// </summary>
-#pragma warning disable CS8618
-public static class UnicodeObjectSignatures
+public static partial class UnicodeObjectSignatures
 {
 	/// <summary>
 	/// Prefix for fully-qualified-class type declaration in the JNI signature for methods and properties.
@@ -14,8 +13,8 @@ public static class UnicodeObjectSignatures
 	/// <summary>
 	/// Sufix for fully-qualified-class type declaration in the JNI signature for methods and properties.
 	/// </summary>
-	[DefaultValue(ObjectSignatures.ObjectSignatureSufix)]
-	public static readonly CString ObjectSignatureSufix;
+	[DefaultValue(ObjectSignatures.ObjectSignatureSuffix)]
+	public static readonly CString ObjectSignatureSuffix;
 	/// <summary>
 	/// Prefix for both array declaration in JNI signature for methods and properties and
 	/// for JNI name of array classes.
