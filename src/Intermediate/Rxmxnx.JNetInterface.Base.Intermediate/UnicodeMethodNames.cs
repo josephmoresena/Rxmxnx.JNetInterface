@@ -1,31 +1,30 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// Unicode method names.
+///     Unicode method names.
 /// </summary>
 #pragma warning disable CS8618
-public static partial class UnicodeMethodNames
+public static class UnicodeMethodNames
 {
     /// <summary>
-    /// JNI name for class constructors.
+    ///     JNI name for class constructors.
     /// </summary>
     [DefaultValue(MethodNames.ConstructorName)]
-    public static readonly CString ConstructorName;
+	public static readonly CString ConstructorName;
 
     /// <summary>
-    /// JNI name of <c>java.lang.Class&lt;?&gt;.getName()</c> method.
+    ///     JNI name of <c>java.lang.Class&lt;?&gt;.getName()</c> method.
     /// </summary>
     [DefaultValue(MethodNames.GetClassNameMethodName)]
-    internal static readonly CString GetClassNameMethodName;
+	internal static readonly CString GetClassNameMethodName;
     /// <summary>
-    /// JNI name of <c>java.lang.Throwable.getMessage()</c> method.
+    ///     JNI name of <c>java.lang.Throwable.getMessage()</c> method.
     /// </summary>
     [DefaultValue(MethodNames.GetThrowableMessageMethodName)]
-    internal static readonly CString GetThrowableMessageMethodName;
+	internal static readonly CString GetThrowableMessageMethodName;
     /// <summary>
-    /// JNI name of <c>java.lang.System.getProperty(String key)</c> method.
+    ///     JNI name of <c>java.lang.System.getProperty(String key)</c> method.
     /// </summary>
     [DefaultValue(MethodNames.GetPropertyMethodName)]
-    internal static readonly CString GetPropertyMethodName;
+	internal static readonly CString GetPropertyMethodName;
 }
-

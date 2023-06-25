@@ -1,4 +1,5 @@
 using System;
+
 using Microsoft.CodeAnalysis;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
@@ -36,17 +37,18 @@ partial struct {1} : IEquatable<{1}>
     public static Boolean operator !=({1} left, {1} right) => !(left == right);
 }}
 #nullable restore";
-	
+
 	/// <summary>
-	/// Generates operators for self-equatable structures.
+	///     Generates operators for self-equatable structures.
 	/// </summary>
 	/// <param name="structSymbol">A type symbol of self-equatable structure.</param>
 	/// <param name="context">Generation context.</param>
 	/// <param name="valueName">Internal absolute value field name.</param>
-	public static void GenerateSelfEquatableStructOperators(this ISymbol structSymbol, GeneratorExecutionContext context, String valueName)
+	public static void GenerateSelfEquatableStructOperators(this ISymbol structSymbol,
+		GeneratorExecutionContext context, String valueName)
 	{
-		context.AddSource($"{structSymbol.Name}.Equals.g.cs", 
-			String.Format(GenerationExtensions.structEquatableFormat, 
-				structSymbol.ContainingNamespace, structSymbol.Name, valueName));
+		context.AddSource($"{structSymbol.Name}.Equals.g.cs",
+		                  String.Format(GenerationExtensions.structEquatableFormat,
+		                                structSymbol.ContainingNamespace, structSymbol.Name, valueName));
 	}
 }

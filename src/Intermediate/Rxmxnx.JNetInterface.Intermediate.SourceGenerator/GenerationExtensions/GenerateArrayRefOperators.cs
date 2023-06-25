@@ -1,4 +1,5 @@
 using System;
+
 using Microsoft.CodeAnalysis;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
@@ -81,7 +82,7 @@ partial struct {1} : IWrapper<JArrayLocalRef>
 	public static void GenerateArrayRefOperators(this ISymbol arrayRefSymbol, GeneratorExecutionContext context)
 	{
 		context.AddSource($"{arrayRefSymbol.Name}.ArrayRef.g.cs",
-			String.Format(GenerationExtensions.arrayRefFormat,
-				arrayRefSymbol.ContainingNamespace.Name, arrayRefSymbol.Name));
+		                  String.Format(GenerationExtensions.arrayRefFormat,
+		                                arrayRefSymbol.ContainingNamespace.Name, arrayRefSymbol.Name));
 	}
 }

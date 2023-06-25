@@ -2,15 +2,13 @@
 
 using Microsoft.CodeAnalysis;
 
-namespace Rxmxnx.JNetInterface.SourceGenerator
+namespace Rxmxnx.JNetInterface.SourceGenerator;
+
+internal static class PrimitiveGenerator
 {
-    internal static class PrimitiveGenerator
-    {
-        public const String AssemblyName = "Rxmxnx.JNetInterface.Primitive.Intermediate";
+	public const String AssemblyName = "Rxmxnx.JNetInterface.Primitive.Intermediate";
 
-        public static void Execute(GeneratorExecutionContext context)
-        {
-
-        }
-    }
+	public static void Execute(GeneratorExecutionContext context)
+	{
+	}
 }

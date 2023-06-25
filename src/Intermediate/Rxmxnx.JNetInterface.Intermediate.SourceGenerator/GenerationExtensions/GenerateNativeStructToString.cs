@@ -1,4 +1,5 @@
 using System;
+
 using Microsoft.CodeAnalysis;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
@@ -17,12 +18,14 @@ partial struct {1}
 #nullable restore";
 
 	/// <summary>
-	/// Generates overrides for <see cref="Object.ToString()"/> for natives structures.
+	///     Generates overrides for <see cref="Object.ToString()"/> for natives structures.
 	/// </summary>
 	/// <param name="nativeSymbol">A type symbol of native structure.</param>
 	/// <param name="context">Generation context.</param>
 	public static void GenerateNativeStructToString(this ISymbol nativeSymbol, GeneratorExecutionContext context)
-		=> context.AddSource($"{nativeSymbol.Name}.ToString.g.cs", 
-			String.Format(GenerationExtensions.nativeToStringFormat, 
-				nativeSymbol.ContainingNamespace, nativeSymbol.Name));
+	{
+		context.AddSource($"{nativeSymbol.Name}.ToString.g.cs",
+		                  String.Format(GenerationExtensions.nativeToStringFormat,
+		                                nativeSymbol.ContainingNamespace, nativeSymbol.Name));
+	}
 }

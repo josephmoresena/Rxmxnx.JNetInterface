@@ -1,25 +1,25 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.References;
 
 /// <summary>
-/// JNI local handle for class objects (<c>jclass</c>). Represents a native signed integer 
-/// which serves as opaque identifier for an class object (<c>java.lang.Class&lt;?&gt;</c>). 
+///     JNI local handle for class objects (<c>jclass</c>). Represents a native signed integer
+///     which serves as opaque identifier for an class object (<c>java.lang.Class&lt;?&gt;</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-public readonly partial struct JClassLocalRef : IFixedPointer, INative<JClassLocalRef>,
-    IWrapper<JObjectLocalRef>
+public readonly struct JClassLocalRef : IFixedPointer, INative<JClassLocalRef>,
+	IWrapper<JObjectLocalRef>
 {
-    /// <inheritdoc/>
-    public static JNativeType Type => JNativeType.JClass;
+	/// <inheritdoc/>
+	public static JNativeType Type => JNativeType.JClass;
 
     /// <summary>
-    /// Internal <see cref="JObjectLocalRef"/> reference.
+    ///     Internal <see cref="JObjectLocalRef"/> reference.
     /// </summary>
     private readonly JObjectLocalRef _value;
 
     /// <summary>
-    /// JNI local reference.
+    ///     JNI local reference.
     /// </summary>
     public JObjectLocalRef Value => this._value;
-    /// <inheritdoc/>
-    public IntPtr Pointer => this._value.Pointer;
+	/// <inheritdoc/>
+	public IntPtr Pointer => this._value.Pointer;
 }

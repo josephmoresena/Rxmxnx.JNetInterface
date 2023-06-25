@@ -1,47 +1,46 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
 #pragma warning disable CS8618
-internal static partial class UnicodePrimitiveSignatures
+internal static class UnicodePrimitiveSignatures
 {
     /// <summary>
-    /// JNI signature for primitive <c>boolean</c>.
+    ///     JNI signature for primitive <c>boolean</c>.
     /// </summary>
     [DefaultValue(PrimitiveSignatures.JBooleanSignature)]
-    public static readonly CString JBooleanSignature;
+	public static readonly CString JBooleanSignature;
     /// <summary>
-    /// JNI signature for primitive <c>byte</c>.
+    ///     JNI signature for primitive <c>byte</c>.
     /// </summary>
     [DefaultValue(PrimitiveSignatures.JByteSignature)]
-    public static readonly CString JByteSignature;
+	public static readonly CString JByteSignature;
     /// <summary>
-    /// JNI signature for primitive <c>char</c>.
+    ///     JNI signature for primitive <c>char</c>.
     /// </summary>
     [DefaultValue(PrimitiveSignatures.JCharSignature)]
-    public static readonly CString JCharSignature;
+	public static readonly CString JCharSignature;
     /// <summary>
-    /// JNI signature for primitive <c>double</c>.
+    ///     JNI signature for primitive <c>double</c>.
     /// </summary>
     [DefaultValue(PrimitiveSignatures.JDoubleSignature)]
-    public static readonly CString JDoubleSignature;
+	public static readonly CString JDoubleSignature;
     /// <summary>
-    /// JNI signature for primitive <c>float</c>.
+    ///     JNI signature for primitive <c>float</c>.
     /// </summary>
     [DefaultValue(PrimitiveSignatures.JFloatSignature)]
-    public static readonly CString JFloatSignature;
+	public static readonly CString JFloatSignature;
     /// <summary>
-    /// JNI signature for primitive <c>int</c>.
+    ///     JNI signature for primitive <c>int</c>.
     /// </summary>
     [DefaultValue(PrimitiveSignatures.JIntSignature)]
-    public static readonly CString JIntSignature;
+	public static readonly CString JIntSignature;
     /// <summary>
-    /// JNI signature for primitive <c>long</c>.
+    ///     JNI signature for primitive <c>long</c>.
     /// </summary>
     [DefaultValue(PrimitiveSignatures.JLongSignature)]
-    public static readonly CString JLongSignature;
+	public static readonly CString JLongSignature;
     /// <summary>
-    /// JNI signature for primitive <c>short</c>.
+    ///     JNI signature for primitive <c>short</c>.
     /// </summary>
     [DefaultValue(PrimitiveSignatures.JShortSignature)]
-    public static readonly CString JShortSignature;
+	public static readonly CString JShortSignature;
 }
-

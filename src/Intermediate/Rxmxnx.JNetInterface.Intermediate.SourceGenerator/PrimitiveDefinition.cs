@@ -1,5 +1,4 @@
-﻿
-/*
+﻿/*
 namespace Rxmxnx.JNetInterface.SourceGenerator
 {
 	internal sealed record PrimitiveDefinition
@@ -12,3 +11,4 @@ namespace Rxmxnx.JNetInterface.SourceGenerator
 }
 
 */
+
