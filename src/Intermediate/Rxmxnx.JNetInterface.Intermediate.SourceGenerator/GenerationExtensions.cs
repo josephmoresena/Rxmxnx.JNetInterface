@@ -12,9 +12,7 @@ internal static partial class GenerationExtensions
 	/// </summary>
 	/// <param name="context">Generation context.</param>
 	public static IEnumerable<INamedTypeSymbol> GetSourceTypeSymbols(this GeneratorExecutionContext context)
-	{
-		return GenerationExtensions.GetTypeSymbols(context.Compilation.SourceModule.GlobalNamespace);
-	}
+		=> GenerationExtensions.GetTypeSymbols(context.Compilation.SourceModule.GlobalNamespace);
 	/// <summary>
 	/// Retrieves the abbreviation of given number ordinal.
 	/// </summary>
@@ -42,10 +40,12 @@ internal static partial class GenerationExtensions
 	private static IEnumerable<INamedTypeSymbol> GetTypeSymbols(INamespaceSymbol namespaceSymbol)
 	{
 		foreach (INamespaceOrTypeSymbol symbol in namespaceSymbol.GetMembers())
+		{
 			if (symbol.IsType)
 				yield return (INamedTypeSymbol)symbol;
 			else
 				foreach (INamedTypeSymbol typeSymbol in GenerationExtensions.GetTypeSymbols((INamespaceSymbol)symbol))
 					yield return typeSymbol;
+		}
 	}
 }

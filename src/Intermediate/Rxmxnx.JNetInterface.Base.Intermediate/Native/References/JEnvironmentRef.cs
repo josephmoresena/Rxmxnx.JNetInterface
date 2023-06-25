@@ -8,7 +8,10 @@ public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnviron
 	IReadOnlyReferenceable<JEnvironmentValue>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JEnvironmentRef;
+	public static JNativeType Type
+	{
+		get => JNativeType.JEnvironmentRef;
+	}
 
 	/// <summary>
 	/// Internal pointer value.
@@ -16,28 +19,26 @@ public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnviron
 	private readonly IntPtr _value;
 
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value;
+	public IntPtr Pointer
+	{
+		get => this._value;
+	}
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JEnvironmentValue"/> from this pointer.
 	/// </summary>
-	public ref readonly JEnvironmentValue Reference => ref this._value.GetUnsafeReadOnlyReference<JEnvironmentValue>();
+	public ref readonly JEnvironmentValue Reference
+	{
+		get => ref this._value.GetUnsafeReadOnlyReference<JEnvironmentValue>();
+	}
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JEnvironmentRef()
-	{
-		this._value = IntPtr.Zero;
-	}
+	public JEnvironmentRef() => this._value = IntPtr.Zero;
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode()
-	{
-		return HashCode.Combine(this._value);
-	}
+	public override Int32 GetHashCode() => HashCode.Combine(this._value);
 	/// <inheritdoc/>
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
-	{
-		return obj is JEnvironmentRef jEnvRef && this._value.Equals(jEnvRef._value);
-	}
+		=> obj is JEnvironmentRef jEnvRef && this._value.Equals(jEnvRef._value);
 }

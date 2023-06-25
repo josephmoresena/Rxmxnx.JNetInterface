@@ -6,11 +6,13 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanArrayLocalRef>,
-	IWrapper<JObjectLocalRef>
+public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanArrayLocalRef>, IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JArray;
+	public static JNativeType Type
+	{
+		get => JNativeType.JArray;
+	}
 
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
@@ -20,20 +22,20 @@ public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanA
 	/// <summary>
 	/// JNI local reference.
 	/// </summary>
-	public JObjectLocalRef Value => this._value;
+	public JObjectLocalRef Value
+	{
+		get => this._value;
+	}
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value.Pointer;
+	public IntPtr Pointer
+	{
+		get => this._value.Pointer;
+	}
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode()
-	{
-		return this._value.GetHashCode();
-	}
+	public override Int32 GetHashCode() => this._value.GetHashCode();
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj)
-	{
-		return JArrayLocalRef.Equals(this, obj);
-	}
+	public override Boolean Equals(Object? obj) => JArrayLocalRef.Equals(this, obj);
 
 	/// <summary>
 	/// Indicates wheter <paramref name="arr"/> and a <paramref name="obj"/> are equal.

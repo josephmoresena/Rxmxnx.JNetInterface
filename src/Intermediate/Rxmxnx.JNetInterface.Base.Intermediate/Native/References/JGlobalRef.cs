@@ -9,7 +9,10 @@
 internal readonly partial struct JGlobalRef : IFixedPointer, INative<JGlobalRef>, IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JGlobal;
+	public static JNativeType Type
+	{
+		get => JNativeType.JGlobal;
+	}
 
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
@@ -19,26 +22,24 @@ internal readonly partial struct JGlobalRef : IFixedPointer, INative<JGlobalRef>
 	/// <summary>
 	/// JNI value as local reference.
 	/// </summary>
-	public JObjectLocalRef Value => this._value;
+	public JObjectLocalRef Value
+	{
+		get => this._value;
+	}
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value.Pointer;
+	public IntPtr Pointer
+	{
+		get => this._value.Pointer;
+	}
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JGlobalRef()
-	{
-		this._value = default;
-	}
+	public JGlobalRef() => this._value = default;
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode()
-	{
-		return HashCode.Combine(this._value);
-	}
+	public override Int32 GetHashCode() => HashCode.Combine(this._value);
 	/// <inheritdoc/>
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
-	{
-		return obj is JGlobalRef jGlobalRef && this._value.Equals(jGlobalRef._value);
-	}
+		=> obj is JGlobalRef jGlobalRef && this._value.Equals(jGlobalRef._value);
 }

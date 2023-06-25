@@ -48,7 +48,7 @@ partial struct {1} : IEquatable<{1}>
 		GeneratorExecutionContext context, String valueName)
 	{
 		context.AddSource($"{structSymbol.Name}.Equals.g.cs",
-		                  String.Format(GenerationExtensions.structEquatableFormat,
-		                                structSymbol.ContainingNamespace, structSymbol.Name, valueName));
+		                  String.Format(GenerationExtensions.structEquatableFormat, structSymbol.ContainingNamespace,
+		                                structSymbol.Name, valueName));
 	}
 }

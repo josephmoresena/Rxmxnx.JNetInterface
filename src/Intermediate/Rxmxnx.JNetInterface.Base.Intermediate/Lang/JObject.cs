@@ -22,32 +22,22 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	protected JObject() : this(JValue.Empty)
-	{
-	}
+	protected JObject() : this(JValue.Empty) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">Object reference.</param>
-	protected JObject(JObjectLocalRef value) : this(JValue.Create(value))
-	{
-	}
+	protected JObject(JObjectLocalRef value) : this(JValue.Create(value)) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	protected JObject(JObject jObject)
-	{
-		this._value = jObject._value;
-	}
+	protected JObject(JObject jObject) => this._value = jObject._value;
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jValue">Internal <see cref="JValue"/> instance.</param>
-	internal JObject(JValue jValue)
-	{
-		this._value = IMutableReference.Create(jValue);
-	}
+	internal JObject(JValue jValue) => this._value = IMutableReference.Create(jValue);
 
 	/// <summary>
 	/// Object signature.
@@ -61,17 +51,26 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// Internal <see cref="JValue"/> value.
 	/// </summary>
-	internal virtual JValue Value => this._value.Value;
-
-	/// <inheritdoc/>
-	public virtual Boolean Equals(JObject? other)
+	internal virtual JValue Value
 	{
-		return this._value.Equals(other?._value);
+		get => this._value.Value;
 	}
 
-	CString IObject.ObjectClassName => this.ObjectClassName;
-	CString IObject.ObjectSignature => this.ObjectSignature;
-	Boolean IObject.IsDefault => this._value.Value.IsDefault;
+	/// <inheritdoc/>
+	public virtual Boolean Equals(JObject? other) => this._value.Equals(other?._value);
+
+	CString IObject.ObjectClassName
+	{
+		get => this.ObjectClassName;
+	}
+	CString IObject.ObjectSignature
+	{
+		get => this.ObjectSignature;
+	}
+	Boolean IObject.IsDefault
+	{
+		get => this._value.Value.IsDefault;
+	}
 
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
 	{
@@ -79,37 +78,22 @@ public abstract class JObject : IObject, IEquatable<JObject>
 		bytes.CopyTo(span[offset..]);
 		offset += JValue.PointerSize;
 	}
-	void IObject.CopyTo(Span<JValue> span, Int32 index)
-	{
-		span[index] = this.Value;
-	}
+	void IObject.CopyTo(Span<JValue> span, Int32 index) { span[index] = this.Value; }
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode()
-	{
-		return HashCode.Combine(this._value.Value);
-	}
+	public override Int32 GetHashCode() => HashCode.Combine(this._value.Value);
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj)
-	{
-		return obj is JObject jObj && this.Equals(jObj);
-	}
+	public override Boolean Equals(Object? obj) => obj is JObject jObj && this.Equals(jObj);
 
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
 	/// <param name="jValue"><see cref="JValue"/> that is set as the value of current instance.</param>
-	internal void SetValue(JValue jValue)
-	{
-		this._value.Value = jValue;
-	}
+	internal void SetValue(JValue jValue) { this._value.Value = jValue; }
 	/// <summary>
 	/// Sets <see cref="JValue.Empty"/> as the current instance value.
 	/// </summary>
-	internal void ClearValue()
-	{
-		this._value.Value = JValue.Empty;
-	}
+	internal void ClearValue() { this._value.Value = JValue.Empty; }
 
 	/// <summary>
 	/// Interprets current instance a <typeparamref name="TValue"/> value.
@@ -118,17 +102,12 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <returns>A read-only reference of <typeparamref name="TValue"/> value.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal virtual ref readonly TValue As<TValue>() where TValue : unmanaged
-	{
-		return ref JValue.As<TValue>(ref this._value.Reference);
-	}
+		=> ref JValue.As<TValue>(ref this._value.Reference);
 	/// <summary>
 	/// Interprets current instance a <typeparamref name="TValue"/> value.
 	/// </summary>
 	/// <typeparam name="TValue">Type of value.</typeparam>
 	/// <returns>A <typeparamref name="TValue"/> value.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal virtual TValue To<TValue>() where TValue : unmanaged
-	{
-		return JValue.As<TValue>(ref this._value.Reference);
-	}
+	internal virtual TValue To<TValue>() where TValue : unmanaged => JValue.As<TValue>(ref this._value.Reference);
 }

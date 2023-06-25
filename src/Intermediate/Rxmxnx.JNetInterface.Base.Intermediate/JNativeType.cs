@@ -144,7 +144,7 @@ public enum JNativeType : Byte
 	/// <summary>
 	///     <c>jvalue</c>
 	/// </summary>
-	JValue = 0xFF
+	JValue = 0xFF,
 }
 
 /// <summary>
@@ -203,7 +203,7 @@ public static class JNativeTypeExtensions
 			JNativeType.JObjectArray => ReferenceNames.JObjectArrayLocalRefName,
 
 			JNativeType.JValue => ValueNames.JValueName,
-			_ => throw new InvalidEnumArgumentException(nameof(nativeType), (Int32)nativeType, typeof(JNativeType))
+			_ => throw new InvalidEnumArgumentException(nameof(nativeType), (Int32)nativeType, typeof(JNativeType)),
 		};
 	}
 }

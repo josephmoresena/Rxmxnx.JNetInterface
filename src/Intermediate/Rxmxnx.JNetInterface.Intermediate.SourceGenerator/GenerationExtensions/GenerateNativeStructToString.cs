@@ -25,7 +25,7 @@ partial struct {1}
 	public static void GenerateNativeStructToString(this ISymbol nativeSymbol, GeneratorExecutionContext context)
 	{
 		context.AddSource($"{nativeSymbol.Name}.ToString.g.cs",
-		                  String.Format(GenerationExtensions.nativeToStringFormat,
-		                                nativeSymbol.ContainingNamespace, nativeSymbol.Name));
+		                  String.Format(GenerationExtensions.nativeToStringFormat, nativeSymbol.ContainingNamespace,
+		                                nativeSymbol.Name));
 	}
 }

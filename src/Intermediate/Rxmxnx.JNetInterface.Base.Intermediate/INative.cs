@@ -19,7 +19,7 @@ public interface INative
 				JValue jValue => Convert.ToHexString(NativeUtilities.AsBytes(jValue)),
 				JNativeInterface jNative => Convert.ToHexString(NativeUtilities.AsBytes(jNative)),
 				JInvokeInterface jInvoke => Convert.ToHexString(NativeUtilities.AsBytes(jInvoke)),
-				_ => this.ToString()!
+				_ => this.ToString()!,
 			};
 		}
 	}
@@ -40,21 +40,15 @@ public interface INative
 	/// </summary>
 	/// <param name="native"><see cref="INative"/> instance.</param>
 	/// <returns><see cref="INative"/> instance as <see cref="String"/>.</returns>
-	internal static String ToString(INative native)
-	{
-		return native.AsString();
-	}
+	internal static String ToString(INative native) => native.AsString();
 }
 
 /// <summary>
 /// This interface exposes a JNI native value.
 /// </summary>
-internal interface INative<TSelf> : INative
-	where TSelf : unmanaged, INative<TSelf>
+internal interface INative<TSelf> : INative where TSelf : unmanaged, INative<TSelf>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	String INative.AsString()
-	{
-		return String.Format(CommonConstants.NativeReferenceFormat, TSelf.Type.GetTypeName(), this.TextValue);
-	}
+		=> String.Format(CommonConstants.NativeReferenceFormat, TSelf.Type.GetTypeName(), this.TextValue);
 }

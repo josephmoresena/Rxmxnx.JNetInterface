@@ -8,7 +8,5 @@ internal static class PrimitiveGenerator
 {
 	public const String AssemblyName = "Rxmxnx.JNetInterface.Primitive.Intermediate";
 
-	public static void Execute(GeneratorExecutionContext context)
-	{
-	}
+	public static void Execute(GeneratorExecutionContext context) { }
 }

@@ -40,9 +40,8 @@ partial class {1}
 				strBuild.AppendLine($"\t\t{symbol.Name} = new(() => \"{value}\"u8);");
 		}
 
-		context.AddSource(
-			$"{utf8ClassContainerSymbol.Name}.StaticConstructor.g.cs",
-			GenerationExtensions.GenerateUtf8ContainerConstructor(utf8ClassContainerSymbol, strBuild));
+		context.AddSource($"{utf8ClassContainerSymbol.Name}.StaticConstructor.g.cs",
+		                  GenerationExtensions.GenerateUtf8ContainerConstructor(utf8ClassContainerSymbol, strBuild));
 	}
 
 	/// <summary>
@@ -67,6 +66,6 @@ partial class {1}
 	/// <param name="strBuild">A builder with all UTF-8 constants initialization.</param>
 	/// <returns>The content of the generated source code.</returns>
 	private static String GenerateUtf8ContainerConstructor(INamedTypeSymbol utf8ContainerSymbol, StringBuilder strBuild)
-		=> String.Format(GenerationExtensions.staticConstructorFormat, 
-			utf8ContainerSymbol.ContainingNamespace, utf8ContainerSymbol.Name, strBuild);
+		=> String.Format(GenerationExtensions.staticConstructorFormat, utf8ContainerSymbol.ContainingNamespace,
+		                 utf8ContainerSymbol.Name, strBuild);
 }

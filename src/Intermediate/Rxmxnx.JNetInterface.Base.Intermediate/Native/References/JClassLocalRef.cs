@@ -5,11 +5,13 @@
 /// which serves as opaque identifier for an class object (<c>java.lang.Class&lt;?&gt;</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-public readonly partial struct JClassLocalRef : IFixedPointer, INative<JClassLocalRef>,
-	IWrapper<JObjectLocalRef>
+public readonly partial struct JClassLocalRef : IFixedPointer, INative<JClassLocalRef>, IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JClass;
+	public static JNativeType Type
+	{
+		get => JNativeType.JClass;
+	}
 
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
@@ -19,7 +21,13 @@ public readonly partial struct JClassLocalRef : IFixedPointer, INative<JClassLoc
 	/// <summary>
 	/// JNI local reference.
 	/// </summary>
-	public JObjectLocalRef Value => this._value;
+	public JObjectLocalRef Value
+	{
+		get => this._value;
+	}
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value.Pointer;
+	public IntPtr Pointer
+	{
+		get => this._value.Pointer;
+	}
 }

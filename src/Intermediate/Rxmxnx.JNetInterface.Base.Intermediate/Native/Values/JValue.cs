@@ -6,7 +6,10 @@
 internal readonly partial struct JValue : INative<JValue>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JValue;
+	public static JNativeType Type
+	{
+		get => JNativeType.JValue;
+	}
 
 #pragma warning disable 0169
 	/// <summary>
@@ -40,7 +43,10 @@ internal readonly partial struct JValue : INative<JValue>
 	/// <summary>
 	/// Indicates whether the current instance has the <see langword="default"/> value.
 	/// </summary>
-	public Boolean IsDefault => JValue.isDefault(this);
+	public Boolean IsDefault
+	{
+		get => JValue.isDefault(this);
+	}
 
 	/// <summary>
 	/// Creates a new <see cref="JValue"/> value from a <paramref name="value"/>.

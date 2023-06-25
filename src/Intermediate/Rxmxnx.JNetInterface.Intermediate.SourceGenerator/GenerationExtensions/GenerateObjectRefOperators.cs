@@ -86,15 +86,15 @@ partial struct {1}
 	/// <param name="context">Generation context.</param>
 	public static void GenerateObjectRefOperators(this ISymbol objRefSymbol, GeneratorExecutionContext context)
 	{
-		String equalFunction = objRefSymbol.Name.Contains("ArrayLocalRef")
-			? "JArrayLocalRef.ArrayEquals"
-			: "JObjectLocalRef.ObjectEquals";
-		String overrides = objRefSymbol.Name == "JArrayLocalRef"
-			? String.Empty
-			: String.Format(GenerationExtensions.objectRefOverrideFormat, equalFunction);
+		String equalFunction = objRefSymbol.Name.Contains("ArrayLocalRef") ?
+			"JArrayLocalRef.ArrayEquals" :
+			"JObjectLocalRef.ObjectEquals";
+		String overrides = objRefSymbol.Name == "JArrayLocalRef" ?
+			String.Empty :
+			String.Format(GenerationExtensions.objectRefOverrideFormat, equalFunction);
 
 		context.AddSource($"{objRefSymbol.Name}.ObjRef.g.cs",
-		                  String.Format(GenerationExtensions.objectRefFormat,
-		                                objRefSymbol.ContainingNamespace, objRefSymbol.Name, overrides));
+		                  String.Format(GenerationExtensions.objectRefFormat, objRefSymbol.ContainingNamespace,
+		                                objRefSymbol.Name, overrides));
 	}
 }

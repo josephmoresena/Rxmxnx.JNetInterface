@@ -6,7 +6,10 @@
 public readonly partial struct JNativeInterface : INative<JNativeInterface>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JNativeInterface;
+	public static JNativeType Type
+	{
+		get => JNativeType.JNativeInterface;
+	}
 
 	/// <summary>
 	/// public reserved entries.

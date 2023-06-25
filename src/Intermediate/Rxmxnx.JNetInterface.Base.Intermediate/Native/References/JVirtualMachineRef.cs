@@ -10,7 +10,10 @@ public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirt
 	IReadOnlyReferenceable<JVirtualMachineValue>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JVirtualMachineRef;
+	public static JNativeType Type
+	{
+		get => JNativeType.JVirtualMachineRef;
+	}
 
 	/// <summary>
 	/// Internal pointer value.
@@ -20,27 +23,24 @@ public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirt
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JVirtualMachineValue"/> from this pointer.
 	/// </summary>
-	public ref readonly JVirtualMachineValue Reference =>
-		ref this._value.GetUnsafeReadOnlyReference<JVirtualMachineValue>();
+	public ref readonly JVirtualMachineValue Reference
+	{
+		get => ref this._value.GetUnsafeReadOnlyReference<JVirtualMachineValue>();
+	}
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value;
+	public IntPtr Pointer
+	{
+		get => this._value;
+	}
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JVirtualMachineRef()
-	{
-		this._value = IntPtr.Zero;
-	}
+	public JVirtualMachineRef() => this._value = IntPtr.Zero;
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode()
-	{
-		return HashCode.Combine(this._value);
-	}
+	public override Int32 GetHashCode() => HashCode.Combine(this._value);
 	/// <inheritdoc/>
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
-	{
-		return obj is JVirtualMachineRef jVirtualMRef && this._value.Equals(jVirtualMRef._value);
-	}
+		=> obj is JVirtualMachineRef jVirtualMRef && this._value.Equals(jVirtualMRef._value);
 }

@@ -9,7 +9,10 @@
 public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectLocalRef>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JObject;
+	public static JNativeType Type
+	{
+		get => JNativeType.JObject;
+	}
 
 	/// <summary>
 	/// Internal native signed integer
@@ -17,34 +20,25 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
 	private readonly IntPtr _value;
 
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value;
+	public IntPtr Pointer
+	{
+		get => this._value;
+	}
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JObjectLocalRef()
-	{
-		this._value = IntPtr.Zero;
-	}
+	public JObjectLocalRef() => this._value = IntPtr.Zero;
 
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>
-	internal JObjectLocalRef(JObjectLocalRef objRef)
-	{
-		this._value = objRef._value;
-	}
+	internal JObjectLocalRef(JObjectLocalRef objRef) => this._value = objRef._value;
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode()
-	{
-		return this._value.GetHashCode();
-	}
+	public override Int32 GetHashCode() => this._value.GetHashCode();
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj)
-	{
-		return JObjectLocalRef.Equals(this, obj);
-	}
+	public override Boolean Equals(Object? obj) => JObjectLocalRef.Equals(this, obj);
 
 	/// <summary>
 	/// Indicates wheter <paramref name="objRef"/> and a <paramref name="obj"/> are equal.
@@ -59,9 +53,7 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal static Boolean ObjectEquals<TObject>(in TObject objRef, Object? obj)
 		where TObject : unmanaged, IWrapper<JObjectLocalRef>
-	{
-		return JObjectLocalRef.Equals(objRef, obj);
-	}
+		=> JObjectLocalRef.Equals(objRef, obj);
 
 	/// <summary>
 	/// Indicates wheter <paramref name="objRef"/> and a <paramref name="obj"/> are equal.
@@ -74,8 +66,7 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static Boolean Equals<TObject>(in TObject objRef, Object? obj)
-		where TObject : unmanaged
+	private static Boolean Equals<TObject>(in TObject objRef, Object? obj) where TObject : unmanaged
 	{
 		if (obj is IWrapper<JObjectLocalRef> other)
 			return other.Equals(objRef);

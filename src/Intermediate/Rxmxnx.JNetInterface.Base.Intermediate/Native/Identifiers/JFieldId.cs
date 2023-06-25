@@ -8,7 +8,10 @@
 internal readonly partial struct JFieldId : IFixedPointer, INative<JFieldId>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JMethod;
+	public static JNativeType Type
+	{
+		get => JNativeType.JMethod;
+	}
 
 	/// <summary>
 	/// Internal native signed integer
@@ -16,24 +19,19 @@ internal readonly partial struct JFieldId : IFixedPointer, INative<JFieldId>
 	private readonly IntPtr _value;
 
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value;
+	public IntPtr Pointer
+	{
+		get => this._value;
+	}
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JFieldId()
-	{
-		this._value = IntPtr.Zero;
-	}
+	public JFieldId() => this._value = IntPtr.Zero;
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode()
-	{
-		return HashCode.Combine(this._value);
-	}
+	public override Int32 GetHashCode() => HashCode.Combine(this._value);
 	/// <inheritdoc/>
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
-	{
-		return obj is JFieldId fieldId && this._value.Equals(fieldId._value);
-	}
+		=> obj is JFieldId fieldId && this._value.Equals(fieldId._value);
 }

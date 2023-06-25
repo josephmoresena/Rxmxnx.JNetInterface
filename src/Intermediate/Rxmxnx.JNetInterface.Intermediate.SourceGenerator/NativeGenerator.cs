@@ -22,7 +22,7 @@ internal static class NativeGenerator
 
 	static NativeGenerator()
 	{
-		NativeGenerator.constructor = new NativeMethodGenerator
+		NativeGenerator.constructor = new()
 		{
 			TypeName = "JConstructorDefinition",
 			Documentation = @"
@@ -41,9 +41,9 @@ internal static class NativeGenerator
 	public JConstructorDefinition() : 
 		base(ConstructorName, ",
 			BodySufix = @") { }
-}"
+}",
 		};
-		NativeGenerator.function = new NativeMethodGenerator
+		NativeGenerator.function = new()
 		{
 			TypeName = "JFunctionDefinition",
 			Documentation = @"
@@ -70,9 +70,9 @@ internal static class NativeGenerator
 	public JFunctionDefinition(CString functionName) : 
 		base(functionName, TResult.Signature, ",
 			BodySufix = @") { }
-}"
+}",
 		};
-		NativeGenerator.method = new NativeMethodGenerator
+		NativeGenerator.method = new()
 		{
 			TypeName = "JMethodDefinition",
 			Documentation = @"
@@ -92,7 +92,7 @@ internal static class NativeGenerator
 	public JMethodDefinition(CString methodName) : 
 		base(methodName, ",
 			BodySufix = @") { }
-}"
+}",
 		};
 	}
 
