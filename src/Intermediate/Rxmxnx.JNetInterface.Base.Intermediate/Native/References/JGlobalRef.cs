@@ -9,28 +9,19 @@
 internal readonly partial struct JGlobalRef : IFixedPointer, INative<JGlobalRef>, IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JGlobal;
-	}
+	public static JNativeType Type => JNativeType.JGlobal;
 
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
 	/// </summary>
 	private readonly JObjectLocalRef _value;
-
+	
 	/// <summary>
 	/// JNI value as local reference.
 	/// </summary>
-	public JObjectLocalRef Value
-	{
-		get => this._value;
-	}
+	public JObjectLocalRef Value => this._value;
 	/// <inheritdoc/>
-	public IntPtr Pointer
-	{
-		get => this._value.Pointer;
-	}
+	public IntPtr Pointer => this._value.Pointer;
 
 	/// <summary>
 	/// Parameterless constructor.

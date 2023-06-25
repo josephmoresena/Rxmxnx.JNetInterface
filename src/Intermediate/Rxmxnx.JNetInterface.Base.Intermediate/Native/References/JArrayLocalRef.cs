@@ -9,10 +9,7 @@
 public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanArrayLocalRef>, IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JArray;
-	}
+	public static JNativeType Type => JNativeType.JArray;
 
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
@@ -22,15 +19,9 @@ public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanA
 	/// <summary>
 	/// JNI local reference.
 	/// </summary>
-	public JObjectLocalRef Value
-	{
-		get => this._value;
-	}
+	public JObjectLocalRef Value  => this._value;
 	/// <inheritdoc/>
-	public IntPtr Pointer
-	{
-		get => this._value.Pointer;
-	}
+	public IntPtr Pointer => this._value.Pointer;
 
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._value.GetHashCode();
@@ -38,7 +29,7 @@ public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanA
 	public override Boolean Equals(Object? obj) => JArrayLocalRef.Equals(this, obj);
 
 	/// <summary>
-	/// Indicates wheter <paramref name="arr"/> and a <paramref name="obj"/> are equal.
+	/// Indicates whether <paramref name="arr"/> and a <paramref name="obj"/> are equal.
 	/// </summary>
 	/// <typeparam name="TArray">The type of array reference.</typeparam>
 	/// <param name="arr">The array reference to compare with <paramref name="obj"/>.</param>
@@ -55,14 +46,14 @@ public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanA
 			return other.Equals(arr);
 		if (obj is JArrayLocalRef otherArr)
 			return arr.Equals(otherArr);
-		if (obj is JObjectLocalRef jobj)
-			return arr.Equals(jobj);
+		if (obj is JObjectLocalRef jObjRef)
+			return arr.Equals(jObjRef);
 
 		return JObjectLocalRef.ObjectEquals(arr, obj);
 	}
 
 	/// <summary>
-	/// Indicates wheter <paramref name="arr"/> and a <paramref name="obj"/> are equal.
+	/// Indicates whether <paramref name="arr"/> and a <paramref name="obj"/> are equal.
 	/// </summary>
 	/// <typeparam name="TArray">The type of object reference.</typeparam>
 	/// <param name="arr">The object reference to compare with <paramref name="obj"/>.</param>
@@ -79,8 +70,8 @@ public readonly partial struct JArrayLocalRef : IFixedPointer, INative<JBooleanA
 			return other.Equals(arr);
 		if (obj is IEquatable<JArrayLocalRef> otherArr)
 			return otherArr.Equals(arr);
-		if (obj is JObjectLocalRef jobj)
-			return arr.Equals(jobj);
+		if (obj is JObjectLocalRef jObjRef)
+			return arr.Equals(jObjRef);
 
 		return JObjectLocalRef.ObjectEquals(arr, obj);
 	}

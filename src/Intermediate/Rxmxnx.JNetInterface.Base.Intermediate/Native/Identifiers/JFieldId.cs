@@ -8,10 +8,7 @@
 internal readonly partial struct JFieldId : IFixedPointer, INative<JFieldId>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JMethod;
-	}
+	public static JNativeType Type => JNativeType.JMethod;
 
 	/// <summary>
 	/// Internal native signed integer
@@ -19,10 +16,7 @@ internal readonly partial struct JFieldId : IFixedPointer, INative<JFieldId>
 	private readonly IntPtr _value;
 
 	/// <inheritdoc/>
-	public IntPtr Pointer
-	{
-		get => this._value;
-	}
+	public IntPtr Pointer => this._value;
 
 	/// <summary>
 	/// Parameterless constructor.

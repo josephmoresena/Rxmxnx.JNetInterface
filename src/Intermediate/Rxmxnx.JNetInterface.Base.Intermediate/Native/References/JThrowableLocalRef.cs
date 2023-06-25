@@ -9,10 +9,7 @@ public readonly partial struct JThrowableLocalRef : IFixedPointer, INative<JThro
 	IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JThrowable;
-	}
+	public static JNativeType Type => JNativeType.JThrowable;
 
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
@@ -22,13 +19,7 @@ public readonly partial struct JThrowableLocalRef : IFixedPointer, INative<JThro
 	/// <summary>
 	/// JNI local reference.
 	/// </summary>
-	public JObjectLocalRef Value
-	{
-		get => this._value;
-	}
+	public JObjectLocalRef Value => this._value;
 	/// <inheritdoc/>
-	public IntPtr Pointer
-	{
-		get => this._value.Pointer;
-	}
+	public IntPtr Pointer => this._value.Pointer;
 }

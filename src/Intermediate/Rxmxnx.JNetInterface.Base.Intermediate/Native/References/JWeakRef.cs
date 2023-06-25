@@ -9,10 +9,7 @@
 internal readonly partial struct JWeakRef : INative<JWeakRef>, IWrapper<JObjectLocalRef>, IFixedPointer
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JWeak;
-	}
+	public static JNativeType Type => JNativeType.JWeak;
 
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
@@ -22,15 +19,9 @@ internal readonly partial struct JWeakRef : INative<JWeakRef>, IWrapper<JObjectL
 	/// <summary>
 	/// JNI value as local reference.
 	/// </summary>
-	public JObjectLocalRef Value
-	{
-		get => this._value;
-	}
+	public JObjectLocalRef Value => this._value;
 	/// <inheritdoc/>
-	public IntPtr Pointer
-	{
-		get => this._value.Pointer;
-	}
+	public IntPtr Pointer => this._value.Pointer;
 
 	/// <summary>
 	/// Parameterless constructor.

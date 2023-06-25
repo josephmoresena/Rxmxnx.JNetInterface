@@ -7,10 +7,7 @@ public readonly partial struct JVirtualMachineValue : IFixedPointer, INative<JVi
 	IReadOnlyReferenceable<JInvokeInterface>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JVirtualMachine;
-	}
+	public static JNativeType Type => JNativeType.JVirtualMachine;
 
 	/// <summary>
 	/// Internal <see cref="JInvokeInterface"/> pointer.
@@ -20,15 +17,9 @@ public readonly partial struct JVirtualMachineValue : IFixedPointer, INative<JVi
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JInvokeInterface"/> from this value.
 	/// </summary>
-	public ref readonly JInvokeInterface Reference
-	{
-		get => ref this._functions.GetUnsafeReadOnlyReference<JInvokeInterface>();
-	}
+	public ref readonly JInvokeInterface Reference => ref this._functions.GetUnsafeReadOnlyReference<JInvokeInterface>();
 	/// <inheritdoc/>
-	public IntPtr Pointer
-	{
-		get => this._functions;
-	}
+	public IntPtr Pointer => this._functions;
 
 	/// <summary>
 	/// Parameterless constructor.

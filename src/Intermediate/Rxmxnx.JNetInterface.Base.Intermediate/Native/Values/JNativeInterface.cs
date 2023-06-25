@@ -6,15 +6,14 @@
 public readonly partial struct JNativeInterface : INative<JNativeInterface>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JNativeInterface;
-	}
+	public static JNativeType Type => JNativeType.JNativeInterface;
 
 	/// <summary>
 	/// public reserved entries.
 	/// </summary>
+#pragma warning disable CS0169
 	private readonly ComReserved _reserved;
+#pragma warning restore CS0169
 
 	/// <summary>
 	/// Pointer to <c>GetVersion</c> function. Retrieves the version of the <c>JNIEnv</c> interface.
@@ -1070,7 +1069,7 @@ public readonly partial struct JNativeInterface : INative<JNativeInterface>
 	/// Pointer to <c>GetJavaVM</c> function. Retrieves a <c>JavaVM</c> pointer to which the current
 	/// thread is attached.
 	/// </summary>
-	internal readonly IntPtr GetJavaVMPointer { get; init; }
+	internal readonly IntPtr GetJavaVmPointer { get; init; }
 	/// <summary>
 	/// Pointer to <c>GetStringRegion</c> function. Copies a specified number of Unicode characters from the
 	/// specified offset.

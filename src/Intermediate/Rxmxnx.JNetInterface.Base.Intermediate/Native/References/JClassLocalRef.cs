@@ -8,10 +8,7 @@
 public readonly partial struct JClassLocalRef : IFixedPointer, INative<JClassLocalRef>, IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JClass;
-	}
+	public static JNativeType Type => JNativeType.JClass;
 
 	/// <summary>
 	/// Internal <see cref="JObjectLocalRef"/> reference.
@@ -21,13 +18,7 @@ public readonly partial struct JClassLocalRef : IFixedPointer, INative<JClassLoc
 	/// <summary>
 	/// JNI local reference.
 	/// </summary>
-	public JObjectLocalRef Value
-	{
-		get => this._value;
-	}
+	public JObjectLocalRef Value => this._value;
 	/// <inheritdoc/>
-	public IntPtr Pointer
-	{
-		get => this._value.Pointer;
-	}
+	public IntPtr Pointer => this._value.Pointer;
 }

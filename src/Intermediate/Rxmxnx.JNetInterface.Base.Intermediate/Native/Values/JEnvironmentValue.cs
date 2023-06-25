@@ -7,10 +7,7 @@ public readonly partial struct JEnvironmentValue : IFixedPointer, INative<JEnvir
 	IReadOnlyReferenceable<JNativeInterface>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JNativeInterface;
-	}
+	public static JNativeType Type => JNativeType.JNativeInterface;
 
 	/// <summary>
 	/// Internal <see cref="JNativeInterface"/> pointer.
@@ -20,15 +17,9 @@ public readonly partial struct JEnvironmentValue : IFixedPointer, INative<JEnvir
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JNativeInterface"/> from this value.
 	/// </summary>
-	public ref readonly JNativeInterface Reference
-	{
-		get => ref this._functions.GetUnsafeReadOnlyReference<JNativeInterface>();
-	}
+	public ref readonly JNativeInterface Reference => ref this._functions.GetUnsafeReadOnlyReference<JNativeInterface>();
 	/// <inheritdoc/>
-	public IntPtr Pointer
-	{
-		get => this._functions;
-	}
+	public IntPtr Pointer => this._functions;
 
 	/// <summary>
 	/// Parameterless constructor.

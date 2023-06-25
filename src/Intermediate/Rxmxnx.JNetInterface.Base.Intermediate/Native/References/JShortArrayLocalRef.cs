@@ -10,10 +10,7 @@ public readonly partial struct JShortArrayLocalRef : IFixedPointer, INative<JSho
 	IWrapper<JObjectLocalRef>, IEquatable<JArrayLocalRef>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JShortArray;
-	}
+	public static JNativeType Type => JNativeType.JShortArray;
 
 	/// <summary>
 	/// Internal <see cref="JArrayLocalRef"/> reference.
@@ -23,22 +20,13 @@ public readonly partial struct JShortArrayLocalRef : IFixedPointer, INative<JSho
 	/// <summary>
 	/// JNI local reference.
 	/// </summary>
-	public JObjectLocalRef Value
-	{
-		get => this._value.Value;
-	}
+	public JObjectLocalRef Value => this._value.Value;
 	/// <summary>
 	/// JNI array local reference.
 	/// </summary>
-	public JArrayLocalRef ArrayValue
-	{
-		get => this._value;
-	}
+	public JArrayLocalRef ArrayValue => this._value;
 	/// <inheritdoc/>
-	public IntPtr Pointer
-	{
-		get => this._value.Pointer;
-	}
+	public IntPtr Pointer => this._value.Pointer;
 
 	/// <inheritdoc/>
 	public Boolean Equals(JArrayLocalRef other) => this._value.Equals(other);

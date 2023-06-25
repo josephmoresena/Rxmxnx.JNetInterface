@@ -6,20 +6,19 @@
 public readonly partial struct JInvokeInterface : INative<JNativeInterface>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JNativeInterface;
-	}
+	public static JNativeType Type => JNativeType.JNativeInterface;
 
 	/// <summary>
 	/// Internal reserved entries.
 	/// </summary>
+#pragma warning disable CS0169
 	private readonly ComReserved _reserved;
+#pragma warning restore CS0169
 
 	/// <summary>
 	/// Pointer to <c>DestroyJavaVM</c> function. Unloads a JVM and reclaims its resources.
 	/// </summary>
-	internal readonly IntPtr DestroyJavaVMPointer { get; init; }
+	internal readonly IntPtr DestroyJavaVmPointer { get; init; }
 	/// <summary>
 	/// Pointer to <c>AttachCurrentThread</c> function. Attaches the current thread to a JVM.
 	/// </summary>

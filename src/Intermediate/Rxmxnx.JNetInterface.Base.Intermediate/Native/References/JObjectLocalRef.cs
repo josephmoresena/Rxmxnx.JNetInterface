@@ -9,10 +9,7 @@
 public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectLocalRef>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type
-	{
-		get => JNativeType.JObject;
-	}
+	public static JNativeType Type => JNativeType.JObject;
 
 	/// <summary>
 	/// Internal native signed integer
@@ -20,10 +17,7 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
 	private readonly IntPtr _value;
 
 	/// <inheritdoc/>
-	public IntPtr Pointer
-	{
-		get => this._value;
-	}
+	public IntPtr Pointer => this._value;
 
 	/// <summary>
 	/// Parameterless constructor.
@@ -41,7 +35,7 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
 	public override Boolean Equals(Object? obj) => JObjectLocalRef.Equals(this, obj);
 
 	/// <summary>
-	/// Indicates wheter <paramref name="objRef"/> and a <paramref name="obj"/> are equal.
+	/// Indicates whether <paramref name="objRef"/> and a <paramref name="obj"/> are equal.
 	/// </summary>
 	/// <typeparam name="TObject">The type of object reference.</typeparam>
 	/// <param name="objRef">The object reference to compare with <paramref name="obj"/>.</param>
@@ -56,20 +50,20 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
 		=> JObjectLocalRef.Equals(objRef, obj);
 
 	/// <summary>
-	/// Indicates wheter <paramref name="objRef"/> and a <paramref name="obj"/> are equal.
+	/// Indicates whether <paramref name="jObjRef"/> and a <paramref name="obj"/> are equal.
 	/// </summary>
 	/// <typeparam name="TObject">The type of object reference.</typeparam>
-	/// <param name="objRef">The object reference to compare with <paramref name="obj"/>.</param>
-	/// <param name="obj">The object to compare with <paramref name="objRef"/>.</param>
+	/// <param name="jObjRef">The object reference to compare with <paramref name="obj"/>.</param>
+	/// <param name="obj">The object to compare with <paramref name="jObjRef"/>.</param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="obj"/> and <paramref name="objRef"/> represent the same value;
+	/// <see langword="true"/> if <paramref name="obj"/> and <paramref name="jObjRef"/> represent the same value;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static Boolean Equals<TObject>(in TObject objRef, Object? obj) where TObject : unmanaged
+	private static Boolean Equals<TObject>(in TObject jObjRef, Object? obj) where TObject : unmanaged
 	{
-		if (obj is IWrapper<JObjectLocalRef> other)
-			return other.Equals(objRef);
+		if (obj is IEquatable<JObjectLocalRef> other)
+			return other.Equals(jObjRef);
 		return false;
 	}
 }
