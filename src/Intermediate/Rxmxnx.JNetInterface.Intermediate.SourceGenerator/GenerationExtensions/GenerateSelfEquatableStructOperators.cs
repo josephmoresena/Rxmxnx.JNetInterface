@@ -39,7 +39,7 @@ partial struct {1} : IEquatable<{1}>
 #nullable restore";
 
 	/// <summary>
-	///     Generates operators for self-equatable structures.
+	/// Generates operators for self-equatable structures.
 	/// </summary>
 	/// <param name="structSymbol">A type symbol of self-equatable structure.</param>
 	/// <param name="context">Generation context.</param>

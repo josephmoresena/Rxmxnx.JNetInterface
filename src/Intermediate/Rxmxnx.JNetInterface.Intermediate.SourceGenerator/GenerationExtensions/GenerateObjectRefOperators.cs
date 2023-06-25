@@ -79,12 +79,12 @@ partial struct {1}
     /// <inheritdoc/>
     public override Boolean Equals([NotNullWhen(true)] Object? obj) => {0}(this, obj);";
 
-    /// <summary>
-    ///     Generates operators for object reference structures.
-    /// </summary>
-    /// <param name="objRefSymbol">A type symbol of object reference structure.</param>
-    /// <param name="context">Generation context.</param>
-    public static void GenerateObjectRefOperators(this ISymbol objRefSymbol, GeneratorExecutionContext context)
+	/// <summary>
+	/// Generates operators for object reference structures.
+	/// </summary>
+	/// <param name="objRefSymbol">A type symbol of object reference structure.</param>
+	/// <param name="context">Generation context.</param>
+	public static void GenerateObjectRefOperators(this ISymbol objRefSymbol, GeneratorExecutionContext context)
 	{
 		String equalFunction = objRefSymbol.Name.Contains("ArrayLocalRef")
 			? "JArrayLocalRef.ArrayEquals"

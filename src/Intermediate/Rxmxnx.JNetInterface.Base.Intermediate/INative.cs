@@ -1,14 +1,14 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-///     This interface exposes a JNI native value.
+/// This interface exposes a JNI native value.
 /// </summary>
 public interface INative
 {
-    /// <summary>
-    ///     Current instance text value.
-    /// </summary>
-    internal String TextValue
+	/// <summary>
+	/// Current instance text value.
+	/// </summary>
+	internal String TextValue
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get
@@ -24,30 +24,30 @@ public interface INative
 		}
 	}
 
-    /// <summary>
-    ///     Indicates the native type.
-    /// </summary>
-    static abstract JNativeType Type { get; }
+	/// <summary>
+	/// Indicates the native type.
+	/// </summary>
+	static abstract JNativeType Type { get; }
 
-    /// <summary>
-    ///     Current value as <see cref="String"/>.
-    /// </summary>
-    /// <returns>Current instance as <see cref="String"/>.</returns>
-    String AsString();
+	/// <summary>
+	/// Current value as <see cref="String"/>.
+	/// </summary>
+	/// <returns>Current instance as <see cref="String"/>.</returns>
+	String AsString();
 
-    /// <summary>
-    ///     <paramref name="native"/> as <see cref="String"/>.
-    /// </summary>
-    /// <param name="native"><see cref="INative"/> instance.</param>
-    /// <returns><see cref="INative"/> instance as <see cref="String"/>.</returns>
-    internal static String ToString(INative native)
+	/// <summary>
+	/// <paramref name="native"/> as <see cref="String"/>.
+	/// </summary>
+	/// <param name="native"><see cref="INative"/> instance.</param>
+	/// <returns><see cref="INative"/> instance as <see cref="String"/>.</returns>
+	internal static String ToString(INative native)
 	{
 		return native.AsString();
 	}
 }
 
 /// <summary>
-///     This interface exposes a JNI native value.
+/// This interface exposes a JNI native value.
 /// </summary>
 internal interface INative<TSelf> : INative
 	where TSelf : unmanaged, INative<TSelf>

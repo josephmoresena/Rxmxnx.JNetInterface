@@ -1,22 +1,22 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-///     This interface exposes an object that represents a JNI primitive value.
+/// This interface exposes an object that represents a JNI primitive value.
 /// </summary>
 public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 {
-    /// <summary>
-    ///     JNI signature for an array of current primitive type.
-    /// </summary>
-    static abstract CString ArraySignature { get; }
-    /// <summary>
-    ///     Primitive metadata.
-    /// </summary>
-    new static abstract JPrimitiveMetadata PrimitiveMetadata { get; }
+	/// <summary>
+	/// JNI signature for an array of current primitive type.
+	/// </summary>
+	static abstract CString ArraySignature { get; }
+	/// <summary>
+	/// Primitive metadata.
+	/// </summary>
+	new static abstract JPrimitiveMetadata PrimitiveMetadata { get; }
 }
 
 /// <summary>
-///     This interface exposes an object that represents a JNI primitive value.
+/// This interface exposes an object that represents a JNI primitive value.
 /// </summary>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
 public interface IPrimitive<TValue> : IPrimitive, IWrapper<TValue>, IComparable<TValue>
@@ -93,7 +93,7 @@ public interface IPrimitive<TValue> : IPrimitive, IWrapper<TValue>, IComparable<
 }
 
 /// <summary>
-///     This interface exposes an object that represents a JNI primitive value.
+/// This interface exposes an object that represents a JNI primitive value.
 /// </summary>
 /// <typeparam name="TSelf">Type of JNI primitive structure.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>

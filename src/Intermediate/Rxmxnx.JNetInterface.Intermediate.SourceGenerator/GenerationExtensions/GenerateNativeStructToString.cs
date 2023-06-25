@@ -18,7 +18,7 @@ partial struct {1}
 #nullable restore";
 
 	/// <summary>
-	///     Generates overrides for <see cref="Object.ToString()"/> for natives structures.
+	/// Generates overrides for <see cref="Object.ToString()"/> for natives structures.
 	/// </summary>
 	/// <param name="nativeSymbol">A type symbol of native structure.</param>
 	/// <param name="context">Generation context.</param>

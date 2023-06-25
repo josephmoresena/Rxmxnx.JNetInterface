@@ -1,20 +1,20 @@
 ﻿namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-///     This class stores a <c>java.lang.Class&lt;?&gt;</c> accesible object definition.
+/// This class stores a <c>java.lang.Class&lt;?&gt;</c> accesible object definition.
 /// </summary>
 public abstract record JAccessibleObjectDefinition
 {
 	/// <summary>
-	///     Internal <see cref="CStringSequence"/> containing the name and descriptor of accessible object.
+	/// Internal <see cref="CStringSequence"/> containing the name and descriptor of accessible object.
 	/// </summary>
 	private readonly CStringSequence _sequence;
 
 	/// <summary>
-	///     Constructor.
+	/// Constructor.
 	/// </summary>
 	/// <param name="sequence">
-	///     <see cref="CStringSequence"/> containing the name and descriptor of the method.
+	/// <see cref="CStringSequence"/> containing the name and descriptor of the method.
 	/// </param>
 	internal JAccessibleObjectDefinition(CStringSequence sequence)
 	{
@@ -22,11 +22,11 @@ public abstract record JAccessibleObjectDefinition
 	}
 
 	/// <summary>
-	///     Accessible object information.
+	/// Accessible object information.
 	/// </summary>
 	internal CStringSequence Information => this._sequence;
 	/// <summary>
-	///     The format used for <see cref="JAccessibleObjectDefinition.ToString()"/> method.
+	/// The format used for <see cref="JAccessibleObjectDefinition.ToString()"/> method.
 	/// </summary>
 	internal abstract String ToStringFormat { get; }
 
@@ -42,7 +42,7 @@ public abstract record JAccessibleObjectDefinition
 	}
 
 	/// <summary>
-	///     Retrieves the return type from <typeparamref name="TReturn"/>.
+	/// Retrieves the return type from <typeparamref name="TReturn"/>.
 	/// </summary>
 	/// <typeparam name="TReturn"><see cref="IDataType"/> type.</typeparam>
 	/// <returns>Type of return <typeparamref name="TReturn"/> type.</returns>

@@ -25,7 +25,7 @@ partial class {1}
 #nullable restore";
 
 	/// <summary>
-	///     Generates static constructor for UTF-8 constants container.
+	/// Generates static constructor for UTF-8 constants container.
 	/// </summary>
 	/// <param name="utf8ClassContainerSymbol">A class symbol of UTF-8 constants container.</param>
 	/// <param name="context">Generation context.</param>
@@ -46,7 +46,7 @@ partial class {1}
 	}
 
 	/// <summary>
-	///     Retrieves the literal value for UTF-8 constant.
+	/// Retrieves the literal value for UTF-8 constant.
 	/// </summary>
 	/// <param name="symbol">A symbol for UTF-8 constant.</param>
 	/// <returns>The string value to assign to UTF-8 constant.</returns>
@@ -61,7 +61,7 @@ partial class {1}
 		return paramsAttr?.Value as String;
 	}
 	/// <summary>
-	///     Retrieves the generated code for the static constructor of a UTF-8 constants container type.
+	/// Retrieves the generated code for the static constructor of a UTF-8 constants container type.
 	/// </summary>
 	/// <param name="utf8ContainerSymbol">A type symbol of UTF-8 constants container.</param>
 	/// <param name="strBuild">A builder with all UTF-8 constants initialization.</param>

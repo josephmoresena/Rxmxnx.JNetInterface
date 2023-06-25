@@ -75,7 +75,7 @@ partial struct {1} : IWrapper<JArrayLocalRef>
 #nullable restore";
 
 	/// <summary>
-	///     Generates operators for array reference structures.
+	/// Generates operators for array reference structures.
 	/// </summary>
 	/// <param name="arrayRefSymbol">A type symbol of array reference structure.</param>
 	/// <param name="context">Generation context.</param>

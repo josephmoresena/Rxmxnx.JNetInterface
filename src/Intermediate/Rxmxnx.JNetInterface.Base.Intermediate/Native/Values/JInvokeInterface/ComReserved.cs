@@ -4,10 +4,10 @@
                  Justification = CommonConstants.BinaryStructJustification)]
 public readonly partial struct JInvokeInterface
 {
-    /// <summary>
-    ///     This struct represent the reserved pointer for Microsoft COM compatiblity.
-    /// </summary>
-    private readonly struct ComReserved
+	/// <summary>
+	/// This struct represent the reserved pointer for Microsoft COM compatiblity.
+	/// </summary>
+	private readonly struct ComReserved
 	{
 		private readonly IntPtr _reserved0;
 		private readonly IntPtr _reserved1;

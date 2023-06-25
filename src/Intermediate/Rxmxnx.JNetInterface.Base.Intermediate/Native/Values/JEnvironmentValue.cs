@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
-///     <c>JNIEnv</c> struct. Contains a pointer to a <c>JNINativeInterface_</c> object.
+/// <c>JNIEnv</c> struct. Contains a pointer to a <c>JNINativeInterface_</c> object.
 /// </summary>
 public readonly struct JEnvironmentValue : IFixedPointer, INative<JEnvironmentValue>,
 	IReadOnlyReferenceable<JNativeInterface>
@@ -9,23 +9,23 @@ public readonly struct JEnvironmentValue : IFixedPointer, INative<JEnvironmentVa
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JNativeInterface;
 
-    /// <summary>
-    ///     Internal <see cref="JNativeInterface"/> pointer.
-    /// </summary>
-    private readonly IntPtr _functions;
+	/// <summary>
+	/// Internal <see cref="JNativeInterface"/> pointer.
+	/// </summary>
+	private readonly IntPtr _functions;
 
-    /// <summary>
-    ///     <see langword="readonly ref"/> <see cref="JNativeInterface"/> from this value.
-    /// </summary>
-    public ref readonly JNativeInterface Reference =>
+	/// <summary>
+	/// <see langword="readonly ref"/> <see cref="JNativeInterface"/> from this value.
+	/// </summary>
+	public ref readonly JNativeInterface Reference =>
 		ref this._functions.GetUnsafeReadOnlyReference<JNativeInterface>();
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._functions;
 
-    /// <summary>
-    ///     Parameterless constructor.
-    /// </summary>
-    public JEnvironmentValue()
+	/// <summary>
+	/// Parameterless constructor.
+	/// </summary>
+	public JEnvironmentValue()
 	{
 		this._functions = IntPtr.Zero;
 	}

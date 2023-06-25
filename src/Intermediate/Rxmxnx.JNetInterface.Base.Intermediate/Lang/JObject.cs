@@ -1,67 +1,67 @@
 ﻿namespace Rxmxnx.JNetInterface.Lang;
 
 /// <summary>
-///     This class represents a <c>java.lang.Object</c> instance.
+/// This class represents a <c>java.lang.Object</c> instance.
 /// </summary>
 public abstract class JObject : IObject, IEquatable<JObject>
 {
-    /// <summary>
-    ///     <c>java.lang.Object</c> class name.
-    /// </summary>
-    public static readonly CString ClassName = UnicodeClassNames.JObjectClassName;
-    /// <summary>
-    ///     <c>java.lang.Object</c> signature.
-    /// </summary>
-    public static readonly CString Signature = UnicodeObjectSignatures.JObjectSignature;
+	/// <summary>
+	/// <c>java.lang.Object</c> class name.
+	/// </summary>
+	public static readonly CString ClassName = UnicodeClassNames.JObjectClassName;
+	/// <summary>
+	/// <c>java.lang.Object</c> signature.
+	/// </summary>
+	public static readonly CString Signature = UnicodeObjectSignatures.JObjectSignature;
 
-    /// <summary>
-    ///     Internal <see cref="JValue"/> instance.
-    /// </summary>
-    private readonly IMutableReference<JValue> _value;
+	/// <summary>
+	/// Internal <see cref="JValue"/> instance.
+	/// </summary>
+	private readonly IMutableReference<JValue> _value;
 
-    /// <summary>
-    ///     Parameterless constructor.
-    /// </summary>
-    protected JObject() : this(JValue.Empty)
+	/// <summary>
+	/// Parameterless constructor.
+	/// </summary>
+	protected JObject() : this(JValue.Empty)
 	{
 	}
-    /// <summary>
-    ///     Constructor.
-    /// </summary>
-    /// <param name="value">Object reference.</param>
-    protected JObject(JObjectLocalRef value) : this(JValue.Create(value))
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="value">Object reference.</param>
+	protected JObject(JObjectLocalRef value) : this(JValue.Create(value))
 	{
 	}
-    /// <summary>
-    ///     Constructor.
-    /// </summary>
-    protected JObject(JObject jObject)
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	protected JObject(JObject jObject)
 	{
 		this._value = jObject._value;
 	}
 
-    /// <summary>
-    ///     Constructor.
-    /// </summary>
-    /// <param name="jValue">Internal <see cref="JValue"/> instance.</param>
-    internal JObject(JValue jValue)
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jValue">Internal <see cref="JValue"/> instance.</param>
+	internal JObject(JValue jValue)
 	{
 		this._value = IMutableReference.Create(jValue);
 	}
 
-    /// <summary>
-    ///     Object signature.
-    /// </summary>
-    public abstract CString ObjectClassName { get; }
-    /// <summary>
-    ///     Object signature.
-    /// </summary>
-    public abstract CString ObjectSignature { get; }
+	/// <summary>
+	/// Object signature.
+	/// </summary>
+	public abstract CString ObjectClassName { get; }
+	/// <summary>
+	/// Object signature.
+	/// </summary>
+	public abstract CString ObjectSignature { get; }
 
-    /// <summary>
-    ///     Internal <see cref="JValue"/> value.
-    /// </summary>
-    internal virtual JValue Value => this._value.Value;
+	/// <summary>
+	/// Internal <see cref="JValue"/> value.
+	/// </summary>
+	internal virtual JValue Value => this._value.Value;
 
 	/// <inheritdoc/>
 	public virtual Boolean Equals(JObject? other)
@@ -95,38 +95,38 @@ public abstract class JObject : IObject, IEquatable<JObject>
 		return obj is JObject jObj && this.Equals(jObj);
 	}
 
-    /// <summary>
-    ///     Sets the current instance value.
-    /// </summary>
-    /// <param name="jValue"><see cref="JValue"/> that is set as the value of current instance.</param>
-    internal void SetValue(JValue jValue)
+	/// <summary>
+	/// Sets the current instance value.
+	/// </summary>
+	/// <param name="jValue"><see cref="JValue"/> that is set as the value of current instance.</param>
+	internal void SetValue(JValue jValue)
 	{
 		this._value.Value = jValue;
 	}
-    /// <summary>
-    ///     Sets <see cref="JValue.Empty"/> as the current instance value.
-    /// </summary>
-    internal void ClearValue()
+	/// <summary>
+	/// Sets <see cref="JValue.Empty"/> as the current instance value.
+	/// </summary>
+	internal void ClearValue()
 	{
 		this._value.Value = JValue.Empty;
 	}
 
-    /// <summary>
-    ///     Interprets current instance a <typeparamref name="TValue"/> value.
-    /// </summary>
-    /// <typeparam name="TValue">Type of value.</typeparam>
-    /// <returns>A read-only reference of <typeparamref name="TValue"/> value.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+	/// <summary>
+	/// Interprets current instance a <typeparamref name="TValue"/> value.
+	/// </summary>
+	/// <typeparam name="TValue">Type of value.</typeparam>
+	/// <returns>A read-only reference of <typeparamref name="TValue"/> value.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal virtual ref readonly TValue As<TValue>() where TValue : unmanaged
 	{
 		return ref JValue.As<TValue>(ref this._value.Reference);
 	}
-    /// <summary>
-    ///     Interprets current instance a <typeparamref name="TValue"/> value.
-    /// </summary>
-    /// <typeparam name="TValue">Type of value.</typeparam>
-    /// <returns>A <typeparamref name="TValue"/> value.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+	/// <summary>
+	/// Interprets current instance a <typeparamref name="TValue"/> value.
+	/// </summary>
+	/// <typeparam name="TValue">Type of value.</typeparam>
+	/// <returns>A <typeparamref name="TValue"/> value.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal virtual TValue To<TValue>() where TValue : unmanaged
 	{
 		return JValue.As<TValue>(ref this._value.Reference);
