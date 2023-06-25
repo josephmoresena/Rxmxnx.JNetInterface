@@ -4,8 +4,7 @@
 /// <c>JNIEnv</c> pointer. Represents a pointer to a <c>JNIEnv</c> object.
 /// </summary>
 /// <remarks>This references is valid only for the thread who owns the reference.</remarks>
-public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnvironmentRef>,
-	IReadOnlyReferenceable<JEnvironmentValue>
+public readonly partial struct JEnvironmentRef : INativeReference<JEnvironmentRef, JEnvironmentValue>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JEnvironmentRef;
@@ -17,11 +16,12 @@ public readonly partial struct JEnvironmentRef : IFixedPointer, INative<JEnviron
 
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value;
-	
+
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JEnvironmentValue"/> from this pointer.
 	/// </summary>
-	internal ref readonly JEnvironmentValue Reference => ref this._value.GetUnsafeReadOnlyReference<JEnvironmentValue>();
+	internal ref readonly JEnvironmentValue Reference
+		=> ref this._value.GetUnsafeReadOnlyReference<JEnvironmentValue>();
 
 	/// <summary>
 	/// Parameterless constructor.

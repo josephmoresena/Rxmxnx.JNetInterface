@@ -1,5 +1,8 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
+/// <summary>
+/// Java classes names.
+/// </summary>
 internal static class ClassNames
 {
 	/// <summary>

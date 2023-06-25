@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-/// This class stores a <c>java.lang.Class&lt;?&gt;</c> accesible object definition.
+/// This class stores a <c>java.lang.Class&lt;?&gt;</c> accessible object definition.
 /// </summary>
 public abstract record JAccessibleObjectDefinition
 {

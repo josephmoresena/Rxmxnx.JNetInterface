@@ -1,5 +1,8 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
+/// <summary>
+/// Java methods names.
+/// </summary>
 internal static class MethodNames
 {
 	/// <summary>

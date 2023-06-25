@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// This interface exposes a Java datatype.
+/// This interface exposes a java data type.
 /// </summary>
 public interface IDataType
 {
@@ -21,7 +21,7 @@ public interface IDataType
 }
 
 /// <summary>
-/// This interface exposes a Java datatype.
+/// This interface exposes a java data type.
 /// </summary>
 /// <typeparam name="TSelf">Type of current Java datatype.</typeparam>
 public interface IDataType<out TSelf> : IDataType where TSelf : IDataType<TSelf>

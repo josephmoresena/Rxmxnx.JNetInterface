@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// Unicode primitive array signatures names.
+/// Unicode java primitive array signatures.
 /// </summary>
 internal static partial class UnicodePrimitiveArraySignatures
 {

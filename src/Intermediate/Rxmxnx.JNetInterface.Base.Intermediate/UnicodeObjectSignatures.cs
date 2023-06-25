@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// Unicode object signatures.
+/// Unicode java objects signatures.
 /// </summary>
 public static partial class UnicodeObjectSignatures
 {

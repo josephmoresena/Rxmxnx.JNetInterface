@@ -6,7 +6,7 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-public readonly partial struct JBooleanArrayLocalRef : IFixedPointer, IArrayLocalRef, INative<JBooleanArrayLocalRef>
+public readonly partial struct JBooleanArrayLocalRef : IArrayReference<JBooleanArrayLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JBooleanArray;

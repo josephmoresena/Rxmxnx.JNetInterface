@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// Internal class for constants literal <see cref="String"/> values.
+/// Internal class of constant <see cref="String"/> values.
 /// </summary>
 internal static class CommonConstants
 {

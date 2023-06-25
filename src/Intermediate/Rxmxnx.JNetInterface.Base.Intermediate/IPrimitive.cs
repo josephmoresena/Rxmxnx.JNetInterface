@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// This interface exposes an object that represents a JNI primitive value.
+/// This interface exposes an object that represents a java primitive value.
 /// </summary>
 public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 {
@@ -16,7 +16,7 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 }
 
 /// <summary>
-/// This interface exposes an object that represents a JNI primitive value.
+/// This interface exposes an object that represents a java primitive value.
 /// </summary>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
 public interface IPrimitive<TValue> : IPrimitive, IWrapper<TValue>, IComparable<TValue>
@@ -43,11 +43,11 @@ public interface IPrimitive<TValue> : IPrimitive, IWrapper<TValue>, IComparable<
 }
 
 /// <summary>
-/// This interface exposes an object that represents a JNI primitive value.
+/// This interface exposes an object that represents a java primitive value.
 /// </summary>
 /// <typeparam name="TSelf">Type of JNI primitive structure.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
-public interface IPrimitive<TSelf, TValue> : IPrimitive<TValue>, IDataType<TSelf>
+public interface IPrimitive<out TSelf, TValue> : IPrimitive<TValue>, IDataType<TSelf>
 	where TSelf : unmanaged, IPrimitive<TSelf, TValue>, IComparable<TSelf>, IEquatable<TSelf>
 	where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>, IConvertible
 {

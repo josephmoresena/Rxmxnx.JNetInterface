@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// Unicode classes names.
+/// Unicode java classes names.
 /// </summary>
 internal static partial class UnicodeClassNames
 {

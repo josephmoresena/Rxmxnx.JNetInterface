@@ -1,5 +1,8 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
+/// <summary>
+/// Java primitive array signatures.
+/// </summary>
 internal static class PrimitiveArraySignatures
 {
 	/// <summary>

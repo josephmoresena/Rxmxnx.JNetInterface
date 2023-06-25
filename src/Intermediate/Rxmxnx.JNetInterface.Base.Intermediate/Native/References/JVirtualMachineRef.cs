@@ -6,8 +6,7 @@
 /// <remarks>
 /// This identifier will be valid until the library is unloaded or the JVM instance is destroyed.
 /// </remarks>
-public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirtualMachineRef>,
-	IReadOnlyReferenceable<JVirtualMachineValue>
+public readonly partial struct JVirtualMachineRef : INativeReference<JVirtualMachineRef, JVirtualMachineValue>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JVirtualMachineRef;
@@ -16,10 +15,10 @@ public readonly partial struct JVirtualMachineRef : IFixedPointer, INative<JVirt
 	/// Internal pointer value.
 	/// </summary>
 	private readonly IntPtr _value;
-	
+
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value;
-	
+
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JVirtualMachineValue"/> from this pointer.
 	/// </summary>

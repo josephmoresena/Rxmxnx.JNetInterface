@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// This interface exposes a JNI native value.
+/// This interface exposes a java native value.
 /// </summary>
 public interface INative
 {
@@ -25,7 +25,7 @@ public interface INative
 	}
 
 	/// <summary>
-	/// Indicates the native type.
+	/// Indicates the type of native value.
 	/// </summary>
 	static abstract JNativeType Type { get; }
 
@@ -44,8 +44,9 @@ public interface INative
 }
 
 /// <summary>
-/// This interface exposes a JNI native value.
+/// This interface exposes a java native value.
 /// </summary>
+/// <typeparam name="TSelf">Type of <see cref="INative{TSelf}"/></typeparam>
 internal interface INative<TSelf> : INative where TSelf : unmanaged, INative<TSelf>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

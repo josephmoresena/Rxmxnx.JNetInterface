@@ -1,5 +1,8 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
+/// <summary>
+/// Java native values names.
+/// </summary>
 internal static class ValueNames
 {
 	/// <summary>

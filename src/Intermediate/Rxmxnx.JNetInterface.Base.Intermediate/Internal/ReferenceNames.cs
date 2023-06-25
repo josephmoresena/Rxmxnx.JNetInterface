@@ -1,5 +1,8 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
+/// <summary>
+/// Java native references names.
+/// </summary>
 internal static class ReferenceNames
 {
 	/// <summary>

@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// Unicode method signatures.
+/// Unicode java methods signatures.
 /// </summary>
 public static partial class UnicodeMethodSignatures
 {

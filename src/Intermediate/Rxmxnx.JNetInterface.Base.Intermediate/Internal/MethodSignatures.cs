@@ -1,5 +1,8 @@
 ﻿namespace Rxmxnx.JNetInterface.Internal;
 
+/// <summary>
+/// Java objects signatures.
+/// </summary>
 internal static class MethodSignatures
 {
 	/// <summary>

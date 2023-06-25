@@ -6,7 +6,7 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
-public readonly partial struct JByteArrayLocalRef : IFixedPointer, IArrayLocalRef, INative<JByteArrayLocalRef>
+public readonly partial struct JByteArrayLocalRef : IArrayReference<JByteArrayLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JByteArray;
