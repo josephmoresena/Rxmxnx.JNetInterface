@@ -104,12 +104,12 @@ namespace Rxmxnx.JNetInterface.SourceGenerator
 
         private static void Generate(GeneratorExecutionContext context, NativeMethodGenerator method)
         {
-            StringBuilder strBuildDoc = new StringBuilder();
-            StringBuilder strBuildArgType = new StringBuilder();
-            StringBuilder strBuildCons = new StringBuilder();
-            StringBuilder strBuildArg = new StringBuilder();
+            StringBuilder strBuildDoc = new();
+            StringBuilder strBuildArgType = new();
+            StringBuilder strBuildCons = new();
+            StringBuilder strBuildArg = new();
 
-            for (Int32 i = 1; i <= Byte.MaxValue; i++)
+            for (UInt32 i = 1; i <= Byte.MaxValue; i++)
             {
                 PrepareFile(strBuildDoc, strBuildArgType, strBuildArg, i);
                 strBuildDoc.Append(String.Format(genericDocFormat, i, i.GetOrdinalSuffix()));
@@ -133,7 +133,7 @@ namespace Rxmxnx.JNetInterface.SourceGenerator
                 context.AddSource($"{method.TypeName}.g{i:000}.cs", strBuildSource.ToString());
             }
         }
-        private static void PrepareFile(StringBuilder strBuildDoc, StringBuilder strBuildArgType, StringBuilder strBuildArg, Int32 index)
+        private static void PrepareFile(StringBuilder strBuildDoc, StringBuilder strBuildArgType, StringBuilder strBuildArg, UInt32 index)
         {
             if (index > 1)
             {
