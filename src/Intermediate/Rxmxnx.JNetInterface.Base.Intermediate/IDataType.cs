@@ -23,13 +23,13 @@ public interface IDataType
 /// <summary>
 /// This interface exposes a java data type.
 /// </summary>
-/// <typeparam name="TSelf">Type of current Java datatype.</typeparam>
-public interface IDataType<out TSelf> : IDataType where TSelf : IDataType<TSelf>
+/// <typeparam name="TDataType">Type of current Java datatype.</typeparam>
+public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
 	/// <summary>
-	/// Creates a <typeparamref name="TSelf"/> instance from <paramref name="jObject"/>.
+	/// Creates a <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
-	/// <returns>A <typeparamref name="TSelf"/> instance from <paramref name="jObject"/>.</returns>
-	static abstract TSelf? Create(JObject? jObject);
+	/// <returns>A <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.</returns>
+	static abstract TDataType? Create(JObject? jObject);
 }

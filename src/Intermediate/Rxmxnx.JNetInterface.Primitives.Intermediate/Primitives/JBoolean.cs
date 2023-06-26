@@ -4,7 +4,7 @@
 /// Primitive <c>boolean</c>. Represents a Boolean (<see langword="true"/> or <see langword="false"/>) value.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly record struct JBoolean : IPrimitive<JBoolean, Boolean>, IComparable<JBoolean>
+public readonly record struct JBoolean : INative<JBoolean>, IPrimitive<JBoolean, Boolean>, IComparable<JBoolean>
 {
 	/// <summary>
 	/// Unsigned byte value for <see langword="true"/> value.
@@ -32,6 +32,8 @@ public readonly record struct JBoolean : IPrimitive<JBoolean, Boolean>, ICompara
 	private JBoolean(Boolean value) => this._value = value ? JBoolean.trueValue : JBoolean.falseValue;
 	/// <inheritdoc/>
 	public Int32 CompareTo(JBoolean other) => this.Value.CompareTo(other.Value);
+	/// <inheritdoc/>
+	public static JNativeType Type => JNativeType.JBoolean;
 	/// <inheritdoc/>
 	public static CString ClassName => UnicodeClassNames.JBooleanObjectClassName;
 	/// <inheritdoc/>

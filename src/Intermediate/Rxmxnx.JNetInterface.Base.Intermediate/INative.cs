@@ -46,10 +46,10 @@ public interface INative
 /// <summary>
 /// This interface exposes a java native value.
 /// </summary>
-/// <typeparam name="TSelf">Type of <see cref="INative{TSelf}"/></typeparam>
-internal interface INative<TSelf> : INative where TSelf : unmanaged, INative<TSelf>
+/// <typeparam name="TNative">Type of <see cref="INative{TSelf}"/></typeparam>
+internal interface INative<TNative> : INative where TNative : unmanaged, INative<TNative>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	String INative.AsString()
-		=> String.Format(CommonConstants.NativeReferenceFormat, TSelf.Type.GetTypeName(), this.TextValue);
+		=> String.Format(CommonConstants.NativeReferenceFormat, TNative.Type.GetTypeName(), this.TextValue);
 }

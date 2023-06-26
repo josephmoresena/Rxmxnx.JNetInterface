@@ -43,10 +43,10 @@ public interface IPrimitive<TValue> : IPrimitive, IWrapper<TValue>, IComparable<
 /// <summary>
 /// This interface exposes an object that represents a java primitive value.
 /// </summary>
-/// <typeparam name="TSelf">Type of JNI primitive structure.</typeparam>
+/// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
-public interface IPrimitive<out TSelf, TValue> : IPrimitive<TValue>, IDataType<TSelf>
-	where TSelf : unmanaged, IPrimitive<TSelf, TValue>, IComparable<TSelf>, IEquatable<TSelf>
+public interface IPrimitive<out TPrimitive, TValue> : IPrimitive<TValue>, IDataType<TPrimitive>
+	where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>, IConvertible
 {
 	Int32 IComparable<TValue>.CompareTo(TValue other) => this.Value.CompareTo(other);
@@ -56,13 +56,13 @@ public interface IPrimitive<out TSelf, TValue> : IPrimitive<TValue>, IDataType<T
 	{
 		ref TValue refValue = ref Unsafe.AsRef(this.Value);
 		refValue.AsBytes().CopyTo(span[offset..]);
-		offset += TSelf.PrimitiveMetadata.SizeOf;
+		offset += TPrimitive.PrimitiveMetadata.SizeOf;
 	}
 	void IObject.CopyTo(Span<JValue> span, Int32 index) { JValue.Create(this.Value); }
 
 	/// <summary>
-	/// Defines an implicit conversion of a given <typeparamref name="TValue"/> to <typeparamref name="TSelf"/>.
+	/// Defines an implicit conversion of a given <typeparamref name="TValue"/> to <typeparamref name="TPrimitive"/>.
 	/// </summary>
 	/// <param name="value">A <typeparamref name="TValue"/> to implicitly convert.</param>
-	static abstract implicit operator TSelf(TValue value);
+	static abstract implicit operator TPrimitive(TValue value);
 }

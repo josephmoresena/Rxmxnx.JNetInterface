@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// <summary>
 /// Primitive <c>byte</c>. Represents a 8-bit signed integer.
 /// </summary>
-public readonly record struct JByte : IPrimitive<JByte, SByte>, IComparable<JByte>
+public readonly record struct JByte : INative<JByte>, IPrimitive<JByte, SByte>, IComparable<JByte>
 {
 	/// <summary>
 	/// Internal 8-bit signed integer value.
@@ -22,6 +22,8 @@ public readonly record struct JByte : IPrimitive<JByte, SByte>, IComparable<JByt
 	private JByte(SByte value) => this._value = value;
 	/// <inheritdoc/>
 	public Int32 CompareTo(JByte other) => this.Value.CompareTo(other.Value);
+	/// <inheritdoc/>
+	public static JNativeType Type => JNativeType.JByte;
 	/// <inheritdoc/>
 	public static CString ClassName => UnicodeClassNames.JByteObjectClassName;
 	/// <inheritdoc/>

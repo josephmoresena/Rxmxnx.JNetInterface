@@ -8,6 +8,6 @@ internal interface IAccessibleObjectIdentifier : IFixedPointer, INative { }
 /// <summary>
 /// This interface exposes a java accessible object identifier.
 /// </summary>
-/// <typeparam name="TSelf">Type of <see cref="IAccessibleObjectIdentifier{TSelf}"/>.</typeparam>
-internal interface IAccessibleObjectIdentifier<TSelf> : IAccessibleObjectIdentifier, INative<TSelf>
-	where TSelf : unmanaged, IAccessibleObjectIdentifier<TSelf> { }
+/// <typeparam name="TAccessible">Type of <see cref="IAccessibleObjectIdentifier{TSelf}"/>.</typeparam>
+internal interface IAccessibleObjectIdentifier<TAccessible> : IAccessibleObjectIdentifier, INative<TAccessible>
+	where TAccessible : unmanaged, IAccessibleObjectIdentifier<TAccessible> { }

@@ -8,6 +8,6 @@ internal interface IObjectGlobalReference : IFixedPointer, IWrapper<JObjectLocal
 /// <summary>
 /// This interface exposes a java object global reference.
 /// </summary>
-/// <typeparam name="TSelf">Type of <see cref="IObjectGlobalReference{TSelf}"/>.</typeparam>
-internal interface IObjectGlobalReference<TSelf> : IObjectGlobalReference, INative<TSelf>
-	where TSelf : unmanaged, IObjectGlobalReference<TSelf> { }
+/// <typeparam name="TGlobal">Type of <see cref="IObjectGlobalReference{TSelf}"/>.</typeparam>
+internal interface IObjectGlobalReference<TGlobal> : IObjectGlobalReference, INative<TGlobal>
+	where TGlobal : unmanaged, IObjectGlobalReference<TGlobal> { }

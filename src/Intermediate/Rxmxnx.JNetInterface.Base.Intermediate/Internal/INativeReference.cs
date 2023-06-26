@@ -15,7 +15,7 @@ internal interface INativeReference<TSelf> : INativeReference, INative<TSelf>
 /// <summary>
 /// This interface exposes a native java reference.
 /// </summary>
-/// <typeparam name="TSelf">Type of <see cref="INativeReference{TSelf, TValue}"/>.</typeparam>
+/// <typeparam name="TReference">Type of <see cref="INativeReference{TSelf, TValue}"/>.</typeparam>
 /// <typeparam name="TValue">Type of referenced value.</typeparam>
-internal interface INativeReference<TSelf, TValue> : INativeReference<TSelf>, IReadOnlyReferenceable<TValue>
-	where TSelf : unmanaged, INativeReference<TSelf, TValue> where TValue : unmanaged { }
+internal interface INativeReference<TReference, TValue> : INativeReference<TReference>, IReadOnlyReferenceable<TValue>
+	where TReference : unmanaged, INativeReference<TReference, TValue> where TValue : unmanaged { }
