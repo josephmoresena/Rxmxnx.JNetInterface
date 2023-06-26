@@ -27,6 +27,7 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal JObjectLocalRef(JObjectLocalRef objRef) => this._value = objRef._value;
 
 	/// <inheritdoc/>
