@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -32,6 +33,7 @@ partial class {1}
 	public static void GenerateUtf8ContainerInitializer(this INamedTypeSymbol utf8ClassContainerSymbol,
 		GeneratorExecutionContext context)
 	{
+		String fileName = $"{utf8ClassContainerSymbol.Name}.StaticConstructor.g.cs";
 		StringBuilder strBuild = new();
 		foreach (ISymbol symbol in utf8ClassContainerSymbol.GetMembers())
 		{
@@ -39,9 +41,10 @@ partial class {1}
 			if (value is not null)
 				strBuild.AppendLine($"\t\t{symbol.Name} = new(() => \"{value}\"u8);");
 		}
-
-		context.AddSource($"{utf8ClassContainerSymbol.Name}.StaticConstructor.g.cs",
-		                  GenerationExtensions.GenerateUtf8ContainerConstructor(utf8ClassContainerSymbol, strBuild));
+		String source = String.Format(GenerationExtensions.staticConstructorFormat,
+		                              utf8ClassContainerSymbol.ContainingNamespace, utf8ClassContainerSymbol.Name,
+		                              strBuild);
+		context.AddSource(fileName, source);
 	}
 
 	/// <summary>
@@ -49,6 +52,7 @@ partial class {1}
 	/// </summary>
 	/// <param name="symbol">A symbol for UTF-8 constant.</param>
 	/// <returns>The string value to assign to UTF-8 constant.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static String? GetLiteralValue(this ISymbol symbol)
 	{
 		if (!symbol.CanBeReferencedByName)
@@ -59,13 +63,4 @@ partial class {1}
 		TypedConstant? paramsAttr = (attribute?.ConstructorArguments)?.FirstOrDefault();
 		return paramsAttr?.Value as String;
 	}
-	/// <summary>
-	/// Retrieves the generated code for the static constructor of a UTF-8 constants container type.
-	/// </summary>
-	/// <param name="utf8ContainerSymbol">A type symbol of UTF-8 constants container.</param>
-	/// <param name="strBuild">A builder with all UTF-8 constants initialization.</param>
-	/// <returns>The content of the generated source code.</returns>
-	private static String GenerateUtf8ContainerConstructor(INamedTypeSymbol utf8ContainerSymbol, StringBuilder strBuild)
-		=> String.Format(GenerationExtensions.staticConstructorFormat, utf8ContainerSymbol.ContainingNamespace,
-		                 utf8ContainerSymbol.Name, strBuild);
 }

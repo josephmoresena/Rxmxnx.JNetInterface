@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 
@@ -22,10 +23,12 @@ partial struct {1}
 	/// </summary>
 	/// <param name="nativeSymbol">A type symbol of native structure.</param>
 	/// <param name="context">Generation context.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GenerateNativeStructToString(this ISymbol nativeSymbol, GeneratorExecutionContext context)
 	{
-		context.AddSource($"{nativeSymbol.Name}.ToString.g.cs",
-		                  String.Format(GenerationExtensions.nativeToStringFormat, nativeSymbol.ContainingNamespace,
-		                                nativeSymbol.Name));
+		String fileName = $"{nativeSymbol.Name}.ToString.g.cs";
+		String source = String.Format(GenerationExtensions.nativeToStringFormat, nativeSymbol.ContainingNamespace,
+		                              nativeSymbol.Name);
+		context.AddSource(fileName, source);
 	}
 }

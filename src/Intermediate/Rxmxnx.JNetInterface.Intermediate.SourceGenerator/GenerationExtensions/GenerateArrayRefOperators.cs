@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 
@@ -79,10 +80,12 @@ partial struct {1} : IWrapper<JArrayLocalRef>
 	/// </summary>
 	/// <param name="arrayRefSymbol">A type symbol of array reference structure.</param>
 	/// <param name="context">Generation context.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GenerateArrayRefOperators(this ISymbol arrayRefSymbol, GeneratorExecutionContext context)
 	{
-		context.AddSource($"{arrayRefSymbol.Name}.ArrayRef.g.cs",
-		                  String.Format(GenerationExtensions.arrayRefFormat, arrayRefSymbol.ContainingNamespace,
-		                                arrayRefSymbol.Name));
+		String fileName = $"{arrayRefSymbol.Name}.ArrayRef.g.cs";
+		String source = String.Format(GenerationExtensions.arrayRefFormat, arrayRefSymbol.ContainingNamespace,
+		                              arrayRefSymbol.Name);
+		context.AddSource(fileName, source);
 	}
 }

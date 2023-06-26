@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 
@@ -44,11 +45,13 @@ partial struct {1} : IEquatable<{1}>
 	/// <param name="structSymbol">A type symbol of self-equatable structure.</param>
 	/// <param name="context">Generation context.</param>
 	/// <param name="valueName">Internal absolute value field name.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GenerateSelfEquatableStructOperators(this ISymbol structSymbol,
 		GeneratorExecutionContext context, String valueName)
 	{
-		context.AddSource($"{structSymbol.Name}.Equals.g.cs",
-		                  String.Format(GenerationExtensions.structEquatableFormat, structSymbol.ContainingNamespace,
-		                                structSymbol.Name, valueName));
+		String fileName = $"{structSymbol.Name}.Equals.g.cs";
+		String source = String.Format(GenerationExtensions.structEquatableFormat, structSymbol.ContainingNamespace,
+		                              structSymbol.Name, valueName);
+		context.AddSource(fileName, source);
 	}
 }

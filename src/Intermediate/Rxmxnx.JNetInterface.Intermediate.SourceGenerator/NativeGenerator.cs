@@ -30,7 +30,7 @@ internal static class NativeGenerator
 /// This class stores a <see cref=""JClass""/> constructor definition.
 /// </summary>",
 			DefinitionPrefix = "public sealed partial record JConstructorDefinition<",
-			DefinitionSufix = "> : JMethodDefinitionBase ",
+			DefinitionSuffix = "> : JMethodDefinitionBase ",
 			BodyPrefix = @"{
 	/// <inheritdoc/>
 	internal override Type? Return => default;
@@ -40,7 +40,7 @@ internal static class NativeGenerator
 	/// </summary>
 	public JConstructorDefinition() : 
 		base(ConstructorName, ",
-			BodySufix = @") { }
+			BodySuffix = @") { }
 }",
 		};
 		NativeGenerator.function = new()
@@ -52,7 +52,7 @@ internal static class NativeGenerator
 /// </summary>
 /// <typeparam name=""TResult""><see cref=""IDataType""/> type of function result.</typeparam>",
 			DefinitionPrefix = "public sealed partial record JFunctionDefinition<TResult, ",
-			DefinitionSufix = @"> : JMethodDefinitionBase 
+			DefinitionSuffix = @"> : JMethodDefinitionBase 
 	where TResult : IDataType<TResult>",
 			BodyPrefix = @"{
 	/// <summary>
@@ -69,7 +69,7 @@ internal static class NativeGenerator
 	/// <param name=""functionName"">Function name.</param>
 	public JFunctionDefinition(CString functionName) : 
 		base(functionName, TResult.Signature, ",
-			BodySufix = @") { }
+			BodySuffix = @") { }
 }",
 		};
 		NativeGenerator.method = new()
@@ -80,7 +80,7 @@ internal static class NativeGenerator
 /// This class stores a <see cref=""JClass""/> method definition.
 /// </summary>",
 			DefinitionPrefix = "public sealed partial record JMethodDefinition<",
-			DefinitionSufix = "> : JMethodDefinitionBase ",
+			DefinitionSuffix = "> : JMethodDefinitionBase ",
 			BodyPrefix = @"{
 	/// <inheritdoc/>
 	internal override Type? Return => default;
@@ -91,7 +91,7 @@ internal static class NativeGenerator
 	/// <param name=""methodName"">Method name.</param>
 	public JMethodDefinition(CString methodName) : 
 		base(methodName, ",
-			BodySufix = @") { }
+			BodySuffix = @") { }
 }",
 		};
 	}
@@ -125,11 +125,11 @@ internal static class NativeGenerator
 			strBuildSource.AppendLine(strBuildDoc.ToString());
 			strBuildSource.Append(method.DefinitionPrefix);
 			strBuildSource.Append(strBuildArgType);
-			strBuildSource.AppendLine(method.DefinitionSufix);
+			strBuildSource.AppendLine(method.DefinitionSuffix);
 			strBuildSource.Append(strBuildCons);
 			strBuildSource.Append(method.BodyPrefix);
 			strBuildSource.Append(strBuildArg);
-			strBuildSource.AppendLine(method.BodySufix);
+			strBuildSource.AppendLine(method.BodySuffix);
 
 			context.AddSource($"{method.TypeName}.g{i:000}.cs", strBuildSource.ToString());
 		}
