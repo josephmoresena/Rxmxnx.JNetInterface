@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-/// This class stores the metadata for a value <see cref="IPrimitive"/> type.
+/// This record stores the metadata for a value <see cref="IPrimitive"/> type.
 /// </summary>
 public abstract record JPrimitiveMetadata
 {
@@ -17,4 +17,17 @@ public abstract record JPrimitiveMetadata
 	/// Managed type of internal value of <see cref="IPrimitive"/>.
 	/// </summary>
 	public abstract Type Type { get; }
+}
+
+/// <summary>
+/// This record stores the metadata for a value <see cref="IPrimitive"/> type.
+/// </summary>
+/// <typeparam name="TPrimitive">Type of <see cref="IPrimitive"/>.</typeparam>
+/// <typeparam name="TInternalValue">Type of internal primitive value.</typeparam>
+internal sealed record JPrimitiveMetadata<TPrimitive, TInternalValue> : JPrimitiveMetadata
+	where TPrimitive : unmanaged, IPrimitive where TInternalValue : unmanaged
+{
+	public override CString ArraySignature => TPrimitive.ArraySignature;
+	public override Int32 SizeOf => NativeUtilities.SizeOf<TInternalValue>();
+	public override Type Type => typeof(TInternalValue);
 }

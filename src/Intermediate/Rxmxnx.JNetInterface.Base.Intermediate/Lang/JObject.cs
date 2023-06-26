@@ -82,6 +82,23 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// Sets <see cref="JValue.Empty"/> as the current instance value.
 	/// </summary>
 	internal void ClearValue() { this._value.Value = JValue.Empty; }
+	/// <summary>
+	/// Retrieves a <typeparamref name="TValue"/> value from current instance.
+	/// </summary>
+	/// <typeparam name="TPrimitive"><see cref="IPrimitive"/> type.</typeparam>
+	/// <typeparam name="TValue"><see cref="ValueType"/> type.</typeparam>
+	/// <returns>
+	/// The equivalent <typeparamref name="TValue"/> value to current instance.
+	/// </returns>
+	/// <exception cref="InvalidCastException"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal TPrimitive AsPrimitive<TPrimitive, TValue>()
+		where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>, IConvertible
+		where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
+		=> this is IWrapper<TPrimitive> pw ? pw.Value.Value :
+			this is IWrapper<TValue> vw ? vw.Value :
+			this is IConvertible c ? (TValue)c.ToType(typeof(TValue), CultureInfo.CurrentCulture) :
+			throw new InvalidCastException();
 
 	/// <summary>
 	/// Interprets current instance a <typeparamref name="TValue"/> value.

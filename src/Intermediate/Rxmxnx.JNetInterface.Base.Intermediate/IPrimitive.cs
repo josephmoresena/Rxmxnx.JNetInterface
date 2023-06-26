@@ -9,9 +9,7 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 	/// JNI signature for an array of current primitive type.
 	/// </summary>
 	static abstract CString ArraySignature { get; }
-	/// <summary>
-	/// Primitive metadata.
-	/// </summary>
+	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
 	new static abstract JPrimitiveMetadata PrimitiveMetadata { get; }
 }
 
@@ -61,4 +59,10 @@ public interface IPrimitive<out TSelf, TValue> : IPrimitive<TValue>, IDataType<T
 		offset += TSelf.PrimitiveMetadata.SizeOf;
 	}
 	void IObject.CopyTo(Span<JValue> span, Int32 index) { JValue.Create(this.Value); }
+
+	/// <summary>
+	/// Defines an implicit conversion of a given <typeparamref name="TValue"/> to <typeparamref name="TSelf"/>.
+	/// </summary>
+	/// <param name="value">A <typeparamref name="TValue"/> to implicitly convert.</param>
+	static abstract implicit operator TSelf(TValue value);
 }

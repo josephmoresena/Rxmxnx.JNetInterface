@@ -17,6 +17,7 @@
     <ItemGroup>
         <Using Include="System.ComponentModel"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
+        <Using Include="System.Globalization"/>
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
