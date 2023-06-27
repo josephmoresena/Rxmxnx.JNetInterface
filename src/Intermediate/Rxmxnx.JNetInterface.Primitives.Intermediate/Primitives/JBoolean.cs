@@ -68,6 +68,9 @@ public readonly partial struct JBoolean : INative<JBoolean>, IPrimitive<JBoolean
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static implicit operator JObject(JBoolean value) => new JPrimitiveObject<JBoolean>(value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JBoolean(Boolean value) => new(value);
 
 	/// <inheritdoc/>

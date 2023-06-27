@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Primitives.Lang;
+namespace Rxmxnx.JNetInterface.Lang;
 
 /// <summary>
 /// Java object representing a java primitive value.
@@ -16,9 +16,9 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapp
 	/// <inheritdoc cref="IEquatable{TPrimitive}"/>
 	public Boolean Equals(JPrimitiveObject<TPrimitive>? other) => other is not null && this.Value.Equals(other.Value);
 	/// <inheritdoc/>
-	public new static CString ClassName => TPrimitive.ClassName;
+	public static CString ClassName => TPrimitive.ClassName;
 	/// <inheritdoc/>
-	public new static CString Signature => TPrimitive.Signature;
+	public static CString Signature => TPrimitive.Signature;
 	/// <inheritdoc/>
 	public static CString ArraySignature => TPrimitive.ArraySignature;
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>

@@ -59,6 +59,9 @@ public readonly partial struct JLong : INative<JLong>, IPrimitiveInteger<JLong, 
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static implicit operator JObject(JLong value) => new JPrimitiveObject<JLong>(value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JLong(Int64 value) => new(value);
 
 	/// <inheritdoc/>

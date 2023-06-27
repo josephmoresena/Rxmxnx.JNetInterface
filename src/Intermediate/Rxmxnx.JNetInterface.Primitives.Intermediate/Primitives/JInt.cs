@@ -58,6 +58,9 @@ public readonly partial struct JInt : INative<JInt>, IPrimitiveInteger<JInt, Int
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static implicit operator JObject(JInt value) => new JPrimitiveObject<JInt>(value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JInt(Int32 value) => new(value);
 
 	/// <inheritdoc/>

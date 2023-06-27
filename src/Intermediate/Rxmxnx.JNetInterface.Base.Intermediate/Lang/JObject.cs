@@ -6,15 +6,6 @@
 public abstract class JObject : IObject, IEquatable<JObject>
 {
 	/// <summary>
-	/// <c>java.lang.Object</c> class name.
-	/// </summary>
-	public static readonly CString ClassName = UnicodeClassNames.JObjectClassName;
-	/// <summary>
-	/// <c>java.lang.Object</c> signature.
-	/// </summary>
-	public static readonly CString Signature = UnicodeObjectSignatures.JObjectSignature;
-
-	/// <summary>
 	/// Internal <see cref="JValue"/> instance.
 	/// </summary>
 	private readonly IMutableReference<JValue> _value;

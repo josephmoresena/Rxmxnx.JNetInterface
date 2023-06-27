@@ -59,6 +59,9 @@ public readonly partial struct JDouble : INative<JDouble>, IPrimitiveFloatingPoi
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static implicit operator JObject(JDouble value) => new JPrimitiveObject<JDouble>(value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JDouble(Double value) => new(value);
 
 	/// <inheritdoc/>

@@ -59,6 +59,9 @@ public readonly partial struct JFloat : INative<JFloat>, IPrimitiveFloatingPoint
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static implicit operator JObject(JFloat value) => new JPrimitiveObject<JFloat>(value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JFloat(Single value) => new(value);
 
 	/// <inheritdoc/>

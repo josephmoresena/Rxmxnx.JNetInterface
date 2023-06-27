@@ -8,11 +8,11 @@ public interface IDataType
 	/// <summary>
 	/// Java datatype class name.
 	/// </summary>
-	static abstract CString ClassName { get; }
+	static virtual CString ClassName => UnicodeClassNames.JObjectClassName;
 	/// <summary>
 	/// Java datatype signature name.
 	/// </summary>
-	static abstract CString Signature { get; }
+	static virtual CString Signature => UnicodeObjectSignatures.JObjectSignature;
 
 	/// <summary>
 	/// Primitive metadata.

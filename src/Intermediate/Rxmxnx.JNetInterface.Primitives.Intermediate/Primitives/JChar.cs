@@ -59,6 +59,9 @@ public readonly partial struct JChar : INative<JChar>, IPrimitiveInteger<JChar, 
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static implicit operator JObject(JChar value) => new JPrimitiveObject<JChar>(value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JChar(Char value) => new(value);
 
 	/// <inheritdoc/>
