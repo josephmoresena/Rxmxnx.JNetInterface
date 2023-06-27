@@ -48,6 +48,7 @@ public partial record JPrimitiveMetadata
 			IComparable<TPrimitive> cp => -cp.CompareTo(primitive),
 			IWrapper<TValue> wv => primitive.CompareTo(wv.Value),
 			IComparable<TValue> cv => cv.CompareTo(primitive.Value),
+			IPrimitive ip => ip.CompareTo(primitive.Value),
 			IComparable c => -c.CompareTo(primitive.Value),
 			_ => primitive.Value.CompareTo(obj),
 		};
@@ -75,7 +76,7 @@ public partial record JPrimitiveMetadata
 			IEquatable<TPrimitive> ep => ep.Equals(primitive),
 			IWrapper<TValue> wv => primitive.Equals(wv.Value),
 			IEquatable<TValue> ev => ev.Equals(primitive.Value),
-			IPrimitive ip => ip.CompareTo(primitive) == 0,
+			IPrimitive ip => ip.CompareTo(primitive.Value) == 0,
 			_ => primitive.Value.Equals(obj),
 		};
 }
