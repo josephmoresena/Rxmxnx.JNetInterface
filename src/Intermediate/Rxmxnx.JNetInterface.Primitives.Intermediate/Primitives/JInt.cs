@@ -54,7 +54,7 @@ public readonly partial struct JInt : INative<JInt>, IPrimitive<JInt, Int32>, IC
 	public Int32 CompareTo(JInt other) => this._value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.CompareTo<JInt, Int32>(this, obj);
+	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JInt, Int32>(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

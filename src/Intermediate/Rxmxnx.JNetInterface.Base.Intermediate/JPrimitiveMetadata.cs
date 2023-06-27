@@ -52,15 +52,46 @@ public abstract record JPrimitiveMetadata
 	/// </returns>
 	/// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal static Int32 CompareTo<TPrimitive, TValue>(TPrimitive primitive, Object? obj)
+	internal static Int32 Compare<TPrimitive, TValue>(TPrimitive primitive, Object? obj)
 		where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>,
 		IComparable<TValue>
 		where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>, IConvertible, IComparable
 		=> obj switch
 		{
-			IWrapper<Boolean> w => primitive.CompareTo(w.Value),
+			TPrimitive p => primitive.CompareTo(p),
+			TValue v => primitive.Value.CompareTo(v),
+			IWrapper<TPrimitive> wp => primitive.CompareTo(wp.Value),
+			IComparable<TPrimitive> cp => -cp.CompareTo(primitive),
+			IWrapper<TValue> wv => primitive.CompareTo(wv.Value),
+			IComparable<TValue> cv => cv.CompareTo(primitive.Value),
 			IComparable c => -c.CompareTo(primitive.Value),
 			_ => primitive.Value.CompareTo(obj),
+		};
+
+	/// <summary>
+	/// Indicates whether <paramref name="primitive"/> and a specified object are equal.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
+	/// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
+	/// <param name="primitive">A primitive instance.</param>
+	/// <param name="obj">An object to compare with <paramref name="primitive"/>.</param>
+	/// <returns>
+	/// <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal static Boolean Equals<TPrimitive, TValue>(TPrimitive primitive, Object? obj)
+		where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>,
+		IComparable<TValue>
+		where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>, IConvertible, IComparable
+		=> obj switch
+		{
+			TPrimitive p => primitive.Equals(p),
+			TValue v => primitive.Value.Equals(v),
+			IWrapper<TPrimitive> wp => primitive.Equals(wp.Value),
+			IEquatable<TPrimitive> ep => ep.Equals(primitive),
+			IWrapper<TValue> wv => primitive.Equals(wv.Value),
+			IEquatable<TValue> ev => ev.Equals(primitive.Value),
+			_ => primitive.Value.Equals(obj),
 		};
 }
 

@@ -54,7 +54,7 @@ public readonly partial struct JChar : INative<JChar>, IPrimitive<JChar, Char>, 
 	public Int32 CompareTo(JChar other) => this._value.CompareTo(other._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.CompareTo<JChar, Char>(this, obj);
+	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JChar, Char>(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

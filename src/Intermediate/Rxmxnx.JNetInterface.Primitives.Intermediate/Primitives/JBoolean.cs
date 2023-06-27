@@ -64,7 +64,7 @@ public readonly partial struct JBoolean : INative<JBoolean>, IPrimitive<JBoolean
 	public Int32 CompareTo(JBoolean other) => this.Value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.CompareTo<JBoolean, Boolean>(this, obj);
+	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JBoolean, Boolean>(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

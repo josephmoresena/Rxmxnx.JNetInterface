@@ -31,6 +31,10 @@ internal sealed record NativeTypeHelper
 	/// Native type symbol.
 	/// </summary>
 	private readonly ISymbol _typeSymbol;
+	/// <summary>
+	/// Type of primitive type internal value.
+	/// </summary>
+	private readonly String? _underlinePrimitiveType;
 
 	/// <summary>
 	/// Constructor.
@@ -46,6 +50,7 @@ internal sealed record NativeTypeHelper
 		this._isArrRef = interfaces.Contains("Rxmxnx.JNetInterface.Internal.IArrayReference");
 		this._isObjRef = this._isArrRef || interfaces.Contains("Rxmxnx.JNetInterface.Internal.IObjectReference");
 		this._internalPointerName = isPointer ? typeSymbol.Name.EndsWith("Value") ? "_functions" : "_value" : default;
+		this._underlinePrimitiveType = NativeTypeHelper.GetUnderlinePrimitiveType(typeSymbol);
 	}
 
 	/// <summary>
@@ -55,15 +60,20 @@ internal sealed record NativeTypeHelper
 	public void AddSourceCode(GeneratorExecutionContext context)
 	{
 		if (this._isPrimitive)
+		{
 			this._typeSymbol.GeneratePrimitiveToString(context);
+			this._typeSymbol.GeneratePrimitiveOperators(context, this._underlinePrimitiveType!);
+		}
 		else
+		{
 			this._typeSymbol.GenerateNativeStructToString(context);
+		}
 		if (this._isArrRef)
 			this._typeSymbol.GenerateArrayRefOperators(context);
 		if (this._isObjRef)
 			this._typeSymbol.GenerateObjectRefOperators(context);
 		if (this._internalPointerName is not null)
-			this._typeSymbol.GenerateSelfEquatableStructOperators(context, this._internalPointerName);
+			this._typeSymbol.GenerateNativePointerOperators(context, this._internalPointerName);
 	}
 
 	/// <summary>
@@ -79,4 +89,26 @@ internal sealed record NativeTypeHelper
 			return new(typeSymbol, interfaces);
 		return default;
 	}
+
+	/// <summary>
+	/// Retrieves the name of underline type for <paramref name="typeSymbol"/>.
+	/// </summary>
+	/// <param name="typeSymbol">Type symbol.</param>
+	/// <returns>
+	/// The name of underline type for <paramref name="typeSymbol"/> if it is primitive; otherwise,
+	/// <see langword="null"/>.
+	/// </returns>
+	private static String? GetUnderlinePrimitiveType(ISymbol typeSymbol)
+		=> typeSymbol.Name switch
+		{
+			"JBoolean" => "Boolean",
+			"JByte" => "SByte",
+			"JChar" => "Char",
+			"JDouble" => "Double",
+			"JFloat" => "Single",
+			"JInt" => "Int32",
+			"JLong" => "Int64",
+			"JShort" => "Int16",
+			_ => default,
+		};
 }
