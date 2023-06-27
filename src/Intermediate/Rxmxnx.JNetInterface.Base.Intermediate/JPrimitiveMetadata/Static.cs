@@ -46,8 +46,8 @@ public partial record JPrimitiveMetadata
 			IWrapper<TPrimitive> wp => primitive.CompareTo(wp.Value),
 			IComparable<TPrimitive> cp => -cp.CompareTo(primitive),
 			IWrapper<TValue> wv => primitive.CompareTo(wv.Value),
-			IComparable<TValue> cv => cv.CompareTo(primitive.Value),
-			IPrimitive ip => ip.CompareTo(primitive.Value),
+			IComparable<TValue> cv => -cv.CompareTo(primitive.Value),
+			IPrimitive ip => -ip.CompareTo(primitive.Value),
 			IComparable c => -c.CompareTo(primitive.Value),
 			_ => primitive.Value.CompareTo(obj),
 		};

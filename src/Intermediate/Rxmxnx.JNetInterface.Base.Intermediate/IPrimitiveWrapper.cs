@@ -1,12 +1,19 @@
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// This interface exposes an object that represents a java primitive value.
+/// This interface exposes an object that represents a java primitive wrapper.
+/// </summary>
+public interface IPrimitiveWrapper : IObject, IWrapper, IComparable, IConvertible { }
+
+/// <summary>
+/// This interface exposes an object that represents a java primitive wrapper.
 /// </summary>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
-public interface IPrimitive<TValue> : IPrimitive, IWrapper<TValue>, IComparable<TValue>
+public interface IPrimitiveWrapper<TValue> : IPrimitiveWrapper, IWrapper<TValue>, IComparable<TValue>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	Int32 IComparable<TValue>.CompareTo(TValue other) => this.Value.CompareTo(other);
 	TypeCode IConvertible.GetTypeCode() => this.Value.GetTypeCode();
 	Boolean IConvertible.ToBoolean(IFormatProvider? provider) => this.Value.ToBoolean(provider);
 	Byte IConvertible.ToByte(IFormatProvider? provider) => this.Value.ToByte(provider);
@@ -25,4 +32,6 @@ public interface IPrimitive<TValue> : IPrimitive, IWrapper<TValue>, IComparable<
 	UInt16 IConvertible.ToUInt16(IFormatProvider? provider) => this.Value.ToUInt16(provider);
 	UInt32 IConvertible.ToUInt32(IFormatProvider? provider) => this.Value.ToUInt32(provider);
 	UInt64 IConvertible.ToUInt64(IFormatProvider? provider) => this.Value.ToUInt64(provider);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	Boolean IEquatable<TValue>.Equals(TValue other) => this.Value.Equals(other);
 }
