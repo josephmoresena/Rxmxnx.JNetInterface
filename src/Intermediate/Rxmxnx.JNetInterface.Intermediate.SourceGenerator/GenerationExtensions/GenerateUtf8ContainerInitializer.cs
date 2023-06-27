@@ -33,7 +33,7 @@ partial class {1}
 	public static void GenerateUtf8ContainerInitializer(this INamedTypeSymbol utf8ClassContainerSymbol,
 		GeneratorExecutionContext context)
 	{
-		String fileName = $"{utf8ClassContainerSymbol.Name}.StaticConstructor.g.cs";
+		String fileName = $"{utf8ClassContainerSymbol.Name}.Initializer.g.cs";
 		StringBuilder strBuild = new();
 		foreach (ISymbol symbol in utf8ClassContainerSymbol.GetMembers())
 		{

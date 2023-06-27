@@ -18,7 +18,7 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 /// </summary>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
 public interface IPrimitive<TValue> : IPrimitive, IWrapper<TValue>, IComparable<TValue>
-	where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>, IConvertible
+	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
 	TypeCode IConvertible.GetTypeCode() => this.Value.GetTypeCode();
 	Boolean IConvertible.ToBoolean(IFormatProvider? provider) => this.Value.ToBoolean(provider);
@@ -47,7 +47,7 @@ public interface IPrimitive<TValue> : IPrimitive, IWrapper<TValue>, IComparable<
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
 public interface IPrimitive<out TPrimitive, TValue> : IPrimitive<TValue>, IDataType<TPrimitive>
 	where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
-	where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>, IConvertible
+	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
 	Int32 IComparable<TValue>.CompareTo(TValue other) => this.Value.CompareTo(other);
 	Boolean IEquatable<TValue>.Equals(TValue other) => this.Value.Equals(other);

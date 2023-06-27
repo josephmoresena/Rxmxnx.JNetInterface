@@ -4,8 +4,8 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// Primitive <c>double</c>. Represents a double-precision floating-point number.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JDouble : INative<JDouble>, IPrimitive<JDouble, Double>, IComparable<JDouble>,
-	IEquatable<JDouble>
+public readonly partial struct JDouble : INative<JDouble>, IPrimitiveFloatingPoint<JDouble, Double>,
+	IComparable<JDouble>, IEquatable<JDouble>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;

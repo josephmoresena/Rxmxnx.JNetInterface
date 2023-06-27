@@ -37,9 +37,8 @@ public partial record JPrimitiveMetadata
 	/// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal static Int32 Compare<TPrimitive, TValue>(TPrimitive primitive, Object? obj)
-		where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>,
-		IComparable<TValue>
-		where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>, IConvertible, IComparable
+		where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
+		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 		=> obj switch
 		{
 			TPrimitive p => primitive.CompareTo(p),
@@ -65,9 +64,8 @@ public partial record JPrimitiveMetadata
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal static Boolean Equals<TPrimitive, TValue>(TPrimitive primitive, Object? obj)
-		where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>,
-		IComparable<TValue>
-		where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>, IConvertible, IComparable
+		where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
+		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 		=> obj switch
 		{
 			TPrimitive p => primitive.Equals(p),

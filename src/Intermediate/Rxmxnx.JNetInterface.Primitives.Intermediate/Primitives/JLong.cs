@@ -4,7 +4,8 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// Primitive <c>long</c>. Represents a primitive 64-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JLong : INative<JLong>, IPrimitive<JLong, Int64>, IComparable<JLong>, IEquatable<JLong>
+public readonly partial struct JLong : INative<JLong>, IPrimitiveInteger<JLong, Int64>, IComparable<JLong>,
+	IEquatable<JLong>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JLong;

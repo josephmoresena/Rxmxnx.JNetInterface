@@ -4,7 +4,8 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// Primitive <c>char</c>. Represents a character as a UTF-16 code unit.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JChar : INative<JChar>, IPrimitive<JChar, Char>, IComparable<JChar>, IEquatable<JChar>
+public readonly partial struct JChar : INative<JChar>, IPrimitiveInteger<JChar, Char>, IComparable<JChar>,
+	IEquatable<JChar>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JBoolean;

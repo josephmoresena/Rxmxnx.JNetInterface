@@ -93,7 +93,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <exception cref="InvalidCastException"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal TPrimitive AsPrimitive<TPrimitive, TValue>()
-		where TValue : unmanaged, IComparable<TValue>, IEquatable<TValue>, IConvertible
+		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 		where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 		=> this is IWrapper<TPrimitive> pw ? pw.Value.Value :
 			this is IWrapper<TValue> vw ? vw.Value :

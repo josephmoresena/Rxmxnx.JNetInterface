@@ -20,6 +20,18 @@ internal sealed record NativeTypeHelper
 	/// </summary>
 	private readonly Boolean _isArrRef;
 	/// <summary>
+	/// Indicates whether the native type is a floating point value.
+	/// </summary>
+	private readonly Boolean _isFloatingPoint;
+	/// <summary>
+	/// Indicates whether the native type is an integer value.
+	/// </summary>
+	private readonly Boolean _isInteger;
+	/// <summary>
+	/// Indicates whether the native type is a numeric value.
+	/// </summary>
+	private readonly Boolean _isNumeric;
+	/// <summary>
 	/// Indicates whether the native type is an object reference.
 	/// </summary>
 	private readonly Boolean _isObjRef;
@@ -34,7 +46,7 @@ internal sealed record NativeTypeHelper
 	/// <summary>
 	/// Type of primitive type internal value.
 	/// </summary>
-	private readonly String? _underlinePrimitiveType;
+	private readonly String _underlinePrimitiveType;
 
 	/// <summary>
 	/// Constructor.
@@ -48,6 +60,9 @@ internal sealed record NativeTypeHelper
 		this._typeSymbol = typeSymbol;
 		this._isPrimitive = interfaces.Contains("Rxmxnx.JNetInterface.IPrimitive");
 		this._isArrRef = interfaces.Contains("Rxmxnx.JNetInterface.Internal.IArrayReference");
+		this._isNumeric = this._isPrimitive && interfaces.Contains("Rxmxnx.JNetInterface.IPrimitiveNumeric");
+		this._isInteger = this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.IPrimitiveInteger");
+		this._isFloatingPoint = this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.IFloatingPoint");
 		this._isObjRef = this._isArrRef || interfaces.Contains("Rxmxnx.JNetInterface.Internal.IObjectReference");
 		this._internalPointerName = isPointer ? typeSymbol.Name.EndsWith("Value") ? "_functions" : "_value" : default;
 		this._underlinePrimitiveType = NativeTypeHelper.GetUnderlinePrimitiveType(typeSymbol);
@@ -63,6 +78,8 @@ internal sealed record NativeTypeHelper
 		{
 			this._typeSymbol.GeneratePrimitiveToString(context);
 			this._typeSymbol.GeneratePrimitiveOperators(context, this._underlinePrimitiveType!);
+			if (this._isNumeric)
+				this._typeSymbol.GenerateNumericPrimitiveOperators(context, this._underlinePrimitiveType!);
 		}
 		else
 		{
@@ -98,7 +115,7 @@ internal sealed record NativeTypeHelper
 	/// The name of underline type for <paramref name="typeSymbol"/> if it is primitive; otherwise,
 	/// <see langword="null"/>.
 	/// </returns>
-	private static String? GetUnderlinePrimitiveType(ISymbol typeSymbol)
+	private static String GetUnderlinePrimitiveType(ISymbol typeSymbol)
 		=> typeSymbol.Name switch
 		{
 			"JBoolean" => "Boolean",
@@ -109,6 +126,6 @@ internal sealed record NativeTypeHelper
 			"JInt" => "Int32",
 			"JLong" => "Int64",
 			"JShort" => "Int16",
-			_ => default,
+			_ => String.Empty,
 		};
 }
