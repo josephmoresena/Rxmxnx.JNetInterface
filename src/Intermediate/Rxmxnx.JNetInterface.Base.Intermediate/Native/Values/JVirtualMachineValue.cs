@@ -3,6 +3,7 @@
 /// <summary>
 /// <c>JavaVM</c> struct. Contains a pointer to a <c>JNIInvokeInterface_</c> object.
 /// </summary>
+[StructLayout(LayoutKind.Sequential)]
 internal readonly partial struct JVirtualMachineValue : INativeReference<JVirtualMachineValue, JInvokeInterface>
 {
 	/// <inheritdoc/>
@@ -24,11 +25,14 @@ internal readonly partial struct JVirtualMachineValue : INativeReference<JVirtua
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JVirtualMachineValue() => this._functions = IntPtr.Zero;
 
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Int32 GetHashCode() => HashCode.Combine(this._functions);
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
 		=> obj is JVirtualMachineValue jVirtualMValue && this._functions.Equals(jVirtualMValue._functions);
 }

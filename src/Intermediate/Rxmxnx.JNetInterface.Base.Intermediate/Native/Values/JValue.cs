@@ -3,12 +3,12 @@
 /// <summary>
 /// <c>jvalue</c> union. This structure can represent any reference type as any primitive type.
 /// </summary>
+[StructLayout(LayoutKind.Sequential)]
 internal readonly partial struct JValue : INative<JValue>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JValue;
 
-#pragma warning disable CS0649
 	/// <summary>
 	/// Least significant integer (4 bytes).
 	/// </summary>
@@ -17,12 +17,11 @@ internal readonly partial struct JValue : INative<JValue>
 	/// Most significant integer (4 bytes).
 	/// </summary>
 	private readonly Int32 _msi;
-#pragma warning restore CS0649
 
 	/// <summary>
 	/// Represents the empty <see cref="JValue"/>. This field is read-only.
 	/// </summary>
-	public static readonly JValue Empty = default;
+	public static readonly JValue Empty;
 	/// <summary>
 	/// Size in bytes of <see cref="JValue"/> structure.
 	/// </summary>
@@ -43,12 +42,23 @@ internal readonly partial struct JValue : INative<JValue>
 	public Boolean IsDefault => JValue.isDefault(this);
 
 	/// <summary>
+	/// Parameterless constructor.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public JValue()
+	{
+		this._msi = default;
+		this._msi = default;
+	}
+
+	/// <summary>
 	/// Creates a new <see cref="JValue"/> value from a <paramref name="value"/>.
 	/// </summary>
 	/// <typeparam name="T">Type of value.</typeparam>
 	/// <param name="value">Value.</param>
 	/// <returns><see cref="JValue"/> value.</returns>
 	/// <exception cref="InsufficientMemoryException"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static JValue Create<T>(in T value) where T : unmanaged
 	{
 		if (NativeUtilities.SizeOf<T>() > JValue.Size)
@@ -68,6 +78,7 @@ internal readonly partial struct JValue : INative<JValue>
 	/// <param name="jValue">A <see cref="JValue"/> reference.</param>
 	/// <returns>A <typeparamref name="T"/> reference.</returns>
 	/// <exception cref="InsufficientMemoryException"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static ref T As<T>(ref JValue jValue) where T : unmanaged
 	{
 		if (NativeUtilities.SizeOf<T>() > JValue.Size)

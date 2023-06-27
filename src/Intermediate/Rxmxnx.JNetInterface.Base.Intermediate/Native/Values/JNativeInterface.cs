@@ -3,6 +3,7 @@
 /// <summary>
 /// <c>JNINativeInterface_</c> struct. Contains all pointers to the functions of JNI.
 /// </summary>
+[StructLayout(LayoutKind.Sequential)]
 internal readonly partial struct JNativeInterface : INative<JNativeInterface>
 {
 	/// <inheritdoc/>

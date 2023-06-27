@@ -6,6 +6,7 @@
 /// object.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+[StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectLocalRef>
 {
 	/// <inheritdoc/>
@@ -48,23 +49,34 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal static Boolean ObjectEquals<TObject>(in TObject objRef, Object? obj)
 		where TObject : unmanaged, IWrapper<JObjectLocalRef>
-		=> JObjectLocalRef.Equals(objRef, obj);
+		=> obj switch
+		{
+			TObject obj2 => objRef.Value.Equals(obj2.Value),
+			IEquatable<TObject> other => other.Equals(objRef),
+			IObjectReference otherRef => objRef.Equals(otherRef.Value),
+			IObjectGlobalReference globalRef => objRef.Equals(globalRef.Value),
+			JObjectLocalRef jObjRef => objRef.Equals(jObjRef),
+			IEquatable<JObjectLocalRef> other => other.Equals(objRef.Value),
+			_ => false,
+		};
 
 	/// <summary>
-	/// Indicates whether <paramref name="jObjRef"/> and a <paramref name="obj"/> are equal.
+	/// Indicates whether <paramref name="objRef"/> and a <paramref name="obj"/> are equal.
 	/// </summary>
-	/// <typeparam name="TObject">The type of object reference.</typeparam>
-	/// <param name="jObjRef">The object reference to compare with <paramref name="obj"/>.</param>
-	/// <param name="obj">The object to compare with <paramref name="jObjRef"/>.</param>
+	/// <param name="objRef">The object reference to compare with <paramref name="obj"/>.</param>
+	/// <param name="obj">The object to compare with <paramref name="objRef"/>.</param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="obj"/> and <paramref name="jObjRef"/> represent the same value;
+	/// <see langword="true"/> if <paramref name="obj"/> and <paramref name="objRef"/> represent the same value;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static Boolean Equals<TObject>(in TObject jObjRef, Object? obj) where TObject : unmanaged
-	{
-		if (obj is IEquatable<JObjectLocalRef> other)
-			return other.Equals(jObjRef);
-		return false;
-	}
+	private static Boolean Equals(in JObjectLocalRef objRef, Object? obj)
+		=> obj switch
+		{
+			JObjectLocalRef jObjRef => objRef.Equals(jObjRef),
+			IObjectReference otherRef => objRef.Equals(otherRef.Value),
+			IObjectGlobalReference globalRef => objRef.Equals(globalRef.Value),
+			IEquatable<JObjectLocalRef> other => other.Equals(objRef),
+			_ => false,
+		};
 }

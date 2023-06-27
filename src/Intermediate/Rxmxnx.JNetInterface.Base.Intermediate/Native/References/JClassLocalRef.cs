@@ -5,6 +5,7 @@
 /// which serves as opaque identifier for an class object (<c>java.lang.Class&lt;?&gt;</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+[StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JClassLocalRef : IObjectReference<JClassLocalRef>
 {
 	/// <inheritdoc/>

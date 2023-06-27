@@ -5,6 +5,7 @@
 /// as opaque identifier for a declared method in a <c>class</c>.
 /// </summary>
 /// <remarks>This handle will be valid until the associated <c>class</c> is unloaded.</remarks>
+[StructLayout(LayoutKind.Sequential)]
 internal readonly partial struct JMethodId : IAccessibleObjectIdentifier<JMethodId>
 {
 	/// <inheritdoc/>
@@ -21,11 +22,14 @@ internal readonly partial struct JMethodId : IAccessibleObjectIdentifier<JMethod
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JMethodId() => this._value = IntPtr.Zero;
 
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Int32 GetHashCode() => HashCode.Combine(this._value);
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
 		=> obj is JMethodId methodId && this._value.Equals(methodId._value);
 }

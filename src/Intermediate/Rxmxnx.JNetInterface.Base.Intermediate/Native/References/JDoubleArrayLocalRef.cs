@@ -6,6 +6,7 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+[StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JDoubleArrayLocalRef : IArrayReference<JDoubleArrayLocalRef>
 {
 	/// <inheritdoc/>
@@ -26,5 +27,6 @@ public readonly partial struct JDoubleArrayLocalRef : IArrayReference<JDoubleArr
 	public IntPtr Pointer => this._value.Pointer;
 
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JArrayLocalRef other) => this._value.Equals(other);
 }

@@ -5,6 +5,7 @@
 /// which serves as opaque identifier for an throwable object (<c>java.lang.Throwable</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+[StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JThrowableLocalRef : IObjectReference<JThrowableLocalRef>
 {
 	/// <inheritdoc/>

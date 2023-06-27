@@ -6,6 +6,7 @@
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+[StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JArrayLocalRef : IObjectReference<JArrayLocalRef>
 {
 	/// <inheritdoc/>
@@ -24,8 +25,10 @@ public readonly partial struct JArrayLocalRef : IObjectReference<JArrayLocalRef>
 	public IntPtr Pointer => this._value.Pointer;
 
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Int32 GetHashCode() => this._value.GetHashCode();
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals(Object? obj) => JArrayLocalRef.Equals(this, obj);
 
 	/// <summary>
@@ -41,21 +44,18 @@ public readonly partial struct JArrayLocalRef : IObjectReference<JArrayLocalRef>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal static Boolean ArrayEquals<TArray>(in TArray arr, Object? obj)
 		where TArray : unmanaged, IWrapper<JObjectLocalRef>, IEquatable<JArrayLocalRef>
-	{
-		if (obj is IEquatable<TArray> other)
-			return other.Equals(arr);
-		if (obj is JArrayLocalRef otherArr)
-			return arr.Equals(otherArr);
-		if (obj is JObjectLocalRef jObjRef)
-			return arr.Equals(jObjRef);
-
-		return JObjectLocalRef.ObjectEquals(arr, obj);
-	}
+		=> obj switch
+		{
+			TArray arr2 => arr.Value.Equals(arr2.Value),
+			IEquatable<TArray> other => other.Equals(arr),
+			JArrayLocalRef otherArr => arr.Equals(otherArr),
+			IArrayReference arrRef => arr.Equals(arrRef.ArrayValue),
+			_ => JObjectLocalRef.ObjectEquals(arr, obj),
+		};
 
 	/// <summary>
 	/// Indicates whether <paramref name="arr"/> and a <paramref name="obj"/> are equal.
 	/// </summary>
-	/// <typeparam name="TArray">The type of object reference.</typeparam>
 	/// <param name="arr">The object reference to compare with <paramref name="obj"/>.</param>
 	/// <param name="obj">The object to compare with <paramref name="arr"/>.</param>
 	/// <returns>
@@ -63,16 +63,12 @@ public readonly partial struct JArrayLocalRef : IObjectReference<JArrayLocalRef>
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static Boolean Equals<TArray>(in TArray arr, Object? obj)
-		where TArray : unmanaged, IWrapper<JObjectLocalRef>
-	{
-		if (obj is IEquatable<TArray> other)
-			return other.Equals(arr);
-		if (obj is IEquatable<JArrayLocalRef> otherArr)
-			return otherArr.Equals(arr);
-		if (obj is JObjectLocalRef jObjRef)
-			return arr.Equals(jObjRef);
-
-		return JObjectLocalRef.ObjectEquals(arr, obj);
-	}
+	private static Boolean Equals(in JArrayLocalRef arr, Object? obj)
+		=> obj switch
+		{
+			JArrayLocalRef otherArr => arr.Equals(otherArr),
+			IArrayReference arrRef => arr.Equals(arrRef.ArrayValue),
+			IEquatable<JArrayLocalRef> other => other.Equals(arr),
+			_ => JObjectLocalRef.ObjectEquals(arr, obj),
+		};
 }

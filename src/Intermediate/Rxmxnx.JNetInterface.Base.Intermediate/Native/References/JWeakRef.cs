@@ -6,6 +6,7 @@
 /// object.
 /// </summary>
 /// <remarks>This identifier may be valid until it is explicitly unloaded.</remarks>
+[StructLayout(LayoutKind.Sequential)]
 internal readonly partial struct JWeakRef : IObjectGlobalReference<JWeakRef>
 {
 	/// <inheritdoc/>

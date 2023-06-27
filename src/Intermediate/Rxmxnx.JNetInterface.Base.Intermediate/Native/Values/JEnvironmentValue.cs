@@ -3,6 +3,7 @@
 /// <summary>
 /// <c>JNIEnv</c> struct. Contains a pointer to a <c>JNINativeInterface_</c> object.
 /// </summary>
+[StructLayout(LayoutKind.Sequential)]
 internal readonly partial struct JEnvironmentValue : INativeReference<JEnvironmentValue, JNativeInterface>
 {
 	/// <inheritdoc/>
@@ -24,11 +25,14 @@ internal readonly partial struct JEnvironmentValue : INativeReference<JEnvironme
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JEnvironmentValue() => this._functions = IntPtr.Zero;
 
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Int32 GetHashCode() => HashCode.Combine(this._functions);
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
 		=> obj is JEnvironmentValue jEnvValue && this._functions.Equals(jEnvValue._functions);
 }

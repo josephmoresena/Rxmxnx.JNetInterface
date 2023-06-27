@@ -6,6 +6,7 @@
 /// object.
 /// </summary>
 /// <remarks>This identifier will be valid until it is explicitly unloaded.</remarks>
+[StructLayout(LayoutKind.Sequential)]
 internal readonly partial struct JGlobalRef : IObjectGlobalReference<JGlobalRef>
 {
 	/// <inheritdoc/>
@@ -26,11 +27,14 @@ internal readonly partial struct JGlobalRef : IObjectGlobalReference<JGlobalRef>
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JGlobalRef() => this._value = default;
 
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Int32 GetHashCode() => HashCode.Combine(this._value);
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
 		=> obj is JGlobalRef jGlobalRef && this._value.Equals(jGlobalRef._value);
 }

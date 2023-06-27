@@ -7,6 +7,7 @@ internal readonly partial struct JInvokeInterface
 	/// <summary>
 	/// This struct represent the reserved pointer for Microsoft COM compatibility.
 	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
 	private readonly record struct ComReserved
 	{
 #pragma warning disable CS0169

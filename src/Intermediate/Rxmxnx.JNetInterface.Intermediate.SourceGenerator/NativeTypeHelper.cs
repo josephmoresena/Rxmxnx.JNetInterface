@@ -24,6 +24,10 @@ internal sealed record NativeTypeHelper
 	/// </summary>
 	private readonly Boolean _isObjRef;
 	/// <summary>
+	/// Indicates whether the native type is a primitive value.
+	/// </summary>
+	private readonly Boolean _isPrimitive;
+	/// <summary>
 	/// Native type symbol.
 	/// </summary>
 	private readonly ISymbol _typeSymbol;
@@ -38,6 +42,7 @@ internal sealed record NativeTypeHelper
 		Boolean isPointer = interfaces.Contains("Rxmxnx.PInvoke.IFixedPointer");
 
 		this._typeSymbol = typeSymbol;
+		this._isPrimitive = interfaces.Contains("Rxmxnx.JNetInterface.IPrimitive");
 		this._isArrRef = interfaces.Contains("Rxmxnx.JNetInterface.Internal.IArrayReference");
 		this._isObjRef = this._isArrRef || interfaces.Contains("Rxmxnx.JNetInterface.Internal.IObjectReference");
 		this._internalPointerName = isPointer ? typeSymbol.Name.EndsWith("Value") ? "_functions" : "_value" : default;
@@ -49,7 +54,10 @@ internal sealed record NativeTypeHelper
 	/// <param name="context">Generation context.</param>
 	public void AddSourceCode(GeneratorExecutionContext context)
 	{
-		this._typeSymbol.GenerateNativeStructToString(context);
+		if (this._isPrimitive)
+			this._typeSymbol.GeneratePrimitiveToString(context);
+		else
+			this._typeSymbol.GenerateNativeStructToString(context);
 		if (this._isArrRef)
 			this._typeSymbol.GenerateArrayRefOperators(context);
 		if (this._isObjRef)

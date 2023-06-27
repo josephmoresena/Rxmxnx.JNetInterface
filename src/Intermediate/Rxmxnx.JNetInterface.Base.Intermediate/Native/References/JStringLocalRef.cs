@@ -5,6 +5,7 @@
 /// which serves as opaque identifier for an string object (<c>java.lang.String</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
+[StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JStringLocalRef : IObjectReference<JStringLocalRef>
 {
 	/// <inheritdoc/>

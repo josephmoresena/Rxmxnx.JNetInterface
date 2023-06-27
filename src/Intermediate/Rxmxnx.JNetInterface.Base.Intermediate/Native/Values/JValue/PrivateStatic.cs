@@ -21,6 +21,7 @@ internal partial struct JValue
 	/// Retrieves the <see cref="IsDefaultDelegate"/> delegate to use for current process.
 	/// </summary>
 	/// <returns><see cref="IsDefaultDelegate"/> delegate for current process.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static IsDefaultDelegate GetIsDefault() => Environment.Is64BitProcess ? JValue.DefaultLong : JValue.Default;
 	/// <summary>
 	/// Indicates whether <paramref name="jValue"/> has the <see langword="default"/> value.
@@ -30,7 +31,8 @@ internal partial struct JValue
 	/// <see langword="true"/> if <paramref name="jValue"/>  <see langword="default"/>; otherwise;
 	/// <see langword="false"/>.
 	/// </returns>
-	private static Boolean Default(in JValue jValue) => jValue._lsi == default && jValue._msi == default;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static Boolean Default(in JValue jValue) => jValue is { _lsi: 0, _msi: 0, };
 	/// <summary>
 	/// Indicates whether <paramref name="jValue"/> has the <see langword="default"/> value.
 	/// </summary>
@@ -39,5 +41,6 @@ internal partial struct JValue
 	/// <see langword="true"/> if <paramref name="jValue"/>  <see langword="default"/>; otherwise;
 	/// <see langword="false"/>.
 	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static Boolean DefaultLong(in JValue jValue) => Unsafe.AsRef(jValue).Transform<JValue, Int64>() == default;
 }
