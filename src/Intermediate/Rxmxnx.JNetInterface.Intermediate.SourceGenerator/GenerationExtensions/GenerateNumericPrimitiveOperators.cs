@@ -49,7 +49,8 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 
 	/// <inheritdoc cref=""IModulusOperators{{TSelf, TOther, TResult}}.op_Modulus(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static {1} operator %({1} left, {1} right) => ({2})(left._value % right._value);
+	public static {1} operator %({1} left, {1} right) 
+		=> IPrimitiveNumeric<{1}, {2}>.Modulus(left._value, right._value);
 }}
 #nullable restore";
 
@@ -139,7 +140,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	static Boolean INumberBase<JChar>.TryParse(ReadOnlySpan<Char> s, NumberStyles style, IFormatProvider? provider,
 		[MaybeNullWhen(false)] out JChar result)
 		=> IPrimitiveNumeric<JChar, Char>.TryParse(s, style, provider, out result);*/";
-	
+
 	private const String integerFormattableFormat = @"/* 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<{0}>.IsFinite({0} value) => true;
@@ -168,17 +169,20 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 
 	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_BitwiseAnd(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static {0} operator &({0} left, {0} right) => ({1})(left._value & right._value);
+	public static {0} operator &({0} left, {0} right) 
+		=> IPrimitiveNumeric<{0}, {1}>.BitwiseAnd(left._value, right._value);
 	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_BitwiseOr(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static {0} operator |({0} left, {0} right) => ({1})(left._value | right._value);
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator |({0} left, {0} right) 
+		=> IPrimitiveNumeric<{0}, {1}>.BitwiseOr(left._value, right._value);
 	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_ExclusiveOr(TSelf, TOther)"" />
-	public static {0} operator ^({0} left, {0} right) => ({1})(left._value ^ right._value);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator ^({0} left, {0} right) 
+		=> IPrimitiveNumeric<{0}, {1}>.ExclusiveOr(left._value, right._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_OnesComplement(TSelf, TOther)"" />
-	public static {0} operator ~({0} value) => ({1})(~value._value);";
-	
+	public static {0} operator ~({0} value) => IPrimitiveNumeric<{0}, {1}>.OnesComplement(value._value);";
+
 	private const String floatingFormattableFormat = @"
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -213,6 +217,18 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} MinMagnitudeNumber({0} x, {0} y) => {1}.MinMagnitudeNumber(x._value, y._value);
 /*;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static {0} IBitwiseOperators<{0}, {0}, {0}>.operator &({0} left, {0} right) 
+		=> IPrimitiveNumeric<{0}, {1}>.BitwiseAnd(left._value, right._value);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static {0} IBitwiseOperators<{0}, {0}, {0}>.operator |({0} left, {0} right) 
+		=> IPrimitiveNumeric<{0}, {1}>.BitwiseOr(left._value, right._value);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static {0} IBitwiseOperators<{0}, {0}, {0}>.operator ^({0} left, {0} right) 
+		=> IPrimitiveNumeric<{0}, {1}>.ExclusiveOr(left._value, right._value);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static {0} IBitwiseOperators<{0}, {0}, {0}>.operator ~({0} value) 
+		=> IPrimitiveNumeric<{0}, {1}>.OnesComplement(value._value);
 */";
 
 	/// <summary>
@@ -229,12 +245,12 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 		String formattable = numericSymbol.Name is "JChar" ?
 			GenerationExtensions.charFormattable :
 			String.Format(GenerationExtensions.numericFormattableFormat, numericSymbol.Name, underlineType);
-		String numerics = numericSymbol.Name is "JDouble" or "JFloat" ? 
+		String numerics = numericSymbol.Name is "JDouble" or "JFloat" ?
 			String.Format(GenerationExtensions.floatingFormattableFormat, numericSymbol.Name, underlineType) :
 			String.Format(GenerationExtensions.integerFormattableFormat, numericSymbol.Name, underlineType);
 		String source = String.Format(GenerationExtensions.numericPrimitiveOperatorsFormat,
-		                              numericSymbol.ContainingNamespace, numericSymbol.Name, underlineType,
-		                              formattable, numerics);
+		                              numericSymbol.ContainingNamespace, numericSymbol.Name, underlineType, formattable,
+		                              numerics);
 		context.AddSource(fileName, source);
 	}
 }
