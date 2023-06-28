@@ -17,9 +17,9 @@ internal interface IPrimitiveFloatingPoint<TPrimitive> : IPrimitiveFloatingPoint
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive floating point.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent floating point.</typeparam>
-internal interface IPrimitiveFloatingPoint<TPrimitive, TValue> : IPrimitiveFloatingPoint<TPrimitive>,
-	IPrimitiveWrapperFloatingPoint<TValue>,
-	IPrimitiveNumeric<TPrimitive, TValue>
+internal interface
+	IPrimitiveFloatingPoint<TPrimitive, TValue> : IPrimitiveFloatingPoint<TPrimitive>,
+		IPrimitiveNumeric<TPrimitive, TValue>
 	where TPrimitive : unmanaged, IPrimitiveFloatingPoint<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>,

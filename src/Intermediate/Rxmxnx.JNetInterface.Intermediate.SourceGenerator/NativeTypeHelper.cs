@@ -60,7 +60,7 @@ internal sealed record NativeTypeHelper
 		this._typeSymbol = typeSymbol;
 		this._isPrimitive = interfaces.Contains("Rxmxnx.JNetInterface.IPrimitive");
 		this._isArrRef = interfaces.Contains("Rxmxnx.JNetInterface.Internal.IArrayReference");
-		this._isNumeric = this._isPrimitive && interfaces.Contains("Rxmxnx.JNetInterface.IPrimitiveNumeric");
+		this._isNumeric = this._isPrimitive && interfaces.Contains("Rxmxnx.JNetInterface.Internal.IPrimitiveNumeric");
 		this._isInteger = this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.IPrimitiveInteger");
 		this._isFloatingPoint = this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.IFloatingPoint");
 		this._isObjRef = this._isArrRef || interfaces.Contains("Rxmxnx.JNetInterface.Internal.IObjectReference");

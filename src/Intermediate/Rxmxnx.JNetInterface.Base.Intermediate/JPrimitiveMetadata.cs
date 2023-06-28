@@ -16,7 +16,7 @@ public abstract partial record JPrimitiveMetadata
 	/// <summary>
 	/// Managed type of internal value of <see cref="IPrimitive"/>.
 	/// </summary>
-	public abstract Type Type { get; }
+	internal abstract Type Type { get; }
 }
 
 /// <summary>
@@ -27,5 +27,5 @@ internal sealed record JPrimitiveMetadata<TPrimitive> : JPrimitiveMetadata where
 {
 	public override CString ArraySignature => TPrimitive.ArraySignature;
 	public override Int32 SizeOf => NativeUtilities.SizeOf<TPrimitive>();
-	public override Type Type => typeof(TPrimitive);
+	internal override Type Type => typeof(TPrimitive);
 }

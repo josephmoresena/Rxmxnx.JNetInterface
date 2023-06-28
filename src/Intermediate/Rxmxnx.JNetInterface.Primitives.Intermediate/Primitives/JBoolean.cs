@@ -65,6 +65,9 @@ public readonly partial struct JBoolean : INative<JBoolean>, IPrimitive<JBoolean
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JBoolean, Boolean>(this, obj);
+	/// <inheritdoc cref="Boolean.TryFormat(Span{Char}, out Int32)"/>
+	public Boolean TryFormat(Span<Char> destination, out Int32 charsWritten)
+		=> this.Value.TryFormat(destination, out charsWritten);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,5 +82,27 @@ public readonly partial struct JBoolean : INative<JBoolean>, IPrimitive<JBoolean
 	{
 		ArgumentNullException.ThrowIfNull(jObject);
 		return jObject.AsPrimitive<JBoolean, Boolean>();
+	}
+	/// <inheritdoc cref="Boolean.Parse(String)"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static JBoolean Parse(String value) => Boolean.Parse(value);
+	/// <inheritdoc cref="Boolean.Parse(ReadOnlySpan{Char})"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static JBoolean Parse(ReadOnlySpan<Char> value) => Boolean.Parse(value);
+	/// <inheritdoc cref="Boolean.TryParse(String, out Boolean)"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Boolean TryParse([NotNullWhen(true)] String? value, out JBoolean result)
+	{
+		Boolean parseResult = Boolean.TryParse(value, out Boolean boolResult);
+		result = parseResult && boolResult;
+		return parseResult;
+	}
+	/// <inheritdoc cref="Boolean.TryParse(ReadOnlySpan{Char}, out Boolean)"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Boolean TryParse(ReadOnlySpan<Char> value, out JBoolean result)
+	{
+		Boolean parseResult = Boolean.TryParse(value, out Boolean boolResult);
+		result = parseResult && boolResult;
+		return parseResult;
 	}
 }
