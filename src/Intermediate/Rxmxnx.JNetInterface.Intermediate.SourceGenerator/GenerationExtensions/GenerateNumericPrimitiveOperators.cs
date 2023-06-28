@@ -179,14 +179,15 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator ^({0} left, {0} right) 
 		=> IPrimitiveNumeric<{0}, {1}>.ExclusiveOr(left._value, right._value);
+	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_OnesComplement(TSelf)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_OnesComplement(TSelf, TOther)"" />
 	public static {0} operator ~({0} value) => IPrimitiveNumeric<{0}, {1}>.OnesComplement(value._value);";
 
 	private const String floatingFormattableFormat = @"
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean IsFinite({0} value) => {1}.IsFinite(value._value);
+	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean IsInfinity({0} value) => {1}.IsInfinity(value._value);
 	/// <inheritdoc/>
