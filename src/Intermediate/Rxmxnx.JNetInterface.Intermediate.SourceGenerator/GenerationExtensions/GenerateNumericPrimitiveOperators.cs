@@ -20,8 +20,10 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 {3}
 /*
 	static {1} INumberBase<{1}>.One => IPrimitiveNumeric<{1}, {2}>.One;
-	static Int32 INumberBase<{1}>.Radix => IPrimitiveNumeric<{1}, {2}>.Radix;
+	static Int32 INumberBase<{1}>.Radix => 2;
 	static {1} INumberBase<{1}>.Zero => IPrimitiveNumeric<{1}, {2}>.Zero;
+
+	static {1} IBinaryNumber<{1}>.AllBitsSet => IPrimitiveNumeric<{1}, {2}>.AllBitsSet;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<{1}>.IsCanonical({1} value) => true;
@@ -102,8 +104,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 		=> IPrimitiveNumeric<{0}, {1}>.TryParse(s, style, provider, out result);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean TryParse(ReadOnlySpan<Char> s, NumberStyles style, IFormatProvider? provider,
-		[MaybeNullWhen(false)] out {0} result)
+	public static Boolean TryParse(ReadOnlySpan<Char> s, NumberStyles style, IFormatProvider? provider, out {0} result)
 		=> IPrimitiveNumeric<{0}, {1}>.TryParse(s, style, provider, out result);
 ";
 
