@@ -37,7 +37,7 @@ public interface IPrimitive<TPrimitive> : IPrimitive, IDataType<TPrimitive> wher
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
-public interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IPrimitiveWrapper<TValue>
+internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IPrimitiveWrapper<TValue>
 	where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {

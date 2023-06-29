@@ -15,7 +15,7 @@ partial struct {1}
 {{
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override String ToString() => this.Value.ToString();
+	public override String ToString() => this.{2}.ToString();
 }}
 #nullable restore";
 
@@ -24,12 +24,13 @@ partial struct {1}
 	/// </summary>
 	/// <param name="primitiveSymbol">A type symbol of primitive structure.</param>
 	/// <param name="context">Generation context.</param>
+	/// <param name="valueName">Internal absolute value field name.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GeneratePrimitiveToString(this ISymbol primitiveSymbol, GeneratorExecutionContext context)
+	public static void GeneratePrimitiveToString(this ISymbol primitiveSymbol, GeneratorExecutionContext context, String valueName)
 	{
 		String fileName = $"{primitiveSymbol.Name}.ToString.g.cs";
 		String source = String.Format(GenerationExtensions.primitiveToStringFormat, primitiveSymbol.ContainingNamespace,
-		                              primitiveSymbol.Name);
+		                              primitiveSymbol.Name, valueName);
 		context.AddSource(fileName, source);
 	}
 }

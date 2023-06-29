@@ -33,8 +33,7 @@ partial struct {1} : IEquatable<{1}>, IEqualityOperators<{1}, {1}, Boolean>
 	/// <param name="context">Generation context.</param>
 	/// <param name="valueName">Internal absolute value field name.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GenerateNativePointerOperators(this ISymbol nativeSymbol, GeneratorExecutionContext context,
-		String valueName)
+	public static void GenerateNativePointerOperators(this ISymbol nativeSymbol, GeneratorExecutionContext context, String valueName)
 	{
 		String fileName = $"{nativeSymbol.Name}.Pointer.g.cs";
 		String source = String.Format(GenerationExtensions.nativePointerOperatorsFormat,

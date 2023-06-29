@@ -15,7 +15,7 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 {{
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => HashCode.Combine(this._value);
+	public override Int32 GetHashCode() => HashCode.Combine(this.{3});
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj) 
@@ -23,21 +23,21 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 	
 	/// <inheritdoc cref=""IEqualityOperators{{TSelf, TOther, TResult}}.op_Equality(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator ==({1} left, {1} right) => left.Equals(right);
+	public static Boolean operator ==({1} left, {1} right) => left.{3}.Equals(right.{3});
 	/// <inheritdoc cref=""IEqualityOperators{{TSelf, TOther, TResult}}.op_Inequality(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator !=({1} left, {1} right) => !(left == right);
 	
 	/// <inheritdoc cref=""IEqualityOperators{{TSelf, TOther, TResult}}.op_Equality(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator ==({1} left, {2} right) => left.Equals(right);
+	public static Boolean operator ==({1} left, {2} right) => left.{3}.Equals(right);
 	/// <inheritdoc cref=""IEqualityOperators{{TSelf, TOther, TResult}}.op_Inequality(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator !=({1} left, {2} right) => !(left == right);
 
 	/// <inheritdoc cref=""IEqualityOperators{{TSelf, TOther, TResult}}.op_Equality(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator ==({2} left, {1} right) => left.Equals(right);
+	public static Boolean operator ==({2} left, {1} right) => left.Equals(right.{3});
 	/// <inheritdoc cref=""IEqualityOperators{{TSelf, TOther, TResult}}.op_Inequality(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator !=({2} left, {1} right) => !(left == right);
@@ -50,13 +50,14 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 	/// <param name="primitiveSymbol">A type symbol of self-equatable structure.</param>
 	/// <param name="context">Generation context.</param>
 	/// <param name="underlineType">Primitive underline type.</param>
+	/// <param name="valueName">Internal absolute value field name.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GeneratePrimitiveOperators(this ISymbol primitiveSymbol, GeneratorExecutionContext context,
-		String underlineType)
+		String underlineType, String valueName)
 	{
 		String fileName = $"{primitiveSymbol.Name}.Primitive.g.cs";
 		String source = String.Format(GenerationExtensions.primitiveOperatorsFormat,
-		                              primitiveSymbol.ContainingNamespace, primitiveSymbol.Name, underlineType);
+		                              primitiveSymbol.ContainingNamespace, primitiveSymbol.Name, underlineType, valueName);
 		context.AddSource(fileName, source);
 	}
 }
