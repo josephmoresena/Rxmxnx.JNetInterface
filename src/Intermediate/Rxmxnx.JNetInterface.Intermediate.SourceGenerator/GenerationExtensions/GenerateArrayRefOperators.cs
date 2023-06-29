@@ -16,20 +16,6 @@ partial struct {1} : IWrapper<JArrayLocalRef>
 	JArrayLocalRef IWrapper<JArrayLocalRef>.Value => this.ArrayValue;
 
 	/// <summary>
-	/// Private constructor.
-	/// </summary>
-	/// <param name=""arrayRef""><see cref=""JArrayLocalRef""/> value.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private {1}(JArrayLocalRef arrayRef) => this._value = arrayRef;
-
-	/// <summary>
-	/// Defines an explicit conversion of a given <see cref=""JArrayLocalRef""/> to <see cref=""{1}""/>.
-	/// </summary>
-	/// <param name=""arrayRef"">A <see cref=""JArrayLocalRef""/> to implicitly convert.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static explicit operator {1}(JArrayLocalRef arrayRef) => new(arrayRef);
-
-	/// <summary>
 	/// Determines whether a specified <see cref=""{1}""/> and a <see cref=""JArrayLocalRef""/> instance
 	/// have the same value.
 	/// </summary>
@@ -40,7 +26,7 @@ partial struct {1} : IWrapper<JArrayLocalRef>
 	/// of <paramref name=""right""/>; otherwise, <see langword=""false""/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator ==({1} left, JArrayLocalRef right) => left.Equals(right);
+	public static Boolean operator ==({1} left, JArrayLocalRef right) => left._value.Equals(right);
 	/// <summary>
 	/// Determines whether a specified <see cref=""JArrayLocalRef""/> and a <see cref=""{1}""/> instance
 	/// have the same value.
@@ -52,7 +38,7 @@ partial struct {1} : IWrapper<JArrayLocalRef>
 	/// of <paramref name=""right""/>; otherwise, <see langword=""false""/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator ==(JArrayLocalRef left, {1} right) => left.Equals(right);
+	public static Boolean operator ==(JArrayLocalRef left, {1} right) => left.Equals(right._value);
 
 	/// <summary>
 	/// Determines whether a specified <see cref=""{1}""/> and a <see cref=""JArrayLocalRef""/> instance
@@ -65,7 +51,7 @@ partial struct {1} : IWrapper<JArrayLocalRef>
 	/// of <paramref name=""right""/>; otherwise, <see langword=""false""/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator !=({1} left, JArrayLocalRef right) => !left.Equals(right);
+	public static Boolean operator !=({1} left, JArrayLocalRef right) => !left._value.Equals(right);
 	/// <summary>
 	/// Determines whether a specified <see cref=""JArrayLocalRef""/> and a <see cref=""{1}""/> instance
 	/// have different values.
@@ -77,7 +63,15 @@ partial struct {1} : IWrapper<JArrayLocalRef>
 	/// of <paramref name=""right""/>; otherwise, <see langword=""false""/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator !=(JArrayLocalRef left, {1} right) => !left.Equals(right);
+	public static Boolean operator !=(JArrayLocalRef left, {1} right) => !left.Equals(right._value);
+
+	/// <summary>
+	/// Converts a given <see cref=""JArrayLocalRef""/> to <see cref=""{1}""/> instance.
+	/// </summary>
+	/// <param name=""arrayRef"">A <see cref=""JArrayLocalRef""/> to convert.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal static {1} FromReference(in JArrayLocalRef arrayRef) 
+		=> NativeUtilities.Transform<JArrayLocalRef, {1}>(arrayRef);
 }}
 #nullable restore";
 

@@ -12,21 +12,7 @@ internal static partial class GenerationExtensions
 namespace {0};
 
 partial struct {1} 
-{{
-	/// <summary>
-	/// Internal constructor.
-	/// </summary>
-	/// <param name=""objRef""><see cref=""JObjectLocalRef""/> value.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal {1}(JObjectLocalRef objRef) => this._value = new(objRef); {2}
-
-	/// <summary>
-	/// Defines an explicit conversion of a given <see cref=""JObjectLocalRef""/> to <see cref=""{1}""/>.
-	/// </summary>
-	/// <param name=""objRef"">A <see cref=""JObjectLocalRef""/> to implicitly convert.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static explicit operator {1}(JObjectLocalRef objRef) => new(objRef);
-
+{{{2}
 	/// <summary>
 	/// Determines whether a specified <see cref=""{1}""/> and a <see cref=""JObjectLocalRef""/> instance
 	/// have the same value.
@@ -38,7 +24,7 @@ partial struct {1}
 	/// of <paramref name=""right""/>; otherwise, <see langword=""false""/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator ==({1} left, JObjectLocalRef right) => left.Equals(right);
+	public static Boolean operator ==({1} left, JObjectLocalRef right) => left._value.Equals(right);
 	/// <summary>
 	/// Determines whether a specified <see cref=""JObjectLocalRef""/> and a <see cref=""{1}""/> instance
 	/// have the same value.
@@ -50,7 +36,7 @@ partial struct {1}
 	/// of <paramref name=""right""/>; otherwise, <see langword=""false""/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator ==(JObjectLocalRef left, {1} right) => left.Equals(right);
+	public static Boolean operator ==(JObjectLocalRef left, {1} right) => left.Equals(right._value);
 
 	/// <summary>
 	/// Determines whether a specified <see cref=""{1}""/> and a <see cref=""JObjectLocalRef""/> instance
@@ -63,7 +49,7 @@ partial struct {1}
 	/// of <paramref name=""right""/>; otherwise, <see langword=""false""/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator !=({1} left, JObjectLocalRef right) => !left.Equals(right);
+	public static Boolean operator !=({1} left, JObjectLocalRef right) => !left._value.Equals(right);
 	/// <summary>
 	/// Determines whether a specified <see cref=""JObjectLocalRef""/> and a <see cref=""{1}""/> instance
 	/// have different values.
@@ -75,18 +61,26 @@ partial struct {1}
 	/// of <paramref name=""right""/>; otherwise, <see langword=""false""/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean operator !=(JObjectLocalRef left, {1} right) => !left.Equals(right);
+	public static Boolean operator !=(JObjectLocalRef left, {1} right) => !left.Equals(right._value);
+
+	/// <summary>
+	/// Converts a given <see cref=""JObjectLocalRef""/> to <see cref=""{1}""/> instance.
+	/// </summary>
+	/// <param name=""objRef"">A <see cref=""JObjectLocalRef""/> to convert.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal static {1} FromReference(in JObjectLocalRef objRef) 
+		=> NativeUtilities.Transform<JObjectLocalRef, {1}>(objRef);
 }}
 #nullable restore";
 
 	private const String objectRefOverrideFormat = @"
-
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Int32 GetHashCode() => HashCode.Combine(this._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Boolean Equals([NotNullWhen(true)] Object? obj) => {0}(this, obj);";
+	public override Boolean Equals([NotNullWhen(true)] Object? obj) => {0}(this, obj);
+";
 
 	/// <summary>
 	/// Generates operators for object reference structures.
