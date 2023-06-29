@@ -14,9 +14,9 @@ namespace {0};
 partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 {{
 	/// <inheritdoc/>
-	public static {1} MinValue => {2}.MinValue;
+	public static readonly {1} MinValue = {2}.MinValue;
 	/// <inheritdoc/>
-	public static {1} MaxValue => {2}.MinValue;
+	public static readonly {1} MaxValue = {2}.MinValue;
 {3}
 /*
 	static {1} INumberBase<{1}>.One => IPrimitiveNumeric<{1}, {2}>.One;
@@ -51,6 +51,9 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {1} operator %({1} left, {1} right) 
 		=> IPrimitiveNumeric<{1}, {2}>.Modulus(left._value, right._value);
+
+	static {1} IMinMaxValue<{1}>.MinValue => {1}.MinValue;
+	static {1} IMinMaxValue<{1}>.MaxValue => {1}.MaxValue;
 }}
 #nullable restore";
 

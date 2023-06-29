@@ -57,7 +57,8 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 	{
 		String fileName = $"{primitiveSymbol.Name}.Primitive.g.cs";
 		String source = String.Format(GenerationExtensions.primitiveOperatorsFormat,
-		                              primitiveSymbol.ContainingNamespace, primitiveSymbol.Name, underlineType, valueName);
+		                              primitiveSymbol.ContainingNamespace, primitiveSymbol.Name, underlineType,
+		                              valueName);
 		context.AddSource(fileName, source);
 	}
 }

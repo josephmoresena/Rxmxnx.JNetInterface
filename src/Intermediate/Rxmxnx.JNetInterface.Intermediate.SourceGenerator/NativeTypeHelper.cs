@@ -12,10 +12,6 @@ namespace Rxmxnx.JNetInterface.SourceGenerator;
 internal sealed record NativeTypeHelper
 {
 	/// <summary>
-	/// Indicates whether the native type is a pointer.
-	/// </summary>
-	private readonly Boolean _isPointer;
-	/// <summary>
 	/// Indicates whether the native type is an array reference.
 	/// </summary>
 	private readonly Boolean _isArrRef;
@@ -35,6 +31,10 @@ internal sealed record NativeTypeHelper
 	/// Indicates whether the native type is an object reference.
 	/// </summary>
 	private readonly Boolean _isObjRef;
+	/// <summary>
+	/// Indicates whether the native type is a pointer.
+	/// </summary>
+	private readonly Boolean _isPointer;
 	/// <summary>
 	/// Indicates whether the native type is a primitive value.
 	/// </summary>
@@ -77,7 +77,9 @@ internal sealed record NativeTypeHelper
 				this._typeSymbol.GenerateNumericPrimitiveOperators(context, underlineType);
 		}
 		else
+		{
 			this._typeSymbol.GenerateNativeStructToString(context);
+		}
 		if (this._isArrRef)
 			this._typeSymbol.GenerateArrayRefOperators(context);
 		if (this._isObjRef)
@@ -106,7 +108,7 @@ internal sealed record NativeTypeHelper
 			"JShort" => "Int16",
 			_ => String.Empty,
 		};
-	
+
 	/// <summary>
 	/// Retrieves the name of internal value for current symbol.
 	/// </summary>
