@@ -19,20 +19,18 @@ internal partial interface IPrimitiveNumeric<TPrimitive, TValue>
 		return NativeUtilities.Transform<TValue, TPrimitive>(result);
 	}
 	/// <inheritdoc cref="IDecrementOperators{TSelf}.op_Decrement(TSelf)" />
-	public static TPrimitive Decrement(ref TPrimitive value)
+	public static void Decrement(ref TPrimitive value)
 	{
 		ref TValue refValue = ref value.Transform<TPrimitive, TValue>();
 		refValue--;
-		return value;
 	}
 	/// <inheritdoc cref="IDecrementOperators{TSelf}.op_CheckedDecrement(TSelf)" />
-	public static TPrimitive CheckedDecrement(ref TPrimitive value)
+	public static void CheckedDecrement(ref TPrimitive value)
 	{
 		ref TValue refValue = ref value.Transform<TPrimitive, TValue>();
 		checked
 		{
 			refValue--;
 		}
-		return value;
 	}
 }
