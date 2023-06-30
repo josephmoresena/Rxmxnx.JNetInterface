@@ -23,7 +23,14 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	static Int32 INumberBase<{1}>.Radix => 2;
 	static {1} INumberBase<{1}>.Zero => IPrimitiveNumeric<{1}, {2}>.Zero;
 
-	static {1} IBinaryNumber<{1}>.AllBitsSet => IPrimitiveNumeric<{1}, {2}>.AllBitsSet;
+	static {1} IBinaryNumber<{1}>.AllBitsSet 
+		=> IPrimitiveNumeric<{1}, {2}>.AllBitsSet;
+
+	static {1} IAdditiveIdentity<{1}, {1}>.AdditiveIdentity 
+		=> IPrimitiveNumeric<{1}, {2}>.AdditiveIdentity;
+
+	static {1} IMultiplicativeIdentity<{1}, {1}>.MultiplicativeIdentity 
+		=> IPrimitiveNumeric<{1}, {2}>.MultiplicativeIdentity;*/
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<{1}>.IsCanonical({1} value) => true;
@@ -33,7 +40,6 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	static Boolean INumberBase<{1}>.IsImaginaryNumber({1} value) => false;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<{1}>.IsZero({1} value) => value._value == 0;
-*/
 {4}
 
     /// <inheritdoc cref=""IComparisonOperators{{TSelf, TOther, Boolean}}.op_GreaterThan(TSelf, TOther)"" />
@@ -54,6 +60,35 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	public static {1} operator %({1} left, {1} right) 
 		=> IPrimitiveNumeric<{1}, {2}>.Modulus(left._value, right._value);
 
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {1} operator --({1} value) 
+	{{
+		IPrimitiveNumeric<{1}, {2}>.Decrement(ref value);
+		return value;
+	}}
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {1} operator checked --({1} value) 
+	{{
+		IPrimitiveNumeric<{1}, {2}>.CheckedDecrement(ref value);
+		return value;
+	}}
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {1} operator ++({1} value) 
+	{{
+		IPrimitiveNumeric<{1}, {2}>.Increment(ref value);
+		return value;
+	}}
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {1} operator checked ++({1} value) 
+	{{
+		IPrimitiveNumeric<{1}, {2}>.CheckedIncrement(ref value);
+		return value;
+	}}
+
 	static {1} IMinMaxValue<{1}>.MinValue => {1}.MinValue;
 	static {1} IMinMaxValue<{1}>.MaxValue => {1}.MaxValue;
 }}
@@ -67,6 +102,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean TryFormat(Span<Char> destination, out Int32 charsWritten, ReadOnlySpan<Char> format, IFormatProvider? provider)
 		=> this.Value.TryFormat(destination, out charsWritten, format, provider);
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} Abs({0} value) => {1}.Abs(value._value);
@@ -106,7 +142,51 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryParse(ReadOnlySpan<Char> s, NumberStyles style, IFormatProvider? provider, out {0} result)
 		=> IPrimitiveNumeric<{0}, {1}>.TryParse(s, style, provider, out result);
-";
+
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator +({0} left, {0} right) 
+		=> IPrimitiveNumeric<{0}, {1}>.Addition(left._value, right._value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator checked +({0} left, {0} right) 
+		=> IPrimitiveNumeric<{0}, {1}>.CheckedAddition(left._value, right._value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator /({0} left, {0} right)
+		=> IPrimitiveNumeric<{0}, {1}>.Division(left._value, right._value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator checked /({0} left, {0} right)
+		=> IPrimitiveNumeric<{0}, {1}>.CheckedDivision(left._value, right._value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator *({0} left, {0} right)
+		=> IPrimitiveNumeric<{0}, {1}>.Multiply(left._value, right._value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator checked *({0} left, {0} right)
+		=> IPrimitiveNumeric<{0}, {1}>.CheckedMultiply(left._value, right._value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator -({0} left, {0} right)
+		=> IPrimitiveNumeric<{0}, {1}>.Subtraction(left._value, right._value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator checked -({0} left, {0} right)
+		=> IPrimitiveNumeric<{0}, {1}>.CheckedSubtraction(left._value, right._value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator +({0} value)
+		=> IPrimitiveNumeric<{0}, {1}>.UnaryPlus(value._value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator -({0} value)
+		=> IPrimitiveNumeric<{0}, {1}>.UnaryNegation(value._value);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static {0} operator checked -({0} value)
+		=> IPrimitiveNumeric<{0}, {1}>.CheckedUnaryNegation(value._value);";
 
 	private const String charFormattable = @"
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -115,9 +195,9 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Boolean ISpanFormattable.TryFormat(Span<Char> destination, out Int32 charsWritten, ReadOnlySpan<Char> format, IFormatProvider? provider)
 		=> ((ISpanFormattable)this.Value).TryFormat(destination, out charsWritten, format, provider);
-	/*
+/*
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static JChar INumberBase<JChar>.Abs(JChar value) => this;
+	static JChar INumberBase<JChar>.Abs(JChar value) => value;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<JChar>.IsEvenInteger(JChar value) => (value._value & 1) == 0;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -127,9 +207,9 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<JChar>.IsPositive(JChar value) => true;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static Boolean INumberBase<JChar>.MaxMagnitude(JChar x, JChar y) => (Char)Math.Max(x._value, y._value);
+	static JChar INumberBase<JChar>.MaxMagnitude(JChar x, JChar y) => (Char)Math.Max(x._value, y._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static Boolean INumberBase<JChar>.MinMagnitude(JChar x, JChar y) => (Char)Math.Min(x._value, y._value);
+	static JChar INumberBase<JChar>.MinMagnitude(JChar x, JChar y) => (Char)Math.Min(x._value, y._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar INumberBase<JChar>.Parse(String s, NumberStyles style, IFormatProvider? provider)
 	    => IPrimitiveNumeric<JChar, Char>.Parse(s, style, provider);
@@ -137,15 +217,54 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	static JChar INumberBase<JChar>.Parse(ReadOnlySpan<Char> s, NumberStyles style, IFormatProvider? provider)
 	    => IPrimitiveNumeric<JChar, Char>.Parse(s, style, provider);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static Boolean TryParse([NotNullWhen(true)] String? s, NumberStyles style, IFormatProvider? provider,
+	static Boolean INumberBase<JChar>.TryParse([NotNullWhen(true)] String? s, NumberStyles style, IFormatProvider? provider,
 		[MaybeNullWhen(false)] out JChar result)
 		=> IPrimitiveNumeric<JChar, Char>.TryParse(s, style, provider, out result);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<JChar>.TryParse(ReadOnlySpan<Char> s, NumberStyles style, IFormatProvider? provider,
 		[MaybeNullWhen(false)] out JChar result)
-		=> IPrimitiveNumeric<JChar, Char>.TryParse(s, style, provider, out result);*/";
+		=> IPrimitiveNumeric<JChar, Char>.TryParse(s, style, provider, out result);
 
-	private const String integerFormattableFormat = @"/* 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar IAdditionOperators<JChar, JChar, JChar>.operator +(JChar left, JChar right) 
+		=> IPrimitiveNumeric<JChar, Char>.Addition(left._value, right._value);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar IAdditionOperators<JChar, JChar, JChar>.operator checked +(JChar left, JChar right) 
+		=> IPrimitiveNumeric<JChar, Char>.CheckedAddition(left._value, right._value);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar IDivisionOperators<JChar, JChar, JChar>.operator /(JChar left, JChar right)
+		=> IPrimitiveNumeric<JChar, Char>.Division(left._value, right._value);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar IDivisionOperators<JChar, JChar, JChar>.operator checked /(JChar left, JChar right)
+		=> IPrimitiveNumeric<JChar, Char>.CheckedDivision(left._value, right._value);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar IMultiplyOperators<JChar, JChar, JChar>.operator *(JChar left, JChar right)
+		=> IPrimitiveNumeric<JChar, Char>.Multiply(left._value, right._value);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar IMultiplyOperators<JChar, JChar, JChar>.operator checked *(JChar left, JChar right)
+		=> IPrimitiveNumeric<JChar, Char>.CheckedMultiply(left._value, right._value);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar ISubtractionOperators<JChar, JChar, JChar>.operator -(JChar left, JChar right)
+		=> IPrimitiveNumeric<JChar, Char>.Subtraction(left._value, right._value);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar ISubtractionOperators<JChar, JChar, JChar>.operator checked -(JChar left, JChar right)
+		=> IPrimitiveNumeric<JChar, Char>.CheckedSubtraction(left._value, right._value);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar IUnaryPlusOperators<JChar, JChar>.operator +(JChar value)
+		=> IPrimitiveNumeric<JChar, Char>.UnaryPlus(value._value);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar IUnaryNegationOperators<JChar, JChar>.operator -(JChar value)
+		=> IPrimitiveNumeric<JChar, Char>.UnaryNegation(value._value);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static JChar IUnaryNegationOperators<JChar, JChar>.operator checked -(JChar value)
+		=> IPrimitiveNumeric<JChar, Char>.CheckedUnaryNegation(value._value);*/";
+
+	private const String integerFormattableFormat = @"/*
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<{0}>.IsFinite({0} value) => true;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -165,11 +284,11 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<{0}>.IsSubnormal({0} value) => false;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static Boolean INumberBase<{0}>.MaxMagnitudeNumber({0} x, {0} y) 
+	static {0} INumberBase<{0}>.MaxMagnitudeNumber({0} x, {0} y) 
 		=> IPrimitiveNumeric<{0}, {1}>.MaxMagnitudeNumber(x._value, y._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static Boolean INumberBase<{0}>.MinMagnitudeNumber({0} x, {0} y) 
-		=> IPrimitiveNumeric<{0}, {1}>.MinMagnitude(x._value, y._value);*/
+	static {0} INumberBase<{0}>.MinMagnitudeNumber({0} x, {0} y) 
+		=> IPrimitiveNumeric<{0}, {1}>.MinMagnitudeNumber(x._value, y._value);*/
 
 	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_BitwiseAnd(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -187,8 +306,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator ~({0} value) => IPrimitiveNumeric<{0}, {1}>.OnesComplement(value._value);";
 
-	private const String floatingFormattableFormat = @"
-	/// <inheritdoc/>
+	private const String floatingFormattableFormat = @"	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean IsFinite({0} value) => {1}.IsFinite(value._value);
 	/// <inheritdoc/>
@@ -221,7 +339,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} MinMagnitudeNumber({0} x, {0} y) => {1}.MinMagnitudeNumber(x._value, y._value);
-/*;
+/*
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {0} IBitwiseOperators<{0}, {0}, {0}>.operator &({0} left, {0} right) 
 		=> IPrimitiveNumeric<{0}, {1}>.BitwiseAnd(left._value, right._value);
@@ -233,8 +351,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>//, IBinaryNumber<{1}>
 		=> IPrimitiveNumeric<{0}, {1}>.ExclusiveOr(left._value, right._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {0} IBitwiseOperators<{0}, {0}, {0}>.operator ~({0} value) 
-		=> IPrimitiveNumeric<{0}, {1}>.OnesComplement(value._value);
-*/";
+		=> IPrimitiveNumeric<{0}, {1}>.OnesComplement(value._value);*/";
 
 	/// <summary>
 	/// Generates operators for numeric structures.
