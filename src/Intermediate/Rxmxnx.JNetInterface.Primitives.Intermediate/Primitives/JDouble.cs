@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableComparable<JDouble>,
-	IPrimitiveFloatingPoint<JDouble, Double>
+	IPrimitiveFloatingPoint<JDouble, Double>, IPrimitiveSigned<JDouble, Double>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;

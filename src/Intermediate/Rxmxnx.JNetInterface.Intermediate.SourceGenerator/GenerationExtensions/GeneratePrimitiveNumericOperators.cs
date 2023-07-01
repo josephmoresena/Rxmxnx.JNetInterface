@@ -13,10 +13,10 @@ namespace {0};
 
 partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 {{
-	/// <inheritdoc/>
+	/// <inheritdoc cref=""IMinMaxValue{{TSelf}}.MinValue""/>
 	public static readonly {1} MinValue = {2}.MinValue;
-	/// <inheritdoc/>
-	public static readonly {1} MaxValue = {2}.MinValue;
+	/// <inheritdoc cref=""IMinMaxValue{{TSelf}}.MaxValue""/>
+	public static readonly {1} MaxValue = {2}.MaxValue;
 {3}
 
 	static {1} INumberBase<{1}>.One => IPrimitiveNumeric<{1}, {2}>.One;
@@ -183,7 +183,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean IsPow2({0} value) => IPrimitiveNumeric<{0}, {1}>.IsPow2(value.Value);
-	/// <inheritdoc/>
+	/// <inheritdoc cref=""IBinaryNumber{{TSelf}}.Log2(TSelf)""/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} Log2({0} value) => IPrimitiveNumeric<{0}, {1}>.Log2(value.Value);
 

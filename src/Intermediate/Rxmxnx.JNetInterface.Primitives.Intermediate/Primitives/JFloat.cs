@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparable<JFloat>,
-	IPrimitiveFloatingPoint<JFloat, Single>
+	IPrimitiveFloatingPoint<JFloat, Single>, IPrimitiveSigned<JFloat, Single>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloat;

@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparable<JShort>,
-	IPrimitiveInteger<JShort, Int16>
+	IPrimitiveInteger<JShort, Int16>, IPrimitiveSigned<JShort, Int16>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JShort;
