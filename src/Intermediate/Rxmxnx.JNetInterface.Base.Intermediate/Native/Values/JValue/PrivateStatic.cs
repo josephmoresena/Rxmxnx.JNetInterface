@@ -22,7 +22,8 @@ internal partial struct JValue
 	/// </summary>
 	/// <returns><see cref="IsDefaultDelegate"/> delegate for current process.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static IsDefaultDelegate GetIsDefault() => Environment.Is64BitProcess ? JValue.DefaultLong : JValue.Default;
+	private static IsDefaultDelegate GetIsDefault() 
+		=> NativeUtilities.SizeOf<IntPtr>() == NativeUtilities.SizeOf<JValue>()  ? JValue.DefaultPointer : JValue.Default;
 	/// <summary>
 	/// Indicates whether <paramref name="jValue"/> has the <see langword="default"/> value.
 	/// </summary>
@@ -42,5 +43,5 @@ internal partial struct JValue
 	/// <see langword="false"/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static Boolean DefaultLong(in JValue jValue) => Unsafe.AsRef(jValue).Transform<JValue, Int64>() == default;
+	private static Boolean DefaultPointer(in JValue jValue) => jValue._pointerValue == default;
 }

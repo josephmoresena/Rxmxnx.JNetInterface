@@ -3,19 +3,26 @@
 /// <summary>
 /// <c>jvalue</c> union. This structure can represent any reference type as any primitive type.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Explicit)]
 internal readonly partial struct JValue : INative<JValue>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JValue;
 
 	/// <summary>
+	/// Pointer value.
+	/// </summary>
+	[FieldOffset(0)]
+	private readonly IntPtr _pointerValue;
+	/// <summary>
 	/// Least significant integer (4 bytes).
 	/// </summary>
+	[FieldOffset(0)]
 	private readonly Int32 _lsi;
 	/// <summary>
 	/// Most significant integer (4 bytes).
 	/// </summary>
+	[FieldOffset(sizeof(Int32))]
 	private readonly Int32 _msi;
 
 	/// <summary>
@@ -49,6 +56,7 @@ internal readonly partial struct JValue : INative<JValue>
 	{
 		this._msi = default;
 		this._msi = default;
+		this._pointerValue = default;
 	}
 
 	/// <summary>
