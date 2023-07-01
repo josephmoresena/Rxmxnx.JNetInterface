@@ -39,7 +39,7 @@ internal partial interface IPrimitiveNumeric<TPrimitive, TValue>
 
 	/// <inheritdoc cref="INumberBase{TSelf}.TryParse(String, NumberStyles, IFormatProvider?, out TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean TryParse([NotNullWhen(true)] String? s, NumberStyles style, IFormatProvider? provider, 
+	public static Boolean TryParse([NotNullWhen(true)] String? s, NumberStyles style, IFormatProvider? provider,
 		out TPrimitive result)
 	{
 		Boolean parseResult = TValue.TryParse(s, style, provider, out TValue valueResult);
@@ -55,4 +55,18 @@ internal partial interface IPrimitiveNumeric<TPrimitive, TValue>
 		result = parseResult ? NativeUtilities.Transform<TValue, TPrimitive>(valueResult) : default;
 		return parseResult;
 	}
+	/// <inheritdoc cref="INumberBase{TSelf}.CreateChecked{TOther}(TOther)"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static TPrimitive CreateChecked<TOther>(TOther value) where TOther : INumberBase<TOther>
+		=> NativeUtilities.Transform<TValue, TPrimitive>(TValue.CreateChecked(value));
+
+	/// <inheritdoc cref="INumberBase{TSelf}.CreateSaturating{TOther}(TOther)"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static TPrimitive CreateSaturating<TOther>(TOther value) where TOther : INumberBase<TOther>
+		=> NativeUtilities.Transform<TValue, TPrimitive>(TValue.CreateSaturating(value));
+
+	/// <inheritdoc cref="INumberBase{TSelf}.CreateTruncating{TOther}(TOther)"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static TPrimitive CreateTruncating<TOther>(TOther value) where TOther : INumberBase<TOther>
+		=> NativeUtilities.Transform<TValue, TPrimitive>(TValue.CreateTruncating(value));
 }

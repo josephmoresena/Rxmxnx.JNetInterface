@@ -4,8 +4,8 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// Primitive <c>float</c>. Represents a single-precision floating-point number.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JFloat : INative<JFloat>, IPrimitiveFloatingPoint<JFloat, Single>, IComparable<JFloat>,
-	IEquatable<JFloat>
+public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparable<JFloat>,
+	IPrimitiveFloatingPoint<JFloat, Single>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloat;

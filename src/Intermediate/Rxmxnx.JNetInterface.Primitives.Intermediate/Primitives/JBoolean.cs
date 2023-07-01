@@ -4,8 +4,8 @@
 /// Primitive <c>boolean</c>. Represents a Boolean (<see langword="true"/> or <see langword="false"/>) value.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JBoolean : INative<JBoolean>, IPrimitive<JBoolean, Boolean>, IComparable<JBoolean>,
-	IEquatable<JBoolean>
+public readonly partial struct JBoolean : INative<JBoolean>, ISelfEquatableComparable<JBoolean>,
+	IPrimitive<JBoolean, Boolean>
 {
 	/// <summary>
 	/// Unsigned byte value for <see langword="true"/> value.
