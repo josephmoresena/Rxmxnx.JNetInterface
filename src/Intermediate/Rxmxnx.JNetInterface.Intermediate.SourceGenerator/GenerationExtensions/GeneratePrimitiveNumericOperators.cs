@@ -424,7 +424,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 	/// <param name="context">Generation context.</param>
 	/// <param name="underlineType">Primitive underline type.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GenerateNumericPrimitiveOperators(this ISymbol numericSymbol, GeneratorExecutionContext context,
+	public static void GeneratePrimitiveNumericOperators(this ISymbol numericSymbol, GeneratorExecutionContext context,
 		String underlineType)
 	{
 		String fileName = $"{numericSymbol.Name}.Numeric.g.cs";

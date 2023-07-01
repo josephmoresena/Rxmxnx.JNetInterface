@@ -56,8 +56,8 @@ internal sealed record NativeTypeHelper
 		this._isPrimitive = interfaces.Contains("Rxmxnx.JNetInterface.IPrimitive");
 		this._isArrRef = interfaces.Contains("Rxmxnx.JNetInterface.Internal.IArrayReference");
 		this._isNumeric = this._isPrimitive && interfaces.Contains("Rxmxnx.JNetInterface.Internal.IPrimitiveNumeric");
-		this._isInteger = this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.IPrimitiveInteger");
-		this._isFloatingPoint = this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.IFloatingPoint");
+		this._isInteger = this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.Internal.IPrimitiveInteger");
+		this._isFloatingPoint = this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.Internal.IFloatingPoint");
 		this._isObjRef = this._isArrRef || interfaces.Contains("Rxmxnx.JNetInterface.Internal.IObjectReference");
 	}
 
@@ -74,7 +74,9 @@ internal sealed record NativeTypeHelper
 			this._typeSymbol.GeneratePrimitiveToString(context, valueName);
 			this._typeSymbol.GeneratePrimitiveOperators(context, underlineType, valueName);
 			if (this._isNumeric)
-				this._typeSymbol.GenerateNumericPrimitiveOperators(context, underlineType);
+				this._typeSymbol.GeneratePrimitiveNumericOperators(context, underlineType);
+			if (this._isInteger)
+				this._typeSymbol.GenerateNumericPrimitiveIntegerOperators(context, underlineType);
 		}
 		else
 		{
