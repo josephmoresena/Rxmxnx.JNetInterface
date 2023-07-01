@@ -102,17 +102,17 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 	static {1} IMinMaxValue<{1}>.MaxValue => {1}.MaxValue;
 
 	static Boolean INumberBase<{1}>.TryConvertFromChecked<TOther>(TOther value, out {1} result)
-	    => throw new NotImplementedException();
+	    => ValidationUtilities.ThrownInvalidNumberBaseImplementation<{1}>(out result);
 	static Boolean INumberBase<{1}>.TryConvertFromSaturating<TOther>(TOther value, out {1} result)
-	    => throw new NotImplementedException();
+	    => ValidationUtilities.ThrownInvalidNumberBaseImplementation<{1}>(out result);
 	static Boolean INumberBase<{1}>.TryConvertFromTruncating<TOther>(TOther value, out {1} result)
-	    => throw new NotImplementedException();
+	    => ValidationUtilities.ThrownInvalidNumberBaseImplementation<{1}>(out result);
 	static Boolean INumberBase<{1}>.TryConvertToChecked<TOther>({1} value, out TOther result)
-	    => throw new NotImplementedException();
+	    => ValidationUtilities.ThrownInvalidNumberBaseImplementation<TOther>(out result);
 	static Boolean INumberBase<{1}>.TryConvertToSaturating<TOther>({1} value, out TOther result)
-	    => throw new NotImplementedException();
+	    => ValidationUtilities.ThrownInvalidNumberBaseImplementation<TOther>(out result);
 	static Boolean INumberBase<{1}>.TryConvertToTruncating<TOther>({1} value, out TOther result)
-	    => throw new NotImplementedException();
+	    => ValidationUtilities.ThrownInvalidNumberBaseImplementation<TOther>(out result);
 }}
 #nullable restore";
 

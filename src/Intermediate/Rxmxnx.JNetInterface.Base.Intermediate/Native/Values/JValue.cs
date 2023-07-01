@@ -69,18 +69,15 @@ internal readonly partial struct JValue : INative<JValue>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static JValue Create<T>(in T value) where T : unmanaged
 	{
-		if (NativeUtilities.SizeOf<T>() > JValue.Size)
-			throw new InsufficientMemoryException();
-
-		JValue result = default;
-		ref JValue refResult = ref result;
-		Span<Byte> resultByte = result.AsBytes();
+		ValidationUtilities.ThrowIfInvalidType<T>();
+		Span<JValue> resultSpan = stackalloc JValue[1];
+		Span<Byte> resultByte = resultSpan.AsBytes();
 		ReadOnlySpan<Byte> source = NativeUtilities.AsBytes(value);
 		source.CopyTo(resultByte);
-		return result;
+		return resultSpan[0];
 	}
 	/// <summary>
-	/// Interprests <paramref name="jValue"/> as <typeparamref name="T"/> reference.
+	/// Interprets <paramref name="jValue"/> as <typeparamref name="T"/> reference.
 	/// </summary>
 	/// <typeparam name="T">Type of value.</typeparam>
 	/// <param name="jValue">A <see cref="JValue"/> reference.</param>
@@ -89,9 +86,7 @@ internal readonly partial struct JValue : INative<JValue>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static ref T As<T>(ref JValue jValue) where T : unmanaged
 	{
-		if (NativeUtilities.SizeOf<T>() > JValue.Size)
-			throw new InsufficientMemoryException();
-
+		ValidationUtilities.ThrowIfInvalidType<T>();
 		return ref Unsafe.As<JValue, T>(ref jValue);
 	}
 }

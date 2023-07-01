@@ -18,12 +18,11 @@ internal static class CommonConstants
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String JEnvironmentError = "Local object is not owned by the this JEnvironment instance.";
 
-	public static readonly String ExceptionMessageUnavailable = "Exception message unavailable.";
+	public const String ExceptionMessageUnavailable = "Exception message unavailable.";
 
-	public static readonly String
-		JNetVersionError = "JNI version must be at least "; //+ JVirtualMachine.MinimalVersion;
-	public static readonly String AttachingThreadError = "Could not attach the current thread to the JVM.";
-	public static readonly String PrimitveTypeError = "Primitive type is not valid for JNI.";
-	public static readonly String ArrayClassConstructorError = "Cannot get a constructor from an array class.";
-	public static readonly String InvalidLocalReference = "Local object has no reference.";
+	public const String JNetVersionError = "JNI version must be at least "; //+ JVirtualMachine.MinimalVersion;
+	public const String AttachingThreadError = "Could not attach the current thread to the JVM.";
+	public const String PrimitiveTypeError = "Primitive type is not valid for JNI.";
+	public const String ArrayClassConstructorError = "Cannot get a constructor from an array class.";
+	public const String InvalidLocalReference = "Local object has no reference.";
 }

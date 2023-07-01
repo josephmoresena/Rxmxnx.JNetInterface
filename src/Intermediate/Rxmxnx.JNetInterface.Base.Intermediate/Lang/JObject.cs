@@ -88,8 +88,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 		where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 		=> this is IWrapper<TPrimitive> pw ? pw.Value.Value :
 			this is IWrapper<TValue> vw ? vw.Value :
-			this is IConvertible c ? (TValue)c.ToType(typeof(TValue), CultureInfo.CurrentCulture) :
-			throw new InvalidCastException();
+			ValidationUtilities.ThrownIfInvalidCast<TValue>(this as IConvertible);
 
 	/// <summary>
 	/// Interprets current instance a <typeparamref name="TValue"/> value.

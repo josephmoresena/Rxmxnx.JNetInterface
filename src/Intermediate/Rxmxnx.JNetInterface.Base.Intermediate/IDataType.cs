@@ -17,7 +17,8 @@ public interface IDataType
 	/// <summary>
 	/// Primitive metadata.
 	/// </summary>
-	internal static virtual JPrimitiveMetadata? PrimitiveMetadata => throw new NotImplementedException();
+	internal static virtual JPrimitiveMetadata? PrimitiveMetadata
+		=> ValidationUtilities.ThrownInvalidInterface<JPrimitiveMetadata?>(nameof(IDataType));
 }
 
 /// <summary>

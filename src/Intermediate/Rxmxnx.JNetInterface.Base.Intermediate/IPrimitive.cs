@@ -10,7 +10,8 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 	/// </summary>
 	static abstract CString ArraySignature { get; }
 	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
-	internal new static virtual JPrimitiveMetadata PrimitiveMetadata => throw new NotImplementedException();
+	internal new static virtual JPrimitiveMetadata PrimitiveMetadata
+		=> ValidationUtilities.ThrownInvalidInterface<JPrimitiveMetadata>(nameof(IPrimitive));
 }
 
 /// <summary>
@@ -22,7 +23,7 @@ public interface IPrimitive<TPrimitive> : IPrimitive, IDataType<TPrimitive> wher
 	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
 	new static abstract JPrimitiveMetadata PrimitiveMetadata { get; }
 
-	static JPrimitiveMetadata? IDataType.PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
+	static JPrimitiveMetadata IDataType.PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
 	static JPrimitiveMetadata IPrimitive.PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
 
 	/// <summary>

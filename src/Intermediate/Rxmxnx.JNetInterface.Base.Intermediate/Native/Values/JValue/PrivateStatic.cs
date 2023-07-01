@@ -22,8 +22,10 @@ internal partial struct JValue
 	/// </summary>
 	/// <returns><see cref="IsDefaultDelegate"/> delegate for current process.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static IsDefaultDelegate GetIsDefault() 
-		=> NativeUtilities.SizeOf<IntPtr>() == NativeUtilities.SizeOf<JValue>()  ? JValue.DefaultPointer : JValue.Default;
+	private static IsDefaultDelegate GetIsDefault()
+		=> NativeUtilities.SizeOf<IntPtr>() == NativeUtilities.SizeOf<JValue>() ?
+			JValue.DefaultPointer :
+			JValue.Default;
 	/// <summary>
 	/// Indicates whether <paramref name="jValue"/> has the <see langword="default"/> value.
 	/// </summary>

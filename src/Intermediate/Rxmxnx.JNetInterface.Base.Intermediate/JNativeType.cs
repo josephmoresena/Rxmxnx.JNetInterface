@@ -203,7 +203,7 @@ public static class JNativeTypeExtensions
 			JNativeType.JObjectArray => ReferenceNames.JObjectArrayLocalRefName,
 
 			JNativeType.JValue => ValueNames.JValueName,
-			_ => throw new InvalidEnumArgumentException(nameof(nativeType), (Int32)nativeType, typeof(JNativeType)),
+			_ => ValidationUtilities.ThrownInvalidNativeType(nativeType),
 		};
 	}
 }
