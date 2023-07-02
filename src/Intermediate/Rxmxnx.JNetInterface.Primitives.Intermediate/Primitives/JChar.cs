@@ -61,6 +61,10 @@ public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<
 	public static implicit operator JObject(JChar value) => new JPrimitiveObject<JChar>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static explicit operator JChar(JObject jObj)
+		=> ValidationUtilities.ThrowIfInvalidCast<Char>(jObj as IConvertible);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JChar(Char value) => new(value);
 
 	/// <inheritdoc/>

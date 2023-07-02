@@ -25,7 +25,7 @@ internal static class ValidationUtilities
 	/// <param name="result">The output value.</param>
 	/// <returns>Always throws an exception.</returns>
 	/// <exception cref="NotImplementedException">Always thrown.</exception>
-	public static Boolean ThrownInvalidNumberBaseImplementation<TNumber>(out TNumber result)
+	public static Boolean ThrowInvalidNumberBaseImplementation<TNumber>(out TNumber result)
 		where TNumber : INumberBase<TNumber>
 		=> throw new NotImplementedException("Protected methods on INumberBase<> could not be implemented.");
 	/// <summary>
@@ -37,7 +37,7 @@ internal static class ValidationUtilities
 	/// <returns>Always throws an exception.</returns>
 	/// <exception cref="NotImplementedException">Always thrown.</exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static TResult ThrownInvalidInterface<TResult>(String interfaceName)
+	public static TResult ThrowInvalidInterface<TResult>(String interfaceName)
 	{
 		String messagePrefix = $"The {interfaceName} interface can't be implemented by itself.";
 		String recommendation = interfaceName switch
@@ -57,7 +57,7 @@ internal static class ValidationUtilities
 	/// <param name="nativeType">The invalid <see cref="JNativeType"/> value.</param>
 	/// <returns>Always throws an exception.</returns>
 	/// <exception cref="NotImplementedException">Always thrown.</exception>
-	public static String ThrownInvalidNativeType(JNativeType nativeType)
+	public static String ThrowInvalidNativeType(JNativeType nativeType)
 		=> throw new InvalidEnumArgumentException(nameof(nativeType), (Int32)nativeType, typeof(JNativeType));
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> cannot be cast to <typeparamref name="TValue"/>.
@@ -70,7 +70,7 @@ internal static class ValidationUtilities
 	/// <exception cref="InvalidCastException">
 	/// Thrown if <paramref name="value"/> is <see langword="null"/> or cannot be cast to <typeparamref name="TValue"/>.
 	/// </exception>
-	public static TValue ThrownIfInvalidCast<TValue>(IConvertible? value) where TValue : unmanaged
+	public static TValue ThrowIfInvalidCast<TValue>(IConvertible? value) where TValue : unmanaged
 	{
 		if (value is null)
 			throw new InvalidCastException($"Invalid cast to {typeof(TValue)}");

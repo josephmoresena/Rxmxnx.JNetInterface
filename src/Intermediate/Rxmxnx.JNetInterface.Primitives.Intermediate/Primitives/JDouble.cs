@@ -62,6 +62,10 @@ public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableCompara
 	public static implicit operator JObject(JDouble value) => new JPrimitiveObject<JDouble>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static explicit operator JDouble(JObject jObj)
+		=> ValidationUtilities.ThrowIfInvalidCast<Double>(jObj as IConvertible);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JDouble(Double value) => new(value);
 
 	/// <inheritdoc/>

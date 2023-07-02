@@ -203,7 +203,7 @@ public static class JNativeTypeExtensions
 			JNativeType.JObjectArray => ReferenceNames.JObjectArrayLocalRefName,
 
 			JNativeType.JValue => ValueNames.JValueName,
-			_ => ValidationUtilities.ThrownInvalidNativeType(nativeType),
+			_ => ValidationUtilities.ThrowInvalidNativeType(nativeType),
 		};
 	}
 }

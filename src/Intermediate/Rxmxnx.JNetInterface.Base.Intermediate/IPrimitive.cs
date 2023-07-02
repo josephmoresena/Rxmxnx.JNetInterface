@@ -11,7 +11,7 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 	static abstract CString ArraySignature { get; }
 	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
 	internal new static virtual JPrimitiveMetadata PrimitiveMetadata
-		=> ValidationUtilities.ThrownInvalidInterface<JPrimitiveMetadata>(nameof(IPrimitive));
+		=> ValidationUtilities.ThrowInvalidInterface<JPrimitiveMetadata>(nameof(IPrimitive));
 }
 
 /// <summary>
@@ -31,6 +31,11 @@ public interface IPrimitive<TPrimitive> : IPrimitive, IDataType<TPrimitive> wher
 	/// </summary>
 	/// <param name="value">A <typeparamref name="TPrimitive"/> to implicitly convert.</param>
 	static abstract implicit operator JObject(TPrimitive value);
+	/// <summary>
+	/// Defines an implicit conversion of a given <see cref="JObject"/> to <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="jobj">A <see cref="JObject"/> to implicitly convert.</param>
+	static abstract explicit operator TPrimitive(JObject jobj);
 }
 
 /// <summary>

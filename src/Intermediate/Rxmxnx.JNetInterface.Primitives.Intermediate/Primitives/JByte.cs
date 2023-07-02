@@ -61,6 +61,10 @@ public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<
 	public static implicit operator JObject(JByte value) => new JPrimitiveObject<JByte>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static explicit operator JByte(JObject jObj)
+		=> ValidationUtilities.ThrowIfInvalidCast<SByte>(jObj as IConvertible);
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JByte(SByte value) => new(value);
 
 	/// <inheritdoc/>

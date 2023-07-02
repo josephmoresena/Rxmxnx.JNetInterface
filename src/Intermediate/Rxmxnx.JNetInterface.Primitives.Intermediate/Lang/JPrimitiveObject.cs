@@ -24,6 +24,11 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapp
 	/// <inheritdoc/>
 	public static CString ArraySignature => TPrimitive.ArraySignature;
 
+	/// <summary>
+	/// Internal primitive value.
+	/// </summary>
+	public new TPrimitive Value => this.As<TPrimitive>();
+	
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
 	public override CString ObjectClassName => TPrimitive.ClassName;
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
@@ -48,11 +53,7 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapp
 	UInt16 IConvertible.ToUInt16(IFormatProvider? provider) => this.Value.ToUInt16(provider);
 	UInt64 IConvertible.ToUInt64(IFormatProvider? provider) => this.Value.ToUInt64(provider);
 	UInt32 IConvertible.ToUInt32(IFormatProvider? provider) => this.Value.ToUInt32(provider);
-
-	/// <summary>
-	/// Internal primitive value.
-	/// </summary>
-	public new TPrimitive Value => this.As<TPrimitive>();
+	
 	/// <inheritdoc/>
 	public Boolean Equals(TPrimitive other) => this.Value.Equals(other);
 

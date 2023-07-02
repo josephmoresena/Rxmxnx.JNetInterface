@@ -25,7 +25,15 @@ public abstract partial record JPrimitiveMetadata
 /// <typeparam name="TPrimitive">Type of <see cref="IPrimitive"/>.</typeparam>
 internal sealed record JPrimitiveMetadata<TPrimitive> : JPrimitiveMetadata where TPrimitive : unmanaged, IPrimitive
 {
+	/// <inheritdoc cref="JPrimitiveMetadata.Type"/>
+	private static readonly Type type = typeof(TPrimitive);
+	
+	/// <inheritdoc cref="JPrimitiveMetadata.Type"/>
+	public Type PrimitiveType => JPrimitiveMetadata<TPrimitive>.type;
+	/// <inheritdoc/>
 	public override CString ArraySignature => TPrimitive.ArraySignature;
+	/// <inheritdoc/>
 	public override Int32 SizeOf => NativeUtilities.SizeOf<TPrimitive>();
-	internal override Type Type => typeof(TPrimitive);
+	/// <inheritdoc/>
+	internal override Type Type => JPrimitiveMetadata<TPrimitive>.type;
 }
