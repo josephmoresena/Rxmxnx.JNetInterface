@@ -35,13 +35,9 @@ internal readonly partial struct JValue : INative<JValue>
 	/// <remarks>In both 32bit and 64bit process, 8 bytes.</remarks>
 	public static readonly Int32 Size = NativeUtilities.SizeOf<JValue>();
 	/// <summary>
-	/// Size in bytes of <see cref="IntPtr"/> structure.
-	/// </summary>
-	public static readonly Int32 PointerSize = NativeUtilities.SizeOf<IntPtr>();
-	/// <summary>
 	/// Indicates whether <see cref="JValue"/> size is equals to <see cref="IntPtr"/> size.
 	/// </summary>
-	public static readonly Boolean IsMemorySize = NativeUtilities.SizeOf<JValue>() == NativeUtilities.SizeOf<IntPtr>();
+	public static readonly Boolean IsMemorySize = NativeUtilities.SizeOf<JValue>() == NativeUtilities.PointerSize;
 
 	/// <summary>
 	/// Indicates whether the current instance has the <see langword="default"/> value.

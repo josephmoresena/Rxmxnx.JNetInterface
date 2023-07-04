@@ -55,7 +55,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	{
 		ReadOnlySpan<Byte> bytes = NativeUtilities.AsBytes(this.As<JObjectLocalRef>());
 		bytes.CopyTo(span[offset..]);
-		offset += JValue.PointerSize;
+		offset += NativeUtilities.PointerSize;
 	}
 	void IObject.CopyTo(Span<JValue> span, Int32 index) { span[index] = this.Value; }
 

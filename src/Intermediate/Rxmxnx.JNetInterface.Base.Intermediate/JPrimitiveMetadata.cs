@@ -27,7 +27,7 @@ internal sealed record JPrimitiveMetadata<TPrimitive> : JPrimitiveMetadata where
 {
 	/// <inheritdoc cref="JPrimitiveMetadata.Type"/>
 	private static readonly Type type = typeof(TPrimitive);
-	
+
 	/// <inheritdoc cref="JPrimitiveMetadata.Type"/>
 	public Type PrimitiveType => JPrimitiveMetadata<TPrimitive>.type;
 	/// <inheritdoc/>
