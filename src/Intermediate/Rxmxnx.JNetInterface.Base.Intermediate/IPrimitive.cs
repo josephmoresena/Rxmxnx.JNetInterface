@@ -55,7 +55,7 @@ internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IPri
 		offset += TPrimitive.PrimitiveMetadata.SizeOf;
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	void IObject.CopyTo(Span<JValue> span, Int32 index) { JValue.Create(this.Value); }
+	void IObject.CopyTo(Span<JValue> span, Int32 index) => span[index] = JValue.Create(this.Value);
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TValue"/> to <typeparamref name="TPrimitive"/>.

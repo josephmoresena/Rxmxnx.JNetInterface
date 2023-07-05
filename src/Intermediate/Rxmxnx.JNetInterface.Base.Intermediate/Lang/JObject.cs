@@ -13,17 +13,11 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	protected JObject() : this(JValue.Empty) { }
+	internal JObject() : this(JValue.Empty) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="value">Object reference.</param>
-	protected JObject(JObjectLocalRef value) : this(JValue.Create(value)) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	protected JObject(JObject jObject) => this._value = jObject._value;
-
+	internal JObject(JObject jObject) => this._value = jObject._value;
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -51,18 +45,20 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	CString IObject.ObjectSignature => this.ObjectSignature;
 	Boolean IObject.IsDefault => this._value.Value.IsDefault;
 
-	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
-	{
-		ReadOnlySpan<Byte> bytes = NativeUtilities.AsBytes(this.As<JObjectLocalRef>());
-		bytes.CopyTo(span[offset..]);
-		offset += NativeUtilities.PointerSize;
-	}
-	void IObject.CopyTo(Span<JValue> span, Int32 index) { span[index] = this.Value; }
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IObject.CopyTo(Span<Byte> span, ref Int32 offset) => this.CopyTo(span, ref offset);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IObject.CopyTo(Span<JValue> span, Int32 index) => this.CopyTo(span, index);
 
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Int32 GetHashCode() => HashCode.Combine(this._value.Value);
 	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals(Object? obj) => obj is JObject jObj && this.Equals(jObj);
+
+	/// <inheritdoc cref="IObject.CopyTo(Span{Byte}, ref Int32)"/>
+	internal abstract void CopyTo(Span<Byte> span, ref Int32 offset);
 
 	/// <summary>
 	/// Sets the current instance value.
@@ -105,4 +101,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <returns>A <typeparamref name="TValue"/> value.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal virtual TValue To<TValue>() where TValue : unmanaged => JValue.As<TValue>(ref this._value.Reference);
+
+	/// <inheritdoc cref="IObject.CopyTo(Span{JValue}, Int32)"/>
+	private void CopyTo(Span<JValue> span, Int32 index) => span[index] = this._value.Value;
 }

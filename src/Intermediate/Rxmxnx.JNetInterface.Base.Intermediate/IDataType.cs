@@ -8,12 +8,11 @@ public interface IDataType
 	/// <summary>
 	/// Java datatype class name.
 	/// </summary>
-	static virtual CString ClassName => UnicodeClassNames.JObjectClassName;
+	static virtual CString ClassName => ValidationUtilities.ThrowInvalidInterface<CString>(nameof(IDataType));
 	/// <summary>
 	/// Java datatype signature name.
 	/// </summary>
-	static virtual CString Signature => UnicodeObjectSignatures.JObjectSignature;
-
+	static virtual CString Signature => ValidationUtilities.ThrowInvalidInterface<CString>(nameof(IDataType));
 	/// <summary>
 	/// Primitive metadata.
 	/// </summary>
@@ -27,6 +26,8 @@ public interface IDataType
 /// <typeparam name="TDataType">Type of current Java datatype.</typeparam>
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
+	static CString IDataType.ClassName => UnicodeClassNames.JObjectClassName;
+	static CString IDataType.Signature => UnicodeObjectSignatures.JObjectSignature;
 	/// <summary>
 	/// Creates a <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.
 	/// </summary>
