@@ -17,7 +17,7 @@ public interface IObject
 	/// <summary>
 	/// Indicates whether current instance is default value.
 	/// </summary>
-	internal Boolean IsDefault { get; }
+	Boolean IsDefault { get; }
 
 	/// <summary>
 	/// Copy the sequence of bytes of current instance to <paramref name="span"/> at specified

@@ -51,7 +51,7 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapp
 	UInt16 IConvertible.ToUInt16(IFormatProvider? provider) => this.Value.ToUInt16(provider);
 	UInt64 IConvertible.ToUInt64(IFormatProvider? provider) => this.Value.ToUInt64(provider);
 	UInt32 IConvertible.ToUInt32(IFormatProvider? provider) => this.Value.ToUInt32(provider);
-	
+
 	/// <inheritdoc cref="IComparable.CompareTo"/>
 	public Int32 CompareTo(Object? obj) => this.Value.CompareTo(obj);
 	/// <inheritdoc/>

@@ -6,6 +6,15 @@
 public abstract class JObject : IObject, IEquatable<JObject>
 {
 	/// <summary>
+	/// JNI name of <c>java.lang.Object</c> class.
+	/// </summary>
+	public static readonly CString JObjectClassName = UnicodeClassNames.JObjectClassName;
+	/// <summary>
+	/// JNI signature for <c>java.lang.Object</c> object.
+	/// </summary>
+	public static readonly CString JObjectSignature = UnicodeObjectSignatures.JObjectSignature;
+
+	/// <summary>
 	/// Internal <see cref="JValue"/> instance.
 	/// </summary>
 	private readonly IMutableReference<JValue> _value;
@@ -41,9 +50,11 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <inheritdoc/>
 	public virtual Boolean Equals(JObject? other) => this._value.Equals(other?._value);
 
+	/// <inheritdoc/>
+	public Boolean IsDefault => this._value.Value.IsDefault;
+
 	CString IObject.ObjectClassName => this.ObjectClassName;
 	CString IObject.ObjectSignature => this.ObjectSignature;
-	Boolean IObject.IsDefault => this._value.Value.IsDefault;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset) => this.CopyTo(span, ref offset);

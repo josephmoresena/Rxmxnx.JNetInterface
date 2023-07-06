@@ -26,8 +26,8 @@ public interface IDataType
 /// <typeparam name="TDataType">Type of current Java datatype.</typeparam>
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
-	static CString IDataType.ClassName => UnicodeClassNames.JObjectClassName;
-	static CString IDataType.Signature => UnicodeObjectSignatures.JObjectSignature;
+	static CString IDataType.ClassName => JObject.JObjectClassName;
+	static CString IDataType.Signature => JObject.JObjectSignature;
 	/// <summary>
 	/// Creates a <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.
 	/// </summary>
