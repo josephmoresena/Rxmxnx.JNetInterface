@@ -76,4 +76,21 @@ internal static class ValidationUtilities
 			throw new InvalidCastException($"Invalid cast to {typeof(TValue)}");
 		return (TValue)value.ToType(typeof(TValue), CultureInfo.CurrentCulture);
 	}
+	/// <summary>
+	/// Throws an exception if <paramref name="signature"/> is invalid.
+	/// </summary>
+	/// <param name="signature">Signature.</param>
+	/// <param name="allowPrimitive">Indicates whether allow primitive signatures.</param>
+	public static void ThrowIfInvalidSignature(CString? signature, Boolean allowPrimitive)
+	{
+		if (CString.IsNullOrEmpty(signature))
+			throw new ArgumentException("Invalid signature.");
+		if (signature.Length == 1)
+		{
+			if (!allowPrimitive)
+				throw new ArgumentException("Signature not allowed.");
+		}
+		else if (signature[^1] != UnicodeObjectSignatures.ObjectSignatureSuffix[0])
+			throw new ArgumentException("Invalid signature.");
+	}
 }

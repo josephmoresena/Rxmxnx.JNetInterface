@@ -11,17 +11,18 @@ public abstract record JAccessibleObjectDefinition
 	private readonly CStringSequence _sequence;
 
 	/// <summary>
+	/// Accessible object information.
+	/// </summary>
+	internal CStringSequence Information => this._sequence;
+
+	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="sequence">
 	/// <see cref="CStringSequence"/> containing the name and descriptor of the method.
 	/// </param>
 	internal JAccessibleObjectDefinition(CStringSequence sequence) => this._sequence = sequence;
-
-	/// <summary>
-	/// Accessible object information.
-	/// </summary>
-	internal CStringSequence Information => this._sequence;
+	
 	/// <summary>
 	/// The format used for <see cref="JAccessibleObjectDefinition.ToString()"/> method.
 	/// </summary>
