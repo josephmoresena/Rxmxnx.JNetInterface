@@ -3,7 +3,7 @@
 /// <summary>
 /// This interface exposes a JNI interface instance.
 /// </summary>
-public interface IEnvironment
+public partial interface IEnvironment
 {
 	/// <summary>
 	/// JNI reference to the interface.
@@ -34,7 +34,6 @@ public interface IEnvironment
 	/// to the same object; otherwise, <see langword="false"/>.
 	/// </returns>
 	Boolean IsSameObject(JObject jObject, JObject? jOther);
-
 	/// <summary>
 	/// Creates a <typeparamref name="TObject"/> instance for <paramref name="objRef"/> reference
 	/// whose origin is a JNI argument.

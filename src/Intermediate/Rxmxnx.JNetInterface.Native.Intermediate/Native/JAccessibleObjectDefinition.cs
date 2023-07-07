@@ -16,7 +16,7 @@ public abstract record JAccessibleObjectDefinition
 	internal CStringSequence Information => this._sequence;
 
 	/// <summary>
-	/// Constructor.
+	/// Internal constructor.
 	/// </summary>
 	/// <param name="sequence">
 	/// <see cref="CStringSequence"/> containing the name and descriptor of the method.
@@ -38,6 +38,16 @@ public abstract record JAccessibleObjectDefinition
 	/// </summary>
 	/// <typeparam name="TReturn"><see cref="IDataType"/> type.</typeparam>
 	/// <returns>Type of return <typeparamref name="TReturn"/> type.</returns>
-	protected static Type GetReturnType<TReturn>() where TReturn : IDataType
+	protected internal static Type GetReturnType<TReturn>() where TReturn : IDataType
 		=> TReturn.PrimitiveMetadata?.Type ?? typeof(TReturn);
+	/// <summary>
+	/// Retrieves a valid signature from <paramref name="signature"/>.
+	/// </summary>
+	/// <param name="signature">A signature to validate.</param>
+	/// <returns><paramref name="signature"/> if is a valid signature.</returns>
+	protected internal static CString ValidateSingnature(CString signature)
+	{
+		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
+		return signature;
+	}
 }

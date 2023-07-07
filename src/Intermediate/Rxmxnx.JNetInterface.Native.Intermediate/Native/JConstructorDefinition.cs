@@ -11,10 +11,11 @@ public record JConstructorDefinition : JMethodDefinitionBase
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <remarks>This constructor should be never inherited.</remarks>
 	public JConstructorDefinition() : this(Array.Empty<JArgumentMetadata>()) { }
 
 	/// <summary>
-	/// Internal constructor.
+	/// Constructor.
 	/// </summary>
 	protected JConstructorDefinition(params JArgumentMetadata[] metadata) 
 		: base(JMethodDefinitionBase.ConstructorName, metadata) { }

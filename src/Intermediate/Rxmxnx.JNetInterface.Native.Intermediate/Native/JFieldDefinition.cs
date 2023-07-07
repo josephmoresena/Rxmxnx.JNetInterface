@@ -24,11 +24,11 @@ public abstract record JFieldDefinition : JAccessibleObjectDefinition
 /// <summary>
 /// This class stores a class field definition.
 /// </summary>
-/// <typeparam name="TResult"><see cref="IDataType"/> type of field result.</typeparam>
-public sealed record FieldDefinition<TResult> : JFieldDefinition where TResult : IDataType<TResult>, IObject
+/// <typeparam name="TField"><see cref="IDataType"/> type of field result.</typeparam>
+public sealed record FieldDefinition<TField> : JFieldDefinition where TField : IDataType<TField>, IObject
 {
 	/// <inheritdoc/>
-	internal override Type Return => JAccessibleObjectDefinition.GetReturnType<TResult>();
+	internal override Type Return => JAccessibleObjectDefinition.GetReturnType<TField>();
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();
@@ -39,5 +39,5 @@ public sealed record FieldDefinition<TResult> : JFieldDefinition where TResult :
 	/// Constructor.
 	/// </summary>
 	/// <param name="name">Field name.</param>
-	public FieldDefinition(CString name) : base(name, TResult.Signature) { }
+	public FieldDefinition(CString name) : base(name, TField.Signature) { }
 }

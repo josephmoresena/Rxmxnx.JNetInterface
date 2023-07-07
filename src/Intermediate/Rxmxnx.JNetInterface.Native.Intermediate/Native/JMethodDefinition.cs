@@ -12,13 +12,14 @@ public record JMethodDefinition : JMethodDefinitionBase
 	/// Constructor.
 	/// </summary>
 	/// <param name="methodName">Method name.</param>
+	/// <remarks>This constructor should be never inherited.</remarks>
 	public JMethodDefinition(CString methodName) : base(methodName) { }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="functionName">Function name.</param>
+	/// <param name="methodName">Function name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	protected JMethodDefinition(CString functionName, params JArgumentMetadata[] metadata) 
-		: base(functionName, metadata) { }
+	protected JMethodDefinition(CString methodName, params JArgumentMetadata[] metadata) 
+		: base(methodName, metadata) { }
 }
