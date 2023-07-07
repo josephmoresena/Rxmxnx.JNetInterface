@@ -6,7 +6,7 @@
 public abstract record JFunctionDefinition : JMethodDefinitionBase
 {
 	/// <inheritdoc/>
-	internal override Type? Return => typeof(JReferenceObject);
+	internal override Type Return => typeof(JReferenceObject);
 
 	/// <summary>
 	/// Internal constructor.
@@ -25,7 +25,7 @@ public abstract record JFunctionDefinition : JMethodDefinitionBase
 public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult : IDataType<TResult>
 {
 	/// <inheritdoc/>
-	internal override Type? Return => JAccessibleObjectDefinition.GetReturnType<TResult>();
+	internal override Type Return => JAccessibleObjectDefinition.GetReturnType<TResult>();
 
 	/// <summary>
 	/// Constructor.
