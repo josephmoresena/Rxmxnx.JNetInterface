@@ -128,6 +128,30 @@ public class JLocalObject : JReferenceObject, IReferenceType<JLocalObject>
 			this._isDisposed = this is not IClassType;
 	}
 
+	/// <summary>
+	/// Sets the current instance value.
+	/// </summary>
+	/// <param name="localRef">A local object reference the value of current instance.</param>
+	internal void SetValue(JObjectLocalRef localRef)
+	{
+		if (localRef == default)
+			return;
+		base.SetValue(localRef);
+		this._lifetime.Load(this);
+	}
+	/// <summary>
+	/// Sets the current instance value.
+	/// </summary>
+	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
+	/// <param name="localRef">A local object reference the value of current instance.</param>
+	internal void SetValue<TValue>(TValue localRef) where TValue : unmanaged, IObjectReference
+	{
+		if (localRef.Equals(default))
+			return;
+		base.SetValue(localRef);
+		this._lifetime.Load(this);
+	}
+
 	/// <inheritdoc/>
 	internal override ref readonly TValue As<TValue>()
 	{

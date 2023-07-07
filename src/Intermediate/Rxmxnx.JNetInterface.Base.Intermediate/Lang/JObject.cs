@@ -74,8 +74,10 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
-	/// <param name="jValue"><see cref="JValue"/> that is set as the value of current instance.</param>
-	internal void SetValue(JValue jValue) { this._value.Value = jValue; }
+	/// <typeparam name="TValue">Type of <see langword="unmanaged"/></typeparam>
+	/// <param name="value"><typeparamref name="TValue"/> that is set as the value of current instance.</param>
+	protected internal void SetValue<TValue>(in TValue value) where TValue : unmanaged
+		=> JValue.As<TValue>(ref this._value.Reference) = value;
 	/// <summary>
 	/// Sets <see cref="JValue.Empty"/> as the current instance value.
 	/// </summary>
