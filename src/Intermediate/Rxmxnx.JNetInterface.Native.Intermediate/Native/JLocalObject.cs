@@ -32,6 +32,28 @@ public class JLocalObject : JReferenceObject, IReferenceType<JLocalObject>
 	private Boolean _isDisposed;
 
 	/// <summary>
+	/// <see cref="IEnvironment"/> instance.
+	/// </summary>
+	public IEnvironment Environment => this._env;
+
+	/// <summary>
+	/// Internal reference value.
+	/// </summary>
+	internal JObjectLocalRef InternalReference => base.To<JObjectLocalRef>();
+	/// <summary>
+	/// Internal value.
+	/// </summary>
+	internal JValue InternalValue => base.Value;
+
+	/// <inheritdoc cref="JObject.ObjectClassName"/>
+	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
+	/// <inheritdoc cref="JObject.ObjectSignature"/>
+	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
+
+	/// <inheritdoc/>
+	internal override JValue Value => this.GetGlobalObject()?.Value ?? base.Value;
+
+	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
@@ -77,39 +99,11 @@ public class JLocalObject : JReferenceObject, IReferenceType<JLocalObject>
 		this._weak = jGlobal as JWeak;
 	}
 
-	/// <summary>
-	/// <see cref="IEnvironment"/> instance.
-	/// </summary>
-	public IEnvironment Environment => this._env;
-
-	/// <summary>
-	/// Internal reference value.
-	/// </summary>
-	internal JObjectLocalRef InternalReference => base.To<JObjectLocalRef>();
-	/// <summary>
-	/// Internal value.
-	/// </summary>
-	internal JValue InternalValue => base.Value;
-
-	/// <inheritdoc/>
-	internal override JValue Value => this.GetGlobalObject()?.Value ?? base.Value;
-	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
-	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
-
 	/// <inheritdoc/>
 	public void Dispose()
 	{
 		this.Dispose(true);
 		GC.SuppressFinalize(this);
-	}
-
-	static JLocalObject? IDataType<JLocalObject>.Create(JObject? jObject)
-	{
-		if (jObject is JLocalObject { Value.IsDefault: false, } jLocal)
-			return new(jLocal);
-		return null;
 	}
 
 	/// <inheritdoc/>
@@ -174,5 +168,12 @@ public class JLocalObject : JReferenceObject, IReferenceType<JLocalObject>
 		if (this._weak is not null && this._weak.IsValid(this._env))
 			return this._weak;
 		return default;
+	}
+
+	static JLocalObject? IDataType<JLocalObject>.Create(JObject? jObject)
+	{
+		if (jObject is JLocalObject { Value.IsDefault: false, } jLocal)
+			return new(jLocal);
+		return null;
 	}
 }

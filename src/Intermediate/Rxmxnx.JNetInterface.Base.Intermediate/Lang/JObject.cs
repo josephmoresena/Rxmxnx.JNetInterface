@@ -20,20 +20,6 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	private readonly IMutableReference<JValue> _value;
 
 	/// <summary>
-	/// Parameterless constructor.
-	/// </summary>
-	internal JObject() : this(JValue.Empty) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	internal JObject(JObject jObject) => this._value = jObject._value;
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jValue">Internal <see cref="JValue"/> instance.</param>
-	internal JObject(JValue jValue) => this._value = IMutableReference.Create(jValue);
-
-	/// <summary>
 	/// Object signature.
 	/// </summary>
 	public abstract CString ObjectClassName { get; }
@@ -46,6 +32,20 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// Internal <see cref="JValue"/> value.
 	/// </summary>
 	internal virtual JValue Value => this._value.Value;
+
+	/// <summary>
+	/// Parameterless constructor.
+	/// </summary>
+	internal JObject() : this(JValue.Empty) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	internal JObject(JObject jObject) => this._value = jObject._value;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jValue">Internal <see cref="JValue"/> instance.</param>
+	internal JObject(JValue jValue) => this._value = IMutableReference.Create(jValue);
 
 	/// <inheritdoc/>
 	public virtual Boolean Equals(JObject? other) => this._value.Equals(other?._value);
