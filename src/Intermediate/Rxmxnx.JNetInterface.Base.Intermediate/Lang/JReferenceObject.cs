@@ -3,8 +3,13 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents the base of any java reference type instance.
 /// </summary>
-public abstract class JReferenceObject : JObject
+public abstract partial class JReferenceObject : JObject
 {
+	/// <summary>
+	/// Java null-reference type instance.
+	/// </summary>
+	public static readonly JReferenceObject Empty = new JEmptyObject();
+
 	/// <summary>
 	/// Indicates whether the current instance is a dummy object (fake java object).
 	/// </summary>

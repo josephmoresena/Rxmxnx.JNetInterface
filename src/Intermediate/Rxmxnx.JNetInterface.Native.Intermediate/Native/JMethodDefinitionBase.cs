@@ -87,6 +87,51 @@ public abstract record JMethodDefinitionBase : JAccessibleObjectDefinition
 	public override Int32 GetHashCode() => base.GetHashCode();
 
 	/// <summary>
+	/// Creates the argument buffer for the invocation.
+	/// </summary>
+	/// <param name="jArgs">Parameters for the invocation.</param>
+	/// <returns>The buffer for the invocation.</returns>
+	protected internal ReadOnlySpan<Byte> CreateArgSpan(IObject?[] jArgs)
+	{
+		Int32 spanLength = this._useJValue ? this._callCount * JValue.Size : this._callSize;
+		Span<Byte> span = new Byte[spanLength];
+		if (!this._useJValue)
+			JMethodDefinitionBase.CopySpan(span, this._callCount, jArgs);
+		else
+			JMethodDefinitionBase.CopySpan(MemoryMarshal.Cast<Byte, JValue>(span), this._callCount, jArgs);
+		return span;
+	}
+	
+	/// <summary>
+	/// Copy the values of arguments to the buffer.
+	/// </summary>
+	/// <param name="span">Buffer.</param>
+	/// <param name="callCount">Number of parameters.</param>
+	/// <param name="jArgs">Parameters for the invocation.</param>
+	private static void CopySpan(Span<Byte> span, Int32 callCount, IObject?[] jArgs)
+	{
+		Int32 offset = 0;
+		for (Int32 i = 0; i < callCount && i < jArgs.Length; i++)
+		{
+			IObject jObj = jArgs[i] ?? JReferenceObject.Empty;
+			jObj.CopyTo(span, ref offset);
+		}
+	}
+	/// <summary>
+	/// Copy the values of arguments to the buffer.
+	/// </summary>
+	/// <param name="span">Buffer.</param>
+	/// <param name="callCount">Number of parameters.</param>
+	/// <param name="jArgs">Parameters for the invocation.</param>
+	private static void CopySpan(Span<JValue> span, Int32 callCount, IObject?[] jArgs)
+	{
+		for (Int32 i = 0; i < callCount && i < jArgs.Length; i++)
+		{
+			IObject jObj = jArgs[i] ?? JReferenceObject.Empty;
+			jObj.CopyTo(span, i);
+		}
+	}
+	/// <summary>
 	/// Creates the method descriptor using <paramref name="returnSignature"/> and <paramref name="metadata"/>.
 	/// </summary>
 	/// <param name="returnSignature">Method return type signature.</param>
