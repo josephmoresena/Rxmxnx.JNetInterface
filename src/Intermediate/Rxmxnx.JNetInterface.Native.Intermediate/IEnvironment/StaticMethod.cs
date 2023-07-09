@@ -7,52 +7,46 @@ public partial interface IEnvironment
 	/// </summary>
 	/// <param name="jClass"><see cref="IClass"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
-	JLocalObject CallConstructor(IClass jClass, JConstructorDefinition definition, IFixedMemory args)
-		=> this.CallConstructor<JLocalObject>(jClass, definition, args);
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	/// <returns><see cref="JLocalObject"/> function result.</returns>
+	JLocalObject New(IClass jClass, JConstructorDefinition definition, IObject?[] args)
+		=> this.Accessor.CallConstructor<JLocalObject>(jClass, definition, args);
 	/// <summary>
 	/// Invokes a constructor method for given <see cref="IClass"/> instance.
 	/// </summary>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
+	/// <typeparam name="TObject"><see cref="IDataType"/> type of created instance.</typeparam>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
-	TObject CallConstructor<TObject>(IClass jClass, JConstructorDefinition definition, IFixedMemory args)
-		where TObject : JLocalObject, IDataType<TObject>;
-
-	/// <summary>
-	/// Invokes a static function on given <see cref="IClass"/> instance.
-	/// </summary>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
-	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
-	JLocalObject CallStaticFunction(IClass jClass, JNonTypedFunctionDefinition definition, IFixedMemory args)
-		=> this.CallStaticGenericFunction<JLocalObject>(jClass, definition, args);
-	/// <summary>
-	/// Invokes a static function on given <see cref="IClass"/> instance.
-	/// </summary>
-	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
-	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
-	TResult CallStaticFunction<TResult>(IClass jClass, JFunctionDefinition<TResult> definition, IFixedMemory args)
-		where TResult : IDataType<TResult>, IObject
-		=> this.CallStaticGenericFunction<TResult>(jClass, definition, args);
-
-	/// <summary>
-	/// Invokes a static function on given <see cref="IClass"/> instance.
-	/// </summary>
-	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
-	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
-	TResult CallStaticGenericFunction<TResult>(IClass jClass, JFunctionDefinition definition, IFixedMemory args)
-		where TResult : IDataType<TResult>;
-
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	/// <returns>The new <typeparamref name="TObject"/> instance.</returns>
+	TObject New<TObject>(JConstructorDefinition definition, IObject?[] args)
+		where TObject : JLocalObject, IDataType<TObject>
+		=> this.Accessor.CallConstructor<TObject>(this.GetObjectClass<TObject>(), definition, args);
 	/// <summary>
 	/// Invokes a static method on given <see cref="IClass"/> instance.
 	/// </summary>
 	/// <param name="jClass"><see cref="IClass"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
-	void CallStaticMethod(IClass jClass, JMethodDefinition definition, IFixedMemory args);
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	void StaticInvoke(IClass jClass, JMethodDefinition definition, IObject?[] args)
+		=> this.Accessor.CallStaticMethod(jClass, definition, args);
+   /// <summary>
+   /// Invokes a static function on given <see cref="IClass"/> instance.
+   /// </summary>
+   /// <param name="jClass"><see cref="IClass"/> instance.</param>
+   /// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
+   /// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+   /// <returns><see cref="JLocalObject"/> function result.</returns>
+   JLocalObject? StaticInvoke(IClass jClass, JNonTypedFunctionDefinition definition, IObject?[] args)
+		=> this.Accessor.CallStaticFunction<JLocalObject>(jClass, definition, args);
+	/// <summary>
+	/// Invokes a static function on given <see cref="IClass"/> instance.
+	/// </summary>
+	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
+	/// <param name="jClass"><see cref="IClass"/> instance.</param>
+	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	/// <returns><typeparamref name="TResult"/> function result.</returns>
+	TResult? StaticInvoke<TResult>(IClass jClass, JFunctionDefinition<TResult> definition, IObject?[] args)
+		where TResult : IDataType<TResult>, IObject
+		=> this.Accessor.CallStaticFunction<TResult>(jClass, definition, args);
 }

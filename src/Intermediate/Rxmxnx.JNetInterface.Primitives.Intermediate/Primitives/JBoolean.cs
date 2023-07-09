@@ -24,6 +24,8 @@ public readonly partial struct JBoolean : INative<JBoolean>, ISelfEquatableCompa
 	public static CString Signature => UnicodePrimitiveSignatures.JBooleanSignature;
 	/// <inheritdoc/>
 	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JBooleanArraySignature;
+	/// <inheritdoc/>
+	public static CString ClassSignature => UnicodeObjectSignatures.JBooleanObjectSignature;
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
 	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JBoolean>();
 

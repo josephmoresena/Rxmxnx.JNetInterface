@@ -32,20 +32,13 @@ public abstract record JAccessibleObjectDefinition
 	public override String ToString() => String.Format(this.ToStringFormat, this._sequence[0], this._sequence[1]);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._sequence.GetHashCode();
-
-	/// <summary>
-	/// Retrieves the return type from <typeparamref name="TReturn"/>.
-	/// </summary>
-	/// <typeparam name="TReturn"><see cref="IDataType"/> type.</typeparam>
-	/// <returns>Type of return <typeparamref name="TReturn"/> type.</returns>
-	protected internal static Type GetReturnType<TReturn>() where TReturn : IDataType
-		=> TReturn.PrimitiveMetadata?.Type ?? typeof(TReturn);
+	
 	/// <summary>
 	/// Retrieves a valid signature from <paramref name="signature"/>.
 	/// </summary>
 	/// <param name="signature">A signature to validate.</param>
 	/// <returns><paramref name="signature"/> if is a valid signature.</returns>
-	protected internal static CString ValidateSingnature(CString signature)
+	protected internal static CString ValidateSignature(CString signature)
 	{
 		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
 		return signature;

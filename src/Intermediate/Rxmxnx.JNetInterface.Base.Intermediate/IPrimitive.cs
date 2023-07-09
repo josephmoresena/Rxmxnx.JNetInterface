@@ -9,6 +9,10 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 	/// JNI signature for an array of current primitive type.
 	/// </summary>
 	static abstract CString ArraySignature { get; }
+	/// <summary>
+	/// JNI signature for the primitive type wrapper.
+	/// </summary>
+	static abstract CString ClassSignature { get; }
 	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
 	internal new static virtual JPrimitiveMetadata PrimitiveMetadata
 		=> ValidationUtilities.ThrowInvalidInterface<JPrimitiveMetadata>(nameof(IPrimitive));

@@ -15,6 +15,8 @@ public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparabl
 	public static CString Signature => UnicodePrimitiveSignatures.JShortSignature;
 	/// <inheritdoc/>
 	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JShortArraySignature;
+	/// <inheritdoc/>
+	public static CString ClassSignature => UnicodeObjectSignatures.JShortObjectSignature;
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
 	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JShort>();
 

@@ -14,6 +14,8 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapp
 	public static CString Signature => TPrimitive.Signature;
 	/// <inheritdoc/>
 	public static CString ArraySignature => TPrimitive.ArraySignature;
+	/// <inheritdoc/>
+	public static CString ClassSignature => TPrimitive.ClassSignature;
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
 	public static JPrimitiveMetadata PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
 

@@ -14,6 +14,8 @@ public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<
 	public static CString Signature => UnicodePrimitiveSignatures.JByteSignature;
 	/// <inheritdoc/>
 	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JByteArraySignature;
+	/// <inheritdoc/>
+	public static CString ClassSignature => UnicodeObjectSignatures.JByteObjectSignature;
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
 	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JByte>();
 

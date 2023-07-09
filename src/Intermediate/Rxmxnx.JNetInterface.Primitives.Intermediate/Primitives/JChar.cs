@@ -14,6 +14,8 @@ public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<
 	public static CString Signature => UnicodePrimitiveSignatures.JCharSignature;
 	/// <inheritdoc/>
 	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JCharArraySignature;
+	/// <inheritdoc/>
+	public static CString ClassSignature => UnicodeObjectSignatures.JCharacterObjectSignature;
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
 	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JChar>();
 

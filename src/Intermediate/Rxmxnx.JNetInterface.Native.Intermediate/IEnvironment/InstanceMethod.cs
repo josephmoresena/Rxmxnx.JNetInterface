@@ -6,44 +6,33 @@ public partial interface IEnvironment
 	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
+	/// <param name="definition"><see cref="JNonTypedFunctionDefinition"/> definition.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns><see cref="JLocalObject"/> function result.</returns>
-	JLocalObject CallFunction(JLocalObject jLocal, JNonTypedFunctionDefinition definition, IFixedMemory args)
-		=> this.CallGenericFunction<JLocalObject>(jLocal, definition, args);
+	JLocalObject? Invoke(JLocalObject jLocal, JNonTypedFunctionDefinition definition, IObject?[] args)
+		=> this.Accessor.CallFunction<JLocalObject>(jLocal, definition, args);
 	/// <summary>
 	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
 	/// </summary>
 	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
+	/// <param name="definition"><see cref="JFunctionDefinition{TResult}"/> definition.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	TResult CallFunction<TResult>(JLocalObject jLocal, JFunctionDefinition<TResult> definition, IFixedMemory args)
+	TResult? Invoke<TResult>(JLocalObject jLocal, JFunctionDefinition<TResult> definition, IObject?[] args)
 		where TResult : IDataType<TResult>, IObject
-		=> this.CallGenericFunction<TResult>(jLocal, definition, args);
-
-	/// <summary>
-	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
-	/// </summary>
-	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	TResult CallGenericFunction<TResult>(JLocalObject jLocal, JFunctionDefinition definition, IFixedMemory args)
-		where TResult : IDataType<TResult>;
-
+		=> this.Accessor.CallFunction<TResult>(jLocal, definition, args);
 	/// <summary>
 	/// Invokes a function on given <see cref="JLocalObject"/> and <see cref="IClass"/> instances 
 	/// and returns its result.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="IClass"/> instance.</param>
-	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
+	/// <param name="definition"><see cref="JNonTypedFunctionDefinition"/> definition.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns><see cref="JLocalObject"/> function result.</returns>
-	JLocalObject CallNonVirtualFunction(JLocalObject jLocal, IClass jClass, JNonTypedFieldDefinition definition) 
-		=> this.CallNonVirtualGenericFunction<JLocalObject>(jLocal, jClass, definition);
+	JLocalObject? Invoke(JLocalObject jLocal, IClass jClass, JNonTypedFunctionDefinition definition, IObject?[] args) 
+		=> this.Accessor.CallNonVirtualFunction<JLocalObject>(jLocal, jClass, definition, args);
 	/// <summary>
 	/// Invokes a function on given <see cref="JLocalObject"/> and <see cref="IClass"/> instances 
 	/// and returns its result.
@@ -51,31 +40,20 @@ public partial interface IEnvironment
 	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="IClass"/> instance.</param>
-	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
+	/// <param name="definition"><see cref="JFunctionDefinition{TResult}"/> definition.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	TResult CallNonVirtualFunction<TResult>(JLocalObject jLocal, IClass jClass, FieldDefinition<TResult> definition) 
+	TResult? Invoke<TResult>(JLocalObject jLocal, IClass jClass, JFunctionDefinition<TResult> definition, IObject?[] args) 
 		where TResult : IDataType<TResult>, IObject
-		=> this.CallNonVirtualGenericFunction<TResult>(jLocal, jClass, definition);
-	/// <summary>
-	/// Invokes a function on given <see cref="JLocalObject"/> and <see cref="IClass"/> instances 
-	/// and returns its result.
-	/// </summary>
-	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
-	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	TResult CallNonVirtualGenericFunction<TResult>(JLocalObject jLocal, IClass jClass, JFieldDefinition definition) 
-		where TResult : IDataType<TResult>;
-
+		=> this.Accessor.CallNonVirtualFunction<TResult>(jLocal, jClass, definition, args);
 	/// <summary>
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
-	void CallMethod(JLocalObject jLocal, JMethodDefinition definition, IFixedMemory args);
-
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	void Invoke(JLocalObject jLocal, JMethodDefinition definition, IObject?[] args)
+		=> this.Accessor.CallMethod(jLocal, definition, args);
 	/// <summary>
 	/// Invokes a non-virtual method on given <see cref="JLocalObject"/> and <see cref="IClass"/>
 	/// instances.
@@ -83,6 +61,7 @@ public partial interface IEnvironment
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="IClass"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
-	/// <param name="args"><see cref="IFixedMemory"/> with arguments information.</param>
-	void CallNonVirtualMethod(JLocalObject jLocal, IClass jClass, JMethodDefinition definition, IFixedMemory args); 
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	void Invoke(JLocalObject jLocal, IClass jClass, JMethodDefinition definition, IObject?[] args)
+		=> this.Accessor.CallNonVirtualMethod(jLocal, jClass, definition, args);
 }

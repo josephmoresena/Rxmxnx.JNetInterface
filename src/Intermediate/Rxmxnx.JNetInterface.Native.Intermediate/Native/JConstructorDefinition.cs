@@ -3,7 +3,7 @@
 /// <summary>
 /// This class stores a constructor definition.
 /// </summary>
-public record JConstructorDefinition : JMethodDefinitionBase
+public record JConstructorDefinition : JCallDefinition
 {
 	/// <inheritdoc/>
 	internal override Type? Return => default;
@@ -18,5 +18,5 @@ public record JConstructorDefinition : JMethodDefinitionBase
 	/// Constructor.
 	/// </summary>
 	protected JConstructorDefinition(params JArgumentMetadata[] metadata) 
-		: base(JMethodDefinitionBase.ConstructorName, metadata) { }
+		: base(JCallDefinition.ConstructorName, metadata) { }
 }

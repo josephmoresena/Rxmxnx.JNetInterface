@@ -15,6 +15,8 @@ public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableCompara
 	public static CString Signature => UnicodePrimitiveSignatures.JDoubleSignature;
 	/// <inheritdoc/>
 	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JDoubleArraySignature;
+	/// <inheritdoc/>
+	public static CString ClassSignature => UnicodeObjectSignatures.JDoubleObjectSignature;
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
 	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JDouble>();
 

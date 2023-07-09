@@ -15,6 +15,8 @@ public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<
 	public static CString Signature => UnicodePrimitiveSignatures.JLongSignature;
 	/// <inheritdoc/>
 	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JLongArraySignature;
+	/// <inheritdoc/>
+	public static CString ClassSignature => UnicodeObjectSignatures.JLongObjectSignature;
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
 	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JLong>();
 

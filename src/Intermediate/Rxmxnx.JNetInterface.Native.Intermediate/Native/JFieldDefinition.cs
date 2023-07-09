@@ -28,7 +28,7 @@ public abstract record JFieldDefinition : JAccessibleObjectDefinition
 public sealed record FieldDefinition<TField> : JFieldDefinition where TField : IDataType<TField>, IObject
 {
 	/// <inheritdoc/>
-	internal override Type Return => JAccessibleObjectDefinition.GetReturnType<TField>();
+	internal override Type Return => typeof(TField);
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();

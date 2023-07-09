@@ -15,6 +15,8 @@ public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparabl
 	public static CString Signature => UnicodePrimitiveSignatures.JFloatSignature;
 	/// <inheritdoc/>
 	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JFloatArraySignature;
+	/// <inheritdoc/>
+	public static CString ClassSignature => UnicodeObjectSignatures.JFloatObjectSignature;
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
 	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JFloat>();
 

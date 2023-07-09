@@ -15,6 +15,8 @@ public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JI
 	public static CString Signature => UnicodePrimitiveSignatures.JIntSignature;
 	/// <inheritdoc/>
 	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JIntArraySignature;
+	/// <inheritdoc/>
+	public static CString ClassSignature => UnicodeObjectSignatures.JIntegerObjectSignature;
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
 	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JInt>();
 

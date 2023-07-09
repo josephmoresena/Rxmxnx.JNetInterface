@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// This interface exposes a JNI interface instance.
+/// This interface exposes a JNI instance.
 /// </summary>
 public partial interface IEnvironment
 {
@@ -13,6 +13,15 @@ public partial interface IEnvironment
 	/// Virtual machine that owns the current JNI context.
 	/// </summary>
 	IVirtualMachine VirtualMachine { get; }
+	
+	/// <summary>
+	/// Internal accessor object.
+	/// </summary>
+	internal IAccessor Accessor { get; }
+	/// <summary>
+	/// Internal class provider object.
+	/// </summary>
+	internal IClassProvider ClassProvider { get; }
 
 	/// <summary>
 	/// Retrieves the JNI type reference of <paramref name="jObject"/>.
@@ -34,6 +43,26 @@ public partial interface IEnvironment
 	/// to the same object; otherwise, <see langword="false"/>.
 	/// </returns>
 	Boolean IsSameObject(JObject jObject, JObject? jOther);
+	/// <summary>
+	/// Retrieves the java class for given type.
+	/// </summary>
+	/// <typeparam name="TPrimitive">A <see cref="IPrimitive"/> type.</typeparam>
+	/// <returns>The class instance for given type.</returns>
+	IClass GetWrapperClass<TPrimitive>() where TPrimitive : IPrimitive<TPrimitive>
+		=> this.ClassProvider.GetClass<TPrimitive>();
+	/// <summary>
+	/// Retrieves the java class named <paramref name="className"/>.
+	/// </summary>
+	/// <param name="className">Class name.</param>
+	/// <returns>The class instance with given class name.</returns>
+	IClass GetObjectClass(CString className) => this.ClassProvider.GetClass(className);
+	/// <summary>
+	/// Retrieves the java class for given type.
+	/// </summary>
+	/// <typeparam name="TObject">A <see cref="JLocalObject"/> type.</typeparam>
+	/// <returns>The class instance for given type.</returns>
+	IClass GetObjectClass<TObject>() where TObject : JLocalObject, IDataType<TObject>
+		=> this.ClassProvider.GetClass<TObject>();
 	/// <summary>
 	/// Creates a <typeparamref name="TObject"/> instance for <paramref name="objRef"/> reference
 	/// whose origin is a JNI argument.

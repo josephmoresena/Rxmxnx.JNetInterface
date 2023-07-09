@@ -1,4 +1,6 @@
-﻿namespace Rxmxnx.JNetInterface.ApplicationTest;
+﻿using Rxmxnx.JNetInterface.Native.Dummies;
+
+namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public static class Program
 {

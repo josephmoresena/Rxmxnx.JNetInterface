@@ -3,7 +3,7 @@
 /// <summary>
 /// This class stores a method definition.
 /// </summary>
-public record JMethodDefinition : JMethodDefinitionBase
+public record JMethodDefinition : JCallDefinition
 {
 	/// <inheritdoc/>
 	internal override Type? Return => default;

@@ -10,13 +10,13 @@ public abstract partial record JPrimitiveMetadata
 	/// </summary>
 	public abstract CString ArraySignature { get; }
 	/// <summary>
+	/// JNI signature for the primitive type wrapper.
+	/// </summary>
+	public abstract CString ClassSignature { get; }
+	/// <summary>
 	/// Size of current primitive type in bytes.
 	/// </summary>
 	public abstract Int32 SizeOf { get; }
-	/// <summary>
-	/// Managed type of internal value of <see cref="IPrimitive"/>.
-	/// </summary>
-	internal abstract Type Type { get; }
 }
 
 /// <summary>
@@ -25,15 +25,10 @@ public abstract partial record JPrimitiveMetadata
 /// <typeparam name="TPrimitive">Type of <see cref="IPrimitive"/>.</typeparam>
 internal sealed record JPrimitiveMetadata<TPrimitive> : JPrimitiveMetadata where TPrimitive : unmanaged, IPrimitive
 {
-	/// <inheritdoc cref="JPrimitiveMetadata.Type"/>
-	private static readonly Type type = typeof(TPrimitive);
-
-	/// <inheritdoc cref="JPrimitiveMetadata.Type"/>
-	public Type PrimitiveType => JPrimitiveMetadata<TPrimitive>.type;
 	/// <inheritdoc/>
 	public override CString ArraySignature => TPrimitive.ArraySignature;
 	/// <inheritdoc/>
-	public override Int32 SizeOf => NativeUtilities.SizeOf<TPrimitive>();
+	public override CString ClassSignature => TPrimitive.ClassSignature;
 	/// <inheritdoc/>
-	internal override Type Type => JPrimitiveMetadata<TPrimitive>.type;
+	public override Int32 SizeOf => NativeUtilities.SizeOf<TPrimitive>();
 }

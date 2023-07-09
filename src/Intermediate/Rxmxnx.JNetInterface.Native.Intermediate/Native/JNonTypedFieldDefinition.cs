@@ -14,5 +14,5 @@ public sealed record JNonTypedFieldDefinition : JFieldDefinition
 	/// <param name="name">Field name.</param>
 	/// <param name="signature">Signature field.</param>
 	public JNonTypedFieldDefinition(CString name, CString signature) 
-		: base(name, JAccessibleObjectDefinition.ValidateSingnature(signature)) { }
+		: base(name, JAccessibleObjectDefinition.ValidateSignature(signature)) { }
 }

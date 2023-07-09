@@ -15,5 +15,5 @@ public sealed record JNonTypedFunctionDefinition : JFunctionDefinition<JLocalObj
 	/// <param name="returnType">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	public JNonTypedFunctionDefinition(CString functionName, CString returnType, params JArgumentMetadata[] metadata) :
-		base(functionName, JAccessibleObjectDefinition.ValidateSingnature(returnType), metadata) { }
+		base(functionName, JAccessibleObjectDefinition.ValidateSignature(returnType), metadata) { }
 }
