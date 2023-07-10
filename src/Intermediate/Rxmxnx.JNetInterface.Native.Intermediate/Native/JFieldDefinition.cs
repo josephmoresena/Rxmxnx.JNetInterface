@@ -25,7 +25,7 @@ public abstract record JFieldDefinition : JAccessibleObjectDefinition
 /// This class stores a class field definition.
 /// </summary>
 /// <typeparam name="TField"><see cref="IDataType"/> type of field result.</typeparam>
-public sealed record FieldDefinition<TField> : JFieldDefinition where TField : IDataType<TField>, IObject
+public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : IDataType<TField>, IObject
 {
 	/// <inheritdoc/>
 	internal override Type Return => typeof(TField);
@@ -39,5 +39,46 @@ public sealed record FieldDefinition<TField> : JFieldDefinition where TField : I
 	/// Constructor.
 	/// </summary>
 	/// <param name="name">Field name.</param>
-	public FieldDefinition(CString name) : base(name, TField.Signature) { }
+	public JFieldDefinition(CString name) : base(name, TField.Signature) { }
+
+	/// <summary>
+	/// Retrieves the value of a field on <paramref name="jLocal"/> which matches with current definition.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>The <paramref name="jLocal"/> field's value.</returns>
+	public TField? Get(JLocalObject jLocal)
+	{
+		IEnvironment env = jLocal.Environment;
+		return env.Accessor.GetField<TField>(jLocal, this);
+	}
+	/// <summary>
+	/// Retrieves the value of a static field on <paramref name="jClass"/> which matches with current definition.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>The <paramref name="jClass"/> field's value.</returns>
+	public TField? StaticGet(JClassObject jClass)
+	{
+		IEnvironment env = jClass.Environment;
+		return env.Accessor.GetStaticField<TField>(jClass, this);
+	}
+	/// <summary>
+	/// Sets the value of a field on <paramref name="jLocal"/> which matches with current definition.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="value">The field value to set to.</param>
+	public void Set(JLocalObject jLocal, TField? value)
+	{
+		IEnvironment env = jLocal.Environment;
+		env.Accessor.SetField(jLocal, this, value);
+	}
+	/// <summary>
+	/// Sets the value of a static field on <paramref name="jClass"/> which matches with current definition.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="value">The field value to set to.</param>
+	public void StaticSet(JClassObject jClass, TField? value)
+	{
+		IEnvironment env = jClass.Environment;
+		env.Accessor.SetStaticField(jClass, this, value);
+	}
 }
