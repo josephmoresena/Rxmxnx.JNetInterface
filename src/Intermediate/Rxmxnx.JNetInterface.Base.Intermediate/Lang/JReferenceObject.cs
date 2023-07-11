@@ -78,7 +78,7 @@ public abstract class JReferenceObject : JObject
 	internal Boolean IsDummy => this._isDummy;
 
 	/// <inheritdoc/>
-	internal override void CopyTo(Span<Byte> span, ref Int32 offset)
+	protected internal override void CopyTo(Span<Byte> span, ref Int32 offset)
 	{
 		ReadOnlySpan<Byte> bytes = NativeUtilities.AsBytes(this.As<IntPtr>());
 		bytes.CopyTo(span[offset..]);

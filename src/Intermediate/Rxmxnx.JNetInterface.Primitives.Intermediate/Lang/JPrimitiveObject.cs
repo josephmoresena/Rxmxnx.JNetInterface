@@ -72,5 +72,5 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapp
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal override void CopyTo(Span<Byte> span, ref Int32 offset) => this.Value.CopyTo(span, ref offset);
+	protected internal override void CopyTo(Span<Byte> span, ref Int32 offset) => this.Value.CopyTo(span, ref offset);
 }

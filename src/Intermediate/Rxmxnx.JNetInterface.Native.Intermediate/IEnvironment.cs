@@ -13,6 +13,10 @@ public partial interface IEnvironment
 	/// Virtual machine that owns the current JNI context.
 	/// </summary>
 	IVirtualMachine VirtualMachine { get; }
+	/// <summary>
+	/// The current ensured capacity for local references.
+	/// </summary>
+	Int32? EnsuredCapacity { get; }
 	
 	/// <summary>
 	/// Internal accessor object.
