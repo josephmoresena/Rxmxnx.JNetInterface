@@ -39,4 +39,36 @@ public interface IClassProvider
 	/// <paramref name="otherClass"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	Boolean IsAssignableFrom(IClass jClass, IClass otherClass);
+	/// <summary>
+	/// Loads a java class from its binary information into the current VM.
+	/// </summary>
+	/// <param name="className">Name of class to load.</param>
+	/// <param name="rawClassBytes">Binary span with class information.</param>
+	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
+	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
+	JClassObject LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes, JLocalObject? jClassLoader = default);
+	/// <summary>
+	/// Loads a java class from its binary information into the current VM.
+	/// </summary>
+	/// <param name="className">Name of class to load.</param>
+	/// <param name="rawClassBytes">Stream with binary class information.</param>
+	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
+	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
+	JClassObject LoadClass(CString className, Stream rawClassBytes, JLocalObject? jClassLoader = default);
+	/// <summary>
+	/// Loads a java class from its binary information into the current VM.
+	/// </summary>
+	/// <typeparam name="TDataType">The type with class definition.</typeparam>
+	/// <param name="rawClassBytes">Binary span with class information.</param>
+	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
+	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
+	JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JLocalObject? jClassLoader = default);
+	/// <summary>
+	/// Loads a java class from its binary information into the current VM.
+	/// </summary>
+	/// <typeparam name="TDataType">The type with class definition.</typeparam>
+	/// <param name="rawClassBytes">Stream with binary class information.</param>
+	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
+	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
+	JClassObject LoadClass<TDataType>(Stream rawClassBytes, JLocalObject? jClassLoader = default);
 }
