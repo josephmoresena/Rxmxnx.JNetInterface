@@ -40,6 +40,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="jObject"><see cref="JObject"/> instance.</param>
 	internal JObject(JObject jObject) => this._value = jObject._value;
 	/// <summary>
 	/// Constructor.

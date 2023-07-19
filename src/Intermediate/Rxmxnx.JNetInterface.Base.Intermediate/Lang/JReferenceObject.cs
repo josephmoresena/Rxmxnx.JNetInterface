@@ -18,6 +18,7 @@ public abstract class JReferenceObject : JObject
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="jObject"><see cref="JReferenceObject"/> instance.</param>
 	internal JReferenceObject(JReferenceObject jObject) : base(jObject) => this._isDummy = jObject._isDummy;
 	/// <summary>
 	/// Constructor.
