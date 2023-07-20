@@ -7,13 +7,24 @@ namespace Rxmxnx.JNetInterface.Native;
 public abstract class JGlobalBase : JReferenceObject, IDisposable
 {
 	/// <summary>
+	/// This collection stores the weak references to the <see cref="JLocalObject"/> associated with 
+	/// this instance.
+	/// </summary>
+	private readonly ConcurrentBag<WeakReference<JLocalObject>> _objects = new();
+	/// <summary>
 	/// <see cref="IVirtualMachine"/> instance.
 	/// </summary>
 	private readonly IVirtualMachine _vm;
+
 	/// <summary>
 	/// Indicate whether the current instance is disposed.
 	/// </summary>
 	private Boolean _isDisposed;
+
+	/// <summary>
+	/// <see cref="IVirtualMachine"/> instance.
+	/// </summary>
+	public IVirtualMachine VirtualMachine => this._vm;
 
 	/// <summary>
 	/// Constructor.
@@ -37,19 +48,6 @@ public abstract class JGlobalBase : JReferenceObject, IDisposable
 		=> this._vm = jLocal.Environment.VirtualMachine;
 
 	/// <summary>
-	/// <see cref="IVirtualMachine"/> instance.
-	/// </summary>
-	public IVirtualMachine VirtualMachine => this._vm;
-
-	/// <inheritdoc/>
-	public void Dispose()
-	{
-		using IThread thread = this._vm.CreateThread(ThreadPurpose.RemoveGlobalReference);
-		this.Unload(thread);
-		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>
 	/// Destructor.
 	/// </summary>
 	~JGlobalBase()
@@ -66,6 +64,15 @@ public abstract class JGlobalBase : JReferenceObject, IDisposable
 	/// <see langword="true"/> if current instance is still valid; otherwise, <see langword="false"/>.
 	/// </returns>
 	public virtual Boolean IsValid(IEnvironment env) => !this._isDisposed && !this.IsDefault;
+
+	/// <inheritdoc/>
+	public void Dispose()
+	{
+		using IThread thread = this._vm.CreateThread(ThreadPurpose.RemoveGlobalReference);
+		this.Unload(thread);
+		GC.SuppressFinalize(this);
+	}
+
 	/// <summary>
 	/// Performs application-defined tasks associated with freeing, releasing, or resetting
 	/// unmanaged resources.
@@ -82,19 +89,41 @@ public abstract class JGlobalBase : JReferenceObject, IDisposable
 		if (this._isDisposed)
 			return;
 
-		if (disposing) { }
-		/*foreach (WeakReference<JLocalObject> wReference in this._objects)
+		if (disposing)
+			foreach (WeakReference<JLocalObject> wReference in this._objects)
 				if (wReference.TryGetTarget(out JLocalObject? jLocal))
-					this.Unload(jLocal);*/
+					this.Unload(jLocal);
 		this.ClearValue();
 		this._isDisposed = this is not IClassType;
 	}
 
+	/// <summary>
+	/// Retrieves the <see cref="IClass"/> from current global object.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <returns>The <see cref="IClass"/> from current global object.</returns>
 	internal IClass? GetObjectClass(IEnvironment env)
+		=> !this.ObjectClassName.Equals(JObject.JObjectClassName) ? 
+			env.ClassProvider.GetClass(this.ObjectClassName) : default;
+
+	/// <summary>
+	/// Associates the current current instance to <paramref name="jLocal"/>.
+	/// </summary>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <returns>A valid <see cref="JGlobalBase"/> associated to <paramref name="jLocal"/>.</returns>
+	protected JGlobalBase? Load(JLocalObject jLocal)
 	{
-		if (!this.ObjectClassName.Equals(JObject.JObjectClassName))
-			//TODO: Get class form name.
-			return default!;
-		return default;
+		this._objects.Add(new(jLocal));
+		JGlobalBase? result = default;
+		if (!this.IsValid(jLocal.Environment)) 
+			return result;
+		result = this;
+		this._objects.Add(new(jLocal));
+		return result;
 	}
+	/// <summary>
+	/// Disassociates the current current instance from <paramref name="jLocal"/>.
+	/// </summary>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	protected abstract void Unload(in JLocalObject jLocal);
 }

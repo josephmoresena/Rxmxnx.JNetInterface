@@ -22,4 +22,7 @@ public abstract class JGlobal : JGlobalBase
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)
 		=> base.IsValid(env) && env.GetReferenceType(this) == JReferenceType.GlobalRefType;
+
+	/// <inheritdoc cref="JGlobalBase.Load(JLocalObject)"/>
+	internal new virtual JGlobal? Load(JLocalObject jLocal) => base.Load(jLocal) as JGlobal;
 }

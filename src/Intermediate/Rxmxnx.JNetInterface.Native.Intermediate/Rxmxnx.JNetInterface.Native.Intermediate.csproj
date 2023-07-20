@@ -21,6 +21,7 @@
 
     <ItemGroup>
         <Using Include="System.ComponentModel" />
+        <Using Include="System.Collections.Concurrent" />
         <Using Include="System.Diagnostics.CodeAnalysis" />
         <Using Include="System.Numerics" />
         <Using Include="System.Globalization" />

@@ -6,6 +6,21 @@ public partial class JLocalObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jLocalRef">Local object reference.</param>
+	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
+	/// <param name="jClass"><see cref="IClass"/> instance.</param>
+	internal JLocalObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isNativeParameter, IClass? jClass) :
+		base(jLocalRef, false)
+	{
+		this._env = env;
+		this._lifetime = new(isNativeParameter, this);
+		this._isDisposed = false;
+		this._class = jClass;
+	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="refObj"><see cref="JReferenceObject"/> instance.</param>
 	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
 	/// <param name="jClass"><see cref="IClass"/> instance.</param>

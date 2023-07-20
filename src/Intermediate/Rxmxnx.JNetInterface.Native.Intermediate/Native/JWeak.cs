@@ -23,4 +23,7 @@ public abstract class JWeak : JGlobalBase
 	public override Boolean IsValid(IEnvironment env)
 		=> base.IsValid(env) && env.GetReferenceType(this) == JReferenceType.WeakGlobalRefType &&
 			!env.IsSameObject(this, default);
+
+	/// <inheritdoc cref="JGlobalBase.Load(JLocalObject)"/>
+	internal new virtual JWeak? Load(JLocalObject jLocal) => base.Load(jLocal) as JWeak;
 }
