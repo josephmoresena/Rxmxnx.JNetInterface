@@ -5,6 +5,9 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JClassObject : JLocalObject, IClass, IDataType<JClassObject>
 {
+	/// <inheritdoc />
+	public static Boolean Final => true;
+
 	/// <inheritdoc/>
 	public static CString ClassName => UnicodeClassNames.JClassObjectClassName;
 	/// <inheritdoc/>
@@ -14,11 +17,16 @@ public sealed class JClassObject : JLocalObject, IClass, IDataType<JClassObject>
 	public CString Name { get; } = default!;
 	/// <inheritdoc/>
 	public CString ClassSignature { get; }= default!;
+	/// <summary>
+	/// Indicates whether current class is final.
+	/// </summary>
+	public Boolean IsFinalClass { get; } = false;
 
 	JClassLocalRef IClass.Reference => this.As<JClassLocalRef>();
 	
 	private JClassObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.ClassObject) { }
-	internal JClassObject(IEnvironment env, JReferenceObject refObj, Boolean isNativeParameter, IClass? jClass) : base(env, refObj, isNativeParameter, jClass) { }
+	internal JClassObject(IEnvironment env, JClassLocalRef jClassRef, Boolean isDummy, Boolean isNativeParameter) 
+		: base(env, jClassRef.Value, isDummy, isNativeParameter, env.ClassProvider.GetClass<JClassObject>()) { }
 	internal JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc cref="IClass.IsValid(IEnvironment)"/>
 	public Boolean IsValid() => this.IsValid(this.Environment);

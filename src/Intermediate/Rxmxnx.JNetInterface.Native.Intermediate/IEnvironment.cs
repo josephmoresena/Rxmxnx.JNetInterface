@@ -26,6 +26,10 @@ public interface IEnvironment
 	/// Internal class provider object.
 	/// </summary>
 	internal IClassProvider ClassProvider { get; }
+	/// <summary>
+	/// Internal reference provider object.
+	/// </summary>
+	internal IReferenceProvider ReferenceProvider { get; }
 
 	/// <summary>
 	/// Retrieves the JNI type reference of <paramref name="jObject"/>.

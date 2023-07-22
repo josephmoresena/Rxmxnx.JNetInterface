@@ -16,6 +16,8 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
 	internal new static virtual JPrimitiveMetadata PrimitiveMetadata
 		=> ValidationUtilities.ThrowInvalidInterface<JPrimitiveMetadata>(nameof(IPrimitive));
+
+	static Boolean IDataType.Final => true;
 }
 
 /// <summary>

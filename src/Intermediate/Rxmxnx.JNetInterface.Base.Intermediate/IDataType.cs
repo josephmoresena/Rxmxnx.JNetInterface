@@ -14,6 +14,11 @@ public interface IDataType
 	/// </summary>
 	static virtual CString Signature => ValidationUtilities.ThrowInvalidInterface<CString>(nameof(IDataType));
 	/// <summary>
+	/// Indicates whether the current type is final.
+	/// </summary>
+	static virtual Boolean Final => false;
+	
+	/// <summary>
 	/// Primitive metadata.
 	/// </summary>
 	internal static virtual JPrimitiveMetadata? PrimitiveMetadata

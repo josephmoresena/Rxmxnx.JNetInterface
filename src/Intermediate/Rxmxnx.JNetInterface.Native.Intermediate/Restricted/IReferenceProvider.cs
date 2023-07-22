@@ -15,15 +15,6 @@ public interface IReferenceProvider
 	/// </returns>
 	Boolean ReloadObject(JLocalObject jLocal);
 	/// <summary>
-	/// Reloads the global reference of given global class object.
-	/// </summary>
-	/// <typeparam name="TGlobalClass">A global class object.</typeparam>
-	/// <param name="jGlobalClass">A <typeparamref name="TGlobalClass"/> instance.</param>
-	/// <returns>
-	/// <see langword="true"/> if the global reference was loaded; otherwise, <see langword="false"/>.
-	/// </returns>
-	Boolean ReloadGlobalClass<TGlobalClass>(TGlobalClass jGlobalClass) where TGlobalClass : JGlobalBase, IClass;
-	/// <summary>
 	/// Creates a <typeparamref name="TGlobal"/> instance loaded for given <see cref="JLocalObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TGlobal">The type of global object.</typeparam>

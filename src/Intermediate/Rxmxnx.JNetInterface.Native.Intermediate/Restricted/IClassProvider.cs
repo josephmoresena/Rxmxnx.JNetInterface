@@ -17,6 +17,12 @@ public interface IClassProvider
 	/// <returns>The class instance with given class name.</returns>
 	JClassObject GetClass(CString className);
 	/// <summary>
+	/// Retrieves the java class of <paramref name="jLocal"/>.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>The class instance of <paramref name="jLocal"/>.</returns>
+	JClassObject GetObjectClass(JLocalObject jLocal);
+	/// <summary>
 	/// Retrieves the java super class of given class instance.
 	/// </summary>
 	/// <param name="jClass">Java class instance.</param>

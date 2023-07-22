@@ -52,44 +52,49 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	{
 		if (this._isDisposed)
 			return;
-
+		
 		if (disposing)
 		{
-			foreach (WeakReference<JLocalObject> wReference in this._objects)
-			{
-				if (wReference.TryGetTarget(out JLocalObject? jLocal))
+			ImmutableArray<Int64> keys = this._objects.Keys.ToImmutableArray();
+			foreach (Int64 key in keys)
+				if(this._objects.TryRemove(key, out WeakReference<JLocalObject>? wObj) && 
+				   wObj.TryGetTarget(out JLocalObject? jLocal))
 					this.Unload(jLocal);
-			}
-			this._objects.Clear();
 		}
+
+		env.ReferenceProvider.Unload(this);
 		this.ClearValue();
-		this._isDisposed = this is not IClassType;
+		this._isDisposed = true;
 	}
 
 	/// <summary>
-	/// Associates the current current instance to <paramref name="jLocal"/>.
+	/// Associates the current instance to <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <returns>A valid <see cref="JGlobalBase"/> associated to <paramref name="jLocal"/>.</returns>
 	protected JGlobalBase? Load(JLocalObject jLocal)
 	{
-		this._objects.Add(new(jLocal));
+		if (!this._objects.TryAdd(jLocal.Id, new(jLocal)))
+			this._objects[jLocal.Id].SetTarget(jLocal);
 		JGlobalBase? result = default;
 		if (!this.IsValid(jLocal.Environment))
 			return result;
 		result = this;
-		this._objects.Add(new(jLocal));
 		return result;
 	}
+	/// <summary>
+	/// Removes the association of <paramref name="jLocal"/> from this instance.
+	/// </summary>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jLocal"/> was associated to this instance;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	protected Boolean Remove(JLocalObject jLocal) => this._objects.TryRemove(jLocal.Id, out _);
 
 	/// <summary>
 	/// Disassociates the current current instance from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	protected abstract void Unload(in JLocalObject jLocal);
-	/// <summary>
-	/// Disassociates the current current instance from <paramref name="jLocal"/>.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	protected abstract void Clear();
 }

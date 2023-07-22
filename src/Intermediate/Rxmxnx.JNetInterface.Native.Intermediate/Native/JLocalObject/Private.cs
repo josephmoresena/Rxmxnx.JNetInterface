@@ -3,10 +3,6 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JLocalObject
 {
 	/// <summary>
-	/// Instance class object.
-	/// </summary>
-	private readonly IClass? _class;
-	/// <summary>
 	/// Internal <see cref="IEnvironment"/> instance.
 	/// </summary>
 	private readonly IEnvironment _env;
@@ -27,6 +23,14 @@ public partial class JLocalObject
 	/// Current <see cref="JWeak"/> instance.
 	/// </summary>
 	private readonly JWeak? _weak;
+	/// <summary>
+	/// Instance class object.
+	/// </summary>
+	private JClassObject? _class;
+	/// <summary>
+	/// Indicates whether the current class is the real object class.
+	/// </summary>
+	private Boolean _isRealClass;
 
 	/// <summary>
 	/// Retrieves the loaded global object for current instance.

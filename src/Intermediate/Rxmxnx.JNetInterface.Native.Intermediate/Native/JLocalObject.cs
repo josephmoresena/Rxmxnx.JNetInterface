@@ -14,8 +14,8 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
-	protected JLocalObject(JLocalObject jLocal, IClass? jClass = default) : base(jLocal)
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	protected JLocalObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal)
 	{
 		jLocal._lifetime.Load(this);
 
@@ -32,6 +32,17 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 	{
 		this.Dispose(true);
 		GC.SuppressFinalize(this);
+	}
+
+	/// <summary>
+	/// Loads the class object in the current instance.
+	/// </summary>
+	public void LoadClassObject()
+	{
+		if (this._isRealClass) 
+			return;
+		this._class = this._env.ClassProvider.GetObjectClass(this);
+		this._isRealClass = true;
 	}
 
 	static JLocalObject? IDataType<JLocalObject>.Create(JObject? jObject)

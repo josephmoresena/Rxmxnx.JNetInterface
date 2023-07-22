@@ -20,7 +20,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	private readonly IMutableReference<JValue> _value;
 
 	/// <summary>
-	/// Object signature.
+	/// Object class name.
 	/// </summary>
 	public abstract CString ObjectClassName { get; }
 	/// <summary>

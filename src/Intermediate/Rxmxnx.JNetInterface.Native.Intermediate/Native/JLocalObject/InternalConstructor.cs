@@ -7,30 +7,17 @@ public partial class JLocalObject
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jLocalRef">Local object reference.</param>
+	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
 	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
-	internal JLocalObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isNativeParameter, IClass? jClass) :
-		base(jLocalRef, false)
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	internal JLocalObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy, Boolean isNativeParameter, JClassObject? jClass = default) :
+		base(jLocalRef, isDummy)
 	{
 		this._env = env;
 		this._lifetime = new(isNativeParameter, this);
 		this._isDisposed = false;
 		this._class = jClass;
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="refObj"><see cref="JReferenceObject"/> instance.</param>
-	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
-	internal JLocalObject(IEnvironment env, JReferenceObject refObj, Boolean isNativeParameter, IClass? jClass) :
-		base(refObj)
-	{
-		this._env = env;
-		this._lifetime = new(isNativeParameter, this);
-		this._isDisposed = false;
-		this._class = jClass;
+		this._isRealClass = this._class is not null && this._class.IsFinalClass;
 	}
 	/// <summary>
 	/// Constructor.
@@ -42,6 +29,7 @@ public partial class JLocalObject
 		this._env = env;
 		this._lifetime = new(false, this);
 		this._class = jGlobal.GetObjectClass(env);
+		this._isRealClass = true;
 		this._global = jGlobal as JGlobal;
 		this._weak = jGlobal as JWeak;
 	}

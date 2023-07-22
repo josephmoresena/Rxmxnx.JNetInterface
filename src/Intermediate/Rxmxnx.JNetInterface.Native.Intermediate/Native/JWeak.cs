@@ -9,12 +9,6 @@ public abstract class JWeak : JGlobalBase
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JWeak(IVirtualMachine vm, Boolean isDummy) : base(vm, isDummy) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="weakRef">Weak global object reference.</param>
 	internal JWeak(JLocalObject jLocal, JWeakRef weakRef) : base(jLocal, weakRef) { }
