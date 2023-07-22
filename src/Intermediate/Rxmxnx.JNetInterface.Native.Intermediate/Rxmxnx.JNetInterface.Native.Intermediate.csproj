@@ -15,26 +15,26 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj" />
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.Intermediate.SourceGenerator\Rxmxnx.JNetInterface.Intermediate.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0" />
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Intermediate.SourceGenerator\Rxmxnx.JNetInterface.Intermediate.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="System.ComponentModel" />
-        <Using Include="System.Collections.Concurrent" />
-        <Using Include="System.Diagnostics.CodeAnalysis" />
-        <Using Include="System.Numerics" />
-        <Using Include="System.Globalization" />
-        <Using Include="System.Runtime.CompilerServices" />
-        <Using Include="System.Runtime.InteropServices" />
-        <Using Include="Rxmxnx.PInvoke" />
-        <Using Include="Rxmxnx.JNetInterface" />
-        <Using Include="Rxmxnx.JNetInterface.Internal" />
-        <Using Include="Rxmxnx.JNetInterface.Lang" />
-        <Using Include="Rxmxnx.JNetInterface.Native" />
-        <Using Include="Rxmxnx.JNetInterface.Native.References" />
-        <Using Include="Rxmxnx.JNetInterface.Native.Values" />
-        <Using Include="Rxmxnx.JNetInterface.Restricted" />
+        <Using Include="System.ComponentModel"/>
+        <Using Include="System.Collections.Concurrent"/>
+        <Using Include="System.Diagnostics.CodeAnalysis"/>
+        <Using Include="System.Numerics"/>
+        <Using Include="System.Globalization"/>
+        <Using Include="System.Runtime.CompilerServices"/>
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang"/>
+        <Using Include="Rxmxnx.JNetInterface.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.References"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
+        <Using Include="Rxmxnx.JNetInterface.Restricted"/>
     </ItemGroup>
 
 </Project>

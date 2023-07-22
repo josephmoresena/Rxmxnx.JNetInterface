@@ -34,6 +34,13 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 		GC.SuppressFinalize(this);
 	}
 
+	static JLocalObject? IDataType<JLocalObject>.Create(JObject? jObject)
+	{
+		if (jObject is JLocalObject { Value.IsDefault: false, } jLocal)
+			return new(jLocal);
+		return null;
+	}
+
 	/// <inheritdoc/>
 	~JLocalObject() { this.Dispose(false); }
 
@@ -48,12 +55,5 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 		if (this._lifetime.Unload(this))
 			//TODO: Call Unload local object.
 			this._isDisposed = this is not IClassType;
-	}
-
-	static JLocalObject? IDataType<JLocalObject>.Create(JObject? jObject)
-	{
-		if (jObject is JLocalObject { Value.IsDefault: false, } jLocal)
-			return new(jLocal);
-		return null;
 	}
 }

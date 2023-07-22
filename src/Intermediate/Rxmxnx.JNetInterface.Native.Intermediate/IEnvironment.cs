@@ -3,7 +3,7 @@
 /// <summary>
 /// This interface exposes a JNI instance.
 /// </summary>
-public partial interface IEnvironment
+public interface IEnvironment
 {
 	/// <summary>
 	/// JNI reference to the interface.
@@ -17,7 +17,7 @@ public partial interface IEnvironment
 	/// The current ensured capacity for local references.
 	/// </summary>
 	Int32? EnsuredCapacity { get; }
-	
+
 	/// <summary>
 	/// Internal accessor object.
 	/// </summary>

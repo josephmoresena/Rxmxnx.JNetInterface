@@ -18,16 +18,16 @@ public partial class JLocalObject
 	/// <summary>
 	/// Current <see cref="JGlobal"/> instance.
 	/// </summary>
-	private JGlobal? _global;
-	/// <summary>
-	/// Current <see cref="JWeak"/> instance.
-	/// </summary>
-	private  JWeak? _weak;
+	private readonly JGlobal? _global;
 	/// <summary>
 	/// Indicates whether the this instance is disposed.
 	/// </summary>
 	private Boolean _isDisposed;
-	
+	/// <summary>
+	/// Current <see cref="JWeak"/> instance.
+	/// </summary>
+	private readonly JWeak? _weak;
+
 	/// <summary>
 	/// Retrieves the loaded global object for current instance.
 	/// </summary>

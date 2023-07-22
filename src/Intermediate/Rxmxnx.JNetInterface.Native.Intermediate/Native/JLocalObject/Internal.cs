@@ -10,13 +10,13 @@ public partial class JLocalObject
 	/// Internal value.
 	/// </summary>
 	internal JValue InternalValue => base.Value;
+	/// <inheritdoc/>
+	internal override JValue Value => this.GetGlobalObject()?.Value ?? base.Value;
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
 	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
 	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
-	/// <inheritdoc/>
-	internal override JValue Value => this.GetGlobalObject()?.Value ?? base.Value;
 
 	/// <summary>
 	/// Sets the current instance value.

@@ -9,7 +9,7 @@ public interface IClassProvider
 	/// <c>java.lang.Class&lt;?&gt;</c> class instance.
 	/// </summary>
 	JClassObject ClassObject { get; }
-	
+
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.
 	/// </summary>
