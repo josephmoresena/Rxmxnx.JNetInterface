@@ -46,6 +46,10 @@ internal static class ValidationUtilities
 				"Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort, or extend the JLocalObject class.",
 			"IPrimitive" =>
 				"Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort.",
+			"IInterfaceType" =>
+				"Please use an extension of JInterfaceObject class.",
+			"IFinalType" =>
+				"Please use generic IFinalType definition.",
 			_ => String.Empty,
 		};
 		String message = $"{messagePrefix} {recommendation}";
@@ -92,5 +96,8 @@ internal static class ValidationUtilities
 		}
 		else if (signature[^1] != UnicodeObjectSignatures.ObjectSignatureSuffix[0])
 			throw new ArgumentException("Invalid signature.");
+	}
+	public static void ThrowIfFinalInterface<TDataType>(Boolean value)
+	{
 	}
 }

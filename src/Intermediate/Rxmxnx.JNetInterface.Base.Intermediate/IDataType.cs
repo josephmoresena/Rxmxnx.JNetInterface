@@ -13,16 +13,22 @@ public interface IDataType
 	/// Java datatype signature name.
 	/// </summary>
 	static virtual CString Signature => ValidationUtilities.ThrowInvalidInterface<CString>(nameof(IDataType));
+	
 	/// <summary>
 	/// Indicates whether the current type is final.
 	/// </summary>
-	static virtual Boolean Final => false;
-	
+	internal static virtual Boolean Final 
+		=> ValidationUtilities.ThrowInvalidInterface<Boolean>(nameof(IDataType));
 	/// <summary>
 	/// Primitive metadata.
 	/// </summary>
 	internal static virtual JPrimitiveMetadata? PrimitiveMetadata
 		=> ValidationUtilities.ThrowInvalidInterface<JPrimitiveMetadata?>(nameof(IDataType));
+	/// <summary>
+	/// List of compatible types.
+	/// </summary>
+	internal static virtual IEnumerable<Type> CompatibleTypes 
+		=> ValidationUtilities.ThrowInvalidInterface<IEnumerable<Type>>(nameof(IDataType));
 }
 
 /// <summary>
@@ -33,6 +39,7 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 {
 	static CString IDataType.ClassName => JObject.JObjectClassName;
 	static CString IDataType.Signature => JObject.JObjectSignature;
+	static Boolean IDataType.Final => false;
 	/// <summary>
 	/// Creates a <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.
 	/// </summary>

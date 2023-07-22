@@ -3,7 +3,7 @@
 /// <summary>
 /// This interface exposes an object that represents a java primitive value.
 /// </summary>
-public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
+public interface IPrimitive : IObject, IFinalType, IComparable, IConvertible
 {
 	/// <summary>
 	/// JNI signature for an array of current primitive type.
@@ -16,7 +16,7 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
 	internal new static virtual JPrimitiveMetadata PrimitiveMetadata
 		=> ValidationUtilities.ThrowInvalidInterface<JPrimitiveMetadata>(nameof(IPrimitive));
-
+	
 	static Boolean IDataType.Final => true;
 }
 
@@ -24,13 +24,14 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 /// This interface exposes an object that represents a java primitive value.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
-public interface IPrimitive<TPrimitive> : IPrimitive, IDataType<TPrimitive> where TPrimitive : IPrimitive<TPrimitive>
+public interface IPrimitive<TPrimitive> : IPrimitive, IFinalType<TPrimitive> where TPrimitive : IPrimitive<TPrimitive>
 {
 	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
 	new static abstract JPrimitiveMetadata PrimitiveMetadata { get; }
 
 	static JPrimitiveMetadata IDataType.PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
 	static JPrimitiveMetadata IPrimitive.PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
+	static Boolean IDataType.Final => true;
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TPrimitive"/> to <see cref="JObject"/>.
