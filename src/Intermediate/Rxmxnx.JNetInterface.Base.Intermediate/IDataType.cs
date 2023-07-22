@@ -37,9 +37,16 @@ public interface IDataType
 /// <typeparam name="TDataType">Type of current Java datatype.</typeparam>
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
+	/// <summary>
+	/// Internal datatype information.
+	/// </summary>
+	[UnconditionalSuppressMessage("ReflectionAnalysis","IL2091")]
+	private static readonly DataTypeInfo<TDataType> info = new();
+
 	static CString IDataType.ClassName => JObject.JObjectClassName;
 	static CString IDataType.Signature => JObject.JObjectSignature;
-	static Boolean IDataType.Final => false;
+	static Boolean IDataType.Final => IDataType<TDataType>.info.IsFinal;
+
 	/// <summary>
 	/// Creates a <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.
 	/// </summary>

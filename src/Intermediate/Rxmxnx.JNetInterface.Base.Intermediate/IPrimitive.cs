@@ -3,7 +3,7 @@
 /// <summary>
 /// This interface exposes an object that represents a java primitive value.
 /// </summary>
-public interface IPrimitive : IObject, IFinalType, IComparable, IConvertible
+public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 {
 	/// <summary>
 	/// JNI signature for an array of current primitive type.
@@ -24,7 +24,7 @@ public interface IPrimitive : IObject, IFinalType, IComparable, IConvertible
 /// This interface exposes an object that represents a java primitive value.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
-public interface IPrimitive<TPrimitive> : IPrimitive, IFinalType<TPrimitive> where TPrimitive : IPrimitive<TPrimitive>
+public interface IPrimitive<TPrimitive> : IPrimitive, IDataType<TPrimitive> where TPrimitive : IPrimitive<TPrimitive>
 {
 	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
 	new static abstract JPrimitiveMetadata PrimitiveMetadata { get; }
@@ -41,8 +41,8 @@ public interface IPrimitive<TPrimitive> : IPrimitive, IFinalType<TPrimitive> whe
 	/// <summary>
 	/// Defines an implicit conversion of a given <see cref="JObject"/> to <typeparamref name="TPrimitive"/>.
 	/// </summary>
-	/// <param name="jobj">A <see cref="JObject"/> to implicitly convert.</param>
-	static abstract explicit operator TPrimitive(JObject jobj);
+	/// <param name="jObj">A <see cref="JObject"/> to implicitly convert.</param>
+	static abstract explicit operator TPrimitive(JObject jObj);
 }
 
 /// <summary>
@@ -50,7 +50,7 @@ public interface IPrimitive<TPrimitive> : IPrimitive, IFinalType<TPrimitive> whe
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
-internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IPrimitiveWrapper<TValue>
+internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IFinalType<TPrimitive>, IPrimitiveWrapper<TValue>
 	where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
