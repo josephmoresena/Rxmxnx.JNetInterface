@@ -44,7 +44,7 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 		this._class = this._env.ClassProvider.GetObjectClass(this);
 		this._isRealClass = true;
 	}
-
+	
 	static JLocalObject? IDataType<JLocalObject>.Create(JObject? jObject)
 	{
 		if (jObject is JLocalObject { Value.IsDefault: false, } jLocal)

@@ -13,22 +13,15 @@ public interface IDataType
 	/// Java datatype signature name.
 	/// </summary>
 	static virtual CString Signature => ValidationUtilities.ThrowInvalidInterface<CString>(nameof(IDataType));
-	
 	/// <summary>
 	/// Indicates whether the current type is final.
 	/// </summary>
-	internal static virtual Boolean Final 
-		=> ValidationUtilities.ThrowInvalidInterface<Boolean>(nameof(IDataType));
+	static virtual JTypeModifier Modifier => ValidationUtilities.ThrowInvalidInterface<JTypeModifier>(nameof(IDataType));
+
 	/// <summary>
 	/// Primitive metadata.
 	/// </summary>
-	internal static virtual JPrimitiveMetadata? PrimitiveMetadata
-		=> ValidationUtilities.ThrowInvalidInterface<JPrimitiveMetadata?>(nameof(IDataType));
-	/// <summary>
-	/// List of compatible types.
-	/// </summary>
-	internal static virtual IEnumerable<Type> CompatibleTypes 
-		=> ValidationUtilities.ThrowInvalidInterface<IEnumerable<Type>>(nameof(IDataType));
+	internal static virtual JPrimitiveMetadata? PrimitiveMetadata => default;
 }
 
 /// <summary>
@@ -37,15 +30,9 @@ public interface IDataType
 /// <typeparam name="TDataType">Type of current Java datatype.</typeparam>
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
-	/// <summary>
-	/// Internal datatype information.
-	/// </summary>
-	[UnconditionalSuppressMessage("ReflectionAnalysis","IL2091")]
-	private static readonly DataTypeInfo<TDataType> info = new();
-
 	static CString IDataType.ClassName => JObject.JObjectClassName;
 	static CString IDataType.Signature => JObject.JObjectSignature;
-	static Boolean IDataType.Final => IDataType<TDataType>.info.IsFinal;
+	static JTypeModifier IDataType.Modifier => JTypeModifier.Extensible;
 
 	/// <summary>
 	/// Creates a <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.

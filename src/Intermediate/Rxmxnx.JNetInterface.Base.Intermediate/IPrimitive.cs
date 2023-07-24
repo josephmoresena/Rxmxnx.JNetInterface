@@ -16,8 +16,6 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
 	internal new static virtual JPrimitiveMetadata PrimitiveMetadata
 		=> ValidationUtilities.ThrowInvalidInterface<JPrimitiveMetadata>(nameof(IPrimitive));
-	
-	static Boolean IDataType.Final => true;
 }
 
 /// <summary>
@@ -31,7 +29,6 @@ public interface IPrimitive<TPrimitive> : IPrimitive, IDataType<TPrimitive> wher
 
 	static JPrimitiveMetadata IDataType.PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
 	static JPrimitiveMetadata IPrimitive.PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
-	static Boolean IDataType.Final => true;
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TPrimitive"/> to <see cref="JObject"/>.
@@ -50,7 +47,7 @@ public interface IPrimitive<TPrimitive> : IPrimitive, IDataType<TPrimitive> wher
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
-internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IFinalType<TPrimitive>, IPrimitiveWrapper<TValue>
+internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IPrimitiveWrapper<TValue>
 	where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
@@ -63,6 +60,8 @@ internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IFin
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<JValue> span, Int32 index) => span[index] = JValue.Create(this.Value);
+	
+	static JTypeModifier IDataType.Modifier => JTypeModifier.Final;
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TValue"/> to <typeparamref name="TPrimitive"/>.

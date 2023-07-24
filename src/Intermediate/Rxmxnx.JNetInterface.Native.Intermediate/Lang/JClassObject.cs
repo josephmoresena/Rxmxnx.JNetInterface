@@ -3,10 +3,10 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Class&lt;?&gt;</c> instance.
 /// </summary>
-public sealed class JClassObject : JLocalObject, IClass, IFinalType<JClassObject>
+public sealed class JClassObject : JLocalObject, IClass, IDataType<JClassObject>
 {
 	/// <inheritdoc />
-	public static Boolean Final => true;
+	public static JTypeModifier Modifier => JTypeModifier.Final;
 
 	/// <inheritdoc/>
 	public static CString ClassName => UnicodeClassNames.JClassObjectClassName;
