@@ -13,51 +13,32 @@ public sealed partial class JStringObject : JLocalObject, IDataType<JStringObjec
 	public static JTypeModifier Modifier => JTypeModifier.Final;
 
 	/// <summary>
-	/// Instance value.
-	/// </summary>
-	private readonly String _value;
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jStrRef">Local string reference.</param>
-	/// <param name="value">Internal value.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
-	internal JStringObject(IEnvironment env, JStringLocalRef jStrRef, String value, Boolean isDummy,
-		Boolean isNativeParameter) : base(env, jStrRef.Value, isDummy, isNativeParameter,
-		                                  env.ClassProvider.StringClassObject)
-		=> this._value = value;
-	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	internal JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
-		=> this._value ??= env.StringProvider.GetStringValue(jGlobal)!;
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="value">Internal value.</param>
-	private JStringObject(JLocalObject jLocal, String value) : base(
-		jLocal, jLocal.Environment.ClassProvider.StringClassObject)
-		=> this._value = value;
+	public JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
+		=> this._value ??= env.StringProvider.ToString(jGlobal);
 
 	/// <inheritdoc/>
-	public override String ToString() => this._value;
-
-	/// <inheritdoc cref="IDataType{TDataType}.Create(JObject)"/>
-	private static JStringObject? Create(JLocalObject jLocal)
+	public override String ToString()
 	{
-		String? value = jLocal.Environment.StringProvider.GetStringValue(jLocal);
-		return value is not null ? new JStringObject(jLocal, value) : default;
+		this._value ??= this.Environment.StringProvider.ToString(this);
+		return this._value;
+	}
+	/// <inheritdoc/>
+	protected override JObjectMetadata CreateMetadata()
+		=> new JStringMetadata(base.CreateMetadata()) { Value = this.ToString(), };
+	/// <inheritdoc/>
+	protected override void ProcessMetadata(JObjectMetadata metadata)
+	{
+		base.ProcessMetadata(metadata);
+		if (metadata is not JStringMetadata stringMetadata)
+			return;
+		this._value = stringMetadata.Value;
 	}
 
 	/// <inheritdoc/>
 	public static JStringObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal && jLocal.Environment.ClassProvider.IsAssignableTo<JClassObject>(jLocal) ?
-			JStringObject.Create(JLocalObject.Validate<JClassObject>(jLocal)) :
-			default;
+		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JClassObject>(jLocal)) : default;
 }

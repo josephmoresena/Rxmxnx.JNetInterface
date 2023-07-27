@@ -10,8 +10,7 @@ public interface IStringProvider
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
-	/// A <see cref="String"/> value if <paramref name="jObject"/> is a <c>java.lang.String</c>;
-	/// otherwise, <see langword="null"/>.
+	/// The <see cref="String"/> representation of <paramref name="jObject"/>.
 	/// </returns>
-	String? GetStringValue(JReferenceObject jObject);
+	String ToString(JReferenceObject jObject);
 }

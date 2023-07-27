@@ -12,18 +12,6 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	/// <inheritdoc/>
 	public static JTypeModifier Modifier => JTypeModifier.Final;
 
-	/// <inheritdoc cref="IClass.Reference"/>
-	internal JClassLocalRef Reference => this.As<JClassLocalRef>();
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jClassRef">Local class reference.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
-	internal JClassObject(IEnvironment env, JClassLocalRef jClassRef, Boolean isDummy, Boolean isNativeParameter) :
-		base(env, jClassRef.Value, isDummy, isNativeParameter, env.ClassProvider.ClassObject) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -38,7 +26,7 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 		get
 		{
 			if (this._className is null)
-				this.LoadClassInfo();
+				this.LoadClassInformation();
 			return this._className!;
 		}
 	}
@@ -48,7 +36,7 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 		get
 		{
 			if (this._className is null)
-				this.LoadClassInfo();
+				this.LoadClassInformation();
 			return this._className!;
 		}
 	}
@@ -58,7 +46,7 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 		get
 		{
 			if (this._hash is null)
-				this.LoadClassInfo();
+				this.LoadClassInformation();
 			return this._hash!;
 		}
 	}
@@ -66,18 +54,6 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	public Boolean? IsFinal => this._isFinal;
 
 	JClassLocalRef IClass.Reference => this.Reference;
-
-	/// <summary>
-	/// Initialize the current instance with given <see cref="IDataType"/> type.
-	/// </summary>
-	/// <typeparam name="TDataType">The <see cref="IDataType"/> with class definition.</typeparam>
-	internal void Initialize<TDataType>() where TDataType : JLocalObject, IDataType
-	{
-		this._className = TDataType.ClassName;
-		this._signature = TDataType.Signature;
-		this._hash = new CStringSequence(this.Name, this.ClassSignature).ToString();
-		this._isFinal = TDataType.Modifier == JTypeModifier.Final;
-	}
 
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()
@@ -91,7 +67,6 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 		base.ProcessMetadata(metadata);
 		if (metadata is not JClassMetadata classMetadata)
 			return;
-
 		this._className = classMetadata.Name;
 		this._signature = classMetadata.ClassSignature;
 		this._hash = classMetadata.Hash;
@@ -100,5 +75,7 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 
 	/// <inheritdoc/>
 	public static JClassObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JClassObject>(jLocal)) : default;
+		=> jObject is JLocalObject jLocal ?
+			new(jLocal is IClass ? jLocal : JLocalObject.Validate<JClassObject>(jLocal)) :
+			default;
 }

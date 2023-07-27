@@ -150,7 +150,7 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 	/// </exception>
 	protected static JLocalObject Validate<TDataType>(JLocalObject jLocal)
 		where TDataType : JLocalObject, IDataType<TDataType>
-		=> JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal._env);
+		=> jLocal as TDataType ?? JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal._env);
 
 	static JLocalObject? IDataType<JLocalObject>.Create(JObject? jObject)
 	{

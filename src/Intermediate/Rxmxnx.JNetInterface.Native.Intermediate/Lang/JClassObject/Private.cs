@@ -35,9 +35,9 @@ public partial class JClassObject
 	}
 
 	/// <summary>
-	/// Loads class info.
+	/// Loads class information.
 	/// </summary>
-	private void LoadClassInfo()
+	private void LoadClassInformation()
 	{
 		if (this._className is null || this._signature is null)
 			this.Environment.ClassProvider.GetClassInfo(this, out this._className, out this._signature, out this._hash);
