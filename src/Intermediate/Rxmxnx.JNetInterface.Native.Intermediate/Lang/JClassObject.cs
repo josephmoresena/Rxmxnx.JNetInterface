@@ -56,7 +56,7 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
 	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
 	internal JClassObject(IEnvironment env, JClassLocalRef jClassRef, Boolean isDummy, Boolean isNativeParameter) :
-		base(env, jClassRef.Value, isDummy, isNativeParameter, env.ClassProvider.GetClass<JClassObject>()) { }
+		base(env, jClassRef.Value, isDummy, isNativeParameter, env.ClassProvider.ClassObject) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -80,5 +80,7 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	}
 
 	/// <inheritdoc/>
-	public static JClassObject? Create(JObject? jObject) => jObject is JLocalObject jLocal ? new(jLocal) : default;
+	public static JClassObject? Create(JObject? jObject) 
+		=> jObject is JLocalObject jLocal && jLocal.Environment.ClassProvider.IsAssignableTo<JClassObject>(jLocal) ? 
+			new(jLocal) : default;
 }

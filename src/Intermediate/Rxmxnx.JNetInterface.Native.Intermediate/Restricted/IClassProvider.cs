@@ -8,8 +8,23 @@ public interface IClassProvider
 	/// <summary>
 	/// <c>java.lang.Class&lt;?&gt;</c> class instance.
 	/// </summary>
-	JClassObject ClassObject { get; }
+	JClassObject ClassObject => this.GetClass<JClassObject>();
+	/// <summary>
+	/// <c>java.lang.String</c> class instance.
+	/// </summary>
+	JClassObject StringClassObject => this.GetClass<JStringObject>();
 
+	/// <summary>
+	/// Determines whether <paramref name="jLocal"/> can be safely cast to
+	/// <typeparamref name="TDataType"/> instance.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jLocal"/> can be safely cast to
+	/// <typeparamref name="TDataType"/> instance; otherwise, <see langword="false"/>.
+	/// </returns>
+	Boolean IsAssignableTo<TDataType>(JLocalObject jLocal) where TDataType : JLocalObject, IDataType<TDataType>;
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.
 	/// </summary>
