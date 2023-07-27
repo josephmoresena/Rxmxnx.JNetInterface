@@ -6,12 +6,12 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public interface IStringProvider
 {
 	/// <summary>
-	/// Retrieves the string value from <paramref name="jLocal"/>.
+	/// Retrieves the string value from <paramref name="jObject"/>.
 	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
-	/// A <see cref="String"/> value if <paramref name="jLocal"/> is a <c>java.lang.String</c>;
+	/// A <see cref="String"/> value if <paramref name="jObject"/> is a <c>java.lang.String</c>;
 	/// otherwise, <see langword="null"/>.
 	/// </returns>
-	String? GetStringValue(JLocalObject jLocal);
+	String? GetStringValue(JReferenceObject jObject);
 }

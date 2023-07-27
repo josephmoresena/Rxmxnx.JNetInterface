@@ -34,7 +34,8 @@ public sealed partial class JStringObject : JLocalObject, IDataType<JStringObjec
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	internal JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) => this._value ??= default!;
+	internal JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
+		=> this._value ??= env.StringProvider.GetStringValue(jGlobal)!;
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -51,12 +52,12 @@ public sealed partial class JStringObject : JLocalObject, IDataType<JStringObjec
 	private static JStringObject? Create(JLocalObject jLocal)
 	{
 		String? value = jLocal.Environment.StringProvider.GetStringValue(jLocal);
-		return value is not null ? new JStringObject(jLocal!, value) : default;
+		return value is not null ? new JStringObject(jLocal, value) : default;
 	}
 
 	/// <inheritdoc/>
 	public static JStringObject? Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal && jLocal.Environment.ClassProvider.IsAssignableTo<JClassObject>(jLocal) ?
-			JStringObject.Create(jLocal) :
+			JStringObject.Create(JLocalObject.Validate<JClassObject>(jLocal)) :
 			default;
 }

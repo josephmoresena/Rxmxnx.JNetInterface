@@ -29,7 +29,8 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	internal JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	public JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(
+		env, JLocalObject.Validate<JClassObject>(jGlobal, env)) { }
 
 	/// <inheritdoc/>
 	public CString Name
@@ -87,10 +88,10 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(JObjectMetadata metadata)
 	{
+		base.ProcessMetadata(metadata);
 		if (metadata is not JClassMetadata classMetadata)
 			return;
 
-		base.ProcessMetadata(metadata);
 		this._className = classMetadata.Name;
 		this._signature = classMetadata.ClassSignature;
 		this._hash = classMetadata.Hash;
@@ -99,7 +100,5 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 
 	/// <inheritdoc/>
 	public static JClassObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal && jLocal.Environment.ClassProvider.IsAssignableTo<JClassObject>(jLocal) ?
-			new(jLocal) :
-			default;
+		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JClassObject>(jLocal)) : default;
 }

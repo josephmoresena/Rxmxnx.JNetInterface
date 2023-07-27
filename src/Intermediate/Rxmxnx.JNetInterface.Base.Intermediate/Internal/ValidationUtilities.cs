@@ -77,10 +77,29 @@ internal static class ValidationUtilities
 		return (TValue)value.ToType(typeof(TValue), CultureInfo.CurrentCulture);
 	}
 	/// <summary>
+	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
+	/// </summary>
+	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="evaluator">Delegate to check <paramref name="jObject"/>.</param>
+	/// <exception cref="InvalidCastException">
+	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
+	/// </exception>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void ThrowIfInvalidCast<TDataType>(JReferenceObject jObject,
+		Func<JReferenceObject, Boolean> evaluator) where TDataType : IDataType
+	{
+		if (!evaluator(jObject))
+			throw new InvalidCastException($"The current instance can't be casted to {TDataType.ClassName} type.");
+	}
+	/// <summary>
 	/// Throws an exception if <paramref name="signature"/> is invalid.
 	/// </summary>
 	/// <param name="signature">Signature.</param>
 	/// <param name="allowPrimitive">Indicates whether allow primitive signatures.</param>
+	/// <exception cref="ArgumentException">
+	/// Throws an exception if <paramref name="signature"/> is invalid.
+	/// </exception>
 	public static void ThrowIfInvalidSignature(CString? signature, Boolean allowPrimitive)
 	{
 		if (CString.IsNullOrEmpty(signature))
@@ -95,5 +114,4 @@ internal static class ValidationUtilities
 			throw new ArgumentException("Invalid signature.");
 		}
 	}
-	public static void ThrowIfFinalInterface<TDataType>(Boolean value) { }
 }

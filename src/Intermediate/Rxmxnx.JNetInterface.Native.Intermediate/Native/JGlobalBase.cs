@@ -41,6 +41,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// Performs application-defined tasks associated with freeing, releasing, or resetting
 	/// unmanaged resources.
 	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	public void Unload(IEnvironment env) => this.Dispose(true, env);
 
 	/// <inheritdoc cref="IDisposable.Dispose()"/>

@@ -15,16 +15,16 @@ public interface IClassProvider
 	JClassObject StringClassObject => this.GetClass<JStringObject>();
 
 	/// <summary>
-	/// Determines whether <paramref name="jLocal"/> can be safely cast to
+	/// Determines whether <paramref name="jObject"/> can be safely cast to
 	/// <typeparamref name="TDataType"/> instance.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="jLocal"/> can be safely cast to
+	/// <see langword="true"/> if <paramref name="jObject"/> can be safely cast to
 	/// <typeparamref name="TDataType"/> instance; otherwise, <see langword="false"/>.
 	/// </returns>
-	Boolean IsAssignableTo<TDataType>(JLocalObject jLocal) where TDataType : JLocalObject, IDataType<TDataType>;
+	Boolean IsAssignableTo<TDataType>(JReferenceObject jObject) where TDataType : JLocalObject, IDataType<TDataType>;
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.
 	/// </summary>
