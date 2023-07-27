@@ -6,6 +6,11 @@
 public interface INative
 {
 	/// <summary>
+	/// Indicates the type of native value.
+	/// </summary>
+	static abstract JNativeType Type { get; }
+
+	/// <summary>
 	/// Current instance text value.
 	/// </summary>
 	internal String TextValue
@@ -23,11 +28,6 @@ public interface INative
 			};
 		}
 	}
-
-	/// <summary>
-	/// Indicates the type of native value.
-	/// </summary>
-	static abstract JNativeType Type { get; }
 
 	/// <summary>
 	/// Current value as <see cref="String"/>.

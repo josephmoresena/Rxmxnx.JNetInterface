@@ -8,15 +8,8 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapp
 	IEquatable<JPrimitiveObject<TPrimitive>>
 	where TPrimitive : unmanaged, IPrimitive, IDataType<TPrimitive>, IEquatable<TPrimitive>
 {
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Primitive value.</param>
-	public JPrimitiveObject(TPrimitive value) : base(JValue.Create(value)) { }
 	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
 	public static JPrimitiveMetadata PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
-	/// <inheritdoc cref="IEquatable{TPrimitive}"/>
-	public Boolean Equals(JPrimitiveObject<TPrimitive>? other) => other is not null && this.Value.Equals(other.Value);
 	/// <inheritdoc/>
 	public static CString ClassName => TPrimitive.ClassName;
 	/// <inheritdoc/>
@@ -25,6 +18,13 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapp
 	public static CString ArraySignature => TPrimitive.ArraySignature;
 	/// <inheritdoc/>
 	public static CString ClassSignature => TPrimitive.ClassSignature;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="value">Primitive value.</param>
+	public JPrimitiveObject(TPrimitive value) : base(JValue.Create(value)) { }
+	/// <inheritdoc cref="IEquatable{TPrimitive}"/>
+	public Boolean Equals(JPrimitiveObject<TPrimitive>? other) => other is not null && this.Value.Equals(other.Value);
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
 	public override CString ObjectClassName => TPrimitive.ClassName;
 	/// <inheritdoc cref="JObject.ObjectSignature"/>

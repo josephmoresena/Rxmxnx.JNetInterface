@@ -30,16 +30,16 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	/// <inheritdoc/>
 	internal override Type Return => typeof(TField);
 
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="name">Field name.</param>
 	public JFieldDefinition(CString name) : base(name, TField.Signature) { }
+
+	/// <inheritdoc/>
+	public override String ToString() => base.ToString();
+	/// <inheritdoc/>
+	public override Int32 GetHashCode() => base.GetHashCode();
 
 	/// <summary>
 	/// Retrieves the value of a field on <paramref name="jLocal"/> which matches with current definition.

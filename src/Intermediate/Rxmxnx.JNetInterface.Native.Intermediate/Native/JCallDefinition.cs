@@ -27,13 +27,13 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// </summary>
 	private readonly Int32 _callSize;
 	/// <summary>
-	/// Indicates whether the current call must use <see cref="JValue"/> arguments.
-	/// </summary>
-	private readonly Boolean _useJValue;
-	/// <summary>
 	/// Call argument's size.
 	/// </summary>
 	private readonly Int32[] _sizes;
+	/// <summary>
+	/// Indicates whether the current call must use <see cref="JValue"/> arguments.
+	/// </summary>
+	private readonly Boolean _useJValue;
 
 	/// <summary>
 	/// Total size in bytes of call parameters.
@@ -94,7 +94,7 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// </summary>
 	/// <returns>A new array to be used as argument for current call.</returns>
 	protected IObject?[] CreateArgumentsArray() => new IObject?[this._sizes.Length];
-	
+
 	/// <summary>
 	/// Creates the method descriptor using <paramref name="returnSignature"/> and <paramref name="metadata"/>.
 	/// </summary>

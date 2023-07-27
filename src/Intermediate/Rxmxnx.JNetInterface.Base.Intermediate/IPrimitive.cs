@@ -51,6 +51,7 @@ internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IPri
 	where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
+	static JTypeModifier IDataType.Modifier => JTypeModifier.Final;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
 	{
@@ -60,8 +61,6 @@ internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IPri
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<JValue> span, Int32 index) => span[index] = JValue.Create(this.Value);
-
-	static JTypeModifier IDataType.Modifier => JTypeModifier.Final;
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TValue"/> to <typeparamref name="TPrimitive"/>.

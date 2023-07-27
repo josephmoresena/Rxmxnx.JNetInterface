@@ -14,8 +14,8 @@ public abstract record JFunctionDefinition : JCallDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="returnType">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	internal JFunctionDefinition(CString functionName, CString returnType, params JArgumentMetadata[] metadata) 
-		: base(functionName, returnType, metadata) { }
+	internal JFunctionDefinition(CString functionName, CString returnType, params JArgumentMetadata[] metadata) : base(
+		functionName, returnType, metadata) { }
 }
 
 /// <summary>
@@ -63,7 +63,8 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	public TResult? Invoke(JLocalObject jLocal, JClassObject jClass) => this.Invoke(jLocal, jClass, this.CreateArgumentsArray());
+	public TResult? Invoke(JLocalObject jLocal, JClassObject jClass)
+		=> this.Invoke(jLocal, jClass, this.CreateArgumentsArray());
 	/// <summary>
 	/// Invokes a static function on <paramref name="jClass"/> which matches with current definition.
 	/// </summary>

@@ -125,7 +125,9 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// The equivalent <typeparamref name="TValue"/> value to current instance.
 	/// </returns>
 	/// <exception cref="InvalidCastException"/>
-	private TValue AsValue<TValue>() where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue> 
-		=> this is IWrapper<TValue> vw ? vw.Value :
+	private TValue AsValue<TValue>()
+		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
+		=> this is IWrapper<TValue> vw ?
+			vw.Value :
 			ValidationUtilities.ThrowIfInvalidCast<TValue>(this as IConvertible);
 }

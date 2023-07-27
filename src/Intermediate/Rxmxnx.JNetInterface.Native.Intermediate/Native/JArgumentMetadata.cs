@@ -24,7 +24,7 @@ public sealed record JArgumentMetadata
 		this.Signature = signature;
 		this.Size = size;
 	}
-	
+
 	/// <summary>
 	/// Creates a <see cref="JArgumentMetadata"/> from <paramref name="signature"/> value.
 	/// </summary>

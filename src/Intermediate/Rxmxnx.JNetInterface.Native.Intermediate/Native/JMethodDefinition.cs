@@ -5,6 +5,9 @@
 /// </summary>
 public record JMethodDefinition : JCallDefinition
 {
+	/// <inheritdoc/>
+	internal override Type? Return => default;
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -19,8 +22,6 @@ public record JMethodDefinition : JCallDefinition
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	protected JMethodDefinition(CString methodName, params JArgumentMetadata[] metadata) :
 		base(methodName, metadata) { }
-	/// <inheritdoc/>
-	internal override Type? Return => default;
 
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition passing the
