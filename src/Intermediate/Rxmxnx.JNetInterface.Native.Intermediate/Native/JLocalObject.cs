@@ -10,6 +10,47 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 	/// </summary>
 	public IEnvironment Environment => this._env;
 
+	/// <inheritdoc cref="JObject.ObjectClassName"/>
+	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
+	/// <inheritdoc cref="JObject.ObjectSignature"/>
+	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
+	/// <summary>
+	/// Retrieves the class object from current instance.
+	/// </summary>
+	public JClassObject Class
+	{
+		get
+		{
+			if (this._class is null)
+				this.LoadClassObject();
+			return this._class!;
+		}
+	}
+	/// <summary>
+	/// Retrieves the global object from current instance.
+	/// </summary>
+	public JGlobal Global
+	{
+		get
+		{
+			if (this._global is null || this._global.IsValid(this._env))
+				this._global = this._env.ReferenceProvider.Create<JGlobal>(this);
+			return this._global;
+		}
+	}
+	/// <summary>
+	/// Retrieves the global object from current instance.
+	/// </summary>
+	public JWeak Weak
+	{
+		get
+		{
+			if (this._weak is null || this._weak.IsValid(this._env))
+				this._weak = this._env.ReferenceProvider.Create<JWeak>(this);
+			return this._weak;
+		}
+	}
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -39,7 +80,7 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 	/// </summary>
 	public void LoadClassObject()
 	{
-		if (this._isRealClass) 
+		if (this._class is not null && this._isRealClass) 
 			return;
 		this._class = this._env.ClassProvider.GetObjectClass(this);
 		this._isRealClass = true;
@@ -64,7 +105,6 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 		if (this._isDisposed)
 			return;
 		if (this._lifetime.Unload(this))
-			//TODO: Call Unload local object.
-			this._isDisposed = this is not IClassType;
+			this._isDisposed = this._env.ReferenceProvider.Unload(this);
 	}
 }

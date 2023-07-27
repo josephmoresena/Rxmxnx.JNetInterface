@@ -13,11 +13,6 @@ public partial class JLocalObject
 	/// <inheritdoc/>
 	internal override JValue Value => this.GetGlobalObject()?.Value ?? base.Value;
 
-	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
-	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
-
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
@@ -52,4 +47,17 @@ public partial class JLocalObject
 	}
 	/// <inheritdoc/>
 	internal override TValue To<TValue>() => this.GetGlobalObject()?.To<TValue>() ?? base.To<TValue>();
+
+	/// <summary>
+	/// Retrieves the loaded global object for current instance.
+	/// </summary>
+	/// <returns>The loaded <see cref="JGlobalBase"/> object for current instance.</returns>
+	internal JGlobalBase? GetGlobalObject()
+	{
+		if (this._global is not null && this._global.IsValid(this._env))
+			return this._global;
+		if (this._weak is not null && this._weak.IsValid(this._env))
+			return this._weak;
+		return default;
+	}
 }

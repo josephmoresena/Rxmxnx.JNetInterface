@@ -77,4 +77,13 @@ public interface IClassProvider
 	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
 	JClassObject LoadClass<TDataType>(Stream rawClassBytes, JLocalObject? jClassLoader = default);
+
+	/// <summary>
+	/// Retrieves the class info.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="name">Output. Class name.</param>
+	/// <param name="signature">Output. Class signature.</param>
+	/// <param name="hash">Output. Class hash.</param>
+	void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash);
 }

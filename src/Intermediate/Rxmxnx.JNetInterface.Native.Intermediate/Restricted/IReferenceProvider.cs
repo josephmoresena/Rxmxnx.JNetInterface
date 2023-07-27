@@ -22,7 +22,7 @@ public interface IReferenceProvider
 	/// <returns>
 	/// A new <typeparamref name="TGlobal"/> instance loaded for <paramref name="jLocal"/>.
 	/// </returns>
-	TGlobal? Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase;
+	TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase;
 	/// <summary>
 	/// Unloads the local reference of <paramref name="jLocal"/>.
 	/// </summary>

@@ -17,26 +17,14 @@ public interface IClass
 	/// JNI signature for the instances of this class.
 	/// </summary>
 	CString ClassSignature { get; }
+	/// <summary>
+	/// Indicates whether current class is final.
+	/// </summary>
+	Boolean? IsFinal { get; }
 
 	/// <summary>
 	/// Internal class hash.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
-	internal String Hash => new CStringSequence(this.Name, this.ClassSignature).ToString();
-
-	/// <summary>
-	/// Indicates whether the current instance is valid within <paramref name="env"/> context.
-	/// </summary>
-	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	/// <returns>
-	/// <see langword="true"/> if the current instance is valid within <paramref name="env"/> context;
-	/// otherwise, <see langword="false"/>.
-	/// </returns>
-	Boolean IsValid(IEnvironment env);
-	/// <summary>
-	/// Retrieves the <see cref="IEnvironment"/> instance for current thread.
-	/// </summary>
-	/// <returns>The <see cref="IEnvironment"/> instance for current thread.</returns>
-	[ExcludeFromCodeCoverage]
-	internal IEnvironment? GetEnvironment() => this is JLocalObject jObj ? jObj.Environment : default;
+	internal String Hash { get; }
 }

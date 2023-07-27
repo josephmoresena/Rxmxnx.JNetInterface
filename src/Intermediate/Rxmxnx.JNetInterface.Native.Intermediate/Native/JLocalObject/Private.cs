@@ -14,15 +14,11 @@ public partial class JLocalObject
 	/// <summary>
 	/// Current <see cref="JGlobal"/> instance.
 	/// </summary>
-	private readonly JGlobal? _global;
-	/// <summary>
-	/// Indicates whether the this instance is disposed.
-	/// </summary>
-	private Boolean _isDisposed;
+	private JGlobal? _global;
 	/// <summary>
 	/// Current <see cref="JWeak"/> instance.
 	/// </summary>
-	private readonly JWeak? _weak;
+	private JWeak? _weak;
 	/// <summary>
 	/// Instance class object.
 	/// </summary>
@@ -31,17 +27,8 @@ public partial class JLocalObject
 	/// Indicates whether the current class is the real object class.
 	/// </summary>
 	private Boolean _isRealClass;
-
 	/// <summary>
-	/// Retrieves the loaded global object for current instance.
+	/// Indicates whether the this instance is disposed.
 	/// </summary>
-	/// <returns>The loaded <see cref="JGlobalBase"/> object for current instance.</returns>
-	private JGlobalBase? GetGlobalObject()
-	{
-		if (this._global is not null && this._global.IsValid(this._env))
-			return this._global;
-		if (this._weak is not null && this._weak.IsValid(this._env))
-			return this._weak;
-		return default;
-	}
+	private Boolean _isDisposed;
 }
