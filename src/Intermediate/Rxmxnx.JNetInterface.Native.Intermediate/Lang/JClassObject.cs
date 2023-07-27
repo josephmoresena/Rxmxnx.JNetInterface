@@ -15,6 +15,22 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	/// <inheritdoc cref="IClass.Reference"/>
 	internal JClassLocalRef Reference => this.As<JClassLocalRef>();
 
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jClassRef">Local class reference.</param>
+	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
+	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
+	internal JClassObject(IEnvironment env, JClassLocalRef jClassRef, Boolean isDummy, Boolean isNativeParameter) :
+		base(env, jClassRef.Value, isDummy, isNativeParameter, env.ClassProvider.ClassObject) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	internal JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+
 	/// <inheritdoc/>
 	public CString Name
 	{
@@ -48,23 +64,6 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	/// <inheritdoc/>
 	public Boolean? IsFinal => this._isFinal;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jClassRef">Local class reference.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
-	internal JClassObject(IEnvironment env, JClassLocalRef jClassRef, Boolean isDummy, Boolean isNativeParameter) :
-		base(env, jClassRef.Value, isDummy, isNativeParameter, env.ClassProvider.ClassObject) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	internal JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
-		=> this.Initialize(jGlobal as IClass);
-
 	JClassLocalRef IClass.Reference => this.Reference;
 
 	/// <summary>
@@ -80,7 +79,27 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	}
 
 	/// <inheritdoc/>
-	public static JClassObject? Create(JObject? jObject) 
-		=> jObject is JLocalObject jLocal && jLocal.Environment.ClassProvider.IsAssignableTo<JClassObject>(jLocal) ? 
-			new(jLocal) : default;
+	protected override JObjectMetadata CreateMetadata()
+		=> new JClassMetadata(base.CreateMetadata())
+		{
+			Name = this.Name, ClassSignature = this.ClassSignature, IsFinal = this.IsFinal,
+		};
+	/// <inheritdoc/>
+	protected override void ProcessMetadata(JObjectMetadata metadata)
+	{
+		if (metadata is not JClassMetadata classMetadata)
+			return;
+
+		base.ProcessMetadata(metadata);
+		this._className = classMetadata.Name;
+		this._signature = classMetadata.ClassSignature;
+		this._hash = classMetadata.Hash;
+		this._isFinal = classMetadata.IsFinal;
+	}
+
+	/// <inheritdoc/>
+	public static JClassObject? Create(JObject? jObject)
+		=> jObject is JLocalObject jLocal && jLocal.Environment.ClassProvider.IsAssignableTo<JClassObject>(jLocal) ?
+			new(jLocal) :
+			default;
 }

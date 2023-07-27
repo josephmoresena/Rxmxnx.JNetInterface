@@ -49,15 +49,15 @@ public partial class JLocalObject
 	internal override TValue To<TValue>() => this.GetGlobalObject()?.To<TValue>() ?? base.To<TValue>();
 
 	/// <summary>
-	/// Retrieves the loaded global object for current instance.
+	/// Retrieves the loaded global object for given object.
 	/// </summary>
-	/// <returns>The loaded <see cref="JGlobalBase"/> object for current instance.</returns>
-	internal JGlobalBase? GetGlobalObject()
-	{
-		if (this._global is not null && this._global.IsValid(this._env))
-			return this._global;
-		if (this._weak is not null && this._weak.IsValid(this._env))
-			return this._weak;
-		return default;
-	}
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>The loaded <see cref="JGlobalBase"/> object for <paramref name="jLocal"/>.</returns>
+	internal static JGlobalBase? GetGlobalObject(JLocalObject jLocal) => jLocal.GetGlobalObject();
+	/// <summary>
+	/// Retrieves the metadata for given object.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>The object metadata for <paramref name="jLocal"/>.</returns>
+	internal static JObjectMetadata CreateMetadata(JLocalObject jLocal) => jLocal.CreateMetadata();
 }

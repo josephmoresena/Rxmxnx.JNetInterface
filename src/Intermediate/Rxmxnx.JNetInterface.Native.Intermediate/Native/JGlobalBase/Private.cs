@@ -3,18 +3,14 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JGlobalBase
 {
 	/// <summary>
-	/// Object class name.
+	/// Object metadata.
 	/// </summary>
-	private readonly CString _objectClassName;
+	private readonly JObjectMetadata _objectMetadata;
 	/// <summary>
 	/// This collection stores the weak references to the <see cref="JLocalObject"/> associated with
 	/// this instance.
 	/// </summary>
 	private readonly ConcurrentDictionary<Int64, WeakReference<JLocalObject>> _objects = new();
-	/// <summary>
-	/// Object signature.
-	/// </summary>
-	private readonly CString _objectSignature;
 	/// <summary>
 	/// <see cref="IVirtualMachine"/> instance.
 	/// </summary>

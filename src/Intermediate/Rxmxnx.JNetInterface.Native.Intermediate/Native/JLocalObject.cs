@@ -46,11 +46,6 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 		}
 	}
 
-	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
-	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -67,23 +62,30 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 		this._global = jLocal._global;
 		this._weak = jLocal._weak;
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	protected JLocalObject(IEnvironment env, JGlobalBase jGlobal) : base(jGlobal)
+	{
+		this._env = env;
+		this._lifetime = new(false, this);
+		this._global = jGlobal as JGlobal;
+		this._weak = jGlobal as JWeak;
+		JLocalObject.ProcessMetadata(this, jGlobal.ObjectMetadata);
+	}
+
+	/// <inheritdoc cref="JObject.ObjectClassName"/>
+	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
+	/// <inheritdoc cref="JObject.ObjectSignature"/>
+	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
 
 	/// <inheritdoc/>
 	public void Dispose()
 	{
 		this.Dispose(true);
 		GC.SuppressFinalize(this);
-	}
-
-	/// <summary>
-	/// Loads the class object in the current instance.
-	/// </summary>
-	public void LoadClassObject()
-	{
-		if (this._class is not null && this._isRealClass)
-			return;
-		this._class = this._env.ClassProvider.GetObjectClass(this);
-		this._isRealClass = true;
 	}
 
 	/// <inheritdoc/>
@@ -99,6 +101,25 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 			return;
 		if (this._lifetime.Unload(this))
 			this._isDisposed = this._env.ReferenceProvider.Unload(this);
+	}
+
+	/// <summary>
+	/// Creates the object metadata for current instance.
+	/// </summary>
+	/// <returns>The object metadata for current instance.</returns>
+	protected virtual JObjectMetadata CreateMetadata()
+	{
+		this.LoadClassObject();
+		return new(this._class!);
+	}
+	/// <summary>
+	/// Process the object metadata.
+	/// </summary>
+	/// <param name="metadata">The object metadata for current instance.</param>
+	protected virtual void ProcessMetadata(JObjectMetadata metadata)
+	{
+		this._class = this._env.ClassProvider.GetClass(metadata);
+		this._isRealClass = true;
 	}
 
 	static JLocalObject? IDataType<JLocalObject>.Create(JObject? jObject)

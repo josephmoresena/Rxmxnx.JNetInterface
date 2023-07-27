@@ -101,4 +101,11 @@ public interface IClassProvider
 	/// <param name="signature">Output. Class signature.</param>
 	/// <param name="hash">Output. Class hash.</param>
 	void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash);
+
+	/// <summary>
+	/// Retrieves the java class named from <paramref name="metadata"/>.
+	/// </summary>
+	/// <param name="metadata">Object metadata.</param>
+	/// <returns>The class instance with given class name.</returns>
+	internal JClassObject GetClass(JObjectMetadata metadata) => this.GetClass(metadata.ObjectClassName);
 }

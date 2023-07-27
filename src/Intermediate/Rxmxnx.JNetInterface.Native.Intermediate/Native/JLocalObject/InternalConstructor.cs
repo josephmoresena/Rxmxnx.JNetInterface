@@ -19,18 +19,4 @@ public partial class JLocalObject
 		this._class = jClass;
 		this._isRealClass = this._class is not null && this._class.IsFinal.GetValueOrDefault();
 	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	internal JLocalObject(IEnvironment env, JGlobalBase jGlobal) : base(jGlobal)
-	{
-		this._env = env;
-		this._lifetime = new(false, this);
-		this._class = jGlobal.GetObjectClass(env);
-		this._isRealClass = true;
-		this._global = jGlobal as JGlobal;
-		this._weak = jGlobal as JWeak;
-	}
 }

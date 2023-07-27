@@ -1,11 +1,6 @@
-﻿using Rxmxnx.JNetInterface.Native.Dummies;
-
-namespace Rxmxnx.JNetInterface.ApplicationTest;
+﻿namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public static class Program
 {
-	public static void Main(String[] args)
-	{
-		Console.WriteLine("Hello, World!");
-	}
+	public static void Main(String[] args) { Console.WriteLine("Hello, World!"); }
 }

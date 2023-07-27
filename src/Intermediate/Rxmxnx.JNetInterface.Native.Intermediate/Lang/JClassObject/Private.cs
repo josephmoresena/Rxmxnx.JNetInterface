@@ -24,7 +24,15 @@ public partial class JClassObject
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JClassObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.ClassObject)
-		=> this.Initialize(jLocal as IClass);
+	{
+		if (jLocal is not IClass jClass)
+			return;
+
+		this._className = jClass.Name;
+		this._signature = jClass.ClassSignature;
+		this._hash = jClass.Hash;
+		this._isFinal = jClass.IsFinal;
+	}
 
 	/// <summary>
 	/// Loads class info.
@@ -33,20 +41,5 @@ public partial class JClassObject
 	{
 		if (this._className is null || this._signature is null)
 			this.Environment.ClassProvider.GetClassInfo(this, out this._className, out this._signature, out this._hash);
-	}
-
-	/// <summary>
-	/// Initialize class properties from a <see cref="IClass"/> instance.
-	/// </summary>
-	/// <param name="jClass">A <see cref="IClass"/> instance.</param>
-	private void Initialize(IClass? jClass)
-	{
-		if (jClass is null)
-			return;
-
-		this._className = jClass.Name;
-		this._signature = jClass.ClassSignature;
-		this._hash = jClass.Hash;
-		this._isFinal = jClass.IsFinal;
 	}
 }
