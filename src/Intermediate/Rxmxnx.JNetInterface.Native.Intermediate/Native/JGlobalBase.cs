@@ -52,14 +52,16 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	{
 		if (this._isDisposed)
 			return;
-		
+
 		if (disposing)
 		{
 			ImmutableArray<Int64> keys = this._objects.Keys.ToImmutableArray();
 			foreach (Int64 key in keys)
-				if(this._objects.TryRemove(key, out WeakReference<JLocalObject>? wObj) && 
-				   wObj.TryGetTarget(out JLocalObject? jLocal))
+			{
+				if (this._objects.TryRemove(key, out WeakReference<JLocalObject>? wObj) &&
+				    wObj.TryGetTarget(out JLocalObject? jLocal))
 					this.Unload(jLocal);
+			}
 		}
 
 		env.ReferenceProvider.Unload(this);

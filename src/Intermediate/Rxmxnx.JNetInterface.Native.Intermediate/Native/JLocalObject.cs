@@ -9,11 +9,6 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 	/// <see cref="IEnvironment"/> instance.
 	/// </summary>
 	public IEnvironment Environment => this._env;
-
-	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
-	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
 	/// <summary>
 	/// Retrieves the class object from current instance.
 	/// </summary>
@@ -51,6 +46,11 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 		}
 	}
 
+	/// <inheritdoc cref="JObject.ObjectClassName"/>
+	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
+	/// <inheritdoc cref="JObject.ObjectSignature"/>
+	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -80,17 +80,10 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 	/// </summary>
 	public void LoadClassObject()
 	{
-		if (this._class is not null && this._isRealClass) 
+		if (this._class is not null && this._isRealClass)
 			return;
 		this._class = this._env.ClassProvider.GetObjectClass(this);
 		this._isRealClass = true;
-	}
-	
-	static JLocalObject? IDataType<JLocalObject>.Create(JObject? jObject)
-	{
-		if (jObject is JLocalObject { Value.IsDefault: false, } jLocal)
-			return new(jLocal);
-		return null;
 	}
 
 	/// <inheritdoc/>
@@ -106,5 +99,12 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 			return;
 		if (this._lifetime.Unload(this))
 			this._isDisposed = this._env.ReferenceProvider.Unload(this);
+	}
+
+	static JLocalObject? IDataType<JLocalObject>.Create(JObject? jObject)
+	{
+		if (jObject is JLocalObject { Value.IsDefault: false, } jLocal)
+			return new(jLocal);
+		return null;
 	}
 }

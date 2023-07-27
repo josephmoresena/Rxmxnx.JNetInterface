@@ -16,7 +16,8 @@ public interface IDataType
 	/// <summary>
 	/// Indicates whether the current type is final.
 	/// </summary>
-	static virtual JTypeModifier Modifier => ValidationUtilities.ThrowInvalidInterface<JTypeModifier>(nameof(IDataType));
+	static virtual JTypeModifier Modifier
+		=> ValidationUtilities.ThrowInvalidInterface<JTypeModifier>(nameof(IDataType));
 
 	/// <summary>
 	/// Primitive metadata.

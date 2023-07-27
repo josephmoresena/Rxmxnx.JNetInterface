@@ -5,9 +5,6 @@
 /// </summary>
 public record JMethodDefinition : JCallDefinition
 {
-	/// <inheritdoc/>
-	internal override Type? Return => default;
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -20,8 +17,10 @@ public record JMethodDefinition : JCallDefinition
 	/// </summary>
 	/// <param name="methodName">Function name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	protected JMethodDefinition(CString methodName, params JArgumentMetadata[] metadata) 
-		: base(methodName, metadata) { }
+	protected JMethodDefinition(CString methodName, params JArgumentMetadata[] metadata) :
+		base(methodName, metadata) { }
+	/// <inheritdoc/>
+	internal override Type? Return => default;
 
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition passing the
@@ -35,7 +34,8 @@ public record JMethodDefinition : JCallDefinition
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	public void Invoke(JLocalObject jLocal, JClassObject jClass) => this.Invoke(jLocal, jClass, this.CreateArgumentsArray());
+	public void Invoke(JLocalObject jLocal, JClassObject jClass)
+		=> this.Invoke(jLocal, jClass, this.CreateArgumentsArray());
 
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition.

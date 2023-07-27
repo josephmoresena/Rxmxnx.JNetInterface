@@ -60,7 +60,7 @@ internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IPri
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<JValue> span, Int32 index) => span[index] = JValue.Create(this.Value);
-	
+
 	static JTypeModifier IDataType.Modifier => JTypeModifier.Final;
 
 	/// <summary>

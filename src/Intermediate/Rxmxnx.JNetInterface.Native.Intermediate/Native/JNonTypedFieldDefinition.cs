@@ -5,16 +5,15 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 public sealed record JNonTypedFieldDefinition : JFieldDefinition
 {
-	/// <inheritdoc/>
-	internal override Type Return => typeof(JReferenceObject);
-	
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="name">Field name.</param>
 	/// <param name="signature">Signature field.</param>
-	public JNonTypedFieldDefinition(CString name, CString signature) 
-		: base(name, JAccessibleObjectDefinition.ValidateSignature(signature)) { }
+	public JNonTypedFieldDefinition(CString name, CString signature) : base(
+		name, JAccessibleObjectDefinition.ValidateSignature(signature)) { }
+	/// <inheritdoc/>
+	internal override Type Return => typeof(JReferenceObject);
 
 	/// <summary>
 	/// Retrieves the value of a field on <paramref name="jLocal"/> which matches with current definition.

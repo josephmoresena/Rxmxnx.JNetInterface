@@ -5,13 +5,25 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClassObject>
 {
-	/// <inheritdoc />
-	public static JTypeModifier Modifier => JTypeModifier.Final;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jClassRef">Local class reference.</param>
+	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
+	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
+	internal JClassObject(IEnvironment env, JClassLocalRef jClassRef, Boolean isDummy, Boolean isNativeParameter) :
+		base(env, jClassRef.Value, isDummy, isNativeParameter, env.ClassProvider.GetClass<JClassObject>()) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	internal JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
+		=> this.Initialize(jGlobal as IClass);
 
-	/// <inheritdoc/>
-	public static CString ClassName => UnicodeClassNames.JClassObjectClassName;
-	/// <inheritdoc/>
-	public static CString Signature => UnicodeObjectSignatures.JClassObjectSignature;
+	/// <inheritdoc cref="IClass.Reference"/>
+	internal JClassLocalRef Reference => this.As<JClassLocalRef>();
 
 	/// <inheritdoc/>
 	public CString Name
@@ -24,7 +36,7 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 		}
 	}
 	/// <inheritdoc/>
-	public CString ClassSignature 
+	public CString ClassSignature
 	{
 		get
 		{
@@ -34,7 +46,7 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 		}
 	}
 	/// <inheritdoc/>
-	public String Hash 
+	public String Hash
 	{
 		get
 		{
@@ -46,27 +58,17 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	/// <inheritdoc/>
 	public Boolean? IsFinal => this._isFinal;
 
-	/// <inheritdoc cref="IClass.Reference"/>
-	internal JClassLocalRef Reference => this.As<JClassLocalRef>();
-
 	JClassLocalRef IClass.Reference => this.Reference;
+	/// <inheritdoc/>
+	public static JTypeModifier Modifier => JTypeModifier.Final;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jClassRef">Local class reference.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
-	internal JClassObject(IEnvironment env, JClassLocalRef jClassRef, Boolean isDummy, Boolean isNativeParameter) 
-		: base(env, jClassRef.Value, isDummy, isNativeParameter, env.ClassProvider.GetClass<JClassObject>()) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	internal JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
-		=> this.Initialize(jGlobal as IClass);
+	/// <inheritdoc/>
+	public static CString ClassName => UnicodeClassNames.JClassObjectClassName;
+	/// <inheritdoc/>
+	public static CString Signature => UnicodeObjectSignatures.JClassObjectSignature;
+
+	/// <inheritdoc/>
+	public static JClassObject? Create(JObject? jObject) => jObject is JLocalObject jLocal ? new(jLocal) : default;
 
 	/// <summary>
 	/// Initialize the current instance with given <see cref="IDataType"/> type.
@@ -79,7 +81,4 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 		this._hash = new CStringSequence(this.Name, this.ClassSignature).ToString();
 		this._isFinal = TDataType.Modifier == JTypeModifier.Final;
 	}
-
-	/// <inheritdoc/>
-	public static JClassObject? Create(JObject? jObject) => jObject is JLocalObject jLocal ? new(jLocal) : default;
 }

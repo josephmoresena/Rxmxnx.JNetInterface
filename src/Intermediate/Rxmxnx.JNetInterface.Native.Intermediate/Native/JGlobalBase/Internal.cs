@@ -7,6 +7,5 @@ public partial class JGlobalBase
 	/// </summary>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <returns>The <see cref="JClassObject"/> from current global object.</returns>
-	internal JClassObject GetObjectClass(IEnvironment env)
-		=> env.ClassProvider.GetClass(this.ObjectClassName);
+	internal JClassObject GetObjectClass(IEnvironment env) => env.ClassProvider.GetClass(this.ObjectClassName);
 }

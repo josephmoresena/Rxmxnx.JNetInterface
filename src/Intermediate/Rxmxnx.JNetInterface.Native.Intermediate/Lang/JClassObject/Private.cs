@@ -9,15 +9,15 @@ public partial class JClassObject
 	/// <summary>
 	/// JNI signature for an object of current instance.
 	/// </summary>
-	private CString? _signature;
-	/// <summary>
-	/// JNI signature for an object of current instance.
-	/// </summary>
 	private String? _hash;
 	/// <summary>
 	/// Indicates whether current class is final.
 	/// </summary>
 	private Boolean? _isFinal;
+	/// <summary>
+	/// JNI signature for an object of current instance.
+	/// </summary>
+	private CString? _signature;
 
 	/// <summary>
 	/// Constructor.
@@ -32,8 +32,7 @@ public partial class JClassObject
 	private void LoadClassInfo()
 	{
 		if (this._className is null || this._signature is null)
-			this.Environment.ClassProvider
-			    .GetClassInfo(this, out this._className, out this._signature, out this._hash);
+			this.Environment.ClassProvider.GetClassInfo(this, out this._className, out this._signature, out this._hash);
 	}
 
 	/// <summary>
@@ -42,9 +41,9 @@ public partial class JClassObject
 	/// <param name="jClass">A <see cref="IClass"/> instance.</param>
 	private void Initialize(IClass? jClass)
 	{
-		if (jClass is null) 
+		if (jClass is null)
 			return;
-		
+
 		this._className = jClass.Name;
 		this._signature = jClass.ClassSignature;
 		this._hash = jClass.Hash;
