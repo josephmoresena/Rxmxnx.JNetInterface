@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.String</c> instance.
 /// </summary>
-public sealed partial class JStringObject : JLocalObject, IDataType<JStringObject>
+public sealed partial class JStringObject : JLocalObject, IDataType<JStringObject>, IWrapper<String>
 {
 	/// <inheritdoc/>
 	public static CString ClassName => UnicodeClassNames.JStringObjectClassName;
@@ -11,6 +11,9 @@ public sealed partial class JStringObject : JLocalObject, IDataType<JStringObjec
 	public static CString Signature => UnicodeObjectSignatures.JStringObjectSignature;
 	/// <inheritdoc/>
 	public static JTypeModifier Modifier => JTypeModifier.Final;
+
+	/// <inheritdoc cref="JLocalObject.InternalReference"/>
+	internal JStringLocalRef Reference => this.As<JStringLocalRef>();
 
 	/// <summary>
 	/// Constructor.
@@ -20,15 +23,16 @@ public sealed partial class JStringObject : JLocalObject, IDataType<JStringObjec
 	public JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
 		=> this._value ??= env.StringProvider.ToString(jGlobal);
 
+	/// <summary>
+	/// Internal string value.
+	/// </summary>
+	public new String Value => this._value ??= this.Environment.StringProvider.ToString(this);
+
 	/// <inheritdoc/>
-	public override String ToString()
-	{
-		this._value ??= this.Environment.StringProvider.ToString(this);
-		return this._value;
-	}
+	public override String ToString() => this.Value;
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()
-		=> new JStringMetadata(base.CreateMetadata()) { Value = this.ToString(), };
+		=> new JStringMetadata(base.CreateMetadata()) { Value = this.Value, };
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(JObjectMetadata metadata)
 	{
