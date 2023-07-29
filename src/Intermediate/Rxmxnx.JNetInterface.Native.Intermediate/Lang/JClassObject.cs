@@ -72,6 +72,30 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 		this._hash = classMetadata.Hash;
 		this._isFinal = classMetadata.IsFinal;
 	}
+	/// <summary>
+	/// Retrieves the java class named <paramref name="className"/>.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="className">Class name.</param>
+	/// <returns>The class instance with given class name.</returns>
+	public static JClassObject GetClass(IEnvironment env, CString className)
+	{
+		if (!className.IsNullTerminated)
+			className = (CString)className.Clone();
+		return env.ClassProvider.GetClass(className);
+	}
+	/// <summary>
+	/// Retrieves the java class for given type.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <returns>The class instance for given type.</returns>
+	public static JClassObject GetClass<TDataType>(IEnvironment env) where TDataType : IDataType<TDataType>
+	{
+		ValidationUtilities.ThrowIfNotNullTerminatedCString(TDataType.ClassName);
+		ValidationUtilities.ThrowIfNotNullTerminatedCString(TDataType.Signature);
+		return env.ClassProvider.GetClass<TDataType>();
+	}
 
 	/// <inheritdoc/>
 	public static JClassObject? Create(JObject? jObject)

@@ -114,4 +114,38 @@ internal static class ValidationUtilities
 			throw new ArgumentException("Invalid signature.");
 		}
 	}
+	/// <summary>
+	/// Throws an exception if <paramref name="value"/> named <paramref name="nameofValue"/> is not null-terminated
+	/// UTF-8 string.
+	/// </summary>
+	/// <param name="value">A UTF-8 string.</param>
+	/// <param name="nameofValue">The name of <paramref name="value"/>.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="value"/> named <paramref name="nameofValue"/> is not null-terminated
+	/// UTF-8 string.
+	/// </exception>
+	public static void ThrowIfNotNullTerminatedCString(CString value,
+		[CallerArgumentExpression(nameof(value))] String nameofValue = "")
+	{
+		if (!value.IsNullTerminated)
+			throw new InvalidOperationException($"{nameofValue} must be null-terminated UTF-8 string.");
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="value"/> named <paramref name="paramName"/> is not null-terminated
+	/// UTF-8 string.
+	/// </summary>
+	/// <param name="value">A UTF-8 string.</param>
+	/// <param name="paramName">The name of <paramref name="value"/>.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="value"/> named <paramref name="paramName"/> is not null-terminated
+	/// UTF-8 string.
+	/// </exception>
+	public static CString ValidateNullTermination(CString? value,
+		[CallerArgumentExpression(nameof(value))] String paramName = "")
+	{
+		ArgumentNullException.ThrowIfNull(value, paramName);
+		if (!value.IsNullTerminated)
+			throw new InvalidOperationException($"{paramName} must be null-terminated UTF-8 string.");
+		return value;
+	}
 }

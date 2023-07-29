@@ -32,6 +32,12 @@ public interface IClassProvider
 	/// <returns>The class instance with given class name.</returns>
 	JClassObject GetClass(CString className);
 	/// <summary>
+	/// Retrieves the java class for given type.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	/// <returns>The class instance for given type.</returns>
+	JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
+	/// <summary>
 	/// Retrieves the java class of <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
@@ -43,12 +49,6 @@ public interface IClassProvider
 	/// <param name="jClass">Java class instance.</param>
 	/// <returns>The class instance of the super class of given class.</returns>
 	JClassObject? GetSuperClass(IClass jClass);
-	/// <summary>
-	/// Retrieves the java class for given type.
-	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <returns>The class instance for given type.</returns>
-	JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
 	/// <summary>
 	/// Determines whether an object of <paramref name="jClass"/> can be safely cast to
 	/// <paramref name="otherClass"/>.
@@ -101,11 +101,4 @@ public interface IClassProvider
 	/// <param name="signature">Output. Class signature.</param>
 	/// <param name="hash">Output. Class hash.</param>
 	void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash);
-
-	/// <summary>
-	/// Retrieves the java class named from <paramref name="metadata"/>.
-	/// </summary>
-	/// <param name="metadata">Object metadata.</param>
-	/// <returns>The class instance with given class name.</returns>
-	internal JClassObject GetClass(JObjectMetadata metadata) => this.GetClass(metadata.ObjectClassName);
 }

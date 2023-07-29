@@ -60,7 +60,21 @@ public interface IEnvironment
 	/// whose origin is a JNI argument.
 	/// </summary>
 	/// <typeparam name="TObject">A <see cref="JLocalObject"/> type.</typeparam>
-	/// <param name="objRef"></param>
+	/// <param name="objRef">A local object reference.</param>
 	/// <returns>A <typeparamref name="TObject"/> instance passed as JNI argument.</returns>
 	TObject CreateParameterObject<TObject>(JObjectLocalRef objRef) where TObject : JLocalObject, IDataType<TObject>;
+	/// <summary>
+	/// Creates a <see cref="JClassObject"/> instance for <paramref name="classRef"/> reference
+	/// whose origin is a JNI argument.
+	/// </summary>
+	/// <param name="classRef">A local class reference.</param>
+	/// <returns>A <see cref="JClassObject"/> instance passed as JNI argument.</returns>
+	JClassObject CreateParameterObject(JClassLocalRef classRef);
+	/// <summary>
+	/// Creates a <see cref="JStringObject"/> instance for <paramref name="stringRef"/> reference
+	/// whose origin is a JNI argument.
+	/// </summary>
+	/// <param name="stringRef">A local string reference.</param>
+	/// <returns>A <see cref="JStringObject"/> instance passed as JNI argument.</returns>
+	JStringObject CreateParameterObject(JStringLocalRef stringRef);
 }

@@ -7,7 +7,7 @@ public partial class JClassObject
 	/// </summary>
 	private CString? _className;
 	/// <summary>
-	/// JNI signature for an object of current instance.
+	/// Internal class hash.
 	/// </summary>
 	private String? _hash;
 	/// <summary>

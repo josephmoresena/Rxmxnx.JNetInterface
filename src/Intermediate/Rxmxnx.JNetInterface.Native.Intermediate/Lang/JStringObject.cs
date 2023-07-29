@@ -46,6 +46,27 @@ public sealed partial class JStringObject : JLocalObject, IDataType<JStringObjec
 			return;
 		this._value = stringMetadata.Value;
 	}
+	/// <summary>
+	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="data"/>.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="data">UTF-16 string data.</param>
+	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
+	public static JStringObject? Create(IEnvironment env, String? data)
+		=> data is not null ? env.StringProvider.Create(data) : default;
+	/// <inheritdoc cref="JStringObject.Create(IEnvironment, String)"/>
+	public static JStringObject Create(IEnvironment env, ReadOnlySpan<Char> data) => env.StringProvider.Create(data);
+	/// <summary>
+	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="utf8Data"/>.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="utf8Data">UTF-8 string data.</param>
+	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
+	public static JStringObject? Create(IEnvironment env, CString? utf8Data)
+		=> utf8Data is not null ? env.StringProvider.Create(utf8Data) : default;
+	/// <inheritdoc cref="JStringObject.Create(IEnvironment, CString)"/>
+	public static JStringObject Create(IEnvironment env, ReadOnlySpan<Byte> utf8Data)
+		=> env.StringProvider.Create(utf8Data);
 
 	/// <inheritdoc/>
 	public static JStringObject? Create(JObject? jObject)

@@ -35,4 +35,11 @@ public record JObjectMetadata
 		this._objectClassName = metadata._objectClassName;
 		this._objectSignature = metadata._objectSignature;
 	}
+
+	/// <summary>
+	/// Retrieves the java class for current object.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <returns>The class instance for current object.</returns>
+	internal JClassObject GetClass(IEnvironment env) => env.ClassProvider.GetClass(this._objectClassName);
 }

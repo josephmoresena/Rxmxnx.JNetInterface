@@ -119,7 +119,7 @@ public partial class JLocalObject : JReferenceObject, IReferenceType<JLocalObjec
 	/// <param name="metadata">The object metadata for current instance.</param>
 	protected virtual void ProcessMetadata(JObjectMetadata metadata)
 	{
-		this._class = this._env.ClassProvider.GetClass(metadata);
+		this._class = metadata.GetClass(this.Environment);
 		this._isRealClass = true;
 	}
 
