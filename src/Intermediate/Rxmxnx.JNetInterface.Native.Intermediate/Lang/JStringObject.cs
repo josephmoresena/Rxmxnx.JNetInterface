@@ -5,6 +5,11 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed partial class JStringObject : JLocalObject, IDataType<JStringObject>, IWrapper<String>
 {
+	/// <summary>
+	/// CLR type of object metadata.
+	/// </summary>
+	internal static readonly Type MetadataType = typeof(JStringMetadata);
+
 	/// <inheritdoc/>
 	public static CString ClassName => UnicodeClassNames.JStringObjectClassName;
 	/// <inheritdoc/>

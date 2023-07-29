@@ -10,6 +10,10 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <see cref="IVirtualMachine"/> instance.
 	/// </summary>
 	public IVirtualMachine VirtualMachine => this._vm;
+	/// <summary>
+	/// CLR type of object metadata.
+	/// </summary>
+	public Type MetadataType => this._objectMetadata.GetType();
 
 	/// <inheritdoc/>
 	public void Dispose()
