@@ -8,20 +8,30 @@ public interface IDataType
 	/// <summary>
 	/// Java datatype class name.
 	/// </summary>
+	[ReadOnly(true)]
 	static virtual CString ClassName => ValidationUtilities.ThrowInvalidInterface<CString>(nameof(IDataType));
 	/// <summary>
 	/// Java datatype signature name.
 	/// </summary>
+	[ReadOnly(true)]
 	static virtual CString Signature => ValidationUtilities.ThrowInvalidInterface<CString>(nameof(IDataType));
 	/// <summary>
 	/// Indicates whether the current type is final.
 	/// </summary>
+	[ReadOnly(true)]
 	static virtual JTypeModifier Modifier
 		=> ValidationUtilities.ThrowInvalidInterface<JTypeModifier>(nameof(IDataType));
-
+	/// <summary>
+	/// Subclass type.
+	/// </summary>
+	[ReadOnly(true)]
+	static virtual Type? BaseType
+		=> ValidationUtilities.ThrowInvalidInterface<Type?>(nameof(IDataType));
+	
 	/// <summary>
 	/// Primitive metadata.
 	/// </summary>
+	[ReadOnly(true)]
 	internal static virtual JPrimitiveMetadata? PrimitiveMetadata => default;
 }
 
@@ -34,7 +44,8 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 	static CString IDataType.ClassName => JObject.JObjectClassName;
 	static CString IDataType.Signature => JObject.JObjectSignature;
 	static JTypeModifier IDataType.Modifier => JTypeModifier.Extensible;
-
+	static Type? IDataType.BaseType => default;
+	
 	/// <summary>
 	/// Creates a <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.
 	/// </summary>

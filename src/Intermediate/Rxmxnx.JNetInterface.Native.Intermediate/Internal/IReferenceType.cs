@@ -10,4 +10,6 @@ internal interface IReferenceType : IObject, IDataType, IDisposable { }
 /// </summary>
 /// <typeparam name="TObject">Type of java reference type.</typeparam>
 internal interface IReferenceType<out TObject> : IReferenceType, IDataType<TObject>
-	where TObject : JReferenceObject, IReferenceType<TObject> { }
+	where TObject : JReferenceObject, IReferenceType<TObject>
+{
+}

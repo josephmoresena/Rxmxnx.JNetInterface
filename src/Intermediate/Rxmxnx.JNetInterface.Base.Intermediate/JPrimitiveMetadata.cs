@@ -3,32 +3,43 @@
 /// <summary>
 /// This record stores the metadata for a value <see cref="IPrimitive"/> type.
 /// </summary>
-public abstract partial record JPrimitiveMetadata
+public abstract partial record JPrimitiveMetadata : JDataTypeMetadata
 {
-	/// <summary>
-	/// JNI signature for an array of current primitive type.
-	/// </summary>
-	public abstract CString ArraySignature { get; }
-	/// <summary>
-	/// JNI signature for the primitive type wrapper.
-	/// </summary>
-	public abstract CString ClassSignature { get; }
 	/// <summary>
 	/// Size of current primitive type in bytes.
 	/// </summary>
-	public abstract Int32 SizeOf { get; }
+	private readonly Int32 _valueSize;
+	
+	/// <summary>
+	/// Size of current primitive type in bytes.
+	/// </summary>
+	public override Int32 SizeOf => this._valueSize;
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="type">CLR type of <see cref="IDataType"/>.</param>
+	/// <param name="valueSize">Size of current primitive type in bytes.</param>
+	internal JPrimitiveMetadata(Type type, Int32 valueSize) : base(type)
+	{
+		this._valueSize = valueSize;
+	}
 }
 
 /// <summary>
 /// This record stores the metadata for a value <see cref="IPrimitive"/> type.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of <see cref="IPrimitive"/>.</typeparam>
-internal sealed record JPrimitiveMetadata<TPrimitive> : JPrimitiveMetadata where TPrimitive : unmanaged, IPrimitive
+internal sealed record JPrimitiveMetadata<TPrimitive>() : 
+	JPrimitiveMetadata(typeof(TPrimitive), NativeUtilities.SizeOf<TPrimitive>()) 
+	where TPrimitive : unmanaged, IPrimitive
 {
 	/// <inheritdoc/>
-	public override CString ArraySignature => TPrimitive.ArraySignature;
+	public override CString ClassName => TPrimitive.ClassName;
+	/// <inheritdoc/>
+	public override CString Signature => TPrimitive.Signature;
 	/// <inheritdoc/>
 	public override CString ClassSignature => TPrimitive.ClassSignature;
 	/// <inheritdoc/>
-	public override Int32 SizeOf => NativeUtilities.SizeOf<TPrimitive>();
+	public override CString ArraySignature => TPrimitive.ArraySignature;
 }

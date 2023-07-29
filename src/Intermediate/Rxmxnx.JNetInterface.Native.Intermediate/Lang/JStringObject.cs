@@ -16,6 +16,8 @@ public sealed partial class JStringObject : JLocalObject, IDataType<JStringObjec
 	public static CString Signature => UnicodeObjectSignatures.JStringObjectSignature;
 	/// <inheritdoc/>
 	public static JTypeModifier Modifier => JTypeModifier.Final;
+	/// <inheritdoc/>
+	public static Type BaseType => typeof(JLocalObject);
 
 	/// <inheritdoc cref="JLocalObject.InternalReference"/>
 	internal JStringLocalRef Reference => this.As<JStringLocalRef>();

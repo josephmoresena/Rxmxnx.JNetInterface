@@ -11,6 +11,8 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	public static CString Signature => UnicodeObjectSignatures.JClassObjectSignature;
 	/// <inheritdoc/>
 	public static JTypeModifier Modifier => JTypeModifier.Final;
+	/// <inheritdoc/>
+	public static Type BaseType => typeof(JLocalObject);
 
 	/// <summary>
 	/// Constructor.
