@@ -7,18 +7,21 @@ namespace Rxmxnx.JNetInterface.Primitives;
 public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparable<JFloat>,
 	IPrimitiveFloatingPoint<JFloat, Single>, IPrimitiveSigned<JFloat, Single>
 {
+	/// <summary>
+	/// Primitive metadata.
+	/// </summary>
+	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
+	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JFloatSignature)
+	                                                      .WithWrapperClassName(UnicodeClassNames.JFloatObjectClassName)
+	                                                      .WithArraySignature(
+		                                                      UnicodePrimitiveArraySignatures.JFloatArraySignature)
+	                                                      .WithWrapperClassSignature(
+		                                                      UnicodeObjectSignatures.JFloatObjectSignature).Build();
+
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloat;
-	/// <inheritdoc/>
-	public static CString ClassName => UnicodeClassNames.JFloatObjectClassName;
-	/// <inheritdoc/>
-	public static CString Signature => UnicodePrimitiveSignatures.JFloatSignature;
-	/// <inheritdoc/>
-	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JFloatArraySignature;
-	/// <inheritdoc/>
-	public static CString ClassSignature => UnicodeObjectSignatures.JFloatObjectSignature;
-	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
-	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JFloat>();
+
+	static JDataTypeMetadata IDataType.Metadata => JFloat.metadata;
 
 	/// <summary>
 	/// Internal single-precision floating-point number value.
@@ -30,9 +33,9 @@ public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparabl
 	/// </summary>
 	public Single Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => JFloat.ClassName;
+	public CString ObjectClassName => IPrimitive.GetMetadata<JFloat>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => JFloat.Signature;
+	public CString ObjectSignature => IPrimitive.GetMetadata<JFloat>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 

@@ -3,43 +3,41 @@
 /// <summary>
 /// This record stores the metadata for a value <see cref="IPrimitive"/> type.
 /// </summary>
-public abstract partial record JPrimitiveMetadata : JDataTypeMetadata
+public sealed partial record JPrimitiveMetadata : JDataTypeMetadata
 {
+	/// <inheritdoc cref="JPrimitiveMetadata.ClassSignature"/>
+	private readonly CString _classSignature;
+	/// <inheritdoc cref="JPrimitiveMetadata.SizeOfOf"/>
+	private readonly Int32 _sizeOf;
+
+	/// <summary>
+	/// JNI signature for current type wrapper class.
+	/// </summary>
+	public CString ClassSignature => this._classSignature;
 	/// <summary>
 	/// Size of current primitive type in bytes.
 	/// </summary>
-	private readonly Int32 _valueSize;
-	
-	/// <summary>
-	/// Size of current primitive type in bytes.
-	/// </summary>
-	public override Int32 SizeOf => this._valueSize;
+	public Int32 SizeOfOf => this._sizeOf;
+
+	/// <inheritdoc/>
+	public override JTypeKind Kind => JTypeKind.Primitive;
+	/// <inheritdoc/>
+	public override JTypeModifier Modifier => JTypeModifier.Final;
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="type">CLR type of <see cref="IDataType"/>.</param>
-	/// <param name="valueSize">Size of current primitive type in bytes.</param>
-	internal JPrimitiveMetadata(Type type, Int32 valueSize) : base(type)
+	/// <param name="type">CLR type current primitive type.</param>
+	/// <param name="sizeOf">Size of current primitive type in bytes.</param>
+	/// <param name="signature">JNI signature for current primitive type.</param>
+	/// <param name="className">Wrapper class name of current primitive type.</param>
+	/// <param name="arraySignature">JNI signature for an array of current type.</param>
+	/// <param name="classSignature">Wrapper class JNI signature of current primitive type.</param>
+	internal JPrimitiveMetadata(Type type, Int32 sizeOf, CString signature, CString className, CString? arraySignature,
+		CString? classSignature) : base(type, className, signature, arraySignature)
 	{
-		this._valueSize = valueSize;
+		this._sizeOf = sizeOf;
+		this._classSignature = JDataTypeMetadata.SafeNullTerminated(
+			classSignature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className));
 	}
-}
-
-/// <summary>
-/// This record stores the metadata for a value <see cref="IPrimitive"/> type.
-/// </summary>
-/// <typeparam name="TPrimitive">Type of <see cref="IPrimitive"/>.</typeparam>
-internal sealed record JPrimitiveMetadata<TPrimitive>() : 
-	JPrimitiveMetadata(typeof(TPrimitive), NativeUtilities.SizeOf<TPrimitive>()) 
-	where TPrimitive : unmanaged, IPrimitive
-{
-	/// <inheritdoc/>
-	public override CString ClassName => TPrimitive.ClassName;
-	/// <inheritdoc/>
-	public override CString Signature => TPrimitive.Signature;
-	/// <inheritdoc/>
-	public override CString ClassSignature => TPrimitive.ClassSignature;
-	/// <inheritdoc/>
-	public override CString ArraySignature => TPrimitive.ArraySignature;
 }

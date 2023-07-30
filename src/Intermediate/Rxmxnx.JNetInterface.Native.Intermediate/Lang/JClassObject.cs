@@ -5,15 +5,6 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClassObject>
 {
-	/// <inheritdoc/>
-	public static CString ClassName => UnicodeClassNames.JClassObjectClassName;
-	/// <inheritdoc/>
-	public static CString Signature => UnicodeObjectSignatures.JClassObjectSignature;
-	/// <inheritdoc/>
-	public static JTypeModifier Modifier => JTypeModifier.Final;
-	/// <inheritdoc/>
-	public static Type BaseType => typeof(JLocalObject);
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -64,10 +55,10 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 			Name = this.Name, ClassSignature = this.ClassSignature, IsFinal = this.IsFinal,
 		};
 	/// <inheritdoc/>
-	protected override void ProcessMetadata(JObjectMetadata metadata)
+	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
 	{
-		base.ProcessMetadata(metadata);
-		if (metadata is not JClassMetadata classMetadata)
+		base.ProcessMetadata(instanceMetadata);
+		if (instanceMetadata is not JClassMetadata classMetadata)
 			return;
 		this._className = classMetadata.Name;
 		this._signature = classMetadata.ClassSignature;
@@ -93,11 +84,7 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <returns>The class instance for given type.</returns>
 	public static JClassObject GetClass<TDataType>(IEnvironment env) where TDataType : IDataType<TDataType>
-	{
-		ValidationUtilities.ThrowIfNotNullTerminatedCString(TDataType.ClassName);
-		ValidationUtilities.ThrowIfNotNullTerminatedCString(TDataType.Signature);
-		return env.ClassProvider.GetClass<TDataType>();
-	}
+		=> env.ClassProvider.GetClass<TDataType>();
 
 	/// <inheritdoc/>
 	public static JClassObject? Create(JObject? jObject)

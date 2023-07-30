@@ -41,5 +41,6 @@ public sealed record JArgumentMetadata
 	/// <typeparam name="TArg"><see cref="IDataType"/> type.</typeparam>
 	/// <returns>A <see cref="JArgumentMetadata"/> from <typeparamref name="TArg"/> type</returns>
 	public static JArgumentMetadata Create<TArg>() where TArg : IDataType
-		=> new(TArg.Signature, TArg.PrimitiveMetadata?.SizeOf ?? NativeUtilities.PointerSize);
+		=> new(IDataType.GetMetadata<TArg>().Signature,
+		       (IDataType.GetMetadata<TArg>() as JPrimitiveMetadata)?.SizeOfOf ?? NativeUtilities.PointerSize);
 }

@@ -7,18 +7,22 @@ namespace Rxmxnx.JNetInterface.Primitives;
 public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableComparable<JDouble>,
 	IPrimitiveFloatingPoint<JDouble, Double>, IPrimitiveSigned<JDouble, Double>
 {
+	/// <summary>
+	/// Primitive metadata.
+	/// </summary>
+	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
+	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JDoubleSignature)
+	                                                      .WithWrapperClassName(
+		                                                      UnicodeClassNames.JDoubleObjectClassName)
+	                                                      .WithArraySignature(
+		                                                      UnicodePrimitiveArraySignatures.JDoubleArraySignature)
+	                                                      .WithWrapperClassSignature(
+		                                                      UnicodeObjectSignatures.JDoubleObjectSignature).Build();
+
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;
-	/// <inheritdoc/>
-	public static CString ClassName => UnicodeClassNames.JDoubleObjectClassName;
-	/// <inheritdoc/>
-	public static CString Signature => UnicodePrimitiveSignatures.JDoubleSignature;
-	/// <inheritdoc/>
-	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JDoubleArraySignature;
-	/// <inheritdoc/>
-	public static CString ClassSignature => UnicodeObjectSignatures.JDoubleObjectSignature;
-	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
-	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JDouble>();
+
+	static JDataTypeMetadata IDataType.Metadata => JDouble.metadata;
 
 	/// <summary>
 	/// Internal double-precision floating-point number value.
@@ -30,9 +34,9 @@ public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableCompara
 	/// </summary>
 	public Double Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => JDouble.ClassName;
+	public CString ObjectClassName => IPrimitive.GetMetadata<JDouble>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => JDouble.Signature;
+	public CString ObjectSignature => IPrimitive.GetMetadata<JDouble>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 

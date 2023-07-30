@@ -3,6 +3,15 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JLocalObject
 {
 	/// <summary>
+	/// Reference metadata.
+	/// </summary>
+	private static readonly JReferenceMetadata metadata = JMetadataBuilder
+	                                                      .Create<JLocalObject>(JObject.JObjectClassName)
+	                                                      .WithSignature(JObject.JObjectSignature).Build();
+
+	static JDataTypeMetadata IDataType.Metadata => JLocalObject.metadata;
+
+	/// <summary>
 	/// Internal <see cref="IEnvironment"/> instance.
 	/// </summary>
 	private readonly IEnvironment _env;
@@ -59,9 +68,9 @@ public partial class JLocalObject
 	/// Process the object metadata.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="metadata">The object metadata for <paramref name="jLocal"/>.</param>
-	private static void ProcessMetadata(JLocalObject jLocal, JObjectMetadata metadata)
-		=> jLocal.ProcessMetadata(metadata);
+	/// <param name="instanceMetadata">The object metadata for <paramref name="jLocal"/>.</param>
+	private static void ProcessMetadata(JLocalObject jLocal, JObjectMetadata instanceMetadata)
+		=> jLocal.ProcessMetadata(instanceMetadata);
 
 	/// <summary>
 	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.

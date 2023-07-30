@@ -6,18 +6,21 @@ namespace Rxmxnx.JNetInterface.Primitives;
 public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<JByte>, IPrimitiveInteger<JByte, SByte>,
 	IPrimitiveSigned<JByte, SByte>
 {
+	/// <summary>
+	/// Primitive metadata.
+	/// </summary>
+	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
+	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JByteSignature)
+	                                                      .WithWrapperClassName(UnicodeClassNames.JByteObjectClassName)
+	                                                      .WithArraySignature(
+		                                                      UnicodePrimitiveArraySignatures.JByteArraySignature)
+	                                                      .WithWrapperClassSignature(
+		                                                      UnicodeObjectSignatures.JByteObjectSignature).Build();
+
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JByte;
-	/// <inheritdoc/>
-	public static CString ClassName => UnicodeClassNames.JByteObjectClassName;
-	/// <inheritdoc/>
-	public static CString Signature => UnicodePrimitiveSignatures.JByteSignature;
-	/// <inheritdoc/>
-	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JByteArraySignature;
-	/// <inheritdoc/>
-	public static CString ClassSignature => UnicodeObjectSignatures.JByteObjectSignature;
-	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
-	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JByte>();
+
+	static JDataTypeMetadata IDataType.Metadata => JByte.metadata;
 
 	/// <summary>
 	/// Internal 8-bit signed integer value.
@@ -29,9 +32,9 @@ public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<
 	/// </summary>
 	public SByte Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => JByte.ClassName;
+	public CString ObjectClassName => IPrimitive.GetMetadata<JByte>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => JByte.Signature;
+	public CString ObjectSignature => IPrimitive.GetMetadata<JByte>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 

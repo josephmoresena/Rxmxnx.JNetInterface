@@ -7,18 +7,21 @@ namespace Rxmxnx.JNetInterface.Primitives;
 public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparable<JShort>,
 	IPrimitiveInteger<JShort, Int16>, IPrimitiveSigned<JShort, Int16>
 {
+	/// <summary>
+	/// Primitive metadata.
+	/// </summary>
+	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
+	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JShortSignature)
+	                                                      .WithWrapperClassName(UnicodeClassNames.JShortObjectClassName)
+	                                                      .WithArraySignature(
+		                                                      UnicodePrimitiveArraySignatures.JShortArraySignature)
+	                                                      .WithWrapperClassSignature(
+		                                                      UnicodeObjectSignatures.JShortObjectSignature).Build();
+
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JShort;
-	/// <inheritdoc/>
-	public static CString ClassName => UnicodeClassNames.JShortObjectClassName;
-	/// <inheritdoc/>
-	public static CString Signature => UnicodePrimitiveSignatures.JShortSignature;
-	/// <inheritdoc/>
-	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JShortArraySignature;
-	/// <inheritdoc/>
-	public static CString ClassSignature => UnicodeObjectSignatures.JShortObjectSignature;
-	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
-	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JShort>();
+
+	static JDataTypeMetadata IDataType.Metadata => JShort.metadata;
 
 	/// <summary>
 	/// Internal 16-bit signed integer value.
@@ -30,9 +33,9 @@ public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparabl
 	/// </summary>
 	public Int16 Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => JLong.ClassName;
+	public CString ObjectClassName => IPrimitive.GetMetadata<JShort>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => JLong.Signature;
+	public CString ObjectSignature => IPrimitive.GetMetadata<JShort>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 

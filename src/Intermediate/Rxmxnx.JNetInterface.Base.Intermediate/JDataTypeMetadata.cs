@@ -5,35 +5,81 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 public abstract record JDataTypeMetadata
 {
+	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
+	private readonly CString _arraySignature;
+	/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
+	private readonly CString _className;
+	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
+	private readonly CString _signature;
+	/// <inheritdoc cref="JDataTypeMetadata.Type"/>
+	private readonly Type _type;
+
 	/// <summary>
-	/// Class name of current type.
+	/// CLR type of <see cref="IDataType"/>.
 	/// </summary>
-	[ReadOnly(true)]
-	public abstract CString ClassName { get; }
+	public Type Type => this._type;
 	/// <summary>
-	/// JNI signature for current type type.
+	/// Class name.
 	/// </summary>
-	[ReadOnly(true)]
-	public abstract CString Signature { get; }
+	public CString ClassName => this._className;
 	/// <summary>
-	/// JNI signature for an array of current type.
+	/// JNI signature.
 	/// </summary>
-	[ReadOnly(true)]
-	public abstract CString ArraySignature { get; }
+	public CString Signature => this._signature;
 	/// <summary>
-	/// Class JNI signature for current type type.
+	/// Array JNI signature of current type.
 	/// </summary>
-	[ReadOnly(true)]
-	public abstract CString ClassSignature { get; }
+	public CString ArraySignature => this._arraySignature;
 	/// <summary>
-	/// Size of current type in bytes.
+	/// Kind of current type.
 	/// </summary>
-	[ReadOnly(true)]
-	public abstract Int32 SizeOf { get; }
+	public abstract JTypeKind Kind { get; }
+	/// <summary>
+	/// Modifier of current type.
+	/// </summary>
+	public abstract JTypeModifier Modifier { get; }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="type">CLR type of <see cref="IDataType"/>.</param>
-	internal JDataTypeMetadata(Type type) { }
+	/// <param name="type">CLR type of current type.</param>
+	/// <param name="className">Class name of current type.</param>
+	/// <param name="signature">JNI signature for current type.</param>
+	/// <param name="arraySignature">Array JNI signature for current type.</param>
+	internal JDataTypeMetadata(Type type, CString className, CString signature, CString? arraySignature = default)
+	{
+		this._type = type;
+		this._className = JDataTypeMetadata.SafeNullTerminated(className);
+		this._signature = JDataTypeMetadata.SafeNullTerminated(signature);
+		this._arraySignature =
+			JDataTypeMetadata.SafeNullTerminated(arraySignature ?? JDataTypeMetadata.ComputeArraySignature(signature));
+	}
+
+	/// <summary>
+	/// Retrieve a safe null-terminated <see cref="CString"/> from <paramref name="cstr"/>.
+	/// </summary>
+	/// <param name="cstr">A UTF-8 string.</param>
+	/// <returns>A null-terminated UTF-8 string.</returns>
+	protected static CString SafeNullTerminated(CString cstr)
+	{
+		if (cstr.IsNullTerminated)
+			return cstr;
+		return (CString)cstr.Clone();
+	}
+	/// <summary>
+	/// Computes the type signature for given type class name.
+	/// </summary>
+	/// <param name="className"><see cref="IDataType"/> class name.</param>
+	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
+	protected static CString ComputeReferenceTypeSignature(CString className)
+		=> CString.Concat(UnicodeObjectSignatures.ObjectSignaturePrefix, className,
+		                  UnicodeObjectSignatures.ObjectSignatureSuffix);
+
+	/// <summary>
+	/// Computes the array signature for given type signature.
+	/// </summary>
+	/// <param name="signature"><see cref="IDataType"/> signature.</param>
+	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
+	private static CString ComputeArraySignature(CString signature)
+		=> CString.Concat(UnicodeObjectSignatures.ArraySignaturePrefix, signature);
 }

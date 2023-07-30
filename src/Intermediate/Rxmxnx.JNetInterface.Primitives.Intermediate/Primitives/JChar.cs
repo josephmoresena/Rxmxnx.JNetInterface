@@ -6,18 +6,23 @@ namespace Rxmxnx.JNetInterface.Primitives;
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<JChar>, IPrimitiveInteger<JChar, Char>
 {
+	/// <summary>
+	/// Primitive metadata.
+	/// </summary>
+	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
+	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JCharSignature)
+	                                                      .WithWrapperClassName(
+		                                                      UnicodeClassNames.JCharacterObjectClassName)
+	                                                      .WithArraySignature(
+		                                                      UnicodePrimitiveArraySignatures.JCharArraySignature)
+	                                                      .WithWrapperClassSignature(
+		                                                      UnicodeObjectSignatures.JCharacterObjectSignature)
+	                                                      .Build();
+
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JBoolean;
-	/// <inheritdoc/>
-	public static CString ClassName => UnicodeClassNames.JCharacterObjectClassName;
-	/// <inheritdoc/>
-	public static CString Signature => UnicodePrimitiveSignatures.JCharSignature;
-	/// <inheritdoc/>
-	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JCharArraySignature;
-	/// <inheritdoc/>
-	public static CString ClassSignature => UnicodeObjectSignatures.JCharacterObjectSignature;
-	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
-	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JChar>();
+	public static JNativeType Type => JNativeType.JChar;
+
+	static JDataTypeMetadata IDataType.Metadata => JChar.metadata;
 
 	/// <summary>
 	/// Internal UTF-16 code unit character.
@@ -29,9 +34,9 @@ public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<
 	/// </summary>
 	public Char Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => JChar.ClassName;
+	public CString ObjectClassName => IPrimitive.GetMetadata<JChar>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => JChar.Signature;
+	public CString ObjectSignature => IPrimitive.GetMetadata<JChar>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 

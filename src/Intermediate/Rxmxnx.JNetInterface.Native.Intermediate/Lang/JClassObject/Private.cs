@@ -3,6 +3,18 @@ namespace Rxmxnx.JNetInterface.Lang;
 public partial class JClassObject
 {
 	/// <summary>
+	/// Reference metadata.
+	/// </summary>
+	private static readonly JReferenceMetadata metadata = JMetadataBuilder
+	                                                      .Create<JLocalObject>(
+		                                                      UnicodeClassNames.JClassObjectClassName,
+		                                                      JTypeModifier.Final)
+	                                                      .WithSignature(UnicodeObjectSignatures.JClassObjectSignature)
+	                                                      .Build();
+
+	static JDataTypeMetadata IDataType.Metadata => JClassObject.metadata;
+
+	/// <summary>
 	/// Fully qualified class name.
 	/// </summary>
 	private CString? _className;

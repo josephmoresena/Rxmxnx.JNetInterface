@@ -7,18 +7,22 @@ namespace Rxmxnx.JNetInterface.Primitives;
 public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JInt>, IPrimitiveInteger<JInt, Int32>,
 	IPrimitiveSigned<JInt, Int32>
 {
+	/// <summary>
+	/// Primitive metadata.
+	/// </summary>
+	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
+	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JIntSignature)
+	                                                      .WithWrapperClassName(
+		                                                      UnicodeClassNames.JIntegerObjectClassName)
+	                                                      .WithArraySignature(
+		                                                      UnicodePrimitiveArraySignatures.JIntArraySignature)
+	                                                      .WithWrapperClassSignature(
+		                                                      UnicodeObjectSignatures.JIntegerObjectSignature).Build();
+
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JInt;
-	/// <inheritdoc/>
-	public static CString ClassName => UnicodeClassNames.JIntegerObjectClassName;
-	/// <inheritdoc/>
-	public static CString Signature => UnicodePrimitiveSignatures.JIntSignature;
-	/// <inheritdoc/>
-	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JIntArraySignature;
-	/// <inheritdoc/>
-	public static CString ClassSignature => UnicodeObjectSignatures.JIntegerObjectSignature;
-	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
-	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JInt>();
+
+	static JDataTypeMetadata IDataType.Metadata => JInt.metadata;
 
 	/// <summary>
 	/// Internal 32-bit signed integer value.
@@ -30,9 +34,9 @@ public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JI
 	/// </summary>
 	public Int32 Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => JInt.ClassName;
+	public CString ObjectClassName => IPrimitive.GetMetadata<JFloat>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => JInt.Signature;
+	public CString ObjectSignature => IPrimitive.GetMetadata<JFloat>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 

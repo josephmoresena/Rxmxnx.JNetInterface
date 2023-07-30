@@ -6,33 +6,17 @@
 public interface IDataType
 {
 	/// <summary>
-	/// Java datatype class name.
+	/// Current type metadata.
 	/// </summary>
-	[ReadOnly(true)]
-	static virtual CString ClassName => ValidationUtilities.ThrowInvalidInterface<CString>(nameof(IDataType));
+	protected static virtual JDataTypeMetadata Metadata
+		=> ValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));
+
 	/// <summary>
-	/// Java datatype signature name.
+	/// Retrieves the metadata for given type.
 	/// </summary>
-	[ReadOnly(true)]
-	static virtual CString Signature => ValidationUtilities.ThrowInvalidInterface<CString>(nameof(IDataType));
-	/// <summary>
-	/// Indicates whether the current type is final.
-	/// </summary>
-	[ReadOnly(true)]
-	static virtual JTypeModifier Modifier
-		=> ValidationUtilities.ThrowInvalidInterface<JTypeModifier>(nameof(IDataType));
-	/// <summary>
-	/// Subclass type.
-	/// </summary>
-	[ReadOnly(true)]
-	static virtual Type? BaseType
-		=> ValidationUtilities.ThrowInvalidInterface<Type?>(nameof(IDataType));
-	
-	/// <summary>
-	/// Primitive metadata.
-	/// </summary>
-	[ReadOnly(true)]
-	internal static virtual JPrimitiveMetadata? PrimitiveMetadata => default;
+	/// <typeparam name="TDataType">Type of current java datatype.</typeparam>
+	/// <returns>The <see cref="JDataTypeMetadata"/> instance for given type.</returns>
+	public static JDataTypeMetadata GetMetadata<TDataType>() where TDataType : IDataType => TDataType.Metadata;
 }
 
 /// <summary>
@@ -41,11 +25,9 @@ public interface IDataType
 /// <typeparam name="TDataType">Type of current Java datatype.</typeparam>
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
-	static CString IDataType.ClassName => JObject.JObjectClassName;
-	static CString IDataType.Signature => JObject.JObjectSignature;
-	static JTypeModifier IDataType.Modifier => JTypeModifier.Extensible;
-	static Type? IDataType.BaseType => default;
-	
+	static JDataTypeMetadata IDataType.Metadata
+		=> ValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));
+
 	/// <summary>
 	/// Creates a <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.
 	/// </summary>

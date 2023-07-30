@@ -6,16 +6,12 @@
 public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 {
 	/// <summary>
-	/// JNI signature for an array of current primitive type.
+	/// Retrieves the metadata for given primitive type.
 	/// </summary>
-	static abstract CString ArraySignature { get; }
-	/// <summary>
-	/// JNI signature for the primitive type wrapper.
-	/// </summary>
-	static abstract CString ClassSignature { get; }
-	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
-	internal new static virtual JPrimitiveMetadata PrimitiveMetadata
-		=> ValidationUtilities.ThrowInvalidInterface<JPrimitiveMetadata>(nameof(IPrimitive));
+	/// <typeparam name="TPrimitive">Type of current java primitive datatype.</typeparam>
+	/// <returns>The <see cref="JPrimitiveMetadata"/> instance for given type.</returns>
+	public new static JPrimitiveMetadata GetMetadata<TPrimitive>() where TPrimitive : IPrimitive
+		=> (JPrimitiveMetadata)IDataType.GetMetadata<TPrimitive>();
 }
 
 /// <summary>
@@ -24,12 +20,6 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 /// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
 public interface IPrimitive<TPrimitive> : IPrimitive, IDataType<TPrimitive> where TPrimitive : IPrimitive<TPrimitive>
 {
-	/// <inheritdoc cref="IDataType.PrimitiveMetadata"/>
-	new static abstract JPrimitiveMetadata PrimitiveMetadata { get; }
-
-	static JPrimitiveMetadata IDataType.PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
-	static JPrimitiveMetadata IPrimitive.PrimitiveMetadata => TPrimitive.PrimitiveMetadata;
-
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TPrimitive"/> to <see cref="JObject"/>.
 	/// </summary>
@@ -51,13 +41,12 @@ internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IPri
 	where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
-	static JTypeModifier IDataType.Modifier => JTypeModifier.Final;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
 	{
 		ref TValue refValue = ref Unsafe.AsRef(this.Value);
 		refValue.AsBytes().CopyTo(span[offset..]);
-		offset += TPrimitive.PrimitiveMetadata.SizeOf;
+		offset += IPrimitive.GetMetadata<TPrimitive>().SizeOfOf;
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<JValue> span, Int32 index) => span[index] = JValue.Create(this.Value);

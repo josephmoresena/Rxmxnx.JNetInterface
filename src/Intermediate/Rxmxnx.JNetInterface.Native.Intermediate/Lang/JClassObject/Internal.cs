@@ -16,10 +16,10 @@ public partial class JClassObject
 	/// <typeparam name="TDataType">The <see cref="IDataType"/> with class definition.</typeparam>
 	internal void Initialize<TDataType>() where TDataType : JLocalObject, IDataType
 	{
-		this._className = ValidationUtilities.ValidateNullTermination(TDataType.ClassName);
-		this._signature = ValidationUtilities.ValidateNullTermination(TDataType.Signature);
+		this._className = IDataType.GetMetadata<TDataType>().ClassName;
+		this._signature = IDataType.GetMetadata<TDataType>().Signature;
 		this._hash ??= new CStringSequence(this.Name, this.ClassSignature).ToString();
-		this._isFinal = TDataType.Modifier == JTypeModifier.Final;
+		this._isFinal = IDataType.GetMetadata<TDataType>().Modifier == JTypeModifier.Final;
 	}
 
 	/// <summary>
@@ -29,8 +29,8 @@ public partial class JClassObject
 	/// <returns>The hash for current type.</returns>
 	internal static String GetClassHash<TDataType>() where TDataType : IDataType
 	{
-		CString className = ValidationUtilities.ValidateNullTermination(TDataType.ClassName);
-		CString classSignature = ValidationUtilities.ValidateNullTermination(TDataType.Signature);
+		CString className = IDataType.GetMetadata<TDataType>().ClassName;
+		CString classSignature = IDataType.GetMetadata<TDataType>().Signature;
 		return new CStringSequence(className, classSignature).ToString();
 	}
 	/// <summary>

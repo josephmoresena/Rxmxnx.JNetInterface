@@ -16,18 +16,23 @@ public readonly partial struct JBoolean : INative<JBoolean>, ISelfEquatableCompa
 	/// </summary>
 	private const Byte falseValue = 0x00;
 
+	/// <summary>
+	/// Primitive metadata.
+	/// </summary>
+	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
+	                                                      .Create<JBoolean>(
+		                                                      UnicodePrimitiveSignatures.JBooleanSignature)
+	                                                      .WithWrapperClassName(
+		                                                      UnicodeClassNames.JBooleanObjectClassName)
+	                                                      .WithArraySignature(
+		                                                      UnicodePrimitiveArraySignatures.JBooleanArraySignature)
+	                                                      .WithWrapperClassSignature(
+		                                                      UnicodeObjectSignatures.JBooleanObjectSignature).Build();
+
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JBoolean;
-	/// <inheritdoc/>
-	public static CString ClassName => UnicodeClassNames.JBooleanObjectClassName;
-	/// <inheritdoc/>
-	public static CString Signature => UnicodePrimitiveSignatures.JBooleanSignature;
-	/// <inheritdoc/>
-	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JBooleanArraySignature;
-	/// <inheritdoc/>
-	public static CString ClassSignature => UnicodeObjectSignatures.JBooleanObjectSignature;
-	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
-	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JBoolean>();
+
+	static JDataTypeMetadata IDataType.Metadata => JBoolean.metadata;
 
 	/// <summary>
 	/// Internal 8-bit unsigned integer value.
@@ -39,9 +44,9 @@ public readonly partial struct JBoolean : INative<JBoolean>, ISelfEquatableCompa
 	/// </summary>
 	public Boolean Value => this._value.Equals(JBoolean.trueValue);
 	/// <inheritdoc/>
-	public CString ObjectClassName => JBoolean.ClassName;
+	public CString ObjectClassName => IPrimitive.GetMetadata<JBoolean>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => JBoolean.Signature;
+	public CString ObjectSignature => IPrimitive.GetMetadata<JBoolean>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 

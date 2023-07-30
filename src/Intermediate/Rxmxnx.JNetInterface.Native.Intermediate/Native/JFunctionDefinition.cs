@@ -32,7 +32,8 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	/// </summary>
 	/// <param name="functionName">Function name.</param>
 	/// <remarks>This constructor should be never inherited.</remarks>
-	public JFunctionDefinition(CString functionName) : base(functionName, TResult.Signature) { }
+	public JFunctionDefinition(CString functionName) :
+		base(functionName, IDataType.GetMetadata<TResult>().Signature) { }
 
 	/// <summary>
 	/// Constructor.
@@ -40,7 +41,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	/// <param name="functionName">Function name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	protected JFunctionDefinition(CString functionName, params JArgumentMetadata[] metadata) : base(
-		functionName, TResult.Signature, metadata) { }
+		functionName, IDataType.GetMetadata<TResult>().Signature, metadata) { }
 
 	/// <summary>
 	/// Internal Constructor.

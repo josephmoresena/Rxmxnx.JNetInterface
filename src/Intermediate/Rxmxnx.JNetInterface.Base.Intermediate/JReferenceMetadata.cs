@@ -1,72 +1,51 @@
+using System.Collections.Immutable;
+
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
 /// This record stores the metadata for a reference <see cref="IDataType"/> type.
 /// </summary>
-public abstract record JReferenceMetadata : JDataTypeMetadata
+public sealed record JReferenceMetadata : JDataTypeMetadata
 {
-	/// <summary>
-	/// Metadata of base type.
-	/// </summary>
+	/// <inheritdoc cref="JReferenceMetadata.BaseMetadata"/>
 	private readonly JReferenceMetadata? _baseMetadata;
-	
-	/// <summary>
-	/// Last <see cref="IDataType"/> signature.
-	/// </summary>
-	private CString? _lastSignature;
-	/// <summary>
-	/// Delegate to retrieve JNI signature for an array of current type.
-	/// </summary>
-	private CString _arraySignature;
+	/// <inheritdoc cref="JReferenceMetadata.Interfaces"/>
+	private readonly IImmutableSet<JDataTypeMetadata> _interfaces;
+	/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
+	private readonly JTypeModifier _modifier;
 
 	/// <summary>
-	/// Metadata of base type.
+	/// Base type of current type metadata.
 	/// </summary>
 	public JReferenceMetadata? BaseMetadata => this._baseMetadata;
+	/// <summary>
+	/// Set of interfaces metadata of current type implements.
+	/// </summary>
+	public IImmutableSet<JDataTypeMetadata> Interfaces => this._interfaces;
 
 	/// <inheritdoc/>
-	public override CString Signature
-	{
-		get
-		{
-			if (this._lastSignature is not null && this._lastSignature != this.Signature)
-				this._arraySignature =	this.ComputeArraySignature();
-			return this._arraySignature;
-		}
-	}
+	public override JTypeKind Kind => JTypeKind.Class;
 	/// <inheritdoc/>
-	public override CString ArraySignature => this._arraySignature;
-	/// <inheritdoc/>
-	public override Int32 SizeOf => NativeUtilities.PointerSize;
-	
+	public override JTypeModifier Modifier => this._modifier;
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="type">CLR type of <see cref="IDataType"/>.</param>
-	/// <param name="arraySignature">Delegate to retrieve JNI signature for an array of current type.</param>
-	/// <param name="baseMetadata">Size of current primitive type in bytes.</param>
-	internal JReferenceMetadata(Type type, CString arraySignature, JReferenceMetadata? baseMetadata) 
-		: base(type)
+	/// <param name="type">CLR type of current type.</param>
+	/// <param name="className">Class name of current type.</param>
+	/// <param name="modifier">Modifier of current type.</param>
+	/// <param name="interfaces">Set of interfaces metadata of current type implements.</param>
+	/// <param name="baseMetadata">Base type of current type metadata.</param>
+	/// <param name="signature">JNI signature for current type.</param>
+	/// <param name="arraySignature">Array JNI signature for current type.</param>
+	internal JReferenceMetadata(Type type, CString className, JTypeModifier modifier,
+		IImmutableSet<JDataTypeMetadata> interfaces, JReferenceMetadata? baseMetadata, CString? signature,
+		CString? arraySignature) : base(type, className,
+		                                signature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className),
+		                                arraySignature)
 	{
-		this._arraySignature = arraySignature;
+		this._modifier = modifier;
+		this._interfaces = interfaces;
 		this._baseMetadata = baseMetadata;
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="type">CLR type of <see cref="IDataType"/>.</param>
-	/// <param name="baseMetadata">Size of current primitive type in bytes.</param>
-	internal JReferenceMetadata(Type type, JReferenceMetadata? baseMetadata) 
-		: base(type)
-	{
-		this._baseMetadata = baseMetadata;
-		this._arraySignature = this.ComputeArraySignature();
-	}
-
-	private static CString GetSignature(JDataTypeMetadata metadata) => metadata.Signature;
-	private CString ComputeArraySignature()
-	{
-		this._lastSignature = this.Signature;
-		return CString.Concat(UnicodeObjectSignatures.ArraySignaturePrefix, this._lastSignature);
 	}
 }

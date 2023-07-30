@@ -7,18 +7,21 @@ namespace Rxmxnx.JNetInterface.Primitives;
 public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<JLong>, IPrimitiveInteger<JLong, Int64>,
 	IPrimitiveSigned<JLong, Int64>
 {
+	/// <summary>
+	/// Primitive metadata.
+	/// </summary>
+	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
+	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JLongSignature)
+	                                                      .WithWrapperClassName(UnicodeClassNames.JLongObjectClassName)
+	                                                      .WithArraySignature(
+		                                                      UnicodePrimitiveArraySignatures.JLongArraySignature)
+	                                                      .WithWrapperClassSignature(
+		                                                      UnicodeObjectSignatures.JLongObjectSignature).Build();
+
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JLong;
-	/// <inheritdoc/>
-	public static CString ClassName => UnicodeClassNames.JLongObjectClassName;
-	/// <inheritdoc/>
-	public static CString Signature => UnicodePrimitiveSignatures.JLongSignature;
-	/// <inheritdoc/>
-	public static CString ArraySignature => UnicodePrimitiveArraySignatures.JLongArraySignature;
-	/// <inheritdoc/>
-	public static CString ClassSignature => UnicodeObjectSignatures.JLongObjectSignature;
-	/// <inheritdoc cref="IPrimitive.PrimitiveMetadata"/>
-	public static JPrimitiveMetadata PrimitiveMetadata => new JPrimitiveMetadata<JLong>();
+
+	static JDataTypeMetadata IDataType.Metadata => JLong.metadata;
 
 	/// <summary>
 	/// Internal 64-bit signed integer value.
@@ -30,9 +33,9 @@ public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<
 	/// </summary>
 	public Int64 Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => JLong.ClassName;
+	public CString ObjectClassName => IPrimitive.GetMetadata<JLong>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => JLong.Signature;
+	public CString ObjectSignature => IPrimitive.GetMetadata<JLong>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 

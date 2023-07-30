@@ -89,8 +89,9 @@ internal static class ValidationUtilities
 	public static void ThrowIfInvalidCast<TDataType>(JReferenceObject jObject,
 		Func<JReferenceObject, Boolean> evaluator) where TDataType : IDataType
 	{
+		JDataTypeMetadata metadata = IDataType.GetMetadata<TDataType>();
 		if (!evaluator(jObject))
-			throw new InvalidCastException($"The current instance can't be casted to {TDataType.ClassName} type.");
+			throw new InvalidCastException($"The current instance can't be casted to {metadata.ClassName} type.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="signature"/> is invalid.
@@ -104,15 +105,29 @@ internal static class ValidationUtilities
 	{
 		if (CString.IsNullOrEmpty(signature))
 			throw new ArgumentException("Invalid signature.");
+
 		if (signature.Length == 1)
 		{
 			if (!allowPrimitive)
 				throw new ArgumentException("Signature not allowed.");
+			return;
 		}
-		else if (signature[^1] != UnicodeObjectSignatures.ObjectSignatureSuffix[0])
-		{
+
+		Byte prefix = signature[0];
+		Byte suffix = signature[^1];
+
+		if (prefix == UnicodeObjectSignatures.ArraySignaturePrefix[0])
+			switch (signature.Length)
+			{
+				case < 2:
+					throw new ArgumentException("Invalid signature.");
+				case > 2 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefix[0] ||
+					suffix != UnicodeObjectSignatures.ObjectSignatureSuffix[0]:
+					throw new ArgumentException("Invalid signature.");
+			}
+		else if (prefix != UnicodeObjectSignatures.ObjectSignaturePrefix[0] ||
+		         suffix != UnicodeObjectSignatures.ObjectSignatureSuffix[0])
 			throw new ArgumentException("Invalid signature.");
-		}
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> named <paramref name="nameofValue"/> is not null-terminated
@@ -146,6 +161,22 @@ internal static class ValidationUtilities
 		ArgumentNullException.ThrowIfNull(value, paramName);
 		if (!value.IsNullTerminated)
 			throw new InvalidOperationException($"{paramName} must be null-terminated UTF-8 string.");
+		return value;
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
+	/// </summary>
+	/// <param name="value">A UTF-8 string.</param>
+	/// <param name="paramName">The name of <paramref name="value"/>.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
+	/// </exception>
+	/// <returns>A non-empty <see cref="CString"/> instance.</returns>
+	public static CString ValidateNotEmpty(CString? value,
+		[CallerArgumentExpression(nameof(value))] String paramName = "")
+	{
+		if (CString.IsNullOrEmpty(value))
+			throw new InvalidOperationException($"{paramName} must be non-empty string");
 		return value;
 	}
 }
