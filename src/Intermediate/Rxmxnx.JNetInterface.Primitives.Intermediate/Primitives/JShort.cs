@@ -11,7 +11,7 @@ public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparabl
 	/// Primitive metadata.
 	/// </summary>
 	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JShortSignature)
+	                                                      .Create<JShort>(UnicodePrimitiveSignatures.JShortSignature)
 	                                                      .WithWrapperClassName(UnicodeClassNames.JShortObjectClassName)
 	                                                      .WithArraySignature(
 		                                                      UnicodePrimitiveArraySignatures.JShortArraySignature)

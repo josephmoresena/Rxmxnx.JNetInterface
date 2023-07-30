@@ -27,6 +27,8 @@ public sealed record JReferenceMetadata : JDataTypeMetadata
 	public override JTypeKind Kind => JTypeKind.Class;
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier => this._modifier;
+	/// <inheritdoc/>
+	public override Int32 SizeOf => NativeUtilities.PointerSize;
 
 	/// <summary>
 	/// Constructor.

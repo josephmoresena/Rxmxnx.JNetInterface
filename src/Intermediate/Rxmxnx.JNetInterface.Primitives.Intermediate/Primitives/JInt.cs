@@ -11,7 +11,7 @@ public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JI
 	/// Primitive metadata.
 	/// </summary>
 	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JIntSignature)
+	                                                      .Create<JInt>(UnicodePrimitiveSignatures.JIntSignature)
 	                                                      .WithWrapperClassName(
 		                                                      UnicodeClassNames.JIntegerObjectClassName)
 	                                                      .WithArraySignature(

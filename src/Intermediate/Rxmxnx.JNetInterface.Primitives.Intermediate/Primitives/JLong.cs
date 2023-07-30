@@ -11,7 +11,7 @@ public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<
 	/// Primitive metadata.
 	/// </summary>
 	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JLongSignature)
+	                                                      .Create<JLong>(UnicodePrimitiveSignatures.JLongSignature)
 	                                                      .WithWrapperClassName(UnicodeClassNames.JLongObjectClassName)
 	                                                      .WithArraySignature(
 		                                                      UnicodePrimitiveArraySignatures.JLongArraySignature)

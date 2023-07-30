@@ -38,6 +38,10 @@ public abstract record JDataTypeMetadata
 	/// Modifier of current type.
 	/// </summary>
 	public abstract JTypeModifier Modifier { get; }
+	/// <summary>
+	/// Size of current type in bytes.
+	/// </summary>
+	public abstract Int32 SizeOf { get; }
 
 	/// <summary>
 	/// Constructor.

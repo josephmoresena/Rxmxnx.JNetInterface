@@ -10,7 +10,7 @@ public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<
 	/// Primitive metadata.
 	/// </summary>
 	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JCharSignature)
+	                                                      .Create<JChar>(UnicodePrimitiveSignatures.JCharSignature)
 	                                                      .WithWrapperClassName(
 		                                                      UnicodeClassNames.JCharacterObjectClassName)
 	                                                      .WithArraySignature(

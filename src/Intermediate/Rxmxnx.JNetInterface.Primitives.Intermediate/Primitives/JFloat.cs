@@ -11,7 +11,7 @@ public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparabl
 	/// Primitive metadata.
 	/// </summary>
 	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JFloatSignature)
+	                                                      .Create<JFloat>(UnicodePrimitiveSignatures.JFloatSignature)
 	                                                      .WithWrapperClassName(UnicodeClassNames.JFloatObjectClassName)
 	                                                      .WithArraySignature(
 		                                                      UnicodePrimitiveArraySignatures.JFloatArraySignature)

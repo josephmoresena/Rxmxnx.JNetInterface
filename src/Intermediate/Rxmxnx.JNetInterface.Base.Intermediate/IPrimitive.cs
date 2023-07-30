@@ -10,6 +10,7 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of current java primitive datatype.</typeparam>
 	/// <returns>The <see cref="JPrimitiveMetadata"/> instance for given type.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JPrimitiveMetadata GetMetadata<TPrimitive>() where TPrimitive : IPrimitive
 		=> (JPrimitiveMetadata)IDataType.GetMetadata<TPrimitive>();
 }
@@ -46,7 +47,7 @@ internal interface IPrimitive<TPrimitive, TValue> : IPrimitive<TPrimitive>, IPri
 	{
 		ref TValue refValue = ref Unsafe.AsRef(this.Value);
 		refValue.AsBytes().CopyTo(span[offset..]);
-		offset += IPrimitive.GetMetadata<TPrimitive>().SizeOfOf;
+		offset += IDataType.GetMetadata<TPrimitive>().SizeOf;
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<JValue> span, Int32 index) => span[index] = JValue.Create(this.Value);

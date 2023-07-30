@@ -7,7 +7,7 @@ public sealed partial record JPrimitiveMetadata : JDataTypeMetadata
 {
 	/// <inheritdoc cref="JPrimitiveMetadata.ClassSignature"/>
 	private readonly CString _classSignature;
-	/// <inheritdoc cref="JPrimitiveMetadata.SizeOfOf"/>
+	/// <inheritdoc cref="SizeOf"/>
 	private readonly Int32 _sizeOf;
 
 	/// <summary>
@@ -17,7 +17,7 @@ public sealed partial record JPrimitiveMetadata : JDataTypeMetadata
 	/// <summary>
 	/// Size of current primitive type in bytes.
 	/// </summary>
-	public Int32 SizeOfOf => this._sizeOf;
+	public override Int32 SizeOf => this._sizeOf;
 
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Primitive;

@@ -7,7 +7,7 @@ internal sealed class JPrimitiveMetadataBuilder
 {
 	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 	private readonly CString _signature;
-	/// <inheritdoc cref="JPrimitiveMetadata.SizeOfOf"/>
+	/// <inheritdoc cref="JPrimitiveMetadata.SizeOf"/>
 	private readonly Int32 _sizeOf;
 	/// <inheritdoc cref="JDataTypeMetadata.Type"/>
 	private readonly Type _type;

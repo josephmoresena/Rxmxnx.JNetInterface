@@ -17,6 +17,8 @@ public sealed record JArrayMetadata : JDataTypeMetadata
 	public override JTypeKind Kind => JTypeKind.Array;
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier => JTypeModifier.Final;
+	/// <inheritdoc/>
+	public override Int32 SizeOf => NativeUtilities.PointerSize;
 
 	/// <summary>
 	/// Constructor.

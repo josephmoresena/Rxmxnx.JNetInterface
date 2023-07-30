@@ -11,7 +11,7 @@ public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableCompara
 	/// Primitive metadata.
 	/// </summary>
 	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JDoubleSignature)
+	                                                      .Create<JDouble>(UnicodePrimitiveSignatures.JDoubleSignature)
 	                                                      .WithWrapperClassName(
 		                                                      UnicodeClassNames.JDoubleObjectClassName)
 	                                                      .WithArraySignature(
