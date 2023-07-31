@@ -20,7 +20,7 @@ public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JByte;
 
-	static JDataTypeMetadata IDataType.Metadata => JByte.metadata;
+	static JPrimitiveMetadata IPrimitive<JByte>.Metadata => JByte.metadata;
 
 	/// <summary>
 	/// Internal 8-bit signed integer value.

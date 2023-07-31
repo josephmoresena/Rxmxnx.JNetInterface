@@ -21,7 +21,7 @@ public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JLong;
 
-	static JDataTypeMetadata IDataType.Metadata => JLong.metadata;
+	static JPrimitiveMetadata IPrimitive<JLong>.Metadata => JLong.metadata;
 
 	/// <summary>
 	/// Internal 64-bit signed integer value.
