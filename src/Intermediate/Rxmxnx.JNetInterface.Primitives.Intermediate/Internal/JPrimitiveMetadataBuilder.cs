@@ -75,11 +75,11 @@ internal sealed class JPrimitiveMetadataBuilder
 	/// <summary>
 	/// Creates a new <see cref="JPrimitiveMetadataBuilder"/> instance.
 	/// </summary>
-	/// <typeparam name="TPrimitive"><see cref="IPrimitive"/> type.</typeparam>
+	/// <typeparam name="TPrimitive"><see cref="IPrimitiveType"/> type.</typeparam>
 	/// <param name="signature">Primitive type signature.</param>
 	/// <returns>A new <see cref="JPrimitiveMetadataBuilder"/> instance.</returns>
 	public static JPrimitiveMetadataBuilder Create<TPrimitive>(CString signature)
-		where TPrimitive : unmanaged, IPrimitive<TPrimitive>
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		ValidationUtilities.ThrowIfInvalidSignature(signature, true);
 		Type type = typeof(TPrimitive);

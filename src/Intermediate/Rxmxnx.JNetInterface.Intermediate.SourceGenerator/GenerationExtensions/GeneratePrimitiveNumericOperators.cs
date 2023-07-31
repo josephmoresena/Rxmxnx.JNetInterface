@@ -19,18 +19,18 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 	public static readonly {1} MaxValue = {2}.MaxValue;
 {3}
 
-	static {1} INumberBase<{1}>.One => IPrimitiveNumeric<{1}, {2}>.One;
+	static {1} INumberBase<{1}>.One => IPrimitiveNumericType<{1}, {2}>.One;
 	static Int32 INumberBase<{1}>.Radix => 2;
-	static {1} INumberBase<{1}>.Zero => IPrimitiveNumeric<{1}, {2}>.Zero;
+	static {1} INumberBase<{1}>.Zero => IPrimitiveNumericType<{1}, {2}>.Zero;
 
 	static {1} IBinaryNumber<{1}>.AllBitsSet 
-		=> IPrimitiveNumeric<{1}, {2}>.AllBitsSet;
+		=> IPrimitiveNumericType<{1}, {2}>.AllBitsSet;
 
 	static {1} IAdditiveIdentity<{1}, {1}>.AdditiveIdentity 
-		=> IPrimitiveNumeric<{1}, {2}>.AdditiveIdentity;
+		=> IPrimitiveNumericType<{1}, {2}>.AdditiveIdentity;
 
 	static {1} IMultiplicativeIdentity<{1}, {1}>.MultiplicativeIdentity 
-		=> IPrimitiveNumeric<{1}, {2}>.MultiplicativeIdentity;
+		=> IPrimitiveNumericType<{1}, {2}>.MultiplicativeIdentity;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<{1}>.IsCanonical({1} value) => true;
@@ -42,13 +42,13 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 	static Boolean INumberBase<{1}>.IsZero({1} value) => value._value == 0;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {1} INumberBase<{1}>.CreateChecked<TOther>(TOther value) 
-		=> IPrimitiveNumeric<{1}, {2}>.CreateChecked(value);
+		=> IPrimitiveNumericType<{1}, {2}>.CreateChecked(value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {1} INumberBase<{1}>.CreateSaturating<TOther>(TOther value) 
-		=> IPrimitiveNumeric<{1}, {2}>.CreateSaturating(value);
+		=> IPrimitiveNumericType<{1}, {2}>.CreateSaturating(value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {1} INumberBase<{1}>.CreateTruncating<TOther>(TOther value) 
-		=> IPrimitiveNumeric<{1}, {2}>.CreateTruncating(value);
+		=> IPrimitiveNumericType<{1}, {2}>.CreateTruncating(value);
 {4}
 
     /// <inheritdoc cref=""IComparisonOperators{{TSelf, TOther, Boolean}}.op_GreaterThan(TSelf, TOther)"" />
@@ -67,34 +67,34 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 	/// <inheritdoc cref=""IModulusOperators{{TSelf, TOther, TResult}}.op_Modulus(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {1} operator %({1} left, {1} right) 
-		=> IPrimitiveNumeric<{1}, {2}>.Modulus(left._value, right._value);
+		=> IPrimitiveNumericType<{1}, {2}>.Modulus(left._value, right._value);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {1} operator --({1} value) 
 	{{
-		IPrimitiveNumeric<{1}, {2}>.Decrement(ref value);
+		IPrimitiveNumericType<{1}, {2}>.Decrement(ref value);
 		return value;
 	}}
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {1} operator checked --({1} value) 
 	{{
-		IPrimitiveNumeric<{1}, {2}>.CheckedDecrement(ref value);
+		IPrimitiveNumericType<{1}, {2}>.CheckedDecrement(ref value);
 		return value;
 	}}
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {1} operator ++({1} value) 
 	{{
-		IPrimitiveNumeric<{1}, {2}>.Increment(ref value);
+		IPrimitiveNumericType<{1}, {2}>.Increment(ref value);
 		return value;
 	}}
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {1} operator checked ++({1} value) 
 	{{
-		IPrimitiveNumeric<{1}, {2}>.CheckedIncrement(ref value);
+		IPrimitiveNumericType<{1}, {2}>.CheckedIncrement(ref value);
 		return value;
 	}}
 
@@ -149,88 +149,88 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} Parse(String s, IFormatProvider? provider)
-	    => IPrimitiveNumeric<{0}, {1}>.Parse(s, provider);
+	    => IPrimitiveNumericType<{0}, {1}>.Parse(s, provider);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} Parse(String s, NumberStyles style, IFormatProvider? provider)
-	    => IPrimitiveNumeric<{0}, {1}>.Parse(s, style, provider);
+	    => IPrimitiveNumericType<{0}, {1}>.Parse(s, style, provider);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} Parse(ReadOnlySpan<Char> s, IFormatProvider? provider)
-	    => IPrimitiveNumeric<{0}, {1}>.Parse(s, provider);
+	    => IPrimitiveNumericType<{0}, {1}>.Parse(s, provider);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} Parse(ReadOnlySpan<Char> s, NumberStyles style, IFormatProvider? provider)
-	    => IPrimitiveNumeric<{0}, {1}>.Parse(s, style, provider);
+	    => IPrimitiveNumericType<{0}, {1}>.Parse(s, style, provider);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryParse([NotNullWhen(true)] String? s, IFormatProvider? provider,
 		out {0} result)
-		=> IPrimitiveNumeric<{0}, {1}>.TryParse(s, provider, out result);
+		=> IPrimitiveNumericType<{0}, {1}>.TryParse(s, provider, out result);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryParse([NotNullWhen(true)] String? s, NumberStyles style, IFormatProvider? provider,
 		out {0} result)
-		=> IPrimitiveNumeric<{0}, {1}>.TryParse(s, style, provider, out result);
+		=> IPrimitiveNumericType<{0}, {1}>.TryParse(s, style, provider, out result);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryParse(ReadOnlySpan<Char> s, IFormatProvider? provider, out {0} result)
-		=> IPrimitiveNumeric<{0}, {1}>.TryParse(s, provider, out result);
+		=> IPrimitiveNumericType<{0}, {1}>.TryParse(s, provider, out result);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryParse(ReadOnlySpan<Char> s, NumberStyles style, IFormatProvider? provider, out {0} result)
-		=> IPrimitiveNumeric<{0}, {1}>.TryParse(s, style, provider, out result);
+		=> IPrimitiveNumericType<{0}, {1}>.TryParse(s, style, provider, out result);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean IsPow2({0} value) => IPrimitiveNumeric<{0}, {1}>.IsPow2(value.Value);
+	public static Boolean IsPow2({0} value) => IPrimitiveNumericType<{0}, {1}>.IsPow2(value.Value);
 	/// <inheritdoc cref=""IBinaryNumber{{TSelf}}.Log2(TSelf)""/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static {0} Log2({0} value) => IPrimitiveNumeric<{0}, {1}>.Log2(value.Value);
+	public static {0} Log2({0} value) => IPrimitiveNumericType<{0}, {1}>.Log2(value.Value);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator +({0} left, {0} right) 
-		=> IPrimitiveNumeric<{0}, {1}>.Addition(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.Addition(left._value, right._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator checked +({0} left, {0} right) 
-		=> IPrimitiveNumeric<{0}, {1}>.CheckedAddition(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.CheckedAddition(left._value, right._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator /({0} left, {0} right)
-		=> IPrimitiveNumeric<{0}, {1}>.Division(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.Division(left._value, right._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator checked /({0} left, {0} right)
-		=> IPrimitiveNumeric<{0}, {1}>.CheckedDivision(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.CheckedDivision(left._value, right._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator *({0} left, {0} right)
-		=> IPrimitiveNumeric<{0}, {1}>.Multiply(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.Multiply(left._value, right._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator checked *({0} left, {0} right)
-		=> IPrimitiveNumeric<{0}, {1}>.CheckedMultiply(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.CheckedMultiply(left._value, right._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator -({0} left, {0} right)
-		=> IPrimitiveNumeric<{0}, {1}>.Subtraction(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.Subtraction(left._value, right._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator checked -({0} left, {0} right)
-		=> IPrimitiveNumeric<{0}, {1}>.CheckedSubtraction(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.CheckedSubtraction(left._value, right._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator +({0} value)
-		=> IPrimitiveNumeric<{0}, {1}>.UnaryPlus(value._value);
+		=> IPrimitiveNumericType<{0}, {1}>.UnaryPlus(value._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator -({0} value)
-		=> IPrimitiveNumeric<{0}, {1}>.UnaryNegation(value._value);
+		=> IPrimitiveNumericType<{0}, {1}>.UnaryNegation(value._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator checked -({0} value)
-		=> IPrimitiveNumeric<{0}, {1}>.CheckedUnaryNegation(value._value);";
+		=> IPrimitiveNumericType<{0}, {1}>.CheckedUnaryNegation(value._value);";
 
 	private const String charFormattable = @"
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -241,9 +241,9 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 		=> ((ISpanFormattable)this.Value).TryFormat(destination, out charsWritten, format, provider);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static Boolean IBinaryNumber<JChar>.IsPow2(JChar value) => IPrimitiveNumeric<JChar, Char>.IsPow2(value.Value);
+	static Boolean IBinaryNumber<JChar>.IsPow2(JChar value) => IPrimitiveNumericType<JChar, Char>.IsPow2(value.Value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static JChar IBinaryNumber<JChar>.Log2(JChar value) => IPrimitiveNumeric<JChar, Char>.Log2(value.Value);
+	static JChar IBinaryNumber<JChar>.Log2(JChar value) => IPrimitiveNumericType<JChar, Char>.Log2(value.Value);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar INumberBase<JChar>.Abs(JChar value) => value;
@@ -261,71 +261,71 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 	static JChar INumberBase<JChar>.MinMagnitude(JChar x, JChar y) => (Char)Math.Min(x._value, y._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar INumberBase<JChar>.Parse(String s, NumberStyles style, IFormatProvider? provider)
-	    => IPrimitiveNumeric<JChar, Char>.Parse(s, style, provider);
+	    => IPrimitiveNumericType<JChar, Char>.Parse(s, style, provider);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar INumberBase<JChar>.Parse(ReadOnlySpan<Char> s, NumberStyles style, IFormatProvider? provider)
-	    => IPrimitiveNumeric<JChar, Char>.Parse(s, style, provider);
+	    => IPrimitiveNumericType<JChar, Char>.Parse(s, style, provider);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<JChar>.TryParse(String? s, NumberStyles style, IFormatProvider? provider,
 		out JChar result)
-		=> IPrimitiveNumeric<JChar, Char>.TryParse(s, style, provider, out result);
+		=> IPrimitiveNumericType<JChar, Char>.TryParse(s, style, provider, out result);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<JChar>.TryParse(ReadOnlySpan<Char> s, NumberStyles style, IFormatProvider? provider,
 		out JChar result)
-		=> IPrimitiveNumeric<JChar, Char>.TryParse(s, style, provider, out result);
+		=> IPrimitiveNumericType<JChar, Char>.TryParse(s, style, provider, out result);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IAdditionOperators<JChar, JChar, JChar>.operator +(JChar left, JChar right) 
-		=> IPrimitiveNumeric<JChar, Char>.Addition(left._value, right._value);
+		=> IPrimitiveNumericType<JChar, Char>.Addition(left._value, right._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IAdditionOperators<JChar, JChar, JChar>.operator checked +(JChar left, JChar right) 
-		=> IPrimitiveNumeric<JChar, Char>.CheckedAddition(left._value, right._value);
+		=> IPrimitiveNumericType<JChar, Char>.CheckedAddition(left._value, right._value);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IDivisionOperators<JChar, JChar, JChar>.operator /(JChar left, JChar right)
-		=> IPrimitiveNumeric<JChar, Char>.Division(left._value, right._value);
+		=> IPrimitiveNumericType<JChar, Char>.Division(left._value, right._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IDivisionOperators<JChar, JChar, JChar>.operator checked /(JChar left, JChar right)
-		=> IPrimitiveNumeric<JChar, Char>.CheckedDivision(left._value, right._value);
+		=> IPrimitiveNumericType<JChar, Char>.CheckedDivision(left._value, right._value);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IMultiplyOperators<JChar, JChar, JChar>.operator *(JChar left, JChar right)
-		=> IPrimitiveNumeric<JChar, Char>.Multiply(left._value, right._value);
+		=> IPrimitiveNumericType<JChar, Char>.Multiply(left._value, right._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IMultiplyOperators<JChar, JChar, JChar>.operator checked *(JChar left, JChar right)
-		=> IPrimitiveNumeric<JChar, Char>.CheckedMultiply(left._value, right._value);
+		=> IPrimitiveNumericType<JChar, Char>.CheckedMultiply(left._value, right._value);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar ISubtractionOperators<JChar, JChar, JChar>.operator -(JChar left, JChar right)
-		=> IPrimitiveNumeric<JChar, Char>.Subtraction(left._value, right._value);
+		=> IPrimitiveNumericType<JChar, Char>.Subtraction(left._value, right._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar ISubtractionOperators<JChar, JChar, JChar>.operator checked -(JChar left, JChar right)
-		=> IPrimitiveNumeric<JChar, Char>.CheckedSubtraction(left._value, right._value);
+		=> IPrimitiveNumericType<JChar, Char>.CheckedSubtraction(left._value, right._value);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IUnaryPlusOperators<JChar, JChar>.operator +(JChar value)
-		=> IPrimitiveNumeric<JChar, Char>.UnaryPlus(value._value);
+		=> IPrimitiveNumericType<JChar, Char>.UnaryPlus(value._value);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IUnaryNegationOperators<JChar, JChar>.operator -(JChar value)
-		=> IPrimitiveNumeric<JChar, Char>.UnaryNegation(value._value);
+		=> IPrimitiveNumericType<JChar, Char>.UnaryNegation(value._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IUnaryNegationOperators<JChar, JChar>.operator checked -(JChar value)
-		=> IPrimitiveNumeric<JChar, Char>.CheckedUnaryNegation(value._value);
+		=> IPrimitiveNumericType<JChar, Char>.CheckedUnaryNegation(value._value);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IParsable<JChar>.Parse(String s, IFormatProvider? provider)
-	    => IPrimitiveNumeric<JChar, Char>.Parse(s, provider);
+	    => IPrimitiveNumericType<JChar, Char>.Parse(s, provider);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean IParsable<JChar>.TryParse(String? s, IFormatProvider? provider, out JChar result)
-		=> IPrimitiveNumeric<JChar, Char>.TryParse(s, provider, out result);
+		=> IPrimitiveNumericType<JChar, Char>.TryParse(s, provider, out result);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar ISpanParsable<JChar>.Parse(ReadOnlySpan<Char> s, IFormatProvider? provider)
-	    => IPrimitiveNumeric<JChar, Char>.Parse(s, provider);
+	    => IPrimitiveNumericType<JChar, Char>.Parse(s, provider);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean ISpanParsable<JChar>.TryParse(ReadOnlySpan<Char> s, IFormatProvider? provider, out JChar result)
-		=> IPrimitiveNumeric<JChar, Char>.TryParse(s, provider, out result);";
+		=> IPrimitiveNumericType<JChar, Char>.TryParse(s, provider, out result);";
 
 	private const String integerFormattableFormat = @"
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -348,26 +348,26 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 	static Boolean INumberBase<{0}>.IsSubnormal({0} value) => false;
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {0} INumberBase<{0}>.MaxMagnitudeNumber({0} x, {0} y) 
-		=> IPrimitiveNumeric<{0}, {1}>.MaxMagnitudeNumber(x._value, y._value);
+		=> IPrimitiveNumericType<{0}, {1}>.MaxMagnitudeNumber(x._value, y._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {0} INumberBase<{0}>.MinMagnitudeNumber({0} x, {0} y) 
-		=> IPrimitiveNumeric<{0}, {1}>.MinMagnitudeNumber(x._value, y._value);
+		=> IPrimitiveNumericType<{0}, {1}>.MinMagnitudeNumber(x._value, y._value);
 
 	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_BitwiseAnd(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator &({0} left, {0} right) 
-		=> IPrimitiveNumeric<{0}, {1}>.BitwiseAnd(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.BitwiseAnd(left._value, right._value);
 	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_BitwiseOr(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator |({0} left, {0} right) 
-		=> IPrimitiveNumeric<{0}, {1}>.BitwiseOr(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.BitwiseOr(left._value, right._value);
 	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_ExclusiveOr(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator ^({0} left, {0} right) 
-		=> IPrimitiveNumeric<{0}, {1}>.ExclusiveOr(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.ExclusiveOr(left._value, right._value);
 	/// <inheritdoc cref=""IBitwiseOperators{{TSelf, TOther, TResult}}.op_OnesComplement(TSelf)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static {0} operator ~({0} value) => IPrimitiveNumeric<{0}, {1}>.OnesComplement(value._value);";
+	public static {0} operator ~({0} value) => IPrimitiveNumericType<{0}, {1}>.OnesComplement(value._value);";
 
 	private const String floatingFormattableFormat = @"
 	/// <inheritdoc/>
@@ -406,16 +406,16 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {0} IBitwiseOperators<{0}, {0}, {0}>.operator &({0} left, {0} right) 
-		=> IPrimitiveNumeric<{0}, {1}>.BitwiseAnd(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.BitwiseAnd(left._value, right._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {0} IBitwiseOperators<{0}, {0}, {0}>.operator |({0} left, {0} right) 
-		=> IPrimitiveNumeric<{0}, {1}>.BitwiseOr(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.BitwiseOr(left._value, right._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {0} IBitwiseOperators<{0}, {0}, {0}>.operator ^({0} left, {0} right) 
-		=> IPrimitiveNumeric<{0}, {1}>.ExclusiveOr(left._value, right._value);
+		=> IPrimitiveNumericType<{0}, {1}>.ExclusiveOr(left._value, right._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static {0} IBitwiseOperators<{0}, {0}, {0}>.operator ~({0} value) 
-		=> IPrimitiveNumeric<{0}, {1}>.OnesComplement(value._value);";
+		=> IPrimitiveNumericType<{0}, {1}>.OnesComplement(value._value);";
 
 	/// <summary>
 	/// Generates operators for numeric structures.

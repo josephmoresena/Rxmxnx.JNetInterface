@@ -17,34 +17,34 @@ partial struct {1} : IBinaryInteger<{1}>, {4}<{1}>
 	Int32 IBinaryInteger<{1}>.GetByteCount() => sizeof({2});
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Boolean IBinaryInteger<{1}>.TryWriteBigEndian(Span<Byte> destination, out Int32 bytesWritten)
-		=> IPrimitiveInteger<{1}, {2}>.TryWriteBigEndian(this._value, destination, out bytesWritten);
+		=> IPrimitiveIntegerType<{1}, {2}>.TryWriteBigEndian(this._value, destination, out bytesWritten);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Boolean IBinaryInteger<{1}>.TryWriteLittleEndian(Span<Byte> destination, out Int32 bytesWritten)
-		=> IPrimitiveInteger<{1}, {2}>.TryWriteLittleEndian(this._value, destination, out bytesWritten);
+		=> IPrimitiveIntegerType<{1}, {2}>.TryWriteLittleEndian(this._value, destination, out bytesWritten);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Int32 IBinaryInteger<{1}>.GetShortestBitLength()
-		=> IPrimitiveInteger<{1}, {2}>.GetShortestBitLength(this._value);
+		=> IPrimitiveIntegerType<{1}, {2}>.GetShortestBitLength(this._value);
 {3}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean IBinaryInteger<{1}>.TryReadBigEndian(ReadOnlySpan<Byte> source, Boolean isUnsigned, out {1} value)
-		=> IPrimitiveInteger<{1}, {2}>.TryReadBigEndian(source, isUnsigned, out value);
+		=> IPrimitiveIntegerType<{1}, {2}>.TryReadBigEndian(source, isUnsigned, out value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean IBinaryInteger<{1}>.TryReadLittleEndian(ReadOnlySpan<Byte> source, Boolean isUnsigned, out {1} value)
-		=> IPrimitiveInteger<{1}, {2}>.TryReadLittleEndian(source, isUnsigned, out value);
+		=> IPrimitiveIntegerType<{1}, {2}>.TryReadLittleEndian(source, isUnsigned, out value);
 }}
 #nullable restore";
 
 	private const String binaryIntegerFormattableFormat = @"
-	static {0} ISignedNumber<{0}>.NegativeOne => IPrimitiveSigned<{0}, {1}>.NegativeOne;
+	static {0} ISignedNumber<{0}>.NegativeOne => IPrimitiveSignedType<{0}, {1}>.NegativeOne;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} PopCount({0} value) 
-		=> IPrimitiveInteger<{0}, {1}>.PopCount(value._value);
+		=> IPrimitiveIntegerType<{0}, {1}>.PopCount(value._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} TrailingZeroCount({0} value) 
-		=> IPrimitiveInteger<{0}, {1}>.TrailingZeroCount(value._value);
+		=> IPrimitiveIntegerType<{0}, {1}>.TrailingZeroCount(value._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} operator <<({0} value, Int32 shiftAmount) => ({1})(value._value << shiftAmount);
@@ -56,10 +56,10 @@ partial struct {1} : IBinaryInteger<{1}>, {4}<{1}>
 	public static {0} operator >>>({0} value, Int32 shiftAmount) => ({1})(value._value << shiftAmount);";
 	private const String binaryCharFormattable = @"
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static JChar IBinaryInteger<JChar>.PopCount(JChar value) => IPrimitiveInteger<JChar, Char>.PopCount(value._value);
+	static JChar IBinaryInteger<JChar>.PopCount(JChar value) => IPrimitiveIntegerType<JChar, Char>.PopCount(value._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IBinaryInteger<JChar>.TrailingZeroCount(JChar value) 
-		=> IPrimitiveInteger<JChar, Char>.TrailingZeroCount(value._value);
+		=> IPrimitiveIntegerType<JChar, Char>.TrailingZeroCount(value._value);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IShiftOperators<JChar, Int32, JChar>.operator <<(JChar value, Int32 shiftAmount) 
 		=> (Char)(value._value << shiftAmount);

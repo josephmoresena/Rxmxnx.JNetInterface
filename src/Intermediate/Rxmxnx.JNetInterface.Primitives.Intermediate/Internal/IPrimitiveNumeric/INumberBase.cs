@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial interface IPrimitiveNumeric<TPrimitive, TValue>
+internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
 {
 	/// <inheritdoc cref="INumberBase{TSelf}.One"/>
 	public static readonly TPrimitive One = NativeUtilities.Transform<TValue, TPrimitive>(TValue.One);

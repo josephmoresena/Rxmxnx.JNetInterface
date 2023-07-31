@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparable<JShort>,
-	IPrimitiveInteger<JShort, Int16>, IPrimitiveSigned<JShort, Int16>
+	IPrimitiveNumericIntegerType<JShort, Int16>, IPrimitiveNumericSignedType<JShort, Int16>
 {
 	/// <summary>
 	/// Primitive metadata.
@@ -21,7 +21,7 @@ public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparabl
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JShort;
 
-	static JPrimitiveMetadata IPrimitive.Metadata => JShort.metadata;
+	static JPrimitiveMetadata IPrimitiveType<JShort>.Metadata => JShort.metadata;
 
 	/// <summary>
 	/// Internal 16-bit signed integer value.
@@ -33,9 +33,9 @@ public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparabl
 	/// </summary>
 	public Int16 Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => IPrimitive.GetMetadata<JShort>().ClassName;
+	public CString ObjectClassName => IPrimitiveType.GetMetadata<JShort>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => IPrimitive.GetMetadata<JShort>().Signature;
+	public CString ObjectSignature => IPrimitiveType.GetMetadata<JShort>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 
@@ -60,11 +60,11 @@ public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparabl
 	public Int32 CompareTo(JShort other) => this._value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JShort, Int16>(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveType<JShort, Int16>.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JShort value) => new JPrimitiveObject<JShort>(value);
+	public static implicit operator JObject(JShort value) => new PrimitiveTypeObject<JShort>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JShort(JObject jObj)

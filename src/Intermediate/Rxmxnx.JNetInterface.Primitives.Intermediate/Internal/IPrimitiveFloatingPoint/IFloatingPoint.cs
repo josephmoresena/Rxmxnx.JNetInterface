@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial interface IPrimitiveFloatingPoint<TPrimitive, TValue>
+internal partial interface IPrimitiveNumericFloatingPointType<TPrimitive, TValue>
 {
 	/// <inheritdoc cref="IFloatingPoint{TSelf}.GetExponentByteCount()"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

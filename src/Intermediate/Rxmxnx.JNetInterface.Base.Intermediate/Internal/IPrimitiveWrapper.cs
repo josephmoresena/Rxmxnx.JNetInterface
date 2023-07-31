@@ -1,15 +1,15 @@
-namespace Rxmxnx.JNetInterface;
+namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive wrapper.
 /// </summary>
-public interface IPrimitiveWrapper : IObject, IWrapper, IComparable, IConvertible { }
+internal interface IPrimitiveWrapper : IObject, IWrapper, IComparable, IConvertible { }
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive wrapper.
 /// </summary>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
-public interface IPrimitiveWrapper<TValue> : IPrimitiveWrapper, IWrapper<TValue>, IComparable<TValue>
+internal interface IPrimitiveWrapper<TValue> : IPrimitiveWrapper, IWrapper<TValue>, IComparable<TValue>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

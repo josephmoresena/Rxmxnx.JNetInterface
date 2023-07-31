@@ -4,8 +4,8 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// Primitive <c>int</c>. Represents a primitive 32-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JInt>, IPrimitiveInteger<JInt, Int32>,
-	IPrimitiveSigned<JInt, Int32>
+public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JInt>,
+	IPrimitiveNumericIntegerType<JInt, Int32>, IPrimitiveNumericSignedType<JInt, Int32>
 {
 	/// <summary>
 	/// Primitive metadata.
@@ -22,7 +22,7 @@ public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JI
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JInt;
 
-	static JPrimitiveMetadata IPrimitive.Metadata => JInt.metadata;
+	static JPrimitiveMetadata IPrimitiveType<JInt>.Metadata => JInt.metadata;
 
 	/// <summary>
 	/// Internal 32-bit signed integer value.
@@ -34,9 +34,9 @@ public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JI
 	/// </summary>
 	public Int32 Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => IPrimitive.GetMetadata<JFloat>().ClassName;
+	public CString ObjectClassName => IPrimitiveType.GetMetadata<JFloat>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => IPrimitive.GetMetadata<JFloat>().Signature;
+	public CString ObjectSignature => IPrimitiveType.GetMetadata<JFloat>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 
@@ -61,11 +61,11 @@ public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JI
 	public Int32 CompareTo(JInt other) => this._value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JInt, Int32>(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveType<JInt, Int32>.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JInt value) => new JPrimitiveObject<JInt>(value);
+	public static implicit operator JObject(JInt value) => new PrimitiveTypeObject<JInt>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JInt(JObject jObj)

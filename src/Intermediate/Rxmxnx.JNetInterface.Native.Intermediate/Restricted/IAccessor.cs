@@ -26,46 +26,46 @@ public interface IAccessor
 	/// Retrieves a static field from given <see cref="IClass"/> instance.
 	/// </summary>
 	/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
 	/// <returns><typeparamref name="TField"/> field instance.</returns>
-	TField? GetStaticField<TField>(IClass jClass, JFieldDefinition definition) where TField : IDataType<TField>;
+	TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition) where TField : IDataType<TField>;
 	/// <summary>
 	/// Sets a static field to given <see cref="IClass"/> instance.
 	/// </summary>
 	/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
 	/// <param name="value">The field value to set to.</param>
-	void SetStaticField<TField>(IClass jClass, JFieldDefinition definition, TField? value)
+	void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
 		where TField : IDataType<TField>;
 	/// <summary>
 	/// Invokes a constructor method for given <see cref="IClass"/> instance.
 	/// </summary>
 	/// <typeparam name="TObject"><see cref="IDataType"/> type of created instance.</typeparam>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns>The new <typeparamref name="TObject"/> instance.</returns>
-	TObject CallConstructor<TObject>(IClass jClass, JConstructorDefinition definition, IObject?[] args)
+	TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition, IObject?[] args)
 		where TObject : JLocalObject, IDataType<TObject>;
 	/// <summary>
 	/// Invokes a static function on given <see cref="IClass"/> instance.
 	/// </summary>
 	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	TResult? CallStaticFunction<TResult>(IClass jClass, JFunctionDefinition definition, IObject?[] args)
+	TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition, IObject?[] args)
 		where TResult : IDataType<TResult>;
 	/// <summary>
 	/// Invokes a static method on given <see cref="IClass"/> instance.
 	/// </summary>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
-	void CallStaticMethod(IClass jClass, JMethodDefinition definition, IObject?[] args);
+	void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, IObject?[] args);
 	/// <summary>
 	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
 	/// </summary>
@@ -82,11 +82,11 @@ public interface IAccessor
 	/// </summary>
 	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	TResult? CallNonVirtualFunction<TResult>(JLocalObject jLocal, IClass jClass, JFunctionDefinition definition,
+	TResult? CallNonVirtualFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
 		IObject?[] args) where TResult : IDataType<TResult>;
 	/// <summary>
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.
@@ -100,8 +100,8 @@ public interface IAccessor
 	/// instances.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
-	void CallNonVirtualMethod(JLocalObject jLocal, IClass jClass, JMethodDefinition definition, IObject?[] args);
+	void CallNonVirtualMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition, IObject?[] args);
 }

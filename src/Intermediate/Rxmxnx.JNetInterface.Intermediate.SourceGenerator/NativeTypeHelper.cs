@@ -53,12 +53,13 @@ internal sealed record NativeTypeHelper
 	{
 		this._typeSymbol = typeSymbol;
 		this._isPointer = interfaces.Contains("Rxmxnx.PInvoke.IFixedPointer");
-		this._isPrimitive = interfaces.Contains("Rxmxnx.JNetInterface.IPrimitive");
+		this._isPrimitive = interfaces.Contains("Rxmxnx.JNetInterface.IPrimitiveType");
 		this._isArrRef = interfaces.Contains("Rxmxnx.JNetInterface.Internal.IArrayReference");
-		this._isNumeric = this._isPrimitive && interfaces.Contains("Rxmxnx.JNetInterface.Internal.IPrimitiveNumeric");
-		this._isInteger = this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.Internal.IPrimitiveInteger");
-		this._isFloatingPoint =
-			this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.Internal.IPrimitiveFloatingPoint");
+		this._isNumeric = this._isPrimitive &&
+			interfaces.Contains("Rxmxnx.JNetInterface.Internal.IPrimitiveNumericType");
+		this._isInteger = this._isNumeric && interfaces.Contains("Rxmxnx.JNetInterface.Internal.IPrimitiveIntegerType");
+		this._isFloatingPoint = this._isNumeric &&
+			interfaces.Contains("Rxmxnx.JNetInterface.Internal.IPrimitiveFloatingPointType");
 		this._isObjRef = this._isArrRef || interfaces.Contains("Rxmxnx.JNetInterface.Internal.IObjectReference");
 	}
 

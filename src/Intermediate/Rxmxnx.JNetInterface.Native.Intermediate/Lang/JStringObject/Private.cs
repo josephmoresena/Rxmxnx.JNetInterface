@@ -25,8 +25,8 @@ public partial class JStringObject
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JStringObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.StringClassObject)
 	{
-		if (jLocal is not IWrapper<String> wString)
+		if (jLocal is not JStringObject jString)
 			return;
-		this._value = wString.Value;
+		this._value = jString.Value;
 	}
 }

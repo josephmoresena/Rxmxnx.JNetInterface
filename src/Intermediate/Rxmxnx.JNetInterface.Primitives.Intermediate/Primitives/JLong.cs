@@ -4,8 +4,8 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// Primitive <c>long</c>. Represents a primitive 64-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<JLong>, IPrimitiveInteger<JLong, Int64>,
-	IPrimitiveSigned<JLong, Int64>
+public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<JLong>,
+	IPrimitiveNumericIntegerType<JLong, Int64>, IPrimitiveNumericSignedType<JLong, Int64>
 {
 	/// <summary>
 	/// Primitive metadata.
@@ -21,7 +21,7 @@ public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JLong;
 
-	static JPrimitiveMetadata IPrimitive.Metadata => JLong.metadata;
+	static JPrimitiveMetadata IPrimitiveType<JLong>.Metadata => JLong.metadata;
 
 	/// <summary>
 	/// Internal 64-bit signed integer value.
@@ -33,9 +33,9 @@ public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<
 	/// </summary>
 	public Int64 Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => IPrimitive.GetMetadata<JLong>().ClassName;
+	public CString ObjectClassName => IPrimitiveType.GetMetadata<JLong>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => IPrimitive.GetMetadata<JLong>().Signature;
+	public CString ObjectSignature => IPrimitiveType.GetMetadata<JLong>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 
@@ -60,11 +60,11 @@ public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<
 	public Int32 CompareTo(JLong other) => this._value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JLong, Int64>(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveType<JLong, Int64>.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JLong value) => new JPrimitiveObject<JLong>(value);
+	public static implicit operator JObject(JLong value) => new PrimitiveTypeObject<JLong>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JLong(JObject jObj)

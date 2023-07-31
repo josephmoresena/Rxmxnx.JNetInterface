@@ -19,7 +19,7 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj) 
-		=> JPrimitiveMetadata.Equals<{1}, {2}>(this, obj);
+		=> IPrimitiveType<{1}, {2}>.Equals(this, obj);
 	
 	/// <inheritdoc cref=""IEqualityOperators{{TSelf, TOther, TResult}}.op_Equality(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -19,8 +19,8 @@ public record JObjectMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="jClass"><see cref="IClass"/> instance.</param>
-	internal JObjectMetadata(IClass jClass)
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	internal JObjectMetadata(JClassObject jClass)
 	{
 		this._objectClassName = jClass.Name;
 		this._objectSignature = jClass.ClassSignature;

@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial interface IPrimitiveNumeric<TPrimitive, TValue>
+internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
 {
 	/// <inheritdoc cref="IBitwiseOperators{TSelf, TOther, TResult}.op_BitwiseAnd(TSelf, TOther)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

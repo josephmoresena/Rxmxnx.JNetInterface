@@ -5,7 +5,7 @@
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JBoolean : INative<JBoolean>, ISelfEquatableComparable<JBoolean>,
-	IPrimitive<JBoolean, Boolean>
+	IPrimitiveType<JBoolean, Boolean>
 {
 	/// <summary>
 	/// Unsigned byte value for <see langword="true"/> value.
@@ -32,7 +32,7 @@ public readonly partial struct JBoolean : INative<JBoolean>, ISelfEquatableCompa
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JBoolean;
 
-	static JPrimitiveMetadata IPrimitive.Metadata => JBoolean.metadata;
+	static JPrimitiveMetadata IPrimitiveType<JBoolean>.Metadata => JBoolean.metadata;
 
 	/// <summary>
 	/// Internal 8-bit unsigned integer value.
@@ -44,9 +44,9 @@ public readonly partial struct JBoolean : INative<JBoolean>, ISelfEquatableCompa
 	/// </summary>
 	public Boolean Value => this._value.Equals(JBoolean.trueValue);
 	/// <inheritdoc/>
-	public CString ObjectClassName => IPrimitive.GetMetadata<JBoolean>().ClassName;
+	public CString ObjectClassName => IPrimitiveType.GetMetadata<JBoolean>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => IPrimitive.GetMetadata<JBoolean>().Signature;
+	public CString ObjectSignature => IPrimitiveType.GetMetadata<JBoolean>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 
@@ -71,14 +71,14 @@ public readonly partial struct JBoolean : INative<JBoolean>, ISelfEquatableCompa
 	public Int32 CompareTo(JBoolean other) => this.Value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JBoolean, Boolean>(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveType<JBoolean, Boolean>.Compare(this, obj);
 	/// <inheritdoc cref="Boolean.TryFormat(Span{Char}, out Int32)"/>
 	public Boolean TryFormat(Span<Char> destination, out Int32 charsWritten)
 		=> this.Value.TryFormat(destination, out charsWritten);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JBoolean value) => new JPrimitiveObject<JBoolean>(value);
+	public static implicit operator JObject(JBoolean value) => new PrimitiveTypeObject<JBoolean>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JBoolean(JObject jObj)

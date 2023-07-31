@@ -4,24 +4,25 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// Java object representing a java primitive value.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of java primitive value.</typeparam>
-internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapper<TPrimitive>,
-	IEquatable<JPrimitiveObject<TPrimitive>>
-	where TPrimitive : unmanaged, IPrimitive, IDataType<TPrimitive>, IEquatable<TPrimitive>
+internal sealed class PrimitiveTypeObject<TPrimitive> : JObject, IPrimitiveType, IWrapper<TPrimitive>,
+	IEquatable<PrimitiveTypeObject<TPrimitive>>
+	where TPrimitive : unmanaged, IPrimitiveType, IDataType<TPrimitive>, IEquatable<TPrimitive>
 {
-	static JPrimitiveMetadata IPrimitive.Metadata => IPrimitive.GetMetadata<TPrimitive>();
+	static JDataTypeMetadata IDataType.Metadata => IPrimitiveType.GetMetadata<TPrimitive>();
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">Primitive value.</param>
-	public JPrimitiveObject(TPrimitive value) : base(JValue.Create(value)) { }
+	public PrimitiveTypeObject(TPrimitive value) : base(JValue.Create(value)) { }
 	/// <inheritdoc cref="IEquatable{TPrimitive}"/>
-	public Boolean Equals(JPrimitiveObject<TPrimitive>? other) => other is not null && this.Value.Equals(other.Value);
+	public Boolean Equals(PrimitiveTypeObject<TPrimitive>? other)
+		=> other is not null && this.Value.Equals(other.Value);
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => IPrimitive.GetMetadata<TPrimitive>().ClassName;
+	public override CString ObjectClassName => IPrimitiveType.GetMetadata<TPrimitive>().ClassName;
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => IPrimitive.GetMetadata<TPrimitive>().Signature;
+	public override CString ObjectSignature => IPrimitiveType.GetMetadata<TPrimitive>().Signature;
 
 	Int32 IComparable.CompareTo(Object? obj) => this.Value.CompareTo(obj);
 	TypeCode IConvertible.GetTypeCode() => this.Value.GetTypeCode();
@@ -55,10 +56,10 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapp
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other)
-		=> other is JPrimitiveObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
+		=> other is PrimitiveTypeObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj)
-		=> obj is JPrimitiveObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
+		=> obj is PrimitiveTypeObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
 

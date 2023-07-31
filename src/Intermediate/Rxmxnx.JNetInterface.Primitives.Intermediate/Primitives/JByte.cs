@@ -3,8 +3,8 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// <summary>
 /// Primitive <c>byte</c>. Represents a 8-bit signed integer.
 /// </summary>
-public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<JByte>, IPrimitiveInteger<JByte, SByte>,
-	IPrimitiveSigned<JByte, SByte>
+public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<JByte>,
+	IPrimitiveNumericIntegerType<JByte, SByte>, IPrimitiveNumericSignedType<JByte, SByte>
 {
 	/// <summary>
 	/// Primitive metadata.
@@ -20,7 +20,7 @@ public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JByte;
 
-	static JPrimitiveMetadata IPrimitive.Metadata => JByte.metadata;
+	static JPrimitiveMetadata IPrimitiveType<JByte>.Metadata => JByte.metadata;
 
 	/// <summary>
 	/// Internal 8-bit signed integer value.
@@ -32,9 +32,9 @@ public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<
 	/// </summary>
 	public SByte Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => IPrimitive.GetMetadata<JByte>().ClassName;
+	public CString ObjectClassName => IPrimitiveType.GetMetadata<JByte>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => IPrimitive.GetMetadata<JByte>().Signature;
+	public CString ObjectSignature => IPrimitiveType.GetMetadata<JByte>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 
@@ -59,11 +59,11 @@ public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<
 	public Int32 CompareTo(JByte other) => this._value.CompareTo(other._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JByte, SByte>(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveType<JByte, SByte>.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JByte value) => new JPrimitiveObject<JByte>(value);
+	public static implicit operator JObject(JByte value) => new PrimitiveTypeObject<JByte>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JByte(JObject jObj)

@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial interface IPrimitiveNumeric<TPrimitive, TValue>
+internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static TPrimitive Modulus(in TValue left, in TValue right)

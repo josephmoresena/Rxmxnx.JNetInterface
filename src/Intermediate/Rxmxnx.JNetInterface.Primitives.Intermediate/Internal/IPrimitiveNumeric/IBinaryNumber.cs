@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial interface IPrimitiveNumeric<TPrimitive, TValue>
+internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
 {
 	/// <inheritdoc cref="IBinaryNumber{TSelf}.AllBitsSet"/>
 	public static readonly TPrimitive AllBitsSet = NativeUtilities.Transform<TValue, TPrimitive>(~TValue.Zero);

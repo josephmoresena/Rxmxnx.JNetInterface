@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableComparable<JDouble>,
-	IPrimitiveFloatingPoint<JDouble, Double>, IPrimitiveSigned<JDouble, Double>
+	IPrimitiveNumericFloatingPointType<JDouble, Double>, IPrimitiveNumericSignedType<JDouble, Double>
 {
 	/// <summary>
 	/// Primitive metadata.
@@ -22,7 +22,7 @@ public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableCompara
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;
 
-	static JPrimitiveMetadata IPrimitive.Metadata => JDouble.metadata;
+	static JPrimitiveMetadata IPrimitiveType<JDouble>.Metadata => JDouble.metadata;
 
 	/// <summary>
 	/// Internal double-precision floating-point number value.
@@ -34,9 +34,9 @@ public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableCompara
 	/// </summary>
 	public Double Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => IPrimitive.GetMetadata<JDouble>().ClassName;
+	public CString ObjectClassName => IPrimitiveType.GetMetadata<JDouble>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => IPrimitive.GetMetadata<JDouble>().Signature;
+	public CString ObjectSignature => IPrimitiveType.GetMetadata<JDouble>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 
@@ -61,11 +61,11 @@ public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableCompara
 	public Int32 CompareTo(JDouble other) => this._value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JDouble, Double>(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveType<JDouble, Double>.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JDouble value) => new JPrimitiveObject<JDouble>(value);
+	public static implicit operator JObject(JDouble value) => new PrimitiveTypeObject<JDouble>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JDouble(JObject jObj)

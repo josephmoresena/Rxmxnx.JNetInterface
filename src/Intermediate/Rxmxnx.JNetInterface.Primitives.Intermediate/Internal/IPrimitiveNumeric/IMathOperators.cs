@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial interface IPrimitiveNumeric<TPrimitive, TValue>
+internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
 {
 	/// <inheritdoc cref="IAdditiveIdentity{TSelf, TResult}.AdditiveIdentity"/>
 	public static readonly TPrimitive AdditiveIdentity =

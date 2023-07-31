@@ -4,7 +4,8 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// Primitive <c>char</c>. Represents a character as a UTF-16 code unit.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<JChar>, IPrimitiveInteger<JChar, Char>
+public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<JChar>,
+	IPrimitiveNumericIntegerType<JChar, Char>
 {
 	/// <summary>
 	/// Primitive metadata.
@@ -22,7 +23,7 @@ public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JChar;
 
-	static JPrimitiveMetadata IPrimitive.Metadata => JChar.metadata;
+	static JPrimitiveMetadata IPrimitiveType<JChar>.Metadata => JChar.metadata;
 
 	/// <summary>
 	/// Internal UTF-16 code unit character.
@@ -34,9 +35,9 @@ public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<
 	/// </summary>
 	public Char Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => IPrimitive.GetMetadata<JChar>().ClassName;
+	public CString ObjectClassName => IPrimitiveType.GetMetadata<JChar>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => IPrimitive.GetMetadata<JChar>().Signature;
+	public CString ObjectSignature => IPrimitiveType.GetMetadata<JChar>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 
@@ -61,11 +62,11 @@ public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<
 	public Int32 CompareTo(JChar other) => this._value.CompareTo(other._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JChar, Char>(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveType<JChar, Char>.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JChar value) => new JPrimitiveObject<JChar>(value);
+	public static implicit operator JObject(JChar value) => new PrimitiveTypeObject<JChar>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JChar(JObject jObj)

@@ -3,15 +3,18 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This interface exposes an object that represents a java signed number.
 /// </summary>
-internal interface IPrimitiveSigned : IPrimitiveNumeric { }
+internal interface IPrimitiveNumericSignedType : IPrimitiveNumericType { }
 
 /// <summary>
 /// This interface exposes an object that represents a java signed number.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive integer.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent integer.</typeparam>
-internal interface IPrimitiveSigned<TPrimitive, TValue> : IPrimitiveSigned, IPrimitiveNumeric<TPrimitive, TValue>
-	where TPrimitive : unmanaged, IPrimitiveSigned<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
+internal interface
+	IPrimitiveNumericSignedType<TPrimitive, TValue> : IPrimitiveNumericSignedType,
+		IPrimitiveNumericType<TPrimitive, TValue>
+	where TPrimitive : unmanaged, IPrimitiveNumericSignedType<TPrimitive, TValue>, IComparable<TPrimitive>,
+	IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryNumber<TValue>,
 	IMinMaxValue<TValue>, ISignedNumber<TValue>
 {

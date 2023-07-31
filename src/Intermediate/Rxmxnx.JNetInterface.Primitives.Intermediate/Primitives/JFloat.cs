@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparable<JFloat>,
-	IPrimitiveFloatingPoint<JFloat, Single>, IPrimitiveSigned<JFloat, Single>
+	IPrimitiveNumericFloatingPointType<JFloat, Single>, IPrimitiveNumericSignedType<JFloat, Single>
 {
 	/// <summary>
 	/// Primitive metadata.
@@ -21,7 +21,7 @@ public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparabl
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloat;
 
-	static JPrimitiveMetadata IPrimitive.Metadata => JFloat.metadata;
+	static JPrimitiveMetadata IPrimitiveType<JFloat>.Metadata => JFloat.metadata;
 
 	/// <summary>
 	/// Internal single-precision floating-point number value.
@@ -33,9 +33,9 @@ public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparabl
 	/// </summary>
 	public Single Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => IPrimitive.GetMetadata<JFloat>().ClassName;
+	public CString ObjectClassName => IPrimitiveType.GetMetadata<JFloat>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => IPrimitive.GetMetadata<JFloat>().Signature;
+	public CString ObjectSignature => IPrimitiveType.GetMetadata<JFloat>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
 
@@ -60,11 +60,11 @@ public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparabl
 	public Int32 CompareTo(JFloat other) => this._value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => JPrimitiveMetadata.Compare<JFloat, Single>(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveType<JFloat, Single>.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JFloat value) => new JPrimitiveObject<JFloat>(value);
+	public static implicit operator JObject(JFloat value) => new PrimitiveTypeObject<JFloat>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JFloat(JObject jObj)

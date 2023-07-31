@@ -87,7 +87,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// Retrieves a <typeparamref name="TPrimitive"/> value from current instance.
 	/// </summary>
-	/// <typeparam name="TPrimitive"><see cref="IPrimitive"/> type.</typeparam>
+	/// <typeparam name="TPrimitive"><see cref="IPrimitiveType"/> type.</typeparam>
 	/// <typeparam name="TValue"><see cref="ValueType"/> type.</typeparam>
 	/// <returns>
 	/// The equivalent <typeparamref name="TPrimitive"/> value to current instance.
@@ -96,7 +96,8 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal TPrimitive AsPrimitive<TPrimitive, TValue>()
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
-		where TPrimitive : unmanaged, IPrimitive<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
+		IEquatable<TPrimitive>
 		=> this is IWrapper<TPrimitive> pw ? pw.Value : this.AsValue<TValue>();
 
 	/// <summary>

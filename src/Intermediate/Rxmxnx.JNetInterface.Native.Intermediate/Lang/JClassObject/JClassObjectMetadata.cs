@@ -6,7 +6,7 @@ public partial class JClassObject
 	/// This record stores the metadata of a <see cref="JClassObject"/> in order to create a
 	/// <see cref="JGlobalBase"/> instance.
 	/// </summary>
-	private sealed record JClassMetadata : JObjectMetadata
+	private sealed record JClassObjectMetadata : JObjectMetadata
 	{
 		/// <inheritdoc cref="IClass.Name"/>
 		public CString Name { get; init; }
@@ -21,7 +21,7 @@ public partial class JClassObject
 		/// Constructor.
 		/// </summary>
 		/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
-		public JClassMetadata(JObjectMetadata metadata) : base(metadata)
+		public JClassObjectMetadata(JObjectMetadata metadata) : base(metadata)
 		{
 			this.Name = default!;
 			this.ClassSignature = default!;

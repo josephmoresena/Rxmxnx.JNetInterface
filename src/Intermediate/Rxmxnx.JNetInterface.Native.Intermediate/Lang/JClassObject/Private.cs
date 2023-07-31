@@ -37,7 +37,7 @@ public partial class JClassObject
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JClassObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.ClassObject)
 	{
-		if (jLocal is not IClass jClass)
+		if (jLocal is not JClassObject jClass)
 			return;
 
 		this._className = jClass.Name;

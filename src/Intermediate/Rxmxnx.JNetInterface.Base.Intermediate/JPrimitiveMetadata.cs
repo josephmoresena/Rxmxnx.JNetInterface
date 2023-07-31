@@ -1,9 +1,9 @@
 ﻿namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// This record stores the metadata for a value <see cref="IPrimitive"/> type.
+/// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
 /// </summary>
-public sealed partial record JPrimitiveMetadata : JDataTypeMetadata
+public sealed record JPrimitiveMetadata : JDataTypeMetadata
 {
 	/// <inheritdoc cref="JPrimitiveMetadata.ClassSignature"/>
 	private readonly CString _classSignature;

@@ -3,17 +3,11 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Class&lt;?&gt;</c> instance.
 /// </summary>
-public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClassObject>
+public sealed partial class JClassObject : JLocalObject, IDataType<JClassObject>
 {
 	/// <summary>
-	/// Constructor.
+	/// Fully-qualified class name.
 	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(
-		env, JLocalObject.Validate<JClassObject>(jGlobal, env)) { }
-
-	/// <inheritdoc/>
 	public CString Name
 	{
 		get
@@ -23,7 +17,9 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 			return this._className!;
 		}
 	}
-	/// <inheritdoc/>
+	/// <summary>
+	/// JNI signature for the instances of this class.
+	/// </summary>
 	public CString ClassSignature
 	{
 		get
@@ -33,7 +29,9 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 			return this._className!;
 		}
 	}
-	/// <inheritdoc/>
+	/// <summary>
+	/// Internal class hash.
+	/// </summary>
 	public String Hash
 	{
 		get
@@ -43,14 +41,21 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 			return this._hash!;
 		}
 	}
-	/// <inheritdoc/>
+	/// <summary>
+	/// Indicates whether current class is final.
+	/// </summary>
 	public Boolean? IsFinal => this._isFinal;
-
-	JClassLocalRef IClass.Reference => this.Reference;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	public JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(
+		env, JLocalObject.Validate<JClassObject>(jGlobal, env)) { }
 
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()
-		=> new JClassMetadata(base.CreateMetadata())
+		=> new JClassObjectMetadata(base.CreateMetadata())
 		{
 			Name = this.Name, ClassSignature = this.ClassSignature, IsFinal = this.IsFinal,
 		};
@@ -58,7 +63,7 @@ public sealed partial class JClassObject : JLocalObject, IClass, IDataType<JClas
 	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
-		if (instanceMetadata is not JClassMetadata classMetadata)
+		if (instanceMetadata is not JClassObjectMetadata classMetadata)
 			return;
 		this._className = classMetadata.Name;
 		this._signature = classMetadata.ClassSignature;

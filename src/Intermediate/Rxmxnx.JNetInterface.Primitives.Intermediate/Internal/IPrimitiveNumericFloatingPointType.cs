@@ -3,16 +3,16 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This interface exposes an object that represents a java primitive floating point.
 /// </summary>
-internal interface IPrimitiveFloatingPoint : IPrimitiveNumeric { }
+internal interface IPrimitiveNumericFloatingPointType : IPrimitiveNumericType { }
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive floating point.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive floating point.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent floating point.</typeparam>
-internal partial interface IPrimitiveFloatingPoint<TPrimitive, TValue> : IPrimitiveFloatingPoint,
-	IFloatingPointWrapper<TValue>, IPrimitiveNumeric<TPrimitive, TValue>
-	where TPrimitive : unmanaged, IPrimitiveFloatingPoint<TPrimitive, TValue>, IComparable<TPrimitive>,
+internal partial interface IPrimitiveNumericFloatingPointType<TPrimitive, TValue> : IPrimitiveNumericFloatingPointType,
+	IFloatingPointWrapper<TValue>, IPrimitiveNumericType<TPrimitive, TValue>
+	where TPrimitive : unmanaged, IPrimitiveNumericFloatingPointType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>,
 	IBinaryFloatingPointIeee754<TValue>, IMinMaxValue<TValue> { }

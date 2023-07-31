@@ -48,7 +48,7 @@ public interface IClassProvider
 	/// </summary>
 	/// <param name="jClass">Java class instance.</param>
 	/// <returns>The class instance of the super class of given class.</returns>
-	JClassObject? GetSuperClass(IClass jClass);
+	JClassObject? GetSuperClass(JClassObject jClass);
 	/// <summary>
 	/// Determines whether an object of <paramref name="jClass"/> can be safely cast to
 	/// <paramref name="otherClass"/>.
@@ -59,7 +59,7 @@ public interface IClassProvider
 	/// <see langword="true"/> if an object of <paramref name="jClass"/> can be safely cast to
 	/// <paramref name="otherClass"/>; otherwise, <see langword="false"/>.
 	/// </returns>
-	Boolean IsAssignableFrom(IClass jClass, IClass otherClass);
+	Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass);
 	/// <summary>
 	/// Loads a java class from its binary information into the current VM.
 	/// </summary>
