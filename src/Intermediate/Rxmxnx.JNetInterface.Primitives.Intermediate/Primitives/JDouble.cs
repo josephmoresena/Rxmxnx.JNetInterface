@@ -22,7 +22,7 @@ public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableCompara
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;
 
-	static JPrimitiveMetadata IPrimitive<JDouble>.Metadata => JDouble.metadata;
+	static JPrimitiveMetadata IPrimitive.Metadata => JDouble.metadata;
 
 	/// <summary>
 	/// Internal double-precision floating-point number value.

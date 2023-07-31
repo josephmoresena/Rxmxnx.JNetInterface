@@ -22,7 +22,7 @@ public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JChar;
 
-	static JPrimitiveMetadata IPrimitive<JChar>.Metadata => JChar.metadata;
+	static JPrimitiveMetadata IPrimitive.Metadata => JChar.metadata;
 
 	/// <summary>
 	/// Internal UTF-16 code unit character.

@@ -22,7 +22,7 @@ public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JI
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JInt;
 
-	static JPrimitiveMetadata IPrimitive<JInt>.Metadata => JInt.metadata;
+	static JPrimitiveMetadata IPrimitive.Metadata => JInt.metadata;
 
 	/// <summary>
 	/// Internal 32-bit signed integer value.

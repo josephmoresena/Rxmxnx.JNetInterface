@@ -5,6 +5,9 @@
 /// </summary>
 public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 {
+	/// <inheritdoc cref="IDataType.Metadata"/>
+	protected new static abstract JPrimitiveMetadata Metadata { get; }
+	
 	/// <summary>
 	/// Retrieves the metadata for given primitive type.
 	/// </summary>
@@ -21,10 +24,8 @@ public interface IPrimitive : IObject, IDataType, IComparable, IConvertible
 /// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
 public interface IPrimitive<TPrimitive> : IPrimitive, IDataType<TPrimitive> where TPrimitive : IPrimitive<TPrimitive>
 {
-	/// <inheritdoc cref="IDataType.Metadata"/>
-	new static abstract JPrimitiveMetadata Metadata { get; }
-
 	static JDataTypeMetadata IDataType.Metadata => TPrimitive.Metadata;
+	
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TPrimitive"/> to <see cref="JObject"/>.
 	/// </summary>

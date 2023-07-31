@@ -8,7 +8,7 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitive, IWrapp
 	IEquatable<JPrimitiveObject<TPrimitive>>
 	where TPrimitive : unmanaged, IPrimitive, IDataType<TPrimitive>, IEquatable<TPrimitive>
 {
-	static JDataTypeMetadata IDataType.Metadata => IDataType.GetMetadata<TPrimitive>();
+	static JPrimitiveMetadata IPrimitive.Metadata => IPrimitive.GetMetadata<TPrimitive>();
 
 	/// <summary>
 	/// Constructor.

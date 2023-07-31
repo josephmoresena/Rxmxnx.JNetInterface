@@ -21,7 +21,7 @@ public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparabl
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JShort;
 
-	static JPrimitiveMetadata IPrimitive<JShort>.Metadata => JShort.metadata;
+	static JPrimitiveMetadata IPrimitive.Metadata => JShort.metadata;
 
 	/// <summary>
 	/// Internal 16-bit signed integer value.
