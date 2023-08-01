@@ -22,6 +22,8 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 public interface IPrimitiveType<TPrimitive> : IPrimitiveType, IDataType<TPrimitive>
 	where TPrimitive : IPrimitiveType<TPrimitive>
 {
+	static Type IDataType<TPrimitive>.SelfType => typeof(IPrimitiveType<TPrimitive>);
+
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TPrimitive"/> to <see cref="JObject"/>.
 	/// </summary>

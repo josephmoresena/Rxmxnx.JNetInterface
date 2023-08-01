@@ -28,5 +28,5 @@ public interface IClassType<out TClass> : IClassType, IReferenceType<TClass>
 		ImmutableHashSet.Create(typeof(IDataType<TClass>), typeof(IReferenceType<TClass>));
 
 	static IImmutableSet<Type> IReferenceType<TClass>.ExcludingGenericTypes => IClassType<TClass>.excludingTypes;
-	static Type IReferenceType<TClass>.SelfType => typeof(IClassType<TClass>);
+	static Type IDataType<TClass>.SelfType => typeof(IClassType<TClass>);
 }

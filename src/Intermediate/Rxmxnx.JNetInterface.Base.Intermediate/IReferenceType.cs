@@ -6,11 +6,6 @@ namespace Rxmxnx.JNetInterface;
 public interface IReferenceType : IObject, IDataType, IDisposable
 {
 	/// <summary>
-	/// Excluding CLR types.
-	/// </summary>
-	internal static abstract IImmutableSet<Type> ExcludingTypes { get; }
-
-	/// <summary>
 	/// Retrieves the metadata for given reference type.
 	/// </summary>
 	/// <typeparam name="TReference">Type of current java reference datatype.</typeparam>
@@ -40,10 +35,6 @@ public interface
 	/// Excluding generic CLR types.
 	/// </summary>
 	internal static abstract IImmutableSet<Type> ExcludingGenericTypes { get; }
-	/// <summary>
-	/// Self CLR type.
-	/// </summary>
-	internal static abstract Type SelfType { get; }
 
 	static IImmutableSet<Type> IDataType<TReference>.Interfaces => IReferenceType<TReference>.interfaces;
 	static IImmutableSet<Type> IDataType<TReference>.Bases => IReferenceType<TReference>.bases;

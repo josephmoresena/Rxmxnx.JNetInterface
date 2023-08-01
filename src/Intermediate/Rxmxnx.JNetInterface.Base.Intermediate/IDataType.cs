@@ -5,6 +5,16 @@
 /// </summary>
 public interface IDataType
 {
+	/// <inheritdoc cref="IDataType.ExcludingTypes"/>
+	internal static readonly ImmutableHashSet<Type> ExcludingBasicTypes = ImmutableHashSet.Create(
+		typeof(IDisposable), typeof(IObject), typeof(IEquatable<JObject>), typeof(IDataType), typeof(IPrimitiveType),
+		typeof(IReferenceType), typeof(IInterfaceType), typeof(IClassType), typeof(JReferenceObject));
+
+	/// <summary>
+	/// Excluding CLR types.
+	/// </summary>
+	internal static virtual IImmutableSet<Type> ExcludingTypes => IDataType.ExcludingBasicTypes;
+
 	/// <summary>
 	/// Current type metadata.
 	/// </summary>
@@ -35,6 +45,10 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 	/// CLR base set.
 	/// </summary>
 	internal static virtual IImmutableSet<Type> Bases => ImmutableHashSet<Type>.Empty;
+	/// <summary>
+	/// Self CLR type.
+	/// </summary>
+	internal static virtual Type SelfType => typeof(IDataType<TDataType>);
 
 	static JDataTypeMetadata IDataType.Metadata
 		=> ValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));

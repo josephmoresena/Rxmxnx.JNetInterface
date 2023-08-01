@@ -96,9 +96,9 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal TPrimitive AsPrimitive<TPrimitive, TValue>()
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IWrapper<TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>
-		=> this is IWrapper<TPrimitive> pw ? pw.Value : this.AsValue<TValue>();
+		=> this is IWrapper<TPrimitive> pw ? pw.Value : this.AsValue<TPrimitive>();
 
 	/// <summary>
 	/// Interprets current instance a <typeparamref name="TValue"/> value.

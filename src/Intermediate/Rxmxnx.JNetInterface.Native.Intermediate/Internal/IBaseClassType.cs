@@ -7,14 +7,17 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </remarks>
 internal interface IBaseClassType : IClassType
 {
-	/// <inheritdoc cref="IReferenceType.ExcludingTypes"/>
-	private static readonly ImmutableHashSet<Type> excludingTypes = ImmutableHashSet.Create(
-		typeof(IDisposable), typeof(IObject), typeof(IEquatable<JObject>), typeof(IDataType), typeof(IPrimitiveType),
-		typeof(IReferenceType), typeof(IInterfaceType), typeof(IClassType), typeof(IBaseClassType),
-		typeof(JReferenceObject), typeof(JInterfaceObject), typeof(IDataType<JLocalObject>),
-		typeof(IReferenceType<JLocalObject>), typeof(IBaseClassType<JLocalObject>));
+	/// <inheritdoc cref="IDataType.ExcludingTypes"/>
+	internal static readonly ImmutableHashSet<Type> ExcludingReferenceBaseTypes =
+		IDataType.ExcludingBasicTypes.Union(new[]
+		{
+			typeof(IBaseClassType), typeof(JInterfaceObject),
+			typeof(IDataType<JLocalObject>),
+			typeof(IReferenceType<JLocalObject>),
+			typeof(IBaseClassType<JLocalObject>),
+		});
 
-	static IImmutableSet<Type> IReferenceType.ExcludingTypes => IBaseClassType.excludingTypes;
+	static IImmutableSet<Type> IDataType.ExcludingTypes => IBaseClassType.ExcludingReferenceBaseTypes;
 }
 
 /// <inheritdoc cref="IClassType{TClass}"/>
