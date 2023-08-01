@@ -8,22 +8,18 @@ public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<
 	IPrimitiveNumericIntegerType<JChar, Char>
 {
 	/// <summary>
-	/// Primitive metadata.
+	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JChar>(UnicodePrimitiveSignatures.JCharSignature)
-	                                                      .WithWrapperClassName(
-		                                                      UnicodeClassNames.JCharacterObjectClassName)
-	                                                      .WithArraySignature(
-		                                                      UnicodePrimitiveArraySignatures.JCharArraySignature)
-	                                                      .WithWrapperClassSignature(
-		                                                      UnicodeObjectSignatures.JCharacterObjectSignature)
-	                                                      .Build();
+	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JChar, Char>.JPrimitiveMetadataBuilder
+		.Create(UnicodePrimitiveSignatures.JCharSignature)
+		.WithWrapperClassName(UnicodeClassNames.JCharacterObjectClassName)
+		.WithArraySignature(UnicodePrimitiveArraySignatures.JCharArraySignature)
+		.WithWrapperClassSignature(UnicodeObjectSignatures.JCharacterObjectSignature).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JChar;
 
-	static JPrimitiveMetadata IPrimitiveType<JChar>.Metadata => JChar.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JChar.metadata;
 
 	/// <summary>
 	/// Internal UTF-16 code unit character.
@@ -66,7 +62,7 @@ public readonly partial struct JChar : INative<JChar>, ISelfEquatableComparable<
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JChar value) => new PrimitiveTypeObject<JChar>(value);
+	public static implicit operator JObject(JChar value) => new JPrimitiveObject<JChar>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JChar(JObject jObj)

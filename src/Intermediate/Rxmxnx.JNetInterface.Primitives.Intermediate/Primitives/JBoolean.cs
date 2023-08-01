@@ -17,22 +17,18 @@ public readonly partial struct JBoolean : INative<JBoolean>, ISelfEquatableCompa
 	private const Byte falseValue = 0x00;
 
 	/// <summary>
-	/// Primitive metadata.
+	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JBoolean>(
-		                                                      UnicodePrimitiveSignatures.JBooleanSignature)
-	                                                      .WithWrapperClassName(
-		                                                      UnicodeClassNames.JBooleanObjectClassName)
-	                                                      .WithArraySignature(
-		                                                      UnicodePrimitiveArraySignatures.JBooleanArraySignature)
-	                                                      .WithWrapperClassSignature(
-		                                                      UnicodeObjectSignatures.JBooleanObjectSignature).Build();
+	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JBoolean, Boolean>.JPrimitiveMetadataBuilder
+		.Create(UnicodePrimitiveSignatures.JBooleanSignature)
+		.WithWrapperClassName(UnicodeClassNames.JBooleanObjectClassName)
+		.WithArraySignature(UnicodePrimitiveArraySignatures.JBooleanArraySignature)
+		.WithWrapperClassSignature(UnicodeObjectSignatures.JBooleanObjectSignature).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JBoolean;
 
-	static JPrimitiveMetadata IPrimitiveType<JBoolean>.Metadata => JBoolean.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JBoolean.metadata;
 
 	/// <summary>
 	/// Internal 8-bit unsigned integer value.
@@ -78,7 +74,7 @@ public readonly partial struct JBoolean : INative<JBoolean>, ISelfEquatableCompa
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JBoolean value) => new PrimitiveTypeObject<JBoolean>(value);
+	public static implicit operator JObject(JBoolean value) => new JPrimitiveObject<JBoolean>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JBoolean(JObject jObj)

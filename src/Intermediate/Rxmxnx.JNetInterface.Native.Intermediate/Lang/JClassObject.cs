@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Class&lt;?&gt;</c> instance.
 /// </summary>
-public sealed partial class JClassObject : JLocalObject, IDataType<JClassObject>
+public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject>
 {
 	/// <summary>
 	/// Fully-qualified class name.
@@ -93,7 +93,5 @@ public sealed partial class JClassObject : JLocalObject, IDataType<JClassObject>
 
 	/// <inheritdoc/>
 	public static JClassObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ?
-			new(jLocal is IClass ? jLocal : JLocalObject.Validate<JClassObject>(jLocal)) :
-			default;
+		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JClassObject>(jLocal)) : default;
 }

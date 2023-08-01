@@ -8,20 +8,17 @@ public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<
 	IPrimitiveNumericIntegerType<JLong, Int64>, IPrimitiveNumericSignedType<JLong, Int64>
 {
 	/// <summary>
-	/// Primitive metadata.
+	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JLong>(UnicodePrimitiveSignatures.JLongSignature)
-	                                                      .WithWrapperClassName(UnicodeClassNames.JLongObjectClassName)
-	                                                      .WithArraySignature(
-		                                                      UnicodePrimitiveArraySignatures.JLongArraySignature)
-	                                                      .WithWrapperClassSignature(
-		                                                      UnicodeObjectSignatures.JLongObjectSignature).Build();
+	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JLong, Int64>.JPrimitiveMetadataBuilder
+		.Create(UnicodePrimitiveSignatures.JLongSignature).WithWrapperClassName(UnicodeClassNames.JLongObjectClassName)
+		.WithArraySignature(UnicodePrimitiveArraySignatures.JLongArraySignature)
+		.WithWrapperClassSignature(UnicodeObjectSignatures.JLongObjectSignature).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JLong;
 
-	static JPrimitiveMetadata IPrimitiveType<JLong>.Metadata => JLong.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JLong.metadata;
 
 	/// <summary>
 	/// Internal 64-bit signed integer value.
@@ -64,7 +61,7 @@ public readonly partial struct JLong : INative<JLong>, ISelfEquatableComparable<
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JLong value) => new PrimitiveTypeObject<JLong>(value);
+	public static implicit operator JObject(JLong value) => new JPrimitiveObject<JLong>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JLong(JObject jObj)

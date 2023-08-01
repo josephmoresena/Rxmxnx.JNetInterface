@@ -8,20 +8,18 @@ public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparabl
 	IPrimitiveNumericFloatingPointType<JFloat, Single>, IPrimitiveNumericSignedType<JFloat, Single>
 {
 	/// <summary>
-	/// Primitive metadata.
+	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JFloat>(UnicodePrimitiveSignatures.JFloatSignature)
-	                                                      .WithWrapperClassName(UnicodeClassNames.JFloatObjectClassName)
-	                                                      .WithArraySignature(
-		                                                      UnicodePrimitiveArraySignatures.JFloatArraySignature)
-	                                                      .WithWrapperClassSignature(
-		                                                      UnicodeObjectSignatures.JFloatObjectSignature).Build();
+	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JFloat, Single>.JPrimitiveMetadataBuilder
+		.Create(UnicodePrimitiveSignatures.JFloatSignature)
+		.WithWrapperClassName(UnicodeClassNames.JFloatObjectClassName)
+		.WithArraySignature(UnicodePrimitiveArraySignatures.JFloatArraySignature)
+		.WithWrapperClassSignature(UnicodeObjectSignatures.JFloatObjectSignature).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloat;
 
-	static JPrimitiveMetadata IPrimitiveType<JFloat>.Metadata => JFloat.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JFloat.metadata;
 
 	/// <summary>
 	/// Internal single-precision floating-point number value.
@@ -64,7 +62,7 @@ public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparabl
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JFloat value) => new PrimitiveTypeObject<JFloat>(value);
+	public static implicit operator JObject(JFloat value) => new JPrimitiveObject<JFloat>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JFloat(JObject jObj)

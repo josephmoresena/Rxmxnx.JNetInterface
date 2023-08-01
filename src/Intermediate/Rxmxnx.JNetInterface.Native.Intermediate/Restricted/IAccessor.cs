@@ -23,7 +23,7 @@ public interface IAccessor
 	void SetField<TField>(JLocalObject jLocal, JFieldDefinition definition, TField? value)
 		where TField : IDataType<TField>;
 	/// <summary>
-	/// Retrieves a static field from given <see cref="IClass"/> instance.
+	/// Retrieves a static field from given <see cref="JClassObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
@@ -31,7 +31,7 @@ public interface IAccessor
 	/// <returns><typeparamref name="TField"/> field instance.</returns>
 	TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition) where TField : IDataType<TField>;
 	/// <summary>
-	/// Sets a static field to given <see cref="IClass"/> instance.
+	/// Sets a static field to given <see cref="JClassObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
@@ -40,7 +40,7 @@ public interface IAccessor
 	void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
 		where TField : IDataType<TField>;
 	/// <summary>
-	/// Invokes a constructor method for given <see cref="IClass"/> instance.
+	/// Invokes a constructor method for given <see cref="JClassObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TObject"><see cref="IDataType"/> type of created instance.</typeparam>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
@@ -50,7 +50,7 @@ public interface IAccessor
 	TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition, IObject?[] args)
 		where TObject : JLocalObject, IDataType<TObject>;
 	/// <summary>
-	/// Invokes a static function on given <see cref="IClass"/> instance.
+	/// Invokes a static function on given <see cref="JClassObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
@@ -60,7 +60,7 @@ public interface IAccessor
 	TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition, IObject?[] args)
 		where TResult : IDataType<TResult>;
 	/// <summary>
-	/// Invokes a static method on given <see cref="IClass"/> instance.
+	/// Invokes a static method on given <see cref="JClassObject"/> instance.
 	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JNonTypedFieldDefinition"/> definition.</param>
@@ -77,7 +77,7 @@ public interface IAccessor
 	TResult? CallFunction<TResult>(JLocalObject jLocal, JFunctionDefinition definition, IObject?[] args)
 		where TResult : IDataType<TResult>;
 	/// <summary>
-	/// Invokes a function on given <see cref="JLocalObject"/> and <see cref="IClass"/> instances
+	/// Invokes a function on given <see cref="JLocalObject"/> and <see cref="JClassObject"/> instances
 	/// and returns its result.
 	/// </summary>
 	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
@@ -96,7 +96,7 @@ public interface IAccessor
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	void CallMethod(JLocalObject jLocal, JMethodDefinition definition, IObject?[] args);
 	/// <summary>
-	/// Invokes a non-virtual method on given <see cref="JLocalObject"/> and <see cref="IClass"/>
+	/// Invokes a non-virtual method on given <see cref="JLocalObject"/> and <see cref="JClassObject"/>
 	/// instances.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>

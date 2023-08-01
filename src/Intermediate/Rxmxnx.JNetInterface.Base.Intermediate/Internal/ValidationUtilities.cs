@@ -60,6 +60,20 @@ internal static class ValidationUtilities
 	public static String ThrowInvalidNativeType(JNativeType nativeType)
 		=> throw new InvalidEnumArgumentException(nameof(nativeType), (Int32)nativeType, typeof(JNativeType));
 	/// <summary>
+	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
+	/// <typeparamref name="TInterface"/>.
+	/// </summary>
+	/// <typeparam name="TInterface">Type of </typeparam>
+	/// <param name="typeName">Type of interface.</param>
+	/// <exception cref="NotImplementedException">Always thrown.</exception>
+	public static void ThrowInvalidImplementation<TInterface>(CString typeName)
+		where TInterface : JReferenceObject, IDataType<TInterface>
+	{
+		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();
+		throw new NotImplementedException(
+			$"The type {typeName} doesn't implements {interfaceMetadata.ClassName} interface.");
+	}
+	/// <summary>
 	/// Throws an exception if <paramref name="value"/> cannot be cast to <typeparamref name="TValue"/>.
 	/// </summary>
 	/// <param name="value">Convertible value.</param>

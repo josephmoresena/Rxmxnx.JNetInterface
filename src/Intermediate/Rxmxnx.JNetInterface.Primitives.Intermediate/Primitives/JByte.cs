@@ -7,20 +7,17 @@ public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<
 	IPrimitiveNumericIntegerType<JByte, SByte>, IPrimitiveNumericSignedType<JByte, SByte>
 {
 	/// <summary>
-	/// Primitive metadata.
+	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JByte>(UnicodePrimitiveSignatures.JByteSignature)
-	                                                      .WithWrapperClassName(UnicodeClassNames.JByteObjectClassName)
-	                                                      .WithArraySignature(
-		                                                      UnicodePrimitiveArraySignatures.JByteArraySignature)
-	                                                      .WithWrapperClassSignature(
-		                                                      UnicodeObjectSignatures.JByteObjectSignature).Build();
+	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JByte, SByte>.JPrimitiveMetadataBuilder
+		.Create(UnicodePrimitiveSignatures.JByteSignature).WithWrapperClassName(UnicodeClassNames.JByteObjectClassName)
+		.WithArraySignature(UnicodePrimitiveArraySignatures.JByteArraySignature)
+		.WithWrapperClassSignature(UnicodeObjectSignatures.JByteObjectSignature).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JByte;
 
-	static JPrimitiveMetadata IPrimitiveType<JByte>.Metadata => JByte.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JByte.metadata;
 
 	/// <summary>
 	/// Internal 8-bit signed integer value.
@@ -63,7 +60,7 @@ public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JByte value) => new PrimitiveTypeObject<JByte>(value);
+	public static implicit operator JObject(JByte value) => new JPrimitiveObject<JByte>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JByte(JObject jObj)

@@ -11,13 +11,7 @@ public abstract record JDataTypeMetadata
 	private readonly CString _className;
 	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 	private readonly CString _signature;
-	/// <inheritdoc cref="JDataTypeMetadata.Type"/>
-	private readonly Type _type;
 
-	/// <summary>
-	/// CLR type of <see cref="IDataType"/>.
-	/// </summary>
-	public Type Type => this._type;
 	/// <summary>
 	/// Class name.
 	/// </summary>
@@ -30,6 +24,11 @@ public abstract record JDataTypeMetadata
 	/// Array JNI signature of current type.
 	/// </summary>
 	public CString ArraySignature => this._arraySignature;
+
+	/// <summary>
+	/// CLR type of <see cref="IDataType"/>.
+	/// </summary>
+	public abstract Type Type { get; }
 	/// <summary>
 	/// Kind of current type.
 	/// </summary>
@@ -46,18 +45,23 @@ public abstract record JDataTypeMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="type">CLR type of current type.</param>
 	/// <param name="className">Class name of current type.</param>
 	/// <param name="signature">JNI signature for current type.</param>
 	/// <param name="arraySignature">Array JNI signature for current type.</param>
-	internal JDataTypeMetadata(Type type, CString className, CString signature, CString? arraySignature = default)
+	internal JDataTypeMetadata(CString className, CString signature, CString? arraySignature = default)
 	{
-		this._type = type;
 		this._className = JDataTypeMetadata.SafeNullTerminated(className);
 		this._signature = JDataTypeMetadata.SafeNullTerminated(signature);
 		this._arraySignature =
 			JDataTypeMetadata.SafeNullTerminated(arraySignature ?? JDataTypeMetadata.ComputeArraySignature(signature));
 	}
+
+	/// <summary>
+	/// Creates a <see cref="IDataType"/> instance from <paramref name="jObject"/>.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
+	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jObject"/>.</returns>
+	internal abstract IDataType? Create(JObject? jObject);
 
 	/// <summary>
 	/// Retrieve a safe null-terminated <see cref="CString"/> from <paramref name="cstr"/>.

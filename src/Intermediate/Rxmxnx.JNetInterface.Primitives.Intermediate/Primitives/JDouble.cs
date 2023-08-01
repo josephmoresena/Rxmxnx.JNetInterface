@@ -8,21 +8,18 @@ public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableCompara
 	IPrimitiveNumericFloatingPointType<JDouble, Double>, IPrimitiveNumericSignedType<JDouble, Double>
 {
 	/// <summary>
-	/// Primitive metadata.
+	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JDouble>(UnicodePrimitiveSignatures.JDoubleSignature)
-	                                                      .WithWrapperClassName(
-		                                                      UnicodeClassNames.JDoubleObjectClassName)
-	                                                      .WithArraySignature(
-		                                                      UnicodePrimitiveArraySignatures.JDoubleArraySignature)
-	                                                      .WithWrapperClassSignature(
-		                                                      UnicodeObjectSignatures.JDoubleObjectSignature).Build();
+	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JDouble, Double>.JPrimitiveMetadataBuilder
+		.Create(UnicodePrimitiveSignatures.JDoubleSignature)
+		.WithWrapperClassName(UnicodeClassNames.JDoubleObjectClassName)
+		.WithArraySignature(UnicodePrimitiveArraySignatures.JDoubleArraySignature)
+		.WithWrapperClassSignature(UnicodeObjectSignatures.JDoubleObjectSignature).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;
 
-	static JPrimitiveMetadata IPrimitiveType<JDouble>.Metadata => JDouble.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JDouble.metadata;
 
 	/// <summary>
 	/// Internal double-precision floating-point number value.
@@ -65,7 +62,7 @@ public readonly partial struct JDouble : INative<JDouble>, ISelfEquatableCompara
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JDouble value) => new PrimitiveTypeObject<JDouble>(value);
+	public static implicit operator JObject(JDouble value) => new JPrimitiveObject<JDouble>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JDouble(JObject jObj)

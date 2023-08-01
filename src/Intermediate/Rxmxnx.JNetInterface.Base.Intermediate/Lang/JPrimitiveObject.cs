@@ -4,8 +4,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// Java object representing a java primitive value.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of java primitive value.</typeparam>
-internal sealed class PrimitiveTypeObject<TPrimitive> : JObject, IPrimitiveType, IWrapper<TPrimitive>,
-	IEquatable<PrimitiveTypeObject<TPrimitive>>
+internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitiveType, IWrapper<TPrimitive>,
+	IEquatable<JPrimitiveObject<TPrimitive>>
 	where TPrimitive : unmanaged, IPrimitiveType, IDataType<TPrimitive>, IEquatable<TPrimitive>
 {
 	static JDataTypeMetadata IDataType.Metadata => IPrimitiveType.GetMetadata<TPrimitive>();
@@ -14,10 +14,9 @@ internal sealed class PrimitiveTypeObject<TPrimitive> : JObject, IPrimitiveType,
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">Primitive value.</param>
-	public PrimitiveTypeObject(TPrimitive value) : base(JValue.Create(value)) { }
+	public JPrimitiveObject(TPrimitive value) : base(JValue.Create(value)) { }
 	/// <inheritdoc cref="IEquatable{TPrimitive}"/>
-	public Boolean Equals(PrimitiveTypeObject<TPrimitive>? other)
-		=> other is not null && this.Value.Equals(other.Value);
+	public Boolean Equals(JPrimitiveObject<TPrimitive>? other) => other is not null && this.Value.Equals(other.Value);
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
 	public override CString ObjectClassName => IPrimitiveType.GetMetadata<TPrimitive>().ClassName;
@@ -56,10 +55,10 @@ internal sealed class PrimitiveTypeObject<TPrimitive> : JObject, IPrimitiveType,
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other)
-		=> other is PrimitiveTypeObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
+		=> other is JPrimitiveObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj)
-		=> obj is PrimitiveTypeObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
+		=> obj is JPrimitiveObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
 

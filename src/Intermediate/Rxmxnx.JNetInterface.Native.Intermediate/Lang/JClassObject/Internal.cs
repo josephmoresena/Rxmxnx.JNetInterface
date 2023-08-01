@@ -7,7 +7,9 @@ public partial class JClassObject
 	/// </summary>
 	internal static readonly Type MetadataType = typeof(JClassObjectMetadata);
 
-	/// <inheritdoc cref="IClass.Reference"/>
+	/// <summary>
+	/// JNI class reference.
+	/// </summary>
 	internal JClassLocalRef Reference => this.As<JClassLocalRef>();
 
 	/// <summary>

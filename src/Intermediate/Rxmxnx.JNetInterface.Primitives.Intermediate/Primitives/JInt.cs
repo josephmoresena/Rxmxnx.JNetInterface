@@ -8,21 +8,18 @@ public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JI
 	IPrimitiveNumericIntegerType<JInt, Int32>, IPrimitiveNumericSignedType<JInt, Int32>
 {
 	/// <summary>
-	/// Primitive metadata.
+	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JInt>(UnicodePrimitiveSignatures.JIntSignature)
-	                                                      .WithWrapperClassName(
-		                                                      UnicodeClassNames.JIntegerObjectClassName)
-	                                                      .WithArraySignature(
-		                                                      UnicodePrimitiveArraySignatures.JIntArraySignature)
-	                                                      .WithWrapperClassSignature(
-		                                                      UnicodeObjectSignatures.JIntegerObjectSignature).Build();
+	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JInt, Int32>.JPrimitiveMetadataBuilder
+		.Create(UnicodePrimitiveSignatures.JIntSignature)
+		.WithWrapperClassName(UnicodeClassNames.JIntegerObjectClassName)
+		.WithArraySignature(UnicodePrimitiveArraySignatures.JIntArraySignature)
+		.WithWrapperClassSignature(UnicodeObjectSignatures.JIntegerObjectSignature).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JInt;
 
-	static JPrimitiveMetadata IPrimitiveType<JInt>.Metadata => JInt.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JInt.metadata;
 
 	/// <summary>
 	/// Internal 32-bit signed integer value.
@@ -65,7 +62,7 @@ public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JI
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JInt value) => new PrimitiveTypeObject<JInt>(value);
+	public static implicit operator JObject(JInt value) => new JPrimitiveObject<JInt>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JInt(JObject jObj)

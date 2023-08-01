@@ -24,5 +24,43 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JLocalObject>());
 		Console.WriteLine(IDataType.GetMetadata<JClassObject>());
 		Console.WriteLine(IDataType.GetMetadata<JStringObject>());
+		Console.WriteLine(IDataType.GetMetadata<MyClass>());
+		Console.WriteLine(IDataType.GetMetadata<MyClass2>());
+		Console.WriteLine("Inicio 1");
+		foreach (Type type in IDataType<MyClass>.GetBases())
+			Console.WriteLine(type);
+		Console.WriteLine("Inicio 2");
+		foreach (Type type in IDataType<MyClass2>.GetBases())
+			Console.WriteLine(type);
+		Console.WriteLine("Inicio 3");
+		foreach (Type type in IDataType<MyClass3>.GetBases())
+			Console.WriteLine(type);
+	}
+
+	public class MyClass : JLocalObject, IClassType<MyClass>
+	{
+		public static JDataTypeMetadata Metadata
+			=> JMetadataBuilder<MyClass>.Create(new(() => "application.example.Class1"u8)).Build();
+		public MyClass(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+		protected MyClass(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+		public static MyClass? Create(JObject? jObject) => default;
+	}
+
+	public class MyClass2 : MyClass, IClassType<MyClass2>
+	{
+		public static JDataTypeMetadata Metadata
+			=> JMetadataBuilder<MyClass>.Create(new(() => "application.example.Class2"u8)).Build();
+		public MyClass2(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+		protected MyClass2(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+		public static MyClass2? Create(JObject? jObject) => default;
+	}
+
+	public class MyClass3 : MyClass2, IClassType<MyClass3>
+	{
+		public static JDataTypeMetadata Metadata
+			=> JMetadataBuilder<MyClass>.Create(new(() => "application.example.Class2"u8)).Build();
+		public MyClass3(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+		protected MyClass3(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+		public static MyClass3? Create(JObject? jObject) => default;
 	}
 }

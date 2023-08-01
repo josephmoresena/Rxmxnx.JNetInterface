@@ -3,15 +3,6 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JLocalObject
 {
 	/// <summary>
-	/// Reference metadata.
-	/// </summary>
-	private static readonly JReferenceMetadata metadata = JMetadataBuilder
-	                                                      .Create<JLocalObject>(JObject.JObjectClassName)
-	                                                      .WithSignature(JObject.JObjectSignature).Build();
-
-	static JDataTypeMetadata IDataType.Metadata => JLocalObject.metadata;
-
-	/// <summary>
 	/// Internal <see cref="IEnvironment"/> instance.
 	/// </summary>
 	private readonly IEnvironment _env;

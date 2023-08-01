@@ -8,13 +8,21 @@ public partial class JClassObject
 	/// </summary>
 	private sealed record JClassObjectMetadata : JObjectMetadata
 	{
-		/// <inheritdoc cref="IClass.Name"/>
+		/// <summary>
+		/// Class name of current object.
+		/// </summary>
 		public CString Name { get; init; }
-		/// <inheritdoc cref="IClass.ClassSignature"/>
+		/// <summary>
+		/// Class signature of current object.
+		/// </summary>
 		public CString ClassSignature { get; init; }
-		/// <inheritdoc cref="IClass.Hash"/>
+		/// <summary>
+		/// Class hash of current object.
+		/// </summary>
 		public String Hash { get; }
-		/// <inheritdoc cref="IClass.IsFinal"/>
+		/// <summary>
+		/// Indicates whether the class of current object is final.
+		/// </summary>
 		public Boolean? IsFinal { get; init; }
 
 		/// <summary>

@@ -22,12 +22,6 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 public interface IPrimitiveType<TPrimitive> : IPrimitiveType, IDataType<TPrimitive>
 	where TPrimitive : IPrimitiveType<TPrimitive>
 {
-	
-	/// <inheritdoc cref="IDataType.Metadata"/>
-	protected new static abstract JPrimitiveMetadata Metadata { get; }
-	
-	static JDataTypeMetadata IDataType.Metadata => TPrimitive.Metadata;
-
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TPrimitive"/> to <see cref="JObject"/>.
 	/// </summary>

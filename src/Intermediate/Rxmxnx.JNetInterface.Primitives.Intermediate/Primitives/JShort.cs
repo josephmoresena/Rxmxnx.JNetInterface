@@ -8,20 +8,18 @@ public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparabl
 	IPrimitiveNumericIntegerType<JShort, Int16>, IPrimitiveNumericSignedType<JShort, Int16>
 {
 	/// <summary>
-	/// Primitive metadata.
+	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = JPrimitiveMetadataBuilder
-	                                                      .Create<JShort>(UnicodePrimitiveSignatures.JShortSignature)
-	                                                      .WithWrapperClassName(UnicodeClassNames.JShortObjectClassName)
-	                                                      .WithArraySignature(
-		                                                      UnicodePrimitiveArraySignatures.JShortArraySignature)
-	                                                      .WithWrapperClassSignature(
-		                                                      UnicodeObjectSignatures.JShortObjectSignature).Build();
+	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JShort, Int16>.JPrimitiveMetadataBuilder
+		.Create(UnicodePrimitiveSignatures.JShortSignature)
+		.WithWrapperClassName(UnicodeClassNames.JShortObjectClassName)
+		.WithArraySignature(UnicodePrimitiveArraySignatures.JShortArraySignature)
+		.WithWrapperClassSignature(UnicodeObjectSignatures.JShortObjectSignature).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JShort;
 
-	static JPrimitiveMetadata IPrimitiveType<JShort>.Metadata => JShort.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JShort.metadata;
 
 	/// <summary>
 	/// Internal 16-bit signed integer value.
@@ -64,7 +62,7 @@ public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparabl
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static implicit operator JObject(JShort value) => new PrimitiveTypeObject<JShort>(value);
+	public static implicit operator JObject(JShort value) => new JPrimitiveObject<JShort>(value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JShort(JObject jObj)

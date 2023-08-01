@@ -3,14 +3,13 @@ namespace Rxmxnx.JNetInterface.Lang;
 public partial class JClassObject
 {
 	/// <summary>
-	/// Reference metadata.
+	/// Datatype metadata.
 	/// </summary>
-	private static readonly JReferenceMetadata metadata = JMetadataBuilder
-	                                                      .Create<JLocalObject>(
-		                                                      UnicodeClassNames.JClassObjectClassName,
-		                                                      JTypeModifier.Final)
-	                                                      .WithSignature(UnicodeObjectSignatures.JClassObjectSignature)
-	                                                      .Build();
+	private static readonly JClassMetadata metadata = JMetadataBuilder<JClassObject>
+	                                                  .Create(UnicodeClassNames.JClassObjectClassName,
+	                                                          JTypeModifier.Final)
+	                                                  .WithSignature(UnicodeObjectSignatures.JClassObjectSignature)
+	                                                  .Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JClassObject.metadata;
 
