@@ -25,7 +25,8 @@ public interface IClassType<out TClass> : IClassType, IReferenceType<TClass>
 {
 	/// <inheritdoc cref="IReferenceType{TClass}.ExcludingGenericTypes"/>
 	private static readonly ImmutableHashSet<Type> excludingTypes =
-		ImmutableHashSet.Create(typeof(IDataType<TClass>), typeof(IReferenceType<TClass>), typeof(IClassType<TClass>));
+		ImmutableHashSet.Create(typeof(IDataType<TClass>), typeof(IReferenceType<TClass>));
 
 	static IImmutableSet<Type> IReferenceType<TClass>.ExcludingGenericTypes => IClassType<TClass>.excludingTypes;
+	static Type IReferenceType<TClass>.SelfType => typeof(IClassType<TClass>);
 }

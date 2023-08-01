@@ -40,6 +40,10 @@ public interface
 	/// Excluding generic CLR types.
 	/// </summary>
 	internal static abstract IImmutableSet<Type> ExcludingGenericTypes { get; }
+	/// <summary>
+	/// Self CLR type.
+	/// </summary>
+	internal static abstract Type SelfType { get; }
 
 	static IImmutableSet<Type> IDataType<TReference>.Interfaces => IReferenceType<TReference>.interfaces;
 	static IImmutableSet<Type> IDataType<TReference>.Bases => IReferenceType<TReference>.bases;

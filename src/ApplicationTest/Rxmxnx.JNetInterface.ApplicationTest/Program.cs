@@ -27,13 +27,13 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<MyClass>());
 		Console.WriteLine(IDataType.GetMetadata<MyClass2>());
 		Console.WriteLine("Inicio 1");
-		foreach (Type type in IDataType<MyClass>.GetBases())
+		foreach (Type type in IDataType<MyClass>.GetInterfaces())
 			Console.WriteLine(type);
 		Console.WriteLine("Inicio 2");
-		foreach (Type type in IDataType<MyClass2>.GetBases())
+		foreach (Type type in IDataType<MyClass2>.GetInterfaces())
 			Console.WriteLine(type);
 		Console.WriteLine("Inicio 3");
-		foreach (Type type in IDataType<MyClass3>.GetBases())
+		foreach (Type type in IDataType<MyClass3>.GetInterfaces())
 			Console.WriteLine(type);
 	}
 

@@ -12,7 +12,7 @@ internal interface IBaseClassType : IClassType
 		typeof(IDisposable), typeof(IObject), typeof(IEquatable<JObject>), typeof(IDataType), typeof(IPrimitiveType),
 		typeof(IReferenceType), typeof(IInterfaceType), typeof(IClassType), typeof(IBaseClassType),
 		typeof(JReferenceObject), typeof(JInterfaceObject), typeof(IDataType<JLocalObject>),
-		typeof(IReferenceType<JLocalObject>), typeof(IClassType<JLocalObject>), typeof(IBaseClassType<JLocalObject>));
+		typeof(IReferenceType<JLocalObject>), typeof(IBaseClassType<JLocalObject>));
 
 	static IImmutableSet<Type> IReferenceType.ExcludingTypes => IBaseClassType.excludingTypes;
 }
