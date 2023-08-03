@@ -11,12 +11,12 @@ public partial class JLocalObject
 		{
 			/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
 			private readonly JClassMetadata? _baseMetadata;
+			/// <inheritdoc cref="JDataTypeMetadata.BaseTypes"/>
+			private readonly ISet<Type> _baseTypes;
 			/// <inheritdoc cref="JDataTypeMetadata.Interfaces"/>
 			private readonly IImmutableSet<JInterfaceMetadata> _interfaces;
 			/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 			private readonly JTypeModifier _modifier;
-			/// <inheritdoc cref="JDataTypeMetadata.BaseTypes"/>
-			private readonly ISet<Type> _baseTypes;
 
 			/// <inheritdoc/>
 			public override Type Type => typeof(TClass);
@@ -43,8 +43,7 @@ public partial class JLocalObject
 			/// <param name="arraySignature">Array JNI signature for current type.</param>
 			internal JClassGenericMetadata(CString className, JTypeModifier modifier,
 				IImmutableSet<JInterfaceMetadata> interfaces, JClassMetadata? baseMetadata, ISet<Type> baseTypes,
-				CString? signature, CString? arraySignature) : 
-				base(className, signature, arraySignature)
+				CString? signature, CString? arraySignature) : base(className, signature, arraySignature)
 			{
 				this._modifier = modifier;
 				this._interfaces = interfaces;

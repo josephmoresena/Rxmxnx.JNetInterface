@@ -11,14 +11,14 @@ public partial class JLocalObject
 		/// Base types.
 		/// </summary>
 		private readonly ISet<Type> _baseTypes;
-		/// <summary>
-		/// Interface types.
-		/// </summary>
-		private readonly ISet<Type> _interfaceTypes;
 		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
 		private readonly CString _dataTypeName;
 		/// <inheritdoc cref="JDataTypeMetadata.Interfaces"/>
 		private readonly HashSet<JInterfaceMetadata> _interfaces = new();
+		/// <summary>
+		/// Interface types.
+		/// </summary>
+		private readonly ISet<Type> _interfaceTypes;
 
 		/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
 		private CString? _arraySignature;
@@ -33,7 +33,7 @@ public partial class JLocalObject
 		protected CString? Signature => this._signature;
 		/// <inheritdoc cref="JDataTypeMetadata.BaseTypes"/>
 		protected ISet<Type> BaseTypes => this._baseTypes;
-		
+
 		/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
 		protected abstract JTypeKind Kind { get; }
 
@@ -82,11 +82,12 @@ public partial class JLocalObject
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <param name="deriveFromInterfaceType"><see cref="IDerivedType{TObject,TInterface}"/> interface type.</param>
 		/// <returns>Current instance.</returns>
-		protected void AppendInterface<TInterface>(Type deriveFromInterfaceType) 
+		protected void AppendInterface<TInterface>(Type deriveFromInterfaceType)
 			where TInterface : JInterfaceObject, IInterfaceType<TInterface>
 		{
 			if (!this._interfaceTypes.Contains(deriveFromInterfaceType))
-				ValidationUtilities.ThrowInvalidImplementation<TInterface>(this.DataTypeName, this.Kind != JTypeKind.Interface);
+				ValidationUtilities.ThrowInvalidImplementation<TInterface>(
+					this.DataTypeName, this.Kind != JTypeKind.Interface);
 			this._interfaces.Add(IInterfaceType.GetMetadata<TInterface>());
 		}
 
@@ -131,14 +132,13 @@ public partial class JLocalObject
 		/// <param name="baseMetadataFunc">Delegate. Gets the base type of current type metadata.</param>
 		/// <param name="baseTypes">Base types.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private JMetadataBuilder(CString className, JTypeModifier modifier, Func<JClassMetadata>? baseMetadataFunc, 
-			ISet<Type> baseTypes, ISet<Type> interfaceTypes) :
-			base(className, baseTypes, interfaceTypes)
+		private JMetadataBuilder(CString className, JTypeModifier modifier, Func<JClassMetadata>? baseMetadataFunc,
+			ISet<Type> baseTypes, ISet<Type> interfaceTypes) : base(className, baseTypes, interfaceTypes)
 		{
 			this._modifier = modifier;
 			this._baseMetadataFunc = baseMetadataFunc;
 		}
-		
+
 		/// <summary>
 		/// Sets the type signature.
 		/// </summary>
@@ -177,7 +177,8 @@ public partial class JLocalObject
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JClassMetadata Build()
 			=> new JClassGenericMetadata(this.DataTypeName, this._modifier, this.CreateInterfaceSet(),
-			                             this._baseMetadataFunc?.Invoke(), this.BaseTypes, this.Signature, this.ArraySignature);
+			                             this._baseMetadataFunc?.Invoke(), this.BaseTypes, this.Signature,
+			                             this.ArraySignature);
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceMetadata"/> instance.
