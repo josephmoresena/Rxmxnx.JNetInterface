@@ -1,9 +1,10 @@
-﻿namespace Rxmxnx.JNetInterface;
+﻿namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
 /// This interface exposes a java native value.
 /// </summary>
-public interface INative
+[EditorBrowsable(EditorBrowsableState.Never)]
+internal interface INative
 {
 	/// <summary>
 	/// Indicates the type of native value.

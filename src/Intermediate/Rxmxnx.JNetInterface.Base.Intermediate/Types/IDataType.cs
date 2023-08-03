@@ -1,8 +1,9 @@
-﻿namespace Rxmxnx.JNetInterface;
+﻿namespace Rxmxnx.JNetInterface.Types;
 
 /// <summary>
 /// This interface exposes a java data type.
 /// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
 public interface IDataType
 {
 	/// <inheritdoc cref="IDataType.ExcludingTypes"/>

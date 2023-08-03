@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface;
+namespace Rxmxnx.JNetInterface.Types.Inheritance;
 
 /// <summary>
 /// This interface defines the implementation of a <see cref="IInterfaceType"/> type in a <see cref="JLocalObject"/>

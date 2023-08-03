@@ -1,8 +1,9 @@
-﻿namespace Rxmxnx.JNetInterface;
+﻿namespace Rxmxnx.JNetInterface.Types;
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive value.
 /// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
 public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 {
 	/// <summary>

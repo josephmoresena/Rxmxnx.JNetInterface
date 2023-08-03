@@ -1,8 +1,9 @@
-namespace Rxmxnx.JNetInterface;
+namespace Rxmxnx.JNetInterface.Types;
 
 /// <summary>
 /// This interface exposes an object that represents a java interface type instance.
 /// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
 public interface IInterfaceType : IReferenceType
 {
 	/// <summary>

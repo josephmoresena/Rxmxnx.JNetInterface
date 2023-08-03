@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native;
+namespace Rxmxnx.JNetInterface.Types.Metadata;
 
 /// <summary>
 /// This record stores the metadata for a reference <see cref="IDataType"/> type.

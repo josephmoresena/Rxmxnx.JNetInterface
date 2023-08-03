@@ -53,7 +53,7 @@ internal sealed record NativeTypeHelper
 	{
 		this._typeSymbol = typeSymbol;
 		this._isPointer = interfaces.Contains("Rxmxnx.PInvoke.IFixedPointer");
-		this._isPrimitive = interfaces.Contains("Rxmxnx.JNetInterface.IPrimitiveType");
+		this._isPrimitive = interfaces.Contains("Rxmxnx.JNetInterface.Types.IPrimitiveType");
 		this._isArrRef = interfaces.Contains("Rxmxnx.JNetInterface.Internal.IArrayReference");
 		this._isNumeric = this._isPrimitive &&
 			interfaces.Contains("Rxmxnx.JNetInterface.Internal.IPrimitiveNumericType");
@@ -142,7 +142,7 @@ internal sealed record NativeTypeHelper
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static NativeTypeHelper? Create(INamedTypeSymbol typeSymbol, IImmutableSet<String> interfaces)
 	{
-		if (typeSymbol.TypeKind == TypeKind.Struct && interfaces.Contains("Rxmxnx.JNetInterface.INative"))
+		if (typeSymbol.TypeKind == TypeKind.Struct && interfaces.Contains("Rxmxnx.JNetInterface.Internal.INative"))
 			return new(typeSymbol, interfaces);
 		return default;
 	}

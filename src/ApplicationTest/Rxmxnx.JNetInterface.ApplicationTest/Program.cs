@@ -1,6 +1,8 @@
 ﻿using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Primitives;
+using Rxmxnx.JNetInterface.Types;
+using Rxmxnx.JNetInterface.Types.Metadata;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 

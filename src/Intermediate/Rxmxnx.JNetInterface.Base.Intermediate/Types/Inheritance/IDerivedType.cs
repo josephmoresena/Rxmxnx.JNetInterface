@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface;
+namespace Rxmxnx.JNetInterface.Types.Inheritance;
 
 /// <summary>
 /// This interface exposes a java data type which extends or implements another.
