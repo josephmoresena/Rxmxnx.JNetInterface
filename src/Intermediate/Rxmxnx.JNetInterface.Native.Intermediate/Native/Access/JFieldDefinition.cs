@@ -1,4 +1,4 @@
-﻿namespace Rxmxnx.JNetInterface.Native;
+﻿namespace Rxmxnx.JNetInterface.Native.Access;
 
 /// <summary>
 /// This class stores a class field definition.

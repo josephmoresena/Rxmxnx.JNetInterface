@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native;
+namespace Rxmxnx.JNetInterface;
 
 /// <summary>
 /// This record stores the metadata of a <see cref="JLocalObject"/> in order to create a

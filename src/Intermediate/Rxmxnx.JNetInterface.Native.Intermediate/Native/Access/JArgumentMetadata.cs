@@ -1,4 +1,4 @@
-﻿namespace Rxmxnx.JNetInterface.Native;
+﻿namespace Rxmxnx.JNetInterface.Native.Access;
 
 /// <summary>
 /// This record stores the metadata for a parameter <see cref="IDataType"/> type.

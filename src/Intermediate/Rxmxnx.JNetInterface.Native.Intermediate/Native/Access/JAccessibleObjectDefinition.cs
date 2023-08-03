@@ -1,8 +1,9 @@
-﻿namespace Rxmxnx.JNetInterface.Native;
+﻿namespace Rxmxnx.JNetInterface.Native.Access;
 
 /// <summary>
 /// This class stores a <c>java.lang.Class&lt;?&gt;</c> accessible object definition.
 /// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract record JAccessibleObjectDefinition
 {
 	/// <summary>

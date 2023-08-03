@@ -1,8 +1,9 @@
-﻿namespace Rxmxnx.JNetInterface.Native;
+﻿namespace Rxmxnx.JNetInterface.Native.Access;
 
 /// <summary>
 /// This class stores a java call definition.
 /// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract record JCallDefinition : JAccessibleObjectDefinition
 {
 	/// <summary>
