@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface;
+namespace Rxmxnx.JNetInterface.Types;
 
 /// <summary>
 /// Kinds of java datatype.
