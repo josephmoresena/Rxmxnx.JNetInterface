@@ -18,7 +18,8 @@ internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<T
 			typeof(JPrimitiveObject<TPrimitive>),
 		});
 
-	static IImmutableSet<Type> IDataType<TPrimitive>.ExcludingGenericTypes => IPrimitiveType<TPrimitive, TValue>.ExcludingPrimitiveTypes;
+	static IImmutableSet<Type> IDataType<TPrimitive>.ExcludingGenericTypes
+		=> IPrimitiveType<TPrimitive, TValue>.ExcludingPrimitiveTypes;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
