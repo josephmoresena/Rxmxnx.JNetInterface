@@ -42,8 +42,9 @@ public partial class JLocalObject
 			/// <param name="signature">JNI signature for current type.</param>
 			/// <param name="arraySignature">Array JNI signature for current type.</param>
 			internal JClassGenericTypeMetadata(CString className, JTypeModifier modifier,
-				IImmutableSet<JInterfaceTypeMetadata> interfaces, JClassTypeMetadata? baseMetadata, ISet<Type> baseTypes,
-				CString? signature, CString? arraySignature) : base(className, signature, arraySignature)
+				IImmutableSet<JInterfaceTypeMetadata> interfaces, JClassTypeMetadata? baseMetadata,
+				ISet<Type> baseTypes, CString? signature, CString? arraySignature) : base(
+				className, signature, arraySignature)
 			{
 				this._modifier = modifier;
 				this._interfaces = interfaces;

@@ -18,6 +18,6 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	/// <param name="interfaceName">Interface name of current type.</param>
 	/// <param name="signature">JNI signature for current type.</param>
 	/// <param name="arraySignature">Array JNI signature for current type.</param>
-	internal JInterfaceTypeMetadata(CString interfaceName, CString? signature, CString? arraySignature = default) : base(
-		interfaceName, signature, arraySignature) { }
+	internal JInterfaceTypeMetadata(CString interfaceName, CString? signature, CString? arraySignature = default) :
+		base(interfaceName, signature, arraySignature) { }
 }

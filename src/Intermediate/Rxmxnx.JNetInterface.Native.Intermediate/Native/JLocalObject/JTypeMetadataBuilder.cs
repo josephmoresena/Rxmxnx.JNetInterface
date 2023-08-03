@@ -177,7 +177,7 @@ public partial class JLocalObject
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JClassTypeMetadata Build()
 			=> new JClassGenericTypeMetadata(this.DataTypeName, this._modifier, this.CreateInterfaceSet(),
-			                             this._baseMetadata, this.BaseTypes, this.Signature, this.ArraySignature);
+			                                 this._baseMetadata, this.BaseTypes, this.Signature, this.ArraySignature);
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.

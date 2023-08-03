@@ -40,8 +40,9 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// <param name="className">Wrapper class name of current primitive type.</param>
 			/// <param name="arraySignature">JNI signature for an array of current type.</param>
 			/// <param name="classSignature">Wrapper class JNI signature of current primitive type.</param>
-			internal JPrimitiveGenericTypeMetadata(Int32 sizeOf, Type underlineType, CString signature, CString className,
-				CString? arraySignature, CString? classSignature = default) : base(signature, className, arraySignature)
+			internal JPrimitiveGenericTypeMetadata(Int32 sizeOf, Type underlineType, CString signature,
+				CString className, CString? arraySignature, CString? classSignature = default) : base(
+				signature, className, arraySignature)
 			{
 				this._sizeOf = sizeOf;
 				this._underlineType = underlineType;

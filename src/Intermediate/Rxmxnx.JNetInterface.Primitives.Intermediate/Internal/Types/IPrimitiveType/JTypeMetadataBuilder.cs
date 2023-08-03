@@ -61,8 +61,8 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JPrimitiveTypeMetadata Build()
 			=> new JPrimitiveGenericTypeMetadata(NativeUtilities.SizeOf<TPrimitive>(), typeof(TValue), this._signature,
-			                                 ValidationUtilities.ValidateNotEmpty(this._className),
-			                                 this._arraySignature, this._classSignature);
+			                                     ValidationUtilities.ValidateNotEmpty(this._className),
+			                                     this._arraySignature, this._classSignature);
 
 		/// <summary>
 		/// Creates a new <see cref="JTypeMetadataBuilder"/> instance.
