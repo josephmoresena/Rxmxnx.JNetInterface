@@ -103,7 +103,7 @@ internal static class ValidationUtilities
 	/// </exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void ThrowIfInvalidCast<TDataType>(JReferenceObject jObject,
-		Func<JReferenceObject, Boolean> evaluator) where TDataType : IDataType
+		Func<JReferenceObject, Boolean> evaluator) where TDataType : IDataType<TDataType>
 	{
 		JDataTypeMetadata metadata = IDataType.GetMetadata<TDataType>();
 		if (!evaluator(jObject))

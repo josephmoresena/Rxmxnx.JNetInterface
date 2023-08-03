@@ -33,7 +33,8 @@ public interface IDataType
 	/// <typeparam name="TDataType">Type of current java datatype.</typeparam>
 	/// <returns>The <see cref="JDataTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static JDataTypeMetadata GetMetadata<TDataType>() where TDataType : IDataType => TDataType.Metadata;
+	public static JDataTypeMetadata GetMetadata<TDataType>() where TDataType : IDataType<TDataType>
+		=> TDataType.Metadata;
 }
 
 /// <summary>

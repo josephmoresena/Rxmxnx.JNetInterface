@@ -14,7 +14,8 @@ public interface IInterfaceType : IReferenceType
 	/// <typeparam name="TInterface">Type of current java interface datatype.</typeparam>
 	/// <returns>The <see cref="JInterfaceTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JInterfaceTypeMetadata GetMetadata<TInterface>() where TInterface : IClassType
+	public new static JInterfaceTypeMetadata GetMetadata<TInterface>()
+		where TInterface : JReferenceObject, IInterfaceType<TInterface>
 		=> (JInterfaceTypeMetadata)IDataType.GetMetadata<TInterface>();
 }
 

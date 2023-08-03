@@ -40,6 +40,6 @@ public sealed record JArgumentMetadata
 	/// </summary>
 	/// <typeparam name="TArg"><see cref="IDataType"/> type.</typeparam>
 	/// <returns>A <see cref="JArgumentMetadata"/> from <typeparamref name="TArg"/> type</returns>
-	public static JArgumentMetadata Create<TArg>() where TArg : IDataType
+	public static JArgumentMetadata Create<TArg>() where TArg : IDataType<TArg>
 		=> new(IDataType.GetMetadata<TArg>().Signature, IDataType.GetMetadata<TArg>().SizeOf);
 }

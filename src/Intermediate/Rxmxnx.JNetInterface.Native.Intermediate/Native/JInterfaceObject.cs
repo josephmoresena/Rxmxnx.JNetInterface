@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a local interface instance.
 /// </summary>
-public abstract partial class JInterfaceObject : JLocalObject
+public abstract partial class JInterfaceObject : JLocalObject, IInterfaceType
 {
+	static JTypeKind IDataType.Kind => JTypeKind.Interface;
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>

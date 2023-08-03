@@ -12,7 +12,8 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 	/// <typeparam name="TPrimitive">Type of current java primitive datatype.</typeparam>
 	/// <returns>The <see cref="JPrimitiveTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JPrimitiveTypeMetadata GetMetadata<TPrimitive>() where TPrimitive : IPrimitiveType
+	public new static JPrimitiveTypeMetadata GetMetadata<TPrimitive>()
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		=> (JPrimitiveTypeMetadata)IDataType.GetMetadata<TPrimitive>();
 }
 
@@ -21,7 +22,7 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
 public interface IPrimitiveType<TPrimitive> : IPrimitiveType, IDataType<TPrimitive>
-	where TPrimitive : IPrimitiveType<TPrimitive>
+	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {
 	static Type IDataType<TPrimitive>.SelfType => typeof(IPrimitiveType<TPrimitive>);
 	static JTypeKind IDataType.Kind => JTypeKind.Primitive;

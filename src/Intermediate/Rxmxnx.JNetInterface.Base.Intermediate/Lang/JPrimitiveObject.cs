@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <typeparam name="TPrimitive">Type of java primitive value.</typeparam>
 internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitiveType, IWrapper<TPrimitive>,
 	IEquatable<JPrimitiveObject<TPrimitive>>
-	where TPrimitive : unmanaged, IPrimitiveType, IDataType<TPrimitive>, IEquatable<TPrimitive>
+	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEquatable<TPrimitive>
 {
 	static JDataTypeMetadata IDataType.Metadata => IPrimitiveType.GetMetadata<TPrimitive>();
 

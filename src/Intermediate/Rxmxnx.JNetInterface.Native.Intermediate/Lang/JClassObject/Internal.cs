@@ -16,7 +16,7 @@ public partial class JClassObject
 	/// Initialize the current instance with given <see cref="IDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">The <see cref="IDataType"/> with class definition.</typeparam>
-	internal void Initialize<TDataType>() where TDataType : JLocalObject, IDataType
+	internal void Initialize<TDataType>() where TDataType : JLocalObject, IDataType<TDataType>
 	{
 		this._className = IDataType.GetMetadata<TDataType>().ClassName;
 		this._signature = IDataType.GetMetadata<TDataType>().Signature;
@@ -29,7 +29,7 @@ public partial class JClassObject
 	/// </summary>
 	/// <typeparam name="TDataType">The <see cref="IDataType"/> with class definition.</typeparam>
 	/// <returns>The hash for current type.</returns>
-	internal static String GetClassHash<TDataType>() where TDataType : IDataType
+	internal static String GetClassHash<TDataType>() where TDataType : IDataType<TDataType>
 	{
 		CString className = IDataType.GetMetadata<TDataType>().ClassName;
 		CString classSignature = IDataType.GetMetadata<TDataType>().Signature;
