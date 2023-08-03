@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// Primitive <c>int</c>. Represents a primitive 32-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JInt : INative<JInt>, ISelfEquatableComparable<JInt>,
+public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparable<JInt>,
 	IPrimitiveNumericIntegerType<JInt, Int32>, IPrimitiveNumericSignedType<JInt, Int32>
 {
 	/// <summary>

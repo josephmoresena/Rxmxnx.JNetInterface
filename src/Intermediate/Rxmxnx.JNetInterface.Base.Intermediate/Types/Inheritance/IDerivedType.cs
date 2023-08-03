@@ -14,5 +14,5 @@ public interface IDerivedType<[DynamicallyAccessedMembers(DynamicallyAccessedMem
 	/// <summary>
 	/// Type of current derivation.
 	/// </summary>
-	internal static abstract DerivationKind Type { get; }
+	internal static abstract JDerivationKind Type { get; }
 }

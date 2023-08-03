@@ -5,7 +5,7 @@
 /// </summary>
 /// <remarks>This references is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JEnvironmentRef : INativeReference<JEnvironmentRef, JEnvironmentValue>
+public readonly partial struct JEnvironmentRef : INativeReferenceType<JEnvironmentRef, JEnvironmentValue>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JEnvironmentRef;

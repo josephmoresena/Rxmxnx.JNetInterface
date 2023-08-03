@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JArrayLocalRef : IObjectReference<JArrayLocalRef>
+public readonly partial struct JArrayLocalRef : IObjectReferenceType<JArrayLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JArray;
@@ -49,7 +49,7 @@ public readonly partial struct JArrayLocalRef : IObjectReference<JArrayLocalRef>
 			TArray arr2 => arr.Value.Equals(arr2.Value),
 			IEquatable<TArray> other => other.Equals(arr),
 			JArrayLocalRef otherArr => arr.Equals(otherArr),
-			IArrayReference arrRef => arr.Equals(arrRef.ArrayValue),
+			IArrayReferenceType arrRef => arr.Equals(arrRef.ArrayValue),
 			_ => JObjectLocalRef.ObjectEquals(arr, obj),
 		};
 
@@ -67,7 +67,7 @@ public readonly partial struct JArrayLocalRef : IObjectReference<JArrayLocalRef>
 		=> obj switch
 		{
 			JArrayLocalRef otherArr => arr.Equals(otherArr),
-			IArrayReference arrRef => arr.Equals(arrRef.ArrayValue),
+			IArrayReferenceType arrRef => arr.Equals(arrRef.ArrayValue),
 			IEquatable<JArrayLocalRef> other => other.Equals(arr),
 			_ => JObjectLocalRef.ObjectEquals(arr, obj),
 		};

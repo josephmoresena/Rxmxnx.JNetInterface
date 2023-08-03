@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents the base of any java reference type instance.
 /// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract class JReferenceObject : JObject
 {
 	/// <summary>

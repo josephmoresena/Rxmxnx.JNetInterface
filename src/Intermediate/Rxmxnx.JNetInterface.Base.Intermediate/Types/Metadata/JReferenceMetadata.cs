@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for a reference <see cref="IDataType"/> type.
 /// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract record JReferenceMetadata : JDataTypeMetadata
 {
 	/// <inheritdoc/>

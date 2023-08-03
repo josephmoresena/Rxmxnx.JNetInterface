@@ -1,10 +1,11 @@
-namespace Rxmxnx.JNetInterface.Internal;
+namespace Rxmxnx.JNetInterface.Internal.Types;
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive value.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive structure.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
+[EditorBrowsable(EditorBrowsableState.Never)]
 internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<TPrimitive>, IPrimitiveWrapper<TValue>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>

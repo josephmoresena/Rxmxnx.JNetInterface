@@ -4,7 +4,7 @@
 /// <c>jvalue</c> union. This structure can represent any reference type as any primitive type.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
-internal readonly partial struct JValue : INative<JValue>
+internal readonly partial struct JValue : INativeType<JValue>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JValue;

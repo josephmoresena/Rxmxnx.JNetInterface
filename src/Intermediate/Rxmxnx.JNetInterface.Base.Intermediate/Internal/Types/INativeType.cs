@@ -1,10 +1,10 @@
-﻿namespace Rxmxnx.JNetInterface.Internal;
+﻿namespace Rxmxnx.JNetInterface.Internal.Types;
 
 /// <summary>
 /// This interface exposes a java native value.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface INative
+internal interface INativeType
 {
 	/// <summary>
 	/// Indicates the type of native value.
@@ -37,20 +37,22 @@ internal interface INative
 	String AsString();
 
 	/// <summary>
-	/// <paramref name="native"/> as <see cref="String"/>.
+	/// <paramref name="nativeType"/> as <see cref="String"/>.
 	/// </summary>
-	/// <param name="native"><see cref="INative"/> instance.</param>
-	/// <returns><see cref="INative"/> instance as <see cref="String"/>.</returns>
-	internal static String ToString(INative native) => native.AsString();
+	/// <typeparam name="TNative">Type of <see cref="INativeType"/></typeparam>
+	/// <param name="nativeType"><see cref="INativeType"/> instance.</param>
+	/// <returns><see cref="INativeType"/> instance as <see cref="String"/>.</returns>
+	internal static String ToString<TNative>(TNative nativeType) where TNative : unmanaged, INativeType<TNative> 
+		=> nativeType.AsString();
 }
 
 /// <summary>
 /// This interface exposes a java native value.
 /// </summary>
-/// <typeparam name="TNative">Type of <see cref="INative{TSelf}"/></typeparam>
-internal interface INative<TNative> : INative where TNative : unmanaged, INative<TNative>
+/// <typeparam name="TNative">Type of <see cref="INativeType"/></typeparam>
+internal interface INativeType<TNative> : INativeType where TNative : unmanaged, INativeType<TNative>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	String INative.AsString()
+	String INativeType.AsString()
 		=> String.Format(CommonConstants.NativeReferenceFormat, TNative.Type.GetTypeName(), this.TextValue);
 }

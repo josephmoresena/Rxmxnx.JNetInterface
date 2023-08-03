@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This identifier will be valid until it is explicitly unloaded.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-internal readonly partial struct JGlobalRef : IObjectGlobalReference<JGlobalRef>
+internal readonly partial struct JGlobalRef : IObjectGlobalReferenceType<JGlobalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JGlobal;

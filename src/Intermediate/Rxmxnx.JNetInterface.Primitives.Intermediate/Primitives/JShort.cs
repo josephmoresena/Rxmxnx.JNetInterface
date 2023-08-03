@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// Primitive <c>short</c>. Represents a primitive 16-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JShort : INative<JShort>, ISelfEquatableComparable<JShort>,
+public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableComparable<JShort>,
 	IPrimitiveNumericIntegerType<JShort, Int16>, IPrimitiveNumericSignedType<JShort, Int16>
 {
 	/// <summary>

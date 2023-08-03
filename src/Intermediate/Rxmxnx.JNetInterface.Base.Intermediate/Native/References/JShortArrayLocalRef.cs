@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JShortArrayLocalRef : IArrayReference<JShortArrayLocalRef>
+public readonly partial struct JShortArrayLocalRef : IArrayReferenceType<JShortArrayLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JShortArray;

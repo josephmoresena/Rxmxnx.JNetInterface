@@ -36,7 +36,7 @@ public partial class JLocalObject
 	/// </summary>
 	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
 	/// <param name="localRef">A local object reference the value of current instance.</param>
-	internal void SetValue<TValue>(TValue localRef) where TValue : unmanaged, IObjectReference
+	internal void SetValue<TValue>(TValue localRef) where TValue : unmanaged, IObjectReferenceType
 	{
 		if (localRef.Equals(default))
 			return;

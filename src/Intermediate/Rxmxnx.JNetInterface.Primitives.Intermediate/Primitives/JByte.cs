@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// <summary>
 /// Primitive <c>byte</c>. Represents a 8-bit signed integer.
 /// </summary>
-public readonly partial struct JByte : INative<JByte>, ISelfEquatableComparable<JByte>,
+public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableComparable<JByte>,
 	IPrimitiveNumericIntegerType<JByte, SByte>, IPrimitiveNumericSignedType<JByte, SByte>
 {
 	/// <summary>

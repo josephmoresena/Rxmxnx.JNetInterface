@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Internal;
+namespace Rxmxnx.JNetInterface.Internal.Types;
 
 internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
 {

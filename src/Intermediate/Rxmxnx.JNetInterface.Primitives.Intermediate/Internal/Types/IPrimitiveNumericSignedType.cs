@@ -1,8 +1,9 @@
-namespace Rxmxnx.JNetInterface.Internal;
+namespace Rxmxnx.JNetInterface.Internal.Types;
 
 /// <summary>
 /// This interface exposes an object that represents a java signed number.
 /// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
 internal interface IPrimitiveNumericSignedType : IPrimitiveNumericType { }
 
 /// <summary>
@@ -10,6 +11,7 @@ internal interface IPrimitiveNumericSignedType : IPrimitiveNumericType { }
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive integer.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent integer.</typeparam>
+[EditorBrowsable(EditorBrowsableState.Never)]
 internal interface
 	IPrimitiveNumericSignedType<TPrimitive, TValue> : IPrimitiveNumericSignedType,
 		IPrimitiveNumericType<TPrimitive, TValue>

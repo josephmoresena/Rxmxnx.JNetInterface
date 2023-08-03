@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectLocalRef>
+public readonly partial struct JObjectLocalRef : IFixedPointer, INativeType<JObjectLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JObject;
@@ -47,8 +47,8 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
 		{
 			TObject obj2 => objRef.Value.Equals(obj2.Value),
 			IEquatable<TObject> other => other.Equals(objRef),
-			IObjectReference otherRef => objRef.Equals(otherRef.Value),
-			IObjectGlobalReference globalRef => objRef.Equals(globalRef.Value),
+			IObjectReferenceType otherRef => objRef.Equals(otherRef.Value),
+			IObjectGlobalReferenceType globalRef => objRef.Equals(globalRef.Value),
 			JObjectLocalRef jObjRef => objRef.Equals(jObjRef),
 			IEquatable<JObjectLocalRef> other => other.Equals(objRef.Value),
 			_ => false,
@@ -68,8 +68,8 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INative<JObjectL
 		=> obj switch
 		{
 			JObjectLocalRef jObjRef => objRef.Equals(jObjRef),
-			IObjectReference otherRef => objRef.Equals(otherRef.Value),
-			IObjectGlobalReference globalRef => objRef.Equals(globalRef.Value),
+			IObjectReferenceType otherRef => objRef.Equals(otherRef.Value),
+			IObjectGlobalReferenceType globalRef => objRef.Equals(globalRef.Value),
 			IEquatable<JObjectLocalRef> other => other.Equals(objRef),
 			_ => false,
 		};

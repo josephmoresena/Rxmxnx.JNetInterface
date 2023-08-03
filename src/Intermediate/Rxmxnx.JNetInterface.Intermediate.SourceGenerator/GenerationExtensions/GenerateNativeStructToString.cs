@@ -15,7 +15,7 @@ partial struct {1}
 {{
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override String ToString() => INative.ToString(this);
+	public override String ToString() => INativeType.ToString(this);
 }}
 #nullable restore";
 

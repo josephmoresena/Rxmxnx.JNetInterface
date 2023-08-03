@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JFloatArrayLocalRef : IArrayReference<JFloatArrayLocalRef>
+public readonly partial struct JFloatArrayLocalRef : IArrayReferenceType<JFloatArrayLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloatArray;

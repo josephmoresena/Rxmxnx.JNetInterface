@@ -4,7 +4,7 @@
 /// <c>JNIEnv</c> struct. Contains a pointer to a <c>JNINativeInterface_</c> object.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-internal readonly partial struct JEnvironmentValue : INativeReference<JEnvironmentValue, JNativeInterface>
+internal readonly partial struct JEnvironmentValue : INativeReferenceType<JEnvironmentValue, JNativeInterface>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JNativeInterface;

@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// Primitive <c>float</c>. Represents a single-precision floating-point number.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JFloat : INative<JFloat>, ISelfEquatableComparable<JFloat>,
+public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableComparable<JFloat>,
 	IPrimitiveNumericFloatingPointType<JFloat, Single>, IPrimitiveNumericSignedType<JFloat, Single>
 {
 	/// <summary>

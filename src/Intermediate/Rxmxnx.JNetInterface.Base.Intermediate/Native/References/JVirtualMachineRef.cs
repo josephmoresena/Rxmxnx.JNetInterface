@@ -7,7 +7,7 @@
 /// This identifier will be valid until the library is unloaded or the JVM instance is destroyed.
 /// </remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JVirtualMachineRef : INativeReference<JVirtualMachineRef, JVirtualMachineValue>
+public readonly partial struct JVirtualMachineRef : INativeReferenceType<JVirtualMachineRef, JVirtualMachineValue>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JVirtualMachineRef;

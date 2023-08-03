@@ -1,9 +1,9 @@
-namespace Rxmxnx.JNetInterface.Internal;
+namespace Rxmxnx.JNetInterface.Internal.Types;
 
 /// <summary>
 /// Kind of derivation.
 /// </summary>
-public enum DerivationKind
+public enum JDerivationKind
 {
 	/// <summary>
 	/// Indicates there is no derivation.
