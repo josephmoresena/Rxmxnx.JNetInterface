@@ -9,7 +9,7 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JByte, SByte>.JPrimitiveMetadataBuilder
+	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JByte, SByte>.JTypeMetadataBuilder
 		.Create(UnicodePrimitiveSignatures.JByteSignature).WithWrapperClassName(UnicodeClassNames.JByteObjectClassName)
 		.WithArraySignature(UnicodePrimitiveArraySignatures.JByteArraySignature)
 		.WithWrapperClassSignature(UnicodeObjectSignatures.JByteObjectSignature).Build();
@@ -17,7 +17,7 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JByte;
 
-	static JDataTypeMetadata IDataType.Metadata => JByte.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JByte.typeMetadata;
 
 	/// <summary>
 	/// Internal 8-bit signed integer value.

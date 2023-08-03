@@ -26,11 +26,11 @@ public abstract record JDataTypeMetadata
 	/// <summary>
 	/// Base type of current type metadata.
 	/// </summary>
-	public virtual JClassMetadata? BaseMetadata => default;
+	public virtual JClassTypeMetadata? BaseMetadata => default;
 	/// <summary>
 	/// Set of interfaces metadata of current type implements.
 	/// </summary>
-	public virtual IImmutableSet<JInterfaceMetadata> Interfaces => ImmutableHashSet<JInterfaceMetadata>.Empty;
+	public virtual IImmutableSet<JInterfaceTypeMetadata> Interfaces => ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
 
 	/// <summary>
 	/// CLR type of <see cref="IDataType"/>.

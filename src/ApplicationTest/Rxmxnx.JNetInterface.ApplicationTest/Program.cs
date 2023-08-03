@@ -33,7 +33,7 @@ public static class Program
 	public class MyClass : JLocalObject, IClassType<MyClass>
 	{
 		public static JDataTypeMetadata Metadata
-			=> JMetadataBuilder<MyClass>.Create(new(() => "application.example.Class1"u8)).Build();
+			=> JTypeMetadataBuilder<MyClass>.Create(new(() => "application.example.Class1"u8)).Build();
 		protected MyClass(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 		protected MyClass(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
 		public static MyClass? Create(JObject? jObject) => default;
@@ -42,7 +42,7 @@ public static class Program
 	public class MyClass2 : MyClass, IClassType<MyClass2>
 	{
 		public new static JDataTypeMetadata Metadata
-			=> JMetadataBuilder<MyClass>.Create(new(() => "application.example.Class2"u8)).Build();
+			=> JTypeMetadataBuilder<MyClass>.Create(new(() => "application.example.Class2"u8)).Build();
 		protected MyClass2(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 		protected MyClass2(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
 		public new static MyClass2? Create(JObject? jObject) => default;
@@ -51,7 +51,7 @@ public static class Program
 	public class MyClass3 : MyClass2, IClassType<MyClass3>
 	{
 		public new static JDataTypeMetadata Metadata
-			=> JMetadataBuilder<MyClass>.Create(new(() => "application.example.Class2"u8)).Build();
+			=> JTypeMetadataBuilder<MyClass>.Create(new(() => "application.example.Class2"u8)).Build();
 		public MyClass3(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 		protected MyClass3(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
 		public new static MyClass3? Create(JObject? jObject) => default;

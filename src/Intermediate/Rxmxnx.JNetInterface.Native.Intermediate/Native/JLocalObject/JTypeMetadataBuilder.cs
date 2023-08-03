@@ -3,9 +3,9 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JLocalObject
 {
 	/// <summary>
-	/// <see cref="JClassMetadata"/> class builder.
+	/// <see cref="JClassTypeMetadata"/> class builder.
 	/// </summary>
-	protected abstract class JMetadataBuilder
+	protected abstract class JTypeMetadataBuilder
 	{
 		/// <summary>
 		/// Base types.
@@ -14,7 +14,7 @@ public partial class JLocalObject
 		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
 		private readonly CString _dataTypeName;
 		/// <inheritdoc cref="JDataTypeMetadata.Interfaces"/>
-		private readonly HashSet<JInterfaceMetadata> _interfaces = new();
+		private readonly HashSet<JInterfaceTypeMetadata> _interfaces = new();
 		/// <summary>
 		/// Interface types.
 		/// </summary>
@@ -43,7 +43,7 @@ public partial class JLocalObject
 		/// <param name="dataTypeName">Datatype name.</param>
 		/// <param name="baseTypes">Base types.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		internal JMetadataBuilder(CString dataTypeName, ISet<Type> baseTypes, ISet<Type> interfaceTypes)
+		internal JTypeMetadataBuilder(CString dataTypeName, ISet<Type> baseTypes, ISet<Type> interfaceTypes)
 		{
 			this._dataTypeName = dataTypeName;
 			this._baseTypes = baseTypes;
@@ -54,7 +54,7 @@ public partial class JLocalObject
 		/// Creates a metadata interfaces set for current datatype.
 		/// </summary>
 		/// <returns>A set with current datatype interfaces.</returns>
-		protected IImmutableSet<JInterfaceMetadata> CreateInterfaceSet() => this._interfaces.ToImmutableHashSet();
+		protected IImmutableSet<JInterfaceTypeMetadata> CreateInterfaceSet() => this._interfaces.ToImmutableHashSet();
 
 		/// <summary>
 		/// Sets the type signature.
@@ -109,15 +109,15 @@ public partial class JLocalObject
 	}
 
 	/// <summary>
-	/// <see cref="JClassMetadata"/> class builder.
+	/// <see cref="JClassTypeMetadata"/> class builder.
 	/// </summary>
 	/// <typeparam name="TClass">Type of <c/>java.lang.Object<c/> class.</typeparam>
-	protected sealed partial class JMetadataBuilder<
-		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : JMetadataBuilder
+	protected sealed partial class JTypeMetadataBuilder<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : JTypeMetadataBuilder
 		where TClass : JLocalObject, IClassType<TClass>
 	{
 		/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
-		private readonly JClassMetadata? _baseMetadata;
+		private readonly JClassTypeMetadata? _baseMetadata;
 		/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 		private readonly JTypeModifier _modifier;
 
@@ -132,7 +132,7 @@ public partial class JLocalObject
 		/// <param name="baseMetadata">Base type metadata of current type.</param>
 		/// <param name="baseTypes">Base types.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private JMetadataBuilder(CString className, JTypeModifier modifier, JClassMetadata? baseMetadata,
+		private JTypeMetadataBuilder(CString className, JTypeModifier modifier, JClassTypeMetadata? baseMetadata,
 			ISet<Type> baseTypes, ISet<Type> interfaceTypes) : base(className, baseTypes, interfaceTypes)
 		{
 			this._modifier = modifier;
@@ -144,7 +144,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <param name="signature">Type signature.</param>
 		/// <returns>Current instance.</returns>
-		public new JMetadataBuilder<TClass> WithSignature(CString signature)
+		public new JTypeMetadataBuilder<TClass> WithSignature(CString signature)
 		{
 			base.WithSignature(signature);
 			return this;
@@ -154,7 +154,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <param name="arraySignature">Array signature.</param>
 		/// <returns>Current instance.</returns>
-		public new JMetadataBuilder<TClass> WithArraySignature(CString arraySignature)
+		public new JTypeMetadataBuilder<TClass> WithArraySignature(CString arraySignature)
 		{
 			base.WithArraySignature(arraySignature);
 			return this;
@@ -164,7 +164,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public JMetadataBuilder<TClass> AppendInterface<
+		public JTypeMetadataBuilder<TClass> AppendInterface<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject, IInterfaceType<TInterface>
 		{
@@ -172,38 +172,38 @@ public partial class JLocalObject
 			return this;
 		}
 		/// <summary>
-		/// Creates the <see cref="JReferenceMetadata"/> instance.
+		/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-		public JClassMetadata Build()
-			=> new JClassGenericMetadata(this.DataTypeName, this._modifier, this.CreateInterfaceSet(),
+		public JClassTypeMetadata Build()
+			=> new JClassGenericTypeMetadata(this.DataTypeName, this._modifier, this.CreateInterfaceSet(),
 			                             this._baseMetadata, this.BaseTypes, this.Signature, this.ArraySignature);
 
 		/// <summary>
-		/// Creates a new <see cref="JReferenceMetadata"/> instance.
+		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <param name="className">Class name of current type.</param>
 		/// <param name="modifier">Modifier of current type.</param>
-		/// <returns>A new <see cref="JMetadataBuilder{TClass}"/> instance.</returns>
-		public static JMetadataBuilder<TClass> Create(CString className,
+		/// <returns>A new <see cref="JTypeMetadataBuilder{TClass}"/> instance.</returns>
+		public static JTypeMetadataBuilder<TClass> Create(CString className,
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
 			ISet<Type> baseTypes = IReferenceType<TClass>.GetBaseTypes().ToHashSet();
 			ISet<Type> interfaceTypes = IReferenceType<TClass>.GetInterfaceTypes().ToHashSet();
-			JClassMetadata? baseMetadata = typeof(TClass) != typeof(JLocalObject) ?
+			JClassTypeMetadata? baseMetadata = typeof(TClass) != typeof(JLocalObject) ?
 				IClassType.GetMetadata<JLocalObject>() :
 				default;
 			return new(className, modifier, baseMetadata, baseTypes, interfaceTypes);
 		}
 		/// <summary>
-		/// Creates a new <see cref="JReferenceMetadata"/> instance.
+		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
 		/// <param name="className">Class name of current type.</param>
 		/// <param name="modifier">Modifier of current type.</param>
-		/// <returns>A new <see cref="JMetadataBuilder{TObject}"/> instance.</returns>
-		public static JMetadataBuilder<TObject>
+		/// <returns>A new <see cref="JTypeMetadataBuilder{TClass}"/> instance.</returns>
+		public static JTypeMetadataBuilder<TObject>
 			Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(CString className,
 				JTypeModifier modifier = JTypeModifier.Extensible) where TObject : TClass, IClassType<TObject>
 		{

@@ -10,7 +10,7 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JInt, Int32>.JPrimitiveMetadataBuilder
+	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JInt, Int32>.JTypeMetadataBuilder
 		.Create(UnicodePrimitiveSignatures.JIntSignature)
 		.WithWrapperClassName(UnicodeClassNames.JIntegerObjectClassName)
 		.WithArraySignature(UnicodePrimitiveArraySignatures.JIntArraySignature)
@@ -19,7 +19,7 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JInt;
 
-	static JDataTypeMetadata IDataType.Metadata => JInt.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JInt.typeMetadata;
 
 	/// <summary>
 	/// Internal 32-bit signed integer value.

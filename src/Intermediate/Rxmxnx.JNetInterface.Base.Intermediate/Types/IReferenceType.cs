@@ -10,10 +10,10 @@ public interface IReferenceType : IObject, IDataType, IDisposable
 	/// Retrieves the metadata for given reference type.
 	/// </summary>
 	/// <typeparam name="TReference">Type of current java reference datatype.</typeparam>
-	/// <returns>The <see cref="JReferenceMetadata"/> instance for given type.</returns>
+	/// <returns>The <see cref="JReferenceTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JReferenceMetadata GetMetadata<TReference>() where TReference : IReferenceType
-		=> (JReferenceMetadata)IDataType.GetMetadata<TReference>();
+	public new static JReferenceTypeMetadata GetMetadata<TReference>() where TReference : IReferenceType
+		=> (JReferenceTypeMetadata)IDataType.GetMetadata<TReference>();
 }
 
 /// <summary>

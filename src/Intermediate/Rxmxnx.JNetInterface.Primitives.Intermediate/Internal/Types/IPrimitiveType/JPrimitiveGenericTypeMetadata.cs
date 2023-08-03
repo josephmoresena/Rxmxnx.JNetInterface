@@ -2,14 +2,14 @@ namespace Rxmxnx.JNetInterface.Internal.Types;
 
 internal partial interface IPrimitiveType<TPrimitive, TValue>
 {
-	protected sealed partial class JPrimitiveMetadataBuilder
+	protected sealed partial class JTypeMetadataBuilder
 	{
 		/// <summary>
 		/// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
 		/// </summary>
-		private sealed record JPrimitiveGenericMetadata : JPrimitiveMetadata
+		private sealed record JPrimitiveGenericTypeMetadata : JPrimitiveTypeMetadata
 		{
-			/// <inheritdoc cref="JPrimitiveMetadata.ClassSignature"/>
+			/// <inheritdoc cref="JPrimitiveTypeMetadata.ClassSignature"/>
 			private readonly CString _classSignature;
 			/// <inheritdoc cref="SizeOf"/>
 			private readonly Int32 _sizeOf;
@@ -40,7 +40,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// <param name="className">Wrapper class name of current primitive type.</param>
 			/// <param name="arraySignature">JNI signature for an array of current type.</param>
 			/// <param name="classSignature">Wrapper class JNI signature of current primitive type.</param>
-			internal JPrimitiveGenericMetadata(Int32 sizeOf, Type underlineType, CString signature, CString className,
+			internal JPrimitiveGenericTypeMetadata(Int32 sizeOf, Type underlineType, CString signature, CString className,
 				CString? arraySignature, CString? classSignature = default) : base(signature, className, arraySignature)
 			{
 				this._sizeOf = sizeOf;

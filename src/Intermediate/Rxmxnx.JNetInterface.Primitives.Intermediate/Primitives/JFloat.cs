@@ -10,7 +10,7 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JFloat, Single>.JPrimitiveMetadataBuilder
+	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JFloat, Single>.JTypeMetadataBuilder
 		.Create(UnicodePrimitiveSignatures.JFloatSignature)
 		.WithWrapperClassName(UnicodeClassNames.JFloatObjectClassName)
 		.WithArraySignature(UnicodePrimitiveArraySignatures.JFloatArraySignature)
@@ -19,7 +19,7 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloat;
 
-	static JDataTypeMetadata IDataType.Metadata => JFloat.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JFloat.typeMetadata;
 
 	/// <summary>
 	/// Internal single-precision floating-point number value.

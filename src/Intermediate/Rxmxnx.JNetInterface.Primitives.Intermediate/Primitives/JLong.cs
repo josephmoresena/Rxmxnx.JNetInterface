@@ -10,7 +10,7 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JLong, Int64>.JPrimitiveMetadataBuilder
+	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JLong, Int64>.JTypeMetadataBuilder
 		.Create(UnicodePrimitiveSignatures.JLongSignature).WithWrapperClassName(UnicodeClassNames.JLongObjectClassName)
 		.WithArraySignature(UnicodePrimitiveArraySignatures.JLongArraySignature)
 		.WithWrapperClassSignature(UnicodeObjectSignatures.JLongObjectSignature).Build();
@@ -18,7 +18,7 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JLong;
 
-	static JDataTypeMetadata IDataType.Metadata => JLong.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JLong.typeMetadata;
 
 	/// <summary>
 	/// Internal 64-bit signed integer value.

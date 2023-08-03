@@ -19,7 +19,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JBoolean, Boolean>.JPrimitiveMetadataBuilder
+	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JBoolean, Boolean>.JTypeMetadataBuilder
 		.Create(UnicodePrimitiveSignatures.JBooleanSignature)
 		.WithWrapperClassName(UnicodeClassNames.JBooleanObjectClassName)
 		.WithArraySignature(UnicodePrimitiveArraySignatures.JBooleanArraySignature)
@@ -28,7 +28,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JBoolean;
 
-	static JDataTypeMetadata IDataType.Metadata => JBoolean.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JBoolean.typeMetadata;
 
 	/// <summary>
 	/// Internal 8-bit unsigned integer value.

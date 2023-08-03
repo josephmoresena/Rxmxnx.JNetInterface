@@ -12,10 +12,10 @@ public interface IClassType : IReferenceType
 	/// Retrieves the metadata for given class type.
 	/// </summary>
 	/// <typeparam name="TClass">Type of current java class datatype.</typeparam>
-	/// <returns>The <see cref="JClassMetadata"/> instance for given type.</returns>
+	/// <returns>The <see cref="JClassTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JClassMetadata GetMetadata<TClass>() where TClass : IClassType
-		=> (JClassMetadata)IDataType.GetMetadata<TClass>();
+	public new static JClassTypeMetadata GetMetadata<TClass>() where TClass : IClassType
+		=> (JClassTypeMetadata)IDataType.GetMetadata<TClass>();
 }
 
 /// <summary>

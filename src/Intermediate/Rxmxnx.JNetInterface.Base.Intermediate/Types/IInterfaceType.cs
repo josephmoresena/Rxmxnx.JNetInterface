@@ -12,10 +12,10 @@ public interface IInterfaceType : IReferenceType
 	/// Retrieves the metadata for given interface type.
 	/// </summary>
 	/// <typeparam name="TInterface">Type of current java interface datatype.</typeparam>
-	/// <returns>The <see cref="JInterfaceMetadata"/> instance for given type.</returns>
+	/// <returns>The <see cref="JInterfaceTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JInterfaceMetadata GetMetadata<TInterface>() where TInterface : IClassType
-		=> (JInterfaceMetadata)IDataType.GetMetadata<TInterface>();
+	public new static JInterfaceTypeMetadata GetMetadata<TInterface>() where TInterface : IClassType
+		=> (JInterfaceTypeMetadata)IDataType.GetMetadata<TInterface>();
 }
 
 /// <summary>

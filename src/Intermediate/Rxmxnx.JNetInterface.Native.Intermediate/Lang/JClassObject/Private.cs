@@ -5,13 +5,13 @@ public partial class JClassObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassMetadata metadata = JMetadataBuilder<JClassObject>
+	private static readonly JClassTypeMetadata typeMetadata = JTypeMetadataBuilder<JClassObject>
 	                                                  .Create(UnicodeClassNames.JClassObjectClassName,
 	                                                          JTypeModifier.Final)
 	                                                  .WithSignature(UnicodeObjectSignatures.JClassObjectSignature)
 	                                                  .Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JClassObject.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JClassObject.typeMetadata;
 
 	/// <summary>
 	/// Fully qualified class name.

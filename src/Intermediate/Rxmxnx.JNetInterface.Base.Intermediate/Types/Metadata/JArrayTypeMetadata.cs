@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for an array <see cref="IDataType"/> type.
 /// </summary>
-public abstract record JArrayMetadata : JReferenceMetadata
+public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 {
 	/// <summary>
 	/// Element type of current array metadata.
@@ -19,5 +19,5 @@ public abstract record JArrayMetadata : JReferenceMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="signature">JNI signature for current array type.</param>
-	internal JArrayMetadata(CString signature) : base(signature, signature) { }
+	internal JArrayTypeMetadata(CString signature) : base(signature, signature) { }
 }

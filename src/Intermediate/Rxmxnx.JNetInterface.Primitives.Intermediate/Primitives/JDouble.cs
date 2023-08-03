@@ -10,7 +10,7 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveMetadata metadata = IPrimitiveType<JDouble, Double>.JPrimitiveMetadataBuilder
+	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JDouble, Double>.JTypeMetadataBuilder
 		.Create(UnicodePrimitiveSignatures.JDoubleSignature)
 		.WithWrapperClassName(UnicodeClassNames.JDoubleObjectClassName)
 		.WithArraySignature(UnicodePrimitiveArraySignatures.JDoubleArraySignature)
@@ -19,7 +19,7 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;
 
-	static JDataTypeMetadata IDataType.Metadata => JDouble.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JDouble.typeMetadata;
 
 	/// <summary>
 	/// Internal double-precision floating-point number value.

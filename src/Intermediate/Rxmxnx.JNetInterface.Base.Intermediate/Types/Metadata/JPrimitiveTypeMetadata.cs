@@ -3,7 +3,7 @@
 /// <summary>
 /// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
 /// </summary>
-public abstract record JPrimitiveMetadata : JDataTypeMetadata
+public abstract record JPrimitiveTypeMetadata : JDataTypeMetadata
 {
 	/// <summary>
 	/// JNI signature for current type wrapper class.
@@ -25,6 +25,6 @@ public abstract record JPrimitiveMetadata : JDataTypeMetadata
 	/// <param name="signature">JNI signature for current primitive type.</param>
 	/// <param name="className">Wrapper class name of current primitive type.</param>
 	/// <param name="arraySignature">JNI signature for an array of current type.</param>
-	internal JPrimitiveMetadata(CString signature, CString className, CString? arraySignature) : base(
+	internal JPrimitiveTypeMetadata(CString signature, CString className, CString? arraySignature) : base(
 		className, signature, arraySignature) { }
 }

@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// This record stores the metadata for a reference <see cref="IDataType"/> type.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-public abstract record JReferenceMetadata : JDataTypeMetadata
+public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 {
 	/// <inheritdoc/>
 	public override Int32 SizeOf => NativeUtilities.PointerSize;
@@ -15,6 +15,6 @@ public abstract record JReferenceMetadata : JDataTypeMetadata
 	/// <param name="className">Class name of current type.</param>
 	/// <param name="signature">JNI signature for current type.</param>
 	/// <param name="arraySignature">Array JNI signature for current type.</param>
-	internal JReferenceMetadata(CString className, CString? signature, CString? arraySignature = default) : base(
+	internal JReferenceTypeMetadata(CString className, CString? signature, CString? arraySignature = default) : base(
 		className, signature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className), arraySignature) { }
 }

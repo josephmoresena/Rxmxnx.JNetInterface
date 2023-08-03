@@ -5,13 +5,13 @@ public partial class JStringObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassMetadata metadata = JMetadataBuilder<JStringObject>
+	private static readonly JClassTypeMetadata typeMetadata = JTypeMetadataBuilder<JStringObject>
 	                                                  .Create(UnicodeClassNames.JStringObjectClassName,
 	                                                          JTypeModifier.Final)
 	                                                  .WithSignature(UnicodeObjectSignatures.JStringObjectSignature)
 	                                                  .Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JStringObject.metadata;
+	static JDataTypeMetadata IDataType.Metadata => JStringObject.typeMetadata;
 
 	/// <summary>
 	/// Instance value.
