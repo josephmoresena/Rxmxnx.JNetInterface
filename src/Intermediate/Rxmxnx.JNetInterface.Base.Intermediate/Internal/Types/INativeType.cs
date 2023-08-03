@@ -42,7 +42,7 @@ internal interface INativeType
 	/// <typeparam name="TNative">Type of <see cref="INativeType"/></typeparam>
 	/// <param name="nativeType"><see cref="INativeType"/> instance.</param>
 	/// <returns><see cref="INativeType"/> instance as <see cref="String"/>.</returns>
-	internal static String ToString<TNative>(TNative nativeType) where TNative : unmanaged, INativeType<TNative> 
+	internal static String ToString<TNative>(TNative nativeType) where TNative : unmanaged, INativeType<TNative>
 		=> nativeType.AsString();
 }
 

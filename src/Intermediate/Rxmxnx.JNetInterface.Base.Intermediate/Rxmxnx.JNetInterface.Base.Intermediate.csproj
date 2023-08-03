@@ -15,31 +15,31 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="System.Collections.Immutable" />
-        <Using Include="System.ComponentModel" />
-        <Using Include="System.Diagnostics.CodeAnalysis" />
-        <Using Include="System.Globalization" />
-        <Using Include="System.Numerics" />
-        <Using Include="System.Runtime.CompilerServices" />
-        <Using Include="System.Runtime.InteropServices" />
-        <Using Include="Rxmxnx.PInvoke" />
-        <Using Include="Rxmxnx.JNetInterface.Internal" />
-        <Using Include="Rxmxnx.JNetInterface.Internal.Types" />
-        <Using Include="Rxmxnx.JNetInterface.Lang" />
-        <Using Include="Rxmxnx.JNetInterface.Native" />
-        <Using Include="Rxmxnx.JNetInterface.Native.References" />
-        <Using Include="Rxmxnx.JNetInterface.Native.Values" />
-        <Using Include="Rxmxnx.JNetInterface.Types" />
-        <Using Include="Rxmxnx.JNetInterface.Types.Inheritance" />
-        <Using Include="Rxmxnx.JNetInterface.Types.Metadata" />
+        <Using Include="System.Collections.Immutable"/>
+        <Using Include="System.ComponentModel"/>
+        <Using Include="System.Diagnostics.CodeAnalysis"/>
+        <Using Include="System.Globalization"/>
+        <Using Include="System.Numerics"/>
+        <Using Include="System.Runtime.CompilerServices"/>
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.Types"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang"/>
+        <Using Include="Rxmxnx.JNetInterface.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.References"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
+        <Using Include="Rxmxnx.JNetInterface.Types"/>
+        <Using Include="Rxmxnx.JNetInterface.Types.Inheritance"/>
+        <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="*" />
+        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="*"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.Intermediate.SourceGenerator\Rxmxnx.JNetInterface.Intermediate.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0" />
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Intermediate.SourceGenerator\Rxmxnx.JNetInterface.Intermediate.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
     </ItemGroup>
 
     <ItemGroup>
