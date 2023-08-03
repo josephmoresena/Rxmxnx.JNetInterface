@@ -117,7 +117,7 @@ public partial class JLocalObject
 		where TClass : JLocalObject, IClassType<TClass>
 	{
 		/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
-		private readonly Func<JClassMetadata>? _baseMetadataFunc;
+		private readonly JClassMetadata? _baseMetadata;
 		/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 		private readonly JTypeModifier _modifier;
 
@@ -129,14 +129,14 @@ public partial class JLocalObject
 		/// </summary>
 		/// <param name="className">Class name of current type.</param>
 		/// <param name="modifier">Modifier of current type.</param>
-		/// <param name="baseMetadataFunc">Delegate. Gets the base type of current type metadata.</param>
+		/// <param name="baseMetadata">Base type metadata of current type.</param>
 		/// <param name="baseTypes">Base types.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private JMetadataBuilder(CString className, JTypeModifier modifier, Func<JClassMetadata>? baseMetadataFunc,
+		private JMetadataBuilder(CString className, JTypeModifier modifier, JClassMetadata? baseMetadata,
 			ISet<Type> baseTypes, ISet<Type> interfaceTypes) : base(className, baseTypes, interfaceTypes)
 		{
 			this._modifier = modifier;
-			this._baseMetadataFunc = baseMetadataFunc;
+			this._baseMetadata = baseMetadata;
 		}
 
 		/// <summary>
@@ -177,8 +177,7 @@ public partial class JLocalObject
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JClassMetadata Build()
 			=> new JClassGenericMetadata(this.DataTypeName, this._modifier, this.CreateInterfaceSet(),
-			                             this._baseMetadataFunc?.Invoke(), this.BaseTypes, this.Signature,
-			                             this.ArraySignature);
+			                             this._baseMetadata, this.BaseTypes, this.Signature, this.ArraySignature);
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceMetadata"/> instance.
@@ -190,12 +189,12 @@ public partial class JLocalObject
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
-			Func<JClassMetadata>? baseMetadataFunc = typeof(TClass) != typeof(JLocalObject) ?
-				IClassType.GetMetadata<JLocalObject> :
-				default;
 			ISet<Type> baseTypes = IReferenceType<TClass>.GetBaseTypes().ToHashSet();
 			ISet<Type> interfaceTypes = IReferenceType<TClass>.GetInterfaceTypes().ToHashSet();
-			return new(className, modifier, baseMetadataFunc, baseTypes, interfaceTypes);
+			JClassMetadata? baseMetadata = typeof(TClass) != typeof(JLocalObject) ?
+				IClassType.GetMetadata<JLocalObject>() :
+				default;
+			return new(className, modifier, baseMetadata, baseTypes, interfaceTypes);
 		}
 		/// <summary>
 		/// Creates a new <see cref="JReferenceMetadata"/> instance.
@@ -212,7 +211,7 @@ public partial class JLocalObject
 			ValidationUtilities.ThrowIfSameType<TClass, TObject>(className);
 			ISet<Type> baseTypes = ValidationUtilities.ValidateBaseTypes<TClass, TObject>(className);
 			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();
-			return new(className, modifier, IClassType.GetMetadata<TClass>, baseTypes, interfaceTypes);
+			return new(className, modifier, IClassType.GetMetadata<TClass>(), baseTypes, interfaceTypes);
 		}
 	}
 }

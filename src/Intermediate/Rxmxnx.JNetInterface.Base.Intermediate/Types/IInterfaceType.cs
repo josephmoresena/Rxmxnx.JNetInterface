@@ -6,6 +6,8 @@ namespace Rxmxnx.JNetInterface.Types;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IInterfaceType : IReferenceType
 {
+	static JTypeKind IDataType.Kind => JTypeKind.Interface;
+
 	/// <summary>
 	/// Retrieves the metadata for given interface type.
 	/// </summary>

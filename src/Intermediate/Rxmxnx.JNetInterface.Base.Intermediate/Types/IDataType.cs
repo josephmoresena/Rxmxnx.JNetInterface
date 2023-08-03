@@ -15,6 +15,10 @@ public interface IDataType
 	/// Excluding CLR types.
 	/// </summary>
 	internal static virtual IImmutableSet<Type> ExcludingTypes => IDataType.ExcludingBasicTypes;
+	/// <summary>
+	/// Datatype kind.
+	/// </summary>
+	public static virtual JTypeKind Kind => JTypeKind.Undefined;
 
 	/// <summary>
 	/// Current type metadata.
@@ -45,7 +49,8 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 	/// <summary>
 	/// Excluding generic CLR types.
 	/// </summary>
-	internal static abstract IImmutableSet<Type> ExcludingGenericTypes { get; }
+	internal static virtual IImmutableSet<Type> ExcludingGenericTypes
+		=> ValidationUtilities.ThrowInvalidInterface<IImmutableSet<Type>>(nameof(IDataType));
 
 	static JDataTypeMetadata IDataType.Metadata
 		=> ValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));

@@ -12,17 +12,11 @@ public abstract record JDataTypeMetadata
 	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 	private readonly CString _signature;
 
-	/// <summary>
-	/// Class name.
-	/// </summary>
+	/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
 	public CString ClassName => this._className;
-	/// <summary>
-	/// JNI signature.
-	/// </summary>
+	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 	public CString Signature => this._signature;
-	/// <summary>
-	/// Array JNI signature of current type.
-	/// </summary>
+	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
 	public CString ArraySignature => this._arraySignature;
 
 	/// <summary>
@@ -42,9 +36,7 @@ public abstract record JDataTypeMetadata
 	/// CLR type of <see cref="IDataType"/>.
 	/// </summary>
 	public abstract Type Type { get; }
-	/// <summary>
-	/// Kind of current type.
-	/// </summary>
+	/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
 	public abstract JTypeKind Kind { get; }
 	/// <summary>
 	/// Modifier of current type.

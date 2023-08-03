@@ -24,6 +24,7 @@ public interface IPrimitiveType<TPrimitive> : IPrimitiveType, IDataType<TPrimiti
 	where TPrimitive : IPrimitiveType<TPrimitive>
 {
 	static Type IDataType<TPrimitive>.SelfType => typeof(IPrimitiveType<TPrimitive>);
+	static JTypeKind IDataType.Kind => JTypeKind.Primitive;
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TPrimitive"/> to <see cref="JObject"/>.

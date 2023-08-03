@@ -13,9 +13,7 @@ public interface
 	where TInterface : JInterfaceObject, IInterfaceType<TInterface>
 {
 	static JDerivationKind IDerivedType<TImplementation, TInterface>.Type
-		=> IDataType.GetMetadata<TImplementation>().Kind == IDataType.GetMetadata<TInterface>().Kind ?
-			JDerivationKind.Extension :
-			JDerivationKind.Implementation;
+		=> TImplementation.Kind == JTypeKind.Interface ? JDerivationKind.Extension : JDerivationKind.Implementation;
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TInterface"/> to <typeparamref name="TImplementation"/>.
