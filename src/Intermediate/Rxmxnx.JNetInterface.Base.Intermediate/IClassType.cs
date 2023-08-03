@@ -23,10 +23,10 @@ public interface IClassType : IReferenceType
 public interface IClassType<out TClass> : IClassType, IReferenceType<TClass>
 	where TClass : JReferenceObject, IClassType<TClass>
 {
-	/// <inheritdoc cref="IReferenceType{TClass}.ExcludingGenericTypes"/>
+	/// <inheritdoc cref="IDataType{TClass}.ExcludingGenericTypes"/>
 	private static readonly ImmutableHashSet<Type> excludingTypes =
 		ImmutableHashSet.Create(typeof(IDataType<TClass>), typeof(IReferenceType<TClass>));
 
-	static IImmutableSet<Type> IReferenceType<TClass>.ExcludingGenericTypes => IClassType<TClass>.excludingTypes;
+	static IImmutableSet<Type> IDataType<TClass>.ExcludingGenericTypes => IClassType<TClass>.excludingTypes;
 	static Type IDataType<TClass>.SelfType => typeof(IClassType<TClass>);
 }

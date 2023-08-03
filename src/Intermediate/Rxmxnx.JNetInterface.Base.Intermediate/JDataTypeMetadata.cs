@@ -26,6 +26,19 @@ public abstract record JDataTypeMetadata
 	public CString ArraySignature => this._arraySignature;
 
 	/// <summary>
+	/// Base types set.
+	/// </summary>
+	public virtual IReadOnlySet<Type> BaseTypes => ImmutableHashSet<Type>.Empty;
+	/// <summary>
+	/// Base type of current type metadata.
+	/// </summary>
+	public virtual JClassMetadata? BaseMetadata => default;
+	/// <summary>
+	/// Set of interfaces metadata of current type implements.
+	/// </summary>
+	public virtual IImmutableSet<JInterfaceMetadata> Interfaces => ImmutableHashSet<JInterfaceMetadata>.Empty;
+
+	/// <summary>
 	/// CLR type of <see cref="IDataType"/>.
 	/// </summary>
 	public abstract Type Type { get; }

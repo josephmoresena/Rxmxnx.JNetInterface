@@ -38,17 +38,13 @@ public interface IDataType
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
 	/// <summary>
-	/// CLR interface set.
-	/// </summary>
-	internal static virtual IImmutableSet<Type> Interfaces => ImmutableHashSet<Type>.Empty;
-	/// <summary>
-	/// CLR base set.
-	/// </summary>
-	internal static virtual IImmutableSet<Type> Bases => ImmutableHashSet<Type>.Empty;
-	/// <summary>
 	/// Self CLR type.
 	/// </summary>
 	internal static virtual Type SelfType => typeof(IDataType<TDataType>);
+	/// <summary>
+	/// Excluding generic CLR types.
+	/// </summary>
+	internal static abstract IImmutableSet<Type> ExcludingGenericTypes { get; }
 
 	static JDataTypeMetadata IDataType.Metadata
 		=> ValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));
@@ -59,15 +55,4 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
 	/// <returns>A <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.</returns>
 	static abstract TDataType? Create(JObject? jObject);
-
-	/// <summary>
-	/// Retrieves the set of base types.
-	/// </summary>
-	/// <returns>The set of base types.</returns>
-	public static IImmutableSet<Type> GetBases() => TDataType.Bases;
-	/// <summary>
-	/// Retrieves the set of interface types.
-	/// </summary>
-	/// <returns>The set of interface types.</returns>
-	public static IImmutableSet<Type> GetInterfaces() => TDataType.Interfaces;
 }

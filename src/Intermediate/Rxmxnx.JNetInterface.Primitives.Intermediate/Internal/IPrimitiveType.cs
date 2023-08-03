@@ -9,7 +9,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<T
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
-	/// <inheritdoc cref="IDataType.ExcludingTypes"/>
+	/// <inheritdoc cref="IDataType{TPrimitive}.ExcludingGenericTypes"/>
 	internal static readonly ImmutableHashSet<Type> ExcludingPrimitiveTypes =
 		IDataType.ExcludingBasicTypes.Union(new[]
 		{
@@ -18,7 +18,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<T
 			typeof(JPrimitiveObject<TPrimitive>),
 		});
 
-	static IImmutableSet<Type> IDataType.ExcludingTypes => IPrimitiveType<TPrimitive, TValue>.ExcludingPrimitiveTypes;
+	static IImmutableSet<Type> IDataType<TPrimitive>.ExcludingGenericTypes => IPrimitiveType<TPrimitive, TValue>.ExcludingPrimitiveTypes;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)

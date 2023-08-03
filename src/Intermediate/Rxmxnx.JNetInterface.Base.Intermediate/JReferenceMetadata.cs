@@ -5,14 +5,6 @@ namespace Rxmxnx.JNetInterface;
 /// </summary>
 public abstract record JReferenceMetadata : JDataTypeMetadata
 {
-	/// <summary>
-	/// Base type of current type metadata.
-	/// </summary>
-	public abstract JClassMetadata? BaseMetadata { get; }
-	/// <summary>
-	/// Set of interfaces metadata of current type implements.
-	/// </summary>
-	public abstract IImmutableSet<JInterfaceMetadata> Interfaces { get; }
 	/// <inheritdoc/>
 	public override Int32 SizeOf => NativeUtilities.PointerSize;
 

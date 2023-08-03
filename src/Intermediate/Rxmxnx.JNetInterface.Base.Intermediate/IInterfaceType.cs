@@ -23,8 +23,10 @@ public interface IInterfaceType : IReferenceType
 public interface IInterfaceType<out TInterface> : IInterfaceType, IReferenceType<TInterface>
 	where TInterface : JReferenceObject, IInterfaceType<TInterface>
 {
-	/// <inheritdoc cref="IReferenceType{TClass}.ExcludingGenericTypes"/>
+	/// <inheritdoc cref="IDataType{TClass}.ExcludingGenericTypes"/>
 	private static readonly ImmutableHashSet<Type> excludingTypes =
 		ImmutableHashSet.Create(typeof(IDataType<TInterface>), typeof(IReferenceType<TInterface>));
+	
+	static IImmutableSet<Type> IDataType<TInterface>.ExcludingGenericTypes => IInterfaceType<TInterface>.excludingTypes;
 	static Type IDataType<TInterface>.SelfType => typeof(IInterfaceType<TInterface>);
 }

@@ -63,15 +63,17 @@ internal static class ValidationUtilities
 	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
 	/// <typeparamref name="TInterface"/>.
 	/// </summary>
-	/// <typeparam name="TInterface">Type of </typeparam>
-	/// <param name="typeName">Type of interface.</param>
+	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/></typeparam>
+	/// <param name="typeName">Name of implementing type.</param>
+	/// <param name="isClass">Indicates whether implementing type is a class.</param>
 	/// <exception cref="NotImplementedException">Always thrown.</exception>
-	public static void ThrowInvalidImplementation<TInterface>(CString typeName)
-		where TInterface : JReferenceObject, IDataType<TInterface>
+	public static void ThrowInvalidImplementation<TInterface>(CString typeName, Boolean isClass)
+		where TInterface : JReferenceObject, IInterfaceType<TInterface>
 	{
 		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();
+		String implementationType = isClass ? "implements" : "extends";
 		throw new NotImplementedException(
-			$"The type {typeName} doesn't implements {interfaceMetadata.ClassName} interface.");
+			$"{typeName} type doesn't {implementationType} {interfaceMetadata.ClassName} interface.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> cannot be cast to <typeparamref name="TValue"/>.
@@ -182,15 +184,54 @@ internal static class ValidationUtilities
 	/// </summary>
 	/// <param name="value">A UTF-8 string.</param>
 	/// <param name="paramName">The name of <paramref name="value"/>.</param>
+	/// <returns>A non-empty <see cref="CString"/> instance.</returns>
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
 	/// </exception>
-	/// <returns>A non-empty <see cref="CString"/> instance.</returns>
 	public static CString ValidateNotEmpty(CString? value,
 		[CallerArgumentExpression(nameof(value))] String paramName = "")
 	{
 		if (CString.IsNullOrEmpty(value))
 			throw new InvalidOperationException($"{paramName} must be non-empty string");
 		return value;
+	}
+	/// <summary>
+	/// Throws an exception if <typeparamref name="TBase"/> and <typeparamref name="TReference"/> are the same type.
+	/// </summary>
+	/// <typeparam name="TBase">Base type of <typeparamref name="TReference"/>.</typeparam>
+	/// <typeparam name="TReference">Type of <see cref="IReferenceType{TReference}"/>.</typeparam>
+	/// <param name="typeName">Name of <see cref="IReferenceType{TReference}"/> type.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <typeparamref name="TBase"/> and <typeparamref name="TReference"/> are the same type.
+	/// </exception>
+	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
+	public static void ThrowIfSameType<TBase, TReference>(CString typeName) 
+		where TBase : JReferenceObject, IReferenceType<TBase>
+		where TReference : TBase, IReferenceType<TReference>
+	{
+		if (typeof(TBase) == typeof(TReference))
+			throw new InvalidOperationException($"{typeName} type and base type can't be the same.");
+	}
+	/// <summary>
+	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
+	/// </summary>
+	/// <typeparam name="TBase">Base type of <typeparamref name="TReference"/>.</typeparam>
+	/// <typeparam name="TReference">Type of <see cref="IReferenceType{TReference}"/>.</typeparam>
+	/// <param name="typeName">Name of <see cref="IReferenceType{TReference}"/> type.</param>
+	/// <returns>The set of <typeparamref name="TReference"/> base types.</returns>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
+	/// </exception>
+	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
+	public static ISet<Type> ValidateBaseTypes<TBase, TReference>(CString typeName)
+		where TBase : JReferenceObject, IReferenceType<TBase> 
+		where TReference : TBase, IReferenceType<TReference>
+	{
+		ISet<Type> baseBaseTypes = IReferenceType<TBase>.GetBaseTypes().ToHashSet();
+		ISet<Type> baseTypes = IReferenceType<TReference>.GetBaseTypes().ToHashSet();
+		if (!baseTypes.IsProperSupersetOf(baseBaseTypes))
+			throw new InvalidOperationException();
+		baseTypes.ExceptWith(baseBaseTypes);
+		return baseTypes;
 	}
 }

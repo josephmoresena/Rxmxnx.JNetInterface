@@ -12,10 +12,10 @@ public interface
 	where TImplementation : JLocalObject, IInterfaceImplementation<TImplementation, TInterface>
 	where TInterface : JInterfaceObject, IInterfaceType<TInterface>
 {
-	static DerivationKind IDerivedType<TImplementation, TInterface>.Type
-		=> IReferenceType<TImplementation>.IsDerivedFrom(typeof(JInterfaceObject)) ?
+	static DerivationKind IDerivedType<TImplementation, TInterface>.Type => default;
+		/*=> IReferenceType<TImplementation>.IsDerivedFrom(typeof(JInterfaceObject)) ?
 			DerivationKind.Extension :
-			DerivationKind.Implementation;
+			DerivationKind.Implementation;*/
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TInterface"/> to <typeparamref name="TImplementation"/>.
