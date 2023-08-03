@@ -205,9 +205,8 @@ internal static class ValidationUtilities
 	/// Throws an exception if <typeparamref name="TBase"/> and <typeparamref name="TReference"/> are the same type.
 	/// </exception>
 	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
-	public static void ThrowIfSameType<TBase, TReference>(CString typeName) 
-		where TBase : JReferenceObject, IReferenceType<TBase>
-		where TReference : TBase, IReferenceType<TReference>
+	public static void ThrowIfSameType<TBase, TReference>(CString typeName)
+		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
 	{
 		if (typeof(TBase) == typeof(TReference))
 			throw new InvalidOperationException($"{typeName} type and base type can't be the same.");
@@ -224,8 +223,7 @@ internal static class ValidationUtilities
 	/// </exception>
 	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 	public static ISet<Type> ValidateBaseTypes<TBase, TReference>(CString typeName)
-		where TBase : JReferenceObject, IReferenceType<TBase> 
-		where TReference : TBase, IReferenceType<TReference>
+		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
 	{
 		ISet<Type> baseBaseTypes = IReferenceType<TBase>.GetBaseTypes().ToHashSet();
 		ISet<Type> baseTypes = IReferenceType<TReference>.GetBaseTypes().ToHashSet();
