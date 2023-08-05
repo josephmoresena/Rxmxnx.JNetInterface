@@ -1,4 +1,4 @@
-﻿namespace Rxmxnx.JNetInterface.Internal;
+﻿namespace Rxmxnx.JNetInterface.Internal.ConstantValues;
 
 /// <summary>
 /// Java native references names.

@@ -3,15 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This interface exposes an object that represents a java primitive wrapper.
 /// </summary>
-[EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IPrimitiveWrapper : IObject, IWrapper, IComparable, IConvertible { }
-
-/// <summary>
-/// This interface exposes an object that represents a java primitive wrapper.
-/// </summary>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IPrimitiveWrapper<TValue> : IPrimitiveWrapper, IWrapper<TValue>, IComparable<TValue>
+internal interface IPrimitiveValue<TValue> : IObject, IComparable, IConvertible, IWrapper<TValue>, IComparable<TValue>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

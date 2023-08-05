@@ -13,7 +13,7 @@ internal interface IPrimitiveNumericFloatingPointType : IPrimitiveNumericType { 
 /// <typeparam name="TValue">Type of the .NET equivalent floating point.</typeparam>
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal partial interface IPrimitiveNumericFloatingPointType<TPrimitive, TValue> : IPrimitiveNumericFloatingPointType,
-	IFloatingPointWrapper<TValue>, IPrimitiveNumericType<TPrimitive, TValue>
+	IFloatingPointValue<TValue>, IPrimitiveNumericType<TPrimitive, TValue>
 	where TPrimitive : unmanaged, IPrimitiveNumericFloatingPointType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>,

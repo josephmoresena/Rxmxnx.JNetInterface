@@ -1,4 +1,4 @@
-﻿namespace Rxmxnx.JNetInterface.Internal;
+﻿namespace Rxmxnx.JNetInterface.Internal.ConstantValues;
 
 /// <summary>
 /// Java objects names.
@@ -89,4 +89,19 @@ internal static class ObjectSignatures
 	/// </summary>
 	public const String JThreadGroupObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
 		ClassNames.JThreadGroupObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
+	/// JNI signature for <c>java.lang.System</c> object.
+	/// </summary>
+	public const String JSystemObjectSignature = ObjectSignatures.ObjectSignaturePrefix + ClassNames.JSystemClassName +
+		ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
+	/// JNI signature for <c>java.lang.Cloneable</c> object.
+	/// </summary>
+	public const String JCloneableObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
+		ClassNames.JCloneableInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
+	/// JNI signature for <c>java.io.Serializable</c> object.
+	/// </summary>
+	public const String JSerializableObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
+		ClassNames.JSerializableInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
 }

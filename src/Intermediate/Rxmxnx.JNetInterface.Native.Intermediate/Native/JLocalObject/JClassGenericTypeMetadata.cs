@@ -5,7 +5,7 @@ public partial class JLocalObject
 	protected sealed partial class JTypeMetadataBuilder<TClass>
 	{
 		/// <summary>
-		/// This record stores the metadata for a class <see cref="IDataType"/> type.
+		/// This record stores the metadata for a class <see cref="IClassType"/> type.
 		/// </summary>
 		public sealed record JClassGenericTypeMetadata : JClassTypeMetadata
 		{
@@ -22,8 +22,6 @@ public partial class JLocalObject
 			public override Type Type => typeof(TClass);
 			/// <inheritdoc/>
 			public override JClassTypeMetadata? BaseMetadata => this._baseMetadata;
-			/// <inheritdoc/>
-			public override JTypeKind Kind => JTypeKind.Class;
 			/// <inheritdoc/>
 			public override JTypeModifier Modifier => this._modifier;
 			/// <inheritdoc/>

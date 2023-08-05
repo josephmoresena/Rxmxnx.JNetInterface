@@ -1,4 +1,4 @@
-﻿namespace Rxmxnx.JNetInterface.Internal;
+﻿namespace Rxmxnx.JNetInterface.Internal.ConstantValues;
 
 /// <summary>
 /// Java classes names.
@@ -9,6 +9,10 @@ internal static class ClassNames
 	/// JNI representation of <c>java.lang</c> package.
 	/// </summary>
 	public const String JLangPath = "java/lang/";
+	/// <summary>
+	/// JNI representation of <c>java.io</c> package.
+	/// </summary>
+	public const String JIoPath = "java/io/";
 	/// <summary>
 	/// JNI name of <c>java.lang.Object</c> class.
 	/// </summary>
@@ -69,4 +73,12 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.System</c> class.
 	/// </summary>
 	public const String JSystemClassName = ClassNames.JLangPath + "System";
+	/// <summary>
+	/// JNI name of <c>java.lang.Cloneable</c> interface.
+	/// </summary>
+	public const String JCloneableInterfaceName = ClassNames.JLangPath + "Cloneable";
+	/// <summary>
+	/// JNI name of <c>java.io.Serializable</c> interface.
+	/// </summary>
+	public const String JSerializableInterfaceName = ClassNames.JIoPath + "Serializable";
 }

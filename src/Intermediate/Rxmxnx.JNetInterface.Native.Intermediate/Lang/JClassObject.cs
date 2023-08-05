@@ -45,6 +45,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// Indicates whether current class is final.
 	/// </summary>
 	public Boolean? IsFinal => this._isFinal;
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>

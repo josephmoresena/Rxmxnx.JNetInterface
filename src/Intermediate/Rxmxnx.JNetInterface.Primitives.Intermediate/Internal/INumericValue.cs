@@ -1,10 +1,10 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// This interface exposes an object that represents a java primitive integer.
+/// This interface exposes an object that represents a java primitive number.
 /// </summary>
 /// <typeparam name="TValue">Type of the .NET equivalent structure.</typeparam>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IIntegerWrapper<TValue> : INumericWrapper<TValue>
+internal interface INumericValue<TValue> : IPrimitiveValue<TValue>
 	where TValue : unmanaged, IComparable, IConvertible, ISpanFormattable, IComparable<TValue>, IEquatable<TValue>,
-	IBinaryInteger<TValue>, IMinMaxValue<TValue> { }
+	IBinaryNumber<TValue>, IMinMaxValue<TValue> { }

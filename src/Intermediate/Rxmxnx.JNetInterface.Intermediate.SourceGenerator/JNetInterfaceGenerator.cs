@@ -15,12 +15,12 @@ public class JNetInterfaceGenerator : ISourceGenerator
 			switch (typeSymbol.ToString())
 			{
 				// UTF-8 Containers
-				case "Rxmxnx.JNetInterface.Internal.UnicodeClassNames":
-				case "Rxmxnx.JNetInterface.Internal.UnicodePrimitiveArraySignatures":
-				case "Rxmxnx.JNetInterface.Internal.UnicodePrimitiveSignatures":
-				case "Rxmxnx.JNetInterface.UnicodeMethodNames":
-				case "Rxmxnx.JNetInterface.UnicodeMethodSignatures":
-				case "Rxmxnx.JNetInterface.UnicodeObjectSignatures":
+				case "Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode.UnicodeClassNames":
+				case "Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode.UnicodePrimitiveArraySignatures":
+				case "Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode.UnicodePrimitiveSignatures":
+				case "Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode.UnicodeMethodNames":
+				case "Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode.UnicodeMethodSignatures":
+				case "Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode.UnicodeObjectSignatures":
 					typeSymbol.GenerateUtf8ContainerInitializer(context);
 					break;
 				default:

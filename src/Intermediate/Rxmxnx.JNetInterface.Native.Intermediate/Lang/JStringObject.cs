@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.String</c> instance.
 /// </summary>
-public sealed partial class JStringObject : JLocalObject, IClassType<JStringObject>, IWrapper<String>
+public sealed partial class JStringObject : JLocalObject, IClassType<JStringObject>, IWrapper<String>,
+	IInterfaceImplementation<JStringObject, JCloneableObject>,
+	IInterfaceImplementation<JStringObject, JSerializableObject>
 {
 	/// <summary>
 	/// CLR type of object metadata.

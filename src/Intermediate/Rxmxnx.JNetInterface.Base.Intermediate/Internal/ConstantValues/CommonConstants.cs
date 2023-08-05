@@ -1,4 +1,4 @@
-﻿namespace Rxmxnx.JNetInterface.Internal;
+﻿namespace Rxmxnx.JNetInterface.Internal.ConstantValues;
 
 /// <summary>
 /// Internal class of constant <see cref="String"/> values.

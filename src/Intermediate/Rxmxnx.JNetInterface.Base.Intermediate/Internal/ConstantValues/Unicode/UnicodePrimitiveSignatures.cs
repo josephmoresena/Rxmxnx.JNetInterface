@@ -1,48 +1,32 @@
-﻿namespace Rxmxnx.JNetInterface.Internal;
+﻿namespace Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode;
 
 /// <summary>
 /// Unicode java primitives signatures.
 /// </summary>
 internal static partial class UnicodePrimitiveSignatures
 {
-	/// <summary>
-	/// JNI signature for primitive <c>boolean</c>.
-	/// </summary>
+	/// <inheritdoc cref="PrimitiveSignatures.JBooleanSignature"/>
 	[DefaultValue(PrimitiveSignatures.JBooleanSignature)]
 	public static readonly CString JBooleanSignature;
-	/// <summary>
-	/// JNI signature for primitive <c>byte</c>.
-	/// </summary>
+	/// <inheritdoc cref="PrimitiveSignatures.JByteSignature"/>
 	[DefaultValue(PrimitiveSignatures.JByteSignature)]
 	public static readonly CString JByteSignature;
-	/// <summary>
-	/// JNI signature for primitive <c>char</c>.
-	/// </summary>
+	/// <inheritdoc cref="PrimitiveSignatures.JCharSignature"/>
 	[DefaultValue(PrimitiveSignatures.JCharSignature)]
 	public static readonly CString JCharSignature;
-	/// <summary>
-	/// JNI signature for primitive <c>double</c>.
-	/// </summary>
+	/// <inheritdoc cref="PrimitiveSignatures.JDoubleSignature"/>
 	[DefaultValue(PrimitiveSignatures.JDoubleSignature)]
 	public static readonly CString JDoubleSignature;
-	/// <summary>
-	/// JNI signature for primitive <c>float</c>.
-	/// </summary>
+	/// <inheritdoc cref="PrimitiveSignatures.JFloatSignature"/>
 	[DefaultValue(PrimitiveSignatures.JFloatSignature)]
 	public static readonly CString JFloatSignature;
-	/// <summary>
-	/// JNI signature for primitive <c>int</c>.
-	/// </summary>
+	/// <inheritdoc cref="PrimitiveSignatures.JIntSignature"/>
 	[DefaultValue(PrimitiveSignatures.JIntSignature)]
 	public static readonly CString JIntSignature;
-	/// <summary>
-	/// JNI signature for primitive <c>long</c>.
-	/// </summary>
+	/// <inheritdoc cref="PrimitiveSignatures.JLongSignature"/>
 	[DefaultValue(PrimitiveSignatures.JLongSignature)]
 	public static readonly CString JLongSignature;
-	/// <summary>
-	/// JNI signature for primitive <c>short</c>.
-	/// </summary>
+	/// <inheritdoc cref="PrimitiveSignatures.JShortSignature"/>
 	[DefaultValue(PrimitiveSignatures.JShortSignature)]
 	public static readonly CString JShortSignature;
 }

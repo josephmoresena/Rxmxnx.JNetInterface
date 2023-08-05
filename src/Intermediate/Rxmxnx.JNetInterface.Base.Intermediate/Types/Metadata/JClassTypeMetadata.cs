@@ -5,6 +5,9 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// </summary>
 public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 {
+	/// <inheritdoc/>
+	public override JTypeKind Kind => JTypeKind.Class;
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>

@@ -76,6 +76,32 @@ internal static class ValidationUtilities
 			$"{typeName} type doesn't {implementationType} {interfaceMetadata.ClassName} interface.");
 	}
 	/// <summary>
+	/// Throws an exception if <typeparamref name="TInterface"/> can't extend <typeparamref name="TOtherInterface"/>.
+	/// </summary>
+	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/></typeparam>
+	/// <typeparam name="TOtherInterface">Type of <see cref="IInterfaceType{TInterface}"/></typeparam>
+	/// <param name="typeName">Name of implementing type.</param>
+	/// <exception cref="ArgumentException">
+	/// Throws an exception if <typeparamref name="TInterface"/> can't extend <typeparamref name="TOtherInterface"/>.
+	/// </exception>
+	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
+	public static void ThrowIfInvalidExtension<TInterface, TOtherInterface>(CString typeName)
+		where TInterface : JReferenceObject, IReferenceType<TInterface>
+		where TOtherInterface : JReferenceObject, IReferenceType<TOtherInterface>
+	{
+		ISet<Type> baseBaseTypes = IReferenceType<TOtherInterface>.GetBaseTypes().ToHashSet();
+		Type derivedType = typeof(IDerivedType<TOtherInterface, TInterface>);
+		if (baseBaseTypes.Contains(typeof(TInterface)))
+			throw new InvalidOperationException(
+				$"{typeName} type can't extend an interface type which is derived from it.");
+		foreach (Type interfaceType in IReferenceType<TOtherInterface>.GetInterfaceTypes())
+		{
+			if (interfaceType == derivedType)
+				throw new InvalidOperationException(
+					$"{typeName} type can't extend an interface type which extends it.");
+		}
+	}
+	/// <summary>
 	/// Throws an exception if <paramref name="value"/> cannot be cast to <typeparamref name="TValue"/>.
 	/// </summary>
 	/// <param name="value">Convertible value.</param>
@@ -228,7 +254,7 @@ internal static class ValidationUtilities
 		ISet<Type> baseBaseTypes = IReferenceType<TBase>.GetBaseTypes().ToHashSet();
 		ISet<Type> baseTypes = IReferenceType<TReference>.GetBaseTypes().ToHashSet();
 		if (!baseTypes.IsProperSupersetOf(baseBaseTypes))
-			throw new InvalidOperationException();
+			throw new InvalidOperationException($"{typeName} type can't be based on a type which is derived from it.");
 		baseTypes.ExceptWith(baseBaseTypes);
 		return baseTypes;
 	}

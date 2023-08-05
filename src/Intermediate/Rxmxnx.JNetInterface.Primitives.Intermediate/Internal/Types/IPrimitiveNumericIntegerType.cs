@@ -13,7 +13,7 @@ internal interface IPrimitiveNumericIntegerType : IPrimitiveNumericType { }
 /// <typeparam name="TValue">Type of the .NET equivalent integer.</typeparam>
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface
-	IPrimitiveNumericIntegerType<TPrimitive, TValue> : IPrimitiveNumericIntegerType, IIntegerWrapper<TValue>,
+	IPrimitiveNumericIntegerType<TPrimitive, TValue> : IPrimitiveNumericIntegerType, IIntegerValue<TValue>,
 		IPrimitiveNumericType<TPrimitive, TValue>
 	where TPrimitive : unmanaged, IPrimitiveNumericIntegerType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>
