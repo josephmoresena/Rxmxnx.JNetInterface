@@ -11,8 +11,7 @@ public abstract partial class JInterfaceObject : JLocalObject, IInterfaceType
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	protected JInterfaceObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+	protected JInterfaceObject(JLocalObject jLocal) : base(jLocal, jLocal.Class) { }
 
 	/// <summary>
 	/// Constructor.

@@ -1,5 +1,4 @@
-﻿using Rxmxnx.JNetInterface.Io;
-using Rxmxnx.JNetInterface.Lang;
+﻿using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
@@ -26,6 +25,5 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JLocalObject>());
 		Console.WriteLine(IDataType.GetMetadata<JClassObject>());
 		Console.WriteLine(IDataType.GetMetadata<JStringObject>());
-		Console.WriteLine(IDataType.GetMetadata<JStringObject>().Interfaces.FirstOrDefault());
 	}
 }

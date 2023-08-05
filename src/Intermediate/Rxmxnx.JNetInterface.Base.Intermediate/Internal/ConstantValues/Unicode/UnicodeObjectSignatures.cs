@@ -66,4 +66,13 @@ internal static partial class UnicodeObjectSignatures
 	/// <inheritdoc cref="ObjectSignatures.JSerializableObjectSignature"/>
 	[DefaultValue(ObjectSignatures.JSerializableObjectSignature)]
 	public static readonly CString JSerializableObjectSignature;
+	/// <inheritdoc cref="ObjectSignatures.JAnnotatedElementObjectSignature"/>
+	[DefaultValue(ObjectSignatures.JAnnotatedElementObjectSignature)]
+	public static readonly CString JAnnotatedElementObjectSignature;
+	/// <inheritdoc cref="ObjectSignatures.JGenericDeclarationObjectSignature"/>
+	[DefaultValue(ObjectSignatures.JGenericDeclarationObjectSignature)]
+	public static readonly CString JGenericDeclarationObjectSignature;
+	/// <inheritdoc cref="ObjectSignatures.JTypeObjectSignature"/>
+	[DefaultValue(ObjectSignatures.JTypeObjectSignature)]
+	public static readonly CString JTypeObjectSignature;
 }

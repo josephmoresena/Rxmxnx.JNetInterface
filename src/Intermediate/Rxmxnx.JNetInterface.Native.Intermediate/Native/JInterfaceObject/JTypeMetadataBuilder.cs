@@ -52,7 +52,7 @@ public abstract partial class JInterfaceObject
 			where TOtherInterface : JInterfaceObject, IInterfaceType<TOtherInterface>
 		{
 			ValidationUtilities.ThrowIfInvalidExtension<TInterface, TOtherInterface>(this.DataTypeName);
-			base.AppendInterface<TOtherInterface>(typeof(IDerivedType<TOtherInterface, TOtherInterface>));
+			base.AppendInterface<TOtherInterface>(typeof(IDerivedType<TInterface, TOtherInterface>));
 			return this;
 		}
 		/// <summary>

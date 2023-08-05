@@ -104,4 +104,19 @@ internal static class ObjectSignatures
 	/// </summary>
 	public const String JSerializableObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
 		ClassNames.JSerializableInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
+	/// JNI signature for <c>java.reflect.AnnotatedElement</c> object.
+	/// </summary>
+	public const String JAnnotatedElementObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
+		ClassNames.JAnnotatedElementInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
+	/// JNI signature for <c>java.reflect.GenericDeclaration</c> object.
+	/// </summary>
+	public const String JGenericDeclarationObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
+		ClassNames.JGenericDeclarationInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
+	/// JNI signature for <c>java.reflect.Type</c> object.
+	/// </summary>
+	public const String JTypeObjectSignature = ObjectSignatures.ObjectSignaturePrefix + ClassNames.JTypeInterfaceName +
+		ObjectSignatures.ObjectSignatureSuffix;
 }

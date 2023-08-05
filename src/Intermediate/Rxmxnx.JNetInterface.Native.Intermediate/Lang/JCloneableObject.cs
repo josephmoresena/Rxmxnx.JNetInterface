@@ -28,7 +28,7 @@ public class JCloneableObject : JInterfaceObject, IInterfaceType<JCloneableObjec
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JCloneableObject(JLocalObject jLocal) : base(jLocal, jLocal.Class) { }
+	protected JCloneableObject(JLocalObject jLocal) : base(jLocal) { }
 
 	/// <inheritdoc/>
 	static JCloneableObject? IDataType<JCloneableObject>.Create(JObject? jObject)

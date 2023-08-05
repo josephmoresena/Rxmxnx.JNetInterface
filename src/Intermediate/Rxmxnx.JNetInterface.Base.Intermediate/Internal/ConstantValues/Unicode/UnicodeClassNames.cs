@@ -56,4 +56,13 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.JSerializableInterfaceName"/>
 	[DefaultValue(ClassNames.JSerializableInterfaceName)]
 	public static readonly CString JSerializableInterfaceName;
+	/// <inheritdoc cref="ClassNames.JAnnotatedElementInterfaceName"/>
+	[DefaultValue(ClassNames.JAnnotatedElementInterfaceName)]
+	public static readonly CString JAnnotatedElementInterfaceName;
+	/// <inheritdoc cref="ClassNames.JGenericDeclarationInterfaceName"/>
+	[DefaultValue(ClassNames.JGenericDeclarationInterfaceName)]
+	public static readonly CString JGenericDeclarationInterfaceName;
+	/// <inheritdoc cref="ClassNames.JTypeInterfaceName"/>
+	[DefaultValue(ClassNames.JTypeInterfaceName)]
+	public static readonly CString JTypeInterfaceName;
 }

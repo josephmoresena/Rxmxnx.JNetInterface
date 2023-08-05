@@ -28,7 +28,7 @@ public class JSerializableObject : JInterfaceObject, IInterfaceType<JSerializabl
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JSerializableObject(JLocalObject jLocal) : base(jLocal, jLocal.Class) { }
+	protected JSerializableObject(JLocalObject jLocal) : base(jLocal) { }
 
 	static JSerializableObject? IDataType<JSerializableObject>.Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JCloneableObject>(jLocal)) : default;

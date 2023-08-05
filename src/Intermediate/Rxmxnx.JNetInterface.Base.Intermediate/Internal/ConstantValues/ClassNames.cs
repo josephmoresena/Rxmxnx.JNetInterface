@@ -14,6 +14,10 @@ internal static class ClassNames
 	/// </summary>
 	public const String JIoPath = "java/io/";
 	/// <summary>
+	/// JNI representation of <c>java.reflect</c> package.
+	/// </summary>
+	public const String JReflectPath = "java/reflect/";
+	/// <summary>
 	/// JNI name of <c>java.lang.Object</c> class.
 	/// </summary>
 	public const String JObjectClassName = ClassNames.JLangPath + "Object";
@@ -81,4 +85,16 @@ internal static class ClassNames
 	/// JNI name of <c>java.io.Serializable</c> interface.
 	/// </summary>
 	public const String JSerializableInterfaceName = ClassNames.JIoPath + "Serializable";
+	/// <summary>
+	/// JNI name of <c>java.reflect.AnnotatedElement</c> interface.
+	/// </summary>
+	public const String JAnnotatedElementInterfaceName = ClassNames.JReflectPath + "AnnotatedElement";
+	/// <summary>
+	/// JNI name of <c>java.reflect.GenericDeclaration</c> interface.
+	/// </summary>
+	public const String JGenericDeclarationInterfaceName = ClassNames.JReflectPath + "GenericDeclaration";
+	/// <summary>
+	/// JNI name of <c>java.reflect.Type</c> interface.
+	/// </summary>
+	public const String JTypeInterfaceName = ClassNames.JReflectPath + "Type";
 }
