@@ -22,6 +22,7 @@ public interface IReferenceType : IObject, IDataType, IDisposable
 /// This interface exposes an object that represents a java reference type instance.
 /// </summary>
 /// <typeparam name="TReference">Type of java reference type.</typeparam>
+[EditorBrowsable(EditorBrowsableState.Never)]
 public interface
 	IReferenceType<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TReference> : IReferenceType,

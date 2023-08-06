@@ -3,7 +3,8 @@ namespace Rxmxnx.JNetInterface.Reflect;
 /// <summary>
 /// This class represents a local <c>java.reflect.GenericDeclaration</c> instance.
 /// </summary>
-public class JGenericDeclarationObject : JAnnotatedElementObject, IInterfaceType<JGenericDeclarationObject>,
+public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclarationObject>,
+	IInterfaceType<JGenericDeclarationObject>,
 	IInterfaceImplementation<JGenericDeclarationObject, JAnnotatedElementObject>
 {
 	/// <summary>
@@ -31,7 +32,7 @@ public class JGenericDeclarationObject : JAnnotatedElementObject, IInterfaceType
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	protected JGenericDeclarationObject(JLocalObject jLocal) : base(jLocal) { }
+	private JGenericDeclarationObject(JLocalObject jLocal) : base(jLocal) { }
 
 	static JGenericDeclarationObject? IDataType<JGenericDeclarationObject>.Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JCloneableObject>(jLocal)) : default;

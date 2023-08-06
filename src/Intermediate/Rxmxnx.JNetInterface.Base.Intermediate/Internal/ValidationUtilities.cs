@@ -89,11 +89,7 @@ internal static class ValidationUtilities
 		where TInterface : JReferenceObject, IReferenceType<TInterface>
 		where TOtherInterface : JReferenceObject, IReferenceType<TOtherInterface>
 	{
-		ISet<Type> baseBaseTypes = IReferenceType<TOtherInterface>.GetBaseTypes().ToHashSet();
 		Type derivedType = typeof(IDerivedType<TOtherInterface, TInterface>);
-		if (baseBaseTypes.Contains(typeof(TInterface)))
-			throw new InvalidOperationException(
-				$"{typeName} type can't extend an interface type which is derived from it.");
 		foreach (Type interfaceType in IReferenceType<TOtherInterface>.GetInterfaceTypes())
 		{
 			if (interfaceType == derivedType)

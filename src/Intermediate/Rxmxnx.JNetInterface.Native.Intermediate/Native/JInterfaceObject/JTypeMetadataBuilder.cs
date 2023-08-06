@@ -8,7 +8,7 @@ public abstract partial class JInterfaceObject
 	/// <typeparam name="TInterface">Type of interface.</typeparam>
 	protected new sealed partial class JTypeMetadataBuilder<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface> : JTypeMetadataBuilder
-		where TInterface : JInterfaceObject, IInterfaceType<TInterface>
+		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 	{
 		/// <inheritdoc/>
 		protected override JTypeKind Kind => JTypeKind.Interface;
@@ -47,12 +47,12 @@ public abstract partial class JInterfaceObject
 		/// </summary>
 		/// <typeparam name="TOtherInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public JTypeMetadataBuilder<TInterface> AppendInterface<
+		public new JTypeMetadataBuilder<TInterface> AppendInterface<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TOtherInterface>()
-			where TOtherInterface : JInterfaceObject, IInterfaceType<TOtherInterface>
+			where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
 		{
 			ValidationUtilities.ThrowIfInvalidExtension<TInterface, TOtherInterface>(this.DataTypeName);
-			base.AppendInterface<TOtherInterface>(typeof(IDerivedType<TInterface, TOtherInterface>));
+			base.AppendInterface<TOtherInterface>();
 			return this;
 		}
 		/// <summary>
@@ -62,6 +62,14 @@ public abstract partial class JInterfaceObject
 		public JInterfaceTypeMetadata Build()
 			=> new JInterfaceGenericTypeMetadata(this.DataTypeName, this.CreateInterfaceSet(), this.Signature,
 			                                     this.ArraySignature);
+
+		/// <inheritdoc/>
+		protected override Type GetImplementingType<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TOtherInterface>()
+			=> typeof(IDerivedType<TInterface, TOtherInterface>);
+		/// <inheritdoc/>
+		protected override Type GetImplementingType(JInterfaceTypeMetadata interfaceMetadata)
+			=> interfaceMetadata.GetImplementingType<TInterface>();
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.

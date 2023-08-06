@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Io;
 /// <summary>
 /// This class represents a local <c>java.io.Serializable</c> instance.
 /// </summary>
-public class JSerializableObject : JInterfaceObject, IInterfaceType<JSerializableObject>
+public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>, IInterfaceType<JSerializableObject>
 {
 	/// <summary>
 	/// Datatype metadata.
@@ -28,7 +28,7 @@ public class JSerializableObject : JInterfaceObject, IInterfaceType<JSerializabl
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	protected JSerializableObject(JLocalObject jLocal) : base(jLocal) { }
+	private JSerializableObject(JLocalObject jLocal) : base(jLocal) { }
 
 	static JSerializableObject? IDataType<JSerializableObject>.Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JCloneableObject>(jLocal)) : default;

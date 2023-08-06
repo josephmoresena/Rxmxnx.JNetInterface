@@ -75,6 +75,9 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 		this._class = jClass ?? jLocal._class;
 		this._global = jLocal._global;
 		this._weak = jLocal._weak;
+
+		if (jLocal is JInterfaceObject jInterface)
+			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>

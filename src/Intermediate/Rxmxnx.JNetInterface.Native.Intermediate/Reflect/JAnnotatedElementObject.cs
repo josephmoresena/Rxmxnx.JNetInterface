@@ -3,7 +3,8 @@ namespace Rxmxnx.JNetInterface.Reflect;
 /// <summary>
 /// This class represents a local <c>java.reflect.AnnotatedElement</c> instance.
 /// </summary>
-public class JAnnotatedElementObject : JInterfaceObject, IInterfaceType<JAnnotatedElementObject>
+public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElementObject>,
+	IInterfaceType<JAnnotatedElementObject>
 {
 	/// <summary>
 	/// Datatype metadata.
@@ -29,7 +30,7 @@ public class JAnnotatedElementObject : JInterfaceObject, IInterfaceType<JAnnotat
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	protected JAnnotatedElementObject(JLocalObject jLocal) : base(jLocal) { }
+	private JAnnotatedElementObject(JLocalObject jLocal) : base(jLocal) { }
 
 	static JAnnotatedElementObject? IDataType<JAnnotatedElementObject>.Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JAnnotatedElementObject>(jLocal)) : default;

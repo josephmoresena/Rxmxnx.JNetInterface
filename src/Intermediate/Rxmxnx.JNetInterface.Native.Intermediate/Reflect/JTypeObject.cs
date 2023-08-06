@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Reflect;
 /// <summary>
 /// This class represents a local <c>java.reflect.Type</c> instance.
 /// </summary>
-public class JTypeObject : JInterfaceObject, IInterfaceType<JTypeObject>
+public sealed class JTypeObject : JInterfaceObject<JTypeObject>, IInterfaceType<JTypeObject>
 {
 	/// <summary>
 	/// Datatype metadata.
@@ -28,7 +28,7 @@ public class JTypeObject : JInterfaceObject, IInterfaceType<JTypeObject>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	protected JTypeObject(JLocalObject jLocal) : base(jLocal) { }
+	private JTypeObject(JLocalObject jLocal) : base(jLocal) { }
 
 	static JTypeObject? IDataType<JTypeObject>.Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JTypeObject>(jLocal)) : default;

@@ -20,4 +20,13 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	/// <param name="arraySignature">Array JNI signature for current type.</param>
 	internal JInterfaceTypeMetadata(CString interfaceName, CString? signature, CString? arraySignature = default) :
 		base(interfaceName, signature, arraySignature) { }
+
+	/// <summary>
+	/// Retrieves the CLR type of implementation of <typeparamref name="TReference"/> of current interface.
+	/// </summary>
+	/// <typeparam name="TReference">Type of <see cref="IReferenceType{TReference}"/>.</typeparam>
+	/// <returns>The CLR type of implementation of <typeparamref name="TReference"/> of current interface.</returns>
+	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
+	internal abstract Type GetImplementingType<TReference>()
+		where TReference : JReferenceObject, IReferenceType<TReference>;
 }

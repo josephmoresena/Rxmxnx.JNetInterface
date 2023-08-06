@@ -80,16 +80,41 @@ public partial class JLocalObject
 		/// Appends an interface to current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
-		/// <param name="deriveFromInterfaceType"><see cref="IDerivedType{TObject,TInterface}"/> interface type.</param>
 		/// <returns>Current instance.</returns>
-		protected void AppendInterface<TInterface>(Type deriveFromInterfaceType)
-			where TInterface : JInterfaceObject, IInterfaceType<TInterface>
+		protected void AppendInterface<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
+			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			if (!this._interfaceTypes.Contains(deriveFromInterfaceType))
+			if (!this._interfaceTypes.Contains(this.GetImplementingType<TInterface>()))
 				ValidationUtilities.ThrowInvalidImplementation<TInterface>(
 					this.DataTypeName, this.Kind != JTypeKind.Interface);
-			this._interfaces.Add(IInterfaceType.GetMetadata<TInterface>());
+
+			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
+			foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
+			{
+				if (!this._interfaceTypes.Contains(this.GetImplementingType(interfaceMetadata)))
+					ValidationUtilities.ThrowInvalidImplementation<TInterface>(
+						this.DataTypeName, this.Kind != JTypeKind.Interface);
+			}
+
+			this._interfaces.Add(metadata);
 		}
+
+		/// <summary>
+		/// Retrieves the CLR type of implementation of <typeparamref name="TInterface"/> in current type.
+		/// </summary>
+		/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/>.</typeparam>
+		/// <returns>The CLR type of implementation of <typeparamref name="TInterface"/> in current type.</returns>
+		protected abstract Type GetImplementingType<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
+			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>;
+
+		/// <summary>
+		/// Retrieves the CLR type of implementation of the interface in <paramref name="interfaceMetadata"/> in current type.
+		/// </summary>
+		/// <param name="interfaceMetadata">Interface type metadata.</param>
+		/// <returns>The CLR type of implementation of the interface in <paramref name="interfaceMetadata"/> in current type.</returns>
+		protected abstract Type GetImplementingType(JInterfaceTypeMetadata interfaceMetadata);
 
 		/// <summary>
 		/// Indicates whether <typeparamref name="TClass"/> type implements <typeparamref name="TInterface"/>.
@@ -164,11 +189,11 @@ public partial class JLocalObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public JTypeMetadataBuilder<TClass> AppendInterface<
+		public new JTypeMetadataBuilder<TClass> AppendInterface<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
-			where TInterface : JInterfaceObject, IInterfaceType<TInterface>
+			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			base.AppendInterface<TInterface>(typeof(IDerivedType<TClass, TInterface>));
+			base.AppendInterface<TInterface>();
 			return this;
 		}
 		/// <summary>
@@ -178,6 +203,14 @@ public partial class JLocalObject
 		public JClassTypeMetadata Build()
 			=> new JClassGenericTypeMetadata(this.DataTypeName, this._modifier, this.CreateInterfaceSet(),
 			                                 this._baseMetadata, this.BaseTypes, this.Signature, this.ArraySignature);
+
+		/// <inheritdoc/>
+		protected override Type GetImplementingType<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
+			=> typeof(IDerivedType<TClass, TInterface>);
+		/// <inheritdoc/>
+		protected override Type GetImplementingType(JInterfaceTypeMetadata interfaceMetadata)
+			=> interfaceMetadata.GetImplementingType<TClass>();
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.

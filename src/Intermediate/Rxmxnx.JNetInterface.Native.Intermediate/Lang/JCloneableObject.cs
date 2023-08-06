@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Cloneable</c> instance.
 /// </summary>
-public class JCloneableObject : JInterfaceObject, IInterfaceType<JCloneableObject>
+public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInterfaceType<JCloneableObject>
 {
 	/// <summary>
 	/// Datatype metadata.
@@ -28,7 +28,7 @@ public class JCloneableObject : JInterfaceObject, IInterfaceType<JCloneableObjec
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	protected JCloneableObject(JLocalObject jLocal) : base(jLocal) { }
+	private JCloneableObject(JLocalObject jLocal) : base(jLocal) { }
 
 	/// <inheritdoc/>
 	static JCloneableObject? IDataType<JCloneableObject>.Create(JObject? jObject)

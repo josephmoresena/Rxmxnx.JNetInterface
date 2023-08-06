@@ -12,27 +12,32 @@ public abstract partial class JInterfaceObject : JLocalObject, IInterfaceType
 	/// <summary>
 	/// <see cref="JLocalObject"/> metadata.
 	/// </summary>
-	private readonly JObjectMetadata _metadata;
+	private readonly JObjectMetadata _objectMetadata;
+
+	/// <summary>
+	/// Instance metadata.
+	/// </summary>
+	internal JObjectMetadata ObjectMetadata => this._objectMetadata;
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	protected JInterfaceObject(JLocalObject jLocal) : base(
+	internal JInterfaceObject(JLocalObject jLocal) : base(
 		JInterfaceObject.Load(jLocal, out JClassObject jClass, out JObjectMetadata metadata), jClass)
-		=> this._metadata = metadata;
+		=> this._objectMetadata = metadata;
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	protected JInterfaceObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
-		=> this._metadata = jGlobal.ObjectMetadata;
+	internal JInterfaceObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
+		=> this._objectMetadata = jGlobal.ObjectMetadata;
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	protected override JObjectMetadata CreateMetadata() => this._metadata;
+	protected override JObjectMetadata CreateMetadata() => this._objectMetadata;
 
 	/// <inheritdoc cref="JLocalObject.ProcessMetadata(JObjectMetadata)"/>
 	[EditorBrowsable(EditorBrowsableState.Never)]
@@ -51,4 +56,22 @@ public abstract partial class JInterfaceObject : JLocalObject, IInterfaceType
 		jClass = jLocal.Class;
 		return jLocal;
 	}
+}
+
+/// <summary>
+/// This class represents a local interface instance.
+/// </summary>
+/// <typeparam name="TInterface">Type of <see cref="IInterfaceType"/>.</typeparam>
+public abstract class JInterfaceObject<
+	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface> : JInterfaceObject
+	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+{
+	/// <inheritdoc/>
+	protected JInterfaceObject(JLocalObject jLocal) : base(jLocal) { }
+	/// <inheritdoc/>
+	protected JInterfaceObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+
+	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	protected new JObjectMetadata CreateMetadata() => base.CreateMetadata();
 }
