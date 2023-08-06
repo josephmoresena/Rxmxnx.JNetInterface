@@ -8,6 +8,7 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitiveType, IW
 	IEquatable<JPrimitiveObject<TPrimitive>>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEquatable<TPrimitive>
 {
+	static Type IDataType.FamilyType => typeof(TPrimitive);
 	static JDataTypeMetadata IDataType.Metadata => IPrimitiveType.GetMetadata<TPrimitive>();
 
 	/// <summary>

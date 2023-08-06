@@ -3,7 +3,6 @@
 /// <summary>
 /// This interface exposes a java data type.
 /// </summary>
-[EditorBrowsable(EditorBrowsableState.Never)]
 public interface IDataType
 {
 	/// <inheritdoc cref="IDataType.ExcludingTypes"/>
@@ -18,7 +17,11 @@ public interface IDataType
 	/// <summary>
 	/// Datatype kind.
 	/// </summary>
-	public static virtual JTypeKind Kind => JTypeKind.Undefined;
+	internal static virtual JTypeKind Kind => JTypeKind.Undefined;
+	/// <summary>
+	/// Datatype family type.
+	/// </summary>
+	internal static abstract Type? FamilyType { get; }
 
 	/// <summary>
 	/// Current type metadata.

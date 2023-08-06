@@ -19,6 +19,7 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	public static JNativeType Type => JNativeType.JLong;
 
 	static JDataTypeMetadata IDataType.Metadata => JLong.typeMetadata;
+	static Type? IDataType.FamilyType => default;
 
 	/// <summary>
 	/// Internal 64-bit signed integer value.

@@ -20,6 +20,7 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	public static JNativeType Type => JNativeType.JInt;
 
 	static JDataTypeMetadata IDataType.Metadata => JInt.typeMetadata;
+	static Type? IDataType.FamilyType => default;
 
 	/// <summary>
 	/// Internal 32-bit signed integer value.
