@@ -31,9 +31,10 @@ public partial class JClassObject
 		/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
 		public JClassObjectMetadata(JObjectMetadata metadata) : base(metadata)
 		{
-			this.Name = default!;
-			this.ClassSignature = default!;
-			this.Hash = default!;
+			JClassObjectMetadata? classMetadata = metadata as JClassObjectMetadata;
+			this.Name = classMetadata?.Name!;
+			this.ClassSignature = classMetadata?.ClassSignature!;
+			this.Hash = classMetadata?.Hash!;
 		}
 	}
 }

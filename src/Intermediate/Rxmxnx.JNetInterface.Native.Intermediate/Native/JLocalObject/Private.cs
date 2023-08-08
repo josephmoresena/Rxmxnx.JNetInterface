@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native;
 
-public partial class JLocalObject
+public partial class JLocalObject : ILocalObject
 {
 	static Type IDataType.FamilyType => typeof(JLocalObject);
 
@@ -33,6 +33,9 @@ public partial class JLocalObject
 	/// Current <see cref="JWeak"/> instance.
 	/// </summary>
 	private JWeak? _weak;
+
+	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
+	void ILocalObject.ProcessMetadata(JObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
 
 	/// <summary>
 	/// Loads the class object in the current instance.

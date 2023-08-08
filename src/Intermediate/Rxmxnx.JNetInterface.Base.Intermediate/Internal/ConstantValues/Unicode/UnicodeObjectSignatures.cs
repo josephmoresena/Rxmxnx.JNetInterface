@@ -51,6 +51,9 @@ internal static partial class UnicodeObjectSignatures
 	/// <inheritdoc cref="ObjectSignatures.JNumberObjectSignature"/>
 	[DefaultValue(ObjectSignatures.JNumberObjectSignature)]
 	public static readonly CString JNumberObjectSignature;
+	/// <inheritdoc cref="ObjectSignatures.JEnumObjectSignature"/>
+	[DefaultValue(ObjectSignatures.JEnumObjectSignature)]
+	public static readonly CString JEnumObjectSignature;
 	/// <inheritdoc cref="ObjectSignatures.JThrowableObjectSignature"/>
 	[DefaultValue(ObjectSignatures.JThrowableObjectSignature)]
 	public static readonly CString JThrowableObjectSignature;
@@ -63,6 +66,12 @@ internal static partial class UnicodeObjectSignatures
 	/// <inheritdoc cref="ObjectSignatures.JCloneableObjectSignature"/>
 	[DefaultValue(ObjectSignatures.JCloneableObjectSignature)]
 	public static readonly CString JCloneableObjectSignature;
+	/// <inheritdoc cref="ObjectSignatures.JComparableObjectSignature"/>
+	[DefaultValue(ObjectSignatures.JComparableObjectSignature)]
+	public static readonly CString JComparableObjectSignature;
+	/// <inheritdoc cref="ObjectSignatures.JCharSequenceObjectSignature"/>
+	[DefaultValue(ObjectSignatures.JCharSequenceObjectSignature)]
+	public static readonly CString JCharSequenceObjectSignature;
 	/// <inheritdoc cref="ObjectSignatures.JSerializableObjectSignature"/>
 	[DefaultValue(ObjectSignatures.JSerializableObjectSignature)]
 	public static readonly CString JSerializableObjectSignature;

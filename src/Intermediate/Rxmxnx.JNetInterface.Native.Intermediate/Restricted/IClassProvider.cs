@@ -13,6 +13,10 @@ public interface IClassProvider
 	/// <c>java.lang.String</c> class instance.
 	/// </summary>
 	JClassObject StringClassObject => this.GetClass<JStringObject>();
+	/// <summary>
+	/// <c>java.lang.Enum</c> class instance.
+	/// </summary>
+	JClassObject EnumClassObject => this.GetClass<JEnumObject>();
 
 	/// <summary>
 	/// Determines whether <paramref name="jObject"/> can be safely cast to

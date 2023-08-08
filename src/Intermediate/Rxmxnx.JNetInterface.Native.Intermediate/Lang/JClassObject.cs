@@ -75,6 +75,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		this._hash = classMetadata.Hash;
 		this._isFinal = classMetadata.IsFinal;
 	}
+
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.
 	/// </summary>

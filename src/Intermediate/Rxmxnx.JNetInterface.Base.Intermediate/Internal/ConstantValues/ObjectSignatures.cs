@@ -80,6 +80,11 @@ internal static class ObjectSignatures
 	public const String JNumberObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
 		ClassNames.JNumberObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
 	/// <summary>
+	/// JNI signature for <c>java.lang.Enum</c> object.
+	/// </summary>
+	public const String JEnumObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
+		ClassNames.JEnumObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
 	/// JNI signature for <c>java.lang.Throwable</c> object.
 	/// </summary>
 	public const String JThrowableObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
@@ -99,6 +104,16 @@ internal static class ObjectSignatures
 	/// </summary>
 	public const String JCloneableObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
 		ClassNames.JCloneableInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
+	/// JNI signature for <c>java.lang.Comparable</c> object.
+	/// </summary>
+	public const String JComparableObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
+		ClassNames.JComparableInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
+	/// JNI signature for <c>java.lang.CharSequence</c> object.
+	/// </summary>
+	public const String JCharSequenceObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
+		ClassNames.JCharSequenceInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
 	/// <summary>
 	/// JNI signature for <c>java.io.Serializable</c> object.
 	/// </summary>

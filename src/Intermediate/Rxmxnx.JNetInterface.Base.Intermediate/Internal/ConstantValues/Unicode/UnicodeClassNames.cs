@@ -41,6 +41,9 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.JNumberObjectClassName"/>
 	[DefaultValue(ClassNames.JNumberObjectClassName)]
 	public static readonly CString JNumberObjectClassName;
+	/// <inheritdoc cref="ClassNames.JEnumObjectClassName"/>
+	[DefaultValue(ClassNames.JEnumObjectClassName)]
+	public static readonly CString JEnumObjectClassName;
 	/// <inheritdoc cref="ClassNames.JThrowableObjectClassName"/>
 	[DefaultValue(ClassNames.JThrowableObjectClassName)]
 	public static readonly CString JThrowableObjectClassName;
@@ -53,6 +56,12 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.JCloneableInterfaceName"/>
 	[DefaultValue(ClassNames.JCloneableInterfaceName)]
 	public static readonly CString JCloneableInterfaceName;
+	/// <inheritdoc cref="ClassNames.JComparableInterfaceName"/>
+	[DefaultValue(ClassNames.JComparableInterfaceName)]
+	public static readonly CString JComparableInterfaceName;
+	/// <inheritdoc cref="ClassNames.JCharSequenceInterfaceName"/>
+	[DefaultValue(ClassNames.JCharSequenceInterfaceName)]
+	public static readonly CString JCharSequenceInterfaceName;
 	/// <inheritdoc cref="ClassNames.JSerializableInterfaceName"/>
 	[DefaultValue(ClassNames.JSerializableInterfaceName)]
 	public static readonly CString JSerializableInterfaceName;

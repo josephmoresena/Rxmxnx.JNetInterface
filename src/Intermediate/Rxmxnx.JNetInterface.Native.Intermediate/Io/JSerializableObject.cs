@@ -31,5 +31,5 @@ public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>,
 	private JSerializableObject(JLocalObject jLocal) : base(jLocal) { }
 
 	static JSerializableObject? IDataType<JSerializableObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JCloneableObject>(jLocal)) : default;
+		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JSerializableObject>(jLocal)) : default;
 }

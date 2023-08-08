@@ -61,10 +61,4 @@ public partial class JLocalObject
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>The loaded <see cref="JGlobalBase"/> object for <paramref name="jLocal"/>.</returns>
 	internal static JGlobalBase? GetGlobalObject(JLocalObject jLocal) => jLocal.GetGlobalObject();
-	/// <summary>
-	/// Retrieves the metadata for given object.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>The object metadata for <paramref name="jLocal"/>.</returns>
-	internal static JObjectMetadata CreateMetadata(JLocalObject jLocal) => jLocal.CreateMetadata();
 }

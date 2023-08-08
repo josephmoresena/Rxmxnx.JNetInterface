@@ -34,6 +34,10 @@ public interface IEnvironment
 	/// Internal String provider object.
 	/// </summary>
 	internal IStringProvider StringProvider { get; }
+	/// <summary>
+	/// Internal Enum provider object.
+	/// </summary>
+	internal IEnumProvider EnumProvider { get; }
 
 	/// <summary>
 	/// Retrieves the JNI type reference of <paramref name="jObject"/>.

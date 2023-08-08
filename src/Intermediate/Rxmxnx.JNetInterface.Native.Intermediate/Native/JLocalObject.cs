@@ -80,17 +80,17 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
 
-	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
-	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
-
 	/// <inheritdoc/>
 	public void Dispose()
 	{
 		this.Dispose(true);
 		GC.SuppressFinalize(this);
 	}
+
+	/// <inheritdoc cref="JObject.ObjectClassName"/>
+	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
+	/// <inheritdoc cref="JObject.ObjectSignature"/>
+	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
 
 	/// <inheritdoc/>
 	~JLocalObject() { this.Dispose(false); }
@@ -124,6 +124,19 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	{
 		this._class = instanceMetadata.GetClass(this.Environment);
 		this._isRealClass = true;
+	}
+
+	/// <summary>
+	/// Retrieves the class and metadata from current instance for external use.
+	/// </summary>
+	/// <param name="jClass">Output. Loaded class from current instance.</param>
+	/// <param name="metadata">Output. Metadata for current instance.</param>
+	/// <returns>Current instance instance.</returns>
+	protected internal JLocalObject ForExternalUse(out JClassObject jClass, out JObjectMetadata metadata)
+	{
+		metadata = ILocalObject.CreateMetadata(this);
+		jClass = this.Class;
+		return this;
 	}
 
 	/// <summary>

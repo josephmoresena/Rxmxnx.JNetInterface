@@ -66,6 +66,10 @@ internal static class ClassNames
 	/// </summary>
 	public const String JNumberObjectClassName = ClassNames.JLangPath + "Number";
 	/// <summary>
+	/// JNI name of <c>java.lang.Enum</c> class.
+	/// </summary>
+	public const String JEnumObjectClassName = ClassNames.JLangPath + "Enum";
+	/// <summary>
 	/// JNI name of <c>java.lang.Throwable</c> class.
 	/// </summary>
 	public const String JThrowableObjectClassName = ClassNames.JLangPath + "Throwable";
@@ -81,6 +85,14 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.Cloneable</c> interface.
 	/// </summary>
 	public const String JCloneableInterfaceName = ClassNames.JLangPath + "Cloneable";
+	/// <summary>
+	/// JNI name of <c>java.lang.Comparable</c> interface.
+	/// </summary>
+	public const String JComparableInterfaceName = ClassNames.JLangPath + "Comparable";
+	/// <summary>
+	/// JNI name of <c>java.lang.CharSequence</c> interface.
+	/// </summary>
+	public const String JCharSequenceInterfaceName = ClassNames.JLangPath + "CharSequence";
 	/// <summary>
 	/// JNI name of <c>java.io.Serializable</c> interface.
 	/// </summary>

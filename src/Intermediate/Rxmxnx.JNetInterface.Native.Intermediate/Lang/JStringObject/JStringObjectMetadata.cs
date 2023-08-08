@@ -17,6 +17,10 @@ public partial class JStringObject
 		/// Constructor.
 		/// </summary>
 		/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
-		public JStringObjectMetadata(JObjectMetadata metadata) : base(metadata) => this.Value = default!;
+		public JStringObjectMetadata(JObjectMetadata metadata) : base(metadata)
+		{
+			JStringObjectMetadata? stringMetadata = metadata as JStringObjectMetadata;
+			this.Value = stringMetadata?.Value!;
+		}
 	}
 }

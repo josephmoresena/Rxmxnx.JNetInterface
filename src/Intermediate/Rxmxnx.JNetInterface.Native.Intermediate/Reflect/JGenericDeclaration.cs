@@ -35,5 +35,5 @@ public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclara
 	private JGenericDeclarationObject(JLocalObject jLocal) : base(jLocal) { }
 
 	static JGenericDeclarationObject? IDataType<JGenericDeclarationObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JCloneableObject>(jLocal)) : default;
+		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JGenericDeclarationObject>(jLocal)) : default;
 }

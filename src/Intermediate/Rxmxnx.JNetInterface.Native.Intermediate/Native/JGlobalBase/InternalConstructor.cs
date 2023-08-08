@@ -10,7 +10,7 @@ public partial class JGlobalBase
 	internal JGlobalBase(JLocalObject jLocal, JGlobalRef globalRef) : base(globalRef, jLocal.IsDummy)
 	{
 		this._vm = jLocal.Environment.VirtualMachine;
-		this._objectMetadata = JLocalObject.CreateMetadata(jLocal);
+		this._objectMetadata = ILocalObject.CreateMetadata(jLocal);
 	}
 	/// <summary>
 	/// Constructor.
@@ -20,6 +20,6 @@ public partial class JGlobalBase
 	internal JGlobalBase(JLocalObject jLocal, JWeakRef weakRef) : base(weakRef, jLocal.IsDummy)
 	{
 		this._vm = jLocal.Environment.VirtualMachine;
-		this._objectMetadata = JLocalObject.CreateMetadata(jLocal);
+		this._objectMetadata = ILocalObject.CreateMetadata(jLocal);
 	}
 }

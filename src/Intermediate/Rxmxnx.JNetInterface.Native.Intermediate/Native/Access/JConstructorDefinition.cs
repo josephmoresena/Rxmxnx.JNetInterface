@@ -33,7 +33,7 @@ public record JConstructorDefinition : JCallDefinition
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
-	public TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IDataType<TObject>
+	public TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
 		=> this.New<TObject>(env.ClassProvider.GetClass<TObject>(), this.CreateArgumentsArray());
 
 	/// <summary>
@@ -51,7 +51,7 @@ public record JConstructorDefinition : JCallDefinition
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
-	protected TObject New<TObject>(IEnvironment env, IObject?[] args) where TObject : JLocalObject, IDataType<TObject>
+	protected TObject New<TObject>(IEnvironment env, IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
 		=> this.New<TObject>(env.ClassProvider.GetClass<TObject>(), args);
 
 	/// <summary>
@@ -62,7 +62,7 @@ public record JConstructorDefinition : JCallDefinition
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <typeparamref name="TObject"/>.</returns>
-	private TObject New<TObject>(JClassObject jClass, IObject?[] args) where TObject : JLocalObject, IDataType<TObject>
+	private TObject New<TObject>(JClassObject jClass, IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
 	{
 		IEnvironment env = jClass.Environment;
 		return env.Accessor.CallConstructor<TObject>(jClass, this, args);

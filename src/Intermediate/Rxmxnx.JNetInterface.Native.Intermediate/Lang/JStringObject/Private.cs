@@ -10,8 +10,9 @@ public partial class JStringObject
 	                                                                  JTypeModifier.Final)
 	                                                          .WithSignature(
 		                                                          UnicodeObjectSignatures.JStringObjectSignature)
-	                                                          .AppendInterface<JCloneableObject>()
-	                                                          .AppendInterface<JSerializableObject>().Build();
+	                                                          .AppendInterface<JSerializableObject>()
+	                                                          .AppendInterface<JComparableObject>()
+	                                                          .AppendInterface<JCharSequenceObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JStringObject.typeMetadata;
 
