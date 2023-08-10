@@ -64,6 +64,7 @@ public record JConstructorDefinition : JCallDefinition
 	/// <returns>A new <typeparamref name="TObject"/>.</returns>
 	private TObject New<TObject>(JClassObject jClass, IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
 	{
+		ValidationUtilities.ThrowIfAbstractClass<TObject>();
 		IEnvironment env = jClass.Environment;
 		return env.Accessor.CallConstructor<TObject>(jClass, this, args);
 	}

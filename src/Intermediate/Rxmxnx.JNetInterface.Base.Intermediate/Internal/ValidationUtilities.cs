@@ -60,6 +60,20 @@ internal static class ValidationUtilities
 	public static String ThrowInvalidNativeType(JNativeType nativeType)
 		=> throw new InvalidEnumArgumentException(nameof(nativeType), (Int32)nativeType, typeof(JNativeType));
 	/// <summary>
+	/// Throws an exception if <typeparamref name="TObject"/> is abstract.
+	/// </summary>
+	/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <typeparamref name="TObject"/> is abstract.
+	/// </exception>
+	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
+	public static void ThrowIfAbstractClass<TObject>() where TObject : JReferenceObject, IReferenceType<TObject>
+	{
+		JDataTypeMetadata typeMetadata = IDataType.GetMetadata<TObject>();
+		if (typeMetadata.Modifier == JTypeModifier.Abstract)
+			throw new InvalidOperationException($"{typeMetadata.ClassName} is an abstract type.");
+	}
+	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
 	/// <typeparamref name="TInterface"/>.
 	/// </summary>
