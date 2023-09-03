@@ -2,8 +2,6 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public partial class JEnumObject
 {
-	private static readonly ISet<Type> baseTypes = new HashSet<Type> { typeof(JLocalObject), typeof(JEnumObject), };
-
 	/// <summary>
 	/// <see cref="JReferenceTypeMetadata"/> enum builder.
 	/// </summary>
@@ -25,8 +23,7 @@ public partial class JEnumObject
 		/// </summary>
 		/// <param name="enumType">Enum name of current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private JTypeMetadataBuilder(CString enumType, ISet<Type> interfaceTypes) : base(
-			enumType, JEnumObject.baseTypes, interfaceTypes)
+		private JTypeMetadataBuilder(CString enumType, ISet<Type> interfaceTypes) : base(enumType, interfaceTypes)
 			=> this._fields = new(enumType);
 
 		/// <summary>

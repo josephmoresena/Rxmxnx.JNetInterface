@@ -17,10 +17,9 @@ public abstract partial class JInterfaceObject
 		/// Constructor.
 		/// </summary>
 		/// <param name="interfaceName">Interface name of current type.</param>
-		/// <param name="baseTypes">Base types.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private JTypeMetadataBuilder(CString interfaceName, ISet<Type> baseTypes, ISet<Type> interfaceTypes) : base(
-			interfaceName, baseTypes, interfaceTypes) { }
+		private JTypeMetadataBuilder(CString interfaceName, ISet<Type> interfaceTypes) : base(
+			interfaceName, interfaceTypes) { }
 
 		/// <summary>
 		/// Sets the type signature.
@@ -79,9 +78,8 @@ public abstract partial class JInterfaceObject
 		public static JTypeMetadataBuilder<TInterface> Create(CString className)
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
-			ISet<Type> baseTypes = IReferenceType<TInterface>.GetBaseTypes().ToHashSet();
 			ISet<Type> interfaceTypes = IReferenceType<TInterface>.GetInterfaceTypes().ToHashSet();
-			return new(className, baseTypes, interfaceTypes);
+			return new(className, interfaceTypes);
 		}
 	}
 }

@@ -49,6 +49,17 @@ public partial class JLocalObject
 			this._baseTypes = baseTypes;
 			this._interfaceTypes = interfaceTypes;
 		}
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="dataTypeName">Datatype name.</param>
+		/// <param name="interfaceTypes">Interface types.</param>
+		internal JTypeMetadataBuilder(CString dataTypeName, ISet<Type> interfaceTypes)
+		{
+			this._dataTypeName = dataTypeName;
+			this._baseTypes = ImmutableHashSet<Type>.Empty;
+			this._interfaceTypes = interfaceTypes;
+		}
 
 		/// <summary>
 		/// Creates a metadata interfaces set for current datatype.

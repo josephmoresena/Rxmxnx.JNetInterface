@@ -47,7 +47,8 @@ public interface
 	/// <returns>Enumerable of types.</returns>
 	internal static IEnumerable<Type> GetInterfaceTypes()
 	{
-		foreach (Type interfaceType in typeof(TReference).GetInterfaces())
+		Type[] interfaceTypes = typeof(TReference).GetInterfaces();
+		foreach (Type interfaceType in interfaceTypes)
 		{
 			if (TReference.ExcludingTypes.Contains(interfaceType))
 				continue;
