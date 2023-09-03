@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 public abstract partial class JInterfaceObject
 {
 	/// <summary>
-	/// <see cref="JReferenceTypeMetadata"/> class builder.
+	/// <see cref="JReferenceTypeMetadata"/> interface builder.
 	/// </summary>
 	/// <typeparam name="TInterface">Type of interface.</typeparam>
 	protected new sealed partial class JTypeMetadataBuilder<

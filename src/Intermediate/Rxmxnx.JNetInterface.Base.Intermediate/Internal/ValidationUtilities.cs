@@ -268,4 +268,54 @@ internal static class ValidationUtilities
 		baseTypes.ExceptWith(baseBaseTypes);
 		return baseTypes;
 	}
+	/// <summary>
+	/// Throws an exception if <paramref name="ordinal"/> is an invalid enum ordinal.
+	/// </summary>
+	/// <param name="list">A <see cref="IEnumFieldList"/> instance.</param>
+	/// <param name="ordinal">Enum ordinal.</param>
+	/// <exception cref="ArgumentException">
+	/// Throws an exception if <paramref name="ordinal"/> is negative.
+	/// </exception>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="ordinal"/> is already defined for current enum type.
+	/// </exception>
+	public static void ThrowIfInvalidOrdinal(IEnumFieldList list, Int32 ordinal)
+	{
+		if (ordinal < 0)
+			throw new ArgumentException($"Any ordinal for {list.TypeName} type must be zero or positive.");
+		if (list.HasOrdinal(ordinal))
+			throw new InvalidOperationException($"{list.TypeName} has already a field with ({ordinal}) ordinal.");
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="hash"/> is an invalid field name hash.
+	/// </summary>
+	/// <param name="list">A <see cref="IEnumFieldList"/> instance.</param>
+	/// <param name="hash">Enum name hash.</param>
+	/// <exception cref="ArgumentException">
+	/// Throws an exception if <paramref name="hash"/> is empty.
+	/// </exception>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="hash"/> is already defined for current enum type.
+	/// </exception>
+	public static void ThrowIfInvalidHash(IEnumFieldList list, String hash)
+	{
+		if (String.IsNullOrWhiteSpace(hash))
+			throw new ArgumentException($"Any name for {list.TypeName} type must be non-empty.");
+		if (list.HasHash(hash))
+			throw new InvalidOperationException($"{list.TypeName} has already a field with '{list[list[hash]]}' name.");
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="list"/> is invalid.
+	/// </summary>
+	/// <param name="list">A <see cref="IEnumFieldList"/> instance.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="list"/> is invalid.
+	/// </exception>
+	public static void ThrowIfInvalidList(IEnumFieldList list)
+	{
+		IReadOnlySet<Int32> missing = list.GetMissingFields(out Int32 count);
+		if (missing.Count > 0)
+			throw new InvalidOperationException(
+				$"The enum field list for {list.TypeName} is invalid. Count: {count}. Missing values: {String.Join(", ", missing)}");
+	}
 }

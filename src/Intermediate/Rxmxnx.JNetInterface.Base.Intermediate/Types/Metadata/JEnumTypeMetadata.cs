@@ -6,9 +6,9 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public abstract record JEnumTypeMetadata : JReferenceTypeMetadata
 {
 	/// <summary>
-	/// Name of fields representing each enum value.
+	/// List of fields representing each enum value.
 	/// </summary>
-	public abstract CString[]? Fields { get; }
+	public abstract IEnumFieldList Fields { get; }
 
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Enum;

@@ -7,7 +7,7 @@ public partial class JLocalObject
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IClassType"/> type.
 		/// </summary>
-		public sealed record JClassGenericTypeMetadata : JClassTypeMetadata
+		internal sealed record JClassGenericTypeMetadata : JClassTypeMetadata
 		{
 			/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
 			private readonly JClassTypeMetadata? _baseMetadata;
