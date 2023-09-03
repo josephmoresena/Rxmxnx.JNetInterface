@@ -46,6 +46,7 @@ public interface IEnumFieldList
 	/// Retrieves the missing ordinal set.
 	/// </summary>
 	/// <param name="count">Output. Number of defined elements.</param>
+	/// <param name="maxOrdinal">Output. Maximum enum ordinal.</param>
 	/// <returns>The missing ordinal set.</returns>
-	internal IReadOnlySet<Int32> GetMissingFields(out Int32 count);
+	internal IReadOnlySet<Int32> GetMissingFields(out Int32 count, out Int32 maxOrdinal);
 }

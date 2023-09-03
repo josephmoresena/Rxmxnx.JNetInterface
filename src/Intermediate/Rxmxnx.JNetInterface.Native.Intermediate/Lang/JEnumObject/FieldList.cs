@@ -35,14 +35,12 @@ public partial class JEnumObject
 
 			Boolean IEnumFieldList.HasOrdinal(Int32 ordinal) => this._ordinalDictionary.ContainsKey(ordinal);
 			Boolean IEnumFieldList.HasHash(String hash) => this._hashDictionary.ContainsKey(hash);
-			IReadOnlySet<Int32> IEnumFieldList.GetMissingFields(out Int32 count)
+			IReadOnlySet<Int32> IEnumFieldList.GetMissingFields(out Int32 count, out Int32 maxOrdinal)
 			{
 				Int32[] defined = this._ordinalDictionary.Keys.ToArray();
-				Int32 maxOrdinal = defined.Max();
-
+				HashSet<Int32> result = Enumerable.Range(0, defined.Length + 1).ToHashSet();
+				maxOrdinal = defined.Max();
 				count = defined.Length;
-
-				HashSet<Int32> result = Enumerable.Range(0, count + 1).ToHashSet();
 				result.ExceptWith(defined);
 				return result;
 			}

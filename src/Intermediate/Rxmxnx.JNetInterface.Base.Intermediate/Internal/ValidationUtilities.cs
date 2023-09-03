@@ -313,9 +313,12 @@ internal static class ValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidList(IEnumFieldList list)
 	{
-		IReadOnlySet<Int32> missing = list.GetMissingFields(out Int32 count);
-		if (missing.Count > 0)
-			throw new InvalidOperationException(
-				$"The enum field list for {list.TypeName} is invalid. Count: {count}. Missing values: {String.Join(", ", missing)}");
+		IReadOnlySet<Int32> missing = list.GetMissingFields(out Int32 count, out Int32 maxOrdinal);
+		if (missing.Count <= 0 && maxOrdinal == count - 1)
+			return;
+		String message = $"The enum field list for {list.TypeName} is invalid. " +
+			$"Count: {count}. Maximum ordinal: {maxOrdinal}. " +
+			(missing.Count > 0 ? $"Missing values: {String.Join(", ", missing)}." : "");
+		throw new InvalidOperationException(message);
 	}
 }
