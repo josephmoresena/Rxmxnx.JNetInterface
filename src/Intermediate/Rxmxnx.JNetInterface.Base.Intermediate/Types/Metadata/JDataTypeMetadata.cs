@@ -66,7 +66,7 @@ public abstract record JDataTypeMetadata
 	/// </summary>
 	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jObject"/>.</returns>
-	internal abstract IDataType? Create(JObject? jObject);
+	internal abstract IDataType? CreateInstance(JObject? jObject);
 
 	/// <summary>
 	/// Retrieve a safe null-terminated <see cref="CString"/> from <paramref name="cstr"/>.

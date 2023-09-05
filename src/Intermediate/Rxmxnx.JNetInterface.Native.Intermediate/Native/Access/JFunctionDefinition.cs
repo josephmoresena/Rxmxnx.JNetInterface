@@ -80,7 +80,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? Invoke(JLocalObject jLocal, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.Accessor.CallFunction<TResult>(jLocal, this, args);
+		return env.AccessProvider.CallFunction<TResult>(jLocal, this, args);
 	}
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition but using the
@@ -92,7 +92,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.Accessor.CallNonVirtualFunction<TResult>(jLocal, jClass, this, args);
+		return env.AccessProvider.CallNonVirtualFunction<TResult>(jLocal, jClass, this, args);
 	}
 	/// <summary>
 	/// Invokes a static function on <paramref name="jClass"/> which matches with current definition
@@ -103,6 +103,6 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? StaticInvoke(JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jClass.Environment;
-		return env.Accessor.CallStaticFunction<TResult>(jClass, this, args);
+		return env.AccessProvider.CallStaticFunction<TResult>(jClass, this, args);
 	}
 }

@@ -40,7 +40,7 @@ public partial class JEnumObject
 			}
 
 			/// <inheritdoc/>
-			internal override IDataType? Create(JObject? jObject) => TEnum.Create(jObject);
+			internal override IDataType? CreateInstance(JObject? jObject) => TEnum.Create(jObject);
 		}
 	}
 }

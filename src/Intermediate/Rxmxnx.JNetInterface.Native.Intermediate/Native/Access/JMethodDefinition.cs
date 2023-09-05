@@ -46,7 +46,7 @@ public record JMethodDefinition : JCallDefinition
 	protected void Invoke(JLocalObject jLocal, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		env.Accessor.CallMethod(jLocal, this, args);
+		env.AccessProvider.CallMethod(jLocal, this, args);
 	}
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
@@ -58,7 +58,7 @@ public record JMethodDefinition : JCallDefinition
 	protected void Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		env.Accessor.CallNonVirtualMethod(jLocal, jClass, this, args);
+		env.AccessProvider.CallNonVirtualMethod(jLocal, jClass, this, args);
 	}
 	/// <summary>
 	/// Invokes a static method on <paramref name="jClass"/> which matches with current definition.
@@ -74,6 +74,6 @@ public record JMethodDefinition : JCallDefinition
 	protected void StaticInvoke(JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jClass.Environment;
-		env.Accessor.CallStaticMethod(jClass, this, args);
+		env.AccessProvider.CallStaticMethod(jClass, this, args);
 	}
 }

@@ -19,9 +19,9 @@ public interface IEnvironment
 	Int32? EnsuredCapacity { get; }
 
 	/// <summary>
-	/// Internal accessor object.
+	/// Internal accessor provider object.
 	/// </summary>
-	internal IAccessor Accessor { get; }
+	internal IAccessProvider AccessProvider { get; }
 	/// <summary>
 	/// Internal class provider object.
 	/// </summary>
@@ -38,6 +38,10 @@ public interface IEnvironment
 	/// Internal Enum provider object.
 	/// </summary>
 	internal IEnumProvider EnumProvider { get; }
+	/// <summary>
+	/// Internal Array provider object.
+	/// </summary>
+	internal IArrayProvider ArrayProvider { get; }
 
 	/// <summary>
 	/// Retrieves the JNI type reference of <paramref name="jObject"/>.

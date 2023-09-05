@@ -25,5 +25,19 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JLocalObject>());
 		Console.WriteLine(IDataType.GetMetadata<JClassObject>());
 		Console.WriteLine(IDataType.GetMetadata<JStringObject>());
+
+		Console.WriteLine("====== Array types ======");
+
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JBoolean>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JByte>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JChar>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JShort>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JInt>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JLong>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JFloat>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JDouble>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JLocalObject>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JClassObject>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JStringObject>>());
 	}
 }

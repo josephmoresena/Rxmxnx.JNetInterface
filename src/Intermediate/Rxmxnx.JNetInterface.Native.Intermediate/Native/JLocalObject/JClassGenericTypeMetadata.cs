@@ -51,7 +51,7 @@ public partial class JLocalObject
 			}
 
 			/// <inheritdoc/>
-			internal override IDataType? Create(JObject? jObject) => TClass.Create(jObject);
+			internal override IDataType? CreateInstance(JObject? jObject) => TClass.Create(jObject);
 		}
 	}
 }

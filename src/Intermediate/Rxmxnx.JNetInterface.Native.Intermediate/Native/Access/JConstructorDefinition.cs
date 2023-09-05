@@ -66,6 +66,6 @@ public record JConstructorDefinition : JCallDefinition
 	{
 		ValidationUtilities.ThrowIfAbstractClass<TObject>();
 		IEnvironment env = jClass.Environment;
-		return env.Accessor.CallConstructor<TObject>(jClass, this, args);
+		return env.AccessProvider.CallConstructor<TObject>(jClass, this, args);
 	}
 }

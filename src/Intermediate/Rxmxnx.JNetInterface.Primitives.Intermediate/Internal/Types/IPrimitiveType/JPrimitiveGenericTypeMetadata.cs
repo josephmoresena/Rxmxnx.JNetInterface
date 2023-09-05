@@ -53,7 +53,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 
 			/// <inheritdoc/>
 			// ReSharper disable once MemberHidesStaticFromOuterClass
-			internal override IDataType? Create(JObject? jObject) => TPrimitive.Create(jObject);
+			internal override IDataType? CreateInstance(JObject? jObject) => TPrimitive.Create(jObject);
 		}
 	}
 }

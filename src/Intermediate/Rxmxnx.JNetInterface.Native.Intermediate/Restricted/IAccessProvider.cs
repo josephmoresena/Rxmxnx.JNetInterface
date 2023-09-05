@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes a JNI accessor instance.
 /// </summary>
-public interface IAccessor
+public interface IAccessProvider
 {
 	/// <summary>
 	/// Retrieves a field from given <see cref="JLocalObject"/> instance.

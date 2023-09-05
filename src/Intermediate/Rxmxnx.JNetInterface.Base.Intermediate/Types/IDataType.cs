@@ -8,7 +8,8 @@ public interface IDataType
 	/// <inheritdoc cref="IDataType.ExcludingTypes"/>
 	internal static readonly ImmutableHashSet<Type> ExcludingBasicTypes = ImmutableHashSet.Create(
 		typeof(IDisposable), typeof(IObject), typeof(IEquatable<JObject>), typeof(IDataType), typeof(IPrimitiveType),
-		typeof(IReferenceType), typeof(IInterfaceType), typeof(IClassType), typeof(JReferenceObject));
+		typeof(IReferenceType), typeof(IInterfaceType), typeof(IClassType), typeof(IArrayType),
+		typeof(JReferenceObject));
 
 	/// <summary>
 	/// Excluding CLR types.
