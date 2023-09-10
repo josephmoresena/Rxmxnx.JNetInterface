@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-/// This class represents a local interface instance.
+/// This class represents a local array instance.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract partial class JArrayObject : JLocalObject, IArrayType
