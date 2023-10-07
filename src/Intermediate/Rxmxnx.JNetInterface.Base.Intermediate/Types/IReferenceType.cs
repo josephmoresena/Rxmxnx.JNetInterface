@@ -24,8 +24,8 @@ public interface IReferenceType : IObject, IDataType, IDisposable
 /// <typeparam name="TReference">Type of java reference type.</typeparam>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface
-	IReferenceType<
-		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TReference> : IReferenceType,
+	IReferenceType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TReference> :
+		IReferenceType,
 		IDataType<TReference> where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>

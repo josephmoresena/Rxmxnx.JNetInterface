@@ -16,7 +16,7 @@ public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclara
 	                                                              .WithSignature(
 		                                                              UnicodeObjectSignatures
 			                                                              .JGenericDeclarationObjectSignature)
-	                                                              .AppendInterface<JAnnotatedElementObject>().Build();
+	                                                              .Extends<JAnnotatedElementObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JGenericDeclarationObject.typeMetadata;
 

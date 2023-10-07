@@ -46,12 +46,12 @@ public abstract partial class JInterfaceObject
 		/// </summary>
 		/// <typeparam name="TOtherInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TInterface> AppendInterface<
+		public JTypeMetadataBuilder<TInterface> Extends<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TOtherInterface>()
 			where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
 		{
 			ValidationUtilities.ThrowIfInvalidExtension<TInterface, TOtherInterface>(this.DataTypeName);
-			base.AppendInterface<TOtherInterface>();
+			this.AppendInterface<TOtherInterface>();
 			return this;
 		}
 		/// <summary>

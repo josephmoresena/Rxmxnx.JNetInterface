@@ -51,11 +51,11 @@ public partial class JEnumObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TEnum> AppendInterface<
+		public JTypeMetadataBuilder<TEnum> Implements<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			base.AppendInterface<TInterface>();
+			this.AppendInterface<TInterface>();
 			return this;
 		}
 		/// <summary>

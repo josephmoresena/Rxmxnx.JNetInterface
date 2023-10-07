@@ -10,10 +10,10 @@ public partial class JClassObject
 	                                                                  JTypeModifier.Final)
 	                                                          .WithSignature(
 		                                                          UnicodeObjectSignatures.JClassObjectSignature)
-	                                                          .AppendInterface<JSerializableObject>()
-	                                                          .AppendInterface<JAnnotatedElementObject>()
-	                                                          .AppendInterface<JGenericDeclarationObject>()
-	                                                          .AppendInterface<JTypeObject>().Build();
+	                                                          .Implements<JSerializableObject>()
+	                                                          .Implements<JAnnotatedElementObject>()
+	                                                          .Implements<JGenericDeclarationObject>()
+	                                                          .Implements<JTypeObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JClassObject.typeMetadata;
 

@@ -200,11 +200,11 @@ public partial class JLocalObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TClass> AppendInterface<
+		public JTypeMetadataBuilder<TClass> Implements<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			base.AppendInterface<TInterface>();
+			this.AppendInterface<TInterface>();
 			return this;
 		}
 		/// <summary>

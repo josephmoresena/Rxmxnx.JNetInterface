@@ -11,8 +11,8 @@ public partial class JEnumObject
 	                                                                    .WithSignature(
 		                                                                    UnicodeObjectSignatures
 			                                                                    .JEnumObjectSignature)
-	                                                                    .AppendInterface<JSerializableObject>()
-	                                                                    .AppendInterface<JComparableObject>().Build();
+	                                                                    .Implements<JSerializableObject>()
+	                                                                    .Implements<JComparableObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JEnumObject.JEnumClassMetadata;
 }
