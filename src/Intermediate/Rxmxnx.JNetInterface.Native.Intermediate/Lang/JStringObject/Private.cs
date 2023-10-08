@@ -15,6 +15,14 @@ public partial class JStringObject
 	                                                          .Implements<JCharSequenceObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JStringObject.typeMetadata;
+	/// <summary>
+	/// String length.
+	/// </summary>
+	private Int32? _length;
+	/// <summary>
+	/// UTF-8 string length.
+	/// </summary>
+	private Int32? _utf8Length;
 
 	/// <summary>
 	/// Instance value.

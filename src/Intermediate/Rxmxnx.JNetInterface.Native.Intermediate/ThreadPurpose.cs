@@ -10,4 +10,8 @@ public enum ThreadPurpose : Byte
 	/// Indicates the purpose of the thread is release unused global references.
 	/// </summary>
 	RemoveGlobalReference = 1,
+	/// <summary>
+	/// Indicates the purpose of the thread is release primitve sequence.
+	/// </summary>
+	ReleaseSequence = 2,
 }

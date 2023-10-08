@@ -28,4 +28,56 @@ public interface IArrayProvider
 	/// <param name="value">Element value.</param>
 	void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement value)
 		where TElement : IDataType<TElement>;
+	/// <summary>
+	/// Retrieves a pointer to <see cref="JArrayObject{TPrimitive}"/> elements.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <param name="isCopy">Output. Indicates whether the resulting pointer references a data copy.</param>
+	/// <returns>Pointer to <paramref name="jArray"/> UTF-16 data.</returns>
+	IntPtr GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, out Boolean isCopy)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	/// <summary>
+	/// Retrieves a direct pointer to <see cref="JArrayObject{TPrimitive}"/> elements.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <returns>Pointer to <paramref name="jArray"/> UTF-16 data.</returns>
+	IntPtr GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	/// <summary>
+	/// Releases the pointer associated to <paramref name="jArray"/>.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <param name="pointer">Pointer to release to.</param>
+	/// <param name="mode">Release mode.</param>
+	void ReleaseSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, IntPtr pointer, JReleaseMode mode)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	/// <summary>
+	/// Releases the critical pointer associated to <paramref name="jArray"/>.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <param name="pointer">Pointer to release to.</param>
+	void ReleaseCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, IntPtr pointer)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	/// <summary>
+	/// Copies <paramref name="jArray"/> elements into <paramref name="elements"/>.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <param name="startIndex">Offset position.</param>
+	/// <param name="elements">Destination buffer.</param>
+	void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Span<Char> elements)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	/// <summary>
+	/// Copies <paramref name="elements"/> elements into <paramref name="jArray"/>.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <param name="elements">Source buffer.</param>
+	/// <param name="startIndex">Offset position.</param>
+	void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<Char> elements, Int32 startIndex = 0)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 }

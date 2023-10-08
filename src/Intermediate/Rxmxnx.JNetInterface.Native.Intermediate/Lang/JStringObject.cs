@@ -15,6 +15,14 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 
 	/// <inheritdoc cref="JLocalObject.InternalReference"/>
 	internal JStringLocalRef Reference => this.As<JStringLocalRef>();
+	/// <summary>
+	/// UTF-16 length.
+	/// </summary>
+	public Int32 Length => this._length ?? this._value?.Length ?? this.Environment.StringProvider.GetLength(this);
+	/// <summary>
+	/// UTF-8 length.
+	/// </summary>
+	public Int32 Utf8Length => this._utf8Length ?? this.Environment.StringProvider.GetUtf8Length(this);
 
 	/// <summary>
 	/// Constructor.
@@ -33,7 +41,10 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	public override String ToString() => this.Value;
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()
-		=> new JStringObjectMetadata(base.CreateMetadata()) { Value = this.Value, };
+		=> new JStringObjectMetadata(base.CreateMetadata())
+		{
+			Length = this.Length, Utf8Length = this.Utf8Length, Value = this._value,
+		};
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
 	{
@@ -41,6 +52,8 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		if (instanceMetadata is not JStringObjectMetadata stringMetadata)
 			return;
 		this._value = stringMetadata.Value;
+		this._length = stringMetadata.Length;
+		this._utf8Length = stringMetadata.Utf8Length;
 	}
 	/// <summary>
 	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="data"/>.

@@ -11,7 +11,15 @@ public partial class JStringObject
 		/// <summary>
 		/// Internal string value.
 		/// </summary>
-		public String Value { get; init; }
+		public String? Value { get; init; }
+		/// <summary>
+		/// UTF-16 length.
+		/// </summary>
+		public Int32? Length { get; init; }
+		/// <summary>
+		/// UTF-8 length.
+		/// </summary>
+		public Int32? Utf8Length { get; init; }
 
 		/// <summary>
 		/// Constructor.
@@ -21,6 +29,8 @@ public partial class JStringObject
 		{
 			JStringObjectMetadata? stringMetadata = metadata as JStringObjectMetadata;
 			this.Value = stringMetadata?.Value!;
+			this.Length = stringMetadata?.Length;
+			this.Utf8Length = stringMetadata?.Utf8Length;
 		}
 	}
 }

@@ -6,8 +6,7 @@
 public interface IThread : IEnvironment, IDisposable
 {
 	/// <summary>
-	/// Retrieves the JNI interface for current thread.
+	/// Indicates current thread was attached to the VM with current instance.
 	/// </summary>
-	/// <returns>The <see cref="IEnvironment"/> instanced for current JNI thread.</returns>
-	IEnvironment? GetEnvironment();
+	Boolean Attached { get; }
 }
