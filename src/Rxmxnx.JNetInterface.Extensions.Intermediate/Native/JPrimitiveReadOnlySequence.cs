@@ -6,6 +6,10 @@ namespace Rxmxnx.JNetInterface.Native;
 public abstract partial record JPrimitiveReadOnlySequence : IReadOnlyFixedContext<Byte>, IDisposable
 {
 	/// <summary>
+	/// Indicates current instance is disposed.
+	/// </summary>
+	private readonly Boolean _disposed = true;
+	/// <summary>
 	/// Indicates whether the source object should be disposed.
 	/// </summary>
 	private readonly Boolean _disposeSource;
@@ -13,11 +17,6 @@ public abstract partial record JPrimitiveReadOnlySequence : IReadOnlyFixedContex
 	private readonly JReferenceObject _source;
 	/// <inheritdoc cref="JPrimitiveReadOnlySequence.VirtualMachine"/>
 	private readonly IVirtualMachine _vm;
-
-	/// <summary>
-	/// Indicates current instance is disposed.
-	/// </summary>
-	private readonly Boolean _disposed = true;
 
 	/// <summary>
 	/// <see cref="IVirtualMachine"/> instance.
@@ -182,14 +181,14 @@ public record JPrimitiveReadOnlySequence<TPrimitive> : JPrimitiveReadOnlySequenc
 {
 	/// <inheritdoc cref="JPrimitiveReadOnlySequence{TPrimitive}.Count"/>
 	private readonly Int32 _count;
+	/// <inheritdoc cref="JPrimitiveReadOnlySequence.Critical"/>
+	private readonly Boolean _critical;
 	/// <inheritdoc cref="JPrimitiveReadOnlySequence.Copy"/>
 	private readonly Boolean _isCopy;
 	/// <inheritdoc cref="JPrimitiveReadOnlySequence.Pointer"/>
 	private readonly IntPtr _pointer;
 	/// <inheritdoc cref="JPrimitiveReadOnlySequence.Release"/>
 	private readonly Action<JPrimitiveReadOnlySequence> _release;
-	/// <inheritdoc cref="JPrimitiveReadOnlySequence.Critical"/>
-	private readonly Boolean _critical;
 
 	/// <summary>
 	/// Number of <typeparamref name="TPrimitive"/> elements in current sequence.

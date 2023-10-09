@@ -7,8 +7,8 @@ public partial record JPrimitiveReadOnlySequence
 	{
 		private new IFixedContext<Byte> Memory => (IFixedContext<Byte>)base.Memory;
 
-		internal FixedContext(JPrimitiveReadOnlySequence sequence, Int32 binaryOffset = 0) :
-			base(sequence, binaryOffset) { }
+		internal FixedContext(JPrimitiveReadOnlySequence sequence, Int32 binaryOffset = 0) : base(
+			sequence, binaryOffset) { }
 
 		IntPtr IFixedPointer.Pointer => this.ReadOnlySequence.Pointer + this.BinaryOffset;
 		Span<Byte> IFixedMemory.Bytes => this.Memory.Bytes[this.BinaryOffset..];
@@ -24,7 +24,8 @@ public partial record JPrimitiveReadOnlySequence
 			if (this.BinaryOffset == 0)
 				return this.Memory.Transformation<TDestination>(out residual);
 
-			IFixedContext<TDestination> result = new FixedContext<TDestination>(this.ReadOnlySequence, this.BinaryOffset);
+			IFixedContext<TDestination> result =
+				new FixedContext<TDestination>(this.ReadOnlySequence, this.BinaryOffset);
 			Int32 residualOffset = this.BinaryOffset + result.Values.Length * NativeUtilities.SizeOf<TValue>();
 			residual = new FixedContext<Byte>(this.ReadOnlySequence, residualOffset);
 			return result;
@@ -35,7 +36,8 @@ public partial record JPrimitiveReadOnlySequence
 			if (this.BinaryOffset == 0)
 				return this.Memory.Transformation<TDestination>(out residual);
 
-			IFixedContext<TDestination> result = new FixedContext<TDestination>(this.ReadOnlySequence, this.BinaryOffset);
+			IFixedContext<TDestination> result =
+				new FixedContext<TDestination>(this.ReadOnlySequence, this.BinaryOffset);
 			Int32 residualOffset = this.BinaryOffset + result.Values.Length * NativeUtilities.SizeOf<TValue>();
 			residual = new FixedContext<Byte>(this.ReadOnlySequence, residualOffset);
 			return result;

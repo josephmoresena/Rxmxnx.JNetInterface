@@ -4,19 +4,18 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This class represents a value sequence.
 /// </summary>
 /// <typeparam name="TValue">Type of <see cref="ValueType"/> elements in sequence.</typeparam>
-public abstract record PrimitiveReadOnlySequence<TValue> : IDisposable
-	where TValue : unmanaged
+public abstract record PrimitiveReadOnlySequence<TValue> : IDisposable where TValue : unmanaged
 {
-	/// <inheritdoc cref="PrimitiveReadOnlySequence{TValue}.VirtualMachine"/>
-	private readonly IVirtualMachine _vm;
-	/// <summary>
-	/// Internal sequence handler.
-	/// </summary>
-	private readonly PrimitiveSequenceHandler _handler;
 	/// <summary>
 	/// Indicates current instance is disposed.
 	/// </summary>
 	private readonly IMutableWrapper<Boolean> _disposed = IMutableWrapper<Boolean>.Create();
+	/// <summary>
+	/// Internal sequence handler.
+	/// </summary>
+	private readonly PrimitiveSequenceHandler _handler;
+	/// <inheritdoc cref="PrimitiveReadOnlySequence{TValue}.VirtualMachine"/>
+	private readonly IVirtualMachine _vm;
 
 	/// <summary>
 	/// <see cref="IVirtualMachine"/> instance.
@@ -30,7 +29,7 @@ public abstract record PrimitiveReadOnlySequence<TValue> : IDisposable
 	/// Indicates whether current sequence is critical.
 	/// </summary>
 	public Boolean Critical => this._handler.Critical;
-	
+
 	/// <summary>
 	/// Release mode.
 	/// </summary>
@@ -50,17 +49,17 @@ public abstract record PrimitiveReadOnlySequence<TValue> : IDisposable
 		this._vm = vm;
 		this._handler = handler;
 	}
-	
-	~PrimitiveReadOnlySequence() { this.ReleaseUnmanagedResources(); }
-	
+
 	/// <inheritdoc/>
 	public void Dispose()
 	{
 		this.ReleaseUnmanagedResources();
 		GC.SuppressFinalize(this);
 	}
-	
-	/// <inheritdoc cref="IDisposable.Dispose" />
+
+	~PrimitiveReadOnlySequence() { this.ReleaseUnmanagedResources(); }
+
+	/// <inheritdoc cref="IDisposable.Dispose"/>
 	private void ReleaseUnmanagedResources()
 	{
 		if (this._disposed.Value) return;

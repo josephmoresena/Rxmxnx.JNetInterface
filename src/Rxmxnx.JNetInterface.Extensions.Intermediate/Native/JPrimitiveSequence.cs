@@ -3,31 +3,31 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a primitive values sequence base.
 /// </summary>
-public abstract partial record JPrimitiveSequence : JPrimitiveReadOnlySequence, IFixedContext<Byte>
+public abstract record JPrimitiveSequence : JPrimitiveReadOnlySequence, IFixedContext<Byte>
 {
 	/// <inheritdoc/>
 	internal override Boolean ReadOnly => false;
-	/// <inheritdoc />
-	public new Span<Byte> Bytes => this.Pointer.GetUnsafeSpan<Byte>(this.BinarySize);
-	
+
 	/// <inheritdoc/>
 	internal JPrimitiveSequence(JLocalObject source) : base(source) { }
 	/// <inheritdoc/>
 	internal JPrimitiveSequence(JGlobalBase source, Boolean disposeSource) : base(source, disposeSource) { }
+	/// <inheritdoc/>
+	public new Span<Byte> Bytes => this.Pointer.GetUnsafeSpan<Byte>(this.BinarySize);
 	Span<Byte> IFixedMemory<Byte>.Values => this.Bytes;
-	
+
 	IFixedContext<Byte> IFixedMemory.AsBinaryContext() => this;
-	
-	/// <inheritdoc />
+
+	/// <inheritdoc/>
 	public IFixedContext<TDestination> Transformation<TDestination>(out IFixedMemory residual)
 		where TDestination : unmanaged
 	{
-		IFixedContext<TDestination> result = this as IFixedContext<TDestination> ?? 
+		IFixedContext<TDestination> result = this as IFixedContext<TDestination> ??
 			new FixedContext<TDestination>(this);
 		residual = new FixedContext<TDestination>(this, result.Bytes.Length);
 		return result;
 	}
-	/// <inheritdoc />
+	/// <inheritdoc/>
 	public new IFixedContext<TDestination> Transformation<TDestination>(out IReadOnlyFixedMemory residual)
 		where TDestination : unmanaged
 	{

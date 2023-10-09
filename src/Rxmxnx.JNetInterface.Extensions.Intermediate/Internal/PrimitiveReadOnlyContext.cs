@@ -4,24 +4,20 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// Context of a read-only fixed primitive sequence.
 /// </summary>
 /// <typeparam name="TValue">Type of objects in the read-only fixed memory block.</typeparam>
-internal record PrimitiveReadOnlyContext<TValue> : IReadOnlyFixedContext<TValue>
-	where TValue : unmanaged
+internal record PrimitiveReadOnlyContext<TValue> : IReadOnlyFixedContext<TValue> where TValue : unmanaged
 {
 	/// <summary>
 	/// Internal handler.
 	/// </summary>
-	public PrimitiveSequenceHandler Handler { get; private init; }
+	public PrimitiveSequenceHandler Handler { get; }
 	/// <summary>
 	/// Indicates whether current instance is valid.
 	/// </summary>
-	public IWrapper<Boolean> Valid { get; private init; }
+	public IWrapper<Boolean> Valid { get; }
 	/// <summary>
 	/// Internal offset.
 	/// </summary>
-	public Int32 Offset { get; private init; }
-	
-	/// <inheritdoc/>
-	public IntPtr Pointer => this.Handler.Pointer + this.Offset;
+	public Int32 Offset { get; }
 	/// <summary>
 	/// Binary memory size.
 	/// </summary>
@@ -30,17 +26,6 @@ internal record PrimitiveReadOnlyContext<TValue> : IReadOnlyFixedContext<TValue>
 	/// Number of elements in fixed memory sequence.
 	/// </summary>
 	public Int32 Count => this.BinarySize / NativeUtilities.SizeOf<TValue>();
-	/// <summary>
-	/// Binary representation of fixed memory.
-	/// </summary>
-	public ReadOnlySpan<Byte> Bytes 
-	{
-		get
-		{
-			ValidationUtilities.ThrowIfInvalidSequence(this.Valid);
-			return this.Pointer.GetUnsafeReadOnlySpan<Byte>(this.BinarySize);
-		}
-	}
 	/// <summary>
 	/// Indicates whether current instance is read-only.
 	/// </summary>
@@ -58,7 +43,21 @@ internal record PrimitiveReadOnlyContext<TValue> : IReadOnlyFixedContext<TValue>
 		this.Valid = valid;
 		this.Offset = offset;
 	}
-	
+
+	/// <inheritdoc/>
+	public IntPtr Pointer => this.Handler.Pointer + this.Offset;
+	/// <summary>
+	/// Binary representation of fixed memory.
+	/// </summary>
+	public ReadOnlySpan<Byte> Bytes
+	{
+		get
+		{
+			ValidationUtilities.ThrowIfInvalidSequence(this.Valid);
+			return this.Pointer.GetUnsafeReadOnlySpan<Byte>(this.BinarySize);
+		}
+	}
+
 	ReadOnlySpan<TValue> IReadOnlyFixedMemory<TValue>.Values
 	{
 		get
@@ -67,10 +66,10 @@ internal record PrimitiveReadOnlyContext<TValue> : IReadOnlyFixedContext<TValue>
 			return this.Pointer.GetUnsafeReadOnlySpan<TValue>(this.BinarySize);
 		}
 	}
-	
+
 	IReadOnlyFixedContext<Byte> IReadOnlyFixedMemory.AsBinaryContext()
 		=> this as IReadOnlyFixedContext<Byte> ?? (this.ReadOnly ?
-			new PrimitiveReadOnlyContext<Byte>(this.Handler, this.Valid, this.Offset):
+			new PrimitiveReadOnlyContext<Byte>(this.Handler, this.Valid, this.Offset) :
 			new PrimitiveContext<Byte>(this.Handler, this.Valid, this.Offset));
 	IReadOnlyFixedContext<TDestination> IReadOnlyFixedContext<TValue>.Transformation<TDestination>(
 		out IReadOnlyFixedMemory residual)
@@ -79,9 +78,9 @@ internal record PrimitiveReadOnlyContext<TValue> : IReadOnlyFixedContext<TValue>
 			new PrimitiveReadOnlyContext<TDestination>(this.Handler, this.Valid, this.Offset) :
 			new PrimitiveContext<TDestination>(this.Handler, this.Valid, this.Offset));
 		Int32 offset = this.Offset + result.Values.Length * NativeUtilities.SizeOf<TDestination>();
-		residual = (this.ReadOnly ?
+		residual = this.ReadOnly ?
 			new PrimitiveReadOnlyContext<Byte>(this.Handler, this.Valid, offset) :
-			new PrimitiveContext<Byte>(this.Handler, this.Valid, offset));
+			new PrimitiveContext<Byte>(this.Handler, this.Valid, offset);
 		return result;
 	}
 }
