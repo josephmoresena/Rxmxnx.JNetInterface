@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Applic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Native.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj", "{0AA09937-4748-482F-8C4C-720F530E22D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Extensions.Intermediate", "Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj", "{7F6F3562-B79D-4A75-9590-30AF6A09A5A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,5 +41,9 @@ Global
 		{0AA09937-4748-482F-8C4C-720F530E22D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AA09937-4748-482F-8C4C-720F530E22D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AA09937-4748-482F-8C4C-720F530E22D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F6F3562-B79D-4A75-9590-30AF6A09A5A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F6F3562-B79D-4A75-9590-30AF6A09A5A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F6F3562-B79D-4A75-9590-30AF6A09A5A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F6F3562-B79D-4A75-9590-30AF6A09A5A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

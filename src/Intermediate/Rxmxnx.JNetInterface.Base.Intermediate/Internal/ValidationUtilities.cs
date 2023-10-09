@@ -321,4 +321,14 @@ internal static class ValidationUtilities
 			(missing.Count > 0 ? $"Missing values: {String.Join(", ", missing)}." : "");
 		throw new InvalidOperationException(message);
 	}
+	/// <summary>
+	/// Throws an exception if current sequence is not valid.
+	/// </summary>
+	/// <param name="isValid">Indicates whether current instance is valid.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if current sequence is not valid.</exception>
+	public static void ThrowIfInvalidSequence(IWrapper<Boolean> isValid)
+	{
+		if (!isValid.Value)
+			throw new InvalidOperationException("The sequence is no longer valid.");
+	}
 }

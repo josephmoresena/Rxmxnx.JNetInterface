@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native;
 
-public partial record JPrimitiveSequenceBase
+public partial record JPrimitiveReadOnlySequence
 {
 	/// <summary>
 	/// Read-only for primitive sequence.
@@ -10,17 +10,17 @@ public partial record JPrimitiveSequenceBase
 	{
 		/// <inheritdoc cref="ReadOnlyFixedContext{TValue}.BinaryOffset"/>
 		private readonly Int32 _binaryOffset;
-		/// <inheritdoc cref="ReadOnlyFixedContext{TValue}.Sequence"/>
-		private readonly JPrimitiveSequenceBase _sequence;
+		/// <inheritdoc cref="ReadOnlySequence"/>
+		private readonly JPrimitiveReadOnlySequence _readOnlySequence;
 
 		/// <summary>
-		/// Internal <see cref="JPrimitiveSequenceBase"/> instance.
+		/// Internal <see cref="JPrimitiveReadOnlySequence"/> instance.
 		/// </summary>
-		protected JPrimitiveSequenceBase Sequence => this._sequence;
+		protected JPrimitiveReadOnlySequence ReadOnlySequence => this._readOnlySequence;
 		/// <summary>
 		/// Internal <see cref="IReadOnlyFixedMemory"/> instance.
 		/// </summary>
-		protected IReadOnlyFixedContext<Byte> Memory => this._sequence;
+		protected IReadOnlyFixedContext<Byte> Memory => this._readOnlySequence;
 		/// <summary>
 		/// Binary offset.
 		/// </summary>
@@ -29,11 +29,11 @@ public partial record JPrimitiveSequenceBase
 		/// <summary>
 		/// Constructor..
 		/// </summary>
-		/// <param name="sequence"><see cref="JPrimitiveSequenceBase"/> sequence.</param>
+		/// <param name="sequence"><see cref="JPrimitiveReadOnlySequence"/> sequence.</param>
 		/// <param name="binaryOffset">Binary offset.</param>
-		internal ReadOnlyFixedContext(JPrimitiveSequenceBase sequence, Int32 binaryOffset = 0)
+		internal ReadOnlyFixedContext(JPrimitiveReadOnlySequence sequence, Int32 binaryOffset = 0)
 		{
-			this._sequence = sequence;
+			this._readOnlySequence = sequence;
 			this._binaryOffset = binaryOffset;
 		}
 
@@ -51,13 +51,13 @@ public partial record JPrimitiveSequenceBase
 			if (this.BinaryOffset == 0)
 				return this.Memory.Transformation<TDestination>(out residual);
 
-			IReadOnlyFixedContext<TDestination> result = this.Sequence.ReadOnly ?
-				new ReadOnlyFixedContext<TDestination>(this.Sequence, this.BinaryOffset) :
-				new FixedContext<TDestination>(this.Sequence, this.BinaryOffset);
+			IReadOnlyFixedContext<TDestination> result = this.ReadOnlySequence.ReadOnly ?
+				new ReadOnlyFixedContext<TDestination>(this.ReadOnlySequence, this.BinaryOffset) :
+				new FixedContext<TDestination>(this.ReadOnlySequence, this.BinaryOffset);
 			Int32 residualOffset = this.BinaryOffset + result.Values.Length * NativeUtilities.SizeOf<TValue>();
-			residual = this.Sequence.ReadOnly ?
-				new ReadOnlyFixedContext<Byte>(this.Sequence, residualOffset) :
-				new FixedContext<Byte>(this.Sequence, residualOffset);
+			residual = this.ReadOnlySequence.ReadOnly ?
+				new ReadOnlyFixedContext<Byte>(this.ReadOnlySequence, residualOffset) :
+				new FixedContext<Byte>(this.ReadOnlySequence, residualOffset);
 			return result;
 		}
 
