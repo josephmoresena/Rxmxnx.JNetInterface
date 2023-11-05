@@ -1,19 +1,19 @@
-namespace Rxmxnx.JNetInterface.Internal;
+namespace Rxmxnx.JNetInterface.Internal.Native;
 
 /// <summary>
 /// Context of a read-only fixed primitive sequence.
 /// </summary>
 /// <typeparam name="TValue">Type of objects in the read-only fixed memory block.</typeparam>
-internal record PrimitiveReadOnlyContext<TValue> : IReadOnlyFixedContext<TValue> where TValue : unmanaged
+internal record JNativeReadOnlyContext<TValue> : IReadOnlyFixedContext<TValue> where TValue : unmanaged
 {
 	/// <summary>
 	/// Internal handler.
 	/// </summary>
-	public PrimitiveSequenceHandler Handler { get; }
+	public JNativeMemoryHandler Handler { get; }
 	/// <summary>
 	/// Indicates whether current instance is valid.
 	/// </summary>
-	public IWrapper<Boolean> Valid { get; }
+	public IWrapper<Boolean> Invalid { get; }
 	/// <summary>
 	/// Internal offset.
 	/// </summary>
@@ -34,53 +34,52 @@ internal record PrimitiveReadOnlyContext<TValue> : IReadOnlyFixedContext<TValue>
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="handler">A <see cref="PrimitiveSequenceHandler"/> instance.</param>
-	/// <param name="valid">Indicates whether current instance is valid.</param>
+	/// <param name="handler">A <see cref="JNativeMemoryHandler"/> instance.</param>
+	/// <param name="invalid">Indicates whether current instance is invalid.</param>
 	/// <param name="offset">Offset.</param>
-	public PrimitiveReadOnlyContext(PrimitiveSequenceHandler handler, IWrapper<Boolean> valid, Int32 offset = 0)
+	public JNativeReadOnlyContext(JNativeMemoryHandler handler, IWrapper<Boolean> invalid, Int32 offset = 0)
 	{
 		this.Handler = handler;
-		this.Valid = valid;
+		this.Invalid = invalid;
 		this.Offset = offset;
 	}
-
 	/// <inheritdoc/>
 	public IntPtr Pointer => this.Handler.Pointer + this.Offset;
-	/// <summary>
-	/// Binary representation of fixed memory.
-	/// </summary>
+	/// <inheritdoc/>
 	public ReadOnlySpan<Byte> Bytes
 	{
 		get
 		{
-			ValidationUtilities.ThrowIfInvalidSequence(this.Valid);
+			ValidationUtilities.ThrowIfInvalidSequence(this.Invalid);
 			return this.Pointer.GetUnsafeReadOnlySpan<Byte>(this.BinarySize);
 		}
 	}
-
-	ReadOnlySpan<TValue> IReadOnlyFixedMemory<TValue>.Values
+	/// <inheritdoc/>
+	public ReadOnlySpan<TValue> Values
 	{
 		get
 		{
-			ValidationUtilities.ThrowIfInvalidSequence(this.Valid);
+			ValidationUtilities.ThrowIfInvalidSequence(this.Invalid);
 			return this.Pointer.GetUnsafeReadOnlySpan<TValue>(this.BinarySize);
 		}
 	}
 
 	IReadOnlyFixedContext<Byte> IReadOnlyFixedMemory.AsBinaryContext()
 		=> this as IReadOnlyFixedContext<Byte> ?? (this.ReadOnly ?
-			new PrimitiveReadOnlyContext<Byte>(this.Handler, this.Valid, this.Offset) :
-			new PrimitiveContext<Byte>(this.Handler, this.Valid, this.Offset));
-	IReadOnlyFixedContext<TDestination> IReadOnlyFixedContext<TValue>.Transformation<TDestination>(
-		out IReadOnlyFixedMemory residual)
+			new JNativeReadOnlyContext<Byte>(this.Handler, this.Invalid, this.Offset) :
+			new JNativeContext<Byte>(this.Handler, this.Invalid, this.Offset));
+
+	/// <inheritdoc/>
+	public IReadOnlyFixedContext<TDestination> Transformation<TDestination>(out IReadOnlyFixedMemory residual)
+		where TDestination : unmanaged
 	{
 		IReadOnlyFixedContext<TDestination> result = this as IReadOnlyFixedContext<TDestination> ?? (this.ReadOnly ?
-			new PrimitiveReadOnlyContext<TDestination>(this.Handler, this.Valid, this.Offset) :
-			new PrimitiveContext<TDestination>(this.Handler, this.Valid, this.Offset));
+			new JNativeReadOnlyContext<TDestination>(this.Handler, this.Invalid, this.Offset) :
+			new JNativeContext<TDestination>(this.Handler, this.Invalid, this.Offset));
 		Int32 offset = this.Offset + result.Values.Length * NativeUtilities.SizeOf<TDestination>();
 		residual = this.ReadOnly ?
-			new PrimitiveReadOnlyContext<Byte>(this.Handler, this.Valid, offset) :
-			new PrimitiveContext<Byte>(this.Handler, this.Valid, offset);
+			new JNativeReadOnlyContext<Byte>(this.Handler, this.Invalid, offset) :
+			new JNativeContext<Byte>(this.Handler, this.Invalid, offset);
 		return result;
 	}
 }

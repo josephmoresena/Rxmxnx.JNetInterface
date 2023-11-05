@@ -8,12 +8,7 @@ public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Class;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="className">Class name of current type.</param>
-	/// <param name="signature">JNI signature for current type.</param>
-	/// <param name="arraySignature">Array JNI signature for current type.</param>
+	/// <inheritdoc/>
 	internal JClassTypeMetadata(CString className, CString? signature, CString? arraySignature) : base(
 		className, signature, arraySignature) { }
 }

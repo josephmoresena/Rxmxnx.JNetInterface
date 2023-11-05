@@ -324,11 +324,11 @@ internal static class ValidationUtilities
 	/// <summary>
 	/// Throws an exception if current sequence is not valid.
 	/// </summary>
-	/// <param name="isValid">Indicates whether current instance is valid.</param>
+	/// <param name="isInvalid">Indicates whether current instance is invalid valid.</param>
 	/// <exception cref="InvalidOperationException">Throws an exception if current sequence is not valid.</exception>
-	public static void ThrowIfInvalidSequence(IWrapper<Boolean> isValid)
+	public static void ThrowIfInvalidSequence(IWrapper<Boolean> isInvalid)
 	{
-		if (!isValid.Value)
+		if (isInvalid.Value)
 			throw new InvalidOperationException("The sequence is no longer valid.");
 	}
 }

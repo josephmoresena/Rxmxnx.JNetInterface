@@ -50,7 +50,7 @@ public abstract record JDataTypeMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="className">Class name of current type.</param>
+	/// <param name="className">JNI name of current type.</param>
 	/// <param name="signature">JNI signature for current type.</param>
 	/// <param name="arraySignature">Array JNI signature for current type.</param>
 	internal JDataTypeMetadata(CString className, CString signature, CString? arraySignature = default)

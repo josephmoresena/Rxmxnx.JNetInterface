@@ -1,9 +1,9 @@
-namespace Rxmxnx.JNetInterface.Internal;
+namespace Rxmxnx.JNetInterface.Internal.Native;
 
 /// <summary>
 /// This struct contains a handler for a primitive sequence.
 /// </summary>
-internal readonly struct PrimitiveSequenceHandler
+internal readonly struct JNativeMemoryHandler
 {
 	/// <summary>
 	/// Pointer to beginning element in current sequence.
@@ -37,7 +37,7 @@ internal readonly struct PrimitiveSequenceHandler
 	/// <summary>
 	/// Release delegate.
 	/// </summary>
-	private Action<IVirtualMachine, PrimitiveSequenceHandler, JReleaseMode>? ReleaseAction { get; init; }
+	private Action<IVirtualMachine, JNativeMemoryHandler, JReleaseMode>? ReleaseAction { get; init; }
 
 	/// <summary>
 	/// Releases the current handler.
@@ -47,13 +47,13 @@ internal readonly struct PrimitiveSequenceHandler
 	public void Release(IVirtualMachine vm, JReleaseMode mode = default) { this.ReleaseAction?.Invoke(vm, this, mode); }
 
 	/// <summary>
-	/// Creates a sequence handler for array source.
+	/// Creates a memory handler for array source.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
 	/// <param name="source"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	public static PrimitiveSequenceHandler CreateHandler<TPrimitive>(JArrayObject<TPrimitive> source, Boolean critical)
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	public static JNativeMemoryHandler CreateHandler<TPrimitive>(JArrayObject<TPrimitive> source, Boolean critical)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		IEnvironment environment = source.Environment;
@@ -72,17 +72,17 @@ internal readonly struct PrimitiveSequenceHandler
 			Copy = isCopy,
 			ReleaseAction =
 				!critical ?
-					PrimitiveSequenceHandler.ReleaseArray<TPrimitive> :
-					PrimitiveSequenceHandler.ReleaseCriticalArray<TPrimitive>,
+					JNativeMemoryHandler.ReleaseArray<TPrimitive> :
+					JNativeMemoryHandler.ReleaseCriticalArray<TPrimitive>,
 		};
 	}
 	/// <summary>
-	/// Creates a sequence handler for string source.
+	/// Creates a memory handler for string source.
 	/// </summary>
 	/// <param name="source"><see cref="JStringObject"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	public static PrimitiveSequenceHandler CreateHandler(JStringObject source, Boolean critical)
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	public static JNativeMemoryHandler CreateHandler(JStringObject source, Boolean critical)
 	{
 		IEnvironment environment = source.Environment;
 		Boolean isCopy = false;
@@ -93,21 +93,21 @@ internal readonly struct PrimitiveSequenceHandler
 		{
 			Source = source,
 			Count = source.Length,
-			BinarySize = source.Length * IPrimitiveType.GetMetadata<JChar>().SizeOf,
+			BinarySize = source.Length * sizeof(Char),
 			Disposable = false,
 			Critical = critical,
 			Pointer = pointer,
 			Copy = isCopy,
 			ReleaseAction =
-				!critical ? PrimitiveSequenceHandler.ReleaseString : PrimitiveSequenceHandler.ReleaseCriticalString,
+				!critical ? JNativeMemoryHandler.ReleaseString : JNativeMemoryHandler.ReleaseCriticalString,
 		};
 	}
 	/// <summary>
-	/// Creates a sequence handler for string source.
+	/// Creates a memory handler for string source.
 	/// </summary>
 	/// <param name="source"><see cref="JStringObject"/> instance.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	public static PrimitiveSequenceHandler CreateUtf8Handler(JStringObject source)
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	public static JNativeMemoryHandler CreateUtf8Handler(JStringObject source)
 	{
 		IEnvironment environment = source.Environment;
 		IntPtr pointer = environment.StringProvider.GetUtf8Sequence(source, out Boolean isCopy);
@@ -120,70 +120,69 @@ internal readonly struct PrimitiveSequenceHandler
 			Critical = false,
 			Pointer = pointer,
 			Copy = isCopy,
-			ReleaseAction = PrimitiveSequenceHandler.ReleaseUtf8String,
+			ReleaseAction = JNativeMemoryHandler.ReleaseUtf8String,
 		};
 	}
 	/// <summary>
-	/// Creates a global sequence handler for string source.
+	/// Creates a global memory handler for string source.
 	/// </summary>
 	/// <param name="source"><see cref="JStringObject"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	public static PrimitiveSequenceHandler CreateGlobalHandler(JStringObject source, Boolean critical)
-		=> PrimitiveSequenceHandler.CreateHandler<JGlobal>(source, critical);
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	public static JNativeMemoryHandler CreateGlobalHandler(JStringObject source, Boolean critical)
+		=> JNativeMemoryHandler.CreateHandler<JGlobal>(source, critical);
 	/// <summary>
-	/// Creates a global sequence handler for array source.
+	/// Creates a global memory handler for array source.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
 	/// <param name="source"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	public static PrimitiveSequenceHandler
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	public static JNativeMemoryHandler
 		CreateGlobalHandler<TPrimitive>(JArrayObject<TPrimitive> source, Boolean critical)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
-		=> PrimitiveSequenceHandler.CreateHandler<JGlobal, TPrimitive>(source, critical);
+		=> JNativeMemoryHandler.CreateHandler<JGlobal, TPrimitive>(source, critical);
 	/// <summary>
-	/// Creates a weak sequence handler for string source.
+	/// Creates a weak memory handler for string source.
 	/// </summary>
 	/// <param name="source"><see cref="JStringObject"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	public static PrimitiveSequenceHandler CreateWeakHandler(JStringObject source, Boolean critical)
-		=> PrimitiveSequenceHandler.CreateHandler<JWeak>(source, critical);
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	public static JNativeMemoryHandler CreateWeakHandler(JStringObject source, Boolean critical)
+		=> JNativeMemoryHandler.CreateHandler<JWeak>(source, critical);
 	/// <summary>
-	/// Creates a weak sequence handler for array source.
+	/// Creates a weak memory handler for array source.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
 	/// <param name="source"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	public static PrimitiveSequenceHandler
-		CreateWeakHandler<TPrimitive>(JArrayObject<TPrimitive> source, Boolean critical)
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	public static JNativeMemoryHandler CreateWeakHandler<TPrimitive>(JArrayObject<TPrimitive> source, Boolean critical)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
-		=> PrimitiveSequenceHandler.CreateHandler<JWeak, TPrimitive>(source, critical);
+		=> JNativeMemoryHandler.CreateHandler<JWeak, TPrimitive>(source, critical);
 	/// <summary>
-	/// Creates a UTF-8 global sequence handler for string source.
+	/// Creates a UTF-8 global memory handler for string source.
 	/// </summary>
 	/// <param name="source"><see cref="JStringObject"/> instance.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	public static PrimitiveSequenceHandler CreateUtf8GlobalHandler(JStringObject source)
-		=> PrimitiveSequenceHandler.CreateUtf8Handler<JGlobal>(source);
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	public static JNativeMemoryHandler CreateUtf8GlobalHandler(JStringObject source)
+		=> JNativeMemoryHandler.CreateUtf8Handler<JGlobal>(source);
 	/// <summary>
-	/// Creates a UTF-8 weak sequence handler for string source.
+	/// Creates a UTF-8 weak memory handler for string source.
 	/// </summary>
 	/// <param name="source"><see cref="JStringObject"/> instance.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	public static PrimitiveSequenceHandler CreateUtf8WeakHandler(JStringObject source)
-		=> PrimitiveSequenceHandler.CreateUtf8Handler<JWeak>(source);
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	public static JNativeMemoryHandler CreateUtf8WeakHandler(JStringObject source)
+		=> JNativeMemoryHandler.CreateUtf8Handler<JWeak>(source);
 
 	/// <summary>
-	/// Creates a global sequence handler for string source.
+	/// Creates a global memory handler for string source.
 	/// </summary>
 	/// <typeparam name="TGlobal">The type of global object.</typeparam>
 	/// <param name="source"><see cref="JStringObject"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	private static PrimitiveSequenceHandler CreateHandler<TGlobal>(JStringObject source, Boolean critical)
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	private static JNativeMemoryHandler CreateHandler<TGlobal>(JStringObject source, Boolean critical)
 		where TGlobal : JGlobalBase
 	{
 		IEnvironment environment = source.Environment;
@@ -197,24 +196,24 @@ internal readonly struct PrimitiveSequenceHandler
 		{
 			Source = globalSource,
 			Count = tempSource.Length,
-			BinarySize = source.Length * IPrimitiveType.GetMetadata<JChar>().SizeOf,
+			BinarySize = source.Length * sizeof(Char),
 			Disposable = true,
 			Critical = critical,
 			Pointer = pointer,
 			Copy = isCopy,
 			ReleaseAction =
-				!critical ? PrimitiveSequenceHandler.ReleaseString : PrimitiveSequenceHandler.ReleaseCriticalString,
+				!critical ? JNativeMemoryHandler.ReleaseString : JNativeMemoryHandler.ReleaseCriticalString,
 		};
 	}
 	/// <summary>
-	/// Creates a global sequence handler for array source.
+	/// Creates a global memory handler for array source.
 	/// </summary>
 	/// <typeparam name="TGlobal">The type of global object.</typeparam>
 	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
 	/// <param name="source"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	private static PrimitiveSequenceHandler CreateHandler<TGlobal, TPrimitive>(JArrayObject<TPrimitive> source,
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	private static JNativeMemoryHandler CreateHandler<TGlobal, TPrimitive>(JArrayObject<TPrimitive> source,
 		Boolean critical) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive> where TGlobal : JGlobalBase
 	{
 		IEnvironment environment = source.Environment;
@@ -235,17 +234,17 @@ internal readonly struct PrimitiveSequenceHandler
 			Copy = isCopy,
 			ReleaseAction =
 				!critical ?
-					PrimitiveSequenceHandler.ReleaseArray<TPrimitive> :
-					PrimitiveSequenceHandler.ReleaseCriticalArray<TPrimitive>,
+					JNativeMemoryHandler.ReleaseArray<TPrimitive> :
+					JNativeMemoryHandler.ReleaseCriticalArray<TPrimitive>,
 		};
 	}
 	/// <summary>
-	/// Creates a UTF-8 global sequence handler for string source.
+	/// Creates a UTF-8 global memory handler for string source.
 	/// </summary>
 	/// <typeparam name="TGlobal">The type of global object.</typeparam>
 	/// <param name="source"><see cref="JStringObject"/> instance.</param>
-	/// <returns><see cref="PrimitiveSequenceHandler"/> instance.</returns>
-	private static PrimitiveSequenceHandler CreateUtf8Handler<TGlobal>(JStringObject source) where TGlobal : JGlobalBase
+	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
+	private static JNativeMemoryHandler CreateUtf8Handler<TGlobal>(JStringObject source) where TGlobal : JGlobalBase
 	{
 		IEnvironment environment = source.Environment;
 		JGlobalBase globalSource = environment.ReferenceProvider.Create<TGlobal>(source);
@@ -260,7 +259,7 @@ internal readonly struct PrimitiveSequenceHandler
 			Critical = false,
 			Pointer = pointer,
 			Copy = isCopy,
-			ReleaseAction = PrimitiveSequenceHandler.ReleaseUtf8String,
+			ReleaseAction = JNativeMemoryHandler.ReleaseUtf8String,
 		};
 	}
 	/// <summary>
@@ -268,9 +267,9 @@ internal readonly struct PrimitiveSequenceHandler
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
 	/// <param name="virtualMachine">A <see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="handler">A <see cref="PrimitiveSequenceHandler"/> instance.</param>
+	/// <param name="handler">A <see cref="JNativeMemoryHandler"/> instance.</param>
 	/// <param name="mode">Release mode.</param>
-	private static void ReleaseArray<TPrimitive>(IVirtualMachine virtualMachine, PrimitiveSequenceHandler handler,
+	private static void ReleaseArray<TPrimitive>(IVirtualMachine virtualMachine, JNativeMemoryHandler handler,
 		JReleaseMode mode) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		if (handler.Source is null) return;
@@ -284,10 +283,10 @@ internal readonly struct PrimitiveSequenceHandler
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
 	/// <param name="virtualMachine">A <see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="handler">A <see cref="PrimitiveSequenceHandler"/> instance.</param>
+	/// <param name="handler">A <see cref="JNativeMemoryHandler"/> instance.</param>
 	/// <param name="_">Release mode.</param>
-	private static void ReleaseCriticalArray<TPrimitive>(IVirtualMachine virtualMachine,
-		PrimitiveSequenceHandler handler, JReleaseMode _) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	private static void ReleaseCriticalArray<TPrimitive>(IVirtualMachine virtualMachine, JNativeMemoryHandler handler,
+		JReleaseMode _) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		if (handler.Source is null) return;
 		using IThread thread = virtualMachine.CreateThread(ThreadPurpose.ReleaseSequence);
@@ -299,9 +298,9 @@ internal readonly struct PrimitiveSequenceHandler
 	/// Release string chars pointer.
 	/// </summary>
 	/// <param name="virtualMachine">A <see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="handler">A <see cref="PrimitiveSequenceHandler"/> instance.</param>
+	/// <param name="handler">A <see cref="JNativeMemoryHandler"/> instance.</param>
 	/// <param name="_">Release mode.</param>
-	private static void ReleaseString(IVirtualMachine virtualMachine, PrimitiveSequenceHandler handler, JReleaseMode _)
+	private static void ReleaseString(IVirtualMachine virtualMachine, JNativeMemoryHandler handler, JReleaseMode _)
 	{
 		if (handler.Source is null) return;
 		using IThread thread = virtualMachine.CreateThread(ThreadPurpose.ReleaseSequence);
@@ -312,10 +311,9 @@ internal readonly struct PrimitiveSequenceHandler
 	/// Release string utf chars pointer.
 	/// </summary>
 	/// <param name="virtualMachine">A <see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="handler">A <see cref="PrimitiveSequenceHandler"/> instance.</param>
+	/// <param name="handler">A <see cref="JNativeMemoryHandler"/> instance.</param>
 	/// <param name="_">Release mode.</param>
-	private static void ReleaseUtf8String(IVirtualMachine virtualMachine, PrimitiveSequenceHandler handler,
-		JReleaseMode _)
+	private static void ReleaseUtf8String(IVirtualMachine virtualMachine, JNativeMemoryHandler handler, JReleaseMode _)
 	{
 		if (handler.Source is null) return;
 		using IThread thread = virtualMachine.CreateThread(ThreadPurpose.ReleaseSequence);
@@ -326,9 +324,9 @@ internal readonly struct PrimitiveSequenceHandler
 	/// Release string critical chars pointer.
 	/// </summary>
 	/// <param name="virtualMachine">A <see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="handler">A <see cref="PrimitiveSequenceHandler"/> instance.</param>
+	/// <param name="handler">A <see cref="JNativeMemoryHandler"/> instance.</param>
 	/// <param name="_">Release mode.</param>
-	private static void ReleaseCriticalString(IVirtualMachine virtualMachine, PrimitiveSequenceHandler handler,
+	private static void ReleaseCriticalString(IVirtualMachine virtualMachine, JNativeMemoryHandler handler,
 		JReleaseMode _)
 	{
 		if (handler.Source is null) return;
