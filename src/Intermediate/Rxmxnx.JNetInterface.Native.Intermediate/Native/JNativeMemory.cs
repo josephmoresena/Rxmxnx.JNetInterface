@@ -75,6 +75,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 		Transformation<TDestination>(out IReadOnlyFixedMemory residual)
 		=> this._context.Transformation<TDestination>(out residual);
 
+	/// <inheritdoc/>
 	~JNativeMemory() { this.ReleaseUnmanagedResources(); }
 
 	/// <summary>
@@ -112,10 +113,13 @@ public record JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContext<TValu
 	/// <inheritdoc/>
 	internal JNativeMemory(IVirtualMachine vm, JNativeMemoryHandler handler) : base(vm, handler)
 		=> this._context = new(handler, this.Disposed);
-	/// <inheritdoc/>
-	internal JNativeMemory(IVirtualMachine vm, JNativeMemoryHandler handler, Boolean readOnly) :
-		base(vm, handler, readOnly)
-		=> this._context = readOnly ? new(handler, this.Disposed) : new JNativeContext<TValue>(handler, this.Disposed);
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="mem">A <see cref="JNativeMemory"/> instance.</param>
+	/// <param name="context">A <see cref="JNativeReadOnlyContext{TPrimitive}"/> instance.</param>
+	internal JNativeMemory(JNativeMemory mem, JNativeReadOnlyContext<TValue> context) : base(mem)
+		=> this._context = context;
 
 	/// <inheritdoc/>
 	public ReadOnlySpan<TValue> Values => this._context.Values;
@@ -127,6 +131,6 @@ public record JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContext<TValu
 	/// <summary>
 	/// Retrieves the memory block context.
 	/// </summary>
-	/// <returns>A <see cref="IReadOnlyFixedContext{TValue}"/> instance</returns>
-	internal JNativeReadOnlyContext<TValue> GetValueContext() => this._context;
+	/// <returns>A <see cref="JNativeReadOnlyContext{TValue}"/> instance</returns>
+	internal JNativeReadOnlyContext<TValue> GetContext() => this._context;
 }

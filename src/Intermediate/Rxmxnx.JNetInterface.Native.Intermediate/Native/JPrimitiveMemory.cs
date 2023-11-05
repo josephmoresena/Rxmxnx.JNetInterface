@@ -3,10 +3,39 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a primitive memory block.
 /// </summary>
-/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> in memory block.</typeparam>
-public sealed record JPrimitiveMemory<TPrimitive> : JNativeMemory<TPrimitive>, IFixedContext<Byte>,
-	IFixedContext<TPrimitive> where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+public abstract record JPrimitiveMemory : JNativeMemory, IFixedContext<Byte>
 {
+	/// <inheritdoc/>
+	internal JPrimitiveMemory(IVirtualMachine vm, JNativeMemoryHandler handler) : base(vm, handler, false) { }
+	/// <inheritdoc/>
+	internal JPrimitiveMemory(JNativeMemory mem) : base(mem) { }
+
+	IFixedContext<Byte> IFixedMemory.AsBinaryContext() => this;
+	Span<Byte> IFixedMemory.Bytes => this.GetBinaryContext().Bytes;
+	Span<Byte> IFixedMemory<Byte>.Values => this.GetBinaryContext().Values;
+	IFixedContext<TDestination> IFixedContext<Byte>.Transformation<TDestination>(out IFixedMemory residual)
+		=> this.GetBinaryContext().Transformation<TDestination>(out residual);
+	IFixedContext<TDestination> IFixedContext<Byte>.Transformation<TDestination>(out IReadOnlyFixedMemory residual)
+		=> this.GetBinaryContext().Transformation<TDestination>(out residual);
+
+	/// <summary>
+	/// Retrieves the memory block context.
+	/// </summary>
+	/// <returns>A <see cref="IReadOnlyFixedContext{Byte}"/> instance</returns>
+	private new JNativeContext<Byte> GetBinaryContext() => (JNativeContext<Byte>)base.GetBinaryContext();
+}
+
+/// <summary>
+/// This class represents a primitive memory block.
+/// </summary>
+/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> in memory block.</typeparam>
+public sealed record JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedContext<TPrimitive>
+	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+{
+	/// <summary>
+	/// Internal memory context.
+	/// </summary>
+	private readonly JNativeContext<TPrimitive> _context;
 	/// <summary>
 	/// Memory release mode.
 	/// </summary>
@@ -22,31 +51,43 @@ public sealed record JPrimitiveMemory<TPrimitive> : JNativeMemory<TPrimitive>, I
 	}
 
 	/// <inheritdoc/>
-	internal JPrimitiveMemory(IVirtualMachine vm, JNativeMemoryHandler handler) : base(vm, handler, false) { }
+	internal JPrimitiveMemory(IVirtualMachine vm, JNativeMemoryHandler handler) : base(vm, handler)
+		=> this._context = new(handler, this.Disposed);
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="mem">A <see cref="JNativeMemory"/> instance.</param>
+	/// <param name="context">A <see cref="JNativeContext{TPrimitive}"/> instance.</param>
+	internal JPrimitiveMemory(JNativeMemory mem, JNativeContext<TPrimitive> context) : base(mem)
+		=> this._context = context;
 
-	IFixedContext<Byte> IFixedMemory.AsBinaryContext() => this;
-	Span<Byte> IFixedMemory.Bytes => this.GetBinaryContext().Bytes;
-	Span<Byte> IFixedMemory<Byte>.Values => this.GetBinaryContext().Values;
-	IFixedContext<TDestination> IFixedContext<Byte>.Transformation<TDestination>(out IFixedMemory residual)
-		=> this.GetBinaryContext().Transformation<TDestination>(out residual);
-	IFixedContext<TDestination> IFixedContext<Byte>.Transformation<TDestination>(out IReadOnlyFixedMemory residual)
-		=> this.GetBinaryContext().Transformation<TDestination>(out residual);
 	/// <inheritdoc/>
-	public new Span<TPrimitive> Values => this.GetValueContext().Values;
+	public Span<TPrimitive> Values => this._context.Values;
+
+	IReadOnlyFixedContext<TDestination> IReadOnlyFixedContext<TPrimitive>.
+		Transformation<TDestination>(out IReadOnlyFixedMemory residual)
+		=> this._context.Transformation<TDestination>(out residual);
 	IFixedContext<TDestination> IFixedContext<TPrimitive>.
 		Transformation<TDestination>(out IReadOnlyFixedMemory residual)
-		=> this.GetValueContext().Transformation<TDestination>(out residual);
+		=> this._context.Transformation<TDestination>(out residual);
 	IFixedContext<TDestination> IFixedContext<TPrimitive>.Transformation<TDestination>(out IFixedMemory residual)
-		=> this.GetValueContext().Transformation<TDestination>(out residual);
+		=> this._context.Transformation<TDestination>(out residual);
+	ReadOnlySpan<TPrimitive> IReadOnlyFixedMemory<TPrimitive>.Values => this.Values;
 
 	/// <summary>
-	/// Retrieves the memory block context.
+	/// Defines an implicit conversion of a given <see cref="JPrimitiveMemory{TPrimitive}"/> to
+	/// <see cref="JNativeMemory{TPrimitive}"/>.
 	/// </summary>
-	/// <returns>A <see cref="IReadOnlyFixedContext{Byte}"/> instance</returns>
-	private new JNativeContext<Byte> GetBinaryContext() => (JNativeContext<Byte>)base.GetBinaryContext();
+	/// <param name="jPrimitiveMemory">A <see cref="JPrimitiveMemory{TPrimitive}"/> instance.</param>
+	/// <returns>A <see cref="JNativeMemory{TPrimitive}"/> instance.</returns>
+	public static implicit operator JNativeMemory<TPrimitive>(JPrimitiveMemory<TPrimitive> jPrimitiveMemory)
+		=> new(jPrimitiveMemory, jPrimitiveMemory._context);
 	/// <summary>
-	/// Retrieves the memory block context.
+	/// Defines an implicit conversion of a given <see cref="JNativeMemory{TPrimitive}"/> to
+	/// <see cref="JPrimitiveMemory{TPrimitive}"/>.
 	/// </summary>
-	/// <returns>A <see cref="IReadOnlyFixedContext{TValue}"/> instance</returns>
-	private new JNativeContext<TPrimitive> GetValueContext() => (JNativeContext<TPrimitive>)base.GetValueContext();
+	/// <param name="jNativeMemory">A <see cref="JNativeMemory{TPrimitive}"/> instance.</param>
+	/// <returns>A <see cref="JPrimitiveMemory{TPrimitive}"/> instance.</returns>
+	public static explicit operator JPrimitiveMemory<TPrimitive>(JNativeMemory<TPrimitive> jNativeMemory)
+		=> new(jNativeMemory, (JNativeContext<TPrimitive>)jNativeMemory.GetContext());
 }

@@ -49,7 +49,7 @@ internal readonly struct JNativeMemoryHandler
 	/// <summary>
 	/// Creates a memory handler for array source.
 	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> element.</typeparam>
 	/// <param name="source"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
 	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
@@ -134,7 +134,7 @@ internal readonly struct JNativeMemoryHandler
 	/// <summary>
 	/// Creates a global memory handler for array source.
 	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> element.</typeparam>
 	/// <param name="source"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
 	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
@@ -153,7 +153,7 @@ internal readonly struct JNativeMemoryHandler
 	/// <summary>
 	/// Creates a weak memory handler for array source.
 	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> element.</typeparam>
 	/// <param name="source"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
 	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
@@ -209,7 +209,7 @@ internal readonly struct JNativeMemoryHandler
 	/// Creates a global memory handler for array source.
 	/// </summary>
 	/// <typeparam name="TGlobal">The type of global object.</typeparam>
-	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> element.</typeparam>
 	/// <param name="source"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="critical">Indicates the handler is for a critical sequence.</param>
 	/// <returns><see cref="JNativeMemoryHandler"/> instance.</returns>
@@ -265,7 +265,7 @@ internal readonly struct JNativeMemoryHandler
 	/// <summary>
 	/// Release array elements pointer.
 	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> element.</typeparam>
 	/// <param name="virtualMachine">A <see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="handler">A <see cref="JNativeMemoryHandler"/> instance.</param>
 	/// <param name="mode">Release mode.</param>
@@ -281,7 +281,7 @@ internal readonly struct JNativeMemoryHandler
 	/// <summary>
 	/// Release array elements pointer.
 	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <see cref="TPrimitive"/> element.</typeparam>
+	/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> element.</typeparam>
 	/// <param name="virtualMachine">A <see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="handler">A <see cref="JNativeMemoryHandler"/> instance.</param>
 	/// <param name="_">Release mode.</param>
