@@ -21,7 +21,7 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 
 	static JDataTypeMetadata IDataType.Metadata => JDouble.typeMetadata;
 	static Type? IDataType.FamilyType => default;
-	static JNativeType IPrimitiveType.NativeType => JDouble.Type;
+	static JNativeType IPrimitiveType.JniType => JDouble.Type;
 
 	/// <summary>
 	/// Internal double-precision floating-point number value.

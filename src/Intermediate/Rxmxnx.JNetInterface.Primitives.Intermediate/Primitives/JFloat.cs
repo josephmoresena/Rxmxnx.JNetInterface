@@ -21,7 +21,7 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 
 	static JDataTypeMetadata IDataType.Metadata => JFloat.typeMetadata;
 	static Type? IDataType.FamilyType => default;
-	static JNativeType IPrimitiveType.NativeType => JFloat.Type;
+	static JNativeType IPrimitiveType.JniType => JFloat.Type;
 
 	/// <summary>
 	/// Internal single-precision floating-point number value.

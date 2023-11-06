@@ -10,7 +10,7 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitiveType, IW
 {
 	static Type IDataType.FamilyType => typeof(TPrimitive);
 	static JDataTypeMetadata IDataType.Metadata => IPrimitiveType.GetMetadata<TPrimitive>();
-	static JNativeType IPrimitiveType.NativeType => IPrimitiveType.GetMetadata<TPrimitive>().NativeType;
+	static JNativeType IPrimitiveType.JniType => IPrimitiveType.GetMetadata<TPrimitive>().NativeType;
 
 	/// <summary>
 	/// Constructor.

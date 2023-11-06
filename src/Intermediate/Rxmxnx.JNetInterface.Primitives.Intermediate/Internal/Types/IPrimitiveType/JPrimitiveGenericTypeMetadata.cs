@@ -52,15 +52,17 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			{
 				this._sizeOf = sizeOf;
 				this._underlineType = underlineType;
-				this._nativeType = TPrimitive.NativeType;
+				this._nativeType = TPrimitive.JniType;
 				this._type = typeof(TPrimitive);
 				this._classSignature = JDataTypeMetadata.SafeNullTerminated(
 					classSignature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className));
 			}
 
 			/// <inheritdoc/>
-			// ReSharper disable once MemberHidesStaticFromOuterClass
 			internal override IDataType? CreateInstance(JObject? jObject) => TPrimitive.Create(jObject);
+			/// <inheritdoc/>
+			public override IPrimitiveType CreateInstance<TFrom>(TFrom value)
+				=> NativeUtilities.AsBytes(value).ToValue<TPrimitive>();
 		}
 	}
 }

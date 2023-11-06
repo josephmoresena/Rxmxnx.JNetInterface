@@ -31,4 +31,12 @@ public abstract record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <param name="arraySignature">JNI signature for an array of current type.</param>
 	internal JPrimitiveTypeMetadata(CString signature, CString className, CString? arraySignature) : base(
 		className, signature, arraySignature) { }
+
+	/// <summary>
+	/// Creates a <see cref="IPrimitiveType"/> value from <paramref name="value"/>.
+	/// </summary>
+	/// <typeparam name="TFrom">A <see cref="ValueType"/> type.</typeparam>
+	/// <param name="value">A <typeparamref name="TFrom"/> value.</param>
+	/// <returns>A <see cref="IPrimitiveType"/> value from <paramref name="value"/>.</returns>
+	public abstract IPrimitiveType CreateInstance<TFrom>(TFrom value) where TFrom : unmanaged;
 }

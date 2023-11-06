@@ -30,7 +30,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 
 	static JDataTypeMetadata IDataType.Metadata => JBoolean.typeMetadata;
 	static Type? IDataType.FamilyType => default;
-	static JNativeType IPrimitiveType.NativeType => JBoolean.Type;
+	static JNativeType IPrimitiveType.JniType => JBoolean.Type;
 
 	/// <summary>
 	/// Internal 8-bit unsigned integer value.

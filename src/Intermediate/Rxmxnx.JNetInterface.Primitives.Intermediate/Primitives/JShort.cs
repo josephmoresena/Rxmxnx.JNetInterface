@@ -21,7 +21,7 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 
 	static JDataTypeMetadata IDataType.Metadata => JShort.typeMetadata;
 	static Type? IDataType.FamilyType => default;
-	static JNativeType IPrimitiveType.NativeType => JShort.Type;
+	static JNativeType IPrimitiveType.JniType => JShort.Type;
 
 	/// <summary>
 	/// Internal 16-bit signed integer value.
