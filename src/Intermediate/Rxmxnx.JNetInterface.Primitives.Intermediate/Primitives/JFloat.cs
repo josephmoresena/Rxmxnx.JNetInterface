@@ -52,9 +52,6 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JFloat(Single value) => this._value = value;
 
-	Int64 IPrimitiveNumericType.LongValue => (Int64)this._value;
-	Double IPrimitiveNumericType.DoubleValue => this._value;
-
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JFloat other) => this._value.Equals(other._value);
@@ -83,4 +80,7 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 		ArgumentNullException.ThrowIfNull(jObject);
 		return jObject.AsPrimitive<JFloat, Single>();
 	}
+
+	static JFloat IPrimitiveNumericType<JFloat>.FromDouble(Double value) => (Single)value;
+	static Double IPrimitiveNumericType<JFloat>.ToDouble(JFloat value) => value._value;
 }

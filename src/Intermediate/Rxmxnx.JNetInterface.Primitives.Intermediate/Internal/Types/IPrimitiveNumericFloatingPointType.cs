@@ -4,10 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal.Types;
 /// This interface exposes an object that represents a java primitive floating point.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IPrimitiveNumericFloatingPointType : IPrimitiveNumericType
-{
-	static Boolean IPrimitiveNumericType.IsInteger => false;
-}
+internal interface IPrimitiveNumericFloatingPointType : IPrimitiveNumericType { }
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive floating point.

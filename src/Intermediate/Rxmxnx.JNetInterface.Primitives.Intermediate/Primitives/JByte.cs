@@ -50,9 +50,6 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JByte(SByte value) => this._value = value;
 
-	Int64 IPrimitiveNumericType.LongValue => this._value;
-	Double IPrimitiveNumericType.DoubleValue => this._value;
-
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JByte other) => this._value.Equals(other._value);
@@ -81,4 +78,8 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 		ArgumentNullException.ThrowIfNull(jObject);
 		return jObject.AsPrimitive<JByte, SByte>();
 	}
+
+	static JByte IPrimitiveNumericType<JByte>.FromDouble(Double value)
+		=> IPrimitiveNumericType.GetIntegerValue<SByte>(value);
+	static Double IPrimitiveNumericType<JByte>.ToDouble(JByte value) => value._value;
 }

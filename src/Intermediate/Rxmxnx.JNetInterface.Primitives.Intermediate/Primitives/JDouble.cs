@@ -52,9 +52,6 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JDouble(Double value) => this._value = value;
 
-	Int64 IPrimitiveNumericType.LongValue => (Int64)this._value;
-	Double IPrimitiveNumericType.DoubleValue => this._value;
-
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JDouble other) => this._value.Equals(other._value);
@@ -83,4 +80,7 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 		ArgumentNullException.ThrowIfNull(jObject);
 		return jObject.AsPrimitive<JDouble, Double>();
 	}
+
+	static JDouble IPrimitiveNumericType<JDouble>.FromDouble(Double value) => new(value);
+	static Double IPrimitiveNumericType<JDouble>.ToDouble(JDouble value) => value._value;
 }

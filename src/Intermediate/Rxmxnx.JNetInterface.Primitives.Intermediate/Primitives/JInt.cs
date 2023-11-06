@@ -52,9 +52,6 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JInt(Int32 value) => this._value = value;
 
-	Int64 IPrimitiveNumericType.LongValue => this._value;
-	Double IPrimitiveNumericType.DoubleValue => this._value;
-
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JInt other) => this._value.Equals(other._value);
@@ -83,4 +80,8 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 		ArgumentNullException.ThrowIfNull(jObject);
 		return jObject.AsPrimitive<JInt, Int32>();
 	}
+
+	static JInt IPrimitiveNumericType<JInt>.FromDouble(Double value)
+		=> IPrimitiveNumericType.GetIntegerValue<Int32>(value);
+	static Double IPrimitiveNumericType<JInt>.ToDouble(JInt value) => value._value;
 }

@@ -51,9 +51,6 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JLong(Int64 value) => this._value = value;
 
-	Int64 IPrimitiveNumericType.LongValue => this._value;
-	Double IPrimitiveNumericType.DoubleValue => this._value;
-
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JLong other) => this._value.Equals(other._value);
@@ -82,4 +79,8 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 		ArgumentNullException.ThrowIfNull(jObject);
 		return jObject.AsPrimitive<JLong, Int64>();
 	}
+
+	static JLong IPrimitiveNumericType<JLong>.FromDouble(Double value)
+		=> IPrimitiveNumericType.GetIntegerValue<Int64>(value);
+	static Double IPrimitiveNumericType<JLong>.ToDouble(JLong value) => value._value;
 }

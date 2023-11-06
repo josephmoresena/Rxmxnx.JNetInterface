@@ -52,9 +52,6 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JShort(Int16 value) => this._value = value;
 
-	Int64 IPrimitiveNumericType.LongValue => this._value;
-	Double IPrimitiveNumericType.DoubleValue => this._value;
-
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JShort other) => this._value.Equals(other._value);
@@ -75,6 +72,12 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JShort(Int16 value) => new(value);
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="Char"/> to <see cref="JShort"/>.
+	/// </summary>
+	/// <param name="value">A <see cref="Int16"/> to explicitly convert.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static explicit operator JShort(Char value) => new((Int16)value);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -83,4 +86,8 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 		ArgumentNullException.ThrowIfNull(jObject);
 		return jObject.AsPrimitive<JShort, Int16>();
 	}
+
+	static JShort IPrimitiveNumericType<JShort>.FromDouble(Double value)
+		=> IPrimitiveNumericType.GetIntegerValue<Int16>(value);
+	static Double IPrimitiveNumericType<JShort>.ToDouble(JShort value) => value._value;
 }

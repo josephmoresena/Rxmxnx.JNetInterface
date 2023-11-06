@@ -7,19 +7,16 @@ namespace Rxmxnx.JNetInterface.Internal.Types;
 internal interface IPrimitiveNumericType : IPrimitiveType
 {
 	/// <summary>
-	/// Indicates current type is an integer type.
+	/// Retrieves the integer part of a <see cref="Double"/> value.
 	/// </summary>
-	static virtual Boolean IsInteger
-		=> ValidationUtilities.ThrowInvalidInterface<Boolean>(nameof(IPrimitiveNumericType));
-
-	/// <summary>
-	/// Retrieves the integer value of current primitive.
-	/// </summary>
-	internal Int64 LongValue { get; }
-	/// <summary>
-	/// Retrieves the double value of current primitive.
-	/// </summary>
-	internal Double DoubleValue { get; }
+	/// <typeparam name="TInteger">Integer type.</typeparam>
+	/// <param name="value">A <see cref="Double"/> value.</param>
+	/// <returns>A <typeparamref name="TInteger"/> type.</returns>
+	public static TInteger GetIntegerValue<TInteger>(Double value) where TInteger : unmanaged, IBinaryInteger<TInteger>
+	{
+		Int64 result = (Int64)value;
+		return NativeUtilities.AsBytes(result).ToValue<TInteger>();
+	}
 }
 
 /// <summary>
@@ -29,6 +26,29 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 internal interface IPrimitiveNumericType<TPrimitive> : IPrimitiveNumericType
 	where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>
 {
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="Double"/> to <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="value">A <see cref="Double"/> to explicitly convert.</param>
+	static virtual explicit operator Double(TPrimitive value) => TPrimitive.ToDouble(value);
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="Double"/> to <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="value">A <see cref="Double"/> to explicitly convert.</param>
+	static virtual explicit operator TPrimitive(Double value) => TPrimitive.FromDouble(value);
+
+	/// <summary>
+	/// Creates a <typeparamref name="TPrimitive"/> value from <see cref="Double"/>.
+	/// </summary>
+	/// <param name="value">A <see cref="Double"/> value.</param>
+	/// <returns>A <typeparamref name="TPrimitive"/> value.</returns>
+	protected static abstract TPrimitive FromDouble(Double value);
+	/// <summary>
+	/// Creates a <see cref="Double"/> value from <typeparamref name="TPrimitive"/>.
+	/// </summary>
+	/// <param name="value">A <typeparamref name="TPrimitive"/> value.</param>
+	/// <returns>A <see cref="Double"/> value.</returns>
+	protected static abstract Double ToDouble(TPrimitive value);
 }
 
 /// <summary>
