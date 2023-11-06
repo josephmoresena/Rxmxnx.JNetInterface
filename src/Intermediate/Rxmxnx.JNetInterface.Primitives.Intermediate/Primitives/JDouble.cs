@@ -52,6 +52,9 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JDouble(Double value) => this._value = value;
 
+	Int64 IPrimitiveNumericType.LongValue => (Int64)this._value;
+	Double IPrimitiveNumericType.DoubleValue => this._value;
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JDouble other) => this._value.Equals(other._value);

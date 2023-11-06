@@ -52,6 +52,9 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JShort(Int16 value) => this._value = value;
 
+	Int64 IPrimitiveNumericType.LongValue => this._value;
+	Double IPrimitiveNumericType.DoubleValue => this._value;
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JShort other) => this._value.Equals(other._value);

@@ -11,6 +11,10 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		{
 			/// <inheritdoc cref="JPrimitiveTypeMetadata.ClassSignature"/>
 			private readonly CString _classSignature;
+			/// <summary>
+			/// Native primitive type.
+			/// </summary>
+			private readonly JNativeType _nativeType;
 			/// <inheritdoc cref="SizeOf"/>
 			private readonly Int32 _sizeOf;
 			/// <inheritdoc cref="JDataTypeMetadata.Type"/>
@@ -19,10 +23,6 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// CLR underline type.
 			/// </summary>
 			private readonly Type _underlineType;
-			/// <summary>
-			/// Native primitive type.
-			/// </summary>
-			private readonly JNativeType _nativeType;
 
 			/// <inheritdoc/>
 			public override CString ClassSignature => this._classSignature;

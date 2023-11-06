@@ -52,6 +52,9 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JInt(Int32 value) => this._value = value;
 
+	Int64 IPrimitiveNumericType.LongValue => this._value;
+	Double IPrimitiveNumericType.DoubleValue => this._value;
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JInt other) => this._value.Equals(other._value);

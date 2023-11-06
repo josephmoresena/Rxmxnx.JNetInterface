@@ -52,6 +52,9 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JChar(Char value) => this._value = value;
 
+	Int64 IPrimitiveNumericType.LongValue => this._value;
+	Double IPrimitiveNumericType.DoubleValue => this._value;
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JChar other) => this._value.Equals(other._value);
