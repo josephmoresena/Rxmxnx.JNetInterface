@@ -14,6 +14,10 @@ public interface IClassProvider
 	/// </summary>
 	JClassObject StringClassObject => this.GetClass<JStringObject>();
 	/// <summary>
+	/// <c>java.lang.Number</c> class instance.
+	/// </summary>
+	JClassObject NumberClassObject => this.GetClass<JNumberObject>();
+	/// <summary>
 	/// <c>java.lang.Enum</c> class instance.
 	/// </summary>
 	JClassObject EnumClassObject => this.GetClass<JEnumObject>();

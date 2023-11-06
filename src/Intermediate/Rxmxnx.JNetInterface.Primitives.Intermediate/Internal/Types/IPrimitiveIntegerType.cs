@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal.Types;
 /// This interface exposes an object that represents a java primitive integer.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IPrimitiveNumericIntegerType : IPrimitiveNumericType { }
+internal interface IPrimitiveIntegerType : IPrimitiveNumericType { }
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive integer.
@@ -13,9 +13,9 @@ internal interface IPrimitiveNumericIntegerType : IPrimitiveNumericType { }
 /// <typeparam name="TValue">Type of the .NET equivalent integer.</typeparam>
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface
-	IPrimitiveNumericIntegerType<TPrimitive, TValue> : IPrimitiveNumericIntegerType, IIntegerValue<TValue>,
+	IPrimitiveIntegerType<TPrimitive, TValue> : IPrimitiveIntegerType, IIntegerValue<TValue>,
 		IPrimitiveNumericType<TPrimitive, TValue>
-	where TPrimitive : unmanaged, IPrimitiveNumericIntegerType<TPrimitive, TValue>, IComparable<TPrimitive>,
+	where TPrimitive : unmanaged, IPrimitiveIntegerType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryInteger<TValue>
 	, IMinMaxValue<TValue>

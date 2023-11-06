@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableComparable<JLong>,
-	IPrimitiveNumericIntegerType<JLong, Int64>, IPrimitiveNumericSignedType<JLong, Int64>
+	IPrimitiveIntegerType<JLong, Int64>, IPrimitiveSignedType<JLong, Int64>
 {
 	/// <summary>
 	/// Datatype metadata.

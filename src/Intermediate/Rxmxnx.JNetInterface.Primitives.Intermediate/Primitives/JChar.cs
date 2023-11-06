@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableComparable<JChar>,
-	IPrimitiveNumericIntegerType<JChar, Char>
+	IPrimitiveIntegerType<JChar, Char>
 {
 	/// <summary>
 	/// Datatype metadata.

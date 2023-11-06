@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal.Types;
 /// This interface exposes an object that represents a java signed number.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IPrimitiveNumericSignedType : IPrimitiveNumericType { }
+internal interface IPrimitiveSignedType : IPrimitiveNumericType { }
 
 /// <summary>
 /// This interface exposes an object that represents a java signed number.
@@ -13,9 +13,8 @@ internal interface IPrimitiveNumericSignedType : IPrimitiveNumericType { }
 /// <typeparam name="TValue">Type of the .NET equivalent integer.</typeparam>
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface
-	IPrimitiveNumericSignedType<TPrimitive, TValue> : IPrimitiveNumericSignedType,
-		IPrimitiveNumericType<TPrimitive, TValue>
-	where TPrimitive : unmanaged, IPrimitiveNumericSignedType<TPrimitive, TValue>, IComparable<TPrimitive>,
+	IPrimitiveSignedType<TPrimitive, TValue> : IPrimitiveSignedType, IPrimitiveNumericType<TPrimitive, TValue>
+	where TPrimitive : unmanaged, IPrimitiveSignedType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryNumber<TValue>,
 	IMinMaxValue<TValue>, ISignedNumber<TValue>

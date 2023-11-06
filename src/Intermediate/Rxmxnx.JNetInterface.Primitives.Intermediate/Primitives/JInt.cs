@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Primitives;
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparable<JInt>,
-	IPrimitiveNumericIntegerType<JInt, Int32>, IPrimitiveNumericSignedType<JInt, Int32>
+	IPrimitiveIntegerType<JInt, Int32>, IPrimitiveSignedType<JInt, Int32>
 {
 	/// <summary>
 	/// Datatype metadata.

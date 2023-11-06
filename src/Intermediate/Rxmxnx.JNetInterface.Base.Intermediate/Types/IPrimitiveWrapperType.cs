@@ -10,10 +10,6 @@ public interface IPrimitiveWrapperType : IClassType
 	/// Primitive metadata.
 	/// </summary>
 	internal static abstract JPrimitiveTypeMetadata PrimitiveMetadata { get; }
-	/// <summary>
-	/// Array JNI signature.
-	/// </summary>
-	internal static abstract CString ArraySignature { get; }
 
 	/// <summary>
 	/// Retrieves the metadata for given class type.

@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Extensions.Intermediate.Types.Metadata;
+namespace Rxmxnx.JNetInterface.Types.Metadata;
 
 /// <summary>
 /// This record stores the metadata for a primitive wrapper class <see cref="IDataType"/> type.
@@ -22,7 +22,8 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 	/// </summary>
 	private JPrimitiveWrapperTypeMetadata() : base(TWrapper.PrimitiveMetadata.ClassName,
 	                                               TWrapper.PrimitiveMetadata.ClassSignature,
-	                                               TWrapper.ArraySignature) { }
+	                                               JPrimitiveWrapperTypeMetadata<TWrapper>.classMetadata
+		                                               .ArraySignature) { }
 
 	/// <inheritdoc/>
 	internal override IDataType? CreateInstance(JObject? jObject)
