@@ -19,6 +19,7 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 
 	static JDataTypeMetadata IDataType.Metadata => JByte.typeMetadata;
 	static Type? IDataType.FamilyType => default;
+	static JNativeType IPrimitiveType.NativeType => JByte.Type;
 
 	/// <summary>
 	/// Internal 8-bit signed integer value.

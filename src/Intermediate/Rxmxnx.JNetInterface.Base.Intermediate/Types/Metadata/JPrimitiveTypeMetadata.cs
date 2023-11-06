@@ -13,6 +13,10 @@ public abstract record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// Underline primitive CLR type.
 	/// </summary>
 	public abstract Type UnderlineType { get; }
+	/// <summary>
+	/// Native primitive type.
+	/// </summary>
+	public abstract JNativeType NativeType { get; }
 
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Primitive;

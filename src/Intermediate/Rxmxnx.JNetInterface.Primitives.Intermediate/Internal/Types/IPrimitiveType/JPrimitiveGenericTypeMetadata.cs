@@ -19,11 +19,17 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// CLR underline type.
 			/// </summary>
 			private readonly Type _underlineType;
+			/// <summary>
+			/// Native primitive type.
+			/// </summary>
+			private readonly JNativeType _nativeType;
 
 			/// <inheritdoc/>
 			public override CString ClassSignature => this._classSignature;
 			/// <inheritdoc/>
 			public override Type UnderlineType => this._underlineType;
+			/// <inheritdoc/>
+			public override JNativeType NativeType => this._nativeType;
 			/// <inheritdoc/>
 			public override Type Type => this._type;
 			/// <summary>
@@ -46,6 +52,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			{
 				this._sizeOf = sizeOf;
 				this._underlineType = underlineType;
+				this._nativeType = TPrimitive.NativeType;
 				this._type = typeof(TPrimitive);
 				this._classSignature = JDataTypeMetadata.SafeNullTerminated(
 					classSignature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className));

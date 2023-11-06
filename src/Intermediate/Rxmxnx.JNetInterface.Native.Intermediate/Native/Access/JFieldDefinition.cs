@@ -35,6 +35,8 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	/// </summary>
 	/// <param name="name">Field name.</param>
 	public JFieldDefinition(CString name) : base(name, IDataType.GetMetadata<TField>().Signature) { }
+	/// <inheritdoc/>
+	internal JFieldDefinition(CString name, CString signature) : base(name, signature) { }
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();

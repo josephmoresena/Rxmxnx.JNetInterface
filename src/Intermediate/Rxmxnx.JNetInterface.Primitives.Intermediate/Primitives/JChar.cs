@@ -21,6 +21,7 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 
 	static JDataTypeMetadata IDataType.Metadata => JChar.typeMetadata;
 	static Type? IDataType.FamilyType => default;
+	static JNativeType IPrimitiveType.NativeType => JChar.Type;
 
 	/// <summary>
 	/// Internal UTF-16 code unit character.

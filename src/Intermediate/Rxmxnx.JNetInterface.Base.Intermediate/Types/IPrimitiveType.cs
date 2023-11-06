@@ -7,6 +7,11 @@
 public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 {
 	/// <summary>
+	/// Native primitive type.
+	/// </summary>
+	static abstract JNativeType NativeType { get; }
+	
+	/// <summary>
 	/// Retrieves the metadata for given primitive type.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of current java primitive datatype.</typeparam>
