@@ -22,7 +22,7 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>
 	/// </summary>
 	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType"/> numeric type.</typeparam>
 	/// <returns>A <typeparamref name="TPrimitive"/> numeric value.</returns>
-	public TPrimitive GetValue<TPrimitive>()
+	public virtual TPrimitive GetValue<TPrimitive>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
 	{
 		JFunctionDefinition<TPrimitive> definition = JNumberObject.GetValueDefinition<TPrimitive>();
@@ -31,5 +31,5 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>
 
 	/// <inheritdoc/>
 	public static JNumberObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JClassObject>(jLocal)) : default;
+		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JNumberObject>(jLocal)) : default;
 }

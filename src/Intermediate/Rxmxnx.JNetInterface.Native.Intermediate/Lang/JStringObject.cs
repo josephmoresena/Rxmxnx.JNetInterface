@@ -79,5 +79,5 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 
 	/// <inheritdoc/>
 	public static JStringObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JClassObject>(jLocal)) : default;
+		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JStringObject>(jLocal)) : default;
 }

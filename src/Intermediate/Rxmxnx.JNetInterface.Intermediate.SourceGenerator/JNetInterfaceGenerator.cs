@@ -21,6 +21,7 @@ public class JNetInterfaceGenerator : ISourceGenerator
 				case "Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode.UnicodeMethodNames":
 				case "Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode.UnicodeMethodSignatures":
 				case "Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode.UnicodeObjectSignatures":
+				case "Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode.UnicodeWrapperObjectArraySignatures":
 					typeSymbol.GenerateUtf8ContainerInitializer(context);
 					break;
 				default:

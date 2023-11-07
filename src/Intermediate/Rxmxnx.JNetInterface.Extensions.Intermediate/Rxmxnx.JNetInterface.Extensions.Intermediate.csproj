@@ -28,18 +28,23 @@
         <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.Types"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.Types.Metadata"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.Native"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
+        <Using Include="Rxmxnx.JNetInterface.Io"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>
         <Using Include="Rxmxnx.JNetInterface.Native.References"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
         <Using Include="Rxmxnx.JNetInterface.Primitives"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
         <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
+        <Using Include="Rxmxnx.JNetInterface.Types.Inheritance"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Intermediate.SourceGenerator\Rxmxnx.JNetInterface.Intermediate.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
     </ItemGroup>
 
 </Project>
