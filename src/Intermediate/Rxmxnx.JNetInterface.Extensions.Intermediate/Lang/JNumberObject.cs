@@ -84,7 +84,7 @@ public abstract class
 	internal JNumberObject(JLocalObject jLocal, TValue? value) : base(jLocal, value,
 	                                                                  jLocal.Environment.ClassProvider
 	                                                                        .GetClass<TNumber>()) { }
-	
+
 	/// <inheritdoc/>
 	public new static TNumber? Create(JObject? jObject) => TNumber.Create(jObject);
 }

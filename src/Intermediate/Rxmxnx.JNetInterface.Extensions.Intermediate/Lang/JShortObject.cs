@@ -5,7 +5,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimitiveWrapperType<JShortObject>
 {
-	static JDataTypeMetadata IDataType.Metadata => JPrimitiveWrapperTypeMetadata<JShortObject>.Instance;
+	static JDataTypeMetadata IDataType.Metadata
+		=> new JPrimitiveWrapperTypeMetadata<JShortObject>(IClassType.GetMetadata<JNumberObject>());
 	static CString IPrimitiveWrapperType.ArraySignature
 		=> UnicodeWrapperObjectArraySignatures.JShortObjectArraySignature;
 

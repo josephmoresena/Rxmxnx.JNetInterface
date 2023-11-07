@@ -5,7 +5,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimitiveWrapperType<JFloatObject>
 {
-	static JDataTypeMetadata IDataType.Metadata => JPrimitiveWrapperTypeMetadata<JFloatObject>.Instance;
+	static JDataTypeMetadata IDataType.Metadata
+		=> new JPrimitiveWrapperTypeMetadata<JFloatObject>(IClassType.GetMetadata<JNumberObject>());
 	static CString IPrimitiveWrapperType.ArraySignature
 		=> UnicodeWrapperObjectArraySignatures.JFloatObjectArraySignature;
 

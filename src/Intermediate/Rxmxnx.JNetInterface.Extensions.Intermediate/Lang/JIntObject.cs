@@ -5,7 +5,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimitiveWrapperType<JIntegerObject>
 {
-	static JDataTypeMetadata IDataType.Metadata => JPrimitiveWrapperTypeMetadata<JIntegerObject>.Instance;
+	static JDataTypeMetadata IDataType.Metadata
+		=> new JPrimitiveWrapperTypeMetadata<JIntegerObject>(IClassType.GetMetadata<JNumberObject>());
 	static CString IPrimitiveWrapperType.ArraySignature
 		=> UnicodeWrapperObjectArraySignatures.JIntegerObjectArraySignature;
 

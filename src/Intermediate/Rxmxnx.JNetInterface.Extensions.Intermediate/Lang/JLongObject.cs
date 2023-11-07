@@ -5,7 +5,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JLongObject : JNumberObject<JLong, JLongObject>, IPrimitiveWrapperType<JLongObject>
 {
-	static JDataTypeMetadata IDataType.Metadata => JPrimitiveWrapperTypeMetadata<JLongObject>.Instance;
+	static JDataTypeMetadata IDataType.Metadata
+		=> new JPrimitiveWrapperTypeMetadata<JLongObject>(IClassType.GetMetadata<JNumberObject>());
 	static CString IPrimitiveWrapperType.ArraySignature
 		=> UnicodeWrapperObjectArraySignatures.JLongObjectArraySignature;
 

@@ -10,10 +10,10 @@ internal sealed record
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>,
 	IInterfaceImplementation<TWrapper, JSerializableObject>, IInterfaceImplementation<TWrapper, JComparableObject>
 {
-	/// <summary>
-	/// Instance.
-	/// </summary>
-	public static readonly JPrimitiveWrapperTypeMetadata Instance = new JPrimitiveWrapperTypeMetadata<TWrapper>();
+	/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
+	private readonly JClassTypeMetadata _baseMetadata;
+	/// <inheritdoc cref="JDataTypeMetadata.BaseTypes"/>
+	private readonly HashSet<Type> _baseTypes;
 
 	/// <inheritdoc/>
 	public override JPrimitiveTypeMetadata PrimitiveMetadata => TWrapper.PrimitiveMetadata;
@@ -23,14 +23,21 @@ internal sealed record
 	public override JTypeModifier Modifier => JTypeModifier.Final;
 	/// <inheritdoc/>
 	public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => JPrimitiveWrapperConstants.Interfaces;
+	/// <inheritdoc/>
+	public override JClassTypeMetadata BaseMetadata => this._baseMetadata;
+	/// <inheritdoc/>
+	public override IReadOnlySet<Type> BaseTypes => this._baseTypes;
 
 	/// <summary>
-	/// Private constructor.
+	/// Constructor.
 	/// </summary>
-	private JPrimitiveWrapperTypeMetadata() : base(TWrapper.PrimitiveMetadata.ClassName,
-	                                               TWrapper.PrimitiveMetadata.ClassSignature,
-	                                               TWrapper.ArraySignature) { }
-
+	/// <param name="baseMetadata">Base <see cref="JClassTypeMetadata"/> instance.</param>
+	public JPrimitiveWrapperTypeMetadata(JClassTypeMetadata? baseMetadata = default) : base(
+		TWrapper.PrimitiveMetadata.ClassName, TWrapper.PrimitiveMetadata.ClassSignature, TWrapper.ArraySignature)
+	{
+		this._baseMetadata = baseMetadata ?? IClassType.GetMetadata<JLocalObject>();
+		this._baseTypes = new(1) { this._baseMetadata.Type, };
+	}
 	/// <inheritdoc/>
 	internal override IDataType? CreateInstance(JObject? jObject) => TWrapper.Create(jObject);
 }

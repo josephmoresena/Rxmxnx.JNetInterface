@@ -5,7 +5,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrimitiveWrapperType<JDoubleObject>
 {
-	static JDataTypeMetadata IDataType.Metadata => JPrimitiveWrapperTypeMetadata<JDoubleObject>.Instance;
+	static JDataTypeMetadata IDataType.Metadata
+		=> new JPrimitiveWrapperTypeMetadata<JDoubleObject>(IClassType.GetMetadata<JNumberObject>());
 	static CString IPrimitiveWrapperType.ArraySignature
 		=> UnicodeWrapperObjectArraySignatures.JDoubleObjectArraySignature;
 

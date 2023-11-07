@@ -25,6 +25,7 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JLocalObject>());
 		Console.WriteLine(IDataType.GetMetadata<JClassObject>());
 		Console.WriteLine(IDataType.GetMetadata<JStringObject>());
+		Console.WriteLine(IDataType.GetMetadata<JNumberObject>());
 
 		Console.WriteLine("====== Array types ======");
 
@@ -41,10 +42,12 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JStringObject>>());
 
 		Console.WriteLine("====== Wrapper types ======");
+		Console.WriteLine(IDataType.GetMetadata<JBooleanObject>());
 		Console.WriteLine(IDataType.GetMetadata<JByteObject>());
 		Console.WriteLine(IDataType.GetMetadata<JDoubleObject>());
 		Console.WriteLine(IDataType.GetMetadata<JFloatObject>());
 		Console.WriteLine(IDataType.GetMetadata<JIntegerObject>());
+		Console.WriteLine(IDataType.GetMetadata<JCharacterObject>());
 		Console.WriteLine(IDataType.GetMetadata<JLongObject>());
 		Console.WriteLine(IDataType.GetMetadata<JShortObject>());
 	}
