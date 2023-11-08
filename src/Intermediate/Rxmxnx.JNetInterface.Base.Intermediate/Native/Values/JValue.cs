@@ -28,7 +28,7 @@ internal readonly partial struct JValue : INativeType<JValue>
 	/// <summary>
 	/// Represents the empty <see cref="JValue"/>. This field is read-only.
 	/// </summary>
-	public static readonly JValue Empty;
+	public static readonly JValue Empty = new();
 	/// <summary>
 	/// Size in bytes of <see cref="JValue"/> structure.
 	/// </summary>
