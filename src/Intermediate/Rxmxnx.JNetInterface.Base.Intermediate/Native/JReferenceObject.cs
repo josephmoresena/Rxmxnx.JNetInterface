@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Lang;
+namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
 /// This class represents the base of any java reference type instance.

@@ -15,7 +15,7 @@ internal interface IBaseReferenceType : IReferenceType
 			typeof(IBaseReferenceType), typeof(JInterfaceObject),
 			typeof(IDataType<JLocalObject>),
 			typeof(IReferenceType<JLocalObject>),
-			typeof(IBaseClassType<JLocalObject>),
+			typeof(ISuperClassType<JLocalObject>),
 		});
 
 	static IImmutableSet<Type> IDataType.ExcludingTypes => IBaseReferenceType.ExcludingReferenceBaseTypes;

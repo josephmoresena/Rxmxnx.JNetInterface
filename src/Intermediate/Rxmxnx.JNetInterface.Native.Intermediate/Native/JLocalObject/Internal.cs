@@ -9,6 +9,8 @@ public partial class JLocalObject
 	                                                                   .Create(JObject.JObjectClassName)
 	                                                                   .WithSignature(JObject.JObjectSignature).Build();
 
+	static JClassTypeMetadata ISuperClassType<JLocalObject>.SuperClassMetadata => JLocalObject.JObjectClassMetadata;
+
 	/// <summary>
 	/// Internal reference value.
 	/// </summary>

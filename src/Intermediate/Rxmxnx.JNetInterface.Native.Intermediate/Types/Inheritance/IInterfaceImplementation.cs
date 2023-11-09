@@ -25,6 +25,6 @@ public interface
 	/// Defines an implicit conversion of a given <typeparamref name="TImplementation"/> to <typeparamref name="TInterface"/>.
 	/// </summary>
 	/// <param name="implementationInstance">A <typeparamref name="TImplementation"/> to implicitly convert.</param>
-	static virtual implicit operator TInterface?(TImplementation? implementationInstance)
+	static virtual explicit operator TInterface?(TImplementation? implementationInstance)
 		=> TInterface.Create(implementationInstance);
 }

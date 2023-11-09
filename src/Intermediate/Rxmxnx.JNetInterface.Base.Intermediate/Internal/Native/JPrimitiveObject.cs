@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Lang;
+namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
 /// Java object representing a java primitive value.
