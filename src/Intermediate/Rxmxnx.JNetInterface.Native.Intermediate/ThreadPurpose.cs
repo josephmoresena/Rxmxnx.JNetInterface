@@ -11,7 +11,11 @@ public enum ThreadPurpose : Byte
 	/// </summary>
 	RemoveGlobalReference = 1,
 	/// <summary>
-	/// Indicates the purpose of the thread is release primitve sequence.
+	/// Indicates the purpose of the thread is release primitive sequence.
 	/// </summary>
 	ReleaseSequence = 2,
+	/// <summary>
+	/// Indicates the purpose of the thread is execute JNI calls under exception state.
+	/// </summary>
+	ExceptionExecution = 3,
 }

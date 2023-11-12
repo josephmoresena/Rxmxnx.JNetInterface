@@ -15,7 +15,6 @@ public partial class JLocalObject
 	{
 		this._env = env;
 		this._lifetime = new(isNativeParameter, this);
-		this._isDisposed = false;
 		this._class = jClass;
 		this._isRealClass = this._class is not null && this._class.IsFinal.GetValueOrDefault();
 	}

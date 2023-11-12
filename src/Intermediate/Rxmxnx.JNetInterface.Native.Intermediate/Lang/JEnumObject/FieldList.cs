@@ -53,8 +53,8 @@ public partial class JEnumObject
 			public void AddField(Int32 ordinal, CString name)
 			{
 				String hash = name.ToHexString();
-				ValidationUtilities.ThrowIfInvalidOrdinal(this, ordinal);
-				ValidationUtilities.ThrowIfInvalidHash(this, hash);
+				NativeValidationUtilities.ThrowIfInvalidOrdinal(this, ordinal);
+				NativeValidationUtilities.ThrowIfInvalidHash(this, hash);
 				this._ordinalDictionary.Add(ordinal, hash);
 				this._hashDictionary.Add(hash, ordinal);
 				this._nameDictionary.Add(hash, name);
@@ -65,7 +65,7 @@ public partial class JEnumObject
 			/// <returns>The current instance.</returns>
 			public IEnumFieldList Validate()
 			{
-				ValidationUtilities.ThrowIfInvalidList(this);
+				NativeValidationUtilities.ThrowIfInvalidList(this);
 				return this;
 			}
 		}

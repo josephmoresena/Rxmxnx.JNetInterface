@@ -30,7 +30,11 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
 	public JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
-		=> this._value ??= env.StringProvider.ToString(jGlobal);
+	{
+		if (this._length is not null) return;
+		this._value ??= env.StringProvider.ToString(jGlobal);
+		this._length ??= this._value.Length;
+	}
 
 	/// <summary>
 	/// Internal string value.

@@ -8,9 +8,9 @@ namespace Rxmxnx.JNetInterface.Types.Inheritance;
 /// <typeparam name="TInterface">Type of implemented interface.</typeparam>
 public interface
 	IInterfaceImplementation<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TImplementation,
-		TInterface> : IDerivedType<TImplementation, TInterface>
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface> : IDerivedType<TImplementation, TInterface>
 	where TImplementation : JLocalObject, IInterfaceImplementation<TImplementation, TInterface>
-	where TInterface : JInterfaceObject, IInterfaceType<TInterface>
+	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	static JDerivationKind IDerivedType<TImplementation, TInterface>.Type
 		=> TImplementation.Kind == JTypeKind.Interface ? JDerivationKind.Extension : JDerivationKind.Implementation;

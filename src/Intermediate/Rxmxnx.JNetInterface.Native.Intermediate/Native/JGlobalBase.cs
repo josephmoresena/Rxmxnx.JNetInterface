@@ -55,8 +55,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	protected virtual void Dispose(Boolean disposing, IEnvironment env)
 	{
-		if (this._isDisposed)
-			return;
+		if (this._isDisposed) return;
 
 		if (disposing)
 		{
@@ -69,7 +68,8 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 			}
 		}
 
-		env.ReferenceProvider.Unload(this);
+		if (!env.ReferenceProvider.Unload(this)) return;
+
 		this.ClearValue();
 		this._isDisposed = true;
 	}

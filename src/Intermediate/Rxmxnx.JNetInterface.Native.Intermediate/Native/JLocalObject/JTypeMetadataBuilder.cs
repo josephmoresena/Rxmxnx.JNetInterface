@@ -97,14 +97,14 @@ public partial class JLocalObject
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			if (!this._interfaceTypes.Contains(this.GetImplementingType<TInterface>()))
-				ValidationUtilities.ThrowInvalidImplementation<TInterface>(
+				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
 					this.DataTypeName, this.Kind != JTypeKind.Interface);
 
 			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
 			foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
 			{
 				if (!this._interfaceTypes.Contains(this.GetImplementingType(interfaceMetadata)))
-					ValidationUtilities.ThrowInvalidImplementation<TInterface>(
+					NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
 						this.DataTypeName, this.Kind != JTypeKind.Interface);
 			}
 
@@ -134,9 +134,9 @@ public partial class JLocalObject
 		/// <typeparam name="TInterface">Type of java interface.</typeparam>
 		/// <returns></returns>
 		protected static Boolean
-			HasInterface<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass, TInterface>()
+			HasInterface<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TClass : JLocalObject, IReferenceType<TClass>
-			where TInterface : JReferenceObject, IInterfaceType<TInterface>
+			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			Type typeofT = typeof(TClass);
 			return typeofT.GetInterfaces()

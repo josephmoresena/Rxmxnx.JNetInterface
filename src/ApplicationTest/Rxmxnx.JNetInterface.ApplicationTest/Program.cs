@@ -27,6 +27,7 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JStringObject>());
 		Console.WriteLine(IDataType.GetMetadata<JEnumObject>());
 		Console.WriteLine(IDataType.GetMetadata<JNumberObject>());
+		Console.WriteLine(IDataType.GetMetadata<JThrowableObject>());
 
 		Console.WriteLine("====== Array types ======");
 

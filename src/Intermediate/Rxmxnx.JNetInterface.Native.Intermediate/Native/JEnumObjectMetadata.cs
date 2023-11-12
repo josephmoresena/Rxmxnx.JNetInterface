@@ -9,7 +9,7 @@ public record JEnumObjectMetadata : JObjectMetadata
 	/// <summary>
 	/// Internal string name.
 	/// </summary>
-	public Int32 Ordinal { get; init; }
+	public Int32? Ordinal { get; init; }
 
 	/// <summary>
 	/// Constructor.

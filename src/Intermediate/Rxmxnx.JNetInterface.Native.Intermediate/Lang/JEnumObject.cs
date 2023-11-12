@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Enum</c> instance.
 /// </summary>
-public partial class JEnumObject : JLocalObject, ISuperClassType<JEnumObject>, ILocalObject,
+public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, ILocalObject,
 	IInterfaceImplementation<JEnumObject, JSerializableObject>, IInterfaceImplementation<JEnumObject, JComparableObject>
 {
 	/// <summary>
@@ -12,6 +12,13 @@ public partial class JEnumObject : JLocalObject, ISuperClassType<JEnumObject>, I
 	/// <remarks>Its position in its enum declaration, where the initial constant is assigned an ordinal of zero</remarks>
 	public Int32 Ordinal => this._ordinal ??= this.Environment.EnumProvider.GetOrdinal(this);
 
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	public JEnumObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	
 	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>

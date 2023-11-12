@@ -6,10 +6,11 @@ namespace Rxmxnx.JNetInterface.Internal.Types;
 /// <see cref="JLocalObject"/> derived types.
 /// </remarks>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface ISuperClassType<out TClass> : IBaseReferenceType, IClassType<TClass>
-	where TClass : JReferenceObject, ISuperClassType<TClass>
+internal interface IBaseClassType<out TClass> : IClassType<TClass>
+	where TClass : JReferenceObject, IBaseClassType<TClass>
 {
 	/// <inheritdoc cref="IDataType.Metadata"/>
 	internal static abstract JClassTypeMetadata SuperClassMetadata { get; }
 	static JDataTypeMetadata IDataType.Metadata => TClass.SuperClassMetadata;
+	static Type IDataType.FamilyType => typeof(TClass);
 }

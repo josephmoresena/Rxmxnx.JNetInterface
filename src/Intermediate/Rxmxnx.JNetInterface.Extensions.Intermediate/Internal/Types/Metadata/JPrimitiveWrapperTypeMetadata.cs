@@ -7,8 +7,7 @@ internal sealed record
 	JPrimitiveWrapperTypeMetadata<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TWrapper> :
 		JPrimitiveWrapperTypeMetadata
-	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>,
-	IInterfaceImplementation<TWrapper, JSerializableObject>, IInterfaceImplementation<TWrapper, JComparableObject>
+	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
 {
 	/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
 	private readonly JClassTypeMetadata _baseMetadata;
@@ -39,5 +38,5 @@ internal sealed record
 		this._baseTypes = new(1) { this._baseMetadata.Type, };
 	}
 	/// <inheritdoc/>
-	internal override IDataType? CreateInstance(JObject? jObject) => TWrapper.Create(jObject);
+	internal override IDataType? ParseInstance(JObject? jObject) => TWrapper.Create(jObject);
 }

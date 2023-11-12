@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Types;
+namespace Rxmxnx.JNetInterface;
 
 /// <summary>
 /// This interface exposes an object that represents a list java enum type fields instance.

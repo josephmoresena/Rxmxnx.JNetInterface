@@ -39,5 +39,5 @@ public interface IReferenceProvider
 	/// Unloads the global reference of <paramref name="jGlobal"/>.
 	/// </summary>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
-	void Unload(JGlobalBase jGlobal);
+	Boolean Unload(JGlobalBase jGlobal);
 }

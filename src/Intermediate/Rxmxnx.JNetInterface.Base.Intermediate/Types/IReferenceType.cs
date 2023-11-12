@@ -49,12 +49,6 @@ public interface
 	{
 		Type[] interfaceTypes = typeof(TReference).GetInterfaces();
 		foreach (Type interfaceType in interfaceTypes)
-		{
-			if (TReference.ExcludingTypes.Contains(interfaceType))
-				continue;
-			if (TReference.ExcludingGenericTypes.Contains(interfaceType))
-				continue;
 			yield return interfaceType;
-		}
 	}
 }

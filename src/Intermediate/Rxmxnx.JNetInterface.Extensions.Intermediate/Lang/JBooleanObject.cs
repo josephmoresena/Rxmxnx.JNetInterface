@@ -3,9 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
-public sealed partial class JBooleanObject : JLocalObject, IPrimitiveWrapperType<JBooleanObject>,
-	IInterfaceImplementation<JBooleanObject, JSerializableObject>,
-	IInterfaceImplementation<JBooleanObject, JComparableObject>
+public sealed partial class JBooleanObject : JLocalObject, IPrimitiveWrapperType<JBooleanObject>
 {
 	/// <summary>
 	/// Internal value.

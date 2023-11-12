@@ -5,6 +5,11 @@ namespace Rxmxnx.JNetInterface;
 /// </summary>
 public interface ILocalObject : IObject
 {
+	/// <inheritdoc cref="IEnvironment.VirtualMachine"/>
+	internal IVirtualMachine VirtualMachine { get; }
+	/// <inheritdoc cref="JReferenceObject.IsDummy"/>
+	internal Boolean IsDummy { get; }
+	
 	/// <summary>
 	/// Creates the object metadata for current instance.
 	/// </summary>
@@ -27,6 +32,6 @@ public interface ILocalObject : IObject
 	/// </summary>
 	/// <param name="jLocal">A <see cref="ILocalObject"/> instance.</param>
 	/// <param name="instanceMetadata">The object metadata for <paramref name="jLocal"/>.</param>
-	private static void ProcessMetadata(ILocalObject jLocal, JObjectMetadata instanceMetadata)
+	internal static void ProcessMetadata(ILocalObject jLocal, JObjectMetadata instanceMetadata)
 		=> jLocal.ProcessMetadata(instanceMetadata);
 }

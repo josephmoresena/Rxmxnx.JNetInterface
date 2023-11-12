@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a local <c>java.lang.Object</c> instance.
 /// </summary>
-public partial class JLocalObject : JReferenceObject, ISuperClassType<JLocalObject>
+public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObject>
 {
 	/// <summary>
 	/// <see cref="IEnvironment"/> instance.
@@ -30,6 +30,8 @@ public partial class JLocalObject : JReferenceObject, ISuperClassType<JLocalObje
 		{
 			if (this._global is null || this._global.IsValid(this._env))
 				this._global = this._env.ReferenceProvider.Create<JGlobal>(this);
+			else
+				this._global.RefreshMetadata(this);
 			return this._global;
 		}
 	}
@@ -42,6 +44,8 @@ public partial class JLocalObject : JReferenceObject, ISuperClassType<JLocalObje
 		{
 			if (this._weak is null || this._weak.IsValid(this._env))
 				this._weak = this._env.ReferenceProvider.Create<JWeak>(this);
+			else
+				this._weak.RefreshMetadata(this);
 			return this._weak;
 		}
 	}
@@ -71,7 +75,6 @@ public partial class JLocalObject : JReferenceObject, ISuperClassType<JLocalObje
 
 		this._env = jLocal.Environment;
 		this._lifetime = jLocal._lifetime;
-		this._isDisposed = jLocal._isDisposed;
 		this._class = jClass ?? jLocal._class;
 		this._global = jLocal._global;
 		this._weak = jLocal._weak;
@@ -80,17 +83,17 @@ public partial class JLocalObject : JReferenceObject, ISuperClassType<JLocalObje
 			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
 
+	/// <inheritdoc cref="JObject.ObjectClassName"/>
+	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
+	/// <inheritdoc cref="JObject.ObjectSignature"/>
+	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
+
 	/// <inheritdoc/>
 	public void Dispose()
 	{
 		this.Dispose(true);
 		GC.SuppressFinalize(this);
 	}
-
-	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
-	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
 
 	/// <inheritdoc/>
 	~JLocalObject() { this.Dispose(false); }
@@ -101,12 +104,11 @@ public partial class JLocalObject : JReferenceObject, ISuperClassType<JLocalObje
 	/// </param>
 	protected virtual void Dispose(Boolean disposing)
 	{
-		if (this._isDisposed)
+		if (this._lifetime.IsDisposed)
 			return;
-		if (this._lifetime.Unload(this))
-			this._isDisposed = this._env.ReferenceProvider.Unload(this);
+		if (this._lifetime.Unload(this) && this._env.ReferenceProvider.Unload(this))
+			this._lifetime.SetDisposed();
 	}
-
 	/// <summary>
 	/// Creates the object metadata for current instance.
 	/// </summary>

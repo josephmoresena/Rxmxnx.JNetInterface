@@ -14,8 +14,8 @@ public interface IInterfaceType : IReferenceType
 	/// <typeparam name="TInterface">Type of current java interface datatype.</typeparam>
 	/// <returns>The <see cref="JInterfaceTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JInterfaceTypeMetadata GetMetadata<TInterface>()
-		where TInterface : JReferenceObject, IInterfaceType<TInterface>
+	public new static JInterfaceTypeMetadata GetMetadata<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
+		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		=> (JInterfaceTypeMetadata)IDataType.GetMetadata<TInterface>();
 }
 
@@ -23,14 +23,8 @@ public interface IInterfaceType : IReferenceType
 /// This interface exposes an object that represents a java interface type instance.
 /// </summary>
 /// <typeparam name="TInterface">Type of java interface type.</typeparam>
-[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
-public interface IInterfaceType<out TInterface> : IInterfaceType, IReferenceType<TInterface>
-	where TInterface : JReferenceObject, IInterfaceType<TInterface>
+public interface IInterfaceType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TInterface> : IInterfaceType, IReferenceType<TInterface>
+	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
-	/// <inheritdoc cref="IDataType{TClass}.ExcludingGenericTypes"/>
-	private static readonly ImmutableHashSet<Type> excludingTypes =
-		ImmutableHashSet.Create(typeof(IDataType<TInterface>), typeof(IReferenceType<TInterface>));
-
-	static IImmutableSet<Type> IDataType<TInterface>.ExcludingGenericTypes => IInterfaceType<TInterface>.excludingTypes;
 	static Type IDataType<TInterface>.SelfType => typeof(IInterfaceType<TInterface>);
 }

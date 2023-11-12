@@ -6,6 +6,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal sealed record ObjectLifetime
 {
 	/// <summary>
+	/// Indicates whether the this instance is disposed.
+	/// </summary>
+	private readonly IMutableWrapper<Boolean> _isDisposed;
+	/// <summary>
 	/// Indicates whether the java object comes from a JNI parameter.
 	/// </summary>
 	private readonly Boolean _isNativeParameter;
@@ -15,6 +19,11 @@ internal sealed record ObjectLifetime
 	private readonly HashSet<JLocalObject> _objects = new();
 
 	/// <summary>
+	/// Indicates whether the this instance is disposed.
+	/// </summary>
+	public Boolean IsDisposed => this._isDisposed.Value;
+
+	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
@@ -22,6 +31,7 @@ internal sealed record ObjectLifetime
 	public ObjectLifetime(Boolean isNativeParameter, JLocalObject jLocal)
 	{
 		this._isNativeParameter = isNativeParameter;
+		this._isDisposed = IMutableWrapper.Create<Boolean>();
 		this.Load(jLocal);
 	}
 
@@ -46,4 +56,6 @@ internal sealed record ObjectLifetime
 		Boolean result = !this._isNativeParameter && this._objects.Count == 0;
 		return result;
 	}
+
+	public void SetDisposed() => this._isDisposed.Value = true;
 }

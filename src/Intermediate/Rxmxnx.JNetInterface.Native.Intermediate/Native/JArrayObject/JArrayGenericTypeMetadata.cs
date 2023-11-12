@@ -25,6 +25,6 @@ public partial class JArrayObject<TElement>
 		private JArrayGenericTypeMetadata() : base(IDataType.GetMetadata<TElement>().ArraySignature) { }
 
 		/// <inheritdoc/>
-		internal override IDataType? CreateInstance(JObject? jObject) => JArrayObject<TElement>.Create(jObject);
+		internal override IDataType? ParseInstance(JObject? jObject) => jObject as JArrayObject<TElement> ?? JArrayObject<TElement>.Create(jObject);
 	}
 }

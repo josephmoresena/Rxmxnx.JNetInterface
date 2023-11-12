@@ -3,9 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
-public sealed partial class JCharacterObject : JLocalObject, IPrimitiveWrapperType<JCharacterObject>,
-	IInterfaceImplementation<JCharacterObject, JSerializableObject>,
-	IInterfaceImplementation<JCharacterObject, JComparableObject>
+public sealed partial class JCharacterObject : JLocalObject, IPrimitiveWrapperType<JCharacterObject>
 {
 	/// <summary>
 	/// Internal value.

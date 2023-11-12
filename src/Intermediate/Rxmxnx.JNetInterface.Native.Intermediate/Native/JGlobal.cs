@@ -11,7 +11,16 @@ public abstract class JGlobal : JGlobalBase
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="globalRef">Global object reference.</param>
-	internal JGlobal(JLocalObject jLocal, JGlobalRef globalRef) : base(jLocal, globalRef) { }
+	internal JGlobal(ILocalObject jLocal, JGlobalRef globalRef) : base(jLocal, globalRef) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
+	/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
+	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
+	/// <param name="globalRef">Global reference.</param>
+	internal JGlobal(IVirtualMachine vm, JObjectMetadata metadata, Boolean isDummy, JGlobalRef globalRef) : base(
+		vm, metadata, isDummy, globalRef) { }
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)

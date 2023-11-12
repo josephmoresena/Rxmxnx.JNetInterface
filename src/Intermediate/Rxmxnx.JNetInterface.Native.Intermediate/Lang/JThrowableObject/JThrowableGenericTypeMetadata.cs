@@ -1,13 +1,13 @@
-namespace Rxmxnx.JNetInterface.Native;
+namespace Rxmxnx.JNetInterface.Lang;
 
-public partial class JLocalObject
+public partial class JThrowableObject
 {
-	protected sealed partial class JTypeMetadataBuilder<TClass>
+	protected sealed partial class JTypeMetadataBuilder<TThrowable>
 	{
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IClassType"/> type.
 		/// </summary>
-		internal sealed record JClassGenericTypeMetadata : JClassTypeMetadata
+		internal sealed record JThrowableGenericTypeMetadata : JThrowableTypeMetadata
 		{
 			/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
 			private readonly JClassTypeMetadata? _baseMetadata;
@@ -19,7 +19,7 @@ public partial class JLocalObject
 			private readonly JTypeModifier _modifier;
 
 			/// <inheritdoc/>
-			public override Type Type => typeof(TClass);
+			public override Type Type => typeof(TThrowable);
 			/// <inheritdoc/>
 			public override JClassTypeMetadata? BaseMetadata => this._baseMetadata;
 			/// <inheritdoc/>
@@ -39,7 +39,7 @@ public partial class JLocalObject
 			/// <param name="baseMetadata">Base type of current type metadata.</param>
 			/// <param name="signature">JNI signature for current type.</param>
 			/// <param name="arraySignature">Array JNI signature for current type.</param>
-			internal JClassGenericTypeMetadata(CString className, JTypeModifier modifier,
+			internal JThrowableGenericTypeMetadata(CString className, JTypeModifier modifier,
 				IImmutableSet<JInterfaceTypeMetadata> interfaces, JClassTypeMetadata? baseMetadata,
 				ISet<Type> baseTypes, CString? signature, CString? arraySignature) : base(
 				className, signature, arraySignature)
@@ -51,7 +51,11 @@ public partial class JLocalObject
 			}
 
 			/// <inheritdoc/>
-			internal override IDataType? ParseInstance(JObject? jObject) => jObject as TClass ?? TClass.Create(jObject);
+			internal override IDataType? ParseInstance(JObject? jObject)
+				=> jObject as TThrowable ?? TThrowable.Create(jObject);
+			/// <inheritdoc/>
+			internal override JThrowableException CreateException(JGlobalBase jGlobalThrowable)
+				=> throw new NotImplementedException();
 		}
 	}
 }

@@ -30,16 +30,10 @@ public interface IPrimitiveWrapperType : IClassType
 /// <summary>
 /// This interface exposes an object that represents a java primitive wrapper class type instance.
 /// </summary>
-/// <typeparam name="TWrapperClass">Type of java primitive wrapper class datatype.</typeparam>
+/// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
 [UnconditionalSuppressMessage("Trim analysis", "IL2091")]
-public interface IPrimitiveWrapperType<out TWrapperClass> : IPrimitiveWrapperType, IClassType<TWrapperClass>
-	where TWrapperClass : JReferenceObject, IClassType<TWrapperClass>
+public interface IPrimitiveWrapperType<TWrapper> : IPrimitiveWrapperType, IClassType<TWrapper>,
+	IInterfaceImplementation<TWrapper, JSerializableObject>, IInterfaceImplementation<TWrapper, JComparableObject>
+	where TWrapper : JLocalObject, IClassType<TWrapper>, IInterfaceImplementation<TWrapper, JSerializableObject>, IInterfaceImplementation<TWrapper, JComparableObject>
 {
-	/// <inheritdoc cref="IDataType{TClass}.ExcludingGenericTypes"/>
-	private static readonly ImmutableHashSet<Type> excludingTypes = ImmutableHashSet.Create(
-		typeof(IDataType<TWrapperClass>), typeof(IReferenceType<TWrapperClass>),
-		typeof(IPrimitiveWrapperType<TWrapperClass>));
-
-	static IImmutableSet<Type> IDataType<TWrapperClass>.ExcludingGenericTypes
-		=> IPrimitiveWrapperType<TWrapperClass>.excludingTypes;
 }

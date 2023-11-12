@@ -22,10 +22,6 @@ public partial class JLocalObject : ILocalObject
 	/// </summary>
 	private JGlobal? _global;
 	/// <summary>
-	/// Indicates whether the this instance is disposed.
-	/// </summary>
-	private Boolean _isDisposed;
-	/// <summary>
 	/// Indicates whether the current class is the real object class.
 	/// </summary>
 	private Boolean _isRealClass;

@@ -14,7 +14,7 @@ public interface IEnumType : IReferenceType
 	/// <typeparam name="TEnum">Type of current java enum datatype.</typeparam>
 	/// <returns>The <see cref="JEnumTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JEnumTypeMetadata GetMetadata<TEnum>() where TEnum : JReferenceObject, IInterfaceType<TEnum>
+	public new static JEnumTypeMetadata GetMetadata<TEnum>() where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 		=> (JEnumTypeMetadata)IDataType.GetMetadata<TEnum>();
 }
 
@@ -25,12 +25,7 @@ public interface IEnumType : IReferenceType
 [EditorBrowsable(EditorBrowsableState.Never)]
 [UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 public interface IEnumType<out TEnum> : IEnumType, IReferenceType<TEnum>
-	where TEnum : JReferenceObject, IEnumType<TEnum>
+	where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {
-	/// <inheritdoc cref="IDataType{TClass}.ExcludingGenericTypes"/>
-	private static readonly ImmutableHashSet<Type> excludingTypes =
-		ImmutableHashSet.Create(typeof(IDataType<TEnum>), typeof(IReferenceType<TEnum>));
-
-	static IImmutableSet<Type> IDataType<TEnum>.ExcludingGenericTypes => IEnumType<TEnum>.excludingTypes;
 	static Type IDataType<TEnum>.SelfType => typeof(IEnumType<TEnum>);
 }

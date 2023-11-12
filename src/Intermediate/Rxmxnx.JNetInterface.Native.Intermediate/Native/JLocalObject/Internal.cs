@@ -9,7 +9,7 @@ public partial class JLocalObject
 	                                                                   .Create(JObject.JObjectClassName)
 	                                                                   .WithSignature(JObject.JObjectSignature).Build();
 
-	static JClassTypeMetadata ISuperClassType<JLocalObject>.SuperClassMetadata => JLocalObject.JObjectClassMetadata;
+	static JClassTypeMetadata IBaseClassType<JLocalObject>.SuperClassMetadata => JLocalObject.JObjectClassMetadata;
 
 	/// <summary>
 	/// Internal reference value.
@@ -21,6 +21,9 @@ public partial class JLocalObject
 	internal JValue InternalValue => base.Value;
 	/// <inheritdoc/>
 	internal override JValue Value => this.GetGlobalObject()?.Value ?? base.Value;
+
+	IVirtualMachine ILocalObject.VirtualMachine => this._env.VirtualMachine;
+	Boolean ILocalObject.IsDummy => this.IsDummy;
 
 	/// <summary>
 	/// Sets the current instance value.

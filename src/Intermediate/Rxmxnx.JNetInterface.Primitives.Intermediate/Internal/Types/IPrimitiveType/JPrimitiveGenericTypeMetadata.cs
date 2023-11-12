@@ -59,7 +59,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			}
 
 			/// <inheritdoc/>
-			internal override IDataType? CreateInstance(JObject? jObject) => TPrimitive.Create(jObject);
+			internal override IDataType? ParseInstance(JObject? jObject) => TPrimitive.Create(jObject);
 			/// <inheritdoc/>
 			public override IPrimitiveType CreateInstance<TFrom>(TFrom value)
 				=> NativeUtilities.AsBytes(value).ToValue<TPrimitive>();

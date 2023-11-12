@@ -5,7 +5,7 @@ public partial class JEnumObject
 	/// <summary>
 	/// <see cref="JReferenceTypeMetadata"/> enum builder.
 	/// </summary>
-	/// <typeparam name="TEnum">Type of interface.</typeparam>
+	/// <typeparam name="TEnum">Type of enum.</typeparam>
 	protected new sealed partial class JTypeMetadataBuilder<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TEnum> : JTypeMetadataBuilder
 		where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
