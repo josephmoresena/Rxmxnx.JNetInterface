@@ -7,14 +7,11 @@ internal readonly partial struct JNativeInterface
 	/// <summary>
 	/// This struct represent the reserved pointer for Microsoft COM compatibility.
 	/// </summary>
-	[StructLayout(LayoutKind.Sequential)]
-	private readonly record struct ComReserved
+	[InlineArray(4)]
+	private record struct ComReserved
 	{
 #pragma warning disable CS0169
-		private readonly IntPtr _reserved0;
-		private readonly IntPtr _reserved1;
-		private readonly IntPtr _reserved2;
-		private readonly IntPtr _reserved3;
+		private IntPtr _reserved0;
 #pragma warning restore CS0169
 	}
 }
