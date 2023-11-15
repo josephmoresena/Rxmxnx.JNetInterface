@@ -6,7 +6,7 @@
 /// </summary>
 /// <remarks>This handle will be valid until the associated <c>class</c> is unloaded.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-internal readonly partial struct JFieldId : IAccessibleObjectIdentifierType<JFieldId>
+internal readonly partial struct JFieldId : IAccessibleIdentifierType<JFieldId>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JMethod;
