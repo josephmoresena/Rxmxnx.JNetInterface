@@ -18,7 +18,7 @@ public interface IArrayProvider
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 	/// <param name="index">Element index.</param>
 	/// <returns>The element with <paramref name="index"/> on <paramref name="jArray"/>.</returns>
-	TElement GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index) where TElement : IDataType<TElement>;
+	TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index) where TElement : IDataType<TElement>;
 	/// <summary>
 	/// Sets the element with <paramref name="index"/> on <paramref name="jArray"/>.
 	/// </summary>
@@ -26,7 +26,7 @@ public interface IArrayProvider
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 	/// <param name="index">Element index.</param>
 	/// <param name="value">Element value.</param>
-	void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement value)
+	void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
 		where TElement : IDataType<TElement>;
 	/// <summary>
 	/// Retrieves a pointer to <see cref="JArrayObject{TPrimitive}"/> elements.

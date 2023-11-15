@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This class represents a local array instance.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-public abstract partial class JArrayObject : JLocalObject, IArrayType
+public abstract partial class JArrayObject : JLocalObject
 {
 	/// <summary>
 	/// CLR type of object metadata.
@@ -51,7 +51,7 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IArrayType<JA
 	/// </summary>
 	/// <param name="index">Element index.</param>
 	[IndexerName("Value")]
-	public TElement this[Int32 index]
+	public TElement? this[Int32 index]
 	{
 		get => this.Environment.ArrayProvider.GetElement(this, index);
 		set => this.Environment.ArrayProvider.SetElement(this, index, value);

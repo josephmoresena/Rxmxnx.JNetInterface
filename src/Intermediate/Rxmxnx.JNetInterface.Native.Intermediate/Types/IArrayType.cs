@@ -1,3 +1,5 @@
+namespace Rxmxnx.JNetInterface.Types;
+
 /// <summary>
 /// This interface exposes an object that represents a java array type instance.
 /// </summary>

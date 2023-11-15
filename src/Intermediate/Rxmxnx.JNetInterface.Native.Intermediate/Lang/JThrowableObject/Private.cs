@@ -51,7 +51,7 @@ public partial class JThrowableObject
 			JFunctionDefinition<JArrayObject<JStackTraceElementObject>>.Invoke(definition, this)!;
 		JStackTraceInfo[] result = new JStackTraceInfo[jArr.Length];
 		for (Int32 i = 0; i < result.Length; i++)
-			result[i] = ((JStackTraceElementObjectMetadata)ILocalObject.CreateMetadata(jArr[i]))!;
+			result[i] = ((JStackTraceElementObjectMetadata)ILocalObject.CreateMetadata(jArr[i]!))!;
 		return result;
 	}
 }

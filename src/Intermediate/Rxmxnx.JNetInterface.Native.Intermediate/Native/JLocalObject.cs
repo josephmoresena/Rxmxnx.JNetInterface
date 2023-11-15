@@ -83,17 +83,17 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
 
-	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
-	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
-
 	/// <inheritdoc/>
 	public void Dispose()
 	{
 		this.Dispose(true);
 		GC.SuppressFinalize(this);
 	}
+
+	/// <inheritdoc cref="JObject.ObjectClassName"/>
+	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
+	/// <inheritdoc cref="JObject.ObjectSignature"/>
+	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
 
 	/// <inheritdoc/>
 	~JLocalObject() { this.Dispose(false); }
