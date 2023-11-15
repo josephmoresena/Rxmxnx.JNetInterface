@@ -54,15 +54,15 @@ internal sealed record NativeTypeHelper
 		this._typeSymbol = typeSymbol;
 		this._isPointer = interfaces.Contains("Rxmxnx.PInvoke.IFixedPointer");
 		this._isPrimitive = interfaces.Contains("Rxmxnx.JNetInterface.Types.IPrimitiveType");
-		this._isArrRef = interfaces.Contains("Rxmxnx.JNetInterface.Internal.Types.IArrayReferenceType");
+		this._isArrRef = interfaces.Contains("Rxmxnx.JNetInterface.Types.IArrayReferenceType");
 		this._isNumeric = this._isPrimitive &&
-			interfaces.Contains("Rxmxnx.JNetInterface.Internal.Types.IPrimitiveNumericType");
+			interfaces.Contains("Rxmxnx.JNetInterface.Types.IPrimitiveNumericType");
 		this._isInteger = this._isNumeric &&
-			interfaces.Contains("Rxmxnx.JNetInterface.Internal.Types.IPrimitiveIntegerType");
+			interfaces.Contains("Rxmxnx.JNetInterface.Types.IPrimitiveIntegerType");
 		this._isFloatingPoint = this._isNumeric &&
-			interfaces.Contains("Rxmxnx.JNetInterface.Internal.Types.IPrimitiveFloatingPointType");
+			interfaces.Contains("Rxmxnx.JNetInterface.Types.IPrimitiveFloatingPointType");
 		this._isObjRef = this._isArrRef ||
-			interfaces.Contains("Rxmxnx.JNetInterface.Internal.Types.IObjectReferenceType");
+			interfaces.Contains("Rxmxnx.JNetInterface.Types.IObjectReferenceType");
 	}
 
 	/// <summary>
@@ -145,7 +145,7 @@ internal sealed record NativeTypeHelper
 	public static NativeTypeHelper? Create(INamedTypeSymbol typeSymbol, IImmutableSet<String> interfaces)
 	{
 		if (typeSymbol.TypeKind == TypeKind.Struct &&
-		    interfaces.Contains("Rxmxnx.JNetInterface.Internal.Types.INativeType"))
+		    interfaces.Contains("Rxmxnx.JNetInterface.Types.INativeType"))
 			return new(typeSymbol, interfaces);
 		return default;
 	}

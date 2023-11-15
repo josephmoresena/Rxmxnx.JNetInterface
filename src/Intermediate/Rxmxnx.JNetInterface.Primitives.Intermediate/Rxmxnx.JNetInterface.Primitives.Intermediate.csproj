@@ -32,7 +32,6 @@
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode"/>
-        <Using Include="Rxmxnx.JNetInterface.Internal.Types"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>
         <Using Include="Rxmxnx.JNetInterface.Native.References"/>
