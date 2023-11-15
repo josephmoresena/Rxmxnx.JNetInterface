@@ -34,7 +34,7 @@ public interface
 	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="jObject"/>.</returns>
 	static abstract TReference? Create(JObject? jObject);
-	
+
 	/// <summary>
 	/// Retrieves the base types from current type.
 	/// </summary>

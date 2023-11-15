@@ -41,8 +41,6 @@ internal static class NativeValidationUtilities
 					$"{typeName} type can't extend an interface type which extends it.");
 		}
 	}
-	
-	
 	/// <summary>
 	/// Throws an exception if <typeparamref name="TBase"/> and <typeparamref name="TReference"/> are the same type.
 	/// </summary>
@@ -80,7 +78,7 @@ internal static class NativeValidationUtilities
 		baseTypes.ExceptWith(baseBaseTypes);
 		return baseTypes;
 	}
-	
+
 	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
 	/// <typeparamref name="TInterface"/>.
