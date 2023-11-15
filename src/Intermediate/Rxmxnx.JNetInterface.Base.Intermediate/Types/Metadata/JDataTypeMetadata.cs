@@ -62,13 +62,6 @@ public abstract record JDataTypeMetadata
 	}
 
 	/// <summary>
-	/// Creates a <see cref="IDataType"/> instance from <paramref name="jObject"/>.
-	/// </summary>
-	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
-	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jObject"/>.</returns>
-	internal abstract IDataType? ParseInstance(JObject? jObject);
-
-	/// <summary>
 	/// Retrieve a safe null-terminated <see cref="CString"/> from <paramref name="cstr"/>.
 	/// </summary>
 	/// <param name="cstr">A UTF-8 string.</param>

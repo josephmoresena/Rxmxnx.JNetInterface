@@ -27,6 +27,6 @@ public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimi
 		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
 
 	/// <inheritdoc/>
-	static JIntegerObject? IDataType<JIntegerObject>.Create(JObject? jObject)
+	static JIntegerObject? IReferenceType<JIntegerObject>.Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JIntegerObject>(jLocal)) : default;
 }

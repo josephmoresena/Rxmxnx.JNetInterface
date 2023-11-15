@@ -34,6 +34,6 @@ public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclara
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JGenericDeclarationObject(JLocalObject jLocal) : base(jLocal) { }
 
-	static JGenericDeclarationObject? IDataType<JGenericDeclarationObject>.Create(JObject? jObject)
+	static JGenericDeclarationObject? IReferenceType<JGenericDeclarationObject>.Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JGenericDeclarationObject>(jLocal)) : default;
 }

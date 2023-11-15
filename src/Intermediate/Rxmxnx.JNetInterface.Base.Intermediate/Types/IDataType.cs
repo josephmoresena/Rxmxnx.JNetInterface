@@ -44,11 +44,4 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 
 	static JDataTypeMetadata IDataType.Metadata
 		=> ValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));
-
-	/// <summary>
-	/// Creates a <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.
-	/// </summary>
-	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
-	/// <returns>A <typeparamref name="TDataType"/> instance from <paramref name="jObject"/>.</returns>
-	static abstract TDataType? Create(JObject? jObject);
 }

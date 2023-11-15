@@ -6,6 +6,82 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static class NativeValidationUtilities
 {
 	/// <summary>
+	/// Throws an exception if <typeparamref name="TObject"/> is abstract.
+	/// </summary>
+	/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <typeparamref name="TObject"/> is abstract.
+	/// </exception>
+	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
+	public static void ThrowIfAbstractClass<TObject>() where TObject : JReferenceObject, IReferenceType<TObject>
+	{
+		JDataTypeMetadata typeMetadata = IDataType.GetMetadata<TObject>();
+		if (typeMetadata.Modifier == JTypeModifier.Abstract)
+			throw new InvalidOperationException($"{typeMetadata.ClassName} is an abstract type.");
+	}
+	/// <summary>
+	/// Throws an exception if <typeparamref name="TReference"/> can't extend <typeparamref name="TOtherReference"/>.
+	/// </summary>
+	/// <typeparam name="TReference">Type of <see cref="IReferenceType"/>.</typeparam>
+	/// <typeparam name="TOtherReference">Type of <see cref="IReferenceType"/>.</typeparam>
+	/// <param name="typeName">Name of implementing type.</param>
+	/// <exception cref="ArgumentException">
+	/// Throws an exception if <typeparamref name="TReference"/> can't extend <typeparamref name="TOtherReference"/>.
+	/// </exception>
+	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
+	public static void ThrowIfInvalidExtension<TReference, TOtherReference>(CString typeName)
+		where TReference : JReferenceObject, IReferenceType<TReference>
+		where TOtherReference : JReferenceObject, IReferenceType<TOtherReference>
+	{
+		Type derivedType = typeof(IDerivedType<TOtherReference, TReference>);
+		foreach (Type interfaceType in IReferenceType<TOtherReference>.GetInterfaceTypes())
+		{
+			if (interfaceType == derivedType)
+				throw new InvalidOperationException(
+					$"{typeName} type can't extend an interface type which extends it.");
+		}
+	}
+	
+	
+	/// <summary>
+	/// Throws an exception if <typeparamref name="TBase"/> and <typeparamref name="TReference"/> are the same type.
+	/// </summary>
+	/// <typeparam name="TBase">Base type of <typeparamref name="TReference"/>.</typeparam>
+	/// <typeparam name="TReference">Type of <see cref="IReferenceType{TReference}"/>.</typeparam>
+	/// <param name="typeName">Name of <see cref="IReferenceType{TReference}"/> type.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <typeparamref name="TBase"/> and <typeparamref name="TReference"/> are the same type.
+	/// </exception>
+	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
+	public static void ThrowIfSameType<TBase, TReference>(CString typeName)
+		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
+	{
+		if (typeof(TBase) == typeof(TReference))
+			throw new InvalidOperationException($"{typeName} type and base type can't be the same.");
+	}
+	/// <summary>
+	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
+	/// </summary>
+	/// <typeparam name="TBase">Base type of <typeparamref name="TReference"/>.</typeparam>
+	/// <typeparam name="TReference">Type of <see cref="IReferenceType{TReference}"/>.</typeparam>
+	/// <param name="typeName">Name of <see cref="IReferenceType{TReference}"/> type.</param>
+	/// <returns>The set of <typeparamref name="TReference"/> base types.</returns>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
+	/// </exception>
+	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
+	public static ISet<Type> ValidateBaseTypes<TBase, TReference>(CString typeName)
+		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
+	{
+		ISet<Type> baseBaseTypes = IReferenceType<TBase>.GetBaseTypes().ToHashSet();
+		ISet<Type> baseTypes = IReferenceType<TReference>.GetBaseTypes().ToHashSet();
+		if (!baseTypes.IsProperSupersetOf(baseBaseTypes))
+			throw new InvalidOperationException($"{typeName} type can't be based on a type which is derived from it.");
+		baseTypes.ExceptWith(baseBaseTypes);
+		return baseTypes;
+	}
+	
+	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
 	/// <typeparamref name="TInterface"/>.
 	/// </summary>

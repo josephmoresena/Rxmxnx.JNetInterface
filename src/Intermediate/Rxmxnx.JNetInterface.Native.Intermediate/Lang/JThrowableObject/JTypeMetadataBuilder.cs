@@ -111,8 +111,8 @@ public partial class JThrowableObject
 				JTypeModifier modifier = JTypeModifier.Extensible) where TObject : TThrowable, IThrowableType<TObject>
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
-			ValidationUtilities.ThrowIfSameType<TThrowable, TObject>(className);
-			ISet<Type> baseTypes = ValidationUtilities.ValidateBaseTypes<TThrowable, TObject>(className);
+			NativeValidationUtilities.ThrowIfSameType<TThrowable, TObject>(className);
+			ISet<Type> baseTypes = NativeValidationUtilities.ValidateBaseTypes<TThrowable, TObject>(className);
 			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();
 			return new(className, modifier, IClassType.GetMetadata<TThrowable>(), baseTypes, interfaceTypes);
 		}

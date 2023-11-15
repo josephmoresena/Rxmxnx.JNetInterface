@@ -17,4 +17,11 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	/// <param name="arraySignature">Array JNI signature for current type.</param>
 	internal JReferenceTypeMetadata(CString className, CString? signature, CString? arraySignature = default) : base(
 		className, signature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className), arraySignature) { }
+
+	/// <summary>
+	/// Creates a <see cref="IDataType"/> instance from <paramref name="jObject"/>.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
+	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jObject"/>.</returns>
+	internal abstract IDataType? ParseInstance(JObject? jObject);
 }

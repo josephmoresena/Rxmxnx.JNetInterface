@@ -27,6 +27,6 @@ public sealed class JLongObject : JNumberObject<JLong, JLongObject>, IPrimitiveW
 		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
 
 	/// <inheritdoc/>
-	static JLongObject? IDataType<JLongObject>.Create(JObject? jObject)
+	static JLongObject? IReferenceType<JLongObject>.Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JLongObject>(jLocal)) : default;
 }

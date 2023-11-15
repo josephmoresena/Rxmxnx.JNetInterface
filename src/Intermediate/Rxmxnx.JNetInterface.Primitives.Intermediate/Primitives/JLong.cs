@@ -72,14 +72,6 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JLong(Int64 value) => new(value);
 
-	/// <inheritdoc/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static JLong Create(JObject? jObject)
-	{
-		ArgumentNullException.ThrowIfNull(jObject);
-		return jObject.AsPrimitive<JLong, Int64>();
-	}
-
 	static JLong IPrimitiveNumericType<JLong>.FromDouble(Double value)
 		=> IPrimitiveNumericType.GetIntegerValue<Int64>(value);
 	static Double IPrimitiveNumericType<JLong>.ToDouble(JLong value) => value._value;

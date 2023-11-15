@@ -253,8 +253,8 @@ public partial class JLocalObject
 				JTypeModifier modifier = JTypeModifier.Extensible) where TObject : TClass, IClassType<TObject>
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
-			ValidationUtilities.ThrowIfSameType<TClass, TObject>(className);
-			ISet<Type> baseTypes = ValidationUtilities.ValidateBaseTypes<TClass, TObject>(className);
+			NativeValidationUtilities.ThrowIfSameType<TClass, TObject>(className);
+			ISet<Type> baseTypes = NativeValidationUtilities.ValidateBaseTypes<TClass, TObject>(className);
 			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();
 			return new(className, modifier, IClassType.GetMetadata<TClass>(), baseTypes, interfaceTypes);
 		}

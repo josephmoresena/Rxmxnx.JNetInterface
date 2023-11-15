@@ -64,7 +64,7 @@ public record JConstructorDefinition : JCallDefinition
 	/// <returns>A new <typeparamref name="TObject"/>.</returns>
 	private TObject New<TObject>(JClassObject jClass, IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
 	{
-		ValidationUtilities.ThrowIfAbstractClass<TObject>();
+		NativeValidationUtilities.ThrowIfAbstractClass<TObject>();
 		IEnvironment env = jClass.Environment;
 		return env.AccessProvider.CallConstructor<TObject>(jClass, this, args);
 	}
@@ -80,7 +80,7 @@ public record JConstructorDefinition : JCallDefinition
 	internal static TObject New<TObject>(JConstructorDefinition definition, JClassObject jClass,
 		IObject?[]? args = default) where TObject : JLocalObject, IClassType<TObject>
 	{
-		ValidationUtilities.ThrowIfAbstractClass<TObject>();
+		NativeValidationUtilities.ThrowIfAbstractClass<TObject>();
 		IEnvironment env = jClass.Environment;
 		return env.AccessProvider.CallInternalConstructor<TObject>(jClass, definition,
 		                                                           args ?? definition.CreateArgumentsArray());

@@ -50,7 +50,7 @@ public abstract partial class JInterfaceObject
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TOtherInterface>()
 			where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
 		{
-			ValidationUtilities.ThrowIfInvalidExtension<TInterface, TOtherInterface>(this.DataTypeName);
+			NativeValidationUtilities.ThrowIfInvalidExtension<TInterface, TOtherInterface>(this.DataTypeName);
 			this.AppendInterface<TOtherInterface>();
 			return this;
 		}

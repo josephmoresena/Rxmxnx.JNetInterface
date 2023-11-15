@@ -73,14 +73,6 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JFloat(Single value) => new(value);
 
-	/// <inheritdoc/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static JFloat Create(JObject? jObject)
-	{
-		ArgumentNullException.ThrowIfNull(jObject);
-		return jObject.AsPrimitive<JFloat, Single>();
-	}
-
 	static JFloat IPrimitiveNumericType<JFloat>.FromDouble(Double value) => (Single)value;
 	static Double IPrimitiveNumericType<JFloat>.ToDouble(JFloat value) => value._value;
 }

@@ -9,7 +9,7 @@ namespace Rxmxnx.JNetInterface.Types.Inheritance;
 public interface IInterfaceImplementation<
 	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TImplementation,
 	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface> : IDerivedType<TImplementation,
-	TInterface> where TImplementation : JLocalObject, IInterfaceImplementation<TImplementation, TInterface>
+	TInterface> where TImplementation : JLocalObject, IReferenceType<TImplementation>, IInterfaceImplementation<TImplementation, TInterface>
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	static JDerivationKind IDerivedType<TImplementation, TInterface>.Type

@@ -29,6 +29,13 @@ public interface
 		IDataType<TReference> where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>
+	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="jObject"/>.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
+	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="jObject"/>.</returns>
+	static abstract TReference? Create(JObject? jObject);
+	
+	/// <summary>
 	/// Retrieves the base types from current type.
 	/// </summary>
 	/// <returns>Enumerable of types.</returns>

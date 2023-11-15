@@ -57,9 +57,6 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 				this._classSignature = JDataTypeMetadata.SafeNullTerminated(
 					classSignature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className));
 			}
-
-			/// <inheritdoc/>
-			internal override IDataType? ParseInstance(JObject? jObject) => TPrimitive.Create(jObject);
 			/// <inheritdoc/>
 			public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes) => bytes.ToValue<TPrimitive>();
 		}

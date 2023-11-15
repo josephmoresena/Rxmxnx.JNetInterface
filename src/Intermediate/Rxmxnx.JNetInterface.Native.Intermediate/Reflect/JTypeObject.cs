@@ -30,6 +30,6 @@ public sealed class JTypeObject : JInterfaceObject<JTypeObject>, IInterfaceType<
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JTypeObject(JLocalObject jLocal) : base(jLocal) { }
 
-	static JTypeObject? IDataType<JTypeObject>.Create(JObject? jObject)
+	static JTypeObject? IReferenceType<JTypeObject>.Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JTypeObject>(jLocal)) : default;
 }

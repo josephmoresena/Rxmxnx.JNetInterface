@@ -73,14 +73,6 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JDouble(Double value) => new(value);
 
-	/// <inheritdoc/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static JDouble Create(JObject? jObject)
-	{
-		ArgumentNullException.ThrowIfNull(jObject);
-		return jObject.AsPrimitive<JDouble, Double>();
-	}
-
 	static JDouble IPrimitiveNumericType<JDouble>.FromDouble(Double value) => new(value);
 	static Double IPrimitiveNumericType<JDouble>.ToDouble(JDouble value) => value._value;
 }

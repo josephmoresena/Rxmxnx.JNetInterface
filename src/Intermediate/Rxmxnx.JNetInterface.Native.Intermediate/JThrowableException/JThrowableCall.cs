@@ -68,7 +68,7 @@ public partial class JThrowableException
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			if (throwable is TThrowable throwableT) return throwableT;
-			throwableT = (TThrowable)IDataType.GetMetadata<TThrowable>().ParseInstance(throwable)!;
+			throwableT = (TThrowable)IReferenceType.GetMetadata<TThrowable>().ParseInstance(throwable)!;
 			ILocalObject.ProcessMetadata(throwableT, metadata);
 			return throwableT;
 		}

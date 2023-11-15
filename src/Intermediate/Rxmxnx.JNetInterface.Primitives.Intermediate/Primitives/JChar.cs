@@ -79,14 +79,6 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JChar(Int16 value) => new((Char)value);
 
-	/// <inheritdoc/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static JChar Create(JObject? jObject)
-	{
-		ArgumentNullException.ThrowIfNull(jObject);
-		return jObject.AsPrimitive<JChar, Char>();
-	}
-
 	static JChar IPrimitiveNumericType<JChar>.FromDouble(Double value)
 		=> IPrimitiveNumericType.GetIntegerValue<Char>(value);
 	static Double IPrimitiveNumericType<JChar>.ToDouble(JChar value) => value._value;

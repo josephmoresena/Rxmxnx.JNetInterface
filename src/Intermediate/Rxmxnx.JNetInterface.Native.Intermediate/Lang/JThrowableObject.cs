@@ -42,6 +42,6 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 		this._stackTrace ??= throwableMetadata.StackTrace;
 	}
 
-	static JThrowableObject? IDataType<JThrowableObject>.Create(JObject? jObject)
+	static JThrowableObject? IReferenceType<JThrowableObject>.Create(JObject? jObject)
 		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JThrowableObject>(jLocal)) : default;
 }

@@ -8,8 +8,8 @@ namespace Rxmxnx.JNetInterface.Types.Inheritance;
 [UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IDerivedType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TDerivative,
-	TBase> : IReferenceType<TDerivative> where TDerivative : JReferenceObject, IReferenceType<TDerivative>
-	where TBase : JReferenceObject, IReferenceType<TBase>
+	TBase> : IDataType<TDerivative> where TDerivative : JReferenceObject, IDataType<TDerivative>
+	where TBase : JReferenceObject, IDataType<TBase>
 {
 	/// <summary>
 	/// Type of current derivation.

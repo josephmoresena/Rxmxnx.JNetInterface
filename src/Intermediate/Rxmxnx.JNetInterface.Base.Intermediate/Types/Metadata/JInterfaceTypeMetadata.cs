@@ -24,9 +24,9 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	/// <summary>
 	/// Retrieves the CLR type of implementation of <typeparamref name="TReference"/> of current interface.
 	/// </summary>
-	/// <typeparam name="TReference">Type of <see cref="IReferenceType{TReference}"/>.</typeparam>
+	/// <typeparam name="TReference">Type of <see cref="IDataType{TReference}"/>.</typeparam>
 	/// <returns>The CLR type of implementation of <typeparamref name="TReference"/> of current interface.</returns>
 	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 	internal abstract Type GetImplementingType<TReference>()
-		where TReference : JReferenceObject, IReferenceType<TReference>;
+		where TReference : JReferenceObject, IDataType<TReference>;
 }
