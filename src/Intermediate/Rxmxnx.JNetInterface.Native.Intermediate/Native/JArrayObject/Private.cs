@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native;
 
-public partial class JArrayObject : IArrayType
+public partial class JArrayObject : IDataType
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Array;
 	static Type IDataType.FamilyType => typeof(JArrayObject);
@@ -14,7 +14,7 @@ public partial class JArrayObject : IArrayType
 public partial class JArrayObject<TElement> : IEnumerableSequence<TElement?>
 {
 	static JDataTypeMetadata IDataType.Metadata => JArrayGenericTypeMetadata.Instance;
-	static Type IDataType.FamilyType => typeof(JArrayObject<TElement>);
+	static Type IDataType.FamilyType => typeof(JArrayObject);
 
 	/// <inheritdoc/>
 	private JArrayObject(JLocalObject jLocal) : base(

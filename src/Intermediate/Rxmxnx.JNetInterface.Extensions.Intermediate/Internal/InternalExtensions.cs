@@ -209,7 +209,7 @@ internal static class InternalExtensions
 	/// <returns>Normalized <see cref="IObject"/> instance.</returns>
 	public static IObject? Normalize(this IObject? obj)
 	{
-		if (obj is JPrimitiveObject jObject)
+		if (obj is JPrimitiveObject jObject and not IPrimitiveType)
 			return obj.ObjectSignature[0] switch
 			{
 				0x90 => //Z
