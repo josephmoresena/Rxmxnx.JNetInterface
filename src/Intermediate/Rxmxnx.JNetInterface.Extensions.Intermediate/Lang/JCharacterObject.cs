@@ -3,15 +3,14 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
-public sealed partial class JCharacterObject : JLocalObject, IPrimitiveWrapperType<JCharacterObject>
+public sealed partial class JCharacterObject : JLocalObject, IPrimitiveWrapperType<JCharacterObject>, IWrapper<JChar>
 {
+	/// <inheritdoc/>
+	public JCharacterObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Internal value.
 	/// </summary>
 	public new JChar Value => this._value ??= this.GetValue();
-
-	/// <inheritdoc/>
-	public JCharacterObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()

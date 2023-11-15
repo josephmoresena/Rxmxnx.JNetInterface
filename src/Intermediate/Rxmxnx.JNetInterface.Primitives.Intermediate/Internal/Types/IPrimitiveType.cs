@@ -13,8 +13,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<T
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
 	{
-		ref TValue refValue = ref Unsafe.AsRef(this.Value);
-		refValue.AsBytes().CopyTo(span[offset..]);
+		NativeUtilities.AsBytes(this.Value).CopyTo(span[offset..]);
 		offset += IDataType.GetMetadata<TPrimitive>().SizeOf;
 	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -10,21 +10,30 @@ public record JThrowableObjectMetadata : JObjectMetadata
 	/// Internal throwable message.
 	/// </summary>
 	public String? Message { get; init; }
-	
+	/// <summary>
+	/// Internal throwable stack trace.
+	/// </summary>
+	public JStackTraceInfo[]? StackTrace { get; init; }
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
 	internal JThrowableObjectMetadata(JObjectMetadata metadata) : base(metadata)
 	{
-		if (metadata is not JThrowableObjectMetadata enumMetadata)
+		if (metadata is not JThrowableObjectMetadata throwableMetadata)
 			return;
-		this.Message = enumMetadata.Message;
+		this.Message = throwableMetadata.Message;
+		this.StackTrace = throwableMetadata.StackTrace;
 	}
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata"><see cref="JThrowableObjectMetadata"/> instance.</param>
-	protected JThrowableObjectMetadata(JThrowableObjectMetadata metadata) : base(metadata) => this.Message = metadata.Message;
+	protected JThrowableObjectMetadata(JThrowableObjectMetadata metadata) : base(metadata)
+	{
+		this.Message = metadata.Message;
+		this.StackTrace = metadata.StackTrace;
+	}
 }

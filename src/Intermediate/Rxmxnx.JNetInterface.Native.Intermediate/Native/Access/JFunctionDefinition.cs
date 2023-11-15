@@ -25,7 +25,7 @@ public abstract record JFunctionDefinition : JCallDefinition
 public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult : IDataType<TResult>
 {
 	/// <inheritdoc/>
-	internal override Type Return => typeof(TResult);
+	internal override Type Return => JAccessibleObjectDefinition.ReturnType<TResult>();
 
 	/// <summary>
 	/// Constructor.
@@ -51,6 +51,11 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	internal JFunctionDefinition(CString functionName, CString returnType, params JArgumentMetadata[] metadata) : base(
 		functionName, returnType, metadata) { }
+	/// <summary>
+	/// Internal Constructor.
+	/// </summary>
+	/// <param name="definition">Function definition name.</param>
+	internal JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
 
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition passing the
@@ -104,5 +109,48 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	{
 		IEnvironment env = jClass.Environment;
 		return env.AccessProvider.CallStaticFunction<TResult>(jClass, this, args);
+	}
+
+	/// <summary>
+	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
+	/// </summary>
+	/// <param name="definition">A <see cref="JFunctionDefinition{TResult}"/> definition.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	internal static TResult? Invoke(JFunctionDefinition<TResult> definition, JLocalObject jLocal,
+		IObject?[]? args = default)
+	{
+		IEnvironment env = jLocal.Environment;
+		return env.AccessProvider.CallInternalFunction<TResult>(jLocal, definition,
+		                                                        args ?? definition.CreateArgumentsArray());
+	}
+	/// <summary>
+	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition but using the
+	/// implementation declared on <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JFunctionDefinition{TResult}"/> definition.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	internal static TResult? Invoke(JFunctionDefinition<TResult> definition, JLocalObject jLocal, JClassObject jClass,
+		IObject?[]? args = default)
+	{
+		IEnvironment env = jLocal.Environment;
+		return env.AccessProvider.CallInternalNonVirtualFunction<TResult>(
+			jLocal, jClass, definition, args ?? definition.CreateArgumentsArray());
+	}
+	/// <summary>
+	/// Invokes <paramref name="definition"/> on <paramref name="jClass"/> which matches with current definition
+	/// passing the default value for each argument.
+	/// </summary>
+	/// <param name="definition">A <see cref="JFunctionDefinition{TResult}"/> definition.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	internal static TResult? StaticInvoke(JFunctionDefinition<TResult> definition, JClassObject jClass,
+		IObject?[]? args = default)
+	{
+		IEnvironment env = jClass.Environment;
+		return env.AccessProvider.CallInternalStaticFunction<TResult>(jClass, definition,
+		                                                              args ?? definition.CreateArgumentsArray());
 	}
 }

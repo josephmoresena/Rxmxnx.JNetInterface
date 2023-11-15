@@ -109,4 +109,8 @@ internal static class ClassNames
 	/// JNI name of <c>java.reflect.Type</c> interface.
 	/// </summary>
 	public const String JTypeInterfaceName = ClassNames.JReflectPath + "Type";
+	/// <summary>
+	/// JNI name of <c>java.lang.StackTraceElement</c> class.
+	/// </summary>
+	public const String JStackTraceElementClassName = ClassNames.JLangPath + "StackTraceElement";
 }

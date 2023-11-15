@@ -34,6 +34,5 @@ public interface IPrimitiveWrapperType : IClassType
 [UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 public interface IPrimitiveWrapperType<TWrapper> : IPrimitiveWrapperType, IClassType<TWrapper>,
 	IInterfaceImplementation<TWrapper, JSerializableObject>, IInterfaceImplementation<TWrapper, JComparableObject>
-	where TWrapper : JLocalObject, IClassType<TWrapper>, IInterfaceImplementation<TWrapper, JSerializableObject>, IInterfaceImplementation<TWrapper, JComparableObject>
-{
-}
+	where TWrapper : JLocalObject, IClassType<TWrapper>, IInterfaceImplementation<TWrapper, JSerializableObject>,
+	IInterfaceImplementation<TWrapper, JComparableObject> { }

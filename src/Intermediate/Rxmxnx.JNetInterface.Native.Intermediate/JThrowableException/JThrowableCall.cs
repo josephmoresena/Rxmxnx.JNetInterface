@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
-public partial class JThrowableException 
+public partial class JThrowableException
 {
 	/// <summary>
 	/// Helper to perform a call over a <see cref="JThrowableObject"/> instance.
@@ -8,13 +8,13 @@ public partial class JThrowableException
 	internal sealed record JThrowableCall
 	{
 		/// <summary>
-		/// A <see cref="JGlobalBase"/> instance.
-		/// </summary>
-		private readonly JGlobalBase _global;
-		/// <summary>
 		/// A <see cref="JThrowableObject"/> delegate.
 		/// </summary>
 		private readonly Delegate _delegate;
+		/// <summary>
+		/// A <see cref="JGlobalBase"/> instance.
+		/// </summary>
+		private readonly JGlobalBase _global;
 
 		/// <summary>
 		/// Constructor.
@@ -35,7 +35,8 @@ public partial class JThrowableException
 		{
 			if (this._delegate is not Action<TThrowable> action) return;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
-			TThrowable throwableT = JThrowableCall.Parse<TThrowable>(new(env, this._global), this._global.ObjectMetadata);
+			TThrowable throwableT =
+				JThrowableCall.Parse<TThrowable>(new(env, this._global), this._global.ObjectMetadata);
 			action(throwableT);
 			this._global.RefreshMetadata(throwableT);
 		}
@@ -49,7 +50,8 @@ public partial class JThrowableException
 		{
 			if (this._delegate is not Func<TThrowable, TResult> func) return default!;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
-			TThrowable throwableT = JThrowableCall.Parse<TThrowable>(new(env, this._global), this._global.ObjectMetadata);
+			TThrowable throwableT =
+				JThrowableCall.Parse<TThrowable>(new(env, this._global), this._global.ObjectMetadata);
 			TResult result = func(throwableT);
 			this._global.RefreshMetadata(throwableT);
 			return result;
@@ -62,7 +64,8 @@ public partial class JThrowableException
 		/// <param name="metadata">The <see cref="JThrowableObject"/> instance.</param>
 		/// <typeparam name="TThrowable"></typeparam>
 		/// <returns></returns>
-		private static TThrowable Parse<TThrowable>(JThrowableObject throwable, JObjectMetadata metadata) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		private static TThrowable Parse<TThrowable>(JThrowableObject throwable, JObjectMetadata metadata)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			if (throwable is TThrowable throwableT) return throwableT;
 			throwableT = (TThrowable)IDataType.GetMetadata<TThrowable>().ParseInstance(throwable)!;

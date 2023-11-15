@@ -3,15 +3,14 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
-public sealed partial class JBooleanObject : JLocalObject, IPrimitiveWrapperType<JBooleanObject>
+public sealed partial class JBooleanObject : JLocalObject, IPrimitiveWrapperType<JBooleanObject>, IWrapper<JBoolean>
 {
+	/// <inheritdoc/>
+	public JBooleanObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Internal value.
 	/// </summary>
 	public new JBoolean Value => this._value ??= this.GetValue();
-
-	/// <inheritdoc/>
-	public JBooleanObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()

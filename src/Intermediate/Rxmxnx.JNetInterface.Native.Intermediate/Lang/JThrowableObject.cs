@@ -10,6 +10,10 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 	/// Throwable message.
 	/// </summary>
 	public String Message => this._message ??= this.GetMessage();
+	/// <summary>
+	/// Throwable stack trace.
+	/// </summary>
+	public JStackTraceInfo[] StackTrace => this._stackTrace ??= this.GetStackTraceInfo();
 
 	/// <inheritdoc/>
 	public JThrowableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
@@ -26,7 +30,7 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	protected new virtual JThrowableObjectMetadata CreateMetadata()
-		=> new(base.CreateMetadata()) { Message = this.Message, };
+		=> new(base.CreateMetadata()) { Message = this.Message, StackTrace = this.StackTrace, };
 
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
@@ -35,6 +39,7 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 		if (instanceMetadata is not JThrowableObjectMetadata throwableMetadata)
 			return;
 		this._message ??= throwableMetadata.Message;
+		this._stackTrace ??= throwableMetadata.StackTrace;
 	}
 
 	static JThrowableObject? IDataType<JThrowableObject>.Create(JObject? jObject)

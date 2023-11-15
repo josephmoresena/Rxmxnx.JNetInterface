@@ -74,6 +74,6 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IArrayType<JA
 			return new(JLocalObject.Validate<JArrayObject<TElement>>(jLocal));
 
 		//TODO: Implement java array casting.
-		return new(JLocalObject.Validate<JArrayObject<TElement>>(jLocal));
+		return new(jLocal);
 	}
 }

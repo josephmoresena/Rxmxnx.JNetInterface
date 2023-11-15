@@ -9,7 +9,7 @@ public abstract partial class JThrowableException : Exception
 	private readonly JGlobalBase _global;
 	/// <inheritdoc cref="JThrowableException.Thread"/>
 	private readonly Thread _thread;
-	
+
 	/// <summary>
 	/// Global throwable instance.
 	/// </summary>
@@ -55,7 +55,8 @@ public abstract partial class JThrowableException : Exception
 	/// </summary>
 	/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
 	/// <param name="call">A <see cref="JThrowableCall"/> containing action to perform.</param>
-	internal static void WithSafeInvoke<TThrowable>(Object? call) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+	internal static void WithSafeInvoke<TThrowable>(Object? call)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		=> (call as JThrowableCall)?.Invoke<TThrowable>();
 	/// <summary>
 	/// Executes an function using current global throwable instance and returns its result.
@@ -64,8 +65,9 @@ public abstract partial class JThrowableException : Exception
 	/// <typeparam name="TResult">The type of function result.</typeparam>
 	/// <param name="call">A <see cref="JThrowableCall"/> containing function to execute.</param>
 	/// <returns>The function result.</returns>
-	internal static TResult WithSafeInvoke<TThrowable, TResult>(Object? call) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
-		=> call is JThrowableCall jCall? jCall.Invoke<TThrowable, TResult>() : default!;
+	internal static TResult WithSafeInvoke<TThrowable, TResult>(Object? call)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		=> call is JThrowableCall jCall ? jCall.Invoke<TThrowable, TResult>() : default!;
 }
 
 /// <summary>
@@ -75,9 +77,9 @@ public abstract partial class JThrowableException : Exception
 public sealed class JThrowableException<TThrowable> : JThrowableException
 	where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 {
-	/// <inheritdoc />
+	/// <inheritdoc/>
 	internal JThrowableException(JGlobalBase global) : base(global) { }
-	
+
 	/// <summary>
 	/// Invokes <paramref name="action"/> using the current <typeparamref name="TThrowable"/> instance.
 	/// </summary>
@@ -98,13 +100,13 @@ public sealed class JThrowableException<TThrowable> : JThrowableException
 		JThrowableCall call = new(this.Global, func);
 		return Task.Factory.StartNew(JThrowableException.WithSafeInvoke<JThrowableObject, TResult>, call).Result;
 	}
-	/// <inheritdoc />
-	public override void WithSafeInvoke(Action<JThrowableObject> action) 
+	/// <inheritdoc/>
+	public override void WithSafeInvoke(Action<JThrowableObject> action)
 		=> JThrowableException<TThrowable>.WithSafeInvoke(this, action);
-	/// <inheritdoc />
-	public override TResult WithSafeInvoke<TResult>(Func<JThrowableObject, TResult> func) 
+	/// <inheritdoc/>
+	public override TResult WithSafeInvoke<TResult>(Func<JThrowableObject, TResult> func)
 		=> JThrowableException<TThrowable>.WithSafeInvoke(this, func);
-	
+
 	/// <summary>
 	/// Invokes <paramref name="action"/> using <paramref name="exception"/> instance.
 	/// </summary>
@@ -119,6 +121,7 @@ public sealed class JThrowableException<TThrowable> : JThrowableException
 	/// <param name="exception">A <see cref="JThrowableException{TThrowable}"/> instance.</param>
 	/// <param name="func">A <see cref="Action{JThrowableObject}"/> delegate.</param>
 	/// <returns>Execution result of <paramref name="func"/>.</returns>
-	private static TResult WithSafeInvoke<TResult>(JThrowableException<TThrowable> exception, Func<TThrowable, TResult> func)
+	private static TResult WithSafeInvoke<TResult>(JThrowableException<TThrowable> exception,
+		Func<TThrowable, TResult> func)
 		=> exception.WithSafeInvoke(func);
 }

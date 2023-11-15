@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
@@ -35,6 +35,7 @@
         <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.Types"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.Native.Access"/>
         <Using Include="Rxmxnx.JNetInterface.Io"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>

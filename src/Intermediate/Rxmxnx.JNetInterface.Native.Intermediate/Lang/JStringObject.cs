@@ -43,6 +43,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 
 	/// <inheritdoc/>
 	public override String ToString() => this.Value;
+
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()
 		=> new JStringObjectMetadata(base.CreateMetadata())
@@ -59,6 +60,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		this._length = stringMetadata.Length;
 		this._utf8Length = stringMetadata.Utf8Length;
 	}
+
 	/// <summary>
 	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="data"/>.
 	/// </summary>

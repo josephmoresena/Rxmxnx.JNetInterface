@@ -28,7 +28,7 @@ public abstract record JFieldDefinition : JAccessibleObjectDefinition
 public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : IDataType<TField>, IObject
 {
 	/// <inheritdoc/>
-	internal override Type Return => typeof(TField);
+	internal override Type Return => JAccessibleObjectDefinition.ReturnType<TField>();
 
 	/// <summary>
 	/// Constructor.
@@ -37,6 +37,8 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	public JFieldDefinition(CString name) : base(name, IDataType.GetMetadata<TField>().Signature) { }
 	/// <inheritdoc/>
 	internal JFieldDefinition(CString name, CString signature) : base(name, signature) { }
+	/// <inheritdoc/>
+	internal JFieldDefinition(JFieldDefinition definition) : base(definition) { }
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();

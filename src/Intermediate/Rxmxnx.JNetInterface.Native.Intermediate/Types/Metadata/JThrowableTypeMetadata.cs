@@ -5,11 +5,9 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// </summary>
 public abstract record JThrowableTypeMetadata : JClassTypeMetadata
 {
-	/// <inheritdoc />
+	/// <inheritdoc/>
 	internal JThrowableTypeMetadata(CString className, CString? signature, CString? arraySignature) : base(
-		className, signature, arraySignature)
-	{
-	}
+		className, signature, arraySignature) { }
 
 	/// <summary>
 	/// Creates an exception instance from a <see cref="JGlobalBase"/> throwable instance.

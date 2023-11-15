@@ -76,4 +76,43 @@ public record JMethodDefinition : JCallDefinition
 		IEnvironment env = jClass.Environment;
 		env.AccessProvider.CallStaticMethod(jClass, this, args);
 	}
+
+	/// <summary>
+	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
+	/// </summary>
+	/// <param name="definition">A <see cref="JMethodDefinition"/> definition.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	internal static void Invoke(JMethodDefinition definition, JLocalObject jLocal, IObject?[]? args = default)
+	{
+		IEnvironment env = jLocal.Environment;
+		env.AccessProvider.CallInternalMethod(jLocal, definition, args ?? definition.CreateArgumentsArray());
+	}
+	/// <summary>
+	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition but using the
+	/// implementation declared on <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JMethodDefinition"/> definition.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	internal static void Invoke(JMethodDefinition definition, JLocalObject jLocal, JClassObject jClass,
+		IObject?[]? args = default)
+	{
+		IEnvironment env = jLocal.Environment;
+		env.AccessProvider.CallInternalNonVirtualMethod(jLocal, jClass, definition,
+		                                                args ?? definition.CreateArgumentsArray());
+	}
+	/// <summary>
+	/// Invokes <paramref name="definition"/> on <paramref name="jClass"/> which matches with current definition
+	/// passing the default value for each argument.
+	/// </summary>
+	/// <param name="definition">A <see cref="JMethodDefinition"/> definition.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	internal static void StaticInvoke(JMethodDefinition definition, JClassObject jClass, IObject?[]? args = default)
+	{
+		IEnvironment env = jClass.Environment;
+		env.AccessProvider.CallInternalStaticMethod(jClass, definition, args ?? definition.CreateArgumentsArray());
+	}
 }

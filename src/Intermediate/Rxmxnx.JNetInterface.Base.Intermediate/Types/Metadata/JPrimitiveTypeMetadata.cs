@@ -33,10 +33,9 @@ public abstract record JPrimitiveTypeMetadata : JDataTypeMetadata
 		className, signature, arraySignature) { }
 
 	/// <summary>
-	/// Creates a <see cref="IPrimitiveType"/> value from <paramref name="value"/>.
+	/// Creates a <see cref="IPrimitiveType"/> value from <paramref name="bytes"/>.
 	/// </summary>
-	/// <typeparam name="TFrom">A <see cref="ValueType"/> type.</typeparam>
-	/// <param name="value">A <typeparamref name="TFrom"/> value.</param>
-	/// <returns>A <see cref="IPrimitiveType"/> value from <paramref name="value"/>.</returns>
-	public abstract IPrimitiveType CreateInstance<TFrom>(TFrom value) where TFrom : unmanaged;
+	/// <param name="bytes">Binary read-only span.</param>
+	/// <returns>A <see cref="IPrimitiveType"/> value from <paramref name="bytes"/>.</returns>
+	public abstract IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes);
 }

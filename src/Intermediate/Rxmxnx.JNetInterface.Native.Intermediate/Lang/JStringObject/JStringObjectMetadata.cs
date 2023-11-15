@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 public partial class JStringObject
 {
 	/// <summary>
-	/// This record stores the metadata of a <see cref="JClassObject"/> in order to create a
+	/// This record stores the metadata of a <see cref="JStringObject"/> in order to create a
 	/// <see cref="JGlobalBase"/> instance.
 	/// </summary>
 	private sealed record JStringObjectMetadata : JObjectMetadata

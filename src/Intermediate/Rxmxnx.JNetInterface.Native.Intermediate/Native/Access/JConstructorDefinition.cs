@@ -68,4 +68,21 @@ public record JConstructorDefinition : JCallDefinition
 		IEnvironment env = jClass.Environment;
 		return env.AccessProvider.CallConstructor<TObject>(jClass, this, args);
 	}
+
+	/// <summary>
+	/// Creates a new <typeparamref name="TObject"/> instance using a constructor on <paramref name="jClass"/>
+	/// which matches with <paramref name="definition"/>.
+	/// </summary>
+	/// <typeparam name="TObject">The <see cref="IDataType"/> type of created object.</typeparam>
+	/// <param name="definition">A <see cref="JConstructorDefinition"/> definition.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	internal static TObject New<TObject>(JConstructorDefinition definition, JClassObject jClass,
+		IObject?[]? args = default) where TObject : JLocalObject, IClassType<TObject>
+	{
+		ValidationUtilities.ThrowIfAbstractClass<TObject>();
+		IEnvironment env = jClass.Environment;
+		return env.AccessProvider.CallInternalConstructor<TObject>(jClass, definition,
+		                                                           args ?? definition.CreateArgumentsArray());
+	}
 }

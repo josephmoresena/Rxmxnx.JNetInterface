@@ -6,10 +6,10 @@ namespace Rxmxnx.JNetInterface.Types.Inheritance;
 /// </summary>
 /// <typeparam name="TImplementation">Type of implementing type.</typeparam>
 /// <typeparam name="TInterface">Type of implemented interface.</typeparam>
-public interface
-	IInterfaceImplementation<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TImplementation,
-		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface> : IDerivedType<TImplementation, TInterface>
-	where TImplementation : JLocalObject, IInterfaceImplementation<TImplementation, TInterface>
+public interface IInterfaceImplementation<
+	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TImplementation,
+	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface> : IDerivedType<TImplementation,
+	TInterface> where TImplementation : JLocalObject, IInterfaceImplementation<TImplementation, TInterface>
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	static JDerivationKind IDerivedType<TImplementation, TInterface>.Type

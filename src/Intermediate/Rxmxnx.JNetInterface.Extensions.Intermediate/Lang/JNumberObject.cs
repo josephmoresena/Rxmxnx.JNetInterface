@@ -4,16 +4,11 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// This class represents a local <c>java.lang.Number</c> instance.
 /// </summary>
 /// <typeparam name="TValue">Number <see cref="IPrimitiveType"/> type.</typeparam>
-public abstract class JNumberObject<TValue> : JNumberObject
+public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 {
 	/// <inheritdoc cref="JNumberObject{TPrimitive}.Value"/>
 	private TValue? _value;
-
-	/// <summary>
-	/// Internal value.
-	/// </summary>
-	public new TValue Value => this._value ??= this.GetValue<TValue>();
 
 	/// <inheritdoc/>
 	internal JNumberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
@@ -34,6 +29,11 @@ public abstract class JNumberObject<TValue> : JNumberObject
 		this._value = value;
 		jLocal.Dispose();
 	}
+
+	/// <summary>
+	/// Internal value.
+	/// </summary>
+	public new TValue Value => this._value ??= this.GetValue<TValue>();
 
 	/// <inheritdoc/>
 	public override TPrimitive GetValue<TPrimitive>()

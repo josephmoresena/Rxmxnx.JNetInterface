@@ -133,8 +133,9 @@ public partial class JLocalObject
 		/// <typeparam name="TClass">Type of <c/>java.lang.Object<c/> class.</typeparam>
 		/// <typeparam name="TInterface">Type of java interface.</typeparam>
 		/// <returns></returns>
-		protected static Boolean
-			HasInterface<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
+		protected static Boolean HasInterface<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass,
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TClass : JLocalObject, IReferenceType<TClass>
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{

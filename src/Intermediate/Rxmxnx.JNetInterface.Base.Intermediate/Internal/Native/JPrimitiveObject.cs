@@ -3,8 +3,42 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// Java object representing a java primitive value.
 /// </summary>
+internal partial class JPrimitiveObject : JObject
+{
+	/// <inheritdoc cref="JPrimitiveObject.ObjectClassName"/>
+	private readonly CString _className;
+	/// <inheritdoc cref="JPrimitiveObject.ObjectSignature"/>
+	private readonly CString _signature;
+	/// <inheritdoc cref="JDataTypeMetadata.SizeOf"/>
+	private readonly Int32 _sizeOf;
+
+	/// <inheritdoc cref="IObject.ObjectClassName"/>
+	public override CString ObjectClassName => this._className;
+	/// <inheritdoc cref="IObject.ObjectSignature"/>
+	public override CString ObjectSignature => this._signature;
+
+	/// <inheritdoc/>
+	protected JPrimitiveObject(JValue value, Int32 sizeOf, CString signature, CString className) : base(value)
+	{
+		this._sizeOf = sizeOf;
+		this._signature = signature;
+		this._className = className;
+	}
+
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	protected internal override void CopyTo(Span<Byte> span, ref Int32 offset)
+	{
+		NativeUtilities.AsBytes(this.As<JValue>()).CopyTo(span[offset..]);
+		offset += this._sizeOf;
+	}
+}
+
+/// <summary>
+/// Java object representing a java primitive value.
+/// </summary>
 /// <typeparam name="TPrimitive">Type of java primitive value.</typeparam>
-internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitiveType, IWrapper<TPrimitive>,
+internal sealed class JPrimitiveObject<TPrimitive> : JPrimitiveObject, IPrimitiveType, IWrapper<TPrimitive>,
 	IEquatable<JPrimitiveObject<TPrimitive>>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEquatable<TPrimitive>
 {
@@ -16,14 +50,11 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitiveType, IW
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">Primitive value.</param>
-	public JPrimitiveObject(TPrimitive value) : base(JValue.Create(value)) { }
+	public JPrimitiveObject(TPrimitive value) : base(JValue.Create(value), NativeUtilities.SizeOf<TPrimitive>(),
+	                                                 IPrimitiveType.GetMetadata<TPrimitive>().Signature,
+	                                                 IPrimitiveType.GetMetadata<TPrimitive>().ClassName) { }
 	/// <inheritdoc cref="IEquatable{TPrimitive}"/>
 	public Boolean Equals(JPrimitiveObject<TPrimitive>? other) => other is not null && this.Value.Equals(other.Value);
-
-	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => IPrimitiveType.GetMetadata<TPrimitive>().ClassName;
-	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => IPrimitiveType.GetMetadata<TPrimitive>().Signature;
 
 	Int32 IComparable.CompareTo(Object? obj) => this.Value.CompareTo(obj);
 	TypeCode IConvertible.GetTypeCode() => this.Value.GetTypeCode();
@@ -63,8 +94,4 @@ internal sealed class JPrimitiveObject<TPrimitive> : JObject, IPrimitiveType, IW
 		=> obj is JPrimitiveObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
-
-	/// <inheritdoc/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	protected internal override void CopyTo(Span<Byte> span, ref Int32 offset) => this.Value.CopyTo(span, ref offset);
 }

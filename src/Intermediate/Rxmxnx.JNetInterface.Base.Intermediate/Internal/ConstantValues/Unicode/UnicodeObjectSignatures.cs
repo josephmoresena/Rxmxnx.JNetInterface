@@ -84,4 +84,7 @@ internal static partial class UnicodeObjectSignatures
 	/// <inheritdoc cref="ObjectSignatures.JTypeObjectSignature"/>
 	[DefaultValue(ObjectSignatures.JTypeObjectSignature)]
 	public static readonly CString JTypeObjectSignature;
+	/// <inheritdoc cref="ObjectSignatures.JStackTraceElementObjectSignature"/>
+	[DefaultValue(ObjectSignatures.JStackTraceElementObjectSignature)]
+	public static readonly CString JStackTraceElementObjectSignature;
 }

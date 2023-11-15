@@ -74,4 +74,7 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.JTypeInterfaceName"/>
 	[DefaultValue(ClassNames.JTypeInterfaceName)]
 	public static readonly CString JTypeInterfaceName;
+	/// <inheritdoc cref="ClassNames.JStackTraceElementClassName"/>
+	[DefaultValue(ClassNames.JStackTraceElementClassName)]
+	public static readonly CString JStackTraceElementClassName;
 }

@@ -134,4 +134,9 @@ internal static class ObjectSignatures
 	/// </summary>
 	public const String JTypeObjectSignature = ObjectSignatures.ObjectSignaturePrefix + ClassNames.JTypeInterfaceName +
 		ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
+	/// JNI signature for <c>java.lang.StackTraceElement</c> object.
+	/// </summary>
+	public const String JStackTraceElementObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
+		ClassNames.JStackTraceElementClassName + ObjectSignatures.ObjectSignatureSuffix;
 }

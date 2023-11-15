@@ -18,7 +18,7 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
 	public JEnumObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-	
+
 	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>

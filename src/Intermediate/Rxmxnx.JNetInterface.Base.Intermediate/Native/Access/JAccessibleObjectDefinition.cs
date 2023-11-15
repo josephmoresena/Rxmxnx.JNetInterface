@@ -44,4 +44,14 @@ public abstract record JAccessibleObjectDefinition
 		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
 		return signature;
 	}
+
+	/// <summary>
+	/// Retrieves the type for <typeparamref name="TReturn"/> type.
+	/// </summary>
+	/// <typeparam name="TReturn">A <see cref="IDataType"/> type.</typeparam>
+	/// <returns>Type of return.</returns>
+	internal static Type ReturnType<TReturn>() where TReturn : IDataType<TReturn>
+		=> IDataType.GetMetadata<TReturn>() is JPrimitiveTypeMetadata primitiveTypeMetadata ?
+			primitiveTypeMetadata.UnderlineType :
+			typeof(TReturn);
 }

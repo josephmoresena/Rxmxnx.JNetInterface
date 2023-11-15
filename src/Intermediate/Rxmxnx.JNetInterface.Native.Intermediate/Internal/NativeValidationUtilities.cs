@@ -13,7 +13,9 @@ internal static class NativeValidationUtilities
 	/// <param name="typeName">Name of implementing type.</param>
 	/// <param name="isClass">Indicates whether implementing type is a class.</param>
 	/// <exception cref="NotImplementedException">Always thrown.</exception>
-	public static void ThrowInvalidImplementation<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>(CString typeName, Boolean isClass)
+	public static void
+		ThrowInvalidImplementation<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>(
+			CString typeName, Boolean isClass)
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 	{
 		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();
@@ -21,7 +23,7 @@ internal static class NativeValidationUtilities
 		throw new NotImplementedException(
 			$"{typeName} type doesn't {implementationType} {interfaceMetadata.ClassName} interface.");
 	}
-	
+
 	/// <summary>
 	/// Throws an exception if <paramref name="ordinal"/> is an invalid enum ordinal.
 	/// </summary>

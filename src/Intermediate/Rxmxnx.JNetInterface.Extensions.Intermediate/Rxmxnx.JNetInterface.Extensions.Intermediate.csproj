@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
@@ -30,6 +30,7 @@
         <Using Include="Rxmxnx.JNetInterface.Internal.Types"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.Types.Metadata"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.Native.Access"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Io"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>
@@ -37,6 +38,7 @@
         <Using Include="Rxmxnx.JNetInterface.Native.References"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
         <Using Include="Rxmxnx.JNetInterface.Primitives"/>
+        <Using Include="Rxmxnx.JNetInterface.Restricted"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
         <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
         <Using Include="Rxmxnx.JNetInterface.Types.Inheritance"/>
