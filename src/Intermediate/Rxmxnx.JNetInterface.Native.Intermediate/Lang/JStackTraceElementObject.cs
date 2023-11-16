@@ -70,6 +70,6 @@ public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<
 	}
 
 	/// <inheritdoc/>
-	public static JStackTraceElementObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JStackTraceElementObject>(jLocal)) : default;
+	public static JStackTraceElementObject? Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JStackTraceElementObject>(jLocal)) : default;
 }

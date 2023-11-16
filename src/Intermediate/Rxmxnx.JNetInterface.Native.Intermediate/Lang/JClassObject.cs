@@ -98,6 +98,6 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		=> env.ClassProvider.GetClass<TDataType>();
 
 	/// <inheritdoc/>
-	public static JClassObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JClassObject>(jLocal)) : default;
+	public static JClassObject? Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JClassObject>(jLocal)) : default;
 }

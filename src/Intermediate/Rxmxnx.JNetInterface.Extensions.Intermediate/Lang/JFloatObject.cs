@@ -27,6 +27,6 @@ public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimiti
 		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
 
 	/// <inheritdoc/>
-	static JFloatObject? IReferenceType<JFloatObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JFloatObject>(jLocal)) : default;
+	static JFloatObject? IReferenceType<JFloatObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JFloatObject>(jLocal)) : default;
 }

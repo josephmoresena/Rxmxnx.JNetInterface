@@ -52,7 +52,7 @@ public partial class JThrowableObject
 
 			/// <inheritdoc/>
 			internal override IDataType? ParseInstance(JObject? jObject)
-				=> jObject as TThrowable ?? TThrowable.Create(jObject);
+				=> jObject as TThrowable ?? TThrowable.Create(jObject as JLocalObject);
 			/// <inheritdoc/>
 			internal override JThrowableException CreateException(JGlobalBase jGlobalThrowable)
 				=> throw new NotImplementedException();

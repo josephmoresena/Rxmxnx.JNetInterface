@@ -86,5 +86,6 @@ public abstract class
 	                                                                        .GetClass<TNumber>()) { }
 
 	/// <inheritdoc/>
-	public new static TNumber? Create(JObject? jObject) => TNumber.Create(jObject);
+	public new static TNumber? Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? TNumber.Create(jLocal) : default;
 }

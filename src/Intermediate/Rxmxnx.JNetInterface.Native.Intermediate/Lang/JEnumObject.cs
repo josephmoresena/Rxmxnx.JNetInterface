@@ -34,8 +34,8 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 		this._ordinal ??= enumMetadata.Ordinal;
 	}
 
-	static JEnumObject? IReferenceType<JEnumObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JEnumObject>(jLocal)) : default;
+	static JEnumObject? IReferenceType<JEnumObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JEnumObject>(jLocal)) : default;
 }
 
 /// <summary>

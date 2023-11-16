@@ -27,6 +27,6 @@ public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveW
 		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
 
 	/// <inheritdoc/>
-	static JByteObject? IReferenceType<JByteObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JByteObject>(jLocal)) : default;
+	static JByteObject? IReferenceType<JByteObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JByteObject>(jLocal)) : default;
 }

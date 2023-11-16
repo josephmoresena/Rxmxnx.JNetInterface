@@ -64,10 +64,11 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IArrayType<JA
 	public JArrayObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 
 	/// <inheritdoc/>
-	public static JArrayObject<TElement>? Create(JObject? jObject)
+	public static JArrayObject<TElement>? Create(JLocalObject? jLocal)
 	{
-		if (jObject is not JLocalObject jLocal)
+		if (JObject.IsNullOrDefault(jLocal))
 			return default;
+
 		JDataTypeMetadata elementMetadata = IDataType.GetMetadata<TElement>();
 		if (jLocal is not JArrayObject jArray || jArray.TypeMetadata.ElementMetadata.Kind == JTypeKind.Primitive ||
 		    elementMetadata.Kind == JTypeKind.Primitive)

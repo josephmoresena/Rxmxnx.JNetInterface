@@ -30,6 +30,6 @@ public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>,
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JSerializableObject(JLocalObject jLocal) : base(jLocal) { }
 
-	static JSerializableObject? IReferenceType<JSerializableObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JSerializableObject>(jLocal)) : default;
+	static JSerializableObject? IReferenceType<JSerializableObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JSerializableObject>(jLocal)) : default;
 }

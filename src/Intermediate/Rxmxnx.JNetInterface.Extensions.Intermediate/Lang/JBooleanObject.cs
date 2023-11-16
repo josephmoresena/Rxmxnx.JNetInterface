@@ -32,6 +32,6 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveWrapperType
 	public static JBooleanObject? Create(IEnvironment env, JBoolean? value)
 		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
 	/// <inheritdoc/>
-	public static JBooleanObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JBooleanObject>(jLocal)) : default;
+	public static JBooleanObject? Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JBooleanObject>(jLocal)) : default;
 }

@@ -31,6 +31,6 @@ public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IIn
 	private JComparableObject(JLocalObject jLocal) : base(jLocal) { }
 
 	/// <inheritdoc/>
-	static JComparableObject? IReferenceType<JComparableObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JComparableObject>(jLocal)) : default;
+	static JComparableObject? IReferenceType<JComparableObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JComparableObject>(jLocal)) : default;
 }

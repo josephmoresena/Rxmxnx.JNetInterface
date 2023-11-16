@@ -31,6 +31,6 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>,
 	}
 
 	/// <inheritdoc/>
-	public static JNumberObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JNumberObject>(jLocal)) : default;
+	public static JNumberObject? Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JNumberObject>(jLocal)) : default;
 }

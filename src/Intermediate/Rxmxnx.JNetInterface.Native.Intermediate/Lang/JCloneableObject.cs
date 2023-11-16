@@ -31,6 +31,6 @@ public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInte
 	private JCloneableObject(JLocalObject jLocal) : base(jLocal) { }
 
 	/// <inheritdoc/>
-	static JCloneableObject? IReferenceType<JCloneableObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JCloneableObject>(jLocal)) : default;
+	static JCloneableObject? IReferenceType<JCloneableObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JCloneableObject>(jLocal)) : default;
 }

@@ -32,6 +32,6 @@ public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElement
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JAnnotatedElementObject(JLocalObject jLocal) : base(jLocal) { }
 
-	static JAnnotatedElementObject? IReferenceType<JAnnotatedElementObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JAnnotatedElementObject>(jLocal)) : default;
+	static JAnnotatedElementObject? IReferenceType<JAnnotatedElementObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JAnnotatedElementObject>(jLocal)) : default;
 }

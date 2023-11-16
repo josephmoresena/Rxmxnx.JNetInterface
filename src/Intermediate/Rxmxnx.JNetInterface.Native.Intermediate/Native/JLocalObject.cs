@@ -170,10 +170,6 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 		where TDataType : JLocalObject, IDataType<TDataType>
 		=> jLocal as TDataType ?? JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal._env);
 
-	static JLocalObject? IReferenceType<JLocalObject>.Create(JObject? jObject)
-	{
-		if (jObject is JLocalObject { Value.IsDefault: false, } jLocal)
-			return new(jLocal);
-		return null;
-	}
+	static JLocalObject? IReferenceType<JLocalObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(jLocal) : default;
 }

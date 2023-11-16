@@ -32,6 +32,6 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveWrapperTy
 	public static JCharacterObject? Create(IEnvironment env, JChar? value)
 		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
 	/// <inheritdoc/>
-	public static JCharacterObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JCharacterObject>(jLocal)) : default;
+	public static JCharacterObject? Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JCharacterObject>(jLocal)) : default;
 }

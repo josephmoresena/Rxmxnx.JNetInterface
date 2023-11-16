@@ -31,7 +31,7 @@ public partial class JInterfaceObject
 
 			/// <inheritdoc/>
 			internal override IDataType? ParseInstance(JObject? jObject)
-				=> jObject as TInterface ?? TInterface.Create(jObject);
+				=> jObject as TInterface ?? TInterface.Create(jObject as JLocalObject);
 			/// <inheritdoc/>
 			[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 			internal override Type GetImplementingType<TReference>() => typeof(IDerivedType<TReference, TInterface>);

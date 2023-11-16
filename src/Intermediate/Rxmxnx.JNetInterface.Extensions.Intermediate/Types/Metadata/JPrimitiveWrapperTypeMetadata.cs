@@ -37,6 +37,8 @@ internal sealed record
 		this._baseMetadata = baseMetadata ?? IClassType.GetMetadata<JLocalObject>();
 		this._baseTypes = new(1) { this._baseMetadata.Type, };
 	}
+
 	/// <inheritdoc/>
-	internal override IDataType? ParseInstance(JObject? jObject) => TWrapper.Create(jObject);
+	internal override IDataType? ParseInstance(JObject? jObject)
+		=> jObject as TWrapper ?? TWrapper.Create(jObject as JLocalObject);
 }

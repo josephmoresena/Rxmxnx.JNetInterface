@@ -26,6 +26,6 @@ public partial class JArrayObject<TElement>
 
 		/// <inheritdoc/>
 		internal override IDataType? ParseInstance(JObject? jObject)
-			=> jObject as JArrayObject<TElement> ?? JArrayObject<TElement>.Create(jObject);
+			=> jObject as JArrayObject<TElement> ?? JArrayObject<TElement>.Create(jObject as JLocalObject);
 	}
 }

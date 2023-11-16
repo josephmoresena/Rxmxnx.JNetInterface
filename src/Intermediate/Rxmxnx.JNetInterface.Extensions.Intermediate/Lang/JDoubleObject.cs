@@ -27,6 +27,6 @@ public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrim
 		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
 
 	/// <inheritdoc/>
-	static JDoubleObject? IReferenceType<JDoubleObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JDoubleObject>(jLocal)) : default;
+	static JDoubleObject? IReferenceType<JDoubleObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JDoubleObject>(jLocal)) : default;
 }

@@ -27,6 +27,6 @@ public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimiti
 		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
 
 	/// <inheritdoc/>
-	static JShortObject? IReferenceType<JShortObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JShortObject>(jLocal)) : default;
+	static JShortObject? IReferenceType<JShortObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JShortObject>(jLocal)) : default;
 }

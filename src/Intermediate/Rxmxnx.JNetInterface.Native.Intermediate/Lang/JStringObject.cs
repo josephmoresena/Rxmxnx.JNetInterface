@@ -84,6 +84,6 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		=> env.StringProvider.Create(utf8Data);
 
 	/// <inheritdoc/>
-	public static JStringObject? Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JStringObject>(jLocal)) : default;
+	public static JStringObject? Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JStringObject>(jLocal)) : default;
 }

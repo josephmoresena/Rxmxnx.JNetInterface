@@ -31,6 +31,6 @@ public sealed class JCharSequenceObject : JInterfaceObject<JCharSequenceObject>,
 	private JCharSequenceObject(JLocalObject jLocal) : base(jLocal) { }
 
 	/// <inheritdoc/>
-	static JCharSequenceObject? IReferenceType<JCharSequenceObject>.Create(JObject? jObject)
-		=> jObject is JLocalObject jLocal ? new(JLocalObject.Validate<JCharSequenceObject>(jLocal)) : default;
+	static JCharSequenceObject? IReferenceType<JCharSequenceObject>.Create(JLocalObject? jLocal)
+		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JCharSequenceObject>(jLocal)) : default;
 }

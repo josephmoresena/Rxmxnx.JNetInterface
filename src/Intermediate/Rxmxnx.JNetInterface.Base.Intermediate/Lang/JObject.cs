@@ -131,4 +131,16 @@ public abstract class JObject : IObject, IEquatable<JObject>
 		=> this is IWrapper<TValue> vw ?
 			vw.Value :
 			ValidationUtilities.ThrowIfInvalidCast<TValue>(this as IConvertible);
+
+	/// <summary>
+	/// Indicates whether <paramref name="jObject"/> instance is <see langword="null"/> or
+	/// default value.
+	/// </summary>
+	/// <param name="jObject">A <see cref="jObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jObject"/> instance is <see langword="null"/> or
+	/// default value; otherwise, <see langword="false"/>.
+	/// </returns>
+	public static Boolean IsNullOrDefault([NotNullWhen(false)] JObject? jObject)
+		=> jObject is not null && !jObject.IsDefault;
 }

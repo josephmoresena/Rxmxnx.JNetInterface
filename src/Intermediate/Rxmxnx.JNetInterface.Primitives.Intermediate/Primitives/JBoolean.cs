@@ -84,7 +84,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JBoolean(Boolean value) => new(value);
-	
+
 	/// <inheritdoc cref="Boolean.Parse(String)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static JBoolean Parse(String value) => Boolean.Parse(value);
