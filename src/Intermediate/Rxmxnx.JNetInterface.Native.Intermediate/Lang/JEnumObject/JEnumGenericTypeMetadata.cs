@@ -11,7 +11,7 @@ public partial class JEnumObject
 		{
 			/// <inheritdoc cref="JEnumTypeMetadata.Fields"/>
 			private readonly IEnumFieldList _fields;
-			/// <inheritdoc cref="JDataTypeMetadata.Interfaces"/>
+			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 			private readonly IImmutableSet<JInterfaceTypeMetadata> _interfaces;
 
 			/// <inheritdoc/>

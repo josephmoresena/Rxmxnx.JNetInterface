@@ -9,7 +9,7 @@ internal sealed record
 		JPrimitiveWrapperTypeMetadata
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
 {
-	/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
+	/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 	private readonly JClassTypeMetadata _baseMetadata;
 	/// <inheritdoc cref="JDataTypeMetadata.BaseTypes"/>
 	private readonly HashSet<Type> _baseTypes;

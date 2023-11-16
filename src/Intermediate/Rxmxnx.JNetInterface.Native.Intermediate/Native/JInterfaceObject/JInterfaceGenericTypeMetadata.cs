@@ -9,7 +9,7 @@ public partial class JInterfaceObject
 		/// </summary>
 		internal sealed record JInterfaceGenericTypeMetadata : JInterfaceTypeMetadata
 		{
-			/// <inheritdoc cref="JDataTypeMetadata.Interfaces"/>
+			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 			private readonly IImmutableSet<JInterfaceTypeMetadata> _interfaces;
 
 			/// <inheritdoc/>

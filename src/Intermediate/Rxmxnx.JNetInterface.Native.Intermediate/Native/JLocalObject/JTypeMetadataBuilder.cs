@@ -13,7 +13,7 @@ public partial class JLocalObject
 		private readonly ISet<Type> _baseTypes;
 		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
 		private readonly CString _dataTypeName;
-		/// <inheritdoc cref="JDataTypeMetadata.Interfaces"/>
+		/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 		private readonly HashSet<JInterfaceTypeMetadata> _interfaces = new();
 		/// <summary>
 		/// Interface types.
@@ -153,7 +153,7 @@ public partial class JLocalObject
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : JTypeMetadataBuilder
 		where TClass : JLocalObject, IClassType<TClass>
 	{
-		/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
+		/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 		private readonly JClassTypeMetadata? _baseMetadata;
 		/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 		private readonly JTypeModifier _modifier;

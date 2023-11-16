@@ -10,6 +10,15 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	public override Int32 SizeOf => NativeUtilities.PointerSize;
 
 	/// <summary>
+	/// Base type of current type metadata.
+	/// </summary>
+	public virtual JClassTypeMetadata? BaseMetadata => default;
+	/// <summary>
+	/// Set of interfaces metadata of current type implements.
+	/// </summary>
+	public virtual IImmutableSet<JInterfaceTypeMetadata> Interfaces => ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
+
+	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="className">Class name of current type.</param>

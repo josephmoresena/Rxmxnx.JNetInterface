@@ -10,7 +10,7 @@ public partial class JThrowableObject
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable> : JTypeMetadataBuilder
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 	{
-		/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
+		/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 		private readonly JClassTypeMetadata? _baseMetadata;
 		/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 		private readonly JTypeModifier _modifier;

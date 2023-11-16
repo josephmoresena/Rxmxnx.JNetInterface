@@ -136,7 +136,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// Indicates whether <paramref name="jObject"/> instance is <see langword="null"/> or
 	/// default value.
 	/// </summary>
-	/// <param name="jObject">A <see cref="jObject"/> instance.</param>
+	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
 	/// <returns>
 	/// <see langword="true"/> if <paramref name="jObject"/> instance is <see langword="null"/> or
 	/// default value; otherwise, <see langword="false"/>.

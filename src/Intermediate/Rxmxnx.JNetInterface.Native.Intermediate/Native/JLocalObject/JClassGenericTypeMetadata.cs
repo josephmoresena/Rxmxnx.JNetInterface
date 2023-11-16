@@ -9,11 +9,11 @@ public partial class JLocalObject
 		/// </summary>
 		internal sealed record JClassGenericTypeMetadata : JClassTypeMetadata
 		{
-			/// <inheritdoc cref="JDataTypeMetadata.BaseMetadata"/>
+			/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 			private readonly JClassTypeMetadata? _baseMetadata;
 			/// <inheritdoc cref="JDataTypeMetadata.BaseTypes"/>
 			private readonly ISet<Type> _baseTypes;
-			/// <inheritdoc cref="JDataTypeMetadata.Interfaces"/>
+			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 			private readonly IImmutableSet<JInterfaceTypeMetadata> _interfaces;
 			/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 			private readonly JTypeModifier _modifier;
