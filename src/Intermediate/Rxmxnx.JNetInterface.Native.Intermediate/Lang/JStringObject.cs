@@ -25,18 +25,6 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	public Int32 Utf8Length => this._utf8Length ?? this.Environment.StringProvider.GetUtf8Length(this);
 
 	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
-	{
-		if (this._length is not null) return;
-		this._value ??= env.StringProvider.ToString(jGlobal);
-		this._length ??= this._value.Length;
-	}
-
-	/// <summary>
 	/// Internal string value.
 	/// </summary>
 	public new String Value => this._value ??= this.Environment.StringProvider.ToString(this);
@@ -86,4 +74,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <inheritdoc/>
 	public static JStringObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JStringObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JStringObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JStringObject>(jGlobal, env)) : default;
 }

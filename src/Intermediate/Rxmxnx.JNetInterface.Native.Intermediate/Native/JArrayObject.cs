@@ -61,9 +61,6 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IArrayType<JA
 	internal override JArrayTypeMetadata TypeMetadata => IArrayType.GetMetadata<JArrayObject<TElement>>();
 
 	/// <inheritdoc/>
-	public JArrayObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-
-	/// <inheritdoc/>
 	public static JArrayObject<TElement>? Create(JLocalObject? jLocal)
 	{
 		if (JObject.IsNullOrDefault(jLocal))
@@ -77,4 +74,9 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IArrayType<JA
 		//TODO: Implement java array casting.
 		return new(jLocal);
 	}
+	/// <inheritdoc/>
+	public static JArrayObject<TElement>? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ?
+			new(env, JLocalObject.Validate<JArrayObject<TElement>>(jGlobal, env)) :
+			default;
 }

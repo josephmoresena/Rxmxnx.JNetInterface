@@ -55,7 +55,7 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JLocalObject(IEnvironment env, JGlobalBase jGlobal) : base(jGlobal)
+	protected JLocalObject(IEnvironment env, JGlobalBase jGlobal) : base(jGlobal)
 	{
 		this._env = env;
 		this._lifetime = new(false, this);
@@ -63,7 +63,6 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 		this._weak = jGlobal as JWeak;
 		JLocalObject.ProcessMetadata(this, jGlobal.ObjectMetadata);
 	}
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -172,4 +171,6 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 
 	static JLocalObject? IReferenceType<JLocalObject>.Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(jLocal) : default;
+	static JLocalObject? IReferenceType<JLocalObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, jGlobal) : default;
 }

@@ -39,6 +39,5 @@ internal sealed record
 	}
 
 	/// <inheritdoc/>
-	internal override IDataType? ParseInstance(JObject? jObject)
-		=> jObject as TWrapper ?? TWrapper.Create(jObject as JLocalObject);
+	internal override TWrapper? ParseInstance(JLocalObject? jLocal) => jLocal as TWrapper ?? TWrapper.Create(jLocal);
 }

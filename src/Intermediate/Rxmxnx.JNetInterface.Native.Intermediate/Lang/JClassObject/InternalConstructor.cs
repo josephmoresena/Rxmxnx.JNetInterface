@@ -14,4 +14,10 @@ public partial class JClassObject
 		Boolean isNativeParameter) : base(env, jClassRef.Value, isDummy, isNativeParameter,
 		                                  env.ClassProvider.ClassObject)
 		=> this._hash ??= hash;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	internal JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 }

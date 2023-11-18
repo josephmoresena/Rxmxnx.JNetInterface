@@ -23,15 +23,19 @@ public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElement
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JAnnotatedElementObject(IEnvironment env, JGlobalBase jGlobal) : base(
-		env, JLocalObject.Validate<JAnnotatedElementObject>(jGlobal, env)) { }
-
+	private JAnnotatedElementObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JAnnotatedElementObject(JLocalObject jLocal) : base(jLocal) { }
 
-	static JAnnotatedElementObject? IReferenceType<JAnnotatedElementObject>.Create(JLocalObject? jLocal)
+	/// <inheritdoc/>
+	public static JAnnotatedElementObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JAnnotatedElementObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JAnnotatedElementObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ?
+			new(env, JLocalObject.Validate<JAnnotatedElementObject>(jGlobal, env)) :
+			default;
 }

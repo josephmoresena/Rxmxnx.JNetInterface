@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
-public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveWrapperType<JByteObject>
+public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveWrapperType<JByteObject, JByte>
 {
 	static JDataTypeMetadata IDataType.Metadata
 		=> new JPrimitiveWrapperTypeMetadata<JByteObject>(IClassType.GetMetadata<JNumberObject>());
@@ -17,16 +17,10 @@ public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveW
 	/// <inheritdoc/>
 	private JByteObject(JLocalObject jLocal, JByte? value) : base(jLocal, value) { }
 
-	/// <summary>
-	/// Creates a <see cref="JByteObject"/> instance initialized with <paramref name="value"/>.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="value"><see cref="JByte"/> value.</param>
-	/// <returns>A new <see cref="JByteObject"/> instance.</returns>
-	public static JByteObject? Create(IEnvironment env, JByte? value)
-		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
-
-	/// <inheritdoc/>
 	static JByteObject? IReferenceType<JByteObject>.Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JByteObject>(jLocal)) : default;
+	static JByteObject? IReferenceType<JByteObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JByteObject>(jGlobal, env)) : default;
+	static JByteObject? IPrimitiveWrapperType<JByteObject, JByte>.Create(IEnvironment env, JByte? value)
+		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value.Value), value.Value) : default;
 }

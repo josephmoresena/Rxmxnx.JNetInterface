@@ -7,12 +7,11 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>,
 	IInterfaceImplementation<JNumberObject, JSerializableObject>
 {
 	/// <inheritdoc/>
-	public JNumberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-
-	/// <inheritdoc/>
 	internal JNumberObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy, Boolean isNativeParameter,
 		JClassObject? jClass = default) : base(env, jLocalRef, isDummy, isNativeParameter, jClass) { }
 
+	/// <inheritdoc/>
+	protected JNumberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc/>
 	protected JNumberObject(JLocalObject jLocal, JClassObject? jClass = default) : base(
 		jLocal, jClass ?? jLocal.Environment.ClassProvider.NumberClassObject) { }
@@ -33,4 +32,7 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>,
 	/// <inheritdoc/>
 	public static JNumberObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JNumberObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JNumberObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JNumberObject>(jGlobal, env)) : default;
 }

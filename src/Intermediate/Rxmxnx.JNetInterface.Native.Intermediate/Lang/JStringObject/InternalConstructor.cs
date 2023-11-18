@@ -14,4 +14,15 @@ public partial class JStringObject
 		Boolean isNativeParameter) : base(env, jStrRef.Value, isDummy, isNativeParameter,
 		                                  env.ClassProvider.StringClassObject)
 		=> this._value = value;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	internal JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
+	{
+		if (this._length is not null) return;
+		this._value ??= env.StringProvider.ToString(jGlobal);
+		this._length ??= this._value.Length;
+	}
 }

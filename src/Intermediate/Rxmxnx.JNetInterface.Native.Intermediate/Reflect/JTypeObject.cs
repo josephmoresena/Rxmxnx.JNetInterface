@@ -21,15 +21,17 @@ public sealed class JTypeObject : JInterfaceObject<JTypeObject>, IInterfaceType<
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JTypeObject(IEnvironment env, JGlobalBase jGlobal) : base(
-		env, JLocalObject.Validate<JTypeObject>(jGlobal, env)) { }
-
+	private JTypeObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JTypeObject(JLocalObject jLocal) : base(jLocal) { }
 
-	static JTypeObject? IReferenceType<JTypeObject>.Create(JLocalObject? jLocal)
+	/// <inheritdoc/>
+	public static JTypeObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JTypeObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JTypeObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JTypeObject>(jGlobal, env)) : default;
 }

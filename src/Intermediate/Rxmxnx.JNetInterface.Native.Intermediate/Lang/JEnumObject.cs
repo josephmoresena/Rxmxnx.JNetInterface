@@ -12,13 +12,6 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 	/// <remarks>Its position in its enum declaration, where the initial constant is assigned an ordinal of zero</remarks>
 	public Int32 Ordinal => this._ordinal ??= this.Environment.EnumProvider.GetOrdinal(this);
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JEnumObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-
 	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
@@ -34,8 +27,12 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 		this._ordinal ??= enumMetadata.Ordinal;
 	}
 
-	static JEnumObject? IReferenceType<JEnumObject>.Create(JLocalObject? jLocal)
+	/// <inheritdoc/>
+	public static JEnumObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JEnumObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JEnumObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JEnumObject>(jGlobal, env)) : default;
 }
 
 /// <summary>

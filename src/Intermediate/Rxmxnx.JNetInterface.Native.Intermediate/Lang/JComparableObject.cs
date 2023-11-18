@@ -21,9 +21,7 @@ public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IIn
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JComparableObject(IEnvironment env, JGlobalBase jGlobal) : base(
-		env, JLocalObject.Validate<JComparableObject>(jGlobal, env)) { }
-
+	private JComparableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -31,6 +29,11 @@ public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IIn
 	private JComparableObject(JLocalObject jLocal) : base(jLocal) { }
 
 	/// <inheritdoc/>
-	static JComparableObject? IReferenceType<JComparableObject>.Create(JLocalObject? jLocal)
+	public static JComparableObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JComparableObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JComparableObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ?
+			new(env, JLocalObject.Validate<JComparableObject>(jGlobal, env)) :
+			default;
 }

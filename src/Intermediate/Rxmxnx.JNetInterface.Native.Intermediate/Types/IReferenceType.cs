@@ -34,6 +34,13 @@ public interface
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.</returns>
 	static abstract TReference? Create(JLocalObject? jLocal);
+	/// <summary>
+	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="jGlobal"/>.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="jGlobal"/>.</returns>
+	static abstract TReference? Create(IEnvironment env, JGlobalBase? jGlobal);
 
 	/// <summary>
 	/// Retrieves the base types from current type.

@@ -41,4 +41,6 @@ public partial class JArrayObject<TElement>
 	internal JArrayObject(IEnvironment env, JArrayLocalRef jArrayRef, Int32? length, Boolean isDummy,
 		Boolean isNativeParameter, JClassObject? jClass = default) : base(
 		env, jArrayRef, length, isDummy, isNativeParameter, jClass) { }
+	/// <inheritdoc/>
+	internal JArrayObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 }

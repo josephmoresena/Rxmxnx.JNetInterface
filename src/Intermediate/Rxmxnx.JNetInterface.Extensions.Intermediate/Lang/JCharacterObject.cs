@@ -3,10 +3,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
-public sealed partial class JCharacterObject : JLocalObject, IPrimitiveWrapperType<JCharacterObject>, IWrapper<JChar>
+public sealed partial class JCharacterObject : JLocalObject, IPrimitiveWrapperType<JCharacterObject, JChar>
 {
-	/// <inheritdoc/>
-	public JCharacterObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Internal value.
 	/// </summary>
@@ -29,9 +27,15 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveWrapperTy
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="value"><see cref="JChar"/> value.</param>
 	/// <returns>A new <see cref="JByteObject"/> instance.</returns>
+	[return: NotNullIfNotNull(nameof(value))]
 	public static JCharacterObject? Create(IEnvironment env, JChar? value)
 		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
 	/// <inheritdoc/>
 	public static JCharacterObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JCharacterObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JCharacterObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ?
+			new(env, JLocalObject.Validate<JCharacterObject>(jGlobal, env)) :
+			default;
 }

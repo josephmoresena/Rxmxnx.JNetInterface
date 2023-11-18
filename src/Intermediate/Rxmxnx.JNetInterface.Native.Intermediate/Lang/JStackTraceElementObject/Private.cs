@@ -45,6 +45,8 @@ public partial class JStackTraceElementObject
 		this._methodName ??= traceElement?._methodName;
 		this._nativeMethod ??= traceElement?._nativeMethod;
 	}
+	/// <inheritdoc/>
+	private JStackTraceElementObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 
 	/// <summary>
 	/// Returns the fully qualified name of the class containing the execution point represented

@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Short</c> instance.
 /// </summary>
-public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimitiveWrapperType<JShortObject>
+public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimitiveWrapperType<JShortObject, JShort>
 {
 	static JDataTypeMetadata IDataType.Metadata
 		=> new JPrimitiveWrapperTypeMetadata<JShortObject>(IClassType.GetMetadata<JNumberObject>());
@@ -11,22 +11,16 @@ public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimiti
 		=> UnicodeWrapperObjectArraySignatures.JShortObjectArraySignature;
 
 	/// <inheritdoc/>
-	public JShortObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	private JShortObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc/>
 	private JShortObject(JLocalObject jLocal) : base(jLocal) { }
 	/// <inheritdoc/>
-	private JShortObject(JLocalObject jLocal, JShort? value) : base(jLocal, value) { }
+	private JShortObject(JLocalObject jLocal, JShort value) : base(jLocal, value) => jLocal.Dispose();
 
-	/// <summary>
-	/// Creates a <see cref="JShortObject"/> instance initialized with <paramref name="value"/>.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="value"><see cref="JShort"/> value.</param>
-	/// <returns>A new <see cref="JShortObject"/> instance.</returns>
-	public static JShortObject? Create(IEnvironment env, JShort? value)
-		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
-
-	/// <inheritdoc/>
 	static JShortObject? IReferenceType<JShortObject>.Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JShortObject>(jLocal)) : default;
+	static JShortObject? IReferenceType<JShortObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JShortObject>(jGlobal, env)) : default;
+	static JShortObject? IPrimitiveWrapperType<JShortObject, JShort>.Create(IEnvironment env, JShort? value)
+		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value.Value), value.Value) : default;
 }

@@ -1,5 +1,5 @@
 /// <summary>
-/// Set of native extensions.
+/// Set of primitive memory extensions.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CA1050

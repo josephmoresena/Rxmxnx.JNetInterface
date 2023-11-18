@@ -51,8 +51,7 @@ public partial class JLocalObject
 			}
 
 			/// <inheritdoc/>
-			internal override IDataType? ParseInstance(JObject? jObject)
-				=> jObject as TClass ?? TClass.Create(jObject as JLocalObject);
+			internal override TClass? ParseInstance(JLocalObject? jLocal) => jLocal as TClass ?? TClass.Create(jLocal);
 		}
 	}
 }

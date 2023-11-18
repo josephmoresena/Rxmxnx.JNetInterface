@@ -53,6 +53,12 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 		if (instanceMetadata is JPrimitiveWrapperObjectMetadata<TValue> wrapperMetadata)
 			this._value = wrapperMetadata.Value;
 	}
+
+	/// <summary>
+	/// Sets current value.
+	/// </summary>
+	/// <param name="value">A <typeparamref name="TValue"/>.</param>
+	internal void SetValue(TValue value) => this._value ??= value;
 }
 
 /// <summary>
@@ -65,7 +71,7 @@ public abstract class
 		JNumberObject<TValue>, IPrimitiveWrapperType, IInterfaceImplementation<TNumber, JSerializableObject>,
 		IInterfaceImplementation<TNumber, JComparableObject>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
-	where TNumber : JNumberObject<TValue, TNumber>, IPrimitiveWrapperType<TNumber>
+	where TNumber : JNumberObject<TValue, TNumber>, IPrimitiveWrapperType<TNumber, TValue>
 {
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => IPrimitiveType.GetMetadata<TValue>();
 
@@ -85,7 +91,11 @@ public abstract class
 	                                                                  jLocal.Environment.ClassProvider
 	                                                                        .GetClass<TNumber>()) { }
 
-	/// <inheritdoc/>
-	public new static TNumber? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? TNumber.Create(jLocal) : default;
+	/// <inheritdoc cref="IPrimitiveWrapperType{TNumber, TValue}.Create(IEnvironment, Nullable{TValue})"/>
+	[return: NotNullIfNotNull(nameof(value))]
+	public static TNumber? Create(IEnvironment env, TValue? value) => TNumber.Create(env, value);
+	/// <inheritdoc cref="IReferenceType{TNumber}.Create(JLocalObject?)"/>
+	public new static TNumber? Create(JLocalObject? jLocal) => TNumber.Create(jLocal);
+	/// <inheritdoc cref="IReferenceType{TNumber}.Create(IEnvironment, JGlobalBase?)"/>
+	public new static TNumber? Create(IEnvironment env, JGlobalBase? jGlobal) => TNumber.Create(env, jGlobal);
 }

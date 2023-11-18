@@ -21,15 +21,19 @@ public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>,
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JSerializableObject(IEnvironment env, JGlobalBase jGlobal) : base(
-		env, JLocalObject.Validate<JSerializableObject>(jGlobal, env)) { }
-
+	private JSerializableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JSerializableObject(JLocalObject jLocal) : base(jLocal) { }
 
-	static JSerializableObject? IReferenceType<JSerializableObject>.Create(JLocalObject? jLocal)
+	/// <inheritdoc/>
+	public static JSerializableObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JSerializableObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JSerializableObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ?
+			new(env, JLocalObject.Validate<JSerializableObject>(jGlobal, env)) :
+			default;
 }

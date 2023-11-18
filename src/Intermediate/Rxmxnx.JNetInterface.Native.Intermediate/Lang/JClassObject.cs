@@ -50,14 +50,6 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// </summary>
 	public Boolean? IsFinal => this._isFinal;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(
-		env, JLocalObject.Validate<JClassObject>(jGlobal, env)) { }
-
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()
 		=> new JClassObjectMetadata(base.CreateMetadata())
@@ -100,4 +92,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <inheritdoc/>
 	public static JClassObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JClassObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JClassObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JClassObject>(jGlobal, env)) : default;
 }

@@ -3,10 +3,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
-public sealed partial class JBooleanObject : JLocalObject, IPrimitiveWrapperType<JBooleanObject>, IWrapper<JBoolean>
+public sealed partial class JBooleanObject : JLocalObject, IPrimitiveWrapperType<JBooleanObject, JBoolean>
 {
-	/// <inheritdoc/>
-	public JBooleanObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Internal value.
 	/// </summary>
@@ -29,9 +27,13 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveWrapperType
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="value"><see cref="JBoolean"/> value.</param>
 	/// <returns>A new <see cref="JByteObject"/> instance.</returns>
+	[return: NotNullIfNotNull(nameof(value))]
 	public static JBooleanObject? Create(IEnvironment env, JBoolean? value)
 		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
 	/// <inheritdoc/>
 	public static JBooleanObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JBooleanObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JBooleanObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JBooleanObject>(jGlobal, env)) : default;
 }

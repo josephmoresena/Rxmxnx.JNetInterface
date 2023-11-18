@@ -28,9 +28,9 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 		className, signature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className), arraySignature) { }
 
 	/// <summary>
-	/// Creates a <see cref="IDataType"/> instance from <paramref name="jObject"/>.
+	/// Creates a <see cref="IDataType"/> instance from <paramref name="jLocal"/>.
 	/// </summary>
-	/// <param name="jObject">A <see cref="JObject"/> instance.</param>
-	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jObject"/>.</returns>
-	internal abstract IDataType? ParseInstance(JObject? jObject);
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jLocal"/>.</returns>
+	internal abstract IDataType? ParseInstance(JLocalObject? jLocal);
 }

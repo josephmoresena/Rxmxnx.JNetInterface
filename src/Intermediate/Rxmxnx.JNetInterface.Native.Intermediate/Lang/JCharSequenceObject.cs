@@ -21,9 +21,7 @@ public sealed class JCharSequenceObject : JInterfaceObject<JCharSequenceObject>,
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JCharSequenceObject(IEnvironment env, JGlobalBase jGlobal) : base(
-		env, JLocalObject.Validate<JCharSequenceObject>(jGlobal, env)) { }
-
+	private JCharSequenceObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -31,6 +29,11 @@ public sealed class JCharSequenceObject : JInterfaceObject<JCharSequenceObject>,
 	private JCharSequenceObject(JLocalObject jLocal) : base(jLocal) { }
 
 	/// <inheritdoc/>
-	static JCharSequenceObject? IReferenceType<JCharSequenceObject>.Create(JLocalObject? jLocal)
+	public static JCharSequenceObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JCharSequenceObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JCharSequenceObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ?
+			new(env, JLocalObject.Validate<JCharSequenceObject>(jGlobal, env)) :
+			default;
 }

@@ -16,13 +16,12 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 	public JStackTraceInfo[] StackTrace => this._stackTrace ??= this.GetStackTraceInfo();
 
 	/// <inheritdoc/>
-	public JThrowableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-
-	/// <inheritdoc/>
 	internal JThrowableObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy, Boolean isNativeParameter,
 		JClassObject? jClass = default) : base(env, jLocalRef, isDummy, isNativeParameter,
 		                                       jClass ?? env.ClassProvider.ThrowableClassObject) { }
 
+	/// <inheritdoc/>
+	protected JThrowableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc/>
 	protected JThrowableObject(JLocalObject jLocal, JClassObject jClass) : base(jLocal, jClass) { }
 
@@ -42,6 +41,12 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 		this._stackTrace ??= throwableMetadata.StackTrace;
 	}
 
-	static JThrowableObject? IReferenceType<JThrowableObject>.Create(JLocalObject? jLocal)
+	/// <inheritdoc/>
+	public static JThrowableObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JThrowableObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JThrowableObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ?
+			new(env, JLocalObject.Validate<JThrowableObject>(jGlobal, env)) :
+			default;
 }

@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Float</c> instance.
 /// </summary>
-public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimitiveWrapperType<JFloatObject>
+public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimitiveWrapperType<JFloatObject, JFloat>
 {
 	static JDataTypeMetadata IDataType.Metadata
 		=> new JPrimitiveWrapperTypeMetadata<JFloatObject>(IClassType.GetMetadata<JNumberObject>());
@@ -11,22 +11,16 @@ public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimiti
 		=> UnicodeWrapperObjectArraySignatures.JFloatObjectArraySignature;
 
 	/// <inheritdoc/>
-	public JFloatObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	private JFloatObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc/>
 	private JFloatObject(JLocalObject jLocal) : base(jLocal) { }
 	/// <inheritdoc/>
-	private JFloatObject(JLocalObject jLocal, JFloat? value) : base(jLocal, value) { }
+	private JFloatObject(JLocalObject jLocal, JFloat value) : base(jLocal, value) => jLocal.Dispose();
 
-	/// <summary>
-	/// Creates a <see cref="JFloatObject"/> instance initialized with <paramref name="value"/>.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="value"><see cref="JFloat"/> value.</param>
-	/// <returns>A new <see cref="JFloatObject"/> instance.</returns>
-	public static JFloatObject? Create(IEnvironment env, JFloat? value)
-		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
-
-	/// <inheritdoc/>
 	static JFloatObject? IReferenceType<JFloatObject>.Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JFloatObject>(jLocal)) : default;
+	static JFloatObject? IReferenceType<JFloatObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JFloatObject>(jGlobal, env)) : default;
+	static JFloatObject? IPrimitiveWrapperType<JFloatObject, JFloat>.Create(IEnvironment env, JFloat? value)
+		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value.Value), value.Value) : default;
 }

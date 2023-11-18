@@ -21,9 +21,7 @@ public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInte
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JCloneableObject(IEnvironment env, JGlobalBase jGlobal) : base(
-		env, JLocalObject.Validate<JCloneableObject>(jGlobal, env)) { }
-
+	private JCloneableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -31,6 +29,11 @@ public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInte
 	private JCloneableObject(JLocalObject jLocal) : base(jLocal) { }
 
 	/// <inheritdoc/>
-	static JCloneableObject? IReferenceType<JCloneableObject>.Create(JLocalObject? jLocal)
+	public static JCloneableObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JCloneableObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JCloneableObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ?
+			new(env, JLocalObject.Validate<JCloneableObject>(jGlobal, env)) :
+			default;
 }

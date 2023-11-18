@@ -20,7 +20,7 @@ public sealed partial class JCharacterObject
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	private JCharacterObject(JLocalObject jLocal) : base(
-		jLocal, jLocal.Environment.ClassProvider.GetClass<JCharacterObject>())
+		jLocal, jLocal.Environment.ClassProvider.CharacterClassObject())
 	{
 		if (jLocal is JCharacterObject wrapper)
 			this._value = wrapper._value;
@@ -31,8 +31,13 @@ public sealed partial class JCharacterObject
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="value">Instance value.</param>
 	private JCharacterObject(JLocalObject jLocal, JChar? value) : base(
-		jLocal, jLocal.Environment.ClassProvider.GetClass<JCharacterObject>())
-		=> this._value = value;
+		jLocal, jLocal.Environment.ClassProvider.CharacterClassObject())
+	{
+		this._value = value;
+		jLocal.Dispose();
+	}
+	/// <inheritdoc/>
+	private JCharacterObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 
 	/// <summary>
 	/// Retrieves the primitive value for current instance.

@@ -25,15 +25,19 @@ public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclara
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JGenericDeclarationObject(IEnvironment env, JGlobalBase jGlobal) : base(
-		env, JLocalObject.Validate<JGenericDeclarationObject>(jGlobal, env)) { }
-
+	private JGenericDeclarationObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JGenericDeclarationObject(JLocalObject jLocal) : base(jLocal) { }
 
-	static JGenericDeclarationObject? IReferenceType<JGenericDeclarationObject>.Create(JLocalObject? jLocal)
+	/// <inheritdoc/>
+	public static JGenericDeclarationObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JGenericDeclarationObject>(jLocal)) : default;
+	/// <inheritdoc/>
+	public static JGenericDeclarationObject? Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ?
+			new(env, JLocalObject.Validate<JGenericDeclarationObject>(jGlobal, env)) :
+			default;
 }

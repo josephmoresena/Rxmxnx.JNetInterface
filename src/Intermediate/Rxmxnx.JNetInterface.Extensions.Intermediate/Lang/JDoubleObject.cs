@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Double</c> instance.
 /// </summary>
-public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrimitiveWrapperType<JDoubleObject>
+public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrimitiveWrapperType<JDoubleObject, JDouble>
 {
 	static JDataTypeMetadata IDataType.Metadata
 		=> new JPrimitiveWrapperTypeMetadata<JDoubleObject>(IClassType.GetMetadata<JNumberObject>());
@@ -11,22 +11,16 @@ public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrim
 		=> UnicodeWrapperObjectArraySignatures.JDoubleObjectArraySignature;
 
 	/// <inheritdoc/>
-	public JDoubleObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	private JDoubleObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc/>
 	private JDoubleObject(JLocalObject jLocal) : base(jLocal) { }
 	/// <inheritdoc/>
-	private JDoubleObject(JLocalObject jLocal, JDouble? value) : base(jLocal, value) { }
+	private JDoubleObject(JLocalObject jLocal, JDouble value) : base(jLocal, value) => jLocal.Dispose();
 
-	/// <summary>
-	/// Creates a <see cref="JDoubleObject"/> instance initialized with <paramref name="value"/>.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="value"><see cref="JDouble"/> value.</param>
-	/// <returns>A new <see cref="JDoubleObject"/> instance.</returns>
-	public static JDoubleObject? Create(IEnvironment env, JDouble? value)
-		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
-
-	/// <inheritdoc/>
 	static JDoubleObject? IReferenceType<JDoubleObject>.Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JDoubleObject>(jLocal)) : default;
+	static JDoubleObject? IReferenceType<JDoubleObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
+		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JDoubleObject>(jGlobal, env)) : default;
+	static JDoubleObject? IPrimitiveWrapperType<JDoubleObject, JDouble>.Create(IEnvironment env, JDouble? value)
+		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value.Value), value.Value) : default;
 }

@@ -31,12 +31,13 @@ public partial class JThrowableException
 		/// Invokes current delegate as <see cref="Action{TThrowable}"/>.
 		/// </summary>
 		/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
-		public void Invoke<TThrowable>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		public void Invoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable>()
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			if (this._delegate is not Action<TThrowable> action) return;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
 			TThrowable throwableT =
-				JThrowableCall.Parse<TThrowable>(new(env, this._global), this._global.ObjectMetadata);
+				JThrowableCall.Parse<TThrowable>(TThrowable.Create(env, this._global)!, this._global.ObjectMetadata);
 			action(throwableT);
 			this._global.RefreshMetadata(throwableT);
 		}
@@ -46,12 +47,13 @@ public partial class JThrowableException
 		/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
 		/// <typeparam name="TResult">Type of function result.</typeparam>
 		/// <returns>Function result.</returns>
-		public TResult Invoke<TThrowable, TResult>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		public TResult Invoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable,
+			TResult>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			if (this._delegate is not Func<TThrowable, TResult> func) return default!;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
 			TThrowable throwableT =
-				JThrowableCall.Parse<TThrowable>(new(env, this._global), this._global.ObjectMetadata);
+				JThrowableCall.Parse<TThrowable>(TThrowable.Create(env, this._global)!, this._global.ObjectMetadata);
 			TResult result = func(throwableT);
 			this._global.RefreshMetadata(throwableT);
 			return result;
