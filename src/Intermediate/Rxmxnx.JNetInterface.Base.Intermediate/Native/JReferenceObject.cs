@@ -127,6 +127,21 @@ public abstract class JReferenceObject : JObject
 		this._id = JReferenceObject.CreateInstanceId();
 	}
 
+	/// <summary>
+	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if current instance is assignable to <typeparamref name="TDataType"/> type;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	internal abstract Boolean IsAssignableTo<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>;
+	/// <summary>
+	/// Sets current instance as assignable to <typeparamref name="TDataType"/> type.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	internal abstract void SetAssignableTo<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>;
+
 	/// <inheritdoc/>
 	protected internal override void CopyTo(Span<Byte> span, ref Int32 offset)
 	{

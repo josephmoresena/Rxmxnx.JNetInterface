@@ -36,7 +36,8 @@ public interface IClassProvider
 	/// <see langword="true"/> if <paramref name="jObject"/> can be safely cast to
 	/// <typeparamref name="TDataType"/> instance; otherwise, <see langword="false"/>.
 	/// </returns>
-	Boolean IsAssignableTo<TDataType>(JReferenceObject jObject) where TDataType : JLocalObject, IDataType<TDataType>;
+	Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
+		where TDataType : JReferenceObject, IDataType<TDataType>;
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.
 	/// </summary>
@@ -113,4 +114,12 @@ public interface IClassProvider
 	/// <param name="signature">Output. Class signature.</param>
 	/// <param name="hash">Output. Class hash.</param>
 	void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash);
+
+	/// <summary>
+	/// Sets <paramref name="jObject"/> as assignable to <typeparamref name="TDataType"/> type.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	internal void SetAssignableTo<TDataType>(JReferenceObject jObject)
+		where TDataType : JReferenceObject, IDataType<TDataType>;
 }

@@ -28,5 +28,12 @@ public interface IInterfaceImplementation<
 	/// </summary>
 	/// <param name="implementationInstance">A <typeparamref name="TImplementation"/> to implicitly convert.</param>
 	static virtual explicit operator TInterface?(TImplementation? implementationInstance)
-		=> TInterface.Create(implementationInstance);
+	{
+		if (implementationInstance is not null)
+		{
+			IEnvironment env = implementationInstance.Environment;
+			env.ClassProvider.SetAssignableTo<TInterface>(implementationInstance);
+		}
+		return TInterface.Create(implementationInstance);
+	}
 }

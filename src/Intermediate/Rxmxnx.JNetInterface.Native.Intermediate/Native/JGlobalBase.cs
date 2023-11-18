@@ -104,4 +104,15 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	protected abstract void Unload(in JLocalObject jLocal);
+
+	/// <summary>
+	/// Indicates whether <paramref name="jGlobal"/> is valid.
+	/// </summary>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if current instance is still valid; otherwise, <see langword="false"/>.
+	/// </returns>
+	public static Boolean IsValid([NotNullWhen(true)] JGlobalBase? jGlobal, IEnvironment env)
+		=> jGlobal is not null && jGlobal.IsValid(env);
 }

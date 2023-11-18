@@ -80,17 +80,15 @@ internal static class ValidationUtilities
 	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
 	/// </summary>
 	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
-	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="evaluator">Delegate to check <paramref name="jObject"/>.</param>
+	/// <param name="allowedCast">Indicates whether current cast is allowed.</param>
 	/// <exception cref="InvalidCastException">
 	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
 	/// </exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void ThrowIfInvalidCast<TDataType>(JReferenceObject jObject,
-		Func<JReferenceObject, Boolean> evaluator) where TDataType : IDataType<TDataType>
+	public static void ThrowIfInvalidCast<TDataType>(Boolean allowedCast) where TDataType : IDataType<TDataType>
 	{
 		JDataTypeMetadata metadata = IDataType.GetMetadata<TDataType>();
-		if (!evaluator(jObject))
+		if (!allowedCast)
 			throw new InvalidCastException($"The current instance can't be casted to {metadata.ClassName} type.");
 	}
 	/// <summary>

@@ -28,11 +28,11 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	{
 		get
 		{
-			if (this._global is null || this._global.IsValid(this._env))
+			if (!JGlobalBase.IsValid(this._global, this._env))
 				this._global = this._env.ReferenceProvider.Create<JGlobal>(this);
 			else
 				this._global.RefreshMetadata(this);
-			return this._global;
+			return this._lifetime.Prepare(this._global);
 		}
 	}
 	/// <summary>
@@ -42,11 +42,11 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	{
 		get
 		{
-			if (this._weak is null || this._weak.IsValid(this._env))
+			if (!JGlobalBase.IsValid(this._weak, this._env))
 				this._weak = this._env.ReferenceProvider.Create<JWeak>(this);
 			else
 				this._weak.RefreshMetadata(this);
-			return this._weak;
+			return this._lifetime.Prepare(this._weak);
 		}
 	}
 

@@ -79,7 +79,7 @@ public partial class JLocalObject : ILocalObject
 	private static TReferenceObject Validate<TReferenceObject, TDataType>(TReferenceObject jObject, IEnvironment env)
 		where TReferenceObject : JReferenceObject where TDataType : JLocalObject, IDataType<TDataType>
 	{
-		ValidationUtilities.ThrowIfInvalidCast<TDataType>(jObject, env.ClassProvider.IsAssignableTo<TDataType>);
+		ValidationUtilities.ThrowIfInvalidCast<TDataType>(jObject.IsAssignableTo<TDataType>());
 		return jObject;
 	}
 }

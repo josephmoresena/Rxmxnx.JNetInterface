@@ -59,6 +59,19 @@ public partial class JLocalObject
 	}
 	/// <inheritdoc/>
 	internal override TValue To<TValue>() => this.GetGlobalObject()?.To<TValue>() ?? base.To<TValue>();
+	/// <inheritdoc/>
+	internal override Boolean IsAssignableTo<TDataType>()
+	{
+		if (this._lifetime.IsAssignableTo<TDataType>())
+			return true;
+		if (JGlobalBase.IsValid(this._global, this._env))
+			return this._global.IsAssignableTo<TDataType>();
+		if (JGlobalBase.IsValid(this._weak, this._env))
+			return this._weak.IsAssignableTo<TDataType>();
+		return this._env.ClassProvider.IsAssignableTo<TDataType>(this);
+	}
+	/// <inheritdoc/>
+	internal override void SetAssignableTo<TDataType>() => this._lifetime.SetAssignableTo<TDataType>();
 
 	/// <summary>
 	/// Retrieves the loaded global object for given object.
