@@ -55,7 +55,7 @@ public abstract partial class JThrowableException : Exception
 	/// </summary>
 	/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
 	/// <param name="call">A <see cref="JThrowableCall"/> containing action to perform.</param>
-	internal static void WithSafeInvoke<TThrowable>(Object? call)
+	internal static void WithSafeInvoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable>(Object? call)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		=> (call as JThrowableCall)?.Invoke<TThrowable>();
 	/// <summary>
@@ -65,7 +65,7 @@ public abstract partial class JThrowableException : Exception
 	/// <typeparam name="TResult">The type of function result.</typeparam>
 	/// <param name="call">A <see cref="JThrowableCall"/> containing function to execute.</param>
 	/// <returns>The function result.</returns>
-	internal static TResult WithSafeInvoke<TThrowable, TResult>(Object? call)
+	internal static TResult WithSafeInvoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable, TResult>(Object? call)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		=> call is JThrowableCall jCall ? jCall.Invoke<TThrowable, TResult>() : default!;
 }

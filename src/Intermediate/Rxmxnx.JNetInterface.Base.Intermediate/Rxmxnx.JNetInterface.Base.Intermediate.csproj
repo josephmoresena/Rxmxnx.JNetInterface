@@ -28,6 +28,7 @@
         <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
         <Using Include="Rxmxnx.JNetInterface.Native.References"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
@@ -52,6 +53,9 @@
         </AssemblyAttribute>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Rxmxnx.JNetInterface.Extensions.Intermediate</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>Rxmxnx.JNetInterface.Implementation.Intermediate</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
 
