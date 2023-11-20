@@ -47,12 +47,22 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JBoolean>().Signature;
 	/// <inheritdoc/>
 	public Boolean IsDefault => this._value.Equals(default);
+	/// <summary>
+	/// Internal byte value.
+	/// </summary>
+	internal Byte ByteValue => this._value;
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JBoolean() => this._value = JBoolean.falseValue;
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="value"><see cref="Byte"/> value.</param>
+	internal JBoolean(Byte value) => this._value = value;
 
 	/// <summary>
 	/// Constructor.

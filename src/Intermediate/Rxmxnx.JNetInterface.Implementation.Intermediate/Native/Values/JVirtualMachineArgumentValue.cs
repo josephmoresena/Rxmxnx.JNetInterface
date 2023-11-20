@@ -1,6 +1,6 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.Values;
 
-internal readonly struct JVirtualMachineArgument
+internal readonly struct JVirtualMachineArgumentValue
 {
 	internal Int32 Version { get; init; }
 	internal IntPtr Name { get; init; }

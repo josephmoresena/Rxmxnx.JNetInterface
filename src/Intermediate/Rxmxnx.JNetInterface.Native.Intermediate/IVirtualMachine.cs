@@ -3,7 +3,7 @@
 /// <summary>
 /// This interface exposes the invocation interface of a Java Virtual Machine.
 /// </summary>
-public interface IVirtualMachine
+public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 {
 	/// <summary>
 	/// Minimum virtual machine version required for any JNI thread.
@@ -14,6 +14,8 @@ public interface IVirtualMachine
 	/// JNI reference to the interface.
 	/// </summary>
 	JVirtualMachineRef Reference { get; }
+
+	JVirtualMachineRef IWrapper<JVirtualMachineRef>.Value => this.Reference;
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance for current thread.

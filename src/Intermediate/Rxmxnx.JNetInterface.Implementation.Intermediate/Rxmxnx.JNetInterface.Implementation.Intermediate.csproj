@@ -15,10 +15,20 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="System.Collections.Concurrent"/>
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang"/>
+        <Using Include="Rxmxnx.JNetInterface.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Delegates"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
         <Using Include="Rxmxnx.JNetInterface.Native.References"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
+        <Using Include="Rxmxnx.JNetInterface.Primitives"/>
+        <Using Include="Rxmxnx.JNetInterface.Restricted"/>
+        <Using Include="Rxmxnx.JNetInterface.Types"/>
     </ItemGroup>
 
     <ItemGroup>

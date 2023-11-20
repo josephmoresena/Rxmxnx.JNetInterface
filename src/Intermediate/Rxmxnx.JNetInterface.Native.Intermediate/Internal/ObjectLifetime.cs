@@ -6,9 +6,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal sealed record ObjectLifetime
 {
 	/// <summary>
-	/// Set of assignable types.
+	/// Cache of assignable types.
 	/// </summary>
-	private readonly Dictionary<Type, Action<JGlobalBase>> _assignableTypes = new();
+	private readonly AssignableTypeCache _assignableTypes = new();
 	/// <summary>
 	/// Indicates whether the this instance is disposed.
 	/// </summary>
@@ -74,22 +74,13 @@ internal sealed record ObjectLifetime
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean IsAssignableTo<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>
-		=> this._assignableTypes.ContainsKey(typeof(TDataType));
+		=> this._assignableTypes.IsAssignableTo<TDataType>();
 	/// <summary>
 	/// Sets current instance as assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	internal void SetAssignableTo<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>
-		=> this._assignableTypes.Add(typeof(TDataType), ObjectLifetime.SetAssignableTo<TDataType>);
-
-	/// <summary>
-	/// Sets <paramref name="jGlobal"/> as assignable to <typeparamref name="TDataType"/> type.
-	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
-	private static void SetAssignableTo<TDataType>(JGlobalBase jGlobal)
-		where TDataType : JReferenceObject, IDataType<TDataType>
-		=> jGlobal.SetAssignableTo<TDataType>();
+		=> this._assignableTypes.SetAssignableTo<TDataType>();
 
 	/// <summary>
 	/// Prepares <paramref name="jGlobal"/> instance to be compatible with assignable types.
@@ -98,9 +89,5 @@ internal sealed record ObjectLifetime
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	/// <returns><paramref name="jGlobal"/> instance.</returns>
 	public TGlobal Prepare<TGlobal>(TGlobal jGlobal) where TGlobal : JGlobalBase
-	{
-		foreach (Type assignableType in this._assignableTypes.Keys)
-			this._assignableTypes[assignableType](jGlobal);
-		return jGlobal;
-	}
+		=> this._assignableTypes.Prepare(jGlobal);
 }

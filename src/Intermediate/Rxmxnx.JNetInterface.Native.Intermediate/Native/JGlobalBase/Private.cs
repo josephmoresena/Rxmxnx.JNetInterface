@@ -2,6 +2,7 @@ namespace Rxmxnx.JNetInterface.Native;
 
 public partial class JGlobalBase
 {
+	private readonly AssignableTypeCache _assignableTypes = new();
 	/// <summary>
 	/// This collection stores the weak references to the <see cref="JLocalObject"/> associated with
 	/// this instance.

@@ -97,7 +97,12 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <see langword="true"/> if <paramref name="jLocal"/> was associated to this instance;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	protected Boolean Remove(JLocalObject jLocal) => this._objects.TryRemove(jLocal.Id, out _);
+	protected Boolean Remove(JLocalObject jLocal)
+	{
+		if (!this._objects.TryRemove(jLocal.Id, out _)) return false;
+		_ = this._assignableTypes.Prepare(jLocal);
+		return true;
+	}
 
 	/// <summary>
 	/// Disassociates the current current instance from <paramref name="jLocal"/>.

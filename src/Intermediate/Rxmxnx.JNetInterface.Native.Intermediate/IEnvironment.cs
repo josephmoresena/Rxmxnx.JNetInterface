@@ -3,7 +3,7 @@
 /// <summary>
 /// This interface exposes a JNI instance.
 /// </summary>
-public interface IEnvironment
+public interface IEnvironment : IWrapper<JEnvironmentRef>
 {
 	/// <summary>
 	/// JNI reference to the interface.
@@ -42,6 +42,8 @@ public interface IEnvironment
 	/// Internal Array provider object.
 	/// </summary>
 	internal IArrayProvider ArrayProvider { get; }
+
+	JEnvironmentRef IWrapper<JEnvironmentRef>.Value => this.Reference;
 
 	/// <summary>
 	/// Retrieves the JNI type reference of <paramref name="jObject"/>.
@@ -85,4 +87,12 @@ public interface IEnvironment
 	/// <param name="stringRef">A local string reference.</param>
 	/// <returns>A <see cref="JStringObject"/> instance passed as JNI argument.</returns>
 	JStringObject CreateParameterObject(JStringLocalRef stringRef);
+	/// <summary>
+	/// Creates a <see cref="JArrayObject{TElement}"/> instance for <paramref name="arrayRef"/> reference
+	/// whose origin is a JNI argument.
+	/// </summary>
+	/// <param name="arrayRef">A local array reference.</param>
+	/// <returns>A <see cref="JArrayObject{TElement}"/> instance passed as JNI argument.</returns>
+	JArrayObject<TElement> CreateParameterObject<TElement>(JArrayLocalRef arrayRef)
+		where TElement : IDataType<TElement>;
 }
