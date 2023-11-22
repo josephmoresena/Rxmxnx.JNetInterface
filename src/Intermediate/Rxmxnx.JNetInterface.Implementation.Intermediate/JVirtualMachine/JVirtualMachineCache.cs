@@ -18,11 +18,15 @@ public partial class JVirtualMachine
 		/// </summary>
 		public ThreadCache ThreadCache { get; private init; }
 
-		public JVirtualMachineCache(JVirtualMachineRef reference)
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
+		public JVirtualMachineCache(JVirtualMachineRef vmRef)
 		{
-			this.Reference = reference;
+			this.Reference = vmRef;
 			this.DelegateCache = new();
-			this.ThreadCache = new();
+			this.ThreadCache = new(vmRef);
 		}
 	}
 }

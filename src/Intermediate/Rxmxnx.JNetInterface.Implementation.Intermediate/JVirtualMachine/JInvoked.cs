@@ -20,7 +20,7 @@ public partial class JVirtualMachine
 		public override Boolean IsDisposable => this._isDisposable;
 
 		/// <inheritdoc/>
-		public Invoked(JVirtualMachineRef reference) : base(reference)
+		public Invoked(JVirtualMachineRef vmRef) : base(vmRef)
 		{
 			this._isDisposed = IMutableReference<Boolean>.Create();
 			this._isDisposable = true;
@@ -43,6 +43,8 @@ public partial class JVirtualMachine
 			DestroyVirtualMachineDelegate del = this._cache.DelegateCache.GetDelegate<DestroyVirtualMachineDelegate>(
 				this._cache.Reference.Reference.Reference.DestroyJavaVmPointer);
 			del(this._cache.Reference);
+			this._isDisposed.Value = true;
+			JVirtualMachine.RemoveVirtualMachine(this._cache.Reference);
 		}
 	}
 }

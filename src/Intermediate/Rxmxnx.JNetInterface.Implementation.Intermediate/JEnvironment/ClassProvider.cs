@@ -4,6 +4,15 @@ public partial class JEnvironment
 {
 	private partial record JEnvironmentCache : IClassProvider
 	{
+		JClassObject IClassProvider.BooleanClassObject => this.GetClass<JBooleanObject>();
+		JClassObject IClassProvider.ByteClassObject => this.GetClass<JByteObject>();
+		JClassObject IClassProvider.CharacterClassObject => this.GetClass<JCharacterObject>();
+		JClassObject IClassProvider.DoubleClassObject => this.GetClass<JDoubleObject>();
+		JClassObject IClassProvider.FloatClassObject => this.GetClass<JFloatObject>();
+		JClassObject IClassProvider.IntegerClassObject => this.GetClass<JIntegerObject>();
+		JClassObject IClassProvider.LongClassObject => this.GetClass<JLongObject>();
+		JClassObject IClassProvider.ShortClassObject => this.GetClass<JShortObject>();
+		
 		public Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
 			where TDataType : JReferenceObject, IDataType<TDataType>
 			=> throw new NotImplementedException();

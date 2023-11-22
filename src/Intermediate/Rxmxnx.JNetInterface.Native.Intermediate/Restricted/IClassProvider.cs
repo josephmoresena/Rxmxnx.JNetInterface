@@ -25,6 +25,38 @@ public interface IClassProvider
 	/// <c>java.lang.Throwable</c> class instance.
 	/// </summary>
 	JClassObject ThrowableClassObject => this.GetClass<JThrowableObject>();
+	/// <summary>
+	/// <c>java.lang.Boolean</c> class instance.
+	/// </summary>
+	JClassObject BooleanClassObject { get; }
+	/// <summary>
+	/// <c>java.lang.Byte</c> class instance.
+	/// </summary>
+	JClassObject ByteClassObject { get; }
+	/// <summary>
+	/// <c>java.lang.Character</c> class instance.
+	/// </summary>
+	JClassObject CharacterClassObject { get; }
+	/// <summary>
+	/// <c>java.lang.Double</c> class instance.
+	/// </summary>
+	JClassObject DoubleClassObject { get; }
+	/// <summary>
+	/// <c>java.lang.Float</c> class instance.
+	/// </summary>
+	JClassObject FloatClassObject { get; }
+	/// <summary>
+	/// <c>java.lang.Integer</c> class instance.
+	/// </summary>
+	JClassObject IntegerClassObject { get; }
+	/// <summary>
+	/// <c>java.lang.Long</c> class instance.
+	/// </summary>
+	JClassObject LongClassObject { get; }
+	/// <summary>
+	/// <c>java.lang.Short</c> class instance.
+	/// </summary>
+	JClassObject ShortClassObject { get; }
 
 	/// <summary>
 	/// Determines whether <paramref name="jObject"/> can be safely cast to

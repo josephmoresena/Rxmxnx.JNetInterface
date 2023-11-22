@@ -113,4 +113,8 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.StackTraceElement</c> class.
 	/// </summary>
 	public const String JStackTraceElementClassName = ClassNames.JLangPath + "StackTraceElement";
+	/// <summary>
+	/// JNI name of <c>java.lang.Thread.UncaughtExceptionHandler</c> interface.
+	/// </summary>
+	public const String JUncaughtExceptionHandlerInterfaceName = ClassNames.JLangPath + "Thread$UncaughtExceptionHandler";
 }

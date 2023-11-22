@@ -21,7 +21,7 @@ public partial class JEnvironment : IEnvironment
 	/// </summary>
 	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="reference">A <see cref="JEnvironmentRef"/> reference.</param>
-	private JEnvironment(IVirtualMachine vm, JEnvironmentRef reference) => this._cache = new(vm, reference);
+	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef reference) => this._cache = new(vm, reference);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

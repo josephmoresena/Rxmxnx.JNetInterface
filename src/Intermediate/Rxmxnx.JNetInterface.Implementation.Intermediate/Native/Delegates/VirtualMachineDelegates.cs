@@ -12,13 +12,13 @@ internal delegate JResult GetVirtualMachineDelegate(JEnvironmentRef env, ref JVi
 internal delegate JResult DestroyVirtualMachineDelegate(JVirtualMachineRef vm);
 
 internal delegate JResult AttachCurrentThreadDelegate(JVirtualMachineRef vm, out JEnvironmentRef env,
-	in JVirtualMachineArgumentValue args0);
+	in JVirtualMachineArgumentValue args);
 
 internal delegate JResult DetachCurrentThreadDelegate(JVirtualMachineRef vm);
 internal delegate JResult GetEnvDelegate(JVirtualMachineRef vm, out JEnvironmentRef env, Int32 version);
 
 internal delegate JResult AttachCurrentThreadAsDaemonDelegate(JVirtualMachineRef vm, out JEnvironmentRef env,
-	in JVirtualMachineArgumentValue args0);
+	in JVirtualMachineArgumentValue args);
 
 internal delegate Byte IsVirtualThreadDelegate(JEnvironmentRef env, JObjectLocalRef obj);
 internal delegate JResult GetDefaultVirtualMachineInitArgsDelegate(ref JVirtualMachineInitArgumentValue args);

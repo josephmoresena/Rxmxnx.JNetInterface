@@ -6,6 +6,15 @@ namespace Rxmxnx.JNetInterface.Native.Dummies;
 public interface IDummyEnvironment : IEnvironment, IAccessProvider, IClassProvider, IReferenceProvider, IStringProvider,
 	IEnumProvider, IArrayProvider
 {
+	JClassObject IClassProvider.BooleanClassObject => this.GetClass<JBooleanObject>();
+	JClassObject IClassProvider.ByteClassObject => this.GetClass<JByteObject>();
+	JClassObject IClassProvider.CharacterClassObject => this.GetClass<JCharacterObject>();
+	JClassObject IClassProvider.DoubleClassObject => this.GetClass<JDoubleObject>();
+	JClassObject IClassProvider.FloatClassObject => this.GetClass<JFloatObject>();
+	JClassObject IClassProvider.IntegerClassObject => this.GetClass<JIntegerObject>();
+	JClassObject IClassProvider.LongClassObject => this.GetClass<JLongObject>();
+	JClassObject IClassProvider.ShortClassObject => this.GetClass<JShortObject>();
+	
 	TObject IAccessProvider.CallInternalConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
 		IObject?[] args)
 		=> this.CallConstructor<TObject>(jClass, definition, args.Normalize());
@@ -45,6 +54,7 @@ public interface IDummyEnvironment : IEnvironment, IAccessProvider, IClassProvid
 	void IAccessProvider.CallPrimitiveNonVirtualFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 		JFunctionDefinition definition, IObject?[] args)
 		=> definition.PrimitiveInvoke(bytes, jLocal, jClass, args);
+	
 	IAccessProvider IEnvironment.AccessProvider => this;
 	IClassProvider IEnvironment.ClassProvider => this;
 	IReferenceProvider IEnvironment.ReferenceProvider => this;

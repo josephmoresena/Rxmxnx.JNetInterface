@@ -8,9 +8,13 @@ public partial class JEnvironment
 	private sealed partial record JEnvironmentCache
 	{
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
-		public IVirtualMachine VirtualMachine { get; }
+		public IVirtualMachine VirtualMachine { get; private init; }
 		/// <inheritdoc cref="JEnvironment.Reference"/>
-		public JEnvironmentRef Reference { get; }
+		public JEnvironmentRef Reference { get; private init; }
+		/// <summary>
+		/// Thread.
+		/// </summary>
+		public Thread Thread { get; set; }
 		/// <summary>
 		/// Delegate cache.
 		/// </summary>
@@ -26,6 +30,19 @@ public partial class JEnvironment
 			this.VirtualMachine = vm;
 			this.Reference = reference;
 			this.DelegateCache = new();
+			this.Thread = Thread.CurrentThread;
+			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this);
+		}
+
+		/// <summary>
+		/// Cache finalize method.
+		/// </summary>
+		/// <param name="obj">A <see cref="JEnvironmentCache"/> instance.</param>
+		private static void FinalizeCache(Object? obj)
+		{
+			if (obj is not JEnvironmentCache cache) return;
+			cache.Thread.Join();
+			JVirtualMachine.RemoveEnvironment(cache.VirtualMachine.Reference, cache.Reference);
 		}
 	}
 }

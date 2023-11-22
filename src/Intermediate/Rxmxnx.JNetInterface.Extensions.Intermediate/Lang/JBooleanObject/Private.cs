@@ -19,7 +19,7 @@ public sealed partial class JBooleanObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	private JBooleanObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.BooleanClassObject())
+	private JBooleanObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.BooleanClassObject)
 	{
 		if (jLocal is JBooleanObject wrapper)
 			this._value = wrapper._value;
@@ -30,7 +30,7 @@ public sealed partial class JBooleanObject
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="value">Instance value.</param>
 	private JBooleanObject(JLocalObject jLocal, JBoolean? value) : base(
-		jLocal, jLocal.Environment.ClassProvider.BooleanClassObject())
+		jLocal, jLocal.Environment.ClassProvider.BooleanClassObject)
 	{
 		this._value = value;
 		jLocal.Dispose();

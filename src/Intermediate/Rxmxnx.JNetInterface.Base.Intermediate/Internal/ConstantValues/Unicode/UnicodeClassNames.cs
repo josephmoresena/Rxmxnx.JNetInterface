@@ -77,4 +77,7 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.JStackTraceElementClassName"/>
 	[DefaultValue(ClassNames.JStackTraceElementClassName)]
 	public static readonly CString JStackTraceElementClassName;
+	/// <inheritdoc cref="ClassNames.JUncaughtExceptionHandlerInterfaceName"/>
+	[DefaultValue(ClassNames.JUncaughtExceptionHandlerInterfaceName)]
+	public static readonly CString JUncaughtExceptionHandlerInterfaceName;
 }

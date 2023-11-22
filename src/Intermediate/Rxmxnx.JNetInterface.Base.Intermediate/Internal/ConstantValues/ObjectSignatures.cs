@@ -139,4 +139,9 @@ internal static class ObjectSignatures
 	/// </summary>
 	public const String JStackTraceElementObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
 		ClassNames.JStackTraceElementClassName + ObjectSignatures.ObjectSignatureSuffix;
+	/// <summary>
+	/// JNI signature for <c>java.lang.Thread.UncaughtExceptionHandler</c> object.
+	/// </summary>
+	public const String JUncaughtExceptionHandlerObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
+		ClassNames.JUncaughtExceptionHandlerInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
 }

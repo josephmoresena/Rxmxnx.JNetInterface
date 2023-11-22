@@ -46,4 +46,13 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <returns>A <see cref="IThread"/> instance.</returns>
 	IThread InitializeThread(CString threadName, JObject? threadGroup = default,
 		Int32 version = IVirtualMachine.MinimalVersion);
+	/// <summary>
+	/// Attaches the current thread as daemon to the virtual machine.
+	/// </summary>
+	/// <param name="threadName">A name for current thread.</param>
+	/// <param name="threadGroup">A <see cref="JObject"/> instance of <c>java.lang.ThreadGroup</c>.</param>
+	/// <param name="version">Thread requested version.</param>
+	/// <returns>A <see cref="IThread"/> instance.</returns>
+	IThread InitializeDaemon(CString threadName, JObject? threadGroup = default,
+		Int32 version = IVirtualMachine.MinimalVersion);
 }
