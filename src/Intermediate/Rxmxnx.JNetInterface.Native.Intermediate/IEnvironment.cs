@@ -14,13 +14,13 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </summary>
 	IVirtualMachine VirtualMachine { get; }
 	/// <summary>
-	/// The current ensured capacity for local references.
-	/// </summary>
-	Int32? EnsuredCapacity { get; }
-	/// <summary>
 	/// JNI version.
 	/// </summary>
 	Int32 Version { get; }
+	/// <summary>
+	/// The current ensured capacity for local references.
+	/// </summary>
+	Int32? LocalCapacity { get; set; }
 
 	/// <summary>
 	/// Internal accessor provider object.
@@ -70,13 +70,14 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </returns>
 	Boolean IsSameObject(JObject jObject, JObject? jOther);
 	/// <summary>
-	/// Creates a <typeparamref name="TObject"/> instance for <paramref name="objRef"/> reference
+	/// Creates a <typeparamref name="TObject"/> instance for <paramref name="localRef"/> reference
 	/// whose origin is a JNI argument.
 	/// </summary>
 	/// <typeparam name="TObject">A <see cref="JLocalObject"/> type.</typeparam>
-	/// <param name="objRef">A local object reference.</param>
+	/// <param name="localRef">A local object reference.</param>
 	/// <returns>A <typeparamref name="TObject"/> instance passed as JNI argument.</returns>
-	TObject CreateParameterObject<TObject>(JObjectLocalRef objRef) where TObject : JLocalObject, IDataType<TObject>;
+	TObject CreateParameterObject<TObject>(JObjectLocalRef localRef)
+		where TObject : JLocalObject, IReferenceType<TObject>;
 	/// <summary>
 	/// Creates a <see cref="JClassObject"/> instance for <paramref name="classRef"/> reference
 	/// whose origin is a JNI argument.

@@ -261,6 +261,10 @@ public partial class JEnvironment
 		/// Thread.
 		/// </summary>
 		public Thread Thread { get; }
+		/// <summary>
+		/// Ensured capacity.
+		/// </summary>
+		public Int32? Capacity { get; private set; }
 
 		/// <summary>
 		/// Constructor.
@@ -289,6 +293,37 @@ public partial class JEnvironment
 			Int32 index = JEnvironmentCache.delegateIndex[typeOfT];
 			IntPtr ptr = this.GetPointer(index);
 			return this._delegateCache.GetDelegate<TDelegate>(ptr);
+		}
+		/// <summary>
+		/// Ensure local capacity to <paramref name="capacity"/>.
+		/// </summary>
+		/// <param name="capacity">Top of local references.</param>
+		/// <exception cref="JniException"/>
+		public void EnsureLocalCapacity(Int32 capacity)
+		{
+			if (capacity <= 0) return;
+			ValidationUtilities.ThrowIfDifferentThread(this.Thread);
+			EnsureLocalCapacityDelegate ensureLocalCapacity = this.GetDelegate<EnsureLocalCapacityDelegate>();
+			JResult result = ensureLocalCapacity(this.Reference, capacity);
+			if (result != JResult.Ok)
+				throw new JniException(result);
+			this.Capacity = capacity;
+		}
+
+		/// <summary>
+		/// Retrieves a <see cref="JVirtualMachine"/> from given <paramref name="jEnv"/>.
+		/// </summary>
+		/// <param name="jEnv">A <see cref="JEnvironmentRef"/> reference.</param>
+		/// <returns>A <see cref="IVirtualMachine"/> instance.</returns>
+		public static IVirtualMachine GetVirtualMachine(JEnvironmentRef jEnv)
+		{
+			Int32 index = JEnvironmentCache.delegateIndex[typeof(GetVirtualMachineDelegate)];
+			GetVirtualMachineDelegate getVirtualMachine =
+				jEnv.Reference.Reference[index].GetUnsafeDelegate<GetVirtualMachineDelegate>()!;
+			JResult result = getVirtualMachine(jEnv, out JVirtualMachineRef vmRef);
+			if (result == JResult.Ok)
+				return JVirtualMachine.GetVirtualMachine(vmRef);
+			throw new JniException(result);
 		}
 
 		/// <summary>

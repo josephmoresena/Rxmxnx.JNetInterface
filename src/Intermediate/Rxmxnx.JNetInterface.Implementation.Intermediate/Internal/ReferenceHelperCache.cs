@@ -5,8 +5,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </summary>
 /// <typeparam name="TObject">Type of object.</typeparam>
 /// <typeparam name="TReference">Type of reference.</typeparam>
-internal abstract record ReferenceHelperCache<TObject, TReference> where TObject : class, IWrapper<TReference>
-	where TReference : unmanaged, INativeReferenceType<TReference>
+/// <typeparam name="TCreationArg">Type of creation argument.</typeparam>
+internal abstract record ReferenceHelperCache<TObject, TReference, TCreationArg>
+	where TObject : class, IWrapper<TReference> where TReference : unmanaged, INativeReferenceType<TReference>
 {
 	/// <summary>
 	/// Dictionary of objects.
@@ -17,9 +18,9 @@ internal abstract record ReferenceHelperCache<TObject, TReference> where TObject
 	/// Creates a new <typeparamref name="TObject"/> instance from <paramref name="reference"/>.
 	/// </summary>
 	/// <param name="reference">A reference pointer to create a <typeparamref name="TObject"/> instance.</param>
-	/// <param name="isDestroyable">Indicates whether created instance must be destroyable.</param>
+	/// <param name="arg">Creation argument.</param>
 	/// <returns>A <typeparamref name="TObject"/> instance.</returns>
-	protected abstract TObject Create(TReference reference, Boolean isDestroyable);
+	protected abstract TObject Create(TReference reference, TCreationArg? arg);
 	/// <summary>
 	/// Destroys <paramref name="instance"/>.
 	/// </summary>
@@ -30,17 +31,17 @@ internal abstract record ReferenceHelperCache<TObject, TReference> where TObject
 	/// Retrieves a <typeparamref name="TObject"/> instance from <paramref name="reference"/>.
 	/// </summary>
 	/// <param name="reference">A reference pointer to <typeparamref name="TObject"/> instance.</param>
-	/// <param name="isDestroyable">Indicates whether created instance must be destroyable.</param>
+	/// <param name="arg">Creation argument.</param>
 	/// <param name="isNew">Indicates whether current object is new in cache.</param>
 	/// <returns>A <typeparamref name="TObject"/> instance.</returns>
-	public TObject Get(TReference reference, Boolean isDestroyable, out Boolean isNew)
+	public TObject Get(TReference reference, out Boolean isNew, TCreationArg? arg = default)
 	{
 		isNew = false;
 		if (this._objects.TryGetValue(reference.Pointer, out WeakReference<TObject>? weak) &&
 		    weak.TryGetTarget(out TObject? result)) return result;
 
 		isNew = true;
-		result = this.Create(reference, isDestroyable);
+		result = this.Create(reference, arg);
 		if (weak is null)
 			this._objects.TryAdd(reference.Pointer, new(result));
 		else

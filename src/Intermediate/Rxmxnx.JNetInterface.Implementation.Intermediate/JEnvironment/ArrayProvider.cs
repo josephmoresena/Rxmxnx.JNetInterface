@@ -4,10 +4,19 @@ public partial class JEnvironment
 {
 	private partial record JEnvironmentCache : IArrayProvider
 	{
-		public Int32 GetArrayLength(JReferenceObject jObject) => throw new NotImplementedException();
+		public Int32 GetArrayLength(JReferenceObject jObject)
+		{
+			ValidationUtilities.ThrowIfDummy(jObject);
+			GetArrayLengthDelegate getArrayLength = this.GetDelegate<GetArrayLengthDelegate>();
+			return getArrayLength(this.Reference, jObject.As<JArrayLocalRef>());
+		}
 		public TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
 			where TElement : IDataType<TElement>
-			=> throw new NotImplementedException();
+		{
+			JDataTypeMetadata metadata = IDataType.GetMetadata<TElement>();
+			if (metadata is JPrimitiveTypeMetadata primitiveMetadata) throw new NotImplementedException();
+			throw new NotImplementedException();
+		}
 		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
 			where TElement : IDataType<TElement>
 		{

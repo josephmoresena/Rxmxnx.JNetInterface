@@ -5,7 +5,7 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// Reference cache implementation.
 	/// </summary>
-	private sealed record ReferenceCache : ReferenceHelperCache<JVirtualMachine, JVirtualMachineRef>
+	private sealed record ReferenceCache : ReferenceHelperCache<JVirtualMachine, JVirtualMachineRef, Boolean>
 	{
 		/// <summary>
 		/// Current <see cref="ReferenceCache"/> instance.

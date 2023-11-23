@@ -8,7 +8,7 @@ internal delegate JResult RegisterNativesDelegate(JEnvironmentRef env, JClassLoc
 internal delegate JResult UnregisterNativesDelegate(JEnvironmentRef env, JClassLocalRef jClass);
 internal delegate JResult MonitorEnterDelegate(JEnvironmentRef env, JObjectLocalRef jClass);
 internal delegate JResult MonitorExitDelegate(JEnvironmentRef env, JObjectLocalRef jClass);
-internal delegate JResult GetVirtualMachineDelegate(JEnvironmentRef env, ref JVirtualMachineRef jvm);
+internal delegate JResult GetVirtualMachineDelegate(JEnvironmentRef env, out JVirtualMachineRef jvm);
 internal delegate JResult DestroyVirtualMachineDelegate(JVirtualMachineRef vm);
 
 internal delegate JResult AttachCurrentThreadDelegate(JVirtualMachineRef vm, out JEnvironmentRef env,

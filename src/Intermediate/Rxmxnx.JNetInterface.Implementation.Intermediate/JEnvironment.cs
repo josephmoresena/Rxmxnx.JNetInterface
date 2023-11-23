@@ -11,9 +11,17 @@ public partial class JEnvironment : IEnvironment
 	private readonly JEnvironmentCache _cache;
 
 	/// <summary>
+	/// Thread name.
+	/// </summary>
+	public virtual CString Name => CString.Zero;
+	/// <summary>
 	/// Indicates whether current instance is disposable.
 	/// </summary>
 	public virtual Boolean IsDisposable => false;
+	/// <summary>
+	/// Indicates whether current thread is daemon.
+	/// </summary>
+	public virtual Boolean IsDaemon => false;
 
 	/// <summary>
 	/// Constructor.
@@ -34,7 +42,11 @@ public partial class JEnvironment : IEnvironment
 	/// <inheritdoc/>
 	public Int32 Version => this._cache.Version;
 
-	Int32? IEnvironment.EnsuredCapacity => throw new NotImplementedException();
+	Int32? IEnvironment.LocalCapacity
+	{
+		get => this._cache.Capacity;
+		set => this._cache.EnsureLocalCapacity(value.GetValueOrDefault());
+	}
 	IAccessProvider IEnvironment.AccessProvider => this._cache;
 	IClassProvider IEnvironment.ClassProvider => this._cache;
 	IReferenceProvider IEnvironment.ReferenceProvider => this._cache;
@@ -54,25 +66,40 @@ public partial class JEnvironment : IEnvironment
 		if ((jObject.IsDefault && (jOther is null || jOther.IsDefault)) || jObject.Equals(jOther))
 			return true;
 
-		if (jObject is JReferenceObject jRefObj && jOther is JReferenceObject jRefOther)
-		{
-			ValidationUtilities.ThrowIfDummy(jRefObj);
-			ValidationUtilities.ThrowIfDummy(jRefOther);
-			IsSameObjectDelegate isSameObject = this._cache.GetDelegate<IsSameObjectDelegate>();
-			return isSameObject(this._cache.Reference, jRefObj.As<JObjectLocalRef>(),
-			                    jRefOther.As<JObjectLocalRef>()) == JBoolean.TrueValue;
-		}
+		if (jObject is not JReferenceObject jRefObj || jOther is not JReferenceObject jRefOther)
+			return JEnvironment.Equals(jObject as IEquatable<IPrimitiveType>, jOther as IPrimitiveType) ??
+				JEnvironment.Equals(jOther as IEquatable<IPrimitiveType>, jObject as IPrimitiveType) ??
+				JEnvironment.Equals(jObject as IEquatable<JPrimitiveObject>, jOther as JPrimitiveObject) ??
+				JEnvironment.Equals(jOther as IEquatable<JPrimitiveObject>, jObject as JPrimitiveObject) ?? false;
 
-		return JEnvironment.Equals(jObject as IEquatable<IPrimitiveType>, jOther as IPrimitiveType) ??
-			JEnvironment.Equals(jOther as IEquatable<IPrimitiveType>, jObject as IPrimitiveType) ??
-			JEnvironment.Equals(jObject as IEquatable<JPrimitiveObject>, jOther as JPrimitiveObject) ??
-			JEnvironment.Equals(jOther as IEquatable<JPrimitiveObject>, jObject as JPrimitiveObject) ?? false;
+		ValidationUtilities.ThrowIfDummy(jRefObj);
+		ValidationUtilities.ThrowIfDummy(jRefOther);
+		IsSameObjectDelegate isSameObject = this._cache.GetDelegate<IsSameObjectDelegate>();
+		return isSameObject(this._cache.Reference, jRefObj.As<JObjectLocalRef>(), jRefOther.As<JObjectLocalRef>()) ==
+			JBoolean.TrueValue;
 	}
-	TObject IEnvironment.CreateParameterObject<TObject>(JObjectLocalRef objRef) => throw new NotImplementedException();
+	TObject IEnvironment.CreateParameterObject<TObject>(JObjectLocalRef localRef)
+	{
+		using JLocalObject jLocal = new(this, localRef, false, true, this._cache.GetClass<TObject>());
+		jLocal.SetAssignableTo<TObject>();
+		return (TObject)IReferenceType.GetMetadata<TObject>().ParseInstance(jLocal);
+	}
 	JClassObject IEnvironment.CreateParameterObject(JClassLocalRef classRef) => throw new NotImplementedException();
-	JStringObject IEnvironment.CreateParameterObject(JStringLocalRef stringRef) => throw new NotImplementedException();
+	JStringObject IEnvironment.CreateParameterObject(JStringLocalRef stringRef)
+		=> new(this, stringRef, null, false, true);
 	JArrayObject<TElement> IEnvironment.CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
-		=> throw new NotImplementedException();
+		=> new(this, arrayRef, null, false, true);
+
+	/// <summary>
+	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
+	/// </summary>
+	/// <param name="reference">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <returns>The <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.</returns>
+	public static IEnvironment GetEnvironment(JEnvironmentRef reference)
+	{
+		IVirtualMachine vm = JEnvironmentCache.GetVirtualMachine(reference);
+		return vm.GetEnvironment(reference);
+	}
 
 	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
 	private static Boolean? Equals<TEquatable>(IEquatable<TEquatable>? obj, TEquatable? other)

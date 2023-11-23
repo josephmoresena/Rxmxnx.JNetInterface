@@ -2,7 +2,7 @@
 
 internal readonly struct JVirtualMachineArgumentValue
 {
-	internal Int32 Version { get; init; }
-	internal IntPtr Name { get; init; }
-	internal JObjectLocalRef Group { get; init; }
+	public Int32 Version { get; init; }
+	public IntPtr Name { get; init; }
+	public JGlobalRef Group { get; init; }
 }

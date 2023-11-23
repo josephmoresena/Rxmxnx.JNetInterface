@@ -5,7 +5,7 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// IEnvironment cache implementation.
 	/// </summary>
-	private sealed record ThreadCache : ReferenceHelperCache<JEnvironment, JEnvironmentRef>
+	private sealed record ThreadCache : ReferenceHelperCache<JEnvironment, JEnvironmentRef, ThreadCreationArgs>
 	{
 		/// <inheritdoc cref="JVirtualMachine.Reference"/>
 		private readonly JVirtualMachineRef _envRef;
@@ -17,8 +17,10 @@ public partial class JVirtualMachine
 		public ThreadCache(JVirtualMachineRef envRef) => this._envRef = envRef;
 
 		/// <inheritdoc/>
-		protected override JEnvironment Create(JEnvironmentRef reference, Boolean isDestroyable)
-			=> !isDestroyable ? new(JVirtualMachine.GetVirtualMachine(this._envRef), reference) : default!;
+		protected override JEnvironment Create(JEnvironmentRef reference, ThreadCreationArgs? args)
+			=> args is null ?
+				new JEnvironment(JVirtualMachine.GetVirtualMachine(this._envRef), reference) :
+				new JEnvironment.JThread(JVirtualMachine.GetVirtualMachine(this._envRef), reference, args);
 		/// <inheritdoc/>
 		protected override void Destroy(JEnvironment instance)
 		{

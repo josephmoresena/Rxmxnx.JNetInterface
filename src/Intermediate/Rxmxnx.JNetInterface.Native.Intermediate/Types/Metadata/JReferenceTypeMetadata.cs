@@ -32,5 +32,6 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jLocal"/>.</returns>
-	internal abstract IDataType? ParseInstance(JLocalObject? jLocal);
+	[return: NotNullIfNotNull(nameof(jLocal))]
+	internal abstract JLocalObject? ParseInstance(JLocalObject? jLocal);
 }
