@@ -187,4 +187,27 @@ internal static class ValidationUtilities
 		if (isInvalid.Value)
 			throw new InvalidOperationException("The sequence is no longer valid.");
 	}
+	/// <summary>
+	/// Throws an exception if <paramref name="jObject"/> is dummy.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is dummy.</exception>
+	public static void ThrowIfDummy(JReferenceObject? jObject)
+	{
+		if (jObject is not null && jObject.IsDummy)
+			throw new InvalidOperationException("Invalid JReferenceObject.");
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="thread"/> is different to current thread.
+	/// </summary>
+	/// <param name="thread">A <see cref="Thread"/>.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="thread"/> is different to current
+	/// thread.
+	/// </exception>
+	public static void ThrowIfDifferentThread(Thread thread)
+	{
+		if (thread != Thread.CurrentThread)
+			throw new InvalidOperationException("JNI Environment is assigned to another thread.");
+	}
 }

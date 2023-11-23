@@ -14,7 +14,7 @@ internal abstract record ReferenceHelperCache<TObject, TReference> where TObject
 	private readonly ConcurrentDictionary<IntPtr, WeakReference<TObject>> _objects = new();
 
 	/// <summary>
-	/// Creates a new <see cref="TObject"/> instance from <paramref name="reference"/>.
+	/// Creates a new <typeparamref name="TObject"/> instance from <paramref name="reference"/>.
 	/// </summary>
 	/// <param name="reference">A reference pointer to create a <typeparamref name="TObject"/> instance.</param>
 	/// <param name="isDestroyable">Indicates whether created instance must be destroyable.</param>

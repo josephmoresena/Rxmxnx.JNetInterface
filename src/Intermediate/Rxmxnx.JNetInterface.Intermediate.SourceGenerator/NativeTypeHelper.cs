@@ -73,7 +73,7 @@ internal sealed record NativeTypeHelper
 		{
 			String underlineType = this.GetUnderlinePrimitiveType();
 			this._typeSymbol.GeneratePrimitiveToString(context, valueName);
-			this._typeSymbol.GeneratePrimitiveOperators(context, underlineType, valueName);
+			this._typeSymbol.GeneratePrimitiveOperators(context, underlineType, valueName, this._isNumeric);
 			if (this._isNumeric)
 				this._typeSymbol.GeneratePrimitiveNumericOperators(context, underlineType);
 			if (this._isInteger)

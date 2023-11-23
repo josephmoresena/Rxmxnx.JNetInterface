@@ -32,7 +32,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	{
 		GetEnvDelegate del =
 			this._cache.DelegateCache.GetDelegate<GetEnvDelegate>(this.Reference.Reference.Reference.GetEnvPointer);
-		JResult result =  del(this.Reference, out JEnvironmentRef envRef, 0x00010006);
+		JResult result = del(this.Reference, out JEnvironmentRef envRef, 0x00010006);
 		return result != JResult.Ok ? this._cache.ThreadCache.Get(envRef, false, out _) : default(IEnvironment?);
 	}
 	IEnvironment IVirtualMachine.GetEnvironment(JEnvironmentRef envRef)
@@ -40,8 +40,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose) => throw new NotImplementedException();
 	IThread IVirtualMachine.InitializeThread(CString threadName, JObject? threadGroup, Int32 version)
 		=> throw new NotImplementedException();
-	IThread IVirtualMachine.InitializeDaemon(CString threadName, JObject? threadGroup,
-		Int32 version)
+	IThread IVirtualMachine.InitializeDaemon(CString threadName, JObject? threadGroup, Int32 version)
 		=> throw new NotImplementedException();
 
 	/// <summary>
@@ -66,8 +65,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// Removes the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
 	/// <param name="reference">A <see cref="JVirtualMachineRef"/> reference.</param>
-	public static void RemoveVirtualMachine(JVirtualMachineRef reference)
-		=> ReferenceCache.Instance.Remove(reference);
+	public static void RemoveVirtualMachine(JVirtualMachineRef reference) => ReferenceCache.Instance.Remove(reference);
 
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.

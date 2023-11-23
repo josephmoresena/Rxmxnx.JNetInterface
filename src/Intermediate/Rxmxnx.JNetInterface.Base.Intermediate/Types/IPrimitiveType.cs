@@ -9,7 +9,8 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 	/// <summary>
 	/// Native primitive type.
 	/// </summary>
-	static abstract JNativeType JniType { get; }
+	static virtual JNativeType JniType
+		=> ValidationUtilities.ThrowInvalidInterface<JNativeType>(nameof(IPrimitiveType));
 
 	/// <summary>
 	/// Retrieves the metadata for given primitive type.

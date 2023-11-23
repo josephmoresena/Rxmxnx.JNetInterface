@@ -116,5 +116,6 @@ internal static class ClassNames
 	/// <summary>
 	/// JNI name of <c>java.lang.Thread.UncaughtExceptionHandler</c> interface.
 	/// </summary>
-	public const String JUncaughtExceptionHandlerInterfaceName = ClassNames.JLangPath + "Thread$UncaughtExceptionHandler";
+	public const String JUncaughtExceptionHandlerInterfaceName =
+		ClassNames.JLangPath + "Thread$UncaughtExceptionHandler";
 }

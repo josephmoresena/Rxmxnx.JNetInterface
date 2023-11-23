@@ -12,7 +12,7 @@ public interface IDataType
 	/// <summary>
 	/// Datatype family type.
 	/// </summary>
-	internal static abstract Type? FamilyType { get; }
+	internal static virtual Type? FamilyType => ValidationUtilities.ThrowInvalidInterface<Type>(nameof(IDataType));
 
 	/// <summary>
 	/// Current type metadata.

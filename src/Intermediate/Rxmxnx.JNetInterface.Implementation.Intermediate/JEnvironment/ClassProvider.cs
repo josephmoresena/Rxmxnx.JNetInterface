@@ -12,7 +12,7 @@ public partial class JEnvironment
 		JClassObject IClassProvider.IntegerClassObject => this.GetClass<JIntegerObject>();
 		JClassObject IClassProvider.LongClassObject => this.GetClass<JLongObject>();
 		JClassObject IClassProvider.ShortClassObject => this.GetClass<JShortObject>();
-		
+
 		public Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
 			where TDataType : JReferenceObject, IDataType<TDataType>
 			=> throw new NotImplementedException();

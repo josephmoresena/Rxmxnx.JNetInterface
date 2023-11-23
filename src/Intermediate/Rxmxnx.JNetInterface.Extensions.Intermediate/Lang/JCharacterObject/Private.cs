@@ -19,8 +19,7 @@ public sealed partial class JCharacterObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	private JCharacterObject(JLocalObject jLocal) : base(
-		jLocal, jLocal.Environment.ClassProvider.CharacterClassObject)
+	private JCharacterObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.CharacterClassObject)
 	{
 		if (jLocal is JCharacterObject wrapper)
 			this._value = wrapper._value;

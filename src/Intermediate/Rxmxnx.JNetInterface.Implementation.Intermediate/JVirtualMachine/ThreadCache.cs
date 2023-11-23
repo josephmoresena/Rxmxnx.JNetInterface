@@ -9,20 +9,17 @@ public partial class JVirtualMachine
 	{
 		/// <inheritdoc cref="JVirtualMachine.Reference"/>
 		private readonly JVirtualMachineRef _envRef;
-		
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="envRef">A <see cref="JVirtualMachineRef"/> reference.</param>
-		public ThreadCache(JVirtualMachineRef envRef)
-		{
-			this._envRef = envRef;
-		}
+		public ThreadCache(JVirtualMachineRef envRef) => this._envRef = envRef;
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected override JEnvironment Create(JEnvironmentRef reference, Boolean isDestroyable)
 			=> !isDestroyable ? new(JVirtualMachine.GetVirtualMachine(this._envRef), reference) : default!;
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected override void Destroy(JEnvironment instance)
 		{
 			if (instance is IDisposable disposable)

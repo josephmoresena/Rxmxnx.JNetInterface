@@ -78,8 +78,8 @@ public sealed record JVirtualMachineInitOption
 	/// <summary>
 	/// Retrieves an unsafe <see cref="CString"/> from given pointer.
 	/// </summary>
-	/// <param name="ptr">A <see cref=""/></param>
-	/// <returns></returns>
+	/// <param name="ptr">A UTF-8 string pointer.</param>
+	/// <returns>A <see cref="CString"/> instance.</returns>
 	private static CString GetUnsafeCString(IntPtr ptr)
 	{
 		Int32 length = 0;

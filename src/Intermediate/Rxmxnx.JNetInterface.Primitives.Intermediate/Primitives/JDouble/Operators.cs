@@ -32,4 +32,18 @@ public readonly partial struct JDouble
 	/// </summary>
 	/// <param name="value">A <see cref="JDouble"/> to implicitly convert.</param>
 	public static implicit operator JFloat(JDouble value) => (Single)value._value;
+
+	static explicit IPrimitiveNumericType<JDouble>.operator JFloat(JDouble jPrimitive) => jPrimitive;
+	static explicit IPrimitiveNumericType<JDouble>.operator JDouble(JDouble jPrimitive) => jPrimitive;
+	static explicit IPrimitiveNumericType<JDouble>.operator SByte(JDouble jPrimitive)
+		=> IPrimitiveNumericType.GetIntegerValue<SByte>(jPrimitive._value);
+	static explicit IPrimitiveNumericType<JDouble>.operator Int64(JDouble jPrimitive)
+		=> IPrimitiveNumericType.GetIntegerValue<Int64>(jPrimitive._value);
+	static explicit IPrimitiveNumericType<JDouble>.operator Int16(JDouble jPrimitive)
+		=> IPrimitiveNumericType.GetIntegerValue<Int16>(jPrimitive._value);
+	static explicit IPrimitiveNumericType<JDouble>.operator Single(JDouble jPrimitive) => (Single)jPrimitive._value;
+	static explicit IPrimitiveNumericType<JDouble>.operator Int32(JDouble jPrimitive)
+		=> IPrimitiveNumericType.GetIntegerValue<Int32>(jPrimitive._value);
+	static explicit IPrimitiveNumericType<JDouble>.operator Char(JDouble jPrimitive)
+		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Char>();
 }

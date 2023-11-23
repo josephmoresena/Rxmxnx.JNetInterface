@@ -61,6 +61,7 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	internal void SetValue(TValue value) => this._value ??= value;
 }
 
+#pragma warning disable CS0659
 /// <summary>
 /// This class represents a local <c>java.lang.Number</c> instance.
 /// </summary>
@@ -68,7 +69,8 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 /// <typeparam name="TNumber"><see cref="JNumberObject"/> type.</typeparam>
 public abstract class
 	JNumberObject<TValue, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TNumber> :
-		JNumberObject<TValue>, IPrimitiveWrapperType, IInterfaceImplementation<TNumber, JSerializableObject>,
+		JNumberObject<TValue>, IPrimitiveWrapperType, IPrimitiveEquatable,
+		IInterfaceImplementation<TNumber, JSerializableObject>,
 		IInterfaceImplementation<TNumber, JComparableObject>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 	where TNumber : JNumberObject<TValue, TNumber>, IPrimitiveWrapperType<TNumber, TValue>
@@ -91,6 +93,14 @@ public abstract class
 	                                                                  jLocal.Environment.ClassProvider
 	                                                                        .GetClass<TNumber>()) { }
 
+	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Value.Equals(other);
+	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Value.Equals(other);
+
+	/// <inheritdoc/>
+	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
+	/// <inheritdoc/>
+	public override Boolean Equals(Object? obj) => base.Equals(obj) || this.Value.Equals(obj);
+
 	/// <inheritdoc cref="IPrimitiveWrapperType{TNumber, TValue}.Create(IEnvironment, Nullable{TValue})"/>
 	[return: NotNullIfNotNull(nameof(value))]
 	public static TNumber? Create(IEnvironment env, TValue? value) => TNumber.Create(env, value);
@@ -99,3 +109,4 @@ public abstract class
 	/// <inheritdoc cref="IReferenceType{TNumber}.Create(IEnvironment, JGlobalBase?)"/>
 	public new static TNumber? Create(IEnvironment env, JGlobalBase? jGlobal) => TNumber.Create(env, jGlobal);
 }
+#pragma warning restore CS0659

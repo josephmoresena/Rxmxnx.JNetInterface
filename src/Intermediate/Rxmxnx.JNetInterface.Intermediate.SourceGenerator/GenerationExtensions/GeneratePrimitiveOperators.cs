@@ -19,7 +19,7 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj) 
-		=> IPrimitiveType<{1}, {2}>.Equals(this, obj);
+		=> IPrimitiveType<{1}, {2}>.Equals(this, obj){4};
 	
 	/// <inheritdoc cref=""IEqualityOperators{{TSelf, TOther, TResult}}.op_Equality(TSelf, TOther)"" />
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -43,6 +43,9 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 	public static Boolean operator !=({2} left, {1} right) => !(left == right);
 }}
 #nullable restore";
+	private const String primitiveNumericEquals = @"
+		|| obj is IPrimitiveType primitive && IPrimitiveNumericType.Equals(this, primitive) 
+		|| obj is JPrimitiveObject primitiveObj && IPrimitiveNumericType.Equals(this, primitiveObj)";
 
 	/// <summary>
 	/// Generates operators for self-equatable structures.
@@ -51,14 +54,16 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 	/// <param name="context">Generation context.</param>
 	/// <param name="underlineType">Primitive underline type.</param>
 	/// <param name="valueName">Internal absolute value field name.</param>
+	/// <param name="isNumeric">Indicates whether the native type is a numeric value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void GeneratePrimitiveOperators(this ISymbol primitiveSymbol, GeneratorExecutionContext context,
-		String underlineType, String valueName)
+		String underlineType, String valueName, Boolean isNumeric)
 	{
 		String fileName = $"{primitiveSymbol.Name}.Primitive.g.cs";
+		String equalityComplement = isNumeric ? GenerationExtensions.primitiveNumericEquals : String.Empty;
 		String source = String.Format(GenerationExtensions.primitiveOperatorsFormat,
 		                              primitiveSymbol.ContainingNamespace, primitiveSymbol.Name, underlineType,
-		                              valueName);
+		                              valueName, equalityComplement);
 		context.AddSource(fileName, source);
 	}
 }

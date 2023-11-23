@@ -32,4 +32,18 @@ public readonly partial struct JInt
 	/// </summary>
 	/// <param name="value">A <see cref="JInt"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JInt value) => value._value;
+
+	static explicit IPrimitiveNumericType<JInt>.operator Int32(JInt jPrimitive) => jPrimitive._value;
+	static explicit IPrimitiveNumericType<JInt>.operator JLong(JInt jPrimitive) => jPrimitive;
+	static explicit IPrimitiveNumericType<JInt>.operator JDouble(JInt jPrimitive) => jPrimitive;
+	static explicit IPrimitiveNumericType<JInt>.operator JFloat(JInt jPrimitive) => jPrimitive;
+	static explicit IPrimitiveNumericType<JInt>.operator Single(JInt jPrimitive) => jPrimitive._value;
+	static explicit IPrimitiveNumericType<JInt>.operator JInt(JInt jPrimitive) => jPrimitive;
+	static explicit IPrimitiveNumericType<JInt>.operator SByte(JInt jPrimitive)
+		=> NativeUtilities.AsBytes(jPrimitive).ToValue<SByte>();
+	static explicit IPrimitiveNumericType<JInt>.operator Int64(JInt jPrimitive) => jPrimitive._value;
+	static explicit IPrimitiveNumericType<JInt>.operator Int16(JInt jPrimitive)
+		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Int16>();
+	static explicit IPrimitiveNumericType<JInt>.operator Char(JInt jPrimitive)
+		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Char>();
 }

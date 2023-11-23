@@ -10,11 +10,11 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// <summary>
 	/// Unsigned byte value for <see langword="true"/> value.
 	/// </summary>
-	private const Byte trueValue = 0x01;
+	internal const Byte TrueValue = 0x01;
 	/// <summary>
 	/// Unsigned byte value for <see langword="false"/> value.
 	/// </summary>
-	private const Byte falseValue = 0x00;
+	internal const Byte FalseValue = 0x00;
 
 	/// <summary>
 	/// Datatype metadata.
@@ -40,7 +40,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// <summary>
 	/// <see cref="Boolean"/> representation of current instance.
 	/// </summary>
-	public Boolean Value => this._value.Equals(JBoolean.trueValue);
+	public Boolean Value => this._value.Equals(JBoolean.TrueValue);
 	/// <inheritdoc/>
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JBoolean>().ClassName;
 	/// <inheritdoc/>
@@ -56,7 +56,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JBoolean() => this._value = JBoolean.falseValue;
+	public JBoolean() => this._value = JBoolean.FalseValue;
 
 	/// <summary>
 	/// Constructor.
@@ -69,7 +69,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// </summary>
 	/// <param name="value">Internal value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private JBoolean(Boolean value) => this._value = value ? JBoolean.trueValue : JBoolean.falseValue;
+	private JBoolean(Boolean value) => this._value = value ? JBoolean.TrueValue : JBoolean.FalseValue;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -16,7 +16,7 @@ public partial class JVirtualMachine
 		/// <summary>
 		/// Thread cache.
 		/// </summary>
-		public ThreadCache ThreadCache { get; private init; }
+		public ThreadCache ThreadCache { get; }
 
 		/// <summary>
 		/// Constructor.

@@ -17,6 +17,10 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// The current ensured capacity for local references.
 	/// </summary>
 	Int32? EnsuredCapacity { get; }
+	/// <summary>
+	/// JNI version.
+	/// </summary>
+	Int32 Version { get; }
 
 	/// <summary>
 	/// Internal accessor provider object.
@@ -93,6 +97,5 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </summary>
 	/// <param name="arrayRef">A local array reference.</param>
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance passed as JNI argument.</returns>
-	JArrayObject<TElement> CreateParameterObject<TElement>(JArrayLocalRef arrayRef)
-		where TElement : IDataType<TElement>;
+	JArrayObject<TElement> CreateParameterArray<TElement>(JArrayLocalRef arrayRef) where TElement : IDataType<TElement>;
 }
