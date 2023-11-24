@@ -44,7 +44,7 @@ public abstract partial class JArrayObject : JLocalObject
 /// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
 public sealed partial class JArrayObject<TElement> : JArrayObject, IArrayType<JArrayObject<TElement>>,
 	IInterfaceImplementation<JArrayObject<TElement>, JSerializableObject>,
-	IInterfaceImplementation<JArrayObject<TElement>, JCloneableObject> where TElement : IDataType<TElement>
+	IInterfaceImplementation<JArrayObject<TElement>, JCloneableObject> where TElement : IObject, IDataType<TElement>
 {
 	/// <summary>
 	/// Gets or sets the element of <paramref name="index"/>.

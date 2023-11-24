@@ -76,7 +76,7 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <typeparam name="TObject">A <see cref="JLocalObject"/> type.</typeparam>
 	/// <param name="localRef">A local object reference.</param>
 	/// <returns>A <typeparamref name="TObject"/> instance passed as JNI argument.</returns>
-	TObject CreateParameterObject<TObject>(JObjectLocalRef localRef)
+	TObject? CreateParameterObject<TObject>(JObjectLocalRef localRef)
 		where TObject : JLocalObject, IReferenceType<TObject>;
 	/// <summary>
 	/// Creates a <see cref="JClassObject"/> instance for <paramref name="classRef"/> reference
@@ -84,19 +84,20 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </summary>
 	/// <param name="classRef">A local class reference.</param>
 	/// <returns>A <see cref="JClassObject"/> instance passed as JNI argument.</returns>
-	JClassObject CreateParameterObject(JClassLocalRef classRef);
+	JClassObject? CreateParameterObject(JClassLocalRef classRef);
 	/// <summary>
 	/// Creates a <see cref="JStringObject"/> instance for <paramref name="stringRef"/> reference
 	/// whose origin is a JNI argument.
 	/// </summary>
 	/// <param name="stringRef">A local string reference.</param>
 	/// <returns>A <see cref="JStringObject"/> instance passed as JNI argument.</returns>
-	JStringObject CreateParameterObject(JStringLocalRef stringRef);
+	JStringObject? CreateParameterObject(JStringLocalRef stringRef);
 	/// <summary>
 	/// Creates a <see cref="JArrayObject{TElement}"/> instance for <paramref name="arrayRef"/> reference
 	/// whose origin is a JNI argument.
 	/// </summary>
 	/// <param name="arrayRef">A local array reference.</param>
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance passed as JNI argument.</returns>
-	JArrayObject<TElement> CreateParameterArray<TElement>(JArrayLocalRef arrayRef) where TElement : IDataType<TElement>;
+	JArrayObject<TElement>? CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
+		where TElement : IObject, IDataType<TElement>;
 }

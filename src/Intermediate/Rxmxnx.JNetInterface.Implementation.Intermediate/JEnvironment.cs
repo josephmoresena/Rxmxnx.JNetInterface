@@ -78,17 +78,18 @@ public partial class JEnvironment : IEnvironment
 		return isSameObject(this._cache.Reference, jRefObj.As<JObjectLocalRef>(), jRefOther.As<JObjectLocalRef>()) ==
 			JBoolean.TrueValue;
 	}
-	TObject IEnvironment.CreateParameterObject<TObject>(JObjectLocalRef localRef)
+	TObject? IEnvironment.CreateParameterObject<TObject>(JObjectLocalRef localRef) where TObject : class
 	{
+		if (localRef == default) return default;
+		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TObject>();
 		using JLocalObject jLocal = new(this, localRef, false, true, this._cache.GetClass<TObject>());
-		jLocal.SetAssignableTo<TObject>();
-		return (TObject)IReferenceType.GetMetadata<TObject>().ParseInstance(jLocal);
+		return metadata.ParseInstance(jLocal) as TObject;
 	}
-	JClassObject IEnvironment.CreateParameterObject(JClassLocalRef classRef) => throw new NotImplementedException();
-	JStringObject IEnvironment.CreateParameterObject(JStringLocalRef stringRef)
-		=> new(this, stringRef, null, false, true);
-	JArrayObject<TElement> IEnvironment.CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
-		=> new(this, arrayRef, null, false, true);
+	JClassObject? IEnvironment.CreateParameterObject(JClassLocalRef classRef) => throw new NotImplementedException();
+	JStringObject? IEnvironment.CreateParameterObject(JStringLocalRef stringRef)
+		=> stringRef.Value != default ? new(this, stringRef, null, false, true) : default;
+	JArrayObject<TElement>? IEnvironment.CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
+		=> arrayRef.Value != default ? new(this, arrayRef, null, false, true) : default;
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.

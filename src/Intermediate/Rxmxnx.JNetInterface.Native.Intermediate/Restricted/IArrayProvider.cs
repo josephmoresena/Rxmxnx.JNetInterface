@@ -18,7 +18,8 @@ public interface IArrayProvider
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 	/// <param name="index">Element index.</param>
 	/// <returns>The element with <paramref name="index"/> on <paramref name="jArray"/>.</returns>
-	TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index) where TElement : IDataType<TElement>;
+	TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
+		where TElement : IObject, IDataType<TElement>;
 	/// <summary>
 	/// Sets the element with <paramref name="index"/> on <paramref name="jArray"/>.
 	/// </summary>
@@ -27,7 +28,7 @@ public interface IArrayProvider
 	/// <param name="index">Element index.</param>
 	/// <param name="value">Element value.</param>
 	void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
-		where TElement : IDataType<TElement>;
+		where TElement : IObject, IDataType<TElement>;
 	/// <summary>
 	/// Retrieves a pointer to <see cref="JArrayObject{TPrimitive}"/> elements.
 	/// </summary>
@@ -69,7 +70,7 @@ public interface IArrayProvider
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="startIndex">Offset position.</param>
 	/// <param name="elements">Destination buffer.</param>
-	void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Span<Char> elements)
+	void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Span<TPrimitive> elements)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	/// <summary>
 	/// Copies <paramref name="elements"/> elements into <paramref name="jArray"/>.
@@ -78,6 +79,6 @@ public interface IArrayProvider
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="elements">Source buffer.</param>
 	/// <param name="startIndex">Offset position.</param>
-	void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<Char> elements, Int32 startIndex = 0)
+	void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<TPrimitive> elements, Int32 startIndex = 0)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 }
