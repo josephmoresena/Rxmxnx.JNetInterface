@@ -22,7 +22,7 @@ public abstract record JPrimitiveMemory : JNativeMemory, IFixedContext<Byte>
 	/// Retrieves the memory block context.
 	/// </summary>
 	/// <returns>A <see cref="IReadOnlyFixedContext{Byte}"/> instance</returns>
-	private new JNativeContext<Byte> GetBinaryContext() => (JNativeContext<Byte>)base.GetBinaryContext();
+	internal new IFixedContext<Byte> GetBinaryContext() => (IFixedContext<Byte>)base.GetBinaryContext();
 }
 
 /// <summary>
@@ -35,7 +35,7 @@ public sealed record JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedCont
 	/// <summary>
 	/// Internal memory context.
 	/// </summary>
-	private readonly JNativeContext<TPrimitive> _context;
+	private readonly IFixedContext<TPrimitive> _context;
 	/// <summary>
 	/// Memory release mode.
 	/// </summary>
@@ -52,13 +52,14 @@ public sealed record JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedCont
 
 	/// <inheritdoc/>
 	internal JPrimitiveMemory(IVirtualMachine vm, JNativeMemoryHandler handler) : base(vm, handler)
-		=> this._context = new(handler, this.Disposed);
+		=> this._context = this.GetBinaryContext().Transformation<TPrimitive>(out IFixedMemory _);
+	
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="mem">A <see cref="JNativeMemory"/> instance.</param>
-	/// <param name="context">A <see cref="JNativeContext{TPrimitive}"/> instance.</param>
-	internal JPrimitiveMemory(JNativeMemory mem, JNativeContext<TPrimitive> context) : base(mem)
+	/// <param name="context">A <see cref="IFixedContext{TPrimitive}"/> instance.</param>
+	private JPrimitiveMemory(JNativeMemory mem, IFixedContext<TPrimitive> context) : base(mem)
 		=> this._context = context;
 
 	/// <inheritdoc/>
@@ -89,5 +90,5 @@ public sealed record JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedCont
 	/// <param name="jNativeMemory">A <see cref="JNativeMemory{TPrimitive}"/> instance.</param>
 	/// <returns>A <see cref="JPrimitiveMemory{TPrimitive}"/> instance.</returns>
 	public static explicit operator JPrimitiveMemory<TPrimitive>(JNativeMemory<TPrimitive> jNativeMemory)
-		=> new(jNativeMemory, (JNativeContext<TPrimitive>)jNativeMemory.GetContext());
+		=> new(jNativeMemory, (IFixedContext<TPrimitive>)jNativeMemory.GetContext());
 }

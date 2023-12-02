@@ -39,6 +39,17 @@ internal readonly struct JNativeMemoryHandler
 	/// </summary>
 	private Action<IVirtualMachine, JNativeMemoryHandler, JReleaseMode>? ReleaseAction { get; init; }
 
+	public IReadOnlyFixedContext<Byte>.IDisposable GetReadOnlyContext(JNativeMemory jMemory)
+	{
+		ReadOnlyValPtr<Byte> ptr = (ReadOnlyValPtr<Byte>)this.Pointer;
+		return ptr.GetUnsafeFixedContext(this.BinarySize, jMemory);
+	}
+	public IFixedContext<Byte>.IDisposable GetContext(JNativeMemory jMemory)
+	{
+		ValPtr<Byte> ptr = (ValPtr<Byte>)this.Pointer;
+		return ptr.GetUnsafeFixedContext(this.BinarySize, jMemory);
+	}
+
 	/// <summary>
 	/// Releases the current handler.
 	/// </summary>
