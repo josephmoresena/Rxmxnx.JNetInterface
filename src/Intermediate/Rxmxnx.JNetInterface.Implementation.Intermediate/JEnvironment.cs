@@ -92,6 +92,10 @@ public partial class JEnvironment : IEnvironment
 		=> stringRef.Value != default ? new(this, stringRef, null, false, true) : default;
 	JArrayObject<TElement>? IEnvironment.CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
 		=> arrayRef.Value != default ? new(this, arrayRef, null, false, true) : default;
+	JObjectLocalRef IEnvironment.GetReturn(JLocalObject? jLocal) => throw new NotImplementedException();
+	JClassLocalRef IEnvironment.GetReturn(JClassObject? jClass) => throw new NotImplementedException();
+	JArrayLocalRef IEnvironment.GetReturn(JArrayObject? jArray) => throw new NotImplementedException();
+	JThrowableLocalRef IEnvironment.GetReturn(JThrowableObject? jThrowable) => throw new NotImplementedException();
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.

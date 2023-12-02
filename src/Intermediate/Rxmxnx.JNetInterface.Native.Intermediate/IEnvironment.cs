@@ -96,4 +96,29 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance passed as JNI argument.</returns>
 	JArrayObject<TElement>? CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
 		where TElement : IObject, IDataType<TElement>;
+	
+	/// <summary>
+	/// Retrieves a <see cref="JObjectLocalRef"/> reference from given object.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>A <see cref="JObjectLocalRef"/> reference from given object.</returns>
+	JObjectLocalRef GetReturn(JLocalObject? jLocal);
+	/// <summary>
+	/// Retrieves a <see cref="JClassLocalRef"/> reference from given class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JClassLocalRef"/> reference from given object.</returns>
+	JClassLocalRef GetReturn(JClassObject? jClass);
+	/// <summary>
+	/// Retrieves a <see cref="JArrayLocalRef"/> reference from given array.
+	/// </summary>
+	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+	/// <returns>A <see cref="JArrayLocalRef"/> reference from given object.</returns>
+	JArrayLocalRef GetReturn(JArrayObject? jArray);
+	/// <summary>
+	/// Retrieves a <see cref="JThrowableLocalRef"/> reference from given throwable.
+	/// </summary>
+	/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance.</param>
+	/// <returns>A <see cref="JThrowableLocalRef"/> reference from given object.</returns>
+	JThrowableLocalRef GetReturn(JThrowableObject? jThrowable);
 }

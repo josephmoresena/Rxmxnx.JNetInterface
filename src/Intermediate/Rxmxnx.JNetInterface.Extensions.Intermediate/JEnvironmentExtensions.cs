@@ -1,9 +1,9 @@
 /// <summary>
-/// Set of primitive wrapper extensions.
+/// Set of <see cref="IEnvironment"/> extensions.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CA1050
-public static class JPrimitiveExtensions
+public static class JEnvironmentExtensions
 #pragma warning restore CA1050
 {
 	/// <summary>
@@ -141,4 +141,115 @@ public static class JPrimitiveExtensions
 	/// <returns>A <see cref="JArrayObject{JShort}"/> instance passed as JNI argument.</returns>
 	public static JArrayObject<JShort>? CreateParameterArray(this IEnvironment env, JShortArrayLocalRef arrayRef)
 		=> env.CreateParameterArray<JShort>(arrayRef.ArrayValue);
+	/// <summary>
+	/// Creates a <see cref="JArrayObject{JShort}"/> instance for <paramref name="arrayRef"/> reference
+	/// whose origin is a JNI argument.
+	/// </summary>
+	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
+	/// <param name="arrayRef">A local <c>short</c> array reference.</param>
+	/// <returns>A <see cref="JArrayObject{JShort}"/> instance passed as JNI argument.</returns>
+	public static JArrayObject<TObject>? CreateParameterArray<TObject>(this IEnvironment env, JObjectArrayLocalRef arrayRef)
+		where TObject : JLocalObject, IReferenceType<TObject>
+		=> env.CreateParameterArray<TObject>(arrayRef.ArrayValue);
+	
+	/// <summary>
+	/// Retrieves a <see cref="JBooleanArrayLocalRef"/> reference from given array.
+	/// </summary>
+	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jArray">A <see cref="JArrayObject{JBoolean}"/> instance.</param>
+	/// <returns>A <see cref="JBooleanArrayLocalRef"/> reference from given object.</returns>
+	public static JBooleanArrayLocalRef GetArrayReturn(this IEnvironment env, JArrayObject<JBoolean>? jArray)
+	{
+		JArrayLocalRef arrayRef = env.GetReturn(jArray);
+		return Unsafe.As<JArrayLocalRef, JBooleanArrayLocalRef>(ref arrayRef);
+	}
+	/// <summary>
+	/// Retrieves a <see cref="JByteArrayLocalRef"/> reference from given array.
+	/// </summary>
+	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jArray">A <see cref="JArrayObject{JByte}"/> instance.</param>
+	/// <returns>A <see cref="JByteArrayLocalRef"/> reference from given object.</returns>
+	public static JByteArrayLocalRef GetArrayReturn(this IEnvironment env, JArrayObject<JByte>? jArray)
+	{
+		JArrayLocalRef arrayRef = env.GetReturn(jArray);
+		return Unsafe.As<JArrayLocalRef, JByteArrayLocalRef>(ref arrayRef);
+	}
+	/// <summary>
+	/// Retrieves a <see cref="JCharArrayLocalRef"/> reference from given array.
+	/// </summary>
+	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jArray">A <see cref="JArrayObject{JChar}"/> instance.</param>
+	/// <returns>A <see cref="JCharArrayLocalRef"/> reference from given object.</returns>
+	public static JCharArrayLocalRef GetArrayReturn(this IEnvironment env, JArrayObject<JChar>? jArray)
+	{
+		JArrayLocalRef arrayRef = env.GetReturn(jArray);
+		return Unsafe.As<JArrayLocalRef, JCharArrayLocalRef>(ref arrayRef);
+	}
+	/// <summary>
+	/// Retrieves a <see cref="JDoubleArrayLocalRef"/> reference from given array.
+	/// </summary>
+	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jArray">A <see cref="JArrayObject{JDouble}"/> instance.</param>
+	/// <returns>A <see cref="JDoubleArrayLocalRef"/> reference from given object.</returns>
+	public static JDoubleArrayLocalRef GetArrayReturn(this IEnvironment env, JArrayObject<JDouble>? jArray)
+	{
+		JArrayLocalRef arrayRef = env.GetReturn(jArray);
+		return Unsafe.As<JArrayLocalRef, JDoubleArrayLocalRef>(ref arrayRef);
+	}
+	/// <summary>
+	/// Retrieves a <see cref="JFloatArrayLocalRef"/> reference from given array.
+	/// </summary>
+	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jArray">A <see cref="JArrayObject{JFloat}"/> instance.</param>
+	/// <returns>A <see cref="JFloatArrayLocalRef"/> reference from given object.</returns>
+	public static JFloatArrayLocalRef GetArrayReturn(this IEnvironment env, JArrayObject<JFloat>? jArray)
+	{
+		JArrayLocalRef arrayRef = env.GetReturn(jArray);
+		return Unsafe.As<JArrayLocalRef, JFloatArrayLocalRef>(ref arrayRef);
+	}
+	/// <summary>
+	/// Retrieves a <see cref="JIntArrayLocalRef"/> reference from given array.
+	/// </summary>
+	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jArray">A <see cref="JArrayObject{JInt}"/> instance.</param>
+	/// <returns>A <see cref="JIntArrayLocalRef"/> reference from given object.</returns>
+	public static JIntArrayLocalRef GetArrayReturn(this IEnvironment env, JArrayObject<JInt>? jArray)
+	{
+		JArrayLocalRef arrayRef = env.GetReturn(jArray);
+		return Unsafe.As<JArrayLocalRef, JIntArrayLocalRef>(ref arrayRef);
+	}
+	/// <summary>
+	/// Retrieves a <see cref="JLongArrayLocalRef"/> reference from given array.
+	/// </summary>
+	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jArray">A <see cref="JArrayObject{JLong}"/> instance.</param>
+	/// <returns>A <see cref="JLongArrayLocalRef"/> reference from given object.</returns>
+	public static JLongArrayLocalRef GetArrayReturn(this IEnvironment env, JArrayObject<JLong>? jArray)
+	{
+		JArrayLocalRef arrayRef = env.GetReturn(jArray);
+		return Unsafe.As<JArrayLocalRef, JLongArrayLocalRef>(ref arrayRef);
+	}
+	/// <summary>
+	/// Retrieves a <see cref="JShortArrayLocalRef"/> reference from given array.
+	/// </summary>
+	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jArray">A <see cref="JArrayObject{JShort}"/> instance.</param>
+	/// <returns>A <see cref="JShortArrayLocalRef"/> reference from given object.</returns>
+	public static JShortArrayLocalRef GetArrayReturn(this IEnvironment env, JArrayObject<JShort>? jArray)
+	{
+		JArrayLocalRef arrayRef = env.GetReturn(jArray);
+		return Unsafe.As<JArrayLocalRef, JShortArrayLocalRef>(ref arrayRef);
+	}
+	/// <summary>
+	/// Retrieves a <see cref="JObjectArrayLocalRef"/> reference from given array.
+	/// </summary>
+	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jArray">A <see cref="JArrayObject{JShort}"/> instance.</param>
+	/// <returns>A <see cref="JObjectArrayLocalRef"/> reference from given object.</returns>
+	public static JObjectArrayLocalRef GetArrayReturn<TObject>(this IEnvironment env, JArrayObject<TObject>? jArray)
+		where TObject : JLocalObject, IReferenceType<TObject>
+	{
+		JArrayLocalRef arrayRef = env.GetReturn(jArray);
+		return Unsafe.As<JArrayLocalRef, JObjectArrayLocalRef>(ref arrayRef);
+	}
 }
