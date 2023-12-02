@@ -18,7 +18,9 @@ public partial class JEnvironment
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
-				this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, buffer, index);
+				using IFixedContext<Byte>.IDisposable fixedBuffer = 
+					((ValPtr<Byte>)buffer.GetUnsafeIntPtr()).GetUnsafeFixedContext(buffer.Length);
+				this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
 				return (TElement)primitiveMetadata.CreateInstance(buffer);
 			}
 			GetObjectArrayElementDelegate getObjectArrayElement = this.GetDelegate<GetObjectArrayElementDelegate>();
@@ -34,9 +36,11 @@ public partial class JEnvironment
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Int32 offset = 0;
-				Span<Byte> span = stackalloc Byte[primitiveMetadata.SizeOf];
-				value!.CopyTo(span, ref offset);
-				this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, span, index);
+				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
+				using IFixedContext<Byte>.IDisposable fixedBuffer = 
+					((ValPtr<Byte>)buffer.GetUnsafeIntPtr()).GetUnsafeFixedContext(buffer.Length);
+				value!.CopyTo(buffer, ref offset);
+				this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
 			}
 			else
 			{
@@ -78,19 +82,21 @@ public partial class JEnvironment
 				this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
 			releasePrimitiveArrayCritical(this.Reference, jArray.As<JArrayLocalRef>(), pointer, JReleaseMode.Abort);
 		}
-		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Span<TPrimitive> elements)
+		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ValidationUtilities.ThrowIfDummy(jArray);
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			this.GetPrimitiveArrayRegion(jArray, metadata.Signature, elements.AsBytes(), startIndex, elements.Length);
+			using IFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
+			this.GetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);
 		}
-		public void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<TPrimitive> elements,
+		public void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements,
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ValidationUtilities.ThrowIfDummy(jArray);
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			this.SetPrimitiveArrayRegion(jArray, metadata.Signature, elements.AsBytes(), startIndex, elements.Length);
+			using IReadOnlyFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
+			this.SetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);
 		}
 
 		/// <summary>
@@ -110,42 +116,34 @@ public partial class JEnvironment
 				case 0x90: //Z
 					GetBooleanArrayElementsDelegate getBooleanArrayElements =
 						this.GetDelegate<GetBooleanArrayElementsDelegate>();
-					return NativeUtilities.GetUnsafeIntPtr(
-						in getBooleanArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy));
+					return  getBooleanArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy);
 				case 0x66: //B
 					GetByteArrayElementsDelegate getByteArrayElements =
 						this.GetDelegate<GetByteArrayElementsDelegate>();
-					return NativeUtilities.GetUnsafeIntPtr(
-						in getByteArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy));
+					return getByteArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy);
 				case 0x67: //C
 					GetCharArrayElementsDelegate getCharArrayElements =
 						this.GetDelegate<GetCharArrayElementsDelegate>();
-					return NativeUtilities.GetUnsafeIntPtr(
-						in getCharArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy));
+					return getCharArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy);
 				case 0x68: //D
 					GetDoubleArrayElementsDelegate getDoubleArrayElements =
 						this.GetDelegate<GetDoubleArrayElementsDelegate>();
-					return NativeUtilities.GetUnsafeIntPtr(
-						in getDoubleArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy));
+					return getDoubleArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy);
 				case 0x70: //F
 					GetFloatArrayElementsDelegate getFloatArrayElements =
 						this.GetDelegate<GetFloatArrayElementsDelegate>();
-					return NativeUtilities.GetUnsafeIntPtr(
-						in getFloatArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy));
+					return getFloatArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy);
 				case 0x73: //I
 					GetIntArrayElementsDelegate getIntArrayElements = this.GetDelegate<GetIntArrayElementsDelegate>();
-					return NativeUtilities.GetUnsafeIntPtr(
-						in getIntArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy));
+					return getIntArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy);
 				case 0x74: //J
 					GetLongArrayElementsDelegate getLongArrayElements =
 						this.GetDelegate<GetLongArrayElementsDelegate>();
-					return NativeUtilities.GetUnsafeIntPtr(
-						in getLongArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy));
+					return getLongArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy);
 				case 0x83: //S
 					GetShortArrayElementsDelegate getShortArrayElements =
 						this.GetDelegate<GetShortArrayElementsDelegate>();
-					return NativeUtilities.GetUnsafeIntPtr(
-						in getShortArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy));
+					return getShortArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), out isCopy);
 				default:
 					throw new ArgumentException("Invalid primitive type.");
 			}
@@ -166,65 +164,57 @@ public partial class JEnvironment
 				case 0x90: //Z
 					ReleaseBooleanArrayElementsDelegate releaseBooleanArrayElements =
 						this.GetDelegate<ReleaseBooleanArrayElementsDelegate>();
-					releaseBooleanArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),
-					                            in pointer.GetUnsafeReadOnlyReference<Byte>(), mode);
+					releaseBooleanArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), (ReadOnlyValPtr<Byte>)pointer, mode);
 					break;
 				case 0x66: //B
 					ReleaseByteArrayElementsDelegate releaseByteArrayElements =
 						this.GetDelegate<ReleaseByteArrayElementsDelegate>();
-					releaseByteArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),
-					                         in pointer.GetUnsafeReadOnlyReference<SByte>(), mode);
+					releaseByteArrayElements(this.Reference, jArray.As<JArrayLocalRef>(), (ReadOnlyValPtr<SByte>)pointer, mode);
 					break;
 				case 0x67: //C
 					ReleaseCharArrayElementsDelegate releaseCharArrayElements =
 						this.GetDelegate<ReleaseCharArrayElementsDelegate>();
-					releaseCharArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),
-					                         in pointer.GetUnsafeReadOnlyReference<Char>(), mode);
+					releaseCharArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),(ReadOnlyValPtr<Char>)pointer, mode);
 					break;
 				case 0x68: //D
 					ReleaseDoubleArrayElementsDelegate releaseDoubleArrayElements =
 						this.GetDelegate<ReleaseDoubleArrayElementsDelegate>();
-					releaseDoubleArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),
-					                           in pointer.GetUnsafeReadOnlyReference<Double>(), mode);
+					releaseDoubleArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),(ReadOnlyValPtr<Double>)pointer, mode);
 					break;
 				case 0x70: //F
 					ReleaseFloatArrayElementsDelegate releaseFloatArrayElements =
 						this.GetDelegate<ReleaseFloatArrayElementsDelegate>();
-					releaseFloatArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),
-					                          in pointer.GetUnsafeReadOnlyReference<Single>(), mode);
+					releaseFloatArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),(ReadOnlyValPtr<Single>)pointer, mode);
 					break;
 				case 0x73: //I
 					ReleaseIntArrayElementsDelegate releaseIntArrayElements =
 						this.GetDelegate<ReleaseIntArrayElementsDelegate>();
-					releaseIntArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),
-					                        in pointer.GetUnsafeReadOnlyReference<Int32>(), mode);
+					releaseIntArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),(ReadOnlyValPtr<Int32>)pointer, mode);
 					break;
 				case 0x74: //J
 					ReleaseLongArrayElementsDelegate releaseLongArrayElements =
 						this.GetDelegate<ReleaseLongArrayElementsDelegate>();
-					releaseLongArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),
-					                         in pointer.GetUnsafeReadOnlyReference<Int64>(), mode);
+					releaseLongArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),(ReadOnlyValPtr<Int64>)pointer, mode);
 					break;
 				case 0x83: //S
 					ReleaseShortArrayElementsDelegate releaseShortArrayElements =
 						this.GetDelegate<ReleaseShortArrayElementsDelegate>();
-					releaseShortArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),
-					                          in pointer.GetUnsafeReadOnlyReference<Int16>(), mode);
+					releaseShortArrayElements(this.Reference, jArray.As<JArrayLocalRef>(),(ReadOnlyValPtr<Int16>)pointer, mode);
 					break;
 				default:
 					throw new ArgumentException("Invalid primitive type.");
 			}
 		}
 		/// <summary>
-		/// Copies a primitive array region in <paramref name="buffer"/>.
+		/// Copies a primitive array region in <paramref name="fixedBuffer"/>.
 		/// </summary>
 		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 		/// <param name="signature">Primitive signature.</param>
-		/// <param name="buffer">A binary span to hold region.</param>
+		/// <param name="fixedBuffer">A <see cref="IFixedPointer"/> instance.</param>
 		/// <param name="index">Region start index.</param>
 		/// <param name="count">Number of elements in region.</param>
 		/// <exception cref="ArgumentException"/>
-		private void GetPrimitiveArrayRegion(JArrayObject jArray, CString signature, Span<Byte> buffer, Int32 index,
+		private void GetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer, Int32 index,
 			Int32 count = 1)
 		{
 			switch (signature[0])
@@ -233,58 +223,58 @@ public partial class JEnvironment
 					GetBooleanArrayRegionDelegate getBooleanArrayRegion =
 						this.GetDelegate<GetBooleanArrayRegionDelegate>();
 					getBooleanArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                      ref buffer.AsValue<Byte>());
+					                      (ValPtr<Byte>)fixedBuffer.Pointer);
 					break;
 				case 0x66: //B
 					GetByteArrayRegionDelegate getByteArrayRegion = this.GetDelegate<GetByteArrayRegionDelegate>();
 					getByteArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                   ref buffer.AsValue<SByte>());
+					                   (ValPtr<SByte>)fixedBuffer.Pointer);
 					break;
 				case 0x67: //C
 					GetCharArrayRegionDelegate getCharArrayRegion = this.GetDelegate<GetCharArrayRegionDelegate>();
 					getCharArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                   ref buffer.AsValue<Char>());
+					                   (ValPtr<Char>)fixedBuffer.Pointer);
 					break;
 				case 0x68: //D
 					GetDoubleArrayRegionDelegate getDoubleArrayRegion =
 						this.GetDelegate<GetDoubleArrayRegionDelegate>();
 					getDoubleArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                     ref buffer.AsValue<Double>());
+					                     (ValPtr<Double>)fixedBuffer.Pointer);
 					break;
 				case 0x70: //F
 					GetFloatArrayRegionDelegate getFloatArrayRegion = this.GetDelegate<GetFloatArrayRegionDelegate>();
 					getFloatArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                    ref buffer.AsValue<Single>());
+					                    (ValPtr<Single>)fixedBuffer.Pointer);
 					break;
 				case 0x73: //I
 					GetIntArrayRegionDelegate getIntArrayRegion = this.GetDelegate<GetIntArrayRegionDelegate>();
 					getIntArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                  ref buffer.AsValue<Int32>());
+					                  (ValPtr<Int32>)fixedBuffer.Pointer);
 					break;
 				case 0x74: //J
 					GetLongArrayRegionDelegate getLongArrayRegion = this.GetDelegate<GetLongArrayRegionDelegate>();
 					getLongArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                   ref buffer.AsValue<Int64>());
+					                   (ValPtr<Int64>)fixedBuffer.Pointer);
 					break;
 				case 0x83: //S
 					GetShortArrayRegionDelegate getShortArrayRegion = this.GetDelegate<GetShortArrayRegionDelegate>();
 					getShortArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                    ref buffer.AsValue<Int16>());
+					                    (ValPtr<Int16>)fixedBuffer.Pointer);
 					break;
 				default:
 					throw new ArgumentException("Invalid primitive type.");
 			}
 		}
 		/// <summary>
-		/// Copies <paramref name="buffer"/> in a primitive array region.
+		/// Copies <paramref name="fixedBuffer"/> in a primitive array region.
 		/// </summary>
 		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 		/// <param name="signature">Primitive signature.</param>
-		/// <param name="buffer">A binary read-only span to copy to.</param>
+		/// <param name="fixedBuffer">A <see cref="IReadOnlyFixedMemory"/> instance.</param>
 		/// <param name="index">Region start index.</param>
 		/// <param name="count">Number of elements in region.</param>
 		/// <exception cref="ArgumentException"/>
-		private void SetPrimitiveArrayRegion(JArrayObject jArray, CString signature, ReadOnlySpan<Byte> buffer,
+		private void SetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IReadOnlyFixedMemory fixedBuffer,
 			Int32 index, Int32 count = 1)
 		{
 			switch (signature[0])
@@ -293,43 +283,43 @@ public partial class JEnvironment
 					SetBooleanArrayRegionDelegate setBooleanArrayRegion =
 						this.GetDelegate<SetBooleanArrayRegionDelegate>();
 					setBooleanArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                      in buffer.AsValue<Byte>());
+					                      (ReadOnlyValPtr<Byte>)fixedBuffer.Pointer);
 					break;
 				case 0x66: //B
 					SetByteArrayRegionDelegate setByteArrayRegion = this.GetDelegate<SetByteArrayRegionDelegate>();
 					setByteArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                   in buffer.AsValue<SByte>());
+					                   (ReadOnlyValPtr<SByte>)fixedBuffer.Pointer);
 					break;
 				case 0x67: //C
 					SetCharArrayRegionDelegate setCharArrayRegion = this.GetDelegate<SetCharArrayRegionDelegate>();
 					setCharArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                   in buffer.AsValue<Char>());
+					                   (ReadOnlyValPtr<Char>)fixedBuffer.Pointer);
 					break;
 				case 0x68: //D
 					SetDoubleArrayRegionDelegate setDoubleArrayRegion =
 						this.GetDelegate<SetDoubleArrayRegionDelegate>();
 					setDoubleArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                     in buffer.AsValue<Double>());
+					                     (ReadOnlyValPtr<Double>)fixedBuffer.Pointer);
 					break;
 				case 0x70: //F
 					SetFloatArrayRegionDelegate setFloatArrayRegion = this.GetDelegate<SetFloatArrayRegionDelegate>();
 					setFloatArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                    in buffer.AsValue<Single>());
+					                    (ReadOnlyValPtr<Single>)fixedBuffer.Pointer);
 					break;
 				case 0x73: //I
 					SetIntArrayRegionDelegate setIntArrayRegion = this.GetDelegate<SetIntArrayRegionDelegate>();
 					setIntArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                  in buffer.AsValue<Int32>());
+					                  (ReadOnlyValPtr<Int32>)fixedBuffer.Pointer);
 					break;
 				case 0x74: //J
 					SetLongArrayRegionDelegate setLongArrayRegion = this.GetDelegate<SetLongArrayRegionDelegate>();
 					setLongArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                   in buffer.AsValue<Int64>());
+					                   (ReadOnlyValPtr<Int64>)fixedBuffer.Pointer);
 					break;
 				case 0x83: //S
 					SetShortArrayRegionDelegate setShortArrayRegion = this.GetDelegate<SetShortArrayRegionDelegate>();
 					setShortArrayRegion(this.Reference, jArray.As<JArrayLocalRef>(), index, count,
-					                    in buffer.AsValue<Int16>());
+					                    (ReadOnlyValPtr<Int16>)fixedBuffer.Pointer);
 					break;
 				default:
 					throw new ArgumentException("Invalid primitive type.");

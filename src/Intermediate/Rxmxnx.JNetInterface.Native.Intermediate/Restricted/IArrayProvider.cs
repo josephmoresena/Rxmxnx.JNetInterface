@@ -70,7 +70,7 @@ public interface IArrayProvider
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="startIndex">Offset position.</param>
 	/// <param name="elements">Destination buffer.</param>
-	void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Span<TPrimitive> elements)
+	void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	/// <summary>
 	/// Copies <paramref name="elements"/> elements into <paramref name="jArray"/>.
@@ -79,6 +79,6 @@ public interface IArrayProvider
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="elements">Source buffer.</param>
 	/// <param name="startIndex">Offset position.</param>
-	void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<TPrimitive> elements, Int32 startIndex = 0)
+	void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements, Int32 startIndex = 0)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 }

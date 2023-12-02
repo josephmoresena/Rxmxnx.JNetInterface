@@ -20,101 +20,101 @@ internal delegate JArrayLocalRef NewLongArrayDelegate(JEnvironmentRef env, Int32
 internal delegate JArrayLocalRef NewFloatArrayDelegate(JEnvironmentRef env, Int32 length);
 internal delegate JArrayLocalRef NewDoubleArrayDelegate(JEnvironmentRef env, Int32 length);
 
-internal delegate ref readonly Byte GetBooleanArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+internal delegate ValPtr<Byte> GetBooleanArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	out Byte isCopy);
 
-internal delegate ref readonly SByte GetByteArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+internal delegate ValPtr<SByte> GetByteArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	out Byte isCopy);
 
-internal delegate ref readonly Char GetCharArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+internal delegate ValPtr<Char> GetCharArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	out Byte isCopy);
 
-internal delegate ref readonly Int16 GetShortArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+internal delegate ValPtr<Int16> GetShortArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	out Byte isCopy);
 
-internal delegate ref readonly Int32 GetIntArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+internal delegate ValPtr<Int32> GetIntArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	out Byte isCopy);
 
-internal delegate ref readonly Int64 GetLongArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+internal delegate ValPtr<Int64> GetLongArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	out Byte isCopy);
 
-internal delegate ref readonly Single GetFloatArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+internal delegate ValPtr<Single> GetFloatArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	out Byte isCopy);
 
-internal delegate ref readonly Double GetDoubleArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+internal delegate ValPtr<Double> GetDoubleArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	out Byte isCopy);
 
 internal delegate void ReleaseBooleanArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
-	in Byte elements0, JReleaseMode mode);
+	ReadOnlyValPtr<Byte> elements0, JReleaseMode mode);
 
 internal delegate void ReleaseByteArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
-	in SByte elements0, JReleaseMode mode);
+	ReadOnlyValPtr<SByte> elements0, JReleaseMode mode);
 
-internal delegate void ReleaseCharArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, in Char elements0,
+internal delegate void ReleaseCharArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, ReadOnlyValPtr<Char> elements0,
 	JReleaseMode mode);
 
 internal delegate void ReleaseShortArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
-	in Int16 elements0, JReleaseMode mode);
+	ReadOnlyValPtr<Int16> elements0, JReleaseMode mode);
 
-internal delegate void ReleaseIntArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, in Int32 elements0,
+internal delegate void ReleaseIntArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, ReadOnlyValPtr<Int32> elements0,
 	JReleaseMode mode);
 
 internal delegate void ReleaseLongArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
-	in Int64 elements0, JReleaseMode mode);
+	ReadOnlyValPtr<Int64> elements0, JReleaseMode mode);
 
 internal delegate void ReleaseFloatArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
-	in Single elements0, JReleaseMode mode);
+	ReadOnlyValPtr<Single> elements0, JReleaseMode mode);
 
 internal delegate void ReleaseDoubleArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
-	in Double elements0, JReleaseMode mode);
+	ReadOnlyValPtr<Double> elements0, JReleaseMode mode);
 
 internal delegate void GetBooleanArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, ref Byte buffer0);
+	Int32 length, ValPtr<Byte> buffer0);
 
 internal delegate void GetByteArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, ref SByte buffer0);
+	Int32 length, ValPtr<SByte> buffer0);
 
 internal delegate void GetCharArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, ref Char buffer0);
+	Int32 length, ValPtr<Char> buffer0);
 
 internal delegate void GetShortArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, ref Int16 buffer0);
+	Int32 length, ValPtr<Int16> buffer0);
 
 internal delegate void GetIntArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, ref Int32 buffer0);
+	Int32 length, ValPtr<Int32> buffer0);
 
 internal delegate void GetLongArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, ref Int64 buffer0);
+	Int32 length, ValPtr<Int64> buffer0);
 
 internal delegate void GetFloatArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, ref Single buffer0);
+	Int32 length, ValPtr<Single> buffer0);
 
 internal delegate void GetDoubleArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, ref Double buffer0);
+	Int32 length, ReadOnlyValPtr<Double> buffer0);
 
 internal delegate void SetBooleanArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, in Byte buffer0);
+	Int32 length, ReadOnlyValPtr<Byte> buffer0);
 
 internal delegate void SetByteArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, in SByte buffer0);
+	Int32 length, ReadOnlyValPtr<SByte> buffer0);
 
 internal delegate void SetCharArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, in Char buffer0);
+	Int32 length, ReadOnlyValPtr<Char> buffer0);
 
 internal delegate void SetShortArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, in Int16 buffer0);
+	Int32 length, ReadOnlyValPtr<Int16> buffer0);
 
 internal delegate void SetIntArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, in Int32 buffer0);
+	Int32 length, ReadOnlyValPtr<Int32> buffer0);
 
 internal delegate void SetLongArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, in Int64 buffer0);
+	Int32 length, ReadOnlyValPtr<Int64> buffer0);
 
 internal delegate void SetFloatArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, in Single buffer0);
+	Int32 length, ReadOnlyValPtr<Single> buffer0);
 
 internal delegate void SetDoubleArrayRegionDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, Int32 startIndex,
-	Int32 length, in Double buffer0);
+	Int32 length, ReadOnlyValPtr<Double> buffer0);
 
 internal delegate IntPtr GetPrimitiveArrayCriticalDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	out Byte isCopy);

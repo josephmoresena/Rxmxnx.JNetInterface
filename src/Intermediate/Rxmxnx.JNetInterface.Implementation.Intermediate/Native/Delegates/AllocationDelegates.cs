@@ -9,4 +9,4 @@ internal delegate JObjectLocalRef NewObjectVDelegate(JEnvironmentRef env, JClass
 	ArgIterator args);
 
 internal delegate JObjectLocalRef NewObjectADelegate(JEnvironmentRef env, JClassLocalRef jClass, JMethodId jMethod,
-	in JValue arg0);
+	ReadOnlyValPtr<JValue> arg0);

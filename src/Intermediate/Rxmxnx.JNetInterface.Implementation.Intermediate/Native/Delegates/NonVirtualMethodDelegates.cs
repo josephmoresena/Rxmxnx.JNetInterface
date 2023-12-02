@@ -7,7 +7,7 @@ internal delegate JObjectLocalRef CallNonVirtualObjectMethodVDelegate(JEnvironme
 	JClassLocalRef jclass, JMethodId jMethod, ArgIterator args);
 
 internal delegate JObjectLocalRef CallNonVirtualObjectMethodADelegate(JEnvironmentRef env, JObjectLocalRef obj,
-	JClassLocalRef jclass, JMethodId jMethod, in JValue args0);
+	JClassLocalRef jclass, JMethodId jMethod, ReadOnlyValPtr<JValue> args0);
 
 internal delegate Byte CallNonVirtualBooleanMethodDelegate(JEnvironmentRef env, JObjectLocalRef obj,
 	JClassLocalRef jclass, JMethodId jMethod, IntPtr args);
@@ -16,7 +16,7 @@ internal delegate Byte CallNonVirtualBooleanMethodVDelegate(JEnvironmentRef env,
 	JClassLocalRef jclass, JMethodId jMethod, ArgIterator args);
 
 internal delegate Byte CallNonVirtualBooleanMethodADelegate(JEnvironmentRef env, JObjectLocalRef obj,
-	JClassLocalRef jclass, JMethodId jMethod, in JValue args0);
+	JClassLocalRef jclass, JMethodId jMethod, ReadOnlyValPtr<JValue> args0);
 
 internal delegate SByte CallNonVirtualByteMethodDelegate(JEnvironmentRef env, JObjectLocalRef obj,
 	JClassLocalRef jclass, JMethodId jMethod, IntPtr args);
@@ -25,7 +25,7 @@ internal delegate SByte CallNonVirtualByteMethodVDelegate(JEnvironmentRef env, J
 	JClassLocalRef jclass, JMethodId jMethod, ArgIterator args);
 
 internal delegate SByte CallNonVirtualByteMethodADelegate(JEnvironmentRef env, JObjectLocalRef obj,
-	JClassLocalRef jclass, JMethodId jMethod, in JValue args0);
+	JClassLocalRef jclass, JMethodId jMethod, ReadOnlyValPtr<JValue> args0);
 
 internal delegate Char CallNonVirtualCharMethodDelegate(JEnvironmentRef env, JObjectLocalRef obj, JClassLocalRef jclass,
 	JMethodId jMethod, IntPtr args);
@@ -34,7 +34,7 @@ internal delegate Char CallNonVirtualCharMethodVDelegate(JEnvironmentRef env, JO
 	JClassLocalRef jclass, JMethodId jMethod, ArgIterator args);
 
 internal delegate Char CallNonVirtualCharMethodADelegate(JEnvironmentRef env, JObjectLocalRef obj,
-	JClassLocalRef jclass, JMethodId jMethod, in JValue args0);
+	JClassLocalRef jclass, JMethodId jMethod, ReadOnlyValPtr<JValue> args0);
 
 internal delegate Int16 CallNonVirtualShortMethodDelegate(JEnvironmentRef env, JObjectLocalRef obj,
 	JClassLocalRef jclass, JMethodId jMethod, IntPtr args);
@@ -43,7 +43,7 @@ internal delegate Int16 CallNonVirtualShortMethodVDelegate(JEnvironmentRef env, 
 	JClassLocalRef jclass, JMethodId jMethod, ArgIterator args);
 
 internal delegate Int16 CallNonVirtualShortMethodADelegate(JEnvironmentRef env, JObjectLocalRef obj,
-	JClassLocalRef jclass, JMethodId jMethod, in JValue args0);
+	JClassLocalRef jclass, JMethodId jMethod, ReadOnlyValPtr<JValue> args0);
 
 internal delegate Int32 CallNonVirtualIntMethodDelegate(JEnvironmentRef env, JObjectLocalRef obj, JClassLocalRef jclass,
 	JMethodId jMethod, IntPtr args);
@@ -52,7 +52,7 @@ internal delegate Int32 CallNonVirtualIntMethodVDelegate(JEnvironmentRef env, JO
 	JClassLocalRef jclass, JMethodId jMethod, ArgIterator args);
 
 internal delegate Int32 CallNonVirtualIntMethodADelegate(JEnvironmentRef env, JObjectLocalRef obj,
-	JClassLocalRef jclass, JMethodId jMethod, in JValue args0);
+	JClassLocalRef jclass, JMethodId jMethod, ReadOnlyValPtr<JValue> args0);
 
 internal delegate Int64 CallNonVirtualLongMethodDelegate(JEnvironmentRef env, JObjectLocalRef obj,
 	JClassLocalRef jclass, JMethodId jMethod, IntPtr args);
@@ -61,7 +61,7 @@ internal delegate Int64 CallNonVirtualLongMethodVDelegate(JEnvironmentRef env, J
 	JClassLocalRef jclass, JMethodId jMethod, ArgIterator args);
 
 internal delegate Int64 CallNonVirtualLongMethodADelegate(JEnvironmentRef env, JObjectLocalRef obj,
-	JClassLocalRef jclass, JMethodId jMethod, in JValue args0);
+	JClassLocalRef jclass, JMethodId jMethod, ReadOnlyValPtr<JValue> args0);
 
 internal delegate Single CallNonVirtualFloatMethodDelegate(JEnvironmentRef env, JObjectLocalRef obj,
 	JClassLocalRef jclass, JMethodId jMethod, IntPtr args);
@@ -70,7 +70,7 @@ internal delegate Single CallNonVirtualFloatMethodVDelegate(JEnvironmentRef env,
 	JClassLocalRef jclass, JMethodId jMethod, ArgIterator args);
 
 internal delegate Single CallNonVirtualFloatMethodADelegate(JEnvironmentRef env, JObjectLocalRef obj,
-	JClassLocalRef jclass, JMethodId jMethod, in JValue args0);
+	JClassLocalRef jclass, JMethodId jMethod, ReadOnlyValPtr<JValue> args0);
 
 internal delegate Double CallNonVirtualDoubleMethodDelegate(JEnvironmentRef env, JObjectLocalRef obj,
 	JClassLocalRef jclass, JMethodId jMethod, IntPtr args);
@@ -79,7 +79,7 @@ internal delegate Double CallNonVirtualDoubleMethodVDelegate(JEnvironmentRef env
 	JClassLocalRef jclass, JMethodId jMethod, ArgIterator args);
 
 internal delegate Double CallNonVirtualDoubleMethodADelegate(JEnvironmentRef env, JObjectLocalRef obj,
-	JClassLocalRef jclass, JMethodId jMethod, in JValue args0);
+	JClassLocalRef jclass, JMethodId jMethod, ReadOnlyValPtr<JValue> args0);
 
 internal delegate void CallNonVirtualVoidMethodDelegate(JEnvironmentRef env, JObjectLocalRef obj, JClassLocalRef jclass,
 	JMethodId jMethod, IntPtr args);
@@ -88,4 +88,4 @@ internal delegate void CallNonVirtualVoidMethodVDelegate(JEnvironmentRef env, JO
 	JClassLocalRef jclass, JMethodId jMethod, ArgIterator args);
 
 internal delegate void CallNonVirtualVoidMethodADelegate(JEnvironmentRef env, JObjectLocalRef obj,
-	JClassLocalRef jclass, JMethodId jMethod, in JValue args0);
+	JClassLocalRef jclass, JMethodId jMethod, ReadOnlyValPtr<JValue> args0);

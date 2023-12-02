@@ -91,17 +91,29 @@ public sealed record JVirtualMachineLibrary
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
 	public IReadOnlyList<IVirtualMachine> GetCreatedVirtualMachines()
 	{
-		_ = this._getCreatedVirtualMachines(ref IntPtr.Zero.GetUnsafeReference<JVirtualMachineRef>(), 0,
+		_ = this._getCreatedVirtualMachines(ValPtr<JVirtualMachineRef>.Zero, 0,
 		                                    out Int32 vmCount);
-		if (vmCount == 0)
-			return Array.Empty<IVirtualMachine>();
-		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
-		JResult result = this._getCreatedVirtualMachines(ref arr.AsSpan()[0], arr.Length, out vmCount);
+		if (vmCount == 0) return Array.Empty<IVirtualMachine>();
+		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
 		if (result == JResult.Ok)
 			return arr.Select(JVirtualMachine.GetVirtualMachine).ToArray();
 		throw new JniException(result);
 	}
-
+	
+	/// <summary>
+	/// Retrieves all of the created <see cref="JVirtualMachineRef"/> instances.
+	/// </summary>
+	/// <param name="vmCount">Number of elements to retrieve.</param>
+	/// <param name="result">Output. JNI call result.</param>
+	/// <returns>An array of <see cref="JVirtualMachineRef"/> references.</returns>
+	private JVirtualMachineRef[] GetCreatedVirtualMachines(Int32 vmCount, out JResult result)
+	{
+		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
+		using IFixedContext<JVirtualMachineRef>.IDisposable fixedContext = arr.AsMemory().GetFixedContext();
+		result = this._getCreatedVirtualMachines((ValPtr<JVirtualMachineRef>)fixedContext.Pointer, arr.Length, out vmCount);
+		return arr;
+	}
+	
 	/// <summary>
 	/// Loads a virtual machine library exposed by <paramref name="libraryPath"/>.
 	/// </summary>

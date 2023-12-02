@@ -143,7 +143,7 @@ public partial class JVirtualMachine : IVirtualMachine
 		JGlobalRef threadGroupRef = args.args.ThreadGroup?.As<JGlobalRef>() ?? default;
 		Int32 version = args.args.Version < IVirtualMachine.MinimalVersion ?
 			IVirtualMachine.MinimalVersion :
-			args.args.Version;
+			args.args.Version; 
 		JVirtualMachineArgumentValue arg = new() { Name = name.Pointer, Group = threadGroupRef, Version = version, };
 		JResult result = attachCurrentThread(args.vm._cache.Reference, out JEnvironmentRef envRef, in arg);
 
