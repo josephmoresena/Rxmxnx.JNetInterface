@@ -7,9 +7,13 @@ namespace Rxmxnx.JNetInterface.Native;
 public record JEnumObjectMetadata : JObjectMetadata
 {
 	/// <summary>
-	/// Internal string name.
+	/// Internal ordinal.
 	/// </summary>
 	public Int32? Ordinal { get; init; }
+	/// <summary>
+	/// Internal string name.
+	/// </summary>
+	public String? Name { get; init; }
 
 	/// <summary>
 	/// Constructor.
@@ -20,11 +24,16 @@ public record JEnumObjectMetadata : JObjectMetadata
 		if (metadata is not JEnumObjectMetadata enumMetadata)
 			return;
 		this.Ordinal = enumMetadata.Ordinal;
+		this.Name = enumMetadata.Name;
 	}
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata"><see cref="JEnumObjectMetadata"/> instance.</param>
-	protected JEnumObjectMetadata(JEnumObjectMetadata metadata) : base(metadata) => this.Ordinal = metadata.Ordinal;
+	protected JEnumObjectMetadata(JEnumObjectMetadata metadata) : base(metadata)
+	{
+		this.Ordinal = metadata.Ordinal;
+		this.Name = metadata.Name;
+	}
 }

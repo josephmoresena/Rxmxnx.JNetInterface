@@ -39,10 +39,6 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </summary>
 	internal IStringProvider StringProvider { get; }
 	/// <summary>
-	/// Internal Enum provider object.
-	/// </summary>
-	internal IEnumProvider EnumProvider { get; }
-	/// <summary>
 	/// Internal Array provider object.
 	/// </summary>
 	internal IArrayProvider ArrayProvider { get; }

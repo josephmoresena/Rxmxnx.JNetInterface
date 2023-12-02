@@ -37,7 +37,7 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	/// <returns>A new <see cref="JByteObject"/> instance.</returns>
 	[return: NotNullIfNotNull(nameof(value))]
 	public static JCharacterObject? Create(IEnvironment env, JChar? value)
-		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
+		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value.Value), value) : default;
 	/// <inheritdoc/>
 	public static JCharacterObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JCharacterObject>(jLocal)) : default;

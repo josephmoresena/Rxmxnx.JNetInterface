@@ -27,11 +27,69 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <summary>
 	/// Internal string value.
 	/// </summary>
-	public new String Value => this._value ??= this.Environment.StringProvider.ToString(this);
+	public new String Value => this._value ??= String.Create(this.Length, (this, 0), JStringObject.GetChars);
 
 	/// <inheritdoc/>
 	public override String ToString() => this.Value;
 
+	/// <summary>
+	/// Creates an <see cref="String"/> containing a copy of the UTF-16 chars on the current
+	/// <see cref="JStringObject"/> instance.
+	/// </summary>
+	/// <param name="startIndex">Initial index to copy to.</param>
+	/// <returns>
+	/// An <see cref="String"/> containing a copy of the UTF-16 chars on the current
+	/// <see cref="JStringObject"/> instance.
+	/// </returns>
+	public String GetChars(Int32 startIndex = 0) => this.GetChars(startIndex, this.Length);
+	/// <summary>
+	/// Creates an <see cref="String"/> containing a copy of the UTF-16 chars on the current
+	/// <see cref="JStringObject"/> instance.
+	/// </summary>
+	/// <param name="startIndex">Initial index to copy to.</param>
+	/// <param name="count">The number of chars to copy to.</param>
+	/// <returns>
+	/// An <see cref="String"/> containing a copy of the UTF-16 chars on the current
+	/// <see cref="JStringObject"/> instance.
+	/// </returns>
+	public String GetChars(Int32 startIndex, Int32 count)
+	{
+		if (startIndex == 0 && count == this.Length)
+			return this.Value;
+		if (this._value is not null)
+			return this._value[startIndex..count];
+		Int32 lenght = count - startIndex;
+		return String.Create(lenght, (this, startIndex), JStringObject.GetChars);
+	}
+	/// <summary>
+	/// Creates an <see cref="CString"/> containing a copy of the UTF-8 chars on the current
+	/// <see cref="JStringObject"/> instance.
+	/// </summary>
+	/// <param name="startIndex">Initial index to copy to.</param>
+	/// <returns>
+	/// An <see cref="CString"/> containing a copy of the UTF-8 chars on the current
+	/// <see cref="JStringObject"/> instance.
+	/// </returns>
+	public CString GetUtf8Chars(Int32 startIndex = 0) => this.GetUtf8Chars(startIndex, this.Utf8Length);
+	/// <summary>
+	/// Creates an <see cref="CString"/> containing a copy of the UTF-8 chars on the current
+	/// <see cref="JStringObject"/> instance.
+	/// </summary>
+	/// <param name="startIndex">Initial index to copy to.</param>
+	/// <param name="count">The number of chars to copy to.</param>
+	/// <returns>
+	/// An <see cref="CString"/> containing a copy of the UTF-8 chars on the current
+	/// <see cref="JStringObject"/> instance.
+	/// </returns>
+	public CString GetUtf8Chars(Int32 startIndex, Int32 count)
+	{
+		Int32 lenght = count - startIndex;
+		Byte[] utf8Data = new Byte[lenght + 1];
+		IEnvironment env = this.Environment;
+		env.StringProvider.GetCopyUtf8(this, utf8Data.AsMemory()[..^1], startIndex);
+		return utf8Data;
+	}
+	
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()
 		=> new JStringObjectMetadata(base.CreateMetadata())
@@ -69,7 +127,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		=> utf8Data is not null ? env.StringProvider.Create(utf8Data) : default;
 	/// <inheritdoc cref="JStringObject.Create(IEnvironment, CString)"/>
 	public static JStringObject Create(IEnvironment env, ReadOnlySpan<Byte> utf8Data)
-		=> env.StringProvider.Create(utf8Data);
+		=> env.StringProvider.Create(new CString(utf8Data));
 
 	/// <inheritdoc/>
 	public static JStringObject? Create(JLocalObject? jLocal)

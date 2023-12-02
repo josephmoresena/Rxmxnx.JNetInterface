@@ -8,7 +8,9 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);
 			GetArrayLengthDelegate getArrayLength = this.GetDelegate<GetArrayLengthDelegate>();
-			return getArrayLength(this.Reference, jObject.As<JArrayLocalRef>());
+			Int32 result = getArrayLength(this.Reference, jObject.As<JArrayLocalRef>());
+			if (result <= 0) this.CheckJniError();
+			return result;
 		}
 		public TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
 			where TElement : IObject, IDataType<TElement>
@@ -21,12 +23,14 @@ public partial class JEnvironment
 				using IFixedContext<Byte>.IDisposable fixedBuffer = 
 					((ValPtr<Byte>)buffer.GetUnsafeIntPtr()).GetUnsafeFixedContext(buffer.Length);
 				this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
+				this.CheckJniError();
 				return (TElement)primitiveMetadata.CreateInstance(buffer);
 			}
 			GetObjectArrayElementDelegate getObjectArrayElement = this.GetDelegate<GetObjectArrayElementDelegate>();
 			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
 			JObjectLocalRef localRef = getObjectArrayElement(this.Reference, jArray.As<JArrayLocalRef>(), index);
-			return this.Cast<TElement>(new(env, localRef, false, false, this.GetClass<TElement>()));
+			if (localRef == default)this.CheckJniError();
+			return JEnvironmentCache.Cast<TElement>(new(env, localRef, false, false, this.GetClass<TElement>()));
 		}
 		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
 			where TElement : IObject, IDataType<TElement>
@@ -49,6 +53,7 @@ public partial class JEnvironment
 				JObjectLocalRef localRef = (value as JReferenceObject)?.As<JObjectLocalRef>() ?? default;
 				setObjectArrayElement(this.Reference, jArray.As<JArrayLocalRef>(), index, localRef);
 			}
+			this.CheckJniError();
 		}
 		public IntPtr GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, out Boolean isCopy)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -56,6 +61,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jArray);
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			IntPtr result = this.GetPrimitiveArrayElements(jArray, metadata.Signature, out Byte isCopyByte);
+			if (result == IntPtr.Zero) this.CheckJniError();
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
 		}
@@ -65,7 +71,9 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jArray);
 			GetPrimitiveArrayCriticalDelegate getPrimitiveArrayCriticalDelegate =
 				this.GetDelegate<GetPrimitiveArrayCriticalDelegate>();
-			return getPrimitiveArrayCriticalDelegate(this.Reference, jArray.As<JArrayLocalRef>(), out _);
+			IntPtr result = getPrimitiveArrayCriticalDelegate(this.Reference, jArray.As<JArrayLocalRef>(), out _);
+			if (result == IntPtr.Zero) this.CheckJniError();
+			return result;
 		}
 		public void ReleaseSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, IntPtr pointer, JReleaseMode mode)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -73,6 +81,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jArray);
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			this.ReleasePrimitiveArrayElements(jArray, metadata.Signature, pointer, mode);
+			this.CheckJniError();
 		}
 		public void ReleaseCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, IntPtr pointer)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -81,6 +90,7 @@ public partial class JEnvironment
 			ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
 				this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
 			releasePrimitiveArrayCritical(this.Reference, jArray.As<JArrayLocalRef>(), pointer, JReleaseMode.Abort);
+			this.CheckJniError();
 		}
 		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -89,6 +99,7 @@ public partial class JEnvironment
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			using IFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
 			this.GetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);
+			this.CheckJniError();
 		}
 		public void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements,
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -97,6 +108,7 @@ public partial class JEnvironment
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			using IReadOnlyFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
 			this.SetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);
+			this.CheckJniError();
 		}
 
 		/// <summary>

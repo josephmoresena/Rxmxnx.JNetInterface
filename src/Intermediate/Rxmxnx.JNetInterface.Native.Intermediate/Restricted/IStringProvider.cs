@@ -6,14 +6,6 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public interface IStringProvider
 {
 	/// <summary>
-	/// Retrieves the string value from <paramref name="jObject"/>.
-	/// </summary>
-	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <returns>
-	/// The <see cref="String"/> representation of <paramref name="jObject"/>.
-	/// </returns>
-	String ToString(JReferenceObject jObject);
-	/// <summary>
 	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="data"/>.
 	/// </summary>
 	/// <param name="data">UTF-16 string data.</param>
@@ -26,17 +18,17 @@ public interface IStringProvider
 	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
 	JStringObject Create(ReadOnlySpan<Byte> utf8Data);
 	/// <summary>
-	/// Retrieves the length of given <see cref="JStringObject"/> instance.
+	/// Retrieves the length of given <see cref="JReferenceObject"/> instance.
 	/// </summary>
-	/// <param name="jString"><see cref="JStringObject"/> instance.</param>
+	/// <param name="jObject"><see cref="JReferenceObject"/> instance.</param>
 	/// <returns>String length.</returns>
-	Int32 GetLength(JStringObject jString);
+	Int32 GetLength(JReferenceObject jObject);
 	/// <summary>
-	/// Retrieves the UTF-8 length of given <see cref="JStringObject"/> instance.
+	/// Retrieves the UTF-8 length of given <see cref="JReferenceObject"/> instance.
 	/// </summary>
-	/// <param name="jString"><see cref="JStringObject"/> instance.</param>
+	/// <param name="jObject"><see cref="JReferenceObject"/> instance.</param>
 	/// <returns>UTF-8 string length.</returns>
-	Int32 GetUtf8Length(JStringObject jString);
+	Int32 GetUtf8Length(JReferenceObject jObject);
 	/// <summary>
 	/// Retrieves a pointer to <see cref="JStringObject"/> characters.
 	/// </summary>
@@ -88,5 +80,5 @@ public interface IStringProvider
 	/// <param name="jString">A <see cref="JStringObject"/> instance.</param>
 	/// <param name="utf8Units">Destination buffer.</param>
 	/// <param name="startIndex">Offset position.</param>
-	void GetCopyUtf8(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex = 0);
+	void GetCopyUtf8(JStringObject jString, Memory<Byte> utf8Units, Int32 startIndex = 0);
 }

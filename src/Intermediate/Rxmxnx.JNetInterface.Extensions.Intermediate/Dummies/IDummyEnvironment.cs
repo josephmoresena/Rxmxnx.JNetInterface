@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Native.Dummies;
 /// This interface exposes a JNI dummy instance.
 /// </summary>
 public interface IDummyEnvironment : IEnvironment, IAccessProvider, IClassProvider, IReferenceProvider, IStringProvider,
-	IEnumProvider, IArrayProvider
+	IArrayProvider
 {
 	TObject IAccessProvider.CallInternalConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
 		IObject?[] args)
@@ -58,6 +58,5 @@ public interface IDummyEnvironment : IEnvironment, IAccessProvider, IClassProvid
 	IClassProvider IEnvironment.ClassProvider => this;
 	IReferenceProvider IEnvironment.ReferenceProvider => this;
 	IStringProvider IEnvironment.StringProvider => this;
-	IEnumProvider IEnvironment.EnumProvider => this;
 	IArrayProvider IEnvironment.ArrayProvider => this;
 }

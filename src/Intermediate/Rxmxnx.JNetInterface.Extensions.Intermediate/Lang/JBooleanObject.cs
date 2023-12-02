@@ -38,7 +38,7 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	/// <returns>A new <see cref="JByteObject"/> instance.</returns>
 	[return: NotNullIfNotNull(nameof(value))]
 	public static JBooleanObject? Create(IEnvironment env, JBoolean? value)
-		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value), value) : default;
+		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value.Value), value) : default;
 	/// <inheritdoc/>
 	public static JBooleanObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JBooleanObject>(jLocal)) : default;

@@ -51,7 +51,6 @@ public partial class JEnvironment : IEnvironment
 	IClassProvider IEnvironment.ClassProvider => this._cache;
 	IReferenceProvider IEnvironment.ReferenceProvider => this._cache;
 	IStringProvider IEnvironment.StringProvider => this._cache;
-	IEnumProvider IEnvironment.EnumProvider => this._cache;
 	IArrayProvider IEnvironment.ArrayProvider => this._cache;
 
 	JReferenceType IEnvironment.GetReferenceType(JObject jObject)
@@ -59,7 +58,9 @@ public partial class JEnvironment : IEnvironment
 		if (jObject is not JReferenceObject jRefObj || jRefObj.IsDefault || jRefObj.IsDummy)
 			return JReferenceType.InvalidRefType;
 		GetObjectRefTypeDelegate getObjectRefType = this._cache.GetDelegate<GetObjectRefTypeDelegate>();
-		return getObjectRefType(this._cache.Reference, jRefObj.As<JObjectLocalRef>());
+		JReferenceType result = getObjectRefType(this._cache.Reference, jRefObj.As<JObjectLocalRef>());
+		this._cache.CheckJniError();
+		return result;
 	}
 	Boolean IEnvironment.IsSameObject(JObject jObject, JObject? jOther)
 	{
@@ -75,8 +76,9 @@ public partial class JEnvironment : IEnvironment
 		ValidationUtilities.ThrowIfDummy(jRefObj);
 		ValidationUtilities.ThrowIfDummy(jRefOther);
 		IsSameObjectDelegate isSameObject = this._cache.GetDelegate<IsSameObjectDelegate>();
-		return isSameObject(this._cache.Reference, jRefObj.As<JObjectLocalRef>(), jRefOther.As<JObjectLocalRef>()) ==
-			JBoolean.TrueValue;
+		Byte result = isSameObject(this._cache.Reference, jRefObj.As<JObjectLocalRef>(), jRefOther.As<JObjectLocalRef>());
+		this._cache.CheckJniError();
+		return result == JBoolean.TrueValue;
 	}
 	TObject? IEnvironment.CreateParameterObject<TObject>(JObjectLocalRef localRef) where TObject : class
 	{

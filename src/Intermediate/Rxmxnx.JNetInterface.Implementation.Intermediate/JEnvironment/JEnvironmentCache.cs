@@ -361,5 +361,23 @@ public partial class JEnvironment
 			cache.Thread.Join();
 			JVirtualMachine.RemoveEnvironment(cache.VirtualMachine.Reference, cache.Reference);
 		}
+
+		public void CheckJniError()
+		{
+			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
+			JThrowableLocalRef throwableRef = exceptionOccurred(this.Reference);
+			if (throwableRef.Value == default) return;
+			try
+			{
+				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
+				exceptionClear(this.Reference);
+				//TODO: Implement throw 
+			}
+			finally
+			{
+				ThrowDelegate jThrow = this.GetDelegate<ThrowDelegate>();
+				jThrow(this.Reference, throwableRef);
+			}
+		} 
 	}
 }

@@ -10,13 +10,17 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 	/// Ordinal of this enumeration constant.
 	/// </summary>
 	/// <remarks>Its position in its enum declaration, where the initial constant is assigned an ordinal of zero</remarks>
-	public Int32 Ordinal => this._ordinal ??= this.Environment.EnumProvider.GetOrdinal(this);
+	public Int32 Ordinal => this._ordinal ??= this.GetOrdinal();
+	/// <summary>
+	/// Name of this enum constant, exactly as declared in its enum declaration.
+	/// </summary>
+	public String Name => this._name ??= this.GetName();
 
 	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	protected new virtual JEnumObjectMetadata CreateMetadata()
-		=> new(base.CreateMetadata()) { Ordinal = this.Ordinal, };
+		=> new(base.CreateMetadata()) { Ordinal = this.Ordinal, Name = this.Name, };
 
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
@@ -48,4 +52,11 @@ public abstract class JEnumObject<TEnum> : JEnumObject where TEnum : JEnumObject
 	protected JEnumObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.GetClass<TEnum>()) { }
 	/// <inheritdoc/>
 	protected JEnumObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	
+	/// <inheritdoc/>
+	internal override String GetName()
+	{
+		JEnumTypeMetadata metadata = IEnumType.GetMetadata<TEnum>();
+		return metadata.Fields.HasOrdinal(this.Ordinal) ? metadata.Fields[this.Ordinal].ToString() : base.GetName();
+	}
 }

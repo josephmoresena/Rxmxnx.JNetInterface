@@ -12,4 +12,15 @@ public partial class JEnumObject
 
 	static JDataTypeMetadata IDataType.Metadata => JEnumObject.JEnumClassMetadata;
 	static JClassTypeMetadata IBaseClassType<JEnumObject>.SuperClassMetadata => JEnumObject.JEnumClassMetadata;
+	
+	/// <summary>
+	/// Returns the name of current instance.
+	/// </summary>
+	/// <returns>Returns the name of current instance.</returns>
+	internal virtual String GetName()
+	{
+		JFunctionDefinition<JStringObject> definition = new(JEnumObject.nameName);
+		using JStringObject jString = JFunctionDefinition<JStringObject>.Invoke(definition, this)!;
+		return jString.Value;
+	}
 }

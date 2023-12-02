@@ -37,6 +37,19 @@ public partial class JStringObject
 	{
 		if (jLocal is not JStringObject jString)
 			return;
-		this._value = jString.Value;
+		this._length = jString.Length;
+		this._utf8Length = jString._utf8Length;
+		this._value = jString._value;
+	}
+	
+	/// <summary>
+	/// Retrieves UTF-16 chars.
+	/// </summary>
+	/// <param name="chars">Span to copy chars to.</param>
+	/// <param name="arg">Operation arguments.</param>
+	private static void GetChars(Span<Char> chars, (JStringObject jStr, Int32 startIndex) arg)
+	{
+		IEnvironment env = arg.jStr.Environment;
+		env.StringProvider.GetCopy(arg.jStr, chars, arg.startIndex);
 	}
 }
