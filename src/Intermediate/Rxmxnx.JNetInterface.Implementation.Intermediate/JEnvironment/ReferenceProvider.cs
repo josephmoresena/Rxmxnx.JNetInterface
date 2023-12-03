@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace Rxmxnx.JNetInterface;
 
 public partial class JEnvironment
@@ -13,21 +11,21 @@ public partial class JEnvironment
 			return metadata.Signature[0] switch
 			{
 				0x90 => //Z
-					JBooleanObject.Create(env, Unsafe.As<TPrimitive, JBoolean>(ref primitive)),
+					this.Register(JBooleanObject.Create(env, Unsafe.As<TPrimitive, JBoolean>(ref primitive))),
 				0x66 => //B
-					JByteObject.Create(env, Unsafe.As<TPrimitive, JByte>(ref primitive)),
+					this.Register(JByteObject.Create(env, Unsafe.As<TPrimitive, JByte>(ref primitive))),
 				0x67 => //C
-					JCharacterObject.Create(env, Unsafe.As<TPrimitive, JChar>(ref primitive)),
+					this.Register(JCharacterObject.Create(env, Unsafe.As<TPrimitive, JChar>(ref primitive))),
 				0x68 => //D
-					JDoubleObject.Create(env, Unsafe.As<TPrimitive, JDouble>(ref primitive)),
+					this.Register(JDoubleObject.Create(env, Unsafe.As<TPrimitive, JDouble>(ref primitive))),
 				0x70 => //F
-					JFloatObject.Create(env, Unsafe.As<TPrimitive, JFloat>(ref primitive)),
+					this.Register(JFloatObject.Create(env, Unsafe.As<TPrimitive, JFloat>(ref primitive))),
 				0x73 => //I
-					JIntegerObject.Create(env, Unsafe.As<TPrimitive, JInt>(ref primitive)),
+					this.Register(JIntegerObject.Create(env, Unsafe.As<TPrimitive, JInt>(ref primitive))),
 				0x74 => //J
-					JLongObject.Create(env, Unsafe.As<TPrimitive, JLong>(ref primitive)),
+					this.Register(JLongObject.Create(env, Unsafe.As<TPrimitive, JLong>(ref primitive))),
 				0x83 => //S
-					JShortObject.Create(env, Unsafe.As<TPrimitive, JShort>(ref primitive)),
+					this.Register(JShortObject.Create(env, Unsafe.As<TPrimitive, JShort>(ref primitive))),
 				_ => throw new InvalidOperationException("Object is not primitive."),
 			};
 		}
@@ -38,20 +36,33 @@ public partial class JEnvironment
 		public Boolean Unload(JGlobalBase jGlobal) => throw new NotImplementedException();
 
 		/// <summary>
+		/// Registers a <typeparamref name="TObject"/> in current <see cref="IEnvironment"/> instance.
+		/// </summary>
+		/// <typeparam name="TObject">A <see cref="IDataType{TObject}"/> type.</typeparam>
+		/// <param name="jObject">A <see cref="IDataType{TObject}"/> instance.</param>
+		/// <returns>Registered <see cref="IDataType{TObject}"/> instance.</returns>
+		[return:NotNullIfNotNull(nameof(jObject))]
+		public TObject Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
+		{
+			//TODO: Register
+			return jObject;
+		}
+		
+		/// <summary>
 		/// Applies cast from <see cref="JLocalObject"/> to <typeparamref name="TObject"/>.
 		/// </summary>
 		/// <typeparam name="TObject">A <see cref="IDataType{TObject}"/> type.</typeparam>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <returns>A <typeparamref name="TObject"/> instance.</returns>
-		private static TObject? Cast<TObject>(JLocalObject? jLocal) where TObject : IDataType<TObject>
+		private TObject? Cast<TObject>(JLocalObject? jLocal) where TObject : IDataType<TObject>
 		{
 			if (jLocal is null || jLocal.IsDefault) return default;
 			if (typeof(TObject) == typeof(JLocalObject))
-				return (TObject)(Object)jLocal;
+				return this.Register((TObject)(Object)jLocal);
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TObject>();
 			TObject result = (TObject)(Object)metadata.ParseInstance(jLocal);
 			jLocal.Dispose();
-			return result;
+			return this.Register(result);
 		}
 	}
 }

@@ -85,13 +85,13 @@ public partial class JEnvironment : IEnvironment
 		if (localRef == default) return default;
 		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TObject>();
 		using JLocalObject jLocal = new(this, localRef, false, true, this._cache.GetClass<TObject>());
-		return metadata.ParseInstance(jLocal) as TObject;
+		return this._cache.Register(metadata.ParseInstance(jLocal) as TObject);
 	}
 	JClassObject? IEnvironment.CreateParameterObject(JClassLocalRef classRef) => throw new NotImplementedException();
 	JStringObject? IEnvironment.CreateParameterObject(JStringLocalRef stringRef)
-		=> stringRef.Value != default ? new(this, stringRef, null, false, true) : default;
+		=> this._cache.Register<JStringObject>(stringRef.Value != default ? new(this, stringRef, null, false, true) : default);
 	JArrayObject<TElement>? IEnvironment.CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
-		=> arrayRef.Value != default ? new(this, arrayRef, null, false, true) : default;
+		=> this._cache.Register<JArrayObject<TElement>>(arrayRef.Value != default ? new(this, arrayRef, null, false, true) : default);
 	JObjectLocalRef IEnvironment.GetReturn(JLocalObject? jLocal) => throw new NotImplementedException();
 	JClassLocalRef IEnvironment.GetReturn(JClassObject? jClass) => throw new NotImplementedException();
 	JArrayLocalRef IEnvironment.GetReturn(JArrayObject? jArray) => throw new NotImplementedException();

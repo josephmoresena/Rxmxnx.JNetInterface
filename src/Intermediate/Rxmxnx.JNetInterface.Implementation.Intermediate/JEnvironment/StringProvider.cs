@@ -8,13 +8,13 @@ public partial class JEnvironment
 		{
 			JStringLocalRef stringRef = data.WithSafeFixed(this, JEnvironmentCache.CreateString);
 			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
-			return new(env, stringRef, data.ToString(), false, false);
+			return this.Register<JStringObject>(new(env, stringRef, data.ToString(), false, false));
 		}
 		public JStringObject Create(ReadOnlySpan<Byte> utf8Data)
 		{
 			JStringLocalRef stringRef = utf8Data.WithSafeFixed(this, JEnvironmentCache.CreateUtf8String);
 			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
-			return new(env, stringRef, default, false, false);
+			return this.Register<JStringObject>(new(env, stringRef, default, false, false));
 		}
 		public Int32 GetLength(JReferenceObject jObject)
 		{
@@ -36,7 +36,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			GetStringCharsDelegate getStringChars = this.GetDelegate<GetStringCharsDelegate>();
-			IntPtr result = getStringChars(this.Reference, jString.As<JStringLocalRef>(), out Byte isCopyByte);
+			IntPtr result = getStringChars(this.Reference, jString.Reference, out Byte isCopyByte);
 			if (result == IntPtr.Zero) this.CheckJniError();
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
@@ -45,7 +45,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			GetStringUtfCharsDelegate getStringUtf8Chars = this.GetDelegate<GetStringUtfCharsDelegate>();
-			IntPtr result = getStringUtf8Chars(this.Reference, jString.As<JStringLocalRef>(), out Byte isCopyByte);
+			IntPtr result = getStringUtf8Chars(this.Reference, jString.Reference, out Byte isCopyByte);
 			if (result == IntPtr.Zero) this.CheckJniError();
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
@@ -54,7 +54,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			GetStringCriticalDelegate getStringCritical = this.GetDelegate<GetStringCriticalDelegate>();
-			IntPtr result = getStringCritical(this.Reference, jString.As<JStringLocalRef>(), out _);
+			IntPtr result = getStringCritical(this.Reference, jString.Reference, out _);
 			if (result == IntPtr.Zero) this.CheckJniError();
 			return result;
 		}
@@ -63,7 +63,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jString);
 			ReleaseStringCharsDelegate releaseStringChars =
 				this.GetDelegate<ReleaseStringCharsDelegate>();
-			releaseStringChars(this.Reference, jString.As<JStringLocalRef>(), (ReadOnlyValPtr<Char>)pointer);
+			releaseStringChars(this.Reference, jString.Reference, (ReadOnlyValPtr<Char>)pointer);
 			this.CheckJniError();
 		}
 		public void ReleaseUtf8Sequence(JStringObject jString, IntPtr pointer)
@@ -71,7 +71,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jString);
 			ReleaseStringCharsDelegate releaseStringChars =
 				this.GetDelegate<ReleaseStringCharsDelegate>();
-			releaseStringChars(this.Reference, jString.As<JStringLocalRef>(), (ReadOnlyValPtr<Char>)pointer);
+			releaseStringChars(this.Reference, jString.Reference, (ReadOnlyValPtr<Char>)pointer);
 			this.CheckJniError();
 		}
 		public void ReleaseCriticalSequence(JStringObject jString, IntPtr pointer)
@@ -79,7 +79,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jString);
 			ReleaseStringCriticalDelegate releaseStringCritical =
 				this.GetDelegate<ReleaseStringCriticalDelegate>();
-			releaseStringCritical(this.Reference, jString.As<JStringLocalRef>(), (ReadOnlyValPtr<Char>)pointer);
+			releaseStringCritical(this.Reference, jString.Reference, (ReadOnlyValPtr<Char>)pointer);
 			this.CheckJniError();
 		}
 		public void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
@@ -93,7 +93,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jString);
 			GetStringUtfRegionDelegate getStringUtfRegion = this.GetDelegate<GetStringUtfRegionDelegate>();
 			using IFixedContext<Byte>.IDisposable fixedMemory = utf8Units.GetFixedContext();
-			getStringUtfRegion(this.Reference, jString.As<JStringLocalRef>(), startIndex, utf8Units.Length,
+			getStringUtfRegion(this.Reference, jString.Reference, startIndex, utf8Units.Length,
 			                   (ValPtr<Byte>)fixedMemory.Pointer);
 			this.CheckJniError();
 		}
@@ -116,7 +116,7 @@ public partial class JEnvironment
 			(JEnvironmentCache cache, JStringObject jString, Int32 startIndex) args)
 		{
 			GetStringRegionDelegate getStringRegion = args.cache.GetDelegate<GetStringRegionDelegate>();
-			getStringRegion(args.cache.Reference, args.jString.As<JStringLocalRef>(), args.startIndex,
+			getStringRegion(args.cache.Reference, args.jString.Reference, args.startIndex,
 			                ctx.Values.Length, (ValPtr<Char>)ctx.Pointer);
 		}
 	}
