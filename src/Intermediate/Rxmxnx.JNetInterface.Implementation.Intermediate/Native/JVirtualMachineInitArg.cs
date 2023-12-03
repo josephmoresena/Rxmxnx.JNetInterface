@@ -25,11 +25,12 @@ public sealed record JVirtualMachineInitArg
 	/// Constructor.
 	/// </summary>
 	/// <param name="version">JNI version.</param>
-	internal JVirtualMachineInitArg(Int32 version)
+	public JVirtualMachineInitArg(Int32 version)
 	{
 		this._version = version;
 		this.Options = Array.Empty<JVirtualMachineInitOption>();
 	}
+	
 	/// <summary>
 	/// Constructor.
 	/// </summary>

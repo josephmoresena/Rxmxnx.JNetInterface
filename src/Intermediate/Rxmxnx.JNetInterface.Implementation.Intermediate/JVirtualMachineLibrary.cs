@@ -68,6 +68,22 @@ public sealed record JVirtualMachineLibrary
 	}
 
 	/// <summary>
+	/// Retrieves the latest JNI version supported by the current library.
+	/// </summary>
+	/// <returns>The latest JNI version supported.</returns>
+	public Int32 GetLatestSupportedVersion()
+	{
+		Int32 version = -1;
+		foreach (Int32 jniVersion in JVirtualMachineLibrary.jniVersions)
+		{
+			JVirtualMachineInitArgumentValue initValue = new() { Version = jniVersion, };
+			if (this._getDefaultVirtualMachineInitArgs(ref initValue) != JResult.Ok)
+				break;
+			version = jniVersion;
+		}
+		return version > 0 ? version : throw new InvalidOperationException();
+	}
+	/// <summary>
 	/// Retrieves the default VM initialization argument for current JVM library.
 	/// </summary>
 	/// <param name="jniVersion">The requested JNI version.</param>
@@ -80,8 +96,7 @@ public sealed record JVirtualMachineLibrary
 			Version = jniVersion < JVirtualMachineLibrary.jniVersions[0] ? JVirtualMachineLibrary.jniVersions[0] : jniVersion,
 		};
 		JResult result = this._getDefaultVirtualMachineInitArgs(ref initValue);
-		if (result == JResult.Ok)
-			return new(this.GetDefaultArgument(initValue.Version, initValue));
+		if (result == JResult.Ok) return new(initValue);
 		throw new JniException(result);
 	}
 	/// <summary>
@@ -103,7 +118,7 @@ public sealed record JVirtualMachineLibrary
 	/// </summary>
 	/// <returns>A read-only list of <see cref="IVirtualMachine"/> instances.</returns>
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
-	public IReadOnlyList<IVirtualMachine> GetCreatedVirtualMachines()
+	public IVirtualMachine[] GetCreatedVirtualMachines()
 	{
 		_ = this._getCreatedVirtualMachines(ValPtr<JVirtualMachineRef>.Zero, 0,
 		                                    out Int32 vmCount);
@@ -126,27 +141,6 @@ public sealed record JVirtualMachineLibrary
 		using IFixedContext<JVirtualMachineRef>.IDisposable fixedContext = arr.AsMemory().GetFixedContext();
 		result = this._getCreatedVirtualMachines((ValPtr<JVirtualMachineRef>)fixedContext.Pointer, arr.Length, out vmCount);
 		return arr;
-	}
-	/// <summary>
-	/// Retrieves the maximum supported version. 
-	/// </summary>
-	/// <param name="jniVersion">Current JNI version.</param>
-	/// <param name="initValue">Initial <see cref="JVirtualMachineInitArgumentValue"/> value.</param>
-	/// <returns>Latest <see cref="JVirtualMachineInitArgumentValue"/> value.</returns>
-	private JVirtualMachineInitArgumentValue GetDefaultArgument(Int32 jniVersion,
-		JVirtualMachineInitArgumentValue initValue)
-	{
-		if (initValue is not { IgnoreUnrecognized: 0, OptionsLenght: 0, } || 
-		    initValue.Options != default || initValue.Version != jniVersion) 
-			return initValue;
-		foreach (Int32 jniVersion2 in JVirtualMachineLibrary.jniVersions.Where(ver => ver > jniVersion))
-		{
-			JVirtualMachineInitArgumentValue initValueNew = new() { Version = jniVersion2, };
-			if (this._getDefaultVirtualMachineInitArgs(ref initValueNew) != JResult.Ok)
-				break;
-			initValue = initValueNew;
-		}
-		return initValue;
 	}
 	
 	/// <summary>

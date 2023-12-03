@@ -38,7 +38,7 @@ public partial class JEnvironment
 		public JThread(JEnvironment env) : base(env._cache)
 		{
 			JThread? thread = env as JThread;
-			this._isDisposable = thread is not null;
+			this._isDisposable = false;
 			this._isDisposed = thread?._isDisposed ?? IMutableReference<Boolean>.Create();
 			this._args = thread?._args ?? new();
 		}
@@ -52,8 +52,9 @@ public partial class JEnvironment
 		/// <inheritdoc/>
 		public void Dispose()
 		{
-			if (this._isDisposable || this._isDisposed.Value) return;
+			if (!this._isDisposable || this._isDisposed.Value) return;
 			JVirtualMachine.DetachCurrentThread(this._cache.VirtualMachine.Reference, this._cache.Thread);
+			this._isDisposed.Value = true;
 			JVirtualMachine.RemoveEnvironment(this._cache.VirtualMachine.Reference, this.Reference);
 		}
 	}

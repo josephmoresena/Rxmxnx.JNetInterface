@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class implements <see cref="IVirtualMachine"/> interface.
 /// </summary>
-public partial class JEnvironment : IEnvironment
+public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEquatable<IEnvironment>
 {
 	/// <summary>
 	/// <see cref="JEnvironment"/> cache.
@@ -68,10 +68,10 @@ public partial class JEnvironment : IEnvironment
 			return true;
 
 		if (jObject is not JReferenceObject jRefObj || jOther is not JReferenceObject jRefOther)
-			return JEnvironment.Equals(jObject as IEquatable<IPrimitiveType>, jOther as IPrimitiveType) ??
-				JEnvironment.Equals(jOther as IEquatable<IPrimitiveType>, jObject as IPrimitiveType) ??
-				JEnvironment.Equals(jObject as IEquatable<JPrimitiveObject>, jOther as JPrimitiveObject) ??
-				JEnvironment.Equals(jOther as IEquatable<JPrimitiveObject>, jObject as JPrimitiveObject) ?? false;
+			return JEnvironment.EqualEquatable(jObject as IEquatable<IPrimitiveType>, jOther as IPrimitiveType) ??
+				JEnvironment.EqualEquatable(jOther as IEquatable<IPrimitiveType>, jObject as IPrimitiveType) ??
+				JEnvironment.EqualEquatable(jObject as IEquatable<JPrimitiveObject>, jOther as JPrimitiveObject) ??
+				JEnvironment.EqualEquatable(jOther as IEquatable<JPrimitiveObject>, jObject as JPrimitiveObject) ?? false;
 
 		ValidationUtilities.ThrowIfDummy(jRefObj);
 		ValidationUtilities.ThrowIfDummy(jRefOther);
@@ -96,6 +96,16 @@ public partial class JEnvironment : IEnvironment
 	JClassLocalRef IEnvironment.GetReturn(JClassObject? jClass) => throw new NotImplementedException();
 	JArrayLocalRef IEnvironment.GetReturn(JArrayObject? jArray) => throw new NotImplementedException();
 	JThrowableLocalRef IEnvironment.GetReturn(JThrowableObject? jThrowable) => throw new NotImplementedException();
+	
+	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other) => other is not null && this._cache.Equals(other._cache);
+	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other) => this.Reference == other?.Reference;
+
+	/// <inheritdoc/>
+	public override Boolean Equals(Object? obj) => 
+		obj is JEnvironment other && this._cache.Equals(other._cache) ||
+		obj is IEnvironment env && this.Reference == env.Reference;
+	/// <inheritdoc/>
+	public override Int32 GetHashCode() => this._cache.GetHashCode();
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
@@ -109,7 +119,7 @@ public partial class JEnvironment : IEnvironment
 	}
 
 	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
-	private static Boolean? Equals<TEquatable>(IEquatable<TEquatable>? obj, TEquatable? other)
+	private static Boolean? EqualEquatable<TEquatable>(IEquatable<TEquatable>? obj, TEquatable? other)
 	{
 		if (obj is null || other is null) return default;
 		return obj.Equals(other);

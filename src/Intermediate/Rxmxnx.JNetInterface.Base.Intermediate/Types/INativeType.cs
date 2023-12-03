@@ -53,6 +53,5 @@ internal interface INativeType
 internal interface INativeType<TNative> : INativeType where TNative : unmanaged, INativeType<TNative>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	String INativeType.AsString()
-		=> String.Format(CommonConstants.NativeReferenceFormat, TNative.Type.GetTypeName(), this.TextValue);
+	String INativeType.AsString() => $"{TNative.Type.GetTypeName()}: {this.TextValue}";
 }
