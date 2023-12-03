@@ -71,7 +71,7 @@ public sealed record JVirtualMachineInitOption
 	{
 		Span<JVirtualMachineInitOptionValue> result = new JVirtualMachineInitOptionValue[memoryList.Count / 2];
 		for (Int32 i = 0; i < result.Length; i += 2)
-			result[i] = new() { Name = memoryList[i].Pointer, ExtraInfo = memoryList[i + 1].Pointer, };
+			result[i] = new() { Name = (ReadOnlyValPtr<Byte>)memoryList[i].Pointer, ExtraInfo = memoryList[i + 1].Pointer, };
 		return result;
 	}
 

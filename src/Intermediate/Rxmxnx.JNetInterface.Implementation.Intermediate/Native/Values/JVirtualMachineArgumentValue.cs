@@ -3,6 +3,6 @@
 internal readonly struct JVirtualMachineArgumentValue
 {
 	public Int32 Version { get; init; }
-	public IntPtr Name { get; init; }
+	public ReadOnlyValPtr<Byte> Name { get; init; }
 	public JGlobalRef Group { get; init; }
 }

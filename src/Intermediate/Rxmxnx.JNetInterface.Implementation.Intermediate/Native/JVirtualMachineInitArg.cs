@@ -38,7 +38,6 @@ public sealed record JVirtualMachineInitArg
 	{
 		this._version = value.Version;
 		this.IgnoreUnrecognized = new JBoolean(value.IgnoreUnrecognized).Value;
-		this.Options = JVirtualMachineInitOption.GetOptions(
-			value.Options.GetUnsafeReadOnlySpan<JVirtualMachineInitOptionValue>(value.OptionsLenght));
+		this.Options = JVirtualMachineInitOption.GetOptions(MemoryMarshal.CreateSpan(ref value.Options.Reference, value.OptionsLenght));
 	}
 }

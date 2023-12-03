@@ -2,6 +2,6 @@
 
 internal readonly struct JVirtualMachineInitOptionValue
 {
-	internal IntPtr Name { get; init; }
+	internal ReadOnlyValPtr<Byte> Name { get; init; }
 	internal IntPtr ExtraInfo { get; init; }
 }

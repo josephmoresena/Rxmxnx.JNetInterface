@@ -69,7 +69,9 @@ internal sealed record NativeTypeHelper
 	public void AddSourceCode(GeneratorExecutionContext context)
 	{
 		String valueName = this.GetInternalValueName();
-		if (this._isPrimitive)
+		if (!this._isPrimitive)
+			this._typeSymbol.GenerateNativeStructToString(context);
+		else
 		{
 			String underlineType = this.GetUnderlinePrimitiveType();
 			this._typeSymbol.GeneratePrimitiveToString(context, valueName);
@@ -80,10 +82,6 @@ internal sealed record NativeTypeHelper
 				this._typeSymbol.GenerateNumericPrimitiveIntegerOperators(context, underlineType);
 			if (this._isFloatingPoint)
 				this._typeSymbol.GenerateNumericPrimitiveFloatingPointOperators(context, underlineType);
-		}
-		else
-		{
-			this._typeSymbol.GenerateNativeStructToString(context);
 		}
 		if (this._isArrRef)
 			this._typeSymbol.GenerateArrayRefOperators(context);

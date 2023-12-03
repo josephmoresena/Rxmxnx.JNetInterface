@@ -1,4 +1,6 @@
-﻿using Rxmxnx.JNetInterface.Lang;
+﻿using System.Runtime.InteropServices;
+
+using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
@@ -11,6 +13,10 @@ public static class Program
 	{
 		Console.WriteLine("Hello, World!");
 		Program.PrintBuiltIntMetadata();
+		Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/server/libjvm.dylib");
+		Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib/server/libjvm.dylib");
+		Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home/lib/server/libjvm.dylib");
+		Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/server/libjvm.dylib");
 	}
 	private static void PrintBuiltIntMetadata()
 	{
@@ -52,5 +58,23 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JCharacterObject>());
 		Console.WriteLine(IDataType.GetMetadata<JLongObject>());
 		Console.WriteLine(IDataType.GetMetadata<JShortObject>());
+	}
+	private static void PrintVirtualMachineInfo(String path)
+	{
+		JVirtualMachineLibrary? jvmLib = JVirtualMachineLibrary.LoadLibrary(path);
+		if (jvmLib is null)
+		{
+			Console.WriteLine("Invalid JVM library.");
+			return;
+		}
+		try
+		{
+			JVirtualMachineInitArg args = jvmLib.GetDefaultArgument(0x00010008);
+			Console.WriteLine(args);
+		}
+		finally
+		{
+			NativeLibrary.Free(jvmLib.Handler);
+		}
 	}
 }

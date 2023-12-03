@@ -64,6 +64,11 @@ internal static class ValueNames
 	/// JNI name of <c>jshort</c> value.
 	/// </summary>
 	public const String JShortName = "jshort";
+	
+	/// <summary>
+	/// JNI name of <c>JavaVMInitArgs</c> value.
+	/// </summary>
+	public const String JVirtualMachineInitArgumentName = "JavaVMInitArgs";
 
 	/// <summary>
 	/// JNI name of <c>jvalue</c> value.

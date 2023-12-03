@@ -25,7 +25,7 @@ internal interface INativeType
 				JValue jValue => Convert.ToHexString(NativeUtilities.AsBytes(jValue)),
 				JNativeInterface jNative => Convert.ToHexString(NativeUtilities.AsBytes(jNative)),
 				JInvokeInterface jInvoke => Convert.ToHexString(NativeUtilities.AsBytes(jInvoke)),
-				_ => this.ToString()!,
+				_ => this.GetType().ToString(),
 			};
 		}
 	}

@@ -42,7 +42,7 @@ public partial class JEnvironment
 		/// <param name="jObject">A <see cref="IDataType{TObject}"/> instance.</param>
 		/// <returns>Registered <see cref="IDataType{TObject}"/> instance.</returns>
 		[return:NotNullIfNotNull(nameof(jObject))]
-		public TObject Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
+		public TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
 		{
 			//TODO: Register
 			return jObject;

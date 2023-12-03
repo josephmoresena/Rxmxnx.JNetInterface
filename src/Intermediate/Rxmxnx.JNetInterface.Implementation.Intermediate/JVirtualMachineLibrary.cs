@@ -6,6 +6,20 @@ namespace Rxmxnx.JNetInterface;
 public sealed record JVirtualMachineLibrary
 {
 	/// <summary>
+	/// Support JNI versions. 
+	/// </summary>
+	private static readonly Int32[] jniVersions =
+	{
+		0x00010006, //JNI_VERSION_1_6
+		0x00010008, //JNI_VERSION_1_8
+		0x00090000, //JNI_VERSION_9
+		0x000a0000, //JNI_VERSION_10
+		0x00130000, //JNI_VERSION_19
+		0x00140000,	//JNI_VERSION_20
+		0x00150000,	//JNI_VERSION_21
+	};
+	
+	/// <summary>
 	/// Name of <c>JNI_GetDefaultJavaVMInitArgs</c> function.
 	/// </summary>
 	private const String getDefaultVirtualMachineInitArgsName = "JNI_GetDefaultJavaVMInitArgs";
@@ -63,11 +77,11 @@ public sealed record JVirtualMachineLibrary
 	{
 		JVirtualMachineInitArgumentValue initValue = new()
 		{
-			Version = jniVersion < 0x00010006 ? 0x00010006 : jniVersion,
+			Version = jniVersion < JVirtualMachineLibrary.jniVersions[0] ? JVirtualMachineLibrary.jniVersions[0] : jniVersion,
 		};
 		JResult result = this._getDefaultVirtualMachineInitArgs(ref initValue);
 		if (result == JResult.Ok)
-			return new(initValue);
+			return new(this.GetDefaultArgument(initValue.Version, initValue));
 		throw new JniException(result);
 	}
 	/// <summary>
@@ -112,6 +126,27 @@ public sealed record JVirtualMachineLibrary
 		using IFixedContext<JVirtualMachineRef>.IDisposable fixedContext = arr.AsMemory().GetFixedContext();
 		result = this._getCreatedVirtualMachines((ValPtr<JVirtualMachineRef>)fixedContext.Pointer, arr.Length, out vmCount);
 		return arr;
+	}
+	/// <summary>
+	/// Retrieves the maximum supported version. 
+	/// </summary>
+	/// <param name="jniVersion">Current JNI version.</param>
+	/// <param name="initValue">Initial <see cref="JVirtualMachineInitArgumentValue"/> value.</param>
+	/// <returns>Latest <see cref="JVirtualMachineInitArgumentValue"/> value.</returns>
+	private JVirtualMachineInitArgumentValue GetDefaultArgument(Int32 jniVersion,
+		JVirtualMachineInitArgumentValue initValue)
+	{
+		if (initValue is not { IgnoreUnrecognized: 0, OptionsLenght: 0, } || 
+		    initValue.Options != default || initValue.Version != jniVersion) 
+			return initValue;
+		foreach (Int32 jniVersion2 in JVirtualMachineLibrary.jniVersions.Where(ver => ver > jniVersion))
+		{
+			JVirtualMachineInitArgumentValue initValueNew = new() { Version = jniVersion2, };
+			if (this._getDefaultVirtualMachineInitArgs(ref initValueNew) != JResult.Ok)
+				break;
+			initValue = initValueNew;
+		}
+		return initValue;
 	}
 	
 	/// <summary>
@@ -172,7 +207,7 @@ public sealed record JVirtualMachineLibrary
 		{
 			Version = args.arg.Version,
 			OptionsLenght = ctx.Values.Length,
-			Options = ctx.Pointer,
+			Options = (ValPtr<JVirtualMachineInitOptionValue>)ctx.Pointer,
 			IgnoreUnrecognized = ((JBoolean)args.arg.IgnoreUnrecognized).ByteValue,
 		};
 		JResult result =

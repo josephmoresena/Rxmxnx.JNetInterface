@@ -144,7 +144,7 @@ public partial class JVirtualMachine : IVirtualMachine
 		Int32 version = args.args.Version < IVirtualMachine.MinimalVersion ?
 			IVirtualMachine.MinimalVersion :
 			args.args.Version; 
-		JVirtualMachineArgumentValue arg = new() { Name = name.Pointer, Group = threadGroupRef, Version = version, };
+		JVirtualMachineArgumentValue arg = new() { Name = (ReadOnlyValPtr<Byte>)name.Pointer, Group = threadGroupRef, Version = version, };
 		JResult result = attachCurrentThread(args.vm._cache.Reference, out JEnvironmentRef envRef, in arg);
 
 		if (result == JResult.Ok)
