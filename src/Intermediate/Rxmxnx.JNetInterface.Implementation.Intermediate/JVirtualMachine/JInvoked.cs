@@ -39,10 +39,11 @@ public partial class JVirtualMachine
 		/// <inheritdoc/>
 		public void Dispose()
 		{
-			if (this._isDisposable || this._isDisposed.Value) return;
-			DestroyVirtualMachineDelegate del = this._cache.DelegateCache.GetDelegate<DestroyVirtualMachineDelegate>(
-				this._cache.Reference.Reference.Reference.DestroyJavaVmPointer);
-			del(this._cache.Reference);
+			if (!this._isDisposable || this._isDisposed.Value) return;
+			DestroyVirtualMachineDelegate destroyVirtualMachine =
+				this._cache.GetDelegate<DestroyVirtualMachineDelegate>();
+			JResult result =  destroyVirtualMachine(this._cache.Reference);
+			if (result != JResult.Ok) throw new JniException(result);
 			this._isDisposed.Value = true;
 			JVirtualMachine.RemoveVirtualMachine(this._cache.Reference);
 		}
