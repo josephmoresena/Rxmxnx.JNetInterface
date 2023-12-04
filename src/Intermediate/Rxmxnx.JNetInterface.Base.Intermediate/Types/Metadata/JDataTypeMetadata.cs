@@ -5,6 +5,10 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// </summary>
 public abstract record JDataTypeMetadata
 {
+	/// <summary>
+	/// Internal sequence information.
+	/// </summary>
+	private readonly CStringSequence _sequence;
 	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
 	private readonly CString _arraySignature;
 	/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
@@ -38,6 +42,10 @@ public abstract record JDataTypeMetadata
 	/// Size of current type in bytes.
 	/// </summary>
 	public abstract Int32 SizeOf { get; }
+	/// <summary>
+	/// Current datatype hash.
+	/// </summary>
+	public String Hash => this._sequence.ToString();
 
 	/// <summary>
 	/// Constructor.
@@ -47,23 +55,28 @@ public abstract record JDataTypeMetadata
 	/// <param name="arraySignature">Array JNI signature for current type.</param>
 	internal JDataTypeMetadata(CString className, CString signature, CString? arraySignature = default)
 	{
-		this._className = JDataTypeMetadata.SafeNullTerminated(className);
-		this._signature = JDataTypeMetadata.SafeNullTerminated(signature);
-		this._arraySignature =
-			JDataTypeMetadata.SafeNullTerminated(arraySignature ?? JDataTypeMetadata.ComputeArraySignature(signature));
+		this._sequence = JDataTypeMetadata.CreateInformationSequence(className, signature, arraySignature);
+		this._className = this._sequence[0];
+		this._signature = this._sequence[1];
+		this._arraySignature = this._sequence[2];
 	}
 
 	/// <summary>
-	/// Retrieve a safe null-terminated <see cref="CString"/> from <paramref name="cstr"/>.
+	/// Creates hash from given parameters.
 	/// </summary>
-	/// <param name="cstr">A UTF-8 string.</param>
-	/// <returns>A null-terminated UTF-8 string.</returns>
-	protected static CString SafeNullTerminated(CString cstr)
+	/// <param name="className">JNI name of current type.</param>
+	/// <param name="signature">JNI signature for current type.</param>
+	/// <param name="arraySignature">Array JNI signature for current type.</param>
+	/// <returns>A <see cref="CStringSequence"/> containing JNI information.</returns>
+	internal static CStringSequence CreateInformationSequence(CString className, CString? signature = default, CString? arraySignature = default)
 	{
-		if (cstr.IsNullTerminated)
-			return cstr;
-		return (CString)cstr.Clone();
+		CString[] arr = new CString[3];
+		arr[0] = className;
+		arr[1] = signature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className);
+		arr[2] = arraySignature ?? JDataTypeMetadata.ComputeArraySignature(arr[1]);
+		return CStringSequence.Create(arr, JDataTypeMetadata.WriteItem, arr.Select(c => (Int32?)c.Length).ToArray());
 	}
+	
 	/// <summary>
 	/// Computes the type signature for given type class name.
 	/// </summary>
@@ -80,4 +93,11 @@ public abstract record JDataTypeMetadata
 	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
 	private static CString ComputeArraySignature(CString signature)
 		=> CString.Concat(UnicodeObjectSignatures.ArraySignaturePrefix, signature);
+	/// <summary>
+	/// Writes <paramref name="arr"/> to creating <see cref="CStringSequence"/> instance.
+	/// </summary>
+	/// <param name="span">A binary span to copy <paramref name="arr"/> element to.</param>
+	/// <param name="index">Index of <paramref name="arr"/> element.</param>
+	/// <param name="arr"><see cref="CString"/> elements.</param>
+	private static void WriteItem(Span<Byte> span, Int32 index, CString[] arr) => arr[index].AsSpan().CopyTo(span);
 }

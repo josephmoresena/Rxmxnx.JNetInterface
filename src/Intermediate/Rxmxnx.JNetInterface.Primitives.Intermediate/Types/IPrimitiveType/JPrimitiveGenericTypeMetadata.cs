@@ -54,8 +54,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 				this._underlineType = underlineType;
 				this._nativeType = TPrimitive.JniType;
 				this._type = typeof(TPrimitive);
-				this._classSignature = JDataTypeMetadata.SafeNullTerminated(
-					classSignature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className));
+				this._classSignature = classSignature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className);
 			}
 			/// <inheritdoc/>
 			public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes) => bytes.ToValue<TPrimitive>();
