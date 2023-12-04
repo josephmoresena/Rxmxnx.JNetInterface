@@ -40,4 +40,6 @@ internal sealed record
 
 	/// <inheritdoc/>
 	internal override TWrapper? ParseInstance(JLocalObject? jLocal) => jLocal as TWrapper ?? TWrapper.Create(jLocal);
+	/// <inheritdoc/>
+	internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TWrapper>();
 }

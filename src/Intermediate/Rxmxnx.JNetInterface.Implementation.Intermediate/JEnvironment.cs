@@ -83,7 +83,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	TObject? IEnvironment.CreateParameterObject<TObject>(JObjectLocalRef localRef) where TObject : class
 	{
 		if (localRef == default) return default;
-		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TObject>();
+		JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)JMetadataHelper.GetMetadata<TObject>();
 		using JLocalObject jLocal = new(this, localRef, false, true, this._cache.GetClass<TObject>());
 		return this._cache.Register(metadata.ParseInstance(jLocal) as TObject);
 	}

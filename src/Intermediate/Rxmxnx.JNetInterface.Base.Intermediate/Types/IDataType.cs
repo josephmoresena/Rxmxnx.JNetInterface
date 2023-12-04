@@ -29,6 +29,14 @@ public interface IDataType
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static JDataTypeMetadata GetMetadata<TDataType>() where TDataType : IDataType<TDataType>
 		=> TDataType.Metadata;
+	/// <summary>
+	/// Retrieves the hash for given type.
+	/// </summary>
+	/// <typeparam name="TDataType">Type of current java datatype.</typeparam>
+	/// <returns>The hash string for given type.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static String GetHash<TDataType>() where TDataType : IDataType<TDataType>
+		=> TDataType.Metadata.Hash;
 }
 
 /// <summary>

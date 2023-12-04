@@ -27,5 +27,8 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		internal override JArrayObject<TElement>? ParseInstance(JLocalObject? jLocal)
 			=> jLocal as JArrayObject<TElement> ?? JArrayObject<TElement>.Create(jLocal);
+		/// <inheritdoc/>
+		internal override JArrayTypeMetadata GetArrayMetadata()
+			=> JReferenceTypeMetadata.GetArrayMetadata<JArrayObject<TElement>>();
 	}
 }

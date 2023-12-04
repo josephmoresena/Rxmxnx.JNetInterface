@@ -74,7 +74,7 @@ public abstract record JDataTypeMetadata
 		arr[0] = className;
 		arr[1] = signature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className);
 		arr[2] = arraySignature ?? JDataTypeMetadata.ComputeArraySignature(arr[1]);
-		return CStringSequence.Create(arr, JDataTypeMetadata.WriteItem, arr.Select(c => (Int32?)c.Length).ToArray());
+		return new(arr);
 	}
 	
 	/// <summary>
@@ -93,11 +93,4 @@ public abstract record JDataTypeMetadata
 	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
 	private static CString ComputeArraySignature(CString signature)
 		=> CString.Concat(UnicodeObjectSignatures.ArraySignaturePrefix, signature);
-	/// <summary>
-	/// Writes <paramref name="arr"/> to creating <see cref="CStringSequence"/> instance.
-	/// </summary>
-	/// <param name="span">A binary span to copy <paramref name="arr"/> element to.</param>
-	/// <param name="index">Index of <paramref name="arr"/> element.</param>
-	/// <param name="arr"><see cref="CString"/> elements.</param>
-	private static void WriteItem(Span<Byte> span, Int32 index, CString[] arr) => arr[index].AsSpan().CopyTo(span);
 }

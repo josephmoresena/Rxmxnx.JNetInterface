@@ -35,6 +35,9 @@ public partial class JInterfaceObject
 			/// <inheritdoc/>
 			[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 			internal override Type GetImplementingType<TReference>() => typeof(IDerivedType<TReference, TInterface>);
+			/// <inheritdoc/>
+			internal override JArrayTypeMetadata GetArrayMetadata()
+				=> JReferenceTypeMetadata.GetArrayMetadata<TInterface>();
 		}
 	}
 }

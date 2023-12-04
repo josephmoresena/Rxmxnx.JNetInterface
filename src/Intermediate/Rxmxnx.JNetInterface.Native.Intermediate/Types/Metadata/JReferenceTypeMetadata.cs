@@ -34,4 +34,19 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jLocal"/>.</returns>
 	[return: NotNullIfNotNull(nameof(jLocal))]
 	internal abstract JLocalObject? ParseInstance(JLocalObject? jLocal);
+	
+	/// <summary>
+	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
+	/// </summary>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
+	internal abstract JArrayTypeMetadata GetArrayMetadata();
+
+	/// <summary>
+	/// Retrieves the <see cref="JArrayTypeMetadata"/> for <typeparamref name="TReference"/>
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
+	protected static JArrayTypeMetadata GetArrayMetadata<TReference>()
+		where TReference : JReferenceObject, IReferenceType<TReference>
+		=> IArrayType.GetMetadata<JArrayObject<TReference>>();
 }
