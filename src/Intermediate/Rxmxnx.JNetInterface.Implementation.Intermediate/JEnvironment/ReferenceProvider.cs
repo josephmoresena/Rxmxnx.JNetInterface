@@ -44,9 +44,14 @@ public partial class JEnvironment
 		/// <returns>Registered <see cref="IDataType{TObject}"/> instance.</returns>
 		[return: NotNullIfNotNull(nameof(jObject))]
 		public TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
-			=>
-				//TODO: Register
-				jObject;
+		{
+			if (jObject is JClassObject jClass)
+				this._classes.Add(jClass.Hash, jClass);
+			JLocalObject? jLocal = jObject as JLocalObject;
+			if (!JObject.IsNullOrDefault(jLocal))
+				this._objects[jLocal.As<JObjectLocalRef>()] = new(jLocal);
+			return jObject;
+		}
 
 		/// <summary>
 		/// Applies cast from <see cref="JLocalObject"/> to <typeparamref name="TObject"/>.

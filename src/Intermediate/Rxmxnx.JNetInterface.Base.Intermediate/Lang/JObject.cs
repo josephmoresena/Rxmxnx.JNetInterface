@@ -142,5 +142,5 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// default value; otherwise, <see langword="false"/>.
 	/// </returns>
 	public static Boolean IsNullOrDefault([NotNullWhen(false)] JObject? jObject)
-		=> jObject is not null && !jObject.IsDefault;
+		=> jObject is null || jObject.IsDefault;
 }

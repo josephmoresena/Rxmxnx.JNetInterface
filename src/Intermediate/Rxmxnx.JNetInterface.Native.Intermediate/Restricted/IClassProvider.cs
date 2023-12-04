@@ -6,6 +6,10 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public interface IClassProvider
 {
 	/// <summary>
+	/// <c>java.lang.Object</c> class instance.
+	/// </summary>
+	JClassObject JObject => this.GetClass<JLocalObject>();
+	/// <summary>
 	/// <c>java.lang.Class&lt;?&gt;</c> class instance.
 	/// </summary>
 	JClassObject ClassObject => this.GetClass<JClassObject>();
@@ -58,6 +62,12 @@ public interface IClassProvider
 	/// </summary>
 	JClassObject ShortClassObject { get; }
 
+	/// <summary>
+	/// Retrieves the current <paramref name="jObject"/> instance as <see cref="JClassObject"/>.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <returns>A <see cref="JClassObject"/> instance.</returns>
+	JClassObject AsClassObject(JReferenceObject jObject);
 	/// <summary>
 	/// Determines whether <paramref name="jObject"/> can be safely cast to
 	/// <typeparamref name="TDataType"/> instance.

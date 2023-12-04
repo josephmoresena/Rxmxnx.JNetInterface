@@ -250,6 +250,14 @@ public partial class JEnvironment
 		/// Delegate cache.
 		/// </summary>
 		private readonly DelegateHelperCache _delegateCache;
+		/// <summary>
+		/// Dictionary of objects.
+		/// </summary>
+		private Dictionary<JObjectLocalRef, WeakReference<JLocalObject>> _objects = new();
+		/// <summary>
+		/// Dictionary of classes.
+		/// </summary>
+		private Dictionary<String, JClassObject> _classes = new();
 
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
 		public IVirtualMachine VirtualMachine { get; }
@@ -257,6 +265,8 @@ public partial class JEnvironment
 		public JEnvironmentRef Reference { get; }
 		/// <inheritdoc cref="IEnvironment.Version"/>
 		public Int32 Version { get; }
+		/// <inheritdoc cref="IClassProvider.ClassObject"/>
+		public JClassObject ClassObject { get; }
 		/// <summary>
 		/// Thread.
 		/// </summary>
@@ -271,11 +281,13 @@ public partial class JEnvironment
 		/// </summary>
 		/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
-		public JEnvironmentCache(IVirtualMachine vm, JEnvironmentRef envRef)
+		/// <param name="classObject">The <see cref="JClassObject"/> for <c>java.lang.Class&lt;?&gt;</c>.</param>
+		public JEnvironmentCache(IVirtualMachine vm, JEnvironmentRef envRef, JClassObject classObject)
 		{
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
 			this._delegateCache = new();
+			this.ClassObject = this.Register(classObject);
 			this.Thread = Thread.CurrentThread;
 			this.Version = JEnvironmentCache.GetVersion(envRef);
 			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this);
@@ -308,6 +320,26 @@ public partial class JEnvironment
 			if (result != JResult.Ok)
 				throw new JniException(result);
 			this.Capacity = capacity;
+		}
+		/// <summary>
+		/// Checks JNI ocurred error.
+		/// </summary>
+		public void CheckJniError()
+		{
+			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
+			JThrowableLocalRef throwableRef = exceptionOccurred(this.Reference);
+			if (throwableRef.Value == default) return;
+			try
+			{
+				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
+				exceptionClear(this.Reference);
+				//TODO: Implement throw 
+			}
+			finally
+			{
+				ThrowDelegate jThrow = this.GetDelegate<ThrowDelegate>();
+				jThrow(this.Reference, throwableRef);
+			}
 		}
 
 		/// <summary>
@@ -360,24 +392,6 @@ public partial class JEnvironment
 			if (obj is not JEnvironmentCache cache) return;
 			cache.Thread.Join();
 			JVirtualMachine.RemoveEnvironment(cache.VirtualMachine.Reference, cache.Reference);
-		}
-
-		public void CheckJniError()
-		{
-			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
-			JThrowableLocalRef throwableRef = exceptionOccurred(this.Reference);
-			if (throwableRef.Value == default) return;
-			try
-			{
-				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
-				exceptionClear(this.Reference);
-				//TODO: Implement throw 
-			}
-			finally
-			{
-				ThrowDelegate jThrow = this.GetDelegate<ThrowDelegate>();
-				jThrow(this.Reference, throwableRef);
-			}
 		}
 	}
 }

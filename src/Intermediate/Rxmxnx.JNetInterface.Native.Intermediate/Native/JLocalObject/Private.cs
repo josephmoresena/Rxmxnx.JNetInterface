@@ -32,7 +32,7 @@ public partial class JLocalObject : ILocalObject
 
 	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 	void ILocalObject.ProcessMetadata(JObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
-
+	
 	/// <summary>
 	/// Loads the class object in the current instance.
 	/// </summary>

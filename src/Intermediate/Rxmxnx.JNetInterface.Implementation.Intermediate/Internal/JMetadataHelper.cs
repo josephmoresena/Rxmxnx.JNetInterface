@@ -135,7 +135,7 @@ internal static class JMetadataHelper
 	/// </summary>
 	/// <param name="className">A java type name.</param>
 	/// <returns>Hash for given type.</returns>
-	public static CStringSequence GetHashSequence(CString className)
+	public static CStringSequence GetHashSequence(ref CString className)
 	{
 		CString classNameF = !className.Contains(JMetadataHelper.classNameEscape[0]) ?
 			className :
@@ -158,7 +158,7 @@ internal static class JMetadataHelper
 		arrayHash = default;
 		arrayTypeMetadata = default;
 		if (className.Length < 2 || className[0] != UnicodeObjectSignatures.ArraySignaturePrefix[0]) return false;
-		arrayHash = JDataTypeMetadata.CreateInformationSequence(className);
+		arrayHash = JMetadataHelper.GetHashSequence(ref className);
 		if (!JMetadataHelper.runtimeMetadata.TryGetValue(arrayHash.ToString(),
 		                                                 out JReferenceTypeMetadata? referenceMetadata))
 			referenceMetadata = JMetadataHelper.IsArrayClass(className[1..], out _, out arrayTypeMetadata) ?

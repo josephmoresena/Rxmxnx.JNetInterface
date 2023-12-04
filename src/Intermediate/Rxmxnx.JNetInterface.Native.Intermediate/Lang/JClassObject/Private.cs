@@ -38,8 +38,9 @@ public partial class JClassObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JClassObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.ClassObject)
+	private JClassObject(JLocalObject jLocal) : base(jLocal)
 	{
+		JLocalObject.LoadClassObject(this);
 		if (jLocal is not JClassObject jClass)
 			return;
 

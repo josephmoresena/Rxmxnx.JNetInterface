@@ -79,4 +79,12 @@ public partial class JLocalObject
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>The loaded <see cref="JGlobalBase"/> object for <paramref name="jLocal"/>.</returns>
 	internal static JGlobalBase? GetGlobalObject(JLocalObject jLocal) => jLocal.GetGlobalObject();
+	/// <summary>
+	/// Loads the class object in the <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="hash">Class hash.</param>
+	internal static void LoadClassObject(JClassObject jClass, String? hash = default)
+		=> jClass._class = hash == IDataType.GetHash<JClassObject>() ? jClass : 
+			jClass.Environment.ClassProvider.ClassObject;
 }

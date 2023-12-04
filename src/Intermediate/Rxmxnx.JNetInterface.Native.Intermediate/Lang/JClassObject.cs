@@ -30,7 +30,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		{
 			if (this._className is null)
 				this.LoadClassInformation();
-			return this._className!;
+			return this._signature!;
 		}
 	}
 	/// <summary>
@@ -91,8 +91,8 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 
 	/// <inheritdoc/>
 	public static JClassObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JClassObject>(jLocal)) : default;
+		=> !JObject.IsNullOrDefault(jLocal) ? jLocal.Environment.ClassProvider.AsClassObject(jLocal) : default;
 	/// <inheritdoc/>
 	public static JClassObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JClassObject>(jGlobal, env)) : default;
+		=> !JObject.IsNullOrDefault(jGlobal) ? env.ClassProvider.AsClassObject(jGlobal) : default;
 }

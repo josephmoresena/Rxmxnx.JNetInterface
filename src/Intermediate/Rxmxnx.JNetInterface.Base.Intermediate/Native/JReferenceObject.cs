@@ -157,9 +157,6 @@ public abstract class JReferenceObject : JObject
 	private static Int64 CreateInstanceId()
 	{
 		lock (JReferenceObject.sequenceLock)
-		{
-			JReferenceObject.sequenceValue++;
-			return JReferenceObject.sequenceValue;
-		}
+			return JReferenceObject.sequenceValue++;
 	}
 }
