@@ -10,15 +10,15 @@ public partial class JEnumObject
 	/// Function name of <c>java.lang.Enum.name().</c>
 	/// </summary>
 	private static readonly CString nameName = new(() => "name"u8);
-	
-	/// <summary>
-	/// Ordinal of enum value.
-	/// </summary>
-	private Int32? _ordinal;
 	/// <summary>
 	/// String of enum value.
 	/// </summary>
 	private String? _name;
+
+	/// <summary>
+	/// Ordinal of enum value.
+	/// </summary>
+	private Int32? _ordinal;
 
 	/// <summary>
 	/// Constructor.
@@ -33,7 +33,7 @@ public partial class JEnumObject
 			this._name ??= enumMetadata.Name;
 		}
 	}
-		
+
 	/// <summary>
 	/// Returns the ordinal of current instance.
 	/// </summary>

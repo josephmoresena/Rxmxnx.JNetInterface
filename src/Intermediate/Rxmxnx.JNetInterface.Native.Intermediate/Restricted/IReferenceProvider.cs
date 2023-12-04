@@ -11,7 +11,8 @@ public interface IReferenceProvider
 	/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> value.</typeparam>
 	/// <param name="primitive">A primitive value.</param>
 	/// <returns>A <see cref="JLocalObject"/> wrapper instance for <paramref name="primitive"/> value.</returns>
-	JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	/// <summary>
 	/// Reloads the local reference of given object if the current local reference is not loaded but has a
 	/// global reference.

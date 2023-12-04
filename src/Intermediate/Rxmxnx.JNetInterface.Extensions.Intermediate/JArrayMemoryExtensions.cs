@@ -70,7 +70,7 @@ public static class JArrayMemoryExtensions
 	/// An array of <typeparamref name="TPrimitive"/> elements containing a copy of the elements on
 	/// the current <see cref="JArrayObject{TPrimitive}"/> instance.
 	/// </returns>
-	public static TPrimitive[] ToArray<TPrimitive>(this JArrayObject<TPrimitive> jArray, Int32 startIndex, Int32 count) 
+	public static TPrimitive[] ToArray<TPrimitive>(this JArrayObject<TPrimitive> jArray, Int32 startIndex, Int32 count)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		TPrimitive[] arr = new TPrimitive[count];
@@ -86,8 +86,8 @@ public static class JArrayMemoryExtensions
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="mem">A <see cref="ReadOnlyMemory{TPrimitive}"/> containing elements to copy from.</param>
 	/// <param name="startIndex">Initial <paramref name="jArray"/> index to copy from.</param>
-	public static void Set<TPrimitive>(this JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> mem, Int32 startIndex = 0)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	public static void Set<TPrimitive>(this JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> mem,
+		Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		IEnvironment env = jArray.Environment;
 		env.ArrayProvider.SetCopy(jArray, mem, startIndex);

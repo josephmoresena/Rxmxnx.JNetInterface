@@ -52,7 +52,7 @@ public abstract class JEnumObject<TEnum> : JEnumObject where TEnum : JEnumObject
 	protected JEnumObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.GetClass<TEnum>()) { }
 	/// <inheritdoc/>
 	protected JEnumObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-	
+
 	/// <inheritdoc/>
 	internal override String GetName()
 	{

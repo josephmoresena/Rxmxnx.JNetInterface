@@ -6,20 +6,6 @@ namespace Rxmxnx.JNetInterface;
 public sealed record JVirtualMachineLibrary
 {
 	/// <summary>
-	/// Support JNI versions. 
-	/// </summary>
-	private static readonly Int32[] jniVersions =
-	{
-		0x00010006, //JNI_VERSION_1_6
-		0x00010008, //JNI_VERSION_1_8
-		0x00090000, //JNI_VERSION_9
-		0x000a0000, //JNI_VERSION_10
-		0x00130000, //JNI_VERSION_19
-		0x00140000,	//JNI_VERSION_20
-		0x00150000,	//JNI_VERSION_21
-	};
-	
-	/// <summary>
 	/// Name of <c>JNI_GetDefaultJavaVMInitArgs</c> function.
 	/// </summary>
 	private const String getDefaultVirtualMachineInitArgsName = "JNI_GetDefaultJavaVMInitArgs";
@@ -31,6 +17,19 @@ public sealed record JVirtualMachineLibrary
 	/// Name of <c>JNI_GetCreatedJavaVMs</c> function.
 	/// </summary>
 	private const String getCreatedVirtualMachinesName = "JNI_GetCreatedJavaVMs";
+	/// <summary>
+	/// Support JNI versions.
+	/// </summary>
+	private static readonly Int32[] jniVersions =
+	{
+		0x00010006, //JNI_VERSION_1_6
+		0x00010008, //JNI_VERSION_1_8
+		0x00090000, //JNI_VERSION_9
+		0x000a0000, //JNI_VERSION_10
+		0x00130000, //JNI_VERSION_19
+		0x00140000, //JNI_VERSION_20
+		0x00150000, //JNI_VERSION_21
+	};
 	/// <summary>
 	/// Delegate for <c>JNI_CreateJavaVM</c> function. Loads and initializes a Java VM.
 	/// </summary>
@@ -93,7 +92,9 @@ public sealed record JVirtualMachineLibrary
 	{
 		JVirtualMachineInitArgumentValue initValue = new()
 		{
-			Version = jniVersion < JVirtualMachineLibrary.jniVersions[0] ? JVirtualMachineLibrary.jniVersions[0] : jniVersion,
+			Version = jniVersion < JVirtualMachineLibrary.jniVersions[0] ?
+				JVirtualMachineLibrary.jniVersions[0] :
+				jniVersion,
 		};
 		JResult result = this._getDefaultVirtualMachineInitArgs(ref initValue);
 		if (result == JResult.Ok) return new(initValue);
@@ -120,15 +121,14 @@ public sealed record JVirtualMachineLibrary
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
 	public IVirtualMachine[] GetCreatedVirtualMachines()
 	{
-		_ = this._getCreatedVirtualMachines(ValPtr<JVirtualMachineRef>.Zero, 0,
-		                                    out Int32 vmCount);
+		_ = this._getCreatedVirtualMachines(ValPtr<JVirtualMachineRef>.Zero, 0, out Int32 vmCount);
 		if (vmCount == 0) return Array.Empty<IVirtualMachine>();
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
 		if (result == JResult.Ok)
 			return arr.Select(JVirtualMachine.GetVirtualMachine).ToArray();
 		throw new JniException(result);
 	}
-	
+
 	/// <summary>
 	/// Retrieves all of the created <see cref="JVirtualMachineRef"/> instances.
 	/// </summary>
@@ -139,10 +139,11 @@ public sealed record JVirtualMachineLibrary
 	{
 		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
 		using IFixedContext<JVirtualMachineRef>.IDisposable fixedContext = arr.AsMemory().GetFixedContext();
-		result = this._getCreatedVirtualMachines((ValPtr<JVirtualMachineRef>)fixedContext.Pointer, arr.Length, out vmCount);
+		result = this._getCreatedVirtualMachines((ValPtr<JVirtualMachineRef>)fixedContext.Pointer, arr.Length,
+		                                         out vmCount);
 		return arr;
 	}
-	
+
 	/// <summary>
 	/// Loads a virtual machine library exposed by <paramref name="libraryPath"/>.
 	/// </summary>

@@ -11,7 +11,8 @@ internal delegate JResult MonitorExitDelegate(JEnvironmentRef env, JObjectLocalR
 internal delegate JResult GetVirtualMachineDelegate(JEnvironmentRef env, out JVirtualMachineRef jvm);
 internal delegate JResult DestroyVirtualMachineDelegate(JVirtualMachineRef vm);
 
-internal delegate JResult AttachCurrentThreadDelegate(JVirtualMachineRef vm, out JEnvironmentRef env, in JVirtualMachineArgumentValue args);
+internal delegate JResult AttachCurrentThreadDelegate(JVirtualMachineRef vm, out JEnvironmentRef env,
+	in JVirtualMachineArgumentValue args);
 
 internal delegate JResult DetachCurrentThreadDelegate(JVirtualMachineRef vm);
 internal delegate JResult GetEnvDelegate(JVirtualMachineRef vm, out JEnvironmentRef env, Int32 version);

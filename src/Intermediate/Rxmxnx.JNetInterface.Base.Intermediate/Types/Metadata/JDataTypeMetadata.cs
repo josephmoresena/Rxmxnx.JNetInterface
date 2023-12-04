@@ -5,14 +5,14 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// </summary>
 public abstract record JDataTypeMetadata
 {
-	/// <summary>
-	/// Internal sequence information.
-	/// </summary>
-	private readonly CStringSequence _sequence;
 	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
 	private readonly CString _arraySignature;
 	/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
 	private readonly CString _className;
+	/// <summary>
+	/// Internal sequence information.
+	/// </summary>
+	private readonly CStringSequence _sequence;
 	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 	private readonly CString _signature;
 
@@ -68,7 +68,8 @@ public abstract record JDataTypeMetadata
 	/// <param name="signature">JNI signature for current type.</param>
 	/// <param name="arraySignature">Array JNI signature for current type.</param>
 	/// <returns>A <see cref="CStringSequence"/> containing JNI information.</returns>
-	internal static CStringSequence CreateInformationSequence(CString className, CString? signature = default, CString? arraySignature = default)
+	internal static CStringSequence CreateInformationSequence(CString className, CString? signature = default,
+		CString? arraySignature = default)
 	{
 		CString[] arr = new CString[3];
 		arr[0] = className;
@@ -76,7 +77,7 @@ public abstract record JDataTypeMetadata
 		arr[2] = arraySignature ?? JDataTypeMetadata.ComputeArraySignature(arr[1]);
 		return new(arr);
 	}
-	
+
 	/// <summary>
 	/// Computes the type signature for given type class name.
 	/// </summary>

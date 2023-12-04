@@ -42,7 +42,7 @@ public partial class JVirtualMachine
 			if (!this._isDisposable || this._isDisposed.Value) return;
 			DestroyVirtualMachineDelegate destroyVirtualMachine =
 				this._cache.GetDelegate<DestroyVirtualMachineDelegate>();
-			JResult result =  destroyVirtualMachine(this._cache.Reference);
+			JResult result = destroyVirtualMachine(this._cache.Reference);
 			if (result != JResult.Ok) throw new JniException(result);
 			this._isDisposed.Value = true;
 			JVirtualMachine.RemoveVirtualMachine(this._cache.Reference);

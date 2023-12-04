@@ -70,7 +70,9 @@ internal sealed record NativeTypeHelper
 	{
 		String valueName = this.GetInternalValueName();
 		if (!this._isPrimitive)
+		{
 			this._typeSymbol.GenerateNativeStructToString(context);
+		}
 		else
 		{
 			String underlineType = this.GetUnderlinePrimitiveType();

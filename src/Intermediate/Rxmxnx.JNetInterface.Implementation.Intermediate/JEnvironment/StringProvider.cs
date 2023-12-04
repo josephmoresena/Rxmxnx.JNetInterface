@@ -28,7 +28,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);
 			GetStringUtfLengthDelegate getStringUtf8Length = this.GetDelegate<GetStringUtfLengthDelegate>();
-			Int32 result =  getStringUtf8Length(this.Reference, jObject.As<JStringLocalRef>());
+			Int32 result = getStringUtf8Length(this.Reference, jObject.As<JStringLocalRef>());
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
@@ -50,7 +50,7 @@ public partial class JEnvironment
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
 		}
-		public IntPtr GetCriticalSequence(JStringObject jString) 
+		public IntPtr GetCriticalSequence(JStringObject jString)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			GetStringCriticalDelegate getStringCritical = this.GetDelegate<GetStringCriticalDelegate>();
@@ -61,24 +61,21 @@ public partial class JEnvironment
 		public void ReleaseSequence(JStringObject jString, IntPtr pointer)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
-			ReleaseStringCharsDelegate releaseStringChars =
-				this.GetDelegate<ReleaseStringCharsDelegate>();
+			ReleaseStringCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringCharsDelegate>();
 			releaseStringChars(this.Reference, jString.Reference, (ReadOnlyValPtr<Char>)pointer);
 			this.CheckJniError();
 		}
 		public void ReleaseUtf8Sequence(JStringObject jString, IntPtr pointer)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
-			ReleaseStringCharsDelegate releaseStringChars =
-				this.GetDelegate<ReleaseStringCharsDelegate>();
+			ReleaseStringCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringCharsDelegate>();
 			releaseStringChars(this.Reference, jString.Reference, (ReadOnlyValPtr<Char>)pointer);
 			this.CheckJniError();
 		}
 		public void ReleaseCriticalSequence(JStringObject jString, IntPtr pointer)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
-			ReleaseStringCriticalDelegate releaseStringCritical =
-				this.GetDelegate<ReleaseStringCriticalDelegate>();
+			ReleaseStringCriticalDelegate releaseStringCritical = this.GetDelegate<ReleaseStringCriticalDelegate>();
 			releaseStringCritical(this.Reference, jString.Reference, (ReadOnlyValPtr<Char>)pointer);
 			this.CheckJniError();
 		}
@@ -116,8 +113,8 @@ public partial class JEnvironment
 			(JEnvironmentCache cache, JStringObject jString, Int32 startIndex) args)
 		{
 			GetStringRegionDelegate getStringRegion = args.cache.GetDelegate<GetStringRegionDelegate>();
-			getStringRegion(args.cache.Reference, args.jString.Reference, args.startIndex,
-			                ctx.Values.Length, (ValPtr<Char>)ctx.Pointer);
+			getStringRegion(args.cache.Reference, args.jString.Reference, args.startIndex, ctx.Values.Length,
+			                (ValPtr<Char>)ctx.Pointer);
 		}
 	}
 }

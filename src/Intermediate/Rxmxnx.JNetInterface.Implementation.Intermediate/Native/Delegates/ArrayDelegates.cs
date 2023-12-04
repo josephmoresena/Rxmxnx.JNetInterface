@@ -50,14 +50,14 @@ internal delegate void ReleaseBooleanArrayElementsDelegate(JEnvironmentRef env, 
 internal delegate void ReleaseByteArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	ReadOnlyValPtr<SByte> elements0, JReleaseMode mode);
 
-internal delegate void ReleaseCharArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, ReadOnlyValPtr<Char> elements0,
-	JReleaseMode mode);
+internal delegate void ReleaseCharArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+	ReadOnlyValPtr<Char> elements0, JReleaseMode mode);
 
 internal delegate void ReleaseShortArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	ReadOnlyValPtr<Int16> elements0, JReleaseMode mode);
 
-internal delegate void ReleaseIntArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef, ReadOnlyValPtr<Int32> elements0,
-	JReleaseMode mode);
+internal delegate void ReleaseIntArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+	ReadOnlyValPtr<Int32> elements0, JReleaseMode mode);
 
 internal delegate void ReleaseLongArrayElementsDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	ReadOnlyValPtr<Int64> elements0, JReleaseMode mode);

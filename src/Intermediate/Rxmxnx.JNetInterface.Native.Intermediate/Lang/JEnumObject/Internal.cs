@@ -12,7 +12,7 @@ public partial class JEnumObject
 
 	static JDataTypeMetadata IDataType.Metadata => JEnumObject.JEnumClassMetadata;
 	static JClassTypeMetadata IBaseClassType<JEnumObject>.SuperClassMetadata => JEnumObject.JEnumClassMetadata;
-	
+
 	/// <summary>
 	/// Returns the name of current instance.
 	/// </summary>

@@ -89,7 +89,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		env.StringProvider.GetCopyUtf8(this, utf8Data.AsMemory()[..^1], startIndex);
 		return utf8Data;
 	}
-	
+
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()
 		=> new JStringObjectMetadata(base.CreateMetadata())

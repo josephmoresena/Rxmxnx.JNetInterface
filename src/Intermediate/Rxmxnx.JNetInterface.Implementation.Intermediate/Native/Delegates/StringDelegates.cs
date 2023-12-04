@@ -6,14 +6,17 @@ internal delegate Int32 GetStringLengthDelegate(JEnvironmentRef env, JStringLoca
 internal delegate ReadOnlyValPtr<Char> GetStringCharsDelegate(JEnvironmentRef env, JStringLocalRef jString,
 	out Byte isCopy);
 
-internal delegate void ReleaseStringCharsDelegate(JEnvironmentRef env, JStringLocalRef jString, ReadOnlyValPtr<Char> chars0);
+internal delegate void ReleaseStringCharsDelegate(JEnvironmentRef env, JStringLocalRef jString,
+	ReadOnlyValPtr<Char> chars0);
+
 internal delegate JStringLocalRef NewStringUtfDelegate(JEnvironmentRef env, ReadOnlyValPtr<Byte> utf8Chars0);
 internal delegate Int32 GetStringUtfLengthDelegate(JEnvironmentRef env, JStringLocalRef jString);
 
 internal delegate ReadOnlyValPtr<Byte> GetStringUtfCharsDelegate(JEnvironmentRef env, JStringLocalRef jString,
 	out Byte isCopy);
 
-internal delegate void ReleaseStringUtfCharsDelegate(JEnvironmentRef env, JStringLocalRef jString, ReadOnlyValPtr<Byte> utf8Chars0);
+internal delegate void ReleaseStringUtfCharsDelegate(JEnvironmentRef env, JStringLocalRef jString,
+	ReadOnlyValPtr<Byte> utf8Chars0);
 
 internal delegate void GetStringRegionDelegate(JEnvironmentRef env, JStringLocalRef jString, Int32 startIndex,
 	Int32 length, ValPtr<Char> buffer0);
@@ -24,4 +27,5 @@ internal delegate void GetStringUtfRegionDelegate(JEnvironmentRef env, JStringLo
 internal delegate ReadOnlyValPtr<Char> GetStringCriticalDelegate(JEnvironmentRef env, JStringLocalRef jString,
 	out Byte isCopy);
 
-internal delegate void ReleaseStringCriticalDelegate(JEnvironmentRef env, JStringLocalRef jString, ReadOnlyValPtr<Char> chars0);
+internal delegate void ReleaseStringCriticalDelegate(JEnvironmentRef env, JStringLocalRef jString,
+	ReadOnlyValPtr<Char> chars0);

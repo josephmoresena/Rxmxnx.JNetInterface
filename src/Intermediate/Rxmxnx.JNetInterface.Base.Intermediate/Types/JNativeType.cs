@@ -140,9 +140,9 @@ public enum JNativeType : Byte
 	///     <c>jobjectArray</c>
 	/// </summary>
 	JObjectArray = 0x79,
-	
+
 	/// <summary>
-	/// <c>JavaVMInitArgs</c>
+	///     <c>JavaVMInitArgs</c>
 	/// </summary>
 	JVirtualMachineInitArgument = 0x81,
 
@@ -206,7 +206,7 @@ public static class JNativeTypeExtensions
 			JNativeType.JLongArray => ReferenceNames.JLongArrayLocalRefName,
 			JNativeType.JShortArray => ReferenceNames.JShortArrayLocalRefName,
 			JNativeType.JObjectArray => ReferenceNames.JObjectArrayLocalRefName,
-			
+
 			JNativeType.JVirtualMachineInitArgument => ValueNames.JVirtualMachineInitArgumentName,
 
 			JNativeType.JValue => ValueNames.JValueName,

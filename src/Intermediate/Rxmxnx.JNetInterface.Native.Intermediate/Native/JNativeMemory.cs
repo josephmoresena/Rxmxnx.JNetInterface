@@ -6,15 +6,15 @@ namespace Rxmxnx.JNetInterface.Native;
 public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 {
 	/// <summary>
-	/// Internal memory handler.
-	/// </summary>
-	private readonly JNativeMemoryHandler _handler;
-	/// <summary>
 	/// Internal memory context.
 	/// </summary>
 	private readonly IReadOnlyFixedContext<Byte>.IDisposable _context;
 	/// <inheritdoc cref="JNativeMemory.Disposed"/>
 	private readonly IMutableWrapper<Boolean> _disposed = IMutableWrapper<Boolean>.Create();
+	/// <summary>
+	/// Internal memory handler.
+	/// </summary>
+	private readonly JNativeMemoryHandler _handler;
 	/// <inheritdoc cref="JNativeMemory.VirtualMachine"/>
 	private readonly IVirtualMachine _vm;
 
@@ -66,7 +66,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	{
 		this._vm = vm;
 		this._handler = handler;
-		this._context = isReadOnly ? handler.GetReadOnlyContext(this): handler.GetContext(this);
+		this._context = isReadOnly ? handler.GetReadOnlyContext(this) : handler.GetContext(this);
 	}
 
 	/// <inheritdoc/>
@@ -129,7 +129,8 @@ public sealed record JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContex
 	/// <inheritdoc/>
 	public ReadOnlySpan<TValue> Values => this._context.Values;
 
-	IReadOnlyFixedContext<TDestination> IReadOnlyFixedContext<TValue>.Transformation<TDestination>(out IReadOnlyFixedMemory residual)
+	IReadOnlyFixedContext<TDestination> IReadOnlyFixedContext<TValue>.
+		Transformation<TDestination>(out IReadOnlyFixedMemory residual)
 		=> this._context.Transformation<TDestination>(out residual);
 
 	/// <summary>

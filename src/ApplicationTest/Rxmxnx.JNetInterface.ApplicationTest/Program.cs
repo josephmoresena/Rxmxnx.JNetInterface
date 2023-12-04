@@ -99,7 +99,8 @@ public static class Program
 		IVirtualMachine vm = env.VirtualMachine;
 		Console.WriteLine(vm.Reference);
 		Console.WriteLine($"VM Version: 0x{env.Version:x8}");
-		Console.WriteLine($"Ref Equality: {env.Equals(vm.GetEnvironment())} - Instance Equality: {env == vm.GetEnvironment()}");
+		Console.WriteLine(
+			$"Ref Equality: {env.Equals(vm.GetEnvironment())} - Instance Equality: {env == vm.GetEnvironment()}");
 		Console.WriteLine($"Thread: {Environment.CurrentManagedThreadId} {env.Reference} Type: {env.GetType()}");
 	}
 	private static void PrintAttachThreadInfo(IVirtualMachine vm, CString threadName, IEnvironment? env = default)
@@ -109,8 +110,8 @@ public static class Program
 		using (IThread thread = vm.InitializeThread(threadName))
 		{
 			Program.PrintAttachedThreadInfo(thread);
-			
-			if (env is null) 
+
+			if (env is null)
 				Program.PrintAttachThreadInfo(vm, new(() => CString.Concat(threadName, " Nested"u8)), thread);
 		}
 		Console.WriteLine($"Thread detached: {vm.GetEnvironment() is null}");

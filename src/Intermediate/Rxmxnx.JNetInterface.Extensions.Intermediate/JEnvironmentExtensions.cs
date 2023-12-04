@@ -148,10 +148,11 @@ public static class JEnvironmentExtensions
 	/// <param name="env">Current <see cref="IEnvironment"/> instance.</param>
 	/// <param name="arrayRef">A local <c>short</c> array reference.</param>
 	/// <returns>A <see cref="JArrayObject{JShort}"/> instance passed as JNI argument.</returns>
-	public static JArrayObject<TObject>? CreateParameterArray<TObject>(this IEnvironment env, JObjectArrayLocalRef arrayRef)
+	public static JArrayObject<TObject>?
+		CreateParameterArray<TObject>(this IEnvironment env, JObjectArrayLocalRef arrayRef)
 		where TObject : JLocalObject, IReferenceType<TObject>
 		=> env.CreateParameterArray<TObject>(arrayRef.ArrayValue);
-	
+
 	/// <summary>
 	/// Retrieves a <see cref="JBooleanArrayLocalRef"/> reference from given array.
 	/// </summary>

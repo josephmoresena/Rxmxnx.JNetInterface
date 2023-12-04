@@ -41,7 +41,7 @@ public partial class JStringObject
 		this._utf8Length = jString._utf8Length;
 		this._value = jString._value;
 	}
-	
+
 	/// <summary>
 	/// Retrieves UTF-16 chars.
 	/// </summary>

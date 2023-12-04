@@ -71,12 +71,14 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 			return JEnvironment.EqualEquatable(jObject as IEquatable<IPrimitiveType>, jOther as IPrimitiveType) ??
 				JEnvironment.EqualEquatable(jOther as IEquatable<IPrimitiveType>, jObject as IPrimitiveType) ??
 				JEnvironment.EqualEquatable(jObject as IEquatable<JPrimitiveObject>, jOther as JPrimitiveObject) ??
-				JEnvironment.EqualEquatable(jOther as IEquatable<JPrimitiveObject>, jObject as JPrimitiveObject) ?? false;
+				JEnvironment.EqualEquatable(jOther as IEquatable<JPrimitiveObject>, jObject as JPrimitiveObject) ??
+				false;
 
 		ValidationUtilities.ThrowIfDummy(jRefObj);
 		ValidationUtilities.ThrowIfDummy(jRefOther);
 		IsSameObjectDelegate isSameObject = this._cache.GetDelegate<IsSameObjectDelegate>();
-		Byte result = isSameObject(this._cache.Reference, jRefObj.As<JObjectLocalRef>(), jRefOther.As<JObjectLocalRef>());
+		Byte result = isSameObject(this._cache.Reference, jRefObj.As<JObjectLocalRef>(),
+		                           jRefOther.As<JObjectLocalRef>());
 		this._cache.CheckJniError();
 		return result == JBoolean.TrueValue;
 	}
@@ -89,21 +91,26 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	}
 	JClassObject? IEnvironment.CreateParameterObject(JClassLocalRef classRef) => throw new NotImplementedException();
 	JStringObject? IEnvironment.CreateParameterObject(JStringLocalRef stringRef)
-		=> this._cache.Register<JStringObject>(stringRef.Value != default ? new(this, stringRef, null, false, true) : default);
+		=> this._cache.Register<JStringObject>(stringRef.Value != default ?
+			                                       new(this, stringRef, null, false, true) :
+			                                       default);
 	JArrayObject<TElement>? IEnvironment.CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
-		=> this._cache.Register<JArrayObject<TElement>>(arrayRef.Value != default ? new(this, arrayRef, null, false, true) : default);
+		=> this._cache.Register<JArrayObject<TElement>>(arrayRef.Value != default ?
+			                                                new(this, arrayRef, null, false, true) :
+			                                                default);
 	JObjectLocalRef IEnvironment.GetReturn(JLocalObject? jLocal) => throw new NotImplementedException();
 	JClassLocalRef IEnvironment.GetReturn(JClassObject? jClass) => throw new NotImplementedException();
 	JArrayLocalRef IEnvironment.GetReturn(JArrayObject? jArray) => throw new NotImplementedException();
 	JThrowableLocalRef IEnvironment.GetReturn(JThrowableObject? jThrowable) => throw new NotImplementedException();
-	
-	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other) => other is not null && this._cache.Equals(other._cache);
 	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other) => this.Reference == other?.Reference;
 
+	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
+		=> other is not null && this._cache.Equals(other._cache);
+
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => 
-		obj is JEnvironment other && this._cache.Equals(other._cache) ||
-		obj is IEnvironment env && this.Reference == env.Reference;
+	public override Boolean Equals(Object? obj)
+		=> (obj is JEnvironment other && this._cache.Equals(other._cache)) ||
+			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._cache.GetHashCode();
 

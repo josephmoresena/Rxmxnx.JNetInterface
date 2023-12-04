@@ -20,7 +20,7 @@ public partial class JEnvironment
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
-				using IFixedContext<Byte>.IDisposable fixedBuffer = 
+				using IFixedContext<Byte>.IDisposable fixedBuffer =
 					((ValPtr<Byte>)buffer.GetUnsafeIntPtr()).GetUnsafeFixedContext(buffer.Length);
 				this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
 				this.CheckJniError();
@@ -29,7 +29,7 @@ public partial class JEnvironment
 			GetObjectArrayElementDelegate getObjectArrayElement = this.GetDelegate<GetObjectArrayElementDelegate>();
 			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
 			JObjectLocalRef localRef = getObjectArrayElement(this.Reference, jArray.Reference, index);
-			if (localRef == default)this.CheckJniError();
+			if (localRef == default) this.CheckJniError();
 			return this.Cast<TElement>(new(env, localRef, false, false, this.GetClass<TElement>()));
 		}
 		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
@@ -41,7 +41,7 @@ public partial class JEnvironment
 			{
 				Int32 offset = 0;
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
-				using IFixedContext<Byte>.IDisposable fixedBuffer = 
+				using IFixedContext<Byte>.IDisposable fixedBuffer =
 					((ValPtr<Byte>)buffer.GetUnsafeIntPtr()).GetUnsafeFixedContext(buffer.Length);
 				value!.CopyTo(buffer, ref offset);
 				this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
@@ -128,7 +128,7 @@ public partial class JEnvironment
 				case 0x90: //Z
 					GetBooleanArrayElementsDelegate getBooleanArrayElements =
 						this.GetDelegate<GetBooleanArrayElementsDelegate>();
-					return  getBooleanArrayElements(this.Reference, jArray.Reference, out isCopy);
+					return getBooleanArrayElements(this.Reference, jArray.Reference, out isCopy);
 				case 0x66: //B
 					GetByteArrayElementsDelegate getByteArrayElements =
 						this.GetDelegate<GetByteArrayElementsDelegate>();
@@ -186,32 +186,32 @@ public partial class JEnvironment
 				case 0x67: //C
 					ReleaseCharArrayElementsDelegate releaseCharArrayElements =
 						this.GetDelegate<ReleaseCharArrayElementsDelegate>();
-					releaseCharArrayElements(this.Reference, jArray.Reference,(ReadOnlyValPtr<Char>)pointer, mode);
+					releaseCharArrayElements(this.Reference, jArray.Reference, (ReadOnlyValPtr<Char>)pointer, mode);
 					break;
 				case 0x68: //D
 					ReleaseDoubleArrayElementsDelegate releaseDoubleArrayElements =
 						this.GetDelegate<ReleaseDoubleArrayElementsDelegate>();
-					releaseDoubleArrayElements(this.Reference, jArray.Reference,(ReadOnlyValPtr<Double>)pointer, mode);
+					releaseDoubleArrayElements(this.Reference, jArray.Reference, (ReadOnlyValPtr<Double>)pointer, mode);
 					break;
 				case 0x70: //F
 					ReleaseFloatArrayElementsDelegate releaseFloatArrayElements =
 						this.GetDelegate<ReleaseFloatArrayElementsDelegate>();
-					releaseFloatArrayElements(this.Reference, jArray.Reference,(ReadOnlyValPtr<Single>)pointer, mode);
+					releaseFloatArrayElements(this.Reference, jArray.Reference, (ReadOnlyValPtr<Single>)pointer, mode);
 					break;
 				case 0x73: //I
 					ReleaseIntArrayElementsDelegate releaseIntArrayElements =
 						this.GetDelegate<ReleaseIntArrayElementsDelegate>();
-					releaseIntArrayElements(this.Reference, jArray.Reference,(ReadOnlyValPtr<Int32>)pointer, mode);
+					releaseIntArrayElements(this.Reference, jArray.Reference, (ReadOnlyValPtr<Int32>)pointer, mode);
 					break;
 				case 0x74: //J
 					ReleaseLongArrayElementsDelegate releaseLongArrayElements =
 						this.GetDelegate<ReleaseLongArrayElementsDelegate>();
-					releaseLongArrayElements(this.Reference, jArray.Reference,(ReadOnlyValPtr<Int64>)pointer, mode);
+					releaseLongArrayElements(this.Reference, jArray.Reference, (ReadOnlyValPtr<Int64>)pointer, mode);
 					break;
 				case 0x83: //S
 					ReleaseShortArrayElementsDelegate releaseShortArrayElements =
 						this.GetDelegate<ReleaseShortArrayElementsDelegate>();
-					releaseShortArrayElements(this.Reference, jArray.Reference,(ReadOnlyValPtr<Int16>)pointer, mode);
+					releaseShortArrayElements(this.Reference, jArray.Reference, (ReadOnlyValPtr<Int16>)pointer, mode);
 					break;
 				default:
 					throw new ArgumentException("Invalid primitive type.");
@@ -226,8 +226,8 @@ public partial class JEnvironment
 		/// <param name="index">Region start index.</param>
 		/// <param name="count">Number of elements in region.</param>
 		/// <exception cref="ArgumentException"/>
-		private void GetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer, Int32 index,
-			Int32 count = 1)
+		private void GetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer,
+			Int32 index, Int32 count = 1)
 		{
 			switch (signature[0])
 			{

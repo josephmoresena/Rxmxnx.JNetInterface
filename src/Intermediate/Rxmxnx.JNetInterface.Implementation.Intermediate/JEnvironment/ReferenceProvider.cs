@@ -4,7 +4,8 @@ public partial class JEnvironment
 {
 	private partial record JEnvironmentCache : IReferenceProvider
 	{
-		public JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		public JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
+			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
@@ -41,13 +42,12 @@ public partial class JEnvironment
 		/// <typeparam name="TObject">A <see cref="IDataType{TObject}"/> type.</typeparam>
 		/// <param name="jObject">A <see cref="IDataType{TObject}"/> instance.</param>
 		/// <returns>Registered <see cref="IDataType{TObject}"/> instance.</returns>
-		[return:NotNullIfNotNull(nameof(jObject))]
+		[return: NotNullIfNotNull(nameof(jObject))]
 		public TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
-		{
-			//TODO: Register
-			return jObject;
-		}
-		
+			=>
+				//TODO: Register
+				jObject;
+
 		/// <summary>
 		/// Applies cast from <see cref="JLocalObject"/> to <typeparamref name="TObject"/>.
 		/// </summary>

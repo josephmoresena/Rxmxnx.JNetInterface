@@ -53,7 +53,7 @@ public sealed record JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedCont
 	/// <inheritdoc/>
 	internal JPrimitiveMemory(IVirtualMachine vm, JNativeMemoryHandler handler) : base(vm, handler)
 		=> this._context = this.GetBinaryContext().Transformation<TPrimitive>(out IFixedMemory _);
-	
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>

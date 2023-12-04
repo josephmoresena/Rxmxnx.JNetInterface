@@ -96,7 +96,7 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance passed as JNI argument.</returns>
 	JArrayObject<TElement>? CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
 		where TElement : IObject, IDataType<TElement>;
-	
+
 	/// <summary>
 	/// Retrieves a <see cref="JObjectLocalRef"/> reference from given object.
 	/// </summary>

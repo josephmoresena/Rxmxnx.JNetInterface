@@ -378,6 +378,6 @@ public partial class JEnvironment
 				ThrowDelegate jThrow = this.GetDelegate<ThrowDelegate>();
 				jThrow(this.Reference, throwableRef);
 			}
-		} 
+		}
 	}
 }

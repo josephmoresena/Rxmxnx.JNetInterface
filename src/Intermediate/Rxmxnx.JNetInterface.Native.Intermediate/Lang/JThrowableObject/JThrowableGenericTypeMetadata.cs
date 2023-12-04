@@ -57,7 +57,8 @@ public partial class JThrowableObject
 			internal override JThrowableException CreateException(JGlobalBase jGlobalThrowable)
 				=> throw new NotImplementedException();
 			/// <inheritdoc/>
-			internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TThrowable>();
+			internal override JArrayTypeMetadata GetArrayMetadata()
+				=> JReferenceTypeMetadata.GetArrayMetadata<TThrowable>();
 		}
 	}
 }

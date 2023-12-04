@@ -21,7 +21,7 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="cache">A <see cref="JVirtualMachineCache"/> reference.</param>
 	private JVirtualMachine(JVirtualMachineCache cache) => this._cache = cache;
-	
+
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance associated with current thread.
 	/// </summary>
@@ -69,8 +69,8 @@ public partial class JVirtualMachine
 	/// <param name="arg">Attach argument.</param>
 	/// <param name="envRef">Output. Attached thread <see cref="JEnvironmentRef"/> reference.</param>
 	/// <returns>JNI code result.</returns>
-	private static JResult AttachThread(JVirtualMachine vm, Boolean isDaemon,
-		JVirtualMachineArgumentValue arg, out JEnvironmentRef envRef)
+	private static JResult AttachThread(JVirtualMachine vm, Boolean isDaemon, JVirtualMachineArgumentValue arg,
+		out JEnvironmentRef envRef)
 	{
 		AttachCurrentThreadDelegate? attachCurrentThread =
 			!isDaemon ? vm._cache.GetDelegate<AttachCurrentThreadDelegate>() : default;
@@ -91,8 +91,7 @@ public partial class JVirtualMachine
 	private static JVirtualMachineArgumentValue CreateAttachArgument(IFixedPointer name, ThreadCreationArgs args)
 	{
 		JGlobalRef threadGroupRef = args.ThreadGroup?.As<JGlobalRef>() ?? default;
-		Int32 version = args.Version < IVirtualMachine.MinimalVersion ?
-			IVirtualMachine.MinimalVersion : args.Version;
+		Int32 version = args.Version < IVirtualMachine.MinimalVersion ? IVirtualMachine.MinimalVersion : args.Version;
 		JVirtualMachineArgumentValue arg = new()
 		{
 			Name = (ReadOnlyValPtr<Byte>)name.Pointer, Group = threadGroupRef, Version = version,
