@@ -2,12 +2,15 @@ namespace Rxmxnx.JNetInterface.Native;
 
 public partial class JGlobalBase
 {
+	/// <summary>
+	/// Assignation cache.
+	/// </summary>
 	private readonly AssignableTypeCache _assignableTypes = new();
 	/// <summary>
 	/// This collection stores the weak references to the <see cref="JLocalObject"/> associated with
 	/// this instance.
 	/// </summary>
-	private readonly ConcurrentDictionary<Int64, WeakReference<JLocalObject>> _objects = new();
+	private readonly ConcurrentDictionary<Int64, WeakReference<ObjectLifetime>> _objects = new();
 	/// <summary>
 	/// <see cref="IVirtualMachine"/> instance.
 	/// </summary>

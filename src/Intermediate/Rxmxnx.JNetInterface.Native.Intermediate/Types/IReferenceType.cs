@@ -25,8 +25,8 @@ public interface IReferenceType : IObject, IDataType, IDisposable
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface
 	IReferenceType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TReference> :
-		IReferenceType,
-		IDataType<TReference> where TReference : JReferenceObject, IReferenceType<TReference>
+	IReferenceType,
+	IDataType<TReference> where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>
 	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.

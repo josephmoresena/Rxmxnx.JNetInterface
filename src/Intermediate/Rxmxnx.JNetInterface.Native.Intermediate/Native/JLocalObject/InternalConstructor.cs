@@ -12,10 +12,9 @@ public partial class JLocalObject
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	internal JLocalObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy, Boolean isNativeParameter,
 		JClassObject? jClass = default) : base(jLocalRef, isDummy)
-	{
-		this._env = env;
-		this._lifetime = new(isNativeParameter, this);
-		this._class = jClass;
-		this._isRealClass = this._class is not null && this._class.IsFinal.GetValueOrDefault();
-	}
+		=> this._lifetime = new(isNativeParameter, env, this)
+		{
+			Class = jClass, 
+			IsRealClass = jClass is not null && jClass.IsFinal.GetValueOrDefault(),
+		};
 }

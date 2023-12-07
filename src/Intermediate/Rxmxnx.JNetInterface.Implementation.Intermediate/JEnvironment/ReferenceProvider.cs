@@ -30,10 +30,46 @@ public partial class JEnvironment
 				_ => throw new InvalidOperationException("Object is not primitive."),
 			};
 		}
-		public Boolean ReloadObject(JLocalObject jLocal) => throw new NotImplementedException();
+		public Boolean ReloadObject(JLocalObject jLocal)
+		{
+			ValidationUtilities.ThrowIfDummy(jLocal);
+
+			JClassObject? jClass = jLocal as JClassObject;
+			JObjectLocalRef localRef = jLocal.InternalReference;
+			JObjectLocalRef globalRef = jLocal.As<JObjectLocalRef>();
+
+			if (jClass?.Hash is not null) return true;
+			if (!this.JniSecure() || localRef != default || globalRef == default) return false;
+
+			NewLocalRefDelegate newLocalRef = this.GetDelegate<NewLocalRefDelegate>();
+			localRef = newLocalRef(this.Reference, globalRef);
+			this.CheckJniError();
+			jLocal.SetValue(localRef);
+
+			return true;
+		}
 		public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
 			=> throw new NotImplementedException();
-		public Boolean Unload(JLocalObject jLocal) => throw new NotImplementedException();
+		public Boolean Unload(JLocalObject jLocal)
+		{
+			ValidationUtilities.ThrowIfDummy(jLocal);
+			Boolean isClass = jLocal is JClassObject;
+			JObjectLocalRef localRef = jLocal.InternalReference;
+			try
+			{
+				if (localRef != default && this.JniSecure())
+				{
+					DeleteLocalRefDelegate deleteLocalRef = this.GetDelegate<DeleteLocalRefDelegate>();
+					deleteLocalRef(this.Reference, localRef);
+				}
+			}
+			finally
+			{
+				jLocal.ClearValue();
+				this._objects.Remove(localRef);
+			}
+			return !isClass;
+		}
 		public Boolean Unload(JGlobalBase jGlobal) => throw new NotImplementedException();
 
 		/// <summary>
@@ -45,11 +81,10 @@ public partial class JEnvironment
 		[return: NotNullIfNotNull(nameof(jObject))]
 		public TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
 		{
-			if (jObject is JClassObject jClass)
-				this._classes.Add(jClass.Hash, jClass);
+			if (jObject is JClassObject jClass) this._classes[jClass.Hash] = jClass;
 			JLocalObject? jLocal = jObject as JLocalObject;
-			if (!JObject.IsNullOrDefault(jLocal))
-				this._objects[jLocal.As<JObjectLocalRef>()] = new(jLocal);
+			ValidationUtilities.ThrowIfDummy(jLocal);
+			if (!JObject.IsNullOrDefault(jLocal)) this._objects[jLocal.As<JObjectLocalRef>()] = new(jLocal);
 			return jObject;
 		}
 

@@ -8,47 +8,19 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// <summary>
 	/// <see cref="IEnvironment"/> instance.
 	/// </summary>
-	public IEnvironment Environment => this._env;
+	public IEnvironment Environment => this._lifetime.Environment;
 	/// <summary>
 	/// Retrieves the class object from current instance.
 	/// </summary>
-	public JClassObject Class
-	{
-		get
-		{
-			if (this._class is null)
-				this.LoadClassObject();
-			return this._class!;
-		}
-	}
+	public JClassObject Class => this._lifetime.GetLoadClassObject(this);
 	/// <summary>
 	/// Retrieves the global object from current instance.
 	/// </summary>
-	public JGlobal Global
-	{
-		get
-		{
-			if (!JGlobalBase.IsValid(this._global, this._env))
-				this._global = this._env.ReferenceProvider.Create<JGlobal>(this);
-			else
-				this._global.RefreshMetadata(this);
-			return this._lifetime.Prepare(this._global);
-		}
-	}
+	public JGlobal Global => this._lifetime.GetLoadGlobalObject(this);
 	/// <summary>
 	/// Retrieves the global object from current instance.
 	/// </summary>
-	public JWeak Weak
-	{
-		get
-		{
-			if (!JGlobalBase.IsValid(this._weak, this._env))
-				this._weak = this._env.ReferenceProvider.Create<JWeak>(this);
-			else
-				this._weak.RefreshMetadata(this);
-			return this._lifetime.Prepare(this._weak);
-		}
-	}
+	public JWeak Weak => this._lifetime.GetLoadWeakObject(this);
 
 	/// <summary>
 	/// Constructor.
@@ -57,10 +29,7 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
 	protected JLocalObject(IEnvironment env, JGlobalBase jGlobal) : base(jGlobal)
 	{
-		this._env = env;
-		this._lifetime = new(false, this);
-		this._global = jGlobal as JGlobal;
-		this._weak = jGlobal as JWeak;
+		this._lifetime = new(false, env, this, jGlobal);
 		JLocalObject.ProcessMetadata(this, jGlobal.ObjectMetadata);
 	}
 	/// <summary>
@@ -71,13 +40,8 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	protected JLocalObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal)
 	{
 		jLocal._lifetime.Load(this);
-
-		this._env = jLocal.Environment;
 		this._lifetime = jLocal._lifetime;
-		this._class = jClass ?? jLocal._class;
-		this._global = jLocal._global;
-		this._weak = jLocal._weak;
-
+		this._lifetime.SetClass(jClass);
 		if (jLocal is JInterfaceObject jInterface)
 			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
@@ -90,9 +54,9 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	}
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this._class?.Name ?? JObject.JObjectClassName;
+	public override CString ObjectClassName => this._lifetime.Class?.Name ?? JObject.JObjectClassName;
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this._class?.ClassSignature ?? JObject.JObjectSignature;
+	public override CString ObjectSignature => this._lifetime.Class?.ClassSignature ?? JObject.JObjectSignature;
 
 	/// <inheritdoc/>
 	~JLocalObject() { this.Dispose(false); }
@@ -105,27 +69,20 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	{
 		if (this._lifetime.IsDisposed)
 			return;
-		if (this._lifetime.Unload(this) && this._env.ReferenceProvider.Unload(this))
+		if (this._lifetime.Unload(this) && this._lifetime.Environment.ReferenceProvider.Unload(this))
 			this._lifetime.SetDisposed();
 	}
 	/// <summary>
 	/// Creates the object metadata for current instance.
 	/// </summary>
 	/// <returns>The object metadata for current instance.</returns>
-	protected virtual JObjectMetadata CreateMetadata()
-	{
-		this.LoadClassObject();
-		return new(this._class!);
-	}
+	protected virtual JObjectMetadata CreateMetadata() => new(this._lifetime.GetLoadClassObject(this));
 	/// <summary>
 	/// Process the object metadata.
 	/// </summary>
 	/// <param name="instanceMetadata">The object metadata for current instance.</param>
 	protected virtual void ProcessMetadata(JObjectMetadata instanceMetadata)
-	{
-		this._class = instanceMetadata.GetClass(this.Environment);
-		this._isRealClass = true;
-	}
+		=> this._lifetime.SetClass(instanceMetadata);
 
 	/// <summary>
 	/// Retrieves the class and metadata from current instance for external use.
@@ -167,7 +124,7 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// </exception>
 	protected static JLocalObject Validate<TDataType>(JLocalObject jLocal)
 		where TDataType : JLocalObject, IDataType<TDataType>
-		=> jLocal as TDataType ?? JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal._env);
+		=> jLocal as TDataType ?? JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal._lifetime.Environment);
 
 	static JLocalObject? IReferenceType<JLocalObject>.Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(jLocal) : default;

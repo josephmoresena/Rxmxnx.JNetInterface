@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 internal sealed record
 	JPrimitiveWrapperTypeMetadata<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TWrapper> :
-		JPrimitiveWrapperTypeMetadata
+	JPrimitiveWrapperTypeMetadata
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
 {
 	/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>

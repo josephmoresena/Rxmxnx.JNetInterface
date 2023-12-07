@@ -26,8 +26,8 @@ public interface IInterfaceType : IReferenceType
 /// <typeparam name="TInterface">Type of java interface type.</typeparam>
 public interface
 	IInterfaceType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TInterface> :
-		IInterfaceType,
-		IReferenceType<TInterface> where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+	IInterfaceType,
+	IReferenceType<TInterface> where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	static Type IDataType<TInterface>.SelfType => typeof(IInterfaceType<TInterface>);
 }

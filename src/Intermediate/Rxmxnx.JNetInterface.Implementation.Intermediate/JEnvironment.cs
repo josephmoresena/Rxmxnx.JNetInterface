@@ -30,6 +30,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef envRef)
 		=> this._cache = new(vm, envRef, new(this, IDataType.GetMetadata<JClassObject>(), false));
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -114,6 +115,9 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._cache.GetHashCode();
+
+	/// <inheritdoc cref="JGlobalBase.JniSecure"/>
+	internal Boolean JniSecure() => this._cache.JniSecure();
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.

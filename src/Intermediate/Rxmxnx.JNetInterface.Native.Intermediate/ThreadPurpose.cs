@@ -18,4 +18,8 @@ public enum ThreadPurpose : Byte
 	/// Indicates the purpose of the thread is execute JNI calls under exception state.
 	/// </summary>
 	ExceptionExecution = 3,
+	/// <summary>
+	/// Indicates the purpose of the thread is execute JNI calls to get assignability.
+	/// </summary>
+	CheckAssignability = 4,
 }

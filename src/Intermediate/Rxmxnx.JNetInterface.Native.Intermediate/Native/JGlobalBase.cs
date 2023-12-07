@@ -14,6 +14,10 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// CLR type of object metadata.
 	/// </summary>
 	public Type MetadataType => this._objectMetadata.GetType();
+	/// <inheritdoc/>
+	public override CString ObjectClassName => this._objectMetadata.ObjectClassName;
+	/// <inheritdoc/>
+	public override CString ObjectSignature => this._objectMetadata.ObjectSignature;
 
 	/// <inheritdoc/>
 	public void Dispose()
@@ -62,9 +66,9 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 			ImmutableArray<Int64> keys = this._objects.Keys.ToImmutableArray();
 			foreach (Int64 key in keys)
 			{
-				if (this._objects.TryRemove(key, out WeakReference<JLocalObject>? wObj) &&
-				    wObj.TryGetTarget(out JLocalObject? jLocal))
-					this.Unload(jLocal);
+				if (this._objects.TryRemove(key, out WeakReference<ObjectLifetime>? wObj) &&
+				    wObj.TryGetTarget(out ObjectLifetime? objectLifetime))
+					objectLifetime.UnloadGlobal(this);
 			}
 		}
 
@@ -75,21 +79,6 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	}
 
 	/// <summary>
-	/// Associates the current instance to <paramref name="jLocal"/>.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <returns>A valid <see cref="JGlobalBase"/> associated to <paramref name="jLocal"/>.</returns>
-	protected JGlobalBase? Load(JLocalObject jLocal)
-	{
-		if (!this._objects.TryAdd(jLocal.Id, new(jLocal)))
-			this._objects[jLocal.Id].SetTarget(jLocal);
-		JGlobalBase? result = default;
-		if (!this.IsValid(jLocal.Environment))
-			return result;
-		result = this;
-		return result;
-	}
-	/// <summary>
 	/// Removes the association of <paramref name="jLocal"/> from this instance.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
@@ -99,16 +88,27 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </returns>
 	protected Boolean Remove(JLocalObject jLocal)
 	{
-		if (!this._objects.TryRemove(jLocal.Id, out _)) return false;
-		_ = this._assignableTypes.Prepare(jLocal);
+		ObjectLifetime objectLifetime = (jLocal as ILocalObject).Lifetime;
+		if (!this._objects.TryRemove(objectLifetime.Id, out _)) return false;
+		//_ = this._assignableTypes.Prepare(jLocal);
 		return true;
 	}
 
 	/// <summary>
-	/// Disassociates the current current instance from <paramref name="jLocal"/>.
+	/// Associates the current instance to <paramref name="objectLifetime"/>.
 	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	protected abstract void Unload(in JLocalObject jLocal);
+	/// <param name="objectLifetime"><see cref="ObjectLifetime"/> instance.</param>
+	/// <returns>A valid <see cref="JGlobalBase"/> associated to <paramref name="objectLifetime"/>.</returns>
+	internal JGlobalBase? Load(ObjectLifetime objectLifetime)
+	{
+		if (!this._objects.TryAdd(objectLifetime.Id, new(objectLifetime)))
+			this._objects[objectLifetime.Id].SetTarget(objectLifetime);
+		JGlobalBase? result = default;
+		if (!this.IsValid(objectLifetime.Environment))
+			return result;
+		result = this;
+		return result;
+	}
 
 	/// <summary>
 	/// Indicates whether <paramref name="jGlobal"/> is valid.

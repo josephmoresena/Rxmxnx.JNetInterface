@@ -251,13 +251,13 @@ public partial class JEnvironment
 		/// </summary>
 		private readonly DelegateHelperCache _delegateCache;
 		/// <summary>
-		/// Dictionary of objects.
-		/// </summary>
-		private Dictionary<JObjectLocalRef, WeakReference<JLocalObject>> _objects = new();
-		/// <summary>
 		/// Dictionary of classes.
 		/// </summary>
-		private Dictionary<String, JClassObject> _classes = new();
+		private readonly Dictionary<String, JClassObject> _classes = new();
+		/// <summary>
+		/// Dictionary of objects.
+		/// </summary>
+		private readonly Dictionary<JObjectLocalRef, WeakReference<JLocalObject>> _objects = new();
 
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
 		public IVirtualMachine VirtualMachine { get; }
@@ -265,8 +265,6 @@ public partial class JEnvironment
 		public JEnvironmentRef Reference { get; }
 		/// <inheritdoc cref="IEnvironment.Version"/>
 		public Int32 Version { get; }
-		/// <inheritdoc cref="IClassProvider.ClassObject"/>
-		public JClassObject ClassObject { get; }
 		/// <summary>
 		/// Thread.
 		/// </summary>
@@ -292,6 +290,8 @@ public partial class JEnvironment
 			this.Version = JEnvironmentCache.GetVersion(envRef);
 			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this);
 		}
+		/// <inheritdoc cref="IClassProvider.ClassObject"/>
+		public JClassObject ClassObject { get; }
 
 		/// <summary>
 		/// Retrieves a <typeparamref name="TDelegate"/> instance for <typeparamref name="TDelegate"/>.
@@ -341,6 +341,9 @@ public partial class JEnvironment
 				jThrow(this.Reference, throwableRef);
 			}
 		}
+
+		/// <inheritdoc cref="JGlobalBase.JniSecure"/>
+		public Boolean JniSecure() => this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId;
 
 		/// <summary>
 		/// Retrieves a <see cref="JVirtualMachine"/> from given <paramref name="jEnv"/>.

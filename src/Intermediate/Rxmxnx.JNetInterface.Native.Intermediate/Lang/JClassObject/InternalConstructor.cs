@@ -35,7 +35,8 @@ public partial class JClassObject
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	internal JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) {
+	internal JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
+	{
 		JLocalObject.LoadClassObject(this);
 	}
 }

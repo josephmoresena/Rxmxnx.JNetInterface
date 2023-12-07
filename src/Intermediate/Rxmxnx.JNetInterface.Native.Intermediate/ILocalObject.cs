@@ -9,6 +9,10 @@ public interface ILocalObject : IObject
 	internal IVirtualMachine VirtualMachine { get; }
 	/// <inheritdoc cref="JReferenceObject.IsDummy"/>
 	internal Boolean IsDummy { get; }
+	/// <summary>
+	/// Local <see cref="ObjectLifetime"/> instance.
+	/// </summary>
+	internal ObjectLifetime Lifetime { get; }
 
 	/// <summary>
 	/// Creates the object metadata for current instance.

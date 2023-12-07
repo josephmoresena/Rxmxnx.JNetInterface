@@ -6,6 +6,22 @@ public partial class JGlobalBase
 	/// Instance metadata.
 	/// </summary>
 	internal JObjectMetadata ObjectMetadata => this._objectMetadata;
+	/// <summary>
+	/// Indicates whether current instance has objects.
+	/// </summary>
+	internal Boolean HasObjects => !this._objects.IsEmpty;
+	/// <summary>
+	/// Assignation types cache.
+	/// </summary>
+	internal AssignableTypeCache AssignationCache => this._assignableTypes;
+
+	/// <summary>
+	/// Indicates whether JNI execution is secure.
+	/// </summary>
+	/// <returns>
+	/// <see langword="true"/> if is secure execute JNI calls; otherwise, <see langword="false"/>.
+	/// </returns>
+	internal abstract Boolean JniSecure();
 
 	/// <summary>
 	/// Refresh current metadata instance.
@@ -16,22 +32,23 @@ public partial class JGlobalBase
 	/// <inheritdoc/>
 	internal override Boolean IsAssignableTo<TDataType>()
 	{
-		if (this._assignableTypes.IsAssignableTo<TDataType>())
-			return true;
-		return this.IsAssignableToTask<TDataType>().Result;
+		Boolean? result = this._assignableTypes.IsAssignableTo<TDataType>();
+		if (result.HasValue) return result.Value;
+		return this.JniSecure() ?
+			JGlobalBase.IsAssignableTo<TDataType>(this) :
+			Task.Factory.StartNew(JGlobalBase.IsAssignableTo<TDataType>, this).Result;
 	}
 	/// <inheritdoc/>
-	internal override void SetAssignableTo<TDataType>() => this._assignableTypes.SetAssignableTo<TDataType>();
+	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
+		=> this._assignableTypes.SetAssignableTo<TDataType>(isAssignable);
 
-	/// <summary>
-	/// Task to perform <see cref="JReferenceObject.IsAssignableTo{TDataType}()"/> method.
-	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <returns>
-	/// A task that represents the operation of <see cref="JReferenceObject.IsAssignableTo{TDataType}()"/>. The result of task
-	/// contains
-	/// <see langword="true"/> if current instance is assignable to <typeparamref name="TDataType"/> type;
-	/// otherwise, <see langword="false"/>.
-	/// </returns>
-	internal abstract Task<Boolean> IsAssignableToTask<TDataType>();
+	/// <inheritdoc cref="JReferenceObject.IsAssignableTo{TDataType}"/>
+	/// <param name="obj">A <see cref="JGlobalBase"/> instance.</param>
+	private static Boolean IsAssignableTo<TDataType>(Object? obj)
+		where TDataType : JReferenceObject, IDataType<TDataType>
+	{
+		if (obj is not JGlobalBase jGlobal) return false;
+		using IThread thread = jGlobal.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
+		return thread.ClassProvider.IsAssignableTo<TDataType>(jGlobal);
+	}
 }

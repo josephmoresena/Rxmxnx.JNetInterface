@@ -80,7 +80,7 @@ public sealed class JThrowableException<TThrowable> : JThrowableException
 	where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 {
 	/// <inheritdoc/>
-	internal JThrowableException(JGlobalBase jGlobal) : base(jGlobal) { jGlobal.SetAssignableTo<TThrowable>(); }
+	internal JThrowableException(JGlobalBase jGlobal) : base(jGlobal) { jGlobal.SetAssignableTo<TThrowable>(true); }
 
 	/// <summary>
 	/// Invokes <paramref name="action"/> using the current <typeparamref name="TThrowable"/> instance.

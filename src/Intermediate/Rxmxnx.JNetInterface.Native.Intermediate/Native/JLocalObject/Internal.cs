@@ -20,9 +20,9 @@ public partial class JLocalObject
 	/// </summary>
 	internal JValue InternalValue => base.Value;
 	/// <inheritdoc/>
-	internal override JValue Value => this.GetGlobalObject()?.Value ?? base.Value;
+	internal override JValue Value => this._lifetime.GetGlobalObject()?.Value ?? base.Value;
 
-	IVirtualMachine ILocalObject.VirtualMachine => this._env.VirtualMachine;
+	IVirtualMachine ILocalObject.VirtualMachine => this._lifetime.Environment.VirtualMachine;
 	Boolean ILocalObject.IsDummy => this.IsDummy;
 
 	/// <summary>
@@ -52,39 +52,30 @@ public partial class JLocalObject
 	/// <inheritdoc/>
 	internal override ref readonly TValue As<TValue>()
 	{
-		JGlobalBase? jGlobal = this.GetGlobalObject();
+		JGlobalBase? jGlobal = this._lifetime.GetGlobalObject();
 		if (jGlobal is not null)
 			return ref jGlobal.As<TValue>();
 		return ref base.As<TValue>();
 	}
 	/// <inheritdoc/>
-	internal override TValue To<TValue>() => this.GetGlobalObject()?.To<TValue>() ?? base.To<TValue>();
+	internal override TValue To<TValue>() => this._lifetime.GetGlobalObject()?.To<TValue>() ?? base.To<TValue>();
 	/// <inheritdoc/>
-	internal override Boolean IsAssignableTo<TDataType>()
-	{
-		if (this._lifetime.IsAssignableTo<TDataType>())
-			return true;
-		if (JGlobalBase.IsValid(this._global, this._env))
-			return this._global.IsAssignableTo<TDataType>();
-		if (JGlobalBase.IsValid(this._weak, this._env))
-			return this._weak.IsAssignableTo<TDataType>();
-		return this._env.ClassProvider.IsAssignableTo<TDataType>(this);
-	}
+	internal override Boolean IsAssignableTo<TDataType>() => this._lifetime.IsAssignableTo<TDataType>();
 	/// <inheritdoc/>
-	internal override void SetAssignableTo<TDataType>() => this._lifetime.SetAssignableTo<TDataType>();
+	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
+		=> this._lifetime.SetAssignableTo<TDataType>(isAssignable);
 
 	/// <summary>
 	/// Retrieves the loaded global object for given object.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>The loaded <see cref="JGlobalBase"/> object for <paramref name="jLocal"/>.</returns>
-	internal static JGlobalBase? GetGlobalObject(JLocalObject jLocal) => jLocal.GetGlobalObject();
+	internal static JGlobalBase? GetGlobalObject(JLocalObject jLocal) => jLocal._lifetime.GetGlobalObject();
 	/// <summary>
 	/// Loads the class object in the <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="hash">Class hash.</param>
 	internal static void LoadClassObject(JClassObject jClass, String? hash = default)
-		=> jClass._class = hash == IDataType.GetHash<JClassObject>() ? jClass : 
-			jClass.Environment.ClassProvider.ClassObject;
+		=> jClass._lifetime.SetClassClass(jClass, hash);
 }

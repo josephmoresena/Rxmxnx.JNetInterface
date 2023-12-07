@@ -182,7 +182,7 @@ internal interface IPrimitiveNumericType<TPrimitive> : IPrimitiveNumericType
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal partial interface
 	IPrimitiveNumericType<TPrimitive, TValue> : IPrimitiveNumericType<TPrimitive>, INumericValue<TValue>,
-		IPrimitiveType<TPrimitive, TValue>
+	IPrimitiveType<TPrimitive, TValue>
 	where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryNumber<TValue>,
