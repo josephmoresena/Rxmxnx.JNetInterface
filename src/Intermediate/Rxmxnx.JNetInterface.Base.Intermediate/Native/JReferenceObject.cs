@@ -145,7 +145,7 @@ public abstract class JReferenceObject : JObject
 		where TDataType : JReferenceObject, IDataType<TDataType>;
 
 	/// <inheritdoc/>
-	protected internal override void CopyTo(Span<Byte> span, ref Int32 offset)
+	internal override void CopyTo(Span<Byte> span, ref Int32 offset)
 	{
 		ReadOnlySpan<Byte> bytes = NativeUtilities.AsBytes(this.As<IntPtr>());
 		bytes.CopyTo(span[offset..]);

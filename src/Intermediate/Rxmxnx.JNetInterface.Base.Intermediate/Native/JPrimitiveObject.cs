@@ -27,7 +27,7 @@ internal partial class JPrimitiveObject : JObject
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	protected internal override void CopyTo(Span<Byte> span, ref Int32 offset)
+	internal override void CopyTo(Span<Byte> span, ref Int32 offset)
 	{
 		NativeUtilities.AsBytes(this.As<JValue>()).CopyTo(span[offset..]);
 		offset += this._sizeOf;

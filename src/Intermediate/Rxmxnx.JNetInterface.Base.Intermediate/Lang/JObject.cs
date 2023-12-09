@@ -70,19 +70,19 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	public override Boolean Equals(Object? obj) => obj is JObject jObj && this.Equals(jObj);
 
 	/// <inheritdoc cref="IObject.CopyTo(Span{Byte}, ref Int32)"/>
-	protected internal abstract void CopyTo(Span<Byte> span, ref Int32 offset);
+	internal abstract void CopyTo(Span<Byte> span, ref Int32 offset);
 
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
 	/// <typeparam name="TValue">Type of <see langword="unmanaged"/></typeparam>
 	/// <param name="value"><typeparamref name="TValue"/> that is set as the value of current instance.</param>
-	protected internal void SetValue<TValue>(in TValue value) where TValue : unmanaged
+	internal void SetValue<TValue>(in TValue value) where TValue : unmanaged
 		=> JValue.As<TValue>(ref this._value.Reference) = value;
 	/// <summary>
 	/// Sets <see cref="JValue.Empty"/> as the current instance value.
 	/// </summary>
-	protected internal void ClearValue() { this._value.Value = JValue.Empty; }
+	internal void ClearValue() { this._value.Value = JValue.Empty; }
 
 	/// <summary>
 	/// Retrieves a <typeparamref name="TPrimitive"/> value from current instance.
