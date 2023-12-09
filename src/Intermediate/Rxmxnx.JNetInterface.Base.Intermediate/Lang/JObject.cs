@@ -27,11 +27,11 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// Object signature.
 	/// </summary>
 	public abstract CString ObjectSignature { get; }
-
+	
 	/// <summary>
 	/// Internal <see cref="JValue"/> value.
 	/// </summary>
-	internal virtual JValue Value => this._value.Value;
+	internal ref JValue ValueReference => ref this._value.Reference;
 
 	/// <summary>
 	/// Parameterless constructor.
@@ -49,10 +49,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	internal JObject(JValue jValue) => this._value = IMutableReference.Create(jValue);
 
 	/// <inheritdoc/>
-	public virtual Boolean Equals(JObject? other) => this._value.Equals(other?._value);
-
-	/// <inheritdoc/>
-	public Boolean IsDefault => this._value.Value.IsDefault;
+	public abstract Boolean Equals(JObject? other);
 
 	CString IObject.ObjectClassName => this.ObjectClassName;
 	CString IObject.ObjectSignature => this.ObjectSignature;
@@ -71,66 +68,8 @@ public abstract class JObject : IObject, IEquatable<JObject>
 
 	/// <inheritdoc cref="IObject.CopyTo(Span{Byte}, ref Int32)"/>
 	internal abstract void CopyTo(Span<Byte> span, ref Int32 offset);
-
-	/// <summary>
-	/// Sets the current instance value.
-	/// </summary>
-	/// <typeparam name="TValue">Type of <see langword="unmanaged"/></typeparam>
-	/// <param name="value"><typeparamref name="TValue"/> that is set as the value of current instance.</param>
-	internal void SetValue<TValue>(in TValue value) where TValue : unmanaged
-		=> JValue.As<TValue>(ref this._value.Reference) = value;
-	/// <summary>
-	/// Sets <see cref="JValue.Empty"/> as the current instance value.
-	/// </summary>
-	internal void ClearValue() { this._value.Value = JValue.Empty; }
-
-	/// <summary>
-	/// Retrieves a <typeparamref name="TPrimitive"/> value from current instance.
-	/// </summary>
-	/// <typeparam name="TPrimitive"><see cref="IPrimitiveType"/> type.</typeparam>
-	/// <typeparam name="TValue"><see cref="ValueType"/> type.</typeparam>
-	/// <returns>
-	/// The equivalent <typeparamref name="TPrimitive"/> value to current instance.
-	/// </returns>
-	/// <exception cref="InvalidCastException"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal TPrimitive AsPrimitive<TPrimitive, TValue>()
-		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IWrapper<TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>
-		=> this is IWrapper<TPrimitive> pw ? pw.Value : this.AsValue<TPrimitive>();
-
-	/// <summary>
-	/// Interprets current instance a <typeparamref name="TValue"/> value.
-	/// </summary>
-	/// <typeparam name="TValue">Type of value.</typeparam>
-	/// <returns>A read-only reference of <typeparamref name="TValue"/> value.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal virtual ref readonly TValue As<TValue>() where TValue : unmanaged
-		=> ref JValue.As<TValue>(ref this._value.Reference);
-	/// <summary>
-	/// Interprets current instance a <typeparamref name="TValue"/> value.
-	/// </summary>
-	/// <typeparam name="TValue">Type of value.</typeparam>
-	/// <returns>A <typeparamref name="TValue"/> value.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal virtual TValue To<TValue>() where TValue : unmanaged => JValue.As<TValue>(ref this._value.Reference);
-
 	/// <inheritdoc cref="IObject.CopyTo(Span{JValue}, Int32)"/>
-	private void CopyTo(Span<JValue> span, Int32 index) => span[index] = this._value.Value;
-	/// <summary>
-	/// Retrieves a <typeparamref name="TValue"/> value from current instance.
-	/// </summary>
-	/// <typeparam name="TValue"><see cref="ValueType"/> type.</typeparam>
-	/// <returns>
-	/// The equivalent <typeparamref name="TValue"/> value to current instance.
-	/// </returns>
-	/// <exception cref="InvalidCastException"/>
-	private TValue AsValue<TValue>()
-		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
-		=> this is IWrapper<TValue> vw ?
-			vw.Value :
-			ValidationUtilities.ThrowIfInvalidCast<TValue>(this as IConvertible);
+	internal abstract void CopyTo(Span<JValue> span, Int32 index);
 
 	/// <summary>
 	/// Indicates whether <paramref name="jObject"/> instance is <see langword="null"/> or
@@ -141,6 +80,6 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <see langword="true"/> if <paramref name="jObject"/> instance is <see langword="null"/> or
 	/// default value; otherwise, <see langword="false"/>.
 	/// </returns>
-	public static Boolean IsNullOrDefault([NotNullWhen(false)] JObject? jObject)
+	public static Boolean IsNullOrDefault([NotNullWhen(false)] JReferenceObject? jObject)
 		=> jObject is null || jObject.IsDefault;
 }

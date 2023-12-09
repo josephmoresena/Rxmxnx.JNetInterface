@@ -26,12 +26,48 @@ internal partial class JPrimitiveObject : JObject
 	}
 
 	/// <inheritdoc/>
+	public override Boolean Equals(JObject? other) 
+		=> other is JPrimitiveObject jPrimitive && Unsafe.AreSame(ref this.ValueReference, ref jPrimitive.ValueReference);
+	
+	/// <summary>
+	/// Retrieves a <typeparamref name="TPrimitive"/> value from current instance.
+	/// </summary>
+	/// <typeparam name="TPrimitive"><see cref="IPrimitiveType"/> type.</typeparam>
+	/// <typeparam name="TValue"><see cref="ValueType"/> type.</typeparam>
+	/// <returns>
+	/// The equivalent <typeparamref name="TPrimitive"/> value to current instance.
+	/// </returns>
+	/// <exception cref="InvalidCastException"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal TPrimitive AsPrimitive<TPrimitive, TValue>()
+		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IWrapper<TValue>, IComparable<TPrimitive>,
+		IEquatable<TPrimitive>
+		=> this is IWrapper<TPrimitive> pw ? pw.Value : this.AsValue<TPrimitive>();
+
+	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal override void CopyTo(Span<Byte> span, ref Int32 offset)
 	{
-		NativeUtilities.AsBytes(this.As<JValue>()).CopyTo(span[offset..]);
+		NativeUtilities.AsBytes(this.ValueReference).CopyTo(span[offset..]);
 		offset += this._sizeOf;
 	}
+	/// <inheritdoc/>
+	internal override void CopyTo(Span<JValue> span, Int32 index) => span[index] = this.ValueReference;
+
+	/// <summary>
+	/// Retrieves a <typeparamref name="TValue"/> value from current instance.
+	/// </summary>
+	/// <typeparam name="TValue"><see cref="ValueType"/> type.</typeparam>
+	/// <returns>
+	/// The equivalent <typeparamref name="TValue"/> value to current instance.
+	/// </returns>
+	/// <exception cref="InvalidCastException"/>
+	private TValue AsValue<TValue>()
+		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
+		=> this is IWrapper<TValue> vw ?
+			vw.Value :
+			ValidationUtilities.ThrowIfInvalidCast<TValue>(this as IConvertible);
 }
 
 /// <summary>
@@ -79,7 +115,7 @@ internal sealed class JPrimitiveObject<TPrimitive> : JPrimitiveObject, IPrimitiv
 	/// <summary>
 	/// Internal primitive value.
 	/// </summary>
-	public new TPrimitive Value => this.As<TPrimitive>();
+	public TPrimitive Value => JValue.As<TPrimitive>(ref this.ValueReference);
 	/// <inheritdoc/>
 	public Boolean Equals(TPrimitive other) => this.Value.Equals(other);
 

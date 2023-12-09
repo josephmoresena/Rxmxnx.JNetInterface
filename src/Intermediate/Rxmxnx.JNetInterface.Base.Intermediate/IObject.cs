@@ -15,11 +15,6 @@ public interface IObject
 	CString ObjectSignature { get; }
 
 	/// <summary>
-	/// Indicates whether current instance is default value.
-	/// </summary>
-	Boolean IsDefault { get; }
-
-	/// <summary>
 	/// Copy the sequence of bytes of current instance to <paramref name="span"/> at specified
 	/// <paramref name="offset"/>.
 	/// </summary>

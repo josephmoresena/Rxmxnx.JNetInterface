@@ -36,8 +36,6 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JFloat>().ClassName;
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JFloat>().Signature;
-	/// <inheritdoc/>
-	public Boolean IsDefault => this._value.Equals(default);
 
 	/// <summary>
 	/// Parameterless constructor.

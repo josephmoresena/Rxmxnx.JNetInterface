@@ -24,6 +24,11 @@ public abstract class JReferenceObject : JObject
 	/// Indicates whether the current instance is a dummy object (fake java object).
 	/// </summary>
 	private readonly Boolean _isDummy;
+	
+	/// <summary>
+	/// Indicates whether current instance is default value.
+	/// </summary>
+	public Boolean IsDefault => this.ValueReference.IsDefault;
 
 	/// <summary>
 	/// Indicates whether the current instance is a dummy object (fake java object).
@@ -127,6 +132,22 @@ public abstract class JReferenceObject : JObject
 		this._id = JReferenceObject.CreateInstanceId();
 	}
 
+	/// <inheritdoc/>
+	public override Boolean Equals(JObject? other)
+	{
+		if (other is null or JReferenceObject { IsDefault: true, } && this.IsDefault)
+			return true;
+		return other is JReferenceObject jReference && Unsafe.AreSame(ref this.ValueReference, ref jReference.ValueReference);
+	}
+	
+	/// <inheritdoc/>
+	internal override void CopyTo(Span<JValue> span, Int32 index) => span[index] = this.ValueReference;
+	
+	/// <summary>
+	/// Sets <see cref="JValue.Empty"/> as the current instance value.
+	/// </summary>
+	internal void ClearValue() { this.ValueReference = JValue.Empty; }
+
 	/// <summary>
 	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
@@ -144,6 +165,22 @@ public abstract class JReferenceObject : JObject
 	internal abstract void SetAssignableTo<TDataType>(Boolean isAssignable)
 		where TDataType : JReferenceObject, IDataType<TDataType>;
 
+	/// <summary>
+	/// Interprets current instance a <typeparamref name="TValue"/> value.
+	/// </summary>
+	/// <typeparam name="TValue">Type of value.</typeparam>
+	/// <returns>A read-only reference of <typeparamref name="TValue"/> value.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal virtual ref readonly TValue As<TValue>() where TValue : unmanaged
+		=> ref JValue.As<TValue>(ref this.ValueReference);
+	/// <summary>
+	/// Interprets current instance a <typeparamref name="TValue"/> value.
+	/// </summary>
+	/// <typeparam name="TValue">Type of value.</typeparam>
+	/// <returns>A <typeparamref name="TValue"/> value.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal virtual TValue To<TValue>() where TValue : unmanaged => JValue.As<TValue>(ref this.ValueReference);
+	
 	/// <inheritdoc/>
 	internal override void CopyTo(Span<Byte> span, ref Int32 offset)
 	{

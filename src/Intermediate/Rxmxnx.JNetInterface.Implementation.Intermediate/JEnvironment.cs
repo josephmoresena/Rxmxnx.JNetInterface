@@ -66,9 +66,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	}
 	Boolean IEnvironment.IsSameObject(JObject jObject, JObject? jOther)
 	{
-		if ((jObject.IsDefault && (jOther is null || jOther.IsDefault)) || jObject.Equals(jOther))
-			return true;
-
+		if (jObject.Equals(jOther)) return true;
 		if (jObject is not JReferenceObject jRefObj || jOther is not JReferenceObject jRefOther)
 			return JEnvironment.EqualEquatable(jObject as IEquatable<IPrimitiveType>, jOther as IPrimitiveType) ??
 				JEnvironment.EqualEquatable(jOther as IEquatable<IPrimitiveType>, jObject as IPrimitiveType) ??

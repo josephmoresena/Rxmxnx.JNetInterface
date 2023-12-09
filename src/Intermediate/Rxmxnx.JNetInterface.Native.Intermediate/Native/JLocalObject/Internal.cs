@@ -18,9 +18,7 @@ public partial class JLocalObject
 	/// <summary>
 	/// Internal value.
 	/// </summary>
-	internal JValue InternalValue => base.Value;
-	/// <inheritdoc/>
-	internal override JValue Value => this._lifetime.GetGlobalObject()?.Value ?? base.Value;
+	internal JValue InternalValue => base.ValueReference;
 
 	IVirtualMachine ILocalObject.VirtualMachine => this._lifetime.Environment.VirtualMachine;
 	Boolean ILocalObject.IsDummy => this.IsDummy;
@@ -33,7 +31,7 @@ public partial class JLocalObject
 	{
 		if (localRef == default)
 			return;
-		base.SetValue(localRef);
+		JValue.As<JObjectLocalRef>(ref this.ValueReference) = localRef;
 		this._lifetime.Load(this);
 	}
 	/// <summary>
@@ -45,7 +43,7 @@ public partial class JLocalObject
 	{
 		if (localRef.Equals(default))
 			return;
-		base.SetValue(localRef);
+		JValue.As<TValue>(ref this.ValueReference) = localRef;
 		this._lifetime.Load(this);
 	}
 

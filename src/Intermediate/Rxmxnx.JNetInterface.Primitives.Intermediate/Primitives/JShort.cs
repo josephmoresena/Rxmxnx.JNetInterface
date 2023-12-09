@@ -36,9 +36,7 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JShort>().ClassName;
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JShort>().Signature;
-	/// <inheritdoc/>
-	public Boolean IsDefault => this._value.Equals(default);
-
+	
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>

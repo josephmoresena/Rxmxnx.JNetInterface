@@ -45,8 +45,6 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JBoolean>().ClassName;
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JBoolean>().Signature;
-	/// <inheritdoc/>
-	public Boolean IsDefault => this._value.Equals(default);
 	/// <summary>
 	/// Internal byte value.
 	/// </summary>

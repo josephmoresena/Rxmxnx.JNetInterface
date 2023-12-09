@@ -12,7 +12,7 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	/// <summary>
 	/// Internal value.
 	/// </summary>
-	public new JChar Value => this._value ??= this.GetValue();
+	public JChar Value => this._value ??= this.GetValue();
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);

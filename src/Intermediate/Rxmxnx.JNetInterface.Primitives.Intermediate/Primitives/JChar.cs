@@ -36,8 +36,6 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JChar>().ClassName;
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JChar>().Signature;
-	/// <inheritdoc/>
-	public Boolean IsDefault => this._value.Equals(default);
 
 	/// <summary>
 	/// Parameterless constructor.

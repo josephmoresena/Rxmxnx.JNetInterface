@@ -35,8 +35,6 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JLong>().ClassName;
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JLong>().Signature;
-	/// <inheritdoc/>
-	public Boolean IsDefault => this._value.Equals(default);
 
 	/// <summary>
 	/// Parameterless constructor.

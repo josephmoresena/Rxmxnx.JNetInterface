@@ -34,8 +34,6 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JByte>().ClassName;
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JByte>().Signature;
-	/// <inheritdoc/>
-	public Boolean IsDefault => this._value.Equals(default);
 
 	/// <summary>
 	/// Parameterless constructor.

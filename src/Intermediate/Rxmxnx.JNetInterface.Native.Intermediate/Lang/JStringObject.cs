@@ -27,7 +27,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <summary>
 	/// Internal string value.
 	/// </summary>
-	public new String Value => this._value ??= String.Create(this.Length, (this, 0), JStringObject.GetChars);
+	public String Value => this._value ??= String.Create(this.Length, (this, 0), JStringObject.GetChars);
 
 	/// <inheritdoc/>
 	public override String ToString() => this.Value;
