@@ -3,10 +3,6 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JLocalObject
 {
 	/// <summary>
-	/// Invalid <see cref="JLocalObject"/> instance.
-	/// </summary>
-	internal static readonly JLocalObject InvalidObject = new();
-	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
 	internal static readonly JClassTypeMetadata JObjectClassMetadata = JTypeMetadataBuilder<JLocalObject>
@@ -47,6 +43,7 @@ public partial class JLocalObject
 	}
 	/// <inheritdoc/>
 	internal override TValue To<TValue>() => this._lifetime.GetGlobalObject()?.To<TValue>() ?? base.To<TValue>();
+	/// <inheritdoc/>
 	internal override void ClearValue() => this._lifetime.Dispose();
 	/// <inheritdoc/>
 	internal override Boolean IsAssignableTo<TDataType>() => this._lifetime.IsAssignableTo<TDataType>();
