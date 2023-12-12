@@ -7,8 +7,8 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>,
 	IInterfaceImplementation<JNumberObject, JSerializableObject>
 {
 	/// <inheritdoc/>
-	internal JNumberObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy, Boolean isNativeParameter,
-		JClassObject? jClass = default) : base(env, jLocalRef, isDummy, isNativeParameter, jClass) { }
+	internal JNumberObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy, JClassObject? jClass = default)
+		: base(env, jLocalRef, isDummy, jClass) { }
 
 	/// <inheritdoc/>
 	protected JNumberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }

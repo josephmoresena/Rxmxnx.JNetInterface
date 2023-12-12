@@ -36,7 +36,7 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JDouble>().ClassName;
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JDouble>().Signature;
-	
+
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>

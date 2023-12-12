@@ -6,6 +6,9 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 {
+	/// <inheritdoc cref="JReferenceTypeMetadata.Invalid"/>
+	private JLocalObject? _invalid;
+
 	/// <inheritdoc/>
 	public override Int32 SizeOf => NativeUtilities.PointerSize;
 
@@ -17,6 +20,11 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	/// Set of interfaces metadata of current type implements.
 	/// </summary>
 	public virtual IImmutableSet<JInterfaceTypeMetadata> Interfaces => ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
+
+	/// <summary>
+	/// Internal invalid instance.
+	/// </summary>
+	internal JLocalObject Invalid => this._invalid ??= this.ParseInstance(JLocalObject.InvalidObject);
 
 	/// <summary>
 	/// Constructor.

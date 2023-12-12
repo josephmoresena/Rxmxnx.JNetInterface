@@ -28,7 +28,8 @@ public partial class JGlobalBase
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	internal void RefreshMetadata(ILocalObject jLocal) { this._objectMetadata = ILocalObject.CreateMetadata(jLocal); }
-
+	/// <inheritdoc/>
+	internal override ReadOnlySpan<Byte> AsSpan() => this._value.Reference.AsBytes();
 	/// <inheritdoc/>
 	internal override Boolean IsAssignableTo<TDataType>()
 	{
@@ -41,6 +42,8 @@ public partial class JGlobalBase
 	/// <inheritdoc/>
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
 		=> this._assignableTypes.SetAssignableTo<TDataType>(isAssignable);
+	/// <inheritdoc/>
+	internal override void ClearValue() => this._value.Value = default;
 
 	/// <inheritdoc cref="JReferenceObject.IsAssignableTo{TDataType}"/>
 	/// <param name="obj">A <see cref="JGlobalBase"/> instance.</param>

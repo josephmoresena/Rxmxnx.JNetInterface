@@ -24,11 +24,11 @@ public abstract class JReferenceObject : JObject
 	/// Indicates whether the current instance is a dummy object (fake java object).
 	/// </summary>
 	private readonly Boolean _isDummy;
-	
+
 	/// <summary>
 	/// Indicates whether current instance is default value.
 	/// </summary>
-	public Boolean IsDefault => this.ValueReference.IsDefault;
+	public Boolean IsDefault => this.AsSpan().AsValue<IntPtr>() == IntPtr.Zero;
 
 	/// <summary>
 	/// Indicates whether the current instance is a dummy object (fake java object).
@@ -47,89 +47,19 @@ public abstract class JReferenceObject : JObject
 	/// Parameterless constructor.
 	/// </summary>
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JReferenceObject(Boolean isDummy)
+	internal JReferenceObject(Boolean? isDummy = default)
 	{
-		this._isDummy = isDummy;
-		this._id = JReferenceObject.CreateInstanceId();
+		this._isDummy = isDummy.GetValueOrDefault();
+		this._id = isDummy.HasValue ? JReferenceObject.CreateInstanceId() : -1;
 	}
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jObject"><see cref="JReferenceObject"/> instance.</param>
-	internal JReferenceObject(JReferenceObject jObject) : base(jObject)
+	internal JReferenceObject(JReferenceObject jObject)
 	{
 		this._isDummy = jObject._isDummy;
-		this._id = JReferenceObject.CreateInstanceId();
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Object reference.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JReferenceObject(JObjectLocalRef value, Boolean isDummy) : base(JValue.Create(value))
-	{
-		this._isDummy = isDummy;
-		this._id = JReferenceObject.CreateInstanceId();
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Throwable reference.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JReferenceObject(JThrowableLocalRef value, Boolean isDummy) : base(JValue.Create(value))
-	{
-		this._isDummy = isDummy;
-		this._id = JReferenceObject.CreateInstanceId();
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Class reference.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JReferenceObject(JClassLocalRef value, Boolean isDummy) : base(JValue.Create(value))
-	{
-		this._isDummy = isDummy;
-		this._id = JReferenceObject.CreateInstanceId();
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Array reference.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JReferenceObject(JArrayLocalRef value, Boolean isDummy) : base(JValue.Create(value))
-	{
-		this._isDummy = isDummy;
-		this._id = JReferenceObject.CreateInstanceId();
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Throwable reference.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JReferenceObject(JStringLocalRef value, Boolean isDummy) : base(JValue.Create(value))
-	{
-		this._isDummy = isDummy;
-		this._id = JReferenceObject.CreateInstanceId();
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Global reference.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JReferenceObject(JGlobalRef value, Boolean isDummy) : base(JValue.Create(value))
-	{
-		this._isDummy = isDummy;
-		this._id = JReferenceObject.CreateInstanceId();
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Weak global reference.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JReferenceObject(JWeakRef value, Boolean isDummy) : base(JValue.Create(value))
-	{
-		this._isDummy = isDummy;
-		this._id = JReferenceObject.CreateInstanceId();
+		this._id = jObject._id != -1 ? JReferenceObject.CreateInstanceId() : -1;
 	}
 
 	/// <inheritdoc/>
@@ -137,16 +67,16 @@ public abstract class JReferenceObject : JObject
 	{
 		if (other is null or JReferenceObject { IsDefault: true, } && this.IsDefault)
 			return true;
-		return other is JReferenceObject jReference && Unsafe.AreSame(ref this.ValueReference, ref jReference.ValueReference);
+		return other is JReferenceObject jReference && this.AsSpan().SequenceEqual(jReference.AsSpan());
 	}
-	
+
 	/// <inheritdoc/>
-	internal override void CopyTo(Span<JValue> span, Int32 index) => span[index] = this.ValueReference;
-	
+	internal override void CopyTo(Span<JValue> span, Int32 index) => this.AsSpan().CopyTo(span[index].AsBytes());
+
 	/// <summary>
 	/// Sets <see cref="JValue.Empty"/> as the current instance value.
 	/// </summary>
-	internal void ClearValue() { this.ValueReference = JValue.Empty; }
+	internal abstract void ClearValue();
 
 	/// <summary>
 	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
@@ -164,28 +94,32 @@ public abstract class JReferenceObject : JObject
 	/// <param name="isAssignable">Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.</param>
 	internal abstract void SetAssignableTo<TDataType>(Boolean isAssignable)
 		where TDataType : JReferenceObject, IDataType<TDataType>;
+	/// <summary>
+	/// Retrieves current value as a read-only binary span.
+	/// </summary>
+	/// <returns>A read-only binary span.</returns>
+	internal abstract ReadOnlySpan<Byte> AsSpan();
+	/// <summary>
+	/// Interprets current instance a <typeparamref name="TReference"/> value.
+	/// </summary>
+	/// <typeparam name="TReference">Type of value.</typeparam>
+	/// <returns>A read-only reference of <typeparamref name="TReference"/> value.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal virtual ref readonly TReference As<TReference>() where TReference : unmanaged, INativeType<TReference>
+		=> ref this.AsSpan().AsValue<TReference>();
+	/// <summary>
+	/// Interprets current instance a <typeparamref name="TReference"/> value.
+	/// </summary>
+	/// <typeparam name="TReference">Type of value.</typeparam>
+	/// <returns>A <typeparamref name="TReference"/> value.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal virtual TReference To<TReference>() where TReference : unmanaged, INativeType<TReference>
+		=> this.AsSpan().AsValue<TReference>();
 
-	/// <summary>
-	/// Interprets current instance a <typeparamref name="TValue"/> value.
-	/// </summary>
-	/// <typeparam name="TValue">Type of value.</typeparam>
-	/// <returns>A read-only reference of <typeparamref name="TValue"/> value.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal virtual ref readonly TValue As<TValue>() where TValue : unmanaged
-		=> ref JValue.As<TValue>(ref this.ValueReference);
-	/// <summary>
-	/// Interprets current instance a <typeparamref name="TValue"/> value.
-	/// </summary>
-	/// <typeparam name="TValue">Type of value.</typeparam>
-	/// <returns>A <typeparamref name="TValue"/> value.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal virtual TValue To<TValue>() where TValue : unmanaged => JValue.As<TValue>(ref this.ValueReference);
-	
 	/// <inheritdoc/>
 	internal override void CopyTo(Span<Byte> span, ref Int32 offset)
 	{
-		ReadOnlySpan<Byte> bytes = NativeUtilities.AsBytes(this.As<IntPtr>());
-		bytes.CopyTo(span[offset..]);
+		this.AsSpan().CopyTo(span[offset..]);
 		offset += NativeUtilities.PointerSize;
 	}
 

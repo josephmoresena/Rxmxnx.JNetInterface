@@ -16,8 +16,8 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 	public JStackTraceInfo[] StackTrace => this._stackTrace ??= this.GetStackTraceInfo();
 
 	/// <inheritdoc/>
-	internal JThrowableObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy, Boolean isNativeParameter,
-		JClassObject? jClass = default) : base(env, jLocalRef, isDummy, isNativeParameter,
+	internal JThrowableObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy,
+		JClassObject? jClass = default) : base(env, jLocalRef, isDummy,
 		                                       jClass ?? env.ClassProvider.ThrowableClassObject) { }
 
 	/// <inheritdoc/>

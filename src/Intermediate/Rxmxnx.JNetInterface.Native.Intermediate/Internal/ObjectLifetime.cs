@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This object stores the lifetime for a java object instance.
 /// </summary>
-internal sealed record ObjectLifetime
+internal record ObjectLifetime : IDisposable
 {
 	/// <summary>
 	/// Cache of assignable types.
@@ -22,13 +22,13 @@ internal sealed record ObjectLifetime
 	/// </summary>
 	private readonly IMutableWrapper<Boolean> _isDisposed;
 	/// <summary>
-	/// Indicates whether the java object comes from a JNI parameter.
-	/// </summary>
-	private readonly Boolean _isNativeParameter;
-	/// <summary>
 	/// Internal hash set.
 	/// </summary>
 	private readonly Dictionary<Int64, WeakReference<JLocalObject>> _objects = new();
+	/// <summary>
+	/// Internal value.
+	/// </summary>
+	private readonly IMutableReference<JObjectLocalRef> _value;
 
 	/// <inheritdoc cref="ObjectLifetime.Class"/>
 	private JClassObject? _class;
@@ -72,26 +72,73 @@ internal sealed record ObjectLifetime
 		get => this._isRealClass;
 		init => this._isRealClass = value;
 	}
+	/// <summary>
+	/// Retrieves current value as bytes.
+	/// </summary>
+	public ReadOnlySpan<Byte> Span => this._value.Reference.AsBytes();
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
 	/// <param name="jLocal">The java object to load.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public ObjectLifetime(Boolean isNativeParameter, IEnvironment env, JLocalObject jLocal,
-		JGlobalBase? jGlobal = default)
+	/// <param name="localRef">Local object reference.</param>
+	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JObjectLocalRef localRef)
 	{
 		this._env = env;
-		this._isNativeParameter = isNativeParameter;
+		this._isDisposed = IMutableWrapper.Create<Boolean>();
+		this._id = jLocal.Id;
+		this._value = IMutableReference<JObjectLocalRef>.Create(localRef);
+		this.Load(jLocal);
+	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jLocal">The java object to load.</param>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JGlobalBase? jGlobal)
+	{
+		this._env = env;
 		this._isDisposed = IMutableWrapper.Create<Boolean>();
 		this._global = (jGlobal as JGlobal)?.Load(this);
 		this._weak = (jGlobal as JWeak)?.Load(this);
 		this._id = jLocal.Id;
+		this._value = IMutableReference<JObjectLocalRef>.Create();
 		this.Load(jLocal);
 	}
+	/// <inheritdoc/>
+	public void Dispose()
+	{
+		this.Dispose(true);
+		GC.SuppressFinalize(this);
+	}
 
+	/// <summary>
+	/// Sets the current instance value.
+	/// </summary>
+	/// <param name="jLocal">The java object to load.</param>
+	/// <param name="localRef">A local object reference the value of current instance.</param>
+	internal void SetValue(JLocalObject jLocal, JObjectLocalRef localRef)
+	{
+		if (localRef == default) return;
+		this._value.Value = localRef;
+		this._isDisposed.Value = false;
+		this.Load(jLocal);
+	}
+	/// <summary>
+	/// Sets the current instance value.
+	/// </summary>
+	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
+	/// <param name="jLocal">The java object to load.</param>
+	/// <param name="localRef">A local object reference the value of current instance.</param>
+	internal void SetValue<TValue>(JLocalObject jLocal, TValue localRef) where TValue : unmanaged, IObjectReferenceType
+	{
+		if (localRef.Equals(default)) return;
+		this._value.Value = localRef.Value;
+		this._isDisposed.Value = false;
+		this.Load(jLocal);
+	}
 	/// <summary>
 	/// Retrieves the loaded global object for current instance.
 	/// </summary>
@@ -213,13 +260,12 @@ internal sealed record ObjectLifetime
 	/// <see langword="true"/> if the given instance was the only instance in the lifetime;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	public Boolean Unload(JLocalObject jLocal)
+	public void Unload(JLocalObject jLocal)
 	{
-		if (!this._objects.Remove(jLocal.Id))
-			return false;
+		if (!this._objects.Remove(jLocal.Id)) return;
 		this.CleanObjects();
-		Boolean result = !this._isNativeParameter && this._objects.Count == 0;
-		return result;
+		if (this._objects.Count != 0 || this._env.ReferenceProvider.IsParameter(jLocal)) return;
+		this.Dispose();
 	}
 	/// <summary>
 	/// Unloads current <see cref="JGlobalBase"/> instance.
@@ -232,11 +278,6 @@ internal sealed record ObjectLifetime
 		else if (jGlobal.Equals(jGlobal))
 			this._weak = default;
 	}
-
-	/// <summary>
-	/// Sets current instance as disposed.
-	/// </summary>
-	public void SetDisposed() => this._isDisposed.Value = true;
 	/// <summary>
 	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
@@ -270,5 +311,14 @@ internal sealed record ObjectLifetime
 			if (!this._objects[objId].TryGetTarget(out _))
 				this._objects.Remove(objId);
 		}
+	}
+
+	/// <inheritdoc cref="IDisposable.Dispose()"/>
+	/// <param name="disposing">Indicates whether current instance is called by <see cref="IDisposable.Dispose()"/>.</param>
+	protected virtual void Dispose(Boolean disposing)
+	{
+		this._objects.Clear();
+		this._value.Value = default;
+		this._isDisposed.Value = true;
 	}
 }

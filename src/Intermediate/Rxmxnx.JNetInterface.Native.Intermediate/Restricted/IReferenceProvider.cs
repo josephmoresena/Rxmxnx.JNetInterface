@@ -41,4 +41,12 @@ public interface IReferenceProvider
 	/// </summary>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	Boolean Unload(JGlobalBase jGlobal);
+	/// <summary>
+	/// Indicates whether current instance is a parameter.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jLocal"/> is a JNI parameter; otherwise, <see langword="false"/>.
+	/// </returns>
+	Boolean IsParameter(JLocalObject jLocal);
 }

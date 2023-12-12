@@ -9,6 +9,12 @@ public partial class JLocalObject : ILocalObject
 	/// </summary>
 	private readonly ObjectLifetime _lifetime;
 
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <remarks>This constructs a deliberately corrupted <see cref="JLocalObject"/> instance.</remarks>
+	private JLocalObject() => this._lifetime = default!;
+
 	ObjectLifetime ILocalObject.Lifetime => this._lifetime;
 	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 	void ILocalObject.ProcessMetadata(JObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);

@@ -9,10 +9,8 @@ public partial class JEnumObject
 	/// <param name="jLocalRef">Local object reference.</param>
 	/// <param name="ordinal">Enum instance ordinal.</param>
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
-	internal JEnumObject(IEnvironment env, JObjectLocalRef jLocalRef, Int32? ordinal, Boolean isDummy,
-		Boolean isNativeParameter) : base(env, jLocalRef, isDummy, isNativeParameter,
-		                                  env.ClassProvider.StringClassObject)
+	internal JEnumObject(IEnvironment env, JObjectLocalRef jLocalRef, Int32? ordinal, Boolean isDummy) : base(
+		env, jLocalRef, isDummy, env.ClassProvider.StringClassObject)
 		=> this._ordinal = ordinal;
 	/// <summary>
 	/// Constructor.

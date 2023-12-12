@@ -10,7 +10,7 @@ public partial struct JBoolean : IPrimitiveEquatable
 	{
 		if (other is null || other.ObjectSignature[0] != UnicodePrimitiveSignatures.JBooleanSignature[0])
 			return false;
-		return this._value == JValue.As<Byte>(ref other.ValueReference);
+		return this._value == other.ToByte();
 	}
 	/// <inheritdoc cref="IEquatable{IPrimitiveType}.Equals(IPrimitiveType)"/>
 	private Boolean Equals(IPrimitiveType? other)

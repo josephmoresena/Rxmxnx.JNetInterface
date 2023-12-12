@@ -65,12 +65,13 @@ public partial class JEnvironment
 			}
 			finally
 			{
-				jLocal.ClearValue();
+				//jLocal.ClearValue();
 				this._objects.Remove(localRef);
 			}
 			return !isClass;
 		}
 		public Boolean Unload(JGlobalBase jGlobal) => throw new NotImplementedException();
+		public Boolean IsParameter(JLocalObject jLocal) => throw new NotImplementedException();
 
 		/// <summary>
 		/// Registers a <typeparamref name="TObject"/> in current <see cref="IEnvironment"/> instance.

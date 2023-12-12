@@ -15,11 +15,6 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	public static readonly CString JObjectSignature = UnicodeObjectSignatures.JObjectSignature;
 
 	/// <summary>
-	/// Internal <see cref="JValue"/> instance.
-	/// </summary>
-	private readonly IMutableReference<JValue> _value;
-
-	/// <summary>
 	/// Object class name.
 	/// </summary>
 	public abstract CString ObjectClassName { get; }
@@ -27,26 +22,6 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// Object signature.
 	/// </summary>
 	public abstract CString ObjectSignature { get; }
-	
-	/// <summary>
-	/// Internal <see cref="JValue"/> value.
-	/// </summary>
-	internal ref JValue ValueReference => ref this._value.Reference;
-
-	/// <summary>
-	/// Parameterless constructor.
-	/// </summary>
-	internal JObject() : this(JValue.Empty) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jObject"><see cref="JObject"/> instance.</param>
-	internal JObject(JObject jObject) => this._value = jObject._value;
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jValue">Internal <see cref="JValue"/> instance.</param>
-	internal JObject(JValue jValue) => this._value = IMutableReference.Create(jValue);
 
 	/// <inheritdoc/>
 	public abstract Boolean Equals(JObject? other);
@@ -58,13 +33,6 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset) => this.CopyTo(span, ref offset);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<JValue> span, Int32 index) => this.CopyTo(span, index);
-
-	/// <inheritdoc/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => HashCode.Combine(this._value.Value);
-	/// <inheritdoc/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Boolean Equals(Object? obj) => obj is JObject jObj && this.Equals(jObj);
 
 	/// <inheritdoc cref="IObject.CopyTo(Span{Byte}, ref Int32)"/>
 	internal abstract void CopyTo(Span<Byte> span, ref Int32 offset);

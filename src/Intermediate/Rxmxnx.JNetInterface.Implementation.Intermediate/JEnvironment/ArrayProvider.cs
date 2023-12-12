@@ -30,7 +30,7 @@ public partial class JEnvironment
 			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
 			JObjectLocalRef localRef = getObjectArrayElement(this.Reference, jArray.Reference, index);
 			if (localRef == default) this.CheckJniError();
-			return this.Cast<TElement>(new(env, localRef, false, false, this.GetClass<TElement>()));
+			return this.Cast<TElement>(new(env, localRef, false, this.GetClass<TElement>()));
 		}
 		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
 			where TElement : IObject, IDataType<TElement>

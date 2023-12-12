@@ -9,11 +9,9 @@ public partial class JArrayObject
 	/// <param name="jArrayRef">Local array reference.</param>
 	/// <param name="length">Array length.</param>
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	/// <param name="isNativeParameter">Indicates whether the current instance comes from JNI parameter.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	internal JArrayObject(IEnvironment env, JArrayLocalRef jArrayRef, Int32? length, Boolean isDummy,
-		Boolean isNativeParameter, JClassObject? jClass = default) : base(
-		env, jArrayRef.Value, isDummy, isNativeParameter, jClass)
+		JClassObject? jClass = default) : base(env, jArrayRef.Value, isDummy, jClass)
 		=> this._length = length;
 	/// <summary>
 	/// Constructor.
@@ -39,8 +37,7 @@ public partial class JArrayObject<TElement>
 {
 	/// <inheritdoc/>
 	internal JArrayObject(IEnvironment env, JArrayLocalRef jArrayRef, Int32? length, Boolean isDummy,
-		Boolean isNativeParameter, JClassObject? jClass = default) : base(
-		env, jArrayRef, length, isDummy, isNativeParameter, jClass) { }
+		JClassObject? jClass = default) : base(env, jArrayRef, length, isDummy, jClass) { }
 	/// <inheritdoc/>
 	internal JArrayObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 }

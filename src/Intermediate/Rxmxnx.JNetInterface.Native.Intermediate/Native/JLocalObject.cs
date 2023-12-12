@@ -29,7 +29,7 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
 	protected JLocalObject(IEnvironment env, JGlobalBase jGlobal) : base(jGlobal)
 	{
-		this._lifetime = new(false, env, this, jGlobal);
+		this._lifetime = new(env, this, jGlobal);
 		JLocalObject.ProcessMetadata(this, jGlobal.ObjectMetadata);
 	}
 	/// <summary>
@@ -67,10 +67,8 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// </param>
 	protected virtual void Dispose(Boolean disposing)
 	{
-		if (this._lifetime.IsDisposed)
-			return;
-		if (this._lifetime.Unload(this) && this._lifetime.Environment.ReferenceProvider.Unload(this))
-			this._lifetime.SetDisposed();
+		if (this._lifetime.IsDisposed) return;
+		this._lifetime.Unload(this);
 	}
 	/// <summary>
 	/// Creates the object metadata for current instance.

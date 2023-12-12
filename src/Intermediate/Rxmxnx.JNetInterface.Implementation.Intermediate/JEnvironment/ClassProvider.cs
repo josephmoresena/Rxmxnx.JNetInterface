@@ -59,11 +59,13 @@ public partial class JEnvironment
 			if (this._classes.TryGetValue(hash, out JClassObject? result)) return result;
 			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
 			if (JMetadataHelper.GetMetadata(hash) is { } metadata)
+			{
 				result = new(env, metadata, false);
+			}
 			else
 			{
 				JClassLocalRef classRef = className.WithSafeFixed(this, JEnvironmentCache.FindClass);
-				result = new(env, classRef, hash, false, false);
+				result = new(env, classRef, hash, false);
 			}
 			return this.Register(result);
 		}

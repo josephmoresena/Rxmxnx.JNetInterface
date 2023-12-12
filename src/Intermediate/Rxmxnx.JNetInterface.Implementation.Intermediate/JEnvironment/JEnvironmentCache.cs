@@ -245,15 +245,15 @@ public partial class JEnvironment
 			// JNI 0x00130000
 			{ typeof(IsVirtualThreadDelegate), 229 },
 		};
+		/// <summary>
+		/// Dictionary of classes.
+		/// </summary>
+		private readonly Dictionary<String, JClassObject> _classes = new();
 
 		/// <summary>
 		/// Delegate cache.
 		/// </summary>
 		private readonly DelegateHelperCache _delegateCache;
-		/// <summary>
-		/// Dictionary of classes.
-		/// </summary>
-		private readonly Dictionary<String, JClassObject> _classes = new();
 		/// <summary>
 		/// Dictionary of objects.
 		/// </summary>

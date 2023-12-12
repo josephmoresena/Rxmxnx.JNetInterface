@@ -3,6 +3,10 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JLocalObject
 {
 	/// <summary>
+	/// Invalid <see cref="JLocalObject"/> instance.
+	/// </summary>
+	internal static readonly JLocalObject InvalidObject = new();
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
 	internal static readonly JClassTypeMetadata JObjectClassMetadata = JTypeMetadataBuilder<JLocalObject>
@@ -15,10 +19,6 @@ public partial class JLocalObject
 	/// Internal reference value.
 	/// </summary>
 	internal JObjectLocalRef InternalReference => base.To<JObjectLocalRef>();
-	/// <summary>
-	/// Internal value.
-	/// </summary>
-	internal JValue InternalValue => base.ValueReference;
 
 	IVirtualMachine ILocalObject.VirtualMachine => this._lifetime.Environment.VirtualMachine;
 	Boolean ILocalObject.IsDummy => this.IsDummy;
@@ -27,26 +27,16 @@ public partial class JLocalObject
 	/// Sets the current instance value.
 	/// </summary>
 	/// <param name="localRef">A local object reference the value of current instance.</param>
-	internal void SetValue(JObjectLocalRef localRef)
-	{
-		if (localRef == default)
-			return;
-		JValue.As<JObjectLocalRef>(ref this.ValueReference) = localRef;
-		this._lifetime.Load(this);
-	}
+	internal void SetValue(JObjectLocalRef localRef) => this._lifetime.SetValue(this, localRef);
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
 	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
 	/// <param name="localRef">A local object reference the value of current instance.</param>
 	internal void SetValue<TValue>(TValue localRef) where TValue : unmanaged, IObjectReferenceType
-	{
-		if (localRef.Equals(default))
-			return;
-		JValue.As<TValue>(ref this.ValueReference) = localRef;
-		this._lifetime.Load(this);
-	}
-
+		=> this._lifetime.SetValue(this, localRef);
+	/// <inheritdoc/>
+	internal override ReadOnlySpan<Byte> AsSpan() => this._lifetime.Span;
 	/// <inheritdoc/>
 	internal override ref readonly TValue As<TValue>()
 	{
@@ -57,6 +47,7 @@ public partial class JLocalObject
 	}
 	/// <inheritdoc/>
 	internal override TValue To<TValue>() => this._lifetime.GetGlobalObject()?.To<TValue>() ?? base.To<TValue>();
+	internal override void ClearValue() => this._lifetime.Dispose();
 	/// <inheritdoc/>
 	internal override Boolean IsAssignableTo<TDataType>() => this._lifetime.IsAssignableTo<TDataType>();
 	/// <inheritdoc/>
