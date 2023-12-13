@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This class helper stores a <see cref="JDataTypeMetadata"/>
 /// </summary>
-internal static class JMetadataHelper
+internal static class MetadataHelper
 {
 	/// <summary>
 	/// Separator class assignability.
@@ -96,7 +96,7 @@ internal static class JMetadataHelper
 	/// Runtime metadata dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<String, JReferenceTypeMetadata> runtimeMetadata =
-		new(JMetadataHelper.initialMetadata);
+		new(MetadataHelper.initialMetadata);
 	private static readonly ConcurrentDictionary<String, Boolean?> assignationCache = new();
 
 	/// <summary>
@@ -105,7 +105,7 @@ internal static class JMetadataHelper
 	/// <param name="hash">A JNI class hash.</param>
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
 	public static JReferenceTypeMetadata? GetMetadata(String hash)
-		=> JMetadataHelper.runtimeMetadata.GetValueOrDefault(hash);
+		=> MetadataHelper.runtimeMetadata.GetValueOrDefault(hash);
 	/// <summary>
 	/// Retrieves <see cref="JDataTypeMetadata"/> metadata.
 	/// </summary>
@@ -113,8 +113,8 @@ internal static class JMetadataHelper
 	/// <returns>A <see cref="JDataTypeMetadata"/> metadata.</returns>
 	public static JDataTypeMetadata GetMetadata<TDataType>() where TDataType : IDataType<TDataType>
 	{
-		JMetadataHelper.Register<TDataType>();
-		return JMetadataHelper.GetMetadata(IDataType.GetHash<TDataType>()) ?? IDataType.GetMetadata<TDataType>();
+		MetadataHelper.Register<TDataType>();
+		return MetadataHelper.GetMetadata(IDataType.GetHash<TDataType>()) ?? IDataType.GetMetadata<TDataType>();
 	}
 	/// <summary>
 	/// Registers <typeparamref name="TDataType"/> as valid datatype for current process.
@@ -126,8 +126,8 @@ internal static class JMetadataHelper
 	public static Boolean Register<TDataType>() where TDataType : IDataType<TDataType>
 	{
 		JReferenceTypeMetadata? metadata = IDataType.GetMetadata<TDataType>() as JReferenceTypeMetadata;
-		Boolean result = JMetadataHelper.Register(metadata);
-		JMetadataHelper.Register(metadata?.GetArrayMetadata());
+		Boolean result = MetadataHelper.Register(metadata);
+		MetadataHelper.Register(metadata?.GetArrayMetadata());
 		return result;
 	}
 	/// <summary>
@@ -137,9 +137,9 @@ internal static class JMetadataHelper
 	/// <returns>Hash for given type.</returns>
 	public static CStringSequence GetHashSequence(ref CString className)
 	{
-		CString classNameF = !className.Contains(JMetadataHelper.classNameEscape[0]) ?
+		CString classNameF = !className.Contains(MetadataHelper.classNameEscape[0]) ?
 			className :
-			CString.Create(className.Select(JMetadataHelper.EscapeClassNameChar).ToArray());
+			CString.Create(className.Select(MetadataHelper.EscapeClassNameChar).ToArray());
 		return JDataTypeMetadata.CreateInformationSequence(classNameF);
 	}
 	/// <summary>
@@ -158,15 +158,15 @@ internal static class JMetadataHelper
 		arrayHash = default;
 		arrayTypeMetadata = default;
 		if (className.Length < 2 || className[0] != UnicodeObjectSignatures.ArraySignaturePrefix[0]) return false;
-		arrayHash = JMetadataHelper.GetHashSequence(ref className);
-		if (!JMetadataHelper.runtimeMetadata.TryGetValue(arrayHash.ToString(),
+		arrayHash = MetadataHelper.GetHashSequence(ref className);
+		if (!MetadataHelper.runtimeMetadata.TryGetValue(arrayHash.ToString(),
 		                                                 out JReferenceTypeMetadata? referenceMetadata))
-			referenceMetadata = JMetadataHelper.IsArrayClass(className[1..], out _, out arrayTypeMetadata) ?
+			referenceMetadata = MetadataHelper.IsArrayClass(className[1..], out _, out arrayTypeMetadata) ?
 				arrayTypeMetadata?.GetArrayMetadata() :
-				JMetadataHelper.GetMetadata(JDataTypeMetadata.CreateInformationSequence(className[1..^1]).ToString())
+				MetadataHelper.GetMetadata(JDataTypeMetadata.CreateInformationSequence(className[1..^1]).ToString())
 				               ?.GetArrayMetadata();
 		arrayTypeMetadata = (JArrayTypeMetadata?)referenceMetadata;
-		JMetadataHelper.Register(arrayTypeMetadata);
+		MetadataHelper.Register(arrayTypeMetadata);
 		return true;
 	}
 
@@ -183,18 +183,18 @@ internal static class JMetadataHelper
 	/// </returns>
 	public static Boolean? IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
 	{
-		JReferenceTypeMetadata? classMetadata = JMetadataHelper.GetMetadata(jClass.Hash);
-		JReferenceTypeMetadata? otherClassMetadata = JMetadataHelper.GetMetadata(otherClass.Hash);
+		JReferenceTypeMetadata? classMetadata = MetadataHelper.GetMetadata(jClass.Hash);
+		JReferenceTypeMetadata? otherClassMetadata = MetadataHelper.GetMetadata(otherClass.Hash);
 		if (classMetadata is null || otherClassMetadata is null) return default;
 		if (classMetadata.Hash == otherClassMetadata.Hash) return true;
 		if (otherClassMetadata.Hash == IDataType.GetHash<JLocalObject>()) return true;
 		if (classMetadata.Hash == IDataType.GetHash<JLocalObject>()) return default;
-		String forwardKey = JMetadataHelper.GetAssignationKey(classMetadata, otherClassMetadata);
-		if (JMetadataHelper.assignationCache.TryGetValue(forwardKey, out Boolean? result)) return result;
-		String backwardKey = JMetadataHelper.GetAssignationKey(otherClassMetadata, classMetadata);
-		result = JMetadataHelper.IsAssignableFrom(classMetadata, otherClassMetadata);
-		JMetadataHelper.assignationCache.TryAdd(forwardKey, result);
-		JMetadataHelper.assignationCache.TryAdd(backwardKey, result.HasValue && result.Value ? null : result ?? true);
+		String forwardKey = MetadataHelper.GetAssignationKey(classMetadata, otherClassMetadata);
+		if (MetadataHelper.assignationCache.TryGetValue(forwardKey, out Boolean? result)) return result;
+		String backwardKey = MetadataHelper.GetAssignationKey(otherClassMetadata, classMetadata);
+		result = MetadataHelper.IsAssignableFrom(classMetadata, otherClassMetadata);
+		MetadataHelper.assignationCache.TryAdd(forwardKey, result);
+		MetadataHelper.assignationCache.TryAdd(backwardKey, result.HasValue && result.Value ? null : result ?? true);
 		return result;
 	}
 	/// <summary>
@@ -243,26 +243,26 @@ internal static class JMetadataHelper
 	/// </returns>
 	private static Boolean Register(JReferenceTypeMetadata? metadata)
 	{
-		if (metadata is null || JMetadataHelper.runtimeMetadata.ContainsKey(metadata.Hash)) return false;
+		if (metadata is null || MetadataHelper.runtimeMetadata.ContainsKey(metadata.Hash)) return false;
 		if (metadata.BaseMetadata is not null)
 		{
-			JMetadataHelper.assignationCache.TryAdd(JMetadataHelper.GetAssignationKey(metadata, metadata.BaseMetadata),
+			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(metadata, metadata.BaseMetadata),
 			                                        true);
-			JMetadataHelper.assignationCache.TryAdd(JMetadataHelper.GetAssignationKey(metadata.BaseMetadata, metadata),
+			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(metadata.BaseMetadata, metadata),
 			                                        default);
-			JMetadataHelper.Register(metadata.BaseMetadata);
+			MetadataHelper.Register(metadata.BaseMetadata);
 		}
 		foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
 		{
-			JMetadataHelper.assignationCache.TryAdd(JMetadataHelper.GetAssignationKey(metadata, interfaceMetadata),
+			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(metadata, interfaceMetadata),
 			                                        true);
-			JMetadataHelper.assignationCache.TryAdd(JMetadataHelper.GetAssignationKey(interfaceMetadata, metadata),
+			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(interfaceMetadata, metadata),
 			                                        default);
-			JMetadataHelper.Register(interfaceMetadata);
+			MetadataHelper.Register(interfaceMetadata);
 		}
 		if (metadata is JArrayTypeMetadata arrayMetadata)
-			JMetadataHelper.Register(arrayMetadata.ElementMetadata as JReferenceTypeMetadata);
-		return JMetadataHelper.runtimeMetadata.TryAdd(metadata.Hash, metadata);
+			MetadataHelper.Register(arrayMetadata.ElementMetadata as JReferenceTypeMetadata);
+		return MetadataHelper.runtimeMetadata.TryAdd(metadata.Hash, metadata);
 	}
 	/// <summary>
 	/// Escapes Java class name char to JNI class name.
@@ -270,7 +270,7 @@ internal static class JMetadataHelper
 	/// <param name="classNameChar">A Java class name char.</param>
 	/// <returns>A JNI class name char.</returns>
 	private static Byte EscapeClassNameChar(Byte classNameChar)
-		=> classNameChar == JMetadataHelper.classNameEscape[0] ? JMetadataHelper.classNameEscape[1] : classNameChar;
+		=> classNameChar == MetadataHelper.classNameEscape[0] ? MetadataHelper.classNameEscape[1] : classNameChar;
 	/// <summary>
 	/// Creates the assignation key for <paramref name="fromMetadata"/> to <paramref name="toMetadata"/>
 	/// </summary>
@@ -278,5 +278,5 @@ internal static class JMetadataHelper
 	/// <param name="toMetadata">Metadata whom type must be casted.</param>
 	/// <returns>The assignation key.</returns>
 	private static String GetAssignationKey(JDataTypeMetadata fromMetadata, JDataTypeMetadata toMetadata)
-		=> new CStringSequence(fromMetadata.ClassName, JMetadataHelper.assignableTo, toMetadata.ClassName).ToString();
+		=> new CStringSequence(fromMetadata.ClassName, MetadataHelper.assignableTo, toMetadata.ClassName).ToString();
 }

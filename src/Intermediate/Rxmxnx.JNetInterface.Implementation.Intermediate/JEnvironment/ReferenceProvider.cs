@@ -65,8 +65,9 @@ public partial class JEnvironment
 			}
 			finally
 			{
-				//jLocal.ClearValue();
+				jLocal.ClearValue();
 				this._objects.Remove(localRef);
+				if (isClass) this._classes.Unload(NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(localRef));
 			}
 			return !isClass;
 		}
@@ -85,7 +86,8 @@ public partial class JEnvironment
 			if (jObject is JClassObject jClass) this._classes[jClass.Hash] = jClass;
 			JLocalObject? jLocal = jObject as JLocalObject;
 			ValidationUtilities.ThrowIfDummy(jLocal);
-			if (!JObject.IsNullOrDefault(jLocal)) this._objects[jLocal.As<JObjectLocalRef>()] = new(jLocal);
+			if (!JObject.IsNullOrDefault(jLocal))
+				this._objects[jLocal.As<JObjectLocalRef>()] = new((jLocal as ILocalObject).Lifetime.GetCacheable());
 			return jObject;
 		}
 

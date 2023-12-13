@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This object stores the lifetime for a java object instance.
 /// </summary>
-internal sealed partial class JObjectLifetime : IDisposable
+internal sealed partial class ObjectLifetime : IDisposable
 {
 	/// <summary>
 	/// Internal id.
@@ -38,19 +38,20 @@ internal sealed partial class JObjectLifetime : IDisposable
 	/// Retrieves current value as bytes.
 	/// </summary>
 	public ReadOnlySpan<Byte> Span => this._value.Reference.AsBytes();
-
+	
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jLocal">The java object to load.</param>
 	/// <param name="localRef">Local object reference.</param>
-	public JObjectLifetime(IEnvironment env, JLocalObject jLocal, JObjectLocalRef localRef)
+	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JObjectLocalRef localRef)
 	{
 		this._env = env;
 		this._isDisposed = IMutableWrapper.Create<Boolean>();
 		this._id = jLocal.Id;
 		this._value = IMutableReference<JObjectLocalRef>.Create(localRef);
+		this._isDisposable = jLocal is not JClassObject;
 		this.Load(jLocal);
 	}
 	/// <summary>
@@ -59,7 +60,7 @@ internal sealed partial class JObjectLifetime : IDisposable
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jLocal">The java object to load.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public JObjectLifetime(IEnvironment env, JLocalObject jLocal, JGlobalBase? jGlobal)
+	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JGlobalBase? jGlobal)
 	{
 		this._env = env;
 		this._isDisposed = IMutableWrapper.Create<Boolean>();
@@ -67,6 +68,7 @@ internal sealed partial class JObjectLifetime : IDisposable
 		this._weak = (jGlobal as JWeak)?.Load(this);
 		this._id = jLocal.Id;
 		this._value = IMutableReference<JObjectLocalRef>.Create();
+		this._isDisposable = jLocal is not JClassObject;
 		this.Load(jLocal);
 	}
 
@@ -76,7 +78,14 @@ internal sealed partial class JObjectLifetime : IDisposable
 		if (this._isDisposed.Value) return;
 		this._value.Value = default;
 		this._isDisposed.Value = true;
-		this.Secondary?.Dispose();
+		try
+		{
+			this.Secondary?.Dispose();
+		}
+		finally
+		{
+			if(!this._isDisposable) this._isDisposed.Value = true;
+		}
 	}
 	/// <summary>
 	/// Sets the current instance value.
@@ -264,8 +273,8 @@ internal sealed partial class JObjectLifetime : IDisposable
 	/// <summary>
 	/// Synchronizes current instance with <paramref name="other"/>.
 	/// </summary>
-	/// <param name="other">A <see cref="JObjectLifetime"/> instance.</param>
-	public void Synchronize(JObjectLifetime other)
+	/// <param name="other">A <see cref="ObjectLifetime"/> instance.</param>
+	public void Synchronize(ObjectLifetime other)
 	{
 		this._secondary.SetTarget(other);
 		other._secondary.SetTarget(other);
@@ -273,5 +282,14 @@ internal sealed partial class JObjectLifetime : IDisposable
 		this.SynchronizeGlobal(other);
 		this.SynchronizeObjects(other._objects);
 		other.SynchronizeObjects(this._objects);
+	}
+	/// <summary>
+	/// Retrieves cacheable instance.
+	/// </summary>
+	/// <returns>A <see cref="ObjectLifetime"/> cacheable instance.</returns>
+	public ObjectLifetime GetCacheable()
+	{
+		if (!this._isDisposable || this.Secondary is null || this.Secondary._isDisposable) return this;
+		return this.Secondary;
 	}
 }

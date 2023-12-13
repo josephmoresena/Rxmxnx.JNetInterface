@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial class JObjectLifetime
+internal partial class ObjectLifetime
 {
 	/// <summary>
 	/// Cache of assignable types.
@@ -23,37 +23,41 @@ internal partial class JObjectLifetime
 	/// </summary>
 	private readonly Dictionary<Int64, WeakReference<JLocalObject>> _objects = new();
 	/// <summary>
-	/// Weak reference to <see cref="JObjectLifetime"/> instance.
+	/// Weak reference to <see cref="ObjectLifetime"/> instance.
 	/// </summary>
-	private readonly WeakReference<JObjectLifetime?> _secondary = new(default);
+	private readonly WeakReference<ObjectLifetime?> _secondary = new(default);
 	/// <summary>
 	/// Internal value.
 	/// </summary>
 	private readonly IMutableReference<JObjectLocalRef> _value;
 
-	/// <inheritdoc cref="JObjectLifetime.Class"/>
+	/// <inheritdoc cref="ObjectLifetime.Class"/>
 	private JClassObject? _class;
 	/// <summary>
 	/// Current <see cref="JGlobal"/> instance.
 	/// </summary>
 	private JGlobal? _global;
-	/// <inheritdoc cref="JObjectLifetime.IsRealClass"/>
+	/// <inheritdoc cref="ObjectLifetime.IsRealClass"/>
 	private Boolean _isRealClass;
 	/// <summary>
 	/// Current <see cref="JWeak"/> instance.
 	/// </summary>
 	private JWeak? _weak;
+	/// <summary>
+	/// Indicates whether current instance is not disposable.
+	/// </summary>
+	private readonly Boolean _isDisposable;
 
 	/// <summary>
-	/// Secondary <see cref="JObjectLifetime"/>
+	/// Secondary <see cref="ObjectLifetime"/>
 	/// </summary>
-	private JObjectLifetime? Secondary => this._secondary.TryGetTarget(out JObjectLifetime? result) ? result : default;
+	private ObjectLifetime? Secondary => this._secondary.TryGetTarget(out ObjectLifetime? result) ? result : default;
 
 	/// <summary>
 	/// Synchronizes global objects.
 	/// </summary>
-	/// <param name="other">A <see cref="JObjectLifetime"/> instance.</param>
-	private void SynchronizeGlobal(JObjectLifetime other)
+	/// <param name="other">A <see cref="ObjectLifetime"/> instance.</param>
+	private void SynchronizeGlobal(ObjectLifetime other)
 	{
 		if (this._global is null) this._global = other._global;
 		else if (other._global is null) other._global = this._global;

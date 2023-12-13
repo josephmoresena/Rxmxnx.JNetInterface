@@ -10,9 +10,9 @@ public interface ILocalObject : IObject
 	/// <inheritdoc cref="JReferenceObject.IsDummy"/>
 	internal Boolean IsDummy { get; }
 	/// <summary>
-	/// Local <see cref="JObjectLifetime"/> instance.
+	/// Local <see cref="ObjectLifetime"/> instance.
 	/// </summary>
-	internal JObjectLifetime Lifetime { get; }
+	internal ObjectLifetime Lifetime { get; }
 
 	/// <summary>
 	/// Creates the object metadata for current instance.

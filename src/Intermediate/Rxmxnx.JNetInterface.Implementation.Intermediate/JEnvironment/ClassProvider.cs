@@ -24,12 +24,12 @@ public partial class JEnvironment
 			=> throw new NotImplementedException();
 		public JClassObject GetClass(CString className)
 		{
-			String hash = JMetadataHelper.GetHashSequence(ref className).ToString();
+			String hash = MetadataHelper.GetHashSequence(ref className).ToString();
 			return this.GetObjectClass(className, hash);
 		}
 		public JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>
 		{
-			JDataTypeMetadata metadata = JMetadataHelper.GetMetadata<TDataType>();
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TDataType>();
 			return this.GetObjectClass(metadata.ClassName, metadata.Hash);
 		}
 		public JClassObject GetObjectClass(JLocalObject jLocal) => throw new NotImplementedException();
@@ -58,7 +58,7 @@ public partial class JEnvironment
 		{
 			if (this._classes.TryGetValue(hash, out JClassObject? result)) return result;
 			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
-			if (JMetadataHelper.GetMetadata(hash) is { } metadata)
+			if (MetadataHelper.GetMetadata(hash) is { } metadata)
 			{
 				result = new(env, metadata, false);
 			}

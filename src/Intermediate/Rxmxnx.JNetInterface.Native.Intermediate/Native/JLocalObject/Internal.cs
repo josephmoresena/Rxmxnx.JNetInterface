@@ -18,7 +18,16 @@ public partial class JLocalObject
 
 	IVirtualMachine ILocalObject.VirtualMachine => this._lifetime.Environment.VirtualMachine;
 	Boolean ILocalObject.IsDummy => this.IsDummy;
-
+	
+	/// <summary>
+	/// Interprets internal current value as <typeparamref name="TReference"/> value.
+	/// </summary>
+	/// <typeparam name="TReference">Type of value.</typeparam>
+	/// <returns>A read-only reference of <typeparamref name="TReference"/> value.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal ref readonly TReference InternalAs<TReference>() where TReference : unmanaged, INativeType<TReference>
+		=> ref base.As<TReference>();
+	
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
@@ -50,6 +59,13 @@ public partial class JLocalObject
 	/// <inheritdoc/>
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
 		=> this._lifetime.SetAssignableTo<TDataType>(isAssignable);
+	/// <inheritdoc/>
+	internal override Boolean IsDefaultInstance()
+	{
+		if (this._lifetime.GetGlobalObject() is { } jGlobal && !jGlobal.IsDefaultInstance())
+			return false;
+		return base.IsDefaultInstance();
+	}
 
 	/// <summary>
 	/// Retrieves the loaded global object for given object.

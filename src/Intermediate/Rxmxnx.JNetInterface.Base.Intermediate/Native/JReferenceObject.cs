@@ -74,6 +74,11 @@ public abstract class JReferenceObject : JObject
 	internal override void CopyTo(Span<JValue> span, Int32 index) => this.AsSpan().CopyTo(span[index].AsBytes());
 
 	/// <summary>
+	/// Indicates whether current instance is default value.
+	/// </summary>
+	internal virtual Boolean IsDefaultInstance() => this.AsSpan().AsValue<IntPtr>() == IntPtr.Zero;
+	
+	/// <summary>
 	/// Sets <see cref="JValue.Empty"/> as the current instance value.
 	/// </summary>
 	internal abstract void ClearValue();
@@ -100,7 +105,7 @@ public abstract class JReferenceObject : JObject
 	/// <returns>A read-only binary span.</returns>
 	internal abstract ReadOnlySpan<Byte> AsSpan();
 	/// <summary>
-	/// Interprets current instance a <typeparamref name="TReference"/> value.
+	/// Interprets current instance as a <typeparamref name="TReference"/> value.
 	/// </summary>
 	/// <typeparam name="TReference">Type of value.</typeparam>
 	/// <returns>A read-only reference of <typeparamref name="TReference"/> value.</returns>

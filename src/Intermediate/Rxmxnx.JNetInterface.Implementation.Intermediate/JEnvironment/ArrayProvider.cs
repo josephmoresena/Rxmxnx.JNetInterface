@@ -16,7 +16,7 @@ public partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			ValidationUtilities.ThrowIfDummy(jArray);
-			JDataTypeMetadata metadata = JMetadataHelper.GetMetadata<TElement>();
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -36,7 +36,7 @@ public partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			ValidationUtilities.ThrowIfDummy(jArray);
-			JDataTypeMetadata metadata = JMetadataHelper.GetMetadata<TElement>();
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Int32 offset = 0;

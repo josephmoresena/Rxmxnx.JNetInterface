@@ -27,8 +27,8 @@ public abstract class JWeak : JGlobalBase
 		=> base.IsValid(env) && env.GetReferenceType(this) == JReferenceType.WeakGlobalRefType &&
 			!env.IsSameObject(this, default);
 
-	/// <inheritdoc cref="JGlobalBase.Load(JObjectLifetime)"/>
-	internal new virtual JWeak? Load(JObjectLifetime lifetime) => base.Load(lifetime) as JWeak;
+	/// <inheritdoc cref="JGlobalBase.Load(ObjectLifetime)"/>
+	internal new virtual JWeak? Load(ObjectLifetime lifetime) => base.Load(lifetime) as JWeak;
 
 	/// <summary>
 	/// Synchronizes current instance with <paramref name="other"/>.

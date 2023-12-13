@@ -14,7 +14,7 @@ public partial class JGlobalBase
 	/// This collection stores the weak references to the <see cref="JLocalObject"/> associated with
 	/// this instance.
 	/// </summary>
-	private readonly ConcurrentDictionary<Int64, WeakReference<JObjectLifetime>> _objects = new();
+	private readonly ConcurrentDictionary<Int64, WeakReference<ObjectLifetime>> _objects = new();
 	/// <summary>
 	/// Internal <see cref="IntPtr"/> instance.
 	/// </summary>

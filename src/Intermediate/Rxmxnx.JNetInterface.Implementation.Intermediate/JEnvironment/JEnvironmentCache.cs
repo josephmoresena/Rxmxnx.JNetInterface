@@ -246,9 +246,9 @@ public partial class JEnvironment
 			{ typeof(IsVirtualThreadDelegate), 229 },
 		};
 		/// <summary>
-		/// Dictionary of classes.
+		/// Class cache.
 		/// </summary>
-		private readonly Dictionary<String, JClassObject> _classes = new();
+		private readonly ClassCache<JClassObject> _classes = new();
 
 		/// <summary>
 		/// Delegate cache.
@@ -257,7 +257,7 @@ public partial class JEnvironment
 		/// <summary>
 		/// Dictionary of objects.
 		/// </summary>
-		private readonly Dictionary<JObjectLocalRef, WeakReference<JLocalObject>> _objects = new();
+		private readonly Dictionary<JObjectLocalRef, WeakReference<ObjectLifetime>> _objects = new();
 
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
 		public IVirtualMachine VirtualMachine { get; }
