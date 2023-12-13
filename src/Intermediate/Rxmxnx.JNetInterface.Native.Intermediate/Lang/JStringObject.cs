@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.String</c> instance.
 /// </summary>
+[DebuggerDisplay(nameof(JStringObject.DisplayValue))]
 public sealed partial class JStringObject : JLocalObject, IClassType<JStringObject>, IWrapper<String>,
 	IInterfaceImplementation<JStringObject, JSerializableObject>,
 	IInterfaceImplementation<JStringObject, JComparableObject>,
@@ -15,18 +16,29 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 
 	/// <inheritdoc cref="JLocalObject.InternalReference"/>
 	internal JStringLocalRef Reference => this.As<JStringLocalRef>();
+
+	/// <summary>
+	/// Internal property to debugger display.
+	/// </summary>
+	internal String DisplayValue
+		=> this._value ?? (this._length is not null ?
+			$"{this.Reference} Length: {this.Length}" :
+			this.Reference.ToString());
 	/// <summary>
 	/// UTF-16 length.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public Int32 Length => this._length ?? this._value?.Length ?? this.Environment.StringProvider.GetLength(this);
 	/// <summary>
 	/// UTF-8 length.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public Int32 Utf8Length => this._utf8Length ?? this.Environment.StringProvider.GetUtf8Length(this);
 
 	/// <summary>
 	/// Internal string value.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public String Value => this._value ??= String.Create(this.Length, (this, 0), JStringObject.GetChars);
 
 	/// <inheritdoc/>

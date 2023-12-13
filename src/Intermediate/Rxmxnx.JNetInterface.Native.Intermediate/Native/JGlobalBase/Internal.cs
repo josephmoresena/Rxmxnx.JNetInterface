@@ -16,14 +16,6 @@ public partial class JGlobalBase
 	internal AssignableTypeCache AssignationCache => this._assignableTypes;
 
 	/// <summary>
-	/// Indicates whether JNI execution is secure.
-	/// </summary>
-	/// <returns>
-	/// <see langword="true"/> if is secure execute JNI calls; otherwise, <see langword="false"/>.
-	/// </returns>
-	internal abstract Boolean JniSecure();
-
-	/// <summary>
 	/// Refresh current metadata instance.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>

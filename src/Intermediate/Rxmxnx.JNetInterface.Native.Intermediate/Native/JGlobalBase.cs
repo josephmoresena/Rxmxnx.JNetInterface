@@ -61,19 +61,18 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	{
 		if (this._isDisposed) return;
 
-		if (disposing)
+		if (disposing && !this._isDisposable)
 		{
 			ImmutableArray<Int64> keys = this._objects.Keys.ToImmutableArray();
 			foreach (Int64 key in keys)
 			{
-				if (this._objects.TryRemove(key, out WeakReference<ObjectLifetime>? wObj) &&
-				    wObj.TryGetTarget(out ObjectLifetime? objectLifetime))
+				if (this._objects.TryRemove(key, out WeakReference<JObjectLifetime>? wObj) &&
+				    wObj.TryGetTarget(out JObjectLifetime? objectLifetime))
 					objectLifetime.UnloadGlobal(this);
 			}
 		}
 
 		if (!env.ReferenceProvider.Unload(this)) return;
-
 		this.ClearValue();
 		this._isDisposed = true;
 	}
@@ -88,7 +87,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </returns>
 	protected Boolean Remove(JLocalObject jLocal)
 	{
-		ObjectLifetime objectLifetime = (jLocal as ILocalObject).Lifetime;
+		JObjectLifetime objectLifetime = (jLocal as ILocalObject).Lifetime;
 		if (!this._objects.TryRemove(objectLifetime.Id, out _)) return false;
 		//_ = this._assignableTypes.Prepare(jLocal);
 		return true;
@@ -97,9 +96,9 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <summary>
 	/// Associates the current instance to <paramref name="objectLifetime"/>.
 	/// </summary>
-	/// <param name="objectLifetime"><see cref="ObjectLifetime"/> instance.</param>
+	/// <param name="objectLifetime"><see cref="JObjectLifetime"/> instance.</param>
 	/// <returns>A valid <see cref="JGlobalBase"/> associated to <paramref name="objectLifetime"/>.</returns>
-	internal JGlobalBase? Load(ObjectLifetime objectLifetime)
+	internal JGlobalBase? Load(JObjectLifetime objectLifetime)
 	{
 		if (!this._objects.TryAdd(objectLifetime.Id, new(objectLifetime)))
 			this._objects[objectLifetime.Id].SetTarget(objectLifetime);

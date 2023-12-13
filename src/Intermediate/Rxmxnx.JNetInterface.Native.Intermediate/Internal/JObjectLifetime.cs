@@ -3,46 +3,8 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This object stores the lifetime for a java object instance.
 /// </summary>
-internal record ObjectLifetime : IDisposable
+internal sealed partial class JObjectLifetime : IDisposable
 {
-	/// <summary>
-	/// Cache of assignable types.
-	/// </summary>
-	private readonly AssignableTypeCache _assignableTypes = new();
-	/// <summary>
-	/// Internal <see cref="IEnvironment"/> instance.
-	/// </summary>
-	private readonly IEnvironment _env;
-	/// <summary>
-	/// Internal id.
-	/// </summary>
-	private readonly Int64 _id;
-	/// <summary>
-	/// Indicates whether the this instance is disposed.
-	/// </summary>
-	private readonly IMutableWrapper<Boolean> _isDisposed;
-	/// <summary>
-	/// Internal hash set.
-	/// </summary>
-	private readonly Dictionary<Int64, WeakReference<JLocalObject>> _objects = new();
-	/// <summary>
-	/// Internal value.
-	/// </summary>
-	private readonly IMutableReference<JObjectLocalRef> _value;
-
-	/// <inheritdoc cref="ObjectLifetime.Class"/>
-	private JClassObject? _class;
-	/// <summary>
-	/// Current <see cref="JGlobal"/> instance.
-	/// </summary>
-	private JGlobal? _global;
-	/// <inheritdoc cref="ObjectLifetime.IsRealClass"/>
-	private Boolean _isRealClass;
-	/// <summary>
-	/// Current <see cref="JWeak"/> instance.
-	/// </summary>
-	private JWeak? _weak;
-
 	/// <summary>
 	/// Internal id.
 	/// </summary>
@@ -83,7 +45,7 @@ internal record ObjectLifetime : IDisposable
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jLocal">The java object to load.</param>
 	/// <param name="localRef">Local object reference.</param>
-	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JObjectLocalRef localRef)
+	public JObjectLifetime(IEnvironment env, JLocalObject jLocal, JObjectLocalRef localRef)
 	{
 		this._env = env;
 		this._isDisposed = IMutableWrapper.Create<Boolean>();
@@ -97,7 +59,7 @@ internal record ObjectLifetime : IDisposable
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jLocal">The java object to load.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JGlobalBase? jGlobal)
+	public JObjectLifetime(IEnvironment env, JLocalObject jLocal, JGlobalBase? jGlobal)
 	{
 		this._env = env;
 		this._isDisposed = IMutableWrapper.Create<Boolean>();
@@ -107,24 +69,25 @@ internal record ObjectLifetime : IDisposable
 		this._value = IMutableReference<JObjectLocalRef>.Create();
 		this.Load(jLocal);
 	}
+
 	/// <inheritdoc/>
 	public void Dispose()
 	{
-		this.Dispose(true);
-		GC.SuppressFinalize(this);
+		if (this._isDisposed.Value) return;
+		this._value.Value = default;
+		this._isDisposed.Value = true;
+		this.Secondary?.Dispose();
 	}
-
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
 	/// <param name="jLocal">The java object to load.</param>
 	/// <param name="localRef">A local object reference the value of current instance.</param>
-	internal void SetValue(JLocalObject jLocal, JObjectLocalRef localRef)
+	public void SetValue(JLocalObject jLocal, JObjectLocalRef localRef)
 	{
 		if (localRef == default) return;
-		this._value.Value = localRef;
-		this._isDisposed.Value = false;
-		this.Load(jLocal);
+		this.LoadNewValue(jLocal, localRef);
+		this.Secondary?.LoadNewValue(jLocal, localRef);
 	}
 	/// <summary>
 	/// Sets the current instance value.
@@ -132,12 +95,11 @@ internal record ObjectLifetime : IDisposable
 	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
 	/// <param name="jLocal">The java object to load.</param>
 	/// <param name="localRef">A local object reference the value of current instance.</param>
-	internal void SetValue<TValue>(JLocalObject jLocal, TValue localRef) where TValue : unmanaged, IObjectReferenceType
+	public void SetValue<TValue>(JLocalObject jLocal, TValue localRef) where TValue : unmanaged, IObjectReferenceType
 	{
 		if (localRef.Equals(default)) return;
-		this._value.Value = localRef.Value;
-		this._isDisposed.Value = false;
-		this.Load(jLocal);
+		this.LoadNewValue(jLocal, localRef.Value);
+		this.Secondary?.LoadNewValue(jLocal, localRef.Value);
 	}
 	/// <summary>
 	/// Retrieves the loaded global object for current instance.
@@ -244,14 +206,18 @@ internal record ObjectLifetime : IDisposable
 			return this._global.IsAssignableTo<TDataType>();
 		if (JGlobalBase.IsValid(this._weak, this._env))
 			return this._weak.IsAssignableTo<TDataType>();
-		return this._env.ClassProvider.IsAssignableTo<TDataType>(jLocal);
+		return this.IsAssignableTo<TDataType>() ?? this._env.ClassProvider.IsAssignableTo<TDataType>(jLocal);
 	}
 
 	/// <summary>
 	/// Loads the given object in the current instance.
 	/// </summary>
 	/// <param name="jLocal">The java object to load.</param>
-	public void Load(JLocalObject jLocal) => this._objects.Add(jLocal.Id, new(jLocal));
+	public void Load(JLocalObject jLocal)
+	{
+		this._objects.TryAdd(jLocal.Id, new(jLocal));
+		this.Secondary?._objects.TryAdd(jLocal.Id, new(jLocal));
+	}
 	/// <summary>
 	/// Unloads the given object from the current instance.
 	/// </summary>
@@ -262,9 +228,12 @@ internal record ObjectLifetime : IDisposable
 	/// </returns>
 	public void Unload(JLocalObject jLocal)
 	{
-		if (!this._objects.Remove(jLocal.Id)) return;
-		this.CleanObjects();
-		if (this._objects.Count != 0 || this._env.ReferenceProvider.IsParameter(jLocal)) return;
+		if (!this._objects.ContainsKey(jLocal.Id)) return;
+		Boolean isClass = jLocal is JClassObject;
+		Int32 limit = isClass ? 1 : 0;
+		this.Unload(jLocal.Id, isClass);
+		this.Secondary?.Unload(jLocal.Id, isClass);
+		if (this._objects.Count <= limit || this._env.ReferenceProvider.IsParameter(jLocal)) return;
 		this.Dispose();
 	}
 	/// <summary>
@@ -273,21 +242,15 @@ internal record ObjectLifetime : IDisposable
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance to unload.</param>
 	public void UnloadGlobal(JGlobalBase jGlobal)
 	{
-		if (jGlobal.Equals(jGlobal))
+		if (Object.ReferenceEquals(jGlobal, this._global))
 			this._global = default;
-		else if (jGlobal.Equals(jGlobal))
+		else if (Object.ReferenceEquals(jGlobal, this._global))
 			this._weak = default;
+		if (Object.ReferenceEquals(jGlobal, this.Secondary?._global))
+			this.Secondary._global = default;
+		if (Object.ReferenceEquals(jGlobal, this.Secondary?._weak))
+			this.Secondary._weak = default;
 	}
-	/// <summary>
-	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
-	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <returns>
-	/// <see langword="true"/> if current instance is assignable to <typeparamref name="TDataType"/> type;
-	/// otherwise, <see langword="false"/>.
-	/// </returns>
-	public Boolean IsAssignableTo<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>
-		=> this._assignableTypes.IsAssignableTo<TDataType>().HasValue;
 	/// <summary>
 	/// Sets current instance as assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
@@ -295,30 +258,20 @@ internal record ObjectLifetime : IDisposable
 	public void SetAssignableTo<TDataType>(Boolean isAssignable)
 		where TDataType : JReferenceObject, IDataType<TDataType>
 	{
-		this._assignableTypes.SetAssignableTo<TDataType>(isAssignable);
-		this._global?.AssignationCache.SetAssignableTo<TDataType>(isAssignable);
-		this._weak?.AssignationCache.SetAssignableTo<TDataType>(isAssignable);
+		this.LoadAssignation<TDataType>(isAssignable);
+		this.Secondary?.LoadAssignation<TDataType>(isAssignable);
 	}
-
 	/// <summary>
-	/// Clears current object dictionary.
+	/// Synchronizes current instance with <paramref name="other"/>.
 	/// </summary>
-	private void CleanObjects()
+	/// <param name="other">A <see cref="JObjectLifetime"/> instance.</param>
+	public void Synchronize(JObjectLifetime other)
 	{
-		Int64[] keys = this._objects.Keys.ToArray();
-		foreach (Int64 objId in keys)
-		{
-			if (!this._objects[objId].TryGetTarget(out _))
-				this._objects.Remove(objId);
-		}
-	}
-
-	/// <inheritdoc cref="IDisposable.Dispose()"/>
-	/// <param name="disposing">Indicates whether current instance is called by <see cref="IDisposable.Dispose()"/>.</param>
-	protected virtual void Dispose(Boolean disposing)
-	{
-		this._objects.Clear();
-		this._value.Value = default;
-		this._isDisposed.Value = true;
+		this._secondary.SetTarget(other);
+		other._secondary.SetTarget(other);
+		this._assignableTypes.Merge(other._assignableTypes);
+		this.SynchronizeGlobal(other);
+		this.SynchronizeObjects(other._objects);
+		other.SynchronizeObjects(this._objects);
 	}
 }

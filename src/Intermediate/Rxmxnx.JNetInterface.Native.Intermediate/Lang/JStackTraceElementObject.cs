@@ -22,22 +22,27 @@ public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<
 	/// <summary>
 	/// The fully qualified name of the class containing the execution point.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public String ClassName => this._className ??= this.GetClassName();
 	/// <summary>
 	/// The name of the source file containing the execution point
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public String FileName => this._fileName ??= this.GetFileName();
 	/// <summary>
 	/// The line number of the source line containing the execution point
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public Int32 LineNumber => this._lineNumber ??= this.GetLineNumber();
 	/// <summary>
 	/// The name of the method containing the execution point.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public String MethodName => this._methodName ??= this.GetMethodName();
 	/// <summary>
 	/// Indicates whether the method containing the execution point is a native method.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public Boolean NativeMethod => this._nativeMethod ??= this.IsNativeMethod();
 
 	/// <inheritdoc/>

@@ -46,7 +46,7 @@ public partial class JLocalObject
 	/// <inheritdoc/>
 	internal override void ClearValue() => this._lifetime.Dispose();
 	/// <inheritdoc/>
-	internal override Boolean IsAssignableTo<TDataType>() => this._lifetime.IsAssignableTo<TDataType>();
+	internal override Boolean IsAssignableTo<TDataType>() => this._lifetime.IsAssignableTo<TDataType>(this);
 	/// <inheritdoc/>
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
 		=> this._lifetime.SetAssignableTo<TDataType>(isAssignable);

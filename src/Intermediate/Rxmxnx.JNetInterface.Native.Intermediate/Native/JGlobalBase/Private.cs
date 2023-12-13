@@ -7,10 +7,14 @@ public partial class JGlobalBase
 	/// </summary>
 	private readonly AssignableTypeCache _assignableTypes = new();
 	/// <summary>
+	/// Indicates whether current instance is not disposable.
+	/// </summary>
+	private readonly Boolean _isDisposable;
+	/// <summary>
 	/// This collection stores the weak references to the <see cref="JLocalObject"/> associated with
 	/// this instance.
 	/// </summary>
-	private readonly ConcurrentDictionary<Int64, WeakReference<ObjectLifetime>> _objects = new();
+	private readonly ConcurrentDictionary<Int64, WeakReference<JObjectLifetime>> _objects = new();
 	/// <summary>
 	/// Internal <see cref="IntPtr"/> instance.
 	/// </summary>
@@ -28,4 +32,12 @@ public partial class JGlobalBase
 	/// Object metadata.
 	/// </summary>
 	private JObjectMetadata _objectMetadata;
+
+	/// <summary>
+	/// Indicates whether JNI execution is secure.
+	/// </summary>
+	/// <returns>
+	/// <see langword="true"/> if is secure execute JNI calls; otherwise, <see langword="false"/>.
+	/// </returns>
+	private Boolean JniSecure() => this._vm.GetEnvironment() is { } env && env.JniSecure();
 }

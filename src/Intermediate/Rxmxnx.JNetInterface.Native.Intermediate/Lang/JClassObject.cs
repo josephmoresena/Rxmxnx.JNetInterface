@@ -12,6 +12,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <summary>
 	/// Fully-qualified class name.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public CString Name
 	{
 		get
@@ -24,6 +25,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <summary>
 	/// JNI signature for the instances of this class.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public CString ClassSignature
 	{
 		get
@@ -36,6 +38,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <summary>
 	/// Internal class hash.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public String Hash
 	{
 		get

@@ -17,6 +17,7 @@
     <ItemGroup>
         <Using Include="System.Collections.Immutable"/>
         <Using Include="System.ComponentModel"/>
+        <Using Include="System.Diagnostics"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
         <Using Include="System.Numerics"/>
         <Using Include="System.Globalization"/>

@@ -342,7 +342,7 @@ public partial class JEnvironment
 			}
 		}
 
-		/// <inheritdoc cref="JGlobalBase.JniSecure"/>
+		/// <inheritdoc cref="IEnvironment.JniSecure"/>
 		public Boolean JniSecure() => this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId;
 
 		/// <summary>

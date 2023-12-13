@@ -5,11 +5,11 @@ public partial class JLocalObject : ILocalObject
 	static Type IDataType.FamilyType => typeof(JLocalObject);
 
 	/// <summary>
-	/// Internal <see cref="ObjectLifetime"/> instance.
+	/// Internal <see cref="JObjectLifetime"/> instance.
 	/// </summary>
-	private readonly ObjectLifetime _lifetime;
+	private readonly JObjectLifetime _lifetime;
 
-	ObjectLifetime ILocalObject.Lifetime => this._lifetime;
+	JObjectLifetime ILocalObject.Lifetime => this._lifetime;
 	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 	void ILocalObject.ProcessMetadata(JObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
 

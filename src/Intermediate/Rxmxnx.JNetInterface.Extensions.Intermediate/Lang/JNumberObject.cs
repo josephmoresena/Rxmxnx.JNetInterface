@@ -33,6 +33,7 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	/// <summary>
 	/// Internal value.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public TValue Value => this._value ??= this.GetValue<TValue>();
 
 	/// <inheritdoc/>

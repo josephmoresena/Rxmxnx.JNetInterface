@@ -66,59 +66,10 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </returns>
 	Boolean IsSameObject(JObject jObject, JObject? jOther);
 	/// <summary>
-	/// Creates a <typeparamref name="TObject"/> instance for <paramref name="localRef"/> reference
-	/// whose origin is a JNI argument.
+	/// Indicates whether JNI execution is secure.
 	/// </summary>
-	/// <typeparam name="TObject">A <see cref="JLocalObject"/> type.</typeparam>
-	/// <param name="localRef">A local object reference.</param>
-	/// <returns>A <typeparamref name="TObject"/> instance passed as JNI argument.</returns>
-	TObject? CreateParameterObject<TObject>(JObjectLocalRef localRef)
-		where TObject : JLocalObject, IReferenceType<TObject>;
-	/// <summary>
-	/// Creates a <see cref="JClassObject"/> instance for <paramref name="classRef"/> reference
-	/// whose origin is a JNI argument.
-	/// </summary>
-	/// <param name="classRef">A local class reference.</param>
-	/// <returns>A <see cref="JClassObject"/> instance passed as JNI argument.</returns>
-	JClassObject? CreateParameterObject(JClassLocalRef classRef);
-	/// <summary>
-	/// Creates a <see cref="JStringObject"/> instance for <paramref name="stringRef"/> reference
-	/// whose origin is a JNI argument.
-	/// </summary>
-	/// <param name="stringRef">A local string reference.</param>
-	/// <returns>A <see cref="JStringObject"/> instance passed as JNI argument.</returns>
-	JStringObject? CreateParameterObject(JStringLocalRef stringRef);
-	/// <summary>
-	/// Creates a <see cref="JArrayObject{TElement}"/> instance for <paramref name="arrayRef"/> reference
-	/// whose origin is a JNI argument.
-	/// </summary>
-	/// <param name="arrayRef">A local array reference.</param>
-	/// <returns>A <see cref="JArrayObject{TElement}"/> instance passed as JNI argument.</returns>
-	JArrayObject<TElement>? CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
-		where TElement : IObject, IDataType<TElement>;
-
-	/// <summary>
-	/// Retrieves a <see cref="JObjectLocalRef"/> reference from given object.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>A <see cref="JObjectLocalRef"/> reference from given object.</returns>
-	JObjectLocalRef GetReturn(JLocalObject? jLocal);
-	/// <summary>
-	/// Retrieves a <see cref="JClassLocalRef"/> reference from given class.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	/// <returns>A <see cref="JClassLocalRef"/> reference from given object.</returns>
-	JClassLocalRef GetReturn(JClassObject? jClass);
-	/// <summary>
-	/// Retrieves a <see cref="JArrayLocalRef"/> reference from given array.
-	/// </summary>
-	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
-	/// <returns>A <see cref="JArrayLocalRef"/> reference from given object.</returns>
-	JArrayLocalRef GetReturn(JArrayObject? jArray);
-	/// <summary>
-	/// Retrieves a <see cref="JThrowableLocalRef"/> reference from given throwable.
-	/// </summary>
-	/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance.</param>
-	/// <returns>A <see cref="JThrowableLocalRef"/> reference from given object.</returns>
-	JThrowableLocalRef GetReturn(JThrowableObject? jThrowable);
+	/// <returns>
+	/// <see langword="true"/> if is secure execute JNI calls; otherwise, <see langword="false"/>.
+	/// </returns>
+	Boolean JniSecure();
 }

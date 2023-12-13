@@ -82,26 +82,8 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		this._cache.CheckJniError();
 		return result == JBoolean.TrueValue;
 	}
-	TObject? IEnvironment.CreateParameterObject<TObject>(JObjectLocalRef localRef) where TObject : class
-	{
-		if (localRef == default) return default;
-		JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)JMetadataHelper.GetMetadata<TObject>();
-		using JLocalObject jLocal = new(this, localRef, false, this._cache.GetClass<TObject>());
-		return this._cache.Register(metadata.ParseInstance(jLocal) as TObject);
-	}
-	JClassObject? IEnvironment.CreateParameterObject(JClassLocalRef classRef) => throw new NotImplementedException();
-	JStringObject? IEnvironment.CreateParameterObject(JStringLocalRef stringRef)
-		=> this._cache.Register<JStringObject>(stringRef.Value != default ?
-			                                       new(this, stringRef, null, false) :
-			                                       default);
-	JArrayObject<TElement>? IEnvironment.CreateParameterArray<TElement>(JArrayLocalRef arrayRef)
-		=> this._cache.Register<JArrayObject<TElement>>(arrayRef.Value != default ?
-			                                                new(this, arrayRef, null, false) :
-			                                                default);
-	JObjectLocalRef IEnvironment.GetReturn(JLocalObject? jLocal) => throw new NotImplementedException();
-	JClassLocalRef IEnvironment.GetReturn(JClassObject? jClass) => throw new NotImplementedException();
-	JArrayLocalRef IEnvironment.GetReturn(JArrayObject? jArray) => throw new NotImplementedException();
-	JThrowableLocalRef IEnvironment.GetReturn(JThrowableObject? jThrowable) => throw new NotImplementedException();
+	/// <inheritdoc/>
+	public Boolean JniSecure() => this._cache.JniSecure();
 	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other) => this.Reference == other?.Reference;
 
 	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
@@ -113,9 +95,6 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._cache.GetHashCode();
-
-	/// <inheritdoc cref="JGlobalBase.JniSecure"/>
-	internal Boolean JniSecure() => this._cache.JniSecure();
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.

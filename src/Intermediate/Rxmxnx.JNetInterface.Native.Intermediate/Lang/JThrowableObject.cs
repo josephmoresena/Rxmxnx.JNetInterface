@@ -9,10 +9,12 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 	/// <summary>
 	/// Throwable message.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public String Message => this._message ??= this.GetMessage();
 	/// <summary>
 	/// Throwable stack trace.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public JStackTraceInfo[] StackTrace => this._stackTrace ??= this.GetStackTraceInfo();
 
 	/// <inheritdoc/>

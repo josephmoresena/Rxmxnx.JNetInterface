@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This object stores the assignable types cache for a java object instance.
 /// </summary>
-internal sealed record AssignableTypeCache
+internal sealed class AssignableTypeCache
 {
 	/// <summary>
 	/// Set of assignable types.

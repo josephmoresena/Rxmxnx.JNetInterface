@@ -10,10 +10,12 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 	/// Ordinal of this enumeration constant.
 	/// </summary>
 	/// <remarks>Its position in its enum declaration, where the initial constant is assigned an ordinal of zero</remarks>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public Int32 Ordinal => this._ordinal ??= this.GetOrdinal();
 	/// <summary>
 	/// Name of this enum constant, exactly as declared in its enum declaration.
 	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public String Name => this._name ??= this.GetName();
 
 	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();

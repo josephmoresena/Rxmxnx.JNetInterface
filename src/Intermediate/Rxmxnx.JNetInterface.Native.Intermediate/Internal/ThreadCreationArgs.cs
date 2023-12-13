@@ -3,10 +3,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This record stored information for Thread creation.
 /// </summary>
-internal sealed record ThreadCreationArgs
+internal sealed class ThreadCreationArgs
 {
 	/// <summary>
-	/// Thread Name;
+	/// Thread Name.
 	/// </summary>
 	public CString? Name { get; init; }
 	/// <summary>
@@ -34,7 +34,7 @@ internal sealed record ThreadCreationArgs
 	/// Retrieves the name for purposed thread.
 	/// </summary>
 	/// <param name="purpose">A <see cref="ThreadPurpose"/> value.</param>
-	/// <returns></returns>
+	/// <returns>A <see cref="CString"/> containing thread name.</returns>
 	private static CString GetThreadName(ThreadPurpose purpose)
 	{
 		CString prefix = purpose switch
