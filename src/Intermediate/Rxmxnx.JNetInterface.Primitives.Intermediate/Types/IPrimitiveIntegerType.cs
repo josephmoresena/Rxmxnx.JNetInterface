@@ -32,17 +32,15 @@ internal interface
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryReadBigEndian(ReadOnlySpan<Byte> source, Boolean isUnsigned, out TPrimitive value)
 	{
-		Boolean readResult = TValue.TryReadBigEndian(source, isUnsigned, out TValue valueResult);
-		value = readResult ? NativeUtilities.Transform<TValue, TPrimitive>(valueResult) : default;
-		return readResult;
+		Unsafe.SkipInit(out value);
+		return TValue.TryReadBigEndian(source, isUnsigned, out Unsafe.As<TPrimitive, TValue>(ref value));
 	}
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.TryReadLittleEndian(ReadOnlySpan{Byte}, Boolean, out TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryReadLittleEndian(ReadOnlySpan<Byte> source, Boolean isUnsigned, out TPrimitive value)
 	{
-		Boolean readResult = TValue.TryReadLittleEndian(source, isUnsigned, out TValue valueResult);
-		value = readResult ? NativeUtilities.Transform<TValue, TPrimitive>(valueResult) : default;
-		return readResult;
+		Unsafe.SkipInit(out value);
+		return TValue.TryReadLittleEndian(source, isUnsigned, out Unsafe.As<TPrimitive, TValue>(ref value));
 	}
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.TryWriteLittleEndian(Span{Byte}, out Int32)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
