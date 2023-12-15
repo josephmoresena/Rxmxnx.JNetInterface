@@ -6,6 +6,6 @@ internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
 	public static TPrimitive Modulus(in TValue left, in TValue right)
 	{
 		TValue result = left % right;
-		return NativeUtilities.Transform<TValue, TPrimitive>(result);
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
 	}
 }

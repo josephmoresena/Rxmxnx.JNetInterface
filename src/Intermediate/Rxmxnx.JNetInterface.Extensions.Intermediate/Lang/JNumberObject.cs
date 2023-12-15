@@ -40,7 +40,10 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	public override TPrimitive GetValue<TPrimitive>()
 	{
 		if (typeof(TPrimitive) == typeof(TValue) && this._value is not null)
-			return NativeUtilities.Transform<TValue, TPrimitive>(this._value.Value);
+		{
+			TValue result = this._value.Value;
+			return NativeUtilities.Transform<TValue, TPrimitive>(in result);
+		}
 		return base.GetValue<TPrimitive>();
 	}
 

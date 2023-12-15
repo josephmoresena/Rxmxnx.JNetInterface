@@ -69,7 +69,7 @@ partial struct {1}
 	/// <param name=""objRef"">A <see cref=""JObjectLocalRef""/> to convert.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal static {1} FromReference(in JObjectLocalRef objRef) 
-		=> NativeUtilities.Transform<JObjectLocalRef, {1}>(objRef);
+		=> NativeUtilities.Transform<JObjectLocalRef, {1}>(in objRef);
 }}
 #nullable restore";
 

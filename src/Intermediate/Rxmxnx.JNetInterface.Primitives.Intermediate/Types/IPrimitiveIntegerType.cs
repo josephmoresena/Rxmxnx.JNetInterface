@@ -23,11 +23,17 @@ internal interface
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.PopCount(TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static TPrimitive PopCount(in TValue value)
-		=> NativeUtilities.Transform<TValue, TPrimitive>(TValue.PopCount(value));
+	{
+		TValue result = TValue.PopCount(value);
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
+	}
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.TrailingZeroCount(TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static TPrimitive TrailingZeroCount(in TValue value)
-		=> NativeUtilities.Transform<TValue, TPrimitive>(TValue.PopCount(value));
+	{
+		TValue result = TValue.TrailingZeroCount(value);
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
+	}
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.TryReadBigEndian(ReadOnlySpan{Byte}, Boolean, out TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryReadBigEndian(ReadOnlySpan<Byte> source, Boolean isUnsigned, out TPrimitive value)

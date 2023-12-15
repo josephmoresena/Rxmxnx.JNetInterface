@@ -7,29 +7,27 @@ internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
 	public static TPrimitive Parse(String s, IFormatProvider? provider)
 	{
 		TValue result = TValue.Parse(s, provider);
-		return NativeUtilities.Transform<TValue, TPrimitive>(result);
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
 	}
 	/// <inheritdoc cref="ISpanParsable{TSelf}.Parse(ReadOnlySpan{Char}, IFormatProvider?)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static TPrimitive Parse(ReadOnlySpan<Char> s, IFormatProvider? provider)
 	{
 		TValue result = TValue.Parse(s, provider);
-		return NativeUtilities.Transform<TValue, TPrimitive>(result);
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
 	}
 	/// <inheritdoc cref="IParsable{TSelf}.TryParse(String, IFormatProvider?, out TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryParse([NotNullWhen(true)] String? s, IFormatProvider? provider, out TPrimitive result)
 	{
-		Boolean parseResult = TValue.TryParse(s, provider, out TValue valueResult);
-		result = parseResult ? NativeUtilities.Transform<TValue, TPrimitive>(valueResult) : default;
-		return parseResult;
+		Unsafe.SkipInit(out result);
+		return TValue.TryParse(s, provider, out Unsafe.As<TPrimitive, TValue>(ref result));
 	}
 	/// <inheritdoc cref="ISpanParsable{TSelf}.TryParse(ReadOnlySpan{Char}, IFormatProvider?, out TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean TryParse(ReadOnlySpan<Char> s, IFormatProvider? provider, out TPrimitive result)
 	{
-		Boolean parseResult = TValue.TryParse(s, provider, out TValue valueResult);
-		result = parseResult ? NativeUtilities.Transform<TValue, TPrimitive>(valueResult) : default;
-		return parseResult;
+		Unsafe.SkipInit(out result);
+		return TValue.TryParse(s, provider, out Unsafe.As<TPrimitive, TValue>(ref result));
 	}
 }

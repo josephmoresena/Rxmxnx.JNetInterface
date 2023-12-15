@@ -67,7 +67,7 @@ public partial class JEnvironment
 			{
 				jLocal.ClearValue();
 				this._objects.Remove(localRef);
-				if (isClass) this._classes.Unload(NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(localRef));
+				if (isClass) this._classes.Unload(NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef));
 			}
 			return !isClass;
 		}

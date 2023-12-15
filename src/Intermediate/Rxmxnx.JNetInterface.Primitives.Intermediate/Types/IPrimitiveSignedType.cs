@@ -20,5 +20,12 @@ internal interface
 	IMinMaxValue<TValue>, ISignedNumber<TValue>
 {
 	/// <inheritdoc cref="ISignedNumber{TSelf}.NegativeOne"/>
-	public static readonly TPrimitive NegativeOne = NativeUtilities.Transform<TValue, TPrimitive>(TValue.NegativeOne);
+	public static readonly TPrimitive NegativeOne = IPrimitiveSignedType<TPrimitive, TValue>.GetNegativeOne();
+
+	/// <inheritdoc cref="ISignedNumber{TSelf}.NegativeOne"/>
+	private static TPrimitive GetNegativeOne()
+	{
+		TValue result = TValue.NegativeOne;
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
+	}
 }
