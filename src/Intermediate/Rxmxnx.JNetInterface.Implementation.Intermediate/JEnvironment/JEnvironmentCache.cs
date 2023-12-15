@@ -35,71 +35,50 @@ public partial class JEnvironment
 			{ typeof(NewLocalRefDelegate), 20 },
 			{ typeof(EnsureLocalCapacityDelegate), 21 },
 			{ typeof(AllocObjectDelegate), 22 },
-			{ typeof(NewObjectDelegate), 23 },
-			{ typeof(NewObjectVDelegate), 24 },
+			
 			{ typeof(NewObjectADelegate), 25 },
 			{ typeof(GetObjectClassDelegate), 26 },
 			{ typeof(IsInstanceOfDelegate), 27 },
 			{ typeof(GetMethodIdDelegate), 28 },
-			{ typeof(CallObjectMethodDelegate), 29 },
-			{ typeof(CallObjectMethodVDelegate), 30 },
+			
 			{ typeof(CallObjectMethodADelegate), 31 },
-			{ typeof(CallBooleanMethodDelegate), 32 },
-			{ typeof(CallBooleanMethodVDelegate), 33 },
+			
 			{ typeof(CallBooleanMethodADelegate), 34 },
-			{ typeof(CallByteMethodDelegate), 35 },
-			{ typeof(CallByteMethodVDelegate), 36 },
+			
 			{ typeof(CallByteMethodADelegate), 37 },
-			{ typeof(CallCharMethodDelegate), 38 },
-			{ typeof(CallCharMethodVDelegate), 39 },
+			
 			{ typeof(CallCharMethodADelegate), 40 },
-			{ typeof(CallShortMethodDelegate), 41 },
-			{ typeof(CallShortMethodVDelegate), 42 },
+			
 			{ typeof(CallShortMethodADelegate), 43 },
-			{ typeof(CallIntMethodDelegate), 44 },
-			{ typeof(CallIntMethodVDelegate), 45 },
+			
 			{ typeof(CallIntMethodADelegate), 46 },
-			{ typeof(CallLongMethodDelegate), 47 },
-			{ typeof(CallLongMethodVDelegate), 48 },
+			
 			{ typeof(CallLongMethodADelegate), 49 },
-			{ typeof(CallFloatMethodDelegate), 50 },
-			{ typeof(CallFloatMethodVDelegate), 51 },
+			
 			{ typeof(CallFloatMethodADelegate), 52 },
-			{ typeof(CallDoubleMethodDelegate), 53 },
-			{ typeof(CallDoubleMethodVDelegate), 54 },
+			
 			{ typeof(CallDoubleMethodADelegate), 55 },
-			{ typeof(CallVoidMethodDelegate), 56 },
-			{ typeof(CallVoidMethodVDelegate), 57 },
+			
 			{ typeof(CallVoidMethodADelegate), 58 },
-			{ typeof(CallNonVirtualObjectMethodDelegate), 59 },
-			{ typeof(CallNonVirtualObjectMethodVDelegate), 60 },
+			
 			{ typeof(CallNonVirtualObjectMethodADelegate), 61 },
-			{ typeof(CallNonVirtualBooleanMethodDelegate), 62 },
-			{ typeof(CallNonVirtualBooleanMethodVDelegate), 63 },
+			
 			{ typeof(CallNonVirtualBooleanMethodADelegate), 64 },
-			{ typeof(CallNonVirtualByteMethodDelegate), 65 },
-			{ typeof(CallNonVirtualByteMethodVDelegate), 66 },
+			
 			{ typeof(CallNonVirtualByteMethodADelegate), 67 },
-			{ typeof(CallNonVirtualCharMethodDelegate), 68 },
-			{ typeof(CallNonVirtualCharMethodVDelegate), 69 },
+			
 			{ typeof(CallNonVirtualCharMethodADelegate), 70 },
-			{ typeof(CallNonVirtualShortMethodDelegate), 71 },
-			{ typeof(CallNonVirtualShortMethodVDelegate), 72 },
+			
 			{ typeof(CallNonVirtualShortMethodADelegate), 73 },
-			{ typeof(CallNonVirtualIntMethodDelegate), 74 },
-			{ typeof(CallNonVirtualIntMethodVDelegate), 75 },
+			
 			{ typeof(CallNonVirtualIntMethodADelegate), 76 },
-			{ typeof(CallNonVirtualLongMethodDelegate), 77 },
-			{ typeof(CallNonVirtualLongMethodVDelegate), 78 },
+			
 			{ typeof(CallNonVirtualLongMethodADelegate), 79 },
-			{ typeof(CallNonVirtualFloatMethodDelegate), 80 },
-			{ typeof(CallNonVirtualFloatMethodVDelegate), 81 },
+			
 			{ typeof(CallNonVirtualFloatMethodADelegate), 82 },
-			{ typeof(CallNonVirtualDoubleMethodDelegate), 83 },
-			{ typeof(CallNonVirtualDoubleMethodVDelegate), 84 },
+			
 			{ typeof(CallNonVirtualDoubleMethodADelegate), 85 },
-			{ typeof(CallNonVirtualVoidMethodDelegate), 86 },
-			{ typeof(CallNonVirtualVoidMethodVDelegate), 87 },
+			
 			{ typeof(CallNonVirtualVoidMethodADelegate), 88 },
 			{ typeof(GetFieldIdDelegate), 89 },
 			{ typeof(GetObjectFieldDelegate), 90 },
@@ -121,35 +100,25 @@ public partial class JEnvironment
 			{ typeof(SetFloatFieldDelegate), 106 },
 			{ typeof(SetDoubleFieldDelegate), 107 },
 			{ typeof(GetStaticMethodIdDelegate), 108 },
-			{ typeof(CallStaticObjectMethodDelegate), 109 },
-			{ typeof(CallStaticObjectMethodVDelegate), 110 },
+			
 			{ typeof(CallStaticObjectMethodADelegate), 111 },
-			{ typeof(CallStaticBooleanMethodDelegate), 112 },
-			{ typeof(CallStaticBooleanMethodVDelegate), 113 },
+			
 			{ typeof(CallStaticBooleanMethodADelegate), 114 },
-			{ typeof(CallStaticByteMethodDelegate), 115 },
-			{ typeof(CallStaticByteMethodVDelegate), 116 },
+			
 			{ typeof(CallStaticByteMethodADelegate), 117 },
-			{ typeof(CallStaticCharMethodDelegate), 118 },
-			{ typeof(CallStaticCharMethodVDelegate), 119 },
+			
 			{ typeof(CallStaticCharMethodADelegate), 120 },
-			{ typeof(CallStaticShortMethodDelegate), 121 },
-			{ typeof(CallStaticShortMethodVDelegate), 122 },
+			
 			{ typeof(CallStaticShortMethodADelegate), 123 },
-			{ typeof(CallStaticIntMethodDelegate), 124 },
-			{ typeof(CallStaticIntMethodVDelegate), 125 },
+			
 			{ typeof(CallStaticIntMethodADelegate), 126 },
-			{ typeof(CallStaticLongMethodDelegate), 127 },
-			{ typeof(CallStaticLongMethodVDelegate), 128 },
+			
 			{ typeof(CallStaticLongMethodADelegate), 129 },
-			{ typeof(CallStaticFloatMethodDelegate), 130 },
-			{ typeof(CallStaticFloatMethodVDelegate), 131 },
+			
 			{ typeof(CallStaticFloatMethodADelegate), 132 },
-			{ typeof(CallStaticDoubleMethodDelegate), 133 },
-			{ typeof(CallStaticDoubleMethodVDelegate), 134 },
+			
 			{ typeof(CallStaticDoubleMethodADelegate), 135 },
-			{ typeof(CallStaticVoidMethodDelegate), 136 },
-			{ typeof(CallStaticVoidMethodVDelegate), 137 },
+			
 			{ typeof(CallStaticVoidMethodADelegate), 138 },
 			{ typeof(GetStaticFieldIdDelegate), 139 },
 			{ typeof(GetStaticObjectFieldDelegate), 140 },
@@ -322,7 +291,7 @@ public partial class JEnvironment
 			this.Capacity = capacity;
 		}
 		/// <summary>
-		/// Checks JNI ocurred error.
+		/// Checks JNI occurred error.
 		/// </summary>
 		public void CheckJniError()
 		{
