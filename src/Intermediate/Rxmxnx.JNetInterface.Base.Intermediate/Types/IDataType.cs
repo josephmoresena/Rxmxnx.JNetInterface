@@ -35,7 +35,8 @@ public interface IDataType
 	/// <typeparam name="TDataType">Type of current java datatype.</typeparam>
 	/// <returns>The hash string for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static String GetHash<TDataType>() where TDataType : IDataType<TDataType> => TDataType.Metadata.Hash;
+	public static String GetHash<TDataType>() where TDataType : IDataType<TDataType> 
+        => IDataType.GetMetadata<TDataType>().Hash;
 }
 
 /// <summary>
