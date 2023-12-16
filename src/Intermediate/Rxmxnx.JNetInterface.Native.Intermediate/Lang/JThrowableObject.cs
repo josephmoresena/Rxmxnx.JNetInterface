@@ -15,7 +15,8 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 	/// Throwable stack trace.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public JStackTraceInfo[] StackTrace => this._stackTrace ??= this.GetStackTraceInfo();
+	public JStackTraceInfo[] StackTrace
+		=> this._stackTrace ??= this.Environment.WithFrame(5, this, JThrowableObject.GetStackTraceInfo);
 
 	/// <inheritdoc/>
 	internal JThrowableObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy,

@@ -72,4 +72,31 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <see langword="true"/> if is secure execute JNI calls; otherwise, <see langword="false"/>.
 	/// </returns>
 	Boolean JniSecure();
+
+	/// <summary>
+	/// Creates a new local reference frame and invokes <paramref name="action"/> inside of it.
+	/// </summary>
+	/// <param name="capacity">New local reference frame capacity.</param>
+	/// <param name="action">An action to invoke inside created new local reference.</param>
+	void WithFrame(Int32 capacity, Action<IEnvironment> action);
+	/// <summary>
+	/// Creates a new local reference frame and invokes <paramref name="action"/> inside of it.
+	/// </summary>
+	/// <param name="capacity">New local reference frame capacity.</param>
+	/// <param name="state">A state object.</param>
+	/// <param name="action">An action to invoke inside created new local reference.</param>
+	void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action);
+	/// <summary>
+	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
+	/// </summary>
+	/// <param name="capacity">New local reference frame capacity.</param>
+	/// <param name="func">A function to execute inside created new local reference.</param>
+	TResult WithFrame<TResult>(Int32 capacity, Func<IEnvironment, TResult> func);
+	/// <summary>
+	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
+	/// </summary>
+	/// <param name="capacity">New local reference frame capacity.</param>
+	/// <param name="state">A state object.</param>
+	/// <param name="func">A function to execute inside created new local reference.</param>
+	TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
 }

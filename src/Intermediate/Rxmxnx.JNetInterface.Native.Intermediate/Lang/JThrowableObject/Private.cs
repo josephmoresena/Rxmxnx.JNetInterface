@@ -43,12 +43,12 @@ public partial class JThrowableObject
 	/// Provides programmatic access to the stack trace information printed by printStackTrace();
 	/// </summary>
 	/// <returns>Throwable stack trace.</returns>
-	private JStackTraceInfo[] GetStackTraceInfo()
+	private static JStackTraceInfo[] GetStackTraceInfo(JLocalObject jThrowable)
 	{
 		JFunctionDefinition<JArrayObject<JStackTraceElementObject>>
 			definition = new(JThrowableObject.getStackTraceName);
 		using JArrayObject<JStackTraceElementObject> jArr =
-			JFunctionDefinition<JArrayObject<JStackTraceElementObject>>.Invoke(definition, this)!;
+			JFunctionDefinition<JArrayObject<JStackTraceElementObject>>.Invoke(definition, jThrowable)!;
 		JStackTraceInfo[] result = new JStackTraceInfo[jArr.Length];
 		for (Int32 i = 0; i < result.Length; i++)
 			result[i] = ((JStackTraceElementObjectMetadata)ILocalObject.CreateMetadata(jArr[i]!))!;

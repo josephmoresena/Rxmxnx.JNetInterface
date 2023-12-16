@@ -160,11 +160,11 @@ internal static class MetadataHelper
 		if (className.Length < 2 || className[0] != UnicodeObjectSignatures.ArraySignaturePrefix[0]) return false;
 		arrayHash = MetadataHelper.GetHashSequence(ref className);
 		if (!MetadataHelper.runtimeMetadata.TryGetValue(arrayHash.ToString(),
-		                                                 out JReferenceTypeMetadata? referenceMetadata))
+		                                                out JReferenceTypeMetadata? referenceMetadata))
 			referenceMetadata = MetadataHelper.IsArrayClass(className[1..], out _, out arrayTypeMetadata) ?
 				arrayTypeMetadata?.GetArrayMetadata() :
 				MetadataHelper.GetMetadata(JDataTypeMetadata.CreateInformationSequence(className[1..^1]).ToString())
-				               ?.GetArrayMetadata();
+				              ?.GetArrayMetadata();
 		arrayTypeMetadata = (JArrayTypeMetadata?)referenceMetadata;
 		MetadataHelper.Register(arrayTypeMetadata);
 		return true;
@@ -247,17 +247,16 @@ internal static class MetadataHelper
 		if (metadata.BaseMetadata is not null)
 		{
 			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(metadata, metadata.BaseMetadata),
-			                                        true);
+			                                       true);
 			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(metadata.BaseMetadata, metadata),
-			                                        default);
+			                                       default);
 			MetadataHelper.Register(metadata.BaseMetadata);
 		}
 		foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
 		{
-			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(metadata, interfaceMetadata),
-			                                        true);
+			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(metadata, interfaceMetadata), true);
 			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(interfaceMetadata, metadata),
-			                                        default);
+			                                       default);
 			MetadataHelper.Register(interfaceMetadata);
 		}
 		if (metadata is JArrayTypeMetadata arrayMetadata)

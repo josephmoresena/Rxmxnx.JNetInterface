@@ -77,7 +77,7 @@ public abstract class JReferenceObject : JObject
 	/// Indicates whether current instance is default value.
 	/// </summary>
 	internal virtual Boolean IsDefaultInstance() => this.AsSpan().AsValue<IntPtr>() == IntPtr.Zero;
-	
+
 	/// <summary>
 	/// Sets <see cref="JValue.Empty"/> as the current instance value.
 	/// </summary>

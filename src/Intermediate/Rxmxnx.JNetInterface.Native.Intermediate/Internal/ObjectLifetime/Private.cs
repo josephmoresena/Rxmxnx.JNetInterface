@@ -15,6 +15,10 @@ internal partial class ObjectLifetime
 	/// </summary>
 	private readonly Int64 _id;
 	/// <summary>
+	/// Indicates whether current instance is not disposable.
+	/// </summary>
+	private readonly Boolean _isDisposable;
+	/// <summary>
 	/// Indicates whether the this instance is disposed.
 	/// </summary>
 	private readonly IMutableWrapper<Boolean> _isDisposed;
@@ -43,10 +47,6 @@ internal partial class ObjectLifetime
 	/// Current <see cref="JWeak"/> instance.
 	/// </summary>
 	private JWeak? _weak;
-	/// <summary>
-	/// Indicates whether current instance is not disposable.
-	/// </summary>
-	private readonly Boolean _isDisposable;
 
 	/// <summary>
 	/// Secondary <see cref="ObjectLifetime"/>

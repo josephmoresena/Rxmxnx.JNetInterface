@@ -18,7 +18,7 @@ public partial class JLocalObject
 
 	IVirtualMachine ILocalObject.VirtualMachine => this._lifetime.Environment.VirtualMachine;
 	Boolean ILocalObject.IsDummy => this.IsDummy;
-	
+
 	/// <summary>
 	/// Interprets internal current value as <typeparamref name="TReference"/> value.
 	/// </summary>
@@ -27,7 +27,7 @@ public partial class JLocalObject
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal ref readonly TReference InternalAs<TReference>() where TReference : unmanaged, INativeType<TReference>
 		=> ref base.As<TReference>();
-	
+
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>

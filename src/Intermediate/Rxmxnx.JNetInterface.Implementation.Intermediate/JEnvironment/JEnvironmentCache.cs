@@ -35,50 +35,29 @@ public partial class JEnvironment
 			{ typeof(NewLocalRefDelegate), 20 },
 			{ typeof(EnsureLocalCapacityDelegate), 21 },
 			{ typeof(AllocObjectDelegate), 22 },
-			
 			{ typeof(NewObjectADelegate), 25 },
 			{ typeof(GetObjectClassDelegate), 26 },
 			{ typeof(IsInstanceOfDelegate), 27 },
 			{ typeof(GetMethodIdDelegate), 28 },
-			
 			{ typeof(CallObjectMethodADelegate), 31 },
-			
 			{ typeof(CallBooleanMethodADelegate), 34 },
-			
 			{ typeof(CallByteMethodADelegate), 37 },
-			
 			{ typeof(CallCharMethodADelegate), 40 },
-			
 			{ typeof(CallShortMethodADelegate), 43 },
-			
 			{ typeof(CallIntMethodADelegate), 46 },
-			
 			{ typeof(CallLongMethodADelegate), 49 },
-			
 			{ typeof(CallFloatMethodADelegate), 52 },
-			
 			{ typeof(CallDoubleMethodADelegate), 55 },
-			
 			{ typeof(CallVoidMethodADelegate), 58 },
-			
 			{ typeof(CallNonVirtualObjectMethodADelegate), 61 },
-			
 			{ typeof(CallNonVirtualBooleanMethodADelegate), 64 },
-			
 			{ typeof(CallNonVirtualByteMethodADelegate), 67 },
-			
 			{ typeof(CallNonVirtualCharMethodADelegate), 70 },
-			
 			{ typeof(CallNonVirtualShortMethodADelegate), 73 },
-			
 			{ typeof(CallNonVirtualIntMethodADelegate), 76 },
-			
 			{ typeof(CallNonVirtualLongMethodADelegate), 79 },
-			
 			{ typeof(CallNonVirtualFloatMethodADelegate), 82 },
-			
 			{ typeof(CallNonVirtualDoubleMethodADelegate), 85 },
-			
 			{ typeof(CallNonVirtualVoidMethodADelegate), 88 },
 			{ typeof(GetFieldIdDelegate), 89 },
 			{ typeof(GetObjectFieldDelegate), 90 },
@@ -100,25 +79,15 @@ public partial class JEnvironment
 			{ typeof(SetFloatFieldDelegate), 106 },
 			{ typeof(SetDoubleFieldDelegate), 107 },
 			{ typeof(GetStaticMethodIdDelegate), 108 },
-			
 			{ typeof(CallStaticObjectMethodADelegate), 111 },
-			
 			{ typeof(CallStaticBooleanMethodADelegate), 114 },
-			
 			{ typeof(CallStaticByteMethodADelegate), 117 },
-			
 			{ typeof(CallStaticCharMethodADelegate), 120 },
-			
 			{ typeof(CallStaticShortMethodADelegate), 123 },
-			
 			{ typeof(CallStaticIntMethodADelegate), 126 },
-			
 			{ typeof(CallStaticLongMethodADelegate), 129 },
-			
 			{ typeof(CallStaticFloatMethodADelegate), 132 },
-			
 			{ typeof(CallStaticDoubleMethodADelegate), 135 },
-			
 			{ typeof(CallStaticVoidMethodADelegate), 138 },
 			{ typeof(GetStaticFieldIdDelegate), 139 },
 			{ typeof(GetStaticObjectFieldDelegate), 140 },
@@ -224,9 +193,9 @@ public partial class JEnvironment
 		/// </summary>
 		private readonly DelegateHelperCache _delegateCache;
 		/// <summary>
-		/// Dictionary of objects.
+		/// Object cache.
 		/// </summary>
-		private readonly Dictionary<JObjectLocalRef, WeakReference<ObjectLifetime>> _objects = new();
+		private LocalCache _objects;
 
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
 		public IVirtualMachine VirtualMachine { get; }
@@ -241,7 +210,7 @@ public partial class JEnvironment
 		/// <summary>
 		/// Ensured capacity.
 		/// </summary>
-		public Int32? Capacity { get; private set; }
+		public Int32? Capacity => this._objects.Capacity;
 
 		/// <summary>
 		/// Constructor.
@@ -254,6 +223,7 @@ public partial class JEnvironment
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
 			this._delegateCache = new();
+			this._objects = new();
 			this.ClassObject = this.Register(classObject);
 			this.Thread = Thread.CurrentThread;
 			this.Version = JEnvironmentCache.GetVersion(envRef);
@@ -288,7 +258,7 @@ public partial class JEnvironment
 			JResult result = ensureLocalCapacity(this.Reference, capacity);
 			if (result != JResult.Ok)
 				throw new JniException(result);
-			this.Capacity = capacity;
+			this._objects.Capacity = capacity;
 		}
 		/// <summary>
 		/// Checks JNI occurred error.
@@ -313,7 +283,8 @@ public partial class JEnvironment
 
 		/// <inheritdoc cref="IEnvironment.JniSecure"/>
 		public Boolean JniSecure() => this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId;
-
+		/// <inheritdoc cref="JEnvironment.SetObjectCache(LocalCache?)"/>
+		public void SetObjectCache(LocalCache localCache) { this._objects = localCache; }
 		/// <summary>
 		/// Retrieves a <see cref="JVirtualMachine"/> from given <paramref name="jEnv"/>.
 		/// </summary>

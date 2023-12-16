@@ -68,5 +68,6 @@ internal sealed class ClassCache<TClass> : ClassCache where TClass : JReferenceO
 	/// <returns>
 	/// <see langword="true"/> if the hash was found in the cache; otherwise, <see langword="false"/>.
 	/// </returns>
-	public Boolean TryGetValue(String hash, [NotNullWhen(true)] out TClass? jClass) => this._classes.TryGetValue(hash, out jClass);
+	public Boolean TryGetValue(String hash, [NotNullWhen(true)] out TClass? jClass)
+		=> this._classes.TryGetValue(hash, out jClass);
 }

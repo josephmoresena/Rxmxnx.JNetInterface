@@ -38,7 +38,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// Retrieves current value as bytes.
 	/// </summary>
 	public ReadOnlySpan<Byte> Span => this._value.Reference.AsBytes();
-	
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -84,7 +84,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 		}
 		finally
 		{
-			if(!this._isDisposable) this._isDisposed.Value = true;
+			if (!this._isDisposable) this._isDisposed.Value = true;
 		}
 	}
 	/// <summary>
@@ -291,5 +291,18 @@ internal sealed partial class ObjectLifetime : IDisposable
 	{
 		if (!this._isDisposable || this.Secondary is null || this.Secondary._isDisposable) return this;
 		return this.Secondary;
+	}
+	/// <summary>
+	/// Indicates whether current instance has a valid <typeparamref name="TGlobal"/> instance.
+	/// </summary>
+	/// <typeparam name="TGlobal">A <see cref="JGlobalBase"/> type.</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if current instance has a valid <typeparamref name="TGlobal"/> instance.;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public Boolean HasValidGlobal<TGlobal>() where TGlobal : JGlobalBase
+	{
+		TGlobal? jGlobal = this._global as TGlobal ?? this._weak as TGlobal;
+		return jGlobal is not null && !jGlobal.IsDefault && jGlobal.IsValid(this._env);
 	}
 }

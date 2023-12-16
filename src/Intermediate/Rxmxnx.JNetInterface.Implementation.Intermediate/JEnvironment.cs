@@ -84,6 +84,44 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	}
 	/// <inheritdoc/>
 	public Boolean JniSecure() => this._cache.JniSecure();
+	void IEnvironment.WithFrame(Int32 capacity, Action<IEnvironment> action)
+	{
+		using LocalFrame localFrame = new(this, capacity);
+		this._cache.CheckJniError();
+		action(localFrame.Environment);
+	}
+	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
+	{
+		using LocalFrame localFrame = new(this, capacity);
+		this._cache.CheckJniError();
+		action(state);
+	}
+	TResult IEnvironment.WithFrame<TResult>(Int32 capacity, Func<IEnvironment, TResult> func)
+	{
+		TResult? result;
+		JGlobalRef globalRef;
+		using (LocalFrame localFrame = new(this, capacity))
+		{
+			this._cache.CheckJniError();
+			result = func(localFrame.Environment);
+			this.CreateTempGlobalRef(result, out globalRef);
+		}
+		this.CreateLocalRef(globalRef, result);
+		return result;
+	}
+	TResult IEnvironment.WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
+	{
+		TResult? result;
+		JGlobalRef globalRef;
+		using (LocalFrame localFrame = new(this, capacity))
+		{
+			this._cache.CheckJniError();
+			result = func(state);
+			this.CreateTempGlobalRef(result, out globalRef);
+		}
+		this.CreateLocalRef(globalRef, result);
+		return result;
+	}
 	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other) => this.Reference == other?.Reference;
 
 	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
@@ -95,6 +133,73 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._cache.GetHashCode();
+
+	/// <summary>
+	/// Deletes local reference.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	internal void Delete(JObjectLocalRef localRef)
+	{
+		if (!this.JniSecure()) return;
+		DeleteLocalRefDelegate deleteLocalRef = this._cache.GetDelegate<DeleteLocalRefDelegate>();
+		deleteLocalRef(this.Reference, localRef);
+	}
+	/// <summary>
+	/// Sets current object cache.
+	/// </summary>
+	/// <param name="localCache">A <see cref="LocalCache"/> instance.</param>
+	internal void SetObjectCache(LocalCache localCache) => this._cache.SetObjectCache(localCache);
+
+	/// <summary>
+	/// Creates a new local reference frame.
+	/// </summary>
+	/// <param name="capacity">Frame capacity.</param>
+	/// <exception cref="InvalidOperationException"/>
+	/// <exception cref="JniException"/>
+	private void CreateLocalFrame(Int32 capacity)
+	{
+		if (!this.JniSecure()) throw new InvalidOperationException();
+		PushLocalFrameDelegate pushLocalFrame = this._cache.GetDelegate<PushLocalFrameDelegate>();
+		JResult jResult = pushLocalFrame(this.Reference, capacity);
+		if (jResult != JResult.Ok) throw new JniException(jResult);
+	}
+	/// <summary>
+	/// Creates a new local reference for <paramref name="result"/>.
+	/// </summary>
+	/// <typeparam name="TResult">Result type.</typeparam>
+	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
+	/// <param name="result">A <typeparamref name="TResult"/> instance.</param>
+	private void CreateLocalRef<TResult>(JGlobalRef globalRef, TResult result)
+	{
+		if (globalRef == default) return;
+		try
+		{
+			NewLocalRefDelegate newLocalRef = this._cache.GetDelegate<NewLocalRefDelegate>();
+			JObjectLocalRef localRef = newLocalRef(this.Reference, globalRef.Value);
+			JLocalObject jLocal = this._cache.Register(result as JLocalObject)!;
+			jLocal.SetValue(localRef);
+		}
+		finally
+		{
+			DeleteGlobalRefDelegate deleteGlobalRef = this._cache.GetDelegate<DeleteGlobalRefDelegate>();
+			deleteGlobalRef(this.Reference, globalRef);
+		}
+	}
+	/// <summary>
+	/// Creates a new global reference to <paramref name="result"/>.
+	/// </summary>
+	/// <typeparam name="TResult">Result type.</typeparam>
+	/// <param name="result">A <typeparamref name="TResult"/> instance.</param>
+	/// <param name="globalRef">Output. A temporal <see cref="JGlobalRef"/> reference.</param>
+	private void CreateTempGlobalRef<TResult>(TResult result, out JGlobalRef globalRef)
+	{
+		globalRef = default;
+		if (result is not JLocalObject { IsDefault: false, } jLocal ||
+		    (jLocal as ILocalObject).Lifetime.HasValidGlobal<JGlobal>()) return;
+		NewGlobalRefDelegate newGlobalRef = this._cache.GetDelegate<NewGlobalRefDelegate>();
+		globalRef = newGlobalRef(this.Reference, jLocal.As<JObjectLocalRef>());
+		this._cache.CheckJniError();
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
