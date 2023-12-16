@@ -57,6 +57,21 @@ public partial class JEnvironment
 			this._references.Clear();
 			this.ClearCache(this._env, false);
 		}
+		/// <summary>
+		/// Creates a new global reference to <paramref name="result"/>.
+		/// </summary>
+		/// <typeparam name="TResult">Result type.</typeparam>
+		/// <param name="result">A <typeparamref name="TResult"/> instance.</param>
+		/// <param name="globalRef">Output. A temporal <see cref="JGlobalRef"/> reference.</param>
+		/// <returns>A <see cref="JLocalObject"/> instance.</returns>
+		public JLocalObject? GetLocalResult<TResult>(TResult result, out JGlobalRef globalRef)
+		{
+			globalRef = default;
+			if (result is not JLocalObject { IsDefault: false, } jLocal ||
+			    (jLocal as ILocalObject).Lifetime.HasValidGlobal<JGlobal>()) return default;
+			globalRef = this._env.CreateGlobalRef(jLocal);
+			return jLocal;
+		}
 
 		/// <inheritdoc/>
 		public override void Remove(JObjectLocalRef localRef)

@@ -198,7 +198,7 @@ public partial class JEnvironment
 		private LocalCache _objects;
 
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
-		public IVirtualMachine VirtualMachine { get; }
+		public JVirtualMachine VirtualMachine { get; }
 		/// <inheritdoc cref="JEnvironment.Reference"/>
 		public JEnvironmentRef Reference { get; }
 		/// <inheritdoc cref="IEnvironment.Version"/>
@@ -218,7 +218,7 @@ public partial class JEnvironment
 		/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
 		/// <param name="classObject">The <see cref="JClassObject"/> for <c>java.lang.Class&lt;?&gt;</c>.</param>
-		public JEnvironmentCache(IVirtualMachine vm, JEnvironmentRef envRef, JClassObject classObject)
+		public JEnvironmentCache(JVirtualMachine vm, JEnvironmentRef envRef, JClassObject classObject)
 		{
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
@@ -285,6 +285,11 @@ public partial class JEnvironment
 		public Boolean JniSecure() => this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId;
 		/// <inheritdoc cref="JEnvironment.SetObjectCache(LocalCache?)"/>
 		public void SetObjectCache(LocalCache localCache) { this._objects = localCache; }
+		/// <summary>
+		/// Release all references.
+		/// </summary>
+		public void FreeReferences(JEnvironment env) => this._objects.ClearCache(env, true);
+		
 		/// <summary>
 		/// Retrieves a <see cref="JVirtualMachine"/> from given <paramref name="jEnv"/>.
 		/// </summary>

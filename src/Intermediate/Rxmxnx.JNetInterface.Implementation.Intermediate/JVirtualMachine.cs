@@ -9,7 +9,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	public JVirtualMachineRef Reference => this._cache.Reference;
 
 	IEnvironment? IVirtualMachine.GetEnvironment() => this.GetEnvironment();
-	IEnvironment IVirtualMachine.GetEnvironment(JEnvironmentRef envRef) => this._cache.ThreadCache.Get(envRef, out _);
+	
 	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose)
 	{
 		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
@@ -22,7 +22,16 @@ public partial class JVirtualMachine : IVirtualMachine
 		{
 			Name = threadName, ThreadGroup = threadGroup, Version = version, IsDaemon = true,
 		});
-
+	
+	/// <summary>
+	/// Retrieves the <see cref="IEnvironment"/> instance that <paramref name="envRef"/>
+	/// references to.
+	/// </summary>
+	/// <param name="envRef"><see cref="JEnvironmentRef"/> reference to JNI interface.</param>
+	/// <returns>
+	/// The <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>.
+	/// </returns>
+	internal JEnvironment GetEnvironment(JEnvironmentRef envRef) => this._cache.ThreadCache.Get(envRef, out _);
 	/// <summary>
 	/// Detaches the current thread from a JVM.
 	/// </summary>

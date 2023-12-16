@@ -29,7 +29,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef envRef)
-		=> this._cache = new(vm, envRef, new(this, IDataType.GetMetadata<JClassObject>(), false));
+		=> this._cache = new((JVirtualMachine)vm, envRef, new(this, IDataType.GetMetadata<JClassObject>(), false));
 
 	/// <summary>
 	/// Constructor.
@@ -100,26 +100,28 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	{
 		TResult? result;
 		JGlobalRef globalRef;
+		JLocalObject? localResult;
 		using (LocalFrame localFrame = new(this, capacity))
 		{
 			this._cache.CheckJniError();
 			result = func(localFrame.Environment);
-			this.CreateTempGlobalRef(result, out globalRef);
+			localResult = localFrame.GetLocalResult(result, out globalRef);
 		}
-		this.CreateLocalRef(globalRef, result);
+		this.CreateLocalRef(globalRef, localResult);
 		return result;
 	}
 	TResult IEnvironment.WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
 	{
 		TResult? result;
 		JGlobalRef globalRef;
+		JLocalObject? localResult;
 		using (LocalFrame localFrame = new(this, capacity))
 		{
 			this._cache.CheckJniError();
 			result = func(state);
-			this.CreateTempGlobalRef(result, out globalRef);
+			localResult = localFrame.GetLocalResult(result, out globalRef);
 		}
-		this.CreateLocalRef(globalRef, result);
+		this.CreateLocalRef(globalRef, localResult);
 		return result;
 	}
 	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other) => this.Reference == other?.Reference;
@@ -166,12 +168,11 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	/// <summary>
 	/// Creates a new local reference for <paramref name="result"/>.
 	/// </summary>
-	/// <typeparam name="TResult">Result type.</typeparam>
 	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
-	/// <param name="result">A <typeparamref name="TResult"/> instance.</param>
-	private void CreateLocalRef<TResult>(JGlobalRef globalRef, TResult result)
+	/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
+	private void CreateLocalRef(JGlobalRef globalRef, JLocalObject? result)
 	{
-		if (globalRef == default) return;
+		if (globalRef == default || result is not null) return;
 		try
 		{
 			NewLocalRefDelegate newLocalRef = this._cache.GetDelegate<NewLocalRefDelegate>();
@@ -196,9 +197,17 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		globalRef = default;
 		if (result is not JLocalObject { IsDefault: false, } jLocal ||
 		    (jLocal as ILocalObject).Lifetime.HasValidGlobal<JGlobal>()) return;
+		
+	}
+	/// <summary>
+	/// Creates a new global reference to <paramref name="jLocal"/>.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	private JGlobalRef CreateGlobalRef(JLocalObject jLocal) { 
 		NewGlobalRefDelegate newGlobalRef = this._cache.GetDelegate<NewGlobalRefDelegate>();
-		globalRef = newGlobalRef(this.Reference, jLocal.As<JObjectLocalRef>());
-		this._cache.CheckJniError();
+		JGlobalRef globalRef = newGlobalRef(this.Reference, jLocal.As<JObjectLocalRef>());
+		if (globalRef == default) this._cache.CheckJniError();
+		return globalRef;
 	}
 
 	/// <summary>
@@ -208,7 +217,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	/// <returns>The <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.</returns>
 	public static IEnvironment GetEnvironment(JEnvironmentRef reference)
 	{
-		IVirtualMachine vm = JEnvironmentCache.GetVirtualMachine(reference);
+		JVirtualMachine vm = (JVirtualMachine)JEnvironmentCache.GetVirtualMachine(reference);
 		return vm.GetEnvironment(reference);
 	}
 

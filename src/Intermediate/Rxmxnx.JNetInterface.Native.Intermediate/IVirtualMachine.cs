@@ -23,15 +23,6 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <returns>The <see cref="IEnvironment"/> instance for current thread.</returns>
 	IEnvironment? GetEnvironment();
 	/// <summary>
-	/// Retrieves the <see cref="IEnvironment"/> instance that <paramref name="envRef"/>
-	/// references to.
-	/// </summary>
-	/// <param name="envRef"><see cref="JEnvironmentRef"/> reference to JNI interface.</param>
-	/// <returns>
-	/// The <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>.
-	/// </returns>
-	IEnvironment GetEnvironment(JEnvironmentRef envRef);
-	/// <summary>
 	/// Attaches the current thread to the virtual machine.
 	/// </summary>
 	/// <param name="threadName">A name for current thread.</param>
