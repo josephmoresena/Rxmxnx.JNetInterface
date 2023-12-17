@@ -35,10 +35,9 @@ public partial class JClassObject
 	/// <param name="hash">Internal hash.</param>
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
 	internal JClassObject(IEnvironment env, JClassLocalRef jClassRef, String? hash, Boolean isDummy) : base(
-		env, jClassRef.Value, isDummy)
+		env, jClassRef.Value, isDummy, env.ClassProvider.ClassObject)
 	{
 		this._hash ??= hash;
-		JLocalObject.LoadClassObject(this, hash);
 	}
 	/// <summary>
 	/// Constructor.
@@ -47,6 +46,6 @@ public partial class JClassObject
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
 	internal JClassObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
 	{
-		JLocalObject.LoadClassObject(this);
+		(this as ILocalObject).Lifetime.SetClass(env.ClassProvider.ClassObject);
 	}
 }
