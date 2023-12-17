@@ -61,6 +61,13 @@ public partial class JVirtualMachine
 		lifetime.SetGlobal(jGlobal);
 		return jGlobal;
 	}
+	/// <summary>
+	/// Retrieves <see cref="AccessCache"/> for <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="AccessCache"/> instance.</returns>
+	internal AccessCache? GetAccess(JClassLocalRef classRef)
+		=> this._cache.GlobalClassCache[classRef] ?? this._cache.WeakClassCache[classRef];
 	
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.

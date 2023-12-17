@@ -14,15 +14,6 @@ public interface IReferenceProvider
 	JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	/// <summary>
-	/// Reloads the local reference of given object if the current local reference is not loaded but has a
-	/// global reference.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>
-	/// <see langword="true"/> if the local reference was loaded; otherwise, <see langword="false"/>.
-	/// </returns>
-	Boolean ReloadObject(JLocalObject jLocal);
-	/// <summary>
 	/// Creates a <typeparamref name="TGlobal"/> instance loaded for given <see cref="JLocalObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TGlobal">The type of global object.</typeparam>

@@ -61,12 +61,6 @@ public partial class JEnvironment
 			//this._classes[jClassObject.As<>()]
 			return default!;
 		}
-		private void ReloadClass(JClassObject jClass)
-		{
-			if (!jClass.IsDefault) return;
-			JClassLocalRef classRef = jClass.Reference;
-			//this._classes[]
-		}
 
 		private JClassObject GetObjectClass(CString className, String hash)
 		{

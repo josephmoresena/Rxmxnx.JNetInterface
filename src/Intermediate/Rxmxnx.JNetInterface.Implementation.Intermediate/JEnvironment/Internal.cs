@@ -36,11 +36,9 @@ public partial class JEnvironment
 	internal JGlobalRef GetClassGlobalRef(CString className)
 	{
 		JClassLocalRef classRef = className.WithSafeFixed(this._cache, JEnvironmentCache.FindClass);
-		if (classRef.Value == default) this._cache.CheckJniError();
 		try
 		{
 			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value);
-			if (classRef.Value == default) this._cache.CheckJniError();
 			return globalRef;
 		}
 		finally

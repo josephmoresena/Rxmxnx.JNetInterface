@@ -329,6 +329,7 @@ public partial class JEnvironment
 			{
 				NewLocalRefDelegate newLocalRef = this.GetDelegate<NewLocalRefDelegate>();
 				JObjectLocalRef localRef = newLocalRef(this.Reference, globalRef.Value);
+				if (localRef == default) this.CheckJniError();
 				JLocalObject jLocal = this.Register(result)!;
 				jLocal.SetValue(localRef);
 			}
@@ -361,6 +362,34 @@ public partial class JEnvironment
 			if (jLocal is JClassObject)
 				this._classes.Unload(
 					NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(jLocal.InternalReference));
+		}
+		/// <summary>
+		/// Retrieves <see cref="AccessCache"/> for <paramref name="jClass"/>.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <returns>A <see cref="AccessCache"/> instance.</returns>
+		/// <exception cref="ArgumentException">Throw if <see cref="AccessCache"/> is not found.</exception>
+		public AccessCache GetAccess(JClassObject jClass)
+		{
+			JClassLocalRef classRef = this.ReloadClass(jClass);
+			return this._classes[classRef] ?? this.VirtualMachine.GetAccess(classRef) ?? throw new ArgumentException("Invalid class object.", nameof(jClass));
+		}
+		/// <summary>
+		/// Reloads current class object.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <returns>Current <see cref="JClassLocalRef"/> reference.</returns>
+		private JClassLocalRef ReloadClass(JClassObject? jClass)
+		{
+			if (jClass is null) return default;
+			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
+			if (classRef.Value == default)
+			{
+				classRef = jClass.Name.WithSafeFixed(this, JEnvironmentCache.FindClass);
+				jClass.SetValue(classRef);
+				this.Register(jClass);
+			}
+			return classRef;
 		}
 
 		/// <summary>

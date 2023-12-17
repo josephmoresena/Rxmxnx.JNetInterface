@@ -30,19 +30,6 @@ public partial class JEnvironment
 				_ => throw new InvalidOperationException("Object is not primitive."),
 			};
 		}
-		public Boolean ReloadObject(JLocalObject jLocal)
-		{
-			ValidationUtilities.ThrowIfDummy(jLocal);
-
-			JClassObject? jClass = jLocal as JClassObject;
-			JObjectLocalRef localRef = jLocal.InternalReference;
-			JObjectLocalRef globalRef = jLocal.As<JObjectLocalRef>();
-
-			if (jClass?.Hash is not null) return true;
-			if (!this.JniSecure() || localRef != default || globalRef == default) return false;
-			this.CreateLocalRef(jLocal.As<JGlobalRef>(), jLocal, false);
-			return true;
-		}
 		public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
@@ -162,7 +149,6 @@ public partial class JEnvironment
 					try
 					{
 						localRef = jClass.Name.WithSafeFixed(this, JEnvironmentCache.FindClass).Value;
-						if (localRef == default) this.CheckJniError();
 						this.ReloadGlobal(result, localRef);
 					}
 					finally
@@ -184,7 +170,6 @@ public partial class JEnvironment
 		private void ReloadGlobal(JGlobal jGlobal, JObjectLocalRef localRef)
 		{
 			JGlobalRef globalRef = this.CreateGlobalRef(localRef);
-			if (globalRef == default) this.CheckJniError();
 			jGlobal.SetValue(globalRef);
 		}
 	}
