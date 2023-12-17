@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for a reference <see cref="IDataType"/> type.
 /// </summary>
-public abstract record JDataTypeMetadata
+public abstract record JDataTypeMetadata : ITypeInformation
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
 	private readonly CString _arraySignature;
@@ -16,11 +16,15 @@ public abstract record JDataTypeMetadata
 	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 	private readonly CString _signature;
 
-	/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
+	/// <inheritdoc />
 	public CString ClassName => this._className;
-	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
+	/// <inheritdoc />
 	public CString Signature => this._signature;
-	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
+	/// <inheritdoc />
+	public String Hash => this._sequence.ToString();
+	/// <summary>
+	/// Array signature for current type.
+	/// </summary>
 	public CString ArraySignature => this._arraySignature;
 
 	/// <summary>
@@ -42,10 +46,6 @@ public abstract record JDataTypeMetadata
 	/// Size of current type in bytes.
 	/// </summary>
 	public abstract Int32 SizeOf { get; }
-	/// <summary>
-	/// Current datatype hash.
-	/// </summary>
-	public String Hash => this._sequence.ToString();
 
 	/// <summary>
 	/// Constructor.

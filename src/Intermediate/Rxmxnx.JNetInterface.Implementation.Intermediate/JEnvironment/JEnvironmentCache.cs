@@ -375,6 +375,55 @@ public partial class JEnvironment
 			return this._classes[classRef] ?? this.VirtualMachine.GetAccess(classRef) ?? throw new ArgumentException("Invalid class object.", nameof(jClass));
 		}
 		/// <summary>
+		/// Attempts to get the value associated with the specified hash from the cache.
+		/// </summary>
+		/// <param name="hash">The hash class to get.</param>
+		/// <param name="jClass"></param>
+		/// <returns>
+		/// <see langword="true"/> if the hash was found in the cache; otherwise, <see langword="false"/>.
+		/// </returns>
+		public Boolean TryGetClass(String hash, [NotNullWhen(true)] out JClassObject? jClass)
+			=> this._classes.TryGetValue(hash, out jClass);
+		/// <summary>
+		/// Retrieves object class reference.
+		/// </summary>
+		/// <param name="localRef">Object instance to get class.</param>
+		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+		internal JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
+		{
+			GetObjectClassDelegate getObjectClass = this.GetDelegate<GetObjectClassDelegate>();
+			JClassLocalRef classRef = getObjectClass(this.Reference, localRef);
+			if (classRef.Value == default) this.CheckJniError();
+			return classRef;
+		}
+		/// <summary>
+		/// Creates an object from given reference.
+		/// </summary>
+		/// <typeparam name="TResult">A <see cref="IDataType"/> type.</typeparam>
+		/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="register">Indicates whether object must be registered.</param>
+		/// <returns>A <typeparamref name="TResult"/> instance.</returns>
+		internal TResult? CreateObject<TResult>(JObjectLocalRef localRef, Boolean register)
+			where TResult : IDataType<TResult>
+		{
+			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			this.CheckJniError();
+			if (localRef == default) return default;
+			if (IDataType.GetMetadata<TResult>().Modifier == JTypeModifier.Final)
+				return this.Cast<TResult>(new(env, localRef, false, JClassObject.GetClass<TResult>(env)), register);
+			JClassLocalRef classRef = this.GetObjectClass(localRef);
+			try
+			{
+				JClassObject jClass = env.GetClass(classRef);
+				return this.Cast<TResult>(new(env, localRef, false, jClass), register);
+			}
+			finally
+			{
+				this.DeleteLocalRef(classRef.Value);
+			}
+		}
+		
+		/// <summary>
 		/// Reloads current class object.
 		/// </summary>
 		/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>

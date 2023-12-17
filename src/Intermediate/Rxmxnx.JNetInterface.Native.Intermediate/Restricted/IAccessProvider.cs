@@ -8,11 +8,11 @@ public partial interface IAccessProvider
 	/// <summary>
 	/// Retrieves a field from given <see cref="JLocalObject"/> instance.
 	/// </summary>
-	/// <typeparam name="TResult"><see cref="IDataType"/> type of field result.</typeparam>
+	/// <typeparam name="TField"><see cref="IDataType"/> type of field result.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
-	/// <returns><typeparamref name="TResult"/> field instance.</returns>
-	TResult? GetField<TResult>(JLocalObject jLocal, JFieldDefinition definition) where TResult : IDataType<TResult>;
+	/// <returns><typeparamref name="TField"/> field instance.</returns>
+	TField? GetField<TField>(JLocalObject jLocal, JFieldDefinition definition) where TField : IDataType<TField>;
 	/// <summary>
 	/// Sets a static field to given <see cref="JLocalObject"/> instance.
 	/// </summary>

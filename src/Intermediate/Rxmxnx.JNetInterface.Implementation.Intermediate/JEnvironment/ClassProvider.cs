@@ -25,12 +25,12 @@ public partial class JEnvironment
 		public JClassObject GetClass(CString className)
 		{
 			String hash = MetadataHelper.GetHashSequence(ref className).ToString();
-			return this.GetObjectClass(className, hash);
+			return this.GetClass(className, hash);
 		}
 		public JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TDataType>();
-			return this.GetObjectClass(metadata.ClassName, metadata.Hash);
+			return this.GetClass(metadata.ClassName, metadata.Hash);
 		}
 		public JClassObject GetObjectClass(JLocalObject jLocal) => throw new NotImplementedException();
 		public JClassObject? GetSuperClass(JClassObject jClass) => throw new NotImplementedException();
@@ -55,14 +55,7 @@ public partial class JEnvironment
 			throw new NotImplementedException();
 		}
 
-		public CStringSequence GetClassInfo(JClassLocalRef classRef)
-		{
-			JClassObject jClassObject = this.ClassObject;
-			//this._classes[jClassObject.As<>()]
-			return default!;
-		}
-
-		private JClassObject GetObjectClass(CString className, String hash)
+		private JClassObject GetClass(CString className, String hash)
 		{
 			if (this._classes.TryGetValue(hash, out JClassObject? result)) return result;
 			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);

@@ -143,6 +143,18 @@ internal static class MetadataHelper
 		return JDataTypeMetadata.CreateInformationSequence(classNameF);
 	}
 	/// <summary>
+	/// Retrieves the class has from current <paramref name="className"/>.
+	/// </summary>
+	/// <param name="className">A java type name.</param>
+	/// <returns>Hash for given type.</returns>
+	public static CStringSequence GetHashSequence(ReadOnlySpan<Byte> className)
+	{
+		CString classNameF = !className.Contains(MetadataHelper.classNameEscape[0]) ?
+			CString.Create(className) :
+			CString.Create(CString.CreateUnsafe(className.GetUnsafeIntPtr(), className.Length, true).Select(MetadataHelper.EscapeClassNameChar).ToArray());
+		return JDataTypeMetadata.CreateInformationSequence(classNameF);
+	}
+	/// <summary>
 	/// Indicates whether current class name is for an array.
 	/// </summary>
 	/// <param name="className">A Java class name.</param>

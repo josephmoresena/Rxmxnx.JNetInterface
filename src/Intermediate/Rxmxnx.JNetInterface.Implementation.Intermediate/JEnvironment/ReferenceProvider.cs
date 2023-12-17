@@ -104,13 +104,13 @@ public partial class JEnvironment
 		[return: NotNullIfNotNull(nameof(jObject))]
 		public TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
 		{
+			ValidationUtilities.ThrowIfDummy(jObject as JReferenceObject);
 			if (jObject is JClassObject jClass)
 			{
 				this._classes[jClass.Hash] = jClass;
 				this.VirtualMachine.LoadGlobal(jClass);
 			}
 			JLocalObject? jLocal = jObject as JLocalObject;
-			ValidationUtilities.ThrowIfDummy(jLocal);
 			if (!JObject.IsNullOrDefault(jLocal))
 				this._objects[jLocal.As<JObjectLocalRef>()] = (jLocal as ILocalObject).Lifetime.GetCacheable();
 			return jObject;
@@ -121,16 +121,17 @@ public partial class JEnvironment
 		/// </summary>
 		/// <typeparam name="TObject">A <see cref="IDataType{TObject}"/> type.</typeparam>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+		/// <param name="register">Indicates whether object must be registered.</param>
 		/// <returns>A <typeparamref name="TObject"/> instance.</returns>
-		private TObject? Cast<TObject>(JLocalObject? jLocal) where TObject : IDataType<TObject>
+		private TObject? Cast<TObject>(JLocalObject? jLocal, Boolean register = true) where TObject : IDataType<TObject>
 		{
 			if (jLocal is null || jLocal.IsDefault) return default;
 			if (typeof(TObject) == typeof(JLocalObject))
-				return this.Register((TObject)(Object)jLocal);
+				return register ? this.Register((TObject)(Object)jLocal) : (TObject)(Object)jLocal;
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TObject>();
 			TObject result = (TObject)(Object)metadata.ParseInstance(jLocal);
 			jLocal.Dispose();
-			return this.Register(result);
+			return register? this.Register(result) : result;
 		}
 		/// <summary>
 		/// Loads <see cref="JGlobal"/> instance for <paramref name="jClass"/>

@@ -20,13 +20,20 @@ public partial class JClassObject
 	/// </summary>
 	/// <param name="jClassClassObject"><see cref="JClassObject"/> instance.</param>
 	/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
-	internal JClassObject(JClassObject jClassClassObject, JDataTypeMetadata metadata) : base(
+	internal JClassObject(JClassObject jClassClassObject, ITypeInformation metadata) : base(
 		jClassClassObject.Environment, default, jClassClassObject.IsDummy, jClassClassObject)
 	{
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jClassClassObject"><see cref="JClassObject"/> instance.</param>
+	/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
+	internal JClassObject(JClassObject jClassClassObject, JClassLocalRef localRef) : base(
+		jClassClassObject.Environment, localRef.Value, jClassClassObject.IsDummy, jClassClassObject) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>

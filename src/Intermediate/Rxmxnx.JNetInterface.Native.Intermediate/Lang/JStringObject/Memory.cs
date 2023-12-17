@@ -40,7 +40,7 @@ public partial class JStringObject
 	/// </summary>
 	/// <param name="referenceKind">Reference memory kind.</param>
 	/// <returns>A <see cref="JNativeMemory{Char}"/> instance.</returns>
-	public JNativeMemory<Char> GetUtf8Chars(JMemoryReferenceKind referenceKind = JMemoryReferenceKind.Local)
+	public JNativeMemory<Byte> GetUtf8Chars(JMemoryReferenceKind referenceKind = JMemoryReferenceKind.Local)
 	{
 		IVirtualMachine vm = this.Environment.VirtualMachine;
 		JNativeMemoryHandler handler = referenceKind switch

@@ -18,17 +18,6 @@ public partial class JEnvironment
 	/// <param name="localCache">A <see cref="LocalCache"/> instance.</param>
 	internal void SetObjectCache(LocalCache localCache) => this._cache.SetObjectCache(localCache);
 	/// <summary>
-	/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
-	/// </summary>
-	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	/// <returns>A <see cref="JClassObject"/> instance.</returns>
-	internal JClassObject? GetClass(JClassLocalRef classRef)
-	{
-		if (classRef.Value == default) return default;
-		//String hash = jClass.Hash;
-		return default;
-	}
-	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
 	/// <param name="className">Class name.</param>
@@ -111,5 +100,21 @@ public partial class JEnvironment
 		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetStaticMethodId);
 		if (methodId == default) this._cache.CheckJniError();
 		return methodId;
+	}
+	/// <summary>
+	/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
+	/// <returns>A <see cref="JClassObject"/> instance.</returns>
+	internal JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference = false)
+	{
+		using JStringObject jString = JClassObject.GetClassName(this, classRef);
+		using JNativeMemory<Byte> utf8Text = jString.GetUtf8Chars(JMemoryReferenceKind.Local);
+		CStringSequence sequence = MetadataHelper.GetHashSequence(utf8Text.Values);
+		if (!this._cache.TryGetClass(sequence.ToString(), out JClassObject? jClass))
+			jClass = new(this._cache.ClassObject, new TypeInformation(sequence));
+		if (keepReference) jClass.SetValue(classRef);
+		return this._cache.Register(jClass);
 	}
 }
