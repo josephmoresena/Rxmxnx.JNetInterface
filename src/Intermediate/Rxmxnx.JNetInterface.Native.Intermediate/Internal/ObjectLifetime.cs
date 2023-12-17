@@ -305,4 +305,9 @@ internal sealed partial class ObjectLifetime : IDisposable
 		TGlobal? jGlobal = this._global as TGlobal ?? this._weak as TGlobal;
 		return jGlobal is not null && !jGlobal.IsDefault && jGlobal.IsValid(this._env);
 	}
+	/// <summary>
+	/// Sets current <see cref="JGlobal"/> object.
+	/// </summary>
+	/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
+	public void SetGlobal(JGlobal jGlobal) => this._global = jGlobal;
 }

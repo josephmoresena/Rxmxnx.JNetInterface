@@ -29,7 +29,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef envRef)
-		=> this._cache = new((JVirtualMachine)vm, envRef, new(this, IDataType.GetMetadata<JClassObject>(), false));
+		=> this._cache = new((JVirtualMachine)vm, envRef, new(this));
 
 	/// <summary>
 	/// Constructor.
@@ -62,6 +62,19 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		GetObjectRefTypeDelegate getObjectRefType = this._cache.GetDelegate<GetObjectRefTypeDelegate>();
 		JReferenceType result = getObjectRefType(this._cache.Reference, jRefObj.As<JObjectLocalRef>());
 		this._cache.CheckJniError();
+		if (result == JReferenceType.InvalidRefType)
+		{
+			if (jRefObj is JGlobalBase jGlobal) (this.VirtualMachine as JVirtualMachine)!.Remove(jGlobal);
+			else this._cache.Remove(jRefObj as JLocalObject);
+			jRefObj.ClearValue();
+		}
+		else if (this.IsSame(jRefObj.As<JObjectLocalRef>(), default))
+		{
+			if (jRefObj is JGlobalBase jGlobal) this._cache.Unload(jGlobal);
+			else this._cache.Unload(jRefObj as JLocalObject);
+			jRefObj.ClearValue();
+		}
+
 		return result;
 	}
 	Boolean IEnvironment.IsSameObject(JObject jObject, JObject? jOther)
@@ -76,11 +89,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 
 		ValidationUtilities.ThrowIfDummy(jRefObj);
 		ValidationUtilities.ThrowIfDummy(jRefOther);
-		IsSameObjectDelegate isSameObject = this._cache.GetDelegate<IsSameObjectDelegate>();
-		Byte result = isSameObject(this._cache.Reference, jRefObj.As<JObjectLocalRef>(),
-		                           jRefOther.As<JObjectLocalRef>());
-		this._cache.CheckJniError();
-		return result == JBoolean.TrueValue;
+		return this.IsSame(jRefObj.As<JObjectLocalRef>(), jRefOther.As<JObjectLocalRef>());
 	}
 	/// <inheritdoc/>
 	public Boolean JniSecure() => this._cache.JniSecure();
@@ -107,7 +116,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 			result = func(localFrame.Environment);
 			localResult = localFrame.GetLocalResult(result, out globalRef);
 		}
-		this.CreateLocalRef(globalRef, localResult);
+		this._cache.CreateLocalRef(globalRef, localResult);
 		return result;
 	}
 	TResult IEnvironment.WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
@@ -121,13 +130,20 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 			result = func(state);
 			localResult = localFrame.GetLocalResult(result, out globalRef);
 		}
-		this.CreateLocalRef(globalRef, localResult);
+		this._cache.CreateLocalRef(globalRef, localResult);
 		return result;
 	}
 	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other) => this.Reference == other?.Reference;
 
 	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
 		=> other is not null && this._cache.Equals(other._cache);
+	private Boolean IsSame(JObjectLocalRef localRef, JObjectLocalRef otherRef)
+	{
+		IsSameObjectDelegate isSameObject = this._cache.GetDelegate<IsSameObjectDelegate>();
+		Byte result = isSameObject(this._cache.Reference, localRef, otherRef);
+		this._cache.CheckJniError();
+		return result == JBoolean.TrueValue;
+	}
 
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj)
@@ -151,6 +167,103 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	/// </summary>
 	/// <param name="localCache">A <see cref="LocalCache"/> instance.</param>
 	internal void SetObjectCache(LocalCache localCache) => this._cache.SetObjectCache(localCache);
+	/// <summary>
+	/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JClassObject"/> instance.</returns>
+	internal JClassObject? GetClass(JClassLocalRef classRef)
+	{
+		if (classRef.Value == default) return default;
+		//String hash = jClass.Hash;
+		return default;
+	}
+	/// <summary>
+	/// Retrieves a global reference for given class name.
+	/// </summary>
+	/// <param name="className">Class name.</param>
+	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
+	internal JGlobalRef GetClassGlobalRef(CString className)
+	{
+		JClassLocalRef classRef = className.WithSafeFixed(this._cache, JEnvironmentCache.FindClass);
+		if (classRef.Value == default) this._cache.CheckJniError();
+		try
+		{
+			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value);
+			if (classRef.Value == default) this._cache.CheckJniError();
+			return globalRef;
+		}
+		finally
+		{
+			this._cache.DeleteLocalRef(classRef.Value);
+		}
+	}
+	/// <summary>
+	/// Deletes <paramref name="globalRef"/>.
+	/// </summary>
+	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
+	internal void DeleteGlobalRef(JGlobalRef globalRef)
+	{
+		DeleteGlobalRefDelegate deleteGlobalRef = this._cache.GetDelegate<DeleteGlobalRefDelegate>();
+		deleteGlobalRef(this.Reference, globalRef);
+	}
+	/// <summary>
+	/// Deletes <paramref name="weakRef"/>.
+	/// </summary>
+	/// <param name="weakRef">A <see cref="JWeakRef"/> reference.</param>
+	internal void DeleteWeakGlobalRef(JWeakRef weakRef)
+	{
+		DeleteWeakGlobalRefDelegate deleteWeakGlobalRef = this._cache.GetDelegate<DeleteWeakGlobalRefDelegate>();
+		deleteWeakGlobalRef(this.Reference, weakRef);
+	}
+	/// <summary>
+	/// Retrieves field identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
+	internal JFieldId GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+	{
+		JFieldId fieldId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetFieldId);
+		if (fieldId == default) this._cache.CheckJniError();
+		return fieldId;
+	}
+	/// <summary>
+	/// Retrieves static field identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
+	internal JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+	{
+		JFieldId fieldId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetStaticFieldId);
+		if (fieldId == default) this._cache.CheckJniError();
+		return fieldId;
+	}
+	/// <summary>
+	/// Retrieves method identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JMethodDefinition"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
+	internal JMethodId GetMethodId(JMethodDefinition definition, JClassLocalRef classRef)
+	{
+		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetMethodId);
+		if (methodId == default) this._cache.CheckJniError();
+		return methodId;
+	}
+	/// <summary>
+	/// Retrieves static method identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JMethodDefinition"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
+	internal JMethodId GetStaticMethodId(JMethodDefinition definition, JClassLocalRef classRef)
+	{
+		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetStaticMethodId);
+		if (methodId == default) this._cache.CheckJniError();
+		return methodId;
+	}
 
 	/// <summary>
 	/// Creates a new local reference frame.
@@ -166,49 +279,11 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		if (jResult != JResult.Ok) throw new JniException(jResult);
 	}
 	/// <summary>
-	/// Creates a new local reference for <paramref name="result"/>.
-	/// </summary>
-	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
-	/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
-	private void CreateLocalRef(JGlobalRef globalRef, JLocalObject? result)
-	{
-		if (globalRef == default || result is not null) return;
-		try
-		{
-			NewLocalRefDelegate newLocalRef = this._cache.GetDelegate<NewLocalRefDelegate>();
-			JObjectLocalRef localRef = newLocalRef(this.Reference, globalRef.Value);
-			JLocalObject jLocal = this._cache.Register(result as JLocalObject)!;
-			jLocal.SetValue(localRef);
-		}
-		finally
-		{
-			DeleteGlobalRefDelegate deleteGlobalRef = this._cache.GetDelegate<DeleteGlobalRefDelegate>();
-			deleteGlobalRef(this.Reference, globalRef);
-		}
-	}
-	/// <summary>
-	/// Creates a new global reference to <paramref name="result"/>.
-	/// </summary>
-	/// <typeparam name="TResult">Result type.</typeparam>
-	/// <param name="result">A <typeparamref name="TResult"/> instance.</param>
-	/// <param name="globalRef">Output. A temporal <see cref="JGlobalRef"/> reference.</param>
-	private void CreateTempGlobalRef<TResult>(TResult result, out JGlobalRef globalRef)
-	{
-		globalRef = default;
-		if (result is not JLocalObject { IsDefault: false, } jLocal ||
-		    (jLocal as ILocalObject).Lifetime.HasValidGlobal<JGlobal>()) return;
-		
-	}
-	/// <summary>
 	/// Creates a new global reference to <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JGlobalRef CreateGlobalRef(JLocalObject jLocal) { 
-		NewGlobalRefDelegate newGlobalRef = this._cache.GetDelegate<NewGlobalRefDelegate>();
-		JGlobalRef globalRef = newGlobalRef(this.Reference, jLocal.As<JObjectLocalRef>());
-		if (globalRef == default) this._cache.CheckJniError();
-		return globalRef;
-	}
+	private JGlobalRef CreateGlobalRef(JReferenceObject jLocal)
+		=> this._cache.CreateGlobalRef(jLocal.As<JObjectLocalRef>());
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
@@ -226,5 +301,61 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	{
 		if (obj is null || other is null) return default;
 		return obj.Equals(other);
+	}
+	/// <summary>
+	/// Retrieves field identifier for given definition in given class.
+	/// </summary>
+	/// <param name="memoryList">Definition information.</param>
+	/// <param name="args">Environment and Class instance.</param>
+	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
+	private static JFieldId GetFieldId(ReadOnlyFixedMemoryList memoryList,
+		(JEnvironment env, JClassLocalRef classRef) args)
+	{
+		GetFieldIdDelegate getFieldId = args.env._cache.GetDelegate<GetFieldIdDelegate>();
+		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)memoryList[0].Pointer;
+		ReadOnlyValPtr<Byte> signaturePtr = (ReadOnlyValPtr<Byte>)memoryList[1].Pointer;
+		return getFieldId(args.env.Reference, args.classRef, namePtr, signaturePtr);
+	}
+	/// <summary>
+	/// Retrieves static field identifier for given definition in given class.
+	/// </summary>
+	/// <param name="memoryList">Definition information.</param>
+	/// <param name="args">Environment and Class instance.</param>
+	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
+	private static JFieldId GetStaticFieldId(ReadOnlyFixedMemoryList memoryList,
+		(JEnvironment env, JClassLocalRef classRef) args)
+	{
+		GetStaticFieldIdDelegate getStaticFieldId = args.env._cache.GetDelegate<GetStaticFieldIdDelegate>();
+		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)memoryList[0].Pointer;
+		ReadOnlyValPtr<Byte> signaturePtr = (ReadOnlyValPtr<Byte>)memoryList[1].Pointer;
+		return getStaticFieldId(args.env.Reference, args.classRef, namePtr, signaturePtr);
+	}
+	/// <summary>
+	/// Retrieves method identifier for given definition in given class.
+	/// </summary>
+	/// <param name="memoryList">Definition information.</param>
+	/// <param name="args">Environment and Class instance.</param>
+	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
+	private static JMethodId GetMethodId(ReadOnlyFixedMemoryList memoryList,
+		(JEnvironment env, JClassLocalRef classRef) args)
+	{
+		GetMethodIdDelegate getMethodId = args.env._cache.GetDelegate<GetMethodIdDelegate>();
+		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)memoryList[0].Pointer;
+		ReadOnlyValPtr<Byte> signaturePtr = (ReadOnlyValPtr<Byte>)memoryList[1].Pointer;
+		return getMethodId(args.env.Reference, args.classRef, namePtr, signaturePtr);
+	}
+	/// <summary>
+	/// Retrieves static method identifier for given definition in given class.
+	/// </summary>
+	/// <param name="memoryList">Definition information.</param>
+	/// <param name="args">Environment and Class instance.</param>
+	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
+	private static JMethodId GetStaticMethodId(ReadOnlyFixedMemoryList memoryList,
+		(JEnvironment env, JClassLocalRef classRef) args)
+	{
+		GetStaticMethodIdDelegate getStaticMethodId = args.env._cache.GetDelegate<GetStaticMethodIdDelegate>();
+		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)memoryList[0].Pointer;
+		ReadOnlyValPtr<Byte> signaturePtr = (ReadOnlyValPtr<Byte>)memoryList[1].Pointer;
+		return getStaticMethodId(args.env.Reference, args.classRef, namePtr, signaturePtr);
 	}
 }

@@ -37,6 +37,17 @@ public record JObjectMetadata
 	}
 
 	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="objectClassName">Class name of current instance.</param>
+	/// <param name="objectSignature">Class signature of current instance.</param>
+	internal JObjectMetadata(CString objectClassName, CString objectSignature)
+	{
+		this._objectClassName = objectClassName;
+		this._objectSignature = objectSignature;
+	}
+
+	/// <summary>
 	/// Retrieves the java class for current object.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>

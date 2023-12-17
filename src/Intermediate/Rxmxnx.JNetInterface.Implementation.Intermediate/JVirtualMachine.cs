@@ -9,7 +9,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	public JVirtualMachineRef Reference => this._cache.Reference;
 
 	IEnvironment? IVirtualMachine.GetEnvironment() => this.GetEnvironment();
-	
+
 	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose)
 	{
 		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
@@ -22,7 +22,7 @@ public partial class JVirtualMachine : IVirtualMachine
 		{
 			Name = threadName, ThreadGroup = threadGroup, Version = version, IsDaemon = true,
 		});
-	
+
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance that <paramref name="envRef"/>
 	/// references to.
@@ -40,6 +40,28 @@ public partial class JVirtualMachine : IVirtualMachine
 		DetachCurrentThreadDelegate del = this._cache.GetDelegate<DetachCurrentThreadDelegate>();
 		del(this._cache.Reference);
 	}
+	/// <summary>
+	/// Registers a <see cref="JGlobal"/> instance in current VM.
+	/// </summary>
+	/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
+	[return: NotNullIfNotNull(nameof(jGlobal))]
+	internal JGlobal? Register(JGlobal? jGlobal) => this._cache.Register(jGlobal);
+	/// <summary>
+	/// Registers a <see cref="JWeak"/> instance in current VM.
+	/// </summary>
+	/// <param name="jWeak">A <see cref="JWeak"/> instance.</param>
+	[return: NotNullIfNotNull(nameof(jWeak))]
+	internal JWeak? Register(JWeak? jWeak) => this._cache.Register(jWeak);
+	/// <summary>
+	/// Removes <paramref name="jGlobal"/> from current VM cache.
+	/// </summary>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	internal void Remove(JGlobalBase? jGlobal)
+	{
+		if (jGlobal is null || jGlobal.IsDefault) return;
+		if (jGlobal is JGlobal) this._cache.Remove(jGlobal.As<JGlobalRef>());
+		else if (jGlobal is JWeak) this._cache.Remove(jGlobal.As<JWeakRef>());
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
@@ -52,7 +74,11 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// Removes the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
 	/// <param name="reference">A <see cref="JVirtualMachineRef"/> reference.</param>
-	public static void RemoveVirtualMachine(JVirtualMachineRef reference) => ReferenceCache.Instance.Remove(reference);
+	public static void RemoveVirtualMachine(JVirtualMachineRef reference)
+	{
+		ReferenceCache.Instance.Get(reference, out _)._cache.ClearCache();
+		ReferenceCache.Instance.Remove(reference);
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
@@ -92,5 +118,18 @@ public partial class JVirtualMachine : IVirtualMachine
 	{
 		JVirtualMachine vm = ReferenceCache.Instance.Get(vmRef, out _);
 		vm._cache.ThreadCache.Remove(envRef);
+	}
+	/// <summary>
+	/// Loads global instance in given <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JGlobal"/> instance.</returns>
+	public JGlobal LoadGlobal(JClassObject jClass)
+	{
+		ObjectLifetime lifetime = (jClass as ILocalObject).Lifetime;
+		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
+			jGlobal = new(this, new(jClass), false, default);
+		lifetime.SetGlobal(jGlobal);
+		return jGlobal;
 	}
 }

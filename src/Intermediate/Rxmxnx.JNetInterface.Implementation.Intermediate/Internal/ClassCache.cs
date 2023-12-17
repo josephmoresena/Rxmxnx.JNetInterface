@@ -3,12 +3,17 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Class cache.
 /// </summary>
-internal abstract class ClassCache
+internal class ClassCache
 {
 	/// <summary>
 	/// Class access dictionary.
 	/// </summary>
 	private readonly ConcurrentDictionary<JClassLocalRef, AccessCache> _access = new();
+	/// <summary>
+	/// Retrieves access cache.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	public AccessCache? this[JClassLocalRef classRef] => this._access.GetValueOrDefault(classRef);
 
 	/// <summary>
 	/// Loads current class object.
@@ -16,21 +21,23 @@ internal abstract class ClassCache
 	/// <param name="jClass">A <see cref="JReferenceObject"/> class object.</param>
 	protected void Load(JReferenceObject jClass)
 	{
-		switch (jClass)
+		JClassLocalRef classRef = jClass switch
 		{
-			case JLocalObject jLocal when jLocal.InternalReference != default:
-				this._access[jLocal.InternalAs<JClassLocalRef>()] = new();
-				break;
-			case JGlobalBase { IsDefault: false, }:
-				this._access[jClass.As<JClassLocalRef>()] = new();
-				break;
-		}
+			JLocalObject jLocal when jLocal.InternalReference != default => jLocal.InternalAs<JClassLocalRef>(),
+			JGlobalBase { IsDefault: false, } => jClass.As<JClassLocalRef>(),
+			_ => default,
+		};
+		if (classRef.Value != default) this._access[classRef] = new(classRef);
 	}
 	/// <summary>
 	/// Unloads current class.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	public void Unload(JClassLocalRef classRef) => this._access.TryRemove(classRef, out _);
+	/// <summary>
+	/// Clears current cache.
+	/// </summary>
+	public void Clear() => this._access.Clear();
 }
 
 /// <summary>
@@ -57,6 +64,7 @@ internal sealed class ClassCache<TClass> : ClassCache where TClass : JReferenceO
 			this.Load(value);
 		}
 	}
+
 	/// <summary>
 	/// Attempts to get the value associated with the specified hash from the cache.
 	/// </summary>

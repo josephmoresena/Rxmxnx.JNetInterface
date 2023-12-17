@@ -40,39 +40,72 @@ public partial class JEnvironment
 
 			if (jClass?.Hash is not null) return true;
 			if (!this.JniSecure() || localRef != default || globalRef == default) return false;
-
-			NewLocalRefDelegate newLocalRef = this.GetDelegate<NewLocalRefDelegate>();
-			localRef = newLocalRef(this.Reference, globalRef);
-			this.CheckJniError();
-			jLocal.SetValue(localRef);
-
+			this.CreateLocalRef(jLocal.As<JGlobalRef>(), jLocal, false);
 			return true;
 		}
 		public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
-			=> throw new NotImplementedException();
-		public Boolean Unload(JLocalObject jLocal)
 		{
+			ValidationUtilities.ThrowIfDummy(jLocal);
+			if (typeof(TGlobal) == typeof(JWeak))
+			{
+				NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();
+				JWeakRef weakRef = newWeakGlobalRef(this.Reference, jLocal.As<JObjectLocalRef>());
+				if (weakRef == default) this.CheckJniError();
+				JWeak jWeak = this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
+				return (jWeak as TGlobal)!;
+			}
+			if (this.LoadGlobal(jLocal as JClassObject) is TGlobal result) return result;
+			JObjectMetadata metadata = ILocalObject.CreateMetadata(jLocal);
+			if (metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.JClassObjectClassName))
+			{
+				JClassObject jClass = this.GetClass(UnicodeClassNames.JClassObjectClassName);
+				result = (TGlobal)(Object)this.LoadGlobal(jClass);
+			}
+			else
+			{
+				JGlobal jGlobal = this.VirtualMachine.Register(
+					new JGlobal(this.VirtualMachine, metadata, false,
+					            this.CreateGlobalRef(jLocal.As<JObjectLocalRef>())));
+				result = (TGlobal)(Object)jGlobal;
+			}
+			return result;
+		}
+		public Boolean Unload(JLocalObject? jLocal)
+		{
+			if (jLocal is null) return false;
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.InternalReference;
 			try
 			{
-				if (localRef != default && this.JniSecure())
-				{
-					DeleteLocalRefDelegate deleteLocalRef = this.GetDelegate<DeleteLocalRefDelegate>();
-					deleteLocalRef(this.Reference, localRef);
-				}
+				this.DeleteLocalRef(localRef);
 			}
 			finally
 			{
+				this.Remove(jLocal);
 				jLocal.ClearValue();
-				this._objects.Remove(localRef);
-				if (isClass)
-					this._classes.Unload(NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef));
 			}
 			return !isClass;
 		}
-		public Boolean Unload(JGlobalBase jGlobal) => throw new NotImplementedException();
+		public Boolean Unload(JGlobalBase jGlobal)
+		{
+			ValidationUtilities.ThrowIfDummy(jGlobal);
+			if (jGlobal.IsDefault || this._mainClasses.IsMainGlobal(jGlobal as JGlobal)) return false;
+			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			try
+			{
+				if (jGlobal is JGlobal)
+					env.DeleteGlobalRef(jGlobal.As<JGlobalRef>());
+				else
+					env.DeleteWeakGlobalRef(jGlobal.As<JWeakRef>());
+			}
+			finally
+			{
+				jGlobal.ClearValue();
+				this.VirtualMachine.Remove(jGlobal);
+			}
+			return true;
+		}
 		public Boolean IsParameter(JLocalObject jLocal) => throw new NotImplementedException();
 
 		/// <summary>
@@ -84,7 +117,11 @@ public partial class JEnvironment
 		[return: NotNullIfNotNull(nameof(jObject))]
 		public TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
 		{
-			if (jObject is JClassObject jClass) this._classes[jClass.Hash] = jClass;
+			if (jObject is JClassObject jClass)
+			{
+				this._classes[jClass.Hash] = jClass;
+				this.VirtualMachine.LoadGlobal(jClass);
+			}
 			JLocalObject? jLocal = jObject as JLocalObject;
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			if (!JObject.IsNullOrDefault(jLocal))
@@ -107,6 +144,48 @@ public partial class JEnvironment
 			TObject result = (TObject)(Object)metadata.ParseInstance(jLocal);
 			jLocal.Dispose();
 			return this.Register(result);
+		}
+		/// <summary>
+		/// Loads <see cref="JGlobal"/> instance for <paramref name="jClass"/>
+		/// </summary>
+		/// <param name="jClass">A <see cref="JLocalObject"/> instance.</param>
+		/// <returns>A <see cref="JGlobal"/> instance.</returns>
+		[return: NotNullIfNotNull(nameof(jClass))]
+		private JGlobal? LoadGlobal(JClassObject? jClass)
+		{
+			if (jClass is null) return default;
+			JGlobal result = this.VirtualMachine.LoadGlobal(jClass);
+			JObjectLocalRef localRef = jClass.As<JObjectLocalRef>();
+			switch (result.IsDefault)
+			{
+				case true when localRef == default:
+					try
+					{
+						localRef = jClass.Name.WithSafeFixed(this, JEnvironmentCache.FindClass).Value;
+						if (localRef == default) this.CheckJniError();
+						this.ReloadGlobal(result, localRef);
+					}
+					finally
+					{
+						if (localRef != default) this.DeleteLocalRef(localRef);
+					}
+					break;
+				case true:
+					this.ReloadGlobal(result, localRef);
+					break;
+			}
+			return result;
+		}
+		/// <summary>
+		/// Reloads <paramref name="jGlobal"/> using <paramref name="localRef"/>.
+		/// </summary>
+		/// <param name="jGlobal">A <see cref="JGlobal"/> to reload.</param>
+		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+		private void ReloadGlobal(JGlobal jGlobal, JObjectLocalRef localRef)
+		{
+			JGlobalRef globalRef = this.CreateGlobalRef(localRef);
+			if (globalRef == default) this.CheckJniError();
+			jGlobal.SetValue(globalRef);
 		}
 	}
 }

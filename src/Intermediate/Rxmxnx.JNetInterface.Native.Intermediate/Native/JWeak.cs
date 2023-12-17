@@ -4,8 +4,13 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This class represents a <see cref="JObject"/> instance which may remain valid across
 /// different threads until it is explicitly unloaded.
 /// </summary>
-public abstract class JWeak : JGlobalBase
+public sealed class JWeak : JGlobalBase
 {
+	/// <summary>
+	/// Weak Global reference.
+	/// </summary>
+	internal JWeakRef Reference => this.As<JWeakRef>();
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -28,11 +33,5 @@ public abstract class JWeak : JGlobalBase
 			!env.IsSameObject(this, default);
 
 	/// <inheritdoc cref="JGlobalBase.Load(ObjectLifetime)"/>
-	internal new virtual JWeak? Load(ObjectLifetime lifetime) => base.Load(lifetime) as JWeak;
-
-	/// <summary>
-	/// Synchronizes current instance with <paramref name="other"/>.
-	/// </summary>
-	/// <param name="other">A <see cref="JWeak"/> instance.</param>
-	internal abstract void Synchronize(JWeak other);
+	internal new JWeak? Load(ObjectLifetime lifetime) => base.Load(lifetime) as JWeak;
 }

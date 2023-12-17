@@ -21,5 +21,12 @@ public partial class JVirtualMachine
 			if (instance is IDisposable disposable)
 				disposable.Dispose();
 		}
+
+		public override JVirtualMachine Get(JVirtualMachineRef reference, out Boolean isNew, Boolean arg = default)
+		{
+			JVirtualMachine result = base.Get(reference, out isNew, arg);
+			if (isNew) result.InitializeClasses();
+			return result;
+		}
 	}
 }

@@ -34,7 +34,7 @@ internal abstract record ReferenceHelperCache<TObject, TReference, TCreationArg>
 	/// <param name="arg">Creation argument.</param>
 	/// <param name="isNew">Indicates whether current object is new in cache.</param>
 	/// <returns>A <typeparamref name="TObject"/> instance.</returns>
-	public TObject Get(TReference reference, out Boolean isNew, TCreationArg? arg = default)
+	public virtual TObject Get(TReference reference, out Boolean isNew, TCreationArg? arg = default)
 	{
 		isNew = false;
 		if (this._objects.TryGetValue(reference.Pointer, out WeakReference<TObject>? weak) &&

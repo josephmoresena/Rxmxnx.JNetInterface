@@ -7,10 +7,6 @@ public partial class JGlobalBase
 	/// </summary>
 	private readonly AssignableTypeCache _assignableTypes = new();
 	/// <summary>
-	/// Indicates whether current instance is not disposable.
-	/// </summary>
-	private readonly Boolean _isDisposable;
-	/// <summary>
 	/// This collection stores the weak references to the <see cref="JLocalObject"/> associated with
 	/// this instance.
 	/// </summary>

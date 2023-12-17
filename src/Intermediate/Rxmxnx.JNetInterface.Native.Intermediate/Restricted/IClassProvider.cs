@@ -8,11 +8,19 @@ public interface IClassProvider
 	/// <summary>
 	/// <c>java.lang.Object</c> class instance.
 	/// </summary>
-	JClassObject JObject => this.GetClass<JLocalObject>();
+	JClassObject Object => this.GetClass<JLocalObject>();
 	/// <summary>
 	/// <c>java.lang.Class&lt;?&gt;</c> class instance.
 	/// </summary>
 	JClassObject ClassObject => this.GetClass<JClassObject>();
+	/// <summary>
+	/// <c>java.lang.Throwable</c> class instance.
+	/// </summary>
+	JClassObject ThrowableObject => this.GetClass<JThrowableObject>();
+	/// <summary>
+	/// <c>java.lang.StackTraceElementObject</c> class instance.
+	/// </summary>
+	JClassObject StackTraceElementObject => this.GetClass<JStackTraceElementObject>();
 	/// <summary>
 	/// <c>java.lang.String</c> class instance.
 	/// </summary>

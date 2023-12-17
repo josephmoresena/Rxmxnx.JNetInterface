@@ -22,4 +22,12 @@ public enum ThreadPurpose : Byte
 	/// Indicates the purpose of the thread is execute JNI calls to get assignability.
 	/// </summary>
 	CheckAssignability = 4,
+	/// <summary>
+	/// Indicates the purpose of the thread is create global references.
+	/// </summary>
+	CreateGlobalReference = 5,
+	/// <summary>
+	/// Indicates the purpose of the thread is check global references.
+	/// </summary>
+	CheckGlobalReference = 5,
 }

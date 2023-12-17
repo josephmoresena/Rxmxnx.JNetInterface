@@ -6,25 +6,12 @@ public partial class JGlobalBase
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="globalRef">Global object reference.</param>
-	internal JGlobalBase(ILocalObject jLocal, JGlobalRef globalRef) : base(jLocal.IsDummy)
-	{
-		this._vm = jLocal.VirtualMachine;
-		this._value = IMutableReference.Create(NativeUtilities.Transform<JGlobalRef, IntPtr>(in globalRef));
-		this._objectMetadata = ILocalObject.CreateMetadata(jLocal);
-		this._isDisposable = jLocal is JClassObject;
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="weakRef">Weak global object reference.</param>
 	internal JGlobalBase(ILocalObject jLocal, JWeakRef weakRef) : base(jLocal.IsDummy)
 	{
 		this._vm = jLocal.VirtualMachine;
 		this._value = IMutableReference.Create(NativeUtilities.Transform<JWeakRef, IntPtr>(in weakRef));
 		this._objectMetadata = ILocalObject.CreateMetadata(jLocal);
-		this._isDisposable = jLocal is JClassObject;
 	}
 	/// <summary>
 	/// Constructor.
@@ -39,7 +26,6 @@ public partial class JGlobalBase
 		this._vm = vm;
 		this._value = IMutableReference.Create(NativeUtilities.Transform<JGlobalRef, IntPtr>(in globalRef));
 		this._objectMetadata = metadata;
-		this._isDisposable = metadata.ObjectClassName != UnicodeClassNames.JClassObjectClassName;
 	}
 	/// <summary>
 	/// Constructor.
@@ -54,6 +40,5 @@ public partial class JGlobalBase
 		this._vm = vm;
 		this._value = IMutableReference.Create(NativeUtilities.Transform<JWeakRef, IntPtr>(in weakRef));
 		this._objectMetadata = metadata;
-		this._isDisposable = metadata.ObjectClassName != UnicodeClassNames.JClassObjectClassName;
 	}
 }

@@ -6,6 +6,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal sealed class AccessCache
 {
 	/// <summary>
+	/// Class reference.
+	/// </summary>
+	private readonly JClassLocalRef _classRef;
+	/// <summary>
 	/// Dictionary of fields.
 	/// </summary>
 	private readonly ConcurrentDictionary<String, JFieldId> _fields = new();
@@ -21,4 +25,43 @@ internal sealed class AccessCache
 	/// Dictionary of static methods.
 	/// </summary>
 	private readonly ConcurrentDictionary<String, JMethodId> _staticMethods = new();
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> instance.</param>
+	public AccessCache(JClassLocalRef classRef) => this._classRef = classRef;
+
+	public JFieldId GetFieldId(JFieldDefinition definition, JEnvironment env)
+	{
+		String hash = definition.Information.ToString();
+		if (this._fields.TryGetValue(hash, out JFieldId result)) return result;
+		result = env.GetFieldId(definition, this._classRef);
+		this._fields.TryAdd(hash, result);
+		return result;
+	}
+	public JFieldId GetStaticFieldId(JFieldDefinition definition, JEnvironment env)
+	{
+		String hash = definition.Information.ToString();
+		if (this._staticFields.TryGetValue(hash, out JFieldId result)) return result;
+		result = env.GetStaticFieldId(definition, this._classRef);
+		this._staticFields.TryAdd(hash, result);
+		return result;
+	}
+	public JMethodId GetMethodId(JMethodDefinition definition, JEnvironment env)
+	{
+		String hash = definition.Information.ToString();
+		if (this._methods.TryGetValue(hash, out JMethodId result)) return result;
+		result = env.GetMethodId(definition, this._classRef);
+		this._methods.TryAdd(hash, result);
+		return result;
+	}
+	public JMethodId GetStaticMethodId(JMethodDefinition definition, JEnvironment env)
+	{
+		String hash = definition.Information.ToString();
+		if (this._staticMethods.TryGetValue(hash, out JMethodId result)) return result;
+		result = env.GetStaticMethodId(definition, this._classRef);
+		this._staticMethods.TryAdd(hash, result);
+		return result;
+	}
 }

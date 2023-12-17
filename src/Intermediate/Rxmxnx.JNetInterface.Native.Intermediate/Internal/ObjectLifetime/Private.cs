@@ -65,7 +65,6 @@ internal partial class ObjectLifetime
 
 		if (this._weak is null) this._weak = other._weak;
 		else if (other._weak is null) other._weak = this._weak;
-		else this._weak.Synchronize(other._weak);
 	}
 	/// <summary>
 	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.

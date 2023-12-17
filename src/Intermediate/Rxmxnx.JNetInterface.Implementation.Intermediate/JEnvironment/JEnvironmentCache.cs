@@ -184,14 +184,22 @@ public partial class JEnvironment
 			{ typeof(IsVirtualThreadDelegate), 229 },
 		};
 		/// <summary>
+		/// Cancellation token.
+		/// </summary>
+		private readonly CancellationTokenSource _cancellation = new();
+		/// <summary>
 		/// Class cache.
 		/// </summary>
 		private readonly ClassCache<JClassObject> _classes = new();
-
 		/// <summary>
 		/// Delegate cache.
 		/// </summary>
 		private readonly DelegateHelperCache _delegateCache;
+		/// <summary>
+		/// Main classes.
+		/// </summary>
+		private readonly LocalMainClasses _mainClasses;
+
 		/// <summary>
 		/// Object cache.
 		/// </summary>
@@ -217,20 +225,24 @@ public partial class JEnvironment
 		/// </summary>
 		/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
-		/// <param name="classObject">The <see cref="JClassObject"/> for <c>java.lang.Class&lt;?&gt;</c>.</param>
-		public JEnvironmentCache(JVirtualMachine vm, JEnvironmentRef envRef, JClassObject classObject)
+		/// <param name="mainClasses">A <see cref="LocalMainClasses"/> instance.</param>
+		public JEnvironmentCache(JVirtualMachine vm, JEnvironmentRef envRef, LocalMainClasses mainClasses)
 		{
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
 			this._delegateCache = new();
 			this._objects = new();
-			this.ClassObject = this.Register(classObject);
+			this._mainClasses = this.Register(mainClasses);
 			this.Thread = Thread.CurrentThread;
 			this.Version = JEnvironmentCache.GetVersion(envRef);
-			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this);
+			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this, this._cancellation.Token);
 		}
 		/// <inheritdoc cref="IClassProvider.ClassObject"/>
-		public JClassObject ClassObject { get; }
+		public JClassObject ClassObject => this._mainClasses.ClassObject;
+		/// <inheritdoc cref="IClassProvider.ThrowableObject"/>
+		public JClassObject ThrowableObject => this._mainClasses.ThrowableObject;
+		/// <inheritdoc cref="IClassProvider.StackTraceElementObject"/>
+		public JClassObject StackTraceElementObject => this._mainClasses.StackTraceElementObject;
 
 		/// <summary>
 		/// Retrieves a <typeparamref name="TDelegate"/> instance for <typeparamref name="TDelegate"/>.
@@ -288,8 +300,69 @@ public partial class JEnvironment
 		/// <summary>
 		/// Release all references.
 		/// </summary>
-		public void FreeReferences(JEnvironment env) => this._objects.ClearCache(env, true);
-		
+		public void FreeReferences(JEnvironment env)
+		{
+			this._objects.ClearCache(env, true);
+			this._cancellation.Cancel();
+		}
+		/// <summary>
+		/// Deletes <paramref name="localRef"/>.
+		/// </summary>
+		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to remove.</param>
+		public void DeleteLocalRef(JObjectLocalRef localRef)
+		{
+			if (localRef == default || !this.JniSecure()) return;
+			DeleteLocalRefDelegate deleteLocalRef = this.GetDelegate<DeleteLocalRefDelegate>();
+			deleteLocalRef(this.Reference, localRef);
+		}
+		/// <summary>
+		/// Creates a new local reference for <paramref name="result"/>.
+		/// </summary>
+		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
+		/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
+		/// <param name="deleteGlobal">Indicates whether global reference must be deleted.</param>
+		public void CreateLocalRef(JGlobalRef globalRef, JLocalObject? result, Boolean deleteGlobal = true)
+		{
+			if (globalRef == default || result is not null) return;
+			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			try
+			{
+				NewLocalRefDelegate newLocalRef = this.GetDelegate<NewLocalRefDelegate>();
+				JObjectLocalRef localRef = newLocalRef(this.Reference, globalRef.Value);
+				JLocalObject jLocal = this.Register(result)!;
+				jLocal.SetValue(localRef);
+			}
+			finally
+			{
+				if (deleteGlobal) env.DeleteGlobalRef(globalRef);
+			}
+		}
+		/// <summary>
+		/// Creates a global reference from <paramref name="localRef"/>.
+		/// </summary>
+		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+		/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
+		public JGlobalRef CreateGlobalRef(JObjectLocalRef localRef)
+		{
+			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			NewGlobalRefDelegate newGlobalRef = this.GetDelegate<NewGlobalRefDelegate>();
+			JGlobalRef globalRef = newGlobalRef(this.Reference, localRef);
+			if (globalRef == default) this.CheckJniError();
+			return globalRef;
+		}
+		/// <summary>
+		/// Removes <paramref name="jLocal"/> from current thread.
+		/// </summary>
+		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+		public void Remove(JLocalObject? jLocal)
+		{
+			if (jLocal is null) return;
+			this._objects.Remove(jLocal.InternalReference);
+			if (jLocal is JClassObject)
+				this._classes.Unload(
+					NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(jLocal.InternalReference));
+		}
+
 		/// <summary>
 		/// Retrieves a <see cref="JVirtualMachine"/> from given <paramref name="jEnv"/>.
 		/// </summary>
@@ -305,6 +378,19 @@ public partial class JEnvironment
 				return JVirtualMachine.GetVirtualMachine(vmRef);
 			throw new JniException(result);
 		}
+		/// <summary>
+		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="classNameCtx"/> as class name.
+		/// </summary>
+		/// <param name="classNameCtx">A <see cref="IReadOnlyFixedMemory"/> instance.</param>
+		/// <param name="cache">Current <see cref="JEnvironmentCache"/> instance.</param>
+		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+		public static JClassLocalRef FindClass(in IReadOnlyFixedMemory classNameCtx, JEnvironmentCache cache)
+		{
+			FindClassDelegate findClass = cache.GetDelegate<FindClassDelegate>();
+			JClassLocalRef result = findClass(cache.Reference, (ReadOnlyValPtr<Byte>)classNameCtx.Pointer);
+			if (result.Value == default) cache.CheckJniError();
+			return result;
+		}
 
 		/// <summary>
 		/// Retrieves the JNI function pointer for <paramref name="index"/>.
@@ -318,6 +404,18 @@ public partial class JEnvironment
 				return this.Reference.Reference.Reference[index];
 			index -= lastNormalIndex;
 			return this.Reference.Reference.GetAdditionalPointers(this.Version)[index];
+		}
+		/// <summary>
+		/// Registers a <see cref="LocalMainClasses"/> in current <see cref="IEnvironment"/> instance.
+		/// </summary>
+		/// <param name="mainClasses">A <see cref="LocalMainClasses"/> instance.</param>
+		/// <returns>A <see cref="LocalMainClasses"/> instance.</returns>
+		private LocalMainClasses Register(LocalMainClasses mainClasses)
+		{
+			this.Register(mainClasses.ClassObject);
+			this.Register(mainClasses.ThrowableObject);
+			this.Register(mainClasses.StackTraceElementObject);
+			return mainClasses;
 		}
 
 		/// <summary>

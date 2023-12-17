@@ -40,6 +40,7 @@ public partial class JVirtualMachine
 		public void Dispose()
 		{
 			if (!this._isDisposable || this._isDisposed.Value) return;
+			this._cache.ClearCache();
 			DestroyVirtualMachineDelegate destroyVirtualMachine =
 				this._cache.GetDelegate<DestroyVirtualMachineDelegate>();
 			JResult result = destroyVirtualMachine(this._cache.Reference);

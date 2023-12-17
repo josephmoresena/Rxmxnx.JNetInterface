@@ -15,7 +15,11 @@ public partial class JVirtualMachine
 	/// Constructor.
 	/// </summary>
 	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
-	private JVirtualMachine(JVirtualMachineRef vmRef) => this._cache = new(vmRef);
+	private JVirtualMachine(JVirtualMachineRef vmRef)
+	{
+		GlobalMainClasses mainClasses = new(this);
+		this._cache = new(vmRef, mainClasses);
+	}
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -43,6 +47,18 @@ public partial class JVirtualMachine
 		ValidationUtilities.ThrowIfDummy(args.ThreadGroup);
 		if (this.GetEnvironment() is { } env) return new JEnvironment.JThread(env);
 		return threadName.WithSafeFixed((this, args), JVirtualMachine.AttachThread);
+	}
+	/// <summary>
+	/// Initialize main classes.
+	/// </summary>
+	private void InitializeClasses()
+	{
+		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.CreateGlobalReference));
+		JEnvironment env = this.GetEnvironment(thread.Reference)!;
+		GlobalMainClasses mainClasses = this._cache.MainClasses;
+		mainClasses.ClassObject.SetValue(env.GetClassGlobalRef(mainClasses.ClassMetadata.Name));
+		mainClasses.ThrowableObject.SetValue(env.GetClassGlobalRef(mainClasses.ThrowableMetadata.Name));
+		mainClasses.StackTraceElementObject.SetValue(env.GetClassGlobalRef(mainClasses.StackTraceElementMetadata.Name));
 	}
 
 	/// <summary>

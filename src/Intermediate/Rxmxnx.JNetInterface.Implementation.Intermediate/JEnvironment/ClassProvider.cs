@@ -4,7 +4,7 @@ public partial class JEnvironment
 {
 	private partial record JEnvironmentCache : IClassProvider
 	{
-		JClassObject IClassProvider.JObject => this.GetClass<JLocalObject>();
+		JClassObject IClassProvider.Object => this.GetClass<JLocalObject>();
 		JClassObject IClassProvider.StringClassObject => this.GetClass<JStringObject>();
 		JClassObject IClassProvider.NumberClassObject => this.GetClass<JNumberObject>();
 		JClassObject IClassProvider.EnumClassObject => this.GetClass<JEnumObject>();
@@ -54,28 +54,32 @@ public partial class JEnvironment
 		{
 			throw new NotImplementedException();
 		}
+
+		public CStringSequence GetClassInfo(JClassLocalRef classRef)
+		{
+			JClassObject jClassObject = this.ClassObject;
+			//this._classes[jClassObject.As<>()]
+			return default!;
+		}
+		private void ReloadClass(JClassObject jClass)
+		{
+			if (!jClass.IsDefault) return;
+			JClassLocalRef classRef = jClass.Reference;
+			//this._classes[]
+		}
+
 		private JClassObject GetObjectClass(CString className, String hash)
 		{
 			if (this._classes.TryGetValue(hash, out JClassObject? result)) return result;
-			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
 			if (MetadataHelper.GetMetadata(hash) is { } metadata)
-			{
-				result = new(env, metadata, false);
-			}
+				result = new(env._cache.ClassObject, metadata);
 			else
 			{
 				JClassLocalRef classRef = className.WithSafeFixed(this, JEnvironmentCache.FindClass);
 				result = new(env, classRef, hash, false);
 			}
 			return this.Register(result);
-		}
-
-		private static JClassLocalRef FindClass(in IReadOnlyFixedMemory classNameCtx, JEnvironmentCache cache)
-		{
-			FindClassDelegate findClass = cache.GetDelegate<FindClassDelegate>();
-			JClassLocalRef result = findClass(cache.Reference, (ReadOnlyValPtr<Byte>)classNameCtx.Pointer);
-			if (result.Value == default) cache.CheckJniError();
-			return result;
 		}
 	}
 }

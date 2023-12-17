@@ -14,6 +14,10 @@ public partial class JGlobalBase
 	/// Assignation types cache.
 	/// </summary>
 	internal AssignableTypeCache AssignationCache => this._assignableTypes;
+	/// <summary>
+	/// Indicates whether current instance is disposable.
+	/// </summary>
+	internal virtual Boolean IsDisposable => false;
 
 	/// <summary>
 	/// Refresh current metadata instance.

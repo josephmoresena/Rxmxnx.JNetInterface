@@ -61,7 +61,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	{
 		if (this._isDisposed) return;
 
-		if (disposing && !this._isDisposable)
+		if (disposing && !this.IsDisposable)
 		{
 			ImmutableArray<Int64> keys = this._objects.Keys.ToImmutableArray();
 			foreach (Int64 key in keys)
@@ -77,6 +77,16 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 		this._isDisposed = true;
 	}
 
+	/// <summary>
+	/// Sets the current instance value.
+	/// </summary>
+	/// <param name="globalRef">A global object reference the value of current instance.</param>
+	protected void SetValue(IntPtr globalRef)
+	{
+		if (globalRef != default) return;
+		this._value.Value = globalRef;
+		this._isDisposed = false;
+	}
 	/// <summary>
 	/// Removes the association of <paramref name="jLocal"/> from this instance.
 	/// </summary>
