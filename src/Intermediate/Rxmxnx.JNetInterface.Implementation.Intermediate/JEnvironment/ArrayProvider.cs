@@ -19,12 +19,11 @@ public partial class JEnvironment
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
-				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
 				using IFixedContext<Byte>.IDisposable fixedBuffer =
-					((ValPtr<Byte>)buffer.GetUnsafeIntPtr()).GetUnsafeFixedContext(buffer.Length);
+					JEnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
 				this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
 				this.CheckJniError();
-				return (TElement)primitiveMetadata.CreateInstance(buffer);
+				return (TElement)primitiveMetadata.CreateInstance(fixedBuffer.Values);
 			}
 			GetObjectArrayElementDelegate getObjectArrayElement = this.GetDelegate<GetObjectArrayElementDelegate>();
 			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
@@ -42,7 +41,7 @@ public partial class JEnvironment
 				Int32 offset = 0;
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
 				using IFixedContext<Byte>.IDisposable fixedBuffer =
-					((ValPtr<Byte>)buffer.GetUnsafeIntPtr()).GetUnsafeFixedContext(buffer.Length);
+					JEnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
 				value!.CopyTo(buffer, ref offset);
 				this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
 			}

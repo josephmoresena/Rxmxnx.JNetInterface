@@ -4,10 +4,15 @@ public partial class JEnvironment
 {
 	private partial record JEnvironmentCache : IAccessProvider
 	{
-		public void GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JFieldDefinition definition)
+		private const Int32 maxStackBytes = 128;
+
+		private Int32 _usedStackBytes;
+
+		public void GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
+			JFieldDefinition definition)
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
-			AccessCache access = this.GetAccess(jLocal.Class);
+			AccessCache access = this.GetAccess(jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
 			this.ReloadClass(jLocal as JClassObject);
 			switch (definition.Information[1][^1])
@@ -57,10 +62,11 @@ public partial class JEnvironment
 			}
 			this.CheckJniError();
 		}
-		public void SetPrimitiveField(JLocalObject jLocal, JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
+		public void SetPrimitiveField(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
+			ReadOnlySpan<Byte> bytes)
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
-			AccessCache access = this.GetAccess(jLocal.Class);
+			AccessCache access = this.GetAccess(jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
 			this.ReloadClass(jLocal as JClassObject);
 			switch (definition.Information[1][^1])
@@ -207,50 +213,116 @@ public partial class JEnvironment
 		public void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args)
 		{
-			throw new NotImplementedException();
+			ValidationUtilities.ThrowIfDummy(jClass);
+			AccessCache access = this.GetAccess(jClass);
+			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
+			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
+				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			this.CopyAsJValue(args, argsMemory.Values);
+			switch (definition.Information[1][^1])
+			{
+				case 0x90: //Z
+					CallStaticBooleanMethodADelegate callStaticBooleanMethod =
+						this.GetDelegate<CallStaticBooleanMethodADelegate>();
+					MemoryMarshal.AsRef<Byte>(bytes) = callStaticBooleanMethod(
+						this.Reference, jClass.Reference, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x66: //B
+					CallStaticByteMethodADelegate callByteMethod = this.GetDelegate<CallStaticByteMethodADelegate>();
+					MemoryMarshal.AsRef<SByte>(bytes) = callByteMethod(this.Reference, jClass.Reference, methodId,
+					                                                   (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x67: //C
+					CallStaticCharMethodADelegate callCharMethod = this.GetDelegate<CallStaticCharMethodADelegate>();
+					MemoryMarshal.AsRef<Char>(bytes) = callCharMethod(this.Reference, jClass.Reference, methodId,
+					                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x68: //D
+					CallStaticDoubleMethodADelegate callDoubleMethod =
+						this.GetDelegate<CallStaticDoubleMethodADelegate>();
+					MemoryMarshal.AsRef<Double>(bytes) = callDoubleMethod(
+						this.Reference, jClass.Reference, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x70: //F
+					CallStaticFloatMethodADelegate callFloatMethod = this.GetDelegate<CallStaticFloatMethodADelegate>();
+					MemoryMarshal.AsRef<Single>(bytes) = callFloatMethod(
+						this.Reference, jClass.Reference, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x73: //I
+					CallStaticIntMethodADelegate callIntMethod = this.GetDelegate<CallStaticIntMethodADelegate>();
+					MemoryMarshal.AsRef<Int32>(bytes) = callIntMethod(this.Reference, jClass.Reference, methodId,
+					                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x74: //J
+					CallStaticLongMethodADelegate callLongMethod = this.GetDelegate<CallStaticLongMethodADelegate>();
+					MemoryMarshal.AsRef<Int64>(bytes) = callLongMethod(this.Reference, jClass.Reference, methodId,
+					                                                   (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x83: //S
+					CallStaticShortMethodADelegate callShortMethod = this.GetDelegate<CallStaticShortMethodADelegate>();
+					MemoryMarshal.AsRef<Int32>(bytes) = callShortMethod(this.Reference, jClass.Reference, methodId,
+					                                                    (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				default:
+					throw new ArgumentException("Invalid primitive type.");
+			}
+			this.CheckJniError();
 		}
-		public void CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JFunctionDefinition definition,
-			IObject?[] args)
+		public void CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
+			JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args)
 		{
-			throw new NotImplementedException();
-		}
-		public void CallPrimitiveNonVirtualFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
-			JFunctionDefinition definition, IObject?[] args)
-		{
-			throw new NotImplementedException();
+			ValidationUtilities.ThrowIfDummy(jLocal);
+			AccessCache access = this.GetAccess(jLocal.Class);
+			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			this.ReloadClass(jLocal as JClassObject);
+			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
+			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
+				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			this.CopyAsJValue(args, argsMemory.Values);
+			if (!nonVirtual)
+				this.CallPrimitiveMethod(bytes, jLocal, definition.Information[1][^1], methodId, argsMemory);
+			else
+				this.CallNonVirtualPrimitiveMethod(bytes, jLocal, jClass, definition.Information[1][^1], methodId,
+				                                   argsMemory);
+			this.CheckJniError();
 		}
 
-		public TField? GetField<TField>(JLocalObject jLocal, JFieldDefinition definition)
+		public TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
 			where TField : IDataType<TField>
 		{
 			JDataTypeMetadata metadata = IDataType.GetMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
-				this.GetPrimitiveField(bytes, jLocal, definition);
+				this.GetPrimitiveField(bytes, jLocal, jClass, definition);
 				return (TField)primitiveMetadata.CreateInstance(bytes);
 			}
 			ValidationUtilities.ThrowIfDummy(jLocal);
-			AccessCache access = this.GetAccess(jLocal.Class);
+			AccessCache access = this.GetAccess(jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
 			this.ReloadClass(jLocal as JClassObject);
 			GetObjectFieldDelegate getObjectField = this.GetDelegate<GetObjectFieldDelegate>();
 			JObjectLocalRef localRef = getObjectField(this.Reference, jLocal.As<JObjectLocalRef>(), fieldId);
 			return this.CreateObject<TField>(localRef, true);
 		}
-		public void SetField<TField>(JLocalObject jLocal, JFieldDefinition definition, TField? value)
-			where TField : IDataType<TField>
+		public void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
+			TField? value) where TField : IDataType<TField>
 		{
 			JDataTypeMetadata metadata = IDataType.GetMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
 				(value as IPrimitiveType)!.CopyTo(bytes);
-				this.SetPrimitiveField(jLocal, definition, bytes);
+				this.SetPrimitiveField(jLocal, jClass, definition, bytes);
 				return;
 			}
 			ValidationUtilities.ThrowIfDummy(jLocal);
-			AccessCache access = this.GetAccess(jLocal.Class);
+			AccessCache access = this.GetAccess(jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
 			this.ReloadClass(jLocal as JClassObject);
 			this.ReloadClass(value as JClassObject);
@@ -299,25 +371,311 @@ public partial class JEnvironment
 			=> throw new NotImplementedException();
 		public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args) where TResult : IDataType<TResult>
-			=> throw new NotImplementedException();
+		{
+			JDataTypeMetadata metadata = IDataType.GetMetadata<TResult>();
+			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			{
+				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				this.CallPrimitiveStaticFunction(bytes, jClass, definition, args);
+				return (TResult)primitiveMetadata.CreateInstance(bytes);
+			}
+			ValidationUtilities.ThrowIfDummy(jClass);
+			AccessCache access = this.GetAccess(jClass);
+			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
+			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
+				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			this.CopyAsJValue(args, argsMemory.Values);
+			CallStaticObjectMethodADelegate callStaticObjectMethod =
+				this.GetDelegate<CallStaticObjectMethodADelegate>();
+			JObjectLocalRef localRef = callStaticObjectMethod(this.Reference, jClass.Reference, methodId,
+			                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			this.CheckJniError();
+			return this.CreateObject<TResult>(localRef, true);
+		}
 		public void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, IObject?[] args)
 		{
-			throw new NotImplementedException();
+			ValidationUtilities.ThrowIfDummy(jClass);
+			AccessCache access = this.GetAccess(jClass);
+			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
+			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
+				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			this.CopyAsJValue(args, argsMemory.Values);
+			CallStaticVoidMethodADelegate callStaticVoidMethod = this.GetDelegate<CallStaticVoidMethodADelegate>();
+			callStaticVoidMethod(this.Reference, jClass.Reference, methodId,
+			                     (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			this.CheckJniError();
 		}
-		public TResult? CallFunction<TResult>(JLocalObject jLocal, JFunctionDefinition definition, IObject?[] args)
-			where TResult : IDataType<TResult>
-			=> throw new NotImplementedException();
-		public TResult? CallNonVirtualFunction<TResult>(JLocalObject jLocal, JClassObject jClass,
-			JFunctionDefinition definition, IObject?[] args) where TResult : IDataType<TResult>
-			=> throw new NotImplementedException();
-		public void CallMethod(JLocalObject jLocal, JMethodDefinition definition, IObject?[] args)
+		public TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
+			Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>
 		{
-			throw new NotImplementedException();
+			JDataTypeMetadata metadata = IDataType.GetMetadata<TResult>();
+			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			{
+				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				this.CallPrimitiveFunction(bytes, jLocal, jClass, definition, nonVirtual, args);
+				return (TResult)primitiveMetadata.CreateInstance(bytes);
+			}
+			ValidationUtilities.ThrowIfDummy(jClass);
+			AccessCache access = this.GetAccess(jClass);
+			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			this.ReloadClass(jLocal as JClassObject);
+			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
+			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
+				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			this.CopyAsJValue(args, argsMemory.Values);
+			JObjectLocalRef localRef;
+			if (!nonVirtual)
+			{
+				CallObjectMethodADelegate callObjectMethod = this.GetDelegate<CallObjectMethodADelegate>();
+				localRef = callObjectMethod(this.Reference, jLocal.As<JObjectLocalRef>(), methodId,
+				                            (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			}
+			else
+			{
+				CallNonVirtualObjectMethodADelegate callNonVirtualObjectObjectMethod =
+					this.GetDelegate<CallNonVirtualObjectMethodADelegate>();
+				localRef = callNonVirtualObjectObjectMethod(this.Reference, jLocal.As<JObjectLocalRef>(),
+				                                            jClass.Reference, methodId,
+				                                            (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			}
+			this.CheckJniError();
+			return this.CreateObject<TResult>(localRef, true);
 		}
-		public void CallNonVirtualMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
-			IObject?[] args)
+		public void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
+			Boolean nonVirtual, IObject?[] args)
 		{
-			throw new NotImplementedException();
+			ValidationUtilities.ThrowIfDummy(jClass);
+			AccessCache access = this.GetAccess(jClass);
+			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			this.ReloadClass(jLocal as JClassObject);
+			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
+			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
+				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			this.CopyAsJValue(args, argsMemory.Values);
+			if (!nonVirtual)
+			{
+				CallVoidMethodADelegate callVoidMethod = this.GetDelegate<CallVoidMethodADelegate>();
+				callVoidMethod(this.Reference, jLocal.As<JObjectLocalRef>(), methodId,
+				               (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			}
+			else
+			{
+				CallNonVirtualVoidMethodADelegate callNonVirtualVoidObjectMethod =
+					this.GetDelegate<CallNonVirtualVoidMethodADelegate>();
+				callNonVirtualVoidObjectMethod(this.Reference, jLocal.As<JObjectLocalRef>(), jClass.Reference, methodId,
+				                               (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			}
+			this.CheckJniError();
+		}
+
+		/// <summary>
+		/// Indicates whether current call must use <see langword="stackalloc"/> or <see langword="new"/> to
+		/// hold JNI method parameter.
+		/// </summary>
+		/// <param name="jCall">A <see cref="JCallDefinition"/> instance.</param>
+		/// <param name="requiredBytes">Output. Number of bytes to allocate.</param>
+		/// <returns>
+		/// <see langword="true"/> if current call must use <see langword="stackalloc"/>; otherwise,
+		/// <see langword="false"/>.
+		/// </returns>
+		private Boolean UseStackAlloc(JCallDefinition jCall, out Int32 requiredBytes)
+		{
+			requiredBytes = jCall.Count * JValue.Size;
+			this._usedStackBytes += requiredBytes;
+			if (this._usedStackBytes <= JEnvironmentCache.maxStackBytes) return true;
+			this._usedStackBytes -= requiredBytes;
+			return false;
+		}
+		/// <summary>
+		/// Retrieves <paramref name="argSpan"/> as a <see cref="JValue"/> span containing <paramref name="args"/> information.
+		/// </summary>
+		/// <param name="args">A <see cref="IObject"/> array.</param>
+		/// <param name="argSpan">Destination span.</param>
+		/// <exception cref="InvalidOperationException">Invalid object.</exception>
+		private void CopyAsJValue(IReadOnlyList<IObject?> args, Span<Byte> argSpan)
+		{
+			Span<JValue> result = argSpan.AsValues<Byte, JValue>();
+			for (Int32 i = 0; i < args.Count; i++)
+			{
+				switch (args[i])
+				{
+					case null:
+						result[i] = JValue.Empty;
+						continue;
+					case IPrimitiveType:
+						args[i]!.CopyTo(result, i);
+						break;
+					default:
+						JReferenceObject referenceObject = (args[i] as JReferenceObject)!;
+						ValidationUtilities.ThrowIfDummy(referenceObject);
+						this.ReloadClass(referenceObject as JClassObject);
+						if (referenceObject.IsDefault) throw new ArgumentException($"Invalid object at {i}.");
+						referenceObject.CopyTo(result, i);
+						break;
+				}
+			}
+		}
+		/// <summary>
+		/// Performs primitive method call.
+		/// </summary>
+		/// <param name="bytes">Destination span.</param>
+		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+		/// <param name="signature">Primitive signature.</param>
+		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
+		/// <param name="argsMemory">Fixed memory with parameters.</param>
+		/// <exception cref="ArgumentException">If signature is not for a primitive type.</exception>
+		private void CallPrimitiveMethod(Span<Byte> bytes, JReferenceObject jLocal, Byte signature, JMethodId methodId,
+			IFixedPointer argsMemory)
+		{
+			switch (signature)
+			{
+				case 0x90: //Z
+					CallBooleanMethodADelegate callBooleanMethod = this.GetDelegate<CallBooleanMethodADelegate>();
+					MemoryMarshal.AsRef<Byte>(bytes) = callBooleanMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x66: //B
+					CallByteMethodADelegate callByteMethod = this.GetDelegate<CallByteMethodADelegate>();
+					MemoryMarshal.AsRef<SByte>(bytes) = callByteMethod(this.Reference, jLocal.As<JObjectLocalRef>(),
+					                                                   methodId,
+					                                                   (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x67: //C
+					CallCharMethodADelegate callCharMethod = this.GetDelegate<CallCharMethodADelegate>();
+					MemoryMarshal.AsRef<Char>(bytes) = callCharMethod(this.Reference, jLocal.As<JObjectLocalRef>(),
+					                                                  methodId,
+					                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x68: //D
+					CallDoubleMethodADelegate callDoubleMethod = this.GetDelegate<CallDoubleMethodADelegate>();
+					MemoryMarshal.AsRef<Double>(bytes) = callDoubleMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x70: //F
+					CallFloatMethodADelegate callFloatMethod = this.GetDelegate<CallFloatMethodADelegate>();
+					MemoryMarshal.AsRef<Single>(bytes) = callFloatMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x73: //I
+					CallIntMethodADelegate callIntMethod = this.GetDelegate<CallIntMethodADelegate>();
+					MemoryMarshal.AsRef<Int32>(bytes) = callIntMethod(this.Reference, jLocal.As<JObjectLocalRef>(),
+					                                                  methodId,
+					                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x74: //J
+					CallLongMethodADelegate callLongMethod = this.GetDelegate<CallLongMethodADelegate>();
+					MemoryMarshal.AsRef<Int64>(bytes) = callLongMethod(this.Reference, jLocal.As<JObjectLocalRef>(),
+					                                                   methodId,
+					                                                   (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x83: //S
+					CallShortMethodADelegate callShortMethod = this.GetDelegate<CallShortMethodADelegate>();
+					MemoryMarshal.AsRef<Int32>(bytes) = callShortMethod(this.Reference, jLocal.As<JObjectLocalRef>(),
+					                                                    methodId,
+					                                                    (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				default:
+					throw new ArgumentException("Invalid primitive type.");
+			}
+		}
+		/// <summary>
+		/// Performs primitive non-Virtual method call.
+		/// </summary>
+		/// <param name="bytes">Destination span.</param>
+		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+		/// <param name="signature">Primitive signature.</param>
+		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
+		/// <param name="argsMemory">Fixed memory with parameters.</param>
+		/// <exception cref="ArgumentException">If signature is not for a primitive type.</exception>
+		private void CallNonVirtualPrimitiveMethod(Span<Byte> bytes, JReferenceObject jLocal, JClassObject jClass,
+			Byte signature, JMethodId methodId, IFixedPointer argsMemory)
+		{
+			switch (signature)
+			{
+				case 0x90: //Z
+					CallNonVirtualBooleanMethodADelegate callNonVirtualBooleanMethod =
+						this.GetDelegate<CallNonVirtualBooleanMethodADelegate>();
+					MemoryMarshal.AsRef<Byte>(bytes) = callNonVirtualBooleanMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), jClass.Reference, methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x66: //B
+					CallNonVirtualByteMethodADelegate callNonVirtualByteMethod =
+						this.GetDelegate<CallNonVirtualByteMethodADelegate>();
+					MemoryMarshal.AsRef<SByte>(bytes) = callNonVirtualByteMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), jClass.Reference, methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x67: //C
+					CallNonVirtualCharMethodADelegate callNonVirtualCharMethod =
+						this.GetDelegate<CallNonVirtualCharMethodADelegate>();
+					MemoryMarshal.AsRef<Char>(bytes) = callNonVirtualCharMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), jClass.Reference, methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x68: //D
+					CallNonVirtualDoubleMethodADelegate callNonVirtualDoubleMethod =
+						this.GetDelegate<CallNonVirtualDoubleMethodADelegate>();
+					MemoryMarshal.AsRef<Double>(bytes) = callNonVirtualDoubleMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), jClass.Reference, methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x70: //F
+					CallNonVirtualFloatMethodADelegate callNonVirtualFloatMethod =
+						this.GetDelegate<CallNonVirtualFloatMethodADelegate>();
+					MemoryMarshal.AsRef<Single>(bytes) = callNonVirtualFloatMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), jClass.Reference, methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x73: //I
+					CallNonVirtualIntMethodADelegate callNonVirtualIntMethod =
+						this.GetDelegate<CallNonVirtualIntMethodADelegate>();
+					MemoryMarshal.AsRef<Int32>(bytes) = callNonVirtualIntMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), jClass.Reference, methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x74: //J
+					CallNonVirtualLongMethodADelegate callNonVirtualLongMethod =
+						this.GetDelegate<CallNonVirtualLongMethodADelegate>();
+					MemoryMarshal.AsRef<Int64>(bytes) = callNonVirtualLongMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), jClass.Reference, methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				case 0x83: //S
+					CallNonVirtualShortMethodADelegate callNonVirtualShortMethod =
+						this.GetDelegate<CallNonVirtualShortMethodADelegate>();
+					MemoryMarshal.AsRef<Int32>(bytes) = callNonVirtualShortMethod(
+						this.Reference, jLocal.As<JObjectLocalRef>(), jClass.Reference, methodId,
+						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+					break;
+				default:
+					throw new ArgumentException("Invalid primitive type.");
+			}
+		}
+
+		/// <summary>
+		/// Creates a <see cref="IFixedContext{T}.IDisposable"/> instance from an span created in stack.
+		/// </summary>
+		/// <typeparam name="T">Type of elements in span.</typeparam>
+		/// <param name="stackSpan">A stack created span.</param>
+		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
+		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(scoped Span<T> stackSpan) where T : unmanaged
+		{
+			ValPtr<T> ptr = (ValPtr<T>)stackSpan.GetUnsafeIntPtr();
+			return ptr.GetUnsafeFixedContext(stackSpan.Length);
 		}
 	}
 }

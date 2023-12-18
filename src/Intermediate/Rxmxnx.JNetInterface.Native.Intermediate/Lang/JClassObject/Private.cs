@@ -14,7 +14,7 @@ public partial class JClassObject
 	                                                          .Implements<JAnnotatedElementObject>()
 	                                                          .Implements<JGenericDeclarationObject>()
 	                                                          .Implements<JTypeObject>().Build();
-	
+
 	static JDataTypeMetadata IDataType.Metadata => JClassObject.typeMetadata;
 
 	/// <summary>

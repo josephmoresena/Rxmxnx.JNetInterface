@@ -11,7 +11,7 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 	/// </summary>
 	static virtual JNativeType JniType
 		=> ValidationUtilities.ThrowInvalidInterface<JNativeType>(nameof(IPrimitiveType));
-	
+
 	/// <summary>
 	/// Copy the sequence of bytes of current instance to <paramref name="span"/>.
 	/// </summary>

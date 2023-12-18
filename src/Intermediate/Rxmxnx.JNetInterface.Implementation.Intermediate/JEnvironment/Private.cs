@@ -37,7 +37,7 @@ public partial class JEnvironment
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JGlobalRef CreateGlobalRef(JReferenceObject jLocal)
 		=> this._cache.CreateGlobalRef(jLocal.As<JObjectLocalRef>());
-	
+
 	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
 	private static Boolean? EqualEquatable<TEquatable>(IEquatable<TEquatable>? obj, TEquatable? other)
 	{

@@ -80,10 +80,10 @@ public partial class JEnvironment
 	/// <summary>
 	/// Retrieves method identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
 	/// </summary>
-	/// <param name="definition">A <see cref="JMethodDefinition"/> instance.</param>
+	/// <param name="definition">A <see cref="JCallDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
-	internal JMethodId GetMethodId(JMethodDefinition definition, JClassLocalRef classRef)
+	internal JMethodId GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
 	{
 		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetMethodId);
 		if (methodId == default) this._cache.CheckJniError();
@@ -92,10 +92,10 @@ public partial class JEnvironment
 	/// <summary>
 	/// Retrieves static method identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
 	/// </summary>
-	/// <param name="definition">A <see cref="JMethodDefinition"/> instance.</param>
+	/// <param name="definition">A <see cref="JCallDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	internal JMethodId GetStaticMethodId(JMethodDefinition definition, JClassLocalRef classRef)
+	internal JMethodId GetStaticMethodId(JCallDefinition definition, JClassLocalRef classRef)
 	{
 		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetStaticMethodId);
 		if (methodId == default) this._cache.CheckJniError();

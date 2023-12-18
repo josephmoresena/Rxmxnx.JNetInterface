@@ -151,7 +151,8 @@ internal static class MetadataHelper
 	{
 		CString classNameF = !className.Contains(MetadataHelper.classNameEscape[0]) ?
 			CString.Create(className) :
-			CString.Create(CString.CreateUnsafe(className.GetUnsafeIntPtr(), className.Length, true).Select(MetadataHelper.EscapeClassNameChar).ToArray());
+			CString.Create(CString.CreateUnsafe(className.GetUnsafeIntPtr(), className.Length, true)
+			                      .Select(MetadataHelper.EscapeClassNameChar).ToArray());
 		return JDataTypeMetadata.CreateInformationSequence(classNameF);
 	}
 	/// <summary>

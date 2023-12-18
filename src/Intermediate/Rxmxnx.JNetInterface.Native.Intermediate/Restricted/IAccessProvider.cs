@@ -10,17 +10,20 @@ public partial interface IAccessProvider
 	/// </summary>
 	/// <typeparam name="TField"><see cref="IDataType"/> type of field result.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <returns><typeparamref name="TField"/> field instance.</returns>
-	TField? GetField<TField>(JLocalObject jLocal, JFieldDefinition definition) where TField : IDataType<TField>;
+	TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
+		where TField : IDataType<TField>;
 	/// <summary>
 	/// Sets a static field to given <see cref="JLocalObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <param name="value">The field value to set to.</param>
-	void SetField<TField>(JLocalObject jLocal, JFieldDefinition definition, TField? value)
+	void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition, TField? value)
 		where TField : IDataType<TField>;
 	/// <summary>
 	/// Retrieves a static field from given <see cref="JClassObject"/> instance.
@@ -71,37 +74,21 @@ public partial interface IAccessProvider
 	/// </summary>
 	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
-	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	TResult? CallFunction<TResult>(JLocalObject jLocal, JFunctionDefinition definition, IObject?[] args)
-		where TResult : IDataType<TResult>;
-	/// <summary>
-	/// Invokes a function on given <see cref="JLocalObject"/> and <see cref="JClassObject"/> instances
-	/// and returns its result.
-	/// </summary>
-	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
+	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	TResult? CallNonVirtualFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
-		IObject?[] args) where TResult : IDataType<TResult>;
+	TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
+		Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>;
 	/// <summary>
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
-	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
-	void CallMethod(JLocalObject jLocal, JMethodDefinition definition, IObject?[] args);
-	/// <summary>
-	/// Invokes a non-virtual method on given <see cref="JLocalObject"/> and <see cref="JClassObject"/>
-	/// instances.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
+	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
-	void CallNonVirtualMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition, IObject?[] args);
+	void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition, Boolean nonVirtual,
+		IObject?[] args);
 }

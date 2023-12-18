@@ -48,7 +48,7 @@ internal sealed class AccessCache
 		this._staticFields.TryAdd(hash, result);
 		return result;
 	}
-	public JMethodId GetMethodId(JMethodDefinition definition, JEnvironment env)
+	public JMethodId GetMethodId(JCallDefinition definition, JEnvironment env)
 	{
 		String hash = definition.Information.ToString();
 		if (this._methods.TryGetValue(hash, out JMethodId result)) return result;
@@ -56,7 +56,7 @@ internal sealed class AccessCache
 		this._methods.TryAdd(hash, result);
 		return result;
 	}
-	public JMethodId GetStaticMethodId(JMethodDefinition definition, JEnvironment env)
+	public JMethodId GetStaticMethodId(JCallDefinition definition, JEnvironment env)
 	{
 		String hash = definition.Information.ToString();
 		if (this._staticMethods.TryGetValue(hash, out JMethodId result)) return result;

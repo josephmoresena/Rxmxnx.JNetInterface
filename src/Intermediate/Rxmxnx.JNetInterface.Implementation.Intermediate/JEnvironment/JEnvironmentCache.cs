@@ -372,7 +372,8 @@ public partial class JEnvironment
 		public AccessCache GetAccess(JClassObject jClass)
 		{
 			JClassLocalRef classRef = this.ReloadClass(jClass);
-			return this._classes[classRef] ?? this.VirtualMachine.GetAccess(classRef) ?? throw new ArgumentException("Invalid class object.", nameof(jClass));
+			return this._classes[classRef] ?? this.VirtualMachine.GetAccess(classRef) ??
+				throw new ArgumentException("Invalid class object.", nameof(jClass));
 		}
 		/// <summary>
 		/// Attempts to get the value associated with the specified hash from the cache.
@@ -422,7 +423,7 @@ public partial class JEnvironment
 				this.DeleteLocalRef(classRef.Value);
 			}
 		}
-		
+
 		/// <summary>
 		/// Reloads current class object.
 		/// </summary>

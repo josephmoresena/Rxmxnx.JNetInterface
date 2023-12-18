@@ -68,7 +68,7 @@ public partial class JVirtualMachine
 	/// <returns>A <see cref="AccessCache"/> instance.</returns>
 	internal AccessCache? GetAccess(JClassLocalRef classRef)
 		=> this._cache.GlobalClassCache[classRef] ?? this._cache.WeakClassCache[classRef];
-	
+
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>

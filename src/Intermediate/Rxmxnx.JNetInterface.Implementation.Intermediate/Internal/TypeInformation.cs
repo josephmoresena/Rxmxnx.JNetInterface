@@ -6,10 +6,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <param name="sequence">A <see cref="CStringSequence"/> containg class information.</param>
 internal sealed class TypeInformation(CStringSequence sequence) : ITypeInformation
 {
-	/// <inheritdoc />
+	/// <inheritdoc/>
 	public CString ClassName => sequence[0];
-	/// <inheritdoc />
+	/// <inheritdoc/>
 	public CString Signature => sequence[1];
-	/// <inheritdoc />
+	/// <inheritdoc/>
 	public String Hash => sequence.ToString();
 }

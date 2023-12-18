@@ -19,12 +19,13 @@ internal sealed record JPrimitiveFieldDefinition : JFieldDefinition
 	/// Retrieves the value of a field on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>The <paramref name="jLocal"/> field's value.</returns>
-	public TField Get<TField>(JLocalObject jLocal) where TField : unmanaged
+	public TField Get<TField>(JLocalObject jLocal, JClassObject? jClass = default) where TField : unmanaged
 	{
 		IEnvironment env = jLocal.Environment;
 		Span<TField> result = stackalloc TField[1];
-		env.AccessProvider.GetPrimitiveField(result.AsBytes(), jLocal, this);
+		env.AccessProvider.GetPrimitiveField(result.AsBytes(), jLocal, jClass ?? jLocal.Class, this);
 		return result[0];
 	}
 	/// <summary>
@@ -43,11 +44,13 @@ internal sealed record JPrimitiveFieldDefinition : JFieldDefinition
 	/// Sets the value of a field on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="value">The field value to set to.</param>
-	public void Set<TField>(JLocalObject jLocal, in TField value) where TField : unmanaged
+	public void Set<TField>(JLocalObject jLocal, in TField value, JClassObject? jClass = default)
+		where TField : unmanaged
 	{
 		IEnvironment env = jLocal.Environment;
-		env.AccessProvider.SetPrimitiveField(jLocal, this, NativeUtilities.AsBytes(value));
+		env.AccessProvider.SetPrimitiveField(jLocal, jClass ?? jLocal.Class, this, NativeUtilities.AsBytes(value));
 	}
 	/// <summary>
 	/// Sets the value of a static field on <paramref name="jClass"/> which matches with current definition.

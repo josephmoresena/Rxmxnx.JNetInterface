@@ -49,11 +49,12 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	/// Retrieves the value of a field on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>The <paramref name="jLocal"/> field's value.</returns>
-	public TField? Get(JLocalObject jLocal)
+	public TField? Get(JLocalObject jLocal, JClassObject? jClass = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.GetField<TField>(jLocal, this);
+		return env.AccessProvider.GetField<TField>(jLocal, jClass ?? jLocal.Class, this);
 	}
 	/// <summary>
 	/// Retrieves the value of a static field on <paramref name="jClass"/> which matches with current definition.
@@ -70,10 +71,11 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="value">The field value to set to.</param>
-	public void Set(JLocalObject jLocal, TField? value)
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	public void Set(JLocalObject jLocal, TField? value, JClassObject? jClass = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		env.AccessProvider.SetField(jLocal, this, value);
+		env.AccessProvider.SetField(jLocal, jClass ?? jLocal.Class, this, value);
 	}
 	/// <summary>
 	/// Sets the value of a static field on <paramref name="jClass"/> which matches with current definition.

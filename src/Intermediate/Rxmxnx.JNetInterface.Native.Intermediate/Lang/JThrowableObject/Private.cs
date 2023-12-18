@@ -36,7 +36,8 @@ public partial class JThrowableObject
 	private String GetMessage()
 	{
 		JFunctionDefinition<JStringObject> definition = new(JThrowableObject.getMessageName);
-		using JStringObject jString = JFunctionDefinition<JStringObject>.Invoke(definition, this)!;
+		JClassObject throwableClass = this.Environment.ClassProvider.NumberClassObject;
+		using JStringObject jString = JFunctionDefinition<JStringObject>.Invoke(definition, this, throwableClass)!;
 		return jString.Value;
 	}
 	/// <summary>
@@ -47,8 +48,9 @@ public partial class JThrowableObject
 	{
 		JFunctionDefinition<JArrayObject<JStackTraceElementObject>>
 			definition = new(JThrowableObject.getStackTraceName);
+		JClassObject throwableClass = jThrowable.Environment.ClassProvider.NumberClassObject;
 		using JArrayObject<JStackTraceElementObject> jArr =
-			JFunctionDefinition<JArrayObject<JStackTraceElementObject>>.Invoke(definition, jThrowable)!;
+			JFunctionDefinition<JArrayObject<JStackTraceElementObject>>.Invoke(definition, jThrowable, throwableClass)!;
 		JStackTraceInfo[] result = new JStackTraceInfo[jArr.Length];
 		for (Int32 i = 0; i < result.Length; i++)
 			result[i] = ((JStackTraceElementObjectMetadata)ILocalObject.CreateMetadata(jArr[i]!))!;

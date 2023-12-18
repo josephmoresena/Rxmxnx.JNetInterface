@@ -20,11 +20,12 @@ public sealed record JNonTypedFieldDefinition : JFieldDefinition
 	/// Retrieves the value of a field on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <returns>The <paramref name="jLocal"/> field's value.</returns>
-	public JLocalObject? Get(JLocalObject jLocal)
+	public JLocalObject? Get(JLocalObject jLocal, JClassObject? jClass = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.GetField<JLocalObject>(jLocal, this);
+		return env.AccessProvider.GetField<JLocalObject>(jLocal, jClass ?? jLocal.Class, this);
 	}
 	/// <summary>
 	/// Retrieves the value of a static field on <paramref name="jClass"/> which matches with current definition.
@@ -40,11 +41,12 @@ public sealed record JNonTypedFieldDefinition : JFieldDefinition
 	/// Sets the value of a field on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <param name="value">The field value to set to.</param>
-	public void Set(JLocalObject jLocal, JLocalObject? value)
+	public void Set(JLocalObject jLocal, JLocalObject? value, JClassObject? jClass = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		env.AccessProvider.SetField(jLocal, this, value);
+		env.AccessProvider.SetField(jLocal, jClass ?? jLocal.Class, this, value);
 	}
 	/// <summary>
 	/// Sets the value of a static field on <paramref name="jClass"/> which matches with current definition.

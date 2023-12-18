@@ -20,7 +20,8 @@ public partial class JEnumObject
 	internal virtual String GetName()
 	{
 		JFunctionDefinition<JStringObject> definition = new(JEnumObject.nameName);
-		using JStringObject jString = JFunctionDefinition<JStringObject>.Invoke(definition, this)!;
+		JClassObject enumClass = this.Environment.ClassProvider.EnumClassObject;
+		using JStringObject jString = JFunctionDefinition<JStringObject>.Invoke(definition, this, enumClass)!;
 		return jString.Value;
 	}
 }

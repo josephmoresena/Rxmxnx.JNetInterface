@@ -11,55 +11,35 @@ internal static class InternalExtensions
 	/// <param name="definition"><see cref="JFunctionDefinition"/> instance.</param>
 	/// <param name="bytes"><see cref="Span{T}"/> to hold result.</param>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="args">Function arguments.</param>
-	public static void PrimitiveInvoke(this JFunctionDefinition definition, Span<Byte> bytes, JLocalObject jLocal,
-		IObject?[] args)
-	{
-		if (definition.Return == typeof(Byte))
-			bytes.AsValue<JBoolean>() = JFunctionDefinition<JBoolean>.Invoke(new(definition), jLocal, args);
-		else if (definition.Return == typeof(SByte))
-			bytes.AsValue<JByte>() = JFunctionDefinition<JByte>.Invoke(new(definition), jLocal, args);
-		else if (definition.Return == typeof(Char))
-			bytes.AsValue<JChar>() = JFunctionDefinition<JChar>.Invoke(new(definition), jLocal, args);
-		else if (definition.Return == typeof(Double))
-			bytes.AsValue<JDouble>() = JFunctionDefinition<JDouble>.Invoke(new(definition), jLocal, args);
-		else if (definition.Return == typeof(Single))
-			bytes.AsValue<JFloat>() = JFunctionDefinition<JFloat>.Invoke(new(definition), jLocal, args);
-		else if (definition.Return == typeof(Int32))
-			bytes.AsValue<JInt>() = JFunctionDefinition<JInt>.Invoke(new(definition), jLocal, args);
-		else if (definition.Return == typeof(Int64))
-			bytes.AsValue<JLong>() = JFunctionDefinition<JLong>.Invoke(new(definition), jLocal, args);
-		else if (definition.Return == typeof(Int16))
-			bytes.AsValue<JShort>() = JFunctionDefinition<JShort>.Invoke(new(definition), jLocal, args);
-		throw new InvalidOperationException("Definition is not primitive.");
-	}
-	/// <summary>
-	/// Invokes current function as typed primitive function.
-	/// </summary>
-	/// <param name="definition"><see cref="JFunctionDefinition"/> instance.</param>
-	/// <param name="bytes"><see cref="Span{T}"/> to hold result.</param>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">Function arguments.</param>
 	public static void PrimitiveInvoke(this JFunctionDefinition definition, Span<Byte> bytes, JLocalObject jLocal,
-		JClassObject jClass, IObject?[] args)
+		JClassObject jClass, Boolean nonVirtual, IObject?[] args)
 	{
 		if (definition.Return == typeof(Byte))
-			bytes.AsValue<JBoolean>() = JFunctionDefinition<JBoolean>.Invoke(new(definition), jLocal, jClass, args);
+			bytes.AsValue<JBoolean>() =
+				JFunctionDefinition<JBoolean>.Invoke(new(definition), jLocal, jClass, nonVirtual, args);
 		else if (definition.Return == typeof(SByte))
-			bytes.AsValue<JByte>() = JFunctionDefinition<JByte>.Invoke(new(definition), jLocal, jClass, args);
+			bytes.AsValue<JByte>() =
+				JFunctionDefinition<JByte>.Invoke(new(definition), jLocal, jClass, nonVirtual, args);
 		else if (definition.Return == typeof(Char))
-			bytes.AsValue<JChar>() = JFunctionDefinition<JChar>.Invoke(new(definition), jLocal, jClass, args);
+			bytes.AsValue<JChar>() =
+				JFunctionDefinition<JChar>.Invoke(new(definition), jLocal, jClass, nonVirtual, args);
 		else if (definition.Return == typeof(Double))
-			bytes.AsValue<JDouble>() = JFunctionDefinition<JDouble>.Invoke(new(definition), jLocal, jClass, args);
+			bytes.AsValue<JDouble>() =
+				JFunctionDefinition<JDouble>.Invoke(new(definition), jLocal, jClass, nonVirtual, args);
 		else if (definition.Return == typeof(Single))
-			bytes.AsValue<JFloat>() = JFunctionDefinition<JFloat>.Invoke(new(definition), jLocal, jClass, args);
+			bytes.AsValue<JFloat>() =
+				JFunctionDefinition<JFloat>.Invoke(new(definition), jLocal, jClass, nonVirtual, args);
 		else if (definition.Return == typeof(Int32))
-			bytes.AsValue<JInt>() = JFunctionDefinition<JInt>.Invoke(new(definition), jLocal, jClass, args);
+			bytes.AsValue<JInt>() = JFunctionDefinition<JInt>.Invoke(new(definition), jLocal, jClass, nonVirtual, args);
 		else if (definition.Return == typeof(Int64))
-			bytes.AsValue<JLong>() = JFunctionDefinition<JLong>.Invoke(new(definition), jLocal, jClass, args);
+			bytes.AsValue<JLong>() =
+				JFunctionDefinition<JLong>.Invoke(new(definition), jLocal, jClass, nonVirtual, args);
 		else if (definition.Return == typeof(Int16))
-			bytes.AsValue<JShort>() = JFunctionDefinition<JShort>.Invoke(new(definition), jLocal, jClass, args);
+			bytes.AsValue<JShort>() =
+				JFunctionDefinition<JShort>.Invoke(new(definition), jLocal, jClass, nonVirtual, args);
 		throw new InvalidOperationException("Definition is not primitive.");
 	}
 	/// <summary>
@@ -96,24 +76,26 @@ internal static class InternalExtensions
 	/// <param name="definition"><see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="bytes"><see cref="Span{T}"/> to hold field value.</param>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	public static void PrimitiveGet(this JFieldDefinition definition, Span<Byte> bytes, JLocalObject jLocal)
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	public static void PrimitiveGet(this JFieldDefinition definition, Span<Byte> bytes, JLocalObject jLocal,
+		JClassObject jClass)
 	{
 		if (definition.Return == typeof(Byte))
-			bytes.AsValue<JBoolean>() = new JFieldDefinition<JBoolean>(definition).Get(jLocal);
+			bytes.AsValue<JBoolean>() = new JFieldDefinition<JBoolean>(definition).Get(jLocal, jClass);
 		else if (definition.Return == typeof(SByte))
-			bytes.AsValue<JByte>() = new JFieldDefinition<JByte>(definition).Get(jLocal);
+			bytes.AsValue<JByte>() = new JFieldDefinition<JByte>(definition).Get(jLocal, jClass);
 		else if (definition.Return == typeof(Char))
-			bytes.AsValue<JChar>() = new JFieldDefinition<JChar>(definition).Get(jLocal);
+			bytes.AsValue<JChar>() = new JFieldDefinition<JChar>(definition).Get(jLocal, jClass);
 		else if (definition.Return == typeof(Double))
-			bytes.AsValue<JDouble>() = new JFieldDefinition<JDouble>(definition).Get(jLocal);
+			bytes.AsValue<JDouble>() = new JFieldDefinition<JDouble>(definition).Get(jLocal, jClass);
 		else if (definition.Return == typeof(Single))
-			bytes.AsValue<JFloat>() = new JFieldDefinition<JFloat>(definition).Get(jLocal);
+			bytes.AsValue<JFloat>() = new JFieldDefinition<JFloat>(definition).Get(jLocal, jClass);
 		else if (definition.Return == typeof(Int32))
-			bytes.AsValue<JInt>() = new JFieldDefinition<JInt>(definition).Get(jLocal);
+			bytes.AsValue<JInt>() = new JFieldDefinition<JInt>(definition).Get(jLocal, jClass);
 		else if (definition.Return == typeof(Int64))
-			bytes.AsValue<JLong>() = new JFieldDefinition<JLong>(definition).Get(jLocal);
+			bytes.AsValue<JLong>() = new JFieldDefinition<JLong>(definition).Get(jLocal, jClass);
 		else if (definition.Return == typeof(Int16))
-			bytes.AsValue<JShort>() = new JFieldDefinition<JShort>(definition).Get(jLocal);
+			bytes.AsValue<JShort>() = new JFieldDefinition<JShort>(definition).Get(jLocal, jClass);
 		throw new InvalidOperationException("Definition is not primitive.");
 	}
 	/// <summary>
@@ -147,25 +129,27 @@ internal static class InternalExtensions
 	/// </summary>
 	/// <param name="definition"><see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="bytes"><see cref="Span{T}"/> holding field value to set to.</param>
-	public static void PrimitiveSet(this JFieldDefinition definition, JLocalObject jLocal, ReadOnlySpan<Byte> bytes)
+	public static void PrimitiveSet(this JFieldDefinition definition, JLocalObject jLocal, JClassObject jClass,
+		ReadOnlySpan<Byte> bytes)
 	{
 		if (definition.Return == typeof(Byte))
-			new JFieldDefinition<JBoolean>(definition).Set(jLocal, bytes.AsValue<JBoolean>());
+			new JFieldDefinition<JBoolean>(definition).Set(jLocal, bytes.AsValue<JBoolean>(), jClass);
 		else if (definition.Return == typeof(SByte))
-			new JFieldDefinition<JByte>(definition).Set(jLocal, bytes.AsValue<JByte>());
+			new JFieldDefinition<JByte>(definition).Set(jLocal, bytes.AsValue<JByte>(), jClass);
 		else if (definition.Return == typeof(Char))
-			new JFieldDefinition<JChar>(definition).Set(jLocal, bytes.AsValue<JChar>());
+			new JFieldDefinition<JChar>(definition).Set(jLocal, bytes.AsValue<JChar>(), jClass);
 		else if (definition.Return == typeof(Double))
-			new JFieldDefinition<JDouble>(definition).Set(jLocal, bytes.AsValue<JDouble>());
+			new JFieldDefinition<JDouble>(definition).Set(jLocal, bytes.AsValue<JDouble>(), jClass);
 		else if (definition.Return == typeof(Single))
-			new JFieldDefinition<JFloat>(definition).Set(jLocal, bytes.AsValue<JFloat>());
+			new JFieldDefinition<JFloat>(definition).Set(jLocal, bytes.AsValue<JFloat>(), jClass);
 		else if (definition.Return == typeof(Int32))
-			new JFieldDefinition<JInt>(definition).Set(jLocal, bytes.AsValue<JInt>());
+			new JFieldDefinition<JInt>(definition).Set(jLocal, bytes.AsValue<JInt>(), jClass);
 		else if (definition.Return == typeof(Int64))
-			new JFieldDefinition<JLong>(definition).Set(jLocal, bytes.AsValue<JLong>());
+			new JFieldDefinition<JLong>(definition).Set(jLocal, bytes.AsValue<JLong>(), jClass);
 		else if (definition.Return == typeof(Int16))
-			new JFieldDefinition<JShort>(definition).Set(jLocal, bytes.AsValue<JShort>());
+			new JFieldDefinition<JShort>(definition).Set(jLocal, bytes.AsValue<JShort>(), jClass);
 		throw new InvalidOperationException("Definition is not primitive.");
 	}
 	/// <summary>

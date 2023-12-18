@@ -131,7 +131,7 @@ public partial class JEnvironment
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TObject>();
 			TObject result = (TObject)(Object)metadata.ParseInstance(jLocal);
 			jLocal.Dispose();
-			return register? this.Register(result) : result;
+			return register ? this.Register(result) : result;
 		}
 		/// <summary>
 		/// Loads <see cref="JGlobal"/> instance for <paramref name="jClass"/>

@@ -13,6 +13,16 @@ internal partial class JPrimitiveObject
 		/// Internal value.
 		/// </summary>
 		private readonly TValue _value;
+		/// <summary>
+		/// Size of current type in bytes.
+		/// </summary>
+		public override Int32 SizeOf => NativeUtilities.SizeOf<TValue>();
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="value">Internal wrapper.</param>
+		public Generic(TValue value) => this._value = value;
 
 		/// <inheritdoc cref="IObject.ObjectClassName"/>
 		public override CString ObjectClassName
@@ -64,36 +74,6 @@ internal partial class JPrimitiveObject
 				}
 			}
 		}
-		/// <summary>
-		/// Size of current type in bytes.
-		/// </summary>
-		public override Int32 SizeOf => NativeUtilities.SizeOf<TValue>();
-
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		/// <param name="value">Internal wrapper.</param>
-		public Generic(TValue value) => this._value = value;
-		/// <summary>
-		/// Internal primitive value.
-		/// </summary>
-		public TValue Value => this._value;
-
-		/// <inheritdoc cref="IEquatable{TValue}.Equals(TValue)"/>
-		public Boolean Equals(TValue other) => this._value.Equals(other);
-		/// <inheritdoc/>
-		public override Boolean Equals(JObject? other)
-			=> other is Generic<TValue> jPrimitive && this._value.Equals(jPrimitive._value);
-		/// <inheritdoc/>
-		public override Boolean Equals(Object? obj) => obj is Generic<TValue> jPrimitive && this.Equals(jPrimitive);
-
-		/// <inheritdoc/>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public override Int32 GetHashCode() => this._value.GetHashCode();
-		/// <inheritdoc/>
-		public override String? ToString() => this._value.ToString();
-		/// <inheritdoc/>
-		public override Byte ToByte() => NativeUtilities.AsBytes(in this._value)[0];
 		/// <inheritdoc/>
 		public void CopyTo(Span<Byte> span)
 		{
@@ -120,6 +100,26 @@ internal partial class JPrimitiveObject
 		UInt16 IConvertible.ToUInt16(IFormatProvider? provider) => this.Value.ToUInt16(provider);
 		UInt64 IConvertible.ToUInt64(IFormatProvider? provider) => this.Value.ToUInt64(provider);
 		UInt32 IConvertible.ToUInt32(IFormatProvider? provider) => this.Value.ToUInt32(provider);
+		/// <summary>
+		/// Internal primitive value.
+		/// </summary>
+		public TValue Value => this._value;
+
+		/// <inheritdoc cref="IEquatable{TValue}.Equals(TValue)"/>
+		public Boolean Equals(TValue other) => this._value.Equals(other);
+		/// <inheritdoc/>
+		public override Boolean Equals(JObject? other)
+			=> other is Generic<TValue> jPrimitive && this._value.Equals(jPrimitive._value);
+		/// <inheritdoc/>
+		public override Boolean Equals(Object? obj) => obj is Generic<TValue> jPrimitive && this.Equals(jPrimitive);
+
+		/// <inheritdoc/>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public override Int32 GetHashCode() => this._value.GetHashCode();
+		/// <inheritdoc/>
+		public override String? ToString() => this._value.ToString();
+		/// <inheritdoc/>
+		public override Byte ToByte() => NativeUtilities.AsBytes(in this._value)[0];
 
 		/// <inheritdoc cref="IObject.CopyTo(Span{JValue}, Int32)"/>
 		internal override void CopyTo(Span<JValue> span, Int32 index)

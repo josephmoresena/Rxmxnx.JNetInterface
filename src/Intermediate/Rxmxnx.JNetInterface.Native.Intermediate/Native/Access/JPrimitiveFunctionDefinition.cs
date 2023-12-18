@@ -94,31 +94,17 @@ internal sealed record JPrimitiveFunctionDefinition : JFunctionDefinition
 	/// </summary>
 	/// <param name="definition">A <see cref="JPrimitiveFunctionDefinition"/> definition.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="args">The arguments to pass to.</param>
-	internal static TResult Invoke<TResult>(JPrimitiveFunctionDefinition definition, JLocalObject jLocal,
-		IObject?[]? args = default) where TResult : unmanaged
-	{
-		IEnvironment env = jLocal.Environment;
-		Span<TResult> result = stackalloc TResult[1];
-		env.AccessProvider.CallPrimitiveFunction(result.AsBytes(), jLocal, definition,
-		                                         args ?? definition.CreateArgumentsArray());
-		return result[0];
-	}
-	/// <summary>
-	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition but using the
-	/// implementation declared on <paramref name="jClass"/>.
-	/// </summary>
-	/// <param name="definition">A <see cref="JPrimitiveFunctionDefinition"/> definition.</param>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
+	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	internal static TResult Invoke<TResult>(JPrimitiveFunctionDefinition definition, JLocalObject jLocal,
-		JClassObject jClass, IObject?[]? args = default) where TResult : unmanaged
+		JClassObject? jClass = default, Boolean nonVirtual = false, IObject?[]? args = default)
+		where TResult : unmanaged
 	{
 		IEnvironment env = jLocal.Environment;
 		Span<TResult> result = stackalloc TResult[1];
-		env.AccessProvider.CallPrimitiveNonVirtualFunction(result.AsBytes(), jLocal, jClass, definition,
-		                                                   args ?? definition.CreateArgumentsArray());
+		env.AccessProvider.CallPrimitiveFunction(result.AsBytes(), jLocal, jClass ?? jLocal.Class, definition,
+		                                         nonVirtual, args ?? definition.CreateArgumentsArray());
 		return result[0];
 	}
 	/// <summary>

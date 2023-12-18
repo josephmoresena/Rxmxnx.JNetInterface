@@ -85,7 +85,19 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? Invoke(JLocalObject jLocal, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.CallFunction<TResult>(jLocal, this, args);
+		return env.AccessProvider.CallFunction<TResult>(jLocal, jLocal.Class, this, false, args);
+	}
+	/// <summary>
+	/// Invokes a function on <paramref name="jClass"/> which matches with current definition but using the
+	/// implementation declared on <paramref name="jLocal"/>.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	protected TResult? Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
+	{
+		IEnvironment env = jLocal.Environment;
+		return env.AccessProvider.CallFunction<TResult>(jLocal, jClass, this, false, args);
 	}
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition but using the
@@ -94,10 +106,10 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <param name="args">The arguments to pass to.</param>
-	protected TResult? Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
+	protected TResult? InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.CallNonVirtualFunction<TResult>(jLocal, jClass, this, args);
+		return env.AccessProvider.CallFunction<TResult>(jLocal, jClass, this, true, args);
 	}
 	/// <summary>
 	/// Invokes a static function on <paramref name="jClass"/> which matches with current definition
@@ -116,28 +128,15 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	/// </summary>
 	/// <param name="definition">A <see cref="JFunctionDefinition{TResult}"/> definition.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
+	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	internal static TResult? Invoke(JFunctionDefinition<TResult> definition, JLocalObject jLocal,
-		IObject?[]? args = default)
+		JClassObject? jClass = default, Boolean nonVirtual = false, IObject?[]? args = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.CallInternalFunction<TResult>(jLocal, definition,
+		return env.AccessProvider.CallInternalFunction<TResult>(jLocal, jClass ?? jLocal.Class, definition, nonVirtual,
 		                                                        args ?? definition.CreateArgumentsArray());
-	}
-	/// <summary>
-	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition but using the
-	/// implementation declared on <paramref name="jClass"/>.
-	/// </summary>
-	/// <param name="definition">A <see cref="JFunctionDefinition{TResult}"/> definition.</param>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	/// <param name="args">The arguments to pass to.</param>
-	internal static TResult? Invoke(JFunctionDefinition<TResult> definition, JLocalObject jLocal, JClassObject jClass,
-		IObject?[]? args = default)
-	{
-		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.CallInternalNonVirtualFunction<TResult>(
-			jLocal, jClass, definition, args ?? definition.CreateArgumentsArray());
 	}
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jClass"/> which matches with current definition

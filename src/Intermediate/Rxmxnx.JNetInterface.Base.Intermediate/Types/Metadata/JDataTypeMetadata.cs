@@ -15,13 +15,6 @@ public abstract record JDataTypeMetadata : ITypeInformation
 	private readonly CStringSequence _sequence;
 	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 	private readonly CString _signature;
-
-	/// <inheritdoc />
-	public CString ClassName => this._className;
-	/// <inheritdoc />
-	public CString Signature => this._signature;
-	/// <inheritdoc />
-	public String Hash => this._sequence.ToString();
 	/// <summary>
 	/// Array signature for current type.
 	/// </summary>
@@ -60,6 +53,13 @@ public abstract record JDataTypeMetadata : ITypeInformation
 		this._signature = this._sequence[1];
 		this._arraySignature = this._sequence[2];
 	}
+
+	/// <inheritdoc/>
+	public CString ClassName => this._className;
+	/// <inheritdoc/>
+	public CString Signature => this._signature;
+	/// <inheritdoc/>
+	public String Hash => this._sequence.ToString();
 
 	/// <summary>
 	/// Creates hash from given parameters.

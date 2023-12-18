@@ -144,7 +144,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._cache.GetHashCode();
-	
+
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>

@@ -42,6 +42,7 @@ public partial class JEnumObject
 	{
 		JPrimitiveFunctionDefinition definition =
 			JPrimitiveFunctionDefinition.CreateIntDefinition(JEnumObject.ordinalName);
-		return JPrimitiveFunctionDefinition.Invoke<Int32>(definition, this);
+		JClassObject enumClass = this.Environment.ClassProvider.EnumClassObject;
+		return JPrimitiveFunctionDefinition.Invoke<Int32>(definition, this, enumClass);
 	}
 }

@@ -43,9 +43,7 @@ public partial class JClassObject
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
 	internal JClassObject(IEnvironment env, JClassLocalRef jClassRef, String? hash, Boolean isDummy) : base(
 		env, jClassRef.Value, isDummy, env.ClassProvider.ClassObject)
-	{
-		this._hash ??= hash;
-	}
+		=> this._hash ??= hash;
 	/// <summary>
 	/// Constructor.
 	/// </summary>

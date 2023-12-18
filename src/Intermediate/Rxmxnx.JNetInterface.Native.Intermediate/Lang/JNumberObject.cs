@@ -26,7 +26,8 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>,
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
 	{
 		JFunctionDefinition<TPrimitive> definition = JNumberObject.GetValueDefinition<TPrimitive>();
-		return JFunctionDefinition<TPrimitive>.Invoke(definition, this);
+		JClassObject numberClass = this.Environment.ClassProvider.NumberClassObject;
+		return JFunctionDefinition<TPrimitive>.Invoke(definition, this, numberClass);
 	}
 
 	/// <inheritdoc/>
