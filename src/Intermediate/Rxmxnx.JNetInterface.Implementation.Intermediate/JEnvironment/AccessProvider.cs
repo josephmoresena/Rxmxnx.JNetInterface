@@ -13,7 +13,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			AccessCache access = this.GetAccess(jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			this.ReloadClass(jLocal as JClassObject);
 			switch (definition.Information[1][^1])
 			{
@@ -67,7 +67,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			AccessCache access = this.GetAccess(jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			this.ReloadClass(jLocal as JClassObject);
 			switch (definition.Information[1][^1])
 			{
@@ -120,7 +120,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
 			AccessCache access = this.GetAccess(jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			switch (definition.Information[1][^1])
 			{
 				case 0x90: //Z
@@ -167,7 +167,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
 			AccessCache access = this.GetAccess(jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			switch (definition.Information[1][^1])
 			{
 				case 0x90: //Z
@@ -215,7 +215,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
 			AccessCache access = this.GetAccess(jClass);
-			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
@@ -276,7 +276,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			AccessCache access = this.GetAccess(jLocal.Class);
-			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
 			this.ReloadClass(jLocal as JClassObject);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
@@ -304,7 +304,7 @@ public partial class JEnvironment
 			}
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			AccessCache access = this.GetAccess(jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			this.ReloadClass(jLocal as JClassObject);
 			GetObjectFieldDelegate getObjectField = this.GetDelegate<GetObjectFieldDelegate>();
 			JObjectLocalRef localRef = getObjectField(this.Reference, jLocal.As<JObjectLocalRef>(), fieldId);
@@ -323,7 +323,7 @@ public partial class JEnvironment
 			}
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			AccessCache access = this.GetAccess(jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			this.ReloadClass(jLocal as JClassObject);
 			this.ReloadClass(value as JClassObject);
 			SetObjectFieldDelegate setObjectField = this.GetDelegate<SetObjectFieldDelegate>();
@@ -342,7 +342,7 @@ public partial class JEnvironment
 			}
 			ValidationUtilities.ThrowIfDummy(jClass);
 			AccessCache access = this.GetAccess(jClass);
-			JFieldId fieldId = access.GetStaticFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
 			GetStaticObjectFieldDelegate getStaticObjectField = this.GetDelegate<GetStaticObjectFieldDelegate>();
 			JObjectLocalRef localRef = getStaticObjectField(this.Reference, jClass.As<JClassLocalRef>(), fieldId);
 			return this.CreateObject<TField>(localRef, true);
@@ -360,7 +360,7 @@ public partial class JEnvironment
 			}
 			ValidationUtilities.ThrowIfDummy(jClass);
 			AccessCache access = this.GetAccess(jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			this.ReloadClass(value as JClassObject);
 			SetStaticObjectFieldDelegate setObjectField = this.GetDelegate<SetStaticObjectFieldDelegate>();
 			setObjectField(this.Reference, jClass.As<JClassLocalRef>(), fieldId,
@@ -381,7 +381,7 @@ public partial class JEnvironment
 			}
 			ValidationUtilities.ThrowIfDummy(jClass);
 			AccessCache access = this.GetAccess(jClass);
-			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
@@ -399,7 +399,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
 			AccessCache access = this.GetAccess(jClass);
-			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
@@ -423,7 +423,7 @@ public partial class JEnvironment
 			}
 			ValidationUtilities.ThrowIfDummy(jClass);
 			AccessCache access = this.GetAccess(jClass);
-			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
 			this.ReloadClass(jLocal as JClassObject);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
@@ -454,7 +454,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
 			AccessCache access = this.GetAccess(jClass);
-			JMethodId methodId = access.GetMethodId(definition, this.VirtualMachine.GetEnvironment(this.Reference));
+			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
 			this.ReloadClass(jLocal as JClassObject);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?

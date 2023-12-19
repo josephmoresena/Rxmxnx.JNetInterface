@@ -7,6 +7,10 @@ internal partial class ObjectLifetime
 	/// </summary>
 	private readonly AssignableTypeCache _assignableTypes = new();
 	/// <summary>
+	/// Internal class counter.
+	/// </summary>
+	private readonly IMutableWrapper<Int32> _classCounter = IMutableWrapper<Int32>.Create();
+	/// <summary>
 	/// Internal <see cref="IEnvironment"/> instance.
 	/// </summary>
 	private readonly IEnvironment _env;

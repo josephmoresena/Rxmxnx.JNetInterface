@@ -224,7 +224,8 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="jLocal">The java object to load.</param>
 	public void Load(JLocalObject jLocal)
 	{
-		this._objects.TryAdd(jLocal.Id, new(jLocal));
+		if (this._objects.TryAdd(jLocal.Id, new(jLocal)))
+			this._classCounter.Value += 1;
 		this.Secondary?._objects.TryAdd(jLocal.Id, new(jLocal));
 	}
 	/// <summary>
@@ -239,10 +240,9 @@ internal sealed partial class ObjectLifetime : IDisposable
 	{
 		if (!this._objects.ContainsKey(jLocal.Id)) return;
 		Boolean isClass = jLocal is JClassObject;
-		Int32 limit = isClass ? 1 : 0;
 		this.Unload(jLocal.Id, isClass);
 		this.Secondary?.Unload(jLocal.Id, isClass);
-		if (this._objects.Count <= limit || this._env.ReferenceProvider.IsParameter(jLocal)) return;
+		if (this._objects.Count <= this._classCounter.Value || this._env.ReferenceProvider.IsParameter(jLocal)) return;
 		this.Dispose();
 	}
 	/// <summary>

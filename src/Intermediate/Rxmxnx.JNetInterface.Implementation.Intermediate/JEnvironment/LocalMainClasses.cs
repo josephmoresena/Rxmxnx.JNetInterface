@@ -5,12 +5,18 @@ public partial class JEnvironment
 	private class LocalMainClasses : MainClasses<JClassObject>
 	{
 		/// <summary>
+		/// <see cref="JEnvironment"/> instance.
+		/// </summary>
+		public JEnvironment Environment { get; }
+
+		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-		public LocalMainClasses(IEnvironment env)
+		public LocalMainClasses(JEnvironment env)
 		{
-			this.ClassObject = new(env, false);
+			this.Environment = env;
+			this.ClassObject = new(this.Environment, false);
 			this.ThrowableObject = new(this.ClassObject, MetadataHelper.GetMetadata<JThrowableObject>());
 			this.StackTraceElementObject =
 				new(this.ClassObject, MetadataHelper.GetMetadata<JStackTraceElementObject>());

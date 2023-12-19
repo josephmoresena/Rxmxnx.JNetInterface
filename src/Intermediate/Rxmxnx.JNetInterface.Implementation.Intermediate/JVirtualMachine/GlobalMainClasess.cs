@@ -19,19 +19,24 @@ public partial class JVirtualMachine
 		/// Metadata for <see cref="JStackTraceElementObject"/>.
 		/// </summary>
 		public JClassObjectMetadata StackTraceElementMetadata { get; }
+		/// <summary>
+		/// A <see cref="JVirtualMachine"/> instance.
+		/// </summary>
+		public JVirtualMachine VirtualMachine { get; }
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="vm"></param>
-		public GlobalMainClasses(IVirtualMachine vm)
+		public GlobalMainClasses(JVirtualMachine vm)
 		{
+			this.VirtualMachine = vm;
 			this.ClassMetadata = JClassObjectMetadata.Create<JClassObject>();
-			this.ClassObject = new(vm, this.ClassMetadata, false, default);
+			this.ClassObject = new(this.VirtualMachine, this.ClassMetadata, false, default);
 			this.ThrowableMetadata = JClassObjectMetadata.Create<JThrowableObject>();
-			this.ThrowableObject = new(vm, this.ThrowableMetadata, false, default);
+			this.ThrowableObject = new(this.VirtualMachine, this.ThrowableMetadata, false, default);
 			this.StackTraceElementMetadata = JClassObjectMetadata.Create<JStackTraceElementObject>();
-			this.StackTraceElementObject = new(vm, this.StackTraceElementMetadata, false, default);
+			this.StackTraceElementObject = new(this.VirtualMachine, this.StackTraceElementMetadata, false, default);
 		}
 	}
 }

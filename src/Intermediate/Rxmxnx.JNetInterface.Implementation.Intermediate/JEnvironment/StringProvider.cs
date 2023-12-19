@@ -7,13 +7,13 @@ public partial class JEnvironment
 		public JStringObject Create(ReadOnlySpan<Char> data)
 		{
 			JStringLocalRef stringRef = data.WithSafeFixed(this, JEnvironmentCache.CreateString);
-			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			IEnvironment env = this._mainClasses.Environment;
 			return this.Register<JStringObject>(new(env, stringRef, data.ToString(), false));
 		}
 		public JStringObject Create(ReadOnlySpan<Byte> utf8Data)
 		{
 			JStringLocalRef stringRef = utf8Data.WithSafeFixed(this, JEnvironmentCache.CreateUtf8String);
-			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			IEnvironment env = this._mainClasses.Environment;
 			return this.Register<JStringObject>(new(env, stringRef, default, false));
 		}
 		public Int32 GetLength(JReferenceObject jObject)

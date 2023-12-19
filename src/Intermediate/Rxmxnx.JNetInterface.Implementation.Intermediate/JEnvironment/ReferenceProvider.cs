@@ -8,7 +8,7 @@ public partial class JEnvironment
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			IEnvironment env = this._mainClasses.Environment;
 			return metadata.Signature[0] switch
 			{
 				0x90 => //Z
@@ -78,7 +78,7 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jGlobal);
 			if (jGlobal.IsDefault || this._mainClasses.IsMainGlobal(jGlobal as JGlobal)) return false;
-			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			JEnvironment env = this._mainClasses.Environment;
 			try
 			{
 				if (jGlobal is JGlobal)

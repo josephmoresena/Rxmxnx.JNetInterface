@@ -131,7 +131,7 @@ internal static class MetadataHelper
 	/// </summary>
 	/// <param name="className">A java type name.</param>
 	/// <returns><see cref="CStringSequence"/> with class information for given type.</returns>
-	public static CStringSequence GetClassInformation(ref CString className)
+	public static CStringSequence GetClassInformation(CString className)
 	{
 		CString classNameF = JDataTypeMetadata.JniParseClassName(className);
 		return JDataTypeMetadata.CreateInformationSequence(classNameF);
@@ -162,12 +162,12 @@ internal static class MetadataHelper
 		arrayHash = default;
 		arrayTypeMetadata = default;
 		if (className.Length < 2 || className[0] != UnicodeObjectSignatures.ArraySignaturePrefix[0]) return false;
-		arrayHash = MetadataHelper.GetClassInformation(ref className);
+		arrayHash = MetadataHelper.GetClassInformation(className);
 		if (!MetadataHelper.runtimeMetadata.TryGetValue(arrayHash.ToString(),
 		                                                out JReferenceTypeMetadata? referenceMetadata))
 			referenceMetadata = MetadataHelper.IsArrayClass(className[1..], out _, out arrayTypeMetadata) ?
 				arrayTypeMetadata?.GetArrayMetadata() :
-				MetadataHelper.GetMetadata(JDataTypeMetadata.CreateInformationSequence(className[1..^1]).ToString())
+				MetadataHelper.GetMetadata(JDataTypeMetadata.CreateInformationSequence(arrayHash[0][1..^1]).ToString())
 				              ?.GetArrayMetadata();
 		arrayTypeMetadata = (JArrayTypeMetadata?)referenceMetadata;
 		MetadataHelper.Register(arrayTypeMetadata);
@@ -273,6 +273,6 @@ internal static class MetadataHelper
 	/// <param name="fromMetadata">Metadata whom type must be promoted.</param>
 	/// <param name="toMetadata">Metadata whom type must be casted.</param>
 	/// <returns>The assignation key.</returns>
-	private static String GetAssignationKey(JDataTypeMetadata fromMetadata, JDataTypeMetadata toMetadata)
+	private static String GetAssignationKey(ITypeInformation fromMetadata, ITypeInformation toMetadata)
 		=> new CStringSequence(fromMetadata.ClassName, MetadataHelper.assignableTo, toMetadata.ClassName).ToString();
 }

@@ -324,7 +324,6 @@ public partial class JEnvironment
 		public void CreateLocalRef(JGlobalRef globalRef, JLocalObject? result, Boolean deleteGlobal = true)
 		{
 			if (globalRef == default || result is not null) return;
-			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
 			try
 			{
 				NewLocalRefDelegate newLocalRef = this.GetDelegate<NewLocalRefDelegate>();
@@ -335,7 +334,7 @@ public partial class JEnvironment
 			}
 			finally
 			{
-				if (deleteGlobal) env.DeleteGlobalRef(globalRef);
+				if (deleteGlobal) this._mainClasses.Environment.DeleteGlobalRef(globalRef);
 			}
 		}
 		/// <summary>
@@ -345,7 +344,6 @@ public partial class JEnvironment
 		/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
 		public JGlobalRef CreateGlobalRef(JObjectLocalRef localRef)
 		{
-			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
 			NewGlobalRefDelegate newGlobalRef = this.GetDelegate<NewGlobalRefDelegate>();
 			JGlobalRef globalRef = newGlobalRef(this.Reference, localRef);
 			if (globalRef == default) this.CheckJniError();
@@ -407,7 +405,7 @@ public partial class JEnvironment
 		internal TResult? CreateObject<TResult>(JObjectLocalRef localRef, Boolean register)
 			where TResult : IDataType<TResult>
 		{
-			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			JEnvironment env = this._mainClasses.Environment;
 			this.CheckJniError();
 			if (localRef == default) return default;
 			if (MetadataHelper.GetMetadata<TResult>().Modifier == JTypeModifier.Final)
@@ -433,12 +431,10 @@ public partial class JEnvironment
 		{
 			if (jClass is null) return default;
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			if (classRef.Value == default)
-			{
-				classRef = jClass.Name.WithSafeFixed(this, JEnvironmentCache.FindClass);
-				jClass.SetValue(classRef);
-				this.Register(jClass);
-			}
+			if (classRef.Value != default) return classRef;
+			classRef = jClass.Name.WithSafeFixed(this, JEnvironmentCache.FindClass);
+			jClass.SetValue(classRef);
+			this.Register(jClass);
 			return classRef;
 		}
 

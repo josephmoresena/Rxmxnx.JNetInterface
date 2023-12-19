@@ -63,7 +63,7 @@ public partial class JVirtualMachine
 		{
 			this.Reference = vmRef;
 			this.DelegateCache = new();
-			this.ThreadCache = new(vmRef);
+			this.ThreadCache = new(mainClasses.VirtualMachine);
 			this.MainClasses = this.Register(mainClasses);
 		}
 
@@ -101,8 +101,7 @@ public partial class JVirtualMachine
 		public JGlobal? Register(JGlobal? jGlobal)
 		{
 			if (jGlobal is null || jGlobal.IsDefault) return jGlobal;
-			using IThread thread = JVirtualMachine.GetVirtualMachine(this.Reference)
-			                                      .CreateThread(ThreadPurpose.CheckGlobalReference);
+			using IThread thread = this.CreateThread(ThreadPurpose.CheckGlobalReference);
 			this._globalObjects[jGlobal.Reference] = new(jGlobal.GetCacheable(thread));
 			return jGlobal;
 		}
@@ -148,8 +147,7 @@ public partial class JVirtualMachine
 			this.GlobalClassCache.Clear();
 			this.WeakClassCache.Clear();
 			if (globalKeys.Length == 0 && weakKeys.Length == 0) return;
-			using IThread thread = JVirtualMachine.GetVirtualMachine(this.Reference)
-			                                      .CreateThread(ThreadPurpose.RemoveGlobalReference);
+			using IThread thread = this.CreateThread(ThreadPurpose.RemoveGlobalReference);
 			JEnvironment env = (JEnvironment)thread;
 			foreach (JWeakRef key in weakKeys)
 			{
@@ -164,5 +162,9 @@ public partial class JVirtualMachine
 					env.DeleteGlobalRef(jGlobal.Reference);
 			}
 		}
+
+		/// <inheritdoc cref="IVirtualMachine.CreateThread(ThreadPurpose)"/>
+		private IThread CreateThread(ThreadPurpose purpose)
+			=> (this.MainClasses.VirtualMachine as IVirtualMachine).CreateThread(purpose);
 	}
 }

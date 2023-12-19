@@ -113,8 +113,8 @@ public partial class JEnvironment
 		using JNativeMemory<Byte> utf8Text = jString.GetUtf8Chars(JMemoryReferenceKind.Local);
 		CStringSequence classInformation = MetadataHelper.GetClassInformation(utf8Text.Values);
 		if (!this._cache.TryGetClass(classInformation.ToString(), out JClassObject? jClass))
-			jClass = new(this._cache.ClassObject, new TypeInformation(classInformation));
-		if (keepReference) jClass.SetValue(classRef);
+			jClass = new(this._cache.ClassObject, new TypeInformation(classInformation),
+			             keepReference ? classRef : default);
 		return this._cache.Register(jClass);
 	}
 }

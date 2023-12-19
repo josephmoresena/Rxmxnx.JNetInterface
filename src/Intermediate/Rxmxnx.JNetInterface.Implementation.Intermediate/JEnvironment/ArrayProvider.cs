@@ -26,7 +26,7 @@ public partial class JEnvironment
 				return (TElement)primitiveMetadata.CreateInstance(fixedBuffer.Values);
 			}
 			GetObjectArrayElementDelegate getObjectArrayElement = this.GetDelegate<GetObjectArrayElementDelegate>();
-			IEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
+			IEnvironment env = this._mainClasses.Environment;
 			JObjectLocalRef localRef = getObjectArrayElement(this.Reference, jArray.Reference, index);
 			if (localRef == default) this.CheckJniError();
 			return this.Cast<TElement>(new(env, localRef, false, this.GetClass<TElement>()));
