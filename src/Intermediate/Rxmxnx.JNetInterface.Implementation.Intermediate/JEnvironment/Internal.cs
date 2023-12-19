@@ -3,6 +3,23 @@ namespace Rxmxnx.JNetInterface;
 public partial class JEnvironment
 {
 	/// <summary>
+	/// Class cache.
+	/// </summary>
+	internal ClassCache ClassCache => this._cache.GetClassCache();
+	/// <summary>
+	/// Local cache.
+	/// </summary>
+	internal LocalCache LocalCache => this._cache.GetLocalCache();
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef envRef)
+		=> this._cache = new((JVirtualMachine)vm, envRef, new(this));
+
+	/// <summary>
 	/// Deletes local reference.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
@@ -117,4 +134,9 @@ public partial class JEnvironment
 			             keepReference ? classRef : default);
 		return this._cache.Register(jClass);
 	}
+	/// <summary>
+	/// Loads in current cache given class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	internal void LoadClass(JClassObject jClass) => this._cache.LoadClass(jClass);
 }

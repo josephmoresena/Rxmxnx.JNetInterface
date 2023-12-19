@@ -120,7 +120,9 @@ public partial class JEnvironment
 			}
 			else
 			{
-				JClassLocalRef classRef = classInformation.ClassName.WithSafeFixed(this, JEnvironmentCache.FindClass);
+				JClassLocalRef classRef = this._objects.FindClassParameter(classInformation.Hash);
+				if (classRef.Value != default)
+					classInformation.ClassName.WithSafeFixed(this, JEnvironmentCache.FindClass);
 				result = new(this.ClassObject, classInformation, classRef);
 			}
 			return this.Register(result);

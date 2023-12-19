@@ -52,7 +52,8 @@ internal record LocalCache
 			if (unload) env.Delete(key);
 			this._objects[key].Dispose();
 		}
-		if (this._previous is not null) env.SetObjectCache(this._previous);
+		if (this._previous is not null && Object.ReferenceEquals(env.LocalCache, this))
+			env.SetObjectCache(this._previous);
 	}
 	/// <summary>
 	/// Removes current local reference.
@@ -63,4 +64,21 @@ internal record LocalCache
 		if (!this._objects.Remove(localRef))
 			this._previous?.Remove(localRef);
 	}
+	/// <summary>
+	/// Indicates whether <paramref name="localRef"/> is JNI method parameter reference.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="localRef"/> is a parameter reference;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public virtual Boolean IsParameter(JObjectLocalRef localRef)
+		=> localRef != default && (this._previous?.IsParameter(localRef) ?? false);
+	/// <summary>
+	/// Retrieves class reference according with <paramref name="hash"/>.
+	/// </summary>
+	/// <param name="hash">Class hash.</param>
+	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+	public virtual JClassLocalRef FindClassParameter(String hash)
+		=> this._previous?.FindClassParameter(hash) ?? default;
 }

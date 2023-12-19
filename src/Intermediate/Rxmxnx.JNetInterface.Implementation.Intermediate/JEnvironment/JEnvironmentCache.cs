@@ -298,6 +298,14 @@ public partial class JEnvironment
 		/// <inheritdoc cref="JEnvironment.SetObjectCache(LocalCache?)"/>
 		public void SetObjectCache(LocalCache localCache) { this._objects = localCache; }
 		/// <summary>
+		/// Retrieves local cache.
+		/// </summary>
+		public LocalCache GetLocalCache() => this._objects;
+		/// <summary>
+		/// Class cache cache.
+		/// </summary>
+		public ClassCache GetClassCache() => this._classes;
+		/// <summary>
 		/// Release all references.
 		/// </summary>
 		public void FreeReferences(JEnvironment env)
@@ -388,7 +396,7 @@ public partial class JEnvironment
 		/// </summary>
 		/// <param name="localRef">Object instance to get class.</param>
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		internal JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
+		public JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
 		{
 			GetObjectClassDelegate getObjectClass = this.GetDelegate<GetObjectClassDelegate>();
 			JClassLocalRef classRef = getObjectClass(this.Reference, localRef);
@@ -402,7 +410,7 @@ public partial class JEnvironment
 		/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="register">Indicates whether object must be registered.</param>
 		/// <returns>A <typeparamref name="TResult"/> instance.</returns>
-		internal TResult? CreateObject<TResult>(JObjectLocalRef localRef, Boolean register)
+		public TResult? CreateObject<TResult>(JObjectLocalRef localRef, Boolean register)
 			where TResult : IDataType<TResult>
 		{
 			JEnvironment env = this._mainClasses.Environment;
@@ -420,6 +428,13 @@ public partial class JEnvironment
 			{
 				this.DeleteLocalRef(classRef.Value);
 			}
+		}
+		/// <inheritdoc cref="JEnvironment.LoadClass(JClassObject?)"/>
+		public void LoadClass(JClassObject? jClass)
+		{
+			if (jClass is null) return;
+			this._classes[jClass.Hash] = jClass;
+			this.VirtualMachine.LoadGlobal(jClass);
 		}
 
 		/// <summary>

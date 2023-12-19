@@ -42,7 +42,7 @@ public partial class JEnvironment
 		/// </summary>
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 		/// <param name="capacity">Current capacity.</param>
-		public LocalFrame(JEnvironment env, Int32 capacity)
+		public LocalFrame(JEnvironment env, Int32 capacity) : base(env._cache.GetLocalCache())
 		{
 			env.CreateLocalFrame(capacity);
 

@@ -26,14 +26,6 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef envRef)
-		=> this._cache = new((JVirtualMachine)vm, envRef, new(this));
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
 	/// <param name="cache">A <see cref="JEnvironment"/> reference.</param>
 	private JEnvironment(JEnvironmentCache cache) => this._cache = cache;
 

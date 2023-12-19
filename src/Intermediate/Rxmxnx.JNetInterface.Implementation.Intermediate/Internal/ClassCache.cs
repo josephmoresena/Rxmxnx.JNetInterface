@@ -27,6 +27,14 @@ internal class ClassCache
 			JGlobalBase { IsDefault: false, } => jClass.As<JClassLocalRef>(),
 			_ => default,
 		};
+		this.Load(classRef);
+	}
+	/// <summary>
+	/// Loads a <see cref="JClassLocalRef"/> reference.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	public void Load(JClassLocalRef classRef)
+	{
 		if (classRef.Value != default) this._access[classRef] = new(classRef);
 	}
 	/// <summary>
@@ -35,9 +43,28 @@ internal class ClassCache
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	public void Unload(JClassLocalRef classRef) => this._access.TryRemove(classRef, out _);
 	/// <summary>
+	/// Unloads current class.
+	/// </summary>
+	/// <param name="references">A <see cref="JClassLocalRef"/> collection.</param>
+	public void Unload(IReadOnlyDictionary<String, JClassLocalRef> references)
+	{
+		foreach (String hash in references.Keys)
+		{
+			this.Unload(references[hash]);
+			this.SetAsUnloaded(hash, references[hash]);
+		}
+	}
+	/// <summary>
 	/// Clears current cache.
 	/// </summary>
 	public void Clear() => this._access.Clear();
+
+	/// <summary>
+	/// Set as unloaded a class with given hash.
+	/// </summary>
+	/// <param name="hash">A class hash.</param>
+	/// <param name="classRef">Unloaded <see cref="JClassLocalRef"/> reference.</param>
+	protected virtual void SetAsUnloaded(String hash, JClassLocalRef classRef) { }
 }
 
 /// <summary>
@@ -78,4 +105,12 @@ internal sealed class ClassCache<TClass> : ClassCache where TClass : JReferenceO
 	/// </returns>
 	public Boolean TryGetValue(String hash, [NotNullWhen(true)] out TClass? jClass)
 		=> this._classes.TryGetValue(hash, out jClass);
+
+	/// <inheritdoc/>
+	protected override void SetAsUnloaded(String hash, JClassLocalRef classRef)
+	{
+		if (!this._classes.TryGetValue(hash, out TClass? jClass)) return;
+		if ((jClass as JLocalObject)?.InternalReference == classRef.Value)
+			jClass.ClearValue();
+	}
 }

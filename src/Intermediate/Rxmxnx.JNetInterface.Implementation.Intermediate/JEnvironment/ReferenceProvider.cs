@@ -93,7 +93,7 @@ public partial class JEnvironment
 			}
 			return true;
 		}
-		public Boolean IsParameter(JLocalObject jLocal) => throw new NotImplementedException();
+		public Boolean IsParameter(JLocalObject jLocal) => this._objects.IsParameter(jLocal.InternalReference);
 
 		/// <summary>
 		/// Registers a <typeparamref name="TObject"/> in current <see cref="IEnvironment"/> instance.
@@ -105,11 +105,7 @@ public partial class JEnvironment
 		public TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
 		{
 			ValidationUtilities.ThrowIfDummy(jObject as JReferenceObject);
-			if (jObject is JClassObject jClass)
-			{
-				this._classes[jClass.Hash] = jClass;
-				this.VirtualMachine.LoadGlobal(jClass);
-			}
+			this.LoadClass(jObject as JClassObject);
 			JLocalObject? jLocal = jObject as JLocalObject;
 			if (!JObject.IsNullOrDefault(jLocal))
 				this._objects[jLocal.As<JObjectLocalRef>()] = (jLocal as ILocalObject).Lifetime.GetCacheable();
