@@ -128,7 +128,7 @@ public partial class JEnvironment
 			if (jLocal is null || jLocal.IsDefault) return default;
 			if (typeof(TObject) == typeof(JLocalObject))
 				return register ? this.Register((TObject)(Object)jLocal) : (TObject)(Object)jLocal;
-			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TObject>();
+			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
 			TObject result = (TObject)(Object)metadata.ParseInstance(jLocal);
 			jLocal.Dispose();
 			return register ? this.Register(result) : result;

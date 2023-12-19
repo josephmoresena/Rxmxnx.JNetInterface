@@ -191,11 +191,23 @@ internal static class ValidationUtilities
 	/// Throws an exception if <paramref name="jObject"/> is dummy.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is dummy.</exception>
-	public static void ThrowIfDummy(JReferenceObject? jObject)
+	/// <param name="message">Exception message.</param>
+	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is dummy.</exception>
+	public static void ThrowIfDummy(JReferenceObject? jObject, String? message = default)
 	{
 		if (jObject is not null && jObject.IsDummy)
-			throw new InvalidOperationException("Invalid JReferenceObject.");
+			throw new ArgumentException(message ?? "Invalid JReferenceObject.");
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="jObject"/> is default.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="message">Exception message.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is default.</exception>
+	public static void ThrowIfDefault(JReferenceObject jObject, String? message = default)
+	{
+		if (jObject.IsDefault)
+			throw new ArgumentException(message ?? "Disposed JReferenceObject.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="thread"/> is different to current thread.

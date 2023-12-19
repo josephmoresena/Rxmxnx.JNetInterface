@@ -5,6 +5,11 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// </summary>
 public abstract record JDataTypeMetadata : ITypeInformation
 {
+	/// <summary>
+	/// Escape for Java class name -> JNI class name.
+	/// </summary>
+	private static readonly CString classNameEscape = new(() => "./"u8);
+
 	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
 	private readonly CString _arraySignature;
 	/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
@@ -77,6 +82,31 @@ public abstract record JDataTypeMetadata : ITypeInformation
 		arr[2] = arraySignature ?? JDataTypeMetadata.ComputeArraySignature(arr[1]);
 		return new(arr);
 	}
+	/// <summary>
+	/// Retrieves escaped JNI class name.
+	/// </summary>
+	/// <param name="className">Java class name.</param>
+	/// <returns>A <see cref="CString"/> containing JNI class name.</returns>
+	internal static CString JniParseClassName(CString className)
+	{
+		CString classNameF = !className.Contains(JDataTypeMetadata.classNameEscape[0]) ?
+			className :
+			CString.Create(className.Select(JDataTypeMetadata.EscapeClassNameChar).ToArray());
+		return classNameF;
+	}
+	/// <summary>
+	/// Retrieves escaped JNI class name.
+	/// </summary>
+	/// <param name="className">Java class name.</param>
+	/// <returns>A <see cref="CString"/> containing JNI class name.</returns>
+	internal static CString JniParseClassName(ReadOnlySpan<Byte> className)
+	{
+		if (!className.Contains(JDataTypeMetadata.classNameEscape[0])) return CString.Create(className);
+		Byte[] classNameBytes = new Byte[className.Length];
+		for (Int32 i = 0; i < className.Length; i++)
+			classNameBytes[i] = JDataTypeMetadata.EscapeClassNameChar(className[i]);
+		return classNameBytes;
+	}
 
 	/// <summary>
 	/// Computes the type signature for given type class name.
@@ -94,4 +124,11 @@ public abstract record JDataTypeMetadata : ITypeInformation
 	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
 	private static CString ComputeArraySignature(CString signature)
 		=> CString.Concat(UnicodeObjectSignatures.ArraySignaturePrefix, signature);
+	/// <summary>
+	/// Escapes Java class name char to JNI class name.
+	/// </summary>
+	/// <param name="classNameChar">A Java class name char.</param>
+	/// <returns>A JNI class name char.</returns>
+	private static Byte EscapeClassNameChar(Byte classNameChar)
+		=> classNameChar == JDataTypeMetadata.classNameEscape[0] ? JDataTypeMetadata.classNameEscape[1] : classNameChar;
 }

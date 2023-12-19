@@ -9,10 +9,6 @@ internal static class MetadataHelper
 	/// Separator class assignability.
 	/// </summary>
 	private static readonly CString assignableTo = new(() => " -> "u8);
-	/// <summary>
-	/// Escape for Java class name -> JNI class name.
-	/// </summary>
-	private static readonly CString classNameEscape = new(() => "./"u8);
 
 	/// <summary>
 	/// Basic metadata dictionary.
@@ -134,25 +130,20 @@ internal static class MetadataHelper
 	/// Retrieves the class has from current <paramref name="className"/>.
 	/// </summary>
 	/// <param name="className">A java type name.</param>
-	/// <returns>Hash for given type.</returns>
-	public static CStringSequence GetHashSequence(ref CString className)
+	/// <returns><see cref="CStringSequence"/> with class information for given type.</returns>
+	public static CStringSequence GetClassInformation(ref CString className)
 	{
-		CString classNameF = !className.Contains(MetadataHelper.classNameEscape[0]) ?
-			className :
-			CString.Create(className.Select(MetadataHelper.EscapeClassNameChar).ToArray());
+		CString classNameF = JDataTypeMetadata.JniParseClassName(className);
 		return JDataTypeMetadata.CreateInformationSequence(classNameF);
 	}
 	/// <summary>
 	/// Retrieves the class has from current <paramref name="className"/>.
 	/// </summary>
 	/// <param name="className">A java type name.</param>
-	/// <returns>Hash for given type.</returns>
-	public static CStringSequence GetHashSequence(ReadOnlySpan<Byte> className)
+	/// <returns><see cref="CStringSequence"/> with class information for given type.</returns>
+	public static CStringSequence GetClassInformation(ReadOnlySpan<Byte> className)
 	{
-		CString classNameF = !className.Contains(MetadataHelper.classNameEscape[0]) ?
-			CString.Create(className) :
-			CString.Create(CString.CreateUnsafe(className.GetUnsafeIntPtr(), className.Length, true)
-			                      .Select(MetadataHelper.EscapeClassNameChar).ToArray());
+		CString classNameF = JDataTypeMetadata.JniParseClassName(className);
 		return JDataTypeMetadata.CreateInformationSequence(classNameF);
 	}
 	/// <summary>
@@ -171,7 +162,7 @@ internal static class MetadataHelper
 		arrayHash = default;
 		arrayTypeMetadata = default;
 		if (className.Length < 2 || className[0] != UnicodeObjectSignatures.ArraySignaturePrefix[0]) return false;
-		arrayHash = MetadataHelper.GetHashSequence(ref className);
+		arrayHash = MetadataHelper.GetClassInformation(ref className);
 		if (!MetadataHelper.runtimeMetadata.TryGetValue(arrayHash.ToString(),
 		                                                out JReferenceTypeMetadata? referenceMetadata))
 			referenceMetadata = MetadataHelper.IsArrayClass(className[1..], out _, out arrayTypeMetadata) ?
@@ -276,13 +267,6 @@ internal static class MetadataHelper
 			MetadataHelper.Register(arrayMetadata.ElementMetadata as JReferenceTypeMetadata);
 		return MetadataHelper.runtimeMetadata.TryAdd(metadata.Hash, metadata);
 	}
-	/// <summary>
-	/// Escapes Java class name char to JNI class name.
-	/// </summary>
-	/// <param name="classNameChar">A Java class name char.</param>
-	/// <returns>A JNI class name char.</returns>
-	private static Byte EscapeClassNameChar(Byte classNameChar)
-		=> classNameChar == MetadataHelper.classNameEscape[0] ? MetadataHelper.classNameEscape[1] : classNameChar;
 	/// <summary>
 	/// Creates the assignation key for <paramref name="fromMetadata"/> to <paramref name="toMetadata"/>
 	/// </summary>

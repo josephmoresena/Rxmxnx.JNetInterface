@@ -21,10 +21,19 @@ public partial class JEnvironment
 		public JClassObject AsClassObject(JReferenceObject jObject) => throw new NotImplementedException();
 		public Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
 			where TDataType : JReferenceObject, IDataType<TDataType>
-			=> throw new NotImplementedException();
+		{
+			ValidationUtilities.ThrowIfDummy(jObject);
+			JClassObject jClass = this.GetClass<TDataType>();
+			this.ReloadClass(jObject as JClassObject);
+			ValidationUtilities.ThrowIfDefault(jObject);
+			JClassObject objectClass = this.GetClass(jObject.ObjectClassName);
+			Boolean result = this.IsAssignableFrom(objectClass, jClass);
+			jObject.SetAssignableTo<TDataType>(result);
+			return result;
+		}
 		public JClassObject GetClass(CString className)
 		{
-			String hash = MetadataHelper.GetHashSequence(ref className).ToString();
+			String hash = MetadataHelper.GetClassInformation(ref className).ToString();
 			return this.GetClass(className, hash);
 		}
 		public JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>
@@ -32,13 +41,41 @@ public partial class JEnvironment
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TDataType>();
 			return this.GetClass(metadata.ClassName, metadata.Hash);
 		}
-		public JClassObject GetObjectClass(JLocalObject jLocal) => throw new NotImplementedException();
-		public JClassObject? GetSuperClass(JClassObject jClass) => throw new NotImplementedException();
+		public JClassObject GetObjectClass(JLocalObject jLocal) => this.GetClass(jLocal.ObjectClassName);
+		public JClassObject? GetSuperClass(JClassObject jClass)
+		{
+			if (MetadataHelper.GetMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
+				return this.GetClass(metadata.ClassName, metadata.Hash);
+			ValidationUtilities.ThrowIfDummy(jClass);
+			JClassLocalRef classRef = this.ReloadClass(jClass);
+			ValidationUtilities.ThrowIfDefault(jClass);
+			GetSuperclassDelegate getSuperClass = this.GetDelegate<GetSuperclassDelegate>();
+			JClassLocalRef superClassRef = getSuperClass(this.Reference, classRef);
+			if (superClassRef.Value != default)
+				return this.VirtualMachine.GetEnvironment(this.Reference).GetClass(superClassRef, true);
+			this.CheckJniError();
+			return default;
+		}
 		public Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
-			=> throw new NotImplementedException();
+		{
+			Boolean? result = MetadataHelper.IsAssignableFrom(jClass, otherClass);
+			if (result.HasValue) return result.Value;
+			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfDummy(otherClass);
+			JClassLocalRef classRef = this.ReloadClass(jClass);
+			JClassLocalRef otherClassRef = this.ReloadClass(otherClass);
+			IsAssignableFromDelegate isAssignableFrom = this.GetDelegate<IsAssignableFromDelegate>();
+			result = isAssignableFrom(this.Reference, classRef, otherClassRef) == JBoolean.TrueValue;
+			this.CheckJniError();
+			return result.Value;
+		}
 		public JClassObject LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,
 			JLocalObject? jClassLoader = default)
-			=> throw new NotImplementedException();
+		{
+			className = JDataTypeMetadata.JniParseClassName(className);
+			return NativeUtilities.WithSafeFixed(className.AsSpan(), rawClassBytes, (this, jClassLoader),
+			                                     JEnvironmentCache.LoadClass);
+		}
 		public JClassObject LoadClass(CString className, Stream rawClassBytes, JLocalObject? jClassLoader = default)
 			=> throw new NotImplementedException();
 		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JLocalObject? jClassLoader = default)
@@ -51,9 +88,7 @@ public partial class JEnvironment
 		}
 		public void SetAssignableTo<TDataType>(JReferenceObject jObject)
 			where TDataType : JReferenceObject, IDataType<TDataType>
-		{
-			throw new NotImplementedException();
-		}
+			=> jObject.SetAssignableTo<TDataType>(true);
 
 		private JClassObject GetClass(CString className, String hash)
 		{
@@ -69,6 +104,22 @@ public partial class JEnvironment
 				result = new(env, classRef, hash, false);
 			}
 			return this.Register(result);
+		}
+		private static JClassObject LoadClass(ReadOnlyFixedMemoryList memoryList,
+			(JEnvironmentCache cache, JLocalObject? classLoader) args)
+		{
+			ValidationUtilities.ThrowIfDummy(args.classLoader);
+			CStringSequence classInformation = MetadataHelper.GetClassInformation(memoryList[0].Bytes);
+			DefineClassDelegate defineClass = args.cache.GetDelegate<DefineClassDelegate>();
+			JObjectLocalRef localRef = args.classLoader?.To<JObjectLocalRef>() ?? default;
+			JClassLocalRef classRef = defineClass(args.cache.Reference, (ReadOnlyValPtr<Byte>)memoryList[0].Pointer,
+			                                      localRef, memoryList[1].Pointer, memoryList[1].Bytes.Length);
+			if (classRef.Value == default) args.cache.CheckJniError();
+			if (args.cache._classes.TryGetValue(classInformation.ToString(), out JClassObject? result))
+				result.SetValue(classRef);
+			else
+				result = new(args.cache.ClassObject, new TypeInformation(classInformation));
+			return args.cache.Register(result);
 		}
 	}
 }

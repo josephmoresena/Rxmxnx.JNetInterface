@@ -11,8 +11,9 @@ public partial class JEnvironment
 		public LocalMainClasses(IEnvironment env)
 		{
 			this.ClassObject = new(env, false);
-			this.ThrowableObject = new(this.ClassObject, IDataType.GetMetadata<JThrowableObject>());
-			this.StackTraceElementObject = new(this.ClassObject, IDataType.GetMetadata<JStackTraceElementObject>());
+			this.ThrowableObject = new(this.ClassObject, MetadataHelper.GetMetadata<JThrowableObject>());
+			this.StackTraceElementObject =
+				new(this.ClassObject, MetadataHelper.GetMetadata<JStackTraceElementObject>());
 		}
 		/// <summary>
 		/// Indicates whether <paramref name="jGlobal"/> is a main global class.

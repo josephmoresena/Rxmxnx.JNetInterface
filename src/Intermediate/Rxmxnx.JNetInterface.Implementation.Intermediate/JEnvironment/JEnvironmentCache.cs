@@ -410,7 +410,7 @@ public partial class JEnvironment
 			JEnvironment env = this.VirtualMachine.GetEnvironment(this.Reference);
 			this.CheckJniError();
 			if (localRef == default) return default;
-			if (IDataType.GetMetadata<TResult>().Modifier == JTypeModifier.Final)
+			if (MetadataHelper.GetMetadata<TResult>().Modifier == JTypeModifier.Final)
 				return this.Cast<TResult>(new(env, localRef, false, JClassObject.GetClass<TResult>(env)), register);
 			JClassLocalRef classRef = this.GetObjectClass(localRef);
 			try

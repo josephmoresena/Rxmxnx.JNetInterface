@@ -295,7 +295,7 @@ public partial class JEnvironment
 		public TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
 			where TField : IDataType<TField>
 		{
-			JDataTypeMetadata metadata = IDataType.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -313,7 +313,7 @@ public partial class JEnvironment
 		public void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 			TField? value) where TField : IDataType<TField>
 		{
-			JDataTypeMetadata metadata = IDataType.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -333,7 +333,7 @@ public partial class JEnvironment
 		public TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
 			where TField : IDataType<TField>
 		{
-			JDataTypeMetadata metadata = IDataType.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -350,7 +350,7 @@ public partial class JEnvironment
 		public void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
 			where TField : IDataType<TField>
 		{
-			JDataTypeMetadata metadata = IDataType.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -372,7 +372,7 @@ public partial class JEnvironment
 		public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args) where TResult : IDataType<TResult>
 		{
-			JDataTypeMetadata metadata = IDataType.GetMetadata<TResult>();
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TResult>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -414,7 +414,7 @@ public partial class JEnvironment
 		public TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
 			Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>
 		{
-			JDataTypeMetadata metadata = IDataType.GetMetadata<TResult>();
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TResult>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -519,7 +519,7 @@ public partial class JEnvironment
 						JReferenceObject referenceObject = (args[i] as JReferenceObject)!;
 						ValidationUtilities.ThrowIfDummy(referenceObject);
 						this.ReloadClass(referenceObject as JClassObject);
-						if (referenceObject.IsDefault) throw new ArgumentException($"Invalid object at {i}.");
+						ValidationUtilities.ThrowIfDefault(referenceObject, $"Invalid object at {i}.");
 						referenceObject.CopyTo(result, i);
 						break;
 				}
@@ -596,6 +596,7 @@ public partial class JEnvironment
 		/// </summary>
 		/// <param name="bytes">Destination span.</param>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 		/// <param name="signature">Primitive signature.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="argsMemory">Fixed memory with parameters.</param>
