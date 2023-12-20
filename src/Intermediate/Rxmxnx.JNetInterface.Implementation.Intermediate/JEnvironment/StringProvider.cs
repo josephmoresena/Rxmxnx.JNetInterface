@@ -7,14 +7,14 @@ public partial class JEnvironment
 		public JStringObject Create(ReadOnlySpan<Char> data)
 		{
 			JStringLocalRef stringRef = data.WithSafeFixed(this, JEnvironmentCache.CreateString);
-			IEnvironment env = this._mainClasses.Environment;
-			return this.Register<JStringObject>(new(env, stringRef, data.ToString(), false));
+			JClassObject jStringClass = this.GetClass<JStringObject>();
+			return this.Register<JStringObject>(new(jStringClass, stringRef, data.ToString()));
 		}
 		public JStringObject Create(ReadOnlySpan<Byte> utf8Data)
 		{
 			JStringLocalRef stringRef = utf8Data.WithSafeFixed(this, JEnvironmentCache.CreateUtf8String);
-			IEnvironment env = this._mainClasses.Environment;
-			return this.Register<JStringObject>(new(env, stringRef, default, false));
+			JClassObject jStringClass = this.GetClass<JStringObject>();
+			return this.Register<JStringObject>(new(jStringClass, stringRef, utf8Data.Length));
 		}
 		public Int32 GetLength(JReferenceObject jObject)
 		{

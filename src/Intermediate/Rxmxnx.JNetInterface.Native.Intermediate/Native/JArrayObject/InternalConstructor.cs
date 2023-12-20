@@ -5,13 +5,10 @@ public partial class JArrayObject
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="jArrayRef">Local array reference.</param>
 	/// <param name="length">Array length.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	internal JArrayObject(IEnvironment env, JArrayLocalRef jArrayRef, Int32? length, Boolean isDummy,
-		JClassObject? jClass = default) : base(env, jArrayRef.Value, isDummy, jClass)
+	internal JArrayObject(JClassObject jClass, JArrayLocalRef jArrayRef, Int32? length) : base(jClass, jArrayRef.Value)
 		=> this._length = length;
 	/// <summary>
 	/// Constructor.
@@ -35,9 +32,14 @@ public partial class JArrayObject
 
 public partial class JArrayObject<TElement>
 {
-	/// <inheritdoc/>
-	internal JArrayObject(IEnvironment env, JArrayLocalRef jArrayRef, Int32? length, Boolean isDummy,
-		JClassObject? jClass = default) : base(env, jArrayRef, length, isDummy, jClass) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jArrayRef">Local array reference.</param>
+	/// <param name="length">Array length.</param>
+	internal JArrayObject(IEnvironment env, JArrayLocalRef jArrayRef, Int32? length) : 
+		base(env.ClassProvider.GetClass<JArrayObject<TElement>>(), jArrayRef, length) { }
 	/// <inheritdoc/>
 	internal JArrayObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 }

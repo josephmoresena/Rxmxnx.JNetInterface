@@ -5,6 +5,17 @@ public partial class JLocalObject
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="localRef">Local object reference.</param>
+	internal JLocalObject(JClassObject jClass, JObjectLocalRef localRef) :
+		base(jClass.IsDummy)
+		=> this._lifetime = new(jClass.Environment, this, localRef)
+		{
+			Class = jClass, IsRealClass = jClass.IsFinal.GetValueOrDefault(),
+		};
+	/// <summary>
+	/// Constructor.
+	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="localRef">Local object reference.</param>
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>

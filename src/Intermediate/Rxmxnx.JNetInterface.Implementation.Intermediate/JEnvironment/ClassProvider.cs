@@ -23,8 +23,9 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jObject);
 			this.ReloadClass(jObject as JClassObject);
 			ValidationUtilities.ThrowIfDefault(jObject);
-			JClassLocalRef classRef = this.GetObjectClass(jObject.As<JObjectLocalRef>());
-			return this._mainClasses.Environment.GetClass(classRef, true);
+			JEnvironment env = this._mainClasses.Environment;
+			JClassLocalRef classRef = env.GetObjectClass(jObject.As<JObjectLocalRef>());
+			return env.GetClass(classRef, true);
 		}
 		public Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
 			where TDataType : JReferenceObject, IDataType<TDataType>
@@ -58,8 +59,9 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDefault(jClass);
 			GetSuperclassDelegate getSuperClass = this.GetDelegate<GetSuperclassDelegate>();
 			JClassLocalRef superClassRef = getSuperClass(this.Reference, classRef);
+			JEnvironment env = this._mainClasses.Environment;
 			if (superClassRef.Value != default)
-				return this._mainClasses.Environment.GetClass(superClassRef, true);
+				return env.GetClass(superClassRef, true);
 			this.CheckJniError();
 			return default;
 		}
@@ -100,7 +102,7 @@ public partial class JEnvironment
 			signature = loadedClass.ClassSignature;
 			hash = loadedClass.Hash;
 			if (!Object.ReferenceEquals(jClass, loadedClass))
-				(loadedClass as ILocalObject).Lifetime.Synchronize((jClass as ILocalObject).Lifetime);
+				loadedClass.Lifetime.Synchronize(jClass.Lifetime);
 		}
 		public void SetAssignableTo<TDataType>(JReferenceObject jObject)
 			where TDataType : JReferenceObject, IDataType<TDataType>

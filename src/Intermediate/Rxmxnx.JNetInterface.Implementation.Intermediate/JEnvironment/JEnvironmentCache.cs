@@ -314,16 +314,6 @@ public partial class JEnvironment
 			this._cancellation.Cancel();
 		}
 		/// <summary>
-		/// Deletes <paramref name="localRef"/>.
-		/// </summary>
-		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to remove.</param>
-		public void DeleteLocalRef(JObjectLocalRef localRef)
-		{
-			if (localRef == default || !this.JniSecure()) return;
-			DeleteLocalRefDelegate deleteLocalRef = this.GetDelegate<DeleteLocalRefDelegate>();
-			deleteLocalRef(this.Reference, localRef);
-		}
-		/// <summary>
 		/// Creates a new local reference for <paramref name="result"/>.
 		/// </summary>
 		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
@@ -392,18 +382,6 @@ public partial class JEnvironment
 		public Boolean TryGetClass(String hash, [NotNullWhen(true)] out JClassObject? jClass)
 			=> this._classes.TryGetValue(hash, out jClass);
 		/// <summary>
-		/// Retrieves object class reference.
-		/// </summary>
-		/// <param name="localRef">Object instance to get class.</param>
-		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		public JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
-		{
-			GetObjectClassDelegate getObjectClass = this.GetDelegate<GetObjectClassDelegate>();
-			JClassLocalRef classRef = getObjectClass(this.Reference, localRef);
-			if (classRef.Value == default) this.CheckJniError();
-			return classRef;
-		}
-		/// <summary>
 		/// Creates an object from given reference.
 		/// </summary>
 		/// <typeparam name="TResult">A <see cref="IDataType"/> type.</typeparam>
@@ -418,7 +396,7 @@ public partial class JEnvironment
 			if (localRef == default) return default;
 			if (MetadataHelper.GetMetadata<TResult>().Modifier == JTypeModifier.Final)
 				return this.Cast<TResult>(new(env, localRef, false, JClassObject.GetClass<TResult>(env)), register);
-			JClassLocalRef classRef = this.GetObjectClass(localRef);
+			JClassLocalRef classRef = env.GetObjectClass(localRef);
 			try
 			{
 				JClassObject jClass = env.GetClass(classRef);
@@ -426,7 +404,7 @@ public partial class JEnvironment
 			}
 			finally
 			{
-				this.DeleteLocalRef(classRef.Value);
+				env.DeleteLocalRef(classRef.Value);
 			}
 		}
 		/// <inheritdoc cref="JEnvironment.LoadClass(JClassObject?)"/>

@@ -15,9 +15,8 @@ public partial class JLocalObject
 	/// Internal reference value.
 	/// </summary>
 	internal JObjectLocalRef InternalReference => base.To<JObjectLocalRef>();
-
-	IVirtualMachine ILocalObject.VirtualMachine => this._lifetime.Environment.VirtualMachine;
-	Boolean ILocalObject.IsDummy => this.IsDummy;
+	/// <inheritdoc cref="ILocalObject.Lifetime"/>
+	internal ObjectLifetime Lifetime => this._lifetime;
 
 	/// <summary>
 	/// Interprets internal current value as <typeparamref name="TReference"/> value.

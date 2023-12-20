@@ -4,6 +4,8 @@ public partial class JEnvironment
 {
 	private partial record JEnvironmentCache : IArrayProvider
 	{
+		public JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IObject, IDataType<TElement> => throw new NotImplementedException();
+		public JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement) where TElement : IObject, IDataType<TElement> => throw new NotImplementedException();
 		public Int32 GetArrayLength(JReferenceObject jObject)
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);

@@ -63,9 +63,10 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.InternalReference;
+			JEnvironment env = this._mainClasses.Environment;
 			try
 			{
-				this.DeleteLocalRef(localRef);
+				env.DeleteLocalRef(localRef);
 			}
 			finally
 			{
@@ -108,7 +109,7 @@ public partial class JEnvironment
 			this.LoadClass(jObject as JClassObject);
 			JLocalObject? jLocal = jObject as JLocalObject;
 			if (!JObject.IsNullOrDefault(jLocal))
-				this._objects[jLocal.As<JObjectLocalRef>()] = (jLocal as ILocalObject).Lifetime.GetCacheable();
+				this._objects[jLocal.As<JObjectLocalRef>()] = jLocal.Lifetime.GetCacheable();
 			return jObject;
 		}
 
@@ -140,6 +141,7 @@ public partial class JEnvironment
 			if (jClass is null) return default;
 			JGlobal result = this.VirtualMachine.LoadGlobal(jClass);
 			JObjectLocalRef localRef = jClass.As<JObjectLocalRef>();
+			JEnvironment env = this._mainClasses.Environment;
 			switch (result.IsDefault)
 			{
 				case true when localRef == default:
@@ -150,7 +152,7 @@ public partial class JEnvironment
 					}
 					finally
 					{
-						if (localRef != default) this.DeleteLocalRef(localRef);
+						if (localRef != default) env.DeleteLocalRef(localRef);
 					}
 					break;
 				case true:

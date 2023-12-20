@@ -13,7 +13,7 @@ public partial class JClassObject
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
-		(this as ILocalObject).Lifetime.SetClass(this);
+		this.Lifetime.SetClass(this);
 	}
 	/// <summary>
 	/// Constructor.
@@ -22,7 +22,7 @@ public partial class JClassObject
 	/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
 	/// <param name="classRef">Local class reference.</param>
 	internal JClassObject(JClassObject jClassClassObject, ITypeInformation metadata, JClassLocalRef classRef = default)
-		: base(jClassClassObject.Environment, classRef.Value, jClassClassObject.IsDummy, jClassClassObject)
+		: base(jClassClassObject, classRef.Value)
 	{
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
@@ -33,6 +33,6 @@ public partial class JClassObject
 	/// </summary>
 	/// <param name="jClassClassObject"><see cref="JClassObject"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	internal JClassObject(JClassObject jClassClassObject, JClassLocalRef classRef) : base(
-		jClassClassObject.Environment, classRef.Value, jClassClassObject.IsDummy, jClassClassObject) { }
+	internal JClassObject(JClassObject jClassClassObject, JClassLocalRef classRef) 
+		: base(jClassClassObject, classRef.Value) { }
 }

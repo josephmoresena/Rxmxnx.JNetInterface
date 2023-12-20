@@ -55,7 +55,7 @@ public partial class JVirtualMachine
 	/// <returns>A <see cref="JGlobal"/> instance.</returns>
 	internal JGlobal LoadGlobal(JClassObject jClass)
 	{
-		ObjectLifetime lifetime = (jClass as ILocalObject).Lifetime;
+		ObjectLifetime lifetime = jClass.Lifetime;
 		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
 			jGlobal = new(this, new(jClass), false, default);
 		lifetime.SetGlobal(jGlobal);

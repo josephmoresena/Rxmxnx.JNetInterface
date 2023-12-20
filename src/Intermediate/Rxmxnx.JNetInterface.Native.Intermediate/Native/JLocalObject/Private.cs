@@ -8,7 +8,9 @@ public partial class JLocalObject : ILocalObject
 	/// Internal <see cref="ObjectLifetime"/> instance.
 	/// </summary>
 	private readonly ObjectLifetime _lifetime;
-
+	
+	IVirtualMachine ILocalObject.VirtualMachine => this._lifetime.Environment.VirtualMachine;
+	Boolean ILocalObject.IsDummy => this.IsDummy;
 	ObjectLifetime ILocalObject.Lifetime => this._lifetime;
 	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 	void ILocalObject.ProcessMetadata(JObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);

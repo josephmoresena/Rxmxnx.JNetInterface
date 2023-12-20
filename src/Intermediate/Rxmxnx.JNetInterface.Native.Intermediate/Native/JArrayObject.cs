@@ -79,4 +79,24 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IArrayType<JA
 		=> !JObject.IsNullOrDefault(jGlobal) ?
 			new(env, JLocalObject.Validate<JArrayObject<TElement>>(jGlobal, env)) :
 			default;
+
+	/// <summary>
+	/// Creates an empty <see cref="JArrayObject{TElement}"/> instance.
+	/// </summary>
+	/// <typeparam name="TElement">Type of array element.</typeparam>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="length">New array length.</param>
+	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
+	public static JArrayObject<TElement> Create(IEnvironment env, Int32 length)
+		=> env.ArrayProvider.CreateArray<TElement>(length);
+	/// <summary>
+	/// Creates a <paramref name="initialElement"/> filled <see cref="JArrayObject{TElement}"/> instance.
+	/// </summary>
+	/// <typeparam name="TElement">Type of array element.</typeparam>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="length">New array length.</param>
+	/// <param name="initialElement">Instance to set each array element.</param>
+	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
+	public static JArrayObject<TElement> Create(IEnvironment env, Int32 length, TElement initialElement)
+		=> env.ArrayProvider.CreateArray<TElement>(length, initialElement);
 }

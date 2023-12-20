@@ -6,6 +6,21 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public interface IArrayProvider
 {
 	/// <summary>
+	/// Creates an empty <see cref="JArrayObject{TElement}"/> instance.
+	/// </summary>
+	/// <typeparam name="TElement">Type of array element.</typeparam>
+	/// <param name="length">New array length.</param>
+	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
+	JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IObject, IDataType<TElement>;
+	/// <summary>
+	/// Creates a <paramref name="initialElement"/> filled <see cref="JArrayObject{TElement}"/> instance.
+	/// </summary>
+	/// <typeparam name="TElement">Type of array element.</typeparam>
+	/// <param name="length">New array length.</param>
+	/// <param name="initialElement">Instance to set each array element.</param>
+	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
+	JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement) where TElement : IObject, IDataType<TElement>;
+	/// <summary>
 	/// Retrieves the array length from <paramref name="jObject"/>
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>

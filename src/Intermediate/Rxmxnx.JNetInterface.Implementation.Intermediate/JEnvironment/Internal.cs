@@ -10,6 +10,8 @@ public partial class JEnvironment
 	/// Local cache.
 	/// </summary>
 	internal LocalCache LocalCache => this._cache.GetLocalCache();
+	/// <inheritdoc cref="IClassProvider.ClassObject"/>
+	internal JClassObject ClassObject => this._cache.ClassObject;
 
 	/// <summary>
 	/// Constructor.
@@ -49,7 +51,7 @@ public partial class JEnvironment
 		}
 		finally
 		{
-			this._cache.DeleteLocalRef(classRef.Value);
+			this.DeleteLocalRef(classRef.Value);
 		}
 	}
 	/// <summary>
@@ -133,6 +135,31 @@ public partial class JEnvironment
 			jClass = new(this._cache.ClassObject, new TypeInformation(classInformation),
 			             keepReference ? classRef : default);
 		return this._cache.Register(jClass);
+	}
+	/// <inheritdoc cref="IClassProvider.GetClass{TObject}()"/>
+	internal JClassObject GetClass<TObject>() where TObject : JLocalObject, IReferenceType<TObject>
+		=> this._cache.GetClass<TObject>();
+	/// <summary>
+	/// Deletes <paramref name="localRef"/>.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to remove.</param>
+	internal void DeleteLocalRef(JObjectLocalRef localRef)
+	{
+		if (localRef == default || !this.JniSecure()) return;
+		DeleteLocalRefDelegate deleteLocalRef = this._cache.GetDelegate<DeleteLocalRefDelegate>();
+		deleteLocalRef(this.Reference, localRef);
+	}
+	/// <summary>
+	/// Retrieves object class reference.
+	/// </summary>
+	/// <param name="localRef">Object instance to get class.</param>
+	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+	internal JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
+	{
+		GetObjectClassDelegate getObjectClass = this._cache.GetDelegate<GetObjectClassDelegate>();
+		JClassLocalRef classRef = getObjectClass(this.Reference, localRef);
+		if (classRef.Value == default) this._cache.CheckJniError();
+		return classRef;
 	}
 	/// <summary>
 	/// Loads in current cache given class.

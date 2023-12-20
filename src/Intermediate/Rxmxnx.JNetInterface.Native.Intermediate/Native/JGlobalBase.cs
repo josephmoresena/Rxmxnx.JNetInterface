@@ -97,10 +97,8 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </returns>
 	protected Boolean Remove(JLocalObject jLocal)
 	{
-		ObjectLifetime objectLifetime = (jLocal as ILocalObject).Lifetime;
-		if (!this._objects.TryRemove(objectLifetime.Id, out _)) return false;
-		//_ = this._assignableTypes.Prepare(jLocal);
-		return true;
+		ObjectLifetime objectLifetime = jLocal.Lifetime;
+		return this._objects.TryRemove(objectLifetime.Id, out _);
 	}
 
 	/// <summary>
