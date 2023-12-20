@@ -6,6 +6,11 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 {
 	/// <summary>
+	/// Metadata dictionary.
+	/// </summary>
+	private static readonly ConcurrentDictionary<CString, JArrayTypeMetadata> arrayMetadatas = new();
+	
+	/// <summary>
 	/// Element type of current array metadata.
 	/// </summary>
 	public abstract JDataTypeMetadata ElementMetadata { get; }
@@ -24,7 +29,11 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	/// </summary>
 	/// <param name="signature">JNI signature for current array type.</param>
 	/// <param name="deep">Array deep.</param>
-	internal JArrayTypeMetadata(CString signature, Int32 deep) : base(signature, signature) => this.Deep = deep;
+	internal JArrayTypeMetadata(CString signature, Int32 deep) : base(signature, signature)
+	{
+		this.Deep = deep;
+		JArrayTypeMetadata.arrayMetadatas.TryAdd(this.Signature, this);
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="JArrayTypeMetadata"/> for <typeparamref name="TElement"/>
@@ -35,7 +44,10 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	{
 		try
 		{
-			return IArrayType.GetMetadata<JArrayObject<JArrayObject<TElement>>>();
+			JArrayTypeMetadata metadata = IArrayType.GetMetadata<JArrayObject<TElement>>();
+			return 
+				JArrayTypeMetadata.arrayMetadatas.TryGetValue(metadata.ArraySignature, out JArrayTypeMetadata? result) ?
+					result : IArrayType.GetMetadata<JArrayObject<JArrayObject<TElement>>>();
 		}
 		catch (Exception)
 		{
