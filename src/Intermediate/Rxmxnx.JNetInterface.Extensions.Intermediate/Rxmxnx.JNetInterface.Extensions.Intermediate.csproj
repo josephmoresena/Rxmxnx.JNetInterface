@@ -7,7 +7,7 @@
         <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
         <Deterministic>true</Deterministic>
         <IsTrimmable>true</IsTrimmable>
-        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <IsAotCompatible>true</IsAotCompatible>
         <DocumentationFile>./$(AssemblyName).xml</DocumentationFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <ExcludeXmlAssemblyFiles>false</ExcludeXmlAssemblyFiles>

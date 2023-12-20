@@ -10,10 +10,10 @@ public partial class JArrayObject<TElement>
 		/// <summary>
 		/// Metadata array instance.
 		/// </summary>
-		public static readonly JArrayTypeMetadata Instance = new JArrayGenericTypeMetadata();
+		public static readonly JArrayGenericTypeMetadata Instance = new();
 
 		/// <inheritdoc/>
-		public override Type Type => typeof(JArrayObject<TElement>);
+		public override Type Type => JArrayTypeMetadata.GetArrayType<TElement>() ?? typeof(JArrayObject);
 		/// <inheritdoc/>
 		public override JDataTypeMetadata ElementMetadata => IDataType.GetMetadata<TElement>();
 		/// <inheritdoc/>
@@ -22,13 +22,13 @@ public partial class JArrayObject<TElement>
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		private JArrayGenericTypeMetadata() : base(IDataType.GetMetadata<TElement>().ArraySignature) { }
+		private JArrayGenericTypeMetadata() : base(IDataType.GetMetadata<TElement>().ArraySignature,
+		                                           JArrayTypeMetadata.GetArrayDeep<TElement>()) { }
 
 		/// <inheritdoc/>
-		internal override JArrayObject<TElement>? ParseInstance(JLocalObject? jLocal)
-			=> jLocal as JArrayObject<TElement> ?? JArrayObject<TElement>.Create(jLocal);
+		internal override JArrayObject? ParseInstance(JLocalObject? jLocal)
+			=> JArrayTypeMetadata.ParseInstance<TElement>(jLocal);
 		/// <inheritdoc/>
-		internal override JArrayTypeMetadata GetArrayMetadata()
-			=> JReferenceTypeMetadata.GetArrayMetadata<JArrayObject<TElement>>();
+		internal override JArrayTypeMetadata? GetArrayMetadata() => JArrayTypeMetadata.GetArrayMetadata<TElement>();
 	}
 }

@@ -39,7 +39,7 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
 	/// </summary>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
-	internal abstract JArrayTypeMetadata GetArrayMetadata();
+	internal abstract JArrayTypeMetadata? GetArrayMetadata();
 
 	/// <summary>
 	/// Retrieves the <see cref="JArrayTypeMetadata"/> for <typeparamref name="TReference"/>
@@ -49,4 +49,12 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	protected static JArrayTypeMetadata GetArrayMetadata<TReference>()
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		=> IArrayType.GetMetadata<JArrayObject<TReference>>();
+
+	/// <summary>
+	/// Retrieves the metadata of an array whose elements are of the type that
+	/// <paramref name="metadata"/> represents.
+	/// </summary>
+	/// <param name="metadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
+	public static JArrayTypeMetadata? GetArrayMetadata(JReferenceTypeMetadata metadata) => metadata.GetArrayMetadata();
 }

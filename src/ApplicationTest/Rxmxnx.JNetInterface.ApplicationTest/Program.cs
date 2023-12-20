@@ -4,6 +4,7 @@ using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
+using Rxmxnx.JNetInterface.Types.Metadata;
 using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
@@ -14,10 +15,33 @@ public static class Program
 	{
 		Console.WriteLine("Hello, World!");
 		Program.PrintBuiltIntMetadata();
+		//Program.PrintArrayMetadata(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JInt>>>>>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 10);
 		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/server/libjvm.dylib");
 		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib/server/libjvm.dylib");
 		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home/lib/server/libjvm.dylib");
 		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/server/libjvm.dylib");
+	}
+	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata, Int32 deep)
+	{
+		Console.WriteLine(arrMetadata.ElementMetadata.Signature);
+		for (Int32 i = 0; i < deep; i++)
+		{
+			Console.WriteLine(arrMetadata.Signature);
+			if (JReferenceTypeMetadata.GetArrayMetadata(arrMetadata) is not { } arrMet2)
+				break;
+			arrMetadata = arrMet2;
+		}
+		Program.PrintNestedArrayMetadata(arrMetadata);
+	}
+	private static void PrintNestedArrayMetadata(JArrayTypeMetadata? arrMetadata, Boolean printCurrent = false)
+	{
+		if (printCurrent && arrMetadata is not null) Console.WriteLine(arrMetadata.Signature);
+		while (arrMetadata is not null)
+		{
+			Console.WriteLine(arrMetadata.ElementMetadata.Signature);
+			arrMetadata = arrMetadata.ElementMetadata as JArrayTypeMetadata;
+		}
 	}
 	private static void PrintBuiltIntMetadata()
 	{
