@@ -93,9 +93,8 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IArrayType<JA
 		if (jLocal is not JArrayObject jArray || jArray.TypeMetadata.ElementMetadata.Kind == JTypeKind.Primitive ||
 		    elementMetadata.Kind == JTypeKind.Primitive)
 			return new(JLocalObject.Validate<JArrayObject<TElement>>(jLocal));
-
 		//TODO: Implement java array casting.
-		return new(jLocal);
+		return new(jLocal, jLocal.Class);
 	}
 	/// <inheritdoc/>
 	public static JArrayObject<TElement>? Create(IEnvironment env, JGlobalBase? jGlobal)

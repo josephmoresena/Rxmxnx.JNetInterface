@@ -17,8 +17,8 @@ public partial class JArrayObject<TElement> : IEnumerableSequence<TElement?>
 	static Type IDataType.FamilyType => typeof(JArrayObject);
 
 	/// <inheritdoc/>
-	private JArrayObject(JLocalObject jLocal) : base(
-		jLocal, jLocal.Environment.ClassProvider.GetClass<JArrayObject<TElement>>()) { }
+	private JArrayObject(JLocalObject jLocal, JClassObject? jClass = default) : base(
+		jLocal, jClass ?? jLocal.Environment.ClassProvider.GetClass<JArrayObject<TElement>>()) { }
 
 	TElement? IEnumerableSequence<TElement?>.GetItem(Int32 index) => this[index];
 	Int32 IEnumerableSequence<TElement?>.GetSize() => this.Length;
