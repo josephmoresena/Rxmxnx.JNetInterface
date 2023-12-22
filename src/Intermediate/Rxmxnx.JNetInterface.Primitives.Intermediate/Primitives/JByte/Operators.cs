@@ -33,8 +33,8 @@ public readonly partial struct JByte : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JByte"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JByte value) => value._value;
 
-	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => throw new NotImplementedException();
-	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => throw new NotImplementedException();
+	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Equals(other);
+	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Equals(other);
 
 	/// <inheritdoc cref="IEquatable{JPrimitiveObject}.Equals(JPrimitiveObject)"/>
 	private Boolean Equals(JPrimitiveObject? other)

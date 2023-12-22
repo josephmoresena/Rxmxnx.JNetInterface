@@ -364,7 +364,21 @@ public partial class JEnvironment
 		}
 		public TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition, IObject?[] args)
 			where TObject : JLocalObject, IDataType<TObject>
-			=> throw new NotImplementedException();
+		{
+			AccessCache access = this.GetAccess(jClass);
+			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
+			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
+			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
+				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			this.CopyAsJValue(args, argsMemory.Values);
+			NewObjectADelegate newObject = this.GetDelegate<NewObjectADelegate>();
+			JObjectLocalRef localRef = newObject(this.Reference, jClass.Reference, methodId,
+			                                     (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			this.CheckJniError();
+			return this.CreateObject<TObject>(localRef, true)!;
+		}
 		public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args) where TResult : IDataType<TResult>
 		{
