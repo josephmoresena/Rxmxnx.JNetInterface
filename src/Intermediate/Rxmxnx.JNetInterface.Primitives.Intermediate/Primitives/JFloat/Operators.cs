@@ -42,7 +42,7 @@ public readonly partial struct JFloat
 		=> IPrimitiveNumericType.GetIntegerValue<Int32>(jPrimitive._value);
 	static explicit IPrimitiveNumericType<JFloat>.operator Char(JFloat jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Char>();
-	static explicit IPrimitiveNumericType<JFloat>.operator SByte(JFloat jPrimitive) 
+	static explicit IPrimitiveNumericType<JFloat>.operator SByte(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<SByte>(jPrimitive._value);
 	static explicit IPrimitiveNumericType<JFloat>.operator Int64(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int64>(jPrimitive._value);
