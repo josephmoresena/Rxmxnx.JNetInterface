@@ -215,19 +215,25 @@ internal static class MetadataHelper
 	private static Boolean? IsAssignableFrom(JReferenceTypeMetadata classMetadata,
 		JReferenceTypeMetadata otherClassMetadata)
 	{
-		if (classMetadata is JClassTypeMetadata && otherClassMetadata is JClassTypeMetadata)
+		switch (classMetadata)
 		{
-			JClassTypeMetadata? baseMetadata = otherClassMetadata.BaseMetadata;
-			while (baseMetadata is not null)
+			case JArrayTypeMetadata arrayMetadata when otherClassMetadata is JArrayTypeMetadata otherArrayMetadata:
+				return MetadataHelper.IsAssignableFrom(arrayMetadata, otherArrayMetadata);
+			case JClassTypeMetadata when otherClassMetadata is JClassTypeMetadata:
 			{
-				if (baseMetadata.Hash == classMetadata.Hash) return true;
-				baseMetadata = baseMetadata.BaseMetadata;
-			}
-			baseMetadata = classMetadata.BaseMetadata;
-			while (baseMetadata is not null)
-			{
-				if (baseMetadata.Hash == otherClassMetadata.Hash) return default;
-				baseMetadata = baseMetadata.BaseMetadata;
+				JClassTypeMetadata? baseMetadata = otherClassMetadata.BaseMetadata;
+				while (baseMetadata is not null)
+				{
+					if (baseMetadata.Hash == classMetadata.Hash) return true;
+					baseMetadata = baseMetadata.BaseMetadata;
+				}
+				baseMetadata = classMetadata.BaseMetadata;
+				while (baseMetadata is not null)
+				{
+					if (baseMetadata.Hash == otherClassMetadata.Hash) return default;
+					baseMetadata = baseMetadata.BaseMetadata;
+				}
+				break;
 			}
 		}
 		if (otherClassMetadata is JInterfaceTypeMetadata)

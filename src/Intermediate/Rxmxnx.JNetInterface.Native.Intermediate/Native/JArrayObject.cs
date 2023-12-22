@@ -19,7 +19,7 @@ public abstract partial class JArrayObject : JLocalObject
 	/// <summary>
 	/// JNI array reference.
 	/// </summary>
-	internal JArrayLocalRef Reference => this.As<JArrayLocalRef>();
+	internal JArrayLocalRef Reference => base.As<JArrayLocalRef>();
 	/// <summary>
 	/// Array type metadata.
 	/// </summary>
@@ -36,6 +36,10 @@ public abstract partial class JArrayObject : JLocalObject
 			return;
 		this._length = arrayMetadata.Length;
 	}
+
+	/// <inheritdoc cref="JReferenceObject.As{TValue}()"/>
+	internal new ref readonly TValue As<TValue>() where TValue : unmanaged, IArrayReferenceType<TValue>
+		=> ref base.As<TValue>();
 }
 
 /// <summary>

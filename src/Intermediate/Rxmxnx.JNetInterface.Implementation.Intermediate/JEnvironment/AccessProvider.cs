@@ -4,10 +4,6 @@ public partial class JEnvironment
 {
 	private partial record JEnvironmentCache : IAccessProvider
 	{
-		private const Int32 maxStackBytes = 128;
-
-		private Int32 _usedStackBytes;
-
 		public void GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 			JFieldDefinition definition)
 		{
@@ -480,7 +476,7 @@ public partial class JEnvironment
 
 		/// <summary>
 		/// Indicates whether current call must use <see langword="stackalloc"/> or <see langword="new"/> to
-		/// hold JNI method parameter.
+		/// hold JNI call parameter.
 		/// </summary>
 		/// <param name="jCall">A <see cref="JCallDefinition"/> instance.</param>
 		/// <param name="requiredBytes">Output. Number of bytes to allocate.</param>
@@ -491,10 +487,7 @@ public partial class JEnvironment
 		private Boolean UseStackAlloc(JCallDefinition jCall, out Int32 requiredBytes)
 		{
 			requiredBytes = jCall.Count * JValue.Size;
-			this._usedStackBytes += requiredBytes;
-			if (this._usedStackBytes <= JEnvironmentCache.maxStackBytes) return true;
-			this._usedStackBytes -= requiredBytes;
-			return false;
+			return this.UseStackAlloc(requiredBytes);
 		}
 		/// <summary>
 		/// Retrieves <paramref name="argSpan"/> as a <see cref="JValue"/> span containing <paramref name="args"/> information.

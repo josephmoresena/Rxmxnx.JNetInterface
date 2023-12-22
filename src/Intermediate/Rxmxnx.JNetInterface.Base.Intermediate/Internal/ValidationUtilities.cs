@@ -222,4 +222,16 @@ internal static class ValidationUtilities
 		if (thread != Thread.CurrentThread)
 			throw new InvalidOperationException("JNI Environment is assigned to another thread.");
 	}
+	/// <summary>
+	/// Throws an exception if <paramref name="length"/> is invalid.
+	/// </summary>
+	/// <param name="length">Array length.</param>
+	/// <exception cref="ArgumentException">
+	/// Throws an exception if <paramref name="length"/> is invalid.
+	/// </exception>
+	public static void ThrowIfInvalidArrayLength(Int32 length)
+	{
+		if (length < 0)
+			throw new ArgumentException("Array length must be zero or positive.", nameof(length));
+	}
 }

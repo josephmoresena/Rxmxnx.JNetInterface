@@ -8,6 +8,11 @@ public partial class JEnvironment
 	private sealed partial record JEnvironmentCache
 	{
 		/// <summary>
+		/// Maximum amount of bytes usable on stack.
+		/// </summary>
+		private const Int32 maxStackBytes = 128;
+
+		/// <summary>
 		/// JNI Delegate dictionary.
 		/// </summary>
 		private static readonly Dictionary<Type, Int32> delegateIndex = new()
@@ -204,6 +209,10 @@ public partial class JEnvironment
 		/// Object cache.
 		/// </summary>
 		private LocalCache _objects;
+		/// <summary>
+		/// Amount of bytes used from stack.
+		/// </summary>
+		private Int32 _usedStackBytes;
 
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
 		public JVirtualMachine VirtualMachine { get; }
@@ -484,6 +493,22 @@ public partial class JEnvironment
 			this.Register(mainClasses.ThrowableObject);
 			this.Register(mainClasses.StackTraceElementObject);
 			return mainClasses;
+		}
+		/// <summary>
+		/// Indicates whether current JNI call must use <see langword="stackalloc"/> or <see langword="new"/> to
+		/// hold JNI call parameter.
+		/// </summary>
+		/// <param name="requiredBytes">Output. Number of bytes to allocate.</param>
+		/// <returns>
+		/// <see langword="true"/> if current call must use <see langword="stackalloc"/>; otherwise,
+		/// <see langword="false"/>.
+		/// </returns>
+		private Boolean UseStackAlloc(Int32 requiredBytes)
+		{
+			this._usedStackBytes += requiredBytes;
+			if (this._usedStackBytes <= JEnvironmentCache.maxStackBytes) return true;
+			this._usedStackBytes -= requiredBytes;
+			return false;
 		}
 
 		/// <summary>

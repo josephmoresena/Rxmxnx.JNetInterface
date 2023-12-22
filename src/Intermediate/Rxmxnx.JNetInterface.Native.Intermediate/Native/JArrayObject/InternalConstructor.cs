@@ -15,7 +15,7 @@ public partial class JArrayObject
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	internal JArrayObject(JLocalObject jLocal, JClassObject jClass) : base(jLocal, jClass)
+	internal JArrayObject(JLocalObject jLocal, JClassObject? jClass) : base(jLocal, jClass)
 	{
 		if (jLocal is not JArrayObject jArray)
 			return;
@@ -38,8 +38,11 @@ public partial class JArrayObject<TElement>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jArrayRef">Local array reference.</param>
 	/// <param name="length">Array length.</param>
-	internal JArrayObject(IEnvironment env, JArrayLocalRef jArrayRef, Int32? length) : 
-		base(env.ClassProvider.GetClass<JArrayObject<TElement>>(), jArrayRef, length) { }
+	internal JArrayObject(IEnvironment env, JArrayLocalRef jArrayRef, Int32? length) : base(
+		env.ClassProvider.GetClass<JArrayObject<TElement>>(), jArrayRef, length) { }
+	/// <inheritdoc/>
+	internal JArrayObject(JLocalObject jLocal, JClassObject? jClass = default) : base(
+		jLocal, jClass ?? jLocal.Environment.ClassProvider.GetClass<JArrayObject<TElement>>()) { }
 	/// <inheritdoc/>
 	internal JArrayObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 }

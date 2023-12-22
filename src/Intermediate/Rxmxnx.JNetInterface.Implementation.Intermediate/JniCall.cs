@@ -11,7 +11,7 @@ public readonly ref partial struct JniCall
 	/// Current <see cref="IEnvironment"/> instance.
 	/// </summary>
 	public IEnvironment Environment => this._env;
-	
+
 	/// <summary>
 	/// Builder for <see cref="JniCall"/>
 	/// </summary>
@@ -145,7 +145,7 @@ public readonly ref partial struct JniCall
 		/// <param name="arrayRef">A parameter <see cref="JShortArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JShort}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JLongArrayLocalRef arrayRef, out JArrayObject<JShort> jArray)
+		public Builder WithParameter(JShortArrayLocalRef arrayRef, out JArrayObject<JShort> jArray)
 		{
 			jArray = this.CreateInitialObject<JArrayObject<JShort>>(arrayRef.Value);
 			return this;
@@ -187,19 +187,6 @@ public readonly ref partial struct JniCall
 			return this;
 		}
 		/// <summary>
-		/// Appends to current call a <typeparamref name="TObject"/> array parameter.
-		/// </summary>
-		/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
-		/// <param name="arrayRef">A parameter <see cref="JObjectArrayLocalRef"/> reference.</param>
-		/// <param name="jArray">A <see cref="JArrayObject{TElement}"/> instance from <paramref name="arrayRef"/>.</param>
-		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter<TObject>(JObjectArrayLocalRef arrayRef, out JArrayObject<TObject> jArray)
-			where TObject : JLocalObject, IReferenceType<TObject>
-		{
-			jArray = this.CreateInitialObject<JArrayObject<TObject>>(arrayRef.Value);
-			return this;
-		}
-		/// <summary>
 		/// Appends to current call a <typeparamref name="TElement"/> array parameter.
 		/// </summary>
 		/// <typeparam name="TElement">A <see cref="IDataType"/> type.</typeparam>
@@ -212,12 +199,11 @@ public readonly ref partial struct JniCall
 			jArray = this.CreateInitialObject<JArrayObject<TElement>>(arrayRef.Value);
 			return this;
 		}
-		
-        /// <summary>
+
+		/// <summary>
 		/// Retrieves current <see cref="JniCall"/> instance.
 		/// </summary>
 		/// <returns>A <see cref="JniCall"/> instance.</returns>
 		public JniCall Build() => this._call;
 	}
 }
-
