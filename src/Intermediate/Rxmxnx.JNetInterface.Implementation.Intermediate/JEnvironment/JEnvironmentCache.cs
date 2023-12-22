@@ -293,7 +293,17 @@ public partial class JEnvironment
 			{
 				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
 				exceptionClear(this.Reference);
-				//TODO: Implement throw 
+				JEnvironment env = this._mainClasses.Environment;
+				using LocalFrame frame = new(env, 10);
+				JClassLocalRef classRef = env.GetObjectClass(throwableRef.Value);
+				JClassObject jClass = env.GetClass(classRef, true);
+				JThrowableTypeMetadata throwableMetadata =
+					MetadataHelper.GetMetadata(jClass.Hash) as JThrowableTypeMetadata ??
+					(JThrowableTypeMetadata)MetadataHelper.GetMetadata<JThrowableObject>();
+				JObjectMetadata objectMetadata = new(jClass);
+				JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
+				JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
+				throw throwableMetadata.CreateException(jGlobalThrowable);
 			}
 			finally
 			{
