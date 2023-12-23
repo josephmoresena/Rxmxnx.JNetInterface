@@ -99,10 +99,9 @@ internal static class ValidationUtilities
 	/// <exception cref="ArgumentException">
 	/// Throws an exception if <paramref name="signature"/> is invalid.
 	/// </exception>
-	public static void ThrowIfInvalidSignature(CString? signature, Boolean allowPrimitive)
+	public static void ThrowIfInvalidSignature(ReadOnlySpan<Byte> signature, Boolean allowPrimitive)
 	{
-		if (CString.IsNullOrEmpty(signature))
-			throw new ArgumentException("Invalid signature.");
+		if (signature.IsEmpty) throw new ArgumentException("Invalid signature.");
 
 		if (signature.Length == 1)
 		{

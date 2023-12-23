@@ -12,7 +12,8 @@ internal sealed record JPrimitiveFieldDefinition : JFieldDefinition
 	internal override Type Return => this._type;
 
 	/// <inheritdoc/>
-	private JPrimitiveFieldDefinition(CString name, CString signature, Type type) : base(name, signature)
+	private JPrimitiveFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature, Type type) :
+		base(name, signature)
 		=> this._type = type;
 
 	/// <summary>
@@ -68,55 +69,55 @@ internal sealed record JPrimitiveFieldDefinition : JFieldDefinition
 	/// </summary>
 	/// <param name="functionName">Field name.</param>
 	/// <returns>A <see cref="JPrimitiveFieldDefinition"/> instance.</returns>
-	public static JPrimitiveFieldDefinition CreateBooleanDefinition(CString functionName)
+	public static JPrimitiveFieldDefinition CreateBooleanDefinition(ReadOnlySpan<Byte> functionName)
 		=> new(functionName, UnicodePrimitiveSignatures.JBooleanSignature, typeof(Byte));
 	/// <summary>
 	/// Creates a <c>byte</c> field definition.
 	/// </summary>
 	/// <param name="functionName">Field name.</param>
 	/// <returns>A <see cref="JPrimitiveFieldDefinition"/> instance.</returns>
-	public static JPrimitiveFieldDefinition CreateByteDefinition(CString functionName)
+	public static JPrimitiveFieldDefinition CreateByteDefinition(ReadOnlySpan<Byte> functionName)
 		=> new(functionName, UnicodePrimitiveSignatures.JByteSignature, typeof(SByte));
 	/// <summary>
 	/// Creates a <c>char</c> field definition.
 	/// </summary>
 	/// <param name="functionName">Field name.</param>
 	/// <returns>A <see cref="JPrimitiveFieldDefinition"/> instance.</returns>
-	public static JPrimitiveFieldDefinition CreateCharDefinition(CString functionName)
+	public static JPrimitiveFieldDefinition CreateCharDefinition(ReadOnlySpan<Byte> functionName)
 		=> new(functionName, UnicodePrimitiveSignatures.JCharSignature, typeof(Char));
 	/// <summary>
 	/// Creates a <c>double</c> field definition.
 	/// </summary>
 	/// <param name="functionName">Field name.</param>
 	/// <returns>A <see cref="JPrimitiveFieldDefinition"/> instance.</returns>
-	public static JPrimitiveFieldDefinition CreateDoubleDefinition(CString functionName)
+	public static JPrimitiveFieldDefinition CreateDoubleDefinition(ReadOnlySpan<Byte> functionName)
 		=> new(functionName, UnicodePrimitiveSignatures.JDoubleSignature, typeof(Double));
 	/// <summary>
 	/// Creates a <c>float</c> field definition.
 	/// </summary>
 	/// <param name="functionName">Field name.</param>
 	/// <returns>A <see cref="JPrimitiveFieldDefinition"/> instance.</returns>
-	public static JPrimitiveFieldDefinition CreateFloatDefinition(CString functionName)
+	public static JPrimitiveFieldDefinition CreateFloatDefinition(ReadOnlySpan<Byte> functionName)
 		=> new(functionName, UnicodePrimitiveSignatures.JFloatSignature, typeof(Single));
 	/// <summary>
 	/// Creates a <c>int</c> field definition.
 	/// </summary>
 	/// <param name="functionName">Field name.</param>
 	/// <returns>A <see cref="JPrimitiveFieldDefinition"/> instance.</returns>
-	public static JPrimitiveFieldDefinition CreateIntDefinition(CString functionName)
+	public static JPrimitiveFieldDefinition CreateIntDefinition(ReadOnlySpan<Byte> functionName)
 		=> new(functionName, UnicodePrimitiveSignatures.JIntSignature, typeof(Int32));
 	/// <summary>
 	/// Creates a <c>long</c> field definition.
 	/// </summary>
 	/// <param name="functionName">Field name.</param>
 	/// <returns>A <see cref="JPrimitiveFieldDefinition"/> instance.</returns>
-	public static JPrimitiveFieldDefinition CreateLongDefinition(CString functionName)
+	public static JPrimitiveFieldDefinition CreateLongDefinition(ReadOnlySpan<Byte> functionName)
 		=> new(functionName, UnicodePrimitiveSignatures.JLongSignature, typeof(Int64));
 	/// <summary>
 	/// Creates a <c>short</c> field definition.
 	/// </summary>
 	/// <param name="functionName">Field name.</param>
 	/// <returns>A <see cref="JPrimitiveFieldDefinition"/> instance.</returns>
-	public static JPrimitiveFieldDefinition CreateShortDefinition(CString functionName)
+	public static JPrimitiveFieldDefinition CreateShortDefinition(ReadOnlySpan<Byte> functionName)
 		=> new(functionName, UnicodePrimitiveSignatures.JShortSignature, typeof(Int16));
 }

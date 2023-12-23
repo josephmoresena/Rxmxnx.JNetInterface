@@ -39,7 +39,17 @@ public abstract record JAccessibleObjectDefinition
 	/// </summary>
 	/// <param name="signature">A signature to validate.</param>
 	/// <returns><paramref name="signature"/> if is a valid signature.</returns>
-	protected internal static CString ValidateSignature(CString signature)
+	protected static CString ValidateSignature(CString signature)
+	{
+		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
+		return signature;
+	}
+	/// <summary>
+	/// Retrieves a valid signature from <paramref name="signature"/>.
+	/// </summary>
+	/// <param name="signature">A signature to validate.</param>
+	/// <returns><paramref name="signature"/> if is a valid signature.</returns>
+	protected static ReadOnlySpan<Byte> ValidateSignature(ReadOnlySpan<Byte> signature)
 	{
 		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
 		return signature;

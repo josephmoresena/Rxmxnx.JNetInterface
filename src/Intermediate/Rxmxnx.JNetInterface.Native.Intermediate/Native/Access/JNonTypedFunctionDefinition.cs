@@ -14,8 +14,10 @@ internal sealed record JNonTypedFunctionDefinition : JFunctionDefinition<JLocalO
 	/// <param name="functionName">Function name.</param>
 	/// <param name="returnType">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	public JNonTypedFunctionDefinition(CString functionName, CString returnType, params JArgumentMetadata[] metadata) :
-		base(functionName, JAccessibleObjectDefinition.ValidateSignature(returnType), metadata) { }
+	public JNonTypedFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
+		params JArgumentMetadata[] metadata) : base(functionName,
+		                                            JAccessibleObjectDefinition.ValidateSignature(returnType),
+		                                            metadata) { }
 
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.Invoke(JLocalObject, IObject?[])"/>
 	public new JLocalObject? Invoke(JLocalObject jLocal, params IObject?[] args) => base.Invoke(jLocal, args);

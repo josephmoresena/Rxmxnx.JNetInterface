@@ -12,8 +12,8 @@ internal sealed record JPrimitiveFunctionDefinition : JFunctionDefinition
 	internal override Type Return => this._type;
 
 	/// <inheritdoc/>
-	private JPrimitiveFunctionDefinition(CString functionName, JArgumentMetadata[] metadata, CString returnType,
-		Type type) : base(functionName, returnType, metadata)
+	private JPrimitiveFunctionDefinition(ReadOnlySpan<Byte> functionName, JArgumentMetadata[] metadata,
+		ReadOnlySpan<Byte> returnType, Type type) : base(functionName, returnType, metadata)
 		=> this._type = type;
 
 	/// <summary>
@@ -22,7 +22,7 @@ internal sealed record JPrimitiveFunctionDefinition : JFunctionDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JPrimitiveFunctionDefinition"/> instance.</returns>
-	public static JPrimitiveFunctionDefinition CreateBooleanDefinition(CString functionName,
+	public static JPrimitiveFunctionDefinition CreateBooleanDefinition(ReadOnlySpan<Byte> functionName,
 		params JArgumentMetadata[] metadata)
 		=> new(functionName, metadata, UnicodePrimitiveSignatures.JBooleanSignature, typeof(Byte));
 	/// <summary>
@@ -31,7 +31,7 @@ internal sealed record JPrimitiveFunctionDefinition : JFunctionDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JPrimitiveFunctionDefinition"/> instance.</returns>
-	public static JPrimitiveFunctionDefinition CreateByteDefinition(CString functionName,
+	public static JPrimitiveFunctionDefinition CreateByteDefinition(ReadOnlySpan<Byte> functionName,
 		params JArgumentMetadata[] metadata)
 		=> new(functionName, metadata, UnicodePrimitiveSignatures.JByteSignature, typeof(SByte));
 	/// <summary>
@@ -40,7 +40,7 @@ internal sealed record JPrimitiveFunctionDefinition : JFunctionDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JPrimitiveFunctionDefinition"/> instance.</returns>
-	public static JPrimitiveFunctionDefinition CreateCharDefinition(CString functionName,
+	public static JPrimitiveFunctionDefinition CreateCharDefinition(ReadOnlySpan<Byte> functionName,
 		params JArgumentMetadata[] metadata)
 		=> new(functionName, metadata, UnicodePrimitiveSignatures.JCharSignature, typeof(Char));
 	/// <summary>
@@ -49,7 +49,7 @@ internal sealed record JPrimitiveFunctionDefinition : JFunctionDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JPrimitiveFunctionDefinition"/> instance.</returns>
-	public static JPrimitiveFunctionDefinition CreateDoubleDefinition(CString functionName,
+	public static JPrimitiveFunctionDefinition CreateDoubleDefinition(ReadOnlySpan<Byte> functionName,
 		params JArgumentMetadata[] metadata)
 		=> new(functionName, metadata, UnicodePrimitiveSignatures.JDoubleSignature, typeof(Double));
 	/// <summary>
@@ -58,7 +58,7 @@ internal sealed record JPrimitiveFunctionDefinition : JFunctionDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JPrimitiveFunctionDefinition"/> instance.</returns>
-	public static JPrimitiveFunctionDefinition CreateFloatDefinition(CString functionName,
+	public static JPrimitiveFunctionDefinition CreateFloatDefinition(ReadOnlySpan<Byte> functionName,
 		params JArgumentMetadata[] metadata)
 		=> new(functionName, metadata, UnicodePrimitiveSignatures.JFloatSignature, typeof(Single));
 	/// <summary>
@@ -67,7 +67,7 @@ internal sealed record JPrimitiveFunctionDefinition : JFunctionDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JPrimitiveFunctionDefinition"/> instance.</returns>
-	public static JPrimitiveFunctionDefinition CreateIntDefinition(CString functionName,
+	public static JPrimitiveFunctionDefinition CreateIntDefinition(ReadOnlySpan<Byte> functionName,
 		params JArgumentMetadata[] metadata)
 		=> new(functionName, metadata, UnicodePrimitiveSignatures.JIntSignature, typeof(Int32));
 	/// <summary>
@@ -76,7 +76,7 @@ internal sealed record JPrimitiveFunctionDefinition : JFunctionDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JPrimitiveFunctionDefinition"/> instance.</returns>
-	public static JPrimitiveFunctionDefinition CreateLongDefinition(CString functionName,
+	public static JPrimitiveFunctionDefinition CreateLongDefinition(ReadOnlySpan<Byte> functionName,
 		params JArgumentMetadata[] metadata)
 		=> new(functionName, metadata, UnicodePrimitiveSignatures.JLongSignature, typeof(Int64));
 	/// <summary>
@@ -85,7 +85,7 @@ internal sealed record JPrimitiveFunctionDefinition : JFunctionDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JPrimitiveFunctionDefinition"/> instance.</returns>
-	public static JPrimitiveFunctionDefinition CreateShortDefinition(CString functionName,
+	public static JPrimitiveFunctionDefinition CreateShortDefinition(ReadOnlySpan<Byte> functionName,
 		params JArgumentMetadata[] metadata)
 		=> new(functionName, metadata, UnicodePrimitiveSignatures.JShortSignature, typeof(Int16));
 

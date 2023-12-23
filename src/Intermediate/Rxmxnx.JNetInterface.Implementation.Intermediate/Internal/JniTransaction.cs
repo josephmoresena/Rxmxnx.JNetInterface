@@ -43,7 +43,7 @@ internal sealed record JniTransaction : IDisposable
 	/// <summary>
 	/// Adds to current transaction <paramref name="localRef"/> reference.
 	/// </summary>
-	/// <param name="localRef">A <see cref="localRef"/> reference.</param>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <returns><paramref name="localRef"/>.</returns>
 	public JObjectLocalRef Add(JObjectLocalRef localRef)
 	{
@@ -56,7 +56,7 @@ internal sealed record JniTransaction : IDisposable
 	/// Adds to current transaction <paramref name="nativeRef"/> reference.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="INativeReferenceType"/> type.</typeparam>
-	/// <param name="nativeRef">A <see cref="nativeRef"/> reference.</param>
+	/// <param name="nativeRef">A <typeparamref name="TReference"/> reference.</param>
 	/// <returns><paramref name="nativeRef"/>.</returns>
 	public TReference Add<TReference>(TReference nativeRef)
 		where TReference : unmanaged, IObjectReferenceType<TReference>

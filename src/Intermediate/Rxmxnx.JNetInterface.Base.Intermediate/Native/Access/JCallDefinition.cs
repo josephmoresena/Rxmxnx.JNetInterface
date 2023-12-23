@@ -67,7 +67,7 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// </summary>
 	/// <param name="name">Call defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	internal JCallDefinition(CString name, params JArgumentMetadata[] metadata) : this(
+	internal JCallDefinition(ReadOnlySpan<Byte> name, params JArgumentMetadata[] metadata) : this(
 		name, JCallDefinition.VoidReturnSignature, metadata) { }
 	/// <summary>
 	/// Internal constructor.
@@ -75,9 +75,11 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// <param name="name">Call defined name.</param>
 	/// <param name="returnType">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	internal JCallDefinition(CString name, CString returnType, params JArgumentMetadata[] metadata) : base(
-		new CStringSequence(
-			name, JCallDefinition.CreateDescriptor(returnType, out Int32 size, out Int32[] sizes, metadata)))
+	internal JCallDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType,
+		params JArgumentMetadata[] metadata) : base(name.WithSafeFixed(
+			                                            JCallDefinition.CreateDescriptor(
+				                                            returnType, out Int32 size, out Int32[] sizes, metadata),
+			                                            JCallDefinition.CreateSequence))
 	{
 		this._callSize = size;
 		this._sizes = sizes;
@@ -104,7 +106,7 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// <param name="sizes">Arguments sizes.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>Method descriptor.</returns>
-	private static CString CreateDescriptor(CString returnSignature, out Int32 totalSize, out Int32[] sizes,
+	private static CString CreateDescriptor(ReadOnlySpan<Byte> returnSignature, out Int32 totalSize, out Int32[] sizes,
 		params JArgumentMetadata[] metadata)
 	{
 		totalSize = 0;
@@ -119,7 +121,31 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 			sizes[i] = metadata[i].Size;
 		}
 		memory.Write(JCallDefinition.MethodParameterSuffix);
-		memory.Write(returnSignature, true);
+		memory.Write(returnSignature);
+		memory.WriteByte(default);
 		return memory.ToArray();
+	}
+	/// <summary>
+	/// Creates a call sequence.
+	/// </summary>
+	/// <param name="memName">A <see cref="IReadOnlyFixedMemory"/> containing name.</param>
+	/// <param name="descriptor">A <see cref="CString"/> containing call descriptor.</param>
+	/// <returns>A <see cref="CStringSequence"/> instance.</returns>
+	private static CStringSequence CreateSequence(in IReadOnlyFixedMemory memName, CString descriptor)
+		=> CStringSequence.Create((memName, descriptor), JCallDefinition.CreateSequence, memName.Bytes.Length,
+		                          descriptor.Length);
+	/// <summary>
+	/// Creates a call sequence.
+	/// </summary>
+	/// <param name="span">A span of bytes.</param>
+	/// <param name="index">Index of current sequence item.</param>
+	/// <param name="arg">Creation instance.</param>
+	private static void CreateSequence(Span<Byte> span, Int32 index,
+		(IReadOnlyFixedMemory memName, CString descriptor) arg)
+	{
+		if (index == 0)
+			arg.memName.Bytes.CopyTo(span);
+		else
+			arg.descriptor.AsSpan().CopyTo(span);
 	}
 }

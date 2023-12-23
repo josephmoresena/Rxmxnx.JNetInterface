@@ -13,15 +13,15 @@ public record JMethodDefinition : JCallDefinition
 	/// </summary>
 	/// <param name="methodName">Method name.</param>
 	/// <remarks>This constructor should be never inherited.</remarks>
-	public JMethodDefinition(CString methodName) : base(methodName) { }
+	public JMethodDefinition(ReadOnlySpan<Byte> methodName) : base(methodName) { }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="methodName">Function name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	protected JMethodDefinition(CString methodName, params JArgumentMetadata[] metadata) :
-		base(methodName, metadata) { }
+	protected JMethodDefinition(ReadOnlySpan<Byte> methodName, params JArgumentMetadata[] metadata) : base(
+		methodName, metadata) { }
 
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition passing the

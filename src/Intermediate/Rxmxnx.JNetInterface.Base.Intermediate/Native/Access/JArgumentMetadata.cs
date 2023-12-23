@@ -36,6 +36,16 @@ public sealed record JArgumentMetadata
 		return new(signature, NativeUtilities.PointerSize);
 	}
 	/// <summary>
+	/// Creates a <see cref="JArgumentMetadata"/> from <paramref name="signature"/> value.
+	/// </summary>
+	/// <param name="signature">The signature of type.</param>
+	/// <returns>A <see cref="JArgumentMetadata"/> from <paramref name="signature"/> value</returns>
+	public static JArgumentMetadata Create(ReadOnlySpan<Byte> signature)
+	{
+		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
+		return new(CString.Create(signature), NativeUtilities.PointerSize);
+	}
+	/// <summary>
 	/// Creates a <see cref="JArgumentMetadata"/> from <typeparamref name="TArg"/> type.
 	/// </summary>
 	/// <typeparam name="TArg"><see cref="IDataType"/> type.</typeparam>

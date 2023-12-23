@@ -13,7 +13,7 @@ public sealed record JNonTypedFieldDefinition : JFieldDefinition
 	/// </summary>
 	/// <param name="name">Field name.</param>
 	/// <param name="signature">Signature field.</param>
-	public JNonTypedFieldDefinition(CString name, CString signature) : base(
+	public JNonTypedFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(
 		name, JAccessibleObjectDefinition.ValidateSignature(signature)) { }
 
 	/// <summary>

@@ -18,7 +18,25 @@ public abstract record JFieldDefinition : JAccessibleObjectDefinition
 	/// </summary>
 	/// <param name="name">Field name.</param>
 	/// <param name="signature">Signature field.</param>
-	internal JFieldDefinition(CString name, CString signature) : base(new CStringSequence(name, signature)) { }
+	internal JFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(
+		NativeUtilities.WithSafeFixed(name, signature, JFieldDefinition.CreateSequence)) { }
+
+	/// <summary>
+	/// Creates a field sequence.
+	/// </summary>
+	/// <param name="memoryList">A <see cref="ReadOnlyFixedMemoryList"/> containing name and return signature.</param>
+	/// <returns>A <see cref="CStringSequence"/> instance.</returns>
+	private static CStringSequence CreateSequence(ReadOnlyFixedMemoryList memoryList)
+		=> CStringSequence.Create(memoryList.ToArray(), JFieldDefinition.CreateSequence, memoryList[0].Bytes.Length,
+		                          memoryList[1].Bytes.Length);
+	/// <summary>
+	/// Creates a call sequence.
+	/// </summary>
+	/// <param name="span">A span of bytes.</param>
+	/// <param name="index">Index of current sequence item.</param>
+	/// <param name="arg">Creation instance.</param>
+	private static void CreateSequence(Span<Byte> span, Int32 index, IReadOnlyFixedMemory[] arg)
+		=> arg[index].Bytes.CopyTo(span);
 }
 
 /// <summary>
@@ -34,9 +52,9 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	/// Constructor.
 	/// </summary>
 	/// <param name="name">Field name.</param>
-	public JFieldDefinition(CString name) : base(name, IDataType.GetMetadata<TField>().Signature) { }
+	public JFieldDefinition(ReadOnlySpan<Byte> name) : base(name, IDataType.GetMetadata<TField>().Signature) { }
 	/// <inheritdoc/>
-	internal JFieldDefinition(CString name, CString signature) : base(name, signature) { }
+	internal JFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(name, signature) { }
 	/// <inheritdoc/>
 	internal JFieldDefinition(JFieldDefinition definition) : base(definition) { }
 

@@ -14,8 +14,8 @@ public abstract record JFunctionDefinition : JCallDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="returnType">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	internal JFunctionDefinition(CString functionName, CString returnType, params JArgumentMetadata[] metadata) : base(
-		functionName, returnType, metadata) { }
+	internal JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
+		params JArgumentMetadata[] metadata) : base(functionName, returnType, metadata) { }
 }
 
 /// <summary>
@@ -32,15 +32,15 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	/// </summary>
 	/// <param name="functionName">Function name.</param>
 	/// <remarks>This constructor should be never inherited.</remarks>
-	public JFunctionDefinition(CString functionName) :
-		base(functionName, IDataType.GetMetadata<TResult>().Signature) { }
+	public JFunctionDefinition(ReadOnlySpan<Byte> functionName) : base(functionName,
+	                                                                   IDataType.GetMetadata<TResult>().Signature) { }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="functionName">Function name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	protected JFunctionDefinition(CString functionName, params JArgumentMetadata[] metadata) : base(
+	protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, params JArgumentMetadata[] metadata) : base(
 		functionName, IDataType.GetMetadata<TResult>().Signature, metadata) { }
 
 	/// <summary>
@@ -49,8 +49,8 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	/// <param name="functionName">Function name.</param>
 	/// <param name="returnType">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	internal JFunctionDefinition(CString functionName, CString returnType, params JArgumentMetadata[] metadata) : base(
-		functionName, returnType, metadata) { }
+	internal JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
+		params JArgumentMetadata[] metadata) : base(functionName, returnType, metadata) { }
 	/// <summary>
 	/// Internal Constructor.
 	/// </summary>
