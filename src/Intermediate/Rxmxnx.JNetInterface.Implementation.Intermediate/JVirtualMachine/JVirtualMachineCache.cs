@@ -27,6 +27,10 @@ public partial class JVirtualMachine
 		/// </summary>
 		private readonly ConcurrentDictionary<JGlobalRef, WeakReference<JGlobal>> _globalObjects = new();
 		/// <summary>
+		/// JNI transaction dictionary.
+		/// </summary>
+		private readonly ConcurrentDictionary<Guid, JniTransaction> _transactions = new();
+		/// <summary>
 		/// Weak global object dictionary.
 		/// </summary>
 		private readonly ConcurrentDictionary<JWeakRef, WeakReference<JWeak>> _weakObjects = new();
@@ -161,6 +165,30 @@ public partial class JVirtualMachine
 				    weak.TryGetTarget(out JGlobal? jGlobal) && !jGlobal.IsDefault)
 					env.DeleteGlobalRef(jGlobal.Reference);
 			}
+		}
+		/// <summary>
+		/// Creates a new <see cref="JniTransaction"/> transaction.
+		/// </summary>
+		/// <returns>A new <see cref="JniTransaction"/> instance.</returns>
+		public JniTransaction CreateTransaction() => JniTransaction.Create(this._transactions);
+		/// <summary>
+		/// Indicates whether given <paramref name="jRef"/> is begin using by a transaction.
+		/// </summary>
+		/// <param name="jRef">A <see cref="IntPtr"/> value.</param>
+		/// <returns>
+		/// <see langword="true"/> if <paramref name="jRef"/> is begin using by a transaction;
+		/// otherwise, <see langword="false"/>.
+		/// </returns>
+		public Boolean InTransaction(IntPtr jRef)
+		{
+			Boolean result = false;
+			Parallel.ForEach(this._transactions.Values, (t, s) =>
+			{
+				if (!t.Contains(jRef)) return;
+				result = true;
+				s.Stop();
+			});
+			return result;
 		}
 
 		/// <inheritdoc cref="IVirtualMachine.CreateThread(ThreadPurpose)"/>

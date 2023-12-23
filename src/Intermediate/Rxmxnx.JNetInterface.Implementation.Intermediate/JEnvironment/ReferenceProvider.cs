@@ -9,6 +9,7 @@ public partial class JEnvironment
 		{
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			IEnvironment env = this._mainClasses.Environment;
+			//TODO: Fix.
 			return metadata.Signature[0] switch
 			{
 				0x90 => //Z
@@ -33,10 +34,12 @@ public partial class JEnvironment
 		public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 			if (typeof(TGlobal) == typeof(JWeak))
 			{
 				NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();
-				JWeakRef weakRef = newWeakGlobalRef(this.Reference, jLocal.As<JObjectLocalRef>());
+				JObjectLocalRef localRef = jniTransaction.Add(jLocal);
+				JWeakRef weakRef = newWeakGlobalRef(this.Reference, localRef);
 				if (weakRef == default) this.CheckJniError();
 				JWeak jWeak = this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
 				return (jWeak as TGlobal)!;
@@ -50,9 +53,9 @@ public partial class JEnvironment
 			}
 			else
 			{
+				JObjectLocalRef localRef = jniTransaction.Add(jLocal);
 				JGlobal jGlobal = this.VirtualMachine.Register(
-					new JGlobal(this.VirtualMachine, metadata, false,
-					            this.CreateGlobalRef(jLocal.As<JObjectLocalRef>())));
+					new JGlobal(this.VirtualMachine, metadata, false, this.CreateGlobalRef(localRef)));
 				result = (TGlobal)(Object)jGlobal;
 			}
 			return result;
@@ -64,6 +67,7 @@ public partial class JEnvironment
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.InternalReference;
 			JEnvironment env = this._mainClasses.Environment;
+			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
 			try
 			{
 				env.DeleteLocalRef(localRef);
@@ -83,9 +87,17 @@ public partial class JEnvironment
 			try
 			{
 				if (jGlobal is JGlobal)
-					env.DeleteGlobalRef(jGlobal.As<JGlobalRef>());
+				{
+					JGlobalRef globalRef = jGlobal.As<JGlobalRef>();
+					if (!this.VirtualMachine.SecureRemove(globalRef)) return false;
+					env.DeleteGlobalRef(globalRef);
+				}
 				else
-					env.DeleteWeakGlobalRef(jGlobal.As<JWeakRef>());
+				{
+					JWeakRef weakRef = jGlobal.As<JWeakRef>();
+					if (!this.VirtualMachine.SecureRemove(weakRef)) return false;
+					env.DeleteWeakGlobalRef(weakRef);
+				}
 			}
 			finally
 			{

@@ -54,7 +54,7 @@ public partial class JVirtualMachine
 	private void InitializeClasses()
 	{
 		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.CreateGlobalReference));
-		JEnvironment env = this.GetEnvironment(thread.Reference)!;
+		JEnvironment env = this.GetEnvironment(thread.Reference);
 		GlobalMainClasses mainClasses = this._cache.MainClasses;
 		mainClasses.ClassObject.SetValue(env.GetClassGlobalRef(mainClasses.ClassMetadata.Name));
 		mainClasses.ThrowableObject.SetValue(env.GetClassGlobalRef(mainClasses.ThrowableMetadata.Name));
@@ -71,7 +71,8 @@ public partial class JVirtualMachine
 	private static IThread AttachThread(in IReadOnlyFixedMemory name,
 		(JVirtualMachine vm, ThreadCreationArgs args) args)
 	{
-		JVirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(name, args.args);
+		using JniTransaction jniTransaction = args.vm.CreateTransaction();
+		JVirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, name, args.args);
 		JResult result = JVirtualMachine.AttachThread(args.vm, args.args.IsDaemon, arg, out JEnvironmentRef envRef);
 		if (result != JResult.Ok) throw new JniException(result);
 		JEnvironment env = args.vm._cache.ThreadCache.Get(envRef, out _, args.args);
@@ -101,12 +102,14 @@ public partial class JVirtualMachine
 	/// Creates a <see cref="JVirtualMachineArgumentValue"/> value from <paramref name="name"/> and
 	/// <paramref name="args"/>.
 	/// </summary>
+	/// <param name="jniTransaction">A <see cref="JniTransaction"/> instance.</param>
 	/// <param name="name">A <see cref="IFixedPointer"/> to name.</param>
 	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
 	/// <returns>A <see cref="JVirtualMachineArgumentValue"/> value.</returns>
-	private static JVirtualMachineArgumentValue CreateAttachArgument(IFixedPointer name, ThreadCreationArgs args)
+	private static JVirtualMachineArgumentValue CreateAttachArgument(JniTransaction jniTransaction, IFixedPointer name,
+		ThreadCreationArgs args)
 	{
-		JGlobalRef threadGroupRef = args.ThreadGroup?.As<JGlobalRef>() ?? default;
+		JGlobalRef threadGroupRef = jniTransaction.Add<JGlobalRef>(args.ThreadGroup);
 		Int32 version = args.Version < IVirtualMachine.MinimalVersion ? IVirtualMachine.MinimalVersion : args.Version;
 		JVirtualMachineArgumentValue arg = new()
 		{

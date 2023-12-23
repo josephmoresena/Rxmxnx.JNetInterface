@@ -24,7 +24,9 @@ public partial class JEnvironment
 			this.ReloadClass(jObject as JClassObject);
 			ValidationUtilities.ThrowIfDefault(jObject);
 			JEnvironment env = this._mainClasses.Environment;
-			JClassLocalRef classRef = env.GetObjectClass(jObject.As<JObjectLocalRef>());
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JObjectLocalRef localRef = jniTransaction.Add(jObject);
+			JClassLocalRef classRef = jniTransaction.Add(env.GetObjectClass(localRef));
 			return env.GetClass(classRef, true);
 		}
 		public Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
@@ -55,10 +57,11 @@ public partial class JEnvironment
 			if (MetadataHelper.GetMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
 				return this.GetOrFindClass(metadata);
 			ValidationUtilities.ThrowIfDummy(jClass);
-			JClassLocalRef classRef = this.ReloadClass(jClass);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			ValidationUtilities.ThrowIfDefault(jClass);
 			GetSuperclassDelegate getSuperClass = this.GetDelegate<GetSuperclassDelegate>();
-			JClassLocalRef superClassRef = getSuperClass(this.Reference, classRef);
+			JClassLocalRef superClassRef = jniTransaction.Add(getSuperClass(this.Reference, classRef));
 			JEnvironment env = this._mainClasses.Environment;
 			if (superClassRef.Value != default)
 				return env.GetClass(superClassRef, true);
@@ -71,8 +74,9 @@ public partial class JEnvironment
 			if (result.HasValue) return result.Value;
 			ValidationUtilities.ThrowIfDummy(jClass);
 			ValidationUtilities.ThrowIfDummy(otherClass);
-			JClassLocalRef classRef = this.ReloadClass(jClass);
-			JClassLocalRef otherClassRef = this.ReloadClass(otherClass);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
 			IsAssignableFromDelegate isAssignableFrom = this.GetDelegate<IsAssignableFromDelegate>();
 			result = isAssignableFrom(this.Reference, classRef, otherClassRef) == JBoolean.TrueValue;
 			this.CheckJniError();
@@ -95,7 +99,8 @@ public partial class JEnvironment
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
-			JClassLocalRef classRef = this.ReloadClass(jClass);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			if (classRef.Value == default) throw new ArgumentException("Unloaded class.");
 			JClassObject loadedClass = this._mainClasses.Environment.GetClass(classRef, true);
 			name = loadedClass.Name;
@@ -123,8 +128,8 @@ public partial class JEnvironment
 			else
 			{
 				JClassLocalRef classRef = this._objects.FindClassParameter(classInformation.Hash);
-				if (classRef.Value != default)
-					classInformation.ClassName.WithSafeFixed(this, JEnvironmentCache.FindClass);
+				if (classRef.Value == default)
+					classRef = classInformation.ClassName.WithSafeFixed(this, JEnvironmentCache.FindClass);
 				result = new(this.ClassObject, classInformation, classRef);
 			}
 			return this.Register(result);
@@ -138,12 +143,13 @@ public partial class JEnvironment
 		/// <param name="args">Cache and class loader.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private static JClassObject LoadClass(ReadOnlyFixedMemoryList memoryList,
-			(JEnvironmentCache cache, JLocalObject? classLoader) args)
+			(JEnvironmentCache cache, JLocalObject? jClassLoader) args)
 		{
-			ValidationUtilities.ThrowIfDummy(args.classLoader);
+			ValidationUtilities.ThrowIfDummy(args.jClassLoader);
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(memoryList[0].Bytes);
 			DefineClassDelegate defineClass = args.cache.GetDelegate<DefineClassDelegate>();
-			JObjectLocalRef localRef = args.classLoader?.To<JObjectLocalRef>() ?? default;
+			using JniTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction();
+			JObjectLocalRef localRef = jniTransaction.Add(args.jClassLoader);
 			JClassLocalRef classRef = defineClass(args.cache.Reference, (ReadOnlyValPtr<Byte>)memoryList[0].Pointer,
 			                                      localRef, memoryList[1].Pointer, memoryList[1].Bytes.Length);
 			if (classRef.Value == default) args.cache.CheckJniError();

@@ -6,13 +6,16 @@ public partial class JEnvironment
 	{
 		public JStringObject Create(ReadOnlySpan<Char> data)
 		{
-			JStringLocalRef stringRef = data.WithSafeFixed(this, JEnvironmentCache.CreateString);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add(data.WithSafeFixed(this, JEnvironmentCache.CreateString));
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, data.ToString()));
 		}
 		public JStringObject Create(ReadOnlySpan<Byte> utf8Data)
 		{
-			JStringLocalRef stringRef = utf8Data.WithSafeFixed(this, JEnvironmentCache.CreateUtf8String);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef =
+				jniTransaction.Add(utf8Data.WithSafeFixed(this, JEnvironmentCache.CreateUtf8String));
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, utf8Data.Length));
 		}
@@ -20,7 +23,9 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);
 			GetStringLengthDelegate getStringLength = this.GetDelegate<GetStringLengthDelegate>();
-			Int32 result = getStringLength(this.Reference, jObject.As<JStringLocalRef>());
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
+			Int32 result = getStringLength(this.Reference, stringRef);
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
@@ -28,7 +33,9 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);
 			GetStringUtfLengthDelegate getStringUtf8Length = this.GetDelegate<GetStringUtfLengthDelegate>();
-			Int32 result = getStringUtf8Length(this.Reference, jObject.As<JStringLocalRef>());
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
+			Int32 result = getStringUtf8Length(this.Reference, stringRef);
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
@@ -36,7 +43,9 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			GetStringCharsDelegate getStringChars = this.GetDelegate<GetStringCharsDelegate>();
-			IntPtr result = getStringChars(this.Reference, jString.Reference, out Byte isCopyByte);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add(jString);
+			IntPtr result = getStringChars(this.Reference, stringRef, out Byte isCopyByte);
 			if (result == IntPtr.Zero) this.CheckJniError();
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
@@ -45,7 +54,9 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			GetStringUtfCharsDelegate getStringUtf8Chars = this.GetDelegate<GetStringUtfCharsDelegate>();
-			IntPtr result = getStringUtf8Chars(this.Reference, jString.Reference, out Byte isCopyByte);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add(jString);
+			IntPtr result = getStringUtf8Chars(this.Reference, stringRef, out Byte isCopyByte);
 			if (result == IntPtr.Zero) this.CheckJniError();
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
@@ -54,7 +65,9 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			GetStringCriticalDelegate getStringCritical = this.GetDelegate<GetStringCriticalDelegate>();
-			IntPtr result = getStringCritical(this.Reference, jString.Reference, out _);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add(jString);
+			IntPtr result = getStringCritical(this.Reference, stringRef, out _);
 			if (result == IntPtr.Zero) this.CheckJniError();
 			return result;
 		}
@@ -62,21 +75,27 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			ReleaseStringCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringCharsDelegate>();
-			releaseStringChars(this.Reference, jString.Reference, (ReadOnlyValPtr<Char>)pointer);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add(jString);
+			releaseStringChars(this.Reference, stringRef, (ReadOnlyValPtr<Char>)pointer);
 			this.CheckJniError();
 		}
 		public void ReleaseUtf8Sequence(JStringObject jString, IntPtr pointer)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			ReleaseStringCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringCharsDelegate>();
-			releaseStringChars(this.Reference, jString.Reference, (ReadOnlyValPtr<Char>)pointer);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add(jString);
+			releaseStringChars(this.Reference, stringRef, (ReadOnlyValPtr<Char>)pointer);
 			this.CheckJniError();
 		}
 		public void ReleaseCriticalSequence(JStringObject jString, IntPtr pointer)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			ReleaseStringCriticalDelegate releaseStringCritical = this.GetDelegate<ReleaseStringCriticalDelegate>();
-			releaseStringCritical(this.Reference, jString.Reference, (ReadOnlyValPtr<Char>)pointer);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add(jString);
+			releaseStringCritical(this.Reference, stringRef, (ReadOnlyValPtr<Char>)pointer);
 			this.CheckJniError();
 		}
 		public void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
@@ -89,8 +108,10 @@ public partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			GetStringUtfRegionDelegate getStringUtfRegion = this.GetDelegate<GetStringUtfRegionDelegate>();
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add(jString);
 			using IFixedContext<Byte>.IDisposable fixedMemory = utf8Units.GetFixedContext();
-			getStringUtfRegion(this.Reference, jString.Reference, startIndex, utf8Units.Length,
+			getStringUtfRegion(this.Reference, stringRef, startIndex, utf8Units.Length,
 			                   (ValPtr<Byte>)fixedMemory.Pointer);
 			this.CheckJniError();
 		}
@@ -113,7 +134,9 @@ public partial class JEnvironment
 			(JEnvironmentCache cache, JStringObject jString, Int32 startIndex) args)
 		{
 			GetStringRegionDelegate getStringRegion = args.cache.GetDelegate<GetStringRegionDelegate>();
-			getStringRegion(args.cache.Reference, args.jString.Reference, args.startIndex, ctx.Values.Length,
+			using JniTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction();
+			JStringLocalRef stringRef = jniTransaction.Add(args.jString);
+			getStringRegion(args.cache.Reference, stringRef, args.startIndex, ctx.Values.Length,
 			                (ValPtr<Char>)ctx.Pointer);
 		}
 	}

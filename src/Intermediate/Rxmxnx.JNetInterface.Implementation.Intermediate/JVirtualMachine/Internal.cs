@@ -68,6 +68,38 @@ public partial class JVirtualMachine
 	/// <returns>A <see cref="AccessCache"/> instance.</returns>
 	internal AccessCache? GetAccess(JClassLocalRef classRef)
 		=> this._cache.GlobalClassCache[classRef] ?? this._cache.WeakClassCache[classRef];
+	/// <summary>
+	/// Creates a new <see cref="JniTransaction"/> transaction.
+	/// </summary>
+	/// <returns>A new <see cref="JniTransaction"/> instance.</returns>
+	internal JniTransaction CreateTransaction() => this._cache.CreateTransaction();
+	/// <summary>
+	/// Indicates whether <paramref name="weakRef"/> can be removed safely.
+	/// </summary>
+	/// <param name="weakRef">A <see cref="JWeakRef"/> reference.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="weakRef"/> can be removed safely;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	internal Boolean SecureRemove(JWeakRef weakRef) => this._cache.InTransaction(weakRef.Pointer);
+	/// <summary>
+	/// Indicates whether <paramref name="globalRef"/> can be removed safely.
+	/// </summary>
+	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="globalRef"/> can be removed safely;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	internal Boolean SecureRemove(JGlobalRef globalRef) => this._cache.InTransaction(globalRef.Pointer);
+	/// <summary>
+	/// Indicates whether <paramref name="localRef"/> can be removed safely.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="localRef"/> can be removed safely;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	internal Boolean SecureRemove(JObjectLocalRef localRef) => this._cache.InTransaction(localRef.Pointer);
 
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.

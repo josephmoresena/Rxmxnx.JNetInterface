@@ -90,7 +90,7 @@ internal delegate void GetFloatArrayRegionDelegate(JEnvironmentRef env, JFloatAr
 	Int32 length, ValPtr<Single> buffer0);
 
 internal delegate void GetDoubleArrayRegionDelegate(JEnvironmentRef env, JDoubleArrayLocalRef arrayRef,
-	Int32 startIndex, Int32 length, ReadOnlyValPtr<Double> buffer0);
+	Int32 startIndex, Int32 length, ValPtr<Double> buffer0);
 
 internal delegate void SetBooleanArrayRegionDelegate(JEnvironmentRef env, JBooleanArrayLocalRef arrayRef,
 	Int32 startIndex, Int32 length, ReadOnlyValPtr<Byte> buffer0);
