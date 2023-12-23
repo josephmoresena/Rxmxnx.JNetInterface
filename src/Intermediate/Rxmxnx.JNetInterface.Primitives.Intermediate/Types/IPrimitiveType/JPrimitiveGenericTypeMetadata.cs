@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface.Types;
 
 internal partial interface IPrimitiveType<TPrimitive, TValue>
 {
-	protected sealed partial class JTypeMetadataBuilder
+	protected ref partial struct JTypeMetadataBuilder
 	{
 		/// <summary>
 		/// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
@@ -44,11 +44,9 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// <param name="underlineType">Underline primitive CLR type.</param>
 			/// <param name="signature">JNI signature for current primitive type.</param>
 			/// <param name="className">Wrapper class name of current primitive type.</param>
-			/// <param name="arraySignature">JNI signature for an array of current type.</param>
 			/// <param name="classSignature">Wrapper class JNI signature of current primitive type.</param>
-			internal JPrimitiveGenericTypeMetadata(Int32 sizeOf, Type underlineType, CString signature,
-				CString className, CString? arraySignature, CString? classSignature = default) : base(
-				signature, className, arraySignature)
+			internal JPrimitiveGenericTypeMetadata(Int32 sizeOf, Type underlineType, ReadOnlySpan<Byte> signature,
+				ReadOnlySpan<Byte> className, CString? classSignature = default) : base(signature, className)
 			{
 				this._sizeOf = sizeOf;
 				this._underlineType = underlineType;

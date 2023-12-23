@@ -13,7 +13,6 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JShort, Int16>.JTypeMetadataBuilder
 		.Create(UnicodePrimitiveSignatures.JShortSignature)
 		.WithWrapperClassName(UnicodeClassNames.JShortObjectClassName)
-		.WithArraySignature(UnicodePrimitiveArraySignatures.JShortArraySignature)
 		.WithWrapperClassSignature(UnicodeObjectSignatures.JShortObjectSignature).Build();
 
 	/// <inheritdoc/>

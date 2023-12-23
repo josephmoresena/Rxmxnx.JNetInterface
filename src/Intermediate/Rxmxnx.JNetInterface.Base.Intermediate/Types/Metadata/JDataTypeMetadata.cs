@@ -58,6 +58,18 @@ public abstract record JDataTypeMetadata : ITypeInformation
 		this._signature = this._sequence[1];
 		this._arraySignature = this._sequence[2];
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="className">JNI name of current type.</param>
+	/// <param name="signature">JNI signature for current type.</param>
+	internal JDataTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature = default)
+	{
+		this._sequence = JDataTypeMetadata.CreateInformationSequence(className, signature);
+		this._className = this._sequence[0];
+		this._signature = this._sequence[1];
+		this._arraySignature = this._sequence[2];
+	}
 
 	/// <inheritdoc/>
 	public CString ClassName => this._className;
@@ -83,6 +95,15 @@ public abstract record JDataTypeMetadata : ITypeInformation
 		return new(arr);
 	}
 	/// <summary>
+	/// Creates hash from given parameters.
+	/// </summary>
+	/// <param name="className">JNI name of current type.</param>
+	/// <param name="signature">JNI signature for current type.</param>
+	/// <returns>A <see cref="CStringSequence"/> containing JNI information.</returns>
+	internal static CStringSequence CreateInformationSequence(ReadOnlySpan<Byte> className,
+		ReadOnlySpan<Byte> signature = default)
+		=> NativeUtilities.WithSafeFixed(className, signature, JDataTypeMetadata.CreateInformationSequence);
+	/// <summary>
 	/// Retrieves escaped JNI class name.
 	/// </summary>
 	/// <param name="className">Java class name.</param>
@@ -102,7 +123,7 @@ public abstract record JDataTypeMetadata : ITypeInformation
 	internal static CString JniParseClassName(ReadOnlySpan<Byte> className)
 	{
 		if (!className.Contains(JDataTypeMetadata.classNameEscape[0])) return CString.Create(className);
-		Byte[] classNameBytes = new Byte[className.Length];
+		Byte[] classNameBytes = new Byte[className.Length + 1];
 		for (Int32 i = 0; i < className.Length; i++)
 			classNameBytes[i] = JDataTypeMetadata.EscapeClassNameChar(className[i]);
 		return classNameBytes;
@@ -113,10 +134,63 @@ public abstract record JDataTypeMetadata : ITypeInformation
 	/// </summary>
 	/// <param name="className"><see cref="IDataType"/> class name.</param>
 	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
-	protected static CString ComputeReferenceTypeSignature(CString className)
+	protected static CString ComputeReferenceTypeSignature(ReadOnlySpan<Byte> className)
 		=> CString.Concat(UnicodeObjectSignatures.ObjectSignaturePrefix, className,
 		                  UnicodeObjectSignatures.ObjectSignatureSuffix);
 
+	/// <summary>
+	/// Creates hash from given parameters.
+	/// </summary>
+	/// <param name="memoryList">JNI parameter list of current type.</param>
+	/// <returns>A <see cref="CStringSequence"/> containing JNI information.</returns>
+	private static CStringSequence CreateInformationSequence(ReadOnlyFixedMemoryList memoryList)
+	{
+		Int32?[] lengths =
+		[
+			memoryList[0].Bytes.Length,
+			memoryList[1].Bytes.Length > 0 ? memoryList[1].Bytes.Length : memoryList[0].Bytes.Length + 2,
+			memoryList[1].Bytes.Length > 0 ? memoryList[1].Bytes.Length + 1 : memoryList[0].Bytes.Length + 3,
+		];
+		return CStringSequence.Create(memoryList.ToArray(), JDataTypeMetadata.CreateInformationSequence, lengths);
+	}
+	/// <summary>
+	/// Creates a call sequence.
+	/// </summary>
+	/// <param name="span">A span of bytes.</param>
+	/// <param name="index">Index of current sequence item.</param>
+	/// <param name="arg">Creation instance.</param>
+	private static void CreateInformationSequence(Span<Byte> span, Int32 index, IReadOnlyFixedMemory[] arg)
+	{
+		if (index < arg.Length && arg[index].Bytes.Length != 0)
+			arg[index].Bytes.CopyTo(span);
+		else
+			switch (index)
+			{
+				case 1:
+					JDataTypeMetadata.WriteSignature(span, arg[index].Bytes);
+					break;
+				case 2:
+				{
+					span[0] = UnicodeObjectSignatures.ArraySignaturePrefix[0];
+					if (arg[1].Bytes.Length > 0)
+						arg[1].Bytes.CopyTo(span[1..]);
+					else
+						JDataTypeMetadata.WriteSignature(span[1..], arg[0].Bytes);
+					break;
+				}
+			}
+	}
+	/// <summary>
+	/// Writes type signature from <paramref name="className"/> instance.
+	/// </summary>
+	/// <param name="span">Destination span.</param>
+	/// <param name="className">JNI class name.</param>
+	private static void WriteSignature(Span<Byte> span, ReadOnlySpan<Byte> className)
+	{
+		span[0] = UnicodeObjectSignatures.ObjectSignaturePrefix[0];
+		className.CopyTo(span[1..]);
+		span[^1] = UnicodeObjectSignatures.ObjectSignatureSuffix[0];
+	}
 	/// <summary>
 	/// Computes the array signature for given type signature.
 	/// </summary>

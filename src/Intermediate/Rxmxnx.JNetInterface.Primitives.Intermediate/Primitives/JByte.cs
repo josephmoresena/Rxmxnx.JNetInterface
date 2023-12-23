@@ -11,7 +11,6 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JByte, SByte>.JTypeMetadataBuilder
 		.Create(UnicodePrimitiveSignatures.JByteSignature).WithWrapperClassName(UnicodeClassNames.JByteObjectClassName)
-		.WithArraySignature(UnicodePrimitiveArraySignatures.JByteArraySignature)
 		.WithWrapperClassSignature(UnicodeObjectSignatures.JByteObjectSignature).Build();
 
 	/// <inheritdoc/>

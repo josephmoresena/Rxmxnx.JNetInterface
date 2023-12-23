@@ -28,9 +28,8 @@ public abstract record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// </summary>
 	/// <param name="signature">JNI signature for current primitive type.</param>
 	/// <param name="className">Wrapper class name of current primitive type.</param>
-	/// <param name="arraySignature">JNI signature for an array of current type.</param>
-	internal JPrimitiveTypeMetadata(CString signature, CString className, CString? arraySignature) : base(
-		className, signature, arraySignature) { }
+	internal JPrimitiveTypeMetadata(ReadOnlySpan<Byte> signature, ReadOnlySpan<Byte> className) : base(
+		className, signature) { }
 
 	/// <summary>
 	/// Creates a <see cref="IPrimitiveType"/> value from <paramref name="bytes"/>.

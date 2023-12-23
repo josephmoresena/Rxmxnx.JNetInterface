@@ -13,7 +13,6 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JDouble, Double>.JTypeMetadataBuilder
 		.Create(UnicodePrimitiveSignatures.JDoubleSignature)
 		.WithWrapperClassName(UnicodeClassNames.JDoubleObjectClassName)
-		.WithArraySignature(UnicodePrimitiveArraySignatures.JDoubleArraySignature)
 		.WithWrapperClassSignature(UnicodeObjectSignatures.JDoubleObjectSignature).Build();
 
 	/// <inheritdoc/>
