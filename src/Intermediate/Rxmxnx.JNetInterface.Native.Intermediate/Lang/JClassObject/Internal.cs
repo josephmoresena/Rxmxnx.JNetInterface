@@ -26,11 +26,10 @@ public partial class JClassObject
 	internal static JStringObject GetClassName(IEnvironment env, JClassLocalRef classRef)
 	{
 		JClassObject jClassClass = env.ClassProvider.ClassObject;
-		JFunctionDefinition<JStringObject> getName = new(UnicodeMethodNames.GetClassNameMethodName);
 		using JClassObject tempClass = new(jClassClass, classRef);
 		try
 		{
-			return getName.Invoke(tempClass)!;
+			return env.Functions.GetClassName(tempClass);
 		}
 		finally
 		{

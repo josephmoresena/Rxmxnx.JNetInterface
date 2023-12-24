@@ -46,6 +46,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	IReferenceProvider IEnvironment.ReferenceProvider => this._cache;
 	IStringProvider IEnvironment.StringProvider => this._cache;
 	IArrayProvider IEnvironment.ArrayProvider => this._cache;
+	FunctionCache IEnvironment.Functions => this._cache.Functions;
 
 	JReferenceType IEnvironment.GetReferenceType(JObject jObject)
 	{

@@ -42,6 +42,10 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// Internal Array provider object.
 	/// </summary>
 	internal IArrayProvider ArrayProvider { get; }
+	/// <summary>
+	/// Internal function provider object.
+	/// </summary>
+	internal FunctionCache Functions { get; }
 
 	JEnvironmentRef IWrapper<JEnvironmentRef>.Value => this.Reference;
 

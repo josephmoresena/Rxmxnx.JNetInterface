@@ -19,9 +19,7 @@ public partial class JEnumObject
 	/// <returns>Returns the name of current instance.</returns>
 	internal virtual String GetName()
 	{
-		JFunctionDefinition<JStringObject> definition = new(JEnumObject.nameName);
-		JClassObject enumClass = this.Environment.ClassProvider.EnumClassObject;
-		using JStringObject jString = JFunctionDefinition<JStringObject>.Invoke(definition, this, enumClass)!;
-		return jString.Value;
+		using JStringObject enumName = this.Environment.Functions.GetName(this);
+		return enumName.Value;
 	}
 }

@@ -11,7 +11,7 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 	/// </summary>
 	/// <remarks>Its position in its enum declaration, where the initial constant is assigned an ordinal of zero</remarks>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 Ordinal => this._ordinal ??= this.GetOrdinal();
+	public Int32 Ordinal => this._ordinal ??= this.Environment.Functions.GetOrdinal(this);
 	/// <summary>
 	/// Name of this enum constant, exactly as declared in its enum declaration.
 	/// </summary>

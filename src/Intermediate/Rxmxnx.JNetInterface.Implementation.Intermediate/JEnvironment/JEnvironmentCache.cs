@@ -228,6 +228,10 @@ public partial class JEnvironment
 		/// Ensured capacity.
 		/// </summary>
 		public Int32? Capacity => this._objects.Capacity;
+		/// <summary>
+		/// A <see cref="InternalFunctionCache"/> instance.
+		/// </summary>
+		public InternalFunctionCache Functions { get; }
 
 		/// <summary>
 		/// Constructor.
@@ -242,6 +246,7 @@ public partial class JEnvironment
 			this._delegateCache = new();
 			this._objects = new();
 			this._mainClasses = this.Register(mainClasses);
+			this.Functions = new();
 			this.Thread = Thread.CurrentThread;
 			this.Version = JEnvironmentCache.GetVersion(envRef);
 			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this, this._cancellation.Token);

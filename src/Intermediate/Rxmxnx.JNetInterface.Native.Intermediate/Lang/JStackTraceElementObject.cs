@@ -33,7 +33,7 @@ public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<
 	/// The line number of the source line containing the execution point
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 LineNumber => this._lineNumber ??= this.GetLineNumber();
+	public Int32 LineNumber => this._lineNumber ??= this.Environment.Functions.GetLineNumber(this);
 	/// <summary>
 	/// The name of the method containing the execution point.
 	/// </summary>
@@ -43,7 +43,7 @@ public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<
 	/// Indicates whether the method containing the execution point is a native method.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Boolean NativeMethod => this._nativeMethod ??= this.IsNativeMethod();
+	public Boolean NativeMethod => this._nativeMethod ??= this.Environment.Functions.IsNativeMethod(this);
 
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()

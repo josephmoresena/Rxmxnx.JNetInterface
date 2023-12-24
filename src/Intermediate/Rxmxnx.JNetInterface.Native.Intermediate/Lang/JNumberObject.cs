@@ -24,11 +24,7 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>,
 	/// <returns>A <typeparamref name="TPrimitive"/> numeric value.</returns>
 	public virtual TPrimitive GetValue<TPrimitive>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
-	{
-		JFunctionDefinition<TPrimitive> definition = JNumberObject.GetValueDefinition<TPrimitive>();
-		JClassObject numberClass = this.Environment.ClassProvider.NumberClassObject;
-		return JFunctionDefinition<TPrimitive>.Invoke(definition, this, numberClass);
-	}
+		=> this.Environment.Functions.GetPrimitiveValue<TPrimitive>(this);
 
 	/// <inheritdoc/>
 	public static JNumberObject? Create(JLocalObject? jLocal)
