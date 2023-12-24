@@ -5,135 +5,121 @@ public partial class JLocalObject
 	/// <summary>
 	/// <see cref="JClassTypeMetadata"/> class builder.
 	/// </summary>
-	protected abstract class JTypeMetadataBuilder
+	internal ref struct JTypeMetadataBuilder
 	{
+		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
+		private readonly ReadOnlySpan<Byte> _dataTypeName;
+		/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
+		private readonly JTypeKind _kind;
 		/// <summary>
 		/// Base types.
 		/// </summary>
 		private readonly ISet<Type> _baseTypes;
-		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
-		private readonly CString _dataTypeName;
-		/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
-		private readonly HashSet<JInterfaceTypeMetadata> _interfaces = new();
 		/// <summary>
 		/// Interface types.
 		/// </summary>
 		private readonly ISet<Type> _interfaceTypes;
+		/// <summary>
+		/// Function to retrieve implementing type.
+		/// </summary>
+		private readonly Func<JInterfaceTypeMetadata, Type> _getImplementingType;
+		/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
+		private readonly HashSet<JInterfaceTypeMetadata> _interfaces = new();
 
-		/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
-		private CString? _arraySignature;
 		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
-		private CString? _signature;
+		private ReadOnlySpan<Byte> _signature;
 
 		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
-		protected CString DataTypeName => this._dataTypeName;
-		/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
-		protected CString? ArraySignature => this._arraySignature;
+		public ReadOnlySpan<Byte> DataTypeName => this._dataTypeName;
 		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
-		protected CString? Signature => this._signature;
+		public ReadOnlySpan<Byte> Signature => this._signature;
 		/// <inheritdoc cref="JDataTypeMetadata.BaseTypes"/>
-		protected ISet<Type> BaseTypes => this._baseTypes;
-
+		public ISet<Type> BaseTypes => this._baseTypes;
 		/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
-		protected abstract JTypeKind Kind { get; }
+		public JTypeKind Kind => this._kind;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="dataTypeName">Datatype name.</param>
+		/// <param name="kind">Java datatype kind.</param>
+		/// <param name="getImplementingType">Delegate for retrieve implementing type.</param>
 		/// <param name="baseTypes">Base types.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		internal JTypeMetadataBuilder(CString dataTypeName, ISet<Type> baseTypes, ISet<Type> interfaceTypes)
+		public JTypeMetadataBuilder(ReadOnlySpan<Byte> dataTypeName, JTypeKind kind,
+			Func<JInterfaceTypeMetadata, Type> getImplementingType, ISet<Type> baseTypes, ISet<Type> interfaceTypes)
 		{
 			this._dataTypeName = dataTypeName;
 			this._baseTypes = baseTypes;
 			this._interfaceTypes = interfaceTypes;
+			this._kind = kind;
+			this._getImplementingType = getImplementingType;
 		}
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="dataTypeName">Datatype name.</param>
+		/// <param name="kind">Java datatype kind.</param>
+		/// <param name="getImplementingType">Delegate for retrieve implementing type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		internal JTypeMetadataBuilder(CString dataTypeName, ISet<Type> interfaceTypes)
+		public JTypeMetadataBuilder(ReadOnlySpan<Byte> dataTypeName, JTypeKind kind,
+			Func<JInterfaceTypeMetadata, Type> getImplementingType, ISet<Type> interfaceTypes)
 		{
 			this._dataTypeName = dataTypeName;
 			this._baseTypes = ImmutableHashSet<Type>.Empty;
 			this._interfaceTypes = interfaceTypes;
+			this._kind = kind;
+			this._getImplementingType = getImplementingType;
 		}
-
-		/// <summary>
-		/// Creates a metadata interfaces set for current datatype.
-		/// </summary>
-		/// <returns>A set with current datatype interfaces.</returns>
-		protected IImmutableSet<JInterfaceTypeMetadata> CreateInterfaceSet() => this._interfaces.ToImmutableHashSet();
 
 		/// <summary>
 		/// Sets the type signature.
 		/// </summary>
 		/// <param name="signature">Type signature.</param>
 		/// <returns>Current instance.</returns>
-		protected void WithSignature(CString signature)
+		public void WithSignature(ReadOnlySpan<Byte> signature)
 		{
 			ValidationUtilities.ThrowIfInvalidSignature(signature, false);
 			this._signature = signature;
-		}
-		/// <summary>
-		/// Sets the array signature.
-		/// </summary>
-		/// <param name="arraySignature">Array signature.</param>
-		/// <returns>Current instance.</returns>
-		protected void WithArraySignature(CString arraySignature)
-		{
-			ValidationUtilities.ThrowIfInvalidSignature(arraySignature, false);
-			this._arraySignature = arraySignature;
 		}
 		/// <summary>
 		/// Appends an interface to current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		protected void AppendInterface<
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
-			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+		public void AppendInterface<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>(
+			Type implementingType) where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			if (!this._interfaceTypes.Contains(this.GetImplementingType<TInterface>()))
+			if (!this._interfaceTypes.Contains(implementingType))
 				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
-					this.DataTypeName, this.Kind != JTypeKind.Interface);
+					this._dataTypeName, this._kind != JTypeKind.Interface);
 
 			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
 			foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
 			{
-				if (!this._interfaceTypes.Contains(this.GetImplementingType(interfaceMetadata)))
+				if (!this._interfaceTypes.Contains(this._getImplementingType(interfaceMetadata)))
 					NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
-						this.DataTypeName, this.Kind != JTypeKind.Interface);
+						this._dataTypeName, this._kind != JTypeKind.Interface);
 			}
 
 			this._interfaces.Add(metadata);
 		}
-
 		/// <summary>
-		/// Retrieves the CLR type of implementation of <typeparamref name="TInterface"/> in current type.
+		/// Creates a metadata interfaces set for current datatype.
 		/// </summary>
-		/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/>.</typeparam>
-		/// <returns>The CLR type of implementation of <typeparamref name="TInterface"/> in current type.</returns>
-		protected abstract Type GetImplementingType<
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
-			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>;
-
-		/// <summary>
-		/// Retrieves the CLR type of implementation of the interface in <paramref name="interfaceMetadata"/> in current type.
-		/// </summary>
-		/// <param name="interfaceMetadata">Interface type metadata.</param>
-		/// <returns>The CLR type of implementation of the interface in <paramref name="interfaceMetadata"/> in current type.</returns>
-		protected abstract Type GetImplementingType(JInterfaceTypeMetadata interfaceMetadata);
+		/// <returns>A set with current datatype interfaces.</returns>
+		public IImmutableSet<JInterfaceTypeMetadata> CreateInterfaceSet() => this._interfaces.ToImmutableHashSet();
 
 		/// <summary>
 		/// Indicates whether <typeparamref name="TClass"/> type implements <typeparamref name="TInterface"/>.
 		/// </summary>
 		/// <typeparam name="TClass">Type of <c/>java.lang.Object<c/> class.</typeparam>
 		/// <typeparam name="TInterface">Type of java interface.</typeparam>
-		/// <returns></returns>
-		protected static Boolean HasInterface<
+		/// <returns>
+		/// <see langword="true"/> <typeparamref name="TClass"/> type implements <typeparamref name="TInterface"/>;
+		/// otherwise, <see langword="false"/>.
+		/// </returns>
+		public static Boolean HasInterface<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass,
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TClass : JLocalObject, IReferenceType<TClass>
@@ -143,23 +129,44 @@ public partial class JLocalObject
 			return typeofT.GetInterfaces()
 			              .Any(interfaceType => interfaceType == typeof(IDerivedType<TClass, TInterface>));
 		}
+		/// <summary>
+		/// Retrieves implementing type of <typeparamref name="TInterface"/> in <typeparamref name="TReference"/>.
+		/// </summary>
+		/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+		/// <typeparam name="TInterface">A <see cref="IInterfaceType{TInterface}"/> type.</typeparam>
+		/// <returns>A <see cref="Type"/> instance.</returns>
+		public static Type GetImplementingType<TReference,
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
+			where TReference : JLocalObject, IReferenceType<TReference>
+			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+			=> typeof(IDerivedType<TReference, TInterface>);
+		/// <summary>
+		/// Retrieves implementing type of <paramref name="interfaceMetadata"/> in <typeparamref name="TReference"/>.
+		/// </summary>
+		/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+		/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
+		/// <returns>A <see cref="Type"/> instance.</returns>
+		public static Type GetImplementingType<TReference>(JInterfaceTypeMetadata interfaceMetadata)
+			where TReference : JLocalObject, IReferenceType<TReference>
+			=> interfaceMetadata.GetImplementingType<TReference>();
 	}
 
 	/// <summary>
 	/// <see cref="JClassTypeMetadata"/> class builder.
 	/// </summary>
 	/// <typeparam name="TClass">Type of <c/>java.lang.Object<c/> class.</typeparam>
-	protected sealed partial class JTypeMetadataBuilder<
-		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : JTypeMetadataBuilder
+	protected ref partial struct JTypeMetadataBuilder<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass>
 		where TClass : JLocalObject, IClassType<TClass>
 	{
 		/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 		private readonly JClassTypeMetadata? _baseMetadata;
 		/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 		private readonly JTypeModifier _modifier;
-
-		/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
-		protected override JTypeKind Kind => JTypeKind.Class;
+		/// <summary>
+		/// A <see cref="JTypeMetadataBuilder"/> instance.
+		/// </summary>
+		private JTypeMetadataBuilder _builder;
 
 		/// <summary>
 		/// Constructor.
@@ -169,11 +176,13 @@ public partial class JLocalObject
 		/// <param name="baseMetadata">Base type metadata of current type.</param>
 		/// <param name="baseTypes">Base types.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private JTypeMetadataBuilder(CString className, JTypeModifier modifier, JClassTypeMetadata? baseMetadata,
-			ISet<Type> baseTypes, ISet<Type> interfaceTypes) : base(className, baseTypes, interfaceTypes)
+		private JTypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
+			JClassTypeMetadata? baseMetadata, ISet<Type> baseTypes, ISet<Type> interfaceTypes)
 		{
-			this._modifier = modifier;
+			this._builder = new(className, JTypeKind.Class, JTypeMetadataBuilder.GetImplementingType<TClass>, baseTypes,
+			                    interfaceTypes);
 			this._baseMetadata = baseMetadata;
+			this._modifier = modifier;
 		}
 
 		/// <summary>
@@ -181,19 +190,9 @@ public partial class JLocalObject
 		/// </summary>
 		/// <param name="signature">Type signature.</param>
 		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TClass> WithSignature(CString signature)
+		public JTypeMetadataBuilder<TClass> WithSignature(CString signature)
 		{
-			base.WithSignature(signature);
-			return this;
-		}
-		/// <summary>
-		/// Sets the array signature.
-		/// </summary>
-		/// <param name="arraySignature">Array signature.</param>
-		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TClass> WithArraySignature(CString arraySignature)
-		{
-			base.WithArraySignature(arraySignature);
+			this._builder.WithSignature(signature);
 			return this;
 		}
 		/// <summary>
@@ -205,7 +204,7 @@ public partial class JLocalObject
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			this.AppendInterface<TInterface>();
+			this._builder.AppendInterface<TInterface>(JTypeMetadataBuilder.GetImplementingType<TClass, TInterface>());
 			return this;
 		}
 		/// <summary>
@@ -213,16 +212,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JClassTypeMetadata Build()
-			=> new JClassGenericTypeMetadata(this.DataTypeName, this._modifier, this.CreateInterfaceSet(),
-			                                 this._baseMetadata, this.BaseTypes, this.Signature, this.ArraySignature);
-
-		/// <inheritdoc/>
-		protected override Type GetImplementingType<
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
-			=> typeof(IDerivedType<TClass, TInterface>);
-		/// <inheritdoc/>
-		protected override Type GetImplementingType(JInterfaceTypeMetadata interfaceMetadata)
-			=> interfaceMetadata.GetImplementingType<TClass>();
+			=> new JClassGenericTypeMetadata(this._builder, this._modifier, this._baseMetadata);
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
@@ -230,7 +220,7 @@ public partial class JLocalObject
 		/// <param name="className">Class name of current type.</param>
 		/// <param name="modifier">Modifier of current type.</param>
 		/// <returns>A new <see cref="JTypeMetadataBuilder{TClass}"/> instance.</returns>
-		public static JTypeMetadataBuilder<TClass> Create(CString className,
+		public static JTypeMetadataBuilder<TClass> Create(ReadOnlySpan<Byte> className,
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
@@ -249,8 +239,9 @@ public partial class JLocalObject
 		/// <param name="modifier">Modifier of current type.</param>
 		/// <returns>A new <see cref="JTypeMetadataBuilder{TClass}"/> instance.</returns>
 		public static JTypeMetadataBuilder<TObject>
-			Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(CString className,
-				JTypeModifier modifier = JTypeModifier.Extensible) where TObject : TClass, IClassType<TObject>
+			Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
+				ReadOnlySpan<Byte> className, JTypeModifier modifier = JTypeModifier.Extensible)
+			where TObject : TClass, IClassType<TObject>
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType<TClass, TObject>(className);

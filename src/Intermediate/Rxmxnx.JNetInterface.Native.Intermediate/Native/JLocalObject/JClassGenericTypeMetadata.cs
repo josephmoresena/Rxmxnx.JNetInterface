@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface.Native;
 
 public partial class JLocalObject
 {
-	protected sealed partial class JTypeMetadataBuilder<TClass>
+	protected ref partial struct JTypeMetadataBuilder<TClass>
 	{
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IClassType"/> type.
@@ -32,22 +32,16 @@ public partial class JLocalObject
 			/// <summary>
 			/// Constructor.
 			/// </summary>
-			/// <param name="className">Class name of current type.</param>
+			/// <param name="builder">A <see cref="JTypeMetadataBuilder"/> instance.</param>
 			/// <param name="modifier">Modifier of current type.</param>
-			/// <param name="interfaces">Set of interfaces metadata of current type implements.</param>
-			/// <param name="baseTypes">Base types set.</param>
 			/// <param name="baseMetadata">Base type of current type metadata.</param>
-			/// <param name="signature">JNI signature for current type.</param>
-			/// <param name="arraySignature">Array JNI signature for current type.</param>
-			internal JClassGenericTypeMetadata(CString className, JTypeModifier modifier,
-				IImmutableSet<JInterfaceTypeMetadata> interfaces, JClassTypeMetadata? baseMetadata,
-				ISet<Type> baseTypes, CString? signature, CString? arraySignature) : base(
-				className, signature, arraySignature)
+			public JClassGenericTypeMetadata(JTypeMetadataBuilder builder, JTypeModifier modifier,
+				JClassTypeMetadata? baseMetadata) : base(builder.DataTypeName, builder.Signature)
 			{
 				this._modifier = modifier;
-				this._interfaces = interfaces;
+				this._interfaces = builder.CreateInterfaceSet();
 				this._baseMetadata = baseMetadata;
-				this._baseTypes = baseTypes;
+				this._baseTypes = builder.BaseTypes;
 			}
 
 			/// <inheritdoc/>

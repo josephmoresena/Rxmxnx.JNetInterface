@@ -29,7 +29,7 @@ internal static class NativeValidationUtilities
 	/// Throws an exception if <typeparamref name="TReference"/> can't extend <typeparamref name="TOtherReference"/>.
 	/// </exception>
 	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
-	public static void ThrowIfInvalidExtension<TReference, TOtherReference>(CString typeName)
+	public static void ThrowIfInvalidExtension<TReference, TOtherReference>(ReadOnlySpan<Byte> typeName)
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		where TOtherReference : JReferenceObject, IReferenceType<TOtherReference>
 	{
@@ -38,7 +38,7 @@ internal static class NativeValidationUtilities
 		{
 			if (interfaceType == derivedType)
 				throw new InvalidOperationException(
-					$"{typeName} type can't extend an interface type which extends it.");
+					$"{typeName.ToCString()} type can't extend an interface type which extends it.");
 		}
 	}
 	/// <summary>
@@ -51,11 +51,11 @@ internal static class NativeValidationUtilities
 	/// Throws an exception if <typeparamref name="TBase"/> and <typeparamref name="TReference"/> are the same type.
 	/// </exception>
 	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
-	public static void ThrowIfSameType<TBase, TReference>(CString typeName)
+	public static void ThrowIfSameType<TBase, TReference>(ReadOnlySpan<Byte> typeName)
 		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
 	{
 		if (typeof(TBase) == typeof(TReference))
-			throw new InvalidOperationException($"{typeName} type and base type can't be the same.");
+			throw new InvalidOperationException($"{typeName.ToCString()} type and base type can't be the same.");
 	}
 	/// <summary>
 	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
@@ -68,13 +68,14 @@ internal static class NativeValidationUtilities
 	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
 	/// </exception>
 	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
-	public static ISet<Type> ValidateBaseTypes<TBase, TReference>(CString typeName)
+	public static ISet<Type> ValidateBaseTypes<TBase, TReference>(ReadOnlySpan<Byte> typeName)
 		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
 	{
 		ISet<Type> baseBaseTypes = IReferenceType<TBase>.GetBaseTypes().ToHashSet();
 		ISet<Type> baseTypes = IReferenceType<TReference>.GetBaseTypes().ToHashSet();
 		if (!baseTypes.IsProperSupersetOf(baseBaseTypes))
-			throw new InvalidOperationException($"{typeName} type can't be based on a type which is derived from it.");
+			throw new InvalidOperationException(
+				$"{typeName.ToCString()} type can't be based on a type which is derived from it.");
 		baseTypes.ExceptWith(baseBaseTypes);
 		return baseTypes;
 	}
@@ -89,18 +90,19 @@ internal static class NativeValidationUtilities
 	/// <exception cref="NotImplementedException">Always thrown.</exception>
 	public static void
 		ThrowInvalidImplementation<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>(
-			CString typeName, Boolean isClass)
+			ReadOnlySpan<Byte> typeName, Boolean isClass)
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 	{
 		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();
 		String implementationType = isClass ? "implements" : "extends";
 		throw new NotImplementedException(
-			$"{typeName} type doesn't {implementationType} {interfaceMetadata.ClassName} interface.");
+			$"{typeName.ToCString()} type doesn't {implementationType} {interfaceMetadata.ClassName} interface.");
 	}
 
 	/// <summary>
 	/// Throws an exception if <paramref name="ordinal"/> is an invalid enum ordinal.
 	/// </summary>
+	/// <param name="enumTypeName">Enum type name.</param>
 	/// <param name="list">A <see cref="IEnumFieldList"/> instance.</param>
 	/// <param name="ordinal">Enum ordinal.</param>
 	/// <exception cref="ArgumentException">
@@ -109,16 +111,18 @@ internal static class NativeValidationUtilities
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="ordinal"/> is already defined for current enum type.
 	/// </exception>
-	public static void ThrowIfInvalidOrdinal(IEnumFieldList list, Int32 ordinal)
+	public static void ThrowIfInvalidOrdinal(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list, Int32 ordinal)
 	{
 		if (ordinal < 0)
-			throw new ArgumentException($"Any ordinal for {list.TypeName} type must be zero or positive.");
+			throw new ArgumentException($"Any ordinal for {enumTypeName.ToCString()} type must be zero or positive.");
 		if (list.HasOrdinal(ordinal))
-			throw new InvalidOperationException($"{list.TypeName} has already a field with ({ordinal}) ordinal.");
+			throw new InvalidOperationException(
+				$"{enumTypeName.ToCString()} has already a field with ({ordinal}) ordinal.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="hash"/> is an invalid field name hash.
 	/// </summary>
+	/// <param name="enumTypeName">Enum type name.</param>
 	/// <param name="list">A <see cref="IEnumFieldList"/> instance.</param>
 	/// <param name="hash">Enum name hash.</param>
 	/// <exception cref="ArgumentException">
@@ -127,28 +131,37 @@ internal static class NativeValidationUtilities
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="hash"/> is already defined for current enum type.
 	/// </exception>
-	public static void ThrowIfInvalidHash(IEnumFieldList list, String hash)
+	public static void ThrowIfInvalidHash(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list, String hash)
 	{
 		if (String.IsNullOrWhiteSpace(hash))
-			throw new ArgumentException($"Any name for {list.TypeName} type must be non-empty.");
+			throw new ArgumentException($"Any name for {enumTypeName.ToCString()} type must be non-empty.");
 		if (list.HasHash(hash))
-			throw new InvalidOperationException($"{list.TypeName} has already a field with '{list[list[hash]]}' name.");
+			throw new InvalidOperationException(
+				$"{enumTypeName.ToCString()} has already a field with '{list[list[hash]]}' name.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="list"/> is invalid.
 	/// </summary>
+	/// <param name="enumTypeName">Enum type name.</param>
 	/// <param name="list">A <see cref="IEnumFieldList"/> instance.</param>
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="list"/> is invalid.
 	/// </exception>
-	public static void ThrowIfInvalidList(IEnumFieldList list)
+	public static void ThrowIfInvalidList(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list)
 	{
 		IReadOnlySet<Int32> missing = list.GetMissingFields(out Int32 count, out Int32 maxOrdinal);
 		if (missing.Count <= 0 && maxOrdinal == count - 1)
 			return;
-		String message = $"The enum field list for {list.TypeName} is invalid. " +
+		String message = $"The enum field list for {enumTypeName.ToCString()} is invalid. " +
 			$"Count: {count}. Maximum ordinal: {maxOrdinal}. " +
 			(missing.Count > 0 ? $"Missing values: {String.Join(", ", missing)}." : "");
 		throw new InvalidOperationException(message);
 	}
+
+	/// <summary>
+	/// Extension for <see cref="CString"/> creation.
+	/// </summary>
+	/// <param name="utf8Span">A UTF-8 byte span.</param>
+	/// <returns>A <see cref="CString"/> instance.</returns>
+	private static CString ToCString(this ReadOnlySpan<Byte> utf8Span) => new(utf8Span);
 }

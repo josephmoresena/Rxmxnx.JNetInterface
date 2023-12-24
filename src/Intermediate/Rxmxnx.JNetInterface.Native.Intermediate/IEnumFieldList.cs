@@ -6,11 +6,6 @@ namespace Rxmxnx.JNetInterface;
 public interface IEnumFieldList
 {
 	/// <summary>
-	/// Enum type name.
-	/// </summary>
-	internal CString TypeName { get; }
-
-	/// <summary>
 	/// Retrieves the enum field name for given ordinal.
 	/// </summary>
 	/// <param name="ordinal">Enum ordinal.</param>

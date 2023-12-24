@@ -32,10 +32,10 @@ internal sealed record
 	/// </summary>
 	/// <param name="baseMetadata">Base <see cref="JClassTypeMetadata"/> instance.</param>
 	public JPrimitiveWrapperTypeMetadata(JClassTypeMetadata? baseMetadata = default) : base(
-		TWrapper.PrimitiveMetadata.ClassName, TWrapper.PrimitiveMetadata.ClassSignature, TWrapper.ArraySignature)
+		TWrapper.PrimitiveMetadata.ClassName, TWrapper.PrimitiveMetadata.ClassSignature)
 	{
 		this._baseMetadata = baseMetadata ?? IClassType.GetMetadata<JLocalObject>();
-		this._baseTypes = new(1) { this._baseMetadata.Type, };
+		this._baseTypes = [this._baseMetadata.Type,];
 	}
 
 	/// <inheritdoc/>

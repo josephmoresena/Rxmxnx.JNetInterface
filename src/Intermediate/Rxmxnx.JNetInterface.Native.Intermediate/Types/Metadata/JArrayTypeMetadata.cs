@@ -9,7 +9,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	/// Metadata dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<CString, JArrayTypeMetadata> arrayMetadatas = new();
-	
+
 	/// <summary>
 	/// Element type of current array metadata.
 	/// </summary>
@@ -29,7 +29,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	/// </summary>
 	/// <param name="signature">JNI signature for current array type.</param>
 	/// <param name="deep">Array deep.</param>
-	internal JArrayTypeMetadata(CString signature, Int32 deep) : base(signature, signature)
+	internal JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Int32 deep) : base(signature, signature)
 	{
 		this.Deep = deep;
 		JArrayTypeMetadata.arrayMetadatas.TryAdd(this.Signature, this);
@@ -45,9 +45,10 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 		try
 		{
 			JArrayTypeMetadata metadata = IArrayType.GetMetadata<JArrayObject<TElement>>();
-			return 
-				JArrayTypeMetadata.arrayMetadatas.TryGetValue(metadata.ArraySignature, out JArrayTypeMetadata? result) ?
-					result : IArrayType.GetMetadata<JArrayObject<JArrayObject<TElement>>>();
+			return JArrayTypeMetadata.arrayMetadatas.TryGetValue(metadata.ArraySignature,
+			                                                     out JArrayTypeMetadata? result) ?
+				result :
+				IArrayType.GetMetadata<JArrayObject<JArrayObject<TElement>>>();
 		}
 		catch (Exception)
 		{

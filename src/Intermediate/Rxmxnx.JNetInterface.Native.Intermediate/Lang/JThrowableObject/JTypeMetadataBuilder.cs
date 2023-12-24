@@ -6,17 +6,18 @@ public partial class JThrowableObject
 	/// <see cref="JClassTypeMetadata"/> throwable builder.
 	/// </summary>
 	/// <typeparam name="TThrowable">Type of <c/>java.lang.Throwable<c/> class.</typeparam>
-	protected new sealed partial class JTypeMetadataBuilder<
-		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable> : JTypeMetadataBuilder
+	protected new ref partial struct JTypeMetadataBuilder<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable>
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 	{
 		/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 		private readonly JClassTypeMetadata? _baseMetadata;
 		/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 		private readonly JTypeModifier _modifier;
-
-		/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
-		protected override JTypeKind Kind => JTypeKind.Class;
+		/// <summary>
+		/// A <see cref="JLocalObject.JTypeMetadataBuilder"/> instance.
+		/// </summary>
+		private JTypeMetadataBuilder _builder;
 
 		/// <summary>
 		/// Constructor.
@@ -26,11 +27,13 @@ public partial class JThrowableObject
 		/// <param name="baseMetadata">Base type metadata of current type.</param>
 		/// <param name="baseTypes">Base types.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private JTypeMetadataBuilder(CString className, JTypeModifier modifier, JClassTypeMetadata? baseMetadata,
-			ISet<Type> baseTypes, ISet<Type> interfaceTypes) : base(className, baseTypes, interfaceTypes)
+		private JTypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
+			JClassTypeMetadata? baseMetadata, ISet<Type> baseTypes, ISet<Type> interfaceTypes)
 		{
-			this._modifier = modifier;
+			this._builder = new(className, JTypeKind.Class, JTypeMetadataBuilder.GetImplementingType<TThrowable>,
+			                    baseTypes, interfaceTypes);
 			this._baseMetadata = baseMetadata;
+			this._modifier = modifier;
 		}
 
 		/// <summary>
@@ -38,19 +41,9 @@ public partial class JThrowableObject
 		/// </summary>
 		/// <param name="signature">Type signature.</param>
 		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TThrowable> WithSignature(CString signature)
+		public JTypeMetadataBuilder<TThrowable> WithSignature(CString signature)
 		{
-			base.WithSignature(signature);
-			return this;
-		}
-		/// <summary>
-		/// Sets the array signature.
-		/// </summary>
-		/// <param name="arraySignature">Array signature.</param>
-		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TThrowable> WithArraySignature(CString arraySignature)
-		{
-			base.WithArraySignature(arraySignature);
+			this._builder.WithSignature(signature);
 			return this;
 		}
 		/// <summary>
@@ -62,7 +55,8 @@ public partial class JThrowableObject
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			this.AppendInterface<TInterface>();
+			this._builder.AppendInterface<TInterface>(
+				JTypeMetadataBuilder.GetImplementingType<TThrowable, TInterface>());
 			return this;
 		}
 		/// <summary>
@@ -70,25 +64,15 @@ public partial class JThrowableObject
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JThrowableTypeMetadata Build()
-			=> new JThrowableGenericTypeMetadata(this.DataTypeName, this._modifier, this.CreateInterfaceSet(),
-			                                     this._baseMetadata, this.BaseTypes, this.Signature,
-			                                     this.ArraySignature);
-
-		/// <inheritdoc/>
-		protected override Type GetImplementingType<
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
-			=> typeof(IDerivedType<TThrowable, TInterface>);
-		/// <inheritdoc/>
-		protected override Type GetImplementingType(JInterfaceTypeMetadata interfaceMetadata)
-			=> interfaceMetadata.GetImplementingType<TThrowable>();
+			=> new JThrowableGenericTypeMetadata(this._builder, this._modifier, this._baseMetadata);
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <param name="className">Class name of current type.</param>
 		/// <param name="modifier">Modifier of current type.</param>
-		/// <returns>A new <see cref="JTypeMetadataBuilder{TClass}"/> instance.</returns>
-		public static JTypeMetadataBuilder<TThrowable> Create(CString className,
+		/// <returns>A new <see cref="JTypeMetadataBuilder{TThrowable}"/> instance.</returns>
+		public static JTypeMetadataBuilder<TThrowable> Create(ReadOnlySpan<Byte> className,
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
@@ -105,10 +89,11 @@ public partial class JThrowableObject
 		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
 		/// <param name="className">Class name of current type.</param>
 		/// <param name="modifier">Modifier of current type.</param>
-		/// <returns>A new <see cref="JTypeMetadataBuilder{TClass}"/> instance.</returns>
+		/// <returns>A new <see cref="JTypeMetadataBuilder{TThrowable}"/> instance.</returns>
 		public static JTypeMetadataBuilder<TObject>
-			Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(CString className,
-				JTypeModifier modifier = JTypeModifier.Extensible) where TObject : TThrowable, IThrowableType<TObject>
+			Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
+				ReadOnlySpan<Byte> className, JTypeModifier modifier = JTypeModifier.Extensible)
+			where TObject : TThrowable, IThrowableType<TObject>
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType<TThrowable, TObject>(className);

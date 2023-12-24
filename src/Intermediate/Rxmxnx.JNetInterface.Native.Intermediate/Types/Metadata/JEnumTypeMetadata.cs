@@ -20,7 +20,6 @@ public abstract record JEnumTypeMetadata : JReferenceTypeMetadata
 	/// </summary>
 	/// <param name="className">Enum name of current type.</param>
 	/// <param name="signature">JNI signature for current type.</param>
-	/// <param name="arraySignature">Array JNI signature for current type.</param>
-	internal JEnumTypeMetadata(CString className, CString? signature, CString? arraySignature = default) : base(
-		className, signature, arraySignature) { }
+	internal JEnumTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) :
+		base(className, signature) { }
 }

@@ -6,39 +6,32 @@ public abstract partial class JInterfaceObject
 	/// <see cref="JReferenceTypeMetadata"/> interface builder.
 	/// </summary>
 	/// <typeparam name="TInterface">Type of interface.</typeparam>
-	protected new sealed partial class JTypeMetadataBuilder<
-		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface> : JTypeMetadataBuilder
+	protected new ref partial struct JTypeMetadataBuilder<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 	{
-		/// <inheritdoc/>
-		protected override JTypeKind Kind => JTypeKind.Interface;
+		/// <summary>
+		/// A <see cref="JLocalObject.JTypeMetadataBuilder"/> instance.
+		/// </summary>
+		private JTypeMetadataBuilder _builder;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="interfaceName">Interface name of current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private JTypeMetadataBuilder(CString interfaceName, ISet<Type> interfaceTypes) : base(
-			interfaceName, interfaceTypes) { }
+		private JTypeMetadataBuilder(ReadOnlySpan<Byte> interfaceName, ISet<Type> interfaceTypes)
+			=> this._builder = new(interfaceName, JTypeKind.Interface,
+			                       JTypeMetadataBuilder.GetImplementingType<TInterface>, interfaceTypes);
 
 		/// <summary>
 		/// Sets the type signature.
 		/// </summary>
 		/// <param name="signature">Type signature.</param>
 		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TInterface> WithSignature(CString signature)
+		public JTypeMetadataBuilder<TInterface> WithSignature(CString signature)
 		{
-			base.WithSignature(signature);
-			return this;
-		}
-		/// <summary>
-		/// Sets the array signature.
-		/// </summary>
-		/// <param name="arraySignature">Array signature.</param>
-		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TInterface> WithArraySignature(CString arraySignature)
-		{
-			base.WithArraySignature(arraySignature);
+			this._builder.WithSignature(signature);
 			return this;
 		}
 		/// <summary>
@@ -50,32 +43,23 @@ public abstract partial class JInterfaceObject
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TOtherInterface>()
 			where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
 		{
-			NativeValidationUtilities.ThrowIfInvalidExtension<TInterface, TOtherInterface>(this.DataTypeName);
-			this.AppendInterface<TOtherInterface>();
+			NativeValidationUtilities.ThrowIfInvalidExtension<TInterface, TOtherInterface>(this._builder.DataTypeName);
+			this._builder.AppendInterface<TOtherInterface>(
+				JTypeMetadataBuilder.GetImplementingType<TInterface, TOtherInterface>());
 			return this;
 		}
 		/// <summary>
 		/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-		public JInterfaceTypeMetadata Build()
-			=> new JInterfaceGenericTypeMetadata(this.DataTypeName, this.CreateInterfaceSet(), this.Signature,
-			                                     this.ArraySignature);
-
-		/// <inheritdoc/>
-		protected override Type GetImplementingType<
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TOtherInterface>()
-			=> typeof(IDerivedType<TInterface, TOtherInterface>);
-		/// <inheritdoc/>
-		protected override Type GetImplementingType(JInterfaceTypeMetadata interfaceMetadata)
-			=> interfaceMetadata.GetImplementingType<TInterface>();
+		public JInterfaceTypeMetadata Build() => new JInterfaceGenericTypeMetadata(this._builder);
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <param name="className">Class name of current type.</param>
 		/// <returns>A new <see cref="JTypeMetadataBuilder{TInterface}"/> instance.</returns>
-		public static JTypeMetadataBuilder<TInterface> Create(CString className)
+		public static JTypeMetadataBuilder<TInterface> Create(ReadOnlySpan<Byte> className)
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
 			ISet<Type> interfaceTypes = IReferenceType<TInterface>.GetInterfaceTypes().ToHashSet();

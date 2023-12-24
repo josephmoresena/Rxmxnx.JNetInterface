@@ -6,44 +6,39 @@ public partial class JEnumObject
 	/// <see cref="JReferenceTypeMetadata"/> enum builder.
 	/// </summary>
 	/// <typeparam name="TEnum">Type of enum.</typeparam>
-	protected new sealed partial class JTypeMetadataBuilder<
-		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TEnum> : JTypeMetadataBuilder
+	protected new ref partial struct JTypeMetadataBuilder<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TEnum>
 		where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 	{
+		/// <summary>
+		/// A <see cref="JLocalObject.JTypeMetadataBuilder"/> instance.
+		/// </summary>
+		private JTypeMetadataBuilder _builder;
 		/// <summary>
 		/// Enum field list.
 		/// </summary>
 		private readonly FieldList _fields;
 
-		/// <inheritdoc/>
-		protected override JTypeKind Kind => JTypeKind.Enum;
-
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="enumType">Enum name of current type.</param>
+		/// <param name="enumTypeName">Enum name of current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private JTypeMetadataBuilder(CString enumType, ISet<Type> interfaceTypes) : base(enumType, interfaceTypes)
-			=> this._fields = new(enumType);
+		private JTypeMetadataBuilder(ReadOnlySpan<Byte> enumTypeName, ISet<Type> interfaceTypes)
+		{
+			this._builder = new(enumTypeName, JTypeKind.Enum, JTypeMetadataBuilder.GetImplementingType<TEnum>,
+			                    interfaceTypes);
+			this._fields = new();
+		}
 
 		/// <summary>
 		/// Sets the type signature.
 		/// </summary>
 		/// <param name="signature">Type signature.</param>
 		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TEnum> WithSignature(CString signature)
+		public JTypeMetadataBuilder<TEnum> WithSignature(CString signature)
 		{
-			base.WithSignature(signature);
-			return this;
-		}
-		/// <summary>
-		/// Sets the array signature.
-		/// </summary>
-		/// <param name="arraySignature">Array signature.</param>
-		/// <returns>Current instance.</returns>
-		public new JTypeMetadataBuilder<TEnum> WithArraySignature(CString arraySignature)
-		{
-			base.WithArraySignature(arraySignature);
+			this._builder.WithSignature(signature);
 			return this;
 		}
 		/// <summary>
@@ -55,7 +50,7 @@ public partial class JEnumObject
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			this.AppendInterface<TInterface>();
+			this._builder.AppendInterface<TInterface>(JTypeMetadataBuilder.GetImplementingType<TEnum, TInterface>());
 			return this;
 		}
 		/// <summary>
@@ -66,7 +61,7 @@ public partial class JEnumObject
 		/// <returns>Current instance.</returns>
 		public JTypeMetadataBuilder<TEnum> AppendValue(Int32 ordinal, CString name)
 		{
-			this._fields.AddField(ordinal, name);
+			this._fields.AddField(this._builder.DataTypeName, ordinal, name);
 			return this;
 		}
 		/// <summary>
@@ -78,7 +73,7 @@ public partial class JEnumObject
 		public JTypeMetadataBuilder<TEnum> AppendValues(Int32 offset = 0, params CString[] names)
 		{
 			for (Int32 i = 0; i < names.Length; i++)
-				this._fields.AddField(i + offset, names[i]);
+				this._fields.AddField(this._builder.DataTypeName, i + offset, names[i]);
 			return this;
 		}
 		/// <summary>
@@ -86,23 +81,14 @@ public partial class JEnumObject
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JEnumTypeMetadata Build()
-			=> new JEnumGenericTypeMetadata(this.DataTypeName, this._fields.Validate(), this.CreateInterfaceSet(),
-			                                this.Signature, this.ArraySignature);
-
-		/// <inheritdoc/>
-		protected override Type GetImplementingType<
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TOtherInterface>()
-			=> typeof(IDerivedType<TEnum, TOtherInterface>);
-		/// <inheritdoc/>
-		protected override Type GetImplementingType(JInterfaceTypeMetadata interfaceMetadata)
-			=> interfaceMetadata.GetImplementingType<TEnum>();
+			=> new JEnumGenericTypeMetadata(this._builder, this._fields.Validate(this._builder.DataTypeName));
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <param name="className">Class name of current type.</param>
 		/// <returns>A new <see cref="JTypeMetadataBuilder{TInterface}"/> instance.</returns>
-		public static JTypeMetadataBuilder<TEnum> Create(CString className)
+		public static JTypeMetadataBuilder<TEnum> Create(ReadOnlySpan<Byte> className)
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
 			ISet<Type> interfaceTypes = IReferenceType<TEnum>.GetInterfaceTypes().ToHashSet();

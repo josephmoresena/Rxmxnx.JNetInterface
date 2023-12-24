@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public partial class JEnumObject
 {
-	protected sealed partial class JTypeMetadataBuilder<TEnum>
+	protected new ref partial struct JTypeMetadataBuilder<TEnum>
 	{
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IEnumType"/> type.
@@ -26,17 +26,13 @@ public partial class JEnumObject
 			/// <summary>
 			/// Constructor.
 			/// </summary>
-			/// <param name="enumName">Interface name of current type.</param>
+			/// <param name="builder">A <see cref="JLocalObject.JTypeMetadataBuilder"/> instance.</param>
 			/// <param name="fields">Enum field list.</param>
-			/// <param name="interfaces">Set of interfaces metadata of current type implements.</param>
-			/// <param name="signature">JNI signature for current type.</param>
-			/// <param name="arraySignature">Array JNI signature for current type.</param>
-			internal JEnumGenericTypeMetadata(CString enumName, IEnumFieldList fields,
-				IImmutableSet<JInterfaceTypeMetadata> interfaces, CString? signature, CString? arraySignature) : base(
-				enumName, signature, arraySignature)
+			public JEnumGenericTypeMetadata(JTypeMetadataBuilder builder, IEnumFieldList fields) : base(
+				builder.DataTypeName, builder.Signature)
 			{
 				this._fields = fields;
-				this._interfaces = interfaces;
+				this._interfaces = builder.CreateInterfaceSet();
 			}
 
 			/// <inheritdoc/>

@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public partial class JEnumObject
 {
-	protected sealed partial class JTypeMetadataBuilder<TEnum>
+	protected new ref partial struct JTypeMetadataBuilder<TEnum>
 	{
 		/// <summary>
 		/// Internal implementation of <see cref="IEnumFieldList"/>.
@@ -21,14 +21,7 @@ public partial class JEnumObject
 			/// Enum ordinal dictionary.
 			/// </summary>
 			private readonly Dictionary<Int32, String> _ordinalDictionary = new();
-			/// <summary>
-			/// Enum type name.
-			/// </summary>
-			private readonly CString _typeName;
 
-			public FieldList(CString typeName) => this._typeName = typeName;
-
-			CString IEnumFieldList.TypeName => this._typeName;
 			CString IEnumFieldList.this[Int32 ordinal] => this._nameDictionary[this._ordinalDictionary[ordinal]];
 			Int32 IEnumFieldList.this[CString name] => this._hashDictionary[name.ToHexString()];
 			Int32 IEnumFieldList.this[String hash] => this._hashDictionary[hash];
@@ -48,13 +41,14 @@ public partial class JEnumObject
 			/// <summary>
 			/// Adds a new enum field.
 			/// </summary>
+			/// <param name="enumTypeName">Enum type name.</param>
 			/// <param name="ordinal">Enum ordinal.</param>
 			/// <param name="name">Enum name.</param>
-			public void AddField(Int32 ordinal, CString name)
+			public void AddField(ReadOnlySpan<Byte> enumTypeName, Int32 ordinal, CString name)
 			{
 				String hash = name.ToHexString();
-				NativeValidationUtilities.ThrowIfInvalidOrdinal(this, ordinal);
-				NativeValidationUtilities.ThrowIfInvalidHash(this, hash);
+				NativeValidationUtilities.ThrowIfInvalidOrdinal(enumTypeName, this, ordinal);
+				NativeValidationUtilities.ThrowIfInvalidHash(enumTypeName, this, hash);
 				this._ordinalDictionary.Add(ordinal, hash);
 				this._hashDictionary.Add(hash, ordinal);
 				this._nameDictionary.Add(hash, name);
@@ -62,10 +56,11 @@ public partial class JEnumObject
 			/// <summary>
 			/// Validates and returns the current instance.
 			/// </summary>
+			/// <param name="enumTypeName">Enum type name.</param>
 			/// <returns>The current instance.</returns>
-			public IEnumFieldList Validate()
+			public IEnumFieldList Validate(ReadOnlySpan<Byte> enumTypeName)
 			{
-				NativeValidationUtilities.ThrowIfInvalidList(this);
+				NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
 				return this;
 			}
 		}

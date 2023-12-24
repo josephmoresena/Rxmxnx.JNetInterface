@@ -26,6 +26,13 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	/// <param name="arraySignature">Array JNI signature for current type.</param>
 	internal JReferenceTypeMetadata(CString className, CString? signature, CString? arraySignature = default) : base(
 		className, signature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className), arraySignature) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="className">Class name of current type.</param>
+	/// <param name="signature">JNI signature for current type.</param>
+	internal JReferenceTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
+		className, signature) { }
 
 	/// <summary>
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="jLocal"/>.

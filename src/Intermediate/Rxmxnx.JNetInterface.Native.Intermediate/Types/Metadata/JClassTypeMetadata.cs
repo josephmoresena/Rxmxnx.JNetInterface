@@ -9,6 +9,6 @@ public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 	public override JTypeKind Kind => JTypeKind.Class;
 
 	/// <inheritdoc/>
-	internal JClassTypeMetadata(CString className, CString? signature, CString? arraySignature) : base(
-		className, signature, arraySignature) { }
+	internal JClassTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) :
+		base(className, signature) { }
 }

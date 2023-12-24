@@ -11,6 +11,6 @@ public abstract record JPrimitiveWrapperTypeMetadata : JClassTypeMetadata
 	public abstract JPrimitiveTypeMetadata PrimitiveMetadata { get; }
 
 	/// <inheritdoc/>
-	internal JPrimitiveWrapperTypeMetadata(CString className, CString? signature, CString? arraySignature) : base(
-		className, signature, arraySignature) { }
+	internal JPrimitiveWrapperTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
+		className, signature) { }
 }
