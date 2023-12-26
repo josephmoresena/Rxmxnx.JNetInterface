@@ -24,17 +24,6 @@ public sealed partial class JBooleanObject
 		if (jLocal is JBooleanObject wrapper)
 			this._value = wrapper._value;
 	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="value">Instance value.</param>
-	private JBooleanObject(JLocalObject jLocal, JBoolean? value) : base(
-		jLocal, jLocal.Environment.ClassProvider.BooleanClassObject)
-	{
-		this._value = value;
-		jLocal.Dispose();
-	}
 	/// <inheritdoc/>
 	private JBooleanObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 

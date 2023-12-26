@@ -30,7 +30,7 @@ public readonly ref partial struct JniCall
 		this._env = vm.GetEnvironment(envRef);
 		this._cache = new(this._env);
 	}
-	
+
 	public readonly ref partial struct Builder
 	{
 		/// <summary>
@@ -43,7 +43,7 @@ public readonly ref partial struct JniCall
 		/// </summary>
 		/// <param name="call">Current <see cref="JniCall"/> instance.</param>
 		private Builder(JniCall call) => this._call = call;
-		
+
 		/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
 		private JClassObject GetObjectClass(JObjectLocalRef localRef)
 		{
@@ -100,7 +100,7 @@ public readonly ref partial struct JniCall
 		{
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
 			if (metadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
-			
+
 			JLocalObject jLocalTemp = this.CreateInitialObject(localRef);
 			try
 			{

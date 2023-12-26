@@ -33,6 +33,6 @@ public partial class JClassObject
 	/// </summary>
 	/// <param name="jClassClassObject"><see cref="JClassObject"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	internal JClassObject(JClassObject jClassClassObject, JClassLocalRef classRef) 
-		: base(jClassClassObject, classRef.Value) { }
+	internal JClassObject(JClassObject jClassClassObject, JClassLocalRef classRef) : base(
+		jClassClassObject, classRef.Value) { }
 }

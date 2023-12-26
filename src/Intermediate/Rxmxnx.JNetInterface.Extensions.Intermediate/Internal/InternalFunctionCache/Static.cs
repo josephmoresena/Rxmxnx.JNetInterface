@@ -67,4 +67,37 @@ internal partial class InternalFunctionCache
 	/// <c>Class.getName()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JStringObject> getName = new("getName"u8);
+
+	/// <summary>
+	/// Constructor <c>java.lang.Boolean(boolean)</c>
+	/// </summary>
+	public static readonly JWrapperConstructor<JBoolean> BooleanConstructor = new();
+	/// <summary>
+	/// Constructor <c>java.lang.Byte(byte)</c>
+	/// </summary>
+	public static readonly JWrapperConstructor<JByte> ByteConstructor = new();
+	/// <summary>
+	/// Constructor <c>java.lang.Character(char)</c>
+	/// </summary>
+	public static readonly JWrapperConstructor<JChar> CharacterConstructor = new();
+	/// <summary>
+	/// Constructor <c>java.lang.Double(double)</c>
+	/// </summary>
+	public static readonly JWrapperConstructor<JDouble> DoubleConstructor = new();
+	/// <summary>
+	/// Constructor <c>java.lang.Float(float)</c>
+	/// </summary>
+	public static readonly JWrapperConstructor<JFloat> FloatConstructor = new();
+	/// <summary>
+	/// Constructor <c>java.lang.Integer(int)</c>
+	/// </summary>
+	public static readonly JWrapperConstructor<JInt> IntegerConstructor = new();
+	/// <summary>
+	/// Constructor <c>java.lang.Long(long)</c>
+	/// </summary>
+	public static readonly JWrapperConstructor<JLong> LongConstructor = new();
+	/// <summary>
+	/// Constructor <c>java.lang.Short(short)</c>
+	/// </summary>
+	public static readonly JWrapperConstructor<JShort> ShortConstructor = new();
 }

@@ -96,7 +96,8 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// Creates the argument array for current call.
 	/// </summary>
 	/// <returns>A new array to be used as argument for current call.</returns>
-	protected IObject?[] CreateArgumentsArray() => new IObject?[this._sizes.Length];
+	protected IObject?[] CreateArgumentsArray()
+		=> this._sizes.Length != 0 ? new IObject?[this._sizes.Length] : Array.Empty<IObject?>();
 
 	/// <summary>
 	/// Creates the method descriptor using <paramref name="returnSignature"/> and <paramref name="metadata"/>.

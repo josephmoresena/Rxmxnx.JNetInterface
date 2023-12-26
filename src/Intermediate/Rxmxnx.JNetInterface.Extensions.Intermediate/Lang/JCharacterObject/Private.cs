@@ -24,17 +24,6 @@ public sealed partial class JCharacterObject
 		if (jLocal is JCharacterObject wrapper)
 			this._value = wrapper._value;
 	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="value">Instance value.</param>
-	private JCharacterObject(JLocalObject jLocal, JChar? value) : base(
-		jLocal, jLocal.Environment.ClassProvider.CharacterClassObject)
-	{
-		this._value = value;
-		jLocal.Dispose();
-	}
 	/// <inheritdoc/>
 	private JCharacterObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 

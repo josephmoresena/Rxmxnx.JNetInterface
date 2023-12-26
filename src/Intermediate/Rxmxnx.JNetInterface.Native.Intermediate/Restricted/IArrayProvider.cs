@@ -19,7 +19,8 @@ public interface IArrayProvider
 	/// <param name="length">New array length.</param>
 	/// <param name="initialElement">Instance to set each array element.</param>
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
-	JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement) where TElement : IObject, IDataType<TElement>;
+	JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement)
+		where TElement : IObject, IDataType<TElement>;
 	/// <summary>
 	/// Retrieves the array length from <paramref name="jObject"/>
 	/// </summary>

@@ -363,20 +363,7 @@ public partial class JEnvironment
 		public TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition, IObject?[] args)
 			where TObject : JLocalObject, IDataType<TObject>
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
-			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
-			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
-			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-			NewObjectADelegate newObject = this.GetDelegate<NewObjectADelegate>();
-			JObjectLocalRef localRef = newObject(this.Reference, jClass.Reference, methodId,
-			                                     (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
-			this.CheckJniError();
+			JObjectLocalRef localRef = this.NewObject(jClass, definition, args);
 			return this.CreateObject<TObject>(localRef, true)!;
 		}
 		public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
@@ -685,6 +672,32 @@ public partial class JEnvironment
 				default:
 					throw new ArgumentException("Invalid primitive type.");
 			}
+		}
+		/// <summary>
+		/// Creates a new object using JNI NewObject call.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <param name="definition"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
+		private JObjectLocalRef NewObject(JClassObject jClass, JConstructorDefinition definition,
+			params IObject?[] args)
+		{
+			ValidationUtilities.ThrowIfDummy(jClass);
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			AccessCache access = this.GetAccess(jniTransaction, jClass);
+			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
+			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
+			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
+				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
+			NewObjectADelegate newObject = this.GetDelegate<NewObjectADelegate>();
+			JObjectLocalRef localRef = newObject(this.Reference, jClass.Reference, methodId,
+			                                     (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			this.CheckJniError();
+			return localRef;
 		}
 
 		/// <summary>

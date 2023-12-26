@@ -67,8 +67,8 @@ public partial class JEnvironment
 		public JLocalObject? GetLocalResult<TResult>(TResult result, out JGlobalRef globalRef)
 		{
 			globalRef = default;
-			if (result is not JLocalObject { IsDefault: false, } jLocal ||
-			    jLocal.Lifetime.HasValidGlobal<JGlobal>()) return default;
+			if (result is not JLocalObject { IsDefault: false, } jLocal || jLocal.Lifetime.HasValidGlobal<JGlobal>())
+				return default;
 			globalRef = this._env.CreateGlobalRef(jLocal);
 			return jLocal;
 		}

@@ -7,6 +7,14 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable,
 	IPrimitiveWrapperType<JCharacterObject, JChar>
 {
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="value">Instance value.</param>
+	internal JCharacterObject(JClassObject jClass, JObjectLocalRef localRef, JChar? value) : base(jClass, localRef)
+		=> this._value = value;
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Value.Equals(other);
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Value.Equals(other);
 	/// <summary>
@@ -37,7 +45,7 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	/// <returns>A new <see cref="JByteObject"/> instance.</returns>
 	[return: NotNullIfNotNull(nameof(value))]
 	public static JCharacterObject? Create(IEnvironment env, JChar? value)
-		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value.Value), value) : default;
+		=> value is not null ? (JCharacterObject)env.ReferenceProvider.CreateWrapper(value.Value) : default;
 	/// <inheritdoc/>
 	public static JCharacterObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JCharacterObject>(jLocal)) : default;

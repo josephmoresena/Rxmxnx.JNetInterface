@@ -7,6 +7,14 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	IPrimitiveWrapperType<JBooleanObject, JBoolean>
 {
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="value">Instance value.</param>
+	internal JBooleanObject(JClassObject jClass, JObjectLocalRef localRef, JBoolean value) : base(jClass, localRef)
+		=> this._value = value;
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Value.Equals(other);
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Value.Equals(other);
 	/// <summary>
@@ -38,7 +46,7 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	/// <returns>A new <see cref="JByteObject"/> instance.</returns>
 	[return: NotNullIfNotNull(nameof(value))]
 	public static JBooleanObject? Create(IEnvironment env, JBoolean? value)
-		=> value is not null ? new(env.ReferenceProvider.CreateWrapper(value.Value), value) : default;
+		=> value is not null ? (JBooleanObject)env.ReferenceProvider.CreateWrapper(value.Value) : default;
 	/// <inheritdoc/>
 	public static JBooleanObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JBooleanObject>(jLocal)) : default;

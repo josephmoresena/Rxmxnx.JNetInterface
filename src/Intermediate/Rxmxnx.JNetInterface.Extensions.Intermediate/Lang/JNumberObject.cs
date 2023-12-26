@@ -13,6 +13,9 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	/// <inheritdoc/>
 	internal JNumberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc/>
+	internal JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) : base(jClass, localRef)
+		=> this._value = value;
+	/// <inheritdoc/>
 	internal JNumberObject(JLocalObject jLocal, JClassObject jClass) : base(jLocal, jClass)
 	{
 		if (jLocal is JNumberObject number)
@@ -88,14 +91,9 @@ public abstract class
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	internal JNumberObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.GetClass<TNumber>()) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="value">Instance value.</param>
-	internal JNumberObject(JLocalObject jLocal, TValue? value) : base(jLocal, value,
-	                                                                  jLocal.Environment.ClassProvider
-	                                                                        .GetClass<TNumber>()) { }
+	/// <inheritdoc/>
+	internal JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) :
+		base(jClass, localRef, value) { }
 
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Value.Equals(other);
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Value.Equals(other);

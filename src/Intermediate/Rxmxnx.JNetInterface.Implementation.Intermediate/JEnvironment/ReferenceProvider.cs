@@ -8,28 +8,63 @@ public partial class JEnvironment
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			IEnvironment env = this._mainClasses.Environment;
-			//TODO: Fix.
-			return metadata.Signature[0] switch
+			JClassObject jClass;
+			JObjectLocalRef localRef;
+			JLocalObject result;
+			switch (metadata.Signature[0])
 			{
-				0x90 => //Z
-					this.Register(JBooleanObject.Create(env, Unsafe.As<TPrimitive, JBoolean>(ref primitive))),
-				0x66 => //B
-					this.Register(JByteObject.Create(env, Unsafe.As<TPrimitive, JByte>(ref primitive))),
-				0x67 => //C
-					this.Register(JCharacterObject.Create(env, Unsafe.As<TPrimitive, JChar>(ref primitive))),
-				0x68 => //D
-					this.Register(JDoubleObject.Create(env, Unsafe.As<TPrimitive, JDouble>(ref primitive))),
-				0x70 => //F
-					this.Register(JFloatObject.Create(env, Unsafe.As<TPrimitive, JFloat>(ref primitive))),
-				0x73 => //I
-					this.Register(JIntegerObject.Create(env, Unsafe.As<TPrimitive, JInt>(ref primitive))),
-				0x74 => //J
-					this.Register(JLongObject.Create(env, Unsafe.As<TPrimitive, JLong>(ref primitive))),
-				0x83 => //S
-					this.Register(JShortObject.Create(env, Unsafe.As<TPrimitive, JShort>(ref primitive))),
-				_ => throw new InvalidOperationException("Object is not primitive."),
-			};
+				case 0x90: //Z
+					jClass = this.GetClass<JBooleanObject>();
+					localRef = this.NewObject(jClass, InternalFunctionCache.BooleanConstructor, primitive);
+					result = new JBooleanObject(jClass, localRef,
+					                            NativeUtilities.Transform<TPrimitive, JBoolean>(in primitive));
+					break;
+				case 0x66: //B
+					jClass = this.GetClass<JByteObject>();
+					localRef = this.NewObject(jClass, InternalFunctionCache.ByteConstructor, primitive);
+					result = new JByteObject(jClass, localRef,
+					                         NativeUtilities.Transform<TPrimitive, JByte>(in primitive));
+					break;
+				case 0x67: //C
+					jClass = this.GetClass<JCharacterObject>();
+					localRef = this.NewObject(jClass, InternalFunctionCache.CharacterConstructor, primitive);
+					result = new JCharacterObject(jClass, localRef,
+					                              NativeUtilities.Transform<TPrimitive, JChar>(in primitive));
+					break;
+				case 0x68: //D
+					jClass = this.GetClass<JDoubleObject>();
+					localRef = this.NewObject(jClass, InternalFunctionCache.DoubleConstructor, primitive);
+					result = new JDoubleObject(jClass, localRef,
+					                           NativeUtilities.Transform<TPrimitive, JDouble>(in primitive));
+					break;
+				case 0x70: //F
+					jClass = this.GetClass<JFloatObject>();
+					localRef = this.NewObject(jClass, InternalFunctionCache.FloatConstructor, primitive);
+					result = new JFloatObject(jClass, localRef,
+					                          NativeUtilities.Transform<TPrimitive, JFloat>(in primitive));
+					break;
+				case 0x73: //I
+					jClass = this.GetClass<JIntegerObject>();
+					localRef = this.NewObject(jClass, InternalFunctionCache.IntegerConstructor, primitive);
+					result = new JIntegerObject(jClass, localRef,
+					                            NativeUtilities.Transform<TPrimitive, JInt>(in primitive));
+					break;
+				case 0x74: //J
+					jClass = this.GetClass<JLongObject>();
+					localRef = this.NewObject(jClass, InternalFunctionCache.LongConstructor, primitive);
+					result = new JLongObject(jClass, localRef,
+					                         NativeUtilities.Transform<TPrimitive, JLong>(in primitive));
+					break;
+				case 0x83: //S
+					jClass = this.GetClass<JShortObject>();
+					localRef = this.NewObject(jClass, InternalFunctionCache.ShortConstructor, primitive);
+					result = new JShortObject(jClass, localRef,
+					                          NativeUtilities.Transform<TPrimitive, JShort>(in primitive));
+					break;
+				default:
+					throw new InvalidOperationException("Object is not primitive.");
+			}
+			return this.Register(result);
 		}
 		public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
 		{

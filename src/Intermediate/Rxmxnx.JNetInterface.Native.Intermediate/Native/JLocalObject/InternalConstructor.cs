@@ -7,8 +7,7 @@ public partial class JLocalObject
 	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="localRef">Local object reference.</param>
-	internal JLocalObject(JClassObject jClass, JObjectLocalRef localRef) :
-		base(jClass.IsDummy)
+	internal JLocalObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass.IsDummy)
 		=> this._lifetime = new(jClass.Environment, this, localRef)
 		{
 			Class = jClass, IsRealClass = jClass.IsFinal.GetValueOrDefault(),
