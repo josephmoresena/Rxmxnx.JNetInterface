@@ -53,6 +53,19 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// </summary>
 	public Boolean? IsFinal => this._isFinal;
 
+	/// <summary>
+	/// Registers <paramref name="calls"/> as native methods.
+	/// </summary>
+	/// <param name="call">A <see cref="JNativeCall"/> instance.</param>
+	/// <param name="calls">A <see cref="JNativeCall"/> array.</param>
+	public void Register(JNativeCall call, params JNativeCall[] calls) 
+		=> this.Environment.AccessProvider.RegisterNatives(this, [call, ..calls,]);
+	/// <summary>
+	/// Unregisters any native call.
+	/// </summary>
+	public void UnregisterNativeCalls()
+		=> this.Environment.AccessProvider.ClearNatives(this);
+
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()
 		=> new JClassObjectMetadata(base.CreateMetadata())

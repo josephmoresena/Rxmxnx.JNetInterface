@@ -57,6 +57,10 @@ public partial class JVirtualMachine
 		/// <see cref="GlobalMainClasses"/> instance.
 		/// </summary>
 		public GlobalMainClasses MainClasses { get; }
+		/// <summary>
+		/// <see cref="NativeCache"/> instance.
+		/// </summary>
+		public NativeCache NativesCache { get; } = new();
 
 		/// <summary>
 		/// Constructor.

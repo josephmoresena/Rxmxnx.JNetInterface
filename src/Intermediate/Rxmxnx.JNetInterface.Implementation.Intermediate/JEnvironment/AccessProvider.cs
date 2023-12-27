@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices.JavaScript;
+
 namespace Rxmxnx.JNetInterface;
 
 public partial class JEnvironment
@@ -206,7 +208,7 @@ public partial class JEnvironment
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			switch (definition.Information[1][^1])
@@ -270,7 +272,7 @@ public partial class JEnvironment
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			if (!nonVirtual)
@@ -383,7 +385,7 @@ public partial class JEnvironment
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			CallStaticObjectMethodADelegate callStaticObjectMethod =
@@ -402,7 +404,7 @@ public partial class JEnvironment
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			CallStaticVoidMethodADelegate callStaticVoidMethod = this.GetDelegate<CallStaticVoidMethodADelegate>();
@@ -429,7 +431,7 @@ public partial class JEnvironment
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			JObjectLocalRef resultLocalRef;
@@ -461,7 +463,7 @@ public partial class JEnvironment
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			if (!nonVirtual)
@@ -477,6 +479,45 @@ public partial class JEnvironment
 				                               (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 			}
 			this.CheckJniError();
+		}
+		public void RegisterNatives(JClassObject jClass, JNativeCall[] calls)
+		{
+			ValidationUtilities.ThrowIfDummy(jClass);
+			RegisterNativesDelegate registerNatives = this.GetDelegate<RegisterNativesDelegate>();
+			Int32 requiredBytes = calls.Length * JNativeMethodValue.Size;
+			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
+			List<MemoryHandle> handles = new(calls.Length);
+			using IFixedContext<JNativeMethodValue>.IDisposable argsMemory = 
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc JNativeMethodValue[calls.Length], this) :
+					new JNativeMethodValue[calls.Length].AsMemory().GetFixedContext();
+			for (Int32 i = 0; i < calls.Length; i++)
+				argsMemory.Values[i] = JNativeMethodValue.Create(calls[i], handles);
+			try
+			{
+				using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+				JResult result = registerNatives(this.Reference, classRef, (ReadOnlyValPtr<JNativeMethodValue>)argsMemory.Pointer);
+				if (result != JResult.Ok)
+				{
+					this.CheckJniError();
+					throw new JniException(result);
+				}
+				this.VirtualMachine.RegisterNatives(this.ClassObject.Hash, calls);
+			}
+			finally
+			{
+				handles.ForEach(h => h.Dispose());
+			}
+		}
+		public void ClearNatives(JClassObject jClass)
+		{
+			ValidationUtilities.ThrowIfDummy(jClass);
+			UnregisterNativesDelegate unregisterNatives = this.GetDelegate<UnregisterNativesDelegate>();
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			JResult result = unregisterNatives(this.Reference, classRef);
+			if (result != JResult.Ok) throw new JniException(result);
+			this.VirtualMachine.UnregisterNatives(this.ClassObject.Hash);
 		}
 
 		/// <summary>
@@ -690,7 +731,7 @@ public partial class JEnvironment
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			NewObjectADelegate newObject = this.GetDelegate<NewObjectADelegate>();
@@ -705,11 +746,14 @@ public partial class JEnvironment
 		/// </summary>
 		/// <typeparam name="T">Type of elements in span.</typeparam>
 		/// <param name="stackSpan">A stack created span.</param>
+		/// <param name="cache">Instance to free stack bytes.</param>
 		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
-		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(scoped Span<T> stackSpan) where T : unmanaged
+		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(scoped Span<T> stackSpan, JEnvironmentCache? cache = default) where T : unmanaged
 		{
+			StackDisposable? disposable =
+				cache is not null ? new(cache, stackSpan.Length * NativeUtilities.SizeOf<T>()) : default;
 			ValPtr<T> ptr = (ValPtr<T>)stackSpan.GetUnsafeIntPtr();
-			return ptr.GetUnsafeFixedContext(stackSpan.Length);
+			return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
 		}
 	}
 }

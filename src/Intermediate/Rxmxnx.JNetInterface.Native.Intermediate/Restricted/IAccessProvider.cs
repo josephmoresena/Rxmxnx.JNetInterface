@@ -91,4 +91,15 @@ public partial interface IAccessProvider
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition, Boolean nonVirtual,
 		IObject?[] args);
+	/// <summary>
+	/// Register <paramref name="calls"/> as native methods in current class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="calls">Native calls to register.</param>
+	void RegisterNatives(JClassObject jClass, JNativeCall[] calls);
+	/// <summary>
+	/// Clears native method registration.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	void ClearNatives(JClassObject jClass);
 }

@@ -471,7 +471,7 @@ public partial class JEnvironment
 			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
 			using IFixedContext<Byte>.IDisposable arrayRegion = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes]) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			Int32 offset = 0;
 			while (offset < requiredBytes)

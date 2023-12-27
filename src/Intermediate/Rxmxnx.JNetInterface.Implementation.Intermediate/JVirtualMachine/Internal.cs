@@ -100,6 +100,18 @@ public partial class JVirtualMachine
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	internal Boolean SecureRemove(JObjectLocalRef localRef) => this._cache.InTransaction(localRef.Pointer);
+	/// <summary>
+	/// Registers native methods for given class.
+	/// </summary>
+	/// <param name="classHash">Class hash.</param>
+	/// <param name="calls">A <see cref="JNativeCall"/> array.</param>
+	internal void RegisterNatives(String classHash, JNativeCall[] calls)
+		=> this._cache.NativesCache[classHash] = calls;
+	/// <summary>
+	/// Unregister any native method for given class.
+	/// </summary>
+	/// <param name="classHash">Class hash.</param>
+	public void UnregisterNatives(String classHash) => this._cache.NativesCache.Clear(classHash);
 
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.

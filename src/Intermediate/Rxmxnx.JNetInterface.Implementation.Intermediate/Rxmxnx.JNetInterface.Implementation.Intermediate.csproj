@@ -15,6 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="System.Buffers"/>
         <Using Include="System.Collections.Concurrent"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
         <Using Include="System.Runtime.CompilerServices"/>
