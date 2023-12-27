@@ -105,8 +105,7 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="classHash">Class hash.</param>
 	/// <param name="calls">A <see cref="JNativeCall"/> array.</param>
-	internal void RegisterNatives(String classHash, JNativeCall[] calls)
-		=> this._cache.NativesCache[classHash] = calls;
+	internal void RegisterNatives(String classHash, JNativeCall[] calls) => this._cache.NativesCache[classHash] = calls;
 	/// <summary>
 	/// Unregister any native method for given class.
 	/// </summary>

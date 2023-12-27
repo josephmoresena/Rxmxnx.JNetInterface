@@ -9,7 +9,7 @@ public sealed class NativeCache
 	/// Class dictionary.
 	/// </summary>
 	private readonly ConcurrentDictionary<String, ConcurrentDictionary<String, JNativeCall>> _calls = new();
-	
+
 	/// <summary>
 	/// Cached class.
 	/// </summary>
@@ -33,6 +33,6 @@ public sealed class NativeCache
 	public void Clear(String hash)
 	{
 		if (this._calls.TryGetValue(hash, out ConcurrentDictionary<String, JNativeCall>? value))
-            value.Clear();
+			value.Clear();
 	}
 }

@@ -5,6 +5,12 @@ public partial class JEnvironment
 	private partial record JEnvironmentCache
 	{
 		/// <summary>
+		/// Release used bytes from stack.
+		/// </summary>
+		/// <param name="usedBytes">Amount of used bytes.</param>
+		private void FreeStack(Int32 usedBytes) { this._usedStackBytes -= usedBytes; }
+
+		/// <summary>
 		/// Disposable object to free stack bytes.
 		/// </summary>
 		private sealed record StackDisposable : IDisposable
@@ -29,20 +35,8 @@ public partial class JEnvironment
 				this._cache = cache;
 			}
 
-			/// <inheritdoc />
-			public void Dispose()
-			{
-				this._cache.FreeStack(this._usedBytes);
-			}
-		}
-		
-		/// <summary>
-		/// Release used bytes from stack.
-		/// </summary>
-		/// <param name="usedBytes">Amount of used bytes.</param>
-		private void FreeStack(Int32 usedBytes)
-		{
-			this._usedStackBytes -= usedBytes;
+			/// <inheritdoc/>
+			public void Dispose() => this._cache.FreeStack(this._usedBytes);
 		}
 	}
 }

@@ -4,7 +4,7 @@
 internal readonly struct JNativeMethodValue
 {
 	public static readonly Int32 Size = NativeUtilities.SizeOf<JNativeMethodValue>();
-	
+
 	internal ReadOnlyValPtr<Byte> Name { get; init; }
 	internal ReadOnlyValPtr<Byte> Signature { get; init; }
 	internal IntPtr Pointer { get; init; }

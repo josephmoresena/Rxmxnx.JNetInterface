@@ -18,12 +18,12 @@ public record JNativeCall : IFixedPointer
 	/// Method signature.
 	/// </summary>
 	public CString Signature => this._definition.Information[1];
-	/// <inheritdoc/>
-	public IntPtr Pointer { get; }
 	/// <summary>
 	/// Definition hash.
 	/// </summary>
 	public String Hash => this._definition.Information.ToString();
+	/// <inheritdoc/>
+	public IntPtr Pointer { get; }
 
 	/// <summary>
 	/// Constructor.
@@ -43,8 +43,7 @@ public record JNativeCall : IFixedPointer
 	/// <param name="definition">Java call definition.</param>
 	/// <param name="ptr">Pointer to function.</param>
 	/// <returns>A <see cref="JNativeCall"/> instance.</returns>
-	public static JNativeCall Create(JMethodDefinition definition, IntPtr ptr) 
-		=> new(ptr, definition);
+	public static JNativeCall Create(JMethodDefinition definition, IntPtr ptr) => new(ptr, definition);
 	/// <summary>
 	/// Creates a <see cref="JNativeCall"/> instance using <paramref name="definition"/> and
 	/// <paramref name="ptr"/>.
@@ -52,8 +51,7 @@ public record JNativeCall : IFixedPointer
 	/// <param name="definition">Java call definition.</param>
 	/// <param name="ptr">Pointer to function.</param>
 	/// <returns>A <see cref="JNativeCall"/> instance.</returns>
-	public static JNativeCall Create(JFunctionDefinition definition, IntPtr ptr) 
-		=> new(ptr, definition);
+	public static JNativeCall Create(JFunctionDefinition definition, IntPtr ptr) => new(ptr, definition);
 	/// <summary>
 	/// Creates a <see cref="JNativeCall"/> instance using <paramref name="definition"/> and
 	/// <paramref name="del"/>.
@@ -62,7 +60,7 @@ public record JNativeCall : IFixedPointer
 	/// <param name="definition">Java call definition.</param>
 	/// <param name="del">Delegate.</param>
 	/// <returns>A <see cref="JNativeCall"/> instance.</returns>
-	public static JNativeCall Create<T>(JMethodDefinition definition, T del) where T : Delegate 
+	public static JNativeCall Create<T>(JMethodDefinition definition, T del) where T : Delegate
 		=> new GenericCall<T>(del, definition);
 	/// <summary>
 	/// Creates a <see cref="JNativeCall"/> instance using <paramref name="definition"/> and
@@ -72,26 +70,25 @@ public record JNativeCall : IFixedPointer
 	/// <param name="definition">Java call definition.</param>
 	/// <param name="del">Delegate.</param>
 	/// <returns>A <see cref="JNativeCall"/> instance.</returns>
-	public static JNativeCall Create<T>(JFunctionDefinition definition, T del) where T : Delegate 
+	public static JNativeCall Create<T>(JFunctionDefinition definition, T del) where T : Delegate
 		=> new GenericCall<T>(del, definition);
-	
+
 	/// <summary>
 	/// Java native method.
 	/// </summary>
-	private sealed record GenericCall<T> : JNativeCall
-		where T : Delegate
+	private sealed record GenericCall<T> : JNativeCall where T : Delegate
 	{
 		/// <summary>
 		/// Delegate.
 		/// </summary>
 		private readonly T _del;
-		
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="del">Delegate.</param>
 		/// <param name="definition">Definition.</param>
-		public GenericCall(T del, JCallDefinition definition) : base(del.GetUnsafeIntPtr(), definition) 
+		public GenericCall(T del, JCallDefinition definition) : base(del.GetUnsafeIntPtr(), definition)
 			=> this._del = del;
 	}
 }

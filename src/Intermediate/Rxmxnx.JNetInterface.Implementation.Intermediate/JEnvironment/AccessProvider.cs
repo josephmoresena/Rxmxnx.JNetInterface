@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices.JavaScript;
-
 namespace Rxmxnx.JNetInterface;
 
 public partial class JEnvironment
@@ -487,16 +485,17 @@ public partial class JEnvironment
 			Int32 requiredBytes = calls.Length * JNativeMethodValue.Size;
 			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
 			List<MemoryHandle> handles = new(calls.Length);
-			using IFixedContext<JNativeMethodValue>.IDisposable argsMemory = 
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc JNativeMethodValue[calls.Length], this) :
-					new JNativeMethodValue[calls.Length].AsMemory().GetFixedContext();
+			using IFixedContext<JNativeMethodValue>.IDisposable argsMemory = useStackAlloc ?
+				JEnvironmentCache.AllocToFixedContext(stackalloc JNativeMethodValue[calls.Length], this) :
+				new JNativeMethodValue[calls.Length].AsMemory().GetFixedContext();
 			for (Int32 i = 0; i < calls.Length; i++)
 				argsMemory.Values[i] = JNativeMethodValue.Create(calls[i], handles);
 			try
 			{
 				using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-				JResult result = registerNatives(this.Reference, classRef, (ReadOnlyValPtr<JNativeMethodValue>)argsMemory.Pointer);
+				JResult result = registerNatives(this.Reference, classRef,
+				                                 (ReadOnlyValPtr<JNativeMethodValue>)argsMemory.Pointer);
 				if (result != JResult.Ok)
 				{
 					this.CheckJniError();
@@ -748,7 +747,8 @@ public partial class JEnvironment
 		/// <param name="stackSpan">A stack created span.</param>
 		/// <param name="cache">Instance to free stack bytes.</param>
 		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
-		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(scoped Span<T> stackSpan, JEnvironmentCache? cache = default) where T : unmanaged
+		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(scoped Span<T> stackSpan,
+			JEnvironmentCache? cache = default) where T : unmanaged
 		{
 			StackDisposable? disposable =
 				cache is not null ? new(cache, stackSpan.Length * NativeUtilities.SizeOf<T>()) : default;
