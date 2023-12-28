@@ -19,6 +19,7 @@
         <Using Include="System.Collections.Concurrent"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
         <Using Include="System.Runtime.CompilerServices"/>
+        <Using Include="System.ComponentModel"/>
         <Using Include="System.Runtime.InteropServices"/>
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Io"/>

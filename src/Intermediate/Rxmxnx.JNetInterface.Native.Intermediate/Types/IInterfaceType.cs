@@ -25,9 +25,19 @@ public interface IInterfaceType : IReferenceType
 /// </summary>
 /// <typeparam name="TInterface">Type of java interface type.</typeparam>
 public interface
-	IInterfaceType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TInterface> :
-	IInterfaceType,
+	IInterfaceType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface> : IInterfaceType,
 	IReferenceType<TInterface> where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	static Type IDataType<TInterface>.SelfType => typeof(IInterfaceType<TInterface>);
+
+	/// <summary>
+	/// Retrieves a <see cref="IArrayObject{TElement}"/> instance from <paramref name="jArray"/>.
+	/// </summary>
+	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType"/> type.</typeparam>
+	/// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TObject}"/> instance.</param>
+	/// <returns>A <see cref="IArrayObject{TElement}"/> instance.</returns>
+	public static IArrayObject<TInterface> CastArray<TElement>(JArrayObject<TElement> jArray)
+		where TElement : JLocalObject, IReferenceType<TElement>, IInterfaceImplementation<TElement, TInterface>
+		=> new JArrayObject.JCastedArray<TInterface>(jArray);
 }

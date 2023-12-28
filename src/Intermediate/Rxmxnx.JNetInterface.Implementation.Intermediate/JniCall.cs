@@ -136,6 +136,7 @@ public readonly ref partial struct JniCall
 	/// <summary>
 	/// Builder for <see cref="JniCall"/>
 	/// </summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	public readonly ref partial struct Builder
 	{
 		/// <summary>
