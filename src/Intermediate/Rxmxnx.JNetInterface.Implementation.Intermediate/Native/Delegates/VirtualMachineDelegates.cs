@@ -3,7 +3,7 @@
 internal delegate Int32 GetVersionDelegate(JEnvironmentRef env);
 
 internal delegate JResult RegisterNativesDelegate(JEnvironmentRef env, JClassLocalRef jClass,
-	ReadOnlyValPtr<JNativeMethodValue> methods0);
+	ReadOnlyValPtr<JNativeMethodValue> methods0, Int32 nMethods);
 
 internal delegate JResult UnregisterNativesDelegate(JEnvironmentRef env, JClassLocalRef jClass);
 internal delegate JResult MonitorEnterDelegate(JEnvironmentRef env, JObjectLocalRef jClass);

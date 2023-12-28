@@ -105,7 +105,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
 			switch (definition.Information[1][^1])
 			{
 				case 0x90: //Z
@@ -153,7 +153,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
 			switch (definition.Information[1][^1])
 			{
 				case 0x90: //Z
@@ -202,7 +202,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
+			JMethodId methodId = access.GetStaticMethodId(definition, this._mainClasses.Environment);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
@@ -265,7 +265,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 			AccessCache access = this.GetAccess(jniTransaction, jLocal.Class);
-			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
+			JMethodId methodId = access.GetStaticMethodId(definition, this._mainClasses.Environment);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
@@ -355,7 +355,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
 			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JLocalObject);
 			SetStaticObjectFieldDelegate setObjectField = this.GetDelegate<SetStaticObjectFieldDelegate>();
 			setObjectField(this.Reference, jClass.Reference, fieldId, valueLocalRef);
@@ -379,7 +379,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
+			JMethodId methodId = access.GetStaticMethodId(definition, this._mainClasses.Environment);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
@@ -398,7 +398,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
+			JMethodId methodId = access.GetStaticMethodId(definition, this._mainClasses.Environment);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
@@ -495,7 +495,8 @@ public partial class JEnvironment
 				using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 				JResult result = registerNatives(this.Reference, classRef,
-				                                 (ReadOnlyValPtr<JNativeMethodValue>)argsMemory.Pointer);
+				                                 (ReadOnlyValPtr<JNativeMethodValue>)argsMemory.Pointer,
+				                                 argsMemory.Values.Length);
 				if (result != JResult.Ok)
 				{
 					this.CheckJniError();
