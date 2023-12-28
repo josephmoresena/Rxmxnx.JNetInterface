@@ -2,6 +2,8 @@
 
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
+using Rxmxnx.JNetInterface.Native.Access;
+using Rxmxnx.JNetInterface.Native.References;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
@@ -14,10 +16,11 @@ public static class Program
 	public static void Main(String[] args)
 	{
 		Console.WriteLine("Hello, World!");
-		Program.PrintBuiltIntMetadata();
+		//Program.PrintBuiltIntMetadata();
 		//Program.PrintArrayMetadata(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JInt>>>>>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 10);
-		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/server/libjvm.dylib");
+		//Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 10);
+		Program.PrintVirtualMachineInfo(
+			"/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/server/libjvm.dylib");
 		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib/server/libjvm.dylib");
 		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home/lib/server/libjvm.dylib");
 		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/server/libjvm.dylib");
@@ -105,6 +108,29 @@ public static class Program
 			IVirtualMachine[] vms = jvmLib.GetCreatedVirtualMachines();
 			foreach (IVirtualMachine jvm in vms)
 				Console.WriteLine($"VM: {jvm.Reference} Type: {jvm.GetType()}");
+
+			Byte[] classBytes =
+				File.ReadAllBytes("/Users/atem94/NetBeansProjects/NativeLibrary/build/classes/MainClass.class");
+			using JClassObject mainClass = JClassObject.LoadClass(env, new(() => "MainClass"u8), classBytes);
+			mainClass.Register(new List<JNativeCall>
+			{
+				JNativeCall.Create<GetStringDelegate>(
+					new JFunctionDefinition<JStringObject>("getNativeString"u8),
+					Program.GetString),
+				JNativeCall.Create<GetIntDelegate>(
+					new JFunctionDefinition<JInt>("getNativeInt"u8), Program.GetInt),
+				JNativeCall.Create<PassStringDelegate>(
+					new PassStringDefinition("passNativeString"u8), Program.PassString),
+			});
+
+			try
+			{
+				JMainMethodDefinition.Instance.Invoke(mainClass, "jiji", "esto es una coima mk");
+			}
+			catch (JThrowableException ex)
+			{
+				Console.WriteLine(ex.WithSafeInvoke(t => t.Message));
+			}
 		}
 		finally
 		{
@@ -139,5 +165,36 @@ public static class Program
 				Program.PrintAttachThreadInfo(vm, new(() => CString.Concat(threadName, " Nested"u8)), thread);
 		}
 		Console.WriteLine($"Thread detached: {vm.GetEnvironment() is null}");
+	}
+
+	private static JStringLocalRef GetString(JEnvironmentRef envRef, JObjectLocalRef localRef)
+	{
+		JniCall jniCall = JniCall.Create(envRef, localRef, out _).Build();
+		JStringObject result = JStringObject.Create(jniCall.Environment, "Hola desde .NET");
+		return jniCall.FinalizeCall(result);
+	}
+	private static JInt GetInt(JEnvironmentRef envRef, JObjectLocalRef localRef)
+	{
+		JniCall jniCall = JniCall.Create(envRef, localRef, out _).Build();
+		return jniCall.FinalizeCall<JInt>(Random.Shared.Next());
+	}
+	private static void PassString(JEnvironmentRef envRef, JObjectLocalRef localRef, JStringLocalRef stringRef)
+	{
+		JniCall jniCall = JniCall.Create(envRef, localRef, out JLocalObject jLocal)
+		                         .WithParameter(stringRef, out JStringObject jString).Build();
+		Console.WriteLine(jString.Value);
+		jniCall.FinalizeCall();
+	}
+
+	private delegate JStringLocalRef GetStringDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
+	private delegate JInt GetIntDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
+
+	private delegate void PassStringDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef,
+		JStringLocalRef stringRef);
+
+	private sealed record PassStringDefinition : JMethodDefinition
+	{
+		public PassStringDefinition(ReadOnlySpan<Byte> functionName) : base(
+			functionName, JArgumentMetadata.Create<JStringObject>()) { }
 	}
 }

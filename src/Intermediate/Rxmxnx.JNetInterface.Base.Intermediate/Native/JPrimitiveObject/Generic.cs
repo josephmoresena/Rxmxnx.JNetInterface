@@ -6,7 +6,7 @@ internal partial class JPrimitiveObject
 	/// Internal <see cref="JPrimitiveObject"/> implementation.
 	/// </summary>
 	/// <typeparam name="TValue">A <see langword="unmanaged"/> type.</typeparam>
-	public class Generic<TValue> : JPrimitiveObject, IWrapper<TValue>, IPrimitiveType
+	public abstract class Generic<TValue> : JPrimitiveObject, IWrapper<TValue>, IPrimitiveType
 		where TValue : unmanaged, IEquatable<TValue>, IComparable, IConvertible
 	{
 		/// <summary>
@@ -24,56 +24,6 @@ internal partial class JPrimitiveObject
 		/// <param name="value">Internal wrapper.</param>
 		public Generic(TValue value) => this._value = value;
 
-		/// <inheritdoc cref="IObject.ObjectClassName"/>
-		public override CString ObjectClassName
-		{
-			get
-			{
-				{
-					Type typeofT = typeof(TValue);
-					if (typeofT == typeof(Byte))
-						return UnicodeClassNames.JBooleanObjectClassName;
-					if (typeofT == typeof(SByte))
-						return UnicodeClassNames.JByteObjectClassName;
-					if (typeofT == typeof(Char))
-						return UnicodeClassNames.JCharacterObjectClassName;
-					if (typeofT == typeof(Double))
-						return UnicodeClassNames.JDoubleObjectClassName;
-					if (typeofT == typeof(Single))
-						return UnicodeClassNames.JFloatObjectClassName;
-					if (typeofT == typeof(Int32))
-						return UnicodeClassNames.JIntegerObjectClassName;
-					return typeofT == typeof(Int64) ?
-						UnicodeClassNames.JLongObjectClassName :
-						UnicodeClassNames.JShortObjectClassName;
-				}
-			}
-		}
-		/// <inheritdoc cref="IObject.ObjectSignature"/>
-		public override CString ObjectSignature
-		{
-			get
-			{
-				{
-					Type typeofT = typeof(TValue);
-					if (typeofT == typeof(Byte))
-						return UnicodePrimitiveSignatures.JBooleanSignature;
-					if (typeofT == typeof(SByte))
-						return UnicodePrimitiveSignatures.JByteSignature;
-					if (typeofT == typeof(Char))
-						return UnicodePrimitiveSignatures.JCharSignature;
-					if (typeofT == typeof(Double))
-						return UnicodePrimitiveSignatures.JDoubleSignature;
-					if (typeofT == typeof(Single))
-						return UnicodePrimitiveSignatures.JFloatSignature;
-					if (typeofT == typeof(Int32))
-						return UnicodePrimitiveSignatures.JIntSignature;
-					return typeofT == typeof(Int64) ?
-						UnicodePrimitiveSignatures.JLongSignature :
-						UnicodePrimitiveSignatures.JShortSignature;
-				}
-			}
-		}
 		/// <inheritdoc/>
 		public void CopyTo(Span<Byte> span)
 		{

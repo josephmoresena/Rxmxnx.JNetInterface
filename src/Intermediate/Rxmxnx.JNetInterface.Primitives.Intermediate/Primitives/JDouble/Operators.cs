@@ -1,7 +1,10 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
-public readonly partial struct JDouble
+public readonly partial struct JDouble : IPrimitiveEquatable
 {
+	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => IPrimitiveNumericType.Equals(this, other);
+	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => IPrimitiveNumericType.Equals(this, other);
+
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="JDouble"/> to <see cref="JByte"/>.
 	/// </summary>

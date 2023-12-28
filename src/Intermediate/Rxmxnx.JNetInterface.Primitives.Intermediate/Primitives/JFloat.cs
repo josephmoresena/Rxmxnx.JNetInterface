@@ -11,8 +11,7 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JFloat, Single>.JTypeMetadataBuilder
-		.Create(UnicodePrimitiveSignatures.JFloatSignature)
-		.WithWrapperClassName(UnicodeClassNames.JFloatObjectClassName)
+		.Create("F"u8).WithWrapperClassName("java/lang/Float"u8)
 		.WithWrapperClassSignature(UnicodeObjectSignatures.JFloatObjectSignature).Build();
 
 	/// <inheritdoc/>

@@ -22,23 +22,26 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 	public static Boolean Equals<TPrimitive>(TPrimitive primitive, JPrimitiveObject? other)
 		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>
 	{
-		if (other is null || other.ObjectSignature[0] == UnicodePrimitiveSignatures.JBooleanSignature[0])
+		if (other is null || other.ObjectSignature[0] == 0x90 /*Z*/)
 			return false;
-		if (other.ObjectSignature[0] == UnicodePrimitiveSignatures.JByteSignature[0])
-			return (JByte)primitive == other.AsPrimitive<JByte, SByte>();
-		if (other.ObjectSignature[0] == UnicodePrimitiveSignatures.JCharSignature[0])
-			return (JChar)primitive == other.AsPrimitive<JChar, Char>();
-		if (other.ObjectSignature[0] == UnicodePrimitiveSignatures.JDoubleSignature[0])
-			return (JDouble)primitive == other.AsPrimitive<JDouble, Double>();
-		if (other.ObjectSignature[0] == UnicodePrimitiveSignatures.JFloatSignature[0])
-			return (JFloat)primitive == other.AsPrimitive<JFloat, Single>();
-		if (other.ObjectSignature[0] == UnicodePrimitiveSignatures.JIntSignature[0])
-			return (JInt)primitive == other.AsPrimitive<JInt, Int32>();
-		if (other.ObjectSignature[0] == UnicodePrimitiveSignatures.JLongSignature[0])
-			return (JLong)primitive == other.AsPrimitive<JLong, Int64>();
-		if (other.ObjectSignature[0] == UnicodePrimitiveSignatures.JShortSignature[0])
-			return (JShort)primitive == other.AsPrimitive<JShort, Int16>();
-		return false;
+		return other.ObjectSignature[0] switch
+		{
+			0x66 => //B
+				(JByte)primitive == other.AsPrimitive<JByte, SByte>(),
+			0x67 => //C
+				(JChar)primitive == other.AsPrimitive<JChar, Char>(),
+			0x68 => //D
+				(JDouble)primitive == other.AsPrimitive<JDouble, Double>(),
+			0x70 => //F
+				(JFloat)primitive == other.AsPrimitive<JFloat, Single>(),
+			0x73 => //I
+				(JInt)primitive == other.AsPrimitive<JInt, Int32>(),
+			0x74 => //J
+				(JLong)primitive == other.AsPrimitive<JLong, Int64>(),
+			0x83 => //S
+				(JShort)primitive == other.AsPrimitive<JShort, Int16>(),
+			_ => false,
+		};
 	}
 	/// <inheritdoc cref="IEquatable{IPrimitiveType}.Equals(IPrimitiveType)"/>
 	public static Boolean Equals<TPrimitive>(TPrimitive primitive, IPrimitiveType? other)
