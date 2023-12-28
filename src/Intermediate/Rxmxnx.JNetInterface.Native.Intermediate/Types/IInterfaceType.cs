@@ -30,14 +30,4 @@ public interface
 	IReferenceType<TInterface> where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	static Type IDataType<TInterface>.SelfType => typeof(IInterfaceType<TInterface>);
-
-	/// <summary>
-	/// Retrieves a <see cref="IArrayObject{TElement}"/> instance from <paramref name="jArray"/>.
-	/// </summary>
-	/// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
-	/// <param name="jArray">A <see cref="JArrayObject{TObject}"/> instance.</param>
-	/// <returns>A <see cref="IArrayObject{TElement}"/> instance.</returns>
-	public static IArrayObject<TInterface> CastArray<TElement>(JArrayObject<TElement> jArray)
-		where TElement : JLocalObject, IReferenceType<TElement>, IInterfaceImplementation<TElement, TInterface>
-		=> new JArrayObject.JCastedArray<TInterface>(jArray);
 }

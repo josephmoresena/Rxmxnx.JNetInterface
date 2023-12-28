@@ -3,7 +3,7 @@
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CA1050
-public static class JArrayMemoryExtensions
+public static class JArrayExtensions
 #pragma warning restore CA1050
 {
 	/// <summary>
@@ -92,4 +92,15 @@ public static class JArrayMemoryExtensions
 		IEnvironment env = jArray.Environment;
 		env.ArrayProvider.SetCopy(jArray, mem, startIndex);
 	}
+	/// <summary>
+	/// Retrieves a <see cref="IArrayObject{TElement}"/> instance from <paramref name="jArray"/>.
+	/// </summary>
+	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType"/> type.</typeparam>
+	/// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TObject}"/> instance.</param>
+	/// <returns>A <see cref="IArrayObject{TElement}"/> instance.</returns>
+	public static IArrayObject<TInterface> CastArray<TElement, TInterface>(JArrayObject<TElement> jArray)
+		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+		where TElement : JLocalObject, IReferenceType<TElement>, IInterfaceImplementation<TElement, TInterface>
+		=> new JArrayObject.JCastedArray<TInterface>(jArray);
 }

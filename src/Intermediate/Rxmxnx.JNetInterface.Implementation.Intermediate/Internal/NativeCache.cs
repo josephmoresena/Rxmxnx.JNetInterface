@@ -14,7 +14,7 @@ public sealed class NativeCache
 	/// Cached class.
 	/// </summary>
 	/// <param name="hash">Class hash.</param>
-	public JNativeCall[] this[String hash]
+	public IReadOnlyList<JNativeCall> this[String hash]
 	{
 		set
 		{

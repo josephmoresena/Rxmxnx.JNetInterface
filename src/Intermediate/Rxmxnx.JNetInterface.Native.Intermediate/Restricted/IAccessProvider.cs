@@ -96,7 +96,7 @@ public partial interface IAccessProvider
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="calls">Native calls to register.</param>
-	void RegisterNatives(JClassObject jClass, JNativeCall[] calls);
+	void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCall> calls);
 	/// <summary>
 	/// Clears native method registration.
 	/// </summary>

@@ -61,6 +61,12 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	public void Register(JNativeCall call, params JNativeCall[] calls)
 		=> this.Environment.AccessProvider.RegisterNatives(this, [call, ..calls,]);
 	/// <summary>
+	/// Registers <paramref name="calls"/> as native methods.
+	/// </summary>
+	/// <param name="calls">A <see cref="JNativeCall"/> list.</param>
+	public void Register(IReadOnlyList<JNativeCall> calls)
+		=> this.Environment.AccessProvider.RegisterNatives(this, calls);
+	/// <summary>
 	/// Unregisters any native call.
 	/// </summary>
 	public void UnregisterNativeCalls() => this.Environment.AccessProvider.ClearNatives(this);

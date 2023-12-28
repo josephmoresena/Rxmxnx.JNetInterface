@@ -478,17 +478,17 @@ public partial class JEnvironment
 			}
 			this.CheckJniError();
 		}
-		public void RegisterNatives(JClassObject jClass, JNativeCall[] calls)
+		public void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCall> calls)
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
 			RegisterNativesDelegate registerNatives = this.GetDelegate<RegisterNativesDelegate>();
-			Int32 requiredBytes = calls.Length * JNativeMethodValue.Size;
+			Int32 requiredBytes = calls.Count * JNativeMethodValue.Size;
 			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
-			List<MemoryHandle> handles = new(calls.Length);
+			List<MemoryHandle> handles = new(calls.Count);
 			using IFixedContext<JNativeMethodValue>.IDisposable argsMemory = useStackAlloc ?
-				JEnvironmentCache.AllocToFixedContext(stackalloc JNativeMethodValue[calls.Length], this) :
-				new JNativeMethodValue[calls.Length].AsMemory().GetFixedContext();
-			for (Int32 i = 0; i < calls.Length; i++)
+				JEnvironmentCache.AllocToFixedContext(stackalloc JNativeMethodValue[calls.Count], this) :
+				new JNativeMethodValue[calls.Count].AsMemory().GetFixedContext();
+			for (Int32 i = 0; i < calls.Count; i++)
 				argsMemory.Values[i] = JNativeMethodValue.Create(calls[i], handles);
 			try
 			{
