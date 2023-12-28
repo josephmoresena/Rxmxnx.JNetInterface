@@ -28,14 +28,14 @@ public record JMethodDefinition : JCallDefinition
 	/// default value for each argument.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	public void Invoke(JLocalObject jLocal) => this.Invoke(jLocal, this.CreateArgumentsArray());
+	protected void Invoke(JLocalObject jLocal) => this.Invoke(jLocal, this.CreateArgumentsArray());
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
 	/// implementation declared on <paramref name="jClass"/> passing the default value for each argument.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	public void Invoke(JLocalObject jLocal, JClassObject jClass)
+	protected void Invoke(JLocalObject jLocal, JClassObject jClass)
 		=> this.Invoke(jLocal, jClass, this.CreateArgumentsArray());
 
 	/// <summary>

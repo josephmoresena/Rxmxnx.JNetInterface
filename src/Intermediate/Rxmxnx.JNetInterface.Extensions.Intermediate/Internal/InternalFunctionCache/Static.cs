@@ -30,6 +30,7 @@ internal partial class InternalFunctionCache
 	/// <c>StackTraceElement.isNativeMethod()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JBoolean> isNativeMethodDefinition = new("isNativeMethod"u8);
+
 	/// <summary>
 	/// <c>Number.byteValue()</c> definition.
 	/// </summary>
@@ -67,6 +68,15 @@ internal partial class InternalFunctionCache
 	/// <c>Class.getName()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JStringObject> getName = new("getName"u8);
+
+	/// <summary>
+	/// <c>Boolean.booleanValue()</c> definition.
+	/// </summary>
+	public static readonly JFunctionDefinition<JBoolean> BooleanValueDefinition = new("booleanValue"u8);
+	/// <summary>
+	/// <c>Character.charValue()</c> definition.
+	/// </summary>
+	public static readonly JFunctionDefinition<JChar> CharValueDefinition = new("charValue"u8);
 
 	/// <summary>
 	/// Constructor <c>java.lang.Boolean(boolean)</c>

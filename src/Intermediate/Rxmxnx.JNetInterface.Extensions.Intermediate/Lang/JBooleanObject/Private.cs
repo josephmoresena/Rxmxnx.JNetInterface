@@ -2,11 +2,6 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public sealed partial class JBooleanObject
 {
-	/// <summary>
-	/// Function name for retrieve primitive value.
-	/// </summary>
-	private static readonly CString getValueName = new(() => "booleanValue"u8);
-
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => IPrimitiveType.GetMetadata<JBoolean>();
 	static JDataTypeMetadata IDataType.Metadata => new JPrimitiveWrapperTypeMetadata<JBooleanObject>();
 	static CString IPrimitiveWrapperType.ArraySignature
@@ -26,14 +21,4 @@ public sealed partial class JBooleanObject
 	}
 	/// <inheritdoc/>
 	private JBooleanObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-
-	/// <summary>
-	/// Retrieves the primitive value for current instance.
-	/// </summary>
-	/// <returns>Primitive instance value.</returns>
-	private JBoolean GetValue()
-	{
-		JFunctionDefinition<JBoolean> definition = new(JBooleanObject.getValueName);
-		return definition.Invoke(this);
-	}
 }

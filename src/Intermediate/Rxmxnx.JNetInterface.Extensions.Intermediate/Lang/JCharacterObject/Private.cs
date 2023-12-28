@@ -2,11 +2,6 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public sealed partial class JCharacterObject
 {
-	/// <summary>
-	/// Function name for retrieve primitive value.
-	/// </summary>
-	private static readonly CString getValueName = new(() => "booleanValue"u8);
-
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => IPrimitiveType.GetMetadata<JChar>();
 	static JDataTypeMetadata IDataType.Metadata => new JPrimitiveWrapperTypeMetadata<JCharacterObject>();
 	static CString IPrimitiveWrapperType.ArraySignature
@@ -26,14 +21,4 @@ public sealed partial class JCharacterObject
 	}
 	/// <inheritdoc/>
 	private JCharacterObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-
-	/// <summary>
-	/// Retrieves the primitive value for current instance.
-	/// </summary>
-	/// <returns>Primitive instance value.</returns>
-	private JChar GetValue()
-	{
-		JFunctionDefinition<JChar> definition = new(JCharacterObject.getValueName);
-		return definition.Invoke(this);
-	}
 }

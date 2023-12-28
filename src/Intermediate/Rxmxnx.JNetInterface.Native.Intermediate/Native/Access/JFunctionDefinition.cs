@@ -62,21 +62,15 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	/// default value for each argument.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	public TResult? Invoke(JLocalObject jLocal) => this.Invoke(jLocal, this.CreateArgumentsArray());
+	protected TResult? Invoke(JLocalObject jLocal) => this.Invoke(jLocal, this.CreateArgumentsArray());
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition but using the
 	/// implementation declared on <paramref name="jClass"/> passing the default value for each argument.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	public TResult? Invoke(JLocalObject jLocal, JClassObject jClass)
+	protected TResult? Invoke(JLocalObject jLocal, JClassObject jClass)
 		=> this.Invoke(jLocal, jClass, this.CreateArgumentsArray());
-	/// <summary>
-	/// Invokes a static function on <paramref name="jClass"/> which matches with current definition.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	public TResult? StaticInvoke(JClassObject jClass) => this.Invoke(jClass, this.CreateArgumentsArray());
-
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
@@ -111,6 +105,11 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 		IEnvironment env = jLocal.Environment;
 		return env.AccessProvider.CallFunction<TResult>(jLocal, jClass, this, true, args);
 	}
+	/// <summary>
+	/// Invokes a static function on <paramref name="jClass"/> which matches with current definition.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	protected TResult? StaticInvoke(JClassObject jClass) => this.Invoke(jClass, this.CreateArgumentsArray());
 	/// <summary>
 	/// Invokes a static function on <paramref name="jClass"/> which matches with current definition
 	/// passing the default value for each argument.

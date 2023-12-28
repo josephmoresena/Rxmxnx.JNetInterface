@@ -20,7 +20,8 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	/// <summary>
 	/// Internal value.
 	/// </summary>
-	public JBoolean Value => this._value ??= this.GetValue();
+	public JBoolean Value
+		=> this._value ??= JFunctionDefinition<JBoolean>.Invoke(InternalFunctionCache.BooleanValueDefinition, this);
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);

@@ -20,11 +20,31 @@ internal sealed record JNonTypedFunctionDefinition : JFunctionDefinition<JLocalO
 		                                            metadata) { }
 
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.Invoke(JLocalObject, IObject?[])"/>
-	public new JLocalObject? Invoke(JLocalObject jLocal, params IObject?[] args) => base.Invoke(jLocal, args);
+	public new JLocalObject? Invoke(JLocalObject jLocal, params IObject?[] args)
+	{
+		IObject?[] realArgs = this.CreateArgumentsArray();
+		args.CopyTo(realArgs, 0);
+		return base.Invoke(jLocal, realArgs);
+	}
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.Invoke(JLocalObject, JClassObject, IObject?[])"/>
 	public new JLocalObject? Invoke(JLocalObject jLocal, JClassObject jClass, params IObject?[] args)
-		=> base.Invoke(jLocal, jClass, args);
+	{
+		IObject?[] realArgs = this.CreateArgumentsArray();
+		args.CopyTo(realArgs, 0);
+		return base.Invoke(jLocal, jClass, realArgs);
+	}
+	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeNonVirtual(JLocalObject, JClassObject, IObject?[])"/>
+	public new JLocalObject? InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, params IObject?[] args)
+	{
+		IObject?[] realArgs = this.CreateArgumentsArray();
+		args.CopyTo(realArgs, 0);
+		return base.InvokeNonVirtual(jLocal, jClass, realArgs);
+	}
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.StaticInvoke(JClassObject, IObject?[])"/>
 	public new JLocalObject? StaticInvoke(JClassObject jClass, params IObject?[] args)
-		=> base.StaticInvoke(jClass, args);
+	{
+		IObject?[] realArgs = this.CreateArgumentsArray();
+		args.CopyTo(realArgs, 0);
+		return base.StaticInvoke(jClass, realArgs);
+	}
 }
