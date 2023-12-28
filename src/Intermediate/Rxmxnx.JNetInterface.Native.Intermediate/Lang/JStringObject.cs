@@ -125,6 +125,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="data">UTF-16 string data.</param>
 	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
+	[return: NotNullIfNotNull(nameof(data))]
 	public static JStringObject? Create(IEnvironment env, String? data)
 		=> data is not null ? env.StringProvider.Create(data) : default;
 	/// <inheritdoc cref="JStringObject.Create(IEnvironment, String)"/>
@@ -135,6 +136,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="utf8Data">UTF-8 string data.</param>
 	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
+	[return: NotNullIfNotNull(nameof(utf8Data))]
 	public static JStringObject? Create(IEnvironment env, CString? utf8Data)
 		=> utf8Data is not null ? env.StringProvider.Create(utf8Data) : default;
 	/// <inheritdoc cref="JStringObject.Create(IEnvironment, CString)"/>

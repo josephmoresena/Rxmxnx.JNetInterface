@@ -27,7 +27,7 @@ internal sealed record CallFrame : LocalCache, IDisposable
 	public void Dispose()
 	{
 		this.ClearParameters();
-		this.ClearCache(this._env, true);
+		this.ClearCache(this._env, false);
 		GC.SuppressFinalize(this);
 	}
 

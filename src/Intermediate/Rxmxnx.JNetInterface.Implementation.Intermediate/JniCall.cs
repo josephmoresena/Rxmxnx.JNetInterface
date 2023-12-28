@@ -13,6 +13,127 @@ public readonly ref partial struct JniCall
 	public IEnvironment Environment => this._env;
 
 	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	public void FinalizeCall() => this._cache.Dispose();
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">Primitive result.</param>
+	/// <returns><paramref name="result"/>.</returns>
+	public TPrimitive FinalizeCall<TPrimitive>(TPrimitive result)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	{
+		this.FinalizeCall();
+		return result;
+	}
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JLocalObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JObjectLocalRef FinalizeCall(JLocalObject? result)
+	{
+		JObjectLocalRef jniResult = default;
+		if (result is not null && !result.IsDefault)
+		{
+			jniResult = result.InternalReference;
+			if (jniResult == default)
+				jniResult = this._env.CreateLocalRef(result.As<JObjectLocalRef>());
+			else
+				this._cache.Remove(jniResult);
+		}
+		this.FinalizeCall();
+		return jniResult;
+	}
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JClassLocalRef FinalizeCall(JClassObject? result) => this.FinalizeCall<JClassLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JThrowableLocalRef FinalizeCall(JThrowableObject? result) => this.FinalizeCall<JThrowableLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JStringLocalRef FinalizeCall(JStringObject? result) => this.FinalizeCall<JStringLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JArrayLocalRef FinalizeCall(JArrayObject? result) => this.FinalizeCall<JArrayLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JObjectArrayLocalRef FinalizeCall(JArrayObject<JLocalObject>? result)
+		=> this.FinalizeCall<JObjectArrayLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JBooleanArrayLocalRef FinalizeCall(JArrayObject<JBoolean>? result)
+		=> this.FinalizeCall<JBooleanArrayLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JByteArrayLocalRef FinalizeCall(JArrayObject<JByte>? result)
+		=> this.FinalizeCall<JByteArrayLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JCharArrayLocalRef FinalizeCall(JArrayObject<JChar>? result)
+		=> this.FinalizeCall<JCharArrayLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JDoubleArrayLocalRef FinalizeCall(JArrayObject<JDouble>? result)
+		=> this.FinalizeCall<JDoubleArrayLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JFloatArrayLocalRef FinalizeCall(JArrayObject<JFloat>? result)
+		=> this.FinalizeCall<JFloatArrayLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JIntArrayLocalRef FinalizeCall(JArrayObject<JInt>? result) => this.FinalizeCall<JIntArrayLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JLongArrayLocalRef FinalizeCall(JArrayObject<JLong>? result)
+		=> this.FinalizeCall<JLongArrayLocalRef>(result);
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JShortArrayLocalRef FinalizeCall(JArrayObject<JShort>? result)
+		=> this.FinalizeCall<JShortArrayLocalRef>(result);
+
+	/// <summary>
 	/// Builder for <see cref="JniCall"/>
 	/// </summary>
 	public readonly ref partial struct Builder
@@ -204,6 +325,10 @@ public readonly ref partial struct JniCall
 		/// Retrieves current <see cref="JniCall"/> instance.
 		/// </summary>
 		/// <returns>A <see cref="JniCall"/> instance.</returns>
-		public JniCall Build() => this._call;
+		public JniCall Build()
+		{
+			this._call._cache.Activate();
+			return this._call;
+		}
 	}
 }

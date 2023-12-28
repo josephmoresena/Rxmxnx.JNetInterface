@@ -31,6 +31,18 @@ public readonly ref partial struct JniCall
 		this._cache = new(this._env);
 	}
 
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
+	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <typeparam name="TResult">Type of reference result.</typeparam>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	private TResult FinalizeCall<TResult>(JLocalObject? result) where TResult : unmanaged, IObjectReferenceType<TResult>
+	{
+		JObjectLocalRef jniResult = this.FinalizeCall(result);
+		return NativeUtilities.Transform<JObjectLocalRef, TResult>(in jniResult);
+	}
+
 	public readonly ref partial struct Builder
 	{
 		/// <summary>

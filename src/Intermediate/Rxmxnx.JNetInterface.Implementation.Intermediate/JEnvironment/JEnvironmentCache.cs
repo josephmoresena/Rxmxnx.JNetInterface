@@ -346,17 +346,16 @@ public partial class JEnvironment
 		public void CreateLocalRef(JGlobalRef globalRef, JLocalObject? result, Boolean deleteGlobal = true)
 		{
 			if (globalRef == default || result is not null) return;
+			JEnvironment env = this._mainClasses.Environment;
 			try
 			{
-				NewLocalRefDelegate newLocalRef = this.GetDelegate<NewLocalRefDelegate>();
-				JObjectLocalRef localRef = newLocalRef(this.Reference, globalRef.Value);
-				if (localRef == default) this.CheckJniError();
+				JObjectLocalRef localRef = env.CreateLocalRef(globalRef.Value);
 				JLocalObject jLocal = this.Register(result)!;
 				jLocal.SetValue(localRef);
 			}
 			finally
 			{
-				if (deleteGlobal) this._mainClasses.Environment.DeleteGlobalRef(globalRef);
+				if (deleteGlobal) env.DeleteGlobalRef(globalRef);
 			}
 		}
 		/// <summary>

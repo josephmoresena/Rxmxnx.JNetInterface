@@ -103,7 +103,28 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <returns>The class instance for given type.</returns>
 	public static JClassObject GetClass<TDataType>(IEnvironment env) where TDataType : IDataType<TDataType>
 		=> env.ClassProvider.GetClass<TDataType>();
-
+	/// <summary>
+	/// Loads a java class from its binary information into the current VM.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="className">Name of class to load.</param>
+	/// <param name="rawClassBytes">Binary span with class information.</param>
+	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
+	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
+	public static JClassObject LoadClass(IEnvironment env, CString className, ReadOnlySpan<Byte> rawClassBytes,
+		JLocalObject? jClassLoader = default)
+		=> env.ClassProvider.LoadClass(className, rawClassBytes, jClassLoader);
+	/// <summary>
+	/// Loads a java class from its binary information into the current VM.
+	/// </summary>
+	/// <typeparam name="TDataType">The type with class definition.</typeparam>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="rawClassBytes">Binary span with class information.</param>
+	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
+	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
+	public static JClassObject LoadClass<TDataType>(IEnvironment env, ReadOnlySpan<Byte> rawClassBytes,
+		JLocalObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
+		=> env.ClassProvider.LoadClass<TDataType>(rawClassBytes, jClassLoader);
 	/// <inheritdoc/>
 	public static JClassObject? Create(JLocalObject? jLocal)
 		=> !JObject.IsNullOrDefault(jLocal) ? jLocal.Environment.ClassProvider.AsClassObject(jLocal) : default;

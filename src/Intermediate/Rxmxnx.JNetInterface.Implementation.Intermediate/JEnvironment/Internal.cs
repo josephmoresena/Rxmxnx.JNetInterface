@@ -166,4 +166,15 @@ public partial class JEnvironment
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	internal void LoadClass(JClassObject jClass) => this._cache.LoadClass(jClass);
+	/// <summary>
+	/// Creates a new local reference for <paramref name="oldLocalRef"/>.
+	/// </summary>
+	/// <param name="oldLocalRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	internal JObjectLocalRef CreateLocalRef(JObjectLocalRef oldLocalRef)
+	{
+		NewLocalRefDelegate newLocalRef = this._cache.GetDelegate<NewLocalRefDelegate>();
+		JObjectLocalRef localRef = newLocalRef(this.Reference, oldLocalRef);
+		if (localRef == default) this._cache.CheckJniError();
+		return localRef;
+	}
 }
