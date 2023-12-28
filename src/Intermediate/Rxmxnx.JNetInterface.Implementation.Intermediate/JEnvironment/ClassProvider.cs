@@ -156,7 +156,7 @@ public partial class JEnvironment
 			if (args.cache._classes.TryGetValue(classInformation.ToString(), out JClassObject? result))
 				result.SetValue(classRef);
 			else
-				result = new(args.cache.ClassObject, new TypeInformation(classInformation));
+				result = new(args.cache.ClassObject, new TypeInformation(classInformation), classRef);
 			return args.cache.Register(result);
 		}
 	}
