@@ -51,7 +51,7 @@ public partial class JEnvironment
 			}
 			else
 			{
-				JClassObject jClass = this.GetClass<JArrayObject<TElement>>();
+				JClassObject jClass = this.GetClass<TElement>();
 				arrayRef = this.NewObjectArray(length, jClass);
 			}
 			IEnvironment env = this._mainClasses.Environment;
@@ -69,7 +69,7 @@ public partial class JEnvironment
 			else
 			{
 				IEnvironment env = this._mainClasses.Environment;
-				JClassObject jClass = this.GetClass<JArrayObject<TElement>>();
+				JClassObject jClass = this.GetClass<TElement>();
 				JLocalObject? initial = initialElement as JLocalObject;
 				JArrayLocalRef arrayRef = this.NewObjectArray(length, jClass, initial);
 				result = new(env, arrayRef, length);
@@ -121,8 +121,10 @@ public partial class JEnvironment
 			{
 				ValidationUtilities.ThrowIfDummy(value as JReferenceObject);
 				SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
-				JObjectLocalRef localRef = (value as JReferenceObject)?.As<JObjectLocalRef>() ?? default;
-				setObjectArrayElement(this.Reference, jArray.As<JObjectArrayLocalRef>(), index, localRef);
+				using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+				JObjectLocalRef localRef = jniTransaction.Add(value as JReferenceObject);
+				JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
+				setObjectArrayElement(this.Reference, arrayRef, index, localRef);
 			}
 			this.CheckJniError();
 		}

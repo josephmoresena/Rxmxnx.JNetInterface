@@ -26,6 +26,31 @@ public sealed record JMainMethodDefinition : JMethodDefinition
 	{
 		IEnvironment env = mainClass.Environment;
 		JArrayObject<JStringObject>? args = !nullArgs ? JArrayObject<JStringObject>.Create(env, 0) : default;
+		this.Invoke(mainClass, args);
+	}
+	/// <summary>
+	/// Invokes method defined in <paramref name="mainClass"/>.
+	/// </summary>
+	/// <param name="mainClass">A Java main class.</param>
+	/// <param name="args">Arguments.</param>
+	public void Invoke(JClassObject mainClass, params String?[] args)
+	{
+		IEnvironment env = mainClass.Environment;
+		JArrayObject<JStringObject> jArgs = JArrayObject<JStringObject>.Create(env, args.Length);
+		for(Int32 i = 0; i < args.Length; i++)
+			if (args[i] is not null)
+				using (JStringObject jString = JStringObject.Create(env, args[i])!)
+					jArgs[i] = jString;
+		this.Invoke(mainClass, jArgs);
+	}
+	
+	/// <summary>
+	/// Invokes current definition as static method in <paramref name="mainClass"/>.
+	/// </summary>
+	/// <param name="mainClass">A Java main class.</param>
+	/// <param name="args">Java arguments array.</param>
+	private void Invoke(JClassObject mainClass, JArrayObject<JStringObject>? args)
+	{
 		try
 		{
 			IObject?[] invokeArgs = this.CreateArgumentsArray();
