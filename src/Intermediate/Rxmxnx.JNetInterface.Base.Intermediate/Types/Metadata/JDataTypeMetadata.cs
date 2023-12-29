@@ -50,19 +50,6 @@ public abstract record JDataTypeMetadata : ITypeInformation
 	/// </summary>
 	/// <param name="className">JNI name of current type.</param>
 	/// <param name="signature">JNI signature for current type.</param>
-	/// <param name="arraySignature">Array JNI signature for current type.</param>
-	internal JDataTypeMetadata(CString className, CString signature, CString? arraySignature = default)
-	{
-		this._sequence = JDataTypeMetadata.CreateInformationSequence(className, signature, arraySignature);
-		this._className = this._sequence[0];
-		this._signature = this._sequence[1];
-		this._arraySignature = this._sequence[2];
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="className">JNI name of current type.</param>
-	/// <param name="signature">JNI signature for current type.</param>
 	internal JDataTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature = default)
 	{
 		this._sequence = JDataTypeMetadata.CreateInformationSequence(className, signature);
