@@ -68,6 +68,10 @@ internal partial class InternalFunctionCache
 	/// <c>Class.getName()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JStringObject> getName = new("getName"u8);
+	/// <summary>
+	/// <c>Class.isPrimitive()</c> definition.
+	/// </summary>
+	private static readonly JFunctionDefinition<JBoolean> isPrimitiveClass = new("isPrimitive"u8);
 
 	/// <summary>
 	/// <c>Boolean.booleanValue()</c> definition.

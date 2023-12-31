@@ -84,4 +84,13 @@ internal abstract class FunctionCache
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JStringObject"/> instance.</returns>
 	public abstract JStringObject GetClassName(JClassObject jClass);
+	/// <summary>
+	/// Indicates whether current class object is primitive.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jClass"/> is for primitive type;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public abstract Boolean IsPrimitiveClass(JClassObject jClass);
 }

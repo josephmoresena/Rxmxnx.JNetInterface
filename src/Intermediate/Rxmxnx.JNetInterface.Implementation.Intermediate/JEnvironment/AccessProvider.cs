@@ -195,7 +195,6 @@ public partial class JEnvironment
 			}
 			this.CheckJniError();
 		}
-
 		public void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args)
 		{
@@ -265,7 +264,7 @@ public partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
 			AccessCache access = this.GetAccess(jniTransaction, jLocal.Class);
-			JMethodId methodId = access.GetStaticMethodId(definition, this._mainClasses.Environment);
+			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
@@ -280,7 +279,6 @@ public partial class JEnvironment
 				                                   argsMemory);
 			this.CheckJniError();
 		}
-
 		public TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
 			where TField : IDataType<TField>
 		{

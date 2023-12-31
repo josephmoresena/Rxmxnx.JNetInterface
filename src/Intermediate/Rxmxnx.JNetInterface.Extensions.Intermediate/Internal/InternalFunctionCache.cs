@@ -91,4 +91,13 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	/// <inheritdoc/>
 	public override JStringObject GetClassName(JClassObject jClass)
 		=> JFunctionDefinition<JStringObject>.Invoke(InternalFunctionCache.getName, jClass)!;
+	/// <inheritdoc/>
+	public override Boolean IsPrimitiveClass(JClassObject jClass)
+	{
+		IEnvironment env = jClass.Environment;
+		Span<Byte> bytes = stackalloc Byte[1];
+		env.AccessProvider.CallPrimitiveFunction(bytes, jClass, jClass.Class, InternalFunctionCache.isPrimitiveClass,
+		                                         false, Array.Empty<IObject>());
+		return bytes[0] == JBoolean.TrueValue;
+	}
 }

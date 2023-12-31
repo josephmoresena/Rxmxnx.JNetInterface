@@ -24,85 +24,9 @@ internal static class ObjectSignatures
 	/// </summary>
 	public const String JObjectSignature = ObjectSignatures.ObjectSignaturePrefix + ClassNames.JObjectClassName +
 		ObjectSignatures.ObjectSignatureSuffix;
-
-	/// <summary>
-	/// JNI signature for <c>java.lang.String</c> object.
-	/// </summary>
-	public const String JStringObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JStringObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
 	/// <summary>
 	/// JNI signature for <c>java.lang.Class&lt;?&gt;</c> object.
 	/// </summary>
 	public const String JClassObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
 		ClassNames.JClassObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Number</c> object.
-	/// </summary>
-	public const String JNumberObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JNumberObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Enum</c> object.
-	/// </summary>
-	public const String JEnumObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JEnumObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Throwable</c> object.
-	/// </summary>
-	public const String JThrowableObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JThrowableObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.ThreadGroup</c> object.
-	/// </summary>
-	public const String JThreadGroupObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JThreadGroupObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.System</c> object.
-	/// </summary>
-	public const String JSystemObjectSignature = ObjectSignatures.ObjectSignaturePrefix + ClassNames.JSystemClassName +
-		ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Cloneable</c> object.
-	/// </summary>
-	public const String JCloneableObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JCloneableInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Comparable</c> object.
-	/// </summary>
-	public const String JComparableObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JComparableInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.CharSequence</c> object.
-	/// </summary>
-	public const String JCharSequenceObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JCharSequenceInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.io.Serializable</c> object.
-	/// </summary>
-	public const String JSerializableObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JSerializableInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.reflect.AnnotatedElement</c> object.
-	/// </summary>
-	public const String JAnnotatedElementObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JAnnotatedElementInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.reflect.GenericDeclaration</c> object.
-	/// </summary>
-	public const String JGenericDeclarationObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JGenericDeclarationInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.reflect.Type</c> object.
-	/// </summary>
-	public const String JTypeObjectSignature = ObjectSignatures.ObjectSignaturePrefix + ClassNames.JTypeInterfaceName +
-		ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.StackTraceElement</c> object.
-	/// </summary>
-	public const String JStackTraceElementObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JStackTraceElementClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Thread.UncaughtExceptionHandler</c> object.
-	/// </summary>
-	public const String JUncaughtExceptionHandlerObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JUncaughtExceptionHandlerInterfaceName + ObjectSignatures.ObjectSignatureSuffix;
 }

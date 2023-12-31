@@ -130,12 +130,12 @@ public partial class JEnvironment
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	internal JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference = false)
 	{
-		using JStringObject jString = JClassObject.GetClassName(this, classRef);
+		using JStringObject jString = JClassObject.GetClassName(this, classRef, out Boolean isPrimitive);
 		using JNativeMemory<Byte> utf8Text = jString.GetUtf8Chars(JMemoryReferenceKind.Local);
-		CStringSequence classInformation = MetadataHelper.GetClassInformation(utf8Text.Values);
-		if (!this._cache.TryGetClass(classInformation.ToString(), out JClassObject? jClass))
-			jClass = new(this._cache.ClassObject, new TypeInformation(classInformation),
-			             keepReference ? classRef : default);
+		JClassObject jClass = isPrimitive ?
+			this.GetPrimitiveClass(utf8Text.Values) :
+			this.GetClass(utf8Text.Values, keepReference ? classRef : default);
+		if (keepReference && jClass.InternalReference == default) jClass.SetValue(classRef);
 		return this._cache.Register(jClass);
 	}
 	/// <inheritdoc cref="IClassProvider.GetClass{TObject}()"/>

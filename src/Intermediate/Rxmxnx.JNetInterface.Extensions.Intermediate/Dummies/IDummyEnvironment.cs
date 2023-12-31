@@ -39,6 +39,16 @@ public interface IDummyEnvironment : IEnvironment, IAccessProvider, IClassProvid
 	void IAccessProvider.CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args)
 		=> definition.PrimitiveInvoke(bytes, jLocal, jClass, nonVirtual, args);
+	
+	JClassObject IClassProvider.BooleanPrimitive => this.GetClass<JBoolean>();
+	JClassObject IClassProvider.BytePrimitive => this.GetClass<JByte>();
+	JClassObject IClassProvider.CharPrimitive => this.GetClass<JChar>();
+	JClassObject IClassProvider.DoublePrimitive => this.GetClass<JDouble>();
+	JClassObject IClassProvider.FloatPrimitive => this.GetClass<JFloat>();
+	JClassObject IClassProvider.IntPrimitive => this.GetClass<JInt>();
+	JClassObject IClassProvider.LongPrimitive => this.GetClass<JLong>();
+	JClassObject IClassProvider.ShortPrimitive => this.GetClass<JShort>();
+	
 	JClassObject IClassProvider.BooleanObject => this.GetClass<JBooleanObject>();
 	JClassObject IClassProvider.ByteObject => this.GetClass<JByteObject>();
 	JClassObject IClassProvider.CharacterObject => this.GetClass<JCharacterObject>();

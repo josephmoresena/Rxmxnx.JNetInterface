@@ -37,6 +37,57 @@ public partial class JEnvironment
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JGlobalRef CreateGlobalRef(JReferenceObject jLocal)
 		=> this._cache.CreateGlobalRef(jLocal.As<JObjectLocalRef>());
+	/// <summary>
+	/// Retrieves class instance for <paramref name="classRef"/>.
+	/// </summary>
+	/// <param name="className">Class name.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JClassObject"/> instance.</returns>
+	private JClassObject GetClass(ReadOnlySpan<Byte> className, JClassLocalRef classRef)
+	{
+		CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
+		if (!this._cache.TryGetClass(classInformation.ToString(), out JClassObject? jClass))
+			jClass = new(this._cache.ClassObject, new TypeInformation(classInformation), classRef);
+		return jClass;
+	}
+	/// <summary>
+	/// Retrieves primitive class instance for <paramref name="className"/>.
+	/// </summary>
+	/// <param name="className">Class name.</param>
+	/// <returns>A <see cref="JClassObject"/> instance.</returns>
+	/// <exception cref="ArgumentException">Non-primitive class.</exception>
+	private JClassObject GetPrimitiveClass(ReadOnlySpan<Byte> className)
+		=> className.Length switch
+		{
+			3 => className[0] == 0x69 /*i*/ ?
+				this._cache.IntPrimitive :
+				throw new ArgumentException("Invalid primitive type."),
+			4 => className[0] switch
+			{
+				0x62 //b
+					=> this._cache.BooleanPrimitive,
+				0x63 //c
+					=> this._cache.CharPrimitive,
+				0x6C //l
+					=> this._cache.LongPrimitive,
+				_ => throw new ArgumentException("Invalid primitive type."),
+			},
+			5 => className[0] switch
+			{
+				0x66 //f
+					=> this._cache.FloatPrimitive,
+				0x73 //l
+					=> this._cache.ShortPrimitive,
+				_ => throw new ArgumentException("Invalid primitive type."),
+			},
+			6 => className[0] == 0x64 /*d*/ ?
+				this._cache.DoublePrimitive :
+				throw new ArgumentException("Invalid primitive type."),
+			7 => className[0] == 0x62 /*b*/ ?
+				this._cache.BooleanPrimitive :
+				throw new ArgumentException("Invalid primitive type."),
+			_ => throw new ArgumentException("Invalid primitive type."),
+		};
 
 	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
 	private static Boolean? EqualEquatable<TEquatable>(IEquatable<TEquatable>? obj, TEquatable? other)
