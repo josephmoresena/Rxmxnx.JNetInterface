@@ -72,7 +72,7 @@ public partial class JVirtualMachine
 			this.Reference = vmRef;
 			this.DelegateCache = new();
 			this.ThreadCache = new(mainClasses.VirtualMachine);
-			this.MainClasses = this.Register(mainClasses);
+			this.MainClasses = mainClasses;
 		}
 
 		/// <summary>
@@ -85,19 +85,6 @@ public partial class JVirtualMachine
 			Type typeOfT = typeof(TDelegate);
 			IntPtr ptr = JVirtualMachineCache.getPointer[typeOfT](this.Reference);
 			return this.DelegateCache.GetDelegate<TDelegate>(ptr);
-		}
-
-		/// <summary>
-		/// Registers a <see cref="GlobalMainClasses"/> in current <see cref="IVirtualMachine"/> instance.
-		/// </summary>
-		/// <param name="mainClasses">A <see cref="GlobalMainClasses"/> instance.</param>
-		/// <returns>A <see cref="GlobalMainClasses"/> instance.</returns>
-		private GlobalMainClasses Register(GlobalMainClasses mainClasses)
-		{
-			this.GlobalClassCache[mainClasses.ClassMetadata.Hash] = mainClasses.ClassObject;
-			this.GlobalClassCache[mainClasses.ThrowableMetadata.Hash] = mainClasses.ThrowableObject;
-			this.GlobalClassCache[mainClasses.StackTraceElementMetadata.Hash] = mainClasses.StackTraceElementObject;
-			return mainClasses;
 		}
 
 		/// <summary>

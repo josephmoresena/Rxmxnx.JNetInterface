@@ -10,11 +10,8 @@ public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JClassTypeMetadata typeMetadata = JTypeMetadataBuilder<JStackTraceElementObject>
-	                                                          .Create(UnicodeClassNames.JStackTraceElementClassName,
+	                                                          .Create("java/lang/StackTraceElement"u8,
 	                                                                  JTypeModifier.Final)
-	                                                          .WithSignature(
-		                                                          UnicodeObjectSignatures
-			                                                          .JStackTraceElementObjectSignature)
 	                                                          .Implements<JSerializableObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JStackTraceElementObject.typeMetadata;

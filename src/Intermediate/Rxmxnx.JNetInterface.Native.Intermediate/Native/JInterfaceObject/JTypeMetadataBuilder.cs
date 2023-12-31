@@ -25,16 +25,6 @@ public abstract partial class JInterfaceObject
 			                       JTypeMetadataBuilder.GetImplementingType<TInterface>, interfaceTypes);
 
 		/// <summary>
-		/// Sets the type signature.
-		/// </summary>
-		/// <param name="signature">Type signature.</param>
-		/// <returns>Current instance.</returns>
-		public JTypeMetadataBuilder<TInterface> WithSignature(CString signature)
-		{
-			this._builder.WithSignature(signature);
-			return this;
-		}
-		/// <summary>
 		/// Appends an interface to current type definition.
 		/// </summary>
 		/// <typeparam name="TOtherInterface"><see cref="IDataType"/> interface type.</typeparam>

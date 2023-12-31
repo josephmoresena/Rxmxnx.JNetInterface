@@ -9,8 +9,6 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// </summary>
 		private sealed record JPrimitiveGenericTypeMetadata : JPrimitiveTypeMetadata
 		{
-			/// <inheritdoc cref="JPrimitiveTypeMetadata.ClassSignature"/>
-			private readonly CString _classSignature;
 			/// <summary>
 			/// Native primitive type.
 			/// </summary>
@@ -23,15 +21,23 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// CLR underline type.
 			/// </summary>
 			private readonly Type _underlineType;
+			/// <summary>
+			/// Wrapper class information.
+			/// </summary>
+			private readonly CStringSequence _wrapperInformation;
 
 			/// <inheritdoc/>
-			public override CString ClassSignature => this._classSignature;
+			public override CString WrapperClassSignature => this._wrapperInformation[1];
+			/// <inheritdoc/>
+			public override CString WrapperClassName => this._wrapperInformation[0];
 			/// <inheritdoc/>
 			public override Type UnderlineType => this._underlineType;
 			/// <inheritdoc/>
 			public override JNativeType NativeType => this._nativeType;
 			/// <inheritdoc/>
 			public override Type Type => this._type;
+			/// <inheritdoc/>
+			internal override CStringSequence WrapperInformation => this._wrapperInformation;
 			/// <summary>
 			/// Size of current primitive type in bytes.
 			/// </summary>
@@ -44,16 +50,17 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// <param name="underlineType">Underline primitive CLR type.</param>
 			/// <param name="signature">JNI signature for current primitive type.</param>
 			/// <param name="className">Wrapper class name of current primitive type.</param>
-			/// <param name="classSignature">Wrapper class JNI signature of current primitive type.</param>
+			/// <param name="wrapperClassName">Wrapper class JNI name of current primitive type.</param>
 			internal JPrimitiveGenericTypeMetadata(Int32 sizeOf, Type underlineType, ReadOnlySpan<Byte> signature,
-				ReadOnlySpan<Byte> className, CString? classSignature = default) : base(signature, className)
+				ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(signature, className)
 			{
 				this._sizeOf = sizeOf;
 				this._underlineType = underlineType;
 				this._nativeType = TPrimitive.JniType;
 				this._type = typeof(TPrimitive);
-				this._classSignature = classSignature ?? JDataTypeMetadata.ComputeReferenceTypeSignature(className);
+				this._wrapperInformation = JDataTypeMetadata.CreateInformationSequence(wrapperClassName);
 			}
+
 			/// <inheritdoc/>
 			public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes) => bytes.ToValue<TPrimitive>();
 		}

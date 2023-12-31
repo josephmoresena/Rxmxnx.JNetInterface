@@ -13,49 +13,49 @@ public partial class JEnvironment
 			JLocalObject result;
 			switch (metadata.Signature[0])
 			{
-				case 0x90: //Z
+				case 0x5A: //Z
 					jClass = this.GetClass<JBooleanObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.BooleanConstructor, primitive);
 					result = new JBooleanObject(jClass, localRef,
 					                            NativeUtilities.Transform<TPrimitive, JBoolean>(in primitive));
 					break;
-				case 0x66: //B
+				case 0x42: //B
 					jClass = this.GetClass<JByteObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.ByteConstructor, primitive);
 					result = new JByteObject(jClass, localRef,
 					                         NativeUtilities.Transform<TPrimitive, JByte>(in primitive));
 					break;
-				case 0x67: //C
+				case 0x43: //C
 					jClass = this.GetClass<JCharacterObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.CharacterConstructor, primitive);
 					result = new JCharacterObject(jClass, localRef,
 					                              NativeUtilities.Transform<TPrimitive, JChar>(in primitive));
 					break;
-				case 0x68: //D
+				case 0x44: //D
 					jClass = this.GetClass<JDoubleObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.DoubleConstructor, primitive);
 					result = new JDoubleObject(jClass, localRef,
 					                           NativeUtilities.Transform<TPrimitive, JDouble>(in primitive));
 					break;
-				case 0x70: //F
+				case 0x46: //F
 					jClass = this.GetClass<JFloatObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.FloatConstructor, primitive);
 					result = new JFloatObject(jClass, localRef,
 					                          NativeUtilities.Transform<TPrimitive, JFloat>(in primitive));
 					break;
-				case 0x73: //I
+				case 0x49: //I
 					jClass = this.GetClass<JIntegerObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.IntegerConstructor, primitive);
 					result = new JIntegerObject(jClass, localRef,
 					                            NativeUtilities.Transform<TPrimitive, JInt>(in primitive));
 					break;
-				case 0x74: //J
+				case 0x4A: //J
 					jClass = this.GetClass<JLongObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.LongConstructor, primitive);
 					result = new JLongObject(jClass, localRef,
 					                         NativeUtilities.Transform<TPrimitive, JLong>(in primitive));
 					break;
-				case 0x83: //S
+				case 0x53: //S
 					jClass = this.GetClass<JShortObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.ShortConstructor, primitive);
 					result = new JShortObject(jClass, localRef,
@@ -194,7 +194,7 @@ public partial class JEnvironment
 				case true when localRef == default:
 					try
 					{
-						localRef = jClass.Name.WithSafeFixed(this, JEnvironmentCache.FindClass).Value;
+						localRef = this.FindClass(jClass).Value;
 						this.ReloadGlobal(result, localRef);
 					}
 					finally

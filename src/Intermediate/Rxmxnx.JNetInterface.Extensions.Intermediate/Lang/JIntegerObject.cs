@@ -7,8 +7,6 @@ public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimi
 {
 	static JDataTypeMetadata IDataType.Metadata
 		=> new JPrimitiveWrapperTypeMetadata<JIntegerObject>(IClassType.GetMetadata<JNumberObject>());
-	static CString IPrimitiveWrapperType.ArraySignature
-		=> UnicodeWrapperObjectArraySignatures.JIntegerObjectArraySignature;
 
 	/// <inheritdoc/>
 	internal JIntegerObject(JClassObject jClass, JObjectLocalRef localRef, JInt value) :

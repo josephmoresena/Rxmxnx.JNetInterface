@@ -11,15 +11,20 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		private readonly ReadOnlySpan<Byte> _signature;
 
 		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
-		private ReadOnlySpan<Byte> _className;
-		/// <inheritdoc cref="JPrimitiveTypeMetadata.ClassSignature"/>
-		private CString? _classSignature;
+		private readonly ReadOnlySpan<Byte> _className;
+		/// <inheritdoc cref="JPrimitiveTypeMetadata.WrapperClassName"/>
+		private ReadOnlySpan<Byte> _wrapperClassName;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
+		/// <param name="className">Primitive class name.</param>
 		/// <param name="signature">JNI signature for current primitive type.</param>
-		private JTypeMetadataBuilder(ReadOnlySpan<Byte> signature) => this._signature = signature;
+		private JTypeMetadataBuilder(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature)
+		{
+			this._className = className;
+			this._signature = signature;
+		}
 
 		/// <summary>
 		/// Sets the wrapper class name.
@@ -28,18 +33,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// <returns>Current instance.</returns>
 		public JTypeMetadataBuilder WithWrapperClassName(ReadOnlySpan<Byte> className)
 		{
-			this._className = ValidationUtilities.ValidateNotEmpty(className);
-			return this;
-		}
-		/// <summary>
-		/// Sets the wrapper class signature.
-		/// </summary>
-		/// <param name="classSignature">Wrapper class signature.</param>
-		/// <returns>Current instance.</returns>
-		public JTypeMetadataBuilder WithWrapperClassSignature(CString classSignature)
-		{
-			ValidationUtilities.ThrowIfInvalidSignature(classSignature, false);
-			this._classSignature = classSignature;
+			this._wrapperClassName = ValidationUtilities.ValidateNotEmpty(className);
 			return this;
 		}
 		/// <summary>
@@ -48,18 +42,19 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JPrimitiveTypeMetadata Build()
 			=> new JPrimitiveGenericTypeMetadata(NativeUtilities.SizeOf<TPrimitive>(), typeof(TValue), this._signature,
-			                                     ValidationUtilities.ValidateNotEmpty(this._className),
-			                                     this._classSignature);
+			                                     this._className,
+			                                     ValidationUtilities.ValidateNotEmpty(this._wrapperClassName));
 
 		/// <summary>
 		/// Creates a new <see cref="JTypeMetadataBuilder"/> instance.
 		/// </summary>
+		/// <param name="className">Primitive class name.</param>
 		/// <param name="signature">Primitive type signature.</param>
 		/// <returns>A new <see cref="JTypeMetadataBuilder"/> instance.</returns>
-		public static JTypeMetadataBuilder Create(ReadOnlySpan<Byte> signature)
+		public static JTypeMetadataBuilder Create(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature)
 		{
 			ValidationUtilities.ThrowIfInvalidSignature(signature, true);
-			return new(signature);
+			return new(className, signature);
 		}
 	}
 }

@@ -50,8 +50,8 @@ internal sealed record JClassObjectMetadata : JObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
-	private JClassObjectMetadata(JDataTypeMetadata metadata) : base(UnicodeClassNames.JClassObjectClassName,
-	                                                                UnicodeObjectSignatures.JClassObjectSignature)
+	private JClassObjectMetadata(ITypeInformation metadata) : base(UnicodeClassNames.JClassObjectClassName,
+	                                                               UnicodeObjectSignatures.JClassObjectSignature)
 	{
 		this.Name = metadata.ClassName;
 		this.ClassSignature = metadata.Signature;
@@ -59,13 +59,13 @@ internal sealed record JClassObjectMetadata : JObjectMetadata
 	}
 
 	/// <summary>
-	/// Creates a <see cref="JClassObjectMetadata"/> for given <typeparamref name="TReference"/> type.
+	/// Creates a <see cref="JClassObjectMetadata"/> for given <typeparamref name="TDataType"/> type.
 	/// </summary>
-	/// <typeparam name="TReference">A <see cref="IReferenceType"/> type.</typeparam>
+	/// <typeparam name="TDataType">A <see cref="IReferenceType"/> type.</typeparam>
 	/// <returns>A <see cref="JClassObjectMetadata"/> instance.</returns>
-	public static JClassObjectMetadata Create<TReference>() where TReference : JLocalObject, IReferenceType<TReference>
+	public static JClassObjectMetadata Create<TDataType>() where TDataType : IDataType<TDataType>
 	{
-		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
+		JDataTypeMetadata metadata = IDataType.GetMetadata<TDataType>();
 		return new(metadata);
 	}
 }

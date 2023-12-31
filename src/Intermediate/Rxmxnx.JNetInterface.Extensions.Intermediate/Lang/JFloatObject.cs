@@ -7,8 +7,6 @@ public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimiti
 {
 	static JDataTypeMetadata IDataType.Metadata
 		=> new JPrimitiveWrapperTypeMetadata<JFloatObject>(IClassType.GetMetadata<JNumberObject>());
-	static CString IPrimitiveWrapperType.ArraySignature
-		=> UnicodeWrapperObjectArraySignatures.JFloatObjectArraySignature;
 
 	/// <inheritdoc/>
 	internal JFloatObject(JClassObject jClass, JObjectLocalRef localRef, JFloat value) :

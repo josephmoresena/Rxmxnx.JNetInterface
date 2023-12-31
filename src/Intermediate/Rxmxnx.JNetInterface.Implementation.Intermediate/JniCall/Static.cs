@@ -72,8 +72,7 @@ public readonly ref partial struct JniCall
 	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="envRef">Call <see cref="JEnvironmentRef"/> reference.</param>
 	/// <returns>A <see cref="Builder"/> instance.</returns>
-	public static Builder Create(IVirtualMachine vm, JEnvironmentRef envRef)
-		=> new(new((JVirtualMachine)vm, envRef));
+	public static Builder Create(IVirtualMachine vm, JEnvironmentRef envRef) => new(new((JVirtualMachine)vm, envRef));
 	/// <summary>
 	/// Creates a <see cref="JniCall"/> builder using <see cref="IVirtualMachine"/> instance,
 	/// a <see cref="JEnvironmentRef"/> reference and a <see cref="JObjectLocalRef"/> instance.

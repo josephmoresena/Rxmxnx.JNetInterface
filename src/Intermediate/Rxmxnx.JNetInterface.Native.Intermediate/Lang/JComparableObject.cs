@@ -9,10 +9,7 @@ public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IIn
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata typeMetadata = JTypeMetadataBuilder<JComparableObject>
-	                                                              .Create(UnicodeClassNames.JComparableInterfaceName)
-	                                                              .WithSignature(
-		                                                              UnicodeObjectSignatures
-			                                                              .JComparableObjectSignature).Build();
+	                                                              .Create("java/lang/Comparable"u8).Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JComparableObject.typeMetadata;
 

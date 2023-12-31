@@ -4,8 +4,6 @@ public sealed partial class JBooleanObject
 {
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => IPrimitiveType.GetMetadata<JBoolean>();
 	static JDataTypeMetadata IDataType.Metadata => new JPrimitiveWrapperTypeMetadata<JBooleanObject>();
-	static CString IPrimitiveWrapperType.ArraySignature
-		=> UnicodeWrapperObjectArraySignatures.JBooleanObjectArraySignature;
 
 	/// <inheritdoc cref="JBooleanObject.Value"/>
 	private JBoolean? _value;
@@ -14,7 +12,7 @@ public sealed partial class JBooleanObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	private JBooleanObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.BooleanClassObject)
+	private JBooleanObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.BooleanObject)
 	{
 		if (jLocal is JBooleanObject wrapper)
 			this._value = wrapper._value;

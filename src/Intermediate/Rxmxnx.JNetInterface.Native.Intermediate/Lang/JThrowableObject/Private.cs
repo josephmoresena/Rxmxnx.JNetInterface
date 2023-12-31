@@ -37,7 +37,9 @@ public partial class JThrowableObject
 	{
 		IEnvironment env = jThrowable.Environment;
 		using JArrayObject<JStackTraceElementObject> stackTrace = env.Functions.GetStackTrace(jThrowable);
-		JStackTraceInfo[] result = stackTrace.Length > 0 ? new JStackTraceInfo[stackTrace.Length] : Array.Empty<JStackTraceInfo>();
+		JStackTraceInfo[] result = stackTrace.Length > 0 ?
+			new JStackTraceInfo[stackTrace.Length] :
+			Array.Empty<JStackTraceInfo>();
 		for (Int32 i = 0; i < result.Length; i++)
 			result[i] = ((JStackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]!))!;
 		return result;

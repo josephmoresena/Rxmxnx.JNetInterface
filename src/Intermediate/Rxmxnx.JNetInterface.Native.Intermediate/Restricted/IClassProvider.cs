@@ -6,6 +6,39 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public interface IClassProvider
 {
 	/// <summary>
+	/// <c>boolean</c> class instance.
+	/// </summary>
+	JClassObject BooleanPrimitive { get; }
+	/// <summary>
+	/// <c>byte</c> class instance.
+	/// </summary>
+	JClassObject BytePrimitive { get; }
+	/// <summary>
+	/// <c>char</c> class instance.
+	/// </summary>
+	JClassObject CharPrimitive { get; }
+	/// <summary>
+	/// <c>double</c> class instance.
+	/// </summary>
+	JClassObject DoublePrimitive { get; }
+	/// <summary>
+	/// <c>float</c> class instance.
+	/// </summary>
+	JClassObject FloatPrimitive { get; }
+	/// <summary>
+	/// <c>int</c> class instance.
+	/// </summary>
+	JClassObject IntPrimitive { get; }
+	/// <summary>
+	/// <c>long</c> class instance.
+	/// </summary>
+	JClassObject LongPrimitive { get; }
+	/// <summary>
+	/// <c>short</c> class instance.
+	/// </summary>
+	JClassObject ShortPrimitive { get; }
+
+	/// <summary>
 	/// <c>java.lang.Object</c> class instance.
 	/// </summary>
 	JClassObject Object => this.GetClass<JLocalObject>();
@@ -40,35 +73,35 @@ public interface IClassProvider
 	/// <summary>
 	/// <c>java.lang.Boolean</c> class instance.
 	/// </summary>
-	JClassObject BooleanClassObject { get; }
+	JClassObject BooleanObject { get; }
 	/// <summary>
 	/// <c>java.lang.Byte</c> class instance.
 	/// </summary>
-	JClassObject ByteClassObject { get; }
+	JClassObject ByteObject { get; }
 	/// <summary>
 	/// <c>java.lang.Character</c> class instance.
 	/// </summary>
-	JClassObject CharacterClassObject { get; }
+	JClassObject CharacterObject { get; }
 	/// <summary>
 	/// <c>java.lang.Double</c> class instance.
 	/// </summary>
-	JClassObject DoubleClassObject { get; }
+	JClassObject DoubleObject { get; }
 	/// <summary>
 	/// <c>java.lang.Float</c> class instance.
 	/// </summary>
-	JClassObject FloatClassObject { get; }
+	JClassObject FloatObject { get; }
 	/// <summary>
 	/// <c>java.lang.Integer</c> class instance.
 	/// </summary>
-	JClassObject IntegerClassObject { get; }
+	JClassObject IntegerObject { get; }
 	/// <summary>
 	/// <c>java.lang.Long</c> class instance.
 	/// </summary>
-	JClassObject LongClassObject { get; }
+	JClassObject LongObject { get; }
 	/// <summary>
 	/// <c>java.lang.Short</c> class instance.
 	/// </summary>
-	JClassObject ShortClassObject { get; }
+	JClassObject ShortObject { get; }
 
 	/// <summary>
 	/// Retrieves the current <paramref name="jObject"/> instance as <see cref="JClassObject"/>.

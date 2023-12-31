@@ -110,4 +110,8 @@ internal partial class InternalFunctionCache
 	/// Constructor <c>java.lang.Short(short)</c>
 	/// </summary>
 	public static readonly JWrapperConstructor<JShort> ShortConstructor = new();
+	/// <summary>
+	/// The class instance representing the primitive type in wrapper classes.
+	/// </summary>
+	public static readonly JFieldDefinition<JClassObject> PrimitiveTypeDefinition = new("TYPE"u8);
 }

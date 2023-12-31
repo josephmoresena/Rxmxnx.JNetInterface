@@ -39,14 +39,14 @@ public interface IDummyEnvironment : IEnvironment, IAccessProvider, IClassProvid
 	void IAccessProvider.CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args)
 		=> definition.PrimitiveInvoke(bytes, jLocal, jClass, nonVirtual, args);
-	JClassObject IClassProvider.BooleanClassObject => this.GetClass<JBooleanObject>();
-	JClassObject IClassProvider.ByteClassObject => this.GetClass<JByteObject>();
-	JClassObject IClassProvider.CharacterClassObject => this.GetClass<JCharacterObject>();
-	JClassObject IClassProvider.DoubleClassObject => this.GetClass<JDoubleObject>();
-	JClassObject IClassProvider.FloatClassObject => this.GetClass<JFloatObject>();
-	JClassObject IClassProvider.IntegerClassObject => this.GetClass<JIntegerObject>();
-	JClassObject IClassProvider.LongClassObject => this.GetClass<JLongObject>();
-	JClassObject IClassProvider.ShortClassObject => this.GetClass<JShortObject>();
+	JClassObject IClassProvider.BooleanObject => this.GetClass<JBooleanObject>();
+	JClassObject IClassProvider.ByteObject => this.GetClass<JByteObject>();
+	JClassObject IClassProvider.CharacterObject => this.GetClass<JCharacterObject>();
+	JClassObject IClassProvider.DoubleObject => this.GetClass<JDoubleObject>();
+	JClassObject IClassProvider.FloatObject => this.GetClass<JFloatObject>();
+	JClassObject IClassProvider.IntegerObject => this.GetClass<JIntegerObject>();
+	JClassObject IClassProvider.LongObject => this.GetClass<JLongObject>();
+	JClassObject IClassProvider.ShortObject => this.GetClass<JShortObject>();
 
 	IAccessProvider IEnvironment.AccessProvider => this;
 	IClassProvider IEnvironment.ClassProvider => this;

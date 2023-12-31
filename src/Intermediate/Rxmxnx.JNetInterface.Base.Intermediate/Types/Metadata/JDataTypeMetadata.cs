@@ -57,6 +57,17 @@ public abstract record JDataTypeMetadata : ITypeInformation
 		this._signature = this._sequence[1];
 		this._arraySignature = this._sequence[2];
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="information">Internal sequence information.</param>
+	internal JDataTypeMetadata(CStringSequence information)
+	{
+		this._sequence = information;
+		this._className = this._sequence[0];
+		this._signature = this._sequence[1];
+		this._arraySignature = this._sequence[2];
+	}
 
 	/// <inheritdoc/>
 	public CString ClassName => this._className;
@@ -154,7 +165,7 @@ public abstract record JDataTypeMetadata : ITypeInformation
 			switch (index)
 			{
 				case 1:
-					JDataTypeMetadata.WriteSignature(span, arg[index].Bytes);
+					JDataTypeMetadata.WriteSignature(span, arg[0].Bytes);
 					break;
 				case 2:
 				{

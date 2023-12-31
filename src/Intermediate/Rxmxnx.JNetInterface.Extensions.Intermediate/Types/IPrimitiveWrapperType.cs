@@ -10,11 +10,6 @@ public interface IPrimitiveWrapperType : IClassType
 	/// Primitive metadata.
 	/// </summary>
 	internal static abstract JPrimitiveTypeMetadata PrimitiveMetadata { get; }
-	/// <summary>
-	/// Array signature.
-	/// </summary>
-	internal static virtual CString ArraySignature
-		=> ValidationUtilities.ThrowInvalidInterface<CString>(nameof(IPrimitiveWrapperType));
 
 	/// <summary>
 	/// Retrieves the metadata for given class type.

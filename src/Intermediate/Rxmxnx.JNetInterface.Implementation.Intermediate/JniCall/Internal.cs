@@ -9,7 +9,7 @@ public readonly ref partial struct JniCall
 		/// </summary>
 		/// <param name="call">Current <see cref="JniCall"/> instance.</param>
 		internal Builder(JniCall call) => this._call = call;
-		
+
 		/// <summary>
 		/// Retrieves initial <see cref="JLocalObject"/> instance for <paramref name="localRef"/>.
 		/// </summary>

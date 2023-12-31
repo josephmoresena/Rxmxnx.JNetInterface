@@ -7,8 +7,6 @@ public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimiti
 {
 	static JDataTypeMetadata IDataType.Metadata
 		=> new JPrimitiveWrapperTypeMetadata<JShortObject>(IClassType.GetMetadata<JNumberObject>());
-	static CString IPrimitiveWrapperType.ArraySignature
-		=> UnicodeWrapperObjectArraySignatures.JShortObjectArraySignature;
 
 	/// <inheritdoc/>
 	internal JShortObject(JClassObject jClass, JObjectLocalRef localRef, JShort value) :

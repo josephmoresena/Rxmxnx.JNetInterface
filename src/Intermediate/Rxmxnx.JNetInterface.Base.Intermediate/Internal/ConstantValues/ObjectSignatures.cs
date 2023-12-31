@@ -24,46 +24,7 @@ internal static class ObjectSignatures
 	/// </summary>
 	public const String JObjectSignature = ObjectSignatures.ObjectSignaturePrefix + ClassNames.JObjectClassName +
 		ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Byte</c> object.
-	/// </summary>
-	public const String JByteObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JByteObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Boolean</c> object.
-	/// </summary>
-	public const String JBooleanObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JBooleanObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Character</c> object.
-	/// </summary>
-	public const String JCharacterObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JCharacterObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Double</c> object.
-	/// </summary>
-	public const String JDoubleObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JDoubleObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Float</c> object.
-	/// </summary>
-	public const String JFloatObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JFloatObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Integer</c> object.
-	/// </summary>
-	public const String JIntegerObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JIntegerObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Long</c> object.
-	/// </summary>
-	public const String JLongObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JLongObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Short</c> object.
-	/// </summary>
-	public const String JShortObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JShortObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
+
 	/// <summary>
 	/// JNI signature for <c>java.lang.String</c> object.
 	/// </summary>

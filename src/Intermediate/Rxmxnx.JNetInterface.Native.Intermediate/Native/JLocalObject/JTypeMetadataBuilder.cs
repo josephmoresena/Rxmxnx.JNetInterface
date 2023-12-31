@@ -186,16 +186,6 @@ public partial class JLocalObject
 		}
 
 		/// <summary>
-		/// Sets the type signature.
-		/// </summary>
-		/// <param name="signature">Type signature.</param>
-		/// <returns>Current instance.</returns>
-		public JTypeMetadataBuilder<TClass> WithSignature(CString signature)
-		{
-			this._builder.WithSignature(signature);
-			return this;
-		}
-		/// <summary>
 		/// Appends an interface to current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
@@ -213,6 +203,17 @@ public partial class JLocalObject
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JClassTypeMetadata Build()
 			=> new JClassGenericTypeMetadata(this._builder, this._modifier, this._baseMetadata);
+
+		/// <summary>
+		/// Sets the type signature.
+		/// </summary>
+		/// <param name="signature">Type signature.</param>
+		/// <returns>Current instance.</returns>
+		internal JTypeMetadataBuilder<TClass> WithSignature(CString signature)
+		{
+			this._builder.WithSignature(signature);
+			return this;
+		}
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.

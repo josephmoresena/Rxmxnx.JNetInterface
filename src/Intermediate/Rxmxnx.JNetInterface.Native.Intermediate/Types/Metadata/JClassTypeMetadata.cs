@@ -11,4 +11,6 @@ public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 	/// <inheritdoc/>
 	internal JClassTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) :
 		base(className, signature) { }
+	/// <inheritdoc/>
+	internal JClassTypeMetadata(CStringSequence information) : base(information) { }
 }

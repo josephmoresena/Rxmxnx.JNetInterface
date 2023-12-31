@@ -13,4 +13,6 @@ public abstract record JPrimitiveWrapperTypeMetadata : JClassTypeMetadata
 	/// <inheritdoc/>
 	internal JPrimitiveWrapperTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
+	/// <inheritdoc/>
+	internal JPrimitiveWrapperTypeMetadata(CStringSequence information) : base(information) { }
 }

@@ -9,10 +9,7 @@ public sealed class JTypeObject : JInterfaceObject<JTypeObject>, IInterfaceType<
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata typeMetadata = JTypeMetadataBuilder<JTypeObject>
-	                                                              .Create(UnicodeClassNames.JTypeInterfaceName)
-	                                                              .WithSignature(
-		                                                              UnicodeObjectSignatures.JTypeObjectSignature)
-	                                                              .Build();
+	                                                              .Create("java/reflect/Type"u8).Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JTypeObject.typeMetadata;
 

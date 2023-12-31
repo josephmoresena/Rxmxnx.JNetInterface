@@ -4,8 +4,6 @@ public sealed partial class JCharacterObject
 {
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => IPrimitiveType.GetMetadata<JChar>();
 	static JDataTypeMetadata IDataType.Metadata => new JPrimitiveWrapperTypeMetadata<JCharacterObject>();
-	static CString IPrimitiveWrapperType.ArraySignature
-		=> UnicodeWrapperObjectArraySignatures.JCharacterObjectArraySignature;
 
 	/// <inheritdoc cref="JCharacterObject.Value"/>
 	private JChar? _value;
@@ -14,7 +12,7 @@ public sealed partial class JCharacterObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	private JCharacterObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.CharacterClassObject)
+	private JCharacterObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.CharacterObject)
 	{
 		if (jLocal is JCharacterObject wrapper)
 			this._value = wrapper._value;

@@ -56,9 +56,8 @@ public partial class JVirtualMachine
 		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.CreateGlobalReference));
 		JEnvironment env = this.GetEnvironment(thread.Reference);
 		GlobalMainClasses mainClasses = this._cache.MainClasses;
-		mainClasses.ClassObject.SetValue(env.GetClassGlobalRef(mainClasses.ClassMetadata.Name));
-		mainClasses.ThrowableObject.SetValue(env.GetClassGlobalRef(mainClasses.ThrowableMetadata.Name));
-		mainClasses.StackTraceElementObject.SetValue(env.GetClassGlobalRef(mainClasses.StackTraceElementMetadata.Name));
+		mainClasses.Load(env);
+		mainClasses.Register(this._cache);
 	}
 
 	/// <summary>

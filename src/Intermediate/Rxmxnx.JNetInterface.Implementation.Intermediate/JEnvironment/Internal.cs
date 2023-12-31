@@ -39,11 +39,13 @@ public partial class JEnvironment
 	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
-	/// <param name="className">Class name.</param>
+	/// <param name="metadata">Class metadata name.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal JGlobalRef GetClassGlobalRef(CString className)
+	internal JGlobalRef GetClassGlobalRef(JClassObjectMetadata metadata)
 	{
-		JClassLocalRef classRef = className.WithSafeFixed(this._cache, JEnvironmentCache.FindClass);
+		JClassLocalRef classRef = metadata.ClassSignature.Length != 1 ?
+			metadata.Name.WithSafeFixed(this._cache, JEnvironmentCache.FindClass) :
+			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
 		try
 		{
 			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value);

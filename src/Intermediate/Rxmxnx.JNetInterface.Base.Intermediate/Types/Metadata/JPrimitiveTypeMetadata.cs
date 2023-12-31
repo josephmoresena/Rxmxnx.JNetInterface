@@ -6,9 +6,13 @@
 public abstract record JPrimitiveTypeMetadata : JDataTypeMetadata
 {
 	/// <summary>
+	/// JNI name for current type wrapper class.
+	/// </summary>
+	public abstract CString WrapperClassSignature { get; }
+	/// <summary>
 	/// JNI signature for current type wrapper class.
 	/// </summary>
-	public abstract CString ClassSignature { get; }
+	public abstract CString WrapperClassName { get; }
 	/// <summary>
 	/// Underline primitive CLR type.
 	/// </summary>
@@ -22,6 +26,11 @@ public abstract record JPrimitiveTypeMetadata : JDataTypeMetadata
 	public override JTypeKind Kind => JTypeKind.Primitive;
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier => JTypeModifier.Final;
+
+	/// <summary>
+	/// Information of wrapper class.
+	/// </summary>
+	internal abstract CStringSequence WrapperInformation { get; }
 
 	/// <summary>
 	/// Constructor.

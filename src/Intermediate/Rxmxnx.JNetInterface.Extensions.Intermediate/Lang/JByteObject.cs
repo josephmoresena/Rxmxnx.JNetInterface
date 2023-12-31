@@ -7,8 +7,6 @@ public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveW
 {
 	static JDataTypeMetadata IDataType.Metadata
 		=> new JPrimitiveWrapperTypeMetadata<JByteObject>(IClassType.GetMetadata<JNumberObject>());
-	static CString IPrimitiveWrapperType.ArraySignature
-		=> UnicodeWrapperObjectArraySignatures.JByteObjectArraySignature;
 
 	/// <inheritdoc/>
 	internal JByteObject(JClassObject jClass, JObjectLocalRef localRef, JByte value) : base(jClass, localRef, value) { }

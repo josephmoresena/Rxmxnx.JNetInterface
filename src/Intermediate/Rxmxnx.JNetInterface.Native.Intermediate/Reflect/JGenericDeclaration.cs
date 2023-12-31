@@ -11,11 +11,7 @@ public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclara
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata typeMetadata = JTypeMetadataBuilder<JGenericDeclarationObject>
-	                                                              .Create(UnicodeClassNames
-		                                                                      .JGenericDeclarationInterfaceName)
-	                                                              .WithSignature(
-		                                                              UnicodeObjectSignatures
-			                                                              .JGenericDeclarationObjectSignature)
+	                                                              .Create("java/reflect/GenericDeclaration"u8)
 	                                                              .Extends<JAnnotatedElementObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JGenericDeclarationObject.typeMetadata;

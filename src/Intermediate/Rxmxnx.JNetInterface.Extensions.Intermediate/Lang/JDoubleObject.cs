@@ -7,8 +7,6 @@ public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrim
 {
 	static JDataTypeMetadata IDataType.Metadata
 		=> new JPrimitiveWrapperTypeMetadata<JDoubleObject>(IClassType.GetMetadata<JNumberObject>());
-	static CString IPrimitiveWrapperType.ArraySignature
-		=> UnicodeWrapperObjectArraySignatures.JDoubleObjectArraySignature;
 
 	/// <inheritdoc/>
 	internal JDoubleObject(JClassObject jClass, JObjectLocalRef localRef, JDouble value) :

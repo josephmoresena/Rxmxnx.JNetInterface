@@ -25,6 +25,8 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	/// <param name="signature">JNI signature for current type.</param>
 	internal JReferenceTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
+	/// <inheritdoc/>
+	internal JReferenceTypeMetadata(CStringSequence information) : base(information) { }
 
 	/// <summary>
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="jLocal"/>.

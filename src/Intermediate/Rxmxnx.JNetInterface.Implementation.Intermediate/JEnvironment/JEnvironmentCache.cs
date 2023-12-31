@@ -245,18 +245,35 @@ public partial class JEnvironment
 			this.Reference = envRef;
 			this._delegateCache = new();
 			this._objects = new();
-			this._mainClasses = this.Register(mainClasses);
+			this._mainClasses = mainClasses.Register(this);
 			this.Functions = new();
 			this.Thread = Thread.CurrentThread;
 			this.Version = JEnvironmentCache.GetVersion(envRef);
 			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this, this._cancellation.Token);
 		}
-		/// <inheritdoc cref="IClassProvider.ClassObject"/>
+
+		/// <inheritdoc/>
 		public JClassObject ClassObject => this._mainClasses.ClassObject;
-		/// <inheritdoc cref="IClassProvider.ThrowableObject"/>
+		/// <inheritdoc/>
 		public JClassObject ThrowableObject => this._mainClasses.ThrowableObject;
-		/// <inheritdoc cref="IClassProvider.StackTraceElementObject"/>
+		/// <inheritdoc/>
 		public JClassObject StackTraceElementObject => this._mainClasses.StackTraceElementObject;
+		/// <inheritdoc/>
+		public JClassObject BooleanPrimitive => this._mainClasses.BooleanPrimitive;
+		/// <inheritdoc/>
+		public JClassObject BytePrimitive => this._mainClasses.BytePrimitive;
+		/// <inheritdoc/>
+		public JClassObject CharPrimitive => this._mainClasses.CharPrimitive;
+		/// <inheritdoc/>
+		public JClassObject DoublePrimitive => this._mainClasses.DoublePrimitive;
+		/// <inheritdoc/>
+		public JClassObject FloatPrimitive => this._mainClasses.FloatPrimitive;
+		/// <inheritdoc/>
+		public JClassObject IntPrimitive => this._mainClasses.IntPrimitive;
+		/// <inheritdoc/>
+		public JClassObject LongPrimitive => this._mainClasses.LongPrimitive;
+		/// <inheritdoc/>
+		public JClassObject ShortPrimitive => this._mainClasses.ShortPrimitive;
 
 		/// <summary>
 		/// Retrieves a <typeparamref name="TDelegate"/> instance for <typeparamref name="TDelegate"/>.
@@ -438,6 +455,37 @@ public partial class JEnvironment
 			this._classes[jClass.Hash] = jClass;
 			this.VirtualMachine.LoadGlobal(jClass);
 		}
+		/// <summary>
+		/// Retrieves a <see cref="JClassLocalRef"/> reference for primitive class.
+		/// </summary>
+		/// <param name="signature">Primitive signature.</param>
+		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+		public JClassLocalRef FindPrimitiveClass(Byte signature)
+		{
+			using JClassObject wrapperClass = signature switch
+			{
+				0x5A => //Z
+					this.GetClass<JBooleanObject>(),
+				0x42 => //B
+					this.GetClass<JByteObject>(),
+				0x43 => //C
+					this.GetClass<JCharacterObject>(),
+				0x44 => //D
+					this.GetClass<JDoubleObject>(),
+				0x46 => //F
+					this.GetClass<JFloatObject>(),
+				0x49 => //I
+					this.GetClass<JIntegerObject>(),
+				0x4A => //J
+					this.GetClass<JLongObject>(),
+				0x53 => //S
+					this.GetClass<JShortObject>(),
+				_ => throw new InvalidOperationException("Object is not primitive."),
+			};
+			JObjectLocalRef localRef =
+				this.GetStaticObjectField(wrapperClass, InternalFunctionCache.PrimitiveTypeDefinition);
+			return NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
+		}
 
 		/// <summary>
 		/// Reloads current class object.
@@ -449,7 +497,7 @@ public partial class JEnvironment
 			if (jClass is null) return default;
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
 			if (classRef.Value != default) return classRef;
-			classRef = jClass.Name.WithSafeFixed(this, JEnvironmentCache.FindClass);
+			classRef = this.FindClass(jClass);
 			jClass.SetValue(classRef);
 			this.Register(jClass);
 			return classRef;
@@ -498,18 +546,6 @@ public partial class JEnvironment
 			return this.Reference.Reference.GetAdditionalPointers(this.Version)[index];
 		}
 		/// <summary>
-		/// Registers a <see cref="LocalMainClasses"/> in current <see cref="IEnvironment"/> instance.
-		/// </summary>
-		/// <param name="mainClasses">A <see cref="LocalMainClasses"/> instance.</param>
-		/// <returns>A <see cref="LocalMainClasses"/> instance.</returns>
-		private LocalMainClasses Register(LocalMainClasses mainClasses)
-		{
-			this.Register(mainClasses.ClassObject);
-			this.Register(mainClasses.ThrowableObject);
-			this.Register(mainClasses.StackTraceElementObject);
-			return mainClasses;
-		}
-		/// <summary>
 		/// Indicates whether current JNI call must use <see langword="stackalloc"/> or <see langword="new"/> to
 		/// hold JNI call parameter.
 		/// </summary>
@@ -525,6 +561,15 @@ public partial class JEnvironment
 			this._usedStackBytes -= requiredBytes;
 			return false;
 		}
+		/// <summary>
+		/// Retrieves <see cref="JClassLocalRef"/> reference for given instance.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+		private JClassLocalRef FindClass(JClassObject jClass)
+			=> jClass.ClassSignature.Length != 1 ?
+				jClass.Name.WithSafeFixed(this, JEnvironmentCache.FindClass) :
+				this.FindPrimitiveClass(jClass.ClassSignature[0]);
 
 		/// <summary>
 		/// Retrieves JNI version for <paramref name="envRef"/>.

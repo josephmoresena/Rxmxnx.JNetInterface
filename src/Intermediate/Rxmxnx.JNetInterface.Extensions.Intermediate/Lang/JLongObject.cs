@@ -7,8 +7,6 @@ public sealed class JLongObject : JNumberObject<JLong, JLongObject>, IPrimitiveW
 {
 	static JDataTypeMetadata IDataType.Metadata
 		=> new JPrimitiveWrapperTypeMetadata<JLongObject>(IClassType.GetMetadata<JNumberObject>());
-	static CString IPrimitiveWrapperType.ArraySignature
-		=> UnicodeWrapperObjectArraySignatures.JLongObjectArraySignature;
 
 	/// <inheritdoc/>
 	internal JLongObject(JClassObject jClass, JObjectLocalRef localRef, JLong value) : base(jClass, localRef, value) { }
