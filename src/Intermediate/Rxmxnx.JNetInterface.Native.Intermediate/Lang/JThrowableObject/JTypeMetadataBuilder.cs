@@ -51,8 +51,7 @@ public partial class JThrowableObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public JTypeMetadataBuilder<TThrowable> Implements<
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
+		public JTypeMetadataBuilder<TThrowable> Implements<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			this._builder.AppendInterface<TInterface>(
@@ -78,9 +77,9 @@ public partial class JThrowableObject
 			ValidationUtilities.ValidateNotEmpty(className);
 			ISet<Type> baseTypes = IReferenceType<TThrowable>.GetBaseTypes().ToHashSet();
 			ISet<Type> interfaceTypes = IReferenceType<TThrowable>.GetInterfaceTypes().ToHashSet();
-			JClassTypeMetadata? baseMetadata = typeof(TThrowable) != typeof(JLocalObject) ?
-				IClassType.GetMetadata<JLocalObject>() :
-				default;
+			JClassTypeMetadata? baseMetadata = typeof(TThrowable) != typeof(JThrowableObject) ?
+				IClassType.GetMetadata<JThrowableObject>() :
+				IClassType.GetMetadata<JLocalObject>();
 			return new(className, modifier, baseMetadata, baseTypes, interfaceTypes);
 		}
 		/// <summary>

@@ -17,7 +17,6 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	public static JNativeType Type => JNativeType.JDouble;
 
 	static JDataTypeMetadata IDataType.Metadata => JDouble.typeMetadata;
-	static Type? IDataType.FamilyType => default;
 	static JNativeType IPrimitiveType.JniType => JDouble.Type;
 
 	/// <summary>

@@ -5,11 +5,9 @@ namespace Rxmxnx.JNetInterface.Types.Inheritance;
 /// </summary>
 /// <typeparam name="TDerivative">Type of a datatype which is derived of <typeparamref name="TBase"/>.</typeparam>
 /// <typeparam name="TBase">Type of datatype which <typeparamref name="TDerivative"/> extends or implements.</typeparam>
-[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IDerivedType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TDerivative,
-	TBase> : IDataType<TDerivative> where TDerivative : JReferenceObject, IDataType<TDerivative>
-	where TBase : JReferenceObject, IDataType<TBase>
+public interface IDerivedType<out TDerivative, TBase> : IDataType<TDerivative>
+	where TDerivative : JReferenceObject, IDataType<TDerivative> where TBase : JReferenceObject, IDataType<TBase>
 {
 	/// <summary>
 	/// Type of current derivation.

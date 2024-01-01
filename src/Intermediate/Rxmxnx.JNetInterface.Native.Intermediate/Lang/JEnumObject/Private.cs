@@ -6,7 +6,6 @@ public partial class JEnumObject
 	/// String of enum value.
 	/// </summary>
 	private String? _name;
-
 	/// <summary>
 	/// Ordinal of enum value.
 	/// </summary>

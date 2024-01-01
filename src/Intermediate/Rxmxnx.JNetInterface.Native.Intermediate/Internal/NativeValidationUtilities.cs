@@ -12,7 +12,6 @@ internal static class NativeValidationUtilities
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <typeparamref name="TObject"/> is abstract.
 	/// </exception>
-	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 	public static void ThrowIfAbstractClass<TObject>() where TObject : JReferenceObject, IReferenceType<TObject>
 	{
 		JDataTypeMetadata typeMetadata = IDataType.GetMetadata<TObject>();
@@ -28,7 +27,6 @@ internal static class NativeValidationUtilities
 	/// <exception cref="ArgumentException">
 	/// Throws an exception if <typeparamref name="TReference"/> can't extend <typeparamref name="TOtherReference"/>.
 	/// </exception>
-	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 	public static void ThrowIfInvalidExtension<TReference, TOtherReference>(ReadOnlySpan<Byte> typeName)
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		where TOtherReference : JReferenceObject, IReferenceType<TOtherReference>
@@ -50,7 +48,6 @@ internal static class NativeValidationUtilities
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <typeparamref name="TBase"/> and <typeparamref name="TReference"/> are the same type.
 	/// </exception>
-	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 	public static void ThrowIfSameType<TBase, TReference>(ReadOnlySpan<Byte> typeName)
 		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
 	{
@@ -63,11 +60,9 @@ internal static class NativeValidationUtilities
 	/// <typeparam name="TBase">Base type of <typeparamref name="TReference"/>.</typeparam>
 	/// <typeparam name="TReference">Type of <see cref="IReferenceType{TReference}"/>.</typeparam>
 	/// <param name="typeName">Name of <see cref="IReferenceType{TReference}"/> type.</param>
-	/// <returns>The set of <typeparamref name="TReference"/> base types.</returns>
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
 	/// </exception>
-	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 	public static ISet<Type> ValidateBaseTypes<TBase, TReference>(ReadOnlySpan<Byte> typeName)
 		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
 	{
@@ -88,9 +83,7 @@ internal static class NativeValidationUtilities
 	/// <param name="typeName">Name of implementing type.</param>
 	/// <param name="isClass">Indicates whether implementing type is a class.</param>
 	/// <exception cref="NotImplementedException">Always thrown.</exception>
-	public static void
-		ThrowInvalidImplementation<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>(
-			ReadOnlySpan<Byte> typeName, Boolean isClass)
+	public static void ThrowInvalidImplementation<TInterface>(ReadOnlySpan<Byte> typeName, Boolean isClass)
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 	{
 		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();

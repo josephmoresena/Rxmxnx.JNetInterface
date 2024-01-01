@@ -17,7 +17,6 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	public static JNativeType Type => JNativeType.JInt;
 
 	static JDataTypeMetadata IDataType.Metadata => JInt.typeMetadata;
-	static Type? IDataType.FamilyType => default;
 	static JNativeType IPrimitiveType.JniType => JInt.Type;
 
 	/// <summary>

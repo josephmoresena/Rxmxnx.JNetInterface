@@ -12,7 +12,6 @@ public interface IReferenceType : IObject, IDataType, IDisposable
 	/// <typeparam name="TReference">Type of current java reference datatype.</typeparam>
 	/// <returns>The <see cref="JReferenceTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 	public new static JReferenceTypeMetadata GetMetadata<TReference>()
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		=> (JReferenceTypeMetadata)IDataType.GetMetadata<TReference>();
@@ -23,10 +22,8 @@ public interface IReferenceType : IObject, IDataType, IDisposable
 /// </summary>
 /// <typeparam name="TReference">Type of java reference type.</typeparam>
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface
-	IReferenceType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TReference> :
-	IReferenceType,
-	IDataType<TReference> where TReference : JReferenceObject, IReferenceType<TReference>
+public interface IReferenceType<out TReference> : IReferenceType, IDataType<TReference>
+	where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>
 	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.
@@ -59,6 +56,7 @@ public interface
 	/// Retrieves the interfaces types from current type.
 	/// </summary>
 	/// <returns>Enumerable of types.</returns>
+	[UnconditionalSuppressMessage("Trim analysis", "IL2090")]
 	internal static IEnumerable<Type> GetInterfaceTypes()
 	{
 		Type[] interfaceTypes = typeof(TReference).GetInterfaces();

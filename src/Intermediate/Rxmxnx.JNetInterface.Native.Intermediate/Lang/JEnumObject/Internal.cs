@@ -10,6 +10,7 @@ public partial class JEnumObject
 		.Implements<JComparableObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JEnumObject.JEnumClassMetadata;
+	static Type IDataType.FamilyType => typeof(JLocalObject);
 	static JClassTypeMetadata IBaseClassType<JEnumObject>.SuperClassMetadata => JEnumObject.JEnumClassMetadata;
 
 	/// <summary>

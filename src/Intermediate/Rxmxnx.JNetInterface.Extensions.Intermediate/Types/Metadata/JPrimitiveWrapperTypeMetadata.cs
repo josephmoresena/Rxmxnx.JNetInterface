@@ -3,10 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for a primitive wrapper class <see cref="IDataType"/> type.
 /// </summary>
-internal sealed record
-	JPrimitiveWrapperTypeMetadata<
-		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TWrapper> :
-	JPrimitiveWrapperTypeMetadata
+internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapperTypeMetadata
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
 {
 	/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>

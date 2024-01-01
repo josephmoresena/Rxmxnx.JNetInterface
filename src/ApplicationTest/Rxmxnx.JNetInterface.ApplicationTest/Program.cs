@@ -16,7 +16,7 @@ public static class Program
 	public static void Main(String[] args)
 	{
 		Console.WriteLine("Hello, World!");
-		//Program.PrintBuiltIntMetadata();
+		Program.PrintBuiltIntMetadata();
 		//Program.PrintArrayMetadata(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JInt>>>>>.Metadata, 10);
 		//Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 10);
 		Program.PrintVirtualMachineInfo(

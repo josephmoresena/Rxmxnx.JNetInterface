@@ -12,7 +12,7 @@ public interface IDataType
 	/// <summary>
 	/// Datatype family type.
 	/// </summary>
-	internal static virtual Type? FamilyType => ValidationUtilities.ThrowInvalidInterface<Type>(nameof(IDataType));
+	internal static virtual Type? FamilyType => default;
 
 	/// <summary>
 	/// Current type metadata.
@@ -45,11 +45,6 @@ public interface IDataType
 /// <typeparam name="TDataType">Type of current Java datatype.</typeparam>
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
-	/// <summary>
-	/// Self CLR type.
-	/// </summary>
-	internal static virtual Type SelfType => typeof(IDataType<TDataType>);
-
 	static JDataTypeMetadata IDataType.Metadata
 		=> ValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));
 }

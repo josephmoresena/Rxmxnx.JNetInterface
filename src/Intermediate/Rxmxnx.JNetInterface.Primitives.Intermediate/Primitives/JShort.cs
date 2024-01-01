@@ -17,7 +17,6 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	public static JNativeType Type => JNativeType.JShort;
 
 	static JDataTypeMetadata IDataType.Metadata => JShort.typeMetadata;
-	static Type? IDataType.FamilyType => default;
 	static JNativeType IPrimitiveType.JniType => JShort.Type;
 
 	/// <summary>

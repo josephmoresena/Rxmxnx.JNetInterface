@@ -22,9 +22,5 @@ public interface IClassType : IReferenceType
 /// This interface exposes an object that represents a java class type instance.
 /// </summary>
 /// <typeparam name="TClass">Type of java class type.</typeparam>
-[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 public interface IClassType<out TClass> : IClassType, IReferenceType<TClass>
-	where TClass : JReferenceObject, IClassType<TClass>
-{
-	static Type IDataType<TClass>.SelfType => typeof(IClassType<TClass>);
-}
+	where TClass : JReferenceObject, IClassType<TClass> { }

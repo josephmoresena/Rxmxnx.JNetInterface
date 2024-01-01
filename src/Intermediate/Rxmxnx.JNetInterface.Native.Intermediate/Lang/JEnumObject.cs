@@ -45,8 +45,10 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 /// This class represents a local <c>java.lang.Enum</c> instance.
 /// </summary>
 /// <typeparam name="TEnum">Type of java enum type.</typeparam>
-public abstract class JEnumObject<TEnum> : JEnumObject where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
+public abstract class JEnumObject<TEnum> : JEnumObject, IDataType where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {
+	static Type IDataType.FamilyType => typeof(JEnumObject);
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>

@@ -17,7 +17,6 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	public static JNativeType Type => JNativeType.JLong;
 
 	static JDataTypeMetadata IDataType.Metadata => JLong.typeMetadata;
-	static Type? IDataType.FamilyType => default;
 	static JNativeType IPrimitiveType.JniType => JLong.Type;
 
 	/// <summary>

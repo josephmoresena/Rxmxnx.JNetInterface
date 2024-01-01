@@ -22,18 +22,13 @@ public interface IArrayType : IReferenceType
 /// This interface exposes an object that represents a java array type instance.
 /// </summary>
 /// <typeparam name="TArray">Type of java class type.</typeparam>
-[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
-public interface IArrayType<out TArray> : IArrayType, IReferenceType<TArray>
-	where TArray : JArrayObject, IArrayType<TArray>
-{
-	static Type IDataType<TArray>.SelfType => typeof(IArrayType<TArray>);
-}
+public interface IArrayType<TArray> : IArrayType, IReferenceType<TArray>
+	where TArray : JArrayObject, IArrayType<TArray> { }
 
 /// <summary>
 /// This interface exposes an object that represents a java array type instance.
 /// </summary>
 /// <typeparam name="TArray">Type of java class type.</typeparam>
 /// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
-[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
-public interface IArrayType<out TArray, TElement> : IArrayType<JArrayObject<TElement>>, IArrayObject<TElement>
+public interface IArrayType<TArray, TElement> : IArrayType<JArrayObject<TElement>>, IArrayObject<TElement>
 	where TArray : JArrayObject, IArrayType<TArray, TElement> where TElement : IObject, IDataType<TElement> { }

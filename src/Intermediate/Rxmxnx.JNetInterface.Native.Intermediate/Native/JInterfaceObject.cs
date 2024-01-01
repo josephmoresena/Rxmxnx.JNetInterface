@@ -43,8 +43,7 @@ public abstract partial class JInterfaceObject : JLocalObject, IInterfaceType
 /// This class represents a local interface instance.
 /// </summary>
 /// <typeparam name="TInterface">Type of <see cref="IInterfaceType"/>.</typeparam>
-public abstract class JInterfaceObject<
-	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface> : JInterfaceObject
+public abstract class JInterfaceObject<TInterface> : JInterfaceObject
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	/// <inheritdoc/>

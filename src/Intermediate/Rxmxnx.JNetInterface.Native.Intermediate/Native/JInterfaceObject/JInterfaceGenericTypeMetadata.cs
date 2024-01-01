@@ -29,7 +29,6 @@ public partial class JInterfaceObject
 			internal override TInterface? ParseInstance(JLocalObject? jLocal)
 				=> jLocal as TInterface ?? TInterface.Create(jLocal);
 			/// <inheritdoc/>
-			[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 			internal override Type GetImplementingType<TReference>() => typeof(IDerivedType<TReference, TInterface>);
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata()

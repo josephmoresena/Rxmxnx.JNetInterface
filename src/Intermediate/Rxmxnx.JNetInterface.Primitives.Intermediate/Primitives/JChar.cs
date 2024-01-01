@@ -17,7 +17,6 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	public static JNativeType Type => JNativeType.JChar;
 
 	static JDataTypeMetadata IDataType.Metadata => JChar.typeMetadata;
-	static Type? IDataType.FamilyType => default;
 	static JNativeType IPrimitiveType.JniType => JChar.Type;
 
 	/// <summary>

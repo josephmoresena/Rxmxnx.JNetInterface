@@ -24,7 +24,7 @@ public partial class JLocalObject
 		/// </summary>
 		private readonly Func<JInterfaceTypeMetadata, Type> _getImplementingType;
 		/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
-		private readonly HashSet<JInterfaceTypeMetadata> _interfaces = new();
+		private readonly HashSet<JInterfaceTypeMetadata> _interfaces = [];
 
 		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 		private ReadOnlySpan<Byte> _signature;
@@ -87,8 +87,8 @@ public partial class JLocalObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public void AppendInterface<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>(
-			Type implementingType) where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+		public void AppendInterface<TInterface>(Type implementingType)
+			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			if (!this._interfaceTypes.Contains(implementingType))
 				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
@@ -111,32 +111,12 @@ public partial class JLocalObject
 		public IImmutableSet<JInterfaceTypeMetadata> CreateInterfaceSet() => this._interfaces.ToImmutableHashSet();
 
 		/// <summary>
-		/// Indicates whether <typeparamref name="TClass"/> type implements <typeparamref name="TInterface"/>.
-		/// </summary>
-		/// <typeparam name="TClass">Type of <c/>java.lang.Object<c/> class.</typeparam>
-		/// <typeparam name="TInterface">Type of java interface.</typeparam>
-		/// <returns>
-		/// <see langword="true"/> <typeparamref name="TClass"/> type implements <typeparamref name="TInterface"/>;
-		/// otherwise, <see langword="false"/>.
-		/// </returns>
-		public static Boolean HasInterface<
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass,
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
-			where TClass : JLocalObject, IReferenceType<TClass>
-			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
-		{
-			Type typeofT = typeof(TClass);
-			return typeofT.GetInterfaces()
-			              .Any(interfaceType => interfaceType == typeof(IDerivedType<TClass, TInterface>));
-		}
-		/// <summary>
 		/// Retrieves implementing type of <typeparamref name="TInterface"/> in <typeparamref name="TReference"/>.
 		/// </summary>
 		/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 		/// <typeparam name="TInterface">A <see cref="IInterfaceType{TInterface}"/> type.</typeparam>
 		/// <returns>A <see cref="Type"/> instance.</returns>
-		public static Type GetImplementingType<TReference,
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
+		public static Type GetImplementingType<TReference, TInterface>()
 			where TReference : JLocalObject, IReferenceType<TReference>
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 			=> typeof(IDerivedType<TReference, TInterface>);
@@ -190,8 +170,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public JTypeMetadataBuilder<TClass> Implements<
-			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
+		public JTypeMetadataBuilder<TClass> Implements<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			this._builder.AppendInterface<TInterface>(JTypeMetadataBuilder.GetImplementingType<TClass, TInterface>());

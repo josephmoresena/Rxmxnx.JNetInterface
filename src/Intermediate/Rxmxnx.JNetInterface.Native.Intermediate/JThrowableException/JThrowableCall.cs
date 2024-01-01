@@ -31,8 +31,7 @@ public partial class JThrowableException
 		/// Invokes current delegate as <see cref="Action{TThrowable}"/>.
 		/// </summary>
 		/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
-		public void Invoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable>()
-			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		public void Invoke<TThrowable>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			if (this._delegate is not Action<TThrowable> action) return;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
@@ -47,8 +46,7 @@ public partial class JThrowableException
 		/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
 		/// <typeparam name="TResult">Type of function result.</typeparam>
 		/// <returns>Function result.</returns>
-		public TResult Invoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable,
-			TResult>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		public TResult Invoke<TThrowable, TResult>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			if (this._delegate is not Func<TThrowable, TResult> func) return default!;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);

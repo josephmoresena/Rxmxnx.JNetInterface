@@ -26,7 +26,6 @@ public interface IPrimitiveWrapperType : IClassType
 /// This interface exposes an object that represents a java primitive wrapper class type instance.
 /// </summary>
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
-[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 public interface IPrimitiveWrapperType<TWrapper> : IPrimitiveWrapperType, IClassType<TWrapper>,
 	IInterfaceImplementation<TWrapper, JSerializableObject>, IInterfaceImplementation<TWrapper, JComparableObject>
 	where TWrapper : JLocalObject, IClassType<TWrapper>, IInterfaceImplementation<TWrapper, JSerializableObject>,
@@ -37,7 +36,6 @@ public interface IPrimitiveWrapperType<TWrapper> : IPrimitiveWrapperType, IClass
 /// </summary>
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
 /// <typeparam name="TValue"><see cref="IPrimitiveType"/> type.</typeparam>
-[UnconditionalSuppressMessage("Trim analysis", "IL2091")]
 public interface IPrimitiveWrapperType<TWrapper, TValue> : IPrimitiveWrapperType<TWrapper>, IWrapper<TValue>
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper> where TValue : unmanaged, IPrimitiveType<TValue>
 {

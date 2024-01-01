@@ -37,7 +37,6 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 public interface IPrimitiveType<TPrimitive> : IPrimitiveType, IDataType<TPrimitive>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {
-	static Type IDataType<TPrimitive>.SelfType => typeof(IPrimitiveType<TPrimitive>);
 	static JTypeKind IDataType.Kind => JTypeKind.Primitive;
 
 	/// <summary>
