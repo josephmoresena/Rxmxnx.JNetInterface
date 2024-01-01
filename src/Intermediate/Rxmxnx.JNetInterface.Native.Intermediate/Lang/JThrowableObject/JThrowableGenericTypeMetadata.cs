@@ -11,8 +11,6 @@ public partial class JThrowableObject
 		{
 			/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 			private readonly JClassTypeMetadata? _baseMetadata;
-			/// <inheritdoc cref="JDataTypeMetadata.BaseTypes"/>
-			private readonly ISet<Type> _baseTypes;
 			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 			private readonly IImmutableSet<JInterfaceTypeMetadata> _interfaces;
 			/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
@@ -24,8 +22,6 @@ public partial class JThrowableObject
 			public override JClassTypeMetadata? BaseMetadata => this._baseMetadata;
 			/// <inheritdoc/>
 			public override JTypeModifier Modifier => this._modifier;
-			/// <inheritdoc/>
-			public override IReadOnlySet<Type> BaseTypes => (IReadOnlySet<Type>)this._baseTypes;
 			/// <inheritdoc/>
 			public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
 
@@ -41,7 +37,6 @@ public partial class JThrowableObject
 				this._modifier = modifier;
 				this._interfaces = builder.CreateInterfaceSet();
 				this._baseMetadata = baseMetadata;
-				this._baseTypes = builder.BaseTypes;
 			}
 
 			/// <inheritdoc/>

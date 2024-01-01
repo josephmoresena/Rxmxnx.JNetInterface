@@ -12,10 +12,6 @@ public partial class JLocalObject
 		/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
 		private readonly JTypeKind _kind;
 		/// <summary>
-		/// Base types.
-		/// </summary>
-		private readonly ISet<Type> _baseTypes;
-		/// <summary>
 		/// Interface types.
 		/// </summary>
 		private readonly ISet<Type> _interfaceTypes;
@@ -33,28 +29,9 @@ public partial class JLocalObject
 		public ReadOnlySpan<Byte> DataTypeName => this._dataTypeName;
 		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 		public ReadOnlySpan<Byte> Signature => this._signature;
-		/// <inheritdoc cref="JDataTypeMetadata.BaseTypes"/>
-		public ISet<Type> BaseTypes => this._baseTypes;
 		/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
 		public JTypeKind Kind => this._kind;
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		/// <param name="dataTypeName">Datatype name.</param>
-		/// <param name="kind">Java datatype kind.</param>
-		/// <param name="getImplementingType">Delegate for retrieve implementing type.</param>
-		/// <param name="baseTypes">Base types.</param>
-		/// <param name="interfaceTypes">Interface types.</param>
-		public JTypeMetadataBuilder(ReadOnlySpan<Byte> dataTypeName, JTypeKind kind,
-			Func<JInterfaceTypeMetadata, Type> getImplementingType, ISet<Type> baseTypes, ISet<Type> interfaceTypes)
-		{
-			this._dataTypeName = dataTypeName;
-			this._baseTypes = baseTypes;
-			this._interfaceTypes = interfaceTypes;
-			this._kind = kind;
-			this._getImplementingType = getImplementingType;
-		}
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -66,7 +43,6 @@ public partial class JLocalObject
 			Func<JInterfaceTypeMetadata, Type> getImplementingType, ISet<Type> interfaceTypes)
 		{
 			this._dataTypeName = dataTypeName;
-			this._baseTypes = ImmutableHashSet<Type>.Empty;
 			this._interfaceTypes = interfaceTypes;
 			this._kind = kind;
 			this._getImplementingType = getImplementingType;
@@ -154,12 +130,11 @@ public partial class JLocalObject
 		/// <param name="className">Class name of current type.</param>
 		/// <param name="modifier">Modifier of current type.</param>
 		/// <param name="baseMetadata">Base type metadata of current type.</param>
-		/// <param name="baseTypes">Base types.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
 		private JTypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
-			JClassTypeMetadata? baseMetadata, ISet<Type> baseTypes, ISet<Type> interfaceTypes)
+			JClassTypeMetadata? baseMetadata, ISet<Type> interfaceTypes)
 		{
-			this._builder = new(className, JTypeKind.Class, JTypeMetadataBuilder.GetImplementingType<TClass>, baseTypes,
+			this._builder = new(className, JTypeKind.Class, JTypeMetadataBuilder.GetImplementingType<TClass>,
 			                    interfaceTypes);
 			this._baseMetadata = baseMetadata;
 			this._modifier = modifier;
@@ -204,12 +179,11 @@ public partial class JLocalObject
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
-			ISet<Type> baseTypes = IReferenceType<TClass>.GetBaseTypes().ToHashSet();
 			ISet<Type> interfaceTypes = IReferenceType<TClass>.GetInterfaceTypes().ToHashSet();
 			JClassTypeMetadata? baseMetadata = typeof(TClass) != typeof(JLocalObject) ?
 				IClassType.GetMetadata<JLocalObject>() :
 				default;
-			return new(className, modifier, baseMetadata, baseTypes, interfaceTypes);
+			return new(className, modifier, baseMetadata, interfaceTypes);
 		}
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
@@ -225,9 +199,9 @@ public partial class JLocalObject
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType<TClass, TObject>(className);
-			ISet<Type> baseTypes = NativeValidationUtilities.ValidateBaseTypes<TClass, TObject>(className);
+			NativeValidationUtilities.ValidateBaseTypes<TClass, TObject>(className);
 			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();
-			return new(className, modifier, IClassType.GetMetadata<TClass>(), baseTypes, interfaceTypes);
+			return new(className, modifier, IClassType.GetMetadata<TClass>(), interfaceTypes);
 		}
 	}
 }

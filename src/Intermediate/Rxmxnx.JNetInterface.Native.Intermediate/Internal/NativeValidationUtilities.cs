@@ -63,7 +63,7 @@ internal static class NativeValidationUtilities
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
 	/// </exception>
-	public static ISet<Type> ValidateBaseTypes<TBase, TReference>(ReadOnlySpan<Byte> typeName)
+	public static void ValidateBaseTypes<TBase, TReference>(ReadOnlySpan<Byte> typeName)
 		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
 	{
 		ISet<Type> baseBaseTypes = IReferenceType<TBase>.GetBaseTypes().ToHashSet();
@@ -71,8 +71,6 @@ internal static class NativeValidationUtilities
 		if (!baseTypes.IsProperSupersetOf(baseBaseTypes))
 			throw new InvalidOperationException(
 				$"{typeName.ToCString()} type can't be based on a type which is derived from it.");
-		baseTypes.ExceptWith(baseBaseTypes);
-		return baseTypes;
 	}
 
 	/// <summary>

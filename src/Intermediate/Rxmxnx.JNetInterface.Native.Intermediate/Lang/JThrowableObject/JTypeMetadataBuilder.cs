@@ -25,13 +25,12 @@ public partial class JThrowableObject
 		/// <param name="className">Class name of current type.</param>
 		/// <param name="modifier">Modifier of current type.</param>
 		/// <param name="baseMetadata">Base type metadata of current type.</param>
-		/// <param name="baseTypes">Base types.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
 		private JTypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
-			JClassTypeMetadata? baseMetadata, ISet<Type> baseTypes, ISet<Type> interfaceTypes)
+			JClassTypeMetadata? baseMetadata, ISet<Type> interfaceTypes)
 		{
 			this._builder = new(className, JTypeKind.Class, JTypeMetadataBuilder.GetImplementingType<TThrowable>,
-			                    baseTypes, interfaceTypes);
+			                    interfaceTypes);
 			this._baseMetadata = baseMetadata;
 			this._modifier = modifier;
 		}
@@ -75,12 +74,11 @@ public partial class JThrowableObject
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
-			ISet<Type> baseTypes = IReferenceType<TThrowable>.GetBaseTypes().ToHashSet();
 			ISet<Type> interfaceTypes = IReferenceType<TThrowable>.GetInterfaceTypes().ToHashSet();
 			JClassTypeMetadata? baseMetadata = typeof(TThrowable) != typeof(JThrowableObject) ?
 				IClassType.GetMetadata<JThrowableObject>() :
 				IClassType.GetMetadata<JLocalObject>();
-			return new(className, modifier, baseMetadata, baseTypes, interfaceTypes);
+			return new(className, modifier, baseMetadata, interfaceTypes);
 		}
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
@@ -96,9 +94,9 @@ public partial class JThrowableObject
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType<TThrowable, TObject>(className);
-			ISet<Type> baseTypes = NativeValidationUtilities.ValidateBaseTypes<TThrowable, TObject>(className);
+			NativeValidationUtilities.ValidateBaseTypes<TThrowable, TObject>(className);
 			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();
-			return new(className, modifier, IClassType.GetMetadata<TThrowable>(), baseTypes, interfaceTypes);
+			return new(className, modifier, IClassType.GetMetadata<TThrowable>(), interfaceTypes);
 		}
 	}
 }

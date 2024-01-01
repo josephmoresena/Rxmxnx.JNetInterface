@@ -8,8 +8,6 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 {
 	/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 	private readonly JClassTypeMetadata _baseMetadata;
-	/// <inheritdoc cref="JDataTypeMetadata.BaseTypes"/>
-	private readonly HashSet<Type> _baseTypes;
 
 	/// <inheritdoc/>
 	public override JPrimitiveTypeMetadata PrimitiveMetadata => TWrapper.PrimitiveMetadata;
@@ -21,8 +19,6 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 	public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => JPrimitiveWrapperConstants.Interfaces;
 	/// <inheritdoc/>
 	public override JClassTypeMetadata BaseMetadata => this._baseMetadata;
-	/// <inheritdoc/>
-	public override IReadOnlySet<Type> BaseTypes => this._baseTypes;
 
 	/// <summary>
 	/// Constructor.
@@ -30,10 +26,7 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 	/// <param name="baseMetadata">Base <see cref="JClassTypeMetadata"/> instance.</param>
 	public JPrimitiveWrapperTypeMetadata(JClassTypeMetadata? baseMetadata = default) : base(
 		TWrapper.PrimitiveMetadata.WrapperInformation)
-	{
-		this._baseMetadata = baseMetadata ?? IClassType.GetMetadata<JLocalObject>();
-		this._baseTypes = [this._baseMetadata.Type,];
-	}
+		=> this._baseMetadata = baseMetadata ?? IClassType.GetMetadata<JLocalObject>();
 
 	/// <inheritdoc/>
 	internal override TWrapper? ParseInstance(JLocalObject? jLocal) => jLocal as TWrapper ?? TWrapper.Create(jLocal);

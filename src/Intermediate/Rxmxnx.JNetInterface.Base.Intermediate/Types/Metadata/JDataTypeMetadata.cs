@@ -11,11 +11,6 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	public CString ArraySignature => this._arraySignature;
 
 	/// <summary>
-	/// Base types set.
-	/// </summary>
-	public virtual IReadOnlySet<Type> BaseTypes => ImmutableHashSet<Type>.Empty;
-
-	/// <summary>
 	/// CLR type of <see cref="IDataType"/>.
 	/// </summary>
 	public abstract Type Type { get; }
