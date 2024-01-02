@@ -9,7 +9,8 @@ public sealed class JCharSequenceObject : JInterfaceObject<JCharSequenceObject>,
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata typeMetadata = JTypeMetadataBuilder<JCharSequenceObject>
-	                                                              .Create("java/lang/CharSequence"u8).Build();
+	                                                              .Create(UnicodeClassNames.CharSequenceInterface)
+	                                                              .Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JCharSequenceObject.typeMetadata;
 
