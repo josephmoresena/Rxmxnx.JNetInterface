@@ -38,7 +38,7 @@ internal sealed record JClassObjectMetadata : JObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	public JClassObjectMetadata(JClassObject jClass) : base(UnicodeClassNames.JClassObjectClassName,
+	public JClassObjectMetadata(JClassObject jClass) : base(UnicodeClassNames.ClassObject,
 	                                                        UnicodeObjectSignatures.JClassObjectSignature)
 	{
 		this.Name = jClass.Name;
@@ -50,7 +50,7 @@ internal sealed record JClassObjectMetadata : JObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
-	private JClassObjectMetadata(ITypeInformation metadata) : base(UnicodeClassNames.JClassObjectClassName,
+	private JClassObjectMetadata(ITypeInformation metadata) : base(UnicodeClassNames.ClassObject,
 	                                                               UnicodeObjectSignatures.JClassObjectSignature)
 	{
 		this.Name = metadata.ClassName;

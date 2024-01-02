@@ -22,24 +22,18 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 	public static Boolean Equals<TPrimitive>(TPrimitive primitive, JPrimitiveObject? other)
 		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>
 	{
-		if (other is null || other.ObjectSignature[0] == 0x5A /*Z*/)
+		if (other is null || other.ObjectSignature[0] == UnicodePrimitiveSignatures.JBooleanSignatureChar)
 			return false;
 		return other.ObjectSignature[0] switch
 		{
-			0x42 => //B
-				(JByte)primitive == other.AsPrimitive<JByte, SByte>(),
-			0x43 => //C
-				(JChar)primitive == other.AsPrimitive<JChar, Char>(),
-			0x44 => //D
-				(JDouble)primitive == other.AsPrimitive<JDouble, Double>(),
-			0x46 => //F
-				(JFloat)primitive == other.AsPrimitive<JFloat, Single>(),
-			0x49 => //I
-				(JInt)primitive == other.AsPrimitive<JInt, Int32>(),
-			0x4A => //J
-				(JLong)primitive == other.AsPrimitive<JLong, Int64>(),
-			0x53 => //S
-				(JShort)primitive == other.AsPrimitive<JShort, Int16>(),
+			UnicodePrimitiveSignatures.JByteSignatureChar => (JByte)primitive == other.AsPrimitive<JByte, SByte>(),
+			UnicodePrimitiveSignatures.JCharSignatureChar => (JChar)primitive == other.AsPrimitive<JChar, Char>(),
+			UnicodePrimitiveSignatures.JDoubleSignatureChar => (JDouble)primitive ==
+				other.AsPrimitive<JDouble, Double>(),
+			UnicodePrimitiveSignatures.JFloatSignatureChar => (JFloat)primitive == other.AsPrimitive<JFloat, Single>(),
+			UnicodePrimitiveSignatures.JIntSignatureChar => (JInt)primitive == other.AsPrimitive<JInt, Int32>(),
+			UnicodePrimitiveSignatures.JLongSignatureChar => (JLong)primitive == other.AsPrimitive<JLong, Int64>(),
+			UnicodePrimitiveSignatures.JShortSignatureChar => (JShort)primitive == other.AsPrimitive<JShort, Int16>(),
 			_ => false,
 		};
 	}

@@ -11,7 +11,8 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JInt, Int32>.JTypeMetadataBuilder
-		.Create("int"u8, "I"u8).WithWrapperClassName("java/lang/Integer"u8).Build();
+		.Create(UnicodeClassNames.IntPrimitive, UnicodePrimitiveSignatures.JIntSignature)
+		.WithWrapperClassName(UnicodeClassNames.IntegerObject).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JInt;

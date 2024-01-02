@@ -15,10 +15,10 @@ internal static partial class UnicodeObjectSignatures
 	[DefaultValue(ObjectSignatures.ArraySignaturePrefix)]
 	public static readonly CString ArraySignaturePrefix;
 
-	/// <inheritdoc cref="ObjectSignatures.JObjectSignature"/>
-	[DefaultValue(ObjectSignatures.JObjectSignature)]
+	/// <inheritdoc cref="ObjectSignatures.ObjectSignature"/>
+	[DefaultValue(ObjectSignatures.ObjectSignature)]
 	public static readonly CString JObjectSignature;
-	/// <inheritdoc cref="ObjectSignatures.JClassObjectSignature"/>
-	[DefaultValue(ObjectSignatures.JClassObjectSignature)]
+	/// <inheritdoc cref="ObjectSignatures.ClassObjectSignature"/>
+	[DefaultValue(ObjectSignatures.ClassObjectSignature)]
 	public static readonly CString JClassObjectSignature;
 }

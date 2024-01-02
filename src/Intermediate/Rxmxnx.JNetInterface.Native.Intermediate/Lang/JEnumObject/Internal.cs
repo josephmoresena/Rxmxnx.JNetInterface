@@ -6,7 +6,7 @@ public partial class JEnumObject
 	/// Datatype metadata.
 	/// </summary>
 	internal static readonly JClassTypeMetadata JEnumClassMetadata = JLocalObject.JTypeMetadataBuilder<JEnumObject>
-		.Create("java/lang/Enum"u8, JTypeModifier.Final).Implements<JSerializableObject>()
+		.Create(UnicodeClassNames.EnumObject, JTypeModifier.Final).Implements<JSerializableObject>()
 		.Implements<JComparableObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JEnumObject.JEnumClassMetadata;

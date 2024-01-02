@@ -7,16 +7,6 @@ public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<
 	IInterfaceImplementation<JStackTraceElementObject, JSerializableObject>
 {
 	/// <summary>
-	/// Datatype metadata.
-	/// </summary>
-	private static readonly JClassTypeMetadata typeMetadata = JTypeMetadataBuilder<JStackTraceElementObject>
-	                                                          .Create("java/lang/StackTraceElement"u8,
-	                                                                  JTypeModifier.Final)
-	                                                          .Implements<JSerializableObject>().Build();
-
-	static JDataTypeMetadata IDataType.Metadata => JStackTraceElementObject.typeMetadata;
-
-	/// <summary>
 	/// The fully qualified name of the class containing the execution point.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]

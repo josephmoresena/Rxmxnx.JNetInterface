@@ -36,8 +36,7 @@ public sealed class JGlobal : JGlobalBase
 	/// <param name="globalRef">Global reference.</param>
 	internal JGlobal(IVirtualMachine vm, JObjectMetadata metadata, Boolean isDummy, JGlobalRef globalRef) :
 		base(vm, metadata, isDummy, globalRef)
-		=> this._isDisposable =
-			metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.JClassObjectClassName);
+		=> this._isDisposable = metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)

@@ -22,11 +22,11 @@ internal static class ObjectSignatures
 	/// <summary>
 	/// JNI signature for <c>java.lang.Object</c> object.
 	/// </summary>
-	public const String JObjectSignature = ObjectSignatures.ObjectSignaturePrefix + ClassNames.JObjectClassName +
+	public const String ObjectSignature = ObjectSignatures.ObjectSignaturePrefix + ClassNames.Object +
 		ObjectSignatures.ObjectSignatureSuffix;
 	/// <summary>
 	/// JNI signature for <c>java.lang.Class&lt;?&gt;</c> object.
 	/// </summary>
-	public const String JClassObjectSignature = ObjectSignatures.ObjectSignaturePrefix +
-		ClassNames.JClassObjectClassName + ObjectSignatures.ObjectSignatureSuffix;
+	public const String ClassObjectSignature = ObjectSignatures.ObjectSignaturePrefix + ClassNames.ClassObject +
+		ObjectSignatures.ObjectSignatureSuffix;
 }

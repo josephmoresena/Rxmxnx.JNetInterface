@@ -8,7 +8,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// JNI name of <c>java.lang.Object</c> class.
 	/// </summary>
-	public static readonly CString JObjectClassName = UnicodeClassNames.JObjectClassName;
+	public static readonly CString JObjectClassName = UnicodeClassNames.Object;
 	/// <summary>
 	/// JNI signature for <c>java.lang.Object</c> object.
 	/// </summary>

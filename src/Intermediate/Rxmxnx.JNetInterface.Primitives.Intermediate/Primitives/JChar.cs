@@ -11,7 +11,8 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JChar, Char>.JTypeMetadataBuilder
-		.Create("char"u8, "C"u8).WithWrapperClassName("java/lang/Character"u8).Build();
+		.Create(UnicodeClassNames.CharPrimitive, UnicodePrimitiveSignatures.JCharSignature)
+		.WithWrapperClassName(UnicodeClassNames.CharacterObject).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JChar;
