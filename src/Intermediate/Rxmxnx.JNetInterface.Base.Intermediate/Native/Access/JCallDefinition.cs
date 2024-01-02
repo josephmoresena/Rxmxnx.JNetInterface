@@ -21,7 +21,7 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// <summary>
 	/// JNI name for class constructors.
 	/// </summary>
-	public static CString ConstructorName => UnicodeMethodNames.ConstructorName;
+	public static CString ConstructorName => UnicodeMethodNames.Constructor;
 
 	/// <summary>
 	/// Total size in bytes of call parameters.
