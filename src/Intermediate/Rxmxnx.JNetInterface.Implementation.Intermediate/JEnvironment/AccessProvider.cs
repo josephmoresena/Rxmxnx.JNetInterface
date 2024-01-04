@@ -15,35 +15,35 @@ public partial class JEnvironment
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			switch (definition.Information[1][^1])
 			{
-				case UnicodePrimitiveSignatures.JBooleanSignatureChar:
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
 					GetBooleanFieldDelegate getBooleanField = this.GetDelegate<GetBooleanFieldDelegate>();
 					MemoryMarshal.AsRef<Byte>(bytes) = getBooleanField(this.Reference, localRef, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JByteSignatureChar:
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
 					GetByteFieldDelegate getByteField = this.GetDelegate<GetByteFieldDelegate>();
 					MemoryMarshal.AsRef<SByte>(bytes) = getByteField(this.Reference, localRef, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JCharSignatureChar:
+				case UnicodePrimitiveSignatures.CharSignatureChar:
 					GetCharFieldDelegate getCharField = this.GetDelegate<GetCharFieldDelegate>();
 					MemoryMarshal.AsRef<Char>(bytes) = getCharField(this.Reference, localRef, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JDoubleSignatureChar:
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
 					GetDoubleFieldDelegate getDoubleField = this.GetDelegate<GetDoubleFieldDelegate>();
 					MemoryMarshal.AsRef<Double>(bytes) = getDoubleField(this.Reference, localRef, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JFloatSignatureChar:
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
 					GetFloatFieldDelegate getFloatField = this.GetDelegate<GetFloatFieldDelegate>();
 					MemoryMarshal.AsRef<Single>(bytes) = getFloatField(this.Reference, localRef, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JIntSignatureChar:
+				case UnicodePrimitiveSignatures.IntSignatureChar:
 					GetIntFieldDelegate getIntField = this.GetDelegate<GetIntFieldDelegate>();
 					MemoryMarshal.AsRef<Int32>(bytes) = getIntField(this.Reference, localRef, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JLongSignatureChar:
+				case UnicodePrimitiveSignatures.LongSignatureChar:
 					GetLongFieldDelegate getLongField = this.GetDelegate<GetLongFieldDelegate>();
 					MemoryMarshal.AsRef<Int64>(bytes) = getLongField(this.Reference, localRef, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JShortSignatureChar:
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
 					GetShortFieldDelegate getShortField = this.GetDelegate<GetShortFieldDelegate>();
 					MemoryMarshal.AsRef<Int16>(bytes) = getShortField(this.Reference, localRef, fieldId);
 					break;
@@ -63,35 +63,35 @@ public partial class JEnvironment
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			switch (definition.Information[1][^1])
 			{
-				case UnicodePrimitiveSignatures.JBooleanSignatureChar: //Z
+				case UnicodePrimitiveSignatures.BooleanSignatureChar: //Z
 					SetBooleanFieldDelegate setBooleanField = this.GetDelegate<SetBooleanFieldDelegate>();
 					setBooleanField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Byte>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JByteSignatureChar:
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
 					SetByteFieldDelegate setByteField = this.GetDelegate<SetByteFieldDelegate>();
 					setByteField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<SByte>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JCharSignatureChar:
+				case UnicodePrimitiveSignatures.CharSignatureChar:
 					SetCharFieldDelegate setCharField = this.GetDelegate<SetCharFieldDelegate>();
 					setCharField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Char>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JDoubleSignatureChar:
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
 					SetDoubleFieldDelegate setDoubleField = this.GetDelegate<SetDoubleFieldDelegate>();
 					setDoubleField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Double>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JFloatSignatureChar:
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
 					SetFloatFieldDelegate setFloatField = this.GetDelegate<SetFloatFieldDelegate>();
 					setFloatField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Single>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JIntSignatureChar:
+				case UnicodePrimitiveSignatures.IntSignatureChar:
 					SetIntFieldDelegate setIntField = this.GetDelegate<SetIntFieldDelegate>();
 					setIntField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int32>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JLongSignatureChar:
+				case UnicodePrimitiveSignatures.LongSignatureChar:
 					SetLongFieldDelegate setLongField = this.GetDelegate<SetLongFieldDelegate>();
 					setLongField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int64>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JShortSignatureChar:
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
 					SetShortFieldDelegate setShortField = this.GetDelegate<SetShortFieldDelegate>();
 					setShortField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int16>(bytes));
 					break;
@@ -108,38 +108,38 @@ public partial class JEnvironment
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
 			switch (definition.Information[1][^1])
 			{
-				case UnicodePrimitiveSignatures.JBooleanSignatureChar:
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
 					GetStaticBooleanFieldDelegate getStaticBooleanField =
 						this.GetDelegate<GetStaticBooleanFieldDelegate>();
 					MemoryMarshal.AsRef<Byte>(bytes) = getStaticBooleanField(this.Reference, jClass.Reference, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JByteSignatureChar:
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
 					GetStaticByteFieldDelegate getStaticByteField = this.GetDelegate<GetStaticByteFieldDelegate>();
 					MemoryMarshal.AsRef<SByte>(bytes) = getStaticByteField(this.Reference, jClass.Reference, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JCharSignatureChar:
+				case UnicodePrimitiveSignatures.CharSignatureChar:
 					GetStaticCharFieldDelegate getStaticCharField = this.GetDelegate<GetStaticCharFieldDelegate>();
 					MemoryMarshal.AsRef<Char>(bytes) = getStaticCharField(this.Reference, jClass.Reference, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JDoubleSignatureChar:
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
 					GetStaticDoubleFieldDelegate getStaticDoubleField =
 						this.GetDelegate<GetStaticDoubleFieldDelegate>();
 					MemoryMarshal.AsRef<Double>(bytes) =
 						getStaticDoubleField(this.Reference, jClass.Reference, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JFloatSignatureChar:
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
 					GetStaticFloatFieldDelegate getFloatField = this.GetDelegate<GetStaticFloatFieldDelegate>();
 					MemoryMarshal.AsRef<Single>(bytes) = getFloatField(this.Reference, jClass.Reference, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JIntSignatureChar:
+				case UnicodePrimitiveSignatures.IntSignatureChar:
 					GetStaticIntFieldDelegate getStaticIntField = this.GetDelegate<GetStaticIntFieldDelegate>();
 					MemoryMarshal.AsRef<Int32>(bytes) = getStaticIntField(this.Reference, jClass.Reference, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JLongSignatureChar:
+				case UnicodePrimitiveSignatures.LongSignatureChar:
 					GetStaticLongFieldDelegate getStaticLongField = this.GetDelegate<GetStaticLongFieldDelegate>();
 					MemoryMarshal.AsRef<Int64>(bytes) = getStaticLongField(this.Reference, jClass.Reference, fieldId);
 					break;
-				case UnicodePrimitiveSignatures.JShortSignatureChar:
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
 					GetStaticShortFieldDelegate getStaticShortField = this.GetDelegate<GetStaticShortFieldDelegate>();
 					MemoryMarshal.AsRef<Int16>(bytes) = getStaticShortField(this.Reference, jClass.Reference, fieldId);
 					break;
@@ -156,37 +156,37 @@ public partial class JEnvironment
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
 			switch (definition.Information[1][^1])
 			{
-				case UnicodePrimitiveSignatures.JBooleanSignatureChar:
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
 					SetStaticBooleanFieldDelegate setStaticBooleanField =
 						this.GetDelegate<SetStaticBooleanFieldDelegate>();
 					setStaticBooleanField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Byte>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JByteSignatureChar:
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
 					SetStaticByteFieldDelegate setStaticByteField = this.GetDelegate<SetStaticByteFieldDelegate>();
 					setStaticByteField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<SByte>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JCharSignatureChar:
+				case UnicodePrimitiveSignatures.CharSignatureChar:
 					SetStaticCharFieldDelegate setStaticCharField = this.GetDelegate<SetStaticCharFieldDelegate>();
 					setStaticCharField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Char>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JDoubleSignatureChar:
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
 					SetStaticDoubleFieldDelegate setStaticDoubleField =
 						this.GetDelegate<SetStaticDoubleFieldDelegate>();
 					setStaticDoubleField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Double>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JFloatSignatureChar:
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
 					SetStaticFloatFieldDelegate setStaticFloatField = this.GetDelegate<SetStaticFloatFieldDelegate>();
 					setStaticFloatField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Single>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JIntSignatureChar:
+				case UnicodePrimitiveSignatures.IntSignatureChar:
 					SetStaticIntFieldDelegate setStaticIntField = this.GetDelegate<SetStaticIntFieldDelegate>();
 					setStaticIntField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Int32>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JLongSignatureChar:
+				case UnicodePrimitiveSignatures.LongSignatureChar:
 					SetStaticLongFieldDelegate setStaticLongField = this.GetDelegate<SetStaticLongFieldDelegate>();
 					setStaticLongField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Int64>(bytes));
 					break;
-				case UnicodePrimitiveSignatures.JShortSignatureChar:
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
 					SetStaticShortFieldDelegate setStaticShortField = this.GetDelegate<SetStaticShortFieldDelegate>();
 					setStaticShortField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Int16>(bytes));
 					break;
@@ -210,44 +210,44 @@ public partial class JEnvironment
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			switch (definition.Information[1][^1])
 			{
-				case UnicodePrimitiveSignatures.JBooleanSignatureChar:
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
 					CallStaticBooleanMethodADelegate callStaticBooleanMethod =
 						this.GetDelegate<CallStaticBooleanMethodADelegate>();
 					MemoryMarshal.AsRef<Byte>(bytes) = callStaticBooleanMethod(
 						this.Reference, jClass.Reference, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JByteSignatureChar:
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
 					CallStaticByteMethodADelegate callByteMethod = this.GetDelegate<CallStaticByteMethodADelegate>();
 					MemoryMarshal.AsRef<SByte>(bytes) = callByteMethod(this.Reference, jClass.Reference, methodId,
 					                                                   (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JCharSignatureChar:
+				case UnicodePrimitiveSignatures.CharSignatureChar:
 					CallStaticCharMethodADelegate callCharMethod = this.GetDelegate<CallStaticCharMethodADelegate>();
 					MemoryMarshal.AsRef<Char>(bytes) = callCharMethod(this.Reference, jClass.Reference, methodId,
 					                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JDoubleSignatureChar:
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
 					CallStaticDoubleMethodADelegate callDoubleMethod =
 						this.GetDelegate<CallStaticDoubleMethodADelegate>();
 					MemoryMarshal.AsRef<Double>(bytes) = callDoubleMethod(
 						this.Reference, jClass.Reference, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JFloatSignatureChar:
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
 					CallStaticFloatMethodADelegate callFloatMethod = this.GetDelegate<CallStaticFloatMethodADelegate>();
 					MemoryMarshal.AsRef<Single>(bytes) = callFloatMethod(
 						this.Reference, jClass.Reference, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JIntSignatureChar:
+				case UnicodePrimitiveSignatures.IntSignatureChar:
 					CallStaticIntMethodADelegate callIntMethod = this.GetDelegate<CallStaticIntMethodADelegate>();
 					MemoryMarshal.AsRef<Int32>(bytes) = callIntMethod(this.Reference, jClass.Reference, methodId,
 					                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JLongSignatureChar:
+				case UnicodePrimitiveSignatures.LongSignatureChar:
 					CallStaticLongMethodADelegate callLongMethod = this.GetDelegate<CallStaticLongMethodADelegate>();
 					MemoryMarshal.AsRef<Int64>(bytes) = callLongMethod(this.Reference, jClass.Reference, methodId,
 					                                                   (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JShortSignatureChar: //S
+				case UnicodePrimitiveSignatures.ShortSignatureChar: //S
 					CallStaticShortMethodADelegate callShortMethod = this.GetDelegate<CallStaticShortMethodADelegate>();
 					MemoryMarshal.AsRef<Int32>(bytes) = callShortMethod(this.Reference, jClass.Reference, methodId,
 					                                                    (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
@@ -583,46 +583,46 @@ public partial class JEnvironment
 		{
 			switch (signature)
 			{
-				case UnicodePrimitiveSignatures.JBooleanSignatureChar:
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
 					CallBooleanMethodADelegate callBooleanMethod = this.GetDelegate<CallBooleanMethodADelegate>();
 					MemoryMarshal.AsRef<Byte>(bytes) = callBooleanMethod(
 						this.Reference, localRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JByteSignatureChar:
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
 					CallByteMethodADelegate callByteMethod = this.GetDelegate<CallByteMethodADelegate>();
 					MemoryMarshal.AsRef<SByte>(bytes) = callByteMethod(this.Reference, localRef,
 					                                                   methodId,
 					                                                   (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JCharSignatureChar:
+				case UnicodePrimitiveSignatures.CharSignatureChar:
 					CallCharMethodADelegate callCharMethod = this.GetDelegate<CallCharMethodADelegate>();
 					MemoryMarshal.AsRef<Char>(bytes) = callCharMethod(this.Reference, localRef,
 					                                                  methodId,
 					                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JDoubleSignatureChar:
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
 					CallDoubleMethodADelegate callDoubleMethod = this.GetDelegate<CallDoubleMethodADelegate>();
 					MemoryMarshal.AsRef<Double>(bytes) = callDoubleMethod(
 						this.Reference, localRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JFloatSignatureChar:
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
 					CallFloatMethodADelegate callFloatMethod = this.GetDelegate<CallFloatMethodADelegate>();
 					MemoryMarshal.AsRef<Single>(bytes) = callFloatMethod(
 						this.Reference, localRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JIntSignatureChar:
+				case UnicodePrimitiveSignatures.IntSignatureChar:
 					CallIntMethodADelegate callIntMethod = this.GetDelegate<CallIntMethodADelegate>();
 					MemoryMarshal.AsRef<Int32>(bytes) = callIntMethod(this.Reference, localRef,
 					                                                  methodId,
 					                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JLongSignatureChar:
+				case UnicodePrimitiveSignatures.LongSignatureChar:
 					CallLongMethodADelegate callLongMethod = this.GetDelegate<CallLongMethodADelegate>();
 					MemoryMarshal.AsRef<Int64>(bytes) = callLongMethod(this.Reference, localRef,
 					                                                   methodId,
 					                                                   (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JShortSignatureChar:
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
 					CallShortMethodADelegate callShortMethod = this.GetDelegate<CallShortMethodADelegate>();
 					MemoryMarshal.AsRef<Int32>(bytes) = callShortMethod(this.Reference, localRef,
 					                                                    methodId,
@@ -647,56 +647,56 @@ public partial class JEnvironment
 		{
 			switch (signature)
 			{
-				case UnicodePrimitiveSignatures.JBooleanSignatureChar:
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
 					CallNonVirtualBooleanMethodADelegate callNonVirtualBooleanMethod =
 						this.GetDelegate<CallNonVirtualBooleanMethodADelegate>();
 					MemoryMarshal.AsRef<Byte>(bytes) = callNonVirtualBooleanMethod(
 						this.Reference, localRef, jClass.Reference, methodId,
 						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JByteSignatureChar:
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
 					CallNonVirtualByteMethodADelegate callNonVirtualByteMethod =
 						this.GetDelegate<CallNonVirtualByteMethodADelegate>();
 					MemoryMarshal.AsRef<SByte>(bytes) = callNonVirtualByteMethod(
 						this.Reference, localRef, jClass.Reference, methodId,
 						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JCharSignatureChar:
+				case UnicodePrimitiveSignatures.CharSignatureChar:
 					CallNonVirtualCharMethodADelegate callNonVirtualCharMethod =
 						this.GetDelegate<CallNonVirtualCharMethodADelegate>();
 					MemoryMarshal.AsRef<Char>(bytes) = callNonVirtualCharMethod(
 						this.Reference, localRef, jClass.Reference, methodId,
 						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JDoubleSignatureChar:
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
 					CallNonVirtualDoubleMethodADelegate callNonVirtualDoubleMethod =
 						this.GetDelegate<CallNonVirtualDoubleMethodADelegate>();
 					MemoryMarshal.AsRef<Double>(bytes) = callNonVirtualDoubleMethod(
 						this.Reference, localRef, jClass.Reference, methodId,
 						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JFloatSignatureChar:
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
 					CallNonVirtualFloatMethodADelegate callNonVirtualFloatMethod =
 						this.GetDelegate<CallNonVirtualFloatMethodADelegate>();
 					MemoryMarshal.AsRef<Single>(bytes) = callNonVirtualFloatMethod(
 						this.Reference, localRef, jClass.Reference, methodId,
 						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JIntSignatureChar:
+				case UnicodePrimitiveSignatures.IntSignatureChar:
 					CallNonVirtualIntMethodADelegate callNonVirtualIntMethod =
 						this.GetDelegate<CallNonVirtualIntMethodADelegate>();
 					MemoryMarshal.AsRef<Int32>(bytes) = callNonVirtualIntMethod(
 						this.Reference, localRef, jClass.Reference, methodId,
 						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JLongSignatureChar:
+				case UnicodePrimitiveSignatures.LongSignatureChar:
 					CallNonVirtualLongMethodADelegate callNonVirtualLongMethod =
 						this.GetDelegate<CallNonVirtualLongMethodADelegate>();
 					MemoryMarshal.AsRef<Int64>(bytes) = callNonVirtualLongMethod(
 						this.Reference, localRef, jClass.Reference, methodId,
 						(ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
-				case UnicodePrimitiveSignatures.JShortSignatureChar:
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
 					CallNonVirtualShortMethodADelegate callNonVirtualShortMethod =
 						this.GetDelegate<CallNonVirtualShortMethodADelegate>();
 					MemoryMarshal.AsRef<Int32>(bytes) = callNonVirtualShortMethod(

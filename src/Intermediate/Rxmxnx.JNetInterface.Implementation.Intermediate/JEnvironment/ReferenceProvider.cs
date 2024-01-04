@@ -13,49 +13,49 @@ public partial class JEnvironment
 			JLocalObject result;
 			switch (metadata.Signature[0])
 			{
-				case UnicodePrimitiveSignatures.JBooleanSignatureChar:
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
 					jClass = this.GetClass<JBooleanObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.BooleanConstructor, primitive);
 					result = new JBooleanObject(jClass, localRef,
 					                            NativeUtilities.Transform<TPrimitive, JBoolean>(in primitive));
 					break;
-				case UnicodePrimitiveSignatures.JByteSignatureChar:
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
 					jClass = this.GetClass<JByteObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.ByteConstructor, primitive);
 					result = new JByteObject(jClass, localRef,
 					                         NativeUtilities.Transform<TPrimitive, JByte>(in primitive));
 					break;
-				case UnicodePrimitiveSignatures.JCharSignatureChar:
+				case UnicodePrimitiveSignatures.CharSignatureChar:
 					jClass = this.GetClass<JCharacterObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.CharacterConstructor, primitive);
 					result = new JCharacterObject(jClass, localRef,
 					                              NativeUtilities.Transform<TPrimitive, JChar>(in primitive));
 					break;
-				case UnicodePrimitiveSignatures.JDoubleSignatureChar:
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
 					jClass = this.GetClass<JDoubleObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.DoubleConstructor, primitive);
 					result = new JDoubleObject(jClass, localRef,
 					                           NativeUtilities.Transform<TPrimitive, JDouble>(in primitive));
 					break;
-				case UnicodePrimitiveSignatures.JFloatSignatureChar:
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
 					jClass = this.GetClass<JFloatObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.FloatConstructor, primitive);
 					result = new JFloatObject(jClass, localRef,
 					                          NativeUtilities.Transform<TPrimitive, JFloat>(in primitive));
 					break;
-				case UnicodePrimitiveSignatures.JIntSignatureChar:
+				case UnicodePrimitiveSignatures.IntSignatureChar:
 					jClass = this.GetClass<JIntegerObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.IntegerConstructor, primitive);
 					result = new JIntegerObject(jClass, localRef,
 					                            NativeUtilities.Transform<TPrimitive, JInt>(in primitive));
 					break;
-				case UnicodePrimitiveSignatures.JLongSignatureChar:
+				case UnicodePrimitiveSignatures.LongSignatureChar:
 					jClass = this.GetClass<JLongObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.LongConstructor, primitive);
 					result = new JLongObject(jClass, localRef,
 					                         NativeUtilities.Transform<TPrimitive, JLong>(in primitive));
 					break;
-				case UnicodePrimitiveSignatures.JShortSignatureChar: //S
+				case UnicodePrimitiveSignatures.ShortSignatureChar: //S
 					jClass = this.GetClass<JShortObject>();
 					localRef = this.NewObject(jClass, InternalFunctionCache.ShortConstructor, primitive);
 					result = new JShortObject(jClass, localRef,

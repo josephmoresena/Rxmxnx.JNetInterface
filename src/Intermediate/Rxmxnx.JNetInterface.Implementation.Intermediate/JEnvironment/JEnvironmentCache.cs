@@ -464,14 +464,14 @@ public partial class JEnvironment
 		{
 			using JClassObject wrapperClass = signature switch
 			{
-				UnicodePrimitiveSignatures.JBooleanSignatureChar => this.GetClass<JBooleanObject>(),
-				UnicodePrimitiveSignatures.JByteSignatureChar => this.GetClass<JByteObject>(),
-				UnicodePrimitiveSignatures.JCharSignatureChar => this.GetClass<JCharacterObject>(),
-				UnicodePrimitiveSignatures.JDoubleSignatureChar => this.GetClass<JDoubleObject>(),
-				UnicodePrimitiveSignatures.JFloatSignatureChar => this.GetClass<JFloatObject>(),
-				UnicodePrimitiveSignatures.JIntSignatureChar => this.GetClass<JIntegerObject>(),
-				UnicodePrimitiveSignatures.JLongSignatureChar => this.GetClass<JLongObject>(),
-				UnicodePrimitiveSignatures.JShortSignatureChar => this.GetClass<JShortObject>(),
+				UnicodePrimitiveSignatures.BooleanSignatureChar => this.GetClass<JBooleanObject>(),
+				UnicodePrimitiveSignatures.ByteSignatureChar => this.GetClass<JByteObject>(),
+				UnicodePrimitiveSignatures.CharSignatureChar => this.GetClass<JCharacterObject>(),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => this.GetClass<JDoubleObject>(),
+				UnicodePrimitiveSignatures.FloatSignatureChar => this.GetClass<JFloatObject>(),
+				UnicodePrimitiveSignatures.IntSignatureChar => this.GetClass<JIntegerObject>(),
+				UnicodePrimitiveSignatures.LongSignatureChar => this.GetClass<JLongObject>(),
+				UnicodePrimitiveSignatures.ShortSignatureChar => this.GetClass<JShortObject>(),
 				_ => throw new InvalidOperationException("Object is not primitive."),
 			};
 			JObjectLocalRef localRef =

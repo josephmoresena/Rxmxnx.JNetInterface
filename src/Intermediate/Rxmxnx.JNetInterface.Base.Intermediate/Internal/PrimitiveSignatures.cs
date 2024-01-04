@@ -5,53 +5,53 @@ namespace Rxmxnx.JNetInterface.Internal.ConstantValues;
 /// </summary>
 internal static class PrimitiveSignatures
 {
-	/// <inheritdoc cref="JBooleanSignature"/>
+	/// <inheritdoc cref="BooleanSignature"/>
 	public const Char JBooleanSignatureChar = 'Z';
-	/// <inheritdoc cref="JByteSignature"/>
+	/// <inheritdoc cref="ByteSignature"/>
 	public const Char JByteSignatureChar = 'B';
-	/// <inheritdoc cref="JCharSignature"/>
+	/// <inheritdoc cref="CharSignature"/>
 	public const Char JCharSignatureChar = 'C';
-	/// <inheritdoc cref="JDoubleSignature"/>
+	/// <inheritdoc cref="DoubleSignature"/>
 	public const Char JDoubleSignatureChar = 'D';
-	/// <inheritdoc cref="JFloatSignature"/>
+	/// <inheritdoc cref="FloatSignature"/>
 	public const Char JFloatSignatureChar = 'F';
-	/// <inheritdoc cref="JIntSignature"/>
+	/// <inheritdoc cref="IntSignature"/>
 	public const Char JIntSignatureChar = 'I';
-	/// <inheritdoc cref="JLongSignature"/>
+	/// <inheritdoc cref="LongSignature"/>
 	public const Char JLongSignatureChar = 'J';
-	/// <inheritdoc cref="JShortSignature"/>
+	/// <inheritdoc cref="ShortSignature"/>
 	public const Char JShortSignatureChar = 'S';
 
 	/// <summary>
 	/// JNI signature for primitive <c>boolean</c>.
 	/// </summary>
-	public const String JBooleanSignature = "Z";
+	public const String BooleanSignature = "Z";
 	/// <summary>
 	/// JNI signature for primitive <c>byte</c>.
 	/// </summary>
-	public const String JByteSignature = "B";
+	public const String ByteSignature = "B";
 	/// <summary>
 	/// JNI signature for primitive <c>char</c>.
 	/// </summary>
-	public const String JCharSignature = "C";
+	public const String CharSignature = "C";
 	/// <summary>
 	/// JNI signature for primitive <c>double</c>.
 	/// </summary>
-	public const String JDoubleSignature = "D";
+	public const String DoubleSignature = "D";
 	/// <summary>
 	/// JNI signature for primitive <c>float</c>.
 	/// </summary>
-	public const String JFloatSignature = "F";
+	public const String FloatSignature = "F";
 	/// <summary>
 	/// JNI signature for primitive <c>int</c>.
 	/// </summary>
-	public const String JIntSignature = "I";
+	public const String IntSignature = "I";
 	/// <summary>
 	/// JNI signature for primitive <c>long</c>.
 	/// </summary>
-	public const String JLongSignature = "J";
+	public const String LongSignature = "J";
 	/// <summary>
 	/// JNI signature for primitive <c>short</c>.
 	/// </summary>
-	public const String JShortSignature = "S";
+	public const String ShortSignature = "S";
 }

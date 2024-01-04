@@ -9,7 +9,8 @@ public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInte
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata typeMetadata = JTypeMetadataBuilder<JCloneableObject>
-	                                                              .Create(UnicodeClassNames.CloneableInterface).Build();
+	                                                              .Create(UnicodeClassNames.CloneableInterface())
+	                                                              .Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JCloneableObject.typeMetadata;
 

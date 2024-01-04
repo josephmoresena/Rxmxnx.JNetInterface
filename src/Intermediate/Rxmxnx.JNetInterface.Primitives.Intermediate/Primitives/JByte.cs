@@ -10,8 +10,8 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JByte, SByte>.JTypeMetadataBuilder
-		.Create(UnicodeClassNames.BytePrimitive, UnicodePrimitiveSignatures.JByteSignature)
-		.WithWrapperClassName(UnicodeClassNames.ByteObject).Build();
+		.Create(UnicodeClassNames.BytePrimitive(), UnicodePrimitiveSignatures.ByteSignature())
+		.WithWrapperClassName(UnicodeClassNames.ByteObject()).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JByte;

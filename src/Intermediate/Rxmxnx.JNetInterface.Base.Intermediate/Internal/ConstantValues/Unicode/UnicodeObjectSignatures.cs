@@ -17,8 +17,8 @@ internal static partial class UnicodeObjectSignatures
 
 	/// <inheritdoc cref="ObjectSignatures.ObjectSignature"/>
 	[DefaultValue(ObjectSignatures.ObjectSignature)]
-	public static readonly CString JObjectSignature;
+	public static readonly CString ObjectSignature;
 	/// <inheritdoc cref="ObjectSignatures.ClassObjectSignature"/>
 	[DefaultValue(ObjectSignatures.ClassObjectSignature)]
-	public static readonly CString JClassObjectSignature;
+	public static readonly CString ClassObjectSignature;
 }

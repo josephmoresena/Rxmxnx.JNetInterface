@@ -12,7 +12,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// JNI signature for <c>java.lang.Object</c> object.
 	/// </summary>
-	public static readonly CString JObjectSignature = UnicodeObjectSignatures.JObjectSignature;
+	public static readonly CString JObjectSignature = UnicodeObjectSignatures.ObjectSignature;
 
 	/// <summary>
 	/// Object class name.

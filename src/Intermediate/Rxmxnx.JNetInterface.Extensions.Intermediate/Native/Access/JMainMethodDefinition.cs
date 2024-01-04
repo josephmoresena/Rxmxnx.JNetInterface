@@ -13,7 +13,7 @@ public sealed record JMainMethodDefinition : JMethodDefinition
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	private JMainMethodDefinition() : base(UnicodeMethodNames.Main,
+	private JMainMethodDefinition() : base(UnicodeMethodNames.Main(),
 	                                       JArgumentMetadata.Create<JArrayObject<JStringObject>>()) { }
 
 	/// <summary>

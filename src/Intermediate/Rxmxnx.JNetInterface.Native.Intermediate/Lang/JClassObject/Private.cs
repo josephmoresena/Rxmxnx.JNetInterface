@@ -9,7 +9,7 @@ public partial class JClassObject
 	                                                          .Create(UnicodeClassNames.ClassObject,
 	                                                                  JTypeModifier.Final)
 	                                                          .WithSignature(
-		                                                          UnicodeObjectSignatures.JClassObjectSignature)
+		                                                          UnicodeObjectSignatures.ClassObjectSignature)
 	                                                          .Implements<JSerializableObject>()
 	                                                          .Implements<JAnnotatedElementObject>()
 	                                                          .Implements<JGenericDeclarationObject>()

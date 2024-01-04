@@ -196,14 +196,14 @@ internal static class InternalExtensions
 		if (obj is JPrimitiveObject jObject and not IPrimitiveType)
 			return obj.ObjectSignature[0] switch
 			{
-				UnicodePrimitiveSignatures.JBooleanSignatureChar => jObject.AsPrimitive<JBoolean, Boolean>(),
-				UnicodePrimitiveSignatures.JByteSignatureChar => jObject.AsPrimitive<JByte, SByte>(),
-				UnicodePrimitiveSignatures.JCharSignatureChar => jObject.AsPrimitive<JChar, Char>(),
-				UnicodePrimitiveSignatures.JDoubleSignatureChar => jObject.AsPrimitive<JDouble, Double>(),
-				UnicodePrimitiveSignatures.JFloatSignatureChar => jObject.AsPrimitive<JFloat, Single>(),
-				UnicodePrimitiveSignatures.JIntSignatureChar => jObject.AsPrimitive<JInt, Int32>(),
-				UnicodePrimitiveSignatures.JLongSignatureChar => jObject.AsPrimitive<JLong, Int64>(),
-				UnicodePrimitiveSignatures.JShortSignatureChar => jObject.AsPrimitive<JShort, Int16>(),
+				UnicodePrimitiveSignatures.BooleanSignatureChar => jObject.AsPrimitive<JBoolean, Boolean>(),
+				UnicodePrimitiveSignatures.ByteSignatureChar => jObject.AsPrimitive<JByte, SByte>(),
+				UnicodePrimitiveSignatures.CharSignatureChar => jObject.AsPrimitive<JChar, Char>(),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => jObject.AsPrimitive<JDouble, Double>(),
+				UnicodePrimitiveSignatures.FloatSignatureChar => jObject.AsPrimitive<JFloat, Single>(),
+				UnicodePrimitiveSignatures.IntSignatureChar => jObject.AsPrimitive<JInt, Int32>(),
+				UnicodePrimitiveSignatures.LongSignatureChar => jObject.AsPrimitive<JLong, Int64>(),
+				UnicodePrimitiveSignatures.ShortSignatureChar => jObject.AsPrimitive<JShort, Int16>(),
 				_ => throw new InvalidOperationException("Object is not primitive."),
 			};
 		return obj;

@@ -6,7 +6,8 @@ public partial class JThrowableObject
 	/// Datatype metadata.
 	/// </summary>
 	internal static readonly JThrowableTypeMetadata JThrowableClassMetadata = JTypeMetadataBuilder<JThrowableObject>
-	                                                                          .Create(UnicodeClassNames.ThrowableObject)
+	                                                                          .Create(
+		                                                                          UnicodeClassNames.ThrowableObject())
 	                                                                          .Implements<JSerializableObject>()
 	                                                                          .Build();
 
