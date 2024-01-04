@@ -18,7 +18,7 @@ public static class Program
 		Console.WriteLine("Hello, World!");
 		Program.PrintBuiltIntMetadata();
 		//Program.PrintArrayMetadata(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JInt>>>>>.Metadata, 10);
-		//Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 10);
 		Program.PrintVirtualMachineInfo(
 			"/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/server/libjvm.dylib");
 		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib/server/libjvm.dylib");
