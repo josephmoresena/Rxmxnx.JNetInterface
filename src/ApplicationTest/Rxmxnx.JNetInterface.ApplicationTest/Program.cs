@@ -162,7 +162,7 @@ public static class Program
 			Program.PrintAttachedThreadInfo(thread);
 
 			if (env is null)
-				Program.PrintAttachThreadInfo(vm, new(() => CString.Concat(threadName, " Nested"u8)), thread);
+				Program.PrintAttachThreadInfo(vm, CString.Concat(threadName, " Nested"u8), thread);
 		}
 		Console.WriteLine($"Thread detached: {vm.GetEnvironment() is null}");
 	}
