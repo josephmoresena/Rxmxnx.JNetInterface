@@ -16,7 +16,7 @@ namespace {0};
 
 partial class {1} 
 {{
-	/// <summary>
+{3}	/// <summary>
 	/// Static constructor.
 	/// </summary>
 	static {1}()
@@ -35,15 +35,33 @@ partial class {1}
 	{
 		String fileName = $"{utf8ClassContainerSymbol.Name}.Initializer.g.cs";
 		StringBuilder strBuild = new();
-		foreach (ISymbol symbol in utf8ClassContainerSymbol.GetMembers())
+		StringBuilder strBuildProp = new();
+		foreach (ISymbol symbol in utf8ClassContainerSymbol.GetMembers()
+		                                                   .Where(m => m.IsStatic &&
+			                                                          m.Kind is SymbolKind.Field or SymbolKind.Method))
 		{
 			String? value = symbol.GetLiteralValue();
-			if (value is not null)
+			if (value is null) continue;
+			if (symbol.Kind == SymbolKind.Field)
+			{
 				strBuild.AppendLine($"\t\t{symbol.Name} = new(() => \"{value}\"u8);");
+			}
+			else
+			{
+				String accessibility = symbol.DeclaredAccessibility switch
+				{
+					Accessibility.Public => "public",
+					Accessibility.Internal => "internal",
+					_ => "private",
+				};
+				strBuildProp.AppendLine(
+					$"\t{accessibility} static partial ReadOnlySpan<Byte> {symbol.Name}() => \"{value}\"u8;");
+			}
 		}
+		if (strBuildProp.Length > 0) strBuildProp.AppendLine();
 		String source = String.Format(GenerationExtensions.staticConstructorFormat,
 		                              utf8ClassContainerSymbol.ContainingNamespace, utf8ClassContainerSymbol.Name,
-		                              strBuild);
+		                              strBuild, strBuildProp);
 		context.AddSource(fileName, source);
 	}
 
