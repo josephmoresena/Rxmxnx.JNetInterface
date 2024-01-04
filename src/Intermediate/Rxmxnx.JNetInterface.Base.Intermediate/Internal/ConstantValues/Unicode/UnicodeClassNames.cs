@@ -80,6 +80,22 @@ internal static partial class UnicodeClassNames
 	[DefaultValue(ClassNames.StackTraceElementObject)]
 	public static partial ReadOnlySpan<Byte> StackTraceElementObject();
 
+	/// <inheritdoc cref="ClassNames.BufferObject"/>
+	[DefaultValue(ClassNames.BufferObject)]
+	public static partial ReadOnlySpan<Byte> BufferObject();
+	/// <inheritdoc cref="ClassNames.ByteBufferObject"/>
+	[DefaultValue(ClassNames.ByteBufferObject)]
+	public static partial ReadOnlySpan<Byte> ByteBufferObject();
+	/// <inheritdoc cref="ClassNames.MappedByteBufferObject"/>
+	[DefaultValue(ClassNames.MappedByteBufferObject)]
+	public static partial ReadOnlySpan<Byte> MappedByteBufferObject();
+	/// <inheritdoc cref="ClassNames.DirectByteBufferObject"/>
+	[DefaultValue(ClassNames.DirectByteBufferObject)]
+	public static partial ReadOnlySpan<Byte> DirectByteBufferObject();
+	/// <inheritdoc cref="ClassNames.DirectBufferObject"/>
+	[DefaultValue(ClassNames.DirectBufferObject)]
+	public static partial ReadOnlySpan<Byte> DirectBufferObject();
+
 	/// <inheritdoc cref="ClassNames.BooleanPrimitive"/>
 	[DefaultValue(ClassNames.BooleanPrimitive)]
 	public static partial ReadOnlySpan<Byte> BooleanPrimitive();

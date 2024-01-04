@@ -14,9 +14,17 @@ internal static class ClassNames
 	/// </summary>
 	public const String IoPackage = "java/io/";
 	/// <summary>
+	/// JNI representation of <c>java.nio</c> package.
+	/// </summary>
+	public const String NioPackage = "java/nio/";
+	/// <summary>
 	/// JNI representation of <c>java.reflect</c> package.
 	/// </summary>
 	public const String ReflectPackage = "java/reflect/";
+	/// <summary>
+	/// JNI representation of <c>sun.nio.ch</c> package.
+	/// </summary>
+	public const String SunNioChPackage = "sun/nio/ch/";
 
 	/// <summary>
 	/// Java class name of primitive <c>boolean</c> class.
@@ -147,6 +155,28 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.StackTraceElement</c> class.
 	/// </summary>
 	public const String StackTraceElementObject = ClassNames.LangPackage + "StackTraceElement";
+
+	/// <summary>
+	/// JNI name of <c>java.nio.Buffer</c> class.
+	/// </summary>
+	public const String BufferObject = ClassNames.NioPackage + "Buffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.ByteBuffer</c> class.
+	/// </summary>
+	public const String ByteBufferObject = ClassNames.NioPackage + "ByteBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.MappedByteBuffer</c> class.
+	/// </summary>
+	public const String MappedByteBufferObject = ClassNames.NioPackage + "MappedByteBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.MappedByteBuffer</c> class.
+	/// </summary>
+	public const String DirectByteBufferObject = ClassNames.NioPackage + "DirectByteBuffer";
+	/// <summary>
+	/// JNI name of <c>sun.nio.ch.DirectByteBuffer</c> interface.
+	/// </summary>
+	public const String DirectBufferObject = ClassNames.SunNioChPackage + "DirectBuffer";
+
 	/// <summary>
 	/// JNI name of <c>java.lang.Thread.UncaughtExceptionHandler</c> interface.
 	/// </summary>
