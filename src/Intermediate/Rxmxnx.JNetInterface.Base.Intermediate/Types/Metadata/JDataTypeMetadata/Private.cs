@@ -51,7 +51,7 @@ public partial record JDataTypeMetadata
 					break;
 				case 2:
 				{
-					span[0] = UnicodeObjectSignatures.ArraySignaturePrefix[0];
+					span[0] = UnicodeObjectSignatures.ArraySignaturePrefixChar;
 					if (arg[1].Bytes.Length > 0)
 						arg[1].Bytes.CopyTo(span[1..]);
 					else
@@ -67,9 +67,9 @@ public partial record JDataTypeMetadata
 	/// <param name="className">JNI class name.</param>
 	private static void WriteSignature(Span<Byte> span, ReadOnlySpan<Byte> className)
 	{
-		span[0] = UnicodeObjectSignatures.ObjectSignaturePrefix[0];
+		span[0] = UnicodeObjectSignatures.ObjectSignaturePrefixChar;
 		className.CopyTo(span[1..]);
-		span[^1] = UnicodeObjectSignatures.ObjectSignatureSuffix[0];
+		span[^1] = UnicodeObjectSignatures.ObjectSignatureSuffixChar;
 	}
 	/// <summary>
 	/// Computes the array signature for given type signature.
@@ -77,7 +77,7 @@ public partial record JDataTypeMetadata
 	/// <param name="signature"><see cref="IDataType"/> signature.</param>
 	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
 	private static CString ComputeArraySignature(CString signature)
-		=> CString.Concat(UnicodeObjectSignatures.ArraySignaturePrefix, signature);
+		=> CString.Concat(stackalloc Byte[1] { UnicodeObjectSignatures.ArraySignaturePrefixChar, }, signature);
 	/// <summary>
 	/// Escapes Java class name char to JNI class name.
 	/// </summary>

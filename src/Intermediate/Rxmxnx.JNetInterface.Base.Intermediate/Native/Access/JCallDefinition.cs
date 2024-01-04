@@ -7,23 +7,6 @@
 public abstract record JCallDefinition : JAccessibleObjectDefinition
 {
 	/// <summary>
-	/// JNI signature for void return.
-	/// </summary>
-	public static CString VoidReturnSignature => UnicodeMethodSignatures.VoidReturnSignature;
-	/// <summary>
-	/// Prefix for the parameters declaration in the JNI signature for calls.
-	/// </summary>
-	public static CString MethodParameterPrefix => UnicodeMethodSignatures.MethodParameterPrefix;
-	/// <summary>
-	/// Suffix for the parameters declaration in the JNI signature for calls.
-	/// </summary>
-	public static CString MethodParameterSuffix => UnicodeMethodSignatures.MethodParameterSuffix;
-	/// <summary>
-	/// JNI name for class constructors.
-	/// </summary>
-	public static CString ConstructorName => UnicodeMethodNames.Constructor;
-
-	/// <summary>
 	/// Total size in bytes of call parameters.
 	/// </summary>
 	private readonly Int32 _callSize;
@@ -68,7 +51,7 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// <param name="name">Call defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	internal JCallDefinition(ReadOnlySpan<Byte> name, params JArgumentMetadata[] metadata) : this(
-		name, JCallDefinition.VoidReturnSignature, metadata) { }
+		name, stackalloc Byte[1] { UnicodeMethodSignatures.VoidReturnSignatureChar, }, metadata) { }
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>
@@ -114,14 +97,14 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 		sizes = new Int32[metadata.Length];
 
 		using MemoryStream memory = new();
-		memory.Write(JCallDefinition.MethodParameterPrefix);
+		memory.WriteByte(UnicodeMethodSignatures.MethodParameterPrefixChar);
 		for (Int32 i = 0; i < metadata.Length; i++)
 		{
 			memory.Write(metadata[i].Signature);
 			totalSize += metadata[i].Size;
 			sizes[i] = metadata[i].Size;
 		}
-		memory.Write(JCallDefinition.MethodParameterSuffix);
+		memory.WriteByte(UnicodeMethodSignatures.MethodParameterSuffixChar);
 		memory.Write(returnSignature);
 		memory.WriteByte(default);
 		return memory.ToArray();

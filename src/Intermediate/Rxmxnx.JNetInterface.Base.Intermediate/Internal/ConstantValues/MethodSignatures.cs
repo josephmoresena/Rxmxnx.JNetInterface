@@ -8,13 +8,13 @@ internal static class MethodSignatures
 	/// <summary>
 	/// JNI signature for void return.
 	/// </summary>
-	public const String VoidReturnSignature = "V";
+	public const Char VoidReturnSignatureChar = 'V';
 	/// <summary>
 	/// Prefix for the parameters declaration in the JNI signature for methods.
 	/// </summary>
-	public const String MethodParameterPrefix = "(";
+	public const Char MethodParameterPrefixChar = '(';
 	/// <summary>
 	/// Sufix for the parameters declaration in the JNI signature for methods.
 	/// </summary>
-	public const String MethodParameterSuffix = ")";
+	public const Char MethodParameterSuffixChar = ')';
 }

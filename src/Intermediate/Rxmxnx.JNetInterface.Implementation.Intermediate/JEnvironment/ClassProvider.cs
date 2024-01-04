@@ -8,7 +8,6 @@ public partial class JEnvironment
 		JClassObject IClassProvider.StringClassObject => this.GetClass<JStringObject>();
 		JClassObject IClassProvider.NumberClassObject => this.GetClass<JNumberObject>();
 		JClassObject IClassProvider.EnumClassObject => this.GetClass<JEnumObject>();
-		JClassObject IClassProvider.ThrowableClassObject => this.GetClass<JThrowableObject>();
 		JClassObject IClassProvider.BooleanObject => this.GetClass<JBooleanObject>();
 		JClassObject IClassProvider.ByteObject => this.GetClass<JByteObject>();
 		JClassObject IClassProvider.CharacterObject => this.GetClass<JCharacterObject>();

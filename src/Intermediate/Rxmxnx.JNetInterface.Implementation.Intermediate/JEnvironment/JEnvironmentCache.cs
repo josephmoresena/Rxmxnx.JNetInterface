@@ -319,13 +319,14 @@ public partial class JEnvironment
 				using LocalFrame frame = new(env, 10);
 				JClassLocalRef classRef = env.GetObjectClass(throwableRef.Value);
 				JClassObject jClass = env.GetClass(classRef, true);
+				String message = JEnvironmentCache.GetThrowableMessage(jClass, throwableRef);
+				JThrowableObjectMetadata objectMetadata = new(jClass, message);
 				JThrowableTypeMetadata throwableMetadata =
 					MetadataHelper.GetMetadata(jClass.Hash) as JThrowableTypeMetadata ??
 					(JThrowableTypeMetadata)MetadataHelper.GetMetadata<JThrowableObject>();
-				JObjectMetadata objectMetadata = new(jClass);
 				JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
 				JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
-				throw throwableMetadata.CreateException(jGlobalThrowable);
+				throw throwableMetadata.CreateException(jGlobalThrowable, message);
 			}
 			finally
 			{
@@ -583,6 +584,17 @@ public partial class JEnvironment
 			if (obj is not JEnvironmentCache cache) return;
 			cache.Thread.Join();
 			JVirtualMachine.RemoveEnvironment(cache.VirtualMachine.Reference, cache.Reference);
+		}
+		/// <summary>
+		/// Retrieves throwable message.
+		/// </summary>
+		/// <param name="jClass">Throwable class.</param>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <returns>Throwable message.</returns>
+		private static String GetThrowableMessage(JClassObject jClass, JThrowableLocalRef throwableRef)
+		{
+			using JStringObject throwableMessage = JThrowableObject.GetThrowableMessage(jClass, throwableRef);
+			return throwableMessage.Value;
 		}
 	}
 }

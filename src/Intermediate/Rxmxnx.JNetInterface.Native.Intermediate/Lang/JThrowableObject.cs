@@ -20,8 +20,7 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 
 	/// <inheritdoc/>
 	internal JThrowableObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy,
-		JClassObject? jClass = default) : base(env, jLocalRef, isDummy,
-		                                       jClass ?? env.ClassProvider.ThrowableClassObject) { }
+		JClassObject? jClass = default) : base(env, jLocalRef, isDummy, jClass ?? env.ClassProvider.ThrowableObject) { }
 
 	/// <inheritdoc/>
 	protected JThrowableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
@@ -32,7 +31,7 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	protected new virtual JThrowableObjectMetadata CreateMetadata()
-		=> new(base.CreateMetadata()) { Message = this.Message, StackTrace = this.StackTrace, };
+		=> new(base.CreateMetadata()) { Message = this.Message, StackTrace = this._stackTrace, };
 
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)

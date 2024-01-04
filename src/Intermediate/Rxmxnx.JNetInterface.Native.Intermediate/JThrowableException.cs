@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface;
 /// </summary>
 public abstract partial class JThrowableException : Exception
 {
-	/// <inheritdoc cref="JGlobal"/>
+	/// <inheritdoc cref="Global"/>
 	private readonly JGlobalBase _jGlobal;
 	/// <inheritdoc cref="JThrowableException.Thread"/>
 	private readonly Thread _thread;
@@ -13,7 +13,7 @@ public abstract partial class JThrowableException : Exception
 	/// <summary>
 	/// Global throwable instance.
 	/// </summary>
-	internal JGlobalBase JGlobal => this._jGlobal;
+	internal JGlobalBase Global => this._jGlobal;
 	/// <summary>
 	/// Thread that owns the exception.
 	/// </summary>
@@ -23,7 +23,8 @@ public abstract partial class JThrowableException : Exception
 	/// Constructor.
 	/// </summary>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> throwable instance.</param>
-	internal JThrowableException(JGlobalBase jGlobal)
+	/// <param name="message">Exception message.</param>
+	internal JThrowableException(JGlobalBase jGlobal, String? message) : base(message)
 	{
 		this._jGlobal = jGlobal;
 		this._thread = Thread.CurrentThread;
@@ -78,7 +79,10 @@ public sealed class JThrowableException<TThrowable> : JThrowableException
 	where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 {
 	/// <inheritdoc/>
-	internal JThrowableException(JGlobalBase jGlobal) : base(jGlobal) { jGlobal.SetAssignableTo<TThrowable>(true); }
+	internal JThrowableException(JGlobalBase jGlobal, String? message) : base(jGlobal, message)
+	{
+		jGlobal.SetAssignableTo<TThrowable>(true);
+	}
 
 	/// <summary>
 	/// Invokes <paramref name="action"/> using the current <typeparamref name="TThrowable"/> instance.
@@ -86,7 +90,7 @@ public sealed class JThrowableException<TThrowable> : JThrowableException
 	/// <param name="action">A <see cref="Action{JThrowableObject}"/> delegate.</param>
 	public void WithSafeInvoke(Action<TThrowable> action)
 	{
-		JThrowableCall call = new(this.JGlobal, action);
+		JThrowableCall call = new(this.Global, action);
 		Task.Factory.StartNew(JThrowableException.WithSafeInvoke<JThrowableObject>, call).Wait();
 	}
 	/// <summary>
@@ -97,7 +101,7 @@ public sealed class JThrowableException<TThrowable> : JThrowableException
 	/// <returns>Execution result of <paramref name="func"/>.</returns>
 	public TResult WithSafeInvoke<TResult>(Func<TThrowable, TResult> func)
 	{
-		JThrowableCall call = new(this.JGlobal, func);
+		JThrowableCall call = new(this.Global, func);
 		return Task.Factory.StartNew(JThrowableException.WithSafeInvoke<JThrowableObject, TResult>, call).Result;
 	}
 	/// <inheritdoc/>

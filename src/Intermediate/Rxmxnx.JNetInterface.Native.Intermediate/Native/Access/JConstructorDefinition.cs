@@ -18,7 +18,7 @@ public record JConstructorDefinition : JCallDefinition
 	/// Constructor.
 	/// </summary>
 	protected JConstructorDefinition(params JArgumentMetadata[] metadata) : base(
-		JCallDefinition.ConstructorName, metadata) { }
+		UnicodeMethodNames.Constructor(), metadata) { }
 
 	/// <summary>
 	/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>

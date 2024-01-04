@@ -6,14 +6,11 @@
 internal static partial class UnicodeObjectSignatures
 {
 	/// <inheritdoc cref="ObjectSignatures.ObjectSignaturePrefix"/>
-	[DefaultValue(ObjectSignatures.ObjectSignaturePrefix)]
-	public static readonly CString ObjectSignaturePrefix;
+	public const Byte ObjectSignaturePrefixChar = (Byte)ObjectSignatures.ObjectSignaturePrefixChar;
 	/// <inheritdoc cref="ObjectSignatures.ObjectSignatureSuffix"/>
-	[DefaultValue(ObjectSignatures.ObjectSignatureSuffix)]
-	public static readonly CString ObjectSignatureSuffix;
+	public const Byte ObjectSignatureSuffixChar = (Byte)ObjectSignatures.ObjectSignatureSuffixChar;
 	/// <inheritdoc cref="ObjectSignatures.ArraySignaturePrefix"/>
-	[DefaultValue(ObjectSignatures.ArraySignaturePrefix)]
-	public static readonly CString ArraySignaturePrefix;
+	public const Byte ArraySignaturePrefixChar = (Byte)ObjectSignatures.ArraySignaturePrefixChar;
 
 	/// <inheritdoc cref="ObjectSignatures.ObjectSignature"/>
 	[DefaultValue(ObjectSignatures.ObjectSignature)]

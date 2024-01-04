@@ -8,7 +8,7 @@ internal static class MethodNames
 	/// <summary>
 	/// JNI name for class constructors.
 	/// </summary>
-	public const String ConstructorName = "<init>";
+	public const String Constructor = "<init>";
 	/// <summary>
 	/// Name of <c>Enum.name()</c>.
 	/// </summary>

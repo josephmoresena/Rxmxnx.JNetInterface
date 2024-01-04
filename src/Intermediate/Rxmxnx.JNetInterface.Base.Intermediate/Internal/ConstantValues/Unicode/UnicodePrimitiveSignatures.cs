@@ -5,45 +5,20 @@ namespace Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode;
 /// </summary>
 internal static partial class UnicodePrimitiveSignatures
 {
-	/// <inheritdoc cref="BooleanSignature"/>
-	public const Byte BooleanSignatureChar = (Byte)PrimitiveSignatures.JBooleanSignatureChar;
-	/// <inheritdoc cref="ByteSignature"/>
-	public const Byte ByteSignatureChar = (Byte)PrimitiveSignatures.JByteSignatureChar;
-	/// <inheritdoc cref="CharSignature"/>
-	public const Byte CharSignatureChar = (Byte)PrimitiveSignatures.JCharSignatureChar;
-	/// <inheritdoc cref="DoubleSignature"/>
-	public const Byte DoubleSignatureChar = (Byte)PrimitiveSignatures.JDoubleSignatureChar;
-	/// <inheritdoc cref="FloatSignature"/>
-	public const Byte FloatSignatureChar = (Byte)PrimitiveSignatures.JFloatSignatureChar;
-	/// <inheritdoc cref="IntSignature"/>
-	public const Byte IntSignatureChar = (Byte)PrimitiveSignatures.JIntSignatureChar;
-	/// <inheritdoc cref="LongSignature"/>
-	public const Byte LongSignatureChar = (Byte)PrimitiveSignatures.JLongSignatureChar;
-	/// <inheritdoc cref="ShortSignature"/>
-	public const Byte ShortSignatureChar = (Byte)PrimitiveSignatures.JShortSignatureChar;
-
 	/// <inheritdoc cref="PrimitiveSignatures.BooleanSignature"/>
-	[DefaultValue(PrimitiveSignatures.BooleanSignature)]
-	public static partial ReadOnlySpan<Byte> BooleanSignature();
+	public const Byte BooleanSignatureChar = (Byte)PrimitiveSignatures.JBooleanSignatureChar;
 	/// <inheritdoc cref="PrimitiveSignatures.ByteSignature"/>
-	[DefaultValue(PrimitiveSignatures.ByteSignature)]
-	public static partial ReadOnlySpan<Byte> ByteSignature();
+	public const Byte ByteSignatureChar = (Byte)PrimitiveSignatures.JByteSignatureChar;
 	/// <inheritdoc cref="PrimitiveSignatures.CharSignature"/>
-	[DefaultValue(PrimitiveSignatures.CharSignature)]
-	public static partial ReadOnlySpan<Byte> CharSignature();
+	public const Byte CharSignatureChar = (Byte)PrimitiveSignatures.JCharSignatureChar;
 	/// <inheritdoc cref="PrimitiveSignatures.DoubleSignature"/>
-	[DefaultValue(PrimitiveSignatures.DoubleSignature)]
-	public static partial ReadOnlySpan<Byte> DoubleSignature();
+	public const Byte DoubleSignatureChar = (Byte)PrimitiveSignatures.JDoubleSignatureChar;
 	/// <inheritdoc cref="PrimitiveSignatures.FloatSignature"/>
-	[DefaultValue(PrimitiveSignatures.FloatSignature)]
-	public static partial ReadOnlySpan<Byte> FloatSignature();
+	public const Byte FloatSignatureChar = (Byte)PrimitiveSignatures.JFloatSignatureChar;
 	/// <inheritdoc cref="PrimitiveSignatures.IntSignature"/>
-	[DefaultValue(PrimitiveSignatures.IntSignature)]
-	public static partial ReadOnlySpan<Byte> IntSignature();
+	public const Byte IntSignatureChar = (Byte)PrimitiveSignatures.JIntSignatureChar;
 	/// <inheritdoc cref="PrimitiveSignatures.LongSignature"/>
-	[DefaultValue(PrimitiveSignatures.LongSignature)]
-	public static partial ReadOnlySpan<Byte> LongSignature();
+	public const Byte LongSignatureChar = (Byte)PrimitiveSignatures.JLongSignatureChar;
 	/// <inheritdoc cref="PrimitiveSignatures.ShortSignature"/>
-	[DefaultValue(PrimitiveSignatures.ShortSignature)]
-	public static partial ReadOnlySpan<Byte> ShortSignature();
+	public const Byte ShortSignatureChar = (Byte)PrimitiveSignatures.JShortSignatureChar;
 }

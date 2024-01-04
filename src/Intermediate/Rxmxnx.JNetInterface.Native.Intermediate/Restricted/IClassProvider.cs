@@ -67,10 +67,6 @@ public interface IClassProvider
 	/// </summary>
 	JClassObject EnumClassObject => this.GetClass<JEnumObject>();
 	/// <summary>
-	/// <c>java.lang.Throwable</c> class instance.
-	/// </summary>
-	JClassObject ThrowableClassObject => this.GetClass<JThrowableObject>();
-	/// <summary>
 	/// <c>java.lang.Boolean</c> class instance.
 	/// </summary>
 	JClassObject BooleanObject { get; }

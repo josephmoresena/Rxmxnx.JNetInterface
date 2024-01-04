@@ -18,6 +18,12 @@ public record JThrowableObjectMetadata : JObjectMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="message">Throwable message.</param>
+	internal JThrowableObjectMetadata(JClassObject jClass, String? message) : base(jClass) => this.Message = message;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
 	/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
 	internal JThrowableObjectMetadata(JObjectMetadata metadata) : base(metadata)
 	{

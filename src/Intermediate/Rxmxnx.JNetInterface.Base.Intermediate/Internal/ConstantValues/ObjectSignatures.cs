@@ -5,12 +5,19 @@
 /// </summary>
 internal static class ObjectSignatures
 {
+	/// <inheritdoc cref="ObjectSignatures.ObjectSignaturePrefix"/>
+	public const Char ObjectSignaturePrefixChar = 'L';
+	/// <inheritdoc cref="ObjectSignatures.ObjectSignatureSuffix"/>
+	public const Char ObjectSignatureSuffixChar = ';';
+	/// <inheritdoc cref="ObjectSignatures.ArraySignaturePrefix"/>
+	public const Char ArraySignaturePrefixChar = '[';
+
 	/// <summary>
 	/// Prefix for fully-qualified-class type declaration in the JNI signature for methods and properties.
 	/// </summary>
 	public const String ObjectSignaturePrefix = "L";
 	/// <summary>
-	/// Sufix for fully-qualified-class type declaration in the JNI signature for methods and properties.
+	/// Suffix for fully-qualified-class type declaration in the JNI signature for methods and properties.
 	/// </summary>
 	public const String ObjectSignatureSuffix = ";";
 	/// <summary>

@@ -18,9 +18,6 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.SystemObject"/>
 	[DefaultValue(ClassNames.SystemObject)]
 	public static readonly CString SystemObject;
-	/// <inheritdoc cref="ClassNames.UncaughtExceptionHandlerInterface"/>
-	[DefaultValue(ClassNames.UncaughtExceptionHandlerInterface)]
-	public static readonly CString UncaughtExceptionHandlerInterface;
 
 	/// <inheritdoc cref="ClassNames.BooleanObject"/>
 	[DefaultValue(ClassNames.BooleanObject)]

@@ -113,17 +113,17 @@ internal static class ValidationUtilities
 		Byte prefix = signature[0];
 		Byte suffix = signature[^1];
 
-		if (prefix == UnicodeObjectSignatures.ArraySignaturePrefix[0])
+		if (prefix == UnicodeObjectSignatures.ArraySignaturePrefixChar)
 			switch (signature.Length)
 			{
 				case < 2:
 					throw new ArgumentException("Invalid signature.");
-				case > 2 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefix[0] ||
-					suffix != UnicodeObjectSignatures.ObjectSignatureSuffix[0]:
+				case > 2 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
+					suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar:
 					throw new ArgumentException("Invalid signature.");
 			}
-		else if (prefix != UnicodeObjectSignatures.ObjectSignaturePrefix[0] ||
-		         suffix != UnicodeObjectSignatures.ObjectSignatureSuffix[0])
+		else if (prefix != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
+		         suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar)
 			throw new ArgumentException("Invalid signature.");
 	}
 	/// <summary>

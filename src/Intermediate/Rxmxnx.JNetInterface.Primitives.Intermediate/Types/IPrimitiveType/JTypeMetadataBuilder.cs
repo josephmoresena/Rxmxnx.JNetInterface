@@ -8,7 +8,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 	protected ref partial struct JTypeMetadataBuilder
 	{
 		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
-		private readonly ReadOnlySpan<Byte> _signature;
+		private readonly Byte _signature;
 
 		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
 		private readonly ReadOnlySpan<Byte> _className;
@@ -20,7 +20,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// </summary>
 		/// <param name="className">Primitive class name.</param>
 		/// <param name="signature">JNI signature for current primitive type.</param>
-		private JTypeMetadataBuilder(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature)
+		private JTypeMetadataBuilder(ReadOnlySpan<Byte> className, Byte signature)
 		{
 			this._className = className;
 			this._signature = signature;
@@ -41,8 +41,8 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JPrimitiveTypeMetadata Build()
-			=> new JPrimitiveGenericTypeMetadata(NativeUtilities.SizeOf<TPrimitive>(), typeof(TValue), this._signature,
-			                                     this._className,
+			=> new JPrimitiveGenericTypeMetadata(NativeUtilities.SizeOf<TPrimitive>(), typeof(TValue),
+			                                     stackalloc Byte[1] { this._signature, }, this._className,
 			                                     ValidationUtilities.ValidateNotEmpty(this._wrapperClassName));
 
 		/// <summary>
@@ -51,10 +51,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// <param name="className">Primitive class name.</param>
 		/// <param name="signature">Primitive type signature.</param>
 		/// <returns>A new <see cref="JTypeMetadataBuilder"/> instance.</returns>
-		public static JTypeMetadataBuilder Create(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature)
-		{
-			ValidationUtilities.ThrowIfInvalidSignature(signature, true);
-			return new(className, signature);
-		}
+		public static JTypeMetadataBuilder Create(ReadOnlySpan<Byte> className, Byte signature)
+			=> new(className, signature);
 	}
 }

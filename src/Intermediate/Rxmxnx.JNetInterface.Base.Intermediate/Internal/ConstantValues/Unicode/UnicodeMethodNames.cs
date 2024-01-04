@@ -5,10 +5,9 @@
 /// </summary>
 internal static partial class UnicodeMethodNames
 {
-	/// <inheritdoc cref="MethodNames.ConstructorName"/>
-	[DefaultValue(MethodNames.ConstructorName)]
-	public static readonly CString Constructor;
-
+	/// <inheritdoc cref="MethodNames.Constructor"/>
+	[DefaultValue(MethodNames.Constructor)]
+	public static partial ReadOnlySpan<Byte> Constructor();
 	/// <inheritdoc cref="MethodNames.Name"/>
 	[DefaultValue(MethodNames.Name)]
 	public static partial ReadOnlySpan<Byte> Name();

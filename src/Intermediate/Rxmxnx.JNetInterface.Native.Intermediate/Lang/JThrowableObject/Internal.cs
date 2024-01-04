@@ -14,4 +14,32 @@ public partial class JThrowableObject
 	static JClassTypeMetadata IBaseClassType<JThrowableObject>.SuperClassMetadata
 		=> JThrowableObject.JThrowableClassMetadata;
 	static JDataTypeMetadata IDataType.Metadata => JThrowableObject.JThrowableClassMetadata;
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+	internal JThrowableObject(JClassObject jClass, JThrowableLocalRef throwableRef) :
+		base(jClass, throwableRef.Value) { }
+
+	/// <summary>
+	/// Retrieves a <see cref="JStringObject"/> containing throwable message.
+	/// </summary>
+	/// <param name="throwableClass">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JStringObject"/> instance.</returns>
+	internal static JStringObject GetThrowableMessage(JClassObject throwableClass, JThrowableLocalRef throwableRef)
+	{
+		IEnvironment env = throwableClass.Environment;
+		using JThrowableObject tempThrowable = new(throwableClass, throwableRef);
+		try
+		{
+			return env.Functions.GetMessage(tempThrowable);
+		}
+		finally
+		{
+			tempThrowable.ClearValue();
+		}
+	}
 }

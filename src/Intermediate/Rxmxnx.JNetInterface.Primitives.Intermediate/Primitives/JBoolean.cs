@@ -20,7 +20,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JBoolean, Boolean>.JTypeMetadataBuilder
-		.Create(UnicodeClassNames.BooleanPrimitive(), UnicodePrimitiveSignatures.BooleanSignature())
+		.Create(UnicodeClassNames.BooleanPrimitive(), UnicodePrimitiveSignatures.BooleanSignatureChar)
 		.WithWrapperClassName(UnicodeClassNames.BooleanObject()).Build();
 
 	/// <inheritdoc/>

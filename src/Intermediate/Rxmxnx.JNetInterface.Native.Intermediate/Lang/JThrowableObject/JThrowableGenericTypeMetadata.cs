@@ -43,8 +43,9 @@ public partial class JThrowableObject
 			internal override TThrowable? ParseInstance(JLocalObject? jLocal)
 				=> jLocal as TThrowable ?? TThrowable.Create(jLocal);
 			/// <inheritdoc/>
-			internal override JThrowableException CreateException(JGlobalBase jGlobalThrowable)
-				=> new JThrowableException<TThrowable>(jGlobalThrowable);
+			internal override JThrowableException CreateException(JGlobalBase jGlobalThrowable,
+				String? exceptionMessage = default)
+				=> new JThrowableException<TThrowable>(jGlobalThrowable, exceptionMessage);
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata()
 				=> JReferenceTypeMetadata.GetArrayMetadata<TThrowable>();

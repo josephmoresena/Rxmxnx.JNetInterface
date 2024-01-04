@@ -113,6 +113,6 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	/// <param name="className"><see cref="IDataType"/> class name.</param>
 	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
 	protected static CString ComputeReferenceTypeSignature(ReadOnlySpan<Byte> className)
-		=> CString.Concat(UnicodeObjectSignatures.ObjectSignaturePrefix, className,
-		                  UnicodeObjectSignatures.ObjectSignatureSuffix);
+		=> CString.Concat(stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignaturePrefixChar, }, className,
+		                  stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignatureSuffixChar, });
 }

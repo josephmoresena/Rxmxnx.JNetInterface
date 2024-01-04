@@ -161,7 +161,7 @@ internal static class MetadataHelper
 	{
 		arrayHash = default;
 		arrayTypeMetadata = default;
-		if (className.Length < 2 || className[0] != UnicodeObjectSignatures.ArraySignaturePrefix[0]) return false;
+		if (className.Length < 2 || className[0] != UnicodeObjectSignatures.ArraySignaturePrefixChar) return false;
 		arrayHash = MetadataHelper.GetClassInformation(className);
 		if (!MetadataHelper.runtimeMetadata.TryGetValue(arrayHash.ToString(),
 		                                                out JReferenceTypeMetadata? referenceMetadata))
