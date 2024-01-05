@@ -224,9 +224,11 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="jLocal">The java object to load.</param>
 	public void Load(JLocalObject jLocal)
 	{
-		if (this._objects.TryAdd(jLocal.Id, new(jLocal)))
+		Boolean isClass = jLocal is JClassObject;
+		if (this._objects.TryAdd(jLocal.Id, new(jLocal)) && isClass)
 			this._classCounter.Value += 1;
-		this.Secondary?._objects.TryAdd(jLocal.Id, new(jLocal));
+		if ((this.Secondary?._objects.TryAdd(jLocal.Id, new(jLocal)) ?? false) && isClass)
+			this.Secondary._classCounter.Value += 1;
 	}
 	/// <summary>
 	/// Unloads the given object from the current instance.
