@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// This interface exposes an object that represents a java primitive floating point.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IPrimitiveFloatingPointType : IPrimitiveNumericType { }
+internal interface IPrimitiveFloatingPointType : IPrimitiveNumericType;
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive floating point.
@@ -17,4 +17,4 @@ internal partial interface IPrimitiveFloatingPointType<TPrimitive, TValue> : IPr
 	where TPrimitive : unmanaged, IPrimitiveFloatingPointType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>,
-	IBinaryFloatingPointIeee754<TValue>, IMinMaxValue<TValue> { }
+	IBinaryFloatingPointIeee754<TValue>, IMinMaxValue<TValue>;

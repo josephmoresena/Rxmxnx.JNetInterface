@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// This interface exposes an object that represents a java signed number.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IPrimitiveSignedType : IPrimitiveNumericType { }
+internal interface IPrimitiveSignedType : IPrimitiveNumericType;
 
 /// <summary>
 /// This interface exposes an object that represents a java signed number.

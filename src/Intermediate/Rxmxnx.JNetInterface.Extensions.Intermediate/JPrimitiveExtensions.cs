@@ -1,9 +1,9 @@
 /// <summary>
-/// Set of <see cref="IEnvironment"/> extensions.
+/// Set of <see cref="IPrimitiveType"/> native extensions.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CA1050
-public static class JEnvironmentExtensions
+public static class JPrimitiveExtensions
 #pragma warning restore CA1050
 {
 	/// <summary>

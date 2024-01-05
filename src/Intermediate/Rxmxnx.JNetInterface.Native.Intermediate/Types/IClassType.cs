@@ -23,4 +23,4 @@ public interface IClassType : IReferenceType
 /// </summary>
 /// <typeparam name="TClass">Type of java class type.</typeparam>
 public interface IClassType<out TClass> : IClassType, IReferenceType<TClass>
-	where TClass : JReferenceObject, IClassType<TClass> { }
+	where TClass : JReferenceObject, IClassType<TClass>;

@@ -7,4 +7,4 @@ namespace Rxmxnx.JNetInterface.Internal;
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface IFloatingPointValue<TValue> : INumericValue<TValue>
 	where TValue : unmanaged, IComparable, IConvertible, ISpanFormattable, IComparable<TValue>, IEquatable<TValue>,
-	IBinaryFloatingPointIeee754<TValue>, IMinMaxValue<TValue> { }
+	IBinaryFloatingPointIeee754<TValue>, IMinMaxValue<TValue>;

@@ -183,4 +183,4 @@ internal partial interface
 	where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryNumber<TValue>,
-	IMinMaxValue<TValue> { }
+	IMinMaxValue<TValue>;

@@ -22,8 +22,8 @@ public interface IArrayType : IReferenceType
 /// This interface exposes an object that represents a java array type instance.
 /// </summary>
 /// <typeparam name="TArray">Type of java class type.</typeparam>
-public interface IArrayType<TArray> : IArrayType, IReferenceType<TArray>
-	where TArray : JArrayObject, IArrayType<TArray> { }
+public interface IArrayType<out TArray> : IArrayType, IReferenceType<TArray>
+	where TArray : JArrayObject, IArrayType<TArray>;
 
 /// <summary>
 /// This interface exposes an object that represents a java array type instance.

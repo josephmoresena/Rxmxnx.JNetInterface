@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// This interface exposes an object that represents a java primitive integer.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IPrimitiveIntegerType : IPrimitiveNumericType { }
+internal interface IPrimitiveIntegerType : IPrimitiveNumericType;
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive integer.

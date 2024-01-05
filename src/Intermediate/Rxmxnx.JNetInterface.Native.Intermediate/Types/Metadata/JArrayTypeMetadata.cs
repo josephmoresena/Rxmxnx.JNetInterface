@@ -34,6 +34,13 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 		this.Deep = deep;
 		JArrayTypeMetadata.arrayMetadatas.TryAdd(this.Signature, this);
 	}
+	/// <summary>
+	/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
+	/// </summary>
+	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+	/// <param name="index">Element index.</param>
+	/// <param name="value">Object instance.</param>
+	internal abstract void SetObjectElement(JArrayObject jArray, Int32 index, JLocalObject? value);
 
 	/// <summary>
 	/// Retrieves the <see cref="JArrayTypeMetadata"/> for <typeparamref name="TElement"/>

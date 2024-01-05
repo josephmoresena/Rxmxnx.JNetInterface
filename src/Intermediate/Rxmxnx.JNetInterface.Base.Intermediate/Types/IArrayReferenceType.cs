@@ -16,4 +16,4 @@ internal interface IArrayReferenceType : IObjectReferenceType, IEquatable<JArray
 /// </summary>
 /// <typeparam name="TArray">Type of <see cref="IArrayReferenceType{TArray}"/>.</typeparam>
 internal interface IArrayReferenceType<TArray> : IArrayReferenceType, IObjectReferenceType<TArray>
-	where TArray : unmanaged, IArrayReferenceType<TArray> { }
+	where TArray : unmanaged, IArrayReferenceType<TArray>;

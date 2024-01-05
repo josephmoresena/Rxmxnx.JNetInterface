@@ -7,4 +7,4 @@ namespace Rxmxnx.JNetInterface.Internal;
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface INumericValue<TValue> : IPrimitiveValue<TValue>
 	where TValue : unmanaged, IComparable, IConvertible, ISpanFormattable, IComparable<TValue>, IEquatable<TValue>,
-	IBinaryNumber<TValue>, IMinMaxValue<TValue> { }
+	IBinaryNumber<TValue>, IMinMaxValue<TValue>;

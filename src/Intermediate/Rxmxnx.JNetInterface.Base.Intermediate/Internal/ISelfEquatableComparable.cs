@@ -6,4 +6,4 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </summary>
 /// <typeparam name="TSelf">Type of object.</typeparam>
 internal interface ISelfEquatableComparable<TSelf> : IEquatable<TSelf>, IComparable<TSelf>
-	where TSelf : ISelfEquatableComparable<TSelf> { }
+	where TSelf : ISelfEquatableComparable<TSelf>;

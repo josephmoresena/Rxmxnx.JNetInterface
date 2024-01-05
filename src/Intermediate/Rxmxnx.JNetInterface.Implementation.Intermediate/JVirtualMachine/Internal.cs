@@ -99,7 +99,7 @@ public partial class JVirtualMachine
 	/// <see langword="true"/> if <paramref name="localRef"/> can be removed safely;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	internal Boolean SecureRemove(JObjectLocalRef localRef) => this._cache.InTransaction(localRef.Pointer);
+	internal Boolean SecureRemove(JObjectLocalRef localRef) => !this._cache.InTransaction(localRef.Pointer);
 	/// <summary>
 	/// Registers native methods for given class.
 	/// </summary>

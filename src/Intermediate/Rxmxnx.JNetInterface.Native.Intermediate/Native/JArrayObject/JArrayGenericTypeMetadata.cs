@@ -30,5 +30,41 @@ public partial class JArrayObject<TElement>
 			=> JArrayTypeMetadata.ParseInstance<TElement>(jLocal);
 		/// <inheritdoc/>
 		internal override JArrayTypeMetadata? GetArrayMetadata() => JArrayTypeMetadata.GetArrayMetadata<TElement>();
+		/// <inheritdoc/>
+		internal override void SetObjectElement(JArrayObject jArray, Int32 index, JLocalObject? value)
+		{
+			if (jArray is not JArrayObject<TElement> jGenericArray) return;
+			switch (value)
+			{
+				case TElement element:
+					jGenericArray[index] = element;
+					break;
+				case null:
+					jGenericArray[index] = default;
+					break;
+				default:
+					JArrayGenericTypeMetadata.SetObjectElement(jGenericArray, index, value);
+					break;
+			}
+		}
+		/// <summary>
+		/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
+		/// </summary>
+		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+		/// <param name="index">Element index.</param>
+		/// <param name="value">Object instance.</param>
+		private static void SetObjectElement(JArrayObject<TElement> jArray, Int32 index, JLocalObject value)
+		{
+			JReferenceTypeMetadata elementMetadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TElement>();
+			TElement element = (TElement)(Object)elementMetadata.ParseInstance(value);
+			try
+			{
+				jArray[index] = element;
+			}
+			finally
+			{
+				((IDisposable)element).Dispose();
+			}
+		}
 	}
 }

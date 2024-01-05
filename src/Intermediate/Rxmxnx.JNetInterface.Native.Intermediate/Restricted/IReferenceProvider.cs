@@ -3,16 +3,8 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes a JNI reference provider instance.
 /// </summary>
-public interface IReferenceProvider
+public partial interface IReferenceProvider
 {
-	/// <summary>
-	/// Creates a <see cref="JLocalObject"/> wrapper instance for <paramref name="primitive"/> value.
-	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> value.</typeparam>
-	/// <param name="primitive">A primitive value.</param>
-	/// <returns>A <see cref="JLocalObject"/> wrapper instance for <paramref name="primitive"/> value.</returns>
-	JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	/// <summary>
 	/// Creates a <typeparamref name="TGlobal"/> instance loaded for given <see cref="JLocalObject"/> instance.
 	/// </summary>

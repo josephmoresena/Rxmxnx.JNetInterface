@@ -116,16 +116,21 @@ public partial class JEnvironment
 					JEnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
 				value!.CopyTo(buffer, ref offset);
 				this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
+				this.CheckJniError();
 			}
 			else
 			{
-				ValidationUtilities.ThrowIfDummy(value as JReferenceObject);
-				SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
-				using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
-				JObjectLocalRef localRef = jniTransaction.Add(value as JReferenceObject);
-				JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
-				setObjectArrayElement(this.Reference, arrayRef, index, localRef);
+				this.SetObjectElement(jArray, index, value as JLocalObject);
 			}
+		}
+		public void SetObjectElement(JArrayObject jArray, Int32 index, JLocalObject? value)
+		{
+			ValidationUtilities.ThrowIfDummy(value);
+			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JObjectLocalRef localRef = jniTransaction.Add(value as JReferenceObject);
+			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
+			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
 			this.CheckJniError();
 		}
 		public IntPtr GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, out Boolean isCopy)
