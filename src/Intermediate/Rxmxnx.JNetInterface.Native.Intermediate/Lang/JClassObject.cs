@@ -4,10 +4,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// This class represents a local <c>java.lang.Class&lt;?&gt;</c> instance.
 /// </summary>
 public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject>,
-	IInterfaceImplementation<JClassObject, JSerializableObject>,
-	IInterfaceImplementation<JClassObject, JAnnotatedElementObject>,
-	IInterfaceImplementation<JClassObject, JGenericDeclarationObject>,
-	IInterfaceImplementation<JClassObject, JTypeObject>
+	IInterfaceObject<JSerializableObject>, IInterfaceObject<JAnnotatedElementObject>,
+	IInterfaceObject<JGenericDeclarationObject>, IInterfaceObject<JTypeObject>
 {
 	/// <summary>
 	/// Fully-qualified class name.

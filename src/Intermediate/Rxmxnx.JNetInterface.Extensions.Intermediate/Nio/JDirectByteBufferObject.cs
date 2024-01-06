@@ -5,8 +5,7 @@ namespace Rxmxnx.JNetInterface.Nio;
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDirectByteBufferObject>,
-	IInterfaceImplementation<JDirectByteBufferObject, JComparableObject>,
-	IInterfaceImplementation<JDirectByteBufferObject, JDirectBufferObject>
+	IInterfaceObject<JDirectBufferObject>
 {
 	/// <summary>
 	/// Type metadata.

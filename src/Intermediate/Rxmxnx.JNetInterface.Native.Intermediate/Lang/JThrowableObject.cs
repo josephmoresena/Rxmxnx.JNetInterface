@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// This class represents a local <c>java.lang.Throwable</c> instance.
 /// </summary>
 public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableObject>,
-	IThrowableType<JThrowableObject>, ILocalObject, IInterfaceImplementation<JThrowableObject, JSerializableObject>
+	IThrowableType<JThrowableObject>, ILocalObject, IInterfaceObject<JSerializableObject>
 {
 	/// <summary>
 	/// Throwable message.

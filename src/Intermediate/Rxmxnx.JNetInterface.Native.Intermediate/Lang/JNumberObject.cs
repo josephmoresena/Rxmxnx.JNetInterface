@@ -3,8 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Number</c> instance.
 /// </summary>
-public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>,
-	IInterfaceImplementation<JNumberObject, JSerializableObject>
+public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>, IInterfaceObject<JSerializableObject>
 {
 	/// <inheritdoc/>
 	internal JNumberObject(JClassObject jClass, JObjectLocalRef jLocalRef) : base(jClass, jLocalRef) { }

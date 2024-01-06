@@ -13,6 +13,8 @@ public partial class JInterfaceObject
 			private readonly IImmutableSet<JInterfaceTypeMetadata> _interfaces;
 
 			/// <inheritdoc/>
+			public override Type InterfaceType => typeof(IInterfaceObject<TInterface>);
+			/// <inheritdoc/>
 			public override Type Type => typeof(TInterface);
 			/// <inheritdoc/>
 			public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
@@ -28,8 +30,6 @@ public partial class JInterfaceObject
 			/// <inheritdoc/>
 			internal override TInterface? ParseInstance(JLocalObject? jLocal)
 				=> jLocal as TInterface ?? TInterface.Create(jLocal);
-			/// <inheritdoc/>
-			internal override Type GetImplementingType<TReference>() => typeof(IDerivedType<TReference, TInterface>);
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata()
 				=> JReferenceTypeMetadata.GetArrayMetadata<TInterface>();

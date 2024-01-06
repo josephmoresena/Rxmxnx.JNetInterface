@@ -3,16 +3,14 @@ namespace Rxmxnx.JNetInterface.Nio;
 /// <summary>
 /// This class represents a local <c>java.nio.Buffer</c> instance.
 /// </summary>
-public class JBufferObject : JLocalObject, IClassType<JBufferObject>,
-	IInterfaceImplementation<JBufferObject, JComparableObject>
+public class JBufferObject : JLocalObject, IClassType<JBufferObject>
 {
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
 	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JBufferObject>
 	                                                      .Create(UnicodeClassNames.BufferObject(),
-	                                                              JTypeModifier.Abstract)
-	                                                      .Implements<JComparableObject>().Build();
+	                                                              JTypeModifier.Abstract).Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JBufferObject.metadata;
 
@@ -33,7 +31,7 @@ public class JBufferObject : JLocalObject, IClassType<JBufferObject>,
 /// <summary>
 /// This class represents a local <c>java.nio.Buffer</c> instance.
 /// </summary>
-public abstract class JBufferObject<TValue> : JBufferObject
+public abstract class JBufferObject<TValue> : JBufferObject, IInterfaceObject<JComparableObject>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>
 {
 	/// <inheritdoc/>

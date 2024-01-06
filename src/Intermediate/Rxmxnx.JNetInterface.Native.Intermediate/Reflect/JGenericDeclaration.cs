@@ -4,8 +4,7 @@ namespace Rxmxnx.JNetInterface.Reflect;
 /// This class represents a local <c>java.reflect.GenericDeclaration</c> instance.
 /// </summary>
 public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclarationObject>,
-	IInterfaceType<JGenericDeclarationObject>,
-	IInterfaceImplementation<JGenericDeclarationObject, JAnnotatedElementObject>
+	IInterfaceType<JGenericDeclarationObject>, IInterfaceObject<JAnnotatedElementObject>
 {
 	/// <summary>
 	/// Datatype metadata.

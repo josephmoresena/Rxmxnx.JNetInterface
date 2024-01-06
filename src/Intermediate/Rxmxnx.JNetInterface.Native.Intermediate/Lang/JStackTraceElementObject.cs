@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// This class represents a local <c>java.lang.StackTraceElement</c> instance.
 /// </summary>
 public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<JStackTraceElementObject>,
-	IInterfaceImplementation<JStackTraceElementObject, JSerializableObject>
+	IInterfaceObject<JSerializableObject>
 {
 	/// <summary>
 	/// The fully qualified name of the class containing the execution point.

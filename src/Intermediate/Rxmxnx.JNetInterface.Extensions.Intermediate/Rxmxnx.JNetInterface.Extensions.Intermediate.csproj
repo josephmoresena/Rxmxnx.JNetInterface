@@ -39,7 +39,6 @@
         <Using Include="Rxmxnx.JNetInterface.Sun.Nio.Ch"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
         <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
-        <Using Include="Rxmxnx.JNetInterface.Types.Inheritance"/>
     </ItemGroup>
 
     <ItemGroup>

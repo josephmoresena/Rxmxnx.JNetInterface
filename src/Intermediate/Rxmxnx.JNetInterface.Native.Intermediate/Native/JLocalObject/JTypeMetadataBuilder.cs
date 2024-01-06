@@ -15,10 +15,6 @@ public partial class JLocalObject
 		/// Interface types.
 		/// </summary>
 		private readonly ISet<Type> _interfaceTypes;
-		/// <summary>
-		/// Function to retrieve implementing type.
-		/// </summary>
-		private readonly Func<JInterfaceTypeMetadata, Type> _getImplementingType;
 		/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 		private readonly HashSet<JInterfaceTypeMetadata> _interfaces = [];
 
@@ -37,15 +33,12 @@ public partial class JLocalObject
 		/// </summary>
 		/// <param name="dataTypeName">Datatype name.</param>
 		/// <param name="kind">Java datatype kind.</param>
-		/// <param name="getImplementingType">Delegate for retrieve implementing type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		public JTypeMetadataBuilder(ReadOnlySpan<Byte> dataTypeName, JTypeKind kind,
-			Func<JInterfaceTypeMetadata, Type> getImplementingType, ISet<Type> interfaceTypes)
+		public JTypeMetadataBuilder(ReadOnlySpan<Byte> dataTypeName, JTypeKind kind, ISet<Type> interfaceTypes)
 		{
 			this._dataTypeName = dataTypeName;
 			this._interfaceTypes = interfaceTypes;
 			this._kind = kind;
-			this._getImplementingType = getImplementingType;
 		}
 
 		/// <summary>
@@ -58,26 +51,26 @@ public partial class JLocalObject
 			ValidationUtilities.ThrowIfInvalidSignature(signature, false);
 			this._signature = signature;
 		}
+
 		/// <summary>
 		/// Appends an interface to current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public void AppendInterface<TInterface>(Type implementingType)
+		public void AppendInterface<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			if (!this._interfaceTypes.Contains(implementingType))
+			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
+			if (!this._interfaceTypes.Contains(metadata.InterfaceType))
 				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
 					this._dataTypeName, this._kind != JTypeKind.Interface);
 
-			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
 			foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
 			{
-				if (!this._interfaceTypes.Contains(this._getImplementingType(interfaceMetadata)))
+				if (!this._interfaceTypes.Contains(interfaceMetadata.InterfaceType))
 					NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
 						this._dataTypeName, this._kind != JTypeKind.Interface);
 			}
-
 			this._interfaces.Add(metadata);
 		}
 		/// <summary>
@@ -85,26 +78,6 @@ public partial class JLocalObject
 		/// </summary>
 		/// <returns>A set with current datatype interfaces.</returns>
 		public IImmutableSet<JInterfaceTypeMetadata> CreateInterfaceSet() => this._interfaces.ToImmutableHashSet();
-
-		/// <summary>
-		/// Retrieves implementing type of <typeparamref name="TInterface"/> in <typeparamref name="TReference"/>.
-		/// </summary>
-		/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
-		/// <typeparam name="TInterface">A <see cref="IInterfaceType{TInterface}"/> type.</typeparam>
-		/// <returns>A <see cref="Type"/> instance.</returns>
-		public static Type GetImplementingType<TReference, TInterface>()
-			where TReference : JLocalObject, IReferenceType<TReference>
-			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
-			=> typeof(IDerivedType<TReference, TInterface>);
-		/// <summary>
-		/// Retrieves implementing type of <paramref name="interfaceMetadata"/> in <typeparamref name="TReference"/>.
-		/// </summary>
-		/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
-		/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
-		/// <returns>A <see cref="Type"/> instance.</returns>
-		public static Type GetImplementingType<TReference>(JInterfaceTypeMetadata interfaceMetadata)
-			where TReference : JLocalObject, IReferenceType<TReference>
-			=> interfaceMetadata.GetImplementingType<TReference>();
 	}
 
 	/// <summary>
@@ -134,8 +107,7 @@ public partial class JLocalObject
 		private JTypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata, ISet<Type> interfaceTypes)
 		{
-			this._builder = new(className, JTypeKind.Class, JTypeMetadataBuilder.GetImplementingType<TClass>,
-			                    interfaceTypes);
+			this._builder = new(className, JTypeKind.Class, interfaceTypes);
 			this._baseMetadata = baseMetadata;
 			this._modifier = modifier;
 		}
@@ -148,7 +120,7 @@ public partial class JLocalObject
 		public JTypeMetadataBuilder<TClass> Implements<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			this._builder.AppendInterface<TInterface>(JTypeMetadataBuilder.GetImplementingType<TClass, TInterface>());
+			this._builder.AppendInterface<TInterface>();
 			return this;
 		}
 		/// <summary>

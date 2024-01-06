@@ -26,8 +26,7 @@ public partial class JEnumObject
 		/// <param name="interfaceTypes">Interface types.</param>
 		private JTypeMetadataBuilder(ReadOnlySpan<Byte> enumTypeName, ISet<Type> interfaceTypes)
 		{
-			this._builder = new(enumTypeName, JTypeKind.Enum, JTypeMetadataBuilder.GetImplementingType<TEnum>,
-			                    interfaceTypes);
+			this._builder = new(enumTypeName, JTypeKind.Enum, interfaceTypes);
 			this._fields = new();
 		}
 
@@ -49,7 +48,7 @@ public partial class JEnumObject
 		public JTypeMetadataBuilder<TEnum> Implements<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			this._builder.AppendInterface<TInterface>(JTypeMetadataBuilder.GetImplementingType<TEnum, TInterface>());
+			this._builder.AppendInterface<TInterface>();
 			return this;
 		}
 		/// <summary>

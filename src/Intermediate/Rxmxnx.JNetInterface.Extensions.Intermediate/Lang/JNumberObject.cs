@@ -75,8 +75,7 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 /// <typeparam name="TValue">Number <see cref="IPrimitiveType"/> type.</typeparam>
 /// <typeparam name="TNumber"><see cref="JNumberObject"/> type.</typeparam>
 public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>, IPrimitiveWrapperType,
-	IPrimitiveEquatable, IInterfaceImplementation<TNumber, JSerializableObject>,
-	IInterfaceImplementation<TNumber, JComparableObject>
+	IPrimitiveEquatable, IInterfaceObject<JComparableObject>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 	where TNumber : JNumberObject<TValue, TNumber>, IPrimitiveWrapperType<TNumber, TValue>
 {

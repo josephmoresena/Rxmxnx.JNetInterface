@@ -29,8 +29,7 @@ public partial class JThrowableObject
 		private JTypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata, ISet<Type> interfaceTypes)
 		{
-			this._builder = new(className, JTypeKind.Class, JTypeMetadataBuilder.GetImplementingType<TThrowable>,
-			                    interfaceTypes);
+			this._builder = new(className, JTypeKind.Class, interfaceTypes);
 			this._baseMetadata = baseMetadata;
 			this._modifier = modifier;
 		}
@@ -53,8 +52,7 @@ public partial class JThrowableObject
 		public JTypeMetadataBuilder<TThrowable> Implements<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			this._builder.AppendInterface<TInterface>(
-				JTypeMetadataBuilder.GetImplementingType<TThrowable, TInterface>());
+			this._builder.AppendInterface<TInterface>();
 			return this;
 		}
 		/// <summary>

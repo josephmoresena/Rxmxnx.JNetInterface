@@ -21,8 +21,7 @@ public abstract partial class JInterfaceObject
 		/// <param name="interfaceName">Interface name of current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
 		private JTypeMetadataBuilder(ReadOnlySpan<Byte> interfaceName, ISet<Type> interfaceTypes)
-			=> this._builder = new(interfaceName, JTypeKind.Interface,
-			                       JTypeMetadataBuilder.GetImplementingType<TInterface>, interfaceTypes);
+			=> this._builder = new(interfaceName, JTypeKind.Interface, interfaceTypes);
 
 		/// <summary>
 		/// Appends an interface to current type definition.
@@ -33,8 +32,7 @@ public abstract partial class JInterfaceObject
 			where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
 		{
 			NativeValidationUtilities.ThrowIfInvalidExtension<TInterface, TOtherInterface>(this._builder.DataTypeName);
-			this._builder.AppendInterface<TOtherInterface>(
-				JTypeMetadataBuilder.GetImplementingType<TInterface, TOtherInterface>());
+			this._builder.AppendInterface<TOtherInterface>();
 			return this;
 		}
 		/// <summary>

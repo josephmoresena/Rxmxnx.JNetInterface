@@ -5,6 +5,11 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// </summary>
 public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 {
+	/// <summary>
+	/// CLR interface type.
+	/// </summary>
+	public abstract Type InterfaceType { get; }
+
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Interface;
 	/// <inheritdoc/>
@@ -19,11 +24,4 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	/// <param name="signature">JNI signature for current type.</param>
 	internal JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, ReadOnlySpan<Byte> signature) : base(
 		interfaceName, signature) { }
-
-	/// <summary>
-	/// Retrieves the CLR type of implementation of <typeparamref name="TReference"/> of current interface.
-	/// </summary>
-	/// <typeparam name="TReference">Type of <see cref="IDataType{TReference}"/>.</typeparam>
-	/// <returns>The CLR type of implementation of <typeparamref name="TReference"/> of current interface.</returns>
-	internal abstract Type GetImplementingType<TReference>() where TReference : JReferenceObject, IDataType<TReference>;
 }

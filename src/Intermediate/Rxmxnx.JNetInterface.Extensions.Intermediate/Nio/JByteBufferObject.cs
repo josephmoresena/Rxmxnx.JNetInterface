@@ -3,8 +3,7 @@ namespace Rxmxnx.JNetInterface.Nio;
 /// <summary>
 /// This class represents a local <c>java.nio.ByteBuffer</c> instance.
 /// </summary>
-public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObject>,
-	IInterfaceImplementation<JByteBufferObject, JComparableObject>
+public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObject>
 {
 	/// <summary>
 	/// Type metadata.

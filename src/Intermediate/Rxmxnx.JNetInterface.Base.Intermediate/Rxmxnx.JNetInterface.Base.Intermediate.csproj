@@ -32,7 +32,6 @@
         <Using Include="Rxmxnx.JNetInterface.Native.References"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
-        <Using Include="Rxmxnx.JNetInterface.Types.Inheritance"/>
         <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
     </ItemGroup>
 

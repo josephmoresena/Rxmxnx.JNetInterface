@@ -19,22 +19,22 @@ internal static class NativeValidationUtilities
 			throw new InvalidOperationException($"{typeMetadata.ClassName} is an abstract type.");
 	}
 	/// <summary>
-	/// Throws an exception if <typeparamref name="TReference"/> can't extend <typeparamref name="TOtherReference"/>.
+	/// Throws an exception if <typeparamref name="TInterface"/> can't extend <typeparamref name="TOtherInterface"/>.
 	/// </summary>
-	/// <typeparam name="TReference">Type of <see cref="IReferenceType"/>.</typeparam>
-	/// <typeparam name="TOtherReference">Type of <see cref="IReferenceType"/>.</typeparam>
+	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/>.</typeparam>
+	/// <typeparam name="TOtherInterface">Type of <see cref="IInterfaceType{TOtherInterface}"/>.</typeparam>
 	/// <param name="typeName">Name of implementing type.</param>
 	/// <exception cref="ArgumentException">
-	/// Throws an exception if <typeparamref name="TReference"/> can't extend <typeparamref name="TOtherReference"/>.
+	/// Throws an exception if <typeparamref name="TInterface"/> can't extend <typeparamref name="TOtherInterface"/>.
 	/// </exception>
-	public static void ThrowIfInvalidExtension<TReference, TOtherReference>(ReadOnlySpan<Byte> typeName)
-		where TReference : JReferenceObject, IReferenceType<TReference>
-		where TOtherReference : JReferenceObject, IReferenceType<TOtherReference>
+	public static void ThrowIfInvalidExtension<TInterface, TOtherInterface>(ReadOnlySpan<Byte> typeName)
+		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+		where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
 	{
-		Type derivedType = typeof(IDerivedType<TOtherReference, TReference>);
-		foreach (Type interfaceType in IReferenceType<TOtherReference>.GetInterfaceTypes())
+		Type currentInterfaceType = typeof(IInterfaceObject<TInterface>);
+		foreach (Type interfaceType in IReferenceType<TOtherInterface>.GetInterfaceTypes())
 		{
-			if (interfaceType == derivedType)
+			if (interfaceType == currentInterfaceType)
 				throw new InvalidOperationException(
 					$"{typeName.ToCString()} type can't extend an interface type which extends it.");
 		}

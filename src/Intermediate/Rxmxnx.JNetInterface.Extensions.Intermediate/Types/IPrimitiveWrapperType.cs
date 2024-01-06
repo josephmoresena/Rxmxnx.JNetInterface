@@ -26,17 +26,17 @@ public interface IPrimitiveWrapperType : IClassType
 /// This interface exposes an object that represents a java primitive wrapper class type instance.
 /// </summary>
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
-public interface IPrimitiveWrapperType<TWrapper> : IPrimitiveWrapperType, IClassType<TWrapper>,
-	IInterfaceImplementation<TWrapper, JSerializableObject>, IInterfaceImplementation<TWrapper, JComparableObject>
-	where TWrapper : JLocalObject, IClassType<TWrapper>, IInterfaceImplementation<TWrapper, JSerializableObject>,
-	IInterfaceImplementation<TWrapper, JComparableObject> { }
+public interface IPrimitiveWrapperType<out TWrapper> : IPrimitiveWrapperType, IClassType<TWrapper>,
+	IInterfaceObject<JSerializableObject>, IInterfaceObject<JComparableObject>
+	where TWrapper : JLocalObject, IClassType<TWrapper>, IInterfaceObject<JSerializableObject>,
+	IInterfaceObject<JComparableObject>;
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive wrapper class type instance.
 /// </summary>
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
 /// <typeparam name="TValue"><see cref="IPrimitiveType"/> type.</typeparam>
-public interface IPrimitiveWrapperType<TWrapper, TValue> : IPrimitiveWrapperType<TWrapper>, IWrapper<TValue>
+public interface IPrimitiveWrapperType<out TWrapper, TValue> : IPrimitiveWrapperType<TWrapper>, IWrapper<TValue>
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper> where TValue : unmanaged, IPrimitiveType<TValue>
 {
 	/// <summary>

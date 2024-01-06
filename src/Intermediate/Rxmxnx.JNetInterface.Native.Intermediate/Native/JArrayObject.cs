@@ -46,9 +46,8 @@ public abstract partial class JArrayObject : JLocalObject
 /// This class represents a local array instance.
 /// </summary>
 /// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
-public sealed partial class JArrayObject<TElement> : JArrayObject,
-	IInterfaceImplementation<JArrayObject<TElement>, JSerializableObject>,
-	IInterfaceImplementation<JArrayObject<TElement>, JCloneableObject> where TElement : IObject, IDataType<TElement>
+public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObject<JSerializableObject>,
+	IInterfaceObject<JCloneableObject> where TElement : IObject, IDataType<TElement>
 {
 	/// <summary>
 	/// Metadata array instance.

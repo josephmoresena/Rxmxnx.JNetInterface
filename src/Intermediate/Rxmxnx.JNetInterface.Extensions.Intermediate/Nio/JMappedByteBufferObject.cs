@@ -3,8 +3,7 @@ namespace Rxmxnx.JNetInterface.Nio;
 /// <summary>
 /// This class represents a local <c>java.nio.MappedByteBuffer</c> instance.
 /// </summary>
-public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByteBufferObject>,
-	IInterfaceImplementation<JMappedByteBufferObject, JComparableObject>
+public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByteBufferObject>
 {
 	/// <summary>
 	/// Type metadata.

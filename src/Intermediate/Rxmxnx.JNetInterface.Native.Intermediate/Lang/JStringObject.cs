@@ -5,9 +5,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 [DebuggerDisplay(nameof(JStringObject.DisplayValue))]
 public sealed partial class JStringObject : JLocalObject, IClassType<JStringObject>, IWrapper<String>,
-	IInterfaceImplementation<JStringObject, JSerializableObject>,
-	IInterfaceImplementation<JStringObject, JComparableObject>,
-	IInterfaceImplementation<JStringObject, JCharSequenceObject>
+	IInterfaceObject<JSerializableObject>, IInterfaceObject<JComparableObject>, IInterfaceObject<JCharSequenceObject>
 {
 	/// <summary>
 	/// CLR type of object metadata.
