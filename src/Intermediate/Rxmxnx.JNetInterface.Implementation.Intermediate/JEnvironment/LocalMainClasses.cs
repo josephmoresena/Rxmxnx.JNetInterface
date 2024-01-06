@@ -21,6 +21,7 @@ public partial class JEnvironment
 			this.StackTraceElementObject =
 				new(this.ClassObject, MetadataHelper.GetMetadata<JStackTraceElementObject>());
 
+			this.VoidPrimitive = new(this.ClassObject, JPrimitiveTypeMetadata.VoidMetadata);
 			this.BooleanPrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JBoolean>());
 			this.BytePrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JByte>());
 			this.CharPrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JChar>());

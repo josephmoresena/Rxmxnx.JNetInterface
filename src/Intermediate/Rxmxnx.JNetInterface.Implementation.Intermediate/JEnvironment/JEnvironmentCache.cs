@@ -261,6 +261,8 @@ public partial class JEnvironment
 		/// <inheritdoc/>
 		public JClassObject BooleanPrimitive => this._mainClasses.BooleanPrimitive;
 		/// <inheritdoc/>
+		public JClassObject VoidPrimitive => this._mainClasses.VoidPrimitive;
+		/// <inheritdoc/>
 		public JClassObject BytePrimitive => this._mainClasses.BytePrimitive;
 		/// <inheritdoc/>
 		public JClassObject CharPrimitive => this._mainClasses.CharPrimitive;
@@ -473,7 +475,7 @@ public partial class JEnvironment
 				UnicodePrimitiveSignatures.IntSignatureChar => this.GetClass<JIntegerObject>(),
 				UnicodePrimitiveSignatures.LongSignatureChar => this.GetClass<JLongObject>(),
 				UnicodePrimitiveSignatures.ShortSignatureChar => this.GetClass<JShortObject>(),
-				_ => throw new InvalidOperationException("Object is not primitive."),
+				_ => this.GetClass<JVoidObject>(),
 			};
 			JObjectLocalRef localRef =
 				this.GetStaticObjectField(wrapperClass, InternalFunctionCache.PrimitiveTypeDefinition);

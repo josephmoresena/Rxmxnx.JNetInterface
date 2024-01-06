@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode;
 /// </summary>
 internal static partial class UnicodePrimitiveSignatures
 {
+	/// <inheritdoc cref="PrimitiveSignatures.VoidSignatureChar"/>
+	public const Byte VoidSignatureChar = (Byte)PrimitiveSignatures.VoidSignatureChar;
 	/// <inheritdoc cref="PrimitiveSignatures.BooleanSignature"/>
 	public const Byte BooleanSignatureChar = (Byte)PrimitiveSignatures.JBooleanSignatureChar;
 	/// <inheritdoc cref="PrimitiveSignatures.ByteSignature"/>

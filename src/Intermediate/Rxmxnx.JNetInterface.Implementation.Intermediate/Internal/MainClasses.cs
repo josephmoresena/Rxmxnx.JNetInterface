@@ -19,6 +19,10 @@ internal abstract class MainClasses<TClass> where TClass : JReferenceObject
 	public TClass StackTraceElementObject { get; protected init; } = default!;
 
 	/// <summary>
+	/// Class for Java <c>void</c> type.
+	/// </summary>
+	public TClass VoidPrimitive { get; protected init; } = default!;
+	/// <summary>
 	/// Class for <see cref="JBoolean"/>.
 	/// </summary>
 	public TClass BooleanPrimitive { get; protected init; } = default!;

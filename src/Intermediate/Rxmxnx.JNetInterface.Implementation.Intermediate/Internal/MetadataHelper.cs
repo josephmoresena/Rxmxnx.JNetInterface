@@ -25,6 +25,7 @@ internal static class MetadataHelper
 		{ IDataType.GetHash<JStackTraceElementObject>(), IReferenceType.GetMetadata<JStackTraceElementObject>() },
 
 		// Wrapper objects //
+		{ IDataType.GetHash<JVoidObject>(), IReferenceType.GetMetadata<JVoidObject>() },
 		{ IDataType.GetHash<JBooleanObject>(), IReferenceType.GetMetadata<JBooleanObject>() },
 		{ IDataType.GetHash<JByteObject>(), IReferenceType.GetMetadata<JByteObject>() },
 		{ IDataType.GetHash<JCharacterObject>(), IReferenceType.GetMetadata<JCharacterObject>() },

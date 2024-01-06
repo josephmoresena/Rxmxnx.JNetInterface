@@ -40,6 +40,7 @@ public interface IDummyEnvironment : IEnvironment, IAccessProvider, IClassProvid
 		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args)
 		=> definition.PrimitiveInvoke(bytes, jLocal, jClass, nonVirtual, args);
 
+	JClassObject IClassProvider.VoidPrimitive => new(this.ClassObject, JPrimitiveTypeMetadata.VoidMetadata);
 	JClassObject IClassProvider.BooleanPrimitive => this.GetClass<JBoolean>();
 	JClassObject IClassProvider.BytePrimitive => this.GetClass<JByte>();
 	JClassObject IClassProvider.CharPrimitive => this.GetClass<JChar>();
@@ -49,6 +50,7 @@ public interface IDummyEnvironment : IEnvironment, IAccessProvider, IClassProvid
 	JClassObject IClassProvider.LongPrimitive => this.GetClass<JLong>();
 	JClassObject IClassProvider.ShortPrimitive => this.GetClass<JShort>();
 
+	JClassObject IClassProvider.VoidObject => this.GetClass<JVoidObject>();
 	JClassObject IClassProvider.BooleanObject => this.GetClass<JBooleanObject>();
 	JClassObject IClassProvider.ByteObject => this.GetClass<JByteObject>();
 	JClassObject IClassProvider.CharacterObject => this.GetClass<JCharacterObject>();

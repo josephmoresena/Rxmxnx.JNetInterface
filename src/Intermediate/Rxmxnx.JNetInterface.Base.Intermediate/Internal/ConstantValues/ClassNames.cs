@@ -27,6 +27,10 @@ internal static class ClassNames
 	public const String SunNioChPackage = "sun/nio/ch/";
 
 	/// <summary>
+	/// Java class name of primitive <c>void</c> class.
+	/// </summary>
+	public const String VoidPrimitive = "void";
+	/// <summary>
 	/// Java class name of primitive <c>boolean</c> class.
 	/// </summary>
 	public const String BooleanPrimitive = "boolean";
@@ -63,6 +67,10 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.Object</c> class.
 	/// </summary>
 	public const String Object = ClassNames.LangPackage + "Object";
+	/// <summary>
+	/// JNI name of <c>java.lang.Void</c> class.
+	/// </summary>
+	public const String VoidObject = ClassNames.LangPackage + "Void";
 	/// <summary>
 	/// JNI name of <c>java.lang.Boolean</c> class.
 	/// </summary>

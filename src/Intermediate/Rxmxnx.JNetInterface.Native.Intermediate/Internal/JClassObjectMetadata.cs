@@ -7,6 +7,11 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal sealed record JClassObjectMetadata : JObjectMetadata
 {
 	/// <summary>
+	/// <see cref="JClassObjectMetadata"/> instance for Java <c>void</c> type.
+	/// </summary>
+	public static readonly JClassObjectMetadata VoidMetadata = new(JPrimitiveTypeMetadata.VoidMetadata);
+
+	/// <summary>
 	/// Class name of current object.
 	/// </summary>
 	public CString Name { get; init; }

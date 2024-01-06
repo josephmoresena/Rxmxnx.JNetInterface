@@ -6,6 +6,10 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public interface IClassProvider
 {
 	/// <summary>
+	/// <c>void</c> class instance.
+	/// </summary>
+	JClassObject VoidPrimitive { get; }
+	/// <summary>
 	/// <c>boolean</c> class instance.
 	/// </summary>
 	JClassObject BooleanPrimitive { get; }
@@ -66,6 +70,11 @@ public interface IClassProvider
 	/// <c>java.lang.Enum</c> class instance.
 	/// </summary>
 	JClassObject EnumClassObject => this.GetClass<JEnumObject>();
+
+	/// <summary>
+	/// <c>java.lang.Void</c> class instance.
+	/// </summary>
+	JClassObject VoidObject { get; }
 	/// <summary>
 	/// <c>java.lang.Boolean</c> class instance.
 	/// </summary>

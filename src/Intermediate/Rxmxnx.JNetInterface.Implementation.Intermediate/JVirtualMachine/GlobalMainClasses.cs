@@ -72,6 +72,7 @@ public partial class JVirtualMachine
 			this.StackTraceElementMetadata = JClassObjectMetadata.Create<JStackTraceElementObject>();
 			this.StackTraceElementObject = new(this.VirtualMachine, this.StackTraceElementMetadata, false, default);
 
+			this.VoidPrimitive = new(this.VirtualMachine, JClassObjectMetadata.VoidMetadata, false, default);
 			this.BooleanMetadata = JClassObjectMetadata.Create<JBoolean>();
 			this.BooleanPrimitive = new(this.VirtualMachine, this.BooleanMetadata, false, default);
 			this.ByteMetadata = JClassObjectMetadata.Create<JByte>();
@@ -100,6 +101,7 @@ public partial class JVirtualMachine
 			this.ThrowableObject.SetValue(env.GetClassGlobalRef(this.ThrowableMetadata));
 			this.StackTraceElementObject.SetValue(env.GetClassGlobalRef(this.StackTraceElementMetadata));
 
+			this.VoidPrimitive.SetValue(env.GetClassGlobalRef(JClassObjectMetadata.VoidMetadata));
 			this.BooleanPrimitive.SetValue(env.GetClassGlobalRef(this.BooleanMetadata));
 			this.BytePrimitive.SetValue(env.GetClassGlobalRef(this.ByteMetadata));
 			this.CharPrimitive.SetValue(env.GetClassGlobalRef(this.CharMetadata));
@@ -120,6 +122,7 @@ public partial class JVirtualMachine
 			cache.GlobalClassCache[this.ThrowableMetadata.Hash] = this.ThrowableObject;
 			cache.GlobalClassCache[this.StackTraceElementMetadata.Hash] = this.StackTraceElementObject;
 
+			cache.GlobalClassCache[this.BooleanMetadata.Hash] = this.VoidPrimitive;
 			cache.GlobalClassCache[this.BooleanMetadata.Hash] = this.BooleanPrimitive;
 			cache.GlobalClassCache[this.ByteMetadata.Hash] = this.BytePrimitive;
 			cache.GlobalClassCache[this.CharMetadata.Hash] = this.CharPrimitive;

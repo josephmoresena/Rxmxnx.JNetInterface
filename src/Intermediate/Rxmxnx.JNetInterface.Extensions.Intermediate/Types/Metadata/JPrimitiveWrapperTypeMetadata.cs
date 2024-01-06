@@ -16,7 +16,10 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier => JTypeModifier.Final;
 	/// <inheritdoc/>
-	public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => JPrimitiveWrapperConstants.Interfaces;
+	public override IImmutableSet<JInterfaceTypeMetadata> Interfaces
+		=> this.PrimitiveMetadata.SizeOf != 0 ?
+			JPrimitiveWrapperConstants.Interfaces :
+			ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
 	/// <inheritdoc/>
 	public override JClassTypeMetadata BaseMetadata => this._baseMetadata;
 

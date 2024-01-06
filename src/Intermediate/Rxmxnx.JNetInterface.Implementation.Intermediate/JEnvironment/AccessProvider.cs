@@ -63,7 +63,7 @@ public partial class JEnvironment
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			switch (definition.Information[1][^1])
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar: //Z
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
 					SetBooleanFieldDelegate setBooleanField = this.GetDelegate<SetBooleanFieldDelegate>();
 					setBooleanField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Byte>(bytes));
 					break;

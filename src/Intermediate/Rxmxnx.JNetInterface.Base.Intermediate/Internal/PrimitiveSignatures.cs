@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Internal.ConstantValues;
 /// </summary>
 internal static class PrimitiveSignatures
 {
+	/// <inheritdoc cref="VoidSignature"/>
+	public const Char VoidSignatureChar = 'V';
 	/// <inheritdoc cref="BooleanSignature"/>
 	public const Char JBooleanSignatureChar = 'Z';
 	/// <inheritdoc cref="ByteSignature"/>
@@ -22,6 +24,10 @@ internal static class PrimitiveSignatures
 	/// <inheritdoc cref="ShortSignature"/>
 	public const Char JShortSignatureChar = 'S';
 
+	/// <summary>
+	/// JNI signature for primitive <c>void</c>.
+	/// </summary>
+	public const String VoidSignature = "V";
 	/// <summary>
 	/// JNI signature for primitive <c>boolean</c>.
 	/// </summary>

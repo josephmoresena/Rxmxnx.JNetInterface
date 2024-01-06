@@ -19,6 +19,9 @@ internal static partial class UnicodeClassNames
 	[DefaultValue(ClassNames.SystemObject)]
 	public static readonly CString SystemObject;
 
+	/// <inheritdoc cref="ClassNames.VoidObject"/>
+	[DefaultValue(ClassNames.VoidObject)]
+	public static partial ReadOnlySpan<Byte> VoidObject();
 	/// <inheritdoc cref="ClassNames.BooleanObject"/>
 	[DefaultValue(ClassNames.BooleanObject)]
 	public static partial ReadOnlySpan<Byte> BooleanObject();
@@ -96,6 +99,9 @@ internal static partial class UnicodeClassNames
 	[DefaultValue(ClassNames.DirectBufferObject)]
 	public static partial ReadOnlySpan<Byte> DirectBufferObject();
 
+	/// <inheritdoc cref="ClassNames.VoidPrimitive"/>
+	[DefaultValue(ClassNames.VoidPrimitive)]
+	public static partial ReadOnlySpan<Byte> VoidPrimitive();
 	/// <inheritdoc cref="ClassNames.BooleanPrimitive"/>
 	[DefaultValue(ClassNames.BooleanPrimitive)]
 	public static partial ReadOnlySpan<Byte> BooleanPrimitive();

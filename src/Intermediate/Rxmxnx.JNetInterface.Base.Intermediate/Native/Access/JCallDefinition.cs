@@ -51,7 +51,7 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// <param name="name">Call defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	internal JCallDefinition(ReadOnlySpan<Byte> name, params JArgumentMetadata[] metadata) : this(
-		name, stackalloc Byte[1] { UnicodeMethodSignatures.VoidReturnSignatureChar, }, metadata) { }
+		name, stackalloc Byte[1] { UnicodePrimitiveSignatures.VoidSignatureChar, }, metadata) { }
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>

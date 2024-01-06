@@ -5,8 +5,6 @@
 /// </summary>
 internal static partial class UnicodeMethodSignatures
 {
-	/// <inheritdoc cref="MethodSignatures.VoidReturnSignatureChar"/>
-	public const Byte VoidReturnSignatureChar = (Byte)MethodSignatures.VoidReturnSignatureChar;
 	/// <inheritdoc cref="MethodSignatures.MethodParameterPrefixChar"/>
 	public const Byte MethodParameterPrefixChar = (Byte)MethodSignatures.MethodParameterPrefixChar;
 	/// <inheritdoc cref="MethodSignatures.MethodParameterSuffixChar"/>
