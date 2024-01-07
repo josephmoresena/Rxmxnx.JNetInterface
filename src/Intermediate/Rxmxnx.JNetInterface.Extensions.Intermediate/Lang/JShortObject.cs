@@ -21,5 +21,5 @@ public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimiti
 	static JShortObject? IReferenceType<JShortObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
 		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JShortObject>(jGlobal, env)) : default;
 	static JShortObject? IPrimitiveWrapperType<JShortObject, JShort>.Create(IEnvironment env, JShort? value)
-		=> value is not null ? (JShortObject)env.ReferenceProvider.CreateWrapper(value.Value) : default;
+		=> value is not null ? (JShortObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 }

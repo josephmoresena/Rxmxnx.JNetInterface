@@ -10,7 +10,7 @@ public partial class JEnvironment
 	/// Local cache.
 	/// </summary>
 	internal LocalCache LocalCache => this._cache.GetLocalCache();
-	/// <inheritdoc cref="IClassProvider.ClassObject"/>
+	/// <inheritdoc cref="IClassFeature.ClassObject"/>
 	internal JClassObject ClassObject => this._cache.ClassObject;
 
 	/// <summary>
@@ -138,7 +138,7 @@ public partial class JEnvironment
 		if (keepReference && jClass.InternalReference == default) jClass.SetValue(classRef);
 		return this._cache.Register(jClass);
 	}
-	/// <inheritdoc cref="IClassProvider.GetClass{TObject}()"/>
+	/// <inheritdoc cref="IClassFeature.GetClass{TObject}()"/>
 	internal JClassObject GetClass<TObject>() where TObject : JLocalObject, IReferenceType<TObject>
 		=> this._cache.GetClass<TObject>();
 	/// <summary>

@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 public partial class JEnvironment
 {
-	private partial record JEnvironmentCache : IArrayProvider
+	private partial record JEnvironmentCache : IArrayFeature
 	{
 		public JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IObject, IDataType<TElement>
 		{

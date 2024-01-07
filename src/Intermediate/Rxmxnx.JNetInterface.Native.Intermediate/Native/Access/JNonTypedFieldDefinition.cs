@@ -25,7 +25,7 @@ public sealed record JNonTypedFieldDefinition : JFieldDefinition
 	public JLocalObject? Get(JLocalObject jLocal, JClassObject? jClass = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.GetField<JLocalObject>(jLocal, jClass ?? jLocal.Class, this);
+		return env.AccessFeature.GetField<JLocalObject>(jLocal, jClass ?? jLocal.Class, this);
 	}
 	/// <summary>
 	/// Retrieves the value of a static field on <paramref name="jClass"/> which matches with current definition.
@@ -35,7 +35,7 @@ public sealed record JNonTypedFieldDefinition : JFieldDefinition
 	public JLocalObject? StaticGet(JClassObject jClass)
 	{
 		IEnvironment env = jClass.Environment;
-		return env.AccessProvider.GetStaticField<JLocalObject>(jClass, this);
+		return env.AccessFeature.GetStaticField<JLocalObject>(jClass, this);
 	}
 	/// <summary>
 	/// Sets the value of a field on <paramref name="jLocal"/> which matches with current definition.
@@ -46,7 +46,7 @@ public sealed record JNonTypedFieldDefinition : JFieldDefinition
 	public void Set(JLocalObject jLocal, JLocalObject? value, JClassObject? jClass = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		env.AccessProvider.SetField(jLocal, jClass ?? jLocal.Class, this, value);
+		env.AccessFeature.SetField(jLocal, jClass ?? jLocal.Class, this, value);
 	}
 	/// <summary>
 	/// Sets the value of a static field on <paramref name="jClass"/> which matches with current definition.
@@ -56,6 +56,6 @@ public sealed record JNonTypedFieldDefinition : JFieldDefinition
 	public void StaticSet(JClassObject jClass, JLocalObject? value)
 	{
 		IEnvironment env = jClass.Environment;
-		env.AccessProvider.SetStaticField(jClass, this, value);
+		env.AccessFeature.SetStaticField(jClass, this, value);
 	}
 }

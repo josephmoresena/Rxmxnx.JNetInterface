@@ -23,27 +23,31 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	Int32? LocalCapacity { get; set; }
 
 	/// <summary>
-	/// Internal accessor provider object.
+	/// Accessing feature.
 	/// </summary>
-	internal IAccessProvider AccessProvider { get; }
+	internal IAccessFeature AccessFeature { get; }
 	/// <summary>
-	/// Internal class provider object.
+	/// Classing feature.
 	/// </summary>
-	internal IClassProvider ClassProvider { get; }
+	internal IClassFeature ClassFeature { get; }
 	/// <summary>
-	/// Internal reference provider object.
+	/// Referencing feature.
 	/// </summary>
-	internal IReferenceProvider ReferenceProvider { get; }
+	internal IReferenceFeature ReferenceFeature { get; }
 	/// <summary>
-	/// Internal String provider object.
+	/// String feature.
 	/// </summary>
-	internal IStringProvider StringProvider { get; }
+	internal IStringFeature StringFeature { get; }
 	/// <summary>
-	/// Internal Array provider object.
+	/// Array feature.
 	/// </summary>
-	internal IArrayProvider ArrayProvider { get; }
+	internal IArrayFeature ArrayFeature { get; }
 	/// <summary>
-	/// Internal function provider object.
+	/// Native I/O feature.
+	/// </summary>
+	internal INioFeature NioFeature { get; }
+	/// <summary>
+	/// Function cache.
 	/// </summary>
 	internal FunctionCache Functions { get; }
 

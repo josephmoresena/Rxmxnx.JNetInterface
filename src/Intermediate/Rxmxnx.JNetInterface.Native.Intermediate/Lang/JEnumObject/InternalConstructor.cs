@@ -10,7 +10,7 @@ public partial class JEnumObject
 	/// <param name="ordinal">Enum instance ordinal.</param>
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
 	internal JEnumObject(IEnvironment env, JObjectLocalRef jLocalRef, Int32? ordinal, Boolean isDummy) : base(
-		env, jLocalRef, isDummy, env.ClassProvider.StringClassObject)
+		env, jLocalRef, isDummy, env.ClassFeature.StringClassObject)
 		=> this._ordinal = ordinal;
 	/// <summary>
 	/// Constructor.

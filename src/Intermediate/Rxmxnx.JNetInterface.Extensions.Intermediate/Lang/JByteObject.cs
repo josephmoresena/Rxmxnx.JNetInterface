@@ -21,5 +21,5 @@ public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveW
 	static JByteObject? IReferenceType<JByteObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
 		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JByteObject>(jGlobal, env)) : default;
 	static JByteObject? IPrimitiveWrapperType<JByteObject, JByte>.Create(IEnvironment env, JByte? value)
-		=> value is not null ? (JByteObject)env.ReferenceProvider.CreateWrapper(value.Value) : default;
+		=> value is not null ? (JByteObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 }

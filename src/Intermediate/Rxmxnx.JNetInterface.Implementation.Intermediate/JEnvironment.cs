@@ -41,11 +41,12 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		get => this._cache.Capacity;
 		set => this._cache.EnsureLocalCapacity(value.GetValueOrDefault());
 	}
-	IAccessProvider IEnvironment.AccessProvider => this._cache;
-	IClassProvider IEnvironment.ClassProvider => this._cache;
-	IReferenceProvider IEnvironment.ReferenceProvider => this._cache;
-	IStringProvider IEnvironment.StringProvider => this._cache;
-	IArrayProvider IEnvironment.ArrayProvider => this._cache;
+	IAccessFeature IEnvironment.AccessFeature => this._cache;
+	IClassFeature IEnvironment.ClassFeature => this._cache;
+	IReferenceFeature IEnvironment.ReferenceFeature => this._cache;
+	IStringFeature IEnvironment.StringFeature => this._cache;
+	IArrayFeature IEnvironment.ArrayFeature => this._cache;
+	INioFeature IEnvironment.NioFeature => this._cache;
 	FunctionCache IEnvironment.Functions => this._cache.Functions;
 
 	JReferenceType IEnvironment.GetReferenceType(JObject jObject)

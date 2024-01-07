@@ -46,7 +46,7 @@ public record JMethodDefinition : JCallDefinition
 	protected void Invoke(JLocalObject jLocal, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		env.AccessProvider.CallMethod(jLocal, jLocal.Class, this, false, args);
+		env.AccessFeature.CallMethod(jLocal, jLocal.Class, this, false, args);
 	}
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
@@ -58,7 +58,7 @@ public record JMethodDefinition : JCallDefinition
 	protected void Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		env.AccessProvider.CallMethod(jLocal, jClass, this, false, args);
+		env.AccessFeature.CallMethod(jLocal, jClass, this, false, args);
 	}
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
@@ -70,7 +70,7 @@ public record JMethodDefinition : JCallDefinition
 	protected void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		env.AccessProvider.CallMethod(jLocal, jClass, this, true, args);
+		env.AccessFeature.CallMethod(jLocal, jClass, this, true, args);
 	}
 	/// <summary>
 	/// Invokes a static method on <paramref name="jClass"/> which matches with current definition.
@@ -86,7 +86,7 @@ public record JMethodDefinition : JCallDefinition
 	protected void StaticInvoke(JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jClass.Environment;
-		env.AccessProvider.CallStaticMethod(jClass, this, args);
+		env.AccessFeature.CallStaticMethod(jClass, this, args);
 	}
 
 	/// <summary>
@@ -101,8 +101,8 @@ public record JMethodDefinition : JCallDefinition
 		Boolean nonVirtual = false, IObject?[]? args = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		env.AccessProvider.CallInternalMethod(jLocal, jClass ?? jLocal.Class, definition, nonVirtual,
-		                                      args ?? definition.CreateArgumentsArray());
+		env.AccessFeature.CallInternalMethod(jLocal, jClass ?? jLocal.Class, definition, nonVirtual,
+		                                     args ?? definition.CreateArgumentsArray());
 	}
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jClass"/> which matches with current definition
@@ -114,6 +114,6 @@ public record JMethodDefinition : JCallDefinition
 	internal static void StaticInvoke(JMethodDefinition definition, JClassObject jClass, IObject?[]? args = default)
 	{
 		IEnvironment env = jClass.Environment;
-		env.AccessProvider.CallInternalStaticMethod(jClass, definition, args ?? definition.CreateArgumentsArray());
+		env.AccessFeature.CallInternalStaticMethod(jClass, definition, args ?? definition.CreateArgumentsArray());
 	}
 }

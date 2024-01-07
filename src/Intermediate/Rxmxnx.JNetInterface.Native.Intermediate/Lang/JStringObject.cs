@@ -26,12 +26,12 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// UTF-16 length.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 Length => this._length ?? this._value?.Length ?? this.Environment.StringProvider.GetLength(this);
+	public Int32 Length => this._length ?? this._value?.Length ?? this.Environment.StringFeature.GetLength(this);
 	/// <summary>
 	/// UTF-8 length.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 Utf8Length => this._utf8Length ?? this.Environment.StringProvider.GetUtf8Length(this);
+	public Int32 Utf8Length => this._utf8Length ?? this.Environment.StringFeature.GetUtf8Length(this);
 
 	/// <summary>
 	/// Internal string value.
@@ -96,7 +96,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		Int32 lenght = count - startIndex;
 		Byte[] utf8Data = new Byte[lenght + 1];
 		IEnvironment env = this.Environment;
-		env.StringProvider.GetCopyUtf8(this, utf8Data.AsMemory()[..^1], startIndex);
+		env.StringFeature.GetCopyUtf8(this, utf8Data.AsMemory()[..^1], startIndex);
 		return utf8Data;
 	}
 
@@ -125,9 +125,9 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
 	[return: NotNullIfNotNull(nameof(data))]
 	public static JStringObject? Create(IEnvironment env, String? data)
-		=> data is not null ? env.StringProvider.Create(data) : default;
+		=> data is not null ? env.StringFeature.Create(data) : default;
 	/// <inheritdoc cref="JStringObject.Create(IEnvironment, String)"/>
-	public static JStringObject Create(IEnvironment env, ReadOnlySpan<Char> data) => env.StringProvider.Create(data);
+	public static JStringObject Create(IEnvironment env, ReadOnlySpan<Char> data) => env.StringFeature.Create(data);
 	/// <summary>
 	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="utf8Data"/>.
 	/// </summary>
@@ -136,10 +136,10 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
 	[return: NotNullIfNotNull(nameof(utf8Data))]
 	public static JStringObject? Create(IEnvironment env, CString? utf8Data)
-		=> utf8Data is not null ? env.StringProvider.Create(utf8Data) : default;
+		=> utf8Data is not null ? env.StringFeature.Create(utf8Data) : default;
 	/// <inheritdoc cref="JStringObject.Create(IEnvironment, CString)"/>
 	public static JStringObject Create(IEnvironment env, ReadOnlySpan<Byte> utf8Data)
-		=> env.StringProvider.Create(new CString(utf8Data));
+		=> env.StringFeature.Create(new CString(utf8Data));
 
 	/// <inheritdoc/>
 	public static JStringObject? Create(JLocalObject? jLocal)

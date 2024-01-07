@@ -70,8 +70,8 @@ internal readonly struct JNativeMemoryHandler
 		IEnvironment environment = source.Environment;
 		Boolean isCopy = false;
 		IntPtr pointer = !critical ?
-			environment.ArrayProvider.GetSequence(source, out isCopy) :
-			environment.ArrayProvider.GetCriticalSequence(source);
+			environment.ArrayFeature.GetSequence(source, out isCopy) :
+			environment.ArrayFeature.GetCriticalSequence(source);
 		return new()
 		{
 			Source = source,
@@ -98,8 +98,8 @@ internal readonly struct JNativeMemoryHandler
 		IEnvironment environment = source.Environment;
 		Boolean isCopy = false;
 		IntPtr pointer = !critical ?
-			environment.StringProvider.GetSequence(source, out isCopy) :
-			environment.StringProvider.GetCriticalSequence(source);
+			environment.StringFeature.GetSequence(source, out isCopy) :
+			environment.StringFeature.GetCriticalSequence(source);
 		return new()
 		{
 			Source = source,
@@ -121,7 +121,7 @@ internal readonly struct JNativeMemoryHandler
 	public static JNativeMemoryHandler CreateUtf8Handler(JStringObject source)
 	{
 		IEnvironment environment = source.Environment;
-		IntPtr pointer = environment.StringProvider.GetUtf8Sequence(source, out Boolean isCopy);
+		IntPtr pointer = environment.StringFeature.GetUtf8Sequence(source, out Boolean isCopy);
 		return new()
 		{
 			Source = source,
@@ -197,12 +197,12 @@ internal readonly struct JNativeMemoryHandler
 		where TGlobal : JGlobalBase
 	{
 		IEnvironment environment = source.Environment;
-		JGlobalBase globalSource = environment.ReferenceProvider.Create<TGlobal>(source);
+		JGlobalBase globalSource = environment.ReferenceFeature.Create<TGlobal>(source);
 		JStringObject tempSource = new(environment, globalSource);
 		Boolean isCopy = false;
 		IntPtr pointer = !critical ?
-			environment.StringProvider.GetSequence(tempSource, out isCopy) :
-			environment.StringProvider.GetCriticalSequence(tempSource);
+			environment.StringFeature.GetSequence(tempSource, out isCopy) :
+			environment.StringFeature.GetCriticalSequence(tempSource);
 		return new()
 		{
 			Source = globalSource,
@@ -228,12 +228,12 @@ internal readonly struct JNativeMemoryHandler
 		Boolean critical) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive> where TGlobal : JGlobalBase
 	{
 		IEnvironment environment = source.Environment;
-		JGlobalBase globalSource = environment.ReferenceProvider.Create<TGlobal>(source);
+		JGlobalBase globalSource = environment.ReferenceFeature.Create<TGlobal>(source);
 		JArrayObject<TPrimitive> tempSource = new(environment, globalSource);
 		Boolean isCopy = false;
 		IntPtr pointer = !critical ?
-			environment.ArrayProvider.GetSequence(tempSource, out isCopy) :
-			environment.ArrayProvider.GetCriticalSequence(tempSource);
+			environment.ArrayFeature.GetSequence(tempSource, out isCopy) :
+			environment.ArrayFeature.GetCriticalSequence(tempSource);
 		return new()
 		{
 			Source = globalSource,
@@ -258,9 +258,9 @@ internal readonly struct JNativeMemoryHandler
 	private static JNativeMemoryHandler CreateUtf8Handler<TGlobal>(JStringObject source) where TGlobal : JGlobalBase
 	{
 		IEnvironment environment = source.Environment;
-		JGlobalBase globalSource = environment.ReferenceProvider.Create<TGlobal>(source);
+		JGlobalBase globalSource = environment.ReferenceFeature.Create<TGlobal>(source);
 		JStringObject tempSource = new(environment, globalSource);
-		IntPtr pointer = environment.StringProvider.GetUtf8Sequence(tempSource, out Boolean isCopy);
+		IntPtr pointer = environment.StringFeature.GetUtf8Sequence(tempSource, out Boolean isCopy);
 		return new()
 		{
 			Source = globalSource,
@@ -287,7 +287,7 @@ internal readonly struct JNativeMemoryHandler
 		using IThread thread = virtualMachine.CreateThread(ThreadPurpose.ReleaseSequence);
 		JArrayObject<TPrimitive> jArray =
 			handler.Source as JArrayObject<TPrimitive> ?? new(thread, (JGlobalBase)handler.Source);
-		thread.ArrayProvider.ReleaseSequence(jArray, handler.Pointer, mode);
+		thread.ArrayFeature.ReleaseSequence(jArray, handler.Pointer, mode);
 	}
 	/// <summary>
 	/// Release array elements pointer.
@@ -303,7 +303,7 @@ internal readonly struct JNativeMemoryHandler
 		using IThread thread = virtualMachine.CreateThread(ThreadPurpose.ReleaseSequence);
 		JArrayObject<TPrimitive> jArray =
 			handler.Source as JArrayObject<TPrimitive> ?? new(thread, (JGlobalBase)handler.Source);
-		thread.ArrayProvider.ReleaseCriticalSequence(jArray, handler.Pointer);
+		thread.ArrayFeature.ReleaseCriticalSequence(jArray, handler.Pointer);
 	}
 	/// <summary>
 	/// Release string chars pointer.
@@ -316,7 +316,7 @@ internal readonly struct JNativeMemoryHandler
 		if (handler.Source is null) return;
 		using IThread thread = virtualMachine.CreateThread(ThreadPurpose.ReleaseSequence);
 		JStringObject jString = handler.Source as JStringObject ?? new(thread, (JGlobalBase)handler.Source);
-		thread.StringProvider.ReleaseSequence(jString, handler.Pointer);
+		thread.StringFeature.ReleaseSequence(jString, handler.Pointer);
 	}
 	/// <summary>
 	/// Release string utf chars pointer.
@@ -329,7 +329,7 @@ internal readonly struct JNativeMemoryHandler
 		if (handler.Source is null) return;
 		using IThread thread = virtualMachine.CreateThread(ThreadPurpose.ReleaseSequence);
 		JStringObject jString = handler.Source as JStringObject ?? new(thread, (JGlobalBase)handler.Source);
-		thread.StringProvider.ReleaseUtf8Sequence(jString, handler.Pointer);
+		thread.StringFeature.ReleaseUtf8Sequence(jString, handler.Pointer);
 	}
 	/// <summary>
 	/// Release string critical chars pointer.
@@ -343,6 +343,6 @@ internal readonly struct JNativeMemoryHandler
 		if (handler.Source is null) return;
 		using IThread thread = virtualMachine.CreateThread(ThreadPurpose.ReleaseSequence);
 		JStringObject jString = handler.Source as JStringObject ?? new(thread, (JGlobalBase)handler.Source);
-		thread.StringProvider.ReleaseCriticalSequence(jString, handler.Pointer);
+		thread.StringFeature.ReleaseCriticalSequence(jString, handler.Pointer);
 	}
 }

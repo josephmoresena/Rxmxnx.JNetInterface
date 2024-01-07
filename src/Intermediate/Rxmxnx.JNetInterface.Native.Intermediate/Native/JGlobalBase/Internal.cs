@@ -48,6 +48,6 @@ public partial class JGlobalBase
 	{
 		if (obj is not JGlobalBase jGlobal) return false;
 		using IThread thread = jGlobal.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
-		return thread.ClassProvider.IsAssignableTo<TDataType>(jGlobal);
+		return thread.ClassFeature.IsAssignableTo<TDataType>(jGlobal);
 	}
 }

@@ -57,17 +57,17 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="call">A <see cref="JNativeCall"/> instance.</param>
 	/// <param name="calls">A <see cref="JNativeCall"/> array.</param>
 	public void Register(JNativeCall call, params JNativeCall[] calls)
-		=> this.Environment.AccessProvider.RegisterNatives(this, [call, ..calls,]);
+		=> this.Environment.AccessFeature.RegisterNatives(this, [call, ..calls,]);
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
 	/// </summary>
 	/// <param name="calls">A <see cref="JNativeCall"/> list.</param>
 	public void Register(IReadOnlyList<JNativeCall> calls)
-		=> this.Environment.AccessProvider.RegisterNatives(this, calls);
+		=> this.Environment.AccessFeature.RegisterNatives(this, calls);
 	/// <summary>
 	/// Unregisters any native call.
 	/// </summary>
-	public void UnregisterNativeCalls() => this.Environment.AccessProvider.ClearNatives(this);
+	public void UnregisterNativeCalls() => this.Environment.AccessFeature.ClearNatives(this);
 
 	/// <inheritdoc/>
 	protected override JObjectMetadata CreateMetadata()
@@ -97,7 +97,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	{
 		if (!className.IsNullTerminated)
 			className = (CString)className.Clone();
-		return env.ClassProvider.GetClass(className);
+		return env.ClassFeature.GetClass(className);
 	}
 	/// <summary>
 	/// Retrieves the java class for given type.
@@ -106,7 +106,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <returns>The class instance for given type.</returns>
 	public static JClassObject GetClass<TDataType>(IEnvironment env) where TDataType : IDataType<TDataType>
-		=> env.ClassProvider.GetClass<TDataType>();
+		=> env.ClassFeature.GetClass<TDataType>();
 	/// <summary>
 	/// Loads a java class from its binary information into the current VM.
 	/// </summary>
@@ -117,7 +117,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
 	public static JClassObject LoadClass(IEnvironment env, CString className, ReadOnlySpan<Byte> rawClassBytes,
 		JLocalObject? jClassLoader = default)
-		=> env.ClassProvider.LoadClass(className, rawClassBytes, jClassLoader);
+		=> env.ClassFeature.LoadClass(className, rawClassBytes, jClassLoader);
 	/// <summary>
 	/// Loads a java class from its binary information into the current VM.
 	/// </summary>
@@ -128,11 +128,11 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
 	public static JClassObject LoadClass<TDataType>(IEnvironment env, ReadOnlySpan<Byte> rawClassBytes,
 		JLocalObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
-		=> env.ClassProvider.LoadClass<TDataType>(rawClassBytes, jClassLoader);
+		=> env.ClassFeature.LoadClass<TDataType>(rawClassBytes, jClassLoader);
 	/// <inheritdoc/>
 	public static JClassObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? jLocal.Environment.ClassProvider.AsClassObject(jLocal) : default;
+		=> !JObject.IsNullOrDefault(jLocal) ? jLocal.Environment.ClassFeature.AsClassObject(jLocal) : default;
 	/// <inheritdoc/>
 	public static JClassObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? env.ClassProvider.AsClassObject(jGlobal) : default;
+		=> !JObject.IsNullOrDefault(jGlobal) ? env.ClassFeature.AsClassObject(jGlobal) : default;
 }

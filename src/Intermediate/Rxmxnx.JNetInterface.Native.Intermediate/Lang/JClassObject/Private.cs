@@ -38,7 +38,7 @@ public partial class JClassObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JClassObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.ClassObject)
+	private JClassObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.ClassObject)
 	{
 		if (jLocal is not JClassObject jClass)
 			return;
@@ -55,6 +55,6 @@ public partial class JClassObject
 	private void LoadClassInformation()
 	{
 		if (this._className is null || this._signature is null)
-			this.Environment.ClassProvider.GetClassInfo(this, out this._className, out this._signature, out this._hash);
+			this.Environment.ClassFeature.GetClassInfo(this, out this._className, out this._signature, out this._hash);
 	}
 }

@@ -31,7 +31,7 @@ public partial class JStringObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JStringObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.StringClassObject)
+	private JStringObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.StringClassObject)
 	{
 		if (jLocal is not JStringObject jString)
 			return;
@@ -48,6 +48,6 @@ public partial class JStringObject
 	private static void GetChars(Span<Char> chars, (JStringObject jStr, Int32 startIndex) arg)
 	{
 		IEnvironment env = arg.jStr.Environment;
-		env.StringProvider.GetCopy(arg.jStr, chars, arg.startIndex);
+		env.StringFeature.GetCopy(arg.jStr, chars, arg.startIndex);
 	}
 }

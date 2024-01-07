@@ -72,7 +72,7 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	public TField? Get(JLocalObject jLocal, JClassObject? jClass = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.GetField<TField>(jLocal, jClass ?? jLocal.Class, this);
+		return env.AccessFeature.GetField<TField>(jLocal, jClass ?? jLocal.Class, this);
 	}
 	/// <summary>
 	/// Retrieves the value of a static field on <paramref name="jClass"/> which matches with current definition.
@@ -82,7 +82,7 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	public TField? StaticGet(JClassObject jClass)
 	{
 		IEnvironment env = jClass.Environment;
-		return env.AccessProvider.GetStaticField<TField>(jClass, this);
+		return env.AccessFeature.GetStaticField<TField>(jClass, this);
 	}
 	/// <summary>
 	/// Sets the value of a field on <paramref name="jLocal"/> which matches with current definition.
@@ -93,7 +93,7 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	public void Set(JLocalObject jLocal, TField? value, JClassObject? jClass = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		env.AccessProvider.SetField(jLocal, jClass ?? jLocal.Class, this, value);
+		env.AccessFeature.SetField(jLocal, jClass ?? jLocal.Class, this, value);
 	}
 	/// <summary>
 	/// Sets the value of a static field on <paramref name="jClass"/> which matches with current definition.
@@ -103,6 +103,6 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	public void StaticSet(JClassObject jClass, TField? value)
 	{
 		IEnvironment env = jClass.Environment;
-		env.AccessProvider.SetStaticField(jClass, this, value);
+		env.AccessFeature.SetStaticField(jClass, this, value);
 	}
 }

@@ -21,7 +21,7 @@ public partial class JClassObject
 	/// <returns>A <see cref="JStringObject"/> instance.</returns>
 	internal static JStringObject GetClassName(IEnvironment env, JClassLocalRef classRef, out Boolean isPrimitive)
 	{
-		JClassObject jClassClass = env.ClassProvider.ClassObject;
+		JClassObject jClassClass = env.ClassFeature.ClassObject;
 		using JClassObject tempClass = new(jClassClass, classRef);
 		try
 		{

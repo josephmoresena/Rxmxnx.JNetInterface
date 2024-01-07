@@ -79,7 +79,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? Invoke(JLocalObject jLocal, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.CallFunction<TResult>(jLocal, jLocal.Class, this, false, args);
+		return env.AccessFeature.CallFunction<TResult>(jLocal, jLocal.Class, this, false, args);
 	}
 	/// <summary>
 	/// Invokes a function on <paramref name="jClass"/> which matches with current definition but using the
@@ -91,7 +91,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.CallFunction<TResult>(jLocal, jClass, this, false, args);
+		return env.AccessFeature.CallFunction<TResult>(jLocal, jClass, this, false, args);
 	}
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition but using the
@@ -103,7 +103,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.CallFunction<TResult>(jLocal, jClass, this, true, args);
+		return env.AccessFeature.CallFunction<TResult>(jLocal, jClass, this, true, args);
 	}
 	/// <summary>
 	/// Invokes a static function on <paramref name="jClass"/> which matches with current definition.
@@ -119,7 +119,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? StaticInvoke(JClassObject jClass, IObject?[] args)
 	{
 		IEnvironment env = jClass.Environment;
-		return env.AccessProvider.CallStaticFunction<TResult>(jClass, this, args);
+		return env.AccessFeature.CallStaticFunction<TResult>(jClass, this, args);
 	}
 
 	/// <summary>
@@ -134,8 +134,8 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 		JClassObject? jClass = default, Boolean nonVirtual = false, IObject?[]? args = default)
 	{
 		IEnvironment env = jLocal.Environment;
-		return env.AccessProvider.CallInternalFunction<TResult>(jLocal, jClass ?? jLocal.Class, definition, nonVirtual,
-		                                                        args ?? definition.CreateArgumentsArray());
+		return env.AccessFeature.CallInternalFunction<TResult>(jLocal, jClass ?? jLocal.Class, definition, nonVirtual,
+		                                                       args ?? definition.CreateArgumentsArray());
 	}
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jClass"/> which matches with current definition
@@ -148,7 +148,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 		IObject?[]? args = default)
 	{
 		IEnvironment env = jClass.Environment;
-		return env.AccessProvider.CallInternalStaticFunction<TResult>(jClass, definition,
-		                                                              args ?? definition.CreateArgumentsArray());
+		return env.AccessFeature.CallInternalStaticFunction<TResult>(jClass, definition,
+		                                                             args ?? definition.CreateArgumentsArray());
 	}
 }

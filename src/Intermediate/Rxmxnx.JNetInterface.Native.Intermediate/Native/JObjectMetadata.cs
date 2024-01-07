@@ -52,5 +52,5 @@ public record JObjectMetadata
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <returns>The class instance for current object.</returns>
-	internal JClassObject GetClass(IEnvironment env) => env.ClassProvider.GetClass(this._objectClassName);
+	internal JClassObject GetClass(IEnvironment env) => env.ClassFeature.GetClass(this._objectClassName);
 }

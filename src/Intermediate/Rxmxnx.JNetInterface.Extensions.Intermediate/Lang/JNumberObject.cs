@@ -87,7 +87,7 @@ public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>, IP
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	internal JNumberObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.GetClass<TNumber>()) { }
+	internal JNumberObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.GetClass<TNumber>()) { }
 	/// <inheritdoc/>
 	internal JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) :
 		base(jClass, localRef, value) { }

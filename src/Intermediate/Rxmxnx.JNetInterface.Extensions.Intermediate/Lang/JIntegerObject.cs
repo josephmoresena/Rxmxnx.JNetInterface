@@ -22,5 +22,5 @@ public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimi
 	static JIntegerObject? IReferenceType<JIntegerObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
 		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JIntegerObject>(jGlobal, env)) : default;
 	static JIntegerObject? IPrimitiveWrapperType<JIntegerObject, JInt>.Create(IEnvironment env, JInt? value)
-		=> value is not null ? (JIntegerObject)env.ReferenceProvider.CreateWrapper(value.Value) : default;
+		=> value is not null ? (JIntegerObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 }

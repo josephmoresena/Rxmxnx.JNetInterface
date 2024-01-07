@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
-public partial interface IReferenceProvider
+public partial interface IReferenceFeature
 {
 	/// <summary>
 	/// Creates a <see cref="JLocalObject"/> wrapper instance for <paramref name="primitive"/> value.

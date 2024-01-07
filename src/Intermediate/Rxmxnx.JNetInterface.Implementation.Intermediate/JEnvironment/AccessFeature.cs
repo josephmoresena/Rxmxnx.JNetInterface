@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 public partial class JEnvironment
 {
-	private partial record JEnvironmentCache : IAccessProvider
+	private partial record JEnvironmentCache : IAccessFeature
 	{
 		public void GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 			JFieldDefinition definition)

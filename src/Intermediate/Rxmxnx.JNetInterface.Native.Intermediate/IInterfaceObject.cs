@@ -26,6 +26,6 @@ public interface IInterfaceObject<TInterface> : IObject
 		where TElement : JLocalObject, IReferenceType<TElement>, IInterfaceObject<TInterface>
 	{
 		IEnvironment env = jArray.Environment;
-		env.ArrayProvider.SetObjectElement(jArray, index, element);
+		env.ArrayFeature.SetObjectElement(jArray, index, element);
 	}
 }

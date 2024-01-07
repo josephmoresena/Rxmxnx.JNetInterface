@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
 /// <summary>
-/// This interface exposes a java class provider instance.
+/// This interface exposes JNI classing feature.
 /// </summary>
-public interface IClassProvider
+public interface IClassFeature
 {
 	/// <summary>
 	/// <c>void</c> class instance.

@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 public partial class JEnvironment
 {
-	private partial record JEnvironmentCache : IReferenceProvider
+	private partial record JEnvironmentCache : IReferenceFeature
 	{
 		public JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>

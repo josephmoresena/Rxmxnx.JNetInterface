@@ -14,7 +14,7 @@ public abstract partial class JArrayObject : JLocalObject
 	/// <summary>
 	/// Array length.
 	/// </summary>
-	public Int32 Length => this._length ??= this.Environment.ArrayProvider.GetArrayLength(this);
+	public Int32 Length => this._length ??= this.Environment.ArrayFeature.GetArrayLength(this);
 
 	/// <summary>
 	/// JNI array reference.
@@ -61,8 +61,8 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObj
 	[IndexerName("Value")]
 	public TElement? this[Int32 index]
 	{
-		get => this.Environment.ArrayProvider.GetElement(this, index);
-		set => this.Environment.ArrayProvider.SetElement(this, index, value);
+		get => this.Environment.ArrayFeature.GetElement(this, index);
+		set => this.Environment.ArrayFeature.SetElement(this, index, value);
 	}
 
 	/// <inheritdoc/>
@@ -75,7 +75,7 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObj
 	/// <param name="length">New array length.</param>
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
 	public static JArrayObject<TElement> Create(IEnvironment env, Int32 length)
-		=> env.ArrayProvider.CreateArray<TElement>(length);
+		=> env.ArrayFeature.CreateArray<TElement>(length);
 	/// <summary>
 	/// Creates a <paramref name="initialElement"/> filled <see cref="JArrayObject{TElement}"/> instance.
 	/// </summary>
@@ -84,7 +84,7 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObj
 	/// <param name="initialElement">Instance to set each array element.</param>
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
 	public static JArrayObject<TElement> Create(IEnvironment env, Int32 length, TElement initialElement)
-		=> env.ArrayProvider.CreateArray(length, initialElement);
+		=> env.ArrayFeature.CreateArray(length, initialElement);
 
 	/// <inheritdoc/>
 	public static JArrayObject<TElement>? Create(JLocalObject? jLocal)

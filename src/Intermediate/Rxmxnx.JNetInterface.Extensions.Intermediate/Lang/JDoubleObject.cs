@@ -22,5 +22,5 @@ public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrim
 	static JDoubleObject? IReferenceType<JDoubleObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
 		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JDoubleObject>(jGlobal, env)) : default;
 	static JDoubleObject? IPrimitiveWrapperType<JDoubleObject, JDouble>.Create(IEnvironment env, JDouble? value)
-		=> value is not null ? (JDoubleObject)env.ReferenceProvider.CreateWrapper(value.Value) : default;
+		=> value is not null ? (JDoubleObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 }

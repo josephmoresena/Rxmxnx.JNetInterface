@@ -130,7 +130,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	public JClassObject GetLoadClassObject(JLocalObject jLocal)
 	{
 		if (this._class is not null && this._isRealClass) return this._class;
-		this._class = this._env.ClassProvider.GetObjectClass(jLocal);
+		this._class = this._env.ClassFeature.GetObjectClass(jLocal);
 		this._isRealClass = true;
 		return this._class;
 	}
@@ -143,7 +143,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	{
 		if (!JGlobalBase.IsValid(this._global, this._env))
 		{
-			this._global = this._env.ReferenceProvider.Create<JGlobal>(jLocal);
+			this._global = this._env.ReferenceFeature.Create<JGlobal>(jLocal);
 			this._global.AssignationCache.Merge(this._assignableTypes);
 		}
 		else
@@ -161,7 +161,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	{
 		if (!JGlobalBase.IsValid(this._weak, this._env))
 		{
-			this._weak = this._env.ReferenceProvider.Create<JWeak>(jLocal);
+			this._weak = this._env.ReferenceFeature.Create<JWeak>(jLocal);
 			this._weak.AssignationCache.Merge(this._assignableTypes);
 		}
 		else
@@ -196,7 +196,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="classHash">A <see cref="JClassObject"/> hash.</param>
 	public void SetClassClass(JClassObject jClass, String? classHash)
 	{
-		this._class = classHash == IDataType.GetHash<JClassObject>() ? jClass : this._env.ClassProvider.ClassObject;
+		this._class = classHash == IDataType.GetHash<JClassObject>() ? jClass : this._env.ClassFeature.ClassObject;
 		this._isRealClass = true;
 	}
 	/// <summary>
@@ -215,7 +215,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 			return this._global.IsAssignableTo<TDataType>();
 		if (JGlobalBase.IsValid(this._weak, this._env))
 			return this._weak.IsAssignableTo<TDataType>();
-		return this.IsAssignableTo<TDataType>() ?? this._env.ClassProvider.IsAssignableTo<TDataType>(jLocal);
+		return this.IsAssignableTo<TDataType>() ?? this._env.ClassFeature.IsAssignableTo<TDataType>(jLocal);
 	}
 
 	/// <summary>
@@ -244,8 +244,8 @@ internal sealed partial class ObjectLifetime : IDisposable
 		Boolean isClass = jLocal is JClassObject;
 		this.Unload(jLocal.Id, isClass);
 		this.Secondary?.Unload(jLocal.Id, isClass);
-		if (this._objects.Count > this._classCounter.Value || this._env.ReferenceProvider.IsParameter(jLocal)) return;
-		this._env.ReferenceProvider.Unload(jLocal);
+		if (this._objects.Count > this._classCounter.Value || this._env.ReferenceFeature.IsParameter(jLocal)) return;
+		this._env.ReferenceFeature.Unload(jLocal);
 		this.Dispose();
 	}
 	/// <summary>

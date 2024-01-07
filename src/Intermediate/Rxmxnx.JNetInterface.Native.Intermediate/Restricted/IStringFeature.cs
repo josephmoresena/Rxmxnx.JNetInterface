@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes a JNI string provider instance.
 /// </summary>
-public interface IStringProvider
+public interface IStringFeature
 {
 	/// <summary>
 	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="data"/>.

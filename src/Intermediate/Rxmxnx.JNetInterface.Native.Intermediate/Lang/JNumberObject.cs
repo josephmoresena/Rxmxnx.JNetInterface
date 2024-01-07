@@ -12,7 +12,7 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>, II
 	protected JNumberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc/>
 	protected JNumberObject(JLocalObject jLocal, JClassObject? jClass = default) : base(
-		jLocal, jClass ?? jLocal.Environment.ClassProvider.NumberClassObject) { }
+		jLocal, jClass ?? jLocal.Environment.ClassFeature.NumberClassObject) { }
 
 	/// <summary>
 	/// Returns the value of the specified number as a <typeparamref name="TPrimitive"/>, which may

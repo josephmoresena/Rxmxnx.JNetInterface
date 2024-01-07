@@ -75,7 +75,7 @@ public static class JArrayExtensions
 	{
 		TPrimitive[] arr = new TPrimitive[count];
 		IEnvironment env = jArray.Environment;
-		env.ArrayProvider.GetCopy(jArray, startIndex, arr.AsMemory());
+		env.ArrayFeature.GetCopy(jArray, startIndex, arr.AsMemory());
 		return arr;
 	}
 	/// <summary>
@@ -90,6 +90,6 @@ public static class JArrayExtensions
 		Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		IEnvironment env = jArray.Environment;
-		env.ArrayProvider.SetCopy(jArray, mem, startIndex);
+		env.ArrayFeature.SetCopy(jArray, mem, startIndex);
 	}
 }

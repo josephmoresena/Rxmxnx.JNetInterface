@@ -17,9 +17,10 @@
     <ItemGroup>
         <Using Include="System.Buffers"/>
         <Using Include="System.Collections.Concurrent"/>
-        <Using Include="System.Diagnostics.CodeAnalysis"/>
-        <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.ComponentModel"/>
+        <Using Include="System.Diagnostics.CodeAnalysis"/>
+        <Using Include="System.Numerics"/>
+        <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Io"/>
@@ -32,6 +33,7 @@
         <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
         <Using Include="Rxmxnx.JNetInterface.Native.References"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
+        <Using Include="Rxmxnx.JNetInterface.Nio"/>
         <Using Include="Rxmxnx.JNetInterface.Primitives"/>
         <Using Include="Rxmxnx.JNetInterface.Reflect"/>
         <Using Include="Rxmxnx.JNetInterface.Restricted"/>

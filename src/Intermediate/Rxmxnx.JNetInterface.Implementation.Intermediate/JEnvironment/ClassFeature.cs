@@ -2,21 +2,21 @@ namespace Rxmxnx.JNetInterface;
 
 public partial class JEnvironment
 {
-	private partial record JEnvironmentCache : IClassProvider
+	private partial record JEnvironmentCache : IClassFeature
 	{
-		JClassObject IClassProvider.Object => this.GetClass<JLocalObject>();
-		JClassObject IClassProvider.StringClassObject => this.GetClass<JStringObject>();
-		JClassObject IClassProvider.NumberClassObject => this.GetClass<JNumberObject>();
-		JClassObject IClassProvider.EnumClassObject => this.GetClass<JEnumObject>();
-		JClassObject IClassProvider.VoidObject => this.GetClass<JVoidObject>();
-		JClassObject IClassProvider.BooleanObject => this.GetClass<JBooleanObject>();
-		JClassObject IClassProvider.ByteObject => this.GetClass<JByteObject>();
-		JClassObject IClassProvider.CharacterObject => this.GetClass<JCharacterObject>();
-		JClassObject IClassProvider.DoubleObject => this.GetClass<JDoubleObject>();
-		JClassObject IClassProvider.FloatObject => this.GetClass<JFloatObject>();
-		JClassObject IClassProvider.IntegerObject => this.GetClass<JIntegerObject>();
-		JClassObject IClassProvider.LongObject => this.GetClass<JLongObject>();
-		JClassObject IClassProvider.ShortObject => this.GetClass<JShortObject>();
+		JClassObject IClassFeature.Object => this.GetClass<JLocalObject>();
+		JClassObject IClassFeature.StringClassObject => this.GetClass<JStringObject>();
+		JClassObject IClassFeature.NumberClassObject => this.GetClass<JNumberObject>();
+		JClassObject IClassFeature.EnumClassObject => this.GetClass<JEnumObject>();
+		JClassObject IClassFeature.VoidObject => this.GetClass<JVoidObject>();
+		JClassObject IClassFeature.BooleanObject => this.GetClass<JBooleanObject>();
+		JClassObject IClassFeature.ByteObject => this.GetClass<JByteObject>();
+		JClassObject IClassFeature.CharacterObject => this.GetClass<JCharacterObject>();
+		JClassObject IClassFeature.DoubleObject => this.GetClass<JDoubleObject>();
+		JClassObject IClassFeature.FloatObject => this.GetClass<JFloatObject>();
+		JClassObject IClassFeature.IntegerObject => this.GetClass<JIntegerObject>();
+		JClassObject IClassFeature.LongObject => this.GetClass<JLongObject>();
+		JClassObject IClassFeature.ShortObject => this.GetClass<JShortObject>();
 
 		public JClassObject AsClassObject(JReferenceObject jObject)
 		{

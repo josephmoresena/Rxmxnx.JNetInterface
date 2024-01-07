@@ -34,7 +34,7 @@ public record JConstructorDefinition : JCallDefinition
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
 	public TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
-		=> this.New<TObject>(env.ClassProvider.GetClass<TObject>(), this.CreateArgumentsArray());
+		=> this.New<TObject>(env.ClassFeature.GetClass<TObject>(), this.CreateArgumentsArray());
 
 	/// <summary>
 	/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>
@@ -52,7 +52,7 @@ public record JConstructorDefinition : JCallDefinition
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
 	protected TObject New<TObject>(IEnvironment env, IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
-		=> this.New<TObject>(env.ClassProvider.GetClass<TObject>(), args);
+		=> this.New<TObject>(env.ClassFeature.GetClass<TObject>(), args);
 
 	/// <summary>
 	/// Creates a new <typeparamref name="TObject"/> instance using a constructor on <paramref name="jClass"/>
@@ -66,7 +66,7 @@ public record JConstructorDefinition : JCallDefinition
 	{
 		NativeValidationUtilities.ThrowIfAbstractClass<TObject>();
 		IEnvironment env = jClass.Environment;
-		return env.AccessProvider.CallConstructor<TObject>(jClass, this, args);
+		return env.AccessFeature.CallConstructor<TObject>(jClass, this, args);
 	}
 
 	/// <summary>
@@ -82,7 +82,7 @@ public record JConstructorDefinition : JCallDefinition
 	{
 		NativeValidationUtilities.ThrowIfAbstractClass<TObject>();
 		IEnvironment env = jClass.Environment;
-		return env.AccessProvider.CallInternalConstructor<TObject>(jClass, definition,
-		                                                           args ?? definition.CreateArgumentsArray());
+		return env.AccessFeature.CallInternalConstructor<TObject>(jClass, definition,
+		                                                          args ?? definition.CreateArgumentsArray());
 	}
 }

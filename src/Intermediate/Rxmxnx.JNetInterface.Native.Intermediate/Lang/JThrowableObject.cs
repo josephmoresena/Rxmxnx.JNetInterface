@@ -20,7 +20,7 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 
 	/// <inheritdoc/>
 	internal JThrowableObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy,
-		JClassObject? jClass = default) : base(env, jLocalRef, isDummy, jClass ?? env.ClassProvider.ThrowableObject) { }
+		JClassObject? jClass = default) : base(env, jLocalRef, isDummy, jClass ?? env.ClassFeature.ThrowableObject) { }
 
 	/// <inheritdoc/>
 	protected JThrowableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }

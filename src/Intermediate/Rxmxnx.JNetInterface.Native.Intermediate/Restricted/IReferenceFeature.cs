@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
 /// <summary>
-/// This interface exposes a JNI reference provider instance.
+/// This interface exposes a JNI referencing feature.
 /// </summary>
-public partial interface IReferenceProvider
+public partial interface IReferenceFeature
 {
 	/// <summary>
 	/// Creates a <typeparamref name="TGlobal"/> instance loaded for given <see cref="JLocalObject"/> instance.

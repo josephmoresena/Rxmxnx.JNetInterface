@@ -72,7 +72,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 			}
 		}
 
-		if (!env.ReferenceProvider.Unload(this)) return;
+		if (!env.ReferenceFeature.Unload(this)) return;
 		this.ClearValue();
 		this._isDisposed = true;
 	}

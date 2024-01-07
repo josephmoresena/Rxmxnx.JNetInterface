@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
-public partial interface IAccessProvider
+public partial interface IAccessFeature
 {
 	/// <summary>
 	/// Invokes a constructor method for given <see cref="JClassObject"/> instance.

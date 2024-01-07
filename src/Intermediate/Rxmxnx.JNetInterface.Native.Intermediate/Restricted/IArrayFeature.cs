@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
 /// <summary>
-/// This interface exposes a java array provider instance.
+/// This interface exposes JNI array feature.
 /// </summary>
-public partial interface IArrayProvider
+public partial interface IArrayFeature
 {
 	/// <summary>
 	/// Creates an empty <see cref="JArrayObject{TElement}"/> instance.

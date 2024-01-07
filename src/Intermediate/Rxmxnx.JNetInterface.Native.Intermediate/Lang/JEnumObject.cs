@@ -53,7 +53,7 @@ public abstract class JEnumObject<TEnum> : JEnumObject, IDataType where TEnum : 
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	protected JEnumObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassProvider.GetClass<TEnum>()) { }
+	protected JEnumObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.GetClass<TEnum>()) { }
 	/// <inheritdoc/>
 	protected JEnumObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 

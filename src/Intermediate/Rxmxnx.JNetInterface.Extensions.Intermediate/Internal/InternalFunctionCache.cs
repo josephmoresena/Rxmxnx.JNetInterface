@@ -6,17 +6,17 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	public override JStringObject GetName(JEnumObject jEnum)
 	{
 		IEnvironment env = jEnum.Environment;
-		JClassObject enumClass = env.ClassProvider.EnumClassObject;
+		JClassObject enumClass = env.ClassFeature.EnumClassObject;
 		return JFunctionDefinition<JStringObject>.Invoke(InternalFunctionCache.nameDefinition, jEnum, enumClass)!;
 	}
 	/// <inheritdoc/>
 	public override Int32 GetOrdinal(JEnumObject jEnum)
 	{
 		IEnvironment env = jEnum.Environment;
-		JClassObject enumClass = env.ClassProvider.EnumClassObject;
+		JClassObject enumClass = env.ClassFeature.EnumClassObject;
 		Span<Byte> bytes = stackalloc Byte[sizeof(Int32)];
-		env.AccessProvider.CallPrimitiveFunction(bytes, jEnum, enumClass, InternalFunctionCache.ordinalDefinition,
-		                                         false, Array.Empty<IObject>());
+		env.AccessFeature.CallPrimitiveFunction(bytes, jEnum, enumClass, InternalFunctionCache.ordinalDefinition, false,
+		                                        Array.Empty<IObject>());
 		return bytes.AsValue<Int32>();
 	}
 
@@ -28,9 +28,9 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	{
 		IEnvironment env = jStackTraceElement.Environment;
 		Span<Byte> bytes = stackalloc Byte[sizeof(Int32)];
-		env.AccessProvider.CallPrimitiveFunction(bytes, jStackTraceElement, jStackTraceElement.Class,
-		                                         InternalFunctionCache.getLineNumberDefinition, false,
-		                                         Array.Empty<IObject>());
+		env.AccessFeature.CallPrimitiveFunction(bytes, jStackTraceElement, jStackTraceElement.Class,
+		                                        InternalFunctionCache.getLineNumberDefinition, false,
+		                                        Array.Empty<IObject>());
 		return bytes.AsValue<Int32>();
 	}
 	/// <inheritdoc/>
@@ -45,9 +45,9 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	{
 		IEnvironment env = jStackTraceElement.Environment;
 		Span<Byte> bytes = stackalloc Byte[1];
-		env.AccessProvider.CallPrimitiveFunction(bytes, jStackTraceElement, jStackTraceElement.Class,
-		                                         InternalFunctionCache.isNativeMethodDefinition, false,
-		                                         Array.Empty<IObject>());
+		env.AccessFeature.CallPrimitiveFunction(bytes, jStackTraceElement, jStackTraceElement.Class,
+		                                        InternalFunctionCache.isNativeMethodDefinition, false,
+		                                        Array.Empty<IObject>());
 		return bytes[0] == JBoolean.TrueValue;
 	}
 
@@ -56,7 +56,7 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 		IEnvironment env = jNumber.Environment;
-		JClassObject numberClass = env.ClassProvider.NumberClassObject;
+		JClassObject numberClass = env.ClassFeature.NumberClassObject;
 		JFunctionDefinition functionDefinition = metadata.NativeType switch
 		{
 			JNativeType.JByte => InternalFunctionCache.byteValueDefinition,
@@ -67,8 +67,8 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 			_ => InternalFunctionCache.doubleValueDefinition,
 		};
 		Span<Byte> bytes = stackalloc Byte[metadata.SizeOf];
-		env.AccessProvider.CallPrimitiveFunction(bytes, jNumber, numberClass, functionDefinition, false,
-		                                         Array.Empty<IObject>());
+		env.AccessFeature.CallPrimitiveFunction(bytes, jNumber, numberClass, functionDefinition, false,
+		                                        Array.Empty<IObject>());
 		return bytes.AsValue<TPrimitive>();
 	}
 
@@ -76,7 +76,7 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	public override JStringObject GetMessage(JThrowableObject jThrowable)
 	{
 		IEnvironment env = jThrowable.Environment;
-		JClassObject throwableClass = env.ClassProvider.ThrowableObject;
+		JClassObject throwableClass = env.ClassFeature.ThrowableObject;
 		return JFunctionDefinition<JStringObject>.Invoke(InternalFunctionCache.getMessageDefinition, jThrowable,
 		                                                 throwableClass)!;
 	}
@@ -84,7 +84,7 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	public override JArrayObject<JStackTraceElementObject> GetStackTrace(JThrowableObject jThrowable)
 	{
 		IEnvironment env = jThrowable.Environment;
-		JClassObject throwableClass = env.ClassProvider.ThrowableObject;
+		JClassObject throwableClass = env.ClassFeature.ThrowableObject;
 		return JFunctionDefinition<JArrayObject<JStackTraceElementObject>>.Invoke(
 			InternalFunctionCache.getStackTraceDefinition, jThrowable, throwableClass)!;
 	}
@@ -96,8 +96,8 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	{
 		IEnvironment env = jClass.Environment;
 		Span<Byte> bytes = stackalloc Byte[1];
-		env.AccessProvider.CallPrimitiveFunction(bytes, jClass, jClass.Class, InternalFunctionCache.isPrimitiveClass,
-		                                         false, Array.Empty<IObject>());
+		env.AccessFeature.CallPrimitiveFunction(bytes, jClass, jClass.Class, InternalFunctionCache.isPrimitiveClass,
+		                                        false, Array.Empty<IObject>());
 		return bytes[0] == JBoolean.TrueValue;
 	}
 }

@@ -31,7 +31,7 @@ public partial class JStringObject
 	internal JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
 	{
 		if (this._length is not null) return;
-		this._length ??= this.Environment.StringProvider.GetLength(jGlobal);
-		this._utf8Length ??= this.Environment.StringProvider.GetUtf8Length(jGlobal);
+		this._length ??= this.Environment.StringFeature.GetLength(jGlobal);
+		this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(jGlobal);
 	}
 }

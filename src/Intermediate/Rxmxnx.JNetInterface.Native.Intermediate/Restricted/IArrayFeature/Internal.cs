@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
-public partial interface IArrayProvider
+public partial interface IArrayFeature
 {
 	/// <summary>
 	/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.

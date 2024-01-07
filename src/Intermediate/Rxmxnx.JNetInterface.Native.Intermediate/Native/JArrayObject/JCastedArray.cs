@@ -77,7 +77,7 @@ public partial class JArrayObject
 			if (jArray is null) return default;
 			IEnvironment env = jArray.Environment;
 			ValidationUtilities.ThrowIfInvalidCast<JArrayObject<TCastedElement>>(
-				env.ClassProvider.IsAssignableTo<JArrayObject<TCastedElement>>(jArray));
+				env.ClassFeature.IsAssignableTo<JArrayObject<TCastedElement>>(jArray));
 			return new(jArray);
 		}
 		/// <summary>
@@ -91,7 +91,7 @@ public partial class JArrayObject
 			if (jLocal is null) return default;
 			IEnvironment env = jLocal.Environment;
 			ValidationUtilities.ThrowIfInvalidCast<JArrayObject<TCastedElement>>(
-				env.ClassProvider.IsAssignableTo<JArrayObject<TCastedElement>>(jLocal));
+				env.ClassFeature.IsAssignableTo<JArrayObject<TCastedElement>>(jLocal));
 			return JArrayObject<TCastedElement>.Create(jLocal)!;
 		}
 	}

@@ -21,5 +21,5 @@ public sealed class JLongObject : JNumberObject<JLong, JLongObject>, IPrimitiveW
 	static JLongObject? IReferenceType<JLongObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
 		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JLongObject>(jGlobal, env)) : default;
 	static JLongObject? IPrimitiveWrapperType<JLongObject, JLong>.Create(IEnvironment env, JLong? value)
-		=> value is not null ? (JLongObject)env.ReferenceProvider.CreateWrapper(value.Value) : default;
+		=> value is not null ? (JLongObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 }
