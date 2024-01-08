@@ -39,7 +39,6 @@ partial class JEnvironment
 			{ typeof(IsSameObjectDelegate), 19 },
 			{ typeof(NewLocalRefDelegate), 20 },
 			{ typeof(EnsureLocalCapacityDelegate), 21 },
-			{ typeof(AllocObjectDelegate), 22 },
 			{ typeof(NewObjectADelegate), 25 },
 			{ typeof(GetObjectClassDelegate), 26 },
 			{ typeof(IsInstanceOfDelegate), 27 },

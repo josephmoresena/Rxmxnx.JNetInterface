@@ -64,6 +64,14 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// <inheritdoc/>
 	~JLocalObject() { this.Dispose(false); }
 
+	/// <inheritdoc cref="JObject.ObjectClassName"/>
+	public override Boolean InstanceOf<TDataType>()
+	{
+		Boolean result = this.Environment.ClassFeature.IsInstanceOf<TDataType>(this);
+		this.Environment.ClassFeature.SetAssignableTo<TDataType>(this, result);
+		return result;
+	}
+
 	/// <inheritdoc cref="IDisposable.Dispose()"/>
 	/// <param name="disposing">
 	/// Indicates whether this method was called from the <see cref="IDisposable.Dispose"/> method.

@@ -166,6 +166,27 @@ public interface IClassFeature
 	/// </returns>
 	Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass);
 	/// <summary>
+	/// Indicates whether <paramref name="jObject"/> is an instance of <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if an object of <paramref name="jObject"/> is an instance of
+	/// <paramref name="jClass"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	Boolean IsInstanceOf(JReferenceObject jObject, JClassObject jClass);
+	/// <summary>
+	/// Indicates whether <paramref name="jObject"/> is an instance of
+	/// <typeparamref name="TDataType"/> type class.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if an object of <paramref name="jObject"/> is an instance of
+	/// <typeparamref name="TDataType"/> type class; otherwise, <see langword="false"/>.
+	/// </returns>
+	Boolean IsInstanceOf<TDataType>(JReferenceObject jObject) where TDataType : JReferenceObject, IDataType<TDataType>;
+	/// <summary>
 	/// Loads a java class from its binary information into the current VM.
 	/// </summary>
 	/// <param name="className">Name of class to load.</param>
@@ -182,7 +203,6 @@ public interface IClassFeature
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
 	JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JLocalObject? jClassLoader = default)
 		where TDataType : JLocalObject, IReferenceType<TDataType>;
-
 	/// <summary>
 	/// Retrieves the class info.
 	/// </summary>
@@ -197,6 +217,9 @@ public interface IClassFeature
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	internal void SetAssignableTo<TDataType>(JReferenceObject jObject)
+	/// <param name="isAssignable">
+	/// Indicates whether <paramref name="jObject"/> is assignable to <typeparamref name="TDataType"/> type.
+	/// </param>
+	internal void SetAssignableTo<TDataType>(JReferenceObject jObject, Boolean isAssignable)
 		where TDataType : JReferenceObject, IDataType<TDataType>;
 }

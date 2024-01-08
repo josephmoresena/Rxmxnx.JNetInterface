@@ -38,7 +38,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDefault(jObject);
 			JClassObject objectClass = this.GetClass(jObject.ObjectClassName);
 			Boolean result = this.IsAssignableFrom(objectClass, jClass);
-			jObject.SetAssignableTo<TDataType>(result);
+			this.SetAssignableTo<TDataType>(jObject, result);
 			return result;
 		}
 		public JClassObject GetClass(CString className)
@@ -82,6 +82,24 @@ partial class JEnvironment
 			this.CheckJniError();
 			return result.Value;
 		}
+		public Boolean IsInstanceOf(JReferenceObject jObject, JClassObject jClass)
+		{
+			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfDummy(jClass);
+			IsInstanceOfDelegate isInstanceOf = this.GetDelegate<IsInstanceOfDelegate>();
+			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			JObjectLocalRef localRef = jniTransaction.Add(jObject);
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			Byte result = isInstanceOf(this.Reference, localRef, classRef);
+			this.CheckJniError();
+			return result == JBoolean.TrueValue;
+		}
+		public Boolean IsInstanceOf<TDataType>(JReferenceObject jObject)
+			where TDataType : JReferenceObject, IDataType<TDataType>
+		{
+			Boolean result = this.IsInstanceOf(jObject, this.GetClass<TDataType>());
+			return result;
+		}
 		public JClassObject LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,
 			JLocalObject? jClassLoader = default)
 		{
@@ -109,9 +127,9 @@ partial class JEnvironment
 			if (!Object.ReferenceEquals(jClass, loadedClass))
 				loadedClass.Lifetime.Synchronize(jClass.Lifetime);
 		}
-		public void SetAssignableTo<TDataType>(JReferenceObject jObject)
+		public void SetAssignableTo<TDataType>(JReferenceObject jObject, Boolean isAssignable)
 			where TDataType : JReferenceObject, IDataType<TDataType>
-			=> jObject.SetAssignableTo<TDataType>(true);
+			=> jObject.SetAssignableTo<TDataType>(isAssignable);
 
 		/// <summary>
 		/// Retrieves class from cache or loads it using JNI.

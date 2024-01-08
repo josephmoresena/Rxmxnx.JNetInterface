@@ -52,6 +52,29 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	public void Unload(IEnvironment env) => this.Dispose(true, env);
 
+	/// <summary>
+	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if current instance is an instance of
+	/// <paramref name="jClass"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	public Boolean InstanceOf(JClassObject jClass)
+	{
+		IEnvironment env = jClass.Environment;
+		return env.ClassFeature.IsInstanceOf(this, jClass);
+	}
+
+	/// <inheritdoc/>
+	public override Boolean InstanceOf<TDataType>()
+	{
+		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
+		Boolean result = thread.ClassFeature.IsInstanceOf<TDataType>(this);
+		thread.ClassFeature.SetAssignableTo<TDataType>(this, result);
+		return result;
+	}
+
 	/// <inheritdoc cref="IDisposable.Dispose()"/>
 	/// <param name="disposing">
 	/// Indicates whether this method was called from the <see cref="IDisposable.Dispose"/> method.

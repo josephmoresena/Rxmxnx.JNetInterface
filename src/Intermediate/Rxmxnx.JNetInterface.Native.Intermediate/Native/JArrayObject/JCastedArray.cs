@@ -5,35 +5,14 @@ public partial class JArrayObject
 	/// <summary>
 	/// This record wraps a casted <see cref="JArrayObject"/>
 	/// </summary>
-	internal sealed class JCastedArray<TCastedElement> : JReferenceObject, IViewObject, ILocalObject,
-		IArrayObject<TCastedElement>
+	internal sealed class JCastedArray<TCastedElement> : View<JArrayObject>, IArrayObject<TCastedElement>
 		where TCastedElement : JInterfaceObject<TCastedElement>, IInterfaceType<TCastedElement>
 	{
-		/// <summary>
-		/// Internal instance object.
-		/// </summary>
-		private readonly JArrayObject _array;
-
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="arrayObject">Original <see cref="JArrayObject"/> instance.</param>
-		public JCastedArray(JArrayObject arrayObject) : base(arrayObject) => this._array = arrayObject;
-		IVirtualMachine ILocalObject.VirtualMachine => this._array.Environment.VirtualMachine;
-		Boolean ILocalObject.IsDummy => this._array.IsDummy;
-		ObjectLifetime ILocalObject.Lifetime => this._array.Lifetime;
-		ObjectMetadata ILocalObject.CreateMetadata() => ILocalObject.CreateMetadata(this._array);
-		void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata)
-			=> ILocalObject.ProcessMetadata(this._array, instanceMetadata);
-
-		public IObject Object => this._array;
-		public override CString ObjectClassName => this._array.ObjectClassName;
-		public override CString ObjectSignature => this._array.ObjectSignature;
-		internal override void ClearValue() => this._array.ClearValue();
-		internal override Boolean IsAssignableTo<TDataType>() => this._array.IsAssignableTo<TDataType>();
-		internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
-			=> this._array.SetAssignableTo<TDataType>(isAssignable);
-		internal override ReadOnlySpan<Byte> AsSpan() => this._array.AsSpan();
+		public JCastedArray(JArrayObject arrayObject) : base(arrayObject) { }
 
 		/// <summary>
 		/// Defines an explicit conversion of a given <see cref="JCastedArray{TCastedElement}"/>
@@ -43,7 +22,7 @@ public partial class JArrayObject
 		[return: NotNullIfNotNull(nameof(castedArray))]
 		public static explicit operator JArrayObject<TCastedElement>?(JCastedArray<TCastedElement>? castedArray)
 			=> castedArray is not null ?
-				castedArray._array as JArrayObject<TCastedElement> ?? new(castedArray._array) :
+				castedArray.Object as JArrayObject<TCastedElement> ?? new(castedArray.Object) :
 				default;
 		/// <summary>
 		/// Defines an implicit conversion of a given <see cref="JCastedArray{TCastedElement}"/>
@@ -51,14 +30,14 @@ public partial class JArrayObject
 		/// </summary>
 		/// <param name="castedArray">A <see cref="JCastedArray{TCastedElement}"/> to implicitly convert.</param>
 		[return: NotNullIfNotNull(nameof(castedArray))]
-		public static implicit operator JArrayObject?(JCastedArray<TCastedElement>? castedArray) => castedArray?._array;
+		public static implicit operator JArrayObject?(JCastedArray<TCastedElement>? castedArray) => castedArray?.Object;
 		/// <summary>
 		/// Defines an implicit conversion of a given <see cref="JCastedArray{TCastedElement}"/>
 		/// to <see cref="JLocalObject"/>.
 		/// </summary>
 		/// <param name="castedArray">A <see cref="JCastedArray{TCastedElement}"/> to implicitly convert.</param>
 		[return: NotNullIfNotNull(nameof(castedArray))]
-		public static implicit operator JLocalObject?(JCastedArray<TCastedElement>? castedArray) => castedArray?._array;
+		public static implicit operator JLocalObject?(JCastedArray<TCastedElement>? castedArray) => castedArray?.Object;
 
 		/// <summary>
 		/// Defines an explicit conversion of a given <see cref="JArrayObject{TCastedElement}"/>

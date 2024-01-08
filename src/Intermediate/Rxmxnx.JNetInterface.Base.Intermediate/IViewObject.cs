@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Restricted;
+namespace Rxmxnx.JNetInterface;
 
 /// <summary>
 /// This interface exposes viewed <see cref="IObject"/>.
