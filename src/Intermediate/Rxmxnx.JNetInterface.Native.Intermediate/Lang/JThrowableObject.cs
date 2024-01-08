@@ -27,17 +27,17 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 	/// <inheritdoc/>
 	protected JThrowableObject(JLocalObject jLocal, JClassObject jClass) : base(jLocal, jClass) { }
 
-	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
+	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
-	protected new virtual JThrowableObjectMetadata CreateMetadata()
+	protected new virtual ThrowableObjectMetadata CreateMetadata()
 		=> new(base.CreateMetadata()) { Message = this.Message, StackTrace = this._stackTrace, };
 
 	/// <inheritdoc/>
-	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
+	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
-		if (instanceMetadata is not JThrowableObjectMetadata throwableMetadata)
+		if (instanceMetadata is not ThrowableObjectMetadata throwableMetadata)
 			return;
 		this._message ??= throwableMetadata.Message;
 		this._stackTrace ??= throwableMetadata.StackTrace;

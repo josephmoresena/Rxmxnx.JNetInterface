@@ -132,4 +132,19 @@ internal partial class ObjectLifetime
 				this._objects.Remove(objId);
 		}
 	}
+
+	/// <summary>
+	/// Loads the given object in the <paramref name="lifetime"/> instance.
+	/// </summary>
+	/// <param name="lifetime">A <see cref="ObjectLifetime"/> instance.</param>
+	/// <param name="isClass">
+	/// Indicates whether <paramref name="jLocal"/> is a <see cref="JClassObject"/> instance.
+	/// </param>
+	/// <param name="jLocal">The java object to load.</param>
+	private static void Load(ObjectLifetime? lifetime, Boolean isClass, JLocalObject jLocal)
+	{
+		if (lifetime is null) return;
+		if (lifetime._objects.TryAdd(jLocal.Id, new(jLocal)) && isClass)
+			lifetime._classCounter.Value += 1;
+	}
 }

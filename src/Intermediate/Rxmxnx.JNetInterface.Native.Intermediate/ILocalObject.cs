@@ -18,24 +18,24 @@ public interface ILocalObject : IObject
 	/// Creates the object metadata for current instance.
 	/// </summary>
 	/// <returns>The object metadata for current instance.</returns>
-	protected JObjectMetadata CreateMetadata();
+	protected ObjectMetadata CreateMetadata();
 	/// <summary>
 	/// Process the object metadata.
 	/// </summary>
 	/// <param name="instanceMetadata">The object metadata for current instance.</param>
-	protected void ProcessMetadata(JObjectMetadata instanceMetadata);
+	protected void ProcessMetadata(ObjectMetadata instanceMetadata);
 
 	/// <summary>
 	/// Retrieves the metadata for given object.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="ILocalObject"/> instance.</param>
 	/// <returns>The object metadata for <paramref name="jLocal"/>.</returns>
-	internal static JObjectMetadata CreateMetadata(ILocalObject jLocal) => jLocal.CreateMetadata();
+	internal static ObjectMetadata CreateMetadata(ILocalObject jLocal) => jLocal.CreateMetadata();
 	/// <summary>
 	/// Process the object metadata.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="ILocalObject"/> instance.</param>
 	/// <param name="instanceMetadata">The object metadata for <paramref name="jLocal"/>.</param>
-	internal static void ProcessMetadata(ILocalObject jLocal, JObjectMetadata instanceMetadata)
+	internal static void ProcessMetadata(ILocalObject jLocal, ObjectMetadata instanceMetadata)
 		=> jLocal.ProcessMetadata(instanceMetadata);
 }

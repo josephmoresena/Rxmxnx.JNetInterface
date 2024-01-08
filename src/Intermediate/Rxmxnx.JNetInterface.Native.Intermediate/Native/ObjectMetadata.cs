@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This record stores the metadata of a <see cref="JLocalObject"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
-public record JObjectMetadata
+public record ObjectMetadata
 {
 	/// <inheritdoc cref="IObject.ObjectClassName"/>
 	private readonly CString _objectClassName;
@@ -20,7 +20,7 @@ public record JObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	internal JObjectMetadata(JClassObject jClass)
+	internal ObjectMetadata(JClassObject jClass)
 	{
 		this._objectClassName = jClass.Name;
 		this._objectSignature = jClass.ClassSignature;
@@ -29,8 +29,8 @@ public record JObjectMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
-	protected JObjectMetadata(JObjectMetadata metadata)
+	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
+	protected ObjectMetadata(ObjectMetadata metadata)
 	{
 		this._objectClassName = metadata._objectClassName;
 		this._objectSignature = metadata._objectSignature;
@@ -41,7 +41,7 @@ public record JObjectMetadata
 	/// </summary>
 	/// <param name="objectClassName">Class name of current instance.</param>
 	/// <param name="objectSignature">Class signature of current instance.</param>
-	internal JObjectMetadata(CString objectClassName, CString objectSignature)
+	internal ObjectMetadata(CString objectClassName, CString objectSignature)
 	{
 		this._objectClassName = objectClassName;
 		this._objectSignature = objectSignature;

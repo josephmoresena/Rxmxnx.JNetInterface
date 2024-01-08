@@ -175,7 +175,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// Sets instance class.
 	/// </summary>
 	/// <param name="instanceMetadata">The object metadata for current instance.</param>
-	public void SetClass(JObjectMetadata instanceMetadata)
+	public void SetClass(ObjectMetadata instanceMetadata)
 	{
 		this._class = instanceMetadata.GetClass(this._env);
 		this._isRealClass = true;
@@ -225,10 +225,8 @@ internal sealed partial class ObjectLifetime : IDisposable
 	public void Load(JLocalObject jLocal)
 	{
 		Boolean isClass = jLocal is JClassObject;
-		if (this._objects.TryAdd(jLocal.Id, new(jLocal)) && isClass)
-			this._classCounter.Value += 1;
-		if ((this.Secondary?._objects.TryAdd(jLocal.Id, new(jLocal)) ?? false) && isClass)
-			this.Secondary._classCounter.Value += 1;
+		ObjectLifetime.Load(this, isClass, jLocal);
+		ObjectLifetime.Load(this.Secondary, isClass, jLocal);
 	}
 	/// <summary>
 	/// Unloads the given object from the current instance.

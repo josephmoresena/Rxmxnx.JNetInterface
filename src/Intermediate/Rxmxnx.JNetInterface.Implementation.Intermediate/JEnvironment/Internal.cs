@@ -41,7 +41,7 @@ public partial class JEnvironment
 	/// </summary>
 	/// <param name="metadata">Class metadata name.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal JGlobalRef GetClassGlobalRef(JClassObjectMetadata metadata)
+	internal JGlobalRef GetClassGlobalRef(ClassObjectMetadata metadata)
 	{
 		JClassLocalRef classRef = metadata.ClassSignature.Length != 1 ?
 			metadata.Name.WithSafeFixed(this._cache, JEnvironmentCache.FindClass) :

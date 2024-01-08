@@ -18,14 +18,14 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public String Name => this._name ??= this.GetName();
 
-	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
+	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	protected new virtual JEnumObjectMetadata CreateMetadata()
 		=> new(base.CreateMetadata()) { Ordinal = this.Ordinal, Name = this.Name, };
 
 	/// <inheritdoc/>
-	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
+	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
 		if (instanceMetadata is not JEnumObjectMetadata enumMetadata)

@@ -80,7 +80,7 @@ public partial class JEnvironment
 				return (jWeak as TGlobal)!;
 			}
 			if (this.LoadGlobal(jLocal as JClassObject) is TGlobal result) return result;
-			JObjectMetadata metadata = ILocalObject.CreateMetadata(jLocal);
+			ObjectMetadata metadata = ILocalObject.CreateMetadata(jLocal);
 			if (metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
 			{
 				JClassObject jClass = this.GetClass(UnicodeClassNames.ClassObject);

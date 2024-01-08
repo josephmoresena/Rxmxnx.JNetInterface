@@ -21,10 +21,10 @@ public sealed class JWeak : JGlobalBase
 	/// Constructor.
 	/// </summary>
 	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
+	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
 	/// <param name="weakRef">Weak global reference.</param>
-	internal JWeak(IVirtualMachine vm, JObjectMetadata metadata, Boolean isDummy, JWeakRef weakRef) : base(
+	internal JWeak(IVirtualMachine vm, ObjectMetadata metadata, Boolean isDummy, JWeakRef weakRef) : base(
 		vm, metadata, isDummy, weakRef) { }
 
 	/// <inheritdoc/>

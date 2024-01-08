@@ -2,9 +2,9 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public partial class JThrowableObject
 {
-	/// <inheritdoc cref="JThrowableObjectMetadata.Message"/>
+	/// <inheritdoc cref="ThrowableObjectMetadata.Message"/>
 	private String? _message;
-	/// <inheritdoc cref="JThrowableObjectMetadata.StackTrace"/>
+	/// <inheritdoc cref="ThrowableObjectMetadata.StackTrace"/>
 	private JStackTraceInfo[]? _stackTrace;
 
 	/// <summary>
@@ -12,9 +12,9 @@ public partial class JThrowableObject
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	private JThrowableObject(JLocalObject jLocal) : base(
-		jLocal.ForExternalUse(out JClassObject jClass, out JObjectMetadata metadata), jClass)
+		jLocal.ForExternalUse(out JClassObject jClass, out ObjectMetadata metadata), jClass)
 	{
-		if (metadata is not JThrowableObjectMetadata throwableMetadata)
+		if (metadata is not ThrowableObjectMetadata throwableMetadata)
 			return;
 		this._message ??= throwableMetadata.Message;
 		this._stackTrace ??= throwableMetadata.StackTrace;
@@ -41,7 +41,7 @@ public partial class JThrowableObject
 			new JStackTraceInfo[stackTrace.Length] :
 			Array.Empty<JStackTraceInfo>();
 		for (Int32 i = 0; i < result.Length; i++)
-			result[i] = ((JStackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]!))!;
+			result[i] = ((StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]!))!;
 		return result;
 	}
 }

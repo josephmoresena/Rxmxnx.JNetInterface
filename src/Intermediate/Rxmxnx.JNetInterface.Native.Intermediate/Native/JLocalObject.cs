@@ -77,12 +77,12 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// Creates the object metadata for current instance.
 	/// </summary>
 	/// <returns>The object metadata for current instance.</returns>
-	protected virtual JObjectMetadata CreateMetadata() => new(this._lifetime.GetLoadClassObject(this));
+	protected virtual ObjectMetadata CreateMetadata() => new(this._lifetime.GetLoadClassObject(this));
 	/// <summary>
 	/// Process the object metadata.
 	/// </summary>
 	/// <param name="instanceMetadata">The object metadata for current instance.</param>
-	protected virtual void ProcessMetadata(JObjectMetadata instanceMetadata)
+	protected virtual void ProcessMetadata(ObjectMetadata instanceMetadata)
 		=> this._lifetime.SetClass(instanceMetadata);
 
 	/// <summary>
@@ -91,7 +91,7 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// <param name="jClass">Output. Loaded class from current instance.</param>
 	/// <param name="metadata">Output. Metadata for current instance.</param>
 	/// <returns>Current instance instance.</returns>
-	protected internal JLocalObject ForExternalUse(out JClassObject jClass, out JObjectMetadata metadata)
+	protected internal JLocalObject ForExternalUse(out JClassObject jClass, out ObjectMetadata metadata)
 	{
 		metadata = ILocalObject.CreateMetadata(this);
 		jClass = this.Class;

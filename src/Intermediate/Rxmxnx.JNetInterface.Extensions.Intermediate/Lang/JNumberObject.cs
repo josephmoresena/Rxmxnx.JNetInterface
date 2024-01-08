@@ -51,10 +51,10 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	}
 
 	/// <inheritdoc/>
-	protected override JObjectMetadata CreateMetadata()
+	protected override ObjectMetadata CreateMetadata()
 		=> new JPrimitiveWrapperObjectMetadata<TValue>(base.CreateMetadata()) { Value = this.Value, };
 	/// <inheritdoc/>
-	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
+	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
 		if (instanceMetadata is JPrimitiveWrapperObjectMetadata<TValue> wrapperMetadata)

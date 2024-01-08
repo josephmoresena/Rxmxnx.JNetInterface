@@ -64,7 +64,7 @@ public partial class JThrowableException
 		/// <param name="metadata">The <see cref="JThrowableObject"/> instance.</param>
 		/// <typeparam name="TThrowable"></typeparam>
 		/// <returns></returns>
-		private static TThrowable Parse<TThrowable>(JThrowableObject throwable, JObjectMetadata metadata)
+		private static TThrowable Parse<TThrowable>(JThrowableObject throwable, ObjectMetadata metadata)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			if (throwable is TThrowable throwableT) return throwableT;

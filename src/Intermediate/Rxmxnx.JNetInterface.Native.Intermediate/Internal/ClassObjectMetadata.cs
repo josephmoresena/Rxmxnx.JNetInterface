@@ -4,12 +4,12 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// This record stores the metadata of a <see cref="JClassObject"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
-internal sealed record JClassObjectMetadata : JObjectMetadata
+internal sealed record ClassObjectMetadata : ObjectMetadata
 {
 	/// <summary>
-	/// <see cref="JClassObjectMetadata"/> instance for Java <c>void</c> type.
+	/// <see cref="ClassObjectMetadata"/> instance for Java <c>void</c> type.
 	/// </summary>
-	public static readonly JClassObjectMetadata VoidMetadata = new(JPrimitiveTypeMetadata.VoidMetadata);
+	public static readonly ClassObjectMetadata VoidMetadata = new(JPrimitiveTypeMetadata.VoidMetadata);
 
 	/// <summary>
 	/// Class name of current object.
@@ -31,10 +31,10 @@ internal sealed record JClassObjectMetadata : JObjectMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
-	public JClassObjectMetadata(JObjectMetadata metadata) : base(metadata)
+	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
+	public ClassObjectMetadata(ObjectMetadata metadata) : base(metadata)
 	{
-		JClassObjectMetadata? classMetadata = metadata as JClassObjectMetadata;
+		ClassObjectMetadata? classMetadata = metadata as ClassObjectMetadata;
 		this.Name = classMetadata?.Name!;
 		this.ClassSignature = classMetadata?.ClassSignature!;
 		this.Hash = classMetadata?.Hash!;
@@ -43,8 +43,8 @@ internal sealed record JClassObjectMetadata : JObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	public JClassObjectMetadata(JClassObject jClass) : base(UnicodeClassNames.ClassObject,
-	                                                        UnicodeObjectSignatures.ClassObjectSignature)
+	public ClassObjectMetadata(JClassObject jClass) : base(UnicodeClassNames.ClassObject,
+	                                                       UnicodeObjectSignatures.ClassObjectSignature)
 	{
 		this.Name = jClass.Name;
 		this.ClassSignature = jClass.ClassSignature;
@@ -55,8 +55,8 @@ internal sealed record JClassObjectMetadata : JObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
-	private JClassObjectMetadata(ITypeInformation metadata) : base(UnicodeClassNames.ClassObject,
-	                                                               UnicodeObjectSignatures.ClassObjectSignature)
+	private ClassObjectMetadata(ITypeInformation metadata) : base(UnicodeClassNames.ClassObject,
+	                                                              UnicodeObjectSignatures.ClassObjectSignature)
 	{
 		this.Name = metadata.ClassName;
 		this.ClassSignature = metadata.Signature;
@@ -64,11 +64,11 @@ internal sealed record JClassObjectMetadata : JObjectMetadata
 	}
 
 	/// <summary>
-	/// Creates a <see cref="JClassObjectMetadata"/> for given <typeparamref name="TDataType"/> type.
+	/// Creates a <see cref="ClassObjectMetadata"/> for given <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IReferenceType"/> type.</typeparam>
-	/// <returns>A <see cref="JClassObjectMetadata"/> instance.</returns>
-	public static JClassObjectMetadata Create<TDataType>() where TDataType : IDataType<TDataType>
+	/// <returns>A <see cref="ClassObjectMetadata"/> instance.</returns>
+	public static ClassObjectMetadata Create<TDataType>() where TDataType : IDataType<TDataType>
 	{
 		JDataTypeMetadata metadata = IDataType.GetMetadata<TDataType>();
 		return new(metadata);

@@ -5,7 +5,7 @@ public partial class JGlobalBase
 	/// <summary>
 	/// Instance metadata.
 	/// </summary>
-	internal JObjectMetadata ObjectMetadata => this._objectMetadata;
+	internal ObjectMetadata ObjectMetadata => this._objectMetadata;
 	/// <summary>
 	/// Indicates whether current instance has objects.
 	/// </summary>

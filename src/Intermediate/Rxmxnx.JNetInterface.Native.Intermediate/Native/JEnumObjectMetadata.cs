@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This record stores the metadata of a <see cref="JClassObject"/> in order to create a
 /// <see cref="JEnumObject"/> instance.
 /// </summary>
-public record JEnumObjectMetadata : JObjectMetadata
+public record JEnumObjectMetadata : ObjectMetadata
 {
 	/// <summary>
 	/// Internal ordinal.
@@ -18,8 +18,8 @@ public record JEnumObjectMetadata : JObjectMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
-	internal JEnumObjectMetadata(JObjectMetadata metadata) : base(metadata)
+	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
+	internal JEnumObjectMetadata(ObjectMetadata metadata) : base(metadata)
 	{
 		if (metadata is not JEnumObjectMetadata enumMetadata)
 			return;

@@ -322,7 +322,7 @@ public partial class JEnvironment
 				JClassLocalRef classRef = env.GetObjectClass(throwableRef.Value);
 				JClassObject jClass = env.GetClass(classRef, true);
 				String message = JEnvironmentCache.GetThrowableMessage(jClass, throwableRef);
-				JThrowableObjectMetadata objectMetadata = new(jClass, message);
+				ThrowableObjectMetadata objectMetadata = new(jClass, message);
 				JThrowableTypeMetadata throwableMetadata =
 					MetadataHelper.GetMetadata(jClass.Hash) as JThrowableTypeMetadata ??
 					(JThrowableTypeMetadata)MetadataHelper.GetMetadata<JThrowableObject>();

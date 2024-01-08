@@ -10,48 +10,48 @@ public partial class JVirtualMachine
 		/// <summary>
 		/// Metadata for <see cref="JClassObject"/>.
 		/// </summary>
-		public JClassObjectMetadata ClassMetadata { get; }
+		public ClassObjectMetadata ClassMetadata { get; }
 		/// <summary>
 		/// Metadata for <see cref="JThrowableObject"/>.
 		/// </summary>
-		public JClassObjectMetadata ThrowableMetadata { get; }
+		public ClassObjectMetadata ThrowableMetadata { get; }
 		/// <summary>
 		/// Metadata for <see cref="JStackTraceElementObject"/>.
 		/// </summary>
-		public JClassObjectMetadata StackTraceElementMetadata { get; }
+		public ClassObjectMetadata StackTraceElementMetadata { get; }
 
 		/// <summary>
 		/// Metadata for <see cref="JBoolean"/>.
 		/// </summary>
-		public JClassObjectMetadata BooleanMetadata { get; }
+		public ClassObjectMetadata BooleanMetadata { get; }
 		/// <summary>
 		/// Metadata for <see cref="JByte"/>.
 		/// </summary>
-		public JClassObjectMetadata ByteMetadata { get; }
+		public ClassObjectMetadata ByteMetadata { get; }
 		/// <summary>
 		/// Metadata for <see cref="JChar"/>.
 		/// </summary>
-		public JClassObjectMetadata CharMetadata { get; }
+		public ClassObjectMetadata CharMetadata { get; }
 		/// <summary>
 		/// Metadata for <see cref="JDouble"/>.
 		/// </summary>
-		public JClassObjectMetadata DoubleMetadata { get; }
+		public ClassObjectMetadata DoubleMetadata { get; }
 		/// <summary>
 		/// Metadata for <see cref="JFloat"/>.
 		/// </summary>
-		public JClassObjectMetadata FloatMetadata { get; }
+		public ClassObjectMetadata FloatMetadata { get; }
 		/// <summary>
 		/// Metadata for <see cref="JInt"/>.
 		/// </summary>
-		public JClassObjectMetadata IntMetadata { get; }
+		public ClassObjectMetadata IntMetadata { get; }
 		/// <summary>
 		/// Metadata for <see cref="JLong"/>.
 		/// </summary>
-		public JClassObjectMetadata LongMetadata { get; }
+		public ClassObjectMetadata LongMetadata { get; }
 		/// <summary>
 		/// Metadata for <see cref="JShort"/>.
 		/// </summary>
-		public JClassObjectMetadata ShortMetadata { get; }
+		public ClassObjectMetadata ShortMetadata { get; }
 
 		/// <summary>
 		/// A <see cref="JVirtualMachine"/> instance.
@@ -65,29 +65,29 @@ public partial class JVirtualMachine
 		public GlobalMainClasses(JVirtualMachine vm)
 		{
 			this.VirtualMachine = vm;
-			this.ClassMetadata = JClassObjectMetadata.Create<JClassObject>();
+			this.ClassMetadata = ClassObjectMetadata.Create<JClassObject>();
 			this.ClassObject = new(this.VirtualMachine, this.ClassMetadata, false, default);
-			this.ThrowableMetadata = JClassObjectMetadata.Create<JThrowableObject>();
+			this.ThrowableMetadata = ClassObjectMetadata.Create<JThrowableObject>();
 			this.ThrowableObject = new(this.VirtualMachine, this.ThrowableMetadata, false, default);
-			this.StackTraceElementMetadata = JClassObjectMetadata.Create<JStackTraceElementObject>();
+			this.StackTraceElementMetadata = ClassObjectMetadata.Create<JStackTraceElementObject>();
 			this.StackTraceElementObject = new(this.VirtualMachine, this.StackTraceElementMetadata, false, default);
 
-			this.VoidPrimitive = new(this.VirtualMachine, JClassObjectMetadata.VoidMetadata, false, default);
-			this.BooleanMetadata = JClassObjectMetadata.Create<JBoolean>();
+			this.VoidPrimitive = new(this.VirtualMachine, ClassObjectMetadata.VoidMetadata, false, default);
+			this.BooleanMetadata = ClassObjectMetadata.Create<JBoolean>();
 			this.BooleanPrimitive = new(this.VirtualMachine, this.BooleanMetadata, false, default);
-			this.ByteMetadata = JClassObjectMetadata.Create<JByte>();
+			this.ByteMetadata = ClassObjectMetadata.Create<JByte>();
 			this.BytePrimitive = new(this.VirtualMachine, this.ByteMetadata, false, default);
-			this.CharMetadata = JClassObjectMetadata.Create<JChar>();
+			this.CharMetadata = ClassObjectMetadata.Create<JChar>();
 			this.CharPrimitive = new(this.VirtualMachine, this.CharMetadata, false, default);
-			this.DoubleMetadata = JClassObjectMetadata.Create<JDouble>();
+			this.DoubleMetadata = ClassObjectMetadata.Create<JDouble>();
 			this.DoublePrimitive = new(this.VirtualMachine, this.DoubleMetadata, false, default);
-			this.FloatMetadata = JClassObjectMetadata.Create<JFloat>();
+			this.FloatMetadata = ClassObjectMetadata.Create<JFloat>();
 			this.FloatPrimitive = new(this.VirtualMachine, this.FloatMetadata, false, default);
-			this.IntMetadata = JClassObjectMetadata.Create<JInt>();
+			this.IntMetadata = ClassObjectMetadata.Create<JInt>();
 			this.IntPrimitive = new(this.VirtualMachine, this.IntMetadata, false, default);
-			this.LongMetadata = JClassObjectMetadata.Create<JLong>();
+			this.LongMetadata = ClassObjectMetadata.Create<JLong>();
 			this.LongPrimitive = new(this.VirtualMachine, this.LongMetadata, false, default);
-			this.ShortMetadata = JClassObjectMetadata.Create<JShort>();
+			this.ShortMetadata = ClassObjectMetadata.Create<JShort>();
 			this.ShortPrimitive = new(this.VirtualMachine, this.ShortMetadata, false, default);
 		}
 
@@ -101,7 +101,7 @@ public partial class JVirtualMachine
 			this.ThrowableObject.SetValue(env.GetClassGlobalRef(this.ThrowableMetadata));
 			this.StackTraceElementObject.SetValue(env.GetClassGlobalRef(this.StackTraceElementMetadata));
 
-			this.VoidPrimitive.SetValue(env.GetClassGlobalRef(JClassObjectMetadata.VoidMetadata));
+			this.VoidPrimitive.SetValue(env.GetClassGlobalRef(ClassObjectMetadata.VoidMetadata));
 			this.BooleanPrimitive.SetValue(env.GetClassGlobalRef(this.BooleanMetadata));
 			this.BytePrimitive.SetValue(env.GetClassGlobalRef(this.ByteMetadata));
 			this.CharPrimitive.SetValue(env.GetClassGlobalRef(this.CharMetadata));

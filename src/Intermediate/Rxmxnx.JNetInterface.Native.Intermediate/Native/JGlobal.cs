@@ -31,10 +31,10 @@ public sealed class JGlobal : JGlobalBase
 	/// Constructor.
 	/// </summary>
 	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
+	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
 	/// <param name="globalRef">Global reference.</param>
-	internal JGlobal(IVirtualMachine vm, JObjectMetadata metadata, Boolean isDummy, JGlobalRef globalRef) :
+	internal JGlobal(IVirtualMachine vm, ObjectMetadata metadata, Boolean isDummy, JGlobalRef globalRef) :
 		base(vm, metadata, isDummy, globalRef)
 		=> this._isDisposable = metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
 

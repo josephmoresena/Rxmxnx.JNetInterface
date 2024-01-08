@@ -33,8 +33,8 @@ public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<
 	public Boolean NativeMethod => this._nativeMethod ??= this.Environment.Functions.IsNativeMethod(this);
 
 	/// <inheritdoc/>
-	protected override JObjectMetadata CreateMetadata()
-		=> new JStackTraceElementObjectMetadata(base.CreateMetadata())
+	protected override ObjectMetadata CreateMetadata()
+		=> new StackTraceElementObjectMetadata(base.CreateMetadata())
 		{
 			Information = new()
 			{
@@ -46,10 +46,10 @@ public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<
 			},
 		};
 	/// <inheritdoc/>
-	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
+	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
-		if (instanceMetadata is not JStackTraceElementObjectMetadata traceElementMetadata)
+		if (instanceMetadata is not StackTraceElementObjectMetadata traceElementMetadata)
 			return;
 		this._className = traceElementMetadata.Information?.ClassName;
 		this._fileName = traceElementMetadata.Information?.FileName;

@@ -29,10 +29,10 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	public override Boolean Equals(Object? obj) => base.Equals(obj) || this.Value.Equals(obj);
 
 	/// <inheritdoc/>
-	protected override JObjectMetadata CreateMetadata()
+	protected override ObjectMetadata CreateMetadata()
 		=> new JPrimitiveWrapperObjectMetadata<JBoolean>(base.CreateMetadata()) { Value = this.Value, };
 	/// <inheritdoc/>
-	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
+	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
 		if (instanceMetadata is JPrimitiveWrapperObjectMetadata<JBoolean> wrapperMetadata)

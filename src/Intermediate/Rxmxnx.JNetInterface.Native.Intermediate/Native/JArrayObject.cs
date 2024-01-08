@@ -26,10 +26,10 @@ public abstract partial class JArrayObject : JLocalObject
 	internal abstract JArrayTypeMetadata TypeMetadata { get; }
 
 	/// <inheritdoc/>
-	protected override JObjectMetadata CreateMetadata()
+	protected override ObjectMetadata CreateMetadata()
 		=> new JArrayObjectMetadata(base.CreateMetadata()) { Length = this.Length, };
 	/// <inheritdoc/>
-	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
+	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
 		if (instanceMetadata is not JArrayObjectMetadata arrayMetadata)

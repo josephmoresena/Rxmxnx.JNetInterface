@@ -12,15 +12,15 @@ public partial class JLocalObject : ILocalObject
 	IVirtualMachine ILocalObject.VirtualMachine => this._lifetime.Environment.VirtualMachine;
 	Boolean ILocalObject.IsDummy => this.IsDummy;
 	ObjectLifetime ILocalObject.Lifetime => this._lifetime;
-	JObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
-	void ILocalObject.ProcessMetadata(JObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
+	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
+	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
 
 	/// <summary>
 	/// Process the object metadata.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="instanceMetadata">The object metadata for <paramref name="jLocal"/>.</param>
-	private static void ProcessMetadata(JLocalObject jLocal, JObjectMetadata instanceMetadata)
+	private static void ProcessMetadata(JLocalObject jLocal, ObjectMetadata instanceMetadata)
 		=> jLocal.ProcessMetadata(instanceMetadata);
 
 	/// <summary>

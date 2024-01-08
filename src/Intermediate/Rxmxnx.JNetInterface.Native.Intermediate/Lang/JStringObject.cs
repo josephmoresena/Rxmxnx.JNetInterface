@@ -10,7 +10,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <summary>
 	/// CLR type of object metadata.
 	/// </summary>
-	internal static readonly Type MetadataType = typeof(JStringObjectMetadata);
+	internal static readonly Type MetadataType = typeof(StringObjectMetadata);
 
 	/// <inheritdoc cref="JLocalObject.InternalReference"/>
 	internal JStringLocalRef Reference => this.As<JStringLocalRef>();
@@ -101,16 +101,16 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	}
 
 	/// <inheritdoc/>
-	protected override JObjectMetadata CreateMetadata()
-		=> new JStringObjectMetadata(base.CreateMetadata())
+	protected override ObjectMetadata CreateMetadata()
+		=> new StringObjectMetadata(base.CreateMetadata())
 		{
 			Length = this.Length, Utf8Length = this.Utf8Length, Value = this._value,
 		};
 	/// <inheritdoc/>
-	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
+	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
-		if (instanceMetadata is not JStringObjectMetadata stringMetadata)
+		if (instanceMetadata is not StringObjectMetadata stringMetadata)
 			return;
 		this._value = stringMetadata.Value;
 		this._length = stringMetadata.Length;

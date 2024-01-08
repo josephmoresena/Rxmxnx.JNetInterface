@@ -24,8 +24,8 @@ public partial class JArrayObject
 		IVirtualMachine ILocalObject.VirtualMachine => this._array.Environment.VirtualMachine;
 		Boolean ILocalObject.IsDummy => this._array.IsDummy;
 		ObjectLifetime ILocalObject.Lifetime => this._array.Lifetime;
-		JObjectMetadata ILocalObject.CreateMetadata() => ILocalObject.CreateMetadata(this._array);
-		void ILocalObject.ProcessMetadata(JObjectMetadata instanceMetadata)
+		ObjectMetadata ILocalObject.CreateMetadata() => ILocalObject.CreateMetadata(this._array);
+		void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata)
 			=> ILocalObject.ProcessMetadata(this._array, instanceMetadata);
 		internal override void ClearValue() => this._array.ClearValue();
 		internal override Boolean IsAssignableTo<TDataType>() => this._array.IsAssignableTo<TDataType>();

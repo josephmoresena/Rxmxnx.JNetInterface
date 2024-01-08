@@ -27,7 +27,7 @@ public partial class JGlobalBase
 	/// <summary>
 	/// Object metadata.
 	/// </summary>
-	private JObjectMetadata _objectMetadata;
+	private ObjectMetadata _objectMetadata;
 
 	/// <summary>
 	/// Indicates whether JNI execution is secure.

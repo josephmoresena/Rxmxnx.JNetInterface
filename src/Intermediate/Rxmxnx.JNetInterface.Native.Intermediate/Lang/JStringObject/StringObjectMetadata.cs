@@ -6,7 +6,7 @@ public partial class JStringObject
 	/// This record stores the metadata of a <see cref="JStringObject"/> in order to create a
 	/// <see cref="JGlobalBase"/> instance.
 	/// </summary>
-	private sealed record JStringObjectMetadata : JObjectMetadata
+	private sealed record StringObjectMetadata : ObjectMetadata
 	{
 		/// <summary>
 		/// Internal string value.
@@ -24,10 +24,10 @@ public partial class JStringObject
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
-		public JStringObjectMetadata(JObjectMetadata metadata) : base(metadata)
+		/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
+		public StringObjectMetadata(ObjectMetadata metadata) : base(metadata)
 		{
-			JStringObjectMetadata? stringMetadata = metadata as JStringObjectMetadata;
+			StringObjectMetadata? stringMetadata = metadata as StringObjectMetadata;
 			this.Value = stringMetadata?.Value!;
 			this.Length = stringMetadata?.Length;
 			this.Utf8Length = stringMetadata?.Utf8Length;

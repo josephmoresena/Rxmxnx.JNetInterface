@@ -70,16 +70,16 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	public void UnregisterNativeCalls() => this.Environment.AccessFeature.ClearNatives(this);
 
 	/// <inheritdoc/>
-	protected override JObjectMetadata CreateMetadata()
-		=> new JClassObjectMetadata(base.CreateMetadata())
+	protected override ObjectMetadata CreateMetadata()
+		=> new ClassObjectMetadata(base.CreateMetadata())
 		{
 			Name = this.Name, ClassSignature = this.ClassSignature, IsFinal = this.IsFinal,
 		};
 	/// <inheritdoc/>
-	protected override void ProcessMetadata(JObjectMetadata instanceMetadata)
+	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
-		if (instanceMetadata is not JClassObjectMetadata classMetadata)
+		if (instanceMetadata is not ClassObjectMetadata classMetadata)
 			return;
 		this._className = classMetadata.Name;
 		this._signature = classMetadata.ClassSignature;

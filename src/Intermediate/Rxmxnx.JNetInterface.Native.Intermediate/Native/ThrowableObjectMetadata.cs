@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This record stores the metadata of a <see cref="JThrowableObject"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
-public record JThrowableObjectMetadata : JObjectMetadata
+public record ThrowableObjectMetadata : ObjectMetadata
 {
 	/// <summary>
 	/// Internal throwable message.
@@ -20,14 +20,14 @@ public record JThrowableObjectMetadata : JObjectMetadata
 	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="message">Throwable message.</param>
-	internal JThrowableObjectMetadata(JClassObject jClass, String? message) : base(jClass) => this.Message = message;
+	internal ThrowableObjectMetadata(JClassObject jClass, String? message) : base(jClass) => this.Message = message;
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="metadata"><see cref="JObjectMetadata"/> instance.</param>
-	internal JThrowableObjectMetadata(JObjectMetadata metadata) : base(metadata)
+	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
+	internal ThrowableObjectMetadata(ObjectMetadata metadata) : base(metadata)
 	{
-		if (metadata is not JThrowableObjectMetadata throwableMetadata)
+		if (metadata is not ThrowableObjectMetadata throwableMetadata)
 			return;
 		this.Message = throwableMetadata.Message;
 		this.StackTrace = throwableMetadata.StackTrace;
@@ -36,8 +36,8 @@ public record JThrowableObjectMetadata : JObjectMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="metadata"><see cref="JThrowableObjectMetadata"/> instance.</param>
-	protected JThrowableObjectMetadata(JThrowableObjectMetadata metadata) : base(metadata)
+	/// <param name="metadata"><see cref="ThrowableObjectMetadata"/> instance.</param>
+	protected ThrowableObjectMetadata(ThrowableObjectMetadata metadata) : base(metadata)
 	{
 		this.Message = metadata.Message;
 		this.StackTrace = metadata.StackTrace;
