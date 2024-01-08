@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
-public partial class JEnvironment
+partial class JEnvironment
 {
 	/// <summary>
 	/// This class implements <see cref="IThread"/> interface.

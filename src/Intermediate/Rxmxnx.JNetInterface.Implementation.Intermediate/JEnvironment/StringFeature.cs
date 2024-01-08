@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
-public partial class JEnvironment
+partial class JEnvironment
 {
 	private partial record JEnvironmentCache : IStringFeature
 	{

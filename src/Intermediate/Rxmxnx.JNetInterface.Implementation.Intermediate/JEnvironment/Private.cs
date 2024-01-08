@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
-public partial class JEnvironment
+partial class JEnvironment
 {
 	/// <summary>
 	/// Tests whether two references refer to the same object.

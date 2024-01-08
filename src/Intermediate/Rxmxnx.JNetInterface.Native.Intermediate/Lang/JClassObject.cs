@@ -68,6 +68,20 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// Unregisters any native call.
 	/// </summary>
 	public void UnregisterNativeCalls() => this.Environment.AccessFeature.ClearNatives(this);
+	/// <summary>
+	/// Determines whether an object of current class can be safely cast to
+	/// <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">Java class instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if an object of current class can be safely cast to
+	/// <paramref name="jClass"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	public Boolean IsAssignableTo(JClassObject jClass)
+	{
+		IEnvironment env = this.Environment;
+		return env.ClassFeature.IsAssignableFrom(jClass, this);
+	}
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
