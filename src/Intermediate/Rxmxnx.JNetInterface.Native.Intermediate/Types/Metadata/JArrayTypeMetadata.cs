@@ -43,7 +43,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 		catch (Exception ex)
 		{
 			Debug.WriteLine(
-				$"Unable to create {nameof(MethodInfo)} instance of [{nameof(IArrayType)}.{nameof(JArrayTypeMetadata.getArrayArrayMetadataInfo)}<>()] . {ex.Message}");
+				$"Unable to create {nameof(MethodInfo)} instance of {nameof(IArrayType)}.{nameof(IArrayType.GetArrayArrayMetadata)}<>(). {ex.Message}");
 		}
 	}
 
@@ -76,20 +76,10 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 		"IL3050:Calling members annotated with 'RequiresDynamicCodeAttribute' may break functionality when AOT compiling.",
 		Justification = "Alternatives to avoid reflection use.")]
 	protected static JArrayTypeMetadata? GetArrayArrayMetadata(CString elementSignature, Type typeofElement)
-	{
-		try
-		{
-			return JArrayTypeMetadata.arrayMetadatas.TryGetValue(elementSignature.ToHexString(),
-			                                                     out JArrayTypeMetadata? result) ?
-				result :
-				JArrayTypeMetadata.GetArrayArrayMetadataWithReflection(elementSignature, typeofElement);
-		}
-		catch (Exception ex)
-		{
-			Debug.WriteLine($"Unable to create {nameof(JArrayTypeMetadata)} instance of [[{elementSignature} . {ex.Message}");
-			return default;
-		}
-	}
+		=> JArrayTypeMetadata.arrayMetadatas.TryGetValue(elementSignature.ToHexString(),
+		                                                 out JArrayTypeMetadata? result) ?
+			result :
+			JArrayTypeMetadata.GetArrayArrayMetadataWithReflection(elementSignature, typeofElement);
 	/// <summary>
 	/// Retrieves array deep.
 	/// </summary>
@@ -144,8 +134,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	/// <param name="elementSignature">Element signature.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
 	[RequiresDynamicCode("Calls System.Reflection.MethodInfo.MakeGenericMethod(params Type[])")]
-	private static JArrayTypeMetadata? GetArrayArrayMetadataWithReflection(CString elementSignature,
-		Type typeofElement)
+	private static JArrayTypeMetadata? GetArrayArrayMetadataWithReflection(CString elementSignature, Type typeofElement)
 	{
 		if (JArrayTypeMetadata.getArrayArrayMetadataInfo is null) return default;
 		try
@@ -158,7 +147,8 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 		}
 		catch (Exception ex)
 		{
-			Debug.WriteLine($"Unable to create {nameof(JArrayTypeMetadata)} instance of [[{elementSignature} . {ex.Message}");
+			Debug.WriteLine(
+				$"Unable to create {nameof(JArrayTypeMetadata)} instance of [[{elementSignature}. {ex.Message}");
 			return default;
 		}
 	}
