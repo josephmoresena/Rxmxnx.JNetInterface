@@ -144,7 +144,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	/// <param name="elementSignature">Element signature.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
 	[RequiresDynamicCode("Calls System.Reflection.MethodInfo.MakeGenericMethod(params Type[])")]
-	protected static JArrayTypeMetadata? GetArrayArrayMetadataWithReflection(CString elementSignature,
+	private static JArrayTypeMetadata? GetArrayArrayMetadataWithReflection(CString elementSignature,
 		Type typeofElement)
 	{
 		if (JArrayTypeMetadata.getArrayArrayMetadataInfo is null) return default;
