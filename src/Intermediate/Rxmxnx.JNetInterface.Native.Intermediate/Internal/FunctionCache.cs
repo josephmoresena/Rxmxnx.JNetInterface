@@ -93,4 +93,19 @@ internal abstract class FunctionCache
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	public abstract Boolean IsPrimitiveClass(JClassObject jClass);
+	/// <summary>
+	/// Indicates whether current buffer object is direct.
+	/// </summary>
+	/// <param name="jBuffer">A <see cref="JBufferObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jBuffer"/> is direct buffer;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public abstract Boolean IsDirectBuffer(JBufferObject jBuffer);
+	/// <summary>
+	/// Retrieves <paramref name="jBuffer"/> capacity.
+	/// </summary>
+	/// <param name="jBuffer">A <see cref="JBufferObject"/> instance.</param>
+	/// <returns><paramref name="jBuffer"/> capacity.</returns>
+	public abstract Int64 BufferCapacity(JBufferObject jBuffer);
 }

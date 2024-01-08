@@ -34,6 +34,7 @@
         <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
         <Using Include="Rxmxnx.JNetInterface.Native.References"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
+        <Using Include="Rxmxnx.JNetInterface.Nio"/>
         <Using Include="Rxmxnx.JNetInterface.Primitives"/>
         <Using Include="Rxmxnx.JNetInterface.Restricted"/>
         <Using Include="Rxmxnx.JNetInterface.Sun.Nio.Ch"/>

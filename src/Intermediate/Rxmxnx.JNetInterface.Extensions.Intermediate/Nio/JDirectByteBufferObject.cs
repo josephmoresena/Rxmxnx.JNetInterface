@@ -21,7 +21,7 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	/// <summary>
 	/// Internal memory.
 	/// </summary>
-	private readonly IFixedMemory<Byte>.IDisposable? _memory;
+	private readonly IFixedMemory.IDisposable? _memory;
 
 	/// <summary>
 	/// Indicates whether current instance is disposed.
@@ -29,14 +29,23 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	private Boolean _disposed;
 
 	/// <inheritdoc/>
-	internal JDirectByteBufferObject(JClassObject jClass, IFixedMemory<Byte>.IDisposable memory,
-		JObjectLocalRef localRef) : base(jClass, localRef)
+	internal JDirectByteBufferObject(JClassObject jClass, IFixedMemory.IDisposable memory, JObjectLocalRef localRef) :
+		base(jClass, localRef)
 		=> this._memory = memory;
 
 	/// <inheritdoc/>
 	protected JDirectByteBufferObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc/>
 	protected JDirectByteBufferObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+
+	/// <inheritdoc cref="JBufferObject.Address"/>
+	public new IntPtr Address => base.Address.GetValueOrDefault();
+
+	JBufferObject IDirectBufferObject.InternalBuffer => this;
+	IFixedContext<JByte> IDirectBufferObject<JByte>.GetFixedContext()
+		=> this._memory as IFixedContext<JByte> ??
+			(this._memory?.AsBinaryContext().Transformation<JByte>(out IFixedMemory _) ??
+				((ValPtr<JByte>)this.Address).GetUnsafeFixedContext((Int32)this.Capacity));
 
 	/// <inheritdoc/>
 	protected override void Dispose(Boolean disposing)

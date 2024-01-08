@@ -79,6 +79,15 @@ internal partial class InternalFunctionCache
 	private static readonly JFunctionDefinition<JBoolean> isPrimitiveClass = new(UnicodeMethodNames.IsPrimitive());
 
 	/// <summary>
+	/// <c>Buffer.isDirect()</c> definition.
+	/// </summary>
+	private static readonly JFunctionDefinition<JBoolean> isDirectBuffer = new(UnicodeMethodNames.IsDirect());
+	/// <summary>
+	/// <c>Buffer.capacity()</c> definition.
+	/// </summary>
+	private static readonly JFunctionDefinition<JLong> bufferCapacity = new(UnicodeMethodNames.Capacity());
+
+	/// <summary>
 	/// <c>Boolean.booleanValue()</c> definition.
 	/// </summary>
 	public static readonly JFunctionDefinition<JBoolean>
@@ -91,37 +100,38 @@ internal partial class InternalFunctionCache
 	/// <summary>
 	/// Constructor <c>java.lang.Boolean(boolean)</c>
 	/// </summary>
-	public static readonly JWrapperConstructor<JBoolean> BooleanConstructor = new();
+	public static readonly PrimitiveWrapperConstructor<JBoolean> BooleanConstructor = new();
 	/// <summary>
 	/// Constructor <c>java.lang.Byte(byte)</c>
 	/// </summary>
-	public static readonly JWrapperConstructor<JByte> ByteConstructor = new();
+	public static readonly PrimitiveWrapperConstructor<JByte> ByteConstructor = new();
 	/// <summary>
 	/// Constructor <c>java.lang.Character(char)</c>
 	/// </summary>
-	public static readonly JWrapperConstructor<JChar> CharacterConstructor = new();
+	public static readonly PrimitiveWrapperConstructor<JChar> CharacterConstructor = new();
 	/// <summary>
 	/// Constructor <c>java.lang.Double(double)</c>
 	/// </summary>
-	public static readonly JWrapperConstructor<JDouble> DoubleConstructor = new();
+	public static readonly PrimitiveWrapperConstructor<JDouble> DoubleConstructor = new();
 	/// <summary>
 	/// Constructor <c>java.lang.Float(float)</c>
 	/// </summary>
-	public static readonly JWrapperConstructor<JFloat> FloatConstructor = new();
+	public static readonly PrimitiveWrapperConstructor<JFloat> FloatConstructor = new();
 	/// <summary>
 	/// Constructor <c>java.lang.Integer(int)</c>
 	/// </summary>
-	public static readonly JWrapperConstructor<JInt> IntegerConstructor = new();
+	public static readonly PrimitiveWrapperConstructor<JInt> IntegerConstructor = new();
 	/// <summary>
 	/// Constructor <c>java.lang.Long(long)</c>
 	/// </summary>
-	public static readonly JWrapperConstructor<JLong> LongConstructor = new();
+	public static readonly PrimitiveWrapperConstructor<JLong> LongConstructor = new();
 	/// <summary>
 	/// Constructor <c>java.lang.Short(short)</c>
 	/// </summary>
-	public static readonly JWrapperConstructor<JShort> ShortConstructor = new();
+	public static readonly PrimitiveWrapperConstructor<JShort> ShortConstructor = new();
+
 	/// <summary>
 	/// The class instance representing the primitive type in wrapper classes.
 	/// </summary>
-	public static readonly JFieldDefinition<JClassObject> PrimitiveTypeDefinition = new(UnicodeMethodNames.Type());
+	public static readonly JFieldDefinition<JClassObject> PrimitiveTypeDefinition = new(UnicodeMethodNames.TypeField());
 }

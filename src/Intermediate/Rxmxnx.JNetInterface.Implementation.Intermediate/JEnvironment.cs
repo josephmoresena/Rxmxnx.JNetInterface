@@ -90,11 +90,11 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	}
 	/// <inheritdoc/>
 	public Boolean JniSecure() => this._cache.JniSecure();
-	void IEnvironment.WithFrame(Int32 capacity, Action<IEnvironment> action)
+	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
 		using LocalFrame localFrame = new(this, capacity);
 		this._cache.CheckJniError();
-		action(localFrame.Environment);
+		action();
 	}
 	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
 	{
@@ -102,7 +102,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		this._cache.CheckJniError();
 		action(state);
 	}
-	TResult IEnvironment.WithFrame<TResult>(Int32 capacity, Func<IEnvironment, TResult> func)
+	TResult IEnvironment.WithFrame<TResult>(Int32 capacity, Func<TResult> func)
 	{
 		TResult? result;
 		JGlobalRef globalRef;
@@ -110,7 +110,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		using (LocalFrame localFrame = new(this, capacity))
 		{
 			this._cache.CheckJniError();
-			result = func(localFrame.Environment);
+			result = func();
 			localResult = localFrame.GetLocalResult(result, out globalRef);
 		}
 		this._cache.CreateLocalRef(globalRef, localResult);

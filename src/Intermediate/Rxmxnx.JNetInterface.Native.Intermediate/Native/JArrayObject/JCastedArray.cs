@@ -5,7 +5,8 @@ public partial class JArrayObject
 	/// <summary>
 	/// This record wraps a casted <see cref="JArrayObject"/>
 	/// </summary>
-	internal sealed class JCastedArray<TCastedElement> : JReferenceObject, ILocalObject, IArrayObject<TCastedElement>
+	internal sealed class JCastedArray<TCastedElement> : JReferenceObject, IViewObject, ILocalObject,
+		IArrayObject<TCastedElement>
 		where TCastedElement : JInterfaceObject<TCastedElement>, IInterfaceType<TCastedElement>
 	{
 		/// <summary>
@@ -18,15 +19,16 @@ public partial class JArrayObject
 		/// </summary>
 		/// <param name="arrayObject">Original <see cref="JArrayObject"/> instance.</param>
 		public JCastedArray(JArrayObject arrayObject) : base(arrayObject) => this._array = arrayObject;
-
-		public override CString ObjectClassName => this._array.ObjectClassName;
-		public override CString ObjectSignature => this._array.ObjectSignature;
 		IVirtualMachine ILocalObject.VirtualMachine => this._array.Environment.VirtualMachine;
 		Boolean ILocalObject.IsDummy => this._array.IsDummy;
 		ObjectLifetime ILocalObject.Lifetime => this._array.Lifetime;
 		ObjectMetadata ILocalObject.CreateMetadata() => ILocalObject.CreateMetadata(this._array);
 		void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata)
 			=> ILocalObject.ProcessMetadata(this._array, instanceMetadata);
+
+		public IObject Object => this._array;
+		public override CString ObjectClassName => this._array.ObjectClassName;
+		public override CString ObjectSignature => this._array.ObjectSignature;
 		internal override void ClearValue() => this._array.ClearValue();
 		internal override Boolean IsAssignableTo<TDataType>() => this._array.IsAssignableTo<TDataType>();
 		internal override void SetAssignableTo<TDataType>(Boolean isAssignable)

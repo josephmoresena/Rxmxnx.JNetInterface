@@ -67,6 +67,10 @@ public interface IClassFeature
 	/// </summary>
 	JClassObject NumberClassObject => this.GetClass<JNumberObject>();
 	/// <summary>
+	/// <c>java.nio.Buffer</c> class instance.
+	/// </summary>
+	JClassObject BufferClassObject => this.GetClass<JBufferObject>();
+	/// <summary>
 	/// <c>java.lang.Enum</c> class instance.
 	/// </summary>
 	JClassObject EnumClassObject => this.GetClass<JEnumObject>();

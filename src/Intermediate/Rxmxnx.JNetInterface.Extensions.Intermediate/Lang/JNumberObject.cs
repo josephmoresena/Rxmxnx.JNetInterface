@@ -52,12 +52,12 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
-		=> new JPrimitiveWrapperObjectMetadata<TValue>(base.CreateMetadata()) { Value = this.Value, };
+		=> new PrimitiveWrapperObjectMetadata<TValue>(base.CreateMetadata()) { Value = this.Value, };
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
-		if (instanceMetadata is JPrimitiveWrapperObjectMetadata<TValue> wrapperMetadata)
+		if (instanceMetadata is PrimitiveWrapperObjectMetadata<TValue> wrapperMetadata)
 			this._value = wrapperMetadata.Value;
 	}
 

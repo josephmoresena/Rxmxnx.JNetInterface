@@ -30,12 +30,12 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
-		=> new JPrimitiveWrapperObjectMetadata<JBoolean>(base.CreateMetadata()) { Value = this.Value, };
+		=> new PrimitiveWrapperObjectMetadata<JBoolean>(base.CreateMetadata()) { Value = this.Value, };
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
-		if (instanceMetadata is JPrimitiveWrapperObjectMetadata<JBoolean> wrapperMetadata)
+		if (instanceMetadata is PrimitiveWrapperObjectMetadata<JBoolean> wrapperMetadata)
 			this._value = wrapperMetadata.Value;
 	}
 

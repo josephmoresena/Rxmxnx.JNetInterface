@@ -2,6 +2,16 @@ namespace Rxmxnx.JNetInterface.Internal;
 
 internal sealed partial class InternalFunctionCache : FunctionCache
 {
+	/// <summary>
+	/// Internal function cache.
+	/// </summary>
+	public static readonly InternalFunctionCache Instance = new();
+
+	/// <summary>
+	/// Private constructor.
+	/// </summary>
+	private InternalFunctionCache() { }
+
 	/// <inheritdoc/>
 	public override JStringObject GetName(JEnumObject jEnum)
 	{
@@ -99,5 +109,22 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 		env.AccessFeature.CallPrimitiveFunction(bytes, jClass, jClass.Class, InternalFunctionCache.isPrimitiveClass,
 		                                        false, Array.Empty<IObject>());
 		return bytes[0] == JBoolean.TrueValue;
+	}
+	/// <inheritdoc/>
+	public override Boolean IsDirectBuffer(JBufferObject jBuffer)
+	{
+		IEnvironment env = jBuffer.Environment;
+		Span<Byte> bytes = stackalloc Byte[1];
+		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferClassObject,
+		                                        InternalFunctionCache.isDirectBuffer, false, Array.Empty<IObject>());
+		return bytes[0] == JBoolean.TrueValue;
+	}
+	public override Int64 BufferCapacity(JBufferObject jBuffer)
+	{
+		IEnvironment env = jBuffer.Environment;
+		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
+		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferClassObject,
+		                                        InternalFunctionCache.bufferCapacity, false, Array.Empty<IObject>());
+		return bytes.AsValue<Int64>();
 	}
 }

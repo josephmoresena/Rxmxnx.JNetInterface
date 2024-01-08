@@ -86,7 +86,7 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </summary>
 	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="action">An action to invoke inside created new local reference.</param>
-	void WithFrame(Int32 capacity, Action<IEnvironment> action);
+	void WithFrame(Int32 capacity, Action action);
 	/// <summary>
 	/// Creates a new local reference frame and invokes <paramref name="action"/> inside of it.
 	/// </summary>
@@ -99,7 +99,7 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </summary>
 	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="func">A function to execute inside created new local reference.</param>
-	TResult WithFrame<TResult>(Int32 capacity, Func<IEnvironment, TResult> func);
+	TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func);
 	/// <summary>
 	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
 	/// </summary>

@@ -18,7 +18,7 @@ public partial class JEnumObject
 	private JEnumObject(JLocalObject jLocal) : base(
 		jLocal.ForExternalUse(out JClassObject jClass, out ObjectMetadata metadata), jClass)
 	{
-		if (metadata is not JEnumObjectMetadata enumMetadata) return;
+		if (metadata is not EnumObjectMetadata enumMetadata) return;
 		this._ordinal ??= enumMetadata.Ordinal;
 		this._name ??= enumMetadata.Name;
 	}

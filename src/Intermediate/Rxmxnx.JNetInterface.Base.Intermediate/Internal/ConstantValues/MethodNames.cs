@@ -86,11 +86,20 @@ internal static class MethodNames
 	/// </summary>
 	public const String IsPrimitive = "isPrimitive";
 	/// <summary>
+	/// Name of <c>Buffer.isDirect()</c>.
+	/// </summary>
+	public const String IsDirect = "isDirect";
+	/// <summary>
+	/// Name of <c>Buffer.capacity()</c>.
+	/// </summary>
+	public const String Capacity = "capacity";
+	/// <summary>
 	/// Name of <c>MainClass.main(String[] args)</c>.
 	/// </summary>
 	public const String Main = "main";
+
 	/// <summary>
 	/// Name of wrapper primitive class <c>TYPE</c>.
 	/// </summary>
-	public const String Type = "TYPE";
+	public const String TypeField = "TYPE";
 }

@@ -21,14 +21,14 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
-	protected new virtual JEnumObjectMetadata CreateMetadata()
+	protected new virtual EnumObjectMetadata CreateMetadata()
 		=> new(base.CreateMetadata()) { Ordinal = this.Ordinal, Name = this.Name, };
 
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
-		if (instanceMetadata is not JEnumObjectMetadata enumMetadata)
+		if (instanceMetadata is not EnumObjectMetadata enumMetadata)
 			return;
 		this._ordinal ??= enumMetadata.Ordinal;
 	}

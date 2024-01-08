@@ -246,7 +246,7 @@ public partial class JEnvironment
 			this._delegateCache = new();
 			this._objects = new();
 			this._mainClasses = mainClasses.Register(this);
-			this.Functions = new();
+			this.Functions = InternalFunctionCache.Instance;
 			this.Thread = Thread.CurrentThread;
 			this.Version = JEnvironmentCache.GetVersion(envRef);
 			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this, this._cancellation.Token);
@@ -439,7 +439,7 @@ public partial class JEnvironment
 			this.CheckJniError();
 			if (localRef == default) return default;
 			if (MetadataHelper.GetMetadata<TResult>().Modifier == JTypeModifier.Final)
-				return this.Cast<TResult>(new(env, localRef, false, JClassObject.GetClass<TResult>(env)), register);
+				return this.Cast<TResult>(new(env, localRef, false, this.GetClass<TResult>()), register);
 			JClassLocalRef classRef = env.GetObjectClass(localRef);
 			try
 			{
