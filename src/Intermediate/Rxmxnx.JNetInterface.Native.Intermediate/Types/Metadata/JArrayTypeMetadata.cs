@@ -43,7 +43,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 		catch (Exception ex)
 		{
 			Debug.WriteLine(
-				$"Unable to create MethodInfo instance of [{nameof(IArrayType)}.{nameof(JArrayTypeMetadata.getArrayArrayMetadataInfo)}<>()] . {ex.Message}");
+				$"Unable to create {nameof(MethodInfo)} instance of [{nameof(IArrayType)}.{nameof(JArrayTypeMetadata.getArrayArrayMetadataInfo)}<>()] . {ex.Message}");
 		}
 	}
 
@@ -86,7 +86,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 		}
 		catch (Exception ex)
 		{
-			Debug.WriteLine($"Unable to create JArrayTypeMetadata instance of [[{elementSignature} . {ex.Message}");
+			Debug.WriteLine($"Unable to create {nameof(JArrayTypeMetadata)} instance of [[{elementSignature} . {ex.Message}");
 			return default;
 		}
 	}
@@ -158,7 +158,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 		}
 		catch (Exception ex)
 		{
-			Debug.WriteLine($"Unable to create JArrayTypeMetadata instance of [[{elementSignature} . {ex.Message}");
+			Debug.WriteLine($"Unable to create {nameof(JArrayTypeMetadata)} instance of [[{elementSignature} . {ex.Message}");
 			return default;
 		}
 	}
