@@ -6,9 +6,13 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 {
 	/// <summary>
+	/// <see cref="MethodInfo"/> of array metadata.
+	/// </summary>
+	private static readonly MethodInfo? getArrayArrayMetadataInfo;
+	/// <summary>
 	/// Metadata dictionary.
 	/// </summary>
-	private static readonly ConcurrentDictionary<CString, JArrayTypeMetadata> arrayMetadatas = new();
+	private static readonly ConcurrentDictionary<String, JArrayTypeMetadata> arrayMetadatas = new();
 
 	/// <summary>
 	/// Element type of current array metadata.
@@ -25,6 +29,25 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	public Int32 Deep { get; }
 
 	/// <summary>
+	/// Static constructor.
+	/// </summary>
+	static JArrayTypeMetadata()
+	{
+		try
+		{
+			Type typeofT = typeof(IArrayType);
+			JArrayTypeMetadata.getArrayArrayMetadataInfo =
+				typeofT.GetMethod(nameof(IArrayType.GetArrayArrayMetadata),
+				                  BindingFlags.NonPublic | BindingFlags.Static);
+		}
+		catch (Exception ex)
+		{
+			Debug.WriteLine(
+				$"Unable to create MethodInfo instance of [{nameof(IArrayType)}.{nameof(JArrayTypeMetadata.getArrayArrayMetadataInfo)}<>()] . {ex.Message}");
+		}
+	}
+
+	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="signature">JNI signature for current array type.</param>
@@ -32,7 +55,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	internal JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Int32 deep) : base(signature, signature)
 	{
 		this.Deep = deep;
-		JArrayTypeMetadata.arrayMetadatas.TryAdd(this.Signature, this);
+		JArrayTypeMetadata.arrayMetadatas.TryAdd(this.Signature.ToHexString(), this);
 	}
 	/// <summary>
 	/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
@@ -43,22 +66,27 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	internal abstract void SetObjectElement(JArrayObject jArray, Int32 index, JLocalObject? value);
 
 	/// <summary>
-	/// Retrieves the <see cref="JArrayTypeMetadata"/> for <typeparamref name="TElement"/>
+	/// Retrieves metadata for the array of arrays of <paramref name="typeofElement"/>.
 	/// </summary>
-	/// <typeparam name="TElement">A <see cref="IArrayType{TArrayType}"/> type.</typeparam>
-	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
-	protected new static JArrayTypeMetadata? GetArrayMetadata<TElement>() where TElement : IObject, IDataType<TElement>
+	/// <param name="typeofElement">Type of array element.</param>
+	/// <param name="elementSignature">Element signature.</param>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
+	[UnconditionalSuppressMessage(
+		"AOT",
+		"IL3050:Calling members annotated with 'RequiresDynamicCodeAttribute' may break functionality when AOT compiling.",
+		Justification = "Alternatives to avoid reflection use.")]
+	protected static JArrayTypeMetadata? GetArrayArrayMetadata(CString elementSignature, Type typeofElement)
 	{
 		try
 		{
-			JArrayTypeMetadata metadata = IArrayType.GetMetadata<JArrayObject<TElement>>();
-			return JArrayTypeMetadata.arrayMetadatas.TryGetValue(metadata.ArraySignature,
+			return JArrayTypeMetadata.arrayMetadatas.TryGetValue(elementSignature.ToHexString(),
 			                                                     out JArrayTypeMetadata? result) ?
 				result :
-				IArrayType.GetMetadata<JArrayObject<JArrayObject<TElement>>>();
+				JArrayTypeMetadata.GetArrayArrayMetadataWithReflection(elementSignature, typeofElement);
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
+			Debug.WriteLine($"Unable to create JArrayTypeMetadata instance of [[{elementSignature} . {ex.Message}");
 			return default;
 		}
 	}
@@ -105,6 +133,32 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 		}
 		catch (Exception)
 		{
+			return default;
+		}
+	}
+
+	/// <summary>
+	/// Retrieves metadata for the array of arrays of <paramref name="typeofElement"/>.
+	/// </summary>
+	/// <param name="typeofElement">Type of array element.</param>
+	/// <param name="elementSignature">Element signature.</param>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
+	[RequiresDynamicCode("Calls System.Reflection.MethodInfo.MakeGenericMethod(params Type[])")]
+	protected static JArrayTypeMetadata? GetArrayArrayMetadataWithReflection(CString elementSignature,
+		Type typeofElement)
+	{
+		if (JArrayTypeMetadata.getArrayArrayMetadataInfo is null) return default;
+		try
+		{
+			MethodInfo getGenericArrayArrayMetadataInfo =
+				JArrayTypeMetadata.getArrayArrayMetadataInfo.MakeGenericMethod(typeofElement);
+			Func<JArrayTypeMetadata> getGenericArrayArrayMetadata =
+				getGenericArrayArrayMetadataInfo.CreateDelegate<Func<JArrayTypeMetadata>>();
+			return getGenericArrayArrayMetadata();
+		}
+		catch (Exception ex)
+		{
+			Debug.WriteLine($"Unable to create JArrayTypeMetadata instance of [[{elementSignature} . {ex.Message}");
 			return default;
 		}
 	}
