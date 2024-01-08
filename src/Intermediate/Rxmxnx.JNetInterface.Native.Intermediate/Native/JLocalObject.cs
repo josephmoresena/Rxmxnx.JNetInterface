@@ -49,6 +49,19 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
 
+	/// <summary>
+	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if current instance is an instance of
+	/// <paramref name="jClass"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	public Boolean InstanceOf(JClassObject jClass)
+	{
+		IEnvironment env = this.Environment;
+		return env.ClassFeature.IsInstanceOf(this, jClass);
+	}
 	/// <inheritdoc/>
 	public void Dispose()
 	{
