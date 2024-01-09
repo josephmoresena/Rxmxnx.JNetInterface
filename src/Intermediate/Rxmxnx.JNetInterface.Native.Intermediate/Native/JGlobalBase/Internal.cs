@@ -40,6 +40,12 @@ public partial class JGlobalBase
 		=> this._assignableTypes.SetAssignableTo<TDataType>(isAssignable);
 	/// <inheritdoc/>
 	internal override void ClearValue() => this._value.Value = default;
+	/// <inheritdoc/>
+	internal override IDisposable GetSynchronizer()
+	{
+		IThread env = this.VirtualMachine.CreateThread(ThreadPurpose.SynchronizeGlobalReference);
+		return env.ReferenceFeature.GetSynchronizer(this);
+	}
 
 	/// <inheritdoc cref="JReferenceObject.IsAssignableTo{TDataType}"/>
 	/// <param name="obj">A <see cref="JGlobalBase"/> instance.</param>

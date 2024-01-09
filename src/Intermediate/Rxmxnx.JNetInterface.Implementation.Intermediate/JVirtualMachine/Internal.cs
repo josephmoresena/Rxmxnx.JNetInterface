@@ -68,11 +68,15 @@ public partial class JVirtualMachine
 	/// <returns>A <see cref="AccessCache"/> instance.</returns>
 	internal AccessCache? GetAccess(JClassLocalRef classRef)
 		=> this._cache.GlobalClassCache[classRef] ?? this._cache.WeakClassCache[classRef];
-	/// <summary>
-	/// Creates a new <see cref="JniTransaction"/> transaction.
-	/// </summary>
-	/// <returns>A new <see cref="JniTransaction"/> instance.</returns>
+	/// <inheritdoc cref="JVirtualMachineCache.CreateTransaction()"/>
 	internal JniTransaction CreateTransaction() => this._cache.CreateTransaction();
+	/// <inheritdoc cref="JVirtualMachineCache.CreateUnaryTransaction()"/>
+	internal INativeTransaction CreateUnaryTransaction() => this._cache.CreateUnaryTransaction();
+	/// <inheritdoc cref="JVirtualMachineCache.CreateDuplexTransaction()"/>
+	internal INativeTransaction CreateDuplexTransaction() => this._cache.CreateDuplexTransaction();
+	/// <inheritdoc cref="JVirtualMachineCache.CreateSynchronized(JEnvironment, JReferenceObject)"/>
+	public IDisposable CreateSynchronized(JEnvironment env, JReferenceObject jObject)
+		=> this._cache.CreateSynchronized(env, jObject);
 	/// <summary>
 	/// Indicates whether <paramref name="weakRef"/> can be removed safely.
 	/// </summary>

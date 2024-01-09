@@ -29,7 +29,7 @@ public partial class JVirtualMachine
 		/// <summary>
 		/// JNI transaction dictionary.
 		/// </summary>
-		private readonly ConcurrentDictionary<Guid, JniTransaction> _transactions = new();
+		private readonly ConcurrentDictionary<Guid, INativeTransaction> _transactions = new();
 		/// <summary>
 		/// Weak global object dictionary.
 		/// </summary>
@@ -161,7 +161,27 @@ public partial class JVirtualMachine
 		/// Creates a new <see cref="JniTransaction"/> transaction.
 		/// </summary>
 		/// <returns>A new <see cref="JniTransaction"/> instance.</returns>
-		public JniTransaction CreateTransaction() => JniTransaction.Create(this._transactions);
+		public JniTransaction CreateTransaction() => JniTransactionHandle.Create<JniTransaction>(this._transactions);
+		/// <summary>
+		/// Creates a new unary <see cref="INativeTransaction"/> transaction.
+		/// </summary>
+		/// <returns>A new unary <see cref="INativeTransaction"/> instance.</returns>
+		public INativeTransaction CreateUnaryTransaction()
+			=> JniTransactionHandle.CreateUnaryTransaction(this._transactions);
+		/// <summary>
+		/// Creates a new duplex <see cref="INativeTransaction"/> transaction.
+		/// </summary>
+		/// <returns>A new duplex <see cref="INativeTransaction"/> instance.</returns>
+		public INativeTransaction CreateDuplexTransaction()
+			=> JniTransactionHandle.CreateDuplexTransaction(this._transactions);
+		/// <summary>
+		/// Creates a new synchronizer for <paramref name="jObject"/> instance.
+		/// </summary>
+		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+		/// <returns>A new synchronizer for <paramref name="jObject"/> instance.</returns>
+		public IDisposable CreateSynchronized(JEnvironment env, JReferenceObject jObject)
+			=> JniTransactionHandle.CreateSynchronizer(env, jObject, this._transactions);
 		/// <summary>
 		/// Indicates whether given <paramref name="jRef"/> is begin using by a transaction.
 		/// </summary>

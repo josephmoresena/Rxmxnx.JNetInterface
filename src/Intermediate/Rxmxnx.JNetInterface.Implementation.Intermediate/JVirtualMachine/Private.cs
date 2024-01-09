@@ -70,7 +70,7 @@ public partial class JVirtualMachine
 	private static IThread AttachThread(in IReadOnlyFixedMemory name,
 		(JVirtualMachine vm, ThreadCreationArgs args) args)
 	{
-		using JniTransaction jniTransaction = args.vm.CreateTransaction();
+		using INativeTransaction jniTransaction = args.vm.CreateUnaryTransaction();
 		JVirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, name, args.args);
 		JResult result = JVirtualMachine.AttachThread(args.vm, args.args.IsDaemon, arg, out JEnvironmentRef envRef);
 		if (result != JResult.Ok) throw new JniException(result);
@@ -101,12 +101,12 @@ public partial class JVirtualMachine
 	/// Creates a <see cref="JVirtualMachineArgumentValue"/> value from <paramref name="name"/> and
 	/// <paramref name="args"/>.
 	/// </summary>
-	/// <param name="jniTransaction">A <see cref="JniTransaction"/> instance.</param>
+	/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
 	/// <param name="name">A <see cref="IFixedPointer"/> to name.</param>
 	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
 	/// <returns>A <see cref="JVirtualMachineArgumentValue"/> value.</returns>
-	private static JVirtualMachineArgumentValue CreateAttachArgument(JniTransaction jniTransaction, IFixedPointer name,
-		ThreadCreationArgs args)
+	private static JVirtualMachineArgumentValue CreateAttachArgument(INativeTransaction jniTransaction,
+		IFixedPointer name, ThreadCreationArgs args)
 	{
 		JGlobalRef threadGroupRef = jniTransaction.Add<JGlobalRef>(args.ThreadGroup);
 		Int32 version = args.Version < IVirtualMachine.MinimalVersion ? IVirtualMachine.MinimalVersion : args.Version;

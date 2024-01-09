@@ -38,7 +38,14 @@ public abstract partial class JReferenceObject : JObject
 	/// <see langword="true"/> if current instance is an instance of <typeparamref name="TDataType"/>
 	/// type class; otherwise, <see langword="false"/>.
 	/// </returns>
-	public abstract Boolean InstanceOf<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>;
+	public Boolean InstanceOf<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>
+		=> this.IsInstanceOf<TDataType>();
+
+	/// <summary>
+	/// Tries to obtain a synchronized instance for current instance.
+	/// </summary>
+	/// <returns>A <see cref="IDisposable"/> synchronized</returns>
+	public IDisposable? TryGetSynchronizer() => this.IsDefault ? default : this.GetSynchronizer();
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other)

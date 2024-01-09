@@ -48,6 +48,17 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 		if (jLocal is JInterfaceObject jInterface)
 			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
+	/// <inheritdoc/>
+	public void Dispose()
+	{
+		this.Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	/// <inheritdoc cref="JObject.ObjectClassName"/>
+	public override CString ObjectClassName => this._lifetime.Class?.Name ?? JObject.JObjectClassName;
+	/// <inheritdoc cref="JObject.ObjectSignature"/>
+	public override CString ObjectSignature => this._lifetime.Class?.ClassSignature ?? JObject.JObjectSignature;
 
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
@@ -62,23 +73,12 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 		IEnvironment env = this.Environment;
 		return env.ClassFeature.IsInstanceOf(this, jClass);
 	}
-	/// <inheritdoc/>
-	public void Dispose()
-	{
-		this.Dispose(true);
-		GC.SuppressFinalize(this);
-	}
-
-	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this._lifetime.Class?.Name ?? JObject.JObjectClassName;
-	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this._lifetime.Class?.ClassSignature ?? JObject.JObjectSignature;
 
 	/// <inheritdoc/>
 	~JLocalObject() { this.Dispose(false); }
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override Boolean InstanceOf<TDataType>()
+	internal override Boolean IsInstanceOf<TDataType>()
 	{
 		Boolean result = this.Environment.ClassFeature.IsInstanceOf<TDataType>(this);
 		this.Environment.ClassFeature.SetAssignableTo<TDataType>(this, result);

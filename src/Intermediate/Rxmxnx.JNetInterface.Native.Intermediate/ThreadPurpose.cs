@@ -29,5 +29,9 @@ public enum ThreadPurpose : Byte
 	/// <summary>
 	/// Indicates the purpose of the thread is check global references.
 	/// </summary>
-	CheckGlobalReference = 5,
+	CheckGlobalReference = 6,
+	/// <summary>
+	/// Indicates the purpose of the thread is synchronize global references.
+	/// </summary>
+	SynchronizeGlobalReference = 6,
 }

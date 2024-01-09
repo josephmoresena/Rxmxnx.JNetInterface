@@ -32,4 +32,10 @@ public partial interface IReferenceFeature
 	/// <see langword="true"/> if <paramref name="jLocal"/> is a JNI parameter; otherwise, <see langword="false"/>.
 	/// </returns>
 	Boolean IsParameter(JLocalObject jLocal);
+	/// <summary>
+	/// Retrieves an instance to retrieve a <c>synchronized (Object)</c> block.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JObject"/> instance to synchronize.</param>
+	/// <returns>A <see cref="IDisposable"/> instance representing <c>synchronized (Object)</c> block.</returns>
+	IDisposable GetSynchronizer(JReferenceObject jObject);
 }

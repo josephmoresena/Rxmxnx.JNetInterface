@@ -24,9 +24,23 @@ public partial class JReferenceObject
 	internal virtual Boolean IsDefaultInstance() => this.AsSpan().AsValue<IntPtr>() == IntPtr.Zero;
 
 	/// <summary>
+	/// Indicates whether current instance is an instance of <typeparamref name="TDataType"/> type class.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if current instance is an instance of <typeparamref name="TDataType"/>
+	/// type class; otherwise, <see langword="false"/>.
+	/// </returns>
+	internal abstract Boolean IsInstanceOf<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>;
+	/// <summary>
 	/// Sets <see cref="JValue.Empty"/> as the current instance value.
 	/// </summary>
 	internal abstract void ClearValue();
+	/// <summary>
+	/// Retrieves synchronizer instance for current object.
+	/// </summary>
+	/// <returns>A <see cref="IDisposable"/> synchronizer.</returns>
+	internal abstract IDisposable GetSynchronizer();
 
 	/// <summary>
 	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.

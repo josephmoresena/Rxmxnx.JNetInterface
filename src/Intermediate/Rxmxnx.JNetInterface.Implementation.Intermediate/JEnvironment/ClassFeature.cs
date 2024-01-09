@@ -24,7 +24,7 @@ partial class JEnvironment
 			this.ReloadClass(jObject as JClassObject);
 			ValidationUtilities.ThrowIfDefault(jObject);
 			JEnvironment env = this._mainClasses.Environment;
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
 			JObjectLocalRef localRef = jniTransaction.Add(jObject);
 			JClassLocalRef classRef = jniTransaction.Add(env.GetObjectClass(localRef));
 			return env.GetClass(classRef, true);
@@ -57,7 +57,7 @@ partial class JEnvironment
 			if (MetadataHelper.GetMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
 				return this.GetOrFindClass(metadata);
 			ValidationUtilities.ThrowIfDummy(jClass);
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			ValidationUtilities.ThrowIfDefault(jClass);
 			GetSuperclassDelegate getSuperClass = this.GetDelegate<GetSuperclassDelegate>();
@@ -74,7 +74,7 @@ partial class JEnvironment
 			if (result.HasValue) return result.Value;
 			ValidationUtilities.ThrowIfDummy(jClass);
 			ValidationUtilities.ThrowIfDummy(otherClass);
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
 			IsAssignableFromDelegate isAssignableFrom = this.GetDelegate<IsAssignableFromDelegate>();
@@ -87,7 +87,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jObject);
 			ValidationUtilities.ThrowIfDummy(jClass);
 			IsInstanceOfDelegate isInstanceOf = this.GetDelegate<IsInstanceOfDelegate>();
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
 			JObjectLocalRef localRef = jniTransaction.Add(jObject);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			Byte result = isInstanceOf(this.Reference, localRef, classRef);
@@ -117,7 +117,7 @@ partial class JEnvironment
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			if (classRef.Value == default) throw new ArgumentException("Unloaded class.");
 			JClassObject loadedClass = this._mainClasses.Environment.GetClass(classRef, true);
@@ -166,7 +166,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(args.jClassLoader);
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(memoryList[0].Bytes);
 			DefineClassDelegate defineClass = args.cache.GetDelegate<DefineClassDelegate>();
-			using JniTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateUnaryTransaction();
 			JObjectLocalRef localRef = jniTransaction.Add(args.jClassLoader);
 			JClassLocalRef classRef = defineClass(args.cache.Reference, (ReadOnlyValPtr<Byte>)memoryList[0].Pointer,
 			                                      localRef, memoryList[1].Pointer, memoryList[1].Bytes.Length);

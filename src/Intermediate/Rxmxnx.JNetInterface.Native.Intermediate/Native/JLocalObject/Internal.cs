@@ -54,6 +54,12 @@ public partial class JLocalObject
 	/// <inheritdoc/>
 	internal override void ClearValue() => this._lifetime.Dispose();
 	/// <inheritdoc/>
+	internal override IDisposable GetSynchronizer()
+	{
+		IEnvironment env = this._lifetime.Environment;
+		return env.ReferenceFeature.GetSynchronizer(this);
+	}
+	/// <inheritdoc/>
 	internal override Boolean IsAssignableTo<TDataType>() => this._lifetime.IsAssignableTo<TDataType>(this);
 	/// <inheritdoc/>
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)

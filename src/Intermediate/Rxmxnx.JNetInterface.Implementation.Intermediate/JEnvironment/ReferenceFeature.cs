@@ -4,6 +4,13 @@ partial class JEnvironment
 {
 	private partial record JEnvironmentCache : IReferenceFeature
 	{
+		public IDisposable GetSynchronizer(JReferenceObject jObject)
+		{
+			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfDefault(jObject);
+			JEnvironment env = this._mainClasses.Environment;
+			return this.VirtualMachine.CreateSynchronized(env, jObject);
+		}
 		public JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
@@ -69,7 +76,7 @@ partial class JEnvironment
 		public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
 			if (typeof(TGlobal) == typeof(JWeak))
 			{
 				NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();

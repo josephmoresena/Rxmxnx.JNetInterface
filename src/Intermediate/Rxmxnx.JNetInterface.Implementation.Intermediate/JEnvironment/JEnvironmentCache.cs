@@ -404,11 +404,11 @@ partial class JEnvironment
 		/// <summary>
 		/// Retrieves <see cref="AccessCache"/> for <paramref name="jClass"/>.
 		/// </summary>
-		/// <param name="jniTransaction">A <see cref="JniTransaction"/> instance.</param>
+		/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
 		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 		/// <returns>A <see cref="AccessCache"/> instance.</returns>
 		/// <exception cref="ArgumentException">Throw if <see cref="AccessCache"/> is not found.</exception>
-		public AccessCache GetAccess(JniTransaction jniTransaction, JClassObject jClass)
+		public AccessCache GetAccess(INativeTransaction jniTransaction, JClassObject jClass)
 		{
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			return this._classes[classRef] ?? this.VirtualMachine.GetAccess(classRef) ??

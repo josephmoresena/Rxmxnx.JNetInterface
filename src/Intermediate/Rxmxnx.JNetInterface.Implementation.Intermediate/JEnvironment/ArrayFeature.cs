@@ -127,8 +127,8 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(value);
 			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
-			JObjectLocalRef localRef = jniTransaction.Add(value as JReferenceObject);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
+			JObjectLocalRef localRef = jniTransaction.Add(value);
 			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
 			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
 			this.CheckJniError();
@@ -201,7 +201,7 @@ partial class JEnvironment
 		/// <exception cref="ArgumentException"/>
 		private IntPtr GetPrimitiveArrayElements(JArrayObject jArray, CString signature, out Byte isCopy)
 		{
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
 			switch (signature[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
@@ -258,7 +258,7 @@ partial class JEnvironment
 		private void ReleasePrimitiveArrayElements(JArrayObject jArray, CString signature, IntPtr pointer,
 			JReleaseMode mode)
 		{
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
 			switch (signature[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
@@ -325,7 +325,7 @@ partial class JEnvironment
 		private void GetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer,
 			Int32 index, Int32 count = 1)
 		{
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
 			switch (signature[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
@@ -390,7 +390,7 @@ partial class JEnvironment
 		private void SetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer,
 			Int32 index, Int32 count = 1)
 		{
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
 			switch (signature[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
@@ -457,7 +457,7 @@ partial class JEnvironment
 		private JArrayLocalRef NewObjectArray(Int32 length, JClassObject jClass, JLocalObject? jLocal = default)
 		{
 			NewObjectArrayDelegate newObjectArray = this.GetDelegate<NewObjectArrayDelegate>();
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JObjectLocalRef initialRef = jniTransaction.Add(jLocal);
 			JObjectArrayLocalRef arrayRef = newObjectArray(this.Reference, length, classRef, initialRef);

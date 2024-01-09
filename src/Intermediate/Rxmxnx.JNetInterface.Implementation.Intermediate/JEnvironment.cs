@@ -83,7 +83,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 
 		ValidationUtilities.ThrowIfDummy(jRefObj);
 		ValidationUtilities.ThrowIfDummy(jRefOther);
-		using JniTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction();
+		using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateDuplexTransaction();
 		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);
 		JObjectLocalRef otherLocalRef = jniTransaction.Add(jRefOther);
 		return this.IsSame(localRef, otherLocalRef);
