@@ -9,7 +9,7 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			ValidationUtilities.ThrowIfDummy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -57,7 +57,7 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			ValidationUtilities.ThrowIfDummy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -103,7 +103,7 @@ partial class JEnvironment
 		public void GetPrimitiveStaticField(Span<Byte> bytes, JClassObject jClass, JFieldDefinition definition)
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
 			switch (definition.Information[1][^1])
@@ -151,7 +151,7 @@ partial class JEnvironment
 		public void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
 			switch (definition.Information[1][^1])
@@ -206,7 +206,7 @@ partial class JEnvironment
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
 				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
-			this.CopyAsJValue(jniTransaction as JniTransaction, args, argsMemory.Values);
+			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			switch (definition.Information[1][^1])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
@@ -269,7 +269,7 @@ partial class JEnvironment
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
 				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
-			this.CopyAsJValue(jniTransaction as JniTransaction, args, argsMemory.Values);
+			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			if (!nonVirtual)
 				this.CallPrimitiveMethod(bytes, localRef, definition.Information[1][^1], methodId, argsMemory);
 			else
@@ -289,7 +289,7 @@ partial class JEnvironment
 			}
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			ValidationUtilities.ThrowIfDummy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -311,7 +311,7 @@ partial class JEnvironment
 			}
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			ValidationUtilities.ThrowIfDummy(jClass);
-			using JniTransaction jniTransaction = this.VirtualMachine.CreateTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -344,7 +344,7 @@ partial class JEnvironment
 				return;
 			}
 			ValidationUtilities.ThrowIfDummy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
 			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JLocalObject);
@@ -375,7 +375,7 @@ partial class JEnvironment
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
 				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
-			this.CopyAsJValue(jniTransaction as JniTransaction, args, argsMemory.Values);
+			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			CallStaticObjectMethodADelegate callStaticObjectMethod =
 				this.GetDelegate<CallStaticObjectMethodADelegate>();
 			JObjectLocalRef localRef = callStaticObjectMethod(this.Reference, jClass.Reference, methodId,
@@ -393,7 +393,7 @@ partial class JEnvironment
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
 				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
-			this.CopyAsJValue(jniTransaction as JniTransaction, args, argsMemory.Values);
+			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			CallStaticVoidMethodADelegate callStaticVoidMethod = this.GetDelegate<CallStaticVoidMethodADelegate>();
 			callStaticVoidMethod(this.Reference, jClass.Reference, methodId,
 			                     (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
@@ -419,7 +419,7 @@ partial class JEnvironment
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
 				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
-			this.CopyAsJValue(jniTransaction as JniTransaction, args, argsMemory.Values);
+			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			JObjectLocalRef resultLocalRef;
 			if (!nonVirtual)
 			{
@@ -450,7 +450,7 @@ partial class JEnvironment
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
 				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
-			this.CopyAsJValue(jniTransaction as JniTransaction, args, argsMemory.Values);
+			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			if (!nonVirtual)
 			{
 				CallVoidMethodADelegate callVoidMethod = this.GetDelegate<CallVoidMethodADelegate>();
@@ -479,7 +479,7 @@ partial class JEnvironment
 				argsMemory.Values[i] = JNativeMethodValue.Create(calls[i], handles);
 			try
 			{
-				using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+				using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 				JResult result = registerNatives(this.Reference, classRef,
 				                                 (ReadOnlyValPtr<JNativeMethodValue>)argsMemory.Pointer,
@@ -500,7 +500,7 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
 			UnregisterNativesDelegate unregisterNatives = this.GetDelegate<UnregisterNativesDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JResult result = unregisterNatives(this.Reference, classRef);
 			if (result != JResult.Ok) throw new JniException(result);
@@ -510,7 +510,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Uses <paramref name="jLocal"/> into <paramref name="jniTransaction"/>.
 		/// </summary>
-		/// <param name="jniTransaction">A <see cref="JniTransaction"/> instance.</param>
+		/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <returns>A <see cref="JObjectLocalRef"/> reference</returns>
 		private JObjectLocalRef UseObject(INativeTransaction jniTransaction, JLocalObject? jLocal)
@@ -535,13 +535,12 @@ partial class JEnvironment
 		/// <summary>
 		/// Retrieves <paramref name="argSpan"/> as a <see cref="JValue"/> span containing <paramref name="args"/> information.
 		/// </summary>
-		/// <param name="jniTransaction">A <see cref="JniTransaction"/> transaction.</param>
+		/// <param name="jniTransaction">A <see cref="INativeTransaction"/> transaction.</param>
 		/// <param name="args">A <see cref="IObject"/> array.</param>
 		/// <param name="argSpan">Destination span.</param>
 		/// <exception cref="InvalidOperationException">Invalid object.</exception>
-		private void CopyAsJValue(JniTransaction? jniTransaction, IReadOnlyList<IObject?> args, Span<Byte> argSpan)
+		private void CopyAsJValue(INativeTransaction jniTransaction, IReadOnlyList<IObject?> args, Span<Byte> argSpan)
 		{
-			if (jniTransaction is null) return;
 			Span<JValue> result = argSpan.AsValues<Byte, JValue>();
 			for (Int32 i = 0; i < args.Count; i++)
 			{
@@ -714,13 +713,15 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction =
-				this.GetClassTransaction(jClass, definition, out JMethodId methodId);
+				this.VirtualMachine.CreateTransaction(1 + definition.ReferenceCount);
+			AccessCache access = this.GetAccess(jniTransaction, jClass);
+			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
 				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
-			this.CopyAsJValue(jniTransaction as JniTransaction, args, argsMemory.Values);
+			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			NewObjectADelegate newObject = this.GetDelegate<NewObjectADelegate>();
 			JObjectLocalRef localRef = newObject(this.Reference, jClass.Reference, methodId,
 			                                     (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
@@ -736,7 +737,7 @@ partial class JEnvironment
 		private JObjectLocalRef GetStaticObjectField(JClassObject jClass, JFieldDefinition definition)
 		{
 			ValidationUtilities.ThrowIfDummy(jClass);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
 			GetStaticObjectFieldDelegate getStaticObjectField = this.GetDelegate<GetStaticObjectFieldDelegate>();
@@ -753,9 +754,7 @@ partial class JEnvironment
 		private INativeTransaction GetClassTransaction(JClassObject jClass, JCallDefinition definition,
 			out JMethodId methodId)
 		{
-			INativeTransaction jniTransaction = definition.Count == 0 ?
-				this.VirtualMachine.CreateUnaryTransaction() :
-				this.VirtualMachine.CreateTransaction();
+			INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1 + definition.ReferenceCount);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			methodId = access.GetStaticMethodId(definition, this._mainClasses.Environment);
 			return jniTransaction;
@@ -772,9 +771,7 @@ partial class JEnvironment
 		private INativeTransaction GetInstanceTransaction(JClassObject jClass, JLocalObject jLocal,
 			JCallDefinition definition, out JObjectLocalRef localRef, out JMethodId methodId)
 		{
-			INativeTransaction jniTransaction = definition.Count == 0 ?
-				this.VirtualMachine.CreateUnaryTransaction() :
-				this.VirtualMachine.CreateTransaction();
+			INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			methodId = access.GetMethodId(definition, this._mainClasses.Environment);
 			localRef = this.UseObject(jniTransaction, jLocal);

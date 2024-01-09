@@ -55,7 +55,7 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(buffer);
 			GetDirectBufferAddressDelegate getDirectBufferAddress = this.GetDelegate<GetDirectBufferAddressDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(buffer);
 			IntPtr result = getDirectBufferAddress(this.Reference, localRef);
 			this.CheckJniError();
@@ -66,7 +66,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(buffer);
 			GetDirectBufferCapacityDelegate getDirectBufferCapacity =
 				this.GetDelegate<GetDirectBufferCapacityDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(buffer);
 			Int64 result = getDirectBufferCapacity(this.Reference, localRef);
 			this.CheckJniError();

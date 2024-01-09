@@ -32,6 +32,29 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 		return this.Add(localRef);
 	}
 	/// <summary>
+	/// Adds to current transaction <paramref name="jLocal"/> instance reference.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
+	JObjectLocalRef Add(JLocalObject? jLocal)
+	{
+		if (jLocal is null) return default;
+		JObjectLocalRef localRef = jLocal.As<JObjectLocalRef>();
+		return this.Add(localRef);
+	}
+	/// <summary>
+	/// Adds to current transaction <paramref name="jClass"/> instance reference.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+	JClassLocalRef Add(JClassObject? jClass)
+	{
+		if (jClass is null) return default;
+		JClassLocalRef classRef = jClass.Reference;
+		this.Add(classRef.Value);
+		return classRef;
+	}
+	/// <summary>
 	/// Adds to current transaction <paramref name="jString"/> instance reference.
 	/// </summary>
 	/// <param name="jString">A <see cref="JStringObject"/> instance.</param>
@@ -40,7 +63,31 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 	{
 		if (jString is null) return default;
 		JStringLocalRef stringRef = jString.Reference;
-		return stringRef.Value == default ? default : this.Add(stringRef);
+		return this.Add(stringRef);
+	}
+	/// <summary>
+	/// Adds to current transaction <paramref name="jThrowable"/> instance reference.
+	/// </summary>
+	/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance.</param>
+	/// <returns>A <see cref="JArrayLocalRef"/> reference.</returns>
+	JThrowableLocalRef Add(JThrowableObject? jThrowable)
+	{
+		if (jThrowable is null) return default;
+		JThrowableLocalRef throwableRef = jThrowable.As<JThrowableLocalRef>();
+		this.Add(throwableRef.Value);
+		return throwableRef;
+	}
+	/// <summary>
+	/// Adds to current transaction <paramref name="jArray"/> instance reference.
+	/// </summary>
+	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+	/// <returns>A <see cref="JArrayLocalRef"/> reference.</returns>
+	JArrayLocalRef Add(JArrayObject? jArray)
+	{
+		if (jArray is null) return default;
+		JArrayLocalRef arrayRef = jArray.Reference;
+		this.Add(arrayRef.Value);
+		return arrayRef;
 	}
 	/// <summary>
 	/// Adds to current transaction <paramref name="nativeRef"/> reference.
@@ -90,7 +137,6 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 	{
 		if (jArray is null) return default;
 		TReference arrayRef = jArray.As<TReference>();
-		if (arrayRef.Value == default) return default;
 		this.Add(arrayRef.Value);
 		return arrayRef;
 	}

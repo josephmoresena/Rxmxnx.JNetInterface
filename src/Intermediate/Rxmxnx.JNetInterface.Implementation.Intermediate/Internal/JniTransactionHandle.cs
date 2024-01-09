@@ -28,19 +28,20 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	public void Dispose() => this._transactions?.Remove(this._id);
 
 	/// <summary>
-	/// Creates an empty unary <see cref="INativeTransaction"/> instance.
+	/// Creates an empty <see cref="INativeTransaction"/> instance.
 	/// </summary>
+	/// <param name="capacity">Transaction capacity.</param>
 	/// <param name="transactions">Dictionary of transactions.</param>
 	/// <returns>A new <see cref="INativeTransaction"/> instance.</returns>
-	public static INativeTransaction CreateUnaryTransaction(IDictionary<Guid, INativeTransaction> transactions)
-		=> JniTransactionHandle.Create<UnaryTransaction>(transactions);
-	/// <summary>
-	/// Creates an empty duplex <see cref="INativeTransaction"/> instance.
-	/// </summary>
-	/// <param name="transactions">Dictionary of transactions.</param>
-	/// <returns>A new <see cref="INativeTransaction"/> instance.</returns>
-	public static INativeTransaction CreateDuplexTransaction(IDictionary<Guid, INativeTransaction> transactions)
-		=> JniTransactionHandle.Create<DuplexTransaction>(transactions);
+	public static INativeTransaction CreateTransaction(Int32 capacity,
+		IDictionary<Guid, INativeTransaction> transactions)
+		=> capacity switch
+		{
+			< 2 => JniTransactionHandle.Create<UnaryTransaction>(transactions),
+			2 => JniTransactionHandle.Create<BinaryTransaction>(transactions),
+			3 => JniTransactionHandle.Create<TernaryTransaction>(transactions),
+			_ => JniTransactionHandle.Create<SetTransaction>(transactions),
+		};
 	/// <summary>
 	/// Creates a synchronizer instance for <paramref name="jObject"/>.
 	/// </summary>
@@ -62,13 +63,12 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	/// <typeparam name="TTransaction">A <see cref="INativeTransaction"/> instance.</typeparam>
 	/// <param name="transactions">Dictionary of transactions.</param>
 	/// <returns>A new <typeparamref name="TTransaction"/> instance.</returns>
-	public static TTransaction Create<TTransaction>(IDictionary<Guid, INativeTransaction> transactions)
+	private static TTransaction Create<TTransaction>(IDictionary<Guid, INativeTransaction> transactions)
 		where TTransaction : INativeTransaction, new()
 	{
 		TTransaction result = new();
 		return JniTransactionHandle.Initialize(result, transactions);
 	}
-
 	/// <summary>
 	/// Initialize <typeparamref name="TTransaction"/> instance.
 	/// </summary>

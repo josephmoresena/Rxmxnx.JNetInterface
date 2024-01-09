@@ -158,22 +158,12 @@ public partial class JVirtualMachine
 			}
 		}
 		/// <summary>
-		/// Creates a new <see cref="JniTransaction"/> transaction.
+		/// Creates a new <see cref="INativeTransaction"/> transaction.
 		/// </summary>
-		/// <returns>A new <see cref="JniTransaction"/> instance.</returns>
-		public JniTransaction CreateTransaction() => JniTransactionHandle.Create<JniTransaction>(this._transactions);
-		/// <summary>
-		/// Creates a new unary <see cref="INativeTransaction"/> transaction.
-		/// </summary>
-		/// <returns>A new unary <see cref="INativeTransaction"/> instance.</returns>
-		public INativeTransaction CreateUnaryTransaction()
-			=> JniTransactionHandle.CreateUnaryTransaction(this._transactions);
-		/// <summary>
-		/// Creates a new duplex <see cref="INativeTransaction"/> transaction.
-		/// </summary>
-		/// <returns>A new duplex <see cref="INativeTransaction"/> instance.</returns>
-		public INativeTransaction CreateDuplexTransaction()
-			=> JniTransactionHandle.CreateDuplexTransaction(this._transactions);
+		/// <param name="capacity">Transaction capacity.</param>
+		/// <returns>A new <see cref="INativeTransaction"/> instance.</returns>
+		public INativeTransaction CreateTransaction(Int32 capacity)
+			=> JniTransactionHandle.CreateTransaction(capacity, this._transactions);
 		/// <summary>
 		/// Creates a new synchronizer for <paramref name="jObject"/> instance.
 		/// </summary>

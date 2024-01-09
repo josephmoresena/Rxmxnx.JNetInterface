@@ -11,6 +11,10 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// </summary>
 	private readonly Int32 _callSize;
 	/// <summary>
+	/// Count of reference parameters.
+	/// </summary>
+	private readonly Int32 _referenceCount;
+	/// <summary>
 	/// Call argument's size.
 	/// </summary>
 	private readonly Int32[] _sizes;
@@ -36,6 +40,10 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// List of size in bytes of each call argument.
 	/// </summary>
 	internal IReadOnlyList<Int32> Sizes => this._sizes;
+	/// <summary>
+	/// Count of reference parameters.
+	/// </summary>
+	internal Int32 ReferenceCount => this._referenceCount;
 
 	/// <summary>
 	/// Call return type.
@@ -61,11 +69,13 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	internal JCallDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType,
 		params JArgumentMetadata[] metadata) : base(name.WithSafeFixed(
 			                                            JCallDefinition.CreateDescriptor(
-				                                            returnType, out Int32 size, out Int32[] sizes, metadata),
+				                                            returnType, out Int32 size, out Int32[] sizes,
+				                                            out Int32 referenceCount, metadata),
 			                                            JCallDefinition.CreateSequence))
 	{
 		this._callSize = size;
 		this._sizes = sizes;
+		this._referenceCount = referenceCount;
 		this._useJValue = this._sizes.Length > 1 &&
 			Math.Abs(this._sizes.Length * JValue.Size - this._callSize) <= 0.15 * this._callSize;
 	}
@@ -88,11 +98,13 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// <param name="returnSignature">Method return type signature.</param>
 	/// <param name="totalSize">Total size in bytes of call parameters.</param>
 	/// <param name="sizes">Arguments sizes.</param>
+	/// <param name="referenceCount">Reference counts.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>Method descriptor.</returns>
 	private static CString CreateDescriptor(ReadOnlySpan<Byte> returnSignature, out Int32 totalSize, out Int32[] sizes,
-		params JArgumentMetadata[] metadata)
+		out Int32 referenceCount, params JArgumentMetadata[] metadata)
 	{
+		referenceCount = 0;
 		totalSize = 0;
 		sizes = new Int32[metadata.Length];
 
@@ -100,9 +112,11 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 		memory.WriteByte(UnicodeMethodSignatures.MethodParameterPrefixChar);
 		for (Int32 i = 0; i < metadata.Length; i++)
 		{
-			memory.Write(metadata[i].Signature);
+			ReadOnlySpan<Byte> signature = metadata[i].Signature.AsSpan();
+			memory.Write(signature);
 			totalSize += metadata[i].Size;
 			sizes[i] = metadata[i].Size;
+			if (signature.Length > 1) referenceCount++;
 		}
 		memory.WriteByte(UnicodeMethodSignatures.MethodParameterSuffixChar);
 		memory.Write(returnSignature);

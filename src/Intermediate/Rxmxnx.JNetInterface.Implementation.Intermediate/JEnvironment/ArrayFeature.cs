@@ -127,7 +127,7 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(value);
 			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JObjectLocalRef localRef = jniTransaction.Add(value);
 			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
 			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
@@ -201,7 +201,7 @@ partial class JEnvironment
 		/// <exception cref="ArgumentException"/>
 		private IntPtr GetPrimitiveArrayElements(JArrayObject jArray, CString signature, out Byte isCopy)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			switch (signature[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
@@ -258,7 +258,7 @@ partial class JEnvironment
 		private void ReleasePrimitiveArrayElements(JArrayObject jArray, CString signature, IntPtr pointer,
 			JReleaseMode mode)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			switch (signature[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
@@ -325,7 +325,7 @@ partial class JEnvironment
 		private void GetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer,
 			Int32 index, Int32 count = 1)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			switch (signature[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
@@ -390,7 +390,7 @@ partial class JEnvironment
 		private void SetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer,
 			Int32 index, Int32 count = 1)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			switch (signature[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
@@ -457,7 +457,7 @@ partial class JEnvironment
 		private JArrayLocalRef NewObjectArray(Int32 length, JClassObject jClass, JLocalObject? jLocal = default)
 		{
 			NewObjectArrayDelegate newObjectArray = this.GetDelegate<NewObjectArrayDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateDuplexTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JObjectLocalRef initialRef = jniTransaction.Add(jLocal);
 			JObjectArrayLocalRef arrayRef = newObjectArray(this.Reference, length, classRef, initialRef);

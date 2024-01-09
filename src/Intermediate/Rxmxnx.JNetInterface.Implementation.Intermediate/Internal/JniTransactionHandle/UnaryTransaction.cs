@@ -18,14 +18,8 @@ internal partial struct JniTransactionHandle
 		public UnaryTransaction() : base(1) { }
 
 		/// <inheritdoc/>
-		public override JObjectLocalRef Add(JObjectLocalRef localRef)
-		{
-			if (localRef == default) return default;
-			this.LocalRef = localRef;
-			return localRef;
-		}
+		protected override void PutValue(JObjectLocalRef localRef) => this.LocalRef = localRef;
 		/// <inheritdoc/>
-		public override Boolean Contains(IntPtr reference)
-			=> reference != default && this.LocalRef.Pointer == reference;
+		protected override Boolean InTransaction(IntPtr reference) => this.LocalRef.Pointer == reference;
 	}
 }

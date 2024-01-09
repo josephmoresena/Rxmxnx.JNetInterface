@@ -76,7 +76,7 @@ partial class JEnvironment
 		public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
 		{
 			ValidationUtilities.ThrowIfDummy(jLocal);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateUnaryTransaction();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			if (typeof(TGlobal) == typeof(JWeak))
 			{
 				NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();
