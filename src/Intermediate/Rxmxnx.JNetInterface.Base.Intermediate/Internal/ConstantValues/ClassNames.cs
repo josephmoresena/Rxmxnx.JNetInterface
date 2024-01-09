@@ -18,9 +18,9 @@ internal static class ClassNames
 	/// </summary>
 	public const String NioPackage = "java/nio/";
 	/// <summary>
-	/// JNI representation of <c>java.reflect</c> package.
+	/// JNI representation of <c>java.lang.reflect</c> package.
 	/// </summary>
-	public const String ReflectPackage = "java/reflect/";
+	public const String ReflectPackage = ClassNames.LangPackage + "reflect/";
 	/// <summary>
 	/// JNI representation of <c>sun.nio.ch</c> package.
 	/// </summary>
