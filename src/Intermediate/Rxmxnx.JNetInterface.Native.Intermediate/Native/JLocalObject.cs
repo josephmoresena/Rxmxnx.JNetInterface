@@ -28,6 +28,18 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="localRef">Local object reference.</param>
+	protected JLocalObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass.IsDummy)
+		=> this._lifetime = 
+			this.Environment.ReferenceFeature.GetLifetime(this, localRef, jClass) ??
+			new(jClass.Environment, this, localRef) 
+			{
+				Class = jClass, IsRealClass = jClass.IsFinal.GetValueOrDefault(),
+			};
+	/// <summary>
+	/// Constructor.
+	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
 	protected JLocalObject(IEnvironment env, JGlobalBase jGlobal) : base(jGlobal)

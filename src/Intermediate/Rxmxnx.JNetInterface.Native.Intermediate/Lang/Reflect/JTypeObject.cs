@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Reflect;
 
 /// <summary>
-/// This class represents a local <c>java.reflect.Type</c> instance.
+/// This class represents a local <c>java.lang.reflect.Type</c> instance.
 /// </summary>
 public sealed class JTypeObject : JInterfaceObject<JTypeObject>, IInterfaceType<JTypeObject>
 {

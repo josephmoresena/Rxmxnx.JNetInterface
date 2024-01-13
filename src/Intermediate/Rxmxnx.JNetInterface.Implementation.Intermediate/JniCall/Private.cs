@@ -75,8 +75,7 @@ public readonly ref partial struct JniCall
 		{
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
 			JClassObject jClass = this._call._env.GetClass<TObject>();
-			using JLocalObject jLocalTemp = new(jClass, localRef);
-			return (TObject)metadata.ParseInstance(jLocalTemp);
+			return JLocalObject.Create<TObject>(jClass, metadata, localRef);
 		}
 	}
 }

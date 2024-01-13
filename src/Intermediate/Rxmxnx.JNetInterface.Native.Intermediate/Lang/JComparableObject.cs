@@ -14,16 +14,9 @@ public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IIn
 
 	static JDataTypeMetadata IDataType.Metadata => JComparableObject.typeMetadata;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	/// <inheritdoc/>
 	private JComparableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <inheritdoc/>
 	private JComparableObject(JLocalObject jLocal) : base(jLocal) { }
 
 	/// <inheritdoc/>

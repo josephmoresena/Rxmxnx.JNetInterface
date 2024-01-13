@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Reflect;
 
 /// <summary>
-/// This class represents a local <c>java.reflect.GenericDeclaration</c> instance.
+/// This class represents a local <c>java.lang.reflect.GenericDeclaration</c> instance.
 /// </summary>
 public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclarationObject>,
 	IInterfaceType<JGenericDeclarationObject>, IInterfaceObject<JAnnotatedElementObject>

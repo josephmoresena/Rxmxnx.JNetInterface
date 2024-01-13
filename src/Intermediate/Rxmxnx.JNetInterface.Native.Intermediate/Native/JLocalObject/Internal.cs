@@ -78,4 +78,18 @@ public partial class JLocalObject
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>The loaded <see cref="JGlobalBase"/> object for <paramref name="jLocal"/>.</returns>
 	internal static JGlobalBase? GetGlobalObject(JLocalObject jLocal) => jLocal._lifetime.GetGlobalObject();
+	/// <summary>
+	/// Retrieves initial final <typaramref name="TObject"/> instance for <paramref name="localRef"/>.
+	/// </summary>
+	/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="metadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <returns>Initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.</returns>
+	internal static TObject Create<TObject>(JClassObject jClass, JReferenceTypeMetadata metadata, JObjectLocalRef localRef)
+		where TObject : JLocalObject, IReferenceType<TObject>
+	{
+		using JLocalObject jLocalTemp = new(jClass, localRef);
+		return (TObject)metadata.ParseInstance(jLocalTemp);
+	}
 }

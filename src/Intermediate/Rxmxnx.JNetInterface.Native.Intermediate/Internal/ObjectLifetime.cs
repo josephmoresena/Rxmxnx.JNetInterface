@@ -45,7 +45,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jLocal">The java object to load.</param>
 	/// <param name="localRef">Local object reference.</param>
-	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JObjectLocalRef localRef)
+	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JObjectLocalRef localRef = default)
 	{
 		this._env = env;
 		this._isDisposed = IMutableWrapper.Create<Boolean>();

@@ -6,8 +6,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>, IInterfaceObject<JSerializableObject>
 {
 	/// <inheritdoc/>
-	internal JNumberObject(JClassObject jClass, JObjectLocalRef jLocalRef) : base(jClass, jLocalRef) { }
-
+	protected JNumberObject(JClassObject jClass, JObjectLocalRef jLocalRef) : base(jClass, jLocalRef) { }
 	/// <inheritdoc/>
 	protected JNumberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc/>

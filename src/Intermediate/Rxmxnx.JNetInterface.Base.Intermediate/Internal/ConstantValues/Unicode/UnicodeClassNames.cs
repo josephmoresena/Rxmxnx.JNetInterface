@@ -126,4 +126,14 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.ShortPrimitive"/>
 	[DefaultValue(ClassNames.ShortPrimitive)]
 	public static partial ReadOnlySpan<Byte> ShortPrimitive();
+
+	/// <inheritdoc cref="ClassNames.AccessibleObject"/>
+	[DefaultValue(ClassNames.AccessibleObject)]
+	public static partial ReadOnlySpan<Byte> AccessibleObject();
+	/// <inheritdoc cref="ClassNames.ExecutableObject"/>
+	[DefaultValue(ClassNames.ExecutableObject)]
+	public static partial ReadOnlySpan<Byte> ExecutableObject();
+	/// <inheritdoc cref="ClassNames.MemberInterface"/>
+	[DefaultValue(ClassNames.MemberInterface)]
+	public static partial ReadOnlySpan<Byte> MemberInterface();
 }

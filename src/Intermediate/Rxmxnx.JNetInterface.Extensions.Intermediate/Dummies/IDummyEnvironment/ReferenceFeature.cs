@@ -2,6 +2,8 @@ namespace Rxmxnx.JNetInterface.Native.Dummies;
 
 public partial interface IDummyEnvironment
 {
+	Boolean IReferenceFeature.RealEnvironment => false;
+	ObjectLifetime? IReferenceFeature.GetLifetime(JLocalObject jLocal, JObjectLocalRef localRef, JClassObject? jClass) => default;
 	JLocalObject IReferenceFeature.CreateWrapper<TPrimitive>(TPrimitive primitive)
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();

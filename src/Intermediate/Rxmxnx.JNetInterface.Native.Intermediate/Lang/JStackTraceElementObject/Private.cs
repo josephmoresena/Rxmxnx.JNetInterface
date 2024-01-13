@@ -22,7 +22,9 @@ public partial class JStackTraceElementObject
 	private String? _methodName;
 	/// <inheritdoc cref="JStackTraceElementObject.NativeMethod"/>
 	private Boolean? _nativeMethod;
-
+	
+	/// <inheritdoc />
+	private JStackTraceElementObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) {}
 	/// <inheritdoc/>
 	private JStackTraceElementObject(JLocalObject jLocal) : base(
 		jLocal, jLocal.Environment.ClassFeature.GetClass<JStackTraceElementObject>())

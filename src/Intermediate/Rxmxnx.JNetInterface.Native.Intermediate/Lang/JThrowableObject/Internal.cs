@@ -16,14 +16,6 @@ public partial class JThrowableObject
 	static JDataTypeMetadata IDataType.Metadata => JThrowableObject.JThrowableClassMetadata;
 
 	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
-	internal JThrowableObject(JClassObject jClass, JThrowableLocalRef throwableRef) :
-		base(jClass, throwableRef.Value) { }
-
-	/// <summary>
 	/// Retrieves a <see cref="JStringObject"/> containing throwable message.
 	/// </summary>
 	/// <param name="throwableClass">A <see cref="IEnvironment"/> instance.</param>

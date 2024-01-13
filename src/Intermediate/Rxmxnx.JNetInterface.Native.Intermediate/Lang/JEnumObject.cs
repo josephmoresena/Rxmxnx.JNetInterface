@@ -52,6 +52,14 @@ public abstract class JEnumObject<TEnum> : JEnumObject, IDataType where TEnum : 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="localRef">Local object reference.</param>
+	/// <param name="ordinal">Enum instance ordinal.</param>
+	protected JEnumObject(IEnvironment env, JObjectLocalRef localRef, Int32? ordinal = default) : base(
+		env.ClassFeature.GetClass<TEnum>(), localRef, ordinal) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	protected JEnumObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.GetClass<TEnum>()) { }
 	/// <inheritdoc/>

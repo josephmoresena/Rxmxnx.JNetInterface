@@ -17,11 +17,14 @@ public partial class JThrowableObject : JLocalObject, IBaseClassType<JThrowableO
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public JStackTraceInfo[] StackTrace
 		=> this._stackTrace ??= this.Environment.WithFrame(5, this, JThrowableObject.GetStackTraceInfo);
-
-	/// <inheritdoc/>
-	internal JThrowableObject(IEnvironment env, JObjectLocalRef jLocalRef, Boolean isDummy,
-		JClassObject? jClass = default) : base(env, jLocalRef, isDummy, jClass ?? env.ClassFeature.ThrowableObject) { }
-
+	
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+	protected JThrowableObject(JClassObject jClass, JThrowableLocalRef throwableRef) :
+		base(jClass, throwableRef.Value) { }
 	/// <inheritdoc/>
 	protected JThrowableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 	/// <inheritdoc/>

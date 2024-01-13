@@ -5,12 +5,11 @@ public partial class JEnumObject
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jLocalRef">Local object reference.</param>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="localRef">Local object reference.</param>
 	/// <param name="ordinal">Enum instance ordinal.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JEnumObject(IEnvironment env, JObjectLocalRef jLocalRef, Int32? ordinal, Boolean isDummy) : base(
-		env, jLocalRef, isDummy, env.ClassFeature.StringClassObject)
+	internal JEnumObject(JClassObject jClass, JObjectLocalRef localRef, Int32? ordinal) 
+		: base(jClass, localRef)
 		=> this._ordinal = ordinal;
 	/// <summary>
 	/// Constructor.

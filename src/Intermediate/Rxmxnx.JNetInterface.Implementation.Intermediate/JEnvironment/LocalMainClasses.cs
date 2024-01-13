@@ -16,7 +16,7 @@ partial class JEnvironment
 		public LocalMainClasses(JEnvironment env)
 		{
 			this.Environment = env;
-			this.ClassObject = new(this.Environment, false);
+			this.ClassObject = new(this.Environment);
 			this.ThrowableObject = new(this.ClassObject, MetadataHelper.GetMetadata<JThrowableObject>());
 			this.StackTraceElementObject =
 				new(this.ClassObject, MetadataHelper.GetMetadata<JStackTraceElementObject>());

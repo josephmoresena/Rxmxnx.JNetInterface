@@ -16,10 +16,6 @@ partial class JEnvironment
 		/// </summary>
 		private readonly List<JObjectLocalRef> _references;
 
-		/// <summary>
-		/// Current <see cref="IEnvironment"/> instance.
-		/// </summary>
-		public IEnvironment Environment => this._env;
 		/// <inheritdoc/>
 		public override ObjectLifetime this[JObjectLocalRef localRef]
 		{

@@ -186,6 +186,19 @@ internal static class ClassNames
 	public const String DirectBufferObject = ClassNames.SunNioChPackage + "DirectBuffer";
 
 	/// <summary>
+	/// JNI name of <c>java.lang.reflect.AccessibleObject</c> interface.
+	/// </summary>
+	public const String AccessibleObject = ClassNames.ReflectPackage + "AccessibleObject";
+	/// <summary>
+	/// JNI name of <c>java.lang.reflect.Executable</c> interface.
+	/// </summary>
+	public const String ExecutableObject = ClassNames.ReflectPackage + "Executable";
+	/// <summary>
+	/// JNI name of <c>java.lang.reflect.Member</c> interface.
+	/// </summary>
+	public const String MemberInterface = ClassNames.ReflectPackage + "Member";
+
+	/// <summary>
 	/// JNI name of <c>java.lang.Thread.UncaughtExceptionHandler</c> interface.
 	/// </summary>
 	public const String UncaughtExceptionHandlerInterface = ClassNames.LangPackage + "Thread$UncaughtExceptionHandler";

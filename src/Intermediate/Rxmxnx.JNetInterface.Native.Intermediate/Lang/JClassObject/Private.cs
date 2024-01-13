@@ -37,17 +37,10 @@ public partial class JClassObject
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JClassObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.ClassObject)
-	{
-		if (jLocal is not JClassObject jClass)
-			return;
-
-		this._className = jClass.Name;
-		this._signature = jClass.ClassSignature;
-		this._hash = jClass.Hash;
-		this._isFinal = jClass.IsFinal;
-	}
+	/// <param name="jClassClassObject"><see cref="JClassObject"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	private JClassObject(JClassObject jClassClassObject, JClassLocalRef classRef) : base(
+		jClassClassObject, classRef.Value) { }
 
 	/// <summary>
 	/// Loads class information.

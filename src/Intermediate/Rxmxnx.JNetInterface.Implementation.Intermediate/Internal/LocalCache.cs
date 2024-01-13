@@ -82,4 +82,11 @@ internal record LocalCache
 	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
 	public virtual JClassLocalRef FindClassParameter(String hash)
 		=> this._previous?.FindClassParameter(hash) ?? default;
+	/// <summary>
+	/// Retrieves the value associated with <paramref name="localRef"/>.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
+	/// <returns>The <see cref="ObjectLifetime"/> instance associated with <paramref name="localRef"/>.</returns>
+	public virtual ObjectLifetime? GetLifetime(JObjectLocalRef localRef)
+		=> this._objects.GetValueOrDefault(localRef) ?? this._previous?.GetLifetime(localRef);
 }

@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Reflect;
 
 /// <summary>
-/// This class represents a local <c>java.reflect.AnnotatedElement</c> instance.
+/// This class represents a local <c>java.lang.reflect.AnnotatedElement</c> instance.
 /// </summary>
 public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElementObject>,
 	IInterfaceType<JAnnotatedElementObject>
