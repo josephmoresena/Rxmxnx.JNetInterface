@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// This interface exposes an object that represents a java reference type instance.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IReferenceType : IObject, IDataType, IDisposable
+public partial interface IReferenceType : IObject, IDataType, IDisposable
 {
 	/// <summary>
 	/// Retrieves the metadata for given reference type.
