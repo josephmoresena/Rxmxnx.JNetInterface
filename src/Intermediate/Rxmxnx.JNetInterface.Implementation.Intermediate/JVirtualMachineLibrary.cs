@@ -110,9 +110,20 @@ public sealed record JVirtualMachineLibrary
 	public IInvokedVirtualMachine CreateVirtualMachine(JVirtualMachineInitArg arg, out IEnvironment env)
 	{
 		CStringSequence sequence = JVirtualMachineInitOption.GetOptionsSequence(arg.Options);
-		(IInvokedVirtualMachine vm, env) =
-			sequence.WithSafeFixed((arg, this), JVirtualMachineLibrary.CreateVirtualMachine);
-		return vm;
+		using IFixedPointer.IDisposable fPtr = sequence.GetFixedPointer();
+		using IFixedContext<JVirtualMachineInitOptionValue>.IDisposable options =
+			JVirtualMachineInitOption.GetContext(sequence);
+		JVirtualMachineInitArgumentValue value = new()
+		{
+			Version = arg.Version,
+			OptionsLenght = options.Values.Length,
+			Options = options.ValuePointer,
+			IgnoreUnrecognized = ((JBoolean)arg.IgnoreUnrecognized).ByteValue,
+		};
+		JResult result = this._createVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef, in value);
+		if (result == JResult.Ok)
+			return JVirtualMachine.GetVirtualMachine(vmRef, envRef, out env);
+		throw new JniException(result);
 	}
 	/// <summary>
 	/// Retrieves all of the created <see cref="IVirtualMachine"/> instances.
@@ -139,8 +150,7 @@ public sealed record JVirtualMachineLibrary
 	{
 		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
 		using IFixedContext<JVirtualMachineRef>.IDisposable fixedContext = arr.AsMemory().GetFixedContext();
-		result = this._getCreatedVirtualMachines((ValPtr<JVirtualMachineRef>)fixedContext.Pointer, arr.Length,
-		                                         out vmCount);
+		result = this._getCreatedVirtualMachines(fixedContext.ValuePointer, arr.Length, out vmCount);
 		return arr;
 	}
 
@@ -172,43 +182,5 @@ public sealed record JVirtualMachineLibrary
 			           getCreatedVirtualMachines);
 		NativeLibrary.Free(handler.Value);
 		return default;
-	}
-
-	/// <summary>
-	/// Creates <see cref="IInvokedVirtualMachine"/> instance.
-	/// </summary>
-	/// <param name="memoryList">A <see cref="ReadOnlyFixedMemoryList"/> with options UTF-8 text.</param>
-	/// <param name="args">Tuple (<see cref="JVirtualMachineInitArg"/>, <see cref="JVirtualMachineLibrary"/>).</param>
-	/// <returns>Created <see cref="IInvokedVirtualMachine"/> instance.</returns>
-	/// <exception cref="JniException">If JNI call ends with an error.</exception>
-	private static (IInvokedVirtualMachine vm, IEnvironment env) CreateVirtualMachine(
-		ReadOnlyFixedMemoryList memoryList, (JVirtualMachineInitArg arg, JVirtualMachineLibrary library) args)
-	{
-		ReadOnlySpan<JVirtualMachineInitOptionValue> options = JVirtualMachineInitOption.GetSpan(memoryList);
-		return options.WithSafeFixed(args, JVirtualMachineLibrary.CreateVirtualMachine);
-	}
-	/// <summary>
-	/// Creates <see cref="IInvokedVirtualMachine"/> instance.
-	/// </summary>
-	/// <param name="ctx">A <see cref="IReadOnlyFixedContext{JVirtualMachineInitOptionValue}"/> with options.</param>
-	/// <param name="args">Tuple (<see cref="JVirtualMachineInitArg"/>, <see cref="JVirtualMachineLibrary"/>).</param>
-	/// <returns>Created <see cref="IInvokedVirtualMachine"/> instance.</returns>
-	/// <exception cref="JniException">If JNI call ends with an error.</exception>
-	private static (IInvokedVirtualMachine vm, IEnvironment env) CreateVirtualMachine(
-		in IReadOnlyFixedContext<JVirtualMachineInitOptionValue> ctx,
-		(JVirtualMachineInitArg arg, JVirtualMachineLibrary library) args)
-	{
-		JVirtualMachineInitArgumentValue value = new()
-		{
-			Version = args.arg.Version,
-			OptionsLenght = ctx.Values.Length,
-			Options = (ValPtr<JVirtualMachineInitOptionValue>)ctx.Pointer,
-			IgnoreUnrecognized = ((JBoolean)args.arg.IgnoreUnrecognized).ByteValue,
-		};
-		JResult result =
-			args.library._createVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef, in value);
-		if (result == JResult.Ok)
-			return (JVirtualMachine.GetVirtualMachine(vmRef, envRef, out IEnvironment env), env);
-		throw new JniException(result);
 	}
 }

@@ -137,11 +137,9 @@ internal static class NativeGenerator
 	private static void PrepareFile(StringBuilder strBuildDoc, StringBuilder strBuildArgType, StringBuilder strBuildArg,
 		UInt32 index)
 	{
-		if (index > 1)
-		{
-			strBuildDoc.Append(Environment.NewLine);
-			strBuildArgType.Append(", ");
-			strBuildArg.Append(", ");
-		}
+		if (index <= 1) return;
+		strBuildDoc.AppendLine();
+		strBuildArgType.Append(", ");
+		strBuildArg.Append(", ");
 	}
 }

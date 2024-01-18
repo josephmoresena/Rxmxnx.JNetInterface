@@ -62,22 +62,25 @@ public sealed record JVirtualMachineInitOption
 		return new(list);
 	}
 	/// <summary>
-	/// Creates a <see cref="JVirtualMachineInitOptionValue"/> read-only span from
-	/// <see cref="ReadOnlyFixedMemoryList"/> instance.
+	/// Creates a <see cref="IFixedContext{JVirtualMachineInitOptionValue}.IDisposable"/> from <see cref="CStringSequence"/>
+	/// instance.
 	/// </summary>
-	/// <param name="memoryList">A <see cref="ReadOnlyFixedMemoryList"/> instance with UTF-8 text.</param>
-	/// <returns>A <see cref="JVirtualMachineInitOptionValue"/> read-only span.</returns>
-	internal static ReadOnlySpan<JVirtualMachineInitOptionValue> GetSpan(ReadOnlyFixedMemoryList memoryList)
+	/// <param name="sequence">A fixed <see cref="CStringSequence"/> instance with UTF-8 text.</param>
+	/// <returns>A <see cref="IFixedContext{JVirtualMachineInitOptionValue}.IDisposable"/> array.</returns>
+	internal static IFixedContext<JVirtualMachineInitOptionValue>.IDisposable GetContext(CStringSequence sequence)
 	{
-		Span<JVirtualMachineInitOptionValue> result = new JVirtualMachineInitOptionValue[memoryList.Count / 2];
-		for (Int32 i = 0; i < result.Length; i += 2)
+		JVirtualMachineInitOptionValue[] arr = new JVirtualMachineInitOptionValue[sequence.Count / 2];
+		for (Int32 i = 0; i < arr.Length; i += 2)
 		{
-			result[i] = new()
+			arr[i] = new()
 			{
-				Name = (ReadOnlyValPtr<Byte>)memoryList[i].Pointer, ExtraInfo = memoryList[i + 1].Pointer,
+				Name = sequence[i].AsSpan().GetUnsafeValPtr(),
+				ExtraInfo = sequence[i + 1].AsSpan().GetUnsafeValPtr(),
 			};
 		}
-		return result;
+		Memory<JVirtualMachineInitOptionValue> mem = arr.AsMemory();
+		IFixedContext<JVirtualMachineInitOptionValue>.IDisposable ctx = mem.GetFixedContext();
+		return ctx;
 	}
 
 	/// <summary>

@@ -67,11 +67,11 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 	/// <param name="returnType">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	internal JCallDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType,
-		params JArgumentMetadata[] metadata) : base(name.WithSafeFixed(
+		params JArgumentMetadata[] metadata) : base(new CStringSequence(
+			                                            name,
 			                                            JCallDefinition.CreateDescriptor(
 				                                            returnType, out Int32 size, out Int32[] sizes,
-				                                            out Int32 referenceCount, metadata),
-			                                            JCallDefinition.CreateSequence))
+				                                            out Int32 referenceCount, metadata)))
 	{
 		this._callSize = size;
 		this._sizes = sizes;
@@ -122,28 +122,5 @@ public abstract record JCallDefinition : JAccessibleObjectDefinition
 		memory.Write(returnSignature);
 		memory.WriteByte(default);
 		return memory.ToArray();
-	}
-	/// <summary>
-	/// Creates a call sequence.
-	/// </summary>
-	/// <param name="memName">A <see cref="IReadOnlyFixedMemory"/> containing name.</param>
-	/// <param name="descriptor">A <see cref="CString"/> containing call descriptor.</param>
-	/// <returns>A <see cref="CStringSequence"/> instance.</returns>
-	private static CStringSequence CreateSequence(in IReadOnlyFixedMemory memName, CString descriptor)
-		=> CStringSequence.Create((memName, descriptor), JCallDefinition.CreateSequence, memName.Bytes.Length,
-		                          descriptor.Length);
-	/// <summary>
-	/// Creates a call sequence.
-	/// </summary>
-	/// <param name="span">A span of bytes.</param>
-	/// <param name="index">Index of current sequence item.</param>
-	/// <param name="arg">Creation instance.</param>
-	private static void CreateSequence(Span<Byte> span, Int32 index,
-		(IReadOnlyFixedMemory memName, CString descriptor) arg)
-	{
-		if (index == 0)
-			arg.memName.Bytes.CopyTo(span);
-		else
-			arg.descriptor.AsSpan().CopyTo(span);
 	}
 }
