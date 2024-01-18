@@ -438,12 +438,12 @@ partial class JEnvironment
 			this.CheckJniError();
 			if (localRef == default) return default;
 			if (MetadataHelper.GetMetadata<TResult>().Modifier == JTypeModifier.Final)
-				return this.Cast<TResult>(new(env, localRef, false, this.GetClass<TResult>()), register);
+				return this.Cast<TResult>(new(this.GetClass<TResult>(), localRef), register);
 			JClassLocalRef classRef = env.GetObjectClass(localRef);
 			try
 			{
 				JClassObject jClass = env.GetClass(classRef);
-				return this.Cast<TResult>(new(env, localRef, false, jClass), register);
+				return this.Cast<TResult>(new(jClass, localRef), register);
 			}
 			finally
 			{

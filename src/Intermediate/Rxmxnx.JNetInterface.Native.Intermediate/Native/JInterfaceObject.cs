@@ -14,7 +14,11 @@ public abstract partial class JInterfaceObject : JLocalObject, IInterfaceType
 	/// </summary>
 	internal ObjectMetadata ObjectMetadata { get; }
 
-	/// <inheritdoc />
+	/// <inheritdoc/>
+	internal JInterfaceObject(InternalClassInitializer initializer) : base(
+		IReferenceType.ClassInitializer.FromInternal(initializer))
+		=> this.ObjectMetadata = new(initializer.Class);
+	/// <inheritdoc/>
 	internal JInterfaceObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef)
 		=> this.ObjectMetadata = new(jClass);
 	/// <summary>
@@ -44,7 +48,7 @@ public abstract class JInterfaceObject<TInterface> : JInterfaceObject
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	/// <inheritdoc/>
-	protected JInterfaceObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
+	protected JInterfaceObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
 	/// <inheritdoc/>
 	protected JInterfaceObject(JLocalObject jLocal) : base(jLocal) { }
 	/// <inheritdoc/>

@@ -49,14 +49,8 @@ public abstract class JEnumObject<TEnum> : JEnumObject, IDataType where TEnum : 
 {
 	static Type IDataType.FamilyType => typeof(JEnumObject);
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="localRef">Local object reference.</param>
-	/// <param name="ordinal">Enum instance ordinal.</param>
-	protected JEnumObject(IEnvironment env, JObjectLocalRef localRef, Int32? ordinal = default) : base(
-		env.ClassFeature.GetClass<TEnum>(), localRef, ordinal) { }
+	/// <inheritdoc/>
+	protected JEnumObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>

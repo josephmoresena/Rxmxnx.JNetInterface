@@ -101,7 +101,7 @@ partial class JEnvironment
 			IEnvironment env = this._mainClasses.Environment;
 			JObjectLocalRef localRef = getObjectArrayElement(this.Reference, jArray.As<JObjectArrayLocalRef>(), index);
 			if (localRef == default) this.CheckJniError();
-			return this.Cast<TElement>(new(env, localRef, false, this.GetClass<TElement>()));
+			return this.Cast<TElement>(new(this.GetClass<TElement>(), localRef));
 		}
 		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
 			where TElement : IObject, IDataType<TElement>

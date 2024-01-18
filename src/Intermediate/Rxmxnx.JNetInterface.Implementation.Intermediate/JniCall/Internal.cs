@@ -21,7 +21,7 @@ public readonly ref partial struct JniCall
 			JClassObject jClass = this.GetObjectClass(localRef);
 			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
 			{
-				JLocalObject result = new(env, localRef, false, jClass);
+				JLocalObject result = new(jClass, localRef);
 				this._call._cache[localRef] = result.Lifetime;
 				return result;
 			}

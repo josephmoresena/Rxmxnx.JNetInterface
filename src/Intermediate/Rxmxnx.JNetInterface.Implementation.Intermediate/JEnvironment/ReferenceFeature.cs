@@ -5,7 +5,7 @@ partial class JEnvironment
 	private partial record JEnvironmentCache : IReferenceFeature
 	{
 		public Boolean RealEnvironment => true;
-		
+
 		public IDisposable GetSynchronizer(JReferenceObject jObject)
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);
@@ -13,12 +13,14 @@ partial class JEnvironment
 			JEnvironment env = this._mainClasses.Environment;
 			return this.VirtualMachine.CreateSynchronized(env, jObject);
 		}
-		public ObjectLifetime? GetLifetime(JLocalObject jLocal, JObjectLocalRef localRef, JClassObject? jClass)
+		public ObjectLifetime? GetLifetime(JLocalObject jLocal, JObjectLocalRef localRef, JClassObject? jClass,
+			Boolean overrideClass)
 		{
 			ObjectLifetime? result = this._objects.GetLifetime(localRef);
 			if (result is null) return result;
 			result.Load(jLocal);
-			result.SetClass(jClass);
+			if (!result.IsRealClass && overrideClass && jClass is not null)
+				result.SetClass(jClass);
 			return result;
 		}
 		public JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)

@@ -2,15 +2,9 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public partial class JEnumObject
 {
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="localRef">Local object reference.</param>
-	/// <param name="ordinal">Enum instance ordinal.</param>
-	internal JEnumObject(JClassObject jClass, JObjectLocalRef localRef, Int32? ordinal) 
-		: base(jClass, localRef)
-		=> this._ordinal = ordinal;
+	/// <inheritdoc/>
+	internal JEnumObject(InternalClassInitializer initializer) : base(
+		IReferenceType.ClassInitializer.FromInternal(initializer)) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
