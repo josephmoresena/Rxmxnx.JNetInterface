@@ -50,6 +50,10 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// Function cache.
 	/// </summary>
 	internal FunctionCache Functions { get; }
+	/// <summary>
+	/// Indicates whether current instance is not dummy.
+	/// </summary>
+	internal Boolean RealEnvironment { get; }
 
 	JEnvironmentRef IWrapper<JEnvironmentRef>.Value => this.Reference;
 

@@ -17,6 +17,9 @@ public partial class JArrayObject<TElement> : IArrayType<JArrayObject<TElement>,
 	static JDataTypeMetadata IDataType.Metadata => JArrayGenericTypeMetadata.Instance;
 	static Type IDataType.FamilyType => typeof(JArrayObject);
 
+	/// <inheritdoc/>
+	private JArrayObject(InternalClassInitializer initializer) : base(initializer) { }
+
 	TElement? IEnumerableSequence<TElement?>.GetItem(Int32 index) => this[index];
 	Int32 IEnumerableSequence<TElement?>.GetSize() => this.Length;
 

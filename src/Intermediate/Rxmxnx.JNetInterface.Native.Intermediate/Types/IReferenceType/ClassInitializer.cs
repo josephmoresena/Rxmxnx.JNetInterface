@@ -52,6 +52,18 @@ public partial interface IReferenceType
 		/// <returns>A <see cref="InternalClassInitializer"/> value.</returns>
 		internal InternalClassInitializer ToInternal() => this._instance;
 		/// <summary>
+		/// Retrieves a <see cref="InternalObjectInitializer"/> instance
+		/// from current instance.
+		/// </summary>
+		/// <typeparam name="TClass">Datatype class</typeparam>
+		/// <returns>A <see cref="InternalObjectInitializer"/> value.</returns>
+		internal InternalClassInitializer ToInternal<TClass>() where TClass : IDataType<TClass>
+		{
+			IEnvironment env = this.Class.Environment;
+			JClassObject jClass = env.ClassFeature.GetClass<TClass>();
+			return new() { Class = jClass, LocalReference = this._instance.LocalReference, };
+		}
+		/// <summary>
 		/// Retrieves a <see cref="ClassInitializer"/> instance from <paramref name="initializer"/>
 		/// </summary>
 		/// <param name="initializer">A <see cref="InternalClassInitializer"/> instance.</param>

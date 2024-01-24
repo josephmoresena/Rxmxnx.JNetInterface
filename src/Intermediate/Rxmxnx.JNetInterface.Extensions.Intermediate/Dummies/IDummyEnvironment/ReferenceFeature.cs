@@ -2,7 +2,6 @@ namespace Rxmxnx.JNetInterface.Native.Dummies;
 
 public partial interface IDummyEnvironment
 {
-	Boolean IReferenceFeature.RealEnvironment => false;
 	ObjectLifetime IReferenceFeature.GetLifetime(JLocalObject jLocal, InternalClassInitializer initializer)
 		=> this.GetSourceInstance(initializer.LocalReference)?.Lifetime ?? new(this, jLocal, initializer.LocalReference)
 		{

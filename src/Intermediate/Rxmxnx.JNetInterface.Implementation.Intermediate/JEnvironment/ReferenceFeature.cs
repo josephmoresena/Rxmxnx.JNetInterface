@@ -4,8 +4,6 @@ partial class JEnvironment
 {
 	private partial record JEnvironmentCache : IReferenceFeature
 	{
-		public Boolean RealEnvironment => true;
-
 		public IDisposable GetSynchronizer(JReferenceObject jObject)
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);

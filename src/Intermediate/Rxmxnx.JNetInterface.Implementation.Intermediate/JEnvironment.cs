@@ -30,6 +30,8 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	private JEnvironment(JEnvironmentCache cache) => this._cache = cache;
 
 	/// <inheritdoc/>
+	public Boolean RealEnvironment => true;
+	/// <inheritdoc/>
 	public JEnvironmentRef Reference => this._cache.Reference;
 	/// <inheritdoc/>
 	public IVirtualMachine VirtualMachine => this._cache.VirtualMachine;

@@ -8,9 +8,10 @@ public partial class JLocalObject
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="localRef">Local object reference.</param>
 	internal JLocalObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass.IsDummy)
-		=> this._lifetime =
-			jClass.Environment.ReferenceFeature.GetLifetime(
-				this, new() { Class = jClass, LocalReference = localRef, OverrideClass = true, });
+		=> this._lifetime = new(jClass.Environment, this, localRef)
+		{
+			Class = jClass, IsRealClass = jClass.IsFinal.GetValueOrDefault(),
+		};
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -42,7 +43,7 @@ public partial class JLocalObject
 	/// <param name="localRef">Local object reference.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	internal JLocalObject(IEnvironment env, JObjectLocalRef localRef, JClassObject? jClass = default) :
-		base(!env.ReferenceFeature.RealEnvironment)
+		base(!env.RealEnvironment)
 		=> this._lifetime =
 			env.ReferenceFeature.GetLifetime(
 				this, new() { Class = jClass, LocalReference = localRef, OverrideClass = false, });
@@ -50,6 +51,5 @@ public partial class JLocalObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	internal JLocalObject(IEnvironment env) : base(!env.ReferenceFeature.RealEnvironment)
-		=> this._lifetime = new(env, this);
+	internal JLocalObject(IEnvironment env) : base(!env.RealEnvironment) => this._lifetime = new(env, this);
 }

@@ -3,11 +3,6 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public partial interface IReferenceFeature
 {
 	/// <summary>
-	/// Indicates whether current instance is not dummy.
-	/// </summary>
-	internal Boolean RealEnvironment { get; }
-
-	/// <summary>
 	/// Retrieves <see cref="ObjectLifetime"/> instance for <paramref name="initializer"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>

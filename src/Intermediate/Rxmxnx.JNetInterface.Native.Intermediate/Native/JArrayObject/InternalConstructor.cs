@@ -35,8 +35,6 @@ public partial class JArrayObject
 
 public partial class JArrayObject<TElement>
 {
-	/// <inheritdoc/>
-	internal JArrayObject(InternalClassInitializer initializer) : base(initializer) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>

@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Native.Dummies;
 /// </summary>
 public partial interface IDummyEnvironment : IEnvironment
 {
+	Boolean IEnvironment.RealEnvironment => false;
+
 	/// <summary>
 	/// Creates a <see cref="JBooleanObject"/> wrapper instance for <paramref name="value"/>.
 	/// </summary>

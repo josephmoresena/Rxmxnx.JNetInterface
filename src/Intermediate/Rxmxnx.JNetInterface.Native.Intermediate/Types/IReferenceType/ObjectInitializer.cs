@@ -69,21 +69,13 @@ public partial interface IReferenceType
 		/// Retrieves a <see cref="InternalObjectInitializer"/> instance
 		/// from current instance.
 		/// </summary>
-		/// <param name="jClass">Override class.</param>
-		/// <returns>A <see cref="InternalObjectInitializer"/> value.</returns>
-		internal InternalObjectInitializer ToInternal(JClassObject jClass)
-			=> new() { Instance = this._instance.Instance, Class = jClass, };
-		/// <summary>
-		/// Retrieves a <see cref="InternalObjectInitializer"/> instance
-		/// from current instance.
-		/// </summary>
 		/// <typeparam name="TClass">Datatype class</typeparam>
 		/// <returns>A <see cref="InternalObjectInitializer"/> value.</returns>
 		internal InternalObjectInitializer ToInternal<TClass>() where TClass : IDataType<TClass>
 		{
 			IEnvironment env = this._instance.Instance.Environment;
 			JClassObject jClass = env.ClassFeature.GetClass<TClass>();
-			return this.ToInternal(jClass);
+			return new() { Instance = this._instance.Instance, Class = jClass, };
 		}
 		/// <summary>
 		/// Retrieves a <see cref="ObjectInitializer"/> instance from <paramref name="initializer"/>

@@ -27,6 +27,9 @@ public partial class JStringObject
 	/// </summary>
 	private String? _value;
 
+	/// <inheritdoc/>
+	private JStringObject(InternalClassInitializer initializer) : base(
+		IReferenceType.ClassInitializer.FromInternal(initializer)) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -52,13 +55,7 @@ public partial class JStringObject
 	}
 
 	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.ClassInitializer initializer)
-	{
-		IEnvironment env = initializer.Class.Environment;
-		JClassObject jClassClass = env.ClassFeature.StringClassObject;
-		JObjectLocalRef localRef = initializer.LocalReference;
-		JStringLocalRef stringRef = NativeUtilities.Transform<JObjectLocalRef, JStringLocalRef>(in localRef);
-		return new(jClassClass, stringRef);
-	}
+		=> new(initializer.ToInternal<JStringObject>());
 	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer.Instance);
 	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.GlobalInitializer initializer)
