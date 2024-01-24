@@ -15,16 +15,16 @@ public class JAccessibleObject : JLocalObject, IClassType<JAccessibleObject>, II
 	static JDataTypeMetadata IDataType.Metadata => JAccessibleObject.metadata;
 
 	/// <inheritdoc/>
-	internal JAccessibleObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
+	protected JAccessibleObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	internal JAccessibleObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	protected JAccessibleObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	internal JAccessibleObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+	protected JAccessibleObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JAccessibleObject? IReferenceType<JAccessibleObject>.Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JAccessibleObject>(jLocal)) : default;
-	static JAccessibleObject? IReferenceType<JAccessibleObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JAccessibleObject>(jGlobal, env)) :
-			default;
+	static JAccessibleObject IReferenceType<JAccessibleObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JAccessibleObject IReferenceType<JAccessibleObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JAccessibleObject IReferenceType<JAccessibleObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

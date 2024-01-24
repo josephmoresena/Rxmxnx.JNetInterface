@@ -19,8 +19,10 @@ public partial class JBufferObject
 	/// <inheritdoc cref="JBufferObject.IsDirect"/>
 	private Boolean? _isDirect;
 
-	static JBufferObject? IReferenceType<JBufferObject>.Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JBufferObject>(jLocal)) : default;
-	static JBufferObject? IReferenceType<JBufferObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JBufferObject>(jGlobal, env)) : default;
+	static JBufferObject IReferenceType<JBufferObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JBufferObject IReferenceType<JBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JBufferObject IReferenceType<JBufferObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

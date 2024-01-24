@@ -29,7 +29,19 @@ public interface IPrimitiveWrapperType : IClassType
 public interface IPrimitiveWrapperType<out TWrapper> : IPrimitiveWrapperType, IClassType<TWrapper>,
 	IInterfaceObject<JSerializableObject>, IInterfaceObject<JComparableObject>
 	where TWrapper : JLocalObject, IClassType<TWrapper>, IInterfaceObject<JSerializableObject>,
-	IInterfaceObject<JComparableObject>;
+	IInterfaceObject<JComparableObject>
+{
+	/// <summary>
+	/// Creates a <typeparamref name="TWrapper"/> instance from <paramref name="jLocal"/>.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>A <typeparamref name="TWrapper"/> instance from <paramref name="jLocal"/>.</returns>
+	internal static virtual TWrapper Create(JLocalObject jLocal)
+		=> TWrapper.Create(new ObjectInitializer(jLocal)
+		{
+			Class = jLocal.Environment.ClassFeature.GetClass<TWrapper>(),
+		});
+}
 
 /// <summary>
 /// This interface exposes an object that represents a java primitive wrapper class type instance.

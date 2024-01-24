@@ -16,24 +16,20 @@ public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclara
 
 	static JDataTypeMetadata IDataType.Metadata => JGenericDeclarationObject.typeMetadata;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	private JGenericDeclarationObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JGenericDeclarationObject(JLocalObject jLocal) : base(jLocal) { }
+	/// <inheritdoc/>
+	private JGenericDeclarationObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JGenericDeclarationObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JGenericDeclarationObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	/// <inheritdoc/>
-	public static JGenericDeclarationObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JGenericDeclarationObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JGenericDeclarationObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JGenericDeclarationObject>(jGlobal, env)) :
-			default;
+	static JGenericDeclarationObject IReferenceType<JGenericDeclarationObject>.Create(
+		IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JGenericDeclarationObject IReferenceType<JGenericDeclarationObject>.Create(
+		IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JGenericDeclarationObject IReferenceType<JGenericDeclarationObject>.Create(
+		IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

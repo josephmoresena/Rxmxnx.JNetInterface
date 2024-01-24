@@ -66,4 +66,10 @@ public partial interface IDummyEnvironment : IEnvironment
 	/// <param name="capacity">Capacity of created buffer.</param>
 	/// <returns>A <see cref="JDirectByteBufferObject"/> instance.</returns>
 	JDirectByteBufferObject CreateEphemeralByteBuffer(Int32 capacity);
+	/// <summary>
+	/// Retrieves the original <see cref="JLocalObject"/> instance for <paramref name="localRef"/>.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <returns>The original <see cref="JLocalObject"/> instance for <paramref name="localRef"/>.</returns>
+	JLocalObject? GetSourceInstance(JObjectLocalRef localRef);
 }

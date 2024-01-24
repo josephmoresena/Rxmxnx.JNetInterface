@@ -50,4 +50,17 @@ public partial class JClassObject
 		if (this._className is null || this._signature is null)
 			this.Environment.ClassFeature.GetClassInfo(this, out this._className, out this._signature, out this._hash);
 	}
+
+	static JClassObject IReferenceType<JClassObject>.Create(IReferenceType.ClassInitializer initializer)
+	{
+		IEnvironment env = initializer.Class.Environment;
+		JClassObject jClassClass = env.ClassFeature.ClassObject;
+		JObjectLocalRef localRef = initializer.LocalReference;
+		JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
+		return new(jClassClass, classRef);
+	}
+	static JClassObject IReferenceType<JClassObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> initializer.Instance.Environment.ClassFeature.AsClassObject(initializer.Instance);
+	static JClassObject IReferenceType<JClassObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> initializer.Environment.ClassFeature.AsClassObject(initializer.Global);
 }

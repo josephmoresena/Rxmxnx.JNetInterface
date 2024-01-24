@@ -15,14 +15,16 @@ public sealed class JDirectBufferObject : JInterfaceObject<JDirectBufferObject>,
 	static JDataTypeMetadata IDataType.Metadata => JDirectBufferObject.metadata;
 
 	/// <inheritdoc/>
-	private JDirectBufferObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	private JDirectBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JDirectBufferObject(JLocalObject jLocal) : base(jLocal) { }
+	private JDirectBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JDirectBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JDirectBufferObject? IReferenceType<JDirectBufferObject>.Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JDirectBufferObject>(jLocal)) : default;
-	static JDirectBufferObject? IReferenceType<JDirectBufferObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JDirectBufferObject>(jGlobal, env)) :
-			default;
+	static JDirectBufferObject IReferenceType<JDirectBufferObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JDirectBufferObject IReferenceType<JDirectBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JDirectBufferObject IReferenceType<JDirectBufferObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

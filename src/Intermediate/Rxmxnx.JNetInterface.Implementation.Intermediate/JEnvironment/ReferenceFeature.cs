@@ -13,14 +13,20 @@ partial class JEnvironment
 			JEnvironment env = this._mainClasses.Environment;
 			return this.VirtualMachine.CreateSynchronized(env, jObject);
 		}
-		public ObjectLifetime? GetLifetime(JLocalObject jLocal, JObjectLocalRef localRef, JClassObject? jClass,
-			Boolean overrideClass)
+
+		public ObjectLifetime GetLifetime(JLocalObject jLocal, InternalClassInitializer initializer)
 		{
-			ObjectLifetime? result = this._objects.GetLifetime(localRef);
-			if (result is null) return result;
+			IEnvironment env = this._mainClasses.Environment;
+			ObjectLifetime? result = this._objects.GetLifetime(initializer.LocalReference);
+			if (result is null)
+				return new(env, jLocal, initializer.LocalReference)
+				{
+					Class = initializer.Class,
+					IsRealClass = initializer.Class is not null && initializer.Class.IsFinal.GetValueOrDefault(),
+				};
 			result.Load(jLocal);
-			if (!result.IsRealClass && overrideClass && jClass is not null)
-				result.SetClass(jClass);
+			if (!result.IsRealClass && initializer.OverrideClass && initializer.Class is not null)
+				result.SetClass(initializer.Class);
 			return result;
 		}
 		public JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)

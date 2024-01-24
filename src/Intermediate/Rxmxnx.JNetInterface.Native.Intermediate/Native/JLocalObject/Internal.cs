@@ -5,11 +5,11 @@ public partial class JLocalObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	internal static readonly JClassTypeMetadata JObjectClassMetadata = JTypeMetadataBuilder<JLocalObject>
-	                                                                   .Create(JObject.JObjectClassName)
-	                                                                   .WithSignature(JObject.JObjectSignature).Build();
+	internal static readonly JClassTypeMetadata ObjectClassMetadata = JTypeMetadataBuilder<JLocalObject>
+	                                                                  .Create(JObject.JObjectClassName)
+	                                                                  .WithSignature(JObject.JObjectSignature).Build();
 
-	static JClassTypeMetadata IBaseClassType<JLocalObject>.SuperClassMetadata => JLocalObject.JObjectClassMetadata;
+	static JClassTypeMetadata IBaseClassType<JLocalObject>.SuperClassMetadata => JLocalObject.ObjectClassMetadata;
 
 	/// <summary>
 	/// Internal reference value.
@@ -86,10 +86,38 @@ public partial class JLocalObject
 	/// <param name="metadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <returns>Initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.</returns>
-	internal static TObject Create<TObject>(JClassObject jClass, JReferenceTypeMetadata metadata, JObjectLocalRef localRef)
-		where TObject : JLocalObject, IReferenceType<TObject>
+	internal static TObject Create<TObject>(JClassObject jClass, JReferenceTypeMetadata metadata,
+		JObjectLocalRef localRef) where TObject : JLocalObject, IReferenceType<TObject>
 	{
 		using JLocalObject jLocalTemp = new(jClass, localRef);
 		return (TObject)metadata.ParseInstance(jLocalTemp);
 	}
+
+	/// <summary>
+	/// Throws an exception if the global instance cannot be cast to <typeparamref name="TDataType"/> instance.
+	/// </summary>
+	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <returns>
+	/// </returns>
+	/// <exception cref="InvalidCastException">
+	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
+	/// </exception>
+	internal static JGlobalBase Validate<TDataType>(JGlobalBase jGlobal, IEnvironment env)
+		where TDataType : JLocalObject, IDataType<TDataType>
+		=> JLocalObject.Validate<JGlobalBase, TDataType>(jGlobal, env);
+	/// <summary>
+	/// Throws an exception if the local instance cannot be cast to <typeparamref name="TDataType"/> instance.
+	/// </summary>
+	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>
+	/// </returns>
+	/// <exception cref="InvalidCastException">
+	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
+	/// </exception>
+	internal static JLocalObject Validate<TDataType>(JLocalObject jLocal)
+		where TDataType : JLocalObject, IDataType<TDataType>
+		=> jLocal as TDataType ?? JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal._lifetime.Environment);
 }

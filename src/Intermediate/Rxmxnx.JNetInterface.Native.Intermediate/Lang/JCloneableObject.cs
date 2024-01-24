@@ -14,24 +14,17 @@ public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInte
 
 	static JDataTypeMetadata IDataType.Metadata => JCloneableObject.typeMetadata;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	private JCloneableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JCloneableObject(JLocalObject jLocal) : base(jLocal) { }
+	/// <inheritdoc/>
+	private JCloneableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JCloneableObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JCloneableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	/// <inheritdoc/>
-	public static JCloneableObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JCloneableObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JCloneableObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JCloneableObject>(jGlobal, env)) :
-			default;
+	static JCloneableObject IReferenceType<JCloneableObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JCloneableObject IReferenceType<JCloneableObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JCloneableObject IReferenceType<JCloneableObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

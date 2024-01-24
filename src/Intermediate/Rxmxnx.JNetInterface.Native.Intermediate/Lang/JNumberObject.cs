@@ -6,12 +6,14 @@ namespace Rxmxnx.JNetInterface.Lang;
 public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>, IInterfaceObject<JSerializableObject>
 {
 	/// <inheritdoc/>
-	protected JNumberObject(JClassObject jClass, JObjectLocalRef jLocalRef) : base(jClass, jLocalRef) { }
+	internal JNumberObject(JClassObject jClass, JObjectLocalRef jLocalRef) : base(jClass, jLocalRef) { }
+
 	/// <inheritdoc/>
-	protected JNumberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	protected JNumberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	protected JNumberObject(JLocalObject jLocal, JClassObject? jClass = default) : base(
-		jLocal, jClass ?? jLocal.Environment.ClassFeature.NumberClassObject) { }
+	protected JNumberObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	protected JNumberObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
 	/// <summary>
 	/// Returns the value of the specified number as a <typeparamref name="TPrimitive"/>, which may
@@ -22,11 +24,4 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>, II
 	public virtual TPrimitive GetValue<TPrimitive>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
 		=> this.Environment.Functions.GetPrimitiveValue<TPrimitive>(this);
-
-	/// <inheritdoc/>
-	public static JNumberObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JNumberObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JNumberObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JNumberObject>(jGlobal, env)) : default;
 }

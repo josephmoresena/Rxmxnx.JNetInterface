@@ -30,28 +30,26 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// </summary>
 	/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> initializer.</param>
 	protected JLocalObject(IReferenceType.ClassInitializer initializer)
-		=> this._lifetime = this.GetLifetime(initializer.Class.Environment, initializer.LocalReference,
-		                                     initializer.Class, initializer.RealClass);
+		=> this._lifetime = initializer.Class.Environment.ReferenceFeature.GetLifetime(this, initializer.ToInternal());
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	protected JLocalObject(IEnvironment env, JGlobalBase jGlobal) : base(jGlobal)
+	/// <param name="initializer">A <see cref="IReferenceType.GlobalInitializer"/> initializer.</param>
+	protected JLocalObject(IReferenceType.GlobalInitializer initializer) : base(initializer.Global)
 	{
-		this._lifetime = new(env, this, jGlobal);
-		JLocalObject.ProcessMetadata(this, jGlobal.ObjectMetadata);
+		this._lifetime = new(initializer.Environment, this, initializer.Global);
+		JLocalObject.ProcessMetadata(this, initializer.Global.ObjectMetadata);
 	}
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	protected JLocalObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal)
+	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> initializer.</param>
+	protected JLocalObject(IReferenceType.ObjectInitializer initializer) : base(initializer.Instance)
 	{
+		JLocalObject jLocal = initializer.Instance;
 		jLocal._lifetime.Load(this);
 		this._lifetime = jLocal._lifetime;
-		this._lifetime.SetClass(jClass);
+		this._lifetime.SetClass(initializer.Class);
 		if (jLocal is JInterfaceObject jInterface)
 			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
@@ -125,38 +123,4 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 		jClass = this.Class;
 		return this;
 	}
-
-	/// <summary>
-	/// Throws an exception if the global instance cannot be cast to <typeparamref name="TDataType"/> instance.
-	/// </summary>
-	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
-	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <returns>
-	/// </returns>
-	/// <exception cref="InvalidCastException">
-	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
-	/// </exception>
-	protected static JGlobalBase Validate<TDataType>(JGlobalBase jGlobal, IEnvironment env)
-		where TDataType : JLocalObject, IDataType<TDataType>
-		=> JLocalObject.Validate<JGlobalBase, TDataType>(jGlobal, env);
-
-	/// <summary>
-	/// Throws an exception if the local instance cannot be cast to <typeparamref name="TDataType"/> instance.
-	/// </summary>
-	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>
-	/// </returns>
-	/// <exception cref="InvalidCastException">
-	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
-	/// </exception>
-	protected static JLocalObject Validate<TDataType>(JLocalObject jLocal)
-		where TDataType : JLocalObject, IDataType<TDataType>
-		=> jLocal as TDataType ?? JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal._lifetime.Environment);
-
-	static JLocalObject? IReferenceType<JLocalObject>.Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(jLocal) : default;
-	static JLocalObject? IReferenceType<JLocalObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, jGlobal) : default;
 }

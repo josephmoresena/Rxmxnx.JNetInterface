@@ -29,6 +29,12 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	internal JReferenceTypeMetadata(CStringSequence information) : base(information) { }
 
 	/// <summary>
+	/// Creates a <see cref="IDataType"/> instance from <paramref name="initializer"/>.
+	/// </summary>
+	/// <param name="initializer">A <see cref="InternalClassInitializer"/> instance.</param>
+	/// <returns>A <see cref="IDataType"/> instance from <paramref name="initializer"/>.</returns>
+	internal virtual JLocalObject CreateInstance(InternalClassInitializer initializer) => default!;
+	/// <summary>
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>

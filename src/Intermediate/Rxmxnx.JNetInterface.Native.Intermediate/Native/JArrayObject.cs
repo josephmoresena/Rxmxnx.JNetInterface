@@ -86,20 +86,11 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObj
 	public static JArrayObject<TElement> Create(IEnvironment env, Int32 length, TElement initialElement)
 		=> env.ArrayFeature.CreateArray(length, initialElement);
 
-	/// <inheritdoc/>
-	public static JArrayObject<TElement>? Create(JLocalObject? jLocal)
-	{
-		if (JObject.IsNullOrDefault(jLocal))
-			return default;
-		if (jLocal is JArrayObject<TElement> jArray) return jArray;
-		if (IDataType.GetMetadata<TElement>() is JPrimitiveTypeMetadata primitiveMetadata)
-			ValidationUtilities.ThrowIfInvalidCast<JArrayObject<TElement>>(
-				primitiveMetadata.Kind == JTypeKind.Primitive);
-		return new(JLocalObject.Validate<JArrayObject<TElement>>(jLocal), jLocal.Class);
-	}
-	/// <inheritdoc/>
-	public static JArrayObject<TElement>? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JArrayObject<TElement>>(jGlobal, env)) :
-			default;
+	/// <summary>
+	/// Creates a <see cref="JArrayObject{TElement}"/> instance from <paramref name="jLocal"/>.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>A <see cref="JArrayObject{TElement}"/> instance from <paramref name="jLocal"/>.</returns>
+	internal static JArrayObject<TElement> Create(JLocalObject jLocal)
+		=> new(JLocalObject.Validate<JArrayObject<TElement>>(jLocal), jLocal.Class);
 }

@@ -11,26 +11,22 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	private TValue? _value;
 
 	/// <inheritdoc/>
-	internal JNumberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-	/// <inheritdoc/>
 	internal JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) : base(jClass, localRef)
 		=> this._value = value;
+
 	/// <inheritdoc/>
-	internal JNumberObject(JLocalObject jLocal, JClassObject jClass) : base(jLocal, jClass)
+	internal JNumberObject(InternalClassInitializer initializer) : base(
+		IReferenceType.ClassInitializer.FromInternal(initializer)) { }
+	/// <inheritdoc/>
+	internal JNumberObject(InternalGlobalInitializer initializer) : base(
+		IReferenceType.GlobalInitializer.FromInternal(initializer)) { }
+	/// <inheritdoc/>
+	internal JNumberObject(InternalObjectInitializer initializer) : base(
+		IReferenceType.ObjectInitializer.FromInternal(initializer))
 	{
+		JLocalObject jLocal = initializer.Instance;
 		if (jLocal is JNumberObject number)
 			this._value = number.GetValue<TValue>();
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <param name="value">Instance value.</param>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	internal JNumberObject(JLocalObject jLocal, TValue? value, JClassObject jClass) : base(jLocal, jClass)
-	{
-		this._value = value;
-		jLocal.Dispose();
 	}
 
 	/// <summary>
@@ -42,12 +38,9 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	/// <inheritdoc/>
 	public override TPrimitive GetValue<TPrimitive>()
 	{
-		if (typeof(TPrimitive) == typeof(TValue) && this._value is not null)
-		{
-			TValue result = this._value.Value;
-			return NativeUtilities.Transform<TValue, TPrimitive>(in result);
-		}
-		return base.GetValue<TPrimitive>();
+		if (typeof(TPrimitive) != typeof(TValue) || this._value is null) return base.GetValue<TPrimitive>();
+		TValue result = this._value.Value;
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
 	}
 
 	/// <inheritdoc/>
@@ -82,15 +75,14 @@ public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>, IP
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => IPrimitiveType.GetMetadata<TValue>();
 
 	/// <inheritdoc/>
-	internal JNumberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	internal JNumberObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.GetClass<TNumber>()) { }
-	/// <inheritdoc/>
 	internal JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) :
 		base(jClass, localRef, value) { }
+	/// <inheritdoc/>
+	internal JNumberObject(InternalClassInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	internal JNumberObject(InternalGlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	internal JNumberObject(InternalObjectInitializer initializer) : base(initializer) { }
 
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Value.Equals(other);
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Value.Equals(other);
@@ -98,14 +90,10 @@ public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>, IP
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => base.Equals(obj) || this.Value.Equals(obj);
+	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 
 	/// <inheritdoc cref="IPrimitiveWrapperType{TNumber, TValue}.Create(IEnvironment, Nullable{TValue})"/>
 	[return: NotNullIfNotNull(nameof(value))]
 	public static TNumber? Create(IEnvironment env, TValue? value) => TNumber.Create(env, value);
-	/// <inheritdoc cref="IReferenceType{TNumber}.Create(JLocalObject?)"/>
-	public new static TNumber? Create(JLocalObject? jLocal) => TNumber.Create(jLocal);
-	/// <inheritdoc cref="IReferenceType{TNumber}.Create(IEnvironment, JGlobalBase?)"/>
-	public new static TNumber? Create(IEnvironment env, JGlobalBase? jGlobal) => TNumber.Create(env, jGlobal);
 }
 #pragma warning restore CS0659

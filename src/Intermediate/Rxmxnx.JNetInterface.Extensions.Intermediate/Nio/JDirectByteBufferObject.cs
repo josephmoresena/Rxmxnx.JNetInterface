@@ -34,9 +34,11 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 		=> this._memory = memory;
 
 	/// <inheritdoc/>
-	protected JDirectByteBufferObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	protected JDirectByteBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	protected JDirectByteBufferObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+	protected JDirectByteBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	protected JDirectByteBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
 	/// <inheritdoc cref="JBufferObject.Address"/>
 	public new IntPtr Address => base.Address.GetValueOrDefault();
@@ -56,11 +58,13 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 		this._memory?.Dispose();
 	}
 
-	static JDirectByteBufferObject? IReferenceType<JDirectByteBufferObject>.Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JDirectByteBufferObject>(jLocal)) : default;
-	static JDirectByteBufferObject? IReferenceType<JDirectByteBufferObject>.
-		Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JDirectByteBufferObject>(jGlobal, env)) :
-			default;
+	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+		IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+		IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+		IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

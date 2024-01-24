@@ -8,19 +8,6 @@ public partial class JThrowableObject
 	private JStackTraceInfo[]? _stackTrace;
 
 	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	private JThrowableObject(JLocalObject jLocal) : base(
-		jLocal.ForExternalUse(out JClassObject jClass, out ObjectMetadata metadata), jClass)
-	{
-		if (metadata is not ThrowableObjectMetadata throwableMetadata)
-			return;
-		this._message ??= throwableMetadata.Message;
-		this._stackTrace ??= throwableMetadata.StackTrace;
-	}
-
-	/// <summary>
 	/// Retrieves the throwable message.
 	/// </summary>
 	/// <returns>Throwable message.</returns>
@@ -29,6 +16,7 @@ public partial class JThrowableObject
 		using JStringObject message = this.Environment.Functions.GetMessage(this);
 		return message.Value;
 	}
+
 	/// <summary>
 	/// Provides programmatic access to the stack trace information printed by printStackTrace();
 	/// </summary>
@@ -44,4 +32,11 @@ public partial class JThrowableObject
 			result[i] = ((StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]!))!;
 		return result;
 	}
+
+	static JThrowableObject IReferenceType<JThrowableObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JThrowableObject IReferenceType<JThrowableObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JThrowableObject IReferenceType<JThrowableObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

@@ -17,7 +17,7 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		public override JDataTypeMetadata ElementMetadata => IDataType.GetMetadata<TElement>();
 		/// <inheritdoc/>
-		public override JClassTypeMetadata BaseMetadata => JLocalObject.JObjectClassMetadata;
+		public override JClassTypeMetadata BaseMetadata => JLocalObject.ObjectClassMetadata;
 
 		/// <summary>
 		/// Constructor.

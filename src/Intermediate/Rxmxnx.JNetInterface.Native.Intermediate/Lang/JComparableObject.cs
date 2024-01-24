@@ -15,16 +15,16 @@ public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IIn
 	static JDataTypeMetadata IDataType.Metadata => JComparableObject.typeMetadata;
 
 	/// <inheritdoc/>
-	private JComparableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	private JComparableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JComparableObject(JLocalObject jLocal) : base(jLocal) { }
+	private JComparableObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JComparableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	/// <inheritdoc/>
-	public static JComparableObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JComparableObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JComparableObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JComparableObject>(jGlobal, env)) :
-			default;
+	static JComparableObject IReferenceType<JComparableObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JComparableObject IReferenceType<JComparableObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JComparableObject IReferenceType<JComparableObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

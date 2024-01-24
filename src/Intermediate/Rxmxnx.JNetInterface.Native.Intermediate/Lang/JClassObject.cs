@@ -143,10 +143,4 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	public static JClassObject LoadClass<TDataType>(IEnvironment env, ReadOnlySpan<Byte> rawClassBytes,
 		JLocalObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
 		=> env.ClassFeature.LoadClass<TDataType>(rawClassBytes, jClassLoader);
-	/// <inheritdoc/>
-	public static JClassObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? jLocal.Environment.ClassFeature.AsClassObject(jLocal) : default;
-	/// <inheritdoc/>
-	public static JClassObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? env.ClassFeature.AsClassObject(jGlobal) : default;
 }

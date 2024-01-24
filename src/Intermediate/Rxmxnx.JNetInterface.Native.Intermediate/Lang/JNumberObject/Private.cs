@@ -11,4 +11,11 @@ public partial class JNumberObject
 	                                                          .Implements<JSerializableObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JNumberObject.typeMetadata;
+
+	static JNumberObject IReferenceType<JNumberObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JNumberObject IReferenceType<JNumberObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JNumberObject IReferenceType<JNumberObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

@@ -15,13 +15,16 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	                                                      .Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JByteBufferObject.metadata;
+
 	/// <inheritdoc/>
 	internal JByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
 
 	/// <inheritdoc/>
-	protected JByteBufferObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	protected JByteBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	protected JByteBufferObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+	protected JByteBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	protected JByteBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
 	/// <summary>
 	/// Creates a direct <see cref="JByteBufferObject"/> instance.
@@ -79,10 +82,10 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 		Func<JByteBufferObject, TState, TResult> func)
 		=> env.NioFeature.WithDirectByteBuffer(capacity, state, func);
 
-	static JByteBufferObject? IReferenceType<JByteBufferObject>.Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JByteBufferObject>(jLocal)) : default;
-	static JByteBufferObject? IReferenceType<JByteBufferObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JByteBufferObject>(jGlobal, env)) :
-			default;
+	static JByteBufferObject IReferenceType<JByteBufferObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JByteBufferObject IReferenceType<JByteBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JByteBufferObject IReferenceType<JByteBufferObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

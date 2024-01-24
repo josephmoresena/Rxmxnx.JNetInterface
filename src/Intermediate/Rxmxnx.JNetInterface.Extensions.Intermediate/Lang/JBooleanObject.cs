@@ -26,7 +26,7 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => base.Equals(obj) || this.Value.Equals(obj);
+	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
@@ -48,11 +48,5 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	[return: NotNullIfNotNull(nameof(value))]
 	public static JBooleanObject? Create(IEnvironment env, JBoolean? value)
 		=> value is not null ? (JBooleanObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
-	/// <inheritdoc/>
-	public static JBooleanObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JBooleanObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JBooleanObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JBooleanObject>(jGlobal, env)) : default;
 }
 #pragma warning restore CS0659

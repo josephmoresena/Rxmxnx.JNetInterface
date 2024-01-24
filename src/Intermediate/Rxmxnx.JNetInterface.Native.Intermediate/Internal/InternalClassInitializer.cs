@@ -9,7 +9,7 @@ internal ref struct InternalClassInitializer
 	/// <summary>
 	/// Created object class.
 	/// </summary>
-	public JClassObject Class { get; set; }
+	public JClassObject? Class { get; set; }
 	/// <summary>
 	/// Created object reference.
 	/// </summary>
@@ -17,5 +17,5 @@ internal ref struct InternalClassInitializer
 	/// <summary>
 	/// Indicates whether <see cref="Class"/> is real object class.
 	/// </summary>
-	public Boolean RealClass { get; set; }
+	public Boolean OverrideClass { get; set; }
 }

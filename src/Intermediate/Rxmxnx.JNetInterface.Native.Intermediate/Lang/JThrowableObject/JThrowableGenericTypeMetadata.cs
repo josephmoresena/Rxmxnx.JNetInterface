@@ -41,7 +41,18 @@ public partial class JThrowableObject
 
 			/// <inheritdoc/>
 			internal override TThrowable? ParseInstance(JLocalObject? jLocal)
-				=> jLocal as TThrowable ?? TThrowable.Create(jLocal);
+			{
+				switch (jLocal)
+				{
+					case null:
+						return default;
+					case TThrowable result:
+						return result;
+					default:
+						JLocalObject.Validate<TThrowable>(jLocal);
+						return TThrowable.Create(jLocal);
+				}
+			}
 			/// <inheritdoc/>
 			internal override JThrowableException CreateException(JGlobalBase jGlobalThrowable,
 				String? exceptionMessage = default)

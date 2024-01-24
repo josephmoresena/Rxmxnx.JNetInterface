@@ -15,24 +15,20 @@ public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElement
 
 	static JDataTypeMetadata IDataType.Metadata => JAnnotatedElementObject.typeMetadata;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	private JAnnotatedElementObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JAnnotatedElementObject(JLocalObject jLocal) : base(jLocal) { }
+	/// <inheritdoc/>
+	private JAnnotatedElementObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JAnnotatedElementObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JAnnotatedElementObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	/// <inheritdoc/>
-	public static JAnnotatedElementObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JAnnotatedElementObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JAnnotatedElementObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JAnnotatedElementObject>(jGlobal, env)) :
-			default;
+	static JAnnotatedElementObject IReferenceType<JAnnotatedElementObject>.Create(
+		IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JAnnotatedElementObject IReferenceType<JAnnotatedElementObject>.Create(
+		IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JAnnotatedElementObject IReferenceType<JAnnotatedElementObject>.Create(
+		IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

@@ -10,7 +10,7 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// class metadata.
 	/// </summary>
 	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JAccessibleObject>
-	                                                      .Create<JAccessibleObject>(
+	                                                      .Create<JExecutableObject>(
 		                                                      UnicodeClassNames.ExecutableObject(),
 		                                                      JTypeModifier.Abstract)
 	                                                      .Implements<JAnnotatedElementObject>()
@@ -20,16 +20,16 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	static JDataTypeMetadata IDataType.Metadata => JExecutableObject.metadata;
 
 	/// <inheritdoc/>
-	internal JExecutableObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
+	protected JExecutableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	internal JExecutableObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	protected JExecutableObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	internal JExecutableObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+	protected JExecutableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JExecutableObject? IReferenceType<JExecutableObject>.Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JExecutableObject>(jLocal)) : default;
-	static JExecutableObject? IReferenceType<JExecutableObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JExecutableObject>(jGlobal, env)) :
-			default;
+	static JExecutableObject IReferenceType<JExecutableObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JExecutableObject IReferenceType<JExecutableObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JExecutableObject IReferenceType<JExecutableObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

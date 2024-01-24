@@ -32,13 +32,6 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 			return;
 		this._ordinal ??= enumMetadata.Ordinal;
 	}
-
-	/// <inheritdoc/>
-	public static JEnumObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JEnumObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JEnumObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JEnumObject>(jGlobal, env)) : default;
 }
 
 /// <summary>
@@ -51,13 +44,10 @@ public abstract class JEnumObject<TEnum> : JEnumObject, IDataType where TEnum : 
 
 	/// <inheritdoc/>
 	protected JEnumObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	protected JEnumObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.GetClass<TEnum>()) { }
 	/// <inheritdoc/>
-	protected JEnumObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	protected JEnumObject(IReferenceType.ObjectInitializer initializer) : base(initializer.ToInternal<TEnum>()) { }
+	/// <inheritdoc/>
+	protected JEnumObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
 
 	/// <inheritdoc/>
 	internal override String GetName()

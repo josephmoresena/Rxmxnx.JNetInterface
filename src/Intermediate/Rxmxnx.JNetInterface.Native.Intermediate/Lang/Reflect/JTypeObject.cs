@@ -13,22 +13,17 @@ public sealed class JTypeObject : JInterfaceObject<JTypeObject>, IInterfaceType<
 
 	static JDataTypeMetadata IDataType.Metadata => JTypeObject.typeMetadata;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	private JTypeObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JTypeObject(JLocalObject jLocal) : base(jLocal) { }
+	/// <inheritdoc/>
+	private JTypeObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JTypeObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JTypeObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	/// <inheritdoc/>
-	public static JTypeObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JTypeObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JTypeObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JTypeObject>(jGlobal, env)) : default;
+	static JTypeObject IReferenceType<JTypeObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JTypeObject IReferenceType<JTypeObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JTypeObject IReferenceType<JTypeObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

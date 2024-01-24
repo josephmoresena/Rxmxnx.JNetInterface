@@ -40,7 +40,19 @@ public partial class JLocalObject
 			}
 
 			/// <inheritdoc/>
-			internal override TClass? ParseInstance(JLocalObject? jLocal) => jLocal as TClass ?? TClass.Create(jLocal);
+			internal override TClass? ParseInstance(JLocalObject? jLocal)
+			{
+				switch (jLocal)
+				{
+					case null:
+						return default;
+					case TClass result:
+						return result;
+					default:
+						JLocalObject.Validate<TClass>(jLocal);
+						return TClass.Create(jLocal);
+				}
+			}
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata()
 				=> JReferenceTypeMetadata.GetArrayMetadata<TClass>();

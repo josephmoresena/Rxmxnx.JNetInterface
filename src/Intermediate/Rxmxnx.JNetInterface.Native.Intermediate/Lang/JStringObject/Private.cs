@@ -50,4 +50,17 @@ public partial class JStringObject
 		IEnvironment env = arg.jStr.Environment;
 		env.StringFeature.GetCopy(arg.jStr, chars, arg.startIndex);
 	}
+
+	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.ClassInitializer initializer)
+	{
+		IEnvironment env = initializer.Class.Environment;
+		JClassObject jClassClass = env.ClassFeature.StringClassObject;
+		JObjectLocalRef localRef = initializer.LocalReference;
+		JStringLocalRef stringRef = NativeUtilities.Transform<JObjectLocalRef, JStringLocalRef>(in localRef);
+		return new(jClassClass, stringRef);
+	}
+	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer.Instance);
+	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer.Environment, initializer.Global);
 }

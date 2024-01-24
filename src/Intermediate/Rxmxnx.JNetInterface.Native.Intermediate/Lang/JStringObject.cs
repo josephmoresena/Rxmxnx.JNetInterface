@@ -140,11 +140,4 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <inheritdoc cref="JStringObject.Create(IEnvironment, CString)"/>
 	public static JStringObject Create(IEnvironment env, ReadOnlySpan<Byte> utf8Data)
 		=> env.StringFeature.Create(new CString(utf8Data));
-
-	/// <inheritdoc/>
-	public static JStringObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JStringObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JStringObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JStringObject>(jGlobal, env)) : default;
 }

@@ -3,9 +3,12 @@ namespace Rxmxnx.JNetInterface.Native.Dummies;
 public partial interface IDummyEnvironment
 {
 	Boolean IReferenceFeature.RealEnvironment => false;
-	ObjectLifetime? IReferenceFeature.GetLifetime(JLocalObject jLocal, JObjectLocalRef localRef, JClassObject? jClass,
-		Boolean overrideClass)
-		=> default;
+	ObjectLifetime IReferenceFeature.GetLifetime(JLocalObject jLocal, InternalClassInitializer initializer)
+		=> this.GetSourceInstance(initializer.LocalReference)?.Lifetime ?? new(this, jLocal, initializer.LocalReference)
+		{
+			Class = initializer.Class,
+			IsRealClass = initializer.Class is not null && initializer.Class.IsFinal.GetValueOrDefault(),
+		};
 	JLocalObject IReferenceFeature.CreateWrapper<TPrimitive>(TPrimitive primitive)
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();

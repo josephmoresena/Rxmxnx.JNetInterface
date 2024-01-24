@@ -22,9 +22,9 @@ public partial class JStackTraceElementObject
 	private String? _methodName;
 	/// <inheritdoc cref="JStackTraceElementObject.NativeMethod"/>
 	private Boolean? _nativeMethod;
-	
-	/// <inheritdoc />
-	private JStackTraceElementObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) {}
+
+	/// <inheritdoc/>
+	private JStackTraceElementObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	private JStackTraceElementObject(JLocalObject jLocal) : base(
 		jLocal, jLocal.Environment.ClassFeature.GetClass<JStackTraceElementObject>())
@@ -67,4 +67,14 @@ public partial class JStackTraceElementObject
 		using JStringObject jString = this.Environment.Functions.GetMethodName(this);
 		return jString.Value;
 	}
+
+	static JStackTraceElementObject IReferenceType<JStackTraceElementObject>.Create(
+		IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JStackTraceElementObject IReferenceType<JStackTraceElementObject>.Create(
+		IReferenceType.ObjectInitializer initializer)
+		=> new(initializer.Instance);
+	static JStackTraceElementObject IReferenceType<JStackTraceElementObject>.Create(
+		IReferenceType.GlobalInitializer initializer)
+		=> new(initializer.Environment, initializer.Global);
 }

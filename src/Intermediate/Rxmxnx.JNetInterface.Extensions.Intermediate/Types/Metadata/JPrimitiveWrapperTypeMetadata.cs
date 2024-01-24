@@ -32,7 +32,19 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 		=> this._baseMetadata = baseMetadata ?? IClassType.GetMetadata<JLocalObject>();
 
 	/// <inheritdoc/>
-	internal override TWrapper? ParseInstance(JLocalObject? jLocal) => jLocal as TWrapper ?? TWrapper.Create(jLocal);
+	internal override TWrapper? ParseInstance(JLocalObject? jLocal)
+	{
+		switch (jLocal)
+		{
+			case null:
+				return default;
+			case TWrapper result:
+				return result;
+			default:
+				JLocalObject.Validate<TWrapper>(jLocal);
+				return TWrapper.Create(jLocal);
+		}
+	}
 	/// <inheritdoc/>
 	internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TWrapper>();
 }

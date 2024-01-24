@@ -13,14 +13,19 @@ public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrim
 		base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JDoubleObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	private JDoubleObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
 	/// <inheritdoc/>
-	private JDoubleObject(JLocalObject jLocal) : base(jLocal) { }
+	private JDoubleObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	/// <inheritdoc/>
+	private JDoubleObject(IReferenceType.ObjectInitializer initializer) :
+		base(initializer.ToInternal<JDoubleObject>()) { }
 
-	static JDoubleObject? IReferenceType<JDoubleObject>.Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JDoubleObject>(jLocal)) : default;
-	static JDoubleObject? IReferenceType<JDoubleObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JDoubleObject>(jGlobal, env)) : default;
 	static JDoubleObject? IPrimitiveWrapperType<JDoubleObject, JDouble>.Create(IEnvironment env, JDouble? value)
 		=> value is not null ? (JDoubleObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
+	static JDoubleObject IReferenceType<JDoubleObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JDoubleObject IReferenceType<JDoubleObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JDoubleObject IReferenceType<JDoubleObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

@@ -16,26 +16,6 @@ public partial class JLocalObject : ILocalObject
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
 
 	/// <summary>
-	/// Retrieves <see cref="ObjectLifetime"/> for <see cref="JLocalObject"/> instantiation.
-	/// </summary>
-	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	/// <param name="overrideClass">Indicates whether <paramref name="jClass"/> must override current class.</param>
-	/// <returns></returns>
-	private ObjectLifetime GetLifetime(IEnvironment env, JObjectLocalRef localRef, JClassObject? jClass,
-		Boolean overrideClass = false)
-	{
-		ObjectLifetime? result = default;
-		if (localRef != default)
-			result = this.Environment.ReferenceFeature.GetLifetime(this, localRef, jClass, overrideClass);
-		return result ?? new(env, this, localRef)
-		{
-			Class = jClass, IsRealClass = jClass is not null && jClass.IsFinal.GetValueOrDefault(),
-		};
-	}
-
-	/// <summary>
 	/// Process the object metadata.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
@@ -61,4 +41,11 @@ public partial class JLocalObject : ILocalObject
 		ValidationUtilities.ThrowIfInvalidCast<TDataType>(env.ClassFeature.IsAssignableTo<TDataType>(jObject));
 		return jObject;
 	}
+
+	static JLocalObject IReferenceType<JLocalObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JLocalObject IReferenceType<JLocalObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JLocalObject IReferenceType<JLocalObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

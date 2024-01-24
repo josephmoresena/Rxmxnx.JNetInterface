@@ -29,7 +29,18 @@ public partial class JInterfaceObject
 
 			/// <inheritdoc/>
 			internal override TInterface? ParseInstance(JLocalObject? jLocal)
-				=> jLocal as TInterface ?? TInterface.Create(jLocal);
+			{
+				switch (jLocal)
+				{
+					case null:
+						return default;
+					case TInterface result:
+						return result;
+					default:
+						JLocalObject.Validate<TInterface>(jLocal);
+						return TInterface.Create(jLocal);
+				}
+			}
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata()
 				=> JReferenceTypeMetadata.GetArrayMetadata<TInterface>();

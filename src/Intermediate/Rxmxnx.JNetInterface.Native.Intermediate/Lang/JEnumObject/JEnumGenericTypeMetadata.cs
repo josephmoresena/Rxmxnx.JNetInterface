@@ -36,7 +36,19 @@ public partial class JEnumObject
 			}
 
 			/// <inheritdoc/>
-			internal override TEnum? ParseInstance(JLocalObject? jLocal) => jLocal as TEnum ?? TEnum.Create(jLocal);
+			internal override TEnum? ParseInstance(JLocalObject? jLocal)
+			{
+				switch (jLocal)
+				{
+					case null:
+						return default;
+					case TEnum result:
+						return result;
+					default:
+						JLocalObject.Validate<TEnum>(jLocal);
+						return TEnum.Create(jLocal);
+				}
+			}
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TEnum>();
 		}

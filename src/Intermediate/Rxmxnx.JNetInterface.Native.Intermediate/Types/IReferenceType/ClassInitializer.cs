@@ -18,7 +18,7 @@ public partial interface IReferenceType
 		/// </summary>
 		public JClassObject Class
 		{
-			get => this._instance.Class;
+			get => this._instance.Class!;
 			init => this._instance.Class = value;
 		}
 		/// <summary>
@@ -35,8 +35,8 @@ public partial interface IReferenceType
 		/// </summary>
 		internal Boolean RealClass
 		{
-			get => this._instance.RealClass;
-			init => this._instance.RealClass = value;
+			get => this._instance.OverrideClass;
+			init => this._instance.OverrideClass = value;
 		}
 
 		/// <summary>
@@ -51,7 +51,6 @@ public partial interface IReferenceType
 		/// </summary>
 		/// <returns>A <see cref="InternalClassInitializer"/> value.</returns>
 		internal InternalClassInitializer ToInternal() => this._instance;
-
 		/// <summary>
 		/// Retrieves a <see cref="ClassInitializer"/> instance from <paramref name="initializer"/>
 		/// </summary>

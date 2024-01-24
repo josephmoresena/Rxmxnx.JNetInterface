@@ -8,15 +8,22 @@ public sealed partial class JBooleanObject
 	/// <inheritdoc cref="JBooleanObject.Value"/>
 	private JBoolean? _value;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	private JBooleanObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.BooleanObject)
+	/// <inheritdoc/>
+	private JBooleanObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JBooleanObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JBooleanObject(IReferenceType.ObjectInitializer initializer) : base(initializer)
 	{
+		JLocalObject jLocal = initializer.Instance;
 		if (jLocal is JBooleanObject wrapper)
 			this._value = wrapper._value;
 	}
-	/// <inheritdoc/>
-	private JBooleanObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+
+	static JBooleanObject IReferenceType<JBooleanObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JBooleanObject IReferenceType<JBooleanObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer.WithClass<JBooleanObject>());
+	static JBooleanObject IReferenceType<JBooleanObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

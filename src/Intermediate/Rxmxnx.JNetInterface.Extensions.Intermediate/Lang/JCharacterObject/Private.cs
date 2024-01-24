@@ -8,15 +8,22 @@ public sealed partial class JCharacterObject
 	/// <inheritdoc cref="JCharacterObject.Value"/>
 	private JChar? _value;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	private JCharacterObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.CharacterObject)
+	/// <inheritdoc/>
+	private JCharacterObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JCharacterObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JCharacterObject(IReferenceType.ObjectInitializer initializer) : base(initializer)
 	{
+		JLocalObject jLocal = initializer.Instance;
 		if (jLocal is JCharacterObject wrapper)
 			this._value = wrapper._value;
 	}
-	/// <inheritdoc/>
-	private JCharacterObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+
+	static JCharacterObject IReferenceType<JCharacterObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JCharacterObject IReferenceType<JCharacterObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer.WithClass<JCharacterObject>());
+	static JCharacterObject IReferenceType<JCharacterObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

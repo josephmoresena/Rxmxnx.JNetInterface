@@ -26,18 +26,23 @@ public interface IReferenceType<out TReference> : IReferenceType, IDataType<TRef
 	where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>
-	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.
+	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
 	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.</returns>
-	static abstract TReference? Create(JLocalObject? jLocal);
+	/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> instance.</param>
+	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
+	protected static abstract TReference Create(ClassInitializer initializer);
 	/// <summary>
-	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="jGlobal"/>.
+	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
 	/// </summary>
-	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
-	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="jGlobal"/>.</returns>
-	static abstract TReference? Create(IEnvironment env, JGlobalBase? jGlobal);
+	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
+	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
+	protected static abstract TReference Create(ObjectInitializer initializer);
+	/// <summary>
+	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
+	/// </summary>
+	/// <param name="initializer">A <see cref="IReferenceType.GlobalInitializer"/> instance.</param>
+	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
+	protected static abstract TReference Create(GlobalInitializer initializer);
 
 	/// <summary>
 	/// Retrieves the base types from current type.

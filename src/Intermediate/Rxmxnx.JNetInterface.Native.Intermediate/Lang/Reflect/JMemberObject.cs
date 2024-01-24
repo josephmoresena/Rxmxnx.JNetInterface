@@ -14,14 +14,16 @@ public sealed class JMemberObject : JInterfaceObject<JMemberObject>, IInterfaceT
 	static JDataTypeMetadata IDataType.Metadata => JMemberObject.metadata;
 
 	/// <inheritdoc/>
-	private JMemberObject(JLocalObject jLocal) : base(jLocal) { }
+	private JMemberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JMemberObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	private JMemberObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private JMemberObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	/// <inheritdoc/>
-	public static JMemberObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JMemberObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JMemberObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JMemberObject>(jGlobal, env)) : default;
+	static JMemberObject IReferenceType<JMemberObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JMemberObject IReferenceType<JMemberObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JMemberObject IReferenceType<JMemberObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

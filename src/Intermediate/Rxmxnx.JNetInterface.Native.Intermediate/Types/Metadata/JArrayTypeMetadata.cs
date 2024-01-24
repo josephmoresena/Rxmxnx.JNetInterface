@@ -119,6 +119,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	{
 		try
 		{
+			if (jLocal is null) return default;
 			return jLocal as JArrayObject<TElement> ?? JArrayObject<TElement>.Create(jLocal);
 		}
 		catch (Exception)

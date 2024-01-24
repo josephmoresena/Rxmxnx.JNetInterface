@@ -26,7 +26,7 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => base.Equals(obj) || this.Value.Equals(obj);
+	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
 		=> new PrimitiveWrapperObjectMetadata<JChar>(base.CreateMetadata()) { Value = this.Value, };
@@ -47,13 +47,5 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	[return: NotNullIfNotNull(nameof(value))]
 	public static JCharacterObject? Create(IEnvironment env, JChar? value)
 		=> value is not null ? (JCharacterObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
-	/// <inheritdoc/>
-	public static JCharacterObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JCharacterObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JCharacterObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JCharacterObject>(jGlobal, env)) :
-			default;
 }
 #pragma warning restore CS0659

@@ -13,14 +13,19 @@ public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimi
 		base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JIntegerObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	private JIntegerObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
 	/// <inheritdoc/>
-	private JIntegerObject(JLocalObject jLocal) : base(jLocal) { }
+	private JIntegerObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	/// <inheritdoc/>
+	private JIntegerObject(IReferenceType.ObjectInitializer initializer) : base(
+		initializer.ToInternal<JIntegerObject>()) { }
 
-	static JIntegerObject? IReferenceType<JIntegerObject>.Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JIntegerObject>(jLocal)) : default;
-	static JIntegerObject? IReferenceType<JIntegerObject>.Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ? new(env, JLocalObject.Validate<JIntegerObject>(jGlobal, env)) : default;
 	static JIntegerObject? IPrimitiveWrapperType<JIntegerObject, JInt>.Create(IEnvironment env, JInt? value)
 		=> value is not null ? (JIntegerObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
+	static JIntegerObject IReferenceType<JIntegerObject>.Create(IReferenceType.ClassInitializer initializer)
+		=> new(initializer);
+	static JIntegerObject IReferenceType<JIntegerObject>.Create(IReferenceType.ObjectInitializer initializer)
+		=> new(initializer);
+	static JIntegerObject IReferenceType<JIntegerObject>.Create(IReferenceType.GlobalInitializer initializer)
+		=> new(initializer);
 }

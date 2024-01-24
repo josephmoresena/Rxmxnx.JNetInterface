@@ -57,13 +57,4 @@ public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<
 		this._methodName = traceElementMetadata.Information?.MethodName;
 		this._nativeMethod = traceElementMetadata.Information?.NativeMethod;
 	}
-
-	/// <inheritdoc/>
-	public static JStackTraceElementObject? Create(JLocalObject? jLocal)
-		=> !JObject.IsNullOrDefault(jLocal) ? new(JLocalObject.Validate<JStackTraceElementObject>(jLocal)) : default;
-	/// <inheritdoc/>
-	public static JStackTraceElementObject? Create(IEnvironment env, JGlobalBase? jGlobal)
-		=> !JObject.IsNullOrDefault(jGlobal) ?
-			new(env, JLocalObject.Validate<JStackTraceElementObject>(jGlobal, env)) :
-			default;
 }

@@ -27,9 +27,11 @@ public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>, IL
 	internal JBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
 
 	/// <inheritdoc/>
-	protected JBufferObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	protected JBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	protected JBufferObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+	protected JBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	protected JBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
@@ -62,9 +64,11 @@ public abstract class JBufferObject<TValue> : JBufferObject, IInterfaceObject<JC
 	internal JBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
 
 	/// <inheritdoc/>
-	protected JBufferObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+	protected JBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	protected JBufferObject(JLocalObject jLocal, JClassObject? jClass = default) : base(jLocal, jClass) { }
+	protected JBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	protected JBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
 	/// <summary>
 	/// Creates a <see cref="IDirectBufferObject{TValue}"/> from current buffer if is direct.
