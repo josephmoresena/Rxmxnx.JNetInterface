@@ -21,13 +21,15 @@ partial class JEnvironment
 		public JClassObject AsClassObject(JReferenceObject jObject)
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);
-			this.ReloadClass(jObject as JClassObject);
+			if (jObject is JClassObject jClass) return jClass;
 			ValidationUtilities.ThrowIfDefault(jObject);
+			if (!jObject.IsInstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
 			JEnvironment env = this._mainClasses.Environment;
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			JObjectLocalRef localRef = jniTransaction.Add(jObject);
-			JClassLocalRef classRef = jniTransaction.Add(env.GetObjectClass(localRef));
-			return env.GetClass(classRef, true);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
+			JClassObject result = env.GetClass(classRef, true);
+			if (jObject is ILocalObject local) result.Lifetime.Synchronize(local.Lifetime);
+			return result;
 		}
 		public Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
 			where TDataType : JReferenceObject, IDataType<TDataType>
