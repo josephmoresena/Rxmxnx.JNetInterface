@@ -28,6 +28,25 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	}
 
 	/// <summary>
+	/// Retrieves a <typeparamref name="TReference"/> instance from current global instance.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
+	public TReference AsLocal<TReference>(IEnvironment env) where TReference : JLocalObject, IReferenceType<TReference>
+	{
+		if (JLocalObject.IsClassType<TReference>())
+			return (TReference)(Object)env.ClassFeature.AsClassObject(this);
+		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
+		if (!this.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
+			return (TReference)metadata.ParseInstance(env, this);
+
+		JClassObject jClass = env.ClassFeature.AsClassObject(this);
+		if (JLocalObject.IsObjectType<TReference>()) return (TReference)(Object)jClass;
+		return (TReference)metadata.ParseInstance(jClass);
+	}
+
+	/// <summary>
 	/// Destructor.
 	/// </summary>
 	~JGlobalBase()

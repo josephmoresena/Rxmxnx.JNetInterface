@@ -293,13 +293,12 @@ public readonly ref partial struct JniCall
 		public Builder WithParameter<TObject>(JObjectLocalRef localRef, out TObject jLocal)
 			where TObject : JLocalObject, IReferenceType<TObject>
 		{
-			Type typeofT = typeof(TObject);
-			if (typeofT == typeof(JLocalObject))
+			if (JLocalObject.IsObjectType<TObject>())
 			{
 				Unsafe.SkipInit(out jLocal);
 				return this.WithParameter(localRef, out Unsafe.As<TObject, JLocalObject>(ref jLocal));
 			}
-			if (typeofT == typeof(JLocalObject))
+			if (JLocalObject.IsClassType<TObject>())
 			{
 				Unsafe.SkipInit(out jLocal);
 				JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);

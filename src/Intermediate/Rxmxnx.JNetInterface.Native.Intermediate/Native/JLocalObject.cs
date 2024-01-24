@@ -66,6 +66,41 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	public override CString ObjectSignature => this._lifetime.Class?.ClassSignature ?? JObject.JObjectSignature;
 
 	/// <summary>
+	/// Retrieves a <typeparamref name="TReference"/> instance from current local instance.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	/// <param name="dispose">
+	/// Optional. Indicates whether current instance should be disposed after casting.
+	/// </param>
+	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
+	public TReference CastTo<TReference>(Boolean dispose = false)
+		where TReference : JLocalObject, IReferenceType<TReference>
+	{
+		IEnvironment env = this._lifetime.Environment;
+		if (this is TReference result) return result;
+		try
+		{
+			if (JLocalObject.IsClassType<TReference>())
+				return (TReference)(Object)env.ClassFeature.AsClassObject(this);
+			JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
+			if (!this.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
+				return (TReference)metadata.ParseInstance(this);
+
+			JClassObject jClass = env.ClassFeature.AsClassObject(this);
+			if (JLocalObject.IsObjectType<TReference>()) return (TReference)(Object)jClass;
+			return (TReference)metadata.ParseInstance(jClass);
+		}
+		catch (Exception)
+		{
+			dispose = false;
+			throw;
+		}
+		finally
+		{
+			if (dispose) this.Dispose();
+		}
+	}
+	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>

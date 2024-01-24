@@ -40,6 +40,13 @@ public partial class JThrowableObject
 			}
 
 			/// <inheritdoc/>
+			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+				Boolean realClass = false)
+				=> TThrowable.Create(new IReferenceType.ClassInitializer
+				{
+					Class = jClass, RealClass = realClass, LocalReference = localRef,
+				});
+			/// <inheritdoc/>
 			internal override TThrowable? ParseInstance(JLocalObject? jLocal)
 			{
 				switch (jLocal)
@@ -52,6 +59,14 @@ public partial class JThrowableObject
 						JLocalObject.Validate<TThrowable>(jLocal);
 						return TThrowable.Create(jLocal);
 				}
+			}
+			/// <inheritdoc/>
+			internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+			{
+				if (jGlobal is null) return default;
+				if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))
+					JLocalObject.Validate<TThrowable>(jGlobal, env);
+				return TThrowable.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
 			/// <inheritdoc/>
 			internal override JThrowableException CreateException(JGlobalBase jGlobalThrowable,

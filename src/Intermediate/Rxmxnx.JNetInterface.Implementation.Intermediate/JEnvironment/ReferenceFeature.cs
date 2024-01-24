@@ -193,7 +193,7 @@ partial class JEnvironment
 		private TObject? Cast<TObject>(JLocalObject? jLocal, Boolean register = true) where TObject : IDataType<TObject>
 		{
 			if (jLocal is null || jLocal.IsDefault) return default;
-			if (typeof(TObject) == typeof(JLocalObject))
+			if (JLocalObject.IsObjectType<TObject>())
 				return register ? this.Register((TObject)(Object)jLocal) : (TObject)(Object)jLocal;
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
 			TObject result = (TObject)(Object)metadata.ParseInstance(jLocal);

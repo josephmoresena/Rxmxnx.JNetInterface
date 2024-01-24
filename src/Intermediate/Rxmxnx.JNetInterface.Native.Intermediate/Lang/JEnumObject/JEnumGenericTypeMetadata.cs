@@ -36,6 +36,17 @@ public partial class JEnumObject
 			}
 
 			/// <inheritdoc/>
+			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+				Boolean realClass = false)
+			{
+				IEnvironment env = jClass.Environment;
+				JClassObject enumClass = env.ClassFeature.GetClass<TEnum>();
+				return TEnum.Create(new IReferenceType.ClassInitializer
+				{
+					Class = enumClass, LocalReference = localRef, RealClass = true,
+				});
+			}
+			/// <inheritdoc/>
 			internal override TEnum? ParseInstance(JLocalObject? jLocal)
 			{
 				switch (jLocal)
@@ -48,6 +59,14 @@ public partial class JEnumObject
 						JLocalObject.Validate<TEnum>(jLocal);
 						return TEnum.Create(jLocal);
 				}
+			}
+			/// <inheritdoc/>
+			internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+			{
+				if (jGlobal is null) return default;
+				if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))
+					JLocalObject.Validate<TEnum>(jGlobal, env);
+				return TEnum.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TEnum>();

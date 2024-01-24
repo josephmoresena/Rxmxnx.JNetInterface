@@ -73,6 +73,28 @@ public partial class JLocalObject
 	}
 
 	/// <summary>
+	/// Indicates whether <see cref="IDataType{TDataType}"/> CLR type is the CLR type of
+	/// <see cref="JLocalObject"/>.
+	/// </summary>
+	/// <typeparam name="TDataType">Generic <see cref="IDataType{TDataType}"/> type.</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if <see cref="IDataType{TDataType}"/> type is the CLR type of <see cref="JLocalObject"/>;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	internal static Boolean IsObjectType<TDataType>() where TDataType : IDataType<TDataType>
+		=> typeof(TDataType) == typeof(JLocalObject);
+	/// <summary>
+	/// Indicates whether <see cref="IDataType{TDataType}"/> CLR type is the CLR type of
+	/// <see cref="JClassObject"/>.
+	/// </summary>
+	/// <typeparam name="TDataType">Generic <see cref="IDataType{TDataType}"/> type.</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if <see cref="IDataType{TDataType}"/> type is the CLR type of <see cref="JClassObject"/>;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	internal static Boolean IsClassType<TDataType>() where TDataType : IDataType<TDataType>
+		=> typeof(TDataType) == typeof(JClassObject);
+	/// <summary>
 	/// Retrieves the loaded global object for given object.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
@@ -99,12 +121,10 @@ public partial class JLocalObject
 	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <returns>
-	/// </returns>
 	/// <exception cref="InvalidCastException">
 	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
 	/// </exception>
-	internal static JGlobalBase Validate<TDataType>(JGlobalBase jGlobal, IEnvironment env)
+	internal static void Validate<TDataType>(JGlobalBase jGlobal, IEnvironment env)
 		where TDataType : JLocalObject, IDataType<TDataType>
 		=> JLocalObject.Validate<JGlobalBase, TDataType>(jGlobal, env);
 	/// <summary>
@@ -113,6 +133,7 @@ public partial class JLocalObject
 	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>
+	///     <paramref name="jLocal"/>
 	/// </returns>
 	/// <exception cref="InvalidCastException">
 	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.

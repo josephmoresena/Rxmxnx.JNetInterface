@@ -32,6 +32,14 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 		=> this._baseMetadata = baseMetadata ?? IClassType.GetMetadata<JLocalObject>();
 
 	/// <inheritdoc/>
+	internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+		Boolean realClass = false)
+	{
+		IEnvironment env = jClass.Environment;
+		JClassObject wrapperClass = env.ClassFeature.GetClass<TWrapper>();
+		return TWrapper.Create(wrapperClass, localRef);
+	}
+	/// <inheritdoc/>
 	internal override TWrapper? ParseInstance(JLocalObject? jLocal)
 	{
 		switch (jLocal)
@@ -44,6 +52,14 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 				JLocalObject.Validate<TWrapper>(jLocal);
 				return TWrapper.Create(jLocal);
 		}
+	}
+	/// <inheritdoc/>
+	internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+	{
+		if (jGlobal is null) return default;
+		if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))
+			JLocalObject.Validate<TWrapper>(jGlobal, env);
+		return TWrapper.Create(env, jGlobal);
 	}
 	/// <inheritdoc/>
 	internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TWrapper>();

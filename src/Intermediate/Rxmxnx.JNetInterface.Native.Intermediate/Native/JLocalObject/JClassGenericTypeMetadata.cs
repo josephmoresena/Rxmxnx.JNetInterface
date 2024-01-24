@@ -40,6 +40,13 @@ public partial class JLocalObject
 			}
 
 			/// <inheritdoc/>
+			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+				Boolean realClass = false)
+				=> TClass.Create(new IReferenceType.ClassInitializer
+				{
+					Class = jClass, RealClass = realClass, LocalReference = localRef,
+				});
+			/// <inheritdoc/>
 			internal override TClass? ParseInstance(JLocalObject? jLocal)
 			{
 				switch (jLocal)
@@ -52,6 +59,14 @@ public partial class JLocalObject
 						JLocalObject.Validate<TClass>(jLocal);
 						return TClass.Create(jLocal);
 				}
+			}
+			/// <inheritdoc/>
+			internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+			{
+				if (jGlobal is null) return default;
+				if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))
+					JLocalObject.Validate<TClass>(jGlobal, env);
+				return TClass.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata()

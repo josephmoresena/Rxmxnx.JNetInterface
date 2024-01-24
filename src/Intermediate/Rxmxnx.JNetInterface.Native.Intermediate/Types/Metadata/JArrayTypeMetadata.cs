@@ -112,21 +112,6 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 			return default;
 		}
 	}
-	/// <inheritdoc cref="JReferenceTypeMetadata.ParseInstance(JLocalObject)"/>
-	/// <typeparam name="TElement">A <see cref="IDataType{TElement}"/> element type.</typeparam>
-	protected static JArrayObject? ParseInstance<TElement>(JLocalObject? jLocal)
-		where TElement : IObject, IDataType<TElement>
-	{
-		try
-		{
-			if (jLocal is null) return default;
-			return jLocal as JArrayObject<TElement> ?? JArrayObject<TElement>.Create(jLocal);
-		}
-		catch (Exception)
-		{
-			return default;
-		}
-	}
 
 	/// <summary>
 	/// Retrieves metadata for the array of arrays of <paramref name="typeofElement"/>.

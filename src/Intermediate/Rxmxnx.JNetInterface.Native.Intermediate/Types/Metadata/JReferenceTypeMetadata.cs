@@ -29,11 +29,15 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	internal JReferenceTypeMetadata(CStringSequence information) : base(information) { }
 
 	/// <summary>
-	/// Creates a <see cref="IDataType"/> instance from <paramref name="initializer"/>.
+	/// Creates a <see cref="IDataType"/> instance from <paramref name="localRef"/> using
+	/// <paramref name="jClass"/>.
 	/// </summary>
-	/// <param name="initializer">A <see cref="InternalClassInitializer"/> instance.</param>
-	/// <returns>A <see cref="IDataType"/> instance from <paramref name="initializer"/>.</returns>
-	internal virtual JLocalObject CreateInstance(InternalClassInitializer initializer) => default!;
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="realClass">Indicates whether <paramref name="jClass"/> is instance real class.</param>
+	/// <returns>A <see cref="IDataType"/> instance from <paramref name="localRef"/> and <paramref name="jClass"/>.</returns>
+	internal abstract JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+		Boolean realClass = false);
 	/// <summary>
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="jLocal"/>.
 	/// </summary>
@@ -41,6 +45,15 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jLocal"/>.</returns>
 	[return: NotNullIfNotNull(nameof(jLocal))]
 	internal abstract JLocalObject? ParseInstance(JLocalObject? jLocal);
+	/// <summary>
+	/// Creates a <see cref="IDataType"/> instance from <paramref name="jGlobal"/> and
+	/// <paramref name="env"/>.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jGlobal"/>.</returns>
+	[return: NotNullIfNotNull(nameof(jGlobal))]
+	internal abstract JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal);
 
 	/// <summary>
 	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.

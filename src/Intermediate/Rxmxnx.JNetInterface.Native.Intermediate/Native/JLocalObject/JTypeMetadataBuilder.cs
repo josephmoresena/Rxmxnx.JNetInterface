@@ -152,7 +152,7 @@ public partial class JLocalObject
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
 			ISet<Type> interfaceTypes = IReferenceType<TClass>.GetInterfaceTypes().ToHashSet();
-			JClassTypeMetadata? baseMetadata = typeof(TClass) != typeof(JLocalObject) ?
+			JClassTypeMetadata? baseMetadata = !JLocalObject.IsObjectType<TClass>() ?
 				IClassType.GetMetadata<JLocalObject>() :
 				default;
 			return new(className, modifier, baseMetadata, interfaceTypes);

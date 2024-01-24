@@ -28,6 +28,13 @@ public partial class JInterfaceObject
 				=> this._interfaces = builder.CreateInterfaceSet();
 
 			/// <inheritdoc/>
+			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+				Boolean realClass = false)
+				=> TInterface.Create(new IReferenceType.ClassInitializer
+				{
+					Class = jClass, RealClass = realClass, LocalReference = localRef,
+				});
+			/// <inheritdoc/>
 			internal override TInterface? ParseInstance(JLocalObject? jLocal)
 			{
 				switch (jLocal)
@@ -40,6 +47,14 @@ public partial class JInterfaceObject
 						JLocalObject.Validate<TInterface>(jLocal);
 						return TInterface.Create(jLocal);
 				}
+			}
+			/// <inheritdoc/>
+			internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+			{
+				if (jGlobal is null) return default;
+				if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))
+					JLocalObject.Validate<TInterface>(jGlobal, env);
+				return TInterface.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata()

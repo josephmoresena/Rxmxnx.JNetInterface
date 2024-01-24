@@ -49,16 +49,16 @@ public readonly ref partial struct JniCall
 	public static Builder Create<TObject>(JEnvironmentRef envRef, JObjectLocalRef localRef, out TObject jLocal)
 		where TObject : JLocalObject, IReferenceType<TObject>
 	{
-		Type typeofT = typeof(TObject);
-		if (typeofT == typeof(JLocalObject))
+		if (JLocalObject.IsObjectType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
 			return JniCall.Create(envRef, localRef, out Unsafe.As<TObject, JLocalObject>(ref jLocal));
 		}
-		if (typeofT == typeof(JLocalObject))
+		if (JLocalObject.IsClassType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
-			return JniCall.Create(envRef, localRef, out Unsafe.As<TObject, JLocalObject>(ref jLocal));
+			JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
+			return JniCall.Create(envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 		}
 
 		Builder result = JniCall.Create(envRef);
@@ -118,13 +118,12 @@ public readonly ref partial struct JniCall
 	public static Builder Create<TObject>(IVirtualMachine vm, JEnvironmentRef envRef, JObjectLocalRef localRef,
 		out TObject jLocal) where TObject : JLocalObject, IReferenceType<TObject>
 	{
-		Type typeofT = typeof(TObject);
-		if (typeofT == typeof(JLocalObject))
+		if (JLocalObject.IsObjectType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
 			return JniCall.Create(vm, envRef, localRef, out Unsafe.As<TObject, JLocalObject>(ref jLocal));
 		}
-		if (typeofT == typeof(JClassObject))
+		if (JLocalObject.IsClassType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
 			JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
