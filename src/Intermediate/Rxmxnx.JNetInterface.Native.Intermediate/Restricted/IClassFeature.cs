@@ -113,6 +113,12 @@ public interface IClassFeature
 	JClassObject ShortObject { get; }
 
 	/// <summary>
+	/// Retrieves the current <paramref name="classRef"/> reference as <see cref="JClassObject"/>.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JClassObject"/> instance.</returns>
+	JClassObject AsClassObject(JClassLocalRef classRef);
+	/// <summary>
 	/// Retrieves the current <paramref name="jObject"/> instance as <see cref="JClassObject"/>.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>

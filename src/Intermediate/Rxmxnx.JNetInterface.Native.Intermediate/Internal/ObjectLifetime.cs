@@ -277,6 +277,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="other">A <see cref="ObjectLifetime"/> instance.</param>
 	public void Synchronize(ObjectLifetime other)
 	{
+		if (Object.ReferenceEquals(this, other)) return;
 		this._secondary.SetTarget(other);
 		other._secondary.SetTarget(other);
 		this._assignableTypes.Merge(other._assignableTypes);

@@ -54,10 +54,9 @@ public partial class JClassObject
 	static JClassObject IReferenceType<JClassObject>.Create(IReferenceType.ClassInitializer initializer)
 	{
 		IEnvironment env = initializer.Class.Environment;
-		JClassObject jClassClass = env.ClassFeature.ClassObject;
 		JObjectLocalRef localRef = initializer.LocalReference;
 		JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
-		return new(jClassClass, classRef);
+		return env.ClassFeature.AsClassObject(classRef);
 	}
 	static JClassObject IReferenceType<JClassObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> initializer.Instance.Environment.ClassFeature.AsClassObject(initializer.Instance);

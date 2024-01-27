@@ -123,21 +123,25 @@ partial class JEnvironment
 		return methodId;
 	}
 	/// <summary>
+	/// Retrieves type of given reference.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JReferenceType"/> value.</returns>
+	internal JReferenceType GetReferenceType(JObjectLocalRef localRef)
+	{
+		GetObjectRefTypeDelegate getObjectRefType = this._cache.GetDelegate<GetObjectRefTypeDelegate>();
+		JReferenceType result = getObjectRefType(this._cache.Reference, localRef);
+		this._cache.CheckJniError();
+		return result;
+	}
+	/// <summary>
 	/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	internal JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference = false)
-	{
-		using JStringObject jString = JClassObject.GetClassName(this, classRef, out Boolean isPrimitive);
-		using JNativeMemory<Byte> utf8Text = jString.GetUtf8Chars(JMemoryReferenceKind.Local);
-		JClassObject jClass = isPrimitive ?
-			this.GetPrimitiveClass(utf8Text.Values) :
-			this.GetClass(utf8Text.Values, keepReference ? classRef : default);
-		if (keepReference && jClass.InternalReference == default) jClass.SetValue(classRef);
-		return this._cache.Register(jClass);
-	}
+		=> this._cache.GetClass(classRef, keepReference);
 	/// <inheritdoc cref="IClassFeature.GetClass{TObject}()"/>
 	internal JClassObject GetClass<TObject>() where TObject : JLocalObject, IReferenceType<TObject>
 		=> this._cache.GetClass<TObject>();

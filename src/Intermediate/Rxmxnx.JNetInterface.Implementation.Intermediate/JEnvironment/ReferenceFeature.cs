@@ -184,23 +184,6 @@ partial class JEnvironment
 		}
 
 		/// <summary>
-		/// Applies cast from <see cref="JLocalObject"/> to <typeparamref name="TObject"/>.
-		/// </summary>
-		/// <typeparam name="TObject">A <see cref="IDataType{TObject}"/> type.</typeparam>
-		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-		/// <param name="register">Indicates whether object must be registered.</param>
-		/// <returns>A <typeparamref name="TObject"/> instance.</returns>
-		private TObject? Cast<TObject>(JLocalObject? jLocal, Boolean register = true) where TObject : IDataType<TObject>
-		{
-			if (jLocal is null || jLocal.IsDefault) return default;
-			if (JLocalObject.IsObjectType<TObject>())
-				return register ? this.Register((TObject)(Object)jLocal) : (TObject)(Object)jLocal;
-			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
-			TObject result = (TObject)(Object)metadata.ParseInstance(jLocal);
-			jLocal.Dispose();
-			return register ? this.Register(result) : result;
-		}
-		/// <summary>
 		/// Loads <see cref="JGlobal"/> instance for <paramref name="jClass"/>
 		/// </summary>
 		/// <param name="jClass">A <see cref="JLocalObject"/> instance.</param>

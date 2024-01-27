@@ -36,7 +36,7 @@ public readonly ref partial struct JniCall
 		internal JClassObject CreateInitialClass(JClassLocalRef classRef)
 		{
 			JEnvironment env = this._call._env;
-			JClassObject result = env.GetClass(classRef);
+			JClassObject result = env.GetClass(classRef, true);
 			result.SetValue(classRef);
 			this._call._cache[classRef.Value] = result.Lifetime;
 			return result;

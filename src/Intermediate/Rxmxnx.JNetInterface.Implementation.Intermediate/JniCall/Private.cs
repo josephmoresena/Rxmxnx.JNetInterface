@@ -55,14 +55,16 @@ public readonly ref partial struct JniCall
 		{
 			JEnvironment env = this._call._env;
 			JClassLocalRef classRef = env.GetObjectClass(localRef);
+			JClassObject? result = default;
 			try
 			{
-				return env.GetClass(classRef);
+				result = env.GetClass(classRef);
 			}
 			finally
 			{
 				env.DeleteLocalRef(classRef.Value);
 			}
+			return result;
 		}
 		/// <summary>
 		/// Retrieves initial final <typaramref name="TObject"/> instance for <paramref name="localRef"/>.

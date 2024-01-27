@@ -55,9 +55,9 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	{
 		if (jObject is not JReferenceObject jRefObj || jRefObj.IsDefault || jRefObj.IsDummy)
 			return JReferenceType.InvalidRefType;
-		GetObjectRefTypeDelegate getObjectRefType = this._cache.GetDelegate<GetObjectRefTypeDelegate>();
-		JReferenceType result = getObjectRefType(this._cache.Reference, jRefObj.As<JObjectLocalRef>());
-		this._cache.CheckJniError();
+		using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction(1);
+		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);
+		JReferenceType result = this.GetReferenceType(localRef);
 		if (result == JReferenceType.InvalidRefType)
 		{
 			if (jRefObj is JGlobalBase jGlobal) (this.VirtualMachine as JVirtualMachine)!.Remove(jGlobal);

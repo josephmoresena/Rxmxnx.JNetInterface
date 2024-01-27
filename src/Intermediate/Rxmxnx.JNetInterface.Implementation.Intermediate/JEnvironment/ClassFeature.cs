@@ -18,17 +18,22 @@ partial class JEnvironment
 		JClassObject IClassFeature.LongObject => this.GetClass<JLongObject>();
 		JClassObject IClassFeature.ShortObject => this.GetClass<JShortObject>();
 
+		public JClassObject AsClassObject(JClassLocalRef classRef)
+		{
+			JClassObject result = this.GetClass(classRef, true);
+			return this.Register(result);
+		}
 		public JClassObject AsClassObject(JReferenceObject jObject)
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);
 			if (jObject is JClassObject jClass) return jClass;
 			ValidationUtilities.ThrowIfDefault(jObject);
 			if (!jObject.IsInstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
-			JEnvironment env = this._mainClasses.Environment;
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
-			JClassObject result = env.GetClass(classRef, true);
-			if (jObject is ILocalObject local) result.Lifetime.Synchronize(local.Lifetime);
+			JClassObject result = this.AsClassObject(classRef);
+			if (jObject is ILocalObject local && result.InternalReference == classRef)
+				result.Lifetime.Synchronize(local.Lifetime);
 			return result;
 		}
 		public Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
@@ -66,7 +71,11 @@ partial class JEnvironment
 			JClassLocalRef superClassRef = jniTransaction.Add(getSuperClass(this.Reference, classRef));
 			JEnvironment env = this._mainClasses.Environment;
 			if (superClassRef.Value != default)
-				return env.GetClass(superClassRef, true);
+			{
+				JClassObject jSuperClass = this.AsClassObject(superClassRef);
+				if (jSuperClass.InternalReference != superClassRef.Value) env.DeleteLocalRef(superClassRef.Value);
+				return jSuperClass;
+			}
 			this.CheckJniError();
 			return default;
 		}
@@ -88,13 +97,10 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);
 			ValidationUtilities.ThrowIfDummy(jClass);
-			IsInstanceOfDelegate isInstanceOf = this.GetDelegate<IsInstanceOfDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JObjectLocalRef localRef = jniTransaction.Add(jObject);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			Byte result = isInstanceOf(this.Reference, localRef, classRef);
-			this.CheckJniError();
-			return result == JBoolean.TrueValue;
+			return this.IsInstanceOf(localRef, classRef);
 		}
 		public Boolean IsInstanceOf<TDataType>(JReferenceObject jObject)
 			where TDataType : JReferenceObject, IDataType<TDataType>
@@ -122,7 +128,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			if (classRef.Value == default) throw new ArgumentException("Unloaded class.");
-			JClassObject loadedClass = this._mainClasses.Environment.GetClass(classRef, true);
+			JClassObject loadedClass = this.AsClassObject(classRef);
 			name = loadedClass.Name;
 			signature = loadedClass.ClassSignature;
 			hash = loadedClass.Hash;
@@ -155,6 +161,24 @@ partial class JEnvironment
 			return this.Register(result);
 		}
 		/// <summary>
+		/// Indicates whether the object referenced by <paramref name="localRef"/> is an instance
+		/// of the class referenced by <paramref name="classRef"/>.
+		/// </summary>
+		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <returns>
+		/// <see langword="true"/> if the object referenced by <paramref name="localRef"/> is an instance
+		/// of the class referenced by <paramref name="classRef"/>; otherwise, <see langword="false"/>.
+		/// </returns>
+		private Boolean IsInstanceOf(JObjectLocalRef localRef, JClassLocalRef classRef)
+		{
+			IsInstanceOfDelegate isInstanceOf = this.GetDelegate<IsInstanceOfDelegate>();
+			Byte result = isInstanceOf(this.Reference, localRef, classRef);
+			this.CheckJniError();
+			return result == JBoolean.TrueValue;
+		}
+
+		/// <summary>
 		/// Loads a java class from its binary information into the current VM.
 		/// </summary>
 		/// <param name="memoryList">
@@ -168,15 +192,29 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(args.jClassLoader);
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(memoryList[0].Bytes);
 			DefineClassDelegate defineClass = args.cache.GetDelegate<DefineClassDelegate>();
-			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(1);
+			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(2);
 			JObjectLocalRef localRef = jniTransaction.Add(args.jClassLoader);
 			JClassLocalRef classRef = defineClass(args.cache.Reference, (ReadOnlyValPtr<Byte>)memoryList[0].Pointer,
 			                                      localRef, memoryList[1].Pointer, memoryList[1].Bytes.Length);
 			if (classRef.Value == default) args.cache.CheckJniError();
 			if (args.cache._classes.TryGetValue(classInformation.ToString(), out JClassObject? result))
-				result.SetValue(classRef);
+			{
+				JEnvironment env = args.cache._mainClasses.Environment;
+				JClassLocalRef classRefO = jniTransaction.Add(result);
+				if (classRefO.Value == default || env.IsSame(classRef.Value, default))
+				{
+					result.SetValue(classRef);
+					args.cache._classes.Unload(classRefO);
+				}
+				else if (!env.IsSame(classRef.Value, classRefO.Value))
+				{
+					throw new InvalidOperationException("Redefinition class is unsupported.");
+				}
+			}
 			else
+			{
 				result = new(args.cache.ClassObject, new TypeInformation(classInformation), classRef);
+			}
 			return args.cache.Register(result);
 		}
 	}

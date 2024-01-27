@@ -10,7 +10,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Maximum amount of bytes usable on stack.
 		/// </summary>
-		private const Int32 maxStackBytes = 128;
+		private const Int32 MaxStackBytes = 128;
 
 		/// <summary>
 		/// JNI Delegate dictionary.
@@ -319,7 +319,7 @@ partial class JEnvironment
 				JEnvironment env = this._mainClasses.Environment;
 				using LocalFrame frame = new(env, 10);
 				JClassLocalRef classRef = env.GetObjectClass(throwableRef.Value);
-				JClassObject jClass = env.GetClass(classRef, true);
+				JClassObject jClass = this.AsClassObject(classRef);
 				String message = JEnvironmentCache.GetThrowableMessage(jClass, throwableRef);
 				ThrowableObjectMetadata objectMetadata = new(jClass, message);
 				JThrowableTypeMetadata throwableMetadata =
@@ -335,7 +335,23 @@ partial class JEnvironment
 				jThrow(this.Reference, throwableRef);
 			}
 		}
-
+		/// <summary>
+		/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		public JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference)
+		{
+			JEnvironment env = this._mainClasses.Environment;
+			using JStringObject jString = JClassObject.GetClassName(env, classRef, out Boolean isPrimitive);
+			using JNativeMemory<Byte> utf8Text = jString.GetUtf8Chars(JMemoryReferenceKind.Local);
+			JClassObject jClass = isPrimitive ?
+				this.GetPrimitiveClass(utf8Text.Values) :
+				this.GetClass(utf8Text.Values, keepReference ? classRef : default);
+			if (keepReference && jClass.InternalReference == default) jClass.SetValue(classRef);
+			return jClass;
+		}
 		/// <inheritdoc cref="IEnvironment.JniSecure"/>
 		public Boolean JniSecure() => this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId;
 		/// <inheritdoc cref="JEnvironment.SetObjectCache(LocalCache?)"/>
@@ -434,21 +450,32 @@ partial class JEnvironment
 		public TResult? CreateObject<TResult>(JObjectLocalRef localRef, Boolean register)
 			where TResult : IDataType<TResult>
 		{
-			JEnvironment env = this._mainClasses.Environment;
 			this.CheckJniError();
 			if (localRef == default) return default;
-			if (MetadataHelper.GetMetadata<TResult>().Modifier == JTypeModifier.Final)
-				return this.Cast<TResult>(new(this.GetClass<TResult>(), localRef), register);
-			JClassLocalRef classRef = env.GetObjectClass(localRef);
-			try
+
+			JEnvironment env = this._mainClasses.Environment;
+			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TResult>();
+			JClassObject jClass;
+			if (metadata.Modifier == JTypeModifier.Final)
 			{
-				JClassObject jClass = env.GetClass(classRef);
-				return this.Cast<TResult>(new(jClass, localRef), register);
+				jClass = this.GetClass<TResult>();
 			}
-			finally
+			else
 			{
-				env.DeleteLocalRef(classRef.Value);
+				JClassLocalRef classRef = env.GetObjectClass(localRef);
+				try
+				{
+					jClass = this.GetClass(classRef, false);
+				}
+				finally
+				{
+					env.DeleteLocalRef(classRef.Value);
+				}
 			}
+			TResult result = (TResult)(Object)metadata.CreateInstance(jClass, localRef, true);
+			if (localRef != (result as JLocalObject)!.InternalReference && register)
+				this._mainClasses.Environment.DeleteLocalRef(localRef);
+			return register ? this.Register(result) : result;
 		}
 		/// <inheritdoc cref="JEnvironment.LoadClass(JClassObject?)"/>
 		public void LoadClass(JClassObject? jClass)
@@ -495,6 +522,57 @@ partial class JEnvironment
 			jClass.SetValue(classRef);
 			this.Register(jClass);
 			return classRef;
+		}
+		/// <summary>
+		/// Retrieves primitive class instance for <paramref name="className"/>.
+		/// </summary>
+		/// <param name="className">Class name.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		/// <exception cref="ArgumentException">Non-primitive class.</exception>
+		private JClassObject GetPrimitiveClass(ReadOnlySpan<Byte> className)
+			=> className.Length switch
+			{
+				3 => className[0] == 0x69 /*i*/ ?
+					this.IntPrimitive :
+					throw new ArgumentException("Invalid primitive type."),
+				4 => className[0] switch
+				{
+					0x62 //b
+						=> this.BooleanPrimitive,
+					0x63 //c
+						=> this.CharPrimitive,
+					0x6C //l
+						=> this.LongPrimitive,
+					_ => throw new ArgumentException("Invalid primitive type."),
+				},
+				5 => className[0] switch
+				{
+					0x66 //f
+						=> this.FloatPrimitive,
+					0x73 //l
+						=> this.ShortPrimitive,
+					_ => throw new ArgumentException("Invalid primitive type."),
+				},
+				6 => className[0] == 0x64 /*d*/ ?
+					this.DoublePrimitive :
+					throw new ArgumentException("Invalid primitive type."),
+				7 => className[0] == 0x62 /*b*/ ?
+					this.BooleanPrimitive :
+					throw new ArgumentException("Invalid primitive type."),
+				_ => throw new ArgumentException("Invalid primitive type."),
+			};
+		/// <summary>
+		/// Retrieves class instance for <paramref name="classRef"/>.
+		/// </summary>
+		/// <param name="className">Class name.</param>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject GetClass(ReadOnlySpan<Byte> className, JClassLocalRef classRef)
+		{
+			CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
+			if (!this.TryGetClass(classInformation.ToString(), out JClassObject? jClass))
+				jClass = new(this.ClassObject, new TypeInformation(classInformation), classRef);
+			return jClass;
 		}
 
 		/// <summary>
@@ -551,7 +629,7 @@ partial class JEnvironment
 		private Boolean UseStackAlloc(Int32 requiredBytes)
 		{
 			this._usedStackBytes += requiredBytes;
-			if (this._usedStackBytes <= JEnvironmentCache.maxStackBytes) return true;
+			if (this._usedStackBytes <= JEnvironmentCache.MaxStackBytes) return true;
 			this._usedStackBytes -= requiredBytes;
 			return false;
 		}
