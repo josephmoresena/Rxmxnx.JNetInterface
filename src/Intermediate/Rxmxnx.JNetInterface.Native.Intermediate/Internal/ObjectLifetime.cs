@@ -42,16 +42,27 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jLocal">The java object to load.</param>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="localRef">Local object reference.</param>
-	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JObjectLocalRef localRef = default)
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="isDisposable">Indicates whether current instance is disposable.</param>
+	public ObjectLifetime(IEnvironment env, JObjectLocalRef localRef, JReferenceObject jObject, Boolean isDisposable)
 	{
 		this._env = env;
 		this._isDisposed = IMutableWrapper.Create<Boolean>();
-		this._id = jLocal.Id;
+		this._id = jObject.Id;
 		this._value = IMutableReference<JObjectLocalRef>.Create(localRef);
-		this._isDisposable = jLocal is not JClassObject;
+		this._isDisposable = isDisposable;
+	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jLocal">The java object to load.</param>
+	/// <param name="localRef">Local object reference.</param>
+	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JObjectLocalRef localRef = default) : this(
+		env, localRef, jLocal, jLocal is not JClassObject)
+	{
 		this.Load(jLocal);
 	}
 	/// <summary>
@@ -60,15 +71,11 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jLocal">The java object to load.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JGlobalBase? jGlobal)
+	public ObjectLifetime(IEnvironment env, JLocalObject jLocal, JGlobalBase? jGlobal) : this(
+		env, default, jLocal, jLocal is not JClassObject)
 	{
-		this._env = env;
-		this._isDisposed = IMutableWrapper.Create<Boolean>();
 		this._global = (jGlobal as JGlobal)?.Load(this);
 		this._weak = (jGlobal as JWeak)?.Load(this);
-		this._id = jLocal.Id;
-		this._value = IMutableReference<JObjectLocalRef>.Create();
-		this._isDisposable = jLocal is not JClassObject;
 		this.Load(jLocal);
 	}
 

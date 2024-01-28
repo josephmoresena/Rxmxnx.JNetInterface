@@ -33,7 +33,7 @@ public readonly ref partial struct JniCall
 	public static Builder Create(JEnvironmentRef envRef, JClassLocalRef classRef, out JClassObject jClass)
 	{
 		Builder result = JniCall.Create(envRef);
-		jClass = result.CreateInitialClass(classRef);
+		jClass = result.CreateInitialClass(classRef, true);
 		return result;
 	}
 
@@ -102,7 +102,7 @@ public readonly ref partial struct JniCall
 		out JClassObject jClass)
 	{
 		Builder result = JniCall.Create(vm, envRef);
-		jClass = result.CreateInitialClass(classRef);
+		jClass = result.CreateInitialClass(classRef, true);
 		return result;
 	}
 	/// <summary>

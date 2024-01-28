@@ -158,7 +158,7 @@ public readonly ref partial struct JniCall
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
 		public Builder WithParameter(JClassLocalRef classRef, out JClassObject jClass)
 		{
-			jClass = this.CreateInitialClass(classRef);
+			jClass = this.CreateInitialClass(classRef, true);
 			return this;
 		}
 		/// <summary>
@@ -169,8 +169,7 @@ public readonly ref partial struct JniCall
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
 		public Builder WithParameter(JStringLocalRef stringRef, out JStringObject jString)
 		{
-			JClassObject jStringClass = this._call._env.GetClass<JStringObject>();
-			jString = new(jStringClass, stringRef);
+			jString = this.CreateInitialObject<JStringObject>(stringRef.Value);
 			return this;
 		}
 		/// <summary>
