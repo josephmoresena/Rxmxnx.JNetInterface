@@ -78,7 +78,7 @@ internal static class MethodNames
 	/// </summary>
 	public const String GetStackTrace = "getStackTrace";
 	/// <summary>
-	/// Name of <c>Class.getName()</c>.
+	/// Name of <c>Class.getName()</c> or <c>Member.getName()</c>.
 	/// </summary>
 	public const String GetName = "getName";
 	/// <summary>
@@ -93,6 +93,18 @@ internal static class MethodNames
 	/// Name of <c>Buffer.capacity()</c>.
 	/// </summary>
 	public const String Capacity = "capacity";
+	/// <summary>
+	/// Name of <c>Executable.getParameterTypes()</c>.
+	/// </summary>
+	public const String GetParameterTypes = "getParameterTypes";
+	/// <summary>
+	/// Name of <c>Method.getReturnType()</c>.
+	/// </summary>
+	public const String GetReturnType = "getReturnType";
+	/// <summary>
+	/// Name of <c>Field.getType()</c>.
+	/// </summary>
+	public const String GetFieldType = "getType";
 	/// <summary>
 	/// Name of <c>MainClass.main(String[] args)</c>.
 	/// </summary>

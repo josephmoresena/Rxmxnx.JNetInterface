@@ -26,15 +26,11 @@ public sealed record JArgumentMetadata
 	}
 
 	/// <summary>
-	/// Creates a <see cref="JArgumentMetadata"/> from <paramref name="signature"/> value.
+	/// Retrieves the <see cref="JArgumentMetadata"/> for <typeparamref name="TArg"/> type.
 	/// </summary>
-	/// <param name="signature">The signature of type.</param>
-	/// <returns>A <see cref="JArgumentMetadata"/> from <paramref name="signature"/> value</returns>
-	public static JArgumentMetadata Create(CString signature)
-	{
-		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
-		return new(signature, NativeUtilities.PointerSize);
-	}
+	/// <typeparam name="TArg"><see cref="IDataType"/> type.</typeparam>
+	/// <returns>A <see cref="JArgumentMetadata"/> from <typeparamref name="TArg"/> type</returns>
+	public static JArgumentMetadata Get<TArg>() where TArg : IDataType<TArg> => TArg.Argument;
 	/// <summary>
 	/// Creates a <see cref="JArgumentMetadata"/> from <paramref name="signature"/> value.
 	/// </summary>
@@ -45,11 +41,12 @@ public sealed record JArgumentMetadata
 		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
 		return new(CString.Create(signature), NativeUtilities.PointerSize);
 	}
+
 	/// <summary>
 	/// Creates a <see cref="JArgumentMetadata"/> from <typeparamref name="TArg"/> type.
 	/// </summary>
 	/// <typeparam name="TArg"><see cref="IDataType"/> type.</typeparam>
 	/// <returns>A <see cref="JArgumentMetadata"/> from <typeparamref name="TArg"/> type</returns>
-	public static JArgumentMetadata Create<TArg>() where TArg : IDataType<TArg>
+	internal static JArgumentMetadata Create<TArg>() where TArg : IDataType<TArg>
 		=> new(IDataType.GetMetadata<TArg>().Signature, IDataType.GetMetadata<TArg>().SizeOf);
 }

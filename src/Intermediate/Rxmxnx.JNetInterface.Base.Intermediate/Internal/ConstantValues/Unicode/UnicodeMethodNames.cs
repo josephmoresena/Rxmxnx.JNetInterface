@@ -71,6 +71,15 @@ internal static partial class UnicodeMethodNames
 	/// <inheritdoc cref="MethodNames.Capacity"/>
 	[DefaultValue(MethodNames.Capacity)]
 	public static partial ReadOnlySpan<Byte> Capacity();
+	/// <inheritdoc cref="MethodNames.GetParameterTypes"/>
+	[DefaultValue(MethodNames.GetParameterTypes)]
+	public static partial ReadOnlySpan<Byte> GetParameterTypes();
+	/// <inheritdoc cref="MethodNames.GetReturnType"/>
+	[DefaultValue(MethodNames.GetReturnType)]
+	public static partial ReadOnlySpan<Byte> GetReturnType();
+	/// <inheritdoc cref="MethodNames.GetFieldType"/>
+	[DefaultValue(MethodNames.GetFieldType)]
+	public static partial ReadOnlySpan<Byte> GetFieldType();
 	/// <inheritdoc cref="MethodNames.Main"/>
 	[DefaultValue(MethodNames.Main)]
 	public static partial ReadOnlySpan<Byte> Main();

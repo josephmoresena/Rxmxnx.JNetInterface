@@ -14,7 +14,7 @@ public sealed record JMainMethodDefinition : JMethodDefinition
 	/// Constructor.
 	/// </summary>
 	private JMainMethodDefinition() : base(UnicodeMethodNames.Main(),
-	                                       JArgumentMetadata.Create<JArrayObject<JStringObject>>()) { }
+	                                       JArgumentMetadata.Get<JArrayObject<JStringObject>>()) { }
 
 	/// <summary>
 	/// Invokes method defined in <paramref name="mainClass"/>.

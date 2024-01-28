@@ -16,6 +16,32 @@ public abstract record JFunctionDefinition : JCallDefinition
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	internal JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
 		params JArgumentMetadata[] metadata) : base(functionName, returnType, metadata) { }
+
+	/// <summary>
+	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
+	/// </summary>
+	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
+	/// <param name="definition">A <see cref="JFunctionDefinition{TResult}"/> definition.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
+	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	internal static TResult? Invoke<TResult>(JFunctionDefinition<TResult> definition, JLocalObject jLocal,
+		JClassObject? jClass = default, Boolean nonVirtual = false, IObject?[]? args = default)
+		where TResult : IDataType<TResult>
+		=> JFunctionDefinition<TResult>.Invoke(definition, jLocal, jClass, nonVirtual, args);
+
+	/// <summary>
+	/// Invokes <paramref name="definition"/> on <paramref name="jClass"/> which matches with current definition
+	/// passing the default value for each argument.
+	/// </summary>
+	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
+	/// <param name="definition">A <see cref="JFunctionDefinition{TResult}"/> definition.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	internal static TResult? StaticInvoke<TResult>(JFunctionDefinition<TResult> definition, JClassObject jClass,
+		IObject?[]? args = default) where TResult : IDataType<TResult>
+		=> JFunctionDefinition<TResult>.StaticInvoke(definition, jClass, args);
 }
 
 /// <summary>
@@ -151,4 +177,13 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 		return env.AccessFeature.CallInternalStaticFunction<TResult>(jClass, definition,
 		                                                             args ?? definition.CreateArgumentsArray());
 	}
+
+	/// <summary>
+	/// Create a <see cref="JFunctionDefinition{TResult}"/> instance for <paramref name="metadata"/>.
+	/// </summary>
+	/// <param name="functionName">Function name.</param>
+	/// <param name="metadata">Metadata of the types of call arguments.</param>
+	/// <returns>A <see cref="JFunctionDefinition{TResult}"/> instance.</returns>
+	internal static JFunctionDefinition<TResult> Create(ReadOnlySpan<Byte> functionName, JArgumentMetadata[] metadata)
+		=> new(functionName, metadata);
 }

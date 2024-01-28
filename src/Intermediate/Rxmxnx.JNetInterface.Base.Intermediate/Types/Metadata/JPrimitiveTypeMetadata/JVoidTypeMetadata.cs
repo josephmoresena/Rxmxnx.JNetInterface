@@ -7,10 +7,21 @@ public partial record JPrimitiveTypeMetadata
 	/// </summary>
 	private sealed record JVoidTypeMetadata : JPrimitiveTypeMetadata
 	{
-		public override Type Type => typeof(void);
+		/// <summary>
+		/// <c>void</c> class fake hash.
+		/// </summary>
+		public static readonly String FakeHash =
+			JDataTypeMetadata.CreateInformationSequence(UnicodeClassNames.VoidPrimitive()).ToString();
 
+		/// <summary>
+		/// CLR type for <see langword="void"/>.
+		/// </summary>
+		public override Type Type => typeof(void);
 		/// <inheritdoc/>
 		public override JNativeType NativeType => default;
+		/// <inheritdoc/>
+		public override JArgumentMetadata ArgumentMetadata
+			=> throw new InvalidOperationException("A void value can't be an argument.");
 
 		/// <summary>
 		/// Constructor.
@@ -19,6 +30,7 @@ public partial record JPrimitiveTypeMetadata
 		                                  stackalloc Byte[1] { UnicodePrimitiveSignatures.VoidSignatureChar, },
 		                                  UnicodeClassNames.VoidPrimitive(), UnicodeClassNames.VoidObject()) { }
 		/// <inheritdoc/>
-		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes) => throw new InvalidOperationException("A void value can't be created.");
+		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes)
+			=> throw new InvalidOperationException("A void value can't be created.");
 	}
 }

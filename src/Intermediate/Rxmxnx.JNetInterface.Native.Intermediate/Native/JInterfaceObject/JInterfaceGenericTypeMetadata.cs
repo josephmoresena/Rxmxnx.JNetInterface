@@ -17,6 +17,8 @@ public partial class JInterfaceObject
 			/// <inheritdoc/>
 			public override Type Type => typeof(TInterface);
 			/// <inheritdoc/>
+			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TInterface>();
+			/// <inheritdoc/>
 			public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
 
 			/// <summary>
@@ -56,6 +58,13 @@ public partial class JInterfaceObject
 					JLocalObject.Validate<TInterface>(jGlobal, env);
 				return TInterface.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
+			/// <inheritdoc/>
+			internal override JFunctionDefinition<TInterface> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
+				JArgumentMetadata[] metadata)
+				=> JFunctionDefinition<TInterface>.Create(functionName, metadata);
+			/// <inheritdoc/>
+			internal override JFieldDefinition<TInterface> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
+				=> new(fieldName);
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata()
 				=> JReferenceTypeMetadata.GetArrayMetadata<TInterface>();

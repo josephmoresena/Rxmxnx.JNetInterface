@@ -196,6 +196,6 @@ public static class Program
 	private sealed record PassStringDefinition : JMethodDefinition
 	{
 		public PassStringDefinition(ReadOnlySpan<Byte> functionName) : base(
-			functionName, JArgumentMetadata.Create<JStringObject>()) { }
+			functionName, JArgumentMetadata.Get<JStringObject>()) { }
 	}
 }

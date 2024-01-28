@@ -190,9 +190,13 @@ internal static class ClassNames
 	/// </summary>
 	public const String AccessibleObject = ClassNames.ReflectPackage + "AccessibleObject";
 	/// <summary>
-	/// JNI name of <c>java.lang.reflect.Executable</c> interface.
+	/// JNI name of <c>java.lang.reflect.Executable</c> class.
 	/// </summary>
 	public const String ExecutableObject = ClassNames.ReflectPackage + "Executable";
+	/// <summary>
+	/// JNI name of <c>java.lang.reflect.Method</c> class.
+	/// </summary>
+	public const String MethodObject = ClassNames.ReflectPackage + "Method";
 	/// <summary>
 	/// JNI name of <c>java.lang.reflect.Member</c> interface.
 	/// </summary>

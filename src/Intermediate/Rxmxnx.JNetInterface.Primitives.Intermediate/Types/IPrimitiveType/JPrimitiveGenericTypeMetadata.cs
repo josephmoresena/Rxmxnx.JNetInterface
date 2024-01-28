@@ -1,3 +1,5 @@
+using Rxmxnx.JNetInterface.Native.Access;
+
 namespace Rxmxnx.JNetInterface.Types;
 
 internal partial interface IPrimitiveType<TPrimitive, TValue>
@@ -18,6 +20,8 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 
 			/// <inheritdoc/>
 			public override JNativeType NativeType => this._nativeType;
+			/// <inheritdoc/>
+			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TPrimitive>();
 			/// <inheritdoc/>
 			public override Type Type => this._type;
 

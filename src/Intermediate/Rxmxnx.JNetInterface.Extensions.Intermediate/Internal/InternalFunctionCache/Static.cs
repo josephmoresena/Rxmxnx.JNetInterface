@@ -70,7 +70,7 @@ internal partial class InternalFunctionCache
 	private static readonly JFunctionDefinition<JArrayObject<JStackTraceElementObject>> getStackTraceDefinition =
 		new(UnicodeMethodNames.GetStackTrace());
 	/// <summary>
-	/// <c>Class.getName()</c> definition.
+	/// <c>Class.getName()</c> or <c>Member.getName()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JStringObject> getName = new(UnicodeMethodNames.GetName());
 	/// <summary>
@@ -86,6 +86,20 @@ internal partial class InternalFunctionCache
 	/// <c>Buffer.capacity()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JLong> bufferCapacity = new(UnicodeMethodNames.Capacity());
+
+	/// <summary>
+	/// <c>Executable.getParameterTypes()</c> definition.
+	/// </summary>
+	private static readonly JFunctionDefinition<JArrayObject<JClassObject>> getParameterTypes =
+		new(UnicodeMethodNames.GetParameterTypes());
+	/// <summary>
+	/// <c>Method.getReturnType()</c> definition.
+	/// </summary>
+	private static readonly JFunctionDefinition<JClassObject> getReturnType = new(UnicodeMethodNames.GetReturnType());
+	/// <summary>
+	/// <c>Field.getParameterTypes()</c> definition.
+	/// </summary>
+	private static readonly JFunctionDefinition<JClassObject> getType = new(UnicodeMethodNames.GetFieldType());
 
 	/// <summary>
 	/// <c>Boolean.booleanValue()</c> definition.

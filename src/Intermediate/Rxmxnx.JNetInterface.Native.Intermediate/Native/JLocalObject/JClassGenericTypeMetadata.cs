@@ -21,6 +21,8 @@ public partial class JLocalObject
 			/// <inheritdoc/>
 			public override JClassTypeMetadata? BaseMetadata => this._baseMetadata;
 			/// <inheritdoc/>
+			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TClass>();
+			/// <inheritdoc/>
 			public override JTypeModifier Modifier => this._modifier;
 			/// <inheritdoc/>
 			public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
@@ -68,6 +70,13 @@ public partial class JLocalObject
 					JLocalObject.Validate<TClass>(jGlobal, env);
 				return TClass.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
+			/// <inheritdoc/>
+			internal override JFunctionDefinition<TClass> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
+				JArgumentMetadata[] metadata)
+				=> JFunctionDefinition<TClass>.Create(functionName, metadata);
+			/// <inheritdoc/>
+			internal override JFieldDefinition<TClass> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
+				=> new(fieldName);
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata()
 				=> JReferenceTypeMetadata.GetArrayMetadata<TClass>();

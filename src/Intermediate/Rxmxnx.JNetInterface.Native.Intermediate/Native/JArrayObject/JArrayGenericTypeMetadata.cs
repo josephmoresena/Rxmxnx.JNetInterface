@@ -17,6 +17,8 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		public override JDataTypeMetadata ElementMetadata => IDataType.GetMetadata<TElement>();
 		/// <inheritdoc/>
+		public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<JArrayObject<TElement>>();
+		/// <inheritdoc/>
 		public override JClassTypeMetadata BaseMetadata => JLocalObject.ObjectClassMetadata;
 
 		/// <summary>
@@ -43,6 +45,13 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			=> jGlobal is null ? default(JLocalObject?) : JArrayObject<TElement>.Create(env, jGlobal);
+		/// <inheritdoc/>
+		internal override JFunctionDefinition<JArrayObject<TElement>> CreateFunctionDefinition(
+			ReadOnlySpan<Byte> functionName, JArgumentMetadata[] metadata)
+			=> JFunctionDefinition<JArrayObject<TElement>>.Create(functionName, metadata);
+		/// <inheritdoc/>
+		internal override JFieldDefinition<JArrayObject<TElement>> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
+			=> new(fieldName);
 		/// <inheritdoc/>
 		internal override JArrayTypeMetadata? GetArrayMetadata()
 			=> JArrayTypeMetadata.GetArrayArrayMetadata(this.ArraySignature, typeof(TElement));

@@ -45,6 +45,9 @@ public interface IDataType
 /// <typeparam name="TDataType">Type of current Java datatype.</typeparam>
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
+	/// <inheritdoc cref="JDataTypeMetadata.ArgumentMetadata"/>
+	internal static virtual JArgumentMetadata Argument { get; } = JArgumentMetadata.Create<TDataType>();
+
 	static JDataTypeMetadata IDataType.Metadata
 		=> ValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));
 }

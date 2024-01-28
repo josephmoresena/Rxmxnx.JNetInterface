@@ -11,10 +11,16 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	public CString ArraySignature => this._arraySignature;
 
 	/// <summary>
+	/// Metadata argument for current type.
+	/// </summary>
+	public abstract JArgumentMetadata ArgumentMetadata { get; }
+	/// <summary>
 	/// CLR type of <see cref="IDataType"/>.
 	/// </summary>
 	public abstract Type Type { get; }
-	/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
+	/// <summary>
+	/// Kind of current type.
+	/// </summary>
 	public abstract JTypeKind Kind { get; }
 	/// <summary>
 	/// Modifier of current type.
@@ -112,7 +118,7 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	/// </summary>
 	/// <param name="className"><see cref="IDataType"/> class name.</param>
 	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
-	protected static CString ComputeReferenceTypeSignature(ReadOnlySpan<Byte> className)
+	private static CString ComputeReferenceTypeSignature(ReadOnlySpan<Byte> className)
 		=> CString.Concat(stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignaturePrefixChar, }, className,
 		                  stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignatureSuffixChar, });
 }

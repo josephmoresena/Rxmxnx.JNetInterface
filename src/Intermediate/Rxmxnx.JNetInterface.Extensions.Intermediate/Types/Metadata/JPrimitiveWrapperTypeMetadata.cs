@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
 /// <summary>
-/// This record stores the metadata for a primitive wrapper class <see cref="IDataType"/> type.
+/// This record stores the metadata for a primitive wrapper class <see cref="IPrimitiveWrapperType"/> type.
 /// </summary>
 internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapperTypeMetadata
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
@@ -15,6 +15,8 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 	public override Type Type => typeof(TWrapper);
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier => JTypeModifier.Final;
+	/// <inheritdoc/>
+	public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TWrapper>();
 	/// <inheritdoc/>
 	public override IImmutableSet<JInterfaceTypeMetadata> Interfaces
 		=> this.PrimitiveMetadata.SizeOf != 0 ?
@@ -61,6 +63,12 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 			JLocalObject.Validate<TWrapper>(jGlobal, env);
 		return TWrapper.Create(env, jGlobal);
 	}
+	/// <inheritdoc/>
+	internal override JFunctionDefinition<TWrapper> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
+		JArgumentMetadata[] metadata)
+		=> JFunctionDefinition<TWrapper>.Create(functionName, metadata);
+	/// <inheritdoc/>
+	internal override JFieldDefinition<TWrapper> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName) => new(fieldName);
 	/// <inheritdoc/>
 	internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TWrapper>();
 }

@@ -17,7 +17,7 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	{
 		IEnvironment env = jEnum.Environment;
 		JClassObject enumClass = env.ClassFeature.EnumClassObject;
-		return JFunctionDefinition<JStringObject>.Invoke(InternalFunctionCache.nameDefinition, jEnum, enumClass)!;
+		return JFunctionDefinition.Invoke(InternalFunctionCache.nameDefinition, jEnum, enumClass)!;
 	}
 	/// <inheritdoc/>
 	public override Int32 GetOrdinal(JEnumObject jEnum)
@@ -32,7 +32,7 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 
 	/// <inheritdoc/>
 	public override JStringObject GetClassName(JStackTraceElementObject jStackTraceElement)
-		=> JFunctionDefinition<JStringObject>.Invoke(InternalFunctionCache.getClassDefinition, jStackTraceElement)!;
+		=> JFunctionDefinition.Invoke(InternalFunctionCache.getClassDefinition, jStackTraceElement)!;
 	/// <inheritdoc/>
 	public override Int32 GetLineNumber(JStackTraceElementObject jStackTraceElement)
 	{
@@ -45,11 +45,10 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	}
 	/// <inheritdoc/>
 	public override JStringObject GetFileName(JStackTraceElementObject jStackTraceElement)
-		=> JFunctionDefinition<JStringObject>.Invoke(InternalFunctionCache.getFileNameDefinition, jStackTraceElement)!;
+		=> JFunctionDefinition.Invoke(InternalFunctionCache.getFileNameDefinition, jStackTraceElement)!;
 	/// <inheritdoc/>
 	public override JStringObject GetMethodName(JStackTraceElementObject jStackTraceElement)
-		=> JFunctionDefinition<JStringObject>.Invoke(InternalFunctionCache.getMethodNameDefinition,
-		                                             jStackTraceElement)!;
+		=> JFunctionDefinition.Invoke(InternalFunctionCache.getMethodNameDefinition, jStackTraceElement)!;
 	/// <inheritdoc/>
 	public override Boolean IsNativeMethod(JStackTraceElementObject jStackTraceElement)
 	{
@@ -87,20 +86,18 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	{
 		IEnvironment env = jThrowable.Environment;
 		JClassObject throwableClass = env.ClassFeature.ThrowableObject;
-		return JFunctionDefinition<JStringObject>.Invoke(InternalFunctionCache.getMessageDefinition, jThrowable,
-		                                                 throwableClass)!;
+		return JFunctionDefinition.Invoke(InternalFunctionCache.getMessageDefinition, jThrowable, throwableClass)!;
 	}
 	/// <inheritdoc/>
 	public override JArrayObject<JStackTraceElementObject> GetStackTrace(JThrowableObject jThrowable)
 	{
 		IEnvironment env = jThrowable.Environment;
 		JClassObject throwableClass = env.ClassFeature.ThrowableObject;
-		return JFunctionDefinition<JArrayObject<JStackTraceElementObject>>.Invoke(
-			InternalFunctionCache.getStackTraceDefinition, jThrowable, throwableClass)!;
+		return JFunctionDefinition.Invoke(InternalFunctionCache.getStackTraceDefinition, jThrowable, throwableClass)!;
 	}
 	/// <inheritdoc/>
 	public override JStringObject GetClassName(JClassObject jClass)
-		=> JFunctionDefinition<JStringObject>.Invoke(InternalFunctionCache.getName, jClass)!;
+		=> JFunctionDefinition.Invoke(InternalFunctionCache.getName, jClass)!;
 	/// <inheritdoc/>
 	public override Boolean IsPrimitiveClass(JClassObject jClass)
 	{
@@ -119,6 +116,7 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 		                                        InternalFunctionCache.isDirectBuffer, false, Array.Empty<IObject>());
 		return bytes[0] == JBoolean.TrueValue;
 	}
+	/// <inheritdoc/>
 	public override Int64 BufferCapacity(JBufferObject jBuffer)
 	{
 		IEnvironment env = jBuffer.Environment;
@@ -126,5 +124,28 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferClassObject,
 		                                        InternalFunctionCache.bufferCapacity, false, Array.Empty<IObject>());
 		return bytes.AsValue<Int64>();
+	}
+	/// <inheritdoc/>
+	public override JStringObject GetName<TMember>(TMember jMember)
+	{
+		IEnvironment env = jMember.Environment;
+		JClassObject memberInterface = env.ClassFeature.GetClass<JMemberObject>();
+		return JFunctionDefinition.Invoke(InternalFunctionCache.getName, jMember, memberInterface)!;
+	}
+	/// <inheritdoc/>
+	public override JArrayObject<JClassObject> GetParameterTypes(JExecutableObject jExecutable)
+	{
+		IEnvironment env = jExecutable.Environment;
+		JClassObject executableClass = env.ClassFeature.GetClass<JExecutableObject>();
+		return JFunctionDefinition.Invoke(InternalFunctionCache.getParameterTypes, jExecutable, executableClass)!;
+	}
+	/// <inheritdoc/>
+	public override JClassObject? GetReturnType(JExecutableObject jMethod)
+	{
+		IEnvironment env = jMethod.Environment;
+		JClassObject methodClass = env.ClassFeature.GetClass<JMemberObject>();
+		return jMethod is JMethodObject || jMethod.InstanceOf<JMethodObject>() ?
+			JFunctionDefinition.Invoke(InternalFunctionCache.getReturnType, jMethod, methodClass) :
+			default;
 	}
 }

@@ -9,10 +9,11 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <see cref="JPrimitiveTypeMetadata"/> instance for Java <c>void</c> type.
 	/// </summary>
 	public static readonly JPrimitiveTypeMetadata VoidMetadata = new JVoidTypeMetadata();
+
 	/// <summary>
-	/// Primitive class fake hash.
+	/// Fake class hash for primitive void.
 	/// </summary>
-	private readonly String _fakeHash;
+	internal static String FakeVoidHash => JVoidTypeMetadata.FakeHash;
 
 	/// <inheritdoc cref="SizeOf"/>
 	private readonly Int32 _sizeOf;
@@ -55,10 +56,6 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// Information of wrapper class.
 	/// </summary>
 	internal CStringSequence WrapperInformation => this._wrapperInformation;
-	/// <summary>
-	/// Primitive class fake hash.
-	/// </summary>
-	internal String FakeHash => this._fakeHash;
 
 	/// <summary>
 	/// Constructor.
@@ -74,7 +71,6 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 		this._sizeOf = sizeOf;
 		this._underlineType = underlineType;
 		this._wrapperInformation = JDataTypeMetadata.CreateInformationSequence(wrapperClassName);
-		this._fakeHash = JDataTypeMetadata.CreateInformationSequence(className).ToString();
 	}
 
 	/// <summary>

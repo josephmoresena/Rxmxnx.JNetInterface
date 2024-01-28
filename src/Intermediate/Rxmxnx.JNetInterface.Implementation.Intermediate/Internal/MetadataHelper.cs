@@ -95,13 +95,60 @@ internal static class MetadataHelper
 		{ IDataType.GetHash<JTypeObject>(), IReferenceType.GetMetadata<JTypeObject>() },
 		{ IDataType.GetHash<JDirectBufferObject>(), IReferenceType.GetMetadata<JDirectBufferObject>() },
 	};
+	/// <summary>
+	/// Primitive reflection dictionary.
+	/// </summary>
+	private static readonly Dictionary<String, IReflectionMetadata?> reflectionMetadata = new()
+	{
+		// Basic objects //
+		{ JPrimitiveTypeMetadata.FakeVoidHash, default },
+		{ PrimitiveReflectionMetadata<JBoolean>.FakeHash, PrimitiveReflectionMetadata<JBoolean>.Instance },
+		{ PrimitiveReflectionMetadata<JByte>.FakeHash, PrimitiveReflectionMetadata<JByte>.Instance },
+		{ PrimitiveReflectionMetadata<JChar>.FakeHash, PrimitiveReflectionMetadata<JChar>.Instance },
+		{ PrimitiveReflectionMetadata<JDouble>.FakeHash, PrimitiveReflectionMetadata<JDouble>.Instance },
+		{ PrimitiveReflectionMetadata<JFloat>.FakeHash, PrimitiveReflectionMetadata<JFloat>.Instance },
+		{ PrimitiveReflectionMetadata<JInt>.FakeHash, PrimitiveReflectionMetadata<JInt>.Instance },
+		{ PrimitiveReflectionMetadata<JLong>.FakeHash, PrimitiveReflectionMetadata<JLong>.Instance },
+		{ PrimitiveReflectionMetadata<JShort>.FakeHash, PrimitiveReflectionMetadata<JShort>.Instance },
+	};
 
 	/// <summary>
 	/// Runtime metadata dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<String, JReferenceTypeMetadata> runtimeMetadata =
 		new(MetadataHelper.initialMetadata);
+	/// <summary>
+	/// Runtime metadata assignation dictionary.
+	/// </summary>
 	private static readonly ConcurrentDictionary<String, Boolean?> assignationCache = new();
+
+	/// <summary>
+	/// Retrieves metadata from hash.
+	/// </summary>
+	/// <param name="className">A java type name.</param>
+	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
+	public static IReflectionMetadata? GetReflectionMetadata(ReadOnlySpan<Byte> className)
+	{
+		CStringSequence information = MetadataHelper.GetClassInformation(className);
+		String hash = information.ToString();
+		IReflectionMetadata? result;
+
+		if (MetadataHelper.reflectionMetadata.TryGetValue(hash, out IReflectionMetadata? primitiveMetadata))
+		{
+			result = primitiveMetadata;
+		}
+		else if (MetadataHelper.runtimeMetadata.TryGetValue(hash, out JReferenceTypeMetadata? metadata))
+		{
+			result = metadata;
+			MetadataHelper.reflectionMetadata.Remove(hash);
+		}
+		else
+		{
+			result = new UnknownReflectionMetadata(information[1]);
+			MetadataHelper.reflectionMetadata[hash] = result;
+		}
+		return result;
+	}
 
 	/// <summary>
 	/// Retrieves metadata from hash.

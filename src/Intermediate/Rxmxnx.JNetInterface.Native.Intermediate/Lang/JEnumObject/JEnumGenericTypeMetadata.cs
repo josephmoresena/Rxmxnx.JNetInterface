@@ -21,6 +21,8 @@ public partial class JEnumObject
 			/// <inheritdoc/>
 			public override JClassTypeMetadata BaseMetadata => JEnumObject.JEnumClassMetadata;
 			/// <inheritdoc/>
+			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TEnum>();
+			/// <inheritdoc/>
 			public override IEnumFieldList Fields => this._fields;
 
 			/// <summary>
@@ -68,6 +70,13 @@ public partial class JEnumObject
 					JLocalObject.Validate<TEnum>(jGlobal, env);
 				return TEnum.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
+			/// <inheritdoc/>
+			internal override JFunctionDefinition<TEnum> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
+				JArgumentMetadata[] metadata)
+				=> JFunctionDefinition<TEnum>.Create(functionName, metadata);
+			/// <inheritdoc/>
+			internal override JFieldDefinition<TEnum> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
+				=> new(fieldName);
 			/// <inheritdoc/>
 			internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TEnum>();
 		}

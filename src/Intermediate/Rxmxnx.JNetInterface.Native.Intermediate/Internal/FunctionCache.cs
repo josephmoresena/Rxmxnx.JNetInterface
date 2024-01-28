@@ -108,4 +108,27 @@ internal abstract class FunctionCache
 	/// <param name="jBuffer">A <see cref="JBufferObject"/> instance.</param>
 	/// <returns><paramref name="jBuffer"/> capacity.</returns>
 	public abstract Int64 BufferCapacity(JBufferObject jBuffer);
+
+	/// <summary>
+	/// Returns the name of current member.
+	/// </summary>
+	/// <typeparam name="TMember">Type of member.</typeparam>
+	/// <param name="jMember">A <see cref="JMemberObject"/> instance.</param>
+	/// <returns>Returns the name of current instance.</returns>
+	public abstract JStringObject GetName<TMember>(TMember jMember)
+		where TMember : JLocalObject, IInterfaceObject<JMemberObject>;
+	/// <summary>
+	/// Returns an array of <c>Class</c> objects that represent the formal parameter types,
+	/// in declaration order, of the executable represented by <paramref name="jExecutable"/>.
+	/// </summary>
+	/// <param name="jExecutable">A <see cref="JExecutableObject"/> instance.</param>
+	/// <returns>Returns the name of current instance.</returns>
+	public abstract JArrayObject<JClassObject> GetParameterTypes(JExecutableObject jExecutable);
+	/// <summary>
+	/// Returns a <c>Class</c> object that represents the formal return type of the method represented by
+	/// <paramref name="jMethod"/>.
+	/// </summary>
+	/// <param name="jMethod">A <see cref="JExecutableObject"/> instance.</param>
+	/// <returns>Returns the name of current instance.</returns>
+	public abstract JClassObject? GetReturnType(JExecutableObject jMethod);
 }

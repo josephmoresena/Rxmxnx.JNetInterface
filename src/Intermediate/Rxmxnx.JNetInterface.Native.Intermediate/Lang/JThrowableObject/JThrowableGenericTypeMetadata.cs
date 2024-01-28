@@ -23,6 +23,8 @@ public partial class JThrowableObject
 			/// <inheritdoc/>
 			public override JTypeModifier Modifier => this._modifier;
 			/// <inheritdoc/>
+			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TThrowable>();
+			/// <inheritdoc/>
 			public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
 
 			/// <summary>
@@ -68,6 +70,13 @@ public partial class JThrowableObject
 					JLocalObject.Validate<TThrowable>(jGlobal, env);
 				return TThrowable.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
+			/// <inheritdoc/>
+			internal override JFunctionDefinition<TThrowable> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
+				JArgumentMetadata[] metadata)
+				=> JFunctionDefinition<TThrowable>.Create(functionName, metadata);
+			/// <inheritdoc/>
+			internal override JFieldDefinition<TThrowable> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
+				=> new(fieldName);
 			/// <inheritdoc/>
 			internal override JThrowableException CreateException(JGlobalBase jGlobalThrowable,
 				String? exceptionMessage = default)

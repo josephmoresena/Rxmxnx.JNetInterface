@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// This record stores the metadata for a reference <see cref="IDataType"/> type.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-public abstract record JReferenceTypeMetadata : JDataTypeMetadata
+public abstract record JReferenceTypeMetadata : JDataTypeMetadata, IReflectionMetadata
 {
 	/// <inheritdoc/>
 	public override Int32 SizeOf => NativeUtilities.PointerSize;
@@ -27,6 +27,12 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 		className, signature) { }
 	/// <inheritdoc/>
 	internal JReferenceTypeMetadata(CStringSequence information) : base(information) { }
+
+	JFunctionDefinition IReflectionMetadata.CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
+		JArgumentMetadata[] metadata)
+		=> this.CreateFunctionDefinition(functionName, metadata);
+	JFieldDefinition IReflectionMetadata.CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
+		=> this.CreateFieldDefinition(fieldName);
 
 	/// <summary>
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="localRef"/> using
@@ -54,6 +60,12 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jGlobal"/>.</returns>
 	[return: NotNullIfNotNull(nameof(jGlobal))]
 	internal abstract JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal);
+
+	/// <inheritdoc cref="IReflectiblIReflectionMetadatationDefinition(ReadOnlySpan{Byte}, JArgumentMetadata[])"/>
+	internal abstract JFunctionDefinition CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
+		JArgumentMetadata[] metadata);
+	/// <inheritdoc cref="IReflectiblIReflectionMetadatadDefinition(ReadOnlySpan{Byte})"/>
+	internal abstract JFieldDefinition CreateFieldDefinition(ReadOnlySpan<Byte> fieldName);
 
 	/// <summary>
 	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
