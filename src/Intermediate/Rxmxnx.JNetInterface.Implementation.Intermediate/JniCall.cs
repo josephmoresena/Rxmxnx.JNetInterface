@@ -1,5 +1,3 @@
-using JThrowableObject = Rxmxnx.JNetInterface.Lang.JThrowableObject;
-
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
