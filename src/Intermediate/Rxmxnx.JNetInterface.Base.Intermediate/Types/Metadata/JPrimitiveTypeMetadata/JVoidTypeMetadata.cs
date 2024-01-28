@@ -19,6 +19,6 @@ public partial record JPrimitiveTypeMetadata
 		                                  stackalloc Byte[1] { UnicodePrimitiveSignatures.VoidSignatureChar, },
 		                                  UnicodeClassNames.VoidPrimitive(), UnicodeClassNames.VoidObject()) { }
 		/// <inheritdoc/>
-		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes) => throw new NotImplementedException();
+		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes) => throw new InvalidOperationException("A void value can't be created.");
 	}
 }

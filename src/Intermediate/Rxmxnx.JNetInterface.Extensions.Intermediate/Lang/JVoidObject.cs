@@ -14,13 +14,15 @@ public sealed class JVoidObject : JLocalObject, IPrimitiveEquatable, IPrimitiveW
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	private JVoidObject(IEnvironment env) : base(env.ClassFeature.VoidObject, default) { }
 
-	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => throw new NotImplementedException();
-	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => throw new NotImplementedException();
+	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) 
+		=> throw new InvalidOperationException("A Void instance can't be equatable.");
+	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other)
+		=> throw new InvalidOperationException("A Void instance can't be equatable.");
 
 	static JVoidObject IReferenceType<JVoidObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> throw new NotImplementedException();
+		=> throw new InvalidOperationException("A Void instance can't be created.");
 	static JVoidObject IReferenceType<JVoidObject>.Create(IReferenceType.ObjectInitializer initializer)
-		=> throw new NotImplementedException();
+		=> throw new InvalidOperationException("A Void instance can't be created.");
 	static JVoidObject IReferenceType<JVoidObject>.Create(IReferenceType.GlobalInitializer initializer)
-		=> throw new NotImplementedException();
+		=> throw new InvalidOperationException("A Void instance can't be created.");
 }
