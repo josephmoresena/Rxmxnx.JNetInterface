@@ -25,11 +25,19 @@ public partial class JThrowableObject
 	{
 		IEnvironment env = jThrowable.Environment;
 		using JArrayObject<JStackTraceElementObject> stackTrace = env.Functions.GetStackTrace(jThrowable);
-		JStackTraceInfo[] result = stackTrace.Length > 0 ?
-			new JStackTraceInfo[stackTrace.Length] :
-			Array.Empty<JStackTraceInfo>();
+		return JThrowableObject.GetStackTraceInfo(stackTrace!);
+	}
+	/// <summary>
+	/// Retrieves <see cref="JStackTraceInfo"/> instance from <paramref name="stackTrace"/> array.
+	/// </summary>
+	/// <param name="stackTrace">A <see cref="JStackTraceElementObject"/> array.</param>
+	/// <returns>A <see cref="JStackTraceInfo"/> array.</returns>
+	private static JStackTraceInfo[] GetStackTraceInfo(IReadOnlyList<JStackTraceElementObject> stackTrace)
+	{
+		if (stackTrace.Count == 0) return Array.Empty<JStackTraceInfo>();
+		JStackTraceInfo[] result = new JStackTraceInfo[stackTrace.Count];
 		for (Int32 i = 0; i < result.Length; i++)
-			result[i] = ((StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]!))!;
+			result[i] = (StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]);
 		return result;
 	}
 

@@ -61,10 +61,10 @@ public abstract record JReferenceTypeMetadata : JDataTypeMetadata, IReflectionMe
 	[return: NotNullIfNotNull(nameof(jGlobal))]
 	internal abstract JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal);
 
-	/// <inheritdoc cref="IReflectiblIReflectionMetadatationDefinition(ReadOnlySpan{Byte}, JArgumentMetadata[])"/>
+	/// <inheritdoc cref="IReflectionMetadata.CreateFunctionDefinition(ReadOnlySpan{Byte}, JArgumentMetadata[])"/>
 	internal abstract JFunctionDefinition CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
 		JArgumentMetadata[] metadata);
-	/// <inheritdoc cref="IReflectiblIReflectionMetadatadDefinition(ReadOnlySpan{Byte})"/>
+	/// <inheritdoc cref="IReflectionMetadata.CreateFieldDefinition(ReadOnlySpan{Byte})"/>
 	internal abstract JFieldDefinition CreateFieldDefinition(ReadOnlySpan<Byte> fieldName);
 
 	/// <summary>

@@ -511,7 +511,7 @@ partial class JEnvironment
 		{
 			JEnvironment env = this._mainClasses.Environment;
 			using LocalFrame localFrame = new(env, parameterTypes.Length + 2);
-			JArgumentMetadata[] args = this.GetCallMetadata(parameterTypes);
+			JArgumentMetadata[] args = this.GetCallMetadata(parameterTypes!);
 			if (returnType is null) return JConstructorDefinition.Create(args);
 			IReflectionMetadata? returnMetadata = this.GetReflectionMetadata(returnType);
 			using JNativeMemory<Byte> mem = memberName.GetNativeUtf8Chars();

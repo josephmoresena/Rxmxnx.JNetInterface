@@ -39,4 +39,4 @@ public interface IArrayType<out TArray> : IArrayType, IReferenceType<TArray>
 /// <typeparam name="TArray">Type of java class type.</typeparam>
 /// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
 public interface IArrayType<TArray, TElement> : IArrayType<JArrayObject<TElement>>, IArrayObject<TElement>
-	where TArray : JArrayObject, IArrayType<TArray, TElement> where TElement : IObject, IDataType<TElement> { }
+	where TArray : JArrayObject, IArrayType<TArray, TElement> where TElement : IObject, IDataType<TElement>;

@@ -23,6 +23,7 @@ internal sealed record StackTraceElementObjectMetadata : ObjectMetadata
 	/// <see cref="JStackTraceInfo"/>.
 	/// </summary>
 	/// <param name="metadata">A <see cref="StackTraceElementObjectMetadata"/> to implicitly convert.</param>
+	[return: NotNullIfNotNull(nameof(metadata))]
 	public static implicit operator JStackTraceInfo?(StackTraceElementObjectMetadata? metadata)
 		=> metadata?.Information;
 }

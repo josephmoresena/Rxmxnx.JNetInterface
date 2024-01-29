@@ -52,7 +52,8 @@ public partial interface IArrayFeature
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 	/// <param name="item">The object to locate in <paramref name="jArray"/>.</param>
 	/// <returns>The index of <paramref name="item"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
-	Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement item) where TElement : IObject, IDataType<TElement>;
+	Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item)
+		where TElement : IObject, IDataType<TElement>;
 	/// <summary>
 	/// Retrieves a pointer to <see cref="JArrayObject{TPrimitive}"/> elements.
 	/// </summary>
