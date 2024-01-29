@@ -24,13 +24,6 @@ internal partial class JPrimitiveObject
 		/// <param name="value">Internal wrapper.</param>
 		public Generic(TValue value) => this._value = value;
 
-		/// <inheritdoc/>
-		public void CopyTo(Span<Byte> span)
-		{
-			Int32 offset = 0;
-			this.CopyTo(span, ref offset);
-		}
-
 		Int32 IComparable.CompareTo(Object? obj) => this.Value.CompareTo(obj);
 		TypeCode IConvertible.GetTypeCode() => this.Value.GetTypeCode();
 		Boolean IConvertible.ToBoolean(IFormatProvider? provider) => this.Value.ToBoolean(provider);

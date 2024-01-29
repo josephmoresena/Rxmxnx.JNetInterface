@@ -97,9 +97,9 @@ partial class JEnvironment
 				this.CheckJniError();
 				return (TElement)primitiveMetadata.CreateInstance(fixedBuffer.Values);
 			}
-			GetObjectArrayElementDelegate getObjectArrayElement = this.GetDelegate<GetObjectArrayElementDelegate>();
-			JObjectLocalRef localRef = getObjectArrayElement(this.Reference, jArray.As<JObjectArrayLocalRef>(), index);
-			if (localRef == default) this.CheckJniError();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
+			JObjectLocalRef localRef = this.GetObjectArrayElement(arrayRef, index);
 			return this.CreateObject<TElement>(localRef, true);
 		}
 		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
@@ -124,7 +124,17 @@ partial class JEnvironment
 		}
 		public Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item)
 			where TElement : IObject, IDataType<TElement>
-			=> throw new NotImplementedException();
+		{
+			ValidationUtilities.ThrowIfDummy(jArray);
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+
+			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+				return this.IndexOfObject(jArray, item as JReferenceObject);
+
+			Span<Byte> itemSpan = stackalloc Byte[primitiveMetadata.SizeOf];
+			item!.CopyTo(itemSpan);
+			return this.IndexOfPrimitive(jArray, itemSpan);
+		}
 		public void SetObjectElement(JArrayObject jArray, Int32 index, JLocalObject? value)
 		{
 			ValidationUtilities.ThrowIfDummy(value);
@@ -149,10 +159,7 @@ partial class JEnvironment
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ValidationUtilities.ThrowIfDummy(jArray);
-			GetPrimitiveArrayCriticalDelegate getPrimitiveArrayCriticalDelegate =
-				this.GetDelegate<GetPrimitiveArrayCriticalDelegate>();
-			IntPtr result = getPrimitiveArrayCriticalDelegate(this.Reference, jArray.Reference, out _);
-			if (result == IntPtr.Zero) this.CheckJniError();
+			IntPtr result = this.GetPrimitiveCriticalSequence(jArray.Reference);
 			return result;
 		}
 		public void ReleaseSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, IntPtr pointer, JReleaseMode mode)
@@ -191,6 +198,77 @@ partial class JEnvironment
 			this.CheckJniError();
 		}
 
+		/// <summary>
+		/// Determines the index of a specific item in <paramref name="jArray"/>.
+		/// </summary>
+		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+		/// <param name="item">The object to locate in <paramref name="jArray"/>.</param>
+		/// <returns>The index of <paramref name="item"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
+		private Int32 IndexOfObject(JArrayObject jArray, JReferenceObject? item)
+		{
+			ValidationUtilities.ThrowIfDummy(item);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
+			JObjectLocalRef localRef = jniTransaction.Add(item);
+			JObjectArrayLocalRef objectArrayRef =
+				NativeUtilities.Transform<JArrayLocalRef, JObjectArrayLocalRef>(in arrayRef);
+			JEnvironment env = this._mainClasses.Environment;
+			for (Int32 i = 0; i < jArray.Length; i++)
+			{
+				JObjectLocalRef itemLocalRef = this.GetObjectArrayElement(objectArrayRef, i);
+				if (localRef == itemLocalRef || env.IsSame(localRef, itemLocalRef))
+					return i;
+			}
+			return -1;
+		}
+		/// <summary>
+		/// Determines the index of a specific item in <paramref name="jArray"/>.
+		/// </summary>
+		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+		/// <param name="itemSpan">The binary information to locate in <paramref name="jArray"/>.</param>
+		/// <returns>The index of <paramref name="itemSpan"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
+		private Int32 IndexOfPrimitive(JArrayObject jArray, ReadOnlySpan<Byte> itemSpan)
+		{
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
+			Int32 binaryLength = jArray.Length * itemSpan.Length;
+			ValPtr<Byte> criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef);
+			using IFixedContext<Byte>.IDisposable mem = criticalPtr.GetUnsafeFixedContext(binaryLength);
+			for (Int32 offset = 0; offset < binaryLength; offset += itemSpan.Length)
+			{
+				if (itemSpan.SequenceEqual(mem.Values.Slice(offset, itemSpan.Length)))
+					return offset % itemSpan.Length;
+			}
+			return -1;
+		}
+		/// <summary>
+		/// Retrieves <see cref="JObjectLocalRef"/> reference from <paramref name="arrayRef"/> at
+		/// <paramref name="index"/>.
+		/// </summary>
+		/// <param name="arrayRef">A <see cref="JObjectArrayLocalRef"/> reference.</param>
+		/// <param name="index">Element index.</param>
+		/// <returns>The element with <paramref name="index"/> on <paramref name="arrayRef"/>.</returns>
+		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
+		private JObjectLocalRef GetObjectArrayElement(JObjectArrayLocalRef arrayRef, Int32 index)
+		{
+			GetObjectArrayElementDelegate getObjectArrayElement = this.GetDelegate<GetObjectArrayElementDelegate>();
+			JObjectLocalRef localRef = getObjectArrayElement(this.Reference, arrayRef, index);
+			if (localRef == default) this.CheckJniError();
+			return localRef;
+		}
+		/// <summary>
+		/// Retrieves a direct pointer to <see cref="JArrayObject{TPrimitive}"/> elements.
+		/// </summary>
+		/// <param name="arrayRef">A <see cref="JArrayLocalRef"/> reference.</param>
+		/// <returns>Pointer to <paramref name="arrayRef"/> data.</returns>
+		private ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
+		{
+			GetPrimitiveArrayCriticalDelegate getPrimitiveArrayCriticalDelegate =
+				this.GetDelegate<GetPrimitiveArrayCriticalDelegate>();
+			ValPtr<Byte> result = getPrimitiveArrayCriticalDelegate(this.Reference, arrayRef, out _);
+			if (result == ValPtr<Byte>.Zero) this.CheckJniError();
+			return result;
+		}
 		/// <summary>
 		/// Retrieves a VM managed pointer to primitive array elements.
 		/// </summary>

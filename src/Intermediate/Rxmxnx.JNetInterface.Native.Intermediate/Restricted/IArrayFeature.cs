@@ -60,7 +60,7 @@ public partial interface IArrayFeature
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="isCopy">Output. Indicates whether the resulting pointer references a data copy.</param>
-	/// <returns>Pointer to <paramref name="jArray"/> UTF-16 data.</returns>
+	/// <returns>Pointer to <paramref name="jArray"/> data.</returns>
 	IntPtr GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, out Boolean isCopy)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	/// <summary>
@@ -68,7 +68,7 @@ public partial interface IArrayFeature
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
-	/// <returns>Pointer to <paramref name="jArray"/> UTF-16 data.</returns>
+	/// <returns>Pointer to <paramref name="jArray"/> data.</returns>
 	IntPtr GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	/// <summary>

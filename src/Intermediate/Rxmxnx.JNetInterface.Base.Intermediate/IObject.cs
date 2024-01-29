@@ -15,6 +15,16 @@ public interface IObject
 	CString ObjectSignature { get; }
 
 	/// <summary>
+	/// Copy the sequence of bytes of current instance to <paramref name="span"/>.
+	/// </summary>
+	/// <param name="span">Binary span.</param>
+	/// <returns>Number of bytes copied.</returns>
+	internal void CopyTo(Span<Byte> span)
+	{
+		Int32 index = 0;
+		this.CopyTo(span, ref index);
+	}
+	/// <summary>
 	/// Copy the sequence of bytes of current instance to <paramref name="span"/> at specified
 	/// <paramref name="offset"/>.
 	/// </summary>

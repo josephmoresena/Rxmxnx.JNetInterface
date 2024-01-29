@@ -116,7 +116,7 @@ internal delegate void SetFloatArrayRegionDelegate(JEnvironmentRef env, JFloatAr
 internal delegate void SetDoubleArrayRegionDelegate(JEnvironmentRef env, JDoubleArrayLocalRef arrayRef,
 	Int32 startIndex, Int32 length, ReadOnlyValPtr<Double> buffer0);
 
-internal delegate IntPtr GetPrimitiveArrayCriticalDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
+internal delegate ValPtr<Byte> GetPrimitiveArrayCriticalDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
 	out Byte isCopy);
 
 internal delegate void ReleasePrimitiveArrayCriticalDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,

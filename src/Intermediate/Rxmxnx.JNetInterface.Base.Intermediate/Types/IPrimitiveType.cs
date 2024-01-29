@@ -13,13 +13,6 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 		=> ValidationUtilities.ThrowInvalidInterface<JNativeType>(nameof(IPrimitiveType));
 
 	/// <summary>
-	/// Copy the sequence of bytes of current instance to <paramref name="span"/>.
-	/// </summary>
-	/// <param name="span">Binary span.</param>
-	/// <returns>Number of bytes copied.</returns>
-	internal void CopyTo(Span<Byte> span);
-
-	/// <summary>
 	/// Retrieves the metadata for given primitive type.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of current java primitive datatype.</typeparam>

@@ -278,7 +278,7 @@ partial class JEnvironment
 			this.CheckJniError();
 		}
 		public TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
-			where TField : IDataType<TField>
+			where TField : IObject, IDataType<TField>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
@@ -299,13 +299,13 @@ partial class JEnvironment
 			return this.CreateObject<TField>(resultLocalRef, true);
 		}
 		public void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
-			TField? value) where TField : IDataType<TField>
+			TField? value) where TField : IObject, IDataType<TField>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
-				(value as IPrimitiveType)!.CopyTo(bytes);
+				value!.CopyTo(bytes);
 				this.SetPrimitiveField(jLocal, jClass, definition, bytes);
 				return;
 			}
@@ -320,7 +320,7 @@ partial class JEnvironment
 			setObjectField(this.Reference, localRef, fieldId, valueLocalRef);
 		}
 		public TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
-			where TField : IDataType<TField>
+			where TField : IObject, IDataType<TField>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
@@ -333,13 +333,13 @@ partial class JEnvironment
 			return this.CreateObject<TField>(localRef, true);
 		}
 		public void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
-			where TField : IDataType<TField>
+			where TField : IObject, IDataType<TField>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
-				(value as IPrimitiveType)!.CopyTo(bytes);
+				value!.CopyTo(bytes);
 				this.SetPrimitiveStaticField(jClass, definition, bytes);
 				return;
 			}
@@ -551,7 +551,7 @@ partial class JEnvironment
 			JArgumentMetadata[] args = new JArgumentMetadata[parameterTypes.Count];
 			for (Int32 i = 0; i < parameterTypes.Count; i++)
 			{
-				using JClassObject jClass = parameterTypes[i]!;
+				using JClassObject jClass = parameterTypes[i];
 				using JStringObject className = this.Functions.GetClassName(jClass);
 				using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
 				args[i] = MetadataHelper.GetReflectionMetadata(mem.Values)!.ArgumentMetadata;

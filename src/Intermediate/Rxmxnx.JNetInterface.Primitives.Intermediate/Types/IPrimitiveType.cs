@@ -10,11 +10,6 @@ internal partial interface IPrimitiveType<TPrimitive, TValue> : IPrimitiveType<T
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>, IEquatable<TPrimitive>
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 {
-	void IPrimitiveType.CopyTo(Span<Byte> span)
-	{
-		Int32 offset = 0;
-		this.CopyTo(span, ref offset);
-	}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset)
 	{

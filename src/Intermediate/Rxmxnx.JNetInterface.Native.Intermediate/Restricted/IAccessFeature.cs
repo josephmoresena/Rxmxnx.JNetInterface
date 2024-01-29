@@ -14,7 +14,7 @@ public partial interface IAccessFeature
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <returns><typeparamref name="TField"/> field instance.</returns>
 	TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
-		where TField : IDataType<TField>;
+		where TField : IObject, IDataType<TField>;
 	/// <summary>
 	/// Sets a static field to given <see cref="JLocalObject"/> instance.
 	/// </summary>
@@ -24,7 +24,7 @@ public partial interface IAccessFeature
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <param name="value">The field value to set to.</param>
 	void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition, TField? value)
-		where TField : IDataType<TField>;
+		where TField : IObject, IDataType<TField>;
 	/// <summary>
 	/// Retrieves a static field from given <see cref="JClassObject"/> instance.
 	/// </summary>
@@ -32,7 +32,8 @@ public partial interface IAccessFeature
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <returns><typeparamref name="TField"/> field instance.</returns>
-	TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition) where TField : IDataType<TField>;
+	TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
+		where TField : IObject, IDataType<TField>;
 	/// <summary>
 	/// Sets a static field to given <see cref="JClassObject"/> instance.
 	/// </summary>
@@ -41,7 +42,7 @@ public partial interface IAccessFeature
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <param name="value">The field value to set to.</param>
 	void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
-		where TField : IDataType<TField>;
+		where TField : IObject, IDataType<TField>;
 	/// <summary>
 	/// Invokes a constructor method for given <see cref="JClassObject"/> instance.
 	/// </summary>

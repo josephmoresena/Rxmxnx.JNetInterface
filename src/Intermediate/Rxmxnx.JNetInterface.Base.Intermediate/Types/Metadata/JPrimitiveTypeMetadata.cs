@@ -72,7 +72,6 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 		this._underlineType = underlineType;
 		this._wrapperInformation = JDataTypeMetadata.CreateInformationSequence(wrapperClassName);
 	}
-
 	/// <summary>
 	/// Creates a <see cref="IPrimitiveType"/> value from <paramref name="bytes"/>.
 	/// </summary>
