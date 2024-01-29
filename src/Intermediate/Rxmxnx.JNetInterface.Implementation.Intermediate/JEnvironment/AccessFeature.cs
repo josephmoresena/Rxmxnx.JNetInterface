@@ -551,10 +551,10 @@ partial class JEnvironment
 			JArgumentMetadata[] args = new JArgumentMetadata[parameterTypes.Count];
 			for (Int32 i = 0; i < parameterTypes.Count; i++)
 			{
-				using (JClassObject jClass = parameterTypes[i]!)
-				using (JStringObject className = this.Functions.GetClassName(jClass))
-				using (JNativeMemory<Byte> mem = className.GetNativeUtf8Chars())
-					args[i] = MetadataHelper.GetReflectionMetadata(mem.Values)!.ArgumentMetadata;
+				using JClassObject jClass = parameterTypes[i]!;
+				using JStringObject className = this.Functions.GetClassName(jClass);
+				using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
+				args[i] = MetadataHelper.GetReflectionMetadata(mem.Values)!.ArgumentMetadata;
 			}
 			return args;
 		}
