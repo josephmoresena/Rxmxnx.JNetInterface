@@ -122,6 +122,9 @@ partial class JEnvironment
 				this.SetObjectElement(jArray, index, value as JLocalObject);
 			}
 		}
+		public Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement item)
+			where TElement : IObject, IDataType<TElement>
+			=> throw new NotImplementedException();
 		public void SetObjectElement(JArrayObject jArray, Int32 index, JLocalObject? value)
 		{
 			ValidationUtilities.ThrowIfDummy(value);

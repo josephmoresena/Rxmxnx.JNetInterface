@@ -85,4 +85,11 @@ public record JConstructorDefinition : JCallDefinition
 		return env.AccessFeature.CallInternalConstructor<TObject>(jClass, definition,
 		                                                          args ?? definition.CreateArgumentsArray());
 	}
+
+	/// <summary>
+	/// Create a <see cref="JConstructorDefinition"/> instance for <paramref name="metadata"/>.
+	/// </summary>
+	/// <param name="metadata">Metadata of the types of call arguments.</param>
+	/// <returns>A <see cref="JConstructorDefinition"/> instance.</returns>
+	internal static JConstructorDefinition Create(JArgumentMetadata[] metadata) => new(metadata);
 }

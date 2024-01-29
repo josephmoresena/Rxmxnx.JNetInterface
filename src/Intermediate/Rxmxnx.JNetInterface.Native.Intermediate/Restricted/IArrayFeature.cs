@@ -46,6 +46,14 @@ public partial interface IArrayFeature
 	void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
 		where TElement : IObject, IDataType<TElement>;
 	/// <summary>
+	/// Determines the index of a specific item in <paramref name="jArray"/>.
+	/// </summary>
+	/// <typeparam name="TElement">Type of <paramref name="jArray"/> element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+	/// <param name="item">The object to locate in <paramref name="jArray"/>.</param>
+	/// <returns>The index of <paramref name="item"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
+	Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement item) where TElement : IObject, IDataType<TElement>;
+	/// <summary>
 	/// Retrieves a pointer to <see cref="JArrayObject{TPrimitive}"/> elements.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>

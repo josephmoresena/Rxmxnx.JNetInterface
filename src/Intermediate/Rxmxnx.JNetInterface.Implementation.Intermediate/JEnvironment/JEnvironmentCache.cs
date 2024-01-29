@@ -345,7 +345,7 @@ partial class JEnvironment
 		{
 			JEnvironment env = this._mainClasses.Environment;
 			using JStringObject jString = JClassObject.GetClassName(env, classRef, out Boolean isPrimitive);
-			using JNativeMemory<Byte> utf8Text = jString.GetUtf8Chars(JMemoryReferenceKind.Local);
+			using JNativeMemory<Byte> utf8Text = jString.GetNativeUtf8Chars();
 			JClassObject jClass = isPrimitive ?
 				this.GetPrimitiveClass(utf8Text.Values) :
 				this.GetClass(utf8Text.Values, keepReference ? classRef : default);

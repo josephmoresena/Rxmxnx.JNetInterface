@@ -102,4 +102,15 @@ public partial interface IAccessFeature
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	void ClearNatives(JClassObject jClass);
+
+	/// <summary>
+	/// Retrieves the <see cref="JCallDefinition"/> instance from <paramref name="parameterTypes"/> and
+	/// <paramref name="returnType"/>.
+	/// </summary>
+	/// <param name="memberName">A <see cref="JStringObject"/> instance.</param>
+	/// <param name="parameterTypes">A <see cref="JClassObject"/> array.</param>
+	/// <param name="returnType">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JCallDefinition"/> instance.</returns>
+	JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
+		JClassObject? returnType);
 }

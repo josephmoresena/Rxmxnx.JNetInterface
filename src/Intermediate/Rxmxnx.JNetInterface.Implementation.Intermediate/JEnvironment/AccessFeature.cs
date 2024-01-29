@@ -506,7 +506,58 @@ partial class JEnvironment
 			if (result != JResult.Ok) throw new JniException(result);
 			this.VirtualMachine.UnregisterNatives(this.ClassObject.Hash);
 		}
+		public JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
+			JClassObject? returnType)
+		{
+			JEnvironment env = this._mainClasses.Environment;
+			using LocalFrame localFrame = new(env, parameterTypes.Length + 2);
+			JArgumentMetadata[] args = this.GetCallMetadata(parameterTypes);
+			if (returnType is null) return JConstructorDefinition.Create(args);
+			IReflectionMetadata? returnMetadata = this.GetReflectionMetadata(returnType);
+			using JNativeMemory<Byte> mem = memberName.GetNativeUtf8Chars();
+			return returnMetadata is null ?
+				JMethodDefinition.Create(mem.Values, args) :
+				returnMetadata.CreateFunctionDefinition(mem.Values, args);
+		}
+		public JMethodId GetMethodId(JExecutableObject jExecutable)
+		{
+			ValidationUtilities.ThrowIfDummy(jExecutable);
+			FromReflectedMethodDelegate fromReflectedMethod = this.GetDelegate<FromReflectedMethodDelegate>();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JObjectLocalRef localRef = jniTransaction.Add(jExecutable);
+			JMethodId result = fromReflectedMethod(this.Reference, localRef);
+			if (result == default) this.CheckJniError();
+			return result;
+		}
 
+		/// <summary>
+		/// Retrieves the <see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.
+		/// </summary>
+		/// <param name="returnType">A <see cref="JClassObject"/> instance.</param>
+		/// <returns><see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.</returns>
+		private IReflectionMetadata? GetReflectionMetadata(JClassObject returnType)
+		{
+			using JStringObject className = this.Functions.GetClassName(returnType);
+			using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
+			return MetadataHelper.GetReflectionMetadata(mem.Values);
+		}
+		/// <summary>
+		/// Retrieves a <see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.
+		/// </summary>
+		/// <param name="parameterTypes">A <see cref="JClassObject"/> list.</param>
+		/// <returns><see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.</returns>
+		private JArgumentMetadata[] GetCallMetadata(IReadOnlyList<JClassObject> parameterTypes)
+		{
+			JArgumentMetadata[] args = new JArgumentMetadata[parameterTypes.Count];
+			for (Int32 i = 0; i < parameterTypes.Count; i++)
+			{
+				using (JClassObject jClass = parameterTypes[i]!)
+				using (JStringObject className = this.Functions.GetClassName(jClass))
+				using (JNativeMemory<Byte> mem = className.GetNativeUtf8Chars())
+					args[i] = MetadataHelper.GetReflectionMetadata(mem.Values)!.ArgumentMetadata;
+			}
+			return args;
+		}
 		/// <summary>
 		/// Uses <paramref name="jLocal"/> into <paramref name="jniTransaction"/>.
 		/// </summary>

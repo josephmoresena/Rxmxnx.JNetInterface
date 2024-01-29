@@ -109,4 +109,10 @@ public partial interface IAccessFeature
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	internal void CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args);
+	/// <summary>
+	/// Retrieves <see cref="JMethodId"/> for <paramref name="jExecutable"/>
+	/// </summary>
+	/// <param name="jExecutable">A <see cref="JExecutableObject"/> instance.</param>
+	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
+	internal JMethodId GetMethodId(JExecutableObject jExecutable);
 }

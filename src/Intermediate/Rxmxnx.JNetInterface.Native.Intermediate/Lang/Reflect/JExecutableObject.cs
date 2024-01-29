@@ -20,6 +20,11 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	static JDataTypeMetadata IDataType.Metadata => JExecutableObject.metadata;
 
 	/// <inheritdoc/>
+	internal JExecutableObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition) : base(
+		jClass, localRef)
+		=> this._callDefinition = definition;
+
+	/// <inheritdoc/>
 	protected JExecutableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	protected JExecutableObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
