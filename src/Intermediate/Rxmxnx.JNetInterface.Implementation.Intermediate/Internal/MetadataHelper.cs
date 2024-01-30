@@ -138,7 +138,9 @@ internal static class MetadataHelper
 		IReflectionMetadata? result;
 
 		if (MetadataHelper.primitiveReflectionMetadata.TryGetValue(hash, out IReflectionMetadata? primitiveMetadata))
+		{
 			result = primitiveMetadata;
+		}
 		else if (MetadataHelper.runtimeMetadata.TryGetValue(hash, out JReferenceTypeMetadata? metadata))
 		{
 			result = metadata;
