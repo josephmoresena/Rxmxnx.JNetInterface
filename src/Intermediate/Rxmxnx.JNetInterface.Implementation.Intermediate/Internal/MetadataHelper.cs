@@ -98,7 +98,7 @@ internal static class MetadataHelper
 	/// <summary>
 	/// Primitive reflection dictionary.
 	/// </summary>
-	private static readonly Dictionary<String, IReflectionMetadata?> reflectionMetadata = new()
+	private static readonly Dictionary<String, IReflectionMetadata?> primitiveReflectionMetadata = new()
 	{
 		// Basic objects //
 		{ JPrimitiveTypeMetadata.FakeVoidHash, default },
@@ -118,6 +118,10 @@ internal static class MetadataHelper
 	private static readonly ConcurrentDictionary<String, JReferenceTypeMetadata> runtimeMetadata =
 		new(MetadataHelper.initialMetadata);
 	/// <summary>
+	/// Runtime metadata dictionary.
+	/// </summary>
+	private static readonly ConcurrentDictionary<String, IReflectionMetadata> reflectionMetadata = new();
+	/// <summary>
 	/// Runtime metadata assignation dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<String, Boolean?> assignationCache = new();
@@ -133,14 +137,12 @@ internal static class MetadataHelper
 		String hash = information.ToString();
 		IReflectionMetadata? result;
 
-		if (MetadataHelper.reflectionMetadata.TryGetValue(hash, out IReflectionMetadata? primitiveMetadata))
-		{
+		if (MetadataHelper.primitiveReflectionMetadata.TryGetValue(hash, out IReflectionMetadata? primitiveMetadata))
 			result = primitiveMetadata;
-		}
 		else if (MetadataHelper.runtimeMetadata.TryGetValue(hash, out JReferenceTypeMetadata? metadata))
 		{
 			result = metadata;
-			MetadataHelper.reflectionMetadata.Remove(hash);
+			MetadataHelper.reflectionMetadata.TryRemove(hash, out _);
 		}
 		else
 		{
