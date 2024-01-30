@@ -48,7 +48,7 @@ partial class JEnvironment
 			this.SetAssignableTo<TDataType>(jObject, result);
 			return result;
 		}
-		public JClassObject GetClass(CString className)
+		public JClassObject GetClass(ReadOnlySpan<Byte> className)
 		{
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
 			return this.GetOrFindClass(new TypeInformation(classInformation));
@@ -138,6 +138,13 @@ partial class JEnvironment
 		public void SetAssignableTo<TDataType>(JReferenceObject jObject, Boolean isAssignable)
 			where TDataType : JReferenceObject, IDataType<TDataType>
 			=> jObject.SetAssignableTo<TDataType>(isAssignable);
+		public JClassObject GetClass(String classHash)
+		{
+			if (this._classes.TryGetValue(classHash, out JClassObject? jClass))
+				return jClass;
+			CStringSequence classInformation = MetadataHelper.GetClassInformation(classHash);
+			return this.GetOrFindClass(new TypeInformation(classInformation));
+		}
 
 		/// <summary>
 		/// Retrieves class from cache or loads it using JNI.

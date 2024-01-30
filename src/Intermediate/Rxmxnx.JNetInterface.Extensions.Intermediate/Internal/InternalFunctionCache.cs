@@ -133,6 +133,13 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 		return JFunctionDefinition.Invoke(InternalFunctionCache.getName, jMember, memberInterface)!;
 	}
 	/// <inheritdoc/>
+	public override JClassObject GetDeclaringClass<TMember>(TMember jMember)
+	{
+		IEnvironment env = jMember.Environment;
+		JClassObject memberInterface = env.ClassFeature.GetClass<JMemberObject>();
+		return JFunctionDefinition.Invoke(InternalFunctionCache.getDeclaringClass, jMember, memberInterface)!;
+	}
+	/// <inheritdoc/>
 	public override JArrayObject<JClassObject> GetParameterTypes(JExecutableObject jExecutable)
 	{
 		IEnvironment env = jExecutable.Environment;

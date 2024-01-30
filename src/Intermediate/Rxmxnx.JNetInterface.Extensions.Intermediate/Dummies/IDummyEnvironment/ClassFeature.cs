@@ -21,4 +21,11 @@ public partial interface IDummyEnvironment
 	JClassObject IClassFeature.IntegerObject => this.GetClass<JIntegerObject>();
 	JClassObject IClassFeature.LongObject => this.GetClass<JLongObject>();
 	JClassObject IClassFeature.ShortObject => this.GetClass<JShortObject>();
+
+	JClassObject IClassFeature.GetClass(String classHash)
+	{
+		ReadOnlySpan<Byte> classInformation = classHash.AsSpan().AsBytes();
+		Int32 classNameLength = ITypeInformation.GetSegmentLength(classInformation, 0);
+		return this.GetClass(classInformation[..classNameLength]);
+	}
 }

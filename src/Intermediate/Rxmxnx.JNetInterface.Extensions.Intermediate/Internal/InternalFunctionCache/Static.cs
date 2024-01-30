@@ -88,6 +88,12 @@ internal partial class InternalFunctionCache
 	private static readonly JFunctionDefinition<JLong> bufferCapacity = new(UnicodeMethodNames.Capacity());
 
 	/// <summary>
+	/// <c>Member.getDeclaringClass()</c> definition.
+	/// </summary>
+	private static readonly JFunctionDefinition<JClassObject> getDeclaringClass =
+		new(UnicodeMethodNames.GetDeclaringClass());
+
+	/// <summary>
 	/// <c>Executable.getParameterTypes()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JArrayObject<JClassObject>> getParameterTypes =

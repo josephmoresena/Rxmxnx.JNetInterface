@@ -94,6 +94,10 @@ internal static class MethodNames
 	/// </summary>
 	public const String Capacity = "capacity";
 	/// <summary>
+	/// Name of <c>Member.getDeclaringClass()</c>.
+	/// </summary>
+	public const String GetDeclaringClass = "getDeclaringClass";
+	/// <summary>
 	/// Name of <c>Executable.getParameterTypes()</c>.
 	/// </summary>
 	public const String GetParameterTypes = "getParameterTypes";

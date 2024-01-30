@@ -388,16 +388,18 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction =
 				this.GetClassTransaction(jClass, definition, out JMethodId methodId);
-			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
-			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-			CallStaticVoidMethodADelegate callStaticVoidMethod = this.GetDelegate<CallStaticVoidMethodADelegate>();
-			callStaticVoidMethod(this.Reference, jClass.Reference, methodId,
-			                     (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
-			this.CheckJniError();
+			this.CallStaticMethod(definition, jClass.Reference, args, jniTransaction, methodId);
+		}
+		public void CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition, IObject?[] args)
+		{
+			ValidationUtilities.ThrowIfDummy(jMethod);
+			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
+			using INativeTransaction jniTransaction =
+				this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
+			_ = jniTransaction.Add(jMethod);
+			JMethodId methodId = jMethod.MethodId;
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass));
+			this.CallStaticMethod(definition, classRef, args, jniTransaction, methodId);
 		}
 		public TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
 			Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>
@@ -445,25 +447,24 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction =
 				this.GetInstanceTransaction(jClass, jLocal, definition, out JObjectLocalRef localRef,
 				                            out JMethodId methodId);
-			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
-			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-			if (!nonVirtual)
-			{
-				CallVoidMethodADelegate callVoidMethod = this.GetDelegate<CallVoidMethodADelegate>();
-				callVoidMethod(this.Reference, localRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
-			}
-			else
-			{
-				CallNonVirtualVoidMethodADelegate callNonVirtualVoidObjectMethod =
-					this.GetDelegate<CallNonVirtualVoidMethodADelegate>();
-				callNonVirtualVoidObjectMethod(this.Reference, localRef, jClass.Reference, methodId,
-				                               (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
-			}
-			this.CheckJniError();
+			JClassLocalRef classRef = nonVirtual ? jClass.Reference : default;
+			this.CallMethod(definition, localRef, classRef, args, jniTransaction, methodId);
+		}
+		public void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition,
+			Boolean nonVirtual, IObject?[] args)
+		{
+			ValidationUtilities.ThrowIfDummy(jMethod);
+			ValidationUtilities.ThrowIfDummy(jLocal);
+			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
+			Int32 initialCapacity = nonVirtual ? 3 : 2;
+			using INativeTransaction jniTransaction =
+				this.VirtualMachine.CreateTransaction(initialCapacity + definition.ReferenceCount);
+			_ = jniTransaction.Add(jMethod);
+			JMethodId methodId = jMethod.MethodId;
+			JObjectLocalRef localRef = jniTransaction.Add(jLocal);
+			JClassLocalRef classRef =
+				nonVirtual ? jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass)) : default;
+			this.CallMethod(definition, localRef, classRef, args, jniTransaction, methodId);
 		}
 		public void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCall> calls)
 		{
@@ -530,6 +531,61 @@ partial class JEnvironment
 			return result;
 		}
 
+		/// <summary>
+		/// Invokes a method on given <see cref="JObjectLocalRef"/> reference.
+		/// </summary>
+		/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
+		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
+		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
+		private void CallMethod(JMethodDefinition definition, JObjectLocalRef localRef, JClassLocalRef classRef,
+			IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
+		{
+			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
+			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
+				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
+
+			if (classRef.Value == default)
+			{
+				CallVoidMethodADelegate callVoidMethod = this.GetDelegate<CallVoidMethodADelegate>();
+				callVoidMethod(this.Reference, localRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			}
+			else
+			{
+				CallNonVirtualVoidMethodADelegate callNonVirtualVoidObjectMethod =
+					this.GetDelegate<CallNonVirtualVoidMethodADelegate>();
+				callNonVirtualVoidObjectMethod(this.Reference, localRef, classRef, methodId,
+				                               (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			}
+
+			this.CheckJniError();
+		}
+		/// <summary>
+		/// Invokes a static method on given <see cref="classRef"/> reference.
+		/// </summary>
+		/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
+		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
+		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
+		private void CallStaticMethod(JMethodDefinition definition, JClassLocalRef classRef, IObject?[] args,
+			INativeTransaction jniTransaction, JMethodId methodId)
+		{
+			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
+			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
+				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
+				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
+			CallStaticVoidMethodADelegate callStaticVoidMethod = this.GetDelegate<CallStaticVoidMethodADelegate>();
+			callStaticVoidMethod(this.Reference, classRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			this.CheckJniError();
+		}
 		/// <summary>
 		/// Retrieves the <see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.
 		/// </summary>

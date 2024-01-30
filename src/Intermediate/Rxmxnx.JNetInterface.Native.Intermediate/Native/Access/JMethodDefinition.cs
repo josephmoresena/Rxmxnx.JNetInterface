@@ -90,6 +90,42 @@ public record JMethodDefinition : JCallDefinition
 	}
 
 	/// <summary>
+	/// Invokes a reflected method which matches with current definition
+	/// passing the default value for each argument.
+	/// </summary>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	protected void InvokeReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
+	{
+		IEnvironment env = jMethod.Environment;
+		env.AccessFeature.CallMethod(jMethod, jLocal, this, false, args);
+	}
+	/// <summary>
+	/// Invokes a reflected method which matches with current definition
+	/// passing the default value for each argument.
+	/// </summary>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	protected void InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
+	{
+		IEnvironment env = jMethod.Environment;
+		env.AccessFeature.CallMethod(jMethod, jLocal, this, true, args);
+	}
+	/// <summary>
+	/// Invokes a reflected method which matches with current definition
+	/// passing the default value for each argument.
+	/// </summary>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	protected void InvokeStaticReflected(JMethodObject jMethod, IObject?[] args)
+	{
+		IEnvironment env = jMethod.Environment;
+		env.AccessFeature.CallStaticMethod(jMethod, this, args);
+	}
+
+	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="definition">A <see cref="JMethodDefinition"/> definition.</param>

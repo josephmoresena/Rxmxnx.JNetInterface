@@ -19,6 +19,31 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 
 	static JDataTypeMetadata IDataType.Metadata => JExecutableObject.metadata;
 
+	/// <summary>
+	/// Executable JNI definition.
+	/// </summary>
+	public JCallDefinition Definition => this._callDefinition ??= this.GetCallDefinition();
+	/// <summary>
+	/// Member declaring class.
+	/// </summary>
+	public JClassObject DeclaringClass
+	{
+		get
+		{
+			IEnvironment env = this.Environment;
+			if (!String.IsNullOrWhiteSpace(this._classHash))
+				return env.ClassFeature.GetClass(this._classHash);
+			JClassObject result = env.Functions.GetDeclaringClass(this);
+			this._classHash = result.Hash;
+			return result;
+		}
+	}
+
+	/// <summary>
+	/// JNI method id.
+	/// </summary>
+	internal JMethodId MethodId => this._methodId ??= this.GetMethodId();
+
 	/// <inheritdoc/>
 	internal JExecutableObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition) : base(
 		jClass, localRef)

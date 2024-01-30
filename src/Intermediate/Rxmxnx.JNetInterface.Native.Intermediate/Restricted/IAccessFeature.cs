@@ -71,6 +71,13 @@ public partial interface IAccessFeature
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, IObject?[] args);
 	/// <summary>
+	/// Invokes an static method reflected on <paramref name="jMethod"/>.
+	/// </summary>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	void CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition, IObject?[] args);
+	/// <summary>
 	/// Invokes a function on given <see cref="JLocalObject"/> instance and returns its result.
 	/// </summary>
 	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
@@ -91,6 +98,16 @@ public partial interface IAccessFeature
 	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition, Boolean nonVirtual,
+		IObject?[] args);
+	/// <summary>
+	/// Invokes a method reflected on <paramref name="jMethod"/>.
+	/// </summary>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
+	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition, Boolean nonVirtual,
 		IObject?[] args);
 	/// <summary>
 	/// Register <paramref name="calls"/> as native methods in current class.

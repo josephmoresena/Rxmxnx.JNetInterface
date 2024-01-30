@@ -118,6 +118,15 @@ internal abstract class FunctionCache
 	public abstract JStringObject GetName<TMember>(TMember jMember)
 		where TMember : JLocalObject, IInterfaceObject<JMemberObject>;
 	/// <summary>
+	/// Returns the <c>java.lang.Class</c> object representing the class or interface
+	/// that declares the member or constructor represented by this Member.
+	/// </summary>
+	/// <typeparam name="TMember">Type of member.</typeparam>
+	/// <param name="jMember">A <see cref="JMemberObject"/> instance.</param>
+	/// <returns>Returns the name of current instance.</returns>
+	public abstract JClassObject GetDeclaringClass<TMember>(TMember jMember)
+		where TMember : JLocalObject, IInterfaceObject<JMemberObject>;
+	/// <summary>
 	/// Returns an array of <c>Class</c> objects that represent the formal parameter types,
 	/// in declaration order, of the executable represented by <paramref name="jExecutable"/>.
 	/// </summary>

@@ -202,6 +202,20 @@ internal static class MetadataHelper
 		return JDataTypeMetadata.CreateInformationSequence(classNameF);
 	}
 	/// <summary>
+	/// Retrieves the class has from current <paramref name="hash"/>.
+	/// </summary>
+	/// <param name="hash">A JNI class hash.</param>
+	/// <returns><see cref="CStringSequence"/> with class information for given type.</returns>
+	public static CStringSequence GetClassInformation(String hash)
+	{
+		ReadOnlySpan<Byte> classInformation = hash.AsSpan().AsBytes();
+		Int32 classNameLength = ITypeInformation.GetSegmentLength(classInformation, 0);
+		Int32 signatureLength = ITypeInformation.GetSegmentLength(classInformation, classNameLength + 1);
+		Int32 arraySignatureLength = ITypeInformation.GetSegmentLength(classInformation, signatureLength + 1);
+		return new(classInformation[..classNameLength], classInformation[(classNameLength + 1)..signatureLength],
+		           classInformation[(signatureLength + 1)..arraySignatureLength]);
+	}
+	/// <summary>
 	/// Indicates whether current class name is for an array.
 	/// </summary>
 	/// <param name="className">A Java class name.</param>

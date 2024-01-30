@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes JNI classing feature.
 /// </summary>
-public interface IClassFeature
+public partial interface IClassFeature
 {
 	/// <summary>
 	/// <c>void</c> class instance.
@@ -141,7 +141,7 @@ public interface IClassFeature
 	/// </summary>
 	/// <param name="className">Class name.</param>
 	/// <returns>The class instance with given class name.</returns>
-	JClassObject GetClass(CString className);
+	JClassObject GetClass(ReadOnlySpan<Byte> className);
 	/// <summary>
 	/// Retrieves the java class for given type.
 	/// </summary>

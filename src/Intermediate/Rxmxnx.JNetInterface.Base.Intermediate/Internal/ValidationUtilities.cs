@@ -214,6 +214,20 @@ internal static class ValidationUtilities
 			throw new ArgumentException(message ?? "Invalid JReferenceObject.");
 	}
 	/// <summary>
+	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
+	/// </summary>
+	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
+	/// <param name="otherDefinition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
+	/// <exception cref="ArgumentException">
+	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
+	/// </exception>
+	public static void ThrowIfNotMatchDefinition(JAccessibleObjectDefinition definition,
+		JAccessibleObjectDefinition otherDefinition)
+	{
+		if (definition.Information.ToString() != otherDefinition.Information.ToString())
+			throw new ArgumentException($"[{definition}] Expected: [{otherDefinition}].");
+	}
+	/// <summary>
 	/// Throws an exception if <paramref name="jObject"/> is default.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>

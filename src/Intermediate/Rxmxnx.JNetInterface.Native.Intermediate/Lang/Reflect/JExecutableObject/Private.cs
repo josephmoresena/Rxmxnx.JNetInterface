@@ -4,23 +4,19 @@ public partial class JExecutableObject : ILocalObject
 {
 	/// <inheritdoc cref="JExecutableObject.Definition"/>
 	private JCallDefinition? _callDefinition;
+	/// <summary>
+	/// Class hash for declaring class.
+	/// </summary>
+	private String? _classHash;
 	/// <inheritdoc cref="JExecutableObject.MethodId"/>
 	private JMethodId? _methodId;
-
-	/// <summary>
-	/// Executable JNI definition.
-	/// </summary>
-	public JCallDefinition Definition => this._callDefinition ??= this.GetCallDefinition();
-
-	/// <summary>
-	/// JNI method id.
-	/// </summary>
-	internal JMethodId MethodId => this._methodId ??= this.GetMethodId();
 
 	ObjectMetadata ILocalObject.CreateMetadata()
 		=> new ExecutableObjectMetadata(base.CreateMetadata())
 		{
-			Definition = this._callDefinition, MethodId = this._methodId,
+			Definition = this._callDefinition,
+			ClassHash = this._classHash ?? this.DeclaringClass.Hash,
+			MethodId = this._methodId,
 		};
 
 	/// <summary>
@@ -35,6 +31,10 @@ public partial class JExecutableObject : ILocalObject
 		using JClassObject? returnType = env.Functions.GetReturnType(this);
 		return env.AccessFeature.GetDefinition(memberName, parameterTypes, returnType);
 	}
+	/// <summary>
+	/// Retrieves the <see cref="JMethodId"/> identifier for current instance.
+	/// </summary>
+	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
 	private JMethodId GetMethodId()
 	{
 		IEnvironment env = this.Environment;
@@ -47,6 +47,7 @@ public partial class JExecutableObject : ILocalObject
 		base.ProcessMetadata(instanceMetadata);
 		if (instanceMetadata is not ExecutableObjectMetadata executableMetadata) return;
 		this._callDefinition = executableMetadata.Definition;
+		this._classHash = executableMetadata.ClassHash;
 		this._methodId = executableMetadata.MethodId;
 	}
 

@@ -12,6 +12,10 @@ public partial class JExecutableObject
 		/// Execution definition.
 		/// </summary>
 		public JCallDefinition? Definition { get; init; }
+		/// <summary>
+		/// JNI declaring class hash.
+		/// </summary>
+		public String? ClassHash { get; init; }
 
 		/// <summary>
 		/// Execution JNI method id.
@@ -26,6 +30,7 @@ public partial class JExecutableObject
 		{
 			if (metadata is not ExecutableObjectMetadata executableMetadata) return;
 			this.Definition = executableMetadata.Definition;
+			this.ClassHash = executableMetadata.ClassHash;
 			this.MethodId = executableMetadata.MethodId;
 		}
 	}
