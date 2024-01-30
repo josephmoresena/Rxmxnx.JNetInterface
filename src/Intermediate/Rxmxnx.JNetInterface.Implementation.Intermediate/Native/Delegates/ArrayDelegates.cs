@@ -120,4 +120,4 @@ internal delegate ValPtr<Byte> GetPrimitiveArrayCriticalDelegate(JEnvironmentRef
 	out Byte isCopy);
 
 internal delegate void ReleasePrimitiveArrayCriticalDelegate(JEnvironmentRef env, JArrayLocalRef arrayRef,
-	IntPtr elements, JReleaseMode mode);
+	ValPtr<Byte> elements, JReleaseMode mode);

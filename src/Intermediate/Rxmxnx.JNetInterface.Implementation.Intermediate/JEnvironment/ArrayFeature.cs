@@ -99,8 +99,7 @@ partial class JEnvironment
 			}
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
-			JObjectLocalRef localRef = this.GetObjectArrayElement(arrayRef, index);
-			return this.CreateObject<TElement>(localRef, true);
+			return this.GetElementObject<TElement>(arrayRef, index);
 		}
 		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
 			where TElement : IObject, IDataType<TElement>
@@ -134,6 +133,19 @@ partial class JEnvironment
 			Span<Byte> itemSpan = stackalloc Byte[primitiveMetadata.SizeOf];
 			item!.CopyTo(itemSpan);
 			return this.IndexOfPrimitive(jArray, itemSpan);
+		}
+		public void CopyTo<TElement>(JArrayObject<TElement> jArray, TElement?[] array, Int32 arrayIndex)
+			where TElement : IObject, IDataType<TElement>
+		{
+			ValidationUtilities.ThrowIfDummy(jArray);
+			ArgumentNullException.ThrowIfNull(array);
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(array.Length);
+
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+				this.CopyToPrimitive(jArray, primitiveMetadata.SizeOf, array, arrayIndex);
+			else
+				this.CopyToObject(jArray, array, arrayIndex);
 		}
 		public void SetObjectElement(JArrayObject jArray, Int32 index, JLocalObject? value)
 		{
@@ -174,10 +186,7 @@ partial class JEnvironment
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ValidationUtilities.ThrowIfDummy(jArray);
-			ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
-				this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
-			releasePrimitiveArrayCritical(this.Reference, jArray.Reference, pointer, JReleaseMode.Abort);
-			this.CheckJniError();
+			this.ReleasePrimitiveCriticalSequence(jArray.Reference, (ValPtr<Byte>)pointer);
 		}
 		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -198,6 +207,19 @@ partial class JEnvironment
 			this.CheckJniError();
 		}
 
+		/// <summary>
+		/// Retrieves the element with <paramref name="index"/> on <paramref name="arrayRef"/>.
+		/// </summary>
+		/// <typeparam name="TElement">Type of <paramref name="arrayRef"/> element.</typeparam>
+		/// <param name="arrayRef">A <see cref="JArrayObject"/> reference.</param>
+		/// <param name="index">Element index.</param>
+		/// <returns>The element with <paramref name="index"/> on <paramref name="arrayRef"/>.</returns>
+		private TElement? GetElementObject<TElement>(JObjectArrayLocalRef arrayRef, Int32 index)
+			where TElement : IObject, IDataType<TElement>
+		{
+			JObjectLocalRef localRef = this.GetObjectArrayElement(arrayRef, index);
+			return this.CreateObject<TElement>(localRef, true);
+		}
 		/// <summary>
 		/// Determines the index of a specific item in <paramref name="jArray"/>.
 		/// </summary>
@@ -233,13 +255,74 @@ partial class JEnvironment
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			Int32 binaryLength = jArray.Length * itemSpan.Length;
 			ValPtr<Byte> criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef);
-			using IFixedContext<Byte>.IDisposable mem = criticalPtr.GetUnsafeFixedContext(binaryLength);
-			for (Int32 offset = 0; offset < binaryLength; offset += itemSpan.Length)
+			try
 			{
-				if (itemSpan.SequenceEqual(mem.Values.Slice(offset, itemSpan.Length)))
-					return offset % itemSpan.Length;
+				Span<Byte> span = criticalPtr.Pointer.GetUnsafeSpan<Byte>(binaryLength);
+				for (Int32 offset = 0; offset < binaryLength; offset += itemSpan.Length)
+				{
+					if (itemSpan.SequenceEqual(span.Slice(offset, itemSpan.Length)))
+						return offset % itemSpan.Length;
+				}
+			}
+			finally
+			{
+				this.ReleasePrimitiveCriticalSequence(arrayRef, criticalPtr);
 			}
 			return -1;
+		}
+		/// <summary>
+		/// Copies the elements of the <paramref name="jArray"/> to an <see cref="T:System.Array"/>,
+		/// starting at a particular <see cref="T:System.Array"/> index.
+		/// </summary>
+		/// <typeparam name="TElement">Type of <paramref name="jArray"/> element.</typeparam>
+		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+		/// <param name="sizeOf">Size of primitive value.</param>
+		/// <param name="array">
+		/// The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied
+		/// from <paramref name="jArray"/>. The <see cref="T:System.Array"/> must have zero-based indexing.
+		/// </param>
+		/// <param name="arrayIndex">
+		/// The zero-based index in <paramref name="array"/> at which copying begins.
+		/// </param>
+		private void CopyToPrimitive<TElement>(JArrayObject jArray, Int32 sizeOf, TElement?[] array, Int32 arrayIndex)
+			where TElement : IObject, IDataType<TElement>
+		{
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			using MemoryHandle handle = array.AsMemory().Pin();
+			Span<Byte> bytes = handle.GetUnsafeSpan<Byte>(sizeOf * array.Length);
+			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
+			Int32 offset = sizeOf * arrayIndex;
+			ValPtr<Byte> criticalPtr = this.GetPrimitiveCriticalSequence(arrayRef);
+			try
+			{
+				Span<Byte> span = criticalPtr.Pointer.GetUnsafeSpan<Byte>(sizeOf * jArray.Length);
+				span[offset..].CopyTo(bytes);
+			}
+			finally
+			{
+				this.ReleasePrimitiveCriticalSequence(arrayRef, criticalPtr);
+			}
+		}
+		/// <summary>
+		/// Copies the elements of the <paramref name="jArray"/> to an <see cref="T:System.Array"/>,
+		/// starting at a particular <see cref="T:System.Array"/> index.
+		/// </summary>
+		/// <typeparam name="TElement">Type of <paramref name="jArray"/> element.</typeparam>
+		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+		/// <param name="array">
+		/// The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied
+		/// from <paramref name="jArray"/>. The <see cref="T:System.Array"/> must have zero-based indexing.
+		/// </param>
+		/// <param name="arrayIndex">
+		/// The zero-based index in <paramref name="array"/> at which copying begins.
+		/// </param>
+		private void CopyToObject<TElement>(JArrayObject jArray, IList<TElement?> array, Int32 arrayIndex)
+			where TElement : IObject, IDataType<TElement>
+		{
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(array.Count + 1);
+			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
+			for (Int32 i = 0; i < array.Count; i++)
+				array[i] = this.GetElementObject<TElement>(arrayRef, i + arrayIndex);
 		}
 		/// <summary>
 		/// Retrieves <see cref="JObjectLocalRef"/> reference from <paramref name="arrayRef"/> at
@@ -268,6 +351,18 @@ partial class JEnvironment
 			ValPtr<Byte> result = getPrimitiveArrayCriticalDelegate(this.Reference, arrayRef, out _);
 			if (result == ValPtr<Byte>.Zero) this.CheckJniError();
 			return result;
+		}
+		/// <summary>
+		/// Releases the critical pointer associated to <paramref name="arrayRef"/>.
+		/// </summary>
+		/// <param name="arrayRef">A <see cref="JArrayLocalRef"/> reference.</param>
+		/// <param name="criticalPtr">Pointer to release to.</param>
+		private void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
+		{
+			ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
+				this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
+			releasePrimitiveArrayCritical(this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
+			this.CheckJniError();
 		}
 		/// <summary>
 		/// Retrieves a VM managed pointer to primitive array elements.

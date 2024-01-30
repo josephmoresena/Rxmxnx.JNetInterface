@@ -55,6 +55,32 @@ public partial interface IArrayFeature
 	Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item)
 		where TElement : IObject, IDataType<TElement>;
 	/// <summary>
+	/// Copies the elements of the <paramref name="jArray"/> to an <see cref="T:System.Array"/>,
+	/// starting at a particular <see cref="T:System.Array"/> index.
+	/// </summary>
+	/// <typeparam name="TElement">Type of <paramref name="jArray"/> element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+	/// <param name="array">
+	/// The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied
+	/// from <paramref name="jArray"/>. The <see cref="T:System.Array"/> must have zero-based indexing.
+	/// </param>
+	/// <param name="arrayIndex">
+	/// The zero-based index in <paramref name="array"/> at which copying begins.
+	/// </param>
+	/// <exception cref="T:System.ArgumentNullException">
+	/// <paramref name="array"/> is <see langword="null"/>.
+	/// </exception>
+	/// <exception cref="T:System.ArgumentOutOfRangeException">
+	/// <paramref name="arrayIndex"/> is less than 0.
+	/// </exception>
+	/// <exception cref="T:System.ArgumentException">
+	/// The number of elements in the source <paramref name="jArray"/> is greater
+	/// than the available space from <paramref name="arrayIndex"/> to the end of the
+	/// destination <paramref name="array"/>.
+	/// </exception>
+	void CopyTo<TElement>(JArrayObject<TElement> jArray, TElement?[] array, Int32 arrayIndex)
+		where TElement : IObject, IDataType<TElement>;
+	/// <summary>
 	/// Retrieves a pointer to <see cref="JArrayObject{TPrimitive}"/> elements.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>

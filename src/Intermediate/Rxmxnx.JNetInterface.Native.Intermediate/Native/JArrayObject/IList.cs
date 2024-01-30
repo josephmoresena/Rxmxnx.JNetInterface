@@ -15,6 +15,7 @@ public partial class JArrayObject<TElement> : IList<TElement?>
 	void ICollection<TElement?>.Add(TElement? item) => JArrayObject<TElement>.emptyList.Add(item);
 	void ICollection<TElement?>.Clear() => JArrayObject<TElement>.emptyList.Clear();
 	Boolean ICollection<TElement?>.Contains(TElement? item) => this.Environment.ArrayFeature.IndexOf(this, item) >= 0;
-	void ICollection<TElement?>.CopyTo(TElement?[] array, Int32 arrayIndex) { throw new NotImplementedException(); }
+	void ICollection<TElement?>.CopyTo(TElement?[] array, Int32 arrayIndex)
+		=> this.Environment.ArrayFeature.CopyTo(this, array, arrayIndex);
 	Boolean ICollection<TElement?>.IsReadOnly => true;
 }
