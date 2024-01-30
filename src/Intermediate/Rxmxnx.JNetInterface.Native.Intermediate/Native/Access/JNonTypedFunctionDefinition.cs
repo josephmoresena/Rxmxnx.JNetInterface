@@ -47,4 +47,27 @@ internal sealed record JNonTypedFunctionDefinition : JFunctionDefinition<JLocalO
 		args.CopyTo(realArgs, 0);
 		return base.StaticInvoke(jClass, realArgs);
 	}
+
+	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeReflected(JMethodObject, JLocalObject, IObject?[])"/>
+	public new JLocalObject? InvokeReflected(JMethodObject jMethod, JLocalObject jLocal, params IObject?[] args)
+	{
+		IObject?[] realArgs = this.CreateArgumentsArray();
+		args.CopyTo(realArgs, 0);
+		return base.InvokeReflected(jMethod, jLocal, args);
+	}
+	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeNonVirtualReflected(JMethodObject, JLocalObject, IObject?[])"/>
+	public new JLocalObject? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal,
+		params IObject?[] args)
+	{
+		IObject?[] realArgs = this.CreateArgumentsArray();
+		args.CopyTo(realArgs, 0);
+		return base.InvokeNonVirtualReflected(jMethod, jLocal, args);
+	}
+	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeStaticReflected(JMethodObject, IObject?[])"/>
+	public new JLocalObject? InvokeStaticReflected(JMethodObject jMethod, params IObject?[] args)
+	{
+		IObject?[] realArgs = this.CreateArgumentsArray();
+		args.CopyTo(realArgs, 0);
+		return base.InvokeStaticReflected(jMethod, args);
+	}
 }

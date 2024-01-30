@@ -53,6 +53,19 @@ public record JConstructorDefinition : JCallDefinition
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
 	protected TObject New<TObject>(IEnvironment env, IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
 		=> this.New<TObject>(env.ClassFeature.GetClass<TObject>(), args);
+	/// <summary>
+	/// Invokes a reflected constructor which matches with current definition
+	/// passing the default value for each argument.
+	/// </summary>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	protected TObject NewReflected<TObject>(JMethodObject jMethod, IObject?[] args)
+		where TObject : JLocalObject, IClassType<TObject>
+	{
+		NativeValidationUtilities.ThrowIfAbstractClass<TObject>();
+		IEnvironment env = jMethod.Environment;
+		return env.AccessFeature.CallConstructor<TObject>(jMethod, this, args);
+	}
 
 	/// <summary>
 	/// Creates a new <typeparamref name="TObject"/> instance using a constructor on <paramref name="jClass"/>

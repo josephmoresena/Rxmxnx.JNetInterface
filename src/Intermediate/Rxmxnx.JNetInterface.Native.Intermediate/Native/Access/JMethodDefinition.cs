@@ -73,13 +73,13 @@ public record JMethodDefinition : JCallDefinition
 		env.AccessFeature.CallMethod(jLocal, jClass, this, true, args);
 	}
 	/// <summary>
-	/// Invokes a static method on <paramref name="jClass"/> which matches with current definition.
+	/// Invokes a static method on <paramref name="jClass"/> which matches with current definition
+	/// passing the default value for each argument.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	protected void StaticInvoke(JClassObject jClass) => this.Invoke(jClass, this.CreateArgumentsArray());
 	/// <summary>
-	/// Invokes a static method on <paramref name="jClass"/> which matches with current definition
-	/// passing the default value for each argument.
+	/// Invokes a static method on <paramref name="jClass"/> which matches with current definition.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
@@ -90,8 +90,7 @@ public record JMethodDefinition : JCallDefinition
 	}
 
 	/// <summary>
-	/// Invokes a reflected method which matches with current definition
-	/// passing the default value for each argument.
+	/// Invokes a reflected method which matches with current definition.
 	/// </summary>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
@@ -102,8 +101,7 @@ public record JMethodDefinition : JCallDefinition
 		env.AccessFeature.CallMethod(jMethod, jLocal, this, false, args);
 	}
 	/// <summary>
-	/// Invokes a reflected method which matches with current definition
-	/// passing the default value for each argument.
+	/// Invokes a reflected method which matches with current definition.
 	/// </summary>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
@@ -114,8 +112,7 @@ public record JMethodDefinition : JCallDefinition
 		env.AccessFeature.CallMethod(jMethod, jLocal, this, true, args);
 	}
 	/// <summary>
-	/// Invokes a reflected method which matches with current definition
-	/// passing the default value for each argument.
+	/// Invokes a reflected static method which matches with current definition.
 	/// </summary>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
@@ -141,8 +138,7 @@ public record JMethodDefinition : JCallDefinition
 		                                     args ?? definition.CreateArgumentsArray());
 	}
 	/// <summary>
-	/// Invokes <paramref name="definition"/> on <paramref name="jClass"/> which matches with current definition
-	/// passing the default value for each argument.
+	/// Invokes <paramref name="definition"/> on <paramref name="jClass"/> which matches with current definition.
 	/// </summary>
 	/// <param name="definition">A <see cref="JMethodDefinition"/> definition.</param>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>

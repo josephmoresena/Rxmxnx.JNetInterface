@@ -54,7 +54,17 @@ public partial interface IAccessFeature
 	TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition, IObject?[] args)
 		where TObject : JLocalObject, IDataType<TObject>;
 	/// <summary>
-	/// Invokes a static function on given <see cref="JClassObject"/> instance.
+	/// Invokes a reflected constructor method on <paramref name="jMethod"/>.
+	/// </summary>
+	/// <typeparam name="TObject"><see cref="IDataType"/> type of created instance.</typeparam>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <param name="definition"><see cref="JConstructorDefinition"/> definition.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	/// <returns>The new <typeparamref name="TObject"/> instance.</returns>
+	TObject CallConstructor<TObject>(JMethodObject jMethod, JConstructorDefinition definition, IObject?[] args)
+		where TObject : JLocalObject, IClassType<TObject>;
+	/// <summary>
+	/// Invokes a static function on <see cref="JClassObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
@@ -63,6 +73,16 @@ public partial interface IAccessFeature
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition, IObject?[] args)
 		where TResult : IDataType<TResult>;
+	/// <summary>
+	/// Invokes a static function reflected on <paramref name="jMethod"/> instance.
+	/// </summary>
+	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	/// <returns><typeparamref name="TResult"/> function result.</returns>
+	TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition<TResult> definition,
+		IObject?[] args) where TResult : IDataType<TResult>;
 	/// <summary>
 	/// Invokes a static method on given <see cref="JClassObject"/> instance.
 	/// </summary>
@@ -88,6 +108,18 @@ public partial interface IAccessFeature
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
+		Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>;
+	/// <summary>
+	/// Invokes a function reflected on <paramref name="jMethod"/> and returns its result.
+	/// </summary>
+	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
+	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
+	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
+	/// <returns><typeparamref name="TResult"/> function result.</returns>
+	TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal, JFunctionDefinition<TResult> definition,
 		Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>;
 	/// <summary>
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.

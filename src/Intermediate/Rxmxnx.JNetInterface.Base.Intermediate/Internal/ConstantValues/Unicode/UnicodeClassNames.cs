@@ -140,6 +140,9 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.MethodObject"/>
 	[DefaultValue(ClassNames.MethodObject)]
 	public static partial ReadOnlySpan<Byte> MethodObject();
+	/// <inheritdoc cref="ClassNames.ConstructorObject"/>
+	[DefaultValue(ClassNames.ConstructorObject)]
+	public static partial ReadOnlySpan<Byte> ConstructorObject();
 	/// <inheritdoc cref="ClassNames.MemberInterface"/>
 	[DefaultValue(ClassNames.MemberInterface)]
 	public static partial ReadOnlySpan<Byte> MemberInterface();

@@ -207,6 +207,10 @@ internal static class ClassNames
 	/// </summary>
 	public const String MethodObject = ClassNames.ReflectPackage + "Method";
 	/// <summary>
+	/// JNI name of <c>java.lang.reflect.Constructor</c> class.
+	/// </summary>
+	public const String ConstructorObject = ClassNames.ReflectPackage + "Constructor";
+	/// <summary>
 	/// JNI name of <c>java.lang.reflect.Member</c> interface.
 	/// </summary>
 	public const String MemberInterface = ClassNames.ReflectPackage + "Member";
