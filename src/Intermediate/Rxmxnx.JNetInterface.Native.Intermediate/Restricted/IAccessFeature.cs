@@ -200,4 +200,15 @@ public partial interface IAccessFeature
 	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JConstructorObject"/> instance.</returns>
 	JConstructorObject GetReflectedConstructor(JConstructorDefinition definition, JClassObject declaringClass);
+	/// <summary>
+	/// Retrieves a <see cref="JFieldObject"/> reflected from current definition on
+	/// <paramref name="declaringClass"/>.
+	/// </summary>
+	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
+	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="isStatic">
+	/// Indicates whether <paramref name="definition"/> matches with an static field in <paramref name="declaringClass"/>.
+	/// </param>
+	/// <returns>A <see cref="JFieldObject"/> instance.</returns>
+	JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass, Boolean isStatic);
 }

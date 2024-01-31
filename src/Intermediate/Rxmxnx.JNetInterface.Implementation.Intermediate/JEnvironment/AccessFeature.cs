@@ -502,6 +502,21 @@ partial class JEnvironment
 			JObjectLocalRef localRef = this.GetReflectedCall(definition, declaringClass, false);
 			return new(this.GetClass<JConstructorObject>(), localRef, definition, declaringClass);
 		}
+		public JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
+			Boolean isStatic)
+		{
+			ValidationUtilities.ThrowIfDummy(declaringClass);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			AccessCache access = this.GetAccess(jniTransaction, declaringClass);
+			JFieldId fieldId = isStatic ?
+				access.GetStaticFieldId(definition, this._mainClasses.Environment) :
+				access.GetFieldId(definition, this._mainClasses.Environment);
+			ToReflectedFieldDelegate toReflectedField = this.GetDelegate<ToReflectedFieldDelegate>();
+			JObjectLocalRef localRef = toReflectedField(this.Reference, declaringClass.Reference, fieldId,
+			                                            isStatic ? JBoolean.TrueValue : JBoolean.FalseValue);
+			if (localRef == default) this.CheckJniError();
+			return new(this.GetClass<JFieldObject>(), localRef, definition, declaringClass);
+		}
 		public JMethodId GetMethodId(JExecutableObject jExecutable)
 		{
 			ValidationUtilities.ThrowIfDummy(jExecutable);
@@ -537,8 +552,9 @@ partial class JEnvironment
 			Boolean isStatic)
 		{
 			ValidationUtilities.ThrowIfDummy(declaringClass);
-			using INativeTransaction jniTransaction =
-				this.GetClassTransaction(declaringClass, definition, out JMethodId methodId, false);
+			using INativeTransaction jniTransaction = isStatic ?
+				this.GetClassTransaction(declaringClass, definition, out JMethodId methodId, false) :
+				this.GetInstanceTransaction(declaringClass, definition, out methodId);
 			ToReflectedMethodDelegate toReflectedMethod = this.GetDelegate<ToReflectedMethodDelegate>();
 			JObjectLocalRef localRef = toReflectedMethod(this.Reference, declaringClass.Reference, methodId,
 			                                             isStatic ? JBoolean.TrueValue : JBoolean.FalseValue);
@@ -1042,6 +1058,21 @@ partial class JEnvironment
 				this.VirtualMachine.CreateTransaction(1 + (execution ? definition.ReferenceCount : 0));
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			methodId = access.GetStaticMethodId(definition, this._mainClasses.Environment);
+			return jniTransaction;
+		}
+		/// <summary>
+		/// Creates <see cref="INativeTransaction"/> for instance transaction.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <param name="definition">Transaction call definition.</param>
+		/// <param name="methodId">Output. Call method id.</param>
+		/// <returns>A <see cref="INativeTransaction"/> instance.</returns>
+		private INativeTransaction GetInstanceTransaction(JClassObject jClass, JCallDefinition definition,
+			out JMethodId methodId)
+		{
+			INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			AccessCache access = this.GetAccess(jniTransaction, jClass);
+			methodId = access.GetMethodId(definition, this._mainClasses.Environment);
 			return jniTransaction;
 		}
 		/// <summary>

@@ -28,10 +28,10 @@ public partial class JFieldObject
 		/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
 		public FieldObjectMetadata(ObjectMetadata metadata) : base(metadata)
 		{
-			if (metadata is not FieldObjectMetadata executableMetadata) return;
-			this.Definition = executableMetadata.Definition;
-			this.ClassHash = executableMetadata.ClassHash;
-			this.MethodId = executableMetadata.MethodId;
+			if (metadata is not FieldObjectMetadata fieldMetadata) return;
+			this.Definition = fieldMetadata.Definition;
+			this.ClassHash = fieldMetadata.ClassHash;
+			this.MethodId = fieldMetadata.MethodId;
 		}
 	}
 }
