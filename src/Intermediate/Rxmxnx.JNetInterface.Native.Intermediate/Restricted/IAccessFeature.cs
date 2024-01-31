@@ -43,7 +43,7 @@ public partial interface IAccessFeature
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <param name="value">The field value to set to.</param>
-	void SetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition, TField value)
+	void SetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition, TField? value)
 		where TField : IDataType<TField>, IObject;
 	/// <summary>
 	/// Retrieves a static field from given <see cref="JClassObject"/> instance.
@@ -55,6 +55,15 @@ public partial interface IAccessFeature
 	TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
 		where TField : IObject, IDataType<TField>;
 	/// <summary>
+	/// Retrieves a reflected static field on <paramref name="jField"/>.
+	/// </summary>
+	/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
+	/// <returns><typeparamref name="TField"/> field instance.</returns>
+	TField? GetStaticField<TField>(JFieldObject jField, JFieldDefinition definition)
+		where TField : IDataType<TField>, IObject;
+	/// <summary>
 	/// Sets a static field to given <see cref="JClassObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
@@ -63,6 +72,15 @@ public partial interface IAccessFeature
 	/// <param name="value">The field value to set to.</param>
 	void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
 		where TField : IObject, IDataType<TField>;
+	/// <summary>
+	/// Sets a reflected static field on <paramref name="jField"/>.
+	/// </summary>
+	/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
+	/// <param name="value">The field value to set to.</param>
+	void SetStaticField<TField>(JFieldObject jField, JFieldDefinition definition, TField? value)
+		where TField : IDataType<TField>, IObject;
 	/// <summary>
 	/// Invokes a constructor method for given <see cref="JClassObject"/> instance.
 	/// </summary>

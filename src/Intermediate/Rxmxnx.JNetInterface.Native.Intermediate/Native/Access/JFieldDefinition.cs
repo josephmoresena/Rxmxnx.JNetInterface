@@ -88,6 +88,50 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 		IEnvironment env = jClass.Environment;
 		env.AccessFeature.SetStaticField(jClass, this, value);
 	}
+
+	/// <summary>
+	/// Retrieves the value of a reflected field which matches with current definition.
+	/// </summary>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>The <paramref name="jLocal"/> field's value.</returns>
+	public TField? GetReflected(JFieldObject jField, JLocalObject jLocal)
+	{
+		IEnvironment env = jField.Environment;
+		return env.AccessFeature.GetField<TField>(jField, jLocal, this);
+	}
+	/// <summary>
+	/// Retrieves the value of a reflected static field reflected which matches with current definition.
+	/// </summary>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <returns>The static field's value.</returns>
+	public TField? StaticGetReflected(JFieldObject jField)
+	{
+		IEnvironment env = jField.Environment;
+		return env.AccessFeature.GetStaticField<TField>(jField, this);
+	}
+	/// <summary>
+	/// Sets the value of a reflected field which matches with current definition.
+	/// </summary>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="value">The field value to set to.</param>
+	public void SetReflected(JFieldObject jField, JLocalObject jLocal, TField? value)
+	{
+		IEnvironment env = jField.Environment;
+		env.AccessFeature.SetField(jField, jLocal, this, value);
+	}
+	/// <summary>
+	/// Sets the value of a reflected static field which matches with current definition.
+	/// </summary>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <param name="value">The field value to set to.</param>
+	public void StaticSetReflected(JFieldObject jField, TField? value)
+	{
+		IEnvironment env = jField.Environment;
+		env.AccessFeature.SetStaticField(jField, this, value);
+	}
+
 	/// <summary>
 	/// Retrieves a <see cref="JFieldObject"/> reflected from current definition on
 	/// <paramref name="declaringClass"/>.

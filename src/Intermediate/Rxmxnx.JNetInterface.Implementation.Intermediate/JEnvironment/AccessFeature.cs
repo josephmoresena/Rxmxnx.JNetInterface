@@ -32,47 +32,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
-			switch (definition.Information[1][^1])
-			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					GetStaticBooleanFieldDelegate getStaticBooleanField =
-						this.GetDelegate<GetStaticBooleanFieldDelegate>();
-					MemoryMarshal.AsRef<Byte>(bytes) = getStaticBooleanField(this.Reference, jClass.Reference, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					GetStaticByteFieldDelegate getStaticByteField = this.GetDelegate<GetStaticByteFieldDelegate>();
-					MemoryMarshal.AsRef<SByte>(bytes) = getStaticByteField(this.Reference, jClass.Reference, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
-					GetStaticCharFieldDelegate getStaticCharField = this.GetDelegate<GetStaticCharFieldDelegate>();
-					MemoryMarshal.AsRef<Char>(bytes) = getStaticCharField(this.Reference, jClass.Reference, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					GetStaticDoubleFieldDelegate getStaticDoubleField =
-						this.GetDelegate<GetStaticDoubleFieldDelegate>();
-					MemoryMarshal.AsRef<Double>(bytes) =
-						getStaticDoubleField(this.Reference, jClass.Reference, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					GetStaticFloatFieldDelegate getFloatField = this.GetDelegate<GetStaticFloatFieldDelegate>();
-					MemoryMarshal.AsRef<Single>(bytes) = getFloatField(this.Reference, jClass.Reference, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
-					GetStaticIntFieldDelegate getStaticIntField = this.GetDelegate<GetStaticIntFieldDelegate>();
-					MemoryMarshal.AsRef<Int32>(bytes) = getStaticIntField(this.Reference, jClass.Reference, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
-					GetStaticLongFieldDelegate getStaticLongField = this.GetDelegate<GetStaticLongFieldDelegate>();
-					MemoryMarshal.AsRef<Int64>(bytes) = getStaticLongField(this.Reference, jClass.Reference, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					GetStaticShortFieldDelegate getStaticShortField = this.GetDelegate<GetStaticShortFieldDelegate>();
-					MemoryMarshal.AsRef<Int16>(bytes) = getStaticShortField(this.Reference, jClass.Reference, fieldId);
-					break;
-				default:
-					throw new ArgumentException("Invalid primitive type.");
-			}
-			this.CheckJniError();
+			this.GetPrimitiveStaticField(bytes, jClass.Reference, definition.Information[1][^1], fieldId);
 		}
 		public void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
 		{
@@ -80,46 +40,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
-			switch (definition.Information[1][^1])
-			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					SetStaticBooleanFieldDelegate setStaticBooleanField =
-						this.GetDelegate<SetStaticBooleanFieldDelegate>();
-					setStaticBooleanField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Byte>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					SetStaticByteFieldDelegate setStaticByteField = this.GetDelegate<SetStaticByteFieldDelegate>();
-					setStaticByteField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<SByte>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
-					SetStaticCharFieldDelegate setStaticCharField = this.GetDelegate<SetStaticCharFieldDelegate>();
-					setStaticCharField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Char>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					SetStaticDoubleFieldDelegate setStaticDoubleField =
-						this.GetDelegate<SetStaticDoubleFieldDelegate>();
-					setStaticDoubleField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Double>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					SetStaticFloatFieldDelegate setStaticFloatField = this.GetDelegate<SetStaticFloatFieldDelegate>();
-					setStaticFloatField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Single>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
-					SetStaticIntFieldDelegate setStaticIntField = this.GetDelegate<SetStaticIntFieldDelegate>();
-					setStaticIntField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Int32>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
-					SetStaticLongFieldDelegate setStaticLongField = this.GetDelegate<SetStaticLongFieldDelegate>();
-					setStaticLongField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Int64>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					SetStaticShortFieldDelegate setStaticShortField = this.GetDelegate<SetStaticShortFieldDelegate>();
-					setStaticShortField(this.Reference, jClass.Reference, fieldId, MemoryMarshal.AsRef<Int16>(bytes));
-					break;
-				default:
-					throw new ArgumentException("Invalid primitive type.");
-			}
-			this.CheckJniError();
+			this.SetPrimitiveStaticField(jClass.Reference, bytes, definition.Information[1][^1], fieldId);
 		}
 		public void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args)
@@ -195,13 +116,13 @@ partial class JEnvironment
 			this.SetObjectField(localRef, value, jniTransaction, fieldId);
 		}
 		public void SetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition,
-			TField value) where TField : IDataType<TField>, IObject
+			TField? value) where TField : IDataType<TField>, IObject
 		{
 			ValidationUtilities.ThrowIfDummy(jField);
 			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
@@ -227,6 +148,25 @@ partial class JEnvironment
 			JObjectLocalRef localRef = this.GetStaticObjectField(jClass, definition);
 			return this.CreateObject<TField>(localRef, true);
 		}
+		public TField? GetStaticField<TField>(JFieldObject jField, JFieldDefinition definition)
+			where TField : IDataType<TField>, IObject
+		{
+			ValidationUtilities.ThrowIfDummy(jField);
+			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			_ = jniTransaction.Add(jField);
+			JFieldId fieldId = jField.FieldId;
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jField.DeclaringClass));
+			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+			{
+				JObjectLocalRef localRef = this.GetStaticObjectField(classRef, fieldId);
+				return this.CreateObject<TField>(localRef, true);
+			}
+			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+			this.GetPrimitiveStaticField(bytes, classRef, definition.Information[1][^1], fieldId);
+			return (TField)primitiveMetadata.CreateInstance(bytes);
+		}
 		public void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
 			where TField : IObject, IDataType<TField>
 		{
@@ -242,9 +182,28 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
-			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JReferenceObject);
-			SetStaticObjectFieldDelegate setObjectField = this.GetDelegate<SetStaticObjectFieldDelegate>();
-			setObjectField(this.Reference, jClass.Reference, fieldId, valueLocalRef);
+			this.SetStaticObjectField(jClass.Reference, value, jniTransaction, fieldId);
+		}
+		public void SetStaticField<TField>(JFieldObject jField, JFieldDefinition definition, TField? value)
+			where TField : IDataType<TField>, IObject
+		{
+			ValidationUtilities.ThrowIfDummy(jField);
+			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
+			_ = jniTransaction.Add(jField);
+			JFieldId fieldId = jField.FieldId;
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jField.DeclaringClass));
+			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+			{
+				this.SetStaticObjectField(classRef, value, jniTransaction, fieldId);
+			}
+			else
+			{
+				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				value!.CopyTo(bytes);
+				this.SetPrimitiveStaticField(classRef, bytes, definition.Information[1][^1], fieldId);
+			}
 		}
 		public TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition, IObject?[] args)
 			where TObject : JLocalObject, IDataType<TObject>
@@ -496,6 +455,123 @@ partial class JEnvironment
 		}
 
 		/// <summary>
+		/// Sets a static object field to given <paramref name="classRef"/> reference.
+		/// </summary>
+		/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
+		/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="value">The field value to set to.</param>
+		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		private void SetStaticObjectField<TField>(JClassLocalRef classRef, TField? value,
+			INativeTransaction jniTransaction, JFieldId fieldId) where TField : IObject, IDataType<TField>
+		{
+			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JReferenceObject);
+			SetStaticObjectFieldDelegate setObjectField = this.GetDelegate<SetStaticObjectFieldDelegate>();
+			setObjectField(this.Reference, classRef, fieldId, valueLocalRef);
+		}
+		/// <summary>
+		/// Sets a primitive static field to given <paramref name="classRef"/> reference.
+		/// </summary>
+		/// <param name="bytes">Binary span containing value to set to.</param>
+		/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="signature">Primitive char signature.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		private void SetPrimitiveStaticField(JClassLocalRef classRef, ReadOnlySpan<Byte> bytes, Byte signature,
+			JFieldId fieldId)
+		{
+			switch (signature)
+			{
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+					SetStaticBooleanFieldDelegate setStaticBooleanField =
+						this.GetDelegate<SetStaticBooleanFieldDelegate>();
+					setStaticBooleanField(this.Reference, classRef, fieldId, MemoryMarshal.AsRef<Byte>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
+					SetStaticByteFieldDelegate setStaticByteField = this.GetDelegate<SetStaticByteFieldDelegate>();
+					setStaticByteField(this.Reference, classRef, fieldId, MemoryMarshal.AsRef<SByte>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.CharSignatureChar:
+					SetStaticCharFieldDelegate setStaticCharField = this.GetDelegate<SetStaticCharFieldDelegate>();
+					setStaticCharField(this.Reference, classRef, fieldId, MemoryMarshal.AsRef<Char>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+					SetStaticDoubleFieldDelegate setStaticDoubleField =
+						this.GetDelegate<SetStaticDoubleFieldDelegate>();
+					setStaticDoubleField(this.Reference, classRef, fieldId, MemoryMarshal.AsRef<Double>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
+					SetStaticFloatFieldDelegate setStaticFloatField = this.GetDelegate<SetStaticFloatFieldDelegate>();
+					setStaticFloatField(this.Reference, classRef, fieldId, MemoryMarshal.AsRef<Single>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.IntSignatureChar:
+					SetStaticIntFieldDelegate setStaticIntField = this.GetDelegate<SetStaticIntFieldDelegate>();
+					setStaticIntField(this.Reference, classRef, fieldId, MemoryMarshal.AsRef<Int32>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.LongSignatureChar:
+					SetStaticLongFieldDelegate setStaticLongField = this.GetDelegate<SetStaticLongFieldDelegate>();
+					setStaticLongField(this.Reference, classRef, fieldId, MemoryMarshal.AsRef<Int64>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
+					SetStaticShortFieldDelegate setStaticShortField = this.GetDelegate<SetStaticShortFieldDelegate>();
+					setStaticShortField(this.Reference, classRef, fieldId, MemoryMarshal.AsRef<Int16>(bytes));
+					break;
+				default:
+					throw new ArgumentException("Invalid primitive type.");
+			}
+			this.CheckJniError();
+		}
+		/// <summary>
+		/// Retrieves a primitive static field from given <paramref name="classRef"/> reference.
+		/// </summary>
+		/// <param name="bytes">Binary span to hold result.</param>
+		/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="signature">Primitive char signature.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		private void GetPrimitiveStaticField(Span<Byte> bytes, JClassLocalRef classRef, Byte signature,
+			JFieldId fieldId)
+		{
+			switch (signature)
+			{
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+					GetStaticBooleanFieldDelegate getStaticBooleanField =
+						this.GetDelegate<GetStaticBooleanFieldDelegate>();
+					MemoryMarshal.AsRef<Byte>(bytes) = getStaticBooleanField(this.Reference, classRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
+					GetStaticByteFieldDelegate getStaticByteField = this.GetDelegate<GetStaticByteFieldDelegate>();
+					MemoryMarshal.AsRef<SByte>(bytes) = getStaticByteField(this.Reference, classRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.CharSignatureChar:
+					GetStaticCharFieldDelegate getStaticCharField = this.GetDelegate<GetStaticCharFieldDelegate>();
+					MemoryMarshal.AsRef<Char>(bytes) = getStaticCharField(this.Reference, classRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+					GetStaticDoubleFieldDelegate getStaticDoubleField =
+						this.GetDelegate<GetStaticDoubleFieldDelegate>();
+					MemoryMarshal.AsRef<Double>(bytes) = getStaticDoubleField(this.Reference, classRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
+					GetStaticFloatFieldDelegate getFloatField = this.GetDelegate<GetStaticFloatFieldDelegate>();
+					MemoryMarshal.AsRef<Single>(bytes) = getFloatField(this.Reference, classRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.IntSignatureChar:
+					GetStaticIntFieldDelegate getStaticIntField = this.GetDelegate<GetStaticIntFieldDelegate>();
+					MemoryMarshal.AsRef<Int32>(bytes) = getStaticIntField(this.Reference, classRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.LongSignatureChar:
+					GetStaticLongFieldDelegate getStaticLongField = this.GetDelegate<GetStaticLongFieldDelegate>();
+					MemoryMarshal.AsRef<Int64>(bytes) = getStaticLongField(this.Reference, classRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
+					GetStaticShortFieldDelegate getStaticShortField = this.GetDelegate<GetStaticShortFieldDelegate>();
+					MemoryMarshal.AsRef<Int16>(bytes) = getStaticShortField(this.Reference, classRef, fieldId);
+					break;
+				default:
+					throw new ArgumentException("Invalid primitive type.");
+			}
+			this.CheckJniError();
+		}
+		/// <summary>
 		/// Sets a field to given <paramref name="localRef"/> reference.
 		/// </summary>
 		/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
@@ -511,7 +587,7 @@ partial class JEnvironment
 			setObjectField(this.Reference, localRef, fieldId, valueLocalRef);
 		}
 		/// <summary>
-		/// Sets a primitive static field to given <paramref name="localRef"/> reference.
+		/// Sets a primitive field to given <paramref name="localRef"/> reference.
 		/// </summary>
 		/// <param name="bytes">Binary span containing value to set to.</param>
 		/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
@@ -575,7 +651,7 @@ partial class JEnvironment
 			return this.CreateObject<TField>(resultLocalRef, true);
 		}
 		/// <summary>
-		/// Retrieves a primitive field from given <paramref cref="localRef"/> reference.
+		/// Retrieves a primitive field from given <paramref name="localRef"/> reference.
 		/// </summary>
 		/// <param name="bytes">Binary span to hold result.</param>
 		/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
@@ -1131,8 +1207,19 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
+			return this.GetStaticObjectField(jClass.Reference, fieldId);
+		}
+		/// <summary>
+		/// Retrieves static field object instance reference.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="fieldId">A <see cref="JFieldId"/> identifier.</param>
+		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
+		private JObjectLocalRef GetStaticObjectField(JClassLocalRef classRef, JFieldId fieldId)
+		{
 			GetStaticObjectFieldDelegate getStaticObjectField = this.GetDelegate<GetStaticObjectFieldDelegate>();
-			JObjectLocalRef localRef = getStaticObjectField(this.Reference, jClass.Reference, fieldId);
+			JObjectLocalRef localRef = getStaticObjectField(this.Reference, classRef, fieldId);
+			this.CheckJniError();
 			return localRef;
 		}
 		/// <summary>
