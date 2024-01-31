@@ -478,6 +478,12 @@ partial class JEnvironment
 				JMethodDefinition.Create(mem.Values, args) :
 				returnMetadata.CreateFunctionDefinition(mem.Values, args);
 		}
+		public JFieldDefinition GetDefinition(JStringObject memberName, JClassObject fieldType)
+		{
+			IReflectionMetadata returnMetadata = this.GetReflectionMetadata(fieldType)!;
+			using JNativeMemory<Byte> mem = memberName.GetNativeUtf8Chars();
+			return returnMetadata.CreateFieldDefinition(mem.Values);
+		}
 		public JMethodObject GetReflectedFunction(JFunctionDefinition definition, JClassObject declaringClass,
 			Boolean isStatic)
 		{
@@ -503,6 +509,16 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jExecutable);
 			JMethodId result = fromReflectedMethod(this.Reference, localRef);
+			if (result == default) this.CheckJniError();
+			return result;
+		}
+		public JFieldId GetFieldId(JFieldObject jField)
+		{
+			ValidationUtilities.ThrowIfDummy(jField);
+			FromReflectedFieldDelegate fromReflectedField = this.GetDelegate<FromReflectedFieldDelegate>();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JObjectLocalRef localRef = jniTransaction.Add(jField);
+			JFieldId result = fromReflectedField(this.Reference, localRef);
 			if (result == default) this.CheckJniError();
 			return result;
 		}

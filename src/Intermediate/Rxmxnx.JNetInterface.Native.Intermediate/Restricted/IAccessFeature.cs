@@ -164,6 +164,13 @@ public partial interface IAccessFeature
 	JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
 		JClassObject? returnType);
 	/// <summary>
+	/// Retrieves the <see cref="JFieldDefinition"/> instance from <paramref name="fieldType"/>.
+	/// </summary>
+	/// <param name="memberName">A <see cref="JStringObject"/> instance.</param>
+	/// <param name="fieldType">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JFieldDefinition"/> instance.</returns>
+	JFieldDefinition GetDefinition(JStringObject memberName, JClassObject fieldType);
+	/// <summary>
 	/// Retrieves a <see cref="JMethodObject"/> reflected from current definition on
 	/// <paramref name="declaringClass"/>.
 	/// </summary>

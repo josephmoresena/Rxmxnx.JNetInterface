@@ -131,13 +131,20 @@ internal abstract class FunctionCache
 	/// in declaration order, of the executable represented by <paramref name="jExecutable"/>.
 	/// </summary>
 	/// <param name="jExecutable">A <see cref="JExecutableObject"/> instance.</param>
-	/// <returns>Returns the name of current instance.</returns>
+	/// <returns>A <see cref="JArrayObject{JClassObject}"/> instance.</returns>
 	public abstract JArrayObject<JClassObject> GetParameterTypes(JExecutableObject jExecutable);
 	/// <summary>
 	/// Returns a <c>Class</c> object that represents the formal return type of the method represented by
 	/// <paramref name="jMethod"/>.
 	/// </summary>
 	/// <param name="jMethod">A <see cref="JExecutableObject"/> instance.</param>
-	/// <returns>Returns the name of current instance.</returns>
+	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	public abstract JClassObject? GetReturnType(JExecutableObject jMethod);
+	/// <summary>
+	/// Returns a <c>Class</c> object that identifies the declared type for the field represented by
+	/// <paramref name="jField"/>.
+	/// </summary>
+	/// <param name="jField">A <see cref="JExecutableObject"/> instance.</param>
+	/// <returns>A <see cref="JClassObject"/> instance.</returns>
+	public abstract JClassObject GetFieldType(JFieldObject jField);
 }

@@ -28,6 +28,7 @@ internal static class MetadataHelper
 		{ IDataType.GetHash<JExecutableObject>(), IReferenceType.GetMetadata<JExecutableObject>() },
 		{ IDataType.GetHash<JMethodObject>(), IReferenceType.GetMetadata<JMethodObject>() },
 		{ IDataType.GetHash<JConstructorObject>(), IReferenceType.GetMetadata<JConstructorObject>() },
+		{ IDataType.GetHash<JFieldObject>(), IReferenceType.GetMetadata<JFieldObject>() },
 
 		// Wrapper objects //
 		{ IDataType.GetHash<JVoidObject>(), IReferenceType.GetMetadata<JVoidObject>() },
@@ -78,6 +79,7 @@ internal static class MetadataHelper
 			IDataType.GetHash<JArrayObject<JConstructorObject>>(),
 			IReferenceType.GetMetadata<JArrayObject<JConstructorObject>>()
 		},
+		{ IDataType.GetHash<JArrayObject<JFieldObject>>(), IReferenceType.GetMetadata<JArrayObject<JFieldObject>>() },
 
 		// Wrapper object arrays //
 		{

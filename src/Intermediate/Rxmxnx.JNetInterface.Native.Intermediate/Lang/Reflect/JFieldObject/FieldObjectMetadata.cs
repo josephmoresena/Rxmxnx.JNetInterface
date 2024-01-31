@@ -1,34 +1,34 @@
 namespace Rxmxnx.JNetInterface.Reflect;
 
-public partial class JExecutableObject
+public partial class JFieldObject
 {
 	/// <summary>
-	/// This record stores the metadata of a <see cref="JExecutableObject"/> in order to create a
+	/// This record stores the metadata of a <see cref="JFieldObject"/> in order to create a
 	/// <see cref="JGlobalBase"/> instance.
 	/// </summary>
-	protected record ExecutableObjectMetadata : ObjectMetadata
+	private record FieldObjectMetadata : ObjectMetadata
 	{
 		/// <summary>
-		/// Execution definition.
+		/// Field definition.
 		/// </summary>
-		public JCallDefinition? Definition { get; init; }
+		public JFieldDefinition? Definition { get; init; }
 		/// <summary>
 		/// JNI declaring class hash.
 		/// </summary>
 		public String? ClassHash { get; init; }
 
 		/// <summary>
-		/// JNI method id.
+		/// JNI field id.
 		/// </summary>
-		internal JMethodId? MethodId { get; init; }
+		internal JFieldId? MethodId { get; init; }
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
-		public ExecutableObjectMetadata(ObjectMetadata metadata) : base(metadata)
+		public FieldObjectMetadata(ObjectMetadata metadata) : base(metadata)
 		{
-			if (metadata is not ExecutableObjectMetadata executableMetadata) return;
+			if (metadata is not FieldObjectMetadata executableMetadata) return;
 			this.Definition = executableMetadata.Definition;
 			this.ClassHash = executableMetadata.ClassHash;
 			this.MethodId = executableMetadata.MethodId;

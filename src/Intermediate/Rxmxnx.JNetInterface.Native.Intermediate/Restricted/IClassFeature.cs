@@ -79,6 +79,10 @@ public partial interface IClassFeature
 	/// </summary>
 	JClassObject ConstructorClassObject => this.GetClass<JConstructorObject>();
 	/// <summary>
+	/// <c>java.lang.reflect.Field</c> class instance.
+	/// </summary>
+	JClassObject FieldClassObject => this.GetClass<JFieldObject>();
+	/// <summary>
 	/// <c>java.lang.Enum</c> class instance.
 	/// </summary>
 	JClassObject EnumClassObject => this.GetClass<JEnumObject>();

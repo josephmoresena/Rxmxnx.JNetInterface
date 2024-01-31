@@ -150,9 +150,16 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	public override JClassObject? GetReturnType(JExecutableObject jMethod)
 	{
 		IEnvironment env = jMethod.Environment;
-		JClassObject methodClass = env.ClassFeature.GetClass<JMemberObject>();
+		JClassObject methodClass = env.ClassFeature.GetClass<JMethodObject>();
 		return jMethod is JMethodObject || jMethod.InstanceOf<JMethodObject>() ?
 			JFunctionDefinition.Invoke(InternalFunctionCache.getReturnType, jMethod, methodClass) :
 			default;
+	}
+	/// <inheritdoc/>
+	public override JClassObject GetFieldType(JFieldObject jField)
+	{
+		IEnvironment env = jField.Environment;
+		JClassObject methodClass = env.ClassFeature.GetClass<JFieldObject>();
+		return JFunctionDefinition.Invoke(InternalFunctionCache.getType, jField, methodClass)!;
 	}
 }
