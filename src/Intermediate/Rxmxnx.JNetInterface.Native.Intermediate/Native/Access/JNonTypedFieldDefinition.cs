@@ -58,4 +58,47 @@ public sealed record JNonTypedFieldDefinition : JFieldDefinition
 		IEnvironment env = jClass.Environment;
 		env.AccessFeature.SetStaticField(jClass, this, value);
 	}
+
+	/// <summary>
+	/// Retrieves the value of a reflected field which matches with current definition.
+	/// </summary>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>The <paramref name="jLocal"/> field's value.</returns>
+	public JLocalObject? GetReflected(JFieldObject jField, JLocalObject jLocal)
+	{
+		IEnvironment env = jField.Environment;
+		return env.AccessFeature.GetField<JLocalObject>(jField, jLocal, this);
+	}
+	/// <summary>
+	/// Retrieves the value of a reflected static field reflected which matches with current definition.
+	/// </summary>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <returns>The static field's value.</returns>
+	public JLocalObject? StaticGetReflected(JFieldObject jField)
+	{
+		IEnvironment env = jField.Environment;
+		return env.AccessFeature.GetStaticField<JLocalObject>(jField, this);
+	}
+	/// <summary>
+	/// Sets the value of a reflected field which matches with current definition.
+	/// </summary>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="value">The field value to set to.</param>
+	public void SetReflected(JFieldObject jField, JLocalObject jLocal, JLocalObject? value)
+	{
+		IEnvironment env = jField.Environment;
+		env.AccessFeature.SetField(jField, jLocal, this, value);
+	}
+	/// <summary>
+	/// Sets the value of a reflected static field which matches with current definition.
+	/// </summary>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <param name="value">The field value to set to.</param>
+	public void StaticSetReflected(JFieldObject jField, JLocalObject? value)
+	{
+		IEnvironment env = jField.Environment;
+		env.AccessFeature.SetStaticField(jField, this, value);
+	}
 }

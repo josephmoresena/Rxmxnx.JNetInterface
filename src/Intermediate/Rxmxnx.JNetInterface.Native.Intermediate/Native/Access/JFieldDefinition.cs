@@ -20,6 +20,29 @@ public abstract record JFieldDefinition : JAccessibleObjectDefinition
 	/// <param name="signature">Signature field.</param>
 	internal JFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(
 		new CStringSequence(name, signature)) { }
+
+	/// <summary>
+	/// Retrieves a <see cref="JFieldObject"/> reflected from current definition on
+	/// <paramref name="declaringClass"/>.
+	/// </summary>
+	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JFieldObject"/> instance.</returns>
+	public JFieldObject GetReflected(JClassObject declaringClass)
+	{
+		IEnvironment env = declaringClass.Environment;
+		return env.AccessFeature.GetReflectedField(this, declaringClass, false);
+	}
+	/// <summary>
+	/// Retrieves a <see cref="JFieldObject"/> reflected from current static definition on
+	/// <paramref name="declaringClass"/>.
+	/// </summary>
+	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JFieldObject"/> instance.</returns>
+	public JFieldObject GetStaticReflected(JClassObject declaringClass)
+	{
+		IEnvironment env = declaringClass.Environment;
+		return env.AccessFeature.GetReflectedField(this, declaringClass, true);
+	}
 }
 
 /// <summary>
@@ -130,28 +153,5 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	{
 		IEnvironment env = jField.Environment;
 		env.AccessFeature.SetStaticField(jField, this, value);
-	}
-
-	/// <summary>
-	/// Retrieves a <see cref="JFieldObject"/> reflected from current definition on
-	/// <paramref name="declaringClass"/>.
-	/// </summary>
-	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
-	/// <returns>A <see cref="JFieldObject"/> instance.</returns>
-	public JFieldObject GetReflected(JClassObject declaringClass)
-	{
-		IEnvironment env = declaringClass.Environment;
-		return env.AccessFeature.GetReflectedField(this, declaringClass, false);
-	}
-	/// <summary>
-	/// Retrieves a <see cref="JFieldObject"/> reflected from current static definition on
-	/// <paramref name="declaringClass"/>.
-	/// </summary>
-	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
-	/// <returns>A <see cref="JFieldObject"/> instance.</returns>
-	public JFieldObject GetStaticReflected(JClassObject declaringClass)
-	{
-		IEnvironment env = declaringClass.Environment;
-		return env.AccessFeature.GetReflectedField(this, declaringClass, true);
 	}
 }
