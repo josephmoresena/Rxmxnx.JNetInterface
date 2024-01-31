@@ -71,6 +71,14 @@ public partial interface IClassFeature
 	/// </summary>
 	JClassObject BufferClassObject => this.GetClass<JBufferObject>();
 	/// <summary>
+	/// <c>java.lang.reflect.Method</c> class instance.
+	/// </summary>
+	JClassObject MethodClassObject => this.GetClass<JMethodObject>();
+	/// <summary>
+	/// <c>java.lang.reflect.Constructor</c> class instance.
+	/// </summary>
+	JClassObject ConstructorClassObject => this.GetClass<JConstructorObject>();
+	/// <summary>
 	/// <c>java.lang.Enum</c> class instance.
 	/// </summary>
 	JClassObject EnumClassObject => this.GetClass<JEnumObject>();

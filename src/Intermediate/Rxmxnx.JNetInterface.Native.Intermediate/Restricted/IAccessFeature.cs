@@ -163,4 +163,34 @@ public partial interface IAccessFeature
 	/// <returns>A <see cref="JCallDefinition"/> instance.</returns>
 	JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
 		JClassObject? returnType);
+	/// <summary>
+	/// Retrieves a <see cref="JMethodObject"/> reflected from current definition on
+	/// <paramref name="declaringClass"/>.
+	/// </summary>
+	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
+	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="isStatic">
+	/// Indicates whether <paramref name="definition"/> matches with an static method in <paramref name="declaringClass"/>.
+	/// </param>
+	/// <returns>A <see cref="JMethodObject"/> instance.</returns>
+	JMethodObject GetReflectedMethod(JMethodDefinition definition, JClassObject declaringClass, Boolean isStatic);
+	/// <summary>
+	/// Retrieves a <see cref="JMethodObject"/> reflected from current definition on
+	/// <paramref name="declaringClass"/>.
+	/// </summary>
+	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
+	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="isStatic">
+	/// Indicates whether <paramref name="definition"/> matches with an static method in <paramref name="declaringClass"/>.
+	/// </param>
+	/// <returns>A <see cref="JMethodObject"/> instance.</returns>
+	JMethodObject GetReflectedFunction(JFunctionDefinition definition, JClassObject declaringClass, Boolean isStatic);
+	/// <summary>
+	/// Retrieves a <see cref="JConstructorObject"/> reflected from current definition on
+	/// <paramref name="declaringClass"/>.
+	/// </summary>
+	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
+	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JConstructorObject"/> instance.</returns>
+	JConstructorObject GetReflectedConstructor(JConstructorDefinition definition, JClassObject declaringClass);
 }

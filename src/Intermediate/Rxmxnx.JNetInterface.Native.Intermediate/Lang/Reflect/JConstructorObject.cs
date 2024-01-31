@@ -23,6 +23,10 @@ public sealed class JConstructorObject : JExecutableObject, IClassType<JConstruc
 	public new JConstructorDefinition Definition => (JConstructorDefinition)base.Definition;
 
 	/// <inheritdoc/>
+	internal JConstructorObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition,
+		JClassObject declaringClass) : base(jClass, localRef, definition, declaringClass) { }
+
+	/// <inheritdoc/>
 	private JConstructorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	private JConstructorObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

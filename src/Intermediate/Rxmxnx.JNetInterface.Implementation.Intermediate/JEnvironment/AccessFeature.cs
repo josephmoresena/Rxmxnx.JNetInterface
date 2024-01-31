@@ -478,6 +478,24 @@ partial class JEnvironment
 				JMethodDefinition.Create(mem.Values, args) :
 				returnMetadata.CreateFunctionDefinition(mem.Values, args);
 		}
+		public JMethodObject GetReflectedFunction(JFunctionDefinition definition, JClassObject declaringClass,
+			Boolean isStatic)
+		{
+			JObjectLocalRef localRef = this.GetReflectedCall(definition, declaringClass, isStatic);
+			return new(this.GetClass<JMethodObject>(), localRef, definition, declaringClass);
+		}
+		public JMethodObject GetReflectedMethod(JMethodDefinition definition, JClassObject declaringClass,
+			Boolean isStatic)
+		{
+			JObjectLocalRef localRef = this.GetReflectedCall(definition, declaringClass, isStatic);
+			return new(this.GetClass<JMethodObject>(), localRef, definition, declaringClass);
+		}
+		public JConstructorObject GetReflectedConstructor(JConstructorDefinition definition,
+			JClassObject declaringClass)
+		{
+			JObjectLocalRef localRef = this.GetReflectedCall(definition, declaringClass, false);
+			return new(this.GetClass<JConstructorObject>(), localRef, definition, declaringClass);
+		}
 		public JMethodId GetMethodId(JExecutableObject jExecutable)
 		{
 			ValidationUtilities.ThrowIfDummy(jExecutable);
@@ -489,6 +507,28 @@ partial class JEnvironment
 			return result;
 		}
 
+		/// <summary>
+		/// Retrieves a <see cref="JObjectLocalRef"/> reflected from current definition on
+		/// <paramref name="declaringClass"/>.
+		/// </summary>
+		/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
+		/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
+		/// <param name="isStatic">
+		/// Indicates whether <paramref name="definition"/> matches with an static method in <paramref name="declaringClass"/>.
+		/// </param>
+		/// <returns>A <see cref="JMethodObject"/> instance.</returns>
+		private JObjectLocalRef GetReflectedCall(JCallDefinition definition, JClassObject declaringClass,
+			Boolean isStatic)
+		{
+			ValidationUtilities.ThrowIfDummy(declaringClass);
+			using INativeTransaction jniTransaction =
+				this.GetClassTransaction(declaringClass, definition, out JMethodId methodId, false);
+			ToReflectedMethodDelegate toReflectedMethod = this.GetDelegate<ToReflectedMethodDelegate>();
+			JObjectLocalRef localRef = toReflectedMethod(this.Reference, declaringClass.Reference, methodId,
+			                                             isStatic ? JBoolean.TrueValue : JBoolean.FalseValue);
+			if (localRef == default) this.CheckJniError();
+			return localRef;
+		}
 		/// <summary>
 		/// Invokes an object function on given <see cref="JObjectLocalRef"/> reference.
 		/// </summary>
@@ -977,11 +1017,13 @@ partial class JEnvironment
 		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 		/// <param name="definition">Transaction call definition.</param>
 		/// <param name="methodId">Call method id.</param>
+		/// <param name="execution">Indicates whether transaction is for call execution..</param>
 		/// <returns>A <see cref="INativeTransaction"/> instance.</returns>
 		private INativeTransaction GetClassTransaction(JClassObject jClass, JCallDefinition definition,
-			out JMethodId methodId)
+			out JMethodId methodId, Boolean execution = true)
 		{
-			INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1 + definition.ReferenceCount);
+			INativeTransaction jniTransaction =
+				this.VirtualMachine.CreateTransaction(1 + (execution ? definition.ReferenceCount : 0));
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			methodId = access.GetStaticMethodId(definition, this._mainClasses.Environment);
 			return jniTransaction;

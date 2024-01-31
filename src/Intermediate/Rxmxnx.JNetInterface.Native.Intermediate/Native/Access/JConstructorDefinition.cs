@@ -35,6 +35,17 @@ public record JConstructorDefinition : JCallDefinition
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
 	public TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
 		=> this.New<TObject>(env.ClassFeature.GetClass<TObject>(), this.CreateArgumentsArray());
+	/// <summary>
+	/// Retrieves a <see cref="JConstructorObject"/> reflected from current definition on
+	/// <paramref name="declaringClass"/>.
+	/// </summary>
+	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JConstructorObject"/> instance.</returns>
+	public JConstructorObject GetReflected(JClassObject declaringClass)
+	{
+		IEnvironment env = declaringClass.Environment;
+		return env.AccessFeature.GetReflectedConstructor(this, declaringClass);
+	}
 
 	/// <summary>
 	/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>

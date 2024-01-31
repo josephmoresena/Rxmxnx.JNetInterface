@@ -24,6 +24,29 @@ public record JMethodDefinition : JCallDefinition
 		methodName, metadata) { }
 
 	/// <summary>
+	/// Retrieves a <see cref="JMethodObject"/> reflected from current definition on
+	/// <paramref name="declaringClass"/>.
+	/// </summary>
+	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JMethodObject"/> instance.</returns>
+	public JMethodObject GetReflected(JClassObject declaringClass)
+	{
+		IEnvironment env = declaringClass.Environment;
+		return env.AccessFeature.GetReflectedMethod(this, declaringClass, false);
+	}
+	/// <summary>
+	/// Retrieves a <see cref="JMethodObject"/> reflected from current static definition on
+	/// <paramref name="declaringClass"/>.
+	/// </summary>
+	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JMethodObject"/> instance.</returns>
+	public JMethodObject GetStaticReflected(JClassObject declaringClass)
+	{
+		IEnvironment env = declaringClass.Environment;
+		return env.AccessFeature.GetReflectedMethod(this, declaringClass, true);
+	}
+
+	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition passing the
 	/// default value for each argument.
 	/// </summary>

@@ -24,6 +24,10 @@ internal static class MetadataHelper
 		{ IDataType.GetHash<JThrowableObject>(), IReferenceType.GetMetadata<JThrowableObject>() },
 		{ IDataType.GetHash<JStackTraceElementObject>(), IReferenceType.GetMetadata<JStackTraceElementObject>() },
 		{ IDataType.GetHash<JBufferObject>(), IReferenceType.GetMetadata<JBufferObject>() },
+		{ IDataType.GetHash<JAccessibleObject>(), IReferenceType.GetMetadata<JAccessibleObject>() },
+		{ IDataType.GetHash<JExecutableObject>(), IReferenceType.GetMetadata<JExecutableObject>() },
+		{ IDataType.GetHash<JMethodObject>(), IReferenceType.GetMetadata<JMethodObject>() },
+		{ IDataType.GetHash<JConstructorObject>(), IReferenceType.GetMetadata<JConstructorObject>() },
 
 		// Wrapper objects //
 		{ IDataType.GetHash<JVoidObject>(), IReferenceType.GetMetadata<JVoidObject>() },
@@ -60,6 +64,20 @@ internal static class MetadataHelper
 			IDataType.GetHash<JArrayObject<JStackTraceElementObject>>(),
 			IReferenceType.GetMetadata<JArrayObject<JStackTraceElementObject>>()
 		},
+		{ IDataType.GetHash<JArrayObject<JBufferObject>>(), IReferenceType.GetMetadata<JArrayObject<JBufferObject>>() },
+		{
+			IDataType.GetHash<JArrayObject<JAccessibleObject>>(),
+			IReferenceType.GetMetadata<JArrayObject<JAccessibleObject>>()
+		},
+		{
+			IDataType.GetHash<JArrayObject<JExecutableObject>>(),
+			IReferenceType.GetMetadata<JArrayObject<JExecutableObject>>()
+		},
+		{ IDataType.GetHash<JArrayObject<JMethodObject>>(), IReferenceType.GetMetadata<JArrayObject<JMethodObject>>() },
+		{
+			IDataType.GetHash<JArrayObject<JConstructorObject>>(),
+			IReferenceType.GetMetadata<JArrayObject<JConstructorObject>>()
+		},
 
 		// Wrapper object arrays //
 		{
@@ -93,6 +111,7 @@ internal static class MetadataHelper
 		{ IDataType.GetHash<JAnnotatedElementObject>(), IReferenceType.GetMetadata<JAnnotatedElementObject>() },
 		{ IDataType.GetHash<JGenericDeclarationObject>(), IReferenceType.GetMetadata<JGenericDeclarationObject>() },
 		{ IDataType.GetHash<JTypeObject>(), IReferenceType.GetMetadata<JTypeObject>() },
+		{ IDataType.GetHash<JMemberObject>(), IReferenceType.GetMetadata<JMemberObject>() },
 		{ IDataType.GetHash<JDirectBufferObject>(), IReferenceType.GetMetadata<JDirectBufferObject>() },
 	};
 	/// <summary>
@@ -138,7 +157,9 @@ internal static class MetadataHelper
 		IReflectionMetadata? result;
 
 		if (MetadataHelper.primitiveReflectionMetadata.TryGetValue(hash, out IReflectionMetadata? primitiveMetadata))
+		{
 			result = primitiveMetadata;
+		}
 		else if (MetadataHelper.runtimeMetadata.TryGetValue(hash, out JReferenceTypeMetadata? metadata))
 		{
 			result = metadata;

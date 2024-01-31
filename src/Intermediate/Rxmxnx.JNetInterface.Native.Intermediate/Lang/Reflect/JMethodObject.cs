@@ -18,6 +18,10 @@ public sealed class JMethodObject : JExecutableObject, IClassType<JMethodObject>
 	static JDataTypeMetadata IDataType.Metadata => JMethodObject.metadata;
 
 	/// <inheritdoc/>
+	internal JMethodObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition,
+		JClassObject declaringClass) : base(jClass, localRef, definition, declaringClass) { }
+
+	/// <inheritdoc/>
 	private JMethodObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	private JMethodObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

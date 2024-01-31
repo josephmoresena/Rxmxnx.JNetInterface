@@ -44,10 +44,19 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// </summary>
 	internal JMethodId MethodId => this._methodId ??= this.GetMethodId();
 
-	/// <inheritdoc/>
-	internal JExecutableObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition) : base(
-		jClass, localRef)
-		=> this._callDefinition = definition;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="localRef">Local object reference.</param>
+	/// <param name="definition">Call definition.</param>
+	/// <param name="declaringClass">Declaring class.</param>
+	internal JExecutableObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition,
+		JClassObject declaringClass) : base(jClass, localRef)
+	{
+		this._callDefinition = definition;
+		this._classHash = declaringClass.Hash;
+	}
 
 	/// <inheritdoc/>
 	protected JExecutableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
