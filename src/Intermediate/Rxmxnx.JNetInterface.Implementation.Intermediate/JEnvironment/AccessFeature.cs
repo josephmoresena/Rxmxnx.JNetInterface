@@ -13,44 +13,7 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-			switch (definition.Information[1][^1])
-			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					GetBooleanFieldDelegate getBooleanField = this.GetDelegate<GetBooleanFieldDelegate>();
-					MemoryMarshal.AsRef<Byte>(bytes) = getBooleanField(this.Reference, localRef, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					GetByteFieldDelegate getByteField = this.GetDelegate<GetByteFieldDelegate>();
-					MemoryMarshal.AsRef<SByte>(bytes) = getByteField(this.Reference, localRef, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
-					GetCharFieldDelegate getCharField = this.GetDelegate<GetCharFieldDelegate>();
-					MemoryMarshal.AsRef<Char>(bytes) = getCharField(this.Reference, localRef, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					GetDoubleFieldDelegate getDoubleField = this.GetDelegate<GetDoubleFieldDelegate>();
-					MemoryMarshal.AsRef<Double>(bytes) = getDoubleField(this.Reference, localRef, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					GetFloatFieldDelegate getFloatField = this.GetDelegate<GetFloatFieldDelegate>();
-					MemoryMarshal.AsRef<Single>(bytes) = getFloatField(this.Reference, localRef, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
-					GetIntFieldDelegate getIntField = this.GetDelegate<GetIntFieldDelegate>();
-					MemoryMarshal.AsRef<Int32>(bytes) = getIntField(this.Reference, localRef, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
-					GetLongFieldDelegate getLongField = this.GetDelegate<GetLongFieldDelegate>();
-					MemoryMarshal.AsRef<Int64>(bytes) = getLongField(this.Reference, localRef, fieldId);
-					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					GetShortFieldDelegate getShortField = this.GetDelegate<GetShortFieldDelegate>();
-					MemoryMarshal.AsRef<Int16>(bytes) = getShortField(this.Reference, localRef, fieldId);
-					break;
-				default:
-					throw new ArgumentException("Invalid primitive type.");
-			}
-			this.CheckJniError();
+			this.GetPrimitiveField(bytes, localRef, definition.Information[1][^1], fieldId);
 		}
 		public void SetPrimitiveField(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 			ReadOnlySpan<Byte> bytes)
@@ -61,44 +24,7 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-			switch (definition.Information[1][^1])
-			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					SetBooleanFieldDelegate setBooleanField = this.GetDelegate<SetBooleanFieldDelegate>();
-					setBooleanField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Byte>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					SetByteFieldDelegate setByteField = this.GetDelegate<SetByteFieldDelegate>();
-					setByteField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<SByte>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
-					SetCharFieldDelegate setCharField = this.GetDelegate<SetCharFieldDelegate>();
-					setCharField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Char>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					SetDoubleFieldDelegate setDoubleField = this.GetDelegate<SetDoubleFieldDelegate>();
-					setDoubleField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Double>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					SetFloatFieldDelegate setFloatField = this.GetDelegate<SetFloatFieldDelegate>();
-					setFloatField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Single>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
-					SetIntFieldDelegate setIntField = this.GetDelegate<SetIntFieldDelegate>();
-					setIntField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int32>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
-					SetLongFieldDelegate setLongField = this.GetDelegate<SetLongFieldDelegate>();
-					setLongField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int64>(bytes));
-					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					SetShortFieldDelegate setShortField = this.GetDelegate<SetShortFieldDelegate>();
-					setShortField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int16>(bytes));
-					break;
-				default:
-					throw new ArgumentException("Invalid primitive type.");
-			}
-			this.CheckJniError();
+			this.SetPrimitiveField(localRef, bytes, definition.Information[1][^1], fieldId);
 		}
 		public void GetPrimitiveStaticField(Span<Byte> bytes, JClassObject jClass, JFieldDefinition definition)
 		{
@@ -230,10 +156,24 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-			this.ReloadClass(jLocal as JClassObject);
-			GetObjectFieldDelegate getObjectField = this.GetDelegate<GetObjectFieldDelegate>();
-			JObjectLocalRef resultLocalRef = getObjectField(this.Reference, localRef, fieldId);
-			return this.CreateObject<TField>(resultLocalRef, true);
+			return this.GetObjectField<TField>(localRef, fieldId);
+		}
+		public TField? GetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition)
+			where TField : IDataType<TField>, IObject
+		{
+			ValidationUtilities.ThrowIfDummy(jField);
+			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
+			ValidationUtilities.ThrowIfDummy(jLocal);
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			_ = jniTransaction.Add(jField);
+			JFieldId fieldId = jField.FieldId;
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
+			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+				return this.GetObjectField<TField>(localRef, fieldId);
+			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+			this.GetPrimitiveField(bytes, localRef, definition.Information[1][^1], fieldId);
+			return (TField)primitiveMetadata.CreateInstance(bytes);
 		}
 		public void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 			TField? value) where TField : IObject, IDataType<TField>
@@ -252,9 +192,27 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JLocalObject);
-			SetObjectFieldDelegate setObjectField = this.GetDelegate<SetObjectFieldDelegate>();
-			setObjectField(this.Reference, localRef, fieldId, valueLocalRef);
+			this.SetObjectField(localRef, value, jniTransaction, fieldId);
+		}
+		public void SetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition,
+			TField value) where TField : IDataType<TField>, IObject
+		{
+			ValidationUtilities.ThrowIfDummy(jField);
+			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
+			ValidationUtilities.ThrowIfDummy(jLocal);
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			_ = jniTransaction.Add(jField);
+			JFieldId fieldId = jField.FieldId;
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
+			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			{
+				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+				value!.CopyTo(bytes);
+				this.SetPrimitiveField(localRef, bytes, definition.Information[1][^1], fieldId);
+				return;
+			}
+			this.SetObjectField(localRef, value, jniTransaction, fieldId);
 		}
 		public TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
 			where TField : IObject, IDataType<TField>
@@ -284,7 +242,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
-			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JLocalObject);
+			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JReferenceObject);
 			SetStaticObjectFieldDelegate setObjectField = this.GetDelegate<SetStaticObjectFieldDelegate>();
 			setObjectField(this.Reference, jClass.Reference, fieldId, valueLocalRef);
 		}
@@ -322,7 +280,7 @@ partial class JEnvironment
 				this.GetClassTransaction(jClass, definition, out JMethodId methodId);
 			return this.CallObjectStaticFunction<TResult>(definition, jClass.Reference, args, jniTransaction, methodId);
 		}
-		public TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition<TResult> definition,
+		public TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition definition,
 			IObject?[] args) where TResult : IDataType<TResult>
 		{
 			ValidationUtilities.ThrowIfDummy(jMethod);
@@ -376,8 +334,7 @@ partial class JEnvironment
 			return this.CallObjectFunction<TResult>(definition, localRef, classRef, args, jniTransaction, methodId);
 		}
 		public TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal,
-			JFunctionDefinition<TResult> definition, Boolean nonVirtual, IObject?[] args)
-			where TResult : IDataType<TResult>
+			JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>
 		{
 			ValidationUtilities.ThrowIfDummy(jMethod);
 			ValidationUtilities.ThrowIfDummy(jLocal);
@@ -388,7 +345,7 @@ partial class JEnvironment
 				this.VirtualMachine.CreateTransaction(initialCapacity + definition.ReferenceCount);
 			_ = jniTransaction.Add(jMethod);
 			JMethodId methodId = jMethod.MethodId;
-			JObjectLocalRef localRef = jniTransaction.Add(jLocal);
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			JClassLocalRef classRef =
 				nonVirtual ? jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass)) : default;
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
@@ -419,7 +376,7 @@ partial class JEnvironment
 				this.VirtualMachine.CreateTransaction(initialCapacity + definition.ReferenceCount);
 			_ = jniTransaction.Add(jMethod);
 			JMethodId methodId = jMethod.MethodId;
-			JObjectLocalRef localRef = jniTransaction.Add(jLocal);
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			JClassLocalRef classRef =
 				nonVirtual ? jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass)) : default;
 			this.CallMethod(definition, localRef, classRef, args, jniTransaction, methodId);
@@ -538,6 +495,133 @@ partial class JEnvironment
 			return result;
 		}
 
+		/// <summary>
+		/// Sets a field to given <paramref name="localRef"/> reference.
+		/// </summary>
+		/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
+		/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="value">The field value to set to.</param>
+		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		private void SetObjectField<TField>(JObjectLocalRef localRef, TField? value, INativeTransaction jniTransaction,
+			JFieldId fieldId) where TField : IObject, IDataType<TField>
+		{
+			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JReferenceObject);
+			SetObjectFieldDelegate setObjectField = this.GetDelegate<SetObjectFieldDelegate>();
+			setObjectField(this.Reference, localRef, fieldId, valueLocalRef);
+		}
+		/// <summary>
+		/// Sets a primitive static field to given <paramref name="localRef"/> reference.
+		/// </summary>
+		/// <param name="bytes">Binary span containing value to set to.</param>
+		/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="signature">Primitive char signature.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		private void SetPrimitiveField(JObjectLocalRef localRef, ReadOnlySpan<Byte> bytes, Byte signature,
+			JFieldId fieldId)
+		{
+			switch (signature)
+			{
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+					SetBooleanFieldDelegate setBooleanField = this.GetDelegate<SetBooleanFieldDelegate>();
+					setBooleanField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Byte>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
+					SetByteFieldDelegate setByteField = this.GetDelegate<SetByteFieldDelegate>();
+					setByteField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<SByte>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.CharSignatureChar:
+					SetCharFieldDelegate setCharField = this.GetDelegate<SetCharFieldDelegate>();
+					setCharField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Char>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+					SetDoubleFieldDelegate setDoubleField = this.GetDelegate<SetDoubleFieldDelegate>();
+					setDoubleField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Double>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
+					SetFloatFieldDelegate setFloatField = this.GetDelegate<SetFloatFieldDelegate>();
+					setFloatField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Single>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.IntSignatureChar:
+					SetIntFieldDelegate setIntField = this.GetDelegate<SetIntFieldDelegate>();
+					setIntField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int32>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.LongSignatureChar:
+					SetLongFieldDelegate setLongField = this.GetDelegate<SetLongFieldDelegate>();
+					setLongField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int64>(bytes));
+					break;
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
+					SetShortFieldDelegate setShortField = this.GetDelegate<SetShortFieldDelegate>();
+					setShortField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int16>(bytes));
+					break;
+				default:
+					throw new ArgumentException("Invalid primitive type.");
+			}
+			this.CheckJniError();
+		}
+		/// <summary>
+		/// Retrieves an object field on <paramref name="localRef"/>.
+		/// </summary>
+		/// <typeparam name="TField"><see cref="IDataType"/> type of field result.</typeparam>
+		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		/// <returns><typeparamref name="TField"/> field instance.</returns>
+		private TField? GetObjectField<TField>(JObjectLocalRef localRef, JFieldId fieldId)
+			where TField : IObject, IDataType<TField>
+		{
+			GetObjectFieldDelegate getObjectField = this.GetDelegate<GetObjectFieldDelegate>();
+			JObjectLocalRef resultLocalRef = getObjectField(this.Reference, localRef, fieldId);
+			this.CheckJniError();
+			return this.CreateObject<TField>(resultLocalRef, true);
+		}
+		/// <summary>
+		/// Retrieves a primitive field from given <paramref cref="localRef"/> reference.
+		/// </summary>
+		/// <param name="bytes">Binary span to hold result.</param>
+		/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="signature">Primitive char signature.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		private void GetPrimitiveField(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature, JFieldId fieldId)
+		{
+			switch (signature)
+			{
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+					GetBooleanFieldDelegate getBooleanField = this.GetDelegate<GetBooleanFieldDelegate>();
+					MemoryMarshal.AsRef<Byte>(bytes) = getBooleanField(this.Reference, localRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
+					GetByteFieldDelegate getByteField = this.GetDelegate<GetByteFieldDelegate>();
+					MemoryMarshal.AsRef<SByte>(bytes) = getByteField(this.Reference, localRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.CharSignatureChar:
+					GetCharFieldDelegate getCharField = this.GetDelegate<GetCharFieldDelegate>();
+					MemoryMarshal.AsRef<Char>(bytes) = getCharField(this.Reference, localRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+					GetDoubleFieldDelegate getDoubleField = this.GetDelegate<GetDoubleFieldDelegate>();
+					MemoryMarshal.AsRef<Double>(bytes) = getDoubleField(this.Reference, localRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
+					GetFloatFieldDelegate getFloatField = this.GetDelegate<GetFloatFieldDelegate>();
+					MemoryMarshal.AsRef<Single>(bytes) = getFloatField(this.Reference, localRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.IntSignatureChar:
+					GetIntFieldDelegate getIntField = this.GetDelegate<GetIntFieldDelegate>();
+					MemoryMarshal.AsRef<Int32>(bytes) = getIntField(this.Reference, localRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.LongSignatureChar:
+					GetLongFieldDelegate getLongField = this.GetDelegate<GetLongFieldDelegate>();
+					MemoryMarshal.AsRef<Int64>(bytes) = getLongField(this.Reference, localRef, fieldId);
+					break;
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
+					GetShortFieldDelegate getShortField = this.GetDelegate<GetShortFieldDelegate>();
+					MemoryMarshal.AsRef<Int16>(bytes) = getShortField(this.Reference, localRef, fieldId);
+					break;
+				default:
+					throw new ArgumentException("Invalid primitive type.");
+			}
+			this.CheckJniError();
+		}
 		/// <summary>
 		/// Retrieves a <see cref="JObjectLocalRef"/> reflected from current definition on
 		/// <paramref name="declaringClass"/>.
@@ -800,6 +884,14 @@ partial class JEnvironment
 			}
 			return args;
 		}
+		/// <summary>
+		/// Uses <paramref name="jObject"/> into <paramref name="jniTransaction"/>.
+		/// </summary>
+		/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
+		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+		/// <returns>A <see cref="JObjectLocalRef"/> reference</returns>
+		private JObjectLocalRef UseObject(INativeTransaction jniTransaction, JReferenceObject? jObject)
+			=> jObject is JLocalObject jLocal ? this.UseObject(jniTransaction, jLocal) : jniTransaction.Add(jObject);
 		/// <summary>
 		/// Uses <paramref name="jLocal"/> into <paramref name="jniTransaction"/>.
 		/// </summary>

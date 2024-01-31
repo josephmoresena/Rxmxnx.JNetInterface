@@ -70,8 +70,7 @@ partial class JEnvironment
 			{
 				IEnvironment env = this._mainClasses.Environment;
 				JClassObject jClass = this.GetClass<TElement>();
-				JLocalObject? initial = initialElement as JLocalObject;
-				JArrayLocalRef arrayRef = this.NewObjectArray(length, jClass, initial);
+				JArrayLocalRef arrayRef = this.NewObjectArray(length, jClass, initialElement as JReferenceObject);
 				result = new(env, arrayRef, length);
 			}
 			return result;
@@ -118,7 +117,7 @@ partial class JEnvironment
 			}
 			else
 			{
-				this.SetObjectElement(jArray, index, value as JLocalObject);
+				this.SetObjectElement(jArray, index, value as JReferenceObject);
 			}
 		}
 		public Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item)
@@ -146,16 +145,6 @@ partial class JEnvironment
 				this.CopyToPrimitive(jArray, primitiveMetadata.SizeOf, array, arrayIndex);
 			else
 				this.CopyToObject(jArray, array, arrayIndex);
-		}
-		public void SetObjectElement(JArrayObject jArray, Int32 index, JLocalObject? value)
-		{
-			ValidationUtilities.ThrowIfDummy(value);
-			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			JObjectLocalRef localRef = jniTransaction.Add(value);
-			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
-			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
-			this.CheckJniError();
 		}
 		public IntPtr GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, out Boolean isCopy)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -204,6 +193,16 @@ partial class JEnvironment
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			using IReadOnlyFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
 			this.SetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);
+			this.CheckJniError();
+		}
+		public void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
+		{
+			ValidationUtilities.ThrowIfDummy(value);
+			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);
+			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
+			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
 			this.CheckJniError();
 		}
 
@@ -627,14 +626,14 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="length">Array length.</param>
 		/// <param name="jClass">Array class.</param>
-		/// <param name="jLocal">Initializer array element.</param>
+		/// <param name="jObject">Initializer array element.</param>
 		/// <returns>Created array <see cref="JArrayLocalRef"/> reference.</returns>
-		private JArrayLocalRef NewObjectArray(Int32 length, JClassObject jClass, JLocalObject? jLocal = default)
+		private JArrayLocalRef NewObjectArray(Int32 length, JClassObject jClass, JReferenceObject? jObject = default)
 		{
 			NewObjectArrayDelegate newObjectArray = this.GetDelegate<NewObjectArrayDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			JObjectLocalRef initialRef = jniTransaction.Add(jLocal);
+			JObjectLocalRef initialRef = this.UseObject(jniTransaction, jObject);
 			JObjectArrayLocalRef arrayRef = newObjectArray(this.Reference, length, classRef, initialRef);
 			if (arrayRef.Value == default) this.CheckJniError();
 			return arrayRef.ArrayValue;

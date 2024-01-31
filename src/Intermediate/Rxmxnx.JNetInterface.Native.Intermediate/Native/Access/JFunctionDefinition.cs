@@ -190,7 +190,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? InvokeReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
 	{
 		IEnvironment env = jMethod.Environment;
-		return env.AccessFeature.CallFunction(jMethod, jLocal, this, false, args);
+		return env.AccessFeature.CallFunction<TResult>(jMethod, jLocal, this, false, args);
 	}
 	/// <summary>
 	/// Invokes a reflected function which matches with current definition.
@@ -202,7 +202,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
 	{
 		IEnvironment env = jMethod.Environment;
-		return env.AccessFeature.CallFunction(jMethod, jLocal, this, true, args);
+		return env.AccessFeature.CallFunction<TResult>(jMethod, jLocal, this, true, args);
 	}
 	/// <summary>
 	/// Invokes a reflected static function which matches with current definition.
@@ -213,7 +213,7 @@ public record JFunctionDefinition<TResult> : JFunctionDefinition where TResult :
 	protected TResult? InvokeStaticReflected(JMethodObject jMethod, IObject?[] args)
 	{
 		IEnvironment env = jMethod.Environment;
-		return env.AccessFeature.CallStaticFunction(jMethod, this, args);
+		return env.AccessFeature.CallStaticFunction<TResult>(jMethod, this, args);
 	}
 
 	/// <summary>

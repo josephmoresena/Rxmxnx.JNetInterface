@@ -96,7 +96,7 @@ partial class JEnvironment
 			if (typeof(TGlobal) == typeof(JWeak))
 			{
 				NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();
-				JObjectLocalRef localRef = jniTransaction.Add(jLocal);
+				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 				JWeakRef weakRef = newWeakGlobalRef(this.Reference, localRef);
 				if (weakRef == default) this.CheckJniError();
 				JWeak jWeak = this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
@@ -111,7 +111,7 @@ partial class JEnvironment
 			}
 			else
 			{
-				JObjectLocalRef localRef = jniTransaction.Add(jLocal);
+				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 				JGlobal jGlobal = this.VirtualMachine.Register(
 					new JGlobal(this.VirtualMachine, metadata, false, this.CreateGlobalRef(localRef)));
 				result = (TGlobal)(Object)jGlobal;

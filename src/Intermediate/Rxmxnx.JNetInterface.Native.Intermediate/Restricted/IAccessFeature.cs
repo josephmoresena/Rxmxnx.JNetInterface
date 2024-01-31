@@ -16,7 +16,17 @@ public partial interface IAccessFeature
 	TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
 		where TField : IObject, IDataType<TField>;
 	/// <summary>
-	/// Sets a static field to given <see cref="JLocalObject"/> instance.
+	/// Retrieves a reflected field on <paramref name="jField"/>.
+	/// </summary>
+	/// <typeparam name="TField"><see cref="IDataType"/> type of field result.</typeparam>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
+	/// <returns><typeparamref name="TField"/> field instance.</returns>
+	TField? GetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition)
+		where TField : IDataType<TField>, IObject;
+	/// <summary>
+	/// Sets a field to given <see cref="JLocalObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
@@ -25,6 +35,16 @@ public partial interface IAccessFeature
 	/// <param name="value">The field value to set to.</param>
 	void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition, TField? value)
 		where TField : IObject, IDataType<TField>;
+	/// <summary>
+	/// Sets a reflected field on <paramref name="jField"/>.
+	/// </summary>
+	/// <typeparam name="TField"><see cref="IDataType"/> type of field.</typeparam>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
+	/// <param name="value">The field value to set to.</param>
+	void SetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition, TField value)
+		where TField : IDataType<TField>, IObject;
 	/// <summary>
 	/// Retrieves a static field from given <see cref="JClassObject"/> instance.
 	/// </summary>
@@ -81,8 +101,8 @@ public partial interface IAccessFeature
 	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition<TResult> definition,
-		IObject?[] args) where TResult : IDataType<TResult>;
+	TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition definition, IObject?[] args)
+		where TResult : IDataType<TResult>;
 	/// <summary>
 	/// Invokes a static method on given <see cref="JClassObject"/> instance.
 	/// </summary>
@@ -119,7 +139,7 @@ public partial interface IAccessFeature
 	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal, JFunctionDefinition<TResult> definition,
+	TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal, JFunctionDefinition definition,
 		Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>;
 	/// <summary>
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.
