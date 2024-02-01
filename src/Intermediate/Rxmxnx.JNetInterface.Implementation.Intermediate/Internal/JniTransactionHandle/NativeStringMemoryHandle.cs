@@ -27,7 +27,6 @@ internal partial struct JniTransactionHandle
 		{
 			this._utf8Chars = !critical.HasValue;
 			this.BinarySize = this._utf8Chars ? jString.Utf8Length : jString.Length * sizeof(Char);
-			IEnvironment env = jString.Environment;
 		}
 
 		/// <summary>
