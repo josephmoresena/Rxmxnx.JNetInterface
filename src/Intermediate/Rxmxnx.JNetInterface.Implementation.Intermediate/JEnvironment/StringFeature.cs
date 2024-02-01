@@ -39,12 +39,23 @@ partial class JEnvironment
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
-		public IntPtr GetSequence(JStringObject jString, out Boolean isCopy)
+		public INativeMemoryHandle GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(jString);
-			return this.GetSequence(stringRef, out isCopy);
+			ValidationUtilities.ThrowIfDefault(jString);
+			return this.VirtualMachine.CreateMemoryHandle(jString, referenceKind, false);
+		}
+		public INativeMemoryHandle GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind)
+		{
+			ValidationUtilities.ThrowIfDummy(jString);
+			ValidationUtilities.ThrowIfDefault(jString);
+			return this.VirtualMachine.CreateMemoryHandle(jString, referenceKind, default);
+		}
+		public INativeMemoryHandle GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
+		{
+			ValidationUtilities.ThrowIfDummy(jString);
+			ValidationUtilities.ThrowIfDefault(jString);
+			return this.VirtualMachine.CreateMemoryHandle(jString, referenceKind, true);
 		}
 		public ReadOnlyValPtr<Char> GetSequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
@@ -54,13 +65,6 @@ partial class JEnvironment
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
 		}
-		public IntPtr GetUtf8Sequence(JStringObject jString, out Boolean isCopy)
-		{
-			ValidationUtilities.ThrowIfDummy(jString);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(jString);
-			return this.GetUtf8Sequence(stringRef, out isCopy);
-		}
 		public ReadOnlyValPtr<Byte> GetUtf8Sequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
 			GetStringUtfCharsDelegate getStringUtf8Chars = this.GetDelegate<GetStringUtfCharsDelegate>();
@@ -69,13 +73,6 @@ partial class JEnvironment
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
 		}
-		public IntPtr GetCriticalSequence(JStringObject jString)
-		{
-			ValidationUtilities.ThrowIfDummy(jString);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(jString);
-			return this.GetCriticalSequence(stringRef);
-		}
 		public ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef)
 		{
 			GetStringCriticalDelegate getStringCritical = this.GetDelegate<GetStringCriticalDelegate>();
@@ -83,38 +80,17 @@ partial class JEnvironment
 			if (result == ReadOnlyValPtr<Char>.Zero) this.CheckJniError();
 			return result;
 		}
-		public void ReleaseSequence(JStringObject jString, IntPtr pointer)
-		{
-			ValidationUtilities.ThrowIfDummy(jString);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(jString);
-			this.ReleaseSequence(stringRef, (ReadOnlyValPtr<Char>)pointer);
-		}
 		public void ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
 			ReleaseStringCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringCharsDelegate>();
 			releaseStringChars(this.Reference, stringRef, pointer);
 			this.CheckJniError();
 		}
-		public void ReleaseUtf8Sequence(JStringObject jString, IntPtr pointer)
-		{
-			ValidationUtilities.ThrowIfDummy(jString);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(jString);
-			this.ReleaseUtf8Sequence(stringRef, (ReadOnlyValPtr<Byte>)pointer);
-		}
 		public void ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer)
 		{
 			ReleaseStringUtfCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringUtfCharsDelegate>();
 			releaseStringChars(this.Reference, stringRef, pointer);
 			this.CheckJniError();
-		}
-		public void ReleaseCriticalSequence(JStringObject jString, IntPtr pointer)
-		{
-			ValidationUtilities.ThrowIfDummy(jString);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(jString);
-			this.ReleaseCriticalSequence(stringRef, (ReadOnlyValPtr<Char>)pointer);
 		}
 		public void ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
