@@ -56,6 +56,23 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 		result.Activate();
 		return result;
 	}
+	/// <summary>
+	/// Creates a native memory handle instance for <paramref name="jString"/>.
+	/// </summary>
+	/// <param name="jString"><see cref="JStringObject"/> instance.</param>
+	/// <param name="referenceKind">Reference memory kind.</param>
+	/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+	/// <param name="transactions">Dictionary of transactions.</param>
+	/// <returns>A new native memory handle instance for <paramref name="jString"/>.</returns>
+	public static INativeMemoryHandle CreateMemoryHandle(JStringObject jString, JMemoryReferenceKind referenceKind,
+		Boolean? critical, IDictionary<Guid, INativeTransaction> transactions)
+	{
+		NativeStringMemoryHandle result =
+			JniTransactionHandle.Initialize<NativeStringMemoryHandle>(new(jString, referenceKind, critical),
+			                                                          transactions);
+		result.Activate(jString.Environment);
+		return result;
+	}
 
 	/// <summary>
 	/// Creates an empty <typeparamref name="TTransaction"/> instance.

@@ -70,9 +70,13 @@ public partial class JVirtualMachine
 		=> this._cache.GlobalClassCache[classRef] ?? this._cache.WeakClassCache[classRef];
 	/// <inheritdoc cref="JVirtualMachineCache.CreateTransaction(Int32)"/>
 	internal INativeTransaction CreateTransaction(Int32 capacity) => this._cache.CreateTransaction(capacity);
-	/// <inheritdoc cref="JVirtualMachineCache.CreateSynchronized(JEnvironment, JReferenceObject)"/>
-	public IDisposable CreateSynchronized(JEnvironment env, JReferenceObject jObject)
+	/// <inheritdoc cref="JVirtualMachineCache.CreateSynchronized(IEnvironment, JReferenceObject)"/>
+	internal IDisposable CreateSynchronized(IEnvironment env, JReferenceObject jObject)
 		=> this._cache.CreateSynchronized(env, jObject);
+	/// <inheritdoc cref="JVirtualMachineCache.CreateMemoryHandle(JStringObject, JMemoryReferenceKind, Boolean?)"/>
+	internal INativeMemoryHandle CreateMemoryHandle(JStringObject jString, JMemoryReferenceKind referenceKind,
+		Boolean? critical)
+		=> this._cache.CreateMemoryHandle(jString, referenceKind, critical);
 	/// <summary>
 	/// Indicates whether <paramref name="weakRef"/> can be removed safely.
 	/// </summary>

@@ -17,7 +17,7 @@ internal readonly struct JNativeMemoryHandler : INativeMemoryHandle
 	/// <summary>
 	/// Pointer to beginning element in current sequence.
 	/// </summary>
-	private IntPtr Pointer { get; init; }
+	public IntPtr Pointer { get; init; }
 	/// <summary>
 	/// Source object.
 	/// </summary>
@@ -29,7 +29,7 @@ internal readonly struct JNativeMemoryHandler : INativeMemoryHandle
 	/// <summary>
 	/// Binary sequence length.
 	/// </summary>
-	private Int32 BinarySize { get; init; }
+	public Int32 BinarySize { get; init; }
 	/// <summary>
 	/// Indicates whether current sequence source should be disposed.
 	/// </summary>

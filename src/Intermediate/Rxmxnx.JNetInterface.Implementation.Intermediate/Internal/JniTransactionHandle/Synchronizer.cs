@@ -25,7 +25,7 @@ internal partial struct JniTransactionHandle
 		/// Constructor.
 		/// </summary>
 		/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-		/// <param name="jObject">A <see cref="JLocalObject"/> instance.</param>
+		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 		public Synchronizer(IEnvironment env, JReferenceObject jObject)
 		{
 			this._env = env;

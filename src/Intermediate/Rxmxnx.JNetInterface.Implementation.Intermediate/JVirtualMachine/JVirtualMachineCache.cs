@@ -170,8 +170,18 @@ public partial class JVirtualMachine
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 		/// <returns>A new synchronizer for <paramref name="jObject"/> instance.</returns>
-		public IDisposable CreateSynchronized(JEnvironment env, JReferenceObject jObject)
+		public IDisposable CreateSynchronized(IEnvironment env, JReferenceObject jObject)
 			=> JniTransactionHandle.CreateSynchronizer(env, jObject, this._transactions);
+		/// <summary>
+		/// Creates a native memory handle instance for <paramref name="jString"/>.
+		/// </summary>
+		/// <param name="jString"><see cref="JStringObject"/> instance.</param>
+		/// <param name="referenceKind">Reference memory kind.</param>
+		/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+		/// <returns>A new native memory handle instance for <paramref name="jString"/>.</returns>
+		public INativeMemoryHandle CreateMemoryHandle(JStringObject jString, JMemoryReferenceKind referenceKind,
+			Boolean? critical)
+			=> JniTransactionHandle.CreateMemoryHandle(jString, referenceKind, critical, this._transactions);
 		/// <summary>
 		/// Indicates whether given <paramref name="jRef"/> is begin using by a transaction.
 		/// </summary>
