@@ -26,8 +26,8 @@ public sealed partial record JCompiler
 	/// <returns>Java class bytecode.</returns>
 	public async Task<Byte[]> CompileHelloJniClassAsync()
 	{
-		String javaFilePath = Path.Combine(Environment.CurrentDirectory, "HelloDotnet.java");
-		String classFilePath = Path.Combine(Environment.CurrentDirectory, "HelloDotnet.class");
+		String javaFilePath = Path.Combine(Path.GetTempPath(), "HelloDotnet.java");
+		String classFilePath = Path.Combine(Path.GetTempPath(), "HelloDotnet.class");
 		try
 		{
 			File.Delete(javaFilePath);
