@@ -74,4 +74,11 @@ public partial interface IDummyEnvironment : IEnvironment
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <returns>The original <see cref="JLocalObject"/> instance for <paramref name="localRef"/>.</returns>
 	JLocalObject? GetSourceInstance(JObjectLocalRef localRef);
+
+	/// <summary>
+	/// Creates a <see cref="JClassObject"/> for <c>java.lang.Class&lt;?&gt;</c> data type.
+	/// </summary>
+	/// <param name="env">A <see cref="IDummyEnvironment"/> instance.</param>
+	/// <returns>A <see cref="JClassObject"/> for <c>java.lang.Class&lt;?&gt;</c> data type.</returns>
+	public static JClassObject CreateClassObject(IDummyEnvironment env) => new(env);
 }
