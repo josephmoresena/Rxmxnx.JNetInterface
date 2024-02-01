@@ -250,8 +250,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 		this.Unload(jLocal.Id, isClass);
 		this.Secondary?.Unload(jLocal.Id, isClass);
 		if (this._objects.Count > this._classCounter.Value || this._env.ReferenceFeature.IsParameter(jLocal)) return;
-		this._env.ReferenceFeature.Unload(jLocal);
-		this.Dispose();
+		if (this._env.ReferenceFeature.Unload(jLocal)) this.Dispose();
 	}
 	/// <summary>
 	/// Unloads current <see cref="JGlobalBase"/> instance.

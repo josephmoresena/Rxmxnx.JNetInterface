@@ -14,7 +14,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// <summary>
 	/// Internal memory handler.
 	/// </summary>
-	private readonly JNativeMemoryHandler _handler;
+	private readonly INativeMemoryHandle _handler;
 	/// <inheritdoc cref="JNativeMemory.VirtualMachine"/>
 	private readonly IVirtualMachine _vm;
 
@@ -49,7 +49,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// </summary>
 	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="handler"><see cref="JNativeMemoryHandler"/> handler.</param>
-	internal JNativeMemory(IVirtualMachine vm, JNativeMemoryHandler handler)
+	internal JNativeMemory(IVirtualMachine vm, INativeMemoryHandle handler)
 	{
 		this._vm = vm;
 		this._handler = handler;
@@ -60,9 +60,9 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// Constructor.
 	/// </summary>
 	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="handler"><see cref="JNativeMemoryHandler"/> handler.</param>
+	/// <param name="handler"><see cref="INativeMemoryHandle"/> handler.</param>
 	/// <param name="isReadOnly">Indicates current memory block is read-only.</param>
-	internal JNativeMemory(IVirtualMachine vm, JNativeMemoryHandler handler, Boolean isReadOnly)
+	internal JNativeMemory(IVirtualMachine vm, INativeMemoryHandle handler, Boolean isReadOnly)
 	{
 		this._vm = vm;
 		this._handler = handler;
@@ -116,7 +116,7 @@ public sealed record JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContex
 	private readonly IReadOnlyFixedContext<TValue> _context;
 
 	/// <inheritdoc/>
-	internal JNativeMemory(IVirtualMachine vm, JNativeMemoryHandler handler) : base(vm, handler)
+	internal JNativeMemory(IVirtualMachine vm, INativeMemoryHandle handler) : base(vm, handler)
 		=> this._context = this.Memory.AsBinaryContext().Transformation<TValue>(out _);
 	/// <summary>
 	/// Constructor.

@@ -183,28 +183,4 @@ partial class JEnvironment
 		if (localRef == default) this._cache.CheckJniError();
 		return localRef;
 	}
-	/// <summary>
-	/// Exits from monitor.
-	/// </summary>
-	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
-	/// <exception cref="JniException"/>
-	internal void MonitorExit(JObjectLocalRef localRef)
-	{
-		MonitorExitDelegate monitorExit = this._cache.GetDelegate<MonitorExitDelegate>();
-		JResult result = monitorExit(this.Reference, localRef);
-		if (result != JResult.Ok)
-			throw new JniException(result);
-	}
-	/// <summary>
-	/// Enters to monitor.
-	/// </summary>
-	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
-	/// <exception cref="JniException"/>
-	public void MonitorEnter(JObjectLocalRef localRef)
-	{
-		MonitorEnterDelegate monitorEnter = this._cache.GetDelegate<MonitorEnterDelegate>();
-		JResult result = monitorEnter(this.Reference, localRef);
-		if (result != JResult.Ok)
-			throw new JniException(result);
-	}
 }

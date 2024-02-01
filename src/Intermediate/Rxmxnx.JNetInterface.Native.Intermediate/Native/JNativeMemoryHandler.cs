@@ -3,33 +3,21 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This struct contains a handler for a primitive sequence.
 /// </summary>
-internal readonly struct JNativeMemoryHandler
+internal readonly struct JNativeMemoryHandler : INativeMemoryHandle
 {
-	/// <summary>
-	/// Pointer to beginning element in current sequence.
-	/// </summary>
-	public IntPtr Pointer { get; private init; }
-	/// <summary>
-	/// Number of elements in current sequence.
-	/// </summary>
-	public Int32 Count { get; private init; }
 	/// <summary>
 	/// Indicates whether current sequence is a copy.
 	/// </summary>
 	public Boolean Copy { get; private init; }
 	/// <summary>
-	/// Indicates whether current sequence source should be disposed.
-	/// </summary>
-	public Boolean Disposable { get; private init; }
-	/// <summary>
 	/// Indicates whether current sequence is critical.
 	/// </summary>
 	public Boolean Critical { get; private init; }
-	/// <summary>
-	/// Binary sequence length.
-	/// </summary>
-	internal Int32 BinarySize { get; private init; }
 
+	/// <summary>
+	/// Pointer to beginning element in current sequence.
+	/// </summary>
+	private IntPtr Pointer { get; init; }
 	/// <summary>
 	/// Source object.
 	/// </summary>
@@ -38,12 +26,32 @@ internal readonly struct JNativeMemoryHandler
 	/// Release delegate.
 	/// </summary>
 	private Action<IVirtualMachine, JNativeMemoryHandler, JReleaseMode>? ReleaseAction { get; init; }
+	/// <summary>
+	/// Binary sequence length.
+	/// </summary>
+	private Int32 BinarySize { get; init; }
+	/// <summary>
+	/// Indicates whether current sequence source should be disposed.
+	/// </summary>
+	private Boolean Disposable { get; init; }
 
+	/// <summary>
+	/// Retrieves a <see cref="IReadOnlyFixedContext{Byte}.IDisposable"/> instance from current handle
+	/// using <paramref name="jMemory"/>.
+	/// </summary>
+	/// <param name="jMemory">A <see cref="JNativeMemory"/> instance.</param>
+	/// <returns>A <see cref="IReadOnlyFixedContext{Byte}.IDisposable"/> instance.</returns>
 	public IReadOnlyFixedContext<Byte>.IDisposable GetReadOnlyContext(JNativeMemory jMemory)
 	{
 		ReadOnlyValPtr<Byte> ptr = (ReadOnlyValPtr<Byte>)this.Pointer;
 		return ptr.GetUnsafeFixedContext(this.BinarySize, jMemory);
 	}
+	/// <summary>
+	/// Retrieves a <see cref="IFixedContext{Byte}.IDisposable"/> instance from current handle
+	/// using <paramref name="jMemory"/>.
+	/// </summary>
+	/// <param name="jMemory">A <see cref="JNativeMemory"/> instance.</param>
+	/// <returns>A <see cref="IFixedContext{Byte}.IDisposable"/> instance.</returns>
 	public IFixedContext<Byte>.IDisposable GetContext(JNativeMemory jMemory)
 	{
 		ValPtr<Byte> ptr = (ValPtr<Byte>)this.Pointer;
@@ -55,7 +63,11 @@ internal readonly struct JNativeMemoryHandler
 	/// </summary>
 	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="mode">Release handler mode.</param>
-	public void Release(IVirtualMachine vm, JReleaseMode mode = default) { this.ReleaseAction?.Invoke(vm, this, mode); }
+	public void Release(IVirtualMachine vm, JReleaseMode mode = default)
+	{
+		this.ReleaseAction?.Invoke(vm, this, mode);
+		if (this.Disposable) (this.Source as IDisposable)?.Dispose();
+	}
 
 	/// <summary>
 	/// Creates a memory handler for array source.
@@ -75,7 +87,6 @@ internal readonly struct JNativeMemoryHandler
 		return new()
 		{
 			Source = source,
-			Count = source.Length,
 			BinarySize = source.Length * IPrimitiveType.GetMetadata<TPrimitive>().SizeOf,
 			Disposable = false,
 			Critical = critical,
@@ -103,7 +114,6 @@ internal readonly struct JNativeMemoryHandler
 		return new()
 		{
 			Source = source,
-			Count = source.Length,
 			BinarySize = source.Length * sizeof(Char),
 			Disposable = false,
 			Critical = critical,
@@ -125,7 +135,6 @@ internal readonly struct JNativeMemoryHandler
 		return new()
 		{
 			Source = source,
-			Count = source.Utf8Length,
 			BinarySize = source.Utf8Length,
 			Disposable = false,
 			Critical = false,
@@ -206,7 +215,6 @@ internal readonly struct JNativeMemoryHandler
 		return new()
 		{
 			Source = globalSource,
-			Count = tempSource.Length,
 			BinarySize = source.Length * sizeof(Char),
 			Disposable = true,
 			Critical = critical,
@@ -237,7 +245,6 @@ internal readonly struct JNativeMemoryHandler
 		return new()
 		{
 			Source = globalSource,
-			Count = tempSource.Length,
 			BinarySize = tempSource.Length * IPrimitiveType.GetMetadata<TPrimitive>().SizeOf,
 			Disposable = true,
 			Critical = critical,
@@ -264,7 +271,6 @@ internal readonly struct JNativeMemoryHandler
 		return new()
 		{
 			Source = globalSource,
-			Count = tempSource.Utf8Length,
 			BinarySize = tempSource.Utf8Length,
 			Disposable = true,
 			Critical = false,

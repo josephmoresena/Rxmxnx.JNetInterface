@@ -18,4 +18,19 @@ public interface ILocalViewObject : IViewObject, ILocalObject
 		=> ILocalObject.ProcessMetadata(this.Object, instanceMetadata);
 
 	IObject IViewObject.Object => this.Object;
+
+	/// <summary>
+	/// Retrieves the <see cref="JLocalObject"/> instance from <paramref name="jView"/>.
+	/// </summary>
+	/// <param name="jView">A <see cref="ILocalViewObject"/> instance.</param>
+	/// <returns>A <see cref="JLocalObject"/> instance.</returns>
+	internal static JLocalObject? GetObject(ILocalViewObject? jView)
+	{
+		while (jView is not null)
+		{
+			if (jView.Object is JLocalObject jLocal) return jLocal;
+			jView = jView.Object as ILocalViewObject;
+		}
+		return default;
+	}
 }

@@ -8,9 +8,9 @@ internal partial struct JniTransactionHandle
 	private sealed record Synchronizer : UnaryTransaction
 	{
 		/// <summary>
-		/// A <see cref="JEnvironment"/> instance.
+		/// A <see cref="IEnvironment"/> instance.
 		/// </summary>
-		private readonly JEnvironment _env;
+		private readonly IEnvironment _env;
 		/// <summary>
 		/// Synchronized instance.
 		/// </summary>
@@ -24,9 +24,9 @@ internal partial struct JniTransactionHandle
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+		/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 		/// <param name="jObject">A <see cref="JLocalObject"/> instance.</param>
-		public Synchronizer(JEnvironment env, JReferenceObject jObject)
+		public Synchronizer(IEnvironment env, JReferenceObject jObject)
 		{
 			this._env = env;
 			(this as INativeTransaction).Add(jObject);
@@ -39,7 +39,7 @@ internal partial struct JniTransactionHandle
 		public void Activate()
 		{
 			if (this._active) return;
-			this._env.MonitorEnter(this.LocalRef);
+			this._env.ReferenceFeature.MonitorEnter(this.LocalRef);
 			this._active = false;
 		}
 
@@ -51,7 +51,7 @@ internal partial struct JniTransactionHandle
 				{
 					if (this._active)
 					{
-						this._env.MonitorExit(this.LocalRef);
+						this._env.ReferenceFeature.MonitorExit(this.LocalRef);
 						this._active = false;
 					}
 				}

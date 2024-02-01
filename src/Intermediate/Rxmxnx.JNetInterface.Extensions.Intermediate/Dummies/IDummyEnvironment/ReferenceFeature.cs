@@ -23,4 +23,6 @@ public partial interface IDummyEnvironment
 			_ => this.CreateWrapper(NativeUtilities.Transform<TPrimitive, JShort>(in primitive)),
 		};
 	}
+	void IReferenceFeature.MonitorEnter(JObjectLocalRef localRef) { }
+	void IReferenceFeature.MonitorExit(JObjectLocalRef localRef) { }
 }

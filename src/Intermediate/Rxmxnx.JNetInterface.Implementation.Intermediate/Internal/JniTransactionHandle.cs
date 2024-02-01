@@ -45,11 +45,11 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	/// <summary>
 	/// Creates a synchronizer instance for <paramref name="jObject"/>.
 	/// </summary>
-	/// <param name="env"><see cref="JEnvironment"/> instance.</param>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jObject"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="transactions">Dictionary of transactions.</param>
 	/// <returns>A new synchronizer instance for <paramref name="jObject"/>.</returns>
-	public static IDisposable CreateSynchronizer(JEnvironment env, JReferenceObject jObject,
+	public static IDisposable CreateSynchronizer(IEnvironment env, JReferenceObject jObject,
 		IDictionary<Guid, INativeTransaction> transactions)
 	{
 		Synchronizer result = JniTransactionHandle.Initialize<Synchronizer>(new(env, jObject), transactions);

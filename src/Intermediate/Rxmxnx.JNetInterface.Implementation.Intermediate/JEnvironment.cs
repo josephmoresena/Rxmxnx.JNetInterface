@@ -66,9 +66,10 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		}
 		else if (this.IsSame(jRefObj.As<JObjectLocalRef>(), default))
 		{
-			if (jRefObj is JGlobalBase jGlobal) this._cache.Unload(jGlobal);
-			else this._cache.Unload(jRefObj as JLocalObject);
-			jRefObj.ClearValue();
+			if (jRefObj is JGlobalBase jGlobal)
+				this._cache.Unload(jGlobal);
+			else
+				this._cache.Unload(jRefObj as JLocalObject ?? ILocalViewObject.GetObject(jRefObj as ILocalViewObject));
 		}
 
 		return result;

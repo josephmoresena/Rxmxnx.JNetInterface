@@ -17,4 +17,16 @@ public partial interface IReferenceFeature
 	/// <returns>A <see cref="JLocalObject"/> wrapper instance for <paramref name="primitive"/> value.</returns>
 	internal JLocalObject CreateWrapper<TPrimitive>(TPrimitive primitive)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	/// <summary>
+	/// Enters to monitor.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <exception cref="JniException"/>
+	void MonitorEnter(JObjectLocalRef localRef);
+	/// <summary>
+	/// Exits from monitor.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <exception cref="JniException"/>
+	void MonitorExit(JObjectLocalRef localRef);
 }

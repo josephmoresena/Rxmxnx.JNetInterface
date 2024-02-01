@@ -165,6 +165,20 @@ partial class JEnvironment
 			return true;
 		}
 		public Boolean IsParameter(JLocalObject jLocal) => this._objects.IsParameter(jLocal.InternalReference);
+		public void MonitorEnter(JObjectLocalRef localRef)
+		{
+			MonitorEnterDelegate monitorEnter = this.GetDelegate<MonitorEnterDelegate>();
+			JResult result = monitorEnter(this.Reference, localRef);
+			if (result != JResult.Ok)
+				throw new JniException(result);
+		}
+		public void MonitorExit(JObjectLocalRef localRef)
+		{
+			MonitorExitDelegate monitorExit = this.GetDelegate<MonitorExitDelegate>();
+			JResult result = monitorExit(this.Reference, localRef);
+			if (result != JResult.Ok)
+				throw new JniException(result);
+		}
 
 		/// <summary>
 		/// Registers a <typeparamref name="TObject"/> in current <see cref="IEnvironment"/> instance.
