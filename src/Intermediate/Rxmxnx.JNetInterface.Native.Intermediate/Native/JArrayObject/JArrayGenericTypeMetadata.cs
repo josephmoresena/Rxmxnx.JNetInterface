@@ -78,7 +78,7 @@ public partial class JArrayObject<TElement>
 		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 		/// <param name="index">Element index.</param>
 		/// <param name="value">Object instance.</param>
-		private static void SetObjectElement(JArrayObject<TElement> jArray, Int32 index, JLocalObject value)
+		private static void SetObjectElement(IList<TElement?> jArray, Int32 index, JLocalObject value)
 		{
 			JReferenceTypeMetadata elementMetadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TElement>();
 			TElement element = (TElement)(Object)elementMetadata.ParseInstance(value);

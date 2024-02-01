@@ -146,15 +146,19 @@ partial class JEnvironment
 			else
 				this.CopyToObject(jArray, array, arrayIndex);
 		}
-		public IntPtr GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, out Boolean isCopy)
-			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		public INativeMemoryHandle GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
+			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ValidationUtilities.ThrowIfDummy(jArray);
-			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			IntPtr result = this.GetPrimitiveArrayElements(jArray, metadata.Signature, out Byte isCopyByte);
-			if (result == IntPtr.Zero) this.CheckJniError();
-			isCopy = isCopyByte == JBoolean.TrueValue;
-			return result;
+			ValidationUtilities.ThrowIfDefault(jArray);
+			return this.VirtualMachine.CreateMemoryHandle(jArray, referenceKind, false);
+		}
+		public INativeMemoryHandle GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
+			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		{
+			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfDefault(jArray);
+			return this.VirtualMachine.CreateMemoryHandle(jArray, referenceKind, true);
 		}
 		public IntPtr GetPrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, out Boolean isCopy)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -165,13 +169,6 @@ partial class JEnvironment
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
 		}
-		public IntPtr GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray)
-			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
-		{
-			ValidationUtilities.ThrowIfDummy(jArray);
-			IntPtr result = this.GetPrimitiveCriticalSequence(jArray.Reference);
-			return result;
-		}
 		public ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
 		{
 			GetPrimitiveArrayCriticalDelegate getPrimitiveArrayCriticalDelegate =
@@ -180,26 +177,12 @@ partial class JEnvironment
 			if (result == ValPtr<Byte>.Zero) this.CheckJniError();
 			return result;
 		}
-		public void ReleaseSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, IntPtr pointer, JReleaseMode mode)
-			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
-		{
-			ValidationUtilities.ThrowIfDummy(jArray);
-			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			this.ReleasePrimitiveArrayElements(jArray, metadata.Signature, pointer, mode);
-			this.CheckJniError();
-		}
 		public void ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer, JReleaseMode mode)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			this.ReleasePrimitiveArrayElements(arrayRef, metadata.Signature[0], pointer, mode);
 			this.CheckJniError();
-		}
-		public void ReleaseCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, IntPtr pointer)
-			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
-		{
-			ValidationUtilities.ThrowIfDummy(jArray);
-			this.ReleasePrimitiveCriticalSequence(jArray.Reference, (ValPtr<Byte>)pointer);
 		}
 		public void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
 		{
@@ -369,22 +352,6 @@ partial class JEnvironment
 			if (localRef == default) this.CheckJniError();
 			return localRef;
 		}
-		/// <summary>
-		/// Retrieves a VM managed pointer to primitive array elements.
-		/// </summary>
-		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
-		/// <param name="signature">Primitive signature.</param>
-		/// <param name="isCopy">
-		/// Output. If <c>JNI_TRUE</c> indicates output points to a copy of the elements.
-		/// </param>
-		/// <returns>A VM managed pointer to primitive array elements.</returns>
-		/// <exception cref="ArgumentException"/>
-		private IntPtr GetPrimitiveArrayElements(JArrayObject jArray, CString signature, out Byte isCopy)
-		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
-			return this.GetPrimitiveArrayElements(arrayRef, signature[0], out isCopy);
-		}
 		private IntPtr GetPrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, out Byte isCopy)
 		{
 			switch (signature)
@@ -439,22 +406,6 @@ partial class JEnvironment
 				default:
 					throw new ArgumentException("Invalid primitive type.");
 			}
-		}
-		/// <summary>
-		/// Releases <paramref name="pointer"/> from VM.
-		/// </summary>
-		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
-		/// <param name="signature">Primitive signature.</param>
-		/// <param name="pointer">A VM managed pointer to primitive array elements.</param>
-		/// <param name="mode">A <see cref="JReleaseMode"/> value.</param>
-		/// <exception cref="ArgumentException"/>
-		private void ReleasePrimitiveArrayElements(JArrayObject jArray, CString signature, IntPtr pointer,
-			JReleaseMode mode)
-		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			Byte signatureP = signature[0];
-			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
-			this.ReleasePrimitiveArrayElements(arrayRef, signatureP, pointer, mode);
 		}
 		private void ReleasePrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, IntPtr pointer,
 			JReleaseMode mode)

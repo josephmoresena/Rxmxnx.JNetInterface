@@ -31,12 +31,6 @@ public interface INativeMemoryHandle
 	/// <summary>
 	/// Releases the current handler.
 	/// </summary>
-	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="mode">Release handler mode.</param>
-	void Release(IVirtualMachine vm, JReleaseMode mode = default) => this.Release(mode);
-	/// <summary>
-	/// Releases the current handler.
-	/// </summary>
-	/// <param name="mode">Release handler mode.</param>
-	void Release(JReleaseMode mode = default) => this.Release(default!, mode);
+	void Release(JReleaseMode mode = default);
 }

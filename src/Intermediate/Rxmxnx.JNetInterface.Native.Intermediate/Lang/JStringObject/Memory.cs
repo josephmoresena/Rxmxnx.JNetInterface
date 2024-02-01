@@ -10,8 +10,7 @@ public partial class JStringObject
 	public JNativeMemory<Char> GetNativeChars(JMemoryReferenceKind referenceKind = JMemoryReferenceKind.Local)
 	{
 		INativeMemoryHandle handle = this.Environment.StringFeature.GetSequence(this, referenceKind);
-		IVirtualMachine vm = this.Environment.VirtualMachine;
-		return new(vm, handle);
+		return new(handle);
 	}
 	/// <summary>
 	/// Retrieves the critical native memory of UTF-16 characters.
@@ -22,8 +21,7 @@ public partial class JStringObject
 		JMemoryReferenceKind referenceKind = JMemoryReferenceKind.ThreadUnrestricted)
 	{
 		INativeMemoryHandle handle = this.Environment.StringFeature.GetCriticalSequence(this, referenceKind);
-		IVirtualMachine vm = this.Environment.VirtualMachine;
-		return new(vm, handle);
+		return new(handle);
 	}
 	/// <summary>
 	/// Retrieves the native memory of UTF-8 characters.
@@ -33,7 +31,6 @@ public partial class JStringObject
 	public JNativeMemory<Byte> GetNativeUtf8Chars(JMemoryReferenceKind referenceKind = JMemoryReferenceKind.Local)
 	{
 		INativeMemoryHandle handle = this.Environment.StringFeature.GetUtf8Sequence(this, referenceKind);
-		IVirtualMachine vm = this.Environment.VirtualMachine;
-		return new(vm, handle);
+		return new(handle);
 	}
 }

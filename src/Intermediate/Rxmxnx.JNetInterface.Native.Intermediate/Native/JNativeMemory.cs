@@ -15,13 +15,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// Internal memory handler.
 	/// </summary>
 	private readonly INativeMemoryHandle _handle;
-	/// <inheritdoc cref="JNativeMemory.VirtualMachine"/>
-	private readonly IVirtualMachine _vm;
 
-	/// <summary>
-	/// <see cref="IVirtualMachine"/> instance.
-	/// </summary>
-	public IVirtualMachine VirtualMachine => this._vm;
 	/// <summary>
 	/// Indicates whether current sequence is a copy.
 	/// </summary>
@@ -47,11 +41,9 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
-	/// <param name="handle"><see cref="JNativeMemoryHandler"/> handler.</param>
-	internal JNativeMemory(IVirtualMachine vm, INativeMemoryHandle handle)
+	/// <param name="handle"><see cref="INativeMemoryHandle"/> handler.</param>
+	internal JNativeMemory(INativeMemoryHandle handle)
 	{
-		this._vm = vm;
 		this._handle = handle;
 		this._context = handle.GetReadOnlyContext(this);
 	}
@@ -59,12 +51,10 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="handle"><see cref="INativeMemoryHandle"/> handler.</param>
 	/// <param name="isReadOnly">Indicates current memory block is read-only.</param>
-	internal JNativeMemory(IVirtualMachine vm, INativeMemoryHandle handle, Boolean isReadOnly)
+	internal JNativeMemory(INativeMemoryHandle handle, Boolean isReadOnly)
 	{
-		this._vm = vm;
 		this._handle = handle;
 		this._context = isReadOnly ? handle.GetReadOnlyContext(this) : handle.GetContext(this);
 	}
@@ -99,7 +89,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	{
 		if (this._disposed.Value) return;
 		this._disposed.Value = true;
-		this._handle.Release(this._vm, this.ReleaseMode);
+		this._handle.Release(this.ReleaseMode);
 		this._context.Dispose();
 	}
 }
@@ -116,7 +106,7 @@ public sealed record JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContex
 	private readonly IReadOnlyFixedContext<TValue> _context;
 
 	/// <inheritdoc/>
-	internal JNativeMemory(IVirtualMachine vm, INativeMemoryHandle handle) : base(vm, handle)
+	internal JNativeMemory(INativeMemoryHandle handle) : base(handle)
 		=> this._context = this.Memory.AsBinaryContext().Transformation<TValue>(out _);
 	/// <summary>
 	/// Constructor.

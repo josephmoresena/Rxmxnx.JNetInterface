@@ -81,40 +81,6 @@ public partial interface IArrayFeature
 	void CopyTo<TElement>(JArrayObject<TElement> jArray, TElement?[] array, Int32 arrayIndex)
 		where TElement : IObject, IDataType<TElement>;
 	/// <summary>
-	/// Retrieves a pointer to <see cref="JArrayObject{TPrimitive}"/> elements.
-	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
-	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
-	/// <param name="isCopy">Output. Indicates whether the resulting pointer references a data copy.</param>
-	/// <returns>Pointer to <paramref name="jArray"/> data.</returns>
-	IntPtr GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, out Boolean isCopy)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
-	/// <summary>
-	/// Retrieves a direct pointer to <see cref="JArrayObject{TPrimitive}"/> elements.
-	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
-	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
-	/// <returns>Pointer to <paramref name="jArray"/> data.</returns>
-	IntPtr GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
-	/// <summary>
-	/// Releases the pointer associated to <paramref name="jArray"/>.
-	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
-	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
-	/// <param name="pointer">Pointer to release to.</param>
-	/// <param name="mode">Release mode.</param>
-	void ReleaseSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, IntPtr pointer, JReleaseMode mode)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
-	/// <summary>
-	/// Releases the critical pointer associated to <paramref name="jArray"/>.
-	/// </summary>
-	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
-	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
-	/// <param name="pointer">Pointer to release to.</param>
-	void ReleaseCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, IntPtr pointer)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
-	/// <summary>
 	/// Copies <paramref name="jArray"/> elements into <paramref name="elements"/>.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
@@ -132,4 +98,23 @@ public partial interface IArrayFeature
 	/// <param name="startIndex">Offset position.</param>
 	void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements, Int32 startIndex = 0)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+
+	/// <summary>
+	/// Retrieves a <see cref="INativeMemoryHandle"/> to <see cref="JArrayObject{TPrimitive}"/> elements.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <param name="referenceKind">Reference memory kind.</param>
+	/// <returns>Pointer to <paramref name="jArray"/> data.</returns>
+	INativeMemoryHandle GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	/// <summary>
+	/// Retrieves a direct <see cref="INativeMemoryHandle"/> to <see cref="JArrayObject{TPrimitive}"/> elements.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <param name="referenceKind">Reference memory kind.</param>
+	/// <returns>Pointer to <paramref name="jArray"/> data.</returns>
+	INativeMemoryHandle GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
+		JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 }

@@ -16,14 +16,8 @@ public static class JArrayExtensions
 		JMemoryReferenceKind referenceKind = JMemoryReferenceKind.Local)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
-		IVirtualMachine vm = jArray.Environment.VirtualMachine;
-		JNativeMemoryHandler handler = referenceKind switch
-		{
-			JMemoryReferenceKind.ThreadIndependent => JNativeMemoryHandler.CreateWeakHandler(jArray, false),
-			JMemoryReferenceKind.ThreadUnrestricted => JNativeMemoryHandler.CreateGlobalHandler(jArray, false),
-			_ => JNativeMemoryHandler.CreateHandler(jArray, false),
-		};
-		return new(vm, handler);
+		INativeMemoryHandle handle = jArray.Environment.ArrayFeature.GetSequence(jArray, referenceKind);
+		return new(handle);
 	}
 	/// <summary>
 	/// Retrieves the critical native memory of array elements.
@@ -35,14 +29,8 @@ public static class JArrayExtensions
 		JMemoryReferenceKind referenceKind = JMemoryReferenceKind.ThreadUnrestricted)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
-		IVirtualMachine vm = jArray.Environment.VirtualMachine;
-		JNativeMemoryHandler handler = referenceKind switch
-		{
-			JMemoryReferenceKind.ThreadIndependent => JNativeMemoryHandler.CreateWeakHandler(jArray, true),
-			JMemoryReferenceKind.ThreadUnrestricted => JNativeMemoryHandler.CreateGlobalHandler(jArray, true),
-			_ => JNativeMemoryHandler.CreateHandler(jArray, true),
-		};
-		return new(vm, handler);
+		INativeMemoryHandle handle = jArray.Environment.ArrayFeature.GetCriticalSequence(jArray, referenceKind);
+		return new(handle);
 	}
 	/// <summary>
 	/// Creates an array of <typeparamref name="TPrimitive"/> elements containing a copy of
