@@ -32,7 +32,7 @@ public sealed partial record JCompiler
 		{
 			File.Delete(javaFilePath);
 			File.Delete(classFilePath);
-			await File.WriteAllTextAsync(javaFilePath, await JCompiler.GetHelloJniJavaAsync());
+			await File.WriteAllTextAsync(javaFilePath, JHelloDotnetObject.JavaCode);
 			ProcessStartInfo info = new(Path.Combine(this.JdkPath, this.CompilerPath))
 			{
 				ArgumentList = { javaFilePath, }, WindowStyle = ProcessWindowStyle.Hidden,

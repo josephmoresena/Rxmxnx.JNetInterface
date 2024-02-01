@@ -22,7 +22,6 @@
 
     <ItemGroup>
         <None Remove="HelloJni.java"/>
-        <EmbeddedResource Include="HelloDotnet.java"/>
     </ItemGroup>
 
 </Project>

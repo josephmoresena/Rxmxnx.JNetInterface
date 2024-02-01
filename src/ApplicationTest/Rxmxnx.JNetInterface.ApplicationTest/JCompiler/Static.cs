@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
@@ -52,13 +51,5 @@ public partial record JCompiler
 				});
 		}
 		return result.ToArray();
-	}
-	private static async Task<String> GetHelloJniJavaAsync()
-	{
-		Assembly assembly = Assembly.GetExecutingAssembly();
-		String resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("HelloDotnet.java"));
-		await using Stream stream = assembly.GetManifestResourceStream(resourceName)!;
-		using StreamReader reader = new(stream);
-		return await reader.ReadToEndAsync();
 	}
 }
