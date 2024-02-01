@@ -16,6 +16,6 @@ public partial class JLocalObject
 		/// <summary>
 		/// Parameterless constructor.
 		/// </summary>
-		internal Uninstantiable() : base(IUninstantiableType.ThrowInstantiation<TUninstantiable>()) { }
+		public Uninstantiable() : base(IUninstantiableType.ThrowInstantiation<TUninstantiable>()) { }
 	}
 }

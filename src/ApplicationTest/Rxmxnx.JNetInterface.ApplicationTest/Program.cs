@@ -3,7 +3,6 @@
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
-using Rxmxnx.JNetInterface.Native.References;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
@@ -13,18 +12,29 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public static class Program
 {
-	public static void Main(String[] args)
+	public static async Task Main(String[] args)
 	{
-		Console.WriteLine("Hello, World!");
 		Program.PrintBuiltIntMetadata();
-		//Console.WriteLine(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JInt>>>>>>>>.Metadata);
-		//Program.PrintArrayMetadata(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JInt>>>>>.Metadata, 10);
 		Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 10);
-		Program.PrintVirtualMachineInfo(
-			"/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib/server/libjvm.dylib");
-		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib/server/libjvm.dylib");
-		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home/lib/server/libjvm.dylib");
-		//Program.PrintVirtualMachineInfo("/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre/lib/server/libjvm.dylib");
+
+		JCompiler? compiler = args.Length == 3 ?
+			new() { JdkPath = args[0], CompilerPath = args[1], LibraryPath = args[2], } :
+			JCompiler.GetCompilers().FirstOrDefault();
+
+		if (compiler is null)
+		{
+			Console.WriteLine("JDK not found.");
+			return;
+		}
+
+		Byte[] helloJniByteCode = await compiler.CompileHelloJniClassAsync();
+		JVirtualMachineLibrary jvmLib = compiler.GetLibrary();
+
+		JHelloDotnetObject.PassStringEvent += Console.WriteLine;
+		JHelloDotnetObject.GetIntegerEvent += () => Environment.CurrentManagedThreadId;
+		JHelloDotnetObject.GetStringEvent += () => "Hola desde .NET";
+
+		Program.PrintVirtualMachineInfo(jvmLib, helloJniByteCode, "jiji", "esto es una coima mk");
 	}
 	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata, Int32 deep)
 	{
@@ -88,45 +98,19 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JLongObject>());
 		Console.WriteLine(IDataType.GetMetadata<JShortObject>());
 	}
-	private static void PrintVirtualMachineInfo(String path)
+	private static void PrintVirtualMachineInfo(JVirtualMachineLibrary jvmLib, Byte[] classByteCode,
+		params String[] args)
 	{
-		JVirtualMachineLibrary? jvmLib = JVirtualMachineLibrary.LoadLibrary(path);
-		if (jvmLib is null)
-		{
-			Console.WriteLine("Invalid JVM library.");
-			return;
-		}
 		try
 		{
-			JVirtualMachineInitArg args = jvmLib.GetDefaultArgument();
-			Console.WriteLine(args);
-			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(args, out IEnvironment env);
-			Program.PrintAttachedThreadInfo(env);
-			Program.PrintAttachThreadInfo(vm, new(() => "Main thread Re-Attached"u8), env);
-			Task jvmT = Task.Factory.StartNew(Program.PrintAttachedThreadInfo, vm);
-			jvmT.Wait();
-			Console.WriteLine($"Supported version: 0x{jvmLib.GetLatestSupportedVersion():x8}");
-			IVirtualMachine[] vms = jvmLib.GetCreatedVirtualMachines();
-			foreach (IVirtualMachine jvm in vms)
-				Console.WriteLine($"VM: {jvm.Reference} Type: {jvm.GetType()}");
-
-			Byte[] classBytes =
-				File.ReadAllBytes("/Users/atem94/NetBeansProjects/NativeLibrary/build/classes/MainClass.class");
-			using JClassObject mainClass = JClassObject.LoadClass(env, new(() => "MainClass"u8), classBytes);
-			mainClass.Register(new List<JNativeCall>
-			{
-				JNativeCall.Create<GetStringDelegate>(
-					new JFunctionDefinition<JStringObject>("getNativeString"u8),
-					Program.GetString),
-				JNativeCall.Create<GetIntDelegate>(
-					new JFunctionDefinition<JInt>("getNativeInt"u8), Program.GetInt),
-				JNativeCall.Create<PassStringDelegate>(
-					new PassStringDefinition("passNativeString"u8), Program.PassString),
-			});
-
+			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
+			Console.WriteLine(initArgs);
+			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{
-				JMainMethodDefinition.Instance.Invoke(mainClass, "jiji", "esto es una coima mk");
+				Program.PrintVirtualMachineInfo(env, vm, jvmLib);
+				JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode);
+				JMainMethodDefinition.Instance.Invoke(helloJniClass, args);
 			}
 			catch (JThrowableException ex)
 			{
@@ -137,6 +121,18 @@ public static class Program
 		{
 			NativeLibrary.Free(jvmLib.Handler);
 		}
+	}
+	private static void PrintVirtualMachineInfo(IEnvironment env, IInvokedVirtualMachine vm,
+		JVirtualMachineLibrary jvmLib)
+	{
+		Program.PrintAttachedThreadInfo(env);
+		Program.PrintAttachThreadInfo(vm, new(() => "Main thread Re-Attached"u8), env);
+		Task jvmT = Task.Factory.StartNew(Program.PrintAttachedThreadInfo, vm);
+		jvmT.Wait();
+		Console.WriteLine($"Supported version: 0x{jvmLib.GetLatestSupportedVersion():x8}");
+		IVirtualMachine[] vms = jvmLib.GetCreatedVirtualMachines();
+		foreach (IVirtualMachine jvm in vms)
+			Console.WriteLine($"VM: {jvm.Reference} Type: {jvm.GetType()}");
 	}
 	private static void PrintAttachedThreadInfo(Object? obj)
 	{
@@ -166,36 +162,5 @@ public static class Program
 				Program.PrintAttachThreadInfo(vm, CString.Concat(threadName, " Nested"u8), thread);
 		}
 		Console.WriteLine($"Thread detached: {vm.GetEnvironment() is null}");
-	}
-
-	private static JStringLocalRef GetString(JEnvironmentRef envRef, JObjectLocalRef localRef)
-	{
-		JniCall jniCall = JniCall.Create(envRef, localRef, out _).Build();
-		JStringObject result = JStringObject.Create(jniCall.Environment, "Hola desde .NET");
-		return jniCall.FinalizeCall(result);
-	}
-	private static JInt GetInt(JEnvironmentRef envRef, JObjectLocalRef localRef)
-	{
-		JniCall jniCall = JniCall.Create(envRef, localRef, out _).Build();
-		return jniCall.FinalizeCall<JInt>(Random.Shared.Next());
-	}
-	private static void PassString(JEnvironmentRef envRef, JObjectLocalRef localRef, JStringLocalRef stringRef)
-	{
-		JniCall jniCall = JniCall.Create(envRef, localRef, out JLocalObject jLocal)
-		                         .WithParameter(stringRef, out JStringObject jString).Build();
-		Console.WriteLine(jString.Value);
-		jniCall.FinalizeCall();
-	}
-
-	private delegate JStringLocalRef GetStringDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
-	private delegate JInt GetIntDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
-
-	private delegate void PassStringDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef,
-		JStringLocalRef stringRef);
-
-	private sealed record PassStringDefinition : JMethodDefinition
-	{
-		public PassStringDefinition(ReadOnlySpan<Byte> functionName) : base(
-			functionName, JArgumentMetadata.Get<JStringObject>()) { }
 	}
 }

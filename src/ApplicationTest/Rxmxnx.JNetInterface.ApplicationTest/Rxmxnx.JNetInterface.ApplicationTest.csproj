@@ -20,4 +20,9 @@
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Remove="HelloJni.java"/>
+        <EmbeddedResource Include="HelloDotnet.java"/>
+    </ItemGroup>
+
 </Project>
