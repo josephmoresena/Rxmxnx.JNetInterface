@@ -77,6 +77,11 @@ public partial class JVirtualMachine
 	internal INativeMemoryHandle CreateMemoryHandle(JStringObject jString, JMemoryReferenceKind referenceKind,
 		Boolean? critical)
 		=> this._cache.CreateMemoryHandle(jString, referenceKind, critical);
+	/// <inheritdoc
+	///     cref="JVirtualMachineCache.CreateMemoryHandle{TPrimitive}(JArrayObject{TPrimitive}, JMemoryReferenceKind, Boolean)"/>
+	public INativeMemoryHandle CreateMemoryHandle<TPrimitive>(JArrayObject<TPrimitive> jArray,
+		JMemoryReferenceKind referenceKind, Boolean critical) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		=> this._cache.CreateMemoryHandle(jArray, referenceKind, critical);
 	/// <summary>
 	/// Indicates whether <paramref name="weakRef"/> can be removed safely.
 	/// </summary>

@@ -11,9 +11,9 @@ internal partial struct JniTransactionHandle
 		/// Synchronized instance.
 		/// </summary>
 		private readonly JReferenceObject _source;
+
 		/// <inheritdoc cref="INativeMemoryHandle.Copy"/>
 		protected Boolean IsCopy;
-
 		/// <summary>
 		/// Pointer to beginning element in current sequence.
 		/// </summary>
@@ -62,6 +62,12 @@ internal partial struct JniTransactionHandle
 
 		/// <inheritdoc/>
 		public virtual void Release(JReleaseMode mode) => this.Dispose();
+
+		/// <summary>
+		/// Activates current memory handle.
+		/// </summary>
+		/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+		public abstract void Activate(IEnvironment env);
 
 		/// <inheritdoc/>
 		public override void Dispose()

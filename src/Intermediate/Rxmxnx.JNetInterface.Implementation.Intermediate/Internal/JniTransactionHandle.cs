@@ -73,6 +73,25 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 		result.Activate(jString.Environment);
 		return result;
 	}
+	/// <summary>
+	/// Creates a native memory handle instance for <paramref name="jArray"/>.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
+	/// <param name="jArray"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <param name="referenceKind">Reference memory kind.</param>
+	/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+	/// <param name="transactions">Dictionary of transactions.</param>
+	/// <returns>A new native memory handle instance for <paramref name="jArray"/>.</returns>
+	public static INativeMemoryHandle CreateMemoryHandle<TPrimitive>(JArrayObject<TPrimitive> jArray,
+		JMemoryReferenceKind referenceKind, Boolean critical, IDictionary<Guid, INativeTransaction> transactions)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	{
+		NativeArrayMemoryHandle<TPrimitive> result =
+			JniTransactionHandle.Initialize<NativeArrayMemoryHandle<TPrimitive>>(new(jArray, referenceKind, critical),
+				transactions);
+		result.Activate(jArray.Environment);
+		return result;
+	}
 
 	/// <summary>
 	/// Creates an empty <typeparamref name="TTransaction"/> instance.

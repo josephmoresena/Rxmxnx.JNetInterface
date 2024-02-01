@@ -183,6 +183,18 @@ public partial class JVirtualMachine
 			Boolean? critical)
 			=> JniTransactionHandle.CreateMemoryHandle(jString, referenceKind, critical, this._transactions);
 		/// <summary>
+		/// Creates a native memory handle instance for <paramref name="jArray"/>.
+		/// </summary>
+		/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
+		/// <param name="jArray"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
+		/// <param name="referenceKind">Reference memory kind.</param>
+		/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+		/// <returns>A new native memory handle instance for <paramref name="jArray"/>.</returns>
+		public INativeMemoryHandle CreateMemoryHandle<TPrimitive>(JArrayObject<TPrimitive> jArray,
+			JMemoryReferenceKind referenceKind, Boolean critical)
+			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+			=> JniTransactionHandle.CreateMemoryHandle(jArray, referenceKind, critical, this._transactions);
+		/// <summary>
 		/// Indicates whether given <paramref name="jRef"/> is begin using by a transaction.
 		/// </summary>
 		/// <param name="jRef">A <see cref="IntPtr"/> value.</param>
