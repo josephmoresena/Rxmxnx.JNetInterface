@@ -938,7 +938,7 @@ partial class JEnvironment
 		/// <returns><see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.</returns>
 		private IReflectionMetadata? GetReflectionMetadata(JClassObject returnType)
 		{
-			using JStringObject className = this.Functions.GetClassName(returnType);
+			using JStringObject className = InternalFunctionCache.Instance.GetClassName(returnType);
 			using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
 			return MetadataHelper.GetReflectionMetadata(mem.Values);
 		}
@@ -953,7 +953,7 @@ partial class JEnvironment
 			for (Int32 i = 0; i < parameterTypes.Count; i++)
 			{
 				using JClassObject jClass = parameterTypes[i];
-				using JStringObject className = this.Functions.GetClassName(jClass);
+				using JStringObject className = InternalFunctionCache.Instance.GetClassName(jClass);
 				using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
 				args[i] = MetadataHelper.GetReflectionMetadata(mem.Values)!.ArgumentMetadata;
 			}

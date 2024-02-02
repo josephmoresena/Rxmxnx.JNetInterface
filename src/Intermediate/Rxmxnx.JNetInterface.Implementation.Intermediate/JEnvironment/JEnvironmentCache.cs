@@ -199,20 +199,15 @@ partial class JEnvironment
 		/// <summary>
 		/// Delegate cache.
 		/// </summary>
-		private readonly DelegateHelperCache _delegateCache;
+		private readonly DelegateHelperCache _delegateCache = new();
 		/// <summary>
 		/// Main <see cref="JEnvironment"/> instance.
 		/// </summary>
 		private readonly JEnvironment _env;
-
-		/// <summary>
-		/// A <see cref="InternalFunctionCache"/> instance.
-		/// </summary>
-		public readonly InternalFunctionCache Functions;
 		/// <inheritdoc cref="JEnvironment.Reference"/>
 		public readonly JEnvironmentRef Reference;
 		/// <summary>
-		/// Thread.
+		/// Managed thread.
 		/// </summary>
 		public readonly Thread Thread;
 		/// <inheritdoc cref="IEnvironment.Version"/>
@@ -224,7 +219,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Object cache.
 		/// </summary>
-		private LocalCache _objects;
+		private LocalCache _objects = new();
 		/// <summary>
 		/// Amount of bytes used from stack.
 		/// </summary>
@@ -243,15 +238,13 @@ partial class JEnvironment
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
 		public JEnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(env)
 		{
+			this._env = env;
+
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
-			this.Functions = InternalFunctionCache.Instance;
-			this.Thread = Thread.CurrentThread;
 			this.Version = JEnvironmentCache.GetVersion(envRef);
+			this.Thread = Thread.CurrentThread;
 
-			this._env = env;
-			this._delegateCache = new();
-			this._objects = new();
 			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this, this._cancellation.Token);
 			this.RegisterMainClasses();
 		}

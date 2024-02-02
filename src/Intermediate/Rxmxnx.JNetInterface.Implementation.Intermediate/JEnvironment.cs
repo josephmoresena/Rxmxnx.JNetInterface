@@ -49,7 +49,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	IStringFeature IEnvironment.StringFeature => this._cache;
 	IArrayFeature IEnvironment.ArrayFeature => this._cache;
 	INioFeature IEnvironment.NioFeature => this._cache;
-	FunctionCache IEnvironment.Functions => this._cache.Functions;
+	FunctionCache IEnvironment.Functions => InternalFunctionCache.Instance;
 
 	JReferenceType IEnvironment.GetReferenceType(JObject jObject)
 	{
