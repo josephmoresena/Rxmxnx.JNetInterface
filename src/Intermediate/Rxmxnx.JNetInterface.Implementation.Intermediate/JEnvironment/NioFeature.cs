@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record JEnvironmentCache : INioFeature
+	private partial record EnvironmentCache : INioFeature
 	{
 		public JBufferObject NewDirectByteBuffer(IFixedMemory.IDisposable memory)
 		{
@@ -16,7 +16,7 @@ partial class JEnvironment
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(capacity);
 			using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
-				JEnvironmentCache.AllocToFixedContext(stackalloc Byte[capacity], this) :
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[capacity], this) :
 				new Byte[capacity].AsMemory().GetFixedContext();
 			using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 			action(buffer);
@@ -26,7 +26,7 @@ partial class JEnvironment
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(capacity);
 			using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
-				JEnvironmentCache.AllocToFixedContext(stackalloc Byte[capacity], this) :
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[capacity], this) :
 				new Byte[capacity].AsMemory().GetFixedContext();
 			using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 			action(buffer, state);
@@ -36,7 +36,7 @@ partial class JEnvironment
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(capacity);
 			using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
-				JEnvironmentCache.AllocToFixedContext(stackalloc Byte[capacity], this) :
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[capacity], this) :
 				new Byte[capacity].AsMemory().GetFixedContext();
 			using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 			return func(buffer);
@@ -46,7 +46,7 @@ partial class JEnvironment
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(capacity);
 			using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
-				JEnvironmentCache.AllocToFixedContext(stackalloc Byte[capacity], this) :
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[capacity], this) :
 				new Byte[capacity].AsMemory().GetFixedContext();
 			using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 			return func(buffer, state);

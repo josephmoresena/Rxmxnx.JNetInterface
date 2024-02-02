@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record JEnvironmentCache : IArrayFeature
+	private partial record EnvironmentCache : IArrayFeature
 	{
 		public JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IObject, IDataType<TElement>
 		{
@@ -89,7 +89,7 @@ partial class JEnvironment
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				using IFixedContext<Byte>.IDisposable fixedBuffer =
-					JEnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
+					EnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
 				this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
 				this.CheckJniError();
 				return (TElement)primitiveMetadata.CreateInstance(fixedBuffer.Values);
@@ -108,7 +108,7 @@ partial class JEnvironment
 				Int32 offset = 0;
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
 				using IFixedContext<Byte>.IDisposable fixedBuffer =
-					JEnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
+					EnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
 				value!.CopyTo(buffer, ref offset);
 				this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
 				this.CheckJniError();
@@ -144,19 +144,19 @@ partial class JEnvironment
 			else
 				this.CopyToObject(jArray, array, arrayIndex);
 		}
-		public INativeMemoryHandle GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
+		public INativeMemoryAdapter GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ValidationUtilities.ThrowIfDummy(jArray);
 			ValidationUtilities.ThrowIfDefault(jArray);
-			return this.VirtualMachine.CreateMemoryHandle(jArray, referenceKind, false);
+			return this.VirtualMachine.CreateMemoryAdapter(jArray, referenceKind, false);
 		}
-		public INativeMemoryHandle GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
+		public INativeMemoryAdapter GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ValidationUtilities.ThrowIfDummy(jArray);
 			ValidationUtilities.ThrowIfDefault(jArray);
-			return this.VirtualMachine.CreateMemoryHandle(jArray, referenceKind, true);
+			return this.VirtualMachine.CreateMemoryAdapter(jArray, referenceKind, true);
 		}
 		public IntPtr GetPrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, out Boolean isCopy)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -634,7 +634,7 @@ partial class JEnvironment
 			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
 			using IFixedContext<Byte>.IDisposable arrayRegion = requiredBytes == 0 ?
 				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? JEnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+				useStackAlloc ? EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			Int32 offset = 0;
 			while (offset < requiredBytes)

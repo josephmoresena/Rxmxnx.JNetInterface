@@ -3,16 +3,16 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal partial struct JniTransactionHandle
 {
 	/// <summary>
-	/// Represents a JNI native memory handle.
+	/// Represents a JNI native memory adapter.
 	/// </summary>
-	private abstract record NativeMemoryHandle : UnaryTransaction, INativeMemoryHandle
+	private abstract record NativeMemoryAdapter : UnaryTransaction, INativeMemoryAdapter
 	{
 		/// <summary>
 		/// Synchronized instance.
 		/// </summary>
 		private readonly JReferenceObject _source;
 
-		/// <inheritdoc cref="INativeMemoryHandle.Copy"/>
+		/// <inheritdoc cref="INativeMemoryAdapter.Copy"/>
 		protected Boolean IsCopy;
 		/// <summary>
 		/// Pointer to beginning element in current sequence.
@@ -34,11 +34,11 @@ internal partial struct JniTransactionHandle
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <param name="referenceKind">Reference memory kind.</param>
 		/// <param name="critical">Indicates this handle is for a critical sequence.</param>
-		protected NativeMemoryHandle(JLocalObject jLocal, JMemoryReferenceKind referenceKind, Boolean critical)
+		protected NativeMemoryAdapter(JLocalObject jLocal, JMemoryReferenceKind referenceKind, Boolean critical)
 		{
 			this.VirtualMachine = jLocal.Environment.VirtualMachine;
 			this.Critical = critical;
-			this._source = NativeMemoryHandle.GetSource(jLocal, referenceKind);
+			this._source = NativeMemoryAdapter.GetSource(jLocal, referenceKind);
 			(this as INativeTransaction).Add(this._source);
 		}
 

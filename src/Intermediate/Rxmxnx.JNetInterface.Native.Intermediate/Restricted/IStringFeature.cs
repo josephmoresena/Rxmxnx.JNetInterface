@@ -45,24 +45,24 @@ public partial interface IStringFeature
 	void GetCopyUtf8(JStringObject jString, Memory<Byte> utf8Units, Int32 startIndex = 0);
 
 	/// <summary>
-	/// Retrieves a <see cref="INativeMemoryHandle"/> to <see cref="JStringObject"/> characters.
+	/// Retrieves a <see cref="INativeMemoryAdapter"/> to <see cref="JStringObject"/> characters.
 	/// </summary>
 	/// <param name="jString"><see cref="JStringObject"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
-	/// <returns><see cref="INativeMemoryHandle"/> to <paramref name="jString"/> UTF-16 data.</returns>
-	INativeMemoryHandle GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind);
+	/// <returns>Adapter of <paramref name="jString"/> UTF-16 data.</returns>
+	INativeMemoryAdapter GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind);
 	/// <summary>
-	/// Retrieves a <see cref="INativeMemoryHandle"/> to <see cref="JStringObject"/> UTF-8 characters.
+	/// Retrieves a <see cref="INativeMemoryAdapter"/> to <see cref="JStringObject"/> UTF-8 characters.
 	/// </summary>
 	/// <param name="jString"><see cref="JStringObject"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
-	/// <returns><see cref="INativeMemoryHandle"/> to <paramref name="jString"/> UTF-8 data.</returns>
-	INativeMemoryHandle GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind);
+	/// <returns>Adapter of <paramref name="jString"/> UTF-8 data.</returns>
+	INativeMemoryAdapter GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind);
 	/// <summary>
-	/// Retrieves a direct <see cref="INativeMemoryHandle"/> to <see cref="JStringObject"/> characters.
+	/// Retrieves a direct <see cref="INativeMemoryAdapter"/> to <see cref="JStringObject"/> characters.
 	/// </summary>
 	/// <param name="jString"><see cref="JStringObject"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
-	/// <returns><see cref="INativeMemoryHandle"/> to <paramref name="jString"/> UTF-16 data.</returns>
-	INativeMemoryHandle GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind);
+	/// <returns>Adapter of <paramref name="jString"/> UTF-16 data.</returns>
+	INativeMemoryAdapter GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind);
 }

@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record JEnvironmentCache : IClassFeature
+	private partial record EnvironmentCache : IClassFeature
 	{
 		JClassObject IClassFeature.Object => this.GetClass<JLocalObject>();
 		JClassObject IClassFeature.StringClassObject => this.GetClass<JStringObject>();
@@ -112,14 +112,14 @@ partial class JEnvironment
 		{
 			className = JDataTypeMetadata.JniParseClassName(className);
 			return NativeUtilities.WithSafeFixed(className.AsSpan(), rawClassBytes, (this, jClassLoader),
-			                                     JEnvironmentCache.LoadClass);
+			                                     EnvironmentCache.LoadClass);
 		}
 		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JLocalObject? jClassLoader = default)
 			where TDataType : JLocalObject, IReferenceType<TDataType>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TDataType>();
 			return NativeUtilities.WithSafeFixed(metadata.ClassName.AsSpan(), rawClassBytes, (this, jClassLoader),
-			                                     JEnvironmentCache.LoadClass);
+			                                     EnvironmentCache.LoadClass);
 		}
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 		{
@@ -161,7 +161,7 @@ partial class JEnvironment
 			{
 				JClassLocalRef classRef = this._objects.FindClassParameter(classInformation.Hash);
 				if (classRef.Value == default)
-					classRef = classInformation.ClassName.WithSafeFixed(this, JEnvironmentCache.FindClass);
+					classRef = classInformation.ClassName.WithSafeFixed(this, EnvironmentCache.FindClass);
 				result = new(this.ClassObject, classInformation, classRef);
 			}
 			return this.Register(result);
@@ -193,7 +193,7 @@ partial class JEnvironment
 		/// <param name="args">Cache and class loader.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private static JClassObject LoadClass(ReadOnlyFixedMemoryList memoryList,
-			(JEnvironmentCache cache, JLocalObject? jClassLoader) args)
+			(EnvironmentCache cache, JLocalObject? jClassLoader) args)
 		{
 			ValidationUtilities.ThrowIfDummy(args.jClassLoader);
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(memoryList[0].Bytes);

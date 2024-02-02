@@ -9,14 +9,14 @@ internal readonly struct JNativeMethodValue
 	internal ReadOnlyValPtr<Byte> Signature { get; init; }
 	internal IntPtr Pointer { get; init; }
 
-	public static JNativeMethodValue Create(JNativeCall call, ICollection<MemoryHandle> handles)
+	public static JNativeMethodValue Create(JNativeCallEntry entry, ICollection<MemoryHandle> handles)
 	{
-		handles.Add(call.Hash.AsMemory().Pin());
+		handles.Add(entry.Hash.AsMemory().Pin());
 		return new()
 		{
-			Name = (ReadOnlyValPtr<Byte>)call.Name.AsSpan().GetUnsafeIntPtr(),
-			Signature = (ReadOnlyValPtr<Byte>)call.Signature.AsSpan().GetUnsafeIntPtr(),
-			Pointer = call.Pointer,
+			Name = (ReadOnlyValPtr<Byte>)entry.Name.AsSpan().GetUnsafeIntPtr(),
+			Signature = (ReadOnlyValPtr<Byte>)entry.Signature.AsSpan().GetUnsafeIntPtr(),
+			Pointer = entry.Pointer,
 		};
 	}
 }

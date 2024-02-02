@@ -5,7 +5,7 @@ partial class JEnvironment
 	/// <summary>
 	/// This record stores cache for a <see cref="JEnvironment"/> instance.
 	/// </summary>
-	private sealed partial record JEnvironmentCache : LocalMainClasses
+	private sealed partial record EnvironmentCache : LocalMainClasses
 	{
 		/// <summary>
 		/// Maximum amount of bytes usable on stack.
@@ -236,16 +236,16 @@ partial class JEnvironment
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
-		public JEnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(env)
+		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(env)
 		{
 			this._env = env;
 
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
-			this.Version = JEnvironmentCache.GetVersion(envRef);
+			this.Version = EnvironmentCache.GetVersion(envRef);
 			this.Thread = Thread.CurrentThread;
 
-			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this, this._cancellation.Token);
+			Task.Factory.StartNew(EnvironmentCache.FinalizeCache, this, this._cancellation.Token);
 			this.LoadMainClasses();
 		}
 
@@ -258,7 +258,7 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDifferentThread(this.Thread);
 			Type typeOfT = typeof(TDelegate);
-			Int32 index = JEnvironmentCache.delegateIndex[typeOfT];
+			Int32 index = EnvironmentCache.delegateIndex[typeOfT];
 			IntPtr ptr = this.GetPointer(index);
 			return this._delegateCache.GetDelegate<TDelegate>(ptr);
 		}
@@ -292,7 +292,7 @@ partial class JEnvironment
 				using LocalFrame frame = new(this._env, 10);
 				JClassLocalRef classRef = this._env.GetObjectClass(throwableRef.Value);
 				JClassObject jClass = this.AsClassObject(classRef);
-				String message = JEnvironmentCache.GetThrowableMessage(jClass, throwableRef);
+				String message = EnvironmentCache.GetThrowableMessage(jClass, throwableRef);
 				ThrowableObjectMetadata objectMetadata = new(jClass, message);
 				JThrowableTypeMetadata throwableMetadata =
 					MetadataHelper.GetMetadata(jClass.Hash) as JThrowableTypeMetadata ??
@@ -568,7 +568,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="IVirtualMachine"/> instance.</returns>
 		public static IVirtualMachine GetVirtualMachine(JEnvironmentRef jEnv)
 		{
-			Int32 index = JEnvironmentCache.delegateIndex[typeof(GetVirtualMachineDelegate)];
+			Int32 index = EnvironmentCache.delegateIndex[typeof(GetVirtualMachineDelegate)];
 			GetVirtualMachineDelegate getVirtualMachine =
 				jEnv.Reference.Reference[index].GetUnsafeDelegate<GetVirtualMachineDelegate>()!;
 			JResult result = getVirtualMachine(jEnv, out JVirtualMachineRef vmRef);
@@ -580,9 +580,9 @@ partial class JEnvironment
 		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="classNameCtx"/> as class name.
 		/// </summary>
 		/// <param name="classNameCtx">A <see cref="IReadOnlyFixedMemory"/> instance.</param>
-		/// <param name="cache">Current <see cref="JEnvironmentCache"/> instance.</param>
+		/// <param name="cache">Current <see cref="EnvironmentCache"/> instance.</param>
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		public static JClassLocalRef FindClass(in IReadOnlyFixedMemory classNameCtx, JEnvironmentCache cache)
+		public static JClassLocalRef FindClass(in IReadOnlyFixedMemory classNameCtx, EnvironmentCache cache)
 		{
 			FindClassDelegate findClass = cache.GetDelegate<FindClassDelegate>();
 			JClassLocalRef result = findClass(cache.Reference, (ReadOnlyValPtr<Byte>)classNameCtx.Pointer);
@@ -597,7 +597,7 @@ partial class JEnvironment
 		/// <returns>JNI function pointer.</returns>
 		private IntPtr GetPointer(Int32 index)
 		{
-			Int32 lastNormalIndex = JEnvironmentCache.delegateIndex[typeof(GetObjectRefTypeDelegate)];
+			Int32 lastNormalIndex = EnvironmentCache.delegateIndex[typeof(GetObjectRefTypeDelegate)];
 			if (index <= lastNormalIndex)
 				return this.Reference.Reference.Reference[index];
 			index -= lastNormalIndex;
@@ -615,7 +615,7 @@ partial class JEnvironment
 		private Boolean UseStackAlloc(Int32 requiredBytes)
 		{
 			this._usedStackBytes += requiredBytes;
-			if (this._usedStackBytes <= JEnvironmentCache.MaxStackBytes) return true;
+			if (this._usedStackBytes <= EnvironmentCache.MaxStackBytes) return true;
 			this._usedStackBytes -= requiredBytes;
 			return false;
 		}
@@ -626,7 +626,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
 		private JClassLocalRef FindClass(JClassObject jClass)
 			=> jClass.ClassSignature.Length != 1 ?
-				jClass.Name.WithSafeFixed(this, JEnvironmentCache.FindClass) :
+				jClass.Name.WithSafeFixed(this, EnvironmentCache.FindClass) :
 				this.FindPrimitiveClass(jClass.ClassSignature[0]);
 
 		/// <summary>
@@ -643,10 +643,10 @@ partial class JEnvironment
 		/// <summary>
 		/// Cache finalize method.
 		/// </summary>
-		/// <param name="obj">A <see cref="JEnvironmentCache"/> instance.</param>
+		/// <param name="obj">A <see cref="EnvironmentCache"/> instance.</param>
 		private static void FinalizeCache(Object? obj)
 		{
-			if (obj is not JEnvironmentCache cache) return;
+			if (obj is not EnvironmentCache cache) return;
 			cache.Thread.Join();
 			JVirtualMachine.RemoveEnvironment(cache.VirtualMachine.Reference, cache.Reference);
 		}

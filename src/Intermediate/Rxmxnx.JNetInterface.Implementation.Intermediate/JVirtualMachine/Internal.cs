@@ -68,20 +68,41 @@ public partial class JVirtualMachine
 	/// <returns>A <see cref="AccessCache"/> instance.</returns>
 	internal AccessCache? GetAccess(JClassLocalRef classRef)
 		=> this._cache.GlobalClassCache[classRef] ?? this._cache.WeakClassCache[classRef];
-	/// <inheritdoc cref="JVirtualMachineCache.CreateTransaction(Int32)"/>
+	/// <summary>
+	/// Creates a new <see cref="INativeTransaction"/> transaction.
+	/// </summary>
+	/// <param name="capacity">Transaction capacity.</param>
+	/// <returns>A new <see cref="INativeTransaction"/> instance.</returns>
 	internal INativeTransaction CreateTransaction(Int32 capacity) => this._cache.CreateTransaction(capacity);
-	/// <inheritdoc cref="JVirtualMachineCache.CreateSynchronized(IEnvironment, JReferenceObject)"/>
+	/// <summary>
+	/// Creates a new synchronizer for <paramref name="jObject"/> instance.
+	/// </summary>
+	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <returns>A new synchronizer for <paramref name="jObject"/> instance.</returns>
 	internal IDisposable CreateSynchronized(IEnvironment env, JReferenceObject jObject)
 		=> this._cache.CreateSynchronized(env, jObject);
-	/// <inheritdoc cref="JVirtualMachineCache.CreateMemoryHandle(JStringObject, JMemoryReferenceKind, Boolean?)"/>
-	internal INativeMemoryHandle CreateMemoryHandle(JStringObject jString, JMemoryReferenceKind referenceKind,
+	/// <summary>
+	/// Creates a native memory adapter instance for <paramref name="jString"/>.
+	/// </summary>
+	/// <param name="jString"><see cref="JStringObject"/> instance.</param>
+	/// <param name="referenceKind">Reference memory kind.</param>
+	/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+	/// <returns>A new native memory adapter instance for <paramref name="jString"/>.</returns>
+	internal INativeMemoryAdapter CreateMemoryAdapter(JStringObject jString, JMemoryReferenceKind referenceKind,
 		Boolean? critical)
-		=> this._cache.CreateMemoryHandle(jString, referenceKind, critical);
-	/// <inheritdoc
-	///     cref="JVirtualMachineCache.CreateMemoryHandle{TPrimitive}(JArrayObject{TPrimitive}, JMemoryReferenceKind, Boolean)"/>
-	public INativeMemoryHandle CreateMemoryHandle<TPrimitive>(JArrayObject<TPrimitive> jArray,
+		=> this._cache.CreateMemoryAdapter(jString, referenceKind, critical);
+	/// <summary>
+	/// Creates a native memory adapter instance for <paramref name="jArray"/>.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
+	/// <param name="jArray"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <param name="referenceKind">Reference memory kind.</param>
+	/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+	/// <returns>A new native memory adapter instance for <paramref name="jArray"/>.</returns>
+	public INativeMemoryAdapter CreateMemoryAdapter<TPrimitive>(JArrayObject<TPrimitive> jArray,
 		JMemoryReferenceKind referenceKind, Boolean critical) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
-		=> this._cache.CreateMemoryHandle(jArray, referenceKind, critical);
+		=> this._cache.CreateMemoryAdapter(jArray, referenceKind, critical);
 	/// <summary>
 	/// Indicates whether <paramref name="weakRef"/> can be removed safely.
 	/// </summary>
@@ -113,8 +134,8 @@ public partial class JVirtualMachine
 	/// Registers native methods for given class.
 	/// </summary>
 	/// <param name="classHash">Class hash.</param>
-	/// <param name="calls">A <see cref="JNativeCall"/> array.</param>
-	internal void RegisterNatives(String classHash, IReadOnlyList<JNativeCall> calls)
+	/// <param name="calls">A <see cref="JNativeCallEntry"/> array.</param>
+	internal void RegisterNatives(String classHash, IReadOnlyList<JNativeCallEntry> calls)
 		=> this._cache.NativesCache[classHash] = calls;
 	/// <summary>
 	/// Unregister any native method for given class.

@@ -184,7 +184,7 @@ public partial interface IAccessFeature
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="calls">Native calls to register.</param>
-	void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCall> calls);
+	void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls);
 	/// <summary>
 	/// Clears native method registration.
 	/// </summary>

@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-/// This interface exposes a handler for a primitive sequence.
+/// This interface exposes an adapter for a primitive sequence.
 /// </summary>
-public interface INativeMemoryHandle
+public interface INativeMemoryAdapter
 {
 	/// <summary>
 	/// Indicates whether current sequence is a copy.

@@ -1,15 +1,15 @@
 namespace Rxmxnx.JNetInterface;
 
-public readonly ref partial struct JniCall
+public readonly ref partial struct JNativeCallAdapter
 {
 	/// <summary>
-	/// Creates a <see cref="JniCall"/> builder a <see cref="JEnvironmentRef"/> reference.
+	/// Creates a <see cref="JNativeCallAdapter"/> builder a <see cref="JEnvironmentRef"/> reference.
 	/// </summary>
 	/// <param name="envRef">Call <see cref="JEnvironmentRef"/> reference.</param>
 	/// <returns>A <see cref="Builder"/> instance.</returns>
 	public static Builder Create(JEnvironmentRef envRef) => new(new(envRef));
 	/// <summary>
-	/// Creates a <see cref="JniCall"/> builder using a <see cref="JEnvironmentRef"/> reference and
+	/// Creates a <see cref="JNativeCallAdapter"/> builder using a <see cref="JEnvironmentRef"/> reference and
 	/// a <see cref="JObjectLocalRef"/> instance.
 	/// </summary>
 	/// <param name="envRef">Call <see cref="JEnvironmentRef"/> reference.</param>
@@ -18,12 +18,12 @@ public readonly ref partial struct JniCall
 	/// <returns>A <see cref="Builder"/> instance.</returns>
 	public static Builder Create(JEnvironmentRef envRef, JObjectLocalRef localRef, out JLocalObject jLocal)
 	{
-		Builder result = JniCall.Create(envRef);
+		Builder result = JNativeCallAdapter.Create(envRef);
 		jLocal = result.CreateInitialObject(localRef);
 		return result;
 	}
 	/// <summary>
-	/// Creates a <see cref="JniCall"/> builder using a <see cref="JEnvironmentRef"/> reference and
+	/// Creates a <see cref="JNativeCallAdapter"/> builder using a <see cref="JEnvironmentRef"/> reference and
 	/// a <see cref="JClassLocalRef"/> instance.
 	/// </summary>
 	/// <param name="envRef">Call <see cref="JEnvironmentRef"/> reference.</param>
@@ -32,13 +32,13 @@ public readonly ref partial struct JniCall
 	/// <returns>A <see cref="Builder"/> instance.</returns>
 	public static Builder Create(JEnvironmentRef envRef, JClassLocalRef classRef, out JClassObject jClass)
 	{
-		Builder result = JniCall.Create(envRef);
+		Builder result = JNativeCallAdapter.Create(envRef);
 		jClass = result.CreateInitialClass(classRef, true);
 		return result;
 	}
 
 	/// <summary>
-	/// Creates a <see cref="JniCall"/> builder using a <see cref="JEnvironmentRef"/> reference and
+	/// Creates a <see cref="JNativeCallAdapter"/> builder using a <see cref="JEnvironmentRef"/> reference and
 	/// a <see cref="JObjectLocalRef"/> instance.
 	/// </summary>
 	/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
@@ -52,21 +52,21 @@ public readonly ref partial struct JniCall
 		if (JLocalObject.IsObjectType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
-			return JniCall.Create(envRef, localRef, out Unsafe.As<TObject, JLocalObject>(ref jLocal));
+			return JNativeCallAdapter.Create(envRef, localRef, out Unsafe.As<TObject, JLocalObject>(ref jLocal));
 		}
 		if (JLocalObject.IsClassType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
 			JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
-			return JniCall.Create(envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
+			return JNativeCallAdapter.Create(envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 		}
 
-		Builder result = JniCall.Create(envRef);
+		Builder result = JNativeCallAdapter.Create(envRef);
 		jLocal = result.CreateInitialObject<TObject>(localRef);
 		return result;
 	}
 	/// <summary>
-	/// Creates a <see cref="JniCall"/> builder using <see cref="IVirtualMachine"/> instance and
+	/// Creates a <see cref="JNativeCallAdapter"/> builder using <see cref="IVirtualMachine"/> instance and
 	/// a <see cref="JEnvironmentRef"/> reference.
 	/// </summary>
 	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
@@ -74,7 +74,7 @@ public readonly ref partial struct JniCall
 	/// <returns>A <see cref="Builder"/> instance.</returns>
 	public static Builder Create(IVirtualMachine vm, JEnvironmentRef envRef) => new(new((JVirtualMachine)vm, envRef));
 	/// <summary>
-	/// Creates a <see cref="JniCall"/> builder using <see cref="IVirtualMachine"/> instance,
+	/// Creates a <see cref="JNativeCallAdapter"/> builder using <see cref="IVirtualMachine"/> instance,
 	/// a <see cref="JEnvironmentRef"/> reference and a <see cref="JObjectLocalRef"/> instance.
 	/// </summary>
 	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
@@ -85,12 +85,12 @@ public readonly ref partial struct JniCall
 	public static Builder Create(IVirtualMachine vm, JEnvironmentRef envRef, JObjectLocalRef localRef,
 		out JLocalObject jLocal)
 	{
-		Builder result = JniCall.Create(vm, envRef);
+		Builder result = JNativeCallAdapter.Create(vm, envRef);
 		jLocal = result.CreateInitialObject(localRef);
 		return result;
 	}
 	/// <summary>
-	/// Creates a <see cref="JniCall"/> builder using <see cref="IVirtualMachine"/> instance,
+	/// Creates a <see cref="JNativeCallAdapter"/> builder using <see cref="IVirtualMachine"/> instance,
 	/// a <see cref="JEnvironmentRef"/> reference and a <see cref="JClassLocalRef"/> instance.
 	/// </summary>
 	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
@@ -101,12 +101,12 @@ public readonly ref partial struct JniCall
 	public static Builder Create(IVirtualMachine vm, JEnvironmentRef envRef, JClassLocalRef classRef,
 		out JClassObject jClass)
 	{
-		Builder result = JniCall.Create(vm, envRef);
+		Builder result = JNativeCallAdapter.Create(vm, envRef);
 		jClass = result.CreateInitialClass(classRef, true);
 		return result;
 	}
 	/// <summary>
-	/// Creates a <see cref="JniCall"/> builder using <see cref="IVirtualMachine"/> instance,
+	/// Creates a <see cref="JNativeCallAdapter"/> builder using <see cref="IVirtualMachine"/> instance,
 	/// a <see cref="JEnvironmentRef"/> reference and a <see cref="JObjectLocalRef"/> instance.
 	/// </summary>
 	/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
@@ -121,16 +121,16 @@ public readonly ref partial struct JniCall
 		if (JLocalObject.IsObjectType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
-			return JniCall.Create(vm, envRef, localRef, out Unsafe.As<TObject, JLocalObject>(ref jLocal));
+			return JNativeCallAdapter.Create(vm, envRef, localRef, out Unsafe.As<TObject, JLocalObject>(ref jLocal));
 		}
 		if (JLocalObject.IsClassType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
 			JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
-			return JniCall.Create(vm, envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
+			return JNativeCallAdapter.Create(vm, envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 		}
 
-		Builder result = JniCall.Create(vm, envRef);
+		Builder result = JNativeCallAdapter.Create(vm, envRef);
 		jLocal = result.CreateInitialObject<TObject>(localRef);
 		return result;
 	}

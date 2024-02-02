@@ -2,12 +2,12 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record JEnvironmentCache : IStringFeature
+	private partial record EnvironmentCache : IStringFeature
 	{
 		public JStringObject Create(ReadOnlySpan<Char> data)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(data.WithSafeFixed(this, JEnvironmentCache.CreateString));
+			JStringLocalRef stringRef = jniTransaction.Add(data.WithSafeFixed(this, EnvironmentCache.CreateString));
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, data.ToString()));
 		}
@@ -15,7 +15,7 @@ partial class JEnvironment
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef =
-				jniTransaction.Add(utf8Data.WithSafeFixed(this, JEnvironmentCache.CreateUtf8String));
+				jniTransaction.Add(utf8Data.WithSafeFixed(this, EnvironmentCache.CreateUtf8String));
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, utf8Data.Length));
 		}
@@ -39,23 +39,23 @@ partial class JEnvironment
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
-		public INativeMemoryHandle GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
+		public INativeMemoryAdapter GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			ValidationUtilities.ThrowIfDefault(jString);
-			return this.VirtualMachine.CreateMemoryHandle(jString, referenceKind, false);
+			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, false);
 		}
-		public INativeMemoryHandle GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind)
+		public INativeMemoryAdapter GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			ValidationUtilities.ThrowIfDefault(jString);
-			return this.VirtualMachine.CreateMemoryHandle(jString, referenceKind, default);
+			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, default);
 		}
-		public INativeMemoryHandle GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
+		public INativeMemoryAdapter GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
 			ValidationUtilities.ThrowIfDefault(jString);
-			return this.VirtualMachine.CreateMemoryHandle(jString, referenceKind, true);
+			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, true);
 		}
 		public ReadOnlyValPtr<Char> GetSequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
@@ -101,7 +101,7 @@ partial class JEnvironment
 		public void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
 		{
 			ValidationUtilities.ThrowIfDummy(jString);
-			chars.WithSafeFixed((this, jString, startIndex), JEnvironmentCache.GetStringRegion);
+			chars.WithSafeFixed((this, jString, startIndex), EnvironmentCache.GetStringRegion);
 			this.CheckJniError();
 		}
 		public void GetCopyUtf8(JStringObject jString, Memory<Byte> utf8Units, Int32 startIndex = 0)
@@ -116,14 +116,14 @@ partial class JEnvironment
 			this.CheckJniError();
 		}
 
-		private static JStringLocalRef CreateString(in IReadOnlyFixedContext<Char> ctx, JEnvironmentCache cache)
+		private static JStringLocalRef CreateString(in IReadOnlyFixedContext<Char> ctx, EnvironmentCache cache)
 		{
 			NewStringDelegate newString = cache.GetDelegate<NewStringDelegate>();
 			JStringLocalRef result = newString(cache.Reference, (ReadOnlyValPtr<Char>)ctx.Pointer, ctx.Values.Length);
 			if (result.Value == default) cache.CheckJniError();
 			return result;
 		}
-		private static JStringLocalRef CreateUtf8String(in IReadOnlyFixedContext<Byte> ctx, JEnvironmentCache cache)
+		private static JStringLocalRef CreateUtf8String(in IReadOnlyFixedContext<Byte> ctx, EnvironmentCache cache)
 		{
 			NewStringUtfDelegate newUtf8String = cache.GetDelegate<NewStringUtfDelegate>();
 			JStringLocalRef result = newUtf8String(cache.Reference, (ReadOnlyValPtr<Byte>)ctx.Pointer);
@@ -131,7 +131,7 @@ partial class JEnvironment
 			return result;
 		}
 		private static void GetStringRegion(in IFixedContext<Char> ctx,
-			(JEnvironmentCache cache, JStringObject jString, Int32 startIndex) args)
+			(EnvironmentCache cache, JStringObject jString, Int32 startIndex) args)
 		{
 			GetStringRegionDelegate getStringRegion = args.cache.GetDelegate<GetStringRegionDelegate>();
 			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(1);

@@ -8,7 +8,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	/// <summary>
 	/// <see cref="JEnvironment"/> cache.
 	/// </summary>
-	private readonly JEnvironmentCache _cache;
+	private readonly EnvironmentCache _cache;
 
 	/// <summary>
 	/// Thread name.
@@ -27,7 +27,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	/// Constructor.
 	/// </summary>
 	/// <param name="cache">A <see cref="JEnvironment"/> reference.</param>
-	private JEnvironment(JEnvironmentCache cache) => this._cache = cache;
+	private JEnvironment(EnvironmentCache cache) => this._cache = cache;
 
 	/// <inheritdoc/>
 	public Boolean RealEnvironment => true;
@@ -152,7 +152,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	/// <returns>The <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.</returns>
 	public static IEnvironment GetEnvironment(JEnvironmentRef reference)
 	{
-		JVirtualMachine vm = (JVirtualMachine)JEnvironmentCache.GetVirtualMachine(reference);
+		JVirtualMachine vm = (JVirtualMachine)EnvironmentCache.GetVirtualMachine(reference);
 		return vm.GetEnvironment(reference);
 	}
 }

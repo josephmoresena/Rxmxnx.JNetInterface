@@ -5,7 +5,7 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// <see cref="JVirtualMachine"/> cache.
 	/// </summary>
-	private readonly JVirtualMachineCache _cache;
+	private readonly VirtualMachineCache _cache;
 	/// <summary>
 	/// Indicates whether current instance is disposable.
 	/// </summary>
@@ -19,8 +19,8 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="cache">A <see cref="JVirtualMachineCache"/> reference.</param>
-	private JVirtualMachine(JVirtualMachineCache cache) => this._cache = cache;
+	/// <param name="cache">A <see cref="VirtualMachineCache"/> reference.</param>
+	private JVirtualMachine(VirtualMachineCache cache) => this._cache = cache;
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance associated with current thread.

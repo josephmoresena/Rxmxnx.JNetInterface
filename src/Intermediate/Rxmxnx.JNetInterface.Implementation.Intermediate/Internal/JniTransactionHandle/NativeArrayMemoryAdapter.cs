@@ -5,7 +5,7 @@ internal partial struct JniTransactionHandle
 	/// <summary>
 	/// Represents a JNI native array memory handle.
 	/// </summary>
-	private sealed record NativeArrayMemoryHandle<TPrimitive> : NativeMemoryHandle
+	private sealed record NativeArrayMemoryAdapter<TPrimitive> : NativeMemoryAdapter
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		/// <inheritdoc cref="UnaryTransaction.LocalRef"/>
@@ -18,7 +18,7 @@ internal partial struct JniTransactionHandle
 		/// <param name="jArray">A <see cref="JArrayObject{Primitive}"/> instance.</param>
 		/// <param name="referenceKind">Reference memory kind.</param>
 		/// <param name="critical">Indicates this handle is for a critical sequence.</param>
-		public NativeArrayMemoryHandle(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind,
+		public NativeArrayMemoryAdapter(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind,
 			Boolean critical) : base(jArray, referenceKind, critical)
 			=> this.BinarySize = jArray.Length * IPrimitiveType.GetMetadata<TPrimitive>().SizeOf;
 

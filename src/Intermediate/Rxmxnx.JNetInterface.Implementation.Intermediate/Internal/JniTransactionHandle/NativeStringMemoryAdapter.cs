@@ -3,9 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal partial struct JniTransactionHandle
 {
 	/// <summary>
-	/// Represents a JNI native string memory handle.
+	/// Represents a JNI native string memory adapter.
 	/// </summary>
-	private sealed record NativeStringMemoryHandle : NativeMemoryHandle
+	private sealed record NativeStringMemoryAdapter : NativeMemoryAdapter
 	{
 		/// <summary>
 		/// Indicates whether current handle is for UTF-8 chars.
@@ -22,7 +22,7 @@ internal partial struct JniTransactionHandle
 		/// <param name="jString">A <see cref="JStringObject"/> instance.</param>
 		/// <param name="referenceKind">Reference memory kind.</param>
 		/// <param name="critical">Indicates this handle is for a critical sequence.</param>
-		public NativeStringMemoryHandle(JStringObject jString, JMemoryReferenceKind referenceKind, Boolean? critical) :
+		public NativeStringMemoryAdapter(JStringObject jString, JMemoryReferenceKind referenceKind, Boolean? critical) :
 			base(jString, referenceKind, critical.GetValueOrDefault())
 		{
 			this._utf8Chars = !critical.HasValue;

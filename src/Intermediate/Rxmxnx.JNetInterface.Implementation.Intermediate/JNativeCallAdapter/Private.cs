@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
-public readonly ref partial struct JniCall
+public readonly ref partial struct JNativeCallAdapter
 {
 	/// <summary>
 	/// Current <see cref="IEnvironment"/> instance.
@@ -15,7 +15,7 @@ public readonly ref partial struct JniCall
 	/// Constructor.
 	/// </summary>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	private JniCall(JEnvironmentRef envRef)
+	private JNativeCallAdapter(JEnvironmentRef envRef)
 	{
 		this._env = (JEnvironment)JEnvironment.GetEnvironment(envRef);
 		this._cache = new(this._env);
@@ -25,7 +25,7 @@ public readonly ref partial struct JniCall
 	/// </summary>
 	/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	private JniCall(JVirtualMachine vm, JEnvironmentRef envRef)
+	private JNativeCallAdapter(JVirtualMachine vm, JEnvironmentRef envRef)
 	{
 		this._env = vm.GetEnvironment(envRef);
 		this._cache = new(this._env);
@@ -46,9 +46,9 @@ public readonly ref partial struct JniCall
 	public readonly ref partial struct Builder
 	{
 		/// <summary>
-		/// <see cref="JniCall"/> instance.
+		/// <see cref="JNativeCallAdapter"/> instance.
 		/// </summary>
-		private readonly JniCall _call;
+		private readonly JNativeCallAdapter _callAdapter;
 
 		/// <summary>
 		/// Throws an exception if <paramref name="localRef"/> is not a local reference.
@@ -59,7 +59,7 @@ public readonly ref partial struct JniCall
 		/// </exception>
 		private void ThrowIfNotLocalReference(JObjectLocalRef localRef)
 		{
-			JEnvironment env = this._call._env;
+			JEnvironment env = this._callAdapter._env;
 			if (env.GetReferenceType(localRef) != JReferenceType.LocalRefType)
 				throw new ArgumentException("JNI call only allow local references.");
 		}
@@ -72,7 +72,7 @@ public readonly ref partial struct JniCall
 		/// </exception>
 		private void ThrowIfNotClassObject(JObjectLocalRef localRef)
 		{
-			JEnvironment env = this._call._env;
+			JEnvironment env = this._callAdapter._env;
 			JClassObject jClass = this.GetObjectClass(localRef, true);
 			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
 				throw new ArgumentException($"A {jClass.Name} instance is not {env.ClassObject.Name} instance.");
@@ -80,7 +80,7 @@ public readonly ref partial struct JniCall
 		/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
 		private JClassObject GetObjectClass(JObjectLocalRef localRef, Boolean validateReference = false)
 		{
-			JEnvironment env = this._call._env;
+			JEnvironment env = this._callAdapter._env;
 			if (validateReference) this.ThrowIfNotLocalReference(localRef);
 			JClassLocalRef classRef = env.GetObjectClass(localRef);
 			try
@@ -102,7 +102,7 @@ public readonly ref partial struct JniCall
 			where TObject : JLocalObject, IReferenceType<TObject>
 		{
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
-			JClassObject jClass = this._call._env.GetClass<TObject>();
+			JClassObject jClass = this._callAdapter._env.GetClass<TObject>();
 			TObject result;
 			if (!JLocalObject.IsClassType<TObject>())
 			{

@@ -100,21 +100,21 @@ public partial interface IArrayFeature
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 
 	/// <summary>
-	/// Retrieves a <see cref="INativeMemoryHandle"/> to <see cref="JArrayObject{TPrimitive}"/> elements.
+	/// Retrieves a <see cref="INativeMemoryAdapter"/> to <see cref="JArrayObject{TPrimitive}"/> elements.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
-	/// <returns>Pointer to <paramref name="jArray"/> data.</returns>
-	INativeMemoryHandle GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind)
+	/// <returns>Adapter of <paramref name="jArray"/> data.</returns>
+	INativeMemoryAdapter GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	/// <summary>
-	/// Retrieves a direct <see cref="INativeMemoryHandle"/> to <see cref="JArrayObject{TPrimitive}"/> elements.
+	/// Retrieves a direct <see cref="INativeMemoryAdapter"/> to <see cref="JArrayObject{TPrimitive}"/> elements.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
-	/// <returns>Pointer to <paramref name="jArray"/> data.</returns>
-	INativeMemoryHandle GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
+	/// <returns>Adapter of <paramref name="jArray"/> data.</returns>
+	INativeMemoryAdapter GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 		JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 }

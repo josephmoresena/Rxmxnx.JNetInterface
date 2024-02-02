@@ -5,7 +5,7 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// This record stores cache for a <see cref="JVirtualMachine"/> instance.
 	/// </summary>
-	private sealed record JVirtualMachineCache : GlobalMainClasses
+	private sealed record VirtualMachineCache : GlobalMainClasses
 	{
 		/// <summary>
 		/// Delegates dictionary.
@@ -67,7 +67,7 @@ public partial class JVirtualMachine
 		/// </summary>
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
-		public JVirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm)
+		public VirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm)
 		{
 			this._vm = vm;
 			this.Reference = vmRef;
@@ -83,7 +83,7 @@ public partial class JVirtualMachine
 		public TDelegate GetDelegate<TDelegate>() where TDelegate : Delegate
 		{
 			Type typeOfT = typeof(TDelegate);
-			IntPtr ptr = JVirtualMachineCache.getPointer[typeOfT](this.Reference);
+			IntPtr ptr = VirtualMachineCache.getPointer[typeOfT](this.Reference);
 			return this.DelegateCache.GetDelegate<TDelegate>(ptr);
 		}
 
@@ -157,43 +157,21 @@ public partial class JVirtualMachine
 					env.DeleteGlobalRef(jGlobal.Reference);
 			}
 		}
-		/// <summary>
-		/// Creates a new <see cref="INativeTransaction"/> transaction.
-		/// </summary>
-		/// <param name="capacity">Transaction capacity.</param>
-		/// <returns>A new <see cref="INativeTransaction"/> instance.</returns>
+		/// <inheritdoc cref="JVirtualMachine.CreateTransaction(Int32)"/>
 		public INativeTransaction CreateTransaction(Int32 capacity)
 			=> JniTransactionHandle.CreateTransaction(capacity, this._transactions);
-		/// <summary>
-		/// Creates a new synchronizer for <paramref name="jObject"/> instance.
-		/// </summary>
-		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-		/// <returns>A new synchronizer for <paramref name="jObject"/> instance.</returns>
+		/// <inheritdoc cref="JVirtualMachine.CreateSynchronized(IEnvironment, JReferenceObject)"/>
 		public IDisposable CreateSynchronized(IEnvironment env, JReferenceObject jObject)
 			=> JniTransactionHandle.CreateSynchronizer(env, jObject, this._transactions);
-		/// <summary>
-		/// Creates a native memory handle instance for <paramref name="jString"/>.
-		/// </summary>
-		/// <param name="jString"><see cref="JStringObject"/> instance.</param>
-		/// <param name="referenceKind">Reference memory kind.</param>
-		/// <param name="critical">Indicates this handle is for a critical sequence.</param>
-		/// <returns>A new native memory handle instance for <paramref name="jString"/>.</returns>
-		public INativeMemoryHandle CreateMemoryHandle(JStringObject jString, JMemoryReferenceKind referenceKind,
+		/// <inheritdoc cref="JVirtualMachine.CreateMemoryAdapter(JStringObject, JMemoryReferenceKind, Nullable{Boolean})"/>
+		public INativeMemoryAdapter CreateMemoryAdapter(JStringObject jString, JMemoryReferenceKind referenceKind,
 			Boolean? critical)
-			=> JniTransactionHandle.CreateMemoryHandle(jString, referenceKind, critical, this._transactions);
-		/// <summary>
-		/// Creates a native memory handle instance for <paramref name="jArray"/>.
-		/// </summary>
-		/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
-		/// <param name="jArray"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
-		/// <param name="referenceKind">Reference memory kind.</param>
-		/// <param name="critical">Indicates this handle is for a critical sequence.</param>
-		/// <returns>A new native memory handle instance for <paramref name="jArray"/>.</returns>
-		public INativeMemoryHandle CreateMemoryHandle<TPrimitive>(JArrayObject<TPrimitive> jArray,
+			=> JniTransactionHandle.CreateMemoryAdapter(jString, referenceKind, critical, this._transactions);
+		/// <inheritdoc cref="JVirtualMachine.CreateMemoryAdapter{TPrimitive}(JArrayObject{TPrimitive}, JMemoryReferenceKind, Boolean)"/>
+		public INativeMemoryAdapter CreateMemoryAdapter<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind, Boolean critical)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
-			=> JniTransactionHandle.CreateMemoryHandle(jArray, referenceKind, critical, this._transactions);
+			=> JniTransactionHandle.CreateMemoryAdapter(jArray, referenceKind, critical, this._transactions);
 		/// <summary>
 		/// Indicates whether given <paramref name="jRef"/> is begin using by a transaction.
 		/// </summary>

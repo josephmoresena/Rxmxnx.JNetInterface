@@ -44,7 +44,7 @@ partial class JEnvironment
 	internal JGlobalRef GetClassGlobalRef(ClassObjectMetadata metadata)
 	{
 		JClassLocalRef classRef = metadata.ClassSignature.Length != 1 ?
-			metadata.Name.WithSafeFixed(this._cache, JEnvironmentCache.FindClass) :
+			metadata.Name.WithSafeFixed(this._cache, EnvironmentCache.FindClass) :
 			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
 		try
 		{

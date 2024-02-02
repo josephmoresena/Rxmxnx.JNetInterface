@@ -6,24 +6,24 @@ namespace Rxmxnx.JNetInterface.Native;
 public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 {
 	/// <summary>
+	/// Internal memory handler.
+	/// </summary>
+	private readonly INativeMemoryAdapter _adapter;
+	/// <summary>
 	/// Internal memory context.
 	/// </summary>
 	private readonly IReadOnlyFixedContext<Byte>.IDisposable _context;
 	/// <inheritdoc cref="JNativeMemory.Disposed"/>
 	private readonly IMutableWrapper<Boolean> _disposed = IMutableWrapper<Boolean>.Create();
-	/// <summary>
-	/// Internal memory handler.
-	/// </summary>
-	private readonly INativeMemoryHandle _handle;
 
 	/// <summary>
 	/// Indicates whether current sequence is a copy.
 	/// </summary>
-	public Boolean Copy => this._handle.Copy;
+	public Boolean Copy => this._adapter.Copy;
 	/// <summary>
 	/// Indicates whether current sequence is critical.
 	/// </summary>
-	public Boolean Critical => this._handle.Critical;
+	public Boolean Critical => this._adapter.Critical;
 
 	/// <summary>
 	/// Internal fixed memory.
@@ -41,22 +41,22 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="handle"><see cref="INativeMemoryHandle"/> handler.</param>
-	internal JNativeMemory(INativeMemoryHandle handle)
+	/// <param name="adapter"><see cref="INativeMemoryAdapter"/> handler.</param>
+	internal JNativeMemory(INativeMemoryAdapter adapter)
 	{
-		this._handle = handle;
-		this._context = handle.GetReadOnlyContext(this);
+		this._adapter = adapter;
+		this._context = adapter.GetReadOnlyContext(this);
 	}
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="handle"><see cref="INativeMemoryHandle"/> handler.</param>
+	/// <param name="adapter"><see cref="INativeMemoryAdapter"/> handler.</param>
 	/// <param name="isReadOnly">Indicates current memory block is read-only.</param>
-	internal JNativeMemory(INativeMemoryHandle handle, Boolean isReadOnly)
+	internal JNativeMemory(INativeMemoryAdapter adapter, Boolean isReadOnly)
 	{
-		this._handle = handle;
-		this._context = isReadOnly ? handle.GetReadOnlyContext(this) : handle.GetContext(this);
+		this._adapter = adapter;
+		this._context = isReadOnly ? adapter.GetReadOnlyContext(this) : adapter.GetContext(this);
 	}
 
 	/// <inheritdoc/>
@@ -89,7 +89,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	{
 		if (this._disposed.Value) return;
 		this._disposed.Value = true;
-		this._handle.Release(this.ReleaseMode);
+		this._adapter.Release(this.ReleaseMode);
 		this._context.Dispose();
 	}
 }
@@ -106,7 +106,7 @@ public sealed record JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContex
 	private readonly IReadOnlyFixedContext<TValue> _context;
 
 	/// <inheritdoc/>
-	internal JNativeMemory(INativeMemoryHandle handle) : base(handle)
+	internal JNativeMemory(INativeMemoryAdapter adapter) : base(adapter)
 		=> this._context = this.Memory.AsBinaryContext().Transformation<TValue>(out _);
 	/// <summary>
 	/// Constructor.

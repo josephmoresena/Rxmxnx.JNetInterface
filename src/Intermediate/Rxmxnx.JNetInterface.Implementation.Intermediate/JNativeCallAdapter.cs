@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// Represents a JNI call.
+/// Represents a JNI call adapter.
 /// </summary>
-public readonly ref partial struct JniCall
+public readonly ref partial struct JNativeCallAdapter
 {
 	/// <summary>
 	/// Current <see cref="IEnvironment"/> instance.
@@ -132,7 +132,7 @@ public readonly ref partial struct JniCall
 		=> this.FinalizeCall<JShortArrayLocalRef>(result);
 
 	/// <summary>
-	/// Builder for <see cref="JniCall"/>
+	/// Builder for <see cref="JNativeCallAdapter"/>
 	/// </summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public readonly ref partial struct Builder
@@ -319,13 +319,13 @@ public readonly ref partial struct JniCall
 		}
 
 		/// <summary>
-		/// Retrieves current <see cref="JniCall"/> instance.
+		/// Retrieves current <see cref="JNativeCallAdapter"/> instance.
 		/// </summary>
-		/// <returns>A <see cref="JniCall"/> instance.</returns>
-		public JniCall Build()
+		/// <returns>A <see cref="JNativeCallAdapter"/> instance.</returns>
+		public JNativeCallAdapter Build()
 		{
-			this._call._cache.Activate();
-			return this._call;
+			this._callAdapter._cache.Activate();
+			return this._callAdapter;
 		}
 	}
 }

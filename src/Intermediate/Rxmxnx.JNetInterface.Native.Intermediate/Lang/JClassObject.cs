@@ -54,15 +54,15 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
 	/// </summary>
-	/// <param name="call">A <see cref="JNativeCall"/> instance.</param>
-	/// <param name="calls">A <see cref="JNativeCall"/> array.</param>
-	public void Register(JNativeCall call, params JNativeCall[] calls)
-		=> this.Environment.AccessFeature.RegisterNatives(this, [call, ..calls,]);
+	/// <param name="entry">A <see cref="JNativeCallEntry"/> instance.</param>
+	/// <param name="calls">A <see cref="JNativeCallEntry"/> array.</param>
+	public void Register(JNativeCallEntry entry, params JNativeCallEntry[] calls)
+		=> this.Environment.AccessFeature.RegisterNatives(this, [entry, ..calls,]);
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
 	/// </summary>
-	/// <param name="calls">A <see cref="JNativeCall"/> list.</param>
-	public void Register(IReadOnlyList<JNativeCall> calls)
+	/// <param name="calls">A <see cref="JNativeCallEntry"/> list.</param>
+	public void Register(IReadOnlyList<JNativeCallEntry> calls)
 		=> this.Environment.AccessFeature.RegisterNatives(this, calls);
 	/// <summary>
 	/// Unregisters any native call.

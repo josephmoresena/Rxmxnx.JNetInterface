@@ -8,20 +8,20 @@ public sealed class NativeCache
 	/// <summary>
 	/// Class dictionary.
 	/// </summary>
-	private readonly ConcurrentDictionary<String, ConcurrentDictionary<String, JNativeCall>> _calls = new();
+	private readonly ConcurrentDictionary<String, ConcurrentDictionary<String, JNativeCallEntry>> _calls = new();
 
 	/// <summary>
 	/// Cached class.
 	/// </summary>
 	/// <param name="hash">Class hash.</param>
-	public IReadOnlyList<JNativeCall> this[String hash]
+	public IReadOnlyList<JNativeCallEntry> this[String hash]
 	{
 		set
 		{
 			if (!this._calls.ContainsKey(hash))
 				this._calls[hash] = new();
-			ConcurrentDictionary<String, JNativeCall> calls = this._calls[hash];
-			foreach (JNativeCall t in value)
+			ConcurrentDictionary<String, JNativeCallEntry> calls = this._calls[hash];
+			foreach (JNativeCallEntry t in value)
 				calls[t.Hash] = t;
 		}
 	}
@@ -32,7 +32,7 @@ public sealed class NativeCache
 	/// <param name="hash"></param>
 	public void Clear(String hash)
 	{
-		if (this._calls.TryGetValue(hash, out ConcurrentDictionary<String, JNativeCall>? value))
+		if (this._calls.TryGetValue(hash, out ConcurrentDictionary<String, JNativeCallEntry>? value))
 			value.Clear();
 	}
 }

@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record JEnvironmentCache
+	private partial record EnvironmentCache
 	{
 		/// <summary>
 		/// Release used bytes from stack.
@@ -16,9 +16,9 @@ partial class JEnvironment
 		private sealed record StackDisposable : IDisposable
 		{
 			/// <summary>
-			/// A <see cref="JEnvironmentCache"/> cache.
+			/// A <see cref="EnvironmentCache"/> cache.
 			/// </summary>
-			private readonly JEnvironmentCache _cache;
+			private readonly EnvironmentCache _cache;
 			/// <summary>
 			/// Amount of used bytes.
 			/// </summary>
@@ -27,9 +27,9 @@ partial class JEnvironment
 			/// <summary>
 			/// Constructor.
 			/// </summary>
-			/// <param name="cache">A <see cref="JEnvironmentCache"/> cache.</param>
+			/// <param name="cache">A <see cref="EnvironmentCache"/> cache.</param>
 			/// <param name="usedBytes">Amount of used bytes.</param>
-			public StackDisposable(JEnvironmentCache cache, Int32 usedBytes)
+			public StackDisposable(EnvironmentCache cache, Int32 usedBytes)
 			{
 				this._usedBytes = usedBytes;
 				this._cache = cache;

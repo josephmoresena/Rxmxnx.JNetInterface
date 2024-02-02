@@ -57,37 +57,37 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 		return result;
 	}
 	/// <summary>
-	/// Creates a native memory handle instance for <paramref name="jString"/>.
+	/// Creates a native memory adapter instance for <paramref name="jString"/>.
 	/// </summary>
 	/// <param name="jString"><see cref="JStringObject"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
 	/// <param name="critical">Indicates this handle is for a critical sequence.</param>
 	/// <param name="transactions">Dictionary of transactions.</param>
-	/// <returns>A new native memory handle instance for <paramref name="jString"/>.</returns>
-	public static INativeMemoryHandle CreateMemoryHandle(JStringObject jString, JMemoryReferenceKind referenceKind,
+	/// <returns>A new native memory adapter instance for <paramref name="jString"/>.</returns>
+	public static INativeMemoryAdapter CreateMemoryAdapter(JStringObject jString, JMemoryReferenceKind referenceKind,
 		Boolean? critical, IDictionary<Guid, INativeTransaction> transactions)
 	{
-		NativeStringMemoryHandle result =
-			JniTransactionHandle.Initialize<NativeStringMemoryHandle>(new(jString, referenceKind, critical),
-			                                                          transactions);
+		NativeStringMemoryAdapter result =
+			JniTransactionHandle.Initialize<NativeStringMemoryAdapter>(new(jString, referenceKind, critical),
+			                                                           transactions);
 		result.Activate(jString.Environment);
 		return result;
 	}
 	/// <summary>
-	/// Creates a native memory handle instance for <paramref name="jArray"/>.
+	/// Creates a native memory adapter instance for <paramref name="jArray"/>.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
 	/// <param name="jArray"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
 	/// <param name="critical">Indicates this handle is for a critical sequence.</param>
 	/// <param name="transactions">Dictionary of transactions.</param>
-	/// <returns>A new native memory handle instance for <paramref name="jArray"/>.</returns>
-	public static INativeMemoryHandle CreateMemoryHandle<TPrimitive>(JArrayObject<TPrimitive> jArray,
+	/// <returns>A new native memory adapter instance for <paramref name="jArray"/>.</returns>
+	public static INativeMemoryAdapter CreateMemoryAdapter<TPrimitive>(JArrayObject<TPrimitive> jArray,
 		JMemoryReferenceKind referenceKind, Boolean critical, IDictionary<Guid, INativeTransaction> transactions)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
-		NativeArrayMemoryHandle<TPrimitive> result =
-			JniTransactionHandle.Initialize<NativeArrayMemoryHandle<TPrimitive>>(new(jArray, referenceKind, critical),
+		NativeArrayMemoryAdapter<TPrimitive> result =
+			JniTransactionHandle.Initialize<NativeArrayMemoryAdapter<TPrimitive>>(new(jArray, referenceKind, critical),
 				transactions);
 		result.Activate(jArray.Environment);
 		return result;

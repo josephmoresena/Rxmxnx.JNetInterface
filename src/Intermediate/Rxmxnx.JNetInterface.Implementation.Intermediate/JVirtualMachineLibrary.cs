@@ -164,23 +164,22 @@ public sealed record JVirtualMachineLibrary
 	/// </returns>
 	public static JVirtualMachineLibrary? LoadLibrary(String libraryPath)
 	{
-		IntPtr? handler = NativeUtilities.LoadNativeLib(libraryPath);
-		if (!handler.HasValue)
+		IntPtr? handle = NativeUtilities.LoadNativeLib(libraryPath);
+		if (!handle.HasValue)
 			return default;
 		GetDefaultVirtualMachineInitArgsDelegate? getDefaultVirtualMachineInitArgs =
 			NativeUtilities.GetNativeMethod<GetDefaultVirtualMachineInitArgsDelegate>(
-				handler.Value, JVirtualMachineLibrary.getDefaultVirtualMachineInitArgsName);
+				handle.Value, JVirtualMachineLibrary.getDefaultVirtualMachineInitArgsName);
 		CreateVirtualMachineDelegate? createVirtualMachine =
 			NativeUtilities.GetNativeMethod<CreateVirtualMachineDelegate>(
-				handler.Value, JVirtualMachineLibrary.createVirtualMachineName);
+				handle.Value, JVirtualMachineLibrary.createVirtualMachineName);
 		GetCreatedVirtualMachinesDelegate? getCreatedVirtualMachines =
 			NativeUtilities.GetNativeMethod<GetCreatedVirtualMachinesDelegate>(
-				handler.Value, JVirtualMachineLibrary.getCreatedVirtualMachinesName);
+				handle.Value, JVirtualMachineLibrary.getCreatedVirtualMachinesName);
 		if (getDefaultVirtualMachineInitArgs is not null && createVirtualMachine is not null &&
 		    getCreatedVirtualMachines is not null)
-			return new(handler.Value, getDefaultVirtualMachineInitArgs, createVirtualMachine,
-			           getCreatedVirtualMachines);
-		NativeLibrary.Free(handler.Value);
+			return new(handle.Value, getDefaultVirtualMachineInitArgs, createVirtualMachine, getCreatedVirtualMachines);
+		NativeLibrary.Free(handle.Value);
 		return default;
 	}
 }

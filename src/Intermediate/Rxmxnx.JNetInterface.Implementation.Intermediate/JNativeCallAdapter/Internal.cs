@@ -1,14 +1,14 @@
 namespace Rxmxnx.JNetInterface;
 
-public readonly ref partial struct JniCall
+public readonly ref partial struct JNativeCallAdapter
 {
 	public readonly ref partial struct Builder
 	{
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="call">Current <see cref="JniCall"/> instance.</param>
-		internal Builder(JniCall call) => this._call = call;
+		/// <param name="callAdapter">Current <see cref="JNativeCallAdapter"/> instance.</param>
+		internal Builder(JNativeCallAdapter callAdapter) => this._callAdapter = callAdapter;
 
 		/// <summary>
 		/// Retrieves initial <see cref="JLocalObject"/> instance for <paramref name="localRef"/>.
@@ -17,14 +17,14 @@ public readonly ref partial struct JniCall
 		/// <returns>Initial <see cref="JLocalObject"/> instance for <paramref name="localRef"/>.</returns>
 		internal JLocalObject CreateInitialObject(JObjectLocalRef localRef)
 		{
-			JEnvironment env = this._call._env;
+			JEnvironment env = this._callAdapter._env;
 			JClassObject jClass = this.GetObjectClass(localRef, true);
 			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
 			{
 				JReferenceTypeMetadata metadata = MetadataHelper.GetMetadata(jClass.Hash) ??
 					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>();
 				JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
-				this._call._cache[localRef] = result.Lifetime;
+				this._callAdapter._cache[localRef] = result.Lifetime;
 				return result;
 			}
 			JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
@@ -38,18 +38,18 @@ public readonly ref partial struct JniCall
 		/// <returns>Initial <see cref="JClassObject"/> instance for <paramref name="classRef"/>.</returns>
 		internal JClassObject CreateInitialClass(JClassLocalRef classRef, Boolean validateReference = false)
 		{
-			JEnvironment env = this._call._env;
+			JEnvironment env = this._callAdapter._env;
 			if (validateReference) this.ThrowIfNotClassObject(classRef.Value);
 			JClassObject result = env.GetClass(classRef, true);
 			// Check if class reference is owned by this call.
 			if (classRef == result.InternalReference)
 			{
-				this._call._cache[classRef.Value] = result.Lifetime;
+				this._callAdapter._cache[classRef.Value] = result.Lifetime;
 			}
 			else
 			{
-				JniCallClass callClass = new(classRef, result);
-				this._call._cache[classRef.Value] = callClass.Lifetime;
+				CallClassView callClassView = new(classRef, result);
+				this._callAdapter._cache[classRef.Value] = callClassView.Lifetime;
 			}
 			return result;
 		}

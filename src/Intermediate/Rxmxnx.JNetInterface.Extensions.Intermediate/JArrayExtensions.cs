@@ -16,8 +16,8 @@ public static class JArrayExtensions
 		JMemoryReferenceKind referenceKind = JMemoryReferenceKind.Local)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
-		INativeMemoryHandle handle = jArray.Environment.ArrayFeature.GetSequence(jArray, referenceKind);
-		return new(handle);
+		INativeMemoryAdapter adapter = jArray.Environment.ArrayFeature.GetSequence(jArray, referenceKind);
+		return new(adapter);
 	}
 	/// <summary>
 	/// Retrieves the critical native memory of array elements.
@@ -29,8 +29,8 @@ public static class JArrayExtensions
 		JMemoryReferenceKind referenceKind = JMemoryReferenceKind.ThreadUnrestricted)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
-		INativeMemoryHandle handle = jArray.Environment.ArrayFeature.GetCriticalSequence(jArray, referenceKind);
-		return new(handle);
+		INativeMemoryAdapter adapter = jArray.Environment.ArrayFeature.GetCriticalSequence(jArray, referenceKind);
+		return new(adapter);
 	}
 	/// <summary>
 	/// Creates an array of <typeparamref name="TPrimitive"/> elements containing a copy of
