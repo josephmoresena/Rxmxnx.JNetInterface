@@ -5,7 +5,7 @@ VisualStudioVersion = 25.0.1705.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Base.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj", "{22C8E65E-4093-4FE1-813A-089E3EE755F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Intermediate.SourceGenerator", "Intermediate\Rxmxnx.JNetInterface.Intermediate.SourceGenerator\Rxmxnx.JNetInterface.Intermediate.SourceGenerator.csproj", "{F1FDBE72-DBB4-44CA-849B-4C030A6977CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.SourceGenerator", "SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj", "{F1FDBE72-DBB4-44CA-849B-4C030A6977CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Primitives.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj", "{CDE71873-44B6-4B99-B3DC-085C04571A63}"
 EndProject
