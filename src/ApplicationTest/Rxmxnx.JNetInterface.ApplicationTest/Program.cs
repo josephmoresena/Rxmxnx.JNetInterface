@@ -119,7 +119,7 @@ public static class Program
 		}
 		finally
 		{
-			NativeLibrary.Free(jvmLib.Handler);
+			NativeLibrary.Free(jvmLib.Handle);
 		}
 	}
 	private static void PrintVirtualMachineInfo(IEnvironment env, IInvokedVirtualMachine vm,

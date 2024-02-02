@@ -45,22 +45,22 @@ public sealed record JVirtualMachineLibrary
 	private readonly GetDefaultVirtualMachineInitArgsDelegate _getDefaultVirtualMachineInitArgs;
 
 	/// <summary>
-	/// Library handler.
+	/// Library handle.
 	/// </summary>
-	public IntPtr Handler { get; private init; }
+	public IntPtr Handle { get; private init; }
 
 	/// <summary>
 	/// Private constructor.
 	/// </summary>
-	/// <param name="handler">Library handler.</param>
+	/// <param name="handle">Library handle.</param>
 	/// <param name="getDefaultVirtualMachineInitArgs">A <see cref="GetDefaultVirtualMachineInitArgsDelegate"/> delegate.</param>
 	/// <param name="createVirtualMachine">A <see cref="CreateVirtualMachineDelegate"/> delegate.</param>
 	/// <param name="getCreatedVirtualMachines">A <see cref="GetCreatedVirtualMachinesDelegate"/> delegate.</param>
-	internal JVirtualMachineLibrary(IntPtr handler,
+	internal JVirtualMachineLibrary(IntPtr handle,
 		GetDefaultVirtualMachineInitArgsDelegate getDefaultVirtualMachineInitArgs,
 		CreateVirtualMachineDelegate createVirtualMachine, GetCreatedVirtualMachinesDelegate getCreatedVirtualMachines)
 	{
-		this.Handler = handler;
+		this.Handle = handle;
 		this._getDefaultVirtualMachineInitArgs = getDefaultVirtualMachineInitArgs;
 		this._createVirtualMachine = createVirtualMachine;
 		this._getCreatedVirtualMachines = getCreatedVirtualMachines;

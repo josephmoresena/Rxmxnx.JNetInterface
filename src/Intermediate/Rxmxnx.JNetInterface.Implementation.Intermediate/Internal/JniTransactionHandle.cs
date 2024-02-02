@@ -61,7 +61,7 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	/// </summary>
 	/// <param name="jString"><see cref="JStringObject"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
-	/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+	/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
 	/// <param name="transactions">Dictionary of transactions.</param>
 	/// <returns>A new native memory adapter instance for <paramref name="jString"/>.</returns>
 	public static INativeMemoryAdapter CreateMemoryAdapter(JStringObject jString, JMemoryReferenceKind referenceKind,
@@ -79,7 +79,7 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
 	/// <param name="jArray"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
-	/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+	/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
 	/// <param name="transactions">Dictionary of transactions.</param>
 	/// <returns>A new native memory adapter instance for <paramref name="jArray"/>.</returns>
 	public static INativeMemoryAdapter CreateMemoryAdapter<TPrimitive>(JArrayObject<TPrimitive> jArray,

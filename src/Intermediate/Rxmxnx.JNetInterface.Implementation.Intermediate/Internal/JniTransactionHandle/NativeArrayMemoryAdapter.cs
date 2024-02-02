@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal partial struct JniTransactionHandle
 {
 	/// <summary>
-	/// Represents a JNI native array memory handle.
+	/// Represents a JNI native array memory adapter.
 	/// </summary>
 	private sealed record NativeArrayMemoryAdapter<TPrimitive> : NativeMemoryAdapter
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -17,7 +17,7 @@ internal partial struct JniTransactionHandle
 		/// </summary>
 		/// <param name="jArray">A <see cref="JArrayObject{Primitive}"/> instance.</param>
 		/// <param name="referenceKind">Reference memory kind.</param>
-		/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+		/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
 		public NativeArrayMemoryAdapter(JArrayObject<TPrimitive> jArray, JMemoryReferenceKind referenceKind,
 			Boolean critical) : base(jArray, referenceKind, critical)
 			=> this.BinarySize = jArray.Length * IPrimitiveType.GetMetadata<TPrimitive>().SizeOf;

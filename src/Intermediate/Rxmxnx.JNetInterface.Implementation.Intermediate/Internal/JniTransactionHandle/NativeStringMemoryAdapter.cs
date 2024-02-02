@@ -8,7 +8,7 @@ internal partial struct JniTransactionHandle
 	private sealed record NativeStringMemoryAdapter : NativeMemoryAdapter
 	{
 		/// <summary>
-		/// Indicates whether current handle is for UTF-8 chars.
+		/// Indicates whether current adapter is for UTF-8 chars.
 		/// </summary>
 		private readonly Boolean _utf8Chars;
 
@@ -21,7 +21,7 @@ internal partial struct JniTransactionHandle
 		/// </summary>
 		/// <param name="jString">A <see cref="JStringObject"/> instance.</param>
 		/// <param name="referenceKind">Reference memory kind.</param>
-		/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+		/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
 		public NativeStringMemoryAdapter(JStringObject jString, JMemoryReferenceKind referenceKind, Boolean? critical) :
 			base(jString, referenceKind, critical.GetValueOrDefault())
 		{

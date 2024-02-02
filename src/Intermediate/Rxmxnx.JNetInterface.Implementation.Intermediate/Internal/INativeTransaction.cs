@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, IDisposable
 {
 	/// <summary>
-	/// Indicates whether handle is used by current transaction.
+	/// Indicates whether a handle is used by current transaction.
 	/// </summary>
 	/// <param name="reference">A <see cref="IntPtr"/> handle.</param>
 	/// <returns>

@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Native;
 public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 {
 	/// <summary>
-	/// Internal memory handler.
+	/// Internal memory adapter.
 	/// </summary>
 	private readonly INativeMemoryAdapter _adapter;
 	/// <summary>
@@ -41,7 +41,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="adapter"><see cref="INativeMemoryAdapter"/> handler.</param>
+	/// <param name="adapter"><see cref="INativeMemoryAdapter"/> instance.</param>
 	internal JNativeMemory(INativeMemoryAdapter adapter)
 	{
 		this._adapter = adapter;
@@ -51,7 +51,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="adapter"><see cref="INativeMemoryAdapter"/> handler.</param>
+	/// <param name="adapter"><see cref="INativeMemoryAdapter"/> instance.</param>
 	/// <param name="isReadOnly">Indicates current memory block is read-only.</param>
 	internal JNativeMemory(INativeMemoryAdapter adapter, Boolean isReadOnly)
 	{

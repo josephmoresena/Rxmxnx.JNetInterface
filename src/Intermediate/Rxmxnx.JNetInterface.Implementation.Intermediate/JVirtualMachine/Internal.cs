@@ -87,7 +87,7 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="jString"><see cref="JStringObject"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
-	/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+	/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
 	/// <returns>A new native memory adapter instance for <paramref name="jString"/>.</returns>
 	internal INativeMemoryAdapter CreateMemoryAdapter(JStringObject jString, JMemoryReferenceKind referenceKind,
 		Boolean? critical)
@@ -98,7 +98,7 @@ public partial class JVirtualMachine
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
 	/// <param name="jArray"><see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="referenceKind">Reference memory kind.</param>
-	/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+	/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
 	/// <returns>A new native memory adapter instance for <paramref name="jArray"/>.</returns>
 	public INativeMemoryAdapter CreateMemoryAdapter<TPrimitive>(JArrayObject<TPrimitive> jArray,
 		JMemoryReferenceKind referenceKind, Boolean critical) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>

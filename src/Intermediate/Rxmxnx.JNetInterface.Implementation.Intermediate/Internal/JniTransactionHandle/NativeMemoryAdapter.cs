@@ -33,7 +33,7 @@ internal partial struct JniTransactionHandle
 		/// </summary>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <param name="referenceKind">Reference memory kind.</param>
-		/// <param name="critical">Indicates this handle is for a critical sequence.</param>
+		/// <param name="critical">Indicates this adapter is for a critical sequence.</param>
 		protected NativeMemoryAdapter(JLocalObject jLocal, JMemoryReferenceKind referenceKind, Boolean critical)
 		{
 			this.VirtualMachine = jLocal.Environment.VirtualMachine;
@@ -64,7 +64,7 @@ internal partial struct JniTransactionHandle
 		public virtual void Release(JReleaseMode mode) => this.Dispose();
 
 		/// <summary>
-		/// Activates current memory handle.
+		/// Activates current memory adapter.
 		/// </summary>
 		/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 		public abstract void Activate(IEnvironment env);
