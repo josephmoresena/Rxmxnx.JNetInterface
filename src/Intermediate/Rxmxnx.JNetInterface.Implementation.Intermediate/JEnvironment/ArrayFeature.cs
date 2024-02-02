@@ -54,8 +54,7 @@ partial class JEnvironment
 				JClassObject jClass = this.GetClass<TElement>();
 				arrayRef = this.NewObjectArray(length, jClass);
 			}
-			IEnvironment env = this._mainClasses.Environment;
-			return new(env, arrayRef, length);
+			return new(this._env, arrayRef, length);
 		}
 		public JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement)
 			where TElement : IObject, IDataType<TElement>
@@ -68,10 +67,9 @@ partial class JEnvironment
 			}
 			else
 			{
-				IEnvironment env = this._mainClasses.Environment;
 				JClassObject jClass = this.GetClass<TElement>();
 				JArrayLocalRef arrayRef = this.NewObjectArray(length, jClass, initialElement as JReferenceObject);
-				result = new(env, arrayRef, length);
+				result = new(this._env, arrayRef, length);
 			}
 			return result;
 		}
@@ -247,11 +245,10 @@ partial class JEnvironment
 			JObjectLocalRef localRef = jniTransaction.Add(item);
 			JObjectArrayLocalRef objectArrayRef =
 				NativeUtilities.Transform<JArrayLocalRef, JObjectArrayLocalRef>(in arrayRef);
-			JEnvironment env = this._mainClasses.Environment;
 			for (Int32 i = 0; i < jArray.Length; i++)
 			{
 				JObjectLocalRef itemLocalRef = this.GetObjectArrayElement(objectArrayRef, i);
-				if (localRef == itemLocalRef || env.IsSame(localRef, itemLocalRef))
+				if (localRef == itemLocalRef || this._env.IsSame(localRef, itemLocalRef))
 					return i;
 			}
 			return -1;

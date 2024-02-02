@@ -19,7 +19,7 @@ partial class JEnvironment
 	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef envRef)
-		=> this._cache = new((JVirtualMachine)vm, envRef, new(this));
+		=> this._cache = new((JVirtualMachine)vm, this, envRef);
 
 	/// <summary>
 	/// Deletes local reference.

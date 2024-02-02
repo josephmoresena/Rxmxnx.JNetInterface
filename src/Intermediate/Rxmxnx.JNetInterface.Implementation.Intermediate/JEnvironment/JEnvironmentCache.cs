@@ -5,7 +5,7 @@ partial class JEnvironment
 	/// <summary>
 	/// This record stores cache for a <see cref="JEnvironment"/> instance.
 	/// </summary>
-	private sealed partial record JEnvironmentCache
+	private sealed partial record JEnvironmentCache : LocalMainClasses
 	{
 		/// <summary>
 		/// Maximum amount of bytes usable on stack.
@@ -187,6 +187,7 @@ partial class JEnvironment
 			// JNI 0x00130000
 			{ typeof(IsVirtualThreadDelegate), 229 },
 		};
+
 		/// <summary>
 		/// Cancellation token.
 		/// </summary>
@@ -200,9 +201,25 @@ partial class JEnvironment
 		/// </summary>
 		private readonly DelegateHelperCache _delegateCache;
 		/// <summary>
-		/// Main classes.
+		/// Main <see cref="JEnvironment"/> instance.
 		/// </summary>
-		private readonly LocalMainClasses _mainClasses;
+		private readonly JEnvironment _env;
+		
+		/// <summary>
+		/// A <see cref="InternalFunctionCache"/> instance.
+		/// </summary>
+		public readonly InternalFunctionCache Functions;
+		/// <inheritdoc cref="JEnvironment.Reference"/>
+		public readonly JEnvironmentRef Reference;
+		/// <summary>
+		/// Thread.
+		/// </summary>
+		public readonly Thread Thread;
+		/// <inheritdoc cref="IEnvironment.Version"/>
+		public readonly Int32 Version;
+
+		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
+		public readonly JVirtualMachine VirtualMachine;
 
 		/// <summary>
 		/// Object cache.
@@ -213,68 +230,31 @@ partial class JEnvironment
 		/// </summary>
 		private Int32 _usedStackBytes;
 
-		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
-		public JVirtualMachine VirtualMachine { get; }
-		/// <inheritdoc cref="JEnvironment.Reference"/>
-		public JEnvironmentRef Reference { get; }
-		/// <inheritdoc cref="IEnvironment.Version"/>
-		public Int32 Version { get; }
-		/// <summary>
-		/// Thread.
-		/// </summary>
-		public Thread Thread { get; }
 		/// <summary>
 		/// Ensured capacity.
 		/// </summary>
 		public Int32? Capacity => this._objects.Capacity;
-		/// <summary>
-		/// A <see cref="InternalFunctionCache"/> instance.
-		/// </summary>
-		public InternalFunctionCache Functions { get; }
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
+		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
+		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
-		/// <param name="mainClasses">A <see cref="LocalMainClasses"/> instance.</param>
-		public JEnvironmentCache(JVirtualMachine vm, JEnvironmentRef envRef, LocalMainClasses mainClasses)
+		public JEnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(env)
 		{
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
-			this._delegateCache = new();
-			this._objects = new();
-			this._mainClasses = mainClasses.Register(this);
 			this.Functions = InternalFunctionCache.Instance;
 			this.Thread = Thread.CurrentThread;
 			this.Version = JEnvironmentCache.GetVersion(envRef);
-			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this, this._cancellation.Token);
-		}
 
-		/// <inheritdoc/>
-		public JClassObject ClassObject => this._mainClasses.ClassObject;
-		/// <inheritdoc/>
-		public JClassObject ThrowableObject => this._mainClasses.ThrowableObject;
-		/// <inheritdoc/>
-		public JClassObject StackTraceElementObject => this._mainClasses.StackTraceElementObject;
-		/// <inheritdoc/>
-		public JClassObject BooleanPrimitive => this._mainClasses.BooleanPrimitive;
-		/// <inheritdoc/>
-		public JClassObject VoidPrimitive => this._mainClasses.VoidPrimitive;
-		/// <inheritdoc/>
-		public JClassObject BytePrimitive => this._mainClasses.BytePrimitive;
-		/// <inheritdoc/>
-		public JClassObject CharPrimitive => this._mainClasses.CharPrimitive;
-		/// <inheritdoc/>
-		public JClassObject DoublePrimitive => this._mainClasses.DoublePrimitive;
-		/// <inheritdoc/>
-		public JClassObject FloatPrimitive => this._mainClasses.FloatPrimitive;
-		/// <inheritdoc/>
-		public JClassObject IntPrimitive => this._mainClasses.IntPrimitive;
-		/// <inheritdoc/>
-		public JClassObject LongPrimitive => this._mainClasses.LongPrimitive;
-		/// <inheritdoc/>
-		public JClassObject ShortPrimitive => this._mainClasses.ShortPrimitive;
+			this._env = env;
+			this._delegateCache = new();
+			this._objects = new();
+			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this, this._cancellation.Token);
+			this.RegisterMainClasses();
+		}
 
 		/// <summary>
 		/// Retrieves a <typeparamref name="TDelegate"/> instance for <typeparamref name="TDelegate"/>.
@@ -316,9 +296,8 @@ partial class JEnvironment
 			{
 				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
 				exceptionClear(this.Reference);
-				JEnvironment env = this._mainClasses.Environment;
-				using LocalFrame frame = new(env, 10);
-				JClassLocalRef classRef = env.GetObjectClass(throwableRef.Value);
+				using LocalFrame frame = new(this._env, 10);
+				JClassLocalRef classRef = this._env.GetObjectClass(throwableRef.Value);
 				JClassObject jClass = this.AsClassObject(classRef);
 				String message = JEnvironmentCache.GetThrowableMessage(jClass, throwableRef);
 				ThrowableObjectMetadata objectMetadata = new(jClass, message);
@@ -343,8 +322,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		public JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference)
 		{
-			JEnvironment env = this._mainClasses.Environment;
-			using JStringObject jString = JClassObject.GetClassName(env, classRef, out Boolean isPrimitive);
+			using JStringObject jString = JClassObject.GetClassName(this._env, classRef, out Boolean isPrimitive);
 			using JNativeMemory<Byte> utf8Text = jString.GetNativeUtf8Chars();
 			JClassObject jClass = isPrimitive ?
 				this.GetPrimitiveClass(utf8Text.Values) :
@@ -367,9 +345,9 @@ partial class JEnvironment
 		/// <summary>
 		/// Release all references.
 		/// </summary>
-		public void FreeReferences(JEnvironment env)
+		public void FreeReferences()
 		{
-			this._objects.ClearCache(env, true);
+			this._objects.ClearCache(this._env, true);
 			this._cancellation.Cancel();
 		}
 		/// <summary>
@@ -381,16 +359,15 @@ partial class JEnvironment
 		public void CreateLocalRef(JGlobalRef globalRef, JLocalObject? result, Boolean deleteGlobal = true)
 		{
 			if (globalRef == default || result is not null) return;
-			JEnvironment env = this._mainClasses.Environment;
 			try
 			{
-				JObjectLocalRef localRef = env.CreateLocalRef(globalRef.Value);
+				JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef.Value);
 				JLocalObject jLocal = this.Register(result)!;
 				jLocal.SetValue(localRef);
 			}
 			finally
 			{
-				if (deleteGlobal) env.DeleteGlobalRef(globalRef);
+				if (deleteGlobal) this._env.DeleteGlobalRef(globalRef);
 			}
 		}
 		/// <summary>
@@ -453,7 +430,6 @@ partial class JEnvironment
 			this.CheckJniError();
 			if (localRef == default) return default;
 
-			JEnvironment env = this._mainClasses.Environment;
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TResult>();
 			JClassObject jClass;
 			if (metadata.Modifier == JTypeModifier.Final)
@@ -462,19 +438,19 @@ partial class JEnvironment
 			}
 			else
 			{
-				JClassLocalRef classRef = env.GetObjectClass(localRef);
+				JClassLocalRef classRef = this._env.GetObjectClass(localRef);
 				try
 				{
 					jClass = this.GetClass(classRef, false);
 				}
 				finally
 				{
-					env.DeleteLocalRef(classRef.Value);
+					this._env.DeleteLocalRef(classRef.Value);
 				}
 			}
 			TResult result = (TResult)(Object)metadata.CreateInstance(jClass, localRef, true);
 			if (localRef != (result as JLocalObject)!.InternalReference && register)
-				this._mainClasses.Environment.DeleteLocalRef(localRef);
+				this._env.DeleteLocalRef(localRef);
 			return register ? this.Register(result) : result;
 		}
 		/// <inheritdoc cref="JEnvironment.LoadClass(JClassObject?)"/>
@@ -507,7 +483,24 @@ partial class JEnvironment
 				this.GetStaticObjectField(wrapperClass, InternalFunctionCache.PrimitiveTypeDefinition);
 			return NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
 		}
+		/// <summary>
+		/// Registers main classes.
+		/// </summary>
+		private void RegisterMainClasses()
+		{
+			this.Register(this.ClassObject);
+			this.Register(this.ThrowableObject);
+			this.Register(this.StackTraceElementObject);
 
+			this.Register(this.BooleanPrimitive);
+			this.Register(this.BytePrimitive);
+			this.Register(this.CharPrimitive);
+			this.Register(this.DoublePrimitive);
+			this.Register(this.FloatPrimitive);
+			this.Register(this.IntPrimitive);
+			this.Register(this.LongPrimitive);
+			this.Register(this.ShortPrimitive);
+		}
 		/// <summary>
 		/// Reloads current class object.
 		/// </summary>

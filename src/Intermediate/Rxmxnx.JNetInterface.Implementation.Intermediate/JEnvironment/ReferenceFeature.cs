@@ -8,16 +8,14 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);
 			ValidationUtilities.ThrowIfDefault(jObject);
-			JEnvironment env = this._mainClasses.Environment;
-			return this.VirtualMachine.CreateSynchronized(env, jObject);
+			return this.VirtualMachine.CreateSynchronized(this._env, jObject);
 		}
 
 		public ObjectLifetime GetLifetime(JLocalObject jLocal, InternalClassInitializer initializer)
 		{
-			IEnvironment env = this._mainClasses.Environment;
 			ObjectLifetime? result = this._objects.GetLifetime(initializer.LocalReference);
 			if (result is null)
-				return new(env, jLocal, initializer.LocalReference)
+				return new(this._env, jLocal, initializer.LocalReference)
 				{
 					Class = initializer.Class,
 					IsRealClass = initializer.Class is not null && initializer.Class.IsFinal.GetValueOrDefault(),
@@ -124,11 +122,10 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.InternalReference;
-			JEnvironment env = this._mainClasses.Environment;
 			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
 			try
 			{
-				env.DeleteLocalRef(localRef);
+				this._env.DeleteLocalRef(localRef);
 			}
 			finally
 			{
@@ -140,21 +137,20 @@ partial class JEnvironment
 		public Boolean Unload(JGlobalBase jGlobal)
 		{
 			ValidationUtilities.ThrowIfDummy(jGlobal);
-			if (jGlobal.IsDefault || this._mainClasses.IsMainGlobal(jGlobal as JGlobal)) return false;
-			JEnvironment env = this._mainClasses.Environment;
+			if (jGlobal.IsDefault || this.IsMainGlobal(jGlobal as JGlobal)) return false;
 			try
 			{
 				if (jGlobal is JGlobal)
 				{
 					JGlobalRef globalRef = jGlobal.As<JGlobalRef>();
 					if (!this.VirtualMachine.SecureRemove(globalRef)) return false;
-					env.DeleteGlobalRef(globalRef);
+					this._env.DeleteGlobalRef(globalRef);
 				}
 				else
 				{
 					JWeakRef weakRef = jGlobal.As<JWeakRef>();
 					if (!this.VirtualMachine.SecureRemove(weakRef)) return false;
-					env.DeleteWeakGlobalRef(weakRef);
+					this._env.DeleteWeakGlobalRef(weakRef);
 				}
 			}
 			finally
@@ -208,7 +204,6 @@ partial class JEnvironment
 			if (jClass is null) return default;
 			JGlobal result = this.VirtualMachine.LoadGlobal(jClass);
 			JObjectLocalRef localRef = jClass.As<JObjectLocalRef>();
-			JEnvironment env = this._mainClasses.Environment;
 			switch (result.IsDefault)
 			{
 				case true when localRef == default:
@@ -219,7 +214,7 @@ partial class JEnvironment
 					}
 					finally
 					{
-						if (localRef != default) env.DeleteLocalRef(localRef);
+						if (localRef != default) this._env.DeleteLocalRef(localRef);
 					}
 					break;
 				case true:

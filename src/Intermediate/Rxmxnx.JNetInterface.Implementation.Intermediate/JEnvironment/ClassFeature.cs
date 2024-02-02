@@ -69,11 +69,10 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDefault(jClass);
 			GetSuperclassDelegate getSuperClass = this.GetDelegate<GetSuperclassDelegate>();
 			JClassLocalRef superClassRef = jniTransaction.Add(getSuperClass(this.Reference, classRef));
-			JEnvironment env = this._mainClasses.Environment;
 			if (superClassRef.Value != default)
 			{
 				JClassObject jSuperClass = this.AsClassObject(superClassRef);
-				if (jSuperClass.InternalReference != superClassRef.Value) env.DeleteLocalRef(superClassRef.Value);
+				if (jSuperClass.InternalReference != superClassRef.Value) this._env.DeleteLocalRef(superClassRef.Value);
 				return jSuperClass;
 			}
 			this.CheckJniError();
@@ -206,7 +205,7 @@ partial class JEnvironment
 			if (classRef.Value == default) args.cache.CheckJniError();
 			if (args.cache._classes.TryGetValue(classInformation.ToString(), out JClassObject? result))
 			{
-				JEnvironment env = args.cache._mainClasses.Environment;
+				JEnvironment env = args.cache._env;
 				JClassLocalRef classRefO = jniTransaction.Add(result);
 				if (classRefO.Value == default || env.IsSame(classRef.Value, default))
 				{

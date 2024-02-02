@@ -2,21 +2,15 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private class LocalMainClasses : MainClasses<JClassObject>
+	private abstract record LocalMainClasses : MainClasses<JClassObject>
 	{
-		/// <summary>
-		/// <see cref="JEnvironment"/> instance.
-		/// </summary>
-		public JEnvironment Environment { get; }
-
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-		public LocalMainClasses(JEnvironment env)
+		protected LocalMainClasses(IEnvironment env)
 		{
-			this.Environment = env;
-			this.ClassObject = new(this.Environment);
+			this.ClassObject = new(env);
 			this.ThrowableObject = new(this.ClassObject, MetadataHelper.GetMetadata<JThrowableObject>());
 			this.StackTraceElementObject =
 				new(this.ClassObject, MetadataHelper.GetMetadata<JStackTraceElementObject>());
@@ -33,29 +27,6 @@ partial class JEnvironment
 		}
 
 		/// <summary>
-		/// Registers current instance in <paramref name="cache"/>.
-		/// </summary>
-		/// <param name="cache">A <see cref="JEnvironmentCache"/> instance.</param>
-		/// <returns>Current registered instance.</returns>
-		public LocalMainClasses Register(JEnvironmentCache cache)
-		{
-			cache.Register(this.ClassObject);
-			cache.Register(this.ThrowableObject);
-			cache.Register(this.StackTraceElementObject);
-
-			cache.Register(this.BooleanPrimitive);
-			cache.Register(this.BytePrimitive);
-			cache.Register(this.CharPrimitive);
-			cache.Register(this.DoublePrimitive);
-			cache.Register(this.FloatPrimitive);
-			cache.Register(this.IntPrimitive);
-			cache.Register(this.LongPrimitive);
-			cache.Register(this.ShortPrimitive);
-
-			return this;
-		}
-
-		/// <summary>
 		/// Indicates whether <paramref name="jGlobal"/> is a main global class.
 		/// </summary>
 		/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
@@ -63,7 +34,7 @@ partial class JEnvironment
 		/// <see langword="true"/> if <paramref name="jGlobal"/> is main global class; otherwise;
 		/// <see langword="false"/>.
 		/// </returns>
-		public Boolean IsMainGlobal(JGlobal? jGlobal)
+		protected Boolean IsMainGlobal(JGlobal? jGlobal)
 		{
 			if (jGlobal is null) return false;
 			JVirtualMachine vm = (jGlobal.VirtualMachine as JVirtualMachine)!;

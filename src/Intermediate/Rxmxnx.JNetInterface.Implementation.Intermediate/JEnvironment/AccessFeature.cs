@@ -11,7 +11,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			this.GetPrimitiveField(bytes, localRef, definition.Information[1][^1], fieldId);
 		}
@@ -22,7 +22,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			this.SetPrimitiveField(localRef, bytes, definition.Information[1][^1], fieldId);
 		}
@@ -31,7 +31,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
 			this.GetPrimitiveStaticField(bytes, jClass.Reference, definition.Information[1][^1], fieldId);
 		}
 		public void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
@@ -39,7 +39,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
 			this.SetPrimitiveStaticField(jClass.Reference, bytes, definition.Information[1][^1], fieldId);
 		}
 		public void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
@@ -75,7 +75,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			return this.GetObjectField<TField>(localRef, fieldId);
 		}
@@ -111,7 +111,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			this.SetObjectField(localRef, value, jniTransaction, fieldId);
 		}
@@ -181,7 +181,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
 			this.SetStaticObjectField(jClass.Reference, value, jniTransaction, fieldId);
 		}
 		public void SetStaticField<TField>(JFieldObject jField, JFieldDefinition definition, TField? value)
@@ -384,8 +384,7 @@ partial class JEnvironment
 		public JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
 			JClassObject? returnType)
 		{
-			JEnvironment env = this._mainClasses.Environment;
-			using LocalFrame localFrame = new(env, parameterTypes.Length + 2);
+			using LocalFrame localFrame = new(this._env, parameterTypes.Length + 2);
 			JArgumentMetadata[] args = this.GetCallMetadata(parameterTypes!);
 			if (returnType is null) return JConstructorDefinition.Create(args);
 			IReflectionMetadata? returnMetadata = this.GetReflectionMetadata(returnType);
@@ -425,8 +424,8 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, declaringClass);
 			JFieldId fieldId = isStatic ?
-				access.GetStaticFieldId(definition, this._mainClasses.Environment) :
-				access.GetFieldId(definition, this._mainClasses.Environment);
+				access.GetStaticFieldId(definition, this._env) :
+				access.GetFieldId(definition, this._env);
 			ToReflectedFieldDelegate toReflectedField = this.GetDelegate<ToReflectedFieldDelegate>();
 			JObjectLocalRef localRef = toReflectedField(this.Reference, declaringClass.Reference, fieldId,
 			                                            isStatic ? JBoolean.TrueValue : JBoolean.FalseValue);
@@ -1168,7 +1167,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(1 + definition.ReferenceCount);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JMethodId methodId = access.GetMethodId(definition, this._mainClasses.Environment);
+			JMethodId methodId = access.GetMethodId(definition, this._env);
 			return this.NewObject(definition, jClass.Reference, args, jniTransaction, methodId);
 		}
 		/// <summary>
@@ -1206,7 +1205,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			JFieldId fieldId = access.GetStaticFieldId(definition, this._mainClasses.Environment);
+			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
 			return this.GetStaticObjectField(jClass.Reference, fieldId);
 		}
 		/// <summary>
@@ -1236,7 +1235,7 @@ partial class JEnvironment
 			INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(1 + (execution ? definition.ReferenceCount : 0));
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			methodId = access.GetStaticMethodId(definition, this._mainClasses.Environment);
+			methodId = access.GetStaticMethodId(definition, this._env);
 			return jniTransaction;
 		}
 		/// <summary>
@@ -1251,7 +1250,7 @@ partial class JEnvironment
 		{
 			INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			methodId = access.GetMethodId(definition, this._mainClasses.Environment);
+			methodId = access.GetMethodId(definition, this._env);
 			return jniTransaction;
 		}
 		/// <summary>
@@ -1268,7 +1267,7 @@ partial class JEnvironment
 		{
 			INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
-			methodId = access.GetMethodId(definition, this._mainClasses.Environment);
+			methodId = access.GetMethodId(definition, this._env);
 			localRef = this.UseObject(jniTransaction, jLocal);
 			return jniTransaction;
 		}
