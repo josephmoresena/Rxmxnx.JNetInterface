@@ -65,7 +65,7 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	/// <param name="capacity">Capacity of created buffer.</param>
 	/// <param name="func">Function to execute.</param>
 	/// <returns>The result of <paramref name="func"/> execution.</returns>
-	public static void WithDirectBuffer<TResult>(IEnvironment env, Int32 capacity,
+	public static TResult WithDirectBuffer<TResult>(IEnvironment env, Int32 capacity,
 		Func<JByteBufferObject, TResult> func)
 		=> env.NioFeature.WithDirectByteBuffer(capacity, func);
 	/// <summary>
@@ -78,7 +78,7 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	/// <param name="state">The state object of type <typeparamref name="TState"/>.</param>
 	/// <param name="func">Function to execute.</param>
 	/// <returns>The result of <paramref name="func"/> execution.</returns>
-	public static void WithDirectBuffer<TState, TResult>(IEnvironment env, Int32 capacity, TState state,
+	public static TResult WithDirectBuffer<TState, TResult>(IEnvironment env, Int32 capacity, TState state,
 		Func<JByteBufferObject, TState, TResult> func)
 		=> env.NioFeature.WithDirectByteBuffer(capacity, state, func);
 

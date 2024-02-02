@@ -217,5 +217,20 @@ partial class JEnvironment
 			using JStringObject throwableMessage = JThrowableObject.GetThrowableMessage(jClass, throwableRef);
 			return throwableMessage.Value;
 		}
+		/// <summary>
+		/// Creates a <see cref="IFixedContext{T}.IDisposable"/> instance from an span created in stack.
+		/// </summary>
+		/// <typeparam name="T">Type of elements in span.</typeparam>
+		/// <param name="stackSpan">A stack created span.</param>
+		/// <param name="cache">Instance to free stack bytes.</param>
+		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
+		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(scoped Span<T> stackSpan,
+			EnvironmentCache? cache = default) where T : unmanaged
+		{
+			StackDisposable? disposable =
+				cache is not null ? new(cache, stackSpan.Length * NativeUtilities.SizeOf<T>()) : default;
+			ValPtr<T> ptr = (ValPtr<T>)stackSpan.GetUnsafeIntPtr();
+			return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
+		}
 	}
 }

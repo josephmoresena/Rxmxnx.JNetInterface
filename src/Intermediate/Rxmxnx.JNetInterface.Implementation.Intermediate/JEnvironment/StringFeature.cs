@@ -6,16 +6,13 @@ partial class JEnvironment
 	{
 		public JStringObject Create(ReadOnlySpan<Char> data)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(data.WithSafeFixed(this, EnvironmentCache.CreateString));
+			JStringLocalRef stringRef = data.WithSafeFixed(this, EnvironmentCache.CreateString);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, data.ToString()));
 		}
 		public JStringObject Create(ReadOnlySpan<Byte> utf8Data)
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef =
-				jniTransaction.Add(utf8Data.WithSafeFixed(this, EnvironmentCache.CreateUtf8String));
+			JStringLocalRef stringRef = utf8Data.WithSafeFixed(this, EnvironmentCache.CreateUtf8String);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, utf8Data.Length));
 		}
@@ -116,30 +113,6 @@ partial class JEnvironment
 			getStringUtfRegion(this.Reference, stringRef, startIndex, utf8Units.Length,
 			                   (ValPtr<Byte>)fixedMemory.Pointer);
 			this.CheckJniError();
-		}
-
-		private static JStringLocalRef CreateString(in IReadOnlyFixedContext<Char> ctx, EnvironmentCache cache)
-		{
-			NewStringDelegate newString = cache.GetDelegate<NewStringDelegate>();
-			JStringLocalRef result = newString(cache.Reference, (ReadOnlyValPtr<Char>)ctx.Pointer, ctx.Values.Length);
-			if (result.Value == default) cache.CheckJniError();
-			return result;
-		}
-		private static JStringLocalRef CreateUtf8String(in IReadOnlyFixedContext<Byte> ctx, EnvironmentCache cache)
-		{
-			NewStringUtfDelegate newUtf8String = cache.GetDelegate<NewStringUtfDelegate>();
-			JStringLocalRef result = newUtf8String(cache.Reference, (ReadOnlyValPtr<Byte>)ctx.Pointer);
-			if (result.Value == default) cache.CheckJniError();
-			return result;
-		}
-		private static void GetStringRegion(in IFixedContext<Char> ctx,
-			(EnvironmentCache cache, JStringObject jString, Int32 startIndex) args)
-		{
-			GetStringRegionDelegate getStringRegion = args.cache.GetDelegate<GetStringRegionDelegate>();
-			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(args.jString);
-			getStringRegion(args.cache.Reference, stringRef, args.startIndex, ctx.Values.Length,
-			                (ValPtr<Char>)ctx.Pointer);
 		}
 	}
 }

@@ -8,11 +8,7 @@ public partial interface IArrayFeature
 	/// <param name="jArray">A <see cref="JReferenceObject"/> instance.</param>
 	/// <param name="index">Element index.</param>
 	/// <param name="value">Object instance.</param>
-	internal void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
-	{
-		JArrayTypeMetadata arrayMetadata = jArray.TypeMetadata;
-		arrayMetadata.SetObjectElement(jArray, index, value);
-	}
+	internal void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value);
 	/// <summary>
 	/// Retrieves a pointer to <paramref name="arrayRef"/> elements.
 	/// </summary>
