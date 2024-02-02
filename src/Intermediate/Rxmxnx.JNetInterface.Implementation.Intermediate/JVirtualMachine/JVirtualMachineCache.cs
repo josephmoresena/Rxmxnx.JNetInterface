@@ -5,7 +5,7 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// This record stores cache for a <see cref="JVirtualMachine"/> instance.
 	/// </summary>
-	private sealed record JVirtualMachineCache
+	private sealed record JVirtualMachineCache : GlobalMainClasses
 	{
 		/// <summary>
 		/// Delegates dictionary.
@@ -31,6 +31,10 @@ public partial class JVirtualMachine
 		/// </summary>
 		private readonly ConcurrentDictionary<Guid, INativeTransaction> _transactions = new();
 		/// <summary>
+		/// Main <see cref="IVirtualMachine"/> instance.
+		/// </summary>
+		private readonly IVirtualMachine _vm;
+		/// <summary>
 		/// Weak global object dictionary.
 		/// </summary>
 		private readonly ConcurrentDictionary<JWeakRef, WeakReference<JWeak>> _weakObjects = new();
@@ -54,10 +58,6 @@ public partial class JVirtualMachine
 		/// </summary>
 		public ClassCache WeakClassCache { get; } = new();
 		/// <summary>
-		/// <see cref="GlobalMainClasses"/> instance.
-		/// </summary>
-		public GlobalMainClasses MainClasses { get; }
-		/// <summary>
 		/// <see cref="NativeCache"/> instance.
 		/// </summary>
 		public NativeCache NativesCache { get; } = new();
@@ -65,14 +65,14 @@ public partial class JVirtualMachine
 		/// <summary>
 		/// Constructor.
 		/// </summary>
+		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
-		/// <param name="mainClasses">A <see cref="GlobalMainClasses"/> instance.</param>
-		public JVirtualMachineCache(JVirtualMachineRef vmRef, GlobalMainClasses mainClasses)
+		public JVirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm)
 		{
+			this._vm = vm;
 			this.Reference = vmRef;
 			this.DelegateCache = new();
-			this.ThreadCache = new(mainClasses.VirtualMachine);
-			this.MainClasses = mainClasses;
+			this.ThreadCache = new(vm);
 		}
 
 		/// <summary>
@@ -96,7 +96,7 @@ public partial class JVirtualMachine
 		public JGlobal? Register(JGlobal? jGlobal)
 		{
 			if (jGlobal is null || jGlobal.IsDefault) return jGlobal;
-			using IThread thread = this.CreateThread(ThreadPurpose.CheckGlobalReference);
+			using IThread thread = this._vm.CreateThread(ThreadPurpose.CheckGlobalReference);
 			this._globalObjects[jGlobal.Reference] = new(jGlobal.GetCacheable(thread));
 			return jGlobal;
 		}
@@ -142,7 +142,7 @@ public partial class JVirtualMachine
 			this.GlobalClassCache.Clear();
 			this.WeakClassCache.Clear();
 			if (globalKeys.Length == 0 && weakKeys.Length == 0) return;
-			using IThread thread = this.CreateThread(ThreadPurpose.RemoveGlobalReference);
+			using IThread thread = this._vm.CreateThread(ThreadPurpose.RemoveGlobalReference);
 			JEnvironment env = (JEnvironment)thread;
 			foreach (JWeakRef key in weakKeys)
 			{
@@ -214,8 +214,23 @@ public partial class JVirtualMachine
 			return result;
 		}
 
-		/// <inheritdoc cref="IVirtualMachine.CreateThread(ThreadPurpose)"/>
-		private IThread CreateThread(ThreadPurpose purpose)
-			=> (this.MainClasses.VirtualMachine as IVirtualMachine).CreateThread(purpose);
+		public override void LoadMainClasses(JEnvironment env)
+		{
+			base.LoadMainClasses(env);
+
+			this.GlobalClassCache[this.ClassMetadata.Hash] = this.ClassObject;
+			this.GlobalClassCache[this.ThrowableMetadata.Hash] = this.ThrowableObject;
+			this.GlobalClassCache[this.StackTraceElementMetadata.Hash] = this.StackTraceElementObject;
+
+			this.GlobalClassCache[this.BooleanMetadata.Hash] = this.VoidPrimitive;
+			this.GlobalClassCache[this.BooleanMetadata.Hash] = this.BooleanPrimitive;
+			this.GlobalClassCache[this.ByteMetadata.Hash] = this.BytePrimitive;
+			this.GlobalClassCache[this.CharMetadata.Hash] = this.CharPrimitive;
+			this.GlobalClassCache[this.DoubleMetadata.Hash] = this.DoublePrimitive;
+			this.GlobalClassCache[this.FloatMetadata.Hash] = this.FloatPrimitive;
+			this.GlobalClassCache[this.IntMetadata.Hash] = this.IntPrimitive;
+			this.GlobalClassCache[this.LongMetadata.Hash] = this.LongPrimitive;
+			this.GlobalClassCache[this.ShortMetadata.Hash] = this.ShortPrimitive;
+		}
 	}
 }

@@ -246,7 +246,7 @@ partial class JEnvironment
 			this.Thread = Thread.CurrentThread;
 
 			Task.Factory.StartNew(JEnvironmentCache.FinalizeCache, this, this._cancellation.Token);
-			this.RegisterMainClasses();
+			this.LoadMainClasses();
 		}
 
 		/// <summary>
@@ -477,9 +477,9 @@ partial class JEnvironment
 			return NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
 		}
 		/// <summary>
-		/// Registers main classes.
+		/// Load main classes.
 		/// </summary>
-		private void RegisterMainClasses()
+		private void LoadMainClasses()
 		{
 			this.Register(this.ClassObject);
 			this.Register(this.ThrowableObject);

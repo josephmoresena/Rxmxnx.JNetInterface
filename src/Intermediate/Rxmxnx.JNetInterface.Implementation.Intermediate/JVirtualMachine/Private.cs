@@ -15,11 +15,7 @@ public partial class JVirtualMachine
 	/// Constructor.
 	/// </summary>
 	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
-	private JVirtualMachine(JVirtualMachineRef vmRef)
-	{
-		GlobalMainClasses mainClasses = new(this);
-		this._cache = new(vmRef, mainClasses);
-	}
+	private JVirtualMachine(JVirtualMachineRef vmRef) => this._cache = new(this, vmRef);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -55,9 +51,7 @@ public partial class JVirtualMachine
 	{
 		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.CreateGlobalReference));
 		JEnvironment env = this.GetEnvironment(thread.Reference);
-		GlobalMainClasses mainClasses = this._cache.MainClasses;
-		mainClasses.Load(env);
-		mainClasses.Register(this._cache);
+		this._cache.LoadMainClasses(env);
 	}
 
 	/// <summary>
