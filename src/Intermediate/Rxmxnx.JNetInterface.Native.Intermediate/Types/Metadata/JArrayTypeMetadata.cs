@@ -63,7 +63,7 @@ public abstract record JArrayTypeMetadata : JReferenceTypeMetadata
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 	/// <param name="index">Element index.</param>
 	/// <param name="value">Object instance.</param>
-	internal abstract void SetObjectElement(JArrayObject jArray, Int32 index, JLocalObject? value);
+	internal abstract void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value);
 
 	/// <summary>
 	/// Retrieves metadata for the array of arrays of <paramref name="typeofElement"/>.

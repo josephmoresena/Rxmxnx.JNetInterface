@@ -118,6 +118,16 @@ partial class JEnvironment
 				this.SetObjectElement(jArray, index, value as JReferenceObject);
 			}
 		}
+		public void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
+		{
+			ValidationUtilities.ThrowIfDummy(value);
+			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);
+			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
+			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
+			this.CheckJniError();
+		}
 		public Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item)
 			where TElement : IObject, IDataType<TElement>
 		{
@@ -173,6 +183,7 @@ partial class JEnvironment
 				this.GetDelegate<GetPrimitiveArrayCriticalDelegate>();
 			ValPtr<Byte> result = getPrimitiveArrayCriticalDelegate(this.Reference, arrayRef, out _);
 			if (result == ValPtr<Byte>.Zero) this.CheckJniError();
+			this._criticalCount++;
 			return result;
 		}
 		public void ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer, JReleaseMode mode)
@@ -188,6 +199,7 @@ partial class JEnvironment
 				this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
 			releasePrimitiveArrayCritical(this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
 			this.CheckJniError();
+			this._criticalCount--;
 		}
 		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -205,16 +217,6 @@ partial class JEnvironment
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			using IReadOnlyFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
 			this.SetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);
-			this.CheckJniError();
-		}
-		public void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
-		{
-			ValidationUtilities.ThrowIfDummy(value);
-			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);
-			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
-			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
 			this.CheckJniError();
 		}
 

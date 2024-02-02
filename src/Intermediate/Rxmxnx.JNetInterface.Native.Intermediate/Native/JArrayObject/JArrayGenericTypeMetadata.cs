@@ -56,7 +56,7 @@ public partial class JArrayObject<TElement>
 		internal override JArrayTypeMetadata? GetArrayMetadata()
 			=> JArrayTypeMetadata.GetArrayArrayMetadata(this.ArraySignature, typeof(TElement));
 		/// <inheritdoc/>
-		internal override void SetObjectElement(JArrayObject jArray, Int32 index, JLocalObject? value)
+		internal override void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
 		{
 			if (jArray is not JArrayObject<TElement> jGenericArray) return;
 			switch (value)
@@ -78,10 +78,13 @@ public partial class JArrayObject<TElement>
 		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 		/// <param name="index">Element index.</param>
 		/// <param name="value">Object instance.</param>
-		private static void SetObjectElement(IList<TElement?> jArray, Int32 index, JLocalObject value)
+		private static void SetObjectElement(JArrayObject<TElement> jArray, Int32 index, JReferenceObject value)
 		{
 			JReferenceTypeMetadata elementMetadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TElement>();
-			TElement element = (TElement)(Object)elementMetadata.ParseInstance(value);
+			TElement element = value is JLocalObject jLocal ?
+				(TElement)(Object)elementMetadata.ParseInstance(jLocal) :
+				(TElement)(Object)elementMetadata.CreateInstance(jArray.Environment.ClassFeature.GetClass<TElement>(),
+				                                                 value.As<JObjectLocalRef>());
 			try
 			{
 				jArray[index] = element;

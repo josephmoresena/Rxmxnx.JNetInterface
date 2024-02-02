@@ -78,6 +78,7 @@ partial class JEnvironment
 			GetStringCriticalDelegate getStringCritical = this.GetDelegate<GetStringCriticalDelegate>();
 			ReadOnlyValPtr<Char> result = getStringCritical(this.Reference, stringRef, out _);
 			if (result == ReadOnlyValPtr<Char>.Zero) this.CheckJniError();
+			this._criticalCount++;
 			return result;
 		}
 		public void ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
@@ -97,6 +98,7 @@ partial class JEnvironment
 			ReleaseStringCriticalDelegate releaseStringCritical = this.GetDelegate<ReleaseStringCriticalDelegate>();
 			releaseStringCritical(this.Reference, stringRef, pointer);
 			this.CheckJniError();
+			this._criticalCount--;
 		}
 		public void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
 		{

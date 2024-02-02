@@ -20,6 +20,10 @@ partial class JEnvironment
 		/// Main <see cref="JEnvironment"/> instance.
 		/// </summary>
 		private readonly JEnvironment _env;
+		/// <summary>
+		/// Number of active critical sequences.
+		/// </summary>
+		private Int32 _criticalCount;
 
 		/// <summary>
 		/// Object cache.
@@ -43,16 +47,6 @@ partial class JEnvironment
 			return this._classes[classRef] ?? this.VirtualMachine.GetAccess(classRef) ??
 				throw new ArgumentException("Invalid class object.", nameof(jClass));
 		}
-		/// <summary>
-		/// Attempts to get the value associated with the specified hash from the cache.
-		/// </summary>
-		/// <param name="hash">The hash class to get.</param>
-		/// <param name="jClass"></param>
-		/// <returns>
-		/// <see langword="true"/> if the hash was found in the cache; otherwise, <see langword="false"/>.
-		/// </returns>
-		private Boolean TryGetClass(String hash, [NotNullWhen(true)] out JClassObject? jClass)
-			=> this._classes.TryGetValue(hash, out jClass);
 		/// <summary>
 		/// Creates an object from given reference.
 		/// </summary>
@@ -90,90 +84,6 @@ partial class JEnvironment
 			return register ? this.Register(result) : result;
 		}
 		/// <summary>
-		/// Load main classes.
-		/// </summary>
-		private void LoadMainClasses()
-		{
-			this.Register(this.ClassObject);
-			this.Register(this.ThrowableObject);
-			this.Register(this.StackTraceElementObject);
-
-			this.Register(this.BooleanPrimitive);
-			this.Register(this.BytePrimitive);
-			this.Register(this.CharPrimitive);
-			this.Register(this.DoublePrimitive);
-			this.Register(this.FloatPrimitive);
-			this.Register(this.IntPrimitive);
-			this.Register(this.LongPrimitive);
-			this.Register(this.ShortPrimitive);
-		}
-		/// <summary>
-		/// Reloads current class object.
-		/// </summary>
-		/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>
-		/// <returns>Current <see cref="JClassLocalRef"/> reference.</returns>
-		private JClassLocalRef ReloadClass(JClassObject? jClass)
-		{
-			if (jClass is null) return default;
-			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			if (classRef.Value != default) return classRef;
-			classRef = this.FindClass(jClass);
-			jClass.SetValue(classRef);
-			this.Register(jClass);
-			return classRef;
-		}
-		/// <summary>
-		/// Retrieves primitive class instance for <paramref name="className"/>.
-		/// </summary>
-		/// <param name="className">Class name.</param>
-		/// <returns>A <see cref="JClassObject"/> instance.</returns>
-		/// <exception cref="ArgumentException">Non-primitive class.</exception>
-		private JClassObject GetPrimitiveClass(ReadOnlySpan<Byte> className)
-			=> className.Length switch
-			{
-				3 => className[0] == 0x69 /*i*/ ?
-					this.IntPrimitive :
-					throw new ArgumentException("Invalid primitive type."),
-				4 => className[0] switch
-				{
-					0x62 //b
-						=> this.BooleanPrimitive,
-					0x63 //c
-						=> this.CharPrimitive,
-					0x6C //l
-						=> this.LongPrimitive,
-					_ => throw new ArgumentException("Invalid primitive type."),
-				},
-				5 => className[0] switch
-				{
-					0x66 //f
-						=> this.FloatPrimitive,
-					0x73 //l
-						=> this.ShortPrimitive,
-					_ => throw new ArgumentException("Invalid primitive type."),
-				},
-				6 => className[0] == 0x64 /*d*/ ?
-					this.DoublePrimitive :
-					throw new ArgumentException("Invalid primitive type."),
-				7 => className[0] == 0x62 /*b*/ ?
-					this.BooleanPrimitive :
-					throw new ArgumentException("Invalid primitive type."),
-				_ => throw new ArgumentException("Invalid primitive type."),
-			};
-		/// <summary>
-		/// Retrieves class instance for <paramref name="classRef"/>.
-		/// </summary>
-		/// <param name="className">Class name.</param>
-		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-		/// <returns>A <see cref="JClassObject"/> instance.</returns>
-		private JClassObject GetClass(ReadOnlySpan<Byte> className, JClassLocalRef classRef)
-		{
-			CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
-			if (!this.TryGetClass(classInformation.ToString(), out JClassObject? jClass))
-				jClass = new(this.ClassObject, new TypeInformation(classInformation), classRef);
-			return jClass;
-		}
-		/// <summary>
 		/// Retrieves the JNI function pointer for <paramref name="index"/>.
 		/// </summary>
 		/// <param name="index">JNI function index.</param>
@@ -202,14 +112,5 @@ partial class JEnvironment
 			this._usedStackBytes -= requiredBytes;
 			return false;
 		}
-		/// <summary>
-		/// Retrieves <see cref="JClassLocalRef"/> reference for given instance.
-		/// </summary>
-		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		private JClassLocalRef FindClass(JClassObject jClass)
-			=> jClass.ClassSignature.Length != 1 ?
-				jClass.Name.WithSafeFixed(this, EnvironmentCache.FindClass) :
-				this.FindPrimitiveClass(jClass.ClassSignature[0]);
 	}
 }
