@@ -204,7 +204,7 @@ partial class JEnvironment
 		/// Main <see cref="JEnvironment"/> instance.
 		/// </summary>
 		private readonly JEnvironment _env;
-		
+
 		/// <summary>
 		/// A <see cref="InternalFunctionCache"/> instance.
 		/// </summary>
