@@ -5,62 +5,26 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// This record stores cache for a <see cref="JVirtualMachine"/> instance.
 	/// </summary>
-	private sealed record VirtualMachineCache : GlobalMainClasses
+	private sealed partial record VirtualMachineCache : GlobalMainClasses
 	{
-		/// <summary>
-		/// Delegates dictionary.
-		/// </summary>
-		private static readonly Dictionary<Type, Func<JVirtualMachineRef, IntPtr>> getPointer = new()
-		{
-			{ typeof(DestroyVirtualMachineDelegate), r => r.Reference.Reference.DestroyJavaVmPointer },
-			{ typeof(AttachCurrentThreadDelegate), r => r.Reference.Reference.AttachCurrentThreadPointer },
-			{ typeof(DetachCurrentThreadDelegate), r => r.Reference.Reference.DetachCurrentThreadPointer },
-			{ typeof(GetEnvDelegate), r => r.Reference.Reference.GetEnvPointer },
-			{
-				typeof(AttachCurrentThreadAsDaemonDelegate),
-				r => r.Reference.Reference.AttachCurrentThreadAsDaemonPointer
-			},
-		};
-
-		/// <summary>
-		/// Global object dictionary.
-		/// </summary>
-		private readonly ConcurrentDictionary<JGlobalRef, WeakReference<JGlobal>> _globalObjects = new();
-		/// <summary>
-		/// JNI transaction dictionary.
-		/// </summary>
-		private readonly ConcurrentDictionary<Guid, INativeTransaction> _transactions = new();
-		/// <summary>
-		/// Main <see cref="IVirtualMachine"/> instance.
-		/// </summary>
-		private readonly IVirtualMachine _vm;
-		/// <summary>
-		/// Weak global object dictionary.
-		/// </summary>
-		private readonly ConcurrentDictionary<JWeakRef, WeakReference<JWeak>> _weakObjects = new();
-
 		/// <inheritdoc cref="JVirtualMachine.Reference"/>
-		public JVirtualMachineRef Reference { get; }
-		/// <summary>
-		/// Delegate cache.
-		/// </summary>
-		public DelegateHelperCache DelegateCache { get; }
+		public readonly JVirtualMachineRef Reference;
 		/// <summary>
 		/// Thread cache.
 		/// </summary>
-		public ThreadCache ThreadCache { get; }
+		public readonly ThreadCache ThreadCache;
 		/// <summary>
 		/// Global cache.
 		/// </summary>
-		public ClassCache<JGlobal> GlobalClassCache { get; } = new();
+		public readonly ClassCache<JGlobal> GlobalClassCache = new();
 		/// <summary>
 		/// Weak cache.
 		/// </summary>
-		public ClassCache WeakClassCache { get; } = new();
+		public readonly ClassCache WeakClassCache = new();
 		/// <summary>
 		/// <see cref="NativeCache"/> instance.
 		/// </summary>
-		public NativeCache NativesCache { get; } = new();
+		public readonly NativeCache NativesCache = new();
 
 		/// <summary>
 		/// Constructor.
@@ -69,9 +33,10 @@ public partial class JVirtualMachine
 		/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
 		public VirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm)
 		{
+			this._delegateCache = new();
+			
 			this._vm = vm;
 			this.Reference = vmRef;
-			this.DelegateCache = new();
 			this.ThreadCache = new(vm);
 		}
 
@@ -84,9 +49,8 @@ public partial class JVirtualMachine
 		{
 			Type typeOfT = typeof(TDelegate);
 			IntPtr ptr = VirtualMachineCache.getPointer[typeOfT](this.Reference);
-			return this.DelegateCache.GetDelegate<TDelegate>(ptr);
+			return this._delegateCache.GetDelegate<TDelegate>(ptr);
 		}
-
 		/// <summary>
 		/// Register a <see cref="JGlobal"/> instance.
 		/// </summary>
@@ -156,59 +120,6 @@ public partial class JVirtualMachine
 				    weak.TryGetTarget(out JGlobal? jGlobal) && !jGlobal.IsDefault)
 					env.DeleteGlobalRef(jGlobal.Reference);
 			}
-		}
-		/// <inheritdoc cref="JVirtualMachine.CreateTransaction(Int32)"/>
-		public INativeTransaction CreateTransaction(Int32 capacity)
-			=> JniTransactionHandle.CreateTransaction(capacity, this._transactions);
-		/// <inheritdoc cref="JVirtualMachine.CreateSynchronized(IEnvironment, JReferenceObject)"/>
-		public IDisposable CreateSynchronized(IEnvironment env, JReferenceObject jObject)
-			=> JniTransactionHandle.CreateSynchronizer(env, jObject, this._transactions);
-		/// <inheritdoc cref="JVirtualMachine.CreateMemoryAdapter(JStringObject, JMemoryReferenceKind, Nullable{Boolean})"/>
-		public INativeMemoryAdapter CreateMemoryAdapter(JStringObject jString, JMemoryReferenceKind referenceKind,
-			Boolean? critical)
-			=> JniTransactionHandle.CreateMemoryAdapter(jString, referenceKind, critical, this._transactions);
-		/// <inheritdoc cref="JVirtualMachine.CreateMemoryAdapter{TPrimitive}(JArrayObject{TPrimitive}, JMemoryReferenceKind, Boolean)"/>
-		public INativeMemoryAdapter CreateMemoryAdapter<TPrimitive>(JArrayObject<TPrimitive> jArray,
-			JMemoryReferenceKind referenceKind, Boolean critical)
-			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
-			=> JniTransactionHandle.CreateMemoryAdapter(jArray, referenceKind, critical, this._transactions);
-		/// <summary>
-		/// Indicates whether given <paramref name="jRef"/> is begin using by a transaction.
-		/// </summary>
-		/// <param name="jRef">A <see cref="IntPtr"/> value.</param>
-		/// <returns>
-		/// <see langword="true"/> if <paramref name="jRef"/> is begin using by a transaction;
-		/// otherwise, <see langword="false"/>.
-		/// </returns>
-		public Boolean InTransaction(IntPtr jRef)
-		{
-			Boolean result = false;
-			Parallel.ForEach(this._transactions.Values, (t, s) =>
-			{
-				if (!t.Contains(jRef)) return;
-				result = true;
-				s.Stop();
-			});
-			return result;
-		}
-
-		public override void LoadMainClasses(JEnvironment env)
-		{
-			base.LoadMainClasses(env);
-
-			this.GlobalClassCache[this.ClassMetadata.Hash] = this.ClassObject;
-			this.GlobalClassCache[this.ThrowableMetadata.Hash] = this.ThrowableObject;
-			this.GlobalClassCache[this.StackTraceElementMetadata.Hash] = this.StackTraceElementObject;
-
-			this.GlobalClassCache[this.BooleanMetadata.Hash] = this.VoidPrimitive;
-			this.GlobalClassCache[this.BooleanMetadata.Hash] = this.BooleanPrimitive;
-			this.GlobalClassCache[this.ByteMetadata.Hash] = this.BytePrimitive;
-			this.GlobalClassCache[this.CharMetadata.Hash] = this.CharPrimitive;
-			this.GlobalClassCache[this.DoubleMetadata.Hash] = this.DoublePrimitive;
-			this.GlobalClassCache[this.FloatMetadata.Hash] = this.FloatPrimitive;
-			this.GlobalClassCache[this.IntMetadata.Hash] = this.IntPrimitive;
-			this.GlobalClassCache[this.LongMetadata.Hash] = this.LongPrimitive;
-			this.GlobalClassCache[this.ShortMetadata.Hash] = this.ShortPrimitive;
 		}
 	}
 }
