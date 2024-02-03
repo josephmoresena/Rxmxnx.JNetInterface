@@ -40,7 +40,7 @@ public partial class JEnumObject
 
 			/// <inheritdoc/>
 			public override String ToString()
-				=> $"{{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 			/// <inheritdoc/>
 			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,

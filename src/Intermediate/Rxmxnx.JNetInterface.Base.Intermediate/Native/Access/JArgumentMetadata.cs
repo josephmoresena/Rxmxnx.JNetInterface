@@ -25,8 +25,8 @@ public sealed record JArgumentMetadata
 		this.Size = size;
 	}
 
-	/// <inheritdoc/>
-	public override String ToString()
+	/// <inheritdoc cref="Object.ToString()"/>
+	internal String ToSimplifiedString()
 		=> $"{{ {nameof(JArgumentMetadata.Signature)} = {this.Signature}, {nameof(JArgumentMetadata.Size)} = {this.Size} }}";
 
 	/// <summary>

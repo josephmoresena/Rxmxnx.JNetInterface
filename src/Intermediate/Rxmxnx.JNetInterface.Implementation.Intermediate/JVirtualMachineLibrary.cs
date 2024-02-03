@@ -8,20 +8,21 @@ public sealed record JVirtualMachineLibrary
 	/// <summary>
 	/// Name of <c>JNI_GetDefaultJavaVMInitArgs</c> function.
 	/// </summary>
-	private const String getDefaultVirtualMachineInitArgsName = "JNI_GetDefaultJavaVMInitArgs";
+	private const String GetDefaultVirtualMachineInitArgsName = "JNI_GetDefaultJavaVMInitArgs";
 	/// <summary>
 	/// Name of <c>JNI_CreateJavaVM</c> function.
 	/// </summary>
-	private const String createVirtualMachineName = "JNI_CreateJavaVM";
+	private const String CreateVirtualMachineName = "JNI_CreateJavaVM";
 	/// <summary>
 	/// Name of <c>JNI_GetCreatedJavaVMs</c> function.
 	/// </summary>
-	private const String getCreatedVirtualMachinesName = "JNI_GetCreatedJavaVMs";
+	private const String GetCreatedVirtualMachinesName = "JNI_GetCreatedJavaVMs";
+
 	/// <summary>
 	/// Support JNI versions.
 	/// </summary>
 	private static readonly Int32[] jniVersions =
-	{
+	[
 		0x00010006, //JNI_VERSION_1_6
 		0x00010008, //JNI_VERSION_1_8
 		0x00090000, //JNI_VERSION_9
@@ -29,7 +30,8 @@ public sealed record JVirtualMachineLibrary
 		0x00130000, //JNI_VERSION_19
 		0x00140000, //JNI_VERSION_20
 		0x00150000, //JNI_VERSION_21
-	};
+	];
+
 	/// <summary>
 	/// Delegate for <c>JNI_CreateJavaVM</c> function. Loads and initializes a Java VM.
 	/// </summary>
@@ -56,7 +58,7 @@ public sealed record JVirtualMachineLibrary
 	/// <param name="getDefaultVirtualMachineInitArgs">A <see cref="GetDefaultVirtualMachineInitArgsDelegate"/> delegate.</param>
 	/// <param name="createVirtualMachine">A <see cref="CreateVirtualMachineDelegate"/> delegate.</param>
 	/// <param name="getCreatedVirtualMachines">A <see cref="GetCreatedVirtualMachinesDelegate"/> delegate.</param>
-	internal JVirtualMachineLibrary(IntPtr handle,
+	private JVirtualMachineLibrary(IntPtr handle,
 		GetDefaultVirtualMachineInitArgsDelegate getDefaultVirtualMachineInitArgs,
 		CreateVirtualMachineDelegate createVirtualMachine, GetCreatedVirtualMachinesDelegate getCreatedVirtualMachines)
 	{
@@ -169,13 +171,13 @@ public sealed record JVirtualMachineLibrary
 			return default;
 		GetDefaultVirtualMachineInitArgsDelegate? getDefaultVirtualMachineInitArgs =
 			NativeUtilities.GetNativeMethod<GetDefaultVirtualMachineInitArgsDelegate>(
-				handle.Value, JVirtualMachineLibrary.getDefaultVirtualMachineInitArgsName);
+				handle.Value, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName);
 		CreateVirtualMachineDelegate? createVirtualMachine =
 			NativeUtilities.GetNativeMethod<CreateVirtualMachineDelegate>(
-				handle.Value, JVirtualMachineLibrary.createVirtualMachineName);
+				handle.Value, JVirtualMachineLibrary.CreateVirtualMachineName);
 		GetCreatedVirtualMachinesDelegate? getCreatedVirtualMachines =
 			NativeUtilities.GetNativeMethod<GetCreatedVirtualMachinesDelegate>(
-				handle.Value, JVirtualMachineLibrary.getCreatedVirtualMachinesName);
+				handle.Value, JVirtualMachineLibrary.GetCreatedVirtualMachinesName);
 		if (getDefaultVirtualMachineInitArgs is not null && createVirtualMachine is not null &&
 		    getCreatedVirtualMachines is not null)
 			return new(handle.Value, getDefaultVirtualMachineInitArgs, createVirtualMachine, getCreatedVirtualMachines);

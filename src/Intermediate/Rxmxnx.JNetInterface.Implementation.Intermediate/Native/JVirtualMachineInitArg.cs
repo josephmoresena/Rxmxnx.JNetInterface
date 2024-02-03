@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This record stores a VM initialization argument.
 /// </summary>
-public sealed record JVirtualMachineInitArg
+public sealed partial record JVirtualMachineInitArg
 {
 	/// <inheritdoc cref="JVirtualMachineInitArg.Version"/>
 	private readonly Int32 _version;
@@ -15,7 +15,7 @@ public sealed record JVirtualMachineInitArg
 	/// <summary>
 	/// Initialize options.
 	/// </summary>
-	public JVirtualMachineInitOption[] Options { get; init; }
+	public IList<JVirtualMachineInitOption> Options { get; }
 	/// <summary>
 	/// Indicates whether initialization ignores any unrecognized option.
 	/// </summary>
@@ -39,8 +39,8 @@ public sealed record JVirtualMachineInitArg
 	{
 		this._version = value.Version;
 		this.IgnoreUnrecognized = new JBoolean(value.IgnoreUnrecognized).Value;
-		this.Options =
+		this.Options = new OptionList(
 			JVirtualMachineInitOption.GetOptions(
-				MemoryMarshal.CreateSpan(ref value.Options.Reference, value.OptionsLenght));
+				MemoryMarshal.CreateSpan(ref value.Options.Reference, value.OptionsLenght)));
 	}
 }

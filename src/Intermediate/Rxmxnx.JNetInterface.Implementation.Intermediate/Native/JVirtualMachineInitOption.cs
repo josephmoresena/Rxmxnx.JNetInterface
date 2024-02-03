@@ -27,11 +27,15 @@ public sealed record JVirtualMachineInitOption
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">A <see cref="JVirtualMachineInitOptionValue"/> value.</param>
-	internal JVirtualMachineInitOption(JVirtualMachineInitOptionValue value)
+	private JVirtualMachineInitOption(JVirtualMachineInitOptionValue value)
 	{
 		this.Name = JVirtualMachineInitOption.GetUnsafeCString(value.Name);
 		this.ExtraInfo = JVirtualMachineInitOption.GetUnsafeCString(value.ExtraInfo);
 	}
+
+	/// <inheritdoc cref="Object.ToString()"/>
+	internal String ToSimplifiedString()
+		=> $"{{ {nameof(JVirtualMachineInitOption.Name)} = {this.Name}, {nameof(JVirtualMachineInitOption.ExtraInfo)} = {this.ExtraInfo} }}";
 
 	/// <summary>
 	/// Creates a <see cref="JVirtualMachineInitOption"/> array from a read-only span of
@@ -39,11 +43,11 @@ public sealed record JVirtualMachineInitOption
 	/// </summary>
 	/// <param name="values">A read-only span of <see cref="JVirtualMachineInitOptionValue"/> values.</param>
 	/// <returns>A <see cref="JVirtualMachineInitOption"/> array.</returns>
-	internal static JVirtualMachineInitOption[] GetOptions(ReadOnlySpan<JVirtualMachineInitOptionValue> values)
+	internal static List<JVirtualMachineInitOption> GetOptions(ReadOnlySpan<JVirtualMachineInitOptionValue> values)
 	{
-		JVirtualMachineInitOption[] result = new JVirtualMachineInitOption[values.Length];
-		for (Int32 i = 0; i < result.Length; i++)
-			result[i] = new(values[i]);
+		List<JVirtualMachineInitOption> result = new(values.Length);
+		for (Int32 i = 0; i < result.Count; i++)
+			result.Add(new(values[i]));
 		return result;
 	}
 	/// <summary>
@@ -51,9 +55,9 @@ public sealed record JVirtualMachineInitOption
 	/// </summary>
 	/// <param name="options">A <see cref="JVirtualMachineInitOption"/> array.</param>
 	/// <returns>A <see cref="CStringSequence"/> instance.</returns>
-	internal static CStringSequence GetOptionsSequence(JVirtualMachineInitOption[] options)
+	internal static CStringSequence GetOptionsSequence(IList<JVirtualMachineInitOption> options)
 	{
-		List<CString> list = new(options.Length * 2);
+		List<CString> list = new(options.Count * 2);
 		foreach (JVirtualMachineInitOption option in options)
 		{
 			list.Add(option.Name);

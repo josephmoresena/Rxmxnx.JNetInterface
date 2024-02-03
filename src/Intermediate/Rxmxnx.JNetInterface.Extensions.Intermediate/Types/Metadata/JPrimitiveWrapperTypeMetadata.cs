@@ -32,7 +32,8 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 		=> this._baseMetadata = baseMetadata ?? IClassType.GetMetadata<JLocalObject>();
 
 	/// <inheritdoc/>
-	public override String ToString() => $"{{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+	public override String ToString()
+		=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 	/// <inheritdoc/>
 	internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,

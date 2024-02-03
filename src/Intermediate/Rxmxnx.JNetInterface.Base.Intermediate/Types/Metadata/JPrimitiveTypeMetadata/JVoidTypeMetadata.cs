@@ -33,6 +33,7 @@ public partial record JPrimitiveTypeMetadata
 		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes)
 			=> throw new InvalidOperationException("A void value can't be created.");
 		/// <inheritdoc/>
-		public override String ToString() => $"{{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+		public override String ToString()
+			=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 	}
 }

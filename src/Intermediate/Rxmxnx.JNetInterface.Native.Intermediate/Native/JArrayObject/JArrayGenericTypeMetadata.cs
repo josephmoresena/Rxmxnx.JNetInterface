@@ -29,7 +29,8 @@ public partial class JArrayObject<TElement>
 		private JArrayGenericTypeMetadata() : base(IDataType.GetMetadata<TElement>().ArraySignature,
 		                                           JArrayTypeMetadata.GetArrayDeep<TElement>()) { }
 		/// <inheritdoc/>
-		public override String ToString() => $"{{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+		public override String ToString()
+			=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 		/// <inheritdoc/>
 		internal override JLocalObject
