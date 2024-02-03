@@ -12,7 +12,7 @@ public partial class JThrowableObject
 			/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 			private readonly JClassTypeMetadata? _baseMetadata;
 			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
-			private readonly IImmutableSet<JInterfaceTypeMetadata> _interfaces;
+			private readonly IReadOnlySet<JInterfaceTypeMetadata> _interfaces;
 			/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 			private readonly JTypeModifier _modifier;
 
@@ -25,7 +25,7 @@ public partial class JThrowableObject
 			/// <inheritdoc/>
 			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TThrowable>();
 			/// <inheritdoc/>
-			public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
+			public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
 
 			/// <summary>
 			/// Constructor.
@@ -37,9 +37,13 @@ public partial class JThrowableObject
 				JClassTypeMetadata? baseMetadata) : base(builder.DataTypeName, builder.Signature)
 			{
 				this._modifier = modifier;
-				this._interfaces = builder.CreateInterfaceSet();
+				this._interfaces = InterfaceSet.GetClassInterfaces(baseMetadata, builder.GetInterfaceSet());
 				this._baseMetadata = baseMetadata;
 			}
+
+			/// <inheritdoc/>
+			public override String ToString()
+				=> $"{{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 			/// <inheritdoc/>
 			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,

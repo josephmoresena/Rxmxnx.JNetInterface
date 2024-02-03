@@ -19,6 +19,15 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 	public String Name => this._name ??= this.GetName();
 
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
+	/// <summary>
+	/// Returns the name of current instance.
+	/// </summary>
+	/// <returns>Returns the name of current instance.</returns>
+	internal virtual String GetName()
+	{
+		using JStringObject enumName = this.Environment.Functions.GetName(this);
+		return enumName.Value;
+	}
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	protected new virtual EnumObjectMetadata CreateMetadata()

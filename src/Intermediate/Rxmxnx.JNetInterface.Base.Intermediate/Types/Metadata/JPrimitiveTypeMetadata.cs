@@ -72,10 +72,17 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 		this._underlineType = underlineType;
 		this._wrapperInformation = JDataTypeMetadata.CreateInformationSequence(wrapperClassName);
 	}
+
 	/// <summary>
 	/// Creates a <see cref="IPrimitiveType"/> value from <paramref name="bytes"/>.
 	/// </summary>
 	/// <param name="bytes">Binary read-only span.</param>
 	/// <returns>A <see cref="IPrimitiveType"/> value from <paramref name="bytes"/>.</returns>
 	public abstract IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes);
+
+	/// <inheritdoc/>
+	public override String ToString()
+		=> base.ToString() + $"{nameof(JPrimitiveTypeMetadata.UnderlineType)} = {this.UnderlineType}, " +
+			$"{nameof(JPrimitiveTypeMetadata.NativeType)} = {this.NativeType}, " +
+			$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {this.WrapperClassName}, ";
 }

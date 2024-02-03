@@ -12,14 +12,14 @@ public partial class JEnumObject
 			/// <inheritdoc cref="JEnumTypeMetadata.Fields"/>
 			private readonly IEnumFieldList _fields;
 			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
-			private readonly IImmutableSet<JInterfaceTypeMetadata> _interfaces;
+			private readonly IReadOnlySet<JInterfaceTypeMetadata> _interfaces;
 
 			/// <inheritdoc/>
 			public override Type Type => typeof(TEnum);
 			/// <inheritdoc/>
-			public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
+			public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
 			/// <inheritdoc/>
-			public override JClassTypeMetadata BaseMetadata => JEnumObject.JEnumClassMetadata;
+			public override JClassTypeMetadata BaseMetadata => JEnumObject.enumClassMetadata;
 			/// <inheritdoc/>
 			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TEnum>();
 			/// <inheritdoc/>
@@ -34,8 +34,13 @@ public partial class JEnumObject
 				builder.DataTypeName, builder.Signature)
 			{
 				this._fields = fields;
-				this._interfaces = builder.CreateInterfaceSet();
+				this._interfaces =
+					InterfaceSet.GetClassInterfaces(JEnumObject.enumClassMetadata, builder.GetInterfaceSet());
 			}
+
+			/// <inheritdoc/>
+			public override String ToString()
+				=> $"{{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 			/// <inheritdoc/>
 			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,

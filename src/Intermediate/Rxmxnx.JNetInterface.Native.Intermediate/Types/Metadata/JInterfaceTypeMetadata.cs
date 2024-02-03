@@ -14,8 +14,6 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	public override JTypeKind Kind => JTypeKind.Interface;
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier => JTypeModifier.Abstract;
-	/// <inheritdoc/>
-	public override JClassTypeMetadata? BaseMetadata => default;
 
 	/// <summary>
 	/// Constructor.

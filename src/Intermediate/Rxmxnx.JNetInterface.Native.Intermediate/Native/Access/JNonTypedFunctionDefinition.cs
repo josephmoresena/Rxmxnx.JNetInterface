@@ -70,4 +70,9 @@ internal sealed record JNonTypedFunctionDefinition : JFunctionDefinition<JLocalO
 		args.CopyTo(realArgs, 0);
 		return base.InvokeStaticReflected(jMethod, args);
 	}
+
+	/// <inheritdoc/>
+	public override String ToString() => base.ToString();
+	/// <inheritdoc/>
+	public override Int32 GetHashCode() => base.GetHashCode();
 }

@@ -6,7 +6,7 @@
 public abstract record JFieldDefinition : JAccessibleObjectDefinition
 {
 	/// <inheritdoc/>
-	internal override String ToStringFormat => "xField: {0} Descriptor: {1}";
+	internal override String ToStringFormat => "{{ Field: {0} Descriptor: {1} }}";
 
 	/// <summary>
 	/// Return type.
@@ -20,6 +20,9 @@ public abstract record JFieldDefinition : JAccessibleObjectDefinition
 	/// <param name="signature">Signature field.</param>
 	internal JFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(
 		new CStringSequence(name, signature)) { }
+
+	/// <inheritdoc/>
+	public override String ToString() => base.ToString();
 
 	/// <summary>
 	/// Retrieves a <see cref="JFieldObject"/> reflected from current definition on

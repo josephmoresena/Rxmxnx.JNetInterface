@@ -85,4 +85,12 @@ public partial record JDataTypeMetadata
 	/// <returns>A JNI class name char.</returns>
 	private static Byte EscapeClassNameChar(Byte classNameChar)
 		=> classNameChar == JDataTypeMetadata.classNameEscape[0] ? JDataTypeMetadata.classNameEscape[1] : classNameChar;
+	/// <summary>
+	/// Computes the type signature for given type class name.
+	/// </summary>
+	/// <param name="className"><see cref="IDataType"/> class name.</param>
+	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
+	private static CString ComputeReferenceTypeSignature(ReadOnlySpan<Byte> className)
+		=> CString.Concat(stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignaturePrefixChar, }, className,
+		                  stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignatureSuffixChar, });
 }

@@ -20,12 +20,16 @@ public partial class JArrayObject<TElement>
 		public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<JArrayObject<TElement>>();
 		/// <inheritdoc/>
 		public override JClassTypeMetadata BaseMetadata => JLocalObject.ObjectClassMetadata;
+		/// <inheritdoc/>
+		public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => InterfaceSet.ArraySet;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		private JArrayGenericTypeMetadata() : base(IDataType.GetMetadata<TElement>().ArraySignature,
 		                                           JArrayTypeMetadata.GetArrayDeep<TElement>()) { }
+		/// <inheritdoc/>
+		public override String ToString() => $"{{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 		/// <inheritdoc/>
 		internal override JLocalObject

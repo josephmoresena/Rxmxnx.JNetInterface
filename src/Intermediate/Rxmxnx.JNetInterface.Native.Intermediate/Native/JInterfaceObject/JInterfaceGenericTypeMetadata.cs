@@ -10,7 +10,7 @@ public partial class JInterfaceObject
 		internal sealed record JInterfaceGenericTypeMetadata : JInterfaceTypeMetadata
 		{
 			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
-			private readonly IImmutableSet<JInterfaceTypeMetadata> _interfaces;
+			private readonly IReadOnlySet<JInterfaceTypeMetadata> _interfaces;
 
 			/// <inheritdoc/>
 			public override Type InterfaceType => typeof(IInterfaceObject<TInterface>);
@@ -19,7 +19,7 @@ public partial class JInterfaceObject
 			/// <inheritdoc/>
 			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TInterface>();
 			/// <inheritdoc/>
-			public override IImmutableSet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
+			public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
 
 			/// <summary>
 			/// Constructor.
@@ -27,7 +27,11 @@ public partial class JInterfaceObject
 			/// <param name="builder">A <see cref="JLocalObject.JTypeMetadataBuilder"/> instance.</param>
 			internal JInterfaceGenericTypeMetadata(JTypeMetadataBuilder builder) : base(
 				builder.DataTypeName, builder.Signature)
-				=> this._interfaces = builder.CreateInterfaceSet();
+				=> this._interfaces = InterfaceSet.GetInterfaceInterfaces(builder.GetInterfaceSet());
+
+			/// <inheritdoc/>
+			public override String ToString()
+				=> $"{{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 			/// <inheritdoc/>
 			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,

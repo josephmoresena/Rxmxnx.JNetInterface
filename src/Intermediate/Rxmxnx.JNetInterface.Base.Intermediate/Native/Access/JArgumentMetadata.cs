@@ -25,6 +25,10 @@ public sealed record JArgumentMetadata
 		this.Size = size;
 	}
 
+	/// <inheritdoc/>
+	public override String ToString()
+		=> $"{{ {nameof(JArgumentMetadata.Signature)} = {this.Signature}, {nameof(JArgumentMetadata.Size)} = {this.Size} }}";
+
 	/// <summary>
 	/// Retrieves the <see cref="JArgumentMetadata"/> for <typeparamref name="TArg"/> type.
 	/// </summary>

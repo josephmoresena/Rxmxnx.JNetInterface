@@ -18,10 +18,8 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 	/// <inheritdoc/>
 	public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TWrapper>();
 	/// <inheritdoc/>
-	public override IImmutableSet<JInterfaceTypeMetadata> Interfaces
-		=> this.PrimitiveMetadata.SizeOf != 0 ?
-			JPrimitiveWrapperConstants.Interfaces :
-			ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
+	public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces
+		=> this.PrimitiveMetadata.SizeOf != 0 ? InterfaceSet.PrimitiveWrapperSet : InterfaceSet.Empty;
 	/// <inheritdoc/>
 	public override JClassTypeMetadata BaseMetadata => this._baseMetadata;
 
@@ -32,6 +30,9 @@ internal sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JPrimitiveWrapp
 	public JPrimitiveWrapperTypeMetadata(JClassTypeMetadata? baseMetadata = default) : base(
 		TWrapper.PrimitiveMetadata.WrapperInformation)
 		=> this._baseMetadata = baseMetadata ?? IClassType.GetMetadata<JLocalObject>();
+
+	/// <inheritdoc/>
+	public override String ToString() => $"{{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 	/// <inheritdoc/>
 	internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,

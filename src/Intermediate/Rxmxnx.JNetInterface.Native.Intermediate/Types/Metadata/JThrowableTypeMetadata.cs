@@ -9,6 +9,9 @@ public abstract record JThrowableTypeMetadata : JClassTypeMetadata
 	internal JThrowableTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
 
+	/// <inheritdoc/>
+	public override String ToString() => base.ToString();
+
 	/// <summary>
 	/// Creates an exception instance from a <see cref="JGlobalBase"/> throwable instance.
 	/// </summary>

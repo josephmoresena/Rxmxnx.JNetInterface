@@ -21,6 +21,7 @@
 
     <ItemGroup>
         <Using Include="System.ComponentModel"/>
+        <Using Include="System.Collections"/>
         <Using Include="System.Collections.Concurrent"/>
         <Using Include="System.Collections.Immutable"/>
         <Using Include="System.Diagnostics"/>

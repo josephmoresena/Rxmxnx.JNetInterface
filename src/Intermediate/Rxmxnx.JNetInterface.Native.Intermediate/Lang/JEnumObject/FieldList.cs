@@ -63,6 +63,10 @@ public partial class JEnumObject
 				NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
 				return this;
 			}
+
+			/// <inheritdoc/>
+			public override String ToString()
+				=> $"[{String.Join(", ", this._ordinalDictionary.Select(p => $"{{ {p.Key}, {this._nameDictionary[p.Value]} }}"))}]";
 		}
 	}
 }

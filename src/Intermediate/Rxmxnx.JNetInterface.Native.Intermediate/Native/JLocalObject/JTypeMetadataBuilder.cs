@@ -15,9 +15,9 @@ public partial class JLocalObject
 		/// Interface types.
 		/// </summary>
 		private readonly ISet<Type> _interfaceTypes;
-		/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
-		private readonly HashSet<JInterfaceTypeMetadata> _interfaces = [];
 
+		/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
+		private HashSet<JInterfaceTypeMetadata>? _interfaces;
 		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 		private ReadOnlySpan<Byte> _signature;
 
@@ -71,13 +71,15 @@ public partial class JLocalObject
 					NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
 						this._dataTypeName, this._kind != JTypeKind.Interface);
 			}
+			this._interfaces ??= [];
 			this._interfaces.Add(metadata);
 		}
 		/// <summary>
 		/// Creates a metadata interfaces set for current datatype.
 		/// </summary>
 		/// <returns>A set with current datatype interfaces.</returns>
-		public IImmutableSet<JInterfaceTypeMetadata> CreateInterfaceSet() => this._interfaces.ToImmutableHashSet();
+		public IReadOnlySet<JInterfaceTypeMetadata> GetInterfaceSet()
+			=> this._interfaces ?? (IReadOnlySet<JInterfaceTypeMetadata>)ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
 	}
 
 	/// <summary>
