@@ -13,7 +13,6 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JMappedByteBufferObject>
 	                                                      .Create<JDirectByteBufferObject>(
 		                                                      UnicodeClassNames.DirectByteBufferObject())
-	                                                      .Implements<JComparableObject>()
 	                                                      .Implements<JDirectBufferObject>().Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JDirectByteBufferObject.metadata;

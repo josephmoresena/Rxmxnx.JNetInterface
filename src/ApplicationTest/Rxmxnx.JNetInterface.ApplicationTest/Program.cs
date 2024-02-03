@@ -1,9 +1,13 @@
 ﻿using System.Runtime.InteropServices;
 
+using Rxmxnx.JNetInterface.Io;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
+using Rxmxnx.JNetInterface.Nio;
+using Rxmxnx.JNetInterface.Nio.Ch;
 using Rxmxnx.JNetInterface.Primitives;
+using Rxmxnx.JNetInterface.Reflect;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 using Rxmxnx.PInvoke;
@@ -97,6 +101,28 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JCharacterObject>());
 		Console.WriteLine(IDataType.GetMetadata<JLongObject>());
 		Console.WriteLine(IDataType.GetMetadata<JShortObject>());
+
+		Console.WriteLine("====== NIO types ======");
+		Console.WriteLine(IDataType.GetMetadata<JByteBufferObject>());
+		Console.WriteLine(IDataType.GetMetadata<JMappedByteBufferObject>());
+		Console.WriteLine(IDataType.GetMetadata<JDirectByteBufferObject>());
+
+		Console.WriteLine("====== Reflect types ======");
+		Console.WriteLine(IDataType.GetMetadata<JAccessibleObject>());
+		Console.WriteLine(IDataType.GetMetadata<JFieldObject>());
+		Console.WriteLine(IDataType.GetMetadata<JExecutableObject>());
+		Console.WriteLine(IDataType.GetMetadata<JMethodObject>());
+		Console.WriteLine(IDataType.GetMetadata<JConstructorObject>());
+
+		Console.WriteLine("====== Interfaces types ======");
+		Console.WriteLine(IDataType.GetMetadata<JSerializableObject>());
+		Console.WriteLine(IDataType.GetMetadata<JComparableObject>());
+		Console.WriteLine(IDataType.GetMetadata<JCharSequenceObject>());
+		Console.WriteLine(IDataType.GetMetadata<JDirectBufferObject>());
+		Console.WriteLine(IDataType.GetMetadata<JAnnotatedElementObject>());
+		Console.WriteLine(IDataType.GetMetadata<JMemberObject>());
+		Console.WriteLine(IDataType.GetMetadata<JTypeObject>());
+		Console.WriteLine(IDataType.GetMetadata<JGenericDeclarationObject>());
 	}
 	private static void PrintVirtualMachineInfo(JVirtualMachineLibrary jvmLib, Byte[] classByteCode,
 		params String[] args)

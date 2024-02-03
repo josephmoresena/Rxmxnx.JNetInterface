@@ -11,9 +11,7 @@ public sealed class JMethodObject : JExecutableObject, IClassType<JMethodObject>
 	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JExecutableObject>
 	                                                      .Create<JMethodObject>(
 		                                                      UnicodeClassNames.MethodObject(), JTypeModifier.Final)
-	                                                      .Implements<JAnnotatedElementObject>()
-	                                                      .Implements<JGenericDeclarationObject>()
-	                                                      .Implements<JMemberObject>().Build();
+	                                                      .Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JMethodObject.metadata;
 

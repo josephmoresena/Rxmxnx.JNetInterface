@@ -11,9 +11,7 @@ public sealed class JConstructorObject : JExecutableObject, IClassType<JConstruc
 	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JExecutableObject>
 	                                                      .Create<JConstructorObject>(
 		                                                      UnicodeClassNames.ConstructorObject(),
-		                                                      JTypeModifier.Final).Implements<JAnnotatedElementObject>()
-	                                                      .Implements<JGenericDeclarationObject>()
-	                                                      .Implements<JMemberObject>().Build();
+		                                                      JTypeModifier.Final).Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JConstructorObject.metadata;
 

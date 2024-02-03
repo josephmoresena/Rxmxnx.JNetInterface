@@ -22,4 +22,7 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	/// <param name="signature">JNI signature for current type.</param>
 	internal JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, ReadOnlySpan<Byte> signature) : base(
 		interfaceName, signature) { }
+
+	/// <inheritdoc/>
+	public override String ToString() => base.ToString();
 }

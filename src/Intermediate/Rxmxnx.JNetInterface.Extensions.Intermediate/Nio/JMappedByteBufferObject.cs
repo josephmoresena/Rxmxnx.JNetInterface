@@ -11,8 +11,7 @@ public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByte
 	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JByteBufferObject>
 	                                                      .Create<JMappedByteBufferObject>(
 		                                                      UnicodeClassNames.MappedByteBufferObject(),
-		                                                      JTypeModifier.Abstract).Implements<JComparableObject>()
-	                                                      .Build();
+		                                                      JTypeModifier.Abstract).Build();
 
 	static JDataTypeMetadata IDataType.Metadata => JMappedByteBufferObject.metadata;
 

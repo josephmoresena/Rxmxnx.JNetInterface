@@ -13,7 +13,6 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	                                                      .Create<JExecutableObject>(
 		                                                      UnicodeClassNames.ExecutableObject(),
 		                                                      JTypeModifier.Abstract)
-	                                                      .Implements<JAnnotatedElementObject>()
 	                                                      .Implements<JGenericDeclarationObject>()
 	                                                      .Implements<JMemberObject>().Build();
 

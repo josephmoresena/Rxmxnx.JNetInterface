@@ -12,7 +12,6 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JAccessibleObject>
 	                                                      .Create<JFieldObject>(
 		                                                      UnicodeClassNames.FieldObject(), JTypeModifier.Final)
-	                                                      .Implements<JAnnotatedElementObject>()
 	                                                      .Implements<JGenericDeclarationObject>()
 	                                                      .Implements<JMemberObject>().Build();
 
