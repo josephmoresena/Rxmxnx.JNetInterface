@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "DebugBaseSourceGenerator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../Rxmxnx.JNetInterface.Base.Intermediate/Rxmxnx.JNetInterface.Base.Intermediate.csproj"
+    },
+    "DebugPrimitivesSourceGenerator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../Rxmxnx.JNetInterface.Primitives.Intermediate/Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"
+    },
+    "DebugNativeSourceGenerator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../Rxmxnx.JNetInterface.Native.Intermediate/Rxmxnx.JNetInterface.Native.Intermediate.csproj"
+    },
+    "DebugExtensionsSourceGenerator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../Rxmxnx.JNetInterface.Extensions.Intermediate/Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"
+    }
+  }
+}

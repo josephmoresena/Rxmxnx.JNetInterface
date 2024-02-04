@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
+        <Deterministic>true</Deterministic>
+        <IsTrimmable>true</IsTrimmable>
+        <IsAotCompatible>true</IsAotCompatible>
+        <DocumentationFile>./$(AssemblyName).xml</DocumentationFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <ExcludeXmlAssemblyFiles>false</ExcludeXmlAssemblyFiles>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="System.Collections.Immutable"/>
+        <Using Include="System.ComponentModel"/>
+        <Using Include="System.Diagnostics"/>
+        <Using Include="System.Diagnostics.CodeAnalysis"/>
+        <Using Include="System.Numerics"/>
+        <Using Include="System.Globalization"/>
+        <Using Include="System.Runtime.CompilerServices"/>
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang"/>
+        <Using Include="Rxmxnx.JNetInterface.Io"/>
+        <Using Include="Rxmxnx.JNetInterface.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.References"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
+        <Using Include="Rxmxnx.JNetInterface.Nio"/>
+        <Using Include="Rxmxnx.JNetInterface.Nio.Ch"/>
+        <Using Include="Rxmxnx.JNetInterface.Primitives"/>
+        <Using Include="Rxmxnx.JNetInterface.Reflect"/>
+        <Using Include="Rxmxnx.JNetInterface.Restricted"/>
+        <Using Include="Rxmxnx.JNetInterface.Types"/>
+        <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
+        <ProjectReference Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>Rxmxnx.JNetInterface.Implementation.Intermediate</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+</Project>

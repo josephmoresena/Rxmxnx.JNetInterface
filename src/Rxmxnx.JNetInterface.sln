@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1705.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Base.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj", "{22C8E65E-4093-4FE1-813A-089E3EE755F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.SourceGenerator", "SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj", "{F1FDBE72-DBB4-44CA-849B-4C030A6977CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Primitives.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj", "{CDE71873-44B6-4B99-B3DC-085C04571A63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.ApplicationTest", "ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj", "{6AA1D8F2-A544-4F20-A635-69CEB6D9CC10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Native.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj", "{0AA09937-4748-482F-8C4C-720F530E22D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Extensions.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj", "{7F6F3562-B79D-4A75-9590-30AF6A09A5A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Implementation.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj", "{6FA09D89-4981-40DB-9DAF-EBC9769780A6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22C8E65E-4093-4FE1-813A-089E3EE755F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22C8E65E-4093-4FE1-813A-089E3EE755F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22C8E65E-4093-4FE1-813A-089E3EE755F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22C8E65E-4093-4FE1-813A-089E3EE755F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1FDBE72-DBB4-44CA-849B-4C030A6977CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1FDBE72-DBB4-44CA-849B-4C030A6977CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1FDBE72-DBB4-44CA-849B-4C030A6977CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1FDBE72-DBB4-44CA-849B-4C030A6977CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDE71873-44B6-4B99-B3DC-085C04571A63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDE71873-44B6-4B99-B3DC-085C04571A63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDE71873-44B6-4B99-B3DC-085C04571A63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDE71873-44B6-4B99-B3DC-085C04571A63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AA1D8F2-A544-4F20-A635-69CEB6D9CC10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AA1D8F2-A544-4F20-A635-69CEB6D9CC10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AA1D8F2-A544-4F20-A635-69CEB6D9CC10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AA1D8F2-A544-4F20-A635-69CEB6D9CC10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AA09937-4748-482F-8C4C-720F530E22D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AA09937-4748-482F-8C4C-720F530E22D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AA09937-4748-482F-8C4C-720F530E22D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AA09937-4748-482F-8C4C-720F530E22D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F6F3562-B79D-4A75-9590-30AF6A09A5A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F6F3562-B79D-4A75-9590-30AF6A09A5A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F6F3562-B79D-4A75-9590-30AF6A09A5A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F6F3562-B79D-4A75-9590-30AF6A09A5A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FA09D89-4981-40DB-9DAF-EBC9769780A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FA09D89-4981-40DB-9DAF-EBC9769780A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FA09D89-4981-40DB-9DAF-EBC9769780A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FA09D89-4981-40DB-9DAF-EBC9769780A6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
