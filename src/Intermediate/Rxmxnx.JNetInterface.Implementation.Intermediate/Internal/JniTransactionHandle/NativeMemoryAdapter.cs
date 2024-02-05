@@ -70,10 +70,10 @@ internal partial struct JniTransactionHandle
 		public abstract void Activate(IEnvironment env);
 
 		/// <inheritdoc/>
-		public override void Dispose()
+		protected override void Dispose(Boolean disposing)
 		{
-			base.Dispose();
-			if (!this.Disposed && this._source is JGlobalBase jGlobal)
+			base.Dispose(disposing);
+			if (disposing && !this.Disposed && this._source is JGlobalBase jGlobal)
 				jGlobal.Dispose();
 		}
 

@@ -17,7 +17,7 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	static JDataTypeMetadata IDataType.Metadata => JByteBufferObject.metadata;
 
 	/// <inheritdoc/>
-	internal JByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
+	private protected JByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
 
 	/// <inheritdoc/>
 	protected JByteBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

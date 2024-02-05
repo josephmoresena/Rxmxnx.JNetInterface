@@ -65,7 +65,7 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <param name="signature">JNI signature for current primitive type.</param>
 	/// <param name="className">Wrapper class name of current primitive type.</param>
 	/// <param name="wrapperClassName">Wrapper class JNI name of current primitive type.</param>
-	internal JPrimitiveTypeMetadata(Int32 sizeOf, Type underlineType, ReadOnlySpan<Byte> signature,
+	private protected JPrimitiveTypeMetadata(Int32 sizeOf, Type underlineType, ReadOnlySpan<Byte> signature,
 		ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(className, signature)
 	{
 		this._sizeOf = sizeOf;

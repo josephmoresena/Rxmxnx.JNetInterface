@@ -17,6 +17,12 @@ public partial class JReferenceObject
 
 	/// <inheritdoc/>
 	internal override void CopyTo(Span<JValue> span, Int32 index) => this.AsSpan().CopyTo(span[index].AsBytes());
+	/// <inheritdoc/>
+	internal override void CopyTo(Span<Byte> span, ref Int32 offset)
+	{
+		this.AsSpan().CopyTo(span[offset..]);
+		offset += NativeUtilities.PointerSize;
+	}
 
 	/// <summary>
 	/// Indicates whether current instance is default value.
@@ -79,11 +85,4 @@ public partial class JReferenceObject
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal virtual TReference To<TReference>() where TReference : unmanaged, INativeType<TReference>
 		=> this.AsSpan().AsValue<TReference>();
-
-	/// <inheritdoc/>
-	internal override void CopyTo(Span<Byte> span, ref Int32 offset)
-	{
-		this.AsSpan().CopyTo(span[offset..]);
-		offset += NativeUtilities.PointerSize;
-	}
 }

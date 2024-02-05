@@ -20,10 +20,10 @@ public abstract record JPrimitiveWrapperTypeMetadata : JClassTypeMetadata
 	public JArgumentMetadata PrimitiveArgumentMetadata => this.PrimitiveMetadata.ArgumentMetadata;
 
 	/// <inheritdoc/>
-	internal JPrimitiveWrapperTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
+	private protected JPrimitiveWrapperTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
 	/// <inheritdoc/>
-	internal JPrimitiveWrapperTypeMetadata(CStringSequence information) : base(information) { }
+	private protected JPrimitiveWrapperTypeMetadata(CStringSequence information) : base(information) { }
 
 	/// <inheritdoc/>
 	public override String ToString()

@@ -43,10 +43,9 @@ internal partial struct JniTransactionHandle
 			this._active = false;
 		}
 
-		/// <inheritdoc/>
-		public override void Dispose()
+		protected override void Dispose(Boolean disposing)
 		{
-			if (!this.Disposed)
+			if (disposing && !this.Disposed)
 				try
 				{
 					if (this._active)
@@ -60,7 +59,7 @@ internal partial struct JniTransactionHandle
 					if (this._jObject is JGlobalBase && this._env is IDisposable thread)
 						thread.Dispose();
 				}
-			base.Dispose();
+			base.Dispose(disposing);
 		}
 	}
 }

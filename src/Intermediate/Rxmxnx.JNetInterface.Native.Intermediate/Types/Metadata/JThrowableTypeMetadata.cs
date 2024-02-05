@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public abstract record JThrowableTypeMetadata : JClassTypeMetadata
 {
 	/// <inheritdoc/>
-	internal JThrowableTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
+	private protected JThrowableTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
 
 	/// <inheritdoc/>

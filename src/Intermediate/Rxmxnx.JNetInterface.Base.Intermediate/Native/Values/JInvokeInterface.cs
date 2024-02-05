@@ -4,6 +4,8 @@
 /// <c>JNIInvokeInterface_</c> struct. Contains all pointers to the functions of the Invocation API.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
+                 Justification = CommonConstants.BinaryStructJustification)]
 internal readonly partial struct JInvokeInterface : INativeType<JInvokeInterface>
 {
 	/// <inheritdoc/>

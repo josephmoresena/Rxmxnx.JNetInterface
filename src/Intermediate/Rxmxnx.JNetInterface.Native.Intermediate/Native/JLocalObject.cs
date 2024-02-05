@@ -61,9 +61,10 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	}
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this._lifetime.Class?.Name ?? JObject.JObjectClassName;
+	public override CString ObjectClassName => this._lifetime.Class?.Name ?? UnicodeClassNames.Object;
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this._lifetime.Class?.ClassSignature ?? JObject.JObjectSignature;
+	public override CString ObjectSignature
+		=> this._lifetime.Class?.ClassSignature ?? UnicodeObjectSignatures.ObjectSignature;
 
 	/// <summary>
 	/// Retrieves a <typeparamref name="TReference"/> instance from current local instance.

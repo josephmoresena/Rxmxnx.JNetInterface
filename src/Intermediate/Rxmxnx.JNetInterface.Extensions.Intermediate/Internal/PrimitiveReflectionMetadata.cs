@@ -22,11 +22,6 @@ internal sealed class PrimitiveReflectionMetadata<TPrimitive> : IReflectionMetad
 	private readonly String _hash;
 
 	/// <summary>
-	/// Internal <see cref="JPrimitiveTypeMetadata"/> instance.
-	/// </summary>
-	private readonly JPrimitiveTypeMetadata _metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-
-	/// <summary>
 	/// Constructor.
 	/// </summary>
 	private PrimitiveReflectionMetadata()

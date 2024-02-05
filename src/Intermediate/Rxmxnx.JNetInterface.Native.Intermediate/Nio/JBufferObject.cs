@@ -61,7 +61,7 @@ public abstract class JBufferObject<TValue> : JBufferObject, IInterfaceObject<JC
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>
 {
 	/// <inheritdoc/>
-	internal JBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
+	private protected JBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
 
 	/// <inheritdoc/>
 	protected JBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

@@ -18,7 +18,7 @@ public abstract record JFieldDefinition : JAccessibleObjectDefinition
 	/// </summary>
 	/// <param name="name">Field name.</param>
 	/// <param name="signature">Signature field.</param>
-	internal JFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(
+	private protected JFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(
 		new CStringSequence(name, signature)) { }
 
 	/// <inheritdoc/>
@@ -62,8 +62,6 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	/// </summary>
 	/// <param name="name">Field name.</param>
 	public JFieldDefinition(ReadOnlySpan<Byte> name) : base(name, IDataType.GetMetadata<TField>().Signature) { }
-	/// <inheritdoc/>
-	internal JFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(name, signature) { }
 	/// <inheritdoc/>
 	internal JFieldDefinition(JFieldDefinition definition) : base(definition) { }
 

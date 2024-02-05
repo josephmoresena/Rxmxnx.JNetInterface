@@ -16,7 +16,8 @@ public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByte
 	static JDataTypeMetadata IDataType.Metadata => JMappedByteBufferObject.metadata;
 
 	/// <inheritdoc/>
-	internal JMappedByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
+	private protected JMappedByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) :
+		base(jClass, localRef) { }
 
 	/// <inheritdoc/>
 	protected JMappedByteBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

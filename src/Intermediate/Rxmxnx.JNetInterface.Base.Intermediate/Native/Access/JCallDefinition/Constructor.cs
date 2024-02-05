@@ -7,7 +7,7 @@ public abstract partial record JCallDefinition
 	/// </summary>
 	/// <param name="name">Call defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	internal JCallDefinition(ReadOnlySpan<Byte> name, params JArgumentMetadata[] metadata) : this(
+	private protected JCallDefinition(ReadOnlySpan<Byte> name, params JArgumentMetadata[] metadata) : this(
 		name, stackalloc Byte[1] { UnicodePrimitiveSignatures.VoidSignatureChar, }, metadata) { }
 	/// <summary>
 	/// Internal constructor.
@@ -15,7 +15,7 @@ public abstract partial record JCallDefinition
 	/// <param name="name">Call defined name.</param>
 	/// <param name="returnType">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	internal JCallDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType,
+	private protected JCallDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType,
 		params JArgumentMetadata[] metadata) : base(new CStringSequence(
 			                                            name,
 			                                            JCallDefinition.CreateDescriptor(

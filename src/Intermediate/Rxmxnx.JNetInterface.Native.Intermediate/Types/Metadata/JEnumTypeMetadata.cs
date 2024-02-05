@@ -20,8 +20,8 @@ public abstract record JEnumTypeMetadata : JReferenceTypeMetadata
 	/// </summary>
 	/// <param name="className">Enum name of current type.</param>
 	/// <param name="signature">JNI signature for current type.</param>
-	internal JEnumTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) :
-		base(className, signature) { }
+	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
+		className, signature) { }
 
 	/// <inheritdoc/>
 	public override String ToString() => $"{base.ToString()}{nameof(JEnumTypeMetadata.Fields)} = {this.Fields}, ";

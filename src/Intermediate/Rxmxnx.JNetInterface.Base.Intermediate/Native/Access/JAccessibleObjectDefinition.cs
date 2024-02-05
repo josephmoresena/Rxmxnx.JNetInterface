@@ -27,7 +27,7 @@ public abstract record JAccessibleObjectDefinition
 	/// <param name="sequence">
 	/// <see cref="CStringSequence"/> containing the name and descriptor of the method.
 	/// </param>
-	internal JAccessibleObjectDefinition(CStringSequence sequence) => this._sequence = sequence;
+	private protected JAccessibleObjectDefinition(CStringSequence sequence) => this._sequence = sequence;
 
 	/// <inheritdoc/>
 	public override String ToString() => String.Format(this.ToStringFormat, this._sequence[0], this._sequence[1]);

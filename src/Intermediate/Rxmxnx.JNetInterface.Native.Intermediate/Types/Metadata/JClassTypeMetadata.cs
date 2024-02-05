@@ -14,10 +14,10 @@ public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 	public CString? BaseClassName => this.BaseMetadata?.ClassName;
 
 	/// <inheritdoc/>
-	internal JClassTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) :
-		base(className, signature) { }
+	private protected JClassTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
+		className, signature) { }
 	/// <inheritdoc/>
-	internal JClassTypeMetadata(CStringSequence information) : base(information) { }
+	private protected JClassTypeMetadata(CStringSequence information) : base(information) { }
 
 	/// <inheritdoc/>
 	public override String ToString()

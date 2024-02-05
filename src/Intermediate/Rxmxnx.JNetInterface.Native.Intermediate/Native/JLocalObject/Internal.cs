@@ -6,8 +6,10 @@ public partial class JLocalObject
 	/// Datatype metadata.
 	/// </summary>
 	internal static readonly JClassTypeMetadata ObjectClassMetadata = JTypeMetadataBuilder<JLocalObject>
-	                                                                  .Create(JObject.JObjectClassName)
-	                                                                  .WithSignature(JObject.JObjectSignature).Build();
+	                                                                  .Create(UnicodeClassNames.Object)
+	                                                                  .WithSignature(
+		                                                                  UnicodeObjectSignatures.ObjectSignature)
+	                                                                  .Build();
 
 	static JClassTypeMetadata IBaseClassType<JLocalObject>.SuperClassMetadata => JLocalObject.ObjectClassMetadata;
 

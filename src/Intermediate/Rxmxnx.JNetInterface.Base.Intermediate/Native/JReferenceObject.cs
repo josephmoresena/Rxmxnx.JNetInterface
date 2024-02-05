@@ -15,7 +15,7 @@ public abstract partial class JReferenceObject : JObject
 	/// Parameterless constructor.
 	/// </summary>
 	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	internal JReferenceObject(Boolean? isDummy = default)
+	private protected JReferenceObject(Boolean? isDummy = default)
 	{
 		this._isDummy = isDummy.GetValueOrDefault();
 		this._id = isDummy.HasValue ? JReferenceObject.CreateInstanceId() : -1;
@@ -24,7 +24,7 @@ public abstract partial class JReferenceObject : JObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="jObject"><see cref="JReferenceObject"/> instance.</param>
-	internal JReferenceObject(JReferenceObject jObject)
+	private protected JReferenceObject(JReferenceObject jObject)
 	{
 		this._isDummy = jObject._isDummy;
 		this._id = jObject._id != -1 ? JReferenceObject.CreateInstanceId() : -1;

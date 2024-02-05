@@ -14,7 +14,7 @@ public abstract partial record JFunctionDefinition : JCallDefinition
 	/// <param name="functionName">Method defined name.</param>
 	/// <param name="returnType">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	internal JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
+	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
 		params JArgumentMetadata[] metadata) : base(functionName, returnType, metadata) { }
 
 	/// <summary>
@@ -69,7 +69,7 @@ public partial record JFunctionDefinition<TResult> : JFunctionDefinition where T
 	/// <param name="functionName">Function name.</param>
 	/// <param name="returnType">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	internal JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
+	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
 		params JArgumentMetadata[] metadata) : base(functionName, returnType, metadata) { }
 	/// <summary>
 	/// Internal Constructor.

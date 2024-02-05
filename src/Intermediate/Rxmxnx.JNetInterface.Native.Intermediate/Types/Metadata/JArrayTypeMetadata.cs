@@ -29,7 +29,7 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 	/// </summary>
 	/// <param name="signature">JNI signature for current array type.</param>
 	/// <param name="deep">Array deep.</param>
-	internal JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Int32 deep) : base(signature, signature)
+	private protected JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Int32 deep) : base(signature, signature)
 	{
 		this.Deep = deep;
 		JArrayTypeMetadata.arrayMetadatas.TryAdd(this.Signature.ToHexString(), this);
