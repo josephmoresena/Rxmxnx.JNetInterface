@@ -9,7 +9,7 @@ internal interface IPrimitiveValue<TValue> : IObject, IComparable, IConvertible,
 	where TValue : unmanaged, IComparable, IConvertible, IEquatable<TValue>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	Int32 IComparable.CompareTo(Object? other) => this.Value.CompareTo(other);
+	Int32 IComparable.CompareTo(Object? obj) => this.Value.CompareTo(obj);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Int32 IComparable<TValue>.CompareTo(TValue other)
 		=> (this.Value as IComparable<TValue>)?.CompareTo(other) ?? this.Value.CompareTo(other);
