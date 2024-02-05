@@ -6,7 +6,7 @@ internal partial class JPrimitiveObject
 	/// Internal <see cref="JPrimitiveObject"/> implementation.
 	/// </summary>
 	/// <typeparam name="TValue">A <see langword="unmanaged"/> type.</typeparam>
-	public abstract partial class Generic<TValue> : JPrimitiveObject, IWrapper<TValue>, IPrimitiveType
+	public abstract partial class Generic<TValue> : JPrimitiveObject, IPrimitiveType, IPrimitiveValue<TValue>
 		where TValue : unmanaged, IEquatable<TValue>, IComparable, IConvertible
 	{
 		/// <summary>
