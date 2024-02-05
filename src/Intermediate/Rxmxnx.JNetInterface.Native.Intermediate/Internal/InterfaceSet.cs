@@ -31,24 +31,21 @@ internal partial record InterfaceSet : IReadOnlySet<JInterfaceTypeMetadata>
 	IEnumerator<JInterfaceTypeMetadata> IEnumerable<JInterfaceTypeMetadata>.GetEnumerator()
 		=> this.Enumerable.GetEnumerator();
 	IEnumerator IEnumerable.GetEnumerator() => this.Enumerable.GetEnumerator();
+	Boolean IReadOnlySet<JInterfaceTypeMetadata>.IsProperSubsetOf(IEnumerable<JInterfaceTypeMetadata> other)
+		=> this.GetFullSet().IsProperSubsetOf(other);
+	Boolean IReadOnlySet<JInterfaceTypeMetadata>.IsProperSupersetOf(IEnumerable<JInterfaceTypeMetadata> other)
+		=> this.GetFullSet().IsProperSupersetOf(other);
+	Boolean IReadOnlySet<JInterfaceTypeMetadata>.IsSubsetOf(IEnumerable<JInterfaceTypeMetadata> other)
+		=> this.GetFullSet().IsSubsetOf(other);
+	Boolean IReadOnlySet<JInterfaceTypeMetadata>.IsSupersetOf(IEnumerable<JInterfaceTypeMetadata> other)
+		=> this.GetFullSet().IsSubsetOf(other);
+	Boolean IReadOnlySet<JInterfaceTypeMetadata>.Overlaps(IEnumerable<JInterfaceTypeMetadata> other)
+		=> this.GetFullSet().Overlaps(other);
+	Boolean IReadOnlySet<JInterfaceTypeMetadata>.SetEquals(IEnumerable<JInterfaceTypeMetadata> other)
+		=> this.GetFullSet().SetEquals(other);
 
 	/// <inheritdoc/>
 	public virtual Boolean Contains(JInterfaceTypeMetadata item) => this._internalSet.Contains(item);
-	/// <inheritdoc/>
-	public virtual Boolean IsProperSubsetOf(IEnumerable<JInterfaceTypeMetadata> other)
-		=> this._internalSet.IsProperSubsetOf(other);
-	/// <inheritdoc/>
-	public virtual Boolean IsProperSupersetOf(IEnumerable<JInterfaceTypeMetadata> other)
-		=> this._internalSet.IsProperSupersetOf(other);
-	/// <inheritdoc/>
-	public virtual Boolean IsSubsetOf(IEnumerable<JInterfaceTypeMetadata> other) => this._internalSet.IsSubsetOf(other);
-	/// <inheritdoc/>
-	public virtual Boolean IsSupersetOf(IEnumerable<JInterfaceTypeMetadata> other)
-		=> this._internalSet.IsSupersetOf(other);
-	/// <inheritdoc/>
-	public virtual Boolean Overlaps(IEnumerable<JInterfaceTypeMetadata> other) => this._internalSet.Overlaps(other);
-	/// <inheritdoc/>
-	public virtual Boolean SetEquals(IEnumerable<JInterfaceTypeMetadata> other) => this._internalSet.SetEquals(other);
 
 	/// <inheritdoc/>
 	public override String ToString()
