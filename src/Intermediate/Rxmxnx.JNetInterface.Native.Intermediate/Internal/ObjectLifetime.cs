@@ -260,7 +260,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	{
 		if (Object.ReferenceEquals(jGlobal, this._global))
 			this._global = default;
-		else if (Object.ReferenceEquals(jGlobal, this._global))
+		else if (Object.ReferenceEquals(jGlobal, this._weak))
 			this._weak = default;
 		if (Object.ReferenceEquals(jGlobal, this.Secondary?._global))
 			this.Secondary._global = default;

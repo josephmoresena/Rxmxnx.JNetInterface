@@ -27,6 +27,9 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 	/// <inheritdoc/>
+	public override Int32 GetHashCode() => this.Value.GetHashCode();
+
+	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
 		=> new PrimitiveWrapperObjectMetadata<JChar>(base.CreateMetadata()) { Value = this.Value, };
 	/// <inheritdoc/>

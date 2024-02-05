@@ -15,8 +15,10 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	/// <param name="value">Instance value.</param>
 	internal JBooleanObject(JClassObject jClass, JObjectLocalRef localRef, JBoolean value) : base(jClass, localRef)
 		=> this._value = value;
+
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Value.Equals(other);
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Value.Equals(other);
+
 	/// <summary>
 	/// Internal value.
 	/// </summary>
@@ -27,6 +29,8 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
+	/// <inheritdoc/>
+	public override Int32 GetHashCode() => this.Value.GetHashCode();
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

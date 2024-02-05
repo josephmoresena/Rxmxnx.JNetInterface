@@ -1,10 +1,10 @@
+namespace Rxmxnx.JNetInterface;
+
 /// <summary>
 /// Set of <see cref="IPrimitiveType"/> native extensions.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CA1050
 public static class JPrimitiveExtensions
-#pragma warning restore CA1050
 {
 	/// <summary>
 	/// Creates a <see cref="JBooleanObject"/> from current value.
