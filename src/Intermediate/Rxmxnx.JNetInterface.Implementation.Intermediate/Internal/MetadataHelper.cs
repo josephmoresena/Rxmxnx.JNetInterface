@@ -23,6 +23,7 @@ internal static class MetadataHelper
 		{ IDataType.GetHash<JEnumObject>(), IReferenceType.GetMetadata<JEnumObject>() },
 		{ IDataType.GetHash<JThrowableObject>(), IReferenceType.GetMetadata<JThrowableObject>() },
 		{ IDataType.GetHash<JStackTraceElementObject>(), IReferenceType.GetMetadata<JStackTraceElementObject>() },
+		{ IDataType.GetHash<JClassLoaderObject>(), IReferenceType.GetMetadata<JClassLoaderObject>() },
 		{ IDataType.GetHash<JBufferObject>(), IReferenceType.GetMetadata<JBufferObject>() },
 		{ IDataType.GetHash<JAccessibleObject>(), IReferenceType.GetMetadata<JAccessibleObject>() },
 		{ IDataType.GetHash<JExecutableObject>(), IReferenceType.GetMetadata<JExecutableObject>() },
@@ -64,6 +65,10 @@ internal static class MetadataHelper
 		{
 			IDataType.GetHash<JArrayObject<JStackTraceElementObject>>(),
 			IReferenceType.GetMetadata<JArrayObject<JStackTraceElementObject>>()
+		},
+		{
+			IDataType.GetHash<JArrayObject<JClassLoaderObject>>(),
+			IReferenceType.GetMetadata<JArrayObject<JClassLoaderObject>>()
 		},
 		{ IDataType.GetHash<JArrayObject<JBufferObject>>(), IReferenceType.GetMetadata<JArrayObject<JBufferObject>>() },
 		{

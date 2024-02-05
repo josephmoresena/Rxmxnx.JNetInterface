@@ -18,10 +18,6 @@ internal static class ClassNames
 	/// </summary>
 	public const String NioPackage = "java/nio/";
 	/// <summary>
-	/// JNI representation of <c>java.util</c> package.
-	/// </summary>
-	public const String UtilPackage = "java/util/";
-	/// <summary>
 	/// JNI representation of <c>java.lang.reflect</c> package.
 	/// </summary>
 	public const String ReflectPackage = ClassNames.LangPackage + "reflect/";
@@ -167,11 +163,10 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.StackTraceElement</c> class.
 	/// </summary>
 	public const String StackTraceElementObject = ClassNames.LangPackage + "StackTraceElement";
-
 	/// <summary>
-	/// JNI name of <c>java.util.Arrays</c> class.
+	/// JNI name of <c>java.lang.ClassLoader</c> class.
 	/// </summary>
-	public const String ArraysObject = ClassNames.UtilPackage + "Arrays";
+	public const String ClassLoaderObject = ClassNames.LangPackage + "ClassLoader";
 
 	/// <summary>
 	/// JNI name of <c>java.nio.Buffer</c> class.

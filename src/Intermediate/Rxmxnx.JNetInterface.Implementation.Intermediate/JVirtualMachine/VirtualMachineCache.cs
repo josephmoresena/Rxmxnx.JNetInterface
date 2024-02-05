@@ -34,7 +34,7 @@ public partial class JVirtualMachine
 		public VirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm)
 		{
 			this._delegateCache = new();
-			
+
 			this._vm = vm;
 			this.Reference = vmRef;
 			this.ThreadCache = new(vm);

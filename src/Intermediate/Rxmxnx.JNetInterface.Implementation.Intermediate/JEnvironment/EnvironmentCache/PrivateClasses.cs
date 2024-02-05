@@ -107,7 +107,7 @@ partial class JEnvironment
 		/// <param name="args">Cache and class loader.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private static JClassObject LoadClass(ReadOnlyFixedMemoryList memoryList,
-			(EnvironmentCache cache, JLocalObject? jClassLoader) args)
+			(EnvironmentCache cache, JClassLoaderObject? jClassLoader) args)
 		{
 			ValidationUtilities.ThrowIfDummy(args.jClassLoader);
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(memoryList[0].Bytes);

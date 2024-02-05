@@ -67,6 +67,10 @@ public partial interface IClassFeature
 	/// </summary>
 	JClassObject NumberClassObject => this.GetClass<JNumberObject>();
 	/// <summary>
+	/// <c>java.lang.ClassLoader</c> class instance.
+	/// </summary>
+	JClassObject ClassLoaderObject => this.GetClass<JClassLoaderObject>();
+	/// <summary>
 	/// <c>java.nio.Buffer</c> class instance.
 	/// </summary>
 	JClassObject BufferClassObject => this.GetClass<JBufferObject>();
@@ -211,7 +215,8 @@ public partial interface IClassFeature
 	/// <param name="rawClassBytes">Binary span with class information.</param>
 	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
-	JClassObject LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes, JLocalObject? jClassLoader = default);
+	JClassObject LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,
+		JClassLoaderObject? jClassLoader = default);
 	/// <summary>
 	/// Loads a java class from its binary information into the current VM.
 	/// </summary>
@@ -219,7 +224,7 @@ public partial interface IClassFeature
 	/// <param name="rawClassBytes">Binary span with class information.</param>
 	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
-	JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JLocalObject? jClassLoader = default)
+	JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
 		where TDataType : JLocalObject, IReferenceType<TDataType>;
 	/// <summary>
 	/// Retrieves the class info.

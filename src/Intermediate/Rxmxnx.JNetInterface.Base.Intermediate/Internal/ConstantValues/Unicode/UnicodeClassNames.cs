@@ -83,9 +83,9 @@ internal static partial class UnicodeClassNames
 	[DefaultValue(ClassNames.StackTraceElementObject)]
 	public static partial ReadOnlySpan<Byte> StackTraceElementObject();
 
-	/// <inheritdoc cref="ClassNames.ArraysObject"/>
-	[DefaultValue(ClassNames.ArraysObject)]
-	public static partial ReadOnlySpan<Byte> ArraysObject();
+	/// <inheritdoc cref="ClassNames.ClassLoaderObject"/>
+	[DefaultValue(ClassNames.ClassLoaderObject)]
+	public static partial ReadOnlySpan<Byte> ClassLoaderObject();
 
 	/// <inheritdoc cref="ClassNames.BufferObject"/>
 	[DefaultValue(ClassNames.BufferObject)]

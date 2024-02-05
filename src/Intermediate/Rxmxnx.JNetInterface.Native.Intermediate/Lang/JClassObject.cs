@@ -130,7 +130,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
 	public static JClassObject LoadClass(IEnvironment env, CString className, ReadOnlySpan<Byte> rawClassBytes,
-		JLocalObject? jClassLoader = default)
+		JClassLoaderObject? jClassLoader = default)
 		=> env.ClassFeature.LoadClass(className, rawClassBytes, jClassLoader);
 	/// <summary>
 	/// Loads a java class from its binary information into the current VM.
@@ -141,6 +141,6 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
 	public static JClassObject LoadClass<TDataType>(IEnvironment env, ReadOnlySpan<Byte> rawClassBytes,
-		JLocalObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
+		JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
 		=> env.ClassFeature.LoadClass<TDataType>(rawClassBytes, jClassLoader);
 }

@@ -66,7 +66,9 @@ internal sealed record CallFrame : LocalCache, IDisposable
 		=> this._classes.TryGetValue(hash, out JClassLocalRef result) ? result : base.FindClassParameter(hash);
 	/// <inheritdoc/>
 	public override ObjectLifetime? GetLifetime(JObjectLocalRef localRef)
-		=> this._parameters.TryGetValue(localRef, out JLocalObject? jLocal) ? jLocal.Lifetime : base.GetLifetime(localRef);
+		=> this._parameters.TryGetValue(localRef, out JLocalObject? jLocal) ?
+			jLocal.Lifetime :
+			base.GetLifetime(localRef);
 
 	/// <summary>
 	/// Clear call parameters.

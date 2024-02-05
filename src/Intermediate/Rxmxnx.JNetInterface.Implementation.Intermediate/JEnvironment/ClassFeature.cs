@@ -94,14 +94,14 @@ partial class JEnvironment
 			return result;
 		}
 		public JClassObject LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,
-			JLocalObject? jClassLoader = default)
+			JClassLoaderObject? jClassLoader = default)
 		{
 			className = JDataTypeMetadata.JniParseClassName(className);
 			return NativeUtilities.WithSafeFixed(className.AsSpan(), rawClassBytes, (this, jClassLoader),
 			                                     EnvironmentCache.LoadClass);
 		}
-		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JLocalObject? jClassLoader = default)
-			where TDataType : JLocalObject, IReferenceType<TDataType>
+		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes,
+			JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TDataType>();
 			return NativeUtilities.WithSafeFixed(metadata.ClassName.AsSpan(), rawClassBytes, (this, jClassLoader),
