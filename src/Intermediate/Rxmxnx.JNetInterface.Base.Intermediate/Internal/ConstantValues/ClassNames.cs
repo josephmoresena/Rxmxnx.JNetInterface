@@ -190,6 +190,85 @@ internal static class ClassNames
 	public const String DirectBufferObject = ClassNames.SunNioChPackage + "DirectBuffer";
 
 	/// <summary>
+	/// JNI name of <c>java.lang.RuntimeException</c> class.
+	/// </summary>
+	public const String ExceptionObject = ClassNames.LangPackage + "Exception";
+	/// <summary>
+	/// JNI name of <c>java.lang.Exception</c> class.
+	/// </summary>
+	public const String RuntimeExceptionObject = ClassNames.LangPackage + "RuntimeException";
+	/// <summary>
+	/// JNI name of <c>java.lang.Error</c> class.
+	/// </summary>
+	public const String ErrorObject = ClassNames.LangPackage + "Error";
+	/// <summary>
+	/// JNI name of <c>java.lang.LinkageError</c> class.
+	/// </summary>
+	public const String LinkageErrorObject = ClassNames.LangPackage + "LinkageError";
+	/// <summary>
+	/// JNI name of <c>java.lang.VirtualMachineError</c> class.
+	/// </summary>
+	public const String VirtualMachineErrorObject = ClassNames.LangPackage + "VirtualMachineError";
+	/// <summary>
+	/// JNI name of <c>java.lang.ClassFormatError</c> class.
+	/// </summary>
+	public const String ClassFormatErrorObject = ClassNames.LangPackage + "ClassFormatError";
+	/// <summary>
+	/// JNI name of <c>java.lang.ClassCircularityError</c> class.
+	/// </summary>
+	public const String ClassCircularityErrorObject = ClassNames.LangPackage + "ClassCircularityError";
+	/// <summary>
+	/// JNI name of <c>java.lang.OutOfMemoryError</c> class.
+	/// </summary>
+	public const String OutOfMemoryErrorObject = ClassNames.LangPackage + "OutOfMemoryError";
+	/// <summary>
+	/// JNI name of <c>java.lang.ExceptionInInitializerError</c> class.
+	/// </summary>
+	public const String ExceptionInInitializerErrorObject = ClassNames.LangPackage + "ExceptionInInitializerError";
+	/// <summary>
+	/// JNI name of <c>java.lang.IncompatibleClassChangeError</c> class.
+	/// </summary>
+	public const String IncompatibleClassChangeErrorObject = ClassNames.LangPackage + "IncompatibleClassChangeError";
+	/// <summary>
+	/// JNI name of <c>java.lang.NoSuchMethodError</c> class.
+	/// </summary>
+	public const String NoSuchMethodErrorObject = ClassNames.LangPackage + "NoSuchMethodError";
+	/// <summary>
+	/// JNI name of <c>java.lang.NoSuchFieldError</c> class.
+	/// </summary>
+	public const String NoSuchFieldErrorObject = ClassNames.LangPackage + "NoSuchFieldError";
+	/// <summary>
+	/// JNI name of <c>java.lang.SecurityException</c> class.
+	/// </summary>
+	public const String SecurityExceptionObject = ClassNames.LangPackage + "SecurityException";
+	/// <summary>
+	/// JNI name of <c>java.lang.ReflectiveOperationException</c> class.
+	/// </summary>
+	public const String ReflectiveOperationExceptionObject = ClassNames.LangPackage + "ReflectiveOperationException";
+	/// <summary>
+	/// JNI name of <c>java.lang.InstantiationException</c> class.
+	/// </summary>
+	public const String InstantiationExceptionObject = ClassNames.LangPackage + "InstantiationException";
+	/// <summary>
+	/// JNI name of <c>java.lang.IndexOutOfBoundsException</c> class.
+	/// </summary>
+	public const String IndexOutOfBoundsExceptionObject = ClassNames.LangPackage + "IndexOutOfBoundsException";
+	/// <summary>
+	/// JNI name of <c>java.lang.StringIndexOutOfBoundsException</c> class.
+	/// </summary>
+	public const String StringIndexOutOfBoundsExceptionObject =
+		ClassNames.LangPackage + "StringIndexOutOfBoundsException";
+	/// <summary>
+	/// JNI name of <c>java.lang.ArrayIndexOutOfBoundsException</c> class.
+	/// </summary>
+	public const String ArrayIndexOutOfBoundsExceptionObject =
+		ClassNames.LangPackage + "ArrayIndexOutOfBoundsException";
+	/// <summary>
+	/// JNI name of <c>java.lang.ArrayStoreException</c> class.
+	/// </summary>
+	public const String ArrayStoreExceptionObject = ClassNames.LangPackage + "ArrayStoreException";
+
+	/// <summary>
 	/// JNI name of <c>java.lang.reflect.AccessibleObject</c> interface.
 	/// </summary>
 	public const String AccessibleObject = ClassNames.ReflectPackage + "AccessibleObject";

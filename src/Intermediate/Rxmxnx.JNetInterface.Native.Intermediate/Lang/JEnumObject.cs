@@ -57,6 +57,8 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 /// <typeparam name="TEnum">Type of java enum type.</typeparam>
 public abstract class JEnumObject<TEnum> : JEnumObject, IDataType where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {
+	static JDataTypeMetadata IDataType.Metadata => TEnum.Metadata;
+	static JTypeKind IDataType.Kind => JTypeKind.Enum;
 	static Type IDataType.FamilyType => typeof(JEnumObject);
 
 	/// <inheritdoc/>
