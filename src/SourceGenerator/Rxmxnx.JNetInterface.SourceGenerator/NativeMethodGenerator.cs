@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
+[ExcludeFromCodeCoverage]
 internal sealed class NativeMethodGenerator
 {
 	public String? TypeName { get; set; }

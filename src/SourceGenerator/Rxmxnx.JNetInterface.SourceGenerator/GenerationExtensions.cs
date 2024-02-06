@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -8,6 +9,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
+[ExcludeFromCodeCoverage]
 internal static partial class GenerationExtensions
 {
 	/// <summary>

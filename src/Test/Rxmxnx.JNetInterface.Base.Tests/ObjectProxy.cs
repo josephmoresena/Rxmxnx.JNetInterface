@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
-public abstract record ObjectDummy : IObject
+public abstract record ObjectProxy : IObject
 {
 	public abstract CString ObjectClassName { get; }
 	public abstract CString ObjectSignature { get; }
@@ -17,12 +17,12 @@ public abstract record ObjectDummy : IObject
 	}
 	void IObject.CopyTo(Span<JValue> span, Int32 index)
 	{
-		JPublicValue[] values = new JPublicValue[span.Length];
+		ProxyValue[] values = new ProxyValue[span.Length];
 		span.AsBytes().CopyTo(values.AsSpan().AsBytes());
 		this.CopyTo(values, index);
 		values.AsSpan().AsBytes().CopyTo(span.AsBytes());
 	}
 
 	public abstract void CopyTo(Byte[] bytes, IMutableReference<Int32> offsetRef);
-	public abstract void CopyTo(JPublicValue[] values, Int32 index);
+	public abstract void CopyTo(ProxyValue[] values, Int32 index);
 }

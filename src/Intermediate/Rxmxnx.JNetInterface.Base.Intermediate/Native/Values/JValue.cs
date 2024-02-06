@@ -72,17 +72,4 @@ internal readonly partial struct JValue : INativeType<JValue>
 		source.CopyTo(resultByte);
 		return resultSpan[0];
 	}
-	/// <summary>
-	/// Interprets <paramref name="jValue"/> as <typeparamref name="T"/> reference.
-	/// </summary>
-	/// <typeparam name="T">Type of value.</typeparam>
-	/// <param name="jValue">A <see cref="JValue"/> reference.</param>
-	/// <returns>A <typeparamref name="T"/> reference.</returns>
-	/// <exception cref="InsufficientMemoryException"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static ref T As<T>(ref JValue jValue) where T : unmanaged
-	{
-		ValidationUtilities.ThrowIfInvalidType<T>();
-		return ref Unsafe.As<JValue, T>(ref jValue);
-	}
 }

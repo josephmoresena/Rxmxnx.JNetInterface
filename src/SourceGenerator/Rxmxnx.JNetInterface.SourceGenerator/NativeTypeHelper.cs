@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
@@ -9,6 +10,7 @@ namespace Rxmxnx.JNetInterface.SourceGenerator;
 /// <summary>
 /// Native type helper.
 /// </summary>
+[ExcludeFromCodeCoverage]
 internal sealed record NativeTypeHelper
 {
 	/// <summary>

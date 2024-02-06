@@ -1,14 +1,14 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
-public sealed class TypeInformationTest
+public sealed class TypeInformationTests
 {
 	private static readonly IFixture fixture = new Fixture();
 
 	[Fact]
 	internal void GetSegmentLengthTest()
 	{
-		CString[] texts = TypeInformationTest.fixture.CreateMany<String>(10).Select(s => (CString)s).ToArray();
+		CString[] texts = TypeInformationTests.fixture.CreateMany<String>(10).Select(s => (CString)s).ToArray();
 		CStringSequence sequence = new(texts);
 		ReadOnlySpan<Byte> span = sequence.ToString().AsSpan().AsBytes();
 		Int32 offset = 0;
