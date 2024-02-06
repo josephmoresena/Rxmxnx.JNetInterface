@@ -16,8 +16,4 @@ public abstract partial class EnvironmentProxy
 	public abstract INativeMemoryAdapter GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind);
 	/// <inheritdoc/>
 	public abstract INativeMemoryAdapter GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind);
-	/// <inheritdoc/>
-	public abstract JStringObject Create(ReadOnlySpan<Char> data);
-	/// <inheritdoc/>
-	public abstract JStringObject Create(ReadOnlySpan<Byte> utf8Data);
 }
