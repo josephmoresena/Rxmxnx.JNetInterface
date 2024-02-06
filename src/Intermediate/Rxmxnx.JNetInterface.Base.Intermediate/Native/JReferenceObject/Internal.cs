@@ -16,9 +16,10 @@ public partial class JReferenceObject
 	internal Int64 Id => this._id;
 
 	/// <inheritdoc/>
-	internal override void CopyTo(Span<JValue> span, Int32 index) => this.AsSpan().CopyTo(span[index].AsBytes());
+	private protected override void CopyTo(Span<JValue> span, Int32 index)
+		=> this.AsSpan().CopyTo(span[index].AsBytes());
 	/// <inheritdoc/>
-	internal override void CopyTo(Span<Byte> span, ref Int32 offset)
+	private protected override void CopyTo(Span<Byte> span, ref Int32 offset)
 	{
 		this.AsSpan().CopyTo(span[offset..]);
 		offset += NativeUtilities.PointerSize;

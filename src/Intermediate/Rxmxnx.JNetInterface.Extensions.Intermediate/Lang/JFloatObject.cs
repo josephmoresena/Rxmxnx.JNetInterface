@@ -13,12 +13,11 @@ public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimiti
 		base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JFloatObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
+	private JFloatObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JFloatObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	private JFloatObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JFloatObject(IReferenceType.ObjectInitializer initializer) :
-		base(initializer.ToInternal<JFloatObject>()) { }
+	private JFloatObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JFloatObject>()) { }
 
 	static JFloatObject? IPrimitiveWrapperType<JFloatObject, JFloat>.Create(IEnvironment env, JFloat? value)
 		=> value is not null ? (JFloatObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;

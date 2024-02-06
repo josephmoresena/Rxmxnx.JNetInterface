@@ -18,7 +18,7 @@ internal partial class JPrimitiveObject
 		/// Constructor.
 		/// </summary>
 		/// <param name="value">Internal wrapper.</param>
-		public Generic(TValue value) => this._value = value;
+		protected Generic(TValue value) => this._value = value;
 
 		/// <summary>
 		/// Internal primitive value.
@@ -42,10 +42,11 @@ internal partial class JPrimitiveObject
 		public override Byte ToByte() => NativeUtilities.AsBytes(in this._value)[0];
 
 		/// <inheritdoc cref="IObject.CopyTo(Span{JValue}, Int32)"/>
-		internal override void CopyTo(Span<JValue> span, Int32 index) => this.AsSpan().CopyTo(span[index].AsBytes());
+		private protected override void CopyTo(Span<JValue> span, Int32 index)
+			=> this.AsSpan().CopyTo(span[index].AsBytes());
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		internal override void CopyTo(Span<Byte> span, ref Int32 offset)
+		private protected override void CopyTo(Span<Byte> span, ref Int32 offset)
 		{
 			this.AsSpan().CopyTo(span[offset..]);
 			offset += this.SizeOf;

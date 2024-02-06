@@ -9,9 +9,9 @@ public partial class JGlobalBase
 	/// <param name="weakRef">Weak global object reference.</param>
 	internal JGlobalBase(ILocalObject jLocal, JWeakRef weakRef) : base(jLocal.IsDummy)
 	{
-		this._vm = jLocal.VirtualMachine;
+		this.VirtualMachine = jLocal.VirtualMachine;
 		this._value = IMutableReference.Create(NativeUtilities.Transform<JWeakRef, IntPtr>(in weakRef));
-		this._objectMetadata = ILocalObject.CreateMetadata(jLocal);
+		this.ObjectMetadata = ILocalObject.CreateMetadata(jLocal);
 	}
 	/// <summary>
 	/// Constructor.
@@ -23,9 +23,9 @@ public partial class JGlobalBase
 	internal JGlobalBase(IVirtualMachine vm, ObjectMetadata metadata, Boolean isDummy, JGlobalRef globalRef) :
 		base(isDummy)
 	{
-		this._vm = vm;
+		this.VirtualMachine = vm;
 		this._value = IMutableReference.Create(NativeUtilities.Transform<JGlobalRef, IntPtr>(in globalRef));
-		this._objectMetadata = metadata;
+		this.ObjectMetadata = metadata;
 	}
 	/// <summary>
 	/// Constructor.
@@ -36,8 +36,8 @@ public partial class JGlobalBase
 	/// <param name="weakRef">Weak global reference.</param>
 	internal JGlobalBase(IVirtualMachine vm, ObjectMetadata metadata, Boolean isDummy, JWeakRef weakRef) : base(isDummy)
 	{
-		this._vm = vm;
+		this.VirtualMachine = vm;
 		this._value = IMutableReference.Create(NativeUtilities.Transform<JWeakRef, IntPtr>(in weakRef));
-		this._objectMetadata = metadata;
+		this.ObjectMetadata = metadata;
 	}
 }

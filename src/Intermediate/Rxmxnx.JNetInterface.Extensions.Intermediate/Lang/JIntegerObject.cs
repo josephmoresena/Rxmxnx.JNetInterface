@@ -13,12 +13,12 @@ public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimi
 		base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JIntegerObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
+	private JIntegerObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JIntegerObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	private JIntegerObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JIntegerObject(IReferenceType.ObjectInitializer initializer) : base(
-		initializer.ToInternal<JIntegerObject>()) { }
+	private JIntegerObject(IReferenceType.ObjectInitializer initializer) :
+		base(initializer.WithClass<JIntegerObject>()) { }
 
 	static JIntegerObject? IPrimitiveWrapperType<JIntegerObject, JInt>.Create(IEnvironment env, JInt? value)
 		=> value is not null ? (JIntegerObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;

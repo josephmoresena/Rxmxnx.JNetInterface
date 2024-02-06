@@ -13,12 +13,11 @@ public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimiti
 		base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JShortObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
+	private JShortObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JShortObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	private JShortObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JShortObject(IReferenceType.ObjectInitializer initializer) :
-		base(initializer.ToInternal<JShortObject>()) { }
+	private JShortObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JShortObject>()) { }
 
 	static JShortObject? IPrimitiveWrapperType<JShortObject, JShort>.Create(IEnvironment env, JShort? value)
 		=> value is not null ? (JShortObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;

@@ -55,9 +55,9 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	public static Boolean operator !=(JObject? left, JObject? right) => !(left == right);
 
 	/// <inheritdoc cref="IObject.CopyTo(Span{Byte}, ref Int32)"/>
-	internal abstract void CopyTo(Span<Byte> span, ref Int32 offset);
+	private protected abstract void CopyTo(Span<Byte> span, ref Int32 offset);
 	/// <inheritdoc cref="IObject.CopyTo(Span{JValue}, Int32)"/>
-	internal abstract void CopyTo(Span<JValue> span, Int32 index);
+	private protected abstract void CopyTo(Span<JValue> span, Int32 index);
 
 	/// <summary>
 	/// Indicates whether <paramref name="jObject"/> instance is <see langword="null"/> or

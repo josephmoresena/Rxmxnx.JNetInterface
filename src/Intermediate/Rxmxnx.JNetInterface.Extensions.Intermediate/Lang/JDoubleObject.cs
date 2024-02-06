@@ -13,12 +13,12 @@ public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrim
 		base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JDoubleObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
+	private JDoubleObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JDoubleObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	private JDoubleObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	private JDoubleObject(IReferenceType.ObjectInitializer initializer) :
-		base(initializer.ToInternal<JDoubleObject>()) { }
+		base(initializer.WithClass<JDoubleObject>()) { }
 
 	static JDoubleObject? IPrimitiveWrapperType<JDoubleObject, JDouble>.Create(IEnvironment env, JDouble? value)
 		=> value is not null ? (JDoubleObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;

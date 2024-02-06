@@ -12,11 +12,11 @@ public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveW
 	internal JByteObject(JClassObject jClass, JObjectLocalRef localRef, JByte value) : base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JByteObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
+	private JByteObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JByteObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	private JByteObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JByteObject(IReferenceType.ObjectInitializer initializer) : base(initializer.ToInternal<JByteObject>()) { }
+	private JByteObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JByteObject>()) { }
 
 	static JByteObject? IPrimitiveWrapperType<JByteObject, JByte>.Create(IEnvironment env, JByte? value)
 		=> value is not null ? (JByteObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;

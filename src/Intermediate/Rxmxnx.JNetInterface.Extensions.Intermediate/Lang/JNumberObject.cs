@@ -15,14 +15,11 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 		base(jClass, localRef)
 		=> this._value = value;
 	/// <inheritdoc/>
-	private protected JNumberObject(InternalClassInitializer initializer) : base(
-		IReferenceType.ClassInitializer.FromInternal(initializer)) { }
+	private protected JNumberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private protected JNumberObject(InternalGlobalInitializer initializer) : base(
-		IReferenceType.GlobalInitializer.FromInternal(initializer)) { }
+	private protected JNumberObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private protected JNumberObject(InternalObjectInitializer initializer) : base(
-		IReferenceType.ObjectInitializer.FromInternal(initializer))
+	private protected JNumberObject(IReferenceType.ObjectInitializer initializer) : base(initializer)
 	{
 		JLocalObject jLocal = initializer.Instance;
 		if (jLocal is JNumberObject number)
@@ -78,11 +75,11 @@ public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>, IP
 	internal JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) :
 		base(jClass, localRef, value) { }
 	/// <inheritdoc/>
-	private protected JNumberObject(InternalClassInitializer initializer) : base(initializer) { }
+	private protected JNumberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private protected JNumberObject(InternalGlobalInitializer initializer) : base(initializer) { }
+	private protected JNumberObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private protected JNumberObject(InternalObjectInitializer initializer) : base(initializer) { }
+	private protected JNumberObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Value.Equals(other);
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Value.Equals(other);

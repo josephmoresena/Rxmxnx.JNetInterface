@@ -6,7 +6,7 @@
 public abstract record JFieldDefinition : JAccessibleObjectDefinition
 {
 	/// <inheritdoc/>
-	internal override String ToStringFormat => "{{ Field: {0} Descriptor: {1} }}";
+	private protected override String ToStringFormat => "{{ Field: {0} Descriptor: {1} }}";
 
 	/// <summary>
 	/// Return type.

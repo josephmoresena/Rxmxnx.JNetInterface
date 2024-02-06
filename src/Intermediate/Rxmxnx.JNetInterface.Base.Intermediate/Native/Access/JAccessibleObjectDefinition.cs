@@ -19,7 +19,7 @@ public abstract record JAccessibleObjectDefinition
 	/// <summary>
 	/// The format used for <see cref="JAccessibleObjectDefinition.ToString()"/> method.
 	/// </summary>
-	internal abstract String ToStringFormat { get; }
+	private protected abstract String ToStringFormat { get; }
 
 	/// <summary>
 	/// Internal constructor.

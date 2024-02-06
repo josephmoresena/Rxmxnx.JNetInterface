@@ -12,11 +12,11 @@ public sealed class JLongObject : JNumberObject<JLong, JLongObject>, IPrimitiveW
 	internal JLongObject(JClassObject jClass, JObjectLocalRef localRef, JLong value) : base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JLongObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
+	private JLongObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JLongObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	private JLongObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JLongObject(IReferenceType.ObjectInitializer initializer) : base(initializer.ToInternal<JLongObject>()) { }
+	private JLongObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JLongObject>()) { }
 
 	static JLongObject? IPrimitiveWrapperType<JLongObject, JLong>.Create(IEnvironment env, JLong? value)
 		=> value is not null ? (JLongObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;

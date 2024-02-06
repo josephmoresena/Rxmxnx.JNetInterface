@@ -6,7 +6,7 @@ public partial interface IReferenceFeature
 	/// Retrieves <see cref="ObjectLifetime"/> instance for <paramref name="initializer"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="initializer">A <see cref="InternalClassInitializer"/> instance.</param>
+	/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> instance.</param>
 	/// <returns>A <see cref="ObjectLifetime"/> instance for <paramref name="initializer"/>.</returns>
 	internal ObjectLifetime GetLifetime(JLocalObject jLocal, InternalClassInitializer initializer);
 	/// <summary>

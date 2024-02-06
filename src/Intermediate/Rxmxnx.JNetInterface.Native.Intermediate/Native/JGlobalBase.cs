@@ -9,20 +9,20 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <summary>
 	/// <see cref="IVirtualMachine"/> instance.
 	/// </summary>
-	public IVirtualMachine VirtualMachine => this._vm;
+	public IVirtualMachine VirtualMachine { get; }
 	/// <summary>
 	/// CLR type of object metadata.
 	/// </summary>
-	public Type MetadataType => this._objectMetadata.GetType();
+	public Type MetadataType => this.ObjectMetadata.GetType();
 	/// <inheritdoc/>
-	public override CString ObjectClassName => this._objectMetadata.ObjectClassName;
+	public override CString ObjectClassName => this.ObjectMetadata.ObjectClassName;
 	/// <inheritdoc/>
-	public override CString ObjectSignature => this._objectMetadata.ObjectSignature;
+	public override CString ObjectSignature => this.ObjectMetadata.ObjectSignature;
 
 	/// <inheritdoc/>
 	public void Dispose()
 	{
-		using IThread thread = this._vm.CreateThread(ThreadPurpose.RemoveGlobalReference);
+		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.RemoveGlobalReference);
 		this.Unload(thread);
 		GC.SuppressFinalize(this);
 	}
@@ -51,7 +51,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </summary>
 	~JGlobalBase()
 	{
-		using IThread thread = this._vm.CreateThread(ThreadPurpose.RemoveGlobalReference);
+		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.RemoveGlobalReference);
 		this.Dispose(false, thread);
 	}
 
@@ -63,13 +63,6 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <see langword="true"/> if current instance is still valid; otherwise, <see langword="false"/>.
 	/// </returns>
 	public virtual Boolean IsValid(IEnvironment env) => !this._isDisposed && !this.IsDefault;
-
-	/// <summary>
-	/// Performs application-defined tasks associated with freeing, releasing, or resetting
-	/// unmanaged resources.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	public void Unload(IEnvironment env) => this.Dispose(true, env);
 
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.

@@ -8,15 +8,15 @@ public interface ITypeInformation
 	/// <summary>
 	/// JNI class name.
 	/// </summary>
-	public CString ClassName { get; }
+	CString ClassName { get; }
 	/// <summary>
 	/// JNI signature for object instances of this type.
 	/// </summary>
-	public CString Signature { get; }
+	CString Signature { get; }
 	/// <summary>
 	/// Current datatype hash.
 	/// </summary>
-	public String Hash { get; }
+	String Hash { get; }
 
 	/// <summary>
 	/// Retrieves length of a segment in <paramref name="utf8Sequence"/>

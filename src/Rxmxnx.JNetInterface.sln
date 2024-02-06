@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Extens
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Implementation.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj", "{6FA09D89-4981-40DB-9DAF-EBC9769780A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Base.Tests", "Test\Rxmxnx.JNetInterface.Base.Tests\Rxmxnx.JNetInterface.Base.Tests.csproj", "{68B717BD-382A-467C-BBBA-0C5D4BED03A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,5 +53,9 @@ Global
 		{6FA09D89-4981-40DB-9DAF-EBC9769780A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FA09D89-4981-40DB-9DAF-EBC9769780A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FA09D89-4981-40DB-9DAF-EBC9769780A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68B717BD-382A-467C-BBBA-0C5D4BED03A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68B717BD-382A-467C-BBBA-0C5D4BED03A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68B717BD-382A-467C-BBBA-0C5D4BED03A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68B717BD-382A-467C-BBBA-0C5D4BED03A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

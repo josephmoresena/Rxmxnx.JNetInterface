@@ -18,12 +18,20 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public String Name => this._name ??= this.GetName();
 
+	/// <inheritdoc/>
+	private protected JEnumObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private protected JEnumObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+	/// <inheritdoc/>
+	private protected JEnumObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
+
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
+
 	/// <summary>
 	/// Returns the name of current instance.
 	/// </summary>
 	/// <returns>Returns the name of current instance.</returns>
-	internal virtual String GetName()
+	private protected virtual String GetName()
 	{
 		using JStringObject enumName = this.Environment.Functions.GetName(this);
 		return enumName.Value;
@@ -52,14 +60,14 @@ public abstract class JEnumObject<TEnum> : JEnumObject, IDataType where TEnum : 
 	static Type IDataType.FamilyType => typeof(JEnumObject);
 
 	/// <inheritdoc/>
-	protected JEnumObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
+	protected JEnumObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	protected JEnumObject(IReferenceType.ObjectInitializer initializer) : base(initializer.ToInternal<TEnum>()) { }
+	protected JEnumObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<TEnum>()) { }
 	/// <inheritdoc/>
-	protected JEnumObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	protected JEnumObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 
 	/// <inheritdoc/>
-	internal override String GetName()
+	private protected override String GetName()
 	{
 		JEnumTypeMetadata metadata = IEnumType.GetMetadata<TEnum>();
 		return metadata.Fields.HasOrdinal(this.Ordinal) ? metadata.Fields[this.Ordinal].ToString() : base.GetName();

@@ -3,8 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JArrayObject
 {
 	/// <inheritdoc/>
-	internal JArrayObject(InternalClassInitializer initializer) : base(
-		IReferenceType.ClassInitializer.FromInternal(initializer)) { }
+	private protected JArrayObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>

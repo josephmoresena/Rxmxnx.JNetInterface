@@ -569,7 +569,7 @@ partial class JEnvironment
 						this.ReloadClass(referenceObject as JClassObject);
 						ValidationUtilities.ThrowIfDefault(referenceObject, $"Invalid object at {i}.");
 						jniTransaction.Add(referenceObject);
-						referenceObject.CopyTo(result, i);
+						args[i]!.CopyTo(result, i);
 						break;
 				}
 			}

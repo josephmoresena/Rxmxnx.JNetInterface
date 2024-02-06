@@ -39,7 +39,7 @@ public partial class JEnumObject
 	private JEnumObject(JLocalObject jLocal, JClassObject jClass) : base(jLocal, jClass) { }
 
 	static JEnumObject IReferenceType<JEnumObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer.ToInternal());
+		=> new(initializer);
 	static JEnumObject IReferenceType<JEnumObject>.Create(IReferenceType.ObjectInitializer initializer)
 	{
 		JClassObject? jClass = initializer.Class ?? initializer.Instance.Lifetime.Class;
@@ -48,5 +48,5 @@ public partial class JEnumObject
 		return new(initializer.Instance, jClass);
 	}
 	static JEnumObject IReferenceType<JEnumObject>.Create(IReferenceType.GlobalInitializer initializer)
-		=> new(initializer.ToInternal());
+		=> new(initializer);
 }

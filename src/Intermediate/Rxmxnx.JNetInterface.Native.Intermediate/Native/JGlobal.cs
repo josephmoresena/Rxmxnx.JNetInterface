@@ -7,20 +7,16 @@ namespace Rxmxnx.JNetInterface.Native;
 public sealed class JGlobal : JGlobalBase
 {
 	/// <summary>
-	/// Indicates whether current instance is not disposable.
-	/// </summary>
-	private readonly Boolean _isDisposable;
-	/// <summary>
 	/// Weak reference to <see cref="JGlobal"/> instance.
 	/// </summary>
 	private readonly WeakReference<JGlobal?> _secondary = new(default);
 
+	/// <inheritdoc cref="JGlobal"/>
+	private protected override Boolean IsDisposable { get; }
 	/// <summary>
 	/// Global reference.
 	/// </summary>
 	internal JGlobalRef Reference => this.As<JGlobalRef>();
-	/// <inheritdoc cref="JGlobal"/>
-	internal override Boolean IsDisposable => this._isDisposable;
 
 	/// <summary>
 	/// Secondary <see cref="ObjectLifetime"/>
@@ -36,7 +32,7 @@ public sealed class JGlobal : JGlobalBase
 	/// <param name="globalRef">Global reference.</param>
 	internal JGlobal(IVirtualMachine vm, ObjectMetadata metadata, Boolean isDummy, JGlobalRef globalRef) :
 		base(vm, metadata, isDummy, globalRef)
-		=> this._isDisposable = metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
+		=> this.IsDisposable = metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)
@@ -53,7 +49,7 @@ public sealed class JGlobal : JGlobalBase
 	{
 		if (this.Reference == globalRef) return;
 		base.SetValue(NativeUtilities.Transform<JGlobalRef, IntPtr>(globalRef));
-		if (this.Secondary is not null && !this._isDisposable) this.Secondary.SetValue(globalRef);
+		if (this.Secondary is not null && !this.IsDisposable) this.Secondary.SetValue(globalRef);
 	}
 
 	/// <summary>
@@ -63,7 +59,7 @@ public sealed class JGlobal : JGlobalBase
 	/// <returns>A <see cref="JGlobal"/> cacheable instance.</returns>
 	public JGlobal GetCacheable(IEnvironment env)
 	{
-		if (!this.IsValid(env) || this.Secondary is null || this.Secondary._isDisposable) return this;
+		if (!this.IsValid(env) || this.Secondary is null || this.Secondary.IsDisposable) return this;
 		return this.Secondary!;
 	}
 	/// <summary>
