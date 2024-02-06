@@ -1,8 +1,11 @@
 namespace Rxmxnx.JNetInterface.Native.Dummies;
 
-public partial interface IDummyEnvironment : IAccessFeature, IClassFeature, IReferenceFeature, IStringFeature,
-	IArrayFeature, INioFeature
+public abstract partial class EnvironmentProxy : IEnvironment, IAccessFeature, IClassFeature, IReferenceFeature,
+	IStringFeature, IArrayFeature, INioFeature
 {
+	Boolean IEnvironment.NoProxy => false;
+	IVirtualMachine IEnvironment.VirtualMachine => this.VirtualMachine;
+
 	IAccessFeature IEnvironment.AccessFeature => this;
 	IClassFeature IEnvironment.ClassFeature => this;
 	IReferenceFeature IEnvironment.ReferenceFeature => this;

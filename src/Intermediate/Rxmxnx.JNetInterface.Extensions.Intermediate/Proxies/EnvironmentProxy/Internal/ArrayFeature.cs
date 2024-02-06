@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Dummies;
 
-public partial interface IDummyEnvironment
+public abstract partial class EnvironmentProxy
 {
 	void IArrayFeature.SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
 	{

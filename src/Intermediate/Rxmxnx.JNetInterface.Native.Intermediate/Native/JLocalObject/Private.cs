@@ -10,7 +10,7 @@ public partial class JLocalObject : ILocalObject
 	private readonly ObjectLifetime _lifetime;
 
 	IVirtualMachine ILocalObject.VirtualMachine => this._lifetime.Environment.VirtualMachine;
-	Boolean ILocalObject.IsDummy => this.IsDummy;
+	Boolean ILocalObject.IsProxy => this.IsProxy;
 	ObjectLifetime ILocalObject.Lifetime => this._lifetime;
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);

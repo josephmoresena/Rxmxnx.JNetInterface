@@ -19,7 +19,7 @@ public partial class JReferenceObject
 	/// <summary>
 	/// Indicates whether the current instance is a dummy object (fake java object).
 	/// </summary>
-	private readonly Boolean _isDummy;
+	private readonly Boolean _isProxy;
 
 	/// <summary>
 	/// Creates the identifier for current instance.

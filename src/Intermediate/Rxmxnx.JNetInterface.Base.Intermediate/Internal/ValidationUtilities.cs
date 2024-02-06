@@ -210,7 +210,7 @@ internal static class ValidationUtilities
 	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is dummy.</exception>
 	public static void ThrowIfDummy(JReferenceObject? jObject, String? message = default)
 	{
-		if (jObject is not null && jObject.IsDummy)
+		if (jObject is not null && jObject.IsProxy)
 			throw new ArgumentException(message ?? "Invalid JReferenceObject.");
 	}
 	/// <summary>

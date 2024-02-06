@@ -46,7 +46,7 @@ public partial interface IClassFeature
 	/// <summary>
 	/// <c>java.lang.Class&lt;?&gt;</c> class instance.
 	/// </summary>
-	JClassObject ClassObject => this.GetClass<JClassObject>();
+	JClassObject ClassObject { get; }
 	/// <summary>
 	/// <c>java.lang.Throwable</c> class instance.
 	/// </summary>

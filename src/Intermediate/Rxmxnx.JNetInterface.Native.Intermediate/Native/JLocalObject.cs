@@ -29,7 +29,7 @@ public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObjec
 	/// Constructor.
 	/// </summary>
 	/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> initializer.</param>
-	protected JLocalObject(IReferenceType.ClassInitializer initializer)
+	protected JLocalObject(IReferenceType.ClassInitializer initializer) : base(initializer.Class.IsProxy)
 		=> this._lifetime = initializer.Class.Environment.ReferenceFeature.GetLifetime(this, initializer.ToInternal());
 	/// <summary>
 	/// Constructor.

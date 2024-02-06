@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Dummies;
 
-public partial interface IDummyEnvironment
+public abstract partial class EnvironmentProxy
 {
 	JClassObject IClassFeature.VoidPrimitive => new(this.ClassObject, JPrimitiveTypeMetadata.VoidMetadata);
 	JClassObject IClassFeature.BooleanPrimitive => this.GetClass<JBoolean>();
@@ -22,10 +22,23 @@ public partial interface IDummyEnvironment
 	JClassObject IClassFeature.LongObject => this.GetClass<JLongObject>();
 	JClassObject IClassFeature.ShortObject => this.GetClass<JShortObject>();
 
+	JClassObject IClassFeature.GetClass(ReadOnlySpan<Byte> className) => this.GetClass(new(className));
 	JClassObject IClassFeature.GetClass(String classHash)
 	{
 		ReadOnlySpan<Byte> classInformation = classHash.AsSpan().AsBytes();
 		Int32 classNameLength = ITypeInformation.GetSegmentLength(classInformation, 0);
-		return this.GetClass(classInformation[..classNameLength]);
+		return this.GetClass(new(classInformation[..classNameLength]));
+	}
+	JClassObject IClassFeature.LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,
+		JClassLoaderObject? jClassLoader)
+		=> this.LoadClass(className, rawClassBytes.ToArray(), jClassLoader);
+	JClassObject IClassFeature.LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader)
+		=> this.LoadClass<TDataType>(rawClassBytes.ToArray(), jClassLoader);
+	void IClassFeature.GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
+	{
+		ITypeInformation information = this.GetClassInfo(jClass);
+		name = information.ClassName;
+		signature = information.Signature;
+		hash = information.Hash;
 	}
 }

@@ -17,7 +17,8 @@ public partial class JReferenceObject
 		/// Constructor.
 		/// </summary>
 		/// <param name="jObject">A <typeparamref name="TObject"/> instance.</param>
-		protected View(TObject jObject) => this.Object = jObject;
+		/// <param name="isProxy">Indicates whether the current instance is a proxy object.</param>
+		private protected View(TObject jObject, Boolean isProxy) : base(isProxy) => this.Object = jObject;
 
 		IObject IViewObject.Object => this.Object;
 

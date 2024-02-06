@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Dummies;
 
-public partial interface IDummyEnvironment
+public abstract partial class EnvironmentProxy
 {
 	JBufferObject INioFeature.NewDirectByteBuffer(IFixedMemory.IDisposable memory) => this.NewDirectByteBuffer(memory);
 	void INioFeature.WithDirectByteBuffer<TBuffer>(Int32 capacity, Action<TBuffer> action)

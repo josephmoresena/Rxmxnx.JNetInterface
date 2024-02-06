@@ -14,11 +14,11 @@ public abstract partial class JReferenceObject : JObject
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
-	private protected JReferenceObject(Boolean? isDummy = default)
+	/// <param name="isProxy">Indicates whether the current instance is a proxy object.</param>
+	private protected JReferenceObject(Boolean? isProxy)
 	{
-		this._isDummy = isDummy.GetValueOrDefault();
-		this._id = isDummy.HasValue ? JReferenceObject.CreateInstanceId() : -1;
+		this._isProxy = isProxy.GetValueOrDefault();
+		this._id = isProxy.HasValue ? JReferenceObject.CreateInstanceId() : -1;
 	}
 	/// <summary>
 	/// Constructor.
@@ -26,7 +26,7 @@ public abstract partial class JReferenceObject : JObject
 	/// <param name="jObject"><see cref="JReferenceObject"/> instance.</param>
 	private protected JReferenceObject(JReferenceObject jObject)
 	{
-		this._isDummy = jObject._isDummy;
+		this._isProxy = jObject._isProxy;
 		this._id = jObject._id != -1 ? JReferenceObject.CreateInstanceId() : -1;
 	}
 

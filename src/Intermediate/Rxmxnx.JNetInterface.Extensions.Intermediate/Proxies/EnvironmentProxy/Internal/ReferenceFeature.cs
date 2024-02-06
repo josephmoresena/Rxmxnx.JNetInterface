@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Dummies;
 
-public partial interface IDummyEnvironment
+public abstract partial class EnvironmentProxy
 {
 	ObjectLifetime IReferenceFeature.GetLifetime(JLocalObject jLocal, InternalClassInitializer initializer)
 		=> this.GetSourceInstance(initializer.LocalReference)?.Lifetime ?? new(this, jLocal, initializer.LocalReference)

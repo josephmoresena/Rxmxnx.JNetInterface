@@ -1,7 +1,11 @@
 namespace Rxmxnx.JNetInterface.Native.Dummies;
 
-public partial interface IDummyEnvironment
+public abstract partial class EnvironmentProxy
 {
+	#region IClassFeature
+	void IClassFeature.SetAssignableTo<TDataType>(JReferenceObject jObject, Boolean isAssignable) { }
+	#endregion
+
 	#region IReferenceFeature
 	void IReferenceFeature.MonitorEnter(JObjectLocalRef localRef) { }
 	void IReferenceFeature.MonitorExit(JObjectLocalRef localRef) { }
@@ -34,5 +38,10 @@ public partial interface IDummyEnvironment
 	void IStringFeature.ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer) { }
 	void IStringFeature.ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer) { }
 	void IStringFeature.ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer) { }
+	#endregion
+
+	#region IAccessFeature
+	JMethodId IAccessFeature.GetMethodId(JExecutableObject jExecutable) => default;
+	JFieldId IAccessFeature.GetFieldId(JFieldObject jField) => default;
 	#endregion
 }

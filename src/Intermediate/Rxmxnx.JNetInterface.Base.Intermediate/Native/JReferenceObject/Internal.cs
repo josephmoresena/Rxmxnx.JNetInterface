@@ -9,7 +9,7 @@ public partial class JReferenceObject
 	/// This property is used internally to prevent dummy objects be used in the .NET
 	/// implementation of JNI.
 	/// </remarks>
-	internal Boolean IsDummy => this._isDummy;
+	internal Boolean IsProxy => this._isProxy;
 	/// <summary>
 	/// Reference instance identifiers.
 	/// </summary>
