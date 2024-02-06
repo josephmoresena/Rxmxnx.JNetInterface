@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface;
+namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
 public sealed class JniExceptionTest

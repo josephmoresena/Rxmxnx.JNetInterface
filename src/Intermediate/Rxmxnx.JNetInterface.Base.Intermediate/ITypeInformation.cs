@@ -27,7 +27,7 @@ public interface ITypeInformation
 	internal static Int32 GetSegmentLength(ReadOnlySpan<Byte> utf8Sequence, Int32 offset)
 	{
 		Int32 end = offset;
-		while (utf8Sequence.Length < end)
+		while (utf8Sequence.Length > end)
 		{
 			if (utf8Sequence[end] == default) break;
 			end++;
