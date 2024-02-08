@@ -5,8 +5,12 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrimitiveWrapperType<JDoubleObject, JDouble>
 {
-	static JDataTypeMetadata IDataType.Metadata
-		=> new JPrimitiveWrapperTypeMetadata<JDoubleObject>(IClassType.GetMetadata<JNumberObject>());
+	private static readonly JPrimitiveWrapperTypeMetadata<JDoubleObject> typeMetadata =
+		new(JTypeMetadataBuilder<JDoubleObject>.Build(IPrimitiveType.GetMetadata<JDouble>(),
+		                                              IClassType.GetMetadata<JNumberObject>()));
+
+	static JPrimitiveWrapperTypeMetadata<JDoubleObject> IPrimitiveWrapperType<JDoubleObject>.Metadata
+		=> JDoubleObject.typeMetadata;
 
 	/// <inheritdoc/>
 	internal JDoubleObject(JClassObject jClass, JObjectLocalRef localRef, JDouble value) :

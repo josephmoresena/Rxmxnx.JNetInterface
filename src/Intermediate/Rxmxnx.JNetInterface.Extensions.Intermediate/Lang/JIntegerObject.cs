@@ -5,8 +5,12 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimitiveWrapperType<JIntegerObject, JInt>
 {
-	static JDataTypeMetadata IDataType.Metadata
-		=> new JPrimitiveWrapperTypeMetadata<JIntegerObject>(IClassType.GetMetadata<JNumberObject>());
+	private static readonly JPrimitiveWrapperTypeMetadata<JIntegerObject> typeMetadata =
+		new(JTypeMetadataBuilder<JIntegerObject>.Build(IPrimitiveType.GetMetadata<JInt>(),
+		                                               IClassType.GetMetadata<JNumberObject>()));
+
+	static JPrimitiveWrapperTypeMetadata<JIntegerObject> IPrimitiveWrapperType<JIntegerObject>.Metadata
+		=> JIntegerObject.typeMetadata;
 
 	/// <inheritdoc/>
 	internal JIntegerObject(JClassObject jClass, JObjectLocalRef localRef, JInt value) :

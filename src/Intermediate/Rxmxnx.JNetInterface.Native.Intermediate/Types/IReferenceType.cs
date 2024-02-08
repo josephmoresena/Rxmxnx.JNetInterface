@@ -6,6 +6,8 @@ namespace Rxmxnx.JNetInterface.Types;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public partial interface IReferenceType : IObject, IDataType, IDisposable
 {
+	static Type IDataType.FamilyType => typeof(JLocalObject);
+
 	/// <summary>
 	/// Retrieves the metadata for given reference type.
 	/// </summary>

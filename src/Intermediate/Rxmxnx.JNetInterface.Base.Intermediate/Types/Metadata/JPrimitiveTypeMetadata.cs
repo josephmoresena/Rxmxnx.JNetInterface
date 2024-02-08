@@ -86,3 +86,15 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 			$"{nameof(JPrimitiveTypeMetadata.NativeType)} = {this.NativeType}, " +
 			$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {this.WrapperClassName}, ";
 }
+
+/// <summary>
+/// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
+/// </summary>
+/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
+public abstract record JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetadata
+{
+	/// <inheritdoc/>
+	private protected JPrimitiveTypeMetadata(Int32 sizeOf, Type underlineType, ReadOnlySpan<Byte> signature,
+		ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(
+		sizeOf, underlineType, signature, className, wrapperClassName) { }
+}

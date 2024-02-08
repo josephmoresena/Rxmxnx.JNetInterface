@@ -9,13 +9,14 @@ public class JIncompatibleClassChangeErrorObject : JLinkageErrorObject,
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JLinkageErrorObject>
-	                                                              .Create<JIncompatibleClassChangeErrorObject>(
-		                                                              UnicodeClassNames
-			                                                              .IncompatibleClassChangeErrorObject())
-	                                                              .Build();
+	private static readonly JThrowableTypeMetadata<JIncompatibleClassChangeErrorObject> typeMetadata =
+		JTypeMetadataBuilder<JLinkageErrorObject>
+			.Create<JIncompatibleClassChangeErrorObject>(UnicodeClassNames.IncompatibleClassChangeErrorObject())
+			.Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JIncompatibleClassChangeErrorObject.typeMetadata;
+	static JThrowableTypeMetadata<JIncompatibleClassChangeErrorObject>
+		IThrowableType<JIncompatibleClassChangeErrorObject>.Metadata
+		=> JIncompatibleClassChangeErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JIncompatibleClassChangeErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

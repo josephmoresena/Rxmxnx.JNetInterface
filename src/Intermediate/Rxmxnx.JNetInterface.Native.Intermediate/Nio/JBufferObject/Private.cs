@@ -5,11 +5,11 @@ public partial class JBufferObject
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JBufferObject>
-	                                                      .Create(UnicodeClassNames.BufferObject(),
-	                                                              JTypeModifier.Abstract).Build();
+	private static readonly JClassTypeMetadata<JBufferObject> metadata = JTypeMetadataBuilder<JBufferObject>
+	                                                                     .Create(UnicodeClassNames.BufferObject(),
+		                                                                     JTypeModifier.Abstract).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JBufferObject.metadata;
+	static JClassTypeMetadata<JBufferObject> IClassType<JBufferObject>.Metadata => JBufferObject.metadata;
 
 	/// <inheritdoc cref="JBufferObject.Address"/>
 	private IntPtr? _address;

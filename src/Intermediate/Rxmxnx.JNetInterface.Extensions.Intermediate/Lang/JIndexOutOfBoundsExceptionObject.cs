@@ -9,12 +9,13 @@ public class JIndexOutOfBoundsExceptionObject : JRuntimeExceptionObject,
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JRuntimeExceptionObject>
-	                                                              .Create<JIndexOutOfBoundsExceptionObject>(
-		                                                              UnicodeClassNames
-			                                                              .IndexOutOfBoundsExceptionObject()).Build();
+	private static readonly JThrowableTypeMetadata<JIndexOutOfBoundsExceptionObject> typeMetadata =
+		JTypeMetadataBuilder<JRuntimeExceptionObject>
+			.Create<JIndexOutOfBoundsExceptionObject>(UnicodeClassNames.IndexOutOfBoundsExceptionObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JIndexOutOfBoundsExceptionObject.typeMetadata;
+	static JThrowableTypeMetadata<JIndexOutOfBoundsExceptionObject> IThrowableType<JIndexOutOfBoundsExceptionObject>.
+		Metadata
+		=> JIndexOutOfBoundsExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JIndexOutOfBoundsExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

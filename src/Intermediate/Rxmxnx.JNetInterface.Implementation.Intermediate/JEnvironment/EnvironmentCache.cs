@@ -73,12 +73,11 @@ partial class JEnvironment
 				JClassObject jClass = this.AsClassObject(classRef);
 				String message = EnvironmentCache.GetThrowableMessage(jClass, throwableRef);
 				ThrowableObjectMetadata objectMetadata = new(jClass, message);
-				JThrowableTypeMetadata throwableMetadata =
-					MetadataHelper.GetMetadata(jClass.Hash) as JThrowableTypeMetadata ??
-					(JThrowableTypeMetadata)MetadataHelper.GetMetadata<JThrowableObject>();
+				JClassTypeMetadata throwableMetadata = MetadataHelper.GetMetadata(jClass.Hash) as JClassTypeMetadata ??
+					(JClassTypeMetadata)MetadataHelper.GetMetadata<JThrowableObject>();
 				JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
 				JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
-				throw throwableMetadata.CreateException(jGlobalThrowable, message);
+				throw throwableMetadata.CreateException(jGlobalThrowable, message)!;
 			}
 			finally
 			{

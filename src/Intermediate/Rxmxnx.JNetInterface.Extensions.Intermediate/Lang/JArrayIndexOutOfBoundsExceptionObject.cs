@@ -9,13 +9,14 @@ public class JArrayIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsExceptionO
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
-	                                                              .Create<JArrayIndexOutOfBoundsExceptionObject>(
-		                                                              UnicodeClassNames
-			                                                              .ArrayIndexOutOfBoundsExceptionObject())
-	                                                              .Build();
+	private static readonly JThrowableTypeMetadata<JArrayIndexOutOfBoundsExceptionObject> typeMetadata =
+		JTypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
+			.Create<JArrayIndexOutOfBoundsExceptionObject>(UnicodeClassNames.ArrayIndexOutOfBoundsExceptionObject())
+			.Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JArrayIndexOutOfBoundsExceptionObject.typeMetadata;
+	static JThrowableTypeMetadata<JArrayIndexOutOfBoundsExceptionObject>
+		IThrowableType<JArrayIndexOutOfBoundsExceptionObject>.Metadata
+		=> JArrayIndexOutOfBoundsExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JArrayIndexOutOfBoundsExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

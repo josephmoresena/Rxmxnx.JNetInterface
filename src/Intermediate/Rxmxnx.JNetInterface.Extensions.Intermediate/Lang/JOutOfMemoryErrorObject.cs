@@ -8,12 +8,12 @@ public class JOutOfMemoryErrorObject : JVirtualMachineErrorObject, IThrowableTyp
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JVirtualMachineErrorObject>
-	                                                              .Create<JOutOfMemoryErrorObject>(
-		                                                              UnicodeClassNames.OutOfMemoryErrorObject())
-	                                                              .Build();
+	private static readonly JThrowableTypeMetadata<JOutOfMemoryErrorObject> typeMetadata =
+		JTypeMetadataBuilder<JVirtualMachineErrorObject>
+			.Create<JOutOfMemoryErrorObject>(UnicodeClassNames.OutOfMemoryErrorObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JOutOfMemoryErrorObject.typeMetadata;
+	static JThrowableTypeMetadata<JOutOfMemoryErrorObject> IThrowableType<JOutOfMemoryErrorObject>.Metadata
+		=> JOutOfMemoryErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JOutOfMemoryErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

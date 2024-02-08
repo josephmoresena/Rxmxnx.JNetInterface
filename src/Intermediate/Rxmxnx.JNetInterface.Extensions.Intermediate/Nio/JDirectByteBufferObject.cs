@@ -10,12 +10,13 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JMappedByteBufferObject>
-	                                                      .Create<JDirectByteBufferObject>(
-		                                                      UnicodeClassNames.DirectByteBufferObject())
-	                                                      .Implements<JDirectBufferObject>().Build();
+	private static readonly JClassTypeMetadata<JDirectByteBufferObject> metadata =
+		JTypeMetadataBuilder<JMappedByteBufferObject>
+			.Create<JDirectByteBufferObject>(UnicodeClassNames.DirectByteBufferObject())
+			.Implements<JDirectBufferObject>().Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JDirectByteBufferObject.metadata;
+	static JClassTypeMetadata<JDirectByteBufferObject> IClassType<JDirectByteBufferObject>.Metadata
+		=> JDirectByteBufferObject.metadata;
 
 	/// <summary>
 	/// Internal memory.

@@ -2,8 +2,11 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public sealed partial class JBooleanObject
 {
-	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => IPrimitiveType.GetMetadata<JBoolean>();
-	static JDataTypeMetadata IDataType.Metadata => new JPrimitiveWrapperTypeMetadata<JBooleanObject>();
+	private static readonly JPrimitiveWrapperTypeMetadata<JBooleanObject> typeMetadata =
+		new(JTypeMetadataBuilder<JBooleanObject>.Build(IPrimitiveType.GetMetadata<JBoolean>()));
+
+	static JPrimitiveWrapperTypeMetadata<JBooleanObject> IPrimitiveWrapperType<JBooleanObject>.Metadata
+		=> JBooleanObject.typeMetadata;
 
 	/// <inheritdoc cref="JBooleanObject.Value"/>
 	private JBoolean? _value;

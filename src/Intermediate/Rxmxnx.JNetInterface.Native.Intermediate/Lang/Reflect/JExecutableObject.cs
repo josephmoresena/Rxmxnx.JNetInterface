@@ -9,14 +9,14 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JAccessibleObject>
-	                                                      .Create<JExecutableObject>(
-		                                                      UnicodeClassNames.ExecutableObject(),
-		                                                      JTypeModifier.Abstract)
-	                                                      .Implements<JGenericDeclarationObject>()
-	                                                      .Implements<JMemberObject>().Build();
+	private static readonly JClassTypeMetadata<JExecutableObject> metadata = JTypeMetadataBuilder<JAccessibleObject>
+	                                                                         .Create<JExecutableObject>(
+		                                                                         UnicodeClassNames.ExecutableObject(),
+		                                                                         JTypeModifier.Abstract)
+	                                                                         .Implements<JGenericDeclarationObject>()
+	                                                                         .Implements<JMemberObject>().Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JExecutableObject.metadata;
+	static JClassTypeMetadata<JExecutableObject> IClassType<JExecutableObject>.Metadata => JExecutableObject.metadata;
 
 	/// <summary>
 	/// Executable JNI definition.

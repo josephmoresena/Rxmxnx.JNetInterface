@@ -5,8 +5,12 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimitiveWrapperType<JShortObject, JShort>
 {
-	static JDataTypeMetadata IDataType.Metadata
-		=> new JPrimitiveWrapperTypeMetadata<JShortObject>(IClassType.GetMetadata<JNumberObject>());
+	private static readonly JPrimitiveWrapperTypeMetadata<JShortObject> typeMetadata =
+		new(JTypeMetadataBuilder<JShortObject>.Build(IPrimitiveType.GetMetadata<JShort>(),
+		                                             IClassType.GetMetadata<JNumberObject>()));
+
+	static JPrimitiveWrapperTypeMetadata<JShortObject> IPrimitiveWrapperType<JShortObject>.Metadata
+		=> JShortObject.typeMetadata;
 
 	/// <inheritdoc/>
 	internal JShortObject(JClassObject jClass, JObjectLocalRef localRef, JShort value) :

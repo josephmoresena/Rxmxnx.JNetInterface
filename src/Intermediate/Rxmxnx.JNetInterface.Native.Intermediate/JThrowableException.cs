@@ -54,7 +54,7 @@ public abstract partial class JThrowableException : Exception
 	/// <summary>
 	/// Performs an action using current global throwable instance.
 	/// </summary>
-	/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
+	/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 	/// <param name="call">A <see cref="JThrowableCall"/> containing action to perform.</param>
 	internal static void WithSafeInvoke<TThrowable>(Object? call)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
@@ -62,7 +62,7 @@ public abstract partial class JThrowableException : Exception
 	/// <summary>
 	/// Executes an function using current global throwable instance and returns its result.
 	/// </summary>
-	/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
+	/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 	/// <typeparam name="TResult">The type of function result.</typeparam>
 	/// <param name="call">A <see cref="JThrowableCall"/> containing function to execute.</param>
 	/// <returns>The function result.</returns>
@@ -74,7 +74,7 @@ public abstract partial class JThrowableException : Exception
 /// <summary>
 /// Represents error that occur during JNI calls.
 /// </summary>
-/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
+/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 public sealed class JThrowableException<TThrowable> : JThrowableException
 	where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 {

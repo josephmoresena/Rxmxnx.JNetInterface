@@ -11,11 +11,11 @@ public partial class JArrayObject : IDataType
 	private Int32? _length;
 }
 
-public partial class JArrayObject<TElement> : IArrayType<JArrayObject<TElement>, TElement>,
-	IEnumerableSequence<TElement?>
+public partial class JArrayObject<TElement> : IArrayType, IReferenceType<JArrayObject<TElement>>,
+	IArrayObject<TElement>, IEnumerableSequence<TElement?>
 {
-	static JDataTypeMetadata IDataType.Metadata => JArrayGenericTypeMetadata.Instance;
 	static Type IDataType.FamilyType => typeof(JArrayObject);
+	static JDataTypeMetadata IDataType<JArrayObject<TElement>>.Metadata => JArrayObject<TElement>.Metadata;
 
 	/// <inheritdoc/>
 	private JArrayObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

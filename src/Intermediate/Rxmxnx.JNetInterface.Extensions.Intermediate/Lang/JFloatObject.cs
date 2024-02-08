@@ -5,8 +5,12 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimitiveWrapperType<JFloatObject, JFloat>
 {
-	static JDataTypeMetadata IDataType.Metadata
-		=> new JPrimitiveWrapperTypeMetadata<JFloatObject>(IClassType.GetMetadata<JNumberObject>());
+	private static readonly JPrimitiveWrapperTypeMetadata<JFloatObject> typeMetadata =
+		new(JTypeMetadataBuilder<JFloatObject>.Build(IPrimitiveType.GetMetadata<JFloat>(),
+		                                             IClassType.GetMetadata<JNumberObject>()));
+
+	static JPrimitiveWrapperTypeMetadata<JFloatObject> IPrimitiveWrapperType<JFloatObject>.Metadata
+		=> JFloatObject.typeMetadata;
 
 	/// <inheritdoc/>
 	internal JFloatObject(JClassObject jClass, JObjectLocalRef localRef, JFloat value) :

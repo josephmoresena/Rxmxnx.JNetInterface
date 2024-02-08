@@ -5,15 +5,11 @@ public partial class JEnumObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata enumClassMetadata = JLocalObject.JTypeMetadataBuilder<JEnumObject>
-	                                                                           .Create(UnicodeClassNames.EnumObject(),
-		                                                                           JTypeModifier.Final)
-	                                                                           .Implements<JSerializableObject>()
-	                                                                           .Implements<JComparableObject>().Build();
+	private static readonly JClassTypeMetadata<JEnumObject> enumClassMetadata = JLocalObject
+		.JTypeMetadataBuilder<JEnumObject>.Create(UnicodeClassNames.EnumObject(), JTypeModifier.Final)
+		.Implements<JSerializableObject>().Implements<JComparableObject>().Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JEnumObject.enumClassMetadata;
-	static Type IDataType.FamilyType => typeof(JLocalObject);
-	static JClassTypeMetadata IBaseClassType<JEnumObject>.SuperClassMetadata => JEnumObject.enumClassMetadata;
+	static JClassTypeMetadata<JEnumObject> IClassType<JEnumObject>.Metadata => JEnumObject.enumClassMetadata;
 
 	/// <summary>
 	/// String of enum value.

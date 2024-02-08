@@ -5,13 +5,11 @@ public partial class JLocalObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	internal static readonly JClassTypeMetadata ObjectClassMetadata = JTypeMetadataBuilder<JLocalObject>
-	                                                                  .Create(UnicodeClassNames.Object)
-	                                                                  .WithSignature(
-		                                                                  UnicodeObjectSignatures.ObjectSignature)
-	                                                                  .Build();
+	internal static readonly JClassTypeMetadata<JLocalObject> ObjectClassMetadata = JTypeMetadataBuilder<JLocalObject>
+		.Create(UnicodeClassNames.Object).WithSignature(UnicodeObjectSignatures.ObjectSignature).Build();
 
-	static JClassTypeMetadata IBaseClassType<JLocalObject>.SuperClassMetadata => JLocalObject.ObjectClassMetadata;
+	static JClassTypeMetadata<JLocalObject> IClassType<JLocalObject>.Metadata => JLocalObject.ObjectClassMetadata;
+	static Type IDataType.FamilyType => typeof(JLocalObject);
 
 	/// <summary>
 	/// Internal reference value.

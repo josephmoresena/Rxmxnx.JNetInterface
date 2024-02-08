@@ -8,11 +8,10 @@ public class JErrorObject : JThrowableObject, IThrowableType<JErrorObject>
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JThrowableObject>
-	                                                              .Create<JErrorObject>(UnicodeClassNames.ErrorObject())
-	                                                              .Build();
+	private static readonly JThrowableTypeMetadata<JErrorObject> typeMetadata = JTypeMetadataBuilder<JThrowableObject>
+		.Create<JErrorObject>(UnicodeClassNames.ErrorObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JErrorObject.typeMetadata;
+	static JThrowableTypeMetadata<JErrorObject> IThrowableType<JErrorObject>.Metadata => JErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

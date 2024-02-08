@@ -5,14 +5,15 @@ public partial class JStringObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata typeMetadata = JTypeMetadataBuilder<JStringObject>
-	                                                          .Create(UnicodeClassNames.StringObject(),
-	                                                                  JTypeModifier.Final)
-	                                                          .Implements<JSerializableObject>()
-	                                                          .Implements<JComparableObject>()
-	                                                          .Implements<JCharSequenceObject>().Build();
+	private static readonly JClassTypeMetadata<JStringObject> typeMetadata = JTypeMetadataBuilder<JStringObject>
+	                                                                         .Create(UnicodeClassNames.StringObject(),
+		                                                                         JTypeModifier.Final)
+	                                                                         .Implements<JSerializableObject>()
+	                                                                         .Implements<JComparableObject>()
+	                                                                         .Implements<JCharSequenceObject>().Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JStringObject.typeMetadata;
+	static JClassTypeMetadata<JStringObject> IClassType<JStringObject>.Metadata => JStringObject.typeMetadata;
+
 	/// <summary>
 	/// String length.
 	/// </summary>

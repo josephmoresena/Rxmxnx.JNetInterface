@@ -10,14 +10,19 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JDouble, Double>.JTypeMetadataBuilder
-		.Create(UnicodeClassNames.DoublePrimitive(), UnicodePrimitiveSignatures.DoubleSignatureChar)
-		.WithWrapperClassName(UnicodeClassNames.DoubleObject()).Build();
+	private static readonly JPrimitiveTypeMetadata<JDouble> typeMetadata = IPrimitiveType<JDouble, Double>
+	                                                                       .JTypeMetadataBuilder
+	                                                                       .Create(UnicodeClassNames.DoublePrimitive(),
+		                                                                       UnicodePrimitiveSignatures
+			                                                                       .DoubleSignatureChar)
+	                                                                       .WithWrapperClassName(
+		                                                                       UnicodeClassNames.DoubleObject())
+	                                                                       .Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;
 
-	static JDataTypeMetadata IDataType.Metadata => JDouble.typeMetadata;
+	static JPrimitiveTypeMetadata<JDouble> IPrimitiveType<JDouble>.Metadata => JDouble.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JDouble.Type;
 
 	/// <summary>

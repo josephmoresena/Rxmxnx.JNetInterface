@@ -8,11 +8,11 @@ public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInte
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata typeMetadata = JTypeMetadataBuilder<JCloneableObject>
-	                                                              .Create(UnicodeClassNames.CloneableInterface())
-	                                                              .Build();
+	private static readonly JInterfaceTypeMetadata<JCloneableObject> typeMetadata =
+		JTypeMetadataBuilder<JCloneableObject>.Create(UnicodeClassNames.CloneableInterface()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JCloneableObject.typeMetadata;
+	static JInterfaceTypeMetadata<JCloneableObject> IInterfaceType<JCloneableObject>.Metadata
+		=> JCloneableObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JCloneableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

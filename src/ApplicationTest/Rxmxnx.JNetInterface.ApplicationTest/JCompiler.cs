@@ -35,7 +35,7 @@ public sealed partial record JCompiler
 			await File.WriteAllTextAsync(javaFilePath, JHelloDotnetObject.JavaCode);
 			ProcessStartInfo info = new(Path.Combine(this.JdkPath, this.CompilerPath))
 			{
-				ArgumentList = { javaFilePath, }, WindowStyle = ProcessWindowStyle.Hidden,
+				ArgumentList = { javaFilePath, },
 			};
 			Process javac = Process.Start(info)!;
 			await javac.WaitForExitAsync();

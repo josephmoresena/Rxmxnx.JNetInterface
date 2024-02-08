@@ -8,12 +8,13 @@ public sealed class JConstructorObject : JExecutableObject, IClassType<JConstruc
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JExecutableObject>
-	                                                      .Create<JConstructorObject>(
-		                                                      UnicodeClassNames.ConstructorObject(),
-		                                                      JTypeModifier.Final).Build();
+	private static readonly JClassTypeMetadata<JConstructorObject> metadata = JTypeMetadataBuilder<JExecutableObject>
+	                                                                          .Create<JConstructorObject>(
+		                                                                          UnicodeClassNames.ConstructorObject(),
+		                                                                          JTypeModifier.Final).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JConstructorObject.metadata;
+	static JClassTypeMetadata<JConstructorObject> IClassType<JConstructorObject>.Metadata
+		=> JConstructorObject.metadata;
 
 	/// <summary>
 	/// Executable JNI definition.

@@ -30,6 +30,13 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 public interface IPrimitiveType<TPrimitive> : IPrimitiveType, IDataType<TPrimitive>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {
+	/// <summary>
+	/// Current type metadata.
+	/// </summary>
+	[ReadOnly(true)]
+	protected new static abstract JPrimitiveTypeMetadata<TPrimitive> Metadata { get; }
+
+	static JDataTypeMetadata IDataType<TPrimitive>.Metadata => TPrimitive.Metadata;
 	static JTypeKind IDataType.Kind => JTypeKind.Primitive;
 
 	/// <summary>

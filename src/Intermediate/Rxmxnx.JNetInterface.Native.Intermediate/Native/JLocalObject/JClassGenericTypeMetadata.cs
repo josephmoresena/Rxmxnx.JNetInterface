@@ -7,7 +7,7 @@ public partial class JLocalObject
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IClassType"/> type.
 		/// </summary>
-		internal sealed record JClassGenericTypeMetadata : JClassTypeMetadata
+		internal sealed record JClassGenericTypeMetadata : JClassTypeMetadata<TClass>
 		{
 			/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 			private readonly JClassTypeMetadata? _baseMetadata;
@@ -17,11 +17,7 @@ public partial class JLocalObject
 			private readonly JTypeModifier _modifier;
 
 			/// <inheritdoc/>
-			public override Type Type => typeof(TClass);
-			/// <inheritdoc/>
 			public override JClassTypeMetadata? BaseMetadata => this._baseMetadata;
-			/// <inheritdoc/>
-			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TClass>();
 			/// <inheritdoc/>
 			public override JTypeModifier Modifier => this._modifier;
 			/// <inheritdoc/>
@@ -38,6 +34,19 @@ public partial class JLocalObject
 			{
 				this._modifier = modifier;
 				this._interfaces = InterfaceSet.GetClassInterfaces(baseMetadata, builder.GetInterfaceSet());
+				this._baseMetadata = baseMetadata;
+			}
+			/// <summary>
+			/// Constructor.
+			/// </summary>
+			/// <param name="information">Internal sequence information.</param>
+			/// <param name="isVoid">Indicates if current class is <c>void</c> wrapper.</param>
+			/// <param name="baseMetadata">Base type of current type metadata.</param>
+			public JClassGenericTypeMetadata(CStringSequence information, Boolean isVoid,
+				JClassTypeMetadata? baseMetadata) : base(information)
+			{
+				this._modifier = JTypeModifier.Final;
+				this._interfaces = isVoid ? InterfaceSet.PrimitiveWrapperSet : InterfaceSet.Empty;
 				this._baseMetadata = baseMetadata;
 			}
 
@@ -74,16 +83,6 @@ public partial class JLocalObject
 					JLocalObject.Validate<TClass>(jGlobal, env);
 				return TClass.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
-			/// <inheritdoc/>
-			internal override JFunctionDefinition<TClass> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
-				JArgumentMetadata[] metadata)
-				=> JFunctionDefinition<TClass>.Create(functionName, metadata);
-			/// <inheritdoc/>
-			internal override JFieldDefinition<TClass> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
-				=> new(fieldName);
-			/// <inheritdoc/>
-			internal override JArrayTypeMetadata GetArrayMetadata()
-				=> JReferenceTypeMetadata.GetArrayMetadata<TClass>();
 		}
 	}
 }

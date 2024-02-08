@@ -8,12 +8,12 @@ public class JClassFormatErrorObject : JLinkageErrorObject, IThrowableType<JClas
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JLinkageErrorObject>
-	                                                              .Create<JClassFormatErrorObject>(
-		                                                              UnicodeClassNames.ClassFormatErrorObject())
-	                                                              .Build();
+	private static readonly JThrowableTypeMetadata<JClassFormatErrorObject> typeMetadata =
+		JTypeMetadataBuilder<JLinkageErrorObject>
+			.Create<JClassFormatErrorObject>(UnicodeClassNames.ClassFormatErrorObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JClassFormatErrorObject.typeMetadata;
+	static JThrowableTypeMetadata<JClassFormatErrorObject> IThrowableType<JClassFormatErrorObject>.Metadata
+		=> JClassFormatErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JClassFormatErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

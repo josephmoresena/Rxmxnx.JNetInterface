@@ -23,4 +23,44 @@ public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 	public override String ToString()
 		=> $"{base.ToString()}{nameof(JDataTypeMetadata.Modifier)} = {this.Modifier}, " +
 			$"{nameof(JClassTypeMetadata.BaseClassName)} = {this.BaseClassName}, ";
+
+	/// <summary>
+	/// Creates an exception instance from a <see cref="JGlobalBase"/> throwable instance.
+	/// </summary>
+	/// <param name="jGlobalThrowable">A <see cref="JGlobalBase"/> throwable instance.</param>
+	/// <param name="exceptionMessage">Exception message.</param>
+	/// <returns>A <see cref="JThrowableException"/> instance.</returns>
+	internal virtual JThrowableException? CreateException(JGlobalBase jGlobalThrowable,
+		String? exceptionMessage = default)
+		=> default;
+}
+
+/// <summary>
+/// This record stores the metadata for a class <see cref="IDataType"/> type.
+/// </summary>
+public abstract partial record JClassTypeMetadata<TClass> : JClassTypeMetadata
+	where TClass : JReferenceObject, IClassType<TClass>
+{
+	/// <inheritdoc/>
+	public override Type Type => typeof(TClass);
+	/// <inheritdoc/>
+	public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TClass>();
+
+	/// <inheritdoc/>
+	private protected JClassTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
+		className, signature) { }
+	/// <inheritdoc/>
+	private protected JClassTypeMetadata(CStringSequence information) : base(information) { }
+
+	/// <inheritdoc/>
+	public override String ToString() => base.ToString();
+
+	/// <inheritdoc/>
+	internal override JFunctionDefinition<TClass> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
+		JArgumentMetadata[] metadata)
+		=> JFunctionDefinition<TClass>.Create(functionName, metadata);
+	/// <inheritdoc/>
+	internal override JFieldDefinition<TClass> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName) => new(fieldName);
+	/// <inheritdoc/>
+	internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();
 }

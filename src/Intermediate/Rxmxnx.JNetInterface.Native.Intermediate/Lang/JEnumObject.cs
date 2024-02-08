@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Enum</c> instance.
 /// </summary>
-public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, ILocalObject,
+public partial class JEnumObject : JLocalObject, IClassType<JEnumObject>, ILocalObject,
 	IInterfaceObject<JSerializableObject>, IInterfaceObject<JComparableObject>
 {
 	/// <summary>
@@ -57,7 +57,6 @@ public partial class JEnumObject : JLocalObject, IBaseClassType<JEnumObject>, IL
 /// <typeparam name="TEnum">Type of java enum type.</typeparam>
 public abstract class JEnumObject<TEnum> : JEnumObject, IDataType where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {
-	static JDataTypeMetadata IDataType.Metadata => TEnum.Metadata;
 	static JTypeKind IDataType.Kind => JTypeKind.Enum;
 	static Type IDataType.FamilyType => typeof(JEnumObject);
 

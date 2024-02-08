@@ -129,7 +129,7 @@ public partial class JLocalObject
 		/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-		public JClassTypeMetadata Build()
+		public JClassTypeMetadata<TClass> Build()
 			=> new JClassGenericTypeMetadata(this._builder, this._modifier, this._baseMetadata);
 
 		/// <summary>
@@ -177,5 +177,27 @@ public partial class JLocalObject
 			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();
 			return new(className, modifier, IClassType.GetMetadata<TClass>(), interfaceTypes);
 		}
+
+		/// <summary>
+		/// Creates a <see cref="JClassTypeMetadata{TClass}"/> instance.
+		/// </summary>
+		/// <param name="builder">A <see cref="JTypeMetadataBuilder"/> instance.</param>
+		/// <param name="modifier">Modifier of current type.</param>
+		/// <param name="baseMetadata">Base type metadata of current type.</param>
+		/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
+		internal static JClassTypeMetadata<TClass> Build(JTypeMetadataBuilder builder, JTypeModifier modifier,
+			JClassTypeMetadata? baseMetadata)
+			=> new JClassGenericTypeMetadata(builder, modifier, baseMetadata);
+		/// <summary>
+		/// Creates a <see cref="JClassTypeMetadata{TClass}"/> instance for <paramref name="primitiveMetadata"/>
+		/// wrapper class.
+		/// </summary>
+		/// <param name="primitiveMetadata">A <see cref="JPrimitiveTypeMetadata"/> instance.</param>
+		/// <param name="baseMetadata">Base type metadata of current type.</param>
+		/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
+		internal static JClassTypeMetadata<TClass> Build(JPrimitiveTypeMetadata primitiveMetadata,
+			JClassTypeMetadata? baseMetadata = default)
+			=> new JClassGenericTypeMetadata(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0,
+			                                 baseMetadata);
 	}
 }

@@ -32,7 +32,7 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 	private protected JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Int32 deep) : base(signature, signature)
 	{
 		this.Deep = deep;
-		JArrayTypeMetadata.arrayMetadatas.TryAdd(this.Signature.ToHexString(), this);
+		JArrayTypeMetadata.metadataCache.TryAdd(this.Signature.ToHexString(), this);
 	}
 
 	/// <inheritdoc/>

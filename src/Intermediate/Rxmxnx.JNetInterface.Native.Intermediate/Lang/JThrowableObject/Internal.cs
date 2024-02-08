@@ -5,12 +5,13 @@ public partial class JThrowableObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JThrowableObject>
-	                                                              .Create(UnicodeClassNames.ThrowableObject())
-	                                                              .Implements<JSerializableObject>().Build();
+	private static readonly JThrowableTypeMetadata<JThrowableObject> typeMetadata =
+		JTypeMetadataBuilder<JThrowableObject>.Create(UnicodeClassNames.ThrowableObject())
+		                                      .Implements<JSerializableObject>().Build();
 
-	static JClassTypeMetadata IBaseClassType<JThrowableObject>.SuperClassMetadata => JThrowableObject.typeMetadata;
-	static JDataTypeMetadata IDataType.Metadata => JThrowableObject.typeMetadata;
+	static JThrowableTypeMetadata<JThrowableObject> IThrowableType<JThrowableObject>.Metadata
+		=> JThrowableObject.typeMetadata;
+	static Type IDataType.FamilyType => typeof(JThrowableObject);
 
 	/// <summary>
 	/// Retrieves a <see cref="JStringObject"/> containing throwable message.

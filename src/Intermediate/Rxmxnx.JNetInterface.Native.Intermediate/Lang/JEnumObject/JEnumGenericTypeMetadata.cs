@@ -7,7 +7,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IEnumType"/> type.
 		/// </summary>
-		internal sealed record JEnumGenericTypeMetadata : JEnumTypeMetadata
+		internal sealed record JEnumGenericTypeMetadata : JEnumTypeMetadata<TEnum>
 		{
 			/// <inheritdoc cref="JEnumTypeMetadata.Fields"/>
 			private readonly IEnumFieldList _fields;

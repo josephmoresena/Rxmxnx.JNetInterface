@@ -26,3 +26,14 @@ public abstract record JEnumTypeMetadata : JReferenceTypeMetadata
 	/// <inheritdoc/>
 	public override String ToString() => $"{base.ToString()}{nameof(JEnumTypeMetadata.Fields)} = {this.Fields}, ";
 }
+
+/// <summary>
+/// This record stores the metadata for an enum <see cref="IDataType"/> type.
+/// </summary>
+/// <typeparam name="TEnum">Type of java enum type.</typeparam>
+public abstract record JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
+{
+	/// <inheritdoc/>
+	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
+		className, signature) { }
+}

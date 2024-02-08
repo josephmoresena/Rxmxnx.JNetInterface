@@ -8,12 +8,12 @@ public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByte
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JByteBufferObject>
-	                                                      .Create<JMappedByteBufferObject>(
-		                                                      UnicodeClassNames.MappedByteBufferObject(),
-		                                                      JTypeModifier.Abstract).Build();
-
-	static JDataTypeMetadata IDataType.Metadata => JMappedByteBufferObject.metadata;
+	private static readonly JClassTypeMetadata<JMappedByteBufferObject> metadata =
+		JTypeMetadataBuilder<JByteBufferObject>
+			.Create<JMappedByteBufferObject>(UnicodeClassNames.MappedByteBufferObject(), JTypeModifier.Abstract)
+			.Build();
+	static JClassTypeMetadata<JMappedByteBufferObject> IClassType<JMappedByteBufferObject>.Metadata
+		=> JMappedByteBufferObject.metadata;
 
 	/// <inheritdoc/>
 	private protected JMappedByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) :

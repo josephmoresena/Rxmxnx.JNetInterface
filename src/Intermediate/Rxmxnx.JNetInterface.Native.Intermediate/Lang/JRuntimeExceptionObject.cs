@@ -8,12 +8,12 @@ public class JRuntimeExceptionObject : JExceptionObject, IThrowableType<JRuntime
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JExceptionObject>
-	                                                              .Create<JRuntimeExceptionObject>(
-		                                                              UnicodeClassNames.RuntimeExceptionObject())
-	                                                              .Build();
+	private static readonly JThrowableTypeMetadata<JRuntimeExceptionObject> typeMetadata =
+		JTypeMetadataBuilder<JExceptionObject>
+			.Create<JRuntimeExceptionObject>(UnicodeClassNames.RuntimeExceptionObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JRuntimeExceptionObject.typeMetadata;
+	static JThrowableTypeMetadata<JRuntimeExceptionObject> IThrowableType<JRuntimeExceptionObject>.Metadata
+		=> JRuntimeExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JRuntimeExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

@@ -64,13 +64,11 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 /// </summary>
 /// <typeparam name="TValue">Number <see cref="IPrimitiveType"/> type.</typeparam>
 /// <typeparam name="TNumber"><see cref="JNumberObject"/> type.</typeparam>
-public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>, IPrimitiveWrapperType,
+public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>,
 	IPrimitiveEquatable, IInterfaceObject<JComparableObject>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 	where TNumber : JNumberObject<TValue, TNumber>, IPrimitiveWrapperType<TNumber, TValue>
 {
-	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => IPrimitiveType.GetMetadata<TValue>();
-
 	/// <inheritdoc/>
 	internal JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) :
 		base(jClass, localRef, value) { }

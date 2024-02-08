@@ -5,10 +5,11 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public class JClassLoaderObject : JLocalObject, IClassType<JClassLoaderObject>
 {
-	private static readonly JClassTypeMetadata typeMetadata = JTypeMetadataBuilder<JClassLoaderObject>
-	                                                          .Create(UnicodeClassNames.ClassLoaderObject()).Build();
+	private static readonly JClassTypeMetadata<JClassLoaderObject> typeMetadata =
+		JTypeMetadataBuilder<JClassLoaderObject>.Create(UnicodeClassNames.ClassLoaderObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JClassLoaderObject.typeMetadata;
+	static JClassTypeMetadata<JClassLoaderObject> IClassType<JClassLoaderObject>.Metadata
+		=> JClassLoaderObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JClassLoaderObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

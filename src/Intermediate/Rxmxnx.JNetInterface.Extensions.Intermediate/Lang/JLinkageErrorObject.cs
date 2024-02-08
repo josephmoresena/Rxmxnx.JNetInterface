@@ -8,11 +8,11 @@ public class JLinkageErrorObject : JErrorObject, IThrowableType<JLinkageErrorObj
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JErrorObject>
-	                                                              .Create<JLinkageErrorObject>(
-		                                                              UnicodeClassNames.LinkageErrorObject()).Build();
+	private static readonly JThrowableTypeMetadata<JLinkageErrorObject> typeMetadata =
+		JTypeMetadataBuilder<JErrorObject>.Create<JLinkageErrorObject>(UnicodeClassNames.LinkageErrorObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JLinkageErrorObject.typeMetadata;
+	static JThrowableTypeMetadata<JLinkageErrorObject> IThrowableType<JLinkageErrorObject>.Metadata
+		=> JLinkageErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JLinkageErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

@@ -8,12 +8,12 @@ public class JClassCircularityErrorObject : JLinkageErrorObject, IThrowableType<
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JLinkageErrorObject>
-	                                                              .Create<JClassCircularityErrorObject>(
-		                                                              UnicodeClassNames.ClassCircularityErrorObject())
-	                                                              .Build();
+	private static readonly JThrowableTypeMetadata<JClassCircularityErrorObject> typeMetadata =
+		JTypeMetadataBuilder<JLinkageErrorObject>
+			.Create<JClassCircularityErrorObject>(UnicodeClassNames.ClassCircularityErrorObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JClassCircularityErrorObject.typeMetadata;
+	static JThrowableTypeMetadata<JClassCircularityErrorObject> IThrowableType<JClassCircularityErrorObject>.Metadata
+		=> JClassCircularityErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JClassCircularityErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

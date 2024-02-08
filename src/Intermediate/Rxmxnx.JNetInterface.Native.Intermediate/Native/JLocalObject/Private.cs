@@ -2,8 +2,6 @@ namespace Rxmxnx.JNetInterface.Native;
 
 public partial class JLocalObject : ILocalObject
 {
-	static Type IDataType.FamilyType => typeof(JLocalObject);
-
 	/// <summary>
 	/// Internal <see cref="ObjectLifetime"/> instance.
 	/// </summary>

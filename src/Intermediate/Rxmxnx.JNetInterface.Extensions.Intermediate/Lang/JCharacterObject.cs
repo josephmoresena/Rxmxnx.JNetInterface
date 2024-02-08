@@ -1,6 +1,5 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
-#pragma warning disable CS0659
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
@@ -50,4 +49,3 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	public static JCharacterObject? Create(IEnvironment env, JChar? value)
 		=> value is not null ? (JCharacterObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 }
-#pragma warning restore CS0659

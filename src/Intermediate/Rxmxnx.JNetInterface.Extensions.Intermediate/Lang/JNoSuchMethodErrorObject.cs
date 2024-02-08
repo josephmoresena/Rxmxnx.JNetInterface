@@ -8,11 +8,12 @@ public class JNoSuchMethodErrorObject : JIncompatibleClassChangeErrorObject, ITh
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata =
+	private static readonly JThrowableTypeMetadata<JNoSuchMethodErrorObject> typeMetadata =
 		JTypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
 			.Create<JNoSuchMethodErrorObject>(UnicodeClassNames.NoSuchMethodErrorObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JNoSuchMethodErrorObject.typeMetadata;
+	static JThrowableTypeMetadata<JNoSuchMethodErrorObject> IThrowableType<JNoSuchMethodErrorObject>.Metadata
+		=> JNoSuchMethodErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JNoSuchMethodErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

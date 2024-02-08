@@ -9,10 +9,11 @@ public sealed class JDirectBufferObject : JInterfaceObject<JDirectBufferObject>,
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata metadata = JTypeMetadataBuilder<JDirectBufferObject>
-	                                                          .Create(UnicodeClassNames.DirectBufferObject()).Build();
+	private static readonly JInterfaceTypeMetadata<JDirectBufferObject> metadata =
+		JTypeMetadataBuilder<JDirectBufferObject>.Create(UnicodeClassNames.DirectBufferObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JDirectBufferObject.metadata;
+	static JInterfaceTypeMetadata<JDirectBufferObject> IInterfaceType<JDirectBufferObject>.Metadata
+		=> JDirectBufferObject.metadata;
 
 	/// <inheritdoc/>
 	private JDirectBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

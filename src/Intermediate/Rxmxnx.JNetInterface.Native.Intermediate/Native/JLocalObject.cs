@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a local <c>java.lang.Object</c> instance.
 /// </summary>
-public partial class JLocalObject : JReferenceObject, IBaseClassType<JLocalObject>
+public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 {
 	/// <summary>
 	/// <see cref="IEnvironment"/> instance.

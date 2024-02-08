@@ -8,12 +8,12 @@ public class JVirtualMachineErrorObject : JErrorObject, IThrowableType<JVirtualM
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JErrorObject>
-	                                                              .Create<JVirtualMachineErrorObject>(
-		                                                              UnicodeClassNames.VirtualMachineErrorObject())
-	                                                              .Build();
+	private static readonly JThrowableTypeMetadata<JVirtualMachineErrorObject> typeMetadata =
+		JTypeMetadataBuilder<JErrorObject>
+			.Create<JVirtualMachineErrorObject>(UnicodeClassNames.VirtualMachineErrorObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JVirtualMachineErrorObject.typeMetadata;
+	static JThrowableTypeMetadata<JVirtualMachineErrorObject> IThrowableType<JVirtualMachineErrorObject>.Metadata
+		=> JVirtualMachineErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JVirtualMachineErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

@@ -8,11 +8,11 @@ public class JExceptionObject : JThrowableObject, IThrowableType<JExceptionObjec
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JThrowableObject>
-	                                                              .Create<JExceptionObject>(
-		                                                              UnicodeClassNames.ExceptionObject()).Build();
+	private static readonly JThrowableTypeMetadata<JExceptionObject> typeMetadata =
+		JTypeMetadataBuilder<JThrowableObject>.Create<JExceptionObject>(UnicodeClassNames.ExceptionObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JExceptionObject.typeMetadata;
+	static JThrowableTypeMetadata<JExceptionObject> IThrowableType<JExceptionObject>.Metadata
+		=> JExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

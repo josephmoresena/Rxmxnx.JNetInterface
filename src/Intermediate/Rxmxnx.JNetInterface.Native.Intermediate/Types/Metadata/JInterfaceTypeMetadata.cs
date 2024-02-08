@@ -26,3 +26,15 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();
 }
+
+/// <summary>
+/// This record stores the metadata for an interface <see cref="IDataType"/> type.
+/// </summary>
+/// <typeparam name="TInterface">Type of java interface type.</typeparam>
+public abstract record JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetadata
+	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+{
+	/// <inheritdoc/>
+	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, ReadOnlySpan<Byte> signature) : base(
+		interfaceName, signature) { }
+}

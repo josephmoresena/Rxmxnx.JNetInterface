@@ -8,10 +8,12 @@ public sealed class JMemberObject : JInterfaceObject<JMemberObject>, IInterfaceT
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata metadata = JTypeMetadataBuilder<JMemberObject>
-	                                                          .Create(UnicodeClassNames.MemberInterface()).Build();
+	private static readonly JInterfaceTypeMetadata<JMemberObject> metadata = JTypeMetadataBuilder<JMemberObject>
+	                                                                         .Create(
+		                                                                         UnicodeClassNames.MemberInterface())
+	                                                                         .Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JMemberObject.metadata;
+	static JInterfaceTypeMetadata<JMemberObject> IInterfaceType<JMemberObject>.Metadata => JMemberObject.metadata;
 
 	/// <inheritdoc/>
 	private JMemberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

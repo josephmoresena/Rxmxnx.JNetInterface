@@ -1,6 +1,5 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
-#pragma warning disable CS0659
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
@@ -53,4 +52,3 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	public static JBooleanObject? Create(IEnvironment env, JBoolean? value)
 		=> value is not null ? (JBooleanObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 }
-#pragma warning restore CS0659

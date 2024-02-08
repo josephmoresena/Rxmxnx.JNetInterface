@@ -9,12 +9,13 @@ public class JExceptionInInitializerErrorObject : JLinkageErrorObject,
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JLinkageErrorObject>
-	                                                              .Create<JExceptionInInitializerErrorObject>(
-		                                                              UnicodeClassNames
-			                                                              .ExceptionInInitializerErrorObject()).Build();
+	private static readonly JThrowableTypeMetadata<JExceptionInInitializerErrorObject> typeMetadata =
+		JTypeMetadataBuilder<JLinkageErrorObject>
+			.Create<JExceptionInInitializerErrorObject>(UnicodeClassNames.ExceptionInInitializerErrorObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JExceptionInInitializerErrorObject.typeMetadata;
+	static JThrowableTypeMetadata<JExceptionInInitializerErrorObject> IThrowableType<JExceptionInInitializerErrorObject>
+		.Metadata
+		=> JExceptionInInitializerErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JExceptionInInitializerErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

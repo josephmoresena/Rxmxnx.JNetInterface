@@ -1,23 +1,21 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
 /// <summary>
-/// This record stores the metadata for an exception <see cref="IClassType"/> type.
+/// This record stores the metadata for an exception <see cref="IThrowableType{TThrowable}"/> type.
 /// </summary>
-public abstract record JThrowableTypeMetadata : JClassTypeMetadata
+/// <typeparam name="TThrowable">Type of java enum type.</typeparam>
+public sealed record JThrowableTypeMetadata<TThrowable> : JClassTypeMetadata<TThrowable>.View
+	where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 {
 	/// <inheritdoc/>
-	private protected JThrowableTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
-		className, signature) { }
+	internal JThrowableTypeMetadata(JClassTypeMetadata<TThrowable> metadata) : base(metadata) { }
 
 	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
+	public override String ToString()
+		=> $"{nameof(JThrowableTypeMetadata<TThrowable>)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
-	/// <summary>
-	/// Creates an exception instance from a <see cref="JGlobalBase"/> throwable instance.
-	/// </summary>
-	/// <param name="jGlobalThrowable">A <see cref="JGlobalBase"/> throwable instance.</param>
-	/// <param name="exceptionMessage">Exception message.</param>
-	/// <returns>A <see cref="JThrowableException"/> instance.</returns>
-	internal abstract JThrowableException CreateException(JGlobalBase jGlobalThrowable,
-		String? exceptionMessage = default);
+	/// <inheritdoc/>
+	internal override JThrowableException CreateException(JGlobalBase jGlobalThrowable,
+		String? exceptionMessage = default)
+		=> new JThrowableException<TThrowable>(jGlobalThrowable, exceptionMessage);
 }

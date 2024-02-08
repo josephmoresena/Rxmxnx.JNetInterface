@@ -8,13 +8,14 @@ public class JReflectiveOperationExceptionObject : JExceptionObject, IThrowableT
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata typeMetadata = JTypeMetadataBuilder<JExceptionObject>
-	                                                              .Create<JReflectiveOperationExceptionObject>(
-		                                                              UnicodeClassNames
-			                                                              .ReflectiveOperationExceptionObject())
-	                                                              .Build();
+	private static readonly JThrowableTypeMetadata<JReflectiveOperationExceptionObject> typeMetadata =
+		JTypeMetadataBuilder<JExceptionObject>
+			.Create<JReflectiveOperationExceptionObject>(UnicodeClassNames.ReflectiveOperationExceptionObject())
+			.Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JReflectiveOperationExceptionObject.typeMetadata;
+	static JThrowableTypeMetadata<JReflectiveOperationExceptionObject>
+		IThrowableType<JReflectiveOperationExceptionObject>.Metadata
+		=> JReflectiveOperationExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JReflectiveOperationExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

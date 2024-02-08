@@ -8,11 +8,13 @@ public class JAccessibleObject : JLocalObject, IClassType<JAccessibleObject>, II
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JAccessibleObject>
-	                                                      .Create(UnicodeClassNames.AccessibleObject())
-	                                                      .Implements<JAnnotatedElementObject>().Build();
+	private static readonly JClassTypeMetadata<JAccessibleObject> metadata = JTypeMetadataBuilder<JAccessibleObject>
+	                                                                         .Create(
+		                                                                         UnicodeClassNames.AccessibleObject())
+	                                                                         .Implements<JAnnotatedElementObject>()
+	                                                                         .Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JAccessibleObject.metadata;
+	static JClassTypeMetadata<JAccessibleObject> IClassType<JAccessibleObject>.Metadata => JAccessibleObject.metadata;
 
 	/// <inheritdoc/>
 	internal JAccessibleObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
