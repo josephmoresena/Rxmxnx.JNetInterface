@@ -155,6 +155,7 @@ public enum JNativeType : Byte
 /// <summary>
 /// Extensions for <see cref="JNativeType"/> enum.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class JNativeTypeExtensions
 {

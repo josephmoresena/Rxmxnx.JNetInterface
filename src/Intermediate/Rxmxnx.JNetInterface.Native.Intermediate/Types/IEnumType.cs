@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// <summary>
 /// This interface exposes an object that represents a java enum type instance.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IEnumType : IReferenceType
 {
@@ -22,6 +23,7 @@ public interface IEnumType : IReferenceType
 /// This interface exposes an object that represents a java enum type instance.
 /// </summary>
 /// <typeparam name="TEnum">Type of java enum type.</typeparam>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IEnumType<TEnum> : IEnumType, IReferenceType<TEnum> where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {

@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// Set of <see cref="IPrimitiveType"/> native extensions.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class JPrimitiveExtensions
 {

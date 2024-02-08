@@ -3,6 +3,7 @@
 /// <summary>
 /// This interface exposes a java native value.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface INativeType
 {
@@ -50,6 +51,8 @@ internal interface INativeType
 /// This interface exposes a java native value.
 /// </summary>
 /// <typeparam name="TNative">Type of <see cref="INativeType"/></typeparam>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 internal interface INativeType<TNative> : INativeType where TNative : unmanaged, INativeType<TNative>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

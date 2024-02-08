@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Nio.Ch;
 /// <summary>
 /// This class represents a local <c>sun.nio.ch.DirectBuffer</c> instance.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public sealed class JDirectBufferObject : JInterfaceObject<JDirectBufferObject>, IInterfaceType<JDirectBufferObject>
 {

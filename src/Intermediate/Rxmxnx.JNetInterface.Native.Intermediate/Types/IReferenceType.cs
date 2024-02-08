@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// <summary>
 /// This interface exposes an object that represents a java reference type instance.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public partial interface IReferenceType : IObject, IDataType, IDisposable
 {
@@ -23,6 +24,7 @@ public partial interface IReferenceType : IObject, IDataType, IDisposable
 /// This interface exposes an object that represents a java reference type instance.
 /// </summary>
 /// <typeparam name="TReference">Type of java reference type.</typeparam>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IReferenceType<out TReference> : IReferenceType, IDataType<TReference>
 	where TReference : JReferenceObject, IReferenceType<TReference>

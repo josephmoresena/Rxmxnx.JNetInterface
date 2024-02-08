@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents the base of any java reference type instance.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract partial class JReferenceObject : JObject
 {

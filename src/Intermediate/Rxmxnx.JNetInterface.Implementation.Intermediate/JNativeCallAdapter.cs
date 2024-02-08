@@ -134,6 +134,7 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <summary>
 	/// Builder for <see cref="JNativeCallAdapter"/>
 	/// </summary>
+	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public readonly ref partial struct Builder
 	{

@@ -5,5 +5,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <see cref="IComparable{TSelf}"/> interfaces.
 /// </summary>
 /// <typeparam name="TSelf">Type of object.</typeparam>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 internal interface ISelfEquatableComparable<TSelf> : IEquatable<TSelf>, IComparable<TSelf>
 	where TSelf : ISelfEquatableComparable<TSelf>;

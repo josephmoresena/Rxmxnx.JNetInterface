@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// <summary>
 /// This interface exposes an object that represents a java primitive integer.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface IPrimitiveIntegerType : IPrimitiveNumericType;
 
@@ -11,6 +12,7 @@ internal interface IPrimitiveIntegerType : IPrimitiveNumericType;
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive integer.</typeparam>
 /// <typeparam name="TValue">Type of the .NET equivalent integer.</typeparam>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface
 	IPrimitiveIntegerType<TPrimitive, TValue> : IPrimitiveIntegerType, IIntegerValue<TValue>,

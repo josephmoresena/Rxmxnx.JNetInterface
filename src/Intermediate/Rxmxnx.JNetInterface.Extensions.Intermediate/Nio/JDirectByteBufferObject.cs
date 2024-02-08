@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Nio;
 /// <summary>
 /// This class represents a local <c>java.nio.DirectByteBuffer</c> instance.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDirectByteBufferObject>,
 	IDirectBufferObject<JByte>

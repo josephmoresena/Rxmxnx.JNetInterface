@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// Set of primitive memory extensions.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class JArrayExtensions
 {

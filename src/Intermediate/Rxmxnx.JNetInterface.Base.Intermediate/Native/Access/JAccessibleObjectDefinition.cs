@@ -3,6 +3,7 @@
 /// <summary>
 /// This class stores a <c>java.lang.Class&lt;?&gt;</c> accessible object definition.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract record JAccessibleObjectDefinition
 {

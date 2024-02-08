@@ -3,6 +3,7 @@
 /// <summary>
 /// This interface exposes an object that represents a java primitive value.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 {

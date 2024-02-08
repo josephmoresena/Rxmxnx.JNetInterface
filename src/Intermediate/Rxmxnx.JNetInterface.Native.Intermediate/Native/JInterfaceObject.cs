@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a local interface instance.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract partial class JInterfaceObject : JLocalObject, IInterfaceType
 {

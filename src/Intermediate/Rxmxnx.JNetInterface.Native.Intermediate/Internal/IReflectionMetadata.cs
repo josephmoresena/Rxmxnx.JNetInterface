@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This interface exposes a <c>java.lang.Class&lt;?&gt;</c> JNI reflection container.
 /// </summary>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 internal interface IReflectionMetadata
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArgumentMetadata"/>

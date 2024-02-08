@@ -4,6 +4,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// This interface exposes an object that represents a java throwable class type instance.
 /// </summary>
 /// <typeparam name="TThrowable">Type of java enum type.</typeparam>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IThrowableType<TThrowable> : IClassType<TThrowable>
 	where TThrowable : JThrowableObject, IThrowableType<TThrowable>

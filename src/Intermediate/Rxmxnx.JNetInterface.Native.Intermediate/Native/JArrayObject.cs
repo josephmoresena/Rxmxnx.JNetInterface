@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a local array instance.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract partial class JArrayObject : JLocalObject
 {
@@ -54,6 +55,9 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObj
 	/// </summary>
 	public static JArrayTypeMetadata Metadata => JArrayGenericTypeMetadata.Instance;
 
+	/// <inheritdoc/>
+	internal override JArrayTypeMetadata TypeMetadata => IArrayType.GetMetadata<JArrayObject<TElement>>();
+
 	/// <summary>
 	/// Gets or sets the element of <paramref name="index"/>.
 	/// </summary>
@@ -64,9 +68,6 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObj
 		get => this.Environment.ArrayFeature.GetElement(this, index);
 		set => this.Environment.ArrayFeature.SetElement(this, index, value);
 	}
-
-	/// <inheritdoc/>
-	internal override JArrayTypeMetadata TypeMetadata => IArrayType.GetMetadata<JArrayObject<TElement>>();
 
 	/// <summary>
 	/// Creates an empty <see cref="JArrayObject{TElement}"/> instance.

@@ -3,6 +3,7 @@
 /// <summary>
 /// This class stores a java call definition.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract partial record JCallDefinition : JAccessibleObjectDefinition
 {
