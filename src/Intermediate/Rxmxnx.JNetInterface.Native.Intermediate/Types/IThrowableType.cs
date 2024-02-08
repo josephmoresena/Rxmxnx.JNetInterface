@@ -15,6 +15,7 @@ public interface IThrowableType<TThrowable> : IClassType<TThrowable>
 	protected new static abstract JThrowableTypeMetadata<TThrowable> Metadata { get; }
 
 	static JClassTypeMetadata<TThrowable> IClassType<TThrowable>.Metadata => TThrowable.Metadata;
+	static JDataTypeMetadata IDataType<TThrowable>.Metadata => TThrowable.Metadata;
 
 	/// <summary>
 	/// Creates a <typeparamref name="TThrowable"/> instance from <paramref name="jGlobal"/>.

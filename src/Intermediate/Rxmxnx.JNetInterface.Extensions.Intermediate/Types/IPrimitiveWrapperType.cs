@@ -56,8 +56,7 @@ public interface IPrimitiveWrapperType<TWrapper> : IClassType<TWrapper>
 /// </summary>
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
 /// <typeparam name="TValue"><see cref="IPrimitiveType"/> type.</typeparam>
-public interface IPrimitiveWrapperType<TWrapper, TValue> : IPrimitiveWrapperType<TWrapper>, IWrapper<TValue>,
-	IInterfaceObject<JSerializableObject>, IInterfaceObject<JComparableObject>
+public interface IPrimitiveWrapperType<TWrapper, TValue> : IPrimitiveWrapperType<TWrapper>, IWrapper<TValue>
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper> where TValue : unmanaged, IPrimitiveType<TValue>
 {
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType<TWrapper>.PrimitiveMetadata

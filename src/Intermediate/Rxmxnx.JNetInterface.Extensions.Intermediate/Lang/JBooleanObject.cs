@@ -4,7 +4,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
 public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
-	IPrimitiveWrapperType<JBooleanObject, JBoolean>
+	IPrimitiveWrapperType<JBooleanObject, JBoolean>, IInterfaceObject<JSerializableObject>,
+	IInterfaceObject<JComparableObject>
 {
 	/// <summary>
 	/// Constructor.
