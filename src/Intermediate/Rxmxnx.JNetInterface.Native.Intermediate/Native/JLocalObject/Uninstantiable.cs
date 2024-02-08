@@ -5,7 +5,7 @@ public partial class JLocalObject
 	/// <summary>
 	/// This class represents an uninstantiable java type instance.
 	/// </summary>
-	public class Uninstantiable<TUninstantiable> : JLocalObject
+	public abstract class Uninstantiable<TUninstantiable> : JLocalObject
 		where TUninstantiable : Uninstantiable<TUninstantiable>, IUninstantiableType<TUninstantiable>, new()
 	{
 		/// <inheritdoc/>
@@ -16,6 +16,6 @@ public partial class JLocalObject
 		/// <summary>
 		/// Parameterless constructor.
 		/// </summary>
-		public Uninstantiable() : base(IUninstantiableType.ThrowInstantiation<TUninstantiable>()) { }
+		protected Uninstantiable() : base(ValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>()) { }
 	}
 }

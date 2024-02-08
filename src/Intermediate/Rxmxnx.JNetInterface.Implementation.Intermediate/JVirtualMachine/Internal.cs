@@ -168,8 +168,7 @@ public partial class JVirtualMachine
 		ValidationUtilities.ThrowIfDifferentThread(thread);
 		JVirtualMachine vm = ReferenceCache.Instance.Get(vmRef, out _);
 		DetachCurrentThreadDelegate detachCurrentThread = vm._cache.GetDelegate<DetachCurrentThreadDelegate>();
-		JResult result = detachCurrentThread(vmRef);
-		if (result != JResult.Ok) throw new JniException(result);
+		ValidationUtilities.ThrowIfInvalidResult(detachCurrentThread(vmRef));
 	}
 	/// <summary>
 	/// Removes the <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>

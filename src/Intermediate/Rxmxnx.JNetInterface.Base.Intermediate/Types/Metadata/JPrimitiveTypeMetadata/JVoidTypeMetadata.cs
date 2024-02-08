@@ -20,8 +20,7 @@ public partial record JPrimitiveTypeMetadata
 		/// <inheritdoc/>
 		public override JNativeType NativeType => default;
 		/// <inheritdoc/>
-		public override JArgumentMetadata ArgumentMetadata
-			=> throw new InvalidOperationException("A void value can't be an argument.");
+		public override JArgumentMetadata ArgumentMetadata => ValidationUtilities.ThrowVoidArgument();
 
 		/// <summary>
 		/// Constructor.
@@ -31,7 +30,7 @@ public partial record JPrimitiveTypeMetadata
 		                                  UnicodeClassNames.VoidPrimitive(), UnicodeClassNames.VoidObject()) { }
 		/// <inheritdoc/>
 		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes)
-			=> throw new InvalidOperationException("A void value can't be created.");
+			=> ValidationUtilities.ThrowVoidInstantiation();
 		/// <inheritdoc/>
 		public override String ToString()
 			=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";

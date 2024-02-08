@@ -359,11 +359,8 @@ partial class JEnvironment
 				JResult result = registerNatives(this.Reference, classRef,
 				                                 (ReadOnlyValPtr<JNativeMethodValue>)argsMemory.Pointer,
 				                                 argsMemory.Values.Length);
-				if (result != JResult.Ok)
-				{
-					this.CheckJniError();
-					throw new JniException(result);
-				}
+				this.CheckJniError();
+				ValidationUtilities.ThrowIfInvalidResult(result);
 				this.VirtualMachine.RegisterNatives(this.ClassObject.Hash, calls);
 			}
 			finally
@@ -377,8 +374,7 @@ partial class JEnvironment
 			UnregisterNativesDelegate unregisterNatives = this.GetDelegate<UnregisterNativesDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			JResult result = unregisterNatives(this.Reference, classRef);
-			if (result != JResult.Ok) throw new JniException(result);
+			ValidationUtilities.ThrowIfInvalidResult(unregisterNatives(this.Reference, classRef));
 			this.VirtualMachine.UnregisterNatives(this.ClassObject.Hash);
 		}
 		public JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,

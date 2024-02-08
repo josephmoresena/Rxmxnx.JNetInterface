@@ -67,7 +67,7 @@ public partial class JVirtualMachine
 		using INativeTransaction jniTransaction = args.vm.CreateTransaction(1);
 		JVirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, name, args.args);
 		JResult result = JVirtualMachine.AttachThread(args.vm, args.args.IsDaemon, arg, out JEnvironmentRef envRef);
-		if (result != JResult.Ok) throw new JniException(result);
+		ValidationUtilities.ThrowIfInvalidResult(result);
 		JEnvironment env = args.vm._cache.ThreadCache.Get(envRef, out _, args.args);
 		return (IThread)env;
 	}

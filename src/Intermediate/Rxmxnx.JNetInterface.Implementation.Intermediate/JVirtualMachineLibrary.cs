@@ -82,7 +82,7 @@ public sealed record JVirtualMachineLibrary
 				break;
 			version = jniVersion;
 		}
-		return version > 0 ? version : throw new InvalidOperationException();
+		return ValidationUtilities.ThrowIfInvalidVersion(version);
 	}
 	/// <summary>
 	/// Retrieves the default VM initialization argument for current JVM library.
@@ -98,9 +98,8 @@ public sealed record JVirtualMachineLibrary
 				JVirtualMachineLibrary.jniVersions[0] :
 				jniVersion,
 		};
-		JResult result = this._getDefaultVirtualMachineInitArgs(ref initValue);
-		if (result == JResult.Ok) return new(initValue);
-		throw new JniException(result);
+		ValidationUtilities.ThrowIfInvalidResult(this._getDefaultVirtualMachineInitArgs(ref initValue));
+		return new(initValue);
 	}
 	/// <summary>
 	/// Creates a <see cref="IInvokedVirtualMachine"/> instance.
@@ -123,9 +122,8 @@ public sealed record JVirtualMachineLibrary
 			IgnoreUnrecognized = ((JBoolean)arg.IgnoreUnrecognized).ByteValue,
 		};
 		JResult result = this._createVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef, in value);
-		if (result == JResult.Ok)
-			return JVirtualMachine.GetVirtualMachine(vmRef, envRef, out env);
-		throw new JniException(result);
+		ValidationUtilities.ThrowIfInvalidResult(result);
+		return JVirtualMachine.GetVirtualMachine(vmRef, envRef, out env);
 	}
 	/// <summary>
 	/// Retrieves all of the created <see cref="IVirtualMachine"/> instances.
@@ -137,9 +135,8 @@ public sealed record JVirtualMachineLibrary
 		_ = this._getCreatedVirtualMachines(ValPtr<JVirtualMachineRef>.Zero, 0, out Int32 vmCount);
 		if (vmCount == 0) return Array.Empty<IVirtualMachine>();
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
-		if (result == JResult.Ok)
-			return arr.Select(JVirtualMachine.GetVirtualMachine).ToArray();
-		throw new JniException(result);
+		ValidationUtilities.ThrowIfInvalidResult(result);
+		return arr.Select(JVirtualMachine.GetVirtualMachine).ToArray();
 	}
 
 	/// <summary>

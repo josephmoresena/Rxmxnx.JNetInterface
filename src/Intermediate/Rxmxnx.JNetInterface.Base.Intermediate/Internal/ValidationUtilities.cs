@@ -56,9 +56,38 @@ internal static class ValidationUtilities
 	/// </summary>
 	/// <param name="nativeType">The invalid <see cref="JNativeType"/> value.</param>
 	/// <returns>Always throws an exception.</returns>
-	/// <exception cref="NotImplementedException">Always thrown.</exception>
+	/// <exception cref="InvalidEnumArgumentException">Always thrown.</exception>
 	public static String ThrowInvalidNativeType(JNativeType nativeType)
 		=> throw new InvalidEnumArgumentException(nameof(nativeType), (Int32)nativeType, typeof(JNativeType));
+	/// <summary>
+	/// Throws an <see cref="InvalidOperationException"/> for the specified <typeparamref name="TReference"/>.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IDataType{TReference}"/> type.</typeparam>
+	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+	public static TReference ThrowInvalidInstantiation<TReference>()
+		where TReference : JReferenceObject, IDataType<TReference>
+	{
+		JDataTypeMetadata metadata = IDataType.GetMetadata<TReference>();
+		throw new InvalidOperationException($"{metadata.ClassName} not is an instantiable type.");
+	}
+	/// <summary>
+	/// Throws an <see cref="InvalidOperationException"/> attempting to retrieve a void argument.
+	/// </summary>
+	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+	public static JArgumentMetadata ThrowVoidArgument()
+		=> throw new InvalidOperationException("A void value can't be an argument.");
+	/// <summary>
+	/// Throws an <see cref="InvalidOperationException"/> attempting to create a void value.
+	/// </summary>
+	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+	public static IPrimitiveType ThrowVoidInstantiation()
+		=> throw new InvalidOperationException("A void value can't be created.");
+	/// <summary>
+	/// Throws an <see cref="InvalidOperationException"/> attempting to create a void value.
+	/// </summary>
+	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+	public static Boolean ThrowVoidEquality()
+		=> throw new InvalidOperationException("A Void instance can't be equatable.");
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> cannot be cast to <typeparamref name="TValue"/>.
 	/// </summary>
@@ -263,4 +292,25 @@ internal static class ValidationUtilities
 		if (length < 0)
 			throw new ArgumentException("Array length must be zero or positive.", nameof(length));
 	}
+	/// <summary>
+	/// Throws an exception if <paramref name="result"/> is not <see cref="JResult.Ok"/>.
+	/// </summary>
+	/// <param name="result">A <see cref="JResult"/> value.</param>
+	/// <exception cref="JniException">
+	/// Throws an exception if <paramref name="result"/> is not <see cref="JResult.Ok"/>.
+	/// </exception>
+	public static void ThrowIfInvalidResult(JResult result)
+	{
+		if (result != JResult.Ok)
+			throw new JniException(result);
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="version"/> is invalid.
+	/// </summary>
+	/// <param name="version">JNI version.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="version"/> is invalid.
+	/// </exception>
+	public static Int32 ThrowIfInvalidVersion(Int32 version)
+		=> version > 0 ? version : throw new InvalidOperationException();
 }
