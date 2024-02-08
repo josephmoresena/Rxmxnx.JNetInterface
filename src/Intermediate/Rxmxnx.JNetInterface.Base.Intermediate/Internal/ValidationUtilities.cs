@@ -42,13 +42,13 @@ internal static class ValidationUtilities
 		String messagePrefix = $"The {interfaceName} interface can't be implemented by itself.";
 		String recommendation = interfaceName switch
 		{
-			"INative" =>
-				"Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort, or extend the JLocalObject class.",
-			"IPrimitive" =>
-				"Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort.",
+			"INativeType" =>
+				" Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort, or extend the JLocalObject class.",
+			"IPrimitiveType" =>
+				" Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort.",
 			_ => String.Empty,
 		};
-		String message = $"{messagePrefix} {recommendation}";
+		String message = $"{messagePrefix}{recommendation}";
 		throw new NotImplementedException(message);
 	}
 	/// <summary>
