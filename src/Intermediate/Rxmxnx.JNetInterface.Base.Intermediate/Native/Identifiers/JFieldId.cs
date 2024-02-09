@@ -9,7 +9,7 @@
 internal readonly partial struct JFieldId : IAccessibleIdentifierType<JFieldId>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JMethod;
+	public static JNativeType Type => JNativeType.JField;
 
 	/// <summary>
 	/// Internal native signed integer

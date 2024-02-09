@@ -9,7 +9,7 @@
 internal readonly partial struct JInvokeInterface : INativeType<JInvokeInterface>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JNativeInterface;
+	public static JNativeType Type => JNativeType.JInvokeInterface;
 
 	/// <summary>
 	/// Internal reserved entries.

@@ -5,7 +5,6 @@
 /// </summary>
 internal static class CommonConstants
 {
-	public const String IntPtrToStringFormat = "X";
 	public const String CriticalExceptionMessage =
 		"The execution is in critical state. No calls can be made through native interface.";
 

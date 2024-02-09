@@ -22,7 +22,7 @@ internal interface INativeType
 		{
 			return this switch
 			{
-				IFixedPointer fPtr => fPtr.Pointer.ToString(CommonConstants.IntPtrToStringFormat),
+				IFixedPointer fPtr => $"0x{fPtr.Pointer:x8}",
 				JValue jValue => Convert.ToHexString(NativeUtilities.AsBytes(jValue)),
 				JNativeInterface jNative => Convert.ToHexString(NativeUtilities.AsBytes(jNative)),
 				JInvokeInterface jInvoke => Convert.ToHexString(NativeUtilities.AsBytes(jInvoke)),

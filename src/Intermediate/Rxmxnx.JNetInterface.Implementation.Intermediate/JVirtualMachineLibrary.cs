@@ -117,7 +117,7 @@ public sealed record JVirtualMachineLibrary
 		JVirtualMachineInitArgumentValue value = new()
 		{
 			Version = arg.Version,
-			OptionsLenght = options.Values.Length,
+			OptionsLength = options.Values.Length,
 			Options = options.ValuePointer,
 			IgnoreUnrecognized = ((JBoolean)arg.IgnoreUnrecognized).ByteValue,
 		};

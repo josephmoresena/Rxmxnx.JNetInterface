@@ -7,7 +7,7 @@
 internal readonly partial struct JEnvironmentValue : INativeReferenceType<JEnvironmentValue, JNativeInterface>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JNativeInterface;
+	public static JNativeType Type => JNativeType.JEnvironment;
 
 	/// <summary>
 	/// Internal <see cref="JNativeInterface"/> pointer.
