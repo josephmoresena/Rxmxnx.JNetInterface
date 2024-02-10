@@ -12,13 +12,12 @@ internal readonly partial struct JVirtualMachineValue : INativeReferenceType<JVi
 	/// <summary>
 	/// Internal <see cref="JInvokeInterface"/> pointer.
 	/// </summary>
-	private readonly IntPtr _functions;
+	private readonly ReadOnlyValPtr<JInvokeInterface> _functions;
 
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JInvokeInterface"/> from this value.
 	/// </summary>
-	public ref readonly JInvokeInterface Reference
-		=> ref this._functions.GetUnsafeReadOnlyReference<JInvokeInterface>();
+	public ref readonly JInvokeInterface Reference => ref this._functions.Reference;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._functions;
 
@@ -26,11 +25,11 @@ internal readonly partial struct JVirtualMachineValue : INativeReferenceType<JVi
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JVirtualMachineValue() => this._functions = IntPtr.Zero;
+	public JVirtualMachineValue() => this._functions = ReadOnlyValPtr<JInvokeInterface>.Zero;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => HashCode.Combine(this._functions);
+	public override Int32 GetHashCode() => this._functions.GetHashCode();
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)

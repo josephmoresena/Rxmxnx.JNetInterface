@@ -30,7 +30,7 @@ internal readonly partial struct JWeakRef : IObjectGlobalReferenceType<JWeakRef>
 	public JWeakRef() => this._value = default;
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => HashCode.Combine(this._value);
+	public override Int32 GetHashCode() => this._value.GetHashCode();
 	/// <inheritdoc/>
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
 		=> obj is JWeakRef jWeakRef && this._value.Equals(jWeakRef._value);

@@ -13,7 +13,7 @@ public readonly partial struct JEnvironmentRef : INativeReferenceType<JEnvironme
 	/// <summary>
 	/// Internal pointer value.
 	/// </summary>
-	private readonly IntPtr _value;
+	private readonly ReadOnlyValPtr<JEnvironmentValue> _value;
 
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value;
@@ -21,20 +21,19 @@ public readonly partial struct JEnvironmentRef : INativeReferenceType<JEnvironme
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JEnvironmentValue"/> from this pointer.
 	/// </summary>
-	internal ref readonly JEnvironmentValue Reference
-		=> ref this._value.GetUnsafeReadOnlyReference<JEnvironmentValue>();
+	internal ref readonly JEnvironmentValue Reference => ref this._value.Reference;
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JEnvironmentRef() => this._value = IntPtr.Zero;
+	public JEnvironmentRef() => this._value = ReadOnlyValPtr<JEnvironmentValue>.Zero;
 
 	ref readonly JEnvironmentValue IReadOnlyReferenceable<JEnvironmentValue>.Reference => ref this.Reference;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => HashCode.Combine(this._value);
+	public override Int32 GetHashCode() => this._value.GetHashCode();
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)

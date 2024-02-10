@@ -12,13 +12,12 @@ internal readonly partial struct JEnvironmentValue : INativeReferenceType<JEnvir
 	/// <summary>
 	/// Internal <see cref="JNativeInterface"/> pointer.
 	/// </summary>
-	private readonly IntPtr _functions;
+	private readonly ReadOnlyValPtr<JNativeInterface> _functions;
 
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JNativeInterface"/> from this value.
 	/// </summary>
-	public ref readonly JNativeInterface Reference
-		=> ref this._functions.GetUnsafeReadOnlyReference<JNativeInterface>();
+	public ref readonly JNativeInterface Reference => ref this._functions.Reference;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._functions;
 
@@ -26,11 +25,11 @@ internal readonly partial struct JEnvironmentValue : INativeReferenceType<JEnvir
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JEnvironmentValue() => this._functions = IntPtr.Zero;
+	public JEnvironmentValue() => this._functions = ReadOnlyValPtr<JNativeInterface>.Zero;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => HashCode.Combine(this._functions);
+	public override Int32 GetHashCode() => this._functions.GetHashCode();
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
@@ -51,7 +50,7 @@ internal readonly partial struct JEnvironmentValue : INativeReferenceType<JEnvir
 		};
 		if (size == 0)
 			return ReadOnlySpan<IntPtr>.Empty;
-		IntPtr ptr = this._functions + NativeUtilities.SizeOf<JNativeInterface>();
+		IntPtr ptr = this._functions + 1;
 		return ptr.GetUnsafeReadOnlySpan<IntPtr>(size);
 	}
 }
