@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace Rxmxnx.JNetInterface.Lang;
 
 public partial class JStringObject : IEnumerable<Char>

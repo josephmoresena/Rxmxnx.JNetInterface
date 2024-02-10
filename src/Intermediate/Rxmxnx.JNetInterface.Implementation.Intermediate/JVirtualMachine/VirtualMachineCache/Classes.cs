@@ -4,7 +4,7 @@ public partial class JVirtualMachine
 {
 	private partial record VirtualMachineCache
 	{
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadMainClasses(JEnvironment env)
 		{
 			base.LoadMainClasses(env);

@@ -7,6 +7,14 @@ public partial class JVirtualMachine
 	/// </summary>
 	private sealed partial record VirtualMachineCache : GlobalMainClasses
 	{
+		/// <summary>
+		/// Global cache.
+		/// </summary>
+		public readonly ClassCache<JGlobal> GlobalClassCache = new();
+		/// <summary>
+		/// <see cref="NativeCache"/> instance.
+		/// </summary>
+		public readonly NativeCache NativesCache = new();
 		/// <inheritdoc cref="JVirtualMachine.Reference"/>
 		public readonly JVirtualMachineRef Reference;
 		/// <summary>
@@ -14,17 +22,9 @@ public partial class JVirtualMachine
 		/// </summary>
 		public readonly ThreadCache ThreadCache;
 		/// <summary>
-		/// Global cache.
-		/// </summary>
-		public readonly ClassCache<JGlobal> GlobalClassCache = new();
-		/// <summary>
 		/// Weak cache.
 		/// </summary>
 		public readonly ClassCache WeakClassCache = new();
-		/// <summary>
-		/// <see cref="NativeCache"/> instance.
-		/// </summary>
-		public readonly NativeCache NativesCache = new();
 
 		/// <summary>
 		/// Constructor.

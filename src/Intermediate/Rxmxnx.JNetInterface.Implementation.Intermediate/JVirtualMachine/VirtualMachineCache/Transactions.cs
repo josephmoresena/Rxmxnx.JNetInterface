@@ -14,7 +14,8 @@ public partial class JVirtualMachine
 		public INativeMemoryAdapter CreateMemoryAdapter(JStringObject jString, JMemoryReferenceKind referenceKind,
 			Boolean? critical)
 			=> JniTransactionHandle.CreateMemoryAdapter(jString, referenceKind, critical, this._transactions);
-		/// <inheritdoc cref="JVirtualMachine.CreateMemoryAdapter{TPrimitive}(JArrayObject{TPrimitive}, JMemoryReferenceKind, Boolean)"/>
+		/// <inheritdoc
+		///     cref="JVirtualMachine.CreateMemoryAdapter{TPrimitive}(JArrayObject{TPrimitive}, JMemoryReferenceKind, Boolean)"/>
 		public INativeMemoryAdapter CreateMemoryAdapter<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind, Boolean critical)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>

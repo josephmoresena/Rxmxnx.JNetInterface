@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace Rxmxnx.JNetInterface.Tests.Native.Values;
 
 [ExcludeFromCodeCoverage]
@@ -27,11 +25,11 @@ public sealed class JEnvironmentTests
 		JEnvironmentValue val1 = JEnvironmentTests.NativeInterfaceTest(jniVersion, bytes1);
 		JEnvironmentValue val2 = JEnvironmentTests.NativeInterfaceTest(jniVersion, bytes2);
 
-		JEnvironmentTests.NativeInterfaceTest(bytes1, bytes2, val1, val2);
-		JEnvironmentTests.EnvironmentRefTest(ref val1, ref val2, ref val2);
+		JEnvironmentTests.ValueTest(bytes1, bytes2, val1, val2);
+		JEnvironmentTests.ReferenceTest(ref val1, ref val2, ref val2);
 	}
 
-	private static void EnvironmentRefTest(ref JEnvironmentValue refVal1, ref JEnvironmentValue refVal2,
+	private static void ReferenceTest(ref JEnvironmentValue refVal1, ref JEnvironmentValue refVal2,
 		ref JEnvironmentValue refVal3)
 	{
 		JEnvironmentRef ref1 = JEnvironmentTests.GetReference(in refVal1);
@@ -62,8 +60,7 @@ public sealed class JEnvironmentTests
 
 		Assert.Equal(IntPtr.Zero, new JEnvironmentRef().Pointer);
 	}
-	private static void NativeInterfaceTest(Span<Byte> bytes1, Span<Byte> bytes2, JEnvironmentValue val1,
-		JEnvironmentValue val2)
+	private static void ValueTest(Span<Byte> bytes1, Span<Byte> bytes2, JEnvironmentValue val1, JEnvironmentValue val2)
 	{
 		Span<Byte> bytes3 = stackalloc Byte[bytes1.Length];
 		JEnvironmentValue val3 = JEnvironmentTests.GetValue(bytes3);
@@ -101,6 +98,7 @@ public sealed class JEnvironmentTests
 			pointers[i] = value.Reference[i];
 		Assert.True(Unsafe.AreSame(in jni, in value.Reference));
 		Assert.Equal(ptr, value.Pointer);
+		Assert.Equal(bytes.AsValues<Byte, IntPtr>()[4], value.Reference.GetVersionPointer);
 		Assert.Equal(bytes.AsValues<Byte, IntPtr>()[5..233].ToArray(), pointers);
 
 		Int32 size = jniVersion switch
