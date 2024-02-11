@@ -18,7 +18,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
 			JClassObject result = this.AsClassObject(classRef);
-			if (jObject is ILocalObject local && result.InternalReference == classRef)
+			if (jObject is ILocalObject local && classRef == result.InternalReference)
 				result.Lifetime.Synchronize(local.Lifetime);
 			return result;
 		}
