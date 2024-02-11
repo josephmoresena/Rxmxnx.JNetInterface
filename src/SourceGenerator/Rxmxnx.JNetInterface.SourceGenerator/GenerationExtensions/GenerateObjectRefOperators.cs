@@ -59,7 +59,7 @@ partial struct {1} : IEqualityOperators<{1}, JObjectLocalRef, Boolean>
 	private const String ObjectRefOverrideFormat = @"
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => HashCode.Combine(this._value);
+	public override Int32 GetHashCode() => this._value.GetHashCode();
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj) => {0}(this, obj);
