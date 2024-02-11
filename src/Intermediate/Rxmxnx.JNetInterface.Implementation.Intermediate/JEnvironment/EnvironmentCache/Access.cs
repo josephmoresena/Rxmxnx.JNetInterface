@@ -292,7 +292,7 @@ partial class JEnvironment
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			JObjectLocalRef resultLocalRef;
-			if (classRef.Value == default)
+			if (classRef.IsDefault)
 			{
 				CallObjectMethodADelegate callObjectMethod = this.GetDelegate<CallObjectMethodADelegate>();
 				resultLocalRef = callObjectMethod(this.Reference, localRef, methodId,
@@ -327,7 +327,7 @@ partial class JEnvironment
 				useStackAlloc ? EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-			if (classRef.Value == default)
+			if (classRef.IsDefault)
 				this.CallPrimitiveMethod(bytes, localRef, definition.Information[1][^1], methodId, argsMemory);
 			else
 				this.CallNonVirtualPrimitiveMethod(bytes, localRef, classRef, definition.Information[1][^1], methodId,
@@ -446,7 +446,7 @@ partial class JEnvironment
 					new Byte[requiredBytes].AsMemory().GetFixedContext();
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 
-			if (classRef.Value == default)
+			if (classRef.IsDefault)
 			{
 				CallVoidMethodADelegate callVoidMethod = this.GetDelegate<CallVoidMethodADelegate>();
 				callVoidMethod(this.Reference, localRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);

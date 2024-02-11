@@ -42,7 +42,7 @@ partial class JEnvironment
 		{
 			FindClassDelegate findClass = cache.GetDelegate<FindClassDelegate>();
 			JClassLocalRef result = findClass(cache.Reference, (ReadOnlyValPtr<Byte>)classNameCtx.Pointer);
-			if (result.Value == default) cache.CheckJniError();
+			if (result.IsDefault) cache.CheckJniError();
 			return result;
 		}
 	}

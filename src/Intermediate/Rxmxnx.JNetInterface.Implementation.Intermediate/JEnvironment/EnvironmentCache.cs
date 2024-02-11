@@ -63,7 +63,7 @@ partial class JEnvironment
 		{
 			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
 			JThrowableLocalRef throwableRef = exceptionOccurred(this.Reference);
-			if (throwableRef.Value == default) return;
+			if (throwableRef.IsDefault) return;
 			try
 			{
 				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();

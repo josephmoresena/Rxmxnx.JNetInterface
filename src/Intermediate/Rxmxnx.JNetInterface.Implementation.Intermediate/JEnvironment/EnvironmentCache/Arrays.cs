@@ -386,7 +386,7 @@ partial class JEnvironment
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JObjectLocalRef initialRef = this.UseObject(jniTransaction, jObject);
 			JObjectArrayLocalRef arrayRef = newObjectArray(this.Reference, length, classRef, initialRef);
-			if (arrayRef.Value == default) this.CheckJniError();
+			if (arrayRef.IsDefault) this.CheckJniError();
 			return arrayRef.ArrayValue;
 		}
 		/// <summary>

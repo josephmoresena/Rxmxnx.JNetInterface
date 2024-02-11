@@ -55,7 +55,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDefault(jClass);
 			GetSuperclassDelegate getSuperClass = this.GetDelegate<GetSuperclassDelegate>();
 			JClassLocalRef superClassRef = jniTransaction.Add(getSuperClass(this.Reference, classRef));
-			if (superClassRef.Value != default)
+			if (!superClassRef.IsDefault)
 			{
 				JClassObject jSuperClass = this.AsClassObject(superClassRef);
 				if (jSuperClass.InternalReference != superClassRef.Value) this._env.DeleteLocalRef(superClassRef.Value);
@@ -112,7 +112,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			if (classRef.Value == default) throw new ArgumentException("Unloaded class.");
+			if (classRef.IsDefault) throw new ArgumentException("Unloaded class.");
 			JClassObject loadedClass = this.AsClassObject(classRef);
 			name = loadedClass.Name;
 			signature = loadedClass.ClassSignature;

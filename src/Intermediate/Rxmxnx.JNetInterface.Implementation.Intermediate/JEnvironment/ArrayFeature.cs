@@ -47,7 +47,7 @@ partial class JEnvironment
 					default:
 						throw new ArgumentException("Invalid primitive type.");
 				}
-				if (arrayRef.Value == default) this.CheckJniError();
+				if (arrayRef.IsDefault) this.CheckJniError();
 			}
 			else
 			{

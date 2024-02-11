@@ -35,7 +35,7 @@ internal class ClassCache
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	public void Load(JClassLocalRef classRef)
 	{
-		if (classRef.Value != default) this._access[classRef] = new(classRef);
+		if (!classRef.IsDefault) this._access[classRef] = new(classRef);
 	}
 	/// <summary>
 	/// Unloads current class.
