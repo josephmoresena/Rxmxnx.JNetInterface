@@ -36,7 +36,7 @@ partial class JEnvironment
 			};
 			JObjectLocalRef localRef =
 				this.GetStaticObjectField(wrapperClass, InternalFunctionCache.PrimitiveTypeDefinition);
-			return NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
+			return JClassLocalRef.FromReference(in localRef);
 		}
 
 		/// <summary>

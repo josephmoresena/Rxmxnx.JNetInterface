@@ -57,7 +57,7 @@ public readonly ref partial struct JNativeCallAdapter
 		if (JLocalObject.IsClassType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
-			JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
+			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 			return JNativeCallAdapter.Create(envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 		}
 
@@ -126,7 +126,7 @@ public readonly ref partial struct JNativeCallAdapter
 		if (JLocalObject.IsClassType<TObject>())
 		{
 			Unsafe.SkipInit(out jLocal);
-			JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
+			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 			return JNativeCallAdapter.Create(vm, envRef, classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 		}
 

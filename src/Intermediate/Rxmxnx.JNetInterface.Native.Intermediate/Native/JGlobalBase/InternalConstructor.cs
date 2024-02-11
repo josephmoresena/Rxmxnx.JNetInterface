@@ -10,7 +10,7 @@ public partial class JGlobalBase
 	internal JGlobalBase(ILocalObject jLocal, JWeakRef weakRef) : base(jLocal.IsProxy)
 	{
 		this.VirtualMachine = jLocal.VirtualMachine;
-		this._value = IMutableReference.Create(NativeUtilities.Transform<JWeakRef, IntPtr>(in weakRef));
+		this._value = IMutableReference.Create(weakRef.Pointer);
 		this.ObjectMetadata = ILocalObject.CreateMetadata(jLocal);
 	}
 	/// <summary>
@@ -24,7 +24,7 @@ public partial class JGlobalBase
 		base(isProxy)
 	{
 		this.VirtualMachine = vm;
-		this._value = IMutableReference.Create(NativeUtilities.Transform<JGlobalRef, IntPtr>(in globalRef));
+		this._value = IMutableReference.Create(globalRef.Pointer);
 		this.ObjectMetadata = metadata;
 	}
 	/// <summary>
@@ -37,7 +37,7 @@ public partial class JGlobalBase
 	internal JGlobalBase(IVirtualMachine vm, ObjectMetadata metadata, Boolean isProxy, JWeakRef weakRef) : base(isProxy)
 	{
 		this.VirtualMachine = vm;
-		this._value = IMutableReference.Create(NativeUtilities.Transform<JWeakRef, IntPtr>(in weakRef));
+		this._value = IMutableReference.Create(weakRef.Pointer);
 		this.ObjectMetadata = metadata;
 	}
 }

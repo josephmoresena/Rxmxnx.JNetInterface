@@ -48,7 +48,7 @@ public sealed class JGlobal : JGlobalBase
 	internal void SetValue(JGlobalRef globalRef)
 	{
 		if (this.Reference == globalRef) return;
-		base.SetValue(NativeUtilities.Transform<JGlobalRef, IntPtr>(globalRef));
+		base.SetValue(globalRef.Pointer);
 		if (this.Secondary is not null && !this.IsDisposable) this.Secondary.SetValue(globalRef);
 	}
 

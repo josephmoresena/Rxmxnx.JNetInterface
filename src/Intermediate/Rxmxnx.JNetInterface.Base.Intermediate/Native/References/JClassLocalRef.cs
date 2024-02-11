@@ -22,4 +22,19 @@ public readonly partial struct JClassLocalRef : IObjectReferenceType<JClassLocal
 	public JObjectLocalRef Value => this._value;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value.Pointer;
+
+	/// <summary>
+	/// Converts a given <see cref="JGlobalRef"/> to <see cref="JClassLocalRef"/> instance.
+	/// </summary>
+	/// <param name="globalRef">A <see cref="JGlobalRef"/> to convert.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal static JClassLocalRef FromReference(in JGlobalRef globalRef)
+		=> NativeUtilities.Transform<JGlobalRef, JClassLocalRef>(in globalRef);
+	/// <summary>
+	/// Converts a given <see cref="JWeakRef"/> to <see cref="JClassLocalRef"/> instance.
+	/// </summary>
+	/// <param name="weakRef">A <see cref="JWeakRef"/> to convert.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal static JClassLocalRef FromReference(in JWeakRef weakRef)
+		=> NativeUtilities.Transform<JWeakRef, JClassLocalRef>(in weakRef);
 }

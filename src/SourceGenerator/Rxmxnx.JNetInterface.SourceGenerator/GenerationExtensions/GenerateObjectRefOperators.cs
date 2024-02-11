@@ -70,6 +70,10 @@ partial struct {1}
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal static {1} FromReference(in JObjectLocalRef objRef) 
 		=> NativeUtilities.Transform<JObjectLocalRef, {1}>(in objRef);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static {1} IObjectReferenceType<{1}>.FromReference(in JObjectLocalRef objRef)
+		=> {1}.FromReference(in objRef);
 }}
 #nullable restore";
 

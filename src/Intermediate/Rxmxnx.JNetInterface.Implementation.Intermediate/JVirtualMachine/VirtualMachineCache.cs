@@ -84,7 +84,7 @@ public partial class JVirtualMachine
 		{
 			if (globalRef == default) return;
 			this._globalObjects.Remove(globalRef, out _);
-			this.GlobalClassCache.Unload(NativeUtilities.Transform<JGlobalRef, JClassLocalRef>(in globalRef));
+			this.GlobalClassCache.Unload(JClassLocalRef.FromReference(in globalRef));
 		}
 		/// <summary>
 		/// Removes <see cref="JWeakRef"/> from current cache.
@@ -94,7 +94,7 @@ public partial class JVirtualMachine
 		{
 			if (weakRef == default) return;
 			this._weakObjects.Remove(weakRef, out _);
-			this.GlobalClassCache.Unload(NativeUtilities.Transform<JWeakRef, JClassLocalRef>(in weakRef));
+			this.GlobalClassCache.Unload(JClassLocalRef.FromReference(in weakRef));
 		}
 		/// <summary>
 		/// Clears cache.
