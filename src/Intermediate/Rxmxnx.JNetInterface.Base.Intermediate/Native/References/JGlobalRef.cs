@@ -36,5 +36,10 @@ internal readonly partial struct JGlobalRef : IObjectGlobalReferenceType<JGlobal
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
-		=> obj is JGlobalRef jGlobalRef && this._value.Equals(jGlobalRef._value);
+		=> obj switch
+		{
+			JGlobalRef globalRef => this._value.Equals(globalRef._value),
+			IWrapper<JGlobalRef> wrapper => this._value.Equals(wrapper.Value._value),
+			_ => false,
+		};
 }

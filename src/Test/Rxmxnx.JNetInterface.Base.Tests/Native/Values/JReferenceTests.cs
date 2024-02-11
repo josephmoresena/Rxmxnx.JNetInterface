@@ -47,17 +47,12 @@ public sealed class JReferenceTests
 		TPointer ref1 = JReferenceTests.CreatePointer<TPointer>();
 		TPointer ref2 = JReferenceTests.CreatePointer<TPointer>();
 		TPointer ref3 = ref1;
+		JGlobalRef globalRef = NativeUtilities.Transform<TPointer, JGlobalRef>(in ref1);
+		JWeakRef weakRef = NativeUtilities.Transform<TPointer, JWeakRef>(in ref1);
 
-		if (ref3 is not IObjectGlobalReferenceType)
-		{
-			JGlobalRef globalRef = NativeUtilities.Transform<TPointer, JGlobalRef>(in ref1);
-			JWeakRef weakRef = NativeUtilities.Transform<TPointer, JWeakRef>(in ref1);
-
-			Assert.True(ref1.Equals(globalRef));
-			Assert.True(ref1.Equals(weakRef));
-			Assert.True(ref1.Equals(IWrapper.Create(ref1)));
-		}
-
+		Assert.True(ref1.Equals(IWrapper.Create(ref1)));
+		Assert.Equal(ref3 is not JWeakRef, ref1.Equals(globalRef));
+		Assert.Equal(ref3 is not JGlobalRef, ref1.Equals(weakRef));
 		Assert.Equal(ref1.GetHashCode(), ref1.Pointer.GetHashCode());
 		Assert.NotEqual(ref1, ref2);
 
