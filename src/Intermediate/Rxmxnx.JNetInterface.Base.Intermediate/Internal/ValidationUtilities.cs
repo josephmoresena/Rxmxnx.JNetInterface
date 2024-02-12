@@ -136,7 +136,7 @@ internal static class ValidationUtilities
 		{
 			if (!allowPrimitive)
 				throw new ArgumentException("Signature not allowed.");
-			return;
+			ValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[0]);
 		}
 
 		Byte prefix = signature[0];
@@ -145,9 +145,14 @@ internal static class ValidationUtilities
 		if (prefix == UnicodeObjectSignatures.ArraySignaturePrefixChar)
 			switch (signature.Length)
 			{
-				case < 2:
+				case 2:
+					if (!allowPrimitive)
+						throw new ArgumentException("Array signature not allowed.");
+					ValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[1]);
+					break;
+				case <= 3:
 					throw new ArgumentException("Invalid signature.");
-				case > 2 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
+				case > 3 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
 					suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar:
 					throw new ArgumentException("Invalid signature.");
 			}
@@ -313,4 +318,28 @@ internal static class ValidationUtilities
 	/// </exception>
 	public static Int32 ThrowIfInvalidVersion(Int32 version)
 		=> version > 0 ? version : throw new InvalidOperationException();
+
+	/// <summary>
+	/// Throws an exception if <paramref name="signature"/> is not valid primitive signature.
+	/// </summary>
+	/// <param name="signature">A signature char.</param>
+	/// <exception cref="ArgumentException">
+	/// Throws an exception if <paramref name="signature"/> is not valid primitive signature.
+	/// </exception>
+	private static void ThrowIfInvalidPrimitiveSignature(Byte signature)
+	{
+		switch (signature)
+		{
+			case UnicodePrimitiveSignatures.BooleanSignatureChar:
+			case UnicodePrimitiveSignatures.ByteSignatureChar:
+			case UnicodePrimitiveSignatures.CharSignatureChar:
+			case UnicodePrimitiveSignatures.DoubleSignatureChar:
+			case UnicodePrimitiveSignatures.FloatSignatureChar:
+			case UnicodePrimitiveSignatures.IntSignatureChar:
+			case UnicodePrimitiveSignatures.LongSignatureChar:
+			case UnicodePrimitiveSignatures.ShortSignatureChar:
+				return;
+		}
+		throw new ArgumentException("Invalid primitive signature.");
+	}
 }
