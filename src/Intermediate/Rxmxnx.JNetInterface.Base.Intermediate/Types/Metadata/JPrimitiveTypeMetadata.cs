@@ -6,6 +6,15 @@
 public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 {
 	/// <summary>
+	/// Java <c>void</c> type information.
+	/// </summary>
+	private static readonly CStringSequence voidInformation = new(UnicodeClassNames.VoidPrimitive(),
+	                                                              stackalloc Byte[1]
+	                                                              {
+		                                                              UnicodePrimitiveSignatures.VoidSignatureChar,
+	                                                              }, ReadOnlySpan<Byte>.Empty);
+
+	/// <summary>
 	/// <see cref="JPrimitiveTypeMetadata"/> instance for Java <c>void</c> type.
 	/// </summary>
 	public static readonly JPrimitiveTypeMetadata VoidMetadata = new JVoidTypeMetadata();
@@ -21,19 +30,15 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// CLR underline type.
 	/// </summary>
 	private readonly Type _underlineType;
-	/// <summary>
-	/// Wrapper class information.
-	/// </summary>
-	private readonly CStringSequence _wrapperInformation;
 
 	/// <summary>
 	/// JNI name for current type wrapper class.
 	/// </summary>
-	public CString WrapperClassSignature => this._wrapperInformation[1];
+	public CString WrapperClassSignature => this.WrapperInformation[1];
 	/// <summary>
 	/// JNI signature for current type wrapper class.
 	/// </summary>
-	public CString WrapperClassName => this._wrapperInformation[0];
+	public CString WrapperClassName => this.WrapperInformation[0];
 	/// <summary>
 	/// Underline primitive CLR type.
 	/// </summary>
@@ -55,8 +60,17 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <summary>
 	/// Information of wrapper class.
 	/// </summary>
-	internal CStringSequence WrapperInformation => this._wrapperInformation;
+	internal CStringSequence WrapperInformation { get; }
 
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	private protected JPrimitiveTypeMetadata() : base(JPrimitiveTypeMetadata.voidInformation)
+	{
+		this._sizeOf = default;
+		this._underlineType = typeof(void);
+		this.WrapperInformation = JDataTypeMetadata.CreateInformationSequence(UnicodeClassNames.VoidObject());
+	}
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -70,7 +84,7 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	{
 		this._sizeOf = sizeOf;
 		this._underlineType = underlineType;
-		this._wrapperInformation = JDataTypeMetadata.CreateInformationSequence(wrapperClassName);
+		this.WrapperInformation = JDataTypeMetadata.CreateInformationSequence(wrapperClassName);
 	}
 
 	/// <summary>

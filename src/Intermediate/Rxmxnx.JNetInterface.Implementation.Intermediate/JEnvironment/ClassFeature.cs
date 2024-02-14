@@ -14,7 +14,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jObject);
 			if (jObject is JClassObject jClass) return jClass;
 			ValidationUtilities.ThrowIfDefault(jObject);
-			if (!jObject.IsInstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
+			if (!jObject.InstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
 			JClassObject result = this.AsClassObject(classRef);

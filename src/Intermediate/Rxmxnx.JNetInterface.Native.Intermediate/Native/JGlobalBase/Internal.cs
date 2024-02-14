@@ -25,7 +25,7 @@ public partial class JGlobalBase
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	internal void RefreshMetadata(ILocalObject jLocal) { this.ObjectMetadata = ILocalObject.CreateMetadata(jLocal); }
 	/// <inheritdoc/>
-	internal override ReadOnlySpan<Byte> AsSpan() => this._value.Reference.AsBytes();
+	private protected override ReadOnlySpan<Byte> AsSpan() => this._value.Reference.AsBytes();
 	/// <inheritdoc/>
 	internal override Boolean IsAssignableTo<TDataType>()
 	{
@@ -41,7 +41,7 @@ public partial class JGlobalBase
 	/// <inheritdoc/>
 	internal override void ClearValue() => this._value.Value = default;
 	/// <inheritdoc/>
-	internal override IDisposable GetSynchronizer()
+	private protected override IDisposable GetSynchronizer()
 	{
 		IThread env = this.VirtualMachine.CreateThread(ThreadPurpose.SynchronizeGlobalReference);
 		return env.ReferenceFeature.GetSynchronizer(this);

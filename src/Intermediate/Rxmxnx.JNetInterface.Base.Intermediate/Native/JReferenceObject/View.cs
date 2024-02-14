@@ -28,18 +28,18 @@ public partial class JReferenceObject
 		public override CString ObjectSignature => this.Object.ObjectSignature;
 
 		/// <inheritdoc/>
-		internal override Boolean IsInstanceOf<TDataType>() => this.Object.IsInstanceOf<TDataType>();
+		private protected override Boolean IsInstanceOf<TDataType>() => this.Object.IsInstanceOf<TDataType>();
 
 		/// <inheritdoc/>
 		internal override void ClearValue() => this.Object.ClearValue();
 		/// <inheritdoc/>
-		internal override IDisposable GetSynchronizer() => this.Object.GetSynchronizer();
+		private protected override IDisposable GetSynchronizer() => this.Object.GetSynchronizer();
 		/// <inheritdoc/>
 		internal override Boolean IsAssignableTo<TDataType>() => this.Object.IsAssignableTo<TDataType>();
 		/// <inheritdoc/>
 		internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
 			=> this.Object.SetAssignableTo<TDataType>(isAssignable);
 		/// <inheritdoc/>
-		internal override ReadOnlySpan<Byte> AsSpan() => this.Object.AsSpan();
+		private protected override ReadOnlySpan<Byte> AsSpan() => this.Object.AsSpan();
 	}
 }

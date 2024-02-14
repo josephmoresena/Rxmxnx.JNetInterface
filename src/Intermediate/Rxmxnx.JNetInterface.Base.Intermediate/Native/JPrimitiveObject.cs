@@ -21,6 +21,15 @@ internal abstract partial class JPrimitiveObject : JObject
 	/// <returns>Current instance as <see cref="Byte"/> value.</returns>
 	public abstract Byte ToByte();
 
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override Boolean Equals(Object? obj)
+		=> obj is JPrimitiveObject primitive && primitive.AsSpan().SequenceEqual(this.AsSpan()) &&
+			this.SizeOf == primitive.SizeOf;
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override Int32 GetHashCode() => HashCode.Combine(Convert.ToHexString(this.AsSpan()), this.SizeOf);
+
 	/// <summary>
 	/// Retrieves a <typeparamref name="TPrimitive"/> value from current instance.
 	/// </summary>

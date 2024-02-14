@@ -79,7 +79,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	}
 
 	/// <inheritdoc/>
-	internal override Boolean IsInstanceOf<TDataType>()
+	private protected override Boolean IsInstanceOf<TDataType>()
 	{
 		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
 		Boolean result = thread.ClassFeature.IsInstanceOf<TDataType>(this);

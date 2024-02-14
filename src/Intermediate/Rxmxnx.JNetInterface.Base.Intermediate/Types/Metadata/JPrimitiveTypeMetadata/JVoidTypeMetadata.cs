@@ -25,9 +25,8 @@ public partial record JPrimitiveTypeMetadata
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public JVoidTypeMetadata() : base(default, typeof(void),
-		                                  stackalloc Byte[1] { UnicodePrimitiveSignatures.VoidSignatureChar, },
-		                                  UnicodeClassNames.VoidPrimitive(), UnicodeClassNames.VoidObject()) { }
+		public JVoidTypeMetadata() { }
+
 		/// <inheritdoc/>
 		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes)
 			=> ValidationUtilities.ThrowVoidInstantiation();

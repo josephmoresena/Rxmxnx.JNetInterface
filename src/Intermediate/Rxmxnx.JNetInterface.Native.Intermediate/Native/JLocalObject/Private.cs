@@ -2,14 +2,9 @@ namespace Rxmxnx.JNetInterface.Native;
 
 public partial class JLocalObject : ILocalObject
 {
-	/// <summary>
-	/// Internal <see cref="ObjectLifetime"/> instance.
-	/// </summary>
-	private readonly ObjectLifetime _lifetime;
-
-	IVirtualMachine ILocalObject.VirtualMachine => this._lifetime.Environment.VirtualMachine;
+	IVirtualMachine ILocalObject.VirtualMachine => this.Lifetime.Environment.VirtualMachine;
 	Boolean ILocalObject.IsProxy => this.IsProxy;
-	ObjectLifetime ILocalObject.Lifetime => this._lifetime;
+	ObjectLifetime ILocalObject.Lifetime => this.Lifetime;
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
 
