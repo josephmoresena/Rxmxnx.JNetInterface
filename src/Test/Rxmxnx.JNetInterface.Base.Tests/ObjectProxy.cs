@@ -17,12 +17,12 @@ public abstract record ObjectProxy : IObject
 	}
 	void IObject.CopyTo(Span<JValue> span, Int32 index)
 	{
-		ProxyValue[] values = new ProxyValue[span.Length];
+		ValueProxy[] values = new ValueProxy[span.Length];
 		span.AsBytes().CopyTo(values.AsSpan().AsBytes());
 		this.CopyTo(values, index);
 		values.AsSpan().AsBytes().CopyTo(span.AsBytes());
 	}
 
 	public abstract void CopyTo(Byte[] bytes, IMutableReference<Int32> offsetRef);
-	public abstract void CopyTo(ProxyValue[] values, Int32 index);
+	public abstract void CopyTo(ValueProxy[] values, Int32 index);
 }

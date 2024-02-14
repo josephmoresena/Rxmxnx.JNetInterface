@@ -1,3 +1,5 @@
+using Rxmxnx.JNetInterface.Types.Metadata;
+
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
@@ -62,6 +64,23 @@ public sealed class DataTypeTests
 		DataTypeTests.NativeTypeTest<NativeProxy>();
 		NativeProxy.Type = JNativeType.JVirtualMachineInitArgument;
 		DataTypeTests.NativeTypeTest<NativeProxy>();
+	}
+	[Fact]
+	internal void VoidMetadataTest()
+	{
+		JPrimitiveTypeMetadata voidMetadata = JPrimitiveTypeMetadata.VoidMetadata;
+		Assert.Equal(typeof(void), voidMetadata.Type);
+		Assert.Equal(default, voidMetadata.NativeType);
+		Assert.Throws<InvalidOperationException>(() => voidMetadata.ArgumentMetadata);
+		Assert.Throws<InvalidOperationException>(() => voidMetadata.CreateInstance(Array.Empty<Byte>()));
+		String dataTypeString =
+			$"{nameof(JDataTypeMetadata)} {{ {nameof(JDataTypeMetadata.Type)} = {voidMetadata.Type}, " +
+			$"{nameof(JDataTypeMetadata.Kind)} = {voidMetadata.Kind}, " +
+			$"{nameof(JPrimitiveTypeMetadata.UnderlineType)} = {voidMetadata.UnderlineType}, " +
+			$"{nameof(JPrimitiveTypeMetadata.NativeType)} = {voidMetadata.NativeType}, " +
+			$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {voidMetadata.WrapperClassName}, " +
+			$"{nameof(JDataTypeMetadata.Hash)} = {voidMetadata.Hash} }}";
+		Assert.Equal(dataTypeString, voidMetadata.ToString());
 	}
 
 	private static void DefaultTest<TDataType>() where TDataType : IDataType

@@ -31,7 +31,8 @@ internal partial class JPrimitiveObject
 		public override Boolean Equals(JObject? other)
 			=> other is Generic<TValue> jPrimitive && this._value.Equals(jPrimitive._value);
 		/// <inheritdoc/>
-		public override Boolean Equals(Object? obj) => obj is Generic<TValue> jPrimitive && this.Equals(jPrimitive);
+		public override Boolean Equals(Object? obj)
+			=> obj is Generic<TValue> jPrimitive ? this.Equals(jPrimitive) : this.Value.Equals(obj);
 
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

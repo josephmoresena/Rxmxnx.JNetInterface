@@ -33,6 +33,11 @@ public partial record JPrimitiveTypeMetadata
 			=> ValidationUtilities.ThrowVoidInstantiation();
 		/// <inheritdoc/>
 		public override String ToString()
-			=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+			=> $"{nameof(JDataTypeMetadata)} {{ {nameof(JDataTypeMetadata.Type)} = {this.Type}, " +
+				$"{nameof(JDataTypeMetadata.Kind)} = {this.Kind}, " +
+				$"{nameof(JPrimitiveTypeMetadata.UnderlineType)} = {this.UnderlineType}, " +
+				$"{nameof(JPrimitiveTypeMetadata.NativeType)} = {this.NativeType}, " +
+				$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {this.WrapperClassName}, " +
+				$"{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 	}
 }

@@ -25,8 +25,10 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<JValue> span, Int32 index) => this.CopyTo(span, index);
 	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
 	public override Boolean Equals(Object? obj) => obj is JObject other && this.Equals(other);
 	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
 	public override Int32 GetHashCode() => HashCode.Combine(this.ObjectClassName, this.ObjectSignature);
 
 	/// <summary>

@@ -21,12 +21,6 @@ internal abstract partial class JPrimitiveObject : JObject
 	/// <returns>Current instance as <see cref="Byte"/> value.</returns>
 	public abstract Byte ToByte();
 
-	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj)
-		=> obj is JPrimitiveObject other && this.AsSpan().SequenceEqual(other.AsSpan());
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => HashCode.Combine(Convert.ToHexString(this.AsSpan()), this.SizeOf);
-
 	/// <summary>
 	/// Retrieves a <typeparamref name="TPrimitive"/> value from current instance.
 	/// </summary>
@@ -70,8 +64,7 @@ internal sealed partial class JPrimitiveObject<TPrimitive> : JPrimitiveObject.Ge
 	public override Boolean Equals(JObject? other)
 		=> other is JPrimitiveObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj)
-		=> obj is TPrimitive p ? p.Equals(this.Value) : this.Equals(obj as JObject);
+	public override Boolean Equals(Object? obj) => obj is JObject jObject ? this.Equals(jObject) : base.Equals(obj);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
 }
