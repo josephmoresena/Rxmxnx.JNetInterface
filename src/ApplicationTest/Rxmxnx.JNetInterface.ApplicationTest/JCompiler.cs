@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 /// <summary>
 /// Java compiler.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed partial record JCompiler
 {
 	/// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.Io;
 using Rxmxnx.JNetInterface.Lang;
@@ -14,6 +15,7 @@ using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+[ExcludeFromCodeCoverage]
 public static class Program
 {
 	public static async Task Main(String[] args)

@@ -10,16 +10,16 @@ public abstract partial class JReferenceObject : JObject
 	/// <summary>
 	/// Indicates whether current instance is default value.
 	/// </summary>
-	public Boolean IsDefault => this.AsSpan().AsValue<IntPtr>() == IntPtr.Zero;
+	public Boolean IsDefault => this.IsBlankSpan();
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
 	/// <param name="isProxy">Indicates whether the current instance is a proxy object.</param>
-	private protected JReferenceObject(Boolean? isProxy)
+	private protected JReferenceObject(Boolean isProxy)
 	{
-		this._isProxy = isProxy.GetValueOrDefault();
-		this._id = isProxy.HasValue ? JReferenceObject.CreateInstanceId() : -1;
+		this._isProxy = isProxy;
+		this._id = JReferenceObject.CreateInstanceId();
 	}
 	/// <summary>
 	/// Constructor.
@@ -28,7 +28,7 @@ public abstract partial class JReferenceObject : JObject
 	private protected JReferenceObject(JReferenceObject jObject)
 	{
 		this._isProxy = jObject._isProxy;
-		this._id = jObject._id != -1 ? JReferenceObject.CreateInstanceId() : -1;
+		this._id = this is View ? jObject.Id : JReferenceObject.CreateInstanceId();
 	}
 
 	/// <summary>
@@ -46,13 +46,15 @@ public abstract partial class JReferenceObject : JObject
 	/// Tries to obtain a synchronized instance for current instance.
 	/// </summary>
 	/// <returns>A <see cref="IDisposable"/> synchronized</returns>
-	public IDisposable? TryGetSynchronizer() => this.IsDefault ? default : this.GetSynchronizer();
+	public IDisposable? Synchronize() => this.IsDefault ? default : this.GetSynchronizer();
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other)
-	{
-		if (other is null or JReferenceObject { IsDefault: true, } && this.IsDefault)
-			return true;
-		return other is JReferenceObject jReference && this.AsSpan().SequenceEqual(jReference.AsSpan());
-	}
+		=> other switch
+		{
+			null => this.IsDefault,
+			JReferenceObject jObject => this.IsProxy == jObject.IsProxy && this.IsDefault == jObject.IsDefault &&
+				this.AsSpan().SequenceEqual(jObject.AsSpan()),
+			_ => false,
+		};
 }

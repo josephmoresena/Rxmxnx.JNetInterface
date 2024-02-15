@@ -28,7 +28,7 @@ public partial class JReferenceObject
 	/// <summary>
 	/// Indicates whether current instance is default value.
 	/// </summary>
-	internal virtual Boolean IsDefaultInstance() => this.AsSpan().AsValue<IntPtr>() == IntPtr.Zero;
+	internal virtual Boolean IsDefaultInstance() => this.IsBlankSpan();
 
 	/// <summary>
 	/// Indicates whether current instance is an instance of <typeparamref name="TDataType"/> type class.

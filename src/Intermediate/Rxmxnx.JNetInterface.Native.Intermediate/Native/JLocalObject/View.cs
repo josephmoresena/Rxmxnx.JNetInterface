@@ -10,7 +10,7 @@ public partial class JLocalObject
 		where TObject : JLocalObject, ILocalObject
 	{
 		/// <inheritdoc/>
-		protected View(TObject jObject) : base(jObject, jObject.IsProxy) { }
+		protected View(TObject jObject) : base(jObject) { }
 
 		ILocalObject ILocalViewObject.Object => this.Object;
 	}
