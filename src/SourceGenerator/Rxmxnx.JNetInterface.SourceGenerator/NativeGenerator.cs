@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
+[ExcludeFromCodeCoverage]
 internal static class NativeGenerator
 {
 	public const String AssemblyName = "Rxmxnx.JNetInterface.Native.Intermediate";

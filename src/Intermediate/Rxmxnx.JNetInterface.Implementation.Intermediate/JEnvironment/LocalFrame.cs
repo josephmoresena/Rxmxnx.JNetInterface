@@ -30,7 +30,7 @@ partial class JEnvironment
 		public override Int32? Capacity
 		{
 			get => base.Capacity;
-			set => throw new InvalidOperationException();
+			set => throw new InvalidOperationException("Current stack frame is fixed.");
 		}
 
 		/// <summary>

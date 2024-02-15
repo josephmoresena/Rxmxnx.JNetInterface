@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// This record stores the metadata of a <see cref="IPrimitiveWrapperType"/> in order to create a
+/// This record stores the metadata of a <see cref="IPrimitiveWrapperType{TPrimitive}"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
 internal sealed record PrimitiveWrapperObjectMetadata<TPrimitive> : ObjectMetadata

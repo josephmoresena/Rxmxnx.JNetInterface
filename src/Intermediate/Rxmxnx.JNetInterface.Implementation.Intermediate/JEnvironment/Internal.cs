@@ -164,7 +164,7 @@ partial class JEnvironment
 	{
 		GetObjectClassDelegate getObjectClass = this._cache.GetDelegate<GetObjectClassDelegate>();
 		JClassLocalRef classRef = getObjectClass(this.Reference, localRef);
-		if (classRef.Value == default) this._cache.CheckJniError();
+		if (classRef.IsDefault) this._cache.CheckJniError();
 		return classRef;
 	}
 	/// <summary>

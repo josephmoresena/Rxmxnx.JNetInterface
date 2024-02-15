@@ -3,6 +3,8 @@
 /// <summary>
 /// <c>JNINativeInterface_</c> struct. Contains all pointers to the functions of JNI.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2292,
+                 Justification = CommonConstants.BinaryStructJustification)]
 internal readonly partial struct JNativeInterface : INativeType<JNativeInterface>
 {
 	/// <inheritdoc/>
@@ -14,7 +16,7 @@ internal readonly partial struct JNativeInterface : INativeType<JNativeInterface
 	public IntPtr GetVersionPointer
 	{
 		get => this._getVersionPointer;
-		init => this._getVersionPointer = value;
+		[ExcludeFromCodeCoverage] init => this._getVersionPointer = value;
 	}
 	/// <summary>
 	/// Pointer to JNI function.
@@ -22,6 +24,6 @@ internal readonly partial struct JNativeInterface : INativeType<JNativeInterface
 	public IntPtr this[Int32 index]
 	{
 		get => this._operations[index];
-		init => this._operations[index] = value;
+		[ExcludeFromCodeCoverage] init => this._operations[index] = value;
 	}
 }

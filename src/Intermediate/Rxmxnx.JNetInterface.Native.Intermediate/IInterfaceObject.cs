@@ -7,11 +7,11 @@ public interface IInterfaceObject<TInterface> : IObject
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	/// <summary>
-	/// Retrieves a <see cref="IArrayObject{TElement}"/> instance from <paramref name="jArray"/>.
+	/// Retrieves a <see cref="IArrayObject{TInterface}"/> instance from <paramref name="jArray"/>.
 	/// </summary>
 	/// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
-	/// <param name="jArray">A <see cref="JArrayObject{TObject}"/> instance.</param>
-	/// <returns>A <see cref="IArrayObject{TElement}"/> instance.</returns>
+	/// <param name="jArray">A <see cref="JArrayObject{TElement}"/> instance.</param>
+	/// <returns>A <see cref="IArrayObject{TInterface}"/> instance.</returns>
 	public static IArrayObject<TInterface> CastArray<TElement>(JArrayObject<TElement> jArray)
 		where TElement : JLocalObject, IReferenceType<TElement>, IInterfaceObject<TInterface>
 		=> new JArrayObject.JCastedArray<TInterface>(jArray);

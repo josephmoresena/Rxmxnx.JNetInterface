@@ -203,8 +203,15 @@ partial class JEnvironment
 		private static void FinalizeCache(Object? obj)
 		{
 			if (obj is not EnvironmentCache cache) return;
-			cache.Thread.Join();
-			JVirtualMachine.RemoveEnvironment(cache.VirtualMachine.Reference, cache.Reference);
+			try
+			{
+				cache.Thread.Join();
+				JVirtualMachine.RemoveEnvironment(cache.VirtualMachine.Reference, cache.Reference);
+			}
+			finally
+			{
+				cache._cancellation.Dispose();
+			}
 		}
 		/// <summary>
 		/// Retrieves throwable message.

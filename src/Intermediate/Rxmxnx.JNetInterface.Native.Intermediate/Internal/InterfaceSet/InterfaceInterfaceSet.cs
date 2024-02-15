@@ -34,24 +34,6 @@ internal partial record InterfaceSet
 			return result;
 		}
 		/// <inheritdoc/>
-		public override Boolean IsProperSubsetOf(IEnumerable<JInterfaceTypeMetadata> other)
-			=> this.GetFullSet().IsProperSubsetOf(other);
-		/// <inheritdoc/>
-		public override Boolean IsProperSupersetOf(IEnumerable<JInterfaceTypeMetadata> other)
-			=> this.GetFullSet().IsProperSupersetOf(other);
-		/// <inheritdoc/>
-		public override Boolean IsSubsetOf(IEnumerable<JInterfaceTypeMetadata> other)
-			=> this.GetFullSet().IsSubsetOf(other);
-		/// <inheritdoc/>
-		public override Boolean IsSupersetOf(IEnumerable<JInterfaceTypeMetadata> other)
-			=> this.GetFullSet().IsSubsetOf(other);
-		/// <inheritdoc/>
-		public override Boolean Overlaps(IEnumerable<JInterfaceTypeMetadata> other)
-			=> this.GetFullSet().Overlaps(other);
-		/// <inheritdoc/>
-		public override Boolean SetEquals(IEnumerable<JInterfaceTypeMetadata> other)
-			=> this.GetFullSet().SetEquals(other);
-		/// <inheritdoc/>
 		public override String ToString() => base.ToString();
 	}
 }

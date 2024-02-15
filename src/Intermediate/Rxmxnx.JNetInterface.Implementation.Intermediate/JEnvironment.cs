@@ -30,7 +30,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	private JEnvironment(EnvironmentCache cache) => this._cache = cache;
 
 	/// <inheritdoc/>
-	public Boolean RealEnvironment => true;
+	public Boolean NoProxy => true;
 	/// <inheritdoc/>
 	public JEnvironmentRef Reference => this._cache.Reference;
 	/// <inheritdoc/>
@@ -53,7 +53,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 
 	JReferenceType IEnvironment.GetReferenceType(JObject jObject)
 	{
-		if (jObject is not JReferenceObject jRefObj || jRefObj.IsDefault || jRefObj.IsDummy)
+		if (jObject is not JReferenceObject jRefObj || jRefObj.IsDefault || jRefObj.IsProxy)
 			return JReferenceType.InvalidRefType;
 		using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction(1);
 		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);

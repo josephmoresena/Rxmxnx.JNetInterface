@@ -7,8 +7,8 @@ public interface ILocalObject : IObject
 {
 	/// <inheritdoc cref="IEnvironment.VirtualMachine"/>
 	internal IVirtualMachine VirtualMachine { get; }
-	/// <inheritdoc cref="JReferenceObject.IsDummy"/>
-	internal Boolean IsDummy { get; }
+	/// <inheritdoc cref="JReferenceObject.IsProxy"/>
+	internal Boolean IsProxy { get; }
 	/// <summary>
 	/// Local <see cref="ObjectLifetime"/> instance.
 	/// </summary>

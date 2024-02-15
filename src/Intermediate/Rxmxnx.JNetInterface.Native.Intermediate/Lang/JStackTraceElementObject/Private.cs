@@ -5,12 +5,13 @@ public partial class JStackTraceElementObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata typeMetadata = JTypeMetadataBuilder<JStackTraceElementObject>
-	                                                          .Create(UnicodeClassNames.StackTraceElementObject(),
-	                                                                  JTypeModifier.Final)
-	                                                          .Implements<JSerializableObject>().Build();
+	private static readonly JClassTypeMetadata<JStackTraceElementObject> typeMetadata =
+		JTypeMetadataBuilder<JStackTraceElementObject>
+			.Create(UnicodeClassNames.StackTraceElementObject(), JTypeModifier.Final).Implements<JSerializableObject>()
+			.Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JStackTraceElementObject.typeMetadata;
+	static JClassTypeMetadata<JStackTraceElementObject> IClassType<JStackTraceElementObject>.Metadata
+		=> JStackTraceElementObject.typeMetadata;
 
 	/// <inheritdoc cref="JStackTraceElementObject.ClassName"/>
 	private String? _className;

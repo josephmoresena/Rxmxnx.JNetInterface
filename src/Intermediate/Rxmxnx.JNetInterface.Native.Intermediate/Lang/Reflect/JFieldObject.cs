@@ -9,13 +9,14 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JAccessibleObject>
-	                                                      .Create<JFieldObject>(
-		                                                      UnicodeClassNames.FieldObject(), JTypeModifier.Final)
-	                                                      .Implements<JGenericDeclarationObject>()
-	                                                      .Implements<JMemberObject>().Build();
+	private static readonly JClassTypeMetadata<JFieldObject> metadata = JTypeMetadataBuilder<JAccessibleObject>
+	                                                                    .Create<JFieldObject>(
+		                                                                    UnicodeClassNames.FieldObject(),
+		                                                                    JTypeModifier.Final)
+	                                                                    .Implements<JGenericDeclarationObject>()
+	                                                                    .Implements<JMemberObject>().Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JFieldObject.metadata;
+	static JClassTypeMetadata<JFieldObject> IClassType<JFieldObject>.Metadata => JFieldObject.metadata;
 
 	/// <summary>
 	/// Field JNI definition.

@@ -2,8 +2,11 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public sealed partial class JCharacterObject
 {
-	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => IPrimitiveType.GetMetadata<JChar>();
-	static JDataTypeMetadata IDataType.Metadata => new JPrimitiveWrapperTypeMetadata<JCharacterObject>();
+	private static readonly JPrimitiveWrapperTypeMetadata<JCharacterObject> typeMetadata =
+		new(JTypeMetadataBuilder<JCharacterObject>.Build(IPrimitiveType.GetMetadata<JChar>()));
+
+	static JPrimitiveWrapperTypeMetadata<JCharacterObject> IPrimitiveWrapperType<JCharacterObject>.Metadata
+		=> JCharacterObject.typeMetadata;
 
 	/// <inheritdoc cref="JCharacterObject.Value"/>
 	private JChar? _value;

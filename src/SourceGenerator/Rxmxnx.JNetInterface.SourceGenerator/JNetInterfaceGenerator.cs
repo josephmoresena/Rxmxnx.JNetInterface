@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
+[ExcludeFromCodeCoverage]
 [Generator]
 public class JNetInterfaceGenerator : ISourceGenerator
 {

@@ -8,12 +8,12 @@ public sealed class JMethodObject : JExecutableObject, IClassType<JMethodObject>
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JExecutableObject>
-	                                                      .Create<JMethodObject>(
-		                                                      UnicodeClassNames.MethodObject(), JTypeModifier.Final)
-	                                                      .Build();
+	private static readonly JClassTypeMetadata<JMethodObject> metadata = JTypeMetadataBuilder<JExecutableObject>
+	                                                                     .Create<JMethodObject>(
+		                                                                     UnicodeClassNames.MethodObject(),
+		                                                                     JTypeModifier.Final).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JMethodObject.metadata;
+	static JClassTypeMetadata<JMethodObject> IClassType<JMethodObject>.Metadata => JMethodObject.metadata;
 
 	/// <inheritdoc/>
 	internal JMethodObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition,

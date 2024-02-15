@@ -20,20 +20,23 @@ public partial record JPrimitiveTypeMetadata
 		/// <inheritdoc/>
 		public override JNativeType NativeType => default;
 		/// <inheritdoc/>
-		public override JArgumentMetadata ArgumentMetadata
-			=> throw new InvalidOperationException("A void value can't be an argument.");
+		public override JArgumentMetadata ArgumentMetadata => ValidationUtilities.ThrowVoidArgument();
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public JVoidTypeMetadata() : base(default, typeof(void),
-		                                  stackalloc Byte[1] { UnicodePrimitiveSignatures.VoidSignatureChar, },
-		                                  UnicodeClassNames.VoidPrimitive(), UnicodeClassNames.VoidObject()) { }
+		public JVoidTypeMetadata() { }
+
 		/// <inheritdoc/>
 		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes)
-			=> throw new InvalidOperationException("A void value can't be created.");
+			=> ValidationUtilities.ThrowVoidInstantiation();
 		/// <inheritdoc/>
 		public override String ToString()
-			=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+			=> $"{nameof(JDataTypeMetadata)} {{ {nameof(JDataTypeMetadata.Type)} = {this.Type}, " +
+				$"{nameof(JDataTypeMetadata.Kind)} = {this.Kind}, " +
+				$"{nameof(JPrimitiveTypeMetadata.UnderlineType)} = {this.UnderlineType}, " +
+				$"{nameof(JPrimitiveTypeMetadata.NativeType)} = {this.NativeType}, " +
+				$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {this.WrapperClassName}, " +
+				$"{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 	}
 }

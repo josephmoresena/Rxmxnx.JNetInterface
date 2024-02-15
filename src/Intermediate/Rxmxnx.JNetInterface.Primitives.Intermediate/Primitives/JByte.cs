@@ -9,14 +9,18 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JByte, SByte>.JTypeMetadataBuilder
-		.Create(UnicodeClassNames.BytePrimitive(), UnicodePrimitiveSignatures.ByteSignatureChar)
-		.WithWrapperClassName(UnicodeClassNames.ByteObject()).Build();
+	private static readonly JPrimitiveTypeMetadata<JByte> typeMetadata = IPrimitiveType<JByte, SByte>
+	                                                                     .JTypeMetadataBuilder
+	                                                                     .Create(UnicodeClassNames.BytePrimitive(),
+		                                                                     UnicodePrimitiveSignatures
+			                                                                     .ByteSignatureChar)
+	                                                                     .WithWrapperClassName(
+		                                                                     UnicodeClassNames.ByteObject()).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JByte;
 
-	static JDataTypeMetadata IDataType.Metadata => JByte.typeMetadata;
+	static JPrimitiveTypeMetadata<JByte> IPrimitiveType<JByte>.Metadata => JByte.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JByte.Type;
 
 	/// <summary>

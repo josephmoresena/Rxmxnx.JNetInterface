@@ -8,11 +8,11 @@ public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>,
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata typeMetadata = JTypeMetadataBuilder<JSerializableObject>
-	                                                              .Create(UnicodeClassNames.SerializableInterface())
-	                                                              .Build();
+	private static readonly JInterfaceTypeMetadata<JSerializableObject> typeMetadata =
+		JTypeMetadataBuilder<JSerializableObject>.Create(UnicodeClassNames.SerializableInterface()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JSerializableObject.typeMetadata;
+	static JInterfaceTypeMetadata<JSerializableObject> IInterfaceType<JSerializableObject>.Metadata
+		=> JSerializableObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JSerializableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

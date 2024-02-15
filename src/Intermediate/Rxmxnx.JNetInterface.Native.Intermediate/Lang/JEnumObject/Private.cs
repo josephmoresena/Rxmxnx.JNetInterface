@@ -5,15 +5,11 @@ public partial class JEnumObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata enumClassMetadata = JLocalObject.JTypeMetadataBuilder<JEnumObject>
-	                                                                           .Create(UnicodeClassNames.EnumObject(),
-		                                                                           JTypeModifier.Final)
-	                                                                           .Implements<JSerializableObject>()
-	                                                                           .Implements<JComparableObject>().Build();
+	private static readonly JClassTypeMetadata<JEnumObject> enumClassMetadata = JLocalObject
+		.JTypeMetadataBuilder<JEnumObject>.Create(UnicodeClassNames.EnumObject(), JTypeModifier.Final)
+		.Implements<JSerializableObject>().Implements<JComparableObject>().Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JEnumObject.enumClassMetadata;
-	static Type IDataType.FamilyType => typeof(JLocalObject);
-	static JClassTypeMetadata IBaseClassType<JEnumObject>.SuperClassMetadata => JEnumObject.enumClassMetadata;
+	static JClassTypeMetadata<JEnumObject> IClassType<JEnumObject>.Metadata => JEnumObject.enumClassMetadata;
 
 	/// <summary>
 	/// String of enum value.
@@ -39,7 +35,7 @@ public partial class JEnumObject
 	private JEnumObject(JLocalObject jLocal, JClassObject jClass) : base(jLocal, jClass) { }
 
 	static JEnumObject IReferenceType<JEnumObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer.ToInternal());
+		=> new(initializer);
 	static JEnumObject IReferenceType<JEnumObject>.Create(IReferenceType.ObjectInitializer initializer)
 	{
 		JClassObject? jClass = initializer.Class ?? initializer.Instance.Lifetime.Class;
@@ -48,5 +44,5 @@ public partial class JEnumObject
 		return new(initializer.Instance, jClass);
 	}
 	static JEnumObject IReferenceType<JEnumObject>.Create(IReferenceType.GlobalInitializer initializer)
-		=> new(initializer.ToInternal());
+		=> new(initializer);
 }

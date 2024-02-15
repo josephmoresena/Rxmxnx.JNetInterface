@@ -1,11 +1,11 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
-#pragma warning disable CS0659
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
 public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable,
-	IPrimitiveWrapperType<JCharacterObject, JChar>
+	IPrimitiveWrapperType<JCharacterObject, JChar>, IInterfaceObject<JSerializableObject>,
+	IInterfaceObject<JComparableObject>
 {
 	/// <summary>
 	/// Constructor.
@@ -27,6 +27,9 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 	/// <inheritdoc/>
+	public override Int32 GetHashCode() => this.Value.GetHashCode();
+
+	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
 		=> new PrimitiveWrapperObjectMetadata<JChar>(base.CreateMetadata()) { Value = this.Value, };
 	/// <inheritdoc/>
@@ -47,4 +50,3 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	public static JCharacterObject? Create(IEnvironment env, JChar? value)
 		=> value is not null ? (JCharacterObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 }
-#pragma warning restore CS0659

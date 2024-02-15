@@ -5,14 +5,15 @@ public partial class JStringObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata typeMetadata = JTypeMetadataBuilder<JStringObject>
-	                                                          .Create(UnicodeClassNames.StringObject(),
-	                                                                  JTypeModifier.Final)
-	                                                          .Implements<JSerializableObject>()
-	                                                          .Implements<JComparableObject>()
-	                                                          .Implements<JCharSequenceObject>().Build();
+	private static readonly JClassTypeMetadata<JStringObject> typeMetadata = JTypeMetadataBuilder<JStringObject>
+	                                                                         .Create(UnicodeClassNames.StringObject(),
+		                                                                         JTypeModifier.Final)
+	                                                                         .Implements<JSerializableObject>()
+	                                                                         .Implements<JComparableObject>()
+	                                                                         .Implements<JCharSequenceObject>().Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JStringObject.typeMetadata;
+	static JClassTypeMetadata<JStringObject> IClassType<JStringObject>.Metadata => JStringObject.typeMetadata;
+
 	/// <summary>
 	/// String length.
 	/// </summary>
@@ -28,8 +29,7 @@ public partial class JStringObject
 	private String? _value;
 
 	/// <inheritdoc/>
-	private JStringObject(InternalClassInitializer initializer) : base(
-		IReferenceType.ClassInitializer.FromInternal(initializer)) { }
+	private JStringObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -55,7 +55,7 @@ public partial class JStringObject
 	}
 
 	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer.ToInternal<JStringObject>());
+		=> new(initializer.WithClass<JStringObject>());
 	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer.Instance);
 	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.GlobalInitializer initializer)

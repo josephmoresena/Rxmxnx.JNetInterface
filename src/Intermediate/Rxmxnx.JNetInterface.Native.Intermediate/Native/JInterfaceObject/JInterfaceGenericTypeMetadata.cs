@@ -7,7 +7,7 @@ public partial class JInterfaceObject
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IInterfaceType"/> type.
 		/// </summary>
-		internal sealed record JInterfaceGenericTypeMetadata : JInterfaceTypeMetadata
+		internal sealed record JInterfaceGenericTypeMetadata : JInterfaceTypeMetadata<TInterface>
 		{
 			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 			private readonly IReadOnlySet<JInterfaceTypeMetadata> _interfaces;

@@ -39,7 +39,7 @@ public abstract partial class JInterfaceObject
 		/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-		public JInterfaceTypeMetadata Build() => new JInterfaceGenericTypeMetadata(this._builder);
+		public JInterfaceTypeMetadata<TInterface> Build() => new JInterfaceGenericTypeMetadata(this._builder);
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.

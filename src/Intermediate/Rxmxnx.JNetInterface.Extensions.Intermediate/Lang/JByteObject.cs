@@ -5,18 +5,22 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveWrapperType<JByteObject, JByte>
 {
-	static JDataTypeMetadata IDataType.Metadata
-		=> new JPrimitiveWrapperTypeMetadata<JByteObject>(IClassType.GetMetadata<JNumberObject>());
+	private static readonly JPrimitiveWrapperTypeMetadata<JByteObject> typeMetadata =
+		new(JTypeMetadataBuilder<JByteObject>.Build(IPrimitiveType.GetMetadata<JByte>(),
+		                                            IClassType.GetMetadata<JNumberObject>()));
+
+	static JPrimitiveWrapperTypeMetadata<JByteObject> IPrimitiveWrapperType<JByteObject>.Metadata
+		=> JByteObject.typeMetadata;
 
 	/// <inheritdoc/>
 	internal JByteObject(JClassObject jClass, JObjectLocalRef localRef, JByte value) : base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JByteObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
+	private JByteObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JByteObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	private JByteObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JByteObject(IReferenceType.ObjectInitializer initializer) : base(initializer.ToInternal<JByteObject>()) { }
+	private JByteObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JByteObject>()) { }
 
 	static JByteObject? IPrimitiveWrapperType<JByteObject, JByte>.Create(IEnvironment env, JByte? value)
 		=> value is not null ? (JByteObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;

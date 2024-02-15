@@ -15,7 +15,7 @@ public readonly partial struct JVirtualMachineRef : INativeReferenceType<JVirtua
 	/// <summary>
 	/// Internal pointer value.
 	/// </summary>
-	private readonly IntPtr _value;
+	private readonly ReadOnlyValPtr<JVirtualMachineValue> _value;
 
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._value;
@@ -23,18 +23,17 @@ public readonly partial struct JVirtualMachineRef : INativeReferenceType<JVirtua
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JVirtualMachineValue"/> from this pointer.
 	/// </summary>
-	internal ref readonly JVirtualMachineValue Reference
-		=> ref this._value.GetUnsafeReadOnlyReference<JVirtualMachineValue>();
+	internal ref readonly JVirtualMachineValue Reference => ref this._value.Reference;
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JVirtualMachineRef() => this._value = IntPtr.Zero;
+	public JVirtualMachineRef() => this._value = ReadOnlyValPtr<JVirtualMachineValue>.Zero;
 
 	ref readonly JVirtualMachineValue IReadOnlyReferenceable<JVirtualMachineValue>.Reference => ref this.Reference;
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => HashCode.Combine(this._value);
+	public override Int32 GetHashCode() => this._value.GetHashCode();
 	/// <inheritdoc/>
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
 		=> obj is JVirtualMachineRef jVirtualMRef && this._value.Equals(jVirtualMRef._value);

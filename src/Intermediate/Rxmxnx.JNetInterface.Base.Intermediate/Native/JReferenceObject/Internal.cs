@@ -9,19 +9,26 @@ public partial class JReferenceObject
 	/// This property is used internally to prevent dummy objects be used in the .NET
 	/// implementation of JNI.
 	/// </remarks>
-	internal Boolean IsDummy => this._isDummy;
+	internal Boolean IsProxy => this._isProxy;
 	/// <summary>
 	/// Reference instance identifiers.
 	/// </summary>
 	internal Int64 Id => this._id;
 
 	/// <inheritdoc/>
-	internal override void CopyTo(Span<JValue> span, Int32 index) => this.AsSpan().CopyTo(span[index].AsBytes());
+	private protected override void CopyTo(Span<JValue> span, Int32 index)
+		=> this.AsSpan().CopyTo(span[index].AsBytes());
+	/// <inheritdoc/>
+	private protected override void CopyTo(Span<Byte> span, ref Int32 offset)
+	{
+		this.AsSpan().CopyTo(span[offset..]);
+		offset += NativeUtilities.PointerSize;
+	}
 
 	/// <summary>
 	/// Indicates whether current instance is default value.
 	/// </summary>
-	internal virtual Boolean IsDefaultInstance() => this.AsSpan().AsValue<IntPtr>() == IntPtr.Zero;
+	internal virtual Boolean IsDefaultInstance() => this.IsBlankSpan();
 
 	/// <summary>
 	/// Indicates whether current instance is an instance of <typeparamref name="TDataType"/> type class.
@@ -31,7 +38,8 @@ public partial class JReferenceObject
 	/// <see langword="true"/> if current instance is an instance of <typeparamref name="TDataType"/>
 	/// type class; otherwise, <see langword="false"/>.
 	/// </returns>
-	internal abstract Boolean IsInstanceOf<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>;
+	private protected abstract Boolean IsInstanceOf<TDataType>()
+		where TDataType : JReferenceObject, IDataType<TDataType>;
 	/// <summary>
 	/// Sets <see cref="JValue.Empty"/> as the current instance value.
 	/// </summary>
@@ -40,7 +48,7 @@ public partial class JReferenceObject
 	/// Retrieves synchronizer instance for current object.
 	/// </summary>
 	/// <returns>A <see cref="IDisposable"/> synchronizer.</returns>
-	internal abstract IDisposable GetSynchronizer();
+	private protected abstract IDisposable GetSynchronizer();
 
 	/// <summary>
 	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
@@ -62,7 +70,7 @@ public partial class JReferenceObject
 	/// Retrieves current value as a read-only binary span.
 	/// </summary>
 	/// <returns>A read-only binary span.</returns>
-	internal abstract ReadOnlySpan<Byte> AsSpan();
+	private protected abstract ReadOnlySpan<Byte> AsSpan();
 	/// <summary>
 	/// Interprets current instance as a <typeparamref name="TReference"/> value.
 	/// </summary>
@@ -79,11 +87,4 @@ public partial class JReferenceObject
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal virtual TReference To<TReference>() where TReference : unmanaged, INativeType<TReference>
 		=> this.AsSpan().AsValue<TReference>();
-
-	/// <inheritdoc/>
-	internal override void CopyTo(Span<Byte> span, ref Int32 offset)
-	{
-		this.AsSpan().CopyTo(span[offset..]);
-		offset += NativeUtilities.PointerSize;
-	}
 }

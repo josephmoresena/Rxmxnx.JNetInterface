@@ -42,13 +42,13 @@ internal static class ValidationUtilities
 		String messagePrefix = $"The {interfaceName} interface can't be implemented by itself.";
 		String recommendation = interfaceName switch
 		{
-			"INative" =>
-				"Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort, or extend the JLocalObject class.",
-			"IPrimitive" =>
-				"Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort.",
+			"INativeType" =>
+				" Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort, or extend the JLocalObject class.",
+			"IPrimitiveType" =>
+				" Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort.",
 			_ => String.Empty,
 		};
-		String message = $"{messagePrefix} {recommendation}";
+		String message = $"{messagePrefix}{recommendation}";
 		throw new NotImplementedException(message);
 	}
 	/// <summary>
@@ -56,9 +56,38 @@ internal static class ValidationUtilities
 	/// </summary>
 	/// <param name="nativeType">The invalid <see cref="JNativeType"/> value.</param>
 	/// <returns>Always throws an exception.</returns>
-	/// <exception cref="NotImplementedException">Always thrown.</exception>
+	/// <exception cref="InvalidEnumArgumentException">Always thrown.</exception>
 	public static String ThrowInvalidNativeType(JNativeType nativeType)
 		=> throw new InvalidEnumArgumentException(nameof(nativeType), (Int32)nativeType, typeof(JNativeType));
+	/// <summary>
+	/// Throws an <see cref="InvalidOperationException"/> for the specified <typeparamref name="TReference"/>.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IDataType{TReference}"/> type.</typeparam>
+	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+	public static TReference ThrowInvalidInstantiation<TReference>()
+		where TReference : JReferenceObject, IDataType<TReference>
+	{
+		JDataTypeMetadata metadata = IDataType.GetMetadata<TReference>();
+		throw new InvalidOperationException($"{metadata.ClassName} not is an instantiable type.");
+	}
+	/// <summary>
+	/// Throws an <see cref="InvalidOperationException"/> attempting to retrieve a void argument.
+	/// </summary>
+	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+	public static JArgumentMetadata ThrowVoidArgument()
+		=> throw new InvalidOperationException("A void value can't be an argument.");
+	/// <summary>
+	/// Throws an <see cref="InvalidOperationException"/> attempting to create a void value.
+	/// </summary>
+	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+	public static IPrimitiveType ThrowVoidInstantiation()
+		=> throw new InvalidOperationException("A void value can't be created.");
+	/// <summary>
+	/// Throws an <see cref="InvalidOperationException"/> attempting to create a void value.
+	/// </summary>
+	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+	public static Boolean ThrowVoidEquality()
+		=> throw new InvalidOperationException("A Void instance can't be equatable.");
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> cannot be cast to <typeparamref name="TValue"/>.
 	/// </summary>
@@ -107,7 +136,7 @@ internal static class ValidationUtilities
 		{
 			if (!allowPrimitive)
 				throw new ArgumentException("Signature not allowed.");
-			return;
+			ValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[0]);
 		}
 
 		Byte prefix = signature[0];
@@ -116,9 +145,14 @@ internal static class ValidationUtilities
 		if (prefix == UnicodeObjectSignatures.ArraySignaturePrefixChar)
 			switch (signature.Length)
 			{
-				case < 2:
+				case 2:
+					if (!allowPrimitive)
+						throw new ArgumentException("Array signature not allowed.");
+					ValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[1]);
+					break;
+				case <= 3:
 					throw new ArgumentException("Invalid signature.");
-				case > 2 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
+				case > 3 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
 					suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar:
 					throw new ArgumentException("Invalid signature.");
 			}
@@ -210,7 +244,7 @@ internal static class ValidationUtilities
 	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is dummy.</exception>
 	public static void ThrowIfDummy(JReferenceObject? jObject, String? message = default)
 	{
-		if (jObject is not null && jObject.IsDummy)
+		if (jObject is not null && jObject.IsProxy)
 			throw new ArgumentException(message ?? "Invalid JReferenceObject.");
 	}
 	/// <summary>
@@ -262,5 +296,50 @@ internal static class ValidationUtilities
 	{
 		if (length < 0)
 			throw new ArgumentException("Array length must be zero or positive.", nameof(length));
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="result"/> is not <see cref="JResult.Ok"/>.
+	/// </summary>
+	/// <param name="result">A <see cref="JResult"/> value.</param>
+	/// <exception cref="JniException">
+	/// Throws an exception if <paramref name="result"/> is not <see cref="JResult.Ok"/>.
+	/// </exception>
+	public static void ThrowIfInvalidResult(JResult result)
+	{
+		if (result != JResult.Ok)
+			throw new JniException(result);
+	}
+	/// <summary>
+	/// Throws an exception if <paramref name="version"/> is invalid.
+	/// </summary>
+	/// <param name="version">JNI version.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="version"/> is invalid.
+	/// </exception>
+	public static Int32 ThrowIfInvalidVersion(Int32 version)
+		=> version > 0 ? version : throw new InvalidOperationException();
+
+	/// <summary>
+	/// Throws an exception if <paramref name="signature"/> is not valid primitive signature.
+	/// </summary>
+	/// <param name="signature">A signature char.</param>
+	/// <exception cref="ArgumentException">
+	/// Throws an exception if <paramref name="signature"/> is not valid primitive signature.
+	/// </exception>
+	private static void ThrowIfInvalidPrimitiveSignature(Byte signature)
+	{
+		switch (signature)
+		{
+			case UnicodePrimitiveSignatures.BooleanSignatureChar:
+			case UnicodePrimitiveSignatures.ByteSignatureChar:
+			case UnicodePrimitiveSignatures.CharSignatureChar:
+			case UnicodePrimitiveSignatures.DoubleSignatureChar:
+			case UnicodePrimitiveSignatures.FloatSignatureChar:
+			case UnicodePrimitiveSignatures.IntSignatureChar:
+			case UnicodePrimitiveSignatures.LongSignatureChar:
+			case UnicodePrimitiveSignatures.ShortSignatureChar:
+				return;
+		}
+		throw new ArgumentException("Invalid primitive signature.");
 	}
 }

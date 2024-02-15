@@ -3,34 +3,24 @@ namespace Rxmxnx.JNetInterface.Types;
 /// <summary>
 /// This interface exposes an object that represents a java primitive wrapper class type instance.
 /// </summary>
-[EditorBrowsable(EditorBrowsableState.Never)]
-public interface IPrimitiveWrapperType : IClassType
+/// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
+public interface IPrimitiveWrapperType<TWrapper> : IClassType<TWrapper>
+	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
 {
+	/// <summary>
+	/// Current type metadata.
+	/// </summary>
+	[ReadOnly(true)]
+	protected new static abstract JPrimitiveWrapperTypeMetadata<TWrapper> Metadata { get; }
+
 	/// <summary>
 	/// Primitive metadata.
 	/// </summary>
+	[ReadOnly(true)]
 	internal static abstract JPrimitiveTypeMetadata PrimitiveMetadata { get; }
 
-	/// <summary>
-	/// Retrieves the metadata for given class type.
-	/// </summary>
-	/// <typeparam name="TWrapperClass">Type of current java primitive wrapper class datatype.</typeparam>
-	/// <returns>The <see cref="JClassTypeMetadata"/> instance for given type.</returns>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JPrimitiveWrapperTypeMetadata GetMetadata<TWrapperClass>()
-		where TWrapperClass : JReferenceObject, IClassType<TWrapperClass>
-		=> (JPrimitiveWrapperTypeMetadata)IDataType.GetMetadata<TWrapperClass>();
-}
+	static JClassTypeMetadata<TWrapper> IClassType<TWrapper>.Metadata => TWrapper.Metadata;
 
-/// <summary>
-/// This interface exposes an object that represents a java primitive wrapper class type instance.
-/// </summary>
-/// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
-public interface IPrimitiveWrapperType<out TWrapper> : IPrimitiveWrapperType, IClassType<TWrapper>,
-	IInterfaceObject<JSerializableObject>, IInterfaceObject<JComparableObject>
-	where TWrapper : JLocalObject, IClassType<TWrapper>, IInterfaceObject<JSerializableObject>,
-	IInterfaceObject<JComparableObject>
-{
 	/// <summary>
 	/// Creates a <typeparamref name="TWrapper"/> instance from <paramref name="jLocal"/>.
 	/// </summary>
@@ -66,9 +56,12 @@ public interface IPrimitiveWrapperType<out TWrapper> : IPrimitiveWrapperType, IC
 /// </summary>
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
 /// <typeparam name="TValue"><see cref="IPrimitiveType"/> type.</typeparam>
-public interface IPrimitiveWrapperType<out TWrapper, TValue> : IPrimitiveWrapperType<TWrapper>, IWrapper<TValue>
+public interface IPrimitiveWrapperType<TWrapper, TValue> : IPrimitiveWrapperType<TWrapper>, IWrapper<TValue>
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper> where TValue : unmanaged, IPrimitiveType<TValue>
 {
+	static JPrimitiveTypeMetadata IPrimitiveWrapperType<TWrapper>.PrimitiveMetadata
+		=> IPrimitiveType.GetMetadata<TValue>();
+
 	/// <summary>
 	/// Creates a <typeparamref name="TWrapper"/> instance initialized with <typeparamref name="TValue"/>.
 	/// </summary>

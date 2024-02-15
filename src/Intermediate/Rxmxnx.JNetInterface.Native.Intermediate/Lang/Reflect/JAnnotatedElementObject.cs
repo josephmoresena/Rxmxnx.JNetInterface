@@ -9,11 +9,11 @@ public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElement
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata typeMetadata = JTypeMetadataBuilder<JAnnotatedElementObject>
-	                                                              .Create(UnicodeClassNames.AnnotatedElementInterface())
-	                                                              .Build();
+	private static readonly JInterfaceTypeMetadata<JAnnotatedElementObject> typeMetadata =
+		JTypeMetadataBuilder<JAnnotatedElementObject>.Create(UnicodeClassNames.AnnotatedElementInterface()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JAnnotatedElementObject.typeMetadata;
+	static JInterfaceTypeMetadata<JAnnotatedElementObject> IInterfaceType<JAnnotatedElementObject>.Metadata
+		=> JAnnotatedElementObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JAnnotatedElementObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

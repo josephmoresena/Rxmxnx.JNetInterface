@@ -19,7 +19,20 @@ public partial class JReferenceObject
 	/// <summary>
 	/// Indicates whether the current instance is a dummy object (fake java object).
 	/// </summary>
-	private readonly Boolean _isDummy;
+	private readonly Boolean _isProxy;
+
+	/// <summary>
+	/// Indicates whether current instance is blank,
+	/// </summary>
+	private Boolean IsBlankSpan()
+	{
+		foreach (Byte t in this.AsSpan())
+		{
+			if (t != default)
+				return false;
+		}
+		return true;
+	}
 
 	/// <summary>
 	/// Creates the identifier for current instance.

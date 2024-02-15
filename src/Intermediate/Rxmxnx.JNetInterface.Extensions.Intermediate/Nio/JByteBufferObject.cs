@@ -8,16 +8,16 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata metadata = JTypeMetadataBuilder<JBufferObject>
-	                                                      .Create<JByteBufferObject>(
-		                                                      UnicodeClassNames.ByteBufferObject(),
-		                                                      JTypeModifier.Abstract).Implements<JComparableObject>()
-	                                                      .Build();
+	private static readonly JClassTypeMetadata<JByteBufferObject> metadata = JTypeMetadataBuilder<JBufferObject>
+	                                                                         .Create<JByteBufferObject>(
+		                                                                         UnicodeClassNames.ByteBufferObject(),
+		                                                                         JTypeModifier.Abstract)
+	                                                                         .Implements<JComparableObject>().Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JByteBufferObject.metadata;
+	static JClassTypeMetadata<JByteBufferObject> IClassType<JByteBufferObject>.Metadata => JByteBufferObject.metadata;
 
 	/// <inheritdoc/>
-	internal JByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
+	private protected JByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
 
 	/// <inheritdoc/>
 	protected JByteBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

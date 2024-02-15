@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 /// <summary>
 /// Java compiler.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed partial record JCompiler
 {
 	/// <summary>
@@ -35,7 +37,7 @@ public sealed partial record JCompiler
 			await File.WriteAllTextAsync(javaFilePath, JHelloDotnetObject.JavaCode);
 			ProcessStartInfo info = new(Path.Combine(this.JdkPath, this.CompilerPath))
 			{
-				ArgumentList = { javaFilePath, }, WindowStyle = ProcessWindowStyle.Hidden,
+				ArgumentList = { javaFilePath, },
 			};
 			Process javac = Process.Start(info)!;
 			await javac.WaitForExitAsync();

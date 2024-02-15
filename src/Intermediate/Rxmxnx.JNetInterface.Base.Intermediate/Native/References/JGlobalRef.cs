@@ -32,9 +32,14 @@ internal readonly partial struct JGlobalRef : IObjectGlobalReferenceType<JGlobal
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => HashCode.Combine(this._value);
+	public override Int32 GetHashCode() => this._value.GetHashCode();
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
-		=> obj is JGlobalRef jGlobalRef && this._value.Equals(jGlobalRef._value);
+		=> obj switch
+		{
+			JGlobalRef globalRef => this._value.Equals(globalRef._value),
+			IWrapper<JGlobalRef> wrapper => this._value.Equals(wrapper.Value._value),
+			_ => false,
+		};
 }

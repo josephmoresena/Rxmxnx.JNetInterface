@@ -3,6 +3,7 @@
 /// <summary>
 /// This class stores a <c>java.lang.Class&lt;?&gt;</c> accessible object definition.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract record JAccessibleObjectDefinition
 {
@@ -19,7 +20,7 @@ public abstract record JAccessibleObjectDefinition
 	/// <summary>
 	/// The format used for <see cref="JAccessibleObjectDefinition.ToString()"/> method.
 	/// </summary>
-	internal abstract String ToStringFormat { get; }
+	private protected abstract String ToStringFormat { get; }
 
 	/// <summary>
 	/// Internal constructor.
@@ -27,7 +28,7 @@ public abstract record JAccessibleObjectDefinition
 	/// <param name="sequence">
 	/// <see cref="CStringSequence"/> containing the name and descriptor of the method.
 	/// </param>
-	internal JAccessibleObjectDefinition(CStringSequence sequence) => this._sequence = sequence;
+	private protected JAccessibleObjectDefinition(CStringSequence sequence) => this._sequence = sequence;
 
 	/// <inheritdoc/>
 	public override String ToString() => String.Format(this.ToStringFormat, this._sequence[0], this._sequence[1]);

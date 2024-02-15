@@ -6,11 +6,14 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed class JVoidObject : JLocalObject.Uninstantiable<JVoidObject>, IPrimitiveEquatable,
 	IPrimitiveWrapperType<JVoidObject>, IUninstantiableType<JVoidObject>
 {
-	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => JPrimitiveTypeMetadata.VoidMetadata;
-	static JDataTypeMetadata IDataType.Metadata => new JPrimitiveWrapperTypeMetadata<JVoidObject>();
+	private static readonly JPrimitiveWrapperTypeMetadata<JVoidObject> typeMetadata =
+		new(JTypeMetadataBuilder<JVoidObject>.Build(JPrimitiveTypeMetadata.VoidMetadata));
 
-	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other)
-		=> throw new InvalidOperationException("A Void instance can't be equatable.");
-	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other)
-		=> throw new InvalidOperationException("A Void instance can't be equatable.");
+	static JPrimitiveWrapperTypeMetadata<JVoidObject> IPrimitiveWrapperType<JVoidObject>.Metadata
+		=> JVoidObject.typeMetadata;
+	static JPrimitiveTypeMetadata IPrimitiveWrapperType<JVoidObject>.PrimitiveMetadata
+		=> JPrimitiveTypeMetadata.VoidMetadata;
+
+	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => ValidationUtilities.ThrowVoidEquality();
+	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => ValidationUtilities.ThrowVoidEquality();
 }

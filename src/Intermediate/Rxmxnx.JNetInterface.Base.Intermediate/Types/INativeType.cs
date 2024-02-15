@@ -3,6 +3,7 @@
 /// <summary>
 /// This interface exposes a java native value.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface INativeType
 {
@@ -21,7 +22,7 @@ internal interface INativeType
 		{
 			return this switch
 			{
-				IFixedPointer fPtr => fPtr.Pointer.ToString(CommonConstants.IntPtrToStringFormat),
+				IFixedPointer fPtr => $"0x{fPtr.Pointer:x8}",
 				JValue jValue => Convert.ToHexString(NativeUtilities.AsBytes(jValue)),
 				JNativeInterface jNative => Convert.ToHexString(NativeUtilities.AsBytes(jNative)),
 				JInvokeInterface jInvoke => Convert.ToHexString(NativeUtilities.AsBytes(jInvoke)),
@@ -50,6 +51,8 @@ internal interface INativeType
 /// This interface exposes a java native value.
 /// </summary>
 /// <typeparam name="TNative">Type of <see cref="INativeType"/></typeparam>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 internal interface INativeType<TNative> : INativeType where TNative : unmanaged, INativeType<TNative>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

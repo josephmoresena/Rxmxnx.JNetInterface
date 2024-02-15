@@ -42,8 +42,20 @@ public partial interface IReferenceType
 		/// <summary>
 		/// Private constructor.
 		/// </summary>
-		/// <param name="initializer">A <see cref="InternalClassInitializer"/> instance.</param>
+		/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> instance.</param>
 		private ClassInitializer(InternalClassInitializer initializer) => this._instance = initializer;
+
+		/// <summary>
+		/// Retrieves an instance with <typeparamref name="TClass"/> class instance.
+		/// </summary>
+		/// <typeparam name="TClass">Datatype class</typeparam>
+		/// <returns>A <see cref="ObjectInitializer"/> value.</returns>
+		internal ClassInitializer WithClass<TClass>() where TClass : IDataType<TClass>
+		{
+			IEnvironment env = this.Class.Environment;
+			JClassObject jClass = env.ClassFeature.GetClass<TClass>();
+			return new() { Class = jClass, LocalReference = this._instance.LocalReference, RealClass = true, };
+		}
 
 		/// <summary>
 		/// Retrieves a <see cref="InternalClassInitializer"/> instance
@@ -51,23 +63,5 @@ public partial interface IReferenceType
 		/// </summary>
 		/// <returns>A <see cref="InternalClassInitializer"/> value.</returns>
 		internal InternalClassInitializer ToInternal() => this._instance;
-		/// <summary>
-		/// Retrieves a <see cref="InternalObjectInitializer"/> instance
-		/// from current instance.
-		/// </summary>
-		/// <typeparam name="TClass">Datatype class</typeparam>
-		/// <returns>A <see cref="InternalObjectInitializer"/> value.</returns>
-		internal InternalClassInitializer ToInternal<TClass>() where TClass : IDataType<TClass>
-		{
-			IEnvironment env = this.Class.Environment;
-			JClassObject jClass = env.ClassFeature.GetClass<TClass>();
-			return new() { Class = jClass, LocalReference = this._instance.LocalReference, };
-		}
-		/// <summary>
-		/// Retrieves a <see cref="ClassInitializer"/> instance from <paramref name="initializer"/>
-		/// </summary>
-		/// <param name="initializer">A <see cref="InternalClassInitializer"/> instance.</param>
-		/// <returns>A <see cref="ClassInitializer"/> value.</returns>
-		internal static ClassInitializer FromInternal(InternalClassInitializer initializer) => new(initializer);
 	}
 }

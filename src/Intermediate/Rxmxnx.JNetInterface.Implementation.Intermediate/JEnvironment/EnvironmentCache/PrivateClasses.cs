@@ -31,7 +31,7 @@ partial class JEnvironment
 		{
 			if (jClass is null) return default;
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			if (classRef.Value != default) return classRef;
+			if (!classRef.IsDefault) return classRef;
 			classRef = this.FindClass(jClass);
 			jClass.SetValue(classRef);
 			this.Register(jClass);
@@ -74,7 +74,7 @@ partial class JEnvironment
 			else
 			{
 				JClassLocalRef classRef = this._objects.FindClassParameter(classInformation.Hash);
-				if (classRef.Value == default)
+				if (classRef.IsDefault)
 					classRef = classInformation.ClassName.WithSafeFixed(this, EnvironmentCache.FindClass);
 				result = new(this.ClassObject, classInformation, classRef);
 			}
@@ -107,7 +107,7 @@ partial class JEnvironment
 		/// <param name="args">Cache and class loader.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private static JClassObject LoadClass(ReadOnlyFixedMemoryList memoryList,
-			(EnvironmentCache cache, JLocalObject? jClassLoader) args)
+			(EnvironmentCache cache, JClassLoaderObject? jClassLoader) args)
 		{
 			ValidationUtilities.ThrowIfDummy(args.jClassLoader);
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(memoryList[0].Bytes);
@@ -116,12 +116,12 @@ partial class JEnvironment
 			JObjectLocalRef localRef = jniTransaction.Add(args.jClassLoader);
 			JClassLocalRef classRef = defineClass(args.cache.Reference, (ReadOnlyValPtr<Byte>)memoryList[0].Pointer,
 			                                      localRef, memoryList[1].Pointer, memoryList[1].Bytes.Length);
-			if (classRef.Value == default) args.cache.CheckJniError();
+			if (classRef.IsDefault) args.cache.CheckJniError();
 			if (args.cache._classes.TryGetValue(classInformation.ToString(), out JClassObject? result))
 			{
 				JEnvironment env = args.cache._env;
 				JClassLocalRef classRefO = jniTransaction.Add(result);
-				if (classRefO.Value == default || env.IsSame(classRef.Value, default))
+				if (classRefO.IsDefault || env.IsSame(classRef.Value, default))
 				{
 					result.SetValue(classRef);
 					args.cache._classes.Unload(classRefO);

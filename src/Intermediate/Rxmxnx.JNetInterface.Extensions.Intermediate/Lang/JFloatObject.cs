@@ -5,20 +5,23 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimitiveWrapperType<JFloatObject, JFloat>
 {
-	static JDataTypeMetadata IDataType.Metadata
-		=> new JPrimitiveWrapperTypeMetadata<JFloatObject>(IClassType.GetMetadata<JNumberObject>());
+	private static readonly JPrimitiveWrapperTypeMetadata<JFloatObject> typeMetadata =
+		new(JTypeMetadataBuilder<JFloatObject>.Build(IPrimitiveType.GetMetadata<JFloat>(),
+		                                             IClassType.GetMetadata<JNumberObject>()));
+
+	static JPrimitiveWrapperTypeMetadata<JFloatObject> IPrimitiveWrapperType<JFloatObject>.Metadata
+		=> JFloatObject.typeMetadata;
 
 	/// <inheritdoc/>
 	internal JFloatObject(JClassObject jClass, JObjectLocalRef localRef, JFloat value) :
 		base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JFloatObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
+	private JFloatObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JFloatObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	private JFloatObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JFloatObject(IReferenceType.ObjectInitializer initializer) :
-		base(initializer.ToInternal<JFloatObject>()) { }
+	private JFloatObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JFloatObject>()) { }
 
 	static JFloatObject? IPrimitiveWrapperType<JFloatObject, JFloat>.Create(IEnvironment env, JFloat? value)
 		=> value is not null ? (JFloatObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;

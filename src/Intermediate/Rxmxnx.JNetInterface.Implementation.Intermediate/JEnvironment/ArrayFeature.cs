@@ -47,7 +47,7 @@ partial class JEnvironment
 					default:
 						throw new ArgumentException("Invalid primitive type.");
 				}
-				if (arrayRef.Value == default) this.CheckJniError();
+				if (arrayRef.IsDefault) this.CheckJniError();
 			}
 			else
 			{
@@ -105,11 +105,10 @@ partial class JEnvironment
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
-				Int32 offset = 0;
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
 				using IFixedContext<Byte>.IDisposable fixedBuffer =
 					EnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
-				value!.CopyTo(buffer, ref offset);
+				value!.CopyTo(buffer);
 				this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
 				this.CheckJniError();
 			}

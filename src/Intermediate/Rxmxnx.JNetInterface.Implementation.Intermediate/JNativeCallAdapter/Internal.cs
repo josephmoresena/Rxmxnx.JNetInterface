@@ -27,7 +27,7 @@ public readonly ref partial struct JNativeCallAdapter
 				this._callAdapter._cache[localRef] = result.Lifetime;
 				return result;
 			}
-			JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
+			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 			return this.CreateInitialClass(classRef);
 		}
 		/// <summary>

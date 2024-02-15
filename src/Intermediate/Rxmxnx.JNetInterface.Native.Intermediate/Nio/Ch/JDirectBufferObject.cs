@@ -3,16 +3,18 @@ namespace Rxmxnx.JNetInterface.Nio.Ch;
 /// <summary>
 /// This class represents a local <c>sun.nio.ch.DirectBuffer</c> instance.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public sealed class JDirectBufferObject : JInterfaceObject<JDirectBufferObject>, IInterfaceType<JDirectBufferObject>
 {
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata metadata = JTypeMetadataBuilder<JDirectBufferObject>
-	                                                          .Create(UnicodeClassNames.DirectBufferObject()).Build();
+	private static readonly JInterfaceTypeMetadata<JDirectBufferObject> metadata =
+		JTypeMetadataBuilder<JDirectBufferObject>.Create(UnicodeClassNames.DirectBufferObject()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JDirectBufferObject.metadata;
+	static JInterfaceTypeMetadata<JDirectBufferObject> IInterfaceType<JDirectBufferObject>.Metadata
+		=> JDirectBufferObject.metadata;
 
 	/// <inheritdoc/>
 	private JDirectBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

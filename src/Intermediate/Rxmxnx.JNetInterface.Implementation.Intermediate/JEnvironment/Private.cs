@@ -26,10 +26,9 @@ partial class JEnvironment
 	/// <exception cref="JniException"/>
 	private void CreateLocalFrame(Int32 capacity)
 	{
-		if (!this.JniSecure()) throw new InvalidOperationException();
+		if (!this.JniSecure()) throw new InvalidOperationException("Current thread is not able to execute JNI calls.");
 		PushLocalFrameDelegate pushLocalFrame = this._cache.GetDelegate<PushLocalFrameDelegate>();
-		JResult jResult = pushLocalFrame(this.Reference, capacity);
-		if (jResult != JResult.Ok) throw new JniException(jResult);
+		ValidationUtilities.ThrowIfInvalidResult(pushLocalFrame(this.Reference, capacity));
 	}
 	/// <summary>
 	/// Creates a new global reference to <paramref name="jLocal"/>.

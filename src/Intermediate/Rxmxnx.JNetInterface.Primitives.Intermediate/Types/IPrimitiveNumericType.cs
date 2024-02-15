@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// <summary>
 /// This interface exposes an object that represents a java primitive number.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface IPrimitiveNumericType : IPrimitiveType
 {
@@ -77,6 +78,8 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 /// This interface exposes an object that represents a java primitive number.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of JNI primitive number.</typeparam>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 internal interface IPrimitiveNumericType<TPrimitive> : IPrimitiveNumericType
 	where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>
 {

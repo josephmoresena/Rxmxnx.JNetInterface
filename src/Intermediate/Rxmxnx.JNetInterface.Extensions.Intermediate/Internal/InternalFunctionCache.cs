@@ -20,6 +20,13 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 		return JFunctionDefinition.Invoke(InternalFunctionCache.nameDefinition, jEnum, enumClass)!;
 	}
 	/// <inheritdoc/>
+	public override JStringObject GetName<TMember>(TMember jMember)
+	{
+		IEnvironment env = jMember.Environment;
+		JClassObject memberInterface = env.ClassFeature.GetClass<JMemberObject>();
+		return JFunctionDefinition.Invoke(InternalFunctionCache.getName, jMember, memberInterface)!;
+	}
+	/// <inheritdoc/>
 	public override Int32 GetOrdinal(JEnumObject jEnum)
 	{
 		IEnvironment env = jEnum.Environment;
@@ -33,6 +40,9 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 	/// <inheritdoc/>
 	public override JStringObject GetClassName(JStackTraceElementObject jStackTraceElement)
 		=> JFunctionDefinition.Invoke(InternalFunctionCache.getClassDefinition, jStackTraceElement)!;
+	/// <inheritdoc/>
+	public override JStringObject GetClassName(JClassObject jClass)
+		=> JFunctionDefinition.Invoke(InternalFunctionCache.getName, jClass)!;
 	/// <inheritdoc/>
 	public override Int32 GetLineNumber(JStackTraceElementObject jStackTraceElement)
 	{
@@ -96,9 +106,6 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 		return JFunctionDefinition.Invoke(InternalFunctionCache.getStackTraceDefinition, jThrowable, throwableClass)!;
 	}
 	/// <inheritdoc/>
-	public override JStringObject GetClassName(JClassObject jClass)
-		=> JFunctionDefinition.Invoke(InternalFunctionCache.getName, jClass)!;
-	/// <inheritdoc/>
 	public override Boolean IsPrimitiveClass(JClassObject jClass)
 	{
 		IEnvironment env = jClass.Environment;
@@ -124,13 +131,6 @@ internal sealed partial class InternalFunctionCache : FunctionCache
 		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferClassObject,
 		                                        InternalFunctionCache.bufferCapacity, false, Array.Empty<IObject>());
 		return bytes.AsValue<Int64>();
-	}
-	/// <inheritdoc/>
-	public override JStringObject GetName<TMember>(TMember jMember)
-	{
-		IEnvironment env = jMember.Environment;
-		JClassObject memberInterface = env.ClassFeature.GetClass<JMemberObject>();
-		return JFunctionDefinition.Invoke(InternalFunctionCache.getName, jMember, memberInterface)!;
 	}
 	/// <inheritdoc/>
 	public override JClassObject GetDeclaringClass<TMember>(TMember jMember)

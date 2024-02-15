@@ -8,15 +8,15 @@ public interface ITypeInformation
 	/// <summary>
 	/// JNI class name.
 	/// </summary>
-	public CString ClassName { get; }
+	CString ClassName { get; }
 	/// <summary>
 	/// JNI signature for object instances of this type.
 	/// </summary>
-	public CString Signature { get; }
+	CString Signature { get; }
 	/// <summary>
 	/// Current datatype hash.
 	/// </summary>
-	public String Hash { get; }
+	String Hash { get; }
 
 	/// <summary>
 	/// Retrieves length of a segment in <paramref name="utf8Sequence"/>
@@ -27,7 +27,7 @@ public interface ITypeInformation
 	internal static Int32 GetSegmentLength(ReadOnlySpan<Byte> utf8Sequence, Int32 offset)
 	{
 		Int32 end = offset;
-		while (utf8Sequence.Length < end)
+		while (utf8Sequence.Length > end)
 		{
 			if (utf8Sequence[end] == default) break;
 			end++;

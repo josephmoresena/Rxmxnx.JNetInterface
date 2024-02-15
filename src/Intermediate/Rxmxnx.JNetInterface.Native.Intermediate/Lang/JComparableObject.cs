@@ -8,11 +8,11 @@ public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IIn
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata typeMetadata = JTypeMetadataBuilder<JComparableObject>
-	                                                              .Create(UnicodeClassNames.ComparableInterface())
-	                                                              .Build();
+	private static readonly JInterfaceTypeMetadata<JComparableObject> typeMetadata =
+		JTypeMetadataBuilder<JComparableObject>.Create(UnicodeClassNames.ComparableInterface()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JComparableObject.typeMetadata;
+	static JInterfaceTypeMetadata<JComparableObject> IInterfaceType<JComparableObject>.Metadata
+		=> JComparableObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JComparableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

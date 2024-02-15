@@ -98,7 +98,6 @@ public partial interface IArrayFeature
 	/// <param name="startIndex">Offset position.</param>
 	void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements, Int32 startIndex = 0)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
-
 	/// <summary>
 	/// Retrieves a <see cref="INativeMemoryAdapter"/> to <see cref="JArrayObject{TPrimitive}"/> elements.
 	/// </summary>

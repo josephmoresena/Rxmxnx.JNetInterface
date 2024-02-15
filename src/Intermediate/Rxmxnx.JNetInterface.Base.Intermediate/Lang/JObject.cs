@@ -6,15 +6,6 @@
 public abstract class JObject : IObject, IEquatable<JObject>
 {
 	/// <summary>
-	/// JNI name of <c>java.lang.Object</c> class.
-	/// </summary>
-	public static readonly CString JObjectClassName = UnicodeClassNames.Object;
-	/// <summary>
-	/// JNI signature for <c>java.lang.Object</c> object.
-	/// </summary>
-	public static readonly CString JObjectSignature = UnicodeObjectSignatures.ObjectSignature;
-
-	/// <summary>
 	/// Object class name.
 	/// </summary>
 	public abstract CString ObjectClassName { get; }
@@ -33,11 +24,42 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset) => this.CopyTo(span, ref offset);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<JValue> span, Int32 index) => this.CopyTo(span, index);
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override Boolean Equals(Object? obj) => obj is JObject other && this.Equals(other);
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override Int32 GetHashCode() => HashCode.Combine(this.ObjectClassName, this.ObjectSignature);
+
+	/// <summary>
+	/// Determines whether a specified <see cref="JObject"/> and a <see cref="JObject"/> instance
+	/// have the same value.
+	/// </summary>
+	/// <param name="left">The <see cref="JObject"/> to compare.</param>
+	/// <param name="right">The <see cref="JObject"/> to compare.</param>
+	/// <returns>
+	/// <see langword="true"/> if the value of <paramref name="left"/> is the same as the value
+	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Boolean operator ==(JObject? left, JObject? right) => left?.Equals(right) ?? right is null;
+	/// <summary>
+	/// Determines whether a specified <see cref="JObject"/> and a <see cref="JObject"/> instance
+	/// have different values.
+	/// </summary>
+	/// <param name="left">The <see cref="JObject"/> to compare.</param>
+	/// <param name="right">The <see cref="JObject"/> to compare.</param>
+	/// <returns>
+	/// <see langword="true"/> if the value of <paramref name="left"/> is different from the value
+	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Boolean operator !=(JObject? left, JObject? right) => !(left == right);
 
 	/// <inheritdoc cref="IObject.CopyTo(Span{Byte}, ref Int32)"/>
-	internal abstract void CopyTo(Span<Byte> span, ref Int32 offset);
+	private protected abstract void CopyTo(Span<Byte> span, ref Int32 offset);
 	/// <inheritdoc cref="IObject.CopyTo(Span{JValue}, Int32)"/>
-	internal abstract void CopyTo(Span<JValue> span, Int32 index);
+	private protected abstract void CopyTo(Span<JValue> span, Int32 index);
 
 	/// <summary>
 	/// Indicates whether <paramref name="jObject"/> instance is <see langword="null"/> or

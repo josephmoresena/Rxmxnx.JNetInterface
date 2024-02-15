@@ -83,9 +83,9 @@ internal static partial class UnicodeClassNames
 	[DefaultValue(ClassNames.StackTraceElementObject)]
 	public static partial ReadOnlySpan<Byte> StackTraceElementObject();
 
-	/// <inheritdoc cref="ClassNames.ArraysObject"/>
-	[DefaultValue(ClassNames.ArraysObject)]
-	public static partial ReadOnlySpan<Byte> ArraysObject();
+	/// <inheritdoc cref="ClassNames.ClassLoaderObject"/>
+	[DefaultValue(ClassNames.ClassLoaderObject)]
+	public static partial ReadOnlySpan<Byte> ClassLoaderObject();
 
 	/// <inheritdoc cref="ClassNames.BufferObject"/>
 	[DefaultValue(ClassNames.BufferObject)]
@@ -102,6 +102,65 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.DirectBufferObject"/>
 	[DefaultValue(ClassNames.DirectBufferObject)]
 	public static partial ReadOnlySpan<Byte> DirectBufferObject();
+
+	/// <inheritdoc cref="ClassNames.ExceptionObject"/>
+	[DefaultValue(ClassNames.ExceptionObject)]
+	public static partial ReadOnlySpan<Byte> ExceptionObject();
+
+	/// <inheritdoc cref="ClassNames.RuntimeExceptionObject"/>
+	[DefaultValue(ClassNames.RuntimeExceptionObject)]
+	public static partial ReadOnlySpan<Byte> RuntimeExceptionObject();
+	/// <inheritdoc cref="ClassNames.ErrorObject"/>
+	[DefaultValue(ClassNames.ErrorObject)]
+	public static partial ReadOnlySpan<Byte> ErrorObject();
+	/// <inheritdoc cref="ClassNames.LinkageErrorObject"/>
+	[DefaultValue(ClassNames.LinkageErrorObject)]
+	public static partial ReadOnlySpan<Byte> LinkageErrorObject();
+	/// <inheritdoc cref="ClassNames.VirtualMachineErrorObject"/>
+	[DefaultValue(ClassNames.VirtualMachineErrorObject)]
+	public static partial ReadOnlySpan<Byte> VirtualMachineErrorObject();
+	/// <inheritdoc cref="ClassNames.ClassFormatErrorObject"/>
+	[DefaultValue(ClassNames.ClassFormatErrorObject)]
+	public static partial ReadOnlySpan<Byte> ClassFormatErrorObject();
+	/// <inheritdoc cref="ClassNames.ClassCircularityErrorObject"/>
+	[DefaultValue(ClassNames.ClassCircularityErrorObject)]
+	public static partial ReadOnlySpan<Byte> ClassCircularityErrorObject();
+	/// <inheritdoc cref="ClassNames.OutOfMemoryErrorObject"/>
+	[DefaultValue(ClassNames.OutOfMemoryErrorObject)]
+	public static partial ReadOnlySpan<Byte> OutOfMemoryErrorObject();
+	/// <inheritdoc cref="ClassNames.ExceptionInInitializerErrorObject"/>
+	[DefaultValue(ClassNames.ExceptionInInitializerErrorObject)]
+	public static partial ReadOnlySpan<Byte> ExceptionInInitializerErrorObject();
+	/// <inheritdoc cref="ClassNames.IncompatibleClassChangeErrorObject"/>
+	[DefaultValue(ClassNames.IncompatibleClassChangeErrorObject)]
+	public static partial ReadOnlySpan<Byte> IncompatibleClassChangeErrorObject();
+	/// <inheritdoc cref="ClassNames.NoSuchMethodErrorObject"/>
+	[DefaultValue(ClassNames.NoSuchMethodErrorObject)]
+	public static partial ReadOnlySpan<Byte> NoSuchMethodErrorObject();
+	/// <inheritdoc cref="ClassNames.NoSuchFieldErrorObject"/>
+	[DefaultValue(ClassNames.NoSuchFieldErrorObject)]
+	public static partial ReadOnlySpan<Byte> NoSuchFieldErrorObject();
+	/// <inheritdoc cref="ClassNames.SecurityExceptionObject"/>
+	[DefaultValue(ClassNames.SecurityExceptionObject)]
+	public static partial ReadOnlySpan<Byte> SecurityExceptionObject();
+	/// <inheritdoc cref="ClassNames.ReflectiveOperationExceptionObject"/>
+	[DefaultValue(ClassNames.ReflectiveOperationExceptionObject)]
+	public static partial ReadOnlySpan<Byte> ReflectiveOperationExceptionObject();
+	/// <inheritdoc cref="ClassNames.InstantiationExceptionObject"/>
+	[DefaultValue(ClassNames.InstantiationExceptionObject)]
+	public static partial ReadOnlySpan<Byte> InstantiationExceptionObject();
+	/// <inheritdoc cref="ClassNames.IndexOutOfBoundsExceptionObject"/>
+	[DefaultValue(ClassNames.IndexOutOfBoundsExceptionObject)]
+	public static partial ReadOnlySpan<Byte> IndexOutOfBoundsExceptionObject();
+	/// <inheritdoc cref="ClassNames.StringIndexOutOfBoundsExceptionObject"/>
+	[DefaultValue(ClassNames.StringIndexOutOfBoundsExceptionObject)]
+	public static partial ReadOnlySpan<Byte> StringIndexOutOfBoundsExceptionObject();
+	/// <inheritdoc cref="ClassNames.ArrayIndexOutOfBoundsExceptionObject"/>
+	[DefaultValue(ClassNames.ArrayIndexOutOfBoundsExceptionObject)]
+	public static partial ReadOnlySpan<Byte> ArrayIndexOutOfBoundsExceptionObject();
+	/// <inheritdoc cref="ClassNames.ArrayStoreExceptionObject"/>
+	[DefaultValue(ClassNames.ArrayStoreExceptionObject)]
+	public static partial ReadOnlySpan<Byte> ArrayStoreExceptionObject();
 
 	/// <inheritdoc cref="ClassNames.VoidPrimitive"/>
 	[DefaultValue(ClassNames.VoidPrimitive)]

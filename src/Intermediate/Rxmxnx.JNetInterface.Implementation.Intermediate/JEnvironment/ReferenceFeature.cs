@@ -163,16 +163,12 @@ partial class JEnvironment
 		public void MonitorEnter(JObjectLocalRef localRef)
 		{
 			MonitorEnterDelegate monitorEnter = this.GetDelegate<MonitorEnterDelegate>();
-			JResult result = monitorEnter(this.Reference, localRef);
-			if (result != JResult.Ok)
-				throw new JniException(result);
+			ValidationUtilities.ThrowIfInvalidResult(monitorEnter(this.Reference, localRef));
 		}
 		public void MonitorExit(JObjectLocalRef localRef)
 		{
 			MonitorExitDelegate monitorExit = this.GetDelegate<MonitorExitDelegate>();
-			JResult result = monitorExit(this.Reference, localRef);
-			if (result != JResult.Ok)
-				throw new JniException(result);
+			ValidationUtilities.ThrowIfInvalidResult(monitorExit(this.Reference, localRef));
 		}
 	}
 }

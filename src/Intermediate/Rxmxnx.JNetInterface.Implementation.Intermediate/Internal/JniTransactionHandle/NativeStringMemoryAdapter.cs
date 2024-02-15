@@ -13,8 +13,7 @@ internal partial struct JniTransactionHandle
 		private readonly Boolean _utf8Chars;
 
 		/// <inheritdoc cref="UnaryTransaction.LocalRef"/>
-		private new JStringLocalRef LocalRef
-			=> NativeUtilities.Transform<JObjectLocalRef, JStringLocalRef>(in base.LocalRef);
+		private new JStringLocalRef LocalRef => JStringLocalRef.FromReference(in base.LocalRef);
 
 		/// <summary>
 		/// Constructor.

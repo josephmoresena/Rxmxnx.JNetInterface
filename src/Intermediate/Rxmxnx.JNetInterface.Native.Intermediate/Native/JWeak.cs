@@ -22,10 +22,10 @@ public sealed class JWeak : JGlobalBase
 	/// </summary>
 	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
+	/// <param name="isProxy">Indicates whether the current instance is a dummy object.</param>
 	/// <param name="weakRef">Weak global reference.</param>
-	internal JWeak(IVirtualMachine vm, ObjectMetadata metadata, Boolean isDummy, JWeakRef weakRef) : base(
-		vm, metadata, isDummy, weakRef) { }
+	internal JWeak(IVirtualMachine vm, ObjectMetadata metadata, Boolean isProxy, JWeakRef weakRef) : base(
+		vm, metadata, isProxy, weakRef) { }
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)

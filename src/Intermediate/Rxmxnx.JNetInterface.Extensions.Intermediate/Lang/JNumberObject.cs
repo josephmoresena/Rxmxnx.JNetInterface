@@ -11,18 +11,15 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	private TValue? _value;
 
 	/// <inheritdoc/>
-	internal JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) : base(jClass, localRef)
+	private protected JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) :
+		base(jClass, localRef)
 		=> this._value = value;
-
 	/// <inheritdoc/>
-	internal JNumberObject(InternalClassInitializer initializer) : base(
-		IReferenceType.ClassInitializer.FromInternal(initializer)) { }
+	private protected JNumberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	internal JNumberObject(InternalGlobalInitializer initializer) : base(
-		IReferenceType.GlobalInitializer.FromInternal(initializer)) { }
+	private protected JNumberObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	internal JNumberObject(InternalObjectInitializer initializer) : base(
-		IReferenceType.ObjectInitializer.FromInternal(initializer))
+	private protected JNumberObject(IReferenceType.ObjectInitializer initializer) : base(initializer)
 	{
 		JLocalObject jLocal = initializer.Instance;
 		if (jLocal is JNumberObject number)
@@ -67,22 +64,20 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 /// </summary>
 /// <typeparam name="TValue">Number <see cref="IPrimitiveType"/> type.</typeparam>
 /// <typeparam name="TNumber"><see cref="JNumberObject"/> type.</typeparam>
-public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>, IPrimitiveWrapperType,
+public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>,
 	IPrimitiveEquatable, IInterfaceObject<JComparableObject>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 	where TNumber : JNumberObject<TValue, TNumber>, IPrimitiveWrapperType<TNumber, TValue>
 {
-	static JPrimitiveTypeMetadata IPrimitiveWrapperType.PrimitiveMetadata => IPrimitiveType.GetMetadata<TValue>();
-
 	/// <inheritdoc/>
 	internal JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) :
 		base(jClass, localRef, value) { }
 	/// <inheritdoc/>
-	internal JNumberObject(InternalClassInitializer initializer) : base(initializer) { }
+	private protected JNumberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	internal JNumberObject(InternalGlobalInitializer initializer) : base(initializer) { }
+	private protected JNumberObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	internal JNumberObject(InternalObjectInitializer initializer) : base(initializer) { }
+	private protected JNumberObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Value.Equals(other);
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Value.Equals(other);
@@ -91,6 +86,8 @@ public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>, IP
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
+	/// <inheritdoc/>
+	public override Int32 GetHashCode() => this.Value.GetHashCode();
 
 	/// <inheritdoc cref="IPrimitiveWrapperType{TNumber, TValue}.Create(IEnvironment, Nullable{TValue})"/>
 	[return: NotNullIfNotNull(nameof(value))]

@@ -35,11 +35,9 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		internal override JLocalObject
 			CreateInstance(JClassObject jClass, JObjectLocalRef localRef, Boolean realClass = false)
-			=> JArrayObject<TElement>.Create(new InternalClassInitializer
+			=> JArrayObject<TElement>.Create(new IReferenceType.ClassInitializer
 			{
-				Class = jClass,
-				OverrideClass = realClass,
-				LocalReference = localRef,
+				Class = jClass, RealClass = realClass, LocalReference = localRef,
 			});
 		/// <inheritdoc/>
 		internal override JArrayObject? ParseInstance(JLocalObject? jLocal)

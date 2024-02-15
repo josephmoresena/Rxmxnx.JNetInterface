@@ -6,18 +6,6 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public partial interface IStringFeature
 {
 	/// <summary>
-	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="data"/>.
-	/// </summary>
-	/// <param name="data">UTF-16 string data.</param>
-	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
-	JStringObject Create(ReadOnlySpan<Char> data);
-	/// <summary>
-	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="utf8Data"/>.
-	/// </summary>
-	/// <param name="utf8Data">UTF-8 string data.</param>
-	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
-	JStringObject Create(ReadOnlySpan<Byte> utf8Data);
-	/// <summary>
 	/// Retrieves the length of given <see cref="JReferenceObject"/> instance.
 	/// </summary>
 	/// <param name="jObject"><see cref="JReferenceObject"/> instance.</param>

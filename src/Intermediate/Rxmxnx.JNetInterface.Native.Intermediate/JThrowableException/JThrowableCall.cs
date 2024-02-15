@@ -30,7 +30,7 @@ public partial class JThrowableException
 		/// <summary>
 		/// Invokes current delegate as <see cref="Action{TThrowable}"/>.
 		/// </summary>
-		/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
+		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 		public void Invoke<TThrowable>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			if (this._delegate is not Action<TThrowable> action) return;
@@ -43,7 +43,7 @@ public partial class JThrowableException
 		/// <summary>
 		/// Execute current delegate as <see cref="Func{TThrowable, TResult}"/>.
 		/// </summary>
-		/// <typeparam name="TThrowable">A <see cref="IThrowableType"/> type.</typeparam>
+		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 		/// <typeparam name="TResult">Type of function result.</typeparam>
 		/// <returns>Function result.</returns>
 		public TResult Invoke<TThrowable, TResult>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>

@@ -10,14 +10,18 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JFloat, Single>.JTypeMetadataBuilder
-		.Create(UnicodeClassNames.FloatPrimitive(), UnicodePrimitiveSignatures.FloatSignatureChar)
-		.WithWrapperClassName(UnicodeClassNames.FloatObject()).Build();
+	private static readonly JPrimitiveTypeMetadata<JFloat> typeMetadata = IPrimitiveType<JFloat, Single>
+	                                                                      .JTypeMetadataBuilder
+	                                                                      .Create(UnicodeClassNames.FloatPrimitive(),
+		                                                                      UnicodePrimitiveSignatures
+			                                                                      .FloatSignatureChar)
+	                                                                      .WithWrapperClassName(
+		                                                                      UnicodeClassNames.FloatObject()).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloat;
 
-	static JDataTypeMetadata IDataType.Metadata => JFloat.typeMetadata;
+	static JPrimitiveTypeMetadata<JFloat> IPrimitiveType<JFloat>.Metadata => JFloat.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JFloat.Type;
 
 	/// <summary>

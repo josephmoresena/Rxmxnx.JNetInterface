@@ -9,7 +9,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// <summary>
 		/// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
 		/// </summary>
-		private sealed record JPrimitiveGenericTypeMetadata : JPrimitiveTypeMetadata
+		private sealed record JPrimitiveGenericTypeMetadata : JPrimitiveTypeMetadata<TPrimitive>
 		{
 			/// <summary>
 			/// Native primitive type.

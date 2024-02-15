@@ -139,5 +139,5 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		=> utf8Data is not null ? env.StringFeature.Create(utf8Data) : default;
 	/// <inheritdoc cref="JStringObject.Create(IEnvironment, CString)"/>
 	public static JStringObject Create(IEnvironment env, ReadOnlySpan<Byte> utf8Data)
-		=> env.StringFeature.Create(new CString(utf8Data));
+		=> env.StringFeature.Create(utf8Data);
 }

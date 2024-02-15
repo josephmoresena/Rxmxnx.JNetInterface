@@ -9,7 +9,7 @@ public abstract partial record JArrayTypeMetadata
 	/// <summary>
 	/// Metadata dictionary.
 	/// </summary>
-	private static readonly ConcurrentDictionary<String, JArrayTypeMetadata> arrayMetadatas = new();
+	private static readonly ConcurrentDictionary<String, JArrayTypeMetadata> metadataCache = new();
 
 	/// <summary>
 	/// Static constructor.
@@ -41,8 +41,8 @@ public abstract partial record JArrayTypeMetadata
 		"IL3050:Calling members annotated with 'RequiresDynamicCodeAttribute' may break functionality when AOT compiling.",
 		Justification = "Alternatives to avoid reflection use.")]
 	protected static JArrayTypeMetadata? GetArrayArrayMetadata(CString elementSignature, Type typeofElement)
-		=> JArrayTypeMetadata.arrayMetadatas.TryGetValue(elementSignature.ToHexString(),
-		                                                 out JArrayTypeMetadata? result) ?
+		=> JArrayTypeMetadata.metadataCache.TryGetValue(elementSignature.ToHexString(),
+		                                                out JArrayTypeMetadata? result) ?
 			result :
 			JArrayTypeMetadata.GetArrayArrayMetadataWithReflection(elementSignature, typeofElement);
 	/// <summary>
@@ -87,9 +87,9 @@ public abstract partial record JArrayTypeMetadata
 	[RequiresDynamicCode("Calls System.Reflection.MethodInfo.MakeGenericMethod(params Type[])")]
 	private static JArrayTypeMetadata? GetArrayArrayMetadataWithReflection(CString elementSignature, Type typeofElement)
 	{
-		if (JArrayTypeMetadata.getArrayArrayMetadataInfo is null) return default;
 		try
 		{
+			if (JArrayTypeMetadata.getArrayArrayMetadataInfo is null) return default;
 			MethodInfo getGenericArrayArrayMetadataInfo =
 				JArrayTypeMetadata.getArrayArrayMetadataInfo.MakeGenericMethod(typeofElement);
 			Func<JArrayTypeMetadata> getGenericArrayArrayMetadata =

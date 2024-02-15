@@ -7,6 +7,14 @@ public partial class JVirtualMachine
 	/// </summary>
 	private sealed partial record VirtualMachineCache : GlobalMainClasses
 	{
+		/// <summary>
+		/// Global cache.
+		/// </summary>
+		public readonly ClassCache<JGlobal> GlobalClassCache = new();
+		/// <summary>
+		/// <see cref="NativeCache"/> instance.
+		/// </summary>
+		public readonly NativeCache NativesCache = new();
 		/// <inheritdoc cref="JVirtualMachine.Reference"/>
 		public readonly JVirtualMachineRef Reference;
 		/// <summary>
@@ -14,17 +22,9 @@ public partial class JVirtualMachine
 		/// </summary>
 		public readonly ThreadCache ThreadCache;
 		/// <summary>
-		/// Global cache.
-		/// </summary>
-		public readonly ClassCache<JGlobal> GlobalClassCache = new();
-		/// <summary>
 		/// Weak cache.
 		/// </summary>
 		public readonly ClassCache WeakClassCache = new();
-		/// <summary>
-		/// <see cref="NativeCache"/> instance.
-		/// </summary>
-		public readonly NativeCache NativesCache = new();
 
 		/// <summary>
 		/// Constructor.
@@ -34,7 +34,7 @@ public partial class JVirtualMachine
 		public VirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm)
 		{
 			this._delegateCache = new();
-			
+
 			this._vm = vm;
 			this.Reference = vmRef;
 			this.ThreadCache = new(vm);
@@ -84,7 +84,7 @@ public partial class JVirtualMachine
 		{
 			if (globalRef == default) return;
 			this._globalObjects.Remove(globalRef, out _);
-			this.GlobalClassCache.Unload(NativeUtilities.Transform<JGlobalRef, JClassLocalRef>(in globalRef));
+			this.GlobalClassCache.Unload(JClassLocalRef.FromReference(in globalRef));
 		}
 		/// <summary>
 		/// Removes <see cref="JWeakRef"/> from current cache.
@@ -94,7 +94,7 @@ public partial class JVirtualMachine
 		{
 			if (weakRef == default) return;
 			this._weakObjects.Remove(weakRef, out _);
-			this.GlobalClassCache.Unload(NativeUtilities.Transform<JWeakRef, JClassLocalRef>(in weakRef));
+			this.GlobalClassCache.Unload(JClassLocalRef.FromReference(in weakRef));
 		}
 		/// <summary>
 		/// Clears cache.

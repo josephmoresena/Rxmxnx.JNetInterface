@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
@@ -7,10 +9,13 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 /// <summary>
 /// .NET representation of <c>com.rxmxnx.dotnet.test.HelloDotnet</c> java class.
 /// </summary>
+[ExcludeFromCodeCoverage]
 internal sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHelloDotnetObject>
 {
-	public static JDataTypeMetadata Metadata { get; } = JTypeMetadataBuilder<JHelloDotnetObject>
-	                                                    .Create("com/rxmxnx/dotnet/test/HelloDotnet"u8).Build();
+	public static JClassTypeMetadata<JHelloDotnetObject> Metadata { get; } = JTypeMetadataBuilder<JHelloDotnetObject>
+	                                                                         .Create(
+		                                                                         "com/rxmxnx/dotnet/test/HelloDotnet"u8)
+	                                                                         .Build();
 
 	private JHelloDotnetObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	private JHelloDotnetObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

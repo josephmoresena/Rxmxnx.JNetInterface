@@ -5,18 +5,18 @@ public partial class JLocalObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	internal static readonly JClassTypeMetadata ObjectClassMetadata = JTypeMetadataBuilder<JLocalObject>
-	                                                                  .Create(JObject.JObjectClassName)
-	                                                                  .WithSignature(JObject.JObjectSignature).Build();
+	internal static readonly JClassTypeMetadata<JLocalObject> ObjectClassMetadata = JTypeMetadataBuilder<JLocalObject>
+		.Create(UnicodeClassNames.Object).WithSignature(UnicodeObjectSignatures.ObjectSignature).Build();
 
-	static JClassTypeMetadata IBaseClassType<JLocalObject>.SuperClassMetadata => JLocalObject.ObjectClassMetadata;
+	static JClassTypeMetadata<JLocalObject> IClassType<JLocalObject>.Metadata => JLocalObject.ObjectClassMetadata;
+	static Type IDataType.FamilyType => typeof(JLocalObject);
 
 	/// <summary>
 	/// Internal reference value.
 	/// </summary>
 	internal JObjectLocalRef InternalReference => base.To<JObjectLocalRef>();
 	/// <inheritdoc cref="ILocalObject.Lifetime"/>
-	internal ObjectLifetime Lifetime => this._lifetime;
+	internal ObjectLifetime Lifetime { get; }
 
 	/// <summary>
 	/// Interprets internal current value as <typeparamref name="TReference"/> value.
@@ -31,43 +31,43 @@ public partial class JLocalObject
 	/// Sets the current instance value.
 	/// </summary>
 	/// <param name="localRef">A local object reference the value of current instance.</param>
-	internal void SetValue(JObjectLocalRef localRef) => this._lifetime.SetValue(this, localRef);
+	internal void SetValue(JObjectLocalRef localRef) => this.Lifetime.SetValue(this, localRef);
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
 	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
 	/// <param name="localRef">A local object reference the value of current instance.</param>
 	internal void SetValue<TValue>(TValue localRef) where TValue : unmanaged, IObjectReferenceType
-		=> this._lifetime.SetValue(this, localRef);
+		=> this.Lifetime.SetValue(this, localRef);
 	/// <inheritdoc/>
-	internal override ReadOnlySpan<Byte> AsSpan() => this._lifetime.Span;
+	private protected override ReadOnlySpan<Byte> AsSpan() => this.Lifetime.Span;
 	/// <inheritdoc/>
 	internal override ref readonly TValue As<TValue>()
 	{
-		JGlobalBase? jGlobal = this._lifetime.GetGlobalObject();
+		JGlobalBase? jGlobal = this.Lifetime.GetGlobalObject();
 		if (jGlobal is not null)
 			return ref jGlobal.As<TValue>();
 		return ref base.As<TValue>();
 	}
 	/// <inheritdoc/>
-	internal override TValue To<TValue>() => this._lifetime.GetGlobalObject()?.To<TValue>() ?? base.To<TValue>();
+	internal override TValue To<TValue>() => this.Lifetime.GetGlobalObject()?.To<TValue>() ?? base.To<TValue>();
 	/// <inheritdoc/>
-	internal override void ClearValue() => this._lifetime.Dispose();
+	internal override void ClearValue() => this.Lifetime.Dispose();
 	/// <inheritdoc/>
-	internal override IDisposable GetSynchronizer()
+	private protected override IDisposable GetSynchronizer()
 	{
-		IEnvironment env = this._lifetime.Environment;
+		IEnvironment env = this.Lifetime.Environment;
 		return env.ReferenceFeature.GetSynchronizer(this);
 	}
 	/// <inheritdoc/>
-	internal override Boolean IsAssignableTo<TDataType>() => this._lifetime.IsAssignableTo<TDataType>(this);
+	internal override Boolean IsAssignableTo<TDataType>() => this.Lifetime.IsAssignableTo<TDataType>(this);
 	/// <inheritdoc/>
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
-		=> this._lifetime.SetAssignableTo<TDataType>(isAssignable);
+		=> this.Lifetime.SetAssignableTo<TDataType>(isAssignable);
 	/// <inheritdoc/>
 	internal override Boolean IsDefaultInstance()
 	{
-		if (this._lifetime.GetGlobalObject() is { } jGlobal && !jGlobal.IsDefaultInstance())
+		if (this.Lifetime.GetGlobalObject() is { } jGlobal && !jGlobal.IsDefaultInstance())
 			return false;
 		return base.IsDefaultInstance();
 	}
@@ -99,7 +99,7 @@ public partial class JLocalObject
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>The loaded <see cref="JGlobalBase"/> object for <paramref name="jLocal"/>.</returns>
-	internal static JGlobalBase? GetGlobalObject(JLocalObject jLocal) => jLocal._lifetime.GetGlobalObject();
+	internal static JGlobalBase? GetGlobalObject(JLocalObject jLocal) => jLocal.Lifetime.GetGlobalObject();
 	/// <summary>
 	/// Retrieves initial final <typaramref name="TObject"/> instance for <paramref name="localRef"/>.
 	/// </summary>
@@ -140,5 +140,5 @@ public partial class JLocalObject
 	/// </exception>
 	internal static JLocalObject Validate<TDataType>(JLocalObject jLocal)
 		where TDataType : JLocalObject, IDataType<TDataType>
-		=> jLocal as TDataType ?? JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal._lifetime.Environment);
+		=> jLocal as TDataType ?? JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal.Lifetime.Environment);
 }

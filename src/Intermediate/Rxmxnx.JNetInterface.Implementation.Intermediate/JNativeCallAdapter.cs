@@ -134,6 +134,7 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <summary>
 	/// Builder for <see cref="JNativeCallAdapter"/>
 	/// </summary>
+	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public readonly ref partial struct Builder
 	{
@@ -298,7 +299,7 @@ public readonly ref partial struct JNativeCallAdapter
 			if (JLocalObject.IsClassType<TObject>())
 			{
 				Unsafe.SkipInit(out jLocal);
-				JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
+				JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 				return this.WithParameter(classRef, out Unsafe.As<TObject, JClassObject>(ref jLocal));
 			}
 			jLocal = this.CreateInitialObject<TObject>(localRef);

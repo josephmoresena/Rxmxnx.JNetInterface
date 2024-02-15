@@ -5,20 +5,24 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// </summary>
 public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimitiveWrapperType<JIntegerObject, JInt>
 {
-	static JDataTypeMetadata IDataType.Metadata
-		=> new JPrimitiveWrapperTypeMetadata<JIntegerObject>(IClassType.GetMetadata<JNumberObject>());
+	private static readonly JPrimitiveWrapperTypeMetadata<JIntegerObject> typeMetadata =
+		new(JTypeMetadataBuilder<JIntegerObject>.Build(IPrimitiveType.GetMetadata<JInt>(),
+		                                               IClassType.GetMetadata<JNumberObject>()));
+
+	static JPrimitiveWrapperTypeMetadata<JIntegerObject> IPrimitiveWrapperType<JIntegerObject>.Metadata
+		=> JIntegerObject.typeMetadata;
 
 	/// <inheritdoc/>
 	internal JIntegerObject(JClassObject jClass, JObjectLocalRef localRef, JInt value) :
 		base(jClass, localRef, value) { }
 
 	/// <inheritdoc/>
-	private JIntegerObject(IReferenceType.ClassInitializer initializer) : base(initializer.ToInternal()) { }
+	private JIntegerObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JIntegerObject(IReferenceType.GlobalInitializer initializer) : base(initializer.ToInternal()) { }
+	private JIntegerObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	private JIntegerObject(IReferenceType.ObjectInitializer initializer) : base(
-		initializer.ToInternal<JIntegerObject>()) { }
+	private JIntegerObject(IReferenceType.ObjectInitializer initializer) :
+		base(initializer.WithClass<JIntegerObject>()) { }
 
 	static JIntegerObject? IPrimitiveWrapperType<JIntegerObject, JInt>.Create(IEnvironment env, JInt? value)
 		=> value is not null ? (JIntegerObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;

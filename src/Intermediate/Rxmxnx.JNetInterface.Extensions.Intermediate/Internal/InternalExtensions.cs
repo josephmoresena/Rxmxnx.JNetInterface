@@ -185,7 +185,7 @@ internal static class InternalExtensions
 	/// <param name="args">Argument array.</param>
 	/// <returns>Normalized argument array.</returns>
 	public static IObject?[] Normalize(this IObject?[] args)
-		=> args.Any(o => o is JPrimitiveObject) ? args.Select(o => o.Normalize()).ToArray() : args;
+		=> Array.Exists(args, o => o is JPrimitiveObject) ? args.Select(o => o.Normalize()).ToArray() : args;
 	/// <summary>
 	/// Normalize <see cref="IObject"/> instance.
 	/// </summary>

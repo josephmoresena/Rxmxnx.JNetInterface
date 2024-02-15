@@ -51,9 +51,9 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </summary>
 	internal FunctionCache Functions { get; }
 	/// <summary>
-	/// Indicates whether current instance is not dummy.
+	/// Indicates whether current instance is not a proxy.
 	/// </summary>
-	internal Boolean RealEnvironment { get; }
+	internal Boolean NoProxy { get; }
 
 	JEnvironmentRef IWrapper<JEnvironmentRef>.Value => this.Reference;
 

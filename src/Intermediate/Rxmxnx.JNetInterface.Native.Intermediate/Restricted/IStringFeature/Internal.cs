@@ -3,6 +3,18 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public partial interface IStringFeature
 {
 	/// <summary>
+	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="data"/>.
+	/// </summary>
+	/// <param name="data">UTF-16 string data.</param>
+	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
+	internal JStringObject Create(ReadOnlySpan<Char> data);
+	/// <summary>
+	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="utf8Data"/>.
+	/// </summary>
+	/// <param name="utf8Data">UTF-8 string data.</param>
+	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
+	internal JStringObject Create(ReadOnlySpan<Byte> utf8Data);
+	/// <summary>
 	/// Retrieves a pointer to <paramref name="stringRef"/> characters.
 	/// </summary>
 	/// <param name="stringRef"><see cref="JStringLocalRef"/> reference.</param>
@@ -22,7 +34,6 @@ public partial interface IStringFeature
 	/// <param name="stringRef"><see cref="JStringLocalRef"/> reference.</param>
 	/// <returns>Pointer to <paramref name="stringRef"/> UTF-16 data.</returns>
 	internal ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef);
-
 	/// <summary>
 	/// Releases the UTF-16 pointer associated to <paramref name="stringRef"/>.
 	/// </summary>

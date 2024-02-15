@@ -5,17 +5,18 @@ public partial class JClassObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata typeMetadata = JTypeMetadataBuilder<JClassObject>
-	                                                          .Create(UnicodeClassNames.ClassObject,
-	                                                                  JTypeModifier.Final)
-	                                                          .WithSignature(
-		                                                          UnicodeObjectSignatures.ClassObjectSignature)
-	                                                          .Implements<JSerializableObject>()
-	                                                          .Implements<JAnnotatedElementObject>()
-	                                                          .Implements<JGenericDeclarationObject>()
-	                                                          .Implements<JTypeObject>().Build();
+	private static readonly JClassTypeMetadata<JClassObject> typeMetadata = JTypeMetadataBuilder<JClassObject>
+	                                                                        .Create(UnicodeClassNames.ClassObject,
+		                                                                        JTypeModifier.Final)
+	                                                                        .WithSignature(
+		                                                                        UnicodeObjectSignatures
+			                                                                        .ClassObjectSignature)
+	                                                                        .Implements<JSerializableObject>()
+	                                                                        .Implements<JAnnotatedElementObject>()
+	                                                                        .Implements<JGenericDeclarationObject>()
+	                                                                        .Implements<JTypeObject>().Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JClassObject.typeMetadata;
+	static JClassTypeMetadata<JClassObject> IClassType<JClassObject>.Metadata => JClassObject.typeMetadata;
 
 	/// <summary>
 	/// Fully qualified class name.
@@ -55,7 +56,7 @@ public partial class JClassObject
 	{
 		IEnvironment env = initializer.Class.Environment;
 		JObjectLocalRef localRef = initializer.LocalReference;
-		JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
+		JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 		return env.ClassFeature.AsClassObject(classRef);
 	}
 	static JClassObject IReferenceType<JClassObject>.Create(IReferenceType.ObjectInitializer initializer)

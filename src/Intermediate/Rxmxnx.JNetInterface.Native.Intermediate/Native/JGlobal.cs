@@ -7,20 +7,16 @@ namespace Rxmxnx.JNetInterface.Native;
 public sealed class JGlobal : JGlobalBase
 {
 	/// <summary>
-	/// Indicates whether current instance is not disposable.
-	/// </summary>
-	private readonly Boolean _isDisposable;
-	/// <summary>
 	/// Weak reference to <see cref="JGlobal"/> instance.
 	/// </summary>
 	private readonly WeakReference<JGlobal?> _secondary = new(default);
 
+	/// <inheritdoc cref="JGlobal"/>
+	private protected override Boolean IsDisposable { get; }
 	/// <summary>
 	/// Global reference.
 	/// </summary>
 	internal JGlobalRef Reference => this.As<JGlobalRef>();
-	/// <inheritdoc cref="JGlobal"/>
-	internal override Boolean IsDisposable => this._isDisposable;
 
 	/// <summary>
 	/// Secondary <see cref="ObjectLifetime"/>
@@ -32,11 +28,11 @@ public sealed class JGlobal : JGlobalBase
 	/// </summary>
 	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
-	/// <param name="isDummy">Indicates whether the current instance is a dummy object.</param>
+	/// <param name="isProxy">Indicates whether the current instance is a dummy object.</param>
 	/// <param name="globalRef">Global reference.</param>
-	internal JGlobal(IVirtualMachine vm, ObjectMetadata metadata, Boolean isDummy, JGlobalRef globalRef) :
-		base(vm, metadata, isDummy, globalRef)
-		=> this._isDisposable = metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
+	internal JGlobal(IVirtualMachine vm, ObjectMetadata metadata, Boolean isProxy, JGlobalRef globalRef) :
+		base(vm, metadata, isProxy, globalRef)
+		=> this.IsDisposable = metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)
@@ -52,8 +48,8 @@ public sealed class JGlobal : JGlobalBase
 	internal void SetValue(JGlobalRef globalRef)
 	{
 		if (this.Reference == globalRef) return;
-		base.SetValue(NativeUtilities.Transform<JGlobalRef, IntPtr>(globalRef));
-		if (this.Secondary is not null && !this._isDisposable) this.Secondary.SetValue(globalRef);
+		base.SetValue(globalRef.Pointer);
+		if (this.Secondary is not null && !this.IsDisposable) this.Secondary.SetValue(globalRef);
 	}
 
 	/// <summary>
@@ -63,7 +59,7 @@ public sealed class JGlobal : JGlobalBase
 	/// <returns>A <see cref="JGlobal"/> cacheable instance.</returns>
 	public JGlobal GetCacheable(IEnvironment env)
 	{
-		if (!this.IsValid(env) || this.Secondary is null || this.Secondary._isDisposable) return this;
+		if (!this.IsValid(env) || this.Secondary is null || this.Secondary.IsDisposable) return this;
 		return this.Secondary!;
 	}
 	/// <summary>

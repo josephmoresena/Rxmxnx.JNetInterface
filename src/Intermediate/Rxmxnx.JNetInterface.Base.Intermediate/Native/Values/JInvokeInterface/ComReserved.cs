@@ -2,6 +2,8 @@
 
 [SuppressMessage(CommonConstants.CodeQuality, CommonConstants.CheckId0051,
                  Justification = CommonConstants.BinaryStructJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
+                 Justification = CommonConstants.BinaryStructJustification)]
 internal readonly partial struct JInvokeInterface
 {
 	/// <summary>

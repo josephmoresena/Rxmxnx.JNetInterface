@@ -9,7 +9,7 @@
 internal readonly partial struct JFieldId : IAccessibleIdentifierType<JFieldId>
 {
 	/// <inheritdoc/>
-	public static JNativeType Type => JNativeType.JMethod;
+	public static JNativeType Type => JNativeType.JField;
 
 	/// <summary>
 	/// Internal native signed integer
@@ -27,7 +27,7 @@ internal readonly partial struct JFieldId : IAccessibleIdentifierType<JFieldId>
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => HashCode.Combine(this._value);
+	public override Int32 GetHashCode() => this._value.GetHashCode();
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)

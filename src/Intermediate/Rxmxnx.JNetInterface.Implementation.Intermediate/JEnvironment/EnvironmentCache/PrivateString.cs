@@ -8,14 +8,14 @@ partial class JEnvironment
 		{
 			NewStringDelegate newString = cache.GetDelegate<NewStringDelegate>();
 			JStringLocalRef result = newString(cache.Reference, (ReadOnlyValPtr<Char>)ctx.Pointer, ctx.Values.Length);
-			if (result.Value == default) cache.CheckJniError();
+			if (result.IsDefault) cache.CheckJniError();
 			return result;
 		}
 		private static JStringLocalRef CreateUtf8String(in IReadOnlyFixedContext<Byte> ctx, EnvironmentCache cache)
 		{
 			NewStringUtfDelegate newUtf8String = cache.GetDelegate<NewStringUtfDelegate>();
 			JStringLocalRef result = newUtf8String(cache.Reference, (ReadOnlyValPtr<Byte>)ctx.Pointer);
-			if (result.Value == default) cache.CheckJniError();
+			if (result.IsDefault) cache.CheckJniError();
 			return result;
 		}
 		private static void GetStringRegion(in IFixedContext<Char> ctx,

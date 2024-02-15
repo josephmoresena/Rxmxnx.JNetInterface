@@ -6,7 +6,7 @@ public partial class JThrowableObject
 	/// <see cref="JClassTypeMetadata"/> throwable builder.
 	/// </summary>
 	/// <typeparam name="TThrowable">Type of <c/>java.lang.Throwable<c/> class.</typeparam>
-	protected new ref partial struct JTypeMetadataBuilder<
+	protected new ref struct JTypeMetadataBuilder<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable>
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 	{
@@ -59,8 +59,12 @@ public partial class JThrowableObject
 		/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-		public JThrowableTypeMetadata Build()
-			=> new JThrowableGenericTypeMetadata(this._builder, this._modifier, this._baseMetadata);
+		public JThrowableTypeMetadata<TThrowable> Build()
+		{
+			JClassTypeMetadata<TThrowable> classMetadata =
+				JLocalObject.JTypeMetadataBuilder<TThrowable>.Build(this._builder, this._modifier, this._baseMetadata);
+			return new(classMetadata);
+		}
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
@@ -73,7 +77,7 @@ public partial class JThrowableObject
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
 			ISet<Type> interfaceTypes = IReferenceType<TThrowable>.GetInterfaceTypes().ToHashSet();
-			JClassTypeMetadata? baseMetadata = typeof(TThrowable) != typeof(JThrowableObject) ?
+			JClassTypeMetadata baseMetadata = typeof(TThrowable) != typeof(JThrowableObject) ?
 				IClassType.GetMetadata<JThrowableObject>() :
 				IClassType.GetMetadata<JLocalObject>();
 			return new(className, modifier, baseMetadata, interfaceTypes);

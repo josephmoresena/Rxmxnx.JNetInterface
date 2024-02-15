@@ -75,10 +75,10 @@ public partial class JEnumObject
 			return this;
 		}
 		/// <summary>
-		/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
+		/// Creates the <see cref="JEnumTypeMetadata{TEnum}"/> instance.
 		/// </summary>
-		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-		public JEnumTypeMetadata Build()
+		/// <returns>A new <see cref="JEnumTypeMetadata{TEnum}"/> instance.</returns>
+		public JEnumTypeMetadata<TEnum> Build()
 			=> new JEnumGenericTypeMetadata(this._builder, this._fields.Validate(this._builder.DataTypeName));
 
 		/// <summary>

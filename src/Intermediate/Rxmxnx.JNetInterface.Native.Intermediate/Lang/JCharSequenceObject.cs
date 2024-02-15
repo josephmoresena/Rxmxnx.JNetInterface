@@ -8,11 +8,11 @@ public sealed class JCharSequenceObject : JInterfaceObject<JCharSequenceObject>,
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata typeMetadata = JTypeMetadataBuilder<JCharSequenceObject>
-	                                                              .Create(UnicodeClassNames.CharSequenceInterface())
-	                                                              .Build();
+	private static readonly JInterfaceTypeMetadata<JCharSequenceObject> typeMetadata =
+		JTypeMetadataBuilder<JCharSequenceObject>.Create(UnicodeClassNames.CharSequenceInterface()).Build();
 
-	static JDataTypeMetadata IDataType.Metadata => JCharSequenceObject.typeMetadata;
+	static JInterfaceTypeMetadata<JCharSequenceObject> IInterfaceType<JCharSequenceObject>.Metadata
+		=> JCharSequenceObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JCharSequenceObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

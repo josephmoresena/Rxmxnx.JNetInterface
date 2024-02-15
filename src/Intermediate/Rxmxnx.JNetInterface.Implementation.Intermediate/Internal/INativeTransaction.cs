@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Represents a native transaction.
 /// </summary>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, IDisposable
 {
 	/// <summary>

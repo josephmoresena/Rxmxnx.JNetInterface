@@ -1,10 +1,11 @@
+namespace Rxmxnx.JNetInterface;
+
 /// <summary>
 /// Set of primitive memory extensions.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CA1050
 public static class JArrayExtensions
-#pragma warning restore CA1050
 {
 	/// <summary>
 	/// Retrieves the native memory of array elements.

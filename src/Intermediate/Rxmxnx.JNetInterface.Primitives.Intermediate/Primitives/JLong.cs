@@ -10,14 +10,18 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata typeMetadata = IPrimitiveType<JLong, Int64>.JTypeMetadataBuilder
-		.Create(UnicodeClassNames.LongPrimitive(), UnicodePrimitiveSignatures.LongSignatureChar)
-		.WithWrapperClassName(UnicodeClassNames.LongObject()).Build();
+	private static readonly JPrimitiveTypeMetadata<JLong> typeMetadata = IPrimitiveType<JLong, Int64>
+	                                                                     .JTypeMetadataBuilder
+	                                                                     .Create(UnicodeClassNames.LongPrimitive(),
+		                                                                     UnicodePrimitiveSignatures
+			                                                                     .LongSignatureChar)
+	                                                                     .WithWrapperClassName(
+		                                                                     UnicodeClassNames.LongObject()).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JLong;
 
-	static JDataTypeMetadata IDataType.Metadata => JLong.typeMetadata;
+	static JPrimitiveTypeMetadata<JLong> IPrimitiveType<JLong>.Metadata => JLong.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JLong.Type;
 
 	/// <summary>

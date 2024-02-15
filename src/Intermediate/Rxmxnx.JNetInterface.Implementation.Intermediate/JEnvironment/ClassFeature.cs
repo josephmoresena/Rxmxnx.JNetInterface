@@ -14,11 +14,11 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jObject);
 			if (jObject is JClassObject jClass) return jClass;
 			ValidationUtilities.ThrowIfDefault(jObject);
-			if (!jObject.IsInstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
+			if (!jObject.InstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
 			JClassObject result = this.AsClassObject(classRef);
-			if (jObject is ILocalObject local && result.InternalReference == classRef)
+			if (jObject is ILocalObject local && classRef == result.InternalReference)
 				result.Lifetime.Synchronize(local.Lifetime);
 			return result;
 		}
@@ -55,7 +55,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDefault(jClass);
 			GetSuperclassDelegate getSuperClass = this.GetDelegate<GetSuperclassDelegate>();
 			JClassLocalRef superClassRef = jniTransaction.Add(getSuperClass(this.Reference, classRef));
-			if (superClassRef.Value != default)
+			if (!superClassRef.IsDefault)
 			{
 				JClassObject jSuperClass = this.AsClassObject(superClassRef);
 				if (jSuperClass.InternalReference != superClassRef.Value) this._env.DeleteLocalRef(superClassRef.Value);
@@ -94,14 +94,14 @@ partial class JEnvironment
 			return result;
 		}
 		public JClassObject LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,
-			JLocalObject? jClassLoader = default)
+			JClassLoaderObject? jClassLoader = default)
 		{
 			className = JDataTypeMetadata.JniParseClassName(className);
 			return NativeUtilities.WithSafeFixed(className.AsSpan(), rawClassBytes, (this, jClassLoader),
 			                                     EnvironmentCache.LoadClass);
 		}
-		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JLocalObject? jClassLoader = default)
-			where TDataType : JLocalObject, IReferenceType<TDataType>
+		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes,
+			JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TDataType>();
 			return NativeUtilities.WithSafeFixed(metadata.ClassName.AsSpan(), rawClassBytes, (this, jClassLoader),
@@ -112,7 +112,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDummy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			if (classRef.Value == default) throw new ArgumentException("Unloaded class.");
+			if (classRef.IsDefault) throw new ArgumentException("Unloaded class.");
 			JClassObject loadedClass = this.AsClassObject(classRef);
 			name = loadedClass.Name;
 			signature = loadedClass.ClassSignature;

@@ -11,7 +11,7 @@ public interface ILocalViewObject : IViewObject, ILocalObject
 	new ILocalObject Object { get; }
 
 	IVirtualMachine ILocalObject.VirtualMachine => this.Object.VirtualMachine;
-	Boolean ILocalObject.IsDummy => this.IsDummy;
+	Boolean ILocalObject.IsProxy => this.IsProxy;
 	ObjectLifetime ILocalObject.Lifetime => this.Object.Lifetime;
 	ObjectMetadata ILocalObject.CreateMetadata() => ILocalObject.CreateMetadata(this.Object);
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata)

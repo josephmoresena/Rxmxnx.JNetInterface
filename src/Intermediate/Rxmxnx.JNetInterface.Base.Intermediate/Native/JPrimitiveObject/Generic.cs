@@ -6,43 +6,20 @@ internal partial class JPrimitiveObject
 	/// Internal <see cref="JPrimitiveObject"/> implementation.
 	/// </summary>
 	/// <typeparam name="TValue">A <see langword="unmanaged"/> type.</typeparam>
-	public abstract class Generic<TValue> : JPrimitiveObject, IWrapper<TValue>, IPrimitiveType
+	public abstract partial class Generic<TValue> : JPrimitiveObject, IPrimitiveType, IPrimitiveValue<TValue>
 		where TValue : unmanaged, IEquatable<TValue>, IComparable, IConvertible
 	{
 		/// <summary>
-		/// Internal value.
-		/// </summary>
-		private readonly TValue _value;
-		/// <summary>
 		/// Size of current type in bytes.
 		/// </summary>
-		public override Int32 SizeOf => NativeUtilities.SizeOf<TValue>();
+		protected override Int32 SizeOf => NativeUtilities.SizeOf<TValue>();
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="value">Internal wrapper.</param>
-		public Generic(TValue value) => this._value = value;
+		protected Generic(TValue value) => this._value = value;
 
-		Int32 IComparable.CompareTo(Object? obj) => this.Value.CompareTo(obj);
-		TypeCode IConvertible.GetTypeCode() => this.Value.GetTypeCode();
-		Boolean IConvertible.ToBoolean(IFormatProvider? provider) => this.Value.ToBoolean(provider);
-		Byte IConvertible.ToByte(IFormatProvider? provider) => this.Value.ToByte(provider);
-		Char IConvertible.ToChar(IFormatProvider? provider) => this.Value.ToChar(provider);
-		DateTime IConvertible.ToDateTime(IFormatProvider? provider) => this.Value.ToDateTime(provider);
-		Decimal IConvertible.ToDecimal(IFormatProvider? provider) => this.Value.ToDecimal(provider);
-		Double IConvertible.ToDouble(IFormatProvider? provider) => this.Value.ToDouble(provider);
-		Int16 IConvertible.ToInt16(IFormatProvider? provider) => this.Value.ToInt16(provider);
-		Int32 IConvertible.ToInt32(IFormatProvider? provider) => this.Value.ToInt32(provider);
-		Int64 IConvertible.ToInt64(IFormatProvider? provider) => this.Value.ToInt64(provider);
-		SByte IConvertible.ToSByte(IFormatProvider? provider) => this.Value.ToSByte(provider);
-		Single IConvertible.ToSingle(IFormatProvider? provider) => this.Value.ToSingle(provider);
-		String IConvertible.ToString(IFormatProvider? provider) => this.Value.ToString(provider);
-		Object IConvertible.ToType(Type conversionType, IFormatProvider? provider)
-			=> this.Value.ToType(conversionType, provider);
-		UInt16 IConvertible.ToUInt16(IFormatProvider? provider) => this.Value.ToUInt16(provider);
-		UInt64 IConvertible.ToUInt64(IFormatProvider? provider) => this.Value.ToUInt64(provider);
-		UInt32 IConvertible.ToUInt32(IFormatProvider? provider) => this.Value.ToUInt32(provider);
 		/// <summary>
 		/// Internal primitive value.
 		/// </summary>
@@ -54,7 +31,8 @@ internal partial class JPrimitiveObject
 		public override Boolean Equals(JObject? other)
 			=> other is Generic<TValue> jPrimitive && this._value.Equals(jPrimitive._value);
 		/// <inheritdoc/>
-		public override Boolean Equals(Object? obj) => obj is Generic<TValue> jPrimitive && this.Equals(jPrimitive);
+		public override Boolean Equals(Object? obj)
+			=> obj is Generic<TValue> jPrimitive ? this.Equals(jPrimitive) : this.Value.Equals(obj);
 
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -65,13 +43,13 @@ internal partial class JPrimitiveObject
 		public override Byte ToByte() => NativeUtilities.AsBytes(in this._value)[0];
 
 		/// <inheritdoc cref="IObject.CopyTo(Span{JValue}, Int32)"/>
-		internal override void CopyTo(Span<JValue> span, Int32 index)
-			=> NativeUtilities.AsBytes(this._value).CopyTo(span[index].AsBytes());
+		private protected override void CopyTo(Span<JValue> span, Int32 index)
+			=> this.AsSpan().CopyTo(span[index].AsBytes());
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		internal override void CopyTo(Span<Byte> span, ref Int32 offset)
+		private protected override void CopyTo(Span<Byte> span, ref Int32 offset)
 		{
-			NativeUtilities.AsBytes(this._value).CopyTo(span[offset..]);
+			this.AsSpan().CopyTo(span[offset..]);
 			offset += this.SizeOf;
 		}
 	}

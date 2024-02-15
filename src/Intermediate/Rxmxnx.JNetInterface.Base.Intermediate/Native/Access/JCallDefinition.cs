@@ -3,6 +3,7 @@
 /// <summary>
 /// This class stores a java call definition.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract partial record JCallDefinition : JAccessibleObjectDefinition
 {
@@ -34,7 +35,7 @@ public abstract partial record JCallDefinition : JAccessibleObjectDefinition
 	internal abstract Type? Return { get; }
 
 	/// <inheritdoc/>
-	internal override String ToStringFormat => "{{ Method: {0} Descriptor: {1} }}";
+	private protected override String ToStringFormat => "{{ Method: {0} Descriptor: {1} }}";
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();

@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// <summary>
 /// This interface exposes an object that represents a java interface type instance.
 /// </summary>
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IInterfaceType : IReferenceType
 {
@@ -24,4 +25,13 @@ public interface IInterfaceType : IReferenceType
 /// </summary>
 /// <typeparam name="TInterface">Type of java interface type.</typeparam>
 public interface IInterfaceType<TInterface> : IInterfaceType, IReferenceType<TInterface>, IInterfaceObject<TInterface>
-	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>;
+	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+{
+	/// <summary>
+	/// Current type metadata.
+	/// </summary>
+	[ReadOnly(true)]
+	protected new static abstract JInterfaceTypeMetadata<TInterface> Metadata { get; }
+
+	static JDataTypeMetadata IDataType<TInterface>.Metadata => TInterface.Metadata;
+}

@@ -40,7 +40,7 @@ public readonly ref partial struct JNativeCallAdapter
 	private TResult FinalizeCall<TResult>(JLocalObject? result) where TResult : unmanaged, IObjectReferenceType<TResult>
 	{
 		JObjectLocalRef jniResult = this.FinalizeCall(result);
-		return NativeUtilities.Transform<JObjectLocalRef, TResult>(in jniResult);
+		return TResult.FromReference(in jniResult);
 	}
 
 	public readonly ref partial struct Builder
@@ -111,7 +111,7 @@ public readonly ref partial struct JNativeCallAdapter
 			}
 			else
 			{
-				JClassLocalRef classRef = NativeUtilities.Transform<JObjectLocalRef, JClassLocalRef>(in localRef);
+				JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 				JClassObject jClassResult = this.CreateInitialClass(classRef, true);
 				result = (TObject)metadata.ParseInstance(jClassResult);
 				if (!Object.ReferenceEquals(result, jClassResult)) jClassResult.Dispose();
