@@ -21,7 +21,18 @@ public static class Program
 	public static async Task Main(String[] args)
 	{
 		Program.PrintBuiltIntMetadata();
+		Program.PrintArrayMetadata(JArrayObject<JBoolean>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JByte>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JChar>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JDouble>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JFloat>.Metadata, 10);
 		Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JLong>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JShort>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JLocalObject>>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JClassObject>>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JThrowableObject>>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JStringObject>>.Metadata, 10);
 
 		JCompiler? compiler = args.Length == 3 ?
 			new() { JdkPath = args[0], CompilerPath = args[1], LibraryPath = args[2], } :

@@ -9,7 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <RdXmlFile Include="rd.xml"/>
+        <!-- Preserves [[Z, [[B, [[C, [[D, [[F, [[I, [[J, [[S metadata generation from [Z, [B, [C, [D, [F, [I, [J, [S -->
+        <RdXmlFile Include="rd_primitive_array_array.xml" Condition="'$(UsePrimitveArrayArrayRd)' == 'true'"/>
     </ItemGroup>
 
     <ItemGroup>
