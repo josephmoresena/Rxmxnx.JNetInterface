@@ -28,14 +28,13 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// <summary>
 			/// Constructor.
 			/// </summary>
-			/// <param name="sizeOf">Size of current primitive type in bytes.</param>
 			/// <param name="underlineType">Underline primitive CLR type.</param>
 			/// <param name="signature">JNI signature for current primitive type.</param>
 			/// <param name="className">Wrapper class name of current primitive type.</param>
 			/// <param name="wrapperClassName">Wrapper class JNI name of current primitive type.</param>
-			internal JPrimitiveGenericTypeMetadata(Int32 sizeOf, Type underlineType, ReadOnlySpan<Byte> signature,
+			internal JPrimitiveGenericTypeMetadata(Type underlineType, ReadOnlySpan<Byte> signature,
 				ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(
-				sizeOf, underlineType, signature, className, wrapperClassName)
+				underlineType, signature, className, wrapperClassName)
 			{
 				this._nativeType = TPrimitive.JniType;
 				this._type = typeof(TPrimitive);

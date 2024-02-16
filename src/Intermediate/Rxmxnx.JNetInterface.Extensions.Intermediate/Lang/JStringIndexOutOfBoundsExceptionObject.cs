@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.StringIndexOutOfBoundsException</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public class JStringIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsExceptionObject,
 	IThrowableType<JStringIndexOutOfBoundsExceptionObject>
 {

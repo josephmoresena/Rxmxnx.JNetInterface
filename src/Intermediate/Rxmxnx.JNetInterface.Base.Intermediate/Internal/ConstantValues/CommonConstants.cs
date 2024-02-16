@@ -13,5 +13,10 @@ internal static class CommonConstants
 	public const String CheckId0051 = "IDE0051:Remove unused private members";
 	public const String CheckIdS1144 = "S1144:Remove the unused private field";
 	public const String CheckIdS2292 = "S2292:Trivial properties should be auto-implemented";
+	public const String CheckIdS3881 = "S3881:\"IDisposable\" should be implemented correctly";
+	public const String CheckIdS110 = "S110:Inheritance tree of classes should not be too deep";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
+	public const String AbstractProxyJustification = "This object is an abstract proxy.";
+	public const String JavaInheritanceJustification =
+		"Any JReferenceObject type tree of classes is inherently longer than a normal C# class.";
 }

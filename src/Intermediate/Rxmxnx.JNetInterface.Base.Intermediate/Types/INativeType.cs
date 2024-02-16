@@ -15,21 +15,7 @@ internal interface INativeType
 	/// <summary>
 	/// Current instance text value.
 	/// </summary>
-	internal String TextValue
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get
-		{
-			return this switch
-			{
-				IFixedPointer fPtr => $"0x{fPtr.Pointer:x8}",
-				JValue jValue => Convert.ToHexString(NativeUtilities.AsBytes(jValue)),
-				JNativeInterface jNative => Convert.ToHexString(NativeUtilities.AsBytes(jNative)),
-				JInvokeInterface jInvoke => Convert.ToHexString(NativeUtilities.AsBytes(jInvoke)),
-				_ => this.GetType().ToString(),
-			};
-		}
-	}
+	internal String TextValue => INativeType.GetTextValue(this);
 
 	/// <summary>
 	/// Current value as <see cref="String"/>.
@@ -45,6 +31,22 @@ internal interface INativeType
 	/// <returns><see cref="INativeType"/> instance as <see cref="String"/>.</returns>
 	internal static String ToString<TNative>(TNative nativeType) where TNative : unmanaged, INativeType<TNative>
 		=> nativeType.AsString();
+
+	/// <summary>
+	/// Returns a <see cref="String"/> representing <paramref name="native"/>.
+	/// </summary>
+	/// <param name="native">A <see cref="INativeType"/> value.</param>
+	/// <returns>A <see cref="String"/> representing <paramref name="native"/>.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static String GetTextValue(INativeType native)
+		=> native switch
+		{
+			IFixedPointer fPtr => $"0x{fPtr.Pointer:x8}",
+			JValue jValue => Convert.ToHexString(NativeUtilities.AsBytes(jValue)),
+			JNativeInterface jNative => Convert.ToHexString(NativeUtilities.AsBytes(jNative)),
+			JInvokeInterface jInvoke => Convert.ToHexString(NativeUtilities.AsBytes(jInvoke)),
+			_ => native.GetType().ToString(),
+		};
 }
 
 /// <summary>
