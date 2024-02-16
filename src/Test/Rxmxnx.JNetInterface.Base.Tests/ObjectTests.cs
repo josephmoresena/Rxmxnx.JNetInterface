@@ -21,6 +21,7 @@ public sealed class ObjectTests
 	[InlineData(0)]
 	[InlineData(10)]
 	[InlineData(100)]
+#pragma warning disable CA1859
 	internal void ViewByteCopyTest(Int32 length)
 	{
 		ObjectProxy jObject = Substitute.For<ObjectProxy>();
@@ -35,7 +36,6 @@ public sealed class ObjectTests
 	[InlineData(0)]
 	[InlineData(10)]
 	[InlineData(100)]
-#pragma warning disable CA1859
 	internal void ViewValueCopyTest(Int32 length)
 	{
 		ObjectProxy jObject = Substitute.For<ObjectProxy>();
