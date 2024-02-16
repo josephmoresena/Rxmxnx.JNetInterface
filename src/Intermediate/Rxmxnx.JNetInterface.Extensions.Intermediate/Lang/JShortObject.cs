@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Short</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimitiveWrapperType<JShortObject, JShort>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JShortObject> typeMetadata =

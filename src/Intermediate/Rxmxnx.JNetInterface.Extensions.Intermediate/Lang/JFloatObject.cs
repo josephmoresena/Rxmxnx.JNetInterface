@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Float</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimitiveWrapperType<JFloatObject, JFloat>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JFloatObject> typeMetadata =

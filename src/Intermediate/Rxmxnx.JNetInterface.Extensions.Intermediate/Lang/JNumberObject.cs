@@ -4,6 +4,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// This class represents a local <c>java.lang.Number</c> instance.
 /// </summary>
 /// <typeparam name="TValue">Number <see cref="IPrimitiveType"/> type.</typeparam>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 {

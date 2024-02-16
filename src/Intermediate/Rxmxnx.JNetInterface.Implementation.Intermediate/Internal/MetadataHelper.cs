@@ -141,17 +141,55 @@ internal static partial class MetadataHelper
 	{
 		JReferenceTypeMetadata? classMetadata = MetadataHelper.GetMetadata(jClass.Hash);
 		JReferenceTypeMetadata? otherClassMetadata = MetadataHelper.GetMetadata(otherClass.Hash);
-		if (classMetadata is null || otherClassMetadata is null) return default;
-		if (classMetadata.Hash == otherClassMetadata.Hash) return true;
-		if (otherClassMetadata.Hash == IDataType.GetHash<JLocalObject>()) return true;
-		if (classMetadata.Hash == IDataType.GetHash<JLocalObject>()) return default;
-		String forwardKey = MetadataHelper.GetAssignationKey(classMetadata, otherClassMetadata);
-		if (MetadataHelper.assignationCache.TryGetValue(forwardKey, out Boolean? result)) return result;
-		String backwardKey = MetadataHelper.GetAssignationKey(otherClassMetadata, classMetadata);
-		result = MetadataHelper.IsAssignableFrom(classMetadata, otherClassMetadata);
-		MetadataHelper.assignationCache.TryAdd(forwardKey, result);
-		MetadataHelper.assignationCache.TryAdd(backwardKey, result.HasValue && result.Value ? null : result ?? true);
+		return MetadataHelper.IsAssignableFrom(classMetadata, otherClassMetadata);
+	}
+
+	/// <summary>
+	/// Determines statically whether an object of <paramref name="classMetadata"/> can be safely cast to
+	/// <paramref name="otherClassMetadata"/>.
+	/// </summary>
+	/// <param name="classMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <param name="otherClassMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if an object of <paramref name="classMetadata"/> can be safely cast to
+	/// <paramref name="otherClassMetadata"/>; <see langword="null"/> if an object of <paramref name="otherClassMetadata"/>
+	/// can be safely cast to <paramref name="classMetadata"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	private static Boolean? IsAssignableFrom(JReferenceTypeMetadata? classMetadata,
+		JReferenceTypeMetadata? otherClassMetadata)
+	{
+		Boolean? result = MetadataHelper.IsBasicAssignable(classMetadata, otherClassMetadata);
+		if (result.HasValue && !result.Value)
+		{
+			String forwardKey = MetadataHelper.GetAssignationKey(classMetadata!, otherClassMetadata!);
+			if (MetadataHelper.assignationCache.TryGetValue(forwardKey, out result)) return result;
+			String backwardKey = MetadataHelper.GetAssignationKey(otherClassMetadata!, classMetadata!);
+			result = MetadataHelper.GetAssignation(classMetadata!, otherClassMetadata!);
+			MetadataHelper.assignationCache.TryAdd(forwardKey, result);
+			MetadataHelper.assignationCache.TryAdd(backwardKey,
+			                                       result.HasValue && result.Value ? null : result ?? true);
+		}
 		return result;
+	}
+	/// <summary>
+	/// Determines statically whether an object of <paramref name="classMetadata"/> can be safely cast to
+	/// <paramref name="otherClassMetadata"/>.
+	/// </summary>
+	/// <param name="classMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <param name="otherClassMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if an object of <paramref name="classMetadata"/> can be safely cast to
+	/// <paramref name="otherClassMetadata"/>; <see langword="null"/> if an object of
+	/// <paramref name="otherClassMetadata"/> can be safely cast to <paramref name="classMetadata"/>;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	private static Boolean? IsBasicAssignable([NotNullWhen(false)] JReferenceTypeMetadata? classMetadata,
+		[NotNullWhen(false)] JReferenceTypeMetadata? otherClassMetadata)
+	{
+		if (classMetadata is null || otherClassMetadata is null ||
+		    classMetadata.Hash == IDataType.GetHash<JLocalObject>()) return default;
+		return classMetadata.Hash == otherClassMetadata.Hash ||
+			otherClassMetadata.Hash == IDataType.GetHash<JLocalObject>();
 	}
 	/// <summary>
 	/// Determines statically whether <paramref name="classMetadata"/> type can be safely cast to
@@ -164,38 +202,57 @@ internal static partial class MetadataHelper
 	/// <paramref name="otherClassMetadata"/> type; <see langword="null"/> if <paramref name="otherClassMetadata"/> type
 	/// can be safely cast to <paramref name="classMetadata"/> type; otherwise, <see langword="false"/>.
 	/// </returns>
-	private static Boolean? IsAssignableFrom(JReferenceTypeMetadata classMetadata,
+	private static Boolean? GetAssignation(JReferenceTypeMetadata classMetadata,
 		JReferenceTypeMetadata otherClassMetadata)
 	{
 		switch (classMetadata)
 		{
 			case JArrayTypeMetadata arrayMetadata when otherClassMetadata is JArrayTypeMetadata otherArrayMetadata:
-				return MetadataHelper.IsAssignableFrom(arrayMetadata, otherArrayMetadata);
+				return MetadataHelper.IsAssignableFrom(arrayMetadata.ElementMetadata as JReferenceTypeMetadata,
+				                                       otherArrayMetadata.ElementMetadata as JReferenceTypeMetadata);
 			case JClassTypeMetadata when otherClassMetadata is JClassTypeMetadata:
 			{
-				JClassTypeMetadata? baseMetadata = otherClassMetadata.BaseMetadata;
-				while (baseMetadata is not null)
-				{
-					if (baseMetadata.Hash == classMetadata.Hash) return true;
-					baseMetadata = baseMetadata.BaseMetadata;
-				}
-				baseMetadata = classMetadata.BaseMetadata;
-				while (baseMetadata is not null)
-				{
-					if (baseMetadata.Hash == otherClassMetadata.Hash) return default;
-					baseMetadata = baseMetadata.BaseMetadata;
-				}
+				if (MetadataHelper.IsForwardAssignable(otherClassMetadata, classMetadata)) return default;
+				if (MetadataHelper.IsForwardAssignable(classMetadata, otherClassMetadata)) return true;
 				break;
 			}
 		}
-		if (otherClassMetadata is JInterfaceTypeMetadata)
-			if (classMetadata.Interfaces.Any(interfaceMetadata => interfaceMetadata.Hash == otherClassMetadata.Hash))
-				return true;
-		if (classMetadata is not JInterfaceTypeMetadata) return false;
-		if (otherClassMetadata.Interfaces.Any(interfaceMetadata => interfaceMetadata.Hash == classMetadata.Hash))
-			return default;
+		if (MetadataHelper.HasInterface(otherClassMetadata, classMetadata as JInterfaceTypeMetadata)) return default;
+		return MetadataHelper.HasInterface(classMetadata, otherClassMetadata as JInterfaceTypeMetadata);
+	}
+	/// <summary>
+	/// Indicates whether <paramref name="classMetadata"/> is forward assignable to
+	/// <paramref name="otherClassMetadata"/>.
+	/// </summary>
+	/// <param name="classMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <param name="otherClassMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="classMetadata"/> is forward assignable
+	/// <paramref name="otherClassMetadata"/> type; otherwise, <see langword="false"/>.
+	/// </returns>
+	private static Boolean IsForwardAssignable(ITypeInformation classMetadata,
+		JReferenceTypeMetadata otherClassMetadata)
+	{
+		JClassTypeMetadata? baseMetadata = otherClassMetadata.BaseMetadata;
+		while (baseMetadata is not null)
+		{
+			if (baseMetadata.Hash == classMetadata.Hash) return true;
+			baseMetadata = baseMetadata.BaseMetadata;
+		}
 		return false;
 	}
+	/// <summary>
+	/// Indicates whether <paramref name="classMetadata"/> has <paramref name="interfaceMetadata"/> as
+	/// interface.
+	/// </summary>
+	/// <param name="classMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="classMetadata"/> has
+	/// <paramref name="interfaceMetadata"/> type as interface; otherwise, <see langword="false"/>.
+	/// </returns>
+	private static Boolean HasInterface(JReferenceTypeMetadata classMetadata, JInterfaceTypeMetadata? interfaceMetadata)
+		=> interfaceMetadata is not null && classMetadata.Interfaces.Contains(interfaceMetadata);
 	/// <summary>
 	/// Registers <paramref name="metadata"/> into the runtime metadata.
 	/// </summary>
@@ -232,5 +289,6 @@ internal static partial class MetadataHelper
 	/// <param name="toMetadata">Metadata whom type must be casted.</param>
 	/// <returns>The assignation key.</returns>
 	private static String GetAssignationKey(ITypeInformation fromMetadata, ITypeInformation toMetadata)
-		=> new CStringSequence(fromMetadata.ClassName, MetadataHelper.assignableTo, toMetadata.ClassName).ToString();
+		=> new CStringSequence(fromMetadata.ClassName.AsSpan(), MetadataHelper.assignableTo, toMetadata.ClassName)
+			.ToString();
 }

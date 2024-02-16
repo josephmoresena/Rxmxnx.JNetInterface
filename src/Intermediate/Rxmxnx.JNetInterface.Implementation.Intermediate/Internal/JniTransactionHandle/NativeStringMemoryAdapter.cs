@@ -31,12 +31,12 @@ internal partial struct JniTransactionHandle
 		/// <inheritdoc/>
 		public override void Activate(IEnvironment env)
 		{
-			this.Pointer = this._utf8Chars ? env.StringFeature.GetUtf8Sequence(this.LocalRef, out this.IsCopy) :
-				!this.Critical ? env.StringFeature.GetSequence(this.LocalRef, out this.IsCopy) :
-				env.StringFeature.GetCriticalSequence(this.LocalRef);
+			this.Pointer = this._utf8Chars ?
+				env.StringFeature.GetUtf8Sequence(this.LocalRef, out this.IsCopy) :
+				this.GetUtf16Pointer(env);
 		}
 		/// <inheritdoc/>
-		public override void Release(JReleaseMode mode)
+		public override void Release(JReleaseMode mode = JReleaseMode.Free)
 		{
 			if (this.Disposed) return;
 			using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.ReleaseSequence);
@@ -48,5 +48,16 @@ internal partial struct JniTransactionHandle
 				thread.StringFeature.ReleaseCriticalSequence(this.LocalRef, (ReadOnlyValPtr<Char>)this.Pointer);
 			base.Release(mode);
 		}
+
+		/// <summary>
+		/// Retrieves UTF-16 char pointer.
+		/// </summary>
+		/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+		/// <returns>A <see cref="ReadOnlyValPtr{Char}"/> pointer.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ReadOnlyValPtr<Char> GetUtf16Pointer(IEnvironment env)
+			=> !this.Critical ?
+				env.StringFeature.GetSequence(this.LocalRef, out this.IsCopy) :
+				env.StringFeature.GetCriticalSequence(this.LocalRef);
 	}
 }

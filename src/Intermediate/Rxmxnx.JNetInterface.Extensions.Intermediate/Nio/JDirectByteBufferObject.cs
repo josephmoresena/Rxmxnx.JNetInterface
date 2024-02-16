@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Nio;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDirectByteBufferObject>,
 	IDirectBufferObject<JByte>
 {

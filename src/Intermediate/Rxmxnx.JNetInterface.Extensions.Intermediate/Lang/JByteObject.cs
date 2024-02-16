@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveWrapperType<JByteObject, JByte>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JByteObject> typeMetadata =

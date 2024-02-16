@@ -29,7 +29,7 @@ internal partial struct JniTransactionHandle
 				env.ArrayFeature.GetPrimitiveCriticalSequence(this.LocalRef);
 		}
 		/// <inheritdoc/>
-		public override void Release(JReleaseMode mode)
+		public override void Release(JReleaseMode mode = JReleaseMode.Free)
 		{
 			if (this.Disposed) return;
 			using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.ReleaseSequence);

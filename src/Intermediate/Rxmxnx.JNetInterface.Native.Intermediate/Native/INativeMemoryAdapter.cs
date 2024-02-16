@@ -32,5 +32,5 @@ public interface INativeMemoryAdapter
 	/// Releases the current memory.
 	/// </summary>
 	/// <param name="mode">Release memory mode.</param>
-	void Release(JReleaseMode mode = default);
+	void Release(JReleaseMode mode = JReleaseMode.Free);
 }

@@ -23,11 +23,6 @@ internal abstract partial class JPrimitiveObject : JObject
 
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
-	public override Boolean Equals(Object? obj)
-		=> obj is JPrimitiveObject primitive && primitive.AsSpan().SequenceEqual(this.AsSpan()) &&
-			this.SizeOf == primitive.SizeOf;
-	/// <inheritdoc/>
-	[ExcludeFromCodeCoverage]
 	public override Int32 GetHashCode() => HashCode.Combine(Convert.ToHexString(this.AsSpan()), this.SizeOf);
 
 	/// <summary>
@@ -60,20 +55,12 @@ internal sealed partial class JPrimitiveObject<TPrimitive> : JPrimitiveObject.Ge
 	/// </summary>
 	/// <param name="value">Primitive value.</param>
 	public JPrimitiveObject(TPrimitive value) : base(value) { }
-	/// <inheritdoc cref="IEquatable{TPrimitive}"/>
-	public Boolean Equals(JPrimitiveObject<TPrimitive>? other) => other is not null && this.Value.Equals(other.Value);
 
 	public override CString ObjectClassName => IPrimitiveType.GetMetadata<TPrimitive>().ClassName;
 	public override CString ObjectSignature => IPrimitiveType.GetMetadata<TPrimitive>().Signature;
 
 	/// <inheritdoc cref="IComparable.CompareTo"/>
 	public Int32 CompareTo(Object? obj) => this.Value.CompareTo(obj);
-
-	/// <inheritdoc/>
-	public override Boolean Equals(JObject? other)
-		=> other is JPrimitiveObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
-	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => obj is JObject jObject ? this.Equals(jObject) : base.Equals(obj);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
 }

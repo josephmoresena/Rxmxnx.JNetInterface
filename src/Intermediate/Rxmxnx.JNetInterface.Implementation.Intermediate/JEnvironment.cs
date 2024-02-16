@@ -3,7 +3,8 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class implements <see cref="IVirtualMachine"/> interface.
 /// </summary>
-public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEquatable<IEnvironment>
+public partial class JEnvironment : IEnvironment, IEquatable<IEnvironment>, IEquatable<JEnvironment>,
+	IEqualityOperators<JEnvironment, JEnvironment, Boolean>
 {
 	/// <summary>
 	/// <see cref="JEnvironment"/> cache.
@@ -155,4 +156,29 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		JVirtualMachine vm = (JVirtualMachine)EnvironmentCache.GetVirtualMachine(reference);
 		return vm.GetEnvironment(reference);
 	}
+
+	/// <summary>
+	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance
+	/// have the same value.
+	/// </summary>
+	/// <param name="left">The <see cref="JEnvironment"/> to compare.</param>
+	/// <param name="right">The <see cref="JEnvironment"/> to compare.</param>
+	/// <returns>
+	/// <see langword="true"/> if the value of <paramref name="left"/> is the same as the value
+	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Boolean operator ==(JEnvironment? left, JEnvironment? right) => left?.Equals(right) ?? right is null;
+	/// <summary>
+	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance
+	/// have different values.
+	/// </summary>
+	/// <param name="left">The <see cref="JEnvironment"/> to compare.</param>
+	/// <param name="right">The <see cref="JEnvironment"/> to compare.</param>
+	/// <returns>
+	/// <see langword="true"/> if the value of <paramref name="left"/> is different from the value
+	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Boolean operator !=(JEnvironment? left, JEnvironment? right) => !(left == right);
 }

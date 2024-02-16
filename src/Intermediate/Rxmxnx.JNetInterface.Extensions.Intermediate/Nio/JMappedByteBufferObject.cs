@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Nio;
 /// <summary>
 /// This class represents a local <c>java.nio.MappedByteBuffer</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByteBufferObject>
 {
 	/// <summary>
