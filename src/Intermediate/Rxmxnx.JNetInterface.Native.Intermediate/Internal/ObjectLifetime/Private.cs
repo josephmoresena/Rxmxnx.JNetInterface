@@ -88,7 +88,7 @@ internal partial class ObjectLifetime
 	/// <param name="objects">External object dictionary.</param>
 	private void SynchronizeObjects(IReadOnlyDictionary<Int64, WeakReference<JLocalObject>> objects)
 	{
-		foreach (Int32 id in objects.Keys)
+		foreach (Int64 id in objects.Keys)
 			this._objects[id] = objects[id];
 	}
 	/// <inheritdoc cref="SetAssignableTo{TDataType}(Boolean)"/>

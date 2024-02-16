@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface;
 /// This class implements <see cref="IVirtualMachine"/> interface.
 /// </summary>
 public partial class JEnvironment : IEnvironment, IEquatable<IEnvironment>, IEquatable<JEnvironment>,
-	IEqualityOperators<JEnvironment, JEnvironment, Boolean>
+	IEqualityOperators<JEnvironment, JEnvironment, Boolean>, IEqualityComparer<JEnvironment>
 {
 	/// <summary>
 	/// <see cref="JEnvironment"/> cache.
@@ -134,8 +134,10 @@ public partial class JEnvironment : IEnvironment, IEquatable<IEnvironment>, IEqu
 		this._cache.CreateLocalRef(globalRef, localResult);
 		return result;
 	}
-	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other) => this.Reference == other?.Reference;
 
+	Int32 IEqualityComparer<JEnvironment>.GetHashCode(JEnvironment obj) => obj._cache.GetHashCode();
+	Boolean IEqualityComparer<JEnvironment>.Equals(JEnvironment? x, JEnvironment? y) => x?.Equals(y) ?? y is null;
+	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other) => this.Reference == other?.Reference;
 	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
 		=> other is not null && this._cache.Equals(other._cache);
 
