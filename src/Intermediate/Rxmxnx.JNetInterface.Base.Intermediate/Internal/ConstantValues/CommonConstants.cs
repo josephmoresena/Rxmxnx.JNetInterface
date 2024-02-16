@@ -18,10 +18,12 @@ internal static class CommonConstants
 	public const String CheckIdS3459 = "S3459:Unassigned members should be removed";
 	public const String CheckIdS2436 = "S2436:Types and methods should not have too many generic parameters";
 	public const String CheckIdS2234 = "S2234:Arguments should be passed in the same order as the method parameters";
+	public const String CheckIdS4035 = "S2234:Classes implementing \"IEquatable<T>\" should be sealed";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String AbstractProxyJustification = "This object is an abstract proxy.";
 	public const String JavaInheritanceJustification =
 		"Any JReferenceObject type tree of classes is inherently longer than a normal C# class.";
 	public const String ReferenceableFieldJustification = "Field value can be set using a managed reference.";
 	public const String BackwardOperationJustification = "Backward operation is needed.";
+	public const String InternalInheritanceJustification = "Only internal inheritance is supported.";
 }
