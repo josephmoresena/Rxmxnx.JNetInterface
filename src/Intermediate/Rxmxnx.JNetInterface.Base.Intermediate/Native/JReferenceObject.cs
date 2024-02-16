@@ -19,7 +19,7 @@ public abstract partial class JReferenceObject : JObject
 	private protected JReferenceObject(Boolean isProxy)
 	{
 		this._isProxy = isProxy;
-		this._id = JReferenceObject.CreateInstanceId();
+		this._id = JReferenceObject.GetInstanceId(this);
 	}
 	/// <summary>
 	/// Constructor.
@@ -28,7 +28,7 @@ public abstract partial class JReferenceObject : JObject
 	private protected JReferenceObject(JReferenceObject jObject)
 	{
 		this._isProxy = jObject._isProxy;
-		this._id = this is View ? jObject.Id : JReferenceObject.CreateInstanceId();
+		this._id = JReferenceObject.GetInstanceId(this);
 	}
 
 	/// <summary>

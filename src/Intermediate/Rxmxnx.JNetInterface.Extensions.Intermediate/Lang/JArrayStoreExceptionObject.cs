@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.ArrayStoreException</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public class JArrayStoreExceptionObject : JIndexOutOfBoundsExceptionObject, IThrowableType<JArrayStoreExceptionObject>
 {
 	/// <summary>

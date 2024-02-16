@@ -106,9 +106,10 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 /// </summary>
 /// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
 public abstract record JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetadata
+	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {
 	/// <inheritdoc/>
-	private protected JPrimitiveTypeMetadata(Int32 sizeOf, Type underlineType, ReadOnlySpan<Byte> signature,
+	private protected JPrimitiveTypeMetadata(Type underlineType, ReadOnlySpan<Byte> signature,
 		ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(
-		sizeOf, underlineType, signature, className, wrapperClassName) { }
+		NativeUtilities.SizeOf<TPrimitive>(), underlineType, signature, className, wrapperClassName) { }
 }
