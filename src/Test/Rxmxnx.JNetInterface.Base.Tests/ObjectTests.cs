@@ -45,6 +45,7 @@ public sealed class ObjectTests
 		view.CopyTo(MemoryMarshal.Cast<ValueProxy, JValue>(array), index);
 		jObject.Received(1).CopyTo(Arg.Is<ValueProxy[]>(a => a.SequenceEqual(array)), index);
 	}
+#pragma warning disable CA1859
 	[Fact]
 	internal void ViewInformationTest()
 	{
@@ -61,4 +62,5 @@ public sealed class ObjectTests
 		Assert.Equal(className, view.ObjectClassName);
 		Assert.Equal(signature, view.ObjectSignature);
 	}
+#pragma warning restore CA1859
 }

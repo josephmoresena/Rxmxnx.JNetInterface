@@ -28,7 +28,7 @@ public abstract partial class JReferenceObject : JObject
 	private protected JReferenceObject(JReferenceObject jObject)
 	{
 		this._isProxy = jObject._isProxy;
-		this._id = JReferenceObject.GetInstanceId(this);
+		this._id = JReferenceObject.GetInstanceId(this, jObject);
 	}
 
 	/// <summary>

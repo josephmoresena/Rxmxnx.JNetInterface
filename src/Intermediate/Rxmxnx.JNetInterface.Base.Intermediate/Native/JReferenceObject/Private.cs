@@ -38,10 +38,11 @@ public partial class JReferenceObject
 	/// Retrieves the identifier for given instance.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="jOther">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>The Identifier for current instance.</returns>
-	private static Int64 GetInstanceId(JReferenceObject jObject)
+	private static Int64 GetInstanceId(JReferenceObject jObject, JReferenceObject? jOther = default)
 	{
-		if (jObject is View) return jObject._id;
+		if (jOther is not null && jObject is View) return jOther._id;
 		lock (JReferenceObject.sequenceLock)
 			return JReferenceObject.sequenceValue++;
 	}
