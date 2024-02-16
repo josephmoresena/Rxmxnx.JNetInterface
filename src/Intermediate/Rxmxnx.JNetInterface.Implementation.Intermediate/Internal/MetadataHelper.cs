@@ -155,6 +155,8 @@ internal static partial class MetadataHelper
 	/// <paramref name="toMetadata"/>; <see langword="null"/> if an object of <paramref name="toMetadata"/>
 	/// can be safely cast to <paramref name="fromMetadata"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2234,
+	                 Justification = CommonConstants.BackwardOperationJustification)]
 	private static Boolean? IsAssignableFrom(JReferenceTypeMetadata? fromMetadata, JReferenceTypeMetadata? toMetadata)
 	{
 		Boolean? result = MetadataHelper.IsBasicAssignable(fromMetadata, toMetadata);
