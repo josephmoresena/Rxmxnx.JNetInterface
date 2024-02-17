@@ -66,8 +66,8 @@ internal static class NativeValidationUtilities
 	public static void ValidateBaseTypes<TBase, TReference>(ReadOnlySpan<Byte> typeName)
 		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
 	{
-		ISet<Type> baseBaseTypes = IReferenceType<TBase>.GetBaseTypes().ToHashSet();
-		ISet<Type> baseTypes = IReferenceType<TReference>.GetBaseTypes().ToHashSet();
+		HashSet<Type> baseBaseTypes = IReferenceType<TBase>.GetBaseTypes().ToHashSet();
+		HashSet<Type> baseTypes = IReferenceType<TReference>.GetBaseTypes().ToHashSet();
 		if (!baseTypes.IsProperSupersetOf(baseBaseTypes))
 			throw new InvalidOperationException(
 				$"{typeName.ToCString()} type can't be based on a type which is derived from it.");

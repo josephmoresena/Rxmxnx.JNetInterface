@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This object stores the lifetime for a java object instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2292,
+                 Justification = CommonConstants.PublicInitPrivateSetJustification)]
 internal sealed partial class ObjectLifetime : IDisposable
 {
 	/// <summary>

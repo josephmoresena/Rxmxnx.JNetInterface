@@ -6,7 +6,7 @@ public partial class JExecutableObject
 	/// This record stores the metadata of a <see cref="JExecutableObject"/> in order to create a
 	/// <see cref="JGlobalBase"/> instance.
 	/// </summary>
-	protected record ExecutableObjectMetadata : ObjectMetadata
+	protected sealed record ExecutableObjectMetadata : ObjectMetadata
 	{
 		/// <summary>
 		/// Execution definition.

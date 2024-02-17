@@ -58,7 +58,7 @@ public partial class JEnumObject
 			/// </summary>
 			/// <param name="enumTypeName">Enum type name.</param>
 			/// <returns>The current instance.</returns>
-			public IEnumFieldList Validate(ReadOnlySpan<Byte> enumTypeName)
+			public FieldList Validate(ReadOnlySpan<Byte> enumTypeName)
 			{
 				NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
 				return this;

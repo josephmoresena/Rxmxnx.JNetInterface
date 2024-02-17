@@ -31,6 +31,22 @@ public readonly ref partial struct JNativeCallAdapter
 			return this.CreateInitialClass(classRef);
 		}
 		/// <summary>
+		/// Retrieves initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.
+		/// </summary>
+		/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
+		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+		/// <returns>Initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.</returns>
+		internal TObject CreateInitialObject<TObject>(JObjectLocalRef localRef)
+			where TObject : JLocalObject, IReferenceType<TObject>
+		{
+			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
+			if (metadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
+			if (JLocalObject.IsObjectType<TObject>())
+				return (TObject)this.CreateInitialObject(localRef);
+			JClassObject jClass = this.GetObjectClass(localRef, true);
+			return (TObject)metadata.CreateInstance(jClass, localRef, true);
+		}
+		/// <summary>
 		/// Retrieves initial <see cref="JLocalObject"/> instance for <paramref name="classRef"/>.
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
@@ -52,22 +68,6 @@ public readonly ref partial struct JNativeCallAdapter
 				this._callAdapter._cache[classRef.Value] = callClassView.Lifetime;
 			}
 			return result;
-		}
-		/// <summary>
-		/// Retrieves initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.
-		/// </summary>
-		/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
-		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
-		/// <returns>Initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.</returns>
-		internal TObject CreateInitialObject<TObject>(JObjectLocalRef localRef)
-			where TObject : JLocalObject, IReferenceType<TObject>
-		{
-			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
-			if (metadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
-			if (JLocalObject.IsObjectType<TObject>())
-				return (TObject)this.CreateInitialObject(localRef);
-			JClassObject jClass = this.GetObjectClass(localRef, true);
-			return (TObject)metadata.CreateInstance(jClass, localRef, true);
 		}
 	}
 }

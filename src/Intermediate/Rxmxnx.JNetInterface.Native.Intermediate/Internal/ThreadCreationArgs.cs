@@ -48,6 +48,6 @@ internal sealed class ThreadCreationArgs
 	private static CString GetThreadName(ThreadPurpose purpose)
 	{
 		CString prefix = ThreadCreationArgs.threadNames.GetValueOrDefault(purpose) ?? CString.Zero;
-		return CString.Concat(prefix, (CString)Environment.CurrentManagedThreadId.ToString());
+		return CString.Concat(prefix.AsSpan(), (CString)Environment.CurrentManagedThreadId.ToString());
 	}
 }
