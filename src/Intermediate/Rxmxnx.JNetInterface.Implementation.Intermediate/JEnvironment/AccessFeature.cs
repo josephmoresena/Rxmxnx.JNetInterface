@@ -347,9 +347,9 @@ partial class JEnvironment
 			Int32 requiredBytes = calls.Count * JNativeMethodValue.Size;
 			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
 			List<MemoryHandle> handles = new(calls.Count);
-			using IFixedContext<JNativeMethodValue>.IDisposable argsMemory = useStackAlloc ?
+			using IFixedContext<JNativeMethodValue>.IDisposable argsMemory = useStackAlloc && calls.Count > 0 ?
 				EnvironmentCache.AllocToFixedContext(stackalloc JNativeMethodValue[calls.Count], this) :
-				new JNativeMethodValue[calls.Count].AsMemory().GetFixedContext();
+				EnvironmentCache.AllocToFixedContext<JNativeMethodValue>(calls.Count);
 			for (Int32 i = 0; i < calls.Count; i++)
 				argsMemory.Values[i] = JNativeMethodValue.Create(calls[i], handles);
 			try
@@ -381,9 +381,9 @@ partial class JEnvironment
 			JClassObject? returnType)
 		{
 			using LocalFrame localFrame = new(this._env, parameterTypes.Length + 2);
-			JArgumentMetadata[] args = this.GetCallMetadata(parameterTypes!);
+			JArgumentMetadata[] args = EnvironmentCache.GetCallMetadata(parameterTypes!);
 			if (returnType is null) return JConstructorDefinition.Create(args);
-			IReflectionMetadata? returnMetadata = this.GetReflectionMetadata(returnType);
+			IReflectionMetadata? returnMetadata = EnvironmentCache.GetReflectionMetadata(returnType);
 			using JNativeMemory<Byte> mem = memberName.GetNativeUtf8Chars();
 			return returnMetadata is null ?
 				JMethodDefinition.Create(mem.Values, args) :
@@ -391,7 +391,7 @@ partial class JEnvironment
 		}
 		public JFieldDefinition GetDefinition(JStringObject memberName, JClassObject fieldType)
 		{
-			IReflectionMetadata returnMetadata = this.GetReflectionMetadata(fieldType)!;
+			IReflectionMetadata returnMetadata = EnvironmentCache.GetReflectionMetadata(fieldType)!;
 			using JNativeMemory<Byte> mem = memberName.GetNativeUtf8Chars();
 			return returnMetadata.CreateFieldDefinition(mem.Values);
 		}

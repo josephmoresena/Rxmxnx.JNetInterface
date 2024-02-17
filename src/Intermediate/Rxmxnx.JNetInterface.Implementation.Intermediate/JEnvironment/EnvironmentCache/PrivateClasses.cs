@@ -48,6 +48,7 @@ partial class JEnvironment
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
 			if (!this._classes.TryGetValue(classInformation.ToString(), out JClassObject? jClass))
 				jClass = new(this.ClassObject, new TypeInformation(classInformation), classRef);
+			if (jClass.InternalReference == default && classRef.Value != default) jClass.SetValue(classRef);
 			return jClass;
 		}
 		/// <summary>

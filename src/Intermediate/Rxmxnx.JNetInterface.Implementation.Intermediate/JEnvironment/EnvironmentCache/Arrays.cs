@@ -401,10 +401,9 @@ partial class JEnvironment
 		{
 			Int32 requiredBytes = metadata.SizeOf * jArray.Length;
 			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
-			using IFixedContext<Byte>.IDisposable arrayRegion = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			using IFixedContext<Byte>.IDisposable arrayRegion = useStackAlloc && requiredBytes > 0 ?
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			Int32 offset = 0;
 			while (offset < requiredBytes)
 				initialElement.CopyTo(arrayRegion.Bytes, ref offset);

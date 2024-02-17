@@ -286,10 +286,9 @@ partial class JEnvironment
 			where TResult : IDataType<TResult>
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			JObjectLocalRef resultLocalRef;
 			if (classRef.IsDefault)
@@ -322,10 +321,9 @@ partial class JEnvironment
 			JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			if (classRef.IsDefault)
 				this.CallPrimitiveMethod(bytes, localRef, definition.Information[1][^1], methodId, argsMemory);
@@ -347,10 +345,9 @@ partial class JEnvironment
 			JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			switch (definition.Information[1][^1])
 			{
@@ -415,10 +412,9 @@ partial class JEnvironment
 			IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId) where TResult : IDataType<TResult>
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			CallStaticObjectMethodADelegate callStaticObjectMethod =
 				this.GetDelegate<CallStaticObjectMethodADelegate>();
@@ -440,10 +436,9 @@ partial class JEnvironment
 			IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 
 			if (classRef.IsDefault)
@@ -473,42 +468,13 @@ partial class JEnvironment
 			INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			CallStaticVoidMethodADelegate callStaticVoidMethod = this.GetDelegate<CallStaticVoidMethodADelegate>();
 			callStaticVoidMethod(this.Reference, classRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 			this.CheckJniError();
-		}
-		/// <summary>
-		/// Retrieves the <see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.
-		/// </summary>
-		/// <param name="returnType">A <see cref="JClassObject"/> instance.</param>
-		/// <returns><see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.</returns>
-		private IReflectionMetadata? GetReflectionMetadata(JClassObject returnType)
-		{
-			using JStringObject className = InternalFunctionCache.Instance.GetClassName(returnType);
-			using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
-			return MetadataHelper.GetReflectionMetadata(mem.Values);
-		}
-		/// <summary>
-		/// Retrieves a <see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.
-		/// </summary>
-		/// <param name="parameterTypes">A <see cref="JClassObject"/> list.</param>
-		/// <returns><see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.</returns>
-		private JArgumentMetadata[] GetCallMetadata(IReadOnlyList<JClassObject> parameterTypes)
-		{
-			JArgumentMetadata[] args = new JArgumentMetadata[parameterTypes.Count];
-			for (Int32 i = 0; i < parameterTypes.Count; i++)
-			{
-				using JClassObject jClass = parameterTypes[i];
-				using JStringObject className = InternalFunctionCache.Instance.GetClassName(jClass);
-				using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
-				args[i] = MetadataHelper.GetReflectionMetadata(mem.Values)!.ArgumentMetadata;
-			}
-			return args;
 		}
 		/// <summary>
 		/// Uses <paramref name="jObject"/> into <paramref name="jniTransaction"/>.
@@ -734,10 +700,9 @@ partial class JEnvironment
 			INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = requiredBytes == 0 ?
-				ValPtr<Byte>.Zero.GetUnsafeFixedContext(0) :
-				useStackAlloc ? EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-					new Byte[requiredBytes].AsMemory().GetFixedContext();
+			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
+				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
+				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			NewObjectADelegate newObject = this.GetDelegate<NewObjectADelegate>();
 			JObjectLocalRef localRef = newObject(this.Reference, classRef, methodId,
