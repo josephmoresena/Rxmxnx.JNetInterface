@@ -72,8 +72,8 @@ public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>,
 	where TNumber : JNumberObject<TValue, TNumber>, IPrimitiveWrapperType<TNumber, TValue>
 {
 	/// <inheritdoc/>
-	private protected JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) :
-		base(jClass, localRef, value) { }
+	private protected JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) : base(
+		jClass, localRef, value) { }
 	/// <inheritdoc/>
 	private protected JNumberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>

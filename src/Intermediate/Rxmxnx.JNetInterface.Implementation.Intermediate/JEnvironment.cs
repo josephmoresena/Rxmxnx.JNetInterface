@@ -98,13 +98,13 @@ public partial class JEnvironment : IEnvironment, IEquatable<IEnvironment>, IEqu
 	public Boolean JniSecure() => this._cache.JniSecure();
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
-		using LocalFrame localFrame = new(this, capacity);
+		using LocalFrame _ = new(this, capacity);
 		this._cache.CheckJniError();
 		action();
 	}
 	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
 	{
-		using LocalFrame localFrame = new(this, capacity);
+		using LocalFrame _ = new(this, capacity);
 		this._cache.CheckJniError();
 		action(state);
 	}
