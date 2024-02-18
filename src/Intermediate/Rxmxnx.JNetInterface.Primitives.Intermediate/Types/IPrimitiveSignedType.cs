@@ -17,7 +17,7 @@ internal interface IPrimitiveSignedType : IPrimitiveNumericType;
 internal interface
 	IPrimitiveSignedType<TPrimitive, TValue> : IPrimitiveSignedType, IPrimitiveNumericType<TPrimitive, TValue>
 	where TPrimitive : unmanaged, IPrimitiveSignedType<TPrimitive, TValue>, IComparable<TPrimitive>,
-	IEquatable<TPrimitive>
+	IEquatable<TPrimitive>, IPrimitiveEquatable
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryNumber<TValue>,
 	IMinMaxValue<TValue>, ISignedNumber<TValue>
 {

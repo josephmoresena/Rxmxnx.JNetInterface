@@ -17,6 +17,6 @@ internal interface IPrimitiveFloatingPointType : IPrimitiveNumericType;
 internal partial interface IPrimitiveFloatingPointType<TPrimitive, TValue> : IPrimitiveFloatingPointType,
 	IFloatingPointValue<TValue>, IPrimitiveNumericType<TPrimitive, TValue>
 	where TPrimitive : unmanaged, IPrimitiveFloatingPointType<TPrimitive, TValue>, IComparable<TPrimitive>,
-	IEquatable<TPrimitive>
+	IEquatable<TPrimitive>, IPrimitiveEquatable
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>,
 	IBinaryFloatingPointIeee754<TValue>, IMinMaxValue<TValue>;

@@ -40,10 +40,9 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			TPrimitive p => primitive.CompareTo(p),
 			TValue v => primitive.Value.CompareTo(v),
 			IWrapper<TPrimitive> wp => primitive.CompareTo(wp.Value),
-			IComparable<TPrimitive> cp => -cp.CompareTo(primitive),
 			IWrapper<TValue> wv => primitive.CompareTo(wv.Value),
+			IComparable<TPrimitive> cp => -cp.CompareTo(primitive),
 			IComparable<TValue> cv => -cv.CompareTo(primitive.Value),
-			IPrimitiveType ip => -ip.CompareTo(primitive.Value),
 			IComparable c => -c.CompareTo(primitive.Value),
 			_ => primitive.Value.CompareTo(obj),
 		};
@@ -61,11 +60,12 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		{
 			TPrimitive p => primitive.Equals(p),
 			TValue v => primitive.Value.Equals(v),
+			IPrimitiveType pt => primitive.Equals(pt),
+			IWrapper<TValue> wv => primitive.Equals(wv.Value),
 			IWrapper<TPrimitive> wp => primitive.Equals(wp.Value),
 			IEquatable<TPrimitive> ep => ep.Equals(primitive),
-			IWrapper<TValue> wv => primitive.Equals(wv.Value),
 			IEquatable<TValue> ev => ev.Equals(primitive.Value),
-			IPrimitiveType ip => ip.CompareTo(primitive.Value) == 0,
+			IComparable c => c.CompareTo(primitive.Value) == 0,
 			_ => primitive.Value.Equals(obj),
 		};
 }
