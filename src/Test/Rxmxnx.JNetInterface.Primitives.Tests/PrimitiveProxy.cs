@@ -1,10 +1,11 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
-internal sealed class PrimitiveProxy(JPrimitiveObject primitive) : JPrimitiveObject
+[ExcludeFromCodeCoverage]
+internal sealed class PrimitiveProxy(JPrimitiveObject primitive, CString? signature = default) : JPrimitiveObject
 {
 	public override CString ObjectClassName => primitive.ObjectClassName;
-	public override CString ObjectSignature => primitive.ObjectSignature;
-	protected override Int32 SizeOf => this.AsSpan().Length;
+	public override CString ObjectSignature => signature ?? primitive.ObjectSignature;
+	public override Int32 SizeOf => this.AsSpan().Length;
 	public override Boolean Equals(JObject? other) => primitive.Equals(other);
 	private protected override void CopyTo(Span<Byte> span, ref Int32 offset)
 		=> (primitive as IObject).CopyTo(span, ref offset);

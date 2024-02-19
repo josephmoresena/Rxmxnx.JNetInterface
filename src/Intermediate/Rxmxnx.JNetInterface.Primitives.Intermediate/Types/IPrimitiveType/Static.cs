@@ -34,7 +34,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 	/// </returns>
 	/// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Int32 Compare(TPrimitive primitive, Object? obj)
+	private protected static Int32 Compare(TPrimitive primitive, Object? obj)
 		=> obj switch
 		{
 			TPrimitive p => primitive.CompareTo(p),
@@ -55,7 +55,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 	/// <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean Equals(TPrimitive primitive, Object? obj)
+	private protected static Boolean Equals(TPrimitive primitive, Object? obj)
 		=> obj switch
 		{
 			TPrimitive p => primitive.Equals(p),

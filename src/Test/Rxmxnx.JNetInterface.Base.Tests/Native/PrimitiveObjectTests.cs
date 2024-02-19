@@ -78,6 +78,7 @@ public sealed class PrimitiveObjectTests
 		Assert.Equal(0, (obj as IComparable).CompareTo(obj2));
 		Assert.Equal(value.CompareTo(value2), (obj as IComparable).CompareTo(value2));
 		Assert.Equal(value.CompareTo(value2), (obj as IComparable).CompareTo(obj3));
+		Assert.Throws<ArgumentException>(() => (obj as IComparable).CompareTo(String.Empty));
 
 		PrimitiveObjectTests.ConvertibleTest(value, obj, c => c.GetTypeCode());
 		PrimitiveObjectTests.ConvertibleTest(value, obj, c => c.ToBoolean(default));

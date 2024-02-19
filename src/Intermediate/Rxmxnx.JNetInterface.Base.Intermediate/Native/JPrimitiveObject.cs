@@ -8,7 +8,7 @@ internal abstract partial class JPrimitiveObject : JObject
 	/// <summary>
 	/// Size of current type in bytes.
 	/// </summary>
-	protected abstract Int32 SizeOf { get; }
+	public abstract Int32 SizeOf { get; }
 
 	/// <summary>
 	/// Constructor.
@@ -39,7 +39,7 @@ internal abstract partial class JPrimitiveObject : JObject
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IWrapper<TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>
-		=> (this as IWrapper<TPrimitive>)?.Value ?? this.AsValue<TPrimitive>();
+		=> this.AsValue<TPrimitive>();
 }
 
 /// <summary>
@@ -50,13 +50,17 @@ internal sealed partial class JPrimitiveObject<TPrimitive> : JPrimitiveObject.Ge
 	IEquatable<JPrimitiveObject<TPrimitive>>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEquatable<TPrimitive>
 {
+	/// <inheritdoc/>
+	public override Int32 SizeOf => IPrimitiveType.GetMetadata<TPrimitive>().SizeOf;
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">Primitive value.</param>
 	public JPrimitiveObject(TPrimitive value) : base(value) { }
 
+	/// <inheritdoc cref="IObject.ObjectClassName"/>
 	public override CString ObjectClassName => IPrimitiveType.GetMetadata<TPrimitive>().ClassName;
+	/// <inheritdoc cref="IObject.ObjectSignature"/>
 	public override CString ObjectSignature => IPrimitiveType.GetMetadata<TPrimitive>().Signature;
 
 	/// <inheritdoc cref="IComparable.CompareTo"/>

@@ -12,7 +12,7 @@ internal partial class JPrimitiveObject
 		/// <summary>
 		/// Size of current type in bytes.
 		/// </summary>
-		protected override Int32 SizeOf => NativeUtilities.SizeOf<TValue>();
+		public override Int32 SizeOf => NativeUtilities.SizeOf<TValue>();
 
 		/// <summary>
 		/// Constructor.
