@@ -101,6 +101,9 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	}
 
 	/// <inheritdoc/>
+	public override Int32 GetHashCode() => this.GetStringHashCode() ?? base.GetHashCode();
+
+	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
 		=> new StringObjectMetadata(base.CreateMetadata())
 		{

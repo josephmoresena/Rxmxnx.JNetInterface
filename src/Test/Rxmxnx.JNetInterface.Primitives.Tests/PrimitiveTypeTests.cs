@@ -72,6 +72,7 @@ public sealed class PrimitiveTypeTests
 		Assert.Equal(typeof(TPrimitive), metadata.Type);
 		Assert.Equal(1, metadata.Signature.Length);
 		Assert.Equal(value, metadata.CreateInstance(value.AsBytes()));
+		Assert.Equal(metadata.ArgumentMetadata, JArgumentMetadata.Get<TPrimitive>());
 
 		Assert.Throws<NotImplementedException>(() => PrimitiveTypeImpl.GetNativeType<PrimitiveTypeImpl>());
 	}
