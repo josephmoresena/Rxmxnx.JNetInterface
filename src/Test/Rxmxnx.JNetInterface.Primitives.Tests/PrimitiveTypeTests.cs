@@ -38,6 +38,7 @@ public sealed class PrimitiveTypeTests
 		}
 		PrimitiveTypeTests.MetadataTest<TPrimitive, TValue>(value);
 		PrimitiveTypeTests.ObjectTest<TPrimitive, TValue>(value);
+		Assert.Equal(value.Value.ToString(), value.ToString());
 	}
 	private static void CopyToTest<TPrimitive, TValue>(TPrimitive value)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
@@ -221,6 +222,7 @@ public sealed class PrimitiveTypeTests
 			JPrimitiveObject<TPrimitive> pObj2 = (JPrimitiveObject<TPrimitive>)(JObject)(TPrimitive)newValue;
 			PrimitiveTypeTests.ObjectEquality<TPrimitive, TValue>(pObj, pObj2);
 		}
+		Assert.Equal(pObj.Value.ToString(), pObj.ToString());
 	}
 	private static void
 		ObjectEquality<TPrimitive, TValue>(JPrimitiveObject<TPrimitive> pObj, JPrimitiveObject<TPrimitive> pObj2)
