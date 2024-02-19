@@ -203,6 +203,7 @@ public sealed class PrimitiveTypeTests
 	{
 		JPrimitiveObject<TPrimitive> pObj = (JPrimitiveObject<TPrimitive>)(JObject)value;
 
+		Assert.False(pObj.Equals(default));
 		Assert.False(pObj.Equals(default(JObject)));
 		Assert.False(pObj.Equals(default(Object)));
 		Assert.Equal(PrimitiveTypeImpl.GetNativeType<TPrimitive>(),
