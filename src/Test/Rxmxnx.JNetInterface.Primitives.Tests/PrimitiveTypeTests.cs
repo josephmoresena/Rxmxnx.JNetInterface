@@ -202,11 +202,9 @@ public sealed class PrimitiveTypeTests
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		JPrimitiveObject<TPrimitive> pObj = (JPrimitiveObject<TPrimitive>)(JObject)value;
-		TPrimitive value2 = PrimitiveTypeTests.fixture.Create<TValue>();
-		JPrimitiveObject<TPrimitive> pObj2 = (JPrimitiveObject<TPrimitive>)(JObject)value2;
-		Boolean equals = pObj.Value == pObj2.Value;
-		Int32 compare = pObj.Value.CompareTo(pObj2.Value);
 
+		Assert.False(pObj.Equals(default(JObject)));
+		Assert.False(pObj.Equals(default(Object)));
 		Assert.Equal(PrimitiveTypeImpl.GetNativeType<TPrimitive>(),
 		             PrimitiveTypeImpl.GetNativeType<JPrimitiveObject<TPrimitive>>());
 		Assert.Equal(typeof(TPrimitive), PrimitiveTypeImpl.GetFamilyType<JPrimitiveObject<TPrimitive>>());
@@ -215,7 +213,23 @@ public sealed class PrimitiveTypeTests
 		Assert.Equal(value.ObjectSignature, pObj.ObjectSignature);
 		Assert.Equal(NativeUtilities.SizeOf<TPrimitive>(), pObj.SizeOf);
 		Assert.Equal(value.GetHashCode(), pObj.GetHashCode());
-		Assert.Equal(value2.GetHashCode(), pObj2.GetHashCode());
+
+		PrimitiveTypeTests.ObjectEquality<TPrimitive, TValue>(pObj, pObj);
+		foreach (TValue newValue in PrimitiveTypeTests.fixture.CreateMany<TValue>(10))
+		{
+			JPrimitiveObject<TPrimitive> pObj2 = (JPrimitiveObject<TPrimitive>)(JObject)(TPrimitive)newValue;
+			PrimitiveTypeTests.ObjectEquality<TPrimitive, TValue>(pObj, pObj2);
+		}
+	}
+	private static void
+		ObjectEquality<TPrimitive, TValue>(JPrimitiveObject<TPrimitive> pObj, JPrimitiveObject<TPrimitive> pObj2)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
+		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
+		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
+	{
+		Boolean equals = pObj.Value == pObj2.Value;
+		Int32 compare = pObj.Value.CompareTo(pObj2.Value);
+		Assert.Equal(pObj2.Value.GetHashCode(), pObj2.GetHashCode());
 		Assert.Equal(compare, pObj.CompareTo(pObj2));
 		Assert.Equal(compare, pObj.CompareTo(pObj2.Value));
 		Assert.Equal(compare, pObj.CompareTo(pObj2.Value.Value));
