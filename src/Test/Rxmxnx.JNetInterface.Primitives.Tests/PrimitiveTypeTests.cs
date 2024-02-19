@@ -64,6 +64,8 @@ public sealed class PrimitiveTypeTests
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+		String textValue = metadata.ToString();
+
 		Assert.Equal(JTypeKind.Primitive, TPrimitive.Kind);
 		Assert.Equal(metadata, TPrimitive.Metadata);
 		Assert.Null(TPrimitive.FamilyType);
@@ -74,6 +76,10 @@ public sealed class PrimitiveTypeTests
 		Assert.Equal(1, metadata.Signature.Length);
 		Assert.Equal(value, metadata.CreateInstance(value.AsBytes()));
 		Assert.Equal(metadata.ArgumentMetadata, JArgumentMetadata.Get<TPrimitive>());
+
+		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.Contains(metadata.ArgumentMetadata.ToSimplifiedString(), textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {metadata.Hash} }}", textValue);
 
 		Assert.Throws<NotImplementedException>(() => PrimitiveTypeImpl.GetNativeType<PrimitiveTypeImpl>());
 	}
@@ -215,6 +221,7 @@ public sealed class PrimitiveTypeTests
 		Assert.Equal(value.ObjectSignature, pObj.ObjectSignature);
 		Assert.Equal(NativeUtilities.SizeOf<TPrimitive>(), pObj.SizeOf);
 		Assert.Equal(value.GetHashCode(), pObj.GetHashCode());
+		Assert.Equal(pObj.Value, (TPrimitive)pObj);
 
 		PrimitiveTypeTests.ObjectEquality<TPrimitive, TValue>(pObj, pObj);
 		foreach (TValue newValue in PrimitiveTypeTests.fixture.CreateMany<TValue>(10))
