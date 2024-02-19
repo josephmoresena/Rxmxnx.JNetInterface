@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache : IStringFeature
+	private sealed partial record EnvironmentCache : IStringFeature
 	{
 		public JStringObject Create(ReadOnlySpan<Char> data)
 		{

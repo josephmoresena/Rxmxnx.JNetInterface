@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache : INioFeature
+	private sealed partial record EnvironmentCache : INioFeature
 	{
 		public JBufferObject NewDirectByteBuffer(IFixedMemory.IDisposable memory)
 		{

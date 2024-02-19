@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This class stores a cache of heavily used functions.
 /// </summary>
-[SuppressMessage(CommonConstants.CheckIdS4136, CommonConstants.CheckIdS2292,
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4136,
                  Justification = CommonConstants.NoMethodOverloadingJustification)]
 internal abstract class FunctionCache
 {

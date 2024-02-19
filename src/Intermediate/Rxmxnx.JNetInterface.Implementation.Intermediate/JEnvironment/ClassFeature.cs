@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache : IClassFeature
+	private sealed partial record EnvironmentCache : IClassFeature
 	{
 		public JClassObject AsClassObject(JClassLocalRef classRef)
 		{

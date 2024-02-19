@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache
+	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
 		/// Ensure local capacity to <paramref name="capacity"/>.

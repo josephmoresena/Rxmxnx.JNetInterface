@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache
+	private sealed partial record EnvironmentCache
 	{
 		private static JStringLocalRef CreateString(in IReadOnlyFixedContext<Char> ctx, EnvironmentCache cache)
 		{

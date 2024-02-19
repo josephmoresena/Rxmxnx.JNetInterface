@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache
+	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
 		/// Sets a static object field to given <paramref name="classRef"/> reference.
