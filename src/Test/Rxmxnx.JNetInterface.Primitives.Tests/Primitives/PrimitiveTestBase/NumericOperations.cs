@@ -19,7 +19,10 @@ public partial class PrimitiveTestBase
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
 	{
-		Assert.Equal(TValue.Abs(primitive.Value), TPrimitive.Abs(primitive).Value);
+		if (primitive.Value != TValue.MinValue)
+			Assert.Equal(TValue.Abs(primitive.Value), TPrimitive.Abs(primitive).Value);
+		else
+			Assert.Equal(TValue.Abs(TValue.MaxValue), TPrimitive.Abs(TPrimitive.MaxValue).Value);
 		if (TValue.IsPositive(primitive.Value))
 			Assert.Equal(TValue.Log2(primitive.Value), TPrimitive.Log2(primitive));
 		else
