@@ -10,8 +10,8 @@ public sealed class LongTest : PrimitiveTestBase
 		Int64 value = PrimitiveTestBase.Fixture.Create<Int64>();
 		JLong primitive = value;
 		PrimitiveTestBase.IntegerTest<JLong, Int64>();
-		PrimitiveTestBase.NegativeOneTest<JLong, Int64>();
-		PrimitiveTestBase.OperationNumericTypeTest<JLong, Int64>();
+		PrimitiveTestBase.SignedNumberTypeTest<JLong, Int64>();
+		PrimitiveTestBase.NumericOperationsTest<JLong, Int64>();
 		PrimitiveTestBase.NumericTypeTest<JLong, Int64>();
 		PrimitiveTestBase.SpanFormattableTest<JLong, Int64>(primitive);
 		Assert.IsType<JPrimitiveObject<JLong>>((JObject)primitive);
@@ -27,7 +27,7 @@ public sealed class LongTest : PrimitiveTestBase
 		Assert.True(UnicodeClassNames.LongPrimitive().SequenceEqual(metadata.ClassName));
 		Assert.Equal(PrimitiveSignatures.LongSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.LongSignatureChar, metadata.Signature[0]);
-		
+
 		Assert.Equal(ClassNames.LongObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.LongObject().SequenceEqual(metadata.WrapperClassName));
 	}

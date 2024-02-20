@@ -10,8 +10,8 @@ public sealed class ByteTest : PrimitiveTestBase
 		SByte value = PrimitiveTestBase.Fixture.Create<SByte>();
 		JByte primitive = value;
 		PrimitiveTestBase.IntegerTest<JByte, SByte>();
-		PrimitiveTestBase.NegativeOneTest<JByte, SByte>();
-		PrimitiveTestBase.OperationNumericTypeTest<JByte, SByte>();
+		PrimitiveTestBase.SignedNumberTypeTest<JByte, SByte>();
+		PrimitiveTestBase.NumericOperationsTest<JByte, SByte>();
 		PrimitiveTestBase.NumericTypeTest<JByte, SByte>();
 		PrimitiveTestBase.SpanFormattableTest<JByte, SByte>(primitive);
 		Assert.IsType<JPrimitiveObject<JByte>>((JObject)primitive);
@@ -27,7 +27,7 @@ public sealed class ByteTest : PrimitiveTestBase
 		Assert.True(UnicodeClassNames.BytePrimitive().SequenceEqual(metadata.ClassName));
 		Assert.Equal(PrimitiveSignatures.ByteSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.ByteSignatureChar, metadata.Signature[0]);
-		
+
 		Assert.Equal(ClassNames.ByteObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.ByteObject().SequenceEqual(metadata.WrapperClassName));
 	}

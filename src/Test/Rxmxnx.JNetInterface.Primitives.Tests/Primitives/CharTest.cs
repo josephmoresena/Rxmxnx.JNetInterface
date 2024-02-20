@@ -10,7 +10,7 @@ public sealed class CharTest : PrimitiveTestBase
 		Char value = PrimitiveTestBase.Fixture.Create<Char>();
 		JChar primitive = value;
 		PrimitiveTestBase.IntegerTest<JChar, Char>();
-		PrimitiveTestBase.OperationNumericTypeTest<JChar, Char>();
+		PrimitiveTestBase.NumericOperationsTest<JChar, Char>();
 		PrimitiveTestBase.NumericTypeTest<JChar, Char>();
 		PrimitiveTestBase.SpanFormattableTest<JChar, Char>(primitive);
 		Assert.IsType<JPrimitiveObject<JChar>>((JObject)primitive);
@@ -26,7 +26,7 @@ public sealed class CharTest : PrimitiveTestBase
 		Assert.True(UnicodeClassNames.CharPrimitive().SequenceEqual(metadata.ClassName));
 		Assert.Equal(PrimitiveSignatures.CharSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.CharSignatureChar, metadata.Signature[0]);
-		
+
 		Assert.Equal(ClassNames.CharacterObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.CharacterObject().SequenceEqual(metadata.WrapperClassName));
 	}

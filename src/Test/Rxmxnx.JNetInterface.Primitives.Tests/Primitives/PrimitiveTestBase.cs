@@ -1,18 +1,30 @@
 namespace Rxmxnx.JNetInterface.Tests.Primitives;
 
 [ExcludeFromCodeCoverage]
-public abstract class PrimitiveTestBase
+public abstract partial class PrimitiveTestBase
 {
 	private static readonly CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
 
 	protected static readonly Fixture Fixture = new();
 
-	protected static IEnumerable<CultureInfo> GetCultures(Int32 count)
+	private protected static void FloatingTest<TPrimitive, TValue>()
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IFloatingPoint<TPrimitive>, IBinaryNumber<TPrimitive>, IFloatingPointIeee754<TPrimitive>
+		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IFloatingPoint<TValue>, IBinaryNumber<TValue>,
+		IFloatingPointIeee754<TValue>
 	{
-		for (Int32 i = 0; i < count; i++)
-			yield return PrimitiveTestBase.cultures[Random.Shared.Next(0, PrimitiveTestBase.cultures.Length)];
+		Assert.Equal(TValue.E, TPrimitive.E.Value);
+		Assert.Equal(TValue.Pi, TPrimitive.Pi.Value);
+		Assert.Equal(TValue.Tau, TPrimitive.Tau.Value);
+		Assert.Equal(TValue.Epsilon, TPrimitive.Epsilon.Value);
+		Assert.Equal(TValue.NaN, TPrimitive.NaN.Value);
+		Assert.Equal(TValue.NegativeInfinity, TPrimitive.NegativeInfinity.Value);
+		Assert.Equal(TValue.PositiveInfinity, TPrimitive.PositiveInfinity.Value);
+		Assert.Equal(TValue.NegativeZero, TPrimitive.NegativeZero.Value);
+		foreach (TValue value in PrimitiveTestBase.Fixture.CreateMany<TValue>())
+			PrimitiveTestBase.FloatingValueTest<TPrimitive, TValue>(value);
 	}
-
 	private protected static void IntegerTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
@@ -29,13 +41,13 @@ public abstract class PrimitiveTestBase
 			PrimitiveTestBase.IntegerValueTest<TPrimitive, TValue>(primitive);
 		}
 	}
-	private protected static void NegativeOneTest<TPrimitive, TValue>()
+	private protected static void SignedNumberTypeTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>, IPrimitiveSignedType<TPrimitive, TValue>, IPrimitiveEquatable, IBinaryNumber<TPrimitive>
 		, INumberBase<TPrimitive>, ISignedNumber<TPrimitive>
 		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 		=> Assert.Equal(TValue.NegativeOne, TPrimitive.NegativeOne.Value);
-	private protected static void OperationNumericTypeTest<TPrimitive, TValue>()
+	private protected static void NumericOperationsTest<TPrimitive, TValue>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
 		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
@@ -43,7 +55,7 @@ public abstract class PrimitiveTestBase
 	{
 		TPrimitive primitive = PrimitiveTestBase.Fixture.Create<TValue>();
 		foreach (TValue value in PrimitiveTestBase.Fixture.CreateMany<TValue>())
-			PrimitiveTestBase.OperationNumericTypeTest<TPrimitive, TValue>(primitive, value);
+			PrimitiveTestBase.NumericOperationsTest<TPrimitive, TValue>(primitive, value);
 		PrimitiveTestBase.CheckedOperationNumericTypeTest<TPrimitive, TValue>();
 	}
 	private protected static void NumericTypeTest<TPrimitive, TValue>()
@@ -94,411 +106,5 @@ public abstract class PrimitiveTestBase
 	{
 		foreach (CultureInfo culture in PrimitiveTestBase.GetCultures(10))
 			PrimitiveTestBase.SpanFormattableTest<TPrimitive, TValue>(primitive, culture);
-	}
-
-	private static void SpanParseableTest<TPrimitive, TValue>(TValue value, IFormatProvider? provider = default)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveEquatable, ISpanParsable<TPrimitive>
-		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>,
-		ISpanParsable<TValue>
-	{
-		TPrimitive primitive = value;
-		String text = primitive.ToString(provider);
-		Assert.Equal(TValue.Parse(text, provider), TPrimitive.Parse(text, provider));
-		Assert.Equal(TValue.TryParse(text, provider, out TValue valueO),
-		             TPrimitive.TryParse(text, provider, out TPrimitive primitiveO));
-		Assert.Equal(valueO, primitiveO.Value);
-		PrimitiveTestBase.ParseableTest<TPrimitive, TValue>(text, provider);
-	}
-	private static void ParseableTest<TPrimitive, TValue>(String text, IFormatProvider? provider)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveEquatable, IParsable<TPrimitive>
-		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IParsable<TValue>
-	{
-		Assert.Equal(TValue.Parse(text, provider), TPrimitive.Parse(text, provider));
-		Assert.Equal(TValue.Parse(text, provider), TPrimitive.Parse(text, provider));
-		Assert.Equal(TValue.TryParse(text, provider, out TValue valueO),
-		             TPrimitive.TryParse(text, provider, out TPrimitive primitiveO));
-		Assert.Equal(valueO, primitiveO.Value);
-	}
-	private static void SpanFormattableTest<TPrimitive, TValue>(TPrimitive primitive0, IFormatProvider? provider)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveEquatable, ISpanFormattable
-		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, ISpanFormattable
-	{
-		Span<Char> chars0 = stackalloc Char[primitive0.Value.ToString(provider).Length];
-		Span<Char> chars1 = stackalloc Char[chars0.Length];
-		Assert.Equal(primitive0.Value.TryFormat(chars0, out Int32 charsW0, default, provider),
-		             primitive0.TryFormat(chars1, out Int32 charsW1, default, provider));
-		Assert.Equal(charsW0, charsW1);
-		Assert.True(chars0.SequenceEqual(chars1));
-	}
-
-	private static void DoubleNumericTypeTest<TPrimitive, TValue>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
-	{
-		Double dValue = (Double)primitive;
-		Assert.Equal(typeof(TValue) == typeof(Char) ? (Char)(Object)primitive.Value : primitive.Value.ToDouble(default),
-		             dValue);
-		Assert.Equal(primitive, (TPrimitive)dValue);
-	}
-	private static void NumericTypeTest<TPrimitive, TValue>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
-	{
-		Assert.Equal(TValue.Abs(primitive.Value), TPrimitive.Abs(primitive).Value);
-		if (TValue.IsPositive(primitive.Value))
-			Assert.Equal(TValue.Log2(primitive.Value), TPrimitive.Log2(primitive));
-		else
-			Assert.Equal(TValue.Log2(-primitive.Value), TPrimitive.Log2(-primitive));
-		Assert.Equal(TValue.Sign(primitive.Value), TPrimitive.Sign(primitive));
-		Assert.Equal(TValue.Clamp(primitive.Value, TValue.MinValue, TValue.MaxValue),
-		             TPrimitive.Clamp(primitive, TPrimitive.MinValue, TPrimitive.MaxValue));
-
-		Assert.Equal(TValue.CreateChecked(primitive.Value), TPrimitive.CreateChecked(primitive).Value);
-		Assert.Equal(TValue.CreateSaturating(primitive.Value), TPrimitive.CreateSaturating(primitive).Value);
-		Assert.Equal(TValue.CreateTruncating(primitive.Value), TPrimitive.CreateTruncating(primitive).Value);
-
-		Assert.Equal(TValue.CreateChecked(primitive), TPrimitive.CreateChecked(primitive.Value).Value);
-		Assert.Equal(TValue.CreateSaturating(primitive), TPrimitive.CreateSaturating(primitive.Value).Value);
-		Assert.Equal(TValue.CreateTruncating(primitive), TPrimitive.CreateTruncating(primitive.Value).Value);
-
-		Assert.Equal(TValue.IsNegative(primitive.Value), TPrimitive.IsNegative(primitive));
-		Assert.Equal(TValue.IsNormal(primitive.Value), TPrimitive.IsNormal(primitive));
-		Assert.Equal(TValue.IsCanonical(primitive.Value), TPrimitive.IsCanonical(primitive));
-		Assert.Equal(TValue.IsInfinity(primitive.Value), TPrimitive.IsInfinity(primitive));
-		Assert.Equal(TValue.IsInteger(primitive.Value), TPrimitive.IsInteger(primitive));
-		Assert.Equal(TValue.IsFinite(primitive.Value), TPrimitive.IsFinite(primitive));
-		Assert.Equal(TValue.IsPositive(primitive.Value), TPrimitive.IsPositive(primitive));
-		Assert.Equal(TValue.IsPow2(primitive.Value), TPrimitive.IsPow2(primitive));
-		Assert.Equal(TValue.IsSubnormal(primitive.Value), TPrimitive.IsSubnormal(primitive));
-		Assert.Equal(TValue.IsZero(primitive.Value), TPrimitive.IsZero(primitive));
-		Assert.Equal(TValue.IsComplexNumber(primitive.Value), TPrimitive.IsComplexNumber(primitive));
-		Assert.Equal(TValue.IsImaginaryNumber(primitive.Value), TPrimitive.IsImaginaryNumber(primitive));
-		Assert.Equal(TValue.IsEvenInteger(primitive.Value), TPrimitive.IsEvenInteger(primitive));
-		Assert.Equal(TValue.IsNaN(primitive.Value), TPrimitive.IsNaN(primitive));
-		Assert.Equal(TValue.IsNegativeInfinity(primitive.Value), TPrimitive.IsNegativeInfinity(primitive));
-		Assert.Equal(TValue.IsOddInteger(primitive.Value), TPrimitive.IsOddInteger(primitive));
-		Assert.Equal(TValue.IsPositiveInfinity(primitive.Value), TPrimitive.IsPositiveInfinity(primitive));
-		Assert.Equal(TValue.IsRealNumber(primitive.Value), TPrimitive.IsRealNumber(primitive));
-
-		Assert.Equal(~primitive.Value, (~primitive).Value);
-		Assert.Equal(primitive.Value | TValue.One, (primitive | TPrimitive.One).Value);
-		Assert.Equal(primitive.Value | TValue.Zero, (primitive | TPrimitive.Zero).Value);
-		Assert.Equal(primitive.Value & TValue.One, (primitive & TPrimitive.One).Value);
-		Assert.Equal(primitive.Value & TValue.Zero, (primitive & TPrimitive.Zero).Value);
-		Assert.Equal(primitive.Value ^ TValue.One, (primitive ^ TPrimitive.One).Value);
-		Assert.Equal(primitive.Value ^ TValue.Zero, (primitive ^ TPrimitive.Zero).Value);
-
-		PrimitiveTestBase.IncrementTest<TPrimitive, TValue>(primitive);
-		PrimitiveTestBase.DecrementTest<TPrimitive, TValue>(primitive);
-	}
-	private static void IncrementTest<TPrimitive, TValue>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
-	{
-		TValue vInc = primitive.Value;
-		TPrimitive pInc = primitive;
-		Assert.Equal(vInc++, pInc++);
-		Assert.Equal(vInc, pInc.Value);
-		if (primitive.Value < TValue.MaxValue)
-		{
-			vInc = TValue.MinValue;
-			pInc = TPrimitive.MinValue;
-		}
-		Assert.Equal(checked(vInc++), checked(pInc++));
-		Assert.Equal(vInc, pInc.Value);
-	}
-	private static void DecrementTest<TPrimitive, TValue>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
-	{
-		TValue vDec = primitive.Value;
-		TPrimitive pDec = primitive;
-		Assert.Equal(vDec--, pDec--);
-		Assert.Equal(vDec, pDec.Value);
-		if (primitive.Value > TValue.MinValue)
-		{
-			vDec = TValue.MaxValue;
-			pDec = TPrimitive.MaxValue;
-		}
-		Assert.Equal(checked(vDec--), checked(pDec--));
-		Assert.Equal(vDec, pDec.Value);
-	}
-	private static void ConversionNumericTypeTest<TPrimitive, TValue>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable
-		where TValue : unmanaged, IConvertible, IBinaryNumber<TValue>, IMinMaxValue<TValue>
-	{
-		SByte bValue = PrimitiveTestBase.Convert(primitive.Value, c => c.ToSByte(default));
-		Char cValue = PrimitiveTestBase.Convert(primitive.Value, c => c.ToChar(default));
-		Double dValue = typeof(TValue) == typeof(Char) ?
-			(Char)(Object)primitive.Value :
-			primitive.Value.ToDouble(default);
-		Single fValue = typeof(TValue) == typeof(Char) ?
-			(Char)(Object)primitive.Value :
-			primitive.Value.ToSingle(default);
-		Int32 iValue = PrimitiveTestBase.Convert(primitive.Value, c => c.ToInt32(default));
-		Int64 lValue = PrimitiveTestBase.Convert(primitive.Value, c => c.ToInt64(default));
-		Int16 sValue = PrimitiveTestBase.Convert(primitive.Value, c => c.ToInt16(default));
-
-		Assert.Equal(bValue, ((JByte)primitive).Value);
-		Assert.Equal(cValue, ((JChar)primitive).Value);
-		Assert.Equal(dValue, ((JDouble)primitive).Value);
-		Assert.Equal(fValue, ((JFloat)primitive).Value);
-		Assert.Equal(iValue, ((JInt)primitive).Value);
-		Assert.Equal(lValue, ((JLong)primitive).Value);
-		Assert.Equal(sValue, ((JShort)primitive).Value);
-	}
-	private static T Convert<T>(IConvertible c, Func<IConvertible, T> func) where T : unmanaged, IBinaryInteger<T>
-	{
-		try
-		{
-			return func(c);
-		}
-		catch (Exception)
-		{
-			Int64 l = c.ToInt64(default);
-			return l.AsBytes().AsValues<Byte, T>()[0];
-		}
-	}
-	private static void CheckedOperationNumericTypeTest<TPrimitive, TValue>()
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
-	{
-		TPrimitive sum = checked(TValue.One + TValue.One);
-		TPrimitive diff = checked(TValue.One - TValue.One);
-		TPrimitive product = checked(TValue.One * TValue.One);
-		TPrimitive div = checked(TValue.One / TValue.One);
-
-		Assert.Equal(sum, checked(TPrimitive.One + TPrimitive.One));
-		Assert.Equal(product, checked(TPrimitive.One * TPrimitive.One));
-		Assert.Equal(checked(-diff), checked(TPrimitive.One - TPrimitive.One));
-		Assert.Equal(div, checked(TPrimitive.One / TPrimitive.One));
-	}
-	private static void OperationNumericTypeTest<TPrimitive, TValue>(TPrimitive primitive0, TPrimitive primitive1)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
-	{
-		TPrimitive sum = primitive0.Value + primitive1.Value;
-		TPrimitive diff0 = primitive0.Value - primitive1.Value;
-		TPrimitive diff1 = primitive1.Value - primitive0.Value;
-		TPrimitive product = primitive0.Value * primitive1.Value;
-
-		Boolean gt = primitive0.Value > primitive1.Value;
-		Boolean gte = primitive0.Value >= primitive1.Value;
-		Boolean lt = primitive0.Value < primitive1.Value;
-		Boolean lte = primitive0.Value <= primitive1.Value;
-
-		Assert.Equal(sum, primitive0 + primitive1);
-		Assert.Equal(product, primitive0 * primitive1);
-		Assert.Equal(+diff0, primitive0 - primitive1);
-		Assert.Equal(-diff1, primitive0 - primitive1);
-		Assert.Equal(+diff1, primitive1 - primitive0);
-		Assert.Equal(-diff0, primitive1 - primitive0);
-
-		PrimitiveTestBase.DivisionTest<TPrimitive, TValue>(primitive0, primitive1);
-		PrimitiveTestBase.DivisionTest<TPrimitive, TValue>(primitive1, primitive0);
-
-		Assert.Equal(gt, primitive0 > primitive1);
-		Assert.Equal(gte, primitive0 >= primitive1);
-		Assert.Equal(lt, primitive0 < primitive1);
-		Assert.Equal(lte, primitive0 <= primitive1);
-		Assert.Equal(primitive0.Value | primitive1.Value, (primitive0 | primitive1).Value);
-		Assert.Equal(primitive0.Value & primitive1.Value, (primitive0 & primitive1).Value);
-		Assert.Equal(primitive0.Value ^ primitive1.Value, (primitive0 ^ primitive1).Value);
-
-		Assert.Equal(TValue.Max(primitive0.Value, primitive1.Value), TPrimitive.Max(primitive0, primitive1).Value);
-		Assert.Equal(TValue.Min(primitive0.Value, primitive1.Value), TPrimitive.Min(primitive0, primitive1).Value);
-		Assert.Equal(TValue.CopySign(primitive0.Value, primitive1.Value),
-		             TPrimitive.CopySign(primitive0, primitive1).Value);
-		Assert.Equal(TValue.MaxNumber(primitive0.Value, primitive1.Value),
-		             TPrimitive.MaxNumber(primitive0, primitive1).Value);
-		Assert.Equal(TValue.MinNumber(primitive0.Value, primitive1.Value),
-		             TPrimitive.MinNumber(primitive0, primitive1).Value);
-		Assert.Equal(TValue.MaxMagnitude(primitive0.Value, primitive1.Value),
-		             TPrimitive.MaxMagnitude(primitive0, primitive1).Value);
-		Assert.Equal(TValue.MinMagnitude(primitive0.Value, primitive1.Value),
-		             TPrimitive.MinMagnitude(primitive0, primitive1).Value);
-		Assert.Equal(TValue.MaxMagnitudeNumber(primitive0.Value, primitive1.Value),
-		             TPrimitive.MaxMagnitudeNumber(primitive0, primitive1).Value);
-		Assert.Equal(TValue.MinMagnitudeNumber(primitive0.Value, primitive1.Value),
-		             TPrimitive.MinMagnitudeNumber(primitive0, primitive1).Value);
-	}
-	private static void DivisionTest<TPrimitive, TValue>(TPrimitive num, TPrimitive div)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, IMinMaxValue<TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>
-	{
-		if (TPrimitive.IsZero(div)) div = TPrimitive.One;
-		Assert.Equal(num.Value / div.Value, num / div);
-		Assert.Equal(num.Value % div.Value, num % div);
-	}
-	private static void ShiftTest<TPrimitive, TValue>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
-		IShiftOperators<TValue, Int32, TValue>
-	{
-		for (Int32 i = 0; i < 8 * NativeUtilities.SizeOf<TPrimitive>(); i++)
-			Assert.Equal(primitive.Value << i, (primitive << i).Value);
-		for (Int32 i = 0; i < 8 * NativeUtilities.SizeOf<TPrimitive>(); i++)
-			Assert.Equal(primitive.Value >> i, (primitive >> i).Value);
-		for (Int32 i = 0; i < 8 * NativeUtilities.SizeOf<TPrimitive>(); i++)
-			Assert.Equal(primitive.Value >>> i, (primitive >>> i).Value);
-	}
-	private static void SignedCreateTest<TPrimitive, TValue>()
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
-	{
-		PrimitiveTestBase.MinMaxCreateTest<TPrimitive, TValue, SByte>();
-		PrimitiveTestBase.MinMaxCreateTest<TPrimitive, TValue, Int16>();
-		PrimitiveTestBase.MinMaxCreateTest<TPrimitive, TValue, Int32>();
-		PrimitiveTestBase.MinMaxCreateTest<TPrimitive, TValue, Int64>();
-	}
-	private static void UnsignedCreateTest<TPrimitive, TValue>()
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
-	{
-		PrimitiveTestBase.MinMaxCreateTest<TPrimitive, TValue, Byte>();
-		PrimitiveTestBase.MinMaxCreateTest<TPrimitive, TValue, UInt16>();
-		PrimitiveTestBase.MinMaxCreateTest<TPrimitive, TValue, UInt32>();
-		PrimitiveTestBase.MinMaxCreateTest<TPrimitive, TValue, UInt64>();
-	}
-	private static void MinMaxCreateTest<TPrimitive, TValue, T>()
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
-		where T : unmanaged, IMinMaxValue<T>, INumberBase<T>
-	{
-		if (NativeUtilities.SizeOf<TPrimitive>() >= NativeUtilities.SizeOf<T>())
-		{
-			Assert.Equal(TValue.CreateChecked(T.MaxValue), TPrimitive.CreateChecked(T.MaxValue).Value);
-			Assert.Equal(TValue.CreateChecked(T.MinValue), TPrimitive.CreateChecked(T.MinValue).Value);
-		}
-		Assert.Equal(TValue.CreateSaturating(T.MaxValue), TPrimitive.CreateSaturating(T.MaxValue).Value);
-		Assert.Equal(TValue.CreateTruncating(T.MaxValue), TPrimitive.CreateTruncating(T.MaxValue).Value);
-		Assert.Equal(TValue.CreateSaturating(T.MinValue), TPrimitive.CreateSaturating(T.MinValue).Value);
-		Assert.Equal(TValue.CreateTruncating(T.MinValue), TPrimitive.CreateTruncating(T.MinValue).Value);
-	}
-	private static void IntegerValueTest<TPrimitive, TValue>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
-		IShiftOperators<TValue, Int32, TValue>
-	{
-		Assert.Equal(primitive.Value.GetByteCount(), primitive.GetByteCount());
-		Assert.Equal(primitive.Value.GetShortestBitLength(), primitive.GetShortestBitLength());
-
-		foreach (CultureInfo culture in PrimitiveTestBase.GetCultures(10))
-		{
-			PrimitiveTestBase.TryFormatCharTest<TPrimitive, TValue>(primitive, culture);
-			PrimitiveTestBase.TryFormatByteTest<TPrimitive, TValue>(primitive, culture);
-			PrimitiveTestBase.IntegerBigEndianTest<TPrimitive, TValue>(primitive);
-			PrimitiveTestBase.IntegerLittleEndianTest<TPrimitive, TValue>(primitive);
-		}
-	}
-	private static void TryFormatCharTest<TPrimitive, TValue>(TPrimitive primitive, CultureInfo culture)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
-		IShiftOperators<TValue, Int32, TValue>
-	{
-		Span<Char> span0 = stackalloc Char[primitive.Value.ToString(culture).Length];
-		Span<Char> span1 = stackalloc Char[span0.Length];
-		Assert.Equal(primitive.Value.TryFormat(span0, out Int32 charsW0, default, culture),
-		             primitive.TryFormat(span1, out Int32 charsW1, default, culture));
-		Assert.Equal(charsW0, charsW1);
-		Assert.True(span0.SequenceEqual(span1));
-	}
-	private static void TryFormatByteTest<TPrimitive, TValue>(TPrimitive primitive, CultureInfo culture)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
-		IShiftOperators<TValue, Int32, TValue>
-	{
-		Span<Byte> span0 = stackalloc Byte[((CString)primitive.Value.ToString(culture)).Length];
-		Span<Byte> span1 = stackalloc Byte[span0.Length];
-		Assert.Equal(primitive.Value.TryFormat(span0, out Int32 bytesW0, default, culture),
-		             primitive.TryFormat(span1, out Int32 bytesW1, default, culture));
-		Assert.Equal(bytesW0, bytesW1);
-		Assert.True(span0.SequenceEqual(span1));
-	}
-	private static void IntegerBigEndianTest<TPrimitive, TValue>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
-		IShiftOperators<TValue, Int32, TValue>
-	{
-		Span<Byte> bytes0 = stackalloc Byte[NativeUtilities.SizeOf<TPrimitive>()];
-		Span<Byte> bytes1 = stackalloc Byte[bytes0.Length];
-		Assert.Equal(primitive.Value.TryWriteBigEndian(bytes0, out Int32 bytesW0),
-		             primitive.TryWriteBigEndian(bytes1, out Int32 bytesW1));
-		Assert.Equal(bytesW0, bytesW1);
-		Assert.True(bytes0.SequenceEqual(bytes1));
-		PrimitiveTestBase.IntegerReadBigEndianTest<TPrimitive, TValue>(bytes0, bytes1);
-	}
-	private static void IntegerReadBigEndianTest<TPrimitive, TValue>(Span<Byte> bytes0, Span<Byte> bytes1)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
-		IShiftOperators<TValue, Int32, TValue>
-	{
-		Boolean unsigned = typeof(TValue) == typeof(Char);
-		Assert.Equal(TValue.TryReadBigEndian(bytes0, unsigned, out TValue value),
-		             TPrimitive.TryReadBigEndian(bytes1, unsigned, out TPrimitive primitive));
-		Assert.Equal(value, primitive.Value);
-	}
-	private static void IntegerLittleEndianTest<TPrimitive, TValue>(TPrimitive primitive)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
-		IShiftOperators<TValue, Int32, TValue>
-	{
-		Span<Byte> bytes0 = stackalloc Byte[NativeUtilities.SizeOf<TPrimitive>()];
-		Span<Byte> bytes1 = stackalloc Byte[bytes0.Length];
-		Assert.Equal(primitive.Value.TryWriteLittleEndian(bytes0, out Int32 bytesW0),
-		             primitive.TryWriteLittleEndian(bytes1, out Int32 bytesW1));
-		Assert.Equal(bytesW0, bytesW1);
-		Assert.True(bytes0.SequenceEqual(bytes1));
-		PrimitiveTestBase.IntegerReadLittleEndianTest<TPrimitive, TValue>(bytes0, bytes1);
-	}
-	private static void IntegerReadLittleEndianTest<TPrimitive, TValue>(Span<Byte> bytes0, Span<Byte> bytes1)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
-		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
-		IBinaryInteger<TPrimitive>, IShiftOperators<TPrimitive, Int32, TPrimitive>
-		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryInteger<TValue>,
-		IShiftOperators<TValue, Int32, TValue>
-	{
-		Boolean unsigned = typeof(TValue) == typeof(Char);
-		Assert.Equal(TValue.TryReadLittleEndian(bytes0, unsigned, out TValue value),
-		             TPrimitive.TryReadLittleEndian(bytes1, unsigned, out TPrimitive primitive));
-		Assert.Equal(value, primitive.Value);
 	}
 }

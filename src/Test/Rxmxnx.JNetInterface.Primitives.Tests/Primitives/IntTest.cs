@@ -10,8 +10,8 @@ public sealed class IntTest : PrimitiveTestBase
 		Int32 value = PrimitiveTestBase.Fixture.Create<Int32>();
 		JInt primitive = value;
 		PrimitiveTestBase.IntegerTest<JInt, Int32>();
-		PrimitiveTestBase.NegativeOneTest<JInt, Int32>();
-		PrimitiveTestBase.OperationNumericTypeTest<JInt, Int32>();
+		PrimitiveTestBase.SignedNumberTypeTest<JInt, Int32>();
+		PrimitiveTestBase.NumericOperationsTest<JInt, Int32>();
 		PrimitiveTestBase.NumericTypeTest<JInt, Int32>();
 		PrimitiveTestBase.SpanFormattableTest<JInt, Int32>(primitive);
 		Assert.IsType<JPrimitiveObject<JInt>>((JObject)primitive);
@@ -27,7 +27,7 @@ public sealed class IntTest : PrimitiveTestBase
 		Assert.True(UnicodeClassNames.IntPrimitive().SequenceEqual(metadata.ClassName));
 		Assert.Equal(PrimitiveSignatures.IntSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.IntSignatureChar, metadata.Signature[0]);
-		
+
 		Assert.Equal(ClassNames.IntegerObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.IntegerObject().SequenceEqual(metadata.WrapperClassName));
 	}
