@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache : IClassFeature
+	private sealed partial record EnvironmentCache : IClassFeature
 	{
 		public JClassObject AsClassObject(JClassLocalRef classRef)
 		{
@@ -37,6 +37,13 @@ partial class JEnvironment
 		public JClassObject GetClass(ReadOnlySpan<Byte> className)
 		{
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
+			return this.GetOrFindClass(new TypeInformation(classInformation));
+		}
+		public JClassObject GetClass(String classHash)
+		{
+			if (this._classes.TryGetValue(classHash, out JClassObject? jClass))
+				return jClass;
+			CStringSequence classInformation = MetadataHelper.GetClassInformation(classHash);
 			return this.GetOrFindClass(new TypeInformation(classInformation));
 		}
 		public JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>
@@ -123,12 +130,5 @@ partial class JEnvironment
 		public void SetAssignableTo<TDataType>(JReferenceObject jObject, Boolean isAssignable)
 			where TDataType : JReferenceObject, IDataType<TDataType>
 			=> jObject.SetAssignableTo<TDataType>(isAssignable);
-		public JClassObject GetClass(String classHash)
-		{
-			if (this._classes.TryGetValue(classHash, out JClassObject? jClass))
-				return jClass;
-			CStringSequence classInformation = MetadataHelper.GetClassInformation(classHash);
-			return this.GetOrFindClass(new TypeInformation(classInformation));
-		}
 	}
 }

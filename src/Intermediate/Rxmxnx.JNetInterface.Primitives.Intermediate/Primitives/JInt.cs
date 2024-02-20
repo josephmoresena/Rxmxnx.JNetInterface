@@ -30,9 +30,9 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	/// </summary>
 	public Int32 Value => this._value;
 	/// <inheritdoc/>
-	public CString ObjectClassName => IPrimitiveType.GetMetadata<JFloat>().ClassName;
+	public CString ObjectClassName => IPrimitiveType.GetMetadata<JInt>().ClassName;
 	/// <inheritdoc/>
-	public CString ObjectSignature => IPrimitiveType.GetMetadata<JFloat>().Signature;
+	public CString ObjectSignature => IPrimitiveType.GetMetadata<JInt>().Signature;
 
 	/// <summary>
 	/// Parameterless constructor.

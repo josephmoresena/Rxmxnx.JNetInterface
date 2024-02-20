@@ -1,14 +1,11 @@
 namespace Rxmxnx.JNetInterface.Types;
 
 internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
+	where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive, TValue>, IComparable<TPrimitive>,
+	IEquatable<TPrimitive>, IPrimitiveEquatable
+	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryNumber<TValue>,
+	IMinMaxValue<TValue>
 {
-	/// <inheritdoc cref="IAdditiveIdentity{TSelf, TResult}.AdditiveIdentity"/>
-	public static readonly TPrimitive
-		AdditiveIdentity = IPrimitiveNumericType<TPrimitive, TValue>.GetAdditiveIdentity();
-	/// <inheritdoc cref="IMultiplicativeIdentity{TSelf, TResult}.MultiplicativeIdentity"/>
-	public static readonly TPrimitive MultiplicativeIdentity =
-		IPrimitiveNumericType<TPrimitive, TValue>.GetMultiplicativeIdentity();
-
 	/// <inheritdoc cref="IAdditionOperators{TSelf, TOther, TResult}.op_Addition(TSelf, TOther)"/>
 	public static TPrimitive Addition(in TValue left, in TValue right)
 	{
@@ -126,19 +123,6 @@ internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
 		{
 			result = -value;
 		}
-		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
-	}
-
-	/// <inheritdoc cref="IAdditiveIdentity{TSelf, TResult}.AdditiveIdentity"/>
-	private static TPrimitive GetAdditiveIdentity()
-	{
-		TValue result = TValue.AdditiveIdentity;
-		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
-	}
-	/// <inheritdoc cref="IMultiplicativeIdentity{TSelf, TResult}.MultiplicativeIdentity"/>
-	private static TPrimitive GetMultiplicativeIdentity()
-	{
-		TValue result = TValue.MultiplicativeIdentity;
 		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
 	}
 }

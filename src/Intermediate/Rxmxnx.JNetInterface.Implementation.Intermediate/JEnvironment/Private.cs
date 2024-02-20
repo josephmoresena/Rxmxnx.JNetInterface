@@ -38,11 +38,13 @@ partial class JEnvironment
 		=> this._cache.CreateGlobalRef(jLocal.As<JObjectLocalRef>());
 
 	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
+#pragma warning disable CA1859
 	private static Boolean? EqualEquatable<TEquatable>(IEquatable<TEquatable>? obj, TEquatable? other)
 	{
 		if (obj is null || other is null) return default;
 		return obj.Equals(other);
 	}
+#pragma warning restore CA1859
 	/// <summary>
 	/// Retrieves field identifier for given definition in given class.
 	/// </summary>

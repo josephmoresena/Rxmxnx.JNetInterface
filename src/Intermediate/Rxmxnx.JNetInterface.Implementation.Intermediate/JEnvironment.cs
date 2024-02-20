@@ -3,7 +3,10 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class implements <see cref="IVirtualMachine"/> interface.
 /// </summary>
-public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEquatable<IEnvironment>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4035,
+                 Justification = CommonConstants.InternalInheritanceJustification)]
+public partial class JEnvironment : IEnvironment, IEquatable<IEnvironment>, IEquatable<JEnvironment>,
+	IEqualityOperators<JEnvironment, JEnvironment, Boolean>
 {
 	/// <summary>
 	/// <see cref="JEnvironment"/> cache.
@@ -95,13 +98,13 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 	public Boolean JniSecure() => this._cache.JniSecure();
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
-		using LocalFrame localFrame = new(this, capacity);
+		using LocalFrame _ = new(this, capacity);
 		this._cache.CheckJniError();
 		action();
 	}
 	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
 	{
-		using LocalFrame localFrame = new(this, capacity);
+		using LocalFrame _ = new(this, capacity);
 		this._cache.CheckJniError();
 		action(state);
 	}
@@ -133,8 +136,8 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		this._cache.CreateLocalRef(globalRef, localResult);
 		return result;
 	}
-	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other) => this.Reference == other?.Reference;
-
+	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other)
+		=> other is not null && this.Reference == other.Reference && this.NoProxy == other.NoProxy;
 	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
 		=> other is not null && this._cache.Equals(other._cache);
 
@@ -155,4 +158,29 @@ public partial class JEnvironment : IEnvironment, IEquatable<JEnvironment>, IEqu
 		JVirtualMachine vm = (JVirtualMachine)EnvironmentCache.GetVirtualMachine(reference);
 		return vm.GetEnvironment(reference);
 	}
+
+	/// <summary>
+	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance
+	/// have the same value.
+	/// </summary>
+	/// <param name="left">The <see cref="JEnvironment"/> to compare.</param>
+	/// <param name="right">The <see cref="JEnvironment"/> to compare.</param>
+	/// <returns>
+	/// <see langword="true"/> if the value of <paramref name="left"/> is the same as the value
+	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Boolean operator ==(JEnvironment? left, JEnvironment? right) => left?.Equals(right) ?? right is null;
+	/// <summary>
+	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance
+	/// have different values.
+	/// </summary>
+	/// <param name="left">The <see cref="JEnvironment"/> to compare.</param>
+	/// <param name="right">The <see cref="JEnvironment"/> to compare.</param>
+	/// <returns>
+	/// <see langword="true"/> if the value of <paramref name="left"/> is different from the value
+	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Boolean operator !=(JEnvironment? left, JEnvironment? right) => !(left == right);
 }

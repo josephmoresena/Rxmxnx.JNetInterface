@@ -2,12 +2,12 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache
+	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
 		/// Class cache cache.
 		/// </summary>
-		public ClassCache GetClassCache() => this._classes;
+		public ClassCache<JClassObject> GetClassCache() => this._classes;
 		/// <summary>
 		/// Retrieves the <see cref="JClassObject"/> according to <paramref name="classRef"/>.
 		/// </summary>
@@ -18,10 +18,10 @@ partial class JEnvironment
 		{
 			using JStringObject jString = JClassObject.GetClassName(this._env, classRef, out Boolean isPrimitive);
 			using JNativeMemory<Byte> utf8Text = jString.GetNativeUtf8Chars();
+			JClassLocalRef usableClassRef = keepReference ? classRef : default;
 			JClassObject jClass = isPrimitive ?
 				this.GetPrimitiveClass(utf8Text.Values) :
-				this.GetClass(utf8Text.Values, keepReference ? classRef : default);
-			if (keepReference && jClass.InternalReference == default) jClass.SetValue(classRef);
+				this.GetClass(utf8Text.Values, usableClassRef);
 			return jClass;
 		}
 		/// <inheritdoc cref="JEnvironment.LoadClass(JClassObject?)"/>

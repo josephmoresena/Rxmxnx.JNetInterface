@@ -8,7 +8,7 @@ internal abstract partial class JPrimitiveObject : JObject
 	/// <summary>
 	/// Size of current type in bytes.
 	/// </summary>
-	protected abstract Int32 SizeOf { get; }
+	public abstract Int32 SizeOf { get; }
 
 	/// <summary>
 	/// Constructor.
@@ -21,11 +21,6 @@ internal abstract partial class JPrimitiveObject : JObject
 	/// <returns>Current instance as <see cref="Byte"/> value.</returns>
 	public abstract Byte ToByte();
 
-	/// <inheritdoc/>
-	[ExcludeFromCodeCoverage]
-	public override Boolean Equals(Object? obj)
-		=> obj is JPrimitiveObject primitive && primitive.AsSpan().SequenceEqual(this.AsSpan()) &&
-			this.SizeOf == primitive.SizeOf;
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override Int32 GetHashCode() => HashCode.Combine(Convert.ToHexString(this.AsSpan()), this.SizeOf);
@@ -44,7 +39,7 @@ internal abstract partial class JPrimitiveObject : JObject
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IWrapper<TValue>, IComparable<TPrimitive>,
 		IEquatable<TPrimitive>
-		=> (this as IWrapper<TPrimitive>)?.Value ?? this.AsValue<TPrimitive>();
+		=> this.AsValue<TPrimitive>();
 }
 
 /// <summary>
@@ -55,25 +50,21 @@ internal sealed partial class JPrimitiveObject<TPrimitive> : JPrimitiveObject.Ge
 	IEquatable<JPrimitiveObject<TPrimitive>>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEquatable<TPrimitive>
 {
+	/// <inheritdoc/>
+	public override Int32 SizeOf => IPrimitiveType.GetMetadata<TPrimitive>().SizeOf;
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">Primitive value.</param>
 	public JPrimitiveObject(TPrimitive value) : base(value) { }
-	/// <inheritdoc cref="IEquatable{TPrimitive}"/>
-	public Boolean Equals(JPrimitiveObject<TPrimitive>? other) => other is not null && this.Value.Equals(other.Value);
 
+	/// <inheritdoc cref="IObject.ObjectClassName"/>
 	public override CString ObjectClassName => IPrimitiveType.GetMetadata<TPrimitive>().ClassName;
+	/// <inheritdoc cref="IObject.ObjectSignature"/>
 	public override CString ObjectSignature => IPrimitiveType.GetMetadata<TPrimitive>().Signature;
 
 	/// <inheritdoc cref="IComparable.CompareTo"/>
 	public Int32 CompareTo(Object? obj) => this.Value.CompareTo(obj);
-
-	/// <inheritdoc/>
-	public override Boolean Equals(JObject? other)
-		=> other is JPrimitiveObject<TPrimitive> jPrimitive && this.Equals(jPrimitive);
-	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => obj is JObject jObject ? this.Equals(jObject) : base.Equals(obj);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
 }

@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache
+	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
 		/// Registers a <typeparamref name="TObject"/> in current <see cref="IEnvironment"/> instance.

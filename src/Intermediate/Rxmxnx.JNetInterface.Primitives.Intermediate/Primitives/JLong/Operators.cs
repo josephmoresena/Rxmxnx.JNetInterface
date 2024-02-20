@@ -36,6 +36,7 @@ public readonly partial struct JLong : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JLong"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JLong value) => value._value;
 
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JLong>.operator JLong(JLong jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JLong>.operator JFloat(JLong jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JLong>.operator JDouble(JLong jPrimitive) => jPrimitive;

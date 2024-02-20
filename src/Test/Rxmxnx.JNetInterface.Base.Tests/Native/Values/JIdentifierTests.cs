@@ -16,7 +16,7 @@ public sealed class JIdentifierTests
 	{
 		IntPtr ptr1 = JIdentifierTests.fixture.CreateMany<Byte>(IntPtr.Size).ToArray().AsSpan().AsValue<IntPtr>();
 		IntPtr ptr2 = JIdentifierTests.fixture.CreateMany<Byte>(IntPtr.Size).ToArray().AsSpan().AsValue<IntPtr>();
-		IntPtr ptr3 = (IntPtr)(Object)ptr1;
+		IntPtr ptr3 = ptr1.AsBytes().AsValue<IntPtr>();
 
 		TIdentifier id1 = NativeUtilities.Transform<IntPtr, TIdentifier>(in ptr1);
 		TIdentifier id2 = NativeUtilities.Transform<IntPtr, TIdentifier>(in ptr2);

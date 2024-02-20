@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache : IReferenceFeature
+	private sealed partial record EnvironmentCache : IReferenceFeature
 	{
 		public IDisposable GetSynchronizer(JReferenceObject jObject)
 		{

@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 public partial class JVirtualMachine
 {
-	private partial record VirtualMachineCache
+	private sealed partial record VirtualMachineCache
 	{
 		/// <summary>
 		/// Delegate cache.

@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
-public partial struct JBoolean : IPrimitiveEquatable
+public partial struct JBoolean : IPrimitiveEquatable, ISpanParsable<JBoolean>
 {
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Equals(other);
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Equals(other);
@@ -23,4 +23,12 @@ public partial struct JBoolean : IPrimitiveEquatable
 			JPrimitiveObject jPrimitive => this.Equals(jPrimitive),
 			_ => false,
 		};
+
+	static JBoolean IParsable<JBoolean>.Parse(String s, IFormatProvider? provider) => JBoolean.Parse(s);
+	static Boolean IParsable<JBoolean>.TryParse(String? s, IFormatProvider? provider, out JBoolean result)
+		=> JBoolean.TryParse(s, out result);
+	static JBoolean ISpanParsable<JBoolean>.Parse(ReadOnlySpan<Char> s, IFormatProvider? provider) => JBoolean.Parse(s);
+	static Boolean ISpanParsable<JBoolean>.TryParse(ReadOnlySpan<Char> s, IFormatProvider? provider,
+		out JBoolean result)
+		=> JBoolean.TryParse(s, out result);
 }

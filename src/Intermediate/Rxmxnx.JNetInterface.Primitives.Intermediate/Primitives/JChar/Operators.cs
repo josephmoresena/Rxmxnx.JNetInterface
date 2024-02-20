@@ -36,6 +36,7 @@ public readonly partial struct JChar : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JChar"/> to explicitly convert.</param>
 	public static explicit operator JDouble(JChar value) => value._value;
 
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JChar>.operator JChar(JChar jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JChar>.operator SByte(JChar jPrimitive) => (SByte)jPrimitive._value;
 	static explicit IPrimitiveNumericType<JChar>.operator Int64(JChar jPrimitive) => jPrimitive._value;

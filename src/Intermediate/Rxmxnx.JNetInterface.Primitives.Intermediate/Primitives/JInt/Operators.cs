@@ -41,6 +41,7 @@ public readonly partial struct JInt : IPrimitiveEquatable
 	static explicit IPrimitiveNumericType<JInt>.operator JDouble(JInt jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JInt>.operator JFloat(JInt jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JInt>.operator Single(JInt jPrimitive) => jPrimitive._value;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JInt>.operator JInt(JInt jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JInt>.operator SByte(JInt jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<SByte>();

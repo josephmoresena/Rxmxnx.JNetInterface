@@ -12,7 +12,7 @@ internal partial class JPrimitiveObject
 		/// <summary>
 		/// Size of current type in bytes.
 		/// </summary>
-		protected override Int32 SizeOf => NativeUtilities.SizeOf<TValue>();
+		public override Int32 SizeOf => NativeUtilities.SizeOf<TValue>();
 
 		/// <summary>
 		/// Constructor.
@@ -24,15 +24,6 @@ internal partial class JPrimitiveObject
 		/// Internal primitive value.
 		/// </summary>
 		public TValue Value => this._value;
-
-		/// <inheritdoc cref="IEquatable{TValue}.Equals(TValue)"/>
-		public Boolean Equals(TValue other) => this._value.Equals(other);
-		/// <inheritdoc/>
-		public override Boolean Equals(JObject? other)
-			=> other is Generic<TValue> jPrimitive && this._value.Equals(jPrimitive._value);
-		/// <inheritdoc/>
-		public override Boolean Equals(Object? obj)
-			=> obj is Generic<TValue> jPrimitive ? this.Equals(jPrimitive) : this.Value.Equals(obj);
 
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

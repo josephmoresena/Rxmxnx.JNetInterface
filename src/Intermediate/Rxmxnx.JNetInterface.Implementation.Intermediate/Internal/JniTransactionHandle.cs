@@ -70,8 +70,7 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 		NativeStringMemoryAdapter result =
 			JniTransactionHandle.Initialize<NativeStringMemoryAdapter>(new(jString, referenceKind, critical),
 			                                                           transactions);
-		result.Activate(jString.Environment);
-		return result;
+		return JniTransactionHandle.ActivateMemoryAdapter(result, jString.Environment);
 	}
 	/// <summary>
 	/// Creates a native memory adapter instance for <paramref name="jArray"/>.
@@ -89,8 +88,7 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 		NativeArrayMemoryAdapter<TPrimitive> result =
 			JniTransactionHandle.Initialize<NativeArrayMemoryAdapter<TPrimitive>>(new(jArray, referenceKind, critical),
 				transactions);
-		result.Activate(jArray.Environment);
-		return result;
+		return JniTransactionHandle.ActivateMemoryAdapter(result, jArray.Environment);
 	}
 
 	/// <summary>
@@ -119,5 +117,16 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 			transaction.Reference = new(transactions);
 		while (!transactions.TryAdd(transaction.Reference._id, transaction));
 		return transaction;
+	}
+	/// <summary>
+	/// Activates <paramref name="adapter"/> using <paramref name="env"/>.
+	/// </summary>
+	/// <param name="adapter">A <see cref="NativeMemoryAdapter"/> instance.</param>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <returns><paramref name="adapter"/> activated.</returns>
+	private static NativeMemoryAdapter ActivateMemoryAdapter(NativeMemoryAdapter adapter, IEnvironment env)
+	{
+		adapter.Activate(env);
+		return adapter;
 	}
 }

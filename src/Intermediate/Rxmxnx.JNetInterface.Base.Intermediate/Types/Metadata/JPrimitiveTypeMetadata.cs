@@ -65,7 +65,7 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	private protected JPrimitiveTypeMetadata() : base(JPrimitiveTypeMetadata.voidInformation)
+	private JPrimitiveTypeMetadata() : base(JPrimitiveTypeMetadata.voidInformation)
 	{
 		this._sizeOf = default;
 		this._underlineType = typeof(void);

@@ -37,5 +37,4 @@ internal sealed partial class JPrimitiveObject<TPrimitive>
 {
 	static Type IDataType.FamilyType => typeof(TPrimitive);
 	static JNativeType IPrimitiveType.JniType => IPrimitiveType.GetMetadata<TPrimitive>().NativeType;
-	protected override Int32 SizeOf => IPrimitiveType.GetMetadata<TPrimitive>().SizeOf;
 }

@@ -24,7 +24,7 @@ public abstract partial class JThrowableException : Exception
 	/// </summary>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> throwable instance.</param>
 	/// <param name="message">Exception message.</param>
-	internal JThrowableException(JGlobalBase jGlobal, String? message) : base(message)
+	private protected JThrowableException(JGlobalBase jGlobal, String? message) : base(message)
 	{
 		this._jGlobal = jGlobal;
 		this._thread = Thread.CurrentThread;

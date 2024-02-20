@@ -7,16 +7,18 @@ using Microsoft.CodeAnalysis;
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
 [ExcludeFromCodeCoverage]
+[SuppressMessage("csharpsquid", "S3963:\"static\" fields should be initialized inline",
+                 Justification = "Static constructor is needed.")]
 internal static class NativeGenerator
 {
 	public const String AssemblyName = "Rxmxnx.JNetInterface.Native.Intermediate";
 
-	private const String sourceNamespace = "namespace Rxmxnx.JNetInterface.Native;";
-	private const String genericDocFormat =
+	private const String SourceNamespace = "namespace Rxmxnx.JNetInterface.Native;";
+	private const String GenericDocFormat =
 		"/// <typeparam name=\"TArg{0}\"><see cref=\"IDataType\"/> type of {0}{1} method argument.</typeparam>";
-	private const String argTypeFormat = "TArg{0}";
-	private const String constraintFormat = "\twhere TArg{0} : IDataType, IObject ";
-	private const String argumentFormat = "JArgumentMetadata.Create<TArg{0}>()";
+	private const String ArgTypeFormat = "TArg{0}";
+	private const String ConstraintFormat = "\twhere TArg{0} : IDataType, IObject ";
+	private const String ArgumentFormat = "JArgumentMetadata.Create<TArg{0}>()";
 
 	private static readonly NativeMethodGenerator constructor;
 	private static readonly NativeMethodGenerator function;
@@ -115,14 +117,14 @@ internal static class NativeGenerator
 		for (UInt32 i = 1; i <= Byte.MaxValue; i++)
 		{
 			NativeGenerator.PrepareFile(strBuildDoc, strBuildArgType, strBuildArg, i);
-			strBuildDoc.Append(String.Format(NativeGenerator.genericDocFormat, i, i.GetOrdinalSuffix()));
-			strBuildArgType.Append(String.Format(NativeGenerator.argTypeFormat, i));
-			strBuildCons.AppendLine(String.Format(NativeGenerator.constraintFormat, i));
-			strBuildArg.Append(String.Format(NativeGenerator.argumentFormat, i));
+			strBuildDoc.Append(String.Format(NativeGenerator.GenericDocFormat, i, i.GetOrdinalSuffix()));
+			strBuildArgType.Append(String.Format(NativeGenerator.ArgTypeFormat, i));
+			strBuildCons.AppendLine(String.Format(NativeGenerator.ConstraintFormat, i));
+			strBuildArg.Append(String.Format(NativeGenerator.ArgumentFormat, i));
 
 			StringBuilder strBuildSource = new();
 
-			strBuildSource.AppendLine(NativeGenerator.sourceNamespace);
+			strBuildSource.AppendLine(NativeGenerator.SourceNamespace);
 			strBuildSource.AppendLine(method.Documentation);
 			strBuildSource.AppendLine(strBuildDoc.ToString());
 			strBuildSource.Append(method.DefinitionPrefix);

@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache : IStringFeature
+	private sealed partial record EnvironmentCache : IStringFeature
 	{
 		public JStringObject Create(ReadOnlySpan<Char> data)
 		{
@@ -42,18 +42,6 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, false);
 		}
-		public INativeMemoryAdapter GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind)
-		{
-			ValidationUtilities.ThrowIfDummy(jString);
-			ValidationUtilities.ThrowIfDefault(jString);
-			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, default);
-		}
-		public INativeMemoryAdapter GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
-		{
-			ValidationUtilities.ThrowIfDummy(jString);
-			ValidationUtilities.ThrowIfDefault(jString);
-			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, true);
-		}
 		public ReadOnlyValPtr<Char> GetSequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
 			GetStringCharsDelegate getStringChars = this.GetDelegate<GetStringCharsDelegate>();
@@ -62,6 +50,12 @@ partial class JEnvironment
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
 		}
+		public INativeMemoryAdapter GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind)
+		{
+			ValidationUtilities.ThrowIfDummy(jString);
+			ValidationUtilities.ThrowIfDefault(jString);
+			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, default);
+		}
 		public ReadOnlyValPtr<Byte> GetUtf8Sequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
 			GetStringUtfCharsDelegate getStringUtf8Chars = this.GetDelegate<GetStringUtfCharsDelegate>();
@@ -69,6 +63,12 @@ partial class JEnvironment
 			if (result == ReadOnlyValPtr<Byte>.Zero) this.CheckJniError();
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
+		}
+		public INativeMemoryAdapter GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
+		{
+			ValidationUtilities.ThrowIfDummy(jString);
+			ValidationUtilities.ThrowIfDefault(jString);
+			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, true);
 		}
 		public ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef)
 		{

@@ -30,7 +30,6 @@ public partial class JStringObject
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
 	internal JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
 	{
-		if (this._length is not null) return;
 		this._length ??= this.Environment.StringFeature.GetLength(jGlobal);
 		this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(jGlobal);
 	}

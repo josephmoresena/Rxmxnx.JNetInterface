@@ -2,6 +2,10 @@ namespace Rxmxnx.JNetInterface.Native;
 
 internal partial class JPrimitiveObject
 {
+	/// <inheritdoc cref="JPrimitiveObject.AsSpan()"/>
+	/// <param name="jPrimitive">A <see cref="JPrimitiveObject"/> instance.</param>
+	internal static ReadOnlySpan<Byte> GetSpan(JPrimitiveObject jPrimitive) => jPrimitive.AsSpan();
+
 	/// <summary>
 	/// Determines whether a specified <see cref="JPrimitiveObject"/> and a <see cref="JPrimitiveObject"/> instance
 	/// have the same value.

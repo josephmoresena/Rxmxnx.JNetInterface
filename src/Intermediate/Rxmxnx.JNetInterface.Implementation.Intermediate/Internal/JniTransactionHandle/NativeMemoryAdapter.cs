@@ -61,7 +61,7 @@ internal partial struct JniTransactionHandle
 		}
 
 		/// <inheritdoc/>
-		public virtual void Release(JReleaseMode mode) => this.Dispose();
+		public virtual void Release(JReleaseMode mode = JReleaseMode.Free) => this.Dispose();
 
 		/// <summary>
 		/// Activates current memory adapter.

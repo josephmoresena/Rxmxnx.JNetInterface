@@ -34,16 +34,15 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 	/// </returns>
 	/// <exception cref="ArgumentException"><paramref name="obj"/> is not the same type as this instance.</exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Int32 Compare(TPrimitive primitive, Object? obj)
+	private protected static Int32 Compare(TPrimitive primitive, Object? obj)
 		=> obj switch
 		{
 			TPrimitive p => primitive.CompareTo(p),
 			TValue v => primitive.Value.CompareTo(v),
 			IWrapper<TPrimitive> wp => primitive.CompareTo(wp.Value),
-			IComparable<TPrimitive> cp => -cp.CompareTo(primitive),
 			IWrapper<TValue> wv => primitive.CompareTo(wv.Value),
+			IComparable<TPrimitive> cp => -cp.CompareTo(primitive),
 			IComparable<TValue> cv => -cv.CompareTo(primitive.Value),
-			IPrimitiveType ip => -ip.CompareTo(primitive.Value),
 			IComparable c => -c.CompareTo(primitive.Value),
 			_ => primitive.Value.CompareTo(obj),
 		};
@@ -56,16 +55,17 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 	/// <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean Equals(TPrimitive primitive, Object? obj)
+	private protected static Boolean Equals(TPrimitive primitive, Object? obj)
 		=> obj switch
 		{
 			TPrimitive p => primitive.Equals(p),
 			TValue v => primitive.Value.Equals(v),
+			IPrimitiveType pt => primitive.Equals(pt),
+			IWrapper<TValue> wv => primitive.Equals(wv.Value),
 			IWrapper<TPrimitive> wp => primitive.Equals(wp.Value),
 			IEquatable<TPrimitive> ep => ep.Equals(primitive),
-			IWrapper<TValue> wv => primitive.Equals(wv.Value),
 			IEquatable<TValue> ev => ev.Equals(primitive.Value),
-			IPrimitiveType ip => ip.CompareTo(primitive.Value) == 0,
+			IComparable c => c.CompareTo(primitive.Value) == 0,
 			_ => primitive.Value.Equals(obj),
 		};
 }

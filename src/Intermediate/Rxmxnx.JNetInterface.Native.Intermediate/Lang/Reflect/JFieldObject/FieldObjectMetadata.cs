@@ -6,7 +6,7 @@ public partial class JFieldObject
 	/// This record stores the metadata of a <see cref="JFieldObject"/> in order to create a
 	/// <see cref="JGlobalBase"/> instance.
 	/// </summary>
-	private record FieldObjectMetadata : ObjectMetadata
+	private sealed record FieldObjectMetadata : ObjectMetadata
 	{
 		/// <summary>
 		/// Field definition.

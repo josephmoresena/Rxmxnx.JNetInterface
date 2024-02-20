@@ -68,8 +68,8 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 			return this.Value;
 		if (this._value is not null)
 			return this._value[startIndex..count];
-		Int32 lenght = count - startIndex;
-		return String.Create(lenght, (this, startIndex), JStringObject.GetChars);
+		Int32 length = count - startIndex;
+		return String.Create(length, (this, startIndex), JStringObject.GetChars);
 	}
 	/// <summary>
 	/// Creates an <see cref="CString"/> containing a copy of the UTF-8 chars on the current
@@ -93,12 +93,15 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// </returns>
 	public CString GetUtf8Chars(Int32 startIndex, Int32 count)
 	{
-		Int32 lenght = count - startIndex;
-		Byte[] utf8Data = new Byte[lenght + 1];
+		Int32 length = count - startIndex;
+		Byte[] utf8Data = new Byte[length + 1];
 		IEnvironment env = this.Environment;
 		env.StringFeature.GetCopyUtf8(this, utf8Data.AsMemory()[..^1], startIndex);
 		return utf8Data;
 	}
+
+	/// <inheritdoc/>
+	public override Int32 GetHashCode() => this.GetStringHashCode() ?? base.GetHashCode();
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

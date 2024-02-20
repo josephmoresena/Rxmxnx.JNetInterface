@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private partial record EnvironmentCache
+	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
 		/// Maximum amount of bytes usable on stack.
@@ -186,6 +186,34 @@ partial class JEnvironment
 		};
 
 		/// <summary>
+		/// Retrieves the <see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.
+		/// </summary>
+		/// <param name="returnType">A <see cref="JClassObject"/> instance.</param>
+		/// <returns><see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.</returns>
+		private static IReflectionMetadata? GetReflectionMetadata(JClassObject returnType)
+		{
+			using JStringObject className = InternalFunctionCache.Instance.GetClassName(returnType);
+			using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
+			return MetadataHelper.GetReflectionMetadata(mem.Values);
+		}
+		/// <summary>
+		/// Retrieves a <see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.
+		/// </summary>
+		/// <param name="parameterTypes">A <see cref="JClassObject"/> list.</param>
+		/// <returns><see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.</returns>
+		private static JArgumentMetadata[] GetCallMetadata(IReadOnlyList<JClassObject> parameterTypes)
+		{
+			JArgumentMetadata[] args = new JArgumentMetadata[parameterTypes.Count];
+			for (Int32 i = 0; i < parameterTypes.Count; i++)
+			{
+				using JClassObject jClass = parameterTypes[i];
+				using JStringObject className = InternalFunctionCache.Instance.GetClassName(jClass);
+				using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
+				args[i] = MetadataHelper.GetReflectionMetadata(mem.Values)!.ArgumentMetadata;
+			}
+			return args;
+		}
+		/// <summary>
 		/// Retrieves JNI version for <paramref name="envRef"/>.
 		/// </summary>
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
@@ -239,5 +267,13 @@ partial class JEnvironment
 			ValPtr<T> ptr = (ValPtr<T>)stackSpan.GetUnsafeIntPtr();
 			return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
 		}
+		/// <summary>
+		/// Creates a <see cref="IFixedContext{T}.IDisposable"/> instance from an span created in heap.
+		/// </summary>
+		/// <typeparam name="T">Type of elements in span.</typeparam>
+		/// <param name="count">Number of allocated elements.</param>
+		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
+		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(Int32 count) where T : unmanaged
+			=> count == 0 ? ValPtr<T>.Zero.GetUnsafeFixedContext(0) : new T[count].AsMemory().GetFixedContext();
 	}
 }

@@ -19,16 +19,6 @@ internal static class ValidationUtilities
 			throw new InsufficientMemoryException("The requested value can't be contained in a JValue.");
 	}
 	/// <summary>
-	/// Throws a <see cref="NotImplementedException"/> for invalid <see cref="INumberBase{TSelf}"/> implementations.
-	/// </summary>
-	/// <typeparam name="TNumber">The type parameter of <see cref="INumberBase{TValue}"/>.</typeparam>
-	/// <param name="result">The output value.</param>
-	/// <returns>Always throws an exception.</returns>
-	/// <exception cref="NotImplementedException">Always thrown.</exception>
-	public static Boolean ThrowInvalidNumberBaseImplementation<TNumber>(out TNumber result)
-		where TNumber : INumberBase<TNumber>
-		=> throw new NotImplementedException("Protected methods on INumberBase<> could not be implemented.");
-	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> with a specified message in accordance with
 	/// the <paramref name="interfaceName"/>.
 	/// </summary>
