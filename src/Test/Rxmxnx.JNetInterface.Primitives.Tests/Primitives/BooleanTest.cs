@@ -25,6 +25,9 @@ public sealed class BooleanTest : PrimitiveTestBase
 		Assert.True(UnicodeClassNames.BooleanPrimitive().SequenceEqual(metadata.ClassName));
 		Assert.Equal(PrimitiveSignatures.BooleanSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.BooleanSignatureChar, metadata.Signature[0]);
+		
+		Assert.Equal(ClassNames.BooleanObject, metadata.WrapperClassName.ToString());
+		Assert.True(UnicodeClassNames.BooleanObject().SequenceEqual(metadata.WrapperClassName));
 	}
 
 	private static void TryFormatTest(JBoolean primitive0)

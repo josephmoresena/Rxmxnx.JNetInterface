@@ -47,13 +47,16 @@ partial struct {1} : IBinaryInteger<{1}>, {4}<{1}>
 		=> IPrimitiveIntegerType<{0}, {1}>.TrailingZeroCount(value._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static {0} operator <<({0} value, Int32 shiftAmount) => ({1})(value._value << shiftAmount);
+	public static {0} operator <<({0} value, Int32 shiftAmount) 
+		=> IPrimitiveIntegerType<{0}, {1}>.LeftShift(value._value, shiftAmount);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static {0} operator >>({0} value, Int32 shiftAmount) => ({1})(value._value >> shiftAmount);
+	public static {0} operator >>({0} value, Int32 shiftAmount) 
+		=> IPrimitiveIntegerType<{0}, {1}>.RightShift(value._value, shiftAmount);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static {0} operator >>>({0} value, Int32 shiftAmount) => ({1})(value._value << shiftAmount);";
+	public static {0} operator >>>({0} value, Int32 shiftAmount) 
+		=> IPrimitiveIntegerType<{0}, {1}>.UnsignedRightShift(value._value, shiftAmount); ";
 	private const String BinaryCharFormattable = @"
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static JChar IBinaryInteger<JChar>.PopCount(JChar value) => IPrimitiveIntegerType<JChar, Char>.PopCount(value._value);
