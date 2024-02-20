@@ -1,12 +1,11 @@
 namespace Rxmxnx.JNetInterface.Types;
 
 internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
+	where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive, TValue>, IComparable<TPrimitive>,
+	IEquatable<TPrimitive>, IPrimitiveEquatable
+	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryNumber<TValue>,
+	IMinMaxValue<TValue>
 {
-	/// <inheritdoc cref="INumberBase{TSelf}.One"/>
-	public static readonly TPrimitive One = IPrimitiveNumericType<TPrimitive, TValue>.GetOne();
-	/// <inheritdoc cref="INumberBase{TSelf}.Zero"/>
-	public static TPrimitive Zero = IPrimitiveNumericType<TPrimitive, TValue>.GetZero();
-
 	/// <inheritdoc cref="INumberBase{TSelf}.MaxMagnitudeNumber(TSelf, TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static TPrimitive MaxMagnitudeNumber(in TValue x, in TValue y)
@@ -52,41 +51,5 @@ internal partial interface IPrimitiveNumericType<TPrimitive, TValue>
 	{
 		Unsafe.SkipInit(out result);
 		return TValue.TryParse(s, style, provider, out Unsafe.As<TPrimitive, TValue>(ref result));
-	}
-	/// <inheritdoc cref="INumberBase{TSelf}.CreateChecked{TOther}(TOther)"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static TPrimitive CreateChecked<TOther>(TOther value) where TOther : INumberBase<TOther>
-	{
-		TValue result = TValue.CreateChecked(value);
-		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
-	}
-
-	/// <inheritdoc cref="INumberBase{TSelf}.CreateSaturating{TOther}(TOther)"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static TPrimitive CreateSaturating<TOther>(TOther value) where TOther : INumberBase<TOther>
-	{
-		TValue result = TValue.CreateSaturating(value);
-		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
-	}
-
-	/// <inheritdoc cref="INumberBase{TSelf}.CreateTruncating{TOther}(TOther)"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static TPrimitive CreateTruncating<TOther>(TOther value) where TOther : INumberBase<TOther>
-	{
-		TValue result = TValue.CreateTruncating(value);
-		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
-	}
-
-	/// <inheritdoc cref="INumberBase{TSelf}.One"/>
-	private static TPrimitive GetOne()
-	{
-		TValue result = TValue.One;
-		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
-	}
-	/// <inheritdoc cref="INumberBase{TSelf}.Zero"/>
-	private static TPrimitive GetZero()
-	{
-		TValue result = TValue.Zero;
-		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
 	}
 }

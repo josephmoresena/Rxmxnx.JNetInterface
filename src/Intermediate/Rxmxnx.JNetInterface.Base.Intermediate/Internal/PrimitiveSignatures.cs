@@ -8,21 +8,21 @@ internal static class PrimitiveSignatures
 	/// <inheritdoc cref="VoidSignature"/>
 	public const Char VoidSignatureChar = 'V';
 	/// <inheritdoc cref="BooleanSignature"/>
-	public const Char JBooleanSignatureChar = 'Z';
+	public const Char BooleanSignatureChar = 'Z';
 	/// <inheritdoc cref="ByteSignature"/>
-	public const Char JByteSignatureChar = 'B';
+	public const Char ByteSignatureChar = 'B';
 	/// <inheritdoc cref="CharSignature"/>
 	public const Char JCharSignatureChar = 'C';
 	/// <inheritdoc cref="DoubleSignature"/>
-	public const Char JDoubleSignatureChar = 'D';
+	public const Char DoubleSignatureChar = 'D';
 	/// <inheritdoc cref="FloatSignature"/>
-	public const Char JFloatSignatureChar = 'F';
+	public const Char FloatSignatureChar = 'F';
 	/// <inheritdoc cref="IntSignature"/>
-	public const Char JIntSignatureChar = 'I';
+	public const Char IntSignatureChar = 'I';
 	/// <inheritdoc cref="LongSignature"/>
-	public const Char JLongSignatureChar = 'J';
+	public const Char LongSignatureChar = 'J';
 	/// <inheritdoc cref="ShortSignature"/>
-	public const Char JShortSignatureChar = 'S';
+	public const Char ShortSignatureChar = 'S';
 
 	/// <summary>
 	/// JNI signature for primitive <c>void</c>.

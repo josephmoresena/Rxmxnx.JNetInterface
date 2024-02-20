@@ -6,7 +6,7 @@ public sealed class BooleanTest : PrimitiveTestBase
 	[Fact]
 	internal void Test()
 	{
-		PrimitiveTestBase.TestSpanParseable<JBoolean, Boolean>();
+		PrimitiveTestBase.SpanParseableTest<JBoolean, Boolean>();
 		Boolean value = PrimitiveTestBase.Fixture.Create<Boolean>();
 		JBoolean primitive = value;
 

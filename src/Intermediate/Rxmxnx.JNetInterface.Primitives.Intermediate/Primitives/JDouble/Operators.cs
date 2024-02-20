@@ -37,6 +37,7 @@ public readonly partial struct JDouble : IPrimitiveEquatable
 	public static implicit operator JFloat(JDouble value) => (Single)value._value;
 
 	static explicit IPrimitiveNumericType<JDouble>.operator JFloat(JDouble jPrimitive) => jPrimitive;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JDouble>.operator JDouble(JDouble jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JDouble>.operator SByte(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<SByte>(jPrimitive._value);

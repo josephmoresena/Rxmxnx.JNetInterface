@@ -36,6 +36,7 @@ public readonly partial struct JByte : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JByte"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JByte value) => value._value;
 
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JByte>.operator JByte(JByte jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JByte>.operator JDouble(JByte jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JByte>.operator JFloat(JByte jPrimitive) => jPrimitive;
