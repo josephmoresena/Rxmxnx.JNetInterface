@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests.Primitives;
 
 [ExcludeFromCodeCoverage]
-public sealed class ShortSignature : PrimitiveTestBase
+public sealed class ShortTest : PrimitiveTestBase
 {
 	[Fact]
 	internal void Test()
@@ -16,7 +16,7 @@ public sealed class ShortSignature : PrimitiveTestBase
 		PrimitiveTestBase.SpanFormattableTest<JShort, Int16>(primitive);
 		Assert.IsType<JPrimitiveObject<JShort>>((JObject)primitive);
 		foreach (Int16 newValue in PrimitiveTestBase.Fixture.CreateMany<Int16>(10))
-			ShortSignature.EqualityTest(primitive, newValue);
+			ShortTest.EqualityTest(primitive, newValue);
 	}
 	[Fact]
 	internal void MetadataTest()
