@@ -29,7 +29,8 @@ public readonly partial struct JDouble : IPrimitiveEquatable
 	/// Defines an explicit conversion of a given <see cref="JDouble"/> to <see cref="JDouble"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="JDouble"/> to explicitly convert.</param>
-	public static explicit operator JChar(JDouble value) => NativeUtilities.AsBytes(value).ToValue<JChar>();
+	public static explicit operator JChar(JDouble value)
+		=> (JChar)IPrimitiveNumericType.GetIntegerValue<Int16>(value._value);
 	/// <summary>
 	/// Defines an implicit conversion of a given <see cref="JDouble"/> to <see cref="JFloat"/>.
 	/// </summary>
