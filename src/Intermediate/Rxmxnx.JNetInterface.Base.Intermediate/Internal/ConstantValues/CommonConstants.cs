@@ -20,10 +20,15 @@ internal static class CommonConstants
 	public const String CheckIdS2234 = "S2234:Arguments should be passed in the same order as the method parameters";
 	public const String CheckIdS4035 = "S4035:Classes implementing \"IEquatable<T>\" should be sealed";
 	public const String CheckIdS4136 = "S4136:Method overloads should be grouped together";
+	public const String CheckIdS2953 = "S2953:Methods named \"Dispose\" should implement \"IDisposable.Dispose\"";
 	public const String CheckIdS3218 =
-		"S3218:Inner class members should not shadow outer class \"static\" or type members\n";
+		"S3218:Inner class members should not shadow outer class \"static\" or type members";
+	public const String CheckIdS3963 = "S3963:\"static\" fields should be initialized inline";
+	public const String CheckIdS3011 =
+		"S3011:Reflection should not be used to increase accessibility of classes, methods, or fields";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String AbstractProxyJustification = "This object is an abstract proxy.";
+	public const String JniThreadRequiredJustification = "Global object disposing requires a JNI thread.";
 	public const String JavaInheritanceJustification =
 		"Any JReferenceObject type tree of classes is inherently longer than a normal C# class.";
 	public const String ReferenceableFieldJustification = "Field value can be set using a managed reference.";
@@ -32,4 +37,8 @@ internal static class CommonConstants
 	public const String PublicInitPrivateSetJustification = "The property must be publicly 'init' but privately 'set'.";
 	public const String NoMethodOverloadingJustification =
 		"Homonymous functions are different and should not be considered overloading.";
+	public const String ReflectionFreeModeJustification =
+		"Reflection use should be avoidable in NativeAOT reflection free mode.";
+	public const String ReflectionPrivateUseJustification =
+		"Reflection use is limited privately and is used only to avoid infinity recursive initialization type.";
 }

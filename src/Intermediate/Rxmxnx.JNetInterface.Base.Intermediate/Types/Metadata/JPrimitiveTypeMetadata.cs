@@ -112,4 +112,7 @@ public abstract record JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetada
 	private protected JPrimitiveTypeMetadata(Type underlineType, ReadOnlySpan<Byte> signature,
 		ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(
 		NativeUtilities.SizeOf<TPrimitive>(), underlineType, signature, className, wrapperClassName) { }
+
+	/// <inheritdoc/>
+	public override String ToString() => base.ToString();
 }

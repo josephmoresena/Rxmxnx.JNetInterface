@@ -22,7 +22,7 @@ public abstract partial class JInterfaceObject : JLocalObject, IInterfaceType
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	internal JInterfaceObject(JLocalObject jLocal) : base(
+	private protected JInterfaceObject(JLocalObject jLocal) : base(
 		jLocal.ForExternalUse(out JClassObject jClass, out ObjectMetadata metadata), jClass)
 		=> this.ObjectMetadata = metadata;
 	/// <summary>
@@ -30,7 +30,7 @@ public abstract partial class JInterfaceObject : JLocalObject, IInterfaceType
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	internal JInterfaceObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
+	private protected JInterfaceObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
 		=> this.ObjectMetadata = jGlobal.ObjectMetadata;
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>

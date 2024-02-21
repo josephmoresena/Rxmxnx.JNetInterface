@@ -4,6 +4,10 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This class represents a <see cref="JObject"/> instance which may remain valid across different
 /// threads.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
+                 Justification = CommonConstants.JniThreadRequiredJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2953,
+                 Justification = CommonConstants.JniThreadRequiredJustification)]
 public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 {
 	/// <summary>
@@ -92,7 +96,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// Indicates whether this method was called from the <see cref="IDisposable.Dispose"/> method.
 	/// </param>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	protected virtual void Dispose(Boolean disposing, IEnvironment env)
+	private protected virtual void Dispose(Boolean disposing, IEnvironment env)
 	{
 		if (this._isDisposed) return;
 

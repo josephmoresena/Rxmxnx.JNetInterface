@@ -117,7 +117,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<IEnvironment>, IEqu
 		{
 			this._cache.CheckJniError();
 			result = func();
-			localResult = localFrame.GetLocalResult(result, out globalRef);
+			localResult = localFrame.GetGlobalResult(result, out globalRef);
 		}
 		this._cache.CreateLocalRef(globalRef, localResult);
 		return result;
@@ -131,7 +131,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<IEnvironment>, IEqu
 		{
 			this._cache.CheckJniError();
 			result = func(state);
-			localResult = localFrame.GetLocalResult(result, out globalRef);
+			localResult = localFrame.GetGlobalResult(result, out globalRef);
 		}
 		this._cache.CreateLocalRef(globalRef, localResult);
 		return result;

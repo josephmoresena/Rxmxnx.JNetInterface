@@ -34,6 +34,42 @@ public partial class JLocalObject : ILocalObject
 		ValidationUtilities.ThrowIfInvalidCast<TDataType>(env.ClassFeature.IsAssignableTo<TDataType>(jObject));
 		return jObject;
 	}
+	/// <summary>
+	/// Retrieves a <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="dispose">
+	/// Indicates whether current instance should be disposed after casting.
+	/// </param>
+	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
+	private static TReference CastTo<TReference>(JLocalObject jLocal, Boolean dispose)
+		where TReference : JLocalObject, IReferenceType<TReference>
+	{
+		IEnvironment env = jLocal.Lifetime.Environment;
+		if (jLocal is TReference result) return result;
+		if (JLocalObject.IsClassType<TReference>())
+		{
+			result = (TReference)(Object)env.ClassFeature.AsClassObject(jLocal);
+		}
+		else
+		{
+			JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
+			if (!jLocal.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
+			{
+				result = (TReference)metadata.ParseInstance(jLocal);
+			}
+			else
+			{
+				JClassObject jClass = env.ClassFeature.AsClassObject(jLocal);
+				result = JLocalObject.IsObjectType<TReference>() ?
+					(TReference)(Object)jClass :
+					(TReference)metadata.ParseInstance(jClass);
+			}
+		}
+		if (dispose) jLocal.Dispose();
+		return result;
+	}
 
 	static JLocalObject IReferenceType<JLocalObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);

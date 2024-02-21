@@ -40,12 +40,6 @@ public partial interface IReferenceType
 		}
 
 		/// <summary>
-		/// Private constructor.
-		/// </summary>
-		/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> instance.</param>
-		private ClassInitializer(InternalClassInitializer initializer) => this._instance = initializer;
-
-		/// <summary>
 		/// Retrieves an instance with <typeparamref name="TClass"/> class instance.
 		/// </summary>
 		/// <typeparam name="TClass">Datatype class</typeparam>

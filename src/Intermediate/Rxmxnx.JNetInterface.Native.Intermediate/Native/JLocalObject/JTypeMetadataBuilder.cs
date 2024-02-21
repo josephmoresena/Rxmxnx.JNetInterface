@@ -86,6 +86,8 @@ public partial class JLocalObject
 	/// <see cref="JClassTypeMetadata"/> class builder.
 	/// </summary>
 	/// <typeparam name="TClass">Type of <c/>java.lang.Object<c/> class.</typeparam>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
+	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	protected ref partial struct JTypeMetadataBuilder<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass>
 		where TClass : JLocalObject, IClassType<TClass>

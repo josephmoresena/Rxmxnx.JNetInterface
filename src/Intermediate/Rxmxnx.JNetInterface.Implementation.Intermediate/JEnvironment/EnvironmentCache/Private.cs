@@ -112,5 +112,23 @@ partial class JEnvironment
 			this._usedStackBytes -= requiredBytes;
 			return false;
 		}
+		/// <summary>
+		/// Creates JNI exception from <paramref name="throwableRef"/>.
+		/// </summary>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <returns>A <see cref="JThrowableException"/> exception.</returns>
+		private JThrowableException CreateJniException(JThrowableLocalRef throwableRef)
+		{
+			using LocalFrame _ = new(this._env, 10);
+			JClassLocalRef classRef = this._env.GetObjectClass(throwableRef.Value);
+			JClassObject jClass = this.AsClassObject(classRef);
+			String message = EnvironmentCache.GetThrowableMessage(jClass, throwableRef);
+			ThrowableObjectMetadata objectMetadata = new(jClass, message);
+			JClassTypeMetadata throwableMetadata = MetadataHelper.GetMetadata(jClass.Hash) as JClassTypeMetadata ??
+				(JClassTypeMetadata)MetadataHelper.GetMetadata<JThrowableObject>();
+			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
+			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
+			return throwableMetadata.CreateException(jGlobalThrowable, message)!;
+		}
 	}
 }

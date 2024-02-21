@@ -60,7 +60,7 @@ partial class JEnvironment
 		/// <param name="result">A <typeparamref name="TResult"/> instance.</param>
 		/// <param name="globalRef">Output. A temporal <see cref="JGlobalRef"/> reference.</param>
 		/// <returns>A <see cref="JLocalObject"/> instance.</returns>
-		public JLocalObject? GetLocalResult<TResult>(TResult result, out JGlobalRef globalRef)
+		public JLocalObject? GetGlobalResult<TResult>(TResult result, out JGlobalRef globalRef)
 		{
 			globalRef = default;
 			if (result is not JLocalObject { IsDefault: false, } jLocal || jLocal.Lifetime.HasValidGlobal<JGlobal>())

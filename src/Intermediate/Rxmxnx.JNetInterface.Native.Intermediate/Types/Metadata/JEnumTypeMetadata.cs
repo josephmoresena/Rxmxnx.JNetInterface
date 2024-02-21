@@ -36,4 +36,7 @@ public abstract record JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum 
 	/// <inheritdoc/>
 	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
+
+	/// <inheritdoc/>
+	public override String ToString() => base.ToString();
 }
