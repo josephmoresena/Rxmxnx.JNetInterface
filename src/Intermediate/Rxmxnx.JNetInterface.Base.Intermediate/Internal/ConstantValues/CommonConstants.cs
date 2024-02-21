@@ -26,6 +26,9 @@ internal static class CommonConstants
 	public const String CheckIdS3963 = "S3963:\"static\" fields should be initialized inline";
 	public const String CheckIdS3011 =
 		"S3011:Reflection should not be used to increase accessibility of classes, methods, or fields";
+	public const String CheckIdS2743 =
+		"S2743:A static field in a generic type is not shared among instances of different close constructed types";
+	public const String CheckIdS1006 = "S1006:Use the default parameter value defined in the overridden method";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String AbstractProxyJustification = "This object is an abstract proxy.";
 	public const String JniThreadRequiredJustification = "Global object disposing requires a JNI thread.";
@@ -41,4 +44,7 @@ internal static class CommonConstants
 		"Reflection use should be avoidable in NativeAOT reflection free mode.";
 	public const String ReflectionPrivateUseJustification =
 		"Reflection use is limited privately and is used only to avoid infinity recursive initialization type.";
+	public const String StaticAbstractPropertyUseJustification =
+		"There is no static field, but abstract/virtual property.";
+	public const String DefaultValueTypeJustification = "Default value for ValueType is not null.";
 }
