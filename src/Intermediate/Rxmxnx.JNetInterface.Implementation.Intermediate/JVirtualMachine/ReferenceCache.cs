@@ -22,7 +22,7 @@ public partial class JVirtualMachine
 				disposable.Dispose();
 		}
 
-		public override JVirtualMachine Get(JVirtualMachineRef reference, out Boolean isNew, Boolean arg = default)
+		public override JVirtualMachine Get(JVirtualMachineRef reference, out Boolean isNew, Boolean arg = false)
 		{
 			JVirtualMachine result = base.Get(reference, out isNew, arg);
 			if (isNew) result.InitializeClasses();
