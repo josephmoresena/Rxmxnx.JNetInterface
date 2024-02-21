@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net8.0": {
+      "Microsoft.DotNet.ILCompiler": {
+        "type": "Direct",
+        "requested": "[8.0.1, )",
+        "resolved": "8.0.1",
+        "contentHash": "vEmBtYRsH2gpnUJ9p7ElgB2UZSx5+CF2nHVr2QJ/3kzlfAYBxqXMx3VmQcxOcrsDEuF4/n1VH95qobrj8xnPdw=="
+      },
+      "Microsoft.NET.ILLink.Tasks": {
+        "type": "Direct",
+        "requested": "[8.0.1, )",
+        "resolved": "8.0.1",
+        "contentHash": "ADdJXuKNjwZDfBmybMnpvwd5CK3gp92WkWqqeQhW4W+q4MO3Qaa9QyW2DcFLAvCDMcCWxT5hRXqGdv13oon7nA=="
+      },
+      "Rxmxnx.PInvoke.Extensions": {
+        "type": "Transitive",
+        "resolved": "1.2.1",
+        "contentHash": "zvveE0kp8MQxUUs3LqqoAy0RZog9y87qtY2kdIQDsNuqS2p/b/DfVeRRBcMnQONZ3cVlDifQP8wRkJVJtQKEBg=="
+      },
+      "rxmxnx.jnetinterface.base.intermediate": {
+        "type": "Project",
+        "dependencies": {
+          "Rxmxnx.PInvoke.Extensions": "[*, )"
+        }
+      },
+      "rxmxnx.jnetinterface.extensions.intermediate": {
+        "type": "Project",
+        "dependencies": {
+          "Rxmxnx.JNetInterface.Native.Intermediate": "[1.0.0, )",
+          "Rxmxnx.JNetInterface.Primitives.Intermediate": "[1.0.0, )"
+        }
+      },
+      "rxmxnx.jnetinterface.implementation.intermediate": {
+        "type": "Project",
+        "dependencies": {
+          "Rxmxnx.JNetInterface.Extensions.Intermediate": "[1.0.0, )"
+        }
+      },
+      "rxmxnx.jnetinterface.native.intermediate": {
+        "type": "Project",
+        "dependencies": {
+          "Rxmxnx.JNetInterface.Base.Intermediate": "[1.0.0, )"
+        }
+      },
+      "rxmxnx.jnetinterface.primitives.intermediate": {
+        "type": "Project",
+        "dependencies": {
+          "Rxmxnx.JNetInterface.Base.Intermediate": "[1.0.0, )"
+        }
+      }
+    }
+  }
+}
