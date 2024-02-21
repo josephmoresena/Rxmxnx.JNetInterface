@@ -4,6 +4,8 @@ namespace Rxmxnx.JNetInterface.Types;
 /// This interface exposes an object that represents a java primitive wrapper class type instance.
 /// </summary>
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2743,
+                 Justification = CommonConstants.StaticAbstractPropertyUseJustification)]
 public interface IPrimitiveWrapperType<TWrapper> : IClassType<TWrapper>
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
 {

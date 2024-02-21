@@ -22,6 +22,9 @@ public partial class JVirtualMachine
 				disposable.Dispose();
 		}
 
+		/// <inheritdoc/>
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1006,
+		                 Justification = CommonConstants.DefaultValueTypeJustification)]
 		public override JVirtualMachine Get(JVirtualMachineRef reference, out Boolean isNew, Boolean arg = false)
 		{
 			JVirtualMachine result = base.Get(reference, out isNew, arg);
