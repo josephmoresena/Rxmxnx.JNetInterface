@@ -37,4 +37,7 @@ public abstract record JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetada
 	/// <inheritdoc/>
 	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, ReadOnlySpan<Byte> signature) : base(
 		interfaceName, signature) { }
+
+	/// <inheritdoc/>
+	public override String ToString() => base.ToString();
 }
