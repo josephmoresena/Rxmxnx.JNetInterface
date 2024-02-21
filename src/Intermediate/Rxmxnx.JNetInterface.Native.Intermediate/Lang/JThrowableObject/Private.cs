@@ -13,7 +13,7 @@ public partial class JThrowableObject
 	/// <returns>Throwable message.</returns>
 	private String GetMessage()
 	{
-		using JStringObject message = this.Environment.Functions.GetMessage(this);
+		using JStringObject message = this.Environment.FunctionSet.GetMessage(this);
 		return message.Value;
 	}
 
@@ -24,7 +24,7 @@ public partial class JThrowableObject
 	private static JStackTraceInfo[] GetStackTraceInfo(JThrowableObject jThrowable)
 	{
 		IEnvironment env = jThrowable.Environment;
-		using JArrayObject<JStackTraceElementObject> stackTrace = env.Functions.GetStackTrace(jThrowable);
+		using JArrayObject<JStackTraceElementObject> stackTrace = env.FunctionSet.GetStackTrace(jThrowable);
 		return JThrowableObject.GetStackTraceInfo(stackTrace!);
 	}
 	/// <summary>

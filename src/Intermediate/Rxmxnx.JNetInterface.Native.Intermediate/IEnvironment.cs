@@ -49,7 +49,7 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <summary>
 	/// Function cache.
 	/// </summary>
-	internal FunctionCache Functions { get; }
+	internal NativeFunctionSet FunctionSet { get; }
 	/// <summary>
 	/// Indicates whether current instance is not a proxy.
 	/// </summary>

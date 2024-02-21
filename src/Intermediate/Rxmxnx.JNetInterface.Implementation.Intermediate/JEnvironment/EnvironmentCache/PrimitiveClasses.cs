@@ -35,7 +35,7 @@ partial class JEnvironment
 				_ => this.GetClass<JVoidObject>(),
 			};
 			JObjectLocalRef localRef =
-				this.GetStaticObjectField(wrapperClass, InternalFunctionCache.PrimitiveTypeDefinition);
+				this.GetStaticObjectField(wrapperClass, NativeFunctionSetImpl.PrimitiveTypeDefinition);
 			return JClassLocalRef.FromReference(in localRef);
 		}
 

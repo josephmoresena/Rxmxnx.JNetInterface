@@ -32,7 +32,7 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 			IEnvironment env = this.Environment;
 			if (!String.IsNullOrWhiteSpace(this._classHash))
 				return env.ClassFeature.GetClass(this._classHash);
-			JClassObject result = env.Functions.GetDeclaringClass(this);
+			JClassObject result = env.FunctionSet.GetDeclaringClass(this);
 			this._classHash = result.Hash;
 			return result;
 		}

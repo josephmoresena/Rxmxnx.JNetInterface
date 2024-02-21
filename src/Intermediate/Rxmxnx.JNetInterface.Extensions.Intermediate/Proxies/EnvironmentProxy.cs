@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native.Dummies;
+namespace Rxmxnx.JNetInterface.Native.Proxies;
 
 /// <summary>
 /// This object exposes a JNI proxy instance.

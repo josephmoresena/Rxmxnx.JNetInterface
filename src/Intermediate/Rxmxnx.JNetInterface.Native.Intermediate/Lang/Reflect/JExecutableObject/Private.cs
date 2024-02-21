@@ -26,9 +26,9 @@ public partial class JExecutableObject : ILocalObject
 	private JCallDefinition GetCallDefinition()
 	{
 		IEnvironment env = this.Environment;
-		using JStringObject memberName = env.Functions.GetName(this);
-		using JArrayObject<JClassObject> parameterTypes = env.Functions.GetParameterTypes(this);
-		using JClassObject? returnType = env.Functions.GetReturnType(this);
+		using JStringObject memberName = env.FunctionSet.GetName(this);
+		using JArrayObject<JClassObject> parameterTypes = env.FunctionSet.GetParameterTypes(this);
+		using JClassObject? returnType = env.FunctionSet.GetReturnType(this);
 		return env.AccessFeature.GetDefinition(memberName, parameterTypes, returnType);
 	}
 	/// <summary>

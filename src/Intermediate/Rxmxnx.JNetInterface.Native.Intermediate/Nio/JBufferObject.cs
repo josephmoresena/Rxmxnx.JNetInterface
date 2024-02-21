@@ -8,14 +8,14 @@ public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>, IL
 	/// <summary>
 	/// Indicates whether current instance is a direct buffer.
 	/// </summary>
-	public Boolean IsDirect => this._isDirect ??= this.Environment.Functions.IsDirectBuffer(this);
+	public Boolean IsDirect => this._isDirect ??= this.Environment.FunctionSet.IsDirectBuffer(this);
 	/// <summary>
 	/// Buffer's capacity.
 	/// </summary>
 	public Int64 Capacity
 		=> this._capacity ??= this.IsDirect ?
 			this.Environment.NioFeature.GetDirectCapacity(this) :
-			this.Environment.Functions.BufferCapacity(this);
+			this.Environment.FunctionSet.BufferCapacity(this);
 
 	/// <summary>
 	/// Direct buffer address.

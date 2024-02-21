@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial class InternalFunctionCache
+internal partial class NativeFunctionSetImpl
 {
 	/// <summary>
 	/// <c>Enum.name()</c> definition.

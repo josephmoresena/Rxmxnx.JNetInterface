@@ -25,8 +25,8 @@ public partial class JClassObject
 		using JClassObject tempClass = new(jClassClass, classRef);
 		try
 		{
-			isPrimitive = env.Functions.IsPrimitiveClass(tempClass);
-			return env.Functions.GetClassName(tempClass);
+			isPrimitive = env.FunctionSet.IsPrimitiveClass(tempClass);
+			return env.FunctionSet.GetClassName(tempClass);
 		}
 		finally
 		{

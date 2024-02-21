@@ -32,7 +32,7 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 			IEnvironment env = this.Environment;
 			if (!String.IsNullOrWhiteSpace(this._classHash))
 				return env.ClassFeature.GetClass(this._classHash);
-			JClassObject result = env.Functions.GetDeclaringClass(this);
+			JClassObject result = env.FunctionSet.GetDeclaringClass(this);
 			this._classHash = result.Hash;
 			return result;
 		}

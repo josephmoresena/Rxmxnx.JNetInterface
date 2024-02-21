@@ -47,7 +47,7 @@ public partial class JStackTraceElementObject
 	/// <returns>The fully qualified name of the class containing the execution point.</returns>
 	private String GetClassName()
 	{
-		using JStringObject className = this.Environment.Functions.GetClassName(this);
+		using JStringObject className = this.Environment.FunctionSet.GetClassName(this);
 		return className.Value;
 	}
 	/// <summary>
@@ -56,7 +56,7 @@ public partial class JStackTraceElementObject
 	/// <returns>The name of the source file containing the execution point.</returns>
 	private String GetFileName()
 	{
-		using JStringObject fileName = this.Environment.Functions.GetFileName(this);
+		using JStringObject fileName = this.Environment.FunctionSet.GetFileName(this);
 		return fileName.Value;
 	}
 	/// <summary>
@@ -65,7 +65,7 @@ public partial class JStackTraceElementObject
 	/// <returns>The name of the method containing the execution point</returns>
 	private String GetMethodName()
 	{
-		using JStringObject jString = this.Environment.Functions.GetMethodName(this);
+		using JStringObject jString = this.Environment.FunctionSet.GetMethodName(this);
 		return jString.Value;
 	}
 

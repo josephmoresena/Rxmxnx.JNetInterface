@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rxmxnx.JNetInterface.Tests</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="System.Diagnostics.CodeAnalysis"/>
+
+        <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang"/>
+        <Using Include="Rxmxnx.JNetInterface.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.References"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
+        <Using Include="Rxmxnx.JNetInterface.Nio"/>
+        <Using Include="Rxmxnx.JNetInterface.Reflect"/>
+        <Using Include="Rxmxnx.JNetInterface.Restricted"/>
+        <Using Include="Rxmxnx.JNetInterface.Types"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
+    </ItemGroup>
+
+</Project>

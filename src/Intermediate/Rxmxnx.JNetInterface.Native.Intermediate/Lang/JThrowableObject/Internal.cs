@@ -25,7 +25,7 @@ public partial class JThrowableObject
 		using JThrowableObject tempThrowable = new(throwableClass, throwableRef);
 		try
 		{
-			return env.Functions.GetMessage(tempThrowable);
+			return env.FunctionSet.GetMessage(tempThrowable);
 		}
 		finally
 		{

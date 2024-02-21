@@ -52,7 +52,7 @@ public partial class JEnvironment : IEnvironment, IEquatable<IEnvironment>, IEqu
 	IStringFeature IEnvironment.StringFeature => this._cache;
 	IArrayFeature IEnvironment.ArrayFeature => this._cache;
 	INioFeature IEnvironment.NioFeature => this._cache;
-	FunctionCache IEnvironment.Functions => InternalFunctionCache.Instance;
+	NativeFunctionSet IEnvironment.FunctionSet => NativeFunctionSetImpl.Instance;
 
 	JReferenceType IEnvironment.GetReferenceType(JObject jObject)
 	{

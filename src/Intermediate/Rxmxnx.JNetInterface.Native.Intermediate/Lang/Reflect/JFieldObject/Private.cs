@@ -26,8 +26,8 @@ public partial class JFieldObject : ILocalObject
 	private JFieldDefinition GetFieldDefinition()
 	{
 		IEnvironment env = this.Environment;
-		using JStringObject memberName = env.Functions.GetName(this);
-		using JClassObject returnType = env.Functions.GetFieldType(this);
+		using JStringObject memberName = env.FunctionSet.GetName(this);
+		using JClassObject returnType = env.FunctionSet.GetFieldType(this);
 		return env.AccessFeature.GetDefinition(memberName, returnType);
 	}
 	/// <summary>

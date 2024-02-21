@@ -1,11 +1,13 @@
-namespace Rxmxnx.JNetInterface.Internal;
+namespace Rxmxnx.JNetInterface.Restricted;
 
 /// <summary>
-/// This class stores a cache of heavily used functions.
+/// This class stores the set of Java functions required for internal use.
 /// </summary>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4136,
                  Justification = CommonConstants.NoMethodOverloadingJustification)]
-internal abstract class FunctionCache
+public abstract class NativeFunctionSet
 {
 	/// <summary>
 	/// Returns the name of current instance.

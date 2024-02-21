@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes JNI accessing feature.
 /// </summary>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public partial interface IAccessFeature
 {
 	/// <summary>
