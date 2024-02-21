@@ -68,16 +68,7 @@ partial class JEnvironment
 			{
 				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
 				exceptionClear(this.Reference);
-				using LocalFrame _ = new(this._env, 10);
-				JClassLocalRef classRef = this._env.GetObjectClass(throwableRef.Value);
-				JClassObject jClass = this.AsClassObject(classRef);
-				String message = EnvironmentCache.GetThrowableMessage(jClass, throwableRef);
-				ThrowableObjectMetadata objectMetadata = new(jClass, message);
-				JClassTypeMetadata throwableMetadata = MetadataHelper.GetMetadata(jClass.Hash) as JClassTypeMetadata ??
-					(JClassTypeMetadata)MetadataHelper.GetMetadata<JThrowableObject>();
-				JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
-				JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
-				throw throwableMetadata.CreateException(jGlobalThrowable, message)!;
+				throw this.CreateJniException(throwableRef);
 			}
 			finally
 			{
