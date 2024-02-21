@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a native memory block.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
+                 Justification = CommonConstants.InternalInheritanceJustification)]
 public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 {
 	/// <summary>
@@ -42,18 +44,17 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// Constructor.
 	/// </summary>
 	/// <param name="adapter"><see cref="INativeMemoryAdapter"/> instance.</param>
-	internal JNativeMemory(INativeMemoryAdapter adapter)
+	private protected JNativeMemory(INativeMemoryAdapter adapter)
 	{
 		this._adapter = adapter;
 		this._context = adapter.GetReadOnlyContext(this);
 	}
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="adapter"><see cref="INativeMemoryAdapter"/> instance.</param>
 	/// <param name="isReadOnly">Indicates current memory block is read-only.</param>
-	internal JNativeMemory(INativeMemoryAdapter adapter, Boolean isReadOnly)
+	private protected JNativeMemory(INativeMemoryAdapter adapter, Boolean isReadOnly)
 	{
 		this._adapter = adapter;
 		this._context = isReadOnly ? adapter.GetReadOnlyContext(this) : adapter.GetContext(this);

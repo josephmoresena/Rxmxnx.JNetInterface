@@ -6,9 +6,9 @@ namespace Rxmxnx.JNetInterface.Native;
 public abstract record JPrimitiveMemory : JNativeMemory, IFixedContext<Byte>
 {
 	/// <inheritdoc/>
-	internal JPrimitiveMemory(INativeMemoryAdapter adapter) : base(adapter, false) { }
+	private protected JPrimitiveMemory(INativeMemoryAdapter adapter) : base(adapter, false) { }
 	/// <inheritdoc/>
-	internal JPrimitiveMemory(JNativeMemory mem) : base(mem) { }
+	private protected JPrimitiveMemory(JNativeMemory mem) : base(mem) { }
 
 	IFixedContext<Byte> IFixedMemory.AsBinaryContext() => this;
 	Span<Byte> IFixedMemory.Bytes => this.GetBinaryContext().Bytes;

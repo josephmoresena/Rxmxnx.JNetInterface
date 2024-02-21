@@ -33,5 +33,5 @@ public enum ThreadPurpose : Byte
 	/// <summary>
 	/// Indicates the purpose of the thread is synchronize global references.
 	/// </summary>
-	SynchronizeGlobalReference = 6,
+	SynchronizeGlobalReference = 7,
 }

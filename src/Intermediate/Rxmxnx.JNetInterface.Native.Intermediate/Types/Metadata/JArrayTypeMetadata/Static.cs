@@ -1,5 +1,9 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3963,
+                 Justification = CommonConstants.ReflectionFreeModeJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3011,
+                 Justification = CommonConstants.ReflectionPrivateUseJustification)]
 public abstract partial record JArrayTypeMetadata
 {
 	/// <summary>

@@ -37,10 +37,10 @@ public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>, IL
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	protected new virtual BufferObjectMetadata CreateMetadata()
-	{
-		Boolean isDirect = this is IDirectBufferObject || this.IsDirect;
-		return new(base.CreateMetadata()) { IsDirect = isDirect, Capacity = this.Capacity, Address = this.Address, };
-	}
+		=> new(base.CreateMetadata())
+		{
+			IsDirect = JBufferObject.IsDirectBuffer(this), Capacity = this.Capacity, Address = this.Address,
+		};
 
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
@@ -51,6 +51,30 @@ public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>, IL
 		this._isDirect ??= bufferMetadata.IsDirect;
 		this._capacity ??= bufferMetadata.Capacity;
 		this._address ??= bufferMetadata.Address;
+	}
+
+	/// <summary>
+	/// Indicates whether <paramref name="jBuffer"/> is a direct buffer.
+	/// </summary>
+	/// <param name="jBuffer">A <see cref="JBufferObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jBuffer"/> is direct; otherwise, <see langword="false"/>.
+	/// </returns>
+	public static Boolean IsDirectBuffer(JBufferObject jBuffer) => jBuffer is IDirectBufferObject || jBuffer.IsDirect;
+
+	/// <summary>
+	/// Creates a <see cref="IDirectBufferObject{TValue}"/> from <paramref name="jBuffer"/> if is direct.
+	/// </summary>
+	/// <param name="jBuffer">A <see cref="JBufferObject"/> instance.</param>
+	/// <returns>
+	/// A <see cref="IDirectBufferObject{TValue}"/> instance if <paramref name="jBuffer"/> is direct; otherwise,
+	/// <see langword="null"/>.
+	/// </returns>
+	private protected static IDirectBufferObject<TValue>? AsDirectObject<TValue>(JBufferObject<TValue> jBuffer)
+		where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>
+	{
+		if (jBuffer is IDirectBufferObject<TValue> direct) return direct;
+		return jBuffer.IsDirect ? new DirectBufferWrapper<TValue>(jBuffer) : default(IDirectBufferObject<TValue>?);
 	}
 }
 
@@ -77,9 +101,5 @@ public abstract class JBufferObject<TValue> : JBufferObject, IInterfaceObject<JC
 	/// A <see cref="IDirectBufferObject{TValue}"/> instance if is direct; otherwise,
 	/// <see langword="null"/>.
 	/// </returns>
-	public IDirectBufferObject<TValue>? AsDirectObject()
-	{
-		if (this is IDirectBufferObject<TValue> direct) return direct;
-		return this.IsDirect ? new DirectBufferWrapper<TValue>(this) : default(IDirectBufferObject<TValue>?);
-	}
+	public IDirectBufferObject<TValue>? AsDirectObject() => JBufferObject.AsDirectObject(this);
 }

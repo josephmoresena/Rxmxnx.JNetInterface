@@ -76,31 +76,7 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
 	public TReference CastTo<TReference>(Boolean dispose = false)
 		where TReference : JLocalObject, IReferenceType<TReference>
-	{
-		IEnvironment env = this.Lifetime.Environment;
-		if (this is TReference result) return result;
-		try
-		{
-			if (JLocalObject.IsClassType<TReference>())
-				return (TReference)(Object)env.ClassFeature.AsClassObject(this);
-			JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
-			if (!this.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
-				return (TReference)metadata.ParseInstance(this);
-
-			JClassObject jClass = env.ClassFeature.AsClassObject(this);
-			if (JLocalObject.IsObjectType<TReference>()) return (TReference)(Object)jClass;
-			return (TReference)metadata.ParseInstance(jClass);
-		}
-		catch (Exception)
-		{
-			dispose = false;
-			throw;
-		}
-		finally
-		{
-			if (dispose) this.Dispose();
-		}
-	}
+		=> JLocalObject.CastTo<TReference>(this, dispose);
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
 	/// </summary>

@@ -68,7 +68,7 @@ partial class JEnvironment
 			{
 				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
 				exceptionClear(this.Reference);
-				using LocalFrame frame = new(this._env, 10);
+				using LocalFrame _ = new(this._env, 10);
 				JClassLocalRef classRef = this._env.GetObjectClass(throwableRef.Value);
 				JClassObject jClass = this.AsClassObject(classRef);
 				String message = EnvironmentCache.GetThrowableMessage(jClass, throwableRef);

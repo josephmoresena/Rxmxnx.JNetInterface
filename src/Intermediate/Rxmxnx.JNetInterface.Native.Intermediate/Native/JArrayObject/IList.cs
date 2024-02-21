@@ -5,7 +5,9 @@ public partial class JArrayObject<TElement> : IList<TElement?>
 	/// <summary>
 	/// Empty <see cref="IList{T}"/> instance.
 	/// </summary>
+#pragma warning disable CA1859
 	private static readonly IList<TElement?> emptyList = Array.Empty<TElement?>();
+#pragma warning restore CA1859
 
 	Boolean ICollection<TElement?>.Remove(TElement? item) => JArrayObject<TElement>.emptyList.Remove(item);
 	Int32 ICollection<TElement?>.Count => this.Length;

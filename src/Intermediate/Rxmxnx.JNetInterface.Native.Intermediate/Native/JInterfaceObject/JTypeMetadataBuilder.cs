@@ -6,6 +6,8 @@ public abstract partial class JInterfaceObject
 	/// <see cref="JReferenceTypeMetadata"/> interface builder.
 	/// </summary>
 	/// <typeparam name="TInterface">Type of interface.</typeparam>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
+	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	protected new ref partial struct JTypeMetadataBuilder<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
