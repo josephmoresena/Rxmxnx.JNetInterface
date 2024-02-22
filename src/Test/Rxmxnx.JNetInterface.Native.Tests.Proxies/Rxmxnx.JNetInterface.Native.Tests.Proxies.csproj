@@ -10,6 +10,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>Rxmxnx.JNetInterface.Native.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
 
         <Using Include="Rxmxnx.PInvoke"/>

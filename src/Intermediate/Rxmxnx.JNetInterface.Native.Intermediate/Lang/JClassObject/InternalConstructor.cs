@@ -12,6 +12,7 @@ public partial class JClassObject
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
+		this._isFinal = true;
 		this.Lifetime.SetClass(this);
 	}
 	/// <summary>

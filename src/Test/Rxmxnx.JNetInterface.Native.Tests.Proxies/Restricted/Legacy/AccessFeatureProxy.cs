@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Tests.Restricted;
 
-public abstract partial class AccessFeatureProxy
+public partial class AccessFeatureProxy
 {
 	JMethodId IAccessFeature.GetMethodId(JExecutableObject jExecutable)
 	{

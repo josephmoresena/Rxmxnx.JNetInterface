@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Tests.Restricted;
 
-public abstract partial class StringFeatureProxy
+public partial class StringFeatureProxy
 {
 	void IStringFeature.GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex)
 		=> chars.WithSafeFixed((this, jString, startIndex), StringFeatureProxy.GetCopy);

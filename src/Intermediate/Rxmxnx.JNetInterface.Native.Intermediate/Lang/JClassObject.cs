@@ -87,7 +87,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	protected override ObjectMetadata CreateMetadata()
 		=> new ClassObjectMetadata(base.CreateMetadata())
 		{
-			Name = this.Name, ClassSignature = this.ClassSignature, IsFinal = this.IsFinal,
+			Name = this.Name, ClassSignature = this.ClassSignature, IsFinal = this.IsFinal, Hash = this.Hash,
 		};
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)

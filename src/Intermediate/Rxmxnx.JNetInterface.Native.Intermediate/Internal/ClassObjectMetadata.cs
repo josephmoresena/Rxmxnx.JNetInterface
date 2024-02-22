@@ -39,17 +39,6 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 		this.ClassSignature = classMetadata?.ClassSignature!;
 		this.Hash = classMetadata?.Hash!;
 	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	public ClassObjectMetadata(JClassObject jClass) : base(UnicodeClassNames.ClassObject,
-	                                                       UnicodeObjectSignatures.ClassObjectSignature)
-	{
-		this.Name = jClass.Name;
-		this.ClassSignature = jClass.ClassSignature;
-		this.Hash = jClass.Hash;
-	}
 
 	/// <summary>
 	/// Constructor.
