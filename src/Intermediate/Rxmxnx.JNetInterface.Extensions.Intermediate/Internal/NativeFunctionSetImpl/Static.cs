@@ -69,14 +69,6 @@ internal partial class NativeFunctionSetImpl
 	/// </summary>
 	private static readonly JFunctionDefinition<JArrayObject<JStackTraceElementObject>> getStackTraceDefinition =
 		new(UnicodeMethodNames.GetStackTrace());
-	/// <summary>
-	/// <c>Class.getName()</c> or <c>Member.getName()</c> definition.
-	/// </summary>
-	private static readonly JFunctionDefinition<JStringObject> getName = new(UnicodeMethodNames.GetName());
-	/// <summary>
-	/// <c>Class.isPrimitive()</c> definition.
-	/// </summary>
-	private static readonly JFunctionDefinition<JBoolean> isPrimitiveClass = new(UnicodeMethodNames.IsPrimitive());
 
 	/// <summary>
 	/// <c>Buffer.isDirect()</c> definition.
@@ -106,6 +98,15 @@ internal partial class NativeFunctionSetImpl
 	/// <c>Field.getParameterTypes()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JClassObject> getType = new(UnicodeMethodNames.GetFieldType());
+
+	/// <summary>
+	/// <c>Class.getName()</c> or <c>Member.getName()</c> definition.
+	/// </summary>
+	public static readonly JFunctionDefinition<JStringObject> GetNameDefinition = new(UnicodeMethodNames.GetName());
+	/// <summary>
+	/// <c>Class.isPrimitive()</c> definition.
+	/// </summary>
+	public static readonly JFunctionDefinition<JBoolean> IsPrimitiveDefinition = new(UnicodeMethodNames.IsPrimitive());
 
 	/// <summary>
 	/// <c>Boolean.booleanValue()</c> definition.

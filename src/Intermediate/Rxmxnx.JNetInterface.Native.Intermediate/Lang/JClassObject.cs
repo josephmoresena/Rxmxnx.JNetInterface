@@ -82,6 +82,18 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		IEnvironment env = this.Environment;
 		return env.ClassFeature.IsAssignableFrom(jClass, this);
 	}
+	/// <summary>
+	/// Retrieves a <see cref="JStringObject"/> containing class name.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="isPrimitive">Indicates whether current class is primitive.</param>
+	/// <returns>A <see cref="JStringObject"/> instance.</returns>
+	public JStringObject GetClassName(out Boolean isPrimitive)
+	{
+		IEnvironment env = this.Environment;
+		isPrimitive = env.FunctionSet.IsPrimitiveClass(this);
+		return env.FunctionSet.GetClassName(this);
+	}
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

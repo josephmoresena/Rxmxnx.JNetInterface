@@ -23,6 +23,50 @@ partial class JEnvironment
 			this.Register(this.ShortPrimitive);
 		}
 		/// <summary>
+		/// Retrieves a <see cref="JStringObject"/> containing class name.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="isPrimitive">Output. Indicates whether class is primitive.</param>
+		/// <returns>A <see cref="JStringObject"/> instance.</returns>
+		private JStringObject GetClassName(JClassLocalRef classRef, out Boolean isPrimitive)
+		{
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			AccessCache access = this.GetAccess(jniTransaction, this.ClassObject);
+			jniTransaction.Add(classRef);
+			isPrimitive = this.IsPrimitiveClass(classRef, access);
+			return this.GetClassName(classRef, access);
+		}
+		/// <summary>
+		/// Indicates whether class is primitive.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="access">A <see cref="AccessCache"/> instance.</param>
+		/// <returns>
+		/// <see langword="true"/> if class is primitive; otherwise; <see langword="false"/>.
+		/// </returns>
+		private JStringObject GetClassName(JClassLocalRef classRef, AccessCache access)
+		{
+			JMethodId getNameId = access.GetMethodId(NativeFunctionSetImpl.GetNameDefinition, this._env);
+			CallObjectMethodADelegate callObjectMethod = this.GetDelegate<CallObjectMethodADelegate>();
+			JObjectLocalRef localRef = callObjectMethod(this.Reference, classRef.Value, getNameId,
+			                                            ReadOnlyValPtr<JValue>.Zero);
+			JClassObject jStringClass = this.GetClass<JStringObject>();
+			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
+		}
+		/// <summary>
+		/// Retrieves a <see cref="JStringObject"/> containing class name.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="access">A <see cref="AccessCache"/> instance.</param>
+		/// <returns>A <see cref="JStringObject"/> instance.</returns>
+		private Boolean IsPrimitiveClass(JClassLocalRef classRef, AccessCache access)
+		{
+			JMethodId isPrimitiveId = access.GetMethodId(NativeFunctionSetImpl.IsPrimitiveDefinition, this._env);
+			CallBooleanMethodADelegate callBooleanMethod = this.GetDelegate<CallBooleanMethodADelegate>();
+			Byte result = callBooleanMethod(this.Reference, classRef.Value, isPrimitiveId, ReadOnlyValPtr<JValue>.Zero);
+			return result == JBoolean.TrueValue;
+		}
+		/// <summary>
 		/// Reloads current class object.
 		/// </summary>
 		/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>

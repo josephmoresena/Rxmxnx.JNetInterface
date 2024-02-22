@@ -24,7 +24,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jMember.Environment;
 		JClassObject memberInterface = env.ClassFeature.GetClass<JMemberObject>();
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getName, jMember, memberInterface)!;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetNameDefinition, jMember, memberInterface)!;
 	}
 	/// <inheritdoc/>
 	public override Int32 GetOrdinal(JEnumObject jEnum)
@@ -42,7 +42,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		=> JFunctionDefinition.Invoke(NativeFunctionSetImpl.getClassDefinition, jStackTraceElement)!;
 	/// <inheritdoc/>
 	public override JStringObject GetClassName(JClassObject jClass)
-		=> JFunctionDefinition.Invoke(NativeFunctionSetImpl.getName, jClass)!;
+		=> JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetNameDefinition, jClass)!;
 	/// <inheritdoc/>
 	public override Int32 GetLineNumber(JStackTraceElementObject jStackTraceElement)
 	{
@@ -110,8 +110,9 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jClass.Environment;
 		Span<Byte> bytes = stackalloc Byte[1];
-		env.AccessFeature.CallPrimitiveFunction(bytes, jClass, jClass.Class, NativeFunctionSetImpl.isPrimitiveClass,
-		                                        false, Array.Empty<IObject>());
+		env.AccessFeature.CallPrimitiveFunction(bytes, jClass, jClass.Class,
+		                                        NativeFunctionSetImpl.IsPrimitiveDefinition, false,
+		                                        Array.Empty<IObject>());
 		return bytes[0] == JBoolean.TrueValue;
 	}
 	/// <inheritdoc/>

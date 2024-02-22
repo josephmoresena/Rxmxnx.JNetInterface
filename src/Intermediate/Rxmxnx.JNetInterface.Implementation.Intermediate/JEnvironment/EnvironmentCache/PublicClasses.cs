@@ -16,7 +16,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		public JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference)
 		{
-			using JStringObject jString = JClassObject.GetClassName(this._env, classRef, out Boolean isPrimitive);
+			using JStringObject jString = this.GetClassName(classRef, out Boolean isPrimitive);
 			using JNativeMemory<Byte> utf8Text = jString.GetNativeUtf8Chars();
 			JClassLocalRef usableClassRef = keepReference ? classRef : default;
 			JClassObject jClass = isPrimitive ?
