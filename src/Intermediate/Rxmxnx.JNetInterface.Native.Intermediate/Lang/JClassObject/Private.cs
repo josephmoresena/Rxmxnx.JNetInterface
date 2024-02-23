@@ -36,19 +36,12 @@ public partial class JClassObject
 	private CString? _signature;
 
 	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jClassClassObject"><see cref="JClassObject"/> instance.</param>
-	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	private JClassObject(JClassObject jClassClassObject, JClassLocalRef classRef) : base(
-		jClassClassObject, classRef.Value) { }
-
-	/// <summary>
 	/// Loads class information.
 	/// </summary>
 	private void LoadClassInformation()
 	{
-		if (this._className is null || this._signature is null)
+		if (CString.IsNullOrEmpty(this._className) || CString.IsNullOrEmpty(this._signature) ||
+		    String.IsNullOrWhiteSpace(this._hash))
 			this.Environment.ClassFeature.GetClassInfo(this, out this._className, out this._signature, out this._hash);
 	}
 

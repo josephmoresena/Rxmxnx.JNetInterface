@@ -28,4 +28,11 @@ public partial class JClassObject
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jClassClassObject"><see cref="JClassObject"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	internal JClassObject(JClassObject jClassClassObject, JClassLocalRef classRef) : base(
+		jClassClassObject, classRef.Value) { }
 }

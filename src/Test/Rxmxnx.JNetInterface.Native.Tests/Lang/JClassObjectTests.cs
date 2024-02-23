@@ -50,7 +50,6 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClass.IsFinal, objectMetadata.IsFinal);
 		Assert.Equal(jClass.Hash, objectMetadata.Hash);
 	}
-
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
@@ -72,5 +71,37 @@ public sealed class JClassObjectTests
 		Assert.False(isPrimitive);
 
 		functionSet.Received(1).GetClassName(jClass);
+	}
+
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	[InlineData(true, 1)]
+	[InlineData(false, 1)]
+	[InlineData(true, 2)]
+	[InlineData(false, 2)]
+	internal void GetClassInfoTest(Boolean isProxy, Byte c = 0)
+	{
+		ITypeInformation information = Substitute.For<ITypeInformation>();
+		CString className = (CString)JClassObjectTests.fixture.Create<String>();
+		CString signature = (CString)JClassObjectTests.fixture.Create<String>();
+		String hash = JClassObjectTests.fixture.Create<String>();
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment(isProxy);
+		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
+		using JClassObject jClass = new(env);
+		using JClassObject jClassObj = new(jClass, classRef);
+
+		env.ClassFeature.GetClassInfo(jClassObj).Returns(information);
+		information.ClassName.Returns(className);
+		information.Signature.Returns(signature);
+		information.Hash.Returns(hash);
+
+		if (c < 1)
+			Assert.Equal(className, jClassObj.Name);
+		if (c < 2)
+			Assert.Equal(signature, jClassObj.ClassSignature);
+		if (c < 3)
+			Assert.Equal(hash, jClassObj.Hash);
+		env.ClassFeature.Received(1).GetClassInfo(jClassObj);
 	}
 }
