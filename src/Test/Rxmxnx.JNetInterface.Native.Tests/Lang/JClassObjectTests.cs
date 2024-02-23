@@ -3,13 +3,15 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 [ExcludeFromCodeCoverage]
 public sealed class JClassObjectTests
 {
+	private static readonly IFixture fixture = new Fixture().RegisterReferences();
+
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
 	internal void ConstructorClassTest(Boolean isProxy)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JClassObject>();
-		EnvironmentProxy env = JClassObjectTests.CreateEnvironment(isProxy);
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment(isProxy);
 		JClassObject jClass = new(env);
 		ObjectLifetime lifetime = jClass.Lifetime;
 		ClassObjectMetadata objectMetadata = Assert.IsType<ClassObjectMetadata>(ILocalObject.CreateMetadata(jClass));
@@ -28,6 +30,11 @@ public sealed class JClassObjectTests
 		Assert.Equal(typeMetadata.Signature, jClass.ObjectSignature);
 		Assert.Equal(typeMetadata.Hash, jClass.Hash);
 
+		jClass.Dispose();
+
+		env.ReferenceFeature.Received(1).IsParameter(jClass);
+		env.ReferenceFeature.Received(1).Unload(jClass);
+
 		Assert.False(lifetime.IsDisposed);
 		Assert.True(lifetime.IsRealClass);
 		Assert.Equal(jClass.Class, lifetime.Class);
@@ -44,10 +51,26 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClass.Hash, objectMetadata.Hash);
 	}
 
-	private static EnvironmentProxy CreateEnvironment(Boolean isProxy)
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	internal void GetClassNameTest(Boolean isProxy)
 	{
-		EnvironmentProxy env = Substitute.For<EnvironmentProxy>();
-		env.NoProxy.Returns(!isProxy);
-		return env;
+		JClassTypeMetadata stringTypeMetadata = IClassType.GetMetadata<JStringObject>();
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment(isProxy);
+		NativeFunctionSet functionSet = Substitute.For<NativeFunctionSet>();
+		JStringLocalRef stringRef = JClassObjectTests.fixture.Create<JStringLocalRef>();
+		using JClassObject jClass = new(env);
+		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
+		using JStringObject jString = new(jStringClass, stringRef);
+
+		env.FunctionSet.Returns(functionSet);
+		functionSet.GetClassName(jClass).Returns(jString);
+		functionSet.IsPrimitiveClass(jClass).Returns(false);
+
+		Assert.Equal(jString, jClass.GetClassName(out Boolean isPrimitive));
+		Assert.False(isPrimitive);
+
+		functionSet.Received(1).GetClassName(jClass);
 	}
 }

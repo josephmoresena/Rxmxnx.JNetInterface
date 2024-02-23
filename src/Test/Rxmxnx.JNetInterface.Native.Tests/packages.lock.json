@@ -2,16 +2,6 @@
   "version": 1,
   "dependencies": {
     "net8.0": {
-      "AutoFixture": {
-        "type": "Direct",
-        "requested": "[4.18.1, )",
-        "resolved": "4.18.1",
-        "contentHash": "BmWZDY4fkrYOyd5/CTBOeXbzsNwV8kI4kDi/Ty1Y5F+WDHBVKxzfWlBE4RSicvZ+EOi2XDaN5uwdrHsItLW6Kw==",
-        "dependencies": {
-          "Fare": "[2.1.1, 3.0.0)",
-          "System.ComponentModel.Annotations": "4.3.0"
-        }
-      },
       "coverlet.collector": {
         "type": "Direct",
         "requested": "[6.0.1, )",
@@ -26,15 +16,6 @@
         "dependencies": {
           "Microsoft.CodeCoverage": "17.9.0",
           "Microsoft.TestPlatform.TestHost": "17.9.0"
-        }
-      },
-      "NSubstitute": {
-        "type": "Direct",
-        "requested": "[5.1.0, )",
-        "resolved": "5.1.0",
-        "contentHash": "ZCqOP3Kpp2ea7QcLyjMU4wzE+0wmrMN35PQMsdPOHYc2IrvjmusG9hICOiqiOTPKN0gJon6wyCn6ZuGHdNs9hQ==",
-        "dependencies": {
-          "Castle.Core": "5.1.1"
         }
       },
       "xunit": {
@@ -53,6 +34,15 @@
         "requested": "[2.5.7, )",
         "resolved": "2.5.7",
         "contentHash": "31Rl7dBJriX0DNwZfDp8gqFOPsiM0c9kqpcH/HvNi9vDp+K7Ydf42H7mVIvYT918Ywzn1ymLg1c4DDC6iU754w=="
+      },
+      "AutoFixture": {
+        "type": "Transitive",
+        "resolved": "4.18.1",
+        "contentHash": "BmWZDY4fkrYOyd5/CTBOeXbzsNwV8kI4kDi/Ty1Y5F+WDHBVKxzfWlBE4RSicvZ+EOi2XDaN5uwdrHsItLW6Kw==",
+        "dependencies": {
+          "Fare": "[2.1.1, 3.0.0)",
+          "System.ComponentModel.Annotations": "4.3.0"
+        }
       },
       "Castle.Core": {
         "type": "Transitive",
@@ -167,6 +157,14 @@
         "type": "Transitive",
         "resolved": "13.0.1",
         "contentHash": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A=="
+      },
+      "NSubstitute": {
+        "type": "Transitive",
+        "resolved": "5.1.0",
+        "contentHash": "ZCqOP3Kpp2ea7QcLyjMU4wzE+0wmrMN35PQMsdPOHYc2IrvjmusG9hICOiqiOTPKN0gJon6wyCn6ZuGHdNs9hQ==",
+        "dependencies": {
+          "Castle.Core": "5.1.1"
+        }
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": {
         "type": "Transitive",
@@ -1091,6 +1089,8 @@
       "rxmxnx.jnetinterface.native.tests.proxies": {
         "type": "Project",
         "dependencies": {
+          "AutoFixture": "[4.18.1, )",
+          "NSubstitute": "[5.1.0, )",
           "Rxmxnx.JNetInterface.Native.Intermediate": "[1.0.0, )"
         }
       }

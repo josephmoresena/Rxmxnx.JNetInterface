@@ -16,6 +16,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Using Include="AutoFixture"/>
+        <Using Include="NSubstitute"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
 
         <Using Include="Rxmxnx.PInvoke"/>
@@ -30,11 +32,17 @@
         <Using Include="Rxmxnx.JNetInterface.Nio"/>
         <Using Include="Rxmxnx.JNetInterface.Reflect"/>
         <Using Include="Rxmxnx.JNetInterface.Restricted"/>
+        <Using Include="Rxmxnx.JNetInterface.Tests.Restricted"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoFixture" Version="4.18.1"/>
+        <PackageReference Include="NSubstitute" Version="5.1.0"/>
     </ItemGroup>
 
 </Project>
