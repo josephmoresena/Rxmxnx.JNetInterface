@@ -5,7 +5,7 @@ public partial class JNumberObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JNumberObject> typeMetadata = JTypeMetadataBuilder<JNumberObject>
+	private static readonly JClassTypeMetadata<JNumberObject> typeMetadata = TypeMetadataBuilder<JNumberObject>
 	                                                                         .Create(UnicodeClassNames.NumberObject(),
 		                                                                         JTypeModifier.Abstract)
 	                                                                         .Implements<JSerializableObject>().Build();

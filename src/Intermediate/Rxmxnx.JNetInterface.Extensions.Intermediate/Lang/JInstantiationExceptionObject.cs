@@ -12,7 +12,7 @@ public class JInstantiationExceptionObject : JReflectiveOperationExceptionObject
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JInstantiationExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JReflectiveOperationExceptionObject>
+		TypeMetadataBuilder<JReflectiveOperationExceptionObject>
 			.Create<JInstantiationExceptionObject>(UnicodeClassNames.InstantiationExceptionObject()).Build();
 
 	static JThrowableTypeMetadata<JInstantiationExceptionObject> IThrowableType<JInstantiationExceptionObject>.Metadata

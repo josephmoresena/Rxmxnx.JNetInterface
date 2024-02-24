@@ -8,7 +8,7 @@ public sealed class JConstructorObject : JExecutableObject, IClassType<JConstruc
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JConstructorObject> metadata = JTypeMetadataBuilder<JExecutableObject>
+	private static readonly JClassTypeMetadata<JConstructorObject> metadata = TypeMetadataBuilder<JExecutableObject>
 	                                                                          .Create<JConstructorObject>(
 		                                                                          UnicodeClassNames.ConstructorObject(),
 		                                                                          JTypeModifier.Final).Build();

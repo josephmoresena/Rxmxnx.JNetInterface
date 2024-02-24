@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed class JLongObject : JNumberObject<JLong, JLongObject>, IPrimitiveWrapperType<JLongObject, JLong>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JLongObject> typeMetadata =
-		new(JTypeMetadataBuilder<JLongObject>.Build(IPrimitiveType.GetMetadata<JLong>(),
+		new(TypeMetadataBuilder<JLongObject>.Build(IPrimitiveType.GetMetadata<JLong>(),
 		                                            IClassType.GetMetadata<JNumberObject>()));
 
 	static JPrimitiveWrapperTypeMetadata<JLongObject> IPrimitiveWrapperType<JLongObject>.Metadata

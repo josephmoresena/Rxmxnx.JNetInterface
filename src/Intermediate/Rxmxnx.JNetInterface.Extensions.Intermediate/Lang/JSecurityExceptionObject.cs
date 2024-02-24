@@ -11,7 +11,7 @@ public class JSecurityExceptionObject : JRuntimeExceptionObject, IThrowableType<
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JSecurityExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JRuntimeExceptionObject>
+		TypeMetadataBuilder<JRuntimeExceptionObject>
 			.Create<JSecurityExceptionObject>(UnicodeClassNames.SecurityExceptionObject()).Build();
 
 	static JThrowableTypeMetadata<JSecurityExceptionObject> IThrowableType<JSecurityExceptionObject>.Metadata

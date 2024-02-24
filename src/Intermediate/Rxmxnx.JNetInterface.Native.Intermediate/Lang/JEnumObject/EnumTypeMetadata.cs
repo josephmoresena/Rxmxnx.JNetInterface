@@ -2,12 +2,12 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public partial class JEnumObject
 {
-	protected new ref partial struct JTypeMetadataBuilder<TEnum>
+	protected new ref partial struct TypeMetadataBuilder<TEnum>
 	{
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IEnumType"/> type.
 		/// </summary>
-		internal sealed record JEnumGenericTypeMetadata : JEnumTypeMetadata<TEnum>
+		internal sealed record EnumTypeMetadata : JEnumTypeMetadata<TEnum>
 		{
 			/// <inheritdoc cref="JEnumTypeMetadata.Fields"/>
 			private readonly IEnumFieldList _fields;
@@ -28,9 +28,9 @@ public partial class JEnumObject
 			/// <summary>
 			/// Constructor.
 			/// </summary>
-			/// <param name="builder">A <see cref="JLocalObject.JTypeMetadataBuilder"/> instance.</param>
+			/// <param name="builder">A <see cref="JLocalObject.TypeMetadataBuilder"/> instance.</param>
 			/// <param name="fields">Enum field list.</param>
-			public JEnumGenericTypeMetadata(JTypeMetadataBuilder builder, IEnumFieldList fields) : base(
+			public EnumTypeMetadata(TypeMetadataBuilder builder, IEnumFieldList fields) : base(
 				builder.DataTypeName, builder.Signature)
 			{
 				this._fields = fields;

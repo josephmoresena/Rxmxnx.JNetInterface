@@ -9,7 +9,7 @@ public class JVirtualMachineErrorObject : JErrorObject, IThrowableType<JVirtualM
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JVirtualMachineErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JErrorObject>
+		TypeMetadataBuilder<JErrorObject>
 			.Create<JVirtualMachineErrorObject>(UnicodeClassNames.VirtualMachineErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JVirtualMachineErrorObject> IThrowableType<JVirtualMachineErrorObject>.Metadata

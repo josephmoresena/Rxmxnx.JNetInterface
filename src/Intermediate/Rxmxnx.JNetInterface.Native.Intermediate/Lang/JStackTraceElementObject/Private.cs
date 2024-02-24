@@ -6,7 +6,7 @@ public partial class JStackTraceElementObject
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JClassTypeMetadata<JStackTraceElementObject> typeMetadata =
-		JTypeMetadataBuilder<JStackTraceElementObject>
+		TypeMetadataBuilder<JStackTraceElementObject>
 			.Create(UnicodeClassNames.StackTraceElementObject(), JTypeModifier.Final).Implements<JSerializableObject>()
 			.Build();
 

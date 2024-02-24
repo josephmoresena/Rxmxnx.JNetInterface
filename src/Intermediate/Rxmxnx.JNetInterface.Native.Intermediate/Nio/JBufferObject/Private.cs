@@ -5,7 +5,7 @@ public partial class JBufferObject
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JBufferObject> metadata = JTypeMetadataBuilder<JBufferObject>
+	private static readonly JClassTypeMetadata<JBufferObject> metadata = TypeMetadataBuilder<JBufferObject>
 	                                                                     .Create(UnicodeClassNames.BufferObject(),
 		                                                                     JTypeModifier.Abstract).Build();
 

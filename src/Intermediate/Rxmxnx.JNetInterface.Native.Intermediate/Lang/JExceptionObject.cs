@@ -9,7 +9,7 @@ public class JExceptionObject : JThrowableObject, IThrowableType<JExceptionObjec
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JThrowableObject>.Create<JExceptionObject>(UnicodeClassNames.ExceptionObject()).Build();
+		TypeMetadataBuilder<JThrowableObject>.Create<JExceptionObject>(UnicodeClassNames.ExceptionObject()).Build();
 
 	static JThrowableTypeMetadata<JExceptionObject> IThrowableType<JExceptionObject>.Metadata
 		=> JExceptionObject.typeMetadata;

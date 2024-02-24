@@ -5,7 +5,7 @@ public partial class JClassObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JClassObject> typeMetadata = JTypeMetadataBuilder<JClassObject>
+	private static readonly JClassTypeMetadata<JClassObject> typeMetadata = TypeMetadataBuilder<JClassObject>
 	                                                                        .Create(UnicodeClassNames.ClassObject,
 		                                                                        JTypeModifier.Final)
 	                                                                        .WithSignature(

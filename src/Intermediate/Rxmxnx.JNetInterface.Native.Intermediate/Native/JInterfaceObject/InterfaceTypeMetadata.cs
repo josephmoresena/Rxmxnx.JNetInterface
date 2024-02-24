@@ -2,12 +2,12 @@ namespace Rxmxnx.JNetInterface.Native;
 
 public partial class JInterfaceObject
 {
-	protected ref partial struct JTypeMetadataBuilder<TInterface>
+	protected ref partial struct TypeMetadataBuilder<TInterface>
 	{
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IInterfaceType"/> type.
 		/// </summary>
-		internal sealed record JInterfaceGenericTypeMetadata : JInterfaceTypeMetadata<TInterface>
+		internal sealed record InterfaceTypeMetadata : JInterfaceTypeMetadata<TInterface>
 		{
 			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 			private readonly IReadOnlySet<JInterfaceTypeMetadata> _interfaces;
@@ -24,8 +24,8 @@ public partial class JInterfaceObject
 			/// <summary>
 			/// Constructor.
 			/// </summary>
-			/// <param name="builder">A <see cref="JLocalObject.JTypeMetadataBuilder"/> instance.</param>
-			internal JInterfaceGenericTypeMetadata(JTypeMetadataBuilder builder) : base(
+			/// <param name="builder">A <see cref="JLocalObject.TypeMetadataBuilder"/> instance.</param>
+			internal InterfaceTypeMetadata(TypeMetadataBuilder builder) : base(
 				builder.DataTypeName, builder.Signature)
 				=> this._interfaces = InterfaceSet.GetInterfaceInterfaces(builder.GetInterfaceSet());
 

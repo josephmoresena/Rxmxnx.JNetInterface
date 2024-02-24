@@ -2,12 +2,12 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public partial class JEnumObject
 {
-	protected new ref partial struct JTypeMetadataBuilder<TEnum>
+	protected new ref partial struct TypeMetadataBuilder<TEnum>
 	{
 		/// <summary>
 		/// Internal implementation of <see cref="IEnumFieldList"/>.
 		/// </summary>
-		private sealed record FieldList : IEnumFieldList
+		private sealed record EnumFieldList : IEnumFieldList
 		{
 			/// <summary>
 			/// Enum ordinal dictionary.
@@ -58,7 +58,7 @@ public partial class JEnumObject
 			/// </summary>
 			/// <param name="enumTypeName">Enum type name.</param>
 			/// <returns>The current instance.</returns>
-			public FieldList Validate(ReadOnlySpan<Byte> enumTypeName)
+			public EnumFieldList Validate(ReadOnlySpan<Byte> enumTypeName)
 			{
 				NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
 				return this;

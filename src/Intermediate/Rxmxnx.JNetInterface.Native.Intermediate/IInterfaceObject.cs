@@ -14,7 +14,7 @@ public interface IInterfaceObject<TInterface> : IObject
 	/// <returns>A <see cref="IArrayObject{TInterface}"/> instance.</returns>
 	public static IArrayObject<TInterface> CastArray<TElement>(JArrayObject<TElement> jArray)
 		where TElement : JLocalObject, IReferenceType<TElement>, IInterfaceObject<TInterface>
-		=> new JArrayObject.JCastedArray<TInterface>(jArray);
+		=> new JArrayObject.CastedArray<TInterface>(jArray);
 	/// <summary>
 	/// Sets <paramref name="element"/> instance as the <paramref name="jArray"/> element of <paramref name="index"/>.
 	/// </summary>

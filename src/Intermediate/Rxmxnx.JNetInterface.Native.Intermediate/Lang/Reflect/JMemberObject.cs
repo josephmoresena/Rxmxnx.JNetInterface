@@ -8,7 +8,7 @@ public sealed class JMemberObject : JInterfaceObject<JMemberObject>, IInterfaceT
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JMemberObject> metadata = JTypeMetadataBuilder<JMemberObject>
+	private static readonly JInterfaceTypeMetadata<JMemberObject> metadata = TypeMetadataBuilder<JMemberObject>
 	                                                                         .Create(
 		                                                                         UnicodeClassNames.MemberInterface())
 	                                                                         .Build();

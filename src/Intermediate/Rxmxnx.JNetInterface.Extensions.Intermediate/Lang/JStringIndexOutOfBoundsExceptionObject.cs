@@ -12,7 +12,7 @@ public class JStringIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsException
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JStringIndexOutOfBoundsExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
+		TypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
 			.Create<JStringIndexOutOfBoundsExceptionObject>(UnicodeClassNames.StringIndexOutOfBoundsExceptionObject())
 			.Build();
 

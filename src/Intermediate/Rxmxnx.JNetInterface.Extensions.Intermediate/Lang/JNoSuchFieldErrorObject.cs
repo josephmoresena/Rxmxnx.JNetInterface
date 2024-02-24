@@ -11,7 +11,7 @@ public class JNoSuchFieldErrorObject : JIncompatibleClassChangeErrorObject, IThr
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JNoSuchFieldErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
+		TypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
 			.Create<JNoSuchFieldErrorObject>(UnicodeClassNames.NoSuchFieldErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JNoSuchFieldErrorObject> IThrowableType<JNoSuchFieldErrorObject>.Metadata

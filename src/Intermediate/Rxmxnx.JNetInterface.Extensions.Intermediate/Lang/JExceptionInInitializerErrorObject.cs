@@ -12,7 +12,7 @@ public class JExceptionInInitializerErrorObject : JLinkageErrorObject,
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JExceptionInInitializerErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JLinkageErrorObject>
+		TypeMetadataBuilder<JLinkageErrorObject>
 			.Create<JExceptionInInitializerErrorObject>(UnicodeClassNames.ExceptionInInitializerErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JExceptionInInitializerErrorObject> IThrowableType<JExceptionInInitializerErrorObject>

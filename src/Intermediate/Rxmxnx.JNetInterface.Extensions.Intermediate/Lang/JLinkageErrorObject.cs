@@ -9,7 +9,7 @@ public class JLinkageErrorObject : JErrorObject, IThrowableType<JLinkageErrorObj
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JLinkageErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JErrorObject>.Create<JLinkageErrorObject>(UnicodeClassNames.LinkageErrorObject()).Build();
+		TypeMetadataBuilder<JErrorObject>.Create<JLinkageErrorObject>(UnicodeClassNames.LinkageErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JLinkageErrorObject> IThrowableType<JLinkageErrorObject>.Metadata
 		=> JLinkageErrorObject.typeMetadata;

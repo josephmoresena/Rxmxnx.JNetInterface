@@ -5,12 +5,12 @@ public partial class JArrayObject<TElement>
 	/// <summary>
 	/// This record stores the metadata for a class <see cref="IArrayType"/> type.
 	/// </summary>
-	private sealed record JArrayGenericTypeMetadata : JArrayTypeMetadata
+	private sealed record ArrayTypeMetadata : JArrayTypeMetadata
 	{
 		/// <summary>
 		/// Metadata array instance.
 		/// </summary>
-		public static readonly JArrayGenericTypeMetadata Instance = new();
+		public static readonly ArrayTypeMetadata Instance = new();
 
 		/// <inheritdoc/>
 		public override Type Type => JArrayTypeMetadata.GetArrayType<TElement>() ?? typeof(JArrayObject);
@@ -26,7 +26,7 @@ public partial class JArrayObject<TElement>
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		private JArrayGenericTypeMetadata() : base(IDataType.GetMetadata<TElement>().ArraySignature,
+		private ArrayTypeMetadata() : base(IDataType.GetMetadata<TElement>().ArraySignature,
 		                                           JArrayTypeMetadata.GetArrayDeep<TElement>()) { }
 		/// <inheritdoc/>
 		public override String ToString()
@@ -71,7 +71,7 @@ public partial class JArrayObject<TElement>
 					jGenericArray[index] = default;
 					break;
 				default:
-					JArrayGenericTypeMetadata.SetObjectElement(jGenericArray, index, value);
+					ArrayTypeMetadata.SetObjectElement(jGenericArray, index, value);
 					break;
 			}
 		}

@@ -11,7 +11,7 @@ public class JClassFormatErrorObject : JLinkageErrorObject, IThrowableType<JClas
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JClassFormatErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JLinkageErrorObject>
+		TypeMetadataBuilder<JLinkageErrorObject>
 			.Create<JClassFormatErrorObject>(UnicodeClassNames.ClassFormatErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JClassFormatErrorObject> IThrowableType<JClassFormatErrorObject>.Metadata

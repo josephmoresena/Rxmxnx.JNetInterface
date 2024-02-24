@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveWrapperType<JByteObject, JByte>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JByteObject> typeMetadata =
-		new(JTypeMetadataBuilder<JByteObject>.Build(IPrimitiveType.GetMetadata<JByte>(),
+		new(TypeMetadataBuilder<JByteObject>.Build(IPrimitiveType.GetMetadata<JByte>(),
 		                                            IClassType.GetMetadata<JNumberObject>()));
 
 	static JPrimitiveWrapperTypeMetadata<JByteObject> IPrimitiveWrapperType<JByteObject>.Metadata

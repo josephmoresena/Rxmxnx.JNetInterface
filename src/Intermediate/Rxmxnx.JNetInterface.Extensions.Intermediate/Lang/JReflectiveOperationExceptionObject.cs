@@ -9,7 +9,7 @@ public class JReflectiveOperationExceptionObject : JExceptionObject, IThrowableT
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JReflectiveOperationExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JExceptionObject>
+		TypeMetadataBuilder<JExceptionObject>
 			.Create<JReflectiveOperationExceptionObject>(UnicodeClassNames.ReflectiveOperationExceptionObject())
 			.Build();
 

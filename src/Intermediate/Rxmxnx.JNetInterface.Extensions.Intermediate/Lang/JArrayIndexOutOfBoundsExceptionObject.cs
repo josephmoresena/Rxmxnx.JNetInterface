@@ -12,7 +12,7 @@ public class JArrayIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsExceptionO
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JArrayIndexOutOfBoundsExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
+		TypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
 			.Create<JArrayIndexOutOfBoundsExceptionObject>(UnicodeClassNames.ArrayIndexOutOfBoundsExceptionObject())
 			.Build();
 

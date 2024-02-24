@@ -11,7 +11,7 @@ public class JNoSuchMethodErrorObject : JIncompatibleClassChangeErrorObject, ITh
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JNoSuchMethodErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
+		TypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
 			.Create<JNoSuchMethodErrorObject>(UnicodeClassNames.NoSuchMethodErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JNoSuchMethodErrorObject> IThrowableType<JNoSuchMethodErrorObject>.Metadata

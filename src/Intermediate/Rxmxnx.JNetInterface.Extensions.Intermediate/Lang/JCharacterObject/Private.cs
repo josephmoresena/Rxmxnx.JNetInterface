@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed partial class JCharacterObject
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JCharacterObject> typeMetadata =
-		new(JTypeMetadataBuilder<JCharacterObject>.Build(IPrimitiveType.GetMetadata<JChar>()));
+		new(TypeMetadataBuilder<JCharacterObject>.Build(IPrimitiveType.GetMetadata<JChar>()));
 
 	static JPrimitiveWrapperTypeMetadata<JCharacterObject> IPrimitiveWrapperType<JCharacterObject>.Metadata
 		=> JCharacterObject.typeMetadata;

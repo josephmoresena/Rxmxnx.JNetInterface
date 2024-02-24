@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrimitiveWrapperType<JDoubleObject, JDouble>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JDoubleObject> typeMetadata =
-		new(JTypeMetadataBuilder<JDoubleObject>.Build(IPrimitiveType.GetMetadata<JDouble>(),
+		new(TypeMetadataBuilder<JDoubleObject>.Build(IPrimitiveType.GetMetadata<JDouble>(),
 		                                              IClassType.GetMetadata<JNumberObject>()));
 
 	static JPrimitiveWrapperTypeMetadata<JDoubleObject> IPrimitiveWrapperType<JDoubleObject>.Metadata

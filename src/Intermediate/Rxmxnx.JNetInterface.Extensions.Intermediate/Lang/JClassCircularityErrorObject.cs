@@ -11,7 +11,7 @@ public class JClassCircularityErrorObject : JLinkageErrorObject, IThrowableType<
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JClassCircularityErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JLinkageErrorObject>
+		TypeMetadataBuilder<JLinkageErrorObject>
 			.Create<JClassCircularityErrorObject>(UnicodeClassNames.ClassCircularityErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JClassCircularityErrorObject> IThrowableType<JClassCircularityErrorObject>.Metadata

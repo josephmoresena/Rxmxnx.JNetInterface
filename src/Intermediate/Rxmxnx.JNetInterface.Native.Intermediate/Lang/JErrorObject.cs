@@ -8,7 +8,7 @@ public class JErrorObject : JThrowableObject, IThrowableType<JErrorObject>
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JErrorObject> typeMetadata = JTypeMetadataBuilder<JThrowableObject>
+	private static readonly JThrowableTypeMetadata<JErrorObject> typeMetadata = TypeMetadataBuilder<JThrowableObject>
 		.Create<JErrorObject>(UnicodeClassNames.ErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JErrorObject> IThrowableType<JErrorObject>.Metadata => JErrorObject.typeMetadata;

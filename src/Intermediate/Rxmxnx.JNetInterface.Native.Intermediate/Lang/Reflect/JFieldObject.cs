@@ -9,7 +9,7 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JFieldObject> metadata = JTypeMetadataBuilder<JAccessibleObject>
+	private static readonly JClassTypeMetadata<JFieldObject> metadata = TypeMetadataBuilder<JAccessibleObject>
 	                                                                    .Create<JFieldObject>(
 		                                                                    UnicodeClassNames.FieldObject(),
 		                                                                    JTypeModifier.Final)

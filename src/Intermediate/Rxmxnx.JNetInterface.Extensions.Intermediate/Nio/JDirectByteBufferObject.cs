@@ -14,7 +14,7 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	/// Type metadata.
 	/// </summary>
 	private static readonly JClassTypeMetadata<JDirectByteBufferObject> metadata =
-		JTypeMetadataBuilder<JMappedByteBufferObject>
+		TypeMetadataBuilder<JMappedByteBufferObject>
 			.Create<JDirectByteBufferObject>(UnicodeClassNames.DirectByteBufferObject())
 			.Implements<JDirectBufferObject>().Build();
 

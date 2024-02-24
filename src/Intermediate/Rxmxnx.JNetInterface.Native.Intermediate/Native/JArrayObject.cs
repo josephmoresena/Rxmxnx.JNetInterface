@@ -10,7 +10,7 @@ public abstract partial class JArrayObject : JLocalObject
 	/// <summary>
 	/// CLR type of object metadata.
 	/// </summary>
-	internal static readonly Type MetadataType = typeof(JArrayObjectMetadata);
+	internal static readonly Type MetadataType = typeof(ArrayObjectMetadata);
 
 	/// <summary>
 	/// Array length.
@@ -28,12 +28,12 @@ public abstract partial class JArrayObject : JLocalObject
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
-		=> new JArrayObjectMetadata(base.CreateMetadata()) { Length = this.Length, };
+		=> new ArrayObjectMetadata(base.CreateMetadata()) { Length = this.Length, };
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
-		if (instanceMetadata is not JArrayObjectMetadata arrayMetadata)
+		if (instanceMetadata is not ArrayObjectMetadata arrayMetadata)
 			return;
 		this._length = arrayMetadata.Length;
 	}
@@ -53,7 +53,7 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObj
 	/// <summary>
 	/// Metadata array instance.
 	/// </summary>
-	public static JArrayTypeMetadata Metadata => JArrayGenericTypeMetadata.Instance;
+	public static JArrayTypeMetadata Metadata => ArrayTypeMetadata.Instance;
 
 	/// <inheritdoc/>
 	internal override JArrayTypeMetadata TypeMetadata => IArrayType.GetMetadata<JArrayObject<TElement>>();

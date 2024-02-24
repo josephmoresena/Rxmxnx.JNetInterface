@@ -12,7 +12,7 @@ public class JIncompatibleClassChangeErrorObject : JLinkageErrorObject,
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JIncompatibleClassChangeErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JLinkageErrorObject>
+		TypeMetadataBuilder<JLinkageErrorObject>
 			.Create<JIncompatibleClassChangeErrorObject>(UnicodeClassNames.IncompatibleClassChangeErrorObject())
 			.Build();
 

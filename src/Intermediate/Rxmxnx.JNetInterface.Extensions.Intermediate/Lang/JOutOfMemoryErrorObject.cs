@@ -11,7 +11,7 @@ public class JOutOfMemoryErrorObject : JVirtualMachineErrorObject, IThrowableTyp
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JOutOfMemoryErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JVirtualMachineErrorObject>
+		TypeMetadataBuilder<JVirtualMachineErrorObject>
 			.Create<JOutOfMemoryErrorObject>(UnicodeClassNames.OutOfMemoryErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JOutOfMemoryErrorObject> IThrowableType<JOutOfMemoryErrorObject>.Metadata

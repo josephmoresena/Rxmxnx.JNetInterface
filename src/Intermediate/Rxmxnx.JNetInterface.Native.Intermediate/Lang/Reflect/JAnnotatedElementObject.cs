@@ -10,7 +10,7 @@ public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElement
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata<JAnnotatedElementObject> typeMetadata =
-		JTypeMetadataBuilder<JAnnotatedElementObject>.Create(UnicodeClassNames.AnnotatedElementInterface()).Build();
+		TypeMetadataBuilder<JAnnotatedElementObject>.Create(UnicodeClassNames.AnnotatedElementInterface()).Build();
 
 	static JInterfaceTypeMetadata<JAnnotatedElementObject> IInterfaceType<JAnnotatedElementObject>.Metadata
 		=> JAnnotatedElementObject.typeMetadata;

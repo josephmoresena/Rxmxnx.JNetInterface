@@ -12,7 +12,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 [ExcludeFromCodeCoverage]
 internal sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHelloDotnetObject>
 {
-	public static JClassTypeMetadata<JHelloDotnetObject> Metadata { get; } = JTypeMetadataBuilder<JHelloDotnetObject>
+	public static JClassTypeMetadata<JHelloDotnetObject> Metadata { get; } = TypeMetadataBuilder<JHelloDotnetObject>
 	                                                                         .Create(
 		                                                                         "com/rxmxnx/dotnet/test/HelloDotnet"u8)
 	                                                                         .Build();

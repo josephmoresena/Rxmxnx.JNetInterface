@@ -8,7 +8,7 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JByteBufferObject> metadata = JTypeMetadataBuilder<JBufferObject>
+	private static readonly JClassTypeMetadata<JByteBufferObject> metadata = TypeMetadataBuilder<JBufferObject>
 	                                                                         .Create<JByteBufferObject>(
 		                                                                         UnicodeClassNames.ByteBufferObject(),
 		                                                                         JTypeModifier.Abstract)

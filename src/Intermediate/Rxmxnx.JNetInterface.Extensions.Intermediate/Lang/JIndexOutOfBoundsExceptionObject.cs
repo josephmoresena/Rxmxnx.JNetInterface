@@ -12,7 +12,7 @@ public class JIndexOutOfBoundsExceptionObject : JRuntimeExceptionObject,
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JIndexOutOfBoundsExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JRuntimeExceptionObject>
+		TypeMetadataBuilder<JRuntimeExceptionObject>
 			.Create<JIndexOutOfBoundsExceptionObject>(UnicodeClassNames.IndexOutOfBoundsExceptionObject()).Build();
 
 	static JThrowableTypeMetadata<JIndexOutOfBoundsExceptionObject> IThrowableType<JIndexOutOfBoundsExceptionObject>.

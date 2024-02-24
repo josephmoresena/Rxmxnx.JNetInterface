@@ -9,7 +9,7 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JExecutableObject> metadata = JTypeMetadataBuilder<JAccessibleObject>
+	private static readonly JClassTypeMetadata<JExecutableObject> metadata = TypeMetadataBuilder<JAccessibleObject>
 	                                                                         .Create<JExecutableObject>(
 		                                                                         UnicodeClassNames.ExecutableObject(),
 		                                                                         JTypeModifier.Abstract)

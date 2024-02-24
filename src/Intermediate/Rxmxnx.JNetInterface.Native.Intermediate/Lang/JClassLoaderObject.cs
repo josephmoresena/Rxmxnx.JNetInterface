@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 public class JClassLoaderObject : JLocalObject, IClassType<JClassLoaderObject>
 {
 	private static readonly JClassTypeMetadata<JClassLoaderObject> typeMetadata =
-		JTypeMetadataBuilder<JClassLoaderObject>.Create(UnicodeClassNames.ClassLoaderObject()).Build();
+		TypeMetadataBuilder<JClassLoaderObject>.Create(UnicodeClassNames.ClassLoaderObject()).Build();
 
 	static JClassTypeMetadata<JClassLoaderObject> IClassType<JClassLoaderObject>.Metadata
 		=> JClassLoaderObject.typeMetadata;

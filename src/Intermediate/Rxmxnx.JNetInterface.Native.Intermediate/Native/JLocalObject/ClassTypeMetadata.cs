@@ -2,12 +2,12 @@ namespace Rxmxnx.JNetInterface.Native;
 
 public partial class JLocalObject
 {
-	protected ref partial struct JTypeMetadataBuilder<TClass>
+	protected ref partial struct TypeMetadataBuilder<TClass>
 	{
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IClassType"/> type.
 		/// </summary>
-		internal sealed record JClassGenericTypeMetadata : JClassTypeMetadata<TClass>
+		internal sealed record ClassTypeMetadata : JClassTypeMetadata<TClass>
 		{
 			/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 			private readonly JClassTypeMetadata? _baseMetadata;
@@ -26,10 +26,10 @@ public partial class JLocalObject
 			/// <summary>
 			/// Constructor.
 			/// </summary>
-			/// <param name="builder">A <see cref="JTypeMetadataBuilder"/> instance.</param>
+			/// <param name="builder">A <see cref="TypeMetadataBuilder"/> instance.</param>
 			/// <param name="modifier">Modifier of current type.</param>
 			/// <param name="baseMetadata">Base type of current type metadata.</param>
-			public JClassGenericTypeMetadata(JTypeMetadataBuilder builder, JTypeModifier modifier,
+			public ClassTypeMetadata(TypeMetadataBuilder builder, JTypeModifier modifier,
 				JClassTypeMetadata? baseMetadata) : base(builder.DataTypeName, builder.Signature)
 			{
 				this._modifier = modifier;
@@ -42,7 +42,7 @@ public partial class JLocalObject
 			/// <param name="information">Internal sequence information.</param>
 			/// <param name="isVoid">Indicates if current class is <c>void</c> wrapper.</param>
 			/// <param name="baseMetadata">Base type of current type metadata.</param>
-			public JClassGenericTypeMetadata(CStringSequence information, Boolean isVoid,
+			public ClassTypeMetadata(CStringSequence information, Boolean isVoid,
 				JClassTypeMetadata? baseMetadata) : base(information)
 			{
 				this._modifier = JTypeModifier.Final;

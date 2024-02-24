@@ -5,10 +5,8 @@ public partial class JLocalObject
 	/// <summary>
 	/// <see cref="JClassTypeMetadata"/> class builder.
 	/// </summary>
-	internal ref struct JTypeMetadataBuilder
+	internal ref struct TypeMetadataBuilder
 	{
-		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
-		private readonly ReadOnlySpan<Byte> _dataTypeName;
 		/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
 		private readonly JTypeKind _kind;
 		/// <summary>
@@ -18,13 +16,11 @@ public partial class JLocalObject
 
 		/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 		private HashSet<JInterfaceTypeMetadata>? _interfaces;
-		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
-		private ReadOnlySpan<Byte> _signature;
 
 		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
-		public ReadOnlySpan<Byte> DataTypeName => this._dataTypeName;
+		public ReadOnlySpan<Byte> DataTypeName { get; }
 		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
-		public ReadOnlySpan<Byte> Signature => this._signature;
+		public ReadOnlySpan<Byte> Signature { get; private set; }
 
 		/// <summary>
 		/// Constructor.
@@ -32,9 +28,9 @@ public partial class JLocalObject
 		/// <param name="dataTypeName">Datatype name.</param>
 		/// <param name="kind">Java datatype kind.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		public JTypeMetadataBuilder(ReadOnlySpan<Byte> dataTypeName, JTypeKind kind, ISet<Type> interfaceTypes)
+		public TypeMetadataBuilder(ReadOnlySpan<Byte> dataTypeName, JTypeKind kind, ISet<Type> interfaceTypes)
 		{
-			this._dataTypeName = dataTypeName;
+			this.DataTypeName = dataTypeName;
 			this._interfaceTypes = interfaceTypes;
 			this._kind = kind;
 		}
@@ -47,7 +43,7 @@ public partial class JLocalObject
 		public void WithSignature(ReadOnlySpan<Byte> signature)
 		{
 			ValidationUtilities.ThrowIfInvalidSignature(signature, false);
-			this._signature = signature;
+			this.Signature = signature;
 		}
 
 		/// <summary>
@@ -61,13 +57,13 @@ public partial class JLocalObject
 			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
 			if (!this._interfaceTypes.Contains(metadata.InterfaceType))
 				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
-					this._dataTypeName, this._kind != JTypeKind.Interface);
+					this.DataTypeName, this._kind != JTypeKind.Interface);
 
 			foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
 			{
 				if (!this._interfaceTypes.Contains(interfaceMetadata.InterfaceType))
 					NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
-						this._dataTypeName, this._kind != JTypeKind.Interface);
+						this.DataTypeName, this._kind != JTypeKind.Interface);
 			}
 			this._interfaces ??= [];
 			this._interfaces.Add(metadata);
@@ -86,7 +82,7 @@ public partial class JLocalObject
 	/// <typeparam name="TClass">Type of <c/>java.lang.Object<c/> class.</typeparam>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-	protected ref partial struct JTypeMetadataBuilder<
+	protected ref partial struct TypeMetadataBuilder<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass>
 		where TClass : JLocalObject, IClassType<TClass>
 	{
@@ -95,9 +91,9 @@ public partial class JLocalObject
 		/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 		private readonly JTypeModifier _modifier;
 		/// <summary>
-		/// A <see cref="JTypeMetadataBuilder"/> instance.
+		/// A <see cref="TypeMetadataBuilder"/> instance.
 		/// </summary>
-		private JTypeMetadataBuilder _builder;
+		private TypeMetadataBuilder _builder;
 
 		/// <summary>
 		/// Constructor.
@@ -106,7 +102,7 @@ public partial class JLocalObject
 		/// <param name="modifier">Modifier of current type.</param>
 		/// <param name="baseMetadata">Base type metadata of current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private JTypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
+		private TypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata, ISet<Type> interfaceTypes)
 		{
 			this._builder = new(className, JTypeKind.Class, interfaceTypes);
@@ -119,7 +115,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public JTypeMetadataBuilder<TClass> Implements<TInterface>()
+		public TypeMetadataBuilder<TClass> Implements<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			this._builder.AppendInterface<TInterface>();
@@ -130,14 +126,14 @@ public partial class JLocalObject
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JClassTypeMetadata<TClass> Build()
-			=> new JClassGenericTypeMetadata(this._builder, this._modifier, this._baseMetadata);
+			=> new ClassTypeMetadata(this._builder, this._modifier, this._baseMetadata);
 
 		/// <summary>
 		/// Sets the type signature.
 		/// </summary>
 		/// <param name="signature">Type signature.</param>
 		/// <returns>Current instance.</returns>
-		internal JTypeMetadataBuilder<TClass> WithSignature(CString signature)
+		internal TypeMetadataBuilder<TClass> WithSignature(CString signature)
 		{
 			this._builder.WithSignature(signature);
 			return this;
@@ -148,8 +144,8 @@ public partial class JLocalObject
 		/// </summary>
 		/// <param name="className">Class name of current type.</param>
 		/// <param name="modifier">Modifier of current type.</param>
-		/// <returns>A new <see cref="JTypeMetadataBuilder{TClass}"/> instance.</returns>
-		public static JTypeMetadataBuilder<TClass> Create(ReadOnlySpan<Byte> className,
+		/// <returns>A new <see cref="TypeMetadataBuilder{TClass}"/> instance.</returns>
+		public static TypeMetadataBuilder<TClass> Create(ReadOnlySpan<Byte> className,
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			ValidationUtilities.ValidateNotEmpty(className);
@@ -165,8 +161,8 @@ public partial class JLocalObject
 		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
 		/// <param name="className">Class name of current type.</param>
 		/// <param name="modifier">Modifier of current type.</param>
-		/// <returns>A new <see cref="JTypeMetadataBuilder{TClass}"/> instance.</returns>
-		public static JTypeMetadataBuilder<TObject>
+		/// <returns>A new <see cref="TypeMetadataBuilder{TClass}"/> instance.</returns>
+		public static TypeMetadataBuilder<TObject>
 			Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
 				ReadOnlySpan<Byte> className, JTypeModifier modifier = JTypeModifier.Extensible)
 			where TObject : TClass, IClassType<TObject>
@@ -181,13 +177,13 @@ public partial class JLocalObject
 		/// <summary>
 		/// Creates a <see cref="JClassTypeMetadata{TClass}"/> instance.
 		/// </summary>
-		/// <param name="builder">A <see cref="JTypeMetadataBuilder"/> instance.</param>
+		/// <param name="builder">A <see cref="TypeMetadataBuilder"/> instance.</param>
 		/// <param name="modifier">Modifier of current type.</param>
 		/// <param name="baseMetadata">Base type metadata of current type.</param>
 		/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
-		internal static JClassTypeMetadata<TClass> Build(JTypeMetadataBuilder builder, JTypeModifier modifier,
+		internal static JClassTypeMetadata<TClass> Build(TypeMetadataBuilder builder, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata)
-			=> new JClassGenericTypeMetadata(builder, modifier, baseMetadata);
+			=> new ClassTypeMetadata(builder, modifier, baseMetadata);
 		/// <summary>
 		/// Creates a <see cref="JClassTypeMetadata{TClass}"/> instance for <paramref name="primitiveMetadata"/>
 		/// wrapper class.
@@ -197,7 +193,7 @@ public partial class JLocalObject
 		/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
 		internal static JClassTypeMetadata<TClass> Build(JPrimitiveTypeMetadata primitiveMetadata,
 			JClassTypeMetadata? baseMetadata = default)
-			=> new JClassGenericTypeMetadata(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0,
+			=> new ClassTypeMetadata(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0,
 			                                 baseMetadata);
 	}
 }

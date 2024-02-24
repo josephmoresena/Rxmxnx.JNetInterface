@@ -11,7 +11,7 @@ public sealed class JDirectBufferObject : JInterfaceObject<JDirectBufferObject>,
 	/// Type metadata.
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata<JDirectBufferObject> metadata =
-		JTypeMetadataBuilder<JDirectBufferObject>.Create(UnicodeClassNames.DirectBufferObject()).Build();
+		TypeMetadataBuilder<JDirectBufferObject>.Create(UnicodeClassNames.DirectBufferObject()).Build();
 
 	static JInterfaceTypeMetadata<JDirectBufferObject> IInterfaceType<JDirectBufferObject>.Metadata
 		=> JDirectBufferObject.metadata;

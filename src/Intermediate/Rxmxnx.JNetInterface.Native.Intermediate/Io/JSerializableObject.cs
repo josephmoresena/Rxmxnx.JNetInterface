@@ -9,7 +9,7 @@ public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>,
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata<JSerializableObject> typeMetadata =
-		JTypeMetadataBuilder<JSerializableObject>.Create(UnicodeClassNames.SerializableInterface()).Build();
+		TypeMetadataBuilder<JSerializableObject>.Create(UnicodeClassNames.SerializableInterface()).Build();
 
 	static JInterfaceTypeMetadata<JSerializableObject> IInterfaceType<JSerializableObject>.Metadata
 		=> JSerializableObject.typeMetadata;

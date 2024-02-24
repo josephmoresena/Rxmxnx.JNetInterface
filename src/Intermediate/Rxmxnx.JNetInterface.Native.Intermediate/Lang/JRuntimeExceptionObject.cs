@@ -9,7 +9,7 @@ public class JRuntimeExceptionObject : JExceptionObject, IThrowableType<JRuntime
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JRuntimeExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JExceptionObject>
+		TypeMetadataBuilder<JExceptionObject>
 			.Create<JRuntimeExceptionObject>(UnicodeClassNames.RuntimeExceptionObject()).Build();
 
 	static JThrowableTypeMetadata<JRuntimeExceptionObject> IThrowableType<JRuntimeExceptionObject>.Metadata

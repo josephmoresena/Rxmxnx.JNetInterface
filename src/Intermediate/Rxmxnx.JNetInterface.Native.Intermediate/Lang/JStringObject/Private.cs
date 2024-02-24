@@ -5,7 +5,7 @@ public partial class JStringObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JStringObject> typeMetadata = JTypeMetadataBuilder<JStringObject>
+	private static readonly JClassTypeMetadata<JStringObject> typeMetadata = TypeMetadataBuilder<JStringObject>
 	                                                                         .Create(UnicodeClassNames.StringObject(),
 		                                                                         JTypeModifier.Final)
 	                                                                         .Implements<JSerializableObject>()
