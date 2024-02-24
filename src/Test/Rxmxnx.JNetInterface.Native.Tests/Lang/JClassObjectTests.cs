@@ -155,6 +155,8 @@ public sealed class JClassObjectTests
 
 		ILocalObject.ProcessMetadata(jStringClass, classObjectMetadata);
 
+		env.ClassFeature.Received(0).GetClass(Arg.Any<CString>());
+
 		Assert.Equal(classObjectMetadata.ObjectClassName, jStringClass.ObjectClassName);
 		Assert.Equal(classObjectMetadata.ObjectSignature, jStringClass.ObjectSignature);
 		Assert.Equal(classObjectMetadata.Name, jStringClass.Name);
@@ -197,6 +199,8 @@ public sealed class JClassObjectTests
 		Assert.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JTypeObject>(), typeMetadata.Interfaces);
 
+		env.ReferenceFeature.Received(1).GetLifetime(jLocal, classRef.Value, jClass, false);
+
 		env.ClassFeature.AsClassObject(classRef).Returns(jClassResult);
 		env.ClassFeature.AsClassObject(jLocal).Returns(jClassResult);
 		env.ClassFeature.AsClassObject(jGlobal).Returns(jClassResult);
@@ -208,8 +212,43 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClassResult, typeMetadata.ParseInstance(jLocal));
 		Assert.Equal(jClassResult, typeMetadata.ParseInstance(env, jGlobal));
 
+		env.ReferenceFeature.Received(1).GetLifetime(Arg.Any<JLocalObject>(), Arg.Any<JObjectLocalRef>(),
+		                                             Arg.Any<JClassObject>(), Arg.Any<Boolean>());
 		env.ClassFeature.Received(1).AsClassObject(classRef);
 		env.ClassFeature.Received(1).AsClassObject(jLocal);
 		env.ClassFeature.Received(1).AsClassObject(jGlobal);
+		env.ClassFeature.Received(0).IsAssignableTo<JClassObject>(Arg.Any<JReferenceObject>());
+	}
+	[Fact]
+	internal void GetClassTest()
+	{
+		JClassTypeMetadata stringTypeMetadata = IClassType.GetMetadata<JStringObject>();
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
+		using JClassObject jClass = new(env);
+		using JClassObject jClassResult = new(jClass, classRef);
+
+		env.ClassFeature.GetClass<JStringObject>().Returns(jClassResult);
+		env.ClassFeature.GetClass(stringTypeMetadata.ClassName).Returns(jClassResult);
+
+		Assert.Equal(jClassResult, JClassObject.GetClass(env, stringTypeMetadata.ClassName));
+		Assert.Equal(jClassResult, JClassObject.GetClass<JStringObject>(env));
+	}
+	[Fact]
+	internal void LoadClassTest()
+	{
+		JClassTypeMetadata stringTypeMetadata = IClassType.GetMetadata<JStringObject>();
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
+		Byte[] rawByte = JClassObjectTests.fixture.CreateMany<Byte>().ToArray();
+		using JClassObject jClass = new(env);
+		using JClassObject jClassResult = new(jClass, classRef);
+
+		env.ClassFeature.LoadClass(stringTypeMetadata.ClassName, Arg.Is<Byte[]>(a => a.SequenceEqual(rawByte)))
+		   .Returns(jClassResult);
+		env.ClassFeature.LoadClass<JStringObject>(Arg.Is<Byte[]>(a => a.SequenceEqual(rawByte))).Returns(jClassResult);
+
+		Assert.Equal(jClassResult, JClassObject.LoadClass(env, stringTypeMetadata.ClassName, rawByte));
+		Assert.Equal(jClassResult, JClassObject.LoadClass<JStringObject>(env, rawByte));
 	}
 }

@@ -186,8 +186,8 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="instanceMetadata">The object metadata for current instance.</param>
 	public void SetClass(ObjectMetadata instanceMetadata)
 	{
-		if (instanceMetadata.ObjectClassName.AsSpan().SequenceEqual(this._class?.Name)) return;
-		this._class = instanceMetadata.GetClass(this._env);
+		if (!instanceMetadata.ObjectClassName.AsSpan().SequenceEqual(this._class?.Name))
+			this._class = instanceMetadata.GetClass(this._env);
 		this._isRealClass = true;
 	}
 	/// <summary>

@@ -118,12 +118,8 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="className">Class name.</param>
 	/// <returns>The class instance with given class name.</returns>
-	public static JClassObject GetClass(IEnvironment env, CString className)
-	{
-		if (!className.IsNullTerminated)
-			className = (CString)className.Clone();
-		return env.ClassFeature.GetClass(className);
-	}
+	public static JClassObject GetClass(IEnvironment env, ReadOnlySpan<Byte> className)
+		=> env.ClassFeature.GetClass(new CString(className));
 	/// <summary>
 	/// Retrieves the java class for given type.
 	/// </summary>
