@@ -1,5 +1,3 @@
-using Rxmxnx.JNetInterface.Io;
-
 namespace Rxmxnx.JNetInterface.Tests.Lang;
 
 [ExcludeFromCodeCoverage]
