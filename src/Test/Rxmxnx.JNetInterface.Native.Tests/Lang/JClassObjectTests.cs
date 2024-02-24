@@ -181,6 +181,7 @@ public sealed class JClassObjectTests
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JClassObject>();
 		VirtualMachineProxy vm = Substitute.For<VirtualMachineProxy>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
 		JGlobalRef globalRef = JClassObjectTests.fixture.Create<JGlobalRef>();
 		using JClassObject jClass = new(env);
@@ -197,6 +198,7 @@ public sealed class JClassObjectTests
 		Assert.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JTypeObject>(), typeMetadata.Interfaces);
 
+		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ReferenceFeature.Received(1).GetLifetime(jLocal, classRef.Value, jClass, false);
 
 		env.ClassFeature.AsClassObject(classRef).Returns(jClassResult);
