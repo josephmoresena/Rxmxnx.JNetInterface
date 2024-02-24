@@ -105,6 +105,7 @@ public partial class JLocalObject
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata, ISet<Type> interfaceTypes)
 		{
+			NativeValidationUtilities.ThrowIfInvalidTypeBuilder(className, TClass.FamilyType);
 			this._builder = new(className, JTypeKind.Class, interfaceTypes);
 			this._baseMetadata = baseMetadata;
 			this._modifier = modifier;
@@ -193,7 +194,6 @@ public partial class JLocalObject
 		/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
 		internal static JClassTypeMetadata<TClass> Build(JPrimitiveTypeMetadata primitiveMetadata,
 			JClassTypeMetadata? baseMetadata = default)
-			=> new ClassTypeMetadata(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0,
-			                                 baseMetadata);
+			=> new ClassTypeMetadata(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0, baseMetadata);
 	}
 }

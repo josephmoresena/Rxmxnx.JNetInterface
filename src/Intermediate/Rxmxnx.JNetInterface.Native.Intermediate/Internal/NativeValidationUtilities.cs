@@ -148,6 +148,30 @@ internal static class NativeValidationUtilities
 			(missing.Count > 0 ? $"Missing values: {String.Join(", ", missing)}." : "");
 		throw new InvalidOperationException(message);
 	}
+	/// <summary>
+	/// Throws an exception in illegal use of <see cref="JLocalObject.TypeMetadataBuilder"/>.
+	/// </summary>
+	/// <param name="className">Class name.</param>
+	/// <param name="familyType">Family type name.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception in illegal use of <see cref="JLocalObject.TypeMetadataBuilder"/>.
+	/// </exception>
+	public static void ThrowIfInvalidTypeBuilder(ReadOnlySpan<Byte> className, Type? familyType)
+	{
+		if (familyType == typeof(JLocalObject)) return;
+
+		String? expectedBuilder = default;
+		if (familyType == typeof(JInterfaceObject))
+			expectedBuilder = $"{nameof(JInterfaceObject)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
+		else if (familyType == typeof(JEnumTypeMetadata))
+			expectedBuilder = $"{nameof(JEnumObject)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
+		else if (familyType == typeof(JThrowableObject))
+			expectedBuilder = $"{nameof(JThrowableObject)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
+
+		throw !String.IsNullOrWhiteSpace(expectedBuilder) ?
+			new InvalidOperationException($"To build {className.ToCString()} type metadata use {expectedBuilder}.") :
+			new($"{className.ToCString()} is invalid reference type.");
+	}
 
 	/// <summary>
 	/// Extension for <see cref="CString"/> creation.
