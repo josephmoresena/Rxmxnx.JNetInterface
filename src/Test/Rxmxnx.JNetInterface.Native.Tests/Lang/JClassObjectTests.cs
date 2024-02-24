@@ -4,8 +4,11 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JClassObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString classSignature = CString.Concat("L"u8, UnicodeClassNames.ClassObject, ";"u8);
-	private static readonly CString arraySignature = CString.Concat("[L"u8, UnicodeClassNames.ClassObject, ";"u8);
+	private static readonly CString className = UnicodeClassNames.ClassObject;
+	private static readonly CString classSignature = CString.Concat("L"u8, JClassObjectTests.className, ";"u8);
+	private static readonly CString arraySignature = CString.Concat("["u8, JClassObjectTests.classSignature);
+	private static readonly CStringSequence hash = new(JClassObjectTests.className, JClassObjectTests.classSignature,
+	                                                   JClassObjectTests.arraySignature);
 
 	[Theory]
 	[InlineData(true)]
@@ -85,25 +88,25 @@ public sealed class JClassObjectTests
 	internal void GetClassInfoTest(Byte c)
 	{
 		ITypeInformation information = Substitute.For<ITypeInformation>();
-		CString className = (CString)JClassObjectTests.fixture.Create<String>();
-		CString signature = (CString)JClassObjectTests.fixture.Create<String>();
-		String hash = JClassObjectTests.fixture.Create<String>();
+		CString className0 = (CString)JClassObjectTests.fixture.Create<String>();
+		CString signature0 = (CString)JClassObjectTests.fixture.Create<String>();
+		String hash0 = JClassObjectTests.fixture.Create<String>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
 		using JClassObject jClass = new(env);
 		using JClassObject jClassObj = new(jClass, classRef);
 
 		env.ClassFeature.GetClassInfo(jClassObj).Returns(information);
-		information.ClassName.Returns(className);
-		information.Signature.Returns(signature);
-		information.Hash.Returns(hash);
+		information.ClassName.Returns(className0);
+		information.Signature.Returns(signature0);
+		information.Hash.Returns(hash0);
 
 		if (c < 1)
-			Assert.Equal(className, jClassObj.Name);
+			Assert.Equal(className0, jClassObj.Name);
 		if (c < 2)
-			Assert.Equal(signature, jClassObj.ClassSignature);
+			Assert.Equal(signature0, jClassObj.ClassSignature);
 		if (c < 3)
-			Assert.Equal(hash, jClassObj.Hash);
+			Assert.Equal(hash0, jClassObj.Hash);
 		env.ClassFeature.Received(1).GetClassInfo(jClassObj);
 	}
 	[Theory]
@@ -179,6 +182,7 @@ public sealed class JClassObjectTests
 	internal void MetadataTest()
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JClassObject>();
+		String textValue = typeMetadata.ToString();
 		VirtualMachineProxy vm = Substitute.For<VirtualMachineProxy>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
@@ -189,9 +193,20 @@ public sealed class JClassObjectTests
 		using JLocalObject jLocal = new(env, classRef.Value, jClass);
 		using JGlobal jGlobal = new(vm, new(jClass), !env.NoProxy, globalRef);
 
-		Assert.Equal(UnicodeClassNames.ClassObject, typeMetadata.ClassName);
+		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.Hash} }}", textValue);
+
+		Assert.Equal(JTypeModifier.Final, typeMetadata.Modifier);
+		Assert.Equal(IntPtr.Size, typeMetadata.SizeOf);
+		Assert.Equal(JArrayObject<JClassObject>.Metadata, typeMetadata.GetArrayMetadata());
+		Assert.Equal(typeof(JClassObject), typeMetadata.Type);
+		Assert.Equal(JTypeKind.Class, typeMetadata.Kind);
+		Assert.Equal(JClassObjectTests.className, typeMetadata.ClassName);
 		Assert.Equal(JClassObjectTests.classSignature, typeMetadata.Signature);
 		Assert.Equal(JClassObjectTests.arraySignature, typeMetadata.ArraySignature);
+		Assert.Equal(JClassObjectTests.hash.ToString(), typeMetadata.Hash);
+		Assert.Equal(JClassObjectTests.hash.ToString(), IDataType.GetHash<JClassObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces);
@@ -208,6 +223,7 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClass, typeMetadata.ParseInstance(jClass));
 		Assert.Null(typeMetadata.ParseInstance(default));
 		Assert.Null(typeMetadata.ParseInstance(env, default));
+		Assert.Null(typeMetadata.CreateException(jGlobal));
 		Assert.Equal(jClassResult, typeMetadata.CreateInstance(jClass, classRef.Value, true));
 		Assert.Equal(jClassResult, typeMetadata.ParseInstance(jLocal));
 		Assert.Equal(jClassResult, typeMetadata.ParseInstance(env, jGlobal));

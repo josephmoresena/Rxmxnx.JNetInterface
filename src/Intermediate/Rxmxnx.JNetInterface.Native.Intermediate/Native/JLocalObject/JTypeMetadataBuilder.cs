@@ -25,8 +25,6 @@ public partial class JLocalObject
 		public ReadOnlySpan<Byte> DataTypeName => this._dataTypeName;
 		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 		public ReadOnlySpan<Byte> Signature => this._signature;
-		/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
-		public JTypeKind Kind => this._kind;
 
 		/// <summary>
 		/// Constructor.
