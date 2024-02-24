@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Tests.Restricted;
 
-public partial class ClassFeatureProxy : IClassFeature
+public partial class ClassFeatureProxy
 {
 	JClassObject IClassFeature.GetClass(ReadOnlySpan<Byte> className) => this.GetClass(new CString(className));
 	JClassObject IClassFeature.LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,

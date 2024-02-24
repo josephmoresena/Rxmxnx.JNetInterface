@@ -28,13 +28,12 @@ public partial record JMethodDefinition
 		IEnvironment env = jClass.Environment;
 		env.AccessFeature.CallInternalStaticMethod(jClass, definition, args ?? definition.CreateArgumentsArray());
 	}
-
 	/// <summary>
 	/// Create a <see cref="JMethodDefinition"/> instance for <paramref name="metadata"/>.
 	/// </summary>
 	/// <param name="methodName">Method name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JMethodDefinition"/> instance.</returns>
-	public static JMethodDefinition Create(ReadOnlySpan<Byte> methodName, JArgumentMetadata[] metadata)
+	internal static JMethodDefinition Create(ReadOnlySpan<Byte> methodName, params JArgumentMetadata[] metadata)
 		=> new(methodName, metadata);
 }

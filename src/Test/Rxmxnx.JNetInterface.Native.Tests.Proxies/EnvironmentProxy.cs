@@ -26,7 +26,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 	public abstract TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func);
 	public abstract TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
 
-	public static EnvironmentProxy CreateEnvironment(Boolean isProxy, VirtualMachineProxy? vm = default)
+	public static EnvironmentProxy CreateEnvironment(Boolean isProxy = false, VirtualMachineProxy? vm = default)
 	{
 		EnvironmentProxy env = Substitute.For<EnvironmentProxy>();
 		env.VirtualMachine.Returns(vm ?? Substitute.For<VirtualMachineProxy>());

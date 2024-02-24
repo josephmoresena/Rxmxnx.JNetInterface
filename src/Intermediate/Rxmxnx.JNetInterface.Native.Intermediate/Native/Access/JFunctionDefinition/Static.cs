@@ -71,6 +71,7 @@ public partial record JFunctionDefinition<TResult>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JFunctionDefinition{TResult}"/> instance.</returns>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	internal static JFunctionDefinition<TResult> Create(ReadOnlySpan<Byte> functionName, JArgumentMetadata[] metadata)
+	internal static JFunctionDefinition<TResult> Create(ReadOnlySpan<Byte> functionName,
+		params JArgumentMetadata[] metadata)
 		=> new(functionName, metadata);
 }
