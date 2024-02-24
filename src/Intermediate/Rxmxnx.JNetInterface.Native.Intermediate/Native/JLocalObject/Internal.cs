@@ -140,5 +140,9 @@ public partial class JLocalObject
 	/// </exception>
 	internal static JLocalObject Validate<TDataType>(JLocalObject jLocal)
 		where TDataType : JLocalObject, IDataType<TDataType>
-		=> jLocal as TDataType ?? JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal.Lifetime.Environment);
+	{
+		if (jLocal.ObjectClassName.AsSpan().SequenceEqual(IDataType.GetMetadata<TDataType>().ClassName)) return jLocal;
+		return jLocal as TDataType ??
+			JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal.Lifetime.Environment);
+	}
 }

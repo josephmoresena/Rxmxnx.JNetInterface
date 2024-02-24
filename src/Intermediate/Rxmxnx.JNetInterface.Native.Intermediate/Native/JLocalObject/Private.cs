@@ -15,7 +15,6 @@ public partial class JLocalObject : ILocalObject
 	/// <param name="instanceMetadata">The object metadata for <paramref name="jLocal"/>.</param>
 	private static void ProcessMetadata(JLocalObject jLocal, ObjectMetadata instanceMetadata)
 		=> jLocal.ProcessMetadata(instanceMetadata);
-
 	/// <summary>
 	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
 	/// </summary>

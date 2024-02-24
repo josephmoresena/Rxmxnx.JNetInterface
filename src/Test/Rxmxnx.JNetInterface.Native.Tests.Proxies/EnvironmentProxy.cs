@@ -38,6 +38,21 @@ public abstract partial class EnvironmentProxy : IEnvironment
 		env.ArrayFeature.Returns(Substitute.For<ArrayFeatureProxy>());
 		env.NioFeature.Returns(Substitute.For<NioFeatureProxy>());
 		env.FunctionSet.Returns(Substitute.For<NativeFunctionSet>());
+
+		env.ReferenceFeature.GetLifetime(Arg.Any<JLocalObject>(), Arg.Any<JObjectLocalRef>(), Arg.Any<JClassObject>(),
+		                                 Arg.Any<Boolean>()).Returns(l =>
+		{
+			JLocalObject jLocal = (JLocalObject)l[0];
+			JObjectLocalRef localRef = (JObjectLocalRef)l[1];
+			JClassObject jClass = (JClassObject)l[2];
+			return new()
+			{
+				Value = new(env, jLocal, localRef)
+				{
+					Class = jClass, IsRealClass = jClass is not null && jClass.IsFinal.GetValueOrDefault(),
+				},
+			};
+		});
 		return env;
 	}
 }
