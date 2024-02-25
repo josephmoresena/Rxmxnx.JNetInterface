@@ -192,6 +192,7 @@ public sealed class JClassObjectTests
 		using JClassObject jClassResult = new(jClass, classRef);
 		using JLocalObject jLocal = new(env, classRef.Value, jClass);
 		using JGlobal jGlobal = new(vm, new(jClass), !env.NoProxy, globalRef);
+		JReferenceObject jObject = jGlobal;
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -218,7 +219,7 @@ public sealed class JClassObjectTests
 
 		env.ClassFeature.AsClassObject(classRef).Returns(jClassResult);
 		env.ClassFeature.AsClassObject(jLocal).Returns(jClassResult);
-		env.ClassFeature.AsClassObject(jGlobal).Returns(jClassResult);
+		env.ClassFeature.AsClassObject(Arg.Is<JGlobal>(g => jObject.Equals(g))).Returns(jClassResult);
 
 		Assert.Equal(jClass, typeMetadata.ParseInstance(jClass));
 		Assert.Null(typeMetadata.ParseInstance(default));

@@ -46,6 +46,13 @@ public partial class JGlobalBase
 		IThread env = this.VirtualMachine.CreateThread(ThreadPurpose.SynchronizeGlobalReference);
 		return env.ReferenceFeature.GetSynchronizer(this);
 	}
+	/// <inheritdoc/>
+	private protected override Boolean Same(JReferenceObject jObject)
+	{
+		if (base.Same(jObject)) return true;
+		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.CheckGlobalReference);
+		return thread.IsSameObject(this, jObject);
+	}
 
 	/// <inheritdoc cref="JReferenceObject.IsAssignableTo{TDataType}"/>
 	/// <param name="obj">A <see cref="JGlobalBase"/> instance.</param>

@@ -60,6 +60,9 @@ public partial class JLocalObject
 		return env.ReferenceFeature.GetSynchronizer(this);
 	}
 	/// <inheritdoc/>
+	private protected override Boolean Same(JReferenceObject jObject)
+		=> base.Same(jObject) || this.Environment.IsSameObject(this, jObject);
+	/// <inheritdoc/>
 	internal override Boolean IsAssignableTo<TDataType>() => this.Lifetime.IsAssignableTo<TDataType>(this);
 	/// <inheritdoc/>
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)

@@ -16,8 +16,7 @@ public partial class JStringObject : IEquatable<JStringObject?>, IEquatable<IWra
 				this._value.Equals(jString._value) :
 				this.Environment.IsSameObject(this, jString),
 			String str => this.Value.Equals(str),
-			IWrapper<String> wStr => this.Value.Equals(wStr),
-			JReferenceObject jObject => this.Environment.IsSameObject(this, jObject),
+			IWrapper<String> wStr => this.Value.Equals(wStr.Value),
 			_ => base.Equals(obj),
 		};
 }

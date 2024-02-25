@@ -18,6 +18,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <summary>
 	/// Internal property to debugger display.
 	/// </summary>
+	[ExcludeFromCodeCoverage]
 	internal String DisplayValue
 		=> this._value ?? (this._length is not null ?
 			$"{this.Reference} Length: {this.Length}" :
@@ -26,12 +27,12 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// UTF-16 length.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 Length => this._length ?? this._value?.Length ?? this.Environment.StringFeature.GetLength(this);
+	public Int32 Length => this._length ??= this._value?.Length ?? this.Environment.StringFeature.GetLength(this);
 	/// <summary>
 	/// UTF-8 length.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 Utf8Length => this._utf8Length ?? this.Environment.StringFeature.GetUtf8Length(this);
+	public Int32 Utf8Length => this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(this);
 
 	/// <summary>
 	/// Internal string value.

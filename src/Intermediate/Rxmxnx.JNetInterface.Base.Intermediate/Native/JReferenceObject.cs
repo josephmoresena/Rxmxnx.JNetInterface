@@ -50,11 +50,12 @@ public abstract partial class JReferenceObject : JObject
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other)
-		=> other switch
+		=> Object.ReferenceEquals(this, other) || other switch
 		{
 			null => this.IsDefault,
-			JReferenceObject jObject => this.IsProxy == jObject.IsProxy && this.IsDefault == jObject.IsDefault &&
-				this.AsSpan().SequenceEqual(jObject.AsSpan()),
+			JReferenceObject jObject => this.Same(jObject),
 			_ => false,
 		};
+	/// <inheritdoc/>
+	public override Int32 GetHashCode() => this.As<JObjectLocalRef>().GetHashCode();
 }
