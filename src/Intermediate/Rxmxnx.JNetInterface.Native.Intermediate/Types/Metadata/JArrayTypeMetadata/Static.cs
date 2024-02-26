@@ -7,6 +7,15 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public abstract partial record JArrayTypeMetadata
 {
 	/// <summary>
+	/// Name of <see cref="IArrayType.GetArrayArrayMetadata{TElement}"/> method.
+	/// </summary>
+	private const String GetArrayArrayMetadataName = nameof(IArrayType.GetArrayArrayMetadata);
+	/// <summary>
+	/// Flags of <see cref="IArrayType.GetArrayArrayMetadata{TElement}"/> method.
+	/// </summary>
+	private const BindingFlags GetArrayArrayMetadataFlags = BindingFlags.NonPublic | BindingFlags.Static;
+
+	/// <summary>
 	/// <see cref="MethodInfo"/> of array metadata.
 	/// </summary>
 	private static readonly MethodInfo? getArrayArrayMetadataInfo;
@@ -18,14 +27,12 @@ public abstract partial record JArrayTypeMetadata
 	/// <summary>
 	/// Static constructor.
 	/// </summary>
+	[ExcludeFromCodeCoverage]
 	static JArrayTypeMetadata()
 	{
 		try
 		{
-			Type typeofT = typeof(IArrayType);
-			JArrayTypeMetadata.getArrayArrayMetadataInfo =
-				typeofT.GetMethod(nameof(IArrayType.GetArrayArrayMetadata),
-				                  BindingFlags.NonPublic | BindingFlags.Static);
+			JArrayTypeMetadata.getArrayArrayMetadataInfo = JArrayTypeMetadata.ReflectGetArrayArrayMetadataMethod();
 		}
 		catch (Exception ex)
 		{
@@ -48,7 +55,7 @@ public abstract partial record JArrayTypeMetadata
 		=> JArrayTypeMetadata.metadataCache.TryGetValue(elementSignature.ToHexString(),
 		                                                out JArrayTypeMetadata? result) ?
 			result :
-			JArrayTypeMetadata.GetArrayArrayMetadataWithReflection(elementSignature, typeofElement);
+			JArrayTypeMetadata.TryGetArrayArrayMetadataWithReflection(elementSignature, typeofElement);
 	/// <summary>
 	/// Retrieves array deep.
 	/// </summary>
@@ -70,6 +77,7 @@ public abstract partial record JArrayTypeMetadata
 	/// </summary>
 	/// <typeparam name="TElement">A <see cref="IDataType{TElement}"/> element type.</typeparam>
 	/// <returns>Type of <see cref="JArrayObject{TElement}"/></returns>
+	[ExcludeFromCodeCoverage]
 	protected static Type? GetArrayType<TElement>() where TElement : IObject, IDataType<TElement>
 	{
 		try
@@ -97,22 +105,19 @@ public abstract partial record JArrayTypeMetadata
 	}
 
 	/// <summary>
-	/// Retrieves metadata for the array of arrays of <paramref name="typeofElement"/>.
+	/// Tries to retrieve metadata for the array of arrays of <paramref name="typeofElement"/>.
 	/// </summary>
 	/// <param name="typeofElement">Type of array element.</param>
 	/// <param name="elementSignature">Element signature.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
 	[RequiresDynamicCode("Calls System.Reflection.MethodInfo.MakeGenericMethod(params Type[])")]
-	private static JArrayTypeMetadata? GetArrayArrayMetadataWithReflection(CString elementSignature, Type typeofElement)
+	[ExcludeFromCodeCoverage]
+	private static JArrayTypeMetadata? TryGetArrayArrayMetadataWithReflection(CString elementSignature,
+		Type typeofElement)
 	{
 		try
 		{
-			if (JArrayTypeMetadata.getArrayArrayMetadataInfo is null) return default;
-			MethodInfo getGenericArrayArrayMetadataInfo =
-				JArrayTypeMetadata.getArrayArrayMetadataInfo.MakeGenericMethod(typeofElement);
-			Func<JArrayTypeMetadata> getGenericArrayArrayMetadata =
-				getGenericArrayArrayMetadataInfo.CreateDelegate<Func<JArrayTypeMetadata>>();
-			return getGenericArrayArrayMetadata();
+			return JArrayTypeMetadata.GetArrayArrayMetadataWithReflection(typeofElement);
 		}
 		catch (Exception ex)
 		{
@@ -120,5 +125,33 @@ public abstract partial record JArrayTypeMetadata
 				$"Unable to create {nameof(JArrayTypeMetadata)} instance of [[{elementSignature}. {ex.Message}");
 			return default;
 		}
+	}
+	/// <summary>
+	/// Retrieves metadata for the array of arrays of <paramref name="typeofElement"/>.
+	/// </summary>
+	/// <param name="typeofElement">Type of array element.</param>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
+	[RequiresDynamicCode("Calls System.Reflection.MethodInfo.MakeGenericMethod(params Type[])")]
+	private static JArrayTypeMetadata? GetArrayArrayMetadataWithReflection(Type typeofElement)
+	{
+		if (JArrayTypeMetadata.getArrayArrayMetadataInfo is null) return default;
+		MethodInfo getGenericArrayArrayMetadataInfo =
+			JArrayTypeMetadata.getArrayArrayMetadataInfo.MakeGenericMethod(typeofElement);
+		Func<JArrayTypeMetadata> getGenericArrayArrayMetadata =
+			getGenericArrayArrayMetadataInfo.CreateDelegate<Func<JArrayTypeMetadata>>();
+		return getGenericArrayArrayMetadata();
+	}
+	/// <summary>
+	/// Retrieves a <see cref="MethodInfo"/> instance for
+	/// generic <see cref="IArrayType.GetArrayArrayMetadata{TElement}"/> method.
+	/// </summary>
+	/// <returns>
+	/// A <see cref="MethodInfo"/> for <see cref="IArrayType.GetArrayArrayMetadata{TElement}"/> method.
+	/// </returns>
+	private static MethodInfo ReflectGetArrayArrayMetadataMethod()
+	{
+		Type typeofT = typeof(IArrayType);
+		return typeofT.GetMethod(JArrayTypeMetadata.GetArrayArrayMetadataName,
+		                         JArrayTypeMetadata.GetArrayArrayMetadataFlags)!;
 	}
 }
