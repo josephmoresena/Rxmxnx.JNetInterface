@@ -40,7 +40,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 		env.FunctionSet.Returns(Substitute.For<NativeFunctionSet>());
 
 		env.ReferenceFeature.GetLifetime(Arg.Any<JLocalObject>(), Arg.Any<JObjectLocalRef>(), Arg.Any<JClassObject>(),
-		                                 Arg.Any<Boolean>()).Returns(l =>
+		                                 Arg.Any<Boolean>()).ReturnsForAnyArgs(l =>
 		{
 			JLocalObject jLocal = (JLocalObject)l[0];
 			JObjectLocalRef localRef = (JObjectLocalRef)l[1];

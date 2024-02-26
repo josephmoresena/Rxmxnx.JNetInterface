@@ -57,7 +57,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// An <see cref="String"/> containing a copy of the UTF-16 chars on the current
 	/// <see cref="JStringObject"/> instance.
 	/// </returns>
-	public String GetChars(Int32 startIndex = 0) => this.GetChars(startIndex, this.Length);
+	public String GetChars(Int32 startIndex = 0) => this.GetChars(startIndex, this.Length - startIndex);
 	/// <summary>
 	/// Creates an <see cref="String"/> containing a copy of the UTF-16 chars on the current
 	/// <see cref="JStringObject"/> instance.
@@ -72,10 +72,9 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	{
 		if (startIndex == 0 && count == this.Length)
 			return this.Value;
-		if (this._value is not null)
-			return this._value[startIndex..count];
-		Int32 length = count - startIndex;
-		return String.Create(length, (this, startIndex), JStringObject.GetChars);
+		return this._value is not null ?
+			this._value[startIndex..(startIndex + count)] :
+			String.Create(count, (this, startIndex), JStringObject.GetChars);
 	}
 	/// <summary>
 	/// Creates an <see cref="CString"/> containing a copy of the UTF-8 chars on the current

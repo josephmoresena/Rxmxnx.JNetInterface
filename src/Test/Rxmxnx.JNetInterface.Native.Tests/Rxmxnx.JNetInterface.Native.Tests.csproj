@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="System.Collections"/>
         <Using Include="System.ComponentModel"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
         <Using Include="System.Numerics"/>
