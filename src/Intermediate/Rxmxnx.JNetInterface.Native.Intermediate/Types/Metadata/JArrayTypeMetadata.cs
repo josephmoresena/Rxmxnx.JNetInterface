@@ -12,6 +12,8 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Array;
+	/// <inheritdoc/>
+	public override JTypeModifier Modifier { get; }
 	/// <summary>
 	/// Array deep.
 	/// </summary>
@@ -26,10 +28,13 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="signature">JNI signature for current array type.</param>
+	/// <param name="final">Indicates whether element type is final.</param>
 	/// <param name="deep">Array deep.</param>
-	private protected JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Int32 deep) : base(signature, signature)
+	private protected JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Boolean final, Int32 deep) : base(
+		signature, signature)
 	{
 		this.Deep = deep;
+		this.Modifier = final ? JTypeModifier.Final : JTypeModifier.Extensible;
 		JArrayTypeMetadata.metadataCache.TryAdd(this.Signature.ToHexString(), this);
 	}
 

@@ -12,8 +12,6 @@ public partial class JArrayObject<TElement>
 		/// </summary>
 		public static readonly ArrayTypeMetadata Instance = new();
 
-		private JTypeModifier? _modifier;
-
 		/// <inheritdoc/>
 		public override Type Type => JArrayTypeMetadata.GetArrayType<TElement>() ?? typeof(JArrayObject);
 		/// <inheritdoc/>
@@ -24,16 +22,12 @@ public partial class JArrayObject<TElement>
 		public override JClassTypeMetadata BaseMetadata => JLocalObject.ObjectClassMetadata;
 		/// <inheritdoc/>
 		public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => InterfaceSet.ArraySet;
-		/// <inheritdoc/>
-		public override JTypeModifier Modifier
-			=> this._modifier ??= JArrayTypeMetadata.IsFinalElementType(IDataType.GetMetadata<TElement>()) ?
-				JTypeModifier.Final :
-				JTypeModifier.Extensible;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		private ArrayTypeMetadata() : base(IDataType.GetMetadata<TElement>().ArraySignature,
+		                                   JArrayTypeMetadata.IsFinalElementType(IDataType.GetMetadata<TElement>()),
 		                                   JArrayTypeMetadata.GetArrayDeep<TElement>()) { }
 
 		/// <inheritdoc/>

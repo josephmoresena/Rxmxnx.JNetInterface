@@ -91,8 +91,8 @@ public abstract partial record JArrayTypeMetadata
 	/// </returns>
 	protected static Boolean IsFinalElementType(JDataTypeMetadata elementMetadata)
 	{
-		if (elementMetadata is JArrayTypeMetadata arrayMetadata)
-			return JArrayTypeMetadata.IsFinalElementType(arrayMetadata);
+		while (elementMetadata is JArrayTypeMetadata arrayMetadata)
+			elementMetadata = arrayMetadata.ElementMetadata;
 		return elementMetadata.Modifier == JTypeModifier.Final;
 	}
 

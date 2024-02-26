@@ -92,7 +92,6 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JThrowableObject>());
 
 		Console.WriteLine("====== Array types ======");
-
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JBoolean>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JByte>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JChar>>());
@@ -104,6 +103,9 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JLocalObject>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JClassObject>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JStringObject>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JEnumObject>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JNumberObject>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JThrowableObject>>());
 
 		Console.WriteLine("====== Wrapper types ======");
 		Console.WriteLine(IDataType.GetMetadata<JBooleanObject>());
