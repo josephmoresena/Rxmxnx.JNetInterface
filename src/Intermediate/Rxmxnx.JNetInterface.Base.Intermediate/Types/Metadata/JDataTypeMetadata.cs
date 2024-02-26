@@ -38,6 +38,11 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	/// <inheritdoc/>
 	public String Hash => this._sequence.ToString();
 
+	[ExcludeFromCodeCoverage]
+	JTypeModifier? ITypeInformation.Modifier => this.Modifier;
+	[ExcludeFromCodeCoverage]
+	IFixedPointer.IDisposable ITypeInformation.GetClassNameFixedPointer() => this._sequence.GetFixedPointer();
+
 	/// <inheritdoc/>
 	public override String ToString()
 		=> $"{nameof(JDataTypeMetadata.ClassName)} = {this.ClassName}, " +

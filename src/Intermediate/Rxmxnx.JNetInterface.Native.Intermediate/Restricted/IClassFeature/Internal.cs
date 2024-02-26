@@ -21,7 +21,7 @@ public partial interface IClassFeature
 	/// <param name="rawClassBytes">Binary span with class information.</param>
 	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
-	internal JClassObject LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,
+	internal JClassObject LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 		JClassLoaderObject? jClassLoader = default);
 	/// <summary>
 	/// Loads a java class from its binary information into the current VM.

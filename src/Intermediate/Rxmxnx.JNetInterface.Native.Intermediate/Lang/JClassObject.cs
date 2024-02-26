@@ -49,7 +49,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <summary>
 	/// Indicates whether current class is final.
 	/// </summary>
-	public Boolean? IsFinal => this._isFinal;
+	public Boolean IsFinal => this._isFinal ??= this.Environment.FunctionSet.IsFinal(this);
 
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
@@ -136,8 +136,8 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="rawClassBytes">Binary span with class information.</param>
 	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
-	public static JClassObject LoadClass(IEnvironment env, CString className, ReadOnlySpan<Byte> rawClassBytes,
-		JClassLoaderObject? jClassLoader = default)
+	public static JClassObject LoadClass(IEnvironment env, ReadOnlySpan<Byte> className,
+		ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
 		=> env.ClassFeature.LoadClass(className, rawClassBytes, jClassLoader);
 	/// <summary>
 	/// Loads a java class from its binary information into the current VM.

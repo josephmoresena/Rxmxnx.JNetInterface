@@ -17,7 +17,7 @@ partial class JEnvironment
 				return new(this._env, jLocal, initializer.LocalReference)
 				{
 					Class = initializer.Class,
-					IsRealClass = initializer.Class is not null && initializer.Class.IsFinal.GetValueOrDefault(),
+					IsRealClass = initializer.Class is not null && initializer.Class.IsFinal,
 				};
 			result.Load(jLocal);
 			if (!result.IsRealClass && initializer.OverrideClass && initializer.Class is not null)

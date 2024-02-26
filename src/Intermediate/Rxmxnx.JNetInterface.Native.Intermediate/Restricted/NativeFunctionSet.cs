@@ -98,6 +98,16 @@ public abstract class NativeFunctionSet
 	/// </returns>
 	public abstract Boolean IsPrimitiveClass(JClassObject jClass);
 	/// <summary>
+	/// Indicates whether current class object is final.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jClass"/> is final;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public abstract Boolean IsFinal(JClassObject jClass);
+
+	/// <summary>
 	/// Indicates whether current buffer object is direct.
 	/// </summary>
 	/// <param name="jBuffer">A <see cref="JBufferObject"/> instance.</param>

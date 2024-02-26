@@ -34,6 +34,11 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public Int32 Utf8Length => this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(this);
 
+	/// <inheritdoc/>
+	public Int32 CompareTo(JStringObject? other) => this.CompareTo(other?.Value);
+	/// <inheritdoc/>
+	public Int32 CompareTo(String? other) => String.Compare(this.Value, other, StringComparison.Ordinal);
+
 	/// <summary>
 	/// Internal string value.
 	/// </summary>
@@ -100,6 +105,8 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		env.StringFeature.GetCopyUtf8(this, utf8Data.AsMemory()[..^1], startIndex);
 		return utf8Data;
 	}
+	/// <inheritdoc cref="String.GetEnumerator()"/>
+	public CharEnumerator GetEnumerator() => this.Value.GetEnumerator();
 
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.GetStringHashCode() ?? base.GetHashCode();

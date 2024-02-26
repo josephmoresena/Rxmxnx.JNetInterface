@@ -70,10 +70,7 @@ internal static partial class MetadataHelper
 	/// <param name="className">A java type name.</param>
 	/// <returns><see cref="CStringSequence"/> with class information for given type.</returns>
 	public static CStringSequence GetClassInformation(CString className)
-	{
-		CString classNameF = JDataTypeMetadata.JniParseClassName(className);
-		return JDataTypeMetadata.CreateInformationSequence(classNameF);
-	}
+		=> MetadataHelper.GetClassInformation(className.AsSpan());
 	/// <summary>
 	/// Retrieves the class has from current <paramref name="className"/>.
 	/// </summary>

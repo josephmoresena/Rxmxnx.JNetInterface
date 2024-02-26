@@ -81,6 +81,20 @@ public abstract partial record JArrayTypeMetadata
 			return default;
 		}
 	}
+	/// <summary>
+	/// Indicates whether <paramref name="elementMetadata"/> is final.
+	/// </summary>
+	/// <param name="elementMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="elementMetadata"/> is final; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+	protected static Boolean IsFinalElementType(JDataTypeMetadata elementMetadata)
+	{
+		if (elementMetadata is JArrayTypeMetadata arrayMetadata)
+			return JArrayTypeMetadata.IsFinalElementType(arrayMetadata);
+		return elementMetadata.Modifier == JTypeModifier.Final;
+	}
 
 	/// <summary>
 	/// Retrieves metadata for the array of arrays of <paramref name="typeofElement"/>.

@@ -39,7 +39,7 @@ public partial class JEnumObject
 	static JEnumObject IReferenceType<JEnumObject>.Create(IReferenceType.ObjectInitializer initializer)
 	{
 		JClassObject? jClass = initializer.Class ?? initializer.Instance.Lifetime.Class;
-		if (jClass is null || !jClass.IsFinal.GetValueOrDefault())
+		if (jClass is null || !jClass.IsFinal)
 			return new(initializer.Instance);
 		return new(initializer.Instance, jClass);
 	}

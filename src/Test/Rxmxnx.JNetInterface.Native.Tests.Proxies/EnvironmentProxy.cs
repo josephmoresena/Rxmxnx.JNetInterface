@@ -49,7 +49,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 			{
 				Value = new(env, jLocal, localRef)
 				{
-					Class = jClass, IsRealClass = jClass is not null && jClass.IsFinal.GetValueOrDefault(),
+					Class = jClass, IsRealClass = jClass is not null && jClass.IsFinal,
 				},
 			};
 		});

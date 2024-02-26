@@ -106,7 +106,7 @@ public abstract partial class EnvironmentProxy
 	#region IClassFeature
 	/// <inheritdoc cref="IClassFeature.GetClass(ReadOnlySpan{Byte})"/>
 	public abstract JClassObject GetClass(CString className);
-	/// <inheritdoc cref="IClassFeature.LoadClass(CString, ReadOnlySpan{Byte}, JClassLoaderObject?)"/>
+	/// <inheritdoc cref="IClassFeature.LoadClass(ReadOnlySpan{Byte}, ReadOnlySpan{Byte}, JClassLoaderObject?)"/>
 	public abstract JClassObject LoadClass(CString className, Byte[] rawClassBytes,
 		JClassLoaderObject? jClassLoader = default);
 	/// <inheritdoc cref="IClassFeature.LoadClass{TDataType}(ReadOnlySpan{Byte}, JClassLoaderObject?)"/>

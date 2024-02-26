@@ -27,6 +27,8 @@ public partial class JClassObject
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
+		if (metadata.Modifier.HasValue)
+			this._isFinal = metadata.Modifier == JTypeModifier.Final;
 	}
 	/// <summary>
 	/// Constructor.

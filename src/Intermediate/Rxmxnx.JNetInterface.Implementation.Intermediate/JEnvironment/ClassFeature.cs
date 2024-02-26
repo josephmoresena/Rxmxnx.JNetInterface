@@ -100,19 +100,18 @@ partial class JEnvironment
 			Boolean result = this.IsInstanceOf(jObject, this.GetClass<TDataType>());
 			return result;
 		}
-		public JClassObject LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,
+		public JClassObject LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 			JClassLoaderObject? jClassLoader = default)
 		{
-			className = JDataTypeMetadata.JniParseClassName(className);
-			return NativeUtilities.WithSafeFixed(className.AsSpan(), rawClassBytes, (this, jClassLoader),
-			                                     EnvironmentCache.LoadClass);
+			CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
+			ITypeInformation metadata = new TypeInformation(classInformation);
+			return rawClassBytes.WithSafeFixed((this, metadata, jClassLoader), EnvironmentCache.LoadClass);
 		}
 		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes,
 			JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TDataType>();
-			return NativeUtilities.WithSafeFixed(metadata.ClassName.AsSpan(), rawClassBytes, (this, jClassLoader),
-			                                     EnvironmentCache.LoadClass);
+			ITypeInformation metadata = MetadataHelper.GetMetadata<TDataType>();
+			return rawClassBytes.WithSafeFixed((this, metadata, jClassLoader), EnvironmentCache.LoadClass);
 		}
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 		{

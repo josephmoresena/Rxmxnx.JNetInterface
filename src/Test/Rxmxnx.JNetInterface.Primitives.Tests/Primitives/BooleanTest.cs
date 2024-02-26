@@ -28,6 +28,9 @@ public sealed class BooleanTest : PrimitiveTestBase
 
 		Assert.Equal(ClassNames.BooleanObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.BooleanObject().SequenceEqual(metadata.WrapperClassName));
+
+		using IFixedPointer.IDisposable fPtr = (metadata as ITypeInformation).GetClassNameFixedPointer();
+		Assert.Equal(fPtr.Pointer, metadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 
 	private static void TryFormatTest(JBoolean primitive0)

@@ -5,8 +5,7 @@ public abstract partial class EnvironmentProxy
 	ObjectLifetime IReferenceFeature.GetLifetime(JLocalObject jLocal, InternalClassInitializer initializer)
 		=> this.GetSourceInstance(initializer.LocalReference)?.Lifetime ?? new(this, jLocal, initializer.LocalReference)
 		{
-			Class = initializer.Class,
-			IsRealClass = initializer.Class is not null && initializer.Class.IsFinal.GetValueOrDefault(),
+			Class = initializer.Class, IsRealClass = initializer.Class is not null && initializer.Class.IsFinal,
 		};
 	JLocalObject IReferenceFeature.CreateWrapper<TPrimitive>(TPrimitive primitive)
 	{

@@ -25,10 +25,9 @@ public sealed class JStringObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject jStringClass = new(jClass, typeMetadata);
 		using JStringObject jString = new(jStringClass, stringRef, initText ? text : default);
-		using JLocalObject jLocal = new(jStringClass, stringRef.Value);
+
 		JReferenceObject jObject = jString;
 
-		env.IsSameObject(jString, jLocal).Returns(true);
 		env.StringFeature.GetLength(Arg.Is<JStringObject>(ss => jObject.Equals(ss))).Returns(text.Length);
 		env.StringFeature.GetUtf8Length(Arg.Is<JStringObject>(ss => jObject.Equals(ss))).Returns(utf8Text.Length);
 		env.StringFeature
@@ -55,16 +54,60 @@ public sealed class JStringObjectTests
 		Assert.Equal(text, jString.Value);
 		Assert.Equal(utf8Text, jString.GetUtf8Chars());
 		Assert.Equal(text, jString.ToString());
-		Assert.True(text.GetHashCode().Equals(jString.GetHashCode()));
-		Assert.True(jString.Equals((Object)text));
-		Assert.True(jString.Equals(IWrapper.CreateObject(text)));
-		Assert.True(jString.Equals((Object)jLocal));
-		Assert.True((jString as IEquatable<IWrapper<String>>).Equals(IWrapper.CreateObject(text)));
-		Assert.Equal(text.ToArray(), jString);
+
+		JStringObjectTests.EqualityTest(jString);
+		JStringObjectTests.ComparisionTest(jString);
+		JStringObjectTests.EnumeratorTest(jString);
 
 		env.StringFeature.Received(1).GetUtf8Length(jString);
 		env.StringFeature.Received(1).GetCopyUtf8(jString, Arg.Any<Memory<Byte>>());
 		env.StringFeature.Received(initText ? 0 : 1).GetLength(jString);
 		env.StringFeature.Received(initText ? 0 : 1).GetCopy(jString, Arg.Any<IFixedMemory<Char>>());
+	}
+	private static void ComparisionTest(JStringObject jString)
+	{
+		JStringLocalRef stringRef1 = JStringObjectTests.fixture.Create<JStringLocalRef>();
+		using JStringObject jString1 = new(jString.Class, stringRef1, jString.Value);
+
+		Assert.True(jString.Equals(jString1));
+		Assert.True(jString.Equals((Object)jString1));
+
+		Assert.Equal(0, jString.CompareTo(jString.Value));
+		Assert.Equal(0, jString.CompareTo(jString1));
+		Assert.Equal(0, (jString as IComparable).CompareTo(jString.Value));
+		Assert.Equal(0, (jString as IComparable).CompareTo(jString1));
+		Assert.Equal(0, (jString as IComparable).CompareTo(IWrapper.CreateObject(jString.Value)));
+		Assert.Equal(0, (jString as IComparable).CompareTo(jString1));
+	}
+	private static void EqualityTest(JStringObject jString)
+	{
+		JStringLocalRef stringRef = jString.Reference;
+		JStringLocalRef stringRef1 = NativeUtilities.Transform<IntPtr, JStringLocalRef>(~stringRef.Value.Pointer);
+		using JLocalObject jLocal = new(jString.Class, stringRef.Value);
+		using JLocalObject jLocal1 = new(jString.Class, stringRef1.Value);
+
+		jString.Environment.IsSameObject(jString, jLocal1).Returns(true);
+
+		Assert.True(jString.Value.GetHashCode().Equals(jString.GetHashCode()));
+		Assert.True(jString.Equals(jString.Value));
+		Assert.True(jString.Equals(jLocal));
+		Assert.True(jString.Equals(jLocal1));
+		Assert.True(jString.Equals((Object)jString.Value));
+		Assert.True(jString.Equals(IWrapper.CreateObject(jString.Value)));
+		Assert.True(jString.Equals((Object)jLocal));
+		Assert.True((jString as IEquatable<IWrapper<String>>).Equals(IWrapper.CreateObject(jString.Value)));
+		Assert.Equal(jString.Value.ToArray(), jString);
+
+		jString.Environment.Received(0)
+		       .IsSameObject(jString, Arg.Is<JLocalObject>(l => l.InternalReference.Equals(stringRef)));
+		jString.Environment.Received(1)
+		       .IsSameObject(jString, Arg.Is<JLocalObject>(l => l.InternalReference.Equals(stringRef1)));
+	}
+	private static void EnumeratorTest(JStringObject jString)
+	{
+		using CharEnumerator stringEnumerator = jString.Value.GetEnumerator();
+		using CharEnumerator jStringEnumerator = jString.GetEnumerator();
+		while (stringEnumerator.MoveNext() && jStringEnumerator.MoveNext())
+			Assert.Equal(stringEnumerator.Current, jStringEnumerator.Current);
 	}
 }

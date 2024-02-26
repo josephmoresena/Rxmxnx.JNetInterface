@@ -142,27 +142,26 @@ partial class JEnvironment
 			this.CheckJniError();
 			return result == JBoolean.TrueValue;
 		}
-
 		/// <summary>
 		/// Loads a java class from its binary information into the current VM.
 		/// </summary>
-		/// <param name="memoryList">
-		/// A fixed memory list containing both JNI class name and class binary information.
+		/// <param name="rawClassMemory">
+		/// A fixed context containing class binary information.
 		/// </param>
-		/// <param name="args">Cache and class loader.</param>
+		/// <param name="args">Cache, Class metadata and class loader.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
-		private static JClassObject LoadClass(ReadOnlyFixedMemoryList memoryList,
-			(EnvironmentCache cache, JClassLoaderObject? jClassLoader) args)
+		private static JClassObject LoadClass(in IReadOnlyFixedContext<Byte> rawClassMemory,
+			(EnvironmentCache cache, ITypeInformation metadata, JClassLoaderObject? jClassLoader) args)
 		{
 			ValidationUtilities.ThrowIfDummy(args.jClassLoader);
-			CStringSequence classInformation = MetadataHelper.GetClassInformation(memoryList[0].Bytes);
 			DefineClassDelegate defineClass = args.cache.GetDelegate<DefineClassDelegate>();
 			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(2);
+			using IFixedPointer.IDisposable classNamePointer = args.metadata.GetClassNameFixedPointer();
 			JObjectLocalRef localRef = jniTransaction.Add(args.jClassLoader);
-			JClassLocalRef classRef = defineClass(args.cache.Reference, (ReadOnlyValPtr<Byte>)memoryList[0].Pointer,
-			                                      localRef, memoryList[1].Pointer, memoryList[1].Bytes.Length);
+			JClassLocalRef classRef = defineClass(args.cache.Reference, (ReadOnlyValPtr<Byte>)classNamePointer.Pointer,
+			                                      localRef, rawClassMemory.Pointer, rawClassMemory.Bytes.Length);
 			if (classRef.IsDefault) args.cache.CheckJniError();
-			if (args.cache._classes.TryGetValue(classInformation.ToString(), out JClassObject? result))
+			if (args.cache._classes.TryGetValue(args.metadata.Hash, out JClassObject? result))
 			{
 				JEnvironment env = args.cache._env;
 				JClassLocalRef classRefO = jniTransaction.Add(result);
@@ -178,7 +177,7 @@ partial class JEnvironment
 			}
 			else
 			{
-				result = new(args.cache.ClassObject, new TypeInformation(classInformation), classRef);
+				result = new(args.cache.ClassObject, args.metadata, classRef);
 			}
 			return args.cache.Register(result);
 		}

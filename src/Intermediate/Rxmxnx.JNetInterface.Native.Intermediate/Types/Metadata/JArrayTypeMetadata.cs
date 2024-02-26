@@ -12,8 +12,6 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Array;
-	/// <inheritdoc/>
-	public override JTypeModifier Modifier => JTypeModifier.Final;
 	/// <summary>
 	/// Array deep.
 	/// </summary>

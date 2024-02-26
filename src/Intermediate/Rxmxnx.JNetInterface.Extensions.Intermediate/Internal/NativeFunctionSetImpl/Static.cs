@@ -71,6 +71,16 @@ internal partial class NativeFunctionSetImpl
 		new(UnicodeMethodNames.GetStackTrace());
 
 	/// <summary>
+	/// <c>Class.getModifiers()</c> definition.
+	/// </summary>
+	private static readonly JFunctionDefinition<JInt> getModifiersDefinition = new(UnicodeMethodNames.GetModifiers());
+	/// <summary>
+	/// <c>Class.GetComponentType()</c> definition.
+	/// </summary>
+	private static readonly JFunctionDefinition<JClassObject> getComponentTypeDefinition =
+		new(UnicodeMethodNames.GetComponentType());
+
+	/// <summary>
 	/// <c>Buffer.isDirect()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JBoolean> isDirectBuffer = new(UnicodeMethodNames.IsDirect());
@@ -155,4 +165,40 @@ internal partial class NativeFunctionSetImpl
 	/// The class instance representing the primitive type in wrapper classes.
 	/// </summary>
 	public static readonly JFieldDefinition<JClassObject> PrimitiveTypeDefinition = new(UnicodeMethodNames.TypeField());
+
+	/// <summary>
+	/// Indicates whether an array class is final.
+	/// </summary>
+	/// <param name="arrayClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="arrayClass"/> is final; otherwise;
+	/// <see langword="false"/>.
+	/// </returns>
+	private static Boolean IsFinalArrayType(JClassObject arrayClass)
+	{
+		JClassObject? elementClass;
+		do
+			elementClass = JFunctionDefinition.Invoke(NativeFunctionSetImpl.getComponentTypeDefinition, arrayClass)!;
+		while (elementClass.ClassSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar);
+		return NativeFunctionSetImpl.IsFinalNonArrayType(elementClass);
+	}
+	/// <summary>
+	/// Indicates whether a non-array class is final.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jClass"/> is final; otherwise;
+	/// <see langword="false"/>.
+	/// </returns>
+	private static Boolean IsFinalNonArrayType(JClassObject jClass)
+	{
+		//Primitive classes are final.
+		if (jClass.ClassSignature.Length == 1) return true;
+		IEnvironment env = jClass.Environment;
+		JModifier modifier = default;
+		env.AccessFeature.CallPrimitiveFunction(modifier.AsBytes(), jClass, jClass.Class,
+		                                        NativeFunctionSetImpl.getModifiersDefinition, false,
+		                                        Array.Empty<IObject>());
+		return modifier.HasFlag(JModifier.Final);
+	}
 }
