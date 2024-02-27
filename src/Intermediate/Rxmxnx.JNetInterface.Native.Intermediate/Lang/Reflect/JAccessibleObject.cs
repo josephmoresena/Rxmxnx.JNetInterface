@@ -26,10 +26,10 @@ public class JAccessibleObject : JLocalObject, IClassType<JAccessibleObject>, II
 	/// <inheritdoc/>
 	protected JAccessibleObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JAccessibleObject IReferenceType<JAccessibleObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JAccessibleObject IClassType<JAccessibleObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JAccessibleObject IReferenceType<JAccessibleObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JAccessibleObject IClassType<JAccessibleObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JAccessibleObject IReferenceType<JAccessibleObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JAccessibleObject IClassType<JAccessibleObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

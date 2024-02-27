@@ -16,16 +16,8 @@ public sealed class JTypeObject : JInterfaceObject<JTypeObject>, IInterfaceType<
 	static JInterfaceTypeMetadata<JTypeObject> IInterfaceType<JTypeObject>.Metadata => JTypeObject.typeMetadata;
 
 	/// <inheritdoc/>
-	private JTypeObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JTypeObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JTypeObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JTypeObject IReferenceType<JTypeObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JTypeObject IReferenceType<JTypeObject>.Create(IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JTypeObject IReferenceType<JTypeObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JTypeObject IInterfaceType<JTypeObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
 }

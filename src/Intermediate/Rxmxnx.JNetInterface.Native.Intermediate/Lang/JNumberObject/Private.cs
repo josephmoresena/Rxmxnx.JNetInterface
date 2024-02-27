@@ -12,10 +12,10 @@ public partial class JNumberObject
 
 	static JClassTypeMetadata<JNumberObject> IClassType<JNumberObject>.Metadata => JNumberObject.typeMetadata;
 
-	static JNumberObject IReferenceType<JNumberObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JNumberObject IClassType<JNumberObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JNumberObject IReferenceType<JNumberObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JNumberObject IClassType<JNumberObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JNumberObject IReferenceType<JNumberObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JNumberObject IClassType<JNumberObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

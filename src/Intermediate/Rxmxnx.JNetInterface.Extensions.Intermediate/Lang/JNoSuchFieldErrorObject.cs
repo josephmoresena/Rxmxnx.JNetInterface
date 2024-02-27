@@ -24,13 +24,13 @@ public class JNoSuchFieldErrorObject : JIncompatibleClassChangeErrorObject, IThr
 	/// <inheritdoc/>
 	protected JNoSuchFieldErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JNoSuchFieldErrorObject IReferenceType<JNoSuchFieldErrorObject>.Create(
+	static JNoSuchFieldErrorObject IClassType<JNoSuchFieldErrorObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JNoSuchFieldErrorObject IReferenceType<JNoSuchFieldErrorObject>.Create(
+	static JNoSuchFieldErrorObject IClassType<JNoSuchFieldErrorObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JNoSuchFieldErrorObject IReferenceType<JNoSuchFieldErrorObject>.Create(
+	static JNoSuchFieldErrorObject IClassType<JNoSuchFieldErrorObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

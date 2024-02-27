@@ -32,10 +32,10 @@ public sealed class JConstructorObject : JExecutableObject, IClassType<JConstruc
 	/// <inheritdoc/>
 	private JConstructorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JConstructorObject IReferenceType<JConstructorObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JConstructorObject IClassType<JConstructorObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JConstructorObject IReferenceType<JConstructorObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JConstructorObject IClassType<JConstructorObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JConstructorObject IReferenceType<JConstructorObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JConstructorObject IClassType<JConstructorObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

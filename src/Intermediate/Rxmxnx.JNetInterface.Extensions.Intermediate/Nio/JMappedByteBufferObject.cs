@@ -28,13 +28,13 @@ public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByte
 	/// <inheritdoc/>
 	protected JMappedByteBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JMappedByteBufferObject IReferenceType<JMappedByteBufferObject>.Create(
+	static JMappedByteBufferObject IClassType<JMappedByteBufferObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JMappedByteBufferObject IReferenceType<JMappedByteBufferObject>.Create(
+	static JMappedByteBufferObject IClassType<JMappedByteBufferObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JMappedByteBufferObject IReferenceType<JMappedByteBufferObject>.Create(
+	static JMappedByteBufferObject IClassType<JMappedByteBufferObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

@@ -60,10 +60,10 @@ public partial class JStringObject
 		env.StringFeature.GetCopy(arg.jStr, chars, arg.startIndex);
 	}
 
-	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JStringObject IClassType<JStringObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer.WithClass<JStringObject>());
-	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JStringObject IClassType<JStringObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer.Instance);
-	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JStringObject IClassType<JStringObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer.Environment, initializer.Global);
 }

@@ -34,4 +34,18 @@ public interface IInterfaceType<TInterface> : IInterfaceType, IReferenceType<TIn
 	protected new static abstract JInterfaceTypeMetadata<TInterface> Metadata { get; }
 
 	static JDataTypeMetadata IDataType<TInterface>.Metadata => TInterface.Metadata;
+
+	/// <summary>
+	/// Creates a <typeparamref name="TInterface"/> instance from <paramref name="initializer"/>.
+	/// </summary>
+	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
+	/// <returns>A <typeparamref name="TInterface"/> instance from <paramref name="initializer"/>.</returns>
+	protected static abstract TInterface Create(ObjectInitializer initializer);
+
+	/// <summary>
+	/// Creates a <typeparamref name="TInterface"/> instance from <paramref name="jLocal"/>.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>A <typeparamref name="TInterface"/> instance from <paramref name="jLocal"/>.</returns>
+	internal static TInterface Create(JLocalObject jLocal) => TInterface.Create(jLocal);
 }

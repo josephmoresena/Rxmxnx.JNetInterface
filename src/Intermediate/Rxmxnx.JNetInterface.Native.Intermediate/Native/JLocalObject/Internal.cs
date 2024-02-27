@@ -128,7 +128,7 @@ public partial class JLocalObject
 	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
 	/// </exception>
 	internal static void Validate<TDataType>(JGlobalBase jGlobal, IEnvironment env)
-		where TDataType : JLocalObject, IDataType<TDataType>
+		where TDataType : JReferenceObject, IDataType<TDataType>
 		=> JLocalObject.Validate<JGlobalBase, TDataType>(jGlobal, env);
 	/// <summary>
 	/// Throws an exception if the local instance cannot be cast to <typeparamref name="TDataType"/> instance.
@@ -142,10 +142,10 @@ public partial class JLocalObject
 	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
 	/// </exception>
 	internal static JLocalObject Validate<TDataType>(JLocalObject jLocal)
-		where TDataType : JLocalObject, IDataType<TDataType>
+		where TDataType : JReferenceObject, IDataType<TDataType>
 	{
 		if (jLocal.ObjectClassName.AsSpan().SequenceEqual(IDataType.GetMetadata<TDataType>().ClassName)) return jLocal;
-		return jLocal as TDataType ??
+		return (JLocalObject?)(Object?)(jLocal as TDataType) ??
 			JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal.Lifetime.Environment);
 	}
 }

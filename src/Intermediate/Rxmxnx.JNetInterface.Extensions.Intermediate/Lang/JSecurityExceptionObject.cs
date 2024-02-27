@@ -24,13 +24,13 @@ public class JSecurityExceptionObject : JRuntimeExceptionObject, IThrowableType<
 	/// <inheritdoc/>
 	protected JSecurityExceptionObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JSecurityExceptionObject IReferenceType<JSecurityExceptionObject>.Create(
+	static JSecurityExceptionObject IClassType<JSecurityExceptionObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JSecurityExceptionObject IReferenceType<JSecurityExceptionObject>.Create(
+	static JSecurityExceptionObject IClassType<JSecurityExceptionObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JSecurityExceptionObject IReferenceType<JSecurityExceptionObject>.Create(
+	static JSecurityExceptionObject IClassType<JSecurityExceptionObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

@@ -29,8 +29,6 @@ public partial class JLocalObject
 		jLocal.Lifetime.Load(this);
 		this.Lifetime = jLocal.Lifetime;
 		this.Lifetime.SetClass(jClass);
-		if (jLocal is JInterfaceObject jInterface)
-			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
 
 	/// <summary>

@@ -34,15 +34,13 @@ public partial class JEnumObject
 	/// <inheritdoc/>
 	private JEnumObject(JLocalObject jLocal, JClassObject jClass) : base(jLocal, jClass) { }
 
-	static JEnumObject IReferenceType<JEnumObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JEnumObject IReferenceType<JEnumObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JEnumObject IClassType<JEnumObject>.Create(IReferenceType.ClassInitializer initializer) => new(initializer);
+	static JEnumObject IClassType<JEnumObject>.Create(IReferenceType.ObjectInitializer initializer)
 	{
 		JClassObject? jClass = initializer.Class ?? initializer.Instance.Lifetime.Class;
 		if (jClass is null || !jClass.IsFinal)
 			return new(initializer.Instance);
 		return new(initializer.Instance, jClass);
 	}
-	static JEnumObject IReferenceType<JEnumObject>.Create(IReferenceType.GlobalInitializer initializer)
-		=> new(initializer);
+	static JEnumObject IClassType<JEnumObject>.Create(IReferenceType.GlobalInitializer initializer) => new(initializer);
 }

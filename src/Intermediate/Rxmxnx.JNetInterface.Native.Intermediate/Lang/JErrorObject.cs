@@ -20,10 +20,10 @@ public class JErrorObject : JThrowableObject, IThrowableType<JErrorObject>
 	/// <inheritdoc/>
 	protected JErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JErrorObject IReferenceType<JErrorObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JErrorObject IClassType<JErrorObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JErrorObject IReferenceType<JErrorObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JErrorObject IClassType<JErrorObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JErrorObject IReferenceType<JErrorObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JErrorObject IClassType<JErrorObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

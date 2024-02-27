@@ -17,10 +17,11 @@ public class JClassLoaderObject : JLocalObject, IClassType<JClassLoaderObject>
 	protected JClassLoaderObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	protected JClassLoaderObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
-	static JClassLoaderObject IReferenceType<JClassLoaderObject>.Create(IReferenceType.ClassInitializer initializer)
+
+	static JClassLoaderObject IClassType<JClassLoaderObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JClassLoaderObject IReferenceType<JClassLoaderObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JClassLoaderObject IClassType<JClassLoaderObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JClassLoaderObject IReferenceType<JClassLoaderObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JClassLoaderObject IClassType<JClassLoaderObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

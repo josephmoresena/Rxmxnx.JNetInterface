@@ -64,10 +64,10 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 	/// <inheritdoc/>
 	private JFieldObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JFieldObject IReferenceType<JFieldObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JFieldObject IClassType<JFieldObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JFieldObject IReferenceType<JFieldObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JFieldObject IClassType<JFieldObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JFieldObject IReferenceType<JFieldObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JFieldObject IClassType<JFieldObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

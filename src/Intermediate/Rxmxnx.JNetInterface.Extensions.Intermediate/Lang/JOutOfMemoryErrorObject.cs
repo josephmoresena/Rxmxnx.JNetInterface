@@ -24,13 +24,13 @@ public class JOutOfMemoryErrorObject : JVirtualMachineErrorObject, IThrowableTyp
 	/// <inheritdoc/>
 	protected JOutOfMemoryErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JOutOfMemoryErrorObject IReferenceType<JOutOfMemoryErrorObject>.Create(
+	static JOutOfMemoryErrorObject IClassType<JOutOfMemoryErrorObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JOutOfMemoryErrorObject IReferenceType<JOutOfMemoryErrorObject>.Create(
+	static JOutOfMemoryErrorObject IClassType<JOutOfMemoryErrorObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JOutOfMemoryErrorObject IReferenceType<JOutOfMemoryErrorObject>.Create(
+	static JOutOfMemoryErrorObject IClassType<JOutOfMemoryErrorObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

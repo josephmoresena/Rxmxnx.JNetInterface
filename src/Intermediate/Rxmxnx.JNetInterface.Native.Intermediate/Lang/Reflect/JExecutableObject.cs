@@ -64,10 +64,10 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// <inheritdoc/>
 	protected JExecutableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JExecutableObject IReferenceType<JExecutableObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JExecutableObject IClassType<JExecutableObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JExecutableObject IReferenceType<JExecutableObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JExecutableObject IClassType<JExecutableObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JExecutableObject IReferenceType<JExecutableObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JExecutableObject IClassType<JExecutableObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

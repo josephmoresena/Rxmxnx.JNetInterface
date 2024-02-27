@@ -19,10 +19,10 @@ public partial class JBufferObject
 	/// <inheritdoc cref="JBufferObject.IsDirect"/>
 	private Boolean? _isDirect;
 
-	static JBufferObject IReferenceType<JBufferObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JBufferObject IClassType<JBufferObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JBufferObject IReferenceType<JBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JBufferObject IClassType<JBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JBufferObject IReferenceType<JBufferObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JBufferObject IClassType<JBufferObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

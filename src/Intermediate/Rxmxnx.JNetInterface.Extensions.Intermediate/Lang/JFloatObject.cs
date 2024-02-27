@@ -9,7 +9,7 @@ public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimiti
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JFloatObject> typeMetadata =
 		new(TypeMetadataBuilder<JFloatObject>.Build(IPrimitiveType.GetMetadata<JFloat>(),
-		                                             IClassType.GetMetadata<JNumberObject>()));
+		                                            IClassType.GetMetadata<JNumberObject>()));
 
 	static JPrimitiveWrapperTypeMetadata<JFloatObject> IPrimitiveWrapperType<JFloatObject>.Metadata
 		=> JFloatObject.typeMetadata;
@@ -27,10 +27,10 @@ public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimiti
 
 	static JFloatObject? IPrimitiveWrapperType<JFloatObject, JFloat>.Create(IEnvironment env, JFloat? value)
 		=> value is not null ? (JFloatObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
-	static JFloatObject IReferenceType<JFloatObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JFloatObject IClassType<JFloatObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JFloatObject IReferenceType<JFloatObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JFloatObject IClassType<JFloatObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JFloatObject IReferenceType<JFloatObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JFloatObject IClassType<JFloatObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

@@ -9,7 +9,7 @@ public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrim
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JDoubleObject> typeMetadata =
 		new(TypeMetadataBuilder<JDoubleObject>.Build(IPrimitiveType.GetMetadata<JDouble>(),
-		                                              IClassType.GetMetadata<JNumberObject>()));
+		                                             IClassType.GetMetadata<JNumberObject>()));
 
 	static JPrimitiveWrapperTypeMetadata<JDoubleObject> IPrimitiveWrapperType<JDoubleObject>.Metadata
 		=> JDoubleObject.typeMetadata;
@@ -28,10 +28,10 @@ public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrim
 
 	static JDoubleObject? IPrimitiveWrapperType<JDoubleObject, JDouble>.Create(IEnvironment env, JDouble? value)
 		=> value is not null ? (JDoubleObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
-	static JDoubleObject IReferenceType<JDoubleObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JDoubleObject IClassType<JDoubleObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JDoubleObject IReferenceType<JDoubleObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JDoubleObject IClassType<JDoubleObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JDoubleObject IReferenceType<JDoubleObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JDoubleObject IClassType<JDoubleObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

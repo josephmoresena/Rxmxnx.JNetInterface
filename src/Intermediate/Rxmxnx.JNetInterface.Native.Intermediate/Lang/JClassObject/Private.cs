@@ -45,15 +45,15 @@ public partial class JClassObject
 			this.Environment.ClassFeature.GetClassInfo(this, out this._className, out this._signature, out this._hash);
 	}
 
-	static JClassObject IReferenceType<JClassObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JClassObject IClassType<JClassObject>.Create(IReferenceType.ClassInitializer initializer)
 	{
 		IEnvironment env = initializer.Class.Environment;
 		JObjectLocalRef localRef = initializer.LocalReference;
 		JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 		return env.ClassFeature.AsClassObject(classRef);
 	}
-	static JClassObject IReferenceType<JClassObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JClassObject IClassType<JClassObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> initializer.Instance.Environment.ClassFeature.AsClassObject(initializer.Instance);
-	static JClassObject IReferenceType<JClassObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JClassObject IClassType<JClassObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> initializer.Environment.ClassFeature.AsClassObject(initializer.Global);
 }

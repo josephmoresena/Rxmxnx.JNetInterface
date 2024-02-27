@@ -42,14 +42,4 @@ public partial class JArrayObject<TElement> : IArrayType, IReferenceType<JArrayO
 			JLocalObject.Validate<JArrayObject<TElement>>(jGlobal, env);
 		return new(env, jGlobal);
 	}
-
-	static JArrayObject<TElement> IReferenceType<JArrayObject<TElement>>.Create(
-		IReferenceType.ClassInitializer initializer)
-		=> JArrayObject<TElement>.Create(initializer);
-	static JArrayObject<TElement> IReferenceType<JArrayObject<TElement>>.Create(
-		IReferenceType.ObjectInitializer initializer)
-		=> JArrayObject<TElement>.Create(initializer.Instance);
-	static JArrayObject<TElement> IReferenceType<JArrayObject<TElement>>.
-		Create(IReferenceType.GlobalInitializer initializer)
-		=> JArrayObject<TElement>.Create(initializer.Environment, initializer.Global);
 }

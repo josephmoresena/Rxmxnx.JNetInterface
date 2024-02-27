@@ -69,13 +69,13 @@ public partial class JStackTraceElementObject
 		return jString.Value;
 	}
 
-	static JStackTraceElementObject IReferenceType<JStackTraceElementObject>.Create(
+	static JStackTraceElementObject IClassType<JStackTraceElementObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JStackTraceElementObject IReferenceType<JStackTraceElementObject>.Create(
+	static JStackTraceElementObject IClassType<JStackTraceElementObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer.Instance);
-	static JStackTraceElementObject IReferenceType<JStackTraceElementObject>.Create(
+	static JStackTraceElementObject IClassType<JStackTraceElementObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer.Environment, initializer.Global);
 }

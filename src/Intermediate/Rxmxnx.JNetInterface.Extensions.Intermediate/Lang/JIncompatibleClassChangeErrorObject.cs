@@ -27,13 +27,13 @@ public class JIncompatibleClassChangeErrorObject : JLinkageErrorObject,
 	/// <inheritdoc/>
 	protected JIncompatibleClassChangeErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JIncompatibleClassChangeErrorObject IReferenceType<JIncompatibleClassChangeErrorObject>.Create(
+	static JIncompatibleClassChangeErrorObject IClassType<JIncompatibleClassChangeErrorObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JIncompatibleClassChangeErrorObject IReferenceType<JIncompatibleClassChangeErrorObject>.Create(
+	static JIncompatibleClassChangeErrorObject IClassType<JIncompatibleClassChangeErrorObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JIncompatibleClassChangeErrorObject IReferenceType<JIncompatibleClassChangeErrorObject>.Create(
+	static JIncompatibleClassChangeErrorObject IClassType<JIncompatibleClassChangeErrorObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

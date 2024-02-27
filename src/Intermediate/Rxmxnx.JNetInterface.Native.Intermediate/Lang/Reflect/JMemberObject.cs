@@ -16,16 +16,8 @@ public sealed class JMemberObject : JInterfaceObject<JMemberObject>, IInterfaceT
 	static JInterfaceTypeMetadata<JMemberObject> IInterfaceType<JMemberObject>.Metadata => JMemberObject.metadata;
 
 	/// <inheritdoc/>
-	private JMemberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JMemberObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JMemberObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JMemberObject IReferenceType<JMemberObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JMemberObject IReferenceType<JMemberObject>.Create(IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JMemberObject IReferenceType<JMemberObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JMemberObject IInterfaceType<JMemberObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
 }

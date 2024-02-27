@@ -82,10 +82,10 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 		Func<JByteBufferObject, TState, TResult> func)
 		=> env.NioFeature.WithDirectByteBuffer(capacity, state, func);
 
-	static JByteBufferObject IReferenceType<JByteBufferObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JByteBufferObject IClassType<JByteBufferObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JByteBufferObject IReferenceType<JByteBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JByteBufferObject IClassType<JByteBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JByteBufferObject IReferenceType<JByteBufferObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JByteBufferObject IClassType<JByteBufferObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

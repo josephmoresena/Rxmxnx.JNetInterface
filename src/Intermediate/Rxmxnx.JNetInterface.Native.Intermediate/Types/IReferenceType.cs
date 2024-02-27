@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public partial interface IReferenceType : IObject, IDataType, IDisposable
+public partial interface IReferenceType : IObject, IDataType
 {
 	static Type IDataType.FamilyType => typeof(JLocalObject);
 
@@ -29,25 +29,6 @@ public partial interface IReferenceType : IObject, IDataType, IDisposable
 public interface IReferenceType<out TReference> : IReferenceType, IDataType<TReference>
 	where TReference : JReferenceObject, IReferenceType<TReference>
 {
-	/// <summary>
-	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
-	/// </summary>
-	/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> instance.</param>
-	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
-	protected static abstract TReference Create(ClassInitializer initializer);
-	/// <summary>
-	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
-	/// </summary>
-	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
-	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
-	protected static abstract TReference Create(ObjectInitializer initializer);
-	/// <summary>
-	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
-	/// </summary>
-	/// <param name="initializer">A <see cref="IReferenceType.GlobalInitializer"/> instance.</param>
-	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
-	protected static abstract TReference Create(GlobalInitializer initializer);
-
 	/// <summary>
 	/// Retrieves the base types from current type.
 	/// </summary>

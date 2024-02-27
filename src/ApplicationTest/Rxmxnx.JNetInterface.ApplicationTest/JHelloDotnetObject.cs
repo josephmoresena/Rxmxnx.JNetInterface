@@ -25,10 +25,10 @@ internal sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHel
 	public static event Func<Int32> GetIntegerEvent = default!;
 	public static event Action<String> PassStringEvent = default!;
 
-	static JHelloDotnetObject IReferenceType<JHelloDotnetObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JHelloDotnetObject IClassType<JHelloDotnetObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JHelloDotnetObject IReferenceType<JHelloDotnetObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JHelloDotnetObject IClassType<JHelloDotnetObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JHelloDotnetObject IReferenceType<JHelloDotnetObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JHelloDotnetObject IClassType<JHelloDotnetObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

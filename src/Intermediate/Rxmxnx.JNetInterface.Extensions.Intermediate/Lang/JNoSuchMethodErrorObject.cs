@@ -24,13 +24,13 @@ public class JNoSuchMethodErrorObject : JIncompatibleClassChangeErrorObject, ITh
 	/// <inheritdoc/>
 	protected JNoSuchMethodErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JNoSuchMethodErrorObject IReferenceType<JNoSuchMethodErrorObject>.Create(
+	static JNoSuchMethodErrorObject IClassType<JNoSuchMethodErrorObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JNoSuchMethodErrorObject IReferenceType<JNoSuchMethodErrorObject>.Create(
+	static JNoSuchMethodErrorObject IClassType<JNoSuchMethodErrorObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JNoSuchMethodErrorObject IReferenceType<JNoSuchMethodErrorObject>.Create(
+	static JNoSuchMethodErrorObject IClassType<JNoSuchMethodErrorObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

@@ -11,25 +11,15 @@ public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclara
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata<JGenericDeclarationObject> typeMetadata =
 		TypeMetadataBuilder<JGenericDeclarationObject>.Create(UnicodeClassNames.GenericDeclarationInterface())
-		                                               .Extends<JAnnotatedElementObject>().Build();
+		                                              .Extends<JAnnotatedElementObject>().Build();
 
 	static JInterfaceTypeMetadata<JGenericDeclarationObject> IInterfaceType<JGenericDeclarationObject>.Metadata
 		=> JGenericDeclarationObject.typeMetadata;
 
 	/// <inheritdoc/>
-	private JGenericDeclarationObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JGenericDeclarationObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JGenericDeclarationObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JGenericDeclarationObject IReferenceType<JGenericDeclarationObject>.Create(
-		IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JGenericDeclarationObject IReferenceType<JGenericDeclarationObject>.Create(
+	static JGenericDeclarationObject IInterfaceType<JGenericDeclarationObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JGenericDeclarationObject IReferenceType<JGenericDeclarationObject>.Create(
-		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

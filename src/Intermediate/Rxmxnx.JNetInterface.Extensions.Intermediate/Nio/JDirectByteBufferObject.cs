@@ -61,13 +61,13 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 		this._memory?.Dispose();
 	}
 
-	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+	static JDirectByteBufferObject IClassType<JDirectByteBufferObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+	static JDirectByteBufferObject IClassType<JDirectByteBufferObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+	static JDirectByteBufferObject IClassType<JDirectByteBufferObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

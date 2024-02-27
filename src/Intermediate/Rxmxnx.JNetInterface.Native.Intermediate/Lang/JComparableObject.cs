@@ -15,16 +15,8 @@ public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IIn
 		=> JComparableObject.typeMetadata;
 
 	/// <inheritdoc/>
-	private JComparableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JComparableObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JComparableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JComparableObject IReferenceType<JComparableObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JComparableObject IReferenceType<JComparableObject>.Create(IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JComparableObject IReferenceType<JComparableObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JComparableObject IInterfaceType<JComparableObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
 }

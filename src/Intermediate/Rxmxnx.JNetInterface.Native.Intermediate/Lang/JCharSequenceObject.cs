@@ -15,16 +15,8 @@ public sealed class JCharSequenceObject : JInterfaceObject<JCharSequenceObject>,
 		=> JCharSequenceObject.typeMetadata;
 
 	/// <inheritdoc/>
-	private JCharSequenceObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JCharSequenceObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JCharSequenceObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JCharSequenceObject IReferenceType<JCharSequenceObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JCharSequenceObject IReferenceType<JCharSequenceObject>.Create(IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JCharSequenceObject IReferenceType<JCharSequenceObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JCharSequenceObject IInterfaceType<JCharSequenceObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
 }

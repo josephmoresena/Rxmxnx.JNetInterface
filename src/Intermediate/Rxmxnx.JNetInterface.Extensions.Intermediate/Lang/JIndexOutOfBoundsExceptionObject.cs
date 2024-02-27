@@ -26,13 +26,13 @@ public class JIndexOutOfBoundsExceptionObject : JRuntimeExceptionObject,
 	/// <inheritdoc/>
 	protected JIndexOutOfBoundsExceptionObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JIndexOutOfBoundsExceptionObject IReferenceType<JIndexOutOfBoundsExceptionObject>.Create(
+	static JIndexOutOfBoundsExceptionObject IClassType<JIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JIndexOutOfBoundsExceptionObject IReferenceType<JIndexOutOfBoundsExceptionObject>.Create(
+	static JIndexOutOfBoundsExceptionObject IClassType<JIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JIndexOutOfBoundsExceptionObject IReferenceType<JIndexOutOfBoundsExceptionObject>.Create(
+	static JIndexOutOfBoundsExceptionObject IClassType<JIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

@@ -50,8 +50,6 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 		jLocal.Lifetime.Load(this);
 		this.Lifetime = jLocal.Lifetime;
 		this.Lifetime.SetClass(initializer.Class);
-		if (jLocal is JInterfaceObject jInterface)
-			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
 	/// <inheritdoc/>
 	public void Dispose()

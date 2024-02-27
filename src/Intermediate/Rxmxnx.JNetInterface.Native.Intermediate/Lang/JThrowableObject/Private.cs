@@ -41,10 +41,10 @@ public partial class JThrowableObject
 		return result;
 	}
 
-	static JThrowableObject IReferenceType<JThrowableObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JThrowableObject IClassType<JThrowableObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JThrowableObject IReferenceType<JThrowableObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JThrowableObject IClassType<JThrowableObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JThrowableObject IReferenceType<JThrowableObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JThrowableObject IClassType<JThrowableObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

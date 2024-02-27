@@ -17,16 +17,8 @@ public sealed class JDirectBufferObject : JInterfaceObject<JDirectBufferObject>,
 		=> JDirectBufferObject.metadata;
 
 	/// <inheritdoc/>
-	private JDirectBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JDirectBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JDirectBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JDirectBufferObject IReferenceType<JDirectBufferObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JDirectBufferObject IReferenceType<JDirectBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JDirectBufferObject IReferenceType<JDirectBufferObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JDirectBufferObject IInterfaceType<JDirectBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
 }

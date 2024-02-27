@@ -26,10 +26,10 @@ public sealed class JMethodObject : JExecutableObject, IClassType<JMethodObject>
 	/// <inheritdoc/>
 	private JMethodObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JMethodObject IReferenceType<JMethodObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JMethodObject IClassType<JMethodObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JMethodObject IReferenceType<JMethodObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JMethodObject IClassType<JMethodObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JMethodObject IReferenceType<JMethodObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JMethodObject IClassType<JMethodObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

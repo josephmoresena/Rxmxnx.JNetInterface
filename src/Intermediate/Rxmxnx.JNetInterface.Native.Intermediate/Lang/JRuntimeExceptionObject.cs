@@ -22,13 +22,13 @@ public class JRuntimeExceptionObject : JExceptionObject, IThrowableType<JRuntime
 	/// <inheritdoc/>
 	protected JRuntimeExceptionObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JRuntimeExceptionObject IReferenceType<JRuntimeExceptionObject>.Create(
+	static JRuntimeExceptionObject IClassType<JRuntimeExceptionObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JRuntimeExceptionObject IReferenceType<JRuntimeExceptionObject>.Create(
+	static JRuntimeExceptionObject IClassType<JRuntimeExceptionObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JRuntimeExceptionObject IReferenceType<JRuntimeExceptionObject>.Create(
+	static JRuntimeExceptionObject IClassType<JRuntimeExceptionObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

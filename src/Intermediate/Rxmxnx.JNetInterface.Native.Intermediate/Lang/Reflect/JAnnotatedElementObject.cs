@@ -16,19 +16,9 @@ public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElement
 		=> JAnnotatedElementObject.typeMetadata;
 
 	/// <inheritdoc/>
-	private JAnnotatedElementObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JAnnotatedElementObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JAnnotatedElementObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JAnnotatedElementObject IReferenceType<JAnnotatedElementObject>.Create(
-		IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JAnnotatedElementObject IReferenceType<JAnnotatedElementObject>.Create(
+	static JAnnotatedElementObject IInterfaceType<JAnnotatedElementObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JAnnotatedElementObject IReferenceType<JAnnotatedElementObject>.Create(
-		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

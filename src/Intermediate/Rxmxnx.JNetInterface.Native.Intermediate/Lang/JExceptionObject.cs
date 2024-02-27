@@ -21,10 +21,10 @@ public class JExceptionObject : JThrowableObject, IThrowableType<JExceptionObjec
 	/// <inheritdoc/>
 	protected JExceptionObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JExceptionObject IReferenceType<JExceptionObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JExceptionObject IClassType<JExceptionObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JExceptionObject IReferenceType<JExceptionObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JExceptionObject IClassType<JExceptionObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JExceptionObject IReferenceType<JExceptionObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JExceptionObject IClassType<JExceptionObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

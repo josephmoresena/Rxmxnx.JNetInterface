@@ -23,10 +23,10 @@ public sealed partial class JCharacterObject
 			this._value = wrapper._value;
 	}
 
-	static JCharacterObject IReferenceType<JCharacterObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JCharacterObject IClassType<JCharacterObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JCharacterObject IReferenceType<JCharacterObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JCharacterObject IClassType<JCharacterObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer.WithClass<JCharacterObject>());
-	static JCharacterObject IReferenceType<JCharacterObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JCharacterObject IClassType<JCharacterObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

@@ -15,16 +15,8 @@ public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>,
 		=> JSerializableObject.typeMetadata;
 
 	/// <inheritdoc/>
-	private JSerializableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JSerializableObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JSerializableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JSerializableObject IReferenceType<JSerializableObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JSerializableObject IReferenceType<JSerializableObject>.Create(IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JSerializableObject IReferenceType<JSerializableObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JSerializableObject IInterfaceType<JSerializableObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
 }

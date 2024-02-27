@@ -15,16 +15,8 @@ public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInte
 		=> JCloneableObject.typeMetadata;
 
 	/// <inheritdoc/>
-	private JCloneableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JCloneableObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JCloneableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JCloneableObject IReferenceType<JCloneableObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JCloneableObject IReferenceType<JCloneableObject>.Create(IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JCloneableObject IReferenceType<JCloneableObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JCloneableObject IInterfaceType<JCloneableObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
 }

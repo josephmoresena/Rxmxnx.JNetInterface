@@ -9,7 +9,7 @@ public sealed class JLongObject : JNumberObject<JLong, JLongObject>, IPrimitiveW
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JLongObject> typeMetadata =
 		new(TypeMetadataBuilder<JLongObject>.Build(IPrimitiveType.GetMetadata<JLong>(),
-		                                            IClassType.GetMetadata<JNumberObject>()));
+		                                           IClassType.GetMetadata<JNumberObject>()));
 
 	static JPrimitiveWrapperTypeMetadata<JLongObject> IPrimitiveWrapperType<JLongObject>.Metadata
 		=> JLongObject.typeMetadata;
@@ -26,10 +26,7 @@ public sealed class JLongObject : JNumberObject<JLong, JLongObject>, IPrimitiveW
 
 	static JLongObject? IPrimitiveWrapperType<JLongObject, JLong>.Create(IEnvironment env, JLong? value)
 		=> value is not null ? (JLongObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
-	static JLongObject IReferenceType<JLongObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JLongObject IReferenceType<JLongObject>.Create(IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JLongObject IReferenceType<JLongObject>.Create(IReferenceType.GlobalInitializer initializer)
-		=> new(initializer);
+	static JLongObject IClassType<JLongObject>.Create(IReferenceType.ClassInitializer initializer) => new(initializer);
+	static JLongObject IClassType<JLongObject>.Create(IReferenceType.ObjectInitializer initializer) => new(initializer);
+	static JLongObject IClassType<JLongObject>.Create(IReferenceType.GlobalInitializer initializer) => new(initializer);
 }
