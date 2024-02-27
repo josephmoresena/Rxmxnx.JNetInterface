@@ -36,10 +36,6 @@ public partial class JLocalObject
 					=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 				/// <inheritdoc/>
-				internal override JReferenceObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
-					Boolean realClass = false)
-					=> default!;
-				/// <inheritdoc/>
 				internal override JReferenceObject? ParseInstance(JLocalObject? jLocal)
 				{
 					if (jLocal == null) return default;
@@ -47,8 +43,6 @@ public partial class JLocalObject
 						JLocalObject.Validate<TInterface>(jLocal);
 					return IInterfaceType<TInterface>.Create(jLocal);
 				}
-				/// <inheritdoc/>
-				internal override JReferenceObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal) => default;
 				/// <inheritdoc/>
 				internal override JFunctionDefinition<TInterface> CreateFunctionDefinition(
 					ReadOnlySpan<Byte> functionName, JArgumentMetadata[] metadata)

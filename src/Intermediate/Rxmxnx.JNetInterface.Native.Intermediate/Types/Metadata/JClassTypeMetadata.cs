@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for a class <see cref="IDataType"/> type.
 /// </summary>
-public abstract record JClassTypeMetadata : JReferenceTypeMetadata
+public abstract partial record JClassTypeMetadata : JReferenceTypeMetadata
 {
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Class;

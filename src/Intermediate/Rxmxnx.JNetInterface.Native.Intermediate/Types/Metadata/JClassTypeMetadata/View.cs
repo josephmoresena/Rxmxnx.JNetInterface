@@ -26,13 +26,13 @@ public partial record JClassTypeMetadata<TClass>
 		public override String ToString() => base.ToString();
 
 		/// <inheritdoc/>
-		internal override JReferenceObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+		internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 			Boolean realClass = false)
 			=> this._metadata.CreateInstance(jClass, localRef, realClass);
 		/// <inheritdoc/>
 		internal override JReferenceObject? ParseInstance(JLocalObject? jLocal) => this._metadata.ParseInstance(jLocal);
 		/// <inheritdoc/>
-		internal override JReferenceObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			=> this._metadata.ParseInstance(env, jGlobal);
 	}
 }

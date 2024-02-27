@@ -55,7 +55,7 @@ public partial class JLocalObject
 				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 			/// <inheritdoc/>
-			internal override JReferenceObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 				Boolean realClass = false)
 				=> TClass.Create(new IReferenceType.ClassInitializer
 				{
@@ -76,7 +76,7 @@ public partial class JLocalObject
 				}
 			}
 			/// <inheritdoc/>
-			internal override JReferenceObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+			internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			{
 				if (jGlobal is null) return default;
 				if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))

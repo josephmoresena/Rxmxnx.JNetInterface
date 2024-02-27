@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for an enum <see cref="IDataType"/> type.
 /// </summary>
-public abstract record JEnumTypeMetadata : JReferenceTypeMetadata
+public abstract partial record JEnumTypeMetadata : JReferenceTypeMetadata
 {
 	/// <summary>
 	/// List of fields representing each enum value.
