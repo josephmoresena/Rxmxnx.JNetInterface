@@ -24,5 +24,18 @@ public class HelloDotnet {
     public native String getNativeString();
     public native int getNativeInt();
     public native void passNativeString(String value);
+    public Object getRandomObject(int value) {
+        if (value == 1)
+            return ""texto random"";
+        if (value == 2)
+            return -1;
+        if (value == 3)
+            return new Object();
+        if (value == 4)
+            return new String[0][0][0];
+        if (value == 5)
+            return new int[0][0][0];
+        return null;
+    }
 }";
 }

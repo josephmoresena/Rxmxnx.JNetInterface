@@ -10,7 +10,7 @@ public abstract partial record JReferenceTypeMetadata
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <param name="realClass">Indicates whether <paramref name="jClass"/> is instance real class.</param>
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="localRef"/> and <paramref name="jClass"/>.</returns>
-	internal abstract JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+	internal abstract JReferenceObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 		Boolean realClass = false);
 	/// <summary>
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="jLocal"/>.
@@ -18,7 +18,7 @@ public abstract partial record JReferenceTypeMetadata
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jLocal"/>.</returns>
 	[return: NotNullIfNotNull(nameof(jLocal))]
-	internal abstract JLocalObject? ParseInstance(JLocalObject? jLocal);
+	internal abstract JReferenceObject? ParseInstance(JLocalObject? jLocal);
 	/// <summary>
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="jGlobal"/> and
 	/// <paramref name="env"/>.
@@ -27,7 +27,7 @@ public abstract partial record JReferenceTypeMetadata
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jGlobal"/>.</returns>
 	[return: NotNullIfNotNull(nameof(jGlobal))]
-	internal abstract JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal);
+	internal abstract JReferenceObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal);
 
 	/// <inheritdoc cref="IReflectionMetadata.CreateFunctionDefinition(ReadOnlySpan{Byte}, JArgumentMetadata[])"/>
 	internal abstract JFunctionDefinition CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,

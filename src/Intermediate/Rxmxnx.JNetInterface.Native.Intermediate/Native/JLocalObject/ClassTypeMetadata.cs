@@ -42,8 +42,8 @@ public partial class JLocalObject
 			/// <param name="information">Internal sequence information.</param>
 			/// <param name="isVoid">Indicates if current class is <c>void</c> wrapper.</param>
 			/// <param name="baseMetadata">Base type of current type metadata.</param>
-			public ClassTypeMetadata(CStringSequence information, Boolean isVoid,
-				JClassTypeMetadata? baseMetadata) : base(information)
+			public ClassTypeMetadata(CStringSequence information, Boolean isVoid, JClassTypeMetadata? baseMetadata) :
+				base(information)
 			{
 				this._modifier = JTypeModifier.Final;
 				this._interfaces = isVoid ? InterfaceSet.PrimitiveWrapperSet : InterfaceSet.Empty;
@@ -55,14 +55,14 @@ public partial class JLocalObject
 				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 			/// <inheritdoc/>
-			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+			internal override JReferenceObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 				Boolean realClass = false)
 				=> TClass.Create(new IReferenceType.ClassInitializer
 				{
 					Class = jClass, RealClass = realClass, LocalReference = localRef,
 				});
 			/// <inheritdoc/>
-			internal override TClass? ParseInstance(JLocalObject? jLocal)
+			internal override JReferenceObject? ParseInstance(JLocalObject? jLocal)
 			{
 				switch (jLocal)
 				{
@@ -76,7 +76,7 @@ public partial class JLocalObject
 				}
 			}
 			/// <inheritdoc/>
-			internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+			internal override JReferenceObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			{
 				if (jGlobal is null) return default;
 				if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))

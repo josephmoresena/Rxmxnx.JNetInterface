@@ -43,7 +43,7 @@ public partial class JEnumObject
 				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 			/// <inheritdoc/>
-			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+			internal override JReferenceObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 				Boolean realClass = false)
 			{
 				IEnvironment env = jClass.Environment;
@@ -54,7 +54,7 @@ public partial class JEnumObject
 				});
 			}
 			/// <inheritdoc/>
-			internal override TEnum? ParseInstance(JLocalObject? jLocal)
+			internal override JReferenceObject? ParseInstance(JLocalObject? jLocal)
 			{
 				switch (jLocal)
 				{
@@ -68,7 +68,7 @@ public partial class JEnumObject
 				}
 			}
 			/// <inheritdoc/>
-			internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+			internal override JReferenceObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			{
 				if (jGlobal is null) return default;
 				if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))

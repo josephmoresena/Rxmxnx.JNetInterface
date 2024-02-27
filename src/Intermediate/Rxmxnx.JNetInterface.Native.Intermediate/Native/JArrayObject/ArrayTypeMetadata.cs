@@ -35,20 +35,20 @@ public partial class JArrayObject<TElement>
 			=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 		/// <inheritdoc/>
-		internal override JLocalObject
-			CreateInstance(JClassObject jClass, JObjectLocalRef localRef, Boolean realClass = false)
+		internal override JReferenceObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+			Boolean realClass = false)
 			=> JArrayObject<TElement>.Create(new IReferenceType.ClassInitializer
 			{
 				Class = jClass, RealClass = realClass, LocalReference = localRef,
 			});
 		/// <inheritdoc/>
-		internal override JArrayObject? ParseInstance(JLocalObject? jLocal)
+		internal override JReferenceObject? ParseInstance(JLocalObject? jLocal)
 		{
 			if (jLocal is null) return default;
 			return jLocal as JArrayObject<TElement> ?? JArrayObject<TElement>.Create(jLocal);
 		}
 		/// <inheritdoc/>
-		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+		internal override JReferenceObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			=> jGlobal is null ? default(JLocalObject?) : JArrayObject<TElement>.Create(env, jGlobal);
 		/// <inheritdoc/>
 		internal override JFunctionDefinition<JArrayObject<TElement>> CreateFunctionDefinition(

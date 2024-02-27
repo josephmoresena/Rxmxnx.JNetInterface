@@ -25,8 +25,7 @@ public partial class JInterfaceObject
 			/// Constructor.
 			/// </summary>
 			/// <param name="builder">A <see cref="JLocalObject.TypeMetadataBuilder"/> instance.</param>
-			internal InterfaceTypeMetadata(TypeMetadataBuilder builder) : base(
-				builder.DataTypeName, builder.Signature)
+			internal InterfaceTypeMetadata(TypeMetadataBuilder builder) : base(builder.DataTypeName, builder.Signature)
 				=> this._interfaces = InterfaceSet.GetInterfaceInterfaces(builder.GetInterfaceSet());
 
 			/// <inheritdoc/>
@@ -34,14 +33,14 @@ public partial class JInterfaceObject
 				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 			/// <inheritdoc/>
-			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+			internal override JReferenceObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 				Boolean realClass = false)
 				=> TInterface.Create(new IReferenceType.ClassInitializer
 				{
 					Class = jClass, RealClass = realClass, LocalReference = localRef,
 				});
 			/// <inheritdoc/>
-			internal override TInterface? ParseInstance(JLocalObject? jLocal)
+			internal override JReferenceObject? ParseInstance(JLocalObject? jLocal)
 			{
 				switch (jLocal)
 				{
@@ -55,7 +54,7 @@ public partial class JInterfaceObject
 				}
 			}
 			/// <inheritdoc/>
-			internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+			internal override JReferenceObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			{
 				if (jGlobal is null) return default;
 				if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))

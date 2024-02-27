@@ -23,7 +23,7 @@ public readonly ref partial struct JNativeCallAdapter
 			{
 				JReferenceTypeMetadata metadata = MetadataHelper.GetMetadata(jClass.Hash) ??
 					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>();
-				JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
+				JLocalObject result = (JLocalObject)metadata.CreateInstance(jClass, localRef, true);
 				this._callAdapter._cache[localRef] = result.Lifetime;
 				return result;
 			}
