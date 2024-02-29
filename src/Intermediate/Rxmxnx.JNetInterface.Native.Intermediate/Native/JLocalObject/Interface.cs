@@ -14,5 +14,12 @@ public partial class JLocalObject
 
 		/// <inheritdoc/>
 		private protected Interface(JLocalObject jObject) : base(jObject) { }
+
+		/// <inheritdoc/>
+		public void Dispose()
+		{
+			this.Object.Dispose();
+			GC.SuppressFinalize(this);
+		}
 	}
 }
