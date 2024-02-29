@@ -86,15 +86,22 @@ partial class JEnvironment
 	/// Retrieves the <see cref="JInterfaceTypeMetadata"/> instance from <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="hashes">Set of interface validated hashes.</param>
 	/// <returns>A <see cref="JInterfaceTypeMetadata"/> instance.</returns>
-	private JInterfaceTypeMetadata? GetInterfaceMetadata(JClassObject jClass)
+	private JInterfaceTypeMetadata? GetInterfaceMetadata(JClassObject jClass, HashSet<String>? hashes = default)
 	{
 		if (jClass.IsAnnotation)
 			return (JInterfaceTypeMetadata)MetadataHelper.GetMetadata<JAnnotationObject>();
+		hashes ??= [];
 		using JArrayObject<JClassObject> interfaces = jClass.GetInterfaces();
 		using LocalFrame _ = new(this, 2);
 		foreach (JClassObject? interfaceClass in interfaces)
-			return (JInterfaceTypeMetadata?)MetadataHelper.GetMetadata(interfaceClass!.Name);
+		{
+			if (hashes.Contains(interfaceClass!.Hash)) continue;
+			if (this.GetInterfaceMetadata(interfaceClass!) is { } metadata)
+				return metadata;
+			hashes.Add(interfaceClass!.Hash);
+		}
 		return default;
 	}
 
