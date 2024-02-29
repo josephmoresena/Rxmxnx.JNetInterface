@@ -41,6 +41,16 @@ internal static partial class MetadataHelper
 	public static JReferenceTypeMetadata? GetMetadata(String hash)
 		=> MetadataHelper.runtimeMetadata.GetValueOrDefault(hash);
 	/// <summary>
+	/// Retrieves metadata from hash.
+	/// </summary>
+	/// <param name="className">A JNI class hash.</param>
+	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
+	public static JReferenceTypeMetadata? GetMetadata(ReadOnlySpan<Byte> className)
+	{
+		CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
+		return MetadataHelper.runtimeMetadata.GetValueOrDefault(classInformation.ToString());
+	}
+	/// <summary>
 	/// Retrieves <see cref="JDataTypeMetadata"/> metadata.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType{TDataType}"/> type.</typeparam>
@@ -68,18 +78,12 @@ internal static partial class MetadataHelper
 	/// Retrieves the class has from current <paramref name="className"/>.
 	/// </summary>
 	/// <param name="className">A java type name.</param>
+	/// <param name="escape">Indicates whether <paramref name="className"/> should be escaped.</param>
 	/// <returns><see cref="CStringSequence"/> with class information for given type.</returns>
-	public static CStringSequence GetClassInformation(CString className)
-		=> MetadataHelper.GetClassInformation(className.AsSpan());
-	/// <summary>
-	/// Retrieves the class has from current <paramref name="className"/>.
-	/// </summary>
-	/// <param name="className">A java type name.</param>
-	/// <returns><see cref="CStringSequence"/> with class information for given type.</returns>
-	public static CStringSequence GetClassInformation(ReadOnlySpan<Byte> className)
+	public static CStringSequence GetClassInformation(ReadOnlySpan<Byte> className, Boolean escape = true)
 	{
-		CString classNameF = JDataTypeMetadata.JniParseClassName(className);
-		return JDataTypeMetadata.CreateInformationSequence(classNameF);
+		ReadOnlySpan<Byte> jniClassName = escape ? JDataTypeMetadata.JniEscapeClassName(className) : className;
+		return JDataTypeMetadata.CreateInformationSequence(jniClassName);
 	}
 	/// <summary>
 	/// Retrieves the class has from current <paramref name="hash"/>.
@@ -95,34 +99,6 @@ internal static partial class MetadataHelper
 		return new(classInformation[..classNameLength], classInformation[(classNameLength + 1)..signatureLength],
 		           classInformation[(signatureLength + 1)..arraySignatureLength]);
 	}
-	/// <summary>
-	/// Indicates whether current class name is for an array.
-	/// </summary>
-	/// <param name="className">A Java class name.</param>
-	/// <param name="arrayHash">Output. Hash for array type.</param>
-	/// <param name="arrayTypeMetadata">Output. Metadata for array type.</param>
-	/// <returns>
-	/// <see langword="true"/> if <paramref name="className"/> is for an array; otherwise,
-	/// <see langword="false"/>.
-	/// </returns>
-	public static Boolean IsArrayClass(CString className, [NotNullWhen(true)] out CStringSequence? arrayHash,
-		out JArrayTypeMetadata? arrayTypeMetadata)
-	{
-		arrayHash = default;
-		arrayTypeMetadata = default;
-		if (className.Length < 2 || className[0] != UnicodeObjectSignatures.ArraySignaturePrefixChar) return false;
-		arrayHash = MetadataHelper.GetClassInformation(className);
-		if (!MetadataHelper.runtimeMetadata.TryGetValue(arrayHash.ToString(),
-		                                                out JReferenceTypeMetadata? referenceMetadata))
-			referenceMetadata = MetadataHelper.IsArrayClass(className[1..], out _, out arrayTypeMetadata) ?
-				arrayTypeMetadata?.GetArrayMetadata() :
-				MetadataHelper.GetMetadata(JDataTypeMetadata.CreateInformationSequence(arrayHash[0][1..^1]).ToString())
-				              ?.GetArrayMetadata();
-		arrayTypeMetadata = (JArrayTypeMetadata?)referenceMetadata;
-		MetadataHelper.Register(arrayTypeMetadata);
-		return true;
-	}
-
 	/// <summary>
 	/// Determines statically whether an object of <paramref name="jClass"/> can be safely cast to
 	/// <paramref name="otherClass"/>.

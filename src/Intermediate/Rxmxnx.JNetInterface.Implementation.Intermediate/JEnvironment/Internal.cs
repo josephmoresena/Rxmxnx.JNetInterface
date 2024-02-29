@@ -168,6 +168,26 @@ partial class JEnvironment
 		return classRef;
 	}
 	/// <summary>
+	/// Retrieves the class object and instantiation metadata.
+	/// </summary>
+	/// <param name="localRef">Object instance to get class.</param>
+	/// <param name="metadata">Output. Instantiation metadata.</param>
+	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
+	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JClassTypeMetadata metadata)
+	{
+		using LocalFrame _ = new(this, 6);
+		JClassLocalRef classRef = this.GetObjectClass(localRef);
+		JClassObject jClass = this._cache.GetClass(classRef, true);
+		if (MetadataHelper.GetMetadata(jClass.Hash) is JClassTypeMetadata classMetadata)
+			metadata = classMetadata;
+		else if (jClass.IsArray)
+			metadata = this.GetArrayTypeMetadata(jClass.ClassSignature);
+		else
+			metadata = this.GetClassMetadata(jClass);
+		return jClass;
+	}
+
+	/// <summary>
 	/// Loads in current cache given class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>

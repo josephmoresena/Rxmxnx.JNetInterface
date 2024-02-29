@@ -25,11 +25,15 @@ public partial record JDataTypeMetadata
 	/// <returns>A <see cref="CStringSequence"/> containing JNI information.</returns>
 	private static CStringSequence CreateInformationSequence(ReadOnlyFixedMemoryList memoryList)
 	{
+		Boolean isArray = memoryList[0].Bytes[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar;
+		Int32 signatureLength = isArray ? 1 : 2;
 		Int32?[] lengths =
 		[
 			memoryList[0].Bytes.Length,
-			memoryList[1].Bytes.Length > 0 ? memoryList[1].Bytes.Length : memoryList[0].Bytes.Length + 2,
-			memoryList[1].Bytes.Length > 0 ? memoryList[1].Bytes.Length + 1 : memoryList[0].Bytes.Length + 3,
+			memoryList[1].Bytes.Length > 0 ? memoryList[1].Bytes.Length : memoryList[0].Bytes.Length + signatureLength,
+			memoryList[1].Bytes.Length > 0 ?
+				memoryList[1].Bytes.Length + 1 :
+				memoryList[0].Bytes.Length + signatureLength + 1,
 		];
 		return CStringSequence.Create(memoryList.ToArray(), JDataTypeMetadata.CreateInformationSequence, lengths);
 	}
@@ -67,9 +71,16 @@ public partial record JDataTypeMetadata
 	/// <param name="className">JNI class name.</param>
 	private static void WriteSignature(Span<Byte> span, ReadOnlySpan<Byte> className)
 	{
-		span[0] = UnicodeObjectSignatures.ObjectSignaturePrefixChar;
-		className.CopyTo(span[1..]);
-		span[^1] = UnicodeObjectSignatures.ObjectSignatureSuffixChar;
+		if (className[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
+		{
+			className.CopyTo(span);
+		}
+		else
+		{
+			span[0] = UnicodeObjectSignatures.ObjectSignaturePrefixChar;
+			className.CopyTo(span[1..]);
+			span[^1] = UnicodeObjectSignatures.ObjectSignatureSuffixChar;
+		}
 	}
 	/// <summary>
 	/// Computes the array signature for given type signature.
@@ -91,6 +102,8 @@ public partial record JDataTypeMetadata
 	/// <param name="className"><see cref="IDataType"/> class name.</param>
 	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
 	private static CString ComputeReferenceTypeSignature(ReadOnlySpan<Byte> className)
-		=> CString.Concat(stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignaturePrefixChar, }, className,
-		                  stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignatureSuffixChar, });
+		=> className[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar ?
+			new(className) :
+			CString.Concat(stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignaturePrefixChar, }, className,
+			               stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignatureSuffixChar, });
 }

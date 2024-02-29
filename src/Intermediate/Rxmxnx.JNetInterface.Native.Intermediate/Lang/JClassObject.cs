@@ -49,7 +49,51 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <summary>
 	/// Indicates whether current class is final.
 	/// </summary>
-	public Boolean IsFinal => this._isFinal ??= this.Environment.FunctionSet.IsFinal(this);
+	public Boolean IsFinal => this._isFinal ??= this.IsFinalType();
+	/// <summary>
+	/// Indicates whether current class is an array.
+	/// </summary>
+	public Boolean IsArray => this.ClassSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar;
+	/// <summary>
+	/// Indicates whether current class is an array.
+	/// </summary>
+	public Boolean IsPrimitive => this.ClassSignature.Length == 1;
+	/// <summary>
+	/// Indicates whether current class is an interface.
+	/// </summary>
+	public Boolean IsInterface
+	{
+		get
+		{
+			if (!this._isInterface.HasValue)
+				this._isFinal = this.IsFinalType();
+			return this._isInterface!.Value;
+		}
+	}
+	/// <summary>
+	/// Indicates whether current class is an enum.
+	/// </summary>
+	public Boolean IsEnum
+	{
+		get
+		{
+			if (!this._isEnum.HasValue)
+				this._isFinal = this.IsFinalType();
+			return this._isEnum!.Value;
+		}
+	}
+	/// <summary>
+	/// Indicates whether current class is an annotation.
+	/// </summary>
+	public Boolean IsAnnotation
+	{
+		get
+		{
+			if (!this._isAnnotation.HasValue)
+				this._isFinal = this.IsFinalType();
+			return this._isAnnotation!.Value;
+		}
+	}
 
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
@@ -93,12 +137,38 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		isPrimitive = env.FunctionSet.IsPrimitiveClass(this);
 		return env.FunctionSet.GetClassName(this);
 	}
+	/// <summary>
+	/// Retrieves super class of current type.
+	/// </summary>
+	/// <returns>Current super class <see cref="JClassObject"/> instance.</returns>
+	public JClassObject? GetSuperClass()
+	{
+		IEnvironment env = this.Environment;
+		if (this.IsInterface || this.Name.AsSpan().SequenceEqual(UnicodeClassNames.Object)) return default;
+		if (this.IsEnum) return JClassObject.GetClass<JEnumObject>(env);
+		return env.ClassFeature.GetSuperClass(this);
+	}
+	/// <summary>
+	/// Retrieves an array with interfaces implemented by current type.
+	/// </summary>
+	/// <returns>A <see cref="JArrayObject{JClassObject}"/> instance.</returns>
+	public JArrayObject<JClassObject> GetInterfaces()
+	{
+		IEnvironment env = this.Environment;
+		return env.FunctionSet.GetInterfaces(this);
+	}
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
 		=> new ClassObjectMetadata(base.CreateMetadata())
 		{
-			Name = this.Name, ClassSignature = this.ClassSignature, IsFinal = this.IsFinal, Hash = this.Hash,
+			Name = this.Name,
+			ClassSignature = this.ClassSignature,
+			IsInterface = this.IsInterface,
+			IsEnum = this.IsEnum,
+			IsAnnotation = this.IsAnnotation,
+			IsFinal = this.IsFinal,
+			Hash = this.Hash,
 		};
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
@@ -109,6 +179,9 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		this._className = classMetadata.Name;
 		this._signature = classMetadata.ClassSignature;
 		this._hash = classMetadata.Hash;
+		this._isInterface = classMetadata.IsInterface;
+		this._isEnum = classMetadata.IsEnum;
+		this._isAnnotation = classMetadata.IsAnnotation;
 		this._isFinal = classMetadata.IsFinal;
 	}
 
@@ -119,7 +192,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="className">Class name.</param>
 	/// <returns>The class instance with given class name.</returns>
 	public static JClassObject GetClass(IEnvironment env, ReadOnlySpan<Byte> className)
-		=> env.ClassFeature.GetClass(new CString(className));
+		=> env.ClassFeature.GetClass(className);
 	/// <summary>
 	/// Retrieves the java class for given type.
 	/// </summary>

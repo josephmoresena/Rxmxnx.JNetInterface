@@ -53,6 +53,11 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClass.Name, objectMetadata.Name);
 		Assert.Equal(jClass.ClassSignature, objectMetadata.ClassSignature);
 		Assert.Equal(jClass.IsFinal, objectMetadata.IsFinal);
+		Assert.Equal(jClass.IsInterface, objectMetadata.IsInterface);
+		Assert.Equal(jClass.IsEnum, objectMetadata.IsEnum);
+		Assert.Equal(jClass.IsAnnotation, objectMetadata.IsAnnotation);
+		Assert.Equal(jClass.IsArray,
+		             objectMetadata.ObjectSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar);
 		Assert.Equal(jClass.Hash, objectMetadata.Hash);
 	}
 	[Theory]

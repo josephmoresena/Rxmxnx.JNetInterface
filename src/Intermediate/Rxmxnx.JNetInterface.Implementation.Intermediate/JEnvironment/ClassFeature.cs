@@ -36,7 +36,7 @@ partial class JEnvironment
 		}
 		public JClassObject GetClass(ReadOnlySpan<Byte> className)
 		{
-			CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
+			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
 			return this.GetOrFindClass(new TypeInformation(classInformation));
 		}
 		public JClassObject GetClass(String classHash)
@@ -103,7 +103,7 @@ partial class JEnvironment
 		public JClassObject LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 			JClassLoaderObject? jClassLoader = default)
 		{
-			CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
+			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
 			ITypeInformation metadata = new TypeInformation(classInformation);
 			return rawClassBytes.WithSafeFixed((this, metadata, jClassLoader), EnvironmentCache.LoadClass);
 		}

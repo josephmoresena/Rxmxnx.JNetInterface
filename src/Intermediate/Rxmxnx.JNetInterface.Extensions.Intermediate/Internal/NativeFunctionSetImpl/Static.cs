@@ -75,10 +75,15 @@ internal partial class NativeFunctionSetImpl
 	/// </summary>
 	private static readonly JFunctionDefinition<JInt> getModifiersDefinition = new(UnicodeMethodNames.GetModifiers());
 	/// <summary>
-	/// <c>Class.GetComponentType()</c> definition.
+	/// <c>Class.getComponentType()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JClassObject> getComponentTypeDefinition =
 		new(UnicodeMethodNames.GetComponentType());
+	/// <summary>
+	/// <c>Class.getInterfaces()</c> definition.
+	/// </summary>
+	private static readonly JFunctionDefinition<JArrayObject<JClassObject>> getInterfacesDefinition =
+		new(UnicodeMethodNames.GetInterfaces());
 
 	/// <summary>
 	/// <c>Buffer.isDirect()</c> definition.
@@ -179,8 +184,8 @@ internal partial class NativeFunctionSetImpl
 		JClassObject? elementClass;
 		do
 			elementClass = JFunctionDefinition.Invoke(NativeFunctionSetImpl.getComponentTypeDefinition, arrayClass)!;
-		while (elementClass.ClassSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar);
-		return NativeFunctionSetImpl.IsFinalNonArrayType(elementClass);
+		while (elementClass.IsArray);
+		return NativeFunctionSetImpl.GetClassModifiers(elementClass).HasFlag(JModifierObject.Modifier.Final);
 	}
 	/// <summary>
 	/// Indicates whether a non-array class is final.
@@ -190,15 +195,14 @@ internal partial class NativeFunctionSetImpl
 	/// <see langword="true"/> if <paramref name="jClass"/> is final; otherwise;
 	/// <see langword="false"/>.
 	/// </returns>
-	private static Boolean IsFinalNonArrayType(JClassObject jClass)
+	private static JModifierObject.Modifier GetClassModifiers(JClassObject jClass)
 	{
-		//Primitive classes are final.
-		if (jClass.ClassSignature.Length == 1) return true;
+		if (jClass.IsPrimitive) return JModifierObject.PrimitiveModifiers;
 		IEnvironment env = jClass.Environment;
-		JModifier modifier = default;
-		env.AccessFeature.CallPrimitiveFunction(modifier.AsBytes(), jClass, jClass.Class,
+		JModifierObject.Modifier result = default;
+		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jClass, jClass.Class,
 		                                        NativeFunctionSetImpl.getModifiersDefinition, false,
 		                                        Array.Empty<IObject>());
-		return modifier.HasFlag(JModifier.Final);
+		return result;
 	}
 }

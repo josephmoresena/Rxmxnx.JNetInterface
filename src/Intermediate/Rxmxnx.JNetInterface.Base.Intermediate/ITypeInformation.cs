@@ -18,6 +18,10 @@ public interface ITypeInformation
 	/// </summary>
 	String Hash { get; }
 	/// <summary>
+	/// Kind of current type.
+	/// </summary>
+	JTypeKind Kind { get; }
+	/// <summary>
 	/// Modifier of current type.
 	/// </summary>
 	JTypeModifier? Modifier { get; }

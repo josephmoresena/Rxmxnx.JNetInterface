@@ -94,6 +94,10 @@ internal static class MethodNames
 	/// </summary>
 	public const String GetComponentType = "getComponentType";
 	/// <summary>
+	/// Name of <c>Class.GetInterfaces()</c>.
+	/// </summary>
+	public const String GetInterfaces = "getInterfaces";
+	/// <summary>
 	/// Name of <c>Buffer.isDirect()</c>.
 	/// </summary>
 	public const String IsDirect = "isDirect";

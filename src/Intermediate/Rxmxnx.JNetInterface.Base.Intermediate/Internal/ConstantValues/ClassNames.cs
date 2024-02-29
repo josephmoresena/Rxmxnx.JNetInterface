@@ -22,6 +22,10 @@ internal static class ClassNames
 	/// </summary>
 	public const String ReflectPackage = ClassNames.LangPackage + "reflect/";
 	/// <summary>
+	/// JNI representation of <c>java.lang.Annotation</c> package.
+	/// </summary>
+	public const String AnnotationPackage = ClassNames.LangPackage + "annotation/";
+	/// <summary>
 	/// JNI representation of <c>sun.nio.ch</c> package.
 	/// </summary>
 	public const String SunNioChPackage = "sun/nio/ch/";
@@ -289,9 +293,17 @@ internal static class ClassNames
 	/// </summary>
 	public const String FieldObject = ClassNames.ReflectPackage + "Field";
 	/// <summary>
+	/// JNI name of <c>java.lang.reflect.Modifier</c> class.
+	/// </summary>
+	public const String ModifierObject = ClassNames.ReflectPackage + "Modifier";
+	/// <summary>
 	/// JNI name of <c>java.lang.reflect.Member</c> interface.
 	/// </summary>
 	public const String MemberInterface = ClassNames.ReflectPackage + "Member";
+	/// <summary>
+	/// JNI name of <c>java.lang.annotation.Annotation</c> interface.
+	/// </summary>
+	public const String AnnotationInterface = ClassNames.AnnotationPackage + "Annotation";
 
 	/// <summary>
 	/// JNI name of <c>java.lang.Thread.UncaughtExceptionHandler</c> interface.

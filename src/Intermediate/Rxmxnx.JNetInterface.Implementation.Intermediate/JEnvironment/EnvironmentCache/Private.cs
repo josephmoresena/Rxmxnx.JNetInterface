@@ -61,24 +61,19 @@ partial class JEnvironment
 			if (localRef == default) return default;
 
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TResult>();
+			JClassTypeMetadata classMetadata;
 			JClassObject jClass;
-			if (metadata.Modifier == JTypeModifier.Final)
+			if (metadata.Modifier != JTypeModifier.Final)
 			{
-				jClass = this.GetClass<TResult>();
+				jClass = this._env.GetObjectClass(localRef, out classMetadata);
 			}
 			else
 			{
-				JClassLocalRef classRef = this._env.GetObjectClass(localRef);
-				try
-				{
-					jClass = this.GetClass(classRef, false);
-				}
-				finally
-				{
-					this._env.DeleteLocalRef(classRef.Value);
-				}
+				jClass = this.GetClass<TResult>();
+				classMetadata = (JClassTypeMetadata)MetadataHelper.GetMetadata<TResult>();
 			}
-			TResult result = (TResult)(Object)metadata.CreateInstance(jClass, localRef, true);
+			JLocalObject jLocal = classMetadata.CreateInstance(jClass, localRef, true);
+			TResult result = (TResult)(Object)metadata.ParseInstance(jLocal);
 			if (localRef != (result as JLocalObject)!.InternalReference && register)
 				this._env.DeleteLocalRef(localRef);
 			return register ? this.Register(result) : result;

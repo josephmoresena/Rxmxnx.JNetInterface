@@ -205,7 +205,13 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.FieldObject"/>
 	[DefaultValue(ClassNames.FieldObject)]
 	public static partial ReadOnlySpan<Byte> FieldObject();
+	/// <inheritdoc cref="ClassNames.ModifierObject"/>
+	[DefaultValue(ClassNames.ModifierObject)]
+	public static partial ReadOnlySpan<Byte> ModifierObject();
 	/// <inheritdoc cref="ClassNames.MemberInterface"/>
 	[DefaultValue(ClassNames.MemberInterface)]
 	public static partial ReadOnlySpan<Byte> MemberInterface();
+	/// <inheritdoc cref="ClassNames.AnnotationInterface"/>
+	[DefaultValue(ClassNames.AnnotationInterface)]
+	public static partial ReadOnlySpan<Byte> AnnotationInterface();
 }

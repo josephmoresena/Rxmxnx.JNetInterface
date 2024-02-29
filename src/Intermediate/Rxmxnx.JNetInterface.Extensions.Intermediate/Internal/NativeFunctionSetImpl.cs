@@ -116,10 +116,17 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		return bytes[0] == JBoolean.TrueValue;
 	}
 	/// <inheritdoc/>
-	public override Boolean IsFinal(JClassObject jClass)
-		=> jClass.ClassSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar ?
-			jClass.Environment.WithFrame(2, jClass, NativeFunctionSetImpl.IsFinalArrayType) :
-			NativeFunctionSetImpl.IsFinalNonArrayType(jClass);
+	public override Boolean IsFinal(JClassObject jClass, out JModifierObject.Modifier modifiers)
+	{
+		IEnvironment env = jClass.Environment;
+		modifiers = NativeFunctionSetImpl.GetClassModifiers(jClass);
+		return jClass.IsArray ?
+			env.WithFrame(4, jClass, NativeFunctionSetImpl.IsFinalArrayType) :
+			modifiers.HasFlag(JModifierObject.Modifier.Final);
+	}
+	/// <inheritdoc/>
+	public override JArrayObject<JClassObject> GetInterfaces(JClassObject jClass)
+		=> JFunctionDefinition.Invoke(NativeFunctionSetImpl.getInterfacesDefinition, jClass, jClass.Class)!;
 
 	/// <inheritdoc/>
 	public override Boolean IsDirectBuffer(JBufferObject jBuffer)

@@ -18,12 +18,10 @@ public readonly ref partial struct JNativeCallAdapter
 		internal JLocalObject CreateInitialObject(JObjectLocalRef localRef)
 		{
 			JEnvironment env = this._callAdapter._env;
-			JClassObject jClass = this.GetObjectClass(localRef, true);
+			JClassObject jClass = this.GetObjectClass(localRef, out JClassTypeMetadata metadata, true);
 			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
 			{
-				JReferenceTypeMetadata metadata = MetadataHelper.GetMetadata(jClass.Hash) ??
-					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>();
-				JLocalObject result = (JLocalObject)metadata.CreateInstance(jClass, localRef, true);
+				JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
 				this._callAdapter._cache[localRef] = result.Lifetime;
 				return result;
 			}
@@ -43,8 +41,9 @@ public readonly ref partial struct JNativeCallAdapter
 			if (metadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
 			if (JLocalObject.IsObjectType<TObject>())
 				return (TObject)this.CreateInitialObject(localRef);
-			JClassObject jClass = this.GetObjectClass(localRef, true);
-			return (TObject)metadata.CreateInstance(jClass, localRef, true);
+			JClassObject jClass = this.GetObjectClass(localRef, out JClassTypeMetadata classMetadata, true);
+			JLocalObject localObject = classMetadata.CreateInstance(jClass, localRef, true);
+			return (TObject)metadata.ParseInstance(localObject);
 		}
 		/// <summary>
 		/// Retrieves initial <see cref="JLocalObject"/> instance for <paramref name="classRef"/>.

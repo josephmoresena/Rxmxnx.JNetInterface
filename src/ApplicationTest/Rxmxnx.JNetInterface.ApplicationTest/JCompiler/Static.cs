@@ -27,7 +27,7 @@ public partial record JCompiler
 	}
 	private static JCompiler[] GetLinuxCompilers()
 	{
-		String javaPath = Path.Combine("/Library/", "Java", "JavaVirtualMachines");
+		String javaPath = Path.Combine("/usr", "lib", "jvm");
 		return JCompiler.GetCompilers(javaPath, "jdk-*", "javac", "libjvm.so");
 	}
 	private static JCompiler[] GetCompilers(String javaPath, String jdkPattern, String javacName, String jvmName)

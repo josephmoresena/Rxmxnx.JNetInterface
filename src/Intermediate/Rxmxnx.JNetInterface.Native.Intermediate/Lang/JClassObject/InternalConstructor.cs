@@ -12,6 +12,9 @@ public partial class JClassObject
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
+		this._isInterface = false;
+		this._isEnum = false;
+		this._isAnnotation = false;
 		this._isFinal = true;
 		this.Lifetime.SetClass(this);
 	}
@@ -27,6 +30,8 @@ public partial class JClassObject
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
+		if (metadata.Kind != JTypeKind.Undefined)
+			this._isInterface = metadata.Kind == JTypeKind.Interface;
 		if (metadata.Modifier.HasValue)
 			this._isFinal = metadata.Modifier == JTypeModifier.Final;
 	}

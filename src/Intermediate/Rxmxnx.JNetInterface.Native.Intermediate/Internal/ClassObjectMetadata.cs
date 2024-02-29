@@ -27,6 +27,18 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 	/// Indicates whether the class of current object is final.
 	/// </summary>
 	public Boolean? IsFinal { get; init; }
+	/// <summary>
+	/// Indicates whether the class of current type is interface.
+	/// </summary>
+	public Boolean? IsInterface { get; init; }
+	/// <summary>
+	/// Indicates whether the class of current type is enum.
+	/// </summary>
+	public Boolean? IsEnum { get; init; }
+	/// <summary>
+	/// Indicates whether the class of current type is annotation.
+	/// </summary>
+	public Boolean? IsAnnotation { get; init; }
 
 	/// <summary>
 	/// Constructor.
@@ -38,6 +50,10 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 		this.Name = classMetadata?.Name!;
 		this.ClassSignature = classMetadata?.ClassSignature!;
 		this.Hash = classMetadata?.Hash!;
+		this.IsInterface = classMetadata?.IsInterface;
+		this.IsEnum = classMetadata?.IsEnum;
+		this.IsAnnotation = classMetadata?.IsAnnotation;
+		this.IsFinal = classMetadata?.IsFinal;
 	}
 
 	/// <summary>
@@ -50,6 +66,14 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 		this.Name = metadata.ClassName;
 		this.ClassSignature = metadata.Signature;
 		this.Hash = metadata.Hash;
+		if (metadata.Kind != JTypeKind.Undefined)
+			this.IsInterface = metadata.Kind == JTypeKind.Interface;
+		if (metadata.Kind != JTypeKind.Undefined)
+			this.IsEnum = metadata.Kind == JTypeKind.Enum;
+		if (metadata.Kind != JTypeKind.Undefined)
+			this.IsAnnotation = metadata.Kind == JTypeKind.Annotation;
+		if (metadata.Modifier.HasValue)
+			this.IsFinal = metadata.Modifier == JTypeModifier.Final;
 	}
 
 	/// <summary>

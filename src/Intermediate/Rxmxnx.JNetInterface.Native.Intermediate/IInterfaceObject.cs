@@ -23,7 +23,7 @@ public interface IInterfaceObject<TInterface> : IObject
 	/// <param name="index">Index of element to set to.</param>
 	/// <param name="element">A <see cref="JLocalObject"/> instance.</param>
 	public static void SetElement<TElement>(JArrayObject<TInterface> jArray, Int32 index, TElement? element)
-		where TElement : JLocalObject, IReferenceType<TElement>, IInterfaceObject<TInterface>
+		where TElement : JReferenceObject, IReferenceType<TElement>, IInterfaceObject<TInterface>
 	{
 		IEnvironment env = jArray.Environment;
 		env.ArrayFeature.SetObjectElement(jArray, index, element);

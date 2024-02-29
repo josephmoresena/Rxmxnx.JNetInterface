@@ -27,9 +27,21 @@ public partial class JClassObject
 	/// </summary>
 	private String? _hash;
 	/// <summary>
+	/// Indicates whether current class is an annotation.
+	/// </summary>
+	private Boolean? _isAnnotation;
+	/// <summary>
+	/// Indicates whether current class is an enum.
+	/// </summary>
+	private Boolean? _isEnum;
+	/// <summary>
 	/// Indicates whether current class is final.
 	/// </summary>
 	private Boolean? _isFinal;
+	/// <summary>
+	/// Indicates whether current class is an interface.
+	/// </summary>
+	private Boolean? _isInterface;
 	/// <summary>
 	/// JNI signature for an object of current instance.
 	/// </summary>
@@ -43,6 +55,14 @@ public partial class JClassObject
 		if (CString.IsNullOrEmpty(this._className) || CString.IsNullOrEmpty(this._signature) ||
 		    String.IsNullOrWhiteSpace(this._hash))
 			this.Environment.ClassFeature.GetClassInfo(this, out this._className, out this._signature, out this._hash);
+	}
+	private Boolean IsFinalType()
+	{
+		Boolean result = this.Environment.FunctionSet.IsFinal(this, out JModifierObject.Modifier modifier);
+		this._isInterface = !result && modifier.HasFlag(JModifierObject.Modifier.Interface);
+		this._isEnum = result && modifier.HasFlag(JModifierObject.Modifier.Enum);
+		this._isAnnotation = this._isInterface.Value && modifier.HasFlag(JModifierObject.Modifier.Annotation);
+		return result;
 	}
 
 	static JClassObject IClassType<JClassObject>.Create(IReferenceType.ClassInitializer initializer)

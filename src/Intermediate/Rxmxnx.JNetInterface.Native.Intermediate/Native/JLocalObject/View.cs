@@ -6,7 +6,7 @@ public partial class JLocalObject
 	/// This class is used for create view instances of object.
 	/// </summary>
 	/// <typeparam name="TObject">A <see cref="IObject"/> instance.</typeparam>
-	public new abstract class View<TObject> : JReferenceObject.View<TObject>, ILocalViewObject, IWrapper<JLocalObject> 
+	public new abstract class View<TObject> : JReferenceObject.View<TObject>, ILocalViewObject, IWrapper<JLocalObject>
 		where TObject : JLocalObject, ILocalObject
 	{
 		/// <inheritdoc/>

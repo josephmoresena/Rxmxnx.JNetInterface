@@ -73,15 +73,15 @@ public readonly ref partial struct JNativeCallAdapter
 		private void ThrowIfNotClassObject(JObjectLocalRef localRef)
 		{
 			JEnvironment env = this._callAdapter._env;
-			JClassObject jClass = this.GetObjectClass(localRef, true);
+			JClassObject jClass = this.GetObjectClass(localRef);
 			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
 				throw new ArgumentException($"A {jClass.Name} instance is not {env.ClassObject.Name} instance.");
 		}
 		/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
-		private JClassObject GetObjectClass(JObjectLocalRef localRef, Boolean validateReference = false)
+		private JClassObject GetObjectClass(JObjectLocalRef localRef)
 		{
 			JEnvironment env = this._callAdapter._env;
-			if (validateReference) this.ThrowIfNotLocalReference(localRef);
+			this.ThrowIfNotLocalReference(localRef);
 			JClassLocalRef classRef = env.GetObjectClass(localRef);
 			try
 			{
@@ -92,6 +92,14 @@ public readonly ref partial struct JNativeCallAdapter
 				env.DeleteLocalRef(classRef.Value);
 			}
 		}
+		/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef, out JClassTypeMetadata)"/>
+		private JClassObject GetObjectClass(JObjectLocalRef localRef, out JClassTypeMetadata classMetadata,
+			Boolean validateReference = false)
+		{
+			JEnvironment env = this._callAdapter._env;
+			if (validateReference) this.ThrowIfNotLocalReference(localRef);
+			return env.GetObjectClass(localRef, out classMetadata);
+		}
 		/// <summary>
 		/// Retrieves initial final <typaramref name="TObject"/> instance for <paramref name="localRef"/>.
 		/// </summary>
@@ -101,22 +109,15 @@ public readonly ref partial struct JNativeCallAdapter
 		private TObject CreateFinalObject<TObject>(JObjectLocalRef localRef)
 			where TObject : JLocalObject, IReferenceType<TObject>
 		{
-			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
+			JClassTypeMetadata metadata = (JClassTypeMetadata)MetadataHelper.GetMetadata<TObject>();
 			JClassObject jClass = this._callAdapter._env.GetClass<TObject>();
-			TObject result;
 			if (!JLocalObject.IsClassType<TObject>())
 			{
 				this.ThrowIfNotLocalReference(localRef);
-				result = JLocalObject.Create<TObject>(jClass, metadata, localRef);
+				return (TObject)metadata.CreateInstance(jClass, localRef, true);
 			}
-			else
-			{
-				JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
-				JClassObject jClassResult = this.CreateInitialClass(classRef, true);
-				result = (TObject)metadata.ParseInstance(jClassResult);
-				if (!Object.ReferenceEquals(result, jClassResult)) jClassResult.Dispose();
-			}
-			return result;
+			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
+			return (TObject)(Object)this.CreateInitialClass(classRef, true);
 		}
 	}
 }

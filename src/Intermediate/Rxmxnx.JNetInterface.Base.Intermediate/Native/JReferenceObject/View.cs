@@ -47,8 +47,7 @@ public partial class JReferenceObject
 	/// This class is used for create view instances of object.
 	/// </summary>
 	/// <typeparam name="TObject">A <see cref="IObject"/> instance.</typeparam>
-	public abstract class View<TObject> : View, IWrapper<TObject> 
-		where TObject : JReferenceObject, IObject
+	public abstract class View<TObject> : View, IWrapper<TObject> where TObject : JReferenceObject, IObject
 	{
 		/// <summary>
 		/// <typeparamref name="TObject"/> instance.
@@ -60,7 +59,7 @@ public partial class JReferenceObject
 		/// </summary>
 		/// <param name="jObject">A <typeparamref name="TObject"/> instance.</param>
 		private protected View(TObject jObject) : base(jObject) => this.Object = jObject;
-	
+
 		TObject IWrapper<TObject>.Value => this.Object;
 
 		/// <inheritdoc/>

@@ -36,6 +36,67 @@ partial class JEnvironment
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	private JGlobalRef CreateGlobalRef(JReferenceObject jLocal)
 		=> this._cache.CreateGlobalRef(jLocal.As<JObjectLocalRef>());
+	/// <summary>
+	/// Retrieves the <see cref="JArrayTypeMetadata"/> instance for given <paramref name="arraySignature"/>.
+	/// </summary>
+	/// <param name="arraySignature">JNI array signature.</param>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
+	private JArrayTypeMetadata GetArrayTypeMetadata(ReadOnlySpan<Byte> arraySignature)
+	{
+		ReadOnlySpan<Byte> elementName = arraySignature[1..];
+		if (elementName[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
+		{
+			if (MetadataHelper.GetMetadata(elementName)?.GetArrayMetadata() is { } arrayTypeMetadata)
+				return arrayTypeMetadata;
+			return this.GetArrayTypeMetadata(arraySignature);
+		}
+		JReferenceTypeMetadata? elementMetadata = MetadataHelper.GetMetadata(elementName);
+		if (elementMetadata is null)
+		{
+			JClassObject elementClass = this._cache.GetClass(elementName);
+			elementMetadata = !elementClass.IsInterface ?
+				this.GetClassMetadata(elementClass) :
+				this.GetInterfaceMetadata(elementClass);
+		}
+		return elementMetadata?.GetArrayMetadata() ??
+			(JArrayTypeMetadata)MetadataHelper.GetMetadata<JArrayObject<JLocalObject>>();
+	}
+	/// <summary>
+	/// Retrieves the <see cref="JClassTypeMetadata"/> instance from <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JClassTypeMetadata"/> instance.</returns>
+	private JClassTypeMetadata GetClassMetadata(JClassObject jClass)
+	{
+		switch (jClass.IsEnum)
+		{
+			case true:
+				return (JClassTypeMetadata)MetadataHelper.GetMetadata<JEnumObject>();
+			default:
+				while (jClass.GetSuperClass() is { } superClass)
+				{
+					if (MetadataHelper.GetMetadata(superClass.Name) is JClassTypeMetadata classMetadata)
+						return classMetadata;
+				}
+				break;
+		}
+		return (JClassTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>();
+	}
+	/// <summary>
+	/// Retrieves the <see cref="JInterfaceTypeMetadata"/> instance from <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JInterfaceTypeMetadata"/> instance.</returns>
+	private JInterfaceTypeMetadata? GetInterfaceMetadata(JClassObject jClass)
+	{
+		if (jClass.IsAnnotation)
+			return (JInterfaceTypeMetadata)MetadataHelper.GetMetadata<JAnnotationObject>();
+		using JArrayObject<JClassObject> interfaces = jClass.GetInterfaces();
+		using LocalFrame _ = new(this, 2);
+		foreach (JClassObject? interfaceClass in interfaces)
+			return (JInterfaceTypeMetadata?)MetadataHelper.GetMetadata(interfaceClass!.Name);
+		return default;
+	}
 
 	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
 #pragma warning disable CA1859

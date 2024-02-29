@@ -101,11 +101,20 @@ public abstract class NativeFunctionSet
 	/// Indicates whether current class object is final.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="modifiers">Output. Current class modifiers.</param>
 	/// <returns>
 	/// <see langword="true"/> if <paramref name="jClass"/> is final;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	public abstract Boolean IsFinal(JClassObject jClass);
+	public abstract Boolean IsFinal(JClassObject jClass, out JModifierObject.Modifier modifiers);
+	/// <summary>
+	/// Determines the interfaces implemented by the class or interface represented by this object.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>
+	/// A <see cref="JArrayObject{JClassObject}"/> instance.
+	/// </returns>
+	public abstract JArrayObject<JClassObject> GetInterfaces(JClassObject jClass);
 
 	/// <summary>
 	/// Indicates whether current buffer object is direct.
