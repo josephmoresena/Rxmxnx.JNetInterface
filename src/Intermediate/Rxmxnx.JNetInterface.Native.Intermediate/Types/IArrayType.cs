@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IArrayType : IReferenceType, IDisposable
+public interface IArrayType : IReferenceType
 {
 	/// <summary>
 	/// Current type metadata.

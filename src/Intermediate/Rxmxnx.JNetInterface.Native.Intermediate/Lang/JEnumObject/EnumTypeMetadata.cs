@@ -47,19 +47,8 @@ public partial class JEnumObject
 				Boolean realClass = false)
 				=> IEnumType<TEnum>.Create(jClass.Environment, localRef);
 			/// <inheritdoc/>
-			internal override JReferenceObject? ParseInstance(JLocalObject? jLocal)
-			{
-				switch (jLocal)
-				{
-					case null:
-						return default;
-					case TEnum result:
-						return result;
-					default:
-						JLocalObject.Validate<TEnum>(jLocal);
-						return IEnumType<TEnum>.Create(jLocal);
-				}
-			}
+			internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
+				=> jLocal?.CastTo<TEnum>(dispose);
 			/// <inheritdoc/>
 			internal override JEnumObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			{

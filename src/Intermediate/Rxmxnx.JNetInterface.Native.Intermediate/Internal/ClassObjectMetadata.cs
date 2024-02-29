@@ -55,6 +55,20 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 		this.IsAnnotation = classMetadata?.IsAnnotation;
 		this.IsFinal = classMetadata?.IsFinal;
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	internal ClassObjectMetadata(JClassObject jClass) : base(jClass.Class, IClassType.GetMetadata<JClassObject>())
+	{
+		this.Name = jClass.Name!;
+		this.ClassSignature = jClass.ClassSignature;
+		this.Hash = jClass.Hash!;
+		this.IsInterface = jClass.IsInterface;
+		this.IsEnum = jClass.IsEnum;
+		this.IsAnnotation = jClass.IsAnnotation;
+		this.IsFinal = jClass.IsFinal;
+	}
 
 	/// <summary>
 	/// Constructor.
@@ -66,12 +80,12 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 		this.Name = metadata.ClassName;
 		this.ClassSignature = metadata.Signature;
 		this.Hash = metadata.Hash;
-		if (metadata.Kind != JTypeKind.Undefined)
-			this.IsInterface = metadata.Kind == JTypeKind.Interface;
-		if (metadata.Kind != JTypeKind.Undefined)
-			this.IsEnum = metadata.Kind == JTypeKind.Enum;
-		if (metadata.Kind != JTypeKind.Undefined)
-			this.IsAnnotation = metadata.Kind == JTypeKind.Annotation;
+		if (metadata.Kind is not JTypeKind.Undefined)
+		{
+			this.IsInterface = metadata.Kind is JTypeKind.Interface or JTypeKind.Annotation;
+			this.IsAnnotation = metadata.Kind is JTypeKind.Annotation;
+			this.IsEnum = metadata.Kind is JTypeKind.Enum;
+		}
 		if (metadata.Modifier.HasValue)
 			this.IsFinal = metadata.Modifier == JTypeModifier.Final;
 	}

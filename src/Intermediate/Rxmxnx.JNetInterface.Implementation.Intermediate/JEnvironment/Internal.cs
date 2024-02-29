@@ -180,10 +180,8 @@ partial class JEnvironment
 		JClassObject jClass = this._cache.GetClass(classRef, true);
 		if (MetadataHelper.GetMetadata(jClass.Hash) is JClassTypeMetadata classMetadata)
 			metadata = classMetadata;
-		else if (jClass.IsArray)
-			metadata = this.GetArrayTypeMetadata(jClass.ClassSignature);
 		else
-			metadata = this.GetClassMetadata(jClass);
+			metadata = this._cache.GetClassMetadata(jClass)!;
 		return jClass;
 	}
 

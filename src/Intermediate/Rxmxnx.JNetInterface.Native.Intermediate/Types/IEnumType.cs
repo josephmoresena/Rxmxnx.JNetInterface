@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IEnumType : IReferenceType, IDisposable
+public interface IEnumType : IReferenceType
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Enum;
 
@@ -46,7 +46,7 @@ public interface IEnumType<TEnum> : IEnumType, IReferenceType<TEnum> where TEnum
 	/// </summary>
 	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
 	/// <returns>A <typeparamref name="TEnum"/> instance from <paramref name="initializer"/>.</returns>
-	protected static abstract TEnum Create(ObjectInitializer initializer);
+	protected new static abstract TEnum Create(ObjectInitializer initializer);
 	/// <summary>
 	/// Creates a <typeparamref name="TEnum"/> instance from <paramref name="initializer"/>.
 	/// </summary>
@@ -83,4 +83,6 @@ public interface IEnumType<TEnum> : IEnumType, IReferenceType<TEnum> where TEnum
 	/// <returns>A <typeparamref name="TEnum"/> instance from <paramref name="jGlobal"/>.</returns>
 	internal static TEnum Create(IEnvironment env, JGlobalBase jGlobal)
 		=> TEnum.Create(new GlobalInitializer { Global = jGlobal, Environment = env, });
+
+	static TEnum IReferenceType<TEnum>.Create(ObjectInitializer initializer) => TEnum.Create(initializer);
 }

@@ -34,6 +34,13 @@ partial class JEnvironment
 			this.SetAssignableTo<TDataType>(jObject, result);
 			return result;
 		}
+		public JClassTypeMetadata? GetClassMetadata(JClassObject? jClass)
+		{
+			if (jClass is null || jClass.IsPrimitive || jClass.IsInterface) return default;
+			return jClass.IsArray ?
+				this._env.GetArrayTypeMetadata(jClass.ClassSignature) :
+				this._env.GetClassMetadata(jClass);
+		}
 		public JClassObject GetClass(ReadOnlySpan<Byte> className)
 		{
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);

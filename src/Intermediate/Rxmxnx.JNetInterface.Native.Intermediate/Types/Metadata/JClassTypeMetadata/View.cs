@@ -30,7 +30,8 @@ public partial record JClassTypeMetadata<TClass>
 			Boolean realClass = false)
 			=> this._metadata.CreateInstance(jClass, localRef, realClass);
 		/// <inheritdoc/>
-		internal override JReferenceObject? ParseInstance(JLocalObject? jLocal) => this._metadata.ParseInstance(jLocal);
+		internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
+			=> this._metadata.ParseInstance(jLocal, dispose);
 		/// <inheritdoc/>
 		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			=> this._metadata.ParseInstance(env, jGlobal);

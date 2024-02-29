@@ -30,10 +30,14 @@ public partial class JClassObject
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
-		if (metadata.Kind != JTypeKind.Undefined)
-			this._isInterface = metadata.Kind == JTypeKind.Interface;
+		if (metadata.Kind is not JTypeKind.Undefined)
+		{
+			this._isInterface = metadata.Kind is JTypeKind.Interface or JTypeKind.Annotation;
+			this._isAnnotation = metadata.Kind is JTypeKind.Annotation;
+			this._isEnum = metadata.Kind is JTypeKind.Enum;
+		}
 		if (metadata.Modifier.HasValue)
-			this._isFinal = metadata.Modifier == JTypeModifier.Final;
+			this._isFinal = metadata.Modifier is JTypeModifier.Final;
 	}
 	/// <summary>
 	/// Constructor.

@@ -86,12 +86,4 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObj
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
 	public static JArrayObject<TElement> Create(IEnvironment env, Int32 length, TElement initialElement)
 		=> env.ArrayFeature.CreateArray(length, initialElement);
-
-	/// <summary>
-	/// Creates a <see cref="JArrayObject{TElement}"/> instance from <paramref name="jLocal"/>.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>A <see cref="JArrayObject{TElement}"/> instance from <paramref name="jLocal"/>.</returns>
-	internal static JArrayObject<TElement> Create(JLocalObject jLocal)
-		=> new(JLocalObject.Validate<JArrayObject<TElement>>(jLocal), jLocal.Class);
 }

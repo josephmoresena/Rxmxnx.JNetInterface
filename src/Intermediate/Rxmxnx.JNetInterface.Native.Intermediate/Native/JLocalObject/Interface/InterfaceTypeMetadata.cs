@@ -36,7 +36,7 @@ public partial class JLocalObject
 					=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 				/// <inheritdoc/>
-				internal override JReferenceObject? ParseInstance(JLocalObject? jLocal)
+				internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
 				{
 					if (jLocal == null) return default;
 					if (jLocal is not IInterfaceObject<TInterface>)

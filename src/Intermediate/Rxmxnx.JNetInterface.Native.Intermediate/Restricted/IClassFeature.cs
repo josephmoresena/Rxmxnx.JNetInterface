@@ -81,4 +81,10 @@ public partial interface IClassFeature
 	/// <typeparamref name="TDataType"/> type class; otherwise, <see langword="false"/>.
 	/// </returns>
 	Boolean IsInstanceOf<TDataType>(JReferenceObject jObject) where TDataType : JReferenceObject, IDataType<TDataType>;
+	/// <summary>
+	/// Retrieves <see cref="JClassTypeMetadata"/> from <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JClassTypeMetadata"/> instance.</returns>
+	JClassTypeMetadata? GetClassMetadata(JClassObject? jClass);
 }

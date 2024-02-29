@@ -37,18 +37,13 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
-	public TReference AsLocal<TReference>(IEnvironment env) 
-		where TReference : JLocalObject, IClassType<TReference>
+	public TReference AsLocal<TReference>(IEnvironment env)
+		where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		if (JLocalObject.IsClassType<TReference>())
-			return (TReference)(Object)env.ClassFeature.AsClassObject(this);
-		JClassTypeMetadata metadata = IClassType.GetMetadata<TReference>();
-		if (!this.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
-			return (TReference)metadata.ParseInstance(env, this);
-
-		JClassObject jClass = env.ClassFeature.AsClassObject(this);
-		if (JLocalObject.IsObjectType<TReference>()) return (TReference)(Object)jClass;
-		return (TReference)metadata.ParseInstance(jClass);
+		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
+		JClassTypeMetadata classMetadata = this.ObjectMetadata.ClassMetadata ?? IClassType.GetMetadata<JLocalObject>();
+		JLocalObject jLocal = classMetadata.ParseInstance(env, this);
+		return (TReference)metadata.ParseInstance(jLocal, true);
 	}
 
 	/// <summary>

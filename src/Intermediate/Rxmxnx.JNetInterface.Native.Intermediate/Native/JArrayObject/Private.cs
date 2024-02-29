@@ -42,4 +42,8 @@ public partial class JArrayObject<TElement> : IArrayType, IReferenceType<JArrayO
 			JLocalObject.Validate<JArrayObject<TElement>>(jGlobal, env);
 		return new(env, jGlobal);
 	}
+
+	static JArrayObject<TElement> IReferenceType<JArrayObject<TElement>>.
+		Create(IReferenceType.ObjectInitializer initializer)
+		=> initializer.Instance.CastTo<JArrayObject<TElement>>();
 }

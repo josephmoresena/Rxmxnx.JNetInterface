@@ -62,19 +62,8 @@ public partial class JLocalObject
 					Class = jClass, RealClass = realClass, LocalReference = localRef,
 				});
 			/// <inheritdoc/>
-			internal override JReferenceObject? ParseInstance(JLocalObject? jLocal)
-			{
-				switch (jLocal)
-				{
-					case null:
-						return default;
-					case TClass result:
-						return result;
-					default:
-						JLocalObject.Validate<TClass>(jLocal);
-						return TClass.Create(jLocal);
-				}
-			}
+			internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
+				=> jLocal?.CastTo<TClass>(dispose);
 			/// <inheritdoc/>
 			internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			{

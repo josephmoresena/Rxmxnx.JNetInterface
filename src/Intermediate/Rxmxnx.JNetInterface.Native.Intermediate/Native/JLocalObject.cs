@@ -73,8 +73,22 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// </param>
 	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
 	public TReference CastTo<TReference>(Boolean dispose = false)
-		where TReference : JLocalObject, IReferenceType<TReference>
-		=> JLocalObject.CastTo<TReference>(this, dispose);
+		where TReference : JReferenceObject, IReferenceType<TReference>
+	{
+		IEnvironment env = this.Environment;
+		if (this is TReference result) return result;
+		if (JLocalObject.IsClassType<TReference>())
+		{
+			result = (TReference)(Object)env.ClassFeature.AsClassObject(this);
+		}
+		else
+		{
+			JLocalObject.Validate<TReference>(this);
+			result = TReference.Create(this);
+		}
+		if (dispose) this.Dispose();
+		return result;
+	}
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
 	/// </summary>

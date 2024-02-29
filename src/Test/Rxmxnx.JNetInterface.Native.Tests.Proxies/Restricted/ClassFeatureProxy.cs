@@ -37,6 +37,7 @@ public abstract partial class ClassFeatureProxy : IClassFeature
 	public abstract JClassObject GetClass(String classHash);
 	public abstract void SetAssignableTo<TDataType>(JReferenceObject jObject, Boolean isAssignable)
 		where TDataType : JReferenceObject, IDataType<TDataType>;
+	public abstract JClassTypeMetadata? GetClassMetadata(JClassObject? jClass);
 	public abstract ITypeInformation GetClassInfo(JClassObject jClass);
 	public abstract JClassObject GetClass(CString className);
 	public abstract JClassObject LoadClass(CString className, Byte[] rawClassBytes,

@@ -73,7 +73,7 @@ public partial class JArrayObject
 			IEnvironment env = jLocal.Environment;
 			ValidationUtilities.ThrowIfInvalidCast<JArrayObject<TCastedElement>>(
 				env.ClassFeature.IsAssignableTo<JArrayObject<TCastedElement>>(jLocal));
-			return JArrayObject<TCastedElement>.Create(jLocal)!;
+			return jLocal.CastTo<JArrayObject<TCastedElement>>();
 		}
 	}
 }

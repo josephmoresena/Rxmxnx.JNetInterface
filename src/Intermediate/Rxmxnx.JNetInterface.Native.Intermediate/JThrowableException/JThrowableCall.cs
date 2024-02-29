@@ -35,8 +35,7 @@ public partial class JThrowableException
 		{
 			if (this._delegate is not Action<TThrowable> action) return;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
-			TThrowable throwableT =
-				JThrowableCall.Parse<TThrowable>(TThrowable.Create(env, this._global)!, this._global.ObjectMetadata);
+			TThrowable throwableT = this._global.AsLocal<TThrowable>(env);
 			action(throwableT);
 			this._global.RefreshMetadata(throwableT);
 		}
@@ -50,27 +49,10 @@ public partial class JThrowableException
 		{
 			if (this._delegate is not Func<TThrowable, TResult> func) return default!;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
-			TThrowable throwableT =
-				JThrowableCall.Parse<TThrowable>(TThrowable.Create(env, this._global)!, this._global.ObjectMetadata);
+			TThrowable throwableT = this._global.AsLocal<TThrowable>(env);
 			TResult result = func(throwableT);
 			this._global.RefreshMetadata(throwableT);
 			return result;
-		}
-
-		/// <summary>
-		/// Creates a <typeparamref name="TThrowable"/> instances from <paramref name="throwable"/>.
-		/// </summary>
-		/// <param name="throwable">A <see cref="JThrowableObject"/> instance.</param>
-		/// <param name="metadata">The <see cref="JThrowableObject"/> instance.</param>
-		/// <typeparam name="TThrowable"></typeparam>
-		/// <returns></returns>
-		private static TThrowable Parse<TThrowable>(JThrowableObject throwable, ObjectMetadata metadata)
-			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
-		{
-			if (throwable is TThrowable throwableT) return throwableT;
-			throwableT = (TThrowable)IReferenceType.GetMetadata<TThrowable>().ParseInstance(throwable)!;
-			ILocalObject.ProcessMetadata(throwableT, metadata);
-			return throwableT;
 		}
 	}
 }

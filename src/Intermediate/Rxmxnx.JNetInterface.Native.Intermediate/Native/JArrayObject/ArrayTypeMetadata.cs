@@ -37,16 +37,11 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 			Boolean realClass = false)
-			=> JArrayObject<TElement>.Create(new IReferenceType.ClassInitializer
-			{
-				Class = jClass, RealClass = realClass, LocalReference = localRef,
-			});
+			=> JArrayObject<TElement>.Create(
+				new() { Class = jClass, RealClass = realClass, LocalReference = localRef, });
 		/// <inheritdoc/>
-		internal override JReferenceObject? ParseInstance(JLocalObject? jLocal)
-		{
-			if (jLocal is null) return default;
-			return jLocal as JArrayObject<TElement> ?? JArrayObject<TElement>.Create(jLocal);
-		}
+		internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
+			=> jLocal?.CastTo<JArrayObject<TElement>>();
 		/// <inheritdoc/>
 		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			=> jGlobal is null ? default(JLocalObject?) : JArrayObject<TElement>.Create(env, jGlobal);
@@ -86,14 +81,15 @@ public partial class JArrayObject<TElement>
 		private static void SetObjectElement(JArrayObject<TElement> jArray, Int32 index, JReferenceObject value)
 		{
 			JReferenceTypeMetadata elementMetadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TElement>();
-			TElement? element = (TElement?)(Object?)elementMetadata.ParseInstance(value as JLocalObject ?? (value as IWrapper<JLocalObject>)?.Value);
+			JLocalObject? jLocal = value as JLocalObject ?? (value as IWrapper<JLocalObject>)?.Value;
+			TElement? element = (TElement?)(Object?)elementMetadata.ParseInstance(jLocal);
 			try
 			{
 				jArray[index] = element;
 			}
 			finally
 			{
-				(element as IDisposable)?.Dispose();
+				(element as JLocalObject)?.Dispose();
 			}
 		}
 	}

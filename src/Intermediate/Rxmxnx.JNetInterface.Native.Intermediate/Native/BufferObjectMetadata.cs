@@ -31,17 +31,6 @@ public record BufferObjectMetadata : ObjectMetadata
 		this.Capacity = bufferMetadata.Capacity;
 		this.Address = bufferMetadata.Address;
 	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	/// <param name="memory"><see cref="IFixedMemory"/> instance.</param>
-	internal BufferObjectMetadata(JClassObject jClass, IFixedMemory memory) : base(jClass)
-	{
-		this.IsDirect = true;
-		this.Capacity = memory.Bytes.Length;
-		this.Address = memory.Pointer;
-	}
 
 	/// <summary>
 	/// Constructor.

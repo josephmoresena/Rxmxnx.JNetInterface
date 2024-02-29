@@ -6,9 +6,12 @@ public abstract partial record JReferenceTypeMetadata
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="dispose">
+	/// Indicates whether current instance should be disposed after casting.
+	/// </param>
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jLocal"/>.</returns>
 	[return: NotNullIfNotNull(nameof(jLocal))]
-	internal abstract JReferenceObject? ParseInstance(JLocalObject? jLocal);
+	internal abstract JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false);
 
 	/// <inheritdoc cref="IReflectionMetadata.CreateFunctionDefinition(ReadOnlySpan{Byte}, JArgumentMetadata[])"/>
 	internal abstract JFunctionDefinition CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,

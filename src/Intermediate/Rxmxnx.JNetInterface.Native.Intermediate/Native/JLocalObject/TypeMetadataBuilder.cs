@@ -57,13 +57,13 @@ public partial class JLocalObject
 			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
 			if (!this._interfaceTypes.Contains(metadata.InterfaceType))
 				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
-					this.DataTypeName, this._kind != JTypeKind.Interface);
+					this.DataTypeName, this._kind is not JTypeKind.Interface);
 
 			foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
 			{
 				if (!this._interfaceTypes.Contains(interfaceMetadata.InterfaceType))
 					NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
-						this.DataTypeName, this._kind != JTypeKind.Interface);
+						this.DataTypeName, this._kind is not JTypeKind.Interface);
 			}
 			this._interfaces ??= [];
 			this._interfaces.Add(metadata);

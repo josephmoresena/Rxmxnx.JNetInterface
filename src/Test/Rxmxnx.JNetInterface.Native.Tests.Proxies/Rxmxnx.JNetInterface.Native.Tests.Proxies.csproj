@@ -35,6 +35,7 @@
         <Using Include="Rxmxnx.JNetInterface.Restricted"/>
         <Using Include="Rxmxnx.JNetInterface.Tests.Restricted"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
+        <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
     </ItemGroup>
 
     <ItemGroup>

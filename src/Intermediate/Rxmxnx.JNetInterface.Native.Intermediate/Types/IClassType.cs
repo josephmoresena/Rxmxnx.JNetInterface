@@ -45,11 +45,13 @@ public interface IClassType<TClass> : IClassType, IReferenceType<TClass>
 	/// </summary>
 	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
 	/// <returns>A <typeparamref name="TClass"/> instance from <paramref name="initializer"/>.</returns>
-	protected static abstract TClass Create(ObjectInitializer initializer);
+	protected new static abstract TClass Create(ObjectInitializer initializer);
 	/// <summary>
 	/// Creates a <typeparamref name="TClass"/> instance from <paramref name="initializer"/>.
 	/// </summary>
 	/// <param name="initializer">A <see cref="IReferenceType.GlobalInitializer"/> instance.</param>
 	/// <returns>A <typeparamref name="TClass"/> instance from <paramref name="initializer"/>.</returns>
 	protected static abstract TClass Create(GlobalInitializer initializer);
+
+	static TClass IReferenceType<TClass>.Create(ObjectInitializer initializer) => TClass.Create(initializer);
 }

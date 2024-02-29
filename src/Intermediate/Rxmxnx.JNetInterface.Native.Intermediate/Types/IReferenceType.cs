@@ -30,6 +30,13 @@ public interface IReferenceType<out TReference> : IReferenceType, IDataType<TRef
 	where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>
+	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
+	/// </summary>
+	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
+	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
+	protected static abstract TReference Create(ObjectInitializer initializer);
+
+	/// <summary>
 	/// Retrieves the base types from current type.
 	/// </summary>
 	/// <returns>Enumerable of types.</returns>
