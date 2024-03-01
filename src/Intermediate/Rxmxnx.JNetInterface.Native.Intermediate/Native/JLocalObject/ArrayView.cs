@@ -17,11 +17,6 @@ public partial class JLocalObject
 		/// </summary>
 		public Int32 Length => this.Object.Length;
 
-		/// <summary>
-		/// JNI array reference.
-		/// </summary>
-		internal JArrayLocalRef Reference => base.As<JArrayLocalRef>();
-
 		/// <inheritdoc/>
 		private protected ArrayView(JArrayObject jObject) : base(jObject) { }
 
@@ -32,8 +27,22 @@ public partial class JLocalObject
 			GC.SuppressFinalize(this);
 		}
 
-		/// <inheritdoc cref="JReferenceObject.As{TValue}()"/>
-		internal new ref readonly TValue As<TValue>() where TValue : unmanaged, IArrayReferenceType<TValue>
-			=> ref base.As<TValue>();
+		/// <summary>
+		/// Retrieves a <see cref="JArrayObject"/> instance from <paramref name="jLocal"/>.
+		/// </summary>
+		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+		/// <param name="dispose">
+		/// Optional. Indicates whether current instance should be disposed after casting.
+		/// </param>
+		/// <returns>A <see cref="JArrayObject"/> instance from current global instance.</returns>
+		internal static JArrayObject ParseArray<TElement>(JLocalObject jLocal, Boolean dispose = false)
+			where TElement : IObject, IDataType<TElement>
+		{
+			IEnvironment env = jLocal.Environment;
+			if (jLocal is JArrayObject result) return result;
+			result = new Generic<TElement>(jLocal, env.ClassFeature.GetClass<JArrayObject<TElement>>());
+			if (dispose) jLocal.Dispose();
+			return result;
+		}
 	}
 }

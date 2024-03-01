@@ -42,10 +42,9 @@ public partial class JArrayObject<TElement>
 		internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
 		{
 			if (jLocal == null) return default;
-			IEnvironment env = jLocal.Environment;
 			if (jLocal is not IArrayObject<TElement>)
 				JLocalObject.Validate<JArrayObject<TElement>>(jLocal);
-			return new Generic<TElement>(jLocal, env.ClassFeature.GetClass<JArrayObject<TElement>>());
+			return JLocalObject.ArrayView.ParseArray<TElement>(jLocal, dispose);
 		}
 		/// <inheritdoc/>
 		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
