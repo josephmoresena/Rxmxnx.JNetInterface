@@ -121,7 +121,7 @@ partial class JEnvironment
 			ThrowableObjectMetadata objectMetadata = new(jClass, throwableMetadata, message);
 			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
 			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
-			return (throwableMetadata as JClassTypeMetadata)!.CreateException(jGlobalThrowable, message)!;
+			return throwableMetadata.CreateException(jGlobalThrowable, message)!;
 		}
 	}
 }

@@ -32,6 +32,16 @@ public abstract partial record JReferenceTypeMetadata
 	[return: NotNullIfNotNull(nameof(jGlobal))]
 	internal abstract JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal);
 
+	/// <summary>
+	/// Creates an exception instance from a <see cref="JGlobalBase"/> throwable instance.
+	/// </summary>
+	/// <param name="jGlobalThrowable">A <see cref="JGlobalBase"/> throwable instance.</param>
+	/// <param name="exceptionMessage">Exception message.</param>
+	/// <returns>A <see cref="JThrowableException"/> instance.</returns>
+	internal virtual JThrowableException? CreateException(JGlobalBase jGlobalThrowable,
+		String? exceptionMessage = default)
+		=> default;
+
 	/// <inheritdoc cref="IReflectionMetadata.CreateFunctionDefinition(ReadOnlySpan{Byte}, JArgumentMetadata[])"/>
 	internal abstract JFunctionDefinition CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
 		JArgumentMetadata[] metadata);

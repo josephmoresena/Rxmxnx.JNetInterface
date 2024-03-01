@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for a class <see cref="IDataType"/> type.
 /// </summary>
-public abstract partial record JClassTypeMetadata : JReferenceTypeMetadata
+public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 {
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Class;
@@ -23,16 +23,6 @@ public abstract partial record JClassTypeMetadata : JReferenceTypeMetadata
 	public override String ToString()
 		=> $"{base.ToString()}{nameof(JDataTypeMetadata.Modifier)} = {this.Modifier}, " +
 			$"{nameof(JClassTypeMetadata.BaseClassName)} = {this.BaseClassName}, ";
-
-	/// <summary>
-	/// Creates an exception instance from a <see cref="JGlobalBase"/> throwable instance.
-	/// </summary>
-	/// <param name="jGlobalThrowable">A <see cref="JGlobalBase"/> throwable instance.</param>
-	/// <param name="exceptionMessage">Exception message.</param>
-	/// <returns>A <see cref="JThrowableException"/> instance.</returns>
-	internal virtual JThrowableException? CreateException(JGlobalBase jGlobalThrowable,
-		String? exceptionMessage = default)
-		=> default;
 }
 
 /// <summary>
