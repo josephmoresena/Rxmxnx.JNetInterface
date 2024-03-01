@@ -72,11 +72,17 @@ public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView
 	/// </summary>
 	/// <param name="jArray">A <see cref="JArrayObject{TElement}"/> to implicitly convert.</param>
 	[return: NotNullIfNotNull(nameof(jArray))]
+	public static implicit operator JLocalObject?(JArrayObject<TElement>? jArray) => jArray?.Object;
+	/// <summary>
+	/// Defines an implicit conversion of a given <see cref="JArrayObject{TElement}"/> to <see cref="JArrayObject"/>.
+	/// </summary>
+	/// <param name="jArray">A <see cref="JArrayObject{TElement}"/> to implicitly convert.</param>
+	[return: NotNullIfNotNull(nameof(jArray))]
 	public static implicit operator JArrayObject?(JArrayObject<TElement>? jArray) => jArray?.Object;
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="JArrayObject"/> to <see cref="JArrayObject{TElement}"/>.
 	/// </summary>
-	/// <param name="jArray">A <see cref="JArrayObject{TElement}"/> to explicitly convert.</param>
+	/// <param name="jArray">A <see cref="JArrayObject"/> to explicitly convert.</param>
 	[return: NotNullIfNotNull(nameof(jArray))]
 	public static explicit operator JArrayObject<TElement>?(JArrayObject? jArray)
 	{
@@ -84,6 +90,16 @@ public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView
 		if (jArray is not IArrayObject<TElement>)
 			JLocalObject.Validate<JArrayObject<TElement>>(jArray);
 		return new(jArray, jArray.Class);
+	}
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="JLocalObject"/> to <see cref="JArrayObject{TElement}"/>.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> to explicitly convert.</param>
+	[return: NotNullIfNotNull(nameof(jLocal))]
+	public static explicit operator JArrayObject<TElement>?(JLocalObject? jLocal)
+	{
+		if (jLocal is null) return default;
+		return (JArrayObject<TElement>)(JArrayObject)jLocal;
 	}
 
 	/// <summary>
