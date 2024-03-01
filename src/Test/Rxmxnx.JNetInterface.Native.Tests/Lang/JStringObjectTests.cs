@@ -67,8 +67,10 @@ public sealed class JStringObjectTests
 		env.StringFeature.Received(initText ? 0 : 1).GetLength(jString);
 		env.StringFeature.Received(initText ? 0 : 1).GetCopy(jString, Arg.Any<IFixedMemory<Char>>());
 	}
-	[Fact]
-	internal void MetadataTest()
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	internal void MetadataTest(Boolean disposeParse)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JStringObject>();
 		String textValue = typeMetadata.ToString();
@@ -113,7 +115,7 @@ public sealed class JStringObjectTests
 
 		using JStringObject jString0 =
 			Assert.IsType<JStringObject>(typeMetadata.CreateInstance(jStringClass, stringRef.Value, true));
-		using JStringObject jString1 = Assert.IsType<JStringObject>(typeMetadata.ParseInstance(jLocal));
+		using JStringObject jString1 = Assert.IsType<JStringObject>(typeMetadata.ParseInstance(jLocal, disposeParse));
 		using JStringObject jString2 = Assert.IsType<JStringObject>(typeMetadata.ParseInstance(env, jGlobal));
 
 		env.ClassFeature.Received(0).IsAssignableTo<JStringObject>(Arg.Any<JReferenceObject>());

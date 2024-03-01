@@ -183,8 +183,10 @@ public sealed class JClassObjectTests
 		env.ClassFeature.IsAssignableFrom(jClass1, jClass0).Returns(isAssignable);
 		Assert.Equal(isAssignable, jClass0.IsAssignableTo(jClass1));
 	}
-	[Fact]
-	internal void MetadataTest()
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	internal void MetadataTest(Boolean disposeParse)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JClassObject>();
 		String textValue = typeMetadata.ToString();
@@ -226,12 +228,13 @@ public sealed class JClassObjectTests
 		env.ClassFeature.AsClassObject(jLocal).Returns(jClassResult);
 		env.ClassFeature.AsClassObject(Arg.Is<JGlobal>(g => jObject.Equals(g))).Returns(jClassResult);
 
-		Assert.Equal(jClass, typeMetadata.ParseInstance(jClass));
+		Assert.Equal(jClass, typeMetadata.ParseInstance(jClass, disposeParse));
 		Assert.Null(typeMetadata.ParseInstance(default));
 		Assert.Null(typeMetadata.ParseInstance(env, default));
 		Assert.Null(typeMetadata.CreateException(jGlobal));
 		Assert.Equal(jClassResult, typeMetadata.CreateInstance(jClass, classRef.Value, true));
-		Assert.Equal(jClassResult, typeMetadata.ParseInstance(jLocal));
+		Assert.Equal(jClassResult, typeMetadata.ParseInstance(jClassResult, disposeParse));
+		Assert.Equal(jClassResult, typeMetadata.ParseInstance(jLocal, disposeParse));
 		Assert.Equal(jClassResult, typeMetadata.ParseInstance(env, jGlobal));
 
 		env.ReferenceFeature.Received(1).GetLifetime(Arg.Any<JLocalObject>(), Arg.Any<JObjectLocalRef>(),
