@@ -77,6 +77,7 @@ public class JModifierObject : JLocalObject, IClassType<JModifierObject>
 	/// Modifiers for any primitive type.
 	/// </summary>
 	public const Modifier PrimitiveModifiers = Modifier.Abstract | Modifier.Final | Modifier.Public;
+
 	/// <summary>
 	/// class metadata.
 	/// </summary>

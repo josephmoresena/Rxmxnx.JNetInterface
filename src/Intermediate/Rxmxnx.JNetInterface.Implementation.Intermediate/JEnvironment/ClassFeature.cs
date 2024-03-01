@@ -34,12 +34,37 @@ partial class JEnvironment
 			this.SetAssignableTo<TDataType>(jObject, result);
 			return result;
 		}
-		public JClassTypeMetadata? GetClassMetadata(JClassObject? jClass)
+		[return:NotNullIfNotNull(nameof(jClass))]
+		public JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass)
 		{
-			if (jClass is null || jClass.IsPrimitive || jClass.IsInterface) return default;
-			return jClass.IsArray ?
-				this._env.GetArrayTypeMetadata(jClass.ClassSignature) :
-				this._env.GetClassMetadata(jClass);
+			if (jClass is null) return default;
+			if (MetadataHelper.GetMetadata(jClass.Hash) is { } result)
+				return result;
+			return jClass.ClassSignature[0] switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JBooleanObject>(),
+				UnicodePrimitiveSignatures.ByteSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JByteObject>(),
+				UnicodePrimitiveSignatures.CharSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JCharacterObject>(),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JDoubleObject>(),
+				UnicodePrimitiveSignatures.FloatSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JFloatObject>(),
+				UnicodePrimitiveSignatures.IntSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JIntegerObject>(),
+				UnicodePrimitiveSignatures.LongSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JLongObject>(),
+				UnicodePrimitiveSignatures.ShortSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JShortObject>(),
+				UnicodeObjectSignatures.ArraySignaturePrefixChar => this._env.GetArrayTypeMetadata(
+					jClass.ClassSignature),
+				_ => !jClass.IsInterface ?
+					this._env.GetClassMetadata(jClass) :
+					this._env.GetInterfaceMetadata(jClass) ??
+					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>()
+			};
 		}
 		public JClassObject GetClass(ReadOnlySpan<Byte> className)
 		{

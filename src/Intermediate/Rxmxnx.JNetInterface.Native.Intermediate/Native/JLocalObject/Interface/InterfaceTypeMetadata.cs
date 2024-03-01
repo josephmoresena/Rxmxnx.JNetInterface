@@ -36,12 +36,28 @@ public partial class JLocalObject
 					=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 				/// <inheritdoc/>
+				internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+					Boolean realClass = false)
+					=> new Proxy<TInterface>(new IReferenceType.ClassInitializer
+					{
+						Class = jClass.Environment.ClassFeature.GetClass<TInterface>(),
+						RealClass = true,
+						LocalReference = localRef,
+					});
+				/// <inheritdoc/>
 				internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
 				{
 					if (jLocal == null) return default;
 					if (jLocal is not IInterfaceObject<TInterface>)
 						JLocalObject.Validate<TInterface>(jLocal);
 					return IInterfaceType<TInterface>.Create(jLocal);
+				}
+				/// <inheritdoc/>
+				internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+				{
+					if (jGlobal is null) return default;
+					JLocalObject.Validate<TInterface>(jGlobal, env);
+					return new Proxy<TInterface>(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 				}
 				/// <inheritdoc/>
 				internal override JFunctionDefinition<TInterface> CreateFunctionDefinition(

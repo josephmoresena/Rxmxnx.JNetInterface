@@ -19,9 +19,9 @@ public record ThrowableObjectMetadata : ObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="metadata"><see cref="JClassTypeMetadata"/> instance.</param>
+	/// <param name="metadata"><see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <param name="message">Throwable message.</param>
-	internal ThrowableObjectMetadata(JClassObject jClass, JClassTypeMetadata metadata, String? message) :
+	internal ThrowableObjectMetadata(JClassObject jClass, JReferenceTypeMetadata metadata, String? message) :
 		base(jClass, metadata)
 		=> this.Message = message;
 	/// <summary>

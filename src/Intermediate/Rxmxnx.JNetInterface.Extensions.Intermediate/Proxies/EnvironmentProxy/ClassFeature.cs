@@ -23,5 +23,5 @@ public abstract partial class EnvironmentProxy
 	public abstract Boolean IsInstanceOf<TDataType>(JReferenceObject jObject)
 		where TDataType : JReferenceObject, IDataType<TDataType>;
 	/// <inheritdoc/>
-	public abstract JClassTypeMetadata? GetClassMetadata(JClassObject? jClass);
+	public abstract JReferenceTypeMetadata GetTypeMetadata(JClassObject? jClass);
 }

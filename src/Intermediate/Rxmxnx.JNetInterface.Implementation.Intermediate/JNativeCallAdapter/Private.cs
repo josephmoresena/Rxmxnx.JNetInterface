@@ -92,13 +92,13 @@ public readonly ref partial struct JNativeCallAdapter
 				env.DeleteLocalRef(classRef.Value);
 			}
 		}
-		/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef, out JClassTypeMetadata)"/>
-		private JClassObject GetObjectClass(JObjectLocalRef localRef, out JClassTypeMetadata classMetadata,
+		/// <inheritdoc cref="JEnvironment.GetObjectClass(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,out Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata)"/>
+		private JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata,
 			Boolean validateReference = false)
 		{
 			JEnvironment env = this._callAdapter._env;
 			if (validateReference) this.ThrowIfNotLocalReference(localRef);
-			return env.GetObjectClass(localRef, out classMetadata);
+			return env.GetObjectClass(localRef, out typeMetadata);
 		}
 		/// <summary>
 		/// Retrieves initial final <typaramref name="TObject"/> instance for <paramref name="localRef"/>.

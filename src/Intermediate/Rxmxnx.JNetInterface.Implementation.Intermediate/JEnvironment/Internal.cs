@@ -173,15 +173,12 @@ partial class JEnvironment
 	/// <param name="localRef">Object instance to get class.</param>
 	/// <param name="metadata">Output. Instantiation metadata.</param>
 	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
-	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JClassTypeMetadata metadata)
+	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata metadata)
 	{
 		using LocalFrame _ = new(this, 6);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
 		JClassObject jClass = this._cache.GetClass(classRef, true);
-		if (MetadataHelper.GetMetadata(jClass.Hash) is JClassTypeMetadata classMetadata)
-			metadata = classMetadata;
-		else
-			metadata = this._cache.GetClassMetadata(jClass)!;
+		metadata = this._cache.GetTypeMetadata(jClass)!;
 		return jClass;
 	}
 

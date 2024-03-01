@@ -61,18 +61,18 @@ partial class JEnvironment
 			if (localRef == default) return default;
 
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TResult>();
-			JClassTypeMetadata classMetadata;
+			JReferenceTypeMetadata typeMetadata;
 			JClassObject jClass;
 			if (metadata.Modifier != JTypeModifier.Final)
 			{
-				jClass = this._env.GetObjectClass(localRef, out classMetadata);
+				jClass = this._env.GetObjectClass(localRef, out typeMetadata);
 			}
 			else
 			{
 				jClass = this.GetClass<TResult>();
-				classMetadata = (JClassTypeMetadata)MetadataHelper.GetMetadata<TResult>();
+				typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TResult>();
 			}
-			JLocalObject jLocal = classMetadata.CreateInstance(jClass, localRef, true);
+			JLocalObject jLocal = typeMetadata.CreateInstance(jClass, localRef, true);
 			TResult result = (TResult)(Object)metadata.ParseInstance(jLocal, true);
 			if (localRef != (result as JLocalObject)!.InternalReference && register)
 				this._env.DeleteLocalRef(localRef);
@@ -116,12 +116,12 @@ partial class JEnvironment
 		{
 			using LocalFrame _ = new(this._env, 5);
 			JClassObject jClass =
-				this._env.GetObjectClass(throwableRef.Value, out JClassTypeMetadata throwableMetadata);
+				this._env.GetObjectClass(throwableRef.Value, out JReferenceTypeMetadata throwableMetadata);
 			String message = EnvironmentCache.GetThrowableMessage(jClass, throwableRef);
 			ThrowableObjectMetadata objectMetadata = new(jClass, throwableMetadata, message);
 			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
 			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
-			return throwableMetadata.CreateException(jGlobalThrowable, message)!;
+			return (throwableMetadata as JClassTypeMetadata)!.CreateException(jGlobalThrowable, message)!;
 		}
 	}
 }

@@ -208,6 +208,9 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.ModifierObject"/>
 	[DefaultValue(ClassNames.ModifierObject)]
 	public static partial ReadOnlySpan<Byte> ModifierObject();
+	/// <inheritdoc cref="ClassNames.ProxyObject"/>
+	[DefaultValue(ClassNames.ProxyObject)]
+	public static partial ReadOnlySpan<Byte> ProxyObject();
 	/// <inheritdoc cref="ClassNames.MemberInterface"/>
 	[DefaultValue(ClassNames.MemberInterface)]
 	public static partial ReadOnlySpan<Byte> MemberInterface();

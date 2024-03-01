@@ -297,6 +297,10 @@ internal static class ClassNames
 	/// </summary>
 	public const String ModifierObject = ClassNames.ReflectPackage + "Modifier";
 	/// <summary>
+	/// JNI name of <c>java.lang.reflect.Proxy</c> class.
+	/// </summary>
+	public const String ProxyObject = ClassNames.ReflectPackage + "Proxy";
+	/// <summary>
 	/// JNI name of <c>java.lang.reflect.Member</c> interface.
 	/// </summary>
 	public const String MemberInterface = ClassNames.ReflectPackage + "Member";

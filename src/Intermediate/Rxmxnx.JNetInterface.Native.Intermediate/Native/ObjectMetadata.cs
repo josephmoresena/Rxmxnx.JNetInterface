@@ -14,23 +14,21 @@ public record ObjectMetadata
 	/// <summary>
 	/// Class type metadata.
 	/// </summary>
-	internal JClassTypeMetadata? ClassMetadata { get; }
+	internal JReferenceTypeMetadata? TypeMetadata { get; }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="classMetadata"><see cref="JClassTypeMetadata"/> instance.</param>
-	internal ObjectMetadata(JClassObject jClass, JClassTypeMetadata? classMetadata = default)
+	/// <param name="typeMetadata"><see cref="JReferenceTypeMetadata"/> instance.</param>
+	internal ObjectMetadata(JClassObject jClass, JReferenceTypeMetadata? typeMetadata = default)
 	{
 		this.ObjectClassName = jClass.Name;
 		this.ObjectSignature = jClass.ClassSignature;
 		if (jClass.Name.SequenceEqual(UnicodeClassNames.ClassObject))
-			this.ClassMetadata = IClassType.GetMetadata<JClassObject>();
-		else if (classMetadata is null)
-			this.ClassMetadata = jClass.Environment.ClassFeature.GetClassMetadata(jClass);
+			this.TypeMetadata = IClassType.GetMetadata<JClassObject>();
 		else
-			this.ClassMetadata = classMetadata;
+			this.TypeMetadata = typeMetadata ?? jClass.Environment.ClassFeature.GetTypeMetadata(jClass);
 	}
 
 	/// <summary>
@@ -41,7 +39,7 @@ public record ObjectMetadata
 	{
 		this.ObjectClassName = metadata.ObjectClassName;
 		this.ObjectSignature = metadata.ObjectSignature;
-		this.ClassMetadata = metadata.ClassMetadata;
+		this.TypeMetadata = metadata.TypeMetadata;
 	}
 
 	/// <summary>
@@ -53,7 +51,7 @@ public record ObjectMetadata
 	{
 		this.ObjectClassName = objectClassName;
 		this.ObjectSignature = objectSignature;
-		this.ClassMetadata = IClassType.GetMetadata<JClassObject>();
+		this.TypeMetadata = IClassType.GetMetadata<JClassObject>();
 	}
 
 	/// <summary>

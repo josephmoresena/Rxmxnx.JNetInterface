@@ -41,8 +41,8 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 		where TReference : JReferenceObject, IReferenceType<TReference>
 	{
 		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
-		JClassTypeMetadata classMetadata = this.ObjectMetadata.ClassMetadata ?? IClassType.GetMetadata<JLocalObject>();
-		JLocalObject jLocal = classMetadata.ParseInstance(env, this);
+		JReferenceTypeMetadata typeMetadata = this.ObjectMetadata.TypeMetadata ?? IClassType.GetMetadata<JLocalObject>();
+		JLocalObject jLocal = typeMetadata.ParseInstance(env, this);
 		return (TReference)metadata.ParseInstance(jLocal, true);
 	}
 
