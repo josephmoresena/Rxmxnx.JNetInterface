@@ -24,33 +24,6 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public JWeak Weak => this.Lifetime.GetLoadWeakObject(this);
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> initializer.</param>
-	protected JLocalObject(IReferenceType.ClassInitializer initializer) : base(initializer.Class.IsProxy)
-		=> this.Lifetime = initializer.Class.Environment.ReferenceFeature.GetLifetime(this, initializer.ToInternal());
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="initializer">A <see cref="IReferenceType.GlobalInitializer"/> initializer.</param>
-	protected JLocalObject(IReferenceType.GlobalInitializer initializer) : base(initializer.Global)
-	{
-		this.Lifetime = new(initializer.Environment, this, initializer.Global);
-		JLocalObject.ProcessMetadata(this, initializer.Global.ObjectMetadata);
-	}
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> initializer.</param>
-	protected JLocalObject(IReferenceType.ObjectInitializer initializer) : base(initializer.Instance)
-	{
-		JLocalObject jLocal = initializer.Instance;
-		jLocal.Lifetime.Load(this);
-		this.Lifetime = jLocal.Lifetime;
-		this.Lifetime.SetClass(initializer.Class);
-	}
 	/// <inheritdoc/>
 	public void Dispose()
 	{
@@ -63,6 +36,9 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
 	public override CString ObjectSignature
 		=> this.Lifetime.Class?.ClassSignature ?? UnicodeObjectSignatures.ObjectSignature;
+
+	/// <inheritdoc/>
+	~JLocalObject() { this.Dispose(false); }
 
 	/// <summary>
 	/// Retrieves a <typeparamref name="TReference"/> instance from current local instance.
@@ -103,44 +79,13 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 		return env.ClassFeature.IsInstanceOf(this, jClass);
 	}
 
-	/// <inheritdoc/>
-	~JLocalObject() { this.Dispose(false); }
-
-	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	private protected override Boolean IsInstanceOf<TDataType>()
-	{
-		Boolean result = this.Environment.ClassFeature.IsInstanceOf<TDataType>(this);
-		this.Environment.ClassFeature.SetAssignableTo<TDataType>(this, result);
-		return result;
-	}
-
-	/// <inheritdoc cref="IDisposable.Dispose()"/>
-	/// <param name="disposing">
-	/// Indicates whether this method was called from the <see cref="IDisposable.Dispose"/> method.
-	/// </param>
-	protected virtual void Dispose(Boolean disposing)
-	{
-		if (this.Lifetime.IsDisposed) return;
-		this.Lifetime.Unload(this);
-	}
-	/// <summary>
-	/// Creates the object metadata for current instance.
-	/// </summary>
-	/// <returns>The object metadata for current instance.</returns>
-	protected virtual ObjectMetadata CreateMetadata() => new(this.Lifetime.GetLoadClassObject(this));
-	/// <summary>
-	/// Process the object metadata.
-	/// </summary>
-	/// <param name="instanceMetadata">The object metadata for current instance.</param>
-	protected virtual void ProcessMetadata(ObjectMetadata instanceMetadata) => this.Lifetime.SetClass(instanceMetadata);
-
 	/// <summary>
 	/// Retrieves the class and metadata from current instance for external use.
 	/// </summary>
 	/// <param name="jClass">Output. Loaded class from current instance.</param>
 	/// <param name="metadata">Output. Metadata for current instance.</param>
 	/// <returns>Current instance instance.</returns>
-	protected internal JLocalObject ForExternalUse(out JClassObject jClass, out ObjectMetadata metadata)
+	public JLocalObject ForExternalUse(out JClassObject jClass, out ObjectMetadata metadata)
 	{
 		metadata = ILocalObject.CreateMetadata(this);
 		jClass = this.Class;

@@ -27,12 +27,9 @@ public partial class JLocalObject : ILocalObject
 	/// <exception cref="InvalidCastException">
 	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
 	/// </exception>
-	private static TReferenceObject Validate<TReferenceObject, TDataType>(TReferenceObject jObject, IEnvironment env)
+	private static void Validate<TReferenceObject, TDataType>(TReferenceObject jObject, IEnvironment env)
 		where TReferenceObject : JReferenceObject where TDataType : JReferenceObject, IDataType<TDataType>
-	{
-		ValidationUtilities.ThrowIfInvalidCast<TDataType>(env.ClassFeature.IsAssignableTo<TDataType>(jObject));
-		return jObject;
-	}
+		=> ValidationUtilities.ThrowIfInvalidCast<TDataType>(env.ClassFeature.IsAssignableTo<TDataType>(jObject));
 
 	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);

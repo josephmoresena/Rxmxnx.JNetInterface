@@ -40,8 +40,6 @@ public partial class JLocalObject
 	internal void SetValue<TValue>(TValue localRef) where TValue : unmanaged, IObjectReferenceType
 		=> this.Lifetime.SetValue(this, localRef);
 	/// <inheritdoc/>
-	private protected override ReadOnlySpan<Byte> AsSpan() => this.Lifetime.Span;
-	/// <inheritdoc/>
 	internal override ref readonly TValue As<TValue>()
 	{
 		JGlobalBase? jGlobal = this.Lifetime.GetGlobalObject();
@@ -54,15 +52,6 @@ public partial class JLocalObject
 	/// <inheritdoc/>
 	internal override void ClearValue() => this.Lifetime.Dispose();
 	/// <inheritdoc/>
-	private protected override IDisposable GetSynchronizer()
-	{
-		IEnvironment env = this.Lifetime.Environment;
-		return env.ReferenceFeature.GetSynchronizer(this);
-	}
-	/// <inheritdoc/>
-	private protected override Boolean Same(JReferenceObject jObject)
-		=> base.Same(jObject) || this.Environment.IsSameObject(this, jObject);
-	/// <inheritdoc/>
 	internal override Boolean IsAssignableTo<TDataType>() => this.Lifetime.IsAssignableTo<TDataType>(this);
 	/// <inheritdoc/>
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
@@ -74,6 +63,25 @@ public partial class JLocalObject
 			return false;
 		return base.IsDefaultInstance();
 	}
+
+	/// <inheritdoc cref="JObject.ObjectClassName"/>
+	private protected override Boolean IsInstanceOf<TDataType>()
+	{
+		Boolean result = this.Environment.ClassFeature.IsInstanceOf<TDataType>(this);
+		this.Environment.ClassFeature.SetAssignableTo<TDataType>(this, result);
+		return result;
+	}
+	/// <inheritdoc/>
+	private protected override ReadOnlySpan<Byte> AsSpan() => this.Lifetime.Span;
+	/// <inheritdoc/>
+	private protected override IDisposable GetSynchronizer()
+	{
+		IEnvironment env = this.Lifetime.Environment;
+		return env.ReferenceFeature.GetSynchronizer(this);
+	}
+	/// <inheritdoc/>
+	private protected override Boolean Same(JReferenceObject jObject)
+		=> base.Same(jObject) || this.Environment.IsSameObject(this, jObject);
 
 	/// <summary>
 	/// Indicates whether <see cref="IDataType{TDataType}"/> CLR type is the CLR type of
@@ -127,11 +135,11 @@ public partial class JLocalObject
 	/// <exception cref="InvalidCastException">
 	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
 	/// </exception>
-	internal static JLocalObject Validate<TDataType>(JLocalObject jLocal)
+	internal static void Validate<TDataType>(JLocalObject jLocal)
 		where TDataType : JReferenceObject, IDataType<TDataType>
 	{
-		if (jLocal.ObjectClassName.AsSpan().SequenceEqual(IDataType.GetMetadata<TDataType>().ClassName)) return jLocal;
-		return (JLocalObject?)(Object?)(jLocal as TDataType) ??
+		if (jLocal.ObjectClassName.AsSpan().SequenceEqual(IDataType.GetMetadata<TDataType>().ClassName)) return;
+		if (jLocal is not TDataType)
 			JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal.Lifetime.Environment);
 	}
 }
