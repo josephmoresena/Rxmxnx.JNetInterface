@@ -24,6 +24,15 @@ public partial class JVirtualMachine : IVirtualMachine
 		});
 
 	/// <summary>
+	/// Registers <typeparamref name="TReference"/> as valid datatype for current process.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TDataType}"/> type.</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if current datatype was registered; otherwise, <see langword="false"/>.
+	/// </returns>
+	public static Boolean Register<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
+		=> MetadataHelper.Register<TReference>();
+	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
 	/// <param name="reference">A <see cref="JVirtualMachineRef"/> reference.</param>
