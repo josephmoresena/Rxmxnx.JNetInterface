@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface.Native;
 
 public partial class JLocalObject
 {
-	public abstract partial class Interface
+	public abstract partial class InterfaceView
 	{
 		protected ref partial struct TypeMetadataBuilder<TInterface>
 		{
@@ -57,7 +57,8 @@ public partial class JLocalObject
 				{
 					if (jGlobal is null) return default;
 					JLocalObject.Validate<TInterface>(jGlobal, env);
-					return new Proxy<TInterface>(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
+					return new Proxy<TInterface>(
+						new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 				}
 				/// <inheritdoc/>
 				internal override JFunctionDefinition<TInterface> CreateFunctionDefinition(

@@ -5,7 +5,8 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public abstract partial class JArrayObject : JLocalObject
+public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSerializableObject>,
+	IInterfaceObject<JCloneableObject>
 {
 	/// <summary>
 	/// CLR type of object metadata.
@@ -47,16 +48,13 @@ public abstract partial class JArrayObject : JLocalObject
 /// This class represents a local array instance.
 /// </summary>
 /// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
-public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObject<JSerializableObject>,
-	IInterfaceObject<JCloneableObject> where TElement : IObject, IDataType<TElement>
+public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView
+	where TElement : IObject, IDataType<TElement>
 {
 	/// <summary>
 	/// Metadata array instance.
 	/// </summary>
 	public static JArrayTypeMetadata Metadata => ArrayTypeMetadata.Instance;
-
-	/// <inheritdoc/>
-	internal override JArrayTypeMetadata TypeMetadata => IArrayType.GetMetadata<JArrayObject<TElement>>();
 
 	/// <summary>
 	/// Gets or sets the element of <paramref name="index"/>.
@@ -67,6 +65,25 @@ public sealed partial class JArrayObject<TElement> : JArrayObject, IInterfaceObj
 	{
 		get => this.Environment.ArrayFeature.GetElement(this, index);
 		set => this.Environment.ArrayFeature.SetElement(this, index, value);
+	}
+
+	/// <summary>
+	/// Defines an implicit conversion of a given <see cref="JArrayObject{TElement}"/> to <see cref="JArrayObject"/>.
+	/// </summary>
+	/// <param name="jArray">A <see cref="JArrayObject{TElement}"/> to implicitly convert.</param>
+	[return: NotNullIfNotNull(nameof(jArray))]
+	public static implicit operator JArrayObject?(JArrayObject<TElement>? jArray) => jArray?.Object;
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="JArrayObject"/> to <see cref="JArrayObject{TElement}"/>.
+	/// </summary>
+	/// <param name="jArray">A <see cref="JArrayObject{TElement}"/> to explicitly convert.</param>
+	[return: NotNullIfNotNull(nameof(jArray))]
+	public static explicit operator JArrayObject<TElement>?(JArrayObject? jArray)
+	{
+		if (jArray is null) return default;
+		if (jArray is not IArrayObject<TElement>)
+			JLocalObject.Validate<JArrayObject<TElement>>(jArray);
+		return new(jArray, jArray.Class);
 	}
 
 	/// <summary>

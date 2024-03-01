@@ -7,13 +7,13 @@ public partial class JLocalObject
 	/// </summary>
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public abstract partial class Interface : View<JLocalObject>, IInterfaceType
+	public abstract partial class InterfaceView : View<JLocalObject>, IInterfaceType
 	{
 		static JTypeKind IDataType.Kind => JTypeKind.Interface;
-		static Type IDataType.FamilyType => typeof(Interface);
+		static Type IDataType.FamilyType => typeof(InterfaceView);
 
 		/// <inheritdoc/>
-		private protected Interface(JLocalObject jObject) : base(jObject) { }
+		private protected InterfaceView(JLocalObject jObject) : base(jObject) { }
 
 		/// <inheritdoc/>
 		public void Dispose()

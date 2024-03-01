@@ -41,10 +41,8 @@ public partial class JArrayObject<TElement>
 	/// <param name="jArrayRef">Local array reference.</param>
 	/// <param name="length">Array length.</param>
 	internal JArrayObject(IEnvironment env, JArrayLocalRef jArrayRef, Int32? length) : base(
-		env.ClassFeature.GetClass<JArrayObject<TElement>>(), jArrayRef, length) { }
+		new Generic<TElement>(env.ClassFeature.GetClass<JArrayObject<TElement>>(), jArrayRef, length)) { }
 	/// <inheritdoc/>
 	internal JArrayObject(JLocalObject jLocal, JClassObject? jClass = default) : base(
-		jLocal, jClass ?? jLocal.Environment.ClassFeature.GetClass<JArrayObject<TElement>>()) { }
-	/// <inheritdoc/>
-	internal JArrayObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+		new Generic<TElement>(jLocal, jClass ?? jLocal.Environment.ClassFeature.GetClass<JArrayObject<TElement>>())) { }
 }

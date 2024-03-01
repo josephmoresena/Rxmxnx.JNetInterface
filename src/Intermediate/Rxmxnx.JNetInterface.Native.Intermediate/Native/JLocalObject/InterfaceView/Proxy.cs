@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface.Native;
 
 public partial class JLocalObject
 {
-	public abstract partial class Interface
+	public abstract partial class InterfaceView
 	{
 		/// <summary>
 		/// Interface proxy.

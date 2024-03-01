@@ -161,8 +161,8 @@ internal static class NativeValidationUtilities
 		if (familyType == typeof(JLocalObject)) return;
 
 		String? expectedBuilder = default;
-		if (familyType == typeof(JLocalObject.Interface))
-			expectedBuilder = $"{nameof(JLocalObject.Interface)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
+		if (familyType == typeof(JLocalObject.InterfaceView))
+			expectedBuilder = $"{nameof(JLocalObject.InterfaceView)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
 		else if (familyType == typeof(JEnumTypeMetadata))
 			expectedBuilder = $"{nameof(JEnumObject)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
 		else if (familyType == typeof(JThrowableObject))

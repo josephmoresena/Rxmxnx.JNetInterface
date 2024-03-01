@@ -9,6 +9,9 @@ public partial class JLocalObject
 	public new abstract class View<TObject> : JReferenceObject.View<TObject>, ILocalViewObject, IWrapper<JLocalObject>
 		where TObject : JLocalObject, ILocalObject
 	{
+		/// <inheritdoc cref="JLocalObject.Environment"/>
+		public IEnvironment Environment => this.Object.Environment;
+
 		/// <inheritdoc/>
 		protected View(TObject jObject) : base(jObject) { }
 

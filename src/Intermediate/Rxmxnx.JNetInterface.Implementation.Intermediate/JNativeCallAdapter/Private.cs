@@ -92,7 +92,8 @@ public readonly ref partial struct JNativeCallAdapter
 				env.DeleteLocalRef(classRef.Value);
 			}
 		}
-		/// <inheritdoc cref="JEnvironment.GetObjectClass(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,out Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata)"/>
+		/// <inheritdoc
+		///     cref="JEnvironment.GetObjectClass(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,out Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata)"/>
 		private JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata,
 			Boolean validateReference = false)
 		{
@@ -107,14 +108,14 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <returns>Initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.</returns>
 		private TObject CreateFinalObject<TObject>(JObjectLocalRef localRef)
-			where TObject : JLocalObject, IReferenceType<TObject>
+			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
 			JClassTypeMetadata metadata = (JClassTypeMetadata)MetadataHelper.GetMetadata<TObject>();
 			JClassObject jClass = this._callAdapter._env.GetClass<TObject>();
 			if (!JLocalObject.IsClassType<TObject>())
 			{
 				this.ThrowIfNotLocalReference(localRef);
-				return (TObject)metadata.CreateInstance(jClass, localRef, true);
+				return (TObject)(Object)metadata.CreateInstance(jClass, localRef, true);
 			}
 			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 			return (TObject)(Object)this.CreateInitialClass(classRef, true);

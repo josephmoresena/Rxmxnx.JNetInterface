@@ -37,14 +37,23 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 			Boolean realClass = false)
-			=> JArrayObject<TElement>.Create(
-				new() { Class = jClass, RealClass = realClass, LocalReference = localRef, });
+			=> new Generic<TElement>(jClass, localRef, realClass);
 		/// <inheritdoc/>
 		internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
-			=> jLocal?.CastTo<JArrayObject<TElement>>();
+		{
+			if (jLocal == null) return default;
+			IEnvironment env = jLocal.Environment;
+			if (jLocal is not IArrayObject<TElement>)
+				JLocalObject.Validate<JArrayObject<TElement>>(jLocal);
+			return new Generic<TElement>(jLocal, env.ClassFeature.GetClass<JArrayObject<TElement>>());
+		}
 		/// <inheritdoc/>
 		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
-			=> jGlobal is null ? default(JLocalObject?) : JArrayObject<TElement>.Create(env, jGlobal);
+		{
+			if (jGlobal is null) return default;
+			JLocalObject.Validate<JArrayObject<TElement>>(jGlobal, env);
+			return new Generic<TElement>(env, jGlobal);
+		}
 		/// <inheritdoc/>
 		internal override JFunctionDefinition<JArrayObject<TElement>> CreateFunctionDefinition(
 			ReadOnlySpan<Byte> functionName, JArgumentMetadata[] metadata)

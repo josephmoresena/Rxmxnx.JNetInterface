@@ -22,7 +22,7 @@ public interface IArrayType : IReferenceType
 	/// <typeparam name="TArray">Type of current java array datatype.</typeparam>
 	/// <returns>The <see cref="JArrayTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JArrayTypeMetadata GetMetadata<TArray>() where TArray : JArrayObject, IArrayType
+	public new static JArrayTypeMetadata GetMetadata<TArray>() where TArray : JLocalObject.ArrayView, IArrayType
 		=> TArray.Metadata;
 
 	/// <summary>

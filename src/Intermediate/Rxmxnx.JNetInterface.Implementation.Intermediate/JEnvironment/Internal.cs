@@ -143,7 +143,7 @@ partial class JEnvironment
 	internal JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference = false)
 		=> this._cache.GetClass(classRef, keepReference);
 	/// <inheritdoc cref="IClassFeature.GetClass{TObject}()"/>
-	internal JClassObject GetClass<TObject>() where TObject : JLocalObject, IReferenceType<TObject>
+	internal JClassObject GetClass<TObject>() where TObject : JReferenceObject, IReferenceType<TObject>
 		=> this._cache.GetClass<TObject>();
 	/// <summary>
 	/// Deletes <paramref name="localRef"/>.
