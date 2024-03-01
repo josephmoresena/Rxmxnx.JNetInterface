@@ -24,7 +24,8 @@ public class HelloDotnet {
     public native String getNativeString();
     public native int getNativeInt();
     public native void passNativeString(String value);
-    public Object getRandomObject(int value) {
+
+    public static Object getRandomObject(int value) {
         if (value == 1)
             return ""texto random"";
         if (value == 2)
@@ -32,9 +33,15 @@ public class HelloDotnet {
         if (value == 3)
             return new Object();
         if (value == 4)
-            return new String[0][0][0];
+            return new String[10][0][0];
         if (value == 5)
-            return new int[0][0][0];
+            return new int[1][0][0];
+        if (value == 6)
+            return new char[0][1][0][0][0];
+        if (value == 8)
+            return new Math[1][0][0][0][0];
+        if (value == 9)
+            return new Process[0][0];
         return null;
     }
 }";

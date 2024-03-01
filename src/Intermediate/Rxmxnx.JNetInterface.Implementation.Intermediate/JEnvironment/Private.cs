@@ -43,22 +43,24 @@ partial class JEnvironment
 	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
 	private JArrayTypeMetadata GetArrayTypeMetadata(ReadOnlySpan<Byte> arraySignature)
 	{
-		ReadOnlySpan<Byte> elementName = arraySignature[1..];
-		if (elementName[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
+		ReadOnlySpan<Byte> elementSignature = arraySignature[1..];
+		if (elementSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
 		{
-			if (MetadataHelper.GetMetadata(elementName)?.GetArrayMetadata() is { } arrayTypeMetadata)
+			if (MetadataHelper.GetMetadata(elementSignature)?.GetArrayMetadata() is { } arrayTypeMetadata)
 				return arrayTypeMetadata;
-			return this.GetArrayTypeMetadata(arraySignature);
+			return this.GetArrayTypeMetadata(elementSignature).GetArrayMetadata() ??
+				(JArrayTypeMetadata)MetadataHelper.GetMetadata<JArrayObject<JArrayObject<JLocalObject>>>();
 		}
-		JReferenceTypeMetadata? elementMetadata = MetadataHelper.GetMetadata(elementName);
+		ReadOnlySpan<Byte> elementClassName = elementSignature[1] == UnicodeObjectSignatures.ObjectSignaturePrefixChar ?
+			elementSignature[1..^1] :
+			elementSignature;
+		JReferenceTypeMetadata? elementMetadata = MetadataHelper.GetMetadata(elementClassName);
 		if (elementMetadata is null)
 		{
-			JClassObject elementClass = this._cache.GetClass(elementName);
-			elementMetadata = !elementClass.IsInterface ?
-				this.GetClassMetadata(elementClass) :
-				this.GetInterfaceMetadata(elementClass);
+			JClassObject elementClass = this._cache.GetClass(elementClassName);
+			elementMetadata = this._cache.GetTypeMetadata(elementClass);
 		}
-		return elementMetadata?.GetArrayMetadata() ??
+		return elementMetadata.GetArrayMetadata() ??
 			(JArrayTypeMetadata)MetadataHelper.GetMetadata<JArrayObject<JLocalObject>>();
 	}
 	/// <summary>
@@ -98,9 +100,9 @@ partial class JEnvironment
 		foreach (JClassObject? interfaceClass in interfaces)
 		{
 			if (hashes.Contains(interfaceClass!.Hash)) continue;
-			if (this.GetInterfaceMetadata(interfaceClass!) is { } metadata)
+			if (this.GetInterfaceMetadata(interfaceClass) is { } metadata)
 				return metadata;
-			hashes.Add(interfaceClass!.Hash);
+			hashes.Add(interfaceClass.Hash);
 		}
 		return default;
 	}

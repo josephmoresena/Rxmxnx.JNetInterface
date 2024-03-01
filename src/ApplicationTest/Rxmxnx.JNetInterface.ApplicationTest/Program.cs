@@ -54,10 +54,10 @@ public static class Program
 
 		Program.PrintVirtualMachineInfo(jvmLib, helloJniByteCode, "jiji", "esto es una coima mk");
 	}
-	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata, Int32 deep)
+	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata, Int32 dimension)
 	{
 		Console.WriteLine(arrMetadata.ElementMetadata.Signature);
-		for (Int32 i = 0; i < deep; i++)
+		for (Int32 i = 0; i < dimension; i++)
 		{
 			Console.WriteLine(arrMetadata.Signature);
 			if (JReferenceTypeMetadata.GetArrayMetadata(arrMetadata) is not { } arrMet2)
@@ -154,12 +154,19 @@ public static class Program
 			try
 			{
 				Program.PrintVirtualMachineInfo(env, vm, jvmLib);
-				JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode);
+				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode);
 				JMainMethodDefinition.Instance.Invoke(helloJniClass, args);
+				GetRandomObjectDefinition getRandomObjectDefinition = new("getRandomObject"u8);
+				for (Int32 i = 0; i < 10; i++)
+				{
+					using JLocalObject? jLocal = getRandomObjectDefinition.Invoke(helloJniClass, i);
+					Console.WriteLine($"{i}: {jLocal}");
+				}
 			}
 			catch (JThrowableException ex)
 			{
-				Console.WriteLine(ex.WithSafeInvoke(t => t.Message));
+				Console.WriteLine(ex.Message);
+				Console.WriteLine(ex.Message);
 			}
 		}
 		finally

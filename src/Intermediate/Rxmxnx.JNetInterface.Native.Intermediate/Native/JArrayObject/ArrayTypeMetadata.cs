@@ -28,7 +28,7 @@ public partial class JArrayObject<TElement>
 		/// </summary>
 		private ArrayTypeMetadata() : base(IDataType.GetMetadata<TElement>().ArraySignature,
 		                                   JArrayTypeMetadata.IsFinalElementType(IDataType.GetMetadata<TElement>()),
-		                                   JArrayTypeMetadata.GetArrayDeep<TElement>()) { }
+		                                   JArrayTypeMetadata.GetArrayDimension<TElement>()) { }
 
 		/// <inheritdoc/>
 		public override String ToString()

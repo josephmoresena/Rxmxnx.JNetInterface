@@ -23,6 +23,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		=> this._value ?? (this._length is not null ?
 			$"{this.Reference} Length: {this.Length}" :
 			this.Reference.ToString());
+
 	/// <summary>
 	/// UTF-16 length.
 	/// </summary>
@@ -108,7 +109,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	public CharEnumerator GetEnumerator() => this.Value.GetEnumerator();
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this.GetStringHashCode() ?? base.GetHashCode();
+	public override Int32 GetHashCode() => this.Value.GetHashCode();
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

@@ -181,10 +181,12 @@ internal partial class NativeFunctionSetImpl
 	/// </returns>
 	private static Boolean IsFinalArrayType(JClassObject arrayClass)
 	{
-		JClassObject? elementClass;
-		do
-			elementClass = JFunctionDefinition.Invoke(NativeFunctionSetImpl.getComponentTypeDefinition, arrayClass)!;
-		while (elementClass.IsArray);
+		Int32 dimension = arrayClass.ArrayDimension;
+		//Primitive array
+		if (dimension + 1 == arrayClass.ClassSignature.Length) return true;
+		//Reference type array.
+		IEnvironment env = arrayClass.Environment;
+		JClassObject elementClass = env.ClassFeature.GetClass(arrayClass.ClassSignature.AsSpan()[(dimension + 1)..^1]);
 		return NativeFunctionSetImpl.GetClassModifiers(elementClass).HasFlag(JModifierObject.Modifier.Final);
 	}
 	/// <summary>

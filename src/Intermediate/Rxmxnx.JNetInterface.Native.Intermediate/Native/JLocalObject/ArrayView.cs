@@ -27,6 +27,9 @@ public partial class JLocalObject
 			GC.SuppressFinalize(this);
 		}
 
+		/// <inheritdoc/>
+		public override String ToString() => this.Object.ToString()!;
+
 		/// <summary>
 		/// Retrieves a <see cref="JArrayObject"/> instance from <paramref name="jLocal"/>.
 		/// </summary>

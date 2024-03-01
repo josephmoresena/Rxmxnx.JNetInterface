@@ -21,8 +21,11 @@ partial class JEnvironment
 		{
 			set
 			{
-				this.ValidateQueue();
-				this._references.Add(localRef);
+				if (!this.Contains(localRef))
+				{
+					this.ValidateQueue();
+					this._references.Add(localRef);
+				}
 				base[localRef] = value;
 			}
 		}

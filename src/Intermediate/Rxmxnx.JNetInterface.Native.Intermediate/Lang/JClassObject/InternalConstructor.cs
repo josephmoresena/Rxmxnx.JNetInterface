@@ -16,6 +16,7 @@ public partial class JClassObject
 		this._isEnum = false;
 		this._isAnnotation = false;
 		this._isFinal = true;
+		this._arrayDimension = 0;
 		this.Lifetime.SetClass(this);
 	}
 	/// <summary>
@@ -30,6 +31,7 @@ public partial class JClassObject
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
+		this._arrayDimension = JClassObject.GetArrayDimension(metadata.Signature);
 		if (metadata.Kind is not JTypeKind.Undefined)
 		{
 			this._isInterface = metadata.Kind is JTypeKind.Interface or JTypeKind.Annotation;

@@ -28,6 +28,8 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
+	/// <inheritdoc/>
+	public override String ToString() => this.Value.ToString()!;
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

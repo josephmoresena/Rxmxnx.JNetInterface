@@ -15,9 +15,9 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier { get; }
 	/// <summary>
-	/// Array deep.
+	/// Array dimension.
 	/// </summary>
-	public Int32 Deep { get; }
+	public Int32 Dimension { get; }
 
 	/// <summary>
 	/// Element class name.
@@ -29,11 +29,11 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 	/// </summary>
 	/// <param name="signature">JNI signature for current array type.</param>
 	/// <param name="final">Indicates whether element type is final.</param>
-	/// <param name="deep">Array deep.</param>
-	private protected JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Boolean final, Int32 deep) : base(
+	/// <param name="dimension">Array dimension.</param>
+	private protected JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Boolean final, Int32 dimension) : base(
 		signature, signature)
 	{
-		this.Deep = deep;
+		this.Dimension = dimension;
 		this.Modifier = final ? JTypeModifier.Final : JTypeModifier.Extensible;
 		JArrayTypeMetadata.metadataCache.TryAdd(this.Signature.ToHexString(), this);
 	}
@@ -41,7 +41,7 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 	/// <inheritdoc/>
 	public override String ToString()
 		=> $"{base.ToString()}{nameof(JArrayTypeMetadata.ElementClassName)} = {this.ElementClassName}, " +
-			$"{nameof(JArrayTypeMetadata.Deep)} = {this.Deep}, ";
+			$"{nameof(JArrayTypeMetadata.Dimension)} = {this.Dimension}, ";
 
 	/// <summary>
 	/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.

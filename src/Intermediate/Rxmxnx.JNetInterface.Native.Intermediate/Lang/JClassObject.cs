@@ -94,6 +94,10 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 			return this._isAnnotation!.Value;
 		}
 	}
+	/// <summary>
+	/// Array class dimension.
+	/// </summary>
+	public Int32 ArrayDimension => this._arrayDimension ??= JClassObject.GetArrayDimension(this.ClassSignature);
 
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
@@ -168,6 +172,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 			IsEnum = this.IsEnum,
 			IsAnnotation = this.IsAnnotation,
 			IsFinal = this.IsFinal,
+			ArrayDimension = this.ArrayDimension,
 			Hash = this.Hash,
 		};
 	/// <inheritdoc/>
@@ -183,6 +188,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		this._isEnum = classMetadata.IsEnum;
 		this._isAnnotation = classMetadata.IsAnnotation;
 		this._isFinal = classMetadata.IsFinal;
+		this._arrayDimension = classMetadata.ArrayDimension;
 	}
 
 	/// <summary>

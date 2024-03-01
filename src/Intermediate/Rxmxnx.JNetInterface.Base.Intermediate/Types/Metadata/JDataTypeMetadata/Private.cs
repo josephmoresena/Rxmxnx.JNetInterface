@@ -26,14 +26,15 @@ public partial record JDataTypeMetadata
 	private static CStringSequence CreateInformationSequence(ReadOnlyFixedMemoryList memoryList)
 	{
 		Boolean isArray = memoryList[0].Bytes[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar;
-		Int32 signatureLength = isArray ? 1 : 2;
+		Int32 signatureLength = memoryList[1].Bytes.Length > 0 ?
+			memoryList[1].Bytes.Length :
+			memoryList[0].Bytes.Length + (isArray ? 0 : 2);
+		Int32 arraySignatureLength = signatureLength + 1;
 		Int32?[] lengths =
 		[
 			memoryList[0].Bytes.Length,
-			memoryList[1].Bytes.Length > 0 ? memoryList[1].Bytes.Length : memoryList[0].Bytes.Length + signatureLength,
-			memoryList[1].Bytes.Length > 0 ?
-				memoryList[1].Bytes.Length + 1 :
-				memoryList[0].Bytes.Length + signatureLength + 1,
+			signatureLength,
+			arraySignatureLength,
 		];
 		return CStringSequence.Create(memoryList.ToArray(), JDataTypeMetadata.CreateInformationSequence, lengths);
 	}

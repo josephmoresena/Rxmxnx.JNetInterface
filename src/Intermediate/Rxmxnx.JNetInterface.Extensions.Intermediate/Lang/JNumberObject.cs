@@ -90,6 +90,8 @@ public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>,
 	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
+	/// <inheritdoc/>
+	public override String ToString() => this.Value.ToString()!;
 
 	/// <inheritdoc cref="IPrimitiveWrapperType{TNumber, TValue}.Create(IEnvironment, Nullable{TValue})"/>
 	[return: NotNullIfNotNull(nameof(value))]

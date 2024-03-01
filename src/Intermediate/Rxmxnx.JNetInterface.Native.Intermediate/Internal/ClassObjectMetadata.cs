@@ -39,6 +39,10 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 	/// Indicates whether the class of current type is annotation.
 	/// </summary>
 	public Boolean? IsAnnotation { get; init; }
+	/// <summary>
+	/// Array type dimension.
+	/// </summary>
+	public Int32? ArrayDimension { get; init; }
 
 	/// <summary>
 	/// Constructor.
@@ -54,6 +58,7 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 		this.IsEnum = classMetadata?.IsEnum;
 		this.IsAnnotation = classMetadata?.IsAnnotation;
 		this.IsFinal = classMetadata?.IsFinal;
+		this.ArrayDimension = classMetadata?.ArrayDimension;
 	}
 	/// <summary>
 	/// Constructor.
@@ -68,6 +73,7 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 		this.IsEnum = jClass.IsEnum;
 		this.IsAnnotation = jClass.IsAnnotation;
 		this.IsFinal = jClass.IsFinal;
+		this.ArrayDimension = jClass.ArrayDimension;
 	}
 
 	/// <summary>
@@ -80,6 +86,7 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 		this.Name = metadata.ClassName;
 		this.ClassSignature = metadata.Signature;
 		this.Hash = metadata.Hash;
+		this.ArrayDimension = JClassObject.GetArrayDimension(metadata.Signature);
 		if (metadata.Kind is not JTypeKind.Undefined)
 		{
 			this.IsInterface = metadata.Kind is JTypeKind.Interface or JTypeKind.Annotation;

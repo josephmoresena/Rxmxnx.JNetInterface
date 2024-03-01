@@ -44,12 +44,6 @@ public partial class JStringObject
 	}
 
 	/// <summary>
-	/// Retrieves hash code of current text.
-	/// </summary>
-	/// <returns>A <see cref="Nullable{Int32}"/> hash code.</returns>
-	private Int32? GetStringHashCode() => this._value?.GetHashCode();
-
-	/// <summary>
 	/// Retrieves UTF-16 chars.
 	/// </summary>
 	/// <param name="chars">Span to copy chars to.</param>

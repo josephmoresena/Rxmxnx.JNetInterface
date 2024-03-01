@@ -17,6 +17,10 @@ public partial class JClassObject
 	                                                                        .Implements<JTypeObject>().Build();
 
 	static JClassTypeMetadata<JClassObject> IClassType<JClassObject>.Metadata => JClassObject.typeMetadata;
+	/// <summary>
+	/// Array class dimension.
+	/// </summary>
+	private Int32? _arrayDimension;
 
 	/// <summary>
 	/// Fully qualified class name.

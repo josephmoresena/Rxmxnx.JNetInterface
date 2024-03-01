@@ -4,11 +4,7 @@ partial class JEnvironment
 {
 	private sealed partial record EnvironmentCache : IClassFeature
 	{
-		public JClassObject AsClassObject(JClassLocalRef classRef)
-		{
-			JClassObject result = this.GetClass(classRef, true);
-			return this.Register(result);
-		}
+		public JClassObject AsClassObject(JClassLocalRef classRef) => this.Register(this.GetClass(classRef, true));
 		public JClassObject AsClassObject(JReferenceObject jObject)
 		{
 			ValidationUtilities.ThrowIfDummy(jObject);
@@ -34,12 +30,13 @@ partial class JEnvironment
 			this.SetAssignableTo<TDataType>(jObject, result);
 			return result;
 		}
-		[return:NotNullIfNotNull(nameof(jClass))]
+		[return: NotNullIfNotNull(nameof(jClass))]
 		public JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass)
 		{
 			if (jClass is null) return default;
 			if (MetadataHelper.GetMetadata(jClass.Hash) is { } result)
 				return result;
+			using LocalFrame _ = new(this._env, 2);
 			return jClass.ClassSignature[0] switch
 			{
 				UnicodePrimitiveSignatures.BooleanSignatureChar => (JClassTypeMetadata)MetadataHelper
@@ -63,7 +60,7 @@ partial class JEnvironment
 				_ => !jClass.IsInterface ?
 					this._env.GetClassMetadata(jClass) :
 					this._env.GetInterfaceMetadata(jClass) ??
-					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>()
+					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>(),
 			};
 		}
 		public JClassObject GetClass(ReadOnlySpan<Byte> className)

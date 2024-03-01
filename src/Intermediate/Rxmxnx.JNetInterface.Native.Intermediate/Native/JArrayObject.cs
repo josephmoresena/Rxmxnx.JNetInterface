@@ -42,6 +42,29 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 	/// <inheritdoc cref="JReferenceObject.As{TValue}()"/>
 	internal new ref readonly TValue As<TValue>() where TValue : unmanaged, IArrayReferenceType<TValue>
 		=> ref base.As<TValue>();
+
+	/// <summary>
+	/// Retrieves array element class name.
+	/// </summary>
+	/// <param name="arraySignature">A JNI array signature.</param>
+	/// <param name="dimension">Output. Array dimension.</param>
+	/// <returns>Element class name.</returns>
+	protected static CString GetElementName(ReadOnlySpan<Byte> arraySignature, out Int32 dimension)
+	{
+		dimension = JClassObject.GetArrayDimension(arraySignature);
+		return new(arraySignature[dimension] switch
+		{
+			UnicodePrimitiveSignatures.BooleanSignatureChar => UnicodeClassNames.BooleanPrimitive(),
+			UnicodePrimitiveSignatures.ByteSignatureChar => UnicodeClassNames.BytePrimitive(),
+			UnicodePrimitiveSignatures.CharSignatureChar => UnicodeClassNames.CharPrimitive(),
+			UnicodePrimitiveSignatures.DoubleSignatureChar => UnicodeClassNames.DoublePrimitive(),
+			UnicodePrimitiveSignatures.FloatSignatureChar => UnicodeClassNames.FloatPrimitive(),
+			UnicodePrimitiveSignatures.IntSignatureChar => UnicodeClassNames.IntPrimitive(),
+			UnicodePrimitiveSignatures.LongSignatureChar => UnicodeClassNames.LongPrimitive(),
+			UnicodePrimitiveSignatures.ShortSignatureChar => UnicodeClassNames.ShortPrimitive(),
+			_ => arraySignature[(dimension + 1)..^1],
+		});
+	}
 }
 
 /// <summary>

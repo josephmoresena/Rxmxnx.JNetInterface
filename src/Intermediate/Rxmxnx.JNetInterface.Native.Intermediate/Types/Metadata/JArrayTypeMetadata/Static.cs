@@ -61,7 +61,7 @@ public abstract partial record JArrayTypeMetadata
 	/// </summary>
 	/// <typeparam name="TElement">A <see cref="IArrayType"/> type.</typeparam>
 	/// <returns>Array type.</returns>
-	protected static Int32 GetArrayDeep<TElement>() where TElement : IObject, IDataType<TElement>
+	protected static Int32 GetArrayDimension<TElement>() where TElement : IObject, IDataType<TElement>
 	{
 		Int32 i = 1;
 		JArrayTypeMetadata? elementArray = IDataType.GetMetadata<TElement>() as JArrayTypeMetadata;
