@@ -140,6 +140,9 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.NoSuchFieldErrorObject"/>
 	[DefaultValue(ClassNames.NoSuchFieldErrorObject)]
 	public static partial ReadOnlySpan<Byte> NoSuchFieldErrorObject();
+	/// <inheritdoc cref="ClassNames.NoClassDefFoundErrorObject"/>
+	[DefaultValue(ClassNames.NoClassDefFoundErrorObject)]
+	public static partial ReadOnlySpan<Byte> NoClassDefFoundErrorObject();
 	/// <inheritdoc cref="ClassNames.SecurityExceptionObject"/>
 	[DefaultValue(ClassNames.SecurityExceptionObject)]
 	public static partial ReadOnlySpan<Byte> SecurityExceptionObject();

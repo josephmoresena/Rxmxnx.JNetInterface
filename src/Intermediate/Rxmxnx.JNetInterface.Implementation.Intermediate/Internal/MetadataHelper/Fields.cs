@@ -149,6 +149,7 @@ internal static partial class MetadataHelper
 		},
 		{ IDataType.GetHash<JNoSuchFieldErrorObject>(), IReferenceType.GetMetadata<JNoSuchFieldErrorObject>() },
 		{ IDataType.GetHash<JNoSuchMethodErrorObject>(), IReferenceType.GetMetadata<JNoSuchMethodErrorObject>() },
+		{ IDataType.GetHash<JNoClassDefFoundErrorObject>(), IReferenceType.GetMetadata<JNoClassDefFoundErrorObject>() },
 		{ IDataType.GetHash<JVirtualMachineErrorObject>(), IReferenceType.GetMetadata<JVirtualMachineErrorObject>() },
 		{ IDataType.GetHash<JOutOfMemoryErrorObject>(), IReferenceType.GetMetadata<JOutOfMemoryErrorObject>() },
 		{ IDataType.GetHash<JSecurityExceptionObject>(), IReferenceType.GetMetadata<JSecurityExceptionObject>() },

@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
-public partial class JThrowableException
+public partial class ThrowableException
 {
 	/// <summary>
 	/// Helper to perform a call over a <see cref="JThrowableObject"/> instance.
@@ -35,7 +35,8 @@ public partial class JThrowableException
 		{
 			if (this._delegate is not Action<TThrowable> action) return;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
-			TThrowable throwableT = this._global.AsLocal<TThrowable>(env);
+			using JWeak jWeak = env.ReferenceFeature.CreateWeak(this._global);
+			using TThrowable throwableT = jWeak.AsLocal<TThrowable>(env);
 			action(throwableT);
 			this._global.RefreshMetadata(throwableT);
 		}
@@ -49,7 +50,8 @@ public partial class JThrowableException
 		{
 			if (this._delegate is not Func<TThrowable, TResult> func) return default!;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
-			TThrowable throwableT = this._global.AsLocal<TThrowable>(env);
+			using JWeak jWeak = env.ReferenceFeature.CreateWeak(this._global);
+			TThrowable throwableT = jWeak.AsLocal<TThrowable>(env);
 			TResult result = func(throwableT);
 			this._global.RefreshMetadata(throwableT);
 			return result;

@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// Stores the information of a <see cref="JStackTraceElementObject"/> instance.
 /// </summary>
-public sealed record JStackTraceInfo
+public sealed record StackTraceInfo
 {
 	/// <summary>
 	/// The fully qualified name of the class containing the execution point.
@@ -29,7 +29,7 @@ public sealed record JStackTraceInfo
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	internal JStackTraceInfo()
+	internal StackTraceInfo()
 	{
 		this.ClassName = default!;
 		this.FileName = default!;

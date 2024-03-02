@@ -111,8 +111,8 @@ partial class JEnvironment
 		/// Creates JNI exception from <paramref name="throwableRef"/>.
 		/// </summary>
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
-		/// <returns>A <see cref="JThrowableException"/> exception.</returns>
-		private JThrowableException CreateJniException(JThrowableLocalRef throwableRef)
+		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
+		private ThrowableException CreateJniException(JThrowableLocalRef throwableRef)
 		{
 			using LocalFrame _ = new(this._env, 5);
 			JClassObject jClass =

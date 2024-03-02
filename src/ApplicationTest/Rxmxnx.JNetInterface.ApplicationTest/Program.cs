@@ -164,7 +164,7 @@ public static class Program
 					Console.WriteLine($"{i}: {jLocal}");
 				}
 			}
-			catch (JThrowableException ex)
+			catch (ThrowableException ex)
 			{
 				Console.WriteLine(ex.Message);
 				Console.WriteLine(ex.Message);
@@ -200,7 +200,7 @@ public static class Program
 		Console.WriteLine(vm.Reference);
 		Console.WriteLine($"VM Version: 0x{env.Version:x8}");
 		Console.WriteLine(
-			$"Ref Equality: {env.Equals(vm.GetEnvironment())} - Instance Equality: {env == vm.GetEnvironment()}");
+			$"Ref Equality: {env.Equals(vm.GetEnvironment())} - Instance Equality: {Object.ReferenceEquals(env, vm.GetEnvironment())}");
 		Console.WriteLine($"Thread: {Environment.CurrentManagedThreadId} {env.Reference} Type: {env.GetType()}");
 	}
 	private static void PrintAttachThreadInfo(IVirtualMachine vm, CString threadName, IEnvironment? env = default)

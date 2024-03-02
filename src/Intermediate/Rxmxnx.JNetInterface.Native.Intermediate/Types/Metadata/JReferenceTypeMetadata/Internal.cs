@@ -37,8 +37,8 @@ public abstract partial record JReferenceTypeMetadata
 	/// </summary>
 	/// <param name="jGlobalThrowable">A <see cref="JGlobalBase"/> throwable instance.</param>
 	/// <param name="exceptionMessage">Exception message.</param>
-	/// <returns>A <see cref="JThrowableException"/> instance.</returns>
-	internal virtual JThrowableException? CreateException(JGlobalBase jGlobalThrowable,
+	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
+	internal virtual ThrowableException? CreateException(JGlobalBase jGlobalThrowable,
 		String? exceptionMessage = default)
 		=> default;
 

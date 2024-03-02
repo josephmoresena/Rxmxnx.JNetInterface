@@ -13,7 +13,7 @@ public record ThrowableObjectMetadata : ObjectMetadata
 	/// <summary>
 	/// Internal throwable stack trace.
 	/// </summary>
-	public JStackTraceInfo[]? StackTrace { get; init; }
+	public StackTraceInfo[]? StackTrace { get; init; }
 
 	/// <summary>
 	/// Constructor.

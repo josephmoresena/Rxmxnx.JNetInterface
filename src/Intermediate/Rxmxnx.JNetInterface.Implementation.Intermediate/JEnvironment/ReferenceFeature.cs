@@ -88,17 +88,14 @@ partial class JEnvironment
 		}
 		public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
 		{
-			ValidationUtilities.ThrowIfDummy(jLocal);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			if (typeof(TGlobal) == typeof(JWeak))
 			{
-				NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();
-				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-				JWeakRef weakRef = newWeakGlobalRef(this.Reference, localRef);
-				if (weakRef == default) this.CheckJniError();
-				JWeak jWeak = this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
-				return (jWeak as TGlobal)!;
+				JWeakRef weakRef = this.CreateWeakGlobalRef(jLocal);
+				return (TGlobal)(Object)this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
 			}
+
+			ValidationUtilities.ThrowIfDummy(jLocal);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			if (this.LoadGlobal(jLocal as JClassObject) is TGlobal result) return result;
 			ObjectMetadata metadata = ILocalObject.CreateMetadata(jLocal);
 			if (metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
@@ -114,6 +111,11 @@ partial class JEnvironment
 				result = (TGlobal)(Object)jGlobal;
 			}
 			return result;
+		}
+		public JWeak CreateWeak(JGlobalBase jGlobal)
+		{
+			JWeakRef weakRef = this.CreateWeakGlobalRef(jGlobal);
+			return this.VirtualMachine.Register(new JWeak(jGlobal, weakRef));
 		}
 		public Boolean Unload(JLocalObject? jLocal)
 		{

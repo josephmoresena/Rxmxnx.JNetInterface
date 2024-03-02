@@ -242,6 +242,10 @@ internal static class ClassNames
 	/// </summary>
 	public const String NoSuchFieldErrorObject = ClassNames.LangPackage + "NoSuchFieldError";
 	/// <summary>
+	/// JNI name of <c>java.lang.NoClassDefFoundError</c> class.
+	/// </summary>
+	public const String NoClassDefFoundErrorObject = ClassNames.LangPackage + "NoClassDefFoundError";
+	/// <summary>
 	/// JNI name of <c>java.lang.SecurityException</c> class.
 	/// </summary>
 	public const String SecurityExceptionObject = ClassNames.LangPackage + "SecurityException";

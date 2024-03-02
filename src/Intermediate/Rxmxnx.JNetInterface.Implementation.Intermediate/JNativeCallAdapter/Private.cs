@@ -17,7 +17,7 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	private JNativeCallAdapter(JEnvironmentRef envRef)
 	{
-		this._env = (JEnvironment)JEnvironment.GetEnvironment(envRef);
+		this._env = JEnvironment.GetEnvironment(envRef);
 		this._cache = new(this._env);
 	}
 	/// <summary>

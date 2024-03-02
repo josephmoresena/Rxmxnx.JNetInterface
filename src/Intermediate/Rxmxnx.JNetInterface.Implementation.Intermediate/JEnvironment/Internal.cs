@@ -199,4 +199,15 @@ partial class JEnvironment
 		if (localRef == default) this._cache.CheckJniError();
 		return localRef;
 	}
+
+	/// <summary>
+	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
+	/// </summary>
+	/// <param name="reference">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <returns>The <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.</returns>
+	internal static JEnvironment GetEnvironment(JEnvironmentRef reference)
+	{
+		JVirtualMachine vm = EnvironmentCache.GetVirtualMachine(reference);
+		return vm.GetEnvironment(reference);
+	}
 }

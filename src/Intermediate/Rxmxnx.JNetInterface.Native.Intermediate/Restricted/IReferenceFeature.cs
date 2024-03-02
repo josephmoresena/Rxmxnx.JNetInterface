@@ -17,6 +17,14 @@ public partial interface IReferenceFeature
 	/// </returns>
 	TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase;
 	/// <summary>
+	/// Creates a <see cref="JWeak"/> instance loaded from <see cref="jGlobal"/>.
+	/// </summary>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <returns>
+	/// A new <see cref="JWeak"/> instance loaded from <see cref="jGlobal"/>.
+	/// </returns>
+	JWeak CreateWeak(JGlobalBase jGlobal);
+	/// <summary>
 	/// Unloads the local reference of <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>

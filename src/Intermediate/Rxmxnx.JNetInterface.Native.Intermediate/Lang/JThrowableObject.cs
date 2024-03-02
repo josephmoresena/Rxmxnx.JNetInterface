@@ -15,7 +15,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// Throwable stack trace.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public JStackTraceInfo[] StackTrace
+	public StackTraceInfo[] StackTrace
 		=> this._stackTrace ??= this.Environment.WithFrame(5, this, JThrowableObject.GetStackTraceInfo);
 
 	/// <summary>

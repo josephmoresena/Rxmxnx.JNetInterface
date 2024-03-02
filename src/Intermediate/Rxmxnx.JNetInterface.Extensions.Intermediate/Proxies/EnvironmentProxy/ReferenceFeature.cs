@@ -5,6 +5,8 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase;
 	/// <inheritdoc/>
+	public abstract JWeak CreateWeak(JGlobalBase jGlobal);
+	/// <inheritdoc/>
 	public abstract Boolean Unload(JLocalObject jLocal);
 	/// <inheritdoc/>
 	public abstract Boolean Unload(JGlobalBase jGlobal);

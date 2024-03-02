@@ -5,7 +5,7 @@ public partial class JThrowableObject
 	/// <inheritdoc cref="ThrowableObjectMetadata.Message"/>
 	private String? _message;
 	/// <inheritdoc cref="ThrowableObjectMetadata.StackTrace"/>
-	private JStackTraceInfo[]? _stackTrace;
+	private StackTraceInfo[]? _stackTrace;
 
 	/// <summary>
 	/// Retrieves the throwable message.
@@ -21,21 +21,21 @@ public partial class JThrowableObject
 	/// Provides programmatic access to the stack trace information printed by printStackTrace();
 	/// </summary>
 	/// <returns>Throwable stack trace.</returns>
-	private static JStackTraceInfo[] GetStackTraceInfo(JThrowableObject jThrowable)
+	private static StackTraceInfo[] GetStackTraceInfo(JThrowableObject jThrowable)
 	{
 		IEnvironment env = jThrowable.Environment;
 		using JArrayObject<JStackTraceElementObject> stackTrace = env.FunctionSet.GetStackTrace(jThrowable);
 		return JThrowableObject.GetStackTraceInfo(stackTrace!);
 	}
 	/// <summary>
-	/// Retrieves <see cref="JStackTraceInfo"/> instance from <paramref name="stackTrace"/> array.
+	/// Retrieves <see cref="StackTraceInfo"/> instance from <paramref name="stackTrace"/> array.
 	/// </summary>
 	/// <param name="stackTrace">A <see cref="JStackTraceElementObject"/> array.</param>
-	/// <returns>A <see cref="JStackTraceInfo"/> array.</returns>
-	private static JStackTraceInfo[] GetStackTraceInfo(IReadOnlyList<JStackTraceElementObject> stackTrace)
+	/// <returns>A <see cref="StackTraceInfo"/> array.</returns>
+	private static StackTraceInfo[] GetStackTraceInfo(IReadOnlyList<JStackTraceElementObject> stackTrace)
 	{
-		if (stackTrace.Count == 0) return Array.Empty<JStackTraceInfo>();
-		JStackTraceInfo[] result = new JStackTraceInfo[stackTrace.Count];
+		if (stackTrace.Count == 0) return Array.Empty<StackTraceInfo>();
+		StackTraceInfo[] result = new StackTraceInfo[stackTrace.Count];
 		for (Int32 i = 0; i < result.Length; i++)
 			result[i] = (StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]);
 		return result;

@@ -3,6 +3,17 @@ namespace Rxmxnx.JNetInterface;
 partial class JEnvironment
 {
 	/// <summary>
+	/// <see cref="JEnvironment"/> cache.
+	/// </summary>
+	private readonly EnvironmentCache _cache;
+
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="cache">A <see cref="JEnvironment"/> reference.</param>
+	private JEnvironment(EnvironmentCache cache) => this._cache = cache;
+
+	/// <summary>
 	/// Tests whether two references refer to the same object.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
