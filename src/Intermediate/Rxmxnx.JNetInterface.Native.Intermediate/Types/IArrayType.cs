@@ -26,6 +26,13 @@ public interface IArrayType : IReferenceType
 		=> TArray.Metadata;
 
 	/// <summary>
+	/// Retrieves metadata for the array of <typeparamref name="TElement"/> type.
+	/// </summary>
+	/// <typeparam name="TElement">A <see cref="IDataType{TDataType}"/> type.</typeparam>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of <typeparamref name="TElement"/> type.</returns>
+	internal static JArrayTypeMetadata GetArrayMetadata<TElement>() where TElement : IObject, IDataType<TElement>
+		=> IArrayType.GetMetadata<JArrayObject<TElement>>();
+	/// <summary>
 	/// Retrieves metadata for the array of arrays of <typeparamref name="TElement"/> type.
 	/// </summary>
 	/// <typeparam name="TElement">A <see cref="IDataType{TDataType}"/> type.</typeparam>

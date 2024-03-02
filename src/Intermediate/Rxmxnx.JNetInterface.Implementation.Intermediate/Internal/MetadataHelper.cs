@@ -32,7 +32,6 @@ internal static partial class MetadataHelper
 		}
 		return result;
 	}
-
 	/// <summary>
 	/// Retrieves metadata from hash.
 	/// </summary>
@@ -41,9 +40,9 @@ internal static partial class MetadataHelper
 	public static JReferenceTypeMetadata? GetMetadata(String hash)
 		=> MetadataHelper.runtimeMetadata.GetValueOrDefault(hash);
 	/// <summary>
-	/// Retrieves metadata from hash.
+	/// Retrieves metadata from class name.
 	/// </summary>
-	/// <param name="className">A JNI class hash.</param>
+	/// <param name="className">A JNI class name.</param>
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
 	public static JReferenceTypeMetadata? GetMetadata(ReadOnlySpan<Byte> className)
 	{
@@ -59,6 +58,26 @@ internal static partial class MetadataHelper
 	{
 		MetadataHelper.Register<TDataType>();
 		return MetadataHelper.GetMetadata(IDataType.GetHash<TDataType>()) ?? IDataType.GetMetadata<TDataType>();
+	}
+	/// <summary>
+	/// Retrieves array metadata from element class name.
+	/// </summary>
+	/// <param name="elementClassName">A JNI class name.</param>
+	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
+	public static JArrayTypeMetadata? GetArrayMetadata(ReadOnlySpan<Byte> elementClassName)
+	{
+		CStringSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);
+		JReferenceTypeMetadata? elementMetadata =
+			MetadataHelper.runtimeMetadata.GetValueOrDefault(elementClassInformation.ToString());
+		JArrayTypeMetadata? result = elementMetadata?.GetArrayMetadata();
+		MetadataHelper.Register(result);
+		return result;
+	}
+	public static JArrayTypeMetadata? GetArrayMetadata(JReferenceTypeMetadata? elementMetadata)
+	{
+		JArrayTypeMetadata? result = elementMetadata?.GetArrayMetadata();
+		MetadataHelper.Register(result);
+		return result;
 	}
 	/// <summary>
 	/// Registers <typeparamref name="TDataType"/> as valid datatype for current process.

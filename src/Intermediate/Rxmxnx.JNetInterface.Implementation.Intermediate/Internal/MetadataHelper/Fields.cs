@@ -3,6 +3,16 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static partial class MetadataHelper
 {
 	/// <summary>
+	/// Object array metadata.
+	/// </summary>
+	public static readonly JArrayTypeMetadata ObjectArrayMetadata = IArrayType.GetArrayMetadata<JLocalObject>();
+	/// <summary>
+	/// Object array array metadata.
+	/// </summary>
+	public static readonly JArrayTypeMetadata ObjectArrayArrayMetadata =
+		IArrayType.GetArrayArrayMetadata<JLocalObject>();
+
+	/// <summary>
 	/// Separator class assignability.
 	/// </summary>
 	private static readonly CString assignableTo = new(() => " -> "u8);
@@ -55,6 +65,10 @@ internal static partial class MetadataHelper
 
 		// Basic object arrays //
 		{ IDataType.GetHash<JArrayObject<JLocalObject>>(), IReferenceType.GetMetadata<JArrayObject<JLocalObject>>() },
+		{
+			IDataType.GetHash<JArrayObject<JArrayObject<JLocalObject>>>(),
+			IReferenceType.GetMetadata<JArrayObject<JArrayObject<JLocalObject>>>()
+		},
 		{ IDataType.GetHash<JArrayObject<JClassObject>>(), IReferenceType.GetMetadata<JArrayObject<JClassObject>>() },
 		{ IDataType.GetHash<JArrayObject<JStringObject>>(), IReferenceType.GetMetadata<JArrayObject<JStringObject>>() },
 		{ IDataType.GetHash<JArrayObject<JNumberObject>>(), IReferenceType.GetMetadata<JArrayObject<JNumberObject>>() },

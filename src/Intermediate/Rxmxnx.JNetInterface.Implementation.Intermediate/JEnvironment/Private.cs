@@ -57,10 +57,10 @@ partial class JEnvironment
 		ReadOnlySpan<Byte> elementSignature = arraySignature[1..];
 		if (elementSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
 		{
-			if (MetadataHelper.GetMetadata(elementSignature)?.GetArrayMetadata() is { } arrayTypeMetadata)
+			if (MetadataHelper.GetArrayMetadata(elementSignature) is { } arrayTypeMetadata)
 				return arrayTypeMetadata;
-			return this.GetArrayTypeMetadata(elementSignature).GetArrayMetadata() ??
-				(JArrayTypeMetadata)MetadataHelper.GetMetadata<JArrayObject<JArrayObject<JLocalObject>>>();
+			return MetadataHelper.GetArrayMetadata(this.GetArrayTypeMetadata(elementSignature)) ??
+				MetadataHelper.ObjectArrayArrayMetadata;
 		}
 		ReadOnlySpan<Byte> elementClassName = elementSignature[1] == UnicodeObjectSignatures.ObjectSignaturePrefixChar ?
 			elementSignature[1..^1] :
@@ -71,8 +71,7 @@ partial class JEnvironment
 			JClassObject elementClass = this._cache.GetClass(elementClassName);
 			elementMetadata = this._cache.GetTypeMetadata(elementClass);
 		}
-		return elementMetadata.GetArrayMetadata() ??
-			(JArrayTypeMetadata)MetadataHelper.GetMetadata<JArrayObject<JLocalObject>>();
+		return elementMetadata.GetArrayMetadata() ?? MetadataHelper.ObjectArrayMetadata;
 	}
 	/// <summary>
 	/// Retrieves the <see cref="JClassTypeMetadata"/> instance from <paramref name="jClass"/>.
