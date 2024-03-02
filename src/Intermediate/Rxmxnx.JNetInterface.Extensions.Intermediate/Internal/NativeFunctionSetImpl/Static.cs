@@ -42,7 +42,7 @@ internal partial class NativeFunctionSetImpl
 	/// <summary>
 	/// <c>Number.doubleValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JByte> doubleValueDefinition = new(UnicodeMethodNames.DoubleValue());
+	private static readonly JFunctionDefinition<JDouble> doubleValueDefinition = new(UnicodeMethodNames.DoubleValue());
 	/// <summary>
 	/// <c>Number.shortValue()</c> definition.
 	/// </summary>
@@ -74,11 +74,6 @@ internal partial class NativeFunctionSetImpl
 	/// <c>Class.getModifiers()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JInt> getModifiersDefinition = new(UnicodeMethodNames.GetModifiers());
-	/// <summary>
-	/// <c>Class.getComponentType()</c> definition.
-	/// </summary>
-	private static readonly JFunctionDefinition<JClassObject> getComponentTypeDefinition =
-		new(UnicodeMethodNames.GetComponentType());
 	/// <summary>
 	/// <c>Class.getInterfaces()</c> definition.
 	/// </summary>

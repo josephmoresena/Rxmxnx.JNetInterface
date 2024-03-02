@@ -26,23 +26,37 @@ public class HelloDotnet {
     public native void passNativeString(String value);
 
     public static Object getRandomObject(int value) {
-        if (value == 1)
-            return ""texto random"";
-        if (value == 2)
-            return -1;
-        if (value == 3)
-            return new Object();
-        if (value == 4)
-            return new String[10][0][0];
-        if (value == 5)
-            return new int[1][0][0];
-        if (value == 6)
-            return new char[0][1][0][0][0];
-        if (value == 8)
-            return new Math[1][0][0][0][0];
-        if (value == 9)
-            return new Process[0][0];
-        return null;
+        switch (value) {
+            case 1:
+                return ""texto random"";
+            case 2:
+                return -1;
+            case 3:
+                return new Object();
+            case 4:
+                return new String[10][][];
+            case 5:
+                return new int[1][][];
+            case 6:
+                return new char[0][][][][];
+            case 7:
+                return String.class;
+            case 8:
+                return new Math[1][][][][]; 
+            case 9:
+                return new Void[2][]; 
+            case 10:
+                return int.class;
+            case 11:
+                return new Process[2][]; 
+            case 12:
+                return Math.E; 
+            case 13:
+                return (float)Math.PI; 
+            default:
+                return null;
+        }
     }
+    public static final int COUNT_RANDOM = 14;
 }";
 }

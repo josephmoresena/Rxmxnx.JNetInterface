@@ -90,10 +90,6 @@ internal static class MethodNames
 	/// </summary>
 	public const String GetModifiers = "getModifiers";
 	/// <summary>
-	/// Name of <c>Class.getComponentType()</c>.
-	/// </summary>
-	public const String GetComponentType = "getComponentType";
-	/// <summary>
 	/// Name of <c>Class.GetInterfaces()</c>.
 	/// </summary>
 	public const String GetInterfaces = "getInterfaces";

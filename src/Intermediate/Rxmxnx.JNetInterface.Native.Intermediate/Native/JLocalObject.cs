@@ -36,6 +36,8 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
 	public override CString ObjectSignature
 		=> this.Lifetime.Class?.ClassSignature ?? UnicodeObjectSignatures.ObjectSignature;
+	/// <inheritdoc/>
+	public override String ToString() => $"{this.Class.Name} {this.As<JObjectLocalRef>()}";
 
 	/// <inheritdoc/>
 	~JLocalObject() { this.Dispose(false); }
@@ -78,7 +80,6 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 		IEnvironment env = this.Environment;
 		return env.ClassFeature.IsInstanceOf(this, jClass);
 	}
-
 	/// <summary>
 	/// Retrieves the class and metadata from current instance for external use.
 	/// </summary>

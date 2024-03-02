@@ -156,8 +156,9 @@ public static class Program
 				Program.PrintVirtualMachineInfo(env, vm, jvmLib);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode);
 				JMainMethodDefinition.Instance.Invoke(helloJniClass, args);
+				JInt count = new JFieldDefinition<JInt>("COUNT_RANDOM"u8).StaticGet(helloJniClass);
 				GetRandomObjectDefinition getRandomObjectDefinition = new("getRandomObject"u8);
-				for (Int32 i = 0; i < 10; i++)
+				for (JInt i = 0; i < count; i++)
 				{
 					using JLocalObject? jLocal = getRandomObjectDefinition.Invoke(helloJniClass, i);
 					Console.WriteLine($"{i}: {jLocal}");

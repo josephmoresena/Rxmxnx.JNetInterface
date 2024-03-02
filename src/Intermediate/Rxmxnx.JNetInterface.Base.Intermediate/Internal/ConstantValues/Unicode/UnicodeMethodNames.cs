@@ -68,9 +68,6 @@ internal static partial class UnicodeMethodNames
 	/// <inheritdoc cref="MethodNames.GetModifiers"/>
 	[DefaultValue(MethodNames.GetModifiers)]
 	public static partial ReadOnlySpan<Byte> GetModifiers();
-	/// <inheritdoc cref="MethodNames.GetComponentType"/>
-	[DefaultValue(MethodNames.GetComponentType)]
-	public static partial ReadOnlySpan<Byte> GetComponentType();
 	/// <inheritdoc cref="MethodNames.GetInterfaces"/>
 	[DefaultValue(MethodNames.GetInterfaces)]
 	public static partial ReadOnlySpan<Byte> GetInterfaces();

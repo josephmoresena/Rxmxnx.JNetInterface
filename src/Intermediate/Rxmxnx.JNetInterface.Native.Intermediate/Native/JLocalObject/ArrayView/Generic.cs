@@ -38,7 +38,7 @@ public partial class JLocalObject
 			internal Generic(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
 
 			/// <inheritdoc/>
-			public override String ToString() => this._stringValue ??= this.GetStringValue();
+			public override String ToString() => $"{this._stringValue ??= this.GetStringValue()} {this.Reference}";
 
 			/// <inheritdoc cref="Object.ToString()"/>
 			private String GetStringValue()

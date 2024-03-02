@@ -190,6 +190,8 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		this._isFinal = classMetadata.IsFinal;
 		this._arrayDimension = classMetadata.ArrayDimension;
 	}
+	/// <inheritdoc/>
+	public override String ToString() => $"{this.Name} {this.Reference}";
 
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.
