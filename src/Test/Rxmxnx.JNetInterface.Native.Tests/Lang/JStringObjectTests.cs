@@ -47,8 +47,7 @@ public sealed class JStringObjectTests
 		Assert.Equal(JStringObjectTests.className, jString.ObjectClassName);
 		Assert.Equal(JStringObjectTests.classSignature, jString.ObjectSignature);
 		Assert.Equal(stringRef, jString.Reference);
-		Assert.Equal(initText, text.GetHashCode().Equals(jString.GetHashCode()));
-		Assert.Equal(!initText, stringRef.GetHashCode().Equals(jString.GetHashCode()));
+		Assert.Equal(text.GetHashCode(), jString.GetHashCode());
 		Assert.Equal(text.Length, jString.Length);
 		Assert.Equal(utf8Text.Length, jString.Utf8Length);
 		Assert.Equal(text, jString.Value);

@@ -58,7 +58,9 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClass.IsAnnotation, objectMetadata.IsAnnotation);
 		Assert.Equal(jClass.IsArray,
 		             objectMetadata.ObjectSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar);
+		Assert.Equal(jClass.ArrayDimension, objectMetadata.ArrayDimension);
 		Assert.Equal(jClass.Hash, objectMetadata.Hash);
+		Assert.Equal($"{jClass.Name} {jClass.Reference}", jClass.ToString());
 	}
 	[Theory]
 	[InlineData(true)]
@@ -67,7 +69,6 @@ public sealed class JClassObjectTests
 	{
 		JClassTypeMetadata stringTypeMetadata = IClassType.GetMetadata<JStringObject>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment(isProxy);
-		NativeFunctionSet functionSet = Substitute.For<NativeFunctionSet>();
 		JStringLocalRef stringRef = JClassObjectTests.fixture.Create<JStringLocalRef>();
 		using JClassObject jClass = new(env);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
@@ -77,20 +78,20 @@ public sealed class JClassObjectTests
 		Assert.Equal(isProxy, jStringClass.IsProxy);
 		Assert.Equal(isProxy, jString.IsProxy);
 
-		env.FunctionSet.Returns(functionSet);
-		functionSet.GetClassName(jClass).Returns(jString);
-		functionSet.IsPrimitiveClass(jClass).Returns(false);
+		env.FunctionSet.GetClassName(jClass).Returns(jString);
+		env.FunctionSet.IsPrimitiveClass(jClass).Returns(false);
 
 		Assert.Equal(jString, jClass.GetClassName(out Boolean isPrimitive));
 		Assert.False(isPrimitive);
 
-		functionSet.Received(1).GetClassName(jClass);
+		env.FunctionSet.Received(1).GetClassName(jClass);
 	}
 	[Theory]
 	[InlineData(0)]
 	[InlineData(1)]
 	[InlineData(2)]
-	internal void GetClassInfoTest(Byte c)
+	[InlineData(3)]
+	internal void GetClassInfoTest(Byte call)
 	{
 		ITypeInformation information = Substitute.For<ITypeInformation>();
 		CString className0 = (CString)JClassObjectTests.fixture.Create<String>();
@@ -98,6 +99,8 @@ public sealed class JClassObjectTests
 		String hash0 = JClassObjectTests.fixture.Create<String>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
+		Boolean isFinal = JClassObjectTests.fixture.Create<Boolean>();
+		JModifierObject.Modifier modifier = (JModifierObject.Modifier)Random.Shared.Next(1, 0x8000 - 1);
 		using JClassObject jClass = new(env);
 		using JClassObject jClassObj = new(jClass, classRef);
 
@@ -105,13 +108,34 @@ public sealed class JClassObjectTests
 		information.ClassName.Returns(className0);
 		information.Signature.Returns(signature0);
 		information.Hash.Returns(hash0);
+		env.FunctionSet.IsFinal(jClassObj, out Arg.Any<JModifierObject.Modifier>()).ReturnsForAnyArgs(c =>
+		{
+			c[1] = modifier;
+			return isFinal;
+		});
 
-		if (c < 1)
+		if (call < 1)
 			Assert.Equal(className0, jClassObj.Name);
-		if (c < 2)
+		if (call < 2)
 			Assert.Equal(signature0, jClassObj.ClassSignature);
-		if (c < 3)
+		if (call < 3)
 			Assert.Equal(hash0, jClassObj.Hash);
+
+		Assert.Equal(signature0[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar, jClassObj.IsArray);
+		Assert.Equal(signature0.Length == 1, jClassObj.IsPrimitive);
+		Assert.Equal(JClassObject.GetArrayDimension(signature0), jClassObj.ArrayDimension);
+
+		if (call < 1)
+			Assert.Equal(isFinal, jClassObj.IsFinal);
+		if (call < 2)
+			Assert.Equal(!isFinal && modifier.HasFlag(JModifierObject.Modifier.Interface), jClassObj.IsInterface);
+		if (call < 3)
+			Assert.Equal(isFinal && modifier.HasFlag(JModifierObject.Modifier.Enum), jClassObj.IsEnum);
+		if (call < 4)
+			Assert.Equal(
+				!isFinal && modifier.HasFlag(JModifierObject.Modifier.Interface) &&
+				modifier.HasFlag(JModifierObject.Modifier.Annotation), jClassObj.IsAnnotation);
+
 		env.ClassFeature.Received(1).GetClassInfo(jClassObj);
 	}
 	[Theory]
@@ -167,6 +191,8 @@ public sealed class JClassObjectTests
 		Assert.Equal(classObjectMetadata.ObjectSignature, jStringClass.ObjectSignature);
 		Assert.Equal(classObjectMetadata.Name, jStringClass.Name);
 		Assert.Equal(classObjectMetadata.ClassSignature, jStringClass.ClassSignature);
+
+		Assert.Equal($"{classObjectMetadata.Name} {jStringClass.Reference}", jStringClass.ToString());
 	}
 	[Theory]
 	[InlineData(true)]
