@@ -11,7 +11,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="JWeakRef"/> reference.</returns>
 		private JWeakRef CreateWeakGlobalRef(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfProxy(jObject);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jObject);
@@ -28,7 +28,7 @@ partial class JEnvironment
 		[return: NotNullIfNotNull(nameof(jObject))]
 		private TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
 		{
-			ValidationUtilities.ThrowIfDummy(jObject as JReferenceObject);
+			ValidationUtilities.ThrowIfProxy(jObject as JReferenceObject);
 			this.LoadClass(jObject as JClassObject);
 			JLocalObject? jLocal = jObject as JLocalObject;
 			if (!JObject.IsNullOrDefault(jLocal))

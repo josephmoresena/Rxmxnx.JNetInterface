@@ -227,15 +227,16 @@ internal static class ValidationUtilities
 			throw new InvalidOperationException("The sequence is no longer valid.");
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="jObject"/> is dummy.
+	/// Throws an exception if <paramref name="jObject"/> is proxy.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="message">Exception message.</param>
-	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is dummy.</exception>
-	public static void ThrowIfDummy(JReferenceObject? jObject, String? message = default)
+	/// <param name="nameofObject">Name of <paramref name="jObject"/>.</param>
+	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is proxy.</exception>
+	public static void ThrowIfProxy(JReferenceObject? jObject,
+		[CallerArgumentExpression(nameof(jObject))] String nameofObject = "")
 	{
 		if (jObject is not null && jObject.IsProxy)
-			throw new ArgumentException(message ?? "Invalid JReferenceObject.");
+			throw new ArgumentException($"Invalid JReferenceObject ({nameofObject}).");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.

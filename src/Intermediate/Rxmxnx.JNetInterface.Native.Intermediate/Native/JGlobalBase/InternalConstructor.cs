@@ -6,13 +6,16 @@ public partial class JGlobalBase
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="globalRef">Global object reference.</param>
+	private protected JGlobalBase(ILocalObject jLocal, JGlobalRef globalRef) : this(
+		jLocal.VirtualMachine, ILocalObject.CreateMetadata(jLocal), jLocal.IsProxy, globalRef.Pointer) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="weakRef">Weak global object reference.</param>
-	private protected JGlobalBase(ILocalObject jLocal, JWeakRef weakRef) : base(jLocal.IsProxy)
-	{
-		this.VirtualMachine = jLocal.VirtualMachine;
-		this._value = IMutableReference.Create(weakRef.Pointer);
-		this.ObjectMetadata = ILocalObject.CreateMetadata(jLocal);
-	}
+	private protected JGlobalBase(ILocalObject jLocal, JWeakRef weakRef) : this(
+		jLocal.VirtualMachine, ILocalObject.CreateMetadata(jLocal), jLocal.IsProxy, weakRef.Pointer) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -21,12 +24,7 @@ public partial class JGlobalBase
 	/// <param name="isProxy">Indicates whether the current instance is a dummy object.</param>
 	/// <param name="globalRef">Global reference.</param>
 	private protected JGlobalBase(IVirtualMachine vm, ObjectMetadata metadata, Boolean isProxy, JGlobalRef globalRef) :
-		base(isProxy)
-	{
-		this.VirtualMachine = vm;
-		this._value = IMutableReference.Create(globalRef.Pointer);
-		this.ObjectMetadata = metadata;
-	}
+		this(vm, metadata, isProxy, globalRef.Pointer) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -35,10 +33,5 @@ public partial class JGlobalBase
 	/// <param name="isProxy">Indicates whether the current instance is a dummy object.</param>
 	/// <param name="weakRef">Weak global reference.</param>
 	private protected JGlobalBase(IVirtualMachine vm, ObjectMetadata metadata, Boolean isProxy, JWeakRef weakRef) :
-		base(isProxy)
-	{
-		this.VirtualMachine = vm;
-		this._value = IMutableReference.Create(weakRef.Pointer);
-		this.ObjectMetadata = metadata;
-	}
+		this(vm, metadata, isProxy, weakRef.Pointer) { }
 }

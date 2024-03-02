@@ -25,7 +25,7 @@ partial class JEnvironment
 		/// <returns>The index of <paramref name="item"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
 		private Int32 IndexOfObject(JArrayObject jArray, JReferenceObject? item)
 		{
-			ValidationUtilities.ThrowIfDummy(item);
+			ValidationUtilities.ThrowIfProxy(item);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			JObjectLocalRef localRef = jniTransaction.Add(item);

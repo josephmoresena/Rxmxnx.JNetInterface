@@ -75,7 +75,7 @@ partial class JEnvironment
 		}
 		public Int32 GetArrayLength(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfProxy(jObject);
 			GetArrayLengthDelegate getArrayLength = this.GetDelegate<GetArrayLengthDelegate>();
 			Int32 result = getArrayLength(this.Reference, jObject.As<JArrayLocalRef>());
 			if (result <= 0) this.CheckJniError();
@@ -84,7 +84,7 @@ partial class JEnvironment
 		public TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
 			where TElement : IObject, IDataType<TElement>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
@@ -101,7 +101,7 @@ partial class JEnvironment
 		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
 			where TElement : IObject, IDataType<TElement>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
@@ -119,7 +119,7 @@ partial class JEnvironment
 		}
 		public void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
 		{
-			ValidationUtilities.ThrowIfDummy(value);
+			ValidationUtilities.ThrowIfProxy(value);
 			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);
@@ -130,7 +130,7 @@ partial class JEnvironment
 		public Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item)
 			where TElement : IObject, IDataType<TElement>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
 
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
@@ -143,7 +143,7 @@ partial class JEnvironment
 		public void CopyTo<TElement>(JArrayObject<TElement> jArray, TElement?[] array, Int32 arrayIndex)
 			where TElement : IObject, IDataType<TElement>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			ArgumentNullException.ThrowIfNull(array);
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(array.Length);
 
@@ -156,14 +156,14 @@ partial class JEnvironment
 		public INativeMemoryAdapter GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			ValidationUtilities.ThrowIfDefault(jArray);
 			return this.VirtualMachine.CreateMemoryAdapter(jArray, referenceKind, false);
 		}
 		public INativeMemoryAdapter GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			ValidationUtilities.ThrowIfDefault(jArray);
 			return this.VirtualMachine.CreateMemoryAdapter(jArray, referenceKind, true);
 		}
@@ -203,7 +203,7 @@ partial class JEnvironment
 		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			using IFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
 			this.GetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);
@@ -212,7 +212,7 @@ partial class JEnvironment
 		public void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements,
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			using IReadOnlyFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
 			this.SetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);

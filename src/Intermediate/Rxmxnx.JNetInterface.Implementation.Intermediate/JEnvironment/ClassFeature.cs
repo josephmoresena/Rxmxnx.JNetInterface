@@ -7,7 +7,7 @@ partial class JEnvironment
 		public JClassObject AsClassObject(JClassLocalRef classRef) => this.Register(this.GetClass(classRef, true));
 		public JClassObject AsClassObject(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfProxy(jObject);
 			if (jObject is JClassObject jClass) return jClass;
 			ValidationUtilities.ThrowIfDefault(jObject);
 			if (!jObject.InstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
@@ -21,7 +21,7 @@ partial class JEnvironment
 		public Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
 			where TDataType : JReferenceObject, IDataType<TDataType>
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfProxy(jObject);
 			JClassObject jClass = this.GetClass<TDataType>();
 			this.ReloadClass(jObject as JClassObject);
 			ValidationUtilities.ThrowIfDefault(jObject);
@@ -85,7 +85,7 @@ partial class JEnvironment
 		{
 			if (MetadataHelper.GetMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
 				return this.GetOrFindClass(metadata);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			ValidationUtilities.ThrowIfDefault(jClass);
@@ -104,8 +104,8 @@ partial class JEnvironment
 		{
 			Boolean? result = MetadataHelper.IsAssignableFrom(jClass, otherClass);
 			if (result.HasValue) return result.Value;
-			ValidationUtilities.ThrowIfDummy(jClass);
-			ValidationUtilities.ThrowIfDummy(otherClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
+			ValidationUtilities.ThrowIfProxy(otherClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
@@ -116,8 +116,8 @@ partial class JEnvironment
 		}
 		public Boolean IsInstanceOf(JReferenceObject jObject, JClassObject jClass)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jObject);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JObjectLocalRef localRef = jniTransaction.Add(jObject);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
@@ -144,7 +144,7 @@ partial class JEnvironment
 		}
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			if (classRef.IsDefault) throw new ArgumentException("Unloaded class.");

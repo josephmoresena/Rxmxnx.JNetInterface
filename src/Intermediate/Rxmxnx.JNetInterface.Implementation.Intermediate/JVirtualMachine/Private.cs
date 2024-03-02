@@ -40,7 +40,7 @@ public partial class JVirtualMachine
 	private IThread AttachThread(ThreadCreationArgs args)
 	{
 		CString threadName = args.Name ?? CString.Zero;
-		ValidationUtilities.ThrowIfDummy(args.ThreadGroup);
+		ValidationUtilities.ThrowIfProxy(args.ThreadGroup);
 		if (this.GetEnvironment() is { } env) return new JEnvironment.JThread(env);
 		return threadName.WithSafeFixed((this, args), JVirtualMachine.AttachThread);
 	}

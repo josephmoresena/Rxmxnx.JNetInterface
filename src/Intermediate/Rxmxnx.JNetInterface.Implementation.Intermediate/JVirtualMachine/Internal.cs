@@ -58,7 +58,6 @@ public partial class JVirtualMachine
 		ObjectLifetime lifetime = jClass.Lifetime;
 		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
 		{
-			CString className = jClass.Name;
 			ClassObjectMetadata metadata = new(jClass);
 			jGlobal = new(this, metadata, false, default);
 		}

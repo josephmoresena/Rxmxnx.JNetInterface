@@ -18,6 +18,20 @@ public partial class JGlobalBase
 	private Boolean _isDisposed;
 
 	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
+	/// <param name="metadata"><see cref="Native.ObjectMetadata"/> instance.</param>
+	/// <param name="isProxy">Indicates whether the current instance is a dummy object.</param>
+	/// <param name="value">Internal value.</param>
+	private JGlobalBase(IVirtualMachine vm, ObjectMetadata metadata, Boolean isProxy, IntPtr value) : base(isProxy)
+	{
+		this.VirtualMachine = vm;
+		this._value = IMutableReference.Create(value);
+		this.ObjectMetadata = metadata;
+	}
+
+	/// <summary>
 	/// Indicates whether JNI execution is secure.
 	/// </summary>
 	/// <returns>

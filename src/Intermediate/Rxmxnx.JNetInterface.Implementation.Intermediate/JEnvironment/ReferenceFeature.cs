@@ -6,7 +6,7 @@ partial class JEnvironment
 	{
 		public IDisposable GetSynchronizer(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfProxy(jObject);
 			ValidationUtilities.ThrowIfDefault(jObject);
 			return this.VirtualMachine.CreateSynchronized(this._env, jObject);
 		}
@@ -94,7 +94,7 @@ partial class JEnvironment
 				return (TGlobal)(Object)this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
 			}
 
-			ValidationUtilities.ThrowIfDummy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jLocal);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			if (this.LoadGlobal(jLocal as JClassObject) is TGlobal result) return result;
 			ObjectMetadata metadata = ILocalObject.CreateMetadata(jLocal);
@@ -106,8 +106,7 @@ partial class JEnvironment
 			else
 			{
 				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-				JGlobal jGlobal = this.VirtualMachine.Register(
-					new JGlobal(this.VirtualMachine, metadata, false, this.CreateGlobalRef(localRef)));
+				JGlobal jGlobal = this.VirtualMachine.Register(new JGlobal(jLocal, this.CreateGlobalRef(localRef)));
 				result = (TGlobal)(Object)jGlobal;
 			}
 			return result;
@@ -120,7 +119,7 @@ partial class JEnvironment
 		public Boolean Unload(JLocalObject? jLocal)
 		{
 			if (jLocal is null) return false;
-			ValidationUtilities.ThrowIfDummy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.InternalReference;
 			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
@@ -137,7 +136,7 @@ partial class JEnvironment
 		}
 		public Boolean Unload(JGlobalBase jGlobal)
 		{
-			ValidationUtilities.ThrowIfDummy(jGlobal);
+			ValidationUtilities.ThrowIfProxy(jGlobal);
 			if (jGlobal.IsDefault || this.IsMainGlobal(jGlobal as JGlobal)) return false;
 			try
 			{
