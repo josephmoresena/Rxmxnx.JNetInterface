@@ -49,6 +49,7 @@ public abstract partial class JReferenceObject : JObject
 	public IDisposable? Synchronize() => this.IsDefault ? default : this.GetSynchronizer();
 
 	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
 	public override Boolean Equals(Object? obj) => this.Equals(obj as JObject);
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other)
@@ -59,5 +60,6 @@ public abstract partial class JReferenceObject : JObject
 			_ => false,
 		};
 	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
 	public override Int32 GetHashCode() => this.As<JObjectLocalRef>().GetHashCode();
 }
