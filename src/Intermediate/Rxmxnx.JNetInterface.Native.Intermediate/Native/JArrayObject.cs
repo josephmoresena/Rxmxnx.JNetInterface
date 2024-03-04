@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSerializableObject>,
 	IInterfaceObject<JCloneableObject>
 {

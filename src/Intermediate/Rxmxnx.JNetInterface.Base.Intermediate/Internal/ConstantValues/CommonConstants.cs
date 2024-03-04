@@ -29,6 +29,8 @@ internal static class CommonConstants
 	public const String CheckIdS2743 =
 		"S2743:A static field in a generic type is not shared among instances of different close constructed types";
 	public const String CheckIdS1006 = "S1006:Use the default parameter value defined in the overridden method";
+	public const String CheckIdS1210 =
+		"S1210:\"Equals\" and the comparison operators should be overridden when implementing \"IComparable\"";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String AbstractProxyJustification = "This object is an abstract proxy.";
 	public const String JniThreadRequiredJustification = "Global object disposing requires a JNI thread.";
@@ -47,4 +49,5 @@ internal static class CommonConstants
 	public const String StaticAbstractPropertyUseJustification =
 		"There is no static field, but abstract/virtual property.";
 	public const String DefaultValueTypeJustification = "Default value for ValueType is not null.";
+	public const String NoStringComparisonOperatorsJustification = "System.String has no comparison operators.";
 }

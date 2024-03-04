@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Lang.Annotation;
 /// <summary>
 /// This class represents a local <c>java.lang.annotation.Annotation</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public sealed class JAnnotationObject : JInterfaceObject<JAnnotationObject>, IInterfaceType<JAnnotationObject>
 {
 	/// <summary>

@@ -78,7 +78,7 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JClassTypeMetadata"/> instance.</returns>
-	private JClassTypeMetadata GetClassMetadata(JClassObject jClass)
+	private static JClassTypeMetadata GetClassMetadata(JClassObject jClass)
 	{
 		switch (jClass.IsEnum)
 		{

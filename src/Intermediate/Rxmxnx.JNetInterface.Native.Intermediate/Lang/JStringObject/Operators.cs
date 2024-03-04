@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1210,
+                 Justification = CommonConstants.NoStringComparisonOperatorsJustification)]
 public partial class JStringObject : IEqualityOperators<JStringObject, JStringObject, Boolean>,
 	IEqualityOperators<JStringObject, String, Boolean>
 {

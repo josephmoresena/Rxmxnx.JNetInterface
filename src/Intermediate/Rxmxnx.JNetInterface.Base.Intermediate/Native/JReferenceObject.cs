@@ -49,6 +49,8 @@ public abstract partial class JReferenceObject : JObject
 	public IDisposable? Synchronize() => this.IsDefault ? default : this.GetSynchronizer();
 
 	/// <inheritdoc/>
+	public override Boolean Equals(Object? other) => this.Equals(other as JObject);
+	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other)
 		=> Object.ReferenceEquals(this, other) || other switch
 		{

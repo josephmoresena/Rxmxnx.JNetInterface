@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Io;
 /// <summary>
 /// This class represents a local <c>java.io.Serializable</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>, IInterfaceType<JSerializableObject>
 {
 	/// <summary>

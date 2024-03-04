@@ -58,7 +58,7 @@ partial class JEnvironment
 				UnicodeObjectSignatures.ArraySignaturePrefixChar => this._env.GetArrayTypeMetadata(
 					jClass.ClassSignature),
 				_ => !jClass.IsInterface ?
-					this._env.GetClassMetadata(jClass) :
+					JEnvironment.GetClassMetadata(jClass) :
 					this._env.GetInterfaceMetadata(jClass) ??
 					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>(),
 			};

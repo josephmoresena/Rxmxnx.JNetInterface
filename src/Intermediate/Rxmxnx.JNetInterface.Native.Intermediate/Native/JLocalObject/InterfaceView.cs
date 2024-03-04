@@ -7,6 +7,10 @@ public partial class JLocalObject
 	/// </summary>
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
+	                 Justification = CommonConstants.InternalInheritanceJustification)]
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
+	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	public abstract partial class InterfaceView : View<JLocalObject>, IInterfaceType
 	{
 		static JTypeKind IDataType.Kind => JTypeKind.Interface;

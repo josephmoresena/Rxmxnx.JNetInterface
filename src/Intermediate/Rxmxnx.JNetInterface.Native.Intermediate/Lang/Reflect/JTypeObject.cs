@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Lang.Reflect;
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Type</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public sealed class JTypeObject : JInterfaceObject<JTypeObject>, IInterfaceType<JTypeObject>
 {
 	/// <summary>
