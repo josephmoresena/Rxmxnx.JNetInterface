@@ -182,7 +182,7 @@ internal partial class NativeFunctionSetImpl
 		//Reference type array.
 		IEnvironment env = arrayClass.Environment;
 		JClassObject elementClass = env.ClassFeature.GetClass(arrayClass.ClassSignature.AsSpan()[(dimension + 1)..^1]);
-		return NativeFunctionSetImpl.GetClassModifiers(elementClass).HasFlag(JModifierObject.Modifier.Final);
+		return NativeFunctionSetImpl.GetClassModifiers(elementClass).HasFlag(JModifierObject.Modifiers.Final);
 	}
 	/// <summary>
 	/// Indicates whether a non-array class is final.
@@ -192,11 +192,11 @@ internal partial class NativeFunctionSetImpl
 	/// <see langword="true"/> if <paramref name="jClass"/> is final; otherwise;
 	/// <see langword="false"/>.
 	/// </returns>
-	private static JModifierObject.Modifier GetClassModifiers(JClassObject jClass)
+	private static JModifierObject.Modifiers GetClassModifiers(JClassObject jClass)
 	{
 		if (jClass.IsPrimitive) return JModifierObject.PrimitiveModifiers;
 		IEnvironment env = jClass.Environment;
-		JModifierObject.Modifier result = default;
+		JModifierObject.Modifiers result = default;
 		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jClass, jClass.Class,
 		                                        NativeFunctionSetImpl.getModifiersDefinition, false,
 		                                        Array.Empty<IObject>());

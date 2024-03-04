@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Types;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IClassType : IReferenceType, IDisposable
+public interface IClassType : IReferenceType
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Class;
 

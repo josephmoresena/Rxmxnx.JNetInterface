@@ -5,8 +5,6 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
-                 Justification = CommonConstants.JavaInheritanceJustification)]
 public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSerializableObject>,
 	IInterfaceObject<JCloneableObject>
 {
@@ -82,6 +80,8 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 /// This class represents a local array instance.
 /// </summary>
 /// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView
 	where TElement : IObject, IDataType<TElement>
 {

@@ -30,6 +30,24 @@ public partial class JLocalObject : ILocalObject
 	private static void Validate<TReferenceObject, TDataType>(TReferenceObject jObject, IEnvironment env)
 		where TReferenceObject : JReferenceObject where TDataType : JReferenceObject, IDataType<TDataType>
 		=> ValidationUtilities.ThrowIfInvalidCast<TDataType>(env.ClassFeature.IsAssignableTo<TDataType>(jObject));
+	/// <summary>
+	/// Retrieves a <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="dispose">
+	/// Optional. Indicates whether <paramref name="jLocal"/> should be disposed after casting.
+	/// </param>
+	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.</returns>
+	private TReference CastTo<TReference>(JLocalObject jLocal, Boolean dispose)
+		where TReference : JReferenceObject, IReferenceType<TReference>
+	{
+		if (jLocal is TReference result) return result;
+		JLocalObject.Validate<TReference>(jLocal);
+		result = TReference.Create(jLocal);
+		if (dispose && result is JLocalObject) this.Dispose();
+		return result;
+	}
 
 	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);

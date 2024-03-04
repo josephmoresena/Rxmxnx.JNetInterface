@@ -43,22 +43,16 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	~JLocalObject() { this.Dispose(false); }
 
 	/// <summary>
-	/// Retrieves a <typeparamref name="TReference"/> instance from current local instance.
+	/// Retrieves a <typeparamref name="TReference"/> instance from current instance.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="dispose">
 	/// Optional. Indicates whether current instance should be disposed after casting.
 	/// </param>
-	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
+	/// <returns>A <typeparamref name="TReference"/> instance from current instance.</returns>
 	public TReference CastTo<TReference>(Boolean dispose = false)
 		where TReference : JReferenceObject, IReferenceType<TReference>
-	{
-		if (this is TReference result) return result;
-		JLocalObject.Validate<TReference>(this);
-		result = TReference.Create(this);
-		if (dispose) this.Dispose();
-		return result;
-	}
+		=> this.CastTo<TReference>(this, dispose);
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
 	/// </summary>

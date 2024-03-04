@@ -106,7 +106,7 @@ public abstract class NativeFunctionSet
 	/// <see langword="true"/> if <paramref name="jClass"/> is final;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	public abstract Boolean IsFinal(JClassObject jClass, out JModifierObject.Modifier modifiers);
+	public abstract Boolean IsFinal(JClassObject jClass, out JModifierObject.Modifiers modifiers);
 	/// <summary>
 	/// Determines the interfaces implemented by the class or interface represented by this object.
 	/// </summary>

@@ -9,7 +9,7 @@ public class JModifierObject : JLocalObject, IClassType<JModifierObject>
 	/// Enum for <c>java.lang.reflect.Modifier</c> constants.
 	/// </summary>
 	[Flags]
-	public enum Modifier
+	public enum Modifiers
 	{
 		/// <summary>
 		/// <c>public</c> modifier.
@@ -76,7 +76,7 @@ public class JModifierObject : JLocalObject, IClassType<JModifierObject>
 	/// <summary>
 	/// Modifiers for any primitive type.
 	/// </summary>
-	public const Modifier PrimitiveModifiers = Modifier.Abstract | Modifier.Final | Modifier.Public;
+	public const Modifiers PrimitiveModifiers = Modifiers.Abstract | Modifiers.Final | Modifiers.Public;
 
 	/// <summary>
 	/// class metadata.

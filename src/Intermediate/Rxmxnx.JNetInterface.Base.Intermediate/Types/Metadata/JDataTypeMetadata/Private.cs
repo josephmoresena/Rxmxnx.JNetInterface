@@ -26,9 +26,10 @@ public partial record JDataTypeMetadata
 	private static CStringSequence CreateInformationSequence(ReadOnlyFixedMemoryList memoryList)
 	{
 		Boolean isArray = memoryList[0].Bytes[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar;
+		Int32 signatureAdditionalChars = isArray ? 0 : 2;
 		Int32 signatureLength = memoryList[1].Bytes.Length > 0 ?
 			memoryList[1].Bytes.Length :
-			memoryList[0].Bytes.Length + (isArray ? 0 : 2);
+			memoryList[0].Bytes.Length + signatureAdditionalChars;
 		Int32 arraySignatureLength = signatureLength + 1;
 		Int32?[] lengths =
 		[

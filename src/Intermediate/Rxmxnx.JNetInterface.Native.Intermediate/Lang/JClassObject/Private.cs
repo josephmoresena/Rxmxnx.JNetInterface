@@ -62,10 +62,10 @@ public partial class JClassObject
 	}
 	private Boolean IsFinalType()
 	{
-		Boolean result = this.Environment.FunctionSet.IsFinal(this, out JModifierObject.Modifier modifier);
-		this._isInterface = !result && modifier.HasFlag(JModifierObject.Modifier.Interface);
-		this._isEnum = result && modifier.HasFlag(JModifierObject.Modifier.Enum);
-		this._isAnnotation = this._isInterface.Value && modifier.HasFlag(JModifierObject.Modifier.Annotation);
+		Boolean result = this.Environment.FunctionSet.IsFinal(this, out JModifierObject.Modifiers modifier);
+		this._isInterface = !result && modifier.HasFlag(JModifierObject.Modifiers.Interface);
+		this._isEnum = result && modifier.HasFlag(JModifierObject.Modifiers.Enum);
+		this._isAnnotation = this._isInterface.Value && modifier.HasFlag(JModifierObject.Modifiers.Annotation);
 		return result;
 	}
 

@@ -100,7 +100,7 @@ public sealed class JClassObjectTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
 		Boolean isFinal = JClassObjectTests.fixture.Create<Boolean>();
-		JModifierObject.Modifier modifier = (JModifierObject.Modifier)Random.Shared.Next(1, 0x8000 - 1);
+		JModifierObject.Modifiers modifiers = (JModifierObject.Modifiers)Random.Shared.Next(1, 0x8000 - 1);
 		using JClassObject jClass = new(env);
 		using JClassObject jClassObj = new(jClass, classRef);
 
@@ -108,9 +108,9 @@ public sealed class JClassObjectTests
 		information.ClassName.Returns(className0);
 		information.Signature.Returns(signature0);
 		information.Hash.Returns(hash0);
-		env.FunctionSet.IsFinal(jClassObj, out Arg.Any<JModifierObject.Modifier>()).ReturnsForAnyArgs(c =>
+		env.FunctionSet.IsFinal(jClassObj, out Arg.Any<JModifierObject.Modifiers>()).ReturnsForAnyArgs(c =>
 		{
-			c[1] = modifier;
+			c[1] = modifiers;
 			return isFinal;
 		});
 
@@ -128,16 +128,16 @@ public sealed class JClassObjectTests
 		if (call < 1)
 			Assert.Equal(isFinal, jClassObj.IsFinal);
 		if (call < 2)
-			Assert.Equal(!isFinal && modifier.HasFlag(JModifierObject.Modifier.Interface), jClassObj.IsInterface);
+			Assert.Equal(!isFinal && modifiers.HasFlag(JModifierObject.Modifiers.Interface), jClassObj.IsInterface);
 		if (call < 3)
-			Assert.Equal(isFinal && modifier.HasFlag(JModifierObject.Modifier.Enum), jClassObj.IsEnum);
+			Assert.Equal(isFinal && modifiers.HasFlag(JModifierObject.Modifiers.Enum), jClassObj.IsEnum);
 		if (call < 4)
 			Assert.Equal(
-				!isFinal && modifier.HasFlag(JModifierObject.Modifier.Interface) &&
-				modifier.HasFlag(JModifierObject.Modifier.Annotation), jClassObj.IsAnnotation);
+				!isFinal && modifiers.HasFlag(JModifierObject.Modifiers.Interface) &&
+				modifiers.HasFlag(JModifierObject.Modifiers.Annotation), jClassObj.IsAnnotation);
 
 		env.ClassFeature.Received(1).GetClassInfo(jClassObj);
-		env.FunctionSet.Received(1).IsFinal(jClassObj, out Arg.Any<JModifierObject.Modifier>());
+		env.FunctionSet.Received(1).IsFinal(jClassObj, out Arg.Any<JModifierObject.Modifiers>());
 	}
 	[Theory]
 	[InlineData(true)]
