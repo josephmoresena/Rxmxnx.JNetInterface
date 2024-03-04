@@ -19,10 +19,6 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	/// </summary>
 	public abstract Type Type { get; }
 	/// <summary>
-	/// Kind of current type.
-	/// </summary>
-	public abstract JTypeKind Kind { get; }
-	/// <summary>
 	/// Modifier of current type.
 	/// </summary>
 	public abstract JTypeModifier Modifier { get; }
@@ -30,6 +26,10 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	/// Size of current type in bytes.
 	/// </summary>
 	public abstract Int32 SizeOf { get; }
+	/// <summary>
+	/// Kind of current type.
+	/// </summary>
+	public abstract JTypeKind Kind { get; }
 
 	/// <inheritdoc/>
 	public CString ClassName => this._className;

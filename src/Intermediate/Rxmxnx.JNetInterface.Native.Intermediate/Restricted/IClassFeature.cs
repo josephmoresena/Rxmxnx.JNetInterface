@@ -86,6 +86,6 @@ public partial interface IClassFeature
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
-	[return:NotNullIfNotNull(nameof(jClass))]
+	[return: NotNullIfNotNull(nameof(jClass))]
 	JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass);
 }
