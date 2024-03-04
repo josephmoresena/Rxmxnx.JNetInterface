@@ -5,6 +5,8 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// This record stores cache for a <see cref="JVirtualMachine"/> instance.
 	/// </summary>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
+	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	private sealed partial record VirtualMachineCache : GlobalMainClasses
 	{
 		/// <summary>
