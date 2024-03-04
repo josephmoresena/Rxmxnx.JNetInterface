@@ -16,7 +16,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	public override JStringObject GetName(JEnumObject jEnum)
 	{
 		IEnvironment env = jEnum.Environment;
-		JClassObject enumClass = env.ClassFeature.EnumClassObject;
+		JClassObject enumClass = env.ClassFeature.EnumObject;
 		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.nameDefinition, jEnum, enumClass)!;
 	}
 	/// <inheritdoc/>
@@ -30,7 +30,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	public override Int32 GetOrdinal(JEnumObject jEnum)
 	{
 		IEnvironment env = jEnum.Environment;
-		JClassObject enumClass = env.ClassFeature.EnumClassObject;
+		JClassObject enumClass = env.ClassFeature.EnumObject;
 		Span<Byte> bytes = stackalloc Byte[sizeof(Int32)];
 		env.AccessFeature.CallPrimitiveFunction(bytes, jEnum, enumClass, NativeFunctionSetImpl.ordinalDefinition, false,
 		                                        Array.Empty<IObject>());
@@ -75,7 +75,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 		IEnvironment env = jNumber.Environment;
-		JClassObject numberClass = env.ClassFeature.NumberClassObject;
+		JClassObject numberClass = env.ClassFeature.NumberObject;
 		JFunctionDefinition functionDefinition = metadata.NativeType switch
 		{
 			JNativeType.JByte => NativeFunctionSetImpl.byteValueDefinition,
@@ -133,7 +133,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jBuffer.Environment;
 		Span<Byte> bytes = stackalloc Byte[1];
-		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferClassObject,
+		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferObject,
 		                                        NativeFunctionSetImpl.isDirectBuffer, false, Array.Empty<IObject>());
 		return bytes[0] == JBoolean.TrueValue;
 	}
@@ -142,7 +142,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jBuffer.Environment;
 		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
-		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferClassObject,
+		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferObject,
 		                                        NativeFunctionSetImpl.bufferCapacity, false, Array.Empty<IObject>());
 		return bytes.AsValue<Int64>();
 	}

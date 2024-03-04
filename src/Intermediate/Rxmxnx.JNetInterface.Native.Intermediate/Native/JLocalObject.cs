@@ -53,17 +53,9 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	public TReference CastTo<TReference>(Boolean dispose = false)
 		where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		IEnvironment env = this.Environment;
 		if (this is TReference result) return result;
-		if (JLocalObject.IsClassType<TReference>())
-		{
-			result = (TReference)(Object)env.ClassFeature.AsClassObject(this);
-		}
-		else
-		{
-			JLocalObject.Validate<TReference>(this);
-			result = TReference.Create(this);
-		}
+		JLocalObject.Validate<TReference>(this);
+		result = TReference.Create(this);
 		if (dispose) this.Dispose();
 		return result;
 	}

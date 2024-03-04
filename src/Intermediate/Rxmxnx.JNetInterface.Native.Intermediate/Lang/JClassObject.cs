@@ -148,8 +148,6 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	public JClassObject? GetSuperClass()
 	{
 		IEnvironment env = this.Environment;
-		if (this.IsInterface || this.Name.AsSpan().SequenceEqual(UnicodeClassNames.Object)) return default;
-		if (this.IsEnum) return JClassObject.GetClass<JEnumObject>(env);
 		return env.ClassFeature.GetSuperClass(this);
 	}
 	/// <summary>

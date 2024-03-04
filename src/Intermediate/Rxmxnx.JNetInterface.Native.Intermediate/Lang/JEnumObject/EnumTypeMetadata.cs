@@ -39,6 +39,9 @@ public partial class JEnumObject
 			}
 
 			/// <inheritdoc/>
+			public override Boolean InstanceOf(JReferenceObject? jObject)
+				=> jObject is null || jObject is TEnum || jObject.InstanceOf<TEnum>();
+			/// <inheritdoc/>
 			public override String ToString()
 				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 

@@ -120,6 +120,7 @@ partial class JEnvironment
 		public void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
 		{
 			ValidationUtilities.ThrowIfProxy(value);
+			jArray.ValidateObjectElement(value);
 			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);

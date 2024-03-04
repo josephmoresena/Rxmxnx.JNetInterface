@@ -36,6 +36,14 @@ public partial class JLocalObject
 			internal Generic(JLocalObject jLocal, JClassObject? jClass) : base(jLocal, jClass) { }
 			/// <inheritdoc/>
 			internal Generic(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal) { }
+			/// <inheritdoc/>
+			internal override void ValidateObjectElement(JReferenceObject? jObject)
+			{
+				Boolean result = IDataType.GetMetadata<TElement>() is JReferenceTypeMetadata metadata ?
+					metadata.InstanceOf(jObject) :
+					jObject is TElement;
+				ValidationUtilities.ThrowIfInvalidCast<TElement>(result);
+			}
 
 			/// <inheritdoc/>
 			public override String ToString() => $"{this._stringValue ??= this.GetStringValue()} {this.Reference}";

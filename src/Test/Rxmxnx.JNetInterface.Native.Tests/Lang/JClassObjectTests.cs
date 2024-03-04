@@ -137,6 +137,7 @@ public sealed class JClassObjectTests
 				modifier.HasFlag(JModifierObject.Modifier.Annotation), jClassObj.IsAnnotation);
 
 		env.ClassFeature.Received(1).GetClassInfo(jClassObj);
+		env.FunctionSet.Received(1).IsFinal(jClassObj, out Arg.Any<JModifierObject.Modifier>());
 	}
 	[Theory]
 	[InlineData(true)]
@@ -209,6 +210,39 @@ public sealed class JClassObjectTests
 		env.ClassFeature.IsAssignableFrom(jClass1, jClass0).Returns(isAssignable);
 		Assert.Equal(isAssignable, jClass0.IsAssignableTo(jClass1));
 	}
+	[Fact]
+	internal void GetInterfacesTest()
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
+		JArrayLocalRef arrRef = JClassObjectTests.fixture.Create<JArrayLocalRef>();
+		using JClassObject jClassClass = new(env);
+		using JClassObject jClass = new(jClassClass, classRef);
+		using JClassObject jArrayClass = new(jClass, IArrayType.GetArrayMetadata<JArrayObject<JClassObject>>());
+
+		env.ClassFeature.GetClass<JArrayObject<JClassObject>>().Returns(jArrayClass);
+
+		using JArrayObject<JClassObject> interfaces = new(env, arrRef, 0);
+
+		env.FunctionSet.GetInterfaces(jClass).Returns(interfaces);
+		Assert.Equal(interfaces, jClass.GetInterfaces());
+		env.FunctionSet.Received(1).GetInterfaces(jClass);
+	}
+	[Fact]
+	internal void GetSuperClassTest()
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
+		JClassLocalRef superClassRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
+		using JClassObject jClassClass = new(env);
+		using JClassObject jClass = new(jClassClass, classRef);
+		using JClassObject jSuperClass = new(jClassClass, superClassRef);
+
+		env.ClassFeature.GetSuperClass(jClass).ReturnsForAnyArgs(jSuperClass);
+
+		Assert.Equal(jSuperClass, jClass.GetSuperClass());
+		env.ClassFeature.Received(1).GetSuperClass(jClass);
+	}
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
@@ -253,11 +287,15 @@ public sealed class JClassObjectTests
 		env.ClassFeature.AsClassObject(classRef).Returns(jClassResult);
 		env.ClassFeature.AsClassObject(jLocal).Returns(jClassResult);
 		env.ClassFeature.AsClassObject(Arg.Is<JGlobal>(g => jObject.Equals(g))).Returns(jClassResult);
+		env.ClassFeature.IsInstanceOf<JClassObject>(jLocal).Returns(true);
 
 		Assert.Equal(jClass, typeMetadata.ParseInstance(jClass, disposeParse));
 		Assert.Null(typeMetadata.ParseInstance(default));
 		Assert.Null(typeMetadata.ParseInstance(env, default));
 		Assert.Null(typeMetadata.CreateException(jGlobal));
+		Assert.True(typeMetadata.InstanceOf(default));
+		Assert.True(typeMetadata.InstanceOf(jClassResult));
+		Assert.True(typeMetadata.InstanceOf(jLocal));
 		Assert.Equal(jClassResult, typeMetadata.CreateInstance(jClass, classRef.Value, true));
 		Assert.Equal(jClassResult, typeMetadata.ParseInstance(jClassResult, disposeParse));
 		Assert.Equal(jClassResult, typeMetadata.ParseInstance(jLocal, disposeParse));
@@ -269,6 +307,7 @@ public sealed class JClassObjectTests
 		env.ClassFeature.Received(1).AsClassObject(jLocal);
 		env.ClassFeature.Received(1).AsClassObject(jGlobal);
 		env.ClassFeature.Received(0).IsAssignableTo<JClassObject>(Arg.Any<JReferenceObject>());
+		env.ClassFeature.Received(1).IsInstanceOf<JClassObject>(jLocal);
 
 		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
 		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
@@ -304,5 +343,15 @@ public sealed class JClassObjectTests
 
 		Assert.Equal(jClassResult, JClassObject.LoadClass(env, stringTypeMetadata.ClassName, rawByte));
 		Assert.Equal(jClassResult, JClassObject.LoadClass<JStringObject>(env, rawByte));
+	}
+	[Fact]
+	internal void GetArrayDimensionTest()
+	{
+		CString signature = new(() => "I"u8);
+		for (Int32 i = 0; i < 10; i++)
+		{
+			Assert.Equal(i, JClassObject.GetArrayDimension(signature));
+			signature = CString.Concat("["u8, signature);
+		}
 	}
 }

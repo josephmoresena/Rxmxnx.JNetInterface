@@ -25,6 +25,16 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	JFieldDefinition IReflectionMetadata.CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
 		=> this.CreateFieldDefinition(fieldName);
 
+	/// <summary>
+	/// Indicates whether <paramref name="jObject"/> is instance of current type.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jObject"/> is instance of current type;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public abstract Boolean InstanceOf(JReferenceObject? jObject);
+
 	/// <inheritdoc/>
 	public override String ToString()
 		=> $"{base.ToString()}{nameof(JReferenceTypeMetadata.Interfaces)} = {this.Interfaces}, ";

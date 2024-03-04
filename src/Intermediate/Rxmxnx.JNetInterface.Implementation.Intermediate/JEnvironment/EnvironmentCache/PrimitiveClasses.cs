@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	private sealed partial record EnvironmentCache
 	{
-		JClassObject IClassFeature.EnumClassObject => this.GetClass<JEnumObject>();
+		JClassObject IClassFeature.EnumObject => this.GetClass<JEnumObject>();
 		JClassObject IClassFeature.VoidObject => this.GetClass<JVoidObject>();
 		JClassObject IClassFeature.BooleanObject => this.GetClass<JBooleanObject>();
 		JClassObject IClassFeature.ByteObject => this.GetClass<JByteObject>();

@@ -34,7 +34,7 @@ public partial class JStringObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JStringObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.StringClassObject)
+	private JStringObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.StringObject)
 	{
 		if (jLocal is not JStringObject jString)
 			return;

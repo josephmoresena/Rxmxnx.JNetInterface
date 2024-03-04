@@ -31,6 +31,9 @@ public partial class JArrayObject<TElement>
 		                                   JArrayTypeMetadata.GetArrayDimension<TElement>()) { }
 
 		/// <inheritdoc/>
+		public override Boolean InstanceOf(JReferenceObject? jObject)
+			=> jObject is null || jObject is IArrayObject<TElement> || jObject.InstanceOf<JArrayObject<TElement>>();
+		/// <inheritdoc/>
 		public override String ToString()
 			=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 

@@ -42,6 +42,15 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 	/// <inheritdoc cref="JReferenceObject.As{TValue}()"/>
 	internal new ref readonly TValue As<TValue>() where TValue : unmanaged, IArrayReferenceType<TValue>
 		=> ref base.As<TValue>();
+	/// <summary>
+	/// Indicates whether <paramref name="jObject"/> is a valid element for current array instance.
+	/// </summary>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jObject"/> is a valid element for current array instance;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	internal abstract void ValidateObjectElement(JReferenceObject? jObject);
 
 	/// <summary>
 	/// Retrieves array element class name.

@@ -15,7 +15,9 @@ public sealed class JStringObjectTests
 	[InlineData(false)]
 	[InlineData(true, true)]
 	[InlineData(false, true)]
-	internal void ConstructorClassTest(Boolean isProxy, Boolean initText = false)
+	[InlineData(true, null)]
+	[InlineData(false, null)]
+	internal void ConstructorClassTest(Boolean isProxy, Boolean? initText = false)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JStringObject>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment(isProxy);
@@ -24,10 +26,13 @@ public sealed class JStringObjectTests
 		CString utf8Text = (CString)text;
 		using JClassObject jClass = new(env);
 		using JClassObject jStringClass = new(jClass, typeMetadata);
-		using JStringObject jString = new(jStringClass, stringRef, initText ? text : default);
+		using JStringObject jString = initText.HasValue ?
+			new(jStringClass, stringRef, initText.Value ? text : default) :
+			new(jStringClass, stringRef, utf8Text.Length);
 
 		JReferenceObject jObject = jString;
 
+		env.ClassFeature.GetClass<JStringObject>().Returns(jStringClass);
 		env.StringFeature.GetLength(Arg.Is<JStringObject>(ss => jObject.Equals(ss))).Returns(text.Length);
 		env.StringFeature.GetUtf8Length(Arg.Is<JStringObject>(ss => jObject.Equals(ss))).Returns(utf8Text.Length);
 		env.StringFeature
@@ -61,10 +66,41 @@ public sealed class JStringObjectTests
 		JStringObjectTests.EnumeratorTest(jString);
 		JStringObjectTests.EnumerableTest<JStringObject, String>(jString);
 
-		env.StringFeature.Received(1).GetUtf8Length(jString);
+		env.StringFeature.Received(initText.HasValue ? 1 : 0).GetUtf8Length(jString);
 		env.StringFeature.Received(1).GetCopyUtf8(jString, Arg.Any<Memory<Byte>>());
-		env.StringFeature.Received(initText ? 0 : 1).GetLength(jString);
-		env.StringFeature.Received(initText ? 0 : 1).GetCopy(jString, Arg.Any<IFixedMemory<Char>>());
+		env.StringFeature.Received(initText.GetValueOrDefault() ? 0 : 1).GetLength(jString);
+		env.StringFeature.Received(initText.GetValueOrDefault() ? 0 : 1)
+		   .GetCopy(jString, Arg.Any<IFixedMemory<Char>>());
+
+		using JStringObject jStringClone = JFakeObject<JStringObject>.Clone(jString);
+		Assert.Equal(jString, jStringClone);
+
+		env.ClassFeature.Received(1).GetClass<JStringObject>();
+	}
+	[Fact]
+	internal void ProcessMetadataTest()
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JStringLocalRef stringRef = JStringObjectTests.fixture.Create<JStringLocalRef>();
+		String value = JStringObjectTests.fixture.Create<String>();
+		CString utf8Value = (CString)value;
+		using JClassObject jClass = new(env);
+		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
+		using JStringObject jString = new(jStringClass, stringRef);
+		StringObjectMetadata stringMetadata = new(new(jStringClass))
+		{
+			Value = value, Length = value.Length, Utf8Length = utf8Value.Length,
+		};
+
+		ILocalObject.ProcessMetadata(jString, stringMetadata);
+
+		Assert.Equal(stringMetadata.ObjectClassName, jString.ObjectClassName);
+		Assert.Equal(stringMetadata.ObjectSignature, jString.ObjectSignature);
+		Assert.Equal(stringMetadata.Value, jString.Value);
+		Assert.Equal(stringMetadata.Length, jString.Length);
+		Assert.Equal(stringMetadata.Utf8Length, jString.Utf8Length);
+
+		Assert.Equal(stringMetadata.Value, jString.ToString());
 	}
 	[Theory]
 	[InlineData(true)]
@@ -121,6 +157,49 @@ public sealed class JStringObjectTests
 
 		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
 		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
+	}
+	[Fact]
+	internal void CreateTest()
+	{
+		String textValue = JStringObjectTests.fixture.Create<String>();
+		CString utf8Value = (CString)textValue;
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JStringLocalRef stringRef = JStringObjectTests.fixture.Create<JStringLocalRef>();
+		using JClassObject jClassClass = new(env);
+		using JClassObject jStringClass = new(jClassClass, IClassType.GetMetadata<JStringObject>());
+		using JStringObject jString = new(jStringClass, stringRef, textValue);
+
+		env.StringFeature.Create(textValue).Returns(jString);
+		env.StringFeature.Create(utf8Value).Returns(jString);
+
+		Assert.Null(JStringObject.Create(env, default(String)));
+		Assert.Equal(jString, JStringObject.Create(env, textValue));
+		Assert.Equal(jString, JStringObject.Create(env, textValue.AsSpan()));
+		Assert.Null(JStringObject.Create(env, default(CString)));
+		Assert.Equal(jString, JStringObject.Create(env, utf8Value));
+		Assert.Equal(jString, JStringObject.Create(env, utf8Value.AsSpan()));
+
+		env.StringFeature.Received(2).Create(textValue);
+		env.StringFeature.Received(2).Create(utf8Value);
+	}
+	[Fact]
+	public void OperatorsTest()
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		String value0 = JStringObjectTests.fixture.Create<String>();
+		String value1 = JStringObjectTests.fixture.Create<String>();
+		JStringLocalRef stringRef0 = JStringObjectTests.fixture.Create<JStringLocalRef>();
+		JStringLocalRef stringRef1 = JStringObjectTests.fixture.Create<JStringLocalRef>();
+
+		using JClassObject jClassClass = new(env);
+		using JClassObject jStringClass = new(jClassClass, IClassType.GetMetadata<JStringObject>());
+		using JStringObject jString0 = new(jStringClass, stringRef0, value0);
+		using JStringObject jString1 = new(jStringClass, stringRef1, value1);
+
+		Assert.Equal(value0 == value1, jString0 == value1);
+		Assert.Equal(value0 != value1, jString0 != value1);
+		Assert.Equal(value0 == value1, jString0 == jString1);
+		Assert.Equal(value0 != value1, jString0 != jString1);
 	}
 
 	private static void ObjectMetadataTest(JStringObject jString)
