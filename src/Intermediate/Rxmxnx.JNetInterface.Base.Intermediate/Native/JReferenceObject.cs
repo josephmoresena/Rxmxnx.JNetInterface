@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1206,
+                 Justification = CommonConstants.InternalInheritanceJustification)]
 public abstract partial class JReferenceObject : JObject
 {
 	/// <summary>

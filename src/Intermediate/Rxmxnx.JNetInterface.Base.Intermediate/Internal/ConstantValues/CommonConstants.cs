@@ -31,6 +31,7 @@ internal static class CommonConstants
 	public const String CheckIdS1006 = "S1006:Use the default parameter value defined in the overridden method";
 	public const String CheckIdS1210 =
 		"S1210:\"Equals\" and the comparison operators should be overridden when implementing \"IComparable\"";
+	public const String CheckIdS1206 = "S1206:\"Equals(Object)\" and \"GetHashCode()\" should be overridden in pairs";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String AbstractProxyJustification = "This object is an abstract proxy.";
 	public const String JniThreadRequiredJustification = "Global object disposing requires a JNI thread.";
