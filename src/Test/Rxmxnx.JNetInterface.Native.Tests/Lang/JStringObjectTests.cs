@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Rxmxnx.JNetInterface.Tests.Lang;
 
 [ExcludeFromCodeCoverage]
@@ -183,7 +185,7 @@ public sealed class JStringObjectTests
 		env.StringFeature.Received(2).Create(utf8Value);
 	}
 	[Fact]
-	public void OperatorsTest()
+	internal void OperatorsTest()
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		String value0 = JStringObjectTests.fixture.Create<String>();
@@ -200,6 +202,125 @@ public sealed class JStringObjectTests
 		Assert.Equal(value0 != value1, jString0 != value1);
 		Assert.Equal(value0 == value1, jString0 == jString1);
 		Assert.Equal(value0 != value1, jString0 != jString1);
+	}
+	[Fact]
+	internal void MemoryTest()
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JStringLocalRef stringRef = JStringObjectTests.fixture.Create<JStringLocalRef>();
+		String value = JStringObjectTests.fixture.Create<String>();
+		using JClassObject jClassClass = new(env);
+		using JClassObject jStringClass = new(jClassClass, IClassType.GetMetadata<JStringObject>());
+		using JStringObject jString = new(jStringClass, stringRef, value);
+
+		JStringObjectTests.GetNativeCharsTest(jString);
+		JStringObjectTests.GetCriticalCharsTest(jString);
+		JStringObjectTests.GetNativeUtf8CharsTest(jString);
+	}
+
+	private static void GetNativeCharsTest(JStringObject jString)
+	{
+		using IReadOnlyFixedMemory<Char>.IDisposable chars = jString.Value.AsMemory().GetFixedContext();
+		IReadOnlyFixedContext<Byte> binarySequenceMemory = chars.AsBinaryContext();
+		INativeMemoryAdapter sequenceMemory = Substitute.For<INativeMemoryAdapter>();
+		JReleaseMode releaseMode = JStringObjectTests.fixture.Create<JReleaseMode>();
+
+		sequenceMemory.GetReadOnlyContext(Arg.Any<JNativeMemory<Char>>()).Returns(binarySequenceMemory);
+		jString.Environment.StringFeature.GetSequence(jString, Arg.Any<JMemoryReferenceKind>()).Returns(sequenceMemory);
+
+		JNativeMemory<Char> sequence = jString.GetNativeChars();
+		try
+		{
+			IReadOnlyFixedContext<Char> charsContext = sequence.GetContext();
+
+			Assert.Equal(chars.Pointer, sequence.Pointer);
+			Assert.Equal(sequenceMemory.Copy, sequence.Copy);
+			Assert.Equal(sequenceMemory.Critical, sequenceMemory.Critical);
+			Assert.False(sequence.Disposed.Value);
+			Assert.True(chars.Values.SequenceEqual(sequence.Values));
+			Assert.Equal(binarySequenceMemory, sequence.GetBinaryContext());
+
+			Assert.Equal(chars.Pointer, charsContext.Pointer);
+			Assert.True(chars.Values.SequenceEqual(charsContext.Values));
+			Assert.Equal(chars.ValuePointer, charsContext.ValuePointer);
+
+			sequence.ReleaseMode = releaseMode;
+			Assert.Equal(releaseMode, sequence.ReleaseMode);
+		}
+		finally
+		{
+			sequence.Dispose();
+		}
+		sequenceMemory.Received(1).GetReadOnlyContext(sequence);
+		sequenceMemory.Received(1).Release(releaseMode);
+	}
+	private static void GetCriticalCharsTest(JStringObject jString)
+	{
+		using IReadOnlyFixedMemory<Char>.IDisposable chars = jString.Value.AsMemory().GetFixedContext();
+		IReadOnlyFixedContext<Byte> binarySequenceMemory = chars.AsBinaryContext();
+		INativeMemoryAdapter sequenceMemory = Substitute.For<INativeMemoryAdapter>();
+		JReleaseMode releaseMode = JStringObjectTests.fixture.Create<JReleaseMode>();
+
+		sequenceMemory.GetReadOnlyContext(Arg.Any<JNativeMemory<Char>>()).Returns(binarySequenceMemory);
+		jString.Environment.StringFeature.GetCriticalSequence(jString, Arg.Any<JMemoryReferenceKind>())
+		       .Returns(sequenceMemory);
+
+		JNativeMemory<Char> sequence = jString.GetCriticalChars();
+		try
+		{
+			IReadOnlyFixedContext<Char> charsContext = sequence.GetContext();
+
+			Assert.Equal(chars.Pointer, sequence.Pointer);
+			Assert.Equal(sequenceMemory.Copy, sequence.Copy);
+			Assert.Equal(sequenceMemory.Critical, sequenceMemory.Critical);
+			Assert.False(sequence.Disposed.Value);
+			Assert.True(chars.Values.SequenceEqual(sequence.Values));
+			Assert.Equal(binarySequenceMemory, sequence.GetBinaryContext());
+
+			Assert.Equal(chars.Pointer, charsContext.Pointer);
+			Assert.True(chars.Values.SequenceEqual(charsContext.Values));
+			Assert.Equal(chars.ValuePointer, charsContext.ValuePointer);
+
+			sequence.ReleaseMode = releaseMode;
+			Assert.Equal(releaseMode, sequence.ReleaseMode);
+		}
+		finally
+		{
+			sequence.Dispose();
+		}
+		sequenceMemory.Received(1).GetReadOnlyContext(sequence);
+		sequenceMemory.Received(1).Release(releaseMode);
+	}
+	private static void GetNativeUtf8CharsTest(JStringObject jString)
+	{
+		using IReadOnlyFixedMemory<Byte>.IDisposable utf8Chars =
+			Encoding.UTF8.GetBytes(jString.Value).AsMemory().GetFixedContext();
+		INativeMemoryAdapter sequenceMemory = Substitute.For<INativeMemoryAdapter>();
+		JReleaseMode releaseMode = JStringObjectTests.fixture.Create<JReleaseMode>();
+
+		sequenceMemory.GetReadOnlyContext(Arg.Any<JNativeMemory<Byte>>()).Returns(utf8Chars);
+		jString.Environment.StringFeature.GetUtf8Sequence(jString, Arg.Any<JMemoryReferenceKind>())
+		       .Returns(sequenceMemory);
+
+		JNativeMemory<Byte> utf8Dispose = jString.GetNativeUtf8Chars();
+		try
+		{
+			Assert.Equal(utf8Chars.Pointer, utf8Dispose.Pointer);
+			Assert.Equal(sequenceMemory.Copy, utf8Dispose.Copy);
+			Assert.Equal(sequenceMemory.Critical, sequenceMemory.Critical);
+			Assert.False(utf8Dispose.Disposed.Value);
+			Assert.True(utf8Chars.Values.SequenceEqual(utf8Dispose.Values));
+			Assert.Equal((IReadOnlyFixedContext<Byte>)utf8Chars, utf8Dispose.GetBinaryContext());
+
+			utf8Dispose.ReleaseMode = releaseMode;
+			Assert.Equal(releaseMode, utf8Dispose.ReleaseMode);
+		}
+		finally
+		{
+			utf8Dispose.Dispose();
+		}
+		sequenceMemory.Received(1).GetReadOnlyContext(utf8Dispose);
+		sequenceMemory.Received(1).Release(releaseMode);
 	}
 
 	private static void ObjectMetadataTest(JStringObject jString)
