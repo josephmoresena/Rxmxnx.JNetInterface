@@ -25,6 +25,12 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();
+
+	/// <summary>
+	/// Sets <see cref="proxy"/> instance as assignable to current type.
+	/// </summary>
+	/// <param name="proxy">A <see cref="JProxyObject"/> instance.</param>
+	internal abstract void SetAssignable(JProxyObject proxy);
 }
 
 /// <summary>
@@ -40,4 +46,11 @@ public abstract record JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetada
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();
+
+	/// <inheritdoc/>
+	internal override void SetAssignable(JProxyObject proxy)
+	{
+		IEnvironment env = proxy.Environment;
+		env.ClassFeature.SetAssignableTo<TInterface>(proxy, true);
+	}
 }
