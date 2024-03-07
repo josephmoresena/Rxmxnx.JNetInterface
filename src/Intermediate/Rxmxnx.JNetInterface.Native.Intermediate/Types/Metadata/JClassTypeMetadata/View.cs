@@ -23,7 +23,7 @@ public partial record JClassTypeMetadata<TClass>
 		private protected View(JClassTypeMetadata<TClass> metadata) : base(metadata) => this._metadata = metadata;
 
 		/// <inheritdoc/>
-		public override Boolean InstanceOf(JReferenceObject? jObject) => this._metadata.InstanceOf(jObject);
+		internal override Boolean IsInstance(JReferenceObject jObject) => this._metadata.IsInstance(jObject);
 		/// <inheritdoc/>
 		public override String ToString() => base.ToString();
 

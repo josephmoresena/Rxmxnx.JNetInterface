@@ -34,7 +34,7 @@ public abstract partial class JReferenceObject : JObject
 	}
 
 	/// <summary>
-	/// Indicates whether current instance is an instance of <typeparamref name="TDataType"/> type class.
+	/// Indicates whether current instance is an instance of <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <returns>

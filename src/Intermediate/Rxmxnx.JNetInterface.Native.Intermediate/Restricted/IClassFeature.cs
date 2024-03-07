@@ -20,18 +20,6 @@ public partial interface IClassFeature
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	JClassObject AsClassObject(JReferenceObject jObject);
 	/// <summary>
-	/// Determines whether <paramref name="jObject"/> can be safely cast to
-	/// <typeparamref name="TDataType"/> instance.
-	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <returns>
-	/// <see langword="true"/> if <paramref name="jObject"/> can be safely cast to
-	/// <typeparamref name="TDataType"/> instance; otherwise, <see langword="false"/>.
-	/// </returns>
-	Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
-		where TDataType : JReferenceObject, IDataType<TDataType>;
-	/// <summary>
 	/// Retrieves the java class for given type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>

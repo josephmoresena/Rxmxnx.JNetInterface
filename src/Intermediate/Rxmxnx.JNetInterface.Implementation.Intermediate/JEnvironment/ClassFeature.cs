@@ -18,18 +18,6 @@ partial class JEnvironment
 				result.Lifetime.Synchronize(local.Lifetime);
 			return result;
 		}
-		public Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
-			where TDataType : JReferenceObject, IDataType<TDataType>
-		{
-			ValidationUtilities.ThrowIfProxy(jObject);
-			JClassObject jClass = this.GetClass<TDataType>();
-			this.ReloadClass(jObject as JClassObject);
-			ValidationUtilities.ThrowIfDefault(jObject);
-			JClassObject objectClass = this.GetClass(jObject.ObjectClassName);
-			Boolean result = this.IsAssignableFrom(objectClass, jClass);
-			this.SetAssignableTo<TDataType>(jObject, result);
-			return result;
-		}
 		[return: NotNullIfNotNull(nameof(jClass))]
 		public JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass)
 		{
@@ -125,10 +113,7 @@ partial class JEnvironment
 		}
 		public Boolean IsInstanceOf<TDataType>(JReferenceObject jObject)
 			where TDataType : JReferenceObject, IDataType<TDataType>
-		{
-			Boolean result = this.IsInstanceOf(jObject, this.GetClass<TDataType>());
-			return result;
-		}
+			=> this.IsInstanceOf(jObject, this.GetClass<TDataType>());
 		public JClassObject LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 			JClassLoaderObject? jClassLoader = default)
 		{

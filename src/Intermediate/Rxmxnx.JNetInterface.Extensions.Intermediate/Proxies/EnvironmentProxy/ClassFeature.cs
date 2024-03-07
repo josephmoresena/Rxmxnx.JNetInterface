@@ -7,9 +7,6 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract JClassObject AsClassObject(JReferenceObject jObject);
 	/// <inheritdoc/>
-	public abstract Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
-		where TDataType : JReferenceObject, IDataType<TDataType>;
-	/// <inheritdoc/>
 	public abstract JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
 	/// <inheritdoc/>
 	public abstract JClassObject GetObjectClass(JLocalObject jLocal);

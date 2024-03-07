@@ -16,21 +16,6 @@ public partial class JLocalObject : ILocalObject
 	private static void ProcessMetadata(JLocalObject jLocal, ObjectMetadata instanceMetadata)
 		=> jLocal.ProcessMetadata(instanceMetadata);
 	/// <summary>
-	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
-	/// </summary>
-	/// <typeparam name="TReferenceObject"><see langword="JReferenceObject"/> type.</typeparam>
-	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
-	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <returns>
-	/// </returns>
-	/// <exception cref="InvalidCastException">
-	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
-	/// </exception>
-	private static void Validate<TReferenceObject, TDataType>(TReferenceObject jObject, IEnvironment env)
-		where TReferenceObject : JReferenceObject where TDataType : JReferenceObject, IDataType<TDataType>
-		=> ValidationUtilities.ThrowIfInvalidCast<TDataType>(env.ClassFeature.IsAssignableTo<TDataType>(jObject));
-	/// <summary>
 	/// Retrieves a <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>

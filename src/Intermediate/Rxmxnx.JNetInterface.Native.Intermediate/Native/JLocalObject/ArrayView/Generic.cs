@@ -40,7 +40,7 @@ public partial class JLocalObject
 			internal override void ValidateObjectElement(JReferenceObject? jObject)
 			{
 				Boolean result = IDataType.GetMetadata<TElement>() is JReferenceTypeMetadata metadata ?
-					metadata.InstanceOf(jObject) :
+					metadata.IsInstance(this.Environment, jObject) :
 					jObject is TElement;
 				ValidationUtilities.ThrowIfInvalidCast<TElement>(result);
 			}

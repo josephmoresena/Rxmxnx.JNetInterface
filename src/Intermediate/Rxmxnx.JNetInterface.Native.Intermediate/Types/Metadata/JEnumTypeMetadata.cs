@@ -39,4 +39,7 @@ public abstract record JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum 
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();
+
+	/// <inheritdoc/>
+	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TEnum;
 }

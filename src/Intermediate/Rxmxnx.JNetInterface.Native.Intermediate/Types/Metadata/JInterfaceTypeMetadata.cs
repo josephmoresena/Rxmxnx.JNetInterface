@@ -27,7 +27,7 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	public override String ToString() => base.ToString();
 
 	/// <summary>
-	/// Sets <see cref="proxy"/> instance as assignable to current type.
+	/// Sets <paramref name="proxy"/> instance as assignable to current type.
 	/// </summary>
 	/// <param name="proxy">A <see cref="JProxyObject"/> instance.</param>
 	internal abstract void SetAssignable(JProxyObject proxy);
@@ -46,6 +46,10 @@ public abstract record JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetada
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();
+
+	/// <inheritdoc/>
+	internal override Boolean IsInstance(JReferenceObject jObject)
+		=> jObject is IInterfaceObject<TInterface> || this.Interfaces.Any(i => i.IsInstance(jObject));
 
 	/// <inheritdoc/>
 	internal override void SetAssignable(JProxyObject proxy)

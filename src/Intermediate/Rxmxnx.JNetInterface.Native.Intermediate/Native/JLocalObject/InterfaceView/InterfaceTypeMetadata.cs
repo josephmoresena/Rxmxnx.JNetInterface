@@ -32,9 +32,6 @@ public partial class JLocalObject
 					=> this._interfaces = InterfaceSet.GetInterfaceInterfaces(builder.GetInterfaceSet());
 
 				/// <inheritdoc/>
-				public override Boolean InstanceOf(JReferenceObject? jObject)
-					=> jObject is null || jObject is IInterfaceObject<TInterface> || jObject.InstanceOf<TInterface>();
-				/// <inheritdoc/>
 				public override String ToString()
 					=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
@@ -59,7 +56,7 @@ public partial class JLocalObject
 				internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 				{
 					if (jGlobal is null) return default;
-					JLocalObject.Validate<TInterface>(jGlobal, env);
+					JLocalObject.Validate<TInterface>(jGlobal);
 					return new Proxy<TInterface>(
 						new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 				}

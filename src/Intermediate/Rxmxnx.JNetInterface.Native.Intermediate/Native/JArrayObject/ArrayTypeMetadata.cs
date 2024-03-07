@@ -31,8 +31,17 @@ public partial class JArrayObject<TElement>
 		                                   JArrayTypeMetadata.GetArrayDimension<TElement>()) { }
 
 		/// <inheritdoc/>
-		public override Boolean InstanceOf(JReferenceObject? jObject)
-			=> jObject is null || jObject is IArrayObject<TElement> || jObject.InstanceOf<JArrayObject<TElement>>();
+		internal override Boolean IsInstance(JReferenceObject jObject)
+		{
+			Boolean result = jObject is IArrayObject<TElement>;
+			if (!result && this.ElementMetadata.Kind != JTypeKind.Primitive && jObject is JArrayObject jArray)
+			{
+				JReferenceTypeMetadata elementMetadata = (JReferenceTypeMetadata)this.ElementMetadata;
+				if (jArray.TypeMetadata.ElementMetadata is JReferenceTypeMetadata otherElementMetadata)
+					return elementMetadata.TypeOf(otherElementMetadata);
+			}
+			return result;
+		}
 		/// <inheritdoc/>
 		public override String ToString()
 			=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
@@ -53,7 +62,7 @@ public partial class JArrayObject<TElement>
 		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 		{
 			if (jGlobal is null) return default;
-			JLocalObject.Validate<JArrayObject<TElement>>(jGlobal, env);
+			JLocalObject.Validate<JArrayObject<TElement>>(jGlobal);
 			return new Generic<TElement>(env, jGlobal);
 		}
 		/// <inheritdoc/>

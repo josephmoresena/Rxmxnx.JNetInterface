@@ -52,8 +52,6 @@ public partial class JLocalObject
 	/// <inheritdoc/>
 	internal override void ClearValue() => this.Lifetime.Dispose();
 	/// <inheritdoc/>
-	internal override Boolean IsAssignableTo<TDataType>() => this.Lifetime.IsAssignableTo<TDataType>(this);
-	/// <inheritdoc/>
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
 		=> this.Lifetime.SetAssignableTo<TDataType>(isAssignable);
 	/// <inheritdoc/>
@@ -65,12 +63,7 @@ public partial class JLocalObject
 	}
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	private protected override Boolean IsInstanceOf<TDataType>()
-	{
-		Boolean result = this.Environment.ClassFeature.IsInstanceOf<TDataType>(this);
-		this.Environment.ClassFeature.SetAssignableTo<TDataType>(this, result);
-		return result;
-	}
+	private protected override Boolean IsInstanceOf<TDataType>() => this.Lifetime.InstanceOf<TDataType>(this);
 	/// <inheritdoc/>
 	private protected override ReadOnlySpan<Byte> AsSpan() => this.Lifetime.Span;
 	/// <inheritdoc/>
@@ -113,33 +106,22 @@ public partial class JLocalObject
 	internal static JGlobalBase? GetGlobalObject(JLocalObject jLocal) => jLocal.Lifetime.GetGlobalObject();
 
 	/// <summary>
-	/// Throws an exception if the global instance cannot be cast to <typeparamref name="TDataType"/> instance.
+	/// Throws an exception if <paramref name="jObject"/> cannot be casted to
+	/// <typeparamref name="TDataType"/> instance.
 	/// </summary>
 	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
-	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <exception cref="InvalidCastException">
-	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
-	/// </exception>
-	internal static void Validate<TDataType>(JGlobalBase jGlobal, IEnvironment env)
-		where TDataType : JReferenceObject, IDataType<TDataType>
-		=> JLocalObject.Validate<JGlobalBase, TDataType>(jGlobal, env);
-	/// <summary>
-	/// Throws an exception if the local instance cannot be cast to <typeparamref name="TDataType"/> instance.
-	/// </summary>
-	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
-	///     <paramref name="jLocal"/>
+	///     <paramref name="jObject"/>
 	/// </returns>
 	/// <exception cref="InvalidCastException">
-	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
+	/// Throws an exception if the instance cannot be casted to <typeparamref name="TDataType"/> instance.
 	/// </exception>
-	internal static void Validate<TDataType>(JLocalObject jLocal)
+	internal static void Validate<TDataType>(JReferenceObject jObject)
 		where TDataType : JReferenceObject, IDataType<TDataType>
 	{
-		if (jLocal.ObjectClassName.AsSpan().SequenceEqual(IDataType.GetMetadata<TDataType>().ClassName)) return;
-		if (jLocal is not TDataType)
-			JLocalObject.Validate<JLocalObject, TDataType>(jLocal, jLocal.Lifetime.Environment);
+		if (jObject.ObjectClassName.AsSpan().SequenceEqual(IDataType.GetMetadata<TDataType>().ClassName)) return;
+		if (jObject is not TDataType)
+			ValidationUtilities.ThrowIfInvalidCast<TDataType>(jObject.InstanceOf<TDataType>());
 	}
 }

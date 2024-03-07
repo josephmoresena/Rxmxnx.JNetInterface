@@ -25,8 +25,6 @@ public abstract partial class ClassFeatureProxy : IClassFeature
 
 	public abstract JClassObject AsClassObject(JClassLocalRef classRef);
 	public abstract JClassObject AsClassObject(JReferenceObject jObject);
-	public abstract Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
-		where TDataType : JReferenceObject, IDataType<TDataType>;
 	public abstract JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
 	public abstract JClassObject GetObjectClass(JLocalObject jLocal);
 	public abstract JClassObject? GetSuperClass(JClassObject jClass);

@@ -46,6 +46,9 @@ public abstract partial record JClassTypeMetadata<TClass> : JClassTypeMetadata
 	public override String ToString() => base.ToString();
 
 	/// <inheritdoc/>
+	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TClass;
+
+	/// <inheritdoc/>
 	internal override JFunctionDefinition<TClass> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
 		JArgumentMetadata[] metadata)
 		=> JFunctionDefinition<TClass>.Create(functionName, metadata);

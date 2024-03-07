@@ -27,8 +27,6 @@ public partial class JReferenceObject
 		/// <inheritdoc/>
 		internal override void ClearValue() => this.GetObject().ClearValue();
 		/// <inheritdoc/>
-		internal override Boolean IsAssignableTo<TDataType>() => this.GetObject().IsAssignableTo<TDataType>();
-		/// <inheritdoc/>
 		internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
 			=> this.GetObject().SetAssignableTo<TDataType>(isAssignable);
 		/// <inheritdoc/>

@@ -26,6 +26,31 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 		=> this.CreateFieldDefinition(fieldName);
 
 	/// <summary>
+	/// Indicates whether <paramref name="jObject"/> is an instance of current type.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jObject"/> is an instance of current type;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public Boolean IsInstance(IEnvironment env, JReferenceObject? jObject)
+		=> jObject is null || this.IsInstance(jObject) ||
+			env.ClassFeature.IsInstanceOf(jObject, env.ClassFeature.GetClass(this.Hash));
+
+	/// <summary>
+	/// Indicates whether an instance of current type is instance of the type of
+	/// <paramref name="otherMetadata"/>.
+	/// </summary>
+	/// <param name="otherMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if an instance of current type is instance of
+	/// the type of <paramref name="otherMetadata"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	public virtual Boolean TypeOf(JReferenceTypeMetadata otherMetadata)
+		=> JReferenceTypeMetadata.TypeOf(this, otherMetadata);
+
+	/// <summary>
 	/// Indicates whether <paramref name="jObject"/> is instance of current type.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
@@ -33,7 +58,7 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	/// <see langword="true"/> if <paramref name="jObject"/> is instance of current type;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	public abstract Boolean InstanceOf(JReferenceObject? jObject);
+	internal abstract Boolean IsInstance(JReferenceObject jObject);
 
 	/// <inheritdoc/>
 	public override String ToString()
@@ -55,4 +80,27 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	/// <param name="metadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
 	public static JArrayTypeMetadata? GetArrayMetadata(JReferenceTypeMetadata metadata) => metadata.GetArrayMetadata();
+
+	/// <summary>
+	/// Indicates whether an instance of type <paramref name="metadata"/> is instance of
+	/// the type of <paramref name="otherMetadata"/>.
+	/// </summary>
+	/// <param name="metadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <param name="otherMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if an instance of type <paramref name="metadata"/> is instance of
+	/// the type of <paramref name="otherMetadata"/>; otherwise, <see langword="false"/>.
+	/// </returns>
+	private static Boolean TypeOf(JReferenceTypeMetadata metadata, JReferenceTypeMetadata otherMetadata)
+	{
+		if (otherMetadata is JInterfaceTypeMetadata interfaceMetadata)
+			return metadata.Interfaces.Contains(interfaceMetadata);
+		while (metadata.BaseMetadata is not null)
+		{
+			if (otherMetadata.Equals(metadata.BaseMetadata))
+				return true;
+			metadata = metadata.BaseMetadata;
+		}
+		return false;
+	}
 }

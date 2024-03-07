@@ -218,14 +218,13 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <see langword="true"/> if local instance is assignable to <typeparamref name="TDataType"/> type;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	public Boolean IsAssignableTo<TDataType>(JLocalObject jLocal)
-		where TDataType : JReferenceObject, IDataType<TDataType>
+	public Boolean InstanceOf<TDataType>(JLocalObject jLocal) where TDataType : JReferenceObject, IDataType<TDataType>
 	{
 		if (JGlobalBase.IsValid(this._global, this._env))
-			return this._global.IsAssignableTo<TDataType>();
+			return this._global.InstanceOf<TDataType>();
 		if (JGlobalBase.IsValid(this._weak, this._env))
-			return this._weak.IsAssignableTo<TDataType>();
-		return this.IsAssignableTo<TDataType>() ?? this._env.ClassFeature.IsAssignableTo<TDataType>(jLocal);
+			return this._weak.InstanceOf<TDataType>();
+		return this.InstanceOf<TDataType>() ?? this._env.ClassFeature.IsInstanceOf<TDataType>(jLocal);
 	}
 
 	/// <summary>

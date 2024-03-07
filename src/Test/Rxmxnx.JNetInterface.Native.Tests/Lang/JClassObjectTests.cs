@@ -293,9 +293,13 @@ public sealed class JClassObjectTests
 		Assert.Null(typeMetadata.ParseInstance(default));
 		Assert.Null(typeMetadata.ParseInstance(env, default));
 		Assert.Null(typeMetadata.CreateException(jGlobal));
-		Assert.True(typeMetadata.InstanceOf(default));
-		Assert.True(typeMetadata.InstanceOf(jClassResult));
-		Assert.True(typeMetadata.InstanceOf(jLocal));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JLocalObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JSerializableObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JAnnotatedElementObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JGenericDeclarationObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JTypeObject>()));
+		Assert.True(typeMetadata.IsInstance(jClassResult));
+		Assert.True(typeMetadata.IsInstance(jLocal));
 		Assert.Equal(jClassResult, typeMetadata.CreateInstance(jClass, classRef.Value, true));
 		Assert.Equal(jClassResult, typeMetadata.ParseInstance(jClassResult, disposeParse));
 		Assert.Equal(jClassResult, typeMetadata.ParseInstance(jLocal, disposeParse));
@@ -306,7 +310,6 @@ public sealed class JClassObjectTests
 		env.ClassFeature.Received(1).AsClassObject(classRef);
 		env.ClassFeature.Received(1).AsClassObject(jLocal);
 		env.ClassFeature.Received(1).AsClassObject(jGlobal);
-		env.ClassFeature.Received(0).IsAssignableTo<JClassObject>(Arg.Any<JReferenceObject>());
 		env.ClassFeature.Received(1).IsInstanceOf<JClassObject>(jLocal);
 
 		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();

@@ -51,7 +51,7 @@ public partial class JLocalObject
 			}
 
 			/// <inheritdoc/>
-			public override Boolean InstanceOf(JReferenceObject? jObject)
+			internal override Boolean IsInstance(JReferenceObject? jObject)
 				=> jObject is null || jObject is TClass || jObject.InstanceOf<TClass>();
 			/// <inheritdoc/>
 			public override String ToString()
@@ -71,8 +71,7 @@ public partial class JLocalObject
 			internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			{
 				if (jGlobal is null) return default;
-				if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))
-					JLocalObject.Validate<TClass>(jGlobal, env);
+				JLocalObject.Validate<TClass>(jGlobal);
 				return TClass.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
 		}

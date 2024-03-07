@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace Rxmxnx.JNetInterface.Tests.Lang;
 
 [ExcludeFromCodeCoverage]
@@ -146,6 +144,10 @@ public sealed class JStringObjectTests
 		env.ClassFeature.GetClass<JStringObject>().Returns(jStringClass);
 		env.ReferenceFeature.Received(1).GetLifetime(jLocal, stringRef.Value, jStringClass, false);
 
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JLocalObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JSerializableObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JCharSequenceObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JComparableObject>()));
 		Assert.Null(typeMetadata.ParseInstance(default));
 		Assert.Null(typeMetadata.ParseInstance(env, default));
 		Assert.Null(typeMetadata.CreateException(jGlobal));
@@ -155,7 +157,7 @@ public sealed class JStringObjectTests
 		using JStringObject jString1 = Assert.IsType<JStringObject>(typeMetadata.ParseInstance(jLocal, disposeParse));
 		using JStringObject jString2 = Assert.IsType<JStringObject>(typeMetadata.ParseInstance(env, jGlobal));
 
-		env.ClassFeature.Received(0).IsAssignableTo<JStringObject>(Arg.Any<JReferenceObject>());
+		env.ClassFeature.Received(0).IsInstanceOf<JStringObject>(Arg.Any<JReferenceObject>());
 
 		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
 		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());

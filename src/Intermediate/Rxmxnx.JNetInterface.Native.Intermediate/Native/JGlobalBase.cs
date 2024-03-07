@@ -79,40 +79,6 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 		return env.ClassFeature.IsInstanceOf(this, jClass);
 	}
 
-	/// <inheritdoc/>
-	private protected override Boolean IsInstanceOf<TDataType>()
-	{
-		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
-		Boolean result = thread.ClassFeature.IsInstanceOf<TDataType>(this);
-		thread.ClassFeature.SetAssignableTo<TDataType>(this, result);
-		return result;
-	}
-
-	/// <inheritdoc cref="IDisposable.Dispose()"/>
-	/// <param name="disposing">
-	/// Indicates whether this method was called from the <see cref="IDisposable.Dispose"/> method.
-	/// </param>
-	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	private protected virtual void Dispose(Boolean disposing, IEnvironment env)
-	{
-		if (this._isDisposed) return;
-
-		if (disposing && !this.IsDisposable)
-		{
-			ImmutableArray<Int64> keys = this._objects.Keys.ToImmutableArray();
-			foreach (Int64 key in keys)
-			{
-				if (this._objects.TryRemove(key, out WeakReference<ObjectLifetime>? wObj) &&
-				    wObj.TryGetTarget(out ObjectLifetime? objectLifetime))
-					objectLifetime.UnloadGlobal(this);
-			}
-		}
-
-		if (!env.ReferenceFeature.Unload(this)) return;
-		this.ClearValue();
-		this._isDisposed = true;
-	}
-
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>

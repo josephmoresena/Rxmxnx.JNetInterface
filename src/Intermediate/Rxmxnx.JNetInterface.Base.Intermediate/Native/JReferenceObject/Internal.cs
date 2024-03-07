@@ -62,15 +62,6 @@ public partial class JReferenceObject
 			this.AsSpan().SequenceEqual(jObject.AsSpan());
 
 	/// <summary>
-	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
-	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <returns>
-	/// <see langword="true"/> if current instance is assignable to <typeparamref name="TDataType"/> type;
-	/// otherwise, <see langword="false"/>.
-	/// </returns>
-	internal abstract Boolean IsAssignableTo<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>;
-	/// <summary>
 	/// Sets current instance as assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>

@@ -39,9 +39,6 @@ public partial class JEnumObject
 			}
 
 			/// <inheritdoc/>
-			public override Boolean InstanceOf(JReferenceObject? jObject)
-				=> jObject is null || jObject is TEnum || jObject.InstanceOf<TEnum>();
-			/// <inheritdoc/>
 			public override String ToString()
 				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
@@ -56,8 +53,7 @@ public partial class JEnumObject
 			internal override JEnumObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			{
 				if (jGlobal is null) return default;
-				if (!jGlobal.ObjectMetadata.ObjectClassName.AsSpan().SequenceEqual(this.ClassName))
-					JLocalObject.Validate<TEnum>(jGlobal, env);
+				JLocalObject.Validate<TEnum>(jGlobal);
 				return IEnumType<TEnum>.Create(env, jGlobal);
 			}
 			/// <inheritdoc/>
