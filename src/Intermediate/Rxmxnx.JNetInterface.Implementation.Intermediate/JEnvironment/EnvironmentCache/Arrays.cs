@@ -178,7 +178,7 @@ partial class JEnvironment
 					return getShortArrayElements(this.Reference, JShortArrayLocalRef.FromReference(in arrayRef),
 					                             out isCopy);
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
 			}
 		}
 		private void ReleasePrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, IntPtr pointer,
@@ -235,7 +235,7 @@ partial class JEnvironment
 					                          (ReadOnlyValPtr<Int16>)pointer, mode);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
 			}
 		}
 		/// <summary>
@@ -300,7 +300,7 @@ partial class JEnvironment
 					                    (ValPtr<Int16>)fixedBuffer.Pointer);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
 			}
 		}
 		/// <summary>
@@ -369,7 +369,7 @@ partial class JEnvironment
 					                    (ReadOnlyValPtr<Int16>)fixedBuffer.Pointer);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
 			}
 		}
 		/// <summary>

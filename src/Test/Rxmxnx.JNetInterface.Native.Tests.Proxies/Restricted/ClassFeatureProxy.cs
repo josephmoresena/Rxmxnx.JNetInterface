@@ -33,8 +33,6 @@ public abstract partial class ClassFeatureProxy : IClassFeature
 	public abstract Boolean IsInstanceOf<TDataType>(JReferenceObject jObject)
 		where TDataType : JReferenceObject, IDataType<TDataType>;
 	public abstract JClassObject GetClass(String classHash);
-	public abstract void SetAssignableTo<TDataType>(JReferenceObject jObject, Boolean isAssignable)
-		where TDataType : JReferenceObject, IDataType<TDataType>;
 	public abstract JReferenceTypeMetadata GetTypeMetadata(JClassObject? jClass);
 	public abstract ITypeInformation GetClassInfo(JClassObject jClass);
 	public abstract JClassObject GetClass(CString className);

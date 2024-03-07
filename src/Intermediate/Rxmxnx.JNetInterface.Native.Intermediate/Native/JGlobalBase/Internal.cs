@@ -29,35 +29,9 @@ public partial class JGlobalBase
 	{
 		Boolean? result = this.AssignationCache.IsAssignableTo<TDataType>();
 		if (result.HasValue) return result.Value;
-
-		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
-		result = thread.ClassFeature.IsInstanceOf<TDataType>(this);
-		thread.ClassFeature.SetAssignableTo<TDataType>(this, result.Value);
-		return result.Value;
-	}
-	/// <inheritdoc cref="IDisposable.Dispose()"/>
-	/// <param name="disposing">
-	/// Indicates whether this method was called from the <see cref="IDisposable.Dispose"/> method.
-	/// </param>
-	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	private protected virtual void Dispose(Boolean disposing, IEnvironment env)
-	{
-		if (this._isDisposed) return;
-
-		if (disposing && !this.IsDisposable)
-		{
-			ImmutableArray<Int64> keys = this._objects.Keys.ToImmutableArray();
-			foreach (Int64 key in keys)
-			{
-				if (this._objects.TryRemove(key, out WeakReference<ObjectLifetime>? wObj) &&
-				    wObj.TryGetTarget(out ObjectLifetime? objectLifetime))
-					objectLifetime.UnloadGlobal(this);
-			}
-		}
-
-		if (!env.ReferenceFeature.Unload(this)) return;
-		this.ClearValue();
-		this._isDisposed = true;
+		return this.JniSecure() ?
+			JGlobalBase.IsInstanceOf<TDataType>(this) :
+			Task.Factory.StartNew(JGlobalBase.IsInstanceOf<TDataType>, this).Result;
 	}
 	/// <inheritdoc/>
 	private protected override ReadOnlySpan<Byte> AsSpan() => this._value.Reference.AsBytes();
@@ -82,8 +56,7 @@ public partial class JGlobalBase
 
 	/// <inheritdoc cref="JReferenceObject.IsInstanceOf{TDataType}"/>
 	/// <param name="obj">A <see cref="JGlobalBase"/> instance.</param>
-	private static Boolean IsAssignableTo<TDataType>(Object? obj)
-		where TDataType : JReferenceObject, IDataType<TDataType>
+	private static Boolean IsInstanceOf<TDataType>(Object? obj) where TDataType : JReferenceObject, IDataType<TDataType>
 	{
 		if (obj is not JGlobalBase jGlobal) return false;
 		using IThread thread = jGlobal.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);

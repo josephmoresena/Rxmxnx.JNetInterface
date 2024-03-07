@@ -52,9 +52,5 @@ public abstract record JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetada
 		=> jObject is IInterfaceObject<TInterface> || this.Interfaces.Any(i => i.IsInstance(jObject));
 
 	/// <inheritdoc/>
-	internal override void SetAssignable(JProxyObject proxy)
-	{
-		IEnvironment env = proxy.Environment;
-		env.ClassFeature.SetAssignableTo<TInterface>(proxy, true);
-	}
+	internal override void SetAssignable(JProxyObject proxy) => proxy.SetAssignableTo<TInterface>(true);
 }

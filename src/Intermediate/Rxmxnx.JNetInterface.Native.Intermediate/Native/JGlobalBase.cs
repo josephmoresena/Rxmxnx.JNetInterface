@@ -27,7 +27,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	public void Dispose()
 	{
 		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.RemoveGlobalReference);
-		this.Unload(thread);
+		this.Dispose(true, thread);
 		GC.SuppressFinalize(this);
 	}
 

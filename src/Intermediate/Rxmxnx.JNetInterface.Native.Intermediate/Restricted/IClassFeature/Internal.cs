@@ -40,14 +40,4 @@ public partial interface IClassFeature
 	/// <param name="signature">Output. Class signature.</param>
 	/// <param name="hash">Output. Class hash.</param>
 	internal void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash);
-	/// <summary>
-	/// Sets <paramref name="jObject"/> as assignable to <typeparamref name="TDataType"/> type.
-	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="isAssignable">
-	/// Indicates whether <paramref name="jObject"/> is assignable to <typeparamref name="TDataType"/> type.
-	/// </param>
-	internal void SetAssignableTo<TDataType>(JReferenceObject jObject, Boolean isAssignable)
-		where TDataType : JReferenceObject, IDataType<TDataType>;
 }
