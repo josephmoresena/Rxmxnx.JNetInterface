@@ -50,7 +50,7 @@ partial class JEnvironment
 			{
 				3 => className[0] == 0x69 /*i*/ ?
 					this.IntPrimitive :
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveType),
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 				4 => className[0] switch
 				{
 					0x62 //b
@@ -59,7 +59,7 @@ partial class JEnvironment
 						=> this.CharPrimitive,
 					0x6C //l
 						=> this.LongPrimitive,
-					_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveType),
+					_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 				},
 				5 => className[0] switch
 				{
@@ -67,15 +67,15 @@ partial class JEnvironment
 						=> this.FloatPrimitive,
 					0x73 //l
 						=> this.ShortPrimitive,
-					_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveType),
+					_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 				},
 				6 => className[0] == 0x64 /*d*/ ?
 					this.DoublePrimitive :
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveType),
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 				7 => className[0] == 0x62 /*b*/ ?
 					this.BooleanPrimitive :
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveType),
-				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveType),
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 			};
 	}
 }

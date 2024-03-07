@@ -40,7 +40,7 @@ internal static class InternalExtensions
 		else if (definition.Return == typeof(Int16))
 			bytes.AsValue<JShort>() =
 				JFunctionDefinition<JShort>.Invoke(new(definition), jLocal, jClass, nonVirtual, args);
-		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinition);
+		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
 	}
 	/// <summary>
 	/// Invokes current function as static typed primitive function.
@@ -68,7 +68,7 @@ internal static class InternalExtensions
 			bytes.AsValue<JLong>() = JFunctionDefinition<JLong>.StaticInvoke(new(definition), jClass, args);
 		else if (definition.Return == typeof(Int16))
 			bytes.AsValue<JShort>() = JFunctionDefinition<JShort>.StaticInvoke(new(definition), jClass, args);
-		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinition);
+		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
 	}
 	/// <summary>
 	/// Retrieves current field as typed primitive field.
@@ -96,7 +96,7 @@ internal static class InternalExtensions
 			bytes.AsValue<JLong>() = new JFieldDefinition<JLong>(definition).Get(jLocal, jClass);
 		else if (definition.Return == typeof(Int16))
 			bytes.AsValue<JShort>() = new JFieldDefinition<JShort>(definition).Get(jLocal, jClass);
-		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinition);
+		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
 	}
 	/// <summary>
 	/// Retrieves current static field as typed primitive field.
@@ -122,7 +122,7 @@ internal static class InternalExtensions
 			bytes.AsValue<JLong>() = new JFieldDefinition<JLong>(definition).StaticGet(jClass);
 		else if (definition.Return == typeof(Int16))
 			bytes.AsValue<JShort>() = new JFieldDefinition<JShort>(definition).StaticGet(jClass);
-		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinition);
+		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
 	}
 	/// <summary>
 	/// Sets current field value as typed primitive field.
@@ -150,7 +150,7 @@ internal static class InternalExtensions
 			new JFieldDefinition<JLong>(definition).Set(jLocal, bytes.AsValue<JLong>(), jClass);
 		else if (definition.Return == typeof(Int16))
 			new JFieldDefinition<JShort>(definition).Set(jLocal, bytes.AsValue<JShort>(), jClass);
-		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinition);
+		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
 	}
 	/// <summary>
 	/// Sets current static field value as typed primitive field.
@@ -177,7 +177,7 @@ internal static class InternalExtensions
 			new JFieldDefinition<JLong>(definition).StaticSet(jClass, bytes.AsValue<JLong>());
 		else if (definition.Return == typeof(Int16))
 			new JFieldDefinition<JShort>(definition).StaticSet(jClass, bytes.AsValue<JShort>());
-		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinition);
+		throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
 	}
 	/// <summary>
 	/// Normalize argument array to standard form.

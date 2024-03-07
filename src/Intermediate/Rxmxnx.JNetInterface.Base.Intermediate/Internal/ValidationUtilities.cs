@@ -120,7 +120,7 @@ internal static class ValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidSignature(ReadOnlySpan<Byte> signature, Boolean allowPrimitive)
 	{
-		if (signature.IsEmpty) throw new ArgumentException("Invalid signature.");
+		if (signature.IsEmpty) throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 
 		if (signature.Length == 1)
 		{
@@ -141,14 +141,14 @@ internal static class ValidationUtilities
 					ValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[1]);
 					break;
 				case <= 3:
-					throw new ArgumentException("Invalid signature.");
+					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 				case > 3 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
 					suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar:
-					throw new ArgumentException("Invalid signature.");
+					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 			}
 		else if (prefix != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
 		         suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar)
-			throw new ArgumentException("Invalid signature.");
+			throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> named <paramref name="nameofValue"/> is not null-terminated

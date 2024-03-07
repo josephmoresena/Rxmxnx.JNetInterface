@@ -66,7 +66,7 @@ partial class JEnvironment
 					setStaticShortField(this.Reference, classRef, fieldId, MemoryMarshal.AsRef<Int16>(bytes));
 					break;
 				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
 		}
@@ -117,7 +117,7 @@ partial class JEnvironment
 					MemoryMarshal.AsRef<Int16>(bytes) = getStaticShortField(this.Reference, classRef, fieldId);
 					break;
 				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
 		}
@@ -181,7 +181,7 @@ partial class JEnvironment
 					setShortField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int16>(bytes));
 					break;
 				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
 		}
@@ -244,7 +244,7 @@ partial class JEnvironment
 					MemoryMarshal.AsRef<Int16>(bytes) = getShortField(this.Reference, localRef, fieldId);
 					break;
 				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
 		}
@@ -394,7 +394,7 @@ partial class JEnvironment
 					                                                    (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
 				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
 		}
@@ -600,7 +600,7 @@ partial class JEnvironment
 					                                                    (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
 				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		/// <summary>
@@ -667,7 +667,7 @@ partial class JEnvironment
 						this.Reference, localRef, classRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
 				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		/// <summary>

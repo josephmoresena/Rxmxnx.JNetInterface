@@ -7,8 +7,9 @@ internal static class CommonConstants
 {
 	public const String CriticalExceptionMessage =
 		"The execution is in critical state. No calls can be made through native interface.";
-	public const String InvalidPrimitiveDefinition = "Definition is not primitive.";
-	public const String InvalidPrimitiveType = "Invalid primitive type.";
+	public const String InvalidPrimitiveDefinitionMessage = "Definition is not primitive.";
+	public const String InvalidPrimitiveTypeMessage = "Invalid primitive type.";
+	public const String InvalidSignatureMessage = "Invalid signature.";
 
 	public const String CodeQuality = "CodeQuality";
 	public const String CSharpSquid = "csharpsquid";

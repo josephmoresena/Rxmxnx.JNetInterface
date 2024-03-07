@@ -45,7 +45,7 @@ partial class JEnvironment
 						arrayRef = newShortArray(this.Reference, length).ArrayValue;
 						break;
 					default:
-						throw new ArgumentException(CommonConstants.InvalidPrimitiveType);
+						throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 				}
 				if (arrayRef.IsDefault) this.CheckJniError();
 			}
