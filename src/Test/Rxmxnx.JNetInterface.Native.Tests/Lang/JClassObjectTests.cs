@@ -61,6 +61,21 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClass.ArrayDimension, objectMetadata.ArrayDimension);
 		Assert.Equal(jClass.Hash, objectMetadata.Hash);
 		Assert.Equal($"{jClass.Name} {jClass.Reference}", jClass.ToString());
+
+		JSerializableObject jSerializable = jClass.CastTo<JSerializableObject>();
+		JAnnotatedElementObject jAnnotated = jClass.CastTo<JAnnotatedElementObject>();
+		JGenericDeclarationObject jGenericDeclaration = jClass.CastTo<JGenericDeclarationObject>();
+		JTypeObject jType = jClass.CastTo<JTypeObject>();
+
+		Assert.Equal(jClass.Id, jSerializable.Id);
+		Assert.Equal(jClass.Id, jAnnotated.Id);
+		Assert.Equal(jClass.Id, jGenericDeclaration.Id);
+		Assert.Equal(jClass.Id, jType.Id);
+
+		Assert.Equal(jClass, jSerializable.Object);
+		Assert.Equal(jClass, jAnnotated.Object);
+		Assert.Equal(jClass, jGenericDeclaration.Object);
+		Assert.Equal(jClass, jType.Object);
 	}
 	[Theory]
 	[InlineData(true)]

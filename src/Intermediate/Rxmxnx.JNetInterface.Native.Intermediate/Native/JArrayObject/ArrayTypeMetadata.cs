@@ -38,9 +38,9 @@ public partial class JArrayObject<TElement>
 			{
 				JReferenceTypeMetadata elementMetadata = (JReferenceTypeMetadata)this.ElementMetadata;
 				if (jArray.TypeMetadata.ElementMetadata is JReferenceTypeMetadata otherElementMetadata)
-					return elementMetadata.TypeOf(otherElementMetadata);
+					result = otherElementMetadata.TypeOf(elementMetadata);
 			}
-			return result;
+			return result || jObject.InstanceOf<JArrayObject<TElement>>();
 		}
 		/// <inheritdoc/>
 		public override String ToString()

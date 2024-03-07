@@ -120,8 +120,9 @@ public partial class JLocalObject
 	internal static void Validate<TDataType>(JReferenceObject jObject)
 		where TDataType : JReferenceObject, IDataType<TDataType>
 	{
-		if (jObject.ObjectClassName.AsSpan().SequenceEqual(IDataType.GetMetadata<TDataType>().ClassName)) return;
+		JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TDataType>();
+		if (jObject.ObjectClassName.AsSpan().SequenceEqual(typeMetadata.ClassName)) return;
 		if (jObject is not TDataType)
-			ValidationUtilities.ThrowIfInvalidCast<TDataType>(jObject.InstanceOf<TDataType>());
+			ValidationUtilities.ThrowIfInvalidCast<TDataType>(typeMetadata.IsInstance(jObject));
 	}
 }

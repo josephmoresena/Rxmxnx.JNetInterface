@@ -333,6 +333,18 @@ public sealed class JStringObjectTests
 		Assert.Equal(jString.Value, objectMetadata.Value);
 		Assert.Equal(jString.Length, objectMetadata.Length);
 		Assert.Equal(jString.Utf8Length, objectMetadata.Utf8Length);
+
+		JSerializableObject jSerializable = jString.CastTo<JSerializableObject>();
+		JCharSequenceObject jCharSequence = jString.CastTo<JCharSequenceObject>();
+		JComparableObject jComparableO = jString.CastTo<JComparableObject>();
+
+		Assert.Equal(jString.Id, jSerializable.Id);
+		Assert.Equal(jString.Id, jCharSequence.Id);
+		Assert.Equal(jString.Id, jComparableO.Id);
+
+		Assert.Equal(jString, jSerializable.Object);
+		Assert.Equal(jString, jCharSequence.Object);
+		Assert.Equal(jString, jComparableO.Object);
 	}
 	private static void GetCharsTest(JStringObject jString)
 	{
