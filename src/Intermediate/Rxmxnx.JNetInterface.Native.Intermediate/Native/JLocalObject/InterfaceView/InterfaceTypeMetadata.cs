@@ -19,6 +19,8 @@ public partial class JLocalObject
 				/// <inheritdoc/>
 				public override Type Type => typeof(TInterface);
 				/// <inheritdoc/>
+				public override JClassTypeMetadata ProxyMetadata => Proxy<TInterface>.ProxyMetadata;
+				/// <inheritdoc/>
 				public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TInterface>();
 				/// <inheritdoc/>
 				public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
@@ -40,9 +42,7 @@ public partial class JLocalObject
 					Boolean realClass = false)
 					=> new Proxy<TInterface>(new IReferenceType.ClassInitializer
 					{
-						Class = jClass.Environment.ClassFeature.GetClass<TInterface>(),
-						RealClass = true,
-						LocalReference = localRef,
+						Class = jClass, RealClass = realClass, LocalReference = localRef,
 					});
 				/// <inheritdoc/>
 				internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)

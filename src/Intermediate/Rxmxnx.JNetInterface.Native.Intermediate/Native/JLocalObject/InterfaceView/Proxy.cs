@@ -9,9 +9,14 @@ public partial class JLocalObject
 		/// </summary>
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
 		                 Justification = CommonConstants.InternalInheritanceJustification)]
-		private protected sealed class Proxy<TInterface> : JProxyObject, IInterfaceObject<TInterface>
+		private protected sealed partial class Proxy<TInterface> : JProxyObject, IInterfaceObject<TInterface>
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
+			/// <summary>
+			/// Proxy metadata.
+			/// </summary>
+			public static readonly JClassTypeMetadata ProxyMetadata = new ProxyTypeMetadata();
+
 			/// <inheritdoc/>
 			public Proxy(IReferenceType.ClassInitializer initializer) : base(initializer)
 			{

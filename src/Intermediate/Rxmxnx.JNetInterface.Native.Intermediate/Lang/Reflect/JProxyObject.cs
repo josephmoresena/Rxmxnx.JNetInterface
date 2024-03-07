@@ -8,11 +8,10 @@ public class JProxyObject : JLocalObject, IClassType<JProxyObject>
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JProxyObject> metadata = TypeMetadataBuilder<JProxyObject>
-	                                                                    .Create(UnicodeClassNames.ProxyObject())
-	                                                                    .Build();
+	internal static readonly JClassTypeMetadata<JProxyObject> ProxyTypeMetadata = TypeMetadataBuilder<JProxyObject>
+		.Create(UnicodeClassNames.ProxyObject()).Build();
 
-	static JClassTypeMetadata<JProxyObject> IClassType<JProxyObject>.Metadata => JProxyObject.metadata;
+	static JClassTypeMetadata<JProxyObject> IClassType<JProxyObject>.Metadata => JProxyObject.ProxyTypeMetadata;
 
 	/// <inheritdoc/>
 	protected JProxyObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

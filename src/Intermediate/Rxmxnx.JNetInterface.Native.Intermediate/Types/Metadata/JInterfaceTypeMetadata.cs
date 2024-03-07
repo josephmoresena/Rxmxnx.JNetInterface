@@ -14,6 +14,10 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	public override JTypeKind Kind => JTypeKind.Interface;
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier => JTypeModifier.Abstract;
+	/// <summary>
+	/// Proxy class metadata.
+	/// </summary>
+	public abstract JClassTypeMetadata ProxyMetadata { get; }
 
 	/// <summary>
 	/// Constructor.

@@ -87,8 +87,17 @@ partial class JEnvironment
 			default:
 				while (jClass.GetSuperClass() is { } superClass)
 				{
-					if (MetadataHelper.GetMetadata(superClass.Name) is JClassTypeMetadata classMetadata)
+					if (UnicodeClassNames.ProxyObject().SequenceEqual(superClass.Name))
+					{
+						using JArrayObject<JClassObject> interfaces = superClass.GetInterfaces();
+						if (jClass.Environment.ClassFeature.GetTypeMetadata(interfaces.FirstOrDefault()) is
+						    JInterfaceTypeMetadata interfaceMetadata)
+							return interfaceMetadata.ProxyMetadata;
+					}
+					else if (MetadataHelper.GetMetadata(superClass.Name) is JClassTypeMetadata classMetadata)
+					{
 						return classMetadata;
+					}
 				}
 				break;
 		}
