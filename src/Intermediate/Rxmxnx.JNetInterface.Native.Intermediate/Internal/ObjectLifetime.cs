@@ -220,11 +220,16 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// </returns>
 	public Boolean InstanceOf<TDataType>(JLocalObject jLocal) where TDataType : JReferenceObject, IDataType<TDataType>
 	{
+		Boolean? result = this.InstanceOf<TDataType>();
+
+		if (result.HasValue)
+			return result.Value;
 		if (JGlobalBase.IsValid(this._global, this._env))
 			return this._global.InstanceOf<TDataType>();
 		if (JGlobalBase.IsValid(this._weak, this._env))
 			return this._weak.InstanceOf<TDataType>();
-		return this.InstanceOf<TDataType>() ?? this._env.ClassFeature.IsInstanceOf<TDataType>(jLocal);
+
+		return this._env.ClassFeature.IsInstanceOf<TDataType>(jLocal);
 	}
 
 	/// <summary>

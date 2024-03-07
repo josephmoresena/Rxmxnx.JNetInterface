@@ -49,7 +49,7 @@ public abstract record JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetada
 
 	/// <inheritdoc/>
 	internal override Boolean IsInstance(JReferenceObject jObject)
-		=> jObject is IInterfaceObject<TInterface> || this.Interfaces.Any(i => i.IsInstance(jObject));
+		=> jObject is IInterfaceObject<TInterface> || jObject.InstanceOf<TInterface>();
 
 	/// <inheritdoc/>
 	internal override void SetAssignable(JProxyObject proxy) => proxy.SetAssignableTo<TInterface>(true);
