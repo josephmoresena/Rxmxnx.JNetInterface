@@ -7,6 +7,8 @@ public partial class JLocalObject
 		/// <summary>
 		/// Interface proxy.
 		/// </summary>
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2743,
+		                 Justification = CommonConstants.StaticAbstractPropertyUseJustification)]
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
 		                 Justification = CommonConstants.InternalInheritanceJustification)]
 		private protected sealed partial class Proxy<TInterface> : JProxyObject, IInterfaceObject<TInterface>
@@ -24,6 +26,8 @@ public partial class JLocalObject
 				         IInterfaceType.GetMetadata<TInterface>().Interfaces)
 					interfaceMetadata.SetAssignable(this);
 			}
+			/// <inheritdoc/>
+			public Proxy(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 			/// <inheritdoc/>
 			public Proxy(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 		}

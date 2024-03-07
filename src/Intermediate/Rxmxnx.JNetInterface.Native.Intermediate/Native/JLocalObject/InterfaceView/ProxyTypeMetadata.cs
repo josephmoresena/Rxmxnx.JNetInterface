@@ -21,7 +21,17 @@ public partial class JLocalObject
 					=> IReferenceType.GetMetadata<TInterface>().CreateInstance(jClass, localRef, realClass);
 				/// <inheritdoc/>
 				internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
-					=> IReferenceType.GetMetadata<TInterface>().ParseInstance(jLocal, dispose);
+				{
+					if (jLocal is null) return default;
+					try
+					{
+						return new Proxy<TInterface>(jLocal);
+					}
+					finally
+					{
+						if (dispose) jLocal.Dispose();
+					}
+				}
 				/// <inheritdoc/>
 				internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 					=> IReferenceType.GetMetadata<TInterface>().ParseInstance(env, jGlobal);
