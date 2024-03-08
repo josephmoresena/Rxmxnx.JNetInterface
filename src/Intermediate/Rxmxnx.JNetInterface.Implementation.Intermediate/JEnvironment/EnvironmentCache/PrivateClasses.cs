@@ -37,13 +37,11 @@ partial class JEnvironment
 			return this.GetClassName(classRef, access);
 		}
 		/// <summary>
-		/// Indicates whether class is primitive.
+		/// Retrieves a <see cref="JStringObject"/> containing class name.
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="access">A <see cref="AccessCache"/> instance.</param>
-		/// <returns>
-		/// <see langword="true"/> if class is primitive; otherwise; <see langword="false"/>.
-		/// </returns>
+		/// <returns>A <see cref="JStringObject"/> instance.</returns>
 		private JStringObject GetClassName(JClassLocalRef classRef, AccessCache access)
 		{
 			JMethodId getNameId = access.GetMethodId(NativeFunctionSetImpl.GetNameDefinition, this._env);
@@ -54,11 +52,13 @@ partial class JEnvironment
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}
 		/// <summary>
-		/// Retrieves a <see cref="JStringObject"/> containing class name.
+		/// Indicates whether class is primitive.
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="access">A <see cref="AccessCache"/> instance.</param>
-		/// <returns>A <see cref="JStringObject"/> instance.</returns>
+		/// <returns>
+		/// <see langword="true"/> if class is primitive; otherwise; <see langword="false"/>.
+		/// </returns>
 		private Boolean IsPrimitiveClass(JClassLocalRef classRef, AccessCache access)
 		{
 			JMethodId isPrimitiveId = access.GetMethodId(NativeFunctionSetImpl.IsPrimitiveDefinition, this._env);

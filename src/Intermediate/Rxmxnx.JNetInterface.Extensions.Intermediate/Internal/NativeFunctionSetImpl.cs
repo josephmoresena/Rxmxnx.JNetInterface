@@ -96,7 +96,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jThrowable.Environment;
 		JClassObject throwableClass = env.ClassFeature.ThrowableObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getMessageDefinition, jThrowable, throwableClass)!;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetMessageDefinition, jThrowable, throwableClass)!;
 	}
 	/// <inheritdoc/>
 	public override JArrayObject<JStackTraceElementObject> GetStackTrace(JThrowableObject jThrowable)

@@ -68,7 +68,7 @@ partial class JEnvironment
 			{
 				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
 				exceptionClear(this.Reference);
-				throw this.CreateJniException(throwableRef);
+				throw this.CreateJniException(ref throwableRef);
 			}
 			finally
 			{

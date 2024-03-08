@@ -112,16 +112,47 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
-		private ThrowableException CreateJniException(JThrowableLocalRef throwableRef)
+		private ThrowableException CreateJniException(ref JThrowableLocalRef throwableRef)
 		{
 			using LocalFrame _ = new(this._env, 5);
 			JClassObject jClass =
 				this._env.GetObjectClass(throwableRef.Value, out JReferenceTypeMetadata throwableMetadata);
-			String message = EnvironmentCache.GetThrowableMessage(jClass, throwableRef);
+			String message = this.GetThrowableMessage(throwableRef);
 			ThrowableObjectMetadata objectMetadata = new(jClass, throwableMetadata, message);
 			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
 			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
+
+			this._env.DeleteLocalRef(throwableRef.Value);
+			throwableRef = JThrowableLocalRef.FromReference(globalRef.Value);
 			return throwableMetadata.CreateException(jGlobalThrowable, message)!;
+		}
+		/// <summary>
+		/// Retrieves throwable message.
+		/// </summary>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <returns>Throwable message.</returns>
+		private String GetThrowableMessage(JThrowableLocalRef throwableRef)
+		{
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			AccessCache access = this.GetAccess(jniTransaction, this.ThrowableObject);
+			jniTransaction.Add(throwableRef);
+			using JStringObject throwableMessage = this.GetThrowableMessage(throwableRef, access);
+			return throwableMessage.Value;
+		}
+		/// <summary>
+		/// Retrieves a <see cref="JStringObject"/> containing throwable message.
+		/// </summary>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <param name="access">A <see cref="AccessCache"/> instance.</param>
+		/// <returns>A <see cref="JStringObject"/> instance.</returns>
+		private JStringObject GetThrowableMessage(JThrowableLocalRef throwableRef, AccessCache access)
+		{
+			JMethodId getNameId = access.GetMethodId(NativeFunctionSetImpl.GetMessageDefinition, this._env);
+			CallObjectMethodADelegate callObjectMethod = this.GetDelegate<CallObjectMethodADelegate>();
+			JObjectLocalRef localRef = callObjectMethod(this.Reference, throwableRef.Value, getNameId,
+			                                            ReadOnlyValPtr<JValue>.Zero);
+			JClassObject jStringClass = this.GetClass<JStringObject>();
+			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}
 	}
 }

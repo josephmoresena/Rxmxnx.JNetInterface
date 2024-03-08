@@ -18,14 +18,6 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	public StackTraceInfo[] StackTrace
 		=> this._stackTrace ??= this.Environment.WithFrame(5, this, JThrowableObject.GetStackTraceInfo);
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
-	private JThrowableObject(JClassObject jClass, JThrowableLocalRef throwableRef) :
-		base(jClass, throwableRef.Value) { }
-
 	/// <inheritdoc/>
 	protected JThrowableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>

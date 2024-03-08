@@ -60,11 +60,6 @@ internal partial class NativeFunctionSetImpl
 	/// </summary>
 	private static readonly JFunctionDefinition<JFloat> floatValueDefinition = new(UnicodeMethodNames.FloatValue());
 	/// <summary>
-	/// <c>Throwable.getMessage()</c> definition.
-	/// </summary>
-	private static readonly JFunctionDefinition<JStringObject> getMessageDefinition =
-		new(UnicodeMethodNames.GetMessage());
-	/// <summary>
 	/// <c>Throwable.getStackTrace()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JArrayObject<JStackTraceElementObject>> getStackTraceDefinition =
@@ -117,6 +112,12 @@ internal partial class NativeFunctionSetImpl
 	/// <c>Class.isPrimitive()</c> definition.
 	/// </summary>
 	public static readonly JFunctionDefinition<JBoolean> IsPrimitiveDefinition = new(UnicodeMethodNames.IsPrimitive());
+
+	/// <summary>
+	/// <c>Throwable.getMessage()</c> definition.
+	/// </summary>
+	public static readonly JFunctionDefinition<JStringObject> GetMessageDefinition =
+		new(UnicodeMethodNames.GetMessage());
 
 	/// <summary>
 	/// <c>Boolean.booleanValue()</c> definition.

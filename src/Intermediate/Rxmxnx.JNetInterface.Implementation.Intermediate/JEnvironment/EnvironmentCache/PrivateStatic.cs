@@ -242,17 +242,6 @@ partial class JEnvironment
 			}
 		}
 		/// <summary>
-		/// Retrieves throwable message.
-		/// </summary>
-		/// <param name="jClass">Throwable class.</param>
-		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
-		/// <returns>Throwable message.</returns>
-		private static String GetThrowableMessage(JClassObject jClass, JThrowableLocalRef throwableRef)
-		{
-			using JStringObject throwableMessage = JThrowableObject.GetThrowableMessage(jClass, throwableRef);
-			return throwableMessage.Value;
-		}
-		/// <summary>
 		/// Creates a <see cref="IFixedContext{T}.IDisposable"/> instance from an span created in stack.
 		/// </summary>
 		/// <typeparam name="T">Type of elements in span.</typeparam>
