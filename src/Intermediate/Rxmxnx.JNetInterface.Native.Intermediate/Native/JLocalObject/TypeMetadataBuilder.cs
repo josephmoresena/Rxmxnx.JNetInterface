@@ -21,6 +21,10 @@ public partial class JLocalObject
 		public ReadOnlySpan<Byte> DataTypeName { get; }
 		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 		public ReadOnlySpan<Byte> Signature { get; private set; }
+		/// <summary>
+		/// Indicates whether current type is annotation.
+		/// </summary>
+		public Boolean IsAnnotation => this._kind is JTypeKind.Annotation;
 
 		/// <summary>
 		/// Constructor.
@@ -54,6 +58,7 @@ public partial class JLocalObject
 		public void AppendInterface<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
+			NativeValidationUtilities.ThrowIfAnnotation<TInterface>(this.DataTypeName, this.IsAnnotation);
 			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
 			if (!this._interfaceTypes.Contains(metadata.InterfaceType))
 				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(

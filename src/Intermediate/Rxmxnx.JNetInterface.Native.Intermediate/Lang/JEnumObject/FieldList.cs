@@ -31,7 +31,7 @@ public partial class JEnumObject
 			IReadOnlySet<Int32> IEnumFieldList.GetMissingFields(out Int32 count, out Int32 maxOrdinal)
 			{
 				Int32[] defined = this._ordinalDictionary.Keys.ToArray();
-				HashSet<Int32> result = Enumerable.Range(0, defined.Length + 1).ToHashSet();
+				HashSet<Int32> result = Enumerable.Range(0, defined.Length).ToHashSet();
 				maxOrdinal = defined.Max();
 				count = defined.Length;
 				result.ExceptWith(defined);

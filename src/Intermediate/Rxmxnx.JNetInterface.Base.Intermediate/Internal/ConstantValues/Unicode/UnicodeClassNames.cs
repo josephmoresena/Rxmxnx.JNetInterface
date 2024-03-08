@@ -220,4 +220,10 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.AnnotationInterface"/>
 	[DefaultValue(ClassNames.AnnotationInterface)]
 	public static partial ReadOnlySpan<Byte> AnnotationInterface();
+	/// <inheritdoc cref="ClassNames.ElementTypeEnum"/>
+	[DefaultValue(ClassNames.ElementTypeEnum)]
+	public static partial ReadOnlySpan<Byte> ElementTypeEnum();
+	/// <inheritdoc cref="ClassNames.TargetAnnotation"/>
+	[DefaultValue(ClassNames.TargetAnnotation)]
+	public static partial ReadOnlySpan<Byte> TargetAnnotation();
 }

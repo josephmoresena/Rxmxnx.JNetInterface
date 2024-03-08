@@ -13,6 +13,12 @@ internal partial record InterfaceSet
 		new(ImmutableHashSet.Create(IInterfaceType.GetMetadata<JSerializableObject>(),
 		                            IInterfaceType.GetMetadata<JCloneableObject>()));
 	/// <summary>
+	/// Annotation interface set.
+	/// </summary>
+	public static readonly InterfaceSet AnnotationSet =
+		new(ImmutableHashSet.Create(IInterfaceType.GetMetadata<JAnnotationObject>()));
+
+	/// <summary>
 	/// Primitive wrapper interface set.
 	/// </summary>
 	public static readonly InterfaceSet PrimitiveWrapperSet =

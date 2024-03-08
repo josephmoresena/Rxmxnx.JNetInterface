@@ -146,6 +146,10 @@ internal static partial class MetadataHelper
 		{ IDataType.GetHash<JDirectBufferObject>(), IReferenceType.GetMetadata<JDirectBufferObject>() },
 		{ IDataType.GetHash<JAnnotationObject>(), IReferenceType.GetMetadata<JAnnotationObject>() },
 
+		// Annotation Package //
+		{ IDataType.GetHash<JElementTypeObject>(), IReferenceType.GetMetadata<JElementTypeObject>() },
+		{ IDataType.GetHash<JTargetObject>(), IReferenceType.GetMetadata<JTargetObject>() },
+
 		// Basic Throwable Objects //
 		{ IDataType.GetHash<JLinkageErrorObject>(), IReferenceType.GetMetadata<JLinkageErrorObject>() },
 		{

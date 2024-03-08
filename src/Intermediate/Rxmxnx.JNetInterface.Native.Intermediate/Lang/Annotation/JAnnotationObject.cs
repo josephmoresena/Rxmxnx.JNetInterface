@@ -22,3 +22,20 @@ public sealed class JAnnotationObject : JInterfaceObject<JAnnotationObject>, IIn
 	static JAnnotationObject IInterfaceType<JAnnotationObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
 }
+
+/// <summary>
+/// This class represents an annotation instance.
+/// </summary>
+/// <typeparam name="TAnnotation">Type of <see cref="IInterfaceType"/>.</typeparam>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
+public abstract class JAnnotationObject<TAnnotation> : JInterfaceObject<TAnnotation>,
+	IInterfaceObject<JAnnotationObject>,
+	IDataType where TAnnotation : JAnnotationObject<TAnnotation>, IInterfaceType<TAnnotation>
+{
+	static JTypeKind IDataType.Kind => JTypeKind.Annotation;
+	static Type IDataType.FamilyType => typeof(JAnnotationObject);
+
+	/// <inheritdoc/>
+	protected JAnnotationObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
+}

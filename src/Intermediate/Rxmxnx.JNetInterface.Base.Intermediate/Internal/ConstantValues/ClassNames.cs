@@ -312,6 +312,14 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.annotation.Annotation</c> interface.
 	/// </summary>
 	public const String AnnotationInterface = ClassNames.AnnotationPackage + "Annotation";
+	/// <summary>
+	/// JNI name of <c>java.lang.annotation.ElementType</c> enum.
+	/// </summary>
+	public const String ElementTypeEnum = ClassNames.AnnotationPackage + "ElementType";
+	/// <summary>
+	/// JNI name of <c>java.lang.annotation.Target</c> annotation.
+	/// </summary>
+	public const String TargetAnnotation = ClassNames.AnnotationPackage + "Target";
 
 	/// <summary>
 	/// JNI name of <c>java.lang.Thread.UncaughtExceptionHandler</c> interface.

@@ -142,6 +142,10 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JTypeObject>());
 		Console.WriteLine(IDataType.GetMetadata<JGenericDeclarationObject>());
 		Console.WriteLine(IDataType.GetMetadata<JAnnotationObject>());
+
+		Console.WriteLine("==== Annotation package ====");
+		Console.WriteLine(IDataType.GetMetadata<JElementTypeObject>());
+		Console.WriteLine(IDataType.GetMetadata<JTargetObject>());
 	}
 	private static void PrintVirtualMachineInfo(JVirtualMachineLibrary jvmLib, Byte[] classByteCode,
 		params String[] args)

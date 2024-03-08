@@ -30,8 +30,10 @@ public partial class JLocalObject
 				/// </summary>
 				/// <param name="builder">A <see cref="JLocalObject.TypeMetadataBuilder"/> instance.</param>
 				internal InterfaceTypeMetadata(TypeMetadataBuilder builder) :
-					base(builder.DataTypeName, builder.Signature)
-					=> this._interfaces = InterfaceSet.GetInterfaceInterfaces(builder.GetInterfaceSet());
+					base(builder.DataTypeName, builder.Signature, builder.IsAnnotation)
+					=> this._interfaces = builder.IsAnnotation ?
+						InterfaceSet.AnnotationSet :
+						InterfaceSet.GetInterfaceInterfaces(builder.GetInterfaceSet());
 
 				/// <inheritdoc/>
 				public override String ToString()

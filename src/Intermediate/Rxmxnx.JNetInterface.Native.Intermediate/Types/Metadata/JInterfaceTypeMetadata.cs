@@ -11,7 +11,7 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	public abstract Type InterfaceType { get; }
 
 	/// <inheritdoc/>
-	public override JTypeKind Kind => JTypeKind.Interface;
+	public override JTypeKind Kind { get; }
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier => JTypeModifier.Abstract;
 	/// <summary>
@@ -24,8 +24,10 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	/// </summary>
 	/// <param name="interfaceName">Interface name of current type.</param>
 	/// <param name="signature">JNI signature for current type.</param>
-	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, ReadOnlySpan<Byte> signature) : base(
-		interfaceName, signature) { }
+	/// <param name="isAnnotation">Indicates whether current type is an annotation.</param>
+	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, ReadOnlySpan<Byte> signature,
+		Boolean isAnnotation) : base(interfaceName, signature)
+		=> this.Kind = !isAnnotation ? JTypeKind.Interface : JTypeKind.Annotation;
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();
@@ -45,8 +47,8 @@ public abstract record JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetada
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	/// <inheritdoc/>
-	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, ReadOnlySpan<Byte> signature) : base(
-		interfaceName, signature) { }
+	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, ReadOnlySpan<Byte> signature,
+		Boolean isAnnotation) : base(interfaceName, signature, isAnnotation) { }
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();

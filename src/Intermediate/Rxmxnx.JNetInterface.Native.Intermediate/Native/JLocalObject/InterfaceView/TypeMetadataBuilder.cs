@@ -25,7 +25,12 @@ public partial class JLocalObject
 			/// <param name="interfaceName">Interface name of current type.</param>
 			/// <param name="interfaceTypes">Interface types.</param>
 			private TypeMetadataBuilder(ReadOnlySpan<Byte> interfaceName, ISet<Type> interfaceTypes)
-				=> this._builder = new(interfaceName, JTypeKind.Interface, interfaceTypes);
+			{
+				JTypeKind typeKind = TInterface.FamilyType == typeof(InterfaceView) ?
+					JTypeKind.Interface :
+					JTypeKind.Annotation;
+				this._builder = new(interfaceName, typeKind, interfaceTypes);
+			}
 
 			/// <summary>
 			/// Appends an interface to current type definition.

@@ -74,6 +74,22 @@ internal static class NativeValidationUtilities
 	}
 
 	/// <summary>
+	/// Throws an exception if current data type is annotation.
+	/// </summary>
+	/// <param name="typeName">Data type name.</param>
+	/// <param name="isAnnotation">Indicates whether current data type is an annotation.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if current data type is annotation.
+	/// </exception>
+	public static void ThrowIfAnnotation<TInterface>(ReadOnlySpan<Byte> typeName, Boolean isAnnotation)
+		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+	{
+		if (!isAnnotation) return;
+		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();
+		throw new InvalidOperationException(
+			$"Unable to extend {interfaceMetadata.ClassName}. {typeName.ToCString()} is an annotation.");
+	}
+	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
 	/// <typeparamref name="TInterface"/>.
 	/// </summary>
