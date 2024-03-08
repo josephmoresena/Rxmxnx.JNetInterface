@@ -5,30 +5,18 @@ namespace Rxmxnx.JNetInterface;
 /// </summary>
 public abstract partial class ThrowableException : Exception
 {
-	/// <inheritdoc cref="Global"/>
-	private readonly JGlobalBase _jGlobal;
-	/// <inheritdoc cref="ThrowableException.Thread"/>
-	private readonly Thread _thread;
-
 	/// <summary>
 	/// Global throwable instance.
 	/// </summary>
-	internal JGlobalBase Global => this._jGlobal;
-	/// <summary>
-	/// Thread that owns the exception.
-	/// </summary>
-	internal Thread Thread => this._thread;
+	internal JGlobalBase Global { get; }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> throwable instance.</param>
 	/// <param name="message">Exception message.</param>
-	private protected ThrowableException(JGlobalBase jGlobal, String? message) : base(message)
-	{
-		this._jGlobal = jGlobal;
-		this._thread = Thread.CurrentThread;
-	}
+	private protected ThrowableException(JGlobalBase jGlobal, String? message) : base(message) 
+		=> this.Global = jGlobal;
 
 	/// <summary>
 	/// Performs an action using current global throwable instance.
@@ -59,9 +47,7 @@ public sealed class ThrowableException<TThrowable> : ThrowableException, IThrowa
 {
 	/// <inheritdoc/>
 	internal ThrowableException(JGlobalBase jGlobal, String? message) : base(jGlobal, message)
-	{
-		jGlobal.SetAssignableTo<TThrowable>(true);
-	}
+		=> jGlobal.SetAssignableTo<TThrowable>(true);
 
 	/// <summary>
 	/// Invokes <paramref name="action"/> using the current <typeparamref name="TThrowable"/> instance.

@@ -20,17 +20,6 @@ partial class JEnvironment
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef envRef)
 		=> this._cache = new((JVirtualMachine)vm, this, envRef);
-
-	/// <summary>
-	/// Deletes local reference.
-	/// </summary>
-	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
-	internal void Delete(JObjectLocalRef localRef)
-	{
-		if (!this.JniSecure()) return;
-		DeleteLocalRefDelegate deleteLocalRef = this._cache.GetDelegate<DeleteLocalRefDelegate>();
-		deleteLocalRef(this.Reference, localRef);
-	}
 	/// <summary>
 	/// Sets current object cache.
 	/// </summary>

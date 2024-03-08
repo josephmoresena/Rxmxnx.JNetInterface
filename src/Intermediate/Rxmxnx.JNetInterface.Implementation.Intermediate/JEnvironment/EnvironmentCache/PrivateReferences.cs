@@ -12,6 +12,7 @@ partial class JEnvironment
 		private JWeakRef CreateWeakGlobalRef(JReferenceObject jObject)
 		{
 			ValidationUtilities.ThrowIfProxy(jObject);
+			ValidationUtilities.ThrowIfDefault(jObject);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jObject);
