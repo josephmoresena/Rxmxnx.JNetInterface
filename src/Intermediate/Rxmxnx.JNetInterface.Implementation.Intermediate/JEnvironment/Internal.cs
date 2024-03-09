@@ -140,7 +140,6 @@ partial class JEnvironment
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to remove.</param>
 	internal void DeleteLocalRef(JObjectLocalRef localRef)
 	{
-		if (localRef == default || !this.JniSecure()) return;
 		DeleteLocalRefDelegate deleteLocalRef = this._cache.GetDelegate<DeleteLocalRefDelegate>();
 		deleteLocalRef(this.Reference, localRef);
 	}

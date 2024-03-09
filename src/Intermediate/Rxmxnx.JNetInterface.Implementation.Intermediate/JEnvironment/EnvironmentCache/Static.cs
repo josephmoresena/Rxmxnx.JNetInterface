@@ -14,10 +14,10 @@ partial class JEnvironment
 			Int32 index = EnvironmentCache.delegateIndex[typeof(GetVirtualMachineDelegate)];
 			GetVirtualMachineDelegate getVirtualMachine =
 				jEnv.Reference.Reference[index].GetUnsafeDelegate<GetVirtualMachineDelegate>()!;
-			JResult result = getVirtualMachine(jEnv, out JVirtualMachineRef vmRef);
-			if (result == JResult.Ok)
+			JniException? jniException = getVirtualMachine(jEnv, out JVirtualMachineRef vmRef);
+			if (jniException is null)
 				return (JVirtualMachine)JVirtualMachine.GetVirtualMachine(vmRef);
-			throw new JniException(result);
+			throw jniException;
 		}
 	}
 }

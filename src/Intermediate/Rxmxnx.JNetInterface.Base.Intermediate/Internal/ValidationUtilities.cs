@@ -297,8 +297,9 @@ internal static class ValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidResult(JResult result)
 	{
-		if (result != JResult.Ok)
-			throw new JniException(result);
+		JniException? exception = result;
+		if (exception is not null)
+			throw exception;
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="version"/> is invalid.

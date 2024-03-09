@@ -34,6 +34,17 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
+	/// <summary>
+	/// Throws an exception from current instance.
+	/// </summary>
+	/// <exception cref="ThrowableException">Always throws an exception.</exception>
+	public void Throw()
+	{
+		IEnvironment env = this.Environment;
+		JReferenceTypeMetadata metadata = env.ClassFeature.GetTypeMetadata(this.Class);
+		throw metadata.CreateException(this.Global, this.Message)!;
+	}
+
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	protected new virtual ThrowableObjectMetadata CreateMetadata()
 		=> new(base.CreateMetadata()) { Message = this.Message, StackTrace = this._stackTrace, };

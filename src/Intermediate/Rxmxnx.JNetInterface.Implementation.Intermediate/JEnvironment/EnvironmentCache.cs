@@ -18,6 +18,10 @@ partial class JEnvironment
 
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
 		public readonly JVirtualMachine VirtualMachine;
+		/// <summary>
+		/// Current thrown exception.
+		/// </summary>
+		public JniException? Thrown { get; private set; }
 
 		/// <summary>
 		/// Ensured capacity.
@@ -61,23 +65,54 @@ partial class JEnvironment
 		/// </summary>
 		public void CheckJniError()
 		{
-			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
-			JThrowableLocalRef throwableRef = exceptionOccurred(this.Reference);
-			if (throwableRef.IsDefault) return;
-			try
+			if (this._criticalCount > 0)
 			{
-				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
-				exceptionClear(this.Reference);
-				throw this.CreateJniException(ref throwableRef);
+				ExceptionCheckDelegate exceptionCheck = this.GetDelegate<ExceptionCheckDelegate>();
+				if (exceptionCheck(this.Reference) != JBoolean.TrueValue) return;
+				this.ThrowJniException(new CriticalException());
 			}
-			finally
+			else
 			{
-				ThrowDelegate jThrow = this.GetDelegate<ThrowDelegate>();
-				jThrow(this.Reference, throwableRef);
+				ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
+				JThrowableLocalRef throwableRef = exceptionOccurred(this.Reference);
+				if (throwableRef.IsDefault) return;
+				this.ClearException();
+				this.ThrowJniException(this.CreateThrowableException(throwableRef));
 			}
 		}
 		/// <inheritdoc cref="IEnvironment.JniSecure"/>
-		public Boolean JniSecure()
-			=> this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId && this._criticalCount == 0;
+		/// <param name="level">JNI call level.</param>
+		public Boolean JniSecure(JniLevel level = JniLevel.Unsafe)
+			=> this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId &&
+				(level.HasFlag(JniLevel.CriticalSafe) || this._criticalCount == 0) &&
+				(level.HasFlag(JniLevel.ErrorSafe) || this.Thrown is null);
+		/// <summary>
+		/// Sets <paramref name="throwableException"/> as pending exception and throws it.
+		/// </summary>
+		/// <param name="throwableException">A <see cref="ThrowableException"/> instance.</param>
+		/// <exception cref="ThrowableException">
+		/// Throws if <paramref name="throwableException"/> is not null.
+		/// </exception>
+		public void ThrowJniException(ThrowableException? throwableException)
+		{
+			if (this.Thrown == throwableException) return;
+			try
+			{
+				ValidationUtilities.ThrowIfProxy(throwableException?.Global);
+				this.ThrowJniException(throwableException as JniException);
+			}
+			finally
+			{
+				if (throwableException is null)
+				{
+					this.ClearException();
+				}
+				else
+				{
+					ValidationUtilities.ThrowIfDefault(throwableException.Global);
+					this.Throw(throwableException.Global.As<JThrowableLocalRef>());
+				}
+			}
+		}
 	}
 }

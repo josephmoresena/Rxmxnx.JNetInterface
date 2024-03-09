@@ -112,7 +112,7 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
-		private ThrowableException CreateJniException(ref JThrowableLocalRef throwableRef)
+		private ThrowableException CreateThrowableException(JThrowableLocalRef throwableRef)
 		{
 			using LocalFrame _ = new(this._env, 5);
 			JClassObject jClass =
@@ -123,7 +123,6 @@ partial class JEnvironment
 			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
 
 			this._env.DeleteLocalRef(throwableRef.Value);
-			throwableRef = JThrowableLocalRef.FromReference(globalRef.Value);
 			return throwableMetadata.CreateException(jGlobalThrowable, message)!;
 		}
 		/// <summary>
@@ -153,6 +152,35 @@ partial class JEnvironment
 			                                            ReadOnlyValPtr<JValue>.Zero);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
+		}
+		/// <summary>
+		/// Sets given <see cref="JThrowableLocalRef"/> reference as pending exception.
+		/// </summary>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		private void Throw(JThrowableLocalRef throwableRef)
+		{
+			ThrowDelegate jThrow = this.GetDelegate<ThrowDelegate>();
+			jThrow(this.Reference, throwableRef);
+		}
+		/// <summary>
+		/// Clears pending JNI exception.
+		/// </summary>
+		private void ClearException()
+		{
+			ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
+			exceptionClear(this.Reference);
+		}
+		/// <summary>
+		/// Sets <paramref name="jniException"/> as managed pending exception and throws it.
+		/// </summary>
+		/// <param name="jniException">A <see cref="JniException"/> instance.</param>
+		/// <exception cref="ThrowableException">
+		/// Throws if <paramref name="jniException"/> is not null.
+		/// </exception>
+		private void ThrowJniException(JniException? jniException)
+		{
+			this.Thrown = jniException;
+			if (this.Thrown is not null) throw this.Thrown;
 		}
 	}
 }

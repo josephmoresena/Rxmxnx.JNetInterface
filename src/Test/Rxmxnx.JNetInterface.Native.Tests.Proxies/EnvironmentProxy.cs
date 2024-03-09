@@ -13,6 +13,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 	public abstract NioFeatureProxy NioFeature { get; }
 	public abstract JEnvironmentRef Reference { get; }
 	public abstract Int32 Version { get; }
+	public abstract ThrowableException? PendingException { get; set; }
 	public abstract Int32? LocalCapacity { get; set; }
 
 	public abstract NativeFunctionSet FunctionSet { get; }
@@ -25,6 +26,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 	public abstract void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action);
 	public abstract TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func);
 	public abstract TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
+	public abstract void DescribeException();
 
 	public static EnvironmentProxy CreateEnvironment(Boolean isProxy = false, VirtualMachineProxy? vm = default)
 	{

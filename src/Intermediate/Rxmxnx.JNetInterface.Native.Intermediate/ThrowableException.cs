@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// Represents error that occur during JNI calls.
 /// </summary>
-public abstract partial class ThrowableException : Exception
+public abstract partial class ThrowableException : JniException
 {
 	/// <summary>
 	/// Global throwable instance.
@@ -15,7 +15,8 @@ public abstract partial class ThrowableException : Exception
 	/// </summary>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> throwable instance.</param>
 	/// <param name="message">Exception message.</param>
-	private protected ThrowableException(JGlobalBase jGlobal, String? message) : base(message) => this.Global = jGlobal;
+	private protected ThrowableException(JGlobalBase jGlobal, String? message) : base(message: message)
+		=> this.Global = jGlobal;
 
 	/// <summary>
 	/// Performs an action using current global throwable instance.

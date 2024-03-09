@@ -184,6 +184,44 @@ partial class JEnvironment
 			// JNI 0x00130000
 			{ typeof(IsVirtualThreadDelegate), 229 },
 		};
+		/// <summary>
+		/// JNI levels for calls.
+		/// </summary>
+		private static readonly Dictionary<Type, JniLevel> levels = new()
+		{
+			{ typeof(ExceptionOccurredDelegate), JniLevel.CriticalSafe },
+			{ typeof(ExceptionDescribeDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ExceptionClearDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ExceptionCheckDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(GetStringLengthDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetStringUtfLengthDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetStringCharsDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetStringCriticalDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetStringUtfCharsDelegate), JniLevel.CriticalSafe },
+			{ typeof(ReleaseStringCharsDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ReleaseStringCriticalDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ReleaseStringUtfCharsDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(GetBooleanArrayElementsDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetByteArrayElementsDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetCharArrayElementsDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetDoubleArrayElementsDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetFloatArrayElementsDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetIntArrayElementsDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetLongArrayElementsDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetShortArrayElementsDelegate), JniLevel.CriticalSafe },
+			{ typeof(GetPrimitiveArrayCriticalDelegate), JniLevel.CriticalSafe },
+			{ typeof(ReleaseBooleanArrayElementsDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ReleaseByteArrayElementsDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ReleaseCharArrayElementsDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ReleaseDoubleArrayElementsDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ReleaseFloatArrayElementsDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ReleaseIntArrayElementsDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ReleaseLongArrayElementsDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ReleaseShortArrayElementsDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(ReleasePrimitiveArrayCriticalDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(MonitorExitDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+			{ typeof(PopLocalFrameDelegate), JniLevel.ErrorSafe | JniLevel.CriticalSafe },
+		};
 
 		/// <summary>
 		/// Retrieves the <see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.

@@ -17,6 +17,17 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// Indicates whether current thread is daemon.
 	/// </summary>
 	public virtual Boolean IsDaemon => false;
+	/// <inheritdoc cref="IEnvironment.PendingException"/>
+	public ThrowableException? PendingException
+	{
+		get
+		{
+			ThrowableException? jniException = this._cache.Thrown as ThrowableException;
+			if (jniException is null && this._cache.Thrown is CriticalException)
+				throw this._cache.Thrown;
+			return jniException;
+		}
+	}
 
 	/// <inheritdoc/>
 	public Boolean NoProxy => true;
@@ -26,9 +37,19 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	public IVirtualMachine VirtualMachine => this._cache.VirtualMachine;
 	/// <inheritdoc/>
 	public Int32 Version => this._cache.Version;
-
 	/// <inheritdoc/>
 	public Boolean JniSecure() => this._cache.JniSecure();
+
+	ThrowableException? IEnvironment.PendingException
+	{
+		get => this.PendingException;
+		set
+		{
+			if (this._cache.Thrown is CriticalException)
+				throw this._cache.Thrown;
+			this._cache.ThrowJniException(value);
+		}
+	}
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
 		using LocalFrame _ = new(this, capacity);
@@ -40,6 +61,11 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 		using LocalFrame _ = new(this, capacity);
 		this._cache.CheckJniError();
 		action(state);
+	}
+	void IEnvironment.DescribeException()
+	{
+		ExceptionDescribeDelegate exceptionDescribe = this._cache.GetDelegate<ExceptionDescribeDelegate>();
+		exceptionDescribe(this.Reference);
 	}
 
 	/// <inheritdoc/>

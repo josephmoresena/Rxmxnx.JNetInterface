@@ -7,6 +7,8 @@ public abstract partial class EnvironmentProxy
 {
 	/// <inheritdoc cref="IEnvironment.VirtualMachine"/>
 	public abstract VirtualMachineProxy VirtualMachine { get; }
+	/// <inheritdoc cref="IEnvironment.PendingException"/>
+	public abstract ThrowableException? PendingException { get; }
 	/// <inheritdoc/>
 	public abstract JClassObject ClassObject { get; }
 	/// <inheritdoc/>
@@ -15,6 +17,16 @@ public abstract partial class EnvironmentProxy
 	public abstract Int32 Version { get; }
 	/// <inheritdoc/>
 	public abstract Int32? LocalCapacity { get; set; }
+
+	ThrowableException? IEnvironment.PendingException
+	{
+		get => this.PendingException;
+		set
+		{
+			if (value is not null)
+				throw value;
+		}
+	}
 
 	/// <inheritdoc/>
 	public abstract JReferenceType GetReferenceType(JObject jObject);
@@ -30,6 +42,8 @@ public abstract partial class EnvironmentProxy
 	public abstract TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func);
 	/// <inheritdoc/>
 	public abstract TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
+	/// <inheritdoc/>
+	public abstract void DescribeException();
 
 	#region IReferenceFeature
 	/// <summary>
