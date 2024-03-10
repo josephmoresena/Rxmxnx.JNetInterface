@@ -28,8 +28,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// <inheritdoc/>
 	public void FatalError(CString? message)
 	{
-		ReadOnlySpan<Byte> utf8Message = message is null ? ReadOnlySpan<Byte>.Empty :
-			!message.IsNullTerminated ? message : (CString)message.Clone();
+		ReadOnlySpan<Byte> utf8Message = JEnvironment.GetSafeSpan(message);
 		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.FatalError));
 		JEnvironment env = this.GetEnvironment(thread.Reference);
 		utf8Message.WithSafeFixed(env, JEnvironment.FatalError);

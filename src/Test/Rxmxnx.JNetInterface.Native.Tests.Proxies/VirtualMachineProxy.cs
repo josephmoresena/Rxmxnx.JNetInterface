@@ -6,8 +6,8 @@ namespace Rxmxnx.JNetInterface.Tests;
 public abstract partial class VirtualMachineProxy : IVirtualMachine
 {
 	public abstract JVirtualMachineRef Reference { get; }
-	public abstract void FatalError(CString message);
-	public abstract void FatalError(String message);
+	public abstract void FatalError(CString? message);
+	public abstract void FatalError(String? message);
 
 	public abstract EnvironmentProxy? GetEnvironment();
 	public abstract ThreadProxy InitializeThread(CString? threadName = default, JGlobalBase? threadGroup = default,

@@ -208,4 +208,15 @@ partial class JEnvironment
 		FatalErrorDelegate fatalError = env._cache.GetDelegate<FatalErrorDelegate>();
 		fatalError(env.Reference, (ReadOnlyValPtr<Byte>)messageMem.Pointer);
 	}
+	/// <summary>
+	/// Retrieves safe read-only span from <paramref name="value"/>.
+	/// </summary>
+	/// <param name="value">A <see cref="CString"/> instance.</param>
+	/// <returns>A binary read-only span from <paramref name="value"/>.</returns>
+	public static ReadOnlySpan<Byte> GetSafeSpan(CString? value)
+	{
+		if (value is null)
+			return ReadOnlySpan<Byte>.Empty;
+		return value.IsNullTerminated ? value.AsSpan() : (CString)value.Clone();
+	}
 }
