@@ -132,7 +132,19 @@ partial class JEnvironment
 	{
 		ThrowableException? jniException = this._cache.Thrown as ThrowableException;
 		if (jniException is null && this._cache.Thrown is not null)
-			throw this._cache.Thrown;
+			if (!this._cache.JniSecure(JniSafetyLevels.ErrorSafe))
+			{
+				throw this._cache.Thrown;
+			}
+			else
+			{
+				JThrowableLocalRef throwableRef = this._cache.GetPendingException();
+				if (!throwableRef.IsDefault)
+				{
+					jniException = this._cache.CreateThrowableException(throwableRef);
+					this._cache.ThrowJniException(jniException, false);
+				}
+			}
 		return jniException;
 	}
 	/// <summary>

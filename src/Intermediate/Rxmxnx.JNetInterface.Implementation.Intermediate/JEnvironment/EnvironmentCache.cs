@@ -116,5 +116,29 @@ partial class JEnvironment
 				}
 			}
 		}
+		/// <summary>
+		/// Retrieves exception occured reference.
+		/// </summary>
+		/// <returns>Pending exception <see cref="JThrowableLocalRef"/> reference.</returns>
+		public JThrowableLocalRef GetPendingException()
+		{
+			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
+			return exceptionOccurred(this.Reference);
+		}
+		/// <summary>
+		/// Creates JNI exception from <paramref name="throwableRef"/>.
+		/// </summary>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
+		public ThrowableException CreateThrowableException(JThrowableLocalRef throwableRef)
+		{
+			this.ClearException();
+
+			using LocalFrame _ = new(this._env, 5);
+			JClassObject jClass =
+				this._env.GetObjectClass(throwableRef.Value, out JReferenceTypeMetadata throwableMetadata);
+			String message = this.GetThrowableMessage(throwableRef);
+			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
+		}
 	}
 }
