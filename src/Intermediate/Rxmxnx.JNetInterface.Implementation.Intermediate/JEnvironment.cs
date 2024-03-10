@@ -18,16 +18,7 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// </summary>
 	public virtual Boolean IsDaemon => false;
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
-	public ThrowableException? PendingException
-	{
-		get
-		{
-			ThrowableException? jniException = this._cache.Thrown as ThrowableException;
-			if (jniException is null && this._cache.Thrown is CriticalException)
-				throw this._cache.Thrown;
-			return jniException;
-		}
-	}
+	public ThrowableException? PendingException => this.GetThrown();
 
 	/// <inheritdoc/>
 	public Boolean NoProxy => true;

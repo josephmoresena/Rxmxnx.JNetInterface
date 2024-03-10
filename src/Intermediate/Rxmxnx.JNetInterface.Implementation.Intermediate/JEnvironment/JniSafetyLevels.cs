@@ -3,10 +3,10 @@ namespace Rxmxnx.JNetInterface;
 partial class JEnvironment
 {
 	/// <summary>
-	/// JNI call level.
+	/// JNI call safety levels.
 	/// </summary>
 	[Flags]
-	private enum JniLevel : Byte
+	private enum JniSafetyLevels : Byte
 	{
 		/// <summary>
 		/// Indicates JNI call is always unsafe.
@@ -19,6 +19,6 @@ partial class JEnvironment
 		/// <summary>
 		/// Indicates JNI call is safe in error mode.
 		/// </summary>
-		ErrorSafe = 0x1,
+		ErrorSafe = 0x2,
 	}
 }

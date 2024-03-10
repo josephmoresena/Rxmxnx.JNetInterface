@@ -85,7 +85,7 @@ partial class JEnvironment
 		/// <returns>JNI function pointer.</returns>
 		private IntPtr GetPointer(Int32 index)
 		{
-			Int32 lastNormalIndex = EnvironmentCache.delegateIndex[typeof(GetObjectRefTypeDelegate)];
+			Int32 lastNormalIndex = EnvironmentCache.delegateIndex[typeof(GetObjectRefTypeDelegate)].Index;
 			if (index <= lastNormalIndex)
 				return this.Reference.Reference.Reference[index];
 			index -= lastNormalIndex;

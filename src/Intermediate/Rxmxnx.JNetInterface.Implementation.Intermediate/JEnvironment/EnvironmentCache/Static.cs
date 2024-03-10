@@ -11,7 +11,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="IVirtualMachine"/> instance.</returns>
 		public static JVirtualMachine GetVirtualMachine(JEnvironmentRef jEnv)
 		{
-			Int32 index = EnvironmentCache.delegateIndex[typeof(GetVirtualMachineDelegate)];
+			Int32 index = EnvironmentCache.delegateIndex[typeof(GetVirtualMachineDelegate)].Index;
 			GetVirtualMachineDelegate getVirtualMachine =
 				jEnv.Reference.Reference[index].GetUnsafeDelegate<GetVirtualMachineDelegate>()!;
 			JniException? jniException = getVirtualMachine(jEnv, out JVirtualMachineRef vmRef);

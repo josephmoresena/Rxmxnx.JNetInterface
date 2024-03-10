@@ -124,6 +124,17 @@ partial class JEnvironment
 		}
 		return default;
 	}
+	/// <summary>
+	/// Retrieves the <see cref="ThrowableException"/> pending exception.
+	/// </summary>
+	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
+	private ThrowableException? GetThrown()
+	{
+		ThrowableException? jniException = this._cache.Thrown as ThrowableException;
+		if (jniException is null && this._cache.Thrown is CriticalException)
+			throw this._cache.Thrown;
+		return jniException;
+	}
 
 	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
 #pragma warning disable CA1859

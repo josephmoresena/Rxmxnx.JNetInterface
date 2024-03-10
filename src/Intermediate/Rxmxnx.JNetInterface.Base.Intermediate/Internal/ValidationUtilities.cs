@@ -334,4 +334,17 @@ internal static class ValidationUtilities
 		}
 		throw new ArgumentException("Invalid primitive signature.");
 	}
+	/// <summary>
+	/// Throws an exception if JNI execution is not secure.
+	/// </summary>
+	/// <param name="functionName">Name of JNI function.</param>
+	/// <param name="jniSecure">Indicates whether JNI execution is safe.</param>
+	/// <exception cref="NotImplementedException">
+	/// Throws an exception if JNI execution is not secure.
+	/// </exception>
+	public static void ThrowIfUnsafe(String functionName, Boolean jniSecure)
+	{
+		if (!jniSecure)
+			throw new InvalidOperationException($"Current JNI status is invalid to call {functionName}.");
+	}
 }
