@@ -236,8 +236,8 @@ public sealed class JStringObjectTests
 			IReadOnlyFixedContext<Char> charsContext = sequence.GetContext();
 
 			Assert.Equal(chars.Pointer, sequence.Pointer);
-			Assert.Equal(sequenceMemory.Copy, sequence.Copy);
-			Assert.Equal(sequenceMemory.Critical, sequenceMemory.Critical);
+			Assert.Equal(sequence.Copy, sequence.Copy);
+			Assert.Equal(sequence.Critical, sequenceMemory.Critical);
 			Assert.False(sequence.Disposed.Value);
 			Assert.True(chars.Values.SequenceEqual(sequence.Values));
 			Assert.Equal(binarySequenceMemory, sequence.GetBinaryContext());
@@ -245,6 +245,8 @@ public sealed class JStringObjectTests
 			Assert.Equal(chars.Pointer, charsContext.Pointer);
 			Assert.True(chars.Values.SequenceEqual(charsContext.Values));
 			Assert.Equal(chars.ValuePointer, charsContext.ValuePointer);
+			Assert.Equal((sequence as IReadOnlyFixedContext<Byte>).Transformation<Byte>(out _).Pointer,
+			             binarySequenceMemory.Transformation<Byte>(out _).Pointer);
 
 			sequence.ReleaseMode = releaseMode;
 			Assert.Equal(releaseMode, sequence.ReleaseMode);
@@ -253,6 +255,7 @@ public sealed class JStringObjectTests
 		{
 			sequence.Dispose();
 		}
+		sequence.Dispose();
 		sequenceMemory.Received(1).GetReadOnlyContext(sequence);
 		sequenceMemory.Received(1).Release(releaseMode);
 	}
@@ -273,15 +276,19 @@ public sealed class JStringObjectTests
 			IReadOnlyFixedContext<Char> charsContext = sequence.GetContext();
 
 			Assert.Equal(chars.Pointer, sequence.Pointer);
-			Assert.Equal(sequenceMemory.Copy, sequence.Copy);
-			Assert.Equal(sequenceMemory.Critical, sequenceMemory.Critical);
+			Assert.Equal(sequence.Copy, sequence.Copy);
+			Assert.Equal(sequence.Critical, sequenceMemory.Critical);
 			Assert.False(sequence.Disposed.Value);
 			Assert.True(chars.Values.SequenceEqual(sequence.Values));
+			Assert.True(chars.Bytes.SequenceEqual((sequence as IReadOnlyFixedMemory<Byte>).Values));
+			Assert.True(chars.Bytes.SequenceEqual((sequence as IReadOnlyFixedMemory<Byte>).Bytes));
 			Assert.Equal(binarySequenceMemory, sequence.GetBinaryContext());
 
 			Assert.Equal(chars.Pointer, charsContext.Pointer);
 			Assert.True(chars.Values.SequenceEqual(charsContext.Values));
 			Assert.Equal(chars.ValuePointer, charsContext.ValuePointer);
+			Assert.Equal((sequence as IReadOnlyFixedContext<Byte>).Transformation<Byte>(out _).Pointer,
+			             binarySequenceMemory.Transformation<Byte>(out _).Pointer);
 
 			sequence.ReleaseMode = releaseMode;
 			Assert.Equal(releaseMode, sequence.ReleaseMode);
@@ -290,6 +297,7 @@ public sealed class JStringObjectTests
 		{
 			sequence.Dispose();
 		}
+		sequence.Dispose();
 		sequenceMemory.Received(1).GetReadOnlyContext(sequence);
 		sequenceMemory.Received(1).Release(releaseMode);
 	}
@@ -304,24 +312,29 @@ public sealed class JStringObjectTests
 		jString.Environment.StringFeature.GetUtf8Sequence(jString, Arg.Any<JMemoryReferenceKind>())
 		       .Returns(sequenceMemory);
 
-		JNativeMemory<Byte> utf8Dispose = jString.GetNativeUtf8Chars();
+		JNativeMemory<Byte> sequence = jString.GetNativeUtf8Chars();
 		try
 		{
-			Assert.Equal(utf8Chars.Pointer, utf8Dispose.Pointer);
-			Assert.Equal(sequenceMemory.Copy, utf8Dispose.Copy);
-			Assert.Equal(sequenceMemory.Critical, sequenceMemory.Critical);
-			Assert.False(utf8Dispose.Disposed.Value);
-			Assert.True(utf8Chars.Values.SequenceEqual(utf8Dispose.Values));
-			Assert.Equal((IReadOnlyFixedContext<Byte>)utf8Chars, utf8Dispose.GetBinaryContext());
+			Assert.Equal(sequence, ((IReadOnlyFixedMemory)sequence).AsBinaryContext());
+			Assert.Equal(utf8Chars.Pointer, sequence.Pointer);
+			Assert.Equal(sequence.Copy, sequence.Copy);
+			Assert.Equal(sequence.Critical, sequenceMemory.Critical);
+			Assert.False(sequence.Disposed.Value);
+			Assert.True(utf8Chars.Values.SequenceEqual(sequence.Values));
+			Assert.True(utf8Chars.Values.SequenceEqual((sequence as IReadOnlyFixedMemory<Byte>).Bytes));
+			Assert.Equal((IReadOnlyFixedContext<Byte>)utf8Chars, sequence.GetBinaryContext());
+			Assert.Equal((sequence as IReadOnlyFixedContext<Byte>).Transformation<Byte>(out _).Pointer,
+			             utf8Chars.Pointer);
 
-			utf8Dispose.ReleaseMode = releaseMode;
-			Assert.Equal(releaseMode, utf8Dispose.ReleaseMode);
+			sequence.ReleaseMode = releaseMode;
+			Assert.Equal(releaseMode, sequence.ReleaseMode);
 		}
 		finally
 		{
-			utf8Dispose.Dispose();
+			sequence.Dispose();
 		}
-		sequenceMemory.Received(1).GetReadOnlyContext(utf8Dispose);
+		sequence.Dispose();
+		sequenceMemory.Received(1).GetReadOnlyContext(sequence);
 		sequenceMemory.Received(1).Release(releaseMode);
 	}
 

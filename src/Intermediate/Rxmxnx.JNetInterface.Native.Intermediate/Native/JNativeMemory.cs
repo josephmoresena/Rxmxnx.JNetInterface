@@ -77,6 +77,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 		=> this._context.Transformation<TDestination>(out residual);
 
 	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
 	~JNativeMemory() { this.ReleaseUnmanagedResources(); }
 
 	/// <summary>
