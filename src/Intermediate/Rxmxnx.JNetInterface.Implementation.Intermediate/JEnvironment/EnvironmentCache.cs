@@ -56,7 +56,7 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfDifferentThread(this.Thread);
 			Type typeOfT = typeof(TDelegate);
-			DelegateInfo info = EnvironmentCache.delegateIndex[typeOfT];
+			JniDelegateInfo info = EnvironmentCache.delegateIndex[typeOfT];
 			ValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
 			IntPtr ptr = this.GetPointer(info.Index);
 			return this._delegateCache.GetDelegate<TDelegate>(ptr);
@@ -83,7 +83,7 @@ partial class JEnvironment
 		}
 		/// <inheritdoc cref="IEnvironment.JniSecure"/>
 		/// <param name="level">JNI call level.</param>
-		public Boolean JniSecure(JniSafetyLevels level = JniSafetyLevels.Unsafe)
+		public Boolean JniSecure(JniSafetyLevels level = JniSafetyLevels.None)
 			=> this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId &&
 				(level.HasFlag(JniSafetyLevels.CriticalSafe) || this._criticalCount == 0) &&
 				(level.HasFlag(JniSafetyLevels.ErrorSafe) || this.Thrown is null);

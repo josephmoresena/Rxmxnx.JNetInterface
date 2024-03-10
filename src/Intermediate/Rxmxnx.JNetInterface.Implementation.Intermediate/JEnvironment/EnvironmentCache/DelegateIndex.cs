@@ -7,7 +7,7 @@ partial class JEnvironment
 		/// <summary>
 		/// JNI Delegate dictionary.
 		/// </summary>
-		private static readonly Dictionary<Type, DelegateInfo> delegateIndex = new()
+		private static readonly Dictionary<Type, JniDelegateInfo> delegateIndex = new()
 		{
 			{ typeof(DefineClassDelegate), new() { Index = 0, Name = nameof(DefineClassDelegate), } },
 			{ typeof(FindClassDelegate), new() { Index = 1, Name = nameof(FindClassDelegate), } },
