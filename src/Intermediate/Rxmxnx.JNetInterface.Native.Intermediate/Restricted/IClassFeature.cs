@@ -76,4 +76,29 @@ public partial interface IClassFeature
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
 	[return: NotNullIfNotNull(nameof(jClass))]
 	JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass);
+	/// <summary>
+	/// Throws an exception from <typeparamref name="TThrowable"/> type.
+	/// </summary>
+	/// <typeparam name="TThrowable"></typeparam>
+	/// <param name="message">
+	/// The message used to construct the <c>java.lang.Throwable</c> instance.
+	/// The string is encoded in modified UTF-8.
+	/// </param>
+	/// <param name="throwException">
+	/// Indicates whether exception should be thrown in managed code.
+	/// </param>
+	void ThrowNew<TThrowable>(CString? message, Boolean throwException)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
+	/// <summary>
+	/// Throws an exception from <typeparamref name="TThrowable"/> type.
+	/// </summary>
+	/// <typeparam name="TThrowable"></typeparam>
+	/// <param name="message">
+	/// The message used to construct the <c>java.lang.Throwable</c> instance.
+	/// </param>
+	/// <param name="throwException">
+	/// Indicates whether exception should be thrown in managed code.
+	/// </param>
+	void ThrowNew<TThrowable>(String? message, Boolean throwException)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 }

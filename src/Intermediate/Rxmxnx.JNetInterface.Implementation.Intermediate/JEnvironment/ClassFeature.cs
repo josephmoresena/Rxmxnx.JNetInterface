@@ -51,6 +51,20 @@ partial class JEnvironment
 					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>(),
 			};
 		}
+		public void ThrowNew<TThrowable>(CString? message, Boolean throwException)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			ReadOnlySpan<Byte> utf8Message = message is null ? ReadOnlySpan<Byte>.Empty :
+				!message.IsNullTerminated ? message : (CString)message.Clone();
+			this.ThrowNew<TThrowable>(utf8Message, throwException, message?.ToString());
+		}
+		public void ThrowNew<TThrowable>(String? message, Boolean throwException)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			CString? utf8Message = (CString?)message;
+			this.ThrowNew<TThrowable>(utf8Message, throwException, message);
+		}
+
 		public JClassObject GetClass(ReadOnlySpan<Byte> className)
 		{
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);

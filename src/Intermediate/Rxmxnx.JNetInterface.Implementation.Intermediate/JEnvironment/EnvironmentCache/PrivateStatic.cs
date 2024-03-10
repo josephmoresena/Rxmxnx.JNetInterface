@@ -66,6 +66,23 @@ partial class JEnvironment
 			}
 		}
 		/// <summary>
+		/// Constructs an <typeparamref name="TThrowable"/> exception with the message specified by
+		/// <paramref name="messageMem"/> and causes that exception to be thrown.
+		/// </summary>
+		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
+		/// <param name="messageMem">Fixed exception message.</param>
+		/// <param name="cache">A <see cref="EnvironmentCache"/> instance.</param>
+		/// <returns>JNI code result.</returns>
+		private static JResult ThrowNew<TThrowable>(in IReadOnlyFixedMemory messageMem, EnvironmentCache cache)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			JClassObject jClass = cache.GetClass<TThrowable>();
+			ThrowNewDelegate throwNew = cache.GetDelegate<ThrowNewDelegate>();
+			using INativeTransaction jniTransaction = cache.VirtualMachine.CreateTransaction(2);
+			JClassLocalRef classRef = jniTransaction.Add(cache.ReloadClass(jClass));
+			return throwNew(cache.Reference, classRef, (ReadOnlyValPtr<Byte>)messageMem.Pointer);
+		}
+		/// <summary>
 		/// Creates a <see cref="IFixedContext{T}.IDisposable"/> instance from an span created in stack.
 		/// </summary>
 		/// <typeparam name="T">Type of elements in span.</typeparam>

@@ -24,7 +24,7 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <summary>
 	/// JNI pending exception.
 	/// </summary>
-	ThrowableException? PendingException { get; internal set; }
+	ThrowableException? PendingException { get; set; }
 
 	/// <summary>
 	/// Accessing feature.

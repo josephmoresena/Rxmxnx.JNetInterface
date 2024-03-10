@@ -23,6 +23,18 @@ public partial class JVirtualMachine : IVirtualMachine
 			Name = threadName, ThreadGroup = threadGroup, Version = version, IsDaemon = true,
 		});
 
+	/// <inheritdoc/>
+	public void FatalError(String? message) => this.FatalError((CString?)message);
+	/// <inheritdoc/>
+	public void FatalError(CString? message)
+	{
+		ReadOnlySpan<Byte> utf8Message = message is null ? ReadOnlySpan<Byte>.Empty :
+			!message.IsNullTerminated ? message : (CString)message.Clone();
+		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.FatalError));
+		JEnvironment env = this.GetEnvironment(thread.Reference);
+		utf8Message.WithSafeFixed(env, JEnvironment.FatalError);
+	}
+
 	/// <summary>
 	/// Registers <typeparamref name="TReference"/> as valid datatype for current process.
 	/// </summary>

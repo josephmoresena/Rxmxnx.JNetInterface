@@ -21,4 +21,10 @@ public abstract partial class EnvironmentProxy
 		where TDataType : JReferenceObject, IDataType<TDataType>;
 	/// <inheritdoc/>
 	public abstract JReferenceTypeMetadata GetTypeMetadata(JClassObject? jClass);
+	/// <inheritdoc/>
+	public abstract void ThrowNew<TThrowable>(CString message, Boolean throwException)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
+	/// <inheritdoc/>
+	public abstract void ThrowNew<TThrowable>(String message, Boolean throwException)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 }

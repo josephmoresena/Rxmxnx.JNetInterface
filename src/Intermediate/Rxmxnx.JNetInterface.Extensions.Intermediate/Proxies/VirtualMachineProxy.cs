@@ -13,6 +13,10 @@ public abstract class VirtualMachineProxy : IVirtualMachine
 		=> this.InitializeThread(threadName, threadGroup, version);
 	IThread IVirtualMachine.InitializeDaemon(CString? threadName, JGlobalBase? threadGroup, Int32 version)
 		=> this.InitializeDaemon(threadName, threadGroup, version);
+	/// <inheritdoc/>
+	public abstract void FatalError(CString message);
+	/// <inheritdoc/>
+	public abstract void FatalError(String message);
 
 	/// <inheritdoc cref="IVirtualMachine.GetEnvironment()"/>
 	public abstract EnvironmentProxy? GetEnvironment();

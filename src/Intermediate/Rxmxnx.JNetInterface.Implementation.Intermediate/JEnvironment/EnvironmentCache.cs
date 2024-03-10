@@ -70,15 +70,13 @@ partial class JEnvironment
 			{
 				ExceptionCheckDelegate exceptionCheck = this.GetDelegate<ExceptionCheckDelegate>();
 				if (exceptionCheck(this.Reference) != JBoolean.TrueValue) return;
-				this.ThrowJniException(new CriticalException());
+				this.ThrowJniException(new CriticalException(), true);
 			}
 			else
 			{
-				ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
-				JThrowableLocalRef throwableRef = exceptionOccurred(this.Reference);
+				JThrowableLocalRef throwableRef = this.GetPendingException();
 				if (throwableRef.IsDefault) return;
-				this.ClearException();
-				this.ThrowJniException(this.CreateThrowableException(throwableRef));
+				this.ThrowJniException(this.CreateThrowableException(throwableRef), true);
 			}
 		}
 		/// <inheritdoc cref="IEnvironment.JniSecure"/>
@@ -91,16 +89,19 @@ partial class JEnvironment
 		/// Sets <paramref name="throwableException"/> as pending exception and throws it.
 		/// </summary>
 		/// <param name="throwableException">A <see cref="ThrowableException"/> instance.</param>
+		/// <param name="throwException">
+		/// Indicates whether exception should be thrown in managed code.
+		/// </param>
 		/// <exception cref="ThrowableException">
 		/// Throws if <paramref name="throwableException"/> is not null.
 		/// </exception>
-		public void ThrowJniException(ThrowableException? throwableException)
+		public void ThrowJniException(ThrowableException? throwableException, Boolean throwException)
 		{
 			if (this.Thrown == throwableException) return;
 			try
 			{
 				ValidationUtilities.ThrowIfProxy(throwableException?.Global);
-				this.ThrowJniException(throwableException as JniException);
+				this.ThrowJniException(throwableException as JniException, throwException);
 			}
 			finally
 			{

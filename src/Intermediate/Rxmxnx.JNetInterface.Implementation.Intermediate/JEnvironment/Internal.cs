@@ -198,4 +198,14 @@ partial class JEnvironment
 		JVirtualMachine vm = EnvironmentCache.GetVirtualMachine(reference);
 		return vm.GetEnvironment(reference);
 	}
+	/// <summary>
+	/// Sends JNI fatal error signal to VM.
+	/// </summary>
+	/// <param name="messageMem">Error message.</param>
+	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+	internal static void FatalError(in IReadOnlyFixedMemory messageMem, JEnvironment env)
+	{
+		FatalErrorDelegate fatalError = env._cache.GetDelegate<FatalErrorDelegate>();
+		fatalError(env.Reference, (ReadOnlyValPtr<Byte>)messageMem.Pointer);
+	}
 }

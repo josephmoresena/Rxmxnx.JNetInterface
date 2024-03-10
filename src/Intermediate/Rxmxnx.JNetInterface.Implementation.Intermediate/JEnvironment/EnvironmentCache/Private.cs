@@ -108,16 +108,81 @@ partial class JEnvironment
 			return false;
 		}
 		/// <summary>
+		/// Throws an exception from <typeparamref name="TThrowable"/> type.
+		/// </summary>
+		/// <typeparam name="TThrowable"></typeparam>
+		/// <param name="utf8Message">
+		/// The message used to construct the <c>java.lang.Throwable</c> instance.
+		/// The string is encoded in modified UTF-8.
+		/// </param>
+		/// <param name="throwException">
+		/// Indicates whether exception should be thrown in managed code.
+		/// </param>
+		/// <param name="message">
+		/// The message used to construct the <see cref="ThrowableException"/> instance.
+		/// </param>
+		private void ThrowNew<TThrowable>(ReadOnlySpan<Byte> utf8Message, Boolean throwException, String? message)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			JResult result = utf8Message.WithSafeFixed(this, EnvironmentCache.ThrowNew<TThrowable>);
+			ValidationUtilities.ThrowIfInvalidResult(result);
+
+			ThrowableException throwableException =
+				this.CreateThrowableException<TThrowable>(this.GetPendingException(), message);
+			this.ThrowJniException(throwableException, throwException);
+		}
+		/// <summary>
+		/// Retrieves exception occured reference.
+		/// </summary>
+		/// <returns>Pending exception <see cref="JThrowableLocalRef"/> reference.</returns>
+		private JThrowableLocalRef GetPendingException()
+		{
+			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
+			return exceptionOccurred(this.Reference);
+		}
+		/// <summary>
+		/// Creates JNI exception from <paramref name="throwableRef"/>.
+		/// </summary>
+		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <param name="message">Throwable message.</param>
+		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
+		private ThrowableException CreateThrowableException<TThrowable>(JThrowableLocalRef throwableRef,
+			String? message) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			JClassObject jClass = this.GetClass<TThrowable>();
+			JReferenceTypeMetadata throwableMetadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TThrowable>();
+			this.ClearException();
+			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
+		}
+		/// <summary>
 		/// Creates JNI exception from <paramref name="throwableRef"/>.
 		/// </summary>
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
 		private ThrowableException CreateThrowableException(JThrowableLocalRef throwableRef)
 		{
+			this.ClearException();
+
 			using LocalFrame _ = new(this._env, 5);
 			JClassObject jClass =
 				this._env.GetObjectClass(throwableRef.Value, out JReferenceTypeMetadata throwableMetadata);
 			String message = this.GetThrowableMessage(throwableRef);
+			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
+		}
+		/// <summary>
+		/// Creates JNI exception from <paramref name="throwableRef"/>.
+		/// </summary>
+		/// <param name="jClass">Throwable class.</param>
+		/// <param name="throwableMetadata">Throwable metadata.</param>
+		/// <param name="message">Throwable message.</param>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
+		private ThrowableException CreateThrowableException(JClassObject jClass,
+			JReferenceTypeMetadata throwableMetadata, String? message, JThrowableLocalRef throwableRef)
+		{
+			this._env.DeleteLocalRef(throwableRef.Value);
+
 			ThrowableObjectMetadata objectMetadata = new(jClass, throwableMetadata, message);
 			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
 			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
@@ -173,14 +238,18 @@ partial class JEnvironment
 		/// <summary>
 		/// Sets <paramref name="jniException"/> as managed pending exception and throws it.
 		/// </summary>
+		/// <param name="throwException">
+		/// Indicates whether exception should be thrown in managed code.
+		/// </param>
 		/// <param name="jniException">A <see cref="JniException"/> instance.</param>
 		/// <exception cref="ThrowableException">
-		/// Throws if <paramref name="jniException"/> is not null.
+		/// Throws if <paramref name="jniException"/> is not null and <paramref name="throwException"/> is
+		/// <see langword="true"/>.
 		/// </exception>
-		private void ThrowJniException(JniException? jniException)
+		private void ThrowJniException(JniException? jniException, Boolean throwException)
 		{
 			this.Thrown = jniException;
-			if (this.Thrown is not null) throw this.Thrown;
+			if (this.Thrown is not null && throwException) throw this.Thrown;
 		}
 	}
 }

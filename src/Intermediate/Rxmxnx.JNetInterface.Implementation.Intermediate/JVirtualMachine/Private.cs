@@ -30,7 +30,7 @@ public partial class JVirtualMachine
 	{
 		GetEnvDelegate del = this._cache.GetDelegate<GetEnvDelegate>();
 		JResult result = del(this.Reference, out JEnvironmentRef envRef, 0x00010006);
-		return result == JResult.Ok ? this._cache.ThreadCache.Get(envRef, out _) : default;
+		return result is JResult.Ok ? this._cache.ThreadCache.Get(envRef, out _) : default;
 	}
 	/// <summary>
 	/// Attaches current thread to VM.

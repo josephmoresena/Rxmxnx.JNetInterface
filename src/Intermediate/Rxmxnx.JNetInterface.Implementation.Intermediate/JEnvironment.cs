@@ -18,7 +18,11 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// </summary>
 	public virtual Boolean IsDaemon => false;
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
-	public ThrowableException? PendingException => this.GetThrown();
+	public ThrowableException? PendingException
+	{
+		get => this.GetThrown();
+		set => this.SetThrown(value);
+	}
 
 	/// <inheritdoc/>
 	public Boolean NoProxy => true;
@@ -31,16 +35,6 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <inheritdoc/>
 	public Boolean JniSecure() => this._cache.JniSecure();
 
-	ThrowableException? IEnvironment.PendingException
-	{
-		get => this.PendingException;
-		set
-		{
-			if (this._cache.Thrown is CriticalException)
-				throw this._cache.Thrown;
-			this._cache.ThrowJniException(value);
-		}
-	}
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
 		using LocalFrame _ = new(this, capacity);

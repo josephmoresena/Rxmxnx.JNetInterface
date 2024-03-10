@@ -42,7 +42,17 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	{
 		IEnvironment env = this.Environment;
 		JReferenceTypeMetadata metadata = env.ClassFeature.GetTypeMetadata(this.Class);
-		throw metadata.CreateException(this.Global, this.Message)!;
+		JGlobal jGlobal = env.ReferenceFeature.Create<JGlobal>(this);
+		try
+		{
+			env.PendingException = metadata.CreateException(jGlobal, this.Message)!;
+		}
+		catch (Exception)
+		{
+			jGlobal.Dispose();
+			throw;
+		}
+		throw env.PendingException;
 	}
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
@@ -58,4 +68,33 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 		this._message ??= throwableMetadata.Message;
 		this._stackTrace ??= throwableMetadata.StackTrace;
 	}
+
+	/// <summary>
+	/// Throws an exception from <typeparamref name="TThrowable"/> type.
+	/// </summary>
+	/// <typeparam name="TThrowable"></typeparam>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="message">
+	/// The message used to construct the <c>java.lang.Throwable</c> instance.
+	/// </param>
+	/// <param name="throwException">
+	/// Indicates whether exception should be thrown in managed code.
+	/// </param>
+	public static void ThrowNew<TThrowable>(IEnvironment env, CString message, Boolean throwException = false)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		=> env.ClassFeature.ThrowNew<TThrowable>(message, throwException);
+	/// <summary>
+	/// Throws an exception from <typeparamref name="TThrowable"/> type.
+	/// </summary>
+	/// <typeparam name="TThrowable"></typeparam>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="message">
+	/// The message used to construct the <c>java.lang.Throwable</c> instance.
+	/// </param>
+	/// <param name="throwException">
+	/// Indicates whether exception should be thrown in managed code.
+	/// </param>
+	public static void ThrowNew<TThrowable>(IEnvironment env, String message, Boolean throwException = false)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		=> env.ClassFeature.ThrowNew<TThrowable>(message, throwException);
 }

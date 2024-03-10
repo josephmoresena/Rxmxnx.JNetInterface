@@ -131,9 +131,19 @@ partial class JEnvironment
 	private ThrowableException? GetThrown()
 	{
 		ThrowableException? jniException = this._cache.Thrown as ThrowableException;
-		if (jniException is null && this._cache.Thrown is CriticalException)
+		if (jniException is null && this._cache.Thrown is not null)
 			throw this._cache.Thrown;
 		return jniException;
+	}
+	/// <summary>
+	/// Sets <paramref name="throwableException"/> as pending exception.
+	/// </summary>
+	/// <param name="throwableException">A <see cref="ThrowableException"/> instance.</param>
+	private void SetThrown(ThrowableException? throwableException)
+	{
+		if (this._cache.Thrown is CriticalException)
+			throw this._cache.Thrown;
+		this._cache.ThrowJniException(throwableException, false);
 	}
 
 	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
