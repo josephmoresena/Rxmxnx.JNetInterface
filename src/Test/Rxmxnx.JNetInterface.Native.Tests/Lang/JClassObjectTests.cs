@@ -288,6 +288,8 @@ public sealed class JClassObjectTests
 		Assert.Equal(JClassObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JClassObjectTests.hash.ToString(), IDataType.GetHash<JClassObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
+		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JClassObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>(), typeMetadata.Interfaces);

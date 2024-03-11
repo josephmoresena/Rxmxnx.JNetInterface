@@ -57,4 +57,6 @@ public abstract partial class EnvironmentProxy : IEnvironment
 		});
 		return env;
 	}
+	public static Type? GetFamilyType<TDataType>() where TDataType : IDataType => TDataType.FamilyType;
+	public static JTypeKind? GetKind<TDataType>() where TDataType : IDataType => TDataType.Kind;
 }

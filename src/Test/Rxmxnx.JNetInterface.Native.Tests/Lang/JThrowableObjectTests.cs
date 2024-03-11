@@ -14,12 +14,16 @@ public sealed class JThrowableObjectTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
-	internal void ProcessMetadataTest(Boolean useMessage)
+	[InlineData(true, true)]
+	[InlineData(false, true)]
+	internal void ProcessMetadataTest(Boolean useMessage, Boolean emptyStackTrace = false)
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JThrowableLocalRef throwableRef = JThrowableObjectTests.fixture.Create<JThrowableLocalRef>();
 		String message = JThrowableObjectTests.fixture.Create<String>();
-		StackTraceInfo[] stackTrace = JThrowableObjectTests.fixture.CreateMany<StackTraceInfo>().ToArray();
+		StackTraceInfo[] stackTrace = emptyStackTrace ?
+			JThrowableObjectTests.fixture.CreateMany<StackTraceInfo>().ToArray() :
+			Array.Empty<StackTraceInfo>();
 		using JClassObject jClass = new(env);
 		using JClassObject jThrowableClass = new(jClass, IClassType.GetMetadata<JThrowableObject>());
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
@@ -48,6 +52,12 @@ public sealed class JThrowableObjectTests
 		Assert.Equal(throwableMetadata.ObjectSignature, jThrowable.ObjectSignature);
 		Assert.Equal(jStringMessage.Value, jThrowable.Message);
 		Assert.Equal(stackTrace, jThrowable.StackTrace);
+
+		ThrowableObjectMetadata objectMetadata =
+			Assert.IsType<ThrowableObjectMetadata>(ILocalObject.CreateMetadata(jThrowable));
+		Assert.Equal(throwableMetadata.ObjectClassName, objectMetadata.ObjectClassName);
+		Assert.Equal(throwableMetadata.ObjectSignature, objectMetadata.ObjectSignature);
+		Assert.Equal(throwableMetadata.Message ?? jStringMessage.Value, objectMetadata.Message);
 
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jThrowable);
 	}
@@ -86,6 +96,8 @@ public sealed class JThrowableObjectTests
 		Assert.Equal(JThrowableObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JThrowableObjectTests.hash.ToString(), IDataType.GetHash<JThrowableObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
+		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JThrowableObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
@@ -107,7 +119,7 @@ public sealed class JThrowableObjectTests
 			Assert.IsType<ThrowableException<JThrowableObject>>(
 				typeMetadata.CreateException(jGlobal, exceptionMessage));
 
-		env.ClassFeature.Received(1).GetObjectClass(jLocal);
+		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JThrowableObject>(Arg.Any<JReferenceObject>());
 		Assert.Equal(jGlobal, exception.Global);
 		Assert.Equal(exceptionMessage, exception.Message);

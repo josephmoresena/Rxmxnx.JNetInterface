@@ -23,14 +23,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// <inheritdoc/>
 	protected JThrowableObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
-	protected JThrowableObject(IReferenceType.ObjectInitializer initializer) : base(
-		initializer.Instance.ForExternalUse(out JClassObject jClass, out ObjectMetadata metadata), jClass)
-	{
-		if (metadata is not ThrowableObjectMetadata throwableMetadata)
-			return;
-		this._message ??= throwableMetadata.Message;
-		this._stackTrace ??= throwableMetadata.StackTrace;
-	}
+	protected JThrowableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
