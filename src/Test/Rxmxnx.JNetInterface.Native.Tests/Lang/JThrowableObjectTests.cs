@@ -179,6 +179,7 @@ public sealed class JThrowableObjectTests
 
 			exception.WithSafeInvoke(t =>
 			{
+				Assert.Equal(default, t.InternalReference);
 				Assert.Equal(exceptionMessage, t.Message);
 				Assert.Equal(typeMetadata.ClassName, t.ObjectClassName);
 				Assert.Equal(typeMetadata.Signature, t.ObjectSignature);

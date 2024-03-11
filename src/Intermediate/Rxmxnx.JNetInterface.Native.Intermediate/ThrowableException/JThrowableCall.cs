@@ -33,11 +33,10 @@ public partial class ThrowableException
 		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 		public void Invoke<TThrowable>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
-			if (this._delegate is not Action<TThrowable> action) return;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
 			using JWeak jWeak = env.ReferenceFeature.CreateWeak(this._global);
 			using TThrowable throwableT = jWeak.AsLocal<TThrowable>(env);
-			action(throwableT);
+			(this._delegate as Action<TThrowable>)!(throwableT);
 			this._global.RefreshMetadata(throwableT);
 		}
 		/// <summary>
@@ -48,11 +47,10 @@ public partial class ThrowableException
 		/// <returns>Function result.</returns>
 		public TResult Invoke<TThrowable, TResult>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
-			if (this._delegate is not Func<TThrowable, TResult> func) return default!;
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
 			using JWeak jWeak = env.ReferenceFeature.CreateWeak(this._global);
 			TThrowable throwableT = jWeak.AsLocal<TThrowable>(env);
-			TResult result = func(throwableT);
+			TResult result = (this._delegate as Func<TThrowable, TResult>)!(throwableT);
 			this._global.RefreshMetadata(throwableT);
 			return result;
 		}

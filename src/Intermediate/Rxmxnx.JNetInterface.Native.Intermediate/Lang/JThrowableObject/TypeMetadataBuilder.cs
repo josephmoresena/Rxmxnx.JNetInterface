@@ -37,16 +37,6 @@ public partial class JThrowableObject
 		}
 
 		/// <summary>
-		/// Sets the type signature.
-		/// </summary>
-		/// <param name="signature">Type signature.</param>
-		/// <returns>Current instance.</returns>
-		public TypeMetadataBuilder<TThrowable> WithSignature(CString signature)
-		{
-			this._builder.WithSignature(signature);
-			return this;
-		}
-		/// <summary>
 		/// Appends an interface to current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>

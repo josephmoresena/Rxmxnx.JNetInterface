@@ -139,7 +139,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <param name="signature">Type signature.</param>
 		/// <returns>Current instance.</returns>
-		internal TypeMetadataBuilder<TClass> WithSignature(CString signature)
+		internal TypeMetadataBuilder<TClass> WithSignature(ReadOnlySpan<Byte> signature)
 		{
 			this._builder.WithSignature(signature);
 			return this;
