@@ -51,7 +51,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 			{
 				Value = new(env, jLocal, localRef)
 				{
-					Class = jClass, IsRealClass = jClass is not null && jClass.IsFinal,
+					Class = jClass, IsRealClass = jClass is not null && (jClass.IsFinal || (Boolean)l[3]),
 				},
 			};
 		});

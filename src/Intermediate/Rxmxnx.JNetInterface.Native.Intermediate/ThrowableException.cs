@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// Represents error that occur during JNI calls.
 /// </summary>
-public abstract partial class ThrowableException : JniException
+public abstract partial class ThrowableException : JniException, IThrowableException
 {
 	/// <summary>
 	/// Global throwable instance.
@@ -17,6 +17,24 @@ public abstract partial class ThrowableException : JniException
 	/// <param name="message">Exception message.</param>
 	private protected ThrowableException(JGlobalBase jGlobal, String? message) : base(message: message)
 		=> this.Global = jGlobal;
+
+	/// <inheritdoc/>
+	public void WithSafeInvoke(Action<JThrowableObject> action) => this.WithSafeInvokeBase(action);
+	/// <inheritdoc/>
+	public TResult WithSafeInvoke<TResult>(Func<JThrowableObject, TResult> func) => this.WithSafeInvokeBase(func);
+
+	/// <summary>
+	/// Invokes <paramref name="action"/> using the current <see cref="JThrowableObject"/> instance.
+	/// </summary>
+	/// <param name="action">A <see cref="Action{JThrowableObject}"/> delegate.</param>
+	private protected abstract void WithSafeInvokeBase(Action<JThrowableObject> action);
+	/// <summary>
+	/// Executes <paramref name="func"/> using the current <see cref="JThrowableObject"/> instance.
+	/// </summary>
+	/// <typeparam name="TResult">Type of <paramref name="func"/> result.</typeparam>
+	/// <param name="func">A <see cref="Action{JThrowableObject}"/> delegate.</param>
+	/// <returns>Execution result of <paramref name="func"/>.</returns>
+	private protected abstract TResult WithSafeInvokeBase<TResult>(Func<JThrowableObject, TResult> func);
 
 	/// <summary>
 	/// Performs an action using current global throwable instance.
@@ -69,4 +87,10 @@ public sealed class ThrowableException<TThrowable> : ThrowableException, IThrowa
 		JThrowableCall call = new(this.Global, func);
 		return Task.Factory.StartNew(ThrowableException.WithSafeInvoke<JThrowableObject, TResult>, call).Result;
 	}
+
+	/// <inheritdoc/>
+	private protected override void WithSafeInvokeBase(Action<JThrowableObject> action) => this.WithSafeInvoke(action);
+	/// <inheritdoc/>
+	private protected override TResult WithSafeInvokeBase<TResult>(Func<JThrowableObject, TResult> func)
+		=> this.WithSafeInvoke(func);
 }

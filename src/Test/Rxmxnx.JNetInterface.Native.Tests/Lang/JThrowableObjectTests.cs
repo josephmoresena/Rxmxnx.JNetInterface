@@ -127,4 +127,89 @@ public sealed class JThrowableObjectTests
 		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
 		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	internal void ThrowTest(Boolean fail)
+	{
+		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JThrowableObject>();
+		String exceptionMessage = JThrowableObjectTests.fixture.Create<String>();
+		VirtualMachineProxy vm = Substitute.For<VirtualMachineProxy>();
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
+		JThrowableLocalRef throwableRef = JThrowableObjectTests.fixture.Create<JThrowableLocalRef>();
+		JGlobalRef globalRef = JThrowableObjectTests.fixture.Create<JGlobalRef>();
+		JWeakRef weakRef = JThrowableObjectTests.fixture.Create<JWeakRef>();
+		Exception failException = JThrowableObjectTests.fixture.Create<Exception>();
+		using JClassObject jClassClass = new(env);
+		using JClassObject jThrowableClass = new(jClassClass, typeMetadata);
+		using JClassObject jStringClass = new(jClassClass, IClassType.GetMetadata<JStringObject>());
+		using JStringObject jStringMessage = new(jStringClass, default, exceptionMessage);
+		using JThrowableObject jThrowable =
+			Assert.IsType<JThrowableObject>(typeMetadata.CreateInstance(jThrowableClass, throwableRef.Value, true));
+		using JGlobal jGlobal =
+			new(vm, new ThrowableObjectMetadata(new(jThrowableClass)) { Message = exceptionMessage, }, !env.NoProxy,
+			    globalRef);
+		using JWeak jWeak = new(jGlobal, weakRef);
+
+		IMutableWrapper<ThrowableException?> mutableException = IMutableWrapper<ThrowableException>.Create();
+
+		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
+		env.ReferenceFeature.Create<JGlobal>(jThrowable).Returns(jGlobal);
+		env.FunctionSet.GetMessage(jThrowable).Returns(jStringMessage);
+		env.ClassFeature.GetTypeMetadata(jThrowableClass).Returns(typeMetadata);
+		env.PendingException = Arg.Do<ThrowableException>(c =>
+		{
+			if (fail) throw failException;
+			mutableException.Value = c;
+			env.PendingException.Returns(c);
+		});
+		thread.ReferenceFeature.CreateWeak(jGlobal).Returns(jWeak);
+		thread.ClassFeature.GetClass(JThrowableObjectTests.className).Returns(jThrowableClass);
+		thread.GetReferenceType(jWeak).Returns(JReferenceType.WeakGlobalRefType);
+		thread.IsSameObject(jWeak, default).Returns(false);
+
+		if (!fail)
+		{
+			ThrowableException exception =
+				Assert.Throws<ThrowableException<JThrowableObject>>(() => jThrowable.Throw());
+			Assert.Equal(exceptionMessage, exception.Message);
+			Assert.Equal(jGlobal, exception.Global);
+			Assert.Equal(mutableException.Value, exception);
+
+			exception.WithSafeInvoke(t =>
+			{
+				Assert.Equal(exceptionMessage, t.Message);
+				Assert.Equal(typeMetadata.ClassName, t.ObjectClassName);
+				Assert.Equal(typeMetadata.Signature, t.ObjectSignature);
+			});
+			Assert.Equal(jWeak, exception.WithSafeInvoke(t => t.Weak));
+
+			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
+			thread.ClassFeature.Received(2).GetClass(JThrowableObjectTests.className);
+			thread.Received(3).GetReferenceType(jWeak);
+			thread.Received(3).IsSameObject(jWeak, default);
+		}
+		else
+		{
+			Assert.Equal(failException, Assert.ThrowsAny<Exception>(() => jThrowable.Throw()));
+		}
+
+		env.ReferenceFeature.Received(1).Create<JGlobal>(jThrowable);
+		env.FunctionSet.Received(1).GetMessage(jThrowable);
+	}
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	internal void ThrowNewTest(Boolean throwException)
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		String exceptionMessage = JThrowableObjectTests.fixture.Create<String>();
+		CString utf8Message = (CString)exceptionMessage;
+		JThrowableObject.ThrowNew<JThrowableObject>(env, exceptionMessage, throwException);
+		JThrowableObject.ThrowNew<JThrowableObject>(env, utf8Message, throwException);
+
+		env.ClassFeature.Received(1).ThrowNew<JThrowableObject>(exceptionMessage, throwException);
+		env.ClassFeature.Received(1).ThrowNew<JThrowableObject>(utf8Message, throwException);
+	}
 }
