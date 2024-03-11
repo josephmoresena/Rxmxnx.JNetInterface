@@ -12,7 +12,7 @@ public sealed record JThrowableTypeMetadata<TThrowable> : JClassTypeMetadata<TTh
 
 	/// <inheritdoc/>
 	public override String ToString()
-		=> $"{nameof(JThrowableTypeMetadata<TThrowable>)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+		=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
 	/// <inheritdoc/>
 	internal override ThrowableException CreateException(JGlobalBase jGlobalThrowable,

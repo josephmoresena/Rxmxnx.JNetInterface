@@ -123,7 +123,7 @@ public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView
 		if (jArray is null) return default;
 		if (jArray is not IArrayObject<TElement>)
 			JLocalObject.Validate<JArrayObject<TElement>>(jArray);
-		return new(jArray, jArray.Class);
+		return new(jArray);
 	}
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="JLocalObject"/> to <see cref="JArrayObject{TElement}"/>.

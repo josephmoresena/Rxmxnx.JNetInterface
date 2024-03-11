@@ -54,7 +54,7 @@ partial class JEnvironment
 				JClassObject jClass = this.GetClass<TElement>();
 				arrayRef = this.NewObjectArray(length, jClass);
 			}
-			return new(this._env, arrayRef, length);
+			return new(this.GetClass<JArrayObject<TElement>>(), arrayRef, length);
 		}
 		public JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement)
 			where TElement : IObject, IDataType<TElement>
@@ -69,7 +69,7 @@ partial class JEnvironment
 			{
 				JClassObject jClass = this.GetClass<TElement>();
 				JArrayLocalRef arrayRef = this.NewObjectArray(length, jClass, initialElement as JReferenceObject);
-				result = new(this._env, arrayRef, length);
+				result = new(this.GetClass<JArrayObject<TElement>>(), arrayRef, length);
 			}
 			return result;
 		}

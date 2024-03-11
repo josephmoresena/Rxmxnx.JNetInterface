@@ -234,10 +234,7 @@ public sealed class JClassObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jClass = new(jClassClass, classRef);
 		using JClassObject jArrayClass = new(jClass, IArrayType.GetArrayMetadata<JArrayObject<JClassObject>>());
-
-		env.ClassFeature.GetClass<JArrayObject<JClassObject>>().Returns(jArrayClass);
-
-		using JArrayObject<JClassObject> interfaces = new(env, arrRef, 0);
+		using JArrayObject<JClassObject> interfaces = new(jArrayClass, arrRef, 0);
 
 		env.FunctionSet.GetInterfaces(jClass).Returns(interfaces);
 		Assert.Equal(interfaces, jClass.GetInterfaces());

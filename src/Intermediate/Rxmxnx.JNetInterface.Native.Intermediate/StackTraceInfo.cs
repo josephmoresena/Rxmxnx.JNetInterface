@@ -29,7 +29,7 @@ public sealed record StackTraceInfo
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	internal StackTraceInfo()
+	public StackTraceInfo()
 	{
 		this.ClassName = default!;
 		this.FileName = default!;

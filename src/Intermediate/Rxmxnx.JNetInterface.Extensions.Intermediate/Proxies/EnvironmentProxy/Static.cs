@@ -44,6 +44,17 @@ public abstract partial class EnvironmentProxy
 			};
 		return (TGlobal?)result ?? throw new ArgumentException("Invalid global type.");
 	}
+	/// <summary>
+	/// Sets <paramref name="info"/> information as <paramref name="element"/> information.
+	/// </summary>
+	/// <param name="element">A <see cref="JStackTraceElementObject"/> instance.</param>
+	/// <param name="info">A <see cref="StackTraceInfo"/> instance.</param>
+	public static void SetStackTrace(JStackTraceElementObject element, StackTraceInfo info)
+	{
+		EnvironmentProxy.ThrowIfNotProxy(element);
+		StackTraceElementObjectMetadata objectMetadata = new(new(element.Class)) { Information = info, };
+		ILocalObject.ProcessMetadata(element, objectMetadata);
+	}
 
 	/// <summary>
 	/// Throws an exception if <paramref name="jObject"/> is proxy.

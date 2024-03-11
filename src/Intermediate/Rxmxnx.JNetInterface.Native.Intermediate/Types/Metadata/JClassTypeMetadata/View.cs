@@ -15,6 +15,8 @@ public partial record JClassTypeMetadata<TClass>
 		private readonly JClassTypeMetadata _metadata;
 
 		/// <inheritdoc/>
+		public override JClassTypeMetadata? BaseMetadata => this._metadata.BaseMetadata;
+		/// <inheritdoc/>
 		public override JTypeModifier Modifier => this._metadata.Modifier;
 		/// <inheritdoc/>
 		public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => this._metadata.Interfaces;

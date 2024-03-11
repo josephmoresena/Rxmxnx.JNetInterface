@@ -14,6 +14,15 @@ public static class ProxyTestsExtensions
 		fixture.Register<IFixture, JWeakRef>(ProxyTestsExtensions.CreateReference<JWeakRef>);
 		return fixture;
 	}
+	public static JStackTraceElementObject CreateStackTrace(this StackTraceInfo info, JClassObject jClass,
+		JObjectLocalRef localRef = default)
+	{
+		JReferenceTypeMetadata metadata = IClassType.GetMetadata<JStackTraceElementObject>();
+		JStackTraceElementObject element = (JStackTraceElementObject)metadata.CreateInstance(jClass, localRef);
+		StackTraceElementObjectMetadata objectMetadata = new(new(jClass)) { Information = info, };
+		ILocalObject.ProcessMetadata(element, objectMetadata);
+		return element;
+	}
 
 	private static T CreateReference<T>(IFixture fixture) where T : unmanaged, IFixedPointer
 	{

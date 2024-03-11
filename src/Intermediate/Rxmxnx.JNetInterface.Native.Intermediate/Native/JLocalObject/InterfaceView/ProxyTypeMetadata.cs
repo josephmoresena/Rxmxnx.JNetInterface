@@ -13,7 +13,7 @@ public partial class JLocalObject
 				: JClassTypeMetadata<JProxyObject>.View(JProxyObject.ProxyTypeMetadata)
 			{
 				/// <inheritdoc/>
-				public override String ToString() => base.ToString();
+				public override String ToString() => JProxyObject.ProxyTypeMetadata.ToString();
 
 				/// <inheritdoc/>
 				internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
