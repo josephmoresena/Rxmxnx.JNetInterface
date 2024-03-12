@@ -76,6 +76,8 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClass, jAnnotated.Object);
 		Assert.Equal(jClass, jGenericDeclaration.Object);
 		Assert.Equal(jClass, jType.Object);
+
+		Assert.True(Object.ReferenceEquals(jClass, jClass.CastTo<JLocalObject>()));
 	}
 	[Theory]
 	[InlineData(true)]
@@ -301,7 +303,7 @@ public sealed class JClassObjectTests
 		Assert.Equal(JClassObjectTests.hash.ToString(), IDataType.GetHash<JClassObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JClassObject>());
-		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JClassObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>(), typeMetadata.Interfaces);

@@ -30,6 +30,8 @@ public class JNumberObjectTests
 		JSerializableObject jSerializable = jNumber.CastTo<JSerializableObject>();
 		Assert.Equal(jNumber.Id, jSerializable.Id);
 		Assert.Equal(jNumber, jSerializable.Object);
+
+		Assert.True(Object.ReferenceEquals(jNumber, jNumber.CastTo<JLocalObject>()));
 	}
 	[Theory]
 	[InlineData(true)]
@@ -66,7 +68,7 @@ public class JNumberObjectTests
 		Assert.Equal(JNumberObjectTests.hash.ToString(), IDataType.GetHash<JNumberObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JNumberObject>());
-		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JNumberObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);

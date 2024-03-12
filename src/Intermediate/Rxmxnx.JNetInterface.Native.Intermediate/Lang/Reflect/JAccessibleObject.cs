@@ -17,7 +17,7 @@ public class JAccessibleObject : JLocalObject, IClassType<JAccessibleObject>, II
 	static JClassTypeMetadata<JAccessibleObject> IClassType<JAccessibleObject>.Metadata => JAccessibleObject.metadata;
 
 	/// <inheritdoc/>
-	internal JAccessibleObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
+	private protected JAccessibleObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
 
 	/// <inheritdoc/>
 	protected JAccessibleObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

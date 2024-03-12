@@ -47,6 +47,8 @@ public class JBufferObjectTests
 		Assert.Equal(capacity, objectMetadata.Capacity);
 		Assert.Equal(objectMetadata, new(objectMetadata));
 
+		Assert.True(Object.ReferenceEquals(jBuffer, jBuffer.CastTo<JLocalObject>()));
+
 		env.FunctionSet.Received(useMetadata ? 0 : 1).IsDirectBuffer(jBuffer);
 		env.FunctionSet.Received(useMetadata || isDirect ? 0 : 1).BufferCapacity(jBuffer);
 		env.NioFeature.Received(useMetadata || !isDirect ? 0 : 1).GetDirectCapacity(jBuffer);
@@ -87,7 +89,8 @@ public class JBufferObjectTests
 		Assert.Equal(JBufferObjectTests.hash.ToString(), IDataType.GetHash<JBufferObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JBufferObject>());
-		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JBufferObject>());
+		Assert.Empty(typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JBufferObject>().Returns(jBufferClass);

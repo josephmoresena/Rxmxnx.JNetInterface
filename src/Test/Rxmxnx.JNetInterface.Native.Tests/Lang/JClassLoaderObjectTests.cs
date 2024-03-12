@@ -25,6 +25,8 @@ public class JClassLoaderObjectTests
 
 		ObjectMetadata objectMetadata = ILocalObject.CreateMetadata(jClassLoader);
 
+		Assert.True(Object.ReferenceEquals(jClassLoader, jClassLoader.CastTo<JLocalObject>()));
+
 		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
 	}
@@ -63,7 +65,7 @@ public class JClassLoaderObjectTests
 		Assert.Equal(JClassLoaderObjectTests.hash.ToString(), IDataType.GetHash<JClassLoaderObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JClassLoaderObject>());
-		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JClassLoaderObject>());
 		Assert.Empty(typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
@@ -71,6 +73,7 @@ public class JClassLoaderObjectTests
 		env.ReferenceFeature.Received(1).GetLifetime(jLocal, throwableRef.Value, jThrowableClass, false);
 		env.ClassFeature.GetObjectClass(jLocal).Returns(jThrowableClass);
 
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JLocalObject>()));
 		Assert.Null(typeMetadata.ParseInstance(default));
 		Assert.Null(typeMetadata.ParseInstance(env, default));
 		Assert.Null(typeMetadata.CreateException(jGlobal));

@@ -47,6 +47,8 @@ public class JEnumObjectTests
 		Assert.Equal(jEnum.Id, jSerializable.Id);
 		Assert.Equal(jEnum, jSerializable.Object);
 
+		Assert.True(Object.ReferenceEquals(jEnum, jEnum.CastTo<JLocalObject>()));
+
 		env.FunctionSet.Received(initEnum ? 0 : 1).GetName(jEnum);
 		env.FunctionSet.Received(initEnum ? 0 : 1).GetOrdinal(jEnum);
 	}
@@ -86,7 +88,7 @@ public class JEnumObjectTests
 		Assert.Equal(JEnumObjectTests.hash.ToString(), IDataType.GetHash<JEnumObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JEnumObject>());
-		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JEnumObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);

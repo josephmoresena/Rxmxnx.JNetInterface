@@ -59,6 +59,9 @@ public sealed class JErrorObjectTests
 		Assert.Equal(jError.Id, jSerializable.Id);
 		Assert.Equal(jError, jSerializable.Object);
 
+		Assert.True(Object.ReferenceEquals(jError, jError.CastTo<JLocalObject>()));
+		Assert.True(Object.ReferenceEquals(jError, jError.CastTo<JThrowableObject>()));
+
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jError);
 	}
 	[Theory]
@@ -97,7 +100,7 @@ public sealed class JErrorObjectTests
 		Assert.Equal(JErrorObjectTests.hash.ToString(), IDataType.GetHash<JErrorObject>());
 		Assert.Equal(IDataType.GetMetadata<JThrowableObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JErrorObject>());
-		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JErrorObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
@@ -106,6 +109,7 @@ public sealed class JErrorObjectTests
 		env.ClassFeature.GetObjectClass(jLocal).Returns(jErrorClass);
 
 		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JLocalObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JThrowableObject>()));
 		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JSerializableObject>()));
 		Assert.Null(typeMetadata.ParseInstance(default));
 		Assert.Null(typeMetadata.ParseInstance(env, default));

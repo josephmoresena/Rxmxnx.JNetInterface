@@ -48,6 +48,8 @@ public class JStackTraceElementObjectTests
 		Assert.Equal(jStackTraceElement.Id, jSerializable.Id);
 		Assert.Equal(jStackTraceElement, jSerializable.Object);
 
+		Assert.True(Object.ReferenceEquals(jStackTraceElement, jStackTraceElement.CastTo<JLocalObject>()));
+
 		env.FunctionSet.Received(1).GetLineNumber(jStackTraceElement);
 		env.FunctionSet.Received(1).IsNativeMethod(jStackTraceElement);
 		env.FunctionSet.Received(1).GetClassName(jStackTraceElement);
@@ -90,7 +92,7 @@ public class JStackTraceElementObjectTests
 		Assert.Equal(JStackTraceElementObjectTests.hash.ToString(), IDataType.GetHash<JStackTraceElementObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JStackTraceElementObject>());
-		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStackTraceElementObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);

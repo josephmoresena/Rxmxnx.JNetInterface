@@ -63,6 +63,10 @@ public sealed class JRuntimeExceptionObjectTests
 		Assert.Equal(jRuntimeException.Id, jSerializable.Id);
 		Assert.Equal(jRuntimeException, jSerializable.Object);
 
+		Assert.True(Object.ReferenceEquals(jRuntimeException, jRuntimeException.CastTo<JLocalObject>()));
+		Assert.True(Object.ReferenceEquals(jRuntimeException, jRuntimeException.CastTo<JExceptionObject>()));
+		Assert.True(Object.ReferenceEquals(jRuntimeException, jRuntimeException.CastTo<JThrowableObject>()));
+
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jRuntimeException);
 	}
 	[Theory]
@@ -101,7 +105,7 @@ public sealed class JRuntimeExceptionObjectTests
 		Assert.Equal(JRuntimeExceptionObjectTests.hash.ToString(), IDataType.GetHash<JRuntimeExceptionObject>());
 		Assert.Equal(IDataType.GetMetadata<JExceptionObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JRuntimeExceptionObject>());
-		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JRuntimeExceptionObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
@@ -110,6 +114,8 @@ public sealed class JRuntimeExceptionObjectTests
 		env.ClassFeature.GetObjectClass(jLocal).Returns(jRuntimeExceptionClass);
 
 		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JLocalObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JThrowableObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JExceptionObject>()));
 		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JSerializableObject>()));
 		Assert.Null(typeMetadata.ParseInstance(default));
 		Assert.Null(typeMetadata.ParseInstance(env, default));

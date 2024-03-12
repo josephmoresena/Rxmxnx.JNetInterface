@@ -50,7 +50,7 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// <param name="localRef">Local object reference.</param>
 	/// <param name="definition">Call definition.</param>
 	/// <param name="declaringClass">Declaring class.</param>
-	internal JExecutableObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition,
+	private protected JExecutableObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition,
 		JClassObject declaringClass) : base(jClass, localRef)
 	{
 		this._callDefinition = definition;

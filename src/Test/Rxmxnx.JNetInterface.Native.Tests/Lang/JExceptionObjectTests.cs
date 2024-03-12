@@ -62,6 +62,9 @@ public sealed class JExceptionObjectTests
 		Assert.Equal(jException.Id, jSerializable.Id);
 		Assert.Equal(jException, jSerializable.Object);
 
+		Assert.True(Object.ReferenceEquals(jException, jException.CastTo<JLocalObject>()));
+		Assert.True(Object.ReferenceEquals(jException, jException.CastTo<JThrowableObject>()));
+
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jException);
 	}
 	[Theory]
@@ -100,7 +103,7 @@ public sealed class JExceptionObjectTests
 		Assert.Equal(JExceptionObjectTests.hash.ToString(), IDataType.GetHash<JExceptionObject>());
 		Assert.Equal(IDataType.GetMetadata<JThrowableObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JExceptionObject>());
-		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JExceptionObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
@@ -109,6 +112,7 @@ public sealed class JExceptionObjectTests
 		env.ClassFeature.GetObjectClass(jLocal).Returns(jExceptionClass);
 
 		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JLocalObject>()));
+		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JThrowableObject>()));
 		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JSerializableObject>()));
 		Assert.Null(typeMetadata.ParseInstance(default));
 		Assert.Null(typeMetadata.ParseInstance(env, default));

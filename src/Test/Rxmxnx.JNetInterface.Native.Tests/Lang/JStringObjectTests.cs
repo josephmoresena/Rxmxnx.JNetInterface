@@ -360,6 +360,8 @@ public sealed class JStringObjectTests
 		Assert.Equal(jString, jSerializable.Object);
 		Assert.Equal(jString, jCharSequence.Object);
 		Assert.Equal(jString, jComparableO.Object);
+
+		Assert.True(Object.ReferenceEquals(jString, jString.CastTo<JLocalObject>()));
 	}
 	private static void GetCharsTest(JStringObject jString)
 	{

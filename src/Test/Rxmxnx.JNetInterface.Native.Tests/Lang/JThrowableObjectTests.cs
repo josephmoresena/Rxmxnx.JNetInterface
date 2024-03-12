@@ -64,6 +64,8 @@ public sealed class JThrowableObjectTests
 		Assert.Equal(jThrowable.Id, jSerializable.Id);
 		Assert.Equal(jThrowable, jSerializable.Object);
 
+		Assert.True(Object.ReferenceEquals(jThrowable, jThrowable.CastTo<JLocalObject>()));
+
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jThrowable);
 	}
 	[Theory]
@@ -102,7 +104,7 @@ public sealed class JThrowableObjectTests
 		Assert.Equal(JThrowableObjectTests.hash.ToString(), IDataType.GetHash<JThrowableObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JThrowableObject>());
-		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
+		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JThrowableObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
