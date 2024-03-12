@@ -41,6 +41,7 @@ public class JEnumObjectTests
 		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
 		Assert.Equal(ordinal, objectMetadata.Ordinal);
 		Assert.Equal(enumName, objectMetadata.Name);
+		Assert.Equal(objectMetadata, new(objectMetadata));
 
 		JSerializableObject jSerializable = jEnum.CastTo<JSerializableObject>();
 		Assert.Equal(jEnum.Id, jSerializable.Id);
