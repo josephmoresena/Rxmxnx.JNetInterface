@@ -56,6 +56,7 @@ public sealed class JExceptionObjectTests
 		Assert.Equal(throwableMetadata.ObjectClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(throwableMetadata.ObjectSignature, objectMetadata.ObjectSignature);
 		Assert.Equal(throwableMetadata.Message ?? jStringMessage.Value, objectMetadata.Message);
+		Assert.Equal(objectMetadata, new(objectMetadata));
 
 		JSerializableObject jSerializable = jException.CastTo<JSerializableObject>();
 		Assert.Equal(jException.Id, jSerializable.Id);

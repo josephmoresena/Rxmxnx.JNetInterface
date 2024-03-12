@@ -57,6 +57,7 @@ public sealed class JRuntimeExceptionObjectTests
 		Assert.Equal(throwableMetadata.ObjectClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(throwableMetadata.ObjectSignature, objectMetadata.ObjectSignature);
 		Assert.Equal(throwableMetadata.Message ?? jStringMessage.Value, objectMetadata.Message);
+		Assert.Equal(objectMetadata, new(objectMetadata));
 
 		JSerializableObject jSerializable = jRuntimeException.CastTo<JSerializableObject>();
 		Assert.Equal(jRuntimeException.Id, jSerializable.Id);

@@ -99,10 +99,9 @@ public class JEnumObjectTests
 		Assert.Null(typeMetadata.ParseInstance(env, default));
 		Assert.Null(typeMetadata.CreateException(jGlobal));
 
-		using JEnumObject jStackTrace0 =
-			Assert.IsType<JEnumObject>(typeMetadata.CreateInstance(jEnumClass, localRef, true));
-		using JEnumObject jStackTrace1 = Assert.IsType<JEnumObject>(typeMetadata.ParseInstance(jLocal, disposeParse));
-		using JEnumObject jStackTrace2 = Assert.IsType<JEnumObject>(typeMetadata.ParseInstance(env, jGlobal));
+		using JEnumObject jEnum0 = Assert.IsType<JEnumObject>(typeMetadata.CreateInstance(jEnumClass, localRef, true));
+		using JEnumObject jEnum1 = Assert.IsType<JEnumObject>(typeMetadata.ParseInstance(jLocal, disposeParse));
+		using JEnumObject jEnum2 = Assert.IsType<JEnumObject>(typeMetadata.ParseInstance(env, jGlobal));
 
 		env.ClassFeature.Received(1).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JEnumObject>(Arg.Any<JReferenceObject>());

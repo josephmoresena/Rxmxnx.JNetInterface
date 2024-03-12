@@ -18,12 +18,12 @@ public class JClassLoaderObjectTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = JClassLoaderObjectTests.fixture.Create<JObjectLocalRef>();
 		using JClassObject jClass = new(env);
-		using JClassObject jNumberClass = new(jClass, typeMetadata);
+		using JClassObject jClassLoaderClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
-		using JClassLoaderObject jNumber =
-			Assert.IsType<JClassLoaderObject>(typeMetadata.CreateInstance(jNumberClass, localRef, true));
+		using JClassLoaderObject jClassLoader =
+			Assert.IsType<JClassLoaderObject>(typeMetadata.CreateInstance(jClassLoaderClass, localRef, true));
 
-		ObjectMetadata objectMetadata = ILocalObject.CreateMetadata(jNumber);
+		ObjectMetadata objectMetadata = ILocalObject.CreateMetadata(jClassLoader);
 
 		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
@@ -75,11 +75,12 @@ public class JClassLoaderObjectTests
 		Assert.Null(typeMetadata.ParseInstance(env, default));
 		Assert.Null(typeMetadata.CreateException(jGlobal));
 
-		using JClassLoaderObject jNumber0 =
+		using JClassLoaderObject jClassLoader0 =
 			Assert.IsType<JClassLoaderObject>(typeMetadata.CreateInstance(jThrowableClass, throwableRef.Value, true));
-		using JClassLoaderObject jNumber1 =
+		using JClassLoaderObject jClassLoader1 =
 			Assert.IsType<JClassLoaderObject>(typeMetadata.ParseInstance(jLocal, disposeParse));
-		using JClassLoaderObject jNumber2 = Assert.IsType<JClassLoaderObject>(typeMetadata.ParseInstance(env, jGlobal));
+		using JClassLoaderObject jClassLoader2 =
+			Assert.IsType<JClassLoaderObject>(typeMetadata.ParseInstance(env, jGlobal));
 
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JClassLoaderObject>(Arg.Any<JReferenceObject>());

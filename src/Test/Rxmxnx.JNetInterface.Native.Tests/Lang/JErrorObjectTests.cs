@@ -53,6 +53,7 @@ public sealed class JErrorObjectTests
 		Assert.Equal(throwableMetadata.ObjectClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(throwableMetadata.ObjectSignature, objectMetadata.ObjectSignature);
 		Assert.Equal(throwableMetadata.Message ?? jStringMessage.Value, objectMetadata.Message);
+		Assert.Equal(objectMetadata, new(objectMetadata));
 
 		JSerializableObject jSerializable = jError.CastTo<JSerializableObject>();
 		Assert.Equal(jError.Id, jSerializable.Id);

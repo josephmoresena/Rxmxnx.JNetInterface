@@ -70,7 +70,7 @@ public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>, IL
 	/// A <see cref="IDirectBufferObject{TValue}"/> instance if <paramref name="jBuffer"/> is direct; otherwise,
 	/// <see langword="null"/>.
 	/// </returns>
-	private protected static IDirectBufferObject<TValue>? AsDirectObject<TValue>(JBufferObject<TValue> jBuffer)
+	private protected static IDirectBufferObject<TValue>? AsDirect<TValue>(JBufferObject<TValue> jBuffer)
 		where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>
 	{
 		if (jBuffer is IDirectBufferObject<TValue> direct) return direct;
@@ -101,5 +101,5 @@ public abstract class JBufferObject<TValue> : JBufferObject, IInterfaceObject<JC
 	/// A <see cref="IDirectBufferObject{TValue}"/> instance if is direct; otherwise,
 	/// <see langword="null"/>.
 	/// </returns>
-	public IDirectBufferObject<TValue>? AsDirectObject() => JBufferObject.AsDirectObject(this);
+	public IDirectBufferObject<TValue>? AsDirect() => JBufferObject.AsDirect(this);
 }

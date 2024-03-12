@@ -104,12 +104,12 @@ public class JStackTraceElementObjectTests
 		Assert.Null(typeMetadata.ParseInstance(env, default));
 		Assert.Null(typeMetadata.CreateException(jGlobal));
 
-		using JStackTraceElementObject jStackTrace0 =
+		using JStackTraceElementObject jStackTraceElement0 =
 			Assert.IsType<JStackTraceElementObject>(
 				typeMetadata.CreateInstance(jStackTraceElementClass, localRef, true));
-		using JStackTraceElementObject jStackTrace1 =
+		using JStackTraceElementObject jStackTraceElement1 =
 			Assert.IsType<JStackTraceElementObject>(typeMetadata.ParseInstance(jLocal, disposeParse));
-		using JStackTraceElementObject jStackTrace2 =
+		using JStackTraceElementObject jStackTraceElement2 =
 			Assert.IsType<JStackTraceElementObject>(typeMetadata.ParseInstance(env, jGlobal));
 
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);

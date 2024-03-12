@@ -40,6 +40,7 @@ public record ThrowableObjectMetadata : ObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata"><see cref="ThrowableObjectMetadata"/> instance.</param>
+	[ExcludeFromCodeCoverage]
 	protected ThrowableObjectMetadata(ThrowableObjectMetadata metadata) : base(metadata)
 	{
 		this.Message = metadata.Message;
