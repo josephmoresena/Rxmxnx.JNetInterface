@@ -57,8 +57,8 @@ public class JEnumObjectTests
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JEnumObject>();
 		String textValue = typeMetadata.ToString();
-		VirtualMachineProxy vm = Substitute.For<VirtualMachineProxy>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JClassLocalRef classRef = JEnumObjectTests.fixture.Create<JClassLocalRef>();
 		JObjectLocalRef localRef = JEnumObjectTests.fixture.Create<JObjectLocalRef>();

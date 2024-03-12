@@ -73,8 +73,8 @@ public sealed class JThrowableObjectTests
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JThrowableObject>();
 		String textValue = typeMetadata.ToString();
 		String exceptionMessage = JThrowableObjectTests.fixture.Create<String>();
-		VirtualMachineProxy vm = Substitute.For<VirtualMachineProxy>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JClassLocalRef classRef = JThrowableObjectTests.fixture.Create<JClassLocalRef>();
 		JThrowableLocalRef throwableRef = JThrowableObjectTests.fixture.Create<JThrowableLocalRef>();
@@ -138,8 +138,8 @@ public sealed class JThrowableObjectTests
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JThrowableObject>();
 		String exceptionMessage = JThrowableObjectTests.fixture.Create<String>();
-		VirtualMachineProxy vm = Substitute.For<VirtualMachineProxy>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JThrowableLocalRef throwableRef = JThrowableObjectTests.fixture.Create<JThrowableLocalRef>();
 		JGlobalRef globalRef = JThrowableObjectTests.fixture.Create<JGlobalRef>();
@@ -216,5 +216,19 @@ public sealed class JThrowableObjectTests
 
 		env.ClassFeature.Received(1).ThrowNew<JThrowableObject>(exceptionMessage, throwException);
 		env.ClassFeature.Received(1).ThrowNew<JThrowableObject>(utf8Message, throwException);
+	}
+	[Fact]
+	internal void ThrowableMetadataTest()
+	{
+		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JThrowableObject>();
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		String message = JThrowableObjectTests.fixture.Create<String>();
+		using JClassObject jClass = new(env);
+		using JClassObject jThrowableClass = new(jClass, IClassType.GetMetadata<JThrowableObject>());
+
+		ThrowableObjectMetadata throwableMetadata = new(jThrowableClass, typeMetadata, message);
+		Assert.Equal(typeMetadata.ClassName, throwableMetadata.ObjectClassName);
+		Assert.Equal(typeMetadata.Signature, throwableMetadata.ObjectSignature);
+		Assert.Equal(message, throwableMetadata.Message);
 	}
 }

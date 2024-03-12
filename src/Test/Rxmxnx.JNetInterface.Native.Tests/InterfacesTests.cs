@@ -3,8 +3,6 @@ namespace Rxmxnx.JNetInterface.Tests;
 [ExcludeFromCodeCoverage]
 public sealed class InterfacesTests
 {
-	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-
 	[Fact]
 	internal void EnvironmentTest()
 	{
@@ -18,7 +16,6 @@ public sealed class InterfacesTests
 
 		Assert.Equal(envRef, (env as IWrapper<JEnvironmentRef>).Value);
 	}
-
 	[Fact]
 	internal void VirtualMachineTest()
 	{
@@ -38,5 +35,12 @@ public sealed class InterfacesTests
 			using IThread thread = (env.VirtualMachine as IVirtualMachine).CreateThread(purpose);
 			env.VirtualMachine.Received(1).InitializeThread(Arg.Is<CString?>(c => c!.ToString() == threadName));
 		}
+	}
+	[Fact]
+	internal void CriticalExceptionTest()
+	{
+		CriticalException ex = CriticalException.Instance;
+		Assert.Equal(JResult.Error, ex.Result);
+		Assert.Equal(CommonConstants.CriticalExceptionMessage, ex.Message);
 	}
 }

@@ -6,7 +6,12 @@ namespace Rxmxnx.JNetInterface;
 public sealed class CriticalException : JniException
 {
 	/// <summary>
+	/// Singleton instance.
+	/// </summary>
+	internal static readonly CriticalException Instance = new();
+
+	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	internal CriticalException() { }
+	private CriticalException() : base(message: CommonConstants.CriticalExceptionMessage) { }
 }

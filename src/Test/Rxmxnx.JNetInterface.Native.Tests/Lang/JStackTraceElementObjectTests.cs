@@ -42,6 +42,7 @@ public class JStackTraceElementObjectTests
 		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
 		Assert.Equal(info, objectMetadata.Information);
+		Assert.Equal(objectMetadata, new(objectMetadata));
 
 		JSerializableObject jSerializable = jStackTraceElement.CastTo<JSerializableObject>();
 		Assert.Equal(jStackTraceElement.Id, jSerializable.Id);
@@ -60,8 +61,8 @@ public class JStackTraceElementObjectTests
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JStackTraceElementObject>();
 		String textValue = typeMetadata.ToString();
-		VirtualMachineProxy vm = Substitute.For<VirtualMachineProxy>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JClassLocalRef classRef = JStackTraceElementObjectTests.fixture.Create<JClassLocalRef>();
 		JObjectLocalRef localRef = JStackTraceElementObjectTests.fixture.Create<JObjectLocalRef>();

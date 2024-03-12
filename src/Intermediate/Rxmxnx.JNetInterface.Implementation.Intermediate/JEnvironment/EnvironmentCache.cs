@@ -70,7 +70,7 @@ partial class JEnvironment
 			{
 				ExceptionCheckDelegate exceptionCheck = this.GetDelegate<ExceptionCheckDelegate>();
 				if (exceptionCheck(this.Reference) != JBoolean.TrueValue) return;
-				this.ThrowJniException(new CriticalException(), true);
+				this.ThrowJniException(CriticalException.Instance, true);
 			}
 			else
 			{

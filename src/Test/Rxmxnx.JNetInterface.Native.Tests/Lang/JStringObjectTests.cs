@@ -109,8 +109,8 @@ public sealed class JStringObjectTests
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JStringObject>();
 		String textValue = typeMetadata.ToString();
-		VirtualMachineProxy vm = Substitute.For<VirtualMachineProxy>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JClassLocalRef classRef = JStringObjectTests.fixture.Create<JClassLocalRef>();
 		JStringLocalRef stringRef = JStringObjectTests.fixture.Create<JStringLocalRef>();

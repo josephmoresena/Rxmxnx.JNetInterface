@@ -6,7 +6,7 @@
 internal static class CommonConstants
 {
 	public const String CriticalExceptionMessage =
-		"The execution is in critical state. No calls can be made through native interface.";
+		"The execution is in critical state. There is a pending exception but no calls can be made through native interface.";
 	public const String InvalidPrimitiveDefinitionMessage = "Definition is not primitive.";
 	public const String InvalidPrimitiveTypeMessage = "Invalid primitive type.";
 	public const String InvalidSignatureMessage = "Invalid signature.";

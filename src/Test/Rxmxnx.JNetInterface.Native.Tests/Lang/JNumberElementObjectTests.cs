@@ -38,8 +38,8 @@ public class JNumberObjectTests
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JNumberObject>();
 		String textValue = typeMetadata.ToString();
-		VirtualMachineProxy vm = Substitute.For<VirtualMachineProxy>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JClassLocalRef classRef = JNumberObjectTests.fixture.Create<JClassLocalRef>();
 		JObjectLocalRef localRef = JNumberObjectTests.fixture.Create<JObjectLocalRef>();

@@ -153,6 +153,18 @@ public sealed class JClassObjectTests
 
 		env.ClassFeature.Received(1).GetClassInfo(jClassObj);
 		env.FunctionSet.Received(1).IsFinal(jClassObj, out Arg.Any<JModifierObject.Modifiers>());
+
+		ClassObjectMetadata metadata = new(jClassObj);
+		Assert.Equal(jClassObj.Name, metadata.Name);
+		Assert.Equal(jClassObj.ClassSignature, metadata.ClassSignature);
+		Assert.Equal(jClassObj.ObjectClassName, metadata.ObjectClassName);
+		Assert.Equal(jClassObj.ObjectSignature, metadata.ObjectSignature);
+		Assert.Equal(jClassObj.ArrayDimension, metadata.ArrayDimension);
+		Assert.Equal(jClassObj.IsAnnotation, metadata.IsAnnotation);
+		Assert.Equal(jClassObj.IsFinal, metadata.IsFinal);
+		Assert.Equal(jClassObj.IsInterface, metadata.IsInterface);
+		Assert.Equal(jClassObj.IsEnum, metadata.IsEnum);
+		Assert.Equal(jClassObj.Hash, metadata.Hash);
 	}
 	[Theory]
 	[InlineData(true)]
@@ -262,8 +274,8 @@ public sealed class JClassObjectTests
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JClassObject>();
 		String textValue = typeMetadata.ToString();
-		VirtualMachineProxy vm = Substitute.For<VirtualMachineProxy>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
 		JGlobalRef globalRef = JClassObjectTests.fixture.Create<JGlobalRef>();
@@ -328,6 +340,23 @@ public sealed class JClassObjectTests
 
 		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
 		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
+	}
+	[Fact]
+	internal void VoidMetadataTest()
+	{
+		JPrimitiveTypeMetadata primitiveVoidMetadata = JPrimitiveTypeMetadata.VoidMetadata;
+		ClassObjectMetadata voidClassObjectMetadata = ClassObjectMetadata.VoidMetadata;
+
+		Assert.Equal(JClassObjectTests.className, voidClassObjectMetadata.ObjectClassName);
+		Assert.Equal(JClassObjectTests.classSignature, voidClassObjectMetadata.ObjectSignature);
+		Assert.Equal(primitiveVoidMetadata.ClassName, voidClassObjectMetadata.Name);
+		Assert.Equal(primitiveVoidMetadata.Signature, voidClassObjectMetadata.ClassSignature);
+		Assert.Equal(primitiveVoidMetadata.Hash, voidClassObjectMetadata.Hash);
+		Assert.Equal(0, voidClassObjectMetadata.ArrayDimension);
+		Assert.True(voidClassObjectMetadata.IsFinal);
+		Assert.False(voidClassObjectMetadata.IsInterface);
+		Assert.False(voidClassObjectMetadata.IsAnnotation);
+		Assert.False(voidClassObjectMetadata.IsEnum);
 	}
 	[Fact]
 	internal void GetClassTest()
