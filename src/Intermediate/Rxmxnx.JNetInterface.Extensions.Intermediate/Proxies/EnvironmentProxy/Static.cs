@@ -45,6 +45,20 @@ public abstract partial class EnvironmentProxy
 		return (TGlobal?)result ?? throw new ArgumentException("Invalid global type.");
 	}
 	/// <summary>
+	/// Sets <paramref name="text"/> information as <paramref name="jString"/> value.
+	/// </summary>
+	/// <param name="jString">A <see cref="JStringObject"/> instance.</param>
+	/// <param name="text">A <see cref="String"/> value.</param>
+	public static void SetText(JStringObject jString, String text)
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jString);
+		StringObjectMetadata objectMetadata = new(new(jString.Class))
+		{
+			Value = text, Length = text.Length, Utf8Length = ((CString)text).Length,
+		};
+		ILocalObject.ProcessMetadata(jString, objectMetadata);
+	}
+	/// <summary>
 	/// Sets <paramref name="info"/> information as <paramref name="element"/> information.
 	/// </summary>
 	/// <param name="element">A <see cref="JStackTraceElementObject"/> instance.</param>

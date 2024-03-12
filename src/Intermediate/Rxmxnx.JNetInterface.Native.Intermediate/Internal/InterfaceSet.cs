@@ -3,12 +3,16 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Interface record set.
 /// </summary>
-internal partial record InterfaceSet : IReadOnlySet<JInterfaceTypeMetadata>
+internal partial class InterfaceSet : IReadOnlySet<JInterfaceTypeMetadata>
 {
 	/// <summary>
 	/// Internal set.
 	/// </summary>
-	private readonly IReadOnlySet<JInterfaceTypeMetadata> _internalSet;
+	private readonly ImmutableHashSet<JInterfaceTypeMetadata> _internalSet;
+	/// <summary>
+	/// Cached set.
+	/// </summary>
+	private ImmutableHashSet<JInterfaceTypeMetadata>? _cachedSet;
 	/// <summary>
 	/// Internal set.
 	/// </summary>
@@ -18,14 +22,14 @@ internal partial record InterfaceSet : IReadOnlySet<JInterfaceTypeMetadata>
 	/// Internal enumeration.
 	/// </summary>
 	protected virtual IEnumerable<JInterfaceTypeMetadata> Enumerable => this._internalSet;
-	/// <inheritdoc/>
-	public virtual Int32 Count => this._internalSet.Count;
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="set">A <see cref="IReadOnlySet{T}"/> instance.</param>
-	private InterfaceSet(IReadOnlySet<JInterfaceTypeMetadata> set) => this._internalSet = set;
+	private InterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) => this._internalSet = set;
+	/// <inheritdoc/>
+	public virtual Int32 Count => this._internalSet.Count;
 
 	[ExcludeFromCodeCoverage]
 	IEnumerator<JInterfaceTypeMetadata> IEnumerable<JInterfaceTypeMetadata>.GetEnumerator()
@@ -68,9 +72,5 @@ internal partial record InterfaceSet : IReadOnlySet<JInterfaceTypeMetadata>
 	/// </summary>
 	/// <returns>A <see cref="HashSet{JInterfaceTypeMetadata}"/> instance,</returns>
 	[ExcludeFromCodeCoverage]
-	private IReadOnlySet<JInterfaceTypeMetadata> GetFullSet()
-	{
-		if (this.Enumerable is IReadOnlySet<JInterfaceTypeMetadata> set) return set;
-		return new HashSet<JInterfaceTypeMetadata>(this.Enumerable);
-	}
+	private ImmutableHashSet<JInterfaceTypeMetadata> GetFullSet() => this._cachedSet ??= this.GetFullSet();
 }

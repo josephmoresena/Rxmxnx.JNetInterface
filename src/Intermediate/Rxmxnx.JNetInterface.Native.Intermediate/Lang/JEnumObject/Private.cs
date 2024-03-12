@@ -6,7 +6,7 @@ public partial class JEnumObject
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JClassTypeMetadata<JEnumObject> enumClassMetadata = JLocalObject
-		.TypeMetadataBuilder<JEnumObject>.Create(UnicodeClassNames.EnumObject(), JTypeModifier.Final)
+		.TypeMetadataBuilder<JEnumObject>.Create(UnicodeClassNames.EnumObject(), JTypeModifier.Abstract)
 		.Implements<JSerializableObject>().Implements<JComparableObject>().Build();
 
 	static JClassTypeMetadata<JEnumObject> IClassType<JEnumObject>.Metadata => JEnumObject.enumClassMetadata;
@@ -20,27 +20,11 @@ public partial class JEnumObject
 	/// </summary>
 	private Int32? _ordinal;
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	private JEnumObject(JLocalObject jLocal) : this(
-		jLocal.ForExternalUse(out JClassObject jClass, out ObjectMetadata metadata), jClass)
-	{
-		if (metadata is not EnumObjectMetadata enumMetadata) return;
-		this._ordinal ??= enumMetadata.Ordinal;
-		this._name ??= enumMetadata.Name;
-	}
 	/// <inheritdoc/>
 	private JEnumObject(JLocalObject jLocal, JClassObject jClass) : base(jLocal, jClass) { }
 
 	static JEnumObject IClassType<JEnumObject>.Create(IReferenceType.ClassInitializer initializer) => new(initializer);
 	static JEnumObject IClassType<JEnumObject>.Create(IReferenceType.ObjectInitializer initializer)
-	{
-		JClassObject? jClass = initializer.Class ?? initializer.Instance.Lifetime.Class;
-		if (jClass is null || !jClass.IsFinal)
-			return new(initializer.Instance);
-		return new(initializer.Instance, jClass);
-	}
+		=> new(initializer.Instance, initializer.Class ?? initializer.Instance.Class);
 	static JEnumObject IClassType<JEnumObject>.Create(IReferenceType.GlobalInitializer initializer) => new(initializer);
 }

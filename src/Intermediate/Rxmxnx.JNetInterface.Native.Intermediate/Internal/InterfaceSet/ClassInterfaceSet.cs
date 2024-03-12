@@ -1,11 +1,11 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial record InterfaceSet
+internal partial class InterfaceSet
 {
 	/// <summary>
 	/// Interface set for classes.
 	/// </summary>
-	private sealed record ClassInterfaceSet : InterfaceSet
+	private sealed class ClassInterfaceSet : InterfaceSet
 	{
 		/// <summary>
 		/// Base type metadata.
@@ -24,7 +24,7 @@ internal partial record InterfaceSet
 		/// </summary>
 		/// <param name="baseMetadata">Base metadata.</param>
 		/// <param name="set">Interface set.</param>
-		public ClassInterfaceSet(JReferenceTypeMetadata baseMetadata, IReadOnlySet<JInterfaceTypeMetadata> set) :
+		public ClassInterfaceSet(JReferenceTypeMetadata baseMetadata, ImmutableHashSet<JInterfaceTypeMetadata> set) :
 			base(set)
 			=> this._baseInterfaces = baseMetadata.Interfaces;
 

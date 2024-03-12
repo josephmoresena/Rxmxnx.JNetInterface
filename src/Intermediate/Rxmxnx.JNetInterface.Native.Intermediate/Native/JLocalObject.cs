@@ -66,16 +66,4 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 		IEnvironment env = this.Environment;
 		return env.ClassFeature.IsInstanceOf(this, jClass);
 	}
-	/// <summary>
-	/// Retrieves the class and metadata from current instance for external use.
-	/// </summary>
-	/// <param name="jClass">Output. Loaded class from current instance.</param>
-	/// <param name="metadata">Output. Metadata for current instance.</param>
-	/// <returns>Current instance instance.</returns>
-	public JLocalObject ForExternalUse(out JClassObject jClass, out ObjectMetadata metadata)
-	{
-		metadata = ILocalObject.CreateMetadata(this);
-		jClass = this.Class;
-		return this;
-	}
 }

@@ -24,12 +24,12 @@ public partial class PrimitiveTestBase
 		else
 			Assert.Equal(TValue.Abs(TValue.MaxValue), TPrimitive.Abs(TPrimitive.MaxValue).Value);
 		if (TValue.IsPositive(primitive.Value))
-			Assert.Equal(TValue.Log2(primitive.Value), TPrimitive.Log2(primitive));
+			Assert.Equal(TValue.Log2(primitive.Value), TPrimitive.Log2(primitive).Value);
 		else
-			Assert.Equal(TValue.Log2(-primitive.Value), TPrimitive.Log2(-primitive));
+			Assert.Equal(TValue.Log2(-primitive.Value), TPrimitive.Log2(-primitive).Value);
 		Assert.Equal(TValue.Sign(primitive.Value), TPrimitive.Sign(primitive));
 		Assert.Equal(TValue.Clamp(primitive.Value, TValue.MinValue, TValue.MaxValue),
-		             TPrimitive.Clamp(primitive, TPrimitive.MinValue, TPrimitive.MaxValue));
+		             TPrimitive.Clamp(primitive, TPrimitive.MinValue, TPrimitive.MaxValue).Value);
 
 		Assert.Equal(TValue.CreateChecked(primitive.Value), TPrimitive.CreateChecked(primitive).Value);
 		Assert.Equal(TValue.CreateSaturating(primitive.Value), TPrimitive.CreateSaturating(primitive).Value);

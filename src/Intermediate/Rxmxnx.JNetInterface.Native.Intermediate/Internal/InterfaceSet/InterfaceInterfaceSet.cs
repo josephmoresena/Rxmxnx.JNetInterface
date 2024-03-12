@@ -1,11 +1,11 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial record InterfaceSet
+internal partial class InterfaceSet
 {
 	/// <summary>
 	/// Interface set for interfaces.
 	/// </summary>
-	public sealed record InterfaceInterfaceSet : InterfaceSet
+	public sealed class InterfaceInterfaceSet : InterfaceSet
 	{
 		/// <inheritdoc/>
 		protected override IEnumerable<JInterfaceTypeMetadata> Enumerable
@@ -18,7 +18,7 @@ internal partial record InterfaceSet
 		/// Constructor.
 		/// </summary>
 		/// <param name="set">Interface set.</param>
-		public InterfaceInterfaceSet(IReadOnlySet<JInterfaceTypeMetadata> set) : base(set) { }
+		public InterfaceInterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) : base(set) { }
 
 		/// <inheritdoc/>
 		public override Boolean Contains(JInterfaceTypeMetadata item)

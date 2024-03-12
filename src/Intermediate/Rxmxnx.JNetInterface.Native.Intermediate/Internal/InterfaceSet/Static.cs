@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial record InterfaceSet
+internal partial class InterfaceSet
 {
 	/// <summary>
 	/// Empty interface set.
@@ -35,8 +35,10 @@ internal partial record InterfaceSet
 		IReadOnlySet<JInterfaceTypeMetadata> interfaces)
 	{
 		if (baseMetadata is null)
-			return interfaces.Count == 0 ? InterfaceSet.Empty : new(interfaces);
-		return interfaces.Count == 0 ? baseMetadata.Interfaces : new ClassInterfaceSet(baseMetadata, interfaces);
+			return interfaces.Count == 0 ? InterfaceSet.Empty : new(interfaces.ToImmutableHashSet());
+		return interfaces.Count == 0 ?
+			baseMetadata.Interfaces :
+			new ClassInterfaceSet(baseMetadata, interfaces.ToImmutableHashSet());
 	}
 	/// <summary>
 	/// Retrieves a set with interface super interfaces.
@@ -45,5 +47,5 @@ internal partial record InterfaceSet
 	/// <returns>A <see cref="IReadOnlySet{JInterfaceTypeMetadata}"/> instance.</returns>
 	public static IReadOnlySet<JInterfaceTypeMetadata>
 		GetInterfaceInterfaces(IReadOnlySet<JInterfaceTypeMetadata> interfaces)
-		=> interfaces.Count == 0 ? InterfaceSet.Empty : new InterfaceInterfaceSet(interfaces);
+		=> interfaces.Count == 0 ? InterfaceSet.Empty : new InterfaceInterfaceSet(interfaces.ToImmutableHashSet());
 }

@@ -47,6 +47,7 @@ public partial class JEnumObject : JLocalObject, IClassType<JEnumObject>, ILocal
 		base.ProcessMetadata(instanceMetadata);
 		if (instanceMetadata is not EnumObjectMetadata enumMetadata)
 			return;
+		this._name ??= enumMetadata.Name;
 		this._ordinal ??= enumMetadata.Ordinal;
 	}
 }

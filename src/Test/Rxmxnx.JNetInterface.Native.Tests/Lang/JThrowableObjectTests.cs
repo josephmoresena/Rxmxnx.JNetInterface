@@ -59,6 +59,10 @@ public sealed class JThrowableObjectTests
 		Assert.Equal(throwableMetadata.ObjectSignature, objectMetadata.ObjectSignature);
 		Assert.Equal(throwableMetadata.Message ?? jStringMessage.Value, objectMetadata.Message);
 
+		JSerializableObject jSerializable = jThrowable.CastTo<JSerializableObject>();
+		Assert.Equal(jThrowable.Id, jSerializable.Id);
+		Assert.Equal(jThrowable, jSerializable.Object);
+
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jThrowable);
 	}
 	[Theory]
