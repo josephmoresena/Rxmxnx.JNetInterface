@@ -14,9 +14,9 @@ public partial class JFieldObject : ILocalObject
 	ObjectMetadata ILocalObject.CreateMetadata()
 		=> new FieldObjectMetadata(base.CreateMetadata())
 		{
-			Definition = this._fieldDefinition,
+			Definition = this.Definition,
 			ClassHash = this._classHash ?? this.DeclaringClass.Hash,
-			MethodId = this._fieldId,
+			FieldId = this._fieldId,
 		};
 
 	/// <summary>
@@ -47,7 +47,7 @@ public partial class JFieldObject : ILocalObject
 		if (instanceMetadata is not FieldObjectMetadata fieldMetadata) return;
 		this._fieldDefinition = fieldMetadata.Definition;
 		this._classHash = fieldMetadata.ClassHash;
-		this._fieldId = fieldMetadata.MethodId;
+		this._fieldId = fieldMetadata.FieldId;
 	}
 
 	/// <inheritdoc/>

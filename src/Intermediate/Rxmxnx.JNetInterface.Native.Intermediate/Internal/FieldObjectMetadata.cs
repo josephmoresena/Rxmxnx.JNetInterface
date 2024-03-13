@@ -18,7 +18,7 @@ internal sealed record FieldObjectMetadata : ObjectMetadata
 	/// <summary>
 	/// JNI field id.
 	/// </summary>
-	internal JFieldId? MethodId { get; init; }
+	internal JFieldId? FieldId { get; init; }
 
 	/// <summary>
 	/// Constructor.
@@ -29,6 +29,6 @@ internal sealed record FieldObjectMetadata : ObjectMetadata
 		if (metadata is not FieldObjectMetadata fieldMetadata) return;
 		this.Definition = fieldMetadata.Definition;
 		this.ClassHash = fieldMetadata.ClassHash;
-		this.MethodId = fieldMetadata.MethodId;
+		this.FieldId = fieldMetadata.FieldId;
 	}
 }

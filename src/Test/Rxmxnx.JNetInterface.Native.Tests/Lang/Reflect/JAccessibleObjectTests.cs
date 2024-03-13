@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Tests.Lang;
+namespace Rxmxnx.JNetInterface.Tests.Lang.Reflect;
 
 [ExcludeFromCodeCoverage]
 public class JAccessibleObjectTests
@@ -28,9 +28,9 @@ public class JAccessibleObjectTests
 		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
 
-		JAnnotatedElementObject jSerializable = jAccessible.CastTo<JAnnotatedElementObject>();
-		Assert.Equal(jAccessible.Id, jSerializable.Id);
-		Assert.Equal(jAccessible, jSerializable.Object);
+		JAnnotatedElementObject jAnnotatedElement = jAccessible.CastTo<JAnnotatedElementObject>();
+		Assert.Equal(jAccessible.Id, jAnnotatedElement.Id);
+		Assert.Equal(jAccessible, jAnnotatedElement.Object);
 
 		Assert.True(Object.ReferenceEquals(jAccessible, jAccessible.CastTo<JLocalObject>()));
 	}

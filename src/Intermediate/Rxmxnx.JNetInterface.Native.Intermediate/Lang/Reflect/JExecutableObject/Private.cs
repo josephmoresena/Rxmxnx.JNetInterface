@@ -14,7 +14,7 @@ public partial class JExecutableObject : ILocalObject
 	ObjectMetadata ILocalObject.CreateMetadata()
 		=> new ExecutableObjectMetadata(base.CreateMetadata())
 		{
-			Definition = this._callDefinition,
+			Definition = this.Definition,
 			ClassHash = this._classHash ?? this.DeclaringClass.Hash,
 			MethodId = this._methodId,
 		};
