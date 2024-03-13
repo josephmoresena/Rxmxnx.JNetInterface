@@ -22,8 +22,8 @@ public partial class JLocalObject
 			/// <inheritdoc/>
 			public Proxy(IReferenceType.ClassInitializer initializer) : base(initializer)
 			{
-				foreach (JInterfaceTypeMetadata interfaceMetadata in
-				         IInterfaceType.GetMetadata<TInterface>().Interfaces)
+				JInterfaceTypeMetadata interfaceTypeMetadata = IInterfaceType.GetMetadata<TInterface>();
+				foreach (JInterfaceTypeMetadata interfaceMetadata in interfaceTypeMetadata.Interfaces.Enumerable)
 					interfaceMetadata.SetAssignable(this);
 			}
 			/// <inheritdoc/>

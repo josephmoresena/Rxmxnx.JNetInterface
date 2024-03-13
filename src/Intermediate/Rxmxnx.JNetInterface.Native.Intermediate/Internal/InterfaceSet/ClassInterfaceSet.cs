@@ -10,14 +10,11 @@ internal partial class InterfaceSet
 		/// <summary>
 		/// Base type metadata.
 		/// </summary>
-		private readonly IReadOnlySet<JInterfaceTypeMetadata> _baseInterfaces;
+		private readonly IInterfaceSet _baseInterfaces;
 
 		/// <inheritdoc/>
-		protected override IEnumerable<JInterfaceTypeMetadata> Enumerable
-			=> base.Enumerable.Union(this._baseInterfaces).Distinct();
-
-		/// <inheritdoc/>
-		public override Int32 Count => this.Enumerable.Count();
+		public override IEnumerable<JInterfaceTypeMetadata> Enumerable
+			=> base.Enumerable.Union(this._baseInterfaces.Enumerable).Distinct();
 
 		/// <summary>
 		/// Constructor.
@@ -31,7 +28,5 @@ internal partial class InterfaceSet
 		/// <inheritdoc/>
 		public override Boolean Contains(JInterfaceTypeMetadata item)
 			=> base.Contains(item) || this._baseInterfaces.Contains(item);
-		/// <inheritdoc/>
-		public override String ToString() => base.ToString();
 	}
 }

@@ -8,11 +8,8 @@ internal partial class InterfaceSet
 	public sealed class InterfaceInterfaceSet : InterfaceSet
 	{
 		/// <inheritdoc/>
-		protected override IEnumerable<JInterfaceTypeMetadata> Enumerable
-			=> base.Enumerable.Union(base.Enumerable.SelectMany(i => i.Interfaces)).Distinct();
-
-		/// <inheritdoc/>
-		public override Int32 Count => this.Enumerable.Count();
+		public override IEnumerable<JInterfaceTypeMetadata> Enumerable
+			=> base.Enumerable.Union(base.Enumerable.SelectMany(i => i.Interfaces.Enumerable)).Distinct();
 
 		/// <summary>
 		/// Constructor.
@@ -33,7 +30,5 @@ internal partial class InterfaceSet
 			});
 			return result;
 		}
-		/// <inheritdoc/>
-		public override String ToString() => base.ToString();
 	}
 }

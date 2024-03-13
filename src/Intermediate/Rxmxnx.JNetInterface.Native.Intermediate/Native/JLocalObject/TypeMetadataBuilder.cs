@@ -64,7 +64,7 @@ public partial class JLocalObject
 				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
 					this.DataTypeName, this._kind is not JTypeKind.Interface);
 
-			foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
+			foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces.Enumerable)
 			{
 				if (!this._interfaceTypes.Contains(interfaceMetadata.InterfaceType))
 					NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(

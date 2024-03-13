@@ -12,7 +12,7 @@ public partial class JLocalObject
 			internal sealed record InterfaceTypeMetadata : JInterfaceTypeMetadata<TInterface>
 			{
 				/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
-				private readonly IReadOnlySet<JInterfaceTypeMetadata> _interfaces;
+				private readonly IInterfaceSet _interfaces;
 
 				/// <inheritdoc/>
 				public override Type InterfaceType => typeof(IInterfaceObject<TInterface>);
@@ -23,7 +23,7 @@ public partial class JLocalObject
 				/// <inheritdoc/>
 				public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TInterface>();
 				/// <inheritdoc/>
-				public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
+				public override IInterfaceSet Interfaces => this._interfaces;
 
 				/// <summary>
 				/// Constructor.

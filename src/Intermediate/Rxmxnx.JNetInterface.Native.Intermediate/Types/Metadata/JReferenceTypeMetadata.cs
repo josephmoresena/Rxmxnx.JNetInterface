@@ -17,7 +17,7 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	/// <summary>
 	/// Set of interfaces metadata of current type implements.
 	/// </summary>
-	public abstract IReadOnlySet<JInterfaceTypeMetadata> Interfaces { get; }
+	public abstract IInterfaceSet Interfaces { get; }
 
 	JFunctionDefinition IReflectionMetadata.CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
 		JArgumentMetadata[] metadata)

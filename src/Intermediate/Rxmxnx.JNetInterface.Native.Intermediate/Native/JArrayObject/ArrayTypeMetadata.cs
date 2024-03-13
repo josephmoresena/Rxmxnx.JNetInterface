@@ -21,7 +21,7 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		public override JClassTypeMetadata BaseMetadata => JLocalObject.ObjectClassMetadata;
 		/// <inheritdoc/>
-		public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => InterfaceSet.ArraySet;
+		public override IInterfaceSet Interfaces => InterfaceSet.ArraySet;
 
 		/// <summary>
 		/// Constructor.

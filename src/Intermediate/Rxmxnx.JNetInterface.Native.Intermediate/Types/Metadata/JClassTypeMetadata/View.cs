@@ -19,7 +19,7 @@ public partial record JClassTypeMetadata<TClass>
 		/// <inheritdoc/>
 		public override JTypeModifier Modifier => this._metadata.Modifier;
 		/// <inheritdoc/>
-		public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => this._metadata.Interfaces;
+		public override IInterfaceSet Interfaces => this._metadata.Interfaces;
 
 		/// <inheritdoc/>
 		private protected View(JClassTypeMetadata<TClass> metadata) : base(metadata) => this._metadata = metadata;

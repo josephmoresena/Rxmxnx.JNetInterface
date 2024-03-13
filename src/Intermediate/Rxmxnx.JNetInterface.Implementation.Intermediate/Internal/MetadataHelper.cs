@@ -262,7 +262,7 @@ internal static partial class MetadataHelper
 			                                       default);
 			MetadataHelper.Register(metadata.BaseMetadata);
 		}
-		foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
+		foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces.Enumerable)
 		{
 			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(metadata, interfaceMetadata), true);
 			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(interfaceMetadata, metadata),

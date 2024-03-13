@@ -12,12 +12,12 @@ public partial class JEnumObject
 			/// <inheritdoc cref="JEnumTypeMetadata.Fields"/>
 			private readonly IEnumFieldList _fields;
 			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
-			private readonly IReadOnlySet<JInterfaceTypeMetadata> _interfaces;
+			private readonly IInterfaceSet _interfaces;
 
 			/// <inheritdoc/>
 			public override Type Type => typeof(TEnum);
 			/// <inheritdoc/>
-			public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
+			public override IInterfaceSet Interfaces => this._interfaces;
 			/// <inheritdoc/>
 			public override JClassTypeMetadata BaseMetadata => JEnumObject.enumClassMetadata;
 			/// <inheritdoc/>

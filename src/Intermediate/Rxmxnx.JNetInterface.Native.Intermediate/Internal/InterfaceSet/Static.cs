@@ -30,8 +30,8 @@ internal partial class InterfaceSet
 	/// </summary>
 	/// <param name="baseMetadata">A <see cref="JClassTypeMetadata"/> instance.</param>
 	/// <param name="interfaces">A <see cref="IReadOnlySet{JInterfaceTypeMetadata}"/> instance.</param>
-	/// <returns>A <see cref="IReadOnlySet{JInterfaceTypeMetadata}"/> instance.</returns>
-	public static IReadOnlySet<JInterfaceTypeMetadata> GetClassInterfaces(JClassTypeMetadata? baseMetadata,
+	/// <returns>A <see cref="IInterfaceSet"/> instance.</returns>
+	public static IInterfaceSet GetClassInterfaces(JClassTypeMetadata? baseMetadata,
 		IReadOnlySet<JInterfaceTypeMetadata> interfaces)
 	{
 		if (baseMetadata is null)
@@ -44,8 +44,7 @@ internal partial class InterfaceSet
 	/// Retrieves a set with interface super interfaces.
 	/// </summary>
 	/// <param name="interfaces">A <see cref="IReadOnlySet{JInterfaceTypeMetadata}"/> instance.</param>
-	/// <returns>A <see cref="IReadOnlySet{JInterfaceTypeMetadata}"/> instance.</returns>
-	public static IReadOnlySet<JInterfaceTypeMetadata>
-		GetInterfaceInterfaces(IReadOnlySet<JInterfaceTypeMetadata> interfaces)
+	/// <returns>A <see cref="IInterfaceSet"/> instance.</returns>
+	public static IInterfaceSet GetInterfaceInterfaces(IReadOnlySet<JInterfaceTypeMetadata> interfaces)
 		=> interfaces.Count == 0 ? InterfaceSet.Empty : new InterfaceInterfaceSet(interfaces.ToImmutableHashSet());
 }

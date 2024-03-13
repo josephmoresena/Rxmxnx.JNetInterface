@@ -12,7 +12,7 @@ public partial class JLocalObject
 			/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 			private readonly JClassTypeMetadata? _baseMetadata;
 			/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
-			private readonly IReadOnlySet<JInterfaceTypeMetadata> _interfaces;
+			private readonly IInterfaceSet _interfaces;
 			/// <inheritdoc cref="JDataTypeMetadata.Modifier"/>
 			private readonly JTypeModifier _modifier;
 
@@ -21,7 +21,7 @@ public partial class JLocalObject
 			/// <inheritdoc/>
 			public override JTypeModifier Modifier => this._modifier;
 			/// <inheritdoc/>
-			public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => this._interfaces;
+			public override IInterfaceSet Interfaces => this._interfaces;
 
 			/// <summary>
 			/// Constructor.
