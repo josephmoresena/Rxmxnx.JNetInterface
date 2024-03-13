@@ -13,15 +13,13 @@ public partial class JLocalObject
 			{
 				/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 				private readonly IReadOnlySet<JInterfaceTypeMetadata> _interfaces;
-				/// <inheritdoc cref="InterfaceTypeMetadata.ProxyMetadata"/>
-				private readonly JClassTypeMetadata _proxyMetadata = Proxy<TInterface>.ProxyMetadata;
 
 				/// <inheritdoc/>
 				public override Type InterfaceType => typeof(IInterfaceObject<TInterface>);
 				/// <inheritdoc/>
 				public override Type Type => typeof(TInterface);
 				/// <inheritdoc/>
-				public override JClassTypeMetadata ProxyMetadata => this._proxyMetadata;
+				public override JClassTypeMetadata ProxyMetadata => Proxy<TInterface>.ProxyMetadata;
 				/// <inheritdoc/>
 				public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TInterface>();
 				/// <inheritdoc/>
