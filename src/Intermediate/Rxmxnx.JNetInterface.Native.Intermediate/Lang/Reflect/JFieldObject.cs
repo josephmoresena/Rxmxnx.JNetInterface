@@ -3,8 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang.Reflect;
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Field</c> instance.
 /// </summary>
-public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldObject>,
-	IInterfaceObject<JGenericDeclarationObject>, IInterfaceObject<JMemberObject>
+public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldObject>, IInterfaceObject<JMemberObject>
 {
 	/// <summary>
 	/// class metadata.
@@ -13,7 +12,6 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 	                                                                    .Create<JFieldObject>(
 		                                                                    UnicodeClassNames.FieldObject(),
 		                                                                    JTypeModifier.Final)
-	                                                                    .Implements<JGenericDeclarationObject>()
 	                                                                    .Implements<JMemberObject>().Build();
 
 	static JClassTypeMetadata<JFieldObject> IClassType<JFieldObject>.Metadata => JFieldObject.metadata;
