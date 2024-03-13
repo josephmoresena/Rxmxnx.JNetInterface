@@ -101,7 +101,7 @@ public sealed class JErrorObjectTests
 		Assert.Equal(IDataType.GetMetadata<JThrowableObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JErrorObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JErrorObject>());
-		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces.Enumerable);
+		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces.GetEnumerable());
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JErrorObject>().Returns(jErrorClass);

@@ -147,8 +147,8 @@ public class JFieldObjectTests
 		Assert.Equal(IDataType.GetMetadata<JAccessibleObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JFieldObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JFieldObject>());
-		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces.Enumerable);
-		Assert.Contains(IInterfaceType.GetMetadata<JMemberObject>(), typeMetadata.Interfaces.Enumerable);
+		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces.GetEnumerable());
+		Assert.Contains(IInterfaceType.GetMetadata<JMemberObject>(), typeMetadata.Interfaces.GetEnumerable());
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JFieldObject>().Returns(jThrowableClass);

@@ -6,11 +6,6 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public interface IInterfaceSet
 {
 	/// <summary>
-	/// Internal enumeration.
-	/// </summary>
-	IEnumerable<JInterfaceTypeMetadata> Enumerable { get; }
-
-	/// <summary>
 	/// Determines if the set contains a specific item.
 	/// </summary>
 	/// <param name="item">The item to check if the set contains.</param>
@@ -18,4 +13,15 @@ public interface IInterfaceSet
 	/// <see langword="true"/> if found; otherwise <see langword="false"/>.
 	/// </returns>
 	Boolean Contains(JInterfaceTypeMetadata item);
+	/// <summary>
+	/// Internal enumeration.
+	/// </summary>
+	IEnumerable<JInterfaceTypeMetadata> GetEnumerable();
+	/// <summary>
+	/// Performs <paramref name="action"/> for each unique item in current set.
+	/// </summary>
+	/// <typeparam name="T">Type of state object</typeparam>
+	/// <param name="state">Object state.</param>
+	/// <param name="action">A <see cref="Action{T, JInterfaceTypeMetadata}"/> delegate.</param>
+	void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action);
 }

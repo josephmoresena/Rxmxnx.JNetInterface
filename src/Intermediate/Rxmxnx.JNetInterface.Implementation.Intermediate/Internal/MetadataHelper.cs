@@ -262,16 +262,22 @@ internal static partial class MetadataHelper
 			                                       default);
 			MetadataHelper.Register(metadata.BaseMetadata);
 		}
-		foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces.Enumerable)
-		{
-			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(metadata, interfaceMetadata), true);
-			MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(interfaceMetadata, metadata),
-			                                       default);
-			MetadataHelper.Register(interfaceMetadata);
-		}
+		metadata.Interfaces.ForEach(metadata, MetadataHelper.RegisterInterfaceAssignation);
 		if (metadata is JArrayTypeMetadata arrayMetadata)
 			MetadataHelper.Register(arrayMetadata.ElementMetadata as JReferenceTypeMetadata);
 		return MetadataHelper.runtimeMetadata.TryAdd(metadata.Hash, metadata);
+	}
+	/// <summary>
+	/// Registers assignation of <paramref name="metadata"/> to <paramref name="interfaceMetadata"/>.
+	/// </summary>
+	/// <param name="metadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
+	private static void RegisterInterfaceAssignation(JReferenceTypeMetadata metadata,
+		JInterfaceTypeMetadata interfaceMetadata)
+	{
+		MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(metadata, interfaceMetadata), true);
+		MetadataHelper.assignationCache.TryAdd(MetadataHelper.GetAssignationKey(interfaceMetadata, metadata), default);
+		MetadataHelper.Register(interfaceMetadata);
 	}
 	/// <summary>
 	/// Creates the assignation key for <paramref name="fromMetadata"/> to <paramref name="toMetadata"/>

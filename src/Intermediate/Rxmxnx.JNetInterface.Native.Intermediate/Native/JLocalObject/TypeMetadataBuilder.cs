@@ -63,22 +63,48 @@ public partial class JLocalObject
 			if (!this._interfaceTypes.Contains(metadata.InterfaceType))
 				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
 					this.DataTypeName, this._kind is not JTypeKind.Interface);
-
-			foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces.Enumerable)
-			{
-				if (!this._interfaceTypes.Contains(interfaceMetadata.InterfaceType))
-					NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
-						this.DataTypeName, this._kind is not JTypeKind.Interface);
-			}
+			this.DataTypeName.WithSafeFixed((this._interfaceTypes, this._kind),
+			                                TypeMetadataBuilder.ValidateSuperInterfaces<TInterface>);
 			this._interfaces ??= [];
 			this._interfaces.Add(metadata);
 		}
+
 		/// <summary>
 		/// Creates a metadata interfaces set for current datatype.
 		/// </summary>
 		/// <returns>A set with current datatype interfaces.</returns>
 		public IReadOnlySet<JInterfaceTypeMetadata> GetInterfaceSet()
 			=> this._interfaces ?? (IReadOnlySet<JInterfaceTypeMetadata>)ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
+
+		/// <summary>
+		/// Validates implementation of each super interface of <typeparamref name="TInterface"/>.
+		/// </summary>
+		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
+		/// <param name="mem">Current datatype fixed name.</param>
+		/// <param name="args">Interface type set and kind of current type.</param>
+		private static void ValidateSuperInterfaces<TInterface>(in IReadOnlyFixedMemory mem,
+			(ISet<Type> interfaceTypes, JTypeKind kind) args)
+			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+		{
+			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
+			IReadOnlyFixedMemory dataTypeName = mem;
+			metadata.Interfaces.ForEach((dataTypeName, args.interfaceTypes, args.kind),
+			                            TypeMetadataBuilder.ValidateSuperInterfaces<TInterface>);
+		}
+		/// <summary>
+		/// Validates implementation of each super interface of <typeparamref name="TInterface"/>.
+		/// </summary>
+		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
+		/// <param name="args">Fixed name, interface type set and kind of current type.</param>
+		private static void ValidateSuperInterfaces<TInterface>(
+			(IReadOnlyFixedMemory dataTypeName, ISet<Type> interfaceTypes, JTypeKind kind) args,
+			JInterfaceTypeMetadata interfaceMetadata)
+			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+		{
+			if (!args.interfaceTypes.Contains(interfaceMetadata.InterfaceType))
+				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
+					args.dataTypeName.Bytes, args.kind is not JTypeKind.Interface);
+		}
 	}
 
 	/// <summary>

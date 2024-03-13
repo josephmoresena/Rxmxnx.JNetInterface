@@ -14,9 +14,6 @@ internal partial class InterfaceSet : IInterfaceSet
 	/// </summary>
 	private String? _stringRepresentation;
 
-	/// <inheritdoc/>
-	public virtual IEnumerable<JInterfaceTypeMetadata> Enumerable => this._internalSet;
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -25,12 +22,30 @@ internal partial class InterfaceSet : IInterfaceSet
 
 	/// <inheritdoc/>
 	public virtual Boolean Contains(JInterfaceTypeMetadata item) => this._internalSet.Contains(item);
+	/// <inheritdoc/>
+	public virtual void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
+	{
+		foreach (JInterfaceTypeMetadata interfaceMetadata in this._internalSet)
+			action(state, interfaceMetadata);
+	}
+	/// <inheritdoc/>
+	public virtual IEnumerable<JInterfaceTypeMetadata> GetEnumerable() => this._internalSet;
 
 	/// <inheritdoc/>
 	public override String ToString()
 	{
 		if (String.IsNullOrEmpty(this._stringRepresentation))
-			this._stringRepresentation = $"[{String.Join(", ", this.Enumerable.Select(i => i.ClassName))}]";
+			this._stringRepresentation = $"[{String.Join(", ", this.GetEnumerable().Select(i => i.ClassName))}]";
 		return this._stringRepresentation;
+	}
+
+	private static void ForEach<T>(
+		(T state, HashSet<String> hashes, Boolean recursive, Action<T, JInterfaceTypeMetadata> action) args,
+		JInterfaceTypeMetadata interfaceMetadata)
+	{
+		if (!args.hashes.Add(interfaceMetadata.Hash)) return;
+		args.action(args.state, interfaceMetadata);
+		if (args.recursive)
+			interfaceMetadata.Interfaces.ForEach(args, InterfaceSet.ForEach);
 	}
 }

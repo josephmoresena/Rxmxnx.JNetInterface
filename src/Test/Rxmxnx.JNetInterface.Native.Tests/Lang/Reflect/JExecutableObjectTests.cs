@@ -131,9 +131,10 @@ public class JExecutableObjectTests
 		Assert.Equal(IDataType.GetMetadata<JAccessibleObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JExecutableObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JExecutableObject>());
-		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces.Enumerable);
-		Assert.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>(), typeMetadata.Interfaces.Enumerable);
-		Assert.Contains(IInterfaceType.GetMetadata<JMemberObject>(), typeMetadata.Interfaces.Enumerable);
+		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces.GetEnumerable());
+		Assert.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>(),
+		                typeMetadata.Interfaces.GetEnumerable());
+		Assert.Contains(IInterfaceType.GetMetadata<JMemberObject>(), typeMetadata.Interfaces.GetEnumerable());
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JExecutableObject>().Returns(jThrowableClass);

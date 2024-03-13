@@ -304,10 +304,11 @@ public sealed class JClassObjectTests
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JClassObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JClassObject>());
-		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces.Enumerable);
-		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces.Enumerable);
-		Assert.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>(), typeMetadata.Interfaces.Enumerable);
-		Assert.Contains(IInterfaceType.GetMetadata<JTypeObject>(), typeMetadata.Interfaces.Enumerable);
+		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces.GetEnumerable());
+		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces.GetEnumerable());
+		Assert.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>(),
+		                typeMetadata.Interfaces.GetEnumerable());
+		Assert.Contains(IInterfaceType.GetMetadata<JTypeObject>(), typeMetadata.Interfaces.GetEnumerable());
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ReferenceFeature.Received(1).GetLifetime(jLocal, classRef.Value, jClass, false);

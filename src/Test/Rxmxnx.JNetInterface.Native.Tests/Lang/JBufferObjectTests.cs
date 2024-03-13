@@ -90,7 +90,7 @@ public class JBufferObjectTests
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JBufferObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JBufferObject>());
-		Assert.Empty(typeMetadata.Interfaces.Enumerable);
+		Assert.Empty(typeMetadata.Interfaces.GetEnumerable());
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JBufferObject>().Returns(jBufferClass);

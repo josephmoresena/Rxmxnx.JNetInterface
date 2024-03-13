@@ -138,9 +138,9 @@ public sealed class JStringObjectTests
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JStringObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
-		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces.Enumerable);
-		Assert.Contains(IInterfaceType.GetMetadata<JCharSequenceObject>(), typeMetadata.Interfaces.Enumerable);
-		Assert.Contains(IInterfaceType.GetMetadata<JComparableObject>(), typeMetadata.Interfaces.Enumerable);
+		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces.GetEnumerable());
+		Assert.Contains(IInterfaceType.GetMetadata<JCharSequenceObject>(), typeMetadata.Interfaces.GetEnumerable());
+		Assert.Contains(IInterfaceType.GetMetadata<JComparableObject>(), typeMetadata.Interfaces.GetEnumerable());
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JStringObject>().Returns(jStringClass);

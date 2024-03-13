@@ -66,7 +66,7 @@ public class JModifierObjectTests
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JModifierObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JModifierObject>());
-		Assert.Empty(typeMetadata.Interfaces.Enumerable);
+		Assert.Empty(typeMetadata.Interfaces.GetEnumerable());
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JModifierObject>().Returns(jThrowableClass);
