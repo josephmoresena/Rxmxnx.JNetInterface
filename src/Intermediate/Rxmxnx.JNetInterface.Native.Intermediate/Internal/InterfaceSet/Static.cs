@@ -17,7 +17,6 @@ internal partial class InterfaceSet
 	/// </summary>
 	public static readonly InterfaceSet AnnotationSet =
 		new(ImmutableHashSet.Create(IInterfaceType.GetMetadata<JAnnotationObject>()));
-
 	/// <summary>
 	/// Primitive wrapper interface set.
 	/// </summary>
@@ -47,4 +46,20 @@ internal partial class InterfaceSet
 	/// <returns>A <see cref="IInterfaceSet"/> instance.</returns>
 	public static IInterfaceSet GetInterfaceInterfaces(IReadOnlySet<JInterfaceTypeMetadata> interfaces)
 		=> interfaces.Count == 0 ? InterfaceSet.Empty : new InterfaceInterfaceSet(interfaces.ToImmutableHashSet());
+
+	/// <summary>
+	/// Internal for each implementation.
+	/// </summary>
+	/// <typeparam name="T">Type of state object.</typeparam>
+	/// <param name="args">Execution args.</param>
+	/// <param name="interfaceMetadata">A <see cref="JInterfaceObject{TInterface}"/> instance.</param>
+	private static void ForEachImpl<T>(
+		(T state, HashSet<String> hashes, Boolean recursive, Action<T, JInterfaceTypeMetadata> action) args,
+		JInterfaceTypeMetadata interfaceMetadata)
+	{
+		if (!args.hashes.Add(interfaceMetadata.Hash)) return;
+		args.action(args.state, interfaceMetadata);
+		if (args.recursive)
+			interfaceMetadata.Interfaces.ForEach(args, InterfaceSet.ForEachImpl);
+	}
 }

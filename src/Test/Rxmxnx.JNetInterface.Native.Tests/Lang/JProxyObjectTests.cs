@@ -65,7 +65,7 @@ public class JProxyObjectTests
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JProxyObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JProxyObject>());
-		Assert.Empty(typeMetadata.Interfaces.GetEnumerable());
+		Assert.Empty(typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JProxyObject>().Returns(jThrowableClass);

@@ -22,18 +22,18 @@ internal partial class InterfaceSet
 			=> this._baseInterfaces = baseMetadata.Interfaces;
 
 		/// <inheritdoc/>
-		public override IEnumerable<JInterfaceTypeMetadata> GetEnumerable()
-			=> base.GetEnumerable().Union(this._baseInterfaces.GetEnumerable()).Distinct();
-
-		/// <inheritdoc/>
 		public override Boolean Contains(JInterfaceTypeMetadata item)
 			=> base.Contains(item) || this._baseInterfaces.Contains(item);
 		/// <inheritdoc/>
 		public override void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
 		{
 			HashSet<String> hashes = [];
-			base.ForEach((state, hashes, false, action), InterfaceSet.ForEach);
-			this._baseInterfaces.ForEach((state, hashes, false, action), InterfaceSet.ForEach);
+			base.ForEach((state, hashes, false, action), InterfaceSet.ForEachImpl);
+			this._baseInterfaces.ForEach((state, hashes, false, action), InterfaceSet.ForEachImpl);
 		}
+
+		/// <inheritdoc/>
+		private protected override IEnumerable<JInterfaceTypeMetadata> GetEnumerable()
+			=> base.GetEnumerable().Union(this._baseInterfaces).Distinct();
 	}
 }

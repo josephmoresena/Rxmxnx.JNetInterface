@@ -20,6 +20,10 @@ internal partial class InterfaceSet : IInterfaceSet
 	/// <param name="set">A <see cref="IReadOnlySet{T}"/> instance.</param>
 	private InterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) => this._internalSet = set;
 
+	IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+
+	/// <inheritdoc/>
+	public IEnumerator<JInterfaceTypeMetadata> GetEnumerator() => this.GetEnumerable().GetEnumerator();
 	/// <inheritdoc/>
 	public virtual Boolean Contains(JInterfaceTypeMetadata item) => this._internalSet.Contains(item);
 	/// <inheritdoc/>
@@ -29,9 +33,6 @@ internal partial class InterfaceSet : IInterfaceSet
 			action(state, interfaceMetadata);
 	}
 	/// <inheritdoc/>
-	public virtual IEnumerable<JInterfaceTypeMetadata> GetEnumerable() => this._internalSet;
-
-	/// <inheritdoc/>
 	public override String ToString()
 	{
 		if (String.IsNullOrEmpty(this._stringRepresentation))
@@ -39,13 +40,8 @@ internal partial class InterfaceSet : IInterfaceSet
 		return this._stringRepresentation;
 	}
 
-	private static void ForEach<T>(
-		(T state, HashSet<String> hashes, Boolean recursive, Action<T, JInterfaceTypeMetadata> action) args,
-		JInterfaceTypeMetadata interfaceMetadata)
-	{
-		if (!args.hashes.Add(interfaceMetadata.Hash)) return;
-		args.action(args.state, interfaceMetadata);
-		if (args.recursive)
-			interfaceMetadata.Interfaces.ForEach(args, InterfaceSet.ForEach);
-	}
+	/// <summary>
+	/// Internal enumeration.
+	/// </summary>
+	private protected virtual IEnumerable<JInterfaceTypeMetadata> GetEnumerable() => this._internalSet;
 }

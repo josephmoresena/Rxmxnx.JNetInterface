@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// Interface metadata set.
 /// </summary>
-public interface IInterfaceSet
+public interface IInterfaceSet : IEnumerable<JInterfaceTypeMetadata>
 {
 	/// <summary>
 	/// Determines if the set contains a specific item.
@@ -13,10 +13,6 @@ public interface IInterfaceSet
 	/// <see langword="true"/> if found; otherwise <see langword="false"/>.
 	/// </returns>
 	Boolean Contains(JInterfaceTypeMetadata item);
-	/// <summary>
-	/// Internal enumeration.
-	/// </summary>
-	IEnumerable<JInterfaceTypeMetadata> GetEnumerable();
 	/// <summary>
 	/// Performs <paramref name="action"/> for each unique item in current set.
 	/// </summary>

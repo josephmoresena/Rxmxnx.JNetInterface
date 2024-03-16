@@ -96,6 +96,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <param name="args">Fixed name, interface type set and kind of current type.</param>
+		/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance..</param>
 		private static void ValidateSuperInterfaces<TInterface>(
 			(IReadOnlyFixedMemory dataTypeName, ISet<Type> interfaceTypes, JTypeKind kind) args,
 			JInterfaceTypeMetadata interfaceMetadata)

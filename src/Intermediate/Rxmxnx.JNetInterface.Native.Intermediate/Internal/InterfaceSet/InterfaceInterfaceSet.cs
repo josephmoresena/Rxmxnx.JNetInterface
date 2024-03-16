@@ -12,10 +12,6 @@ internal partial class InterfaceSet
 		/// </summary>
 		/// <param name="set">Interface set.</param>
 		public InterfaceInterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) : base(set) { }
-		/// <inheritdoc/>
-		public override IEnumerable<JInterfaceTypeMetadata> GetEnumerable()
-			=> base.GetEnumerable().Union(base.GetEnumerable().SelectMany(i => i.Interfaces.GetEnumerable()))
-			       .Distinct();
 
 		/// <inheritdoc/>
 		public override Boolean Contains(JInterfaceTypeMetadata item)
@@ -34,7 +30,11 @@ internal partial class InterfaceSet
 		public override void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
 		{
 			HashSet<String> hashes = [];
-			base.ForEach((state, hashes, true, action), InterfaceSet.ForEach);
+			base.ForEach((state, hashes, true, action), InterfaceSet.ForEachImpl);
 		}
+
+		/// <inheritdoc/>
+		private protected override IEnumerable<JInterfaceTypeMetadata> GetEnumerable()
+			=> base.GetEnumerable().Union(base.GetEnumerable().SelectMany(i => i.Interfaces)).Distinct();
 	}
 }
