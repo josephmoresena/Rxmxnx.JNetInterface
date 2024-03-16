@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Tests.Lang;
+namespace Rxmxnx.JNetInterface.Tests.Nio;
 
 [ExcludeFromCodeCoverage]
 public class JBufferObjectTests
