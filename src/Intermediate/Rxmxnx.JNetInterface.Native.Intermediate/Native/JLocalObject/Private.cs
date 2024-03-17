@@ -7,6 +7,7 @@ public partial class JLocalObject : ILocalObject
 	ObjectLifetime ILocalObject.Lifetime => this.Lifetime;
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
+	TReference ILocalObject.CastTo<TReference>() => this.CastTo<TReference>();
 
 	/// <summary>
 	/// Process the object metadata.

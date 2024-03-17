@@ -87,11 +87,6 @@ public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView
 	/// </summary>
 	public static JArrayTypeMetadata Metadata => ArrayTypeMetadata.Instance;
 
-	/// <inheritdoc/>
-	public TReference CastTo<TReference>(Boolean dispose = false)
-		where TReference : JReferenceObject, IReferenceType<TReference>
-		=> this as TReference ?? this.Object.CastTo<TReference>(dispose);
-
 	/// <summary>
 	/// Gets or sets the element of <paramref name="index"/>.
 	/// </summary>

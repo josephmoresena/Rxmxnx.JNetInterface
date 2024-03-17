@@ -10,17 +10,6 @@ public partial interface IReferenceType : IObject, IDataType, IDisposable
 	static Type IDataType.FamilyType => typeof(JLocalObject);
 
 	/// <summary>
-	/// Retrieves a <typeparamref name="TReference"/> instance from current instance.
-	/// </summary>
-	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
-	/// <param name="dispose">
-	/// Optional. Indicates whether current instance should be disposed after casting.
-	/// </param>
-	/// <returns>A <typeparamref name="TReference"/> instance from current instance.</returns>
-	TReference CastTo<TReference>(Boolean dispose = false)
-		where TReference : JReferenceObject, IReferenceType<TReference>;
-
-	/// <summary>
 	/// Retrieves the metadata for given reference type.
 	/// </summary>
 	/// <typeparam name="TReference">Type of current java reference datatype.</typeparam>

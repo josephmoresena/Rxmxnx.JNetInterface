@@ -16,6 +16,14 @@ public partial class JLocalObject
 		protected View(TObject jObject) : base(jObject) { }
 
 		ILocalObject ILocalViewObject.Object => this.Object;
+
+		/// <summary>
+		/// Retrieves a <typeparamref name="TReference"/> instance from current instance.
+		/// </summary>
+		/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+		/// <returns>A <typeparamref name="TReference"/> instance from current instance.</returns>
+		public TReference CastTo<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
+			=> this as TReference ?? this.Object.CastTo<TReference>();
 		JLocalObject IWrapper<JLocalObject>.Value => this.Object;
 	}
 }

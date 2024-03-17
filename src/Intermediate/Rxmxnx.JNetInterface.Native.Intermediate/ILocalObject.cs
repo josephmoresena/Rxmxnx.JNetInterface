@@ -26,6 +26,13 @@ public interface ILocalObject : IObject
 	protected void ProcessMetadata(ObjectMetadata instanceMetadata);
 
 	/// <summary>
+	/// Retrieves a <typeparamref name="TReference"/> instance from current instance.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	/// <returns>A <typeparamref name="TReference"/> instance from current instance.</returns>
+	public TReference CastTo<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>;
+
+	/// <summary>
 	/// Retrieves the metadata for given object.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="ILocalObject"/> instance.</param>

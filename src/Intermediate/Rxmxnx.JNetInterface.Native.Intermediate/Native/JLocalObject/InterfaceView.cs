@@ -20,11 +20,6 @@ public partial class JLocalObject
 		private protected InterfaceView(JLocalObject jObject) : base(jObject) { }
 
 		/// <inheritdoc/>
-		public TReference CastTo<TReference>(Boolean dispose = false)
-			where TReference : JReferenceObject, IReferenceType<TReference>
-			=> this as TReference ?? this.Object.CastTo<TReference>(dispose);
-
-		/// <inheritdoc/>
 		public void Dispose()
 		{
 			this.Object.Dispose();
