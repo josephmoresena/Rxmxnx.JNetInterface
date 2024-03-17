@@ -20,7 +20,11 @@ public partial class JArrayObject<TElement> : IArrayType, IReferenceType<JArrayO
 	TElement? IEnumerableSequence<TElement?>.GetItem(Int32 index) => this[index];
 	Int32 IEnumerableSequence<TElement?>.GetSize() => this.Length;
 
-	static JArrayObject<TElement> IReferenceType<JArrayObject<TElement>>.
-		Create(IReferenceType.ObjectInitializer initializer)
-		=> initializer.Instance.CastTo<JArrayObject<TElement>>();
+	static JArrayObject<TElement> IReferenceType<JArrayObject<TElement>>.Create(
+		IReferenceType.ObjectInitializer initializer)
+	{
+		if (initializer.Instance is not JArrayObject jArray)
+			jArray = new Generic<TElement>(initializer.Instance, initializer.Class);
+		return new(jArray);
+	}
 }

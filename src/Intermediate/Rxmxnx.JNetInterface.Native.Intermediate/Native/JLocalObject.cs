@@ -31,6 +31,11 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 		GC.SuppressFinalize(this);
 	}
 
+	/// <inheritdoc/>
+	public TReference CastTo<TReference>(Boolean dispose = false)
+		where TReference : JReferenceObject, IReferenceType<TReference>
+		=> this.CastTo<TReference>(this, dispose);
+
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
 	public override CString ObjectClassName => this.Lifetime.Class?.Name ?? UnicodeClassNames.Object;
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
@@ -41,18 +46,6 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 
 	/// <inheritdoc/>
 	~JLocalObject() { this.Dispose(false); }
-
-	/// <summary>
-	/// Retrieves a <typeparamref name="TReference"/> instance from current instance.
-	/// </summary>
-	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
-	/// <param name="dispose">
-	/// Optional. Indicates whether current instance should be disposed after casting.
-	/// </param>
-	/// <returns>A <typeparamref name="TReference"/> instance from current instance.</returns>
-	public TReference CastTo<TReference>(Boolean dispose = false)
-		where TReference : JReferenceObject, IReferenceType<TReference>
-		=> this.CastTo<TReference>(this, dispose);
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
 	/// </summary>

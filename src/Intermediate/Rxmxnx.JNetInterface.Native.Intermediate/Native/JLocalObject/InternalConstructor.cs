@@ -8,7 +8,10 @@ public partial class JLocalObject
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="localRef">Local object reference.</param>
 	internal JLocalObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass.IsProxy)
-		=> this.Lifetime = new(jClass.Environment, this, localRef) { Class = jClass, IsRealClass = jClass.IsFinal, };
+		=> this.Lifetime = new(jClass.Environment, this, localRef)
+		{
+			Class = jClass, IsRealClass = JLocalObject.IsRealClass(jClass, this),
+		};
 	/// <summary>
 	/// Constructor.
 	/// </summary>

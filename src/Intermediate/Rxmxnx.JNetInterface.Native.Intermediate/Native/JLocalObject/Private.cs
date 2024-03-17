@@ -34,6 +34,17 @@ public partial class JLocalObject : ILocalObject
 		return result;
 	}
 
+	/// <summary>
+	/// Indicates whether <paramref name="jClass"/> is real class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="jLocal">Current <see cref="JLocalObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jClass"/> is final or current instance is
+	/// a <see cref="JArrayObject{TElement}"/> instance; otherwise, <see langword="false"/>.
+	/// </returns>
+	private static Boolean IsRealClass(JClassObject jClass, IObject jLocal) => jClass.IsFinal || jLocal is JArrayObject;
+
 	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
 	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.ObjectInitializer initializer)
