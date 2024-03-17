@@ -56,7 +56,7 @@ public partial class JArrayObject<TElement>
 			if (jLocal == null) return default;
 			if (jLocal is not IArrayObject<TElement>)
 				JLocalObject.Validate<JArrayObject<TElement>>(jLocal);
-			return JLocalObject.ArrayView.ParseArray<TElement>(jLocal, dispose);
+			return new JArrayObject<TElement>(JLocalObject.ArrayView.ParseArray<TElement>(jLocal, dispose));
 		}
 		/// <inheritdoc/>
 		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)

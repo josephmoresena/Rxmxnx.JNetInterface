@@ -101,6 +101,6 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 				return true;
 			metadata = metadata.BaseMetadata;
 		}
-		return false;
+		return otherMetadata.ClassName.AsSpan().SequenceEqual(UnicodeClassNames.Object);
 	}
 }

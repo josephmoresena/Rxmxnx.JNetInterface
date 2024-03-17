@@ -39,9 +39,6 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 		this._length = arrayMetadata.Length;
 	}
 
-	/// <inheritdoc cref="JReferenceObject.As{TValue}()"/>
-	internal new ref readonly TValue As<TValue>() where TValue : unmanaged, IArrayReferenceType<TValue>
-		=> ref base.As<TValue>();
 	/// <summary>
 	/// Indicates whether <paramref name="jObject"/> is a valid element for current array instance.
 	/// </summary>
