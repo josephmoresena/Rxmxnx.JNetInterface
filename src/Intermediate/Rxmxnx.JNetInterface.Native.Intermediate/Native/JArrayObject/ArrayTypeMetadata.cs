@@ -75,23 +75,6 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		internal override JArrayTypeMetadata? GetArrayMetadata()
 			=> JArrayTypeMetadata.GetArrayArrayMetadata(this.ArraySignature, typeof(TElement));
-		/// <inheritdoc/>
-		internal override void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
-		{
-			if (jArray is not JArrayObject<TElement> jGenericArray) return;
-			switch (value)
-			{
-				case TElement element:
-					jGenericArray[index] = element;
-					break;
-				case null:
-					jGenericArray[index] = default;
-					break;
-				default:
-					ArrayTypeMetadata.SetObjectElement(jGenericArray, index, value);
-					break;
-			}
-		}
 		/// <summary>
 		/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
 		/// </summary>

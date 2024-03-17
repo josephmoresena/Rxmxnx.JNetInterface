@@ -117,17 +117,6 @@ partial class JEnvironment
 				this.SetObjectElement(jArray, index, value as JReferenceObject);
 			}
 		}
-		public void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
-		{
-			ValidationUtilities.ThrowIfProxy(value);
-			jArray.ValidateObjectElement(value);
-			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);
-			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
-			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
-			this.CheckJniError();
-		}
 		public Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item)
 			where TElement : IObject, IDataType<TElement>
 		{

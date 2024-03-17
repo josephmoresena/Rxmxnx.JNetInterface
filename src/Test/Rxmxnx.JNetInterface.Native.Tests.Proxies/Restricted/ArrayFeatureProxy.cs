@@ -24,7 +24,6 @@ public abstract class ArrayFeatureProxy : IArrayFeature
 		JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	public abstract INativeMemoryAdapter GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 		JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
-	public abstract void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value);
 	public abstract IntPtr GetPrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, out Boolean isCopy)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	public abstract ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef);

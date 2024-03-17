@@ -5,6 +5,23 @@ partial class JEnvironment
 	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
+		/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
+		/// </summary>
+		/// <param name="jArray">A <see cref="JReferenceObject"/> instance.</param>
+		/// <param name="index">Element index.</param>
+		/// <param name="value">Object instance.</param>
+		private void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
+		{
+			ValidationUtilities.ThrowIfProxy(value);
+			jArray.ValidateObjectElement(value);
+			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);
+			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
+			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
+			this.CheckJniError();
+		}
+		/// <summary>
 		/// Retrieves the element with <paramref name="index"/> on <paramref name="arrayRef"/>.
 		/// </summary>
 		/// <typeparam name="TElement">Type of <paramref name="arrayRef"/> element.</typeparam>

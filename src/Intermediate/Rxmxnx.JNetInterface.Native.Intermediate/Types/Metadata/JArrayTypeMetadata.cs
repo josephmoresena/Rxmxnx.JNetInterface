@@ -64,12 +64,4 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 	public override String ToString()
 		=> $"{base.ToString()}{nameof(JArrayTypeMetadata.ElementClassName)} = {this.ElementClassName}, " +
 			$"{nameof(JArrayTypeMetadata.Dimension)} = {this.Dimension}, ";
-
-	/// <summary>
-	/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
-	/// </summary>
-	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
-	/// <param name="index">Element index.</param>
-	/// <param name="value">Object instance.</param>
-	internal abstract void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value);
 }
