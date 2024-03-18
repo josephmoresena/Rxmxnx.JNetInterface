@@ -129,6 +129,9 @@ public class JExecutableObjectTests
 		Assert.Equal(JExecutableObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JExecutableObjectTests.hash.ToString(), IDataType.GetHash<JExecutableObject>());
 		Assert.Equal(IDataType.GetMetadata<JAccessibleObject>(), typeMetadata.BaseMetadata);
+		Assert.IsType<JFunctionDefinition<JExecutableObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JExecutableObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JExecutableObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JExecutableObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces);

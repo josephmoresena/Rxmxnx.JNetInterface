@@ -47,6 +47,7 @@ partial class JEnvironment
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			JObjectLocalRef localRef = jniTransaction.Add(item);
 			JObjectArrayLocalRef objectArrayRef = JObjectArrayLocalRef.FromReference(in arrayRef);
+			using LocalFrame _ = new(this._env, 2);
 			for (Int32 i = 0; i < jArray.Length; i++)
 			{
 				JObjectLocalRef itemLocalRef = this.GetObjectArrayElement(objectArrayRef, i);

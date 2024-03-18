@@ -136,6 +136,9 @@ public sealed class JStringObjectTests
 		Assert.Equal(JStringObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JStringObjectTests.hash.ToString(), IDataType.GetHash<JStringObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
+		Assert.IsType<JFunctionDefinition<JStringObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JStringObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JStringObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStringObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);

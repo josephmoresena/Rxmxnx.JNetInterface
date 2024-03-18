@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Tests.Restricted;
 [ExcludeFromCodeCoverage]
 public abstract partial class ClassFeatureProxy : IClassFeature
 {
+	public Boolean UseNonGeneric { get; set; }
+
 	public abstract JClassObject VoidPrimitive { get; }
 	public abstract JClassObject BooleanPrimitive { get; }
 	public abstract JClassObject BytePrimitive { get; }
@@ -25,7 +27,6 @@ public abstract partial class ClassFeatureProxy : IClassFeature
 
 	public abstract JClassObject AsClassObject(JClassLocalRef classRef);
 	public abstract JClassObject AsClassObject(JReferenceObject jObject);
-	public abstract JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
 	public abstract JClassObject GetObjectClass(JLocalObject jLocal);
 	public abstract JClassObject? GetSuperClass(JClassObject jClass);
 	public abstract Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass);
@@ -38,7 +39,9 @@ public abstract partial class ClassFeatureProxy : IClassFeature
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 	public abstract void ThrowNew<TThrowable>(String? message, Boolean throwException)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
+	public abstract JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
 	public abstract ITypeInformation GetClassInfo(JClassObject jClass);
+	public abstract JClassObject GetNonGenericClass(Type classHash);
 	public abstract JClassObject GetClass(CString className);
 	public abstract JClassObject LoadClass(CString className, Byte[] rawClassBytes,
 		JClassLoaderObject? jClassLoader = default);

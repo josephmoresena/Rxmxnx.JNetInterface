@@ -145,6 +145,9 @@ public class JFieldObjectTests
 		Assert.Equal(JFieldObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JFieldObjectTests.hash.ToString(), IDataType.GetHash<JFieldObject>());
 		Assert.Equal(IDataType.GetMetadata<JAccessibleObject>(), typeMetadata.BaseMetadata);
+		Assert.IsType<JFunctionDefinition<JFieldObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JFieldObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JFieldObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JFieldObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces);

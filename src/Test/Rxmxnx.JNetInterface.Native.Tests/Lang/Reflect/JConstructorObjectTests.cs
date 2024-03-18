@@ -176,6 +176,9 @@ public class JConstructorObjectTests
 		Assert.Equal(JConstructorObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JConstructorObjectTests.hash.ToString(), IDataType.GetHash<JConstructorObject>());
 		Assert.Equal(IDataType.GetMetadata<JExecutableObject>(), typeMetadata.BaseMetadata);
+		Assert.IsType<JFunctionDefinition<JConstructorObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JConstructorObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JConstructorObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JConstructorObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces);

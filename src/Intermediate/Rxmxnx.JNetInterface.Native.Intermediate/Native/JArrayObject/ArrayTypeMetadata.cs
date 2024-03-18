@@ -20,8 +20,6 @@ public partial class JArrayObject<TElement>
 		public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<JArrayObject<TElement>>();
 		/// <inheritdoc/>
 		public override JClassTypeMetadata BaseMetadata => JLocalObject.ObjectClassMetadata;
-		/// <inheritdoc/>
-		public override IInterfaceSet Interfaces => InterfaceSet.ArraySet;
 
 		/// <summary>
 		/// Constructor.
@@ -75,25 +73,5 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		internal override JArrayTypeMetadata? GetArrayMetadata()
 			=> JArrayTypeMetadata.GetArrayArrayMetadata(this.ArraySignature, typeof(TElement));
-		/// <summary>
-		/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
-		/// </summary>
-		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
-		/// <param name="index">Element index.</param>
-		/// <param name="value">Object instance.</param>
-		private static void SetObjectElement(JArrayObject<TElement> jArray, Int32 index, JReferenceObject value)
-		{
-			JReferenceTypeMetadata elementMetadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TElement>();
-			JLocalObject? jLocal = value as JLocalObject ?? (value as IWrapper<JLocalObject>)?.Value;
-			TElement? element = (TElement?)(Object?)elementMetadata.ParseInstance(jLocal);
-			try
-			{
-				jArray[index] = element;
-			}
-			finally
-			{
-				(element as JLocalObject)?.Dispose();
-			}
-		}
 	}
 }

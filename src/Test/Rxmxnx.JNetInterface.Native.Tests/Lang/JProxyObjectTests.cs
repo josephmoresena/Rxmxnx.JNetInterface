@@ -63,6 +63,9 @@ public class JProxyObjectTests
 		Assert.Equal(JProxyObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JProxyObjectTests.hash.ToString(), IDataType.GetHash<JProxyObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
+		Assert.IsType<JFunctionDefinition<JProxyObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JProxyObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JProxyObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JProxyObject>());
 		Assert.Empty(typeMetadata.Interfaces);

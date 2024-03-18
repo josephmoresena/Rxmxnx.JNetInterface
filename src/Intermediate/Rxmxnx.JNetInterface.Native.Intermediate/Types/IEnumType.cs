@@ -7,6 +7,7 @@ namespace Rxmxnx.JNetInterface.Types;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IEnumType : IReferenceType
 {
+	[ExcludeFromCodeCoverage]
 	static JTypeKind IDataType.Kind => JTypeKind.Enum;
 
 	/// <summary>

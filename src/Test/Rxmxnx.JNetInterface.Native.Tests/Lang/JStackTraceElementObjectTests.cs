@@ -91,6 +91,9 @@ public class JStackTraceElementObjectTests
 		Assert.Equal(JStackTraceElementObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JStackTraceElementObjectTests.hash.ToString(), IDataType.GetHash<JStackTraceElementObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
+		Assert.IsType<JFunctionDefinition<JStackTraceElementObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JStackTraceElementObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JStackTraceElementObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStackTraceElementObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);

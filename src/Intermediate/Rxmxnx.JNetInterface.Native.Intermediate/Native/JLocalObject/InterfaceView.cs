@@ -13,9 +13,6 @@ public partial class JLocalObject
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	public abstract partial class InterfaceView : View<JLocalObject>, IInterfaceType
 	{
-		static JTypeKind IDataType.Kind => JTypeKind.Interface;
-		static Type IDataType.FamilyType => typeof(InterfaceView);
-
 		/// <inheritdoc/>
 		private protected InterfaceView(JLocalObject jObject) : base(jObject) { }
 

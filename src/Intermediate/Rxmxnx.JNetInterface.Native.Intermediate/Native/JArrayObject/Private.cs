@@ -14,7 +14,6 @@ public partial class JArrayObject : IDataType
 public partial class JArrayObject<TElement> : IArrayType, IReferenceType<JArrayObject<TElement>>,
 	IArrayObject<TElement>, IEnumerableSequence<TElement?>
 {
-	static Type IDataType.FamilyType => typeof(JArrayObject);
 	static JDataTypeMetadata IDataType<JArrayObject<TElement>>.Metadata => JArrayObject<TElement>.Metadata;
 
 	TElement? IEnumerableSequence<TElement?>.GetItem(Int32 index) => this[index];

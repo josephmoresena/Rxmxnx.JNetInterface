@@ -196,12 +196,18 @@ public sealed class JArrayObjectTests
 	private static void ObjectArrayTest<TElement>(Byte initializer = 0)
 		where TElement : JReferenceObject, IReferenceType<TElement>
 	{
+		IInterfaceSet interfaces = InterfaceSet.ArraySet;
+		Assert.Contains(IInterfaceType.GetMetadata<JCloneableObject>(), interfaces);
+		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), interfaces);
+
 		JReferenceTypeMetadata elementTypeMetadata = IReferenceType.GetMetadata<TElement>();
 		JArrayTypeMetadata arrayTypeMetadata = IArrayType.GetMetadata<JArrayObject<TElement>>();
+		String textValue = arrayTypeMetadata.ToString();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JArrayLocalRef arrayRef = JArrayObjectTests.fixture.Create<JArrayLocalRef>();
 		Int32 length = Random.Shared.Next(0, 10);
 		using JClassObject jClass = new(env);
+		using JClassObject jElementClass = new(jClass, elementTypeMetadata);
 		using JClassObject jArrayClass = new(jClass, arrayTypeMetadata);
 		using JArrayObject<TElement> jArray = initializer == 0 ?
 			new(jArrayClass, arrayRef, length) :
@@ -209,10 +215,15 @@ public sealed class JArrayObjectTests
 		ObjectMetadata objectMetadata = initializer == 3 ?
 			new ArrayObjectMetadata(new(jArrayClass)) { Length = length, } :
 			new ObjectMetadata(jArrayClass);
+		ILocalViewObject localView = jArray;
 
 		env.ArrayFeature.GetArrayLength(jArray).Returns(length);
 
 		if (initializer > 1) ILocalObject.ProcessMetadata(jArray, objectMetadata);
+
+		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.Contains(arrayTypeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {arrayTypeMetadata.Hash} }}", textValue);
 
 		Assert.Equal(typeof(JArrayObject), EnvironmentProxy.GetFamilyType<JArrayObject>());
 		Assert.Equal(JTypeKind.Array, EnvironmentProxy.GetKind<JArrayObject>());
@@ -220,6 +231,9 @@ public sealed class JArrayObjectTests
 		Assert.Equal(JTypeKind.Array, EnvironmentProxy.GetKind<JArrayObject<TElement>>());
 		Assert.Equal(elementTypeMetadata is JArrayTypeMetadata, arrayTypeMetadata.Dimension > 1);
 		Assert.Equal(arrayTypeMetadata, elementTypeMetadata.GetArrayMetadata());
+		Assert.IsType<JFunctionDefinition<JArrayObject<TElement>>>(
+			arrayTypeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JArrayObject<TElement>>>(arrayTypeMetadata.CreateFieldDefinition("fieldName"u8));
 
 		Assert.Equal(arrayRef, jArray.Object.Reference);
 		Assert.Equal(length, jArray.Length);
@@ -232,11 +246,41 @@ public sealed class JArrayObjectTests
 		Assert.Equal(length, Assert.IsType<ArrayObjectMetadata>(ILocalObject.CreateMetadata(jArray)).Length);
 		Assert.Equal(jArray.ToString(), jArray.Object.ToString());
 
+		Assert.Equal(jArray.Object, localView.Object);
+		Assert.Equal(jArray.Object, (localView as IViewObject).Object);
+		Assert.Equal(jArray.Object, ILocalViewObject.GetObject(jArray));
+		Assert.Equal(jArray.Object.Lifetime, localView.Lifetime);
+		Assert.Equal(jArray.Object.IsProxy, localView.IsProxy);
+		Assert.Equal(jArray.Object.Environment.VirtualMachine, localView.VirtualMachine);
+
 		env.ArrayFeature.Received(initializer is 0 or 3 ? 0 : 1).GetArrayLength(jArray);
 		JArrayObjectTests.CastTest(jArray);
+		JArrayObjectTests.CollectionTest(jArray);
 
 		if (arrayTypeMetadata.Dimension < 10)
 			JArrayObjectTests.ObjectArrayTest<JArrayObject<TElement>>(initializer);
+
+		if (length <= 0 || JLocalObject.IsClassType<TElement>() || typeof(TElement) == typeof(JStringObject)) return;
+		JObjectLocalRef localRef = JArrayObjectTests.fixture.Create<JObjectLocalRef>();
+		using JLocalObject jLocal = elementTypeMetadata.CreateInstance(jElementClass, localRef, true);
+		TElement element = jLocal.CastTo<TElement>();
+
+		env.ArrayFeature.GetElement(jArray, 0).Returns(element);
+
+		Assert.Equal(element, jArray[0]);
+		jArray[^1] = element;
+
+		env.ArrayFeature.Received(1).GetElement(jArray, 0);
+		env.ArrayFeature.Received(1).SetElement(jArray, length - 1, element);
+	}
+	private static void CollectionTest<TElement>(JArrayObject<TElement> jArray)
+		where TElement : JReferenceObject, IReferenceType<TElement>
+	{
+		ICollection<TElement?> collection = jArray;
+		Assert.Equal(jArray.Length, collection.Count);
+		Assert.True(collection.IsReadOnly);
+		
+		jArray.Environment.ArrayFeature.ClearReceivedCalls();
 	}
 	private static void CastTest<TElement>(JArrayObject<TElement> jArray)
 		where TElement : JReferenceObject, IReferenceType<TElement>

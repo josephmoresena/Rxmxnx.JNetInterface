@@ -15,4 +15,6 @@ public partial class ClassFeatureProxy
 		signature = information.Signature;
 		hash = information.Hash;
 	}
+	JClassObject IClassFeature.GetClass<TDataType>()
+		=> !this.UseNonGeneric ? this.GetClass<TDataType>() : this.GetNonGenericClass(typeof(TDataType));
 }

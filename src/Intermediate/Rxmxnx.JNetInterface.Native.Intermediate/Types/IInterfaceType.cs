@@ -8,6 +8,7 @@ namespace Rxmxnx.JNetInterface.Types;
 public interface IInterfaceType : IReferenceType
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Interface;
+	static Type IDataType.FamilyType => typeof(JLocalObject.InterfaceView);
 
 	/// <summary>
 	/// Retrieves the metadata for given interface type.

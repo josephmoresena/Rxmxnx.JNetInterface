@@ -87,6 +87,9 @@ public class JEnumObjectTests
 		Assert.Equal(JEnumObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JEnumObjectTests.hash.ToString(), IDataType.GetHash<JEnumObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
+		Assert.IsType<JFunctionDefinition<JEnumObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JEnumObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JEnumObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JEnumObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);

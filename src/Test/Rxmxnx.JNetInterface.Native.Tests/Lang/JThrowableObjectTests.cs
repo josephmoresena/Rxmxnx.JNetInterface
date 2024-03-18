@@ -103,6 +103,9 @@ public sealed class JThrowableObjectTests
 		Assert.Equal(JThrowableObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JThrowableObjectTests.hash.ToString(), IDataType.GetHash<JThrowableObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
+		Assert.IsType<JFunctionDefinition<JThrowableObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JThrowableObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JThrowableObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JThrowableObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);

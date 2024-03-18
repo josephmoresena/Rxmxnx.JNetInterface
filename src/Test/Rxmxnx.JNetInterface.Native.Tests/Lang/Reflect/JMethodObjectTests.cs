@@ -170,6 +170,9 @@ public class JMethodObjectTests
 		Assert.Equal(JMethodObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JMethodObjectTests.hash.ToString(), IDataType.GetHash<JMethodObject>());
 		Assert.Equal(IDataType.GetMetadata<JExecutableObject>(), typeMetadata.BaseMetadata);
+		Assert.IsType<JFunctionDefinition<JMethodObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JMethodObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JMethodObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JMethodObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces);

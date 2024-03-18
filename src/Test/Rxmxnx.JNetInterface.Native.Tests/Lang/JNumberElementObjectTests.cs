@@ -67,6 +67,9 @@ public class JNumberObjectTests
 		Assert.Equal(JNumberObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JNumberObjectTests.hash.ToString(), IDataType.GetHash<JNumberObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
+		Assert.IsType<JFunctionDefinition<JNumberObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFieldDefinition<JNumberObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JNumberObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JNumberObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
