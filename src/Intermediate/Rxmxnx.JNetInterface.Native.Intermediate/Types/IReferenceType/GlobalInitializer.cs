@@ -11,10 +11,10 @@ public partial interface IReferenceType
 		/// <summary>
 		/// Current <see cref="IEnvironment"/> instance.
 		/// </summary>
-		public IEnvironment Environment { get; set; }
+		public IEnvironment Environment { get; init; }
 		/// <summary>
 		/// Created object global instance.
 		/// </summary>
-		public JGlobalBase Global { get; set; }
+		public JGlobalBase Global { get; init; }
 	}
 }

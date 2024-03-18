@@ -43,13 +43,6 @@ public interface IInterfaceType<TInterface> : IInterfaceType, IReferenceType<TIn
 	/// <returns>A <typeparamref name="TInterface"/> instance from <paramref name="initializer"/>.</returns>
 	protected new static abstract TInterface Create(ObjectInitializer initializer);
 
-	/// <summary>
-	/// Creates a <typeparamref name="TInterface"/> instance from <paramref name="jLocal"/>.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>A <typeparamref name="TInterface"/> instance from <paramref name="jLocal"/>.</returns>
-	internal static TInterface Create(JLocalObject jLocal) => TInterface.Create(jLocal);
-
 	static TInterface IReferenceType<TInterface>.Create(ObjectInitializer initializer)
 		=> TInterface.Create(initializer);
 }

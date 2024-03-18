@@ -52,7 +52,7 @@ public partial class JLocalObject
 					if (jLocal == null) return default;
 					if (jLocal is not IInterfaceObject<TInterface>)
 						JLocalObject.Validate<TInterface>(jLocal);
-					return IInterfaceType<TInterface>.Create(jLocal);
+					return TInterface.Create(jLocal);
 				}
 				/// <inheritdoc/>
 				internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
