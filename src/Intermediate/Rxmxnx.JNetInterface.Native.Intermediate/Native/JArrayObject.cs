@@ -128,10 +128,7 @@ public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView
 	/// <param name="jLocal">A <see cref="JLocalObject"/> to explicitly convert.</param>
 	[return: NotNullIfNotNull(nameof(jLocal))]
 	public static explicit operator JArrayObject<TElement>?(JLocalObject? jLocal)
-	{
-		if (jLocal is null) return default;
-		return (JArrayObject<TElement>)(JArrayObject)jLocal;
-	}
+		=> (JArrayObject<TElement>?)(JArrayObject?)jLocal;
 
 	/// <summary>
 	/// Creates an empty <see cref="JArrayObject{TElement}"/> instance.

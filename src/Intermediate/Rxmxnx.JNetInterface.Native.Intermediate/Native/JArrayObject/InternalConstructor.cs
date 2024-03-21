@@ -17,12 +17,7 @@ public partial class JArrayObject
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	internal JArrayObject(JLocalObject jLocal, JClassObject? jClass) : base(jLocal, jClass)
-	{
-		if (jLocal is not JArrayObject jArray)
-			return;
-		this._length = jArray.Length;
-	}
+	internal JArrayObject(JLocalObject jLocal, JClassObject? jClass) : base(jLocal, jClass) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
