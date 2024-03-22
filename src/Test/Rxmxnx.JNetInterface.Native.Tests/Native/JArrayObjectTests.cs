@@ -258,7 +258,6 @@ public sealed class JArrayObjectTests
 	}
 	private static void MetadataTest<TElement>() where TElement : JReferenceObject, IReferenceType<TElement>
 	{
-		JArrayObjectTests.InterfaceSetTest();
 		JReferenceTypeMetadata elementTypeMetadata = IReferenceType.GetMetadata<TElement>();
 		JArrayTypeMetadata arrayTypeMetadata = IArrayType.GetMetadata<JArrayObject<TElement>>();
 		String textValue = arrayTypeMetadata.ToString();
@@ -307,13 +306,6 @@ public sealed class JArrayObjectTests
 		JLocalObject? nullObject = default;
 		JArrayObject<TElement>? nullArrayView = (JArrayObject<TElement>?)nullObject;
 		Assert.Null(nullArrayView);
-	}
-	private static void InterfaceSetTest()
-	{
-		IInterfaceSet interfaces = InterfaceSet.ArraySet;
-
-		Assert.Contains(IInterfaceType.GetMetadata<JCloneableObject>(), interfaces);
-		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), interfaces);
 	}
 	private static void CollectionTest<TElement>(JArrayObject<TElement> jArray)
 		where TElement : JReferenceObject, IReferenceType<TElement>

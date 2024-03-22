@@ -9,20 +9,15 @@ internal partial class InterfaceSet
 	/// <summary>
 	/// Array interface set.
 	/// </summary>
-	public static readonly InterfaceSet ArraySet =
-		new(ImmutableHashSet.Create(IInterfaceType.GetMetadata<JSerializableObject>(),
-		                            IInterfaceType.GetMetadata<JCloneableObject>()));
+	public static readonly IInterfaceSet ArraySet = ArrayInterfaceSet.Instance;
 	/// <summary>
 	/// Annotation interface set.
 	/// </summary>
-	public static readonly InterfaceSet AnnotationSet =
-		new(ImmutableHashSet.Create(IInterfaceType.GetMetadata<JAnnotationObject>()));
+	public static readonly IInterfaceSet AnnotationSet = AnnotationInterfaceSet.Instance;
 	/// <summary>
 	/// Primitive wrapper interface set.
 	/// </summary>
-	public static readonly InterfaceSet PrimitiveWrapperSet =
-		new(ImmutableHashSet.Create(IInterfaceType.GetMetadata<JSerializableObject>(),
-		                            IInterfaceType.GetMetadata<JComparableObject>()));
+	public static readonly IInterfaceSet PrimitiveWrapperSet = PrimitiveWrapperInterfaceSet.Instance;
 
 	/// <summary>
 	/// Retrieves a set with class interfaces.
