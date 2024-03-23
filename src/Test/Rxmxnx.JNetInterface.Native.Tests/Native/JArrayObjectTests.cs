@@ -293,9 +293,15 @@ public sealed class JArrayObjectTests
 			Assert.IsAssignableFrom<JArrayObject>(arrayTypeMetadata.ParseInstance(env, jGlobal));
 		JArrayObject<JLocalObject> jArray3 = (JArrayObject<JLocalObject>)(JArrayObject)jArray1;
 		using JArrayObject<TElement> jArray4 = jLocal.CastTo<JArrayObject<TElement>>();
+		using JArrayObject<TElement> jArray5 =
+			Assert.IsType<JArrayObject<TElement>>(arrayTypeMetadata.ParseInstance(jLocal, true));
+		JArrayObject<TElement> jArray6 =
+			Assert.IsType<JArrayObject<TElement>>(arrayTypeMetadata.ParseInstance(jArray0, true));
 
 		Assert.Equal(jArray1.Object, jArray0.Object);
+		Assert.Equal(jArray1.Object, jArray6.Object);
 		Assert.Equal(JArrayLocalRef.FromReference(globalRef.Value), jArray2.Reference);
+		Assert.Equal(arrayRef, jArray5.Object.Reference);
 		Assert.Equal(arrayRef, jArray3.Object.Reference);
 		Assert.Equal(arrayRef, jArray4.Object.Reference);
 		Assert.False(Object.ReferenceEquals(jLocal, jArray4));
@@ -440,5 +446,10 @@ public sealed class JArrayObjectTests
 		env.ArrayFeature.CreateArray(jArray.Length, element).Returns(jArray);
 		Assert.Equal(jArray, JArrayObject<TElement>.Create(env, jArray.Length, element));
 		env.ArrayFeature.Received(1).CreateArray(jArray.Length, element);
+
+		if (jArray.Object.TypeMetadata.Equals(elementTypeMetadata.GetArrayMetadata()))
+			jArray.Object.ValidateObjectElement(element);
+		else
+			Assert.Throws<InvalidCastException>(() => jArray.Object.ValidateObjectElement(element));
 	}
 }

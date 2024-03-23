@@ -9,11 +9,6 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 	IInterfaceObject<JCloneableObject>
 {
 	/// <summary>
-	/// CLR type of object metadata.
-	/// </summary>
-	internal static readonly Type MetadataType = typeof(ArrayObjectMetadata);
-
-	/// <summary>
 	/// Array length.
 	/// </summary>
 	public Int32 Length => this._length ??= this.Environment.ArrayFeature.GetArrayLength(this);
