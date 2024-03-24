@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
-public partial record JMethodDefinition
+public partial class JMethodDefinition
 {
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.

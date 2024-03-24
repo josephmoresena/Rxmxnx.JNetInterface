@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
-public class JFakeInterfaceObject : JInterfaceObject<JFakeInterfaceObject>, IInterfaceType<JFakeInterfaceObject>
+public sealed class JFakeInterfaceObject : JInterfaceObject<JFakeInterfaceObject>, IInterfaceType<JFakeInterfaceObject>
 {
 	public static readonly JInterfaceTypeMetadata<JFakeInterfaceObject> TypeMetadata =
 		TypeMetadataBuilder<JFakeInterfaceObject>.Create((CString)new Fixture().Create<String>()).Build();

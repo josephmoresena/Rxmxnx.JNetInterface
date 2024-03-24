@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
-public partial record JConstructorDefinition
+public partial class JConstructorDefinition
 {
 	/// <summary>
 	/// Constructor.

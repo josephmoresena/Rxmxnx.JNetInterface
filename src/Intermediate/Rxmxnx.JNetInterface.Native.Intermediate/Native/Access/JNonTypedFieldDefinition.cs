@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// <summary>
 /// This class stores a non-typed class field definition.
 /// </summary>
-public sealed record JNonTypedFieldDefinition : JFieldDefinition
+public sealed class JNonTypedFieldDefinition : JFieldDefinition
 {
 	/// <inheritdoc/>
 	internal override Type Return => typeof(JReferenceObject);
@@ -101,9 +101,4 @@ public sealed record JNonTypedFieldDefinition : JFieldDefinition
 		IEnvironment env = jField.Environment;
 		env.AccessFeature.SetStaticField(jField, this, value);
 	}
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 }

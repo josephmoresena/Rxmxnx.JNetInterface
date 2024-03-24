@@ -3,7 +3,7 @@
 /// <summary>
 /// This class stores a function definition.
 /// </summary>
-public abstract partial record JFunctionDefinition : JCallDefinition
+public abstract partial class JFunctionDefinition : JCallDefinition
 {
 	/// <inheritdoc/>
 	internal override Type Return => typeof(JReferenceObject);
@@ -16,6 +16,8 @@ public abstract partial record JFunctionDefinition : JCallDefinition
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
 		params JArgumentMetadata[] metadata) : base(functionName, returnType, metadata) { }
+	/// <inheritdoc/>
+	private protected JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
 
 	/// <summary>
 	/// Retrieves a <see cref="JMethodObject"/> reflected from current definition on
@@ -39,18 +41,13 @@ public abstract partial record JFunctionDefinition : JCallDefinition
 		IEnvironment env = declaringClass.Environment;
 		return env.AccessFeature.GetReflectedFunction(this, declaringClass, true);
 	}
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
 /// This class stores a function definition.
 /// </summary>
 /// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
-public partial record JFunctionDefinition<TResult> : JFunctionDefinition where TResult : IDataType<TResult>
+public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TResult : IDataType<TResult>
 {
 	/// <inheritdoc/>
 	internal override Type Return => JAccessibleObjectDefinition.ReturnType<TResult>();
@@ -76,9 +73,4 @@ public partial record JFunctionDefinition<TResult> : JFunctionDefinition where T
 	/// </summary>
 	/// <param name="definition">Function definition name.</param>
 	internal JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 }

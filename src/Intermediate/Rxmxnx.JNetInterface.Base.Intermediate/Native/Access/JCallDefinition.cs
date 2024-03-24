@@ -5,7 +5,7 @@
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public abstract partial record JCallDefinition : JAccessibleObjectDefinition
+public abstract partial class JCallDefinition : JAccessibleObjectDefinition
 {
 	/// <summary>
 	/// Total size in bytes of call parameters.
@@ -36,11 +36,6 @@ public abstract partial record JCallDefinition : JAccessibleObjectDefinition
 
 	/// <inheritdoc/>
 	private protected override String ToStringFormat => "{{ Method: {0} Descriptor: {1} }}";
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 
 	/// <summary>
 	/// Creates the argument array for current call.

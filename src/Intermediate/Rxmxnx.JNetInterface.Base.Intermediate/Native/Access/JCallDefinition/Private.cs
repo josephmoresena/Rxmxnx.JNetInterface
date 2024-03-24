@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
-public abstract partial record JCallDefinition
+public abstract partial class JCallDefinition
 {
 	/// <summary>
 	/// Total size in bytes of call parameters.

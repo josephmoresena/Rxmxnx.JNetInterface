@@ -3,7 +3,7 @@
 /// <summary>
 /// This class stores a method definition.
 /// </summary>
-public partial record JMethodDefinition : JCallDefinition
+public partial class JMethodDefinition : JCallDefinition
 {
 	/// <inheritdoc/>
 	internal override Type? Return => default;
@@ -37,9 +37,4 @@ public partial record JMethodDefinition : JCallDefinition
 		IEnvironment env = declaringClass.Environment;
 		return env.AccessFeature.GetReflectedMethod(this, declaringClass, true);
 	}
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 }

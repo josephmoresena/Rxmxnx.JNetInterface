@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
-public partial record JFunctionDefinition<TResult>
+public partial class JFunctionDefinition<TResult>
 {
 	/// <summary>
 	/// Constructor.

@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
-public partial record JMethodDefinition
+public partial class JMethodDefinition
 {
 	/// <summary>
 	/// Constructor.

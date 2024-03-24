@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
-public abstract partial record JCallDefinition
+public abstract partial class JCallDefinition
 {
 	/// <summary>
 	/// Internal constructor.
@@ -27,5 +27,13 @@ public abstract partial record JCallDefinition
 		this._referenceCount = referenceCount;
 		this._useJValue = this._sizes.Length > 1 &&
 			Math.Abs(this._sizes.Length * JValue.Size - this._callSize) <= 0.15 * this._callSize;
+	}
+	/// <inheritdoc/>
+	private protected JCallDefinition(JCallDefinition definition) : base(definition)
+	{
+		this._callSize = definition._callSize;
+		this._sizes = definition._sizes;
+		this._referenceCount = definition._referenceCount;
+		this._useJValue = definition._useJValue;
 	}
 }

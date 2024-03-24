@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
-public abstract partial record JFunctionDefinition
+public abstract partial class JFunctionDefinition
 {
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
@@ -30,7 +30,7 @@ public abstract partial record JFunctionDefinition
 		=> JFunctionDefinition<TResult>.StaticInvoke(definition, jClass, args);
 }
 
-public partial record JFunctionDefinition<TResult>
+public partial class JFunctionDefinition<TResult>
 {
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.

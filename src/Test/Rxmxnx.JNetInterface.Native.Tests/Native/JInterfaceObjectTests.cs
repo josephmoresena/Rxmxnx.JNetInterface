@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests.Native;
 
 [ExcludeFromCodeCoverage]
-public class JInterfaceObjectTests
+public sealed class JInterfaceObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
