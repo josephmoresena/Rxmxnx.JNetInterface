@@ -3,6 +3,12 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal partial class InterfaceSet
 {
 	/// <summary>
+	/// Operation hash set.
+	/// </summary>
+	[ThreadStatic]
+	private static HashSet<String>? operationHashes;
+
+	/// <summary>
 	/// Empty interface set.
 	/// </summary>
 	public static readonly InterfaceSet Empty = new(ImmutableHashSet<JInterfaceTypeMetadata>.Empty);
@@ -43,18 +49,35 @@ internal partial class InterfaceSet
 		=> interfaces.Count == 0 ? InterfaceSet.Empty : new InterfaceInterfaceSet(interfaces.ToImmutableHashSet());
 
 	/// <summary>
-	/// Internal for each implementation.
+	/// Initializes an operation and retrieves operation hash set.
 	/// </summary>
-	/// <typeparam name="T">Type of state object.</typeparam>
-	/// <param name="args">Execution args.</param>
-	/// <param name="interfaceMetadata">A <see cref="JInterfaceObject{TInterface}"/> instance.</param>
-	private static void ForEachImpl<T>(
-		(T state, HashSet<String> hashes, Boolean recursive, Action<T, JInterfaceTypeMetadata> action) args,
-		JInterfaceTypeMetadata interfaceMetadata)
+	/// <param name="isNew">Output. Indicates whether current operation is new.</param>
+	/// <returns>A <see cref="HashSet{String}"/> instance.</returns>
+	private static HashSet<String> OpenSetOperation(out Boolean isNew)
 	{
-		if (!args.hashes.Add(interfaceMetadata.Hash)) return;
-		args.action(args.state, interfaceMetadata);
-		if (args.recursive)
-			interfaceMetadata.Interfaces.ForEach(args, InterfaceSet.ForEachImpl);
+		isNew = InterfaceSet.operationHashes is null;
+		return InterfaceSet.operationHashes ??= [];
+	}
+	/// <summary>
+	/// Initializes an operation and retrieves operation hash set.
+	/// </summary>
+	/// <param name="interfaceSet">Current interface set.</param>
+	/// <param name="isNew">Output. Indicates whether current operation is new.</param>
+	/// <param name="isRecursive">Output. Indicates whether current operation is recursive.</param>
+	/// <returns>A <see cref="HashSet{String}"/> instance.</returns>
+	private static HashSet<String> OpenSetOperation(InterfaceSet interfaceSet, out Boolean isNew,
+		out Boolean isRecursive)
+	{
+		isNew = InterfaceSet.operationHashes is null;
+		isRecursive = interfaceSet is InterfaceInterfaceSet;
+		return InterfaceSet.operationHashes ??= [];
+	}
+	/// <summary>
+	/// Closes current operation.
+	/// </summary>
+	/// <param name="isNew">Indicates if operation is new.</param>
+	private static void CloseSetOperation(Boolean isNew)
+	{
+		if (isNew) InterfaceSet.operationHashes = default;
 	}
 }

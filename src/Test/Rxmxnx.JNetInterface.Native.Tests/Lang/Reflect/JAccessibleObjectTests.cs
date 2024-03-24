@@ -74,6 +74,10 @@ public class JAccessibleObjectTests
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JAccessibleObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JAccessibleObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces);
+		Assert.DoesNotContain(JFakeInterfaceObject.TypeMetadata, typeMetadata.Interfaces);
+
+		Assert.True(typeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>()));
+		Assert.False(typeMetadata.Interfaces.Contains(JFakeInterfaceObject.TypeMetadata));
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JAccessibleObject>().Returns(jThrowableClass);

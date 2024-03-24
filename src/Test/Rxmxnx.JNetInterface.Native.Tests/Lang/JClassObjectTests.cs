@@ -311,6 +311,13 @@ public sealed class JClassObjectTests
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JTypeObject>(), typeMetadata.Interfaces);
+		Assert.DoesNotContain(JFakeInterfaceObject.TypeMetadata, typeMetadata.Interfaces);
+
+		Assert.True(typeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
+		Assert.True(typeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>()));
+		Assert.True(typeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>()));
+		Assert.True(typeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JTypeObject>()));
+		Assert.False(typeMetadata.Interfaces.Contains(JFakeInterfaceObject.TypeMetadata));
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ReferenceFeature.Received(1).GetLifetime(jLocal, classRef.Value, jClass, false);

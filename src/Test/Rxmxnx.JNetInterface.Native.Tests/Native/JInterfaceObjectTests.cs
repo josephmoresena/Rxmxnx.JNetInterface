@@ -13,15 +13,45 @@ public class JInterfaceObjectTests
 		IInterfaceSet annotationInterfaces = InterfaceSet.AnnotationSet;
 		IInterfaceSet primitiveWrapperInterfaces = InterfaceSet.PrimitiveWrapperSet;
 
-		Assert.Contains(IInterfaceType.GetMetadata<JCloneableObject>(), arrayInterfaces);
-		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), arrayInterfaces);
+		Assert.Contains(IInterfaceType.GetMetadata<JCloneableObject>(), arrayInterfaces.ToArray());
+		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), arrayInterfaces.ToArray());
+		Assert.Empty(emptyInterfaces.ToArray());
+		Assert.Contains(IInterfaceType.GetMetadata<JAnnotationObject>(), annotationInterfaces.ToArray());
+		Assert.Contains(IInterfaceType.GetMetadata<JComparableObject>(), primitiveWrapperInterfaces.ToArray());
+		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), primitiveWrapperInterfaces.ToArray());
 
-		Assert.Empty(emptyInterfaces);
+		Assert.True(arrayInterfaces.Contains(IInterfaceType.GetMetadata<JCloneableObject>()));
+		Assert.True(arrayInterfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
+		Assert.False(arrayInterfaces.Contains(IInterfaceType.GetMetadata<JComparableObject>()));
+		Assert.False(arrayInterfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()));
+		Assert.False(emptyInterfaces.Contains(IInterfaceType.GetMetadata<JCloneableObject>()));
+		Assert.False(emptyInterfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
+		Assert.False(emptyInterfaces.Contains(IInterfaceType.GetMetadata<JComparableObject>()));
+		Assert.False(emptyInterfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()));
+		Assert.True(annotationInterfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()));
+		Assert.False(annotationInterfaces.Contains(IInterfaceType.GetMetadata<JComparableObject>()));
+		Assert.False(annotationInterfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
+		Assert.True(primitiveWrapperInterfaces.Contains(IInterfaceType.GetMetadata<JComparableObject>()));
+		Assert.True(primitiveWrapperInterfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
+		Assert.False(primitiveWrapperInterfaces.Contains(IInterfaceType.GetMetadata<JCloneableObject>()));
+		Assert.False(primitiveWrapperInterfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()));
 
-		Assert.Contains(IInterfaceType.GetMetadata<JAnnotationObject>(), annotationInterfaces);
+		List<JInterfaceTypeMetadata> interfaces = [];
+		arrayInterfaces.ForEach(default(Object), (_, i) => interfaces.Add(i));
+		emptyInterfaces.ForEach(default(Object), (_, i) => interfaces.Add(i));
+		annotationInterfaces.ForEach(default(Object), (_, i) => interfaces.Add(i));
+		primitiveWrapperInterfaces.ForEach(default(Object), (_, i) => interfaces.Add(i));
 
-		Assert.Contains(IInterfaceType.GetMetadata<JComparableObject>(), primitiveWrapperInterfaces);
-		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), primitiveWrapperInterfaces);
+		Assert.Equal(IInterfaceType.GetMetadata<JSerializableObject>(), interfaces[0]);
+		Assert.Equal(IInterfaceType.GetMetadata<JCloneableObject>(), interfaces[1]);
+		Assert.Equal(IInterfaceType.GetMetadata<JAnnotationObject>(), interfaces[2]);
+		Assert.Equal(IInterfaceType.GetMetadata<JSerializableObject>(), interfaces[3]);
+		Assert.Equal(IInterfaceType.GetMetadata<JComparableObject>(), interfaces[4]);
+
+		Assert.False(arrayInterfaces.Contains(JFakeInterfaceObject.TypeMetadata));
+		Assert.False(emptyInterfaces.Contains(JFakeInterfaceObject.TypeMetadata));
+		Assert.False(annotationInterfaces.Contains(JFakeInterfaceObject.TypeMetadata));
+		Assert.False(primitiveWrapperInterfaces.Contains(JFakeInterfaceObject.TypeMetadata));
 	}
 
 	[Fact]
@@ -92,6 +122,9 @@ public class JInterfaceObjectTests
 		Assert.Equal(jLocal.InternalReference, instanceProxy.InternalReference);
 		Assert.Equal(jLocal.InternalReference, instanceProxyD.InternalReference);
 
+		Assert.False(interfaceTypeMetadata.Interfaces.Contains(JFakeInterfaceObject.TypeMetadata));
+
+		HashSet<JInterfaceTypeMetadata> interfaceList = [];
 		foreach (JInterfaceTypeMetadata interfaceMetadata in interfaceTypeMetadata.Interfaces)
 		{
 			JReferenceObject jObject0 = interfaceMetadata.ParseInstance(jLocal1);
@@ -100,7 +133,13 @@ public class JInterfaceObjectTests
 			Assert.Equal(jLocal1, (jObject0 as IWrapper<JLocalObject>)!.Value);
 			Assert.Equal(interfaceMetadata.Type, jObject1.GetType());
 			Assert.Equal(jLocal1, (jObject1 as IWrapper<JLocalObject>)!.Value);
+
+			Assert.True(interfaceTypeMetadata.Interfaces.Contains(interfaceMetadata));
+			interfaceList.Add(interfaceMetadata);
 		}
+		Assert.True(interfaceList.SetEquals(interfaceTypeMetadata.Interfaces));
+		interfaceTypeMetadata.Interfaces.ForEach(default(Object), (_, i) => Assert.True(interfaceList.Remove(i)));
+		Assert.Empty(interfaceList);
 	}
 	private static void MetadataTest<TInterface>()
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>

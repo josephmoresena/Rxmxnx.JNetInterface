@@ -20,6 +20,7 @@ internal partial class InterfaceSet : IInterfaceSet
 	/// <param name="set">A <see cref="IReadOnlySet{T}"/> instance.</param>
 	private InterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) => this._internalSet = set;
 
+	[ExcludeFromCodeCoverage]
 	IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
 	/// <inheritdoc/>
@@ -29,8 +30,20 @@ internal partial class InterfaceSet : IInterfaceSet
 	/// <inheritdoc/>
 	public virtual void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
 	{
-		foreach (JInterfaceTypeMetadata interfaceMetadata in this._internalSet)
-			action(state, interfaceMetadata);
+		HashSet<String> hashes = InterfaceSet.OpenSetOperation(this, out Boolean isNew, out Boolean isRecursive);
+		try
+		{
+			foreach (JInterfaceTypeMetadata interfaceMetadata in this._internalSet)
+			{
+				if (!hashes.Add(interfaceMetadata.Hash)) continue;
+				action(state, interfaceMetadata);
+				if (isRecursive) interfaceMetadata.Interfaces.ForEach(state, action);
+			}
+		}
+		finally
+		{
+			InterfaceSet.CloseSetOperation(isNew);
+		}
 	}
 	/// <inheritdoc/>
 	public override String ToString()

@@ -17,6 +17,7 @@ internal partial class InterfaceSet
 		/// </summary>
 		private PrimitiveWrapperInterfaceSet() { }
 
+		[ExcludeFromCodeCoverage]
 		IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
 		/// <inheritdoc/>
@@ -32,8 +33,18 @@ internal partial class InterfaceSet
 		/// <inheritdoc/>
 		public void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
 		{
-			action(state, IInterfaceType.GetMetadata<JSerializableObject>());
-			action(state, IInterfaceType.GetMetadata<JComparableObject>());
+			HashSet<String> hashes = InterfaceSet.OpenSetOperation(out Boolean isNew);
+			try
+			{
+				if (hashes.Add(IInterfaceType.GetMetadata<JSerializableObject>().Hash))
+					action(state, IInterfaceType.GetMetadata<JSerializableObject>());
+				if (hashes.Add(IInterfaceType.GetMetadata<JComparableObject>().Hash))
+					action(state, IInterfaceType.GetMetadata<JComparableObject>());
+			}
+			finally
+			{
+				InterfaceSet.CloseSetOperation(isNew);
+			}
 		}
 	}
 }

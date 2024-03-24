@@ -27,9 +27,16 @@ internal partial class InterfaceSet
 		/// <inheritdoc/>
 		public override void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
 		{
-			HashSet<String> hashes = [];
-			base.ForEach((state, hashes, false, action), InterfaceSet.ForEachImpl);
-			this._baseInterfaces.ForEach((state, hashes, false, action), InterfaceSet.ForEachImpl);
+			_ = InterfaceSet.OpenSetOperation(out Boolean isNew);
+			try
+			{
+				base.ForEach(state, action);
+				this._baseInterfaces.ForEach(state, action);
+			}
+			finally
+			{
+				InterfaceSet.CloseSetOperation(isNew);
+			}
 		}
 
 		/// <inheritdoc/>

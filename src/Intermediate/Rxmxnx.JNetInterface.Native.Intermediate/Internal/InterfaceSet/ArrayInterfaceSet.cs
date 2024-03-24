@@ -17,6 +17,7 @@ internal partial class InterfaceSet
 		/// </summary>
 		private ArrayInterfaceSet() { }
 
+		[ExcludeFromCodeCoverage]
 		IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
 		/// <inheritdoc/>

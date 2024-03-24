@@ -378,7 +378,7 @@ public sealed class JArrayObjectTests
 		List<Type> types = basicElementMetadata.BaseMetadata is not null ?
 			[basicElementMetadata.BaseMetadata.Type,] :
 			[];
-		types.AddRange(basicElementMetadata.Interfaces.Select(i => i.Type));
+		basicElementMetadata.Interfaces.ForEach(default(Object), (_, i) => types.Add(i.Type));
 		Type[] elementTypes = types.ToArray();
 		return elementTypes;
 	}

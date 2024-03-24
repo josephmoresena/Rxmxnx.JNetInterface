@@ -110,6 +110,10 @@ public sealed class JRuntimeExceptionObjectTests
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JRuntimeExceptionObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JRuntimeExceptionObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
+		Assert.DoesNotContain(JFakeInterfaceObject.TypeMetadata, typeMetadata.Interfaces);
+
+		Assert.True(typeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
+		Assert.False(typeMetadata.Interfaces.Contains(JFakeInterfaceObject.TypeMetadata));
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JRuntimeExceptionObject>().Returns(jRuntimeExceptionClass);

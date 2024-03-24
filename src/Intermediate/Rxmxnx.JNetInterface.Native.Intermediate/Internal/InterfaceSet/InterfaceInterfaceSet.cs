@@ -17,20 +17,12 @@ internal partial class InterfaceSet
 		public override Boolean Contains(JInterfaceTypeMetadata item)
 		{
 			if (base.Contains(item)) return true;
-			Boolean result = false;
-			Parallel.ForEach(this.GetEnumerable().Select(i => i.Interfaces), (ii, s) =>
+			foreach (JInterfaceTypeMetadata interfaceTypeMetadata in this._internalSet)
 			{
-				if (!ii.Contains(item)) return;
-				result = true;
-				s.Stop();
-			});
-			return result;
-		}
-		/// <inheritdoc/>
-		public override void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
-		{
-			HashSet<String> hashes = [];
-			base.ForEach((state, hashes, true, action), InterfaceSet.ForEachImpl);
+				if (interfaceTypeMetadata.Interfaces.Contains(item))
+					return true;
+			}
+			return false;
 		}
 
 		/// <inheritdoc/>

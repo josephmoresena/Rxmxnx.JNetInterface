@@ -178,6 +178,12 @@ public class JMethodObjectTests
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>(), typeMetadata.Interfaces);
 		Assert.Contains(IInterfaceType.GetMetadata<JMemberObject>(), typeMetadata.Interfaces);
+		Assert.DoesNotContain(JFakeInterfaceObject.TypeMetadata, typeMetadata.Interfaces);
+
+		Assert.True(typeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>()));
+		Assert.True(typeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JGenericDeclarationObject>()));
+		Assert.True(typeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JMemberObject>()));
+		Assert.False(typeMetadata.Interfaces.Contains(JFakeInterfaceObject.TypeMetadata));
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JMethodObject>().Returns(jThrowableClass);

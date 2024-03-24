@@ -93,6 +93,10 @@ public class JEnumObjectTests
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JEnumObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JEnumObject>());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), typeMetadata.Interfaces);
+		Assert.DoesNotContain(JFakeInterfaceObject.TypeMetadata, typeMetadata.Interfaces);
+
+		Assert.True(typeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
+		Assert.False(typeMetadata.Interfaces.Contains(JFakeInterfaceObject.TypeMetadata));
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
 		env.ClassFeature.GetClass<JEnumObject>().Returns(jEnumClass);
