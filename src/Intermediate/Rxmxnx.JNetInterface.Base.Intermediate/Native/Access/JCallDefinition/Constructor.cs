@@ -25,8 +25,6 @@ public abstract partial class JCallDefinition
 		this._callSize = size;
 		this._sizes = sizes;
 		this._referenceCount = referenceCount;
-		this._useJValue = this._sizes.Length > 1 &&
-			Math.Abs(this._sizes.Length * JValue.Size - this._callSize) <= 0.15 * this._callSize;
 	}
 	/// <inheritdoc/>
 	private protected JCallDefinition(JCallDefinition definition) : base(definition)
@@ -34,6 +32,5 @@ public abstract partial class JCallDefinition
 		this._callSize = definition._callSize;
 		this._sizes = definition._sizes;
 		this._referenceCount = definition._referenceCount;
-		this._useJValue = definition._useJValue;
 	}
 }

@@ -14,6 +14,8 @@ internal partial class InterfaceSet
 		public InterfaceInterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) : base(set) { }
 
 		/// <inheritdoc/>
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3267,
+		                 Justification = CommonConstants.NonStandardLinqJustification)]
 		public override Boolean Contains(JInterfaceTypeMetadata item)
 		{
 			if (base.Contains(item)) return true;

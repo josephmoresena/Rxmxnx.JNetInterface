@@ -17,10 +17,6 @@ public abstract partial class JCallDefinition : JAccessibleObjectDefinition
 	public Int32 Count => this._sizes.Length;
 
 	/// <summary>
-	/// Indicates whether the current call must use <see cref="JValue"/> arguments.
-	/// </summary>
-	internal Boolean UseJValue => this._useJValue;
-	/// <summary>
 	/// List of size in bytes of each call argument.
 	/// </summary>
 	internal IReadOnlyList<Int32> Sizes => this._sizes;
@@ -28,11 +24,6 @@ public abstract partial class JCallDefinition : JAccessibleObjectDefinition
 	/// Count of reference parameters.
 	/// </summary>
 	internal Int32 ReferenceCount => this._referenceCount;
-
-	/// <summary>
-	/// Call return type.
-	/// </summary>
-	internal abstract Type? Return { get; }
 
 	/// <inheritdoc/>
 	private protected override String ToStringFormat => "{{ Method: {0} Descriptor: {1} }}";

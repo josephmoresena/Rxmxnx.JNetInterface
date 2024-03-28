@@ -5,9 +5,6 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// </summary>
 internal sealed class JNonTypedFunctionDefinition : JFunctionDefinition<JLocalObject>
 {
-	/// <inheritdoc/>
-	internal override Type Return => typeof(JReferenceObject);
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>

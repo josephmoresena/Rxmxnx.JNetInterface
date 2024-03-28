@@ -5,9 +5,6 @@
 /// </summary>
 public partial class JMethodDefinition : JCallDefinition
 {
-	/// <inheritdoc/>
-	internal override Type? Return => default;
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>

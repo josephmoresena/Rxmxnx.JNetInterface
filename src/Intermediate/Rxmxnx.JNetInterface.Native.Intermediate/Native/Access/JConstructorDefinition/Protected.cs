@@ -45,6 +45,12 @@ public partial class JConstructorDefinition
 	/// passing the default value for each argument.
 	/// </summary>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	protected TObject NewReflected<TObject>(JMethodObject jMethod) where TObject : JLocalObject, IClassType<TObject>
+		=> this.NewReflected<TObject>(jMethod);
+	/// <summary>
+	/// Invokes a reflected constructor which matches with current definition.
+	/// </summary>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	protected TObject NewReflected<TObject>(JMethodObject jMethod, IObject?[] args)
 		where TObject : JLocalObject, IClassType<TObject>

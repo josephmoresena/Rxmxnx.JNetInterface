@@ -5,9 +5,6 @@
 /// </summary>
 public abstract partial class JFunctionDefinition : JCallDefinition
 {
-	/// <inheritdoc/>
-	internal override Type Return => typeof(JReferenceObject);
-
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>
@@ -49,9 +46,6 @@ public abstract partial class JFunctionDefinition : JCallDefinition
 /// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
 public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TResult : IDataType<TResult>
 {
-	/// <inheritdoc/>
-	internal override Type Return => JAccessibleObjectDefinition.ReturnType<TResult>();
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>

@@ -8,8 +8,8 @@ public sealed class JInterfaceObjectTests
 	[Fact]
 	internal void InterfaceSetTest()
 	{
+		InterfaceSet emptyInterfaces = InterfaceSet.Empty;
 		IInterfaceSet arrayInterfaces = InterfaceSet.ArraySet;
-		IInterfaceSet emptyInterfaces = InterfaceSet.Empty;
 		IInterfaceSet annotationInterfaces = InterfaceSet.AnnotationSet;
 		IInterfaceSet primitiveWrapperInterfaces = InterfaceSet.PrimitiveWrapperSet;
 

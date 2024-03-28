@@ -5,6 +5,8 @@
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4035,
+                 Justification = CommonConstants.InternalInheritanceJustification)]
 public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObjectDefinition>
 {
 	/// <summary>

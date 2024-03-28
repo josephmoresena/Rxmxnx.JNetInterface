@@ -14,10 +14,6 @@ public abstract partial class JCallDefinition
 	/// Call argument's size.
 	/// </summary>
 	private readonly Int32[] _sizes;
-	/// <summary>
-	/// Indicates whether the current call must use <see cref="JValue"/> arguments.
-	/// </summary>
-	private readonly Boolean _useJValue;
 
 	/// <summary>
 	/// Creates the method descriptor using <paramref name="returnSignature"/> and <paramref name="metadata"/>.
