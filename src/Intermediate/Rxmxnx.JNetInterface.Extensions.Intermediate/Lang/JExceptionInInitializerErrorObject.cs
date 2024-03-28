@@ -12,7 +12,7 @@ public class JExceptionInInitializerErrorObject : JLinkageErrorObject,
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JExceptionInInitializerErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JLinkageErrorObject>
+		TypeMetadataBuilder<JLinkageErrorObject>
 			.Create<JExceptionInInitializerErrorObject>(UnicodeClassNames.ExceptionInInitializerErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JExceptionInInitializerErrorObject> IThrowableType<JExceptionInInitializerErrorObject>
@@ -26,13 +26,13 @@ public class JExceptionInInitializerErrorObject : JLinkageErrorObject,
 	/// <inheritdoc/>
 	protected JExceptionInInitializerErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JExceptionInInitializerErrorObject IReferenceType<JExceptionInInitializerErrorObject>.Create(
+	static JExceptionInInitializerErrorObject IClassType<JExceptionInInitializerErrorObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JExceptionInInitializerErrorObject IReferenceType<JExceptionInInitializerErrorObject>.Create(
+	static JExceptionInInitializerErrorObject IClassType<JExceptionInInitializerErrorObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JExceptionInInitializerErrorObject IReferenceType<JExceptionInInitializerErrorObject>.Create(
+	static JExceptionInInitializerErrorObject IClassType<JExceptionInInitializerErrorObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

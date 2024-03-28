@@ -3,6 +3,16 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static partial class MetadataHelper
 {
 	/// <summary>
+	/// Object array metadata.
+	/// </summary>
+	public static readonly JArrayTypeMetadata ObjectArrayMetadata = IArrayType.GetArrayMetadata<JLocalObject>();
+	/// <summary>
+	/// Object array array metadata.
+	/// </summary>
+	public static readonly JArrayTypeMetadata ObjectArrayArrayMetadata =
+		IArrayType.GetArrayArrayMetadata<JLocalObject>();
+
+	/// <summary>
 	/// Separator class assignability.
 	/// </summary>
 	private static readonly CString assignableTo = new(() => " -> "u8);
@@ -30,6 +40,7 @@ internal static partial class MetadataHelper
 		{ IDataType.GetHash<JExceptionObject>(), IReferenceType.GetMetadata<JExceptionObject>() },
 		{ IDataType.GetHash<JRuntimeExceptionObject>(), IReferenceType.GetMetadata<JRuntimeExceptionObject>() },
 		{ IDataType.GetHash<JErrorObject>(), IReferenceType.GetMetadata<JErrorObject>() },
+		{ IDataType.GetHash<JModifierObject>(), IReferenceType.GetMetadata<JModifierObject>() },
 
 		// Wrapper objects //
 		{ IDataType.GetHash<JVoidObject>(), IReferenceType.GetMetadata<JVoidObject>() },
@@ -54,6 +65,10 @@ internal static partial class MetadataHelper
 
 		// Basic object arrays //
 		{ IDataType.GetHash<JArrayObject<JLocalObject>>(), IReferenceType.GetMetadata<JArrayObject<JLocalObject>>() },
+		{
+			IDataType.GetHash<JArrayObject<JArrayObject<JLocalObject>>>(),
+			IReferenceType.GetMetadata<JArrayObject<JArrayObject<JLocalObject>>>()
+		},
 		{ IDataType.GetHash<JArrayObject<JClassObject>>(), IReferenceType.GetMetadata<JArrayObject<JClassObject>>() },
 		{ IDataType.GetHash<JArrayObject<JStringObject>>(), IReferenceType.GetMetadata<JArrayObject<JStringObject>>() },
 		{ IDataType.GetHash<JArrayObject<JNumberObject>>(), IReferenceType.GetMetadata<JArrayObject<JNumberObject>>() },
@@ -129,6 +144,11 @@ internal static partial class MetadataHelper
 		{ IDataType.GetHash<JTypeObject>(), IReferenceType.GetMetadata<JTypeObject>() },
 		{ IDataType.GetHash<JMemberObject>(), IReferenceType.GetMetadata<JMemberObject>() },
 		{ IDataType.GetHash<JDirectBufferObject>(), IReferenceType.GetMetadata<JDirectBufferObject>() },
+		{ IDataType.GetHash<JAnnotationObject>(), IReferenceType.GetMetadata<JAnnotationObject>() },
+
+		// Annotation Package //
+		{ IDataType.GetHash<JElementTypeObject>(), IReferenceType.GetMetadata<JElementTypeObject>() },
+		{ IDataType.GetHash<JTargetObject>(), IReferenceType.GetMetadata<JTargetObject>() },
 
 		// Basic Throwable Objects //
 		{ IDataType.GetHash<JLinkageErrorObject>(), IReferenceType.GetMetadata<JLinkageErrorObject>() },
@@ -147,6 +167,7 @@ internal static partial class MetadataHelper
 		},
 		{ IDataType.GetHash<JNoSuchFieldErrorObject>(), IReferenceType.GetMetadata<JNoSuchFieldErrorObject>() },
 		{ IDataType.GetHash<JNoSuchMethodErrorObject>(), IReferenceType.GetMetadata<JNoSuchMethodErrorObject>() },
+		{ IDataType.GetHash<JNoClassDefFoundErrorObject>(), IReferenceType.GetMetadata<JNoClassDefFoundErrorObject>() },
 		{ IDataType.GetHash<JVirtualMachineErrorObject>(), IReferenceType.GetMetadata<JVirtualMachineErrorObject>() },
 		{ IDataType.GetHash<JOutOfMemoryErrorObject>(), IReferenceType.GetMetadata<JOutOfMemoryErrorObject>() },
 		{ IDataType.GetHash<JSecurityExceptionObject>(), IReferenceType.GetMetadata<JSecurityExceptionObject>() },

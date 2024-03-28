@@ -3,14 +3,25 @@ namespace Rxmxnx.JNetInterface.Tests;
 [ExcludeFromCodeCoverage]
 public sealed class JniExceptionTests
 {
-	private static readonly IFixture fixture = new Fixture();
-
-	[Fact]
-	internal void Test()
+	[Theory]
+	[InlineData(JResult.Ok)]
+	[InlineData(JResult.Error)]
+	[InlineData(JResult.ExitingError)]
+	[InlineData(JResult.MemoryError)]
+	[InlineData(JResult.DetachedThreadError)]
+	[InlineData(JResult.VersionError)]
+	[InlineData(JResult.InvalidArgumentsError)]
+	internal void Test(JResult result)
 	{
-		JResult result = JniExceptionTests.fixture.Create<JResult>();
-		JniException exception = new(result);
-		Assert.Equal(Enum.GetName(result), exception.Message);
-		Assert.Equal(result, exception.Result);
+		JniException? exception = result;
+		if (result is JResult.Ok)
+		{
+			Assert.Null(exception);
+		}
+		else
+		{
+			Assert.Equal(Enum.GetName(result), exception!.Message);
+			Assert.Equal(result, exception.Result);
+		}
 	}
 }

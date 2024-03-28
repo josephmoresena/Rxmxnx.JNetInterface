@@ -20,17 +20,6 @@ partial class JEnvironment
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	internal JEnvironment(IVirtualMachine vm, JEnvironmentRef envRef)
 		=> this._cache = new((JVirtualMachine)vm, this, envRef);
-
-	/// <summary>
-	/// Deletes local reference.
-	/// </summary>
-	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
-	internal void Delete(JObjectLocalRef localRef)
-	{
-		if (!this.JniSecure()) return;
-		DeleteLocalRefDelegate deleteLocalRef = this._cache.GetDelegate<DeleteLocalRefDelegate>();
-		deleteLocalRef(this.Reference, localRef);
-	}
 	/// <summary>
 	/// Sets current object cache.
 	/// </summary>
@@ -143,7 +132,7 @@ partial class JEnvironment
 	internal JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference = false)
 		=> this._cache.GetClass(classRef, keepReference);
 	/// <inheritdoc cref="IClassFeature.GetClass{TObject}()"/>
-	internal JClassObject GetClass<TObject>() where TObject : JLocalObject, IReferenceType<TObject>
+	internal JClassObject GetClass<TObject>() where TObject : JReferenceObject, IReferenceType<TObject>
 		=> this._cache.GetClass<TObject>();
 	/// <summary>
 	/// Deletes <paramref name="localRef"/>.
@@ -151,7 +140,6 @@ partial class JEnvironment
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to remove.</param>
 	internal void DeleteLocalRef(JObjectLocalRef localRef)
 	{
-		if (localRef == default || !this.JniSecure()) return;
 		DeleteLocalRefDelegate deleteLocalRef = this._cache.GetDelegate<DeleteLocalRefDelegate>();
 		deleteLocalRef(this.Reference, localRef);
 	}
@@ -168,6 +156,22 @@ partial class JEnvironment
 		return classRef;
 	}
 	/// <summary>
+	/// Retrieves the class object and instantiation metadata.
+	/// </summary>
+	/// <param name="localRef">Object instance to get class.</param>
+	/// <param name="metadata">Output. Instantiation metadata.</param>
+	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
+	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata metadata)
+	{
+		using LocalFrame frame = new(this, 2);
+		JClassLocalRef classRef = this.GetObjectClass(localRef);
+		JClassObject jClass = this._cache.GetClass(classRef, true);
+		frame[jClass.InternalReference] = jClass.Lifetime.GetCacheable();
+		metadata = this._cache.GetTypeMetadata(jClass)!;
+		return jClass;
+	}
+
+	/// <summary>
 	/// Loads in current cache given class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
@@ -182,5 +186,37 @@ partial class JEnvironment
 		JObjectLocalRef localRef = newLocalRef(this.Reference, oldLocalRef);
 		if (localRef == default) this._cache.CheckJniError();
 		return localRef;
+	}
+
+	/// <summary>
+	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
+	/// </summary>
+	/// <param name="reference">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <returns>The <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.</returns>
+	internal static JEnvironment GetEnvironment(JEnvironmentRef reference)
+	{
+		JVirtualMachine vm = EnvironmentCache.GetVirtualMachine(reference);
+		return vm.GetEnvironment(reference);
+	}
+	/// <summary>
+	/// Sends JNI fatal error signal to VM.
+	/// </summary>
+	/// <param name="messageMem">Error message.</param>
+	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+	internal static void FatalError(in IReadOnlyFixedMemory messageMem, JEnvironment env)
+	{
+		FatalErrorDelegate fatalError = env._cache.GetDelegate<FatalErrorDelegate>();
+		fatalError(env.Reference, (ReadOnlyValPtr<Byte>)messageMem.Pointer);
+	}
+	/// <summary>
+	/// Retrieves safe read-only span from <paramref name="value"/>.
+	/// </summary>
+	/// <param name="value">A <see cref="CString"/> instance.</param>
+	/// <returns>A binary read-only span from <paramref name="value"/>.</returns>
+	public static ReadOnlySpan<Byte> GetSafeSpan(CString? value)
+	{
+		if (value is null)
+			return ReadOnlySpan<Byte>.Empty;
+		return value.IsNullTerminated ? value.AsSpan() : (CString)value.Clone();
 	}
 }

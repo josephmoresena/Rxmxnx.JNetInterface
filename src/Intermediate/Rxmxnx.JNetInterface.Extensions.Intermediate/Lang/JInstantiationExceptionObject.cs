@@ -12,7 +12,7 @@ public class JInstantiationExceptionObject : JReflectiveOperationExceptionObject
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JInstantiationExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JReflectiveOperationExceptionObject>
+		TypeMetadataBuilder<JReflectiveOperationExceptionObject>
 			.Create<JInstantiationExceptionObject>(UnicodeClassNames.InstantiationExceptionObject()).Build();
 
 	static JThrowableTypeMetadata<JInstantiationExceptionObject> IThrowableType<JInstantiationExceptionObject>.Metadata
@@ -25,13 +25,13 @@ public class JInstantiationExceptionObject : JReflectiveOperationExceptionObject
 	/// <inheritdoc/>
 	protected JInstantiationExceptionObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JInstantiationExceptionObject IReferenceType<JInstantiationExceptionObject>.Create(
+	static JInstantiationExceptionObject IClassType<JInstantiationExceptionObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JInstantiationExceptionObject IReferenceType<JInstantiationExceptionObject>.Create(
+	static JInstantiationExceptionObject IClassType<JInstantiationExceptionObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JInstantiationExceptionObject IReferenceType<JInstantiationExceptionObject>.Create(
+	static JInstantiationExceptionObject IClassType<JInstantiationExceptionObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

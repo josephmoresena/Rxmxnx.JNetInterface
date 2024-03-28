@@ -21,6 +21,10 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// The current ensured capacity for local references.
 	/// </summary>
 	Int32? LocalCapacity { get; set; }
+	/// <summary>
+	/// JNI pending exception.
+	/// </summary>
+	ThrowableException? PendingException { get; set; }
 
 	/// <summary>
 	/// Accessing feature.
@@ -49,7 +53,7 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <summary>
 	/// Function cache.
 	/// </summary>
-	internal FunctionCache Functions { get; }
+	internal NativeFunctionSet FunctionSet { get; }
 	/// <summary>
 	/// Indicates whether current instance is not a proxy.
 	/// </summary>
@@ -111,4 +115,9 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <param name="state">A state object.</param>
 	/// <param name="func">A function to execute inside created new local reference.</param>
 	TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
+
+	/// <summary>
+	/// JNI pending exception describe.
+	/// </summary>
+	void DescribeException();
 }

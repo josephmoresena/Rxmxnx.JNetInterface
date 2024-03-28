@@ -3,11 +3,8 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// <summary>
 /// This class stores a non-typed class function definition.
 /// </summary>
-internal sealed record JNonTypedFunctionDefinition : JFunctionDefinition<JLocalObject>
+internal sealed class JNonTypedFunctionDefinition : JFunctionDefinition<JLocalObject>
 {
-	/// <inheritdoc/>
-	internal override Type Return => typeof(JReferenceObject);
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -70,9 +67,4 @@ internal sealed record JNonTypedFunctionDefinition : JFunctionDefinition<JLocalO
 		args.CopyTo(realArgs, 0);
 		return base.InvokeStaticReflected(jMethod, args);
 	}
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 }

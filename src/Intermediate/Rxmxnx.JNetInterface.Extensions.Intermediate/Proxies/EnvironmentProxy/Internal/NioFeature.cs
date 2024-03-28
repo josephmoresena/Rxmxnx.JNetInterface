@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native.Dummies;
+namespace Rxmxnx.JNetInterface.Native.Proxies;
 
 public abstract partial class EnvironmentProxy
 {

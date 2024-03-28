@@ -9,7 +9,7 @@ internal sealed record StackTraceElementObjectMetadata : ObjectMetadata
 	/// <summary>
 	/// Stack trace information.
 	/// </summary>
-	public JStackTraceInfo? Information { get; init; }
+	public StackTraceInfo? Information { get; init; }
 
 	/// <inheritdoc/>
 	internal StackTraceElementObjectMetadata(ObjectMetadata metadata) : base(metadata)
@@ -20,10 +20,9 @@ internal sealed record StackTraceElementObjectMetadata : ObjectMetadata
 
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="StackTraceElementObjectMetadata"/> to
-	/// <see cref="JStackTraceInfo"/>.
+	/// <see cref="StackTraceInfo"/>.
 	/// </summary>
 	/// <param name="metadata">A <see cref="StackTraceElementObjectMetadata"/> to implicitly convert.</param>
 	[return: NotNullIfNotNull(nameof(metadata))]
-	public static implicit operator JStackTraceInfo?(StackTraceElementObjectMetadata? metadata)
-		=> metadata?.Information;
+	public static implicit operator StackTraceInfo?(StackTraceElementObjectMetadata? metadata) => metadata?.Information;
 }

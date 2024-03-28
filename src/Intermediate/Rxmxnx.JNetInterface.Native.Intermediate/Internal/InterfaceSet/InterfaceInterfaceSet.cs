@@ -1,39 +1,34 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial record InterfaceSet
+internal partial class InterfaceSet
 {
 	/// <summary>
 	/// Interface set for interfaces.
 	/// </summary>
-	public sealed record InterfaceInterfaceSet : InterfaceSet
+	public sealed class InterfaceInterfaceSet : InterfaceSet
 	{
-		/// <inheritdoc/>
-		protected override IEnumerable<JInterfaceTypeMetadata> Enumerable
-			=> base.Enumerable.Union(base.Enumerable.SelectMany(i => i.Interfaces)).Distinct();
-
-		/// <inheritdoc/>
-		public override Int32 Count => this.Enumerable.Count();
-
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="set">Interface set.</param>
-		public InterfaceInterfaceSet(IReadOnlySet<JInterfaceTypeMetadata> set) : base(set) { }
+		public InterfaceInterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) : base(set) { }
 
 		/// <inheritdoc/>
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3267,
+		                 Justification = CommonConstants.NonStandardLinqJustification)]
 		public override Boolean Contains(JInterfaceTypeMetadata item)
 		{
 			if (base.Contains(item)) return true;
-			Boolean result = false;
-			Parallel.ForEach(this.Enumerable.Select(i => i.Interfaces), (ii, s) =>
+			foreach (JInterfaceTypeMetadata interfaceTypeMetadata in this._internalSet)
 			{
-				if (!ii.Contains(item)) return;
-				result = true;
-				s.Stop();
-			});
-			return result;
+				if (interfaceTypeMetadata.Interfaces.Contains(item))
+					return true;
+			}
+			return false;
 		}
+
 		/// <inheritdoc/>
-		public override String ToString() => base.ToString();
+		private protected override IEnumerable<JInterfaceTypeMetadata> GetEnumerable()
+			=> base.GetEnumerable().Union(base.GetEnumerable().SelectMany(i => i.Interfaces)).Distinct();
 	}
 }

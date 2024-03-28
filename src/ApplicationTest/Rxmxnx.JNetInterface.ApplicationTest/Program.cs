@@ -3,12 +3,13 @@ using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.Io;
 using Rxmxnx.JNetInterface.Lang;
+using Rxmxnx.JNetInterface.Lang.Annotation;
+using Rxmxnx.JNetInterface.Lang.Reflect;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Nio;
 using Rxmxnx.JNetInterface.Nio.Ch;
 using Rxmxnx.JNetInterface.Primitives;
-using Rxmxnx.JNetInterface.Reflect;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 using Rxmxnx.PInvoke;
@@ -53,10 +54,10 @@ public static class Program
 
 		Program.PrintVirtualMachineInfo(jvmLib, helloJniByteCode, "jiji", "esto es una coima mk");
 	}
-	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata, Int32 deep)
+	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata, Int32 dimension)
 	{
 		Console.WriteLine(arrMetadata.ElementMetadata.Signature);
-		for (Int32 i = 0; i < deep; i++)
+		for (Int32 i = 0; i < dimension; i++)
 		{
 			Console.WriteLine(arrMetadata.Signature);
 			if (JReferenceTypeMetadata.GetArrayMetadata(arrMetadata) is not { } arrMet2)
@@ -90,9 +91,9 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JEnumObject>());
 		Console.WriteLine(IDataType.GetMetadata<JNumberObject>());
 		Console.WriteLine(IDataType.GetMetadata<JThrowableObject>());
+		Console.WriteLine(IDataType.GetMetadata<JModifierObject>());
 
 		Console.WriteLine("====== Array types ======");
-
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JBoolean>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JByte>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JChar>>());
@@ -104,6 +105,10 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JLocalObject>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JClassObject>>());
 		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JStringObject>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JEnumObject>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JNumberObject>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JThrowableObject>>());
+		Console.WriteLine(IDataType.GetMetadata<JArrayObject<JModifierObject>>());
 
 		Console.WriteLine("====== Wrapper types ======");
 		Console.WriteLine(IDataType.GetMetadata<JBooleanObject>());
@@ -136,6 +141,11 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JMemberObject>());
 		Console.WriteLine(IDataType.GetMetadata<JTypeObject>());
 		Console.WriteLine(IDataType.GetMetadata<JGenericDeclarationObject>());
+		Console.WriteLine(IDataType.GetMetadata<JAnnotationObject>());
+
+		Console.WriteLine("==== Annotation package ====");
+		Console.WriteLine(IDataType.GetMetadata<JElementTypeObject>());
+		Console.WriteLine(IDataType.GetMetadata<JTargetObject>());
 	}
 	private static void PrintVirtualMachineInfo(JVirtualMachineLibrary jvmLib, Byte[] classByteCode,
 		params String[] args)
@@ -148,12 +158,20 @@ public static class Program
 			try
 			{
 				Program.PrintVirtualMachineInfo(env, vm, jvmLib);
-				JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode);
+				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode);
 				JMainMethodDefinition.Instance.Invoke(helloJniClass, args);
+				JInt count = new JFieldDefinition<JInt>("COUNT_RANDOM"u8).StaticGet(helloJniClass);
+				GetRandomObjectDefinition getRandomObjectDefinition = new("getRandomObject"u8);
+				for (JInt i = 0; i < count; i++)
+				{
+					using JLocalObject? jLocal = getRandomObjectDefinition.Invoke(helloJniClass, i);
+					Console.WriteLine($"{i}: {jLocal}");
+				}
 			}
-			catch (JThrowableException ex)
+			catch (ThrowableException ex)
 			{
-				Console.WriteLine(ex.WithSafeInvoke(t => t.Message));
+				Console.WriteLine(ex.Message);
+				Console.WriteLine(ex.Message);
 			}
 		}
 		finally
@@ -186,7 +204,7 @@ public static class Program
 		Console.WriteLine(vm.Reference);
 		Console.WriteLine($"VM Version: 0x{env.Version:x8}");
 		Console.WriteLine(
-			$"Ref Equality: {env.Equals(vm.GetEnvironment())} - Instance Equality: {env == vm.GetEnvironment()}");
+			$"Ref Equality: {env.Equals(vm.GetEnvironment())} - Instance Equality: {Object.ReferenceEquals(env, vm.GetEnvironment())}");
 		Console.WriteLine($"Thread: {Environment.CurrentManagedThreadId} {env.Reference} Type: {env.GetType()}");
 	}
 	private static void PrintAttachThreadInfo(IVirtualMachine vm, CString threadName, IEnvironment? env = default)

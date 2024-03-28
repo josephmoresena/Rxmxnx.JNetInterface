@@ -140,6 +140,9 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.NoSuchFieldErrorObject"/>
 	[DefaultValue(ClassNames.NoSuchFieldErrorObject)]
 	public static partial ReadOnlySpan<Byte> NoSuchFieldErrorObject();
+	/// <inheritdoc cref="ClassNames.NoClassDefFoundErrorObject"/>
+	[DefaultValue(ClassNames.NoClassDefFoundErrorObject)]
+	public static partial ReadOnlySpan<Byte> NoClassDefFoundErrorObject();
 	/// <inheritdoc cref="ClassNames.SecurityExceptionObject"/>
 	[DefaultValue(ClassNames.SecurityExceptionObject)]
 	public static partial ReadOnlySpan<Byte> SecurityExceptionObject();
@@ -205,7 +208,22 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.FieldObject"/>
 	[DefaultValue(ClassNames.FieldObject)]
 	public static partial ReadOnlySpan<Byte> FieldObject();
+	/// <inheritdoc cref="ClassNames.ModifierObject"/>
+	[DefaultValue(ClassNames.ModifierObject)]
+	public static partial ReadOnlySpan<Byte> ModifierObject();
+	/// <inheritdoc cref="ClassNames.ProxyObject"/>
+	[DefaultValue(ClassNames.ProxyObject)]
+	public static partial ReadOnlySpan<Byte> ProxyObject();
 	/// <inheritdoc cref="ClassNames.MemberInterface"/>
 	[DefaultValue(ClassNames.MemberInterface)]
 	public static partial ReadOnlySpan<Byte> MemberInterface();
+	/// <inheritdoc cref="ClassNames.AnnotationInterface"/>
+	[DefaultValue(ClassNames.AnnotationInterface)]
+	public static partial ReadOnlySpan<Byte> AnnotationInterface();
+	/// <inheritdoc cref="ClassNames.ElementTypeEnum"/>
+	[DefaultValue(ClassNames.ElementTypeEnum)]
+	public static partial ReadOnlySpan<Byte> ElementTypeEnum();
+	/// <inheritdoc cref="ClassNames.TargetAnnotation"/>
+	[DefaultValue(ClassNames.TargetAnnotation)]
+	public static partial ReadOnlySpan<Byte> TargetAnnotation();
 }

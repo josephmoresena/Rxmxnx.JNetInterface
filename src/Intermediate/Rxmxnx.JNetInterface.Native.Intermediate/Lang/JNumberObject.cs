@@ -23,5 +23,5 @@ public partial class JNumberObject : JLocalObject, IClassType<JNumberObject>, II
 	/// <returns>A <typeparamref name="TPrimitive"/> numeric value.</returns>
 	public virtual TPrimitive GetValue<TPrimitive>()
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
-		=> this.Environment.Functions.GetPrimitiveValue<TPrimitive>(this);
+		=> this.Environment.FunctionSet.GetPrimitiveValue<TPrimitive>(this);
 }

@@ -4,14 +4,10 @@ partial class JEnvironment
 {
 	private sealed partial record EnvironmentCache : IClassFeature
 	{
-		public JClassObject AsClassObject(JClassLocalRef classRef)
-		{
-			JClassObject result = this.GetClass(classRef, true);
-			return this.Register(result);
-		}
+		public JClassObject AsClassObject(JClassLocalRef classRef) => this.Register(this.GetClass(classRef, true));
 		public JClassObject AsClassObject(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfProxy(jObject);
 			if (jObject is JClassObject jClass) return jClass;
 			ValidationUtilities.ThrowIfDefault(jObject);
 			if (!jObject.InstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
@@ -22,21 +18,55 @@ partial class JEnvironment
 				result.Lifetime.Synchronize(local.Lifetime);
 			return result;
 		}
-		public Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
-			where TDataType : JReferenceObject, IDataType<TDataType>
+		[return: NotNullIfNotNull(nameof(jClass))]
+		public JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
-			JClassObject jClass = this.GetClass<TDataType>();
-			this.ReloadClass(jObject as JClassObject);
-			ValidationUtilities.ThrowIfDefault(jObject);
-			JClassObject objectClass = this.GetClass(jObject.ObjectClassName);
-			Boolean result = this.IsAssignableFrom(objectClass, jClass);
-			this.SetAssignableTo<TDataType>(jObject, result);
-			return result;
+			if (jClass is null) return default;
+			if (MetadataHelper.GetMetadata(jClass.Hash) is { } result)
+				return result;
+			using LocalFrame _ = new(this._env, 2);
+			return jClass.ClassSignature[0] switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JBooleanObject>(),
+				UnicodePrimitiveSignatures.ByteSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JByteObject>(),
+				UnicodePrimitiveSignatures.CharSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JCharacterObject>(),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JDoubleObject>(),
+				UnicodePrimitiveSignatures.FloatSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JFloatObject>(),
+				UnicodePrimitiveSignatures.IntSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JIntegerObject>(),
+				UnicodePrimitiveSignatures.LongSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JLongObject>(),
+				UnicodePrimitiveSignatures.ShortSignatureChar => (JClassTypeMetadata)MetadataHelper
+					.GetMetadata<JShortObject>(),
+				UnicodeObjectSignatures.ArraySignaturePrefixChar => this._env.GetArrayTypeMetadata(
+					jClass.ClassSignature),
+				_ => !jClass.IsInterface ?
+					JEnvironment.GetClassMetadata(jClass) :
+					this._env.GetInterfaceMetadata(jClass) ??
+					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>(),
+			};
 		}
+		public void ThrowNew<TThrowable>(CString? message, Boolean throwException)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			ReadOnlySpan<Byte> utf8Message = JEnvironment.GetSafeSpan(message);
+			this.ThrowNew<TThrowable>(utf8Message, throwException, message?.ToString());
+		}
+		public void ThrowNew<TThrowable>(String? message, Boolean throwException)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			CString? utf8Message = (CString?)message;
+			this.ThrowNew<TThrowable>(utf8Message, throwException, message);
+		}
+
 		public JClassObject GetClass(ReadOnlySpan<Byte> className)
 		{
-			CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
+			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
 			return this.GetOrFindClass(new TypeInformation(classInformation));
 		}
 		public JClassObject GetClass(String classHash)
@@ -56,7 +86,7 @@ partial class JEnvironment
 		{
 			if (MetadataHelper.GetMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
 				return this.GetOrFindClass(metadata);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			ValidationUtilities.ThrowIfDefault(jClass);
@@ -75,8 +105,8 @@ partial class JEnvironment
 		{
 			Boolean? result = MetadataHelper.IsAssignableFrom(jClass, otherClass);
 			if (result.HasValue) return result.Value;
-			ValidationUtilities.ThrowIfDummy(jClass);
-			ValidationUtilities.ThrowIfDummy(otherClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
+			ValidationUtilities.ThrowIfProxy(otherClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
@@ -87,8 +117,8 @@ partial class JEnvironment
 		}
 		public Boolean IsInstanceOf(JReferenceObject jObject, JClassObject jClass)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jObject);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JObjectLocalRef localRef = jniTransaction.Add(jObject);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
@@ -98,25 +128,25 @@ partial class JEnvironment
 			where TDataType : JReferenceObject, IDataType<TDataType>
 		{
 			Boolean result = this.IsInstanceOf(jObject, this.GetClass<TDataType>());
+			jObject.SetAssignableTo<TDataType>(result);
 			return result;
 		}
-		public JClassObject LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,
+		public JClassObject LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 			JClassLoaderObject? jClassLoader = default)
 		{
-			className = JDataTypeMetadata.JniParseClassName(className);
-			return NativeUtilities.WithSafeFixed(className.AsSpan(), rawClassBytes, (this, jClassLoader),
-			                                     EnvironmentCache.LoadClass);
+			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
+			ITypeInformation metadata = new TypeInformation(classInformation);
+			return rawClassBytes.WithSafeFixed((this, metadata, jClassLoader), EnvironmentCache.LoadClass);
 		}
 		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes,
 			JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TDataType>();
-			return NativeUtilities.WithSafeFixed(metadata.ClassName.AsSpan(), rawClassBytes, (this, jClassLoader),
-			                                     EnvironmentCache.LoadClass);
+			ITypeInformation metadata = MetadataHelper.GetMetadata<TDataType>();
+			return rawClassBytes.WithSafeFixed((this, metadata, jClassLoader), EnvironmentCache.LoadClass);
 		}
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			if (classRef.IsDefault) throw new ArgumentException("Unloaded class.");
@@ -127,8 +157,5 @@ partial class JEnvironment
 			if (!Object.ReferenceEquals(jClass, loadedClass))
 				loadedClass.Lifetime.Synchronize(jClass.Lifetime);
 		}
-		public void SetAssignableTo<TDataType>(JReferenceObject jObject, Boolean isAssignable)
-			where TDataType : JReferenceObject, IDataType<TDataType>
-			=> jObject.SetAssignableTo<TDataType>(isAssignable);
 	}
 }

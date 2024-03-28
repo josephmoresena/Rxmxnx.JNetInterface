@@ -1,19 +1,17 @@
-namespace Rxmxnx.JNetInterface.Reflect;
+namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Field</c> instance.
 /// </summary>
-public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldObject>,
-	IInterfaceObject<JGenericDeclarationObject>, IInterfaceObject<JMemberObject>
+public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldObject>, IInterfaceObject<JMemberObject>
 {
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JFieldObject> metadata = JTypeMetadataBuilder<JAccessibleObject>
+	private static readonly JClassTypeMetadata<JFieldObject> metadata = TypeMetadataBuilder<JAccessibleObject>
 	                                                                    .Create<JFieldObject>(
 		                                                                    UnicodeClassNames.FieldObject(),
 		                                                                    JTypeModifier.Final)
-	                                                                    .Implements<JGenericDeclarationObject>()
 	                                                                    .Implements<JMemberObject>().Build();
 
 	static JClassTypeMetadata<JFieldObject> IClassType<JFieldObject>.Metadata => JFieldObject.metadata;
@@ -32,7 +30,7 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 			IEnvironment env = this.Environment;
 			if (!String.IsNullOrWhiteSpace(this._classHash))
 				return env.ClassFeature.GetClass(this._classHash);
-			JClassObject result = env.Functions.GetDeclaringClass(this);
+			JClassObject result = env.FunctionSet.GetDeclaringClass(this);
 			this._classHash = result.Hash;
 			return result;
 		}
@@ -64,10 +62,10 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 	/// <inheritdoc/>
 	private JFieldObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JFieldObject IReferenceType<JFieldObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JFieldObject IClassType<JFieldObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JFieldObject IReferenceType<JFieldObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JFieldObject IClassType<JFieldObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JFieldObject IReferenceType<JFieldObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JFieldObject IClassType<JFieldObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed partial class JBooleanObject
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JBooleanObject> typeMetadata =
-		new(JTypeMetadataBuilder<JBooleanObject>.Build(IPrimitiveType.GetMetadata<JBoolean>()));
+		new(TypeMetadataBuilder<JBooleanObject>.Build(IPrimitiveType.GetMetadata<JBoolean>()));
 
 	static JPrimitiveWrapperTypeMetadata<JBooleanObject> IPrimitiveWrapperType<JBooleanObject>.Metadata
 		=> JBooleanObject.typeMetadata;
@@ -23,10 +23,10 @@ public sealed partial class JBooleanObject
 			this._value = wrapper._value;
 	}
 
-	static JBooleanObject IReferenceType<JBooleanObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JBooleanObject IClassType<JBooleanObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JBooleanObject IReferenceType<JBooleanObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JBooleanObject IClassType<JBooleanObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer.WithClass<JBooleanObject>());
-	static JBooleanObject IReferenceType<JBooleanObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JBooleanObject IClassType<JBooleanObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

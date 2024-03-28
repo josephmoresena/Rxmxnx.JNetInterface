@@ -11,7 +11,7 @@ public class JClassCircularityErrorObject : JLinkageErrorObject, IThrowableType<
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JClassCircularityErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JLinkageErrorObject>
+		TypeMetadataBuilder<JLinkageErrorObject>
 			.Create<JClassCircularityErrorObject>(UnicodeClassNames.ClassCircularityErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JClassCircularityErrorObject> IThrowableType<JClassCircularityErrorObject>.Metadata
@@ -24,13 +24,13 @@ public class JClassCircularityErrorObject : JLinkageErrorObject, IThrowableType<
 	/// <inheritdoc/>
 	protected JClassCircularityErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JClassCircularityErrorObject IReferenceType<JClassCircularityErrorObject>.Create(
+	static JClassCircularityErrorObject IClassType<JClassCircularityErrorObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JClassCircularityErrorObject IReferenceType<JClassCircularityErrorObject>.Create(
+	static JClassCircularityErrorObject IClassType<JClassCircularityErrorObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JClassCircularityErrorObject IReferenceType<JClassCircularityErrorObject>.Create(
+	static JClassCircularityErrorObject IClassType<JClassCircularityErrorObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

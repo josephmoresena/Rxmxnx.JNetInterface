@@ -186,7 +186,8 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="instanceMetadata">The object metadata for current instance.</param>
 	public void SetClass(ObjectMetadata instanceMetadata)
 	{
-		this._class = instanceMetadata.GetClass(this._env);
+		if (!instanceMetadata.ObjectClassName.AsSpan().SequenceEqual(this._class?.Name))
+			this._class = instanceMetadata.GetClass(this._env);
 		this._isRealClass = true;
 	}
 	/// <summary>
@@ -217,14 +218,18 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <see langword="true"/> if local instance is assignable to <typeparamref name="TDataType"/> type;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	public Boolean IsAssignableTo<TDataType>(JLocalObject jLocal)
-		where TDataType : JReferenceObject, IDataType<TDataType>
+	public Boolean InstanceOf<TDataType>(JLocalObject jLocal) where TDataType : JReferenceObject, IDataType<TDataType>
 	{
+		Boolean? result = this.InstanceOf<TDataType>();
+
+		if (result.HasValue)
+			return result.Value;
 		if (JGlobalBase.IsValid(this._global, this._env))
-			return this._global.IsAssignableTo<TDataType>();
+			return this._global.InstanceOf<TDataType>();
 		if (JGlobalBase.IsValid(this._weak, this._env))
-			return this._weak.IsAssignableTo<TDataType>();
-		return this.IsAssignableTo<TDataType>() ?? this._env.ClassFeature.IsAssignableTo<TDataType>(jLocal);
+			return this._weak.InstanceOf<TDataType>();
+
+		return this._env.ClassFeature.IsInstanceOf<TDataType>(jLocal);
 	}
 
 	/// <summary>

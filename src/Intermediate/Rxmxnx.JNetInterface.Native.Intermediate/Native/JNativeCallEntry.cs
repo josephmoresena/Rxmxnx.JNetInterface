@@ -22,6 +22,8 @@ public record JNativeCallEntry : IFixedPointer
 	/// Definition hash.
 	/// </summary>
 	public String Hash => this._definition.Information.ToString();
+	/// <inheritdoc/>
+	public IntPtr Pointer { get; }
 
 	/// <summary>
 	/// Constructor.
@@ -33,8 +35,6 @@ public record JNativeCallEntry : IFixedPointer
 		this.Pointer = ptr;
 		this._definition = definition;
 	}
-	/// <inheritdoc/>
-	public IntPtr Pointer { get; }
 
 	/// <summary>
 	/// Creates a <see cref="JNativeCallEntry"/> instance using <paramref name="definition"/> and

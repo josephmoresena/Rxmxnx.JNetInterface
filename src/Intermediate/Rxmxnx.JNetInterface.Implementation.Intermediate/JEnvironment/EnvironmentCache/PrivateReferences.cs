@@ -5,6 +5,22 @@ partial class JEnvironment
 	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
+		/// Creates a <see cref="JWeakRef"/> from <paramref name="jObject"/>.
+		/// </summary>
+		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+		/// <returns>A <see cref="JWeakRef"/> reference.</returns>
+		private JWeakRef CreateWeakGlobalRef(JReferenceObject jObject)
+		{
+			ValidationUtilities.ThrowIfProxy(jObject);
+			ValidationUtilities.ThrowIfDefault(jObject);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, jObject);
+			JWeakRef weakRef = newWeakGlobalRef(this.Reference, localRef);
+			if (weakRef == default) this.CheckJniError();
+			return weakRef;
+		}
+		/// <summary>
 		/// Registers a <typeparamref name="TObject"/> in current <see cref="IEnvironment"/> instance.
 		/// </summary>
 		/// <typeparam name="TObject">A <see cref="IDataType{TObject}"/> type.</typeparam>
@@ -13,7 +29,7 @@ partial class JEnvironment
 		[return: NotNullIfNotNull(nameof(jObject))]
 		private TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
 		{
-			ValidationUtilities.ThrowIfDummy(jObject as JReferenceObject);
+			ValidationUtilities.ThrowIfProxy(jObject as JReferenceObject);
 			this.LoadClass(jObject as JClassObject);
 			JLocalObject? jLocal = jObject as JLocalObject;
 			if (!JObject.IsNullOrDefault(jLocal))

@@ -23,7 +23,7 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	/// Internal value.
 	/// </summary>
 	public JBoolean Value
-		=> this._value ??= JFunctionDefinition.Invoke(InternalFunctionCache.BooleanValueDefinition, this);
+		=> this._value ??= JFunctionDefinition.Invoke(NativeFunctionSetImpl.BooleanValueDefinition, this);
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
@@ -31,6 +31,8 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
+	/// <inheritdoc/>
+	public override String ToString() => this.Value.ToString()!;
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

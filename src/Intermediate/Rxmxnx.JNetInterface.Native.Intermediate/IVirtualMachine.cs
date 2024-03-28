@@ -40,6 +40,16 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <returns>A <see cref="IThread"/> instance.</returns>
 	IThread InitializeDaemon(CString? threadName = default, JGlobalBase? threadGroup = default,
 		Int32 version = IVirtualMachine.MinimalVersion);
+	/// <summary>
+	/// Raises a fatal error and does not expect the VM to recover.
+	/// </summary>
+	/// <param name="message">Error message. The string is encoded in modified UTF-8.</param>
+	void FatalError(CString? message);
+	/// <summary>
+	/// Raises a fatal error and does not expect the VM to recover.
+	/// </summary>
+	/// <param name="message">Error message.</param>
+	void FatalError(String? message);
 
 	/// <summary>
 	/// Attaches the current thread to the virtual machine for <paramref name="purpose"/>.

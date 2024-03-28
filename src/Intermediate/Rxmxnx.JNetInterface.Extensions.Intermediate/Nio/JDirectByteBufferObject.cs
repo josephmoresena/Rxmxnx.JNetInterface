@@ -14,7 +14,7 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	/// Type metadata.
 	/// </summary>
 	private static readonly JClassTypeMetadata<JDirectByteBufferObject> metadata =
-		JTypeMetadataBuilder<JMappedByteBufferObject>
+		TypeMetadataBuilder<JMappedByteBufferObject>
 			.Create<JDirectByteBufferObject>(UnicodeClassNames.DirectByteBufferObject())
 			.Implements<JDirectBufferObject>().Build();
 
@@ -61,13 +61,13 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 		this._memory?.Dispose();
 	}
 
-	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+	static JDirectByteBufferObject IClassType<JDirectByteBufferObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+	static JDirectByteBufferObject IClassType<JDirectByteBufferObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+	static JDirectByteBufferObject IClassType<JDirectByteBufferObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

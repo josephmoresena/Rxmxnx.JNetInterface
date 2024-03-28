@@ -3,13 +3,6 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public partial interface IArrayFeature
 {
 	/// <summary>
-	/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
-	/// </summary>
-	/// <param name="jArray">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="index">Element index.</param>
-	/// <param name="value">Object instance.</param>
-	internal void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value);
-	/// <summary>
 	/// Retrieves a pointer to <paramref name="arrayRef"/> elements.
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>

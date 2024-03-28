@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Reflect;
+namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Method</c> instance.
@@ -8,7 +8,7 @@ public sealed class JMethodObject : JExecutableObject, IClassType<JMethodObject>
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JMethodObject> metadata = JTypeMetadataBuilder<JExecutableObject>
+	private static readonly JClassTypeMetadata<JMethodObject> metadata = TypeMetadataBuilder<JExecutableObject>
 	                                                                     .Create<JMethodObject>(
 		                                                                     UnicodeClassNames.MethodObject(),
 		                                                                     JTypeModifier.Final).Build();
@@ -26,10 +26,10 @@ public sealed class JMethodObject : JExecutableObject, IClassType<JMethodObject>
 	/// <inheritdoc/>
 	private JMethodObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JMethodObject IReferenceType<JMethodObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JMethodObject IClassType<JMethodObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JMethodObject IReferenceType<JMethodObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JMethodObject IClassType<JMethodObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JMethodObject IReferenceType<JMethodObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JMethodObject IClassType<JMethodObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

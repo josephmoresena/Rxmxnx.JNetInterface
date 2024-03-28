@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1206,
+                 Justification = CommonConstants.InternalInheritanceJustification)]
 public abstract partial class JReferenceObject : JObject
 {
 	/// <summary>
@@ -32,7 +34,7 @@ public abstract partial class JReferenceObject : JObject
 	}
 
 	/// <summary>
-	/// Indicates whether current instance is an instance of <typeparamref name="TDataType"/> type class.
+	/// Indicates whether current instance is an instance of <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <returns>
@@ -50,11 +52,13 @@ public abstract partial class JReferenceObject : JObject
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other)
-		=> other switch
+		=> Object.ReferenceEquals(this, other) || other switch
 		{
 			null => this.IsDefault,
-			JReferenceObject jObject => this.IsProxy == jObject.IsProxy && this.IsDefault == jObject.IsDefault &&
-				this.AsSpan().SequenceEqual(jObject.AsSpan()),
+			JReferenceObject jObject => this.Same(jObject),
 			_ => false,
 		};
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override Int32 GetHashCode() => this.As<JObjectLocalRef>().GetHashCode();
 }

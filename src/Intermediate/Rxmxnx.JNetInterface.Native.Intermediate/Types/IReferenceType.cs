@@ -32,21 +32,9 @@ public interface IReferenceType<out TReference> : IReferenceType, IDataType<TRef
 	/// <summary>
 	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
 	/// </summary>
-	/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> instance.</param>
-	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
-	protected static abstract TReference Create(ClassInitializer initializer);
-	/// <summary>
-	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
-	/// </summary>
 	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
 	protected static abstract TReference Create(ObjectInitializer initializer);
-	/// <summary>
-	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
-	/// </summary>
-	/// <param name="initializer">A <see cref="IReferenceType.GlobalInitializer"/> instance.</param>
-	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
-	protected static abstract TReference Create(GlobalInitializer initializer);
 
 	/// <summary>
 	/// Retrieves the base types from current type.

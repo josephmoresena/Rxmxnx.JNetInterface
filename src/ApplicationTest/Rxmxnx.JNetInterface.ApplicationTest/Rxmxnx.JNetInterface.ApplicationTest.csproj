@@ -9,11 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!-- Preserves [[Z, [[B, [[C, [[D, [[F, [[I, [[J, [[S metadata generation from [Z, [B, [C, [D, [F, [I, [J, [S -->
-        <RdXmlFile Include="rd_primitive_array_array.xml" Condition="'$(UsePrimitveArrayArrayRd)' == 'true'"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>

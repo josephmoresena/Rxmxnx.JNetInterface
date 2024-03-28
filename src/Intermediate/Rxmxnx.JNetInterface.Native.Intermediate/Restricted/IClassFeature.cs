@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes JNI classing feature.
 /// </summary>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public partial interface IClassFeature
 {
 	/// <summary>
@@ -17,18 +19,6 @@ public partial interface IClassFeature
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	JClassObject AsClassObject(JReferenceObject jObject);
-	/// <summary>
-	/// Determines whether <paramref name="jObject"/> can be safely cast to
-	/// <typeparamref name="TDataType"/> instance.
-	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <returns>
-	/// <see langword="true"/> if <paramref name="jObject"/> can be safely cast to
-	/// <typeparamref name="TDataType"/> instance; otherwise, <see langword="false"/>.
-	/// </returns>
-	Boolean IsAssignableTo<TDataType>(JReferenceObject jObject)
-		where TDataType : JReferenceObject, IDataType<TDataType>;
 	/// <summary>
 	/// Retrieves the java class for given type.
 	/// </summary>
@@ -79,4 +69,36 @@ public partial interface IClassFeature
 	/// <typeparamref name="TDataType"/> type class; otherwise, <see langword="false"/>.
 	/// </returns>
 	Boolean IsInstanceOf<TDataType>(JReferenceObject jObject) where TDataType : JReferenceObject, IDataType<TDataType>;
+	/// <summary>
+	/// Retrieves <see cref="JReferenceTypeMetadata"/> from <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
+	[return: NotNullIfNotNull(nameof(jClass))]
+	JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass);
+	/// <summary>
+	/// Throws an exception from <typeparamref name="TThrowable"/> type.
+	/// </summary>
+	/// <typeparam name="TThrowable"></typeparam>
+	/// <param name="message">
+	/// The message used to construct the <c>java.lang.Throwable</c> instance.
+	/// The string is encoded in modified UTF-8.
+	/// </param>
+	/// <param name="throwException">
+	/// Indicates whether exception should be thrown in managed code.
+	/// </param>
+	void ThrowNew<TThrowable>(CString? message, Boolean throwException)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
+	/// <summary>
+	/// Throws an exception from <typeparamref name="TThrowable"/> type.
+	/// </summary>
+	/// <typeparam name="TThrowable"></typeparam>
+	/// <param name="message">
+	/// The message used to construct the <c>java.lang.Throwable</c> instance.
+	/// </param>
+	/// <param name="throwException">
+	/// Indicates whether exception should be thrown in managed code.
+	/// </param>
+	void ThrowNew<TThrowable>(String? message, Boolean throwException)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 }

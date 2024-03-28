@@ -20,7 +20,11 @@ internal record LocalCache
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	public virtual ObjectLifetime this[JObjectLocalRef localRef]
 	{
-		set => this._objects[localRef] = value;
+		set
+		{
+			Boolean add = !(this._previous?.Contains(localRef) ?? localRef == default);
+			if (add) this._objects[localRef] = value;
+		}
 	}
 	/// <see cref="IEnvironment.LocalCapacity"/>
 	public virtual Int32? Capacity { get; set; }
@@ -39,6 +43,16 @@ internal record LocalCache
 		this._objects = new();
 	}
 
+	/// <summary>
+	/// Indicates whether current value is contained by cache.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by current cache; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+	public Boolean Contains(JObjectLocalRef localRef)
+		=> this._objects.ContainsKey(localRef) || (this._previous?.Contains(localRef) ?? localRef == default);
 	/// <summary>
 	/// Clear current cache.
 	/// </summary>

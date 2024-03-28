@@ -14,9 +14,8 @@ partial class JEnvironment
 			if (capacity <= 0) return;
 			ValidationUtilities.ThrowIfDifferentThread(this.Thread);
 			EnsureLocalCapacityDelegate ensureLocalCapacity = this.GetDelegate<EnsureLocalCapacityDelegate>();
-			JResult result = ensureLocalCapacity(this.Reference, capacity);
-			if (result != JResult.Ok)
-				throw new JniException(result);
+			JniException? jniException = ensureLocalCapacity(this.Reference, capacity);
+			if (jniException is not null) throw jniException;
 			this._objects.Capacity = capacity;
 		}
 		/// <inheritdoc cref="JEnvironment.SetObjectCache(LocalCache?)"/>

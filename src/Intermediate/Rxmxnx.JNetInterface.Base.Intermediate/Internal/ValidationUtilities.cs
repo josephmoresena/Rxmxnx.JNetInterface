@@ -120,7 +120,7 @@ internal static class ValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidSignature(ReadOnlySpan<Byte> signature, Boolean allowPrimitive)
 	{
-		if (signature.IsEmpty) throw new ArgumentException("Invalid signature.");
+		if (signature.IsEmpty) throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 
 		if (signature.Length == 1)
 		{
@@ -141,14 +141,14 @@ internal static class ValidationUtilities
 					ValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[1]);
 					break;
 				case <= 3:
-					throw new ArgumentException("Invalid signature.");
+					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 				case > 3 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
 					suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar:
-					throw new ArgumentException("Invalid signature.");
+					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 			}
 		else if (prefix != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
 		         suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar)
-			throw new ArgumentException("Invalid signature.");
+			throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> named <paramref name="nameofValue"/> is not null-terminated
@@ -227,15 +227,16 @@ internal static class ValidationUtilities
 			throw new InvalidOperationException("The sequence is no longer valid.");
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="jObject"/> is dummy.
+	/// Throws an exception if <paramref name="jObject"/> is proxy.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="message">Exception message.</param>
-	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is dummy.</exception>
-	public static void ThrowIfDummy(JReferenceObject? jObject, String? message = default)
+	/// <param name="nameofObject">Name of <paramref name="jObject"/>.</param>
+	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is proxy.</exception>
+	public static void ThrowIfProxy(JReferenceObject? jObject,
+		[CallerArgumentExpression(nameof(jObject))] String nameofObject = "")
 	{
 		if (jObject is not null && jObject.IsProxy)
-			throw new ArgumentException(message ?? "Invalid JReferenceObject.");
+			throw new ArgumentException($"Invalid JReferenceObject ({nameofObject}).");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
@@ -296,8 +297,9 @@ internal static class ValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidResult(JResult result)
 	{
-		if (result != JResult.Ok)
-			throw new JniException(result);
+		JniException? exception = result;
+		if (exception is not null)
+			throw exception;
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="version"/> is invalid.
@@ -331,5 +333,18 @@ internal static class ValidationUtilities
 				return;
 		}
 		throw new ArgumentException("Invalid primitive signature.");
+	}
+	/// <summary>
+	/// Throws an exception if JNI execution is not secure.
+	/// </summary>
+	/// <param name="functionName">Name of JNI function.</param>
+	/// <param name="jniSecure">Indicates whether JNI execution is safe.</param>
+	/// <exception cref="NotImplementedException">
+	/// Throws an exception if JNI execution is not secure.
+	/// </exception>
+	public static void ThrowIfUnsafe(String functionName, Boolean jniSecure)
+	{
+		if (!jniSecure)
+			throw new InvalidOperationException($"Current JNI status is invalid to call {functionName}.");
 	}
 }

@@ -3,11 +3,8 @@
 /// <summary>
 /// This class stores a constructor definition.
 /// </summary>
-public partial record JConstructorDefinition : JCallDefinition
+public partial class JConstructorDefinition : JCallDefinition
 {
-	/// <inheritdoc/>
-	internal override Type? Return => default;
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -25,11 +22,6 @@ public partial record JConstructorDefinition : JCallDefinition
 		IEnvironment env = declaringClass.Environment;
 		return env.AccessFeature.GetReflectedConstructor(this, declaringClass);
 	}
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 
 	/// <summary>
 	/// Creates a new <typeparamref name="TObject"/> instance using a constructor on <paramref name="jClass"/>

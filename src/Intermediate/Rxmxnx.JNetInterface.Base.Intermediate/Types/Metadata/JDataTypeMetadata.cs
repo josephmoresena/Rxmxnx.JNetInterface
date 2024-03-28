@@ -19,10 +19,6 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	/// </summary>
 	public abstract Type Type { get; }
 	/// <summary>
-	/// Kind of current type.
-	/// </summary>
-	public abstract JTypeKind Kind { get; }
-	/// <summary>
 	/// Modifier of current type.
 	/// </summary>
 	public abstract JTypeModifier Modifier { get; }
@@ -30,6 +26,10 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	/// Size of current type in bytes.
 	/// </summary>
 	public abstract Int32 SizeOf { get; }
+	/// <summary>
+	/// Kind of current type.
+	/// </summary>
+	public abstract JTypeKind Kind { get; }
 
 	/// <inheritdoc/>
 	public CString ClassName => this._className;
@@ -37,6 +37,11 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	public CString Signature => this._signature;
 	/// <inheritdoc/>
 	public String Hash => this._sequence.ToString();
+
+	[ExcludeFromCodeCoverage]
+	JTypeModifier? ITypeInformation.Modifier => this.Modifier;
+	[ExcludeFromCodeCoverage]
+	IFixedPointer.IDisposable ITypeInformation.GetClassNameFixedPointer() => this._sequence.GetFixedPointer();
 
 	/// <inheritdoc/>
 	public override String ToString()

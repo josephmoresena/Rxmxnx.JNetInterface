@@ -14,12 +14,6 @@ public partial class JStringObject : IEnumerable<Char>, IComparable, IComparable
 		};
 	Int32 IComparable<IWrapper<String>?>.CompareTo(IWrapper<String>? other)
 		=> String.Compare(this.Value, other?.Value, StringComparison.Ordinal);
-	/// <inheritdoc/>
-	public Int32 CompareTo(JStringObject? other) => this.CompareTo(other?.Value);
-	/// <inheritdoc/>
-	public Int32 CompareTo(String? other) => String.Compare(this.Value, other, StringComparison.Ordinal);
 	IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
-
-	/// <inheritdoc cref="String.GetEnumerator()"/>
-	public IEnumerator<Char> GetEnumerator() => this.Value.GetEnumerator();
+	IEnumerator<Char> IEnumerable<Char>.GetEnumerator() => this.GetEnumerator();
 }

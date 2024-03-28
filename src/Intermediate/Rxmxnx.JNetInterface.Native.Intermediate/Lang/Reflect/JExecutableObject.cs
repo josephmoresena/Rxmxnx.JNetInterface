@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Reflect;
+namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Executable</c> instance.
@@ -9,7 +9,7 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JExecutableObject> metadata = JTypeMetadataBuilder<JAccessibleObject>
+	private static readonly JClassTypeMetadata<JExecutableObject> metadata = TypeMetadataBuilder<JAccessibleObject>
 	                                                                         .Create<JExecutableObject>(
 		                                                                         UnicodeClassNames.ExecutableObject(),
 		                                                                         JTypeModifier.Abstract)
@@ -32,7 +32,7 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 			IEnvironment env = this.Environment;
 			if (!String.IsNullOrWhiteSpace(this._classHash))
 				return env.ClassFeature.GetClass(this._classHash);
-			JClassObject result = env.Functions.GetDeclaringClass(this);
+			JClassObject result = env.FunctionSet.GetDeclaringClass(this);
 			this._classHash = result.Hash;
 			return result;
 		}
@@ -50,7 +50,7 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// <param name="localRef">Local object reference.</param>
 	/// <param name="definition">Call definition.</param>
 	/// <param name="declaringClass">Declaring class.</param>
-	internal JExecutableObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition,
+	private protected JExecutableObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition,
 		JClassObject declaringClass) : base(jClass, localRef)
 	{
 		this._callDefinition = definition;
@@ -64,10 +64,10 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// <inheritdoc/>
 	protected JExecutableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JExecutableObject IReferenceType<JExecutableObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JExecutableObject IClassType<JExecutableObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JExecutableObject IReferenceType<JExecutableObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JExecutableObject IClassType<JExecutableObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JExecutableObject IReferenceType<JExecutableObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JExecutableObject IClassType<JExecutableObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

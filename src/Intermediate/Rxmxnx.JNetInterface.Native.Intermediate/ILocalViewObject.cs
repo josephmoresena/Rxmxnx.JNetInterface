@@ -11,12 +11,13 @@ public interface ILocalViewObject : IViewObject, ILocalObject
 	new ILocalObject Object { get; }
 
 	IVirtualMachine ILocalObject.VirtualMachine => this.Object.VirtualMachine;
-	Boolean ILocalObject.IsProxy => this.IsProxy;
+	Boolean ILocalObject.IsProxy => this.Object.IsProxy;
 	ObjectLifetime ILocalObject.Lifetime => this.Object.Lifetime;
 	ObjectMetadata ILocalObject.CreateMetadata() => ILocalObject.CreateMetadata(this.Object);
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata)
 		=> ILocalObject.ProcessMetadata(this.Object, instanceMetadata);
 
+	[ExcludeFromCodeCoverage]
 	IObject IViewObject.Object => this.Object;
 
 	/// <summary>

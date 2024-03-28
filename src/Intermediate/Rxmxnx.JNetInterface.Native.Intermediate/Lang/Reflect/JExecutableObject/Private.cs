@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Reflect;
+namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
 public partial class JExecutableObject : ILocalObject
 {
@@ -14,7 +14,7 @@ public partial class JExecutableObject : ILocalObject
 	ObjectMetadata ILocalObject.CreateMetadata()
 		=> new ExecutableObjectMetadata(base.CreateMetadata())
 		{
-			Definition = this._callDefinition,
+			Definition = this.Definition,
 			ClassHash = this._classHash ?? this.DeclaringClass.Hash,
 			MethodId = this._methodId,
 		};
@@ -26,9 +26,9 @@ public partial class JExecutableObject : ILocalObject
 	private JCallDefinition GetCallDefinition()
 	{
 		IEnvironment env = this.Environment;
-		using JStringObject memberName = env.Functions.GetName(this);
-		using JArrayObject<JClassObject> parameterTypes = env.Functions.GetParameterTypes(this);
-		using JClassObject? returnType = env.Functions.GetReturnType(this);
+		using JStringObject memberName = env.FunctionSet.GetName(this);
+		using JArrayObject<JClassObject> parameterTypes = env.FunctionSet.GetParameterTypes(this);
+		using JClassObject? returnType = env.FunctionSet.GetReturnType(this);
 		return env.AccessFeature.GetDefinition(memberName, parameterTypes, returnType);
 	}
 	/// <summary>

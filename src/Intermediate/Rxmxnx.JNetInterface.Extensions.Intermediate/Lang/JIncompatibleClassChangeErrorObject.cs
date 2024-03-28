@@ -12,7 +12,7 @@ public class JIncompatibleClassChangeErrorObject : JLinkageErrorObject,
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JIncompatibleClassChangeErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JLinkageErrorObject>
+		TypeMetadataBuilder<JLinkageErrorObject>
 			.Create<JIncompatibleClassChangeErrorObject>(UnicodeClassNames.IncompatibleClassChangeErrorObject())
 			.Build();
 
@@ -27,13 +27,13 @@ public class JIncompatibleClassChangeErrorObject : JLinkageErrorObject,
 	/// <inheritdoc/>
 	protected JIncompatibleClassChangeErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JIncompatibleClassChangeErrorObject IReferenceType<JIncompatibleClassChangeErrorObject>.Create(
+	static JIncompatibleClassChangeErrorObject IClassType<JIncompatibleClassChangeErrorObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JIncompatibleClassChangeErrorObject IReferenceType<JIncompatibleClassChangeErrorObject>.Create(
+	static JIncompatibleClassChangeErrorObject IClassType<JIncompatibleClassChangeErrorObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JIncompatibleClassChangeErrorObject IReferenceType<JIncompatibleClassChangeErrorObject>.Create(
+	static JIncompatibleClassChangeErrorObject IClassType<JIncompatibleClassChangeErrorObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

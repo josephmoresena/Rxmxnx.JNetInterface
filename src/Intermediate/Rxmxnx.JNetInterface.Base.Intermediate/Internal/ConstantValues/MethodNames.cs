@@ -86,6 +86,14 @@ internal static class MethodNames
 	/// </summary>
 	public const String IsPrimitive = "isPrimitive";
 	/// <summary>
+	/// Name of <c>Class.getModifiers()</c>.
+	/// </summary>
+	public const String GetModifiers = "getModifiers";
+	/// <summary>
+	/// Name of <c>Class.GetInterfaces()</c>.
+	/// </summary>
+	public const String GetInterfaces = "getInterfaces";
+	/// <summary>
 	/// Name of <c>Buffer.isDirect()</c>.
 	/// </summary>
 	public const String IsDirect = "isDirect";

@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native.Dummies;
+namespace Rxmxnx.JNetInterface.Native.Proxies;
 
 /// <summary>
 /// This object exposes a JNI proxy instance.
@@ -9,6 +9,8 @@ public abstract partial class EnvironmentProxy
 	public abstract VirtualMachineProxy VirtualMachine { get; }
 	/// <inheritdoc/>
 	public abstract JClassObject ClassObject { get; }
+	/// <inheritdoc cref="IEnvironment.PendingException"/>
+	public abstract ThrowableException? PendingException { get; set; }
 	/// <inheritdoc/>
 	public abstract JEnvironmentRef Reference { get; }
 	/// <inheritdoc/>
@@ -30,6 +32,8 @@ public abstract partial class EnvironmentProxy
 	public abstract TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func);
 	/// <inheritdoc/>
 	public abstract TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
+	/// <inheritdoc/>
+	public abstract void DescribeException();
 
 	#region IReferenceFeature
 	/// <summary>
@@ -106,7 +110,7 @@ public abstract partial class EnvironmentProxy
 	#region IClassFeature
 	/// <inheritdoc cref="IClassFeature.GetClass(ReadOnlySpan{Byte})"/>
 	public abstract JClassObject GetClass(CString className);
-	/// <inheritdoc cref="IClassFeature.LoadClass(CString, ReadOnlySpan{Byte}, JClassLoaderObject?)"/>
+	/// <inheritdoc cref="IClassFeature.LoadClass(ReadOnlySpan{Byte}, ReadOnlySpan{Byte}, JClassLoaderObject?)"/>
 	public abstract JClassObject LoadClass(CString className, Byte[] rawClassBytes,
 		JClassLoaderObject? jClassLoader = default);
 	/// <inheritdoc cref="IClassFeature.LoadClass{TDataType}(ReadOnlySpan{Byte}, JClassLoaderObject?)"/>

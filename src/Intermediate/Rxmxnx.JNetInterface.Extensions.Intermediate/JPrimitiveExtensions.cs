@@ -8,6 +8,24 @@ namespace Rxmxnx.JNetInterface;
 public static class JPrimitiveExtensions
 {
 	/// <summary>
+	/// Initializes primitive array arrays metadata.
+	/// </summary>
+#pragma warning disable CA2255
+	[ModuleInitializer]
+#pragma warning restore CA2255
+	internal static void Initializer()
+	{
+		_ = IArrayType.GetArrayArrayMetadata<JBoolean>();
+		_ = IArrayType.GetArrayArrayMetadata<JByte>();
+		_ = IArrayType.GetArrayArrayMetadata<JChar>();
+		_ = IArrayType.GetArrayArrayMetadata<JDouble>();
+		_ = IArrayType.GetArrayArrayMetadata<JFloat>();
+		_ = IArrayType.GetArrayArrayMetadata<JInt>();
+		_ = IArrayType.GetArrayArrayMetadata<JLong>();
+		_ = IArrayType.GetArrayArrayMetadata<JShort>();
+	}
+
+	/// <summary>
 	/// Creates a <see cref="JBooleanObject"/> from current value.
 	/// </summary>
 	/// <param name="value">A <see cref="JBoolean"/> value.</param>

@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// <summary>
 /// Definition for a <c>static void main(String[])</c> method.
 /// </summary>
-public sealed record JMainMethodDefinition : JMethodDefinition
+public sealed class JMainMethodDefinition : JMethodDefinition
 {
 	/// <summary>
 	/// Instance.

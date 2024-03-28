@@ -1,8 +1,10 @@
-namespace Rxmxnx.JNetInterface.Reflect;
+namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
 /// <summary>
-/// This class represents a local <c>java.lang.reflect.AnnotatedElement</c> instance.
+/// This class represents a local <c>java.lang.Annotation.AnnotatedElement</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElementObject>,
 	IInterfaceType<JAnnotatedElementObject>
 {
@@ -10,25 +12,15 @@ public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElement
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata<JAnnotatedElementObject> typeMetadata =
-		JTypeMetadataBuilder<JAnnotatedElementObject>.Create(UnicodeClassNames.AnnotatedElementInterface()).Build();
+		TypeMetadataBuilder<JAnnotatedElementObject>.Create(UnicodeClassNames.AnnotatedElementInterface()).Build();
 
 	static JInterfaceTypeMetadata<JAnnotatedElementObject> IInterfaceType<JAnnotatedElementObject>.Metadata
 		=> JAnnotatedElementObject.typeMetadata;
 
 	/// <inheritdoc/>
-	private JAnnotatedElementObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JAnnotatedElementObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JAnnotatedElementObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JAnnotatedElementObject IReferenceType<JAnnotatedElementObject>.Create(
-		IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JAnnotatedElementObject IReferenceType<JAnnotatedElementObject>.Create(
+	static JAnnotatedElementObject IInterfaceType<JAnnotatedElementObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JAnnotatedElementObject IReferenceType<JAnnotatedElementObject>.Create(
-		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

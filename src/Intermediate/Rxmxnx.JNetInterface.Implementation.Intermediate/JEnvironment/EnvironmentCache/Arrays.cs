@@ -5,6 +5,23 @@ partial class JEnvironment
 	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
+		/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
+		/// </summary>
+		/// <param name="jArray">A <see cref="JReferenceObject"/> instance.</param>
+		/// <param name="index">Element index.</param>
+		/// <param name="value">Object instance.</param>
+		private void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
+		{
+			ValidationUtilities.ThrowIfProxy(value);
+			jArray.ValidateObjectElement(value);
+			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);
+			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
+			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
+			this.CheckJniError();
+		}
+		/// <summary>
 		/// Retrieves the element with <paramref name="index"/> on <paramref name="arrayRef"/>.
 		/// </summary>
 		/// <typeparam name="TElement">Type of <paramref name="arrayRef"/> element.</typeparam>
@@ -25,11 +42,12 @@ partial class JEnvironment
 		/// <returns>The index of <paramref name="item"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
 		private Int32 IndexOfObject(JArrayObject jArray, JReferenceObject? item)
 		{
-			ValidationUtilities.ThrowIfDummy(item);
+			ValidationUtilities.ThrowIfProxy(item);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			JObjectLocalRef localRef = jniTransaction.Add(item);
 			JObjectArrayLocalRef objectArrayRef = JObjectArrayLocalRef.FromReference(in arrayRef);
+			using LocalFrame _ = new(this._env, 2);
 			for (Int32 i = 0; i < jArray.Length; i++)
 			{
 				JObjectLocalRef itemLocalRef = this.GetObjectArrayElement(objectArrayRef, i);
@@ -178,7 +196,7 @@ partial class JEnvironment
 					return getShortArrayElements(this.Reference, JShortArrayLocalRef.FromReference(in arrayRef),
 					                             out isCopy);
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		private void ReleasePrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, IntPtr pointer,
@@ -235,7 +253,7 @@ partial class JEnvironment
 					                          (ReadOnlyValPtr<Int16>)pointer, mode);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		/// <summary>
@@ -300,7 +318,7 @@ partial class JEnvironment
 					                    (ValPtr<Int16>)fixedBuffer.Pointer);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		/// <summary>
@@ -369,7 +387,7 @@ partial class JEnvironment
 					                    (ReadOnlyValPtr<Int16>)fixedBuffer.Pointer);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		/// <summary>

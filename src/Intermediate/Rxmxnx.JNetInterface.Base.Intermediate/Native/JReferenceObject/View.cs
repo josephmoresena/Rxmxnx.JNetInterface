@@ -27,8 +27,6 @@ public partial class JReferenceObject
 		/// <inheritdoc/>
 		internal override void ClearValue() => this.GetObject().ClearValue();
 		/// <inheritdoc/>
-		internal override Boolean IsAssignableTo<TDataType>() => this.GetObject().IsAssignableTo<TDataType>();
-		/// <inheritdoc/>
 		internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
 			=> this.GetObject().SetAssignableTo<TDataType>(isAssignable);
 		/// <inheritdoc/>
@@ -47,7 +45,7 @@ public partial class JReferenceObject
 	/// This class is used for create view instances of object.
 	/// </summary>
 	/// <typeparam name="TObject">A <see cref="IObject"/> instance.</typeparam>
-	public abstract class View<TObject> : View where TObject : JReferenceObject, IObject
+	public abstract class View<TObject> : View, IWrapper<TObject> where TObject : JReferenceObject, IObject
 	{
 		/// <summary>
 		/// <typeparamref name="TObject"/> instance.
@@ -59,6 +57,8 @@ public partial class JReferenceObject
 		/// </summary>
 		/// <param name="jObject">A <typeparamref name="TObject"/> instance.</param>
 		private protected View(TObject jObject) : base(jObject) => this.Object = jObject;
+
+		TObject IWrapper<TObject>.Value => this.Object;
 
 		/// <inheritdoc/>
 		private protected override JReferenceObject GetObject() => this.Object;

@@ -30,6 +30,9 @@ public sealed class DoubleTest : PrimitiveTestBase
 
 		Assert.Equal(ClassNames.DoubleObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.DoubleObject().SequenceEqual(metadata.WrapperClassName));
+
+		using IFixedPointer.IDisposable fPtr = (metadata as ITypeInformation).GetClassNameFixedPointer();
+		Assert.Equal(fPtr.Pointer, metadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	private static void EqualityTest(JDouble primitive0, JDouble primitive1)
 	{

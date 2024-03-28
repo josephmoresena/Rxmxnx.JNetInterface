@@ -36,7 +36,6 @@ public sealed class ReferenceObjectProxy : JReferenceObject
 		foreach (ref readonly Byte value in this.AsSpan())
 			Unsafe.AsRef(in value) = default;
 	}
-	internal override Boolean IsAssignableTo<TDataType>() => false;
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
 		=> this.SetAssignableToEvent?.Invoke(typeof(TDataType), this);
 }

@@ -26,6 +26,12 @@ public sealed class JGlobal : JGlobalBase
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="globalRef">Global reference.</param>
+	internal JGlobal(ILocalObject jLocal, JGlobalRef globalRef) : base(jLocal, globalRef) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
 	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
 	/// <param name="isProxy">Indicates whether the current instance is a dummy object.</param>
@@ -33,6 +39,13 @@ public sealed class JGlobal : JGlobalBase
 	internal JGlobal(IVirtualMachine vm, ObjectMetadata metadata, Boolean isProxy, JGlobalRef globalRef) :
 		base(vm, metadata, isProxy, globalRef)
 		=> this.IsDisposable = metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	/// <param name="globalRef">Global reference.</param>
+	internal JGlobal(JGlobalBase jGlobal, JGlobalRef globalRef) : base(jGlobal.VirtualMachine, jGlobal.ObjectMetadata,
+	                                                                   jGlobal.IsProxy, globalRef) { }
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)

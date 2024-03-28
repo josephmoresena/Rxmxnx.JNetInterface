@@ -27,7 +27,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	public void Dispose()
 	{
 		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.RemoveGlobalReference);
-		this.Unload(thread);
+		this.Dispose(true, thread);
 		GC.SuppressFinalize(this);
 	}
 
@@ -37,17 +37,14 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
-	public TReference AsLocal<TReference>(IEnvironment env) where TReference : JLocalObject, IReferenceType<TReference>
+	public TReference AsLocal<TReference>(IEnvironment env)
+		where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		if (JLocalObject.IsClassType<TReference>())
-			return (TReference)(Object)env.ClassFeature.AsClassObject(this);
 		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
-		if (!this.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
-			return (TReference)metadata.ParseInstance(env, this);
-
-		JClassObject jClass = env.ClassFeature.AsClassObject(this);
-		if (JLocalObject.IsObjectType<TReference>()) return (TReference)(Object)jClass;
-		return (TReference)metadata.ParseInstance(jClass);
+		JReferenceTypeMetadata typeMetadata = this.ObjectMetadata.TypeMetadata ??
+			metadata as JClassTypeMetadata ?? IClassType.GetMetadata<JLocalObject>();
+		JLocalObject jLocal = typeMetadata.ParseInstance(env, this);
+		return (TReference)metadata.ParseInstance(jLocal, true);
 	}
 
 	/// <summary>
@@ -80,40 +77,6 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	{
 		IEnvironment env = jClass.Environment;
 		return env.ClassFeature.IsInstanceOf(this, jClass);
-	}
-
-	/// <inheritdoc/>
-	private protected override Boolean IsInstanceOf<TDataType>()
-	{
-		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
-		Boolean result = thread.ClassFeature.IsInstanceOf<TDataType>(this);
-		thread.ClassFeature.SetAssignableTo<TDataType>(this, result);
-		return result;
-	}
-
-	/// <inheritdoc cref="IDisposable.Dispose()"/>
-	/// <param name="disposing">
-	/// Indicates whether this method was called from the <see cref="IDisposable.Dispose"/> method.
-	/// </param>
-	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	private protected virtual void Dispose(Boolean disposing, IEnvironment env)
-	{
-		if (this._isDisposed) return;
-
-		if (disposing && !this.IsDisposable)
-		{
-			ImmutableArray<Int64> keys = this._objects.Keys.ToImmutableArray();
-			foreach (Int64 key in keys)
-			{
-				if (this._objects.TryRemove(key, out WeakReference<ObjectLifetime>? wObj) &&
-				    wObj.TryGetTarget(out ObjectLifetime? objectLifetime))
-					objectLifetime.UnloadGlobal(this);
-			}
-		}
-
-		if (!env.ReferenceFeature.Unload(this)) return;
-		this.ClearValue();
-		this._isDisposed = true;
 	}
 
 	/// <summary>

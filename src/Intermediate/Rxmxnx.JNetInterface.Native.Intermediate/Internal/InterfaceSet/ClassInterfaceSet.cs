@@ -1,30 +1,23 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial record InterfaceSet
+internal partial class InterfaceSet
 {
 	/// <summary>
 	/// Interface set for classes.
 	/// </summary>
-	private sealed record ClassInterfaceSet : InterfaceSet
+	private sealed class ClassInterfaceSet : InterfaceSet
 	{
 		/// <summary>
 		/// Base type metadata.
 		/// </summary>
-		private readonly IReadOnlySet<JInterfaceTypeMetadata> _baseInterfaces;
-
-		/// <inheritdoc/>
-		protected override IEnumerable<JInterfaceTypeMetadata> Enumerable
-			=> base.Enumerable.Union(this._baseInterfaces).Distinct();
-
-		/// <inheritdoc/>
-		public override Int32 Count => this.Enumerable.Count();
+		private readonly IInterfaceSet _baseInterfaces;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="baseMetadata">Base metadata.</param>
 		/// <param name="set">Interface set.</param>
-		public ClassInterfaceSet(JReferenceTypeMetadata baseMetadata, IReadOnlySet<JInterfaceTypeMetadata> set) :
+		public ClassInterfaceSet(JReferenceTypeMetadata baseMetadata, ImmutableHashSet<JInterfaceTypeMetadata> set) :
 			base(set)
 			=> this._baseInterfaces = baseMetadata.Interfaces;
 
@@ -32,6 +25,22 @@ internal partial record InterfaceSet
 		public override Boolean Contains(JInterfaceTypeMetadata item)
 			=> base.Contains(item) || this._baseInterfaces.Contains(item);
 		/// <inheritdoc/>
-		public override String ToString() => base.ToString();
+		public override void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
+		{
+			_ = InterfaceSet.OpenSetOperation(out Boolean isNew);
+			try
+			{
+				base.ForEach(state, action);
+				this._baseInterfaces.ForEach(state, action);
+			}
+			finally
+			{
+				InterfaceSet.CloseSetOperation(isNew);
+			}
+		}
+
+		/// <inheritdoc/>
+		private protected override IEnumerable<JInterfaceTypeMetadata> GetEnumerable()
+			=> base.GetEnumerable().Union(this._baseInterfaces).Distinct();
 	}
 }

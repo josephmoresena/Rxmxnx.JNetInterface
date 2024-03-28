@@ -12,7 +12,7 @@ public class JIndexOutOfBoundsExceptionObject : JRuntimeExceptionObject,
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JIndexOutOfBoundsExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JRuntimeExceptionObject>
+		TypeMetadataBuilder<JRuntimeExceptionObject>
 			.Create<JIndexOutOfBoundsExceptionObject>(UnicodeClassNames.IndexOutOfBoundsExceptionObject()).Build();
 
 	static JThrowableTypeMetadata<JIndexOutOfBoundsExceptionObject> IThrowableType<JIndexOutOfBoundsExceptionObject>.
@@ -26,13 +26,13 @@ public class JIndexOutOfBoundsExceptionObject : JRuntimeExceptionObject,
 	/// <inheritdoc/>
 	protected JIndexOutOfBoundsExceptionObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JIndexOutOfBoundsExceptionObject IReferenceType<JIndexOutOfBoundsExceptionObject>.Create(
+	static JIndexOutOfBoundsExceptionObject IClassType<JIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JIndexOutOfBoundsExceptionObject IReferenceType<JIndexOutOfBoundsExceptionObject>.Create(
+	static JIndexOutOfBoundsExceptionObject IClassType<JIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JIndexOutOfBoundsExceptionObject IReferenceType<JIndexOutOfBoundsExceptionObject>.Create(
+	static JIndexOutOfBoundsExceptionObject IClassType<JIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

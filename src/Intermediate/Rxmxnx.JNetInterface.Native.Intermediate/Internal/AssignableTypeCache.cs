@@ -37,5 +37,5 @@ internal sealed class AssignableTypeCache
 	/// <param name="isAssignable">Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.</param>
 	internal void SetAssignableTo<TDataType>(Boolean isAssignable)
 		where TDataType : JReferenceObject, IDataType<TDataType>
-		=> this._assignableTypes.TryAdd(typeof(TDataType), true);
+		=> this._assignableTypes.TryAdd(typeof(TDataType), isAssignable);
 }

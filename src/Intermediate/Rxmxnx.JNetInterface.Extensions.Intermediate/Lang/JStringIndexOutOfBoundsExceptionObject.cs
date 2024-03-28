@@ -12,7 +12,7 @@ public class JStringIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsException
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JStringIndexOutOfBoundsExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
+		TypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
 			.Create<JStringIndexOutOfBoundsExceptionObject>(UnicodeClassNames.StringIndexOutOfBoundsExceptionObject())
 			.Build();
 
@@ -30,13 +30,13 @@ public class JStringIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsException
 	protected JStringIndexOutOfBoundsExceptionObject(IReferenceType.ObjectInitializer initializer) :
 		base(initializer) { }
 
-	static JStringIndexOutOfBoundsExceptionObject IReferenceType<JStringIndexOutOfBoundsExceptionObject>.Create(
+	static JStringIndexOutOfBoundsExceptionObject IClassType<JStringIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JStringIndexOutOfBoundsExceptionObject IReferenceType<JStringIndexOutOfBoundsExceptionObject>.Create(
+	static JStringIndexOutOfBoundsExceptionObject IClassType<JStringIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JStringIndexOutOfBoundsExceptionObject IReferenceType<JStringIndexOutOfBoundsExceptionObject>.Create(
+	static JStringIndexOutOfBoundsExceptionObject IClassType<JStringIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

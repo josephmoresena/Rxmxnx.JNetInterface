@@ -3,65 +3,58 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Interface record set.
 /// </summary>
-internal partial record InterfaceSet : IReadOnlySet<JInterfaceTypeMetadata>
+internal partial class InterfaceSet : IInterfaceSet
 {
 	/// <summary>
 	/// Internal set.
 	/// </summary>
-	private readonly IReadOnlySet<JInterfaceTypeMetadata> _internalSet;
+	private readonly ImmutableHashSet<JInterfaceTypeMetadata> _internalSet;
 	/// <summary>
 	/// Internal set.
 	/// </summary>
 	private String? _stringRepresentation;
 
 	/// <summary>
-	/// Internal enumeration.
-	/// </summary>
-	protected virtual IEnumerable<JInterfaceTypeMetadata> Enumerable => this._internalSet;
-
-	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="set">A <see cref="IReadOnlySet{T}"/> instance.</param>
-	private InterfaceSet(IReadOnlySet<JInterfaceTypeMetadata> set) => this._internalSet = set;
+	private InterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) => this._internalSet = set;
+
+	[ExcludeFromCodeCoverage]
+	IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
 	/// <inheritdoc/>
-	public virtual Int32 Count => this._internalSet.Count;
-
-	IEnumerator<JInterfaceTypeMetadata> IEnumerable<JInterfaceTypeMetadata>.GetEnumerator()
-		=> this.Enumerable.GetEnumerator();
-	IEnumerator IEnumerable.GetEnumerator() => this.Enumerable.GetEnumerator();
-	Boolean IReadOnlySet<JInterfaceTypeMetadata>.IsProperSubsetOf(IEnumerable<JInterfaceTypeMetadata> other)
-		=> this.GetFullSet().IsProperSubsetOf(other);
-	Boolean IReadOnlySet<JInterfaceTypeMetadata>.IsProperSupersetOf(IEnumerable<JInterfaceTypeMetadata> other)
-		=> this.GetFullSet().IsProperSupersetOf(other);
-	Boolean IReadOnlySet<JInterfaceTypeMetadata>.IsSubsetOf(IEnumerable<JInterfaceTypeMetadata> other)
-		=> this.GetFullSet().IsSubsetOf(other);
-	Boolean IReadOnlySet<JInterfaceTypeMetadata>.IsSupersetOf(IEnumerable<JInterfaceTypeMetadata> other)
-		=> this.GetFullSet().IsSubsetOf(other);
-	Boolean IReadOnlySet<JInterfaceTypeMetadata>.Overlaps(IEnumerable<JInterfaceTypeMetadata> other)
-		=> this.GetFullSet().Overlaps(other);
-	Boolean IReadOnlySet<JInterfaceTypeMetadata>.SetEquals(IEnumerable<JInterfaceTypeMetadata> other)
-		=> this.GetFullSet().SetEquals(other);
-
+	public IEnumerator<JInterfaceTypeMetadata> GetEnumerator() => this.GetEnumerable().GetEnumerator();
 	/// <inheritdoc/>
 	public virtual Boolean Contains(JInterfaceTypeMetadata item) => this._internalSet.Contains(item);
-
+	/// <inheritdoc/>
+	public virtual void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
+	{
+		HashSet<String> hashes = InterfaceSet.OpenSetOperation(this, out Boolean isNew, out Boolean isRecursive);
+		try
+		{
+			foreach (JInterfaceTypeMetadata interfaceMetadata in this._internalSet)
+			{
+				if (!hashes.Add(interfaceMetadata.Hash)) continue;
+				action(state, interfaceMetadata);
+				if (isRecursive) interfaceMetadata.Interfaces.ForEach(state, action);
+			}
+		}
+		finally
+		{
+			InterfaceSet.CloseSetOperation(isNew);
+		}
+	}
 	/// <inheritdoc/>
 	public override String ToString()
 	{
 		if (String.IsNullOrEmpty(this._stringRepresentation))
-			this._stringRepresentation = $"[{String.Join(", ", this.Enumerable.Select(i => i.ClassName))}]";
+			this._stringRepresentation = $"[{String.Join(", ", this.GetEnumerable().Select(i => i.ClassName))}]";
 		return this._stringRepresentation;
 	}
 
 	/// <summary>
-	/// Creates a hash set from current instance.
+	/// Internal enumeration.
 	/// </summary>
-	/// <returns>A <see cref="HashSet{JInterfaceTypeMetadata}"/> instance,</returns>
-	private IReadOnlySet<JInterfaceTypeMetadata> GetFullSet()
-	{
-		if (this.Enumerable is IReadOnlySet<JInterfaceTypeMetadata> set) return set;
-		return new HashSet<JInterfaceTypeMetadata>(this.Enumerable);
-	}
+	private protected virtual IEnumerable<JInterfaceTypeMetadata> GetEnumerable() => this._internalSet;
 }

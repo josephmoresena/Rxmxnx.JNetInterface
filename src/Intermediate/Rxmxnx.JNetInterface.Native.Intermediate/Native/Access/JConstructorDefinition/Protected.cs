@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
-public partial record JConstructorDefinition
+public partial class JConstructorDefinition
 {
 	/// <summary>
 	/// Constructor.
@@ -43,6 +43,12 @@ public partial record JConstructorDefinition
 	/// <summary>
 	/// Invokes a reflected constructor which matches with current definition
 	/// passing the default value for each argument.
+	/// </summary>
+	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	protected TObject NewReflected<TObject>(JMethodObject jMethod) where TObject : JLocalObject, IClassType<TObject>
+		=> this.NewReflected<TObject>(jMethod);
+	/// <summary>
+	/// Invokes a reflected constructor which matches with current definition.
 	/// </summary>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>

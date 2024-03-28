@@ -49,16 +49,18 @@ public partial class JReferenceObject
 	/// </summary>
 	/// <returns>A <see cref="IDisposable"/> synchronizer.</returns>
 	private protected abstract IDisposable GetSynchronizer();
-
 	/// <summary>
-	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
+	/// Indicates whether current instance is same of <paramref name="jObject"/>.
 	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if current instance is assignable to <typeparamref name="TDataType"/> type;
-	/// otherwise, <see langword="false"/>.
+	/// <see langword="true"/> if current instance is <paramref name="jObject"/>; otherwise,
+	/// <see langword="false"/>.
 	/// </returns>
-	internal abstract Boolean IsAssignableTo<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>;
+	private protected virtual Boolean Same(JReferenceObject jObject)
+		=> this.IsProxy == jObject.IsProxy && this.IsDefault == jObject.IsDefault &&
+			this.AsSpan().SequenceEqual(jObject.AsSpan());
+
 	/// <summary>
 	/// Sets current instance as assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>

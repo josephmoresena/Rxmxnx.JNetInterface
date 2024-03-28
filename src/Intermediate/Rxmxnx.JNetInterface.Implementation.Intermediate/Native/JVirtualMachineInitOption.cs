@@ -46,7 +46,7 @@ public sealed record JVirtualMachineInitOption
 	internal static List<JVirtualMachineInitOption> GetOptions(ReadOnlySpan<JVirtualMachineInitOptionValue> values)
 	{
 		List<JVirtualMachineInitOption> result = new(values.Length);
-		for (Int32 i = 0; i < result.Count; i++)
+		for (Int32 i = 0; i < values.Length; i++)
 			result.Add(new(values[i]));
 		return result;
 	}

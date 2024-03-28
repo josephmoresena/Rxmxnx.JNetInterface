@@ -8,14 +8,14 @@ public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>, IL
 	/// <summary>
 	/// Indicates whether current instance is a direct buffer.
 	/// </summary>
-	public Boolean IsDirect => this._isDirect ??= this.Environment.Functions.IsDirectBuffer(this);
+	public Boolean IsDirect => this._isDirect ??= this.Environment.FunctionSet.IsDirectBuffer(this);
 	/// <summary>
 	/// Buffer's capacity.
 	/// </summary>
 	public Int64 Capacity
 		=> this._capacity ??= this.IsDirect ?
 			this.Environment.NioFeature.GetDirectCapacity(this) :
-			this.Environment.Functions.BufferCapacity(this);
+			this.Environment.FunctionSet.BufferCapacity(this);
 
 	/// <summary>
 	/// Direct buffer address.
@@ -70,7 +70,7 @@ public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>, IL
 	/// A <see cref="IDirectBufferObject{TValue}"/> instance if <paramref name="jBuffer"/> is direct; otherwise,
 	/// <see langword="null"/>.
 	/// </returns>
-	private protected static IDirectBufferObject<TValue>? AsDirectObject<TValue>(JBufferObject<TValue> jBuffer)
+	private protected static IDirectBufferObject<TValue>? AsDirect<TValue>(JBufferObject<TValue> jBuffer)
 		where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>
 	{
 		if (jBuffer is IDirectBufferObject<TValue> direct) return direct;
@@ -101,5 +101,5 @@ public abstract class JBufferObject<TValue> : JBufferObject, IInterfaceObject<JC
 	/// A <see cref="IDirectBufferObject{TValue}"/> instance if is direct; otherwise,
 	/// <see langword="null"/>.
 	/// </returns>
-	public IDirectBufferObject<TValue>? AsDirectObject() => JBufferObject.AsDirectObject(this);
+	public IDirectBufferObject<TValue>? AsDirect() => JBufferObject.AsDirect(this);
 }

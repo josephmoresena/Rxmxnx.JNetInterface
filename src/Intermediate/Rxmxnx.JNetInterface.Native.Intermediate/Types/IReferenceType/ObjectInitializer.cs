@@ -10,11 +10,11 @@ public partial interface IReferenceType
 		/// <summary>
 		/// Created object previous instance.
 		/// </summary>
-		public JLocalObject Instance { get; set; }
+		public JLocalObject Instance { get; init; }
 		/// <summary>
 		/// Override class instance.
 		/// </summary>
-		public JClassObject? Class { get; set; }
+		public JClassObject? Class { get; init; }
 
 		/// <summary>
 		/// Constructor.

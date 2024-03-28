@@ -5,7 +5,7 @@ public partial class JStringObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JStringObject> typeMetadata = JTypeMetadataBuilder<JStringObject>
+	private static readonly JClassTypeMetadata<JStringObject> typeMetadata = TypeMetadataBuilder<JStringObject>
 	                                                                         .Create(UnicodeClassNames.StringObject(),
 		                                                                         JTypeModifier.Final)
 	                                                                         .Implements<JSerializableObject>()
@@ -34,7 +34,7 @@ public partial class JStringObject
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JStringObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.StringClassObject)
+	private JStringObject(JLocalObject jLocal) : base(jLocal, jLocal.Environment.ClassFeature.StringObject)
 	{
 		if (jLocal is not JStringObject jString)
 			return;
@@ -42,12 +42,6 @@ public partial class JStringObject
 		this._utf8Length = jString._utf8Length;
 		this._value = jString._value;
 	}
-
-	/// <summary>
-	/// Retrieves hash code of current text.
-	/// </summary>
-	/// <returns>A <see cref="Nullable{Int32}"/> hash code.</returns>
-	private Int32? GetStringHashCode() => this._value?.GetHashCode();
 
 	/// <summary>
 	/// Retrieves UTF-16 chars.
@@ -60,10 +54,10 @@ public partial class JStringObject
 		env.StringFeature.GetCopy(arg.jStr, chars, arg.startIndex);
 	}
 
-	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JStringObject IClassType<JStringObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer.WithClass<JStringObject>());
-	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JStringObject IClassType<JStringObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer.Instance);
-	static JStringObject IReferenceType<JStringObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JStringObject IClassType<JStringObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer.Environment, initializer.Global);
 }

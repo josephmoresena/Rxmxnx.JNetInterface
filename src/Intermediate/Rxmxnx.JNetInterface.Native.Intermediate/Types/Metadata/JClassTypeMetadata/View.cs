@@ -15,13 +15,17 @@ public partial record JClassTypeMetadata<TClass>
 		private readonly JClassTypeMetadata _metadata;
 
 		/// <inheritdoc/>
+		public override JClassTypeMetadata? BaseMetadata => this._metadata.BaseMetadata;
+		/// <inheritdoc/>
 		public override JTypeModifier Modifier => this._metadata.Modifier;
 		/// <inheritdoc/>
-		public override IReadOnlySet<JInterfaceTypeMetadata> Interfaces => this._metadata.Interfaces;
+		public override IInterfaceSet Interfaces => this._metadata.Interfaces;
 
 		/// <inheritdoc/>
 		private protected View(JClassTypeMetadata<TClass> metadata) : base(metadata) => this._metadata = metadata;
 
+		/// <inheritdoc/>
+		internal override Boolean IsInstance(JReferenceObject jObject) => this._metadata.IsInstance(jObject);
 		/// <inheritdoc/>
 		public override String ToString() => base.ToString();
 
@@ -30,7 +34,8 @@ public partial record JClassTypeMetadata<TClass>
 			Boolean realClass = false)
 			=> this._metadata.CreateInstance(jClass, localRef, realClass);
 		/// <inheritdoc/>
-		internal override JLocalObject? ParseInstance(JLocalObject? jLocal) => this._metadata.ParseInstance(jLocal);
+		internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
+			=> this._metadata.ParseInstance(jLocal, dispose);
 		/// <inheritdoc/>
 		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			=> this._metadata.ParseInstance(env, jGlobal);

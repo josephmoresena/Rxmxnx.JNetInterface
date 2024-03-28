@@ -13,14 +13,17 @@ public record ThrowableObjectMetadata : ObjectMetadata
 	/// <summary>
 	/// Internal throwable stack trace.
 	/// </summary>
-	public JStackTraceInfo[]? StackTrace { get; init; }
+	public StackTraceInfo[]? StackTrace { get; init; }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
+	/// <param name="metadata"><see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <param name="message">Throwable message.</param>
-	internal ThrowableObjectMetadata(JClassObject jClass, String? message) : base(jClass) => this.Message = message;
+	internal ThrowableObjectMetadata(JClassObject jClass, JReferenceTypeMetadata metadata, String? message) :
+		base(jClass, metadata)
+		=> this.Message = message;
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -37,6 +40,7 @@ public record ThrowableObjectMetadata : ObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata"><see cref="ThrowableObjectMetadata"/> instance.</param>
+	[ExcludeFromCodeCoverage]
 	protected ThrowableObjectMetadata(ThrowableObjectMetadata metadata) : base(metadata)
 	{
 		this.Message = metadata.Message;

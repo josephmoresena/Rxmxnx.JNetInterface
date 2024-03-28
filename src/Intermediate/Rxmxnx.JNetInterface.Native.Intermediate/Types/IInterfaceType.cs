@@ -8,6 +8,7 @@ namespace Rxmxnx.JNetInterface.Types;
 public interface IInterfaceType : IReferenceType
 {
 	static JTypeKind IDataType.Kind => JTypeKind.Interface;
+	static Type IDataType.FamilyType => typeof(JLocalObject.InterfaceView);
 
 	/// <summary>
 	/// Retrieves the metadata for given interface type.
@@ -34,4 +35,14 @@ public interface IInterfaceType<TInterface> : IInterfaceType, IReferenceType<TIn
 	protected new static abstract JInterfaceTypeMetadata<TInterface> Metadata { get; }
 
 	static JDataTypeMetadata IDataType<TInterface>.Metadata => TInterface.Metadata;
+
+	/// <summary>
+	/// Creates a <typeparamref name="TInterface"/> instance from <paramref name="initializer"/>.
+	/// </summary>
+	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
+	/// <returns>A <typeparamref name="TInterface"/> instance from <paramref name="initializer"/>.</returns>
+	protected new static abstract TInterface Create(ObjectInitializer initializer);
+
+	static TInterface IReferenceType<TInterface>.Create(ObjectInitializer initializer)
+		=> TInterface.Create(initializer);
 }
