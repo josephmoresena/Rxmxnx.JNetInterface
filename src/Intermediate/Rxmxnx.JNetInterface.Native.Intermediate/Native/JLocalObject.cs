@@ -51,8 +51,6 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// <inheritdoc/>
 	public override String ToString() => $"{this.Class.Name} {this.As<JObjectLocalRef>()}";
 
-	/// <inheritdoc/>
-	~JLocalObject() { this.Dispose(false); }
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
 	/// </summary>

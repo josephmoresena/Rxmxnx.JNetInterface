@@ -26,7 +26,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	public void Invoke(JClassObject mainClass, Boolean nullArgs = false)
 	{
 		IEnvironment env = mainClass.Environment;
-		JArrayObject<JStringObject>? args = !nullArgs ? JArrayObject<JStringObject>.Create(env, 0) : default;
+		using JArrayObject<JStringObject>? args = !nullArgs ? JArrayObject<JStringObject>.Create(env, 0) : default;
 		this.Invoke(mainClass, args);
 	}
 	/// <summary>
@@ -37,12 +37,12 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	public void Invoke(JClassObject mainClass, params String?[] args)
 	{
 		IEnvironment env = mainClass.Environment;
-		JArrayObject<JStringObject> jArgs = JArrayObject<JStringObject>.Create(env, args.Length);
+		using JArrayObject<JStringObject> jArgs = JArrayObject<JStringObject>.Create(env, args.Length);
 		for (Int32 i = 0; i < args.Length; i++)
 		{
-			if (args[i] is not null)
-				using (JStringObject jString = JStringObject.Create(env, args[i])!)
-					jArgs[i] = jString;
+			if (args[i] is null) continue;
+			using JStringObject jString = JStringObject.Create(env, args[i])!;
+			jArgs[i] = jString;
 		}
 		this.Invoke(mainClass, jArgs);
 	}

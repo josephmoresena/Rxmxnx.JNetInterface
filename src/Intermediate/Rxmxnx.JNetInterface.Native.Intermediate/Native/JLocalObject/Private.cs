@@ -8,6 +8,10 @@ public partial class JLocalObject : ILocalObject
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
 	TReference ILocalObject.CastTo<TReference>() => this.CastTo<TReference>();
+	JObjectLocalRef ILocalObject.InternalReference => this.InternalReference;
+
+	/// <inheritdoc/>
+	~JLocalObject() { this.Dispose(false); }
 
 	/// <summary>
 	/// Process the object metadata.

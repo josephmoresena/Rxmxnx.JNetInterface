@@ -54,7 +54,7 @@ partial class JEnvironment
 		/// <returns>A <typeparamref name="TDelegate"/> instance.</returns>
 		public TDelegate GetDelegate<TDelegate>() where TDelegate : Delegate
 		{
-			ValidationUtilities.ThrowIfDifferentThread(this.Thread);
+			ValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
 			Type typeOfT = typeof(TDelegate);
 			JniDelegateInfo info = EnvironmentCache.delegateIndex[typeOfT];
 			ValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));

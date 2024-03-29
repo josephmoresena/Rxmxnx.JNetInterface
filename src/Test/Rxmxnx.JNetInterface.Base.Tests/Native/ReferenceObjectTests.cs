@@ -114,6 +114,7 @@ public sealed class ReferenceObjectTests
 		Assert.Equal(jObject.InstanceOf<DataTypeProxy>(), view.InstanceOf<DataTypeProxy>());
 		Assert.Equal(jObject.Synchronize(), view.Synchronize());
 		Assert.True(jObject.Equals(view));
+		Assert.Equal(JObject.IsNullOrDefault(jObject), JObject.IsNullOrDefault(view));
 		view.SetAssignableTo<DataTypeProxy>(default);
 
 		if (!jObject.IsDefault)

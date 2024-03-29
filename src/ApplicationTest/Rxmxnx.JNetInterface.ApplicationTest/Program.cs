@@ -19,21 +19,11 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 [ExcludeFromCodeCoverage]
 public static class Program
 {
+	private const Boolean ShowInfo = true;
+
 	public static async Task Main(String[] args)
 	{
-		Program.PrintBuiltIntMetadata();
-		Program.PrintArrayMetadata(JArrayObject<JBoolean>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JByte>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JChar>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JDouble>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JFloat>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JLong>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JShort>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JLocalObject>>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JClassObject>>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JThrowableObject>>.Metadata, 10);
-		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JStringObject>>.Metadata, 10);
+		if (Program.ShowInfo) Program.PrintMetadataInfo();
 
 		JCompiler? compiler = args.Length == 3 ?
 			new() { JdkPath = args[0], CompilerPath = args[1], LibraryPath = args[2], } :
@@ -52,7 +42,23 @@ public static class Program
 		JHelloDotnetObject.GetIntegerEvent += () => Environment.CurrentManagedThreadId;
 		JHelloDotnetObject.GetStringEvent += () => "Hola desde .NET";
 
-		Program.PrintVirtualMachineInfo(jvmLib, helloJniByteCode, "jiji", "esto es una coima mk");
+		Program.Execute(jvmLib, helloJniByteCode, "jiji", "esto es una coima mk");
+	}
+	private static void PrintMetadataInfo()
+	{
+		Program.PrintBuiltIntMetadata();
+		Program.PrintArrayMetadata(JArrayObject<JBoolean>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JByte>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JChar>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JDouble>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JFloat>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JLong>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JShort>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JLocalObject>>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JClassObject>>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JThrowableObject>>.Metadata, 10);
+		Program.PrintArrayMetadata(JArrayObject<JArrayObject<JStringObject>>.Metadata, 10);
 	}
 	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata, Int32 dimension)
 	{
@@ -147,24 +153,22 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JElementTypeObject>());
 		Console.WriteLine(IDataType.GetMetadata<JTargetObject>());
 	}
-	private static void PrintVirtualMachineInfo(JVirtualMachineLibrary jvmLib, Byte[] classByteCode,
-		params String[] args)
+	private static void Execute(JVirtualMachineLibrary jvmLib, Byte[] classByteCode, params String[] args)
 	{
 		try
 		{
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
-			Console.WriteLine(initArgs);
+			if (Program.ShowInfo) Console.WriteLine(initArgs);
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{
-				Program.PrintVirtualMachineInfo(env, vm, jvmLib);
+				if (Program.ShowInfo) Program.PrintVirtualMachineInfo(env, vm, jvmLib);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode);
 				JMainMethodDefinition.Instance.Invoke(helloJniClass, args);
 				JInt count = new JFieldDefinition<JInt>("COUNT_RANDOM"u8).StaticGet(helloJniClass);
-				GetRandomObjectDefinition getRandomObjectDefinition = new("getRandomObject"u8);
 				for (JInt i = 0; i < count; i++)
 				{
-					using JLocalObject? jLocal = getRandomObjectDefinition.Invoke(helloJniClass, i);
+					using JLocalObject? jLocal = GetRandomObjectDefinition.Instance.Invoke(helloJniClass, i);
 					Console.WriteLine($"{i}: {jLocal}");
 				}
 			}

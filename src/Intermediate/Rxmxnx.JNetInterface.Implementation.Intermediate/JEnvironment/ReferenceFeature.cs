@@ -122,10 +122,14 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfProxy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.InternalReference;
+			Boolean isRegistered = this._objects.Contains(localRef);
 			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
 			try
 			{
-				this._env.DeleteLocalRef(localRef);
+				if (!isRegistered)
+					Debug.WriteLine($"Unable to remove unregistered local reference {localRef}.");
+				else
+					this._env.DeleteLocalRef(localRef);
 			}
 			finally
 			{

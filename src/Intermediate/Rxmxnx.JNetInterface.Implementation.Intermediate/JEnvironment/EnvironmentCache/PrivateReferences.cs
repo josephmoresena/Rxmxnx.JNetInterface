@@ -31,9 +31,8 @@ partial class JEnvironment
 		{
 			ValidationUtilities.ThrowIfProxy(jObject as JReferenceObject);
 			this.LoadClass(jObject as JClassObject);
-			JLocalObject? jLocal = jObject as JLocalObject;
-			if (!JObject.IsNullOrDefault(jLocal))
-				this._objects[jLocal.As<JObjectLocalRef>()] = jLocal.Lifetime.GetCacheable();
+			if (jObject is ILocalObject jLocal && jLocal.InternalReference != default)
+				this._objects[jLocal.InternalReference] = jLocal.Lifetime.GetCacheable();
 			return jObject;
 		}
 		/// <summary>

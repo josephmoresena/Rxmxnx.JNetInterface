@@ -266,15 +266,17 @@ internal static class ValidationUtilities
 	/// <summary>
 	/// Throws an exception if <paramref name="thread"/> is different to current thread.
 	/// </summary>
-	/// <param name="thread">A <see cref="Thread"/>.</param>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <param name="thread">A <see cref="Thread"/> instance.</param>
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="thread"/> is different to current
 	/// thread.
 	/// </exception>
-	public static void ThrowIfDifferentThread(Thread thread)
+	public static void ThrowIfDifferentThread(JEnvironmentRef envRef, Thread thread)
 	{
 		if (thread != Thread.CurrentThread)
-			throw new InvalidOperationException("JNI Environment is assigned to another thread.");
+			throw new InvalidOperationException(
+				$"JNI Environment ({envRef}) is assigned to another thread. Expected: {thread.ManagedThreadId} Current: {Environment.CurrentManagedThreadId}.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="length"/> is invalid.

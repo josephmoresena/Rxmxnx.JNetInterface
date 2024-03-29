@@ -13,6 +13,10 @@ public interface ILocalObject : IObject
 	/// Local <see cref="ObjectLifetime"/> instance.
 	/// </summary>
 	internal ObjectLifetime Lifetime { get; }
+	/// <summary>
+	/// Local <see cref="JObjectLocalRef"/> reference.
+	/// </summary>
+	internal JObjectLocalRef InternalReference { get; }
 
 	/// <summary>
 	/// Creates the object metadata for current instance.

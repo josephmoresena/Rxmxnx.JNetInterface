@@ -11,9 +11,18 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 /// Definition of <c>(I)Ljava.lang.Object</c> static java function;
 /// </summary>
 [ExcludeFromCodeCoverage]
-public class GetRandomObjectDefinition(ReadOnlySpan<Byte> functionName)
-	: JFunctionDefinition<JLocalObject>(functionName, JArgumentMetadata.Get<JInt>())
+public class GetRandomObjectDefinition : JFunctionDefinition<JLocalObject>
 {
+	/// <summary>
+	/// Instance.
+	/// </summary>
+	public static readonly GetRandomObjectDefinition Instance = new();
+
+	/// <summary>
+	/// Private constructor.
+	/// </summary>
+	private GetRandomObjectDefinition() : base("getRandomObject"u8, JArgumentMetadata.Get<JInt>()) { }
+
 	public JLocalObject? Invoke(JClassObject helloDotnetClass, JInt value)
 	{
 		IObject?[] invokeArgs = this.CreateArgumentsArray();

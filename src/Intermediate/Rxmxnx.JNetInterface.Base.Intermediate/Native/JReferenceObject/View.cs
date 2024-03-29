@@ -25,6 +25,8 @@ public partial class JReferenceObject
 		private protected override Boolean IsInstanceOf<TDataType>() => this.GetObject().IsInstanceOf<TDataType>();
 
 		/// <inheritdoc/>
+		internal override Boolean IsDefaultInstance() => this.GetObject().IsDefaultInstance();
+		/// <inheritdoc/>
 		internal override void ClearValue() => this.GetObject().ClearValue();
 		/// <inheritdoc/>
 		internal override void SetAssignableTo<TDataType>(Boolean isAssignable)

@@ -177,7 +177,14 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, this.ThrowableObject);
 			jniTransaction.Add(throwableRef);
 			using JStringObject throwableMessage = this.GetThrowableMessage(throwableRef, access);
-			return throwableMessage.Value;
+			try
+			{
+				return throwableMessage.Value;
+			}
+			finally
+			{
+				this.FreeUnregistered(throwableMessage);
+			}
 		}
 		/// <summary>
 		/// Retrieves a <see cref="JStringObject"/> containing throwable message.
@@ -226,6 +233,15 @@ partial class JEnvironment
 		{
 			this.Thrown = jniException;
 			if (this.Thrown is not null && throwException) throw this.Thrown;
+		}
+		/// <summary>
+		/// Deletes and clears unregister <see cref="JLocalObject"/> instance.
+		/// </summary>
+		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+		private void FreeUnregistered(JLocalObject jLocal)
+		{
+			this._env.DeleteLocalRef(jLocal.InternalReference);
+			jLocal.ClearValue();
 		}
 	}
 }

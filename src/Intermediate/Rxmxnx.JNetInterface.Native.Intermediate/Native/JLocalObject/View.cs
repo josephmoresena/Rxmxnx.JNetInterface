@@ -16,6 +16,7 @@ public partial class JLocalObject
 		protected View(TObject jObject) : base(jObject) { }
 
 		ILocalObject ILocalViewObject.Object => this.Object;
+		JObjectLocalRef ILocalObject.InternalReference => this.Object.InternalReference;
 
 		/// <summary>
 		/// Retrieves a <typeparamref name="TReference"/> instance from current instance.
