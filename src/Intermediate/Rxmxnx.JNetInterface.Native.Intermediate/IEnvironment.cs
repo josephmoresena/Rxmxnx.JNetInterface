@@ -66,7 +66,8 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </summary>
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if <see cref="jGlobal"/> validation can be avoided; otherwise, <see langword="false"/>;
+	/// <see langword="true"/> if <paramref name="jGlobal"/> validation can be avoided;
+	/// otherwise, <see langword="false"/>;
 	/// </returns>
 	Boolean IsValidationAvoidable(JGlobalBase jGlobal);
 	/// <summary>
