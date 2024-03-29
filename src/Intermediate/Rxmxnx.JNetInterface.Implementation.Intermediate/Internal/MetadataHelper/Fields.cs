@@ -11,6 +11,15 @@ internal static partial class MetadataHelper
 	/// </summary>
 	public static readonly JArrayTypeMetadata ObjectArrayArrayMetadata =
 		IArrayType.GetArrayArrayMetadata<JLocalObject>();
+	/// <summary>
+	/// Hashes of main classes.
+	/// </summary>
+	public static readonly IImmutableSet<String> MainClassHashes = ImmutableHashSet.Create(
+		IDataType.GetHash<JClassObject>(), IDataType.GetHash<JThrowableObject>(),
+		IDataType.GetHash<JStackTraceElementObject>(), ClassObjectMetadata.VoidMetadata.Hash,
+		IDataType.GetHash<JBoolean>(), IDataType.GetHash<JByte>(), IDataType.GetHash<JChar>(),
+		IDataType.GetHash<JDouble>(), IDataType.GetHash<JFloat>(), IDataType.GetHash<JInt>(),
+		IDataType.GetHash<JLong>(), IDataType.GetHash<JShort>());
 
 	/// <summary>
 	/// Separator class assignability.

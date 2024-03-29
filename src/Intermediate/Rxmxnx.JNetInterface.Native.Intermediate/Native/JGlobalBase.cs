@@ -11,6 +11,10 @@ namespace Rxmxnx.JNetInterface.Native;
 public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 {
 	/// <summary>
+	/// Last validation datetime.
+	/// </summary>
+	public DateTime LastValidation { get; protected set; } = DateTime.Now;
+	/// <summary>
 	/// <see cref="IVirtualMachine"/> instance.
 	/// </summary>
 	public IVirtualMachine VirtualMachine { get; }
@@ -63,7 +67,11 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <returns>
 	/// <see langword="true"/> if current instance is still valid; otherwise, <see langword="false"/>.
 	/// </returns>
-	public virtual Boolean IsValid(IEnvironment env) => !this._isDisposed && !this.IsDefault;
+	public virtual Boolean IsValid(IEnvironment env)
+	{
+		this.LastValidation = DateTime.Now;
+		return this.IsValidInstance;
+	}
 
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
@@ -112,10 +120,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	{
 		if (!this._objects.TryAdd(objectLifetime.Id, new(objectLifetime)))
 			this._objects[objectLifetime.Id].SetTarget(objectLifetime);
-		JGlobalBase? result = default;
-		if (!this.IsValid(objectLifetime.Environment))
-			return result;
-		result = this;
+		JGlobalBase? result = this.IsValid(objectLifetime.Environment) ? this : default;
 		return result;
 	}
 

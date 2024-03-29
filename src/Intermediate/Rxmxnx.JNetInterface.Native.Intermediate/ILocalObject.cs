@@ -14,7 +14,7 @@ public interface ILocalObject : IObject
 	/// </summary>
 	internal ObjectLifetime Lifetime { get; }
 	/// <summary>
-	/// Local <see cref="JObjectLocalRef"/> reference.
+	/// Internal reference value.
 	/// </summary>
 	internal JObjectLocalRef InternalReference { get; }
 

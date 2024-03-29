@@ -20,6 +20,18 @@ public partial class JGlobalBase
 	private protected virtual Boolean IsDisposable => false;
 
 	/// <summary>
+	/// Indicates whether the current instance is minimally valid.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if current instance is still valid; otherwise, <see langword="false"/>.
+	/// </returns>
+	internal Boolean IsMinimalValid(IEnvironment env)
+	{
+		if (!this.IsValidInstance) return false;
+		return env.IsValidationAvoidable(this) || this.IsValid(env);
+	}
+	/// <summary>
 	/// Refresh current metadata instance.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>

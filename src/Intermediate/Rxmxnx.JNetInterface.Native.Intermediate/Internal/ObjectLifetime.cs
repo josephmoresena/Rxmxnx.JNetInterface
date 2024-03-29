@@ -125,9 +125,9 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <returns>The loaded <see cref="JGlobalBase"/> object for current instance.</returns>
 	public JGlobalBase? GetGlobalObject()
 	{
-		if (this._global is not null && this._global.IsValid(this._env))
+		if (this._global is not null && this._global.IsMinimalValid(this._env))
 			return this._global;
-		if (this._weak is not null && this._weak.IsValid(this._env))
+		if (this._weak is not null && this._weak.IsMinimalValid(this._env))
 			return this._weak;
 		return default;
 	}

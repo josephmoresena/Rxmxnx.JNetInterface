@@ -62,6 +62,14 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	JEnvironmentRef IWrapper<JEnvironmentRef>.Value => this.Reference;
 
 	/// <summary>
+	/// Indicates whether validation of <paramref name="jGlobal"/> can be avoided.
+	/// </summary>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <see cref="jGlobal"/> validation can be avoided; otherwise, <see langword="false"/>;
+	/// </returns>
+	Boolean IsValidationAvoidable(JGlobalBase jGlobal);
+	/// <summary>
 	/// Retrieves the JNI type reference of <paramref name="jObject"/>.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JObject"/> instance.</param>

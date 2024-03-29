@@ -19,6 +19,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 	public abstract NativeFunctionSet FunctionSet { get; }
 	public abstract Boolean NoProxy { get; }
 
+	public abstract Boolean IsValidationAvoidable(JGlobalBase jGlobal);
 	public abstract JReferenceType GetReferenceType(JObject jObject);
 	public abstract Boolean IsSameObject(JObject jObject, JObject? jOther);
 	public abstract Boolean JniSecure();

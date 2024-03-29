@@ -11,8 +11,9 @@ public sealed class JGlobal : JGlobalBase
 	/// </summary>
 	private readonly WeakReference<JGlobal?> _secondary = new(default);
 
-	/// <inheritdoc cref="JGlobal"/>
+	/// <inheritdoc/>
 	private protected override Boolean IsDisposable { get; }
+
 	/// <summary>
 	/// Global reference.
 	/// </summary>
@@ -72,7 +73,7 @@ public sealed class JGlobal : JGlobalBase
 	/// <returns>A <see cref="JGlobal"/> cacheable instance.</returns>
 	public JGlobal GetCacheable(IEnvironment env)
 	{
-		if (!this.IsValid(env) || this.Secondary is null || this.Secondary.IsDisposable) return this;
+		if (!this.IsMinimalValid(env) || this.Secondary is null || this.Secondary.IsDisposable) return this;
 		return this.Secondary!;
 	}
 	/// <summary>

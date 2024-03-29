@@ -19,6 +19,8 @@ public abstract partial class EnvironmentProxy
 	public abstract Int32? LocalCapacity { get; set; }
 
 	/// <inheritdoc/>
+	public abstract Boolean IsValidationAvoidable(JGlobalBase jGlobal);
+	/// <inheritdoc/>
 	public abstract JReferenceType GetReferenceType(JObject jObject);
 	/// <inheritdoc/>
 	public abstract Boolean IsSameObject(JObject jObject, JObject? jOther);
