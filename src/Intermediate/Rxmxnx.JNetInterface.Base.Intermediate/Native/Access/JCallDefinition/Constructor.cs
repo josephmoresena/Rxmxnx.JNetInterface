@@ -13,13 +13,13 @@ public abstract partial class JCallDefinition
 	/// Internal constructor.
 	/// </summary>
 	/// <param name="name">Call defined name.</param>
-	/// <param name="returnType">Method return type defined signature.</param>
+	/// <param name="returnTypeSignature">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	private protected JCallDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType,
+	private protected JCallDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnTypeSignature,
 		params JArgumentMetadata[] metadata) : base(new CStringSequence(
 			                                            name,
 			                                            JCallDefinition.CreateDescriptor(
-				                                            returnType, out Int32 size, out Int32[] sizes,
+				                                            returnTypeSignature, out Int32 size, out Int32[] sizes,
 				                                            out Int32 referenceCount, metadata)))
 	{
 		this._callSize = size;

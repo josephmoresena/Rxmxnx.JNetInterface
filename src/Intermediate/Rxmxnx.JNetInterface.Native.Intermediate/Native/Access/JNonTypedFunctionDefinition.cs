@@ -9,11 +9,11 @@ internal sealed class JNonTypedFunctionDefinition : JFunctionDefinition<JLocalOb
 	/// Constructor.
 	/// </summary>
 	/// <param name="functionName">Function name.</param>
-	/// <param name="returnType">Method return type defined signature.</param>
+	/// <param name="returnTypeSignature">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	public JNonTypedFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
+	public JNonTypedFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnTypeSignature,
 		params JArgumentMetadata[] metadata) : base(functionName,
-		                                            JAccessibleObjectDefinition.ValidateSignature(returnType),
+		                                            JAccessibleObjectDefinition.ValidateSignature(returnTypeSignature),
 		                                            metadata) { }
 
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.Invoke(JLocalObject, IObject?[])"/>
@@ -50,7 +50,7 @@ internal sealed class JNonTypedFunctionDefinition : JFunctionDefinition<JLocalOb
 	{
 		IObject?[] realArgs = this.CreateArgumentsArray();
 		args.CopyTo(realArgs, 0);
-		return base.InvokeReflected(jMethod, jLocal, args);
+		return base.InvokeReflected(jMethod, jLocal, realArgs);
 	}
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeNonVirtualReflected(JMethodObject, JLocalObject, IObject?[])"/>
 	public new JLocalObject? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal,
@@ -58,13 +58,13 @@ internal sealed class JNonTypedFunctionDefinition : JFunctionDefinition<JLocalOb
 	{
 		IObject?[] realArgs = this.CreateArgumentsArray();
 		args.CopyTo(realArgs, 0);
-		return base.InvokeNonVirtualReflected(jMethod, jLocal, args);
+		return base.InvokeNonVirtualReflected(jMethod, jLocal, realArgs);
 	}
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeStaticReflected(JMethodObject, IObject?[])"/>
 	public new JLocalObject? InvokeStaticReflected(JMethodObject jMethod, params IObject?[] args)
 	{
 		IObject?[] realArgs = this.CreateArgumentsArray();
 		args.CopyTo(realArgs, 0);
-		return base.InvokeStaticReflected(jMethod, args);
+		return base.InvokeStaticReflected(jMethod, realArgs);
 	}
 }

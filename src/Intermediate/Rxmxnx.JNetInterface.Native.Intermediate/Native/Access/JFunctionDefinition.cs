@@ -9,10 +9,10 @@ public abstract partial class JFunctionDefinition : JCallDefinition
 	/// Internal constructor.
 	/// </summary>
 	/// <param name="functionName">Method defined name.</param>
-	/// <param name="returnType">Method return type defined signature.</param>
+	/// <param name="returnTypeSignature">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
-		params JArgumentMetadata[] metadata) : base(functionName, returnType, metadata) { }
+	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnTypeSignature,
+		params JArgumentMetadata[] metadata) : base(functionName, returnTypeSignature, metadata) { }
 	/// <inheritdoc/>
 	private protected JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
 
@@ -58,10 +58,10 @@ public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TR
 	/// Internal Constructor.
 	/// </summary>
 	/// <param name="functionName">Function name.</param>
-	/// <param name="returnType">Method return type defined signature.</param>
+	/// <param name="returnTypeSignature">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
-		params JArgumentMetadata[] metadata) : base(functionName, returnType, metadata) { }
+	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnTypeSignature,
+		params JArgumentMetadata[] metadata) : base(functionName, returnTypeSignature, metadata) { }
 	/// <summary>
 	/// Internal Constructor.
 	/// </summary>
