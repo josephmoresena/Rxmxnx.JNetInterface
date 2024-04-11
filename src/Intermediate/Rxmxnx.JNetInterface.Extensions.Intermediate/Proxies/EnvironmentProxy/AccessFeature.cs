@@ -30,7 +30,7 @@ public abstract partial class EnvironmentProxy
 	public abstract TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
 		IObject?[] args) where TObject : JLocalObject, IDataType<TObject>;
 	/// <inheritdoc/>
-	public abstract TObject CallConstructor<TObject>(JMethodObject jMethod, JConstructorDefinition definition,
+	public abstract TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 		IObject?[] args) where TObject : JLocalObject, IClassType<TObject>;
 	/// <inheritdoc/>
 	public abstract TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,

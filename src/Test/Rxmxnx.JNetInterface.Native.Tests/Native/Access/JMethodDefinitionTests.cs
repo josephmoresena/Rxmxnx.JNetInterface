@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Tests.Native;
+namespace Rxmxnx.JNetInterface.Tests.Native.Access;
 
 [ExcludeFromCodeCoverage]
 public sealed class JMethodDefinitionTests

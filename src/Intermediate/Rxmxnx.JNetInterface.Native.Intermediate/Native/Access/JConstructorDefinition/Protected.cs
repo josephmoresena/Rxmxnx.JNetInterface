@@ -12,13 +12,14 @@ public partial class JConstructorDefinition
 	/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>
 	/// which matches with current definition passing the default value for each argument.
 	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="jClass">An <see cref="JClassObject"/> instance.</param>
 	/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
 	protected JLocalObject New(JClassObject jClass) => this.New<JLocalObject>(jClass, this.CreateArgumentsArray());
 	/// <summary>
 	/// Creates a new <typeparamref name="TObject"/> instance using a constructor which matches with
 	/// current definition passing the default value for each argument.
 	/// </summary>
+	/// <typeparam name="TObject">A <see cref="IClassType{TClass}"/> type.</typeparam>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
 	protected TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
@@ -27,7 +28,7 @@ public partial class JConstructorDefinition
 	/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>
 	/// which matches with current definition.
 	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="jClass">An <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
 	protected JLocalObject New(JClassObject jClass, IObject?[] args) => this.New<JLocalObject>(jClass, args);
@@ -35,6 +36,7 @@ public partial class JConstructorDefinition
 	/// Creates a new <typeparamref name="TObject"/> instance using a constructor which matches with
 	/// current definition.
 	/// </summary>
+	/// <typeparam name="TObject">A <see cref="IClassType{TClass}"/> type.</typeparam>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
@@ -44,19 +46,40 @@ public partial class JConstructorDefinition
 	/// Invokes a reflected constructor which matches with current definition
 	/// passing the default value for each argument.
 	/// </summary>
-	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
-	protected TObject NewReflected<TObject>(JMethodObject jMethod) where TObject : JLocalObject, IClassType<TObject>
-		=> this.NewReflected<TObject>(jMethod);
+	/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
+	/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
+	protected JLocalObject NewReflected(JConstructorObject jConstructor)
+		=> this.NewReflected(jConstructor, this.CreateArgumentsArray());
+	/// <summary>
+	/// Invokes a reflected constructor which matches with current definition
+	/// passing the default value for each argument.
+	/// </summary>
+	/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
+	/// <param name="args">The arguments to pass to.</param>
+	/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
+	protected JLocalObject NewReflected(JConstructorObject jConstructor, IObject?[] args)
+		=> this.NewReflected<JLocalObject>(jConstructor, args);
 	/// <summary>
 	/// Invokes a reflected constructor which matches with current definition.
 	/// </summary>
-	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <typeparam name="TObject">A <see cref="IClassType{TClass}"/> type.</typeparam>
+	/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
+	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
+	protected TObject NewReflected<TObject>(JConstructorObject jConstructor)
+		where TObject : JLocalObject, IClassType<TObject>
+		=> this.NewReflected<TObject>(jConstructor, this.CreateArgumentsArray());
+	/// <summary>
+	/// Invokes a reflected constructor which matches with current definition.
+	/// </summary>
+	/// <typeparam name="TObject">A <see cref="IClassType{TClass}"/> type.</typeparam>
+	/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
-	protected TObject NewReflected<TObject>(JMethodObject jMethod, IObject?[] args)
+	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
+	protected TObject NewReflected<TObject>(JConstructorObject jConstructor, IObject?[] args)
 		where TObject : JLocalObject, IClassType<TObject>
 	{
 		NativeValidationUtilities.ThrowIfAbstractClass<TObject>();
-		IEnvironment env = jMethod.Environment;
-		return env.AccessFeature.CallConstructor<TObject>(jMethod, this, args);
+		IEnvironment env = jConstructor.Environment;
+		return env.AccessFeature.CallConstructor<TObject>(jConstructor, this, args);
 	}
 }

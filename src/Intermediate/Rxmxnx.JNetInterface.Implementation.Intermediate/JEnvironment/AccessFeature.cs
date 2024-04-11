@@ -213,16 +213,16 @@ partial class JEnvironment
 			JObjectLocalRef localRef = this.NewObject(jClass, definition, args);
 			return this.CreateObject<TObject>(localRef, true)!;
 		}
-		public TObject CallConstructor<TObject>(JMethodObject jMethod, JConstructorDefinition definition,
+		public TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 			IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
 		{
-			ValidationUtilities.ThrowIfProxy(jMethod);
-			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
+			ValidationUtilities.ThrowIfProxy(jConstructor);
+			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jConstructor.Definition);
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
-			_ = jniTransaction.Add(jMethod);
-			JMethodId methodId = jMethod.MethodId;
-			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass));
+			_ = jniTransaction.Add(jConstructor);
+			JMethodId methodId = jConstructor.MethodId;
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jConstructor.DeclaringClass));
 			JObjectLocalRef localRef = this.NewObject(definition, classRef, args, jniTransaction, methodId);
 			return this.CreateObject<TObject>(localRef, true)!;
 		}

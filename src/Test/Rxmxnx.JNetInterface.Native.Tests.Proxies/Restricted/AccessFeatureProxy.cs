@@ -21,7 +21,7 @@ public abstract partial class AccessFeatureProxy : IAccessFeature
 		where TField : IDataType<TField>, IObject;
 	public abstract TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
 		IObject?[] args) where TObject : JLocalObject, IDataType<TObject>;
-	public abstract TObject CallConstructor<TObject>(JMethodObject jMethod, JConstructorDefinition definition,
+	public abstract TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 		IObject?[] args) where TObject : JLocalObject, IClassType<TObject>;
 	public abstract TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 		IObject?[] args) where TResult : IDataType<TResult>;
