@@ -349,4 +349,24 @@ internal static class ValidationUtilities
 		if (!jniSecure)
 			throw new InvalidOperationException($"Current JNI status is invalid to call {functionName}.");
 	}
+	/// <summary>
+	/// Throws an exception if JVM is not alive.
+	/// </summary>
+	/// <param name="isAlive">Indicates whether JVM remains alive.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if JVM is not alive.</exception>
+	public static void ThrowIfInvalidVirtualMachine(Boolean isAlive)
+	{
+		if (!isAlive)
+			throw new InvalidOperationException("Current JVM is not alive.");
+	}
+	/// <summary>
+	/// Throws an exception if current thread is not attached to JVM.
+	/// </summary>
+	/// <param name="isAttached">Indicates whether current thread is attached to a JVM.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if current thread is not attached to JVM</exception>
+	public static void ThrowIfNotAttached(Boolean isAttached)
+	{
+		if (!isAttached)
+			throw new InvalidOperationException("Current thread is not attached.");
+	}
 }

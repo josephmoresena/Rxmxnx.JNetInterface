@@ -17,6 +17,8 @@ public partial class JVirtualMachine
 		private readonly IMutableWrapper<Boolean> _isDisposed;
 
 		/// <inheritdoc/>
+		public override Boolean IsAlive => !this._isDisposable || !this._isDisposed.Value;
+		/// <inheritdoc/>
 		public override Boolean IsDisposable => this._isDisposable;
 
 		/// <inheritdoc/>

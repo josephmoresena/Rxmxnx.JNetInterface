@@ -19,6 +19,8 @@ partial class JEnvironment
 		/// Indicates whether current instance is disposed.
 		/// </summary>
 		private readonly IMutableWrapper<Boolean> _isDisposed;
+
+		public override Boolean IsAttached => !this._isDisposable || !this._isDisposed.Value;
 		/// <inheritdoc/>
 		public override Boolean IsDaemon => this._args.IsDaemon;
 		/// <inheritdoc/>

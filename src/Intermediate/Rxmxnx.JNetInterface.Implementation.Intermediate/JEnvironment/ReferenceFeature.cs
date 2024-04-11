@@ -128,6 +128,10 @@ partial class JEnvironment
 			{
 				if (!isRegistered)
 					Debug.WriteLine($"Unable to remove unregistered local reference {localRef}.");
+				else if (!this._env.IsAttached)
+					Debug.WriteLine($"Unable to remove local reference {localRef}. Thread is not attached.");
+				else if (!this.VirtualMachine.IsAlive)
+					Debug.WriteLine($"Unable to remove local reference {localRef}. JVM is not alive.");
 				else
 					this._env.DeleteLocalRef(localRef);
 			}
@@ -141,26 +145,48 @@ partial class JEnvironment
 		public Boolean Unload(JGlobalBase jGlobal)
 		{
 			ValidationUtilities.ThrowIfProxy(jGlobal);
+			Boolean keepReference = false;
 			if (jGlobal.IsDefault || this.IsMainGlobal(jGlobal as JGlobal)) return false;
 			try
 			{
 				if (jGlobal is JGlobal)
 				{
 					JGlobalRef globalRef = jGlobal.As<JGlobalRef>();
-					if (!this.VirtualMachine.SecureRemove(globalRef)) return false;
-					this._env.DeleteGlobalRef(globalRef);
+					if (!this.VirtualMachine.SecureRemove(globalRef))
+					{
+						keepReference = true;
+						return false;
+					}
+					if (!this._env.IsAttached)
+						Debug.WriteLine($"Unable to remove global reference {globalRef}. Thread is not attached.");
+					else if (!this.VirtualMachine.IsAlive)
+						Debug.WriteLine($"Unable to remove global reference {globalRef}. JVM is not alive.");
+					else
+						this._env.DeleteGlobalRef(globalRef);
 				}
 				else
 				{
 					JWeakRef weakRef = jGlobal.As<JWeakRef>();
-					if (!this.VirtualMachine.SecureRemove(weakRef)) return false;
-					this._env.DeleteWeakGlobalRef(weakRef);
+					if (!this.VirtualMachine.SecureRemove(weakRef))
+					{
+						keepReference = true;
+						return false;
+					}
+					if (!this._env.IsAttached)
+						Debug.WriteLine($"Unable to remove weak-global reference {weakRef}. Thread is not attached.");
+					else if (!this.VirtualMachine.IsAlive)
+						Debug.WriteLine($"Unable to remove weak-global reference {weakRef}. JVM is not alive.");
+					else
+						this._env.DeleteWeakGlobalRef(weakRef);
 				}
 			}
 			finally
 			{
-				jGlobal.ClearValue();
-				this.VirtualMachine.Remove(jGlobal);
+				if (!keepReference)
+				{
+					jGlobal.ClearValue();
+					this.VirtualMachine.Remove(jGlobal);
+				}
 			}
 			return true;
 		}
@@ -172,8 +198,19 @@ partial class JEnvironment
 		}
 		public void MonitorExit(JObjectLocalRef localRef)
 		{
-			MonitorExitDelegate monitorExit = this.GetDelegate<MonitorExitDelegate>();
-			ValidationUtilities.ThrowIfInvalidResult(monitorExit(this.Reference, localRef));
+			if (!this._env.IsAttached)
+			{
+				Debug.WriteLine($"Unable to exit monitor reference {localRef}. Thread is not attached.");
+			}
+			else if (!this.VirtualMachine.IsAlive)
+			{
+				Debug.WriteLine($"Unable to exit monitor reference {localRef}. JVM is not alive.");
+			}
+			else
+			{
+				MonitorExitDelegate monitorExit = this.GetDelegate<MonitorExitDelegate>();
+				ValidationUtilities.ThrowIfInvalidResult(monitorExit(this.Reference, localRef));
+			}
 		}
 	}
 }

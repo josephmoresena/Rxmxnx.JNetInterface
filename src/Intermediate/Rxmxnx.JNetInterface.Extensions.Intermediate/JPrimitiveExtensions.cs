@@ -7,6 +7,7 @@ namespace Rxmxnx.JNetInterface;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class JPrimitiveExtensions
 {
+#if !PACKAGE
 	/// <summary>
 	/// Initializes primitive array arrays metadata.
 	/// </summary>
@@ -24,6 +25,7 @@ public static class JPrimitiveExtensions
 		_ = IArrayType.GetArrayArrayMetadata<JLong>();
 		_ = IArrayType.GetArrayArrayMetadata<JShort>();
 	}
+#endif
 
 	/// <summary>
 	/// Creates a <see cref="JBooleanObject"/> from current value.

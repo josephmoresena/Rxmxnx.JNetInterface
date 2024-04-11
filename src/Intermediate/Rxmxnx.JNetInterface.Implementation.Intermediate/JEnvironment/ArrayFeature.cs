@@ -180,17 +180,39 @@ partial class JEnvironment
 		public void ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer, JReleaseMode mode)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			this.ReleasePrimitiveArrayElements(arrayRef, metadata.Signature[0], pointer, mode);
-			this.CheckJniError();
+			if (!this._env.IsAttached)
+			{
+				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. Thread is not attached.");
+			}
+			else if (!this.VirtualMachine.IsAlive)
+			{
+				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. JVM is not alive.");
+			}
+			else
+			{
+				JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+				this.ReleasePrimitiveArrayElements(arrayRef, metadata.Signature[0], pointer, mode);
+				this.CheckJniError();
+			}
 		}
 		public void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
 		{
-			ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
-				this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
-			releasePrimitiveArrayCritical(this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
-			this.CheckJniError();
-			this._criticalCount--;
+			if (!this._env.IsAttached)
+			{
+				Debug.WriteLine($"Unable to release critical memory 0x{criticalPtr:0x8}. Thread is not attached.");
+			}
+			else if (!this.VirtualMachine.IsAlive)
+			{
+				Debug.WriteLine($"Unable to release critical memory 0x{criticalPtr:0x8}. JVM is not alive.");
+			}
+			else
+			{
+				ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
+					this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
+				releasePrimitiveArrayCritical(this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
+				this.CheckJniError();
+				this._criticalCount--;
+			}
 		}
 		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>

@@ -11,7 +11,7 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata<JDouble> typeMetadata = IPrimitiveType<JDouble, Double>
-	                                                                       .JTypeMetadataBuilder
+	                                                                       .TypeMetadataBuilder
 	                                                                       .Create(UnicodeClassNames.DoublePrimitive(),
 		                                                                       UnicodePrimitiveSignatures
 			                                                                       .DoubleSignatureChar)

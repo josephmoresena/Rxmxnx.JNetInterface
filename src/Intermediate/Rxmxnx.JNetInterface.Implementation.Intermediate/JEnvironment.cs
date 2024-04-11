@@ -17,6 +17,10 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// Indicates whether current thread is daemon.
 	/// </summary>
 	public virtual Boolean IsDaemon => false;
+	/// <summary>
+	/// Indicates whether current thread is attached to a JVM.
+	/// </summary>
+	public virtual Boolean IsAttached => true;
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
 	public ThrowableException? PendingException
 	{

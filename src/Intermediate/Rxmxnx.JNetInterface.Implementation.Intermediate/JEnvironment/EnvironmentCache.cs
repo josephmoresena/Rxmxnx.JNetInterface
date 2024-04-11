@@ -55,6 +55,8 @@ partial class JEnvironment
 		public TDelegate GetDelegate<TDelegate>() where TDelegate : Delegate
 		{
 			ValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
+			ValidationUtilities.ThrowIfInvalidVirtualMachine(this.VirtualMachine.IsAlive);
+			ValidationUtilities.ThrowIfNotAttached(this._env.IsAttached);
 			Type typeOfT = typeof(TDelegate);
 			JniDelegateInfo info = EnvironmentCache.delegateIndex[typeOfT];
 			ValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));

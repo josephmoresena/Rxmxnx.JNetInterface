@@ -48,9 +48,11 @@ public abstract partial record JReferenceTypeMetadata
 	/// <inheritdoc cref="IReflectionMetadata.CreateFieldDefinition(ReadOnlySpan{Byte})"/>
 	internal abstract JFieldDefinition CreateFieldDefinition(ReadOnlySpan<Byte> fieldName);
 
+#if !PACKAGE
 	/// <summary>
 	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
 	/// </summary>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
 	internal abstract JArrayTypeMetadata? GetArrayMetadata();
+#endif
 }

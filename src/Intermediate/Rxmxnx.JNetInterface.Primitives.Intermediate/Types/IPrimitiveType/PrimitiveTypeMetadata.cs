@@ -2,12 +2,12 @@ namespace Rxmxnx.JNetInterface.Types;
 
 internal partial interface IPrimitiveType<TPrimitive, TValue>
 {
-	protected ref partial struct JTypeMetadataBuilder
+	protected ref partial struct TypeMetadataBuilder
 	{
 		/// <summary>
 		/// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
 		/// </summary>
-		private sealed record JPrimitiveGenericTypeMetadata : JPrimitiveTypeMetadata<TPrimitive>
+		private sealed record PrimitiveTypeMetadata : JPrimitiveTypeMetadata<TPrimitive>
 		{
 			/// <summary>
 			/// Native primitive type.
@@ -30,7 +30,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// <param name="signature">JNI signature for current primitive type.</param>
 			/// <param name="className">Wrapper class name of current primitive type.</param>
 			/// <param name="wrapperClassName">Wrapper class JNI name of current primitive type.</param>
-			internal JPrimitiveGenericTypeMetadata(Type underlineType, ReadOnlySpan<Byte> signature,
+			internal PrimitiveTypeMetadata(Type underlineType, ReadOnlySpan<Byte> signature,
 				ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(
 				underlineType, signature, className, wrapperClassName)
 			{
@@ -43,6 +43,12 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// <inheritdoc/>
 			public override String ToString()
 				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+
+#if PACKAGE
+			/// <inheritdoc/>
+			internal override JArrayTypeMetadata GetArrayMetadata() 
+				=> IArrayType.GetMetadata<JArrayObject<TPrimitive>>()
+#endif
 		}
 	}
 }

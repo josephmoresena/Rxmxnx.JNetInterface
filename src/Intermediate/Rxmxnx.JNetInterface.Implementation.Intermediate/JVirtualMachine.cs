@@ -5,6 +5,10 @@ namespace Rxmxnx.JNetInterface;
 /// </summary>
 public partial class JVirtualMachine : IVirtualMachine
 {
+	/// <summary>
+	/// Indicates whether current virtual machine remains alive.
+	/// </summary>
+	public virtual Boolean IsAlive => true;
 	/// <inheritdoc/>
 	public JVirtualMachineRef Reference => this._cache.Reference;
 
@@ -12,6 +16,7 @@ public partial class JVirtualMachine : IVirtualMachine
 
 	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose)
 	{
+		//TODO: Fake thread 
 		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
 		return this.AttachThread(args);
 	}

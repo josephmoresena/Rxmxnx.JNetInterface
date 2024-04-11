@@ -11,7 +11,7 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata<JShort> typeMetadata = IPrimitiveType<JShort, Int16>
-	                                                                      .JTypeMetadataBuilder
+	                                                                      .TypeMetadataBuilder
 	                                                                      .Create(UnicodeClassNames.ShortPrimitive(),
 		                                                                      UnicodePrimitiveSignatures
 			                                                                      .ShortSignatureChar)

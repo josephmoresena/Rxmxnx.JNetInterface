@@ -10,14 +10,9 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata<JChar> typeMetadata = IPrimitiveType<JChar, Char>
-	                                                                     .JTypeMetadataBuilder
-	                                                                     .Create(UnicodeClassNames.CharPrimitive(),
-		                                                                     UnicodePrimitiveSignatures
-			                                                                     .CharSignatureChar)
-	                                                                     .WithWrapperClassName(
-		                                                                     UnicodeClassNames.CharacterObject())
-	                                                                     .Build();
+	private static readonly JPrimitiveTypeMetadata<JChar> typeMetadata = IPrimitiveType<JChar, Char>.TypeMetadataBuilder
+		.Create(UnicodeClassNames.CharPrimitive(), UnicodePrimitiveSignatures.CharSignatureChar)
+		.WithWrapperClassName(UnicodeClassNames.CharacterObject()).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JChar;

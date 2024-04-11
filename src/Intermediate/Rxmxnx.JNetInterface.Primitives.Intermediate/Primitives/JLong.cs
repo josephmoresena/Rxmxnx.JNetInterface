@@ -11,7 +11,7 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata<JLong> typeMetadata = IPrimitiveType<JLong, Int64>
-	                                                                     .JTypeMetadataBuilder
+	                                                                     .TypeMetadataBuilder
 	                                                                     .Create(UnicodeClassNames.LongPrimitive(),
 		                                                                     UnicodePrimitiveSignatures
 			                                                                     .LongSignatureChar)
