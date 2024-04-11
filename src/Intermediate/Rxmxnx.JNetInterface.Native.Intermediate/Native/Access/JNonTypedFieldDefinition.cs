@@ -5,9 +5,6 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// </summary>
 public sealed class JNonTypedFieldDefinition : JFieldDefinition
 {
-	/// <inheritdoc/>
-	internal override Type Return => typeof(JReferenceObject);
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>

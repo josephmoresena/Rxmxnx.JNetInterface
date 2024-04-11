@@ -9,11 +9,6 @@ public abstract class JFieldDefinition : JAccessibleObjectDefinition
 	private protected override String ToStringFormat => "{{ Field: {0} Descriptor: {1} }}";
 
 	/// <summary>
-	/// Return type.
-	/// </summary>
-	internal abstract Type Return { get; }
-
-	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="name">Field name.</param>
@@ -53,9 +48,6 @@ public abstract class JFieldDefinition : JAccessibleObjectDefinition
 /// <typeparam name="TField"><see cref="IDataType"/> type of field result.</typeparam>
 public sealed class JFieldDefinition<TField> : JFieldDefinition where TField : IDataType<TField>, IObject
 {
-	/// <inheritdoc/>
-	internal override Type Return => JAccessibleObjectDefinition.ReturnType<TField>();
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
