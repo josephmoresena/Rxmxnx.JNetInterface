@@ -16,7 +16,7 @@ public partial class JVirtualMachine : IVirtualMachine
 
 	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose)
 	{
-		//TODO: Fake thread 
+		if (!this.IsAlive) return new DeadThread(this);
 		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
 		return this.AttachThread(args);
 	}
