@@ -45,7 +45,7 @@ public abstract partial class JReferenceObject : JObject
 		=> this.IsInstanceOf<TDataType>();
 
 	/// <summary>
-	/// Tries to obtain a synchronized instance for current instance.
+	/// Tries to obtain a synchronized instance for the current instance.
 	/// </summary>
 	/// <returns>A <see cref="IDisposable"/> synchronized</returns>
 	public IDisposable? Synchronize() => this.IsDefault ? default : this.GetSynchronizer();

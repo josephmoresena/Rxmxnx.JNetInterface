@@ -116,7 +116,7 @@ internal static class NativeValidationUtilities
 	/// Throws an exception if <paramref name="ordinal"/> is negative.
 	/// </exception>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="ordinal"/> is already defined for current enum type.
+	/// Throws an exception if <paramref name="ordinal"/> is already defined for the current enum type.
 	/// </exception>
 	public static void ThrowIfInvalidOrdinal(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list, Int32 ordinal)
 	{
@@ -136,7 +136,7 @@ internal static class NativeValidationUtilities
 	/// Throws an exception if <paramref name="hash"/> is empty.
 	/// </exception>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="hash"/> is already defined for current enum type.
+	/// Throws an exception if <paramref name="hash"/> is already defined for the current enum type.
 	/// </exception>
 	public static void ThrowIfInvalidHash(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list, String hash)
 	{

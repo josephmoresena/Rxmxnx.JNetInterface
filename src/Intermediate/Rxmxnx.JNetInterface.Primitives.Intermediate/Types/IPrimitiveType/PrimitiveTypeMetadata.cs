@@ -27,9 +27,9 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 			/// Constructor.
 			/// </summary>
 			/// <param name="underlineType">Underline primitive CLR type.</param>
-			/// <param name="signature">JNI signature for current primitive type.</param>
-			/// <param name="className">Wrapper class name of current primitive type.</param>
-			/// <param name="wrapperClassName">Wrapper class JNI name of current primitive type.</param>
+			/// <param name="signature">JNI signature for the current primitive type.</param>
+			/// <param name="className">Wrapper class name of the current primitive type.</param>
+			/// <param name="wrapperClassName">Wrapper class JNI name of the current primitive type.</param>
 			internal PrimitiveTypeMetadata(Type underlineType, ReadOnlySpan<Byte> signature,
 				ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(
 				underlineType, signature, className, wrapperClassName)

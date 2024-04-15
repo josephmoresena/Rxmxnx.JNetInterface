@@ -12,7 +12,7 @@ public partial interface IReferenceType : IObject, IDataType, IDisposable
 	/// <summary>
 	/// Retrieves the metadata for given reference type.
 	/// </summary>
-	/// <typeparam name="TReference">Type of current java reference datatype.</typeparam>
+	/// <typeparam name="TReference">Type of the current java reference datatype.</typeparam>
 	/// <returns>The <see cref="JReferenceTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JReferenceTypeMetadata GetMetadata<TReference>()

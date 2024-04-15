@@ -12,31 +12,31 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 	public static readonly ClassObjectMetadata VoidMetadata = new(JPrimitiveTypeMetadata.VoidMetadata);
 
 	/// <summary>
-	/// Class name of current object.
+	/// Class name of the current object.
 	/// </summary>
 	public CString Name { get; init; }
 	/// <summary>
-	/// Class signature of current object.
+	/// Class signature of the current object.
 	/// </summary>
 	public CString ClassSignature { get; init; }
 	/// <summary>
-	/// Class hash of current object.
+	/// Class hash of the current object.
 	/// </summary>
 	public String Hash { get; init; }
 	/// <summary>
-	/// Indicates whether the class of current object is final.
+	/// Indicates whether the class of the current object is final.
 	/// </summary>
 	public Boolean? IsFinal { get; init; }
 	/// <summary>
-	/// Indicates whether the class of current type is interface.
+	/// Indicates whether the class of the current type is interface.
 	/// </summary>
 	public Boolean? IsInterface { get; init; }
 	/// <summary>
-	/// Indicates whether the class of current type is enum.
+	/// Indicates whether the class of the current type is enum.
 	/// </summary>
 	public Boolean? IsEnum { get; init; }
 	/// <summary>
-	/// Indicates whether the class of current type is annotation.
+	/// Indicates whether the class of the current type is annotation.
 	/// </summary>
 	public Boolean? IsAnnotation { get; init; }
 	/// <summary>

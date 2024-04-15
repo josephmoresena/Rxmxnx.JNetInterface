@@ -45,8 +45,8 @@ public record ObjectMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="objectClassName">Class name of current instance.</param>
-	/// <param name="objectSignature">Class signature of current instance.</param>
+	/// <param name="objectClassName">Class name of the current instance.</param>
+	/// <param name="objectSignature">Class signature of the current instance.</param>
 	private protected ObjectMetadata(CString objectClassName, CString objectSignature)
 	{
 		this.ObjectClassName = objectClassName;
@@ -55,9 +55,9 @@ public record ObjectMetadata
 	}
 
 	/// <summary>
-	/// Retrieves the java class for current object.
+	/// Retrieves the java class for the current object.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <returns>The class instance for current object.</returns>
+	/// <returns>The class instance for the current object.</returns>
 	internal JClassObject GetClass(IEnvironment env) => env.ClassFeature.GetClass(this.ObjectClassName);
 }

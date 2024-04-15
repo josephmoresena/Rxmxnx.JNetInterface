@@ -24,9 +24,9 @@ public partial class JThrowableObject
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="className">Class name of current type.</param>
-		/// <param name="modifier">Modifier of current type.</param>
-		/// <param name="baseMetadata">Base type metadata of current type.</param>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
+		/// <param name="baseMetadata">Base type metadata of the current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata, ISet<Type> interfaceTypes)
@@ -61,8 +61,8 @@ public partial class JThrowableObject
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
-		/// <param name="className">Class name of current type.</param>
-		/// <param name="modifier">Modifier of current type.</param>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
 		/// <returns>A new <see cref="TypeMetadataBuilder{TThrowable}"/> instance.</returns>
 		public static TypeMetadataBuilder<TThrowable> Create(ReadOnlySpan<Byte> className,
 			JTypeModifier modifier = JTypeModifier.Extensible)
@@ -78,8 +78,8 @@ public partial class JThrowableObject
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
-		/// <param name="className">Class name of current type.</param>
-		/// <param name="modifier">Modifier of current type.</param>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
 		/// <returns>A new <see cref="TypeMetadataBuilder{TThrowable}"/> instance.</returns>
 		public static TypeMetadataBuilder<TObject>
 			Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(

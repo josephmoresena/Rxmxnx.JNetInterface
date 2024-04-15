@@ -6,12 +6,12 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public abstract partial record JDataTypeMetadata : ITypeInformation
 {
 	/// <summary>
-	/// Array signature for current type.
+	/// Array signature for the current type.
 	/// </summary>
 	public CString ArraySignature => this._arraySignature;
 
 	/// <summary>
-	/// Metadata argument for current type.
+	/// Metadata argument for the current type.
 	/// </summary>
 	public abstract JArgumentMetadata ArgumentMetadata { get; }
 	/// <summary>
@@ -19,15 +19,15 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	/// </summary>
 	public abstract Type Type { get; }
 	/// <summary>
-	/// Modifier of current type.
+	/// Modifier of the current type.
 	/// </summary>
 	public abstract JTypeModifier Modifier { get; }
 	/// <summary>
-	/// Size of current type in bytes.
+	/// Size of the current type in bytes.
 	/// </summary>
 	public abstract Int32 SizeOf { get; }
 	/// <summary>
-	/// Kind of current type.
+	/// Kind of the current type.
 	/// </summary>
 	public abstract JTypeKind Kind { get; }
 

@@ -90,7 +90,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
-	/// <param name="globalRef">A global object reference the value of current instance.</param>
+	/// <param name="globalRef">A global object reference the value of the current instance.</param>
 	protected void SetValue(IntPtr globalRef)
 	{
 		if (globalRef == default) return;

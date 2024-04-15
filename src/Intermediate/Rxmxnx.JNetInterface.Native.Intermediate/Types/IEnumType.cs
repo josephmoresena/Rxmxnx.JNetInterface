@@ -13,7 +13,7 @@ public interface IEnumType : IReferenceType
 	/// <summary>
 	/// Retrieves the metadata for given enum type.
 	/// </summary>
-	/// <typeparam name="TEnum">Type of current java enum datatype.</typeparam>
+	/// <typeparam name="TEnum">Type of the current java enum datatype.</typeparam>
 	/// <returns>The <see cref="JEnumTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JEnumTypeMetadata GetMetadata<TEnum>() where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>

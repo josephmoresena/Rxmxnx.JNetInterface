@@ -26,7 +26,7 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	private readonly Int32 _value;
 
 	/// <summary>
-	/// <see cref="Int32"/> representation of current instance.
+	/// <see cref="Int32"/> representation of the current instance.
 	/// </summary>
 	public Int32 Value => this._value;
 	/// <inheritdoc/>

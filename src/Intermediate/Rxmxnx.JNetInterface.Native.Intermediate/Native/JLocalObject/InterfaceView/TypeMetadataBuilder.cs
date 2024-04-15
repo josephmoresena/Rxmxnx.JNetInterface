@@ -22,7 +22,7 @@ public partial class JLocalObject
 			/// <summary>
 			/// Constructor.
 			/// </summary>
-			/// <param name="interfaceName">Interface name of current type.</param>
+			/// <param name="interfaceName">Interface name of the current type.</param>
 			/// <param name="interfaceTypes">Interface types.</param>
 			private TypeMetadataBuilder(ReadOnlySpan<Byte> interfaceName, ISet<Type> interfaceTypes)
 			{
@@ -54,7 +54,7 @@ public partial class JLocalObject
 			/// <summary>
 			/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 			/// </summary>
-			/// <param name="className">Class name of current type.</param>
+			/// <param name="className">Class name of the current type.</param>
 			/// <returns>A new <see cref="TypeMetadataBuilder{TInterface}"/> instance.</returns>
 			public static TypeMetadataBuilder<TInterface> Create(ReadOnlySpan<Byte> className)
 			{

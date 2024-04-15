@@ -29,7 +29,7 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	private readonly SByte _value;
 
 	/// <summary>
-	/// <see cref="SByte"/> representation of current instance.
+	/// <see cref="SByte"/> representation of the current instance.
 	/// </summary>
 	public SByte Value => this._value;
 	/// <inheritdoc/>

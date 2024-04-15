@@ -20,7 +20,7 @@ public partial class JFieldObject : ILocalObject
 		};
 
 	/// <summary>
-	/// Retrieves the <see cref="JFieldDefinition"/> instance for current instance.
+	/// Retrieves the <see cref="JFieldDefinition"/> instance for the current instance.
 	/// </summary>
 	/// <returns>A <see cref="JFieldDefinition"/> instance.</returns>
 	private JFieldDefinition GetFieldDefinition()
@@ -31,7 +31,7 @@ public partial class JFieldObject : ILocalObject
 		return env.AccessFeature.GetDefinition(memberName, returnType);
 	}
 	/// <summary>
-	/// Retrieves the <see cref="JFieldId"/> identifier for current instance.
+	/// Retrieves the <see cref="JFieldId"/> identifier for the current instance.
 	/// </summary>
 	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
 	private JFieldId GetFieldId()

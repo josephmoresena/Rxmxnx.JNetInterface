@@ -18,14 +18,14 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	JVirtualMachineRef IWrapper<JVirtualMachineRef>.Value => this.Reference;
 
 	/// <summary>
-	/// Retrieves the <see cref="IEnvironment"/> instance for current thread.
+	/// Retrieves the <see cref="IEnvironment"/> instance for the current thread.
 	/// </summary>
-	/// <returns>The <see cref="IEnvironment"/> instance for current thread.</returns>
+	/// <returns>The <see cref="IEnvironment"/> instance for the current thread.</returns>
 	IEnvironment? GetEnvironment();
 	/// <summary>
 	/// Attaches the current thread to the virtual machine.
 	/// </summary>
-	/// <param name="threadName">A name for current thread.</param>
+	/// <param name="threadName">A name for the current thread.</param>
 	/// <param name="threadGroup">A <see cref="JGlobalBase"/> instance of <c>java.lang.ThreadGroup</c>.</param>
 	/// <param name="version">Thread requested version.</param>
 	/// <returns>A <see cref="IThread"/> instance.</returns>
@@ -34,7 +34,7 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <summary>
 	/// Attaches the current thread as daemon to the virtual machine.
 	/// </summary>
-	/// <param name="threadName">A name for current thread.</param>
+	/// <param name="threadName">A name for the current thread.</param>
 	/// <param name="threadGroup">A <see cref="JGlobalBase"/> instance of <c>java.lang.ThreadGroup</c>.</param>
 	/// <param name="version">Thread requested version.</param>
 	/// <returns>A <see cref="IThread"/> instance.</returns>

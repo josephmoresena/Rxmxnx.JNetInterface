@@ -20,7 +20,7 @@ public interface IArrayType : IReferenceType
 	/// Retrieves the metadata for given array type.
 	/// Current type metadata.
 	/// </summary>
-	/// <typeparam name="TArray">Type of current java array datatype.</typeparam>
+	/// <typeparam name="TArray">Type of the current java array datatype.</typeparam>
 	/// <returns>The <see cref="JArrayTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JArrayTypeMetadata GetMetadata<TArray>() where TArray : JLocalObject.ArrayView, IArrayType

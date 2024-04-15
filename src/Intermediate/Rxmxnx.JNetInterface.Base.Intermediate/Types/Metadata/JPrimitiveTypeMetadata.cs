@@ -32,11 +32,11 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	private readonly Type _underlineType;
 
 	/// <summary>
-	/// JNI name for current type wrapper class.
+	/// JNI name for the current type wrapper class.
 	/// </summary>
 	public CString WrapperClassSignature => this.WrapperInformation[1];
 	/// <summary>
-	/// JNI signature for current type wrapper class.
+	/// JNI signature for the current type wrapper class.
 	/// </summary>
 	public CString WrapperClassName => this.WrapperInformation[0];
 	/// <summary>
@@ -48,7 +48,7 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// </summary>
 	public abstract JNativeType NativeType { get; }
 	/// <summary>
-	/// Size of current primitive type in bytes.
+	/// Size of the current primitive type in bytes.
 	/// </summary>
 	public override Int32 SizeOf => this._sizeOf;
 
@@ -74,11 +74,11 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="sizeOf">Size of current primitive type in bytes.</param>
+	/// <param name="sizeOf">Size of the current primitive type in bytes.</param>
 	/// <param name="underlineType">Underline primitive CLR type.</param>
-	/// <param name="signature">JNI signature for current primitive type.</param>
-	/// <param name="className">Wrapper class name of current primitive type.</param>
-	/// <param name="wrapperClassName">Wrapper class JNI name of current primitive type.</param>
+	/// <param name="signature">JNI signature for the current primitive type.</param>
+	/// <param name="className">Wrapper class name of the current primitive type.</param>
+	/// <param name="wrapperClassName">Wrapper class JNI name of the current primitive type.</param>
 	private protected JPrimitiveTypeMetadata(Int32 sizeOf, Type underlineType, ReadOnlySpan<Byte> signature,
 		ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(className, signature)
 	{

@@ -31,7 +31,7 @@ internal readonly partial struct JInvokeInterface : INativeType<JInvokeInterface
 	/// </summary>
 	internal IntPtr DetachCurrentThreadPointer { get; [ExcludeFromCodeCoverage] init; }
 	/// <summary>
-	/// Pointer to <c>GetEnv</c> function. Retrieves the <c>JNIEnv</c> pointer for current thread.
+	/// Pointer to <c>GetEnv</c> function. Retrieves the <c>JNIEnv</c> pointer for the current thread.
 	/// </summary>
 	internal IntPtr GetEnvPointer { get; [ExcludeFromCodeCoverage] init; }
 	/// <summary>

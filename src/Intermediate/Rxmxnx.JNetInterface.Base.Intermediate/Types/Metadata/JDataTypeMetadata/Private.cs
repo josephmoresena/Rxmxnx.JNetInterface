@@ -21,7 +21,7 @@ public partial record JDataTypeMetadata
 	/// <summary>
 	/// Creates hash from given parameters.
 	/// </summary>
-	/// <param name="memoryList">JNI parameter list of current type.</param>
+	/// <param name="memoryList">JNI parameter list of the current type.</param>
 	/// <returns>A <see cref="CStringSequence"/> containing JNI information.</returns>
 	private static CStringSequence CreateInformationSequence(ReadOnlyFixedMemoryList memoryList)
 	{
@@ -43,7 +43,7 @@ public partial record JDataTypeMetadata
 	/// Creates a call sequence.
 	/// </summary>
 	/// <param name="span">A span of bytes.</param>
-	/// <param name="index">Index of current sequence item.</param>
+	/// <param name="index">Index of the current sequence item.</param>
 	/// <param name="arg">Creation instance.</param>
 	private static void CreateInformationSequence(Span<Byte> span, Int32 index, IReadOnlyFixedMemory[] arg)
 	{

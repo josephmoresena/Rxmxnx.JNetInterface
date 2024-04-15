@@ -13,8 +13,8 @@ public partial record JDataTypeMetadata
 	/// <summary>
 	/// Creates hash from given parameters.
 	/// </summary>
-	/// <param name="className">JNI name of current type.</param>
-	/// <param name="signature">JNI signature for current type.</param>
+	/// <param name="className">JNI name of the current type.</param>
+	/// <param name="signature">JNI signature for the current type.</param>
 	/// <returns>A <see cref="CStringSequence"/> containing JNI information.</returns>
 	internal static CStringSequence CreateInformationSequence(ReadOnlySpan<Byte> className,
 		ReadOnlySpan<Byte> signature = default)

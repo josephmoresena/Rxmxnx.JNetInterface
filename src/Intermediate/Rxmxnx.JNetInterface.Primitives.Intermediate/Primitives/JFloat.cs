@@ -30,7 +30,7 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	private readonly Single _value;
 
 	/// <summary>
-	/// <see cref="Single"/> representation of current instance.
+	/// <see cref="Single"/> representation of the current instance.
 	/// </summary>
 	public Single Value => this._value;
 	/// <inheritdoc/>

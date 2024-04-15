@@ -47,7 +47,7 @@ public partial class JClassObject
 	/// </summary>
 	private Boolean? _isInterface;
 	/// <summary>
-	/// JNI signature for an object of current instance.
+	/// JNI signature for an object of the current instance.
 	/// </summary>
 	private CString? _signature;
 

@@ -39,13 +39,13 @@ public partial class JLocalObject
 		this.Lifetime.Unload(this);
 	}
 	/// <summary>
-	/// Creates the object metadata for current instance.
+	/// Creates the object metadata for the current instance.
 	/// </summary>
-	/// <returns>The object metadata for current instance.</returns>
+	/// <returns>The object metadata for the current instance.</returns>
 	protected virtual ObjectMetadata CreateMetadata() => new(this.Lifetime.GetLoadClassObject(this));
 	/// <summary>
 	/// Process the object metadata.
 	/// </summary>
-	/// <param name="instanceMetadata">The object metadata for current instance.</param>
+	/// <param name="instanceMetadata">The object metadata for the current instance.</param>
 	protected virtual void ProcessMetadata(ObjectMetadata instanceMetadata) => this.Lifetime.SetClass(instanceMetadata);
 }

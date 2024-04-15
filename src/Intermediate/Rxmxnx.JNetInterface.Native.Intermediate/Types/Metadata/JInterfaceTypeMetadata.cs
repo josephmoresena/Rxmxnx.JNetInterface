@@ -22,8 +22,8 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="interfaceName">Interface name of current type.</param>
-	/// <param name="signature">JNI signature for current type.</param>
+	/// <param name="interfaceName">Interface name of the current type.</param>
+	/// <param name="signature">JNI signature for the current type.</param>
 	/// <param name="isAnnotation">Indicates whether current type is an annotation.</param>
 	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, ReadOnlySpan<Byte> signature,
 		Boolean isAnnotation) : base(interfaceName, signature)

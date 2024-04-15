@@ -30,13 +30,13 @@ public partial class JLocalObject
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
-	/// <param name="localRef">A local object reference the value of current instance.</param>
+	/// <param name="localRef">A local object reference the value of the current instance.</param>
 	internal void SetValue(JObjectLocalRef localRef) => this.Lifetime.SetValue(this, localRef);
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
 	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
-	/// <param name="localRef">A local object reference the value of current instance.</param>
+	/// <param name="localRef">A local object reference the value of the current instance.</param>
 	internal void SetValue<TValue>(TValue localRef) where TValue : unmanaged, IObjectReferenceType
 		=> this.Lifetime.SetValue(this, localRef);
 	/// <inheritdoc/>

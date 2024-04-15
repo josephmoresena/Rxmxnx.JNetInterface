@@ -16,7 +16,7 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 	/// <summary>
 	/// Retrieves the metadata for given primitive type.
 	/// </summary>
-	/// <typeparam name="TPrimitive">Type of current java primitive datatype.</typeparam>
+	/// <typeparam name="TPrimitive">Type of the current java primitive datatype.</typeparam>
 	/// <returns>The <see cref="JPrimitiveTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JPrimitiveTypeMetadata GetMetadata<TPrimitive>()

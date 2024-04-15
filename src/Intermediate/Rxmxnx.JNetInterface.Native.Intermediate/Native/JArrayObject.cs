@@ -35,11 +35,11 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 	}
 
 	/// <summary>
-	/// Indicates whether <paramref name="jObject"/> is a valid element for current array instance.
+	/// Indicates whether <paramref name="jObject"/> is a valid element for the current array instance.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="jObject"/> is a valid element for current array instance;
+	/// <see langword="true"/> if <paramref name="jObject"/> is a valid element for the current array instance;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	internal abstract void ValidateObjectElement(JReferenceObject? jObject);

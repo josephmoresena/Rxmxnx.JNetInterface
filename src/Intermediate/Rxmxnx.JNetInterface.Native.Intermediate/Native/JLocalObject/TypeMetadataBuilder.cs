@@ -70,7 +70,7 @@ public partial class JLocalObject
 		}
 
 		/// <summary>
-		/// Creates a metadata interfaces set for current datatype.
+		/// Creates a metadata interfaces set for the current datatype.
 		/// </summary>
 		/// <returns>A set with current datatype interfaces.</returns>
 		public IReadOnlySet<JInterfaceTypeMetadata> GetInterfaceSet()
@@ -81,7 +81,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <param name="mem">Current datatype fixed name.</param>
-		/// <param name="args">Interface type set and kind of current type.</param>
+		/// <param name="args">Interface type set and kind of the current type.</param>
 		private static void ValidateSuperInterfaces<TInterface>(in IReadOnlyFixedMemory mem,
 			(ISet<Type> interfaceTypes, JTypeKind kind) args)
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
@@ -95,7 +95,7 @@ public partial class JLocalObject
 		/// Validates implementation of each super interface of <typeparamref name="TInterface"/>.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
-		/// <param name="args">Fixed name, interface type set and kind of current type.</param>
+		/// <param name="args">Fixed name, interface type set and kind of the current type.</param>
 		/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance..</param>
 		private static void ValidateSuperInterfaces<TInterface>(
 			(IReadOnlyFixedMemory dataTypeName, ISet<Type> interfaceTypes, JTypeKind kind) args,
@@ -130,9 +130,9 @@ public partial class JLocalObject
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="className">Class name of current type.</param>
-		/// <param name="modifier">Modifier of current type.</param>
-		/// <param name="baseMetadata">Base type metadata of current type.</param>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
+		/// <param name="baseMetadata">Base type metadata of the current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata, ISet<Type> interfaceTypes)
@@ -175,8 +175,8 @@ public partial class JLocalObject
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
-		/// <param name="className">Class name of current type.</param>
-		/// <param name="modifier">Modifier of current type.</param>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
 		/// <returns>A new <see cref="TypeMetadataBuilder{TClass}"/> instance.</returns>
 		public static TypeMetadataBuilder<TClass> Create(ReadOnlySpan<Byte> className,
 			JTypeModifier modifier = JTypeModifier.Extensible)
@@ -192,8 +192,8 @@ public partial class JLocalObject
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
-		/// <param name="className">Class name of current type.</param>
-		/// <param name="modifier">Modifier of current type.</param>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
 		/// <returns>A new <see cref="TypeMetadataBuilder{TClass}"/> instance.</returns>
 		public static TypeMetadataBuilder<TObject>
 			Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
@@ -211,8 +211,8 @@ public partial class JLocalObject
 		/// Creates a <see cref="JClassTypeMetadata{TClass}"/> instance.
 		/// </summary>
 		/// <param name="builder">A <see cref="TypeMetadataBuilder"/> instance.</param>
-		/// <param name="modifier">Modifier of current type.</param>
-		/// <param name="baseMetadata">Base type metadata of current type.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
+		/// <param name="baseMetadata">Base type metadata of the current type.</param>
 		/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
 		internal static JClassTypeMetadata<TClass> Build(TypeMetadataBuilder builder, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata)
@@ -222,7 +222,7 @@ public partial class JLocalObject
 		/// wrapper class.
 		/// </summary>
 		/// <param name="primitiveMetadata">A <see cref="JPrimitiveTypeMetadata"/> instance.</param>
-		/// <param name="baseMetadata">Base type metadata of current type.</param>
+		/// <param name="baseMetadata">Base type metadata of the current type.</param>
 		/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
 		internal static JClassTypeMetadata<TClass> Build(JPrimitiveTypeMetadata primitiveMetadata,
 			JClassTypeMetadata? baseMetadata = default)

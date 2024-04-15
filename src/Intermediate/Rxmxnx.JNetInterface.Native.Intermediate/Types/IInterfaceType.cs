@@ -13,7 +13,7 @@ public interface IInterfaceType : IReferenceType
 	/// <summary>
 	/// Retrieves the metadata for given interface type.
 	/// </summary>
-	/// <typeparam name="TInterface">Type of current java interface datatype.</typeparam>
+	/// <typeparam name="TInterface">Type of the current java interface datatype.</typeparam>
 	/// <returns>The <see cref="JInterfaceTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JInterfaceTypeMetadata GetMetadata<TInterface>()

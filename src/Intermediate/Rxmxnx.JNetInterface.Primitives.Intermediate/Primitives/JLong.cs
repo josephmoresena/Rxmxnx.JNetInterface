@@ -30,7 +30,7 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	private readonly Int64 _value;
 
 	/// <summary>
-	/// <see cref="Int64"/> representation of current instance.
+	/// <see cref="Int64"/> representation of the current instance.
 	/// </summary>
 	public Int64 Value => this._value;
 	/// <inheritdoc/>

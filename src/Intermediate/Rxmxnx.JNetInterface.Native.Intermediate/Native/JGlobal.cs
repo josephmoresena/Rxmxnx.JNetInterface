@@ -58,7 +58,7 @@ public sealed class JGlobal : JGlobalBase
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
-	/// <param name="globalRef">A global object reference the value of current instance.</param>
+	/// <param name="globalRef">A global object reference the value of the current instance.</param>
 	internal void SetValue(JGlobalRef globalRef)
 	{
 		if (this.Reference == globalRef) return;

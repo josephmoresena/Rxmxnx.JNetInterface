@@ -26,7 +26,7 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	private readonly Char _value;
 
 	/// <summary>
-	/// <see cref="Char"/> representation of current instance.
+	/// <see cref="Char"/> representation of the current instance.
 	/// </summary>
 	public Char Value => this._value;
 	/// <inheritdoc/>

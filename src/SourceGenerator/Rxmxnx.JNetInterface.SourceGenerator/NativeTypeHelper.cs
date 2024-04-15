@@ -65,7 +65,7 @@ internal sealed record NativeTypeHelper
 	}
 
 	/// <summary>
-	/// Appends the source code for current symbol.
+	/// Appends the source code for the current symbol.
 	/// </summary>
 	/// <param name="context">Generation context.</param>
 	public void AddSourceCode(GeneratorExecutionContext context)
@@ -96,10 +96,10 @@ internal sealed record NativeTypeHelper
 	}
 
 	/// <summary>
-	/// Retrieves the name of underline type for current symbol.
+	/// Retrieves the name of underline type for the current symbol.
 	/// </summary>
 	/// <returns>
-	/// The name of underline type for current symbol if it is primitive; otherwise,
+	/// The name of underline type for the current symbol if it is primitive; otherwise,
 	/// <see cref="String.Empty"/>.
 	/// </returns>
 	private String GetUnderlinePrimitiveType()
@@ -117,10 +117,10 @@ internal sealed record NativeTypeHelper
 		};
 
 	/// <summary>
-	/// Retrieves the name of internal value for current symbol.
+	/// Retrieves the name of internal value for the current symbol.
 	/// </summary>
 	/// <returns>
-	/// The name of internal value for current symbol.
+	/// The name of internal value for the current symbol.
 	/// </returns>
 	private String GetInternalValueName()
 		=> this._typeSymbol.Name switch

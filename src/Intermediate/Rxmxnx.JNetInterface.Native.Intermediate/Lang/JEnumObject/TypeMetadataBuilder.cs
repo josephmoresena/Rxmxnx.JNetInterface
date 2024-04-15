@@ -24,7 +24,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="enumTypeName">Enum name of current type.</param>
+		/// <param name="enumTypeName">Enum name of the current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> enumTypeName, ISet<Type> interfaceTypes)
 		{
@@ -76,7 +76,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
-		/// <param name="className">Class name of current type.</param>
+		/// <param name="className">Class name of the current type.</param>
 		/// <returns>A new <see cref="TypeMetadataBuilder{TEnum}"/> instance.</returns>
 		public static TypeMetadataBuilder<TEnum> Create(ReadOnlySpan<Byte> className)
 		{

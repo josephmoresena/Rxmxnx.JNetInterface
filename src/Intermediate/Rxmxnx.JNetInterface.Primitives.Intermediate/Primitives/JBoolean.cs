@@ -41,7 +41,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	private readonly Byte _value;
 
 	/// <summary>
-	/// <see cref="Boolean"/> representation of current instance.
+	/// <see cref="Boolean"/> representation of the current instance.
 	/// </summary>
 	public Boolean Value => this._value.Equals(JBoolean.TrueValue);
 	/// <inheritdoc/>

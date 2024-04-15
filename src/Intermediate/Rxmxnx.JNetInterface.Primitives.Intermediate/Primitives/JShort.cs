@@ -30,7 +30,7 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	private readonly Int16 _value;
 
 	/// <summary>
-	/// <see cref="Int16"/> representation of current instance.
+	/// <see cref="Int16"/> representation of the current instance.
 	/// </summary>
 	public Int16 Value => this._value;
 	/// <inheritdoc/>

@@ -80,7 +80,7 @@ internal static partial class MetadataHelper
 		return result;
 	}
 	/// <summary>
-	/// Registers <typeparamref name="TDataType"/> as valid datatype for current process.
+	/// Registers <typeparamref name="TDataType"/> as valid datatype for the current process.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType{TDataType}"/> type.</typeparam>
 	/// <returns>

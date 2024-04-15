@@ -45,7 +45,7 @@ public partial class JReferenceObject
 	/// </summary>
 	internal abstract void ClearValue();
 	/// <summary>
-	/// Retrieves synchronizer instance for current object.
+	/// Retrieves synchronizer instance for the current object.
 	/// </summary>
 	/// <returns>A <see cref="IDisposable"/> synchronizer.</returns>
 	private protected abstract IDisposable GetSynchronizer();

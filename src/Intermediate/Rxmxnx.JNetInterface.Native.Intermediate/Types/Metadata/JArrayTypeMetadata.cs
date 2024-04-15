@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 {
 	/// <summary>
-	/// Element type of current array metadata.
+	/// Element type of the current array metadata.
 	/// </summary>
 	public abstract JDataTypeMetadata ElementMetadata { get; }
 
@@ -30,7 +30,7 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="signature">JNI signature for current array type.</param>
+	/// <param name="signature">JNI signature for the current array type.</param>
 	/// <param name="final">Indicates whether element type is final.</param>
 	/// <param name="dimension">Array dimension.</param>
 	private protected JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Boolean final, Int32 dimension) : base(
@@ -42,12 +42,12 @@ public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
 	}
 
 	/// <summary>
-	/// Indicates whether an instance of current array type is instance of the current type of
+	/// Indicates whether an instance of the current array type is instance of the current type of
 	/// <paramref name="otherMetadata"/>.
 	/// </summary>
 	/// <param name="otherMetadata">A <see cref="JArrayTypeMetadata"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if an instance of current current type is instance of
+	/// <see langword="true"/> if an instance of the current current type is instance of
 	/// the current type of <paramref name="otherMetadata"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean TypeOf(JArrayTypeMetadata otherMetadata)

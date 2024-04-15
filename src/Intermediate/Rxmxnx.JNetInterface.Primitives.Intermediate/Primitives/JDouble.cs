@@ -31,7 +31,7 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	private readonly Double _value;
 
 	/// <summary>
-	/// <see cref="Double"/> representation of current instance.
+	/// <see cref="Double"/> representation of the current instance.
 	/// </summary>
 	public Double Value => this._value;
 	/// <inheritdoc/>

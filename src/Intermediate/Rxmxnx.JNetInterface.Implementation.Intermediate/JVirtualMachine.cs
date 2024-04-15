@@ -40,7 +40,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	}
 
 	/// <summary>
-	/// Registers <typeparamref name="TReference"/> as valid datatype for current process.
+	/// Registers <typeparamref name="TReference"/> as valid datatype for the current process.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TDataType}"/> type.</typeparam>
 	/// <returns>

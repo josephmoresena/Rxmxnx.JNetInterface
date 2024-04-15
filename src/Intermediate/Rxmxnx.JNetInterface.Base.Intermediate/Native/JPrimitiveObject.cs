@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Native;
 internal abstract partial class JPrimitiveObject : JObject
 {
 	/// <summary>
-	/// Size of current type in bytes.
+	/// Size of the current type in bytes.
 	/// </summary>
 	public abstract Int32 SizeOf { get; }
 

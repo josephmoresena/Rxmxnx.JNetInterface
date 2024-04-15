@@ -19,14 +19,14 @@ public interface ILocalObject : IObject
 	internal JObjectLocalRef InternalReference { get; }
 
 	/// <summary>
-	/// Creates the object metadata for current instance.
+	/// Creates the object metadata for the current instance.
 	/// </summary>
-	/// <returns>The object metadata for current instance.</returns>
+	/// <returns>The object metadata for the current instance.</returns>
 	protected ObjectMetadata CreateMetadata();
 	/// <summary>
 	/// Process the object metadata.
 	/// </summary>
-	/// <param name="instanceMetadata">The object metadata for current instance.</param>
+	/// <param name="instanceMetadata">The object metadata for the current instance.</param>
 	protected void ProcessMetadata(ObjectMetadata instanceMetadata);
 
 	/// <summary>

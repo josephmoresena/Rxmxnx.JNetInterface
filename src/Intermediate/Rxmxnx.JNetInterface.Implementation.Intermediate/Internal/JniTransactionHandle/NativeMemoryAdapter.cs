@@ -78,7 +78,7 @@ internal partial struct JniTransactionHandle
 		}
 
 		/// <summary>
-		/// Retrieves the <see cref="JReferenceObject"/> instance which serves as source of current
+		/// Retrieves the <see cref="JReferenceObject"/> instance which serves as source of the current
 		/// native memory.
 		/// </summary>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>

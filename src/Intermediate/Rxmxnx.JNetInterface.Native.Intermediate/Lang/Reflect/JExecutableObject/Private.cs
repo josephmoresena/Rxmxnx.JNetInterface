@@ -20,7 +20,7 @@ public partial class JExecutableObject : ILocalObject
 		};
 
 	/// <summary>
-	/// Retrieves the <see cref="JCallDefinition"/> instance for current instance.
+	/// Retrieves the <see cref="JCallDefinition"/> instance for the current instance.
 	/// </summary>
 	/// <returns>A <see cref="JCallDefinition"/> instance.</returns>
 	private JCallDefinition GetCallDefinition()
@@ -32,7 +32,7 @@ public partial class JExecutableObject : ILocalObject
 		return env.AccessFeature.GetDefinition(memberName, parameterTypes, returnType);
 	}
 	/// <summary>
-	/// Retrieves the <see cref="JMethodId"/> identifier for current instance.
+	/// Retrieves the <see cref="JMethodId"/> identifier for the current instance.
 	/// </summary>
 	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
 	private JMethodId GetMethodId()

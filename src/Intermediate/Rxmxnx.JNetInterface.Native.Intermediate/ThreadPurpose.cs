@@ -35,7 +35,7 @@ public enum ThreadPurpose : Byte
 	/// </summary>
 	SynchronizeGlobalReference = 7,
 	/// <summary>
-	/// Indicates the purpose of the thread send fatal error signal to VM.
+	/// Indicates the purpose of the thread sending fatal error signal to VM.
 	/// </summary>
 	FatalError = 8,
 }

@@ -19,7 +19,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// Constructor.
 		/// </summary>
 		/// <param name="className">Primitive class name.</param>
-		/// <param name="signature">JNI signature for current primitive type.</param>
+		/// <param name="signature">JNI signature for the current primitive type.</param>
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> className, Byte signature)
 		{
 			this._className = className;

@@ -100,7 +100,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// Sets the current instance value.
 	/// </summary>
 	/// <param name="jLocal">The java object to load.</param>
-	/// <param name="localRef">A local object reference the value of current instance.</param>
+	/// <param name="localRef">A local object reference the value of the current instance.</param>
 	public void SetValue(JLocalObject jLocal, JObjectLocalRef localRef)
 	{
 		if (localRef == default) return;
@@ -112,7 +112,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// </summary>
 	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
 	/// <param name="jLocal">The java object to load.</param>
-	/// <param name="localRef">A local object reference the value of current instance.</param>
+	/// <param name="localRef">A local object reference the value of the current instance.</param>
 	public void SetValue<TValue>(JLocalObject jLocal, TValue localRef) where TValue : unmanaged, IObjectReferenceType
 	{
 		if (localRef.Equals(default)) return;
@@ -120,9 +120,9 @@ internal sealed partial class ObjectLifetime : IDisposable
 		this.Secondary?.LoadNewValue(jLocal, localRef.Value);
 	}
 	/// <summary>
-	/// Retrieves the loaded global object for current instance.
+	/// Retrieves the loaded global object for the current instance.
 	/// </summary>
-	/// <returns>The loaded <see cref="JGlobalBase"/> object for current instance.</returns>
+	/// <returns>The loaded <see cref="JGlobalBase"/> object for the current instance.</returns>
 	public JGlobalBase? GetGlobalObject()
 	{
 		if (this._global is not null && this._global.IsMinimalValid(this._env))
@@ -183,7 +183,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <summary>
 	/// Sets instance class.
 	/// </summary>
-	/// <param name="instanceMetadata">The object metadata for current instance.</param>
+	/// <param name="instanceMetadata">The object metadata for the current instance.</param>
 	public void SetClass(ObjectMetadata instanceMetadata)
 	{
 		if (!instanceMetadata.ObjectClassName.AsSpan().SequenceEqual(this._class?.Name))

@@ -27,8 +27,8 @@ public partial class JLocalObject
 			/// Constructor.
 			/// </summary>
 			/// <param name="builder">A <see cref="TypeMetadataBuilder"/> instance.</param>
-			/// <param name="modifier">Modifier of current type.</param>
-			/// <param name="baseMetadata">Base type of current type metadata.</param>
+			/// <param name="modifier">Modifier of the current type.</param>
+			/// <param name="baseMetadata">Base type of the current type metadata.</param>
 			public ClassTypeMetadata(TypeMetadataBuilder builder, JTypeModifier modifier,
 				JClassTypeMetadata? baseMetadata) : base(builder.DataTypeName, builder.Signature)
 			{
@@ -41,7 +41,7 @@ public partial class JLocalObject
 			/// </summary>
 			/// <param name="information">Internal sequence information.</param>
 			/// <param name="isVoid">Indicates if current class is <c>void</c> wrapper.</param>
-			/// <param name="baseMetadata">Base type of current type metadata.</param>
+			/// <param name="baseMetadata">Base type of the current type metadata.</param>
 			public ClassTypeMetadata(CStringSequence information, Boolean isVoid, JClassTypeMetadata? baseMetadata) :
 				base(information)
 			{

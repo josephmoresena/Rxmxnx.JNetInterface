@@ -10,10 +10,10 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public abstract class NativeFunctionSet
 {
 	/// <summary>
-	/// Returns the name of current instance.
+	/// Returns the name of the current instance.
 	/// </summary>
 	/// <param name="jEnum">A <see cref="JEnumObject"/> instance.</param>
-	/// <returns>Returns the name of current instance.</returns>
+	/// <returns>Returns the name of the current instance.</returns>
 	public abstract JStringObject GetName(JEnumObject jEnum);
 	/// <summary>
 	/// Returns the ordinal of <paramref name="jEnum"/>
@@ -133,11 +133,11 @@ public abstract class NativeFunctionSet
 	public abstract Int64 BufferCapacity(JBufferObject jBuffer);
 
 	/// <summary>
-	/// Returns the name of current member.
+	/// Returns the name of the current member.
 	/// </summary>
 	/// <typeparam name="TMember">Type of member.</typeparam>
 	/// <param name="jMember">A <see cref="JMemberObject"/> instance.</param>
-	/// <returns>Returns the name of current instance.</returns>
+	/// <returns>Returns the name of the current instance.</returns>
 	public abstract JStringObject GetName<TMember>(TMember jMember)
 		where TMember : JLocalObject, IInterfaceObject<JMemberObject>;
 	/// <summary>
@@ -146,7 +146,7 @@ public abstract class NativeFunctionSet
 	/// </summary>
 	/// <typeparam name="TMember">Type of member.</typeparam>
 	/// <param name="jMember">A <see cref="JMemberObject"/> instance.</param>
-	/// <returns>Returns the name of current instance.</returns>
+	/// <returns>Returns the name of the current instance.</returns>
 	public abstract JClassObject GetDeclaringClass<TMember>(TMember jMember)
 		where TMember : JLocalObject, IInterfaceObject<JMemberObject>;
 	/// <summary>

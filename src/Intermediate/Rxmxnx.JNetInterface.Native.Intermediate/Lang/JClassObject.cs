@@ -117,12 +117,12 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// </summary>
 	public void UnregisterNativeCalls() => this.Environment.AccessFeature.ClearNatives(this);
 	/// <summary>
-	/// Determines whether an object of current class can be safely cast to
+	/// Determines whether an object of the current class can be safely cast to
 	/// <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">Java class instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if an object of current class can be safely cast to
+	/// <see langword="true"/> if an object of the current class can be safely cast to
 	/// <paramref name="jClass"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean IsAssignableTo(JClassObject jClass)
@@ -142,7 +142,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		return env.FunctionSet.GetClassName(this);
 	}
 	/// <summary>
-	/// Retrieves super class of current type.
+	/// Retrieves super class of the current type.
 	/// </summary>
 	/// <returns>Current super class <see cref="JClassObject"/> instance.</returns>
 	public JClassObject? GetSuperClass()

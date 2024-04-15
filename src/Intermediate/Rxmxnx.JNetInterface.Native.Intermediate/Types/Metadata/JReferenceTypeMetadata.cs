@@ -11,11 +11,11 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	public override Int32 SizeOf => NativeUtilities.PointerSize;
 
 	/// <summary>
-	/// Base type of current type metadata.
+	/// Base type of the current type metadata.
 	/// </summary>
 	public virtual JClassTypeMetadata? BaseMetadata => default;
 	/// <summary>
-	/// Set of interfaces metadata of current type implements.
+	/// Set of interfaces metadata of the current type implements.
 	/// </summary>
 	public abstract IInterfaceSet Interfaces { get; }
 
@@ -26,12 +26,12 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 		=> this.CreateFieldDefinition(fieldName);
 
 	/// <summary>
-	/// Indicates whether <paramref name="jObject"/> is an instance of current type.
+	/// Indicates whether <paramref name="jObject"/> is an instance of the current type.
 	/// </summary>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="jObject"/> is an instance of current type;
+	/// <see langword="true"/> if <paramref name="jObject"/> is an instance of the current type;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean IsInstance(IEnvironment env, JReferenceObject? jObject)
@@ -39,23 +39,23 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 			env.ClassFeature.IsInstanceOf(jObject, env.ClassFeature.GetClass(this.Hash));
 
 	/// <summary>
-	/// Indicates whether an instance of current type is instance of the type of
+	/// Indicates whether an instance of the current type is instance of the type of
 	/// <paramref name="otherMetadata"/>.
 	/// </summary>
 	/// <param name="otherMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if an instance of current type is instance of
+	/// <see langword="true"/> if an instance of the current type is instance of
 	/// the type of <paramref name="otherMetadata"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	public virtual Boolean TypeOf(JReferenceTypeMetadata otherMetadata)
 		=> JReferenceTypeMetadata.TypeOf(this, otherMetadata);
 
 	/// <summary>
-	/// Indicates whether <paramref name="jObject"/> is instance of current type.
+	/// Indicates whether <paramref name="jObject"/> is instance of the current type.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="jObject"/> is instance of current type;
+	/// <see langword="true"/> if <paramref name="jObject"/> is instance of the current type;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	internal abstract Boolean IsInstance(JReferenceObject jObject);
