@@ -87,7 +87,7 @@ public sealed class JInterfaceObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject interfaceClass = new(jClass, interfaceTypeMetadata);
 		using JLocalObject jLocal = new(interfaceClass, localRef);
-		using JGlobal jGlobal = new(env.VirtualMachine, new(interfaceClass), !env.NoProxy, globalRef);
+		using JGlobal jGlobal = new(env.VirtualMachine, new(interfaceClass), globalRef);
 
 		Assert.Null(interfaceTypeMetadata.ParseInstance(default));
 		Assert.Null(interfaceTypeMetadata.ProxyMetadata.ParseInstance(default));
@@ -158,7 +158,7 @@ public sealed class JInterfaceObjectTests
 		Assert.Equal(typeof(JLocalObject.InterfaceView), EnvironmentProxy.GetFamilyType<TInterface>());
 		Assert.Equal(JTypeKind.Interface, EnvironmentProxy.GetKind<JLocalObject.InterfaceView>());
 		Assert.IsType<JFunctionDefinition<TInterface>>(
-			interfaceTypeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+			interfaceTypeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<TInterface>>(interfaceTypeMetadata.CreateFieldDefinition("fieldName"u8));
 
 		Assert.Equal(proxyTypeMetadata.ClassName, interfaceTypeMetadata.ProxyMetadata.ClassName);

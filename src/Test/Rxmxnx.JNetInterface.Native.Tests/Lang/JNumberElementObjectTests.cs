@@ -49,8 +49,7 @@ public class JNumberObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jNumberClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jNumberClass);
-		using JGlobal jGlobal = new(vm, new(jNumberClass, IClassType.GetMetadata<JNumberObject>()), !env.NoProxy,
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jNumberClass, IClassType.GetMetadata<JNumberObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -67,8 +66,7 @@ public class JNumberObjectTests
 		Assert.Equal(JNumberObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JNumberObjectTests.hash.ToString(), IDataType.GetHash<JNumberObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JNumberObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFunctionDefinition<JNumberObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JNumberObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JNumberObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JNumberObject>());

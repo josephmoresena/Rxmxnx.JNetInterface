@@ -46,8 +46,7 @@ public class JClassLoaderObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jThrowableClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
-		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JClassLoaderObject>()),
-		                            !env.NoProxy, globalRef);
+		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JClassLoaderObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -65,7 +64,7 @@ public class JClassLoaderObjectTests
 		Assert.Equal(JClassLoaderObjectTests.hash.ToString(), IDataType.GetHash<JClassLoaderObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<JClassLoaderObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JClassLoaderObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JClassLoaderObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JClassLoaderObject>());

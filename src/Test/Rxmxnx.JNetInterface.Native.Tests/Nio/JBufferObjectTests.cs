@@ -70,8 +70,7 @@ public class JBufferObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jBufferClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jBufferClass);
-		using JGlobal jGlobal = new(vm, new(jBufferClass, IClassType.GetMetadata<JBufferObject>()), !env.NoProxy,
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jBufferClass, IClassType.GetMetadata<JBufferObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -88,8 +87,7 @@ public class JBufferObjectTests
 		Assert.Equal(JBufferObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JBufferObjectTests.hash.ToString(), IDataType.GetHash<JBufferObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JBufferObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFunctionDefinition<JBufferObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JBufferObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JBufferObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JBufferObject>());

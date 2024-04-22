@@ -1,17 +1,18 @@
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// This class implements <see cref="IVirtualMachine"/> interface.
+/// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
 public partial class JVirtualMachine : IVirtualMachine
 {
 	/// <summary>
-	/// Indicates whether current virtual machine remains alive.
+	/// Indicates whether the current virtual machine remains alive.
 	/// </summary>
 	public virtual Boolean IsAlive => true;
 	/// <inheritdoc/>
 	public JVirtualMachineRef Reference => this._cache.Reference;
 
+	Boolean IVirtualMachine.NoProxy => true;
 	IEnvironment? IVirtualMachine.GetEnvironment() => this.GetEnvironment();
 
 	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose)

@@ -45,8 +45,7 @@ public class JProxyObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jThrowableClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
-		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JProxyObject>()), !env.NoProxy,
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JProxyObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -63,8 +62,7 @@ public class JProxyObjectTests
 		Assert.Equal(JProxyObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JProxyObjectTests.hash.ToString(), IDataType.GetHash<JProxyObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JProxyObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFunctionDefinition<JProxyObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JProxyObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JProxyObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JProxyObject>());

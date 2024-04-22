@@ -111,8 +111,7 @@ public class JExecutableObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jThrowableClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
-		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JExecutableObject>()), !env.NoProxy,
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JExecutableObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -130,7 +129,7 @@ public class JExecutableObjectTests
 		Assert.Equal(JExecutableObjectTests.hash.ToString(), IDataType.GetHash<JExecutableObject>());
 		Assert.Equal(IDataType.GetMetadata<JAccessibleObject>(), typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<JExecutableObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JExecutableObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JExecutableObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JExecutableObject>());

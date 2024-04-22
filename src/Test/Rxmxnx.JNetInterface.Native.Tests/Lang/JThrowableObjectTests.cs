@@ -23,7 +23,7 @@ public sealed class JThrowableObjectTests
 		String message = JThrowableObjectTests.fixture.Create<String>();
 		StackTraceInfo[] stackTrace = emptyStackTrace ?
 			JThrowableObjectTests.fixture.CreateMany<StackTraceInfo>().ToArray() :
-			Array.Empty<StackTraceInfo>();
+			[];
 		using JClassObject jClass = new(env);
 		using JClassObject jThrowableClass = new(jClass, IClassType.GetMetadata<JThrowableObject>());
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
@@ -85,8 +85,7 @@ public sealed class JThrowableObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jThrowableClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
-		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JThrowableObject>()), !env.NoProxy,
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JThrowableObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -104,7 +103,7 @@ public sealed class JThrowableObjectTests
 		Assert.Equal(JThrowableObjectTests.hash.ToString(), IDataType.GetHash<JThrowableObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<JThrowableObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JThrowableObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JThrowableObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JThrowableObject>());
@@ -162,8 +161,7 @@ public sealed class JThrowableObjectTests
 		using JThrowableObject jThrowable =
 			Assert.IsType<JThrowableObject>(typeMetadata.CreateInstance(jThrowableClass, throwableRef.Value, true));
 		using JGlobal jGlobal =
-			new(vm, new ThrowableObjectMetadata(new(jThrowableClass)) { Message = exceptionMessage, }, !env.NoProxy,
-			    globalRef);
+			new(vm, new ThrowableObjectMetadata(new(jThrowableClass)) { Message = exceptionMessage, }, globalRef);
 		using JWeak jWeak = new(jGlobal, weakRef);
 
 		IMutableWrapper<ThrowableException?> mutableException = IMutableWrapper<ThrowableException>.Create();

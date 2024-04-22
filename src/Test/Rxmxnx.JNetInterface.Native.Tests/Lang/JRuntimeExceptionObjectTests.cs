@@ -24,7 +24,7 @@ public sealed class JRuntimeExceptionObjectTests
 		String message = JRuntimeExceptionObjectTests.fixture.Create<String>();
 		StackTraceInfo[] stackTrace = emptyStackTrace ?
 			JRuntimeExceptionObjectTests.fixture.CreateMany<StackTraceInfo>().ToArray() :
-			Array.Empty<StackTraceInfo>();
+			[];
 		using JClassObject jClass = new(env);
 		using JClassObject jRuntimeExceptionClass = new(jClass, IClassType.GetMetadata<JRuntimeExceptionObject>());
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
@@ -87,7 +87,7 @@ public sealed class JRuntimeExceptionObjectTests
 		using JClassObject jRuntimeExceptionClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jRuntimeExceptionClass);
 		using JGlobal jGlobal = new(vm, new(jRuntimeExceptionClass, IClassType.GetMetadata<JRuntimeExceptionObject>()),
-		                            !env.NoProxy, globalRef);
+		                            globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -105,7 +105,7 @@ public sealed class JRuntimeExceptionObjectTests
 		Assert.Equal(JRuntimeExceptionObjectTests.hash.ToString(), IDataType.GetHash<JRuntimeExceptionObject>());
 		Assert.Equal(IDataType.GetMetadata<JExceptionObject>(), typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<JRuntimeExceptionObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JRuntimeExceptionObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JRuntimeExceptionObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JRuntimeExceptionObject>());
@@ -169,7 +169,7 @@ public sealed class JRuntimeExceptionObjectTests
 				typeMetadata.CreateInstance(jRuntimeExceptionClass, throwableRef.Value, true));
 		using JGlobal jGlobal =
 			new(vm, new ThrowableObjectMetadata(new(jRuntimeExceptionClass)) { Message = exceptionMessage, },
-			    !env.NoProxy, globalRef);
+			    globalRef);
 		using JWeak jWeak = new(jGlobal, weakRef);
 
 		IMutableWrapper<ThrowableException?> mutableException = IMutableWrapper<ThrowableException>.Create();

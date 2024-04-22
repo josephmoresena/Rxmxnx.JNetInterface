@@ -27,9 +27,8 @@ public partial class JGlobalBase
 	/// </summary>
 	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="metadata"><see cref="Native.ObjectMetadata"/> instance.</param>
-	/// <param name="isProxy">Indicates whether the current instance is a dummy object.</param>
 	/// <param name="value">Internal value.</param>
-	private JGlobalBase(IVirtualMachine vm, ObjectMetadata metadata, Boolean isProxy, IntPtr value) : base(isProxy)
+	private JGlobalBase(IVirtualMachine vm, ObjectMetadata metadata, IntPtr value) : base(!vm.NoProxy)
 	{
 		this.VirtualMachine = vm;
 		this._value = IMutableReference.Create(value);

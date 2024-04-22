@@ -267,7 +267,7 @@ public sealed class JArrayObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject jArrayClass = new(jClass, arrayTypeMetadata);
 		using JLocalObject jLocal = new(jArrayClass, arrayRef.Value);
-		using JGlobal jGlobal = new(env.VirtualMachine, new(jArrayClass), !env.NoProxy, globalRef);
+		using JGlobal jGlobal = new(env.VirtualMachine, new(jArrayClass), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(arrayTypeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -280,7 +280,7 @@ public sealed class JArrayObjectTests
 		Assert.Equal(elementTypeMetadata is JArrayTypeMetadata, arrayTypeMetadata.Dimension > 1);
 		Assert.Equal(arrayTypeMetadata, elementTypeMetadata.GetArrayMetadata());
 		Assert.IsType<JFunctionDefinition<JArrayObject<TElement>>>(
-			arrayTypeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+			arrayTypeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JArrayObject<TElement>>>(arrayTypeMetadata.CreateFieldDefinition("fieldName"u8));
 
 		env.GetReferenceType(jGlobal).Returns(JReferenceType.GlobalRefType);

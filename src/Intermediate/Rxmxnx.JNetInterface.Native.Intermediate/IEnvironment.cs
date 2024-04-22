@@ -55,7 +55,7 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// </summary>
 	internal NativeFunctionSet FunctionSet { get; }
 	/// <summary>
-	/// Indicates whether current instance is not a proxy.
+	/// Indicates whether the current instance is not a proxy.
 	/// </summary>
 	internal Boolean NoProxy { get; }
 

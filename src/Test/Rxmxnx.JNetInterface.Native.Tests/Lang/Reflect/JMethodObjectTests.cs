@@ -152,8 +152,7 @@ public class JMethodObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jThrowableClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
-		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JMethodObject>()), !env.NoProxy,
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JMethodObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -170,8 +169,7 @@ public class JMethodObjectTests
 		Assert.Equal(JMethodObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JMethodObjectTests.hash.ToString(), IDataType.GetHash<JMethodObject>());
 		Assert.Equal(IDataType.GetMetadata<JExecutableObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JMethodObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFunctionDefinition<JMethodObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JMethodObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JMethodObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JMethodObject>());

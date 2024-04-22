@@ -23,7 +23,7 @@ public sealed class JWeak : JGlobalBase
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
 	/// <param name="weakRef">Weak global reference.</param>
 	internal JWeak(JGlobalBase jGlobal, JWeakRef weakRef) : base(jGlobal.VirtualMachine, jGlobal.ObjectMetadata,
-	                                                             jGlobal.IsProxy, weakRef) { }
+	                                                             weakRef) { }
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)

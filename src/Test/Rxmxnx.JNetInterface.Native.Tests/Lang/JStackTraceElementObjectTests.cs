@@ -73,8 +73,7 @@ public class JStackTraceElementObjectTests
 		using JClassObject jStackTraceElementClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jStackTraceElementClass);
 		using JGlobal jGlobal =
-			new(vm, new(jStackTraceElementClass, IClassType.GetMetadata<JStackTraceElementObject>()), !env.NoProxy,
-			    globalRef);
+			new(vm, new(jStackTraceElementClass, IClassType.GetMetadata<JStackTraceElementObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -92,7 +91,7 @@ public class JStackTraceElementObjectTests
 		Assert.Equal(JStackTraceElementObjectTests.hash.ToString(), IDataType.GetHash<JStackTraceElementObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<JStackTraceElementObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JStackTraceElementObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JStackTraceElementObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JStackTraceElementObject>());

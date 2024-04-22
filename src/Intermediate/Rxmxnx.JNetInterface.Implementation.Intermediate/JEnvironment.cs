@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// This class implements <see cref="IVirtualMachine"/> interface.
+/// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
 public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironment, JEnvironment, Boolean>
 {

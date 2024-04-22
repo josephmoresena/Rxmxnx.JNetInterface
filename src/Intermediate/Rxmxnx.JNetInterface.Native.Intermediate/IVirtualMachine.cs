@@ -14,6 +14,10 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// JNI reference to the interface.
 	/// </summary>
 	JVirtualMachineRef Reference { get; }
+	/// <summary>
+	/// Indicates whether the current instance is not a proxy.
+	/// </summary>
+	internal Boolean NoProxy { get; }
 
 	JVirtualMachineRef IWrapper<JVirtualMachineRef>.Value => this.Reference;
 

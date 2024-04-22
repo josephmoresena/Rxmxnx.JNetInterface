@@ -5,6 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests;
                  Justification = CommonConstants.AbstractProxyJustification)]
 public abstract partial class VirtualMachineProxy : IVirtualMachine
 {
+	public abstract Boolean NoProxy { get; }
 	public abstract JVirtualMachineRef Reference { get; }
 	public abstract void FatalError(CString? message);
 	public abstract void FatalError(String? message);

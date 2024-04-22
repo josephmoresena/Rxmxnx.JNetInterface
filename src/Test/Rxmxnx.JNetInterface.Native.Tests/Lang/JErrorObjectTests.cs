@@ -22,7 +22,7 @@ public sealed class JErrorObjectTests
 		String message = JErrorObjectTests.fixture.Create<String>();
 		StackTraceInfo[] stackTrace = emptyStackTrace ?
 			JErrorObjectTests.fixture.CreateMany<StackTraceInfo>().ToArray() :
-			Array.Empty<StackTraceInfo>();
+			[];
 		using JClassObject jClass = new(env);
 		using JClassObject jErrorClass = new(jClass, IClassType.GetMetadata<JErrorObject>());
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
@@ -81,8 +81,7 @@ public sealed class JErrorObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jErrorClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jErrorClass);
-		using JGlobal jGlobal = new(vm, new(jErrorClass, IClassType.GetMetadata<JErrorObject>()), !env.NoProxy,
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jErrorClass, IClassType.GetMetadata<JErrorObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -99,8 +98,7 @@ public sealed class JErrorObjectTests
 		Assert.Equal(JErrorObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JErrorObjectTests.hash.ToString(), IDataType.GetHash<JErrorObject>());
 		Assert.Equal(IDataType.GetMetadata<JThrowableObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JErrorObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFunctionDefinition<JErrorObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JErrorObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JErrorObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JErrorObject>());
@@ -157,7 +155,7 @@ public sealed class JErrorObjectTests
 		using JErrorObject jError =
 			Assert.IsType<JErrorObject>(typeMetadata.CreateInstance(jErrorClass, throwableRef.Value, true));
 		using JGlobal jGlobal = new(vm, new ThrowableObjectMetadata(new(jErrorClass)) { Message = exceptionMessage, },
-		                            !env.NoProxy, globalRef);
+		                            globalRef);
 		using JWeak jWeak = new(jGlobal, weakRef);
 
 		IMutableWrapper<ThrowableException?> mutableException = IMutableWrapper<ThrowableException>.Create();

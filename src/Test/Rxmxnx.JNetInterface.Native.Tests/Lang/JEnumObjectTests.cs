@@ -69,8 +69,7 @@ public class JEnumObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jEnumClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jEnumClass);
-		using JGlobal jGlobal = new(vm, new(jEnumClass, IClassType.GetMetadata<JEnumObject>()), !env.NoProxy,
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jEnumClass, IClassType.GetMetadata<JEnumObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -87,8 +86,7 @@ public class JEnumObjectTests
 		Assert.Equal(JEnumObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JEnumObjectTests.hash.ToString(), IDataType.GetHash<JEnumObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JEnumObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+		Assert.IsType<JFunctionDefinition<JEnumObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JEnumObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JEnumObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JEnumObject>());

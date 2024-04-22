@@ -23,7 +23,7 @@ public sealed class JExceptionObjectTests
 		String message = JExceptionObjectTests.fixture.Create<String>();
 		StackTraceInfo[] stackTrace = emptyStackTrace ?
 			JExceptionObjectTests.fixture.CreateMany<StackTraceInfo>().ToArray() :
-			Array.Empty<StackTraceInfo>();
+			[];
 		using JClassObject jClass = new(env);
 		using JClassObject jExceptionClass = new(jClass, IClassType.GetMetadata<JExceptionObject>());
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
@@ -84,8 +84,7 @@ public sealed class JExceptionObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jExceptionClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jExceptionClass);
-		using JGlobal jGlobal = new(vm, new(jExceptionClass, IClassType.GetMetadata<JExceptionObject>()), !env.NoProxy,
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jExceptionClass, IClassType.GetMetadata<JExceptionObject>()), globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -103,7 +102,7 @@ public sealed class JExceptionObjectTests
 		Assert.Equal(JExceptionObjectTests.hash.ToString(), IDataType.GetHash<JExceptionObject>());
 		Assert.Equal(IDataType.GetMetadata<JThrowableObject>(), typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<JExceptionObject>>(
-			typeMetadata.CreateFunctionDefinition("functionName"u8, Array.Empty<JArgumentMetadata>()));
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<JExceptionObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JExceptionObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JExceptionObject>());
@@ -162,8 +161,7 @@ public sealed class JExceptionObjectTests
 		using JExceptionObject jException =
 			Assert.IsType<JExceptionObject>(typeMetadata.CreateInstance(jExceptionClass, throwableRef.Value, true));
 		using JGlobal jGlobal =
-			new(vm, new ThrowableObjectMetadata(new(jExceptionClass)) { Message = exceptionMessage, }, !env.NoProxy,
-			    globalRef);
+			new(vm, new ThrowableObjectMetadata(new(jExceptionClass)) { Message = exceptionMessage, }, globalRef);
 		using JWeak jWeak = new(jGlobal, weakRef);
 
 		IMutableWrapper<ThrowableException?> mutableException = IMutableWrapper<ThrowableException>.Create();

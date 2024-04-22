@@ -59,7 +59,7 @@ public partial class JVirtualMachine
 		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
 		{
 			ClassObjectMetadata metadata = new(jClass);
-			jGlobal = new(this, metadata, false, default);
+			jGlobal = new(this, metadata, default);
 		}
 		lifetime.SetGlobal(jGlobal);
 		return jGlobal;
