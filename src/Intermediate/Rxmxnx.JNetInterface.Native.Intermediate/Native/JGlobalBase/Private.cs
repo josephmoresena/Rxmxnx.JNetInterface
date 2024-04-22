@@ -18,7 +18,7 @@ public partial class JGlobalBase
 	private Boolean _isDisposed;
 
 	/// <summary>
-	/// Indicates whether current instance is valid.
+	/// Indicates whether the current instance is valid.
 	/// </summary>
 	private Boolean IsValidInstance => !this._isDisposed && !this.IsDefault;
 

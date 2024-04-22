@@ -49,7 +49,7 @@ public partial class JVirtualMachine
 		}
 	}
 	/// <summary>
-	/// Loads global instance in given <paramref name="jClass"/>.
+	/// Loads global instance in the given <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JGlobal"/> instance.</returns>

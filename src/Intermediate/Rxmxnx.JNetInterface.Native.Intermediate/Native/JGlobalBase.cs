@@ -65,7 +65,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if current instance is still valid; otherwise, <see langword="false"/>.
+	/// <see langword="true"/> if the current instance is still valid; otherwise, <see langword="false"/>.
 	/// </returns>
 	public virtual Boolean IsValid(IEnvironment env)
 	{
@@ -74,11 +74,11 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	}
 
 	/// <summary>
-	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
+	/// Indicates whether the current instance is an instance of <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if current instance is an instance of
+	/// <see langword="true"/> if the current instance is an instance of
 	/// <paramref name="jClass"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean InstanceOf(JClassObject jClass)
@@ -130,7 +130,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if current instance is still valid; otherwise, <see langword="false"/>.
+	/// <see langword="true"/> if the current instance is still valid; otherwise, <see langword="false"/>.
 	/// </returns>
 	public static Boolean IsValid([NotNullWhen(true)] JGlobalBase? jGlobal, IEnvironment env)
 		=> jGlobal is not null && jGlobal.IsValid(env);

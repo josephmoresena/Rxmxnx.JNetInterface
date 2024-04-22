@@ -15,12 +15,12 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public JClassObject Class => this.Lifetime.GetLoadClassObject(this);
 	/// <summary>
-	/// Retrieves the global object from current instance.
+	/// Retrieves the global object from the current instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public JGlobal Global => this.Lifetime.GetLoadGlobalObject(this);
 	/// <summary>
-	/// Retrieves the global object from current instance.
+	/// Retrieves the global object from the current instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public JWeak Weak => this.Lifetime.GetLoadWeakObject(this);
