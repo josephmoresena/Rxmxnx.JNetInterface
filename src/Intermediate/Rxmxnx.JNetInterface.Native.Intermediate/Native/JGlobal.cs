@@ -29,7 +29,8 @@ public sealed class JGlobal : JGlobalBase
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="globalRef">Global reference.</param>
-	internal JGlobal(ILocalObject jLocal, JGlobalRef globalRef) : base(jLocal, globalRef) { }
+	internal JGlobal(ILocalObject jLocal, JGlobalRef globalRef) : base(jLocal, globalRef)
+		=> this.IsDisposable = jLocal is not JClassObject;
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -37,14 +38,15 @@ public sealed class JGlobal : JGlobalBase
 	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
 	/// <param name="globalRef">Global reference.</param>
 	internal JGlobal(IVirtualMachine vm, ObjectMetadata metadata, JGlobalRef globalRef) : base(vm, metadata, globalRef)
-		=> this.IsDisposable = metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
+		=> this.IsDisposable = !metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
 	/// <param name="globalRef">Global reference.</param>
 	internal JGlobal(JGlobalBase jGlobal, JGlobalRef globalRef) : base(jGlobal.VirtualMachine, jGlobal.ObjectMetadata,
-	                                                                   globalRef) { }
+	                                                                   globalRef)
+		=> this.IsDisposable = true;
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)
