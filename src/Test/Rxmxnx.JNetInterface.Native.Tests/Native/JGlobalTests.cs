@@ -22,10 +22,15 @@ public sealed class JGlobalTests
 		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
 
+		DateTime currentDate = DateTime.Now;
 		using JClassObject jClassClass = new(env);
 		using JGlobal jGlobal0 = new(jClassClass, globalRef0);
 		using JGlobal jGlobal1 = new(vm, jGlobal0.ObjectMetadata, globalRef0);
 		JGlobal jGlobal2 = new(jGlobal1, globalRef1);
+		DateTime latestDate = DateTime.Now;
+
+		env.ReferenceFeature.Create<JGlobal>(jClassClass).Returns(jGlobal2);
+		env.GetReferenceType(jGlobal2).Returns(JReferenceType.GlobalRefType);
 
 		Assert.Equal(globalRef0, jGlobal0.Reference);
 		Assert.Equal(globalRef0, jGlobal1.Reference);
@@ -38,6 +43,26 @@ public sealed class JGlobalTests
 		Assert.Equal(jGlobal0, jGlobal0.GetCacheable(env));
 		Assert.Equal(jGlobal1, jGlobal1.GetCacheable(env));
 		Assert.Equal(jGlobal2, jGlobal2.GetCacheable(env));
+
+		Assert.InRange(jGlobal0.LastValidation, currentDate, latestDate);
+		Assert.InRange(jGlobal1.LastValidation, currentDate, latestDate);
+		Assert.InRange(jGlobal2.LastValidation, currentDate, latestDate);
+
+		Assert.Equal(jGlobal2, jClassClass.Global);
+		env.ReferenceFeature.Received(1).Create<JGlobal>(jClassClass);
+
+		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(false);
+
+		Assert.Equal(jGlobal2, jClassClass.Global);
+
+		env.ReferenceFeature.Received(1).Create<JGlobal>(jClassClass);
+		env.Received(1).IsValidationAvoidable(jGlobal2);
+		env.Received(1).GetReferenceType(jGlobal2);
+
+		Assert.Equal(jGlobal2, jClassClass.Global);
+		env.ReferenceFeature.Received(1).Create<JGlobal>(jClassClass);
+
+		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
 
 		jGlobal0.Synchronize(jGlobal1);
 		jGlobal1.Synchronize(jGlobal2);
@@ -70,6 +95,10 @@ public sealed class JGlobalTests
 		jGlobal2.Dispose();
 		vm.Received(1).InitializeThread(Arg.Any<CString?>());
 		env.ReferenceFeature.Received(0).Unload(jGlobal2);
+
+		env.ReferenceFeature.Create<JGlobal>(jClassClass).Returns(jGlobal0);
+		Assert.Equal(jGlobal0, jClassClass.Global);
+		env.ReferenceFeature.Received(1).Create<JGlobal>(jClassClass);
 	}
 
 	[Theory]
