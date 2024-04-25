@@ -48,19 +48,22 @@ public sealed class JGlobalTests
 		Assert.InRange(jGlobal1.LastValidation, currentDate, latestDate);
 		Assert.InRange(jGlobal2.LastValidation, currentDate, latestDate);
 
+		env.ClearReceivedCalls();
+
 		Assert.Equal(jGlobal2, jClassClass.Global);
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jClassClass);
+
+		Assert.Equal(globalRef1.Value, jClassClass.Reference.Value);
+		env.Received(1).IsValidationAvoidable(jGlobal2);
+		env.Received(0).GetReferenceType(jGlobal2);
 
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(false);
 
-		Assert.Equal(jGlobal2, jClassClass.Global);
+		Assert.Equal(globalRef1.Value, jClassClass.Reference.Value);
 
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jClassClass);
-		env.Received(1).IsValidationAvoidable(jGlobal2);
+		env.Received(2).IsValidationAvoidable(jGlobal2);
 		env.Received(1).GetReferenceType(jGlobal2);
-
-		Assert.Equal(jGlobal2, jClassClass.Global);
-		env.ReferenceFeature.Received(1).Create<JGlobal>(jClassClass);
 
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
 
@@ -96,9 +99,11 @@ public sealed class JGlobalTests
 		vm.Received(1).InitializeThread(Arg.Any<CString?>());
 		env.ReferenceFeature.Received(0).Unload(jGlobal2);
 
-		env.ReferenceFeature.Create<JGlobal>(jClassClass).Returns(jGlobal0);
-		Assert.Equal(jGlobal0, jClassClass.Global);
-		env.ReferenceFeature.Received(1).Create<JGlobal>(jClassClass);
+		env.ClearReceivedCalls();
+
+		Assert.Equal(default, jClassClass.Reference.Value);
+		env.Received(0).IsValidationAvoidable(jGlobal2);
+		env.Received(0).GetReferenceType(jGlobal2);
 	}
 
 	[Theory]
