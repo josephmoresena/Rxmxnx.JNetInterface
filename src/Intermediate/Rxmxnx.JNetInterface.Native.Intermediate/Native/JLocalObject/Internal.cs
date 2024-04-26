@@ -70,7 +70,8 @@ public partial class JLocalObject
 	private protected override IDisposable GetSynchronizer()
 	{
 		IEnvironment env = this.Lifetime.Environment;
-		return env.ReferenceFeature.GetSynchronizer(this);
+		JReferenceObject jObject = this.Lifetime.GetGlobalObject() as JReferenceObject ?? this;
+		return env.ReferenceFeature.GetSynchronizer(jObject);
 	}
 	/// <inheritdoc/>
 	private protected override Boolean Same(JReferenceObject jObject)

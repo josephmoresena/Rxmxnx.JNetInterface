@@ -52,6 +52,10 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JDouble(Double value) => this._value = value;
 
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JDouble other) => this._value.Equals(other._value);

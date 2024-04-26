@@ -48,7 +48,7 @@ public abstract partial class JReferenceObject : JObject
 	/// Tries to obtain a synchronized instance for the current instance.
 	/// </summary>
 	/// <returns>A <see cref="IDisposable"/> synchronized</returns>
-	public IDisposable? Synchronize() => this.IsDefault ? default : this.GetSynchronizer();
+	public IDisposable? Synchronize() => JObject.IsNullOrDefault(this) ? default : this.GetSynchronizer();
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other)

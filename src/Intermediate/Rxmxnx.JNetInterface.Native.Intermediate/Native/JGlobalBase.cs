@@ -93,22 +93,8 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <param name="globalRef">A global object reference the value of the current instance.</param>
 	protected void SetValue(IntPtr globalRef)
 	{
-		if (globalRef == default) return;
 		this._value.Value = globalRef;
-		this._isDisposed = false;
-	}
-	/// <summary>
-	/// Removes the association of <paramref name="jLocal"/> from this instance.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <returns>
-	/// <see langword="true"/> if <paramref name="jLocal"/> was associated to this instance;
-	/// otherwise, <see langword="false"/>.
-	/// </returns>
-	protected Boolean Remove(JLocalObject jLocal)
-	{
-		ObjectLifetime objectLifetime = jLocal.Lifetime;
-		return this._objects.TryRemove(objectLifetime.Id, out _);
+		this._isDisposed = globalRef == default;
 	}
 
 	/// <summary>

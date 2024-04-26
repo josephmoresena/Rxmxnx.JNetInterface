@@ -72,6 +72,10 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JBoolean(Boolean value) => this._value = value ? JBoolean.TrueValue : JBoolean.FalseValue;
 
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JBoolean other) => this._value.Equals(other._value);

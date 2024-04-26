@@ -50,6 +50,10 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JByte(SByte value) => this._value = value;
 
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JByte other) => this._value.Equals(other._value);

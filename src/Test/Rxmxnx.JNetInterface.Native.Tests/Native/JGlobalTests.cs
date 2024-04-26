@@ -104,6 +104,8 @@ public sealed class JGlobalTests
 		Assert.Equal(default, jClassClass.Reference.Value);
 		env.Received(0).IsValidationAvoidable(jGlobal2);
 		env.Received(0).GetReferenceType(jGlobal2);
+
+		jGlobal0.SetValue(default);
 	}
 
 	[Theory]
@@ -152,6 +154,30 @@ public sealed class JGlobalTests
 		env.Received(jniSecure.HasValue ? 1 : 0).JniSecure();
 		vm.Received(1).InitializeThread(Arg.Any<CString?>());
 		env.ClassFeature.Received(1).IsInstanceOf<JArrayObject<JLocalObject>>(jGlobal);
+	}
+
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	internal void GetSynchronizerTest(Boolean isDefault)
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
+		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
+		JGlobalRef globalRef = !isDefault ? JGlobalTests.fixture.Create<JGlobalRef>() : default;
+		using IDisposable synchronizer = Substitute.For<IDisposable>();
+		using JClassObject jClassClass = new(env);
+		using JGlobal jGlobal = new(jClassClass, globalRef);
+
+		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		env.ReferenceFeature.GetSynchronizer(Arg.Any<JGlobal>()).Returns(synchronizer);
+
+		if (isDefault)
+			Assert.Null(jGlobal.Synchronize());
+		else
+			Assert.Equal(synchronizer, jGlobal.Synchronize());
+
+		env.ReferenceFeature.Received(!isDefault ? 1 : 0).GetSynchronizer(Arg.Any<JGlobal>());
 	}
 
 	[Theory]

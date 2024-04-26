@@ -51,6 +51,10 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JFloat(Single value) => this._value = value;
 
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JFloat other) => this._value.Equals(other._value);

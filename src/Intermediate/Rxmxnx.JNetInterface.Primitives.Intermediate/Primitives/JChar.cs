@@ -47,6 +47,10 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JChar(Char value) => this._value = value;
 
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
+
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Boolean Equals(JChar other) => this._value.Equals(other._value);

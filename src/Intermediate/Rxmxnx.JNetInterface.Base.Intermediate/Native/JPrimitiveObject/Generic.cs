@@ -25,6 +25,11 @@ internal partial class JPrimitiveObject
 		/// </summary>
 		public TValue Value => this._value;
 
+#if PACKAGE
+		/// <inheritdoc/>
+		public abstract JLocalObject ToObject(IEnvironment env);
+#endif
+
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override Int32 GetHashCode() => this._value.GetHashCode();

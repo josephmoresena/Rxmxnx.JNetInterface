@@ -44,6 +44,10 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JShort() => this._value = default;
 
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>
