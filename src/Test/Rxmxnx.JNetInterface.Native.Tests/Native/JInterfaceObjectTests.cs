@@ -114,13 +114,13 @@ public sealed class JInterfaceObjectTests
 		Assert.Equal(jLocal, instance.Object);
 		Assert.Equal(jLocal0.GetType(), instanceProxy.GetType());
 		Assert.Equal(localRef, jLocal0.InternalReference);
-		Assert.Equal(localRef, jLocal1.InternalReference);
+		Assert.Equal(localRef, (jLocal1 as ILocalObject).InternalReference);
 		Assert.Equal(default, jLocal2.InternalReference);
-		Assert.Equal(default, jLocal3.InternalReference);
+		Assert.Equal(default, (jLocal3 as ILocalObject).InternalReference);
 		Assert.Equal(jGlobal.Reference, jLocal2.As<JGlobalRef>());
 		Assert.Equal(jGlobal.Reference, jLocal3.As<JGlobalRef>());
 		Assert.Equal(jLocal.InternalReference, instanceProxy.InternalReference);
-		Assert.Equal(jLocal.InternalReference, instanceProxyD.InternalReference);
+		Assert.Equal(jLocal.InternalReference, (instanceProxyD as ILocalObject).InternalReference);
 
 		Assert.False(interfaceTypeMetadata.Interfaces.Contains(JFakeInterfaceObject.TypeMetadata));
 

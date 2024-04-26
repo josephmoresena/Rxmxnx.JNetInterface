@@ -326,9 +326,9 @@ public sealed class JArrayObjectTests
 		where TElement : JReferenceObject, IReferenceType<TElement>
 	{
 		JArrayObject<JLocalObject> jObjectArray = jArray.Object.CastTo<JArrayObject<JLocalObject>>();
-		JLocalObject jLocal = jArray.Object.CastTo<JLocalObject>();
+		JLocalObject jLocal = (jArray.Object as ILocalObject).CastTo<JLocalObject>();
 		JSerializableObject jSerializable = jArray.Object.CastTo<JSerializableObject>();
-		JCloneableObject jCloneable = jArray.Object.CastTo<JCloneableObject>();
+		JCloneableObject jCloneable = (jArray.Object as ILocalObject).CastTo<JCloneableObject>();
 
 		Assert.Equal(jArray.Object, jObjectArray.Object);
 		Assert.Equal(jArray.Object, jLocal);

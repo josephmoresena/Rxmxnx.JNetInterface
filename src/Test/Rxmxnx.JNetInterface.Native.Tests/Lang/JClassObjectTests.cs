@@ -64,9 +64,9 @@ public sealed class JClassObjectTests
 		Assert.Equal($"{jClass.Name} {jClass.Reference}", jClass.ToString());
 
 		JSerializableObject jSerializable = jClass.CastTo<JSerializableObject>();
-		JAnnotatedElementObject jAnnotated = jClass.CastTo<JAnnotatedElementObject>();
+		JAnnotatedElementObject jAnnotated = (jClass as ILocalObject).CastTo<JAnnotatedElementObject>();
 		JGenericDeclarationObject jGenericDeclaration = jClass.CastTo<JGenericDeclarationObject>();
-		JTypeObject jType = jClass.CastTo<JTypeObject>();
+		JTypeObject jType = (jClass as ILocalObject).CastTo<JTypeObject>();
 
 		Assert.Equal(jClass.Id, jSerializable.Id);
 		Assert.Equal(jClass.Id, jAnnotated.Id);

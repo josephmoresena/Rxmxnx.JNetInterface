@@ -426,7 +426,8 @@ public sealed class JStringObjectTests
 		jString.Environment.Received(0)
 		       .IsSameObject(jString, Arg.Is<JLocalObject>(l => l.InternalReference.Equals(stringRef)));
 		jString.Environment.Received(1)
-		       .IsSameObject(jString, Arg.Is<JLocalObject>(l => l.InternalReference.Equals(stringRef1)));
+		       .IsSameObject(
+			       jString, Arg.Is<JLocalObject>(l => (l as ILocalObject).InternalReference.Equals(stringRef1)));
 	}
 	private static void EnumeratorTest(JStringObject jString)
 	{

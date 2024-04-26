@@ -99,12 +99,6 @@ public partial class JLocalObject
 	/// </returns>
 	internal static Boolean IsClassType<TDataType>() where TDataType : IDataType<TDataType>
 		=> typeof(TDataType) == typeof(JClassObject);
-	/// <summary>
-	/// Retrieves the loaded global object for given object.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>The loaded <see cref="JGlobalBase"/> object for <paramref name="jLocal"/>.</returns>
-	internal static JGlobalBase? GetGlobalObject(JLocalObject jLocal) => jLocal.Lifetime.GetGlobalObject();
 
 	/// <summary>
 	/// Throws an exception if <paramref name="jObject"/> cannot be casted to

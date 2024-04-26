@@ -186,6 +186,7 @@ public sealed class JErrorObjectTests
 			exception.WithSafeInvoke(t =>
 			{
 				Assert.Equal(default, t.InternalReference);
+				Assert.Equal(default, (t as ILocalObject).InternalReference);
 				Assert.Equal(exceptionMessage, t.Message);
 				Assert.Equal(typeMetadata.ClassName, t.ObjectClassName);
 				Assert.Equal(typeMetadata.Signature, t.ObjectSignature);

@@ -27,6 +27,7 @@ public class JClassLoaderObjectTests
 		ObjectMetadata objectMetadata = ILocalObject.CreateMetadata(jClassLoader);
 
 		Assert.True(Object.ReferenceEquals(jClassLoader, jClassLoader.CastTo<JLocalObject>()));
+		Assert.True(Object.ReferenceEquals(jClassLoader, (jClassLoader as ILocalObject).CastTo<JLocalObject>()));
 
 		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
