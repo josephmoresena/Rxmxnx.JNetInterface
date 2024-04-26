@@ -182,17 +182,21 @@ public sealed class JClassObjectTests
 		JMethodDefinition methodDefinition = JMethodDefinition.Create("methodName"u8);
 		JFunctionDefinition<JClassObject> functionDefinition =
 			JFunctionDefinition<JClassObject>.Create("functionName"u8);
+		List<JNativeCallEntry> entries =
+		[
+			JNativeCallEntry.Create(methodDefinition, IntPtr.Zero),
+			JNativeCallEntry.Create(functionDefinition, IntPtr.Zero),
+			JNativeCallEntry.Create<JNativeMethodDelegate>(methodDefinition, default!),
+			JNativeCallEntry.Create<JNativeFunctionDelegate>(functionDefinition, default!),
+		];
 
-		JNativeCallEntry entry1 = JNativeCallEntry.Create(methodDefinition, IntPtr.Zero);
-		JNativeCallEntry entry2 = JNativeCallEntry.Create(functionDefinition, IntPtr.Zero);
 		if (!useList)
-			jClassObj.Register(entry1, entry2);
+			jClassObj.Register(entries[0], entries[1], entries[2], entries[3]);
 		else
-			jClassObj.Register([entry1, entry2,]);
+			jClassObj.Register(entries);
 
 		env.AccessFeature.Received(1)
-		   .RegisterNatives(
-			   jClassObj, Arg.Is<IReadOnlyList<JNativeCallEntry>>(l => entry1.Equals(l[0]) && entry2.Equals(l[1])));
+		   .RegisterNatives(jClassObj, Arg.Is<IReadOnlyList<JNativeCallEntry>>(l => l.SequenceEqual(entries)));
 
 		jClassObj.UnregisterNativeCalls();
 		env.AccessFeature.Received(1).ClearNatives(jClassObj);
@@ -412,4 +416,7 @@ public sealed class JClassObjectTests
 			signature = CString.Concat("["u8, signature);
 		}
 	}
+
+	private delegate void JNativeMethodDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
+	private delegate JClassLocalRef JNativeFunctionDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
 }
