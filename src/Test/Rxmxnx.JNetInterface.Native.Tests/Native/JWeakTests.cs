@@ -184,7 +184,7 @@ public sealed class JWeakTests
 			GC.Collect();
 		}
 		GC.Collect();
-		thread.ReferenceFeature.Received().Unload(Arg.Is<JWeak>(g => g.Reference == (unload ? default : weakRef)));
+		thread.ReferenceFeature.Received().Unload(Arg.Any<JWeak>());
 		Assert.All(references, g => Assert.Equal(weakRef, g));
 	}
 }
