@@ -74,7 +74,8 @@ public sealed class ThrowableException<TThrowable> : ThrowableException, IThrowa
 	public void WithSafeInvoke(Action<TThrowable> action)
 	{
 		JThrowableCall call = new(this.Global, action);
-		Task.Factory.StartNew(ThrowableException.WithSafeInvoke<TThrowable>, call).Wait();
+		Task.Factory.StartNew(ThrowableException.WithSafeInvoke<TThrowable>, call, TaskCreationOptions.LongRunning)
+		    .Wait();
 	}
 	/// <summary>
 	/// Executes <paramref name="func"/> using the current <typeparamref name="TThrowable"/> instance.
@@ -85,7 +86,8 @@ public sealed class ThrowableException<TThrowable> : ThrowableException, IThrowa
 	public TResult WithSafeInvoke<TResult>(Func<TThrowable, TResult> func)
 	{
 		JThrowableCall call = new(this.Global, func);
-		return Task.Factory.StartNew(ThrowableException.WithSafeInvoke<TThrowable, TResult>, call).Result;
+		return Task.Factory.StartNew(ThrowableException.WithSafeInvoke<TThrowable, TResult>, call,
+		                             TaskCreationOptions.LongRunning).Result;
 	}
 
 	/// <inheritdoc/>

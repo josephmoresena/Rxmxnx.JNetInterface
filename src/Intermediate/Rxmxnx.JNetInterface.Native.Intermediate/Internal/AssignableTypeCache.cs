@@ -29,7 +29,11 @@ internal sealed class AssignableTypeCache
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean? IsAssignableTo<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>
-		=> this._assignableTypes.TryGetValue(typeof(TDataType), out Boolean value) ? value : default(Boolean?);
+	{
+		if (JLocalObject.IsObjectType<TDataType>()) return true;
+		JDataTypeMetadata metadata = IDataType.GetMetadata<TDataType>();
+		return this._assignableTypes.TryGetValue(metadata.Type, out Boolean value) ? value : default(Boolean?);
+	}
 	/// <summary>
 	/// Sets current instance as assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
@@ -37,5 +41,18 @@ internal sealed class AssignableTypeCache
 	/// <param name="isAssignable">Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.</param>
 	internal void SetAssignableTo<TDataType>(Boolean isAssignable)
 		where TDataType : JReferenceObject, IDataType<TDataType>
-		=> this._assignableTypes.TryAdd(typeof(TDataType), isAssignable);
+	{
+		JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TDataType>();
+		this._assignableTypes.TryAdd(metadata.Type, isAssignable);
+		if (!isAssignable) return;
+		// If assignable should be assignable to interfaces and base types.
+		foreach (JInterfaceTypeMetadata interfaceMetadata in metadata.Interfaces)
+			this._assignableTypes.TryAdd(interfaceMetadata.Type, isAssignable);
+		JClassTypeMetadata? baseMetadata = metadata.BaseMetadata;
+		while (baseMetadata is not null && baseMetadata.Type != typeof(JLocalObject))
+		{
+			this._assignableTypes.TryAdd(baseMetadata.Type, isAssignable);
+			baseMetadata = baseMetadata.BaseMetadata;
+		}
+	}
 }

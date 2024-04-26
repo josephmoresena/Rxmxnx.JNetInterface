@@ -66,4 +66,13 @@ public partial class JGlobalBase
 		this.ClearValue();
 		this._isDisposed = true;
 	}
+
+	/// <inheritdoc cref="JReferenceObject.IsInstanceOf{TDataType}"/>
+	/// <param name="obj">A <see cref="JGlobalBase"/> instance.</param>
+	private static Boolean IsInstanceOf<TDataType>(Object? obj) where TDataType : JReferenceObject, IDataType<TDataType>
+	{
+		if (obj is not JGlobalBase jGlobal) return false;
+		using IThread thread = jGlobal.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
+		return thread.ClassFeature.IsInstanceOf<TDataType>(jGlobal);
+	}
 }

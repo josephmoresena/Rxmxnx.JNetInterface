@@ -107,6 +107,54 @@ public sealed class JGlobalTests
 	}
 
 	[Theory]
+	[InlineData(null)]
+	[InlineData(true)]
+	[InlineData(false)]
+	internal void InstanceOfTest(Boolean? jniSecure)
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
+		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
+		JGlobalRef globalRef = JGlobalTests.fixture.Create<JGlobalRef>();
+		String threadName = $"CheckAssignability-{Environment.CurrentManagedThreadId}";
+		using JClassObject jClassClass = new(env);
+		using JGlobal jGlobal = new(jClassClass, globalRef);
+
+		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		jClassClass.SetAssignableTo<JClassObject>(true);
+
+		env.ReferenceFeature.Create<JGlobal>(jClassClass).Returns(jGlobal);
+		Assert.Equal(jGlobal, jClassClass.Global);
+
+		Assert.True(jGlobal.InstanceOf<JClassObject>());
+		Assert.True(jGlobal.InstanceOf<JLocalObject>());
+		Assert.True(jGlobal.InstanceOf<JSerializableObject>());
+		Assert.True(jGlobal.InstanceOf<JAnnotatedElementObject>());
+		Assert.True(jGlobal.InstanceOf<JGenericDeclarationObject>());
+		Assert.True(jGlobal.InstanceOf<JTypeObject>());
+
+		env.ClassFeature.IsInstanceOf(jGlobal, jClassClass).Returns(true);
+		jGlobal.InstanceOf(jClassClass);
+		env.ClassFeature.Received(1).IsInstanceOf(jGlobal, jClassClass);
+
+		env.JniSecure().Returns(jniSecure.GetValueOrDefault());
+		vm.GetEnvironment().Returns(jniSecure.HasValue ? env : default);
+		vm.WhenForAnyArgs(v => v.InitializeThread(Arg.Any<CString?>())).Do(c =>
+		{
+			if (!c[0]!.ToString()!.StartsWith("CheckAssignability-")) return;
+			if (!jniSecure.GetValueOrDefault())
+				Assert.NotEqual(threadName, c[0].ToString());
+			else
+				Assert.Equal(threadName, c[0].ToString());
+		});
+		Assert.False(jGlobal.InstanceOf<JArrayObject<JLocalObject>>());
+		vm.Received(1).GetEnvironment();
+		env.Received(jniSecure.HasValue ? 1 : 0).JniSecure();
+		vm.Received(1).InitializeThread(Arg.Any<CString?>());
+		env.ClassFeature.Received(1).IsInstanceOf<JArrayObject<JLocalObject>>(jGlobal);
+	}
+
+	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
 	internal void FinalizerTest(Boolean unload)

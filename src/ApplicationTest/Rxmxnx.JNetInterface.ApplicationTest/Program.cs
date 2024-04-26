@@ -188,7 +188,7 @@ public static class Program
 	{
 		Program.PrintAttachedThreadInfo(env);
 		Program.PrintAttachThreadInfo(vm, new(() => "Main thread Re-Attached"u8), env);
-		Task jvmT = Task.Factory.StartNew(Program.PrintAttachedThreadInfo, vm);
+		Task jvmT = Task.Factory.StartNew(Program.PrintAttachedThreadInfo, vm, TaskCreationOptions.LongRunning);
 		jvmT.Wait();
 		Console.WriteLine($"Supported version: 0x{jvmLib.GetLatestSupportedVersion():x8}");
 		IVirtualMachine[] vms = jvmLib.GetCreatedVirtualMachines();

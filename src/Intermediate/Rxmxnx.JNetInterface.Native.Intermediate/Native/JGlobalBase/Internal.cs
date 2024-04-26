@@ -43,7 +43,7 @@ public partial class JGlobalBase
 		if (result.HasValue) return result.Value;
 		return this.JniSecure() ?
 			JGlobalBase.IsInstanceOf<TDataType>(this) :
-			Task.Factory.StartNew(JGlobalBase.IsInstanceOf<TDataType>, this).Result;
+			Task.Factory.StartNew(JGlobalBase.IsInstanceOf<TDataType>, this, TaskCreationOptions.LongRunning).Result;
 	}
 	/// <inheritdoc/>
 	private protected override ReadOnlySpan<Byte> AsSpan() => this._value.Reference.AsBytes();
@@ -64,14 +64,5 @@ public partial class JGlobalBase
 		if (base.Same(jObject)) return true;
 		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.CheckGlobalReference);
 		return thread.IsSameObject(this, jObject);
-	}
-
-	/// <inheritdoc cref="JReferenceObject.IsInstanceOf{TDataType}"/>
-	/// <param name="obj">A <see cref="JGlobalBase"/> instance.</param>
-	private static Boolean IsInstanceOf<TDataType>(Object? obj) where TDataType : JReferenceObject, IDataType<TDataType>
-	{
-		if (obj is not JGlobalBase jGlobal) return false;
-		using IThread thread = jGlobal.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
-		return thread.ClassFeature.IsInstanceOf<TDataType>(jGlobal);
 	}
 }
