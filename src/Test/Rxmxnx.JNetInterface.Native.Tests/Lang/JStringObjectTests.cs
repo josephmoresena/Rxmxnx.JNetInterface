@@ -1,6 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests.Lang;
 
 [ExcludeFromCodeCoverage]
+[SuppressMessage("Usage", "xUnit1046:Avoid using TheoryDataRow arguments that are not serializable")]
 public sealed class JStringObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();

@@ -1,6 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests.Lang.Reflect;
 
 [ExcludeFromCodeCoverage]
+[SuppressMessage("Usage", "xUnit1046:Avoid using TheoryDataRow arguments that are not serializable")]
 public class JMethodObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
