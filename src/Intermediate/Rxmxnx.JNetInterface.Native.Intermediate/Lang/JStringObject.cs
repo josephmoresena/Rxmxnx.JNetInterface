@@ -8,12 +8,14 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	IInterfaceObject<JSerializableObject>, IInterfaceObject<JComparableObject>, IInterfaceObject<JCharSequenceObject>
 {
 	/// <summary>
+	/// JNI string reference.
+	/// </summary>
+	public new JStringLocalRef Reference => this.As<JStringLocalRef>();
+
+	/// <summary>
 	/// CLR type of object metadata.
 	/// </summary>
 	internal static readonly Type MetadataType = typeof(StringObjectMetadata);
-
-	/// <inheritdoc cref="JLocalObject.InternalReference"/>
-	internal JStringLocalRef Reference => this.As<JStringLocalRef>();
 
 	/// <summary>
 	/// Internal property to debugger display.
