@@ -11,11 +11,11 @@ public partial class JGlobalBase
 	/// </summary>
 	internal AssignableTypeCache AssignationCache { get; } = new();
 	/// <summary>
-	/// Indicates whether current instance has objects.
+	/// Indicates whether the current instance has objects.
 	/// </summary>
 	internal Boolean HasObjects => !this._objects.IsEmpty;
 	/// <summary>
-	/// Indicates whether current instance is disposable.
+	/// Indicates whether the current instance is disposable.
 	/// </summary>
 	private protected virtual Boolean IsDisposable => false;
 

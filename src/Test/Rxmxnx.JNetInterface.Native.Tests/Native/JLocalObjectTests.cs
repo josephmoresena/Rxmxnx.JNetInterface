@@ -113,6 +113,12 @@ public sealed class JLocalObjectTests
 		Assert.Equal(nCase == 0, jLocal.IsDefaultInstance());
 		Assert.Equal(jLocal.InternalReference, jLocal.InternalAs<JClassLocalRef>().Value);
 		Assert.Equal($"{jObjectClass.Name} {jLocal.As<JObjectLocalRef>()}", jLocal.ToString());
+		Assert.Equal(nCase switch
+		{
+			2 => jWeak,
+			3 => jGlobal,
+			_ => default,
+		}, jLocal.Lifetime.GetGlobalObject());
 
 		Assert.True(jLocal.InstanceOf(jObjectClass));
 
@@ -145,6 +151,15 @@ public sealed class JLocalObjectTests
 			env.ReferenceFeature.Received(nCase == 2 ? 1 : 0).GetSynchronizer(jWeak);
 			env.ReferenceFeature.Received(nCase == 3 ? 1 : 0).GetSynchronizer(jGlobal);
 		}
+
+		env.GetReferenceType(Arg.Any<JWeak>()).Returns(JReferenceType.WeakGlobalRefType);
+		env.GetReferenceType(Arg.Any<JGlobal>()).Returns(JReferenceType.GlobalRefType);
+
+		Assert.Equal(nCase > 1, jLocal.Lifetime.HasValidGlobal<JWeak>());
+		Assert.Equal(nCase > 2, jLocal.Lifetime.HasValidGlobal<JGlobal>());
+
+		env.Received(nCase > 1 ? 1 : 0).GetReferenceType(jWeak);
+		env.Received(nCase > 2 ? 1 : 0).GetReferenceType(jGlobal);
 	}
 
 	[Fact]
@@ -172,5 +187,37 @@ public sealed class JLocalObjectTests
 
 		jLocal.SetValue(throwableRef);
 		Assert.Equal(throwableRef.Value, jLocal.Reference);
+	}
+
+	[Fact]
+	internal void SetGlobal()
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
+		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
+		JClassLocalRef classRef = JLocalObjectTests.fixture.Create<JClassLocalRef>();
+		JObjectLocalRef localRef = JLocalObjectTests.fixture.Create<JObjectLocalRef>();
+		JGlobalRef globalRef = JLocalObjectTests.fixture.Create<JGlobalRef>();
+
+		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
+		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
+
+		using IDisposable synchronizer = Substitute.For<IDisposable>();
+		using JClassObject jClassClass = new(env);
+		using JClassObject jObjectClass = new(jClassClass, IClassType.GetMetadata<JLocalObject>(), classRef);
+		using JLocalObject jLocal = new(jObjectClass, localRef);
+
+		env.ClassFeature.GetObjectClass(jLocal).Returns(jObjectClass);
+		env.ReferenceFeature.GetSynchronizer(Arg.Any<JReferenceObject>()).Returns(synchronizer);
+		env.ClassFeature.IsInstanceOf(Arg.Any<JReferenceObject>(), jObjectClass).Returns(true);
+
+		Assert.Null(jLocal.Lifetime.GetGlobalObject());
+
+		using JGlobal jGlobal = new(jLocal, globalRef);
+
+		jLocal.Lifetime.SetGlobal(jGlobal);
+
+		Assert.Equal(jGlobal, jLocal.Lifetime.GetGlobalObject());
 	}
 }

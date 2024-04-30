@@ -124,6 +124,7 @@ public sealed class JGlobalTests
 
 		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
 		jClassClass.SetAssignableTo<JClassObject>(true);
+		jClassClass.SetAssignableTo<JStringObject>(false);
 
 		env.ReferenceFeature.Create<JGlobal>(jClassClass).Returns(jGlobal);
 		Assert.Equal(jGlobal, jClassClass.Global);
@@ -134,6 +135,7 @@ public sealed class JGlobalTests
 		Assert.True(jGlobal.InstanceOf<JAnnotatedElementObject>());
 		Assert.True(jGlobal.InstanceOf<JGenericDeclarationObject>());
 		Assert.True(jGlobal.InstanceOf<JTypeObject>());
+		Assert.False(jGlobal.InstanceOf<JStringObject>());
 
 		env.ClassFeature.IsInstanceOf(jGlobal, jClassClass).Returns(true);
 		jGlobal.InstanceOf(jClassClass);

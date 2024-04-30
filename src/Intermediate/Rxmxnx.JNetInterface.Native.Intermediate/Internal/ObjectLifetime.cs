@@ -103,7 +103,6 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="localRef">A local object reference the value of the current instance.</param>
 	public void SetValue(JLocalObject jLocal, JObjectLocalRef localRef)
 	{
-		if (localRef == default) return;
 		this.LoadNewValue(jLocal, localRef);
 		this.Secondary?.LoadNewValue(jLocal, localRef);
 	}
@@ -115,7 +114,6 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="localRef">A local object reference the value of the current instance.</param>
 	public void SetValue<TValue>(JLocalObject jLocal, TValue localRef) where TValue : unmanaged, IObjectReferenceType
 	{
-		if (localRef.Equals(default)) return;
 		this.LoadNewValue(jLocal, localRef.Value);
 		this.Secondary?.LoadNewValue(jLocal, localRef.Value);
 	}
@@ -198,16 +196,6 @@ internal sealed partial class ObjectLifetime : IDisposable
 	{
 		this._class = jClass ?? this._class;
 		if (this._class?.IsFinal == true) this._isRealClass = true;
-	}
-	/// <summary>
-	/// Sets the class object for a local class instance.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	/// <param name="classHash">A <see cref="JClassObject"/> hash.</param>
-	public void SetClassClass(JClassObject jClass, String? classHash)
-	{
-		this._class = classHash == IDataType.GetHash<JClassObject>() ? jClass : this._env.ClassFeature.ClassObject;
-		this._isRealClass = true;
 	}
 	/// <summary>
 	/// Indicates whether a local instance is assignable to <typeparamref name="TDataType"/> type.

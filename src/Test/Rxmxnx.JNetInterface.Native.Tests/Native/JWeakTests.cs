@@ -102,6 +102,7 @@ public sealed class JWeakTests
 
 		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
 		jClassClass.SetAssignableTo<JClassObject>(true);
+		jClassClass.SetAssignableTo<JStringObject>(false);
 
 		env.ReferenceFeature.Create<JWeak>(jClassClass).Returns(jWeak);
 		Assert.Equal(jWeak, jClassClass.Weak);
@@ -112,6 +113,7 @@ public sealed class JWeakTests
 		Assert.True(jWeak.InstanceOf<JAnnotatedElementObject>());
 		Assert.True(jWeak.InstanceOf<JGenericDeclarationObject>());
 		Assert.True(jWeak.InstanceOf<JTypeObject>());
+		Assert.False(jWeak.InstanceOf<JStringObject>());
 
 		env.ClassFeature.IsInstanceOf(jWeak, jClassClass).Returns(true);
 		jWeak.InstanceOf(jClassClass);
