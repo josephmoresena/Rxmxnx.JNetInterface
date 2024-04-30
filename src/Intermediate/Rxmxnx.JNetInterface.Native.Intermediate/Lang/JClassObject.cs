@@ -8,7 +8,11 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	IInterfaceObject<JGenericDeclarationObject>, IInterfaceObject<JTypeObject>
 {
 	/// <summary>
-	/// Fully-qualified class name.
+	/// JNI class reference.
+	/// </summary>
+	public new JClassLocalRef Reference => this.To<JClassLocalRef>();
+	/// <summary>
+	/// Fully qualified class name.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public CString Name

@@ -7,6 +7,10 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	IInterfaceObject<JSerializableObject>
 {
 	/// <summary>
+	/// JNI throwable reference.
+	/// </summary>
+	public new JThrowableLocalRef Reference => this.To<JThrowableLocalRef>();
+	/// <summary>
 	/// Throwable message.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]

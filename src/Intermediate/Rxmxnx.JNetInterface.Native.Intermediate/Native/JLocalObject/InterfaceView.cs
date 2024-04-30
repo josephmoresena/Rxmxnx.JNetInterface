@@ -13,6 +13,11 @@ public partial class JLocalObject
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	public abstract partial class InterfaceView : View<JLocalObject>, IInterfaceType
 	{
+		/// <summary>
+		/// JNI object reference.
+		/// </summary>
+		public JObjectLocalRef Reference => this.Object.Reference;
+
 		/// <inheritdoc/>
 		private protected InterfaceView(JLocalObject jObject) : base(jObject) { }
 

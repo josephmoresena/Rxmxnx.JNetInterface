@@ -12,11 +12,11 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 	/// Array length.
 	/// </summary>
 	public Int32 Length => this._length ??= this.Environment.ArrayFeature.GetArrayLength(this);
-
 	/// <summary>
 	/// JNI array reference.
 	/// </summary>
-	internal JArrayLocalRef Reference => base.As<JArrayLocalRef>();
+	public new JArrayLocalRef Reference => this.To<JArrayLocalRef>();
+
 	/// <summary>
 	/// Array type metadata.
 	/// </summary>

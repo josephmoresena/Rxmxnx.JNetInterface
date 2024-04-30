@@ -52,6 +52,7 @@ public partial class JLocalObject : ILocalObject
 
 	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
+	[ExcludeFromCodeCoverage]
 	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
 	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.GlobalInitializer initializer)

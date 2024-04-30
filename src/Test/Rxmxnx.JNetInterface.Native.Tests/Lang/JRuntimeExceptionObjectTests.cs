@@ -69,6 +69,8 @@ public sealed class JRuntimeExceptionObjectTests
 		Assert.True(Object.ReferenceEquals(jRuntimeException, jRuntimeException.CastTo<JThrowableObject>()));
 
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jRuntimeException);
+
+		Assert.Equal(throwableRef, jRuntimeException.Reference);
 	}
 	[Theory]
 	[InlineData(true)]

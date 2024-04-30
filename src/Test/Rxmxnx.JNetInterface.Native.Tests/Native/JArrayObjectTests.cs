@@ -217,6 +217,8 @@ public sealed class JArrayObjectTests
 
 		env.ArrayFeature.GetArrayLength(jArray).Returns(length);
 
+		Assert.Equal(jArray.Object.Reference, jArray.Reference);
+
 		if (initializer > 1) ILocalObject.ProcessMetadata(jArray, objectMetadata);
 
 		Assert.Equal(arrayRef, jArray.Object.Reference);
@@ -255,6 +257,8 @@ public sealed class JArrayObjectTests
 		env.ArrayFeature.CreateArray<TElement>(jArray.Length).Returns(jArray);
 		Assert.Equal(jArray, JArrayObject<TElement>.Create(env, jArray.Length));
 		env.ArrayFeature.Received(1).CreateArray<TElement>(jArray.Length);
+
+		Assert.Equal(ILocalObject.CreateMetadata(jArray), new ArrayObjectMetadata(ILocalObject.CreateMetadata(jArray)));
 	}
 	private static void MetadataTest<TElement>() where TElement : JReferenceObject, IReferenceType<TElement>
 	{

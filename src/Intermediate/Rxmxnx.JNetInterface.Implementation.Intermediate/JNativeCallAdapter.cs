@@ -37,7 +37,7 @@ public readonly ref partial struct JNativeCallAdapter
 		{
 			jniResult = result.InternalReference;
 			if (jniResult == default)
-				jniResult = this._env.CreateLocalRef(result.As<JObjectLocalRef>());
+				jniResult = this._env.CreateLocalRef(result.Reference);
 			else
 				this._cache.Remove(jniResult);
 		}

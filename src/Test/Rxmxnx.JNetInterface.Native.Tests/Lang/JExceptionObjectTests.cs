@@ -67,6 +67,8 @@ public sealed class JExceptionObjectTests
 		Assert.True(Object.ReferenceEquals(jException, jException.CastTo<JThrowableObject>()));
 
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jException);
+
+		Assert.Equal(throwableRef, jException.Reference);
 	}
 	[Theory]
 	[InlineData(true)]

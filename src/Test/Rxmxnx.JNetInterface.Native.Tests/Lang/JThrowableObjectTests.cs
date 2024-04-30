@@ -68,6 +68,8 @@ public sealed class JThrowableObjectTests
 		Assert.True(Object.ReferenceEquals(jThrowable, jThrowable.CastTo<JLocalObject>()));
 
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jThrowable);
+
+		Assert.Equal(throwableRef, jThrowable.Reference);
 	}
 	[Theory]
 	[InlineData(true)]

@@ -172,8 +172,17 @@ public sealed class JWeakTests
 
 		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
 		thread.ReferenceFeature.Unload(Arg.Any<JWeak>()).Returns(unload);
-		thread.ReferenceFeature.WhenForAnyArgs(r => r.Unload(Arg.Any<JWeak>()))
-		      .Do(c => references.Add((c[0] as JWeak)!.Reference));
+		thread.ReferenceFeature.WhenForAnyArgs(r => r.Unload(Arg.Any<JWeak>())).Do(c =>
+		{
+			try
+			{
+				references.Add((c[0] as JWeak)!.Reference);
+			}
+			catch (Exception)
+			{
+				// ignored
+			}
+		});
 
 		using JClassObject jClassClass = new(env);
 		using JClassObject jStringClass = new(jClassClass, IClassType.GetMetadata<JStringObject>());

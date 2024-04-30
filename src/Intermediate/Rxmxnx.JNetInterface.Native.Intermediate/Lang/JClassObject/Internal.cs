@@ -8,11 +8,6 @@ public partial class JClassObject
 	internal static readonly Type MetadataType = typeof(ClassObjectMetadata);
 
 	/// <summary>
-	/// JNI class reference.
-	/// </summary>
-	internal JClassLocalRef Reference => this.As<JClassLocalRef>();
-
-	/// <summary>
 	/// Retrieves array dimension for given class signature.
 	/// </summary>
 	/// <param name="classSignature">JNI class signature.</param>

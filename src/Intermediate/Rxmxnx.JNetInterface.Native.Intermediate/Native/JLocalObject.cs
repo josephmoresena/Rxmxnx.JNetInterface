@@ -6,11 +6,15 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 {
 	/// <summary>
+	/// JNI local reference.
+	/// </summary>
+	public JObjectLocalRef Reference => this.To<JObjectLocalRef>();
+	/// <summary>
 	/// <see cref="IEnvironment"/> instance.
 	/// </summary>
 	public IEnvironment Environment => this.Lifetime.Environment;
 	/// <summary>
-	/// Retrieves the class object from current instance.
+	/// Retrieves the class object from the current instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public JClassObject Class => this.Lifetime.GetLoadClassObject(this);
@@ -44,24 +48,25 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// <param name="dispose">
 	/// Optional. Indicates whether current instance should be disposed after casting.
 	/// </param>
-	/// <returns>A <typeparamref name="TReference"/> instance from current instance.</returns>
+	/// <returns>A <typeparamref name="TReference"/> instance from the current instance.</returns>
 	public TReference CastTo<TReference>(Boolean dispose = false)
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		=> this.CastTo<TReference>(this, dispose);
 	/// <inheritdoc/>
-	public override String ToString() => $"{this.Class.Name} {this.As<JObjectLocalRef>()}";
+	public override String ToString() => $"{this.Class.Name} {this.Reference}";
 
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if current instance is an instance of
+	/// <see langword="true"/> if the current instance is an instance of
 	/// <paramref name="jClass"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean InstanceOf(JClassObject jClass)
 	{
 		IEnvironment env = this.Environment;
-		return env.ClassFeature.IsInstanceOf(this, jClass);
+		JReferenceObject jObject = (JReferenceObject?)this.Lifetime.GetGlobalObject() ?? this;
+		return env.ClassFeature.IsInstanceOf(jObject, jClass);
 	}
 }

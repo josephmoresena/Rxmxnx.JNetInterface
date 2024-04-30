@@ -64,6 +64,8 @@ public sealed class JErrorObjectTests
 		Assert.True(Object.ReferenceEquals(jError, jError.CastTo<JThrowableObject>()));
 
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jError);
+
+		Assert.Equal(throwableRef, jError.Reference);
 	}
 	[Theory]
 	[InlineData(true)]

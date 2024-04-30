@@ -17,6 +17,10 @@ public partial class JLocalObject
 		/// Array length.
 		/// </summary>
 		public Int32 Length => this.Object.Length;
+		/// <summary>
+		/// JNI array reference.
+		/// </summary>
+		public JArrayLocalRef Reference => this.Object.Reference;
 
 		/// <inheritdoc/>
 		private protected ArrayView(JArrayObject jObject) : base(jObject) { }

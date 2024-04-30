@@ -41,7 +41,7 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 	JObjectLocalRef Add(JLocalObject? jLocal)
 	{
 		if (jLocal is null) return default;
-		JObjectLocalRef localRef = jLocal.As<JObjectLocalRef>();
+		JObjectLocalRef localRef = jLocal.Reference;
 		return this.Add(localRef);
 	}
 	/// <summary>
