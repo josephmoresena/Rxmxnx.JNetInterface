@@ -60,12 +60,14 @@ public sealed class JLocalObjectTests
 		Assert.Null(typeMetadata.ParseInstance(env, default));
 		Assert.Null(typeMetadata.CreateException(jGlobal));
 
-		using JLocalObject jLocal0 =
-			Assert.IsType<JLocalObject>(typeMetadata.CreateInstance(jObjectClass, localRef, true));
+		using JLocalObject jLocal0 = typeMetadata.CreateInstance(jObjectClass, localRef, true);
 		using JLocalObject jLocal1 = Assert.IsType<JLocalObject>(typeMetadata.ParseInstance(jLocal, disposeParse));
-		using JLocalObject jLocal2 = Assert.IsType<JLocalObject>(typeMetadata.ParseInstance(env, jGlobal));
+		using JLocalObject jLocal2 = typeMetadata.ParseInstance(env, jGlobal);
 
 		Assert.Equal(jLocal, jLocal0);
+		Assert.Equal(jLocal, jLocal1);
+		Assert.False(Object.ReferenceEquals(jLocal, jLocal0));
+		Assert.True(Object.ReferenceEquals(jLocal, jLocal1));
 
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JLocalObject>(Arg.Any<JReferenceObject>());
@@ -166,8 +168,6 @@ public sealed class JLocalObjectTests
 	internal void SetValueTest()
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
-		VirtualMachineProxy vm = env.VirtualMachine;
-		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JClassLocalRef classRef = JLocalObjectTests.fixture.Create<JClassLocalRef>();
 		JObjectLocalRef localRef = JLocalObjectTests.fixture.Create<JObjectLocalRef>();
 		JArrayLocalRef arrayRef = JLocalObjectTests.fixture.Create<JArrayLocalRef>();
@@ -219,5 +219,71 @@ public sealed class JLocalObjectTests
 		jLocal.Lifetime.SetGlobal(jGlobal);
 
 		Assert.Equal(jGlobal, jLocal.Lifetime.GetGlobalObject());
+	}
+
+	[Theory]
+	[InlineData(0)]
+	[InlineData(1)]
+	[InlineData(2)]
+	[InlineData(3)]
+	internal void IsInstanceOfTest(Byte nCase)
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
+		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
+		JClassLocalRef classRef = JLocalObjectTests.fixture.Create<JClassLocalRef>();
+		JObjectLocalRef localRef = nCase > 0 ? JLocalObjectTests.fixture.Create<JObjectLocalRef>() : default;
+		JWeakRef weakRef = nCase > 1 ? JLocalObjectTests.fixture.Create<JWeakRef>() : default;
+		JGlobalRef globalRef = nCase > 2 ? JLocalObjectTests.fixture.Create<JGlobalRef>() : default;
+		Boolean result = JLocalObjectTests.fixture.Create<Boolean>();
+
+		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
+		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
+
+		using IDisposable synchronizer = Substitute.For<IDisposable>();
+		using JClassObject jClassClass = new(env);
+		using JClassObject jObjectClass = new(jClassClass, IClassType.GetMetadata<JLocalObject>(), classRef);
+		using JLocalObject jLocal = new(jObjectClass, localRef);
+
+		env.ClassFeature.GetObjectClass(jLocal).Returns(jObjectClass);
+		env.ReferenceFeature.GetSynchronizer(Arg.Any<JReferenceObject>()).Returns(synchronizer);
+		env.GetReferenceType(Arg.Any<JWeak>()).Returns(JReferenceType.WeakGlobalRefType);
+		env.GetReferenceType(Arg.Any<JGlobal>()).Returns(JReferenceType.GlobalRefType);
+		env.ClassFeature.IsInstanceOf<JSerializableObject>(Arg.Any<JReferenceObject>()).Returns(result);
+
+		using JWeak jWeak = new(jLocal, weakRef);
+		using JGlobal jGlobal = new(jLocal, globalRef);
+
+		env.ReferenceFeature.Create<JGlobal>(jLocal).Returns(jGlobal);
+		env.ReferenceFeature.Create<JWeak>(jLocal).Returns(jWeak);
+
+		Assert.Equal(jWeak, jLocal.Weak);
+		Assert.Equal(jGlobal, jLocal.Global);
+
+		Assert.Equal(result, jLocal.InstanceOf<JSerializableObject>());
+
+		env.ClassFeature.Received(nCase < 2 ? 1 : 0).IsInstanceOf<JSerializableObject>(jLocal);
+		env.ClassFeature.Received(nCase == 2 ? 1 : 0).IsInstanceOf<JSerializableObject>(jWeak);
+		env.ClassFeature.Received(nCase > 2 ? 1 : 0).IsInstanceOf<JSerializableObject>(jGlobal);
+
+		env.ReferenceFeature.ClearReceivedCalls();
+		env.ClassFeature.ClearReceivedCalls();
+
+		jLocal.SetAssignableTo<JSerializableObject>(result);
+
+		Assert.Equal(result, jLocal.InstanceOf<JSerializableObject>());
+		env.ClassFeature.Received(0).IsInstanceOf<JSerializableObject>(Arg.Any<JReferenceObject>());
+
+		if (nCase > 1)
+		{
+			Assert.Equal(jWeak, jLocal.Weak);
+			env.ReferenceFeature.Received(0).Create<JWeak>(jLocal);
+		}
+		if (nCase > 2)
+		{
+			Assert.Equal(jGlobal, jLocal.Global);
+			env.ReferenceFeature.Received(0).Create<JGlobal>(jLocal);
+		}
 	}
 }
