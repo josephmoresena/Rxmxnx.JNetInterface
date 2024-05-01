@@ -181,6 +181,30 @@ internal static class ClassNames
 	/// </summary>
 	public const String ByteBufferObject = ClassNames.NioPackage + "ByteBuffer";
 	/// <summary>
+	/// JNI name of <c>java.nio.CharBuffer</c> class.
+	/// </summary>
+	public const String CharBufferObject = ClassNames.NioPackage + "CharBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.DoubleBuffer</c> class.
+	/// </summary>
+	public const String DoubleBufferObject = ClassNames.NioPackage + "DoubleBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.FloatBuffer</c> class.
+	/// </summary>
+	public const String FloatBufferObject = ClassNames.NioPackage + "FloatBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.IntBuffer</c> class.
+	/// </summary>
+	public const String IntBufferObject = ClassNames.NioPackage + "IntBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.LongBuffer</c> class.
+	/// </summary>
+	public const String LongBufferObject = ClassNames.NioPackage + "LongBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.ShortBuffer</c> class.
+	/// </summary>
+	public const String ShortBufferObject = ClassNames.NioPackage + "ShortBuffer";
+	/// <summary>
 	/// JNI name of <c>java.nio.MappedByteBuffer</c> class.
 	/// </summary>
 	public const String MappedByteBufferObject = ClassNames.NioPackage + "MappedByteBuffer";
@@ -308,6 +332,14 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.reflect.Member</c> interface.
 	/// </summary>
 	public const String MemberInterface = ClassNames.ReflectPackage + "Member";
+	/// <summary>
+	/// JNI name of <c>java.lang.Appendable</c> interface.
+	/// </summary>
+	public const String AppendableInterface = ClassNames.LangPackage + "Appendable";
+	/// <summary>
+	/// JNI name of <c>java.lang.Readable</c> interface.
+	/// </summary>
+	public const String ReadableInterface = ClassNames.LangPackage + "Readable";
 	/// <summary>
 	/// JNI name of <c>java.lang.annotation.Annotation</c> interface.
 	/// </summary>

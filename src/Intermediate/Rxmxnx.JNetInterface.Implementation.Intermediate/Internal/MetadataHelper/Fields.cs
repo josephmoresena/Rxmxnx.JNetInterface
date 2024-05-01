@@ -140,6 +140,12 @@ internal static partial class MetadataHelper
 
 		// NIO Objects //
 		{ IDataType.GetHash<JByteBufferObject>(), IReferenceType.GetMetadata<JByteBufferObject>() },
+		{ IDataType.GetHash<JCharBufferObject>(), IReferenceType.GetMetadata<JCharBufferObject>() },
+		{ IDataType.GetHash<JDoubleBufferObject>(), IReferenceType.GetMetadata<JDoubleBufferObject>() },
+		{ IDataType.GetHash<JFloatBufferObject>(), IReferenceType.GetMetadata<JFloatBufferObject>() },
+		{ IDataType.GetHash<JIntBufferObject>(), IReferenceType.GetMetadata<JIntBufferObject>() },
+		{ IDataType.GetHash<JLongBufferObject>(), IReferenceType.GetMetadata<JLongBufferObject>() },
+		{ IDataType.GetHash<JShortBufferObject>(), IReferenceType.GetMetadata<JShortBufferObject>() },
 		{ IDataType.GetHash<JMappedByteBufferObject>(), IReferenceType.GetMetadata<JMappedByteBufferObject>() },
 		{ IDataType.GetHash<JDirectByteBufferObject>(), IReferenceType.GetMetadata<JDirectByteBufferObject>() },
 
@@ -152,6 +158,8 @@ internal static partial class MetadataHelper
 		{ IDataType.GetHash<JGenericDeclarationObject>(), IReferenceType.GetMetadata<JGenericDeclarationObject>() },
 		{ IDataType.GetHash<JTypeObject>(), IReferenceType.GetMetadata<JTypeObject>() },
 		{ IDataType.GetHash<JMemberObject>(), IReferenceType.GetMetadata<JMemberObject>() },
+		{ IDataType.GetHash<JAppendableObject>(), IReferenceType.GetMetadata<JAppendableObject>() },
+		{ IDataType.GetHash<JReadableObject>(), IReferenceType.GetMetadata<JReadableObject>() },
 		{ IDataType.GetHash<JDirectBufferObject>(), IReferenceType.GetMetadata<JDirectBufferObject>() },
 		{ IDataType.GetHash<JAnnotationObject>(), IReferenceType.GetMetadata<JAnnotationObject>() },
 

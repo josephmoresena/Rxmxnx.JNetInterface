@@ -93,6 +93,24 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.ByteBufferObject"/>
 	[DefaultValue(ClassNames.ByteBufferObject)]
 	public static partial ReadOnlySpan<Byte> ByteBufferObject();
+	/// <inheritdoc cref="ClassNames.CharBufferObject"/>
+	[DefaultValue(ClassNames.CharBufferObject)]
+	public static partial ReadOnlySpan<Byte> CharBufferObject();
+	/// <inheritdoc cref="ClassNames.DoubleBufferObject"/>
+	[DefaultValue(ClassNames.DoubleBufferObject)]
+	public static partial ReadOnlySpan<Byte> DoubleBufferObject();
+	/// <inheritdoc cref="ClassNames.FloatBufferObject"/>
+	[DefaultValue(ClassNames.FloatBufferObject)]
+	public static partial ReadOnlySpan<Byte> FloatBufferObject();
+	/// <inheritdoc cref="ClassNames.IntBufferObject"/>
+	[DefaultValue(ClassNames.IntBufferObject)]
+	public static partial ReadOnlySpan<Byte> IntBufferObject();
+	/// <inheritdoc cref="ClassNames.LongBufferObject"/>
+	[DefaultValue(ClassNames.LongBufferObject)]
+	public static partial ReadOnlySpan<Byte> LongBufferObject();
+	/// <inheritdoc cref="ClassNames.ShortBufferObject"/>
+	[DefaultValue(ClassNames.ShortBufferObject)]
+	public static partial ReadOnlySpan<Byte> ShortBufferObject();
 	/// <inheritdoc cref="ClassNames.MappedByteBufferObject"/>
 	[DefaultValue(ClassNames.MappedByteBufferObject)]
 	public static partial ReadOnlySpan<Byte> MappedByteBufferObject();
@@ -220,6 +238,12 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.AnnotationInterface"/>
 	[DefaultValue(ClassNames.AnnotationInterface)]
 	public static partial ReadOnlySpan<Byte> AnnotationInterface();
+	/// <inheritdoc cref="ClassNames.AppendableInterface"/>
+	[DefaultValue(ClassNames.AppendableInterface)]
+	public static partial ReadOnlySpan<Byte> AppendableInterface();
+	/// <inheritdoc cref="ClassNames.ReadableInterface"/>
+	[DefaultValue(ClassNames.ReadableInterface)]
+	public static partial ReadOnlySpan<Byte> ReadableInterface();
 	/// <inheritdoc cref="ClassNames.ElementTypeEnum"/>
 	[DefaultValue(ClassNames.ElementTypeEnum)]
 	public static partial ReadOnlySpan<Byte> ElementTypeEnum();

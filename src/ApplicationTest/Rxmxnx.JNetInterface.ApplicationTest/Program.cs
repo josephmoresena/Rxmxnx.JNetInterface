@@ -128,6 +128,12 @@ public static class Program
 
 		Console.WriteLine("====== NIO types ======");
 		Console.WriteLine(IDataType.GetMetadata<JByteBufferObject>());
+		Console.WriteLine(IDataType.GetMetadata<JCharBufferObject>());
+		Console.WriteLine(IDataType.GetMetadata<JDoubleBufferObject>());
+		Console.WriteLine(IDataType.GetMetadata<JFloatBufferObject>());
+		Console.WriteLine(IDataType.GetMetadata<JIntBufferObject>());
+		Console.WriteLine(IDataType.GetMetadata<JLongBufferObject>());
+		Console.WriteLine(IDataType.GetMetadata<JShortBufferObject>());
 		Console.WriteLine(IDataType.GetMetadata<JMappedByteBufferObject>());
 		Console.WriteLine(IDataType.GetMetadata<JDirectByteBufferObject>());
 
@@ -147,6 +153,8 @@ public static class Program
 		Console.WriteLine(IDataType.GetMetadata<JMemberObject>());
 		Console.WriteLine(IDataType.GetMetadata<JTypeObject>());
 		Console.WriteLine(IDataType.GetMetadata<JGenericDeclarationObject>());
+		Console.WriteLine(IDataType.GetMetadata<JAppendableObject>());
+		Console.WriteLine(IDataType.GetMetadata<JReadableObject>());
 		Console.WriteLine(IDataType.GetMetadata<JAnnotationObject>());
 
 		Console.WriteLine("==== Annotation package ====");
