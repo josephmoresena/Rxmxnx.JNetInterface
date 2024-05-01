@@ -280,7 +280,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	{
 		if (Object.ReferenceEquals(this, other)) return;
 		this._secondary.SetTarget(other);
-		other._secondary.SetTarget(other);
+		other._secondary.SetTarget(this);
 		this._assignableTypes.Merge(other._assignableTypes);
 		this.SynchronizeGlobal(other);
 		this.SynchronizeObjects(other._objects);

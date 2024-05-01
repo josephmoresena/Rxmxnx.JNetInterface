@@ -416,6 +416,91 @@ public sealed class JClassObjectTests
 			signature = CString.Concat("["u8, signature);
 		}
 	}
+	[Theory]
+	[InlineData(0)]
+	[InlineData(1)]
+	[InlineData(2)]
+	[InlineData(3)]
+	internal void SynchronizeObjectTest(Byte nCase)
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		VirtualMachineProxy vm = env.VirtualMachine;
+		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
+		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
+		JGlobalRef globalRef0 = JClassObjectTests.fixture.Create<JGlobalRef>();
+		JGlobalRef globalRef1 = JClassObjectTests.fixture.Create<JGlobalRef>();
+		JWeakRef weakRef0 = JClassObjectTests.fixture.Create<JWeakRef>();
+		JWeakRef weakRef1 = JClassObjectTests.fixture.Create<JWeakRef>();
+		JClassObject jClass = new(env);
+		JLocalObject jLocal = new(jClass, classRef.Value);
+
+		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
+		thread.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
+
+		jClass.SetValue(classRef);
+
+		ObjectLifetime lifetime0 = jClass.Lifetime;
+		ObjectLifetime lifetime1 = jLocal.Lifetime;
+
+		JGlobal jGlobal0 = new(jClass, globalRef0);
+		JGlobal jGlobal1 = new(jClass, globalRef1);
+		JWeak jWeak0 = new(jClass, weakRef0);
+		JWeak jWeak1 = new(jClass, weakRef1);
+
+		lifetime0.UnloadGlobal(jGlobal0);
+		lifetime0.UnloadGlobal(jGlobal1);
+		lifetime1.UnloadGlobal(jGlobal0);
+		lifetime1.UnloadGlobal(jGlobal1);
+		lifetime0.UnloadGlobal(jWeak0);
+		lifetime0.UnloadGlobal(jWeak1);
+		lifetime1.UnloadGlobal(jWeak0);
+		lifetime1.UnloadGlobal(jWeak1);
+
+		if (nCase > 1)
+		{
+			env.ReferenceFeature.Create<JWeak>(jClass).Returns(jWeak0);
+			lifetime0.SetGlobal(jGlobal0);
+			Assert.Equal(jWeak0, lifetime0.GetLoadWeakObject(jClass));
+		}
+		switch (nCase)
+		{
+			case 2:
+				env.ReferenceFeature.Create<JWeak>(jLocal).Returns(jWeak0);
+				lifetime1.SetGlobal(jGlobal0);
+				Assert.Equal(jWeak0, lifetime0.GetLoadWeakObject(jLocal));
+				break;
+			case > 2:
+				env.ReferenceFeature.Create<JWeak>(jLocal).Returns(jWeak1);
+				lifetime1.SetGlobal(jGlobal1);
+				Assert.Equal(jWeak1, lifetime0.GetLoadWeakObject(jLocal));
+				break;
+		}
+
+		lifetime0.Synchronize(lifetime1);
+		lifetime0.Synchronize(lifetime0);
+		lifetime1.Synchronize(lifetime1);
+
+		Assert.Equal(lifetime0, lifetime0.GetCacheable());
+		Assert.Equal(lifetime0, lifetime1.GetCacheable());
+
+		jWeak1.Dispose();
+		jWeak1.Dispose();
+
+		jWeak0.Dispose();
+		jWeak0.Dispose();
+
+		jGlobal1.Dispose();
+		jGlobal1.Dispose();
+
+		jGlobal0.Dispose();
+		jGlobal0.Dispose();
+
+		jClass.Dispose();
+		jClass.Dispose();
+
+		jLocal.Dispose();
+		jLocal.Dispose();
+	}
 
 	private delegate void JNativeMethodDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
 	private delegate JClassLocalRef JNativeFunctionDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
