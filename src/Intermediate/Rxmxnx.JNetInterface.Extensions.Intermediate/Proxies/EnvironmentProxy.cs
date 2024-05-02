@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Native.Proxies;
 /// <summary>
 /// This object exposes a JNI proxy instance.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public abstract partial class EnvironmentProxy
 {
 	/// <inheritdoc cref="IEnvironment.VirtualMachine"/>

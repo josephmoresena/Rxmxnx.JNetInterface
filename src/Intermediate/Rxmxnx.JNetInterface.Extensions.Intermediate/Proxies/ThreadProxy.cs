@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Native.Proxies;
 /// <summary>
 /// This interface exposes a JNI proxy thread.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
                  Justification = CommonConstants.AbstractProxyJustification)]
 public abstract class ThreadProxy : EnvironmentProxy, IThread
