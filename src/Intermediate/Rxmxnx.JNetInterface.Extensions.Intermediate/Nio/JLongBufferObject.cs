@@ -17,9 +17,6 @@ public class JLongBufferObject : JBufferObject<JLong>, IClassType<JLongBufferObj
 	static JClassTypeMetadata<JLongBufferObject> IClassType<JLongBufferObject>.Metadata => JLongBufferObject.metadata;
 
 	/// <inheritdoc/>
-	private protected JLongBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
-
-	/// <inheritdoc/>
 	protected JLongBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	protected JLongBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

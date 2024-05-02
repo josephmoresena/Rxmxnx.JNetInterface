@@ -19,9 +19,6 @@ public class JDoubleBufferObject : JBufferObject<JDouble>, IClassType<JDoubleBuf
 		=> JDoubleBufferObject.metadata;
 
 	/// <inheritdoc/>
-	private protected JDoubleBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
-
-	/// <inheritdoc/>
 	protected JDoubleBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	protected JDoubleBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

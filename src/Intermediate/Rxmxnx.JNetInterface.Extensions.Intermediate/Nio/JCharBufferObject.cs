@@ -20,9 +20,6 @@ public class JCharBufferObject : JBufferObject<JChar>, IClassType<JCharBufferObj
 	static JClassTypeMetadata<JCharBufferObject> IClassType<JCharBufferObject>.Metadata => JCharBufferObject.metadata;
 
 	/// <inheritdoc/>
-	private protected JCharBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
-
-	/// <inheritdoc/>
 	protected JCharBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	protected JCharBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

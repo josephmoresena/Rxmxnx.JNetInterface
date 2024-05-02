@@ -18,9 +18,6 @@ public class JShortBufferObject : JBufferObject<JShort>, IClassType<JShortBuffer
 		=> JShortBufferObject.metadata;
 
 	/// <inheritdoc/>
-	private protected JShortBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
-
-	/// <inheritdoc/>
 	protected JShortBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	protected JShortBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

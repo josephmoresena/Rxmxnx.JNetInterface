@@ -17,9 +17,6 @@ public class JIntBufferObject : JBufferObject<JInt>, IClassType<JIntBufferObject
 	static JClassTypeMetadata<JIntBufferObject> IClassType<JIntBufferObject>.Metadata => JIntBufferObject.metadata;
 
 	/// <inheritdoc/>
-	private protected JIntBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
-
-	/// <inheritdoc/>
 	protected JIntBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	protected JIntBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }

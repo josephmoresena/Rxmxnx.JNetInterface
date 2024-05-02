@@ -18,9 +18,6 @@ public class JFloatBufferObject : JBufferObject<JFloat>, IClassType<JFloatBuffer
 		=> JFloatBufferObject.metadata;
 
 	/// <inheritdoc/>
-	private protected JFloatBufferObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
-
-	/// <inheritdoc/>
 	protected JFloatBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	protected JFloatBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
