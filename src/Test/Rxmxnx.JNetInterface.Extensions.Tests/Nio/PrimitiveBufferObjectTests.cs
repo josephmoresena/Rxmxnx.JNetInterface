@@ -26,12 +26,12 @@ public sealed class PrimitiveBufferObjectTests
 		where TBuffer : JBufferObject<TPrimitive>, IClassType<TBuffer>
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>
 	{
-		PrimitiveBufferObjectTests.CreateMetadataTest<TBuffer, TPrimitive>(true);
-		PrimitiveBufferObjectTests.CreateMetadataTest<TBuffer, TPrimitive>(false);
+		PrimitiveBufferObjectTests.CreationTest<TBuffer, TPrimitive>(true);
+		PrimitiveBufferObjectTests.CreationTest<TBuffer, TPrimitive>(false);
 		PrimitiveBufferObjectTests.MetadataTest<TBuffer, TPrimitive>(true);
 		PrimitiveBufferObjectTests.MetadataTest<TBuffer, TPrimitive>(false);
 	}
-	private static void CreateMetadataTest<TBuffer, TPrimitive>(Boolean useMetadata)
+	private static void CreationTest<TBuffer, TPrimitive>(Boolean useMetadata)
 		where TBuffer : JBufferObject<TPrimitive>, IClassType<TBuffer>
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>
 	{
@@ -106,15 +106,20 @@ public sealed class PrimitiveBufferObjectTests
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
 		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.Hash} }}", textValue);
 
-		Assert.Equal(JTypeModifier.Abstract, typeMetadata.Modifier);
+		Assert.Equal(
+			typeof(TBuffer).BaseType == typeof(JBufferObject<TPrimitive>) ||
+			typeof(TBuffer).BaseType == typeof(JByteBufferObject) ?
+				JTypeModifier.Abstract :
+				JTypeModifier.Extensible, typeMetadata.Modifier);
 		Assert.Equal(IntPtr.Size, typeMetadata.SizeOf);
 		Assert.Equal(JArrayObject<TBuffer>.Metadata, typeMetadata.GetArrayMetadata());
 		Assert.Equal(typeof(TBuffer), typeMetadata.Type);
 		Assert.Equal(JTypeKind.Class, typeMetadata.Kind);
-		Assert.Equal(
-			typeof(TBuffer) != typeof(JMappedByteBufferObject) ?
-				IDataType.GetMetadata<JBufferObject>() :
-				IDataType.GetMetadata<JByteBufferObject>(), typeMetadata.BaseMetadata);
+		Assert.Equal(typeof(TBuffer).BaseType == typeof(JBufferObject<TPrimitive>) ?
+			             IDataType.GetMetadata<JBufferObject>() :
+			             typeof(TBuffer).BaseType == typeof(JByteBufferObject) ?
+				             IDataType.GetMetadata<JByteBufferObject>() :
+				             IDataType.GetMetadata<JMappedByteBufferObject>(), typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<TBuffer>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<TBuffer>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<TBuffer>());
