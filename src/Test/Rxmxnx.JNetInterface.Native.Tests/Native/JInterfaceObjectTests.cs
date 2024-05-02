@@ -74,6 +74,10 @@ public sealed class JInterfaceObjectTests
 	internal void AnnotationTest() => JInterfaceObjectTests.InterfaceObjectTest<JAnnotationObject>();
 	[Fact]
 	internal void SerializableTest() => JInterfaceObjectTests.InterfaceObjectTest<JSerializableObject>();
+	[Fact]
+	internal void AppendableTest() => JInterfaceObjectTests.InterfaceObjectTest<JAppendableObject>();
+	[Fact]
+	internal void ReadableTest() => JInterfaceObjectTests.InterfaceObjectTest<JReadableObject>();
 
 	private static void InterfaceObjectTest<TInterface>()
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
