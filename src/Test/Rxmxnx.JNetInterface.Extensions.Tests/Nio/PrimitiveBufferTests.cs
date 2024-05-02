@@ -1,37 +1,37 @@
 namespace Rxmxnx.JNetInterface.Tests.Nio;
 
 [ExcludeFromCodeCoverage]
-public sealed class PrimitiveBufferObjectTests
+public sealed class PrimitiveBufferTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 	private static readonly MethodInfo getMetadata =
 		typeof(IClassType).GetMethod(nameof(IClassType.GetMetadata), BindingFlags.Public | BindingFlags.Static)!;
 
 	[Fact]
-	internal void ByteTest() => PrimitiveBufferObjectTests.PrimitiveBufferTest<JByteBufferObject, JByte>();
+	internal void ByteTest() => PrimitiveBufferTests.PrimitiveBufferTest<JByteBufferObject, JByte>();
 	[Fact]
-	internal void CharTest() => PrimitiveBufferObjectTests.PrimitiveBufferTest<JCharBufferObject, JChar>();
+	internal void CharTest() => PrimitiveBufferTests.PrimitiveBufferTest<JCharBufferObject, JChar>();
 	[Fact]
-	internal void DoubleTest() => PrimitiveBufferObjectTests.PrimitiveBufferTest<JDoubleBufferObject, JDouble>();
+	internal void DoubleTest() => PrimitiveBufferTests.PrimitiveBufferTest<JDoubleBufferObject, JDouble>();
 	[Fact]
-	internal void FloatTest() => PrimitiveBufferObjectTests.PrimitiveBufferTest<JFloatBufferObject, JFloat>();
+	internal void FloatTest() => PrimitiveBufferTests.PrimitiveBufferTest<JFloatBufferObject, JFloat>();
 	[Fact]
-	internal void IntTest() => PrimitiveBufferObjectTests.PrimitiveBufferTest<JIntBufferObject, JInt>();
+	internal void IntTest() => PrimitiveBufferTests.PrimitiveBufferTest<JIntBufferObject, JInt>();
 	[Fact]
-	internal void LongTest() => PrimitiveBufferObjectTests.PrimitiveBufferTest<JLongBufferObject, JLong>();
+	internal void LongTest() => PrimitiveBufferTests.PrimitiveBufferTest<JLongBufferObject, JLong>();
 	[Fact]
-	internal void ShortTest() => PrimitiveBufferObjectTests.PrimitiveBufferTest<JShortBufferObject, JShort>();
+	internal void ShortTest() => PrimitiveBufferTests.PrimitiveBufferTest<JShortBufferObject, JShort>();
 	[Fact]
-	internal void MappedByteTest() => PrimitiveBufferObjectTests.PrimitiveBufferTest<JMappedByteBufferObject, JByte>();
+	internal void MappedByteTest() => PrimitiveBufferTests.PrimitiveBufferTest<JMappedByteBufferObject, JByte>();
 
 	private static void PrimitiveBufferTest<TBuffer, TPrimitive>()
 		where TBuffer : JBufferObject<TPrimitive>, IClassType<TBuffer>
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>
 	{
-		PrimitiveBufferObjectTests.CreationTest<TBuffer, TPrimitive>(true);
-		PrimitiveBufferObjectTests.CreationTest<TBuffer, TPrimitive>(false);
-		PrimitiveBufferObjectTests.MetadataTest<TBuffer, TPrimitive>(true);
-		PrimitiveBufferObjectTests.MetadataTest<TBuffer, TPrimitive>(false);
+		PrimitiveBufferTests.CreationTest<TBuffer, TPrimitive>(true);
+		PrimitiveBufferTests.CreationTest<TBuffer, TPrimitive>(false);
+		PrimitiveBufferTests.MetadataTest<TBuffer, TPrimitive>(true);
+		PrimitiveBufferTests.MetadataTest<TBuffer, TPrimitive>(false);
 	}
 	private static void CreationTest<TBuffer, TPrimitive>(Boolean useMetadata)
 		where TBuffer : JBufferObject<TPrimitive>, IClassType<TBuffer>
@@ -39,8 +39,8 @@ public sealed class PrimitiveBufferObjectTests
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<TBuffer>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
-		JObjectLocalRef localRef = PrimitiveBufferObjectTests.fixture.Create<JObjectLocalRef>();
-		Int64 capacity = PrimitiveBufferObjectTests.fixture.Create<Int32>();
+		JObjectLocalRef localRef = PrimitiveBufferTests.fixture.Create<JObjectLocalRef>();
+		Int64 capacity = PrimitiveBufferTests.fixture.Create<Int32>();
 		using JClassObject jClass = new(env);
 		using JClassObject jBufferClass = new(jClass, typeMetadata);
 		using TBuffer jBuffer = Assert.IsType<TBuffer>(typeMetadata.CreateInstance(jBufferClass, localRef, true));
@@ -96,17 +96,17 @@ public sealed class PrimitiveBufferObjectTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
-		JClassLocalRef classRef = PrimitiveBufferObjectTests.fixture.Create<JClassLocalRef>();
-		JObjectLocalRef localRef = PrimitiveBufferObjectTests.fixture.Create<JObjectLocalRef>();
-		JGlobalRef globalRef = PrimitiveBufferObjectTests.fixture.Create<JGlobalRef>();
+		JClassLocalRef classRef = PrimitiveBufferTests.fixture.Create<JClassLocalRef>();
+		JObjectLocalRef localRef = PrimitiveBufferTests.fixture.Create<JObjectLocalRef>();
+		JGlobalRef globalRef = PrimitiveBufferTests.fixture.Create<JGlobalRef>();
 		JTypeModifier modifier = typeof(TBuffer).BaseType == typeof(JBufferObject<TPrimitive>) ||
 			typeof(TBuffer).BaseType == typeof(JByteBufferObject) ?
 				JTypeModifier.Abstract :
 				JTypeModifier.Extensible;
 		JClassTypeMetadata baseMetadata = typeof(TBuffer).BaseType == typeof(JBufferObject<TPrimitive>) ?
 			IClassType.GetMetadata<JBufferObject>() :
-			(JClassTypeMetadata)PrimitiveBufferObjectTests.getMetadata.MakeGenericMethod(typeof(TBuffer).BaseType!)
-			                                              .Invoke(default, [])!;
+			(JClassTypeMetadata)PrimitiveBufferTests.getMetadata.MakeGenericMethod(typeof(TBuffer).BaseType!)
+			                                        .Invoke(default, [])!;
 		using JClassObject jClassClass = new(env);
 		using JClassObject jBufferClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jBufferClass);
