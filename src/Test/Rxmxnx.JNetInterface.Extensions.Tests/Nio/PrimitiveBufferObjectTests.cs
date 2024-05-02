@@ -4,6 +4,8 @@ namespace Rxmxnx.JNetInterface.Tests.Nio;
 public sealed class PrimitiveBufferObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
+	private static readonly MethodInfo getMetadata =
+		typeof(IClassType).GetMethod(nameof(IClassType.GetMetadata), BindingFlags.Public | BindingFlags.Static)!;
 
 	[Fact]
 	internal void ByteTest() => PrimitiveBufferObjectTests.PrimitiveBufferTest<JByteBufferObject, JByte>();
@@ -97,6 +99,14 @@ public sealed class PrimitiveBufferObjectTests
 		JClassLocalRef classRef = PrimitiveBufferObjectTests.fixture.Create<JClassLocalRef>();
 		JObjectLocalRef localRef = PrimitiveBufferObjectTests.fixture.Create<JObjectLocalRef>();
 		JGlobalRef globalRef = PrimitiveBufferObjectTests.fixture.Create<JGlobalRef>();
+		JTypeModifier modifier = typeof(TBuffer).BaseType == typeof(JBufferObject<TPrimitive>) ||
+			typeof(TBuffer).BaseType == typeof(JByteBufferObject) ?
+				JTypeModifier.Abstract :
+				JTypeModifier.Extensible;
+		JClassTypeMetadata baseMetadata = typeof(TBuffer).BaseType == typeof(JBufferObject<TPrimitive>) ?
+			IClassType.GetMetadata<JBufferObject>() :
+			(JClassTypeMetadata)PrimitiveBufferObjectTests.getMetadata.MakeGenericMethod(typeof(TBuffer).BaseType!)
+			                                              .Invoke(default, [])!;
 		using JClassObject jClassClass = new(env);
 		using JClassObject jBufferClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jBufferClass);
@@ -106,20 +116,12 @@ public sealed class PrimitiveBufferObjectTests
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
 		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.Hash} }}", textValue);
 
-		Assert.Equal(
-			typeof(TBuffer).BaseType == typeof(JBufferObject<TPrimitive>) ||
-			typeof(TBuffer).BaseType == typeof(JByteBufferObject) ?
-				JTypeModifier.Abstract :
-				JTypeModifier.Extensible, typeMetadata.Modifier);
+		Assert.Equal(modifier, typeMetadata.Modifier);
 		Assert.Equal(IntPtr.Size, typeMetadata.SizeOf);
 		Assert.Equal(JArrayObject<TBuffer>.Metadata, typeMetadata.GetArrayMetadata());
 		Assert.Equal(typeof(TBuffer), typeMetadata.Type);
 		Assert.Equal(JTypeKind.Class, typeMetadata.Kind);
-		Assert.Equal(typeof(TBuffer).BaseType == typeof(JBufferObject<TPrimitive>) ?
-			             IDataType.GetMetadata<JBufferObject>() :
-			             typeof(TBuffer).BaseType == typeof(JByteBufferObject) ?
-				             IDataType.GetMetadata<JByteBufferObject>() :
-				             IDataType.GetMetadata<JMappedByteBufferObject>(), typeMetadata.BaseMetadata);
+		Assert.Equal(baseMetadata, typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<TBuffer>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<TBuffer>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<TBuffer>());
