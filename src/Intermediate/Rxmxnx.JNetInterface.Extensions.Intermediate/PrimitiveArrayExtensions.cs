@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public static class JArrayExtensions
+public static class PrimitiveArrayExtensions
 {
 	/// <summary>
 	/// Retrieves the native memory of array elements.

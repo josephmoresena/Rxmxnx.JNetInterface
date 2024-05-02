@@ -190,6 +190,26 @@ public sealed class JClassObjectTests
 			JNativeCallEntry.Create<JNativeFunctionDelegate>(functionDefinition, default!),
 		];
 
+		Assert.Equal(methodDefinition.Information[0], entries[0].Name);
+		Assert.Equal(functionDefinition.Information[0], entries[1].Name);
+		Assert.Equal(methodDefinition.Information[0], entries[2].Name);
+		Assert.Equal(functionDefinition.Information[0], entries[3].Name);
+
+		Assert.Equal(methodDefinition.Information[1], entries[0].Signature);
+		Assert.Equal(functionDefinition.Information[1], entries[1].Signature);
+		Assert.Equal(methodDefinition.Information[1], entries[2].Signature);
+		Assert.Equal(functionDefinition.Information[1], entries[3].Signature);
+
+		Assert.Equal(methodDefinition.Information.ToString(), entries[0].Hash);
+		Assert.Equal(functionDefinition.Information.ToString(), entries[1].Hash);
+		Assert.Equal(methodDefinition.Information.ToString(), entries[2].Hash);
+		Assert.Equal(functionDefinition.Information.ToString(), entries[3].Hash);
+
+		Assert.Equal(IntPtr.Zero, entries[0].Pointer);
+		Assert.Equal(IntPtr.Zero, entries[1].Pointer);
+		Assert.Equal(IntPtr.Zero, entries[2].Pointer);
+		Assert.Equal(IntPtr.Zero, entries[3].Pointer);
+
 		if (!useList)
 			jClassObj.Register(entries[0], entries[1], entries[2], entries[3]);
 		else

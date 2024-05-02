@@ -43,6 +43,9 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		public override String ToString()
 			=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+		/// <inheritdoc/>
+		public override JArrayTypeMetadata? GetArrayMetadata()
+			=> JArrayTypeMetadata.GetArrayArrayMetadata(this.ArraySignature, typeof(TElement));
 
 		/// <inheritdoc/>
 		internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
@@ -70,8 +73,5 @@ public partial class JArrayObject<TElement>
 		/// <inheritdoc/>
 		internal override JFieldDefinition<JArrayObject<TElement>> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
 			=> new(fieldName);
-		/// <inheritdoc/>
-		internal override JArrayTypeMetadata? GetArrayMetadata()
-			=> JArrayTypeMetadata.GetArrayArrayMetadata(this.ArraySignature, typeof(TElement));
 	}
 }

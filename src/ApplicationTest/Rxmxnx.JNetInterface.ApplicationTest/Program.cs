@@ -66,7 +66,7 @@ public static class Program
 		for (Int32 i = 0; i < dimension; i++)
 		{
 			Console.WriteLine(arrMetadata.Signature);
-			if (JReferenceTypeMetadata.GetArrayMetadata(arrMetadata) is not { } arrMet2)
+			if (arrMetadata.GetArrayMetadata() is not { } arrMet2)
 				break;
 			arrMetadata = arrMet2;
 		}

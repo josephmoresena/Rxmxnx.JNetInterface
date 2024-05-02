@@ -50,6 +50,14 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	public virtual Boolean TypeOf(JReferenceTypeMetadata otherMetadata)
 		=> JReferenceTypeMetadata.TypeOf(this, otherMetadata);
 
+#if !PACKAGE
+	/// <summary>
+	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
+	/// </summary>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
+	public abstract JArrayTypeMetadata? GetArrayMetadata();
+#endif
+
 	/// <summary>
 	/// Indicates whether <paramref name="jObject"/> is instance of the current type.
 	/// </summary>
@@ -72,14 +80,6 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	protected static JArrayTypeMetadata GetArrayMetadata<TReference>()
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		=> IArrayType.GetMetadata<JArrayObject<TReference>>();
-
-	/// <summary>
-	/// Retrieves the metadata of an array whose elements are of the type that
-	/// <paramref name="metadata"/> represents.
-	/// </summary>
-	/// <param name="metadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
-	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
-	public static JArrayTypeMetadata? GetArrayMetadata(JReferenceTypeMetadata metadata) => metadata.GetArrayMetadata();
 
 	/// <summary>
 	/// Indicates whether an instance of type <paramref name="metadata"/> is instance of

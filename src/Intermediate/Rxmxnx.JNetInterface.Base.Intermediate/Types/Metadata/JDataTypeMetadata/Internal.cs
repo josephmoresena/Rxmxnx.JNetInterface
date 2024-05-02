@@ -7,7 +7,7 @@ public partial record JDataTypeMetadata
 	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
 	/// </summary>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
-	internal abstract JArrayTypeMetadata? GetArrayMetadata();
+	public abstract JArrayTypeMetadata? GetArrayMetadata();
 #endif
 
 	/// <summary>

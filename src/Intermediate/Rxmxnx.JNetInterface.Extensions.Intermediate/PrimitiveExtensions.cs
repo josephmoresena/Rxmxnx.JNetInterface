@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public static class JPrimitiveExtensions
+public static class PrimitiveExtensions
 {
 #if !PACKAGE
 	/// <summary>
@@ -13,6 +13,7 @@ public static class JPrimitiveExtensions
 	/// </summary>
 #pragma warning disable CA2255
 	[ModuleInitializer]
+	[ExcludeFromCodeCoverage]
 #pragma warning restore CA2255
 	internal static void Initializer()
 	{

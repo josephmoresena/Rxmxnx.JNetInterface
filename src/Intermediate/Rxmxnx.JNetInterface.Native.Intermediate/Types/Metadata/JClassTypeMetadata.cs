@@ -44,6 +44,8 @@ public abstract partial record JClassTypeMetadata<TClass> : JClassTypeMetadata
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();
+	/// <inheritdoc/>
+	public override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();
 
 	/// <inheritdoc/>
 	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TClass;
@@ -54,6 +56,4 @@ public abstract partial record JClassTypeMetadata<TClass> : JClassTypeMetadata
 		=> JFunctionDefinition<TClass>.Create(functionName, metadata);
 	/// <inheritdoc/>
 	internal override JFieldDefinition<TClass> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName) => new(fieldName);
-	/// <inheritdoc/>
-	internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();
 }

@@ -279,6 +279,7 @@ public sealed class JStringObjectTests
 		sequenceMemory.GetReadOnlyContext(Arg.Any<JNativeMemory<Char>>()).Returns(binarySequenceMemory);
 		jString.Environment.StringFeature.GetCriticalSequence(jString, Arg.Any<JMemoryReferenceKind>())
 		       .Returns(sequenceMemory);
+		sequenceMemory.Critical.Returns(true);
 
 		JNativeMemory<Char> sequence = jString.GetCriticalChars();
 		try
