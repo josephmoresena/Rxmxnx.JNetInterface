@@ -1,9 +1,10 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// Internal extensions class.
+/// Internal extensions class for proxy objects.
 /// </summary>
-internal static class InternalExtensions
+[ExcludeFromCodeCoverage]
+internal static class PrimitiveProxyExtensions
 {
 	/// <summary>
 	/// Invokes current function as typed primitive function.
@@ -287,12 +288,13 @@ internal static class InternalExtensions
 	/// <returns>Normalized argument array.</returns>
 	public static IObject?[] Normalize(this IObject?[] args)
 		=> Array.Exists(args, o => o is JPrimitiveObject) ? args.Select(o => o.Normalize()).ToArray() : args;
+
 	/// <summary>
 	/// Normalize <see cref="IObject"/> instance.
 	/// </summary>
 	/// <param name="obj">A <see cref="IObject"/> instance.</param>
 	/// <returns>Normalized <see cref="IObject"/> instance.</returns>
-	public static IObject? Normalize(this IObject? obj)
+	private static IObject? Normalize(this IObject? obj)
 	{
 		if (obj is JPrimitiveObject jObject and not IPrimitiveType)
 			return obj.ObjectSignature[0] switch
