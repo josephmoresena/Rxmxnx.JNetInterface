@@ -89,5 +89,23 @@ public sealed class InterfacesTests
 		Assert.Equal(CommonConstants.CriticalExceptionMessage, ex.Message);
 	}
 	[Fact]
-	internal void LocalViewObjectTest() => Assert.Null(ILocalViewObject.GetObject(default));
+	internal void LocalViewObjectTest()
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		using JClassObject jClassClass = new(env);
+		Assert.Null(ILocalViewObject.GetObject(default));
+		LocalView localView = new(jClassClass);
+		for (Int32 i = 0; i < Random.Shared.Next(1, 10); i++)
+		{
+			Assert.Equal(jClassClass, ILocalViewObject.GetObject(localView));
+			localView = new(localView);
+		}
+	}
+
+	private sealed record LocalView(ILocalObject Object) : ILocalViewObject
+	{
+		public JObjectLocalRef InternalReference => this.Object.InternalReference;
+		public TReference CastTo<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
+			=> this.Object.CastTo<TReference>();
+	}
 }
