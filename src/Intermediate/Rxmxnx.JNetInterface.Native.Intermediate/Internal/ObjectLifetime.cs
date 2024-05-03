@@ -16,7 +16,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// </summary>
 	public IEnvironment Environment => this._env;
 	/// <summary>
-	/// Indicates whether the this instance is disposed.
+	/// Indicates whether this instance is disposed.
 	/// </summary>
 	public Boolean IsDisposed => this._isDisposed.Value;
 

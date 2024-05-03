@@ -27,14 +27,17 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	private readonly IFixedMemory.IDisposable? _memory;
 
 	/// <summary>
-	/// Indicates whether current instance is disposed.
+	/// Indicates whether the current instance is disposed.
 	/// </summary>
 	private Boolean _disposed;
 
 	/// <inheritdoc/>
 	internal JDirectByteBufferObject(JClassObject jClass, IFixedMemory.IDisposable memory, JObjectLocalRef localRef) :
 		base(jClass, localRef)
-		=> this._memory = memory;
+	{
+		this._memory = memory;
+		JBufferObject.InitializeDirect(this, this._memory.Pointer, this._memory.Bytes.Length);
+	}
 
 	/// <inheritdoc/>
 	protected JDirectByteBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

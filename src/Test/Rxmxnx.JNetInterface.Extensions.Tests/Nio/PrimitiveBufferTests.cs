@@ -23,6 +23,15 @@ public sealed class PrimitiveBufferTests
 	internal void ShortTest() => PrimitiveBufferTests.PrimitiveBufferTest<JShortBufferObject, JShort>();
 	[Fact]
 	internal void MappedByteTest() => PrimitiveBufferTests.PrimitiveBufferTest<JMappedByteBufferObject, JByte>();
+	[Fact]
+	internal void DirectByteTest()
+	{
+		PrimitiveBufferTests.DirectCreationTest();
+		PrimitiveBufferTests.DirectCreationTest(false);
+		PrimitiveBufferTests.DirectCreationTest(true);
+		PrimitiveBufferTests.MetadataTest<JDirectByteBufferObject, JByte>(true);
+		PrimitiveBufferTests.MetadataTest<JDirectByteBufferObject, JByte>(false);
+	}
 
 	private static void PrimitiveBufferTest<TBuffer, TPrimitive>()
 		where TBuffer : JBufferObject<TPrimitive>, IClassType<TBuffer>
@@ -32,6 +41,8 @@ public sealed class PrimitiveBufferTests
 		PrimitiveBufferTests.CreationTest<TBuffer, TPrimitive>(false);
 		PrimitiveBufferTests.MetadataTest<TBuffer, TPrimitive>(true);
 		PrimitiveBufferTests.MetadataTest<TBuffer, TPrimitive>(false);
+		PrimitiveBufferTests.WrapperCreationTest<TBuffer, TPrimitive>(true);
+		PrimitiveBufferTests.WrapperCreationTest<TBuffer, TPrimitive>(false);
 	}
 	private static void CreationTest<TBuffer, TPrimitive>(Boolean useMetadata)
 		where TBuffer : JBufferObject<TPrimitive>, IClassType<TBuffer>
@@ -86,6 +97,133 @@ public sealed class PrimitiveBufferTests
 		Assert.Equal(jBuffer.Id, jReadableObject.Id);
 		Assert.Equal(jBuffer, jAppendableObject.Object);
 		Assert.Equal(jBuffer, jReadableObject.Object);
+		Assert.Null(jBuffer.AsDirect());
+	}
+	private static void WrapperCreationTest<TBuffer, TPrimitive>(Boolean useMetadata)
+		where TBuffer : JBufferObject<TPrimitive>, IClassType<TBuffer>
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>
+	{
+		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<TBuffer>();
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JObjectLocalRef localRef = PrimitiveBufferTests.fixture.Create<JObjectLocalRef>();
+		TPrimitive[] values = PrimitiveBufferTests.CreatePrimitiveArray<TPrimitive>(Random.Shared.Next(0, 10));
+		using IFixedMemory.IDisposable mem = values.AsMemory().GetFixedContext();
+		Int64 capacity = mem.Bytes.Length;
+		IntPtr address = mem.Pointer;
+		using JClassObject jClass = new(env);
+		using JClassObject jBufferClass = new(jClass, typeMetadata);
+		using TBuffer jBuffer = Assert.IsType<TBuffer>(typeMetadata.CreateInstance(jBufferClass, localRef, true));
+
+		env.FunctionSet.IsDirectBuffer(jBuffer).Returns(true);
+		env.NioFeature.GetDirectAddress(jBuffer).Returns(address);
+		env.NioFeature.GetDirectCapacity(jBuffer).Returns(capacity);
+
+		ILocalObject.ProcessMetadata(jBuffer,
+		                             useMetadata ?
+			                             new BufferObjectMetadata(new(jBufferClass))
+			                             {
+				                             Capacity = capacity, IsDirect = true, Address = address,
+			                             } :
+			                             new ObjectMetadata(jBufferClass));
+
+		BufferObjectMetadata objectMetadata = Assert.IsType<BufferObjectMetadata>(ILocalObject.CreateMetadata(jBuffer));
+
+		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
+		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
+		Assert.True(objectMetadata.IsDirect);
+		Assert.Equal(address, objectMetadata.Address);
+		Assert.Equal(capacity, objectMetadata.Capacity);
+		Assert.Equal(objectMetadata, new(objectMetadata));
+
+		Assert.True(Object.ReferenceEquals(jBuffer, jBuffer.CastTo<JLocalObject>()));
+		Assert.True(Object.ReferenceEquals(jBuffer, jBuffer.CastTo<JBufferObject>()));
+		Assert.True(Object.ReferenceEquals(jBuffer, jBuffer.CastTo<JComparableObject>().Object));
+
+		env.FunctionSet.Received(useMetadata ? 0 : 1).IsDirectBuffer(jBuffer);
+		env.FunctionSet.Received(0).BufferCapacity(jBuffer);
+		env.NioFeature.Received(useMetadata ? 0 : 1).GetDirectCapacity(jBuffer);
+		env.NioFeature.Received(useMetadata ? 0 : 1).GetDirectAddress(jBuffer);
+
+		IDirectBufferObject<TPrimitive>? directBuffer = jBuffer.AsDirect();
+
+		Assert.NotNull(directBuffer);
+		Assert.Equal(address, directBuffer.Address);
+		Assert.Equal(capacity, directBuffer.Capacity);
+		Assert.Equal(jBuffer, directBuffer.InternalBuffer);
+
+		IFixedContext<TPrimitive> ctx = directBuffer.GetFixedContext();
+		Assert.True(Unsafe.AreSame(ref MemoryMarshal.GetReference(ctx.Values),
+		                           ref MemoryMarshal.GetReference(values.AsSpan())));
+	}
+	private static void DirectCreationTest(Boolean? useMetadata = default)
+	{
+		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JDirectByteBufferObject>();
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JObjectLocalRef localRef = PrimitiveBufferTests.fixture.Create<JObjectLocalRef>();
+		Byte[] bytes = PrimitiveBufferTests.fixture.CreateMany<Byte>(Random.Shared.Next(0, 10)).ToArray();
+		using IFixedMemory.IDisposable mem = bytes.AsMemory().GetFixedContext();
+		Int64 capacity = mem.Bytes.Length;
+		IntPtr address = mem.Pointer;
+		using JClassObject jClass = new(env);
+		using JClassObject jBufferClass = new(jClass, typeMetadata);
+		using JDirectByteBufferObject jBuffer = useMetadata.HasValue ?
+			Assert.IsType<JDirectByteBufferObject>(typeMetadata.CreateInstance(jBufferClass, localRef, true)) :
+			new(jBufferClass, mem, localRef);
+
+		env.ClassFeature.GetObjectClass(jBuffer).Returns(jBufferClass);
+		env.FunctionSet.IsDirectBuffer(jBuffer).Returns(true);
+		env.NioFeature.GetDirectAddress(jBuffer).Returns(address);
+		env.NioFeature.GetDirectCapacity(jBuffer).Returns(capacity);
+
+		if (useMetadata.HasValue)
+			ILocalObject.ProcessMetadata(jBuffer,
+			                             useMetadata.Value ?
+				                             new BufferObjectMetadata(new(jBufferClass))
+				                             {
+					                             Capacity = capacity, IsDirect = true, Address = address,
+				                             } :
+				                             new ObjectMetadata(jBufferClass));
+
+		BufferObjectMetadata objectMetadata = Assert.IsType<BufferObjectMetadata>(ILocalObject.CreateMetadata(jBuffer));
+
+		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
+		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
+		Assert.True(objectMetadata.IsDirect);
+		Assert.Equal(address, objectMetadata.Address);
+		Assert.Equal(capacity, objectMetadata.Capacity);
+		Assert.Equal(objectMetadata, new(objectMetadata));
+
+		Assert.True(Object.ReferenceEquals(jBuffer, jBuffer.CastTo<JLocalObject>()));
+		Assert.True(Object.ReferenceEquals(jBuffer, jBuffer.CastTo<JBufferObject>()));
+		Assert.True(Object.ReferenceEquals(jBuffer, jBuffer.CastTo<JComparableObject>().Object));
+
+		env.ClassFeature.Received(!useMetadata.HasValue ? 1 : 0).GetObjectClass(jBuffer);
+		env.FunctionSet.Received(!useMetadata.HasValue || useMetadata.Value ? 0 : 1).IsDirectBuffer(jBuffer);
+		env.FunctionSet.Received(0).BufferCapacity(jBuffer);
+		env.NioFeature.Received(!useMetadata.HasValue || useMetadata.Value ? 0 : 1).GetDirectCapacity(jBuffer);
+		env.NioFeature.Received(!useMetadata.HasValue || useMetadata.Value ? 0 : 1).GetDirectAddress(jBuffer);
+
+		JComparableObject jComparableObject = jBuffer.CastTo<JComparableObject>();
+		JDirectBufferObject jDirectBufferObject = jBuffer.CastTo<JDirectBufferObject>();
+		Assert.Equal(jBuffer.Id, jComparableObject.Id);
+		Assert.Equal(jBuffer.Id, jDirectBufferObject.Id);
+		Assert.Equal(jBuffer, jComparableObject.Object);
+		Assert.Equal(jBuffer, jDirectBufferObject.Object);
+
+		IDirectBufferObject<JByte> directBuffer = jBuffer;
+
+		Assert.Equal(address, directBuffer.Address);
+		Assert.Equal(capacity, directBuffer.Capacity);
+		Assert.Equal(jBuffer, directBuffer.InternalBuffer);
+		Assert.True(JBufferObject.IsDirectBuffer(jBuffer));
+
+		Assert.Equal(jBuffer, jBuffer.AsDirect());
+
+		IFixedMemory fixedMemory = directBuffer.AsFixedMemory();
+		Assert.True(Unsafe.AreSame(ref MemoryMarshal.GetReference(fixedMemory.Bytes),
+		                           ref MemoryMarshal.GetReference(bytes.AsSpan())));
+		
+		(typeMetadata.ParseInstance(jBuffer) as IDisposable)!.Dispose();
 	}
 	private static void MetadataTest<TBuffer, TPrimitive>(Boolean disposeParse)
 		where TBuffer : JBufferObject<TPrimitive>, IClassType<TBuffer>
@@ -149,5 +287,47 @@ public sealed class PrimitiveBufferTests
 
 		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
 		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
+	}
+	private static TPrimitive[] CreatePrimitiveArray<TPrimitive>(Int32 length)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	{
+		TPrimitive[] result = new TPrimitive[length];
+		JPrimitiveTypeMetadata primitiveTypeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
+		switch (primitiveTypeMetadata.Signature[0])
+		{
+			case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				PrimitiveBufferTests.fixture.CreateMany<Boolean>(length).ToArray().AsSpan().AsBytes()
+				                    .CopyTo(result.AsSpan().AsBytes());
+				break;
+			case UnicodePrimitiveSignatures.ByteSignatureChar:
+				PrimitiveBufferTests.fixture.CreateMany<SByte>(length).ToArray().AsSpan().AsBytes()
+				                    .CopyTo(result.AsSpan().AsBytes());
+				break;
+			case UnicodePrimitiveSignatures.CharSignatureChar:
+				PrimitiveBufferTests.fixture.CreateMany<Char>(length).ToArray().AsSpan().AsBytes()
+				                    .CopyTo(result.AsSpan().AsBytes());
+				break;
+			case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				PrimitiveBufferTests.fixture.CreateMany<Double>(length).ToArray().AsSpan().AsBytes()
+				                    .CopyTo(result.AsSpan().AsBytes());
+				break;
+			case UnicodePrimitiveSignatures.FloatSignatureChar:
+				PrimitiveBufferTests.fixture.CreateMany<Single>(length).ToArray().AsSpan().AsBytes()
+				                    .CopyTo(result.AsSpan().AsBytes());
+				break;
+			case UnicodePrimitiveSignatures.IntSignatureChar:
+				PrimitiveBufferTests.fixture.CreateMany<Int32>(length).ToArray().AsSpan().AsBytes()
+				                    .CopyTo(result.AsSpan().AsBytes());
+				break;
+			case UnicodePrimitiveSignatures.LongSignatureChar:
+				PrimitiveBufferTests.fixture.CreateMany<Int64>(length).ToArray().AsSpan().AsBytes()
+				                    .CopyTo(result.AsSpan().AsBytes());
+				break;
+			case UnicodePrimitiveSignatures.ShortSignatureChar:
+				PrimitiveBufferTests.fixture.CreateMany<Int16>(length).ToArray().AsSpan().AsBytes()
+				                    .CopyTo(result.AsSpan().AsBytes());
+				break;
+		}
+		return result;
 	}
 }
