@@ -155,6 +155,7 @@ public sealed class PrimitiveBufferTests
 		Assert.True(Unsafe.AreSame(ref MemoryMarshal.GetReference(ctx.Values),
 		                           ref MemoryMarshal.GetReference(values.AsSpan())));
 	}
+#pragma warning disable CA1859
 	private static void DirectCreationTest(Boolean? useMetadata = default)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JDirectByteBufferObject>();
@@ -225,6 +226,7 @@ public sealed class PrimitiveBufferTests
 
 		(typeMetadata.ParseInstance(jBuffer) as IDisposable)!.Dispose();
 	}
+#pragma warning restore CA1859
 	private static void MetadataTest<TBuffer, TPrimitive>(Boolean disposeParse)
 		where TBuffer : JBufferObject<TPrimitive>, IClassType<TBuffer>
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>
