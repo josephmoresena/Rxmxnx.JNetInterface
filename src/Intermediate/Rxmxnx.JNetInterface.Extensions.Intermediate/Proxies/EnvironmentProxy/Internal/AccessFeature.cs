@@ -2,9 +2,6 @@ namespace Rxmxnx.JNetInterface.Native.Proxies;
 
 public abstract partial class EnvironmentProxy
 {
-	TObject IAccessFeature.CallInternalConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
-		IObject?[] args)
-		=> this.CallConstructor<TObject>(jClass, definition, args.Normalize());
 	TResult IAccessFeature.CallInternalStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 		IObject?[] args)
 		=> this.CallStaticFunction<TResult>(jClass, definition, args.Normalize())!;
