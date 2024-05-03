@@ -222,7 +222,7 @@ public sealed class PrimitiveBufferTests
 		IFixedMemory fixedMemory = directBuffer.AsFixedMemory();
 		Assert.True(Unsafe.AreSame(ref MemoryMarshal.GetReference(fixedMemory.Bytes),
 		                           ref MemoryMarshal.GetReference(bytes.AsSpan())));
-		
+
 		(typeMetadata.ParseInstance(jBuffer) as IDisposable)!.Dispose();
 	}
 	private static void MetadataTest<TBuffer, TPrimitive>(Boolean disposeParse)
