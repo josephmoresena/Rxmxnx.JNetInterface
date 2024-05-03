@@ -17,18 +17,10 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	                                       JArgumentMetadata.Get<JArrayObject<JStringObject>>()) { }
 
 	/// <summary>
-	/// Invokes method defined in <paramref name="mainClass"/>.
+	/// Invokes method defined in <paramref name="mainClass"/> with null args.
 	/// </summary>
 	/// <param name="mainClass">A Java main class.</param>
-	/// <param name="nullArgs">
-	/// Optional. Indicates whether <c>args</c> parameter should be passed as <c>null</c> to main method.
-	/// </param>
-	public void Invoke(JClassObject mainClass, Boolean nullArgs = false)
-	{
-		IEnvironment env = mainClass.Environment;
-		using JArrayObject<JStringObject>? args = !nullArgs ? JArrayObject<JStringObject>.Create(env, 0) : default;
-		this.Invoke(mainClass, args);
-	}
+	public void InvokeWithNullArgs(JClassObject mainClass) => this.InvokeMain(mainClass);
 	/// <summary>
 	/// Invokes method defined in <paramref name="mainClass"/>.
 	/// </summary>
@@ -37,14 +29,8 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	public void Invoke(JClassObject mainClass, params String?[] args)
 	{
 		IEnvironment env = mainClass.Environment;
-		using JArrayObject<JStringObject> jArgs = JArrayObject<JStringObject>.Create(env, args.Length);
-		for (Int32 i = 0; i < args.Length; i++)
-		{
-			if (args[i] is null) continue;
-			using JStringObject jString = JStringObject.Create(env, args[i])!;
-			jArgs[i] = jString;
-		}
-		this.Invoke(mainClass, jArgs);
+		using JArrayObject<JStringObject> jArgs = JMainMethodDefinition.CreateArgsArray(env, args);
+		this.InvokeMain(mainClass, jArgs);
 	}
 
 	/// <summary>
@@ -52,7 +38,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	/// </summary>
 	/// <param name="mainClass">A Java main class.</param>
 	/// <param name="args">Java arguments array.</param>
-	private void Invoke(JClassObject mainClass, JArrayObject<JStringObject>? args)
+	private void InvokeMain(JClassObject mainClass, JArrayObject<JStringObject>? args = default)
 	{
 		try
 		{
@@ -64,5 +50,27 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 		{
 			args?.Dispose();
 		}
+	}
+
+	/// <summary>
+	/// Creates a <see cref="JArrayObject{JStringObject}"/> in order to invoke PSVM method.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="args">A <see cref="String"/> array.</param>
+	/// <returns>
+	/// A <see cref="JArrayObject{JStringObject}"/> instance containing each value from <paramref name="args"/>.
+	/// </returns>
+	[return: NotNullIfNotNull(nameof(args))]
+	private static JArrayObject<JStringObject>? CreateArgsArray(IEnvironment env, String?[]? args = default)
+	{
+		if (args is null) return default;
+		JArrayObject<JStringObject> jArgs = JArrayObject<JStringObject>.Create(env, args.Length);
+		for (Int32 i = 0; i < args.Length; i++)
+		{
+			if (args[i] is null) continue;
+			using JStringObject jString = JStringObject.Create(env, args[i])!;
+			jArgs[i] = jString;
+		}
+		return jArgs;
 	}
 }
