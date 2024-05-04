@@ -1,5 +1,13 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
+using TDirectBuffer =
+#if !PACKAGE
+	JBufferObject
+#else
+	JDirectByteBufferObject
+#endif
+	;
+
 public partial interface INioFeature
 {
 	/// <summary>
@@ -7,7 +15,7 @@ public partial interface INioFeature
 	/// </summary>
 	/// <param name="memory">A <see cref="IFixedMemory"/> instance.</param>
 	/// <returns>A direct <see cref="JBufferObject"/> instance.</returns>
-	internal JBufferObject NewDirectByteBuffer(IFixedMemory.IDisposable memory);
+	internal TDirectBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory);
 	/// <summary>
 	/// Creates an ephemeral <c>java.nio.DirectByteBuffer</c> instance and executes <paramref name="action"/>.
 	/// </summary>

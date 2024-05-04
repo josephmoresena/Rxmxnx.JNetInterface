@@ -1,10 +1,18 @@
 namespace Rxmxnx.JNetInterface;
 
+using TDirectBuffer =
+#if !PACKAGE
+	JBufferObject
+#else
+	JDirectByteBufferObject
+#endif
+	;
+
 partial class JEnvironment
 {
 	private sealed partial record EnvironmentCache : INioFeature
 	{
-		public JBufferObject NewDirectByteBuffer(IFixedMemory.IDisposable memory)
+		public TDirectBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)
 		{
 			JClassObject jClass = this.GetClass<JDirectByteBufferObject>();
 			NewDirectByteBufferDelegate newDirectByteBuffer = this.GetDelegate<NewDirectByteBufferDelegate>();

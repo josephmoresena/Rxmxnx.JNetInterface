@@ -1,8 +1,16 @@
 namespace Rxmxnx.JNetInterface.Native.Proxies;
 
+using TDirectBuffer =
+#if !PACKAGE
+	JBufferObject
+#else
+	JDirectByteBufferObject
+#endif
+	;
+
 public abstract partial class EnvironmentProxy
 {
-	JBufferObject INioFeature.NewDirectByteBuffer(IFixedMemory.IDisposable memory) => this.NewDirectByteBuffer(memory);
+	TDirectBuffer INioFeature.NewDirectByteBuffer(IFixedMemory.IDisposable memory) => this.NewDirectByteBuffer(memory);
 	void INioFeature.WithDirectByteBuffer<TBuffer>(Int32 capacity, Action<TBuffer> action)
 	{
 		using TBuffer buffer = (TBuffer)(Object)this.CreateEphemeralByteBuffer(capacity);
