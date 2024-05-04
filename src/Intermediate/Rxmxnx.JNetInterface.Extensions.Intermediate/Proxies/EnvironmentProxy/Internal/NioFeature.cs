@@ -4,7 +4,7 @@ using TDirectBuffer =
 #if !PACKAGE
 	JBufferObject
 #else
-	JDirectByteBufferObject
+	JByteBufferObject
 #endif
 	;
 

@@ -32,7 +32,58 @@ public sealed class PrimitiveBufferTests
 		PrimitiveBufferTests.MetadataTest<JDirectByteBufferObject, JByte>(true);
 		PrimitiveBufferTests.MetadataTest<JDirectByteBufferObject, JByte>(false);
 	}
+	[Fact]
+	internal void CreateDirectBufferTest()
+	{
+		PrimitiveBufferTests.CreateDirectBufferPrimitive<SByte>();
+		PrimitiveBufferTests.CreateDirectBufferPrimitive<Int16>();
+		PrimitiveBufferTests.CreateDirectBufferPrimitive<Int32>();
+		PrimitiveBufferTests.CreateDirectBufferPrimitive<Int64>();
+		PrimitiveBufferTests.CreateDirectBufferPrimitive<Guid>();
+	}
+	[Fact]
+	internal void WithDirectBufferTest()
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		Int32 capacity = Random.Shared.Next(0, 10);
+		Object obj = new();
+		Object result = new();
+		Action<JByteBufferObject> action0 = Substitute.For<Action<JByteBufferObject>>();
+		Action<JByteBufferObject, Object> action1 = Substitute.For<Action<JByteBufferObject, Object>>();
+		Func<JByteBufferObject, Object> func0 = Substitute.For<Func<JByteBufferObject, Object>>();
+		Func<JByteBufferObject, Object, Object> func1 = Substitute.For<Func<JByteBufferObject, Object, Object>>();
 
+		env.NioFeature.WithDirectByteBuffer(capacity, func0).Returns(result);
+		env.NioFeature.WithDirectByteBuffer(capacity, obj, func1).Returns(result);
+
+		JByteBufferObject.WithDirectBuffer(env, capacity, action0);
+		JByteBufferObject.WithDirectBuffer(env, capacity, obj, action1);
+		Assert.Equal(result, JByteBufferObject.WithDirectBuffer(env, capacity, func0));
+		Assert.Equal(result, JByteBufferObject.WithDirectBuffer(env, capacity, obj, func1));
+
+		env.NioFeature.Received(1).WithDirectByteBuffer(capacity, action0);
+		env.NioFeature.Received(1).WithDirectByteBuffer(capacity, obj, action1);
+		env.NioFeature.Received(1).WithDirectByteBuffer(capacity, func0);
+		env.NioFeature.Received(1).WithDirectByteBuffer(capacity, obj, func1);
+	}
+
+	private static void CreateDirectBufferPrimitive<TMemory>() where TMemory : unmanaged
+	{
+		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JDirectByteBufferObject>();
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JObjectLocalRef localRef = PrimitiveBufferTests.fixture.Create<JObjectLocalRef>();
+		Int32 count = Random.Shared.Next(0, 10);
+		TMemory[] values = PrimitiveBufferTests.fixture.CreateMany<TMemory>(count).ToArray();
+		using IFixedMemory.IDisposable mem = values.AsMemory().GetFixedContext();
+		using JClassObject jClass = new(env);
+		using JClassObject jBufferClass = new(jClass, typeMetadata);
+		using JDirectByteBufferObject jBuffer = new(jBufferClass, mem, localRef);
+		IntPtr address = mem.Pointer;
+
+		env.NioFeature.NewDirectByteBuffer(Arg.Is<IFixedMemory.IDisposable>(m => m.Pointer == address))
+		   .Returns(jBuffer);
+		Assert.Equal(jBuffer, JByteBufferObject.CreateDirectBuffer(env, values.AsMemory()));
+	}
 	private static void PrimitiveBufferTest<TBuffer, TPrimitive>()
 		where TBuffer : JBufferObject<TPrimitive>, IClassType<TBuffer>
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IBinaryNumber<TPrimitive>

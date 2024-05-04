@@ -4,7 +4,7 @@ using TDirectBuffer =
 #if !PACKAGE
 	JBufferObject
 #else
-	JDirectByteBufferObject
+	JByteBufferObject
 #endif
 	;
 
@@ -22,7 +22,7 @@ public partial interface INioFeature
 	/// <typeparam name="TBuffer">Type of created buffer.</typeparam>
 	/// <param name="capacity">Capacity of created buffer.</param>
 	/// <param name="action">Action to execute.</param>
-	internal void WithDirectByteBuffer<TBuffer>(Int32 capacity, Action<TBuffer> action) where TBuffer : JBufferObject;
+	internal void WithDirectByteBuffer<TBuffer>(Int32 capacity, Action<TBuffer> action) where TBuffer : TDirectBuffer;
 	/// <summary>
 	/// Creates an ephemeral <c>java.nio.DirectByteBuffer</c> instance and executes <paramref name="action"/>.
 	/// </summary>
@@ -32,7 +32,7 @@ public partial interface INioFeature
 	/// <param name="state">The state object of type <typeparamref name="TState"/>.</param>
 	/// <param name="action">Action to execute.</param>
 	internal void WithDirectByteBuffer<TBuffer, TState>(Int32 capacity, TState state, Action<TBuffer, TState> action)
-		where TBuffer : JBufferObject;
+		where TBuffer : TDirectBuffer;
 	/// <summary>
 	/// Creates an ephemeral <c>java.nio.DirectByteBuffer</c> instance and executes <paramref name="func"/>.
 	/// </summary>
@@ -42,7 +42,7 @@ public partial interface INioFeature
 	/// <param name="func">Function to execute.</param>
 	/// <returns>The result of <paramref name="func"/> execution.</returns>
 	internal TResult WithDirectByteBuffer<TBuffer, TResult>(Int32 capacity, Func<TBuffer, TResult> func)
-		where TBuffer : JBufferObject;
+		where TBuffer : TDirectBuffer;
 	/// <summary>
 	/// Creates an ephemeral <c>java.nio.DirectByteBuffer</c> instance and executes <paramref name="func"/>.
 	/// </summary>
@@ -54,5 +54,5 @@ public partial interface INioFeature
 	/// <param name="func">Function to execute.</param>
 	/// <returns>The result of <paramref name="func"/> execution.</returns>
 	internal TResult WithDirectByteBuffer<TBuffer, TState, TResult>(Int32 capacity, TState state,
-		Func<TBuffer, TState, TResult> func) where TBuffer : JBufferObject;
+		Func<TBuffer, TState, TResult> func) where TBuffer : TDirectBuffer;
 }
