@@ -199,8 +199,7 @@ internal partial class NativeFunctionSetImpl
 		IEnvironment env = jClass.Environment;
 		JModifierObject.Modifiers result = default;
 		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jClass, jClass.Class,
-		                                        NativeFunctionSetImpl.getModifiersDefinition, false,
-		                                        Array.Empty<IObject>());
+		                                        NativeFunctionSetImpl.getModifiersDefinition, false, []);
 		return result;
 	}
 }

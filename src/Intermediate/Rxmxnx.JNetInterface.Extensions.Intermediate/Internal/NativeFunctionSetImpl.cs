@@ -33,7 +33,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		JClassObject enumClass = env.ClassFeature.EnumObject;
 		Span<Byte> bytes = stackalloc Byte[sizeof(Int32)];
 		env.AccessFeature.CallPrimitiveFunction(bytes, jEnum, enumClass, NativeFunctionSetImpl.ordinalDefinition, false,
-		                                        Array.Empty<IObject>());
+		                                        []);
 		return bytes.AsValue<Int32>();
 	}
 
@@ -49,8 +49,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jStackTraceElement.Environment;
 		Span<Byte> bytes = stackalloc Byte[sizeof(Int32)];
 		env.AccessFeature.CallPrimitiveFunction(bytes, jStackTraceElement, jStackTraceElement.Class,
-		                                        NativeFunctionSetImpl.getLineNumberDefinition, false,
-		                                        Array.Empty<IObject>());
+		                                        NativeFunctionSetImpl.getLineNumberDefinition, false, []);
 		return bytes.AsValue<Int32>();
 	}
 	/// <inheritdoc/>
@@ -65,8 +64,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jStackTraceElement.Environment;
 		Span<Byte> bytes = stackalloc Byte[1];
 		env.AccessFeature.CallPrimitiveFunction(bytes, jStackTraceElement, jStackTraceElement.Class,
-		                                        NativeFunctionSetImpl.isNativeMethodDefinition, false,
-		                                        Array.Empty<IObject>());
+		                                        NativeFunctionSetImpl.isNativeMethodDefinition, false, []);
 		return bytes[0] == JBoolean.TrueValue;
 	}
 
@@ -86,8 +84,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 			_ => NativeFunctionSetImpl.doubleValueDefinition,
 		};
 		Span<Byte> bytes = stackalloc Byte[metadata.SizeOf];
-		env.AccessFeature.CallPrimitiveFunction(bytes, jNumber, numberClass, functionDefinition, false,
-		                                        Array.Empty<IObject>());
+		env.AccessFeature.CallPrimitiveFunction(bytes, jNumber, numberClass, functionDefinition, false, []);
 		return bytes.AsValue<TPrimitive>();
 	}
 
@@ -111,8 +108,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jClass.Environment;
 		Span<Byte> bytes = stackalloc Byte[1];
 		env.AccessFeature.CallPrimitiveFunction(bytes, jClass, jClass.Class,
-		                                        NativeFunctionSetImpl.IsPrimitiveDefinition, false,
-		                                        Array.Empty<IObject>());
+		                                        NativeFunctionSetImpl.IsPrimitiveDefinition, false, []);
 		return bytes[0] == JBoolean.TrueValue;
 	}
 	/// <inheritdoc/>
@@ -134,7 +130,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jBuffer.Environment;
 		Span<Byte> bytes = stackalloc Byte[1];
 		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferObject,
-		                                        NativeFunctionSetImpl.isDirectBuffer, false, Array.Empty<IObject>());
+		                                        NativeFunctionSetImpl.isDirectBuffer, false, []);
 		return bytes[0] == JBoolean.TrueValue;
 	}
 	/// <inheritdoc/>
@@ -143,7 +139,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jBuffer.Environment;
 		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
 		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferObject,
-		                                        NativeFunctionSetImpl.bufferCapacity, false, Array.Empty<IObject>());
+		                                        NativeFunctionSetImpl.bufferCapacity, false, []);
 		return bytes.AsValue<Int64>();
 	}
 	/// <inheritdoc/>
