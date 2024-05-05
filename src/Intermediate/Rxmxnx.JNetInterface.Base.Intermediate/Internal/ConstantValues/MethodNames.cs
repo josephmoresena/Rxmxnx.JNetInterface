@@ -24,7 +24,7 @@ internal static class MethodNames
 	/// <summary>
 	/// Name of <c>StackTraceElement.getLineNumber()</c>.
 	/// </summary>
-	public const String GetLineNumber = "getClassName";
+	public const String GetLineNumber = "getLineNumber";
 	/// <summary>
 	/// Name of <c>StackTraceElement.getFileName()</c>.
 	/// </summary>
