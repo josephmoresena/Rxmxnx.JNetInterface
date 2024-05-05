@@ -23,8 +23,10 @@ public partial class JEnumObject
 			private readonly Dictionary<Int32, String> _ordinalDictionary = new();
 
 			CString IEnumFieldList.this[Int32 ordinal] => this._nameDictionary[this._ordinalDictionary[ordinal]];
-			Int32 IEnumFieldList.this[CString name] => this._hashDictionary[name.ToHexString()];
+			Int32 IEnumFieldList.this[ReadOnlySpan<Byte> name]
+				=> this._hashDictionary[Convert.ToHexString(name).ToLower()];
 			Int32 IEnumFieldList.this[String hash] => this._hashDictionary[hash];
+			Int32 IEnumFieldList.Count => this._nameDictionary.Count;
 
 			Boolean IEnumFieldList.HasOrdinal(Int32 ordinal) => this._ordinalDictionary.ContainsKey(ordinal);
 			Boolean IEnumFieldList.HasHash(String hash) => this._hashDictionary.ContainsKey(hash);

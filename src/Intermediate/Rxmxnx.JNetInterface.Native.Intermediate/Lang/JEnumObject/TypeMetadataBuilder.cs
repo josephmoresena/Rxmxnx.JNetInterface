@@ -55,7 +55,7 @@ public partial class JEnumObject
 			return this;
 		}
 		/// <summary>
-		/// Appends all enum values to current type.
+		/// Appends all enum values to the current type.
 		/// </summary>
 		/// <param name="offset">Enum value ordinal offset.</param>
 		/// <param name="names">Enum value names.</param>

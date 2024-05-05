@@ -6,6 +6,10 @@ namespace Rxmxnx.JNetInterface;
 public interface IEnumFieldList
 {
 	/// <summary>
+	/// Gets the number of elements in the collection.
+	/// </summary>
+	Int32 Count { get; }
+	/// <summary>
 	/// Retrieves the enum field name for given ordinal.
 	/// </summary>
 	/// <param name="ordinal">Enum ordinal.</param>
@@ -14,12 +18,13 @@ public interface IEnumFieldList
 	/// Retrieves the enum field ordinal for given name.
 	/// </summary>
 	/// <param name="name">Enum name.</param>
-	Int32 this[CString name] { get; }
+	Int32 this[ReadOnlySpan<Byte> name] { get; }
+
 	/// <summary>
 	/// Retrieves the enum field ordinal for given hash name.
 	/// </summary>
 	/// <param name="hash">Enum name hash.</param>
-	Int32 this[String hash] { get; }
+	internal Int32 this[String hash] { get; }
 
 	/// <summary>
 	/// Indicates whether <paramref name="ordinal"/> is defined in current list.

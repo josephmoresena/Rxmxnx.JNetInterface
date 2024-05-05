@@ -20,7 +20,6 @@ public class JClassLoaderObjectTests
 		JObjectLocalRef localRef = JClassLoaderObjectTests.fixture.Create<JObjectLocalRef>();
 		using JClassObject jClass = new(env);
 		using JClassObject jClassLoaderClass = new(jClass, typeMetadata);
-		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
 		using JClassLoaderObject jClassLoader =
 			Assert.IsType<JClassLoaderObject>(typeMetadata.CreateInstance(jClassLoaderClass, localRef, true));
 
@@ -43,12 +42,13 @@ public class JClassLoaderObjectTests
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JClassLocalRef classRef = JClassLoaderObjectTests.fixture.Create<JClassLocalRef>();
-		JThrowableLocalRef throwableRef = JClassLoaderObjectTests.fixture.Create<JThrowableLocalRef>();
+		JObjectLocalRef localRef = JClassLoaderObjectTests.fixture.Create<JObjectLocalRef>();
 		JGlobalRef globalRef = JClassLoaderObjectTests.fixture.Create<JGlobalRef>();
 		using JClassObject jClassClass = new(env);
-		using JClassObject jThrowableClass = new(jClassClass, typeMetadata, classRef);
-		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
-		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JClassLoaderObject>()), globalRef);
+		using JClassObject jClassLoaderClass = new(jClassClass, typeMetadata, classRef);
+		using JLocalObject jLocal = new(env, localRef, jClassLoaderClass);
+		using JGlobal jGlobal = new(vm, new(jClassLoaderClass, IClassType.GetMetadata<JClassLoaderObject>()),
+		                            globalRef);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -73,9 +73,9 @@ public class JClassLoaderObjectTests
 		Assert.Empty(typeMetadata.Interfaces);
 
 		vm.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>()).ReturnsForAnyArgs(thread);
-		env.ClassFeature.GetClass<JClassLoaderObject>().Returns(jThrowableClass);
-		env.ReferenceFeature.Received(1).GetLifetime(jLocal, throwableRef.Value, jThrowableClass, false);
-		env.ClassFeature.GetObjectClass(jLocal).Returns(jThrowableClass);
+		env.ClassFeature.GetClass<JClassLoaderObject>().Returns(jClassLoaderClass);
+		env.ReferenceFeature.Received(1).GetLifetime(jLocal, localRef, jClassLoaderClass, false);
+		env.ClassFeature.GetObjectClass(jLocal).Returns(jClassLoaderClass);
 
 		Assert.True(typeMetadata.TypeOf(IReferenceType.GetMetadata<JLocalObject>()));
 		Assert.Null(typeMetadata.ParseInstance(default));
@@ -83,7 +83,7 @@ public class JClassLoaderObjectTests
 		Assert.Null(typeMetadata.CreateException(jGlobal));
 
 		using JClassLoaderObject jClassLoader0 =
-			Assert.IsType<JClassLoaderObject>(typeMetadata.CreateInstance(jThrowableClass, throwableRef.Value, true));
+			Assert.IsType<JClassLoaderObject>(typeMetadata.CreateInstance(jClassLoaderClass, localRef, true));
 		using JClassLoaderObject jClassLoader1 =
 			Assert.IsType<JClassLoaderObject>(typeMetadata.ParseInstance(jLocal, disposeParse));
 		using JClassLoaderObject jClassLoader2 =
