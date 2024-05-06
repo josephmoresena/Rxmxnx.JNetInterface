@@ -14,7 +14,6 @@ public abstract partial class ClassFeatureProxy : IClassFeature
 	public abstract JClassObject IntPrimitive { get; }
 	public abstract JClassObject LongPrimitive { get; }
 	public abstract JClassObject ShortPrimitive { get; }
-	public abstract JClassObject ClassObject { get; }
 	public abstract JClassObject VoidObject { get; }
 	public abstract JClassObject BooleanObject { get; }
 	public abstract JClassObject ByteObject { get; }

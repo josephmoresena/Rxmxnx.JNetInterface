@@ -28,11 +28,13 @@ public sealed class JErrorObjectTests
 		using JClassObject jErrorClass = new(jClass, IClassType.GetMetadata<JErrorObject>());
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
 		using JClassObject jStackTraceElementClass = new(jClass, IClassType.GetMetadata<JStackTraceElementObject>());
+		using JClassObject jStackTraceElementArrayClass =
+			new(jClass, IClassType.GetMetadata<JStackTraceElementObject>().GetArrayMetadata()!);
 		using JStringObject jStringMessage = new(jStringClass, default, message);
 		using JErrorObject jError = (JErrorObject)IClassType.GetMetadata<JErrorObject>()
 		                                                    .CreateInstance(jErrorClass, throwableRef.Value);
 		using JArrayObject<JStackTraceElementObject> stackTraceElements =
-			new(jStackTraceElementClass, default, stackTrace.Length);
+			new(jStackTraceElementArrayClass, default, stackTrace.Length);
 		JStackTraceElementObject[] elements =
 			stackTrace.Select(i => i.CreateStackTrace(jStackTraceElementClass)).ToArray();
 		ThrowableObjectMetadata throwableMetadata = new(new(jErrorClass)) { Message = useMessage ? message : default, };

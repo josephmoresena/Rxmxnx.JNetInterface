@@ -30,11 +30,13 @@ public sealed class JRuntimeExceptionObjectTests
 		using JClassObject jRuntimeExceptionClass = new(jClass, IClassType.GetMetadata<JRuntimeExceptionObject>());
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
 		using JClassObject jStackTraceElementClass = new(jClass, IClassType.GetMetadata<JStackTraceElementObject>());
+		using JClassObject jStackTraceElementArrayClass =
+			new(jClass, IClassType.GetMetadata<JStackTraceElementObject>().GetArrayMetadata()!);
 		using JStringObject jStringMessage = new(jStringClass, default, message);
 		using JRuntimeExceptionObject jRuntimeException = (JRuntimeExceptionObject)IClassType
 			.GetMetadata<JRuntimeExceptionObject>().CreateInstance(jRuntimeExceptionClass, throwableRef.Value);
 		using JArrayObject<JStackTraceElementObject> stackTraceElements =
-			new(jStackTraceElementClass, default, stackTrace.Length);
+			new(jStackTraceElementArrayClass, default, stackTrace.Length);
 		JStackTraceElementObject[] elements =
 			stackTrace.Select(i => i.CreateStackTrace(jStackTraceElementClass)).ToArray();
 		ThrowableObjectMetadata throwableMetadata =

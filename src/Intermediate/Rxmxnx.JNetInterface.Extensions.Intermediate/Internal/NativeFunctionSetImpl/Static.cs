@@ -178,9 +178,7 @@ internal partial class NativeFunctionSetImpl
 	private static Boolean IsFinalArrayType(JClassObject arrayClass)
 	{
 		Int32 dimension = arrayClass.ArrayDimension;
-		//Primitive array
 		if (dimension + 1 == arrayClass.ClassSignature.Length) return true;
-		//Reference type array.
 		IEnvironment env = arrayClass.Environment;
 		JClassObject elementClass = env.ClassFeature.GetClass(arrayClass.ClassSignature.AsSpan()[(dimension + 1)..^1]);
 		return NativeFunctionSetImpl.GetClassModifiers(elementClass).HasFlag(JModifierObject.Modifiers.Final);
@@ -195,10 +193,11 @@ internal partial class NativeFunctionSetImpl
 	/// </returns>
 	private static JModifierObject.Modifiers GetClassModifiers(JClassObject jClass)
 	{
-		if (jClass.IsPrimitive) return JModifierObject.PrimitiveModifiers;
+		if (jClass.ArrayDimension + 1 == jClass.ClassSignature.Length) return JModifierObject.PrimitiveModifiers;
 		IEnvironment env = jClass.Environment;
+		JClassObject classClass = env.ClassFeature.ClassObject;
 		JModifierObject.Modifiers result = default;
-		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jClass, jClass.Class,
+		env.AccessFeature.CallPrimitiveFunction(result.AsBytes(), jClass, classClass,
 		                                        NativeFunctionSetImpl.getModifiersDefinition, false, []);
 		return result;
 	}

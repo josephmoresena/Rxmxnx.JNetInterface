@@ -19,7 +19,6 @@ public class JProxyObjectTests
 		JObjectLocalRef localRef = JProxyObjectTests.fixture.Create<JObjectLocalRef>();
 		using JClassObject jClass = new(env);
 		using JClassObject jProxyClass = new(jClass, typeMetadata);
-		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
 		using JProxyObject jProxy =
 			Assert.IsType<JProxyObject>(typeMetadata.CreateInstance(jProxyClass, localRef, true));
 

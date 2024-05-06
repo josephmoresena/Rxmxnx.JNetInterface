@@ -29,12 +29,14 @@ public sealed class JThrowableObjectTests
 		using JClassObject jThrowableClass = new(jClass, IClassType.GetMetadata<JThrowableObject>());
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
 		using JClassObject jStackTraceElementClass = new(jClass, IClassType.GetMetadata<JStackTraceElementObject>());
+		using JClassObject jStackTraceElementArrayClass =
+			new(jClass, IClassType.GetMetadata<JStackTraceElementObject>().GetArrayMetadata()!);
 		using JStringObject jStringMessage = new(jStringClass, default, message);
 		using JThrowableObject jThrowable = (JThrowableObject)IClassType.GetMetadata<JThrowableObject>()
 		                                                                .CreateInstance(
 			                                                                jThrowableClass, throwableRef.Value);
 		using JArrayObject<JStackTraceElementObject> stackTraceElements =
-			new(jStackTraceElementClass, default, stackTrace.Length);
+			new(jStackTraceElementArrayClass, default, stackTrace.Length);
 		JStackTraceElementObject[] elements =
 			stackTrace.Select(i => i.CreateStackTrace(jStackTraceElementClass)).ToArray();
 		ThrowableObjectMetadata throwableMetadata = new(new(jThrowableClass))

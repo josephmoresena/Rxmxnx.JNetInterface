@@ -19,7 +19,6 @@ public class JNumberObjectTests
 		JObjectLocalRef localRef = JNumberObjectTests.fixture.Create<JObjectLocalRef>();
 		using JClassObject jClass = new(env);
 		using JClassObject jNumberClass = new(jClass, typeMetadata);
-		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
 		using JNumberObject jNumber =
 			Assert.IsType<JNumberObject>(typeMetadata.CreateInstance(jNumberClass, localRef, true));
 

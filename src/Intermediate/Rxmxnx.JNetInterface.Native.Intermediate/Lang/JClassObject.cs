@@ -51,19 +51,19 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		}
 	}
 	/// <summary>
-	/// Indicates whether current class is final.
+	/// Indicates whether the current class is final.
 	/// </summary>
 	public Boolean IsFinal => this._isFinal ??= this.IsFinalType();
 	/// <summary>
-	/// Indicates whether current class is an array.
+	/// Indicates whether the current class is an array.
 	/// </summary>
 	public Boolean IsArray => this.ClassSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar;
 	/// <summary>
-	/// Indicates whether current class is an array.
+	/// Indicates whether the current class is an array.
 	/// </summary>
 	public Boolean IsPrimitive => this.ClassSignature.Length == 1;
 	/// <summary>
-	/// Indicates whether current class is an interface.
+	/// Indicates whether the current class is an interface.
 	/// </summary>
 	public Boolean IsInterface
 	{
@@ -75,7 +75,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		}
 	}
 	/// <summary>
-	/// Indicates whether current class is an enum.
+	/// Indicates whether the current class is an enum.
 	/// </summary>
 	public Boolean IsEnum
 	{
@@ -87,7 +87,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		}
 	}
 	/// <summary>
-	/// Indicates whether current class is an annotation.
+	/// Indicates whether the current class is an annotation.
 	/// </summary>
 	public Boolean IsAnnotation
 	{
