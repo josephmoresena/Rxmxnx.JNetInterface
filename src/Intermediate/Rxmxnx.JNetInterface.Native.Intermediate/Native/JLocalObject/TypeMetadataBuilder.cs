@@ -226,6 +226,7 @@ public partial class JLocalObject
 		/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
 		internal static JClassTypeMetadata<TClass> Build(JPrimitiveTypeMetadata primitiveMetadata,
 			JClassTypeMetadata? baseMetadata = default)
-			=> new ClassTypeMetadata(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0, baseMetadata);
+			=> new ClassTypeMetadata(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0,
+			                         baseMetadata ?? IClassType.GetMetadata<JLocalObject>());
 	}
 }

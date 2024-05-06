@@ -18,9 +18,8 @@ public sealed partial class JCharacterObject
 	/// <inheritdoc/>
 	private JCharacterObject(IReferenceType.ObjectInitializer initializer) : base(initializer)
 	{
-		JLocalObject jLocal = initializer.Instance;
-		if (jLocal is JCharacterObject wrapper)
-			this._value = wrapper._value;
+		JCharacterObject? jBooleanObject = initializer.Instance as JCharacterObject;
+		this._value = jBooleanObject?._value;
 	}
 
 	static JCharacterObject IClassType<JCharacterObject>.Create(IReferenceType.ClassInitializer initializer)

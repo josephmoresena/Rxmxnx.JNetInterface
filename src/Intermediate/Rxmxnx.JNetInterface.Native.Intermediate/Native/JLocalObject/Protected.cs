@@ -35,7 +35,8 @@ public partial class JLocalObject
 	/// </param>
 	protected virtual void Dispose(Boolean disposing)
 	{
-		if (this.Lifetime.IsDisposed) return;
+		//Disposed or uninstantiated object.
+		if (this.Lifetime is { IsDisposed: true, } or null) return;
 		this.Lifetime.Unload(this);
 	}
 	/// <summary>

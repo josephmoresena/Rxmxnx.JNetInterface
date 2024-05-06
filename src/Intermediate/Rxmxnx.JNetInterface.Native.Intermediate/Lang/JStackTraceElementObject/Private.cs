@@ -28,7 +28,7 @@ public partial class JStackTraceElementObject
 	private JStackTraceElementObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	private JStackTraceElementObject(JLocalObject jLocal) : base(
-		jLocal, jLocal.Environment.ClassFeature.GetClass<JStackTraceElementObject>())
+		jLocal, jLocal.Environment.ClassFeature.StackTraceElementObject)
 	{
 		JStackTraceElementObject? traceElement = jLocal as JStackTraceElementObject;
 		this._className ??= traceElement?._className;

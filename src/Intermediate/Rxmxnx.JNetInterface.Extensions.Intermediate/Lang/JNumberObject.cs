@@ -23,9 +23,8 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	/// <inheritdoc/>
 	private protected JNumberObject(IReferenceType.ObjectInitializer initializer) : base(initializer)
 	{
-		JLocalObject jLocal = initializer.Instance;
-		if (jLocal is JNumberObject number)
-			this._value = number.GetValue<TValue>();
+		JNumberObject? jBooleanObject = initializer.Instance as JNumberObject;
+		this._value = jBooleanObject?.GetValue<TValue>();
 	}
 
 	/// <summary>

@@ -70,12 +70,6 @@ public interface IEnumType<TEnum> : IEnumType, IReferenceType<TEnum> where TEnum
 		return TEnum.Create(new ClassInitializer { Class = enumClass, LocalReference = localRef, RealClass = true, });
 	}
 	/// <summary>
-	/// Creates a <typeparamref name="TEnum"/> instance from <paramref name="jLocal"/>.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>A <typeparamref name="TEnum"/> instance from <paramref name="jLocal"/>.</returns>
-	internal static TEnum Create(JLocalObject jLocal) => TEnum.Create(jLocal);
-	/// <summary>
 	/// Creates a <typeparamref name="TEnum"/> instance from <paramref name="jGlobal"/> and
 	/// <paramref name="env"/>.
 	/// </summary>

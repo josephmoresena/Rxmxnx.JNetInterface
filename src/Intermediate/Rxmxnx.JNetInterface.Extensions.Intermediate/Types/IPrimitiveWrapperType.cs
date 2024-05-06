@@ -22,35 +22,6 @@ public interface IPrimitiveWrapperType<TWrapper> : IClassType<TWrapper>
 	internal static abstract JPrimitiveTypeMetadata PrimitiveMetadata { get; }
 
 	static JClassTypeMetadata<TWrapper> IClassType<TWrapper>.Metadata => TWrapper.Metadata;
-
-	/// <summary>
-	/// Creates a <typeparamref name="TWrapper"/> instance from <paramref name="jLocal"/>.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns>A <typeparamref name="TWrapper"/> instance from <paramref name="jLocal"/>.</returns>
-	internal static virtual TWrapper Create(JLocalObject jLocal)
-		=> TWrapper.Create(new ObjectInitializer(jLocal)
-		{
-			Class = jLocal.Environment.ClassFeature.GetClass<TWrapper>(),
-		});
-	/// <summary>
-	/// Creates a <typeparamref name="TWrapper"/> instance from <paramref name="localRef"/> using
-	/// <paramref name="jClass"/>.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
-	/// <returns>A <typeparamref name="TWrapper"/> instance from <paramref name="localRef"/> and <paramref name="jClass"/>.</returns>
-	internal static virtual TWrapper Create(JClassObject jClass, JObjectLocalRef localRef)
-		=> TWrapper.Create(new ClassInitializer { Class = jClass, LocalReference = localRef, RealClass = true, });
-	/// <summary>
-	/// Creates a <typeparamref name="TWrapper"/> instance from <paramref name="jGlobal"/> using
-	/// <paramref name="env"/>.
-	/// </summary>
-	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
-	/// <returns>A <typeparamref name="TWrapper"/> instance from <paramref name="jGlobal"/> and <paramref name="env"/>.</returns>
-	internal static virtual TWrapper Create(IEnvironment env, JGlobalBase jGlobal)
-		=> TWrapper.Create(new GlobalInitializer { Global = jGlobal, Environment = env, });
 }
 
 /// <summary>

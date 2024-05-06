@@ -47,7 +47,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="localRef">Local object reference.</param>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="isDisposable">Indicates whether current instance is disposable.</param>
+	/// <param name="isDisposable">Indicates whether the current instance is disposable.</param>
 	public ObjectLifetime(IEnvironment env, JObjectLocalRef localRef, JReferenceObject jObject, Boolean isDisposable)
 	{
 		this._env = env;
@@ -203,7 +203,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if local instance is assignable to <typeparamref name="TDataType"/> type;
+	/// <see langword="true"/> if the local instance is assignable to <typeparamref name="TDataType"/> type;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean InstanceOf<TDataType>(JLocalObject jLocal) where TDataType : JReferenceObject, IDataType<TDataType>
@@ -300,7 +300,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// </summary>
 	/// <typeparam name="TGlobal">A <see cref="JGlobalBase"/> type.</typeparam>
 	/// <returns>
-	/// <see langword="true"/> if current instance has a valid <typeparamref name="TGlobal"/> instance.;
+	/// <see langword="true"/> if the current instance has a valid <typeparamref name="TGlobal"/> instance.;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean HasValidGlobal<TGlobal>() where TGlobal : JGlobalBase

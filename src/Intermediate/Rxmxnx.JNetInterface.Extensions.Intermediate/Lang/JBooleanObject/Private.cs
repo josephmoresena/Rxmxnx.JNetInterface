@@ -18,9 +18,8 @@ public sealed partial class JBooleanObject
 	/// <inheritdoc/>
 	private JBooleanObject(IReferenceType.ObjectInitializer initializer) : base(initializer)
 	{
-		JLocalObject jLocal = initializer.Instance;
-		if (jLocal is JBooleanObject wrapper)
-			this._value = wrapper._value;
+		JBooleanObject? jBooleanObject = initializer.Instance as JBooleanObject;
+		this._value = jBooleanObject?._value;
 	}
 
 	static JBooleanObject IClassType<JBooleanObject>.Create(IReferenceType.ClassInitializer initializer)

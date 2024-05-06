@@ -46,7 +46,7 @@ public partial class JLocalObject
 				base(information)
 			{
 				this._modifier = JTypeModifier.Final;
-				this._interfaces = isVoid ? InterfaceSet.PrimitiveWrapperSet : InterfaceSet.Empty;
+				this._interfaces = !isVoid ? InterfaceSet.PrimitiveWrapperSet : InterfaceSet.Empty;
 				this._baseMetadata = baseMetadata;
 			}
 
