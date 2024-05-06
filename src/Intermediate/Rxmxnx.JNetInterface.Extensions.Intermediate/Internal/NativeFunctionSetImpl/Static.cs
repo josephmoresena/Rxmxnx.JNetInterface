@@ -100,7 +100,7 @@ internal partial class NativeFunctionSetImpl
 	/// </summary>
 	private static readonly JFunctionDefinition<JClassObject> getReturnType = new(UnicodeMethodNames.GetReturnType());
 	/// <summary>
-	/// <c>Field.getParameterTypes()</c> definition.
+	/// <c>Field.getType()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JClassObject> getType = new(UnicodeMethodNames.GetFieldType());
 

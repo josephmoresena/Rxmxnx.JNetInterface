@@ -10,7 +10,7 @@ namespace Rxmxnx.JNetInterface.Native;
 public abstract partial class JReferenceObject : JObject
 {
 	/// <summary>
-	/// Indicates whether current instance is default value.
+	/// Indicates whether the current instance is default value.
 	/// </summary>
 	public Boolean IsDefault => this.IsBlankSpan();
 
@@ -34,7 +34,7 @@ public abstract partial class JReferenceObject : JObject
 	}
 
 	/// <summary>
-	/// Indicates whether current instance is an instance of <typeparamref name="TDataType"/> type.
+	/// Indicates whether the current instance is an instance of <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <returns>

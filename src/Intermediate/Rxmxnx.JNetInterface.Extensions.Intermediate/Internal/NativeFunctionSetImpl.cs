@@ -186,17 +186,18 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	/// <inheritdoc/>
 	public override JClassObject? GetReturnType(JExecutableObject jMethod)
 	{
+		if (jMethod is not JMethodObject && (jMethod is JConstructorObject || !jMethod.InstanceOf<JMethodObject>()))
+			return default;
+
 		IEnvironment env = jMethod.Environment;
-		JClassObject methodClass = env.ClassFeature.GetClass<JMethodObject>();
-		return jMethod is JMethodObject || jMethod.InstanceOf<JMethodObject>() ?
-			JFunctionDefinition.Invoke(NativeFunctionSetImpl.getReturnType, jMethod, methodClass) :
-			default;
+		JClassObject methodClass = env.ClassFeature.MethodObject;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getReturnType, jMethod, methodClass);
 	}
 	/// <inheritdoc/>
 	public override JClassObject GetFieldType(JFieldObject jField)
 	{
 		IEnvironment env = jField.Environment;
-		JClassObject methodClass = env.ClassFeature.GetClass<JFieldObject>();
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getType, jField, methodClass)!;
+		JClassObject fieldClass = env.ClassFeature.FieldObject;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getType, jField, fieldClass)!;
 	}
 }
