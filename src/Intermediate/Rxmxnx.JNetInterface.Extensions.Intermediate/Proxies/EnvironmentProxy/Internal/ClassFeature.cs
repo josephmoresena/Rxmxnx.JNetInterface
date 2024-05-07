@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native.Dummies;
+namespace Rxmxnx.JNetInterface.Native.Proxies;
 
 public abstract partial class EnvironmentProxy
 {
@@ -29,9 +29,9 @@ public abstract partial class EnvironmentProxy
 		Int32 classNameLength = ITypeInformation.GetSegmentLength(classInformation, 0);
 		return this.GetClass(new(classInformation[..classNameLength]));
 	}
-	JClassObject IClassFeature.LoadClass(CString className, ReadOnlySpan<Byte> rawClassBytes,
+	JClassObject IClassFeature.LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 		JClassLoaderObject? jClassLoader)
-		=> this.LoadClass(className, rawClassBytes.ToArray(), jClassLoader);
+		=> this.LoadClass(new(className), rawClassBytes.ToArray(), jClassLoader);
 	JClassObject IClassFeature.LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader)
 		=> this.LoadClass<TDataType>(rawClassBytes.ToArray(), jClassLoader);
 	void IClassFeature.GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)

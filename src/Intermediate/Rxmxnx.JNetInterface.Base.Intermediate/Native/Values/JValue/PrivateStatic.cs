@@ -18,9 +18,9 @@ internal partial struct JValue
 	private static readonly IsDefaultDelegate isDefault = JValue.GetIsDefault();
 
 	/// <summary>
-	/// Retrieves the <see cref="IsDefaultDelegate"/> delegate to use for current process.
+	/// Retrieves the <see cref="IsDefaultDelegate"/> delegate to use for the current process.
 	/// </summary>
-	/// <returns><see cref="IsDefaultDelegate"/> delegate for current process.</returns>
+	/// <returns><see cref="IsDefaultDelegate"/> delegate for the current process.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static IsDefaultDelegate GetIsDefault()
 		=> NativeUtilities.SizeOf<JValue>() == NativeUtilities.PointerSize ? JValue.DefaultPointer : JValue.Default;

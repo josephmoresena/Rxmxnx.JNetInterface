@@ -18,6 +18,10 @@ partial class JEnvironment
 
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
 		public readonly JVirtualMachine VirtualMachine;
+		/// <summary>
+		/// Current thrown exception.
+		/// </summary>
+		public JniException? Thrown { get; private set; }
 
 		/// <summary>
 		/// Ensured capacity.
@@ -50,10 +54,13 @@ partial class JEnvironment
 		/// <returns>A <typeparamref name="TDelegate"/> instance.</returns>
 		public TDelegate GetDelegate<TDelegate>() where TDelegate : Delegate
 		{
-			ValidationUtilities.ThrowIfDifferentThread(this.Thread);
+			ValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
+			ValidationUtilities.ThrowIfInvalidVirtualMachine(this.VirtualMachine.IsAlive);
+			ValidationUtilities.ThrowIfNotAttached(this._env.IsAttached);
 			Type typeOfT = typeof(TDelegate);
-			Int32 index = EnvironmentCache.delegateIndex[typeOfT];
-			IntPtr ptr = this.GetPointer(index);
+			JniDelegateInfo info = EnvironmentCache.delegateIndex[typeOfT];
+			ValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
+			IntPtr ptr = this.GetPointer(info.Index);
 			return this._delegateCache.GetDelegate<TDelegate>(ptr);
 		}
 		/// <summary>
@@ -61,23 +68,79 @@ partial class JEnvironment
 		/// </summary>
 		public void CheckJniError()
 		{
-			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
-			JThrowableLocalRef throwableRef = exceptionOccurred(this.Reference);
-			if (throwableRef.IsDefault) return;
-			try
+			if (this._criticalCount > 0)
 			{
-				ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
-				exceptionClear(this.Reference);
-				throw this.CreateJniException(throwableRef);
+				ExceptionCheckDelegate exceptionCheck = this.GetDelegate<ExceptionCheckDelegate>();
+				if (exceptionCheck(this.Reference) != JBoolean.TrueValue) return;
+				this.ThrowJniException(CriticalException.Instance, true);
 			}
-			finally
+			else
 			{
-				ThrowDelegate jThrow = this.GetDelegate<ThrowDelegate>();
-				jThrow(this.Reference, throwableRef);
+				JThrowableLocalRef throwableRef = this.GetPendingException();
+				if (throwableRef.IsDefault) return;
+				this.ThrowJniException(this.CreateThrowableException(throwableRef), true);
 			}
 		}
 		/// <inheritdoc cref="IEnvironment.JniSecure"/>
-		public Boolean JniSecure()
-			=> this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId && this._criticalCount == 0;
+		/// <param name="level">JNI call level.</param>
+		public Boolean JniSecure(JniSafetyLevels level = JniSafetyLevels.None)
+			=> this.Thread.ManagedThreadId == Environment.CurrentManagedThreadId &&
+				(level.HasFlag(JniSafetyLevels.CriticalSafe) || this._criticalCount == 0) &&
+				(level.HasFlag(JniSafetyLevels.ErrorSafe) || this.Thrown is null);
+		/// <summary>
+		/// Sets <paramref name="throwableException"/> as pending exception and throws it.
+		/// </summary>
+		/// <param name="throwableException">A <see cref="ThrowableException"/> instance.</param>
+		/// <param name="throwException">
+		/// Indicates whether exception should be thrown in managed code.
+		/// </param>
+		/// <exception cref="ThrowableException">
+		/// Throws if <paramref name="throwableException"/> is not null.
+		/// </exception>
+		public void ThrowJniException(ThrowableException? throwableException, Boolean throwException)
+		{
+			if (this.Thrown == throwableException) return;
+			try
+			{
+				ValidationUtilities.ThrowIfProxy(throwableException?.Global);
+				this.ThrowJniException(throwableException as JniException, throwException);
+			}
+			finally
+			{
+				if (throwableException is null)
+				{
+					this.ClearException();
+				}
+				else
+				{
+					ValidationUtilities.ThrowIfDefault(throwableException.Global);
+					this.Throw(throwableException.Global.As<JThrowableLocalRef>());
+				}
+			}
+		}
+		/// <summary>
+		/// Retrieves exception occured reference.
+		/// </summary>
+		/// <returns>Pending exception <see cref="JThrowableLocalRef"/> reference.</returns>
+		public JThrowableLocalRef GetPendingException()
+		{
+			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
+			return exceptionOccurred(this.Reference);
+		}
+		/// <summary>
+		/// Creates JNI exception from <paramref name="throwableRef"/>.
+		/// </summary>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
+		public ThrowableException CreateThrowableException(JThrowableLocalRef throwableRef)
+		{
+			this.ClearException();
+
+			using LocalFrame _ = new(this._env, 5);
+			JClassObject jClass =
+				this._env.GetObjectClass(throwableRef.Value, out JReferenceTypeMetadata throwableMetadata);
+			String message = this.GetThrowableMessage(throwableRef);
+			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
+		}
 	}
 }

@@ -18,7 +18,7 @@ partial class JEnvironment
 		}
 		public Int32 GetLength(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfProxy(jObject);
 			GetStringLengthDelegate getStringLength = this.GetDelegate<GetStringLengthDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
@@ -28,7 +28,7 @@ partial class JEnvironment
 		}
 		public Int32 GetUtf8Length(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfProxy(jObject);
 			GetStringUtfLengthDelegate getStringUtf8Length = this.GetDelegate<GetStringUtfLengthDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
@@ -38,7 +38,7 @@ partial class JEnvironment
 		}
 		public INativeMemoryAdapter GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
-			ValidationUtilities.ThrowIfDummy(jString);
+			ValidationUtilities.ThrowIfProxy(jString);
 			ValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, false);
 		}
@@ -52,7 +52,7 @@ partial class JEnvironment
 		}
 		public INativeMemoryAdapter GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
-			ValidationUtilities.ThrowIfDummy(jString);
+			ValidationUtilities.ThrowIfProxy(jString);
 			ValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, default);
 		}
@@ -66,7 +66,7 @@ partial class JEnvironment
 		}
 		public INativeMemoryAdapter GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
-			ValidationUtilities.ThrowIfDummy(jString);
+			ValidationUtilities.ThrowIfProxy(jString);
 			ValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, true);
 		}
@@ -80,32 +80,65 @@ partial class JEnvironment
 		}
 		public void ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
-			ReleaseStringCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringCharsDelegate>();
-			releaseStringChars(this.Reference, stringRef, pointer);
-			this.CheckJniError();
+			if (!this._env.IsAttached)
+			{
+				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. Thread is not attached.");
+			}
+			else if (!this.VirtualMachine.IsAlive)
+			{
+				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. JVM is not alive.");
+			}
+			else
+			{
+				ReleaseStringCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringCharsDelegate>();
+				releaseStringChars(this.Reference, stringRef, pointer);
+				this.CheckJniError();
+			}
 		}
 		public void ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer)
 		{
-			ReleaseStringUtfCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringUtfCharsDelegate>();
-			releaseStringChars(this.Reference, stringRef, pointer);
-			this.CheckJniError();
+			if (!this._env.IsAttached)
+			{
+				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. Thread is not attached.");
+			}
+			else if (!this.VirtualMachine.IsAlive)
+			{
+				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. JVM is not alive.");
+			}
+			else
+			{
+				ReleaseStringUtfCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringUtfCharsDelegate>();
+				releaseStringChars(this.Reference, stringRef, pointer);
+				this.CheckJniError();
+			}
 		}
 		public void ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
-			ReleaseStringCriticalDelegate releaseStringCritical = this.GetDelegate<ReleaseStringCriticalDelegate>();
-			releaseStringCritical(this.Reference, stringRef, pointer);
-			this.CheckJniError();
-			this._criticalCount--;
+			if (!this._env.IsAttached)
+			{
+				Debug.WriteLine($"Unable to release critical memory 0x{pointer:0x8}. Thread is not attached.");
+			}
+			else if (!this.VirtualMachine.IsAlive)
+			{
+				Debug.WriteLine($"Unable to release critical memory 0x{pointer:0x8}. JVM is not alive.");
+			}
+			else
+			{
+				ReleaseStringCriticalDelegate releaseStringCritical = this.GetDelegate<ReleaseStringCriticalDelegate>();
+				releaseStringCritical(this.Reference, stringRef, pointer);
+				this.CheckJniError();
+				this._criticalCount--;
+			}
 		}
 		public void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
 		{
-			ValidationUtilities.ThrowIfDummy(jString);
+			ValidationUtilities.ThrowIfProxy(jString);
 			chars.WithSafeFixed((this, jString, startIndex), EnvironmentCache.GetStringRegion);
 			this.CheckJniError();
 		}
 		public void GetCopyUtf8(JStringObject jString, Memory<Byte> utf8Units, Int32 startIndex = 0)
 		{
-			ValidationUtilities.ThrowIfDummy(jString);
+			ValidationUtilities.ThrowIfProxy(jString);
 			GetStringUtfRegionDelegate getStringUtfRegion = this.GetDelegate<GetStringUtfRegionDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add(jString);

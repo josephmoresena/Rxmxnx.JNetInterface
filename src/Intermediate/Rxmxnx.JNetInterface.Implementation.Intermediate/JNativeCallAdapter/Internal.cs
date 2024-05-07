@@ -18,11 +18,9 @@ public readonly ref partial struct JNativeCallAdapter
 		internal JLocalObject CreateInitialObject(JObjectLocalRef localRef)
 		{
 			JEnvironment env = this._callAdapter._env;
-			JClassObject jClass = this.GetObjectClass(localRef, true);
+			JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata metadata, true);
 			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
 			{
-				JReferenceTypeMetadata metadata = MetadataHelper.GetMetadata(jClass.Hash) ??
-					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>();
 				JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
 				this._callAdapter._cache[localRef] = result.Lifetime;
 				return result;
@@ -37,14 +35,15 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <returns>Initial <typaramref name="TObject"/> instance for <paramref name="localRef"/>.</returns>
 		internal TObject CreateInitialObject<TObject>(JObjectLocalRef localRef)
-			where TObject : JLocalObject, IReferenceType<TObject>
+			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
 			if (metadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
 			if (JLocalObject.IsObjectType<TObject>())
-				return (TObject)this.CreateInitialObject(localRef);
-			JClassObject jClass = this.GetObjectClass(localRef, true);
-			return (TObject)metadata.CreateInstance(jClass, localRef, true);
+				return (TObject)(Object)this.CreateInitialObject(localRef);
+			JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata classMetadata, true);
+			JLocalObject localObject = classMetadata.CreateInstance(jClass, localRef, true);
+			return (TObject)metadata.ParseInstance(localObject, true);
 		}
 		/// <summary>
 		/// Retrieves initial <see cref="JLocalObject"/> instance for <paramref name="classRef"/>.

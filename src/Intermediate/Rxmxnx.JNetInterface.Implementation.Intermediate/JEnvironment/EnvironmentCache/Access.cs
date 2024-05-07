@@ -66,7 +66,7 @@ partial class JEnvironment
 					setStaticShortField(this.Reference, classRef, fieldId, MemoryMarshal.AsRef<Int16>(bytes));
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
 		}
@@ -117,7 +117,7 @@ partial class JEnvironment
 					MemoryMarshal.AsRef<Int16>(bytes) = getStaticShortField(this.Reference, classRef, fieldId);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
 		}
@@ -181,7 +181,7 @@ partial class JEnvironment
 					setShortField(this.Reference, localRef, fieldId, MemoryMarshal.AsRef<Int16>(bytes));
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
 		}
@@ -244,7 +244,7 @@ partial class JEnvironment
 					MemoryMarshal.AsRef<Int16>(bytes) = getShortField(this.Reference, localRef, fieldId);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
 		}
@@ -261,7 +261,7 @@ partial class JEnvironment
 		private JObjectLocalRef GetReflectedCall(JCallDefinition definition, JClassObject declaringClass,
 			Boolean isStatic)
 		{
-			ValidationUtilities.ThrowIfDummy(declaringClass);
+			ValidationUtilities.ThrowIfProxy(declaringClass);
 			using INativeTransaction jniTransaction = isStatic ?
 				this.GetClassTransaction(declaringClass, definition, out JMethodId methodId, false) :
 				this.GetInstanceTransaction(declaringClass, definition, out methodId);
@@ -394,7 +394,7 @@ partial class JEnvironment
 					                                                    (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
 		}
@@ -531,7 +531,7 @@ partial class JEnvironment
 						break;
 					default:
 						JReferenceObject referenceObject = (args[i] as JReferenceObject)!;
-						ValidationUtilities.ThrowIfDummy(referenceObject);
+						ValidationUtilities.ThrowIfProxy(referenceObject);
 						this.ReloadClass(referenceObject as JClassObject);
 						ValidationUtilities.ThrowIfDefault(referenceObject, $"Invalid object at {i}.");
 						jniTransaction.Add(referenceObject);
@@ -600,7 +600,7 @@ partial class JEnvironment
 					                                                    (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		/// <summary>
@@ -667,7 +667,7 @@ partial class JEnvironment
 						this.Reference, localRef, classRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 					break;
 				default:
-					throw new ArgumentException("Invalid primitive type.");
+					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		/// <summary>
@@ -680,7 +680,7 @@ partial class JEnvironment
 		private JObjectLocalRef NewObject(JClassObject jClass, JConstructorDefinition definition,
 			params IObject?[] args)
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(1 + definition.ReferenceCount);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
@@ -718,7 +718,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
 		private JObjectLocalRef GetStaticObjectField(JClassObject jClass, JFieldDefinition definition)
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);

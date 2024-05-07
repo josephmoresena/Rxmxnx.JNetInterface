@@ -12,6 +12,11 @@ public partial class JClassObject
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
+		this._isInterface = false;
+		this._isEnum = false;
+		this._isAnnotation = false;
+		this._isFinal = true;
+		this._arrayDimension = 0;
 		this.Lifetime.SetClass(this);
 	}
 	/// <summary>
@@ -26,5 +31,21 @@ public partial class JClassObject
 		this._className = metadata.ClassName;
 		this._signature = metadata.Signature;
 		this._hash = metadata.Hash;
+		this._arrayDimension = JClassObject.GetArrayDimension(metadata.Signature);
+		if (metadata.Kind is not JTypeKind.Undefined)
+		{
+			this._isInterface = metadata.Kind is JTypeKind.Interface or JTypeKind.Annotation;
+			this._isAnnotation = metadata.Kind is JTypeKind.Annotation;
+			this._isEnum = metadata.Kind is JTypeKind.Enum;
+		}
+		if (metadata.Modifier.HasValue)
+			this._isFinal = metadata.Modifier is JTypeModifier.Final;
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jClassClassObject"><see cref="JClassObject"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	internal JClassObject(JClassObject jClassClassObject, JClassLocalRef classRef) : base(
+		jClassClassObject, classRef.Value) { }
 }

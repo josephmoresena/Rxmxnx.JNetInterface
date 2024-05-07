@@ -3,15 +3,10 @@
 /// <summary>
 /// This class stores a class field definition.
 /// </summary>
-public abstract record JFieldDefinition : JAccessibleObjectDefinition
+public abstract class JFieldDefinition : JAccessibleObjectDefinition
 {
 	/// <inheritdoc/>
 	private protected override String ToStringFormat => "{{ Field: {0} Descriptor: {1} }}";
-
-	/// <summary>
-	/// Return type.
-	/// </summary>
-	internal abstract Type Return { get; }
 
 	/// <summary>
 	/// Constructor.
@@ -20,9 +15,8 @@ public abstract record JFieldDefinition : JAccessibleObjectDefinition
 	/// <param name="signature">Signature field.</param>
 	private protected JFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(
 		new CStringSequence(name, signature)) { }
-
 	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
+	private protected JFieldDefinition(JFieldDefinition definition) : base(definition) { }
 
 	/// <summary>
 	/// Retrieves a <see cref="JFieldObject"/> reflected from current definition on
@@ -52,11 +46,8 @@ public abstract record JFieldDefinition : JAccessibleObjectDefinition
 /// This class stores a class field definition.
 /// </summary>
 /// <typeparam name="TField"><see cref="IDataType"/> type of field result.</typeparam>
-public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : IDataType<TField>, IObject
+public sealed class JFieldDefinition<TField> : JFieldDefinition where TField : IDataType<TField>, IObject
 {
-	/// <inheritdoc/>
-	internal override Type Return => JAccessibleObjectDefinition.ReturnType<TField>();
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -64,11 +55,6 @@ public sealed record JFieldDefinition<TField> : JFieldDefinition where TField : 
 	public JFieldDefinition(ReadOnlySpan<Byte> name) : base(name, IDataType.GetMetadata<TField>().Signature) { }
 	/// <inheritdoc/>
 	internal JFieldDefinition(JFieldDefinition definition) : base(definition) { }
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 
 	/// <summary>
 	/// Retrieves the value of a field on <paramref name="jLocal"/> which matches with current definition.

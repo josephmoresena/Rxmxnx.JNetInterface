@@ -26,16 +26,16 @@ public partial class JReferenceObject
 	}
 
 	/// <summary>
-	/// Indicates whether current instance is default value.
+	/// Indicates whether the current instance is default value.
 	/// </summary>
 	internal virtual Boolean IsDefaultInstance() => this.IsBlankSpan();
 
 	/// <summary>
-	/// Indicates whether current instance is an instance of <typeparamref name="TDataType"/> type class.
+	/// Indicates whether the current instance is an instance of <typeparamref name="TDataType"/> type class.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <returns>
-	/// <see langword="true"/> if current instance is an instance of <typeparamref name="TDataType"/>
+	/// <see langword="true"/> if the current instance is an instance of <typeparamref name="TDataType"/>
 	/// type class; otherwise, <see langword="false"/>.
 	/// </returns>
 	private protected abstract Boolean IsInstanceOf<TDataType>()
@@ -45,34 +45,39 @@ public partial class JReferenceObject
 	/// </summary>
 	internal abstract void ClearValue();
 	/// <summary>
-	/// Retrieves synchronizer instance for current object.
+	/// Retrieves synchronizer instance for the current object.
 	/// </summary>
 	/// <returns>A <see cref="IDisposable"/> synchronizer.</returns>
 	private protected abstract IDisposable GetSynchronizer();
-
 	/// <summary>
-	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
+	/// Indicates whether the current instance is same of <paramref name="jObject"/>.
 	/// </summary>
-	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if current instance is assignable to <typeparamref name="TDataType"/> type;
-	/// otherwise, <see langword="false"/>.
+	/// <see langword="true"/> if the current instance is <paramref name="jObject"/>; otherwise,
+	/// <see langword="false"/>.
 	/// </returns>
-	internal abstract Boolean IsAssignableTo<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>;
+	private protected virtual Boolean Same(JReferenceObject jObject)
+		=> this.IsProxy == jObject.IsProxy && this.IsDefault == jObject.IsDefault &&
+			this.AsSpan().SequenceEqual(jObject.AsSpan());
+
 	/// <summary>
 	/// Sets current instance as assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
-	/// <param name="isAssignable">Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.</param>
+	/// <param name="isAssignable">
+	/// Indicates whether the current instance is assignable to <typeparamref name="TDataType"/>
+	/// type.
+	/// </param>
 	internal abstract void SetAssignableTo<TDataType>(Boolean isAssignable)
 		where TDataType : JReferenceObject, IDataType<TDataType>;
 	/// <summary>
-	/// Retrieves current value as a read-only binary span.
+	/// Retrieves the current value as a read-only binary span.
 	/// </summary>
 	/// <returns>A read-only binary span.</returns>
 	private protected abstract ReadOnlySpan<Byte> AsSpan();
 	/// <summary>
-	/// Interprets current instance as a <typeparamref name="TReference"/> value.
+	/// Interprets the current instance as a <typeparamref name="TReference"/> value.
 	/// </summary>
 	/// <typeparam name="TReference">Type of value.</typeparam>
 	/// <returns>A read-only reference of <typeparamref name="TReference"/> value.</returns>
@@ -80,7 +85,7 @@ public partial class JReferenceObject
 	internal virtual ref readonly TReference As<TReference>() where TReference : unmanaged, INativeType<TReference>
 		=> ref this.AsSpan().AsValue<TReference>();
 	/// <summary>
-	/// Interprets current instance a <typeparamref name="TReference"/> value.
+	/// Interprets the current instance a <typeparamref name="TReference"/> value.
 	/// </summary>
 	/// <typeparam name="TReference">Type of value.</typeparam>
 	/// <returns>A <typeparamref name="TReference"/> value.</returns>

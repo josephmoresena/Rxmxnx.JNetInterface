@@ -8,30 +8,39 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	IInterfaceObject<JSerializableObject>, IInterfaceObject<JComparableObject>, IInterfaceObject<JCharSequenceObject>
 {
 	/// <summary>
+	/// JNI string reference.
+	/// </summary>
+	public new JStringLocalRef Reference => this.As<JStringLocalRef>();
+
+	/// <summary>
 	/// CLR type of object metadata.
 	/// </summary>
 	internal static readonly Type MetadataType = typeof(StringObjectMetadata);
 
-	/// <inheritdoc cref="JLocalObject.InternalReference"/>
-	internal JStringLocalRef Reference => this.As<JStringLocalRef>();
-
 	/// <summary>
 	/// Internal property to debugger display.
 	/// </summary>
+	[ExcludeFromCodeCoverage]
 	internal String DisplayValue
 		=> this._value ?? (this._length is not null ?
 			$"{this.Reference} Length: {this.Length}" :
 			this.Reference.ToString());
+
 	/// <summary>
 	/// UTF-16 length.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 Length => this._length ?? this._value?.Length ?? this.Environment.StringFeature.GetLength(this);
+	public Int32 Length => this._length ??= this._value?.Length ?? this.Environment.StringFeature.GetLength(this);
 	/// <summary>
 	/// UTF-8 length.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 Utf8Length => this._utf8Length ?? this.Environment.StringFeature.GetUtf8Length(this);
+	public Int32 Utf8Length => this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(this);
+
+	/// <inheritdoc/>
+	public Int32 CompareTo(JStringObject? other) => this.CompareTo(other?.Value);
+	/// <inheritdoc/>
+	public Int32 CompareTo(String? other) => String.Compare(this.Value, other, StringComparison.Ordinal);
 
 	/// <summary>
 	/// Internal string value.
@@ -51,7 +60,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// An <see cref="String"/> containing a copy of the UTF-16 chars on the current
 	/// <see cref="JStringObject"/> instance.
 	/// </returns>
-	public String GetChars(Int32 startIndex = 0) => this.GetChars(startIndex, this.Length);
+	public String GetChars(Int32 startIndex = 0) => this.GetChars(startIndex, this.Length - startIndex);
 	/// <summary>
 	/// Creates an <see cref="String"/> containing a copy of the UTF-16 chars on the current
 	/// <see cref="JStringObject"/> instance.
@@ -66,10 +75,9 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	{
 		if (startIndex == 0 && count == this.Length)
 			return this.Value;
-		if (this._value is not null)
-			return this._value[startIndex..count];
-		Int32 length = count - startIndex;
-		return String.Create(length, (this, startIndex), JStringObject.GetChars);
+		return this._value is not null ?
+			this._value[startIndex..(startIndex + count)] :
+			String.Create(count, (this, startIndex), JStringObject.GetChars);
 	}
 	/// <summary>
 	/// Creates an <see cref="CString"/> containing a copy of the UTF-8 chars on the current
@@ -99,9 +107,11 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		env.StringFeature.GetCopyUtf8(this, utf8Data.AsMemory()[..^1], startIndex);
 		return utf8Data;
 	}
+	/// <inheritdoc cref="String.GetEnumerator()"/>
+	public CharEnumerator GetEnumerator() => this.Value.GetEnumerator();
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this.GetStringHashCode() ?? base.GetHashCode();
+	public override Int32 GetHashCode() => this.Value.GetHashCode();
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

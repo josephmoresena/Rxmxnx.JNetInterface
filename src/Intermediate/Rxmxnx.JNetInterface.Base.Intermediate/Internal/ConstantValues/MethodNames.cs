@@ -24,7 +24,7 @@ internal static class MethodNames
 	/// <summary>
 	/// Name of <c>StackTraceElement.getLineNumber()</c>.
 	/// </summary>
-	public const String GetLineNumber = "getClassName";
+	public const String GetLineNumber = "getLineNumber";
 	/// <summary>
 	/// Name of <c>StackTraceElement.getFileName()</c>.
 	/// </summary>
@@ -85,6 +85,14 @@ internal static class MethodNames
 	/// Name of <c>Class.isPrimitive()</c>.
 	/// </summary>
 	public const String IsPrimitive = "isPrimitive";
+	/// <summary>
+	/// Name of <c>Class.getModifiers()</c>.
+	/// </summary>
+	public const String GetModifiers = "getModifiers";
+	/// <summary>
+	/// Name of <c>Class.GetInterfaces()</c>.
+	/// </summary>
+	public const String GetInterfaces = "getInterfaces";
 	/// <summary>
 	/// Name of <c>Buffer.isDirect()</c>.
 	/// </summary>

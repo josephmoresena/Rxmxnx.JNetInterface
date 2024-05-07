@@ -10,7 +10,7 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata<JByte> typeMetadata = IPrimitiveType<JByte, SByte>
-	                                                                     .JTypeMetadataBuilder
+	                                                                     .TypeMetadataBuilder
 	                                                                     .Create(UnicodeClassNames.BytePrimitive(),
 		                                                                     UnicodePrimitiveSignatures
 			                                                                     .ByteSignatureChar)
@@ -29,7 +29,7 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	private readonly SByte _value;
 
 	/// <summary>
-	/// <see cref="SByte"/> representation of current instance.
+	/// <see cref="SByte"/> representation of the current instance.
 	/// </summary>
 	public SByte Value => this._value;
 	/// <inheritdoc/>
@@ -49,6 +49,10 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	/// <param name="value">Internal value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JByte(SByte value) => this._value = value;
+
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

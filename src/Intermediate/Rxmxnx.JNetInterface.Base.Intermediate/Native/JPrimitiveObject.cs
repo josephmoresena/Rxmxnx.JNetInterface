@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Native;
 internal abstract partial class JPrimitiveObject : JObject
 {
 	/// <summary>
-	/// Size of current type in bytes.
+	/// Size of the current type in bytes.
 	/// </summary>
 	public abstract Int32 SizeOf { get; }
 
@@ -65,6 +65,11 @@ internal sealed partial class JPrimitiveObject<TPrimitive> : JPrimitiveObject.Ge
 
 	/// <inheritdoc cref="IComparable.CompareTo"/>
 	public Int32 CompareTo(Object? obj) => this.Value.CompareTo(obj);
+
+#if PACKAGE
+	/// <inheritdoc/>
+	public override JLocalObject ToObject(IEnvironment env) => this.Value.ToObject(env);
+#endif
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
 }

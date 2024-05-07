@@ -8,8 +8,8 @@ public class JLinkageErrorObject : JErrorObject, IThrowableType<JLinkageErrorObj
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JLinkageErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JErrorObject>.Create<JLinkageErrorObject>(UnicodeClassNames.LinkageErrorObject()).Build();
+	private static readonly JThrowableTypeMetadata<JLinkageErrorObject> typeMetadata = TypeMetadataBuilder<JErrorObject>
+		.Create<JLinkageErrorObject>(UnicodeClassNames.LinkageErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JLinkageErrorObject> IThrowableType<JLinkageErrorObject>.Metadata
 		=> JLinkageErrorObject.typeMetadata;
@@ -21,10 +21,10 @@ public class JLinkageErrorObject : JErrorObject, IThrowableType<JLinkageErrorObj
 	/// <inheritdoc/>
 	protected JLinkageErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JLinkageErrorObject IReferenceType<JLinkageErrorObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JLinkageErrorObject IClassType<JLinkageErrorObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JLinkageErrorObject IReferenceType<JLinkageErrorObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JLinkageErrorObject IClassType<JLinkageErrorObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JLinkageErrorObject IReferenceType<JLinkageErrorObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JLinkageErrorObject IClassType<JLinkageErrorObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

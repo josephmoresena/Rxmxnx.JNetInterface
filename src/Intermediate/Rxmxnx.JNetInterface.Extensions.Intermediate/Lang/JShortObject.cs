@@ -8,8 +8,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimitiveWrapperType<JShortObject, JShort>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JShortObject> typeMetadata =
-		new(JTypeMetadataBuilder<JShortObject>.Build(IPrimitiveType.GetMetadata<JShort>(),
-		                                             IClassType.GetMetadata<JNumberObject>()));
+		new(TypeMetadataBuilder<JShortObject>.Build(IPrimitiveType.GetMetadata<JShort>(),
+		                                            IClassType.GetMetadata<JNumberObject>()));
 
 	static JPrimitiveWrapperTypeMetadata<JShortObject> IPrimitiveWrapperType<JShortObject>.Metadata
 		=> JShortObject.typeMetadata;
@@ -27,10 +27,10 @@ public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimiti
 
 	static JShortObject? IPrimitiveWrapperType<JShortObject, JShort>.Create(IEnvironment env, JShort? value)
 		=> value is not null ? (JShortObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
-	static JShortObject IReferenceType<JShortObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JShortObject IClassType<JShortObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JShortObject IReferenceType<JShortObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JShortObject IClassType<JShortObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JShortObject IReferenceType<JShortObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JShortObject IClassType<JShortObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

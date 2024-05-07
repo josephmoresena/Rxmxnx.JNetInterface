@@ -85,7 +85,7 @@ public sealed record JVirtualMachineLibrary
 		return ValidationUtilities.ThrowIfInvalidVersion(version);
 	}
 	/// <summary>
-	/// Retrieves the default VM initialization argument for current JVM library.
+	/// Retrieves the default VM initialization argument for the current JVM library.
 	/// </summary>
 	/// <param name="jniVersion">The requested JNI version.</param>
 	/// <returns>A <see cref="JVirtualMachineInitArg"/> instance.</returns>

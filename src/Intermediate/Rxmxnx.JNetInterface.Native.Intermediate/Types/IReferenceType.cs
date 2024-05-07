@@ -7,12 +7,13 @@ namespace Rxmxnx.JNetInterface.Types;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public partial interface IReferenceType : IObject, IDataType, IDisposable
 {
+	[ExcludeFromCodeCoverage]
 	static Type IDataType.FamilyType => typeof(JLocalObject);
 
 	/// <summary>
 	/// Retrieves the metadata for given reference type.
 	/// </summary>
-	/// <typeparam name="TReference">Type of current java reference datatype.</typeparam>
+	/// <typeparam name="TReference">Type of the current java reference datatype.</typeparam>
 	/// <returns>The <see cref="JReferenceTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JReferenceTypeMetadata GetMetadata<TReference>()
@@ -32,21 +33,9 @@ public interface IReferenceType<out TReference> : IReferenceType, IDataType<TRef
 	/// <summary>
 	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
 	/// </summary>
-	/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> instance.</param>
-	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
-	protected static abstract TReference Create(ClassInitializer initializer);
-	/// <summary>
-	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
-	/// </summary>
 	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
 	protected static abstract TReference Create(ObjectInitializer initializer);
-	/// <summary>
-	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
-	/// </summary>
-	/// <param name="initializer">A <see cref="IReferenceType.GlobalInitializer"/> instance.</param>
-	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
-	protected static abstract TReference Create(GlobalInitializer initializer);
 
 	/// <summary>
 	/// Retrieves the base types from current type.

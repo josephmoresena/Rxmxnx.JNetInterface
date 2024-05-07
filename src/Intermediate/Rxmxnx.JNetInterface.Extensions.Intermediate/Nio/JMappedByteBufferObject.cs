@@ -11,7 +11,7 @@ public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByte
 	/// Type metadata.
 	/// </summary>
 	private static readonly JClassTypeMetadata<JMappedByteBufferObject> metadata =
-		JTypeMetadataBuilder<JByteBufferObject>
+		TypeMetadataBuilder<JByteBufferObject>
 			.Create<JMappedByteBufferObject>(UnicodeClassNames.MappedByteBufferObject(), JTypeModifier.Abstract)
 			.Build();
 	static JClassTypeMetadata<JMappedByteBufferObject> IClassType<JMappedByteBufferObject>.Metadata
@@ -28,13 +28,13 @@ public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByte
 	/// <inheritdoc/>
 	protected JMappedByteBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JMappedByteBufferObject IReferenceType<JMappedByteBufferObject>.Create(
+	static JMappedByteBufferObject IClassType<JMappedByteBufferObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JMappedByteBufferObject IReferenceType<JMappedByteBufferObject>.Create(
+	static JMappedByteBufferObject IClassType<JMappedByteBufferObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JMappedByteBufferObject IReferenceType<JMappedByteBufferObject>.Create(
+	static JMappedByteBufferObject IClassType<JMappedByteBufferObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

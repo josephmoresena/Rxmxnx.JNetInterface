@@ -11,7 +11,7 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata<JLong> typeMetadata = IPrimitiveType<JLong, Int64>
-	                                                                     .JTypeMetadataBuilder
+	                                                                     .TypeMetadataBuilder
 	                                                                     .Create(UnicodeClassNames.LongPrimitive(),
 		                                                                     UnicodePrimitiveSignatures
 			                                                                     .LongSignatureChar)
@@ -30,7 +30,7 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	private readonly Int64 _value;
 
 	/// <summary>
-	/// <see cref="Int64"/> representation of current instance.
+	/// <see cref="Int64"/> representation of the current instance.
 	/// </summary>
 	public Int64 Value => this._value;
 	/// <inheritdoc/>
@@ -50,6 +50,10 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	/// <param name="value">Internal value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JLong(Int64 value) => this._value = value;
+
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

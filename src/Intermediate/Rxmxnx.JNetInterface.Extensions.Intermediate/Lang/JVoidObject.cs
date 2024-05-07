@@ -7,13 +7,15 @@ public sealed class JVoidObject : JLocalObject.Uninstantiable<JVoidObject>, IPri
 	IPrimitiveWrapperType<JVoidObject>, IUninstantiableType<JVoidObject>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JVoidObject> typeMetadata =
-		new(JTypeMetadataBuilder<JVoidObject>.Build(JPrimitiveTypeMetadata.VoidMetadata));
+		new(TypeMetadataBuilder<JVoidObject>.Build(JPrimitiveTypeMetadata.VoidMetadata));
 
 	static JPrimitiveWrapperTypeMetadata<JVoidObject> IPrimitiveWrapperType<JVoidObject>.Metadata
 		=> JVoidObject.typeMetadata;
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType<JVoidObject>.PrimitiveMetadata
 		=> JPrimitiveTypeMetadata.VoidMetadata;
 
+	[ExcludeFromCodeCoverage]
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => ValidationUtilities.ThrowVoidEquality();
+	[ExcludeFromCodeCoverage]
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => ValidationUtilities.ThrowVoidEquality();
 }

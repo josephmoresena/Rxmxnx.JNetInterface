@@ -11,7 +11,7 @@ public partial class JEnumObject : JLocalObject, IClassType<JEnumObject>, ILocal
 	/// </summary>
 	/// <remarks>Its position in its enum declaration, where the initial constant is assigned an ordinal of zero</remarks>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 Ordinal => this._ordinal ??= this.Environment.Functions.GetOrdinal(this);
+	public Int32 Ordinal => this._ordinal ??= this.Environment.FunctionSet.GetOrdinal(this);
 	/// <summary>
 	/// Name of this enum constant, exactly as declared in its enum declaration.
 	/// </summary>
@@ -28,12 +28,12 @@ public partial class JEnumObject : JLocalObject, IClassType<JEnumObject>, ILocal
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 
 	/// <summary>
-	/// Returns the name of current instance.
+	/// Returns the name of the current instance.
 	/// </summary>
-	/// <returns>Returns the name of current instance.</returns>
+	/// <returns>Returns the name of the current instance.</returns>
 	private protected virtual String GetName()
 	{
-		using JStringObject enumName = this.Environment.Functions.GetName(this);
+		using JStringObject enumName = this.Environment.FunctionSet.GetName(this);
 		return enumName.Value;
 	}
 
@@ -47,6 +47,7 @@ public partial class JEnumObject : JLocalObject, IClassType<JEnumObject>, ILocal
 		base.ProcessMetadata(instanceMetadata);
 		if (instanceMetadata is not EnumObjectMetadata enumMetadata)
 			return;
+		this._name ??= enumMetadata.Name;
 		this._ordinal ??= enumMetadata.Ordinal;
 	}
 }

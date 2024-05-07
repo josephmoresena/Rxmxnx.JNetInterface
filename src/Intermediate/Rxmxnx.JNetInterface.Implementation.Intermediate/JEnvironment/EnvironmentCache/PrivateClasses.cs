@@ -23,6 +23,50 @@ partial class JEnvironment
 			this.Register(this.ShortPrimitive);
 		}
 		/// <summary>
+		/// Retrieves a <see cref="JStringObject"/> containing class name.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="isPrimitive">Output. Indicates whether class is primitive.</param>
+		/// <returns>A <see cref="JStringObject"/> instance.</returns>
+		private JStringObject GetClassName(JClassLocalRef classRef, out Boolean isPrimitive)
+		{
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			AccessCache access = this.GetAccess(jniTransaction, this.ClassObject);
+			jniTransaction.Add(classRef);
+			isPrimitive = this.IsPrimitiveClass(classRef, access);
+			return this.GetClassName(classRef, access);
+		}
+		/// <summary>
+		/// Retrieves a <see cref="JStringObject"/> containing class name.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="access">A <see cref="AccessCache"/> instance.</param>
+		/// <returns>A <see cref="JStringObject"/> instance.</returns>
+		private JStringObject GetClassName(JClassLocalRef classRef, AccessCache access)
+		{
+			JMethodId getNameId = access.GetMethodId(NativeFunctionSetImpl.GetNameDefinition, this._env);
+			CallObjectMethodADelegate callObjectMethod = this.GetDelegate<CallObjectMethodADelegate>();
+			JObjectLocalRef localRef = callObjectMethod(this.Reference, classRef.Value, getNameId,
+			                                            ReadOnlyValPtr<JValue>.Zero);
+			JClassObject jStringClass = this.GetClass<JStringObject>();
+			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
+		}
+		/// <summary>
+		/// Indicates whether class is primitive.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="access">A <see cref="AccessCache"/> instance.</param>
+		/// <returns>
+		/// <see langword="true"/> if class is primitive; otherwise; <see langword="false"/>.
+		/// </returns>
+		private Boolean IsPrimitiveClass(JClassLocalRef classRef, AccessCache access)
+		{
+			JMethodId isPrimitiveId = access.GetMethodId(NativeFunctionSetImpl.IsPrimitiveDefinition, this._env);
+			CallBooleanMethodADelegate callBooleanMethod = this.GetDelegate<CallBooleanMethodADelegate>();
+			Byte result = callBooleanMethod(this.Reference, classRef.Value, isPrimitiveId, ReadOnlyValPtr<JValue>.Zero);
+			return result == JBoolean.TrueValue;
+		}
+		/// <summary>
 		/// Reloads current class object.
 		/// </summary>
 		/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>
@@ -98,27 +142,26 @@ partial class JEnvironment
 			this.CheckJniError();
 			return result == JBoolean.TrueValue;
 		}
-
 		/// <summary>
 		/// Loads a java class from its binary information into the current VM.
 		/// </summary>
-		/// <param name="memoryList">
-		/// A fixed memory list containing both JNI class name and class binary information.
+		/// <param name="rawClassMemory">
+		/// A fixed context containing class binary information.
 		/// </param>
-		/// <param name="args">Cache and class loader.</param>
+		/// <param name="args">Cache, Class metadata and class loader.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
-		private static JClassObject LoadClass(ReadOnlyFixedMemoryList memoryList,
-			(EnvironmentCache cache, JClassLoaderObject? jClassLoader) args)
+		private static JClassObject LoadClass(in IReadOnlyFixedContext<Byte> rawClassMemory,
+			(EnvironmentCache cache, ITypeInformation metadata, JClassLoaderObject? jClassLoader) args)
 		{
-			ValidationUtilities.ThrowIfDummy(args.jClassLoader);
-			CStringSequence classInformation = MetadataHelper.GetClassInformation(memoryList[0].Bytes);
+			ValidationUtilities.ThrowIfProxy(args.jClassLoader);
 			DefineClassDelegate defineClass = args.cache.GetDelegate<DefineClassDelegate>();
 			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(2);
+			using IFixedPointer.IDisposable classNamePointer = args.metadata.GetClassNameFixedPointer();
 			JObjectLocalRef localRef = jniTransaction.Add(args.jClassLoader);
-			JClassLocalRef classRef = defineClass(args.cache.Reference, (ReadOnlyValPtr<Byte>)memoryList[0].Pointer,
-			                                      localRef, memoryList[1].Pointer, memoryList[1].Bytes.Length);
+			JClassLocalRef classRef = defineClass(args.cache.Reference, (ReadOnlyValPtr<Byte>)classNamePointer.Pointer,
+			                                      localRef, rawClassMemory.Pointer, rawClassMemory.Bytes.Length);
 			if (classRef.IsDefault) args.cache.CheckJniError();
-			if (args.cache._classes.TryGetValue(classInformation.ToString(), out JClassObject? result))
+			if (args.cache._classes.TryGetValue(args.metadata.Hash, out JClassObject? result))
 			{
 				JEnvironment env = args.cache._env;
 				JClassLocalRef classRefO = jniTransaction.Add(result);
@@ -134,7 +177,7 @@ partial class JEnvironment
 			}
 			else
 			{
-				result = new(args.cache.ClassObject, new TypeInformation(classInformation), classRef);
+				result = new(args.cache.ClassObject, args.metadata, classRef);
 			}
 			return args.cache.Register(result);
 		}

@@ -6,7 +6,7 @@ partial class JEnvironment
 	{
 		public IDisposable GetSynchronizer(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfProxy(jObject);
 			ValidationUtilities.ThrowIfDefault(jObject);
 			return this.VirtualMachine.CreateSynchronized(this._env, jObject);
 		}
@@ -17,7 +17,7 @@ partial class JEnvironment
 				return new(this._env, jLocal, initializer.LocalReference)
 				{
 					Class = initializer.Class,
-					IsRealClass = initializer.Class is not null && initializer.Class.IsFinal.GetValueOrDefault(),
+					IsRealClass = initializer.Class is not null && initializer.Class.IsFinal,
 				};
 			result.Load(jLocal);
 			if (!result.IsRealClass && initializer.OverrideClass && initializer.Class is not null)
@@ -35,49 +35,49 @@ partial class JEnvironment
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
 					jClass = this.GetClass<JBooleanObject>();
-					localRef = this.NewObject(jClass, InternalFunctionCache.BooleanConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.BooleanConstructor, primitive);
 					result = new JBooleanObject(jClass, localRef,
 					                            NativeUtilities.Transform<TPrimitive, JBoolean>(in primitive));
 					break;
 				case UnicodePrimitiveSignatures.ByteSignatureChar:
 					jClass = this.GetClass<JByteObject>();
-					localRef = this.NewObject(jClass, InternalFunctionCache.ByteConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.ByteConstructor, primitive);
 					result = new JByteObject(jClass, localRef,
 					                         NativeUtilities.Transform<TPrimitive, JByte>(in primitive));
 					break;
 				case UnicodePrimitiveSignatures.CharSignatureChar:
 					jClass = this.GetClass<JCharacterObject>();
-					localRef = this.NewObject(jClass, InternalFunctionCache.CharacterConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.CharacterConstructor, primitive);
 					result = new JCharacterObject(jClass, localRef,
 					                              NativeUtilities.Transform<TPrimitive, JChar>(in primitive));
 					break;
 				case UnicodePrimitiveSignatures.DoubleSignatureChar:
 					jClass = this.GetClass<JDoubleObject>();
-					localRef = this.NewObject(jClass, InternalFunctionCache.DoubleConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.DoubleConstructor, primitive);
 					result = new JDoubleObject(jClass, localRef,
 					                           NativeUtilities.Transform<TPrimitive, JDouble>(in primitive));
 					break;
 				case UnicodePrimitiveSignatures.FloatSignatureChar:
 					jClass = this.GetClass<JFloatObject>();
-					localRef = this.NewObject(jClass, InternalFunctionCache.FloatConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.FloatConstructor, primitive);
 					result = new JFloatObject(jClass, localRef,
 					                          NativeUtilities.Transform<TPrimitive, JFloat>(in primitive));
 					break;
 				case UnicodePrimitiveSignatures.IntSignatureChar:
 					jClass = this.GetClass<JIntegerObject>();
-					localRef = this.NewObject(jClass, InternalFunctionCache.IntegerConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.IntegerConstructor, primitive);
 					result = new JIntegerObject(jClass, localRef,
 					                            NativeUtilities.Transform<TPrimitive, JInt>(in primitive));
 					break;
 				case UnicodePrimitiveSignatures.LongSignatureChar:
 					jClass = this.GetClass<JLongObject>();
-					localRef = this.NewObject(jClass, InternalFunctionCache.LongConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.LongConstructor, primitive);
 					result = new JLongObject(jClass, localRef,
 					                         NativeUtilities.Transform<TPrimitive, JLong>(in primitive));
 					break;
 				case UnicodePrimitiveSignatures.ShortSignatureChar: //S
 					jClass = this.GetClass<JShortObject>();
-					localRef = this.NewObject(jClass, InternalFunctionCache.ShortConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.ShortConstructor, primitive);
 					result = new JShortObject(jClass, localRef,
 					                          NativeUtilities.Transform<TPrimitive, JShort>(in primitive));
 					break;
@@ -88,17 +88,14 @@ partial class JEnvironment
 		}
 		public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
 		{
-			ValidationUtilities.ThrowIfDummy(jLocal);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			if (typeof(TGlobal) == typeof(JWeak))
 			{
-				NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();
-				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-				JWeakRef weakRef = newWeakGlobalRef(this.Reference, localRef);
-				if (weakRef == default) this.CheckJniError();
-				JWeak jWeak = this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
-				return (jWeak as TGlobal)!;
+				JWeakRef weakRef = this.CreateWeakGlobalRef(jLocal);
+				return (TGlobal)(Object)this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
 			}
+
+			ValidationUtilities.ThrowIfProxy(jLocal);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			if (this.LoadGlobal(jLocal as JClassObject) is TGlobal result) return result;
 			ObjectMetadata metadata = ILocalObject.CreateMetadata(jLocal);
 			if (metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
@@ -109,22 +106,27 @@ partial class JEnvironment
 			else
 			{
 				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-				JGlobal jGlobal = this.VirtualMachine.Register(
-					new JGlobal(this.VirtualMachine, metadata, false, this.CreateGlobalRef(localRef)));
+				JGlobal jGlobal = this.VirtualMachine.Register(new JGlobal(jLocal, this.CreateGlobalRef(localRef)));
 				result = (TGlobal)(Object)jGlobal;
 			}
 			return result;
 		}
+		public JWeak CreateWeak(JGlobalBase jGlobal)
+		{
+			JWeakRef weakRef = this.CreateWeakGlobalRef(jGlobal);
+			return this.VirtualMachine.Register(new JWeak(jGlobal, weakRef));
+		}
 		public Boolean Unload(JLocalObject? jLocal)
 		{
 			if (jLocal is null) return false;
-			ValidationUtilities.ThrowIfDummy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.InternalReference;
+			Boolean isRegistered = this._objects.Contains(localRef);
 			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
 			try
 			{
-				this._env.DeleteLocalRef(localRef);
+				this.Unload(isRegistered, localRef);
 			}
 			finally
 			{
@@ -135,27 +137,39 @@ partial class JEnvironment
 		}
 		public Boolean Unload(JGlobalBase jGlobal)
 		{
-			ValidationUtilities.ThrowIfDummy(jGlobal);
-			if (jGlobal.IsDefault || this.IsMainGlobal(jGlobal as JGlobal)) return false;
+			ValidationUtilities.ThrowIfProxy(jGlobal);
+			Boolean keepReference = false;
+			if (this.IsMainOrDefault(jGlobal)) return false;
 			try
 			{
 				if (jGlobal is JGlobal)
 				{
 					JGlobalRef globalRef = jGlobal.As<JGlobalRef>();
-					if (!this.VirtualMachine.SecureRemove(globalRef)) return false;
-					this._env.DeleteGlobalRef(globalRef);
+					if (!this.VirtualMachine.SecureRemove(globalRef))
+					{
+						keepReference = true;
+						return false;
+					}
+					this.Unload(globalRef);
 				}
 				else
 				{
 					JWeakRef weakRef = jGlobal.As<JWeakRef>();
-					if (!this.VirtualMachine.SecureRemove(weakRef)) return false;
-					this._env.DeleteWeakGlobalRef(weakRef);
+					if (!this.VirtualMachine.SecureRemove(weakRef))
+					{
+						keepReference = true;
+						return false;
+					}
+					this.Unload(weakRef);
 				}
 			}
 			finally
 			{
-				jGlobal.ClearValue();
-				this.VirtualMachine.Remove(jGlobal);
+				if (!keepReference)
+				{
+					jGlobal.ClearValue();
+					this.VirtualMachine.Remove(jGlobal);
+				}
 			}
 			return true;
 		}
@@ -167,8 +181,19 @@ partial class JEnvironment
 		}
 		public void MonitorExit(JObjectLocalRef localRef)
 		{
-			MonitorExitDelegate monitorExit = this.GetDelegate<MonitorExitDelegate>();
-			ValidationUtilities.ThrowIfInvalidResult(monitorExit(this.Reference, localRef));
+			if (!this._env.IsAttached)
+			{
+				Debug.WriteLine($"Unable to exit monitor reference {localRef}. Thread is not attached.");
+			}
+			else if (!this.VirtualMachine.IsAlive)
+			{
+				Debug.WriteLine($"Unable to exit monitor reference {localRef}. JVM is not alive.");
+			}
+			else
+			{
+				MonitorExitDelegate monitorExit = this.GetDelegate<MonitorExitDelegate>();
+				ValidationUtilities.ThrowIfInvalidResult(monitorExit(this.Reference, localRef));
+			}
 		}
 	}
 }

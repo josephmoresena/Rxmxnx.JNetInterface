@@ -12,7 +12,7 @@ public interface IClassType : IReferenceType
 	/// <summary>
 	/// Retrieves the metadata for given class type.
 	/// </summary>
-	/// <typeparam name="TClass">Type of current java class datatype.</typeparam>
+	/// <typeparam name="TClass">Type of the current java class datatype.</typeparam>
 	/// <returns>The <see cref="JClassTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JClassTypeMetadata GetMetadata<TClass>() where TClass : JReferenceObject, IClassType<TClass>
@@ -33,4 +33,25 @@ public interface IClassType<TClass> : IClassType, IReferenceType<TClass>
 	protected new static abstract JClassTypeMetadata<TClass> Metadata { get; }
 
 	static JDataTypeMetadata IDataType<TClass>.Metadata => TClass.Metadata;
+
+	/// <summary>
+	/// Creates a <typeparamref name="TClass"/> instance from <paramref name="initializer"/>.
+	/// </summary>
+	/// <param name="initializer">A <see cref="IReferenceType.ClassInitializer"/> instance.</param>
+	/// <returns>A <typeparamref name="TClass"/> instance from <paramref name="initializer"/>.</returns>
+	protected static abstract TClass Create(ClassInitializer initializer);
+	/// <summary>
+	/// Creates a <typeparamref name="TClass"/> instance from <paramref name="initializer"/>.
+	/// </summary>
+	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
+	/// <returns>A <typeparamref name="TClass"/> instance from <paramref name="initializer"/>.</returns>
+	protected new static abstract TClass Create(ObjectInitializer initializer);
+	/// <summary>
+	/// Creates a <typeparamref name="TClass"/> instance from <paramref name="initializer"/>.
+	/// </summary>
+	/// <param name="initializer">A <see cref="IReferenceType.GlobalInitializer"/> instance.</param>
+	/// <returns>A <typeparamref name="TClass"/> instance from <paramref name="initializer"/>.</returns>
+	protected static abstract TClass Create(GlobalInitializer initializer);
+
+	static TClass IReferenceType<TClass>.Create(ObjectInitializer initializer) => TClass.Create(initializer);
 }

@@ -8,7 +8,11 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	IInterfaceObject<JGenericDeclarationObject>, IInterfaceObject<JTypeObject>
 {
 	/// <summary>
-	/// Fully-qualified class name.
+	/// JNI class reference.
+	/// </summary>
+	public new JClassLocalRef Reference => this.To<JClassLocalRef>();
+	/// <summary>
+	/// Fully qualified class name.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public CString Name
@@ -47,9 +51,57 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		}
 	}
 	/// <summary>
-	/// Indicates whether current class is final.
+	/// Indicates whether the current class is final.
 	/// </summary>
-	public Boolean? IsFinal => this._isFinal;
+	public Boolean IsFinal => this._isFinal ??= this.IsFinalType();
+	/// <summary>
+	/// Indicates whether the current class is an array.
+	/// </summary>
+	public Boolean IsArray => this.ClassSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar;
+	/// <summary>
+	/// Indicates whether the current class is an array.
+	/// </summary>
+	public Boolean IsPrimitive => this.ClassSignature.Length == 1;
+	/// <summary>
+	/// Indicates whether the current class is an interface.
+	/// </summary>
+	public Boolean IsInterface
+	{
+		get
+		{
+			if (!this._isInterface.HasValue)
+				this._isFinal = this.IsFinalType();
+			return this._isInterface!.Value;
+		}
+	}
+	/// <summary>
+	/// Indicates whether the current class is an enum.
+	/// </summary>
+	public Boolean IsEnum
+	{
+		get
+		{
+			if (!this._isEnum.HasValue)
+				this._isFinal = this.IsFinalType();
+			return this._isEnum!.Value;
+		}
+	}
+	/// <summary>
+	/// Indicates whether the current class is an annotation.
+	/// </summary>
+	public Boolean IsAnnotation
+	{
+		get
+		{
+			if (!this._isAnnotation.HasValue)
+				this._isFinal = this.IsFinalType();
+			return this._isAnnotation!.Value;
+		}
+	}
+	/// <summary>
+	/// Array class dimension.
+	/// </summary>
+	public Int32 ArrayDimension => this._arrayDimension ??= JClassObject.GetArrayDimension(this.ClassSignature);
 
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
@@ -69,12 +121,12 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// </summary>
 	public void UnregisterNativeCalls() => this.Environment.AccessFeature.ClearNatives(this);
 	/// <summary>
-	/// Determines whether an object of current class can be safely cast to
+	/// Determines whether an object of the current class can be safely cast to
 	/// <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">Java class instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if an object of current class can be safely cast to
+	/// <see langword="true"/> if an object of the current class can be safely cast to
 	/// <paramref name="jClass"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean IsAssignableTo(JClassObject jClass)
@@ -82,12 +134,48 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		IEnvironment env = this.Environment;
 		return env.ClassFeature.IsAssignableFrom(jClass, this);
 	}
+	/// <summary>
+	/// Retrieves a <see cref="JStringObject"/> containing class name.
+	/// </summary>
+	/// <param name="isPrimitive">Indicates whether current class is primitive.</param>
+	/// <returns>A <see cref="JStringObject"/> instance.</returns>
+	public JStringObject GetClassName(out Boolean isPrimitive)
+	{
+		IEnvironment env = this.Environment;
+		isPrimitive = env.FunctionSet.IsPrimitiveClass(this);
+		return env.FunctionSet.GetClassName(this);
+	}
+	/// <summary>
+	/// Retrieves super class of the current type.
+	/// </summary>
+	/// <returns>Current super class <see cref="JClassObject"/> instance.</returns>
+	public JClassObject? GetSuperClass()
+	{
+		IEnvironment env = this.Environment;
+		return env.ClassFeature.GetSuperClass(this);
+	}
+	/// <summary>
+	/// Retrieves an array with interfaces implemented by current type.
+	/// </summary>
+	/// <returns>A <see cref="JArrayObject{JClassObject}"/> instance.</returns>
+	public JArrayObject<JClassObject> GetInterfaces()
+	{
+		IEnvironment env = this.Environment;
+		return env.FunctionSet.GetInterfaces(this);
+	}
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
 		=> new ClassObjectMetadata(base.CreateMetadata())
 		{
-			Name = this.Name, ClassSignature = this.ClassSignature, IsFinal = this.IsFinal,
+			Name = this.Name,
+			ClassSignature = this.ClassSignature,
+			IsInterface = this.IsInterface,
+			IsEnum = this.IsEnum,
+			IsAnnotation = this.IsAnnotation,
+			IsFinal = this.IsFinal,
+			ArrayDimension = this.ArrayDimension,
+			Hash = this.Hash,
 		};
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
@@ -98,8 +186,14 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		this._className = classMetadata.Name;
 		this._signature = classMetadata.ClassSignature;
 		this._hash = classMetadata.Hash;
+		this._isInterface = classMetadata.IsInterface;
+		this._isEnum = classMetadata.IsEnum;
+		this._isAnnotation = classMetadata.IsAnnotation;
 		this._isFinal = classMetadata.IsFinal;
+		this._arrayDimension = classMetadata.ArrayDimension;
 	}
+	/// <inheritdoc/>
+	public override String ToString() => $"{this.Name} {this.Reference}";
 
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.
@@ -107,12 +201,8 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="className">Class name.</param>
 	/// <returns>The class instance with given class name.</returns>
-	public static JClassObject GetClass(IEnvironment env, CString className)
-	{
-		if (!className.IsNullTerminated)
-			className = (CString)className.Clone();
-		return env.ClassFeature.GetClass(className);
-	}
+	public static JClassObject GetClass(IEnvironment env, ReadOnlySpan<Byte> className)
+		=> env.ClassFeature.GetClass(className);
 	/// <summary>
 	/// Retrieves the java class for given type.
 	/// </summary>
@@ -129,8 +219,8 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="rawClassBytes">Binary span with class information.</param>
 	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
-	public static JClassObject LoadClass(IEnvironment env, CString className, ReadOnlySpan<Byte> rawClassBytes,
-		JClassLoaderObject? jClassLoader = default)
+	public static JClassObject LoadClass(IEnvironment env, ReadOnlySpan<Byte> className,
+		ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
 		=> env.ClassFeature.LoadClass(className, rawClassBytes, jClassLoader);
 	/// <summary>
 	/// Loads a java class from its binary information into the current VM.

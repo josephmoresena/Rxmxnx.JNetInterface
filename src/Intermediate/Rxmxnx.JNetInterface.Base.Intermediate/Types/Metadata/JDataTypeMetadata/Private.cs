@@ -21,15 +21,21 @@ public partial record JDataTypeMetadata
 	/// <summary>
 	/// Creates hash from given parameters.
 	/// </summary>
-	/// <param name="memoryList">JNI parameter list of current type.</param>
+	/// <param name="memoryList">JNI parameter list of the current type.</param>
 	/// <returns>A <see cref="CStringSequence"/> containing JNI information.</returns>
 	private static CStringSequence CreateInformationSequence(ReadOnlyFixedMemoryList memoryList)
 	{
+		Boolean isArray = memoryList[0].Bytes[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar;
+		Int32 signatureAdditionalChars = isArray ? 0 : 2;
+		Int32 signatureLength = memoryList[1].Bytes.Length > 0 ?
+			memoryList[1].Bytes.Length :
+			memoryList[0].Bytes.Length + signatureAdditionalChars;
+		Int32 arraySignatureLength = signatureLength + 1;
 		Int32?[] lengths =
 		[
 			memoryList[0].Bytes.Length,
-			memoryList[1].Bytes.Length > 0 ? memoryList[1].Bytes.Length : memoryList[0].Bytes.Length + 2,
-			memoryList[1].Bytes.Length > 0 ? memoryList[1].Bytes.Length + 1 : memoryList[0].Bytes.Length + 3,
+			signatureLength,
+			arraySignatureLength,
 		];
 		return CStringSequence.Create(memoryList.ToArray(), JDataTypeMetadata.CreateInformationSequence, lengths);
 	}
@@ -37,7 +43,7 @@ public partial record JDataTypeMetadata
 	/// Creates a call sequence.
 	/// </summary>
 	/// <param name="span">A span of bytes.</param>
-	/// <param name="index">Index of current sequence item.</param>
+	/// <param name="index">Index of the current sequence item.</param>
 	/// <param name="arg">Creation instance.</param>
 	private static void CreateInformationSequence(Span<Byte> span, Int32 index, IReadOnlyFixedMemory[] arg)
 	{
@@ -67,17 +73,17 @@ public partial record JDataTypeMetadata
 	/// <param name="className">JNI class name.</param>
 	private static void WriteSignature(Span<Byte> span, ReadOnlySpan<Byte> className)
 	{
-		span[0] = UnicodeObjectSignatures.ObjectSignaturePrefixChar;
-		className.CopyTo(span[1..]);
-		span[^1] = UnicodeObjectSignatures.ObjectSignatureSuffixChar;
+		if (className[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
+		{
+			className.CopyTo(span);
+		}
+		else
+		{
+			span[0] = UnicodeObjectSignatures.ObjectSignaturePrefixChar;
+			className.CopyTo(span[1..]);
+			span[^1] = UnicodeObjectSignatures.ObjectSignatureSuffixChar;
+		}
 	}
-	/// <summary>
-	/// Computes the array signature for given type signature.
-	/// </summary>
-	/// <param name="signature"><see cref="IDataType"/> signature.</param>
-	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
-	private static CString ComputeArraySignature(CString signature)
-		=> CString.Concat(stackalloc Byte[1] { UnicodeObjectSignatures.ArraySignaturePrefixChar, }, signature);
 	/// <summary>
 	/// Escapes Java class name char to JNI class name.
 	/// </summary>
@@ -85,12 +91,4 @@ public partial record JDataTypeMetadata
 	/// <returns>A JNI class name char.</returns>
 	private static Byte EscapeClassNameChar(Byte classNameChar)
 		=> classNameChar == JDataTypeMetadata.classNameEscape[0] ? JDataTypeMetadata.classNameEscape[1] : classNameChar;
-	/// <summary>
-	/// Computes the type signature for given type class name.
-	/// </summary>
-	/// <param name="className"><see cref="IDataType"/> class name.</param>
-	/// <returns>Signature for given <see cref="IDataType"/> type.</returns>
-	private static CString ComputeReferenceTypeSignature(ReadOnlySpan<Byte> className)
-		=> CString.Concat(stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignaturePrefixChar, }, className,
-		                  stackalloc Byte[1] { UnicodeObjectSignatures.ObjectSignatureSuffixChar, });
 }

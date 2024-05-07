@@ -9,8 +9,8 @@ partial class JEnvironment
 		public void GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 			JFieldDefinition definition)
 		{
-			ValidationUtilities.ThrowIfDummy(jLocal);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
@@ -20,8 +20,8 @@ partial class JEnvironment
 		public void SetPrimitiveField(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 			ReadOnlySpan<Byte> bytes)
 		{
-			ValidationUtilities.ThrowIfDummy(jLocal);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
@@ -30,7 +30,7 @@ partial class JEnvironment
 		}
 		public void GetPrimitiveStaticField(Span<Byte> bytes, JClassObject jClass, JFieldDefinition definition)
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
@@ -38,7 +38,7 @@ partial class JEnvironment
 		}
 		public void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
@@ -47,7 +47,7 @@ partial class JEnvironment
 		public void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args)
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.GetClassTransaction(jClass, definition, out JMethodId methodId);
 			this.CallPrimitiveStaticFunction(bytes, definition, jClass.Reference, args, jniTransaction, methodId);
@@ -55,8 +55,8 @@ partial class JEnvironment
 		public void CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 			JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args)
 		{
-			ValidationUtilities.ThrowIfDummy(jLocal);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.GetInstanceTransaction(jClass, jLocal, definition, out JObjectLocalRef localRef,
 				                            out JMethodId methodId);
@@ -73,8 +73,8 @@ partial class JEnvironment
 				this.GetPrimitiveField(bytes, jLocal, jClass, definition);
 				return (TField)primitiveMetadata.CreateInstance(bytes);
 			}
-			ValidationUtilities.ThrowIfDummy(jLocal);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
@@ -84,9 +84,9 @@ partial class JEnvironment
 		public TField? GetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition)
 			where TField : IDataType<TField>, IObject
 		{
-			ValidationUtilities.ThrowIfDummy(jField);
+			ValidationUtilities.ThrowIfProxy(jField);
 			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
-			ValidationUtilities.ThrowIfDummy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jLocal);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			_ = jniTransaction.Add(jField);
@@ -109,8 +109,8 @@ partial class JEnvironment
 				this.SetPrimitiveField(jLocal, jClass, definition, bytes);
 				return;
 			}
-			ValidationUtilities.ThrowIfDummy(jLocal);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
@@ -120,9 +120,9 @@ partial class JEnvironment
 		public void SetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition,
 			TField? value) where TField : IDataType<TField>, IObject
 		{
-			ValidationUtilities.ThrowIfDummy(jField);
+			ValidationUtilities.ThrowIfProxy(jField);
 			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
-			ValidationUtilities.ThrowIfDummy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jLocal);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
 			_ = jniTransaction.Add(jField);
@@ -153,7 +153,7 @@ partial class JEnvironment
 		public TField? GetStaticField<TField>(JFieldObject jField, JFieldDefinition definition)
 			where TField : IDataType<TField>, IObject
 		{
-			ValidationUtilities.ThrowIfDummy(jField);
+			ValidationUtilities.ThrowIfProxy(jField);
 			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
@@ -180,7 +180,7 @@ partial class JEnvironment
 				this.SetPrimitiveStaticField(jClass, definition, bytes);
 				return;
 			}
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
@@ -189,7 +189,7 @@ partial class JEnvironment
 		public void SetStaticField<TField>(JFieldObject jField, JFieldDefinition definition, TField? value)
 			where TField : IDataType<TField>, IObject
 		{
-			ValidationUtilities.ThrowIfDummy(jField);
+			ValidationUtilities.ThrowIfProxy(jField);
 			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
@@ -213,16 +213,16 @@ partial class JEnvironment
 			JObjectLocalRef localRef = this.NewObject(jClass, definition, args);
 			return this.CreateObject<TObject>(localRef, true)!;
 		}
-		public TObject CallConstructor<TObject>(JMethodObject jMethod, JConstructorDefinition definition,
+		public TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 			IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
 		{
-			ValidationUtilities.ThrowIfDummy(jMethod);
-			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
+			ValidationUtilities.ThrowIfProxy(jConstructor);
+			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jConstructor.Definition);
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
-			_ = jniTransaction.Add(jMethod);
-			JMethodId methodId = jMethod.MethodId;
-			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass));
+			_ = jniTransaction.Add(jConstructor);
+			JMethodId methodId = jConstructor.MethodId;
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jConstructor.DeclaringClass));
 			JObjectLocalRef localRef = this.NewObject(definition, classRef, args, jniTransaction, methodId);
 			return this.CreateObject<TObject>(localRef, true)!;
 		}
@@ -236,7 +236,7 @@ partial class JEnvironment
 				this.CallPrimitiveStaticFunction(bytes, jClass, definition, args);
 				return (TResult)primitiveMetadata.CreateInstance(bytes);
 			}
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.GetClassTransaction(jClass, definition, out JMethodId methodId);
 			return this.CallObjectStaticFunction<TResult>(definition, jClass.Reference, args, jniTransaction, methodId);
@@ -244,7 +244,7 @@ partial class JEnvironment
 		public TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition definition,
 			IObject?[] args) where TResult : IDataType<TResult>
 		{
-			ValidationUtilities.ThrowIfDummy(jMethod);
+			ValidationUtilities.ThrowIfProxy(jMethod);
 			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TResult>();
 			using INativeTransaction jniTransaction =
@@ -260,14 +260,14 @@ partial class JEnvironment
 		}
 		public void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, IObject?[] args)
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.GetClassTransaction(jClass, definition, out JMethodId methodId);
 			this.CallStaticMethod(definition, jClass.Reference, args, jniTransaction, methodId);
 		}
 		public void CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition, IObject?[] args)
 		{
-			ValidationUtilities.ThrowIfDummy(jMethod);
+			ValidationUtilities.ThrowIfProxy(jMethod);
 			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
@@ -286,8 +286,8 @@ partial class JEnvironment
 				this.CallPrimitiveFunction(bytes, jLocal, jClass, definition, nonVirtual, args);
 				return (TResult)primitiveMetadata.CreateInstance(bytes);
 			}
-			ValidationUtilities.ThrowIfDummy(jLocal);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.GetInstanceTransaction(jClass, jLocal, definition, out JObjectLocalRef localRef,
 				                            out JMethodId methodId);
@@ -297,8 +297,8 @@ partial class JEnvironment
 		public TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal,
 			JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>
 		{
-			ValidationUtilities.ThrowIfDummy(jMethod);
-			ValidationUtilities.ThrowIfDummy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jMethod);
+			ValidationUtilities.ThrowIfProxy(jLocal);
 			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TResult>();
 			Int32 initialCapacity = nonVirtual ? 3 : 2;
@@ -318,8 +318,8 @@ partial class JEnvironment
 		public void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
 			Boolean nonVirtual, IObject?[] args)
 		{
-			ValidationUtilities.ThrowIfDummy(jLocal);
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.GetInstanceTransaction(jClass, jLocal, definition, out JObjectLocalRef localRef,
 				                            out JMethodId methodId);
@@ -329,8 +329,8 @@ partial class JEnvironment
 		public void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition,
 			Boolean nonVirtual, IObject?[] args)
 		{
-			ValidationUtilities.ThrowIfDummy(jMethod);
-			ValidationUtilities.ThrowIfDummy(jLocal);
+			ValidationUtilities.ThrowIfProxy(jMethod);
+			ValidationUtilities.ThrowIfProxy(jLocal);
 			ValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
 			Int32 initialCapacity = nonVirtual ? 3 : 2;
 			using INativeTransaction jniTransaction =
@@ -344,7 +344,7 @@ partial class JEnvironment
 		}
 		public void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls)
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			RegisterNativesDelegate registerNatives = this.GetDelegate<RegisterNativesDelegate>();
 			Int32 requiredBytes = calls.Count * JNativeMethodValue.Size;
 			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
@@ -372,7 +372,7 @@ partial class JEnvironment
 		}
 		public void ClearNatives(JClassObject jClass)
 		{
-			ValidationUtilities.ThrowIfDummy(jClass);
+			ValidationUtilities.ThrowIfProxy(jClass);
 			UnregisterNativesDelegate unregisterNatives = this.GetDelegate<UnregisterNativesDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
@@ -418,7 +418,7 @@ partial class JEnvironment
 		public JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
 			Boolean isStatic)
 		{
-			ValidationUtilities.ThrowIfDummy(declaringClass);
+			ValidationUtilities.ThrowIfProxy(declaringClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, declaringClass);
 			JFieldId fieldId = isStatic ?
@@ -432,7 +432,7 @@ partial class JEnvironment
 		}
 		public JMethodId GetMethodId(JExecutableObject jExecutable)
 		{
-			ValidationUtilities.ThrowIfDummy(jExecutable);
+			ValidationUtilities.ThrowIfProxy(jExecutable);
 			FromReflectedMethodDelegate fromReflectedMethod = this.GetDelegate<FromReflectedMethodDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jExecutable);
@@ -442,7 +442,7 @@ partial class JEnvironment
 		}
 		public JFieldId GetFieldId(JFieldObject jField)
 		{
-			ValidationUtilities.ThrowIfDummy(jField);
+			ValidationUtilities.ThrowIfProxy(jField);
 			FromReflectedFieldDelegate fromReflectedField = this.GetDelegate<FromReflectedFieldDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jField);

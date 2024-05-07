@@ -5,8 +5,8 @@ public abstract partial record JReferenceTypeMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="className">Class name of current type.</param>
-	/// <param name="signature">JNI signature for current type.</param>
+	/// <param name="className">Class name of the current type.</param>
+	/// <param name="signature">JNI signature for the current type.</param>
 	private protected JReferenceTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
 	/// <inheritdoc/>

@@ -120,7 +120,7 @@ internal static class ValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidSignature(ReadOnlySpan<Byte> signature, Boolean allowPrimitive)
 	{
-		if (signature.IsEmpty) throw new ArgumentException("Invalid signature.");
+		if (signature.IsEmpty) throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 
 		if (signature.Length == 1)
 		{
@@ -141,14 +141,14 @@ internal static class ValidationUtilities
 					ValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[1]);
 					break;
 				case <= 3:
-					throw new ArgumentException("Invalid signature.");
+					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 				case > 3 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
 					suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar:
-					throw new ArgumentException("Invalid signature.");
+					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 			}
 		else if (prefix != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
 		         suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar)
-			throw new ArgumentException("Invalid signature.");
+			throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> named <paramref name="nameofValue"/> is not null-terminated
@@ -227,15 +227,16 @@ internal static class ValidationUtilities
 			throw new InvalidOperationException("The sequence is no longer valid.");
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="jObject"/> is dummy.
+	/// Throws an exception if <paramref name="jObject"/> is proxy.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="message">Exception message.</param>
-	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is dummy.</exception>
-	public static void ThrowIfDummy(JReferenceObject? jObject, String? message = default)
+	/// <param name="nameofObject">Name of <paramref name="jObject"/>.</param>
+	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is proxy.</exception>
+	public static void ThrowIfProxy(JReferenceObject? jObject,
+		[CallerArgumentExpression(nameof(jObject))] String nameofObject = "")
 	{
 		if (jObject is not null && jObject.IsProxy)
-			throw new ArgumentException(message ?? "Invalid JReferenceObject.");
+			throw new ArgumentException($"Invalid JReferenceObject ({nameofObject}).");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
@@ -265,15 +266,17 @@ internal static class ValidationUtilities
 	/// <summary>
 	/// Throws an exception if <paramref name="thread"/> is different to current thread.
 	/// </summary>
-	/// <param name="thread">A <see cref="Thread"/>.</param>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+	/// <param name="thread">A <see cref="Thread"/> instance.</param>
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="thread"/> is different to current
 	/// thread.
 	/// </exception>
-	public static void ThrowIfDifferentThread(Thread thread)
+	public static void ThrowIfDifferentThread(JEnvironmentRef envRef, Thread thread)
 	{
 		if (thread != Thread.CurrentThread)
-			throw new InvalidOperationException("JNI Environment is assigned to another thread.");
+			throw new InvalidOperationException(
+				$"JNI Environment ({envRef}) is assigned to another thread. Expected: {thread.ManagedThreadId} Current: {Environment.CurrentManagedThreadId}.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="length"/> is invalid.
@@ -296,8 +299,9 @@ internal static class ValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidResult(JResult result)
 	{
-		if (result != JResult.Ok)
-			throw new JniException(result);
+		JniException? exception = result;
+		if (exception is not null)
+			throw exception;
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="version"/> is invalid.
@@ -331,5 +335,38 @@ internal static class ValidationUtilities
 				return;
 		}
 		throw new ArgumentException("Invalid primitive signature.");
+	}
+	/// <summary>
+	/// Throws an exception if JNI execution is not secure.
+	/// </summary>
+	/// <param name="functionName">Name of JNI function.</param>
+	/// <param name="jniSecure">Indicates whether JNI execution is safe.</param>
+	/// <exception cref="NotImplementedException">
+	/// Throws an exception if JNI execution is not secure.
+	/// </exception>
+	public static void ThrowIfUnsafe(String functionName, Boolean jniSecure)
+	{
+		if (!jniSecure)
+			throw new InvalidOperationException($"Current JNI status is invalid to call {functionName}.");
+	}
+	/// <summary>
+	/// Throws an exception if JVM is not alive.
+	/// </summary>
+	/// <param name="isAlive">Indicates whether JVM remains alive.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if JVM is not alive.</exception>
+	public static void ThrowIfInvalidVirtualMachine(Boolean isAlive)
+	{
+		if (!isAlive)
+			throw new InvalidOperationException("Current JVM is not alive.");
+	}
+	/// <summary>
+	/// Throws an exception if current thread is not attached to JVM.
+	/// </summary>
+	/// <param name="isAttached">Indicates whether current thread is attached to a JVM.</param>
+	/// <exception cref="InvalidOperationException">Throws an exception if current thread is not attached to JVM</exception>
+	public static void ThrowIfNotAttached(Boolean isAttached)
+	{
+		if (!isAttached)
+			throw new InvalidOperationException("Current thread is not attached.");
 	}
 }

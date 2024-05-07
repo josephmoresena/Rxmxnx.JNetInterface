@@ -1,10 +1,18 @@
 namespace Rxmxnx.JNetInterface;
 
+using TDirectBuffer =
+#if !PACKAGE
+	JBufferObject
+#else
+	JByteBufferObject
+#endif
+	;
+
 partial class JEnvironment
 {
 	private sealed partial record EnvironmentCache : INioFeature
 	{
-		public JBufferObject NewDirectByteBuffer(IFixedMemory.IDisposable memory)
+		public TDirectBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)
 		{
 			JClassObject jClass = this.GetClass<JDirectByteBufferObject>();
 			NewDirectByteBufferDelegate newDirectByteBuffer = this.GetDelegate<NewDirectByteBufferDelegate>();
@@ -12,7 +20,7 @@ partial class JEnvironment
 			this.CheckJniError();
 			return this.Register<JDirectByteBufferObject>(new(jClass, memory, localRef));
 		}
-		public void WithDirectByteBuffer<TBuffer>(Int32 capacity, Action<TBuffer> action) where TBuffer : JBufferObject
+		public void WithDirectByteBuffer<TBuffer>(Int32 capacity, Action<TBuffer> action) where TBuffer : TDirectBuffer
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(capacity);
 			using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
@@ -22,7 +30,7 @@ partial class JEnvironment
 			action(buffer);
 		}
 		public void WithDirectByteBuffer<TBuffer, TState>(Int32 capacity, TState state, Action<TBuffer, TState> action)
-			where TBuffer : JBufferObject
+			where TBuffer : TDirectBuffer
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(capacity);
 			using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
@@ -32,7 +40,7 @@ partial class JEnvironment
 			action(buffer, state);
 		}
 		public TResult WithDirectByteBuffer<TBuffer, TResult>(Int32 capacity, Func<TBuffer, TResult> func)
-			where TBuffer : JBufferObject
+			where TBuffer : TDirectBuffer
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(capacity);
 			using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
@@ -42,7 +50,7 @@ partial class JEnvironment
 			return func(buffer);
 		}
 		public TResult WithDirectByteBuffer<TBuffer, TState, TResult>(Int32 capacity, TState state,
-			Func<TBuffer, TState, TResult> func) where TBuffer : JBufferObject
+			Func<TBuffer, TState, TResult> func) where TBuffer : TDirectBuffer
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(capacity);
 			using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?
@@ -53,7 +61,7 @@ partial class JEnvironment
 		}
 		public IntPtr GetDirectAddress(JBufferObject buffer)
 		{
-			ValidationUtilities.ThrowIfDummy(buffer);
+			ValidationUtilities.ThrowIfProxy(buffer);
 			GetDirectBufferAddressDelegate getDirectBufferAddress = this.GetDelegate<GetDirectBufferAddressDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(buffer);
@@ -63,7 +71,7 @@ partial class JEnvironment
 		}
 		public Int64 GetDirectCapacity(JBufferObject buffer)
 		{
-			ValidationUtilities.ThrowIfDummy(buffer);
+			ValidationUtilities.ThrowIfProxy(buffer);
 			GetDirectBufferCapacityDelegate getDirectBufferCapacity =
 				this.GetDelegate<GetDirectBufferCapacityDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);

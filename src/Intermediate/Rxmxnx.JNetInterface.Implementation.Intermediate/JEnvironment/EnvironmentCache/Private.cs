@@ -61,24 +61,19 @@ partial class JEnvironment
 			if (localRef == default) return default;
 
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TResult>();
+			JReferenceTypeMetadata typeMetadata;
 			JClassObject jClass;
-			if (metadata.Modifier == JTypeModifier.Final)
+			if (metadata.Modifier != JTypeModifier.Final)
 			{
-				jClass = this.GetClass<TResult>();
+				jClass = this._env.GetObjectClass(localRef, out typeMetadata);
 			}
 			else
 			{
-				JClassLocalRef classRef = this._env.GetObjectClass(localRef);
-				try
-				{
-					jClass = this.GetClass(classRef, false);
-				}
-				finally
-				{
-					this._env.DeleteLocalRef(classRef.Value);
-				}
+				jClass = this.GetClass<TResult>();
+				typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TResult>();
 			}
-			TResult result = (TResult)(Object)metadata.CreateInstance(jClass, localRef, true);
+			JLocalObject jLocal = typeMetadata.CreateInstance(jClass, localRef, true);
+			TResult result = (TResult)(Object)metadata.ParseInstance(jLocal, true);
 			if (localRef != (result as JLocalObject)!.InternalReference && register)
 				this._env.DeleteLocalRef(localRef);
 			return register ? this.Register(result) : result;
@@ -90,7 +85,7 @@ partial class JEnvironment
 		/// <returns>JNI function pointer.</returns>
 		private IntPtr GetPointer(Int32 index)
 		{
-			Int32 lastNormalIndex = EnvironmentCache.delegateIndex[typeof(GetObjectRefTypeDelegate)];
+			Int32 lastNormalIndex = EnvironmentCache.delegateIndex[typeof(GetObjectRefTypeDelegate)].Index;
 			if (index <= lastNormalIndex)
 				return this.Reference.Reference.Reference[index];
 			index -= lastNormalIndex;
@@ -113,22 +108,140 @@ partial class JEnvironment
 			return false;
 		}
 		/// <summary>
+		/// Throws an exception from <typeparamref name="TThrowable"/> type.
+		/// </summary>
+		/// <typeparam name="TThrowable"></typeparam>
+		/// <param name="utf8Message">
+		/// The message used to construct the <c>java.lang.Throwable</c> instance.
+		/// The string is encoded in modified UTF-8.
+		/// </param>
+		/// <param name="throwException">
+		/// Indicates whether exception should be thrown in managed code.
+		/// </param>
+		/// <param name="message">
+		/// The message used to construct the <see cref="ThrowableException"/> instance.
+		/// </param>
+		private void ThrowNew<TThrowable>(ReadOnlySpan<Byte> utf8Message, Boolean throwException, String? message)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			JResult result = utf8Message.WithSafeFixed(this, EnvironmentCache.ThrowNew<TThrowable>);
+			ValidationUtilities.ThrowIfInvalidResult(result);
+
+			ThrowableException throwableException =
+				this.CreateThrowableException<TThrowable>(this.GetPendingException(), message);
+			this.ThrowJniException(throwableException, throwException);
+		}
+		/// <summary>
 		/// Creates JNI exception from <paramref name="throwableRef"/>.
 		/// </summary>
+		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
-		/// <returns>A <see cref="JThrowableException"/> exception.</returns>
-		private JThrowableException CreateJniException(JThrowableLocalRef throwableRef)
+		/// <param name="message">Throwable message.</param>
+		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
+		private ThrowableException CreateThrowableException<TThrowable>(JThrowableLocalRef throwableRef,
+			String? message) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
-			using LocalFrame _ = new(this._env, 10);
-			JClassLocalRef classRef = this._env.GetObjectClass(throwableRef.Value);
-			JClassObject jClass = this.AsClassObject(classRef);
-			String message = EnvironmentCache.GetThrowableMessage(jClass, throwableRef);
-			ThrowableObjectMetadata objectMetadata = new(jClass, message);
-			JClassTypeMetadata throwableMetadata = MetadataHelper.GetMetadata(jClass.Hash) as JClassTypeMetadata ??
-				(JClassTypeMetadata)MetadataHelper.GetMetadata<JThrowableObject>();
+			JClassObject jClass = this.GetClass<TThrowable>();
+			JReferenceTypeMetadata throwableMetadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TThrowable>();
+			this.ClearException();
+			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
+		}
+		/// <summary>
+		/// Creates JNI exception from <paramref name="throwableRef"/>.
+		/// </summary>
+		/// <param name="jClass">Throwable class.</param>
+		/// <param name="throwableMetadata">Throwable metadata.</param>
+		/// <param name="message">Throwable message.</param>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
+		private ThrowableException CreateThrowableException(JClassObject jClass,
+			JReferenceTypeMetadata throwableMetadata, String? message, JThrowableLocalRef throwableRef)
+		{
+			this._env.DeleteLocalRef(throwableRef.Value);
+
+			ThrowableObjectMetadata objectMetadata = new(jClass, throwableMetadata, message);
 			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
-			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, false, globalRef);
+			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, globalRef);
+
+			this._env.DeleteLocalRef(throwableRef.Value);
 			return throwableMetadata.CreateException(jGlobalThrowable, message)!;
+		}
+		/// <summary>
+		/// Retrieves throwable message.
+		/// </summary>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <returns>Throwable message.</returns>
+		private String GetThrowableMessage(JThrowableLocalRef throwableRef)
+		{
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			AccessCache access = this.GetAccess(jniTransaction, this.ThrowableObject);
+			jniTransaction.Add(throwableRef);
+			using JStringObject throwableMessage = this.GetThrowableMessage(throwableRef, access);
+			try
+			{
+				return throwableMessage.Value;
+			}
+			finally
+			{
+				this.FreeUnregistered(throwableMessage);
+			}
+		}
+		/// <summary>
+		/// Retrieves a <see cref="JStringObject"/> containing throwable message.
+		/// </summary>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <param name="access">A <see cref="AccessCache"/> instance.</param>
+		/// <returns>A <see cref="JStringObject"/> instance.</returns>
+		private JStringObject GetThrowableMessage(JThrowableLocalRef throwableRef, AccessCache access)
+		{
+			JMethodId getNameId = access.GetMethodId(NativeFunctionSetImpl.GetMessageDefinition, this._env);
+			CallObjectMethodADelegate callObjectMethod = this.GetDelegate<CallObjectMethodADelegate>();
+			JObjectLocalRef localRef = callObjectMethod(this.Reference, throwableRef.Value, getNameId,
+			                                            ReadOnlyValPtr<JValue>.Zero);
+			JClassObject jStringClass = this.GetClass<JStringObject>();
+			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
+		}
+		/// <summary>
+		/// Sets given <see cref="JThrowableLocalRef"/> reference as pending exception.
+		/// </summary>
+		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		private void Throw(JThrowableLocalRef throwableRef)
+		{
+			ThrowDelegate jThrow = this.GetDelegate<ThrowDelegate>();
+			jThrow(this.Reference, throwableRef);
+		}
+		/// <summary>
+		/// Clears pending JNI exception.
+		/// </summary>
+		private void ClearException()
+		{
+			ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
+			exceptionClear(this.Reference);
+		}
+		/// <summary>
+		/// Sets <paramref name="jniException"/> as managed pending exception and throws it.
+		/// </summary>
+		/// <param name="throwException">
+		/// Indicates whether exception should be thrown in managed code.
+		/// </param>
+		/// <param name="jniException">A <see cref="JniException"/> instance.</param>
+		/// <exception cref="ThrowableException">
+		/// Throws if <paramref name="jniException"/> is not null and <paramref name="throwException"/> is
+		/// <see langword="true"/>.
+		/// </exception>
+		private void ThrowJniException(JniException? jniException, Boolean throwException)
+		{
+			this.Thrown = jniException;
+			if (this.Thrown is not null && throwException) throw this.Thrown;
+		}
+		/// <summary>
+		/// Deletes and clears unregister <see cref="JLocalObject"/> instance.
+		/// </summary>
+		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+		private void FreeUnregistered(JLocalObject jLocal)
+		{
+			this._env.DeleteLocalRef(jLocal.InternalReference);
+			jLocal.ClearValue();
 		}
 	}
 }

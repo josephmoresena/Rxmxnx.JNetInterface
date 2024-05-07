@@ -7,31 +7,35 @@
 public enum ThreadPurpose : Byte
 {
 	/// <summary>
-	/// Indicates the purpose of the thread is release unused global references.
+	/// Indicates the purpose of the thread is freeing unused global references.
 	/// </summary>
 	RemoveGlobalReference = 1,
 	/// <summary>
-	/// Indicates the purpose of the thread is release primitive sequence.
+	/// Indicates the purpose of the thread is freeing primitive sequences.
 	/// </summary>
 	ReleaseSequence = 2,
 	/// <summary>
-	/// Indicates the purpose of the thread is execute JNI calls under exception state.
+	/// Indicates the purpose of the thread is executing JNI calls under exception state.
 	/// </summary>
 	ExceptionExecution = 3,
 	/// <summary>
-	/// Indicates the purpose of the thread is execute JNI calls to get assignability.
+	/// Indicates the purpose of the thread is executing JNI calls to get assignability.
 	/// </summary>
 	CheckAssignability = 4,
 	/// <summary>
-	/// Indicates the purpose of the thread is create global references.
+	/// Indicates the purpose of the thread is creating global references.
 	/// </summary>
 	CreateGlobalReference = 5,
 	/// <summary>
-	/// Indicates the purpose of the thread is check global references.
+	/// Indicates the purpose of the thread is checking global references.
 	/// </summary>
 	CheckGlobalReference = 6,
 	/// <summary>
-	/// Indicates the purpose of the thread is synchronize global references.
+	/// Indicates the purpose of the thread is synchronizing global references.
 	/// </summary>
 	SynchronizeGlobalReference = 7,
+	/// <summary>
+	/// Indicates the purpose of the thread sending fatal error signal to VM.
+	/// </summary>
+	FatalError = 8,
 }

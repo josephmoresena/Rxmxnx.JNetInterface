@@ -22,6 +22,10 @@ internal static class ClassNames
 	/// </summary>
 	public const String ReflectPackage = ClassNames.LangPackage + "reflect/";
 	/// <summary>
+	/// JNI representation of <c>java.lang.Annotation</c> package.
+	/// </summary>
+	public const String AnnotationPackage = ClassNames.LangPackage + "annotation/";
+	/// <summary>
 	/// JNI representation of <c>sun.nio.ch</c> package.
 	/// </summary>
 	public const String SunNioChPackage = "sun/nio/ch/";
@@ -177,6 +181,30 @@ internal static class ClassNames
 	/// </summary>
 	public const String ByteBufferObject = ClassNames.NioPackage + "ByteBuffer";
 	/// <summary>
+	/// JNI name of <c>java.nio.CharBuffer</c> class.
+	/// </summary>
+	public const String CharBufferObject = ClassNames.NioPackage + "CharBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.DoubleBuffer</c> class.
+	/// </summary>
+	public const String DoubleBufferObject = ClassNames.NioPackage + "DoubleBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.FloatBuffer</c> class.
+	/// </summary>
+	public const String FloatBufferObject = ClassNames.NioPackage + "FloatBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.IntBuffer</c> class.
+	/// </summary>
+	public const String IntBufferObject = ClassNames.NioPackage + "IntBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.LongBuffer</c> class.
+	/// </summary>
+	public const String LongBufferObject = ClassNames.NioPackage + "LongBuffer";
+	/// <summary>
+	/// JNI name of <c>java.nio.ShortBuffer</c> class.
+	/// </summary>
+	public const String ShortBufferObject = ClassNames.NioPackage + "ShortBuffer";
+	/// <summary>
 	/// JNI name of <c>java.nio.MappedByteBuffer</c> class.
 	/// </summary>
 	public const String MappedByteBufferObject = ClassNames.NioPackage + "MappedByteBuffer";
@@ -238,6 +266,10 @@ internal static class ClassNames
 	/// </summary>
 	public const String NoSuchFieldErrorObject = ClassNames.LangPackage + "NoSuchFieldError";
 	/// <summary>
+	/// JNI name of <c>java.lang.NoClassDefFoundError</c> class.
+	/// </summary>
+	public const String NoClassDefFoundErrorObject = ClassNames.LangPackage + "NoClassDefFoundError";
+	/// <summary>
 	/// JNI name of <c>java.lang.SecurityException</c> class.
 	/// </summary>
 	public const String SecurityExceptionObject = ClassNames.LangPackage + "SecurityException";
@@ -289,9 +321,37 @@ internal static class ClassNames
 	/// </summary>
 	public const String FieldObject = ClassNames.ReflectPackage + "Field";
 	/// <summary>
+	/// JNI name of <c>java.lang.reflect.Modifier</c> class.
+	/// </summary>
+	public const String ModifierObject = ClassNames.ReflectPackage + "Modifier";
+	/// <summary>
+	/// JNI name of <c>java.lang.reflect.Proxy</c> class.
+	/// </summary>
+	public const String ProxyObject = ClassNames.ReflectPackage + "Proxy";
+	/// <summary>
 	/// JNI name of <c>java.lang.reflect.Member</c> interface.
 	/// </summary>
 	public const String MemberInterface = ClassNames.ReflectPackage + "Member";
+	/// <summary>
+	/// JNI name of <c>java.lang.Appendable</c> interface.
+	/// </summary>
+	public const String AppendableInterface = ClassNames.LangPackage + "Appendable";
+	/// <summary>
+	/// JNI name of <c>java.lang.Readable</c> interface.
+	/// </summary>
+	public const String ReadableInterface = ClassNames.LangPackage + "Readable";
+	/// <summary>
+	/// JNI name of <c>java.lang.annotation.Annotation</c> interface.
+	/// </summary>
+	public const String AnnotationInterface = ClassNames.AnnotationPackage + "Annotation";
+	/// <summary>
+	/// JNI name of <c>java.lang.annotation.ElementType</c> enum.
+	/// </summary>
+	public const String ElementTypeEnum = ClassNames.AnnotationPackage + "ElementType";
+	/// <summary>
+	/// JNI name of <c>java.lang.annotation.Target</c> annotation.
+	/// </summary>
+	public const String TargetAnnotation = ClassNames.AnnotationPackage + "Target";
 
 	/// <summary>
 	/// JNI name of <c>java.lang.Thread.UncaughtExceptionHandler</c> interface.

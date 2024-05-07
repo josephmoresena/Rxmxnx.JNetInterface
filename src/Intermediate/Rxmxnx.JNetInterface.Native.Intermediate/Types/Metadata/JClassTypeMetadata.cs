@@ -23,16 +23,6 @@ public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 	public override String ToString()
 		=> $"{base.ToString()}{nameof(JDataTypeMetadata.Modifier)} = {this.Modifier}, " +
 			$"{nameof(JClassTypeMetadata.BaseClassName)} = {this.BaseClassName}, ";
-
-	/// <summary>
-	/// Creates an exception instance from a <see cref="JGlobalBase"/> throwable instance.
-	/// </summary>
-	/// <param name="jGlobalThrowable">A <see cref="JGlobalBase"/> throwable instance.</param>
-	/// <param name="exceptionMessage">Exception message.</param>
-	/// <returns>A <see cref="JThrowableException"/> instance.</returns>
-	internal virtual JThrowableException? CreateException(JGlobalBase jGlobalThrowable,
-		String? exceptionMessage = default)
-		=> default;
 }
 
 /// <summary>
@@ -54,13 +44,15 @@ public abstract partial record JClassTypeMetadata<TClass> : JClassTypeMetadata
 
 	/// <inheritdoc/>
 	public override String ToString() => base.ToString();
+	/// <inheritdoc/>
+	public override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();
 
+	/// <inheritdoc/>
+	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TClass || jObject.InstanceOf<TClass>();
 	/// <inheritdoc/>
 	internal override JFunctionDefinition<TClass> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
 		JArgumentMetadata[] metadata)
 		=> JFunctionDefinition<TClass>.Create(functionName, metadata);
 	/// <inheritdoc/>
 	internal override JFieldDefinition<TClass> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName) => new(fieldName);
-	/// <inheritdoc/>
-	internal override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();
 }

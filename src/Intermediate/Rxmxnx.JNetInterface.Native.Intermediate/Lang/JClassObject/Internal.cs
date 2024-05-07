@@ -8,29 +8,15 @@ public partial class JClassObject
 	internal static readonly Type MetadataType = typeof(ClassObjectMetadata);
 
 	/// <summary>
-	/// JNI class reference.
+	/// Retrieves array dimension for given class signature.
 	/// </summary>
-	internal JClassLocalRef Reference => this.As<JClassLocalRef>();
-
-	/// <summary>
-	/// Retrieves a <see cref="JStringObject"/> containing class name.
-	/// </summary>
-	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	/// <param name="isPrimitive">Indicates whether current class is primitive.</param>
-	/// <returns>A <see cref="JStringObject"/> instance.</returns>
-	internal static JStringObject GetClassName(IEnvironment env, JClassLocalRef classRef, out Boolean isPrimitive)
+	/// <param name="classSignature">JNI class signature.</param>
+	/// <returns>Array dimension for <paramref name="classSignature"/>.</returns>
+	internal static Int32 GetArrayDimension(ReadOnlySpan<Byte> classSignature)
 	{
-		JClassObject jClassClass = env.ClassFeature.ClassObject;
-		using JClassObject tempClass = new(jClassClass, classRef);
-		try
-		{
-			isPrimitive = env.Functions.IsPrimitiveClass(tempClass);
-			return env.Functions.GetClassName(tempClass);
-		}
-		finally
-		{
-			tempClass.ClearValue();
-		}
+		Int32 dimension = 0;
+		while (classSignature[dimension] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
+			dimension++;
+		return dimension;
 	}
 }

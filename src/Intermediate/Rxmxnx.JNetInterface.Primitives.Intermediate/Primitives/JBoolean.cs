@@ -20,7 +20,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata<JBoolean> typeMetadata = IPrimitiveType<JBoolean, Boolean>
-	                                                                        .JTypeMetadataBuilder
+	                                                                        .TypeMetadataBuilder
 	                                                                        .Create(
 		                                                                        UnicodeClassNames.BooleanPrimitive(),
 		                                                                        UnicodePrimitiveSignatures
@@ -41,7 +41,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	private readonly Byte _value;
 
 	/// <summary>
-	/// <see cref="Boolean"/> representation of current instance.
+	/// <see cref="Boolean"/> representation of the current instance.
 	/// </summary>
 	public Boolean Value => this._value.Equals(JBoolean.TrueValue);
 	/// <inheritdoc/>
@@ -71,6 +71,10 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// <param name="value">Internal value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JBoolean(Boolean value) => this._value = value ? JBoolean.TrueValue : JBoolean.FalseValue;
+
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

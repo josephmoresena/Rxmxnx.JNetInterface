@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
 /// <summary>
-/// This class represents a local <c>java.lang.Byte</c> instance.
+/// This class represents a local <c>java.lang.Boolean</c> instance.
 /// </summary>
 public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	IPrimitiveWrapperType<JBooleanObject, JBoolean>, IInterfaceObject<JSerializableObject>,
@@ -23,14 +23,19 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	/// Internal value.
 	/// </summary>
 	public JBoolean Value
-		=> this._value ??= JFunctionDefinition.Invoke(InternalFunctionCache.BooleanValueDefinition, this);
+		=> this._value ??= JFunctionDefinition.Invoke(NativeFunctionSetImpl.BooleanValueDefinition, this,
+		                                              this.Environment.ClassFeature.BooleanObject);
 
+	/// <inheritdoc/>
+	public Boolean Equals(JBoolean other) => this.Value.Equals(other);
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
+	/// <inheritdoc/>
+	public override String ToString() => this.Value.ToString()!;
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

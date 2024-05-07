@@ -6,7 +6,7 @@ public partial class JStackTraceElementObject
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JClassTypeMetadata<JStackTraceElementObject> typeMetadata =
-		JTypeMetadataBuilder<JStackTraceElementObject>
+		TypeMetadataBuilder<JStackTraceElementObject>
 			.Create(UnicodeClassNames.StackTraceElementObject(), JTypeModifier.Final).Implements<JSerializableObject>()
 			.Build();
 
@@ -28,7 +28,7 @@ public partial class JStackTraceElementObject
 	private JStackTraceElementObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	/// <inheritdoc/>
 	private JStackTraceElementObject(JLocalObject jLocal) : base(
-		jLocal, jLocal.Environment.ClassFeature.GetClass<JStackTraceElementObject>())
+		jLocal, jLocal.Environment.ClassFeature.StackTraceElementObject)
 	{
 		JStackTraceElementObject? traceElement = jLocal as JStackTraceElementObject;
 		this._className ??= traceElement?._className;
@@ -47,7 +47,7 @@ public partial class JStackTraceElementObject
 	/// <returns>The fully qualified name of the class containing the execution point.</returns>
 	private String GetClassName()
 	{
-		using JStringObject className = this.Environment.Functions.GetClassName(this);
+		using JStringObject className = this.Environment.FunctionSet.GetClassName(this);
 		return className.Value;
 	}
 	/// <summary>
@@ -56,7 +56,7 @@ public partial class JStackTraceElementObject
 	/// <returns>The name of the source file containing the execution point.</returns>
 	private String GetFileName()
 	{
-		using JStringObject fileName = this.Environment.Functions.GetFileName(this);
+		using JStringObject fileName = this.Environment.FunctionSet.GetFileName(this);
 		return fileName.Value;
 	}
 	/// <summary>
@@ -65,17 +65,17 @@ public partial class JStackTraceElementObject
 	/// <returns>The name of the method containing the execution point</returns>
 	private String GetMethodName()
 	{
-		using JStringObject jString = this.Environment.Functions.GetMethodName(this);
+		using JStringObject jString = this.Environment.FunctionSet.GetMethodName(this);
 		return jString.Value;
 	}
 
-	static JStackTraceElementObject IReferenceType<JStackTraceElementObject>.Create(
+	static JStackTraceElementObject IClassType<JStackTraceElementObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JStackTraceElementObject IReferenceType<JStackTraceElementObject>.Create(
+	static JStackTraceElementObject IClassType<JStackTraceElementObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer.Instance);
-	static JStackTraceElementObject IReferenceType<JStackTraceElementObject>.Create(
+	static JStackTraceElementObject IClassType<JStackTraceElementObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer.Environment, initializer.Global);
 }

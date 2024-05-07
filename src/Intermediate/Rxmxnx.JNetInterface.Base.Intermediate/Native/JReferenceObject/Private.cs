@@ -39,7 +39,7 @@ public partial class JReferenceObject
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <param name="jOther">A <see cref="JReferenceObject"/> instance.</param>
-	/// <returns>The Identifier for current instance.</returns>
+	/// <returns>The Identifier for the current instance.</returns>
 	private static Int64 GetInstanceId(JReferenceObject jObject, JReferenceObject? jOther = default)
 	{
 		if (jOther is not null && jObject is View) return jOther._id;

@@ -20,7 +20,7 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	/// <summary>
 	/// Internal value.
 	/// </summary>
-	public JChar Value => this._value ??= JFunctionDefinition.Invoke(InternalFunctionCache.CharValueDefinition, this);
+	public JChar Value => this._value ??= JFunctionDefinition.Invoke(NativeFunctionSetImpl.CharValueDefinition, this);
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
@@ -28,6 +28,8 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
+	/// <inheritdoc/>
+	public override String ToString() => this.Value.ToString()!;
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

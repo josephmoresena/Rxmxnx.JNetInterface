@@ -16,8 +16,8 @@ public partial record JDataTypeMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="className">JNI name of current type.</param>
-	/// <param name="signature">JNI signature for current type.</param>
+	/// <param name="className">JNI name of the current type.</param>
+	/// <param name="signature">JNI signature for the current type.</param>
 	private protected JDataTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature = default)
 	{
 		this._sequence = JDataTypeMetadata.CreateInformationSequence(className, signature);

@@ -11,7 +11,7 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata<JShort> typeMetadata = IPrimitiveType<JShort, Int16>
-	                                                                      .JTypeMetadataBuilder
+	                                                                      .TypeMetadataBuilder
 	                                                                      .Create(UnicodeClassNames.ShortPrimitive(),
 		                                                                      UnicodePrimitiveSignatures
 			                                                                      .ShortSignatureChar)
@@ -30,7 +30,7 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	private readonly Int16 _value;
 
 	/// <summary>
-	/// <see cref="Int16"/> representation of current instance.
+	/// <see cref="Int16"/> representation of the current instance.
 	/// </summary>
 	public Int16 Value => this._value;
 	/// <inheritdoc/>
@@ -43,6 +43,10 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JShort() => this._value = default;
+
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
 
 	/// <summary>
 	/// Constructor.

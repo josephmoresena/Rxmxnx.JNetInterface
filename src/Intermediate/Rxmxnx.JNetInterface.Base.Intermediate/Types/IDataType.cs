@@ -17,7 +17,7 @@ public interface IDataType
 	/// <summary>
 	/// Retrieves the metadata for given type.
 	/// </summary>
-	/// <typeparam name="TDataType">Type of current java datatype.</typeparam>
+	/// <typeparam name="TDataType">Type of the current java datatype.</typeparam>
 	/// <returns>The <see cref="JDataTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static JDataTypeMetadata GetMetadata<TDataType>() where TDataType : IDataType<TDataType>
@@ -25,7 +25,7 @@ public interface IDataType
 	/// <summary>
 	/// Retrieves the hash for given type.
 	/// </summary>
-	/// <typeparam name="TDataType">Type of current java datatype.</typeparam>
+	/// <typeparam name="TDataType">Type of the current java datatype.</typeparam>
 	/// <returns>The hash string for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static String GetHash<TDataType>() where TDataType : IDataType<TDataType>
@@ -35,7 +35,7 @@ public interface IDataType
 /// <summary>
 /// This interface exposes a java data type.
 /// </summary>
-/// <typeparam name="TDataType">Type of current Java datatype.</typeparam>
+/// <typeparam name="TDataType">Type of the current Java datatype.</typeparam>
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArgumentMetadata"/>

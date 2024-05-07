@@ -26,5 +26,21 @@ public sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JClassTypeMetadat
 	/// <inheritdoc/>
 	public override String ToString()
 		=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveClassName)} = {this.PrimitiveClassName}, " +
-			$"{nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveArgumentMetadata)} = {this.PrimitiveArgumentMetadata.ToSimplifiedString()}, {nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+			$"{nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveArgumentMetadata)} = {this.GetPrimitiveArgumentSimplifiedString()}, {nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
+
+	/// <summary>
+	/// Returns a string that represents the primitive argument of the current instance.
+	/// </summary>
+	/// <returns>A string that represents the primitive argument of the current object.</returns>
+	private String GetPrimitiveArgumentSimplifiedString()
+	{
+		try
+		{
+			return this.PrimitiveArgumentMetadata.ToSimplifiedString();
+		}
+		catch (Exception)
+		{
+			return String.Empty;
+		}
+	}
 }

@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
-public abstract partial record JFunctionDefinition
+public abstract partial class JFunctionDefinition
 {
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
@@ -30,7 +30,7 @@ public abstract partial record JFunctionDefinition
 		=> JFunctionDefinition<TResult>.StaticInvoke(definition, jClass, args);
 }
 
-public partial record JFunctionDefinition<TResult>
+public partial class JFunctionDefinition<TResult>
 {
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
@@ -71,6 +71,7 @@ public partial record JFunctionDefinition<TResult>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JFunctionDefinition{TResult}"/> instance.</returns>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	internal static JFunctionDefinition<TResult> Create(ReadOnlySpan<Byte> functionName, JArgumentMetadata[] metadata)
+	internal static JFunctionDefinition<TResult> Create(ReadOnlySpan<Byte> functionName,
+		params JArgumentMetadata[] metadata)
 		=> new(functionName, metadata);
 }

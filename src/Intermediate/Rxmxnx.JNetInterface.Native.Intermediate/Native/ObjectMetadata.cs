@@ -7,23 +7,28 @@ namespace Rxmxnx.JNetInterface.Native;
 public record ObjectMetadata
 {
 	/// <inheritdoc cref="IObject.ObjectClassName"/>
-	private readonly CString _objectClassName;
+	public CString ObjectClassName { get; }
 	/// <inheritdoc cref="IObject.ObjectSignature"/>
-	private readonly CString _objectSignature;
+	public CString ObjectSignature { get; }
 
-	/// <inheritdoc cref="IObject.ObjectClassName"/>
-	public CString ObjectClassName => this._objectClassName;
-	/// <inheritdoc cref="IObject.ObjectSignature"/>
-	public CString ObjectSignature => this._objectSignature;
+	/// <summary>
+	/// Class type metadata.
+	/// </summary>
+	internal JReferenceTypeMetadata? TypeMetadata { get; }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	internal ObjectMetadata(JClassObject jClass)
+	/// <param name="typeMetadata"><see cref="JReferenceTypeMetadata"/> instance.</param>
+	internal ObjectMetadata(JClassObject jClass, JReferenceTypeMetadata? typeMetadata = default)
 	{
-		this._objectClassName = jClass.Name;
-		this._objectSignature = jClass.ClassSignature;
+		this.ObjectClassName = jClass.Name;
+		this.ObjectSignature = jClass.ClassSignature;
+		if (jClass.Name.SequenceEqual(UnicodeClassNames.ClassObject))
+			this.TypeMetadata = IClassType.GetMetadata<JClassObject>();
+		else
+			this.TypeMetadata = typeMetadata ?? jClass.Environment.ClassFeature.GetTypeMetadata(jClass);
 	}
 
 	/// <summary>
@@ -32,25 +37,27 @@ public record ObjectMetadata
 	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
 	protected ObjectMetadata(ObjectMetadata metadata)
 	{
-		this._objectClassName = metadata._objectClassName;
-		this._objectSignature = metadata._objectSignature;
+		this.ObjectClassName = metadata.ObjectClassName;
+		this.ObjectSignature = metadata.ObjectSignature;
+		this.TypeMetadata = metadata.TypeMetadata;
 	}
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="objectClassName">Class name of current instance.</param>
-	/// <param name="objectSignature">Class signature of current instance.</param>
-	internal ObjectMetadata(CString objectClassName, CString objectSignature)
+	/// <param name="objectClassName">Class name of the current instance.</param>
+	/// <param name="objectSignature">Class signature of the current instance.</param>
+	private protected ObjectMetadata(CString objectClassName, CString objectSignature)
 	{
-		this._objectClassName = objectClassName;
-		this._objectSignature = objectSignature;
+		this.ObjectClassName = objectClassName;
+		this.ObjectSignature = objectSignature;
+		this.TypeMetadata = IClassType.GetMetadata<JClassObject>();
 	}
 
 	/// <summary>
-	/// Retrieves the java class for current object.
+	/// Retrieves the java class for the current object.
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <returns>The class instance for current object.</returns>
-	internal JClassObject GetClass(IEnvironment env) => env.ClassFeature.GetClass(this._objectClassName);
+	/// <returns>The class instance for the current object.</returns>
+	internal JClassObject GetClass(IEnvironment env) => env.ClassFeature.GetClass(this.ObjectClassName);
 }

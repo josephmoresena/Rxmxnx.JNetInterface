@@ -1,17 +1,23 @@
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// This class implements <see cref="IVirtualMachine"/> interface.
+/// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
 public partial class JVirtualMachine : IVirtualMachine
 {
+	/// <summary>
+	/// Indicates whether the current virtual machine remains alive.
+	/// </summary>
+	public virtual Boolean IsAlive => true;
 	/// <inheritdoc/>
 	public JVirtualMachineRef Reference => this._cache.Reference;
 
+	Boolean IVirtualMachine.NoProxy => true;
 	IEnvironment? IVirtualMachine.GetEnvironment() => this.GetEnvironment();
 
 	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose)
 	{
+		if (!this.IsAlive) return new DeadThread(this);
 		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
 		return this.AttachThread(args);
 	}
@@ -23,6 +29,26 @@ public partial class JVirtualMachine : IVirtualMachine
 			Name = threadName, ThreadGroup = threadGroup, Version = version, IsDaemon = true,
 		});
 
+	/// <inheritdoc/>
+	public void FatalError(String? message) => this.FatalError((CString?)message);
+	/// <inheritdoc/>
+	public void FatalError(CString? message)
+	{
+		ReadOnlySpan<Byte> utf8Message = JEnvironment.GetSafeSpan(message);
+		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.FatalError));
+		JEnvironment env = this.GetEnvironment(thread.Reference);
+		utf8Message.WithSafeFixed(env, JEnvironment.FatalError);
+	}
+
+	/// <summary>
+	/// Registers <typeparamref name="TReference"/> as valid datatype for the current process.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TDataType}"/> type.</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if current datatype was registered; otherwise, <see langword="false"/>.
+	/// </returns>
+	public static Boolean Register<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
+		=> MetadataHelper.Register<TReference>();
 	/// <summary>
 	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>

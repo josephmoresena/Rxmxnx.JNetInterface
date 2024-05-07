@@ -30,7 +30,7 @@ public partial class JVirtualMachine
 	{
 		GetEnvDelegate del = this._cache.GetDelegate<GetEnvDelegate>();
 		JResult result = del(this.Reference, out JEnvironmentRef envRef, 0x00010006);
-		return result == JResult.Ok ? this._cache.ThreadCache.Get(envRef, out _) : default;
+		return result is JResult.Ok ? this._cache.ThreadCache.Get(envRef, out _) : default;
 	}
 	/// <summary>
 	/// Attaches current thread to VM.
@@ -40,7 +40,7 @@ public partial class JVirtualMachine
 	private IThread AttachThread(ThreadCreationArgs args)
 	{
 		CString threadName = args.Name ?? CString.Zero;
-		ValidationUtilities.ThrowIfDummy(args.ThreadGroup);
+		ValidationUtilities.ThrowIfProxy(args.ThreadGroup);
 		if (this.GetEnvironment() is { } env) return new JEnvironment.JThread(env);
 		return threadName.WithSafeFixed((this, args), JVirtualMachine.AttachThread);
 	}

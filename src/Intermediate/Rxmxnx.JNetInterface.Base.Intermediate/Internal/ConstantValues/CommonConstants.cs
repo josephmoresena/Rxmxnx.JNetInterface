@@ -6,7 +6,10 @@
 internal static class CommonConstants
 {
 	public const String CriticalExceptionMessage =
-		"The execution is in critical state. No calls can be made through native interface.";
+		"The execution is in critical state. There is a pending exception but no calls can be made through native interface.";
+	public const String InvalidPrimitiveDefinitionMessage = "Definition is not primitive.";
+	public const String InvalidPrimitiveTypeMessage = "Invalid primitive type.";
+	public const String InvalidSignatureMessage = "Invalid signature.";
 
 	public const String CodeQuality = "CodeQuality";
 	public const String CSharpSquid = "csharpsquid";
@@ -29,6 +32,11 @@ internal static class CommonConstants
 	public const String CheckIdS2743 =
 		"S2743:A static field in a generic type is not shared among instances of different close constructed types";
 	public const String CheckIdS1006 = "S1006:Use the default parameter value defined in the overridden method";
+	public const String CheckIdS1210 =
+		"S1210:\"Equals\" and the comparison operators should be overridden when implementing \"IComparable\"";
+	public const String CheckIdS1206 = "S1206:\"Equals(Object)\" and \"GetHashCode()\" should be overridden in pairs";
+	public const String CheckIdS2094 = "S2094:Classes should not be empty.";
+	public const String CheckIdS3267 = "S3267:Loops should be simplified with \"LINQ\" expressions";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String AbstractProxyJustification = "This object is an abstract proxy.";
 	public const String JniThreadRequiredJustification = "Global object disposing requires a JNI thread.";
@@ -47,4 +55,7 @@ internal static class CommonConstants
 	public const String StaticAbstractPropertyUseJustification =
 		"There is no static field, but abstract/virtual property.";
 	public const String DefaultValueTypeJustification = "Default value for ValueType is not null.";
+	public const String NoStringComparisonOperatorsJustification = "System.String has no comparison operators.";
+	public const String ClassJustification = "Type needs class inheritance.";
+	public const String NonStandardLinqJustification = "Linq is not needed.";
 }

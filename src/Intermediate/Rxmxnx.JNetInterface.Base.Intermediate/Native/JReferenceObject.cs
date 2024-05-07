@@ -5,10 +5,12 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1206,
+                 Justification = CommonConstants.InternalInheritanceJustification)]
 public abstract partial class JReferenceObject : JObject
 {
 	/// <summary>
-	/// Indicates whether current instance is default value.
+	/// Indicates whether the current instance is default value.
 	/// </summary>
 	public Boolean IsDefault => this.IsBlankSpan();
 
@@ -32,7 +34,7 @@ public abstract partial class JReferenceObject : JObject
 	}
 
 	/// <summary>
-	/// Indicates whether current instance is an instance of <typeparamref name="TDataType"/> type class.
+	/// Indicates whether the current instance is an instance of <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <returns>
@@ -43,18 +45,20 @@ public abstract partial class JReferenceObject : JObject
 		=> this.IsInstanceOf<TDataType>();
 
 	/// <summary>
-	/// Tries to obtain a synchronized instance for current instance.
+	/// Tries to obtain a synchronized instance for the current instance.
 	/// </summary>
 	/// <returns>A <see cref="IDisposable"/> synchronized</returns>
-	public IDisposable? Synchronize() => this.IsDefault ? default : this.GetSynchronizer();
+	public IDisposable? Synchronize() => JObject.IsNullOrDefault(this) ? default : this.GetSynchronizer();
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other)
-		=> other switch
+		=> Object.ReferenceEquals(this, other) || other switch
 		{
 			null => this.IsDefault,
-			JReferenceObject jObject => this.IsProxy == jObject.IsProxy && this.IsDefault == jObject.IsDefault &&
-				this.AsSpan().SequenceEqual(jObject.AsSpan()),
+			JReferenceObject jObject => this.Same(jObject),
 			_ => false,
 		};
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override Int32 GetHashCode() => this.As<JObjectLocalRef>().GetHashCode();
 }

@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Reflect;
+namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.AccessibleObject</c> instance.
@@ -8,7 +8,7 @@ public class JAccessibleObject : JLocalObject, IClassType<JAccessibleObject>, II
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JAccessibleObject> metadata = JTypeMetadataBuilder<JAccessibleObject>
+	private static readonly JClassTypeMetadata<JAccessibleObject> metadata = TypeMetadataBuilder<JAccessibleObject>
 	                                                                         .Create(
 		                                                                         UnicodeClassNames.AccessibleObject())
 	                                                                         .Implements<JAnnotatedElementObject>()
@@ -17,7 +17,7 @@ public class JAccessibleObject : JLocalObject, IClassType<JAccessibleObject>, II
 	static JClassTypeMetadata<JAccessibleObject> IClassType<JAccessibleObject>.Metadata => JAccessibleObject.metadata;
 
 	/// <inheritdoc/>
-	internal JAccessibleObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
+	private protected JAccessibleObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }
 
 	/// <inheritdoc/>
 	protected JAccessibleObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
@@ -26,10 +26,10 @@ public class JAccessibleObject : JLocalObject, IClassType<JAccessibleObject>, II
 	/// <inheritdoc/>
 	protected JAccessibleObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JAccessibleObject IReferenceType<JAccessibleObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JAccessibleObject IClassType<JAccessibleObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JAccessibleObject IReferenceType<JAccessibleObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JAccessibleObject IClassType<JAccessibleObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JAccessibleObject IReferenceType<JAccessibleObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JAccessibleObject IClassType<JAccessibleObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

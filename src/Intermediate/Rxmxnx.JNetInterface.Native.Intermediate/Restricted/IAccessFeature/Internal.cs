@@ -3,17 +3,6 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public partial interface IAccessFeature
 {
 	/// <summary>
-	/// Invokes a constructor method for given <see cref="JClassObject"/> instance.
-	/// </summary>
-	/// <typeparam name="TObject"><see cref="IDataType"/> type of created instance.</typeparam>
-	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="definition"><see cref="JConstructorDefinition"/> definition.</param>
-	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
-	/// <returns>The new <typeparamref name="TObject"/> instance.</returns>
-	internal TObject CallInternalConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
-		IObject?[] args) where TObject : JLocalObject, IDataType<TObject>
-		=> this.CallConstructor<TObject>(jClass, definition, args);
-	/// <summary>
 	/// Invokes a static function on given <see cref="JClassObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>

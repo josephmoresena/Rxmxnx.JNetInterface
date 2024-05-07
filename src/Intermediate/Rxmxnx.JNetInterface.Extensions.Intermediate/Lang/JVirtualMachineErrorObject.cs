@@ -9,7 +9,7 @@ public class JVirtualMachineErrorObject : JErrorObject, IThrowableType<JVirtualM
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JVirtualMachineErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JErrorObject>
+		TypeMetadataBuilder<JErrorObject>
 			.Create<JVirtualMachineErrorObject>(UnicodeClassNames.VirtualMachineErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JVirtualMachineErrorObject> IThrowableType<JVirtualMachineErrorObject>.Metadata
@@ -22,13 +22,13 @@ public class JVirtualMachineErrorObject : JErrorObject, IThrowableType<JVirtualM
 	/// <inheritdoc/>
 	protected JVirtualMachineErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JVirtualMachineErrorObject IReferenceType<JVirtualMachineErrorObject>.Create(
+	static JVirtualMachineErrorObject IClassType<JVirtualMachineErrorObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JVirtualMachineErrorObject IReferenceType<JVirtualMachineErrorObject>.Create(
+	static JVirtualMachineErrorObject IClassType<JVirtualMachineErrorObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JVirtualMachineErrorObject IReferenceType<JVirtualMachineErrorObject>.Create(
+	static JVirtualMachineErrorObject IClassType<JVirtualMachineErrorObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

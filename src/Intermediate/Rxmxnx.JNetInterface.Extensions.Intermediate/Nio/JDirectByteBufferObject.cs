@@ -14,7 +14,7 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	/// Type metadata.
 	/// </summary>
 	private static readonly JClassTypeMetadata<JDirectByteBufferObject> metadata =
-		JTypeMetadataBuilder<JMappedByteBufferObject>
+		TypeMetadataBuilder<JMappedByteBufferObject>
 			.Create<JDirectByteBufferObject>(UnicodeClassNames.DirectByteBufferObject())
 			.Implements<JDirectBufferObject>().Build();
 
@@ -27,14 +27,17 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	private readonly IFixedMemory.IDisposable? _memory;
 
 	/// <summary>
-	/// Indicates whether current instance is disposed.
+	/// Indicates whether the current instance is disposed.
 	/// </summary>
 	private Boolean _disposed;
 
 	/// <inheritdoc/>
 	internal JDirectByteBufferObject(JClassObject jClass, IFixedMemory.IDisposable memory, JObjectLocalRef localRef) :
 		base(jClass, localRef)
-		=> this._memory = memory;
+	{
+		this._memory = memory;
+		JBufferObject.InitializeDirect(this, this._memory.Pointer, this._memory.Bytes.Length);
+	}
 
 	/// <inheritdoc/>
 	protected JDirectByteBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
@@ -61,13 +64,13 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 		this._memory?.Dispose();
 	}
 
-	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+	static JDirectByteBufferObject IClassType<JDirectByteBufferObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+	static JDirectByteBufferObject IClassType<JDirectByteBufferObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JDirectByteBufferObject IReferenceType<JDirectByteBufferObject>.Create(
+	static JDirectByteBufferObject IClassType<JDirectByteBufferObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

@@ -58,11 +58,11 @@ public partial interface IClassFeature
 	/// <summary>
 	/// <c>java.lang.String</c> class instance.
 	/// </summary>
-	JClassObject StringClassObject => this.GetClass<JStringObject>();
+	JClassObject StringObject => this.GetClass<JStringObject>();
 	/// <summary>
 	/// <c>java.lang.Number</c> class instance.
 	/// </summary>
-	JClassObject NumberClassObject => this.GetClass<JNumberObject>();
+	JClassObject NumberObject => this.GetClass<JNumberObject>();
 	/// <summary>
 	/// <c>java.lang.ClassLoader</c> class instance.
 	/// </summary>
@@ -70,32 +70,32 @@ public partial interface IClassFeature
 	/// <summary>
 	/// <c>java.nio.Buffer</c> class instance.
 	/// </summary>
-	JClassObject BufferClassObject => this.GetClass<JBufferObject>();
+	JClassObject BufferObject => this.GetClass<JBufferObject>();
 	/// <summary>
 	/// <c>java.lang.reflect.Method</c> class instance.
 	/// </summary>
-	JClassObject MethodClassObject => this.GetClass<JMethodObject>();
+	JClassObject MethodObject => this.GetClass<JMethodObject>();
 	/// <summary>
 	/// <c>java.lang.reflect.Constructor</c> class instance.
 	/// </summary>
-	JClassObject ConstructorClassObject => this.GetClass<JConstructorObject>();
+	JClassObject ConstructorObject => this.GetClass<JConstructorObject>();
 	/// <summary>
 	/// <c>java.lang.reflect.Field</c> class instance.
 	/// </summary>
-	JClassObject FieldClassObject => this.GetClass<JFieldObject>();
+	JClassObject FieldObject => this.GetClass<JFieldObject>();
 	/// <summary>
 	/// <c>java.lang.Enum</c> class instance.
 	/// </summary>
-	JClassObject EnumClassObject => this.GetClass<JEnumObject>();
+	JClassObject EnumObject => this.GetClass<JEnumObject>();
 
 	/// <summary>
 	/// <c>java.lang.Exception</c> class instance.
 	/// </summary>
-	JClassObject ExceptionClassObject => this.GetClass<JExceptionObject>();
+	JClassObject ExceptionObject => this.GetClass<JExceptionObject>();
 	/// <summary>
 	/// <c>java.lang.Error</c> class instance.
 	/// </summary>
-	JClassObject ErrorClassObject => this.GetClass<JErrorObject>();
+	JClassObject ErrorObject => this.GetClass<JErrorObject>();
 
 	/// <summary>
 	/// <c>java.lang.Void</c> class instance.

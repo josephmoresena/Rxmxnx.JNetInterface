@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rxmxnx.JNetInterface.Tests</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="System.Collections"/>
+        <Using Include="System.Collections.Concurrent"/>
+        <Using Include="System.ComponentModel"/>
+        <Using Include="System.Diagnostics.CodeAnalysis"/>
+        <Using Include="System.Globalization"/>
+        <Using Include="System.Numerics"/>
+        <Using Include="System.Reflection"/>
+        <Using Include="System.Runtime.CompilerServices"/>
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="System.Text"/>
+
+        <Using Include="Xunit"/>
+        <Using Include="AutoFixture"/>
+        <Using Include="NSubstitute"/>
+
+        <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode"/>
+        <Using Include="Rxmxnx.JNetInterface.Io"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang.Reflect"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang.Annotation"/>
+        <Using Include="Rxmxnx.JNetInterface.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.References"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
+        <Using Include="Rxmxnx.JNetInterface.Nio"/>
+        <Using Include="Rxmxnx.JNetInterface.Nio.Ch"/>
+        <Using Include="Rxmxnx.JNetInterface.Restricted"/>
+        <Using Include="Rxmxnx.JNetInterface.Tests.Restricted"/>
+        <Using Include="Rxmxnx.JNetInterface.Types"/>
+        <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0"/>
+        <PackageReference Include="xunit" Version="2.7.1"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.8">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="6.0.2">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Native.Tests.Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies.csproj"/>
+    </ItemGroup>
+
+</Project>

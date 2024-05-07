@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native.Access;
 
-public abstract partial record JCallDefinition
+public abstract partial class JCallDefinition
 {
 	/// <summary>
 	/// Internal constructor.
@@ -13,19 +13,24 @@ public abstract partial record JCallDefinition
 	/// Internal constructor.
 	/// </summary>
 	/// <param name="name">Call defined name.</param>
-	/// <param name="returnType">Method return type defined signature.</param>
+	/// <param name="returnTypeSignature">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	private protected JCallDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType,
+	private protected JCallDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnTypeSignature,
 		params JArgumentMetadata[] metadata) : base(new CStringSequence(
 			                                            name,
 			                                            JCallDefinition.CreateDescriptor(
-				                                            returnType, out Int32 size, out Int32[] sizes,
+				                                            returnTypeSignature, out Int32 size, out Int32[] sizes,
 				                                            out Int32 referenceCount, metadata)))
 	{
 		this._callSize = size;
 		this._sizes = sizes;
 		this._referenceCount = referenceCount;
-		this._useJValue = this._sizes.Length > 1 &&
-			Math.Abs(this._sizes.Length * JValue.Size - this._callSize) <= 0.15 * this._callSize;
+	}
+	/// <inheritdoc/>
+	private protected JCallDefinition(JCallDefinition definition) : base(definition)
+	{
+		this._callSize = definition._callSize;
+		this._sizes = definition._sizes;
+		this._referenceCount = definition._referenceCount;
 	}
 }

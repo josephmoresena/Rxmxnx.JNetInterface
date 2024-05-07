@@ -11,7 +11,7 @@ public class JClassFormatErrorObject : JLinkageErrorObject, IThrowableType<JClas
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JClassFormatErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JLinkageErrorObject>
+		TypeMetadataBuilder<JLinkageErrorObject>
 			.Create<JClassFormatErrorObject>(UnicodeClassNames.ClassFormatErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JClassFormatErrorObject> IThrowableType<JClassFormatErrorObject>.Metadata
@@ -24,13 +24,13 @@ public class JClassFormatErrorObject : JLinkageErrorObject, IThrowableType<JClas
 	/// <inheritdoc/>
 	protected JClassFormatErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JClassFormatErrorObject IReferenceType<JClassFormatErrorObject>.Create(
+	static JClassFormatErrorObject IClassType<JClassFormatErrorObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JClassFormatErrorObject IReferenceType<JClassFormatErrorObject>.Create(
+	static JClassFormatErrorObject IClassType<JClassFormatErrorObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JClassFormatErrorObject IReferenceType<JClassFormatErrorObject>.Create(
+	static JClassFormatErrorObject IClassType<JClassFormatErrorObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

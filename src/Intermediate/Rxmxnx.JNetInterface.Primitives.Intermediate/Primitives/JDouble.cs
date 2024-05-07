@@ -11,7 +11,7 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata<JDouble> typeMetadata = IPrimitiveType<JDouble, Double>
-	                                                                       .JTypeMetadataBuilder
+	                                                                       .TypeMetadataBuilder
 	                                                                       .Create(UnicodeClassNames.DoublePrimitive(),
 		                                                                       UnicodePrimitiveSignatures
 			                                                                       .DoubleSignatureChar)
@@ -31,7 +31,7 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	private readonly Double _value;
 
 	/// <summary>
-	/// <see cref="Double"/> representation of current instance.
+	/// <see cref="Double"/> representation of the current instance.
 	/// </summary>
 	public Double Value => this._value;
 	/// <inheritdoc/>
@@ -51,6 +51,10 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	/// <param name="value">Internal value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JDouble(Double value) => this._value = value;
+
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

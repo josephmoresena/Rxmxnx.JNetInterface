@@ -78,7 +78,7 @@ internal partial class ObjectLifetime
 	/// <see langword="true"/> if current instance is assignable to <typeparamref name="TDataType"/> type,
 	/// <see langword="null"/> if unknown; otherwise, <see langword="false"/>.
 	/// </returns>
-	private Boolean? IsAssignableTo<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>
+	private Boolean? InstanceOf<TDataType>() where TDataType : JReferenceObject, IDataType<TDataType>
 		=> this._assignableTypes.IsAssignableTo<TDataType>() ??
 			this.Secondary?._assignableTypes.IsAssignableTo<TDataType>();
 
@@ -103,7 +103,7 @@ internal partial class ObjectLifetime
 	private void LoadNewValue(JLocalObject jLocal, JObjectLocalRef localRef)
 	{
 		this._value.Value = localRef;
-		this._isDisposed.Value = false;
+		this._isDisposed.Value = localRef != default;
 		this.Load(jLocal);
 	}
 	/// <summary>

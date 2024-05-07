@@ -7,6 +7,15 @@
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 {
+#if PACKAGE
+	/// <summary>
+	/// Creates a <see cref="JLocalObject"/> from current value.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <returns>A <see cref="JLocalObject"/> instance.</returns>
+	JLocalObject ToObject(IEnvironment env);
+#endif
+
 	/// <summary>
 	/// Native primitive type.
 	/// </summary>
@@ -16,7 +25,7 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 	/// <summary>
 	/// Retrieves the metadata for given primitive type.
 	/// </summary>
-	/// <typeparam name="TPrimitive">Type of current java primitive datatype.</typeparam>
+	/// <typeparam name="TPrimitive">Type of the current java primitive datatype.</typeparam>
 	/// <returns>The <see cref="JPrimitiveTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public new static JPrimitiveTypeMetadata GetMetadata<TPrimitive>()

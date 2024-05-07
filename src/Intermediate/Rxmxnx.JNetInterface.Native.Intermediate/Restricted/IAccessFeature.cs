@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes JNI accessing feature.
 /// </summary>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public partial interface IAccessFeature
 {
 	/// <summary>
@@ -92,15 +94,15 @@ public partial interface IAccessFeature
 	TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition, IObject?[] args)
 		where TObject : JLocalObject, IDataType<TObject>;
 	/// <summary>
-	/// Invokes a reflected constructor method on <paramref name="jMethod"/>.
+	/// Invokes a reflected constructor method on <paramref name="jConstructor"/>.
 	/// </summary>
 	/// <typeparam name="TObject"><see cref="IDataType"/> type of created instance.</typeparam>
-	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
+	/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
 	/// <param name="definition"><see cref="JConstructorDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 	/// <returns>The new <typeparamref name="TObject"/> instance.</returns>
-	TObject CallConstructor<TObject>(JMethodObject jMethod, JConstructorDefinition definition, IObject?[] args)
-		where TObject : JLocalObject, IClassType<TObject>;
+	TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
+		IObject?[] args) where TObject : JLocalObject, IClassType<TObject>;
 	/// <summary>
 	/// Invokes a static function on <see cref="JClassObject"/> instance.
 	/// </summary>

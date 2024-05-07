@@ -3,20 +3,17 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// <summary>
 /// This class stores a non-typed class function definition.
 /// </summary>
-internal sealed record JNonTypedFunctionDefinition : JFunctionDefinition<JLocalObject>
+internal sealed class JNonTypedFunctionDefinition : JFunctionDefinition<JLocalObject>
 {
-	/// <inheritdoc/>
-	internal override Type Return => typeof(JReferenceObject);
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="functionName">Function name.</param>
-	/// <param name="returnType">Method return type defined signature.</param>
+	/// <param name="returnTypeSignature">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	public JNonTypedFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
+	public JNonTypedFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnTypeSignature,
 		params JArgumentMetadata[] metadata) : base(functionName,
-		                                            JAccessibleObjectDefinition.ValidateSignature(returnType),
+		                                            JAccessibleObjectDefinition.ValidateSignature(returnTypeSignature),
 		                                            metadata) { }
 
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.Invoke(JLocalObject, IObject?[])"/>
@@ -53,7 +50,7 @@ internal sealed record JNonTypedFunctionDefinition : JFunctionDefinition<JLocalO
 	{
 		IObject?[] realArgs = this.CreateArgumentsArray();
 		args.CopyTo(realArgs, 0);
-		return base.InvokeReflected(jMethod, jLocal, args);
+		return base.InvokeReflected(jMethod, jLocal, realArgs);
 	}
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeNonVirtualReflected(JMethodObject, JLocalObject, IObject?[])"/>
 	public new JLocalObject? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal,
@@ -61,18 +58,13 @@ internal sealed record JNonTypedFunctionDefinition : JFunctionDefinition<JLocalO
 	{
 		IObject?[] realArgs = this.CreateArgumentsArray();
 		args.CopyTo(realArgs, 0);
-		return base.InvokeNonVirtualReflected(jMethod, jLocal, args);
+		return base.InvokeNonVirtualReflected(jMethod, jLocal, realArgs);
 	}
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.InvokeStaticReflected(JMethodObject, IObject?[])"/>
 	public new JLocalObject? InvokeStaticReflected(JMethodObject jMethod, params IObject?[] args)
 	{
 		IObject?[] realArgs = this.CreateArgumentsArray();
 		args.CopyTo(realArgs, 0);
-		return base.InvokeStaticReflected(jMethod, args);
+		return base.InvokeStaticReflected(jMethod, realArgs);
 	}
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 }

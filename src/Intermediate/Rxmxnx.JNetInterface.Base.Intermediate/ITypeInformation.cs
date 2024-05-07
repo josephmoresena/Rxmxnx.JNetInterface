@@ -17,6 +17,18 @@ public interface ITypeInformation
 	/// Current datatype hash.
 	/// </summary>
 	String Hash { get; }
+	/// <summary>
+	/// Kind of the current type.
+	/// </summary>
+	JTypeKind Kind { get; }
+	/// <summary>
+	/// Modifier of the current type.
+	/// </summary>
+	JTypeModifier? Modifier { get; }
+	/// <summary>
+	/// Retrieve fixed pointer of class name.
+	/// </summary>
+	IFixedPointer.IDisposable GetClassNameFixedPointer();
 
 	/// <summary>
 	/// Retrieves length of a segment in <paramref name="utf8Sequence"/>

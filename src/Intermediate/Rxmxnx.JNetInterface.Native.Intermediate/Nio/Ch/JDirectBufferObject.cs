@@ -5,28 +5,22 @@ namespace Rxmxnx.JNetInterface.Nio.Ch;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public sealed class JDirectBufferObject : JInterfaceObject<JDirectBufferObject>, IInterfaceType<JDirectBufferObject>
 {
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
 	private static readonly JInterfaceTypeMetadata<JDirectBufferObject> metadata =
-		JTypeMetadataBuilder<JDirectBufferObject>.Create(UnicodeClassNames.DirectBufferObject()).Build();
+		TypeMetadataBuilder<JDirectBufferObject>.Create(UnicodeClassNames.DirectBufferObject()).Build();
 
 	static JInterfaceTypeMetadata<JDirectBufferObject> IInterfaceType<JDirectBufferObject>.Metadata
 		=> JDirectBufferObject.metadata;
 
 	/// <inheritdoc/>
-	private JDirectBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private JDirectBufferObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
 	private JDirectBufferObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JDirectBufferObject IReferenceType<JDirectBufferObject>.Create(IReferenceType.ClassInitializer initializer)
-		=> new(initializer);
-	static JDirectBufferObject IReferenceType<JDirectBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
-		=> new(initializer);
-	static JDirectBufferObject IReferenceType<JDirectBufferObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JDirectBufferObject IInterfaceType<JDirectBufferObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
 }

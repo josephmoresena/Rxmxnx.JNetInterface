@@ -10,7 +10,7 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata<JInt> typeMetadata = IPrimitiveType<JInt, Int32>.JTypeMetadataBuilder
+	private static readonly JPrimitiveTypeMetadata<JInt> typeMetadata = IPrimitiveType<JInt, Int32>.TypeMetadataBuilder
 		.Create(UnicodeClassNames.IntPrimitive(), UnicodePrimitiveSignatures.IntSignatureChar)
 		.WithWrapperClassName(UnicodeClassNames.IntegerObject()).Build();
 
@@ -26,7 +26,7 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	private readonly Int32 _value;
 
 	/// <summary>
-	/// <see cref="Int32"/> representation of current instance.
+	/// <see cref="Int32"/> representation of the current instance.
 	/// </summary>
 	public Int32 Value => this._value;
 	/// <inheritdoc/>
@@ -46,6 +46,10 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	/// <param name="value">Internal value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JInt(Int32 value) => this._value = value;
+
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

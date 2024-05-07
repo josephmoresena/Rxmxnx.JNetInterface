@@ -2,12 +2,12 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public partial class JEnumObject
 {
-	protected new ref partial struct JTypeMetadataBuilder<TEnum>
+	protected new ref partial struct TypeMetadataBuilder<TEnum>
 	{
 		/// <summary>
 		/// Internal implementation of <see cref="IEnumFieldList"/>.
 		/// </summary>
-		private sealed record FieldList : IEnumFieldList
+		private sealed record EnumFieldList : IEnumFieldList
 		{
 			/// <summary>
 			/// Enum ordinal dictionary.
@@ -23,15 +23,17 @@ public partial class JEnumObject
 			private readonly Dictionary<Int32, String> _ordinalDictionary = new();
 
 			CString IEnumFieldList.this[Int32 ordinal] => this._nameDictionary[this._ordinalDictionary[ordinal]];
-			Int32 IEnumFieldList.this[CString name] => this._hashDictionary[name.ToHexString()];
+			Int32 IEnumFieldList.this[ReadOnlySpan<Byte> name]
+				=> this._hashDictionary[Convert.ToHexString(name).ToLower()];
 			Int32 IEnumFieldList.this[String hash] => this._hashDictionary[hash];
+			Int32 IEnumFieldList.Count => this._nameDictionary.Count;
 
 			Boolean IEnumFieldList.HasOrdinal(Int32 ordinal) => this._ordinalDictionary.ContainsKey(ordinal);
 			Boolean IEnumFieldList.HasHash(String hash) => this._hashDictionary.ContainsKey(hash);
 			IReadOnlySet<Int32> IEnumFieldList.GetMissingFields(out Int32 count, out Int32 maxOrdinal)
 			{
 				Int32[] defined = this._ordinalDictionary.Keys.ToArray();
-				HashSet<Int32> result = Enumerable.Range(0, defined.Length + 1).ToHashSet();
+				HashSet<Int32> result = Enumerable.Range(0, defined.Length).ToHashSet();
 				maxOrdinal = defined.Max();
 				count = defined.Length;
 				result.ExceptWith(defined);
@@ -58,7 +60,7 @@ public partial class JEnumObject
 			/// </summary>
 			/// <param name="enumTypeName">Enum type name.</param>
 			/// <returns>The current instance.</returns>
-			public FieldList Validate(ReadOnlySpan<Byte> enumTypeName)
+			public EnumFieldList Validate(ReadOnlySpan<Byte> enumTypeName)
 			{
 				NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
 				return this;

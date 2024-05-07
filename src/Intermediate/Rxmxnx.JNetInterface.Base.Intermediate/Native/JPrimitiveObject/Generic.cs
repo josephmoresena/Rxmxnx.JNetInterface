@@ -10,7 +10,7 @@ internal partial class JPrimitiveObject
 		where TValue : unmanaged, IEquatable<TValue>, IComparable, IConvertible
 	{
 		/// <summary>
-		/// Size of current type in bytes.
+		/// Size of the current type in bytes.
 		/// </summary>
 		public override Int32 SizeOf => NativeUtilities.SizeOf<TValue>();
 
@@ -24,6 +24,11 @@ internal partial class JPrimitiveObject
 		/// Internal primitive value.
 		/// </summary>
 		public TValue Value => this._value;
+
+#if PACKAGE
+		/// <inheritdoc/>
+		public abstract JLocalObject ToObject(IEnvironment env);
+#endif
 
 		/// <inheritdoc/>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

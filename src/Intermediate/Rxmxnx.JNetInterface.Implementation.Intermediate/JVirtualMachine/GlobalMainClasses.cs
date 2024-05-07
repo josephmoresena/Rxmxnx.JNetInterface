@@ -60,29 +60,29 @@ public partial class JVirtualMachine
 		protected GlobalMainClasses(IVirtualMachine vm)
 		{
 			this.ClassMetadata = ClassObjectMetadata.Create<JClassObject>();
-			this.ClassObject = new(vm, this.ClassMetadata, false, default);
+			this.ClassObject = new(vm, this.ClassMetadata, default);
 			this.ThrowableMetadata = ClassObjectMetadata.Create<JThrowableObject>();
-			this.ThrowableObject = new(vm, this.ThrowableMetadata, false, default);
+			this.ThrowableObject = new(vm, this.ThrowableMetadata, default);
 			this.StackTraceElementMetadata = ClassObjectMetadata.Create<JStackTraceElementObject>();
-			this.StackTraceElementObject = new(vm, this.StackTraceElementMetadata, false, default);
+			this.StackTraceElementObject = new(vm, this.StackTraceElementMetadata, default);
 
-			this.VoidPrimitive = new(vm, ClassObjectMetadata.VoidMetadata, false, default);
+			this.VoidPrimitive = new(vm, ClassObjectMetadata.VoidMetadata, default);
 			this.BooleanMetadata = ClassObjectMetadata.Create<JBoolean>();
-			this.BooleanPrimitive = new(vm, this.BooleanMetadata, false, default);
+			this.BooleanPrimitive = new(vm, this.BooleanMetadata, default);
 			this.ByteMetadata = ClassObjectMetadata.Create<JByte>();
-			this.BytePrimitive = new(vm, this.ByteMetadata, false, default);
+			this.BytePrimitive = new(vm, this.ByteMetadata, default);
 			this.CharMetadata = ClassObjectMetadata.Create<JChar>();
-			this.CharPrimitive = new(vm, this.CharMetadata, false, default);
+			this.CharPrimitive = new(vm, this.CharMetadata, default);
 			this.DoubleMetadata = ClassObjectMetadata.Create<JDouble>();
-			this.DoublePrimitive = new(vm, this.DoubleMetadata, false, default);
+			this.DoublePrimitive = new(vm, this.DoubleMetadata, default);
 			this.FloatMetadata = ClassObjectMetadata.Create<JFloat>();
-			this.FloatPrimitive = new(vm, this.FloatMetadata, false, default);
+			this.FloatPrimitive = new(vm, this.FloatMetadata, default);
 			this.IntMetadata = ClassObjectMetadata.Create<JInt>();
-			this.IntPrimitive = new(vm, this.IntMetadata, false, default);
+			this.IntPrimitive = new(vm, this.IntMetadata, default);
 			this.LongMetadata = ClassObjectMetadata.Create<JLong>();
-			this.LongPrimitive = new(vm, this.LongMetadata, false, default);
+			this.LongPrimitive = new(vm, this.LongMetadata, default);
 			this.ShortMetadata = ClassObjectMetadata.Create<JShort>();
-			this.ShortPrimitive = new(vm, this.ShortMetadata, false, default);
+			this.ShortPrimitive = new(vm, this.ShortMetadata, default);
 		}
 
 		/// <summary>

@@ -45,7 +45,7 @@ partial class JEnvironment
 						arrayRef = newShortArray(this.Reference, length).ArrayValue;
 						break;
 					default:
-						throw new ArgumentException("Invalid primitive type.");
+						throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 				}
 				if (arrayRef.IsDefault) this.CheckJniError();
 			}
@@ -54,7 +54,8 @@ partial class JEnvironment
 				JClassObject jClass = this.GetClass<TElement>();
 				arrayRef = this.NewObjectArray(length, jClass);
 			}
-			return new(this._env, arrayRef, length);
+			return this.Register<JArrayObject<TElement>>(new(this.GetClass<JArrayObject<TElement>>(), arrayRef,
+			                                                 length));
 		}
 		public JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement)
 			where TElement : IObject, IDataType<TElement>
@@ -69,13 +70,14 @@ partial class JEnvironment
 			{
 				JClassObject jClass = this.GetClass<TElement>();
 				JArrayLocalRef arrayRef = this.NewObjectArray(length, jClass, initialElement as JReferenceObject);
-				result = new(this._env, arrayRef, length);
+				result = this.Register<JArrayObject<TElement>>(new(this.GetClass<JArrayObject<TElement>>(), arrayRef,
+				                                                   length));
 			}
 			return result;
 		}
 		public Int32 GetArrayLength(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfDummy(jObject);
+			ValidationUtilities.ThrowIfProxy(jObject);
 			GetArrayLengthDelegate getArrayLength = this.GetDelegate<GetArrayLengthDelegate>();
 			Int32 result = getArrayLength(this.Reference, jObject.As<JArrayLocalRef>());
 			if (result <= 0) this.CheckJniError();
@@ -84,7 +86,7 @@ partial class JEnvironment
 		public TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
 			where TElement : IObject, IDataType<TElement>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
@@ -101,7 +103,7 @@ partial class JEnvironment
 		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
 			where TElement : IObject, IDataType<TElement>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
@@ -117,20 +119,10 @@ partial class JEnvironment
 				this.SetObjectElement(jArray, index, value as JReferenceObject);
 			}
 		}
-		public void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
-		{
-			ValidationUtilities.ThrowIfDummy(value);
-			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);
-			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
-			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
-			this.CheckJniError();
-		}
 		public Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item)
 			where TElement : IObject, IDataType<TElement>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
 
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
@@ -143,7 +135,7 @@ partial class JEnvironment
 		public void CopyTo<TElement>(JArrayObject<TElement> jArray, TElement?[] array, Int32 arrayIndex)
 			where TElement : IObject, IDataType<TElement>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			ArgumentNullException.ThrowIfNull(array);
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(array.Length);
 
@@ -156,14 +148,14 @@ partial class JEnvironment
 		public INativeMemoryAdapter GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			ValidationUtilities.ThrowIfDefault(jArray);
 			return this.VirtualMachine.CreateMemoryAdapter(jArray, referenceKind, false);
 		}
 		public INativeMemoryAdapter GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			ValidationUtilities.ThrowIfDefault(jArray);
 			return this.VirtualMachine.CreateMemoryAdapter(jArray, referenceKind, true);
 		}
@@ -188,22 +180,44 @@ partial class JEnvironment
 		public void ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer, JReleaseMode mode)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			this.ReleasePrimitiveArrayElements(arrayRef, metadata.Signature[0], pointer, mode);
-			this.CheckJniError();
+			if (!this._env.IsAttached)
+			{
+				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. Thread is not attached.");
+			}
+			else if (!this.VirtualMachine.IsAlive)
+			{
+				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. JVM is not alive.");
+			}
+			else
+			{
+				JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+				this.ReleasePrimitiveArrayElements(arrayRef, metadata.Signature[0], pointer, mode);
+				this.CheckJniError();
+			}
 		}
 		public void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
 		{
-			ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
-				this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
-			releasePrimitiveArrayCritical(this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
-			this.CheckJniError();
-			this._criticalCount--;
+			if (!this._env.IsAttached)
+			{
+				Debug.WriteLine($"Unable to release critical memory 0x{criticalPtr:0x8}. Thread is not attached.");
+			}
+			else if (!this.VirtualMachine.IsAlive)
+			{
+				Debug.WriteLine($"Unable to release critical memory 0x{criticalPtr:0x8}. JVM is not alive.");
+			}
+			else
+			{
+				ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
+					this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
+				releasePrimitiveArrayCritical(this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
+				this.CheckJniError();
+				this._criticalCount--;
+			}
 		}
 		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			using IFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
 			this.GetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);
@@ -212,7 +226,7 @@ partial class JEnvironment
 		public void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements,
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			ValidationUtilities.ThrowIfDummy(jArray);
+			ValidationUtilities.ThrowIfProxy(jArray);
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			using IReadOnlyFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
 			this.SetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);

@@ -11,7 +11,7 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata<JFloat> typeMetadata = IPrimitiveType<JFloat, Single>
-	                                                                      .JTypeMetadataBuilder
+	                                                                      .TypeMetadataBuilder
 	                                                                      .Create(UnicodeClassNames.FloatPrimitive(),
 		                                                                      UnicodePrimitiveSignatures
 			                                                                      .FloatSignatureChar)
@@ -30,7 +30,7 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	private readonly Single _value;
 
 	/// <summary>
-	/// <see cref="Single"/> representation of current instance.
+	/// <see cref="Single"/> representation of the current instance.
 	/// </summary>
 	public Single Value => this._value;
 	/// <inheritdoc/>
@@ -50,6 +50,10 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	/// <param name="value">Internal value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JFloat(Single value) => this._value = value;
+
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

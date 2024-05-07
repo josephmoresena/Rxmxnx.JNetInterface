@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Reflect;
+namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Constructor</c> instance.
@@ -8,7 +8,7 @@ public sealed class JConstructorObject : JExecutableObject, IClassType<JConstruc
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JConstructorObject> metadata = JTypeMetadataBuilder<JExecutableObject>
+	private static readonly JClassTypeMetadata<JConstructorObject> metadata = TypeMetadataBuilder<JExecutableObject>
 	                                                                          .Create<JConstructorObject>(
 		                                                                          UnicodeClassNames.ConstructorObject(),
 		                                                                          JTypeModifier.Final).Build();
@@ -32,10 +32,10 @@ public sealed class JConstructorObject : JExecutableObject, IClassType<JConstruc
 	/// <inheritdoc/>
 	private JConstructorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JConstructorObject IReferenceType<JConstructorObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JConstructorObject IClassType<JConstructorObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JConstructorObject IReferenceType<JConstructorObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JConstructorObject IClassType<JConstructorObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JConstructorObject IReferenceType<JConstructorObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JConstructorObject IClassType<JConstructorObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

@@ -11,7 +11,7 @@ public class JNoSuchFieldErrorObject : JIncompatibleClassChangeErrorObject, IThr
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JNoSuchFieldErrorObject> typeMetadata =
-		JTypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
+		TypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
 			.Create<JNoSuchFieldErrorObject>(UnicodeClassNames.NoSuchFieldErrorObject()).Build();
 
 	static JThrowableTypeMetadata<JNoSuchFieldErrorObject> IThrowableType<JNoSuchFieldErrorObject>.Metadata
@@ -24,13 +24,13 @@ public class JNoSuchFieldErrorObject : JIncompatibleClassChangeErrorObject, IThr
 	/// <inheritdoc/>
 	protected JNoSuchFieldErrorObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	static JNoSuchFieldErrorObject IReferenceType<JNoSuchFieldErrorObject>.Create(
+	static JNoSuchFieldErrorObject IClassType<JNoSuchFieldErrorObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JNoSuchFieldErrorObject IReferenceType<JNoSuchFieldErrorObject>.Create(
+	static JNoSuchFieldErrorObject IClassType<JNoSuchFieldErrorObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JNoSuchFieldErrorObject IReferenceType<JNoSuchFieldErrorObject>.Create(
+	static JNoSuchFieldErrorObject IClassType<JNoSuchFieldErrorObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

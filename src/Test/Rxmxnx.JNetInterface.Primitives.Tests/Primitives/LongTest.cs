@@ -30,6 +30,9 @@ public sealed class LongTest : PrimitiveTestBase
 
 		Assert.Equal(ClassNames.LongObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.LongObject().SequenceEqual(metadata.WrapperClassName));
+
+		using IFixedPointer.IDisposable fPtr = (metadata as ITypeInformation).GetClassNameFixedPointer();
+		Assert.Equal(fPtr.Pointer, metadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	private static void EqualityTest(JLong primitive0, JLong primitive1)
 	{

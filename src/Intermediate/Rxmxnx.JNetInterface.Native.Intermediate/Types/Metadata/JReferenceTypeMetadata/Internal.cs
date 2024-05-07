@@ -16,9 +16,12 @@ public abstract partial record JReferenceTypeMetadata
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="dispose">
+	/// Indicates whether current instance should be disposed after casting.
+	/// </param>
 	/// <returns>A <see cref="IDataType"/> instance from <paramref name="jLocal"/>.</returns>
 	[return: NotNullIfNotNull(nameof(jLocal))]
-	internal abstract JLocalObject? ParseInstance(JLocalObject? jLocal);
+	internal abstract JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false);
 	/// <summary>
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="jGlobal"/> and
 	/// <paramref name="env"/>.
@@ -29,15 +32,19 @@ public abstract partial record JReferenceTypeMetadata
 	[return: NotNullIfNotNull(nameof(jGlobal))]
 	internal abstract JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal);
 
+	/// <summary>
+	/// Creates an exception instance from a <see cref="JGlobalBase"/> throwable instance.
+	/// </summary>
+	/// <param name="jGlobalThrowable">A <see cref="JGlobalBase"/> throwable instance.</param>
+	/// <param name="exceptionMessage">Exception message.</param>
+	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
+	internal virtual ThrowableException? CreateException(JGlobalBase jGlobalThrowable,
+		String? exceptionMessage = default)
+		=> default;
+
 	/// <inheritdoc cref="IReflectionMetadata.CreateFunctionDefinition(ReadOnlySpan{Byte}, JArgumentMetadata[])"/>
 	internal abstract JFunctionDefinition CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
 		JArgumentMetadata[] metadata);
 	/// <inheritdoc cref="IReflectionMetadata.CreateFieldDefinition(ReadOnlySpan{Byte})"/>
 	internal abstract JFieldDefinition CreateFieldDefinition(ReadOnlySpan<Byte> fieldName);
-
-	/// <summary>
-	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
-	/// </summary>
-	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
-	internal abstract JArrayTypeMetadata? GetArrayMetadata();
 }

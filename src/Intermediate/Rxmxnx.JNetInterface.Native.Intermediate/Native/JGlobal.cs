@@ -11,8 +11,9 @@ public sealed class JGlobal : JGlobalBase
 	/// </summary>
 	private readonly WeakReference<JGlobal?> _secondary = new(default);
 
-	/// <inheritdoc cref="JGlobal"/>
+	/// <inheritdoc/>
 	private protected override Boolean IsDisposable { get; }
+
 	/// <summary>
 	/// Global reference.
 	/// </summary>
@@ -26,13 +27,26 @@ public sealed class JGlobal : JGlobalBase
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
+	/// <param name="globalRef">Global reference.</param>
+	internal JGlobal(ILocalObject jLocal, JGlobalRef globalRef) : base(jLocal, globalRef)
+		=> this.IsDisposable = jLocal is not JClassObject;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
 	/// <param name="vm"><see cref="IVirtualMachine"/> instance.</param>
 	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
-	/// <param name="isProxy">Indicates whether the current instance is a dummy object.</param>
 	/// <param name="globalRef">Global reference.</param>
-	internal JGlobal(IVirtualMachine vm, ObjectMetadata metadata, Boolean isProxy, JGlobalRef globalRef) :
-		base(vm, metadata, isProxy, globalRef)
-		=> this.IsDisposable = metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
+	internal JGlobal(IVirtualMachine vm, ObjectMetadata metadata, JGlobalRef globalRef) : base(vm, metadata, globalRef)
+		=> this.IsDisposable = !metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject);
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	/// <param name="globalRef">Global reference.</param>
+	internal JGlobal(JGlobalBase jGlobal, JGlobalRef globalRef) : base(jGlobal.VirtualMachine, jGlobal.ObjectMetadata,
+	                                                                   globalRef)
+		=> this.IsDisposable = true;
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)
@@ -44,7 +58,7 @@ public sealed class JGlobal : JGlobalBase
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
-	/// <param name="globalRef">A global object reference the value of current instance.</param>
+	/// <param name="globalRef">A global object reference the value of the current instance.</param>
 	internal void SetValue(JGlobalRef globalRef)
 	{
 		if (this.Reference == globalRef) return;
@@ -59,7 +73,7 @@ public sealed class JGlobal : JGlobalBase
 	/// <returns>A <see cref="JGlobal"/> cacheable instance.</returns>
 	public JGlobal GetCacheable(IEnvironment env)
 	{
-		if (!this.IsValid(env) || this.Secondary is null || this.Secondary.IsDisposable) return this;
+		if (!this.IsMinimalValid(env) || this.Secondary is null || this.Secondary.IsDisposable) return this;
 		return this.Secondary!;
 	}
 	/// <summary>

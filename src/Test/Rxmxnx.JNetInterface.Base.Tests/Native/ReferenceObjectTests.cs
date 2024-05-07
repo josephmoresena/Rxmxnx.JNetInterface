@@ -108,12 +108,13 @@ public sealed class ReferenceObjectTests
 		Assert.Equal(jObject.Id, view.Id);
 		Assert.Equal(jObject, view.Object);
 		Assert.Equal(jObject, (view as IViewObject).Object);
+		Assert.Equal(jObject, (view as IWrapper<JReferenceObject>).Value);
 		Assert.Equal(jObject.ObjectClassName, view.ObjectClassName);
 		Assert.Equal(jObject.ObjectSignature, view.ObjectSignature);
 		Assert.Equal(jObject.InstanceOf<DataTypeProxy>(), view.InstanceOf<DataTypeProxy>());
-		Assert.Equal(jObject.IsAssignableTo<DataTypeProxy>(), view.IsAssignableTo<DataTypeProxy>());
 		Assert.Equal(jObject.Synchronize(), view.Synchronize());
 		Assert.True(jObject.Equals(view));
+		Assert.Equal(JObject.IsNullOrDefault(jObject), JObject.IsNullOrDefault(view));
 		view.SetAssignableTo<DataTypeProxy>(default);
 
 		if (!jObject.IsDefault)

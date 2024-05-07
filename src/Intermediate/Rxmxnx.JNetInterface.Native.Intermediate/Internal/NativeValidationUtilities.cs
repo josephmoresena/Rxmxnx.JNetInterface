@@ -74,6 +74,22 @@ internal static class NativeValidationUtilities
 	}
 
 	/// <summary>
+	/// Throws an exception if current data type is annotation.
+	/// </summary>
+	/// <param name="typeName">Data type name.</param>
+	/// <param name="isAnnotation">Indicates whether current data type is an annotation.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if current data type is annotation.
+	/// </exception>
+	public static void ThrowIfAnnotation<TInterface>(ReadOnlySpan<Byte> typeName, Boolean isAnnotation)
+		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+	{
+		if (!isAnnotation) return;
+		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();
+		throw new InvalidOperationException(
+			$"Unable to extend {interfaceMetadata.ClassName}. {typeName.ToCString()} is an annotation.");
+	}
+	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
 	/// <typeparamref name="TInterface"/>.
 	/// </summary>
@@ -100,7 +116,7 @@ internal static class NativeValidationUtilities
 	/// Throws an exception if <paramref name="ordinal"/> is negative.
 	/// </exception>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="ordinal"/> is already defined for current enum type.
+	/// Throws an exception if <paramref name="ordinal"/> is already defined for the current enum type.
 	/// </exception>
 	public static void ThrowIfInvalidOrdinal(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list, Int32 ordinal)
 	{
@@ -120,7 +136,7 @@ internal static class NativeValidationUtilities
 	/// Throws an exception if <paramref name="hash"/> is empty.
 	/// </exception>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="hash"/> is already defined for current enum type.
+	/// Throws an exception if <paramref name="hash"/> is already defined for the current enum type.
 	/// </exception>
 	public static void ThrowIfInvalidHash(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list, String hash)
 	{
@@ -147,6 +163,30 @@ internal static class NativeValidationUtilities
 			$"Count: {count}. Maximum ordinal: {maxOrdinal}. " +
 			(missing.Count > 0 ? $"Missing values: {String.Join(", ", missing)}." : "");
 		throw new InvalidOperationException(message);
+	}
+	/// <summary>
+	/// Throws an exception in illegal use of <see cref="JLocalObject.TypeMetadataBuilder"/>.
+	/// </summary>
+	/// <param name="className">Class name.</param>
+	/// <param name="familyType">Family type name.</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception in illegal use of <see cref="JLocalObject.TypeMetadataBuilder"/>.
+	/// </exception>
+	public static void ThrowIfInvalidTypeBuilder(ReadOnlySpan<Byte> className, Type? familyType)
+	{
+		if (familyType == typeof(JLocalObject)) return;
+
+		String? expectedBuilder = default;
+		if (familyType == typeof(JLocalObject.InterfaceView))
+			expectedBuilder = $"{nameof(JLocalObject.InterfaceView)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
+		else if (familyType == typeof(JEnumTypeMetadata))
+			expectedBuilder = $"{nameof(JEnumObject)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
+		else if (familyType == typeof(JThrowableObject))
+			expectedBuilder = $"{nameof(JThrowableObject)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
+
+		throw !String.IsNullOrWhiteSpace(expectedBuilder) ?
+			new InvalidOperationException($"To build {className.ToCString()} type metadata use {expectedBuilder}.") :
+			new($"{className.ToCString()} is invalid reference type.");
 	}
 
 	/// <summary>

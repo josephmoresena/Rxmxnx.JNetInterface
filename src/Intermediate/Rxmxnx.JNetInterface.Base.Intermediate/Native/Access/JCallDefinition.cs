@@ -5,7 +5,7 @@
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public abstract partial record JCallDefinition : JAccessibleObjectDefinition
+public abstract partial class JCallDefinition : JAccessibleObjectDefinition
 {
 	/// <summary>
 	/// Total size in bytes of call parameters.
@@ -17,10 +17,6 @@ public abstract partial record JCallDefinition : JAccessibleObjectDefinition
 	public Int32 Count => this._sizes.Length;
 
 	/// <summary>
-	/// Indicates whether the current call must use <see cref="JValue"/> arguments.
-	/// </summary>
-	internal Boolean UseJValue => this._useJValue;
-	/// <summary>
 	/// List of size in bytes of each call argument.
 	/// </summary>
 	internal IReadOnlyList<Int32> Sizes => this._sizes;
@@ -29,23 +25,13 @@ public abstract partial record JCallDefinition : JAccessibleObjectDefinition
 	/// </summary>
 	internal Int32 ReferenceCount => this._referenceCount;
 
-	/// <summary>
-	/// Call return type.
-	/// </summary>
-	internal abstract Type? Return { get; }
-
 	/// <inheritdoc/>
 	private protected override String ToStringFormat => "{{ Method: {0} Descriptor: {1} }}";
 
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
-
 	/// <summary>
-	/// Creates the argument array for current call.
+	/// Creates the argument array for the current call.
 	/// </summary>
-	/// <returns>A new array to be used as argument for current call.</returns>
+	/// <returns>A new array to be used as argument for the current call.</returns>
 	protected IObject?[] CreateArgumentsArray()
 		=> this._sizes.Length != 0 ? new IObject?[this._sizes.Length] : Array.Empty<IObject?>();
 }

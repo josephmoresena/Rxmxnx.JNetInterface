@@ -11,6 +11,10 @@ namespace Rxmxnx.JNetInterface.Native;
 public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 {
 	/// <summary>
+	/// Last validation datetime.
+	/// </summary>
+	public DateTime LastValidation { get; protected set; } = DateTime.Now;
+	/// <summary>
 	/// <see cref="IVirtualMachine"/> instance.
 	/// </summary>
 	public IVirtualMachine VirtualMachine { get; }
@@ -27,7 +31,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	public void Dispose()
 	{
 		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.RemoveGlobalReference);
-		this.Unload(thread);
+		this.Dispose(true, thread);
 		GC.SuppressFinalize(this);
 	}
 
@@ -37,17 +41,14 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
-	public TReference AsLocal<TReference>(IEnvironment env) where TReference : JLocalObject, IReferenceType<TReference>
+	public TReference AsLocal<TReference>(IEnvironment env)
+		where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		if (JLocalObject.IsClassType<TReference>())
-			return (TReference)(Object)env.ClassFeature.AsClassObject(this);
 		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
-		if (!this.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
-			return (TReference)metadata.ParseInstance(env, this);
-
-		JClassObject jClass = env.ClassFeature.AsClassObject(this);
-		if (JLocalObject.IsObjectType<TReference>()) return (TReference)(Object)jClass;
-		return (TReference)metadata.ParseInstance(jClass);
+		JReferenceTypeMetadata typeMetadata = this.ObjectMetadata.TypeMetadata ??
+			metadata as JClassTypeMetadata ?? IClassType.GetMetadata<JLocalObject>();
+		JLocalObject jLocal = typeMetadata.ParseInstance(env, this);
+		return (TReference)metadata.ParseInstance(jLocal, true);
 	}
 
 	/// <summary>
@@ -64,16 +65,20 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </summary>
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if current instance is still valid; otherwise, <see langword="false"/>.
+	/// <see langword="true"/> if the current instance is still valid; otherwise, <see langword="false"/>.
 	/// </returns>
-	public virtual Boolean IsValid(IEnvironment env) => !this._isDisposed && !this.IsDefault;
+	public virtual Boolean IsValid(IEnvironment env)
+	{
+		this.LastValidation = DateTime.Now;
+		return this.IsValidInstance;
+	}
 
 	/// <summary>
-	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.
+	/// Indicates whether the current instance is an instance of <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if current instance is an instance of
+	/// <see langword="true"/> if the current instance is an instance of
 	/// <paramref name="jClass"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean InstanceOf(JClassObject jClass)
@@ -82,62 +87,14 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 		return env.ClassFeature.IsInstanceOf(this, jClass);
 	}
 
-	/// <inheritdoc/>
-	private protected override Boolean IsInstanceOf<TDataType>()
-	{
-		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
-		Boolean result = thread.ClassFeature.IsInstanceOf<TDataType>(this);
-		thread.ClassFeature.SetAssignableTo<TDataType>(this, result);
-		return result;
-	}
-
-	/// <inheritdoc cref="IDisposable.Dispose()"/>
-	/// <param name="disposing">
-	/// Indicates whether this method was called from the <see cref="IDisposable.Dispose"/> method.
-	/// </param>
-	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	private protected virtual void Dispose(Boolean disposing, IEnvironment env)
-	{
-		if (this._isDisposed) return;
-
-		if (disposing && !this.IsDisposable)
-		{
-			ImmutableArray<Int64> keys = this._objects.Keys.ToImmutableArray();
-			foreach (Int64 key in keys)
-			{
-				if (this._objects.TryRemove(key, out WeakReference<ObjectLifetime>? wObj) &&
-				    wObj.TryGetTarget(out ObjectLifetime? objectLifetime))
-					objectLifetime.UnloadGlobal(this);
-			}
-		}
-
-		if (!env.ReferenceFeature.Unload(this)) return;
-		this.ClearValue();
-		this._isDisposed = true;
-	}
-
 	/// <summary>
 	/// Sets the current instance value.
 	/// </summary>
-	/// <param name="globalRef">A global object reference the value of current instance.</param>
+	/// <param name="globalRef">A global object reference the value of the current instance.</param>
 	protected void SetValue(IntPtr globalRef)
 	{
-		if (globalRef == default) return;
 		this._value.Value = globalRef;
-		this._isDisposed = false;
-	}
-	/// <summary>
-	/// Removes the association of <paramref name="jLocal"/> from this instance.
-	/// </summary>
-	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
-	/// <returns>
-	/// <see langword="true"/> if <paramref name="jLocal"/> was associated to this instance;
-	/// otherwise, <see langword="false"/>.
-	/// </returns>
-	protected Boolean Remove(JLocalObject jLocal)
-	{
-		ObjectLifetime objectLifetime = jLocal.Lifetime;
-		return this._objects.TryRemove(objectLifetime.Id, out _);
+		this._isDisposed = globalRef == default;
 	}
 
 	/// <summary>
@@ -149,10 +106,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	{
 		if (!this._objects.TryAdd(objectLifetime.Id, new(objectLifetime)))
 			this._objects[objectLifetime.Id].SetTarget(objectLifetime);
-		JGlobalBase? result = default;
-		if (!this.IsValid(objectLifetime.Environment))
-			return result;
-		result = this;
+		JGlobalBase? result = this.IsValid(objectLifetime.Environment) ? this : default;
 		return result;
 	}
 
@@ -162,7 +116,7 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if current instance is still valid; otherwise, <see langword="false"/>.
+	/// <see langword="true"/> if the current instance is still valid; otherwise, <see langword="false"/>.
 	/// </returns>
 	public static Boolean IsValid([NotNullWhen(true)] JGlobalBase? jGlobal, IEnvironment env)
 		=> jGlobal is not null && jGlobal.IsValid(env);

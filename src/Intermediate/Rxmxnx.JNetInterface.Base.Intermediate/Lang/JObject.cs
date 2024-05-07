@@ -71,5 +71,5 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// default value; otherwise, <see langword="false"/>.
 	/// </returns>
 	public static Boolean IsNullOrDefault([NotNullWhen(false)] JReferenceObject? jObject)
-		=> jObject is null || jObject.IsDefault;
+		=> jObject is null || jObject.IsDefaultInstance();
 }

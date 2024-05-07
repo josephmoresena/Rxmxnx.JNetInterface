@@ -1,11 +1,7 @@
-namespace Rxmxnx.JNetInterface.Native.Dummies;
+namespace Rxmxnx.JNetInterface.Native.Proxies;
 
 public abstract partial class EnvironmentProxy
 {
-	#region IClassFeature
-	void IClassFeature.SetAssignableTo<TDataType>(JReferenceObject jObject, Boolean isAssignable) { }
-	#endregion
-
 	#region IReferenceFeature
 	void IReferenceFeature.MonitorEnter(JObjectLocalRef localRef) { }
 	void IReferenceFeature.MonitorExit(JObjectLocalRef localRef) { }

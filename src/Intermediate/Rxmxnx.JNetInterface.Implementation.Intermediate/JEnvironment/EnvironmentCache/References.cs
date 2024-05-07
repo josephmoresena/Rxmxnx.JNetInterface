@@ -12,11 +12,10 @@ partial class JEnvironment
 		public void EnsureLocalCapacity(Int32 capacity)
 		{
 			if (capacity <= 0) return;
-			ValidationUtilities.ThrowIfDifferentThread(this.Thread);
+			ValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
 			EnsureLocalCapacityDelegate ensureLocalCapacity = this.GetDelegate<EnsureLocalCapacityDelegate>();
-			JResult result = ensureLocalCapacity(this.Reference, capacity);
-			if (result != JResult.Ok)
-				throw new JniException(result);
+			JniException? jniException = ensureLocalCapacity(this.Reference, capacity);
+			if (jniException is not null) throw jniException;
 			this._objects.Capacity = capacity;
 		}
 		/// <inheritdoc cref="JEnvironment.SetObjectCache(LocalCache?)"/>

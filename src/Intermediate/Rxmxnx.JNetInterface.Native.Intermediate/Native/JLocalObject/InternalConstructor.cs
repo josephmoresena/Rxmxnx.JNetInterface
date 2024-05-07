@@ -10,7 +10,7 @@ public partial class JLocalObject
 	internal JLocalObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass.IsProxy)
 		=> this.Lifetime = new(jClass.Environment, this, localRef)
 		{
-			Class = jClass, IsRealClass = jClass.IsFinal.GetValueOrDefault(),
+			Class = jClass, IsRealClass = JLocalObject.IsRealClass(jClass, this),
 		};
 	/// <summary>
 	/// Constructor.
@@ -32,8 +32,6 @@ public partial class JLocalObject
 		jLocal.Lifetime.Load(this);
 		this.Lifetime = jLocal.Lifetime;
 		this.Lifetime.SetClass(jClass);
-		if (jLocal is JInterfaceObject jInterface)
-			JLocalObject.ProcessMetadata(this, jInterface.ObjectMetadata);
 	}
 
 	/// <summary>

@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed partial class JCharacterObject
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JCharacterObject> typeMetadata =
-		new(JTypeMetadataBuilder<JCharacterObject>.Build(IPrimitiveType.GetMetadata<JChar>()));
+		new(TypeMetadataBuilder<JCharacterObject>.Build(IPrimitiveType.GetMetadata<JChar>()));
 
 	static JPrimitiveWrapperTypeMetadata<JCharacterObject> IPrimitiveWrapperType<JCharacterObject>.Metadata
 		=> JCharacterObject.typeMetadata;
@@ -18,15 +18,14 @@ public sealed partial class JCharacterObject
 	/// <inheritdoc/>
 	private JCharacterObject(IReferenceType.ObjectInitializer initializer) : base(initializer)
 	{
-		JLocalObject jLocal = initializer.Instance;
-		if (jLocal is JCharacterObject wrapper)
-			this._value = wrapper._value;
+		JCharacterObject? jBooleanObject = initializer.Instance as JCharacterObject;
+		this._value = jBooleanObject?._value;
 	}
 
-	static JCharacterObject IReferenceType<JCharacterObject>.Create(IReferenceType.ClassInitializer initializer)
+	static JCharacterObject IClassType<JCharacterObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JCharacterObject IReferenceType<JCharacterObject>.Create(IReferenceType.ObjectInitializer initializer)
+	static JCharacterObject IClassType<JCharacterObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer.WithClass<JCharacterObject>());
-	static JCharacterObject IReferenceType<JCharacterObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JCharacterObject IClassType<JCharacterObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

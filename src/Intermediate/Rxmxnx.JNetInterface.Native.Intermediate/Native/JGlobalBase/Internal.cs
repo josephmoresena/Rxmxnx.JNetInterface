@@ -11,30 +11,42 @@ public partial class JGlobalBase
 	/// </summary>
 	internal AssignableTypeCache AssignationCache { get; } = new();
 	/// <summary>
-	/// Indicates whether current instance has objects.
+	/// Indicates whether the current instance has objects.
 	/// </summary>
 	internal Boolean HasObjects => !this._objects.IsEmpty;
 	/// <summary>
-	/// Indicates whether current instance is disposable.
+	/// Indicates whether the current instance is disposable.
 	/// </summary>
 	private protected virtual Boolean IsDisposable => false;
 
+	/// <summary>
+	/// Indicates whether the current instance is minimally valid.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if current instance is still valid; otherwise, <see langword="false"/>.
+	/// </returns>
+	internal Boolean IsMinimalValid(IEnvironment env)
+	{
+		if (!this.IsValidInstance) return false;
+		return env.IsValidationAvoidable(this) || this.IsValid(env);
+	}
 	/// <summary>
 	/// Refresh current metadata instance.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	internal void RefreshMetadata(ILocalObject jLocal) { this.ObjectMetadata = ILocalObject.CreateMetadata(jLocal); }
 	/// <inheritdoc/>
-	private protected override ReadOnlySpan<Byte> AsSpan() => this._value.Reference.AsBytes();
-	/// <inheritdoc/>
-	internal override Boolean IsAssignableTo<TDataType>()
+	private protected override Boolean IsInstanceOf<TDataType>()
 	{
 		Boolean? result = this.AssignationCache.IsAssignableTo<TDataType>();
 		if (result.HasValue) return result.Value;
 		return this.JniSecure() ?
-			JGlobalBase.IsAssignableTo<TDataType>(this) :
-			Task.Factory.StartNew(JGlobalBase.IsAssignableTo<TDataType>, this).Result;
+			JGlobalBase.IsInstanceOf<TDataType>(this) :
+			Task.Factory.StartNew(JGlobalBase.IsInstanceOf<TDataType>, this, TaskCreationOptions.LongRunning).Result;
 	}
+	/// <inheritdoc/>
+	private protected override ReadOnlySpan<Byte> AsSpan() => this._value.Reference.AsBytes();
 	/// <inheritdoc/>
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
 		=> this.AssignationCache.SetAssignableTo<TDataType>(isAssignable);
@@ -46,14 +58,11 @@ public partial class JGlobalBase
 		IThread env = this.VirtualMachine.CreateThread(ThreadPurpose.SynchronizeGlobalReference);
 		return env.ReferenceFeature.GetSynchronizer(this);
 	}
-
-	/// <inheritdoc cref="JReferenceObject.IsAssignableTo{TDataType}"/>
-	/// <param name="obj">A <see cref="JGlobalBase"/> instance.</param>
-	private static Boolean IsAssignableTo<TDataType>(Object? obj)
-		where TDataType : JReferenceObject, IDataType<TDataType>
+	/// <inheritdoc/>
+	private protected override Boolean Same(JReferenceObject jObject)
 	{
-		if (obj is not JGlobalBase jGlobal) return false;
-		using IThread thread = jGlobal.VirtualMachine.CreateThread(ThreadPurpose.CheckAssignability);
-		return thread.ClassFeature.IsAssignableTo<TDataType>(jGlobal);
+		if (base.Same(jObject)) return true;
+		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.CheckGlobalReference);
+		return thread.IsSameObject(this, jObject);
 	}
 }

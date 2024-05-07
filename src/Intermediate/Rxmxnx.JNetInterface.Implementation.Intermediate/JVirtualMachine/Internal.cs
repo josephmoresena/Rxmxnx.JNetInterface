@@ -49,7 +49,7 @@ public partial class JVirtualMachine
 		}
 	}
 	/// <summary>
-	/// Loads global instance in given <paramref name="jClass"/>.
+	/// Loads global instance in the given <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns>A <see cref="JGlobal"/> instance.</returns>
@@ -57,7 +57,10 @@ public partial class JVirtualMachine
 	{
 		ObjectLifetime lifetime = jClass.Lifetime;
 		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
-			jGlobal = new(this, new(jClass), false, default);
+		{
+			ClassObjectMetadata metadata = new(jClass);
+			jGlobal = new(this, metadata, default);
+		}
 		lifetime.SetGlobal(jGlobal);
 		return jGlobal;
 	}
@@ -162,10 +165,11 @@ public partial class JVirtualMachine
 	/// Detaches current thread from <see cref="IVirtualMachine"/> referenced by <paramref name="vmRef"/>.
 	/// </summary>
 	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
+	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	/// <param name="thread">A <see cref="Thread"/> instance.</param>
-	internal static void DetachCurrentThread(JVirtualMachineRef vmRef, Thread thread)
+	internal static void DetachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef envRef, Thread thread)
 	{
-		ValidationUtilities.ThrowIfDifferentThread(thread);
+		ValidationUtilities.ThrowIfDifferentThread(envRef, thread);
 		JVirtualMachine vm = ReferenceCache.Instance.Get(vmRef, out _);
 		DetachCurrentThreadDelegate detachCurrentThread = vm._cache.GetDelegate<DetachCurrentThreadDelegate>();
 		ValidationUtilities.ThrowIfInvalidResult(detachCurrentThread(vmRef));

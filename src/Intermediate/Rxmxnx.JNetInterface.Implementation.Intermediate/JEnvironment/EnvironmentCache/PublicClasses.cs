@@ -16,13 +16,20 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		public JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference)
 		{
-			using JStringObject jString = JClassObject.GetClassName(this._env, classRef, out Boolean isPrimitive);
-			using JNativeMemory<Byte> utf8Text = jString.GetNativeUtf8Chars();
-			JClassLocalRef usableClassRef = keepReference ? classRef : default;
-			JClassObject jClass = isPrimitive ?
-				this.GetPrimitiveClass(utf8Text.Values) :
-				this.GetClass(utf8Text.Values, usableClassRef);
-			return jClass;
+			using JStringObject jString = this.GetClassName(classRef, out Boolean isPrimitive);
+			try
+			{
+				using JNativeMemory<Byte> utf8Text = jString.GetNativeUtf8Chars();
+				JClassLocalRef usableClassRef = keepReference ? classRef : default;
+				JClassObject jClass = isPrimitive ?
+					this.GetPrimitiveClass(utf8Text.Values) :
+					this.GetClass(utf8Text.Values, usableClassRef);
+				return jClass;
+			}
+			finally
+			{
+				this.FreeUnregistered(jString);
+			}
 		}
 		/// <inheritdoc cref="JEnvironment.LoadClass(JClassObject?)"/>
 		public void LoadClass(JClassObject? jClass)

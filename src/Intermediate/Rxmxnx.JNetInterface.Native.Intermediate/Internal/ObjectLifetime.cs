@@ -16,7 +16,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// </summary>
 	public IEnvironment Environment => this._env;
 	/// <summary>
-	/// Indicates whether the this instance is disposed.
+	/// Indicates whether this instance is disposed.
 	/// </summary>
 	public Boolean IsDisposed => this._isDisposed.Value;
 
@@ -47,7 +47,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <param name="localRef">Local object reference.</param>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="isDisposable">Indicates whether current instance is disposable.</param>
+	/// <param name="isDisposable">Indicates whether the current instance is disposable.</param>
 	public ObjectLifetime(IEnvironment env, JObjectLocalRef localRef, JReferenceObject jObject, Boolean isDisposable)
 	{
 		this._env = env;
@@ -100,10 +100,9 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// Sets the current instance value.
 	/// </summary>
 	/// <param name="jLocal">The java object to load.</param>
-	/// <param name="localRef">A local object reference the value of current instance.</param>
+	/// <param name="localRef">A local object reference the value of the current instance.</param>
 	public void SetValue(JLocalObject jLocal, JObjectLocalRef localRef)
 	{
-		if (localRef == default) return;
 		this.LoadNewValue(jLocal, localRef);
 		this.Secondary?.LoadNewValue(jLocal, localRef);
 	}
@@ -112,22 +111,21 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// </summary>
 	/// <typeparam name="TValue">Type of <see langword="IObjectReference"/> instance.</typeparam>
 	/// <param name="jLocal">The java object to load.</param>
-	/// <param name="localRef">A local object reference the value of current instance.</param>
+	/// <param name="localRef">A local object reference the value of the current instance.</param>
 	public void SetValue<TValue>(JLocalObject jLocal, TValue localRef) where TValue : unmanaged, IObjectReferenceType
 	{
-		if (localRef.Equals(default)) return;
 		this.LoadNewValue(jLocal, localRef.Value);
 		this.Secondary?.LoadNewValue(jLocal, localRef.Value);
 	}
 	/// <summary>
-	/// Retrieves the loaded global object for current instance.
+	/// Retrieves the loaded global object for the current instance.
 	/// </summary>
-	/// <returns>The loaded <see cref="JGlobalBase"/> object for current instance.</returns>
+	/// <returns>The loaded <see cref="JGlobalBase"/> object for the current instance.</returns>
 	public JGlobalBase? GetGlobalObject()
 	{
-		if (this._global is not null && this._global.IsValid(this._env))
+		if (this._global is not null && this._global.IsMinimalValid(this._env))
 			return this._global;
-		if (this._weak is not null && this._weak.IsValid(this._env))
+		if (this._weak is not null && this._weak.IsMinimalValid(this._env))
 			return this._weak;
 		return default;
 	}
@@ -183,10 +181,11 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <summary>
 	/// Sets instance class.
 	/// </summary>
-	/// <param name="instanceMetadata">The object metadata for current instance.</param>
+	/// <param name="instanceMetadata">The object metadata for the current instance.</param>
 	public void SetClass(ObjectMetadata instanceMetadata)
 	{
-		this._class = instanceMetadata.GetClass(this._env);
+		if (!instanceMetadata.ObjectClassName.AsSpan().SequenceEqual(this._class?.Name))
+			this._class = instanceMetadata.GetClass(this._env);
 		this._isRealClass = true;
 	}
 	/// <summary>
@@ -199,32 +198,26 @@ internal sealed partial class ObjectLifetime : IDisposable
 		if (this._class?.IsFinal == true) this._isRealClass = true;
 	}
 	/// <summary>
-	/// Sets the class object for a local class instance.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	/// <param name="classHash">A <see cref="JClassObject"/> hash.</param>
-	public void SetClassClass(JClassObject jClass, String? classHash)
-	{
-		this._class = classHash == IDataType.GetHash<JClassObject>() ? jClass : this._env.ClassFeature.ClassObject;
-		this._isRealClass = true;
-	}
-	/// <summary>
 	/// Indicates whether a local instance is assignable to <typeparamref name="TDataType"/> type.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType"/> type.</typeparam>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if local instance is assignable to <typeparamref name="TDataType"/> type;
+	/// <see langword="true"/> if the local instance is assignable to <typeparamref name="TDataType"/> type;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	public Boolean IsAssignableTo<TDataType>(JLocalObject jLocal)
-		where TDataType : JReferenceObject, IDataType<TDataType>
+	public Boolean InstanceOf<TDataType>(JLocalObject jLocal) where TDataType : JReferenceObject, IDataType<TDataType>
 	{
+		Boolean? result = this.InstanceOf<TDataType>();
+
+		if (result.HasValue)
+			return result.Value;
 		if (JGlobalBase.IsValid(this._global, this._env))
-			return this._global.IsAssignableTo<TDataType>();
+			return this._global.InstanceOf<TDataType>();
 		if (JGlobalBase.IsValid(this._weak, this._env))
-			return this._weak.IsAssignableTo<TDataType>();
-		return this.IsAssignableTo<TDataType>() ?? this._env.ClassFeature.IsAssignableTo<TDataType>(jLocal);
+			return this._weak.InstanceOf<TDataType>();
+
+		return this._env.ClassFeature.IsInstanceOf<TDataType>(jLocal);
 	}
 
 	/// <summary>
@@ -287,7 +280,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	{
 		if (Object.ReferenceEquals(this, other)) return;
 		this._secondary.SetTarget(other);
-		other._secondary.SetTarget(other);
+		other._secondary.SetTarget(this);
 		this._assignableTypes.Merge(other._assignableTypes);
 		this.SynchronizeGlobal(other);
 		this.SynchronizeObjects(other._objects);
@@ -307,7 +300,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// </summary>
 	/// <typeparam name="TGlobal">A <see cref="JGlobalBase"/> type.</typeparam>
 	/// <returns>
-	/// <see langword="true"/> if current instance has a valid <typeparamref name="TGlobal"/> instance.;
+	/// <see langword="true"/> if the current instance has a valid <typeparamref name="TGlobal"/> instance.;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean HasValidGlobal<TGlobal>() where TGlobal : JGlobalBase

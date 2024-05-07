@@ -3,19 +3,18 @@
 /// <summary>
 /// This class stores a function definition.
 /// </summary>
-public abstract partial record JFunctionDefinition : JCallDefinition
+public abstract partial class JFunctionDefinition : JCallDefinition
 {
-	/// <inheritdoc/>
-	internal override Type Return => typeof(JReferenceObject);
-
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>
 	/// <param name="functionName">Method defined name.</param>
-	/// <param name="returnType">Method return type defined signature.</param>
+	/// <param name="returnTypeSignature">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
-		params JArgumentMetadata[] metadata) : base(functionName, returnType, metadata) { }
+	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnTypeSignature,
+		params JArgumentMetadata[] metadata) : base(functionName, returnTypeSignature, metadata) { }
+	/// <inheritdoc/>
+	private protected JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
 
 	/// <summary>
 	/// Retrieves a <see cref="JMethodObject"/> reflected from current definition on
@@ -39,22 +38,14 @@ public abstract partial record JFunctionDefinition : JCallDefinition
 		IEnvironment env = declaringClass.Environment;
 		return env.AccessFeature.GetReflectedFunction(this, declaringClass, true);
 	}
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
 /// This class stores a function definition.
 /// </summary>
 /// <typeparam name="TResult"><see cref="IDataType"/> type of function result.</typeparam>
-public partial record JFunctionDefinition<TResult> : JFunctionDefinition where TResult : IDataType<TResult>
+public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TResult : IDataType<TResult>
 {
-	/// <inheritdoc/>
-	internal override Type Return => JAccessibleObjectDefinition.ReturnType<TResult>();
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -67,18 +58,13 @@ public partial record JFunctionDefinition<TResult> : JFunctionDefinition where T
 	/// Internal Constructor.
 	/// </summary>
 	/// <param name="functionName">Function name.</param>
-	/// <param name="returnType">Method return type defined signature.</param>
+	/// <param name="returnTypeSignature">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnType,
-		params JArgumentMetadata[] metadata) : base(functionName, returnType, metadata) { }
+	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnTypeSignature,
+		params JArgumentMetadata[] metadata) : base(functionName, returnTypeSignature, metadata) { }
 	/// <summary>
 	/// Internal Constructor.
 	/// </summary>
 	/// <param name="definition">Function definition name.</param>
 	internal JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
-	public override Int32 GetHashCode() => base.GetHashCode();
 }

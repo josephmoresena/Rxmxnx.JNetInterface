@@ -15,7 +15,7 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 {{
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => HashCode.Combine(this.{3});
+	public override Int32 GetHashCode() => this.{3}.GetHashCode();
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj) 

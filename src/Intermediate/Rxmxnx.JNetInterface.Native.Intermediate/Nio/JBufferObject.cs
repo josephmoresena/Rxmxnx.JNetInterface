@@ -6,16 +6,16 @@ namespace Rxmxnx.JNetInterface.Nio;
 public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>, ILocalObject
 {
 	/// <summary>
-	/// Indicates whether current instance is a direct buffer.
+	/// Indicates whether the current instance is a direct buffer.
 	/// </summary>
-	public Boolean IsDirect => this._isDirect ??= this.Environment.Functions.IsDirectBuffer(this);
+	public Boolean IsDirect => this._isDirect ??= this.Environment.FunctionSet.IsDirectBuffer(this);
 	/// <summary>
 	/// Buffer's capacity.
 	/// </summary>
 	public Int64 Capacity
 		=> this._capacity ??= this.IsDirect ?
 			this.Environment.NioFeature.GetDirectCapacity(this) :
-			this.Environment.Functions.BufferCapacity(this);
+			this.Environment.FunctionSet.BufferCapacity(this);
 
 	/// <summary>
 	/// Direct buffer address.
@@ -65,22 +65,38 @@ public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>, IL
 	/// <summary>
 	/// Creates a <see cref="IDirectBufferObject{TValue}"/> from <paramref name="jBuffer"/> if is direct.
 	/// </summary>
+	/// <typeparam name="TValue">Primitive type of buffer.</typeparam>
 	/// <param name="jBuffer">A <see cref="JBufferObject"/> instance.</param>
 	/// <returns>
 	/// A <see cref="IDirectBufferObject{TValue}"/> instance if <paramref name="jBuffer"/> is direct; otherwise,
 	/// <see langword="null"/>.
 	/// </returns>
-	private protected static IDirectBufferObject<TValue>? AsDirectObject<TValue>(JBufferObject<TValue> jBuffer)
+	private protected static IDirectBufferObject<TValue>? AsDirect<TValue>(JBufferObject<TValue> jBuffer)
 		where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>
 	{
 		if (jBuffer is IDirectBufferObject<TValue> direct) return direct;
 		return jBuffer.IsDirect ? new DirectBufferWrapper<TValue>(jBuffer) : default(IDirectBufferObject<TValue>?);
+	}
+	/// <summary>
+	/// Initialize <paramref name="jBuffer"/> with direct information.
+	/// </summary>
+	/// <typeparam name="TValue">Primitive type of buffer.</typeparam>
+	/// <param name="jBuffer">A <see cref="JBufferObject"/> instance.</param>
+	/// <param name="address">Direct buffer address.</param>
+	/// <param name="capacity">Direct buffer capacity.</param>
+	private protected static void InitializeDirect<TValue>(JBufferObject<TValue> jBuffer, IntPtr address,
+		Int32 capacity) where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>
+	{
+		jBuffer._isDirect = true;
+		jBuffer._address = address;
+		jBuffer._capacity = capacity;
 	}
 }
 
 /// <summary>
 /// This class represents a local <c>java.nio.Buffer</c> instance.
 /// </summary>
+/// <typeparam name="TValue">Primitive type of buffer.</typeparam>
 public abstract class JBufferObject<TValue> : JBufferObject, IInterfaceObject<JComparableObject>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>
 {
@@ -101,5 +117,5 @@ public abstract class JBufferObject<TValue> : JBufferObject, IInterfaceObject<JC
 	/// A <see cref="IDirectBufferObject{TValue}"/> instance if is direct; otherwise,
 	/// <see langword="null"/>.
 	/// </returns>
-	public IDirectBufferObject<TValue>? AsDirectObject() => JBufferObject.AsDirectObject(this);
+	public IDirectBufferObject<TValue>? AsDirect() => JBufferObject.AsDirect(this);
 }

@@ -10,14 +10,9 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata<JChar> typeMetadata = IPrimitiveType<JChar, Char>
-	                                                                     .JTypeMetadataBuilder
-	                                                                     .Create(UnicodeClassNames.CharPrimitive(),
-		                                                                     UnicodePrimitiveSignatures
-			                                                                     .CharSignatureChar)
-	                                                                     .WithWrapperClassName(
-		                                                                     UnicodeClassNames.CharacterObject())
-	                                                                     .Build();
+	private static readonly JPrimitiveTypeMetadata<JChar> typeMetadata = IPrimitiveType<JChar, Char>.TypeMetadataBuilder
+		.Create(UnicodeClassNames.CharPrimitive(), UnicodePrimitiveSignatures.CharSignatureChar)
+		.WithWrapperClassName(UnicodeClassNames.CharacterObject()).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JChar;
@@ -31,7 +26,7 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	private readonly Char _value;
 
 	/// <summary>
-	/// <see cref="Char"/> representation of current instance.
+	/// <see cref="Char"/> representation of the current instance.
 	/// </summary>
 	public Char Value => this._value;
 	/// <inheritdoc/>
@@ -51,6 +46,10 @@ public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableCompara
 	/// <param name="value">Internal value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private JChar(Char value) => this._value = value;
+
+#if PACKAGE
+	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+#endif
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

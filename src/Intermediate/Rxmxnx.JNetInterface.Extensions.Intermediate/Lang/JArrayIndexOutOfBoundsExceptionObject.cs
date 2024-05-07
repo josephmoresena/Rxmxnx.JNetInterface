@@ -12,7 +12,7 @@ public class JArrayIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsExceptionO
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JThrowableTypeMetadata<JArrayIndexOutOfBoundsExceptionObject> typeMetadata =
-		JTypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
+		TypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
 			.Create<JArrayIndexOutOfBoundsExceptionObject>(UnicodeClassNames.ArrayIndexOutOfBoundsExceptionObject())
 			.Build();
 
@@ -29,13 +29,13 @@ public class JArrayIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsExceptionO
 	protected JArrayIndexOutOfBoundsExceptionObject(IReferenceType.ObjectInitializer initializer) :
 		base(initializer) { }
 
-	static JArrayIndexOutOfBoundsExceptionObject IReferenceType<JArrayIndexOutOfBoundsExceptionObject>.Create(
+	static JArrayIndexOutOfBoundsExceptionObject IClassType<JArrayIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JArrayIndexOutOfBoundsExceptionObject IReferenceType<JArrayIndexOutOfBoundsExceptionObject>.Create(
+	static JArrayIndexOutOfBoundsExceptionObject IClassType<JArrayIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JArrayIndexOutOfBoundsExceptionObject IReferenceType<JArrayIndexOutOfBoundsExceptionObject>.Create(
+	static JArrayIndexOutOfBoundsExceptionObject IClassType<JArrayIndexOutOfBoundsExceptionObject>.Create(
 		IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }

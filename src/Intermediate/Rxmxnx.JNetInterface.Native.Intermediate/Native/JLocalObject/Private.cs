@@ -7,6 +7,11 @@ public partial class JLocalObject : ILocalObject
 	ObjectLifetime ILocalObject.Lifetime => this.Lifetime;
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
+	TReference ILocalObject.CastTo<TReference>() => this.CastTo<TReference>();
+	JObjectLocalRef ILocalObject.InternalReference => this.InternalReference;
+
+	/// <inheritdoc/>
+	~JLocalObject() { this.Dispose(false); }
 
 	/// <summary>
 	/// Process the object metadata.
@@ -15,66 +20,41 @@ public partial class JLocalObject : ILocalObject
 	/// <param name="instanceMetadata">The object metadata for <paramref name="jLocal"/>.</param>
 	private static void ProcessMetadata(JLocalObject jLocal, ObjectMetadata instanceMetadata)
 		=> jLocal.ProcessMetadata(instanceMetadata);
-
-	/// <summary>
-	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
-	/// </summary>
-	/// <typeparam name="TReferenceObject"><see langword="JReferenceObject"/> type.</typeparam>
-	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
-	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <returns>
-	/// </returns>
-	/// <exception cref="InvalidCastException">
-	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
-	/// </exception>
-	private static TReferenceObject Validate<TReferenceObject, TDataType>(TReferenceObject jObject, IEnvironment env)
-		where TReferenceObject : JReferenceObject where TDataType : JLocalObject, IDataType<TDataType>
-	{
-		ValidationUtilities.ThrowIfInvalidCast<TDataType>(env.ClassFeature.IsAssignableTo<TDataType>(jObject));
-		return jObject;
-	}
 	/// <summary>
 	/// Retrieves a <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="dispose">
-	/// Indicates whether current instance should be disposed after casting.
+	/// Optional. Indicates whether <paramref name="jLocal"/> should be disposed after casting.
 	/// </param>
-	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
-	private static TReference CastTo<TReference>(JLocalObject jLocal, Boolean dispose)
-		where TReference : JLocalObject, IReferenceType<TReference>
+	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.</returns>
+	private TReference CastTo<TReference>(JLocalObject jLocal, Boolean dispose)
+		where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		IEnvironment env = jLocal.Lifetime.Environment;
 		if (jLocal is TReference result) return result;
-		if (JLocalObject.IsClassType<TReference>())
-		{
-			result = (TReference)(Object)env.ClassFeature.AsClassObject(jLocal);
-		}
-		else
-		{
-			JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
-			if (!jLocal.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
-			{
-				result = (TReference)metadata.ParseInstance(jLocal);
-			}
-			else
-			{
-				JClassObject jClass = env.ClassFeature.AsClassObject(jLocal);
-				result = JLocalObject.IsObjectType<TReference>() ?
-					(TReference)(Object)jClass :
-					(TReference)metadata.ParseInstance(jClass);
-			}
-		}
-		if (dispose) jLocal.Dispose();
+		JLocalObject.Validate<TReference>(jLocal);
+		result = TReference.Create(jLocal);
+		if (dispose && result is JLocalObject) this.Dispose();
 		return result;
 	}
 
-	static JLocalObject IReferenceType<JLocalObject>.Create(IReferenceType.ClassInitializer initializer)
+	/// <summary>
+	/// Indicates whether <paramref name="jClass"/> is real class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="jLocal">Current <see cref="JLocalObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jClass"/> is final or current instance is
+	/// a <see cref="JArrayObject{TElement}"/> instance; otherwise, <see langword="false"/>.
+	/// </returns>
+	private static Boolean IsRealClass(JClassObject jClass, IObject jLocal) => jClass.IsFinal || jLocal is JArrayObject;
+
+	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
-	static JLocalObject IReferenceType<JLocalObject>.Create(IReferenceType.ObjectInitializer initializer)
+	[ExcludeFromCodeCoverage]
+	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.ObjectInitializer initializer)
 		=> new(initializer);
-	static JLocalObject IReferenceType<JLocalObject>.Create(IReferenceType.GlobalInitializer initializer)
+	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.GlobalInitializer initializer)
 		=> new(initializer);
 }
