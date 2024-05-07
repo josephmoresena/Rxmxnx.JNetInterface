@@ -148,6 +148,10 @@ public sealed class JRuntimeExceptionObjectTests
 		Assert.Equal(jGlobal, exception.Global);
 		Assert.Equal(exceptionMessage, exception.Message);
 
+		Assert.True(typeMetadata.IsInstance(jRuntimeException0));
+		Assert.True(typeMetadata.IsInstance(jRuntimeException1));
+		Assert.True(typeMetadata.IsInstance(jRuntimeException2));
+
 		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
 		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}

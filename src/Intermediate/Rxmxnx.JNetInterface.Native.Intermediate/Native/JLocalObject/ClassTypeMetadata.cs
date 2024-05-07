@@ -51,9 +51,6 @@ public partial class JLocalObject
 			}
 
 			/// <inheritdoc/>
-			internal override Boolean IsInstance(JReferenceObject jObject)
-				=> jObject is TClass || jObject.InstanceOf<TClass>();
-			/// <inheritdoc/>
 			public override String ToString()
 				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 

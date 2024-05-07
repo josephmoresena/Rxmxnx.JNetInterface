@@ -118,6 +118,10 @@ public sealed class JCharacterObjectTests
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JCharacterObject>(Arg.Any<JReferenceObject>());
 
+		Assert.True(typeMetadata.IsInstance(jCharacterObject0));
+		Assert.True(typeMetadata.IsInstance(jCharacterObject1));
+		Assert.True(typeMetadata.IsInstance(jCharacterObject2));
+
 		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
 		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}

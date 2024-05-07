@@ -115,6 +115,10 @@ public class JEnumObjectTests
 		env.ClassFeature.Received(1).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JEnumObject>(Arg.Any<JReferenceObject>());
 
+		Assert.True(typeMetadata.IsInstance(jEnum0));
+		Assert.True(typeMetadata.IsInstance(jEnum1));
+		Assert.True(typeMetadata.IsInstance(jEnum2));
+
 		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
 		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}

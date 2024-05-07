@@ -48,8 +48,7 @@ public abstract partial record JClassTypeMetadata<TClass> : JClassTypeMetadata
 	public override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();
 
 	/// <inheritdoc/>
-	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TClass;
-
+	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TClass || jObject.InstanceOf<TClass>();
 	/// <inheritdoc/>
 	internal override JFunctionDefinition<TClass> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
 		JArgumentMetadata[] metadata)

@@ -44,7 +44,7 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	/// </summary>
 	/// <param name="otherMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if an instance of the current type is instance of
+	/// <see langword="true"/> if an instance of the current type is an instance of
 	/// the type of <paramref name="otherMetadata"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	public virtual Boolean TypeOf(JReferenceTypeMetadata otherMetadata)
@@ -63,7 +63,7 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="jObject"/> is instance of the current type;
+	/// <see langword="true"/> if <paramref name="jObject"/> is an instance of the current type;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	internal abstract Boolean IsInstance(JReferenceObject jObject);
@@ -88,7 +88,7 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	/// <param name="metadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <param name="otherMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if an instance of type <paramref name="metadata"/> is instance of
+	/// <see langword="true"/> if an instance of type <paramref name="metadata"/> is an instance of
 	/// the type of <paramref name="otherMetadata"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	private static Boolean TypeOf(JReferenceTypeMetadata metadata, JReferenceTypeMetadata otherMetadata)
