@@ -6,26 +6,11 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <typeparam name="TValue">Number <see cref="IPrimitiveType"/> type.</typeparam>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
-public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
+public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 {
 	/// <inheritdoc cref="JNumberObject{TPrimitive}.Value"/>
 	private TValue? _value;
-
-	/// <inheritdoc/>
-	private protected JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) :
-		base(jClass, localRef)
-		=> this._value = value;
-	/// <inheritdoc/>
-	private protected JNumberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private protected JNumberObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private protected JNumberObject(IReferenceType.ObjectInitializer initializer) : base(initializer)
-	{
-		JNumberObject? jBooleanObject = initializer.Instance as JNumberObject;
-		this._value = jBooleanObject?.GetValue<TValue>();
-	}
 
 	/// <summary>
 	/// Internal value.
@@ -51,12 +36,6 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 		if (instanceMetadata is PrimitiveWrapperObjectMetadata<TValue> wrapperMetadata)
 			this._value = wrapperMetadata.Value;
 	}
-
-	/// <summary>
-	/// Sets current value.
-	/// </summary>
-	/// <param name="value">A <typeparamref name="TValue"/>.</param>
-	internal void SetValue(TValue value) => this._value ??= value;
 }
 
 #pragma warning disable CS0659
@@ -65,21 +44,11 @@ public abstract class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 /// </summary>
 /// <typeparam name="TValue">Number <see cref="IPrimitiveType"/> type.</typeparam>
 /// <typeparam name="TNumber"><see cref="JNumberObject"/> type.</typeparam>
-public abstract class JNumberObject<TValue, TNumber> : JNumberObject<TValue>,
+public abstract partial class JNumberObject<TValue, TNumber> : JNumberObject<TValue>,
 	IPrimitiveEquatable, IInterfaceObject<JComparableObject>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 	where TNumber : JNumberObject<TValue, TNumber>, IPrimitiveWrapperType<TNumber, TValue>
 {
-	/// <inheritdoc/>
-	private protected JNumberObject(JClassObject jClass, JObjectLocalRef localRef, TValue value) : base(
-		jClass, localRef, value) { }
-	/// <inheritdoc/>
-	private protected JNumberObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private protected JNumberObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-	/// <inheritdoc/>
-	private protected JNumberObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
-
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => this.Value.Equals(other);
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Value.Equals(other);
 
