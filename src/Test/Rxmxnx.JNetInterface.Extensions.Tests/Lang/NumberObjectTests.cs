@@ -91,7 +91,7 @@ public sealed class NumberObjectTests
 		using JClassObject jNumberClass = new(jClass, IClassType.GetMetadata<JNumberObject>());
 		using JClassObject jPrimitiveWrapperClass =
 			NumberObjectTests.GetPrimitiveWrapperClass<TPrimitive, TNumber>(
-				env, jClass, out JClassTypeMetadata typeMetadata);
+				env, jClass, out JPrimitiveWrapperTypeMetadata<TNumber> typeMetadata);
 		using TNumber jNumberObject = creator(jPrimitiveWrapperClass, localRef, value);
 
 		env.ClassFeature.GetClass<JNumberObject>().Returns(jNumberClass);
@@ -130,6 +130,7 @@ public sealed class NumberObjectTests
 		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>, IPrimitiveType<TPrimitive>,
 		IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
 	{
+		JPrimitiveTypeMetadata primitiveTypeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
@@ -139,7 +140,7 @@ public sealed class NumberObjectTests
 		using JClassObject jNumberClass = new(jClass, IClassType.GetMetadata<JNumberObject>());
 		using JClassObject jPrimitiveWrapperClass =
 			NumberObjectTests.GetPrimitiveWrapperClass<TPrimitive, TNumber>(
-				env, jClass, out JClassTypeMetadata typeMetadata);
+				env, jClass, out JPrimitiveWrapperTypeMetadata<TNumber> typeMetadata);
 		using JLocalObject jLocal = new(env, localRef, jPrimitiveWrapperClass);
 		using JGlobal jGlobal = new(vm, new(jPrimitiveWrapperClass, IClassType.GetMetadata<TNumber>()), globalRef);
 		String textValue = typeMetadata.ToString();
@@ -154,6 +155,11 @@ public sealed class NumberObjectTests
 		Assert.Equal(typeof(TNumber), typeMetadata.Type);
 		Assert.Equal(JTypeKind.Class, typeMetadata.Kind);
 		Assert.Equal(IDataType.GetMetadata<JNumberObject>(), typeMetadata.BaseMetadata);
+		Assert.Equal(primitiveTypeMetadata.WrapperClassName, typeMetadata.ClassName);
+		Assert.Equal(primitiveTypeMetadata.WrapperClassSignature, typeMetadata.Signature);
+		Assert.Equal(primitiveTypeMetadata.ClassName, typeMetadata.PrimitiveClassName);
+		Assert.Equal(primitiveTypeMetadata, typeMetadata.PrimitiveMetadata);
+		Assert.Equal(primitiveTypeMetadata.ArgumentMetadata, typeMetadata.PrimitiveArgumentMetadata);
 		Assert.IsType<JFunctionDefinition<TNumber>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<TNumber>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<TNumber>());
@@ -202,7 +208,7 @@ public sealed class NumberObjectTests
 		using JClassObject jNumberClass = new(jClass, IClassType.GetMetadata<JNumberObject>());
 		using JClassObject jPrimitiveWrapperClass =
 			NumberObjectTests.GetPrimitiveWrapperClass<TPrimitive, TNumber>(
-				env, jClass, out JClassTypeMetadata typeMetadata);
+				env, jClass, out JPrimitiveWrapperTypeMetadata<TNumber> typeMetadata);
 		using TNumber jNumberObject = useMetadata.HasValue ?
 			Assert.IsType<TNumber>(typeMetadata.CreateInstance(jPrimitiveWrapperClass, localRef, true)) :
 			creator(jPrimitiveWrapperClass, localRef, value);
@@ -257,19 +263,16 @@ public sealed class NumberObjectTests
 		   .GetPrimitiveValue<JShort>(jNumberObject);
 
 		NumberObjectTests.PrimitiveEqualityTest<JBoolean>(NumberObjectTests.fixture.Create<Boolean>(), value,
-		                                                   jNumberObject);
-		NumberObjectTests.PrimitiveEqualityTest<JChar>(NumberObjectTests.fixture.Create<Char>(), value,
-		                                                jNumberObject);
-		NumberObjectTests.PrimitiveEqualityTest<JDouble>(NumberObjectTests.fixture.Create<Double>(), value,
 		                                                  jNumberObject);
+		NumberObjectTests.PrimitiveEqualityTest<JChar>(NumberObjectTests.fixture.Create<Char>(), value, jNumberObject);
+		NumberObjectTests.PrimitiveEqualityTest<JDouble>(NumberObjectTests.fixture.Create<Double>(), value,
+		                                                 jNumberObject);
 		NumberObjectTests.PrimitiveEqualityTest<JFloat>(NumberObjectTests.fixture.Create<Single>(), value,
-		                                                 jNumberObject);
-		NumberObjectTests.PrimitiveEqualityTest<JInt>(NumberObjectTests.fixture.Create<Int32>(), value,
-		                                               jNumberObject);
-		NumberObjectTests.PrimitiveEqualityTest<JLong>(NumberObjectTests.fixture.Create<Int64>(), value,
 		                                                jNumberObject);
+		NumberObjectTests.PrimitiveEqualityTest<JInt>(NumberObjectTests.fixture.Create<Int32>(), value, jNumberObject);
+		NumberObjectTests.PrimitiveEqualityTest<JLong>(NumberObjectTests.fixture.Create<Int64>(), value, jNumberObject);
 		NumberObjectTests.PrimitiveEqualityTest<JShort>(NumberObjectTests.fixture.Create<Int16>(), value,
-		                                                 jNumberObject);
+		                                                jNumberObject);
 	}
 	private static void ToObjectTest<TPrimitive, TNumber>(
 		Func<JClassObject, JObjectLocalRef, TPrimitive, TNumber> creator0,
@@ -284,7 +287,7 @@ public sealed class NumberObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject jNumberClass = new(jClass, IClassType.GetMetadata<JNumberObject>());
 		using JClassObject jPrimitiveWrapperClass =
-			NumberObjectTests.GetPrimitiveWrapperClass<TPrimitive, TNumber>(env, jClass, out JClassTypeMetadata _);
+			NumberObjectTests.GetPrimitiveWrapperClass<TPrimitive, TNumber>(env, jClass, out _);
 		using TNumber jNumberObject = creator0(jPrimitiveWrapperClass, localRef, value);
 
 		env.ReferenceFeature.CreateWrapper(value).Returns(jNumberObject);
@@ -295,14 +298,13 @@ public sealed class NumberObjectTests
 		env.ReferenceFeature.Received(1).CreateWrapper(value);
 	}
 
-	private static JClassObject
-		GetPrimitiveWrapperClass<TPrimitive, TNumber>(EnvironmentProxy env, JClassObject jClass,
-			out JClassTypeMetadata typeMetadata)
+	private static JClassObject GetPrimitiveWrapperClass<TPrimitive, TNumber>(EnvironmentProxy env, JClassObject jClass,
+		out JPrimitiveWrapperTypeMetadata<TNumber> typeMetadata)
 		where TNumber : JNumberObject<TPrimitive>, IPrimitiveWrapperType<TNumber>
 		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>, IPrimitiveType<TPrimitive>,
 		IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
 	{
-		typeMetadata = IClassType.GetMetadata<TNumber>();
+		typeMetadata = Assert.IsType<JPrimitiveWrapperTypeMetadata<TNumber>>(IClassType.GetMetadata<TNumber>());
 		JClassObject jPrimitiveWrapperClass = new(jClass, typeMetadata);
 		env.ClassFeature.GetClass<TNumber>().Returns(jPrimitiveWrapperClass);
 		switch (IDataType.GetMetadata<TPrimitive>().Signature[0])
