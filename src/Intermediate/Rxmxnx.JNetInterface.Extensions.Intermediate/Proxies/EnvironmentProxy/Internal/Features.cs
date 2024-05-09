@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native.Proxies;
+namespace Rxmxnx.JNetInterface.Proxies;
 
 public abstract partial class EnvironmentProxy : IEnvironment, IAccessFeature, IClassFeature, IReferenceFeature,
 	IStringFeature, IArrayFeature, INioFeature

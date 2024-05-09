@@ -51,7 +51,7 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	private JByte(SByte value) => this._value = value;
 
 #if PACKAGE
-	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
 
 	/// <inheritdoc/>

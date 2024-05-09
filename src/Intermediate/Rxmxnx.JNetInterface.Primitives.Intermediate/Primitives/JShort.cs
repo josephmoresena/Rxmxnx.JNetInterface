@@ -45,7 +45,7 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	public JShort() => this._value = default;
 
 #if PACKAGE
-	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
 
 	/// <summary>

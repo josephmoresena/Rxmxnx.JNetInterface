@@ -52,7 +52,7 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	private JLong(Int64 value) => this._value = value;
 
 #if PACKAGE
-	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
 
 	/// <inheritdoc/>

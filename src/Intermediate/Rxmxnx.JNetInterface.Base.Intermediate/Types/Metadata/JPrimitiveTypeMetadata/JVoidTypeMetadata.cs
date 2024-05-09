@@ -27,6 +27,11 @@ public partial record JPrimitiveTypeMetadata
 		/// </summary>
 		public JVoidTypeMetadata() { }
 
+#if PACKAGE
+		/// <inheritdoc/>
+		public override JArrayTypeMetadata GetArrayMetadata() 
+			=> ValidationUtilities.ThrowVoidArray();
+#endif
 		/// <inheritdoc/>
 		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes)
 			=> ValidationUtilities.ThrowVoidInstantiation();

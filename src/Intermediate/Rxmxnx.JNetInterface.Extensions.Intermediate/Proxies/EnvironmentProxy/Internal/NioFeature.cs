@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native.Proxies;
+namespace Rxmxnx.JNetInterface.Proxies;
 
 using TDirectBuffer =
 #if !PACKAGE
