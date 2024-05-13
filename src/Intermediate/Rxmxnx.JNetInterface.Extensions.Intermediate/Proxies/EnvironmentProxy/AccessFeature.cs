@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native.Proxies;
+namespace Rxmxnx.JNetInterface.Proxies;
 
 public abstract partial class EnvironmentProxy
 {
@@ -75,4 +75,8 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
 		Boolean isStatic);
+	/// <inheritdoc/>
+	public abstract JMethodId GetMethodId(JExecutableObject jExecutable);
+	/// <inheritdoc/>
+	public abstract JFieldId GetFieldId(JFieldObject jField);
 }

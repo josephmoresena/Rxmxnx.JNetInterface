@@ -50,6 +50,8 @@ public abstract partial class AccessFeatureProxy : IAccessFeature
 		JClassObject declaringClass);
 	public abstract JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
 		Boolean isStatic);
+	public abstract JMethodId GetMethodId(JExecutableObject jExecutable);
+	public abstract JFieldId GetFieldId(JFieldObject jField);
 	public abstract void GetPrimitiveField(IFixedMemory bytes, JLocalObject jLocal, JClassObject jClass,
 		JFieldDefinition definition);
 	public abstract void GetPrimitiveStaticField(IFixedMemory bytes, JClassObject jClass, JFieldDefinition definition);
@@ -60,6 +62,4 @@ public abstract partial class AccessFeatureProxy : IAccessFeature
 		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args);
 	protected abstract void CallPrimitiveStaticFunction(IFixedMemory mem, JClassObject jClass,
 		JFunctionDefinition definition, IObject?[] args);
-	public abstract IntPtr GetMethodId(JExecutableObject jExecutable);
-	public abstract IntPtr GetFieldId(JFieldObject jField);
 }

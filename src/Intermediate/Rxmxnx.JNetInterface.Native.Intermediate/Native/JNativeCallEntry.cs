@@ -13,17 +13,15 @@ public record JNativeCallEntry : IFixedPointer
 	/// <summary>
 	/// Method name.
 	/// </summary>
-	public CString Name => this._definition.Information[0];
+	public CString Name => this._definition.Name;
 	/// <summary>
-	/// Method signature.
+	/// Method descriptor.
 	/// </summary>
-	public CString Signature => this._definition.Information[1];
+	public CString Descriptor => this._definition.Descriptor;
 	/// <summary>
 	/// Definition hash.
 	/// </summary>
-	public String Hash => this._definition.Information.ToString();
-	/// <inheritdoc/>
-	public IntPtr Pointer { get; }
+	public String Hash => this._definition.Hash;
 
 	/// <summary>
 	/// Constructor.
@@ -35,6 +33,8 @@ public record JNativeCallEntry : IFixedPointer
 		this.Pointer = ptr;
 		this._definition = definition;
 	}
+	/// <inheritdoc/>
+	public IntPtr Pointer { get; }
 
 	/// <summary>
 	/// Creates a <see cref="JNativeCallEntry"/> instance using <paramref name="definition"/> and

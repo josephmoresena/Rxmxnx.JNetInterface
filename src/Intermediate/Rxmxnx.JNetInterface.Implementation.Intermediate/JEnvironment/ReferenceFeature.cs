@@ -96,20 +96,28 @@ partial class JEnvironment
 
 			ValidationUtilities.ThrowIfProxy(jLocal);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			if (this.LoadGlobal(jLocal as JClassObject) is TGlobal result) return result;
-			ObjectMetadata metadata = ILocalObject.CreateMetadata(jLocal);
-			if (metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
+			JGlobal? jGlobal;
+
+			if (jLocal is JClassObject jClass)
 			{
-				JClassObject jClass = this.GetClass(UnicodeClassNames.ClassObject);
-				result = (TGlobal)(Object)this.LoadGlobal(jClass);
+				jGlobal = this.LoadGlobal(jClass);
+			}
+			else if (jLocal.InstanceOf<JClassObject>())
+			{
+				jGlobal = this.LoadGlobal(this.AsClassObjectUnchecked(jLocal));
 			}
 			else
 			{
 				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-				JGlobal jGlobal = this.VirtualMachine.Register(new JGlobal(jLocal, this.CreateGlobalRef(localRef)));
-				result = (TGlobal)(Object)jGlobal;
+				jGlobal = new(jLocal, this.CreateGlobalRef(localRef));
 			}
-			return result;
+
+			if (jGlobal.IsDefault)
+			{
+				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
+				jGlobal.SetValue(this.CreateGlobalRef(localRef));
+			}
+			return (TGlobal)(Object)this.VirtualMachine.Register(jGlobal);
 		}
 		public JWeak CreateWeak(JGlobalBase jGlobal)
 		{
@@ -121,7 +129,7 @@ partial class JEnvironment
 			if (jLocal is null) return false;
 			ValidationUtilities.ThrowIfProxy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
-			JObjectLocalRef localRef = jLocal.InternalReference;
+			JObjectLocalRef localRef = jLocal.LocalReference;
 			Boolean isRegistered = this._objects.Contains(localRef);
 			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
 			try
@@ -173,7 +181,7 @@ partial class JEnvironment
 			}
 			return true;
 		}
-		public Boolean IsParameter(JLocalObject jLocal) => this._objects.IsParameter(jLocal.InternalReference);
+		public Boolean IsParameter(JLocalObject jLocal) => this._objects.IsParameter(jLocal.LocalReference);
 		public void MonitorEnter(JObjectLocalRef localRef)
 		{
 			MonitorEnterDelegate monitorEnter = this.GetDelegate<MonitorEnterDelegate>();
@@ -181,19 +189,14 @@ partial class JEnvironment
 		}
 		public void MonitorExit(JObjectLocalRef localRef)
 		{
-			if (!this._env.IsAttached)
-			{
-				Debug.WriteLine($"Unable to exit monitor reference {localRef}. Thread is not attached.");
-			}
-			else if (!this.VirtualMachine.IsAlive)
-			{
-				Debug.WriteLine($"Unable to exit monitor reference {localRef}. JVM is not alive.");
-			}
-			else
+			JResult result = JResult.Ok;
+			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 			{
 				MonitorExitDelegate monitorExit = this.GetDelegate<MonitorExitDelegate>();
-				ValidationUtilities.ThrowIfInvalidResult(monitorExit(this.Reference, localRef));
+				result = monitorExit(this.Reference, localRef);
 			}
+			JTrace.MonitorExit(this._env.IsAttached, this.VirtualMachine.IsAlive, result == JResult.Ok, localRef);
+			ValidationUtilities.ThrowIfInvalidResult(result);
 		}
 	}
 }

@@ -10,9 +10,9 @@
       },
       "Rxmxnx.PInvoke.Extensions": {
         "type": "Direct",
-        "requested": "[*, )",
-        "resolved": "1.2.1",
-        "contentHash": "zvveE0kp8MQxUUs3LqqoAy0RZog9y87qtY2kdIQDsNuqS2p/b/DfVeRRBcMnQONZ3cVlDifQP8wRkJVJtQKEBg=="
+        "requested": "[1.2.2, )",
+        "resolved": "1.2.2",
+        "contentHash": "owIqjR9ikrElWnRXyKhD3/uUSDcYr94cjEUhfTIlPjFr95spja6eCkeMUNETkmt9N1nkLN1zJXaIRX2XtIL05Q=="
       }
     }
   }

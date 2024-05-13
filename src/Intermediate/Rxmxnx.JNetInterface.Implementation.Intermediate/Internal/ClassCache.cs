@@ -3,17 +3,22 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Class cache.
 /// </summary>
-internal class ClassCache
+internal class ClassCache(JReferenceType type)
 {
 	/// <summary>
 	/// Class access dictionary.
 	/// </summary>
 	private readonly ConcurrentDictionary<JClassLocalRef, AccessCache> _access = new();
 	/// <summary>
+	/// Class access dictionary.
+	/// </summary>
+	private readonly JReferenceType _type = type;
+
+	/// <summary>
 	/// Retrieves access cache.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	public AccessCache? this[JClassLocalRef classRef] => this._access.GetValueOrDefault(classRef);
+	public AccessCache? this[JClassLocalRef classRef] => this.GetAccessCache(classRef);
 
 	/// <summary>
 	/// Loads current class object.
@@ -23,7 +28,7 @@ internal class ClassCache
 	{
 		JClassLocalRef classRef = jClass switch
 		{
-			JLocalObject jLocal when jLocal.InternalReference != default => jLocal.InternalAs<JClassLocalRef>(),
+			JLocalObject jLocal when jLocal.LocalReference != default => jLocal.LocalAs<JClassLocalRef>(),
 			JGlobalBase { IsDefault: false, } => jClass.As<JClassLocalRef>(),
 			_ => default,
 		};
@@ -65,13 +70,25 @@ internal class ClassCache
 	/// <param name="hash">A class hash.</param>
 	/// <param name="classRef">Unloaded <see cref="JClassLocalRef"/> reference.</param>
 	protected virtual void SetAsUnloaded(String hash, JClassLocalRef classRef) { }
+
+	/// <summary>
+	/// Retrieves access cache.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> class.</param>
+	/// <returns>A <see cref="AccessCache"/> instance.</returns>
+	private AccessCache? GetAccessCache(JClassLocalRef classRef)
+	{
+		AccessCache? result = this._access.GetValueOrDefault(classRef);
+		JTrace.GetAccessCache(classRef, this._type, result != default);
+		return result;
+	}
 }
 
 /// <summary>
 /// Class cache.
 /// </summary>
 /// <typeparam name="TClass">A <see cref="JReferenceObject"/> class type.</typeparam>
-internal sealed class ClassCache<TClass> : ClassCache where TClass : JReferenceObject
+internal sealed class ClassCache<TClass>(JReferenceType type) : ClassCache(type) where TClass : JReferenceObject
 {
 	/// <summary>
 	/// Class dictionary.
@@ -91,6 +108,15 @@ internal sealed class ClassCache<TClass> : ClassCache where TClass : JReferenceO
 			this.Load(value);
 		}
 	}
+	/// <summary>
+	/// Determines whether the instance contains the specified class hash.
+	/// </summary>
+	/// <param name="hash">Clash hash to locate.</param>
+	/// <returns>
+	/// <see langword="true"/> if the cache contains an element with the specified class hash;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public Boolean ContainsHash(String hash) => this._classes.ContainsKey(hash);
 
 	/// <summary>
 	/// Attempts to get the value associated with the specified hash from the cache.
@@ -110,7 +136,7 @@ internal sealed class ClassCache<TClass> : ClassCache where TClass : JReferenceO
 	protected override void SetAsUnloaded(String hash, JClassLocalRef classRef)
 	{
 		if (!this._classes.TryGetValue(hash, out TClass? jClass)) return;
-		if ((jClass as JLocalObject)?.InternalReference == classRef.Value)
+		if ((jClass as JLocalObject)?.LocalReference == classRef.Value)
 			jClass.ClearValue();
 	}
 }

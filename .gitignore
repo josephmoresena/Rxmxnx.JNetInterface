@@ -400,3 +400,5 @@ FodyWeavers.xsd
 **/.vscode
 **/Rxmxnx.JNetInterface**.xml
 **/.idea/
+/package/Nuget
+package/Rxmxnx.JNetInterface.snk

@@ -15,7 +15,8 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-			this.GetPrimitiveField(bytes, localRef, definition.Information[1][^1], fieldId);
+			JTrace.GetField(jLocal, jClass, definition);
+			this.GetPrimitiveField(bytes, localRef, definition.Descriptor[^1], fieldId);
 		}
 		public void SetPrimitiveField(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 			ReadOnlySpan<Byte> bytes)
@@ -26,7 +27,8 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-			this.SetPrimitiveField(localRef, bytes, definition.Information[1][^1], fieldId);
+			EnvironmentCache.TraceSetPrimitiveField(jLocal, jClass, definition, bytes);
+			this.SetPrimitiveField(localRef, bytes, definition.Descriptor[^1], fieldId);
 		}
 		public void GetPrimitiveStaticField(Span<Byte> bytes, JClassObject jClass, JFieldDefinition definition)
 		{
@@ -34,7 +36,8 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
-			this.GetPrimitiveStaticField(bytes, jClass.Reference, definition.Information[1][^1], fieldId);
+			JTrace.GetField(default, jClass, definition);
+			this.GetPrimitiveStaticField(bytes, jClass.Reference, definition.Descriptor[^1], fieldId);
 		}
 		public void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
 		{
@@ -42,7 +45,8 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
-			this.SetPrimitiveStaticField(jClass.Reference, bytes, definition.Information[1][^1], fieldId);
+			EnvironmentCache.TraceSetPrimitiveField(default, jClass, definition, bytes);
+			this.SetPrimitiveStaticField(jClass.Reference, bytes, definition.Descriptor[^1], fieldId);
 		}
 		public void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args)
@@ -79,6 +83,7 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
+			JTrace.GetField(jLocal, jClass, definition);
 			return this.GetObjectField<TField>(localRef, fieldId);
 		}
 		public TField? GetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition)
@@ -93,9 +98,12 @@ partial class JEnvironment
 			JFieldId fieldId = jField.FieldId;
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
+			{
+				JTrace.GetField(jLocal, jField.DeclaringClass, definition);
 				return this.GetObjectField<TField>(localRef, fieldId);
+			}
 			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
-			this.GetPrimitiveField(bytes, localRef, definition.Information[1][^1], fieldId);
+			this.GetPrimitiveField(bytes, localRef, definition.Descriptor[^1], fieldId);
 			return (TField)primitiveMetadata.CreateInstance(bytes);
 		}
 		public void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
@@ -115,6 +123,7 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
+			JTrace.SetField(jLocal, jClass, definition, value);
 			this.SetObjectField(localRef, value, jniTransaction, fieldId);
 		}
 		public void SetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition,
@@ -132,9 +141,10 @@ partial class JEnvironment
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
 				value!.CopyTo(bytes);
-				this.SetPrimitiveField(localRef, bytes, definition.Information[1][^1], fieldId);
+				this.SetPrimitiveField(localRef, bytes, definition.Descriptor[^1], fieldId);
 				return;
 			}
+			JTrace.SetField(jLocal, jField.DeclaringClass, definition, value);
 			this.SetObjectField(localRef, value, jniTransaction, fieldId);
 		}
 		public TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
@@ -147,6 +157,7 @@ partial class JEnvironment
 				this.GetPrimitiveStaticField(bytes, jClass, definition);
 				return (TField)primitiveMetadata.CreateInstance(bytes);
 			}
+			JTrace.GetField(default, jClass, definition);
 			JObjectLocalRef localRef = this.GetStaticObjectField(jClass, definition);
 			return this.CreateObject<TField>(localRef, true);
 		}
@@ -162,11 +173,12 @@ partial class JEnvironment
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jField.DeclaringClass));
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
 			{
+				JTrace.GetField(default, jField.DeclaringClass, definition);
 				JObjectLocalRef localRef = this.GetStaticObjectField(classRef, fieldId);
 				return this.CreateObject<TField>(localRef, true);
 			}
 			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
-			this.GetPrimitiveStaticField(bytes, classRef, definition.Information[1][^1], fieldId);
+			this.GetPrimitiveStaticField(bytes, classRef, definition.Descriptor[^1], fieldId);
 			return (TField)primitiveMetadata.CreateInstance(bytes);
 		}
 		public void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
@@ -184,6 +196,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
+			JTrace.SetField(default, jClass, definition, value);
 			this.SetStaticObjectField(jClass.Reference, value, jniTransaction, fieldId);
 		}
 		public void SetStaticField<TField>(JFieldObject jField, JFieldDefinition definition, TField? value)
@@ -198,19 +211,21 @@ partial class JEnvironment
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jField.DeclaringClass));
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
 			{
+				JTrace.SetField(default, jField.DeclaringClass, definition, value);
 				this.SetStaticObjectField(classRef, value, jniTransaction, fieldId);
 			}
 			else
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
 				value!.CopyTo(bytes);
-				this.SetPrimitiveStaticField(classRef, bytes, definition.Information[1][^1], fieldId);
+				this.SetPrimitiveStaticField(classRef, bytes, definition.Descriptor[^1], fieldId);
 			}
 		}
 		public TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition, IObject?[] args)
 			where TObject : JLocalObject, IDataType<TObject>
 		{
 			JObjectLocalRef localRef = this.NewObject(jClass, definition, args);
+			JTrace.CallMethod(default, jClass, definition, false, args);
 			return this.CreateObject<TObject>(localRef, true)!;
 		}
 		public TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
@@ -224,6 +239,7 @@ partial class JEnvironment
 			JMethodId methodId = jConstructor.MethodId;
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jConstructor.DeclaringClass));
 			JObjectLocalRef localRef = this.NewObject(definition, classRef, args, jniTransaction, methodId);
+			JTrace.CallMethod(default, jConstructor.DeclaringClass, definition, false, args);
 			return this.CreateObject<TObject>(localRef, true)!;
 		}
 		public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
@@ -239,6 +255,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.GetClassTransaction(jClass, definition, out JMethodId methodId);
+			JTrace.CallMethod(default, jClass, definition, false, args);
 			return this.CallObjectStaticFunction<TResult>(definition, jClass.Reference, args, jniTransaction, methodId);
 		}
 		public TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition definition,
@@ -255,6 +272,7 @@ partial class JEnvironment
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
 				return this.CallObjectStaticFunction<TResult>(definition, classRef, args, jniTransaction, methodId);
 			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+			JTrace.CallMethod(default, jMethod.DeclaringClass, definition, false, args);
 			this.CallPrimitiveStaticFunction(bytes, definition, classRef, args, jniTransaction, methodId);
 			return (TResult)primitiveMetadata.CreateInstance(bytes);
 		}
@@ -263,6 +281,7 @@ partial class JEnvironment
 			ValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.GetClassTransaction(jClass, definition, out JMethodId methodId);
+			JTrace.CallMethod(default, jClass, definition, false, args);
 			this.CallStaticMethod(definition, jClass.Reference, args, jniTransaction, methodId);
 		}
 		public void CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition, IObject?[] args)
@@ -274,6 +293,7 @@ partial class JEnvironment
 			_ = jniTransaction.Add(jMethod);
 			JMethodId methodId = jMethod.MethodId;
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass));
+			JTrace.CallMethod(default, jMethod.DeclaringClass, definition, false, args);
 			this.CallStaticMethod(definition, classRef, args, jniTransaction, methodId);
 		}
 		public TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
@@ -292,6 +312,7 @@ partial class JEnvironment
 				this.GetInstanceTransaction(jClass, jLocal, definition, out JObjectLocalRef localRef,
 				                            out JMethodId methodId);
 			JClassLocalRef classRef = nonVirtual ? jClass.Reference : default;
+			JTrace.CallMethod(jLocal, jClass, definition, nonVirtual, args);
 			return this.CallObjectFunction<TResult>(definition, localRef, classRef, args, jniTransaction, methodId);
 		}
 		public TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal,
@@ -312,6 +333,7 @@ partial class JEnvironment
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
 				return this.CallObjectFunction<TResult>(definition, localRef, classRef, args, jniTransaction, methodId);
 			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
+			JTrace.CallMethod(jLocal, jMethod.DeclaringClass, definition, nonVirtual, args);
 			this.CallPrimitiveFunction(bytes, definition, localRef, classRef, args, jniTransaction, methodId);
 			return (TResult)primitiveMetadata.CreateInstance(bytes);
 		}
@@ -324,6 +346,7 @@ partial class JEnvironment
 				this.GetInstanceTransaction(jClass, jLocal, definition, out JObjectLocalRef localRef,
 				                            out JMethodId methodId);
 			JClassLocalRef classRef = nonVirtual ? jClass.Reference : default;
+			JTrace.CallMethod(jLocal, jClass, definition, nonVirtual, args);
 			this.CallMethod(definition, localRef, classRef, args, jniTransaction, methodId);
 		}
 		public void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition,
@@ -340,6 +363,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			JClassLocalRef classRef =
 				nonVirtual ? jniTransaction.Add(this.ReloadClass(jMethod.DeclaringClass)) : default;
+			JTrace.CallMethod(jLocal, jMethod.DeclaringClass, definition, nonVirtual, args);
 			this.CallMethod(definition, localRef, classRef, args, jniTransaction, methodId);
 		}
 		public void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls)

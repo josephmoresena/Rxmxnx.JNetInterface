@@ -82,6 +82,23 @@ partial class JEnvironment
 			return classRef;
 		}
 		/// <summary>
+		/// Retrieves the current <paramref name="classRef"/> instance as <see cref="JClassObject"/>.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="isLocalRef">Indicates whether <paramref name="classRef"/> is local reference.</param>
+		/// <param name="classObjectMetadata">A <see cref="ClassObjectMetadata"/> instance.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject GetClass(JClassLocalRef classRef, Boolean isLocalRef,
+			ClassObjectMetadata? classObjectMetadata)
+		{
+			JClassObject result;
+			if (classObjectMetadata is null)
+				result = this.GetClass(classRef, isLocalRef);
+			else
+				result = this.GetClass(classObjectMetadata.Name, isLocalRef ? classRef : default);
+			return this.Register(result);
+		}
+		/// <summary>
 		/// Retrieves class instance for <paramref name="classRef"/>.
 		/// </summary>
 		/// <param name="className">Class name.</param>
@@ -89,10 +106,11 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private JClassObject GetClass(ReadOnlySpan<Byte> className, JClassLocalRef classRef)
 		{
-			CStringSequence classInformation = MetadataHelper.GetClassInformation(className);
+			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, true);
+			JTrace.GetClass(classRef, classInformation);
 			if (!this._classes.TryGetValue(classInformation.ToString(), out JClassObject? jClass))
 				jClass = new(this.ClassObject, new TypeInformation(classInformation), classRef);
-			if (jClass.InternalReference == default && classRef.Value != default) jClass.SetValue(classRef);
+			if (jClass.LocalReference == default && classRef.Value != default) jClass.SetValue(classRef);
 			return jClass;
 		}
 		/// <summary>
@@ -101,9 +119,12 @@ partial class JEnvironment
 		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
 		private JClassLocalRef FindClass(JClassObject jClass)
-			=> jClass.ClassSignature.Length != 1 ?
-				jClass.Name.WithSafeFixed(this, EnvironmentCache.FindClass) :
-				this.FindPrimitiveClass(jClass.ClassSignature[0]);
+		{
+			if (jClass.ClassSignature.Length == 1)
+				return this.FindPrimitiveClass(jClass.ClassSignature[0]);
+			JTrace.FindClass(jClass);
+			return jClass.Name.WithSafeFixed(this, EnvironmentCache.FindClass);
+		}
 		/// <summary>
 		/// Retrieves class from cache or loads it using JNI.
 		/// </summary>
@@ -180,6 +201,48 @@ partial class JEnvironment
 				result = new(args.cache.ClassObject, args.metadata, classRef);
 			}
 			return args.cache.Register(result);
+		}
+		/// <summary>
+		/// Retrieves the <see cref="ClassObjectMetadata"/> instance from <paramref name="jObject"/> metadata.
+		/// </summary>
+		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+		/// <returns>A <see cref="ClassObjectMetadata"/> instance.</returns>
+		private ClassObjectMetadata? GetClassObjectMetadata(JReferenceObject jObject)
+			=> jObject switch
+			{
+				ILocalObject local => ILocalObject.CreateMetadata(local) as ClassObjectMetadata,
+				JGlobalBase jGlobal => this.VirtualMachine.LoadMetadataGlobal(jGlobal),
+				_ => default,
+			};
+		/// <summary>
+		/// Retrieves the current <paramref name="jObject"/> instance as <see cref="JClassObject"/>.
+		/// </summary>
+		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject AsClassObjectUnchecked(JReferenceObject jObject)
+		{
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
+			JReferenceType referenceType = this._env.GetReferenceType(classRef.Value);
+			Boolean isLocalRef = referenceType == JReferenceType.LocalRefType;
+			ClassObjectMetadata? classObjectMetadata = this.GetClassObjectMetadata(jObject);
+			JTrace.AsClassObject(classRef, referenceType, classObjectMetadata);
+			JClassObject result = this.GetClass(classRef, isLocalRef, classObjectMetadata);
+			switch (jObject)
+			{
+				case ILocalObject local when classRef == result.LocalReference:
+					result.Lifetime.Synchronize(local.Lifetime);
+					break;
+				case JGlobal jGlobal when !result.Lifetime.HasValidGlobal<JGlobal>():
+					result.Lifetime.SetGlobal(jGlobal);
+					break;
+				case JWeak jWeak when !result.Lifetime.HasValidGlobal<JWeak>():
+					result.Lifetime.SetGlobal(jWeak);
+					break;
+			}
+			if (classObjectMetadata is not null)
+				ILocalObject.ProcessMetadata(result, classObjectMetadata);
+			return result;
 		}
 	}
 }

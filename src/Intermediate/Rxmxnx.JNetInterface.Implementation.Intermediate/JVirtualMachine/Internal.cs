@@ -58,11 +58,23 @@ public partial class JVirtualMachine
 		ObjectLifetime lifetime = jClass.Lifetime;
 		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
 		{
+			JTrace.LoadGlobalClass(jClass);
 			ClassObjectMetadata metadata = new(jClass);
 			jGlobal = new(this, metadata, default);
+			this._cache.GlobalClassCache[jClass.Hash] = jGlobal;
 		}
 		lifetime.SetGlobal(jGlobal);
 		return jGlobal;
+	}
+	internal ClassObjectMetadata? LoadMetadataGlobal(JGlobalBase jGlobal)
+	{
+		ClassObjectMetadata? result = jGlobal.ObjectMetadata as ClassObjectMetadata;
+		if (result is not null && !this._cache.GlobalClassCache.ContainsHash(result.Hash))
+		{
+			JTrace.LoadClassMetadata(result);
+			this._cache.GlobalClassCache[result.Hash] = new(this, result, default);
+		}
+		return result;
 	}
 	/// <summary>
 	/// Retrieves <see cref="AccessCache"/> for <paramref name="classRef"/>.

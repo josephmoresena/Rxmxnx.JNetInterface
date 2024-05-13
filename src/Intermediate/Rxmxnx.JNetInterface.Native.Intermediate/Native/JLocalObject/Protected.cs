@@ -48,5 +48,8 @@ public partial class JLocalObject
 	/// Process the object metadata.
 	/// </summary>
 	/// <param name="instanceMetadata">The object metadata for the current instance.</param>
-	protected virtual void ProcessMetadata(ObjectMetadata instanceMetadata) => this.Lifetime.SetClass(instanceMetadata);
+	protected virtual void ProcessMetadata(ObjectMetadata instanceMetadata)
+	{
+		this.Lifetime.SetClass(instanceMetadata);
+	}
 }

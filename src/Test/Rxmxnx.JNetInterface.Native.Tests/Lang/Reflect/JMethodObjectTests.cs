@@ -27,7 +27,7 @@ public class JMethodObjectTests
 		using JClassObject jMethodClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
 		using JClassObject jClassArrayClass = new(jClass, IArrayType.GetMetadata<JArrayObject<JClassObject>>());
-		using JStringObject jStringMethodName = new(jStringClass, default, methodDefinition.Information[0].ToString());
+		using JStringObject jStringMethodName = new(jStringClass, default, methodDefinition.Name.ToString());
 		using JArrayObject<JClassObject> jArrayParameters = new(jClassArrayClass, arrayRef, 0);
 		using JMethodObject jMethod = initDefinition ?
 			new(jMethodClass, localRef, methodDefinition, jClass) :
@@ -39,7 +39,7 @@ public class JMethodObjectTests
 		env.FunctionSet.GetParameterTypes(jMethod).Returns(jArrayParameters);
 		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringMethodName, jArrayParameters, default).Returns(methodDefinition);
-		env.AccessFeature.GetMethodId(jMethod).Returns(methodId.Pointer);
+		env.AccessFeature.GetMethodId(jMethod).Returns(methodId);
 
 		Assert.Equal(methodDefinition, jMethod.Definition);
 		Assert.Equal(jClass, jMethod.DeclaringClass);
@@ -72,7 +72,7 @@ public class JMethodObjectTests
 		using JClassObject jMethodClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
 		using JClassObject jClassArrayClass = new(jClass, IArrayType.GetMetadata<JArrayObject<JClassObject>>());
-		using JStringObject jStringMethodName = new(jStringClass, default, methodDefinition.Information[0].ToString());
+		using JStringObject jStringMethodName = new(jStringClass, default, methodDefinition.Name.ToString());
 		using JArrayObject<JClassObject> jArrayParameters = new(jClassArrayClass, arrayRef, 0);
 		using JMethodObject jMethod =
 			Assert.IsType<JMethodObject>(typeMetadata.CreateInstance(jMethodClass, localRef, true));
@@ -83,7 +83,7 @@ public class JMethodObjectTests
 		env.FunctionSet.GetParameterTypes(jMethod).Returns(jArrayParameters);
 		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringMethodName, jArrayParameters, default).Returns(methodDefinition);
-		env.AccessFeature.GetMethodId(jMethod).Returns(methodId.Pointer);
+		env.AccessFeature.GetMethodId(jMethod).Returns(methodId);
 
 		ILocalObject.ProcessMetadata(
 			jMethod,

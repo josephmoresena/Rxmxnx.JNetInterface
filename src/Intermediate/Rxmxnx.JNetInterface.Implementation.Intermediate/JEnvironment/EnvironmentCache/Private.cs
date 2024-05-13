@@ -11,7 +11,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Class cache.
 		/// </summary>
-		private readonly ClassCache<JClassObject> _classes = new();
+		private readonly ClassCache<JClassObject> _classes = new(JReferenceType.LocalRefType);
 		/// <summary>
 		/// Delegate cache.
 		/// </summary>
@@ -74,7 +74,7 @@ partial class JEnvironment
 			}
 			JLocalObject jLocal = typeMetadata.CreateInstance(jClass, localRef, true);
 			TResult result = (TResult)(Object)metadata.ParseInstance(jLocal, true);
-			if (localRef != (result as JLocalObject)!.InternalReference && register)
+			if (localRef != (result as JLocalObject)!.LocalReference && register)
 				this._env.DeleteLocalRef(localRef);
 			return register ? this.Register(result) : result;
 		}
@@ -240,7 +240,7 @@ partial class JEnvironment
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		private void FreeUnregistered(JLocalObject jLocal)
 		{
-			this._env.DeleteLocalRef(jLocal.InternalReference);
+			this._env.DeleteLocalRef(jLocal.LocalReference);
 			jLocal.ClearValue();
 		}
 	}

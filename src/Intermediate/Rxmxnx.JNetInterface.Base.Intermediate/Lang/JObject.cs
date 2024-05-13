@@ -24,6 +24,11 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset) => this.CopyTo(span, ref offset);
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IObject.CopyTo(Span<JValue> span, Int32 index) => this.CopyTo(span, index);
+
+	/// <inheritdoc cref="Object.ToString()"/>
+	/// <remarks>Use this method for trace.</remarks>
+	public abstract String ToTraceText();
+
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override Boolean Equals(Object? obj) => obj is JObject other && this.Equals(other);

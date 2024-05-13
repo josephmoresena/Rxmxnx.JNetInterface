@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native.Proxies;
+namespace Rxmxnx.JNetInterface.Proxies;
 
 /// <summary>
 /// This interface exposes a proxy for invocation interface.
@@ -11,6 +11,7 @@ public abstract class VirtualMachineProxy : IVirtualMachine
 
 	Boolean IVirtualMachine.NoProxy => false;
 	IEnvironment? IVirtualMachine.GetEnvironment() => this.GetEnvironment();
+	IThread IVirtualMachine.CreateThread(ThreadPurpose purpose) => this.CreateThread(purpose);
 	IThread IVirtualMachine.InitializeThread(CString? threadName, JGlobalBase? threadGroup, Int32 version)
 		=> this.InitializeThread(threadName, threadGroup, version);
 	IThread IVirtualMachine.InitializeDaemon(CString? threadName, JGlobalBase? threadGroup, Int32 version)
@@ -29,4 +30,6 @@ public abstract class VirtualMachineProxy : IVirtualMachine
 	/// <inheritdoc cref="IVirtualMachine.InitializeDaemon(CString, JGlobalBase, Int32)"/>
 	public abstract ThreadProxy InitializeDaemon(CString? threadName = default, JGlobalBase? threadGroup = default,
 		Int32 version = IVirtualMachine.MinimalVersion);
+	/// <inheritdoc cref="IVirtualMachine.CreateThread(ThreadPurpose)"/>
+	public abstract ThreadProxy CreateThread(ThreadPurpose purpose);
 }

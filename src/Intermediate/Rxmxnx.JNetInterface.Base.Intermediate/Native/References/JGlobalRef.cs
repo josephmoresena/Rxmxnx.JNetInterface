@@ -2,12 +2,12 @@
 
 /// <summary>
 /// JNI global handle for fully-qualified-class objects (<c>jobject</c>).
-/// Represents a native signed integer which serves as opaque identifier for any
+/// Represents a native-signed integer which serves as opaque identifier for any
 /// object.
 /// </summary>
 /// <remarks>This identifier will be valid until it is explicitly unloaded.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-internal readonly partial struct JGlobalRef : IObjectGlobalReferenceType<JGlobalRef>
+public readonly partial struct JGlobalRef : IObjectGlobalReferenceType<JGlobalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JGlobal;

@@ -15,6 +15,19 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	private readonly CStringSequence _sequence;
 
 	/// <summary>
+	/// Definition name.
+	/// </summary>
+	public CString Name => this._sequence[0];
+	/// <summary>
+	/// Definition descriptor.
+	/// </summary>
+	public CString Descriptor => this._sequence[1];
+	/// <summary>
+	/// Definition hash.
+	/// </summary>
+	public String Hash => this._sequence.ToString();
+
+	/// <summary>
 	/// Accessible object information.
 	/// </summary>
 	internal CStringSequence Information => this._sequence;
@@ -53,6 +66,10 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._sequence.GetHashCode();
 
+	/// <inheritdoc cref="Object.ToString()"/>
+	/// <remarks>Use this method for trace.</remarks>
+	public abstract String ToTraceText();
+
 	/// <summary>
 	/// Determines whether a specified <see cref="JAccessibleObjectDefinition"/> and a
 	/// <see cref="JAccessibleObjectDefinition"/> instance
@@ -64,6 +81,7 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <see langword="true"/> if the value of <paramref name="left"/> is the same as the value
 	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator ==(JAccessibleObjectDefinition? left, JAccessibleObjectDefinition? right)
 		=> left?.Equals(right) ?? right is null;
@@ -78,20 +96,10 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <see langword="true"/> if the value of <paramref name="left"/> is different from the value
 	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator !=(JAccessibleObjectDefinition? left, JAccessibleObjectDefinition? right)
 		=> !(left == right);
-
-	/// <summary>
-	/// Retrieves a valid signature from <paramref name="signature"/>.
-	/// </summary>
-	/// <param name="signature">A signature to validate.</param>
-	/// <returns><paramref name="signature"/> if is a valid signature.</returns>
-	protected static CString ValidateSignature(CString signature)
-	{
-		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
-		return signature;
-	}
 	/// <summary>
 	/// Retrieves a valid signature from <paramref name="signature"/>.
 	/// </summary>
@@ -102,14 +110,4 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
 		return signature;
 	}
-
-	/// <summary>
-	/// Retrieves the type for <typeparamref name="TReturn"/> type.
-	/// </summary>
-	/// <typeparam name="TReturn">A <see cref="IDataType"/> type.</typeparam>
-	/// <returns>Type of return.</returns>
-	internal static Type ReturnType<TReturn>() where TReturn : IDataType<TReturn>
-		=> IDataType.GetMetadata<TReturn>() is JPrimitiveTypeMetadata primitiveTypeMetadata ?
-			primitiveTypeMetadata.UnderlineType :
-			typeof(TReturn);
 }

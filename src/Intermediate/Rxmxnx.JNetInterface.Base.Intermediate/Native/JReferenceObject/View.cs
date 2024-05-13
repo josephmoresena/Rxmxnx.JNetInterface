@@ -63,6 +63,10 @@ public partial class JReferenceObject
 		TObject IWrapper<TObject>.Value => this.Object;
 
 		/// <inheritdoc/>
+		[ExcludeFromCodeCoverage]
+		public override String ToTraceText() => this.Object.ToTraceText();
+
+		/// <inheritdoc/>
 		private protected override JReferenceObject GetObject() => this.Object;
 	}
 }

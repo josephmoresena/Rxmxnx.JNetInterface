@@ -13,19 +13,19 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <summary>
 	/// Last validation datetime.
 	/// </summary>
-	public DateTime LastValidation { get; protected set; } = DateTime.Now;
+	public DateTime LastValidation { get; private set; } = DateTime.Now;
 	/// <summary>
 	/// <see cref="IVirtualMachine"/> instance.
 	/// </summary>
 	public IVirtualMachine VirtualMachine { get; }
-	/// <summary>
-	/// CLR type of object metadata.
-	/// </summary>
-	public Type MetadataType => this.ObjectMetadata.GetType();
 	/// <inheritdoc/>
 	public override CString ObjectClassName => this.ObjectMetadata.ObjectClassName;
 	/// <inheritdoc/>
 	public override CString ObjectSignature => this.ObjectMetadata.ObjectSignature;
+	/// <summary>
+	/// Instance metadata.
+	/// </summary>
+	public ObjectMetadata ObjectMetadata { get; private set; }
 
 	/// <inheritdoc/>
 	public void Dispose()

@@ -40,6 +40,10 @@ public abstract class JFieldDefinition : JAccessibleObjectDefinition
 		IEnvironment env = declaringClass.Environment;
 		return env.AccessFeature.GetReflectedField(this, declaringClass, true);
 	}
+
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override String ToTraceText() => $"field: {this.Name} {this.Descriptor}";
 }
 
 /// <summary>

@@ -200,8 +200,8 @@ public sealed class JExceptionObjectTests
 
 			exception.WithSafeInvoke(t =>
 			{
-				Assert.Equal(default, t.InternalReference);
-				Assert.Equal(default, (t as ILocalObject).InternalReference);
+				Assert.Equal(default, t.LocalReference);
+				Assert.Equal(default, (t as ILocalObject).LocalReference);
 				Assert.Equal(exceptionMessage, t.Message);
 				Assert.Equal(typeMetadata.ClassName, t.ObjectClassName);
 				Assert.Equal(typeMetadata.Signature, t.ObjectSignature);

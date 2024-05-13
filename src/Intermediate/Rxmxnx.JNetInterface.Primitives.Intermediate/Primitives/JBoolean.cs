@@ -73,7 +73,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	private JBoolean(Boolean value) => this._value = value ? JBoolean.TrueValue : JBoolean.FalseValue;
 
 #if PACKAGE
-	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
 
 	/// <inheritdoc/>

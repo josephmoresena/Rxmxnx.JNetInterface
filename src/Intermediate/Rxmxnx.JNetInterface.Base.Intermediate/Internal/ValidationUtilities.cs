@@ -65,13 +65,21 @@ internal static class ValidationUtilities
 	/// </summary>
 	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
 	public static JArgumentMetadata ThrowVoidArgument()
-		=> throw new InvalidOperationException("A void value can't be an argument.");
+		=> throw new InvalidOperationException("The void type can't be an instance argument.");
 	/// <summary>
 	/// Throws an <see cref="InvalidOperationException"/> attempting to create a void value.
 	/// </summary>
 	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
 	public static IPrimitiveType ThrowVoidInstantiation()
 		=> throw new InvalidOperationException("A void value can't be created.");
+#if PACKAGE
+	/// <summary>
+	/// Throws an <see cref="InvalidOperationException"/> attempting to retrieve a void array metadata.
+	/// </summary>
+	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+	public static JArrayTypeMetadata ThrowVoidArray()
+		=> throw new InvalidOperationException("The void type can't be element type of an array.");
+#endif
 	/// <summary>
 	/// Throws an <see cref="InvalidOperationException"/> attempting to create a void value.
 	/// </summary>
@@ -249,7 +257,7 @@ internal static class ValidationUtilities
 	public static void ThrowIfNotMatchDefinition(JAccessibleObjectDefinition definition,
 		JAccessibleObjectDefinition otherDefinition)
 	{
-		if (definition.Information.ToString() != otherDefinition.Information.ToString())
+		if (definition.Hash != otherDefinition.Hash)
 			throw new ArgumentException($"[{definition}] Expected: [{otherDefinition}].");
 	}
 	/// <summary>

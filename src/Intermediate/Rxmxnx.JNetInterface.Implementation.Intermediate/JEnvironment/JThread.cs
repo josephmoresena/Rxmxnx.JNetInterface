@@ -12,11 +12,11 @@ partial class JEnvironment
 		/// </summary>
 		private readonly ThreadCreationArgs _args;
 		/// <summary>
-		/// Indicates whether current instance is disposable.
+		/// Indicates whether the current instance is disposable.
 		/// </summary>
 		private readonly Boolean _isDisposable;
 		/// <summary>
-		/// Indicates whether current instance is disposed.
+		/// Indicates whether the current instance is disposed.
 		/// </summary>
 		private readonly IMutableWrapper<Boolean> _isDisposed;
 

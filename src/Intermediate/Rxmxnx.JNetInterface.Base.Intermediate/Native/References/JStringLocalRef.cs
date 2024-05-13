@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.References;
 
 /// <summary>
-/// JNI local handle for string objects (<c>jstring</c>). Represents a native signed integer
+/// JNI local handle for string objects (<c>jstring</c>). Represents a native-signed integer
 /// which serves as opaque identifier for an string object (<c>java.lang.String</c>).
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>

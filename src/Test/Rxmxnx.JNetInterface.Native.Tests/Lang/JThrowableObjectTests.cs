@@ -72,6 +72,16 @@ public sealed class JThrowableObjectTests
 		env.FunctionSet.Received(useMessage ? 0 : 1).GetMessage(jThrowable);
 
 		Assert.Equal(throwableRef, jThrowable.Reference);
+
+		String toString = $"{jThrowable.Class.Name} {jThrowable.Reference} {jThrowable.Message}";
+		if (jThrowable.StackTrace.Length > 0)
+		{
+			StringBuilder strBuild = new(toString);
+			foreach (StackTraceInfo t in jThrowable.StackTrace)
+				strBuild.AppendLine(t.ToTraceText());
+			toString = strBuild.ToString();
+		}
+		Assert.Equal(toString, jThrowable.ToString());
 	}
 	[Theory]
 	[InlineData(true)]
@@ -200,8 +210,8 @@ public sealed class JThrowableObjectTests
 
 			exception.WithSafeInvoke(t =>
 			{
-				Assert.Equal(default, t.InternalReference);
-				Assert.Equal(default, (t as ILocalObject).InternalReference);
+				Assert.Equal(default, t.LocalReference);
+				Assert.Equal(default, (t as ILocalObject).LocalReference);
 				Assert.Equal(exceptionMessage, t.Message);
 				Assert.Equal(typeMetadata.ClassName, t.ObjectClassName);
 				Assert.Equal(typeMetadata.Signature, t.ObjectSignature);

@@ -31,19 +31,19 @@ public partial class JClassObject
 	/// </summary>
 	private String? _hash;
 	/// <summary>
-	/// Indicates whether current class is an annotation.
+	/// Indicates whether the current class is an annotation.
 	/// </summary>
 	private Boolean? _isAnnotation;
 	/// <summary>
-	/// Indicates whether current class is an enum.
+	/// Indicates whether the current class is an enum.
 	/// </summary>
 	private Boolean? _isEnum;
 	/// <summary>
-	/// Indicates whether current class is final.
+	/// Indicates whether the current class is final.
 	/// </summary>
 	private Boolean? _isFinal;
 	/// <summary>
-	/// Indicates whether current class is an interface.
+	/// Indicates whether the current class is an interface.
 	/// </summary>
 	private Boolean? _isInterface;
 	/// <summary>

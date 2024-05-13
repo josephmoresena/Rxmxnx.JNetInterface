@@ -80,54 +80,64 @@ partial class JEnvironment
 		}
 		public void ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
-			if (!this._env.IsAttached)
+			try
 			{
-				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. Thread is not attached.");
+				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+				{
+					ReleaseStringCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringCharsDelegate>();
+					releaseStringChars(this.Reference, stringRef, pointer);
+					this.CheckJniError();
+				}
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, true, stringRef,
+				                     pointer);
 			}
-			else if (!this.VirtualMachine.IsAlive)
+			catch (Exception)
 			{
-				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. JVM is not alive.");
-			}
-			else
-			{
-				ReleaseStringCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringCharsDelegate>();
-				releaseStringChars(this.Reference, stringRef, pointer);
-				this.CheckJniError();
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, false, stringRef,
+				                     pointer);
+				throw;
 			}
 		}
 		public void ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer)
 		{
-			if (!this._env.IsAttached)
+			try
 			{
-				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. Thread is not attached.");
+				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+				{
+					ReleaseStringUtfCharsDelegate releaseStringChars =
+						this.GetDelegate<ReleaseStringUtfCharsDelegate>();
+					releaseStringChars(this.Reference, stringRef, pointer);
+					this.CheckJniError();
+				}
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, true, stringRef,
+				                     pointer);
 			}
-			else if (!this.VirtualMachine.IsAlive)
+			catch (Exception)
 			{
-				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. JVM is not alive.");
-			}
-			else
-			{
-				ReleaseStringUtfCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringUtfCharsDelegate>();
-				releaseStringChars(this.Reference, stringRef, pointer);
-				this.CheckJniError();
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, false, stringRef,
+				                     pointer);
+				throw;
 			}
 		}
 		public void ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
-			if (!this._env.IsAttached)
+			try
 			{
-				Debug.WriteLine($"Unable to release critical memory 0x{pointer:0x8}. Thread is not attached.");
+				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+				{
+					ReleaseStringCriticalDelegate releaseStringCritical =
+						this.GetDelegate<ReleaseStringCriticalDelegate>();
+					releaseStringCritical(this.Reference, stringRef, pointer);
+					this.CheckJniError();
+					this._criticalCount--;
+				}
+				JTrace.ReleaseMemory(true, this._env.IsAttached, this.VirtualMachine.IsAlive, true, stringRef, pointer);
 			}
-			else if (!this.VirtualMachine.IsAlive)
+			catch (Exception)
 			{
-				Debug.WriteLine($"Unable to release critical memory 0x{pointer:0x8}. JVM is not alive.");
-			}
-			else
-			{
-				ReleaseStringCriticalDelegate releaseStringCritical = this.GetDelegate<ReleaseStringCriticalDelegate>();
-				releaseStringCritical(this.Reference, stringRef, pointer);
-				this.CheckJniError();
-				this._criticalCount--;
+				JTrace.ReleaseMemory(true, this._env.IsAttached, this.VirtualMachine.IsAlive, false, stringRef,
+				                     pointer);
+				throw;
 			}
 		}
 		public void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)

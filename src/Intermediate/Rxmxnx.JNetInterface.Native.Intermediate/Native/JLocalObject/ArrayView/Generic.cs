@@ -47,6 +47,9 @@ public partial class JLocalObject
 
 			/// <inheritdoc/>
 			public override String ToString() => $"{this.GetStringValue()} {this.Reference}";
+			/// <inheritdoc/>
+			public override String ToTraceText()
+				=> $"{this.Class.Name} length: {this.Length} {this.GetReferenceText()}";
 
 			/// <inheritdoc cref="Object.ToString()"/>
 			private String GetStringValue()
@@ -66,6 +69,23 @@ public partial class JLocalObject
 				}
 				return this._stringValue;
 			}
+			/// <summary>
+			/// Returns a <see cref="String"/> that represents the current reference.
+			/// </summary>
+			/// <returns>A <see cref="String"/> that represents the current object.</returns>
+			private String GetReferenceText()
+				=> this.TypeMetadata.ElementMetadata.Signature[0] switch
+				{
+					UnicodePrimitiveSignatures.BooleanSignatureChar => this.As<JBooleanArrayLocalRef>().ToString(),
+					UnicodePrimitiveSignatures.ByteSignatureChar => this.As<JByteArrayLocalRef>().ToString(),
+					UnicodePrimitiveSignatures.CharSignatureChar => this.As<JCharArrayLocalRef>().ToString(),
+					UnicodePrimitiveSignatures.DoubleSignatureChar => this.As<JDoubleArrayLocalRef>().ToString(),
+					UnicodePrimitiveSignatures.FloatSignatureChar => this.As<JFloatArrayLocalRef>().ToString(),
+					UnicodePrimitiveSignatures.IntSignatureChar => this.As<JIntArrayLocalRef>().ToString(),
+					UnicodePrimitiveSignatures.LongSignatureChar => this.As<JLongArrayLocalRef>().ToString(),
+					UnicodePrimitiveSignatures.ShortSignatureChar => this.As<JShortArrayLocalRef>().ToString(),
+					_ => this.As<JObjectArrayLocalRef>().ToString(),
+				};
 		}
 	}
 }

@@ -120,6 +120,7 @@ public sealed class JFunctionDefinitionTests
 			            (Object)new JNonTypedFunctionDefinition((CString)functionName, TDataType.Argument.Signature)));
 		Assert.Equal(0, functionDefinition.Count);
 		Assert.Equal(0, functionDefinition.ReferenceCount);
+		Assert.Equal(functionDefinition.Sizes.Sum(), functionDefinition.Size);
 		Assert.Empty(functionDefinition.Sizes);
 		Assert.Equal(jMethod, functionDefinition.GetReflected(jClassClass));
 		Assert.Equal(jMethod, functionDefinition.GetStaticReflected(jClassClass));
@@ -167,6 +168,7 @@ public sealed class JFunctionDefinitionTests
 			            (Object)new JNonTypedFunctionDefinition((CString)functionName, TDataType.Argument.Signature,
 			                                                    JFunctionDefinitionTests.args)));
 		Assert.Equal(JFunctionDefinitionTests.args.Length, functionDefinition.Count);
+		Assert.Equal(functionDefinition.Sizes.Sum(), functionDefinition.Size);
 		Assert.Equal(JFunctionDefinitionTests.args.Count(a => a.Signature.Length > 1),
 		             functionDefinition.ReferenceCount);
 		Assert.Equal(JFunctionDefinitionTests.args.Select(a => a.Size), functionDefinition.Sizes);
@@ -259,6 +261,7 @@ public sealed class JFunctionDefinitionTests
 			            (Object)new JNonTypedFunctionDefinition((CString)functionName, TDataType.Argument.Signature,
 			                                                    JFunctionDefinitionTests.args)));
 		Assert.Equal(JFunctionDefinitionTests.args.Length, functionDefinition.Count);
+		Assert.Equal(functionDefinition.Sizes.Sum(), functionDefinition.Size);
 		Assert.Equal(JFunctionDefinitionTests.args.Count(a => a.Signature.Length > 1),
 		             functionDefinition.ReferenceCount);
 		Assert.Equal(JFunctionDefinitionTests.args.Select(a => a.Size), functionDefinition.Sizes);

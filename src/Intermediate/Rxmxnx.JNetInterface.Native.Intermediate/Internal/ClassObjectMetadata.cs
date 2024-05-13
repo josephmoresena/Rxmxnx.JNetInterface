@@ -20,10 +20,6 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 	/// </summary>
 	public CString ClassSignature { get; init; }
 	/// <summary>
-	/// Class hash of the current object.
-	/// </summary>
-	public String Hash { get; init; }
-	/// <summary>
 	/// Indicates whether the class of the current object is final.
 	/// </summary>
 	public Boolean? IsFinal { get; init; }
@@ -43,6 +39,10 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 	/// Array type dimension.
 	/// </summary>
 	public Int32? ArrayDimension { get; init; }
+	/// <summary>
+	/// Class hash of the current object.
+	/// </summary>
+	public String Hash { get; init; }
 
 	/// <summary>
 	/// Constructor.
@@ -66,9 +66,9 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	internal ClassObjectMetadata(JClassObject jClass) : base(jClass.Class, IClassType.GetMetadata<JClassObject>())
 	{
-		this.Name = jClass.Name!;
+		this.Name = jClass.Name;
 		this.ClassSignature = jClass.ClassSignature;
-		this.Hash = jClass.Hash!;
+		this.Hash = jClass.Hash;
 		this.IsInterface = jClass.IsInterface;
 		this.IsEnum = jClass.IsEnum;
 		this.IsAnnotation = jClass.IsAnnotation;

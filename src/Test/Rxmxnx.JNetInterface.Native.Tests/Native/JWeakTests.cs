@@ -25,65 +25,68 @@ public sealed class JWeakTests
 		DateTime currentDate = DateTime.Now;
 		using JClassObject jClassClass = new(env);
 		using JWeak jWeak0 = new(jClassClass, weakRef0);
-		JWeak jWeak2 = new(jWeak0, weakRef1);
+		JWeak jWeak1 = new(jWeak0, weakRef1);
 		DateTime latestDate = DateTime.Now;
 
-		env.ReferenceFeature.Create<JWeak>(jClassClass).Returns(jWeak2);
-		env.GetReferenceType(jWeak2).Returns(JReferenceType.WeakGlobalRefType);
+		env.ReferenceFeature.Create<JWeak>(jClassClass).Returns(jWeak1);
+		env.GetReferenceType(jWeak1).Returns(JReferenceType.WeakGlobalRefType);
 
 		Assert.Equal(weakRef0, jWeak0.Reference);
-		Assert.Equal(weakRef1, jWeak2.Reference);
+		Assert.Equal(weakRef1, jWeak1.Reference);
 
 		Assert.Equal(isProxy, jWeak0.IsProxy);
-		Assert.Equal(isProxy, jWeak2.IsProxy);
+		Assert.Equal(isProxy, jWeak1.IsProxy);
 
 		Assert.InRange(jWeak0.LastValidation, currentDate, latestDate);
-		Assert.InRange(jWeak2.LastValidation, currentDate, latestDate);
+		Assert.InRange(jWeak1.LastValidation, currentDate, latestDate);
 
 		env.ClearReceivedCalls();
 
-		Assert.Equal(jWeak2, jClassClass.Weak);
+		Assert.Equal(jWeak1, jClassClass.Weak);
 		env.ReferenceFeature.Received(1).Create<JWeak>(jClassClass);
 
 		Assert.Equal(weakRef1.Value, jClassClass.Reference.Value);
-		env.Received(1).IsValidationAvoidable(jWeak2);
-		env.Received(0).GetReferenceType(jWeak2);
+		env.Received(1).IsValidationAvoidable(jWeak1);
+		env.Received(0).GetReferenceType(jWeak1);
 
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(false);
 
 		Assert.Equal(weakRef1.Value, jClassClass.Reference.Value);
 
 		env.ReferenceFeature.Received(1).Create<JWeak>(jClassClass);
-		env.Received(2).IsValidationAvoidable(jWeak2);
-		env.Received(1).GetReferenceType(jWeak2);
+		env.Received(2).IsValidationAvoidable(jWeak1);
+		env.Received(1).GetReferenceType(jWeak1);
 
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
 
 		Assert.False(jWeak0.HasObjects);
-		Assert.False(jWeak2.HasObjects);
+		Assert.False(jWeak1.HasObjects);
 
-		Assert.Equal(typeof(ClassObjectMetadata), jWeak0.MetadataType);
+		Assert.Equal(typeof(ClassObjectMetadata), jWeak0.ObjectMetadata.GetType());
 		Assert.True(jWeak0.ObjectSignature.AsSpan().SequenceEqual(jClassClass.ObjectSignature));
 
 		vm.ClearReceivedCalls();
 		env.ReferenceFeature.ClearReceivedCalls();
-		jWeak2.Dispose();
+		jWeak1.Dispose();
 
 		vm.Received(1).InitializeThread(Arg.Any<CString?>());
-		env.ReferenceFeature.Received(1).Unload(jWeak2);
-		Assert.Equal(default, jWeak2.Reference);
+		env.ReferenceFeature.Received(1).Unload(jWeak1);
+		Assert.Equal(default, jWeak1.Reference);
 
 		vm.ClearReceivedCalls();
 		env.ReferenceFeature.ClearReceivedCalls();
-		jWeak2.Dispose();
+		jWeak1.Dispose();
 		vm.Received(1).InitializeThread(Arg.Any<CString?>());
-		env.ReferenceFeature.Received(0).Unload(jWeak2);
+		env.ReferenceFeature.Received(0).Unload(jWeak1);
 
 		env.ClearReceivedCalls();
 
 		Assert.Equal(default, jClassClass.Reference.Value);
-		env.Received(0).IsValidationAvoidable(jWeak2);
-		env.Received(0).GetReferenceType(jWeak2);
+		env.Received(0).IsValidationAvoidable(jWeak1);
+		env.Received(0).GetReferenceType(jWeak1);
+
+		Assert.Equal($"{jWeak0.Reference} {jWeak0.ObjectMetadata}", jWeak0.ToString());
+		Assert.Equal($"{jWeak1.Reference} {jWeak1.ObjectMetadata}", jWeak1.ToString());
 	}
 
 	[Theory]

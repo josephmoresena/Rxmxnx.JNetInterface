@@ -35,11 +35,10 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 			return result;
 		}
 	}
-
 	/// <summary>
 	/// JNI field id.
 	/// </summary>
-	internal JFieldId FieldId => this._fieldId ??= this.GetFieldId();
+	public JFieldId FieldId => this._fieldId ??= this.GetFieldId();
 
 	/// <summary>
 	/// Constructor.

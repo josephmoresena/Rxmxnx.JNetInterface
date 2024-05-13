@@ -41,6 +41,18 @@ public sealed class PrimitiveArrayTests
 			Int32 arrayLength = Random.Shared.Next(0, Int32.MaxValue);
 			JArrayLocalRef arrayRef = PrimitiveArrayTests.fixture.Create<JArrayLocalRef>();
 			JClassLocalRef classRef = PrimitiveArrayTests.fixture.Create<JClassLocalRef>();
+			Object traceArrayRef = arrayTypeMetadata.Signature[1] switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => JBooleanArrayLocalRef.FromReference(arrayRef),
+				UnicodePrimitiveSignatures.ByteSignatureChar => JByteArrayLocalRef.FromReference(arrayRef),
+				UnicodePrimitiveSignatures.CharSignatureChar => JCharArrayLocalRef.FromReference(arrayRef),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => JDoubleArrayLocalRef.FromReference(arrayRef),
+				UnicodePrimitiveSignatures.FloatSignatureChar => JFloatArrayLocalRef.FromReference(arrayRef),
+				UnicodePrimitiveSignatures.IntSignatureChar => JIntArrayLocalRef.FromReference(arrayRef),
+				UnicodePrimitiveSignatures.LongSignatureChar => JLongArrayLocalRef.FromReference(arrayRef),
+				UnicodePrimitiveSignatures.ShortSignatureChar => JShortArrayLocalRef.FromReference(arrayRef),
+				_ => JObjectArrayLocalRef.FromReference(arrayRef),
+			};
 
 			env.ArrayFeature.GetArrayLength(Arg.Any<JReferenceObject>()).Returns(arrayLength);
 
@@ -56,6 +68,8 @@ public sealed class PrimitiveArrayTests
 			Assert.Equal(
 				$"{primitiveTypeMetadata.ClassName}[{arrayLength}]{String.Concat(Enumerable.Repeat("[]", i))} {arrayRef}",
 				jArray.ToString());
+			Assert.Equal($"{arrayTypeMetadata.ClassName} length: {jArray.Length} {traceArrayRef}",
+			             jArray.ToTraceText());
 			Assert.Equal($"[{String.Concat(Enumerable.Repeat("[", i))}{primitiveTypeMetadata.Signature}",
 			             arrayTypeMetadata.Signature.ToString());
 			arrayTypeMetadata = arrayTypeMetadata.GetArrayMetadata()!;

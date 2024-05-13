@@ -104,7 +104,7 @@ public sealed class InterfacesTests
 
 	private sealed record LocalView(ILocalObject Object) : ILocalViewObject
 	{
-		public JObjectLocalRef InternalReference => this.Object.InternalReference;
+		public JObjectLocalRef LocalReference => this.Object.LocalReference;
 		public TReference CastTo<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
 			=> this.Object.CastTo<TReference>();
 	}

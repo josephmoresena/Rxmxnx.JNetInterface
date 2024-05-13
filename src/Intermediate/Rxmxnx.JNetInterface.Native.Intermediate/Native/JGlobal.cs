@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-/// This class represents a <see cref="JObject"/> instance which remain valid across
+/// This class represents a <see cref="JObject"/> instance that remains valid across
 /// different threads until it is explicitly unloaded.
 /// </summary>
 public sealed class JGlobal : JGlobalBase
@@ -17,7 +17,7 @@ public sealed class JGlobal : JGlobalBase
 	/// <summary>
 	/// Global reference.
 	/// </summary>
-	internal JGlobalRef Reference => this.As<JGlobalRef>();
+	public JGlobalRef Reference => this.As<JGlobalRef>();
 
 	/// <summary>
 	/// Secondary <see cref="ObjectLifetime"/>
@@ -47,6 +47,12 @@ public sealed class JGlobal : JGlobalBase
 	internal JGlobal(JGlobalBase jGlobal, JGlobalRef globalRef) : base(jGlobal.VirtualMachine, jGlobal.ObjectMetadata,
 	                                                                   globalRef)
 		=> this.IsDisposable = true;
+
+	/// <inheritdoc/>
+	public override String ToString() => $"{this.Reference} {this.ObjectMetadata}";
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override String ToTraceText() => $"{this.Reference} {this.ObjectMetadata.ToTraceText()}";
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)

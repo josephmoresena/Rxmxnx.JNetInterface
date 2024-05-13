@@ -180,38 +180,43 @@ partial class JEnvironment
 		public void ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer, JReleaseMode mode)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
-			if (!this._env.IsAttached)
+			try
 			{
-				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. Thread is not attached.");
+				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+				{
+					JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+					this.ReleasePrimitiveArrayElements(arrayRef, metadata.Signature[0], pointer, mode);
+					this.CheckJniError();
+				}
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, true, arrayRef, pointer);
 			}
-			else if (!this.VirtualMachine.IsAlive)
+			catch (Exception)
 			{
-				Debug.WriteLine($"Unable to release memory 0x{pointer:0x8}. JVM is not alive.");
-			}
-			else
-			{
-				JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-				this.ReleasePrimitiveArrayElements(arrayRef, metadata.Signature[0], pointer, mode);
-				this.CheckJniError();
+				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, false, arrayRef,
+				                     pointer);
+				throw;
 			}
 		}
 		public void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
 		{
-			if (!this._env.IsAttached)
+			try
 			{
-				Debug.WriteLine($"Unable to release critical memory 0x{criticalPtr:0x8}. Thread is not attached.");
+				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
+				{
+					ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
+						this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
+					releasePrimitiveArrayCritical(this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
+					this.CheckJniError();
+					this._criticalCount--;
+				}
+				JTrace.ReleaseMemory(true, this._env.IsAttached, this.VirtualMachine.IsAlive, true, arrayRef,
+				                     criticalPtr);
 			}
-			else if (!this.VirtualMachine.IsAlive)
+			catch (Exception)
 			{
-				Debug.WriteLine($"Unable to release critical memory 0x{criticalPtr:0x8}. JVM is not alive.");
-			}
-			else
-			{
-				ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
-					this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
-				releasePrimitiveArrayCritical(this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
-				this.CheckJniError();
-				this._criticalCount--;
+				JTrace.ReleaseMemory(true, this._env.IsAttached, this.VirtualMachine.IsAlive, false, arrayRef,
+				                     criticalPtr);
+				throw;
 			}
 		}
 		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)

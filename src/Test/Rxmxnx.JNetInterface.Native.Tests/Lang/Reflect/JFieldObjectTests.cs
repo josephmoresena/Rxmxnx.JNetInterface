@@ -25,7 +25,7 @@ public class JFieldObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
 		using JClassObject jFieldClass = new(jClass, typeMetadata);
-		using JStringObject jStringFieldName = new(jStringClass, default, fieldDefinition.Information[0].ToString());
+		using JStringObject jStringFieldName = new(jStringClass, default, fieldDefinition.Name.ToString());
 		using JFieldObject jField = initDefinition ?
 			new(jFieldClass, localRef, fieldDefinition, jClass) :
 			Assert.IsType<JFieldObject>(typeMetadata.CreateInstance(jFieldClass, localRef));
@@ -35,7 +35,7 @@ public class JFieldObjectTests
 		env.FunctionSet.GetFieldType(jField).Returns(jStringClass);
 		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringFieldName, jStringClass).Returns(fieldDefinition);
-		env.AccessFeature.GetFieldId(jField).Returns(fieldId.Pointer);
+		env.AccessFeature.GetFieldId(jField).Returns(fieldId);
 
 		Assert.Equal(fieldDefinition, jField.Definition);
 		Assert.Equal(jClass, jField.DeclaringClass);
@@ -66,7 +66,7 @@ public class JFieldObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject jFieldClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
-		using JStringObject jStringFieldName = new(jStringClass, default, fieldDefinition.Information[0].ToString());
+		using JStringObject jStringFieldName = new(jStringClass, default, fieldDefinition.Name.ToString());
 		using JFieldObject jField =
 			Assert.IsType<JFieldObject>(typeMetadata.CreateInstance(jFieldClass, localRef, true));
 
@@ -75,7 +75,7 @@ public class JFieldObjectTests
 		env.FunctionSet.GetFieldType(jField).Returns(jStringClass);
 		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringFieldName, jStringClass).Returns(fieldDefinition);
-		env.AccessFeature.GetFieldId(jField).Returns(fieldId.Pointer);
+		env.AccessFeature.GetFieldId(jField).Returns(fieldId);
 
 		ILocalObject.ProcessMetadata(
 			jField,

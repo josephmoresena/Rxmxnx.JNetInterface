@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 {
 	/// <summary>
-	/// JNI local reference.
+	/// JNI object reference.
 	/// </summary>
 	public JObjectLocalRef Reference => this.To<JObjectLocalRef>();
 	/// <summary>
@@ -40,6 +40,10 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
 	public override CString ObjectSignature
 		=> this.Lifetime.Class?.ClassSignature ?? UnicodeObjectSignatures.ObjectSignature;
+	/// <summary>
+	/// JNI local object reference.
+	/// </summary>
+	public JObjectLocalRef LocalReference => base.To<JObjectLocalRef>();
 
 	/// <summary>
 	/// Retrieves a <typeparamref name="TReference"/> instance from current instance.
@@ -53,7 +57,10 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		=> this.CastTo<TReference>(this, dispose);
 	/// <inheritdoc/>
-	public override String ToString() => $"{this.Class.Name} {this.Reference}";
+	public override String ToString() => this.ToTraceText();
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override String ToTraceText() => $"{this.Class.Name} {this.Reference}";
 
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.

@@ -6,4 +6,6 @@ internal sealed class PrimitiveObjectProxy<T>(CString className, CString signatu
 {
 	public override CString ObjectClassName { get; } = className;
 	public override CString ObjectSignature { get; } = signature;
+
+	public override String ToTraceText() => this.ToString()!;
 }

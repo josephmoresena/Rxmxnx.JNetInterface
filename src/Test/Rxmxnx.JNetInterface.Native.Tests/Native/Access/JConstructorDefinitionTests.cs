@@ -95,6 +95,7 @@ public sealed class JConstructorDefinitionTests
 			            (Object)new JMethodDefinition((CString)JConstructorDefinitionTests.MethodName)));
 		Assert.Equal(0, constructorDefinition.Count);
 		Assert.Equal(0, constructorDefinition.ReferenceCount);
+		Assert.Equal(0, constructorDefinition.Size);
 		Assert.Empty(constructorDefinition.Sizes);
 		Assert.Equal(jConstructor, constructorDefinition.GetReflected(jClass));
 
@@ -144,6 +145,7 @@ public sealed class JConstructorDefinitionTests
 		Assert.True(constructorDefinition.Equals(
 			            (Object)JMethodDefinition.Create((CString)JConstructorDefinitionTests.MethodName,
 			                                             JConstructorDefinitionTests.args)));
+		Assert.Equal(JConstructorDefinitionTests.args.Select(a => a.Size).Sum(), constructorDefinition.Size);
 		Assert.Equal(JConstructorDefinitionTests.args.Length, constructorDefinition.Count);
 		Assert.Equal(JConstructorDefinitionTests.args.Count(a => a.Signature.Length > 1),
 		             constructorDefinition.ReferenceCount);

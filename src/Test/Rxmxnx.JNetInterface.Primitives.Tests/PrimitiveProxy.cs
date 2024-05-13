@@ -11,6 +11,7 @@ internal sealed class PrimitiveProxy(JPrimitiveObject primitive, CString? signat
 		=> (primitive as IObject).CopyTo(span, ref offset);
 	private protected override void CopyTo(Span<JValue> span, Int32 index)
 		=> (primitive as IObject).CopyTo(span, index);
+	public override String ToTraceText() => this.ToString()!;
 	private protected override ReadOnlySpan<Byte> AsSpan() => JPrimitiveObject.GetSpan(primitive);
 	public override Byte ToByte() => this.AsSpan()[0];
 }

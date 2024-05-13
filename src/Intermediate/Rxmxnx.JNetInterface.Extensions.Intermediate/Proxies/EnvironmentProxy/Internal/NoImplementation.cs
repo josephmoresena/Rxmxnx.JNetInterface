@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native.Proxies;
+namespace Rxmxnx.JNetInterface.Proxies;
 
 public abstract partial class EnvironmentProxy
 {
@@ -34,10 +34,5 @@ public abstract partial class EnvironmentProxy
 	void IStringFeature.ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer) { }
 	void IStringFeature.ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer) { }
 	void IStringFeature.ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer) { }
-	#endregion
-
-	#region IAccessFeature
-	JMethodId IAccessFeature.GetMethodId(JExecutableObject jExecutable) => default;
-	JFieldId IAccessFeature.GetFieldId(JFieldObject jField) => default;
 	#endregion
 }

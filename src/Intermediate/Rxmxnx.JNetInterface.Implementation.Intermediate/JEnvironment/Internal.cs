@@ -72,6 +72,7 @@ partial class JEnvironment
 	internal JFieldId GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
 	{
 		JFieldId fieldId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetFieldId);
+		JTrace.GetAccessibleId(classRef, definition, fieldId);
 		if (fieldId == default) this._cache.CheckJniError();
 		return fieldId;
 	}
@@ -84,6 +85,7 @@ partial class JEnvironment
 	internal JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
 	{
 		JFieldId fieldId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetStaticFieldId);
+		JTrace.GetAccessibleId(classRef, definition, fieldId);
 		if (fieldId == default) this._cache.CheckJniError();
 		return fieldId;
 	}
@@ -96,6 +98,7 @@ partial class JEnvironment
 	internal JMethodId GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
 	{
 		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetMethodId);
+		JTrace.GetAccessibleId(classRef, definition, methodId);
 		if (methodId == default) this._cache.CheckJniError();
 		return methodId;
 	}
@@ -108,6 +111,7 @@ partial class JEnvironment
 	internal JMethodId GetStaticMethodId(JCallDefinition definition, JClassLocalRef classRef)
 	{
 		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetStaticMethodId);
+		JTrace.GetAccessibleId(classRef, definition, methodId);
 		if (methodId == default) this._cache.CheckJniError();
 		return methodId;
 	}
@@ -166,8 +170,8 @@ partial class JEnvironment
 		using LocalFrame frame = new(this, 2);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
 		JClassObject jClass = this._cache.GetClass(classRef, true);
-		frame[jClass.InternalReference] = jClass.Lifetime.GetCacheable();
-		metadata = this._cache.GetTypeMetadata(jClass)!;
+		frame[jClass.LocalReference] = jClass.Lifetime.GetCacheable();
+		metadata = this._cache.GetTypeMetadata(jClass);
 		return jClass;
 	}
 
@@ -177,13 +181,16 @@ partial class JEnvironment
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	internal void LoadClass(JClassObject jClass) => this._cache.LoadClass(jClass);
 	/// <summary>
-	/// Creates a new local reference for <paramref name="oldLocalRef"/>.
+	/// Creates a new local reference for <paramref name="objectRef"/>.
 	/// </summary>
-	/// <param name="oldLocalRef">A <see cref="JObjectLocalRef"/> reference.</param>
-	internal JObjectLocalRef CreateLocalRef(JObjectLocalRef oldLocalRef)
+	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
+	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
+	internal JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
+		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
 	{
 		NewLocalRefDelegate newLocalRef = this._cache.GetDelegate<NewLocalRefDelegate>();
-		JObjectLocalRef localRef = newLocalRef(this.Reference, oldLocalRef);
+		JObjectLocalRef localRef = newLocalRef(this.Reference, objectRef.Value);
+		JTrace.CreateLocalRef(objectRef, localRef);
 		if (localRef == default) this._cache.CheckJniError();
 		return localRef;
 	}

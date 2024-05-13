@@ -34,32 +34,36 @@ internal sealed class AccessCache
 
 	public JFieldId GetFieldId(JFieldDefinition definition, JEnvironment env)
 	{
-		String hash = definition.Information.ToString();
+		String hash = definition.Hash;
 		if (this._fields.TryGetValue(hash, out JFieldId result)) return result;
+		JTrace.GetAccessibleId(this._classRef, definition);
 		result = env.GetFieldId(definition, this._classRef);
 		this._fields.TryAdd(hash, result);
 		return result;
 	}
 	public JFieldId GetStaticFieldId(JFieldDefinition definition, JEnvironment env)
 	{
-		String hash = definition.Information.ToString();
+		String hash = definition.Hash;
 		if (this._staticFields.TryGetValue(hash, out JFieldId result)) return result;
+		JTrace.GetAccessibleId(this._classRef, definition);
 		result = env.GetStaticFieldId(definition, this._classRef);
 		this._staticFields.TryAdd(hash, result);
 		return result;
 	}
 	public JMethodId GetMethodId(JCallDefinition definition, JEnvironment env)
 	{
-		String hash = definition.Information.ToString();
+		String hash = definition.Hash;
 		if (this._methods.TryGetValue(hash, out JMethodId result)) return result;
+		JTrace.GetAccessibleId(this._classRef, definition);
 		result = env.GetMethodId(definition, this._classRef);
 		this._methods.TryAdd(hash, result);
 		return result;
 	}
 	public JMethodId GetStaticMethodId(JCallDefinition definition, JEnvironment env)
 	{
-		String hash = definition.Information.ToString();
+		String hash = definition.Hash;
 		if (this._staticMethods.TryGetValue(hash, out JMethodId result)) return result;
+		JTrace.GetAccessibleId(this._classRef, definition);
 		result = env.GetStaticMethodId(definition, this._classRef);
 		this._staticMethods.TryAdd(hash, result);
 		return result;

@@ -11,12 +11,7 @@ partial class JEnvironment
 			if (jObject is JClassObject jClass) return jClass;
 			ValidationUtilities.ThrowIfDefault(jObject);
 			if (!jObject.InstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
-			JClassObject result = this.AsClassObject(classRef);
-			if (jObject is ILocalObject local && classRef == result.InternalReference)
-				result.Lifetime.Synchronize(local.Lifetime);
-			return result;
+			return this.AsClassObjectUnchecked(jObject);
 		}
 		[return: NotNullIfNotNull(nameof(jClass))]
 		public JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass)
@@ -95,7 +90,7 @@ partial class JEnvironment
 			if (!superClassRef.IsDefault)
 			{
 				JClassObject jSuperClass = this.AsClassObject(superClassRef);
-				if (jSuperClass.InternalReference != superClassRef.Value) this._env.DeleteLocalRef(superClassRef.Value);
+				if (jSuperClass.LocalReference != superClassRef.Value) this._env.DeleteLocalRef(superClassRef.Value);
 				return jSuperClass;
 			}
 			this.CheckJniError();
@@ -147,10 +142,14 @@ partial class JEnvironment
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 		{
 			ValidationUtilities.ThrowIfProxy(jClass);
+			ValidationUtilities.ThrowIfDefault(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			JClassLocalRef classRef = jniTransaction.Add(jClass);
+			JReferenceType referenceType = this._env.GetReferenceType(classRef.Value);
+			Boolean isLocalRef = referenceType == JReferenceType.LocalRefType;
+			JTrace.GetClassInfo(classRef, referenceType);
 			if (classRef.IsDefault) throw new ArgumentException("Unloaded class.");
-			JClassObject loadedClass = this.AsClassObject(classRef);
+			JClassObject loadedClass = this.GetClass(classRef, isLocalRef);
 			name = loadedClass.Name;
 			signature = loadedClass.ClassSignature;
 			hash = loadedClass.Hash;

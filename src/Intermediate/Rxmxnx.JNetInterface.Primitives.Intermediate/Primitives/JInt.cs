@@ -48,7 +48,7 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	private JInt(Int32 value) => this._value = value;
 
 #if PACKAGE
-	JLocalObject IPrimitive.ToObject(IEnvironment env) => this.ToObject(env);
+	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
 
 	/// <inheritdoc/>

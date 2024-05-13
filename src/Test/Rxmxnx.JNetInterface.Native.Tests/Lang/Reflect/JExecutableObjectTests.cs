@@ -28,8 +28,7 @@ public class JExecutableObjectTests
 		using JClassObject jExecutableClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
 		using JClassObject jClassArrayClass = new(jClass, IArrayType.GetMetadata<JArrayObject<JClassObject>>());
-		using JStringObject jStringExecutableName =
-			new(jStringClass, default, executableDefinition.Information[0].ToString());
+		using JStringObject jStringExecutableName = new(jStringClass, default, executableDefinition.Name.ToString());
 		using JArrayObject<JClassObject> jArrayParameters = new(jClassArrayClass, arrayRef, 0);
 		using JExecutableObject jExecutable =
 			Assert.IsType<JExecutableObject>(typeMetadata.CreateInstance(jExecutableClass, localRef, true));
@@ -41,7 +40,7 @@ public class JExecutableObjectTests
 		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringExecutableName, jArrayParameters, jStringClass)
 		   .Returns(executableDefinition);
-		env.AccessFeature.GetMethodId(jExecutable).Returns(methodId.Pointer);
+		env.AccessFeature.GetMethodId(jExecutable).Returns(methodId);
 
 		ILocalObject.ProcessMetadata(jExecutable,
 		                             useMetadata ?

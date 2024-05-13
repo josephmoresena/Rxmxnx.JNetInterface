@@ -43,7 +43,8 @@ partial class JEnvironment
 			if (globalRef == default || result is not null) return;
 			try
 			{
-				JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef.Value);
+				JTrace.CreateLocalRef(globalRef);
+				JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
 				JLocalObject jLocal = this.Register(result)!;
 				jLocal.SetValue(localRef);
 			}
@@ -71,7 +72,7 @@ partial class JEnvironment
 		public void Remove(JLocalObject? jLocal)
 		{
 			if (jLocal is null) return;
-			JObjectLocalRef localRef = jLocal.InternalReference;
+			JObjectLocalRef localRef = jLocal.LocalReference;
 			this._objects.Remove(localRef);
 			if (jLocal is JClassObject)
 				this._classes.Unload(JClassLocalRef.FromReference(in localRef));
