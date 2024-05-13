@@ -109,6 +109,23 @@ partial class JEnvironment
 			return jClass.Name.WithSafeFixed(this, EnvironmentCache.FindClass);
 		}
 		/// <summary>
+		/// Retrieves the current <paramref name="classRef"/> instance as <see cref="JClassObject"/>.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="isLocalRef">Indicates whether <paramref name="classRef"/> is local reference.</param>
+		/// <param name="classObjectMetadata">A <see cref="ClassObjectMetadata"/> instance.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject GetClass(JClassLocalRef classRef, Boolean isLocalRef,
+			ClassObjectMetadata? classObjectMetadata)
+		{
+			JClassObject result;
+			if (classObjectMetadata is null)
+				result = this.GetClass(classRef, isLocalRef);
+			else
+				result = this.GetClass(classObjectMetadata.Name, isLocalRef ? classRef : default);
+			return this.Register(result);
+		}
+		/// <summary>
 		/// Retrieves class from cache or loads it using JNI.
 		/// </summary>
 		/// <param name="classInformation">A <see cref="ITypeInformation"/> instance.</param>

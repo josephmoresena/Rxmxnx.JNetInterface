@@ -17,10 +17,7 @@ partial class JEnvironment
 			Boolean isLocalRef = referenceType == JReferenceType.LocalRefType;
 			ClassObjectMetadata? classObjectMetadata = this.GetClassObjectMetadata(jObject);
 			JTrace.AsClassObject(classRef, referenceType, classObjectMetadata);
-			JClassObject result = this.Register(classObjectMetadata is null ?
-				                                    this.GetClass(classRef, isLocalRef) :
-				                                    this.GetClass(classObjectMetadata.Name,
-				                                                  isLocalRef ? classRef : default));
+			JClassObject result = this.GetClass(classRef, isLocalRef, classObjectMetadata);
 			switch (jObject)
 			{
 				case ILocalObject local when classRef == result.LocalReference:

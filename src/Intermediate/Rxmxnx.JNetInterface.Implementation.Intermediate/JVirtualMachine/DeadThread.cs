@@ -6,6 +6,8 @@ public partial class JVirtualMachine
 	/// This class is a JNI instance created from an invalid <see cref="JVirtualMachine"/> instance.
 	/// </summary>
 	/// <param name="VirtualMachine">A <see cref="JVirtualMachine"/> instance.</param>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6670,
+	                 Justification = CommonConstants.NonStandardTraceJustification)]
 	private sealed record DeadThread(JVirtualMachine VirtualMachine)
 		: IThread, IReferenceFeature, IStringFeature, IArrayFeature, IClassFeature
 	{

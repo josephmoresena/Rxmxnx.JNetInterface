@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6670,
+                 Justification = CommonConstants.NonStandardTraceJustification)]
 internal static partial class JTrace
 {
 	/// <summary>
@@ -44,8 +46,8 @@ internal static partial class JTrace
 	/// <param name="definition">Call definition.</param>
 	/// <param name="bytes">Binary span containing value to set to.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void SetPrimitiveField<TPrimitive>(JLocalObject? jLocal, JClassObject jClass,
-		JFieldDefinition definition, ReadOnlySpan<Byte> bytes, [CallerMemberName] String callerMethod = "")
+	public static void SetField<TPrimitive>(JLocalObject? jLocal, JClassObject jClass, JFieldDefinition definition,
+		ReadOnlySpan<Byte> bytes, [CallerMemberName] String callerMethod = "")
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;

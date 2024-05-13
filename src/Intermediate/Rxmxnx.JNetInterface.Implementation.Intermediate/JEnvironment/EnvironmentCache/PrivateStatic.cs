@@ -118,28 +118,28 @@ partial class JEnvironment
 			switch (definition.Information[1][0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					JTrace.SetPrimitiveField<JBoolean>(jLocal, jClass, definition, bytes);
+					JTrace.SetField<JBoolean>(jLocal, jClass, definition, bytes);
 					break;
 				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					JTrace.SetPrimitiveField<JByte>(jLocal, jClass, definition, bytes);
+					JTrace.SetField<JByte>(jLocal, jClass, definition, bytes);
 					break;
 				case UnicodePrimitiveSignatures.CharSignatureChar:
-					JTrace.SetPrimitiveField<JChar>(jLocal, jClass, definition, bytes);
+					JTrace.SetField<JChar>(jLocal, jClass, definition, bytes);
 					break;
 				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					JTrace.SetPrimitiveField<JDouble>(jLocal, jClass, definition, bytes);
+					JTrace.SetField<JDouble>(jLocal, jClass, definition, bytes);
 					break;
 				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					JTrace.SetPrimitiveField<JFloat>(jLocal, jClass, definition, bytes);
+					JTrace.SetField<JFloat>(jLocal, jClass, definition, bytes);
 					break;
 				case UnicodePrimitiveSignatures.IntSignatureChar:
-					JTrace.SetPrimitiveField<JInt>(jLocal, jClass, definition, bytes);
+					JTrace.SetField<JInt>(jLocal, jClass, definition, bytes);
 					break;
 				case UnicodePrimitiveSignatures.LongSignatureChar:
-					JTrace.SetPrimitiveField<JLong>(jLocal, jClass, definition, bytes);
+					JTrace.SetField<JLong>(jLocal, jClass, definition, bytes);
 					break;
 				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					JTrace.SetPrimitiveField<JShort>(jLocal, jClass, definition, bytes);
+					JTrace.SetField<JShort>(jLocal, jClass, definition, bytes);
 					break;
 			}
 		}
