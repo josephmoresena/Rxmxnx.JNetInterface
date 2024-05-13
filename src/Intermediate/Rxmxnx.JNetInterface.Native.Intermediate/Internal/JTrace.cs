@@ -84,7 +84,7 @@ internal static partial class JTrace
 			Trace.WriteLine($"Unable to remove unregistered {localRef}.", callerMethod);
 		else if (!isAttached)
 			Trace.WriteLine($"Unable to remove {localRef}. Thread is not attached.", callerMethod);
-		else if (isAlive)
+		else if (!isAlive)
 			Trace.WriteLine($"Unable to remove {localRef}. JVM is not alive.", callerMethod);
 		else
 			Trace.WriteLine($"{localRef} removed.", callerMethod);
