@@ -159,10 +159,10 @@ partial class JEnvironment
 				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 			if (classRef.IsDefault)
-				this.CallPrimitiveMethod(bytes, localRef, definition.Information[1][^1], methodId, argsMemory);
+				this.CallPrimitiveFunction(bytes, localRef, definition.Information[1][^1], methodId, argsMemory);
 			else
-				this.CallNonVirtualPrimitiveMethod(bytes, localRef, classRef, definition.Information[1][^1], methodId,
-				                                   argsMemory);
+				this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, definition.Information[1][^1], methodId,
+				                                     argsMemory);
 			this.CheckJniError();
 		}
 		/// <summary>

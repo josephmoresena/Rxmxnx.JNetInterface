@@ -90,7 +90,7 @@ internal static partial class JTrace
 					break;
 			}
 		}
-		Trace.WriteLineIf(IVirtualMachine.TraceEnabled, strBuilder, callerMethod);
+		Trace.WriteLine(strBuilder, callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the assignment of a value to a primitive field to the trace listeners.

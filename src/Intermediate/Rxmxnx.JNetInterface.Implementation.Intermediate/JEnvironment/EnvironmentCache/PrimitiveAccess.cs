@@ -55,6 +55,27 @@ partial class JEnvironment
 			this.CheckJniError();
 		}
 		/// <summary>
+		/// Sets a primitive static field.
+		/// </summary>
+		/// <typeparam name="TValue">A <see langword="unmanaged"/> type.</typeparam>
+		/// <typeparam name="TDelegate">A <see cref="Delegate"/> to set static field.</typeparam>
+		/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="bytes">Binary span containing value to set to.</param>
+		/// <param name="signature">Primitive char signature.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		/// <param name="setValue">Action to set value.</param>
+		/// <param name="formatValue">Trace format value function.</param>
+		private void SetPrimitiveStaticField<TValue, TDelegate>(JClassLocalRef classRef, ReadOnlySpan<Byte> bytes,
+			Byte signature, JFieldId fieldId,
+			Action<TDelegate, JEnvironmentRef, JClassLocalRef, JFieldId, TValue> setValue,
+			Func<TValue, String>? formatValue = default) where TValue : unmanaged where TDelegate : Delegate
+		{
+			TValue value = MemoryMarshal.AsRef<TValue>(bytes);
+			TDelegate setStaticField = this.GetDelegate<TDelegate>();
+			setValue(setStaticField, this.Reference, classRef, fieldId, value);
+			JTrace.SetPrimitiveField(default, classRef, signature, fieldId, value, formatValue);
+		}
+		/// <summary>
 		/// Sets a primitive field.
 		/// </summary>
 		/// <param name="bytes">Binary span containing value to set to.</param>
@@ -103,6 +124,27 @@ partial class JEnvironment
 					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
+		}
+		/// <summary>
+		/// Sets a primitive field.
+		/// </summary>
+		/// <typeparam name="TValue">A <see langword="unmanaged"/> type.</typeparam>
+		/// <typeparam name="TDelegate">A <see cref="Delegate"/> to set field.</typeparam>
+		/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="bytes">Binary span containing value to set to.</param>
+		/// <param name="signature">Primitive char signature.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		/// <param name="setValue">Action to set value.</param>
+		/// <param name="formatValue">Function to format value.</param>
+		private void SetPrimitiveField<TValue, TDelegate>(JObjectLocalRef localRef, ReadOnlySpan<Byte> bytes,
+			Byte signature, JFieldId fieldId,
+			Action<TDelegate, JEnvironmentRef, JObjectLocalRef, JFieldId, TValue> setValue,
+			Func<TValue, String>? formatValue = default) where TValue : unmanaged where TDelegate : Delegate
+		{
+			TValue value = MemoryMarshal.AsRef<TValue>(bytes);
+			TDelegate setField = this.GetDelegate<TDelegate>();
+			setValue(setField, this.Reference, localRef, fieldId, value);
+			JTrace.SetPrimitiveField(localRef, default, signature, fieldId, value, formatValue);
 		}
 		/// <summary>
 		/// Retrieves a primitive static field.
@@ -155,6 +197,25 @@ partial class JEnvironment
 			this.CheckJniError();
 		}
 		/// <summary>
+		/// Retrieves a primitive static field.
+		/// </summary>
+		/// <param name="bytes">Binary span to hold result.</param>
+		/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="signature">Primitive char signature.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		/// <param name="getValue">Function to get value.</param>
+		/// <param name="formatValue">Function to format value.</param>
+		private void GetPrimitiveStaticField<TValue, TDelegate>(Span<Byte> bytes, JClassLocalRef classRef,
+			Byte signature, JFieldId fieldId,
+			Func<TDelegate, JEnvironmentRef, JClassLocalRef, JFieldId, TValue> getValue,
+			Func<TValue, String>? formatValue = default) where TValue : unmanaged where TDelegate : Delegate
+		{
+			TDelegate getStaticField = this.GetDelegate<TDelegate>();
+			TValue result = getValue(getStaticField, this.Reference, classRef, fieldId);
+			MemoryMarshal.AsRef<TValue>(bytes) = result;
+			JTrace.GetPrimitiveField(default, classRef, signature, fieldId, result, formatValue);
+		}
+		/// <summary>
 		/// Retrieves a primitive field.
 		/// </summary>
 		/// <param name="bytes">Binary span to hold result.</param>
@@ -202,6 +263,24 @@ partial class JEnvironment
 					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 			this.CheckJniError();
+		}
+		/// <summary>
+		/// Retrieves a primitive field.
+		/// </summary>
+		/// <param name="bytes">Binary span to hold result.</param>
+		/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="signature">Primitive char signature.</param>
+		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
+		/// <param name="getValue">Function to get value.</param>
+		/// <param name="formatValue">Function to format value.</param>
+		private void GetPrimitiveField<TValue, TDelegate>(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
+			JFieldId fieldId, Func<TDelegate, JEnvironmentRef, JObjectLocalRef, JFieldId, TValue> getValue,
+			Func<TValue, String>? formatValue = default) where TValue : unmanaged where TDelegate : Delegate
+		{
+			TDelegate getStaticField = this.GetDelegate<TDelegate>();
+			TValue result = getValue(getStaticField, this.Reference, localRef, fieldId);
+			MemoryMarshal.AsRef<TValue>(bytes) = result;
+			JTrace.GetPrimitiveField(localRef, default, signature, fieldId, result, formatValue);
 		}
 		/// <summary>
 		/// Invokes a primitive static function.
@@ -262,6 +341,29 @@ partial class JEnvironment
 			this.CheckJniError();
 		}
 		/// <summary>
+		/// Invokes a primitive static function.
+		/// </summary>
+		/// <param name="bytes">Destination span.</param>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="signature">Primitive signature.</param>
+		/// <param name="argsPointer">Pointer to call argments array.</param>
+		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
+		/// <param name="callFunction">Function to invoke function.</param>
+		/// <param name="formatValue">Function to format value.</param>
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
+		                 Justification = CommonConstants.PrimitiveCallJustification)]
+		private void CallPrimitiveStaticFunction<TValue, TDelegate>(Span<Byte> bytes, JClassLocalRef classRef,
+			Byte signature, JMethodId methodId, IntPtr argsPointer,
+			Func<TDelegate, JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>, TValue> callFunction,
+			Func<TValue, String>? formatValue = default) where TValue : unmanaged where TDelegate : Delegate
+		{
+			TDelegate callStaticFunction = this.GetDelegate<TDelegate>();
+			TValue result = callFunction(callStaticFunction, this.Reference, classRef, methodId,
+			                             (ReadOnlyValPtr<JValue>)argsPointer);
+			MemoryMarshal.AsRef<TValue>(bytes) = result;
+			JTrace.CallPrimitiveFunction(default, classRef, signature, methodId, result, formatValue);
+		}
+		/// <summary>
 		/// Invokes a primitive non-virtual function.
 		/// </summary>
 		/// <param name="bytes">Destination span.</param>
@@ -271,8 +373,8 @@ partial class JEnvironment
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="argsMemory">Fixed memory with parameters.</param>
 		/// <exception cref="ArgumentException">If signature is not for a primitive type.</exception>
-		private void CallNonVirtualPrimitiveMethod(Span<Byte> bytes, JObjectLocalRef localRef, JClassLocalRef classRef,
-			Byte signature, JMethodId methodId, IFixedPointer argsMemory)
+		private void CallPrimitiveNonVirtualFunction(Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, Byte signature, JMethodId methodId, IFixedPointer argsMemory)
 		{
 			switch (signature)
 			{
@@ -321,6 +423,31 @@ partial class JEnvironment
 			}
 		}
 		/// <summary>
+		/// Invokes a primitive non-virtual function.
+		/// </summary>
+		/// <param name="bytes">Destination span.</param>
+		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="signature">Primitive signature.</param>
+		/// <param name="argsPointer">Pointer to call argments array.</param>
+		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
+		/// <param name="callFunction">Function to invoke function.</param>
+		/// <param name="formatValue">Function to format value.</param>
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
+		                 Justification = CommonConstants.PrimitiveCallJustification)]
+		private void CallPrimitiveNonVirtualFunction<TValue, TDelegate>(Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, Byte signature, JMethodId methodId, IntPtr argsPointer,
+			Func<TDelegate, JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>, TValue>
+				callFunction, Func<TValue, String>? formatValue = default)
+			where TValue : unmanaged where TDelegate : Delegate
+		{
+			TDelegate callNonVirtualFunction = this.GetDelegate<TDelegate>();
+			TValue result = callFunction(callNonVirtualFunction, this.Reference, localRef, classRef, methodId,
+			                             (ReadOnlyValPtr<JValue>)argsPointer);
+			MemoryMarshal.AsRef<TValue>(bytes) = result;
+			JTrace.CallPrimitiveFunction(localRef, classRef, signature, methodId, result, formatValue);
+		}
+		/// <summary>
 		/// Invokes a primitive function.
 		/// </summary>
 		/// <param name="bytes">Destination span.</param>
@@ -329,8 +456,8 @@ partial class JEnvironment
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="argsMemory">Fixed memory with parameters.</param>
 		/// <exception cref="ArgumentException">If signature is not for a primitive type.</exception>
-		private void CallPrimitiveMethod(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature, JMethodId methodId,
-			IFixedPointer argsMemory)
+		private void CallPrimitiveFunction(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
+			JMethodId methodId, IFixedPointer argsMemory)
 		{
 			switch (signature)
 			{
@@ -372,129 +499,6 @@ partial class JEnvironment
 			}
 		}
 		/// <summary>
-		/// Sets a primitive static field.
-		/// </summary>
-		/// <typeparam name="TValue">A <see langword="unmanaged"/> type.</typeparam>
-		/// <typeparam name="TDelegate">A <see cref="Delegate"/> to set static field.</typeparam>
-		/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
-		/// <param name="bytes">Binary span containing value to set to.</param>
-		/// <param name="signature">Primitive char signature.</param>
-		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
-		/// <param name="setValue">Action to set value.</param>
-		/// <param name="formatValue">Trace format value function.</param>
-		private void SetPrimitiveStaticField<TValue, TDelegate>(JClassLocalRef classRef, ReadOnlySpan<Byte> bytes,
-			Byte signature, JFieldId fieldId,
-			Action<TDelegate, JEnvironmentRef, JClassLocalRef, JFieldId, TValue> setValue,
-			Func<TValue, String>? formatValue = default) where TValue : unmanaged where TDelegate : Delegate
-		{
-			TValue value = MemoryMarshal.AsRef<TValue>(bytes);
-			TDelegate setStaticField = this.GetDelegate<TDelegate>();
-			setValue(setStaticField, this.Reference, classRef, fieldId, value);
-			JTrace.SetPrimitiveField(default, classRef, signature, fieldId, value, formatValue);
-		}
-		/// <summary>
-		/// Sets a primitive field.
-		/// </summary>
-		/// <typeparam name="TValue">A <see langword="unmanaged"/> type.</typeparam>
-		/// <typeparam name="TDelegate">A <see cref="Delegate"/> to set field.</typeparam>
-		/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
-		/// <param name="bytes">Binary span containing value to set to.</param>
-		/// <param name="signature">Primitive char signature.</param>
-		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
-		/// <param name="setValue">Action to set value.</param>
-		/// <param name="formatValue">Function to format value.</param>
-		private void SetPrimitiveField<TValue, TDelegate>(JObjectLocalRef localRef, ReadOnlySpan<Byte> bytes,
-			Byte signature, JFieldId fieldId,
-			Action<TDelegate, JEnvironmentRef, JObjectLocalRef, JFieldId, TValue> setValue,
-			Func<TValue, String>? formatValue = default) where TValue : unmanaged where TDelegate : Delegate
-		{
-			TValue value = MemoryMarshal.AsRef<TValue>(bytes);
-			TDelegate setField = this.GetDelegate<TDelegate>();
-			setValue(setField, this.Reference, localRef, fieldId, value);
-			JTrace.SetPrimitiveField(localRef, default, signature, fieldId, value, formatValue);
-		}
-		/// <summary>
-		/// Retrieves a primitive static field.
-		/// </summary>
-		/// <param name="bytes">Binary span to hold result.</param>
-		/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
-		/// <param name="signature">Primitive char signature.</param>
-		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
-		/// <param name="getValue">Function to get value.</param>
-		/// <param name="formatValue">Function to format value.</param>
-		private void GetPrimitiveStaticField<TValue, TDelegate>(Span<Byte> bytes, JClassLocalRef classRef,
-			Byte signature, JFieldId fieldId,
-			Func<TDelegate, JEnvironmentRef, JClassLocalRef, JFieldId, TValue> getValue,
-			Func<TValue, String>? formatValue = default) where TValue : unmanaged where TDelegate : Delegate
-		{
-			TDelegate getStaticField = this.GetDelegate<TDelegate>();
-			TValue result = getValue(getStaticField, this.Reference, classRef, fieldId);
-			MemoryMarshal.AsRef<TValue>(bytes) = result;
-			JTrace.GetPrimitiveField(default, classRef, signature, fieldId, result, formatValue);
-		}
-		/// <summary>
-		/// Retrieves a primitive field.
-		/// </summary>
-		/// <param name="bytes">Binary span to hold result.</param>
-		/// <param name="localRef"><see cref="JObjectLocalRef"/> reference.</param>
-		/// <param name="signature">Primitive char signature.</param>
-		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
-		/// <param name="getValue">Function to get value.</param>
-		/// <param name="formatValue">Function to format value.</param>
-		private void GetPrimitiveField<TValue, TDelegate>(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
-			JFieldId fieldId, Func<TDelegate, JEnvironmentRef, JObjectLocalRef, JFieldId, TValue> getValue,
-			Func<TValue, String>? formatValue = default) where TValue : unmanaged where TDelegate : Delegate
-		{
-			TDelegate getStaticField = this.GetDelegate<TDelegate>();
-			TValue result = getValue(getStaticField, this.Reference, localRef, fieldId);
-			MemoryMarshal.AsRef<TValue>(bytes) = result;
-			JTrace.GetPrimitiveField(localRef, default, signature, fieldId, result, formatValue);
-		}
-		/// <summary>
-		/// Invokes a primitive static function.
-		/// </summary>
-		/// <param name="bytes">Destination span.</param>
-		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-		/// <param name="signature">Primitive signature.</param>
-		/// <param name="argsPointer">Pointer to call argments array.</param>
-		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
-		/// <param name="callFunction">Function to invoke function.</param>
-		/// <param name="formatValue">Function to format value.</param>
-		private void CallPrimitiveStaticFunction<TValue, TDelegate>(Span<Byte> bytes, JClassLocalRef classRef,
-			Byte signature, JMethodId methodId, IntPtr argsPointer,
-			Func<TDelegate, JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>, TValue> callFunction,
-			Func<TValue, String>? formatValue = default) where TValue : unmanaged where TDelegate : Delegate
-		{
-			TDelegate callStaticFunction = this.GetDelegate<TDelegate>();
-			TValue result = callFunction(callStaticFunction, this.Reference, classRef, methodId,
-			                             (ReadOnlyValPtr<JValue>)argsPointer);
-			MemoryMarshal.AsRef<TValue>(bytes) = result;
-			JTrace.CallPrimitiveFunction(default, classRef, signature, methodId, result, formatValue);
-		}
-		/// <summary>
-		/// Invokes a primitive non-virtual function.
-		/// </summary>
-		/// <param name="bytes">Destination span.</param>
-		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
-		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-		/// <param name="signature">Primitive signature.</param>
-		/// <param name="argsPointer">Pointer to call argments array.</param>
-		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
-		/// <param name="callFunction">Function to invoke function.</param>
-		/// <param name="formatValue">Function to format value.</param>
-		private void CallPrimitiveNonVirtualFunction<TValue, TDelegate>(Span<Byte> bytes, JObjectLocalRef localRef,
-			JClassLocalRef classRef, Byte signature, JMethodId methodId, IntPtr argsPointer,
-			Func<TDelegate, JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>, TValue>
-				callFunction, Func<TValue, String>? formatValue = default)
-			where TValue : unmanaged where TDelegate : Delegate
-		{
-			TDelegate callNonVirtualFunction = this.GetDelegate<TDelegate>();
-			TValue result = callFunction(callNonVirtualFunction, this.Reference, localRef, classRef, methodId,
-			                             (ReadOnlyValPtr<JValue>)argsPointer);
-			MemoryMarshal.AsRef<TValue>(bytes) = result;
-			JTrace.CallPrimitiveFunction(localRef, classRef, signature, methodId, result, formatValue);
-		}
-		/// <summary>
 		/// Invokes a primitive function.
 		/// </summary>
 		/// <param name="bytes">Destination span.</param>
@@ -504,6 +508,8 @@ partial class JEnvironment
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="callFunction">Function to invoke function.</param>
 		/// <param name="formatValue">Function to format value.</param>
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
+		                 Justification = CommonConstants.PrimitiveCallJustification)]
 		private void CallPrimitiveFunction<TValue, TDelegate>(Span<Byte> bytes, JObjectLocalRef localRef,
 			Byte signature, JMethodId methodId, IntPtr argsPointer,
 			Func<TDelegate, JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, TValue> callFunction,
