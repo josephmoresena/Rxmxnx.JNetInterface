@@ -214,5 +214,35 @@ partial class JEnvironment
 				JGlobalBase jGlobal => this.VirtualMachine.LoadMetadataGlobal(jGlobal),
 				_ => default,
 			};
+		/// <summary>
+		/// Retrieves the current <paramref name="jObject"/> instance as <see cref="JClassObject"/>.
+		/// </summary>
+		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject AsClassObjectUnchecked(JReferenceObject jObject)
+		{
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
+			JReferenceType referenceType = this._env.GetReferenceType(classRef.Value);
+			Boolean isLocalRef = referenceType == JReferenceType.LocalRefType;
+			ClassObjectMetadata? classObjectMetadata = this.GetClassObjectMetadata(jObject);
+			JTrace.AsClassObject(classRef, referenceType, classObjectMetadata);
+			JClassObject result = this.GetClass(classRef, isLocalRef, classObjectMetadata);
+			switch (jObject)
+			{
+				case ILocalObject local when classRef == result.LocalReference:
+					result.Lifetime.Synchronize(local.Lifetime);
+					break;
+				case JGlobal jGlobal when !result.Lifetime.HasValidGlobal<JGlobal>():
+					result.Lifetime.SetGlobal(jGlobal);
+					break;
+				case JWeak jWeak when !result.Lifetime.HasValidGlobal<JWeak>():
+					result.Lifetime.SetGlobal(jWeak);
+					break;
+			}
+			if (classObjectMetadata is not null)
+				ILocalObject.ProcessMetadata(result, classObjectMetadata);
+			return result;
+		}
 	}
 }

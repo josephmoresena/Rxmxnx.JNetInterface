@@ -64,6 +64,8 @@ public partial class JVirtualMachine
 			if (jGlobal is null || jGlobal.IsDefault) return jGlobal;
 			using IThread thread = this._vm.CreateThread(ThreadPurpose.CheckGlobalReference);
 			this._globalObjects[jGlobal.Reference] = new(jGlobal.GetCacheable(thread));
+			if (UnicodeClassNames.ClassObject.SequenceEqual(jGlobal.ObjectMetadata.ObjectClassName))
+				this.GlobalClassCache.Load(jGlobal.As<JClassLocalRef>());
 			return jGlobal;
 		}
 		/// <summary>
@@ -76,6 +78,8 @@ public partial class JVirtualMachine
 		{
 			if (jWeak is null || jWeak.IsDefault) return jWeak;
 			this._weakObjects[jWeak.Reference] = new(jWeak);
+			if (UnicodeClassNames.ClassObject.SequenceEqual(jWeak.ObjectMetadata.ObjectClassName))
+				this.WeakClassCache.Load(jWeak.As<JClassLocalRef>());
 			return jWeak;
 		}
 		/// <summary>
@@ -96,7 +100,7 @@ public partial class JVirtualMachine
 		{
 			if (weakRef == default) return;
 			this._weakObjects.Remove(weakRef, out _);
-			this.GlobalClassCache.Unload(JClassLocalRef.FromReference(in weakRef));
+			this.WeakClassCache.Unload(JClassLocalRef.FromReference(in weakRef));
 		}
 		/// <summary>
 		/// Clears cache.

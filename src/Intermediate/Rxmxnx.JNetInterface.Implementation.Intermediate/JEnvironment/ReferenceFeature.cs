@@ -96,20 +96,28 @@ partial class JEnvironment
 
 			ValidationUtilities.ThrowIfProxy(jLocal);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			if (this.LoadGlobal(jLocal as JClassObject) is TGlobal result) return result;
-			ObjectMetadata metadata = ILocalObject.CreateMetadata(jLocal);
-			if (metadata.ObjectClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
+			JGlobal? jGlobal;
+
+			if (jLocal is JClassObject jClass)
 			{
-				JClassObject jClass = this.GetClass(UnicodeClassNames.ClassObject);
-				result = (TGlobal)(Object)this.LoadGlobal(jClass);
+				jGlobal = this.LoadGlobal(jClass);
+			}
+			else if (jLocal.InstanceOf<JClassObject>())
+			{
+				jGlobal = this.LoadGlobal(this.AsClassObjectUnchecked(jLocal));
 			}
 			else
 			{
 				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-				JGlobal jGlobal = this.VirtualMachine.Register(new JGlobal(jLocal, this.CreateGlobalRef(localRef)));
-				result = (TGlobal)(Object)jGlobal;
+				jGlobal = new(jLocal, this.CreateGlobalRef(localRef));
 			}
-			return result;
+
+			if (jGlobal.IsDefault)
+			{
+				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
+				jGlobal.SetValue(this.CreateGlobalRef(localRef));
+			}
+			return (TGlobal)(Object)this.VirtualMachine.Register(jGlobal);
 		}
 		public JWeak CreateWeak(JGlobalBase jGlobal)
 		{

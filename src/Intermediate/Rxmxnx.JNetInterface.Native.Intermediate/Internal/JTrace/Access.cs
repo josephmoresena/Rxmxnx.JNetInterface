@@ -261,4 +261,16 @@ internal static partial class JTrace
 				$"{classRef} {definition.Information[0]} {definition.Information[1]} {accessibleId}" :
 				$"{classRef} {definition.Information[0]} {definition.Information[1]} Not found.", callerMethod);
 	}
+	/// <summary>
+	/// Writes a category name and the retrieving access cache to the trace listeners.
+	/// </summary>
+	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="exists">Indicates whether exists an access cache for this class.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void GetAccessCache(JClassLocalRef classRef, Boolean exists,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine(exists ? $"{classRef} Found." : $"{classRef} Not found.", callerMethod);
+	}
 }

@@ -13,7 +13,7 @@ internal class ClassCache
 	/// Retrieves access cache.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	public AccessCache? this[JClassLocalRef classRef] => this._access.GetValueOrDefault(classRef);
+	public AccessCache? this[JClassLocalRef classRef] => this.GetAccessCache(classRef);
 
 	/// <summary>
 	/// Loads current class object.
@@ -65,6 +65,18 @@ internal class ClassCache
 	/// <param name="hash">A class hash.</param>
 	/// <param name="classRef">Unloaded <see cref="JClassLocalRef"/> reference.</param>
 	protected virtual void SetAsUnloaded(String hash, JClassLocalRef classRef) { }
+
+	/// <summary>
+	/// Retrieves access cache.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> class.</param>
+	/// <returns>A <see cref="AccessCache"/> instance.</returns>
+	private AccessCache? GetAccessCache(JClassLocalRef classRef)
+	{
+		AccessCache? result = this._access.GetValueOrDefault(classRef);
+		JTrace.GetAccessCache(classRef, result != default);
+		return result;
+	}
 }
 
 /// <summary>
