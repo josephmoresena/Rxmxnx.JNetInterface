@@ -48,7 +48,6 @@ public partial class JLocalObject
 			/// <inheritdoc/>
 			public override String ToString() => $"{this.GetStringValue()} {this.Reference}";
 			/// <inheritdoc/>
-			[ExcludeFromCodeCoverage]
 			public override String ToTraceText()
 				=> $"{this.Class.Name} length: {this.Length} {this.GetReferenceText()}";
 

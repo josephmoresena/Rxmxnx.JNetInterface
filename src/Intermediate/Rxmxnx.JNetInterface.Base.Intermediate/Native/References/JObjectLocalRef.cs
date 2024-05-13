@@ -25,6 +25,7 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INativeType<JObj
 	/// </summary>
 	public JObjectLocalRef() => this._value = IntPtr.Zero;
 
+	[ExcludeFromCodeCoverage]
 	JObjectLocalRef IWrapper<JObjectLocalRef>.Value => this;
 
 	/// <inheritdoc/>
