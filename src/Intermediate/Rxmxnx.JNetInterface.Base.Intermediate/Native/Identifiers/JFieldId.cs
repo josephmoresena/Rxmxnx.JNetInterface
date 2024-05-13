@@ -12,7 +12,7 @@ public readonly partial struct JFieldId : IAccessibleIdentifierType<JFieldId>
 	public static JNativeType Type => JNativeType.JField;
 
 	/// <summary>
-	/// Internal native signed integer
+	/// Internal native-signed integer
 	/// </summary>
 	private readonly IntPtr _value;
 

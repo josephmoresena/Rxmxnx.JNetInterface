@@ -2,18 +2,18 @@
 
 /// <summary>
 /// JNI local handle for fully-qualified-class objects (<c>jobject</c>).
-/// Represents a native signed integer which serves as opaque identifier for any
+/// Represents a native-signed integer which serves as opaque identifier for any
 /// object.
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JObjectLocalRef : IFixedPointer, INativeType<JObjectLocalRef>
+public readonly partial struct JObjectLocalRef : IFixedPointer, INativeType<JObjectLocalRef>, IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JObject;
 
 	/// <summary>
-	/// Internal native signed integer
+	/// Internal native-signed integer
 	/// </summary>
 	private readonly IntPtr _value;
 
@@ -24,6 +24,8 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INativeType<JObj
 	/// Parameterless constructor.
 	/// </summary>
 	public JObjectLocalRef() => this._value = IntPtr.Zero;
+
+	JObjectLocalRef IWrapper<JObjectLocalRef>.Value => this;
 
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._value.GetHashCode();

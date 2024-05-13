@@ -43,7 +43,8 @@ partial class JEnvironment
 			if (globalRef == default || result is not null) return;
 			try
 			{
-				JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef.Value);
+				JTrace.CreateLocalRef(globalRef);
+				JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
 				JLocalObject jLocal = this.Register(result)!;
 				jLocal.SetValue(localRef);
 			}

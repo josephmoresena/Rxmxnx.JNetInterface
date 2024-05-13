@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.References;
 
 /// <summary>
-/// JNI local handle for array objects (<c>jbooleanArray</c>). Represents a native signed integer
+/// JNI local handle for array objects (<c>jbooleanArray</c>). Represents a native-signed integer
 /// which serves as opaque identifier for a primitive array object (<c>boolean[]</c>).
 /// This handle is valid only for the thread who owns the reference.
 /// </summary>

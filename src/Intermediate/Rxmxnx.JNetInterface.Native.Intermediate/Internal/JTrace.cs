@@ -206,4 +206,38 @@ internal static partial class JTrace
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(classObjectMetadata.ToTraceText(), callerMethod);
 	}
+	/// <summary>
+	/// Writes a category name and creation of local reference to the trace listeners.
+	/// </summary>
+	/// <param name="objectRef">A JNI object reference.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, [CallerMemberName] String callerMethod = "")
+		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine(objectRef, callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and creation of local reference to the trace listeners.
+	/// </summary>
+	/// <param name="objectRef">A JNI object reference.</param>
+	/// <param name="localRef">Local JNI object reference.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, JObjectLocalRef localRef,
+		[CallerMemberName] String callerMethod = "")
+		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine(localRef != default ? $"{objectRef} -> {localRef}" : $"{objectRef} Error.", callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and finallization call to the trace listeners.
+	/// </summary>
+	/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void FinalizeCall(JLocalObject result, [CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine(result.ToTraceText(), callerMethod);
+	}
 }

@@ -12,7 +12,7 @@ public readonly partial struct JMethodId : IAccessibleIdentifierType<JMethodId>
 	public static JNativeType Type => JNativeType.JMethod;
 
 	/// <summary>
-	/// Internal native signed integer
+	/// Internal native-signed integer
 	/// </summary>
 	private readonly IntPtr _value;
 

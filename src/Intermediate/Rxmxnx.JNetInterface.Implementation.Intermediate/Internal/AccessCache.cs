@@ -36,6 +36,7 @@ internal sealed class AccessCache
 	{
 		String hash = definition.Information.ToString();
 		if (this._fields.TryGetValue(hash, out JFieldId result)) return result;
+		JTrace.GetAccessibleId(this._classRef, definition);
 		result = env.GetFieldId(definition, this._classRef);
 		this._fields.TryAdd(hash, result);
 		return result;
@@ -44,6 +45,7 @@ internal sealed class AccessCache
 	{
 		String hash = definition.Information.ToString();
 		if (this._staticFields.TryGetValue(hash, out JFieldId result)) return result;
+		JTrace.GetAccessibleId(this._classRef, definition);
 		result = env.GetStaticFieldId(definition, this._classRef);
 		this._staticFields.TryAdd(hash, result);
 		return result;
@@ -52,6 +54,7 @@ internal sealed class AccessCache
 	{
 		String hash = definition.Information.ToString();
 		if (this._methods.TryGetValue(hash, out JMethodId result)) return result;
+		JTrace.GetAccessibleId(this._classRef, definition);
 		result = env.GetMethodId(definition, this._classRef);
 		this._methods.TryAdd(hash, result);
 		return result;
@@ -60,6 +63,7 @@ internal sealed class AccessCache
 	{
 		String hash = definition.Information.ToString();
 		if (this._staticMethods.TryGetValue(hash, out JMethodId result)) return result;
+		JTrace.GetAccessibleId(this._classRef, definition);
 		result = env.GetStaticMethodId(definition, this._classRef);
 		this._staticMethods.TryAdd(hash, result);
 		return result;

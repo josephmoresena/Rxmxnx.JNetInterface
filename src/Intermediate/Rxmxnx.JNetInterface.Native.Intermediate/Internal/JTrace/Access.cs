@@ -231,4 +231,34 @@ internal static partial class JTrace
 		else //Non-Virtual
 			Trace.WriteLine($"{localRef} {classRef} {methodId}", callerMethod);
 	}
+	/// <summary>
+	/// Writes a category name and the retrieving accessible identifier to the trace listeners.
+	/// </summary>
+	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void GetAccessibleId(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"{classRef} {definition.Information[0]} {definition.Information[1]}", callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and the retrieving accessible identifier to the trace listeners.
+	/// </summary>
+	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
+	/// <param name="accessibleId">Accessible object identifier.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void GetAccessibleId<TAccessibleId>(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
+		TAccessibleId accessibleId, [CallerMemberName] String callerMethod = "")
+		where TAccessibleId : unmanaged, IAccessibleIdentifierType<TAccessibleId>,
+		IEqualityOperators<TAccessibleId, TAccessibleId, Boolean>
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine(
+			accessibleId != default ?
+				$"{classRef} {definition.Information[0]} {definition.Information[1]} {accessibleId}" :
+				$"{classRef} {definition.Information[0]} {definition.Information[1]} Not found.", callerMethod);
+	}
 }
