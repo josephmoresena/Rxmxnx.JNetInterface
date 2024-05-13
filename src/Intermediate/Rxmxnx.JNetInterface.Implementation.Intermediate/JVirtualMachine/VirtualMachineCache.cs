@@ -12,7 +12,7 @@ public partial class JVirtualMachine
 		/// <summary>
 		/// Global cache.
 		/// </summary>
-		public readonly ClassCache<JGlobal> GlobalClassCache = new();
+		public readonly ClassCache<JGlobal> GlobalClassCache = new(JReferenceType.GlobalRefType);
 		/// <summary>
 		/// <see cref="NativeCache"/> instance.
 		/// </summary>
@@ -26,7 +26,7 @@ public partial class JVirtualMachine
 		/// <summary>
 		/// Weak cache.
 		/// </summary>
-		public readonly ClassCache WeakClassCache = new();
+		public readonly ClassCache WeakClassCache = new(JReferenceType.WeakGlobalRefType);
 
 		/// <summary>
 		/// Constructor.

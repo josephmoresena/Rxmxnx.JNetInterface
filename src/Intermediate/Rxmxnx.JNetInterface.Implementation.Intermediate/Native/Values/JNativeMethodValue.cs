@@ -15,7 +15,7 @@ internal readonly struct JNativeMethodValue
 		return new()
 		{
 			Name = (ReadOnlyValPtr<Byte>)entry.Name.AsSpan().GetUnsafeIntPtr(),
-			Signature = (ReadOnlyValPtr<Byte>)entry.Signature.AsSpan().GetUnsafeIntPtr(),
+			Signature = (ReadOnlyValPtr<Byte>)entry.Descriptor.AsSpan().GetUnsafeIntPtr(),
 			Pointer = entry.Pointer,
 		};
 	}

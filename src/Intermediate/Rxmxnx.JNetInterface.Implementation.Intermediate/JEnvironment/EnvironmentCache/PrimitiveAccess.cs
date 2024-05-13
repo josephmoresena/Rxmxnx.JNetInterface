@@ -295,7 +295,7 @@ partial class JEnvironment
 			JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			Byte signature = definition.Information[1][^1];
+			Byte signature = definition.Descriptor[^1];
 			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
 				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);

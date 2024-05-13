@@ -115,7 +115,7 @@ partial class JEnvironment
 		private static void TraceSetPrimitiveField(JLocalObject? jLocal, JClassObject jClass,
 			JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
 		{
-			switch (definition.Information[1][0])
+			switch (definition.Descriptor[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
 					JTrace.SetField<JBoolean>(jLocal, jClass, definition, bytes);

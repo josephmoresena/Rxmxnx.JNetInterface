@@ -8,8 +8,8 @@ public sealed class JMainMethodDefinitionTests
 	[Fact]
 	internal void InformationTest()
 	{
-		Assert.True("main"u8.SequenceEqual(JMainMethodDefinition.Instance.Information[0]));
-		Assert.True("([Ljava/lang/String;)V"u8.SequenceEqual(JMainMethodDefinition.Instance.Information[1]));
+		Assert.True("main"u8.SequenceEqual(JMainMethodDefinition.Instance.Name));
+		Assert.True("([Ljava/lang/String;)V"u8.SequenceEqual(JMainMethodDefinition.Instance.Descriptor));
 		Assert.Equal(1, JMainMethodDefinition.Instance.Count);
 		Assert.Single(JMainMethodDefinition.Instance.Sizes);
 		Assert.Equal(IntPtr.Size, JMainMethodDefinition.Instance.Sizes[0]);

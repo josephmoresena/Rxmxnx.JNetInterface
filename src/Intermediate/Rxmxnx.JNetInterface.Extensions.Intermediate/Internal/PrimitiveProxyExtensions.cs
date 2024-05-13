@@ -18,7 +18,7 @@ internal static class PrimitiveProxyExtensions
 	public static void PrimitiveInvoke(this JFunctionDefinition definition, Span<Byte> bytes, JLocalObject jLocal,
 		JClassObject jClass, Boolean nonVirtual, IObject?[] args)
 	{
-		switch (definition.Information[1][^1])
+		switch (definition.Descriptor[^1])
 		{
 			case UnicodePrimitiveSignatures.BooleanSignatureChar:
 				bytes.AsValue<JBoolean>() = JFunctionDefinition<JBoolean>.Invoke(
@@ -66,7 +66,7 @@ internal static class PrimitiveProxyExtensions
 	public static void PrimitiveStaticInvoke(this JFunctionDefinition definition, Span<Byte> bytes, JClassObject jClass,
 		IObject?[] args)
 	{
-		switch (definition.Information[1][^1])
+		switch (definition.Descriptor[^1])
 		{
 			case UnicodePrimitiveSignatures.BooleanSignatureChar:
 				bytes.AsValue<JBoolean>() =
@@ -122,7 +122,7 @@ internal static class PrimitiveProxyExtensions
 	public static void PrimitiveGet(this JFieldDefinition definition, Span<Byte> bytes, JLocalObject jLocal,
 		JClassObject jClass)
 	{
-		switch (definition.Information[1][^1])
+		switch (definition.Descriptor[^1])
 		{
 			case UnicodePrimitiveSignatures.BooleanSignatureChar:
 				bytes.AsValue<JBoolean>() =
@@ -164,7 +164,7 @@ internal static class PrimitiveProxyExtensions
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	public static void PrimitiveStaticGet(this JFieldDefinition definition, Span<Byte> bytes, JClassObject jClass)
 	{
-		switch (definition.Information[1][^1])
+		switch (definition.Descriptor[^1])
 		{
 			case UnicodePrimitiveSignatures.BooleanSignatureChar:
 				bytes.AsValue<JBoolean>() =
@@ -206,7 +206,7 @@ internal static class PrimitiveProxyExtensions
 	public static void PrimitiveSet(this JFieldDefinition definition, JLocalObject jLocal, JClassObject jClass,
 		ReadOnlySpan<Byte> bytes)
 	{
-		switch (definition.Information[1][^1])
+		switch (definition.Descriptor[^1])
 		{
 			case UnicodePrimitiveSignatures.BooleanSignatureChar:
 				(definition as JFieldDefinition<JBoolean> ?? new(definition)).Set(
@@ -249,7 +249,7 @@ internal static class PrimitiveProxyExtensions
 	public static void PrimitiveStaticSet(this JFieldDefinition definition, JClassObject jClass,
 		ReadOnlySpan<Byte> bytes)
 	{
-		switch (definition.Information[1][^1])
+		switch (definition.Descriptor[^1])
 		{
 			case UnicodePrimitiveSignatures.BooleanSignatureChar:
 				(definition as JFieldDefinition<JBoolean> ?? new(definition)).StaticSet(

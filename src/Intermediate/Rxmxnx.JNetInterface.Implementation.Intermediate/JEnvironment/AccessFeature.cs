@@ -16,7 +16,7 @@ partial class JEnvironment
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			JTrace.GetField(jLocal, jClass, definition);
-			this.GetPrimitiveField(bytes, localRef, definition.Information[1][^1], fieldId);
+			this.GetPrimitiveField(bytes, localRef, definition.Descriptor[^1], fieldId);
 		}
 		public void SetPrimitiveField(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 			ReadOnlySpan<Byte> bytes)
@@ -28,7 +28,7 @@ partial class JEnvironment
 			JFieldId fieldId = access.GetFieldId(definition, this._env);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
 			EnvironmentCache.TraceSetPrimitiveField(jLocal, jClass, definition, bytes);
-			this.SetPrimitiveField(localRef, bytes, definition.Information[1][^1], fieldId);
+			this.SetPrimitiveField(localRef, bytes, definition.Descriptor[^1], fieldId);
 		}
 		public void GetPrimitiveStaticField(Span<Byte> bytes, JClassObject jClass, JFieldDefinition definition)
 		{
@@ -37,7 +37,7 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
 			JTrace.GetField(default, jClass, definition);
-			this.GetPrimitiveStaticField(bytes, jClass.Reference, definition.Information[1][^1], fieldId);
+			this.GetPrimitiveStaticField(bytes, jClass.Reference, definition.Descriptor[^1], fieldId);
 		}
 		public void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
 		{
@@ -46,7 +46,7 @@ partial class JEnvironment
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
 			EnvironmentCache.TraceSetPrimitiveField(default, jClass, definition, bytes);
-			this.SetPrimitiveStaticField(jClass.Reference, bytes, definition.Information[1][^1], fieldId);
+			this.SetPrimitiveStaticField(jClass.Reference, bytes, definition.Descriptor[^1], fieldId);
 		}
 		public void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args)
@@ -103,7 +103,7 @@ partial class JEnvironment
 				return this.GetObjectField<TField>(localRef, fieldId);
 			}
 			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
-			this.GetPrimitiveField(bytes, localRef, definition.Information[1][^1], fieldId);
+			this.GetPrimitiveField(bytes, localRef, definition.Descriptor[^1], fieldId);
 			return (TField)primitiveMetadata.CreateInstance(bytes);
 		}
 		public void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
@@ -141,7 +141,7 @@ partial class JEnvironment
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
 				value!.CopyTo(bytes);
-				this.SetPrimitiveField(localRef, bytes, definition.Information[1][^1], fieldId);
+				this.SetPrimitiveField(localRef, bytes, definition.Descriptor[^1], fieldId);
 				return;
 			}
 			JTrace.SetField(jLocal, jField.DeclaringClass, definition, value);
@@ -178,7 +178,7 @@ partial class JEnvironment
 				return this.CreateObject<TField>(localRef, true);
 			}
 			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
-			this.GetPrimitiveStaticField(bytes, classRef, definition.Information[1][^1], fieldId);
+			this.GetPrimitiveStaticField(bytes, classRef, definition.Descriptor[^1], fieldId);
 			return (TField)primitiveMetadata.CreateInstance(bytes);
 		}
 		public void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
@@ -218,7 +218,7 @@ partial class JEnvironment
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
 				value!.CopyTo(bytes);
-				this.SetPrimitiveStaticField(classRef, bytes, definition.Information[1][^1], fieldId);
+				this.SetPrimitiveStaticField(classRef, bytes, definition.Descriptor[^1], fieldId);
 			}
 		}
 		public TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition, IObject?[] args)

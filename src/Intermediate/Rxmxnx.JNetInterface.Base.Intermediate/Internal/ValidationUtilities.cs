@@ -257,7 +257,7 @@ internal static class ValidationUtilities
 	public static void ThrowIfNotMatchDefinition(JAccessibleObjectDefinition definition,
 		JAccessibleObjectDefinition otherDefinition)
 	{
-		if (definition.Information.ToString() != otherDefinition.Information.ToString())
+		if (definition.Hash != otherDefinition.Hash)
 			throw new ArgumentException($"[{definition}] Expected: [{otherDefinition}].");
 	}
 	/// <summary>

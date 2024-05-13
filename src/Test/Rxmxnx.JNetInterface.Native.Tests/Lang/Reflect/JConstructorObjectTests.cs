@@ -28,8 +28,7 @@ public class JConstructorObjectTests
 		using JClassObject jConstructorClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
 		using JClassObject jClassArrayClass = new(jClass, IArrayType.GetMetadata<JArrayObject<JClassObject>>());
-		using JStringObject jStringConstructorName =
-			new(jStringClass, default, methodDefinition.Information[0].ToString());
+		using JStringObject jStringConstructorName = new(jStringClass, default, methodDefinition.Name.ToString());
 		using JArrayObject<JClassObject> jArrayParameters = new(jClassArrayClass, arrayRef, 0);
 		using JConstructorObject jConstructor = initDefinition ?
 			new(jConstructorClass, localRef, methodDefinition, jClass) :
@@ -75,8 +74,7 @@ public class JConstructorObjectTests
 		using JClassObject jConstructorClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
 		using JClassObject jClassArrayClass = new(jClass, IArrayType.GetMetadata<JArrayObject<JClassObject>>());
-		using JStringObject jStringConstructorName =
-			new(jStringClass, default, methodDefinition.Information[0].ToString());
+		using JStringObject jStringConstructorName = new(jStringClass, default, methodDefinition.Name.ToString());
 		using JArrayObject<JClassObject> jArrayParameters = new(jClassArrayClass, arrayRef, 0);
 		using JConstructorObject jConstructor =
 			Assert.IsType<JConstructorObject>(typeMetadata.CreateInstance(jConstructorClass, localRef, true));

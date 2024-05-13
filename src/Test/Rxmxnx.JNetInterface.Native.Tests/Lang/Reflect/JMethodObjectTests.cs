@@ -27,7 +27,7 @@ public class JMethodObjectTests
 		using JClassObject jMethodClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
 		using JClassObject jClassArrayClass = new(jClass, IArrayType.GetMetadata<JArrayObject<JClassObject>>());
-		using JStringObject jStringMethodName = new(jStringClass, default, methodDefinition.Information[0].ToString());
+		using JStringObject jStringMethodName = new(jStringClass, default, methodDefinition.Name.ToString());
 		using JArrayObject<JClassObject> jArrayParameters = new(jClassArrayClass, arrayRef, 0);
 		using JMethodObject jMethod = initDefinition ?
 			new(jMethodClass, localRef, methodDefinition, jClass) :
@@ -72,7 +72,7 @@ public class JMethodObjectTests
 		using JClassObject jMethodClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
 		using JClassObject jClassArrayClass = new(jClass, IArrayType.GetMetadata<JArrayObject<JClassObject>>());
-		using JStringObject jStringMethodName = new(jStringClass, default, methodDefinition.Information[0].ToString());
+		using JStringObject jStringMethodName = new(jStringClass, default, methodDefinition.Name.ToString());
 		using JArrayObject<JClassObject> jArrayParameters = new(jClassArrayClass, arrayRef, 0);
 		using JMethodObject jMethod =
 			Assert.IsType<JMethodObject>(typeMetadata.CreateInstance(jMethodClass, localRef, true));

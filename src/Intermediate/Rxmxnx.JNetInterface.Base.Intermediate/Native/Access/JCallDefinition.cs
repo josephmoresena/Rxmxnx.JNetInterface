@@ -28,6 +28,10 @@ public abstract partial class JCallDefinition : JAccessibleObjectDefinition
 	/// <inheritdoc/>
 	private protected override String ToStringFormat => "{{ Method: {0} Descriptor: {1} }}";
 
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override String ToTraceText() => $"method: {this.Name}{this.Descriptor}";
+
 	/// <summary>
 	/// Creates the argument array for the current call.
 	/// </summary>

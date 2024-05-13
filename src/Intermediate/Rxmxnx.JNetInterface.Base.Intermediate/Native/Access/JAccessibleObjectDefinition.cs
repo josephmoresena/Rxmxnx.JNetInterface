@@ -15,6 +15,19 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	private readonly CStringSequence _sequence;
 
 	/// <summary>
+	/// Definition name.
+	/// </summary>
+	public CString Name => this._sequence[0];
+	/// <summary>
+	/// Definition descriptor.
+	/// </summary>
+	public CString Descriptor => this._sequence[1];
+	/// <summary>
+	/// Definition hash.
+	/// </summary>
+	public String Hash => this._sequence.ToString();
+
+	/// <summary>
 	/// Accessible object information.
 	/// </summary>
 	internal CStringSequence Information => this._sequence;
@@ -52,6 +65,10 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	public override String ToString() => String.Format(this.ToStringFormat, this._sequence[0], this._sequence[1]);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._sequence.GetHashCode();
+
+	/// <inheritdoc cref="Object.ToString()"/>
+	/// <remarks>Use this method for trace.</remarks>
+	public abstract String ToTraceText();
 
 	/// <summary>
 	/// Determines whether a specified <see cref="JAccessibleObjectDefinition"/> and a

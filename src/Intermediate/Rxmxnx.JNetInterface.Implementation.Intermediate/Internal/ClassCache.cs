@@ -3,12 +3,17 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Class cache.
 /// </summary>
-internal class ClassCache
+internal class ClassCache(JReferenceType type)
 {
 	/// <summary>
 	/// Class access dictionary.
 	/// </summary>
 	private readonly ConcurrentDictionary<JClassLocalRef, AccessCache> _access = new();
+	/// <summary>
+	/// Class access dictionary.
+	/// </summary>
+	private readonly JReferenceType _type = type;
+
 	/// <summary>
 	/// Retrieves access cache.
 	/// </summary>
@@ -74,7 +79,7 @@ internal class ClassCache
 	private AccessCache? GetAccessCache(JClassLocalRef classRef)
 	{
 		AccessCache? result = this._access.GetValueOrDefault(classRef);
-		JTrace.GetAccessCache(classRef, result != default);
+		JTrace.GetAccessCache(classRef, this._type, result != default);
 		return result;
 	}
 }
@@ -83,7 +88,7 @@ internal class ClassCache
 /// Class cache.
 /// </summary>
 /// <typeparam name="TClass">A <see cref="JReferenceObject"/> class type.</typeparam>
-internal sealed class ClassCache<TClass> : ClassCache where TClass : JReferenceObject
+internal sealed class ClassCache<TClass>(JReferenceType type) : ClassCache(type) where TClass : JReferenceObject
 {
 	/// <summary>
 	/// Class dictionary.

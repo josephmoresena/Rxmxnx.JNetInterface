@@ -11,7 +11,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Class cache.
 		/// </summary>
-		private readonly ClassCache<JClassObject> _classes = new();
+		private readonly ClassCache<JClassObject> _classes = new(JReferenceType.LocalRefType);
 		/// <summary>
 		/// Delegate cache.
 		/// </summary>

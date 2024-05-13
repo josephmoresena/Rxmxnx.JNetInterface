@@ -16,8 +16,8 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(jLocal is null ? //Static?
-			                $"{jClass.ToTraceText()} {definition}" :
-			                $"{jLocal.ToTraceText()} {definition}", callerMethod);
+			                $"{jClass.ToTraceText()} {definition.ToTraceText()}" :
+			                $"{jLocal.ToTraceText()} {definition.ToTraceText()}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the assignment of a value to a field to the trace listeners.
@@ -35,8 +35,8 @@ internal static partial class JTrace
 			(value as JReferenceObject)?.ToString() ?? $"{value.ObjectSignature}: {value}" :
 			"value: null";
 		Trace.WriteLine(jLocal is null ? //Static?
-			                $"{jClass.ToTraceText()} {definition} {textValue}" :
-			                $"{jLocal.ToTraceText()} {definition} {textValue}", callerMethod);
+			                $"{jClass.ToTraceText()} {definition.ToTraceText()} {textValue}" :
+			                $"{jLocal.ToTraceText()} {definition.ToTraceText()} {textValue}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the assignment of a value to a primitive field to the trace listeners.
@@ -69,14 +69,14 @@ internal static partial class JTrace
 		if (!IVirtualMachine.TraceEnabled) return;
 		StringBuilder strBuilder = new();
 		if (jLocal is null)
-			if (UnicodeMethodNames.Constructor().SequenceEqual(definition.Information[0]))
-				strBuilder.AppendLine($"{jClass.Name} {definition}");
+			if (UnicodeMethodNames.Constructor().SequenceEqual(definition.Name))
+				strBuilder.AppendLine($"{jClass.Name} {definition.ToTraceText()}");
 			else
-				strBuilder.AppendLine($"{jClass.Name} static {definition}.");
+				strBuilder.AppendLine($"{jClass.Name} static {definition.ToTraceText()}");
 		else if (nonVirtual)
-			strBuilder.AppendLine($"{jLocal.ToTraceText()} {jClass.Name} non-virtual {definition}");
+			strBuilder.AppendLine($"{jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
 		else
-			strBuilder.AppendLine($"{jLocal.ToTraceText()} {definition}");
+			strBuilder.AppendLine($"{jLocal.ToTraceText()} {definition.ToTraceText()}");
 		for (Int32 i = 0; i < args.Length; i++)
 		{
 			switch (args[i])
@@ -241,7 +241,7 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"{classRef} {definition.Information[0]} {definition.Information[1]}", callerMethod);
+		Trace.WriteLine($"{classRef} {definition.ToTraceText()}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the retrieving accessible identifier to the trace listeners.
@@ -258,19 +258,20 @@ internal static partial class JTrace
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
 			accessibleId != default ?
-				$"{classRef} {definition.Information[0]} {definition.Information[1]} {accessibleId}" :
-				$"{classRef} {definition.Information[0]} {definition.Information[1]} Not found.", callerMethod);
+				$"{classRef} {definition.ToTraceText()} {accessibleId}" :
+				$"{classRef} {definition.ToTraceText()} Not found.", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the retrieving access cache to the trace listeners.
 	/// </summary>
 	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="type">Cache reference.</param>
 	/// <param name="exists">Indicates whether exists an access cache for this class.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void GetAccessCache(JClassLocalRef classRef, Boolean exists,
+	public static void GetAccessCache(JClassLocalRef classRef, JReferenceType type, Boolean exists,
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine(exists ? $"{classRef} Found." : $"{classRef} Not found.", callerMethod);
+		Trace.WriteLine(exists ? $"{classRef} {type} Found." : $"{classRef} Not found.", callerMethod);
 	}
 }

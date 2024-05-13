@@ -25,7 +25,7 @@ public class JFieldObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
 		using JClassObject jFieldClass = new(jClass, typeMetadata);
-		using JStringObject jStringFieldName = new(jStringClass, default, fieldDefinition.Information[0].ToString());
+		using JStringObject jStringFieldName = new(jStringClass, default, fieldDefinition.Name.ToString());
 		using JFieldObject jField = initDefinition ?
 			new(jFieldClass, localRef, fieldDefinition, jClass) :
 			Assert.IsType<JFieldObject>(typeMetadata.CreateInstance(jFieldClass, localRef));
@@ -66,7 +66,7 @@ public class JFieldObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject jFieldClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, IClassType.GetMetadata<JStringObject>());
-		using JStringObject jStringFieldName = new(jStringClass, default, fieldDefinition.Information[0].ToString());
+		using JStringObject jStringFieldName = new(jStringClass, default, fieldDefinition.Name.ToString());
 		using JFieldObject jField =
 			Assert.IsType<JFieldObject>(typeMetadata.CreateInstance(jFieldClass, localRef, true));
 
