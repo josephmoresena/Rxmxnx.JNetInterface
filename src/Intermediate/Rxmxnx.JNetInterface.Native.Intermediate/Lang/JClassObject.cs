@@ -146,7 +146,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		return env.FunctionSet.GetClassName(this);
 	}
 	/// <summary>
-	/// Retrieves super class of the current type.
+	/// Retrieves superclass of the current type.
 	/// </summary>
 	/// <returns>Current super class <see cref="JClassObject"/> instance.</returns>
 	public JClassObject? GetSuperClass()
@@ -194,6 +194,9 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	}
 	/// <inheritdoc/>
 	public override String ToString() => $"{this.Name} {this.Reference}";
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override String ToTraceText() => $"{this.Name} {this.Reference} hash: {this.Hash}";
 
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.

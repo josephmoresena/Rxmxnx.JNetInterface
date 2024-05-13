@@ -30,9 +30,10 @@ partial class JEnvironment
 		private TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
 		{
 			ValidationUtilities.ThrowIfProxy(jObject as JReferenceObject);
+			JTrace.RegisterObject(jObject as JReferenceObject);
 			this.LoadClass(jObject as JClassObject);
-			if (jObject is ILocalObject jLocal && jLocal.InternalReference != default)
-				this._objects[jLocal.InternalReference] = jLocal.Lifetime.GetCacheable();
+			if (jObject is ILocalObject jLocal && jLocal.LocalReference != default)
+				this._objects[jLocal.LocalReference] = jLocal.Lifetime.GetCacheable();
 			return jObject;
 		}
 		/// <summary>
@@ -84,14 +85,9 @@ partial class JEnvironment
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to unload.</param>
 		private void Unload(Boolean isRegistered, JObjectLocalRef localRef)
 		{
-			if (!isRegistered)
-				Debug.WriteLine($"Unable to remove unregistered local reference {localRef}.");
-			else if (!this._env.IsAttached)
-				Debug.WriteLine($"Unable to remove local reference {localRef}. Thread is not attached.");
-			else if (!this.VirtualMachine.IsAlive)
-				Debug.WriteLine($"Unable to remove local reference {localRef}. JVM is not alive.");
-			else
+			if (isRegistered && this._env.IsAttached && this.VirtualMachine.IsAlive)
 				this._env.DeleteLocalRef(localRef);
+			JTrace.Unload(isRegistered, this._env.IsAttached, this.VirtualMachine.IsAlive, localRef);
 		}
 		/// <summary>
 		/// Unloads <paramref name="weakRef"/>.
@@ -99,12 +95,9 @@ partial class JEnvironment
 		/// <param name="weakRef">A <see cref="JWeakRef"/> reference to unload.</param>
 		private void Unload(JWeakRef weakRef)
 		{
-			if (!this._env.IsAttached)
-				Debug.WriteLine($"Unable to remove weak-global reference {weakRef}. Thread is not attached.");
-			else if (!this.VirtualMachine.IsAlive)
-				Debug.WriteLine($"Unable to remove weak-global reference {weakRef}. JVM is not alive.");
-			else
+			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				this._env.DeleteWeakGlobalRef(weakRef);
+			JTrace.Unload(this._env.IsAttached, this.VirtualMachine.IsAlive, weakRef);
 		}
 		/// <summary>
 		/// Unloads <paramref name="globalRef"/>.
@@ -112,12 +105,9 @@ partial class JEnvironment
 		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference to unload.</param>
 		private void Unload(JGlobalRef globalRef)
 		{
-			if (!this._env.IsAttached)
-				Debug.WriteLine($"Unable to remove global reference {globalRef}. Thread is not attached.");
-			else if (!this.VirtualMachine.IsAlive)
-				Debug.WriteLine($"Unable to remove global reference {globalRef}. JVM is not alive.");
-			else
+			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				this._env.DeleteGlobalRef(globalRef);
+			JTrace.Unload(this._env.IsAttached, this.VirtualMachine.IsAlive, globalRef);
 		}
 		/// <summary>
 		/// Indicates whether <paramref name="jGlobal"/> is a main global object or default.

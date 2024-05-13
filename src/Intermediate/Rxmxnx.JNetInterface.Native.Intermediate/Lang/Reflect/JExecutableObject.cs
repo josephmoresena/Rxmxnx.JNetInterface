@@ -37,11 +37,10 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 			return result;
 		}
 	}
-
 	/// <summary>
 	/// JNI method id.
 	/// </summary>
-	internal JMethodId MethodId => this._methodId ??= this.GetMethodId();
+	public JMethodId MethodId => this._methodId ??= this.GetMethodId();
 
 	/// <summary>
 	/// Constructor.

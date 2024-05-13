@@ -2,12 +2,12 @@
 
 /// <summary>
 /// JNI weak global handle for fully-qualified-class objects (<c>jweak</c>).
-/// Represents a native signed integer which serves as opaque identifier for any
+/// Represents a native-signed integer which serves as opaque identifier for any
 /// object.
 /// </summary>
 /// <remarks>This identifier may be valid until it is explicitly unloaded.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-internal readonly partial struct JWeakRef : IObjectGlobalReferenceType<JWeakRef>
+public readonly partial struct JWeakRef : IObjectGlobalReferenceType<JWeakRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JWeak;

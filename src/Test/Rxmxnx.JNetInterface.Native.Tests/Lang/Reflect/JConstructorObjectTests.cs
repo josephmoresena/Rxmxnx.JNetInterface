@@ -41,7 +41,7 @@ public class JConstructorObjectTests
 		env.FunctionSet.GetParameterTypes(jConstructor).Returns(jArrayParameters);
 		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringConstructorName, jArrayParameters, default).Returns(methodDefinition);
-		env.AccessFeature.GetMethodId(jConstructor).Returns(methodId.Pointer);
+		env.AccessFeature.GetMethodId(jConstructor).Returns(methodId);
 
 		Assert.Equal(methodDefinition, jConstructor.Definition);
 		Assert.Equal(jClass, jConstructor.DeclaringClass);
@@ -87,7 +87,7 @@ public class JConstructorObjectTests
 		env.FunctionSet.GetParameterTypes(jConstructor).Returns(jArrayParameters);
 		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringConstructorName, jArrayParameters, default).Returns(methodDefinition);
-		env.AccessFeature.GetMethodId(jConstructor).Returns(methodId.Pointer);
+		env.AccessFeature.GetMethodId(jConstructor).Returns(methodId);
 
 		ILocalObject.ProcessMetadata(jConstructor,
 		                             useMetadata ?

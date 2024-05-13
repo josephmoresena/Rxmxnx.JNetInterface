@@ -35,4 +35,13 @@ public sealed record StackTraceInfo
 		this.FileName = default!;
 		this.MethodName = default!;
 	}
+
+	/// <inheritdoc cref="Object.ToString()"/>
+	/// <remarks>Use this method for trace.</remarks>
+	[ExcludeFromCodeCoverage]
+	public String ToTraceText()
+	{
+		String lineText = this.NativeMethod ? "Native Method" : $"{this.FileName}:{this.LineNumber}";
+		return $"{this.ClassName}.{this.MethodName}({lineText})";
+	}
 }

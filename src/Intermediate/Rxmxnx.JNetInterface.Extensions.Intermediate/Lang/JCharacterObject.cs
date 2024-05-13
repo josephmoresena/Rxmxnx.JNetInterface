@@ -30,6 +30,10 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
 	/// <inheritdoc/>
 	public override String ToString() => this.Value.ToString()!;
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override String ToTraceText()
+		=> $"{this.Class.Name} {this.Reference} {IPrimitiveType.GetMetadata<JChar>().Signature}: {this.Value}";
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

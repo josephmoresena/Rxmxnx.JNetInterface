@@ -64,6 +64,7 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <see langword="true"/> if the value of <paramref name="left"/> is the same as the value
 	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator ==(JAccessibleObjectDefinition? left, JAccessibleObjectDefinition? right)
 		=> left?.Equals(right) ?? right is null;
@@ -78,20 +79,10 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <see langword="true"/> if the value of <paramref name="left"/> is different from the value
 	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator !=(JAccessibleObjectDefinition? left, JAccessibleObjectDefinition? right)
 		=> !(left == right);
-
-	/// <summary>
-	/// Retrieves a valid signature from <paramref name="signature"/>.
-	/// </summary>
-	/// <param name="signature">A signature to validate.</param>
-	/// <returns><paramref name="signature"/> if is a valid signature.</returns>
-	protected static CString ValidateSignature(CString signature)
-	{
-		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
-		return signature;
-	}
 	/// <summary>
 	/// Retrieves a valid signature from <paramref name="signature"/>.
 	/// </summary>
@@ -102,14 +93,4 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
 		return signature;
 	}
-
-	/// <summary>
-	/// Retrieves the type for <typeparamref name="TReturn"/> type.
-	/// </summary>
-	/// <typeparam name="TReturn">A <see cref="IDataType"/> type.</typeparam>
-	/// <returns>Type of return.</returns>
-	internal static Type ReturnType<TReturn>() where TReturn : IDataType<TReturn>
-		=> IDataType.GetMetadata<TReturn>() is JPrimitiveTypeMetadata primitiveTypeMetadata ?
-			primitiveTypeMetadata.UnderlineType :
-			typeof(TReturn);
 }

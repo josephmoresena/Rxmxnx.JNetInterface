@@ -15,8 +15,9 @@ public partial class JVirtualMachine
 			=> DeadThread.ThrowInvalidResult<JArrayObject<TElement>>();
 		Int32 IArrayFeature.GetArrayLength(JReferenceObject jObject)
 		{
-			Debug.WriteLine(
-				$"Unable to determine {jObject.As<JObjectLocalRef>()} array length. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to determine {jObject.As<JObjectLocalRef>()} array length. JVM {this.VirtualMachine.Reference} was destroyed.");
 			return 0;
 		}
 		TElement? IArrayFeature.GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
@@ -52,13 +53,15 @@ public partial class JVirtualMachine
 		void IArrayFeature.ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer,
 			JReleaseMode mode)
 		{
-			Debug.WriteLine(
-				$"Unable to release {pointer} memory from {arrayRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to release {pointer} memory from {arrayRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
 		}
 		void IArrayFeature.ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
 		{
-			Debug.WriteLine(
-				$"Unable to release {criticalPtr} critical memory from {arrayRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to release {criticalPtr} critical memory from {arrayRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
 		}
 		JClassObject IClassFeature.VoidPrimitive => DeadThread.ThrowInvalidResult<JClassObject>();
 		JClassObject IClassFeature.BooleanPrimitive => DeadThread.ThrowInvalidResult<JClassObject>();
@@ -93,8 +96,9 @@ public partial class JVirtualMachine
 			=> DeadThread.ThrowInvalidResult<Boolean>();
 		Boolean IClassFeature.IsInstanceOf<TDataType>(JReferenceObject jObject)
 		{
-			Debug.WriteLine(
-				$"Unable to determine if {jObject.As<JObjectLocalRef>()} is an instance of {IDataType.GetMetadata<TDataType>().ClassName} class. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to determine if {jObject.As<JObjectLocalRef>()} is an instance of {IDataType.GetMetadata<TDataType>().ClassName} class. JVM {this.VirtualMachine.Reference} was destroyed.");
 			return jObject is TDataType || jObject.ObjectClassName.AsSpan()
 			                                      .SequenceEqual(IDataType.GetMetadata<TDataType>().ClassName);
 		}
@@ -128,43 +132,49 @@ public partial class JVirtualMachine
 			=> DeadThread.ThrowInvalidResult<ObjectLifetime>();
 		void IReferenceFeature.MonitorExit(JObjectLocalRef localRef)
 		{
-			Debug.WriteLine(
-				$"Unable to exit monitor from {localRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to exit monitor from {localRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
 		}
 		TGlobal IReferenceFeature.Create<TGlobal>(JLocalObject jLocal) => DeadThread.ThrowInvalidResult<TGlobal>();
 		JWeak IReferenceFeature.CreateWeak(JGlobalBase jGlobal) => DeadThread.ThrowInvalidResult<JWeak>();
 		Boolean IReferenceFeature.Unload(JLocalObject jLocal)
 		{
-			Debug.WriteLine(
-				$"Unable to unload {jLocal.InternalReference}. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to unload {jLocal.LocalReference}. JVM {this.VirtualMachine.Reference} was destroyed.");
 			return true;
 		}
 		Boolean IReferenceFeature.Unload(JGlobalBase jGlobal)
 		{
 			JGlobalRef? globalRef = (jGlobal as JGlobal)?.Reference;
 			JWeakRef? weakRef = (jGlobal as JWeak)?.Reference;
-			Debug.WriteLine(
-				$"Unable to unload {globalRef?.ToString() ?? weakRef?.ToString()}. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to unload {globalRef?.ToString() ?? weakRef?.ToString()}. JVM {this.VirtualMachine.Reference} was destroyed.");
 			return true;
 		}
 		Boolean IReferenceFeature.IsParameter(JLocalObject jLocal)
 		{
-			Debug.WriteLine(
-				$"Unable to determine {jLocal.InternalReference} is parameter. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to determine {jLocal.LocalReference} is parameter. JVM {this.VirtualMachine.Reference} was destroyed.");
 			return false;
 		}
 		IDisposable IReferenceFeature.GetSynchronizer(JReferenceObject jObject)
 			=> DeadThread.ThrowInvalidResult<IDisposable>();
 		Int32 IStringFeature.GetLength(JReferenceObject jObject)
 		{
-			Debug.WriteLine(
-				$"Unable to determine {jObject.As<JObjectLocalRef>()} string length. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to determine {jObject.As<JObjectLocalRef>()} string length. JVM {this.VirtualMachine.Reference} was destroyed.");
 			return 0;
 		}
 		Int32 IStringFeature.GetUtf8Length(JReferenceObject jObject)
 		{
-			Debug.WriteLine(
-				$"Unable to determine {jObject.As<JObjectLocalRef>()} UTF8 string length. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to determine {jObject.As<JObjectLocalRef>()} UTF8 string length. JVM {this.VirtualMachine.Reference} was destroyed.");
 			return 0;
 		}
 		void IStringFeature.GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex)
@@ -195,18 +205,21 @@ public partial class JVirtualMachine
 			=> DeadThread.ThrowInvalidResult<ReadOnlyValPtr<Char>>();
 		void IStringFeature.ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
-			Debug.WriteLine(
-				$"Unable to release {pointer} memory from {stringRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to release {pointer} memory from {stringRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
 		}
 		void IStringFeature.ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer)
 		{
-			Debug.WriteLine(
-				$"Unable to release {pointer} memory from {stringRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to release {pointer} memory from {stringRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
 		}
 		void IStringFeature.ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
-			Debug.WriteLine(
-				$"Unable to release {pointer} critical memory from {stringRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to release {pointer} critical memory from {stringRef}. JVM {this.VirtualMachine.Reference} was destroyed.");
 		}
 		Boolean IThread.Attached => false;
 		Boolean IThread.Daemon => false;
@@ -235,14 +248,16 @@ public partial class JVirtualMachine
 		Boolean IEnvironment.IsValidationAvoidable(JGlobalBase jGlobal) => true;
 		JReferenceType IEnvironment.GetReferenceType(JObject jObject)
 		{
-			Debug.WriteLine(
-				$"Unable to determine reference type from {jObject}. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to determine reference type from {jObject.ToTraceText()}. JVM {this.VirtualMachine.Reference} was destroyed.");
 			return JReferenceType.InvalidRefType;
 		}
 		Boolean IEnvironment.IsSameObject(JObject jObject, JObject? jOther)
 		{
-			Debug.WriteLine(
-				$"Unable to determine equality between {jObject} and {jObject}. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to determine equality between {jObject.ToTraceText()} and {jObject.ToTraceText()}. JVM {this.VirtualMachine.Reference} was destroyed.");
 			return Object.ReferenceEquals(jObject, jOther);
 		}
 		Boolean IEnvironment.JniSecure() => true;
@@ -256,8 +271,9 @@ public partial class JVirtualMachine
 		void IEnvironment.DescribeException() => DeadThread.ThrowInvalidResult<Byte>();
 		void IDisposable.Dispose()
 		{
-			Debug.WriteLine(
-				$"Unable to destroy a dead JNI instance. JVM {this.VirtualMachine.Reference} was destroyed.");
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to destroy a dead JNI instance. JVM {this.VirtualMachine.Reference} was destroyed.");
 		}
 
 		/// <summary>

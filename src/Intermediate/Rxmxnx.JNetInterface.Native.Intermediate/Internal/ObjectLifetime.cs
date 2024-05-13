@@ -296,7 +296,7 @@ internal sealed partial class ObjectLifetime : IDisposable
 		return this.Secondary;
 	}
 	/// <summary>
-	/// Indicates whether current instance has a valid <typeparamref name="TGlobal"/> instance.
+	/// Indicates whether the current instance has a valid <typeparamref name="TGlobal"/> instance.
 	/// </summary>
 	/// <typeparam name="TGlobal">A <see cref="JGlobalBase"/> type.</typeparam>
 	/// <returns>
@@ -311,6 +311,17 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// <summary>
 	/// Sets current <see cref="JGlobal"/> object.
 	/// </summary>
-	/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
-	public void SetGlobal(JGlobal jGlobal) => this._global = jGlobal;
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	public void SetGlobal(JGlobalBase jGlobal)
+	{
+		switch (jGlobal)
+		{
+			case JGlobal jGlobalGlobal:
+				this._global = jGlobalGlobal;
+				break;
+			case JWeak jWeak:
+				this._weak = jWeak;
+				break;
+		}
+	}
 }

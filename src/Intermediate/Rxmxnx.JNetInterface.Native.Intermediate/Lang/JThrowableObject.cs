@@ -52,6 +52,23 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 		throw env.PendingException;
 	}
 
+	/// <inheritdoc/>
+	public override String ToString()
+	{
+		String result = $"{this.Class.Name} {this.Reference} {this.Message}";
+		if (this.StackTrace.Length > 0)
+		{
+			StringBuilder strBuild = new(result);
+			foreach (StackTraceInfo t in this.StackTrace)
+				strBuild.AppendLine(t.ToTraceText());
+			result = strBuild.ToString();
+		}
+		return result;
+	}
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override String ToTraceText() => $"{this.Class.Name} {this.Reference}";
+
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	protected new virtual ThrowableObjectMetadata CreateMetadata()
 		=> new(base.CreateMetadata()) { Message = this.Message, StackTrace = this._stackTrace, };

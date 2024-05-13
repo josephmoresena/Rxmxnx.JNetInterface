@@ -121,7 +121,7 @@ partial class JEnvironment
 			if (jLocal is null) return false;
 			ValidationUtilities.ThrowIfProxy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
-			JObjectLocalRef localRef = jLocal.InternalReference;
+			JObjectLocalRef localRef = jLocal.LocalReference;
 			Boolean isRegistered = this._objects.Contains(localRef);
 			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
 			try
@@ -173,7 +173,7 @@ partial class JEnvironment
 			}
 			return true;
 		}
-		public Boolean IsParameter(JLocalObject jLocal) => this._objects.IsParameter(jLocal.InternalReference);
+		public Boolean IsParameter(JLocalObject jLocal) => this._objects.IsParameter(jLocal.LocalReference);
 		public void MonitorEnter(JObjectLocalRef localRef)
 		{
 			MonitorEnterDelegate monitorEnter = this.GetDelegate<MonitorEnterDelegate>();
@@ -181,19 +181,14 @@ partial class JEnvironment
 		}
 		public void MonitorExit(JObjectLocalRef localRef)
 		{
-			if (!this._env.IsAttached)
-			{
-				Debug.WriteLine($"Unable to exit monitor reference {localRef}. Thread is not attached.");
-			}
-			else if (!this.VirtualMachine.IsAlive)
-			{
-				Debug.WriteLine($"Unable to exit monitor reference {localRef}. JVM is not alive.");
-			}
-			else
+			JResult result = JResult.Ok;
+			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 			{
 				MonitorExitDelegate monitorExit = this.GetDelegate<MonitorExitDelegate>();
-				ValidationUtilities.ThrowIfInvalidResult(monitorExit(this.Reference, localRef));
+				result = monitorExit(this.Reference, localRef);
 			}
+			JTrace.MonitorExit(this._env.IsAttached, this.VirtualMachine.IsAlive, result == JResult.Ok, localRef);
+			ValidationUtilities.ThrowIfInvalidResult(result);
 		}
 	}
 }

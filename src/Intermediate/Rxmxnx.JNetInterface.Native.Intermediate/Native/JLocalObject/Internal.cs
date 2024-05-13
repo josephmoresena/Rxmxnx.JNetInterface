@@ -11,10 +11,6 @@ public partial class JLocalObject
 	static JClassTypeMetadata<JLocalObject> IClassType<JLocalObject>.Metadata => JLocalObject.ObjectClassMetadata;
 	static Type IDataType.FamilyType => typeof(JLocalObject);
 
-	/// <summary>
-	/// Internal reference value.
-	/// </summary>
-	internal JObjectLocalRef InternalReference => base.To<JObjectLocalRef>();
 	/// <inheritdoc cref="ILocalObject.Lifetime"/>
 	internal ObjectLifetime Lifetime { get; }
 
@@ -24,7 +20,7 @@ public partial class JLocalObject
 	/// <typeparam name="TReference">Type of value.</typeparam>
 	/// <returns>A read-only reference of <typeparamref name="TReference"/> value.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal ref readonly TReference InternalAs<TReference>() where TReference : unmanaged, INativeType<TReference>
+	internal ref readonly TReference LocalAs<TReference>() where TReference : unmanaged, INativeType<TReference>
 		=> ref base.As<TReference>();
 
 	/// <summary>

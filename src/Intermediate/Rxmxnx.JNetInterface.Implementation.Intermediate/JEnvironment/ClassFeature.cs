@@ -13,9 +13,28 @@ partial class JEnvironment
 			if (!jObject.InstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
-			JClassObject result = this.AsClassObject(classRef);
-			if (jObject is ILocalObject local && classRef == result.InternalReference)
-				result.Lifetime.Synchronize(local.Lifetime);
+			JReferenceType referenceType = this._env.GetReferenceType(classRef.Value);
+			Boolean isLocalRef = referenceType == JReferenceType.LocalRefType;
+			ClassObjectMetadata? classObjectMetadata = this.GetClassObjectMetadata(jObject);
+			JTrace.AsClassObject(classRef, referenceType, classObjectMetadata);
+			JClassObject result = this.Register(classObjectMetadata is null ?
+				                                    this.GetClass(classRef, isLocalRef) :
+				                                    this.GetClass(classObjectMetadata.Name,
+				                                                  isLocalRef ? classRef : default));
+			switch (jObject)
+			{
+				case ILocalObject local when classRef == result.LocalReference:
+					result.Lifetime.Synchronize(local.Lifetime);
+					break;
+				case JGlobal jGlobal when !result.Lifetime.HasValidGlobal<JGlobal>():
+					result.Lifetime.SetGlobal(jGlobal);
+					break;
+				case JWeak jWeak when !result.Lifetime.HasValidGlobal<JWeak>():
+					result.Lifetime.SetGlobal(jWeak);
+					break;
+			}
+			if (classObjectMetadata is not null)
+				ILocalObject.ProcessMetadata(result, classObjectMetadata);
 			return result;
 		}
 		[return: NotNullIfNotNull(nameof(jClass))]
@@ -95,7 +114,7 @@ partial class JEnvironment
 			if (!superClassRef.IsDefault)
 			{
 				JClassObject jSuperClass = this.AsClassObject(superClassRef);
-				if (jSuperClass.InternalReference != superClassRef.Value) this._env.DeleteLocalRef(superClassRef.Value);
+				if (jSuperClass.LocalReference != superClassRef.Value) this._env.DeleteLocalRef(superClassRef.Value);
 				return jSuperClass;
 			}
 			this.CheckJniError();
@@ -147,10 +166,14 @@ partial class JEnvironment
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 		{
 			ValidationUtilities.ThrowIfProxy(jClass);
+			ValidationUtilities.ThrowIfDefault(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			JClassLocalRef classRef = jniTransaction.Add(jClass);
+			JReferenceType referenceType = this._env.GetReferenceType(classRef.Value);
+			Boolean isLocalRef = referenceType == JReferenceType.LocalRefType;
+			JTrace.GetClassInfo(classRef, referenceType);
 			if (classRef.IsDefault) throw new ArgumentException("Unloaded class.");
-			JClassObject loadedClass = this.AsClassObject(classRef);
+			JClassObject loadedClass = this.GetClass(classRef, isLocalRef);
 			name = loadedClass.Name;
 			signature = loadedClass.ClassSignature;
 			hash = loadedClass.Hash;

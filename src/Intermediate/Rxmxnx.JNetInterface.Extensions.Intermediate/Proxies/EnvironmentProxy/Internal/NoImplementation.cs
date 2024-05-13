@@ -35,9 +35,4 @@ public abstract partial class EnvironmentProxy
 	void IStringFeature.ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer) { }
 	void IStringFeature.ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer) { }
 	#endregion
-
-	#region IAccessFeature
-	JMethodId IAccessFeature.GetMethodId(JExecutableObject jExecutable) => default;
-	JFieldId IAccessFeature.GetFieldId(JFieldObject jField) => default;
-	#endregion
 }

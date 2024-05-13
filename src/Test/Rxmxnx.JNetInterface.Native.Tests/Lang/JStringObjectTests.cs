@@ -429,10 +429,9 @@ public sealed class JStringObjectTests
 		Assert.Equal(jString.Value.ToArray(), jString);
 
 		jString.Environment.Received(0)
-		       .IsSameObject(jString, Arg.Is<JLocalObject>(l => l.InternalReference.Equals(stringRef)));
+		       .IsSameObject(jString, Arg.Is<JLocalObject>(l => l.LocalReference.Equals(stringRef)));
 		jString.Environment.Received(1)
-		       .IsSameObject(
-			       jString, Arg.Is<JLocalObject>(l => (l as ILocalObject).InternalReference.Equals(stringRef1)));
+		       .IsSameObject(jString, Arg.Is<JLocalObject>(l => (l as ILocalObject).LocalReference.Equals(stringRef1)));
 	}
 	private static void EnumeratorTest(JStringObject jString)
 	{

@@ -16,7 +16,7 @@ public interface ILocalObject : IObject
 	/// <summary>
 	/// Internal reference value.
 	/// </summary>
-	internal JObjectLocalRef InternalReference { get; }
+	internal JObjectLocalRef LocalReference { get; }
 
 	/// <summary>
 	/// Creates the object metadata for the current instance.

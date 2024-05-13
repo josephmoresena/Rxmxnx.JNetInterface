@@ -5,7 +5,7 @@ partial class JEnvironment
 	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
-		/// Maximum amount of bytes usable on stack.
+		/// Maximum number of bytes usable on stack.
 		/// </summary>
 		private const Int32 MaxStackBytes = 128;
 
@@ -105,5 +105,43 @@ partial class JEnvironment
 		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
 		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(Int32 count) where T : unmanaged
 			=> count == 0 ? ValPtr<T>.Zero.GetUnsafeFixedContext(0) : new T[count].AsMemory().GetFixedContext();
+		/// <summary>
+		/// Traces the assignment of a value to a primitive field.
+		/// </summary>
+		/// <param name="jLocal">Field instance object class.</param>
+		/// <param name="jClass">Field declaring class.</param>
+		/// <param name="definition">Call definition.</param>
+		/// <param name="bytes">Binary span containing value to set to.</param>
+		private static void TraceSetPrimitiveField(JLocalObject? jLocal, JClassObject jClass,
+			JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
+		{
+			switch (definition.Information[1][0])
+			{
+				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+					JTrace.SetPrimitiveField<JBoolean>(jLocal, jClass, definition, bytes);
+					break;
+				case UnicodePrimitiveSignatures.ByteSignatureChar:
+					JTrace.SetPrimitiveField<JByte>(jLocal, jClass, definition, bytes);
+					break;
+				case UnicodePrimitiveSignatures.CharSignatureChar:
+					JTrace.SetPrimitiveField<JChar>(jLocal, jClass, definition, bytes);
+					break;
+				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+					JTrace.SetPrimitiveField<JDouble>(jLocal, jClass, definition, bytes);
+					break;
+				case UnicodePrimitiveSignatures.FloatSignatureChar:
+					JTrace.SetPrimitiveField<JFloat>(jLocal, jClass, definition, bytes);
+					break;
+				case UnicodePrimitiveSignatures.IntSignatureChar:
+					JTrace.SetPrimitiveField<JInt>(jLocal, jClass, definition, bytes);
+					break;
+				case UnicodePrimitiveSignatures.LongSignatureChar:
+					JTrace.SetPrimitiveField<JLong>(jLocal, jClass, definition, bytes);
+					break;
+				case UnicodePrimitiveSignatures.ShortSignatureChar:
+					JTrace.SetPrimitiveField<JShort>(jLocal, jClass, definition, bytes);
+					break;
+			}
+		}
 	}
 }

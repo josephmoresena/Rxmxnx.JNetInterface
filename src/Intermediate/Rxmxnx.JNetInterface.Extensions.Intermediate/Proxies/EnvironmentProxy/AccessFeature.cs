@@ -75,4 +75,8 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
 		Boolean isStatic);
+	/// <inheritdoc/>
+	public abstract JMethodId GetMethodId(JExecutableObject jExecutable);
+	/// <inheritdoc/>
+	public abstract JFieldId GetFieldId(JFieldObject jField);
 }

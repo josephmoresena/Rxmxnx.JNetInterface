@@ -137,6 +137,7 @@ public sealed class ReferenceObjectTests
 		public override Boolean Equals(JObject? other) => true;
 		private protected override void CopyTo(Span<Byte> span, ref Int32 offset) { }
 		private protected override void CopyTo(Span<JValue> span, Int32 index) { }
+		public override String ToTraceText() => this.ToString()!;
 	}
 
 	private sealed class ViewProxy(JReferenceObject jObject) : JReferenceObject.View<JReferenceObject>(jObject);

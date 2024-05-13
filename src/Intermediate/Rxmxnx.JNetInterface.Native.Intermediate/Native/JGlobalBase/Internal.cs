@@ -3,10 +3,6 @@ namespace Rxmxnx.JNetInterface.Native;
 public partial class JGlobalBase
 {
 	/// <summary>
-	/// Instance metadata.
-	/// </summary>
-	internal ObjectMetadata ObjectMetadata { get; private set; }
-	/// <summary>
 	/// Assignation types cache.
 	/// </summary>
 	internal AssignableTypeCache AssignationCache { get; } = new();

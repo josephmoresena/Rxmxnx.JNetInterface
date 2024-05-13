@@ -40,6 +40,7 @@ public sealed class JMethodDefinitionTests
 		Assert.True(methodDefinition.Equals((Object)new JMethodDefinition((CString)methodName)));
 		Assert.Equal(0, methodDefinition.Count);
 		Assert.Equal(0, methodDefinition.ReferenceCount);
+		Assert.Equal(0, methodDefinition.Size);
 		Assert.Empty(methodDefinition.Sizes);
 		Assert.Equal(jMethod, methodDefinition.GetReflected(jStringClass));
 		Assert.Equal(jMethod, methodDefinition.GetStaticReflected(jStringClass));
@@ -90,6 +91,7 @@ public sealed class JMethodDefinitionTests
 		Assert.Equal(JMethodDefinitionTests.args.Length, methodDefinition.Count);
 		Assert.Equal(JMethodDefinitionTests.args.Count(a => a.Signature.Length > 1), methodDefinition.ReferenceCount);
 		Assert.Equal(JMethodDefinitionTests.args.Select(a => a.Size), methodDefinition.Sizes);
+		Assert.Equal(JMethodDefinitionTests.args.Select(a => a.Size).Sum(), methodDefinition.Size);
 
 		methodDefinition.Invoke(jLocal);
 		env.AccessFeature.Received(1).CallMethod(jLocal, jLocal.Class, methodDefinition, false,

@@ -251,4 +251,16 @@ public partial interface IAccessFeature
 	/// </param>
 	/// <returns>A <see cref="JFieldObject"/> instance.</returns>
 	JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass, Boolean isStatic);
+	/// <summary>
+	/// Retrieves <see cref="JMethodId"/> for <paramref name="jExecutable"/>
+	/// </summary>
+	/// <param name="jExecutable">A <see cref="JExecutableObject"/> instance.</param>
+	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
+	JMethodId GetMethodId(JExecutableObject jExecutable);
+	/// <summary>
+	/// Retrieves <see cref="JFieldId"/> for <paramref name="jField"/>
+	/// </summary>
+	/// <param name="jField">A <see cref="JFieldObject"/> instance.</param>
+	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
+	JFieldId GetFieldId(JFieldObject jField);
 }

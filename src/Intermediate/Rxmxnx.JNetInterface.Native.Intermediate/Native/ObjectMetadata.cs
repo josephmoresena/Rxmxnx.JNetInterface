@@ -54,6 +54,10 @@ public record ObjectMetadata
 		this.TypeMetadata = IClassType.GetMetadata<JClassObject>();
 	}
 
+	/// <inheritdoc cref="Object.ToString()"/>
+	/// <remarks>Use this method for trace.</remarks>
+	public virtual String ToTraceText() => this.ToString();
+
 	/// <summary>
 	/// Retrieves the java class for the current object.
 	/// </summary>

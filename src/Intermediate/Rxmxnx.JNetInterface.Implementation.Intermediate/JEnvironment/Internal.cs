@@ -166,7 +166,7 @@ partial class JEnvironment
 		using LocalFrame frame = new(this, 2);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
 		JClassObject jClass = this._cache.GetClass(classRef, true);
-		frame[jClass.InternalReference] = jClass.Lifetime.GetCacheable();
+		frame[jClass.LocalReference] = jClass.Lifetime.GetCacheable();
 		metadata = this._cache.GetTypeMetadata(jClass)!;
 		return jClass;
 	}

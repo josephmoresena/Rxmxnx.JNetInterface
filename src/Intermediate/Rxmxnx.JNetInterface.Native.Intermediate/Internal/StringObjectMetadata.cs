@@ -30,4 +30,7 @@ internal sealed record StringObjectMetadata : ObjectMetadata
 		this.Length = stringMetadata?.Length;
 		this.Utf8Length = stringMetadata?.Utf8Length;
 	}
+
+	/// <inheritdoc/>
+	public override String ToTraceText() => $"{base.ToString()} Length: {this.Length}";
 }

@@ -38,4 +38,5 @@ public sealed class ReferenceObjectProxy : JReferenceObject
 	}
 	internal override void SetAssignableTo<TDataType>(Boolean isAssignable)
 		=> this.SetAssignableToEvent?.Invoke(typeof(TDataType), this);
+	public override String ToTraceText() => this.ToString()!;
 }

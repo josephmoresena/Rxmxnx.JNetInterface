@@ -60,6 +60,10 @@ public abstract partial class JNumberObject<TValue, TNumber> : JNumberObject<TVa
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
 	/// <inheritdoc/>
 	public override String ToString() => this.Value.ToString()!;
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override String ToTraceText()
+		=> $"{this.Class.Name} {this.Reference} {IPrimitiveType.GetMetadata<TValue>().Signature}: {this.Value}";
 
 	/// <inheritdoc cref="IPrimitiveWrapperType{TNumber, TValue}.Create(IEnvironment, Nullable{TValue})"/>
 	[return: NotNullIfNotNull(nameof(value))]

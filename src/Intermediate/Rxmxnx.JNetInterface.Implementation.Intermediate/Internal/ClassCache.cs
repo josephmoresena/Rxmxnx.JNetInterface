@@ -23,7 +23,7 @@ internal class ClassCache
 	{
 		JClassLocalRef classRef = jClass switch
 		{
-			JLocalObject jLocal when jLocal.InternalReference != default => jLocal.InternalAs<JClassLocalRef>(),
+			JLocalObject jLocal when jLocal.LocalReference != default => jLocal.LocalAs<JClassLocalRef>(),
 			JGlobalBase { IsDefault: false, } => jClass.As<JClassLocalRef>(),
 			_ => default,
 		};
@@ -91,6 +91,15 @@ internal sealed class ClassCache<TClass> : ClassCache where TClass : JReferenceO
 			this.Load(value);
 		}
 	}
+	/// <summary>
+	/// Determines whether the instance contains the specified class hash.
+	/// </summary>
+	/// <param name="hash">Clash hash to locate.</param>
+	/// <returns>
+	/// <see langword="true"/> if the cache contains an element with the specified class hash;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public Boolean ContainsHash(String hash) => this._classes.ContainsKey(hash);
 
 	/// <summary>
 	/// Attempts to get the value associated with the specified hash from the cache.
@@ -110,7 +119,7 @@ internal sealed class ClassCache<TClass> : ClassCache where TClass : JReferenceO
 	protected override void SetAsUnloaded(String hash, JClassLocalRef classRef)
 	{
 		if (!this._classes.TryGetValue(hash, out TClass? jClass)) return;
-		if ((jClass as JLocalObject)?.InternalReference == classRef.Value)
+		if ((jClass as JLocalObject)?.LocalReference == classRef.Value)
 			jClass.ClearValue();
 	}
 }

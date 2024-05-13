@@ -41,7 +41,7 @@ public class JExecutableObjectTests
 		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringExecutableName, jArrayParameters, jStringClass)
 		   .Returns(executableDefinition);
-		env.AccessFeature.GetMethodId(jExecutable).Returns(methodId.Pointer);
+		env.AccessFeature.GetMethodId(jExecutable).Returns(methodId);
 
 		ILocalObject.ProcessMetadata(jExecutable,
 		                             useMetadata ?

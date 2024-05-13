@@ -2,16 +2,6 @@ namespace Rxmxnx.JNetInterface.Tests.Restricted;
 
 public partial class AccessFeatureProxy
 {
-	JMethodId IAccessFeature.GetMethodId(JExecutableObject jExecutable)
-	{
-		IntPtr ptr = this.GetMethodId(jExecutable);
-		return ptr.Transform<IntPtr, JMethodId>();
-	}
-	JFieldId IAccessFeature.GetFieldId(JFieldObject jField)
-	{
-		IntPtr ptr = this.GetFieldId(jField);
-		return ptr.Transform<IntPtr, JFieldId>();
-	}
 	void IAccessFeature.GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 		JFieldDefinition definition)
 		=> bytes.WithSafeFixed((this, jLocal, jClass, definition), AccessFeatureProxy.GetPrimitiveField);

@@ -9,7 +9,7 @@ public sealed class JWeak : JGlobalBase
 	/// <summary>
 	/// Weak Global reference.
 	/// </summary>
-	internal JWeakRef Reference => this.As<JWeakRef>();
+	public JWeakRef Reference => this.As<JWeakRef>();
 
 	/// <summary>
 	/// Constructor.
@@ -24,6 +24,12 @@ public sealed class JWeak : JGlobalBase
 	/// <param name="weakRef">Weak global reference.</param>
 	internal JWeak(JGlobalBase jGlobal, JWeakRef weakRef) : base(jGlobal.VirtualMachine, jGlobal.ObjectMetadata,
 	                                                             weakRef) { }
+
+	/// <inheritdoc/>
+	public override String ToString() => $"{this.Reference} {this.ObjectMetadata}";
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	public override String ToTraceText() => $"{this.Reference} {this.ObjectMetadata.ToTraceText()}";
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)

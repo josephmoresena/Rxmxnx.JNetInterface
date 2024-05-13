@@ -11,6 +11,12 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	public const Int32 MinimalVersion = 0x00010006;
 
 	/// <summary>
+	/// Indicates whether trace output is enabled.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean TraceEnabled { get; set; }
+
+	/// <summary>
 	/// JNI reference to the interface.
 	/// </summary>
 	JVirtualMachineRef Reference { get; }

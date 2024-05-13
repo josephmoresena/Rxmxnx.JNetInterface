@@ -36,8 +36,7 @@ public abstract partial record JArrayTypeMetadata
 		}
 		catch (Exception ex)
 		{
-			Debug.WriteLine(
-				$"Unable to create {nameof(MethodInfo)} instance of {nameof(IArrayType)}.{nameof(IArrayType.GetArrayArrayMetadata)}<>(). {ex.Message}");
+			JTrace.ReflectGetArrayArrayMetadataMethodError(ex);
 		}
 	}
 
@@ -121,8 +120,7 @@ public abstract partial record JArrayTypeMetadata
 		}
 		catch (Exception ex)
 		{
-			Debug.WriteLine(
-				$"Unable to create {nameof(JArrayTypeMetadata)} instance of [[{elementSignature}. {ex.Message}");
+			JTrace.GetArrayArrayMetadataWithReflectionError(elementSignature, ex);
 			return default;
 		}
 	}

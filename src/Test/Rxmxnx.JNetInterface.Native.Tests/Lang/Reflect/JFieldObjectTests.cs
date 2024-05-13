@@ -35,7 +35,7 @@ public class JFieldObjectTests
 		env.FunctionSet.GetFieldType(jField).Returns(jStringClass);
 		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringFieldName, jStringClass).Returns(fieldDefinition);
-		env.AccessFeature.GetFieldId(jField).Returns(fieldId.Pointer);
+		env.AccessFeature.GetFieldId(jField).Returns(fieldId);
 
 		Assert.Equal(fieldDefinition, jField.Definition);
 		Assert.Equal(jClass, jField.DeclaringClass);
@@ -75,7 +75,7 @@ public class JFieldObjectTests
 		env.FunctionSet.GetFieldType(jField).Returns(jStringClass);
 		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringFieldName, jStringClass).Returns(fieldDefinition);
-		env.AccessFeature.GetFieldId(jField).Returns(fieldId.Pointer);
+		env.AccessFeature.GetFieldId(jField).Returns(fieldId);
 
 		ILocalObject.ProcessMetadata(
 			jField,

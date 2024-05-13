@@ -113,7 +113,7 @@ public sealed class JLocalObjectTests
 		Assert.Equal(jWeak, jLocal.Weak);
 		Assert.Equal(jGlobal, jLocal.Global);
 		Assert.Equal(nCase == 0, jLocal.IsDefaultInstance());
-		Assert.Equal(jLocal.InternalReference, jLocal.InternalAs<JClassLocalRef>().Value);
+		Assert.Equal(jLocal.LocalReference, jLocal.LocalAs<JClassLocalRef>().Value);
 		Assert.Equal($"{jObjectClass.Name} {jLocal.As<JObjectLocalRef>()}", jLocal.ToString());
 		Assert.Equal(nCase switch
 		{
@@ -189,8 +189,10 @@ public sealed class JLocalObjectTests
 		Assert.Equal(throwableRef.Value, jLocal.Reference);
 	}
 
-	[Fact]
-	internal void SetGlobal()
+	[Theory]
+	[InlineData]
+	[InlineData(true)]
+	internal void SetGlobal(Boolean useWeak = false)
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
@@ -198,6 +200,7 @@ public sealed class JLocalObjectTests
 		JClassLocalRef classRef = JLocalObjectTests.fixture.Create<JClassLocalRef>();
 		JObjectLocalRef localRef = JLocalObjectTests.fixture.Create<JObjectLocalRef>();
 		JGlobalRef globalRef = JLocalObjectTests.fixture.Create<JGlobalRef>();
+		JWeakRef weakRef = JLocalObjectTests.fixture.Create<JWeakRef>();
 
 		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
 		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
@@ -214,11 +217,18 @@ public sealed class JLocalObjectTests
 
 		Assert.Null(jLocal.Lifetime.GetGlobalObject());
 
-		using JGlobal jGlobal = new(jLocal, globalRef);
+		using JGlobalBase jGlobal = !useWeak ? new JGlobal(jLocal, globalRef) : new JWeak(jLocal, weakRef);
 
 		jLocal.Lifetime.SetGlobal(jGlobal);
 
 		Assert.Equal(jGlobal, jLocal.Lifetime.GetGlobalObject());
+		Assert.Equal(localRef, jLocal.LocalReference);
+		Assert.Equal(localRef, jLocal.LocalAs<JObjectLocalRef>());
+		Assert.Equal(!useWeak ? globalRef.Value : weakRef.Value, jLocal.Reference);
+		Assert.Equal(!useWeak, globalRef == jLocal.To<JGlobalRef>());
+		Assert.Equal(!useWeak, globalRef == jLocal.As<JGlobalRef>());
+		Assert.Equal(useWeak, weakRef == jLocal.To<JWeakRef>());
+		Assert.Equal(useWeak, weakRef == jLocal.As<JWeakRef>());
 	}
 
 	[Theory]

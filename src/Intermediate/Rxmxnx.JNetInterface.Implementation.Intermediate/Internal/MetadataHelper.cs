@@ -12,7 +12,7 @@ internal static partial class MetadataHelper
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
 	public static IReflectionMetadata? GetReflectionMetadata(ReadOnlySpan<Byte> className)
 	{
-		CStringSequence information = MetadataHelper.GetClassInformation(className);
+		CStringSequence information = MetadataHelper.GetClassInformation(className, true);
 		String hash = information.ToString();
 		IReflectionMetadata? result;
 
@@ -99,7 +99,7 @@ internal static partial class MetadataHelper
 	/// <param name="className">A java type name.</param>
 	/// <param name="escape">Indicates whether <paramref name="className"/> should be escaped.</param>
 	/// <returns><see cref="CStringSequence"/> with class information for given type.</returns>
-	public static CStringSequence GetClassInformation(ReadOnlySpan<Byte> className, Boolean escape = true)
+	public static CStringSequence GetClassInformation(ReadOnlySpan<Byte> className, Boolean escape)
 	{
 		ReadOnlySpan<Byte> jniClassName = escape ? JDataTypeMetadata.JniEscapeClassName(className) : className;
 		return JDataTypeMetadata.CreateInformationSequence(jniClassName);

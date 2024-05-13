@@ -82,7 +82,7 @@ public sealed class JGlobalTests
 		Assert.False(jGlobal1.HasObjects);
 		Assert.False(jGlobal2.HasObjects);
 
-		Assert.Equal(typeof(ClassObjectMetadata), jGlobal0.MetadataType);
+		Assert.Equal(typeof(ClassObjectMetadata), jGlobal0.ObjectMetadata.GetType());
 		Assert.True(jGlobal0.ObjectSignature.AsSpan().SequenceEqual(jClassClass.ObjectSignature));
 
 		vm.ClearReceivedCalls();
@@ -106,6 +106,10 @@ public sealed class JGlobalTests
 		env.Received(0).GetReferenceType(jGlobal2);
 
 		jGlobal0.SetValue(default);
+
+		Assert.Equal($"{jGlobal0.Reference} {jGlobal0.ObjectMetadata}", jGlobal0.ToString());
+		Assert.Equal($"{jGlobal1.Reference} {jGlobal1.ObjectMetadata}", jGlobal1.ToString());
+		Assert.Equal($"{jGlobal2.Reference} {jGlobal2.ObjectMetadata}", jGlobal2.ToString());
 	}
 
 	[Theory]

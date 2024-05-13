@@ -57,7 +57,7 @@ public readonly ref partial struct JNativeCallAdapter
 			if (validateReference) this.ThrowIfNotClassObject(classRef.Value);
 			JClassObject result = env.GetClass(classRef, true);
 			// Check if class reference is owned by this call.
-			if (classRef == result.InternalReference)
+			if (classRef == result.LocalReference)
 			{
 				this._callAdapter._cache[classRef.Value] = result.Lifetime;
 			}
