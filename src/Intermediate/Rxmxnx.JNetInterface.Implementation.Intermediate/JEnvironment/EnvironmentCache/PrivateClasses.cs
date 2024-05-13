@@ -91,9 +91,11 @@ partial class JEnvironment
 		private JClassObject GetClass(JClassLocalRef classRef, Boolean isLocalRef,
 			ClassObjectMetadata? classObjectMetadata)
 		{
-			JClassObject result = classObjectMetadata is null ? 
-				this.GetClass(classRef, isLocalRef) : 
-				this.GetClass(classObjectMetadata.Name, isLocalRef ? classRef : default);
+			JClassObject result;
+			if (classObjectMetadata is null)
+				result = this.GetClass(classRef, isLocalRef);
+			else
+				result = this.GetClass(classObjectMetadata.Name, isLocalRef ? classRef : default);
 			return this.Register(result);
 		}
 		/// <summary>
