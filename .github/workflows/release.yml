@@ -29,7 +29,7 @@ jobs:
           dotnet build -c Release ./Rxmxnx.JNetInterface.Implementation.Intermediate
     - name: Extract public key
       working-directory: ./package
-      run: echo "${SNK_BASE64}" | base64 -d > Rxmxnx.PInvoke.snk
+      run: echo "${SNK_BASE64}" | base64 -d > Rxmxnx.JNetInterface.snk
     - name: Create Core NuGet Package
       working-directory: ./package/Rxmxnx.JNetInterface.Core
       run: dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
