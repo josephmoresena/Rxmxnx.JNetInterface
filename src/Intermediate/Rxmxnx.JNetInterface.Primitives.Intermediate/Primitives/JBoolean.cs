@@ -8,15 +8,6 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	IPrimitiveType<JBoolean, Boolean>
 {
 	/// <summary>
-	/// Unsigned byte value for <see langword="true"/> value.
-	/// </summary>
-	internal const Byte TrueValue = 0x01;
-	/// <summary>
-	/// Unsigned byte value for <see langword="false"/> value.
-	/// </summary>
-	internal const Byte FalseValue = 0x00;
-
-	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly JPrimitiveTypeMetadata<JBoolean> typeMetadata = IPrimitiveType<JBoolean, Boolean>

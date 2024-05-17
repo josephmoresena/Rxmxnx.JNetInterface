@@ -22,23 +22,23 @@ internal interface
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryInteger<TValue>
 	, IMinMaxValue<TValue>
 {
-	/// <inheritdoc cref="IShiftOperators{TSelf, Int32, TSelf}.op_LeftShift(TSelf, Int32)"/>
+	/// <inheritdoc cref="IShiftOperators{TSelf,TOther,TResult}.op_LeftShift(TSelf, TOther)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static TPrimitive LeftShift(in TValue value, Int32 shiftAmount)
+	protected static TPrimitive LeftShift(in TValue value, Int32 shiftAmount)
 	{
 		TValue result = value << shiftAmount;
 		return NativeUtilities.Transform<TValue, TPrimitive>(result);
 	}
-	/// <inheritdoc cref="IShiftOperators{TSelf, Int32, TSelf}.op_RightShift(TSelf, Int32)"/>
+	/// <inheritdoc cref="IShiftOperators{TSelf,TOther,TResult}.op_RightShift(TSelf, TOther)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static TPrimitive RightShift(in TValue value, Int32 shiftAmount)
+	protected static TPrimitive RightShift(in TValue value, Int32 shiftAmount)
 	{
 		TValue result = value >> shiftAmount;
 		return NativeUtilities.Transform<TValue, TPrimitive>(result);
 	}
-	/// <inheritdoc cref="IShiftOperators{TSelf, Int32, TSelf}.op_UnsignedRightShift(TSelf, Int32)"/>
+	/// <inheritdoc cref="IShiftOperators{TSelf,TOther,TResult}.op_UnsignedRightShift(TSelf, TOther)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static TPrimitive UnsignedRightShift(in TValue value, Int32 shiftAmount)
+	protected static TPrimitive UnsignedRightShift(in TValue value, Int32 shiftAmount)
 	{
 		TValue result = value >>> shiftAmount;
 		return NativeUtilities.Transform<TValue, TPrimitive>(result);
@@ -46,41 +46,41 @@ internal interface
 
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.PopCount(TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static TPrimitive PopCount(in TValue value)
+	protected static TPrimitive PopCount(in TValue value)
 	{
 		TValue result = TValue.PopCount(value);
 		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
 	}
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.TrailingZeroCount(TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static TPrimitive TrailingZeroCount(in TValue value)
+	protected static TPrimitive TrailingZeroCount(in TValue value)
 	{
 		TValue result = TValue.TrailingZeroCount(value);
 		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
 	}
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.TryReadBigEndian(ReadOnlySpan{Byte}, Boolean, out TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean TryReadBigEndian(ReadOnlySpan<Byte> source, Boolean isUnsigned, out TPrimitive value)
+	protected static Boolean TryReadBigEndian(ReadOnlySpan<Byte> source, Boolean isUnsigned, out TPrimitive value)
 	{
 		Unsafe.SkipInit(out value);
 		return TValue.TryReadBigEndian(source, isUnsigned, out Unsafe.As<TPrimitive, TValue>(ref value));
 	}
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.TryReadLittleEndian(ReadOnlySpan{Byte}, Boolean, out TSelf)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean TryReadLittleEndian(ReadOnlySpan<Byte> source, Boolean isUnsigned, out TPrimitive value)
+	protected static Boolean TryReadLittleEndian(ReadOnlySpan<Byte> source, Boolean isUnsigned, out TPrimitive value)
 	{
 		Unsafe.SkipInit(out value);
 		return TValue.TryReadLittleEndian(source, isUnsigned, out Unsafe.As<TPrimitive, TValue>(ref value));
 	}
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.TryWriteLittleEndian(Span{Byte}, out Int32)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean TryWriteBigEndian(TValue value, Span<Byte> destination, out Int32 bytesWritten)
+	protected static Boolean TryWriteBigEndian(TValue value, Span<Byte> destination, out Int32 bytesWritten)
 		=> value.TryWriteBigEndian(destination, out bytesWritten);
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.TryWriteLittleEndian(Span{Byte}, out Int32)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Boolean TryWriteLittleEndian(TValue value, Span<Byte> destination, out Int32 bytesWritten)
+	protected static Boolean TryWriteLittleEndian(TValue value, Span<Byte> destination, out Int32 bytesWritten)
 		=> value.TryWriteLittleEndian(destination, out bytesWritten);
 	/// <inheritdoc cref="IBinaryInteger{TSelf}.TryWriteLittleEndian(Span{Byte}, out Int32)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Int32 GetShortestBitLength(TValue value) => value.GetShortestBitLength();
+	protected static Int32 GetShortestBitLength(TValue value) => value.GetShortestBitLength();
 }
