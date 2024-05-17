@@ -16,8 +16,26 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 	protected static TInteger GetIntegerValue<TInteger>(Double value)
 		where TInteger : unmanaged, IBinaryInteger<TInteger>
 	{
-		Int64 result = (Int64)value;
-		return NativeUtilities.AsBytes(result).ToValue<TInteger>();
+		try
+		{
+			Int64 result = value switch
+			{
+				SByte.MinValue => SByte.MinValue,
+				SByte.MaxValue => SByte.MaxValue,
+				Int16.MinValue => Int16.MinValue,
+				Int16.MaxValue => Int16.MaxValue,
+				Int32.MinValue => Int32.MinValue,
+				Int32.MaxValue => Int32.MaxValue,
+				Int64.MinValue => Int64.MinValue,
+				Int64.MaxValue => Int64.MaxValue,
+				_ => (Int64)value,
+			};
+			return NativeUtilities.AsBytes(result).ToValue<TInteger>();
+		}
+		catch (Exception)
+		{
+			return Double.IsNegative(value) ? TInteger.Zero : TInteger.AllBitsSet;
+		}
 	}
 
 	/// <inheritdoc cref="IEquatable{JPrimitiveObject}.Equals(JPrimitiveObject)"/>

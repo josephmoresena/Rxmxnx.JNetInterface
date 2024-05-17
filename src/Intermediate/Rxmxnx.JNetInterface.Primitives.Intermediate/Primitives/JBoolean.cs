@@ -42,26 +42,24 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// <summary>
 	/// Internal byte value.
 	/// </summary>
-	internal Byte ByteValue => this._value;
+	public Byte ByteValue => this._value;
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[Browsable(false)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	[ExcludeFromCodeCoverage]
 	public JBoolean() => this._value = JBoolean.FalseValue;
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value"><see cref="Byte"/> value.</param>
-	internal JBoolean(Byte value) => this._value = value;
-
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">Internal value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private JBoolean(Boolean value) => this._value = value ? JBoolean.TrueValue : JBoolean.FalseValue;
+	[Browsable(false)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public JBoolean(Boolean value) => this._value = value ? JBoolean.TrueValue : JBoolean.FalseValue;
 
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);

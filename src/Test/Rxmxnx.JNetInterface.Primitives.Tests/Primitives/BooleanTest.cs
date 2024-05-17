@@ -12,7 +12,6 @@ public sealed class BooleanTest : PrimitiveTestBase
 
 		BooleanTest.TryFormatTest(primitive);
 		Assert.IsType<JPrimitiveObject<JBoolean>>((JObject)primitive);
-		BooleanTest.ByteTest(primitive);
 		foreach (Boolean newValue in PrimitiveTestBase.Fixture.CreateMany<Boolean>(10))
 			BooleanTest.EqualityTest(primitive, newValue);
 	}
@@ -52,12 +51,5 @@ public sealed class BooleanTest : PrimitiveTestBase
 
 		Assert.Equal(equals, primitive1.Value == primitive0);
 		Assert.Equal(!equals, primitive1.Value != primitive0);
-
-		BooleanTest.ByteTest(primitive1);
-	}
-	private static void ByteTest(JBoolean primitive)
-	{
-		Assert.Equal(primitive.Value ? JBoolean.TrueValue : JBoolean.FalseValue, primitive.ByteValue);
-		Assert.Equal(primitive, new(primitive.ByteValue));
 	}
 }

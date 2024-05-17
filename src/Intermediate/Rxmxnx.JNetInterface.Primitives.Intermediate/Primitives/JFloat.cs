@@ -38,19 +38,6 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JFloat>().Signature;
 
-	/// <summary>
-	/// Parameterless constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JFloat() => this._value = default;
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Internal value.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private JFloat(Single value) => this._value = value;
-
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif

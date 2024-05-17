@@ -38,19 +38,6 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JLong>().Signature;
 
-	/// <summary>
-	/// Parameterless constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JLong() => this._value = default;
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Internal value.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private JLong(Int64 value) => this._value = value;
-
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
