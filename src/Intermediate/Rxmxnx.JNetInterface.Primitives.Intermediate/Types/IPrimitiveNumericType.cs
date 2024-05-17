@@ -13,14 +13,15 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 	/// <typeparam name="TInteger">Integer type.</typeparam>
 	/// <param name="value">A <see cref="Double"/> value.</param>
 	/// <returns>A <typeparamref name="TInteger"/> type.</returns>
-	public static TInteger GetIntegerValue<TInteger>(Double value) where TInteger : unmanaged, IBinaryInteger<TInteger>
+	protected static TInteger GetIntegerValue<TInteger>(Double value)
+		where TInteger : unmanaged, IBinaryInteger<TInteger>
 	{
 		Int64 result = (Int64)value;
 		return NativeUtilities.AsBytes(result).ToValue<TInteger>();
 	}
 
 	/// <inheritdoc cref="IEquatable{JPrimitiveObject}.Equals(JPrimitiveObject)"/>
-	public static Boolean Equals<TPrimitive>(TPrimitive primitive, JPrimitiveObject? other)
+	protected static Boolean Equals<TPrimitive>(TPrimitive primitive, JPrimitiveObject? other)
 		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>
 	{
 		if (other is null || other.ObjectSignature[0] == UnicodePrimitiveSignatures.BooleanSignatureChar)
@@ -39,7 +40,7 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 		};
 	}
 	/// <inheritdoc cref="IEquatable{IPrimitiveType}.Equals(IPrimitiveType)"/>
-	public static Boolean Equals<TPrimitive>(TPrimitive primitive, IPrimitiveType? other)
+	protected static Boolean Equals<TPrimitive>(TPrimitive primitive, IPrimitiveType? other)
 		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>
 		=> other switch
 		{
@@ -186,4 +187,49 @@ internal partial interface
 	where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>, IPrimitiveEquatable
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryNumber<TValue>,
-	IMinMaxValue<TValue>;
+	IMinMaxValue<TValue>
+{
+	/// <inheritdoc cref="INumberBase{TSelf}.One"/>
+	protected static readonly TPrimitive One = IPrimitiveNumericType<TPrimitive, TValue>.GetOne();
+	/// <inheritdoc cref="INumberBase{TSelf}.Zero"/>
+	protected static readonly TPrimitive Zero = IPrimitiveNumericType<TPrimitive, TValue>.GetZero();
+	/// <inheritdoc cref="IBinaryNumber{TSelf}.AllBitsSet"/>
+	protected static readonly TPrimitive AllBitsSet = IPrimitiveNumericType<TPrimitive, TValue>.GetAllBitsSet();
+	/// <inheritdoc cref="IAdditiveIdentity{TSelf, TResult}.AdditiveIdentity"/>
+	protected static readonly TPrimitive AdditiveIdentity =
+		IPrimitiveNumericType<TPrimitive, TValue>.GetAdditiveIdentity();
+	/// <inheritdoc cref="IMultiplicativeIdentity{TSelf, TResult}.MultiplicativeIdentity"/>
+	protected static readonly TPrimitive MultiplicativeIdentity =
+		IPrimitiveNumericType<TPrimitive, TValue>.GetMultiplicativeIdentity();
+
+	/// <inheritdoc cref="INumberBase{TSelf}.One"/>
+	private static TPrimitive GetOne()
+	{
+		TValue result = TValue.One;
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
+	}
+	/// <inheritdoc cref="INumberBase{TSelf}.Zero"/>
+	private static TPrimitive GetZero()
+	{
+		TValue result = TValue.Zero;
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
+	}
+	/// <inheritdoc cref="IAdditiveIdentity{TSelf, TResult}.AdditiveIdentity"/>
+	private static TPrimitive GetAdditiveIdentity()
+	{
+		TValue result = TValue.AdditiveIdentity;
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
+	}
+	/// <inheritdoc cref="IMultiplicativeIdentity{TSelf, TResult}.MultiplicativeIdentity"/>
+	private static TPrimitive GetMultiplicativeIdentity()
+	{
+		TValue result = TValue.MultiplicativeIdentity;
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
+	}
+	/// <inheritdoc cref="IBinaryNumber{TSelf}.AllBitsSet"/>
+	private static TPrimitive GetAllBitsSet()
+	{
+		TValue result = TValue.AllBitsSet;
+		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
+	}
+}

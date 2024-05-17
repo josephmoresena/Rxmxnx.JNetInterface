@@ -35,8 +35,6 @@ partial struct {1} : IBinaryInteger<{1}>, {4}<{1}>
 #nullable restore";
 
 	private const String BinaryIntegerFormattableFormat = @"
-	static {0} ISignedNumber<{0}>.NegativeOne => IPrimitiveSignedType<{0}, {1}>.NegativeOne;
-
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static {0} PopCount({0} value) 

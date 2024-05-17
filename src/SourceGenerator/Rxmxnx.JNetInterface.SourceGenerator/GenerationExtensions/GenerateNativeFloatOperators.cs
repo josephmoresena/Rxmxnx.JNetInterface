@@ -233,8 +233,6 @@ partial struct {1} : IFloatingPointIeee754<{1}>
 	static {1} IFloatingPointConstants<{1}>.E => {1}.E;
 	static {1} IFloatingPointConstants<{1}>.Pi => {1}.Pi;
 	static {1} IFloatingPointConstants<{1}>.Tau => {1}.Tau;
-
-	static {1} ISignedNumber<{1}>.NegativeOne => IPrimitiveSignedType<{1}, {2}>.NegativeOne;
 }}
 #nullable restore";
 

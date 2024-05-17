@@ -63,9 +63,22 @@ public static class PrimitiveArrayExtensions
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		TPrimitive[] arr = new TPrimitive[count];
-		IEnvironment env = jArray.Environment;
-		env.ArrayFeature.GetCopy(jArray, startIndex, arr.AsMemory());
+		jArray.Get(arr.AsMemory(), startIndex);
 		return arr;
+	}
+	/// <summary>
+	/// Retrieves a copy of the elements from the current <see cref="JArrayObject{TPrimitive}"/> into
+	/// <paramref name="mem"/>.
+	/// </summary>
+	/// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> array element.</typeparam>
+	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
+	/// <param name="mem">A <see cref="ReadOnlyMemory{TPrimitive}"/> to copy to.</param>
+	/// <param name="startIndex">Initial <paramref name="jArray"/> index to copy from.</param>
+	public static void Get<TPrimitive>(this JArrayObject<TPrimitive> jArray, Memory<TPrimitive> mem,
+		Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	{
+		IEnvironment env = jArray.Environment;
+		env.ArrayFeature.GetCopy(jArray, startIndex, mem);
 	}
 	/// <summary>
 	/// Sets the elements on the current <see cref="JArrayObject{TPrimitive}"/> instance according to

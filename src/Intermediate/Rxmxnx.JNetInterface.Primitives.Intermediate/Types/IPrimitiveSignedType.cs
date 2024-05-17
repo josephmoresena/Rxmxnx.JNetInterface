@@ -22,7 +22,7 @@ internal interface
 	IMinMaxValue<TValue>, ISignedNumber<TValue>
 {
 	/// <inheritdoc cref="ISignedNumber{TSelf}.NegativeOne"/>
-	public static readonly TPrimitive NegativeOne = IPrimitiveSignedType<TPrimitive, TValue>.GetNegativeOne();
+	protected static readonly TPrimitive NegativeOne = IPrimitiveSignedType<TPrimitive, TValue>.GetNegativeOne();
 
 	/// <inheritdoc cref="ISignedNumber{TSelf}.NegativeOne"/>
 	private static TPrimitive GetNegativeOne()
