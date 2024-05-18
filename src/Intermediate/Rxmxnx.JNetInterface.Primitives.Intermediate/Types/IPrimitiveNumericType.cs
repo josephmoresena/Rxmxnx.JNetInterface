@@ -59,7 +59,6 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 			Single.NegativeInfinity => 0L,
 			Single.MinValue => 0L,
 			Single.MaxValue => -1L,
-			Single.PositiveInfinity => -1L,
 			_ => (Int64)value,
 		};
 		return NativeUtilities.AsBytes(result).ToValue<TInteger>();
