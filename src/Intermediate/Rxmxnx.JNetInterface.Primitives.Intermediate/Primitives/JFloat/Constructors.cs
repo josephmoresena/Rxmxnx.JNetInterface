@@ -8,7 +8,6 @@ public readonly partial struct JFloat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	[ExcludeFromCodeCoverage]
 	public JFloat() => this._value = default;
 	/// <summary>
 	/// Constructor.
@@ -17,7 +16,6 @@ public readonly partial struct JFloat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	[ExcludeFromCodeCoverage]
 	public JFloat(SByte value) => this._value = value;
 	/// <summary>
 	/// Constructor.
@@ -26,7 +24,6 @@ public readonly partial struct JFloat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	[ExcludeFromCodeCoverage]
 	public JFloat(Char value) => this._value = value;
 	/// <summary>
 	/// Constructor.
@@ -35,8 +32,7 @@ public readonly partial struct JFloat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	[ExcludeFromCodeCoverage]
-	public JFloat(Double value) => this._value = (Single)value;
+	public JFloat(Double value) => this._value = IPrimitiveNumericType.GetSingleValue(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -44,8 +40,7 @@ public readonly partial struct JFloat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	[ExcludeFromCodeCoverage]
-	public JFloat(Single value) => this._value = value;
+	public JFloat(Single value) => this._value = IPrimitiveNumericType.GetSingleValue(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -53,7 +48,6 @@ public readonly partial struct JFloat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	[ExcludeFromCodeCoverage]
 	public JFloat(Int32 value) => this._value = value;
 	/// <summary>
 	/// Constructor.
@@ -62,7 +56,6 @@ public readonly partial struct JFloat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	[ExcludeFromCodeCoverage]
 	public JFloat(Int64 value) => this._value = value;
 	/// <summary>
 	/// Constructor.
@@ -71,6 +64,5 @@ public readonly partial struct JFloat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	[ExcludeFromCodeCoverage]
 	public JFloat(Int16 value) => this._value = value;
 }

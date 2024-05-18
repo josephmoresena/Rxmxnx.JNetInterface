@@ -35,7 +35,7 @@ public readonly partial struct JDouble : IPrimitiveEquatable
 	/// Defines an implicit conversion of a given <see cref="JDouble"/> to <see cref="JFloat"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="JDouble"/> to implicitly convert.</param>
-	public static implicit operator JFloat(JDouble value) => (Single)value._value;
+	public static implicit operator JFloat(JDouble value) => IPrimitiveNumericType.GetSingleValue(value.Value);
 
 	static explicit IPrimitiveNumericType<JDouble>.operator JFloat(JDouble jPrimitive) => jPrimitive;
 	[ExcludeFromCodeCoverage]
@@ -46,7 +46,8 @@ public readonly partial struct JDouble : IPrimitiveEquatable
 		=> IPrimitiveNumericType.GetIntegerValue<Int64>(jPrimitive._value);
 	static explicit IPrimitiveNumericType<JDouble>.operator Int16(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int16>(jPrimitive._value);
-	static explicit IPrimitiveNumericType<JDouble>.operator Single(JDouble jPrimitive) => (Single)jPrimitive._value;
+	static explicit IPrimitiveNumericType<JDouble>.operator Single(JDouble jPrimitive)
+		=> IPrimitiveNumericType.GetSingleValue(jPrimitive.Value);
 	static explicit IPrimitiveNumericType<JDouble>.operator Int32(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int32>(jPrimitive._value);
 	static explicit IPrimitiveNumericType<JDouble>.operator Char(JDouble jPrimitive)

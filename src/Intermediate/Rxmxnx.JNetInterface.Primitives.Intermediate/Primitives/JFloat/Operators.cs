@@ -35,7 +35,7 @@ public readonly partial struct JFloat : IPrimitiveEquatable
 	/// Defines an implicit conversion of a given <see cref="JFloat"/> to <see cref="JDouble"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="JFloat"/> to implicitly convert.</param>
-	public static implicit operator JDouble(JFloat value) => value._value;
+	public static implicit operator JDouble(JFloat value) => IPrimitiveNumericType.GetSingleValue(value.Value);
 
 	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JFloat>.operator JFloat(JFloat jPrimitive) => jPrimitive;
