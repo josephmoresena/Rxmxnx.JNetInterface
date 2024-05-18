@@ -38,7 +38,7 @@ public sealed partial record JVirtualMachineInitArg
 	internal JVirtualMachineInitArg(JVirtualMachineInitArgumentValue value)
 	{
 		this._version = value.Version;
-		this.IgnoreUnrecognized = new JBoolean(value.IgnoreUnrecognized).Value;
+		this.IgnoreUnrecognized = value.IgnoreUnrecognized == JBoolean.TrueValue;
 		this.Options = new OptionList(
 			JVirtualMachineInitOption.GetOptions(
 				MemoryMarshal.CreateSpan(ref value.Options.Reference, value.OptionsLength)));

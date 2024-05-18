@@ -34,6 +34,50 @@ public sealed class ShortTest : PrimitiveTestBase
 		using IFixedPointer.IDisposable fPtr = (metadata as ITypeInformation).GetClassNameFixedPointer();
 		Assert.Equal(fPtr.Pointer, metadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
+	[Fact]
+	private void ConstructorsTest()
+	{
+		Assert.Equal(SByte.MinValue, new JShort(SByte.MinValue).Value);
+		Assert.Equal(SByte.MaxValue, new JShort(SByte.MaxValue).Value);
+		Assert.Equal(0, new JShort('\u0000').Value);
+		Assert.Equal(-1, new JShort('\uffff').Value);
+		Assert.Equal(0, new JShort(Double.MinValue).Value);
+		Assert.Equal(-1, new JShort(Double.MaxValue).Value);
+		Assert.Equal(0, new JShort(Single.MinValue).Value);
+		Assert.Equal(-1, new JShort(Single.MaxValue).Value);
+		Assert.Equal(0, new JShort(Int32.MinValue).Value);
+		Assert.Equal(-1, new JShort(Int32.MaxValue).Value);
+		Assert.Equal(0, new JShort(Int64.MinValue).Value);
+		Assert.Equal(-1, new JShort(Int64.MaxValue).Value);
+		Assert.Equal(Int16.MinValue, new JShort(Int16.MinValue).Value);
+		Assert.Equal(Int16.MaxValue, new JShort(Int16.MaxValue).Value);
+
+		Assert.Equal(SByte.MinValue, new JShort((Single)SByte.MinValue).Value);
+		Assert.Equal(SByte.MaxValue, new JShort((Single)SByte.MaxValue).Value);
+		Assert.Equal(0, new JShort((Single)'\u0000').Value);
+		Assert.Equal(-1, new JShort((Single)'\uffff').Value);
+		Assert.Equal(0, new JShort((Single)Double.MinValue).Value);
+		Assert.Equal(-1, new JShort((Single)Double.MaxValue).Value);
+		Assert.Equal(0, new JShort((Single)Int32.MinValue).Value);
+		Assert.Equal(-1, new JShort((Single)Int32.MaxValue).Value);
+		Assert.Equal(0, new JShort((Single)Int64.MinValue).Value);
+		Assert.Equal(-1, new JShort((Single)Int64.MaxValue).Value);
+		Assert.Equal(Int16.MinValue, new JShort((Single)Int16.MinValue).Value);
+		Assert.Equal(Int16.MaxValue, new JShort((Single)Int16.MaxValue).Value);
+
+		Assert.Equal(SByte.MinValue, new JShort((Double)SByte.MinValue).Value);
+		Assert.Equal(SByte.MaxValue, new JShort((Double)SByte.MaxValue).Value);
+		Assert.Equal(0, new JShort((Double)'\u0000').Value);
+		Assert.Equal(-1, new JShort((Double)'\uffff').Value);
+		Assert.Equal(0, new JShort((Double)Single.MinValue).Value);
+		Assert.Equal(-1, new JShort((Double)Single.MaxValue).Value);
+		Assert.Equal(0, new JShort((Double)Int32.MinValue).Value);
+		Assert.Equal(-1, new JShort((Double)Int32.MaxValue).Value);
+		Assert.Equal(0, new JShort((Double)Int64.MinValue).Value);
+		Assert.Equal(-1, new JShort((Double)Int64.MaxValue).Value);
+		Assert.Equal(Int16.MinValue, new JShort((Double)Int16.MinValue).Value);
+		Assert.Equal(Int16.MaxValue, new JShort((Double)Int16.MaxValue).Value);
+	}
 	private static void EqualityTest(JShort primitive0, JShort primitive1)
 	{
 		Boolean equals = primitive0.Value == primitive1.Value;

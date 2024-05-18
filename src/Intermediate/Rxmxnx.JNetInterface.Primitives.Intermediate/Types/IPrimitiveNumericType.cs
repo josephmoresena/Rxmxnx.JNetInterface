@@ -8,18 +8,32 @@ namespace Rxmxnx.JNetInterface.Types;
 internal interface IPrimitiveNumericType : IPrimitiveType
 {
 	/// <summary>
-	/// Retrieves the integer part of a <see cref="Double"/> value.
+	/// Retrieves the integer part of a <see cref="Single"/> value.
 	/// </summary>
 	/// <typeparam name="TInteger">Integer type.</typeparam>
-	/// <param name="value">A <see cref="Double"/> value.</param>
+	/// <typeparam name="TFloatingPoint">Floating point type.</typeparam>
+	/// <param name="value">A <typeparamref name="TFloatingPoint"/> value.</param>
 	/// <returns>A <typeparamref name="TInteger"/> type.</returns>
-	protected static TInteger GetIntegerValue<TInteger>(Double value)
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	protected static TInteger GetIntegerValue<TInteger, TFloatingPoint>(TFloatingPoint value)
 		where TInteger : unmanaged, IBinaryInteger<TInteger>
-	{
-		Int64 result = (Int64)value;
-		return NativeUtilities.AsBytes(result).ToValue<TInteger>();
-	}
-
+		where TFloatingPoint : unmanaged, IFloatingPoint<TFloatingPoint>
+		=> NativeUtilities.SizeOf<TInteger>() switch
+		{
+			<= sizeof(Int32) => TFloatingPoint.IsPositive(value) ?
+				IPrimitiveNumericType.CreateTruncating<TInteger, Int32, TFloatingPoint>(value) :
+				IPrimitiveNumericType.CreateTruncating<TInteger, Int64, TFloatingPoint>(value),
+			_ => TFloatingPoint.IsPositive(value) ?
+				IPrimitiveNumericType.CreateTruncating<TInteger, Int64, TFloatingPoint>(value) :
+				IPrimitiveNumericType.CreateTruncating<TInteger, Int128, TFloatingPoint>(value),
+		};
+	/// <summary>
+	/// Retrieves the single-precision value of a <see cref="Double"/> value.
+	/// </summary>
+	/// <param name="value">A <see cref="Double"/> value.</param>
+	/// <returns>A <see cref="Single"/> type.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	protected static Single GetSingleValue(Double value) => Single.CreateTruncating(value);
 	/// <inheritdoc cref="IEquatable{JPrimitiveObject}.Equals(JPrimitiveObject)"/>
 	protected static Boolean Equals<TPrimitive>(TPrimitive primitive, JPrimitiveObject? other)
 		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>
@@ -73,6 +87,24 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 			IWrapper<Int16> shortWrapper => (Int16)primitive == (JShort)shortWrapper.Value,
 			_ => false,
 		};
+
+	/// <summary>
+	/// Performs <see cref="INumberBase{TSelf}.CreateTruncating{TOther}(TOther)"/> in a
+	/// <typeparamref name="TInteger"/> binary space and transform the result to <typeparamref name="TResult"/>.
+	/// </summary>
+	/// <typeparam name="TResult">Integer type</typeparam>
+	/// <typeparam name="TInteger">Integer type.</typeparam>
+	/// <typeparam name="TFloatingPoint">Floating point type.</typeparam>
+	/// <param name="value">A <typeparamref name="TFloatingPoint"/> value.</param>
+	/// <returns>A <typeparamref name="TInteger"/> type.</returns>
+	private static TResult CreateTruncating<TResult, TInteger, TFloatingPoint>(TFloatingPoint value)
+		where TResult : unmanaged, IBinaryInteger<TResult>
+		where TInteger : unmanaged, IBinaryInteger<TInteger>
+		where TFloatingPoint : unmanaged, IFloatingPoint<TFloatingPoint>
+	{
+		TInteger result = TInteger.CreateTruncating(value);
+		return NativeUtilities.AsBytes(result).ToValue<TResult>();
+	}
 }
 
 /// <summary>

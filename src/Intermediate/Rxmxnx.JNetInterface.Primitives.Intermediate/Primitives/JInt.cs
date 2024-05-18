@@ -34,19 +34,6 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JInt>().Signature;
 
-	/// <summary>
-	/// Parameterless constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JInt() => this._value = default;
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Internal value.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private JInt(Int32 value) => this._value = value;
-
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
@@ -72,7 +59,6 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JInt(Int32 value) => new(value);
 
-	static JInt IPrimitiveNumericType<JInt>.FromDouble(Double value)
-		=> IPrimitiveNumericType.GetIntegerValue<Int32>(value);
+	static JInt IPrimitiveNumericType<JInt>.FromDouble(Double value) => new(value);
 	static Double IPrimitiveNumericType<JInt>.ToDouble(JInt value) => value._value;
 }

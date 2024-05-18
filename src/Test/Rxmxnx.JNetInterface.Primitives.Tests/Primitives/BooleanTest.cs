@@ -58,6 +58,6 @@ public sealed class BooleanTest : PrimitiveTestBase
 	private static void ByteTest(JBoolean primitive)
 	{
 		Assert.Equal(primitive.Value ? JBoolean.TrueValue : JBoolean.FalseValue, primitive.ByteValue);
-		Assert.Equal(primitive, new(primitive.ByteValue));
+		Assert.Equal(primitive, new(primitive.ByteValue == JBoolean.TrueValue));
 	}
 }

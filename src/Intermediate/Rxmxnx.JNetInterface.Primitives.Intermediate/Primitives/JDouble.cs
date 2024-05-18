@@ -39,19 +39,6 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	/// <inheritdoc/>
 	public CString ObjectSignature => IPrimitiveType.GetMetadata<JDouble>().Signature;
 
-	/// <summary>
-	/// Parameterless constructor.
-	/// </summary>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JDouble() => this._value = default;
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="value">Internal value.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private JDouble(Double value) => this._value = value;
-
 #if PACKAGE
 	JLocalObject IPrimitiveType.ToObject(IEnvironment env) => this.ToObject(env);
 #endif
