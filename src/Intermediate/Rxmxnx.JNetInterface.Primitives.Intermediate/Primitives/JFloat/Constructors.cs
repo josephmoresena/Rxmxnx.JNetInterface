@@ -40,7 +40,7 @@ public readonly partial struct JFloat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JFloat(Single value) => this._value = IPrimitiveNumericType.GetSingleValue(value);
+	public JFloat(Single value) => this._value = value;
 	/// <summary>
 	/// Constructor.
 	/// </summary>

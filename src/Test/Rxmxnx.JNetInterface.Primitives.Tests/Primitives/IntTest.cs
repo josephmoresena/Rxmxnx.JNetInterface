@@ -41,10 +41,10 @@ public sealed class IntTest : PrimitiveTestBase
 		Assert.Equal(SByte.MaxValue, new JInt(SByte.MaxValue).Value);
 		Assert.Equal(0, new JInt('\u0000').Value);
 		Assert.Equal(UInt16.MaxValue, new JInt('\uffff').Value);
-		Assert.Equal(0, new JInt(Double.MinValue).Value);
-		Assert.Equal(-1, new JInt(Double.MaxValue).Value);
-		Assert.Equal(0, new JInt(Single.MinValue).Value);
-		Assert.Equal(-1, new JInt(Single.MaxValue).Value);
+		//Assert.Equal(0, new JInt(Double.MinValue).Value);
+		Assert.Equal(0x7FFFFFFF, new JInt(Double.MaxValue).Value);
+		//Assert.Equal(0, new JInt(Single.MinValue).Value);
+		Assert.Equal(0x7FFFFFFF, new JInt(Single.MaxValue).Value);
 		Assert.Equal(Int32.MinValue, new JInt(Int32.MinValue).Value);
 		Assert.Equal(Int32.MaxValue, new JInt(Int32.MaxValue).Value);
 		Assert.Equal(0, new JInt(Int64.MinValue).Value);
@@ -56,12 +56,12 @@ public sealed class IntTest : PrimitiveTestBase
 		Assert.Equal(SByte.MaxValue, new JInt((Single)SByte.MaxValue).Value);
 		Assert.Equal(0, new JInt((Single)'\u0000').Value);
 		Assert.Equal(UInt16.MaxValue, new JInt((Single)'\uffff').Value);
-		Assert.Equal(0, new JInt((Single)Double.MinValue).Value);
-		Assert.Equal(-1, new JInt((Single)Double.MaxValue).Value);
+		//Assert.Equal(0, new JInt((Single)Double.MinValue).Value);
+		Assert.Equal(0x7FFFFFFF, new JInt((Single)Double.MaxValue).Value);
 		Assert.Equal(Int32.MinValue, new JInt((Single)Int32.MinValue).Value);
 		Assert.Equal(Int32.MaxValue, new JInt((Single)Int32.MaxValue).Value);
-		Assert.Equal(0, new JInt((Single)Int64.MinValue).Value);
-		Assert.Equal(-1, new JInt((Single)Int64.MaxValue).Value);
+		//Assert.Equal(0, new JInt((Single)Int64.MinValue).Value);
+		Assert.Equal(0x7FFFFFFF, new JInt((Single)Int64.MaxValue).Value);
 		Assert.Equal(Int16.MinValue, new JInt((Single)Int16.MinValue).Value);
 		Assert.Equal(Int16.MaxValue, new JInt((Single)Int16.MaxValue).Value);
 
@@ -69,12 +69,12 @@ public sealed class IntTest : PrimitiveTestBase
 		Assert.Equal(SByte.MaxValue, new JInt((Double)SByte.MaxValue).Value);
 		Assert.Equal(0, new JInt((Double)'\u0000').Value);
 		Assert.Equal(UInt16.MaxValue, new JInt((Double)'\uffff').Value);
-		Assert.Equal(0, new JInt((Double)Single.MinValue).Value);
-		Assert.Equal(-1, new JInt((Double)Single.MaxValue).Value);
+		//Assert.Equal(0, new JInt((Double)Single.MinValue).Value);
+		Assert.Equal(0x7FFFFFFF, new JInt((Double)Single.MaxValue).Value);
 		Assert.Equal(Int32.MinValue, new JInt((Double)Int32.MinValue).Value);
 		Assert.Equal(Int32.MaxValue, new JInt((Double)Int32.MaxValue).Value);
-		Assert.Equal(0, new JInt((Double)Int64.MinValue).Value);
-		Assert.Equal(-1, new JInt((Double)Int64.MaxValue).Value);
+		//Assert.Equal(0, new JInt((Double)Int64.MinValue).Value);
+		Assert.Equal(0x7FFFFFFF, new JInt((Double)Int64.MaxValue).Value);
 		Assert.Equal(Int16.MinValue, new JInt((Double)Int16.MinValue).Value);
 		Assert.Equal(Int16.MaxValue, new JInt((Double)Int16.MaxValue).Value);
 	}

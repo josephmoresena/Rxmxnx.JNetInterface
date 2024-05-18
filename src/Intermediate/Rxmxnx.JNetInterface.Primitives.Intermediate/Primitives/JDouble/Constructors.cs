@@ -40,7 +40,7 @@ public readonly partial struct JDouble
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JDouble(Single value) => this._value = IPrimitiveNumericType.GetSingleValue(value);
+	public JDouble(Single value) => this._value = value;
 	/// <summary>
 	/// Constructor.
 	/// </summary>
