@@ -59,7 +59,7 @@ public sealed class ShortTest : PrimitiveTestBase
 		Assert.Equal(0, new JShort((Single)Double.MinValue).Value);
 		Assert.Equal(-1, new JShort((Single)Double.MaxValue).Value);
 		Assert.Equal(0, new JShort((Single)Int32.MinValue).Value);
-		//Assert.Equal(-1, new JShort((Single)Int32.MaxValue).Value);
+		Assert.Equal(-1, new JShort((Single)Int32.MaxValue).Value);
 		Assert.Equal(0, new JShort((Single)Int64.MinValue).Value);
 		Assert.Equal(-1, new JShort((Single)Int64.MaxValue).Value);
 		Assert.Equal(Int16.MinValue, new JShort((Single)Int16.MinValue).Value);

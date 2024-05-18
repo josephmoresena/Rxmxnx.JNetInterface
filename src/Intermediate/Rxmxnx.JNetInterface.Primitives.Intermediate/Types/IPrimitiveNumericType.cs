@@ -19,8 +19,10 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 	{
 		Int64 intValue = NativeUtilities.SizeOf<TInteger>() switch
 		{
-			<= 4 => Int32.CreateTruncating(value),
-			_ => Int64.CreateTruncating(value),
+			<= 4 => Double.IsPositive(value) ? Int32.CreateTruncating(value) : Int64.CreateTruncating(value),
+			_ => Double.IsPositive(value) ?
+				Int64.CreateTruncating(value) :
+				NativeUtilities.AsBytes(Int128.CreateTruncating(value)).ToValue<Int64>(),
 		};
 		return intValue.AsBytes().ToValue<TInteger>();
 	}

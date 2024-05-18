@@ -41,9 +41,9 @@ public sealed class LongTest : PrimitiveTestBase
 		Assert.Equal(SByte.MaxValue, new JLong(SByte.MaxValue).Value);
 		Assert.Equal(0, new JLong('\u0000').Value);
 		Assert.Equal(UInt16.MaxValue, new JLong('\uffff').Value);
-		//Assert.Equal(0, new JLong(Double.MinValue).Value);
+		Assert.Equal(0, new JLong(Double.MinValue).Value);
 		Assert.Equal(0x7FFFFFFFFFFFFFFF, new JLong(Double.MaxValue).Value);
-		//Assert.Equal(0, new JLong(Single.MinValue).Value);
+		Assert.Equal(0, new JLong(Single.MinValue).Value);
 		Assert.Equal(0x7FFFFFFFFFFFFFFF, new JLong(Single.MaxValue).Value);
 		Assert.Equal(Int32.MinValue, new JLong(Int32.MinValue).Value);
 		Assert.Equal(Int32.MaxValue, new JLong(Int32.MaxValue).Value);
@@ -56,7 +56,7 @@ public sealed class LongTest : PrimitiveTestBase
 		Assert.Equal(SByte.MaxValue, new JLong((Single)SByte.MaxValue).Value);
 		Assert.Equal(0, new JLong((Single)'\u0000').Value);
 		Assert.Equal(UInt16.MaxValue, new JLong((Single)'\uffff').Value);
-		//Assert.Equal(0, new JLong((Single)Double.MinValue).Value);
+		Assert.Equal(0, new JLong((Single)Double.MinValue).Value);
 		Assert.Equal(0x7FFFFFFFFFFFFFFF, new JLong((Single)Double.MaxValue).Value);
 		Assert.Equal(Int32.MinValue, new JLong((Single)Int32.MinValue).Value);
 		Assert.Equal(0x80000000, new JLong((Single)Int32.MaxValue).Value);
@@ -69,7 +69,7 @@ public sealed class LongTest : PrimitiveTestBase
 		Assert.Equal(SByte.MaxValue, new JLong((Double)SByte.MaxValue).Value);
 		Assert.Equal(0, new JLong((Double)'\u0000').Value);
 		Assert.Equal(UInt16.MaxValue, new JLong((Double)'\uffff').Value);
-		//Assert.Equal(0, new JLong((Double)Single.MinValue).Value);
+		Assert.Equal(0, new JLong((Double)Single.MinValue).Value);
 		Assert.Equal(0x7FFFFFFFFFFFFFFF, new JLong((Double)Single.MaxValue).Value);
 		Assert.Equal(Int32.MinValue, new JLong((Double)Int32.MinValue).Value);
 		Assert.Equal(Int32.MaxValue, new JLong((Double)Int32.MaxValue).Value);

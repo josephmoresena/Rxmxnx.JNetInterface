@@ -59,7 +59,7 @@ public sealed class ByteTest : PrimitiveTestBase
 		Assert.Equal(0, new JByte((Single)Double.MinValue).Value);
 		Assert.Equal(-1, new JByte((Single)Double.MaxValue).Value);
 		Assert.Equal(0, new JByte((Single)Int32.MinValue).Value);
-		//Assert.Equal(-1, new JByte((Single)Int32.MaxValue).Value);
+		Assert.Equal(-1, new JByte((Single)Int32.MaxValue).Value);
 		Assert.Equal(0, new JByte((Single)Int64.MinValue).Value);
 		Assert.Equal(-1, new JByte((Single)Int64.MaxValue).Value);
 		Assert.Equal(0, new JByte((Single)Int16.MinValue).Value);
