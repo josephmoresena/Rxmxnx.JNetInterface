@@ -17,31 +17,24 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 	protected static TInteger GetIntegerValue<TInteger>(Double value)
 		where TInteger : unmanaged, IBinaryInteger<TInteger>
 	{
-		try
+		Int64 result = value switch
 		{
-			Int64 result = value switch
-			{
-				SByte.MinValue => SByte.MinValue,
-				SByte.MaxValue => SByte.MaxValue,
-				Int16.MinValue => Int16.MinValue,
-				Int16.MaxValue => Int16.MaxValue,
-				Int32.MinValue => Int32.MinValue,
-				Int32.MaxValue => Int32.MaxValue,
-				Int64.MinValue => Int64.MinValue,
-				Int64.MaxValue => Int64.MaxValue,
-				Double.MinValue => 0L,
-				Double.MaxValue => -1L,
-				Single.MinValue => 0L,
-				Single.MaxValue => -1L,
-				Single.PositiveInfinity => -1L,
-				_ => (Int64)value,
-			};
-			return NativeUtilities.AsBytes(result).ToValue<TInteger>();
-		}
-		catch (Exception)
-		{
-			return Double.IsNegative(value) ? TInteger.Zero : TInteger.AllBitsSet;
-		}
+			SByte.MinValue => SByte.MinValue,
+			SByte.MaxValue => SByte.MaxValue,
+			Int16.MinValue => Int16.MinValue,
+			Int16.MaxValue => Int16.MaxValue,
+			Int32.MinValue => Int32.MinValue,
+			Int32.MaxValue => Int32.MaxValue,
+			Int64.MinValue => Int64.MinValue,
+			Int64.MaxValue => Int64.MaxValue,
+			Double.MinValue => 0L,
+			Double.MaxValue => -1L,
+			Single.MinValue => 0L,
+			Single.MaxValue => -1L,
+			Single.PositiveInfinity => -1L,
+			_ => (Int64)value,
+		};
+		return NativeUtilities.AsBytes(result).ToValue<TInteger>();
 	}
 	/// <summary>
 	/// Retrieves the integer part of a <see cref="Single"/> value.
@@ -53,30 +46,23 @@ internal interface IPrimitiveNumericType : IPrimitiveType
 	protected static TInteger GetIntegerValue<TInteger>(Single value)
 		where TInteger : unmanaged, IBinaryInteger<TInteger>
 	{
-		try
+		Int64 result = value switch
 		{
-			Int64 result = value switch
-			{
-				SByte.MinValue => SByte.MinValue,
-				SByte.MaxValue => SByte.MaxValue,
-				Int16.MinValue => Int16.MinValue,
-				Int16.MaxValue => Int16.MaxValue,
-				Int32.MinValue => Int32.MinValue,
-				Int32.MaxValue => Int32.MaxValue,
-				Int64.MinValue => Int64.MinValue,
-				Int64.MaxValue => Int64.MaxValue,
-				Single.NegativeInfinity => 0L,
-				Single.MinValue => 0L,
-				Single.MaxValue => -1L,
-				Single.PositiveInfinity => -1L,
-				_ => (Int64)value,
-			};
-			return NativeUtilities.AsBytes(result).ToValue<TInteger>();
-		}
-		catch (Exception)
-		{
-			return Double.IsNegative(value) ? TInteger.Zero : TInteger.AllBitsSet;
-		}
+			SByte.MinValue => SByte.MinValue,
+			SByte.MaxValue => SByte.MaxValue,
+			Int16.MinValue => Int16.MinValue,
+			Int16.MaxValue => Int16.MaxValue,
+			Int32.MinValue => Int32.MinValue,
+			Int32.MaxValue => Int32.MaxValue,
+			Int64.MinValue => Int64.MinValue,
+			Int64.MaxValue => Int64.MaxValue,
+			Single.NegativeInfinity => 0L,
+			Single.MinValue => 0L,
+			Single.MaxValue => -1L,
+			Single.PositiveInfinity => -1L,
+			_ => (Int64)value,
+		};
+		return NativeUtilities.AsBytes(result).ToValue<TInteger>();
 	}
 	/// <summary>
 	/// Retrieves the single-precision value of a <see cref="Double"/> value.

@@ -40,16 +40,22 @@ public readonly partial struct JDouble : IPrimitiveEquatable
 	static explicit IPrimitiveNumericType<JDouble>.operator JFloat(JDouble jPrimitive) => jPrimitive;
 	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JDouble>.operator JDouble(JDouble jPrimitive) => jPrimitive;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JDouble>.operator SByte(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<SByte>(jPrimitive._value);
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JDouble>.operator Int64(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int64>(jPrimitive._value);
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JDouble>.operator Int16(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int16>(jPrimitive._value);
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JDouble>.operator Single(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetSingleValue(jPrimitive.Value);
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JDouble>.operator Int32(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int32>(jPrimitive._value);
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JDouble>.operator Char(JDouble jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Char>();
 }
