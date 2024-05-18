@@ -36,7 +36,7 @@ public readonly partial struct JInt
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[ExcludeFromCodeCoverage]
-	public JInt(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int32>(value);
+	public JInt(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int32, Double>(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -45,7 +45,7 @@ public readonly partial struct JInt
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[ExcludeFromCodeCoverage]
-	public JInt(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int32>(value);
+	public JInt(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int32, Single>(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

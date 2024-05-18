@@ -32,7 +32,7 @@ public readonly partial struct JByte
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JByte(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<SByte>(value);
+	public JByte(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<SByte, Double>(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -40,7 +40,7 @@ public readonly partial struct JByte
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JByte(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<SByte>(value);
+	public JByte(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<SByte, Single>(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

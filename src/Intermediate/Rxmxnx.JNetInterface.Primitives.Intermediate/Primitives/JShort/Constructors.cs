@@ -36,7 +36,7 @@ public readonly partial struct JShort
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[ExcludeFromCodeCoverage]
-	public JShort(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int16>(value);
+	public JShort(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int16, Double>(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -45,7 +45,7 @@ public readonly partial struct JShort
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[ExcludeFromCodeCoverage]
-	public JShort(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int16>(value);
+	public JShort(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int16, Single>(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

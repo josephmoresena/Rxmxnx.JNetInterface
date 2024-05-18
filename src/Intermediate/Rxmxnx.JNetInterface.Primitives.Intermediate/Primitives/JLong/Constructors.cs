@@ -36,7 +36,7 @@ public readonly partial struct JLong
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[ExcludeFromCodeCoverage]
-	public JLong(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int64>(value);
+	public JLong(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int64, Double>(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -45,7 +45,7 @@ public readonly partial struct JLong
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[ExcludeFromCodeCoverage]
-	public JLong(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int64>(value);
+	public JLong(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int64, Single>(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

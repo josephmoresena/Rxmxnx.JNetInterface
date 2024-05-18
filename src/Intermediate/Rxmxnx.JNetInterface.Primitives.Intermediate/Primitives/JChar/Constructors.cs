@@ -32,7 +32,7 @@ public readonly partial struct JChar
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JChar(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<Char>(value);
+	public JChar(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<Char, Double>(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -40,7 +40,7 @@ public readonly partial struct JChar
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public JChar(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<Char>(value);
+	public JChar(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<Char, Single>(value);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

@@ -59,7 +59,6 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JInt(Int32 value) => new(value);
 
-	static JInt IPrimitiveNumericType<JInt>.FromDouble(Double value)
-		=> IPrimitiveNumericType.GetIntegerValue<Int32>(value);
+	static JInt IPrimitiveNumericType<JInt>.FromDouble(Double value) => new(value);
 	static Double IPrimitiveNumericType<JInt>.ToDouble(JInt value) => value._value;
 }

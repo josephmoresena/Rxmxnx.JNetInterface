@@ -62,7 +62,6 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JByte(SByte value) => new(value);
 
-	static JByte IPrimitiveNumericType<JByte>.FromDouble(Double value)
-		=> IPrimitiveNumericType.GetIntegerValue<SByte>(value);
+	static JByte IPrimitiveNumericType<JByte>.FromDouble(Double value) => new(value);
 	static Double IPrimitiveNumericType<JByte>.ToDouble(JByte value) => value._value;
 }

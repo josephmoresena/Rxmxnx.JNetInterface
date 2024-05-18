@@ -69,7 +69,6 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JShort(Char value) => new((Int16)value);
 
-	static JShort IPrimitiveNumericType<JShort>.FromDouble(Double value)
-		=> IPrimitiveNumericType.GetIntegerValue<Int16>(value);
+	static JShort IPrimitiveNumericType<JShort>.FromDouble(Double value) => new(value);
 	static Double IPrimitiveNumericType<JShort>.ToDouble(JShort value) => value._value;
 }
