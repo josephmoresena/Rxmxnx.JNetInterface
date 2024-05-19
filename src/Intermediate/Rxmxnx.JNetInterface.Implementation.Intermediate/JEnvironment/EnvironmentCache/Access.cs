@@ -44,7 +44,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
 		private JObjectLocalRef GetStaticObjectField(JClassObject jClass, JFieldDefinition definition)
 		{
-			ValidationUtilities.ThrowIfProxy(jClass);
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);
 			JFieldId fieldId = access.GetStaticFieldId(definition, this._env);
@@ -93,7 +93,7 @@ partial class JEnvironment
 		private JObjectLocalRef GetReflectedCall(JCallDefinition definition, JClassObject declaringClass,
 			Boolean isStatic)
 		{
-			ValidationUtilities.ThrowIfProxy(declaringClass);
+			ImplementationValidationUtilities.ThrowIfProxy(declaringClass);
 			using INativeTransaction jniTransaction = isStatic ?
 				this.GetClassTransaction(declaringClass, definition, out JMethodId methodId, false) :
 				this.GetInstanceTransaction(declaringClass, definition, out methodId);
@@ -257,7 +257,7 @@ partial class JEnvironment
 		private JObjectLocalRef NewObject(JClassObject jClass, JConstructorDefinition definition,
 			params IObject?[] args)
 		{
-			ValidationUtilities.ThrowIfProxy(jClass);
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(1 + definition.ReferenceCount);
 			AccessCache access = this.GetAccess(jniTransaction, jClass);

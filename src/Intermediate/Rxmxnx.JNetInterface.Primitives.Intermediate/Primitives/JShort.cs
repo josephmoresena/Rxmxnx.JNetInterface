@@ -58,7 +58,7 @@ public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableCompa
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JShort(JObject jObj)
-		=> ValidationUtilities.ThrowIfInvalidCast<Int16>(jObj as IConvertible);
+		=> CommonValidationUtilities.ThrowIfInvalidCast<Int16>(jObj as IConvertible);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JShort(Int16 value) => new(value);

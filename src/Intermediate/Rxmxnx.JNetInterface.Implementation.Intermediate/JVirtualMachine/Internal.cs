@@ -181,10 +181,10 @@ public partial class JVirtualMachine
 	/// <param name="thread">A <see cref="Thread"/> instance.</param>
 	internal static void DetachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef envRef, Thread thread)
 	{
-		ValidationUtilities.ThrowIfDifferentThread(envRef, thread);
+		ImplementationValidationUtilities.ThrowIfDifferentThread(envRef, thread);
 		JVirtualMachine vm = ReferenceCache.Instance.Get(vmRef, out _);
 		DetachCurrentThreadDelegate detachCurrentThread = vm._cache.GetDelegate<DetachCurrentThreadDelegate>();
-		ValidationUtilities.ThrowIfInvalidResult(detachCurrentThread(vmRef));
+		ImplementationValidationUtilities.ThrowIfInvalidResult(detachCurrentThread(vmRef));
 	}
 	/// <summary>
 	/// Removes the <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>

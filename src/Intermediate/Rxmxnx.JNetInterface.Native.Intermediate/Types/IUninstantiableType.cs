@@ -8,9 +8,9 @@ public interface IUninstantiableType<TUninstantiable> : IClassType<TUninstantiab
 	where TUninstantiable : JReferenceObject, IUninstantiableType<TUninstantiable>
 {
 	static TUninstantiable IClassType<TUninstantiable>.Create(ClassInitializer initializer)
-		=> ValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>();
+		=> CommonValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>();
 	static TUninstantiable IClassType<TUninstantiable>.Create(ObjectInitializer initializer)
-		=> ValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>();
+		=> CommonValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>();
 	static TUninstantiable IClassType<TUninstantiable>.Create(GlobalInitializer initializer)
-		=> ValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>();
+		=> CommonValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>();
 }

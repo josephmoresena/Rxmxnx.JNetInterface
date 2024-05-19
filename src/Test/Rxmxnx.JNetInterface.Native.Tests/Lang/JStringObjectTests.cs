@@ -37,11 +37,12 @@ public sealed class JStringObjectTests
 		env.StringFeature.GetLength(Arg.Is<JStringObject>(ss => jObject.Equals(ss))).Returns(text.Length);
 		env.StringFeature.GetUtf8Length(Arg.Is<JStringObject>(ss => jObject.Equals(ss))).Returns(utf8Text.Length);
 		env.StringFeature
-		   .When(s => s.GetCopyUtf8(Arg.Is<JStringObject>(ss => jObject.Equals(ss)), Arg.Any<Memory<Byte>>())).Do(c =>
-		   {
-			   Memory<Byte> mem = (Memory<Byte>)c[1];
-			   utf8Text.AsSpan().CopyTo(mem.Span);
-		   });
+		   .When(s => s.GetUtf8Copy(Arg.Is<JStringObject>(ss => jObject.Equals(ss)), Arg.Any<IFixedMemory<Byte>>())).Do(
+			   c =>
+			   {
+				   IFixedMemory<Byte> mem = (IFixedMemory<Byte>)c[1];
+				   utf8Text.AsSpan().CopyTo(mem.Values);
+			   });
 		env.StringFeature
 		   .When(s => s.GetCopy(Arg.Is<JStringObject>(ss => jObject.Equals(ss)), Arg.Any<IFixedMemory<Char>>())).Do(c =>
 		   {
@@ -68,7 +69,7 @@ public sealed class JStringObjectTests
 		JStringObjectTests.EnumerableTest<JStringObject, String>(jString);
 
 		env.StringFeature.Received(initText.HasValue ? 1 : 0).GetUtf8Length(jString);
-		env.StringFeature.Received(1).GetCopyUtf8(jString, Arg.Any<Memory<Byte>>());
+		env.StringFeature.Received(1).GetUtf8Copy(jString, Arg.Any<IFixedMemory<Byte>>());
 		env.StringFeature.Received(initText.GetValueOrDefault() ? 0 : 1).GetLength(jString);
 		env.StringFeature.Received(initText.GetValueOrDefault() ? 0 : 1)
 		   .GetCopy(jString, Arg.Any<IFixedMemory<Char>>());

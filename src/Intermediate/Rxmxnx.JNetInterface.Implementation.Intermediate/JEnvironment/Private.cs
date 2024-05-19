@@ -38,7 +38,7 @@ partial class JEnvironment
 	private void CreateLocalFrame(Int32 capacity)
 	{
 		PushLocalFrameDelegate pushLocalFrame = this._cache.GetDelegate<PushLocalFrameDelegate>();
-		ValidationUtilities.ThrowIfInvalidResult(pushLocalFrame(this.Reference, capacity));
+		ImplementationValidationUtilities.ThrowIfInvalidResult(pushLocalFrame(this.Reference, capacity));
 	}
 	/// <summary>
 	/// Creates a new global reference to <paramref name="jLocal"/>.

@@ -58,7 +58,7 @@ public partial class JLocalObject
 			/// <returns>A new <see cref="TypeMetadataBuilder{TInterface}"/> instance.</returns>
 			public static TypeMetadataBuilder<TInterface> Create(ReadOnlySpan<Byte> className)
 			{
-				ValidationUtilities.ValidateNotEmpty(className);
+				CommonValidationUtilities.ValidateNotEmpty(className);
 				ISet<Type> interfaceTypes = IReferenceType<TInterface>.GetInterfaceTypes().ToHashSet();
 				return new(className, interfaceTypes);
 			}

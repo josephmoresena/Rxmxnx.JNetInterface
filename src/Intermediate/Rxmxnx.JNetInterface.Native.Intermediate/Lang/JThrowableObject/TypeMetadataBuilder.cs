@@ -67,7 +67,7 @@ public partial class JThrowableObject
 		public static TypeMetadataBuilder<TThrowable> Create(ReadOnlySpan<Byte> className,
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
-			ValidationUtilities.ValidateNotEmpty(className);
+			CommonValidationUtilities.ValidateNotEmpty(className);
 			ISet<Type> interfaceTypes = IReferenceType<TThrowable>.GetInterfaceTypes().ToHashSet();
 			JClassTypeMetadata baseMetadata = typeof(TThrowable) != typeof(JThrowableObject) ?
 				IClassType.GetMetadata<JThrowableObject>() :
@@ -86,7 +86,7 @@ public partial class JThrowableObject
 				ReadOnlySpan<Byte> className, JTypeModifier modifier = JTypeModifier.Extensible)
 			where TObject : TThrowable, IThrowableType<TObject>
 		{
-			ValidationUtilities.ValidateNotEmpty(className);
+			CommonValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType<TThrowable, TObject>(className);
 			NativeValidationUtilities.ValidateBaseTypes<TThrowable, TObject>(className);
 			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();

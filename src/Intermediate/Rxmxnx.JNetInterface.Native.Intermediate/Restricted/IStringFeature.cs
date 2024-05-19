@@ -32,7 +32,7 @@ public partial interface IStringFeature
 	/// <param name="jString">A <see cref="JStringObject"/> instance.</param>
 	/// <param name="utf8Units">Destination buffer.</param>
 	/// <param name="startIndex">Offset position.</param>
-	void GetCopyUtf8(JStringObject jString, Memory<Byte> utf8Units, Int32 startIndex = 0);
+	void GetUtf8Copy(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex = 0);
 
 	/// <summary>
 	/// Retrieves a <see cref="INativeMemoryAdapter"/> to <see cref="JStringObject"/> characters.

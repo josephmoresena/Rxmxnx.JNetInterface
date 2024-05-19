@@ -33,7 +33,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// <returns>Current instance.</returns>
 		public TypeMetadataBuilder WithWrapperClassName(ReadOnlySpan<Byte> className)
 		{
-			this._wrapperClassName = ValidationUtilities.ValidateNotEmpty(className);
+			this._wrapperClassName = CommonValidationUtilities.ValidateNotEmpty(className);
 			return this;
 		}
 		/// <summary>
@@ -42,7 +42,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public JPrimitiveTypeMetadata<TPrimitive> Build()
 			=> new PrimitiveTypeMetadata(typeof(TValue), stackalloc Byte[1] { this._signature, }, this._className,
-			                             ValidationUtilities.ValidateNotEmpty(this._wrapperClassName));
+			                             CommonValidationUtilities.ValidateNotEmpty(this._wrapperClassName));
 
 		/// <summary>
 		/// Creates a new <see cref="TypeMetadataBuilder"/> instance.

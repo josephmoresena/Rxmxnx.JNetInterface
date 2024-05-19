@@ -12,7 +12,7 @@ partial class JEnvironment
 		/// <param name="value">Object instance.</param>
 		private void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
 		{
-			ValidationUtilities.ThrowIfProxy(value);
+			ImplementationValidationUtilities.ThrowIfProxy(value);
 			jArray.ValidateObjectElement(value);
 			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
@@ -42,7 +42,7 @@ partial class JEnvironment
 		/// <returns>The index of <paramref name="item"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
 		private Int32 IndexOfObject(JArrayObject jArray, JReferenceObject? item)
 		{
-			ValidationUtilities.ThrowIfProxy(item);
+			ImplementationValidationUtilities.ThrowIfProxy(item);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			JObjectLocalRef localRef = jniTransaction.Add(item);
@@ -426,6 +426,23 @@ partial class JEnvironment
 			while (offset < requiredBytes)
 				initialElement.CopyTo(arrayRegion.Bytes, ref offset);
 			this.SetPrimitiveArrayRegion(jArray, metadata.Signature, arrayRegion, 0, jArray.Length);
+		}
+
+		private static void GetPrimitiveArrayRegion<TPrimitive>(in IFixedContext<TPrimitive> ctx,
+			(EnvironmentCache cache, JArrayObject<TPrimitive> jArray, Int32 startIndex) args)
+			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		{
+			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			args.cache.GetPrimitiveArrayRegion(args.jArray, metadata.Signature, ctx, args.startIndex,
+			                                   ctx.Values.Length);
+		}
+		private static void SetPrimitiveArrayRegion<TPrimitive>(in IReadOnlyFixedContext<TPrimitive> ctx,
+			(EnvironmentCache cache, JArrayObject<TPrimitive> jArray, Int32 startIndex) args)
+			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		{
+			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			args.cache.SetPrimitiveArrayRegion(args.jArray, metadata.Signature, ctx, args.startIndex,
+			                                   ctx.Values.Length);
 		}
 	}
 }

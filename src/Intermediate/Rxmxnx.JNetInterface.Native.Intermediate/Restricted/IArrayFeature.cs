@@ -87,9 +87,9 @@ public partial interface IArrayFeature
 	/// </summary>
 	/// <typeparam name="TPrimitive">Type of <typeref name="TPrimitive"/> element.</typeparam>
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
-	/// <param name="startIndex">Offset position.</param>
 	/// <param name="elements">Destination buffer.</param>
-	void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)
+	/// <param name="startIndex">Offset position.</param>
+	void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<TPrimitive> elements, Int32 startIndex = 0)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	/// <summary>
 	/// Copies <paramref name="elements"/> elements into <paramref name="jArray"/>.
@@ -98,7 +98,7 @@ public partial interface IArrayFeature
 	/// <param name="jArray">A <see cref="JArrayObject{TPrimitive}"/> instance.</param>
 	/// <param name="elements">Source buffer.</param>
 	/// <param name="startIndex">Offset position.</param>
-	void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements, Int32 startIndex = 0)
+	void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlySpan<TPrimitive> elements, Int32 startIndex = 0)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	/// <summary>
 	/// Retrieves a <see cref="INativeMemoryAdapter"/> to <see cref="JArrayObject{TPrimitive}"/> elements.

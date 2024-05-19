@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Utility class for argument validation.
 /// </summary>
-internal static class ValidationUtilities
+internal static class CommonValidationUtilities
 {
 	/// <summary>
 	/// Validates if <see langword="unmanaged"/> value can be safely stored into a <see cref="JValue"/>.
@@ -134,7 +134,7 @@ internal static class ValidationUtilities
 		{
 			if (!allowPrimitive)
 				throw new ArgumentException("Signature not allowed.");
-			ValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[0]);
+			CommonValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[0]);
 		}
 
 		Byte prefix = signature[0];
@@ -146,7 +146,7 @@ internal static class ValidationUtilities
 				case 2:
 					if (!allowPrimitive)
 						throw new ArgumentException("Array signature not allowed.");
-					ValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[1]);
+					CommonValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[1]);
 					break;
 				case <= 3:
 					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
@@ -157,56 +157,6 @@ internal static class ValidationUtilities
 		else if (prefix != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
 		         suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar)
 			throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="value"/> named <paramref name="nameofValue"/> is not null-terminated
-	/// UTF-8 string.
-	/// </summary>
-	/// <param name="value">A UTF-8 string.</param>
-	/// <param name="nameofValue">The name of <paramref name="value"/>.</param>
-	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="value"/> named <paramref name="nameofValue"/> is not null-terminated
-	/// UTF-8 string.
-	/// </exception>
-	public static void ThrowIfNotNullTerminatedCString(CString value,
-		[CallerArgumentExpression(nameof(value))] String nameofValue = "")
-	{
-		if (!value.IsNullTerminated)
-			throw new InvalidOperationException($"{nameofValue} must be null-terminated UTF-8 string.");
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="value"/> named <paramref name="paramName"/> is not null-terminated
-	/// UTF-8 string.
-	/// </summary>
-	/// <param name="value">A UTF-8 string.</param>
-	/// <param name="paramName">The name of <paramref name="value"/>.</param>
-	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="value"/> named <paramref name="paramName"/> is not null-terminated
-	/// UTF-8 string.
-	/// </exception>
-	public static CString ValidateNullTermination(CString? value,
-		[CallerArgumentExpression(nameof(value))] String paramName = "")
-	{
-		ArgumentNullException.ThrowIfNull(value, paramName);
-		if (!value.IsNullTerminated)
-			throw new InvalidOperationException($"{paramName} must be null-terminated UTF-8 string.");
-		return value;
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
-	/// </summary>
-	/// <param name="value">A UTF-8 string.</param>
-	/// <param name="paramName">The name of <paramref name="value"/>.</param>
-	/// <returns>A non-empty <see cref="CString"/> instance.</returns>
-	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
-	/// </exception>
-	public static CString ValidateNotEmpty(CString? value,
-		[CallerArgumentExpression(nameof(value))] String paramName = "")
-	{
-		if (CString.IsNullOrEmpty(value))
-			throw new InvalidOperationException($"{paramName} must be non-empty string");
-		return value;
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
@@ -224,102 +174,6 @@ internal static class ValidationUtilities
 			throw new InvalidOperationException($"{paramName} must be non-empty string");
 		return value;
 	}
-	/// <summary>
-	/// Throws an exception if current sequence is not valid.
-	/// </summary>
-	/// <param name="isInvalid">Indicates whether current instance is invalid valid.</param>
-	/// <exception cref="InvalidOperationException">Throws an exception if current sequence is not valid.</exception>
-	public static void ThrowIfInvalidSequence(IWrapper<Boolean> isInvalid)
-	{
-		if (isInvalid.Value)
-			throw new InvalidOperationException("The sequence is no longer valid.");
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="jObject"/> is proxy.
-	/// </summary>
-	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="nameofObject">Name of <paramref name="jObject"/>.</param>
-	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is proxy.</exception>
-	public static void ThrowIfProxy(JReferenceObject? jObject,
-		[CallerArgumentExpression(nameof(jObject))] String nameofObject = "")
-	{
-		if (jObject is not null && jObject.IsProxy)
-			throw new ArgumentException($"Invalid JReferenceObject ({nameofObject}).");
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
-	/// </summary>
-	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
-	/// <param name="otherDefinition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
-	/// <exception cref="ArgumentException">
-	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
-	/// </exception>
-	public static void ThrowIfNotMatchDefinition(JAccessibleObjectDefinition definition,
-		JAccessibleObjectDefinition otherDefinition)
-	{
-		if (definition.Hash != otherDefinition.Hash)
-			throw new ArgumentException($"[{definition}] Expected: [{otherDefinition}].");
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="jObject"/> is default.
-	/// </summary>
-	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="message">Exception message.</param>
-	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is default.</exception>
-	public static void ThrowIfDefault(JReferenceObject jObject, String? message = default)
-	{
-		if (jObject.IsDefault)
-			throw new ArgumentException(message ?? "Disposed JReferenceObject.");
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="thread"/> is different to current thread.
-	/// </summary>
-	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
-	/// <param name="thread">A <see cref="Thread"/> instance.</param>
-	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="thread"/> is different to current
-	/// thread.
-	/// </exception>
-	public static void ThrowIfDifferentThread(JEnvironmentRef envRef, Thread thread)
-	{
-		if (thread != Thread.CurrentThread)
-			throw new InvalidOperationException(
-				$"JNI Environment ({envRef}) is assigned to another thread. Expected: {thread.ManagedThreadId} Current: {Environment.CurrentManagedThreadId}.");
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="length"/> is invalid.
-	/// </summary>
-	/// <param name="length">Array length.</param>
-	/// <exception cref="ArgumentException">
-	/// Throws an exception if <paramref name="length"/> is invalid.
-	/// </exception>
-	public static void ThrowIfInvalidArrayLength(Int32 length)
-	{
-		if (length < 0)
-			throw new ArgumentException("Array length must be zero or positive.", nameof(length));
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="result"/> is not <see cref="JResult.Ok"/>.
-	/// </summary>
-	/// <param name="result">A <see cref="JResult"/> value.</param>
-	/// <exception cref="JniException">
-	/// Throws an exception if <paramref name="result"/> is not <see cref="JResult.Ok"/>.
-	/// </exception>
-	public static void ThrowIfInvalidResult(JResult result)
-	{
-		JniException? exception = result;
-		if (exception is not null)
-			throw exception;
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="version"/> is invalid.
-	/// </summary>
-	/// <param name="version">JNI version.</param>
-	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="version"/> is invalid.
-	/// </exception>
-	public static Int32 ThrowIfInvalidVersion(Int32 version)
-		=> version > 0 ? version : throw new InvalidOperationException();
 
 	/// <summary>
 	/// Throws an exception if <paramref name="signature"/> is not valid primitive signature.
@@ -343,38 +197,5 @@ internal static class ValidationUtilities
 				return;
 		}
 		throw new ArgumentException("Invalid primitive signature.");
-	}
-	/// <summary>
-	/// Throws an exception if JNI execution is not secure.
-	/// </summary>
-	/// <param name="functionName">Name of JNI function.</param>
-	/// <param name="jniSecure">Indicates whether JNI execution is safe.</param>
-	/// <exception cref="NotImplementedException">
-	/// Throws an exception if JNI execution is not secure.
-	/// </exception>
-	public static void ThrowIfUnsafe(String functionName, Boolean jniSecure)
-	{
-		if (!jniSecure)
-			throw new InvalidOperationException($"Current JNI status is invalid to call {functionName}.");
-	}
-	/// <summary>
-	/// Throws an exception if JVM is not alive.
-	/// </summary>
-	/// <param name="isAlive">Indicates whether JVM remains alive.</param>
-	/// <exception cref="InvalidOperationException">Throws an exception if JVM is not alive.</exception>
-	public static void ThrowIfInvalidVirtualMachine(Boolean isAlive)
-	{
-		if (!isAlive)
-			throw new InvalidOperationException("Current JVM is not alive.");
-	}
-	/// <summary>
-	/// Throws an exception if current thread is not attached to JVM.
-	/// </summary>
-	/// <param name="isAttached">Indicates whether current thread is attached to a JVM.</param>
-	/// <exception cref="InvalidOperationException">Throws an exception if current thread is not attached to JVM</exception>
-	public static void ThrowIfNotAttached(Boolean isAttached)
-	{
-		if (!isAttached)
-			throw new InvalidOperationException("Current thread is not attached.");
 	}
 }

@@ -211,7 +211,7 @@ public static class JNativeTypeExtensions
 			JNativeType.JVirtualMachineInitArgument => ValueNames.JVirtualMachineInitArgumentName,
 
 			JNativeType.JValue => ValueNames.JValueName,
-			_ => ValidationUtilities.ThrowInvalidNativeType(nativeType),
+			_ => CommonValidationUtilities.ThrowInvalidNativeType(nativeType),
 		};
 	}
 }

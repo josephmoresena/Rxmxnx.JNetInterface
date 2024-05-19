@@ -84,7 +84,7 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JBoolean(JObject jObj)
-		=> ValidationUtilities.ThrowIfInvalidCast<Boolean>(jObj as IConvertible);
+		=> CommonValidationUtilities.ThrowIfInvalidCast<Boolean>(jObj as IConvertible);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JBoolean(Boolean value) => new(value);

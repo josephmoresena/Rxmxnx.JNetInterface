@@ -174,7 +174,7 @@ partial class JEnvironment
 		private static JClassObject LoadClass(in IReadOnlyFixedContext<Byte> rawClassMemory,
 			(EnvironmentCache cache, ITypeInformation metadata, JClassLoaderObject? jClassLoader) args)
 		{
-			ValidationUtilities.ThrowIfProxy(args.jClassLoader);
+			ImplementationValidationUtilities.ThrowIfProxy(args.jClassLoader);
 			DefineClassDelegate defineClass = args.cache.GetDelegate<DefineClassDelegate>();
 			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(2);
 			using IFixedPointer.IDisposable classNamePointer = args.metadata.GetClassNameFixedPointer();

@@ -4,6 +4,8 @@ namespace Rxmxnx.JNetInterface.Proxies;
 /// This object exposes a JNI proxy instance.
 /// </summary>
 [ExcludeFromCodeCoverage]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4136,
+                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 public abstract partial class EnvironmentProxy
 {
 	/// <inheritdoc cref="IEnvironment.VirtualMachine"/>
@@ -37,6 +39,15 @@ public abstract partial class EnvironmentProxy
 	public abstract TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
 	/// <inheritdoc/>
 	public abstract void DescribeException();
+
+	#region IArrayFeature
+	/// <inheritdoc cref="IArrayFeature.GetCopy{TPrimitive}(JArrayObject{TPrimitive}, Span{TPrimitive}, Int32)"/>
+	public abstract void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, IFixedMemory<TPrimitive> elements,
+		Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	/// <inheritdoc cref="IArrayFeature.SetCopy{TPrimitive}(JArrayObject{TPrimitive}, ReadOnlySpan{TPrimitive}, Int32)"/>
+	public abstract void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, IReadOnlyFixedMemory<TPrimitive> elements,
+		Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	#endregion
 
 	#region IReferenceFeature
 	/// <summary>
@@ -132,5 +143,9 @@ public abstract partial class EnvironmentProxy
 	public abstract JStringObject Create(String data);
 	/// <inheritdoc cref="IStringFeature.Create(ReadOnlySpan{Byte})"/>
 	public abstract JStringObject Create(CString data);
+	/// <inheritdoc cref="IStringFeature.GetCopy(JStringObject, Span{Char}, Int32)"/>
+	public abstract void GetCopy(JStringObject jString, IFixedMemory<Char> chars, Int32 startIndex = 0);
+	/// <inheritdoc cref="IStringFeature.GetUtf8Copy(JStringObject, Span{Byte}, Int32)"/>
+	public abstract void GetUtf8Copy(JStringObject jString, IFixedMemory<Byte> utf8Units, Int32 startIndex = 0);
 	#endregion
 }

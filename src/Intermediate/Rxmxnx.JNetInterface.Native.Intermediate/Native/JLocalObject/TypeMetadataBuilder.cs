@@ -46,7 +46,7 @@ public partial class JLocalObject
 		/// <returns>Current instance.</returns>
 		public void WithSignature(ReadOnlySpan<Byte> signature)
 		{
-			ValidationUtilities.ThrowIfInvalidSignature(signature, false);
+			CommonValidationUtilities.ThrowIfInvalidSignature(signature, false);
 			this.Signature = signature;
 		}
 
@@ -60,11 +60,18 @@ public partial class JLocalObject
 		{
 			NativeValidationUtilities.ThrowIfAnnotation<TInterface>(this.DataTypeName, this.IsAnnotation);
 			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
+			// Validates current interface.
 			if (!this._interfaceTypes.Contains(metadata.InterfaceType))
 				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
 					this.DataTypeName, this._kind is not JTypeKind.Interface);
-			this.DataTypeName.WithSafeFixed((this._interfaceTypes, this._kind),
-			                                TypeMetadataBuilder.ValidateSuperInterfaces<TInterface>);
+
+			// Validates superinterfaces from current interface.
+			HashSet<CString> notContained = [];
+			metadata.Interfaces.ForEach((this._interfaceTypes, notContained),
+			                            TypeMetadataBuilder.ValidateSuperinterface);
+			NativeValidationUtilities.ThrowIfInvalidImplementation<TInterface>(
+				this.DataTypeName, notContained, this._kind is not JTypeKind.Interface);
+
 			this._interfaces ??= [];
 			this._interfaces.Add(metadata);
 		}
@@ -77,34 +84,15 @@ public partial class JLocalObject
 			=> this._interfaces ?? (IReadOnlySet<JInterfaceTypeMetadata>)ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
 
 		/// <summary>
-		/// Validates implementation of each super interface of <typeparamref name="TInterface"/>.
+		/// Checks implementation of a the superinterface type from <paramref name="interfaceMetadata"/>.
 		/// </summary>
-		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
-		/// <param name="mem">Current datatype fixed name.</param>
-		/// <param name="args">Interface type set and kind of the current type.</param>
-		private static void ValidateSuperInterfaces<TInterface>(in IReadOnlyFixedMemory mem,
-			(ISet<Type> interfaceTypes, JTypeKind kind) args)
-			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
-		{
-			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
-			IReadOnlyFixedMemory dataTypeName = mem;
-			metadata.Interfaces.ForEach((dataTypeName, args.interfaceTypes, args.kind),
-			                            TypeMetadataBuilder.ValidateSuperInterfaces<TInterface>);
-		}
-		/// <summary>
-		/// Validates implementation of each super interface of <typeparamref name="TInterface"/>.
-		/// </summary>
-		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
-		/// <param name="args">Fixed name, interface type set and kind of the current type.</param>
-		/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance..</param>
-		private static void ValidateSuperInterfaces<TInterface>(
-			(IReadOnlyFixedMemory dataTypeName, ISet<Type> interfaceTypes, JTypeKind kind) args,
+		/// <param name="args">Interface type set and non-implemented interface name set.</param>
+		/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
+		private static void ValidateSuperinterface((ISet<Type> interfaceTypes, HashSet<CString> notContained) args,
 			JInterfaceTypeMetadata interfaceMetadata)
-			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			if (!args.interfaceTypes.Contains(interfaceMetadata.InterfaceType))
-				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
-					args.dataTypeName.Bytes, args.kind is not JTypeKind.Interface);
+				args.notContained.Add(interfaceMetadata.ClassName);
 		}
 	}
 
@@ -181,7 +169,7 @@ public partial class JLocalObject
 		public static TypeMetadataBuilder<TClass> Create(ReadOnlySpan<Byte> className,
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
-			ValidationUtilities.ValidateNotEmpty(className);
+			CommonValidationUtilities.ValidateNotEmpty(className);
 			ISet<Type> interfaceTypes = IReferenceType<TClass>.GetInterfaceTypes().ToHashSet();
 			JClassTypeMetadata? baseMetadata = !JLocalObject.IsObjectType<TClass>() ?
 				IClassType.GetMetadata<JLocalObject>() :
@@ -200,7 +188,7 @@ public partial class JLocalObject
 				ReadOnlySpan<Byte> className, JTypeModifier modifier = JTypeModifier.Extensible)
 			where TObject : TClass, IClassType<TObject>
 		{
-			ValidationUtilities.ValidateNotEmpty(className);
+			CommonValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType<TClass, TObject>(className);
 			NativeValidationUtilities.ValidateBaseTypes<TClass, TObject>(className);
 			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();

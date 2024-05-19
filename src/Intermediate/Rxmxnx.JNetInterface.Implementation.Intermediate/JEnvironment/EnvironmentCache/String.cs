@@ -27,5 +27,14 @@ partial class JEnvironment
 			getStringRegion(args.cache.Reference, stringRef, args.startIndex, ctx.Values.Length,
 			                (ValPtr<Char>)ctx.Pointer);
 		}
+		private static void GetStringUtf8Region(in IFixedContext<Byte> ctx,
+			(EnvironmentCache cache, JStringObject jString, Int32 startIndex) args)
+		{
+			GetStringUtfRegionDelegate getStringUtfRegion = args.cache.GetDelegate<GetStringUtfRegionDelegate>();
+			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(1);
+			JStringLocalRef stringRef = jniTransaction.Add(args.jString);
+			getStringUtfRegion(args.cache.Reference, stringRef, args.startIndex, ctx.Values.Length,
+			                   (ValPtr<Byte>)ctx.Pointer);
+		}
 	}
 }

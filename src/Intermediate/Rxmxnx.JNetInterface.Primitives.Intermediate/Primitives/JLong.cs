@@ -58,7 +58,7 @@ public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableCompara
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JLong(JObject jObj)
-		=> ValidationUtilities.ThrowIfInvalidCast<Int64>(jObj as IConvertible);
+		=> CommonValidationUtilities.ThrowIfInvalidCast<Int64>(jObj as IConvertible);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JLong(Int64 value) => new(value);

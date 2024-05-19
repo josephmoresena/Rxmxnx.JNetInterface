@@ -46,5 +46,5 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 	/// </summary>
 	[ReadOnly(true)]
 	internal static virtual JDataTypeMetadata Metadata
-		=> ValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));
+		=> CommonValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));
 }

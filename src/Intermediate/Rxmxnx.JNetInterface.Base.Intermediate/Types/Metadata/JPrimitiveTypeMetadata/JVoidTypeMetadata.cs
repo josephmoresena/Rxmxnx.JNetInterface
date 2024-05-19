@@ -20,7 +20,7 @@ public partial record JPrimitiveTypeMetadata
 		/// <inheritdoc/>
 		public override JNativeType NativeType => default;
 		/// <inheritdoc/>
-		public override JArgumentMetadata ArgumentMetadata => ValidationUtilities.ThrowVoidArgument();
+		public override JArgumentMetadata ArgumentMetadata => CommonValidationUtilities.ThrowVoidArgument();
 
 		/// <summary>
 		/// Constructor.
@@ -34,7 +34,7 @@ public partial record JPrimitiveTypeMetadata
 #endif
 		/// <inheritdoc/>
 		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes)
-			=> ValidationUtilities.ThrowVoidInstantiation();
+			=> CommonValidationUtilities.ThrowVoidInstantiation();
 		/// <inheritdoc/>
 		public override String ToString()
 			=> $"{nameof(JDataTypeMetadata)} {{ {nameof(JDataTypeMetadata.Type)} = {this.Type}, " +

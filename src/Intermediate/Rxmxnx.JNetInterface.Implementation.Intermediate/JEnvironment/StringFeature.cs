@@ -18,7 +18,7 @@ partial class JEnvironment
 		}
 		public Int32 GetLength(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfProxy(jObject);
+			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			GetStringLengthDelegate getStringLength = this.GetDelegate<GetStringLengthDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
@@ -28,7 +28,7 @@ partial class JEnvironment
 		}
 		public Int32 GetUtf8Length(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfProxy(jObject);
+			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			GetStringUtfLengthDelegate getStringUtf8Length = this.GetDelegate<GetStringUtfLengthDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
@@ -38,8 +38,8 @@ partial class JEnvironment
 		}
 		public INativeMemoryAdapter GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
-			ValidationUtilities.ThrowIfProxy(jString);
-			ValidationUtilities.ThrowIfDefault(jString);
+			ImplementationValidationUtilities.ThrowIfProxy(jString);
+			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, false);
 		}
 		public ReadOnlyValPtr<Char> GetSequence(JStringLocalRef stringRef, out Boolean isCopy)
@@ -52,8 +52,8 @@ partial class JEnvironment
 		}
 		public INativeMemoryAdapter GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
-			ValidationUtilities.ThrowIfProxy(jString);
-			ValidationUtilities.ThrowIfDefault(jString);
+			ImplementationValidationUtilities.ThrowIfProxy(jString);
+			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, default);
 		}
 		public ReadOnlyValPtr<Byte> GetUtf8Sequence(JStringLocalRef stringRef, out Boolean isCopy)
@@ -66,8 +66,8 @@ partial class JEnvironment
 		}
 		public INativeMemoryAdapter GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
-			ValidationUtilities.ThrowIfProxy(jString);
-			ValidationUtilities.ThrowIfDefault(jString);
+			ImplementationValidationUtilities.ThrowIfProxy(jString);
+			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, true);
 		}
 		public ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef)
@@ -142,19 +142,14 @@ partial class JEnvironment
 		}
 		public void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
 		{
-			ValidationUtilities.ThrowIfProxy(jString);
+			ImplementationValidationUtilities.ThrowIfProxy(jString);
 			chars.WithSafeFixed((this, jString, startIndex), EnvironmentCache.GetStringRegion);
 			this.CheckJniError();
 		}
-		public void GetCopyUtf8(JStringObject jString, Memory<Byte> utf8Units, Int32 startIndex = 0)
+		public void GetUtf8Copy(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex = 0)
 		{
-			ValidationUtilities.ThrowIfProxy(jString);
-			GetStringUtfRegionDelegate getStringUtfRegion = this.GetDelegate<GetStringUtfRegionDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(jString);
-			using IFixedContext<Byte>.IDisposable fixedMemory = utf8Units.GetFixedContext();
-			getStringUtfRegion(this.Reference, stringRef, startIndex, utf8Units.Length,
-			                   (ValPtr<Byte>)fixedMemory.Pointer);
+			ImplementationValidationUtilities.ThrowIfProxy(jString);
+			utf8Units.WithSafeFixed((this, jString, startIndex), EnvironmentCache.GetStringUtf8Region);
 			this.CheckJniError();
 		}
 	}
