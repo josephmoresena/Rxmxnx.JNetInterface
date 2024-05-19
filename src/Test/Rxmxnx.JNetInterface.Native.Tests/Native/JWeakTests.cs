@@ -187,6 +187,10 @@ public sealed class JWeakTests
 			{
 				// ignored
 			}
+			finally
+			{
+				GC.Collect();
+			}
 		});
 
 		using JClassObject jClassClass = new(env);
@@ -194,9 +198,15 @@ public sealed class JWeakTests
 		using JStringObject jString = new(jStringClass, stringRef, JWeakTests.fixture.Create<String>());
 		for (Int32 i = 0; i < 100; i++)
 		{
+			GC.Collect();
 			_ = new JWeak(jString, weakRef);
 			GC.Collect();
 		}
+		GC.Collect();
+		GC.Collect();
+		GC.Collect();
+		Thread.Sleep(100);
+		GC.Collect();
 		GC.Collect();
 		thread.ReferenceFeature.Received().Unload(Arg.Any<JWeak>());
 		Assert.All(references, g => Assert.Equal(weakRef, g));

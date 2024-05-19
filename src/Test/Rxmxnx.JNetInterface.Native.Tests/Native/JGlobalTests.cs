@@ -210,6 +210,10 @@ public sealed class JGlobalTests
 			{
 				// ignored
 			}
+			finally
+			{
+				GC.Collect();
+			}
 		});
 
 		using JClassObject jClassClass = new(env);
@@ -217,9 +221,15 @@ public sealed class JGlobalTests
 		using JStringObject jString = new(jStringClass, stringRef, JGlobalTests.fixture.Create<String>());
 		for (Int32 i = 0; i < 100; i++)
 		{
+			GC.Collect();
 			_ = new JGlobal(jString, globalRef);
 			GC.Collect();
 		}
+		GC.Collect();
+		GC.Collect();
+		GC.Collect();
+		Thread.Sleep(100);
+		GC.Collect();
 		GC.Collect();
 		thread.ReferenceFeature.Received().Unload(Arg.Any<JGlobal>());
 		Assert.All(references, g => Assert.Equal(globalRef, g));
