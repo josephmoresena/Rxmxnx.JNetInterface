@@ -6,8 +6,8 @@ partial class JEnvironment
 	{
 		public IDisposable GetSynchronizer(JReferenceObject jObject)
 		{
-			ValidationUtilities.ThrowIfProxy(jObject);
-			ValidationUtilities.ThrowIfDefault(jObject);
+			ImplementationValidationUtilities.ThrowIfProxy(jObject);
+			ImplementationValidationUtilities.ThrowIfDefault(jObject);
 			return this.VirtualMachine.CreateSynchronized(this._env, jObject);
 		}
 		public ObjectLifetime GetLifetime(JLocalObject jLocal, InternalClassInitializer initializer)
@@ -94,7 +94,7 @@ partial class JEnvironment
 				return (TGlobal)(Object)this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
 			}
 
-			ValidationUtilities.ThrowIfProxy(jLocal);
+			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JGlobal? jGlobal;
 
@@ -127,7 +127,7 @@ partial class JEnvironment
 		public Boolean Unload(JLocalObject? jLocal)
 		{
 			if (jLocal is null) return false;
-			ValidationUtilities.ThrowIfProxy(jLocal);
+			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.LocalReference;
 			Boolean isRegistered = this._objects.Contains(localRef);
@@ -145,7 +145,7 @@ partial class JEnvironment
 		}
 		public Boolean Unload(JGlobalBase jGlobal)
 		{
-			ValidationUtilities.ThrowIfProxy(jGlobal);
+			ImplementationValidationUtilities.ThrowIfProxy(jGlobal);
 			Boolean keepReference = false;
 			if (this.IsMainOrDefault(jGlobal)) return false;
 			try
@@ -185,7 +185,7 @@ partial class JEnvironment
 		public void MonitorEnter(JObjectLocalRef localRef)
 		{
 			MonitorEnterDelegate monitorEnter = this.GetDelegate<MonitorEnterDelegate>();
-			ValidationUtilities.ThrowIfInvalidResult(monitorEnter(this.Reference, localRef));
+			ImplementationValidationUtilities.ThrowIfInvalidResult(monitorEnter(this.Reference, localRef));
 		}
 		public void MonitorExit(JObjectLocalRef localRef)
 		{
@@ -196,7 +196,7 @@ partial class JEnvironment
 				result = monitorExit(this.Reference, localRef);
 			}
 			JTrace.MonitorExit(this._env.IsAttached, this.VirtualMachine.IsAlive, result == JResult.Ok, localRef);
-			ValidationUtilities.ThrowIfInvalidResult(result);
+			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		}
 	}
 }

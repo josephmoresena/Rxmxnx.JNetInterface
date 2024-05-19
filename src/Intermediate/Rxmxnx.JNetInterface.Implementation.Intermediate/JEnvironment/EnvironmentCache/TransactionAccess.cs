@@ -59,9 +59,9 @@ partial class JEnvironment
 						break;
 					default:
 						JReferenceObject referenceObject = (args[i] as JReferenceObject)!;
-						ValidationUtilities.ThrowIfProxy(referenceObject);
+						ImplementationValidationUtilities.ThrowIfProxy(referenceObject);
 						this.ReloadClass(referenceObject as JClassObject);
-						ValidationUtilities.ThrowIfDefault(referenceObject, $"Invalid object at {i}.");
+						ImplementationValidationUtilities.ThrowIfDefault(referenceObject, $"Invalid object at {i}.");
 						jniTransaction.Add(referenceObject);
 						args[i]!.CopyTo(result, i);
 						break;

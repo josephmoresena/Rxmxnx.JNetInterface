@@ -105,6 +105,28 @@ internal static class NativeValidationUtilities
 		throw new NotImplementedException(
 			$"{typeName.ToCString()} type doesn't {implementationType} {interfaceMetadata.ClassName} interface.");
 	}
+	/// <summary>
+	/// Throws a <see cref="NotImplementedException"/> if current datatype is not implementing
+	/// some superinterfaces of <typeparamref name="TInterface"/>.
+	/// </summary>
+	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/></typeparam>
+	/// <param name="typeName">Name of implementing type.</param>
+	/// <param name="notContained">Names of not contained superinterfaces.</param>
+	/// <param name="isClass">Indicates whether implementing type is a class.</param>
+	/// <exception cref="NotImplementedException">
+	/// Throws a <see cref="NotImplementedException"/> if current datatype is not implementing
+	/// some superinterfaces of <typeparamref name="TInterface"/>.
+	/// </exception>
+	public static void ThrowIfInvalidImplementation<TInterface>(ReadOnlySpan<Byte> typeName, ISet<CString> notContained,
+		Boolean isClass) where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+	{
+		if (notContained.Count == 0) return;
+		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();
+		String implementationType = isClass ? "implements" : "extends";
+		String interfacesName = notContained.Count == 1 ? "superinterface" : "superinterfaces";
+		throw new NotImplementedException(
+			$"{typeName.ToCString()} type doesn't {implementationType} {String.Join(", ", notContained)} {interfacesName} of {interfaceMetadata.ClassName} interface.");
+	}
 
 	/// <summary>
 	/// Throws an exception if <paramref name="ordinal"/> is an invalid enum ordinal.

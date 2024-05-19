@@ -58,7 +58,7 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JFloat(JObject jObj)
-		=> ValidationUtilities.ThrowIfInvalidCast<Single>(jObj as IConvertible);
+		=> CommonValidationUtilities.ThrowIfInvalidCast<Single>(jObj as IConvertible);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JFloat(Single value) => new(value);

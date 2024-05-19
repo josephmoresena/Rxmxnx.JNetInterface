@@ -82,7 +82,7 @@ public sealed record JVirtualMachineLibrary
 				break;
 			version = jniVersion;
 		}
-		return ValidationUtilities.ThrowIfInvalidVersion(version);
+		return ImplementationValidationUtilities.ThrowIfInvalidVersion(version);
 	}
 	/// <summary>
 	/// Retrieves the default VM initialization argument for the current JVM library.
@@ -98,7 +98,7 @@ public sealed record JVirtualMachineLibrary
 				JVirtualMachineLibrary.jniVersions[0] :
 				jniVersion,
 		};
-		ValidationUtilities.ThrowIfInvalidResult(this._getDefaultVirtualMachineInitArgs(ref initValue));
+		ImplementationValidationUtilities.ThrowIfInvalidResult(this._getDefaultVirtualMachineInitArgs(ref initValue));
 		return new(initValue);
 	}
 	/// <summary>
@@ -122,7 +122,7 @@ public sealed record JVirtualMachineLibrary
 			IgnoreUnrecognized = ((JBoolean)arg.IgnoreUnrecognized).ByteValue,
 		};
 		JResult result = this._createVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef, in value);
-		ValidationUtilities.ThrowIfInvalidResult(result);
+		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		return JVirtualMachine.GetVirtualMachine(vmRef, envRef, out env);
 	}
 	/// <summary>
@@ -135,7 +135,7 @@ public sealed record JVirtualMachineLibrary
 		_ = this._getCreatedVirtualMachines(ValPtr<JVirtualMachineRef>.Zero, 0, out Int32 vmCount);
 		if (vmCount == 0) return Array.Empty<IVirtualMachine>();
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
-		ValidationUtilities.ThrowIfInvalidResult(result);
+		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		return arr.Select(JVirtualMachine.GetVirtualMachine).ToArray();
 	}
 

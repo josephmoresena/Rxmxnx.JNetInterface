@@ -1,10 +1,8 @@
 namespace Rxmxnx.JNetInterface.Tests.Native;
 
 [ExcludeFromCodeCoverage]
-public sealed class JWeakTests
+public sealed class JWeakTests : GlobalObjectTestsBase
 {
-	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
@@ -15,8 +13,8 @@ public sealed class JWeakTests
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		env.NoProxy.Returns(!isProxy);
 		vm.NoProxy.Returns(!isProxy);
-		JWeakRef weakRef0 = JWeakTests.fixture.Create<JWeakRef>();
-		JWeakRef weakRef1 = JWeakTests.fixture.Create<JWeakRef>();
+		JWeakRef weakRef0 = GlobalObjectTestsBase.Fixture.Create<JWeakRef>();
+		JWeakRef weakRef1 = GlobalObjectTestsBase.Fixture.Create<JWeakRef>();
 
 		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
 		env.ReferenceFeature.Unload(Arg.Any<JWeak>()).Returns(true);
@@ -98,7 +96,7 @@ public sealed class JWeakTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
-		JWeakRef weakRef = JWeakTests.fixture.Create<JWeakRef>();
+		JWeakRef weakRef = GlobalObjectTestsBase.Fixture.Create<JWeakRef>();
 		String threadName = $"CheckAssignability-{Environment.CurrentManagedThreadId}";
 		using JClassObject jClassClass = new(env);
 		using JWeak jWeak = new(jClassClass, weakRef);
@@ -147,7 +145,7 @@ public sealed class JWeakTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
-		JWeakRef weakRef = !isDefault ? JWeakTests.fixture.Create<JWeakRef>() : default;
+		JWeakRef weakRef = !isDefault ? GlobalObjectTestsBase.Fixture.Create<JWeakRef>() : default;
 		using IDisposable synchronizer = Substitute.For<IDisposable>();
 		using JClassObject jClassClass = new(env);
 		using JWeak jWeak = new(jClassClass, weakRef);
@@ -166,49 +164,24 @@ public sealed class JWeakTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
-	internal void FinalizerTest(Boolean unload)
+	internal async Task FinalizerTestAsync(Boolean unload)
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
-		JStringLocalRef stringRef = JWeakTests.fixture.Create<JStringLocalRef>();
-		JWeakRef weakRef = JWeakTests.fixture.Create<JWeakRef>();
-		ConcurrentBag<JWeakRef> references = [];
-
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
-		thread.ReferenceFeature.Unload(Arg.Any<JWeak>()).Returns(unload);
-		thread.ReferenceFeature.WhenForAnyArgs(r => r.Unload(Arg.Any<JWeak>())).Do(c =>
-		{
-			try
-			{
-				references.Add((c[0] as JWeak)!.Reference);
-			}
-			catch (Exception)
-			{
-				// ignored
-			}
-			finally
-			{
-				GC.Collect();
-			}
-		});
+		JStringLocalRef stringRef = GlobalObjectTestsBase.Fixture.Create<JStringLocalRef>();
+		JWeakRef weakRef = GlobalObjectTestsBase.Fixture.Create<JWeakRef>();
+		ConcurrentBag<JWeakRef> references = GlobalObjectTestsBase.ConfigureFinalizer<JWeakRef>(vm, thread, unload);
 
 		using JClassObject jClassClass = new(env);
 		using JClassObject jStringClass = new(jClassClass, IClassType.GetMetadata<JStringObject>());
-		using JStringObject jString = new(jStringClass, stringRef, JWeakTests.fixture.Create<String>());
+		using JStringObject jString = new(jStringClass, stringRef, GlobalObjectTestsBase.Fixture.Create<String>());
 		for (Int32 i = 0; i < 100; i++)
 		{
 			GC.Collect();
 			_ = new JWeak(jString, weakRef);
 			GC.Collect();
 		}
-		GC.Collect();
-		GC.Collect();
-		GC.Collect();
-		Thread.Sleep(100);
-		GC.Collect();
-		GC.Collect();
-		thread.ReferenceFeature.Received().Unload(Arg.Any<JWeak>());
-		Assert.All(references, g => Assert.Equal(weakRef, g));
+		await GlobalObjectTestsBase.FinalizerCheckTestAsync(thread, references, weakRef);
 	}
 }

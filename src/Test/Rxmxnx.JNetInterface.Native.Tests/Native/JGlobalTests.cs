@@ -1,10 +1,8 @@
 namespace Rxmxnx.JNetInterface.Tests.Native;
 
 [ExcludeFromCodeCoverage]
-public sealed class JGlobalTests
+public sealed class JGlobalTests : GlobalObjectTestsBase
 {
-	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
@@ -15,8 +13,8 @@ public sealed class JGlobalTests
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		env.NoProxy.Returns(!isProxy);
 		vm.NoProxy.Returns(!isProxy);
-		JGlobalRef globalRef0 = JGlobalTests.fixture.Create<JGlobalRef>();
-		JGlobalRef globalRef1 = JGlobalTests.fixture.Create<JGlobalRef>();
+		JGlobalRef globalRef0 = GlobalObjectTestsBase.Fixture.Create<JGlobalRef>();
+		JGlobalRef globalRef1 = GlobalObjectTestsBase.Fixture.Create<JGlobalRef>();
 
 		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
 		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
@@ -121,7 +119,7 @@ public sealed class JGlobalTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
-		JGlobalRef globalRef = JGlobalTests.fixture.Create<JGlobalRef>();
+		JGlobalRef globalRef = GlobalObjectTestsBase.Fixture.Create<JGlobalRef>();
 		String threadName = $"CheckAssignability-{Environment.CurrentManagedThreadId}";
 		using JClassObject jClassClass = new(env);
 		using JGlobal jGlobal = new(jClassClass, globalRef);
@@ -170,7 +168,7 @@ public sealed class JGlobalTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
-		JGlobalRef globalRef = !isDefault ? JGlobalTests.fixture.Create<JGlobalRef>() : default;
+		JGlobalRef globalRef = !isDefault ? GlobalObjectTestsBase.Fixture.Create<JGlobalRef>() : default;
 		using IDisposable synchronizer = Substitute.For<IDisposable>();
 		using JClassObject jClassClass = new(env);
 		using JGlobal jGlobal = new(jClassClass, globalRef);
@@ -189,49 +187,24 @@ public sealed class JGlobalTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
-	internal void FinalizerTest(Boolean unload)
+	internal async Task FinalizerTestAsync(Boolean unload)
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
-		JStringLocalRef stringRef = JGlobalTests.fixture.Create<JStringLocalRef>();
-		JGlobalRef globalRef = JGlobalTests.fixture.Create<JGlobalRef>();
-		ConcurrentBag<JGlobalRef> references = [];
-
-		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
-		thread.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(unload);
-		thread.ReferenceFeature.WhenForAnyArgs(r => r.Unload(Arg.Any<JGlobal>())).Do(c =>
-		{
-			try
-			{
-				references.Add((c[0] as JGlobal)!.Reference);
-			}
-			catch (Exception)
-			{
-				// ignored
-			}
-			finally
-			{
-				GC.Collect();
-			}
-		});
+		JStringLocalRef stringRef = GlobalObjectTestsBase.Fixture.Create<JStringLocalRef>();
+		JGlobalRef globalRef = GlobalObjectTestsBase.Fixture.Create<JGlobalRef>();
+		ConcurrentBag<JGlobalRef> references = GlobalObjectTestsBase.ConfigureFinalizer<JGlobalRef>(vm, thread, unload);
 
 		using JClassObject jClassClass = new(env);
 		using JClassObject jStringClass = new(jClassClass, IClassType.GetMetadata<JStringObject>());
-		using JStringObject jString = new(jStringClass, stringRef, JGlobalTests.fixture.Create<String>());
+		using JStringObject jString = new(jStringClass, stringRef, GlobalObjectTestsBase.Fixture.Create<String>());
 		for (Int32 i = 0; i < 100; i++)
 		{
 			GC.Collect();
 			_ = new JGlobal(jString, globalRef);
 			GC.Collect();
 		}
-		GC.Collect();
-		GC.Collect();
-		GC.Collect();
-		Thread.Sleep(100);
-		GC.Collect();
-		GC.Collect();
-		thread.ReferenceFeature.Received().Unload(Arg.Any<JGlobal>());
-		Assert.All(references, g => Assert.Equal(globalRef, g));
+		await GlobalObjectTestsBase.FinalizerCheckTestAsync(thread, references, globalRef);
 	}
 }

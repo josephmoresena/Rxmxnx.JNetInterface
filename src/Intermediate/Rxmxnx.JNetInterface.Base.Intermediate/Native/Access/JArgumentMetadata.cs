@@ -42,7 +42,7 @@ public sealed record JArgumentMetadata
 	/// <returns>A <see cref="JArgumentMetadata"/> from <paramref name="signature"/> value</returns>
 	public static JArgumentMetadata Create(ReadOnlySpan<Byte> signature)
 	{
-		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
+		CommonValidationUtilities.ThrowIfInvalidSignature(signature, false);
 		return new(CString.Create(signature), NativeUtilities.PointerSize);
 	}
 

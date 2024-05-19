@@ -125,7 +125,7 @@ partial class JEnvironment
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			JResult result = utf8Message.WithSafeFixed(this, EnvironmentCache.ThrowNew<TThrowable>);
-			ValidationUtilities.ThrowIfInvalidResult(result);
+			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 
 			ThrowableException throwableException =
 				this.CreateThrowableException<TThrowable>(this.GetPendingException(), message);

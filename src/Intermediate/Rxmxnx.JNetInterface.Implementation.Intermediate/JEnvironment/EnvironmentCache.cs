@@ -54,12 +54,12 @@ partial class JEnvironment
 		/// <returns>A <typeparamref name="TDelegate"/> instance.</returns>
 		public TDelegate GetDelegate<TDelegate>() where TDelegate : Delegate
 		{
-			ValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
-			ValidationUtilities.ThrowIfInvalidVirtualMachine(this.VirtualMachine.IsAlive);
-			ValidationUtilities.ThrowIfNotAttached(this._env.IsAttached);
+			ImplementationValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
+			ImplementationValidationUtilities.ThrowIfInvalidVirtualMachine(this.VirtualMachine.IsAlive);
+			ImplementationValidationUtilities.ThrowIfNotAttached(this._env.IsAttached);
 			Type typeOfT = typeof(TDelegate);
 			JniDelegateInfo info = EnvironmentCache.delegateIndex[typeOfT];
-			ValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
+			ImplementationValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
 			IntPtr ptr = this.GetPointer(info.Index);
 			return this._delegateCache.GetDelegate<TDelegate>(ptr);
 		}
@@ -102,7 +102,7 @@ partial class JEnvironment
 			if (this.Thrown == throwableException) return;
 			try
 			{
-				ValidationUtilities.ThrowIfProxy(throwableException?.Global);
+				ImplementationValidationUtilities.ThrowIfProxy(throwableException?.Global);
 				this.ThrowJniException(throwableException as JniException, throwException);
 			}
 			finally
@@ -113,7 +113,7 @@ partial class JEnvironment
 				}
 				else
 				{
-					ValidationUtilities.ThrowIfDefault(throwableException.Global);
+					ImplementationValidationUtilities.ThrowIfDefault(throwableException.Global);
 					this.Throw(throwableException.Global.As<JThrowableLocalRef>());
 				}
 			}

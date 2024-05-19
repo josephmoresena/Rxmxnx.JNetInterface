@@ -54,7 +54,7 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static explicit operator JInt(JObject jObj)
-		=> ValidationUtilities.ThrowIfInvalidCast<Int32>(jObj as IConvertible);
+		=> CommonValidationUtilities.ThrowIfInvalidCast<Int32>(jObj as IConvertible);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static implicit operator JInt(Int32 value) => new(value);

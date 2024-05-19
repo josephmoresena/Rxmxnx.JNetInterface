@@ -80,7 +80,7 @@ public partial class JEnumObject
 		/// <returns>A new <see cref="TypeMetadataBuilder{TEnum}"/> instance.</returns>
 		public static TypeMetadataBuilder<TEnum> Create(ReadOnlySpan<Byte> className)
 		{
-			ValidationUtilities.ValidateNotEmpty(className);
+			CommonValidationUtilities.ValidateNotEmpty(className);
 			ISet<Type> interfaceTypes = IReferenceType<TEnum>.GetInterfaceTypes().ToHashSet();
 			return new(className, interfaceTypes);
 		}

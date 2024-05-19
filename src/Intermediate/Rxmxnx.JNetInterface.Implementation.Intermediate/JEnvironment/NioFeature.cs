@@ -61,7 +61,7 @@ partial class JEnvironment
 		}
 		public IntPtr GetDirectAddress(JBufferObject buffer)
 		{
-			ValidationUtilities.ThrowIfProxy(buffer);
+			ImplementationValidationUtilities.ThrowIfProxy(buffer);
 			GetDirectBufferAddressDelegate getDirectBufferAddress = this.GetDelegate<GetDirectBufferAddressDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(buffer);
@@ -71,7 +71,7 @@ partial class JEnvironment
 		}
 		public Int64 GetDirectCapacity(JBufferObject buffer)
 		{
-			ValidationUtilities.ThrowIfProxy(buffer);
+			ImplementationValidationUtilities.ThrowIfProxy(buffer);
 			GetDirectBufferCapacityDelegate getDirectBufferCapacity =
 				this.GetDelegate<GetDirectBufferCapacityDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);

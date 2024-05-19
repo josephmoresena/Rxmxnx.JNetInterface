@@ -12,7 +12,7 @@ partial class JEnvironment
 		/// <param name="value">Object instance.</param>
 		private void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
 		{
-			ValidationUtilities.ThrowIfProxy(value);
+			ImplementationValidationUtilities.ThrowIfProxy(value);
 			jArray.ValidateObjectElement(value);
 			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
@@ -42,7 +42,7 @@ partial class JEnvironment
 		/// <returns>The index of <paramref name="item"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
 		private Int32 IndexOfObject(JArrayObject jArray, JReferenceObject? item)
 		{
-			ValidationUtilities.ThrowIfProxy(item);
+			ImplementationValidationUtilities.ThrowIfProxy(item);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			JObjectLocalRef localRef = jniTransaction.Add(item);

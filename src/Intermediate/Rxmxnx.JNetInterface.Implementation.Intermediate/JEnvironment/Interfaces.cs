@@ -58,8 +58,8 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 				JEnvironment.EqualEquatable(jOther as IEquatable<JPrimitiveObject>, jObject as JPrimitiveObject) ??
 				false;
 
-		ValidationUtilities.ThrowIfProxy(jRefObj);
-		ValidationUtilities.ThrowIfProxy(jRefOther);
+		ImplementationValidationUtilities.ThrowIfProxy(jRefObj);
+		ImplementationValidationUtilities.ThrowIfProxy(jRefOther);
 		using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction(2);
 		JObjectLocalRef localRef = jniTransaction.Add(jRefObj);
 		JObjectLocalRef otherLocalRef = jniTransaction.Add(jRefOther);

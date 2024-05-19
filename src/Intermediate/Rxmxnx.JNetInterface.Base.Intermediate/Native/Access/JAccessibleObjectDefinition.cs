@@ -107,7 +107,7 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <returns><paramref name="signature"/> if is a valid signature.</returns>
 	protected static ReadOnlySpan<Byte> ValidateSignature(ReadOnlySpan<Byte> signature)
 	{
-		ValidationUtilities.ThrowIfInvalidSignature(signature, false);
+		CommonValidationUtilities.ThrowIfInvalidSignature(signature, false);
 		return signature;
 	}
 }

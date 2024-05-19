@@ -16,6 +16,6 @@ public partial class JLocalObject
 		/// <summary>
 		/// Parameterless constructor.
 		/// </summary>
-		protected Uninstantiable() : base(ValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>()) { }
+		protected Uninstantiable() : base(CommonValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>()) { }
 	}
 }

@@ -45,7 +45,7 @@ public partial class JVirtualMachine
 			this._cache.ClearCache();
 			DestroyVirtualMachineDelegate destroyVirtualMachine =
 				this._cache.GetDelegate<DestroyVirtualMachineDelegate>();
-			ValidationUtilities.ThrowIfInvalidResult(destroyVirtualMachine(this._cache.Reference));
+			ImplementationValidationUtilities.ThrowIfInvalidResult(destroyVirtualMachine(this._cache.Reference));
 			this._isDisposed.Value = true;
 			JVirtualMachine.RemoveVirtualMachine(this._cache.Reference);
 		}

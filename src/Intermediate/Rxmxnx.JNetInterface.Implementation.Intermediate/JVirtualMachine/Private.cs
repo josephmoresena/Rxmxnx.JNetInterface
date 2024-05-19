@@ -40,7 +40,7 @@ public partial class JVirtualMachine
 	private IThread AttachThread(ThreadCreationArgs args)
 	{
 		CString threadName = args.Name ?? CString.Zero;
-		ValidationUtilities.ThrowIfProxy(args.ThreadGroup);
+		ImplementationValidationUtilities.ThrowIfProxy(args.ThreadGroup);
 		if (this.GetEnvironment() is { } env) return new JEnvironment.JThread(env);
 		return threadName.WithSafeFixed((this, args), JVirtualMachine.AttachThread);
 	}
@@ -67,7 +67,7 @@ public partial class JVirtualMachine
 		using INativeTransaction jniTransaction = args.vm.CreateTransaction(1);
 		JVirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, name, args.args);
 		JResult result = JVirtualMachine.AttachThread(args.vm, args.args.IsDaemon, arg, out JEnvironmentRef envRef);
-		ValidationUtilities.ThrowIfInvalidResult(result);
+		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		JEnvironment env = args.vm._cache.ThreadCache.Get(envRef, out _, args.args);
 		return (IThread)env;
 	}
