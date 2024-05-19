@@ -88,16 +88,15 @@ public sealed class PrimitiveArrayTests
 		using JArrayObject<TPrimitive> jArray = new(jArrayClass, arrayRef, length);
 
 		Assert.Equal(length, jArray.ToArray().Length);
-		env.ArrayFeature.Received(1).GetCopy(jArray, 0, Arg.Is<Memory<TPrimitive>>(m => m.Length == length));
+		env.ArrayFeature.Received(1).GetCopy(jArray, Arg.Any<IFixedMemory<TPrimitive>>());
 		env.ArrayFeature.ClearReceivedCalls();
 
 		Assert.Equal(length - startIndex, jArray.ToArray(startIndex).Length);
-		env.ArrayFeature.Received(1).GetCopy(jArray, startIndex,
-		                                     Arg.Is<Memory<TPrimitive>>(m => m.Length == length - startIndex));
+		env.ArrayFeature.Received(1).GetCopy(jArray, Arg.Any<IFixedMemory<TPrimitive>>(), startIndex);
 		env.ArrayFeature.ClearReceivedCalls();
 
 		Assert.Equal(count, jArray.ToArray(startIndex, count).Length);
-		env.ArrayFeature.Received(1).GetCopy(jArray, startIndex, Arg.Is<Memory<TPrimitive>>(m => m.Length == count));
+		env.ArrayFeature.Received(1).GetCopy(jArray, Arg.Any<IFixedMemory<TPrimitive>>(), startIndex);
 		env.ArrayFeature.ClearReceivedCalls();
 	}
 	private static void SetTest<TPrimitive>() where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -114,7 +113,7 @@ public sealed class PrimitiveArrayTests
 		using JArrayObject<TPrimitive> jArray = new(jArrayClass, arrayRef, length);
 
 		jArray.Set(valuesToSet, startIndex);
-		env.ArrayFeature.SetCopy(jArray, valuesToSet.AsMemory(), startIndex);
+		env.ArrayFeature.Received(1).SetCopy(jArray, Arg.Any<IReadOnlyFixedMemory<TPrimitive>>(), startIndex);
 	}
 	private static void MemoryTest<TPrimitive>() where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{

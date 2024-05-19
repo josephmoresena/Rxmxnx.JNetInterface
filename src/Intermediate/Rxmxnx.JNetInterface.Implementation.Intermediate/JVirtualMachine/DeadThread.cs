@@ -33,10 +33,10 @@ public partial class JVirtualMachine
 		void IArrayFeature.CopyTo<TElement>(JArrayObject<TElement> jArray, TElement?[] array, Int32 arrayIndex)
 			where TElement : default
 			=> DeadThread.ThrowInvalidResult<Byte>();
-		void IArrayFeature.GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex,
-			Memory<TPrimitive> elements)
+		void IArrayFeature.GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<TPrimitive> elements,
+			Int32 startIndex)
 			=> DeadThread.ThrowInvalidResult<Byte>();
-		void IArrayFeature.SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements,
+		void IArrayFeature.SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlySpan<TPrimitive> elements,
 			Int32 startIndex)
 			=> DeadThread.ThrowInvalidResult<Byte>();
 		INativeMemoryAdapter IArrayFeature.GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
@@ -181,7 +181,7 @@ public partial class JVirtualMachine
 		}
 		void IStringFeature.GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex)
 			=> DeadThread.ThrowInvalidResult<Byte>();
-		void IStringFeature.GetCopyUtf8(JStringObject jString, Memory<Byte> utf8Units, Int32 startIndex)
+		void IStringFeature.GetUtf8Copy(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex)
 			=> DeadThread.ThrowInvalidResult<Byte>();
 		INativeMemoryAdapter IStringFeature.GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 			=> DeadThread.ThrowInvalidResult<INativeMemoryAdapter>();

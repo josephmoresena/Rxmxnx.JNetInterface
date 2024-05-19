@@ -146,15 +146,10 @@ partial class JEnvironment
 			chars.WithSafeFixed((this, jString, startIndex), EnvironmentCache.GetStringRegion);
 			this.CheckJniError();
 		}
-		public void GetCopyUtf8(JStringObject jString, Memory<Byte> utf8Units, Int32 startIndex = 0)
+		public void GetUtf8Copy(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex = 0)
 		{
 			ValidationUtilities.ThrowIfProxy(jString);
-			GetStringUtfRegionDelegate getStringUtfRegion = this.GetDelegate<GetStringUtfRegionDelegate>();
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JStringLocalRef stringRef = jniTransaction.Add(jString);
-			using IFixedContext<Byte>.IDisposable fixedMemory = utf8Units.GetFixedContext();
-			getStringUtfRegion(this.Reference, stringRef, startIndex, utf8Units.Length,
-			                   (ValPtr<Byte>)fixedMemory.Pointer);
+			utf8Units.WithSafeFixed((this, jString, startIndex), EnvironmentCache.GetStringUtf8Region);
 			this.CheckJniError();
 		}
 	}

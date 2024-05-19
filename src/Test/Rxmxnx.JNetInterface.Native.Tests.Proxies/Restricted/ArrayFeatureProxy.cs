@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests.Restricted;
 
 [ExcludeFromCodeCoverage]
-public abstract class ArrayFeatureProxy : IArrayFeature
+public abstract partial class ArrayFeatureProxy : IArrayFeature
 {
 	public abstract JArrayObject<TElement> CreateArray<TElement>(Int32 length)
 		where TElement : IObject, IDataType<TElement>;
@@ -16,10 +16,6 @@ public abstract class ArrayFeatureProxy : IArrayFeature
 		where TElement : IObject, IDataType<TElement>;
 	public abstract void CopyTo<TElement>(JArrayObject<TElement> jArray, TElement?[] array, Int32 arrayIndex)
 		where TElement : IObject, IDataType<TElement>;
-	public abstract void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex,
-		Memory<TPrimitive> elements) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
-	public abstract void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements,
-		Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	public abstract INativeMemoryAdapter GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 		JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	public abstract INativeMemoryAdapter GetCriticalSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
@@ -30,4 +26,8 @@ public abstract class ArrayFeatureProxy : IArrayFeature
 	public abstract void ReleasePrimitiveSequence<TPrimitive>(JArrayLocalRef arrayRef, IntPtr pointer,
 		JReleaseMode mode) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 	public abstract void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr);
+	public abstract void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, IFixedMemory<TPrimitive> elements,
+		Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+	public abstract void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, IReadOnlyFixedMemory<TPrimitive> elements,
+		Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
 }

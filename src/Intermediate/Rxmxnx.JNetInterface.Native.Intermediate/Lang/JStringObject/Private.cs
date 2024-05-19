@@ -47,12 +47,20 @@ public partial class JStringObject
 	/// Retrieves UTF-16 chars.
 	/// </summary>
 	/// <param name="chars">Span to copy chars to.</param>
+	/// <param name="startIndex">Initial UTF-16 char to copy from.</param>
+	private void GetChars(Span<Char> chars, Int32 startIndex)
+	{
+		IEnvironment env = this.Environment;
+		env.StringFeature.GetCopy(this, chars, startIndex);
+	}
+
+	/// <summary>
+	/// Retrieves UTF-16 chars.
+	/// </summary>
+	/// <param name="chars">Span to copy chars to.</param>
 	/// <param name="arg">Operation arguments.</param>
 	private static void GetChars(Span<Char> chars, (JStringObject jStr, Int32 startIndex) arg)
-	{
-		IEnvironment env = arg.jStr.Environment;
-		env.StringFeature.GetCopy(arg.jStr, chars, arg.startIndex);
-	}
+		=> arg.jStr.GetChars(chars, arg.startIndex);
 
 	static JStringObject IClassType<JStringObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer.WithClass<JStringObject>());

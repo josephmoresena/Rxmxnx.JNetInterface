@@ -219,22 +219,18 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Int32 startIndex, Memory<TPrimitive> elements)
+		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<TPrimitive> elements, Int32 startIndex)
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ValidationUtilities.ThrowIfProxy(jArray);
-			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			using IFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
-			this.GetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);
+			elements.WithSafeFixed((this, jArray, startIndex), EnvironmentCache.GetPrimitiveArrayRegion);
 			this.CheckJniError();
 		}
-		public void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlyMemory<TPrimitive> elements,
+		public void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlySpan<TPrimitive> elements,
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ValidationUtilities.ThrowIfProxy(jArray);
-			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			using IReadOnlyFixedContext<TPrimitive>.IDisposable fixedMemory = elements.GetFixedContext();
-			this.SetPrimitiveArrayRegion(jArray, metadata.Signature, fixedMemory, startIndex, elements.Length);
+			elements.WithSafeFixed((this, jArray, startIndex), EnvironmentCache.SetPrimitiveArrayRegion);
 			this.CheckJniError();
 		}
 	}

@@ -427,5 +427,22 @@ partial class JEnvironment
 				initialElement.CopyTo(arrayRegion.Bytes, ref offset);
 			this.SetPrimitiveArrayRegion(jArray, metadata.Signature, arrayRegion, 0, jArray.Length);
 		}
+
+		private static void GetPrimitiveArrayRegion<TPrimitive>(in IFixedContext<TPrimitive> ctx,
+			(EnvironmentCache cache, JArrayObject<TPrimitive> jArray, Int32 startIndex) args)
+			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		{
+			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			args.cache.GetPrimitiveArrayRegion(args.jArray, metadata.Signature, ctx, args.startIndex,
+			                                   ctx.Values.Length);
+		}
+		private static void SetPrimitiveArrayRegion<TPrimitive>(in IReadOnlyFixedContext<TPrimitive> ctx,
+			(EnvironmentCache cache, JArrayObject<TPrimitive> jArray, Int32 startIndex) args)
+			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		{
+			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			args.cache.SetPrimitiveArrayRegion(args.jArray, metadata.Signature, ctx, args.startIndex,
+			                                   ctx.Values.Length);
+		}
 	}
 }
