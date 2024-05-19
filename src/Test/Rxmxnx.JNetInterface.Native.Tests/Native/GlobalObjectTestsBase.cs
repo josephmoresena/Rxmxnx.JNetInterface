@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Tests.Native;
 
+[ExcludeFromCodeCoverage]
 public abstract class GlobalObjectTestsBase
 {
 	protected static readonly IFixture Fixture = new Fixture().RegisterReferences();

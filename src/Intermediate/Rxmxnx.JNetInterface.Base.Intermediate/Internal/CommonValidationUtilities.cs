@@ -159,56 +159,6 @@ internal static class CommonValidationUtilities
 			throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="value"/> named <paramref name="nameofValue"/> is not null-terminated
-	/// UTF-8 string.
-	/// </summary>
-	/// <param name="value">A UTF-8 string.</param>
-	/// <param name="nameofValue">The name of <paramref name="value"/>.</param>
-	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="value"/> named <paramref name="nameofValue"/> is not null-terminated
-	/// UTF-8 string.
-	/// </exception>
-	public static void ThrowIfNotNullTerminatedCString(CString value,
-		[CallerArgumentExpression(nameof(value))] String nameofValue = "")
-	{
-		if (!value.IsNullTerminated)
-			throw new InvalidOperationException($"{nameofValue} must be null-terminated UTF-8 string.");
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="value"/> named <paramref name="paramName"/> is not null-terminated
-	/// UTF-8 string.
-	/// </summary>
-	/// <param name="value">A UTF-8 string.</param>
-	/// <param name="paramName">The name of <paramref name="value"/>.</param>
-	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="value"/> named <paramref name="paramName"/> is not null-terminated
-	/// UTF-8 string.
-	/// </exception>
-	public static CString ValidateNullTermination(CString? value,
-		[CallerArgumentExpression(nameof(value))] String paramName = "")
-	{
-		ArgumentNullException.ThrowIfNull(value, paramName);
-		if (!value.IsNullTerminated)
-			throw new InvalidOperationException($"{paramName} must be null-terminated UTF-8 string.");
-		return value;
-	}
-	/// <summary>
-	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
-	/// </summary>
-	/// <param name="value">A UTF-8 string.</param>
-	/// <param name="paramName">The name of <paramref name="value"/>.</param>
-	/// <returns>A non-empty <see cref="CString"/> instance.</returns>
-	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
-	/// </exception>
-	public static CString ValidateNotEmpty(CString? value,
-		[CallerArgumentExpression(nameof(value))] String paramName = "")
-	{
-		if (CString.IsNullOrEmpty(value))
-			throw new InvalidOperationException($"{paramName} must be non-empty string");
-		return value;
-	}
-	/// <summary>
 	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
 	/// </summary>
 	/// <param name="value">A UTF-8 string.</param>
@@ -223,16 +173,6 @@ internal static class CommonValidationUtilities
 		if (value.IsEmpty)
 			throw new InvalidOperationException($"{paramName} must be non-empty string");
 		return value;
-	}
-	/// <summary>
-	/// Throws an exception if current sequence is not valid.
-	/// </summary>
-	/// <param name="isInvalid">Indicates whether current instance is invalid valid.</param>
-	/// <exception cref="InvalidOperationException">Throws an exception if current sequence is not valid.</exception>
-	public static void ThrowIfInvalidSequence(IWrapper<Boolean> isInvalid)
-	{
-		if (isInvalid.Value)
-			throw new InvalidOperationException("The sequence is no longer valid.");
 	}
 
 	/// <summary>
