@@ -111,22 +111,25 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	}
 	/// <summary>
 	/// Retrieves a copy of the UTF-16 chars from the current <see cref="JStringObject"/> into
-	/// <paramref name="mem"/>.
+	/// <paramref name="chars"/>.
 	/// </summary>
-	/// <param name="mem">A <see cref="Memory{Char}"/> to copy to.</param>
+	/// <param name="chars">A <see cref="Span{Char}"/> to copy to.</param>
 	/// <param name="startIndex">Initial UTF-16 char to copy from.</param>
-	[ExcludeFromCodeCoverage]
-	public void Get(Span<Char> mem, Int32 startIndex = 0) => this.GetChars(mem, startIndex);
-	/// <summary>
-	/// Retrieves a copy of the UTF-8 chars from the current <see cref="JStringObject"/> into
-	/// <paramref name="mem"/>.
-	/// </summary>
-	/// <param name="mem">A <see cref="Span{Byte}"/> to copy to.</param>
-	/// <param name="startIndex">Initial UTF-8 char to copy from.</param>
-	public void GetUtf8(Span<Byte> mem, Int32 startIndex = 0)
+	public void Get(Span<Char> chars, Int32 startIndex = 0)
 	{
 		IEnvironment env = this.Environment;
-		env.StringFeature.GetUtf8Copy(this, mem, startIndex);
+		env.StringFeature.GetCopy(this, chars, startIndex);
+	}
+	/// <summary>
+	/// Retrieves a copy of the UTF-8 chars from the current <see cref="JStringObject"/> into
+	/// <paramref name="utf8Units"/>.
+	/// </summary>
+	/// <param name="utf8Units">A <see cref="Span{Byte}"/> to copy to.</param>
+	/// <param name="startIndex">Initial UTF-8 char to copy from.</param>
+	public void GetUtf8(Span<Byte> utf8Units, Int32 startIndex = 0)
+	{
+		IEnvironment env = this.Environment;
+		env.StringFeature.GetUtf8Copy(this, utf8Units, startIndex);
 	}
 	/// <inheritdoc cref="String.GetEnumerator()"/>
 	public CharEnumerator GetEnumerator() => this.Value.GetEnumerator();
