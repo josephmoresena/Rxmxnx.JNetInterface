@@ -30,7 +30,7 @@ public partial record JPrimitiveTypeMetadata
 #if PACKAGE
 		/// <inheritdoc/>
 		public override JArrayTypeMetadata GetArrayMetadata() 
-			=> ValidationUtilities.ThrowVoidArray();
+			=> CommonValidationUtilities.ThrowVoidArray();
 #endif
 		/// <inheritdoc/>
 		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes)
