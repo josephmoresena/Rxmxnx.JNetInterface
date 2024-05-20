@@ -8,11 +8,11 @@ public interface IDataType
 	/// <summary>
 	/// Datatype kind.
 	/// </summary>
-	internal static virtual JTypeKind Kind => JTypeKind.Undefined;
+	internal static abstract JTypeKind Kind { get; }
 	/// <summary>
 	/// Datatype family type.
 	/// </summary>
-	internal static virtual Type? FamilyType => default;
+	internal static abstract Type? FamilyType { get; }
 
 	/// <summary>
 	/// Retrieves the metadata for given type.
@@ -45,6 +45,5 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 	/// Current type metadata.
 	/// </summary>
 	[ReadOnly(true)]
-	internal static virtual JDataTypeMetadata Metadata
-		=> CommonValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));
+	internal static abstract JDataTypeMetadata Metadata { get; }
 }

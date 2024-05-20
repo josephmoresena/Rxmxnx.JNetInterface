@@ -126,6 +126,10 @@ public sealed class ReferenceObjectTests
 
 	private abstract class DataTypeProxy : JReferenceObject, IDataType<DataTypeProxy>
 	{
+		static JTypeKind IDataType.Kind => JTypeKind.Undefined;
+		static Type? IDataType.FamilyType => default;
+		static JDataTypeMetadata IDataType<DataTypeProxy>.Metadata => throw new();
+
 		protected DataTypeProxy(Boolean isProxy) : base(isProxy) { }
 		protected DataTypeProxy(JReferenceObject jObject) : base(jObject) { }
 	}

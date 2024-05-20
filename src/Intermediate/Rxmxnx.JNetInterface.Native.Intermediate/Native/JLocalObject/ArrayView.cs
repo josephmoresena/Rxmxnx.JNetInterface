@@ -13,6 +13,9 @@ public partial class JLocalObject
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	public abstract partial class ArrayView : View<JArrayObject>, IDataType, IDisposable
 	{
+		static JTypeKind IDataType.Kind => JTypeKind.Array;
+		static Type? IDataType.FamilyType => typeof(JArrayObject);
+
 		/// <summary>
 		/// Array length.
 		/// </summary>
