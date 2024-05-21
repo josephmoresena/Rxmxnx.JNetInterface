@@ -193,10 +193,10 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		this._arrayDimension = classMetadata.ArrayDimension;
 	}
 	/// <inheritdoc/>
-	public override String ToString() => $"{this.Name} {this.Reference}";
+	public override String ToString() => JObject.GetObjectIdentifier(this.Name, this.Reference);
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
-	public override String ToTraceText() => $"{this.Name} {this.Reference} hash: {this.Hash}";
+	public override String ToTraceText() => $"{this} hash: {this.Hash}";
 
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.

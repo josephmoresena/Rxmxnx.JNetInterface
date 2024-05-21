@@ -63,7 +63,7 @@ public abstract partial class JNumberObject<TValue, TNumber> : JNumberObject<TVa
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override String ToTraceText()
-		=> $"{this.Class.Name} {this.Reference} {IPrimitiveType.GetMetadata<TValue>().Signature}: {this.Value}";
+		=> $"{JObject.GetObjectIdentifier(this.Class.Name, this.Reference)} {IPrimitiveType.GetMetadata<TValue>().Signature}: {this.Value}";
 
 	/// <inheritdoc cref="IPrimitiveWrapperType{TNumber, TValue}.Create(IEnvironment, Nullable{TValue})"/>
 	[return: NotNullIfNotNull(nameof(value))]

@@ -51,7 +51,8 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	public override String ToString() => this.Value;
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
-	public override String ToTraceText() => $"{this.Class.Name} {this.Reference} length: {this.Length}";
+	public override String ToTraceText()
+		=> $"{JObject.GetObjectIdentifier(this.Class.Name, this.Reference)} length: {this.Length}";
 
 	/// <summary>
 	/// Creates an <see cref="String"/> containing a copy of the UTF-16 chars on the current

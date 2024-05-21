@@ -49,7 +49,18 @@ public partial class JLocalObject
 			public override String ToString() => $"{this.GetStringValue()} {this.Reference}";
 			/// <inheritdoc/>
 			public override String ToTraceText()
-				=> $"{this.Class.Name} length: {this.Length} {this.GetReferenceText()}";
+				=> $"{this.TypeMetadata.ElementMetadata.Signature[0] switch
+				{
+					UnicodePrimitiveSignatures.BooleanSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JBooleanArrayLocalRef>()),
+					UnicodePrimitiveSignatures.ByteSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JByteArrayLocalRef>()),
+					UnicodePrimitiveSignatures.CharSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JCharArrayLocalRef>()),
+					UnicodePrimitiveSignatures.DoubleSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JDoubleArrayLocalRef>()),
+					UnicodePrimitiveSignatures.FloatSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JFloatArrayLocalRef>()),
+					UnicodePrimitiveSignatures.IntSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JIntArrayLocalRef>()),
+					UnicodePrimitiveSignatures.LongSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JLongArrayLocalRef>()),
+					UnicodePrimitiveSignatures.ShortSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JShortArrayLocalRef>()),
+					_ => JObject.GetObjectIdentifier(this.Class.Name, this.As<JObjectArrayLocalRef>()),
+				}} length: {this.Length}";
 
 			/// <inheritdoc cref="Object.ToString()"/>
 			private String GetStringValue()
@@ -69,23 +80,6 @@ public partial class JLocalObject
 				}
 				return this._stringValue;
 			}
-			/// <summary>
-			/// Returns a <see cref="String"/> that represents the current reference.
-			/// </summary>
-			/// <returns>A <see cref="String"/> that represents the current object.</returns>
-			private String GetReferenceText()
-				=> this.TypeMetadata.ElementMetadata.Signature[0] switch
-				{
-					UnicodePrimitiveSignatures.BooleanSignatureChar => this.As<JBooleanArrayLocalRef>().ToString(),
-					UnicodePrimitiveSignatures.ByteSignatureChar => this.As<JByteArrayLocalRef>().ToString(),
-					UnicodePrimitiveSignatures.CharSignatureChar => this.As<JCharArrayLocalRef>().ToString(),
-					UnicodePrimitiveSignatures.DoubleSignatureChar => this.As<JDoubleArrayLocalRef>().ToString(),
-					UnicodePrimitiveSignatures.FloatSignatureChar => this.As<JFloatArrayLocalRef>().ToString(),
-					UnicodePrimitiveSignatures.IntSignatureChar => this.As<JIntArrayLocalRef>().ToString(),
-					UnicodePrimitiveSignatures.LongSignatureChar => this.As<JLongArrayLocalRef>().ToString(),
-					UnicodePrimitiveSignatures.ShortSignatureChar => this.As<JShortArrayLocalRef>().ToString(),
-					_ => this.As<JObjectArrayLocalRef>().ToString(),
-				};
 		}
 	}
 }
