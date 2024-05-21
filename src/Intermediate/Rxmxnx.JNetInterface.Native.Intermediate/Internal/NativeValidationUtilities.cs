@@ -18,22 +18,22 @@ internal static class NativeValidationUtilities
 			throw new InvalidOperationException($"{classTypeMetadata.ClassName} is an abstract type.");
 	}
 	/// <summary>
-	/// Throws an exception if <typeparamref name="TInterface"/> can't extend <typeparamref name="TOtherInterface"/>.
+	/// Throws an exception if <paramref name="interfaceName"/> can't extend an interface whose super-interfaces are
+	/// <paramref name="superInterfacesSet"/>.
 	/// </summary>
-	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/>.</typeparam>
-	/// <typeparam name="TOtherInterface">Type of <see cref="IInterfaceType{TOtherInterface}"/>.</typeparam>
 	/// <param name="interfaceName">Name of implementing type.</param>
+	/// <param name="interfaceType">Type of implementing type.</param>
+	/// <param name="superInterfacesSet">Super-interfaces type set of super interface.</param>
 	/// <exception cref="ArgumentException">
-	/// Throws an exception if <typeparamref name="TInterface"/> can't extend <typeparamref name="TOtherInterface"/>.
+	/// Throws an exception if <paramref name="interfaceName"/> can't extend an interface whose super-interfaces are
+	/// <paramref name="superInterfacesSet"/>.
 	/// </exception>
-	public static void ThrowIfInvalidExtension<TInterface, TOtherInterface>(ReadOnlySpan<Byte> interfaceName)
-		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
-		where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
+	public static void ThrowIfInvalidExtension(ReadOnlySpan<Byte> interfaceName, Type interfaceType,
+		IReadOnlySet<Type> superInterfacesSet)
 	{
-		Type currentInterfaceType = typeof(IInterfaceObject<TInterface>);
-		foreach (Type interfaceType in IReferenceType<TOtherInterface>.GetInterfaceTypes())
+		foreach (Type superInterfaceType in superInterfacesSet)
 		{
-			if (interfaceType == currentInterfaceType)
+			if (superInterfaceType == interfaceType)
 				throw new InvalidOperationException(
 					$"{interfaceName.ToCString()} type can't extend an interface type which extends it.");
 		}
@@ -53,24 +53,23 @@ internal static class NativeValidationUtilities
 			throw new InvalidOperationException($"{className.ToCString()} class and super class can't be the same.");
 	}
 	/// <summary>
-	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
+	/// Throws an exception if <paramref name="className"/> can't extend a class whose super-classes are
+	/// <paramref name="baseBaseTypes"/>.
 	/// </summary>
-	/// <typeparam name="TBase">Base type of <typeparamref name="TReference"/>.</typeparam>
-	/// <typeparam name="TReference">Type of <see cref="IReferenceType{TReference}"/>.</typeparam>
-	/// <param name="typeName">Name of <see cref="IReferenceType{TReference}"/> type.</param>
+	/// <param name="className">Class name.</param>
+	/// <param name="baseTypes">Class base types.</param>
+	/// <param name="baseBaseTypes">Base calss base types.</param>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
+	/// Throws an exception if <paramref name="className"/> can't extend a class whose super-classes are
+	/// <paramref name="baseBaseTypes"/>.
 	/// </exception>
-	public static void ValidateBaseTypes<TBase, TReference>(ReadOnlySpan<Byte> typeName)
-		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
+	public static void ValidateBaseTypes(ReadOnlySpan<Byte> className, IReadOnlySet<Type> baseTypes,
+		IReadOnlySet<Type> baseBaseTypes)
 	{
-		HashSet<Type> baseBaseTypes = IReferenceType<TBase>.GetBaseTypes().ToHashSet();
-		HashSet<Type> baseTypes = IReferenceType<TReference>.GetBaseTypes().ToHashSet();
 		if (!baseTypes.IsProperSupersetOf(baseBaseTypes))
 			throw new InvalidOperationException(
-				$"{typeName.ToCString()} type can't be based on a type which is derived from it.");
+				$"{className.ToCString()} type can't be based on a type which is derived from it.");
 	}
-
 	/// <summary>
 	/// Throws an exception if current data type is annotation.
 	/// </summary>

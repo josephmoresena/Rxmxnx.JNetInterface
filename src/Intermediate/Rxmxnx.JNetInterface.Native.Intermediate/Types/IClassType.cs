@@ -27,6 +27,26 @@ public interface IClassType<TClass> : IClassType, IReferenceType<TClass>
 	where TClass : JReferenceObject, IClassType<TClass>
 {
 	/// <summary>
+	/// Cached type interface set.
+	/// </summary>
+	private static readonly WeakReference<BaseTypeSet<TClass>?> typeBaseTypeSet = new(default);
+
+	/// <summary>
+	/// Retrieves current type base type set.
+	/// </summary>
+	public static IReadOnlySet<Type> TypeBaseTypes
+	{
+		get
+		{
+			if (IClassType<TClass>.typeBaseTypeSet.TryGetTarget(out BaseTypeSet<TClass>? result))
+				return result;
+			result = new();
+			IClassType<TClass>.typeBaseTypeSet.SetTarget(result);
+			return result;
+		}
+	}
+
+	/// <summary>
 	/// Current type metadata.
 	/// </summary>
 	[ReadOnly(true)]

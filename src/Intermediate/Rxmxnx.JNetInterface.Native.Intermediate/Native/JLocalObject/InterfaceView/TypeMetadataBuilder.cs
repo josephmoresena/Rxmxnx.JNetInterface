@@ -18,18 +18,23 @@ public partial class JLocalObject
 			/// A <see cref="JLocalObject.TypeMetadataBuilder"/> instance.
 			/// </summary>
 			private TypeMetadataBuilder _builder;
+			/// <summary>
+			/// Interface type.
+			/// </summary>
+			private readonly Type _interfaceType;
 
 			/// <summary>
 			/// Constructor.
 			/// </summary>
 			/// <param name="interfaceName">Interface name of the current type.</param>
 			/// <param name="interfaceTypes">Interface types.</param>
-			private TypeMetadataBuilder(ReadOnlySpan<Byte> interfaceName, ISet<Type> interfaceTypes)
+			private TypeMetadataBuilder(ReadOnlySpan<Byte> interfaceName, IReadOnlySet<Type> interfaceTypes)
 			{
 				JTypeKind typeKind = TInterface.FamilyType == typeof(InterfaceView) ?
 					JTypeKind.Interface :
 					JTypeKind.Annotation;
 				this._builder = new(interfaceName, typeKind, interfaceTypes);
+				this._interfaceType = typeof(IInterfaceObject<TInterface>);
 			}
 
 			/// <summary>
@@ -40,8 +45,9 @@ public partial class JLocalObject
 			public TypeMetadataBuilder<TInterface> Extends<TOtherInterface>()
 				where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
 			{
-				NativeValidationUtilities.ThrowIfInvalidExtension<TInterface, TOtherInterface>(
-					this._builder.DataTypeName);
+				IReadOnlySet<Type> superInterfacesType = IReferenceType<TOtherInterface>.TypeInterfaces;
+				NativeValidationUtilities.ThrowIfInvalidExtension(this._builder.DataTypeName, this._interfaceType,
+				                                                  superInterfacesType);
 				this._builder.AppendInterface<TOtherInterface>();
 				return this;
 			}
@@ -59,7 +65,7 @@ public partial class JLocalObject
 			public static TypeMetadataBuilder<TInterface> Create(ReadOnlySpan<Byte> className)
 			{
 				CommonValidationUtilities.ValidateNotEmpty(className);
-				ISet<Type> interfaceTypes = IReferenceType<TInterface>.GetInterfaceTypes().ToHashSet();
+				IReadOnlySet<Type> interfaceTypes = IReferenceType<TInterface>.TypeInterfaces;
 				return new(className, interfaceTypes);
 			}
 		}

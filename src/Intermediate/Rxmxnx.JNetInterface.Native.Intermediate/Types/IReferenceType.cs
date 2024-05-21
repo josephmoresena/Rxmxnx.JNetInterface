@@ -31,34 +31,29 @@ public interface IReferenceType<out TReference> : IReferenceType, IDataType<TRef
 	where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>
+	/// Cached type interface set.
+	/// </summary>
+	private static readonly WeakReference<TypeInterfaceSet<TReference>?> typeInterfaces = new(default);
+
+	/// <summary>
+	/// Retrieves current type interfaces set.
+	/// </summary>
+	public static IReadOnlySet<Type> TypeInterfaces
+	{
+		get
+		{
+			if (IReferenceType<TReference>.typeInterfaces.TryGetTarget(out TypeInterfaceSet<TReference>? result))
+				return result;
+			result = new();
+			IReferenceType<TReference>.typeInterfaces.SetTarget(result);
+			return result;
+		}
+	}
+
+	/// <summary>
 	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.
 	/// </summary>
 	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
 	protected static abstract TReference Create(ObjectInitializer initializer);
-
-	/// <summary>
-	/// Retrieves the base types from current type.
-	/// </summary>
-	/// <returns>Enumerable of types.</returns>
-	internal static IEnumerable<Type> GetBaseTypes()
-	{
-		Type? currentType = typeof(TReference).BaseType;
-		while (currentType is not null && currentType != typeof(JReferenceObject))
-		{
-			yield return currentType;
-			currentType = currentType.BaseType;
-		}
-	}
-	/// <summary>
-	/// Retrieves the interfaces types from current type.
-	/// </summary>
-	/// <returns>Enumerable of types.</returns>
-	[UnconditionalSuppressMessage("Trim analysis", "IL2090")]
-	internal static IEnumerable<Type> GetInterfaceTypes()
-	{
-		Type[] interfaceTypes = typeof(TReference).GetInterfaces();
-		foreach (Type interfaceType in interfaceTypes)
-			yield return interfaceType;
-	}
 }

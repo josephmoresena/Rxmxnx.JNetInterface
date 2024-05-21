@@ -26,7 +26,7 @@ public partial class JEnumObject
 		/// </summary>
 		/// <param name="enumTypeName">Enum name of the current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		private TypeMetadataBuilder(ReadOnlySpan<Byte> enumTypeName, ISet<Type> interfaceTypes)
+		private TypeMetadataBuilder(ReadOnlySpan<Byte> enumTypeName, IReadOnlySet<Type> interfaceTypes)
 		{
 			this._builder = new(enumTypeName, JTypeKind.Enum, interfaceTypes);
 			this._enumFields = new();
@@ -81,7 +81,7 @@ public partial class JEnumObject
 		public static TypeMetadataBuilder<TEnum> Create(ReadOnlySpan<Byte> className)
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			ISet<Type> interfaceTypes = IReferenceType<TEnum>.GetInterfaceTypes().ToHashSet();
+			IReadOnlySet<Type> interfaceTypes = IReferenceType<TEnum>.TypeInterfaces;
 			return new(className, interfaceTypes);
 		}
 	}

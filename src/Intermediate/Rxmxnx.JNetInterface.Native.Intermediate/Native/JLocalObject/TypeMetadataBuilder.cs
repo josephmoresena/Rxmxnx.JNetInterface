@@ -12,7 +12,7 @@ public partial class JLocalObject
 		/// <summary>
 		/// Interface types.
 		/// </summary>
-		private readonly ISet<Type> _interfaceTypes;
+		private readonly IReadOnlySet<Type> _interfaceTypes;
 
 		/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 		private HashSet<JInterfaceTypeMetadata>? _interfaces;
@@ -32,7 +32,7 @@ public partial class JLocalObject
 		/// <param name="dataTypeName">Datatype name.</param>
 		/// <param name="kind">Java datatype kind.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
-		public TypeMetadataBuilder(ReadOnlySpan<Byte> dataTypeName, JTypeKind kind, ISet<Type> interfaceTypes)
+		public TypeMetadataBuilder(ReadOnlySpan<Byte> dataTypeName, JTypeKind kind, IReadOnlySet<Type> interfaceTypes)
 		{
 			this.DataTypeName = dataTypeName;
 			this._interfaceTypes = interfaceTypes;
@@ -89,7 +89,8 @@ public partial class JLocalObject
 		/// </summary>
 		/// <param name="args">Interface type set and non-implemented interface name set.</param>
 		/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
-		private static void ValidateSuperinterface((ISet<Type> interfaceTypes, HashSet<CString> notContained) args,
+		private static void ValidateSuperinterface(
+			(IReadOnlySet<Type> interfaceTypes, HashSet<CString> notContained) args,
 			JInterfaceTypeMetadata interfaceMetadata)
 		{
 			if (!args.interfaceTypes.Contains(interfaceMetadata.InterfaceType))
@@ -124,7 +125,7 @@ public partial class JLocalObject
 		/// <param name="baseMetadata">Base type metadata of the current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
-			JClassTypeMetadata? baseMetadata, ISet<Type> interfaceTypes)
+			JClassTypeMetadata? baseMetadata, IReadOnlySet<Type> interfaceTypes)
 		{
 			NativeValidationUtilities.ThrowIfInvalidTypeBuilder(className, TClass.FamilyType);
 			this._builder = new(className, JTypeKind.Class, interfaceTypes);
@@ -171,7 +172,7 @@ public partial class JLocalObject
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			ISet<Type> interfaceTypes = IReferenceType<TClass>.GetInterfaceTypes().ToHashSet();
+			IReadOnlySet<Type> interfaceTypes = IReferenceType<TClass>.TypeInterfaces;
 			JClassTypeMetadata? baseMetadata = !JLocalObject.IsObjectType<TClass>() ?
 				IClassType.GetMetadata<JLocalObject>() :
 				default;
@@ -191,8 +192,10 @@ public partial class JLocalObject
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType(className, typeof(TClass), typeof(TObject));
-			NativeValidationUtilities.ValidateBaseTypes<TClass, TObject>(className);
-			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();
+			IReadOnlySet<Type> baseTypes = IClassType<TObject>.TypeBaseTypes;
+			IReadOnlySet<Type> baseBaseTypes = IClassType<TClass>.TypeBaseTypes;
+			NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
+			IReadOnlySet<Type> interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
 			return new(className, modifier, IClassType.GetMetadata<TClass>(), interfaceTypes);
 		}
 

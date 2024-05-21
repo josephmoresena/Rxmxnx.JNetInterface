@@ -49,7 +49,7 @@ internal static class CommonConstants
 	public const String InternalInheritanceJustification = "Only internal inheritance is supported.";
 	public const String PublicInitPrivateSetJustification = "The property must be publicly 'init' but privately 'set'.";
 	public const String NoMethodOverloadingJustification =
-		"Homonymous functions are different and should not be considered overloading.";
+		"Homonymous functions or types are different and should not be considered overloading.";
 	public const String ReflectionFreeModeJustification =
 		"Reflection use should be avoidable in NativeAOT reflection free mode.";
 	public const String ReflectionPrivateUseJustification =
