@@ -10,7 +10,7 @@ internal partial class JPrimitiveObject
 		where TValue : unmanaged, IEquatable<TValue>, IComparable, IConvertible
 	{
 		static JTypeKind IDataType.Kind => JTypeKind.Primitive;
-		static Type? IDataType.FamilyType => default;
+		static Type? IDataType.FamilyType => typeof(TValue);
 
 		/// <summary>
 		/// Size of the current type in bytes.

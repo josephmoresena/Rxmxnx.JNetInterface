@@ -42,7 +42,7 @@ public partial class JLocalObject
 				Boolean result = IDataType.GetMetadata<TElement>() is JReferenceTypeMetadata metadata ?
 					metadata.IsInstance(this.Environment, jObject) :
 					jObject is TElement;
-				CommonValidationUtilities.ThrowIfInvalidCast<TElement>(result);
+				CommonValidationUtilities.ThrowIfInvalidCast(IDataType.GetMetadata<TElement>(), result);
 			}
 
 			/// <inheritdoc/>

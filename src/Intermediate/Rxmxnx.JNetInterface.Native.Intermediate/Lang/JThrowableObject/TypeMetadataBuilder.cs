@@ -87,7 +87,7 @@ public partial class JThrowableObject
 			where TObject : TThrowable, IThrowableType<TObject>
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			NativeValidationUtilities.ThrowIfSameType<TThrowable, TObject>(className);
+			NativeValidationUtilities.ThrowIfSameType(className, typeof(TThrowable), typeof(TObject));
 			NativeValidationUtilities.ValidateBaseTypes<TThrowable, TObject>(className);
 			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();
 			return new(className, modifier, IClassType.GetMetadata<TThrowable>(), interfaceTypes);

@@ -58,19 +58,20 @@ public partial class JLocalObject
 		public void AppendInterface<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			NativeValidationUtilities.ThrowIfAnnotation<TInterface>(this.DataTypeName, this.IsAnnotation);
+			NativeValidationUtilities.ThrowIfAnnotation(this.DataTypeName, IInterfaceType.GetMetadata<TInterface>(),
+			                                            this.IsAnnotation);
 			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
 			// Validates current interface.
 			if (!this._interfaceTypes.Contains(metadata.InterfaceType))
-				NativeValidationUtilities.ThrowInvalidImplementation<TInterface>(
-					this.DataTypeName, this._kind is not JTypeKind.Interface);
+				NativeValidationUtilities.ThrowInvalidImplementation(this.DataTypeName, metadata,
+				                                                     this._kind is not JTypeKind.Interface);
 
 			// Validates superinterfaces from current interface.
 			HashSet<CString> notContained = [];
 			metadata.Interfaces.ForEach((this._interfaceTypes, notContained),
 			                            TypeMetadataBuilder.ValidateSuperinterface);
-			NativeValidationUtilities.ThrowIfInvalidImplementation<TInterface>(
-				this.DataTypeName, notContained, this._kind is not JTypeKind.Interface);
+			NativeValidationUtilities.ThrowIfInvalidImplementation(this.DataTypeName, metadata, notContained,
+			                                                       this._kind is not JTypeKind.Interface);
 
 			this._interfaces ??= [];
 			this._interfaces.Add(metadata);
@@ -189,7 +190,7 @@ public partial class JLocalObject
 			where TObject : TClass, IClassType<TObject>
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			NativeValidationUtilities.ThrowIfSameType<TClass, TObject>(className);
+			NativeValidationUtilities.ThrowIfSameType(className, typeof(TClass), typeof(TObject));
 			NativeValidationUtilities.ValidateBaseTypes<TClass, TObject>(className);
 			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();
 			return new(className, modifier, IClassType.GetMetadata<TClass>(), interfaceTypes);

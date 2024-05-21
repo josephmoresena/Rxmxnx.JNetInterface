@@ -114,6 +114,6 @@ public partial class JLocalObject
 		JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)IDataType.GetMetadata<TDataType>();
 		if (jObject.ObjectClassName.AsSpan().SequenceEqual(typeMetadata.ClassName)) return;
 		if (jObject is not TDataType)
-			CommonValidationUtilities.ThrowIfInvalidCast<TDataType>(typeMetadata.IsInstance(jObject));
+			CommonValidationUtilities.ThrowIfInvalidCast(typeMetadata, typeMetadata.IsInstance(jObject));
 	}
 }

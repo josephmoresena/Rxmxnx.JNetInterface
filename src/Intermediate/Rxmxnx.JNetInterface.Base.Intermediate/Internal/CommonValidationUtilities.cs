@@ -8,38 +8,15 @@ internal static class CommonValidationUtilities
 	/// <summary>
 	/// Validates if <see langword="unmanaged"/> value can be safely stored into a <see cref="JValue"/>.
 	/// </summary>
-	/// <typeparam name="TValue"><see langword="unmanaged"/> type.</typeparam>
+	/// <param name="sizeOf">Size of <see langword="unmanaged"/> type.</param>
 	/// <exception cref="InsufficientMemoryException">
 	/// Thrown if the size of <see langword="unmanaged"/> type exceeds to <see cref="JValue.Size"/>.
 	/// </exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void ThrowIfInvalidType<TValue>() where TValue : unmanaged
+	public static void ThrowIfInvalidType(Int32 sizeOf)
 	{
-		if (NativeUtilities.SizeOf<TValue>() > JValue.Size)
+		if (sizeOf > JValue.Size)
 			throw new InsufficientMemoryException("The requested value can't be contained in a JValue.");
-	}
-	/// <summary>
-	/// Throws a <see cref="NotImplementedException"/> with a specified message in accordance with
-	/// the <paramref name="interfaceName"/>.
-	/// </summary>
-	/// <typeparam name="TResult">The type of the requested result.</typeparam>
-	/// <param name="interfaceName">The name of the interface that has the missing implementation.</param>
-	/// <returns>Always throws an exception.</returns>
-	/// <exception cref="NotImplementedException">Always thrown.</exception>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static TResult ThrowInvalidInterface<TResult>(String interfaceName)
-	{
-		String messagePrefix = $"The {interfaceName} interface can't be implemented by itself.";
-		String recommendation = interfaceName switch
-		{
-			"INativeType" =>
-				" Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort, or extend the JLocalObject class.",
-			"IPrimitiveType" =>
-				" Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort.",
-			_ => String.Empty,
-		};
-		String message = $"{messagePrefix}{recommendation}";
-		throw new NotImplementedException(message);
 	}
 	/// <summary>
 	/// Throws an <see cref="InvalidEnumArgumentException"/> for the specified <paramref name="nativeType"/>.
@@ -104,19 +81,18 @@ internal static class CommonValidationUtilities
 		return (TValue)value.ToType(typeof(TValue), CultureInfo.CurrentCulture);
 	}
 	/// <summary>
-	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
+	/// Throws an exception if the instance cannot be cast to <paramref name="typeMetadata"/> instance.
 	/// </summary>
-	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
+	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
 	/// <param name="allowedCast">Indicates whether current cast is allowed.</param>
 	/// <exception cref="InvalidCastException">
-	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
+	/// Throws an exception if the instance cannot be cast to <paramref name="typeMetadata"/> instance.
 	/// </exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void ThrowIfInvalidCast<TDataType>(Boolean allowedCast) where TDataType : IDataType<TDataType>
+	public static void ThrowIfInvalidCast(JDataTypeMetadata typeMetadata, Boolean allowedCast)
 	{
-		JDataTypeMetadata metadata = IDataType.GetMetadata<TDataType>();
 		if (!allowedCast)
-			throw new InvalidCastException($"The current instance can't be casted to {metadata.ClassName} type.");
+			throw new InvalidCastException($"The current instance can't be casted to {typeMetadata.ClassName} type.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="signature"/> is invalid.

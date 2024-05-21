@@ -6,28 +6,27 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static class NativeValidationUtilities
 {
 	/// <summary>
-	/// Throws an exception if <typeparamref name="TObject"/> is abstract.
+	/// Throws an exception if the class of <paramref name="classTypeMetadata"/> is abstract.
 	/// </summary>
-	/// <typeparam name="TObject">A <see cref="IReferenceType"/> type.</typeparam>
+	/// <param name="classTypeMetadata">A <see cref="JClassTypeMetadata"/> instance.</param>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <typeparamref name="TObject"/> is abstract.
+	/// Throws an exception if the class of <paramref name="classTypeMetadata"/> is abstract.
 	/// </exception>
-	public static void ThrowIfAbstractClass<TObject>() where TObject : JReferenceObject, IReferenceType<TObject>
+	public static void ThrowIfAbstractClass(JClassTypeMetadata classTypeMetadata)
 	{
-		JDataTypeMetadata typeMetadata = IDataType.GetMetadata<TObject>();
-		if (typeMetadata.Modifier == JTypeModifier.Abstract)
-			throw new InvalidOperationException($"{typeMetadata.ClassName} is an abstract type.");
+		if (classTypeMetadata.Modifier == JTypeModifier.Abstract)
+			throw new InvalidOperationException($"{classTypeMetadata.ClassName} is an abstract type.");
 	}
 	/// <summary>
 	/// Throws an exception if <typeparamref name="TInterface"/> can't extend <typeparamref name="TOtherInterface"/>.
 	/// </summary>
 	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/>.</typeparam>
 	/// <typeparam name="TOtherInterface">Type of <see cref="IInterfaceType{TOtherInterface}"/>.</typeparam>
-	/// <param name="typeName">Name of implementing type.</param>
+	/// <param name="interfaceName">Name of implementing type.</param>
 	/// <exception cref="ArgumentException">
 	/// Throws an exception if <typeparamref name="TInterface"/> can't extend <typeparamref name="TOtherInterface"/>.
 	/// </exception>
-	public static void ThrowIfInvalidExtension<TInterface, TOtherInterface>(ReadOnlySpan<Byte> typeName)
+	public static void ThrowIfInvalidExtension<TInterface, TOtherInterface>(ReadOnlySpan<Byte> interfaceName)
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
 	{
@@ -36,23 +35,22 @@ internal static class NativeValidationUtilities
 		{
 			if (interfaceType == currentInterfaceType)
 				throw new InvalidOperationException(
-					$"{typeName.ToCString()} type can't extend an interface type which extends it.");
+					$"{interfaceName.ToCString()} type can't extend an interface type which extends it.");
 		}
 	}
 	/// <summary>
-	/// Throws an exception if <typeparamref name="TBase"/> and <typeparamref name="TReference"/> are the same type.
+	/// Throws an exception if <paramref name="classType"/> and <paramref name="className"/> are the same type.
 	/// </summary>
-	/// <typeparam name="TBase">Base type of <typeparamref name="TReference"/>.</typeparam>
-	/// <typeparam name="TReference">Type of <see cref="IReferenceType{TReference}"/>.</typeparam>
-	/// <param name="typeName">Name of <see cref="IReferenceType{TReference}"/> type.</param>
+	/// <param name="className">Class name.</param>
+	/// <param name="classType">Class type.</param>
+	/// <param name="baseClassType">Super class type.</param>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <typeparamref name="TBase"/> and <typeparamref name="TReference"/> are the same type.
+	/// Throws an exception if <paramref name="classType"/> and <paramref name="className"/> are the same type.
 	/// </exception>
-	public static void ThrowIfSameType<TBase, TReference>(ReadOnlySpan<Byte> typeName)
-		where TBase : JReferenceObject, IReferenceType<TBase> where TReference : TBase, IReferenceType<TReference>
+	public static void ThrowIfSameType(ReadOnlySpan<Byte> className, Type classType, Type baseClassType)
 	{
-		if (typeof(TBase) == typeof(TReference))
-			throw new InvalidOperationException($"{typeName.ToCString()} type and base type can't be the same.");
+		if (classType == baseClassType)
+			throw new InvalidOperationException($"{className.ToCString()} class and super class can't be the same.");
 	}
 	/// <summary>
 	/// Throws an exception if <typeparamref name="TReference"/> is not a subclass of <typeparamref name="TBase"/>.
@@ -77,51 +75,49 @@ internal static class NativeValidationUtilities
 	/// Throws an exception if current data type is annotation.
 	/// </summary>
 	/// <param name="typeName">Data type name.</param>
+	/// <param name="interfaceMetadata">Super interface type metadata.</param>
 	/// <param name="isAnnotation">Indicates whether current data type is an annotation.</param>
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if current data type is annotation.
 	/// </exception>
-	public static void ThrowIfAnnotation<TInterface>(ReadOnlySpan<Byte> typeName, Boolean isAnnotation)
-		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+	public static void ThrowIfAnnotation(ReadOnlySpan<Byte> typeName, JInterfaceTypeMetadata interfaceMetadata,
+		Boolean isAnnotation)
 	{
 		if (!isAnnotation) return;
-		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();
 		throw new InvalidOperationException(
 			$"Unable to extend {interfaceMetadata.ClassName}. {typeName.ToCString()} is an annotation.");
 	}
 	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
-	/// <typeparamref name="TInterface"/>.
+	/// <paramref name="interfaceMetadata"/>.
 	/// </summary>
-	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/></typeparam>
 	/// <param name="typeName">Name of implementing type.</param>
+	/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
 	/// <param name="isClass">Indicates whether implementing type is a class.</param>
 	/// <exception cref="NotImplementedException">Always thrown.</exception>
-	public static void ThrowInvalidImplementation<TInterface>(ReadOnlySpan<Byte> typeName, Boolean isClass)
-		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+	public static void ThrowInvalidImplementation(ReadOnlySpan<Byte> typeName, JInterfaceTypeMetadata interfaceMetadata,
+		Boolean isClass)
 	{
-		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();
 		String implementationType = isClass ? "implements" : "extends";
 		throw new NotImplementedException(
 			$"{typeName.ToCString()} type doesn't {implementationType} {interfaceMetadata.ClassName} interface.");
 	}
 	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> if current datatype is not implementing
-	/// some superinterfaces of <typeparamref name="TInterface"/>.
+	/// some superinterfaces of <paramref name="interfaceMetadata"/>.
 	/// </summary>
-	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/></typeparam>
 	/// <param name="typeName">Name of implementing type.</param>
+	/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
 	/// <param name="notContained">Names of not contained superinterfaces.</param>
 	/// <param name="isClass">Indicates whether implementing type is a class.</param>
 	/// <exception cref="NotImplementedException">
 	/// Throws a <see cref="NotImplementedException"/> if current datatype is not implementing
-	/// some superinterfaces of <typeparamref name="TInterface"/>.
+	/// some superinterfaces of <paramref name="interfaceMetadata"/>.
 	/// </exception>
-	public static void ThrowIfInvalidImplementation<TInterface>(ReadOnlySpan<Byte> typeName, ISet<CString> notContained,
-		Boolean isClass) where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+	public static void ThrowIfInvalidImplementation(ReadOnlySpan<Byte> typeName,
+		JInterfaceTypeMetadata interfaceMetadata, ISet<CString> notContained, Boolean isClass)
 	{
 		if (notContained.Count == 0) return;
-		JDataTypeMetadata interfaceMetadata = IDataType.GetMetadata<TInterface>();
 		String implementationType = isClass ? "implements" : "extends";
 		String interfacesName = notContained.Count == 1 ? "superinterface" : "superinterfaces";
 		throw new NotImplementedException(
