@@ -26,10 +26,10 @@ public partial class JVirtualMachine
 	/// Retrieves the <see cref="IEnvironment"/> instance associated with current thread.
 	/// </summary>
 	/// <returns>The <see cref="IEnvironment"/> instance associated with current thread.</returns>
-	private JEnvironment? GetEnvironment()
+	private unsafe JEnvironment? GetEnvironment()
 	{
-		GetEnvDelegate del = this._cache.GetDelegate<GetEnvDelegate>();
-		JResult result = del(this.Reference, out JEnvironmentRef envRef, 0x00010006);
+		JResult result = this._cache.GetInvokeInterface()
+		                     .GetEnv(this.Reference, out JEnvironmentRef envRef, 0x00010006);
 		return result is JResult.Ok ? this._cache.ThreadCache.Get(envRef, out _) : default;
 	}
 	/// <summary>
@@ -65,7 +65,7 @@ public partial class JVirtualMachine
 		(JVirtualMachine vm, ThreadCreationArgs args) args)
 	{
 		using INativeTransaction jniTransaction = args.vm.CreateTransaction(1);
-		JVirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, name, args.args);
+		VirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, name, args.args);
 		JResult result = JVirtualMachine.AttachThread(args.vm, args.args.IsDaemon, arg, out JEnvironmentRef envRef);
 		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		JEnvironment env = args.vm._cache.ThreadCache.Get(envRef, out _, args.args);
@@ -79,32 +79,25 @@ public partial class JVirtualMachine
 	/// <param name="arg">Attach argument.</param>
 	/// <param name="envRef">Output. Attached thread <see cref="JEnvironmentRef"/> reference.</param>
 	/// <returns>JNI code result.</returns>
-	private static JResult AttachThread(JVirtualMachine vm, Boolean isDaemon, JVirtualMachineArgumentValue arg,
+	private static unsafe JResult AttachThread(JVirtualMachine vm, Boolean isDaemon, VirtualMachineArgumentValue arg,
 		out JEnvironmentRef envRef)
-	{
-		AttachCurrentThreadDelegate? attachCurrentThread =
-			!isDaemon ? vm._cache.GetDelegate<AttachCurrentThreadDelegate>() : default;
-		AttachCurrentThreadAsDaemonDelegate? attachCurrentThreadAsDaemon =
-			isDaemon ? vm._cache.GetDelegate<AttachCurrentThreadAsDaemonDelegate>() : default;
-		Unsafe.SkipInit(out envRef);
-		return attachCurrentThread?.Invoke(vm._cache.Reference, out envRef, in arg) ??
-			attachCurrentThreadAsDaemon?.Invoke(vm._cache.Reference, out envRef, in arg) ??
-			JResult.InvalidArgumentsError;
-	}
+		=> !isDaemon ?
+			vm._cache.GetInvokeInterface().AttachCurrentThread(vm._cache.Reference, out envRef, in arg) :
+			vm._cache.GetInvokeInterface().AttachCurrentThreadAsDaemon(vm._cache.Reference, out envRef, in arg);
 	/// <summary>
-	/// Creates a <see cref="JVirtualMachineArgumentValue"/> value from <paramref name="name"/> and
+	/// Creates a <see cref="VirtualMachineArgumentValue"/> value from <paramref name="name"/> and
 	/// <paramref name="args"/>.
 	/// </summary>
 	/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
 	/// <param name="name">A <see cref="IFixedPointer"/> to name.</param>
 	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
-	/// <returns>A <see cref="JVirtualMachineArgumentValue"/> value.</returns>
-	private static JVirtualMachineArgumentValue CreateAttachArgument(INativeTransaction jniTransaction,
+	/// <returns>A <see cref="VirtualMachineArgumentValue"/> value.</returns>
+	private static VirtualMachineArgumentValue CreateAttachArgument(INativeTransaction jniTransaction,
 		IFixedPointer name, ThreadCreationArgs args)
 	{
 		JGlobalRef threadGroupRef = jniTransaction.Add<JGlobalRef>(args.ThreadGroup);
 		Int32 version = args.Version < IVirtualMachine.MinimalVersion ? IVirtualMachine.MinimalVersion : args.Version;
-		JVirtualMachineArgumentValue arg = new()
+		VirtualMachineArgumentValue arg = new()
 		{
 			Name = (ReadOnlyValPtr<Byte>)name.Pointer, Group = threadGroupRef, Version = version,
 		};

@@ -4,37 +4,46 @@ partial class JEnvironment
 {
 	private sealed partial record EnvironmentCache
 	{
-		private static JStringLocalRef CreateString(in IReadOnlyFixedContext<Char> ctx, EnvironmentCache cache)
+		private static unsafe JStringLocalRef CreateString(in IReadOnlyFixedContext<Char> ctx, EnvironmentCache cache)
 		{
-			NewStringDelegate newString = cache.GetDelegate<NewStringDelegate>();
-			JStringLocalRef result = newString(cache.Reference, (ReadOnlyValPtr<Char>)ctx.Pointer, ctx.Values.Length);
+			ref readonly NativeInterface nativeInterface =
+				ref cache.GetNativeInterface<NativeInterface>(NativeInterface.NewStringInfo);
+			JStringLocalRef result =
+				nativeInterface.StringFunctions.NewString(cache.Reference, (ReadOnlyValPtr<Char>)ctx.Pointer,
+				                                          ctx.Values.Length);
 			if (result.IsDefault) cache.CheckJniError();
 			return result;
 		}
-		private static JStringLocalRef CreateUtf8String(in IReadOnlyFixedContext<Byte> ctx, EnvironmentCache cache)
+		private static unsafe JStringLocalRef CreateUtf8String(in IReadOnlyFixedContext<Byte> ctx,
+			EnvironmentCache cache)
 		{
-			NewStringUtfDelegate newUtf8String = cache.GetDelegate<NewStringUtfDelegate>();
-			JStringLocalRef result = newUtf8String(cache.Reference, (ReadOnlyValPtr<Byte>)ctx.Pointer);
+			ref readonly NativeInterface nativeInterface =
+				ref cache.GetNativeInterface<NativeInterface>(NativeInterface.NewStringUtfInfo);
+			JStringLocalRef result =
+				nativeInterface.StringFunctions.NewStringUtf(cache.Reference, (ReadOnlyValPtr<Byte>)ctx.Pointer);
 			if (result.IsDefault) cache.CheckJniError();
 			return result;
 		}
-		private static void GetStringRegion(in IFixedContext<Char> ctx,
+		private static unsafe void GetStringRegion(in IFixedContext<Char> ctx,
 			(EnvironmentCache cache, JStringObject jString, Int32 startIndex) args)
 		{
-			GetStringRegionDelegate getStringRegion = args.cache.GetDelegate<GetStringRegionDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref args.cache.GetNativeInterface<NativeInterface>(NativeInterface.NewStringUtfInfo);
 			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add(args.jString);
-			getStringRegion(args.cache.Reference, stringRef, args.startIndex, ctx.Values.Length,
-			                (ValPtr<Char>)ctx.Pointer);
+			nativeInterface.StringRegionFunctions.Utf16.GetStringRegion(args.cache.Reference, stringRef,
+			                                                            args.startIndex, ctx.Values.Length,
+			                                                            (ValPtr<Char>)ctx.Pointer);
 		}
-		private static void GetStringUtf8Region(in IFixedContext<Byte> ctx,
+		private static unsafe void GetStringUtf8Region(in IFixedContext<Byte> ctx,
 			(EnvironmentCache cache, JStringObject jString, Int32 startIndex) args)
 		{
-			GetStringUtfRegionDelegate getStringUtfRegion = args.cache.GetDelegate<GetStringUtfRegionDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref args.cache.GetNativeInterface<NativeInterface>(NativeInterface.NewStringUtfInfo);
 			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add(args.jString);
-			getStringUtfRegion(args.cache.Reference, stringRef, args.startIndex, ctx.Values.Length,
-			                   (ValPtr<Byte>)ctx.Pointer);
+			nativeInterface.StringRegionFunctions.Utf8.GetStringRegion(args.cache.Reference, stringRef, args.startIndex,
+			                                                           ctx.Values.Length, (ValPtr<Byte>)ctx.Pointer);
 		}
 	}
 }

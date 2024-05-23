@@ -9,14 +9,15 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 		/// <returns>A <see cref="JWeakRef"/> reference.</returns>
-		private JWeakRef CreateWeakGlobalRef(JReferenceObject jObject)
+		private unsafe JWeakRef CreateWeakGlobalRef(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			ImplementationValidationUtilities.ThrowIfDefault(jObject);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			NewWeakGlobalRefDelegate newWeakGlobalRef = this.GetDelegate<NewWeakGlobalRefDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewWeakGlobalRefInfo);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, jObject);
-			JWeakRef weakRef = newWeakGlobalRef(this.Reference, localRef);
+			JWeakRef weakRef = nativeInterface.WeakGlobalFunctions.NewWeakGlobalRef.NewRef(this.Reference, localRef);
 			if (weakRef == default) this.CheckJniError();
 			return weakRef;
 		}

@@ -75,11 +75,12 @@ partial class JEnvironment
 			}
 			return result;
 		}
-		public Int32 GetArrayLength(JReferenceObject jObject)
+		public unsafe Int32 GetArrayLength(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
-			GetArrayLengthDelegate getArrayLength = this.GetDelegate<GetArrayLengthDelegate>();
-			Int32 result = getArrayLength(this.Reference, jObject.As<JArrayLocalRef>());
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetArrayLengthInfo);
+			Int32 result = nativeInterface.ArrayFunctions.GetArrayLength(this.Reference, jObject.As<JArrayLocalRef>());
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
@@ -168,11 +169,13 @@ partial class JEnvironment
 			isCopy = isCopyByte == JBoolean.TrueValue;
 			return result;
 		}
-		public ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
+		public unsafe ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
 		{
-			GetPrimitiveArrayCriticalDelegate getPrimitiveArrayCriticalDelegate =
-				this.GetDelegate<GetPrimitiveArrayCriticalDelegate>();
-			ValPtr<Byte> result = getPrimitiveArrayCriticalDelegate(this.Reference, arrayRef, out _);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetPrimitiveArrayCriticalInfo);
+			ValPtr<Byte> result =
+				nativeInterface.PrimitiveArrayCriticalFunctions.GetPrimitiveArrayCritical(
+					this.Reference, arrayRef, out _);
 			if (result == ValPtr<Byte>.Zero) this.CheckJniError();
 			this._criticalCount++;
 			return result;
@@ -197,15 +200,16 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
+		public unsafe void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
 		{
 			try
 			{
 				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				{
-					ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
-						this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
-					releasePrimitiveArrayCritical(this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
+					ref readonly NativeInterface nativeInterface =
+						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleasePrimitiveArrayCriticalInfo);
+					nativeInterface.PrimitiveArrayCriticalFunctions.ReleasePrimitiveArrayCritical(
+						this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
 					this.CheckJniError();
 					this._criticalCount--;
 				}

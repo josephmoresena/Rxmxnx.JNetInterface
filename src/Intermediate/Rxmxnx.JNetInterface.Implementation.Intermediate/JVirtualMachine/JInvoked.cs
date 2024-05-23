@@ -39,13 +39,12 @@ public partial class JVirtualMachine
 		}
 
 		/// <inheritdoc/>
-		public void Dispose()
+		public unsafe void Dispose()
 		{
 			if (!this._isDisposable || this._isDisposed.Value) return;
 			this._cache.ClearCache();
-			DestroyVirtualMachineDelegate destroyVirtualMachine =
-				this._cache.GetDelegate<DestroyVirtualMachineDelegate>();
-			ImplementationValidationUtilities.ThrowIfInvalidResult(destroyVirtualMachine(this._cache.Reference));
+			JResult result = this._cache.GetInvokeInterface().DestroyVirtualMachine(this._cache.Reference);
+			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 			this._isDisposed.Value = true;
 			JVirtualMachine.RemoveVirtualMachine(this._cache.Reference);
 		}

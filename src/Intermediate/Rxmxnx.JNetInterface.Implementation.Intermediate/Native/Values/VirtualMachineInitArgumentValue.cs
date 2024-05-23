@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.Values;
 
 [StructLayout(LayoutKind.Sequential)]
-internal readonly partial struct JVirtualMachineInitArgumentValue : INativeType<JVirtualMachineInitArgumentValue>
+internal readonly partial struct VirtualMachineInitArgumentValue : INativeType<VirtualMachineInitArgumentValue>
 {
 	static JNativeType INativeType.Type => JNativeType.JVirtualMachineInitArgument;
 	String INativeType.TextValue
@@ -9,6 +9,6 @@ internal readonly partial struct JVirtualMachineInitArgumentValue : INativeType<
 
 	internal Int32 Version { get; init; }
 	internal Int32 OptionsLength { get; init; }
-	internal ValPtr<JVirtualMachineInitOptionValue> Options { get; init; }
+	internal ValPtr<VirtualMachineInitOptionValue> Options { get; init; }
 	internal Byte IgnoreUnrecognized { get; init; }
 }

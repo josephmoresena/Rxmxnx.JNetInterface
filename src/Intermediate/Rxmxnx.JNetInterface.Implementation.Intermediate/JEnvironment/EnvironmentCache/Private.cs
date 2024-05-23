@@ -157,8 +157,6 @@ partial class JEnvironment
 		private ThrowableException CreateThrowableException(JClassObject jClass,
 			JReferenceTypeMetadata throwableMetadata, String? message, JThrowableLocalRef throwableRef)
 		{
-			this._env.DeleteLocalRef(throwableRef.Value);
-
 			ThrowableObjectMetadata objectMetadata = new(jClass, throwableMetadata, message);
 			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
 			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, globalRef);
@@ -192,12 +190,14 @@ partial class JEnvironment
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <param name="access">A <see cref="AccessCache"/> instance.</param>
 		/// <returns>A <see cref="JStringObject"/> instance.</returns>
-		private JStringObject GetThrowableMessage(JThrowableLocalRef throwableRef, AccessCache access)
+		private unsafe JStringObject GetThrowableMessage(JThrowableLocalRef throwableRef, AccessCache access)
 		{
 			JMethodId getNameId = access.GetMethodId(NativeFunctionSetImpl.GetMessageDefinition, this._env);
-			CallObjectMethodADelegate callObjectMethod = this.GetDelegate<CallObjectMethodADelegate>();
-			JObjectLocalRef localRef = callObjectMethod(this.Reference, throwableRef.Value, getNameId,
-			                                            ReadOnlyValPtr<JValue>.Zero);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallObjectMethodInfo);
+			JObjectLocalRef localRef =
+				nativeInterface.InstanceMethodFunctions.CallObjectMethod.Call(
+					this.Reference, throwableRef.Value, getNameId, ReadOnlyValPtr<JValue>.Zero);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}
@@ -205,18 +205,20 @@ partial class JEnvironment
 		/// Sets given <see cref="JThrowableLocalRef"/> reference as pending exception.
 		/// </summary>
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
-		private void Throw(JThrowableLocalRef throwableRef)
+		private unsafe void Throw(JThrowableLocalRef throwableRef)
 		{
-			ThrowDelegate jThrow = this.GetDelegate<ThrowDelegate>();
-			jThrow(this.Reference, throwableRef);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowInfo);
+			nativeInterface.ErrorFunctions.Throw(this.Reference, throwableRef);
 		}
 		/// <summary>
 		/// Clears pending JNI exception.
 		/// </summary>
-		private void ClearException()
+		private unsafe void ClearException()
 		{
-			ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
-			exceptionClear(this.Reference);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);
+			nativeInterface.ErrorFunctions.ExceptionClear(this.Reference);
 		}
 		/// <summary>
 		/// Sets <paramref name="jniException"/> as managed pending exception and throws it.

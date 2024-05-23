@@ -45,10 +45,12 @@ partial class JEnvironment
 		/// <param name="classNameCtx">A <see cref="IReadOnlyFixedMemory"/> instance.</param>
 		/// <param name="cache">Current <see cref="EnvironmentCache"/> instance.</param>
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		public static JClassLocalRef FindClass(in IReadOnlyFixedMemory classNameCtx, EnvironmentCache cache)
+		public static unsafe JClassLocalRef FindClass(in IReadOnlyFixedMemory classNameCtx, EnvironmentCache cache)
 		{
-			FindClassDelegate findClass = cache.GetDelegate<FindClassDelegate>();
-			JClassLocalRef result = findClass(cache.Reference, (ReadOnlyValPtr<Byte>)classNameCtx.Pointer);
+			ref readonly NativeInterface nativeInterface =
+				ref cache.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
+			JClassLocalRef result =
+				nativeInterface.ClassFunctions.FindClass(cache.Reference, (ReadOnlyValPtr<Byte>)classNameCtx.Pointer);
 			if (result.IsDefault) cache.CheckJniError();
 			return result;
 		}

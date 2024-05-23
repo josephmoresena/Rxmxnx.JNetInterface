@@ -43,15 +43,15 @@ public partial class JVirtualMachine
 		}
 
 		/// <summary>
-		/// Retrieves a <typeparamref name="TDelegate"/> instance for <typeparamref name="TDelegate"/>.
+		/// Retrieves managed <see cref="InvokeInterface"/> reference from current instance.
 		/// </summary>
-		/// <typeparam name="TDelegate">Type of method delegate.</typeparam>
-		/// <returns>A <typeparamref name="TDelegate"/> instance.</returns>
-		public TDelegate GetDelegate<TDelegate>() where TDelegate : Delegate
+		/// <returns>A managed <see cref="InvokeInterface"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public ref readonly InvokeInterface GetInvokeInterface()
 		{
-			Type typeOfT = typeof(TDelegate);
-			IntPtr ptr = VirtualMachineCache.getPointer[typeOfT](this.Reference);
-			return this._delegateCache.GetDelegate<TDelegate>(ptr);
+			ref readonly JVirtualMachineValue refValue = ref this.Reference.Reference;
+			ref readonly JInvokeInterface refInvoke = ref refValue.Reference;
+			return ref NativeUtilities.Transform<JInvokeInterface, InvokeInterface>(in refInvoke);
 		}
 		/// <summary>
 		/// Register a <see cref="JGlobal"/> instance.

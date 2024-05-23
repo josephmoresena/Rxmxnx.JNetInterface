@@ -77,7 +77,7 @@ partial class JEnvironment
 			return this.GetOrFindClass(metadata);
 		}
 		public JClassObject GetObjectClass(JLocalObject jLocal) => this.GetClass(jLocal.ObjectClassName);
-		public JClassObject? GetSuperClass(JClassObject jClass)
+		public unsafe JClassObject? GetSuperClass(JClassObject jClass)
 		{
 			if (MetadataHelper.GetMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
 				return this.GetOrFindClass(metadata);
@@ -85,8 +85,10 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			ImplementationValidationUtilities.ThrowIfDefault(jClass);
-			GetSuperclassDelegate getSuperClass = this.GetDelegate<GetSuperclassDelegate>();
-			JClassLocalRef superClassRef = jniTransaction.Add(getSuperClass(this.Reference, classRef));
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetSuperclassInfo);
+			JClassLocalRef superClassRef =
+				jniTransaction.Add(nativeInterface.ClassFunctions.GetSuperclass(this.Reference, classRef));
 			if (!superClassRef.IsDefault)
 			{
 				JClassObject jSuperClass = this.AsClassObject(superClassRef);
@@ -96,7 +98,7 @@ partial class JEnvironment
 			this.CheckJniError();
 			return default;
 		}
-		public Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
+		public unsafe Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
 		{
 			Boolean? result = MetadataHelper.IsAssignableFrom(jClass, otherClass);
 			if (result.HasValue) return result.Value;
@@ -105,8 +107,9 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
-			IsAssignableFromDelegate isAssignableFrom = this.GetDelegate<IsAssignableFromDelegate>();
-			result = isAssignableFrom(this.Reference, classRef, otherClassRef) == JBoolean.TrueValue;
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.IsAssignableFromInfo);
+			result = nativeInterface.ClassFunctions.IsAssignableFrom(this.Reference, classRef, otherClassRef).Value;
 			this.CheckJniError();
 			return result.Value;
 		}

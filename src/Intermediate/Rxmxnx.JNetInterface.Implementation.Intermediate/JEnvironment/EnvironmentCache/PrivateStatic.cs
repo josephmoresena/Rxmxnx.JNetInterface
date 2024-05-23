@@ -42,11 +42,13 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
 		/// <returns>JNI version for <paramref name="envRef"/>.</returns>
-		private static Int32 GetVersion(JEnvironmentRef envRef)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static unsafe Int32 GetVersion(JEnvironmentRef envRef)
 		{
-			GetVersionDelegate getVersion =
-				envRef.Reference.Reference.GetVersionPointer.GetUnsafeDelegate<GetVersionDelegate>()!;
-			return getVersion(envRef);
+			ref readonly JEnvironmentValue refValue = ref envRef.Reference;
+			ref readonly NativeInterface nativeInterface =
+				ref NativeUtilities.Transform<JNativeInterface, NativeInterface>(in refValue.Reference);
+			return nativeInterface.GetVersion(envRef);
 		}
 		/// <summary>
 		/// Cache finalize method.
@@ -73,14 +75,16 @@ partial class JEnvironment
 		/// <param name="messageMem">Fixed exception message.</param>
 		/// <param name="cache">A <see cref="EnvironmentCache"/> instance.</param>
 		/// <returns>JNI code result.</returns>
-		private static JResult ThrowNew<TThrowable>(in IReadOnlyFixedMemory messageMem, EnvironmentCache cache)
+		private static unsafe JResult ThrowNew<TThrowable>(in IReadOnlyFixedMemory messageMem, EnvironmentCache cache)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			JClassObject jClass = cache.GetClass<TThrowable>();
-			ThrowNewDelegate throwNew = cache.GetDelegate<ThrowNewDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref cache.GetNativeInterface<NativeInterface>(NativeInterface.ThrowNewInfo);
 			using INativeTransaction jniTransaction = cache.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(cache.ReloadClass(jClass));
-			return throwNew(cache.Reference, classRef, (ReadOnlyValPtr<Byte>)messageMem.Pointer);
+			return nativeInterface.ErrorFunctions.ThrowNew(cache.Reference, classRef,
+			                                               (ReadOnlyValPtr<Byte>)messageMem.Pointer);
 		}
 		/// <summary>
 		/// Creates a <see cref="IFixedContext{T}.IDisposable"/> instance from an span created in stack.

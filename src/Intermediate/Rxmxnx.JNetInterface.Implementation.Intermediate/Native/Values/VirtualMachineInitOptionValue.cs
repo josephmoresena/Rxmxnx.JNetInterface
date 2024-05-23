@@ -1,6 +1,6 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.Values;
 
-internal readonly struct JVirtualMachineInitOptionValue
+internal readonly struct VirtualMachineInitOptionValue
 {
 	internal ReadOnlyValPtr<Byte> Name { get; init; }
 	internal IntPtr ExtraInfo { get; init; }

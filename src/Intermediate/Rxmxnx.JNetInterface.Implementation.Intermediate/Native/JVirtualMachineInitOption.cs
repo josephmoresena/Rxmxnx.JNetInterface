@@ -26,8 +26,8 @@ public sealed record JVirtualMachineInitOption
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="value">A <see cref="JVirtualMachineInitOptionValue"/> value.</param>
-	private JVirtualMachineInitOption(JVirtualMachineInitOptionValue value)
+	/// <param name="value">A <see cref="VirtualMachineInitOptionValue"/> value.</param>
+	private JVirtualMachineInitOption(VirtualMachineInitOptionValue value)
 	{
 		this.Name = JVirtualMachineInitOption.GetUnsafeCString(value.Name);
 		this.ExtraInfo = JVirtualMachineInitOption.GetUnsafeCString(value.ExtraInfo);
@@ -39,11 +39,11 @@ public sealed record JVirtualMachineInitOption
 
 	/// <summary>
 	/// Creates a <see cref="JVirtualMachineInitOption"/> array from a read-only span of
-	/// <see cref="JVirtualMachineInitOptionValue"/> values.
+	/// <see cref="VirtualMachineInitOptionValue"/> values.
 	/// </summary>
-	/// <param name="values">A read-only span of <see cref="JVirtualMachineInitOptionValue"/> values.</param>
+	/// <param name="values">A read-only span of <see cref="VirtualMachineInitOptionValue"/> values.</param>
 	/// <returns>A <see cref="JVirtualMachineInitOption"/> array.</returns>
-	internal static List<JVirtualMachineInitOption> GetOptions(ReadOnlySpan<JVirtualMachineInitOptionValue> values)
+	internal static List<JVirtualMachineInitOption> GetOptions(ReadOnlySpan<VirtualMachineInitOptionValue> values)
 	{
 		List<JVirtualMachineInitOption> result = new(values.Length);
 		for (Int32 i = 0; i < values.Length; i++)
@@ -71,9 +71,9 @@ public sealed record JVirtualMachineInitOption
 	/// </summary>
 	/// <param name="sequence">A fixed <see cref="CStringSequence"/> instance with UTF-8 text.</param>
 	/// <returns>A <see cref="IFixedContext{JVirtualMachineInitOptionValue}.IDisposable"/> array.</returns>
-	internal static IFixedContext<JVirtualMachineInitOptionValue>.IDisposable GetContext(CStringSequence sequence)
+	internal static IFixedContext<VirtualMachineInitOptionValue>.IDisposable GetContext(CStringSequence sequence)
 	{
-		JVirtualMachineInitOptionValue[] arr = new JVirtualMachineInitOptionValue[sequence.Count / 2];
+		VirtualMachineInitOptionValue[] arr = new VirtualMachineInitOptionValue[sequence.Count / 2];
 		for (Int32 i = 0; i < arr.Length; i += 2)
 		{
 			arr[i] = new()
@@ -82,8 +82,8 @@ public sealed record JVirtualMachineInitOption
 				ExtraInfo = sequence[i + 1].AsSpan().GetUnsafeValPtr(),
 			};
 		}
-		Memory<JVirtualMachineInitOptionValue> mem = arr.AsMemory();
-		IFixedContext<JVirtualMachineInitOptionValue>.IDisposable ctx = mem.GetFixedContext();
+		Memory<VirtualMachineInitOptionValue> mem = arr.AsMemory();
+		IFixedContext<VirtualMachineInitOptionValue>.IDisposable ctx = mem.GetFixedContext();
 		return ctx;
 	}
 

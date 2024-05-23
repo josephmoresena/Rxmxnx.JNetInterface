@@ -10,15 +10,17 @@ partial class JEnvironment
 		/// <param name="jArray">A <see cref="JReferenceObject"/> instance.</param>
 		/// <param name="index">Element index.</param>
 		/// <param name="value">Object instance.</param>
-		private void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
+		private unsafe void SetObjectElement(JArrayObject jArray, Int32 index, JReferenceObject? value)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(value);
 			jArray.ValidateObjectElement(value);
-			SetObjectArrayElementDelegate setObjectArrayElement = this.GetDelegate<SetObjectArrayElementDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.SetObjectArrayElementInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JObjectLocalRef localRef = this.UseObject(jniTransaction, value);
 			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
-			setObjectArrayElement(this.Reference, arrayRef, index, localRef);
+			nativeInterface.ArrayFunctions.ObjectArrayFunctions.SetObjectArrayElement(
+				this.Reference, arrayRef, index, localRef);
 			this.CheckJniError();
 		}
 		/// <summary>
@@ -145,10 +147,13 @@ partial class JEnvironment
 		/// <param name="index">Element index.</param>
 		/// <returns>The element with <paramref name="index"/> on <paramref name="arrayRef"/>.</returns>
 		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
-		private JObjectLocalRef GetObjectArrayElement(JObjectArrayLocalRef arrayRef, Int32 index)
+		private unsafe JObjectLocalRef GetObjectArrayElement(JObjectArrayLocalRef arrayRef, Int32 index)
 		{
-			GetObjectArrayElementDelegate getObjectArrayElement = this.GetDelegate<GetObjectArrayElementDelegate>();
-			JObjectLocalRef localRef = getObjectArrayElement(this.Reference, arrayRef, index);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectArrayElementInfo);
+			JObjectLocalRef localRef =
+				nativeInterface.ArrayFunctions.ObjectArrayFunctions.GetObjectArrayElement(
+					this.Reference, arrayRef, index);
 			if (localRef == default) this.CheckJniError();
 			return localRef;
 		}
@@ -397,13 +402,17 @@ partial class JEnvironment
 		/// <param name="jClass">Array class.</param>
 		/// <param name="jObject">Initializer array element.</param>
 		/// <returns>Created array <see cref="JArrayLocalRef"/> reference.</returns>
-		private JArrayLocalRef NewObjectArray(Int32 length, JClassObject jClass, JReferenceObject? jObject = default)
+		private unsafe JArrayLocalRef NewObjectArray(Int32 length, JClassObject jClass,
+			JReferenceObject? jObject = default)
 		{
-			NewObjectArrayDelegate newObjectArray = this.GetDelegate<NewObjectArrayDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewArrayObjectInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JObjectLocalRef initialRef = this.UseObject(jniTransaction, jObject);
-			JObjectArrayLocalRef arrayRef = newObjectArray(this.Reference, length, classRef, initialRef);
+			JObjectArrayLocalRef arrayRef =
+				nativeInterface.ArrayFunctions.ObjectArrayFunctions.NewObjectArray(
+					this.Reference, length, classRef, initialRef);
 			if (arrayRef.IsDefault) this.CheckJniError();
 			return arrayRef.ArrayValue;
 		}

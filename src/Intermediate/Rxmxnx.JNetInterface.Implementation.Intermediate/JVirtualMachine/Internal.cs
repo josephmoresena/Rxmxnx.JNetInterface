@@ -12,14 +12,6 @@ public partial class JVirtualMachine
 	/// </returns>
 	internal JEnvironment GetEnvironment(JEnvironmentRef envRef) => this._cache.ThreadCache.Get(envRef, out _);
 	/// <summary>
-	/// Detaches the current thread from a JVM.
-	/// </summary>
-	internal void DetachCurrentThread()
-	{
-		DetachCurrentThreadDelegate del = this._cache.GetDelegate<DetachCurrentThreadDelegate>();
-		del(this._cache.Reference);
-	}
-	/// <summary>
 	/// Registers a <see cref="JGlobal"/> instance in current VM.
 	/// </summary>
 	/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
@@ -179,12 +171,12 @@ public partial class JVirtualMachine
 	/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	/// <param name="thread">A <see cref="Thread"/> instance.</param>
-	internal static void DetachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef envRef, Thread thread)
+	internal static unsafe void DetachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef envRef, Thread thread)
 	{
 		ImplementationValidationUtilities.ThrowIfDifferentThread(envRef, thread);
 		JVirtualMachine vm = ReferenceCache.Instance.Get(vmRef, out _);
-		DetachCurrentThreadDelegate detachCurrentThread = vm._cache.GetDelegate<DetachCurrentThreadDelegate>();
-		ImplementationValidationUtilities.ThrowIfInvalidResult(detachCurrentThread(vmRef));
+		JResult result = vm._cache.GetInvokeInterface().DetachCurrentThread(vm._cache.Reference);
+		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 	}
 	/// <summary>
 	/// Removes the <see cref="IEnvironment"/> instance referenced by <paramref name="envRef"/>

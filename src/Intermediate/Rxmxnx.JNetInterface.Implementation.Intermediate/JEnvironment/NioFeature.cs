@@ -12,11 +12,13 @@ partial class JEnvironment
 {
 	private sealed partial record EnvironmentCache : INioFeature
 	{
-		public TDirectBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)
+		public unsafe TDirectBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)
 		{
 			JClassObject jClass = this.GetClass<JDirectByteBufferObject>();
-			NewDirectByteBufferDelegate newDirectByteBuffer = this.GetDelegate<NewDirectByteBufferDelegate>();
-			JObjectLocalRef localRef = newDirectByteBuffer(this.Reference, memory.Pointer, memory.Bytes.Length);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewDirectByteBufferInfo);
+			JObjectLocalRef localRef =
+				nativeInterface.NioFunctions.NewDirectByteBuffer(this.Reference, memory.Pointer, memory.Bytes.Length);
 			this.CheckJniError();
 			return this.Register<JDirectByteBufferObject>(new(jClass, memory, localRef));
 		}
@@ -59,24 +61,25 @@ partial class JEnvironment
 			using TBuffer buffer = (TBuffer)this.NewDirectByteBuffer(memory);
 			return func(buffer, state);
 		}
-		public IntPtr GetDirectAddress(JBufferObject buffer)
+		public unsafe IntPtr GetDirectAddress(JBufferObject buffer)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(buffer);
-			GetDirectBufferAddressDelegate getDirectBufferAddress = this.GetDelegate<GetDirectBufferAddressDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetDirectBufferAddressInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(buffer);
-			IntPtr result = getDirectBufferAddress(this.Reference, localRef);
+			IntPtr result = nativeInterface.NioFunctions.GetDirectBufferAddress(this.Reference, localRef);
 			this.CheckJniError();
 			return result;
 		}
-		public Int64 GetDirectCapacity(JBufferObject buffer)
+		public unsafe Int64 GetDirectCapacity(JBufferObject buffer)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(buffer);
-			GetDirectBufferCapacityDelegate getDirectBufferCapacity =
-				this.GetDelegate<GetDirectBufferCapacityDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetDirectBufferAddressInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(buffer);
-			Int64 result = getDirectBufferCapacity(this.Reference, localRef);
+			Int64 result = nativeInterface.NioFunctions.GetDirectBufferCapacity(this.Reference, localRef);
 			this.CheckJniError();
 			return result;
 		}

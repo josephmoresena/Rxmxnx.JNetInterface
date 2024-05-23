@@ -64,14 +64,33 @@ partial class JEnvironment
 			return this._delegateCache.GetDelegate<TDelegate>(ptr);
 		}
 		/// <summary>
+		/// Retrieves managed <see cref="NativeInterface"/> reference from current instance.
+		/// </summary>
+		/// <param name="info">A <see cref="JniMethodInfo"/> instance.</param>
+		/// <returns>A managed <see cref="NativeInterface"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public unsafe ref readonly TNativeInterface GetNativeInterface<TNativeInterface>(JniMethodInfo info)
+			where TNativeInterface : unmanaged, INativeInterface<TNativeInterface>
+		{
+			ImplementationValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
+			ImplementationValidationUtilities.ThrowIfInvalidVirtualMachine(this.VirtualMachine.IsAlive);
+			ImplementationValidationUtilities.ThrowIfNotAttached(this._env.IsAttached);
+			ImplementationValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
+			ImplementationValidationUtilities.ThrowIfInvalidVersion(info.Name, TNativeInterface.RequiredVersion,
+			                                                        this.Version);
+			ref readonly JEnvironmentValue refValue = ref this.Reference.Reference;
+			return ref Unsafe.AsRef<TNativeInterface>(refValue.Pointer.ToPointer());
+		}
+		/// <summary>
 		/// Checks JNI occurred error.
 		/// </summary>
-		public void CheckJniError()
+		public unsafe void CheckJniError()
 		{
 			if (this._criticalCount > 0)
 			{
-				ExceptionCheckDelegate exceptionCheck = this.GetDelegate<ExceptionCheckDelegate>();
-				if (exceptionCheck(this.Reference) != JBoolean.TrueValue) return;
+				ref readonly NativeInterface nativeInterface =
+					ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
+				if (!nativeInterface.ExceptionCheck(this.Reference).Value) return;
 				this.ThrowJniException(CriticalException.Instance, true);
 			}
 			else
@@ -122,10 +141,11 @@ partial class JEnvironment
 		/// Retrieves exception occured reference.
 		/// </summary>
 		/// <returns>Pending exception <see cref="JThrowableLocalRef"/> reference.</returns>
-		public JThrowableLocalRef GetPendingException()
+		public unsafe JThrowableLocalRef GetPendingException()
 		{
-			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
-			return exceptionOccurred(this.Reference);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionOccurredInfo);
+			return nativeInterface.ErrorFunctions.ExceptionOccurred(this.Reference);
 		}
 		/// <summary>
 		/// Creates JNI exception from <paramref name="throwableRef"/>.
