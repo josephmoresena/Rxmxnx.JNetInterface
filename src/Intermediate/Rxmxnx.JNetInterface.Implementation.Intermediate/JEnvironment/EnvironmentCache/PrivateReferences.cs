@@ -12,6 +12,7 @@ partial class JEnvironment
 		private unsafe JWeakRef CreateWeakGlobalRef(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
+			if (jObject is JClassObject jClass) this.ReloadClass(jClass);
 			ImplementationValidationUtilities.ThrowIfDefault(jObject);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			ref readonly NativeInterface nativeInterface =

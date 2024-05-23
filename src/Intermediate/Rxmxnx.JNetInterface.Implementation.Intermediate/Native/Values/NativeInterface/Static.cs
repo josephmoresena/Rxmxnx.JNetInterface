@@ -225,70 +225,70 @@ internal partial struct NativeInterface
 	/// </summary>
 	public static readonly JniMethodInfo CallNonVirtualObjectMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet.CallNonVirtualObjectMethod),
+		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualObjectMethod),
 	};
 	/// <summary>
 	/// Information of see cref="MethodFunctionSet.CallNonVirtualBooleanMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallNonVirtualBooleanMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet.CallNonVirtualBooleanMethod),
+		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualBooleanMethod),
 	};
 	/// <summary>
 	/// Information of see cref="MethodFunctionSet.CallNonVirtualByteMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallNonVirtualByteMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet.CallNonVirtualByteMethod),
+		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualByteMethod),
 	};
 	/// <summary>
 	/// Information of see cref="MethodFunctionSet.CallNonVirtualCharMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallNonVirtualCharMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet.CallNonVirtualCharMethod),
+		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualCharMethod),
 	};
 	/// <summary>
 	/// Information of see cref="MethodFunctionSet.CallNonVirtualShortMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallNonVirtualShortMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet.CallNonVirtualShortMethod),
+		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualShortMethod),
 	};
 	/// <summary>
 	/// Information of see cref="MethodFunctionSet.CallNonVirtualIntMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallNonVirtualIntMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet.CallNonVirtualIntMethod),
+		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualIntMethod),
 	};
 	/// <summary>
 	/// Information of see cref="MethodFunctionSet.CallNonVirtualLongMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallNonVirtualLongMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet.CallNonVirtualLongMethod),
+		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualLongMethod),
 	};
 	/// <summary>
 	/// Information of see cref="MethodFunctionSet.CallNonVirtualFloatMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallNonVirtualFloatMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet.CallNonVirtualFloatMethod),
+		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualFloatMethod),
 	};
 	/// <summary>
 	/// Information of see cref="MethodFunctionSet.CallNonVirtualDoubleMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallNonVirtualDoubleMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet.CallNonVirtualDoubleMethod),
+		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualDoubleMethod),
 	};
 	/// <summary>
 	/// Information of see cref="MethodFunctionSet.CallNonVirtualVoidMethod"/>
 	/// </summary>
 	public static readonly JniMethodInfo CallNonVirtualVoidMethodInfo = new()
 	{
-		Name = nameof(MethodFunctionSet.CallNonVirtualVoidMethod),
+		Name = nameof(NonVirtualMethodFunctionSet.CallNonVirtualVoidMethod),
 	};
 	/// <summary>
 	/// Information of <see cref="FieldFunctionSet{JObjectLocalRef}.GetFieldId"/>

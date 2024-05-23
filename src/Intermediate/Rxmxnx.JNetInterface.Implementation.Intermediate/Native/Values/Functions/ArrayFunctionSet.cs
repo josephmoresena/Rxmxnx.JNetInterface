@@ -7,6 +7,18 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 internal readonly unsafe struct ArrayFunctionSet
 {
 	/// <summary>
+	/// Primitive array functions.
+	/// </summary>
+	public enum PrimitiveFunction : Byte
+	{
+		NewArray = default,
+		GetElements = 1,
+		ReleaseElements = 2,
+		GetRegion = 3,
+		SetRegion = 4,
+	}
+
+	/// <summary>
 	/// Pointer to <c>GetArrayLength</c> function.
 	/// Returns the number of elements in the array.
 	/// </summary>
@@ -26,13 +38,13 @@ internal readonly unsafe struct ArrayFunctionSet
 	/// <c>GetShortArrayElements</c>, <c>GetIntArrayElements</c>, <c>GetLongArrayElements</c>,
 	/// <c>GetFloatArrayElements</c> and <c>GetDoubleArrayElements</c> functions.
 	/// </summary>
-	public readonly GetPrimitiveArrayElementsFunctionSet GetPrimitiveArrayElementsFunctions;
+	public readonly GetPrimitiveArrayElementsFunctionSet GetElementsFunctions;
 	/// <summary>
 	/// Pointers to <c>ReleaseBooleanArrayElements</c>, <c>ReleaseByteArrayElements</c>, <c>ReleaseCharArrayElements</c>,
 	/// <c>ReleaseShortArrayElements</c>, <c>ReleaseIntArrayElements</c>, <c>ReleaseLongArrayElements</c>,
 	/// <c>ReleaseFloatArrayElements</c> and <c>ReleaseDoubleArrayElements</c> functions.
 	/// </summary>
-	public readonly ReleasePrimitiveArrayElementsFunctionSet ReleasePrimitiveArrayElementsFunctions;
+	public readonly ReleasePrimitiveArrayElementsFunctionSet ReleaseElementsFunctions;
 	/// <summary>
 	/// Pointers to <c>GetBooleanArrayRegion</c>, <c>GetByteArrayRegion</c>, <c>GetCharArrayRegion</c>,
 	/// <c>GetShortArrayRegion</c>, <c>GetIntArrayRegion</c>, <c>GetLongArrayRegion</c>,
@@ -41,5 +53,5 @@ internal readonly unsafe struct ArrayFunctionSet
 	/// <c>SetIntArrayRegion</c>, <c>SetLongArrayRegion</c>, <c>SetFloatArrayRegion</c> and
 	/// <c>SetDoubleArrayRegion</c> functions.
 	/// </summary>
-	public readonly PrimitiveArrayRegionFunctionSet PrimitiveArrayRegionFunctions;
+	public readonly PrimitiveArrayRegionFunctionSet RegionFunctions;
 }

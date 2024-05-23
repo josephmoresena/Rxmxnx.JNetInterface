@@ -40,13 +40,9 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// </summary>
 	public readonly ObjectFunctionSet ObjectFunctions;
 	/// <summary>
-	/// Pointers to <c>GetMethodID</c> and <c>Call&lt;type&gt;Method</c> functions.
+	/// Pointers to <c>GetMethodID</c>, <c>Call&lt;type&gt;Method</c> and <c>CallNonvirtual&lt;type&gt;Method</c> functions.
 	/// </summary>
-	public readonly MethodFunctionSet<JObjectLocalRef> InstanceMethodFunctions;
-	/// <summary>
-	/// Pointers to <c>CallNonvirtual&lt;type&gt;Method</c> functions.
-	/// </summary>
-	public readonly MethodFunctionSet NonVirtualMethodFunctions;
+	public readonly InstanceMethodFunctionSet InstanceMethodFunctions;
 	/// <summary>
 	/// Pointers to <c>GetFieldID</c>, <c>Get&lt;type&gt;Field</c> and <c>Set&lt;type&gt;Field</c> functions.
 	/// </summary>

@@ -48,6 +48,237 @@ partial class JEnvironment
 				throw new ArgumentException("Invalid class object.", nameof(jClass));
 		}
 		/// <summary>
+		/// Retrieves managed <see cref="ArrayFunctionSet"/> reference from current instance.
+		/// </summary>
+		/// <param name="primitiveSignature">Primitive signature char.</param>
+		/// <param name="arrayFunction">Requested array function.</param>
+		/// <returns>A managed <see cref="ArrayFunctionSet"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ref readonly ArrayFunctionSet GetArrayFunctions(Byte primitiveSignature,
+			ArrayFunctionSet.PrimitiveFunction arrayFunction)
+		{
+			JniMethodInfo info = primitiveSignature switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => arrayFunction switch
+				{
+					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetBooleanArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface
+						.ReleaseBooleanArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetBooleanArrayRegionInfo,
+					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetBooleanArrayRegionInfo,
+					_ => NativeInterface.NewBooleanArrayInfo,
+				},
+				UnicodePrimitiveSignatures.ByteSignatureChar => arrayFunction switch
+				{
+					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetByteArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseByteArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetByteArrayRegionInfo,
+					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetByteArrayRegionInfo,
+					_ => NativeInterface.NewByteArrayInfo,
+				},
+				UnicodePrimitiveSignatures.CharSignatureChar => arrayFunction switch
+				{
+					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetCharArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseCharArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetCharArrayRegionInfo,
+					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetCharArrayRegionInfo,
+					_ => NativeInterface.NewCharArrayInfo,
+				},
+				UnicodePrimitiveSignatures.DoubleSignatureChar => arrayFunction switch
+				{
+					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetDoubleArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.ReleaseElements =>
+						NativeInterface.ReleaseDoubleArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetDoubleArrayRegionInfo,
+					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetDoubleArrayRegionInfo,
+					_ => NativeInterface.NewDoubleArrayInfo,
+				},
+				UnicodePrimitiveSignatures.FloatSignatureChar => arrayFunction switch
+				{
+					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetFloatArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseFloatArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetFloatArrayRegionInfo,
+					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetFloatArrayRegionInfo,
+					_ => NativeInterface.NewFloatArrayInfo,
+				},
+				UnicodePrimitiveSignatures.IntSignatureChar => arrayFunction switch
+				{
+					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetIntArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseIntArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetIntArrayRegionInfo,
+					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetIntArrayRegionInfo,
+					_ => NativeInterface.NewIntArrayInfo,
+				},
+				UnicodePrimitiveSignatures.LongSignatureChar => arrayFunction switch
+				{
+					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetLongArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseLongArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetLongArrayRegionInfo,
+					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetLongArrayRegionInfo,
+					_ => NativeInterface.NewLongArrayInfo,
+				},
+				UnicodePrimitiveSignatures.ShortSignatureChar => arrayFunction switch
+				{
+					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetShortArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseShortArrayElementsInfo,
+					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetShortArrayRegionInfo,
+					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetShortArrayRegionInfo,
+					_ => NativeInterface.NewShortArrayInfo,
+				},
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+			};
+			return ref this.GetNativeInterface<NativeInterface>(info).ArrayFunctions;
+		}
+		/// <summary>
+		/// Retrieves managed <see cref="InstanceMethodFunctionSet"/> reference from current instance.
+		/// </summary>
+		/// <param name="signatureChar">Signature first char.</param>
+		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+		/// <returns>A managed <see cref="InstanceMethodFunctionSet"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ref readonly InstanceMethodFunctionSet GetInstanceMethodFunctions(Byte signatureChar,
+			Boolean nonVirtual)
+		{
+			JniMethodInfo info = signatureChar switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => nonVirtual ?
+					NativeInterface.CallBooleanMethodInfo :
+					NativeInterface.CallNonVirtualBooleanMethodInfo,
+				UnicodePrimitiveSignatures.ByteSignatureChar => nonVirtual ?
+					NativeInterface.CallByteMethodInfo :
+					NativeInterface.CallNonVirtualByteMethodInfo,
+				UnicodePrimitiveSignatures.CharSignatureChar => nonVirtual ?
+					NativeInterface.CallCharMethodInfo :
+					NativeInterface.CallNonVirtualCharMethodInfo,
+				UnicodePrimitiveSignatures.DoubleSignatureChar => nonVirtual ?
+					NativeInterface.CallDoubleMethodInfo :
+					NativeInterface.CallNonVirtualCharMethodInfo,
+				UnicodePrimitiveSignatures.FloatSignatureChar => nonVirtual ?
+					NativeInterface.CallFloatMethodInfo :
+					NativeInterface.CallNonVirtualFloatMethodInfo,
+				UnicodePrimitiveSignatures.IntSignatureChar => nonVirtual ?
+					NativeInterface.CallIntMethodInfo :
+					NativeInterface.CallNonVirtualIntMethodInfo,
+				UnicodePrimitiveSignatures.LongSignatureChar => nonVirtual ?
+					NativeInterface.CallLongMethodInfo :
+					NativeInterface.CallNonVirtualLongMethodInfo,
+				UnicodePrimitiveSignatures.ShortSignatureChar => nonVirtual ?
+					NativeInterface.CallShortMethodInfo :
+					NativeInterface.CallNonVirtualShortMethodInfo,
+				UnicodePrimitiveSignatures.VoidSignatureChar => nonVirtual ?
+					NativeInterface.CallVoidMethodInfo :
+					NativeInterface.CallNonVirtualVoidMethodInfo,
+				UnicodeObjectSignatures.ObjectSignaturePrefixChar => nonVirtual ?
+					NativeInterface.CallObjectMethodInfo :
+					NativeInterface.CallNonVirtualObjectMethodInfo,
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+			};
+			return ref this.GetNativeInterface<NativeInterface>(info).InstanceMethodFunctions;
+		}
+		/// <summary>
+		/// Retrieves managed <see cref="MethodFunctionSet{JClassLocalRef}"/> reference from current instance.
+		/// </summary>
+		/// <param name="primitiveSignature">Primitive signature char.</param>
+		/// <returns>A managed <see cref="MethodFunctionSet{JClassLocalRef}"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ref readonly MethodFunctionSet<JClassLocalRef> GetStaticMethodFunctions(Byte primitiveSignature)
+		{
+			JniMethodInfo info = primitiveSignature switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => NativeInterface.CallStaticBooleanMethodInfo,
+				UnicodePrimitiveSignatures.ByteSignatureChar => NativeInterface.CallStaticByteMethodInfo,
+				UnicodePrimitiveSignatures.CharSignatureChar => NativeInterface.CallStaticCharMethodInfo,
+				UnicodePrimitiveSignatures.DoubleSignatureChar => NativeInterface.CallStaticDoubleMethodInfo,
+				UnicodePrimitiveSignatures.FloatSignatureChar => NativeInterface.CallStaticFloatMethodInfo,
+				UnicodePrimitiveSignatures.IntSignatureChar => NativeInterface.CallStaticIntMethodInfo,
+				UnicodePrimitiveSignatures.LongSignatureChar => NativeInterface.CallStaticLongMethodInfo,
+				UnicodePrimitiveSignatures.ShortSignatureChar => NativeInterface.CallStaticLongMethodInfo,
+				UnicodePrimitiveSignatures.VoidSignatureChar => NativeInterface.CallStaticVoidMethodInfo,
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+			};
+			return ref this.GetNativeInterface<NativeInterface>(info).StaticMethodFunctions;
+		}
+		/// <summary>
+		/// Retrieves managed <see cref="FieldFunctionSet{JObjectLocalRef}"/> reference from current instance.
+		/// </summary>
+		/// <param name="primitiveSignature">Primitive signature char.</param>
+		/// <param name="getField">Indicates whether current call is get field value.</param>
+		/// <returns>A managed <see cref="FieldFunctionSet{JObjectLocalRef}"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ref readonly FieldFunctionSet<JObjectLocalRef> GetInstanceFieldFunctions(Byte primitiveSignature,
+			Boolean getField)
+		{
+			JniMethodInfo info = primitiveSignature switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => getField ?
+					NativeInterface.GetBooleanFieldInfo :
+					NativeInterface.SetBooleanFieldInfo,
+				UnicodePrimitiveSignatures.ByteSignatureChar => getField ?
+					NativeInterface.GetByteFieldInfo :
+					NativeInterface.SetByteFieldInfo,
+				UnicodePrimitiveSignatures.CharSignatureChar => getField ?
+					NativeInterface.GetCharFieldInfo :
+					NativeInterface.SetCharFieldInfo,
+				UnicodePrimitiveSignatures.DoubleSignatureChar => getField ?
+					NativeInterface.GetDoubleFieldInfo :
+					NativeInterface.SetDoubleFieldInfo,
+				UnicodePrimitiveSignatures.FloatSignatureChar => getField ?
+					NativeInterface.GetFloatFieldInfo :
+					NativeInterface.SetFloatFieldInfo,
+				UnicodePrimitiveSignatures.IntSignatureChar => getField ?
+					NativeInterface.GetIntFieldInfo :
+					NativeInterface.SetIntFieldInfo,
+				UnicodePrimitiveSignatures.LongSignatureChar => getField ?
+					NativeInterface.GetLongFieldInfo :
+					NativeInterface.SetLongFieldInfo,
+				UnicodePrimitiveSignatures.ShortSignatureChar => getField ?
+					NativeInterface.GetShortFieldInfo :
+					NativeInterface.SetShortFieldInfo,
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+			};
+			return ref this.GetNativeInterface<NativeInterface>(info).InstanceFieldFunctions;
+		}
+		/// <summary>
+		/// Retrieves managed <see cref="FieldFunctionSet{JClassLocalRef}"/> reference from current instance.
+		/// </summary>
+		/// <param name="primitiveSignature">Primitive signature char.</param>
+		/// <param name="getField">Indicates whether current call is get field value.</param>
+		/// <returns>A managed <see cref="FieldFunctionSet{JClassLocalRef}"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ref readonly FieldFunctionSet<JClassLocalRef> GetStaticFieldFunctions(Byte primitiveSignature,
+			Boolean getField)
+		{
+			JniMethodInfo info = primitiveSignature switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => getField ?
+					NativeInterface.GetStaticBooleanFieldInfo :
+					NativeInterface.SetStaticBooleanFieldInfo,
+				UnicodePrimitiveSignatures.ByteSignatureChar => getField ?
+					NativeInterface.GetStaticByteFieldInfo :
+					NativeInterface.SetStaticByteFieldInfo,
+				UnicodePrimitiveSignatures.CharSignatureChar => getField ?
+					NativeInterface.GetStaticCharFieldInfo :
+					NativeInterface.SetStaticCharFieldInfo,
+				UnicodePrimitiveSignatures.DoubleSignatureChar => getField ?
+					NativeInterface.GetStaticDoubleFieldInfo :
+					NativeInterface.SetStaticDoubleFieldInfo,
+				UnicodePrimitiveSignatures.FloatSignatureChar => getField ?
+					NativeInterface.GetStaticFloatFieldInfo :
+					NativeInterface.SetStaticFloatFieldInfo,
+				UnicodePrimitiveSignatures.IntSignatureChar => getField ?
+					NativeInterface.GetStaticIntFieldInfo :
+					NativeInterface.SetStaticIntFieldInfo,
+				UnicodePrimitiveSignatures.LongSignatureChar => getField ?
+					NativeInterface.GetStaticLongFieldInfo :
+					NativeInterface.SetStaticLongFieldInfo,
+				UnicodePrimitiveSignatures.ShortSignatureChar => getField ?
+					NativeInterface.GetStaticShortFieldInfo :
+					NativeInterface.SetStaticShortFieldInfo,
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+			};
+			return ref this.GetNativeInterface<NativeInterface>(info).StaticFieldFunctions;
+		}
+		/// <summary>
 		/// Creates an object from given reference.
 		/// </summary>
 		/// <typeparam name="TResult">A <see cref="IDataType"/> type.</typeparam>
@@ -77,19 +308,6 @@ partial class JEnvironment
 			if (localRef != (result as JLocalObject)!.LocalReference && register)
 				this._env.DeleteLocalRef(localRef);
 			return register ? this.Register(result) : result;
-		}
-		/// <summary>
-		/// Retrieves the JNI function pointer for <paramref name="index"/>.
-		/// </summary>
-		/// <param name="index">JNI function index.</param>
-		/// <returns>JNI function pointer.</returns>
-		private IntPtr GetPointer(Int32 index)
-		{
-			Int32 lastNormalIndex = EnvironmentCache.delegateIndex[typeof(GetObjectRefTypeDelegate)].Index;
-			if (index <= lastNormalIndex)
-				return this.Reference.Reference.Reference[index];
-			index -= lastNormalIndex;
-			return this.Reference.Reference.GetAdditionalPointers(this.Version)[index];
 		}
 		/// <summary>
 		/// Indicates whether current JNI call must use <see langword="stackalloc"/> or <see langword="new"/> to
@@ -196,7 +414,7 @@ partial class JEnvironment
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallObjectMethodInfo);
 			JObjectLocalRef localRef =
-				nativeInterface.InstanceMethodFunctions.CallObjectMethod.Call(
+				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, throwableRef.Value, getNameId, ReadOnlyValPtr<JValue>.Zero);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());

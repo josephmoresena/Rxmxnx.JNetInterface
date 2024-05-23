@@ -4,49 +4,35 @@ partial class JEnvironment
 {
 	private sealed partial record EnvironmentCache : IArrayFeature
 	{
-		public JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IObject, IDataType<TElement>
+		public unsafe JArrayObject<TElement> CreateArray<TElement>(Int32 length)
+			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfInvalidArrayLength(length);
-			JArrayLocalRef arrayRef;
+			JArrayLocalRef arrayRef = default;
 			if (MetadataHelper.GetMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
 			{
-				switch (metadata.Signature[0])
+				ref readonly ArrayFunctionSet arrayFunctions =
+					ref this.GetArrayFunctions(metadata.Signature[0], ArrayFunctionSet.PrimitiveFunction.NewArray);
+				arrayRef = metadata.Signature[0] switch
 				{
-					case UnicodePrimitiveSignatures.BooleanSignatureChar:
-						NewBooleanArrayDelegate newBooleanArray = this.GetDelegate<NewBooleanArrayDelegate>();
-						arrayRef = newBooleanArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.ByteSignatureChar:
-						NewByteArrayDelegate newByteArray = this.GetDelegate<NewByteArrayDelegate>();
-						arrayRef = newByteArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.CharSignatureChar:
-						NewCharArrayDelegate newCharArray = this.GetDelegate<NewCharArrayDelegate>();
-						arrayRef = newCharArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.DoubleSignatureChar:
-						NewDoubleArrayDelegate newDoubleArray = this.GetDelegate<NewDoubleArrayDelegate>();
-						arrayRef = newDoubleArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.FloatSignatureChar:
-						NewFloatArrayDelegate newFloatArray = this.GetDelegate<NewFloatArrayDelegate>();
-						arrayRef = newFloatArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.IntSignatureChar:
-						NewIntArrayDelegate newIntArray = this.GetDelegate<NewIntArrayDelegate>();
-						arrayRef = newIntArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.LongSignatureChar:
-						NewLongArrayDelegate newLongArray = this.GetDelegate<NewLongArrayDelegate>();
-						arrayRef = newLongArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.ShortSignatureChar:
-						NewShortArrayDelegate newShortArray = this.GetDelegate<NewShortArrayDelegate>();
-						arrayRef = newShortArray(this.Reference, length).ArrayValue;
-						break;
-					default:
-						throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
-				}
+					UnicodePrimitiveSignatures.BooleanSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewBooleanArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.ByteSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewByteArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.CharSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewCharArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.DoubleSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewDoubleArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.FloatSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewFloatArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.IntSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewIntArray
+						.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.LongSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewLongArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.ShortSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewShortArray.NewArray(this.Reference, length).ArrayValue,
+					_ => arrayRef,
+				};
 				if (arrayRef.IsDefault) this.CheckJniError();
 			}
 			else
@@ -164,9 +150,9 @@ partial class JEnvironment
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			IntPtr result = this.GetPrimitiveArrayElements(arrayRef, metadata.Signature[0], out Byte isCopyByte);
+			IntPtr result = this.GetPrimitiveArrayElements(arrayRef, metadata.Signature[0], out JBoolean isCopyJ);
 			if (result == IntPtr.Zero) this.CheckJniError();
-			isCopy = isCopyByte == JBoolean.TrueValue;
+			isCopy = isCopyJ.Value;
 			return result;
 		}
 		public unsafe ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)

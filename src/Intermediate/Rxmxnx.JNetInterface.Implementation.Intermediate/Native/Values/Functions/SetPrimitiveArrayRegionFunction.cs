@@ -15,5 +15,5 @@ internal readonly unsafe struct SetPrimitiveArrayRegionFunction<TPrimitiveType, 
 	/// Copies back a region of a primitive array from a buffer.
 	/// </summary>
 	public readonly delegate* unmanaged<JEnvironmentRef, TArrayRef, Int32, Int32, ReadOnlyValPtr<TPrimitiveType>, void>
-		SetArrayRegion;
+		Set;
 }

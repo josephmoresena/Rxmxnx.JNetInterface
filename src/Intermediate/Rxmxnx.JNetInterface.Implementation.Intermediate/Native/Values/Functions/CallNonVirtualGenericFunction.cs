@@ -16,6 +16,7 @@ internal readonly unsafe struct CallNonVirtualGenericFunction<TResult> where TRe
 	/// <summary>
 	/// Caller <c>A</c> function.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+	/// <remarks>Should it really be declared as managed?</remarks>
+	public readonly delegate* managed<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
 		ReadOnlyValPtr<JValue>, TResult> Call;
 }

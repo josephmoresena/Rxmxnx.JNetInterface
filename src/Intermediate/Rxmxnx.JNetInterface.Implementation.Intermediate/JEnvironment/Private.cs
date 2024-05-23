@@ -214,7 +214,7 @@ partial class JEnvironment
 			ref args.env._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetMethodIdInfo);
 		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)memoryList[0].Pointer;
 		ReadOnlyValPtr<Byte> signaturePtr = (ReadOnlyValPtr<Byte>)memoryList[1].Pointer;
-		return nativeInterface.InstanceMethodFunctions.GetMethodId.GetId(
+		return nativeInterface.InstanceMethodFunctions.MethodFunctions.GetMethodId.GetId(
 			args.env.Reference, args.classRef, namePtr, signaturePtr);
 	}
 	/// <summary>

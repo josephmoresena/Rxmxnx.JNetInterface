@@ -131,14 +131,13 @@ partial class JEnvironment
 				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
 
-			ref readonly NativeInterface nativeInterface = ref this.GetNativeInterface<NativeInterface>(
-				classRef.IsDefault ?
-					NativeInterface.CallObjectMethodInfo :
-					NativeInterface.CallNonVirtualObjectMethodInfo);
+			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
+				ref this.GetInstanceMethodFunctions(UnicodeObjectSignatures.ObjectSignaturePrefixChar,
+				                                    !classRef.IsDefault);
 			JObjectLocalRef resultLocalRef = classRef.IsDefault ?
-				nativeInterface.InstanceMethodFunctions.CallObjectMethod.Call(
+				instanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, localRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer) :
-				nativeInterface.NonVirtualMethodFunctions.CallNonVirtualObjectMethod.Call(
+				instanceMethodFunctions.NonVirtualFunctions.CallNonVirtualObjectMethod.Call(
 					this.Reference, localRef, classRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 			JTrace.CallObjectFunction(localRef, classRef, methodId, resultLocalRef, false);
 			this.CheckJniError();
@@ -214,14 +213,14 @@ partial class JEnvironment
 				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
 				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
 			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-			ref readonly NativeInterface nativeInterface = ref this.GetNativeInterface<NativeInterface>(
-				classRef.IsDefault ? NativeInterface.CallVoidMethodInfo : NativeInterface.CallNonVirtualVoidMethodInfo);
 
+			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
+				ref this.GetInstanceMethodFunctions(UnicodePrimitiveSignatures.VoidSignatureChar, !classRef.IsDefault);
 			if (classRef.IsDefault)
-				nativeInterface.InstanceMethodFunctions.CallVoidMethod.Call(
+				instanceMethodFunctions.MethodFunctions.CallVoidMethod.Call(
 					this.Reference, localRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 			else
-				nativeInterface.NonVirtualMethodFunctions.CallNonVirtualVoidMethod.Call(
+				instanceMethodFunctions.NonVirtualFunctions.CallNonVirtualVoidMethod.Call(
 					this.Reference, localRef, classRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
 			JTrace.CallMethod(localRef, classRef, methodId);
 			this.CheckJniError();

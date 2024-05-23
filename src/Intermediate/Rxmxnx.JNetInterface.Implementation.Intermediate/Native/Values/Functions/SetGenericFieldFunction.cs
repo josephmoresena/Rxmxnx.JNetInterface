@@ -12,5 +12,6 @@ internal readonly unsafe struct SetGenericFieldFunction<TReceiver, TResult>
 	/// <summary>
 	/// Pointer to <c>Set&lt;type&gt;Field</c> function.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TResult, void> Set;
+	/// <remarks>Should it really be declared as managed?</remarks>
+	public readonly delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TResult, void> Set;
 }

@@ -157,108 +157,87 @@ partial class JEnvironment
 			if (localRef == default) this.CheckJniError();
 			return localRef;
 		}
-		private IntPtr GetPrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, out Byte isCopy)
+		private unsafe IntPtr GetPrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, out JBoolean isCopyJ)
 		{
+			ref readonly ArrayFunctionSet arrayFunctions =
+				ref this.GetArrayFunctions(signature, ArrayFunctionSet.PrimitiveFunction.GetElements);
 			switch (signature)
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					GetBooleanArrayElementsDelegate getBooleanArrayElements =
-						this.GetDelegate<GetBooleanArrayElementsDelegate>();
-					return getBooleanArrayElements(this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef),
-					                               out isCopy);
+					return arrayFunctions.GetElementsFunctions.GetBooleanArrayElements.Get(
+						this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
 				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					GetByteArrayElementsDelegate getByteArrayElements =
-						this.GetDelegate<GetByteArrayElementsDelegate>();
-					return getByteArrayElements(this.Reference, JByteArrayLocalRef.FromReference(in arrayRef),
-					                            out isCopy);
+					return arrayFunctions.GetElementsFunctions.GetByteArrayElements.Get(
+						this.Reference, JByteArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
 				case UnicodePrimitiveSignatures.CharSignatureChar:
-					GetCharArrayElementsDelegate getCharArrayElements =
-						this.GetDelegate<GetCharArrayElementsDelegate>();
-					return getCharArrayElements(this.Reference, JCharArrayLocalRef.FromReference(in arrayRef),
-					                            out isCopy);
+					return arrayFunctions.GetElementsFunctions.GetCharArrayElements.Get(
+						this.Reference, JCharArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
 				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					GetDoubleArrayElementsDelegate getDoubleArrayElements =
-						this.GetDelegate<GetDoubleArrayElementsDelegate>();
-					return getDoubleArrayElements(this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef),
-					                              out isCopy);
+					return arrayFunctions.GetElementsFunctions.GetDoubleArrayElements.Get(
+						this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
 				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					GetFloatArrayElementsDelegate getFloatArrayElements =
-						this.GetDelegate<GetFloatArrayElementsDelegate>();
-					return getFloatArrayElements(this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef),
-					                             out isCopy);
+					return arrayFunctions.GetElementsFunctions.GetFloatArrayElements.Get(
+						this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
 				case UnicodePrimitiveSignatures.IntSignatureChar:
-					GetIntArrayElementsDelegate getIntArrayElements = this.GetDelegate<GetIntArrayElementsDelegate>();
-					return getIntArrayElements(this.Reference, JIntArrayLocalRef.FromReference(in arrayRef),
-					                           out isCopy);
+					return arrayFunctions.GetElementsFunctions.GetIntArrayElements.Get(
+						this.Reference, JIntArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
 				case UnicodePrimitiveSignatures.LongSignatureChar:
-					GetLongArrayElementsDelegate getLongArrayElements =
-						this.GetDelegate<GetLongArrayElementsDelegate>();
-					return getLongArrayElements(this.Reference, JLongArrayLocalRef.FromReference(in arrayRef),
-					                            out isCopy);
+					return arrayFunctions.GetElementsFunctions.GetLongArrayElements.Get(
+						this.Reference, JLongArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
 				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					GetShortArrayElementsDelegate getShortArrayElements =
-						this.GetDelegate<GetShortArrayElementsDelegate>();
-					return getShortArrayElements(this.Reference, JShortArrayLocalRef.FromReference(in arrayRef),
-					                             out isCopy);
-				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
+					return arrayFunctions.GetElementsFunctions.GetShortArrayElements.Get(
+						this.Reference, JShortArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
 			}
+			isCopyJ = false;
+			return default;
 		}
-		private void ReleasePrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, IntPtr pointer,
+		private unsafe void ReleasePrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, IntPtr pointer,
 			JReleaseMode mode)
 		{
+			ref readonly ArrayFunctionSet arrayFunctions =
+				ref this.GetArrayFunctions(signature, ArrayFunctionSet.PrimitiveFunction.ReleaseElements);
 			switch (signature)
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					ReleaseBooleanArrayElementsDelegate releaseBooleanArrayElements =
-						this.GetDelegate<ReleaseBooleanArrayElementsDelegate>();
-					releaseBooleanArrayElements(this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef),
-					                            (ReadOnlyValPtr<Byte>)pointer, mode);
+					arrayFunctions.ReleaseElementsFunctions.ReleaseBooleanArrayElements.Release(
+						this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef),
+						(ReadOnlyValPtr<JBoolean>)pointer, mode);
 					break;
 				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					ReleaseByteArrayElementsDelegate releaseByteArrayElements =
-						this.GetDelegate<ReleaseByteArrayElementsDelegate>();
-					releaseByteArrayElements(this.Reference, JByteArrayLocalRef.FromReference(in arrayRef),
-					                         (ReadOnlyValPtr<SByte>)pointer, mode);
+					arrayFunctions.ReleaseElementsFunctions.ReleaseByteArrayElements.Release(
+						this.Reference, JByteArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JByte>)pointer,
+						mode);
 					break;
 				case UnicodePrimitiveSignatures.CharSignatureChar:
-					ReleaseCharArrayElementsDelegate releaseCharArrayElements =
-						this.GetDelegate<ReleaseCharArrayElementsDelegate>();
-					releaseCharArrayElements(this.Reference, JCharArrayLocalRef.FromReference(in arrayRef),
-					                         (ReadOnlyValPtr<Char>)pointer, mode);
+					arrayFunctions.ReleaseElementsFunctions.ReleaseCharArrayElements.Release(
+						this.Reference, JCharArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JChar>)pointer,
+						mode);
 					break;
 				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					ReleaseDoubleArrayElementsDelegate releaseDoubleArrayElements =
-						this.GetDelegate<ReleaseDoubleArrayElementsDelegate>();
-					releaseDoubleArrayElements(this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef),
-					                           (ReadOnlyValPtr<Double>)pointer, mode);
+					arrayFunctions.ReleaseElementsFunctions.ReleaseDoubleArrayElements.Release(
+						this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef),
+						(ReadOnlyValPtr<JDouble>)pointer, mode);
 					break;
 				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					ReleaseFloatArrayElementsDelegate releaseFloatArrayElements =
-						this.GetDelegate<ReleaseFloatArrayElementsDelegate>();
-					releaseFloatArrayElements(this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef),
-					                          (ReadOnlyValPtr<Single>)pointer, mode);
+					arrayFunctions.ReleaseElementsFunctions.ReleaseFloatArrayElements.Release(
+						this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JFloat>)pointer,
+						mode);
 					break;
 				case UnicodePrimitiveSignatures.IntSignatureChar:
-					ReleaseIntArrayElementsDelegate releaseIntArrayElements =
-						this.GetDelegate<ReleaseIntArrayElementsDelegate>();
-					releaseIntArrayElements(this.Reference, JIntArrayLocalRef.FromReference(in arrayRef),
-					                        (ReadOnlyValPtr<Int32>)pointer, mode);
+					arrayFunctions.ReleaseElementsFunctions.ReleaseIntArrayElements.Release(
+						this.Reference, JIntArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JInt>)pointer,
+						mode);
 					break;
 				case UnicodePrimitiveSignatures.LongSignatureChar:
-					ReleaseLongArrayElementsDelegate releaseLongArrayElements =
-						this.GetDelegate<ReleaseLongArrayElementsDelegate>();
-					releaseLongArrayElements(this.Reference, JLongArrayLocalRef.FromReference(in arrayRef),
-					                         (ReadOnlyValPtr<Int64>)pointer, mode);
+					arrayFunctions.ReleaseElementsFunctions.ReleaseLongArrayElements.Release(
+						this.Reference, JLongArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JLong>)pointer,
+						mode);
 					break;
 				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					ReleaseShortArrayElementsDelegate releaseShortArrayElements =
-						this.GetDelegate<ReleaseShortArrayElementsDelegate>();
-					releaseShortArrayElements(this.Reference, JShortArrayLocalRef.FromReference(in arrayRef),
-					                          (ReadOnlyValPtr<Int16>)pointer, mode);
+					arrayFunctions.ReleaseElementsFunctions.ReleaseShortArrayElements.Release(
+						this.Reference, JShortArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JShort>)pointer,
+						mode);
 					break;
-				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		/// <summary>
@@ -270,60 +249,54 @@ partial class JEnvironment
 		/// <param name="index">Region start index.</param>
 		/// <param name="count">Number of elements in region.</param>
 		/// <exception cref="ArgumentException"/>
-		private void GetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer,
+		private unsafe void GetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer,
 			Int32 index, Int32 count = 1)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			ref readonly ArrayFunctionSet arrayFunctions =
+				ref this.GetArrayFunctions(signature[0], ArrayFunctionSet.PrimitiveFunction.GetRegion);
 			switch (signature[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					GetBooleanArrayRegionDelegate getBooleanArrayRegion =
-						this.GetDelegate<GetBooleanArrayRegionDelegate>();
 					JBooleanArrayLocalRef jBooleanArrayRef = jniTransaction.Add<JBooleanArrayLocalRef>(jArray);
-					getBooleanArrayRegion(this.Reference, jBooleanArrayRef, index, count,
-					                      (ValPtr<Byte>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.GetBooleanArrayRegion.Get(
+						this.Reference, jBooleanArrayRef, index, count, (ValPtr<JBoolean>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					GetByteArrayRegionDelegate getByteArrayRegion = this.GetDelegate<GetByteArrayRegionDelegate>();
 					JByteArrayLocalRef jByteArrayRef = jniTransaction.Add<JByteArrayLocalRef>(jArray);
-					getByteArrayRegion(this.Reference, jByteArrayRef, index, count, (ValPtr<SByte>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.GetByteArrayRegion.Get(
+						this.Reference, jByteArrayRef, index, count, (ValPtr<JByte>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.CharSignatureChar:
-					GetCharArrayRegionDelegate getCharArrayRegion = this.GetDelegate<GetCharArrayRegionDelegate>();
 					JCharArrayLocalRef jCharArrayRef = jniTransaction.Add<JCharArrayLocalRef>(jArray);
-					getCharArrayRegion(this.Reference, jCharArrayRef, index, count, (ValPtr<Char>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.GetCharArrayRegion.Get(
+						this.Reference, jCharArrayRef, index, count, (ValPtr<JChar>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					GetDoubleArrayRegionDelegate getDoubleArrayRegion =
-						this.GetDelegate<GetDoubleArrayRegionDelegate>();
 					JDoubleArrayLocalRef jDoubleArrayRef = jniTransaction.Add<JDoubleArrayLocalRef>(jArray);
-					getDoubleArrayRegion(this.Reference, jDoubleArrayRef, index, count,
-					                     (ValPtr<Double>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.GetDoubleArrayRegion.Get(
+						this.Reference, jDoubleArrayRef, index, count, (ValPtr<JDouble>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					GetFloatArrayRegionDelegate getFloatArrayRegion = this.GetDelegate<GetFloatArrayRegionDelegate>();
 					JFloatArrayLocalRef jFloatArrayRef = jniTransaction.Add<JFloatArrayLocalRef>(jArray);
-					getFloatArrayRegion(this.Reference, jFloatArrayRef, index, count,
-					                    (ValPtr<Single>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.GetFloatArrayRegion.Get(this.Reference, jFloatArrayRef, index, count,
+					                                                       (ValPtr<JFloat>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.IntSignatureChar:
-					GetIntArrayRegionDelegate getIntArrayRegion = this.GetDelegate<GetIntArrayRegionDelegate>();
 					JIntArrayLocalRef jIntArrayRef = jniTransaction.Add<JIntArrayLocalRef>(jArray);
-					getIntArrayRegion(this.Reference, jIntArrayRef, index, count, (ValPtr<Int32>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.GetIntArrayRegion.Get(
+						this.Reference, jIntArrayRef, index, count, (ValPtr<JInt>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.LongSignatureChar:
-					GetLongArrayRegionDelegate getLongArrayRegion = this.GetDelegate<GetLongArrayRegionDelegate>();
 					JLongArrayLocalRef jLongArrayRef = jniTransaction.Add<JLongArrayLocalRef>(jArray);
-					getLongArrayRegion(this.Reference, jLongArrayRef, index, count, (ValPtr<Int64>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.GetLongArrayRegion.Get(
+						this.Reference, jLongArrayRef, index, count, (ValPtr<JLong>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					GetShortArrayRegionDelegate getShortArrayRegion = this.GetDelegate<GetShortArrayRegionDelegate>();
 					JShortArrayLocalRef jShortArrayRef = jniTransaction.Add<JShortArrayLocalRef>(jArray);
-					getShortArrayRegion(this.Reference, jShortArrayRef, index, count,
-					                    (ValPtr<Int16>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.GetShortArrayRegion.Get(this.Reference, jShortArrayRef, index, count,
+					                                                       (ValPtr<JShort>)fixedBuffer.Pointer);
 					break;
-				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		/// <summary>
@@ -335,64 +308,54 @@ partial class JEnvironment
 		/// <param name="index">Region start index.</param>
 		/// <param name="count">Number of elements in region.</param>
 		/// <exception cref="ArgumentException"/>
-		private void SetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer,
+		private unsafe void SetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IFixedPointer fixedBuffer,
 			Int32 index, Int32 count = 1)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			ref readonly ArrayFunctionSet arrayFunctions =
+				ref this.GetArrayFunctions(signature[0], ArrayFunctionSet.PrimitiveFunction.SetRegion);
 			switch (signature[0])
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					SetBooleanArrayRegionDelegate setBooleanArrayRegion =
-						this.GetDelegate<SetBooleanArrayRegionDelegate>();
 					JBooleanArrayLocalRef jBooleanArrayRef = jniTransaction.Add<JBooleanArrayLocalRef>(jArray);
-					setBooleanArrayRegion(this.Reference, jBooleanArrayRef, index, count,
-					                      (ReadOnlyValPtr<Byte>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.SetBooleanArrayRegion.Set(
+						this.Reference, jBooleanArrayRef, index, count, (ReadOnlyValPtr<JBoolean>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					SetByteArrayRegionDelegate setByteArrayRegion = this.GetDelegate<SetByteArrayRegionDelegate>();
 					JByteArrayLocalRef jByteArrayRef = jniTransaction.Add<JByteArrayLocalRef>(jArray);
-					setByteArrayRegion(this.Reference, jByteArrayRef, index, count,
-					                   (ReadOnlyValPtr<SByte>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.SetByteArrayRegion.Set(this.Reference, jByteArrayRef, index, count,
+					                                                      (ReadOnlyValPtr<JByte>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.CharSignatureChar:
-					SetCharArrayRegionDelegate setCharArrayRegion = this.GetDelegate<SetCharArrayRegionDelegate>();
 					JCharArrayLocalRef jCharArrayRef = jniTransaction.Add<JCharArrayLocalRef>(jArray);
-					setCharArrayRegion(this.Reference, jCharArrayRef, index, count,
-					                   (ReadOnlyValPtr<Char>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.SetCharArrayRegion.Set(this.Reference, jCharArrayRef, index, count,
+					                                                      (ReadOnlyValPtr<JChar>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					SetDoubleArrayRegionDelegate setDoubleArrayRegion =
-						this.GetDelegate<SetDoubleArrayRegionDelegate>();
 					JDoubleArrayLocalRef jDoubleArrayRef = jniTransaction.Add<JDoubleArrayLocalRef>(jArray);
-					setDoubleArrayRegion(this.Reference, jDoubleArrayRef, index, count,
-					                     (ReadOnlyValPtr<Double>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.SetDoubleArrayRegion.Set(
+						this.Reference, jDoubleArrayRef, index, count, (ReadOnlyValPtr<JDouble>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					SetFloatArrayRegionDelegate setFloatArrayRegion = this.GetDelegate<SetFloatArrayRegionDelegate>();
 					JFloatArrayLocalRef jFloatArrayRef = jniTransaction.Add<JFloatArrayLocalRef>(jArray);
-					setFloatArrayRegion(this.Reference, jFloatArrayRef, index, count,
-					                    (ReadOnlyValPtr<Single>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.SetFloatArrayRegion.Set(this.Reference, jFloatArrayRef, index, count,
+					                                                       (ReadOnlyValPtr<JFloat>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.IntSignatureChar:
-					SetIntArrayRegionDelegate setIntArrayRegion = this.GetDelegate<SetIntArrayRegionDelegate>();
 					JIntArrayLocalRef jIntArrayRef = jniTransaction.Add<JIntArrayLocalRef>(jArray);
-					setIntArrayRegion(this.Reference, jIntArrayRef, index, count,
-					                  (ReadOnlyValPtr<Int32>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.SetIntArrayRegion.Set(this.Reference, jIntArrayRef, index, count,
+					                                                     (ReadOnlyValPtr<JInt>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.LongSignatureChar:
-					SetLongArrayRegionDelegate setLongArrayRegion = this.GetDelegate<SetLongArrayRegionDelegate>();
 					JLongArrayLocalRef jLongArrayRef = jniTransaction.Add<JLongArrayLocalRef>(jArray);
-					setLongArrayRegion(this.Reference, jLongArrayRef, index, count,
-					                   (ReadOnlyValPtr<Int64>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.SetLongArrayRegion.Set(this.Reference, jLongArrayRef, index, count,
+					                                                      (ReadOnlyValPtr<JLong>)fixedBuffer.Pointer);
 					break;
 				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					SetShortArrayRegionDelegate setShortArrayRegion = this.GetDelegate<SetShortArrayRegionDelegate>();
 					JShortArrayLocalRef jShortArrayRef = jniTransaction.Add<JShortArrayLocalRef>(jArray);
-					setShortArrayRegion(this.Reference, jShortArrayRef, index, count,
-					                    (ReadOnlyValPtr<Int16>)fixedBuffer.Pointer);
+					arrayFunctions.RegionFunctions.SetShortArrayRegion.Set(this.Reference, jShortArrayRef, index, count,
+					                                                       (ReadOnlyValPtr<JShort>)fixedBuffer.Pointer);
 					break;
-				default:
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
 			}
 		}
 		/// <summary>

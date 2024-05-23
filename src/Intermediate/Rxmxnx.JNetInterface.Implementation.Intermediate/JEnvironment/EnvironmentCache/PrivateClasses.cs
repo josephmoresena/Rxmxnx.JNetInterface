@@ -48,7 +48,7 @@ partial class JEnvironment
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallObjectMethodInfo);
 			JObjectLocalRef localRef =
-				nativeInterface.InstanceMethodFunctions.CallObjectMethod.Call(
+				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, classRef.Value, getNameId, ReadOnlyValPtr<JValue>.Zero);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
@@ -67,7 +67,7 @@ partial class JEnvironment
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallBooleanMethodInfo);
 			JBoolean result =
-				nativeInterface.InstanceMethodFunctions.CallBooleanMethod.Call(
+				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallBooleanMethod.Call(
 					this.Reference, classRef.Value, isPrimitiveId, ReadOnlyValPtr<JValue>.Zero);
 			return result.Value;
 		}

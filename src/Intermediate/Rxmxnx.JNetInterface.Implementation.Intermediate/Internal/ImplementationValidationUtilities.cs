@@ -52,7 +52,7 @@ public static class ImplementationValidationUtilities
 	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is default.</exception>
 	public static void ThrowIfDefault(JReferenceObject jObject, String? message = default)
 	{
-		if (jObject.IsDefault)
+		if (jObject.IsDefault && JObject.IsNullOrDefault(jObject))
 			throw new ArgumentException(message ?? "Disposed JReferenceObject.");
 	}
 	/// <summary>

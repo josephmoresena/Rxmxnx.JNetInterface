@@ -16,5 +16,5 @@ internal readonly unsafe struct CallNonVirtualMethodFunction
 	/// Caller <c>A</c> function.
 	/// </summary>
 	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
-		ReadOnlyValPtr<JValue>, void > Call;
+		ReadOnlyValPtr<JValue>, void> Call;
 }

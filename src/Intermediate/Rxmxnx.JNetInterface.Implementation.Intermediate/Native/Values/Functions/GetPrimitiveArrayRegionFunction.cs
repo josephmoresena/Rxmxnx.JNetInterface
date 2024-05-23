@@ -14,6 +14,5 @@ internal readonly unsafe struct GetPrimitiveArrayRegionFunction<TPrimitiveType, 
 	/// Pointer to <c>Get&lt;PrimitiveType&gt;ArrayRegion</c> function.
 	/// Copies a region of a primitive array into a buffer.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, TArrayRef, Int32, Int32, ValPtr<TPrimitiveType>, void>
-		GetArrayRegion;
+	public readonly delegate* unmanaged<JEnvironmentRef, TArrayRef, Int32, Int32, ValPtr<TPrimitiveType>, void> Get;
 }

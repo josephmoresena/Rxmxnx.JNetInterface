@@ -48,22 +48,6 @@ partial class JEnvironment
 		}
 
 		/// <summary>
-		/// Retrieves a <typeparamref name="TDelegate"/> instance for <typeparamref name="TDelegate"/>.
-		/// </summary>
-		/// <typeparam name="TDelegate">Type of method delegate.</typeparam>
-		/// <returns>A <typeparamref name="TDelegate"/> instance.</returns>
-		public TDelegate GetDelegate<TDelegate>() where TDelegate : Delegate
-		{
-			ImplementationValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
-			ImplementationValidationUtilities.ThrowIfInvalidVirtualMachine(this.VirtualMachine.IsAlive);
-			ImplementationValidationUtilities.ThrowIfNotAttached(this._env.IsAttached);
-			Type typeOfT = typeof(TDelegate);
-			JniDelegateInfo info = EnvironmentCache.delegateIndex[typeOfT];
-			ImplementationValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
-			IntPtr ptr = this.GetPointer(info.Index);
-			return this._delegateCache.GetDelegate<TDelegate>(ptr);
-		}
-		/// <summary>
 		/// Retrieves managed <see cref="NativeInterface"/> reference from current instance.
 		/// </summary>
 		/// <param name="info">A <see cref="JniMethodInfo"/> instance.</param>

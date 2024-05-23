@@ -14,5 +14,5 @@ internal readonly unsafe struct NewPrimitiveArrayFunction<TPrimitiveType, TArray
 	/// Pointer to <c>New&lt;PrimitiveType&gt;Array</c> function.
 	/// Constructs a new primitive array object.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, Int32, TArrayRef> NewArray;
+	public readonly delegate* <JEnvironmentRef, Int32, TArrayRef> NewArray;
 }
