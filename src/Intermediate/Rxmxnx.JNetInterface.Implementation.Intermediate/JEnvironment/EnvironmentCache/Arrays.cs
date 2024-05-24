@@ -390,10 +390,9 @@ partial class JEnvironment
 			TElement initialElement) where TElement : IObject, IDataType<TElement>
 		{
 			Int32 requiredBytes = metadata.SizeOf * jArray.Length;
-			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
-			using StackDisposable? stackDisposable =
-				useStackAlloc && requiredBytes > 0 ? new(this, requiredBytes) : default;
-			Span<Byte> buffer = stackDisposable is not null ?
+			using StackDisposable stackDisposable =
+				this.GetStackDisposable(this.UseStackAlloc(requiredBytes), requiredBytes);
+			Span<Byte> buffer = stackDisposable.UsingStack ?
 				stackalloc Byte[requiredBytes] :
 				EnvironmentCache.HeapAlloc<Byte>(requiredBytes);
 			Int32 offset = 0;

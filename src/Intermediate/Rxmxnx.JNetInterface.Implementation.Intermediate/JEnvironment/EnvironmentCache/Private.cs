@@ -360,8 +360,7 @@ partial class JEnvironment
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowNewInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			fixed (Byte* ptr =
-				       &MemoryMarshal.GetReference(message))
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(message))
 				return nativeInterface.ErrorFunctions.ThrowNew(this.Reference, classRef, ptr);
 		}
 		/// <summary>
@@ -478,5 +477,13 @@ partial class JEnvironment
 			this._env.DeleteLocalRef(jLocal.LocalReference);
 			jLocal.ClearValue();
 		}
+		/// <summary>
+		/// Creates a <see cref="StackDisposable"/> instance for current call.
+		/// </summary>
+		/// <param name="useStackAlloc">Indicates whether current call is using stack.</param>
+		/// <param name="requiredBytes">Number of bytes to use from stack.</param>
+		/// <returns>A <see cref="StackDisposable"/> instance.</returns>
+		private StackDisposable GetStackDisposable(Boolean useStackAlloc, Int32 requiredBytes)
+			=> useStackAlloc && requiredBytes > 0 ? new(this, requiredBytes) : new();
 	}
 }
