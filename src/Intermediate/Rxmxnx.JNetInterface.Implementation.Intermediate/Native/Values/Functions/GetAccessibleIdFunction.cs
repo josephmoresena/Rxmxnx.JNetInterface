@@ -12,6 +12,5 @@ internal readonly unsafe struct GetAccessibleIdFunction<TAccessible>
 	/// Pointer to <c>Get&lt;type&gt;ID</c> function.
 	/// </summary>
 	/// <remarks>The accessible object is determined by its name and signature.</remarks>
-	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, ReadOnlyValPtr<Byte>, ReadOnlyValPtr<Byte>,
-		TAccessible> GetId;
+	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, Byte*, Byte*, TAccessible> GetId;
 }

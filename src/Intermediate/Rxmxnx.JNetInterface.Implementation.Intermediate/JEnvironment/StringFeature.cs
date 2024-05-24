@@ -6,13 +6,13 @@ partial class JEnvironment
 	{
 		public JStringObject Create(ReadOnlySpan<Char> data)
 		{
-			JStringLocalRef stringRef = data.WithSafeFixed(this, EnvironmentCache.CreateString);
+			JStringLocalRef stringRef = this.CreateString(data);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, data.ToString()));
 		}
 		public JStringObject Create(ReadOnlySpan<Byte> utf8Data)
 		{
-			JStringLocalRef stringRef = utf8Data.WithSafeFixed(this, EnvironmentCache.CreateUtf8String);
+			JStringLocalRef stringRef = this.CreateUtf8String(utf8Data);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, utf8Data.Length));
 		}
@@ -149,16 +149,18 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
+		public unsafe void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jString);
-			chars.WithSafeFixed((this, jString, startIndex), EnvironmentCache.GetStringRegion);
+			fixed (Char* ptr = &MemoryMarshal.GetReference(chars))
+				this.GetStringRegion(jString, new(ptr), startIndex, chars.Length);
 			this.CheckJniError();
 		}
-		public void GetUtf8Copy(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex = 0)
+		public unsafe void GetUtf8Copy(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex = 0)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jString);
-			utf8Units.WithSafeFixed((this, jString, startIndex), EnvironmentCache.GetStringUtf8Region);
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(utf8Units))
+				this.GetStringUtf8Region(jString, new(ptr), startIndex, utf8Units.Length);
 			this.CheckJniError();
 		}
 	}

@@ -134,13 +134,13 @@ partial class JEnvironment
 		{
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
 			ITypeInformation metadata = new TypeInformation(classInformation);
-			return rawClassBytes.WithSafeFixed((this, metadata, jClassLoader), EnvironmentCache.LoadClass);
+			return this.LoadClass(metadata, rawClassBytes, jClassLoader);
 		}
 		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes,
 			JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
 		{
 			ITypeInformation metadata = MetadataHelper.GetMetadata<TDataType>();
-			return rawClassBytes.WithSafeFixed((this, metadata, jClassLoader), EnvironmentCache.LoadClass);
+			return this.LoadClass(metadata, rawClassBytes, jClassLoader);
 		}
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 		{

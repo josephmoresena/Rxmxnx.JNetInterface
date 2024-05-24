@@ -70,24 +70,7 @@ partial class JEnvironment
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
-		public TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
-			where TElement : IObject, IDataType<TElement>
-		{
-			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
-			{
-				using IFixedContext<Byte>.IDisposable fixedBuffer =
-					EnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
-				this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
-				this.CheckJniError();
-				return (TElement)primitiveMetadata.CreateInstance(fixedBuffer.Values);
-			}
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
-			return this.GetElementObject<TElement>(arrayRef, index);
-		}
-		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
+		public unsafe TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
 			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
@@ -95,10 +78,26 @@ partial class JEnvironment
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
-				using IFixedContext<Byte>.IDisposable fixedBuffer =
-					EnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
+				fixed (Byte* ptr = &MemoryMarshal.GetReference(buffer))
+					this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, new(ptr), index);
+				this.CheckJniError();
+				return (TElement)primitiveMetadata.CreateInstance(buffer);
+			}
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
+			return this.GetElementObject<TElement>(arrayRef, index);
+		}
+		public unsafe void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
+			where TElement : IObject, IDataType<TElement>
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jArray);
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			{
+				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
 				value!.CopyTo(buffer);
-				this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
+				fixed (Byte* ptr = &MemoryMarshal.GetReference(buffer))
+					this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, new(ptr), index);
 				this.CheckJniError();
 			}
 			else
@@ -209,18 +208,22 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<TPrimitive> elements,
+		public unsafe void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<TPrimitive> elements,
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			elements.WithSafeFixed((this, jArray, startIndex), EnvironmentCache.GetPrimitiveArrayRegion);
+			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			fixed (TPrimitive* ptr = &MemoryMarshal.GetReference(elements))
+				this.GetPrimitiveArrayRegion(jArray, metadata.Signature, new(ptr), startIndex, elements.Length);
 			this.CheckJniError();
 		}
-		public void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlySpan<TPrimitive> elements,
+		public unsafe void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlySpan<TPrimitive> elements,
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			elements.WithSafeFixed((this, jArray, startIndex), EnvironmentCache.SetPrimitiveArrayRegion);
+			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			fixed (TPrimitive* ptr = &MemoryMarshal.GetReference(elements))
+				this.SetPrimitiveArrayRegion(jArray, metadata.Signature, new(ptr), startIndex, elements.Length);
 			this.CheckJniError();
 		}
 	}

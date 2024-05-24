@@ -16,7 +16,7 @@ internal readonly unsafe struct ErrorFunctionSet
 	/// Constructs an exception object from the specified class with the message specified
 	/// and causes that exception to be thrown.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, ReadOnlyValPtr<Byte>, JResult> ThrowNew;
+	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, Byte*, JResult> ThrowNew;
 	/// <summary>
 	/// Pointer to <c>ExceptionOccurred</c> function.
 	/// Determines if an exception is being thrown.
@@ -38,5 +38,5 @@ internal readonly unsafe struct ErrorFunctionSet
 	/// Pointer to <c>FatalError</c> function.
 	/// Raises a fatal error and does not expect the <c>VM</c> to recover. This function does not return.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, ReadOnlyValPtr<Byte>, void> FatalError;
+	public readonly delegate* unmanaged<JEnvironmentRef, Byte*, void> FatalError;
 }

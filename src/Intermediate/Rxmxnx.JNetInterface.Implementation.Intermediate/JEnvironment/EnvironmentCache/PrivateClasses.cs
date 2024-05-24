@@ -123,22 +123,24 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		private JClassLocalRef FindClass(JClassObject jClass)
+		private unsafe JClassLocalRef FindClass(JClassObject jClass)
 		{
 			if (jClass.ClassSignature.Length == 1)
 				return this.FindPrimitiveClass(jClass.ClassSignature[0]);
 			JTrace.FindClass(jClass);
-			return jClass.Name.WithSafeFixed(this, EnvironmentCache.FindClass);
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(jClass.Name.AsSpan()))
+				return this.FindClass(new IntPtr(ptr));
 		}
 		/// <summary>
 		/// Retrieves class from cache or loads it using JNI.
 		/// </summary>
 		/// <param name="classInformation">A <see cref="ITypeInformation"/> instance.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
-		private JClassObject GetOrFindClass(ITypeInformation classInformation)
+		private unsafe JClassObject GetOrFindClass(ITypeInformation classInformation)
 		{
 			if (this._classes.TryGetValue(classInformation.Hash, out JClassObject? result)) return result;
 			if (MetadataHelper.GetMetadata(classInformation.Hash) is { } metadata)
+				//Class is found in metadata cache.
 			{
 				result = new(this.ClassObject, metadata);
 			}
@@ -146,7 +148,8 @@ partial class JEnvironment
 			{
 				JClassLocalRef classRef = this._objects.FindClassParameter(classInformation.Hash);
 				if (classRef.IsDefault)
-					classRef = classInformation.ClassName.WithSafeFixed(this, EnvironmentCache.FindClass);
+					fixed (Byte* ptr = &MemoryMarshal.GetReference(classInformation.ClassName.AsSpan()))
+						classRef = this.FindClass(new IntPtr(ptr));
 				result = new(this.ClassObject, classInformation, classRef);
 			}
 			return this.Register(result);
@@ -172,43 +175,67 @@ partial class JEnvironment
 		/// <summary>
 		/// Loads a java class from its binary information into the current VM.
 		/// </summary>
-		/// <param name="rawClassMemory">
-		/// A fixed context containing class binary information.
-		/// </param>
-		/// <param name="args">Cache, Class metadata and class loader.</param>
-		/// <returns>A <see cref="JClassObject"/> instance.</returns>
-		private static unsafe JClassObject LoadClass(in IReadOnlyFixedContext<Byte> rawClassMemory,
-			(EnvironmentCache cache, ITypeInformation metadata, JClassLoaderObject? jClassLoader) args)
+		/// <param name="metadata">A <see cref="ITypeInformation"/> instance.</param>
+		/// <param name="buffer">Binary span with class information.</param>
+		/// <param name="jClassLoader">The object used as class loader.</param>
+		/// <returns>Loaded <see cref="JClassObject"/> instance.</returns>
+		private JClassObject LoadClass(ITypeInformation metadata, ReadOnlySpan<Byte> buffer,
+			JClassLoaderObject? jClassLoader)
 		{
-			ImplementationValidationUtilities.ThrowIfProxy(args.jClassLoader);
+			ImplementationValidationUtilities.ThrowIfProxy(jClassLoader);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			JObjectLocalRef localRef = jniTransaction.Add(jClassLoader);
+			JClassLocalRef classRef = this.DefineClass(metadata.ClassName, buffer, localRef);
+			if (this._classes.TryGetValue(metadata.Hash, out JClassObject? result))
+				//Class found in metadata cache.
+				this.DefineExistingClass(result, jniTransaction, classRef);
+			else
+				result = new(this.ClassObject, metadata, classRef);
+			return this.Register(result);
+		}
+		/// <summary>
+		/// Loads a java class from its binary information into the current VM.
+		/// </summary>
+		/// <param name="className">Class name</param>
+		/// <param name="buffer">Buffer containing the .class file data.</param>
+		/// <param name="localRef">Class loader reference.</param>
+		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+		private unsafe JClassLocalRef DefineClass(CString className, ReadOnlySpan<Byte> buffer,
+			JObjectLocalRef localRef)
+		{
 			ref readonly NativeInterface nativeInterface =
-				ref args.cache.GetNativeInterface<NativeInterface>(NativeInterface.DefineClassInfo);
-			using INativeTransaction jniTransaction = args.cache.VirtualMachine.CreateTransaction(2);
-			using IFixedPointer.IDisposable classNamePointer = args.metadata.GetClassNameFixedPointer();
-			JObjectLocalRef localRef = jniTransaction.Add(args.jClassLoader);
-			JClassLocalRef classRef = nativeInterface.ClassFunctions.DefineClass(
-				args.cache.Reference, (ReadOnlyValPtr<Byte>)classNamePointer.Pointer, localRef, rawClassMemory.Pointer,
-				rawClassMemory.Bytes.Length);
-			if (classRef.IsDefault) args.cache.CheckJniError();
-			if (args.cache._classes.TryGetValue(args.metadata.Hash, out JClassObject? result))
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.DefineClassInfo);
+			JClassLocalRef classRef;
+			fixed (Byte* namePtr = &MemoryMarshal.GetReference(className.AsSpan()))
+			fixed (Byte* bufferPtr = &MemoryMarshal.GetReference(buffer))
 			{
-				JEnvironment env = args.cache._env;
-				JClassLocalRef classRefO = jniTransaction.Add(result);
-				if (classRefO.IsDefault || env.IsSame(classRef.Value, default))
-				{
-					result.SetValue(classRef);
-					args.cache._classes.Unload(classRefO);
-				}
-				else if (!env.IsSame(classRef.Value, classRefO.Value))
-				{
+				classRef = nativeInterface.ClassFunctions.DefineClass(this.Reference, namePtr, localRef, new(bufferPtr),
+				                                                      buffer.Length);
+			}
+			if (classRef.IsDefault) this.CheckJniError();
+			return classRef;
+		}
+		/// <summary>
+		/// Define class definition of existing class in metadata cache.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <exception cref="InvalidOperationException"></exception>
+		private void DefineExistingClass(JClassObject jClass, INativeTransaction jniTransaction,
+			JClassLocalRef classRef)
+		{
+			JClassLocalRef classRefO = jniTransaction.Add(jClass);
+			if (!classRefO.IsDefault && !this._env.IsSame(classRef.Value, default))
+			{
+				if (!this._env.IsSame(classRef.Value, classRefO.Value))
 					throw new InvalidOperationException("Redefinition class is unsupported.");
-				}
 			}
 			else
 			{
-				result = new(args.cache.ClassObject, args.metadata, classRef);
+				jClass.SetValue(classRef);
+				this._classes.Unload(classRefO);
 			}
-			return args.cache.Register(result);
 		}
 		/// <summary>
 		/// Retrieves the <see cref="ClassObjectMetadata"/> instance from <paramref name="jObject"/> metadata.

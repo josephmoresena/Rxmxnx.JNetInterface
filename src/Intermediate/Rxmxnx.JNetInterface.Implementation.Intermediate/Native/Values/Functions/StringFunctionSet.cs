@@ -10,7 +10,7 @@ internal readonly unsafe struct StringFunctionSet
 	/// Pointer to <c>NewString</c> function.
 	/// Constructs a new <c>java.lang.String</c> object from an array of characters.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, ReadOnlyValPtr<Char>, Int32, JStringLocalRef> NewString;
+	public readonly delegate* unmanaged<JEnvironmentRef, Char*, Int32, JStringLocalRef> NewString;
 	/// <summary>
 	/// Pointers to <c>GetStringLength</c>, <c>GetStringChars</c> and <c>ReleaseStringChars</c>
 	/// functions.
@@ -20,7 +20,7 @@ internal readonly unsafe struct StringFunctionSet
 	/// Pointer to <c>NewStringUTF</c> function.
 	/// Constructs a new <c>java.lang.String</c> object from an array of characters.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, ReadOnlyValPtr<Byte>, JStringLocalRef> NewStringUtf;
+	public readonly delegate* unmanaged<JEnvironmentRef, Byte*, JStringLocalRef> NewStringUtf;
 	/// <summary>
 	/// Pointers to <c>GetStringUTFLength</c>, <c>GetStringUTFChars</c> and <c>ReleaseStringUTFChars</c>
 	/// functions.

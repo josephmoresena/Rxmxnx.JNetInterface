@@ -37,12 +37,19 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
 	/// <returns></returns>
-	private IThread AttachThread(ThreadCreationArgs args)
+	private unsafe IThread AttachThread(ThreadCreationArgs args)
 	{
-		CString threadName = args.Name ?? CString.Zero;
 		ImplementationValidationUtilities.ThrowIfProxy(args.ThreadGroup);
 		if (this.GetEnvironment() is { } env) return new JEnvironment.JThread(env);
-		return threadName.WithSafeFixed((this, args), JVirtualMachine.AttachThread);
+		using INativeTransaction jniTransaction = this.CreateTransaction(1);
+		fixed (Byte* ptr = &MemoryMarshal.GetReference((ReadOnlySpan<Byte>)args.Name))
+		{
+			VirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, new(ptr), args);
+			JResult result = JVirtualMachine.AttachThread(this, args.IsDaemon, arg, out JEnvironmentRef envRef);
+			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
+			env = this._cache.ThreadCache.Get(envRef, out _, args);
+		}
+		return (IThread)env;
 	}
 	/// <summary>
 	/// Initialize main classes.
@@ -54,23 +61,6 @@ public partial class JVirtualMachine
 		this._cache.LoadMainClasses(env);
 	}
 
-	/// <summary>
-	/// Attach current thread to VM.
-	/// </summary>
-	/// <param name="name">Thread name.</param>
-	/// <param name="args">Argument.</param>
-	/// <returns>A <see cref="IThread"/> instance.</returns>
-	/// <exception cref="JniException"/>
-	private static IThread AttachThread(in IReadOnlyFixedMemory name,
-		(JVirtualMachine vm, ThreadCreationArgs args) args)
-	{
-		using INativeTransaction jniTransaction = args.vm.CreateTransaction(1);
-		VirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, name, args.args);
-		JResult result = JVirtualMachine.AttachThread(args.vm, args.args.IsDaemon, arg, out JEnvironmentRef envRef);
-		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-		JEnvironment env = args.vm._cache.ThreadCache.Get(envRef, out _, args.args);
-		return (IThread)env;
-	}
 	/// <summary>
 	/// Attach current thread to VM.
 	/// </summary>
@@ -89,17 +79,17 @@ public partial class JVirtualMachine
 	/// <paramref name="args"/>.
 	/// </summary>
 	/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
-	/// <param name="name">A <see cref="IFixedPointer"/> to name.</param>
+	/// <param name="namePtr">Pointer to thread name.</param>
 	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
 	/// <returns>A <see cref="VirtualMachineArgumentValue"/> value.</returns>
-	private static VirtualMachineArgumentValue CreateAttachArgument(INativeTransaction jniTransaction,
-		IFixedPointer name, ThreadCreationArgs args)
+	private static VirtualMachineArgumentValue CreateAttachArgument(INativeTransaction jniTransaction, IntPtr namePtr,
+		ThreadCreationArgs args)
 	{
 		JGlobalRef threadGroupRef = jniTransaction.Add<JGlobalRef>(args.ThreadGroup);
 		Int32 version = args.Version < IVirtualMachine.MinimalVersion ? IVirtualMachine.MinimalVersion : args.Version;
 		VirtualMachineArgumentValue arg = new()
 		{
-			Name = (ReadOnlyValPtr<Byte>)name.Pointer, Group = threadGroupRef, Version = version,
+			Name = (ReadOnlyValPtr<Byte>)namePtr, Group = threadGroupRef, Version = version,
 		};
 		return arg;
 	}

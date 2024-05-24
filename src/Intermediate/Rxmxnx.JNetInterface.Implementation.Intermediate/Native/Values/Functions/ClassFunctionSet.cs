@@ -12,8 +12,8 @@ internal readonly unsafe struct ClassFunctionSet
 	/// The buffer containing the raw class data is not referenced by the <c>VM</c> after the
 	/// <c>DefineClass</c> call returns, and it may be discarded if desired.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, ReadOnlyValPtr<Byte>, JObjectLocalRef, IntPtr, Int32,
-		JClassLocalRef> DefineClass;
+	public readonly delegate* unmanaged<JEnvironmentRef, Byte*, JObjectLocalRef, IntPtr, Int32, JClassLocalRef>
+		DefineClass;
 	/// <summary>
 	/// Pointer to <c>FindClass</c> function.
 	/// Loads a locally-defined class with the specified name.

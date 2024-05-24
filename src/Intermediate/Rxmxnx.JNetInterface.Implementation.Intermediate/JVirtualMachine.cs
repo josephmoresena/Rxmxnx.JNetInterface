@@ -37,7 +37,7 @@ public partial class JVirtualMachine : IVirtualMachine
 		ReadOnlySpan<Byte> utf8Message = JEnvironment.GetSafeSpan(message);
 		using IThread thread = this.AttachThread(ThreadCreationArgs.Create(ThreadPurpose.FatalError));
 		JEnvironment env = this.GetEnvironment(thread.Reference);
-		utf8Message.WithSafeFixed(env, JEnvironment.FatalError);
+		env.FatalError(utf8Message);
 	}
 
 	/// <summary>

@@ -13,10 +13,6 @@ partial class JEnvironment
 		/// </summary>
 		private readonly ClassCache<JClassObject> _classes = new(JReferenceType.LocalRefType);
 		/// <summary>
-		/// Delegate cache.
-		/// </summary>
-		private readonly DelegateHelperCache _delegateCache = new();
-		/// <summary>
 		/// Main <see cref="JEnvironment"/> instance.
 		/// </summary>
 		private readonly JEnvironment _env;
@@ -342,12 +338,31 @@ partial class JEnvironment
 		private void ThrowNew<TThrowable>(ReadOnlySpan<Byte> utf8Message, Boolean throwException, String? message)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
-			JResult result = utf8Message.WithSafeFixed(this, EnvironmentCache.ThrowNew<TThrowable>);
+			JResult result = this.ThrowNew<TThrowable>(utf8Message);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 
 			ThrowableException throwableException =
 				this.CreateThrowableException<TThrowable>(this.GetPendingException(), message);
 			this.ThrowJniException(throwableException, throwException);
+		}
+		/// <summary>
+		/// Constructs an <typeparamref name="TThrowable"/> exception with the message specified by
+		/// <paramref name="message"/> and causes that exception to be thrown.
+		/// </summary>
+		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
+		/// <param name="message">Exception message.</param>
+		/// <returns>JNI code result.</returns>
+		private unsafe JResult ThrowNew<TThrowable>(ReadOnlySpan<Byte> message)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			JClassObject jClass = this.GetClass<TThrowable>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowNewInfo);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			fixed (Byte* ptr =
+				       &MemoryMarshal.GetReference(message))
+				return nativeInterface.ErrorFunctions.ThrowNew(this.Reference, classRef, ptr);
 		}
 		/// <summary>
 		/// Creates JNI exception from <paramref name="throwableRef"/>.

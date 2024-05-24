@@ -68,25 +68,6 @@ partial class JEnvironment
 			}
 		}
 		/// <summary>
-		/// Constructs an <typeparamref name="TThrowable"/> exception with the message specified by
-		/// <paramref name="messageMem"/> and causes that exception to be thrown.
-		/// </summary>
-		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
-		/// <param name="messageMem">Fixed exception message.</param>
-		/// <param name="cache">A <see cref="EnvironmentCache"/> instance.</param>
-		/// <returns>JNI code result.</returns>
-		private static unsafe JResult ThrowNew<TThrowable>(in IReadOnlyFixedMemory messageMem, EnvironmentCache cache)
-			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
-		{
-			JClassObject jClass = cache.GetClass<TThrowable>();
-			ref readonly NativeInterface nativeInterface =
-				ref cache.GetNativeInterface<NativeInterface>(NativeInterface.ThrowNewInfo);
-			using INativeTransaction jniTransaction = cache.VirtualMachine.CreateTransaction(2);
-			JClassLocalRef classRef = jniTransaction.Add(cache.ReloadClass(jClass));
-			return nativeInterface.ErrorFunctions.ThrowNew(cache.Reference, classRef,
-			                                               (ReadOnlyValPtr<Byte>)messageMem.Pointer);
-		}
-		/// <summary>
 		/// Creates a <see cref="IFixedContext{T}.IDisposable"/> instance from an span created in stack.
 		/// </summary>
 		/// <typeparam name="T">Type of elements in span.</typeparam>
@@ -109,6 +90,14 @@ partial class JEnvironment
 		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
 		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(Int32 count) where T : unmanaged
 			=> count == 0 ? ValPtr<T>.Zero.GetUnsafeFixedContext(0) : new T[count].AsMemory().GetFixedContext();
+		/// <summary>
+		/// Creates a <typeparamref name="T"/> span allocated in heap.
+		/// </summary>
+		/// <typeparam name="T">Type of elements in span.</typeparam>
+		/// <param name="count">Number of allocated elements.</param>
+		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
+		private static Span<T> HeapAlloc<T>(Int32 count) where T : unmanaged
+			=> count == 0 ? Span<T>.Empty : new T[count];
 		/// <summary>
 		/// Traces the assignment of a value to a primitive field.
 		/// </summary>

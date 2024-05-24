@@ -38,20 +38,18 @@ partial class JEnvironment
 			this._classes[jClass.Hash] = jClass;
 			this.VirtualMachine.LoadGlobal(jClass);
 		}
-
 		/// <summary>
-		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="classNameCtx"/> as class name.
+		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="namePtr"/> as class name.
 		/// </summary>
-		/// <param name="classNameCtx">A <see cref="IReadOnlyFixedMemory"/> instance.</param>
-		/// <param name="cache">Current <see cref="EnvironmentCache"/> instance.</param>
+		/// <param name="namePtr">A pointer to class name.</param>
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		public static unsafe JClassLocalRef FindClass(in IReadOnlyFixedMemory classNameCtx, EnvironmentCache cache)
+		public unsafe JClassLocalRef FindClass(IntPtr namePtr)
 		{
 			ref readonly NativeInterface nativeInterface =
-				ref cache.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
 			JClassLocalRef result =
-				nativeInterface.ClassFunctions.FindClass(cache.Reference, (ReadOnlyValPtr<Byte>)classNameCtx.Pointer);
-			if (result.IsDefault) cache.CheckJniError();
+				nativeInterface.ClassFunctions.FindClass(this.Reference, (ReadOnlyValPtr<Byte>)namePtr);
+			if (result.IsDefault) this.CheckJniError();
 			return result;
 		}
 	}

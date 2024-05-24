@@ -30,11 +30,15 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="metadata">Class metadata name.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal JGlobalRef GetClassGlobalRef(ClassObjectMetadata metadata)
+	internal unsafe JGlobalRef GetClassGlobalRef(ClassObjectMetadata metadata)
 	{
-		JClassLocalRef classRef = metadata.ClassSignature.Length != 1 ?
-			metadata.Name.WithSafeFixed(this._cache, EnvironmentCache.FindClass) :
-			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
+		JClassLocalRef classRef;
+		if (metadata.ClassSignature.Length == 1)
+			//Primitive Class
+			classRef = this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
+		else
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(metadata.Name.AsSpan()))
+				classRef = this._cache.FindClass(new(ptr));
 		try
 		{
 			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value);
@@ -71,9 +75,17 @@ partial class JEnvironment
 	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	internal JFieldId GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+	internal unsafe JFieldId GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
 	{
-		JFieldId fieldId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetFieldId);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetFieldIdInfo);
+		JFieldId fieldId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			fieldId = nativeInterface.InstanceFieldFunctions.GetFieldId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
 		JTrace.GetAccessibleId(classRef, definition, fieldId);
 		if (fieldId == default) this._cache.CheckJniError();
 		return fieldId;
@@ -84,9 +96,17 @@ partial class JEnvironment
 	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	internal JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+	internal unsafe JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
 	{
-		JFieldId fieldId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetStaticFieldId);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticFieldIdInfo);
+		JFieldId fieldId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			fieldId = nativeInterface.StaticFieldFunctions.GetFieldId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
 		JTrace.GetAccessibleId(classRef, definition, fieldId);
 		if (fieldId == default) this._cache.CheckJniError();
 		return fieldId;
@@ -97,9 +117,17 @@ partial class JEnvironment
 	/// <param name="definition">A <see cref="JCallDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
-	internal JMethodId GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
+	internal unsafe JMethodId GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
 	{
-		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetMethodId);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetMethodIdInfo);
+		JMethodId methodId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			methodId = nativeInterface.InstanceMethodFunctions.MethodFunctions.GetMethodId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
 		JTrace.GetAccessibleId(classRef, definition, methodId);
 		if (methodId == default) this._cache.CheckJniError();
 		return methodId;
@@ -110,9 +138,17 @@ partial class JEnvironment
 	/// <param name="definition">A <see cref="JCallDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	internal JMethodId GetStaticMethodId(JCallDefinition definition, JClassLocalRef classRef)
+	internal unsafe JMethodId GetStaticMethodId(JCallDefinition definition, JClassLocalRef classRef)
 	{
-		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetStaticMethodId);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticMethodIdInfo);
+		JMethodId methodId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			methodId = nativeInterface.StaticMethodFunctions.GetMethodId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
 		JTrace.GetAccessibleId(classRef, definition, methodId);
 		if (methodId == default) this._cache.CheckJniError();
 		return methodId;
@@ -201,6 +237,17 @@ partial class JEnvironment
 		if (localRef == default) this._cache.CheckJniError();
 		return localRef;
 	}
+	/// <summary>
+	/// Sends JNI fatal error signal to VM.
+	/// </summary>
+	/// <param name="errorMessage">Error message.</param>
+	internal unsafe void FatalError(ReadOnlySpan<Byte> errorMessage)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.FatalErrorInfo);
+		fixed (Byte* ptr = &MemoryMarshal.GetReference(errorMessage))
+			nativeInterface.ErrorFunctions.FatalError(this.Reference, ptr);
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
@@ -211,17 +258,6 @@ partial class JEnvironment
 	{
 		JVirtualMachine vm = EnvironmentCache.GetVirtualMachine(reference);
 		return vm.GetEnvironment(reference);
-	}
-	/// <summary>
-	/// Sends JNI fatal error signal to VM.
-	/// </summary>
-	/// <param name="messageMem">Error message.</param>
-	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-	internal static unsafe void FatalError(in IReadOnlyFixedMemory messageMem, JEnvironment env)
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref env._cache.GetNativeInterface<NativeInterface>(NativeInterface.FatalErrorInfo);
-		nativeInterface.ErrorFunctions.FatalError(env.Reference, (ReadOnlyValPtr<Byte>)messageMem.Pointer);
 	}
 	/// <summary>
 	/// Retrieves safe read-only span from <paramref name="value"/>.
