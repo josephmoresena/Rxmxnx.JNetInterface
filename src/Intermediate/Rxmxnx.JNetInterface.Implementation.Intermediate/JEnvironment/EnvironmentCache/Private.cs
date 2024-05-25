@@ -429,7 +429,7 @@ partial class JEnvironment
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallObjectMethodInfo);
 			JObjectLocalRef localRef =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
-					this.Reference, throwableRef.Value, getNameId, ReadOnlyValPtr<JValue>.Zero);
+					this.Reference, throwableRef.Value, getNameId, default);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}
@@ -485,5 +485,16 @@ partial class JEnvironment
 		/// <returns>A <see cref="StackDisposable"/> instance.</returns>
 		private StackDisposable GetStackDisposable(Boolean useStackAlloc, Int32 requiredBytes)
 			=> useStackAlloc && requiredBytes > 0 ? new(this, requiredBytes) : new();
+		/// <summary>
+		/// Creates a <see cref="IFixedContext{Byte}.IDisposable"/> instance from an span created in stack.
+		/// </summary>
+		/// <param name="stackSpan">A stack created span.</param>
+		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
+		private IFixedContext<Byte>.IDisposable GetStackContext(scoped Span<Byte> stackSpan)
+		{
+			StackDisposable disposable = new(this, stackSpan.Length);
+			ValPtr<Byte> ptr = (ValPtr<Byte>)stackSpan.GetUnsafeIntPtr();
+			return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
+		}
 	}
 }

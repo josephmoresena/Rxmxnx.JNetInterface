@@ -13,7 +13,8 @@ partial class JEnvironment
 		/// <summary>
 		/// Disposable object to free stack bytes.
 		/// </summary>
-		private sealed record StackDisposable : IDisposable
+		/// <remarks>This struct should be disposed only once.</remarks>
+		private readonly struct StackDisposable : IDisposable
 		{
 			/// <summary>
 			/// A <see cref="EnvironmentCache"/> cache.

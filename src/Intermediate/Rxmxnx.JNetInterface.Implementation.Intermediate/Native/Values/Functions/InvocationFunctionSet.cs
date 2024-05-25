@@ -21,6 +21,5 @@ internal readonly unsafe struct InvocationFunctionSet
 	/// Pointer to <c>JNI_GetCreatedJavaVMs</c> exported function.
 	/// Returns all Java VMs that have been created.
 	/// </summary>
-	public readonly delegate* unmanaged<ValPtr<JVirtualMachineRef>, Int32, out Int32, JResult>
-		GetCreatedVirtualMachines;
+	public readonly delegate* unmanaged<JVirtualMachineRef*, Int32, out Int32, JResult> GetCreatedVirtualMachines;
 }

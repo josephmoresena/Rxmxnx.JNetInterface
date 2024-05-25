@@ -17,5 +17,5 @@ internal readonly unsafe struct CallMethodFunction<TReceiver>
 	/// <summary>
 	/// Caller <c>A</c> function.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, TReceiver, JMethodId, ReadOnlyValPtr<JValue>, void> Call;
+	public readonly delegate* unmanaged<JEnvironmentRef, TReceiver, JMethodId, JValue*, void> Call;
 }

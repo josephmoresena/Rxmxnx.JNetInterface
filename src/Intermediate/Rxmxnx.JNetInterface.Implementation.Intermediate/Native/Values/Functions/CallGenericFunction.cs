@@ -19,5 +19,5 @@ internal readonly unsafe struct CallGenericFunction<TReceiver, TResult>
 	/// Caller <c>A</c> function.
 	/// </summary>
 	/// <remarks>Should it really be declared as managed?</remarks>
-	public readonly delegate* managed<JEnvironmentRef, TReceiver, JMethodId, ReadOnlyValPtr<JValue>, TResult> Call;
+	public readonly delegate* managed<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult> Call;
 }

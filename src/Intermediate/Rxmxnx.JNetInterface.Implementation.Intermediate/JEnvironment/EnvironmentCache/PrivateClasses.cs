@@ -49,7 +49,7 @@ partial class JEnvironment
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallObjectMethodInfo);
 			JObjectLocalRef localRef =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
-					this.Reference, classRef.Value, getNameId, ReadOnlyValPtr<JValue>.Zero);
+					this.Reference, classRef.Value, getNameId, default);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}
@@ -68,7 +68,7 @@ partial class JEnvironment
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallBooleanMethodInfo);
 			JBoolean result =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallBooleanMethod.Call(
-					this.Reference, classRef.Value, isPrimitiveId, ReadOnlyValPtr<JValue>.Zero);
+					this.Reference, classRef.Value, isPrimitiveId, default);
 			return result.Value;
 		}
 		/// <summary>

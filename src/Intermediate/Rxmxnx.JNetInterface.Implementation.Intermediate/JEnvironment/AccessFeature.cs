@@ -371,20 +371,25 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.RegisterNativesInfo);
-			Int32 requiredBytes = calls.Count * NativeMethodValue.Size;
-			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
 			List<MemoryHandle> handles = new(calls.Count);
-			using IFixedContext<NativeMethodValue>.IDisposable argsMemory = useStackAlloc && calls.Count > 0 ?
-				EnvironmentCache.AllocToFixedContext(stackalloc NativeMethodValue[calls.Count], this) :
-				EnvironmentCache.AllocToFixedContext<NativeMethodValue>(calls.Count);
+			Int32 requiredBytes = calls.Count * NativeMethodValue.Size;
+			using StackDisposable stackDisposable =
+				this.GetStackDisposable(this.UseStackAlloc(requiredBytes), requiredBytes);
+			Span<NativeMethodValue> buffer = stackDisposable.UsingStack ?
+				stackalloc NativeMethodValue[calls.Count] :
+				EnvironmentCache.HeapAlloc<NativeMethodValue>(calls.Count);
 			for (Int32 i = 0; i < calls.Count; i++)
-				argsMemory.Values[i] = NativeMethodValue.Create(calls[i], handles);
+				buffer[i] = NativeMethodValue.Create(calls[i], handles);
 			try
 			{
 				using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-				JResult result = nativeInterface.NativeRegistryFunctions.RegisterNatives(this.Reference, classRef,
-					(ReadOnlyValPtr<NativeMethodValue>)argsMemory.Pointer, argsMemory.Values.Length);
+				JResult result;
+				fixed (NativeMethodValue* ptr = &MemoryMarshal.GetReference(buffer))
+				{
+					result = nativeInterface.NativeRegistryFunctions.RegisterNatives(
+						this.Reference, classRef, ptr, buffer.Length);
+				}
 				this.CheckJniError();
 				ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 				this.VirtualMachine.RegisterNatives(this.ClassObject.Hash, calls);

@@ -269,52 +269,55 @@ partial class JEnvironment
 		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-		private void CallPrimitiveStaticFunction(Span<Byte> bytes, JFunctionDefinition definition,
+		private unsafe void CallPrimitiveStaticFunction(Span<Byte> bytes, JFunctionDefinition definition,
 			JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
-			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
 			Byte signature = definition.Descriptor[^1];
-			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
-				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
-			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-
 			ref readonly MethodFunctionSet<JClassLocalRef> staticMethodFunctions =
 				ref this.GetStaticMethodFunctions(signature);
-			switch (signature)
+			using StackDisposable stackDisposable =
+				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
+			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
+			                                        stackDisposable.UsingStack ?
+				                                        stackalloc Byte[requiredBytes] :
+				                                        EnvironmentCache.HeapAlloc<Byte>(requiredBytes));
+			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, argsMemory.Pointer,
-					                                 staticMethodFunctions.CallBooleanMethod);
-					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, argsMemory.Pointer,
-					                                 staticMethodFunctions.CallByteMethod);
-					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
-					this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, argsMemory.Pointer,
-					                                 staticMethodFunctions.CallCharMethod);
-					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, argsMemory.Pointer,
-					                                 staticMethodFunctions.CallDoubleMethod);
-					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, argsMemory.Pointer,
-					                                 staticMethodFunctions.CallFloatMethod);
-					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
-					this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, argsMemory.Pointer,
-					                                 staticMethodFunctions.CallIntMethod);
-					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
-					this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, argsMemory.Pointer,
-					                                 staticMethodFunctions.CallLongMethod);
-					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, argsMemory.Pointer,
-					                                 staticMethodFunctions.CallShortMethod);
-					break;
+				switch (signature)
+				{
+					case UnicodePrimitiveSignatures.BooleanSignatureChar:
+						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						                                 staticMethodFunctions.CallBooleanMethod);
+						break;
+					case UnicodePrimitiveSignatures.ByteSignatureChar:
+						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						                                 staticMethodFunctions.CallByteMethod);
+						break;
+					case UnicodePrimitiveSignatures.CharSignatureChar:
+						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						                                 staticMethodFunctions.CallCharMethod);
+						break;
+					case UnicodePrimitiveSignatures.DoubleSignatureChar:
+						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						                                 staticMethodFunctions.CallDoubleMethod);
+						break;
+					case UnicodePrimitiveSignatures.FloatSignatureChar:
+						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						                                 staticMethodFunctions.CallFloatMethod);
+						break;
+					case UnicodePrimitiveSignatures.IntSignatureChar:
+						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						                                 staticMethodFunctions.CallIntMethod);
+						break;
+					case UnicodePrimitiveSignatures.LongSignatureChar:
+						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						                                 staticMethodFunctions.CallLongMethod);
+						break;
+					case UnicodePrimitiveSignatures.ShortSignatureChar:
+						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						                                 staticMethodFunctions.CallShortMethod);
+						break;
+				}
 			}
 			this.CheckJniError();
 		}
@@ -325,18 +328,17 @@ partial class JEnvironment
 		/// <param name="bytes">Destination span.</param>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="signature">Primitive signature.</param>
-		/// <param name="argsPointer">Pointer to call argments array.</param>
+		/// <param name="ptr">Pointer to call argments array.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="callFunction">Function to invoke function.</param>
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
 		                 Justification = CommonConstants.PrimitiveCallJustification)]
 		private unsafe void CallPrimitiveStaticFunction<TPrimitive>(Span<Byte> bytes, JClassLocalRef classRef,
-			Byte signature, JMethodId methodId, IntPtr argsPointer,
+			Byte signature, JMethodId methodId, JValue* ptr,
 			in CallGenericFunction<JClassLocalRef, TPrimitive> callFunction)
 			where TPrimitive : unmanaged, INativeType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
-			TPrimitive result = callFunction.Call(this.Reference, classRef, methodId,
-			                                      (ReadOnlyValPtr<JValue>)argsPointer);
+			TPrimitive result = callFunction.Call(this.Reference, classRef, methodId, ptr);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
 			JTrace.CallPrimitiveFunction(default, classRef, signature, methodId, result);
 		}
@@ -348,60 +350,52 @@ partial class JEnvironment
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="signature">Primitive signature.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
-		/// <param name="argsMemory">Fixed memory with parameters.</param>
+		/// <param name="ptr">Pointer to call argments array.</param>
 		/// <exception cref="ArgumentException">If signature is not for a primitive type.</exception>
-		private void CallPrimitiveNonVirtualFunction(Span<Byte> bytes, JObjectLocalRef localRef,
-			JClassLocalRef classRef, Byte signature, JMethodId methodId, IFixedPointer argsMemory)
+		private unsafe void CallPrimitiveNonVirtualFunction(Span<Byte> bytes, JObjectLocalRef localRef,
+			JClassLocalRef classRef, Byte signature, JMethodId methodId, JValue* ptr)
 		{
 			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
 				ref this.GetInstanceMethodFunctions(signature, true);
 			switch (signature)
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId,
-					                                     argsMemory.Pointer,
+					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualBooleanMethod);
 					break;
 				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId,
-					                                     argsMemory.Pointer,
+					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualByteMethod);
 					break;
 				case UnicodePrimitiveSignatures.CharSignatureChar:
-					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId,
-					                                     argsMemory.Pointer,
+					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualCharMethod);
 					break;
 				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId,
-					                                     argsMemory.Pointer,
+					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualDoubleMethod);
 					break;
 				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId,
-					                                     argsMemory.Pointer,
+					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualFloatMethod);
 					break;
 				case UnicodePrimitiveSignatures.IntSignatureChar:
-					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId,
-					                                     argsMemory.Pointer,
+					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualIntMethod);
 					break;
 				case UnicodePrimitiveSignatures.LongSignatureChar:
-					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId,
-					                                     argsMemory.Pointer,
+					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualLongMethod);
 					break;
 				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId,
-					                                     argsMemory.Pointer,
+					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualShortMethod);
 					break;
@@ -415,18 +409,17 @@ partial class JEnvironment
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="signature">Primitive signature.</param>
-		/// <param name="argsPointer">Pointer to call argments array.</param>
+		/// <param name="ptr">Pointer to call argments array.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="callFunction">Function to invoke function.</param>
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
 		                 Justification = CommonConstants.PrimitiveCallJustification)]
 		private unsafe void CallPrimitiveNonVirtualFunction<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef,
-			JClassLocalRef classRef, Byte signature, JMethodId methodId, IntPtr argsPointer,
+			JClassLocalRef classRef, Byte signature, JMethodId methodId, JValue* ptr,
 			in CallNonVirtualGenericFunction<TPrimitive> callFunction)
 			where TPrimitive : unmanaged, INativeType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
-			TPrimitive result = callFunction.Call(this.Reference, localRef, classRef, methodId,
-			                                      (ReadOnlyValPtr<JValue>)argsPointer);
+			TPrimitive result = callFunction.Call(this.Reference, localRef, classRef, methodId, ptr);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
 			JTrace.CallPrimitiveFunction(localRef, classRef, signature, methodId, result);
 		}
@@ -437,45 +430,45 @@ partial class JEnvironment
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="signature">Primitive signature.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
-		/// <param name="argsMemory">Fixed memory with parameters.</param>
+		/// <param name="ptr">Pointer to call argments array.</param>
 		/// <exception cref="ArgumentException">If signature is not for a primitive type.</exception>
-		private void CallPrimitiveFunction(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
-			JMethodId methodId, IFixedPointer argsMemory)
+		private unsafe void CallPrimitiveFunction(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
+			JMethodId methodId, JValue* ptr)
 		{
 			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
 				ref this.GetInstanceMethodFunctions(signature, false);
 			switch (signature)
 			{
 				case UnicodePrimitiveSignatures.BooleanSignatureChar:
-					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, argsMemory.Pointer,
+					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallBooleanMethod);
 					break;
 				case UnicodePrimitiveSignatures.ByteSignatureChar:
-					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, argsMemory.Pointer,
+					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallByteMethod);
 					break;
 				case UnicodePrimitiveSignatures.CharSignatureChar:
-					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, argsMemory.Pointer,
+					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallCharMethod);
 					break;
 				case UnicodePrimitiveSignatures.DoubleSignatureChar:
-					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, argsMemory.Pointer,
+					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallDoubleMethod);
 					break;
 				case UnicodePrimitiveSignatures.FloatSignatureChar:
-					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, argsMemory.Pointer,
+					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallFloatMethod);
 					break;
 				case UnicodePrimitiveSignatures.IntSignatureChar:
-					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, argsMemory.Pointer,
+					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallIntMethod);
 					break;
 				case UnicodePrimitiveSignatures.LongSignatureChar:
-					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, argsMemory.Pointer,
+					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallLongMethod);
 					break;
 				case UnicodePrimitiveSignatures.ShortSignatureChar:
-					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, argsMemory.Pointer,
+					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallShortMethod);
 					break;
 			}
@@ -487,18 +480,17 @@ partial class JEnvironment
 		/// <param name="bytes">Destination span.</param>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="signature">Primitive signature.</param>
-		/// <param name="argsPointer">Pointer to call argments array.</param>
+		/// <param name="ptr">Pointer to call argments array.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="callFunction">Function to invoke function.</param>
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
 		                 Justification = CommonConstants.PrimitiveCallJustification)]
 		private unsafe void CallPrimitiveFunction<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef,
-			Byte signature, JMethodId methodId, IntPtr argsPointer,
+			Byte signature, JMethodId methodId, JValue* ptr,
 			in CallGenericFunction<JObjectLocalRef, TPrimitive> callFunction)
 			where TPrimitive : unmanaged, INativeType<TPrimitive>, IPrimitiveType<TPrimitive>
 		{
-			TPrimitive result = callFunction.Call(this.Reference, localRef, methodId,
-			                                      (ReadOnlyValPtr<JValue>)argsPointer);
+			TPrimitive result = callFunction.Call(this.Reference, localRef, methodId, ptr);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
 			JTrace.CallPrimitiveFunction(localRef, default, signature, methodId, result);
 		}

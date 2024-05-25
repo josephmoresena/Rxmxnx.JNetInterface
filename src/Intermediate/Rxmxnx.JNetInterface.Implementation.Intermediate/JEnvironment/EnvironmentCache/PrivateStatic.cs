@@ -10,6 +10,12 @@ partial class JEnvironment
 		private const Int32 MaxStackBytes = 128;
 
 		/// <summary>
+		/// Disposable context for zero pointer.
+		/// </summary>
+		private static readonly IFixedContext<Byte>.IDisposable zeroByteContext =
+			ValPtr<Byte>.Zero.GetUnsafeFixedContext(0);
+
+		/// <summary>
 		/// Retrieves the <see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.
 		/// </summary>
 		/// <param name="returnType">A <see cref="JClassObject"/> instance.</param>
@@ -74,7 +80,7 @@ partial class JEnvironment
 		/// <param name="stackSpan">A stack created span.</param>
 		/// <param name="cache">Instance to free stack bytes.</param>
 		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
-		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(scoped Span<T> stackSpan,
+		private static IFixedContext<T>.IDisposable GetStackContext<T>(scoped Span<T> stackSpan,
 			EnvironmentCache? cache = default) where T : unmanaged
 		{
 			StackDisposable? disposable =
@@ -83,13 +89,12 @@ partial class JEnvironment
 			return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
 		}
 		/// <summary>
-		/// Creates a <see cref="IFixedContext{T}.IDisposable"/> instance from an span created in heap.
+		/// Creates a <see cref="IFixedContext{Byte}.IDisposable"/> instance from an span created in heap.
 		/// </summary>
-		/// <typeparam name="T">Type of elements in span.</typeparam>
-		/// <param name="count">Number of allocated elements.</param>
-		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
-		private static IFixedContext<T>.IDisposable AllocToFixedContext<T>(Int32 count) where T : unmanaged
-			=> count == 0 ? ValPtr<T>.Zero.GetUnsafeFixedContext(0) : new T[count].AsMemory().GetFixedContext();
+		/// <param name="count">Number of allocated bytes.</param>
+		/// <returns>A <see cref="IFixedContext{Byte}.IDisposable"/> instance</returns>
+		private static IFixedContext<Byte>.IDisposable AllocHeapContext(Int32 count)
+			=> count == 0 ? EnvironmentCache.zeroByteContext : new Byte[count].AsMemory().GetFixedContext();
 		/// <summary>
 		/// Creates a <typeparamref name="T"/> span allocated in heap.
 		/// </summary>
@@ -97,7 +102,7 @@ partial class JEnvironment
 		/// <param name="count">Number of allocated elements.</param>
 		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
 		private static Span<T> HeapAlloc<T>(Int32 count) where T : unmanaged
-			=> count == 0 ? Span<T>.Empty : new T[count];
+			=> count == 0 ? Span<T>.Empty : new T[count].AsSpan();
 		/// <summary>
 		/// Traces the assignment of a value to a primitive field.
 		/// </summary>
