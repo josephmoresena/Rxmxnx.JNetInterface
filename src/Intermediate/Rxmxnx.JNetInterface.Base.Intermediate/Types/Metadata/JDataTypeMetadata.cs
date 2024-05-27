@@ -43,6 +43,14 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 	[ExcludeFromCodeCoverage]
 	IFixedPointer.IDisposable ITypeInformation.GetClassNameFixedPointer() => this._sequence.GetFixedPointer();
 
+#if PACKAGE
+	/// <summary>
+	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
+	/// </summary>
+	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
+	public abstract JArrayTypeMetadata? GetArrayMetadata();
+#endif
+
 	/// <inheritdoc/>
 	public override String ToString()
 		=> $"{nameof(JDataTypeMetadata.ClassName)} = {this.ClassName}, " +
