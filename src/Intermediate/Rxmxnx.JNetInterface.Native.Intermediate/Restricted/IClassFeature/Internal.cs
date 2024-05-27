@@ -30,8 +30,9 @@ public partial interface IClassFeature
 	/// <param name="rawClassBytes">Binary span with class information.</param>
 	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
-	internal JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes,
-		JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>;
+	internal JClassObject LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(
+		ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
+		where TDataType : JLocalObject, IReferenceType<TDataType>;
 	/// <summary>
 	/// Retrieves the class info.
 	/// </summary>

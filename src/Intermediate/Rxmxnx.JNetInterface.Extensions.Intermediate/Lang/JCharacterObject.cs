@@ -33,7 +33,7 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override String ToTraceText()
-		=> $"{this.Class.Name} {this.Reference} {IPrimitiveType.GetMetadata<JChar>().Signature}: {this.Value}";
+		=> $"{JObject.GetObjectIdentifier(this.Class.Name, this.Reference)} {IPrimitiveType.GetMetadata<JChar>().Signature}: {this.Value}";
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

@@ -81,7 +81,7 @@ public sealed class PrimitiveTypeTests
 		Assert.Contains(metadata.ArgumentMetadata.ToSimplifiedString(), textValue);
 		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {metadata.Hash} }}", textValue);
 
-		Assert.Throws<NotImplementedException>(() => PrimitiveTypeImpl.GetNativeType<PrimitiveTypeImpl>());
+		Assert.Equal(JNativeType.JObject, PrimitiveTypeImpl.GetNativeType<PrimitiveTypeImpl>());
 	}
 	private static void EqualityTest<TPrimitive, TValue>(TPrimitive value, TPrimitive value2)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,

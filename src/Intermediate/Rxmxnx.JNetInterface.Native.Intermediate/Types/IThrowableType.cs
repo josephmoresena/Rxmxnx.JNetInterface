@@ -6,7 +6,9 @@ namespace Rxmxnx.JNetInterface.Types;
 /// <typeparam name="TThrowable">Type of java enum type.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IThrowableType<TThrowable> : IClassType<TThrowable>
+public interface
+	IThrowableType<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable> : IClassType<TThrowable>
 	where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 {
 	/// <summary>

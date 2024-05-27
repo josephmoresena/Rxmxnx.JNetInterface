@@ -186,11 +186,13 @@ internal interface IPrimitiveNumericType<TPrimitive> : IPrimitiveNumericType
 	/// Defines an explicit conversion of a given <see cref="Double"/> to <typeparamref name="TPrimitive"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="Double"/> to explicitly convert.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static virtual explicit operator Double(TPrimitive value) => TPrimitive.ToDouble(value);
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="Double"/> to <typeparamref name="TPrimitive"/>.
 	/// </summary>
 	/// <param name="value">A <see cref="Double"/> to explicitly convert.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static virtual explicit operator TPrimitive(Double value) => TPrimitive.FromDouble(value);
 
 	/// <summary>

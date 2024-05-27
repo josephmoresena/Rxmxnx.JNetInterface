@@ -51,10 +51,11 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 		this._cache.CheckJniError();
 		action(state);
 	}
-	void IEnvironment.DescribeException()
+	unsafe void IEnvironment.DescribeException()
 	{
-		ExceptionDescribeDelegate exceptionDescribe = this._cache.GetDelegate<ExceptionDescribeDelegate>();
-		exceptionDescribe(this.Reference);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionDescribeInfo);
+		nativeInterface.ErrorFunctions.ExceptionDescribe(this.Reference);
 	}
 
 	/// <inheritdoc/>

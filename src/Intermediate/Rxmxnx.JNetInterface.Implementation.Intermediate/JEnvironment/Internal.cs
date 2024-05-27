@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface;
 
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 partial class JEnvironment
 {
 	/// <summary>
@@ -30,11 +32,15 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="metadata">Class metadata name.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal JGlobalRef GetClassGlobalRef(ClassObjectMetadata metadata)
+	internal unsafe JGlobalRef GetClassGlobalRef(ClassObjectMetadata metadata)
 	{
-		JClassLocalRef classRef = metadata.ClassSignature.Length != 1 ?
-			metadata.Name.WithSafeFixed(this._cache, EnvironmentCache.FindClass) :
-			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
+		JClassLocalRef classRef;
+		if (metadata.ClassSignature.Length == 1)
+			//Primitive Class
+			classRef = this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
+		else
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(metadata.Name.AsSpan()))
+				classRef = this._cache.FindClass(new(ptr));
 		try
 		{
 			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value);
@@ -49,19 +55,21 @@ partial class JEnvironment
 	/// Deletes <paramref name="globalRef"/>.
 	/// </summary>
 	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
-	internal void DeleteGlobalRef(JGlobalRef globalRef)
+	internal unsafe void DeleteGlobalRef(JGlobalRef globalRef)
 	{
-		DeleteGlobalRefDelegate deleteGlobalRef = this._cache.GetDelegate<DeleteGlobalRefDelegate>();
-		deleteGlobalRef(this.Reference, globalRef);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteGlobalRefInfo);
+		nativeInterface.ReferenceFunctions.DeleteGlobalRef.DeleteRef(this.Reference, globalRef);
 	}
 	/// <summary>
 	/// Deletes <paramref name="weakRef"/>.
 	/// </summary>
 	/// <param name="weakRef">A <see cref="JWeakRef"/> reference.</param>
-	internal void DeleteWeakGlobalRef(JWeakRef weakRef)
+	internal unsafe void DeleteWeakGlobalRef(JWeakRef weakRef)
 	{
-		DeleteWeakGlobalRefDelegate deleteWeakGlobalRef = this._cache.GetDelegate<DeleteWeakGlobalRefDelegate>();
-		deleteWeakGlobalRef(this.Reference, weakRef);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteWeakGlobalRefInfo);
+		nativeInterface.WeakGlobalFunctions.DeleteWeakGlobalRef.DeleteRef(this.Reference, weakRef);
 	}
 	/// <summary>
 	/// Retrieves field identifier for <paramref name="definition"/> in <paramref name="classRef"/>.
@@ -69,9 +77,17 @@ partial class JEnvironment
 	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	internal JFieldId GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+	internal unsafe JFieldId GetFieldId(JFieldDefinition definition, JClassLocalRef classRef)
 	{
-		JFieldId fieldId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetFieldId);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetFieldIdInfo);
+		JFieldId fieldId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			fieldId = nativeInterface.InstanceFieldFunctions.GetFieldId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
 		JTrace.GetAccessibleId(classRef, definition, fieldId);
 		if (fieldId == default) this._cache.CheckJniError();
 		return fieldId;
@@ -82,9 +98,17 @@ partial class JEnvironment
 	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	internal JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+	internal unsafe JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
 	{
-		JFieldId fieldId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetStaticFieldId);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticFieldIdInfo);
+		JFieldId fieldId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			fieldId = nativeInterface.StaticFieldFunctions.GetFieldId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
 		JTrace.GetAccessibleId(classRef, definition, fieldId);
 		if (fieldId == default) this._cache.CheckJniError();
 		return fieldId;
@@ -95,9 +119,17 @@ partial class JEnvironment
 	/// <param name="definition">A <see cref="JCallDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
-	internal JMethodId GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
+	internal unsafe JMethodId GetMethodId(JCallDefinition definition, JClassLocalRef classRef)
 	{
-		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetMethodId);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetMethodIdInfo);
+		JMethodId methodId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			methodId = nativeInterface.InstanceMethodFunctions.MethodFunctions.GetMethodId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
 		JTrace.GetAccessibleId(classRef, definition, methodId);
 		if (methodId == default) this._cache.CheckJniError();
 		return methodId;
@@ -108,9 +140,17 @@ partial class JEnvironment
 	/// <param name="definition">A <see cref="JCallDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	internal JMethodId GetStaticMethodId(JCallDefinition definition, JClassLocalRef classRef)
+	internal unsafe JMethodId GetStaticMethodId(JCallDefinition definition, JClassLocalRef classRef)
 	{
-		JMethodId methodId = definition.Information.WithSafeFixed((this, classRef), JEnvironment.GetStaticMethodId);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticMethodIdInfo);
+		JMethodId methodId;
+		fixed (Byte* namePtr = &MemoryMarshal.GetReference(definition.Name.AsSpan()))
+		fixed (Byte* signaturePtr = &MemoryMarshal.GetReference(definition.Descriptor.AsSpan()))
+		{
+			methodId = nativeInterface.StaticMethodFunctions.GetMethodId.GetId(
+				this.Reference, classRef, namePtr, signaturePtr);
+		}
 		JTrace.GetAccessibleId(classRef, definition, methodId);
 		if (methodId == default) this._cache.CheckJniError();
 		return methodId;
@@ -120,10 +160,11 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JReferenceType"/> value.</returns>
-	internal JReferenceType GetReferenceType(JObjectLocalRef localRef)
+	internal unsafe JReferenceType GetReferenceType(JObjectLocalRef localRef)
 	{
-		GetObjectRefTypeDelegate getObjectRefType = this._cache.GetDelegate<GetObjectRefTypeDelegate>();
-		JReferenceType result = getObjectRefType(this._cache.Reference, localRef);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectRefTypeInfo);
+		JReferenceType result = nativeInterface.GetObjectRefType(this._cache.Reference, localRef);
 		this._cache.CheckJniError();
 		return result;
 	}
@@ -142,20 +183,22 @@ partial class JEnvironment
 	/// Deletes <paramref name="localRef"/>.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to remove.</param>
-	internal void DeleteLocalRef(JObjectLocalRef localRef)
+	internal unsafe void DeleteLocalRef(JObjectLocalRef localRef)
 	{
-		DeleteLocalRefDelegate deleteLocalRef = this._cache.GetDelegate<DeleteLocalRefDelegate>();
-		deleteLocalRef(this.Reference, localRef);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteLocalRefInfo);
+		nativeInterface.ReferenceFunctions.DeleteLocalRef.DeleteRef(this.Reference, localRef);
 	}
 	/// <summary>
 	/// Retrieves object class reference.
 	/// </summary>
 	/// <param name="localRef">Object instance to get class.</param>
 	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-	internal JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
+	internal unsafe JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
 	{
-		GetObjectClassDelegate getObjectClass = this._cache.GetDelegate<GetObjectClassDelegate>();
-		JClassLocalRef classRef = getObjectClass(this.Reference, localRef);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectClassInfo);
+		JClassLocalRef classRef = nativeInterface.ObjectFunctions.GetObjectClass(this.Reference, localRef);
 		if (classRef.IsDefault) this._cache.CheckJniError();
 		return classRef;
 	}
@@ -185,14 +228,27 @@ partial class JEnvironment
 	/// </summary>
 	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
 	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
-	internal JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
+	internal unsafe JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
 		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
 	{
-		NewLocalRefDelegate newLocalRef = this._cache.GetDelegate<NewLocalRefDelegate>();
-		JObjectLocalRef localRef = newLocalRef(this.Reference, objectRef.Value);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.NewLocalRefInfo);
+		JObjectLocalRef localRef =
+			nativeInterface.ReferenceFunctions.NewLocalRef.NewRef(this.Reference, objectRef.Value);
 		JTrace.CreateLocalRef(objectRef, localRef);
 		if (localRef == default) this._cache.CheckJniError();
 		return localRef;
+	}
+	/// <summary>
+	/// Sends JNI fatal error signal to VM.
+	/// </summary>
+	/// <param name="errorMessage">Error message.</param>
+	internal unsafe void FatalError(ReadOnlySpan<Byte> errorMessage)
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.FatalErrorInfo);
+		fixed (Byte* ptr = &MemoryMarshal.GetReference(errorMessage))
+			nativeInterface.ErrorFunctions.FatalError(this.Reference, ptr);
 	}
 
 	/// <summary>
@@ -204,16 +260,6 @@ partial class JEnvironment
 	{
 		JVirtualMachine vm = EnvironmentCache.GetVirtualMachine(reference);
 		return vm.GetEnvironment(reference);
-	}
-	/// <summary>
-	/// Sends JNI fatal error signal to VM.
-	/// </summary>
-	/// <param name="messageMem">Error message.</param>
-	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-	internal static void FatalError(in IReadOnlyFixedMemory messageMem, JEnvironment env)
-	{
-		FatalErrorDelegate fatalError = env._cache.GetDelegate<FatalErrorDelegate>();
-		fatalError(env.Reference, (ReadOnlyValPtr<Byte>)messageMem.Pointer);
 	}
 	/// <summary>
 	/// Retrieves safe read-only span from <paramref name="value"/>.

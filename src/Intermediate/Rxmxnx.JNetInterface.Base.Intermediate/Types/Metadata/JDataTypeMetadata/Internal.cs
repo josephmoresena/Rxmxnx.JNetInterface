@@ -2,14 +2,6 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 
 public partial record JDataTypeMetadata
 {
-#if PACKAGE
-	/// <summary>
-	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.
-	/// </summary>
-	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
-	public abstract JArrayTypeMetadata? GetArrayMetadata();
-#endif
-
 	/// <summary>
 	/// Creates hash from given parameters.
 	/// </summary>

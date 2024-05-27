@@ -77,4 +77,15 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// </returns>
 	public static Boolean IsNullOrDefault([NotNullWhen(false)] JReferenceObject? jObject)
 		=> jObject is null || jObject.IsDefaultInstance();
+
+	/// <summary>
+	/// Retrieves an object identifier using <paramref name="className"/> and <paramref name="objRef"/>.
+	/// </summary>
+	/// <typeparam name="TObjectRef">Type of <see cref="IObjectReferenceType"/>.</typeparam>
+	/// <param name="className">Object class name.</param>
+	/// <param name="objRef">Object reference.</param>
+	/// <returns>An object identifier using <paramref name="className"/> and <paramref name="objRef"/>.</returns>
+	internal static String GetObjectIdentifier<TObjectRef>(CString className, TObjectRef objRef)
+		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
+		=> $"{className} {objRef}";
 }

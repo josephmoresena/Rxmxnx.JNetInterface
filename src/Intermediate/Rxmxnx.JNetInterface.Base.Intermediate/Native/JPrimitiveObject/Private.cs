@@ -18,7 +18,8 @@ internal partial class JPrimitiveObject
 	/// <exception cref="InvalidCastException"/>
 	private TValue AsValue<TValue>()
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
-		=> (this as IWrapper<TValue>)?.Value ?? CommonValidationUtilities.ThrowIfInvalidCast<TValue>(this as IConvertible);
+		=> (this as IWrapper<TValue>)?.Value ??
+			CommonValidationUtilities.ThrowIfInvalidCast<TValue>(this as IConvertible);
 
 	public abstract partial class Generic<TValue>
 	{

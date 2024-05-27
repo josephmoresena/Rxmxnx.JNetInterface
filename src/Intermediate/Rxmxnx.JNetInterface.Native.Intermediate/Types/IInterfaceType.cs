@@ -25,8 +25,10 @@ public interface IInterfaceType : IReferenceType
 /// This interface exposes an object that represents a java interface type instance.
 /// </summary>
 /// <typeparam name="TInterface">Type of java interface type.</typeparam>
-public interface IInterfaceType<TInterface> : IInterfaceType, IReferenceType<TInterface>, IInterfaceObject<TInterface>
-	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+public interface
+	IInterfaceType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface> : IInterfaceType,
+	IReferenceType<TInterface>,
+	IInterfaceObject<TInterface> where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	/// <summary>
 	/// Current type metadata.

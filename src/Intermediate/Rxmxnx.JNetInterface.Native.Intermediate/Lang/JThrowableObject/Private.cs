@@ -34,7 +34,7 @@ public partial class JThrowableObject
 	/// <returns>A <see cref="StackTraceInfo"/> array.</returns>
 	private static StackTraceInfo[] GetStackTraceInfo(IReadOnlyList<JStackTraceElementObject> stackTrace)
 	{
-		if (stackTrace.Count == 0) return Array.Empty<StackTraceInfo>();
+		if (stackTrace.Count == 0) return [];
 		StackTraceInfo[] result = new StackTraceInfo[stackTrace.Count];
 		for (Int32 i = 0; i < result.Length; i++)
 			result[i] = (StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]);

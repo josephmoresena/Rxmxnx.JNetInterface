@@ -41,7 +41,8 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
-	public TReference AsLocal<TReference>(IEnvironment env)
+	public TReference
+		AsLocal<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>(IEnvironment env)
 		where TReference : JReferenceObject, IReferenceType<TReference>
 	{
 		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();

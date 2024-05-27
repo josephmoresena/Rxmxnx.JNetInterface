@@ -29,7 +29,7 @@ public partial class JThrowableObject
 		/// <param name="baseMetadata">Base type metadata of the current type.</param>
 		/// <param name="interfaceTypes">Interface types.</param>
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
-			JClassTypeMetadata? baseMetadata, ISet<Type> interfaceTypes)
+			JClassTypeMetadata? baseMetadata, IReadOnlySet<Type> interfaceTypes)
 		{
 			this._builder = new(className, JTypeKind.Class, interfaceTypes);
 			this._baseMetadata = baseMetadata;
@@ -41,7 +41,8 @@ public partial class JThrowableObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public TypeMetadataBuilder<TThrowable> Implements<TInterface>()
+		public TypeMetadataBuilder<TThrowable> Implements<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			this._builder.AppendInterface<TInterface>();
@@ -51,7 +52,7 @@ public partial class JThrowableObject
 		/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-		public JThrowableTypeMetadata<TThrowable> Build()
+		public readonly JThrowableTypeMetadata<TThrowable> Build()
 		{
 			JClassTypeMetadata<TThrowable> classMetadata =
 				JLocalObject.TypeMetadataBuilder<TThrowable>.Build(this._builder, this._modifier, this._baseMetadata);
@@ -68,7 +69,7 @@ public partial class JThrowableObject
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			ISet<Type> interfaceTypes = IReferenceType<TThrowable>.GetInterfaceTypes().ToHashSet();
+			IReadOnlySet<Type> interfaceTypes = IReferenceType<TThrowable>.TypeInterfaces;
 			JClassTypeMetadata baseMetadata = typeof(TThrowable) != typeof(JThrowableObject) ?
 				IClassType.GetMetadata<JThrowableObject>() :
 				IClassType.GetMetadata<JLocalObject>();
@@ -87,9 +88,11 @@ public partial class JThrowableObject
 			where TObject : TThrowable, IThrowableType<TObject>
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			NativeValidationUtilities.ThrowIfSameType<TThrowable, TObject>(className);
-			NativeValidationUtilities.ValidateBaseTypes<TThrowable, TObject>(className);
-			ISet<Type> interfaceTypes = IReferenceType<TObject>.GetInterfaceTypes().ToHashSet();
+			NativeValidationUtilities.ThrowIfSameType(className, typeof(TThrowable), typeof(TObject));
+			IReadOnlySet<Type> baseTypes = IClassType<TObject>.TypeBaseTypes;
+			IReadOnlySet<Type> baseBaseTypes = IClassType<TThrowable>.TypeBaseTypes;
+			NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
+			IReadOnlySet<Type> interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
 			return new(className, modifier, IClassType.GetMetadata<TThrowable>(), interfaceTypes);
 		}
 	}

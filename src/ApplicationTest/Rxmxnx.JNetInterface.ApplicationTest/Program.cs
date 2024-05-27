@@ -43,6 +43,11 @@ public static class Program
 		JHelloDotnetObject.GetStringEvent += () => "Hola desde .NET";
 
 		Program.Execute(jvmLib, helloJniByteCode, "jiji", "esto es una coima mk");
+
+		Console.WriteLine($"{nameof(Program)}: {typeof(Program)}");
+		Console.WriteLine($"{nameof(IVirtualMachine.TraceEnabled)}: {IVirtualMachine.TraceEnabled}");
+		Console.WriteLine(
+			$"{nameof(IVirtualMachine.MetadataValidationEnabled)}: {IVirtualMachine.MetadataValidationEnabled}");
 	}
 	private static void PrintMetadataInfo()
 	{

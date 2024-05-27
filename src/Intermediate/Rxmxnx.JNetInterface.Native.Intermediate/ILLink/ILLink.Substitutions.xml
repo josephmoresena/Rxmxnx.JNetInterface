@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.EnableTrace"
+              featurevalue="false" featuredefault="true">
+            <method signature="System.Boolean get_TraceEnabled()" body="stub" value="false"/>
+        </type>
+    </assembly>
+    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableMetadataValidation"
+              featurevalue="true" featuredefault="false">
+            <method signature="System.Boolean get_MetadataValidationEnabled()" body="stub" value="false"/>
+        </type>
+    </assembly>
+</linker>

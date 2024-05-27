@@ -2,6 +2,8 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
@@ -38,18 +40,18 @@ partial class JEnvironment
 			this._classes[jClass.Hash] = jClass;
 			this.VirtualMachine.LoadGlobal(jClass);
 		}
-
 		/// <summary>
-		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="classNameCtx"/> as class name.
+		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="namePtr"/> as class name.
 		/// </summary>
-		/// <param name="classNameCtx">A <see cref="IReadOnlyFixedMemory"/> instance.</param>
-		/// <param name="cache">Current <see cref="EnvironmentCache"/> instance.</param>
+		/// <param name="namePtr">A pointer to class name.</param>
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		public static JClassLocalRef FindClass(in IReadOnlyFixedMemory classNameCtx, EnvironmentCache cache)
+		public unsafe JClassLocalRef FindClass(IntPtr namePtr)
 		{
-			FindClassDelegate findClass = cache.GetDelegate<FindClassDelegate>();
-			JClassLocalRef result = findClass(cache.Reference, (ReadOnlyValPtr<Byte>)classNameCtx.Pointer);
-			if (result.IsDefault) cache.CheckJniError();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
+			JClassLocalRef result =
+				nativeInterface.ClassFunctions.FindClass(this.Reference, (ReadOnlyValPtr<Byte>)namePtr);
+			if (result.IsDefault) this.CheckJniError();
 			return result;
 		}
 	}

@@ -26,7 +26,9 @@ public interface IEnumType : IReferenceType
 /// <typeparam name="TEnum">Type of java enum type.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IEnumType<TEnum> : IEnumType, IReferenceType<TEnum> where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
+public interface
+	IEnumType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TEnum> : IEnumType,
+	IReferenceType<TEnum> where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {
 	/// <summary>
 	/// Current type metadata.

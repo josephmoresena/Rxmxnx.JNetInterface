@@ -39,7 +39,7 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override String ToTraceText()
-		=> $"{this.Class.Name} {this.Reference} {IPrimitiveType.GetMetadata<JBoolean>().Signature}: {this.Value}";
+		=> $"{JObject.GetObjectIdentifier(this.Class.Name, this.Reference)} {IPrimitiveType.GetMetadata<JBoolean>().Signature}: {this.Value}";
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

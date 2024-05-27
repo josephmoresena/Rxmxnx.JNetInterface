@@ -4,6 +4,8 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache : IAccessFeature
 	{
 		public void GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
@@ -366,25 +368,30 @@ partial class JEnvironment
 			JTrace.CallMethod(jLocal, jMethod.DeclaringClass, definition, nonVirtual, args);
 			this.CallMethod(definition, localRef, classRef, args, jniTransaction, methodId);
 		}
-		public void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls)
+		public unsafe void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			RegisterNativesDelegate registerNatives = this.GetDelegate<RegisterNativesDelegate>();
-			Int32 requiredBytes = calls.Count * JNativeMethodValue.Size;
-			Boolean useStackAlloc = this.UseStackAlloc(requiredBytes);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.RegisterNativesInfo);
 			List<MemoryHandle> handles = new(calls.Count);
-			using IFixedContext<JNativeMethodValue>.IDisposable argsMemory = useStackAlloc && calls.Count > 0 ?
-				EnvironmentCache.AllocToFixedContext(stackalloc JNativeMethodValue[calls.Count], this) :
-				EnvironmentCache.AllocToFixedContext<JNativeMethodValue>(calls.Count);
+			Int32 requiredBytes = calls.Count * NativeMethodValue.Size;
+			using StackDisposable stackDisposable =
+				this.GetStackDisposable(this.UseStackAlloc(requiredBytes), requiredBytes);
+			Span<NativeMethodValue> buffer = stackDisposable.UsingStack ?
+				stackalloc NativeMethodValue[calls.Count] :
+				EnvironmentCache.HeapAlloc<NativeMethodValue>(calls.Count);
 			for (Int32 i = 0; i < calls.Count; i++)
-				argsMemory.Values[i] = JNativeMethodValue.Create(calls[i], handles);
+				buffer[i] = NativeMethodValue.Create(calls[i], handles);
 			try
 			{
 				using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-				JResult result = registerNatives(this.Reference, classRef,
-				                                 (ReadOnlyValPtr<JNativeMethodValue>)argsMemory.Pointer,
-				                                 argsMemory.Values.Length);
+				JResult result;
+				fixed (NativeMethodValue* ptr = &MemoryMarshal.GetReference(buffer))
+				{
+					result = nativeInterface.NativeRegistryFunctions.RegisterNatives(
+						this.Reference, classRef, ptr, buffer.Length);
+				}
 				this.CheckJniError();
 				ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 				this.VirtualMachine.RegisterNatives(this.ClassObject.Hash, calls);
@@ -394,13 +401,15 @@ partial class JEnvironment
 				handles.ForEach(h => h.Dispose());
 			}
 		}
-		public void ClearNatives(JClassObject jClass)
+		public unsafe void ClearNatives(JClassObject jClass)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			UnregisterNativesDelegate unregisterNatives = this.GetDelegate<UnregisterNativesDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.UnregisterNativesInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			ImplementationValidationUtilities.ThrowIfInvalidResult(unregisterNatives(this.Reference, classRef));
+			JResult jResult = nativeInterface.NativeRegistryFunctions.UnregisterNatives(this.Reference, classRef);
+			ImplementationValidationUtilities.ThrowIfInvalidResult(jResult);
 			this.VirtualMachine.UnregisterNatives(this.ClassObject.Hash);
 		}
 		public JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
@@ -439,7 +448,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef = this.GetReflectedCall(definition, declaringClass, false);
 			return new(this.GetClass<JConstructorObject>(), localRef, definition, declaringClass);
 		}
-		public JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
+		public unsafe JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
 			Boolean isStatic)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(declaringClass);
@@ -448,29 +457,34 @@ partial class JEnvironment
 			JFieldId fieldId = isStatic ?
 				access.GetStaticFieldId(definition, this._env) :
 				access.GetFieldId(definition, this._env);
-			ToReflectedFieldDelegate toReflectedField = this.GetDelegate<ToReflectedFieldDelegate>();
-			JObjectLocalRef localRef = toReflectedField(this.Reference, declaringClass.Reference, fieldId,
-			                                            isStatic ? JBoolean.TrueValue : JBoolean.FalseValue);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ToReflectedFieldInfo);
+			JObjectLocalRef localRef =
+				nativeInterface.ClassFunctions.ToReflectedField.ToReflected(
+					this.Reference, declaringClass.Reference, fieldId, isStatic);
 			if (localRef == default) this.CheckJniError();
 			return new(this.GetClass<JFieldObject>(), localRef, definition, declaringClass);
 		}
-		public JMethodId GetMethodId(JExecutableObject jExecutable)
+		public unsafe JMethodId GetMethodId(JExecutableObject jExecutable)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jExecutable);
-			FromReflectedMethodDelegate fromReflectedMethod = this.GetDelegate<FromReflectedMethodDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FromReflectedMethodInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jExecutable);
-			JMethodId result = fromReflectedMethod(this.Reference, localRef);
+			JMethodId result =
+				nativeInterface.ClassFunctions.FromReflectedMethod.FromReflected(this.Reference, localRef);
 			if (result == default) this.CheckJniError();
 			return result;
 		}
-		public JFieldId GetFieldId(JFieldObject jField)
+		public unsafe JFieldId GetFieldId(JFieldObject jField)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
-			FromReflectedFieldDelegate fromReflectedField = this.GetDelegate<FromReflectedFieldDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FromReflectedMethodInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jField);
-			JFieldId result = fromReflectedField(this.Reference, localRef);
+			JFieldId result = nativeInterface.ClassFunctions.FromReflectedField.FromReflected(this.Reference, localRef);
 			if (result == default) this.CheckJniError();
 			return result;
 		}

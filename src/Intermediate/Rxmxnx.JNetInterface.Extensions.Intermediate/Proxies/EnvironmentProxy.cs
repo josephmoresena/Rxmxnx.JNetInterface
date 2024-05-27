@@ -128,8 +128,10 @@ public abstract partial class EnvironmentProxy
 	public abstract JClassObject LoadClass(CString className, Byte[] rawClassBytes,
 		JClassLoaderObject? jClassLoader = default);
 	/// <inheritdoc cref="IClassFeature.LoadClass{TDataType}(ReadOnlySpan{Byte}, JClassLoaderObject?)"/>
-	public abstract JClassObject LoadClass<TDataType>(Byte[] rawClassBytes, JClassLoaderObject? jClassLoader = default)
-		where TDataType : JLocalObject, IReferenceType<TDataType>;
+	public abstract JClassObject
+		LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(
+			Byte[] rawClassBytes,
+			JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>;
 	/// <summary>
 	/// Retrieves the class info.
 	/// </summary>

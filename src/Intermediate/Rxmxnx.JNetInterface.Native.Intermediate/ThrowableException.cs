@@ -41,7 +41,8 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 	/// </summary>
 	/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 	/// <param name="call">A <see cref="JThrowableCall"/> containing action to perform.</param>
-	internal static void WithSafeInvoke<TThrowable>(Object? call)
+	internal static void
+		WithSafeInvoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable>(Object? call)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		=> (call as JThrowableCall)?.Invoke<TThrowable>();
 	/// <summary>
@@ -51,8 +52,9 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 	/// <typeparam name="TResult">The type of function result.</typeparam>
 	/// <param name="call">A <see cref="JThrowableCall"/> containing function to execute.</param>
 	/// <returns>The function result.</returns>
-	internal static TResult WithSafeInvoke<TThrowable, TResult>(Object? call)
-		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+	internal static TResult
+		WithSafeInvoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable, TResult>(
+			Object? call) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		=> call is JThrowableCall jCall ? jCall.Invoke<TThrowable, TResult>() : default!;
 }
 
@@ -60,8 +62,9 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 /// Represents error that occur during JNI calls.
 /// </summary>
 /// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
-public sealed class ThrowableException<TThrowable> : ThrowableException, IThrowableException<TThrowable>
-	where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+public sealed class
+	ThrowableException<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable> :
+	ThrowableException, IThrowableException<TThrowable> where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 {
 	/// <inheritdoc/>
 	internal ThrowableException(JGlobalBase jGlobal, String? message) : base(jGlobal, message)

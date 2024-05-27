@@ -5,6 +5,8 @@ partial class JEnvironment
 	/// <summary>
 	/// This record stores cache for a <see cref="JEnvironment"/> instance.
 	/// </summary>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache : LocalMainClasses
 	{
 		/// <inheritdoc cref="JEnvironment.Reference"/>
@@ -48,30 +50,33 @@ partial class JEnvironment
 		}
 
 		/// <summary>
-		/// Retrieves a <typeparamref name="TDelegate"/> instance for <typeparamref name="TDelegate"/>.
+		/// Retrieves managed <see cref="NativeInterface"/> reference from current instance.
 		/// </summary>
-		/// <typeparam name="TDelegate">Type of method delegate.</typeparam>
-		/// <returns>A <typeparamref name="TDelegate"/> instance.</returns>
-		public TDelegate GetDelegate<TDelegate>() where TDelegate : Delegate
+		/// <param name="info">A <see cref="JniMethodInfo"/> instance.</param>
+		/// <returns>A managed <see cref="NativeInterface"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public unsafe ref readonly TNativeInterface GetNativeInterface<TNativeInterface>(JniMethodInfo info)
+			where TNativeInterface : unmanaged, INativeInterface<TNativeInterface>
 		{
 			ImplementationValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
 			ImplementationValidationUtilities.ThrowIfInvalidVirtualMachine(this.VirtualMachine.IsAlive);
 			ImplementationValidationUtilities.ThrowIfNotAttached(this._env.IsAttached);
-			Type typeOfT = typeof(TDelegate);
-			JniDelegateInfo info = EnvironmentCache.delegateIndex[typeOfT];
 			ImplementationValidationUtilities.ThrowIfUnsafe(info.Name, this.JniSecure(info.Level));
-			IntPtr ptr = this.GetPointer(info.Index);
-			return this._delegateCache.GetDelegate<TDelegate>(ptr);
+			ImplementationValidationUtilities.ThrowIfInvalidVersion(info.Name, TNativeInterface.RequiredVersion,
+			                                                        this.Version);
+			ref readonly JEnvironmentValue refValue = ref this.Reference.Reference;
+			return ref Unsafe.AsRef<TNativeInterface>(refValue.Pointer.ToPointer());
 		}
 		/// <summary>
 		/// Checks JNI occurred error.
 		/// </summary>
-		public void CheckJniError()
+		public unsafe void CheckJniError()
 		{
 			if (this._criticalCount > 0)
 			{
-				ExceptionCheckDelegate exceptionCheck = this.GetDelegate<ExceptionCheckDelegate>();
-				if (exceptionCheck(this.Reference) != JBoolean.TrueValue) return;
+				ref readonly NativeInterface nativeInterface =
+					ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
+				if (!nativeInterface.ExceptionCheck(this.Reference).Value) return;
 				this.ThrowJniException(CriticalException.Instance, true);
 			}
 			else
@@ -122,10 +127,11 @@ partial class JEnvironment
 		/// Retrieves exception occured reference.
 		/// </summary>
 		/// <returns>Pending exception <see cref="JThrowableLocalRef"/> reference.</returns>
-		public JThrowableLocalRef GetPendingException()
+		public unsafe JThrowableLocalRef GetPendingException()
 		{
-			ExceptionOccurredDelegate exceptionOccurred = this.GetDelegate<ExceptionOccurredDelegate>();
-			return exceptionOccurred(this.Reference);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionOccurredInfo);
+			return nativeInterface.ErrorFunctions.ExceptionOccurred(this.Reference);
 		}
 		/// <summary>
 		/// Creates JNI exception from <paramref name="throwableRef"/>.

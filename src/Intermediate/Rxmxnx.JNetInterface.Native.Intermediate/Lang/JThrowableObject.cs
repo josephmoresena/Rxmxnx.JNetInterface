@@ -55,7 +55,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// <inheritdoc/>
 	public override String ToString()
 	{
-		String result = $"{this.Class.Name} {this.Reference} {this.Message}";
+		String result = $"{JObject.GetObjectIdentifier(this.Class.Name, this.Reference)} {this.Message}";
 		if (this.StackTrace.Length > 0)
 		{
 			StringBuilder strBuild = new(result);
@@ -67,7 +67,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	}
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
-	public override String ToTraceText() => $"{this.Class.Name} {this.Reference}";
+	public override String ToTraceText() => JObject.GetObjectIdentifier(this.Class.Name, this.Reference);
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	protected new virtual ThrowableObjectMetadata CreateMetadata()

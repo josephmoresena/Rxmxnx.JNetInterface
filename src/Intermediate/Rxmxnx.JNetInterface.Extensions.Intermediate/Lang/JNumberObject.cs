@@ -44,8 +44,10 @@ public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TV
 /// </summary>
 /// <typeparam name="TValue">Number <see cref="IPrimitiveType"/> type.</typeparam>
 /// <typeparam name="TNumber"><see cref="JNumberObject"/> type.</typeparam>
-public abstract partial class JNumberObject<TValue, TNumber> : JNumberObject<TValue>,
-	IPrimitiveEquatable, IInterfaceObject<JComparableObject>
+public abstract partial class
+	JNumberObject<TValue, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TNumber> :
+	JNumberObject<TValue>, IPrimitiveEquatable,
+	IInterfaceObject<JComparableObject>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 	where TNumber : JNumberObject<TValue, TNumber>, IPrimitiveWrapperType<TNumber, TValue>
 {
@@ -63,7 +65,7 @@ public abstract partial class JNumberObject<TValue, TNumber> : JNumberObject<TVa
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override String ToTraceText()
-		=> $"{this.Class.Name} {this.Reference} {IPrimitiveType.GetMetadata<TValue>().Signature}: {this.Value}";
+		=> $"{JObject.GetObjectIdentifier(this.Class.Name, this.Reference)} {IPrimitiveType.GetMetadata<TValue>().Signature}: {this.Value}";
 
 	/// <inheritdoc cref="IPrimitiveWrapperType{TNumber, TValue}.Create(IEnvironment, Nullable{TValue})"/>
 	[return: NotNullIfNotNull(nameof(value))]

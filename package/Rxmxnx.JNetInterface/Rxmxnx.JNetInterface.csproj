@@ -19,6 +19,7 @@
     <DefineConstants>$(DefineConstants);PACKAGE</DefineConstants>
     <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' != ''">$(Version)</CoreVersion>
     <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' == ''">*</CoreVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(PUBLIC_KEY)' != ''">

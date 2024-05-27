@@ -68,7 +68,7 @@ public sealed class PrimitiveArrayTests
 			Assert.Equal(
 				$"{primitiveTypeMetadata.ClassName}[{arrayLength}]{String.Concat(Enumerable.Repeat("[]", i))} {arrayRef}",
 				jArray.ToString());
-			Assert.Equal($"{arrayTypeMetadata.ClassName} length: {jArray.Length} {traceArrayRef}",
+			Assert.Equal($"{arrayTypeMetadata.ClassName} {traceArrayRef} length: {jArray.Length}",
 			             jArray.ToTraceText());
 			Assert.Equal($"[{String.Concat(Enumerable.Repeat("[", i))}{primitiveTypeMetadata.Signature}",
 			             arrayTypeMetadata.Signature.ToString());

@@ -2,6 +2,8 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
@@ -12,12 +14,13 @@ partial class JEnvironment
 		/// <param name="value">The field value to set to.</param>
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
-		private void SetStaticObjectField<TField>(JClassLocalRef classRef, TField? value,
+		private unsafe void SetStaticObjectField<TField>(JClassLocalRef classRef, TField? value,
 			INativeTransaction jniTransaction, JFieldId fieldId) where TField : IObject, IDataType<TField>
 		{
 			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JReferenceObject);
-			SetStaticObjectFieldDelegate setObjectField = this.GetDelegate<SetStaticObjectFieldDelegate>();
-			setObjectField(this.Reference, classRef, fieldId, valueLocalRef);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.SetStaticObjectFieldInfo);
+			nativeInterface.StaticFieldFunctions.SetObjectField.Set(this.Reference, classRef, fieldId, valueLocalRef);
 			JTrace.SetObjectField(default, classRef, fieldId, valueLocalRef);
 		}
 		/// <summary>
@@ -28,12 +31,13 @@ partial class JEnvironment
 		/// <param name="value">The field value to set to.</param>
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
-		private void SetObjectField<TField>(JObjectLocalRef localRef, TField? value, INativeTransaction jniTransaction,
-			JFieldId fieldId) where TField : IObject, IDataType<TField>
+		private unsafe void SetObjectField<TField>(JObjectLocalRef localRef, TField? value,
+			INativeTransaction jniTransaction, JFieldId fieldId) where TField : IObject, IDataType<TField>
 		{
 			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JReferenceObject);
-			SetObjectFieldDelegate setObjectField = this.GetDelegate<SetObjectFieldDelegate>();
-			setObjectField(this.Reference, localRef, fieldId, valueLocalRef);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.SetObjectFieldInfo);
+			nativeInterface.InstanceFieldFunctions.SetObjectField.Set(this.Reference, localRef, fieldId, valueLocalRef);
 			JTrace.SetObjectField(localRef, default, fieldId, valueLocalRef);
 		}
 		/// <summary>
@@ -56,10 +60,12 @@ partial class JEnvironment
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="fieldId">A <see cref="JFieldId"/> identifier.</param>
 		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
-		private JObjectLocalRef GetStaticObjectField(JClassLocalRef classRef, JFieldId fieldId)
+		private unsafe JObjectLocalRef GetStaticObjectField(JClassLocalRef classRef, JFieldId fieldId)
 		{
-			GetStaticObjectFieldDelegate getStaticObjectField = this.GetDelegate<GetStaticObjectFieldDelegate>();
-			JObjectLocalRef localRef = getStaticObjectField(this.Reference, classRef, fieldId);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticObjectFieldInfo);
+			JObjectLocalRef localRef =
+				nativeInterface.StaticFieldFunctions.GetObjectField.Get(this.Reference, classRef, fieldId);
 			JTrace.GetObjectField(default, classRef, fieldId, localRef);
 			this.CheckJniError();
 			return localRef;
@@ -71,11 +77,13 @@ partial class JEnvironment
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 		/// <returns><typeparamref name="TField"/> field instance.</returns>
-		private TField? GetObjectField<TField>(JObjectLocalRef localRef, JFieldId fieldId)
+		private unsafe TField? GetObjectField<TField>(JObjectLocalRef localRef, JFieldId fieldId)
 			where TField : IObject, IDataType<TField>
 		{
-			GetObjectFieldDelegate getObjectField = this.GetDelegate<GetObjectFieldDelegate>();
-			JObjectLocalRef resultLocalRef = getObjectField(this.Reference, localRef, fieldId);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectFieldInfo);
+			JObjectLocalRef resultLocalRef =
+				nativeInterface.InstanceFieldFunctions.GetObjectField.Get(this.Reference, localRef, fieldId);
 			JTrace.GetObjectField(localRef, default, fieldId, resultLocalRef);
 			this.CheckJniError();
 			return this.CreateObject<TField>(resultLocalRef, true);
@@ -90,16 +98,18 @@ partial class JEnvironment
 		/// Indicates whether <paramref name="definition"/> matches with an static method in <paramref name="declaringClass"/>.
 		/// </param>
 		/// <returns>A <see cref="JMethodObject"/> instance.</returns>
-		private JObjectLocalRef GetReflectedCall(JCallDefinition definition, JClassObject declaringClass,
+		private unsafe JObjectLocalRef GetReflectedCall(JCallDefinition definition, JClassObject declaringClass,
 			Boolean isStatic)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(declaringClass);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ToReflectedMethodInfo);
 			using INativeTransaction jniTransaction = isStatic ?
 				this.GetClassTransaction(declaringClass, definition, out JMethodId methodId, false) :
 				this.GetInstanceTransaction(declaringClass, definition, out methodId);
-			ToReflectedMethodDelegate toReflectedMethod = this.GetDelegate<ToReflectedMethodDelegate>();
-			JObjectLocalRef localRef = toReflectedMethod(this.Reference, declaringClass.Reference, methodId,
-			                                             isStatic ? JBoolean.TrueValue : JBoolean.FalseValue);
+			JObjectLocalRef localRef =
+				nativeInterface.ClassFunctions.ToReflectedMethod.ToReflected(
+					this.Reference, declaringClass.Reference, methodId, isStatic);
 			if (localRef == default) this.CheckJniError();
 			return localRef;
 		}
@@ -113,28 +123,27 @@ partial class JEnvironment
 		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-		private TResult? CallObjectFunction<TResult>(JFunctionDefinition definition, JObjectLocalRef localRef,
+		private unsafe TResult? CallObjectFunction<TResult>(JFunctionDefinition definition, JObjectLocalRef localRef,
 			JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
 			where TResult : IDataType<TResult>
 		{
-			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
-				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
-			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
+			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
+				ref this.GetInstanceMethodFunctions(UnicodeObjectSignatures.ObjectSignaturePrefixChar,
+				                                    !classRef.IsDefault);
+			using StackDisposable stackDisposable =
+				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
+			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
+			                                        stackDisposable.UsingStack ?
+				                                        stackalloc Byte[requiredBytes] :
+				                                        EnvironmentCache.HeapAlloc<Byte>(requiredBytes));
 			JObjectLocalRef resultLocalRef;
-			if (classRef.IsDefault)
+			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
-				CallObjectMethodADelegate callObjectMethod = this.GetDelegate<CallObjectMethodADelegate>();
-				resultLocalRef = callObjectMethod(this.Reference, localRef, methodId,
-				                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
-			}
-			else
-			{
-				CallNonVirtualObjectMethodADelegate callNonVirtualObjectObjectMethod =
-					this.GetDelegate<CallNonVirtualObjectMethodADelegate>();
-				resultLocalRef = callNonVirtualObjectObjectMethod(this.Reference, localRef, classRef, methodId,
-				                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+				resultLocalRef = classRef.IsDefault ?
+					instanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
+						this.Reference, localRef, methodId, ptr) :
+					instanceMethodFunctions.NonVirtualFunctions.CallNonVirtualObjectMethod.Call(
+						this.Reference, localRef, classRef, methodId, ptr);
 			}
 			JTrace.CallObjectFunction(localRef, classRef, methodId, resultLocalRef, false);
 			this.CheckJniError();
@@ -150,19 +159,24 @@ partial class JEnvironment
 		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-		private void CallPrimitiveFunction(Span<Byte> bytes, JFunctionDefinition definition, JObjectLocalRef localRef,
-			JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
+		private unsafe void CallPrimitiveFunction(Span<Byte> bytes, JFunctionDefinition definition,
+			JObjectLocalRef localRef, JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction,
+			JMethodId methodId)
 		{
-			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
-				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
-			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-			if (classRef.IsDefault)
-				this.CallPrimitiveFunction(bytes, localRef, definition.Descriptor[^1], methodId, argsMemory);
-			else
-				this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, definition.Descriptor[^1], methodId,
-				                                     argsMemory);
+			using StackDisposable stackDisposable =
+				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
+			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
+			                                        stackDisposable.UsingStack ?
+				                                        stackalloc Byte[requiredBytes] :
+				                                        EnvironmentCache.HeapAlloc<Byte>(requiredBytes));
+			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
+			{
+				if (classRef.IsDefault)
+					this.CallPrimitiveFunction(bytes, localRef, definition.Descriptor[^1], methodId, ptr);
+				else
+					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, definition.Descriptor[^1], methodId,
+					                                     ptr);
+			}
 			this.CheckJniError();
 		}
 		/// <summary>
@@ -175,18 +189,24 @@ partial class JEnvironment
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 		/// <returns><typeparamref name="TResult"/> function result.</returns>
-		private TResult? CallObjectStaticFunction<TResult>(JFunctionDefinition definition, JClassLocalRef classRef,
-			IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId) where TResult : IDataType<TResult>
+		private unsafe TResult? CallObjectStaticFunction<TResult>(JFunctionDefinition definition,
+			JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
+			where TResult : IDataType<TResult>
 		{
-			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
-				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
-			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-			CallStaticObjectMethodADelegate callStaticObjectMethod =
-				this.GetDelegate<CallStaticObjectMethodADelegate>();
-			JObjectLocalRef localRef = callStaticObjectMethod(this.Reference, classRef, methodId,
-			                                                  (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallStaticObjectMethodInfo);
+			using StackDisposable stackDisposable =
+				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
+			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
+			                                        stackDisposable.UsingStack ?
+				                                        stackalloc Byte[requiredBytes] :
+				                                        EnvironmentCache.HeapAlloc<Byte>(requiredBytes));
+			JObjectLocalRef localRef;
+			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
+			{
+				localRef = nativeInterface.StaticMethodFunctions.CallObjectMethod.Call(
+					this.Reference, classRef, methodId, ptr);
+			}
 			JTrace.CallObjectFunction(default, classRef, methodId, localRef, false);
 			this.CheckJniError();
 			return this.CreateObject<TResult>(localRef, true);
@@ -200,29 +220,27 @@ partial class JEnvironment
 		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-		private void CallMethod(JMethodDefinition definition, JObjectLocalRef localRef, JClassLocalRef classRef,
+		private unsafe void CallMethod(JMethodDefinition definition, JObjectLocalRef localRef, JClassLocalRef classRef,
 			IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
-			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
-				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
-			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-
-			if (classRef.IsDefault)
+			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
+				ref this.GetInstanceMethodFunctions(UnicodePrimitiveSignatures.VoidSignatureChar, !classRef.IsDefault);
+			using StackDisposable stackDisposable =
+				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
+			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
+			                                        stackDisposable.UsingStack ?
+				                                        stackalloc Byte[requiredBytes] :
+				                                        EnvironmentCache.HeapAlloc<Byte>(requiredBytes));
+			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
-				CallVoidMethodADelegate callVoidMethod = this.GetDelegate<CallVoidMethodADelegate>();
-				callVoidMethod(this.Reference, localRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
-				JTrace.CallMethod(localRef, default, methodId);
+				if (classRef.IsDefault)
+					instanceMethodFunctions.MethodFunctions.CallVoidMethod.Call(
+						this.Reference, localRef, methodId, ptr);
+				else
+					instanceMethodFunctions.NonVirtualFunctions.CallNonVirtualVoidMethod.Call(
+						this.Reference, localRef, classRef, methodId, ptr);
 			}
-			else
-			{
-				CallNonVirtualVoidMethodADelegate callNonVirtualVoidObjectMethod =
-					this.GetDelegate<CallNonVirtualVoidMethodADelegate>();
-				callNonVirtualVoidObjectMethod(this.Reference, localRef, classRef, methodId,
-				                               (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
-				JTrace.CallMethod(localRef, classRef, methodId);
-			}
+			JTrace.CallMethod(localRef, classRef, methodId);
 			this.CheckJniError();
 		}
 		/// <summary>
@@ -233,16 +251,19 @@ partial class JEnvironment
 		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-		private void CallStaticMethod(JMethodDefinition definition, JClassLocalRef classRef, IObject?[] args,
+		private unsafe void CallStaticMethod(JMethodDefinition definition, JClassLocalRef classRef, IObject?[] args,
 			INativeTransaction jniTransaction, JMethodId methodId)
 		{
-			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
-				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
-			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-			CallStaticVoidMethodADelegate callStaticVoidMethod = this.GetDelegate<CallStaticVoidMethodADelegate>();
-			callStaticVoidMethod(this.Reference, classRef, methodId, (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallStaticVoidMethodInfo);
+			using StackDisposable stackDisposable =
+				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
+			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
+			                                        stackDisposable.UsingStack ?
+				                                        stackalloc Byte[requiredBytes] :
+				                                        EnvironmentCache.HeapAlloc<Byte>(requiredBytes));
+			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
+				nativeInterface.StaticMethodFunctions.CallVoidMethod.Call(this.Reference, classRef, methodId, ptr);
 			JTrace.CallMethod(default, classRef, methodId);
 			this.CheckJniError();
 		}
@@ -273,17 +294,20 @@ partial class JEnvironment
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
-		private JObjectLocalRef NewObject(JConstructorDefinition definition, JClassLocalRef classRef, IObject?[] args,
-			INativeTransaction jniTransaction, JMethodId methodId)
+		private unsafe JObjectLocalRef NewObject(JConstructorDefinition definition, JClassLocalRef classRef,
+			IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
-			Boolean useStackAlloc = this.UseStackAlloc(definition, out Int32 requiredBytes);
-			using IFixedContext<Byte>.IDisposable argsMemory = useStackAlloc && requiredBytes > 0 ?
-				EnvironmentCache.AllocToFixedContext(stackalloc Byte[requiredBytes], this) :
-				EnvironmentCache.AllocToFixedContext<Byte>(requiredBytes);
-			this.CopyAsJValue(jniTransaction, args, argsMemory.Values);
-			NewObjectADelegate newObject = this.GetDelegate<NewObjectADelegate>();
-			JObjectLocalRef localRef = newObject(this.Reference, classRef, methodId,
-			                                     (ReadOnlyValPtr<JValue>)argsMemory.Pointer);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewObjectInfo);
+			using StackDisposable stackDisposable =
+				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
+			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
+			                                        stackDisposable.UsingStack ?
+				                                        stackalloc Byte[requiredBytes] :
+				                                        EnvironmentCache.HeapAlloc<Byte>(requiredBytes));
+			JObjectLocalRef localRef;
+			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
+				localRef = nativeInterface.ObjectFunctions.NewObject.Call(this.Reference, classRef, methodId, ptr);
 			JTrace.CallObjectFunction(default, classRef, methodId, localRef, true);
 			this.CheckJniError();
 			return localRef;

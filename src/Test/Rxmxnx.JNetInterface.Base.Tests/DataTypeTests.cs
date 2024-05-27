@@ -6,12 +6,7 @@ public sealed class DataTypeTests
 	private static readonly IFixture fixture = new Fixture();
 
 	[Fact]
-	internal void Test()
-	{
-		DataTypeTests.DefaultTest<DataTypeProxy>();
-		DataTypeTests.GenericDefaultTest<GenericDataTypeProxy>();
-		DataTypeTests.PrimitiveTest<PrimitiveProxy>();
-	}
+	internal void Test() { DataTypeTests.PrimitiveTest<PrimitiveProxy>(); }
 	[Fact]
 	internal void NativeTest()
 	{
@@ -93,31 +88,9 @@ public sealed class DataTypeTests
 		Assert.Equal(dataTypeString, voidMetadata.ToString());
 	}
 
-	private static void DefaultTest<TDataType>() where TDataType : IDataType
-	{
-		Assert.Equal(JTypeKind.Undefined, TDataType.Kind);
-		Assert.Equal(default, TDataType.FamilyType);
-		Assert.Equal(default, TDataType.FamilyType);
-	}
-	private static void GenericDefaultTest<TDataType>() where TDataType : IDataType<TDataType>
-	{
-		DataTypeTests.DefaultTest<TDataType>();
-		List<Exception> exceptions =
-		[
-			Assert.Throws<NotImplementedException>(IDataType.GetMetadata<TDataType>),
-			Assert.Throws<NotImplementedException>(IDataType.GetHash<TDataType>),
-			Assert.Throws<NotImplementedException>(() => TDataType.Metadata),
-		];
-		Assert.Throws<TypeInitializationException>(() => TDataType.Argument);
-		exceptions.ForEach(
-			e => Assert.True(e.Message == $"The {nameof(IDataType)} interface can't be implemented by itself."));
-	}
 	private static void PrimitiveTest<TPrimitive>() where TPrimitive : IPrimitiveType
 	{
-		DataTypeTests.DefaultTest<TPrimitive>();
-		NotImplementedException ex = Assert.Throws<NotImplementedException>(() => TPrimitive.JniType);
-		Assert.True(ex.Message ==
-		            $"The {nameof(IPrimitiveType)} interface can't be implemented by itself. Please use primitive types such as JBoolean, JByte, JChar, JDouble, JFloat, JInt, JLong, JShort.");
+		Assert.Equal(JNativeType.JObject, TPrimitive.JniType);
 	}
 	private static void NativeTypeTest<TNative>() where TNative : unmanaged, INativeType<TNative>
 	{
@@ -132,9 +105,6 @@ public sealed class DataTypeTests
 		};
 		Assert.Equal(prefix + suffix, value.ToString());
 	}
-
-	private abstract record DataTypeProxy : IDataType;
-	private abstract record GenericDataTypeProxy : DataTypeProxy, IDataType<GenericDataTypeProxy>;
 
 	private abstract record PrimitiveProxy : ObjectProxy, IPrimitiveType
 	{

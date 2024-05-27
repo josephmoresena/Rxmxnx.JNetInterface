@@ -34,8 +34,8 @@ public sealed partial record JVirtualMachineInitArg
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="value">A <see cref="JVirtualMachineInitArgumentValue"/> value.</param>
-	internal JVirtualMachineInitArg(JVirtualMachineInitArgumentValue value)
+	/// <param name="value">A <see cref="VirtualMachineInitArgumentValue"/> value.</param>
+	internal JVirtualMachineInitArg(VirtualMachineInitArgumentValue value)
 	{
 		this._version = value.Version;
 		this.IgnoreUnrecognized = value.IgnoreUnrecognized == JBoolean.TrueValue;

@@ -53,7 +53,7 @@ public partial class JGlobalBase
 
 		if (disposing && !this.IsDisposable)
 		{
-			ImmutableArray<Int64> keys = [..this._objects.Keys,];
+			ImmutableArray<Int64> keys = [.. this._objects.Keys,];
 			foreach (Int64 key in keys)
 			{
 				if (this._objects.TryRemove(key, out WeakReference<ObjectLifetime>? wObj) &&

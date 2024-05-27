@@ -32,7 +32,9 @@ public abstract partial class EnvironmentProxy
 	JClassObject IClassFeature.LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 		JClassLoaderObject? jClassLoader)
 		=> this.LoadClass(new(className), rawClassBytes.ToArray(), jClassLoader);
-	JClassObject IClassFeature.LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader)
+	JClassObject IClassFeature.
+		LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(
+			ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader)
 		=> this.LoadClass<TDataType>(rawClassBytes.ToArray(), jClassLoader);
 	void IClassFeature.GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 	{
