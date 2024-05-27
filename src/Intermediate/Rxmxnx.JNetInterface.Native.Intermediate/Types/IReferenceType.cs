@@ -36,7 +36,7 @@ public interface
 	/// <summary>
 	/// Cached type interface set.
 	/// </summary>
-	private static readonly WeakReference<TypeInterfaceSet<TReference>?> typeInterfaces = new(default);
+	private static readonly WeakReference<TypeInterfaceHelper<TReference>?> typeInterfaces = new(default);
 
 	/// <summary>
 	/// Retrieves current type interfaces set.
@@ -45,11 +45,11 @@ public interface
 	{
 		get
 		{
-			if (IReferenceType<TReference>.typeInterfaces.TryGetTarget(out TypeInterfaceSet<TReference>? result))
-				return result;
+			if (IReferenceType<TReference>.typeInterfaces.TryGetTarget(out TypeInterfaceHelper<TReference>? result))
+				return result.Set;
 			result = new();
 			IReferenceType<TReference>.typeInterfaces.SetTarget(result);
-			return result;
+			return result.Set;
 		}
 	}
 

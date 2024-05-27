@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 /// </summary>
 /// <remarks></remarks>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal unsafe struct NativeInterface9 : INativeInterface<NativeInterface>
 {
 	/// <inheritdoc/>

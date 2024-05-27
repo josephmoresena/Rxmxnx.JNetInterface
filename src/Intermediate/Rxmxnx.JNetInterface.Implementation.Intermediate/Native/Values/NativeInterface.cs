@@ -4,6 +4,10 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 /// Function pointer based-struct replacement for <see cref="JNativeInterface"/> type.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
+                 Justification = CommonConstants.BinaryStructJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe partial struct NativeInterface : INativeInterface<NativeInterface>
 {
 	/// <inheritdoc/>

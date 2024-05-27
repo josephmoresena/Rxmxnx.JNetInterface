@@ -6,6 +6,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// <typeparam name="TReceiver">Type of receiver field.</typeparam>
 /// <typeparam name="TResult">Type of return field.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct SetGenericFieldFunction<TReceiver, TResult>
 	where TReceiver : unmanaged, IWrapper<JObjectLocalRef> where TResult : unmanaged, INativeType<TResult>
 {

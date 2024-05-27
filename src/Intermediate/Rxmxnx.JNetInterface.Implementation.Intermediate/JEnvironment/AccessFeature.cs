@@ -4,6 +4,8 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache : IAccessFeature
 	{
 		public void GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,

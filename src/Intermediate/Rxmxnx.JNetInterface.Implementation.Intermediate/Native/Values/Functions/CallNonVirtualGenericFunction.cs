@@ -5,6 +5,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// </summary>
 /// <typeparam name="TResult">Type of return function.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
+                 Justification = CommonConstants.BinaryStructJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct CallNonVirtualGenericFunction<TResult> where TResult : unmanaged, INativeType<TResult>
 {
 	/// <summary>

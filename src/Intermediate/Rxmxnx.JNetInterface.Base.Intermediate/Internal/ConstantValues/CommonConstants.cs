@@ -40,6 +40,7 @@ internal static class CommonConstants
 	public const String CheckIdS3267 = "S3267:Loops should be simplified with \"LINQ\" expressions";
 	public const String CheckIdS6670 = "S6670:\"Trace.Write\" and \"Trace.WriteLine\" should not be used";
 	public const String CheckIdS107 = "S107:Methods should not have too many parameters";
+	public const String CheckIdS6640 = "S107:Using unsafe code blocks is security-sensitive";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String AbstractProxyJustification = "This object is an abstract proxy.";
 	public const String JniThreadRequiredJustification = "Global object disposing requires a JNI thread.";
@@ -65,4 +66,5 @@ internal static class CommonConstants
 	public const String NonStandardLinqJustification = "Linq is not needed.";
 	public const String NonStandardTraceJustification = "Not standard trace is required.";
 	public const String PrimitiveCallJustification = "Primitive call generalization.";
+	public const String SecureUnsafeCodeJustification = "JNI code is secure to use.";
 }

@@ -55,72 +55,21 @@ partial class JEnvironment
 		{
 			JniMethodInfo info = primitiveSignature switch
 			{
-				UnicodePrimitiveSignatures.BooleanSignatureChar => arrayFunction switch
-				{
-					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetBooleanArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface
-						.ReleaseBooleanArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetBooleanArrayRegionInfo,
-					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetBooleanArrayRegionInfo,
-					_ => NativeInterface.NewBooleanArrayInfo,
-				},
-				UnicodePrimitiveSignatures.ByteSignatureChar => arrayFunction switch
-				{
-					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetByteArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseByteArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetByteArrayRegionInfo,
-					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetByteArrayRegionInfo,
-					_ => NativeInterface.NewByteArrayInfo,
-				},
-				UnicodePrimitiveSignatures.CharSignatureChar => arrayFunction switch
-				{
-					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetCharArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseCharArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetCharArrayRegionInfo,
-					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetCharArrayRegionInfo,
-					_ => NativeInterface.NewCharArrayInfo,
-				},
-				UnicodePrimitiveSignatures.DoubleSignatureChar => arrayFunction switch
-				{
-					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetDoubleArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.ReleaseElements =>
-						NativeInterface.ReleaseDoubleArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetDoubleArrayRegionInfo,
-					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetDoubleArrayRegionInfo,
-					_ => NativeInterface.NewDoubleArrayInfo,
-				},
-				UnicodePrimitiveSignatures.FloatSignatureChar => arrayFunction switch
-				{
-					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetFloatArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseFloatArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetFloatArrayRegionInfo,
-					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetFloatArrayRegionInfo,
-					_ => NativeInterface.NewFloatArrayInfo,
-				},
-				UnicodePrimitiveSignatures.IntSignatureChar => arrayFunction switch
-				{
-					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetIntArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseIntArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetIntArrayRegionInfo,
-					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetIntArrayRegionInfo,
-					_ => NativeInterface.NewIntArrayInfo,
-				},
-				UnicodePrimitiveSignatures.LongSignatureChar => arrayFunction switch
-				{
-					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetLongArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseLongArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetLongArrayRegionInfo,
-					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetLongArrayRegionInfo,
-					_ => NativeInterface.NewLongArrayInfo,
-				},
-				UnicodePrimitiveSignatures.ShortSignatureChar => arrayFunction switch
-				{
-					ArrayFunctionSet.PrimitiveFunction.GetElements => NativeInterface.GetShortArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.ReleaseElements => NativeInterface.ReleaseShortArrayElementsInfo,
-					ArrayFunctionSet.PrimitiveFunction.GetRegion => NativeInterface.GetShortArrayRegionInfo,
-					ArrayFunctionSet.PrimitiveFunction.SetRegion => NativeInterface.SetShortArrayRegionInfo,
-					_ => NativeInterface.NewShortArrayInfo,
-				},
+				UnicodePrimitiveSignatures.BooleanSignatureChar => EnvironmentCache.GetBooleanArrayFunctionInfo(
+					arrayFunction),
+				UnicodePrimitiveSignatures.ByteSignatureChar =>
+					EnvironmentCache.GetByteArrayFunctionInfo(arrayFunction),
+				UnicodePrimitiveSignatures.CharSignatureChar =>
+					EnvironmentCache.GetCharArrayFunctionInfo(arrayFunction),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => EnvironmentCache.GetDoubleArrayFunctionInfo(
+					arrayFunction),
+				UnicodePrimitiveSignatures.FloatSignatureChar => EnvironmentCache.GetFloatArrayFunctionInfo(
+					arrayFunction),
+				UnicodePrimitiveSignatures.IntSignatureChar => EnvironmentCache.GetIntArrayFunctionInfo(arrayFunction),
+				UnicodePrimitiveSignatures.LongSignatureChar =>
+					EnvironmentCache.GetLongArrayFunctionInfo(arrayFunction),
+				UnicodePrimitiveSignatures.ShortSignatureChar => EnvironmentCache.GetShortArrayFunctionInfo(
+					arrayFunction),
 				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 			};
 			return ref this.GetNativeInterface<NativeInterface>(info).ArrayFunctions;
@@ -137,36 +86,21 @@ partial class JEnvironment
 		{
 			JniMethodInfo info = signatureChar switch
 			{
-				UnicodePrimitiveSignatures.BooleanSignatureChar => nonVirtual ?
-					NativeInterface.CallBooleanMethodInfo :
-					NativeInterface.CallNonVirtualBooleanMethodInfo,
-				UnicodePrimitiveSignatures.ByteSignatureChar => nonVirtual ?
-					NativeInterface.CallByteMethodInfo :
-					NativeInterface.CallNonVirtualByteMethodInfo,
-				UnicodePrimitiveSignatures.CharSignatureChar => nonVirtual ?
-					NativeInterface.CallCharMethodInfo :
-					NativeInterface.CallNonVirtualCharMethodInfo,
-				UnicodePrimitiveSignatures.DoubleSignatureChar => nonVirtual ?
-					NativeInterface.CallDoubleMethodInfo :
-					NativeInterface.CallNonVirtualCharMethodInfo,
-				UnicodePrimitiveSignatures.FloatSignatureChar => nonVirtual ?
-					NativeInterface.CallFloatMethodInfo :
-					NativeInterface.CallNonVirtualFloatMethodInfo,
-				UnicodePrimitiveSignatures.IntSignatureChar => nonVirtual ?
-					NativeInterface.CallIntMethodInfo :
-					NativeInterface.CallNonVirtualIntMethodInfo,
-				UnicodePrimitiveSignatures.LongSignatureChar => nonVirtual ?
-					NativeInterface.CallLongMethodInfo :
-					NativeInterface.CallNonVirtualLongMethodInfo,
-				UnicodePrimitiveSignatures.ShortSignatureChar => nonVirtual ?
-					NativeInterface.CallShortMethodInfo :
-					NativeInterface.CallNonVirtualShortMethodInfo,
-				UnicodePrimitiveSignatures.VoidSignatureChar => nonVirtual ?
-					NativeInterface.CallVoidMethodInfo :
-					NativeInterface.CallNonVirtualVoidMethodInfo,
-				UnicodeObjectSignatures.ObjectSignaturePrefixChar => nonVirtual ?
-					NativeInterface.CallObjectMethodInfo :
-					NativeInterface.CallNonVirtualObjectMethodInfo,
+				UnicodePrimitiveSignatures.BooleanSignatureChar => EnvironmentCache.GetBooleanInstanceMethodInfo(
+					nonVirtual),
+				UnicodePrimitiveSignatures.ByteSignatureChar => EnvironmentCache.GetByteInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.CharSignatureChar => EnvironmentCache.GetCharInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => EnvironmentCache.GetDoubleInstanceMethodInfo(
+					nonVirtual),
+				UnicodePrimitiveSignatures.FloatSignatureChar =>
+					EnvironmentCache.GetFloatInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.IntSignatureChar => EnvironmentCache.GetIntInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.LongSignatureChar => EnvironmentCache.GetLongInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.ShortSignatureChar =>
+					EnvironmentCache.GetShortInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.VoidSignatureChar => EnvironmentCache.GetVoidInstanceMethodInfo(nonVirtual),
+				UnicodeObjectSignatures.ObjectSignaturePrefixChar => EnvironmentCache.GetObjectInstanceMethodInfo(
+					nonVirtual),
 				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 			};
 			return ref this.GetNativeInterface<NativeInterface>(info).InstanceMethodFunctions;
@@ -198,7 +132,7 @@ partial class JEnvironment
 		/// Retrieves managed <see cref="FieldFunctionSet{JObjectLocalRef}"/> reference from current instance.
 		/// </summary>
 		/// <param name="primitiveSignature">Primitive signature char.</param>
-		/// <param name="getField">Indicates whether current call is get field value.</param>
+		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A managed <see cref="FieldFunctionSet{JObjectLocalRef}"/> reference from current instance.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private ref readonly FieldFunctionSet<JObjectLocalRef> GetInstanceFieldFunctions(Byte primitiveSignature,
@@ -206,30 +140,22 @@ partial class JEnvironment
 		{
 			JniMethodInfo info = primitiveSignature switch
 			{
-				UnicodePrimitiveSignatures.BooleanSignatureChar => getField ?
-					NativeInterface.GetBooleanFieldInfo :
-					NativeInterface.SetBooleanFieldInfo,
-				UnicodePrimitiveSignatures.ByteSignatureChar => getField ?
-					NativeInterface.GetByteFieldInfo :
-					NativeInterface.SetByteFieldInfo,
-				UnicodePrimitiveSignatures.CharSignatureChar => getField ?
-					NativeInterface.GetCharFieldInfo :
-					NativeInterface.SetCharFieldInfo,
-				UnicodePrimitiveSignatures.DoubleSignatureChar => getField ?
-					NativeInterface.GetDoubleFieldInfo :
-					NativeInterface.SetDoubleFieldInfo,
-				UnicodePrimitiveSignatures.FloatSignatureChar => getField ?
-					NativeInterface.GetFloatFieldInfo :
-					NativeInterface.SetFloatFieldInfo,
-				UnicodePrimitiveSignatures.IntSignatureChar => getField ?
-					NativeInterface.GetIntFieldInfo :
-					NativeInterface.SetIntFieldInfo,
-				UnicodePrimitiveSignatures.LongSignatureChar => getField ?
-					NativeInterface.GetLongFieldInfo :
-					NativeInterface.SetLongFieldInfo,
-				UnicodePrimitiveSignatures.ShortSignatureChar => getField ?
-					NativeInterface.GetShortFieldInfo :
-					NativeInterface.SetShortFieldInfo,
+				UnicodePrimitiveSignatures.BooleanSignatureChar => EnvironmentCache.GetInstanceBooleanFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.ByteSignatureChar => EnvironmentCache.GetInstanceByteFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.CharSignatureChar => EnvironmentCache.GetInstanceCharFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => EnvironmentCache.GetInstanceDoubleFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.FloatSignatureChar => EnvironmentCache.GetInstanceFloatFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.IntSignatureChar => EnvironmentCache.GetInstanceIntFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.LongSignatureChar => EnvironmentCache.GetInstanceLongFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.ShortSignatureChar => EnvironmentCache.GetInstanceShortFieldFunctionInfo(
+					getField),
 				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 			};
 			return ref this.GetNativeInterface<NativeInterface>(info).InstanceFieldFunctions;
@@ -238,7 +164,7 @@ partial class JEnvironment
 		/// Retrieves managed <see cref="FieldFunctionSet{JClassLocalRef}"/> reference from current instance.
 		/// </summary>
 		/// <param name="primitiveSignature">Primitive signature char.</param>
-		/// <param name="getField">Indicates whether current call is get field value.</param>
+		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A managed <see cref="FieldFunctionSet{JClassLocalRef}"/> reference from current instance.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private ref readonly FieldFunctionSet<JClassLocalRef> GetStaticFieldFunctions(Byte primitiveSignature,
@@ -246,30 +172,21 @@ partial class JEnvironment
 		{
 			JniMethodInfo info = primitiveSignature switch
 			{
-				UnicodePrimitiveSignatures.BooleanSignatureChar => getField ?
-					NativeInterface.GetStaticBooleanFieldInfo :
-					NativeInterface.SetStaticBooleanFieldInfo,
-				UnicodePrimitiveSignatures.ByteSignatureChar => getField ?
-					NativeInterface.GetStaticByteFieldInfo :
-					NativeInterface.SetStaticByteFieldInfo,
-				UnicodePrimitiveSignatures.CharSignatureChar => getField ?
-					NativeInterface.GetStaticCharFieldInfo :
-					NativeInterface.SetStaticCharFieldInfo,
-				UnicodePrimitiveSignatures.DoubleSignatureChar => getField ?
-					NativeInterface.GetStaticDoubleFieldInfo :
-					NativeInterface.SetStaticDoubleFieldInfo,
-				UnicodePrimitiveSignatures.FloatSignatureChar => getField ?
-					NativeInterface.GetStaticFloatFieldInfo :
-					NativeInterface.SetStaticFloatFieldInfo,
-				UnicodePrimitiveSignatures.IntSignatureChar => getField ?
-					NativeInterface.GetStaticIntFieldInfo :
-					NativeInterface.SetStaticIntFieldInfo,
-				UnicodePrimitiveSignatures.LongSignatureChar => getField ?
-					NativeInterface.GetStaticLongFieldInfo :
-					NativeInterface.SetStaticLongFieldInfo,
-				UnicodePrimitiveSignatures.ShortSignatureChar => getField ?
-					NativeInterface.GetStaticShortFieldInfo :
-					NativeInterface.SetStaticShortFieldInfo,
+				UnicodePrimitiveSignatures.BooleanSignatureChar => EnvironmentCache.GetStaticBooleanFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.ByteSignatureChar => EnvironmentCache.GetStaticByteFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.CharSignatureChar => EnvironmentCache.GetStaticCharFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => EnvironmentCache.GetStaticDoubleFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.FloatSignatureChar => EnvironmentCache.GetStaticFloatFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.IntSignatureChar => EnvironmentCache.GetStaticIntFieldFunctionInfo(getField),
+				UnicodePrimitiveSignatures.LongSignatureChar => EnvironmentCache.GetStaticLongFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.ShortSignatureChar => EnvironmentCache.GetStaticShortFieldFunctionInfo(
+					getField),
 				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 			};
 			return ref this.GetNativeInterface<NativeInterface>(info).StaticFieldFunctions;

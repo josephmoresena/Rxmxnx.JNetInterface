@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// </summary>
 /// <typeparam name="TReceiver">Type of receiver.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly struct FieldFunctionSet<TReceiver> where TReceiver : unmanaged, IWrapper<JObjectLocalRef>
 {
 	/// <summary>

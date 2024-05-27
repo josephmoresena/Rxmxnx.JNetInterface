@@ -5,6 +5,8 @@ partial class JEnvironment
 	/// <summary>
 	/// This record stores cache for a <see cref="JEnvironment"/> instance.
 	/// </summary>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache : LocalMainClasses
 	{
 		/// <inheritdoc cref="JEnvironment.Reference"/>

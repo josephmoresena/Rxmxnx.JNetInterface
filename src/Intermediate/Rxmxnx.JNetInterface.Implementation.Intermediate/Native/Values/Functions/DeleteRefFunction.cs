@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// </summary>
 /// <typeparam name="TReference">Type of object reference.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct DeleteRefFunction<TReference>
 	where TReference : unmanaged, INativeType<TReference>, IWrapper<JObjectLocalRef>
 {

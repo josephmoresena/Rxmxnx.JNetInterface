@@ -4,6 +4,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// Set of function pointers to register/unregister native methods in Java classes through JNI.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct NativeRegistryFunctionSet
 {
 	/// <summary>

@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// </summary>
 /// <typeparam name="TAccessible">Type of accessible identifier.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct FromReflectedFunction<TAccessible>
 	where TAccessible : unmanaged, IAccessibleIdentifierType<TAccessible>
 {

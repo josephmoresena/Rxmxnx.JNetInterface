@@ -4,6 +4,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// Set of function pointers to get elements from a Java primitive array through JNI.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly struct GetPrimitiveArrayElementsFunctionSet
 {
 	/// <summary>

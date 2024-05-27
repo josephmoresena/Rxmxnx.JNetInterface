@@ -6,6 +6,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// <typeparam name="TReceiver">Type of receiver function.</typeparam>
 /// <typeparam name="TResult">Type of return function.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
+                 Justification = CommonConstants.BinaryStructJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct CallGenericFunction<TReceiver, TResult>
 	where TReceiver : unmanaged, IWrapper<JObjectLocalRef> where TResult : unmanaged, INativeType<TResult>
 {

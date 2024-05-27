@@ -6,6 +6,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// <typeparam name="TPrimitiveType">Type of primitive value.</typeparam>
 /// <typeparam name="TArrayRef">Type of array reference.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct GetPrimitiveArrayRegionFunction<TPrimitiveType, TArrayRef>
 	where TPrimitiveType : unmanaged, INativeType<TPrimitiveType>, IPrimitiveType<TPrimitiveType>
 	where TArrayRef : unmanaged, IArrayReferenceType<TArrayRef>

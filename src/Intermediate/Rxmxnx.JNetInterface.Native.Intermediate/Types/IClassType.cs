@@ -30,7 +30,7 @@ public interface
 	/// <summary>
 	/// Cached type interface set.
 	/// </summary>
-	private static readonly WeakReference<BaseTypeSet<TClass>?> typeBaseTypeSet = new(default);
+	private static readonly WeakReference<BaseTypeHelper<TClass>?> typeBaseTypeSet = new(default);
 
 	/// <summary>
 	/// Retrieves current type base type set.
@@ -39,11 +39,11 @@ public interface
 	{
 		get
 		{
-			if (IClassType<TClass>.typeBaseTypeSet.TryGetTarget(out BaseTypeSet<TClass>? result))
-				return result;
+			if (IClassType<TClass>.typeBaseTypeSet.TryGetTarget(out BaseTypeHelper<TClass>? result))
+				return result.Set;
 			result = new();
 			IClassType<TClass>.typeBaseTypeSet.SetTarget(result);
-			return result;
+			return result.Set;
 		}
 	}
 

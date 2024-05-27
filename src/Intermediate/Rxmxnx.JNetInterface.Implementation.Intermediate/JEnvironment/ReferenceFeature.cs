@@ -2,6 +2,8 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache : IReferenceFeature
 	{
 		public IDisposable GetSynchronizer(JReferenceObject jObject)
