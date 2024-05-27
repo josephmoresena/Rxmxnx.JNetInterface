@@ -8,6 +8,19 @@
         <PublishAot>true</PublishAot>
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <TrimMode>full</TrimMode>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <RootAllApplicationAssemblies>false</RootAllApplicationAssemblies>
+        <TrimUnusedDependencies>true</TrimUnusedDependencies>
+        <IlcOptimizationPreference>Size</IlcOptimizationPreference>
+        <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+        <IlcTrimMetadata>true</IlcTrimMetadata>
+        <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+        <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
+        <IlcDisableReflection>false</IlcDisableReflection>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,6 +33,11 @@
 
     <ItemGroup>
         <None Remove="HelloJni.java"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="System.AggressiveAttributeTrimming" Value="true" Trim="true"/>
     </ItemGroup>
 
 </Project>

@@ -23,8 +23,9 @@ public interface IClassType : IReferenceType
 /// This interface exposes an object that represents a java class type instance.
 /// </summary>
 /// <typeparam name="TClass">Type of java class type.</typeparam>
-public interface IClassType<TClass> : IClassType, IReferenceType<TClass>
-	where TClass : JReferenceObject, IClassType<TClass>
+public interface
+	IClassType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : IClassType,
+	IReferenceType<TClass> where TClass : JReferenceObject, IClassType<TClass>
 {
 	/// <summary>
 	/// Cached type interface set.
@@ -34,7 +35,7 @@ public interface IClassType<TClass> : IClassType, IReferenceType<TClass>
 	/// <summary>
 	/// Retrieves current type base type set.
 	/// </summary>
-	public static IReadOnlySet<Type> TypeBaseTypes
+	internal static IReadOnlySet<Type> TypeBaseTypes
 	{
 		get
 		{

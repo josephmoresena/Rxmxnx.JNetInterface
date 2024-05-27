@@ -4,8 +4,11 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// This record stores the metadata for a primitive wrapper class <see cref="IDataType"/> type.
 /// </summary>
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
-public sealed record JPrimitiveWrapperTypeMetadata<TWrapper> : JClassTypeMetadata<TWrapper>.View
-	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
+public sealed record
+	JPrimitiveWrapperTypeMetadata<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TWrapper> : JClassTypeMetadata<TWrapper>
+	.
+	View where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
 {
 	/// <summary>
 	/// Primitive metadata.

@@ -16,7 +16,8 @@ public partial interface IReferenceType : IObject, IDataType, IDisposable
 	/// <typeparam name="TReference">Type of the current java reference datatype.</typeparam>
 	/// <returns>The <see cref="JReferenceTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JReferenceTypeMetadata GetMetadata<TReference>()
+	public new static JReferenceTypeMetadata
+		GetMetadata<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>()
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		=> (JReferenceTypeMetadata)IDataType.GetMetadata<TReference>();
 }
@@ -27,8 +28,10 @@ public partial interface IReferenceType : IObject, IDataType, IDisposable
 /// <typeparam name="TReference">Type of java reference type.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IReferenceType<out TReference> : IReferenceType, IDataType<TReference>
-	where TReference : JReferenceObject, IReferenceType<TReference>
+public interface
+	IReferenceType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] out TReference> :
+	IReferenceType,
+	IDataType<TReference> where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>
 	/// Cached type interface set.
@@ -38,7 +41,7 @@ public interface IReferenceType<out TReference> : IReferenceType, IDataType<TRef
 	/// <summary>
 	/// Retrieves current type interfaces set.
 	/// </summary>
-	public static IReadOnlySet<Type> TypeInterfaces
+	internal static IReadOnlySet<Type> TypeInterfaces
 	{
 		get
 		{

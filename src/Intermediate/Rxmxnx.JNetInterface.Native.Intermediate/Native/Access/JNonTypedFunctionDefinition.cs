@@ -3,19 +3,20 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// <summary>
 /// This class stores a non-typed class function definition.
 /// </summary>
-internal sealed class JNonTypedFunctionDefinition : JFunctionDefinition<JLocalObject>
+/// <remarks>
+/// Constructor.
+/// </remarks>
+/// <param name="functionName">Function name.</param>
+/// <param name="returnTypeSignature">Method return type defined signature.</param>
+/// <param name="metadata">Metadata of the types of call arguments.</param>
+internal sealed class JNonTypedFunctionDefinition(
+	ReadOnlySpan<Byte> functionName,
+	ReadOnlySpan<Byte> returnTypeSignature,
+	params JArgumentMetadata[] metadata) : JFunctionDefinition<JLocalObject>(functionName,
+	                                                                         JAccessibleObjectDefinition
+		                                                                         .ValidateSignature(
+			                                                                         returnTypeSignature), metadata)
 {
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="functionName">Function name.</param>
-	/// <param name="returnTypeSignature">Method return type defined signature.</param>
-	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	public JNonTypedFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnTypeSignature,
-		params JArgumentMetadata[] metadata) : base(functionName,
-		                                            JAccessibleObjectDefinition.ValidateSignature(returnTypeSignature),
-		                                            metadata) { }
-
 	/// <inheritdoc cref="JFunctionDefinition{TResult}.Invoke(JLocalObject, IObject?[])"/>
 	public new JLocalObject? Invoke(JLocalObject jLocal, params IObject?[] args)
 	{

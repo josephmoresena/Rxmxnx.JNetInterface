@@ -11,7 +11,7 @@ internal partial class InterfaceSet
 	/// <summary>
 	/// Empty interface set.
 	/// </summary>
-	public static readonly InterfaceSet Empty = new(ImmutableHashSet<JInterfaceTypeMetadata>.Empty);
+	public static readonly InterfaceSet Empty = new([]);
 	/// <summary>
 	/// Array interface set.
 	/// </summary>
@@ -35,10 +35,8 @@ internal partial class InterfaceSet
 		IReadOnlySet<JInterfaceTypeMetadata> interfaces)
 	{
 		if (baseMetadata is null)
-			return interfaces.Count == 0 ? InterfaceSet.Empty : new(interfaces.ToImmutableHashSet());
-		return interfaces.Count == 0 ?
-			baseMetadata.Interfaces :
-			new ClassInterfaceSet(baseMetadata, interfaces.ToImmutableHashSet());
+			return interfaces.Count == 0 ? InterfaceSet.Empty : new([.. interfaces,]);
+		return interfaces.Count == 0 ? baseMetadata.Interfaces : new ClassInterfaceSet(baseMetadata, [.. interfaces,]);
 	}
 	/// <summary>
 	/// Retrieves a set with interface super interfaces.
@@ -46,7 +44,7 @@ internal partial class InterfaceSet
 	/// <param name="interfaces">A <see cref="IReadOnlySet{JInterfaceTypeMetadata}"/> instance.</param>
 	/// <returns>A <see cref="IInterfaceSet"/> instance.</returns>
 	public static IInterfaceSet GetInterfaceInterfaces(IReadOnlySet<JInterfaceTypeMetadata> interfaces)
-		=> interfaces.Count == 0 ? InterfaceSet.Empty : new InterfaceInterfaceSet(interfaces.ToImmutableHashSet());
+		=> interfaces.Count == 0 ? InterfaceSet.Empty : new InterfaceInterfaceSet([.. interfaces,]);
 
 	/// <summary>
 	/// Initializes an operation and retrieves operation hash set.

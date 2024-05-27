@@ -9,7 +9,7 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// Constructor.
 	/// </summary>
 	/// <remarks>This constructor should be never inherited.</remarks>
-	public JConstructorDefinition() : this(Array.Empty<JArgumentMetadata>()) { }
+	public JConstructorDefinition() : this([]) { }
 
 	/// <summary>
 	/// Retrieves a <see cref="JConstructorObject"/> reflected from current definition on

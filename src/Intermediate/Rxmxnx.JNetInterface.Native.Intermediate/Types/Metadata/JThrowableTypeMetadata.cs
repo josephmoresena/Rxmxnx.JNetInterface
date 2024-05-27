@@ -4,8 +4,11 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// This record stores the metadata for an exception <see cref="IThrowableType{TThrowable}"/> type.
 /// </summary>
 /// <typeparam name="TThrowable">Type of java enum type.</typeparam>
-public sealed record JThrowableTypeMetadata<TThrowable> : JClassTypeMetadata<TThrowable>.View
-	where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+public sealed record
+	JThrowableTypeMetadata<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable> : JClassTypeMetadata<
+		TThrowable>
+	.View where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 {
 	/// <inheritdoc/>
 	internal JThrowableTypeMetadata(JClassTypeMetadata<TThrowable> metadata) : base(metadata) { }

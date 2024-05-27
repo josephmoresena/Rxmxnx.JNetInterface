@@ -4,7 +4,8 @@ public partial class JLocalObject
 {
 	public abstract partial class InterfaceView
 	{
-		private protected sealed partial class Proxy<TInterface>
+		private protected sealed partial class Proxy<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>
 		{
 			/// <summary>
 			/// Proxy metadata.

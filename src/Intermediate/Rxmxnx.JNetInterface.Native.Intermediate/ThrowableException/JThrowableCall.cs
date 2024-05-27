@@ -31,7 +31,8 @@ public partial class ThrowableException
 		/// Invokes current delegate as <see cref="Action{TThrowable}"/>.
 		/// </summary>
 		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
-		public void Invoke<TThrowable>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		public void Invoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable>()
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
 			using JWeak jWeak = env.ReferenceFeature.CreateWeak(this._global);
@@ -45,7 +46,8 @@ public partial class ThrowableException
 		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
 		/// <typeparam name="TResult">Type of function result.</typeparam>
 		/// <returns>Function result.</returns>
-		public TResult Invoke<TThrowable, TResult>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		public TResult Invoke<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable,
+			TResult>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
 			using JWeak jWeak = env.ReferenceFeature.CreateWeak(this._global);

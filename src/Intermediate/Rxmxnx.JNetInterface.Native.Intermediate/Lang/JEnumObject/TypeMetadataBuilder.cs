@@ -37,7 +37,8 @@ public partial class JEnumObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public TypeMetadataBuilder<TEnum> Implements<TInterface>()
+		public TypeMetadataBuilder<TEnum> Implements<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			this._builder.AppendInterface<TInterface>();
@@ -49,7 +50,7 @@ public partial class JEnumObject
 		/// <param name="ordinal">Enum value ordinal.</param>
 		/// <param name="name">Enum value name.</param>
 		/// <returns>Current instance.</returns>
-		public TypeMetadataBuilder<TEnum> AppendValue(Int32 ordinal, CString name)
+		public readonly TypeMetadataBuilder<TEnum> AppendValue(Int32 ordinal, CString name)
 		{
 			this._enumFields.AddField(this._builder.DataTypeName, ordinal, name);
 			return this;
@@ -60,7 +61,7 @@ public partial class JEnumObject
 		/// <param name="offset">Enum value ordinal offset.</param>
 		/// <param name="names">Enum value names.</param>
 		/// <returns>Current instance.</returns>
-		public TypeMetadataBuilder<TEnum> AppendValues(Int32 offset = 0, params CString[] names)
+		public readonly TypeMetadataBuilder<TEnum> AppendValues(Int32 offset = 0, params CString[] names)
 		{
 			for (Int32 i = 0; i < names.Length; i++)
 				this._enumFields.AddField(this._builder.DataTypeName, i + offset, names[i]);
@@ -70,7 +71,7 @@ public partial class JEnumObject
 		/// Creates the <see cref="JEnumTypeMetadata{TEnum}"/> instance.
 		/// </summary>
 		/// <returns>A new <see cref="JEnumTypeMetadata{TEnum}"/> instance.</returns>
-		public JEnumTypeMetadata<TEnum> Build()
+		public readonly JEnumTypeMetadata<TEnum> Build()
 			=> new EnumTypeMetadata(this._builder, this._enumFields.Validate(this._builder.DataTypeName));
 
 		/// <summary>
@@ -81,7 +82,8 @@ public partial class JEnumObject
 		public static TypeMetadataBuilder<TEnum> Create(ReadOnlySpan<Byte> className)
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			IReadOnlySet<Type> interfaceTypes = IReferenceType<TEnum>.TypeInterfaces;
+			IReadOnlySet<Type> interfaceTypes = ImmutableHashSet<Type>.Empty;
+			if (IVirtualMachine.MetadataValidationEnabled) interfaceTypes = IReferenceType<TEnum>.TypeInterfaces;
 			return new(className, interfaceTypes);
 		}
 	}

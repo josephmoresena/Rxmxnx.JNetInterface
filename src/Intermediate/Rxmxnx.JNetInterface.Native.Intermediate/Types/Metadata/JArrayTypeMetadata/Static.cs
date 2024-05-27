@@ -46,10 +46,6 @@ public abstract partial record JArrayTypeMetadata
 	/// <param name="typeofElement">Type of array element.</param>
 	/// <param name="elementSignature">Element signature.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
-	[UnconditionalSuppressMessage(
-		"AOT",
-		"IL3050:Calling members annotated with 'RequiresDynamicCodeAttribute' may break functionality when AOT compiling.",
-		Justification = "Alternatives to avoid reflection use.")]
 	protected static JArrayTypeMetadata? GetArrayArrayMetadata(CString elementSignature, Type typeofElement)
 		=> JArrayTypeMetadata.metadataCache.TryGetValue(elementSignature.ToHexString(),
 		                                                out JArrayTypeMetadata? result) ?
@@ -109,7 +105,6 @@ public abstract partial record JArrayTypeMetadata
 	/// <param name="typeofElement">Type of array element.</param>
 	/// <param name="elementSignature">Element signature.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
-	[RequiresDynamicCode("Calls System.Reflection.MethodInfo.MakeGenericMethod(params Type[])")]
 	[ExcludeFromCodeCoverage]
 	private static JArrayTypeMetadata? TryGetArrayArrayMetadataWithReflection(CString elementSignature,
 		Type typeofElement)
@@ -124,12 +119,14 @@ public abstract partial record JArrayTypeMetadata
 			return default;
 		}
 	}
+
 	/// <summary>
 	/// Retrieves metadata for the array of arrays of <paramref name="typeofElement"/>.
 	/// </summary>
 	/// <param name="typeofElement">Type of array element.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
-	[RequiresDynamicCode("Calls System.Reflection.MethodInfo.MakeGenericMethod(params Type[])")]
+	[UnconditionalSuppressMessage("AOT", "IL3050", Justification = CommonConstants.AvoidableReflectionUseJustification)]
+	[UnconditionalSuppressMessage("AOT", "IL2060", Justification = CommonConstants.AvoidableReflectionUseJustification)]
 	private static JArrayTypeMetadata? GetArrayArrayMetadataWithReflection(Type typeofElement)
 	{
 		if (JArrayTypeMetadata.getArrayArrayMetadataInfo is null) return default;

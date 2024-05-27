@@ -109,7 +109,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="entry">A <see cref="JNativeCallEntry"/> instance.</param>
 	/// <param name="calls">A <see cref="JNativeCallEntry"/> array.</param>
 	public void Register(JNativeCallEntry entry, params JNativeCallEntry[] calls)
-		=> this.Environment.AccessFeature.RegisterNatives(this, [entry, ..calls,]);
+		=> this.Environment.AccessFeature.RegisterNatives(this, [entry, .. calls,]);
 	/// <summary>
 	/// Registers <paramref name="calls"/> as native methods.
 	/// </summary>
@@ -196,7 +196,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	public override String ToString() => JObject.GetObjectIdentifier(this.Name, this.Reference);
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
-	public override String ToTraceText() => $"{this} hash: {this.Hash}";
+	public override String ToTraceText() => $"{this} hash: {this.GetPrintableHash(out String lastChar)}{lastChar}";
 
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.
@@ -233,7 +233,9 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <param name="rawClassBytes">Binary span with class information.</param>
 	/// <param name="jClassLoader">Optional. The object used as class loader.</param>
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
-	public static JClassObject LoadClass<TDataType>(IEnvironment env, ReadOnlySpan<Byte> rawClassBytes,
-		JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
+	public static JClassObject
+		LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(IEnvironment env,
+			ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
+		where TDataType : JLocalObject, IReferenceType<TDataType>
 		=> env.ClassFeature.LoadClass<TDataType>(rawClassBytes, jClassLoader);
 }

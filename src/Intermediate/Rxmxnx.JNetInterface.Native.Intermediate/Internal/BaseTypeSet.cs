@@ -3,7 +3,8 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Set of base types for given type.
 /// </summary>
-public sealed record BaseTypeSet<TReference> : IReadOnlySet<Type>
+public sealed record
+	BaseTypeSet<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference> : IReadOnlySet<Type>
 	where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>

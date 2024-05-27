@@ -136,8 +136,10 @@ partial class JEnvironment
 			ITypeInformation metadata = new TypeInformation(classInformation);
 			return this.LoadClass(metadata, rawClassBytes, jClassLoader);
 		}
-		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes,
-			JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
+		public JClassObject
+			LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(
+				ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
+			where TDataType : JLocalObject, IReferenceType<TDataType>
 		{
 			ITypeInformation metadata = MetadataHelper.GetMetadata<TDataType>();
 			return this.LoadClass(metadata, rawClassBytes, jClassLoader);

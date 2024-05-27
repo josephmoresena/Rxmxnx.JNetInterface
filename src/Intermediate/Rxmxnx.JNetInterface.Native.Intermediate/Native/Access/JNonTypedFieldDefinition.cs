@@ -3,16 +3,14 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// <summary>
 /// This class stores a non-typed class field definition.
 /// </summary>
-public sealed class JNonTypedFieldDefinition : JFieldDefinition
+/// <remarks>
+/// Constructor.
+/// </remarks>
+/// <param name="name">Field name.</param>
+/// <param name="signature">Signature field.</param>
+public sealed class JNonTypedFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : JFieldDefinition(
+	name, JAccessibleObjectDefinition.ValidateSignature(signature))
 {
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="name">Field name.</param>
-	/// <param name="signature">Signature field.</param>
-	public JNonTypedFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(
-		name, JAccessibleObjectDefinition.ValidateSignature(signature)) { }
-
 	/// <summary>
 	/// Retrieves the value of a field on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>

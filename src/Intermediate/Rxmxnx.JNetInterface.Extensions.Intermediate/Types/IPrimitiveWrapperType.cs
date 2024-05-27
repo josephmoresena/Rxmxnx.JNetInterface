@@ -6,7 +6,9 @@ namespace Rxmxnx.JNetInterface.Types;
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2743,
                  Justification = CommonConstants.StaticAbstractPropertyUseJustification)]
-public interface IPrimitiveWrapperType<TWrapper> : IClassType<TWrapper>
+public interface
+	IPrimitiveWrapperType<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TWrapper> : IClassType<TWrapper>
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
 {
 	/// <summary>
@@ -29,7 +31,9 @@ public interface IPrimitiveWrapperType<TWrapper> : IClassType<TWrapper>
 /// </summary>
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
 /// <typeparam name="TValue"><see cref="IPrimitiveType"/> type.</typeparam>
-public interface IPrimitiveWrapperType<TWrapper, TValue> : IPrimitiveWrapperType<TWrapper>, IWrapper<TValue>
+public interface
+	IPrimitiveWrapperType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TWrapper,
+		TValue> : IPrimitiveWrapperType<TWrapper>, IWrapper<TValue>
 	where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper> where TValue : unmanaged, IPrimitiveType<TValue>
 {
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType<TWrapper>.PrimitiveMetadata

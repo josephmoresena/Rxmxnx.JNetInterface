@@ -71,4 +71,10 @@
         </AssemblyAttribute>
     </ItemGroup>
 
+    <ItemGroup>
+        <EmbeddedResource Include="ILLink\ILLink.Substitutions.xml">
+            <LogicalName>ILLink.Substitutions.xml</LogicalName>
+        </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

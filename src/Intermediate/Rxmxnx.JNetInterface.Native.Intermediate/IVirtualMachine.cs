@@ -14,7 +14,20 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// Indicates whether trace output is enabled.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
-	public static Boolean TraceEnabled { get; set; }
+	public static Boolean TraceEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => AppContext.TryGetSwitch("JNetInterface.EnableTrace", out Boolean enable) && enable;
+	}
+	/// <summary>
+	/// Indicates whether metadata validation is enabled.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean MetadataValidationEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => !AppContext.TryGetSwitch("JNetInterface.DisableMetadataValidation", out Boolean disable) || !disable;
+	}
 
 	/// <summary>
 	/// JNI reference to the interface.

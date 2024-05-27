@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Set of interfaces for given type.
 /// </summary>
-internal sealed record TypeInterfaceSet<TReference> : IReadOnlySet<Type>
+internal sealed record
+	TypeInterfaceSet<
+		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference> : IReadOnlySet<Type>
 	where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>

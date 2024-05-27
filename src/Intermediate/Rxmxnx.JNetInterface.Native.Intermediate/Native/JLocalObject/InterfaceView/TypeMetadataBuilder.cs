@@ -42,12 +42,16 @@ public partial class JLocalObject
 			/// </summary>
 			/// <typeparam name="TOtherInterface"><see cref="IDataType"/> interface type.</typeparam>
 			/// <returns>Current instance.</returns>
-			public TypeMetadataBuilder<TInterface> Extends<TOtherInterface>()
+			public TypeMetadataBuilder<TInterface> Extends<
+				[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TOtherInterface>()
 				where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
 			{
-				IReadOnlySet<Type> superInterfacesType = IReferenceType<TOtherInterface>.TypeInterfaces;
-				NativeValidationUtilities.ThrowIfInvalidExtension(this._builder.DataTypeName, this._interfaceType,
-				                                                  superInterfacesType);
+				if (IVirtualMachine.MetadataValidationEnabled)
+				{
+					IReadOnlySet<Type> superInterfacesType = IReferenceType<TOtherInterface>.TypeInterfaces;
+					NativeValidationUtilities.ThrowIfInvalidExtension(this._builder.DataTypeName, this._interfaceType,
+					                                                  superInterfacesType);
+				}
 				this._builder.AppendInterface<TOtherInterface>();
 				return this;
 			}
@@ -55,7 +59,7 @@ public partial class JLocalObject
 			/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
 			/// </summary>
 			/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-			public JInterfaceTypeMetadata<TInterface> Build() => new InterfaceTypeMetadata(this._builder);
+			public readonly JInterfaceTypeMetadata<TInterface> Build() => new InterfaceTypeMetadata(this._builder);
 
 			/// <summary>
 			/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
@@ -65,7 +69,9 @@ public partial class JLocalObject
 			public static TypeMetadataBuilder<TInterface> Create(ReadOnlySpan<Byte> className)
 			{
 				CommonValidationUtilities.ValidateNotEmpty(className);
-				IReadOnlySet<Type> interfaceTypes = IReferenceType<TInterface>.TypeInterfaces;
+				IReadOnlySet<Type> interfaceTypes = ImmutableHashSet<Type>.Empty;
+				if (IVirtualMachine.MetadataValidationEnabled)
+					interfaceTypes = IReferenceType<TInterface>.TypeInterfaces;
 				return new(className, interfaceTypes);
 			}
 		}

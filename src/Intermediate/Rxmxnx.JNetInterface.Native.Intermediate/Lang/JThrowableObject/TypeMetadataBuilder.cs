@@ -41,7 +41,8 @@ public partial class JThrowableObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public TypeMetadataBuilder<TThrowable> Implements<TInterface>()
+		public TypeMetadataBuilder<TThrowable> Implements<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			this._builder.AppendInterface<TInterface>();
@@ -51,7 +52,7 @@ public partial class JThrowableObject
 		/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-		public JThrowableTypeMetadata<TThrowable> Build()
+		public readonly JThrowableTypeMetadata<TThrowable> Build()
 		{
 			JClassTypeMetadata<TThrowable> classMetadata =
 				JLocalObject.TypeMetadataBuilder<TThrowable>.Build(this._builder, this._modifier, this._baseMetadata);

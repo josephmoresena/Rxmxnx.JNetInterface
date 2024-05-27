@@ -3,9 +3,20 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This object stores the lifetime for a java object instance.
 /// </summary>
+/// <remarks>
+/// Constructor.
+/// </remarks>
+/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+/// <param name="localRef">Local object reference.</param>
+/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+/// <param name="isDisposable">Indicates whether the current instance is disposable.</param>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2292,
                  Justification = CommonConstants.PublicInitPrivateSetJustification)]
-internal sealed partial class ObjectLifetime : IDisposable
+internal sealed partial class ObjectLifetime(
+	IEnvironment env,
+	JObjectLocalRef localRef,
+	JReferenceObject jObject,
+	Boolean isDisposable) : IDisposable
 {
 	/// <summary>
 	/// Internal id.
@@ -41,21 +52,6 @@ internal sealed partial class ObjectLifetime : IDisposable
 	/// </summary>
 	public ReadOnlySpan<Byte> Span => this._value.Reference.AsBytes();
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	/// <param name="localRef">Local object reference.</param>
-	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <param name="isDisposable">Indicates whether the current instance is disposable.</param>
-	public ObjectLifetime(IEnvironment env, JObjectLocalRef localRef, JReferenceObject jObject, Boolean isDisposable)
-	{
-		this._env = env;
-		this._isDisposed = IMutableWrapper.Create<Boolean>();
-		this._id = jObject.Id;
-		this._value = IMutableReference<JObjectLocalRef>.Create(localRef);
-		this._isDisposable = isDisposable;
-	}
 	/// <summary>
 	/// Constructor.
 	/// </summary>

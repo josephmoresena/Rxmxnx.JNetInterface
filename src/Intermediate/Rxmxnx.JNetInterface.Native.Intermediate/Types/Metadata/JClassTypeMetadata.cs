@@ -28,7 +28,8 @@ public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 /// <summary>
 /// This record stores the metadata for a class <see cref="IDataType"/> type.
 /// </summary>
-public abstract partial record JClassTypeMetadata<TClass> : JClassTypeMetadata
+public abstract partial record JClassTypeMetadata<
+	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : JClassTypeMetadata
 	where TClass : JReferenceObject, IClassType<TClass>
 {
 	/// <inheritdoc/>

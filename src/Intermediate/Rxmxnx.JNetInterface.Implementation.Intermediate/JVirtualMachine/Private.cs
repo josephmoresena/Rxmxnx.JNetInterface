@@ -75,7 +75,7 @@ public partial class JVirtualMachine
 			vm._cache.GetInvokeInterface().AttachCurrentThread(vm._cache.Reference, out envRef, in arg) :
 			vm._cache.GetInvokeInterface().AttachCurrentThreadAsDaemon(vm._cache.Reference, out envRef, in arg);
 	/// <summary>
-	/// Creates a <see cref="VirtualMachineArgumentValue"/> value from <paramref name="name"/> and
+	/// Creates a <see cref="VirtualMachineArgumentValue"/> value from <paramref name="namePtr"/> and
 	/// <paramref name="args"/>.
 	/// </summary>
 	/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>

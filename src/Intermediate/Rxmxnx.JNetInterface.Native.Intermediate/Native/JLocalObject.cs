@@ -53,7 +53,9 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// Optional. Indicates whether current instance should be disposed after casting.
 	/// </param>
 	/// <returns>A <typeparamref name="TReference"/> instance from the current instance.</returns>
-	public TReference CastTo<TReference>(Boolean dispose = false)
+	public TReference
+		CastTo<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>(
+			Boolean dispose = false)
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		=> this.CastTo<TReference>(this, dispose);
 	/// <inheritdoc/>

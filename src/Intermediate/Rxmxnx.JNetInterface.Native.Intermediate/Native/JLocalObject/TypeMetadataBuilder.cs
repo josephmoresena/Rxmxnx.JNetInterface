@@ -5,39 +5,35 @@ public partial class JLocalObject
 	/// <summary>
 	/// <see cref="JClassTypeMetadata"/> class builder.
 	/// </summary>
-	internal ref struct TypeMetadataBuilder
+	/// <remarks>
+	/// Constructor.
+	/// </remarks>
+	/// <param name="dataTypeName">Datatype name.</param>
+	/// <param name="kind">Java datatype kind.</param>
+	/// <param name="interfaceTypes">Interface types.</param>
+	internal ref struct TypeMetadataBuilder(
+		ReadOnlySpan<Byte> dataTypeName,
+		JTypeKind kind,
+		IReadOnlySet<Type> interfaceTypes)
 	{
 		/// <inheritdoc cref="JDataTypeMetadata.Kind"/>
-		private readonly JTypeKind _kind;
+		private readonly JTypeKind _kind = kind;
 		/// <summary>
 		/// Interface types.
 		/// </summary>
-		private readonly IReadOnlySet<Type> _interfaceTypes;
+		private readonly IReadOnlySet<Type> _interfaceTypes = interfaceTypes;
 
 		/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 		private HashSet<JInterfaceTypeMetadata>? _interfaces;
 
 		/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
-		public ReadOnlySpan<Byte> DataTypeName { get; }
+		public ReadOnlySpan<Byte> DataTypeName { get; } = dataTypeName;
 		/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 		public ReadOnlySpan<Byte> Signature { get; private set; }
 		/// <summary>
 		/// Indicates whether current type is annotation.
 		/// </summary>
-		public Boolean IsAnnotation => this._kind is JTypeKind.Annotation;
-
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		/// <param name="dataTypeName">Datatype name.</param>
-		/// <param name="kind">Java datatype kind.</param>
-		/// <param name="interfaceTypes">Interface types.</param>
-		public TypeMetadataBuilder(ReadOnlySpan<Byte> dataTypeName, JTypeKind kind, IReadOnlySet<Type> interfaceTypes)
-		{
-			this.DataTypeName = dataTypeName;
-			this._interfaceTypes = interfaceTypes;
-			this._kind = kind;
-		}
+		public readonly Boolean IsAnnotation => this._kind is JTypeKind.Annotation;
 
 		/// <summary>
 		/// Sets the type signature.
@@ -58,21 +54,24 @@ public partial class JLocalObject
 		public void AppendInterface<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			NativeValidationUtilities.ThrowIfAnnotation(this.DataTypeName, IInterfaceType.GetMetadata<TInterface>(),
-			                                            this.IsAnnotation);
+			if (IVirtualMachine.MetadataValidationEnabled)
+				NativeValidationUtilities.ThrowIfAnnotation(this.DataTypeName, IInterfaceType.GetMetadata<TInterface>(),
+				                                            this.IsAnnotation);
 			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
-			// Validates current interface.
-			if (!this._interfaceTypes.Contains(metadata.InterfaceType))
-				NativeValidationUtilities.ThrowInvalidImplementation(this.DataTypeName, metadata,
-				                                                     this._kind is not JTypeKind.Interface);
+			if (IVirtualMachine.MetadataValidationEnabled)
+			{
+				// Validates current interface.
+				if (!this._interfaceTypes.Contains(metadata.InterfaceType))
+					NativeValidationUtilities.ThrowInvalidImplementation(this.DataTypeName, metadata,
+					                                                     this._kind is not JTypeKind.Interface);
 
-			// Validates superinterfaces from current interface.
-			HashSet<CString> notContained = [];
-			metadata.Interfaces.ForEach((this._interfaceTypes, notContained),
-			                            TypeMetadataBuilder.ValidateSuperinterface);
-			NativeValidationUtilities.ThrowIfInvalidImplementation(this.DataTypeName, metadata, notContained,
-			                                                       this._kind is not JTypeKind.Interface);
-
+				// Validates superinterfaces from current interface.
+				HashSet<CString> notContained = [];
+				metadata.Interfaces.ForEach((this._interfaceTypes, notContained),
+				                            TypeMetadataBuilder.ValidateSuperinterface);
+				NativeValidationUtilities.ThrowIfInvalidImplementation(this.DataTypeName, metadata, notContained,
+				                                                       this._kind is not JTypeKind.Interface);
+			}
 			this._interfaces ??= [];
 			this._interfaces.Add(metadata);
 		}
@@ -81,7 +80,7 @@ public partial class JLocalObject
 		/// Creates a metadata interfaces set for the current datatype.
 		/// </summary>
 		/// <returns>A set with current datatype interfaces.</returns>
-		public IReadOnlySet<JInterfaceTypeMetadata> GetInterfaceSet()
+		public readonly IReadOnlySet<JInterfaceTypeMetadata> GetInterfaceSet()
 			=> this._interfaces ?? (IReadOnlySet<JInterfaceTypeMetadata>)ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
 
 		/// <summary>
@@ -138,7 +137,8 @@ public partial class JLocalObject
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
 		/// <returns>Current instance.</returns>
-		public TypeMetadataBuilder<TClass> Implements<TInterface>()
+		public TypeMetadataBuilder<TClass> Implements<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
 			this._builder.AppendInterface<TInterface>();
@@ -148,7 +148,7 @@ public partial class JLocalObject
 		/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-		public JClassTypeMetadata<TClass> Build()
+		public readonly JClassTypeMetadata<TClass> Build()
 			=> new ClassTypeMetadata(this._builder, this._modifier, this._baseMetadata);
 
 		/// <summary>
@@ -192,10 +192,14 @@ public partial class JLocalObject
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType(className, typeof(TClass), typeof(TObject));
-			IReadOnlySet<Type> baseTypes = IClassType<TObject>.TypeBaseTypes;
-			IReadOnlySet<Type> baseBaseTypes = IClassType<TClass>.TypeBaseTypes;
-			NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
-			IReadOnlySet<Type> interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
+			IReadOnlySet<Type> interfaceTypes = ImmutableHashSet<Type>.Empty;
+			if (IVirtualMachine.MetadataValidationEnabled)
+			{
+				IReadOnlySet<Type> baseTypes = IClassType<TObject>.TypeBaseTypes;
+				IReadOnlySet<Type> baseBaseTypes = IClassType<TClass>.TypeBaseTypes;
+				NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
+				interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
+			}
 			return new(className, modifier, IClassType.GetMetadata<TClass>(), interfaceTypes);
 		}
 
