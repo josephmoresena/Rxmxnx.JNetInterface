@@ -2,6 +2,8 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
@@ -46,8 +48,7 @@ partial class JEnvironment
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewStringInfo);
 			JStringLocalRef result;
-			fixed (Char* ptr =
-				       &MemoryMarshal.GetReference(chars))
+			fixed (Char* ptr = &MemoryMarshal.GetReference(chars))
 				result = nativeInterface.StringFunctions.NewString(this.Reference, ptr, chars.Length);
 			if (result.IsDefault) this.CheckJniError();
 			return result;
@@ -62,8 +63,7 @@ partial class JEnvironment
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewStringUtfInfo);
 			JStringLocalRef result;
-			fixed (Byte* ptr =
-				       &MemoryMarshal.GetReference(units))
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(units))
 				result = nativeInterface.StringFunctions.NewStringUtf(this.Reference, ptr);
 			if (result.IsDefault) this.CheckJniError();
 			return result;
