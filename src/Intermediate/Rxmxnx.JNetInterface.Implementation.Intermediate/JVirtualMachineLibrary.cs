@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class stores a loaded native JVM library.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 public sealed unsafe record JVirtualMachineLibrary
 {
 	/// <summary>

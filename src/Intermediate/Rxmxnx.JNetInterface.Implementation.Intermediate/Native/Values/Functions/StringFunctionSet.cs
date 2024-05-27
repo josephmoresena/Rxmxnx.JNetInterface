@@ -35,6 +35,8 @@ internal readonly unsafe struct StringFunctionSet
 /// </summary>
 /// <typeparam name="TChar">Type of character.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct StringFunctionSet<TChar>
 	where TChar : unmanaged, IBinaryNumber<TChar>, IUnsignedNumber<TChar>
 {
