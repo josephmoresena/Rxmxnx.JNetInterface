@@ -162,8 +162,8 @@ partial class JEnvironment
 	/// <returns>A <see cref="JReferenceType"/> value.</returns>
 	internal unsafe JReferenceType GetReferenceType(JObjectLocalRef localRef)
 	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectRefTypeInfo);
+		ref readonly NativeInterface6 nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface6>(NativeInterface6.GetObjectRefTypeInfo);
 		JReferenceType result = nativeInterface.GetObjectRefType(this._cache.Reference, localRef);
 		this._cache.CheckJniError();
 		return result;

@@ -299,6 +299,23 @@ public sealed class JClassObjectTests
 		Assert.Equal(jSuperClass, jClass.GetSuperClass());
 		env.ClassFeature.Received(1).GetSuperClass(jClass);
 	}
+
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	internal void GetModuleTest(Boolean nullModule)
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
+		JObjectLocalRef localRef = JClassObjectTests.fixture.Create<JObjectLocalRef>();
+		using JClassObject jClass = new(env);
+		using JClassObject jModuleClass = new(jClass, IClassType.GetMetadata<JModuleObject>());
+		using JModuleObject? jModule = !nullModule ? new(jModuleClass, localRef) : default;
+
+		env.ClassFeature.GetModule(jClass).Returns(jModule);
+		Assert.Equal(jModule, jClass.GetModule());
+		env.ClassFeature.Received(1).GetModule(jClass);
+	}
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]

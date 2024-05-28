@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 /// <summary>
 /// Function pointer based-struct replacement for <see cref="JNativeInterface"/> type.
 /// </summary>
+/// <remarks>JNI 1.2</remarks>
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
@@ -11,7 +12,7 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 internal readonly unsafe partial struct NativeInterface : INativeInterface<NativeInterface>
 {
 	/// <inheritdoc/>
-	public static Int32 RequiredVersion => 0x00090000;
+	public static Int32 RequiredVersion => 0x00010002;
 
 	/// <summary>
 	/// Internal reserved entries.
@@ -101,13 +102,4 @@ internal readonly unsafe partial struct NativeInterface : INativeInterface<Nativ
 	/// Checks for pending exceptions without creating a local reference to the exception object.
 	/// </summary>
 	public readonly delegate* unmanaged<JEnvironmentRef, JBoolean> ExceptionCheck;
-	/// <summary>
-	/// Pointers to <c>NewDirectByteBuffer</c>, <c>GetDirectBufferAddress</c> and <c>GetDirectBufferCapacity</c> functions.
-	/// </summary>
-	public readonly NioFunctionSet NioFunctions;
-	/// <summary>
-	/// Pointer to <c>GetObjectRefType</c> function.
-	/// Retrieves the type of given object reference.
-	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JReferenceType> GetObjectRefType;
 }

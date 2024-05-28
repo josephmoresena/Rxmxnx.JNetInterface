@@ -329,6 +329,14 @@ internal static class ClassNames
 	/// </summary>
 	public const String ProxyObject = ClassNames.ReflectPackage + "Proxy";
 	/// <summary>
+	/// JNI name of <c>java.lang.Module</c> class.
+	/// </summary>
+	public const String ModuleObject = ClassNames.LangPackage + "Module";
+	/// <summary>
+	/// JNI name of <c>java.lang.Thread</c> class.
+	/// </summary>
+	public const String ThreadObject = ClassNames.LangPackage + "Thread";
+	/// <summary>
 	/// JNI name of <c>java.lang.reflect.Member</c> interface.
 	/// </summary>
 	public const String MemberInterface = ClassNames.ReflectPackage + "Member";
@@ -341,6 +349,10 @@ internal static class ClassNames
 	/// </summary>
 	public const String ReadableInterface = ClassNames.LangPackage + "Readable";
 	/// <summary>
+	/// JNI name of <c>java.lang.Runnable</c> interface.
+	/// </summary>
+	public const String RunnableInterface = ClassNames.LangPackage + "Runnable";
+	/// <summary>
 	/// JNI name of <c>java.lang.annotation.Annotation</c> interface.
 	/// </summary>
 	public const String AnnotationInterface = ClassNames.AnnotationPackage + "Annotation";
@@ -352,9 +364,4 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.annotation.Target</c> annotation.
 	/// </summary>
 	public const String TargetAnnotation = ClassNames.AnnotationPackage + "Target";
-
-	/// <summary>
-	/// JNI name of <c>java.lang.Thread.UncaughtExceptionHandler</c> interface.
-	/// </summary>
-	public const String UncaughtExceptionHandlerInterface = ClassNames.LangPackage + "Thread$UncaughtExceptionHandler";
 }

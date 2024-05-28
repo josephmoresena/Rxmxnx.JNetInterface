@@ -48,6 +48,14 @@ partial class JEnvironment
 					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>(),
 			};
 		}
+		public JModuleObject? GetModule(JClassObject jClass)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
+			if (this.Version < NativeInterface9.RequiredVersion) return default;
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			return this.GetModule(classRef);
+		}
 		public void ThrowNew<TThrowable>(CString? message, Boolean throwException)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
