@@ -1073,32 +1073,4 @@ internal partial struct NativeInterface
 		Name = nameof(NativeInterface.ExceptionCheck),
 		Level = JniSafetyLevels.ErrorSafe | JniSafetyLevels.CriticalSafe,
 	};
-	/// <summary>
-	/// Information of <see cref="NioFunctionSet.NewDirectByteBuffer"/>
-	/// </summary>
-	public static readonly JniMethodInfo NewDirectByteBufferInfo = new()
-	{
-		Name = nameof(NioFunctionSet.NewDirectByteBuffer), Level = JniSafetyLevels.CriticalSafe,
-	};
-	/// <summary>
-	/// Information of <see cref="NioFunctionSet.GetDirectBufferAddress"/>
-	/// </summary>
-	public static readonly JniMethodInfo GetDirectBufferAddressInfo = new()
-	{
-		Name = nameof(NioFunctionSet.GetDirectBufferAddress), Level = JniSafetyLevels.CriticalSafe,
-	};
-	/// <summary>
-	/// Information of <see cref="NioFunctionSet.GetDirectBufferCapacity"/>
-	/// </summary>
-	public static readonly JniMethodInfo GetDirectBufferCapacityInfo = new()
-	{
-		Name = nameof(NioFunctionSet.GetDirectBufferCapacity), Level = JniSafetyLevels.CriticalSafe,
-	};
-	/// <summary>
-	/// Information of <see cref="NativeInterface.GetObjectRefType"/>
-	/// </summary>
-	public static readonly JniMethodInfo GetObjectRefTypeInfo = new()
-	{
-		Name = nameof(NativeInterface.GetObjectRefType), Level = JniSafetyLevels.CriticalSafe,
-	};
 }

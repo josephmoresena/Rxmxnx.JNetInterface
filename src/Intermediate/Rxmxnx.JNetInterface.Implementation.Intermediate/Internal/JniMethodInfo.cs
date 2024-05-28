@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// JNI method information.
 /// </summary>
-internal record JniMethodInfo
+internal readonly struct JniMethodInfo
 {
 	/// <summary>
 	/// Name of delegate.
@@ -18,15 +18,4 @@ internal record JniMethodInfo
 	/// Constructor.
 	/// </summary>
 	public JniMethodInfo() => this.Name = default!;
-}
-
-/// <summary>
-/// JNI delegate information.
-/// </summary>
-internal sealed record JniDelegateInfo : JniMethodInfo
-{
-	/// <summary>
-	/// Index of delegate.
-	/// </summary>
-	public Int32 Index { get; init; }
 }

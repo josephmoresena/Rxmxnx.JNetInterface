@@ -55,7 +55,7 @@ partial class JEnvironment
 		{
 			ref readonly JEnvironmentValue refValue = ref envRef.Reference;
 			ref readonly NativeInterface nativeInterface =
-				ref NativeUtilities.Transform<JNativeInterface, NativeInterface>(in refValue.Reference);
+				ref Unsafe.AsRef<NativeInterface>(refValue.Pointer.ToPointer());
 			return nativeInterface.GetVersion(envRef);
 		}
 		/// <summary>
