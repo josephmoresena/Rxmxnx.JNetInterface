@@ -35,8 +35,6 @@ public partial class JVirtualMachine
 		/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
 		public VirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm)
 		{
-			this._delegateCache = new();
-
 			this._vm = vm;
 			this.Reference = vmRef;
 			this.ThreadCache = new(vm);
