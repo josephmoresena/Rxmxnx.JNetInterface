@@ -1,8 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <linker>
+    <assembly fullname="Rxmxnx.JNetInterface.Base.Intermediate">
+        <type fullname="System.ComponentModel.DefaultValueAttribute">
+            <attribute internal="RemoveAttributeInstances"/>
+        </type>
+        <type fullname="System.Diagnostics.CodeAnalysis.SuppressMessageAttribute">
+            <attribute internal="RemoveAttributeInstances"/>
+        </type>
+        <type fullname="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute">
+            <attribute internal="RemoveAttributeInstances"/>
+        </type>
+    </assembly>
     <assembly fullname="Rxmxnx.JNetInterface.Base.Intermediate" feature="System.AggressiveAttributeTrimming"
               featurevalue="true">
-        <type fullname="System.ComponentModel.DefaultValueAttribute">
+        <type fullname="System.ComponentModel.EditorBrowsableAttribute">
+            <attribute internal="RemoveAttributeInstances"/>
+        </type>
+        <type fullname="System.ComponentModel.BrowsableAttribute">
+            <attribute internal="RemoveAttributeInstances"/>
+        </type>
+        <type fullname="System.ComponentModel.ReadOnlyAttribute">
+            <attribute internal="RemoveAttributeInstances"/>
+        </type>
+    </assembly>
+    <assembly fullname="Rxmxnx.JNetInterface.Base.Intermediate" feature="System.Diagnostics.Debugger.IsSupported"
+              featurevalue="false">
+        <type fullname="System.Diagnostics.DebuggerBrowsableAttribute">
             <attribute internal="RemoveAttributeInstances"/>
         </type>
     </assembly>

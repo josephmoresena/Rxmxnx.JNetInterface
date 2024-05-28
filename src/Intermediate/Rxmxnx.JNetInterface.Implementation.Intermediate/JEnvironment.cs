@@ -57,6 +57,17 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionDescribeInfo);
 		nativeInterface.ErrorFunctions.ExceptionDescribe(this.Reference);
 	}
+	unsafe Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
+	{
+		ImplementationValidationUtilities.ThrowIfProxy(jThread);
+		ImplementationValidationUtilities.ThrowIfDefault(jThread);
+		if (this.Version < NativeInterface19.RequiredVersion) return default;
+		ref readonly NativeInterface19 nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface19>(NativeInterface19.IsVirtualThreadInfo);
+		using INativeTransaction jniTransaction = this._cache.VirtualMachine.CreateTransaction(1);
+		JObjectLocalRef localRef = jniTransaction.Add(jThread);
+		return nativeInterface.IsVirtualThread(this.Reference, localRef).Value;
+	}
 
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj)

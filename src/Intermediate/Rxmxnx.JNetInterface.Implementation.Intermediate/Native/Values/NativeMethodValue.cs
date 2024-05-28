@@ -4,6 +4,8 @@
 /// Native representation of <see cref="JNativeCallEntry"/> instance
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2376,
+                 Justification = CommonConstants.BinaryStructJustification)]
 internal readonly unsafe struct NativeMethodValue
 {
 	/// <summary>

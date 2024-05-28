@@ -17,7 +17,10 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 	/// <summary>
 	/// Native interface for <c>JNI_VERSION_1_4</c>
 	/// </summary>
-	public readonly NativeInterface4 NativeInterface4;
+#pragma warning disable CS0169
+	private readonly NativeInterface4 _nativeInterface9;
+#pragma warning restore CS0169
+
 	/// <summary>
 	/// Pointer to <c>GetObjectRefType</c> function.
 	/// Retrieves the type of given object reference.

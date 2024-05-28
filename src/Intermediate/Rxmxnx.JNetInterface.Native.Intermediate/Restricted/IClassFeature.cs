@@ -77,6 +77,15 @@ public partial interface IClassFeature
 	[return: NotNullIfNotNull(nameof(jClass))]
 	JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass);
 	/// <summary>
+	/// Retrieves the <see cref="JModuleObject"/> from <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JModuleObject"/> instance.</returns>
+	/// <exception cref="InvalidOperationException">
+	/// Throws if JNI version doesn't support modules.
+	/// </exception>
+	JModuleObject? GetModule(JClassObject jClass);
+	/// <summary>
 	/// Throws an exception from <typeparamref name="TThrowable"/> type.
 	/// </summary>
 	/// <typeparam name="TThrowable"></typeparam>

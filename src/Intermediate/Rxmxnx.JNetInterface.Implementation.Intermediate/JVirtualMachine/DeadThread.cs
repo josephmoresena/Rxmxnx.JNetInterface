@@ -106,6 +106,7 @@ public partial class JVirtualMachine
 		}
 		JReferenceTypeMetadata? IClassFeature.GetTypeMetadata(JClassObject? jClass)
 			=> DeadThread.ThrowInvalidResult<JReferenceTypeMetadata?>();
+		JModuleObject? IClassFeature.GetModule(JClassObject jClass) => DeadThread.ThrowInvalidResult<JModuleObject?>();
 		void IClassFeature.ThrowNew<TThrowable>(CString? message, Boolean throwException)
 			=> DeadThread.ThrowInvalidResult<Byte>();
 		void IClassFeature.ThrowNew<TThrowable>(String? message, Boolean throwException)
@@ -272,6 +273,7 @@ public partial class JVirtualMachine
 		TResult IEnvironment.WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
 			=> DeadThread.ThrowInvalidResult<TResult>();
 		void IEnvironment.DescribeException() => DeadThread.ThrowInvalidResult<Byte>();
+		Boolean? IEnvironment.IsVirtual(JThreadObject jThread) => DeadThread.ThrowInvalidResult<Boolean?>();
 		void IDisposable.Dispose()
 		{
 			if (IVirtualMachine.TraceEnabled)

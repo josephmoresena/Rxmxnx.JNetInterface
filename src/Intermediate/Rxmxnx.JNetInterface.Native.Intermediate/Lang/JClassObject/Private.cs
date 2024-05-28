@@ -72,6 +72,7 @@ public partial class JClassObject
 	/// Retrieves printable text hash.
 	/// </summary>
 	/// <returns>A read-only UTF-16 char span.</returns>
+	[ExcludeFromCodeCoverage]
 	private ReadOnlySpan<Char> GetPrintableHash(out String lastChar)
 	{
 		ReadOnlySpan<Char> hash = this.Hash;

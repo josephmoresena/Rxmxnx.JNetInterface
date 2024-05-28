@@ -17,7 +17,10 @@ internal unsafe struct NativeInterface9 : INativeInterface<NativeInterface9>
 	/// <summary>
 	/// Native interface for <c>JNI_VERSION_1_8</c>
 	/// </summary>
-	public readonly NativeInterface NativeInterface6;
+#pragma warning disable CS0169
+	private readonly NativeInterface _nativeInterface9;
+#pragma warning restore CS0169
+
 	/// <summary>
 	/// Pointer to <c>GetModule</c> function.
 	/// Returns the <c>java.lang.Module</c> object for the module that the class is a member of.
@@ -33,5 +36,5 @@ internal unsafe struct NativeInterface9 : INativeInterface<NativeInterface9>
 	/// <summary>
 	/// Information of <see cref="NativeInterface9.GetModule"/>
 	/// </summary>
-	public static readonly JniMethodInfo IsVirtualThreadInfo = new() { Name = nameof(NativeInterface9.GetModule), };
+	public static readonly JniMethodInfo GetModuleInfo = new() { Name = nameof(NativeInterface9.GetModule), };
 }

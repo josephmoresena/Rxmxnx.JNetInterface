@@ -17,7 +17,10 @@ internal readonly unsafe struct NativeInterface4 : INativeInterface<NativeInterf
 	/// <summary>
 	/// Native interface for <c>JNI_VERSION_1_2</c>
 	/// </summary>
-	public readonly NativeInterface NativeInterface2;
+#pragma warning disable CS0169
+	private readonly NativeInterface _nativeInterface9;
+#pragma warning restore CS0169
+
 	/// <summary>
 	/// Pointer to <c>NewDirectByteBuffer</c> function.
 	/// Allocates and returns a direct <c>java.nio.ByteBuffer</c> referring to the given block of memory.

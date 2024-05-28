@@ -281,5 +281,18 @@ partial class JEnvironment
 				ILocalObject.ProcessMetadata(result, classObjectMetadata);
 			return result;
 		}
+		/// <summary>
+		/// Retrieves the <see cref="JModuleObject"/> instance from <paramref name="classRef"/>.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <returns>A <see cref="JModuleObject"/> instance.</returns>
+		private unsafe JModuleObject GetModule(JClassLocalRef classRef)
+		{
+			ref readonly NativeInterface9 nativeInterface =
+				ref this.GetNativeInterface<NativeInterface9>(NativeInterface9.GetModuleInfo);
+			JObjectLocalRef localRef = nativeInterface.GetModule(this.Reference, classRef);
+			if (localRef == default) this.CheckJniError();
+			return new(this.GetClass<JModuleObject>(), localRef);
+		}
 	}
 }
