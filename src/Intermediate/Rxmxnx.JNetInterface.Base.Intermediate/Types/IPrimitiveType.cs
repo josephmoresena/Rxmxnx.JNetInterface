@@ -49,7 +49,6 @@ public interface IPrimitiveType<TPrimitive> : IPrimitiveType, IDataType<TPrimiti
 	protected new static abstract JPrimitiveTypeMetadata<TPrimitive> Metadata { get; }
 
 	static JDataTypeMetadata IDataType<TPrimitive>.Metadata => TPrimitive.Metadata;
-	static JTypeKind IDataType.Kind => JTypeKind.Primitive;
 
 	/// <summary>
 	/// Defines an implicit conversion of a given <typeparamref name="TPrimitive"/> to <see cref="JObject"/>.
