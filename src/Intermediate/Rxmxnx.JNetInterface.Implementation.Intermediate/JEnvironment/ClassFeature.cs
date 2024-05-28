@@ -2,6 +2,8 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache : IClassFeature
 	{
 		public JClassObject AsClassObject(JClassLocalRef classRef) => this.Register(this.GetClass(classRef, true));
@@ -77,7 +79,7 @@ partial class JEnvironment
 			return this.GetOrFindClass(metadata);
 		}
 		public JClassObject GetObjectClass(JLocalObject jLocal) => this.GetClass(jLocal.ObjectClassName);
-		public JClassObject? GetSuperClass(JClassObject jClass)
+		public unsafe JClassObject? GetSuperClass(JClassObject jClass)
 		{
 			if (MetadataHelper.GetMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
 				return this.GetOrFindClass(metadata);
@@ -85,8 +87,10 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			ImplementationValidationUtilities.ThrowIfDefault(jClass);
-			GetSuperclassDelegate getSuperClass = this.GetDelegate<GetSuperclassDelegate>();
-			JClassLocalRef superClassRef = jniTransaction.Add(getSuperClass(this.Reference, classRef));
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetSuperclassInfo);
+			JClassLocalRef superClassRef =
+				jniTransaction.Add(nativeInterface.ClassFunctions.GetSuperclass(this.Reference, classRef));
 			if (!superClassRef.IsDefault)
 			{
 				JClassObject jSuperClass = this.AsClassObject(superClassRef);
@@ -96,7 +100,7 @@ partial class JEnvironment
 			this.CheckJniError();
 			return default;
 		}
-		public Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
+		public unsafe Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
 		{
 			Boolean? result = MetadataHelper.IsAssignableFrom(jClass, otherClass);
 			if (result.HasValue) return result.Value;
@@ -105,8 +109,9 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
-			IsAssignableFromDelegate isAssignableFrom = this.GetDelegate<IsAssignableFromDelegate>();
-			result = isAssignableFrom(this.Reference, classRef, otherClassRef) == JBoolean.TrueValue;
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.IsAssignableFromInfo);
+			result = nativeInterface.ClassFunctions.IsAssignableFrom(this.Reference, classRef, otherClassRef).Value;
 			this.CheckJniError();
 			return result.Value;
 		}
@@ -131,13 +136,15 @@ partial class JEnvironment
 		{
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
 			ITypeInformation metadata = new TypeInformation(classInformation);
-			return rawClassBytes.WithSafeFixed((this, metadata, jClassLoader), EnvironmentCache.LoadClass);
+			return this.LoadClass(metadata, rawClassBytes, jClassLoader);
 		}
-		public JClassObject LoadClass<TDataType>(ReadOnlySpan<Byte> rawClassBytes,
-			JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>
+		public JClassObject
+			LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(
+				ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
+			where TDataType : JLocalObject, IReferenceType<TDataType>
 		{
 			ITypeInformation metadata = MetadataHelper.GetMetadata<TDataType>();
-			return rawClassBytes.WithSafeFixed((this, metadata, jClassLoader), EnvironmentCache.LoadClass);
+			return this.LoadClass(metadata, rawClassBytes, jClassLoader);
 		}
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 		{

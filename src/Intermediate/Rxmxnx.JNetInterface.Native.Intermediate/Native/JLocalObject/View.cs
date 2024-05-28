@@ -23,7 +23,8 @@ public partial class JLocalObject
 		/// </summary>
 		/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 		/// <returns>A <typeparamref name="TReference"/> instance from current instance.</returns>
-		public TReference CastTo<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
+		public TReference CastTo<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>()
+			where TReference : JReferenceObject, IReferenceType<TReference>
 			=> this as TReference ?? this.Object.CastTo<TReference>();
 		JLocalObject IWrapper<JLocalObject>.Value => this.Object;
 	}

@@ -7,7 +7,8 @@ public partial class JLocalObject : ILocalObject
 	ObjectLifetime ILocalObject.Lifetime => this.Lifetime;
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata) => this.ProcessMetadata(instanceMetadata);
-	TReference ILocalObject.CastTo<TReference>() => this.CastTo<TReference>();
+	TReference ILocalObject.CastTo<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>()
+		=> this.CastTo<TReference>();
 
 	/// <inheritdoc/>
 	~JLocalObject() { this.Dispose(false); }
@@ -28,8 +29,9 @@ public partial class JLocalObject : ILocalObject
 	/// Optional. Indicates whether <paramref name="jLocal"/> should be disposed after casting.
 	/// </param>
 	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="jLocal"/>.</returns>
-	private TReference CastTo<TReference>(JLocalObject jLocal, Boolean dispose)
-		where TReference : JReferenceObject, IReferenceType<TReference>
+	private TReference
+		CastTo<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>(JLocalObject jLocal,
+			Boolean dispose) where TReference : JReferenceObject, IReferenceType<TReference>
 	{
 		if (jLocal is TReference result) return result;
 		JLocalObject.Validate<TReference>(jLocal);

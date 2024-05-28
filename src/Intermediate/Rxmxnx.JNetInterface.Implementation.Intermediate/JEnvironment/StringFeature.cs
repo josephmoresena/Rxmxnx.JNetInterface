@@ -2,37 +2,41 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache : IStringFeature
 	{
 		public JStringObject Create(ReadOnlySpan<Char> data)
 		{
-			JStringLocalRef stringRef = data.WithSafeFixed(this, EnvironmentCache.CreateString);
+			JStringLocalRef stringRef = this.CreateString(data);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, data.ToString()));
 		}
 		public JStringObject Create(ReadOnlySpan<Byte> utf8Data)
 		{
-			JStringLocalRef stringRef = utf8Data.WithSafeFixed(this, EnvironmentCache.CreateUtf8String);
+			JStringLocalRef stringRef = this.CreateUtf8String(utf8Data);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, utf8Data.Length));
 		}
-		public Int32 GetLength(JReferenceObject jObject)
+		public unsafe Int32 GetLength(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
-			GetStringLengthDelegate getStringLength = this.GetDelegate<GetStringLengthDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringLengthInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
-			Int32 result = getStringLength(this.Reference, stringRef);
+			Int32 result = nativeInterface.StringFunctions.Utf16.GetStringLength(this.Reference, stringRef);
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
-		public Int32 GetUtf8Length(JReferenceObject jObject)
+		public unsafe Int32 GetUtf8Length(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
-			GetStringUtfLengthDelegate getStringUtf8Length = this.GetDelegate<GetStringUtfLengthDelegate>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringUtfLengthInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
-			Int32 result = getStringUtf8Length(this.Reference, stringRef);
+			Int32 result = nativeInterface.StringFunctions.Utf8.GetStringLength(this.Reference, stringRef);
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
@@ -42,12 +46,14 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, false);
 		}
-		public ReadOnlyValPtr<Char> GetSequence(JStringLocalRef stringRef, out Boolean isCopy)
+		public unsafe ReadOnlyValPtr<Char> GetSequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
-			GetStringCharsDelegate getStringChars = this.GetDelegate<GetStringCharsDelegate>();
-			ReadOnlyValPtr<Char> result = getStringChars(this.Reference, stringRef, out Byte isCopyByte);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringCharsInfo);
+			ReadOnlyValPtr<Char> result =
+				nativeInterface.StringFunctions.Utf16.GetStringChars(this.Reference, stringRef, out JBoolean isCopyJ);
 			if (result == ReadOnlyValPtr<Char>.Zero) this.CheckJniError();
-			isCopy = isCopyByte == JBoolean.TrueValue;
+			isCopy = isCopyJ.Value;
 			return result;
 		}
 		public INativeMemoryAdapter GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind)
@@ -56,12 +62,14 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, default);
 		}
-		public ReadOnlyValPtr<Byte> GetUtf8Sequence(JStringLocalRef stringRef, out Boolean isCopy)
+		public unsafe ReadOnlyValPtr<Byte> GetUtf8Sequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
-			GetStringUtfCharsDelegate getStringUtf8Chars = this.GetDelegate<GetStringUtfCharsDelegate>();
-			ReadOnlyValPtr<Byte> result = getStringUtf8Chars(this.Reference, stringRef, out Byte isCopyByte);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringUtfCharsInfo);
+			ReadOnlyValPtr<Byte> result =
+				nativeInterface.StringFunctions.Utf8.GetStringChars(this.Reference, stringRef, out JBoolean isCopyJ);
 			if (result == ReadOnlyValPtr<Byte>.Zero) this.CheckJniError();
-			isCopy = isCopyByte == JBoolean.TrueValue;
+			isCopy = isCopyJ.Value;
 			return result;
 		}
 		public INativeMemoryAdapter GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
@@ -70,22 +78,25 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, true);
 		}
-		public ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef)
+		public unsafe ReadOnlyValPtr<Char> GetCriticalSequence(JStringLocalRef stringRef)
 		{
-			GetStringCriticalDelegate getStringCritical = this.GetDelegate<GetStringCriticalDelegate>();
-			ReadOnlyValPtr<Char> result = getStringCritical(this.Reference, stringRef, out _);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringCriticalInfo);
+			ReadOnlyValPtr<Char> result =
+				nativeInterface.StringCriticalFunctions.GetStringCritical(this.Reference, stringRef, out _);
 			if (result == ReadOnlyValPtr<Char>.Zero) this.CheckJniError();
 			this._criticalCount++;
 			return result;
 		}
-		public void ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
+		public unsafe void ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
 			try
 			{
 				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				{
-					ReleaseStringCharsDelegate releaseStringChars = this.GetDelegate<ReleaseStringCharsDelegate>();
-					releaseStringChars(this.Reference, stringRef, pointer);
+					ref readonly NativeInterface nativeInterface =
+						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleaseStringCharsInfo);
+					nativeInterface.StringFunctions.Utf16.ReleaseStringChars(this.Reference, stringRef, pointer);
 					this.CheckJniError();
 				}
 				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, true, stringRef,
@@ -98,15 +109,15 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer)
+		public unsafe void ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer)
 		{
 			try
 			{
 				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				{
-					ReleaseStringUtfCharsDelegate releaseStringChars =
-						this.GetDelegate<ReleaseStringUtfCharsDelegate>();
-					releaseStringChars(this.Reference, stringRef, pointer);
+					ref readonly NativeInterface nativeInterface =
+						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleaseStringUtfCharsInfo);
+					nativeInterface.StringFunctions.Utf8.ReleaseStringChars(this.Reference, stringRef, pointer);
 					this.CheckJniError();
 				}
 				JTrace.ReleaseMemory(false, this._env.IsAttached, this.VirtualMachine.IsAlive, true, stringRef,
@@ -119,15 +130,15 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
+		public unsafe void ReleaseCriticalSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
 			try
 			{
 				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				{
-					ReleaseStringCriticalDelegate releaseStringCritical =
-						this.GetDelegate<ReleaseStringCriticalDelegate>();
-					releaseStringCritical(this.Reference, stringRef, pointer);
+					ref readonly NativeInterface nativeInterface =
+						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleaseStringUtfCharsInfo);
+					nativeInterface.StringCriticalFunctions.ReleaseStringCritical(this.Reference, stringRef, pointer);
 					this.CheckJniError();
 					this._criticalCount--;
 				}
@@ -140,16 +151,18 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
+		public unsafe void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jString);
-			chars.WithSafeFixed((this, jString, startIndex), EnvironmentCache.GetStringRegion);
+			fixed (Char* ptr = &MemoryMarshal.GetReference(chars))
+				this.GetStringRegion(jString, new(ptr), startIndex, chars.Length);
 			this.CheckJniError();
 		}
-		public void GetUtf8Copy(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex = 0)
+		public unsafe void GetUtf8Copy(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex = 0)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jString);
-			utf8Units.WithSafeFixed((this, jString, startIndex), EnvironmentCache.GetStringUtf8Region);
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(utf8Units))
+				this.GetStringUtf8Region(jString, new(ptr), startIndex, utf8Units.Length);
 			this.CheckJniError();
 		}
 	}

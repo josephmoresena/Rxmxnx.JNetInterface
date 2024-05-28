@@ -5,21 +5,19 @@ internal partial class InterfaceSet
 	/// <summary>
 	/// Interface set for classes.
 	/// </summary>
-	private sealed class ClassInterfaceSet : InterfaceSet
+	/// <remarks>
+	/// Constructor.
+	/// </remarks>
+	/// <param name="baseMetadata">Base metadata.</param>
+	/// <param name="set">Interface set.</param>
+	private sealed class ClassInterfaceSet(
+		JReferenceTypeMetadata baseMetadata,
+		ImmutableHashSet<JInterfaceTypeMetadata> set) : InterfaceSet(set)
 	{
 		/// <summary>
 		/// Base type metadata.
 		/// </summary>
-		private readonly IInterfaceSet _baseInterfaces;
-
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		/// <param name="baseMetadata">Base metadata.</param>
-		/// <param name="set">Interface set.</param>
-		public ClassInterfaceSet(JReferenceTypeMetadata baseMetadata, ImmutableHashSet<JInterfaceTypeMetadata> set) :
-			base(set)
-			=> this._baseInterfaces = baseMetadata.Interfaces;
+		private readonly IInterfaceSet _baseInterfaces = baseMetadata.Interfaces;
 
 		/// <inheritdoc/>
 		public override Boolean Contains(JInterfaceTypeMetadata item)

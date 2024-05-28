@@ -52,7 +52,7 @@ public static class ImplementationValidationUtilities
 	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is default.</exception>
 	public static void ThrowIfDefault(JReferenceObject jObject, String? message = default)
 	{
-		if (jObject.IsDefault)
+		if (jObject.IsDefault && JObject.IsNullOrDefault(jObject))
 			throw new ArgumentException(message ?? "Disposed JReferenceObject.");
 	}
 	/// <summary>
@@ -114,6 +114,21 @@ public static class ImplementationValidationUtilities
 	{
 		if (!jniSecure)
 			throw new InvalidOperationException($"Current JNI status is invalid to call {functionName}.");
+	}
+	/// <summary>
+	/// Throws an exception if JNI execution is not avaliable in current version.
+	/// </summary>
+	/// <param name="functionName">Name of JNI function.</param>
+	/// <param name="requiredVersion">Requried version to execute JNI function.</param>
+	/// <param name="currentVersion">Current version of JNI.</param>
+	/// <exception cref="NotImplementedException">
+	/// Throws an exception if JNI execution is not avaliable in current version.
+	/// </exception>
+	public static void ThrowIfInvalidVersion(String functionName, Int32 requiredVersion, Int32 currentVersion)
+	{
+		if (currentVersion < requiredVersion)
+			throw new InvalidOperationException(
+				$"Current JNI version (0x{currentVersion:x8}) is invalid to call {functionName}. JNI required: 0x{requiredVersion:x8}");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="version"/> is invalid.

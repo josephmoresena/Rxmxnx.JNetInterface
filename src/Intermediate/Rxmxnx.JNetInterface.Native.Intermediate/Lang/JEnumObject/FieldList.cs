@@ -12,15 +12,15 @@ public partial class JEnumObject
 			/// <summary>
 			/// Enum ordinal dictionary.
 			/// </summary>
-			private readonly Dictionary<String, Int32> _hashDictionary = new();
+			private readonly Dictionary<String, Int32> _hashDictionary = [];
 			/// <summary>
 			/// Enum name dictionary.
 			/// </summary>
-			private readonly Dictionary<String, CString> _nameDictionary = new();
+			private readonly Dictionary<String, CString> _nameDictionary = [];
 			/// <summary>
 			/// Enum ordinal dictionary.
 			/// </summary>
-			private readonly Dictionary<Int32, String> _ordinalDictionary = new();
+			private readonly Dictionary<Int32, String> _ordinalDictionary = [];
 
 			CString IEnumFieldList.this[Int32 ordinal] => this._nameDictionary[this._ordinalDictionary[ordinal]];
 			Int32 IEnumFieldList.this[ReadOnlySpan<Byte> name]
@@ -32,7 +32,7 @@ public partial class JEnumObject
 			Boolean IEnumFieldList.HasHash(String hash) => this._hashDictionary.ContainsKey(hash);
 			IReadOnlySet<Int32> IEnumFieldList.GetMissingFields(out Int32 count, out Int32 maxOrdinal)
 			{
-				Int32[] defined = this._ordinalDictionary.Keys.ToArray();
+				Int32[] defined = [.. this._ordinalDictionary.Keys,];
 				HashSet<Int32> result = Enumerable.Range(0, defined.Length).ToHashSet();
 				maxOrdinal = defined.Max();
 				count = defined.Length;
@@ -62,7 +62,8 @@ public partial class JEnumObject
 			/// <returns>The current instance.</returns>
 			public EnumFieldList Validate(ReadOnlySpan<Byte> enumTypeName)
 			{
-				NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
+				if (IVirtualMachine.MetadataValidationEnabled)
+					NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
 				return this;
 			}
 

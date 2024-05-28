@@ -13,23 +13,23 @@ internal partial class ObjectLifetime
 	/// <summary>
 	/// Internal <see cref="IEnvironment"/> instance.
 	/// </summary>
-	private readonly IEnvironment _env;
+	private readonly IEnvironment _env = env;
 	/// <summary>
 	/// Internal id.
 	/// </summary>
-	private readonly Int64 _id;
+	private readonly Int64 _id = jObject.Id;
 	/// <summary>
 	/// Indicates whether current instance is not disposable.
 	/// </summary>
-	private readonly Boolean _isDisposable;
+	private readonly Boolean _isDisposable = isDisposable;
 	/// <summary>
 	/// Indicates whether the this instance is disposed.
 	/// </summary>
-	private readonly IMutableWrapper<Boolean> _isDisposed;
+	private readonly IMutableWrapper<Boolean> _isDisposed = IMutableWrapper.Create<Boolean>();
 	/// <summary>
 	/// Internal hash set.
 	/// </summary>
-	private readonly Dictionary<Int64, WeakReference<JLocalObject>> _objects = new();
+	private readonly Dictionary<Int64, WeakReference<JLocalObject>> _objects = [];
 	/// <summary>
 	/// Weak reference to <see cref="ObjectLifetime"/> instance.
 	/// </summary>
@@ -37,7 +37,7 @@ internal partial class ObjectLifetime
 	/// <summary>
 	/// Internal value.
 	/// </summary>
-	private readonly IMutableReference<JObjectLocalRef> _value;
+	private readonly IMutableReference<JObjectLocalRef> _value = IMutableReference<JObjectLocalRef>.Create(localRef);
 
 	/// <inheritdoc cref="ObjectLifetime.Class"/>
 	private JClassObject? _class;
@@ -68,7 +68,7 @@ internal partial class ObjectLifetime
 		else this._global.Synchronize(other._global);
 
 		if (this._weak is null) this._weak = other._weak;
-		else if (other._weak is null) other._weak = this._weak;
+		else other._weak ??= this._weak;
 	}
 	/// <summary>
 	/// Indicates whether current instance is assignable to <typeparamref name="TDataType"/> type.
@@ -125,7 +125,7 @@ internal partial class ObjectLifetime
 	/// </summary>
 	private void CleanObjects()
 	{
-		Int64[] keys = this._objects.Keys.ToArray();
+		Int64[] keys = [.. this._objects.Keys,];
 		foreach (Int64 objId in keys)
 		{
 			if (!this._objects[objId].TryGetTarget(out JLocalObject? jLocal) && jLocal is not JClassObject)

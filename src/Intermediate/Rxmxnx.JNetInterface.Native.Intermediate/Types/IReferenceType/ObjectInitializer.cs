@@ -5,22 +5,20 @@ public partial interface IReferenceType
 	/// <summary>
 	/// A <see cref="IReferenceType"/> instance initializer using <see cref="JLocalObject"/> instance.
 	/// </summary>
-	protected ref struct ObjectInitializer
+	/// <remarks>
+	/// Constructor.
+	/// </remarks>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	protected readonly ref struct ObjectInitializer(JLocalObject jLocal)
 	{
 		/// <summary>
 		/// Created object previous instance.
 		/// </summary>
-		public JLocalObject Instance { get; init; }
+		public JLocalObject Instance { get; init; } = jLocal;
 		/// <summary>
 		/// Override class instance.
 		/// </summary>
 		public JClassObject? Class { get; init; }
-
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-		public ObjectInitializer(JLocalObject jLocal) => this.Instance = jLocal;
 
 		/// <summary>
 		/// Defines an explicit conversion of a given <see cref="JLocalObject"/> to

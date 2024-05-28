@@ -2,51 +2,39 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache : IArrayFeature
 	{
-		public JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IObject, IDataType<TElement>
+		public unsafe JArrayObject<TElement> CreateArray<TElement>(Int32 length)
+			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfInvalidArrayLength(length);
-			JArrayLocalRef arrayRef;
+			JArrayLocalRef arrayRef = default;
 			if (MetadataHelper.GetMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
 			{
-				switch (metadata.Signature[0])
+				ref readonly ArrayFunctionSet arrayFunctions =
+					ref this.GetArrayFunctions(metadata.Signature[0], ArrayFunctionSet.PrimitiveFunction.NewArray);
+				arrayRef = metadata.Signature[0] switch
 				{
-					case UnicodePrimitiveSignatures.BooleanSignatureChar:
-						NewBooleanArrayDelegate newBooleanArray = this.GetDelegate<NewBooleanArrayDelegate>();
-						arrayRef = newBooleanArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.ByteSignatureChar:
-						NewByteArrayDelegate newByteArray = this.GetDelegate<NewByteArrayDelegate>();
-						arrayRef = newByteArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.CharSignatureChar:
-						NewCharArrayDelegate newCharArray = this.GetDelegate<NewCharArrayDelegate>();
-						arrayRef = newCharArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.DoubleSignatureChar:
-						NewDoubleArrayDelegate newDoubleArray = this.GetDelegate<NewDoubleArrayDelegate>();
-						arrayRef = newDoubleArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.FloatSignatureChar:
-						NewFloatArrayDelegate newFloatArray = this.GetDelegate<NewFloatArrayDelegate>();
-						arrayRef = newFloatArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.IntSignatureChar:
-						NewIntArrayDelegate newIntArray = this.GetDelegate<NewIntArrayDelegate>();
-						arrayRef = newIntArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.LongSignatureChar:
-						NewLongArrayDelegate newLongArray = this.GetDelegate<NewLongArrayDelegate>();
-						arrayRef = newLongArray(this.Reference, length).ArrayValue;
-						break;
-					case UnicodePrimitiveSignatures.ShortSignatureChar:
-						NewShortArrayDelegate newShortArray = this.GetDelegate<NewShortArrayDelegate>();
-						arrayRef = newShortArray(this.Reference, length).ArrayValue;
-						break;
-					default:
-						throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
-				}
+					UnicodePrimitiveSignatures.BooleanSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewBooleanArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.ByteSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewByteArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.CharSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewCharArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.DoubleSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewDoubleArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.FloatSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewFloatArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.IntSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewIntArray
+						.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.LongSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewLongArray.NewArray(this.Reference, length).ArrayValue,
+					UnicodePrimitiveSignatures.ShortSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
+						.NewShortArray.NewArray(this.Reference, length).ArrayValue,
+					_ => arrayRef,
+				};
 				if (arrayRef.IsDefault) this.CheckJniError();
 			}
 			else
@@ -75,32 +63,16 @@ partial class JEnvironment
 			}
 			return result;
 		}
-		public Int32 GetArrayLength(JReferenceObject jObject)
+		public unsafe Int32 GetArrayLength(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
-			GetArrayLengthDelegate getArrayLength = this.GetDelegate<GetArrayLengthDelegate>();
-			Int32 result = getArrayLength(this.Reference, jObject.As<JArrayLocalRef>());
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetArrayLengthInfo);
+			Int32 result = nativeInterface.ArrayFunctions.GetArrayLength(this.Reference, jObject.As<JArrayLocalRef>());
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
-		public TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
-			where TElement : IObject, IDataType<TElement>
-		{
-			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
-			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
-			{
-				using IFixedContext<Byte>.IDisposable fixedBuffer =
-					EnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
-				this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
-				this.CheckJniError();
-				return (TElement)primitiveMetadata.CreateInstance(fixedBuffer.Values);
-			}
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
-			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
-			return this.GetElementObject<TElement>(arrayRef, index);
-		}
-		public void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
+		public unsafe TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
 			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
@@ -108,10 +80,26 @@ partial class JEnvironment
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
-				using IFixedContext<Byte>.IDisposable fixedBuffer =
-					EnvironmentCache.AllocToFixedContext(stackalloc Byte[primitiveMetadata.SizeOf]);
+				fixed (Byte* ptr = &MemoryMarshal.GetReference(buffer))
+					this.GetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, new(ptr), index);
+				this.CheckJniError();
+				return (TElement)primitiveMetadata.CreateInstance(buffer);
+			}
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
+			return this.GetElementObject<TElement>(arrayRef, index);
+		}
+		public unsafe void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
+			where TElement : IObject, IDataType<TElement>
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jArray);
+			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
+			{
+				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
 				value!.CopyTo(buffer);
-				this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, fixedBuffer, index);
+				fixed (Byte* ptr = &MemoryMarshal.GetReference(buffer))
+					this.SetPrimitiveArrayRegion(jArray, primitiveMetadata.Signature, new(ptr), index);
 				this.CheckJniError();
 			}
 			else
@@ -163,16 +151,18 @@ partial class JEnvironment
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-			IntPtr result = this.GetPrimitiveArrayElements(arrayRef, metadata.Signature[0], out Byte isCopyByte);
+			IntPtr result = this.GetPrimitiveArrayElements(arrayRef, metadata.Signature[0], out JBoolean isCopyJ);
 			if (result == IntPtr.Zero) this.CheckJniError();
-			isCopy = isCopyByte == JBoolean.TrueValue;
+			isCopy = isCopyJ.Value;
 			return result;
 		}
-		public ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
+		public unsafe ValPtr<Byte> GetPrimitiveCriticalSequence(JArrayLocalRef arrayRef)
 		{
-			GetPrimitiveArrayCriticalDelegate getPrimitiveArrayCriticalDelegate =
-				this.GetDelegate<GetPrimitiveArrayCriticalDelegate>();
-			ValPtr<Byte> result = getPrimitiveArrayCriticalDelegate(this.Reference, arrayRef, out _);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetPrimitiveArrayCriticalInfo);
+			ValPtr<Byte> result =
+				nativeInterface.PrimitiveArrayCriticalFunctions.GetPrimitiveArrayCritical(
+					this.Reference, arrayRef, out _);
 			if (result == ValPtr<Byte>.Zero) this.CheckJniError();
 			this._criticalCount++;
 			return result;
@@ -197,15 +187,16 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
+		public unsafe void ReleasePrimitiveCriticalSequence(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
 		{
 			try
 			{
 				if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				{
-					ReleasePrimitiveArrayCriticalDelegate releasePrimitiveArrayCritical =
-						this.GetDelegate<ReleasePrimitiveArrayCriticalDelegate>();
-					releasePrimitiveArrayCritical(this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
+					ref readonly NativeInterface nativeInterface =
+						ref this.GetNativeInterface<NativeInterface>(NativeInterface.ReleasePrimitiveArrayCriticalInfo);
+					nativeInterface.PrimitiveArrayCriticalFunctions.ReleasePrimitiveArrayCritical(
+						this.Reference, arrayRef, criticalPtr, JReleaseMode.Abort);
 					this.CheckJniError();
 					this._criticalCount--;
 				}
@@ -219,18 +210,22 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<TPrimitive> elements,
+		public unsafe void GetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, Span<TPrimitive> elements,
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			elements.WithSafeFixed((this, jArray, startIndex), EnvironmentCache.GetPrimitiveArrayRegion);
+			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			fixed (TPrimitive* ptr = &MemoryMarshal.GetReference(elements))
+				this.GetPrimitiveArrayRegion(jArray, metadata.Signature, new(ptr), startIndex, elements.Length);
 			this.CheckJniError();
 		}
-		public void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlySpan<TPrimitive> elements,
+		public unsafe void SetCopy<TPrimitive>(JArrayObject<TPrimitive> jArray, ReadOnlySpan<TPrimitive> elements,
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			elements.WithSafeFixed((this, jArray, startIndex), EnvironmentCache.SetPrimitiveArrayRegion);
+			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
+			fixed (TPrimitive* ptr = &MemoryMarshal.GetReference(elements))
+				this.SetPrimitiveArrayRegion(jArray, metadata.Signature, new(ptr), startIndex, elements.Length);
 			this.CheckJniError();
 		}
 	}

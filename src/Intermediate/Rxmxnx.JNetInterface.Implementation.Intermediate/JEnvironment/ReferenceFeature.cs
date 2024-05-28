@@ -2,6 +2,8 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache : IReferenceFeature
 	{
 		public IDisposable GetSynchronizer(JReferenceObject jObject)
@@ -182,18 +184,21 @@ partial class JEnvironment
 			return true;
 		}
 		public Boolean IsParameter(JLocalObject jLocal) => this._objects.IsParameter(jLocal.LocalReference);
-		public void MonitorEnter(JObjectLocalRef localRef)
+		public unsafe void MonitorEnter(JObjectLocalRef localRef)
 		{
-			MonitorEnterDelegate monitorEnter = this.GetDelegate<MonitorEnterDelegate>();
-			ImplementationValidationUtilities.ThrowIfInvalidResult(monitorEnter(this.Reference, localRef));
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.MonitorEnterInfo);
+			JResult result = nativeInterface.MonitorFunctions.MonitorEnter(this.Reference, localRef);
+			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		}
-		public void MonitorExit(JObjectLocalRef localRef)
+		public unsafe void MonitorExit(JObjectLocalRef localRef)
 		{
 			JResult result = JResult.Ok;
 			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 			{
-				MonitorExitDelegate monitorExit = this.GetDelegate<MonitorExitDelegate>();
-				result = monitorExit(this.Reference, localRef);
+				ref readonly NativeInterface nativeInterface =
+					ref this.GetNativeInterface<NativeInterface>(NativeInterface.MonitorExitInfo);
+				result = nativeInterface.MonitorFunctions.MonitorExit(this.Reference, localRef);
 			}
 			JTrace.MonitorExit(this._env.IsAttached, this.VirtualMachine.IsAlive, result == JResult.Ok, localRef);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);

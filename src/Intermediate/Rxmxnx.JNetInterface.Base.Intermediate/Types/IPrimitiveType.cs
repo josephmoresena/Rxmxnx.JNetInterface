@@ -7,6 +7,14 @@
 [EditorBrowsable(EditorBrowsableState.Never)]
 public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 {
+	/// <summary>
+	/// Native primitive type.
+	/// </summary>
+	static virtual JNativeType JniType => JNativeType.JObject;
+
+	static JTypeKind IDataType.Kind => JTypeKind.Primitive;
+	static Type? IDataType.FamilyType => default;
+
 #if PACKAGE
 	/// <summary>
 	/// Creates a <see cref="JLocalObject"/> from current value.
@@ -15,12 +23,6 @@ public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
 	/// <returns>A <see cref="JLocalObject"/> instance.</returns>
 	JLocalObject ToObject(IEnvironment env);
 #endif
-
-	/// <summary>
-	/// Native primitive type.
-	/// </summary>
-	static virtual JNativeType JniType
-		=> CommonValidationUtilities.ThrowInvalidInterface<JNativeType>(nameof(IPrimitiveType));
 
 	/// <summary>
 	/// Retrieves the metadata for given primitive type.

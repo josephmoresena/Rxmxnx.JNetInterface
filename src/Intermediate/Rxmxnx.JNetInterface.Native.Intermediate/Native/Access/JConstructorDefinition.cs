@@ -9,7 +9,7 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// Constructor.
 	/// </summary>
 	/// <remarks>This constructor should be never inherited.</remarks>
-	public JConstructorDefinition() : this(Array.Empty<JArgumentMetadata>()) { }
+	public JConstructorDefinition() : this([]) { }
 
 	/// <summary>
 	/// Retrieves a <see cref="JConstructorObject"/> reflected from current definition on
@@ -33,7 +33,7 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// <returns>A new <typeparamref name="TObject"/>.</returns>
 	private TObject New<TObject>(JClassObject jClass, IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
 	{
-		NativeValidationUtilities.ThrowIfAbstractClass<TObject>();
+		NativeValidationUtilities.ThrowIfAbstractClass(IClassType.GetMetadata<TObject>());
 		IEnvironment env = jClass.Environment;
 		return env.AccessFeature.CallConstructor<TObject>(jClass, this, args);
 	}

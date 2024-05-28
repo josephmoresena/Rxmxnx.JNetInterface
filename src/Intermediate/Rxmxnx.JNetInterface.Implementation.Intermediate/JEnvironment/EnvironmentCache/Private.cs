@@ -2,6 +2,8 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
@@ -12,10 +14,6 @@ partial class JEnvironment
 		/// Class cache.
 		/// </summary>
 		private readonly ClassCache<JClassObject> _classes = new(JReferenceType.LocalRefType);
-		/// <summary>
-		/// Delegate cache.
-		/// </summary>
-		private readonly DelegateHelperCache _delegateCache = new();
 		/// <summary>
 		/// Main <see cref="JEnvironment"/> instance.
 		/// </summary>
@@ -48,6 +46,154 @@ partial class JEnvironment
 				throw new ArgumentException("Invalid class object.", nameof(jClass));
 		}
 		/// <summary>
+		/// Retrieves managed <see cref="ArrayFunctionSet"/> reference from current instance.
+		/// </summary>
+		/// <param name="primitiveSignature">Primitive signature char.</param>
+		/// <param name="arrayFunction">Requested array function.</param>
+		/// <returns>A managed <see cref="ArrayFunctionSet"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ref readonly ArrayFunctionSet GetArrayFunctions(Byte primitiveSignature,
+			ArrayFunctionSet.PrimitiveFunction arrayFunction)
+		{
+			JniMethodInfo info = primitiveSignature switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => EnvironmentCache.GetBooleanArrayFunctionInfo(
+					arrayFunction),
+				UnicodePrimitiveSignatures.ByteSignatureChar =>
+					EnvironmentCache.GetByteArrayFunctionInfo(arrayFunction),
+				UnicodePrimitiveSignatures.CharSignatureChar =>
+					EnvironmentCache.GetCharArrayFunctionInfo(arrayFunction),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => EnvironmentCache.GetDoubleArrayFunctionInfo(
+					arrayFunction),
+				UnicodePrimitiveSignatures.FloatSignatureChar => EnvironmentCache.GetFloatArrayFunctionInfo(
+					arrayFunction),
+				UnicodePrimitiveSignatures.IntSignatureChar => EnvironmentCache.GetIntArrayFunctionInfo(arrayFunction),
+				UnicodePrimitiveSignatures.LongSignatureChar =>
+					EnvironmentCache.GetLongArrayFunctionInfo(arrayFunction),
+				UnicodePrimitiveSignatures.ShortSignatureChar => EnvironmentCache.GetShortArrayFunctionInfo(
+					arrayFunction),
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+			};
+			return ref this.GetNativeInterface<NativeInterface>(info).ArrayFunctions;
+		}
+		/// <summary>
+		/// Retrieves managed <see cref="InstanceMethodFunctionSet"/> reference from current instance.
+		/// </summary>
+		/// <param name="signatureChar">Signature first char.</param>
+		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
+		/// <returns>A managed <see cref="InstanceMethodFunctionSet"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ref readonly InstanceMethodFunctionSet GetInstanceMethodFunctions(Byte signatureChar,
+			Boolean nonVirtual)
+		{
+			JniMethodInfo info = signatureChar switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => EnvironmentCache.GetBooleanInstanceMethodInfo(
+					nonVirtual),
+				UnicodePrimitiveSignatures.ByteSignatureChar => EnvironmentCache.GetByteInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.CharSignatureChar => EnvironmentCache.GetCharInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => EnvironmentCache.GetDoubleInstanceMethodInfo(
+					nonVirtual),
+				UnicodePrimitiveSignatures.FloatSignatureChar =>
+					EnvironmentCache.GetFloatInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.IntSignatureChar => EnvironmentCache.GetIntInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.LongSignatureChar => EnvironmentCache.GetLongInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.ShortSignatureChar =>
+					EnvironmentCache.GetShortInstanceMethodInfo(nonVirtual),
+				UnicodePrimitiveSignatures.VoidSignatureChar => EnvironmentCache.GetVoidInstanceMethodInfo(nonVirtual),
+				UnicodeObjectSignatures.ObjectSignaturePrefixChar => EnvironmentCache.GetObjectInstanceMethodInfo(
+					nonVirtual),
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+			};
+			return ref this.GetNativeInterface<NativeInterface>(info).InstanceMethodFunctions;
+		}
+		/// <summary>
+		/// Retrieves managed <see cref="MethodFunctionSet{JClassLocalRef}"/> reference from current instance.
+		/// </summary>
+		/// <param name="primitiveSignature">Primitive signature char.</param>
+		/// <returns>A managed <see cref="MethodFunctionSet{JClassLocalRef}"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ref readonly MethodFunctionSet<JClassLocalRef> GetStaticMethodFunctions(Byte primitiveSignature)
+		{
+			JniMethodInfo info = primitiveSignature switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => NativeInterface.CallStaticBooleanMethodInfo,
+				UnicodePrimitiveSignatures.ByteSignatureChar => NativeInterface.CallStaticByteMethodInfo,
+				UnicodePrimitiveSignatures.CharSignatureChar => NativeInterface.CallStaticCharMethodInfo,
+				UnicodePrimitiveSignatures.DoubleSignatureChar => NativeInterface.CallStaticDoubleMethodInfo,
+				UnicodePrimitiveSignatures.FloatSignatureChar => NativeInterface.CallStaticFloatMethodInfo,
+				UnicodePrimitiveSignatures.IntSignatureChar => NativeInterface.CallStaticIntMethodInfo,
+				UnicodePrimitiveSignatures.LongSignatureChar => NativeInterface.CallStaticLongMethodInfo,
+				UnicodePrimitiveSignatures.ShortSignatureChar => NativeInterface.CallStaticLongMethodInfo,
+				UnicodePrimitiveSignatures.VoidSignatureChar => NativeInterface.CallStaticVoidMethodInfo,
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+			};
+			return ref this.GetNativeInterface<NativeInterface>(info).StaticMethodFunctions;
+		}
+		/// <summary>
+		/// Retrieves managed <see cref="FieldFunctionSet{JObjectLocalRef}"/> reference from current instance.
+		/// </summary>
+		/// <param name="primitiveSignature">Primitive signature char.</param>
+		/// <param name="getField">Indicates whether current call is for get field value.</param>
+		/// <returns>A managed <see cref="FieldFunctionSet{JObjectLocalRef}"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ref readonly FieldFunctionSet<JObjectLocalRef> GetInstanceFieldFunctions(Byte primitiveSignature,
+			Boolean getField)
+		{
+			JniMethodInfo info = primitiveSignature switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => EnvironmentCache.GetInstanceBooleanFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.ByteSignatureChar => EnvironmentCache.GetInstanceByteFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.CharSignatureChar => EnvironmentCache.GetInstanceCharFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => EnvironmentCache.GetInstanceDoubleFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.FloatSignatureChar => EnvironmentCache.GetInstanceFloatFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.IntSignatureChar => EnvironmentCache.GetInstanceIntFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.LongSignatureChar => EnvironmentCache.GetInstanceLongFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.ShortSignatureChar => EnvironmentCache.GetInstanceShortFieldFunctionInfo(
+					getField),
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+			};
+			return ref this.GetNativeInterface<NativeInterface>(info).InstanceFieldFunctions;
+		}
+		/// <summary>
+		/// Retrieves managed <see cref="FieldFunctionSet{JClassLocalRef}"/> reference from current instance.
+		/// </summary>
+		/// <param name="primitiveSignature">Primitive signature char.</param>
+		/// <param name="getField">Indicates whether current call is for get field value.</param>
+		/// <returns>A managed <see cref="FieldFunctionSet{JClassLocalRef}"/> reference from current instance.</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private ref readonly FieldFunctionSet<JClassLocalRef> GetStaticFieldFunctions(Byte primitiveSignature,
+			Boolean getField)
+		{
+			JniMethodInfo info = primitiveSignature switch
+			{
+				UnicodePrimitiveSignatures.BooleanSignatureChar => EnvironmentCache.GetStaticBooleanFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.ByteSignatureChar => EnvironmentCache.GetStaticByteFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.CharSignatureChar => EnvironmentCache.GetStaticCharFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.DoubleSignatureChar => EnvironmentCache.GetStaticDoubleFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.FloatSignatureChar => EnvironmentCache.GetStaticFloatFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.IntSignatureChar => EnvironmentCache.GetStaticIntFieldFunctionInfo(getField),
+				UnicodePrimitiveSignatures.LongSignatureChar => EnvironmentCache.GetStaticLongFieldFunctionInfo(
+					getField),
+				UnicodePrimitiveSignatures.ShortSignatureChar => EnvironmentCache.GetStaticShortFieldFunctionInfo(
+					getField),
+				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+			};
+			return ref this.GetNativeInterface<NativeInterface>(info).StaticFieldFunctions;
+		}
+		/// <summary>
 		/// Creates an object from given reference.
 		/// </summary>
 		/// <typeparam name="TResult">A <see cref="IDataType"/> type.</typeparam>
@@ -77,19 +223,6 @@ partial class JEnvironment
 			if (localRef != (result as JLocalObject)!.LocalReference && register)
 				this._env.DeleteLocalRef(localRef);
 			return register ? this.Register(result) : result;
-		}
-		/// <summary>
-		/// Retrieves the JNI function pointer for <paramref name="index"/>.
-		/// </summary>
-		/// <param name="index">JNI function index.</param>
-		/// <returns>JNI function pointer.</returns>
-		private IntPtr GetPointer(Int32 index)
-		{
-			Int32 lastNormalIndex = EnvironmentCache.delegateIndex[typeof(GetObjectRefTypeDelegate)].Index;
-			if (index <= lastNormalIndex)
-				return this.Reference.Reference.Reference[index];
-			index -= lastNormalIndex;
-			return this.Reference.Reference.GetAdditionalPointers(this.Version)[index];
 		}
 		/// <summary>
 		/// Indicates whether current JNI call must use <see langword="stackalloc"/> or <see langword="new"/> to
@@ -124,12 +257,30 @@ partial class JEnvironment
 		private void ThrowNew<TThrowable>(ReadOnlySpan<Byte> utf8Message, Boolean throwException, String? message)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
-			JResult result = utf8Message.WithSafeFixed(this, EnvironmentCache.ThrowNew<TThrowable>);
+			JResult result = this.ThrowNew<TThrowable>(utf8Message);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 
 			ThrowableException throwableException =
 				this.CreateThrowableException<TThrowable>(this.GetPendingException(), message);
 			this.ThrowJniException(throwableException, throwException);
+		}
+		/// <summary>
+		/// Constructs an <typeparamref name="TThrowable"/> exception with the message specified by
+		/// <paramref name="message"/> and causes that exception to be thrown.
+		/// </summary>
+		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
+		/// <param name="message">Exception message.</param>
+		/// <returns>JNI code result.</returns>
+		private unsafe JResult ThrowNew<TThrowable>(ReadOnlySpan<Byte> message)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			JClassObject jClass = this.GetClass<TThrowable>();
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowNewInfo);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(message))
+				return nativeInterface.ErrorFunctions.ThrowNew(this.Reference, classRef, ptr);
 		}
 		/// <summary>
 		/// Creates JNI exception from <paramref name="throwableRef"/>.
@@ -157,8 +308,6 @@ partial class JEnvironment
 		private ThrowableException CreateThrowableException(JClassObject jClass,
 			JReferenceTypeMetadata throwableMetadata, String? message, JThrowableLocalRef throwableRef)
 		{
-			this._env.DeleteLocalRef(throwableRef.Value);
-
 			ThrowableObjectMetadata objectMetadata = new(jClass, throwableMetadata, message);
 			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
 			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, globalRef);
@@ -192,12 +341,14 @@ partial class JEnvironment
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <param name="access">A <see cref="AccessCache"/> instance.</param>
 		/// <returns>A <see cref="JStringObject"/> instance.</returns>
-		private JStringObject GetThrowableMessage(JThrowableLocalRef throwableRef, AccessCache access)
+		private unsafe JStringObject GetThrowableMessage(JThrowableLocalRef throwableRef, AccessCache access)
 		{
 			JMethodId getNameId = access.GetMethodId(NativeFunctionSetImpl.GetMessageDefinition, this._env);
-			CallObjectMethodADelegate callObjectMethod = this.GetDelegate<CallObjectMethodADelegate>();
-			JObjectLocalRef localRef = callObjectMethod(this.Reference, throwableRef.Value, getNameId,
-			                                            ReadOnlyValPtr<JValue>.Zero);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallObjectMethodInfo);
+			JObjectLocalRef localRef =
+				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
+					this.Reference, throwableRef.Value, getNameId, default);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}
@@ -205,18 +356,20 @@ partial class JEnvironment
 		/// Sets given <see cref="JThrowableLocalRef"/> reference as pending exception.
 		/// </summary>
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
-		private void Throw(JThrowableLocalRef throwableRef)
+		private unsafe void Throw(JThrowableLocalRef throwableRef)
 		{
-			ThrowDelegate jThrow = this.GetDelegate<ThrowDelegate>();
-			jThrow(this.Reference, throwableRef);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowInfo);
+			nativeInterface.ErrorFunctions.Throw(this.Reference, throwableRef);
 		}
 		/// <summary>
 		/// Clears pending JNI exception.
 		/// </summary>
-		private void ClearException()
+		private unsafe void ClearException()
 		{
-			ExceptionClearDelegate exceptionClear = this.GetDelegate<ExceptionClearDelegate>();
-			exceptionClear(this.Reference);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);
+			nativeInterface.ErrorFunctions.ExceptionClear(this.Reference);
 		}
 		/// <summary>
 		/// Sets <paramref name="jniException"/> as managed pending exception and throws it.
@@ -242,6 +395,25 @@ partial class JEnvironment
 		{
 			this._env.DeleteLocalRef(jLocal.LocalReference);
 			jLocal.ClearValue();
+		}
+		/// <summary>
+		/// Creates a <see cref="StackDisposable"/> instance for current call.
+		/// </summary>
+		/// <param name="useStackAlloc">Indicates whether current call is using stack.</param>
+		/// <param name="requiredBytes">Number of bytes to use from stack.</param>
+		/// <returns>A <see cref="StackDisposable"/> instance.</returns>
+		private StackDisposable GetStackDisposable(Boolean useStackAlloc, Int32 requiredBytes)
+			=> useStackAlloc && requiredBytes > 0 ? new(this, requiredBytes) : new();
+		/// <summary>
+		/// Creates a <see cref="IFixedContext{Byte}.IDisposable"/> instance from an span created in stack.
+		/// </summary>
+		/// <param name="stackSpan">A stack created span.</param>
+		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
+		private IFixedContext<Byte>.IDisposable GetStackContext(scoped Span<Byte> stackSpan)
+		{
+			StackDisposable disposable = new(this, stackSpan.Length);
+			ValPtr<Byte> ptr = (ValPtr<Byte>)stackSpan.GetUnsafeIntPtr();
+			return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
 		}
 	}
 }

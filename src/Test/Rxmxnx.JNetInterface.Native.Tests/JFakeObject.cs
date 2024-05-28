@@ -4,6 +4,8 @@ namespace Rxmxnx.JNetInterface.Tests;
 public sealed class JFakeObject<TObject>(TObject obj) : IReferenceType<TObject>
 	where TObject : JLocalObject, IClassType<TObject>
 {
+	public static JTypeKind Kind => TObject.Kind;
+	public static JDataTypeMetadata Metadata => TObject.Metadata;
 	CString IObject.ObjectClassName => obj.ObjectClassName;
 	CString IObject.ObjectSignature => obj.ObjectSignature;
 	void IObject.CopyTo(Span<Byte> span, ref Int32 offset) => obj.CopyTo(span, ref offset);

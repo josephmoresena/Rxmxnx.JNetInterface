@@ -44,7 +44,8 @@ partial class JEnvironment
 		/// <param name="args">A <see cref="IObject"/> array.</param>
 		/// <param name="argSpan">Destination span.</param>
 		/// <exception cref="InvalidOperationException">Invalid object.</exception>
-		private void CopyAsJValue(INativeTransaction jniTransaction, IReadOnlyList<IObject?> args, Span<Byte> argSpan)
+		private Span<JValue> CopyAsJValue(INativeTransaction jniTransaction, IReadOnlyList<IObject?> args,
+			Span<Byte> argSpan)
 		{
 			Span<JValue> result = argSpan.AsValues<Byte, JValue>();
 			for (Int32 i = 0; i < args.Count; i++)
@@ -67,6 +68,7 @@ partial class JEnvironment
 						break;
 				}
 			}
+			return result;
 		}
 		/// <summary>
 		/// Creates <see cref="INativeTransaction"/> for class transaction.

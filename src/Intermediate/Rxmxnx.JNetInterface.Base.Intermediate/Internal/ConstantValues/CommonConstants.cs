@@ -13,6 +13,7 @@ internal static class CommonConstants
 
 	public const String CodeQuality = "CodeQuality";
 	public const String CSharpSquid = "csharpsquid";
+	public const String Aot = "AOT";
 	public const String CheckId0051 = "IDE0051:Remove unused private members";
 	public const String CheckIdS1144 = "S1144:Remove the unused private field";
 	public const String CheckIdS2292 = "S2292:Trivial properties should be auto-implemented";
@@ -39,6 +40,7 @@ internal static class CommonConstants
 	public const String CheckIdS3267 = "S3267:Loops should be simplified with \"LINQ\" expressions";
 	public const String CheckIdS6670 = "S6670:\"Trace.Write\" and \"Trace.WriteLine\" should not be used";
 	public const String CheckIdS107 = "S107:Methods should not have too many parameters";
+	public const String CheckIdS6640 = "S6640:Using unsafe code blocks is security-sensitive";
 	public const String BinaryStructJustification = "This struct is created only by binary operations.";
 	public const String AbstractProxyJustification = "This object is an abstract proxy.";
 	public const String JniThreadRequiredJustification = "Global object disposing requires a JNI thread.";
@@ -49,11 +51,13 @@ internal static class CommonConstants
 	public const String InternalInheritanceJustification = "Only internal inheritance is supported.";
 	public const String PublicInitPrivateSetJustification = "The property must be publicly 'init' but privately 'set'.";
 	public const String NoMethodOverloadingJustification =
-		"Homonymous functions are different and should not be considered overloading.";
+		"Homonymous functions or types are different and should not be considered overloading.";
 	public const String ReflectionFreeModeJustification =
 		"Reflection use should be avoidable in NativeAOT reflection free mode.";
 	public const String ReflectionPrivateUseJustification =
 		"Reflection use is limited privately and is used only to avoid infinity recursive initialization type.";
+	public const String AvoidableReflectionUseJustification =
+		"There are alternatives that avoid the use of reflection.";
 	public const String StaticAbstractPropertyUseJustification =
 		"There is no static field, but abstract/virtual property.";
 	public const String DefaultValueTypeJustification = "Default value for ValueType is not null.";
@@ -62,4 +66,5 @@ internal static class CommonConstants
 	public const String NonStandardLinqJustification = "Linq is not needed.";
 	public const String NonStandardTraceJustification = "Not standard trace is required.";
 	public const String PrimitiveCallJustification = "Primitive call generalization.";
+	public const String SecureUnsafeCodeJustification = "JNI code is secure to use.";
 }

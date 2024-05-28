@@ -19,16 +19,6 @@ internal readonly partial struct JNativeInterface
 	private readonly Operations _operations;
 
 	/// <summary>
-	/// This struct represent the reserved pointer for Microsoft COM compatibility.
-	/// </summary>
-	[InlineArray(4)]
-	[StructLayout(LayoutKind.Sequential)]
-	private record struct ComReserved
-	{
-		private IntPtr _reserved0;
-	}
-
-	/// <summary>
 	/// This struct represent the operation pointers in <c>JNINativeInterface_</c>.
 	/// </summary>
 	[InlineArray(228)]

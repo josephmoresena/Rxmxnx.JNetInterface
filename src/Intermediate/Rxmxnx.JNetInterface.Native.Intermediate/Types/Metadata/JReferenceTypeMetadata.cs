@@ -77,7 +77,8 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
-	protected static JArrayTypeMetadata GetArrayMetadata<TReference>()
+	protected static JArrayTypeMetadata
+		GetArrayMetadata<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>()
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		=> IArrayType.GetMetadata<JArrayObject<TReference>>();
 

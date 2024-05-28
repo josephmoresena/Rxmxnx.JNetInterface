@@ -2,6 +2,8 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial record EnvironmentCache
 	{
 		/// <summary>
@@ -9,12 +11,14 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="capacity">Top of local references.</param>
 		/// <exception cref="JniException"/>
-		public void EnsureLocalCapacity(Int32 capacity)
+		public unsafe void EnsureLocalCapacity(Int32 capacity)
 		{
 			if (capacity <= 0) return;
 			ImplementationValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
-			EnsureLocalCapacityDelegate ensureLocalCapacity = this.GetDelegate<EnsureLocalCapacityDelegate>();
-			JniException? jniException = ensureLocalCapacity(this.Reference, capacity);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.EnsureLocalCapacityInfo);
+			JniException? jniException =
+				nativeInterface.ReferenceFunctions.EnsureLocalCapacity(this.Reference, capacity);
 			if (jniException is not null) throw jniException;
 			this._objects.Capacity = capacity;
 		}
@@ -58,10 +62,11 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-		public JGlobalRef CreateGlobalRef(JObjectLocalRef localRef)
+		public unsafe JGlobalRef CreateGlobalRef(JObjectLocalRef localRef)
 		{
-			NewGlobalRefDelegate newGlobalRef = this.GetDelegate<NewGlobalRefDelegate>();
-			JGlobalRef globalRef = newGlobalRef(this.Reference, localRef);
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewGlobalRefInfo);
+			JGlobalRef globalRef = nativeInterface.ReferenceFunctions.NewGlobalRef.NewRef(this.Reference, localRef);
 			if (globalRef == default) this.CheckJniError();
 			return globalRef;
 		}

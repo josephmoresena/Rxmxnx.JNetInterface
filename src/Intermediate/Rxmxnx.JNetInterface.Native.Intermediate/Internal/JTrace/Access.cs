@@ -102,17 +102,14 @@ internal static partial class JTrace
 	/// <param name="signature">Primitive char signature.</param>
 	/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 	/// <param name="value">Value to set to.</param>
-	/// <param name="formatValue">Trace format value function.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void SetPrimitiveField<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
-		JFieldId fieldId, TValue value, Func<TValue, String>? formatValue, [CallerMemberName] String callerMethod = "")
-		where TValue : unmanaged
+		JFieldId fieldId, TValue value, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		String textValue = formatValue?.Invoke(value) ?? value.ToString()!;
 		Trace.WriteLine(localRef == default ? //Static?
-			                $"{classRef} {fieldId} {signature}: {textValue}" :
-			                $"{localRef} {fieldId} {signature}: {textValue}", callerMethod);
+			                $"{classRef} {fieldId} {signature}: {value}" :
+			                $"{localRef} {fieldId} {signature}: {value}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the assignment of a value to an object field to the trace listeners.
@@ -138,17 +135,14 @@ internal static partial class JTrace
 	/// <param name="signature">Primitive char signature.</param>
 	/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 	/// <param name="result">Current value.</param>
-	/// <param name="formatValue">Trace format value function.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void GetPrimitiveField<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
-		JFieldId fieldId, TValue result, Func<TValue, String>? formatValue = default,
-		[CallerMemberName] String callerMethod = "") where TValue : unmanaged
+		JFieldId fieldId, TValue result, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		String textValue = formatValue?.Invoke(result) ?? result.ToString()!;
 		Trace.WriteLine(localRef == default ? //Static?
-			                $"{classRef} {fieldId} Result {signature}: {textValue}" :
-			                $"{localRef} {fieldId} Result {signature}: {textValue}", callerMethod);
+			                $"{classRef} {fieldId} Result {signature}: {result}" :
+			                $"{localRef} {fieldId} Result {signature}: {result}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the retrieval of an object field to the trace listeners.
@@ -174,20 +168,17 @@ internal static partial class JTrace
 	/// <param name="signature">Primitive char signature.</param>
 	/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 	/// <param name="result">Current value.</param>
-	/// <param name="formatValue">Trace format value function.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void CallPrimitiveFunction<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
-		JMethodId methodId, TValue result, Func<TValue, String>? formatValue = default,
-		[CallerMemberName] String callerMethod = "") where TValue : unmanaged
+		JMethodId methodId, TValue result, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		String textValue = formatValue?.Invoke(result) ?? result.ToString()!;
 		if (localRef == default) //Static
-			Trace.WriteLine($"{classRef} {methodId} Result {signature}: {textValue}", callerMethod);
+			Trace.WriteLine($"{classRef} {methodId} Result {signature}: {result}", callerMethod);
 		else if (classRef.IsDefault) //Instance
-			Trace.WriteLine($"{localRef} {methodId} Result {signature}: {textValue}", callerMethod);
+			Trace.WriteLine($"{localRef} {methodId} Result {signature}: {result}", callerMethod);
 		else //Non-Virtual
-			Trace.WriteLine($"{localRef} {classRef} {methodId} Result {signature}: {textValue}", callerMethod);
+			Trace.WriteLine($"{localRef} {classRef} {methodId} Result {signature}: {result}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the invocation of an object function to the trace listeners.

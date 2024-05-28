@@ -8,11 +8,11 @@ public interface IDataType
 	/// <summary>
 	/// Datatype kind.
 	/// </summary>
-	internal static virtual JTypeKind Kind => JTypeKind.Undefined;
+	internal static abstract JTypeKind Kind { get; }
 	/// <summary>
 	/// Datatype family type.
 	/// </summary>
-	internal static virtual Type? FamilyType => default;
+	internal static abstract Type? FamilyType { get; }
 
 	/// <summary>
 	/// Retrieves the metadata for given type.
@@ -36,6 +36,8 @@ public interface IDataType
 /// This interface exposes a java data type.
 /// </summary>
 /// <typeparam name="TDataType">Type of the current Java datatype.</typeparam>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2743,
+                 Justification = CommonConstants.StaticAbstractPropertyUseJustification)]
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArgumentMetadata"/>
@@ -45,6 +47,5 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 	/// Current type metadata.
 	/// </summary>
 	[ReadOnly(true)]
-	internal static virtual JDataTypeMetadata Metadata
-		=> CommonValidationUtilities.ThrowInvalidInterface<JDataTypeMetadata>(nameof(IDataType));
+	internal static abstract JDataTypeMetadata Metadata { get; }
 }

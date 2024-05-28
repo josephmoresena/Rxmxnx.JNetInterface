@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface;
 
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 partial class JEnvironment
 {
 	/// <summary>
@@ -22,12 +24,13 @@ partial class JEnvironment
 	/// <see langword="true"/> if both references refer to the same object; otherwise,
 	/// <see langword="false"/>.
 	/// </returns>
-	private Boolean IsSame(JObjectLocalRef localRef, JObjectLocalRef otherRef)
+	private unsafe Boolean IsSame(JObjectLocalRef localRef, JObjectLocalRef otherRef)
 	{
-		IsSameObjectDelegate isSameObject = this._cache.GetDelegate<IsSameObjectDelegate>();
-		Byte result = isSameObject(this._cache.Reference, localRef, otherRef);
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.IsSameObjectInfo);
+		JBoolean result = nativeInterface.ReferenceFunctions.IsSameObject(this._cache.Reference, localRef, otherRef);
 		this._cache.CheckJniError();
-		return result == JBoolean.TrueValue;
+		return result.Value;
 	}
 	/// <summary>
 	/// Creates a new local reference frame.
@@ -35,10 +38,12 @@ partial class JEnvironment
 	/// <param name="capacity">Frame capacity.</param>
 	/// <exception cref="InvalidOperationException"/>
 	/// <exception cref="JniException"/>
-	private void CreateLocalFrame(Int32 capacity)
+	private unsafe void CreateLocalFrame(Int32 capacity)
 	{
-		PushLocalFrameDelegate pushLocalFrame = this._cache.GetDelegate<PushLocalFrameDelegate>();
-		ImplementationValidationUtilities.ThrowIfInvalidResult(pushLocalFrame(this.Reference, capacity));
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.PushLocalFrameInfo);
+		JResult result = nativeInterface.ReferenceFunctions.PushLocalFrame(this.Reference, capacity);
+		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 	}
 	/// <summary>
 	/// Creates a new global reference to <paramref name="jLocal"/>.
@@ -166,60 +171,4 @@ partial class JEnvironment
 		return obj.Equals(other);
 	}
 #pragma warning restore CA1859
-	/// <summary>
-	/// Retrieves field identifier for given definition in given class.
-	/// </summary>
-	/// <param name="memoryList">Definition information.</param>
-	/// <param name="args">Environment and Class instance.</param>
-	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	private static JFieldId GetFieldId(ReadOnlyFixedMemoryList memoryList,
-		(JEnvironment env, JClassLocalRef classRef) args)
-	{
-		GetFieldIdDelegate getFieldId = args.env._cache.GetDelegate<GetFieldIdDelegate>();
-		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)memoryList[0].Pointer;
-		ReadOnlyValPtr<Byte> signaturePtr = (ReadOnlyValPtr<Byte>)memoryList[1].Pointer;
-		return getFieldId(args.env.Reference, args.classRef, namePtr, signaturePtr);
-	}
-	/// <summary>
-	/// Retrieves static field identifier for given definition in given class.
-	/// </summary>
-	/// <param name="memoryList">Definition information.</param>
-	/// <param name="args">Environment and Class instance.</param>
-	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	private static JFieldId GetStaticFieldId(ReadOnlyFixedMemoryList memoryList,
-		(JEnvironment env, JClassLocalRef classRef) args)
-	{
-		GetStaticFieldIdDelegate getStaticFieldId = args.env._cache.GetDelegate<GetStaticFieldIdDelegate>();
-		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)memoryList[0].Pointer;
-		ReadOnlyValPtr<Byte> signaturePtr = (ReadOnlyValPtr<Byte>)memoryList[1].Pointer;
-		return getStaticFieldId(args.env.Reference, args.classRef, namePtr, signaturePtr);
-	}
-	/// <summary>
-	/// Retrieves method identifier for given definition in given class.
-	/// </summary>
-	/// <param name="memoryList">Definition information.</param>
-	/// <param name="args">Environment and Class instance.</param>
-	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
-	private static JMethodId GetMethodId(ReadOnlyFixedMemoryList memoryList,
-		(JEnvironment env, JClassLocalRef classRef) args)
-	{
-		GetMethodIdDelegate getMethodId = args.env._cache.GetDelegate<GetMethodIdDelegate>();
-		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)memoryList[0].Pointer;
-		ReadOnlyValPtr<Byte> signaturePtr = (ReadOnlyValPtr<Byte>)memoryList[1].Pointer;
-		return getMethodId(args.env.Reference, args.classRef, namePtr, signaturePtr);
-	}
-	/// <summary>
-	/// Retrieves static method identifier for given definition in given class.
-	/// </summary>
-	/// <param name="memoryList">Definition information.</param>
-	/// <param name="args">Environment and Class instance.</param>
-	/// <returns>A <see cref="JMethodId"/> identifier.</returns>
-	private static JMethodId GetStaticMethodId(ReadOnlyFixedMemoryList memoryList,
-		(JEnvironment env, JClassLocalRef classRef) args)
-	{
-		GetStaticMethodIdDelegate getStaticMethodId = args.env._cache.GetDelegate<GetStaticMethodIdDelegate>();
-		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)memoryList[0].Pointer;
-		ReadOnlyValPtr<Byte> signaturePtr = (ReadOnlyValPtr<Byte>)memoryList[1].Pointer;
-		return getStaticMethodId(args.env.Reference, args.classRef, namePtr, signaturePtr);
-	}
 }

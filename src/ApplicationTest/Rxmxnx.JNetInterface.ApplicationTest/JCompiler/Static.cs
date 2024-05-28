@@ -10,9 +10,7 @@ public partial record JCompiler
 			return JCompiler.GetWindowsCompilers();
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 			return JCompiler.GetMacCompilers();
-		return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ?
-			JCompiler.GetLinuxCompilers() :
-			Array.Empty<JCompiler>();
+		return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? JCompiler.GetLinuxCompilers() : [];
 	}
 
 	private static JCompiler[] GetWindowsCompilers()
@@ -33,10 +31,8 @@ public partial record JCompiler
 	private static JCompiler[] GetCompilers(String javaPath, String jdkPattern, String javacName, String jvmName)
 	{
 		DirectoryInfo javaDirectory = new(javaPath);
-		DirectoryInfo[] jdkDirectories = javaDirectory.Exists ?
-			javaDirectory.GetDirectories(jdkPattern) :
-			Array.Empty<DirectoryInfo>();
-		if (jdkDirectories.Length == 0) return Array.Empty<JCompiler>();
+		DirectoryInfo[] jdkDirectories = javaDirectory.Exists ? javaDirectory.GetDirectories(jdkPattern) : [];
+		if (jdkDirectories.Length == 0) return [];
 		List<JCompiler> result = new(jdkDirectories.Length);
 		foreach (DirectoryInfo jdkDirectory in jdkDirectories)
 		{
@@ -50,6 +46,6 @@ public partial record JCompiler
 					LibraryPath = Path.GetRelativePath(jdkDirectory.FullName, jvmFile.FullName),
 				});
 		}
-		return result.ToArray();
+		return [.. result,];
 	}
 }

@@ -78,7 +78,7 @@ public partial class JConstructorDefinition
 	protected TObject NewReflected<TObject>(JConstructorObject jConstructor, IObject?[] args)
 		where TObject : JLocalObject, IClassType<TObject>
 	{
-		NativeValidationUtilities.ThrowIfAbstractClass<TObject>();
+		NativeValidationUtilities.ThrowIfAbstractClass(IClassType.GetMetadata<TObject>());
 		IEnvironment env = jConstructor.Environment;
 		return env.AccessFeature.CallConstructor<TObject>(jConstructor, this, args);
 	}

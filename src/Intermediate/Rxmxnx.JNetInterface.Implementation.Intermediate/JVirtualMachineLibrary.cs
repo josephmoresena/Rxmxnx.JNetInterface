@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class stores a loaded native JVM library.
 /// </summary>
-public sealed record JVirtualMachineLibrary
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+public sealed unsafe record JVirtualMachineLibrary
 {
 	/// <summary>
 	/// Name of <c>JNI_GetDefaultJavaVMInitArgs</c> function.
@@ -33,18 +35,9 @@ public sealed record JVirtualMachineLibrary
 	];
 
 	/// <summary>
-	/// Delegate for <c>JNI_CreateJavaVM</c> function. Loads and initializes a Java VM.
+	/// Pointer to exported Java Library functions.
 	/// </summary>
-	private readonly CreateVirtualMachineDelegate _createVirtualMachine;
-	/// <summary>
-	/// Delegate for <c>JNI_GetCreatedJavaVMs</c> function. Returns all Java VMs that have been created.
-	/// </summary>
-	private readonly GetCreatedVirtualMachinesDelegate _getCreatedVirtualMachines;
-
-	/// <summary>
-	/// Delegate for <c>JNI_GetDefaultJavaVMInitArgs</c> function. Returns a default configuration for the Java VM.
-	/// </summary>
-	private readonly GetDefaultVirtualMachineInitArgsDelegate _getDefaultVirtualMachineInitArgs;
+	private readonly InvocationFunctionSet _functions;
 
 	/// <summary>
 	/// Library handle.
@@ -55,17 +48,11 @@ public sealed record JVirtualMachineLibrary
 	/// Private constructor.
 	/// </summary>
 	/// <param name="handle">Library handle.</param>
-	/// <param name="getDefaultVirtualMachineInitArgs">A <see cref="GetDefaultVirtualMachineInitArgsDelegate"/> delegate.</param>
-	/// <param name="createVirtualMachine">A <see cref="CreateVirtualMachineDelegate"/> delegate.</param>
-	/// <param name="getCreatedVirtualMachines">A <see cref="GetCreatedVirtualMachinesDelegate"/> delegate.</param>
-	private JVirtualMachineLibrary(IntPtr handle,
-		GetDefaultVirtualMachineInitArgsDelegate getDefaultVirtualMachineInitArgs,
-		CreateVirtualMachineDelegate createVirtualMachine, GetCreatedVirtualMachinesDelegate getCreatedVirtualMachines)
+	/// <param name="functions">A <see cref="InvocationFunctionSet"/> value.</param>
+	private JVirtualMachineLibrary(IntPtr handle, InvocationFunctionSet functions)
 	{
 		this.Handle = handle;
-		this._getDefaultVirtualMachineInitArgs = getDefaultVirtualMachineInitArgs;
-		this._createVirtualMachine = createVirtualMachine;
-		this._getCreatedVirtualMachines = getCreatedVirtualMachines;
+		this._functions = functions;
 	}
 
 	/// <summary>
@@ -77,8 +64,8 @@ public sealed record JVirtualMachineLibrary
 		Int32 version = -1;
 		foreach (Int32 jniVersion in JVirtualMachineLibrary.jniVersions)
 		{
-			JVirtualMachineInitArgumentValue initValue = new() { Version = jniVersion, };
-			if (this._getDefaultVirtualMachineInitArgs(ref initValue) != JResult.Ok)
+			VirtualMachineInitArgumentValue initValue = new() { Version = jniVersion, };
+			if (this._functions.GetDefaultVirtualMachineInitArgs(ref initValue) != JResult.Ok)
 				break;
 			version = jniVersion;
 		}
@@ -92,13 +79,14 @@ public sealed record JVirtualMachineLibrary
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
 	public JVirtualMachineInitArg GetDefaultArgument(Int32 jniVersion = 0x00010006)
 	{
-		JVirtualMachineInitArgumentValue initValue = new()
+		VirtualMachineInitArgumentValue initValue = new()
 		{
 			Version = jniVersion < JVirtualMachineLibrary.jniVersions[0] ?
 				JVirtualMachineLibrary.jniVersions[0] :
 				jniVersion,
 		};
-		ImplementationValidationUtilities.ThrowIfInvalidResult(this._getDefaultVirtualMachineInitArgs(ref initValue));
+		ImplementationValidationUtilities.ThrowIfInvalidResult(
+			this._functions.GetDefaultVirtualMachineInitArgs(ref initValue));
 		return new(initValue);
 	}
 	/// <summary>
@@ -112,16 +100,17 @@ public sealed record JVirtualMachineLibrary
 	{
 		CStringSequence sequence = JVirtualMachineInitOption.GetOptionsSequence(arg.Options);
 		using IFixedPointer.IDisposable fPtr = sequence.GetFixedPointer();
-		using IFixedContext<JVirtualMachineInitOptionValue>.IDisposable options =
+		using IFixedContext<VirtualMachineInitOptionValue>.IDisposable options =
 			JVirtualMachineInitOption.GetContext(sequence);
-		JVirtualMachineInitArgumentValue value = new()
+		VirtualMachineInitArgumentValue value = new()
 		{
 			Version = arg.Version,
 			OptionsLength = options.Values.Length,
 			Options = options.ValuePointer,
 			IgnoreUnrecognized = ((JBoolean)arg.IgnoreUnrecognized).ByteValue,
 		};
-		JResult result = this._createVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef, in value);
+		JResult result =
+			this._functions.CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef, in value);
 		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		return JVirtualMachine.GetVirtualMachine(vmRef, envRef, out env);
 	}
@@ -132,8 +121,8 @@ public sealed record JVirtualMachineLibrary
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
 	public IVirtualMachine[] GetCreatedVirtualMachines()
 	{
-		_ = this._getCreatedVirtualMachines(ValPtr<JVirtualMachineRef>.Zero, 0, out Int32 vmCount);
-		if (vmCount == 0) return Array.Empty<IVirtualMachine>();
+		_ = this._functions.GetCreatedVirtualMachines(default, 0, out Int32 vmCount);
+		if (vmCount == 0) return [];
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
 		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		return arr.Select(JVirtualMachine.GetVirtualMachine).ToArray();
@@ -148,8 +137,9 @@ public sealed record JVirtualMachineLibrary
 	private JVirtualMachineRef[] GetCreatedVirtualMachines(Int32 vmCount, out JResult result)
 	{
 		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
-		using IFixedContext<JVirtualMachineRef>.IDisposable fixedContext = arr.AsMemory().GetFixedContext();
-		result = this._getCreatedVirtualMachines(fixedContext.ValuePointer, arr.Length, out vmCount);
+		using MemoryHandle handle = arr.AsMemory().Pin();
+		result = this._functions.GetCreatedVirtualMachines((JVirtualMachineRef*)handle.Pointer, arr.Length,
+		                                                   out vmCount);
 		return arr;
 	}
 
@@ -164,21 +154,17 @@ public sealed record JVirtualMachineLibrary
 	public static JVirtualMachineLibrary? LoadLibrary(String libraryPath)
 	{
 		IntPtr? handle = NativeUtilities.LoadNativeLib(libraryPath);
-		if (!handle.HasValue)
+		if (!handle.HasValue) return default;
+		Span<IntPtr> functions = stackalloc IntPtr[3];
+		if (!NativeLibrary.TryGetExport(handle.Value, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
+		                                out functions[0]) ||
+		    !NativeLibrary.TryGetExport(handle.Value, JVirtualMachineLibrary.CreateVirtualMachineName,
+		                                out functions[1]) || !NativeLibrary.TryGetExport(
+			    handle.Value, JVirtualMachineLibrary.GetCreatedVirtualMachinesName, out functions[2]))
+		{
+			NativeLibrary.Free(handle.Value);
 			return default;
-		GetDefaultVirtualMachineInitArgsDelegate? getDefaultVirtualMachineInitArgs =
-			NativeUtilities.GetNativeMethod<GetDefaultVirtualMachineInitArgsDelegate>(
-				handle.Value, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName);
-		CreateVirtualMachineDelegate? createVirtualMachine =
-			NativeUtilities.GetNativeMethod<CreateVirtualMachineDelegate>(
-				handle.Value, JVirtualMachineLibrary.CreateVirtualMachineName);
-		GetCreatedVirtualMachinesDelegate? getCreatedVirtualMachines =
-			NativeUtilities.GetNativeMethod<GetCreatedVirtualMachinesDelegate>(
-				handle.Value, JVirtualMachineLibrary.GetCreatedVirtualMachinesName);
-		if (getDefaultVirtualMachineInitArgs is not null && createVirtualMachine is not null &&
-		    getCreatedVirtualMachines is not null)
-			return new(handle.Value, getDefaultVirtualMachineInitArgs, createVirtualMachine, getCreatedVirtualMachines);
-		NativeLibrary.Free(handle.Value);
-		return default;
+		}
+		return new(handle.Value, functions.AsValues<IntPtr, InvocationFunctionSet>()[0]);
 	}
 }

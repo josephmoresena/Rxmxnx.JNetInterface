@@ -5,14 +5,12 @@ internal partial class InterfaceSet
 	/// <summary>
 	/// Interface set for interfaces.
 	/// </summary>
-	public sealed class InterfaceInterfaceSet : InterfaceSet
+	/// <remarks>
+	/// Constructor.
+	/// </remarks>
+	/// <param name="set">Interface set.</param>
+	public sealed class InterfaceInterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) : InterfaceSet(set)
 	{
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		/// <param name="set">Interface set.</param>
-		public InterfaceInterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) : base(set) { }
-
 		/// <inheritdoc/>
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3267,
 		                 Justification = CommonConstants.NonStandardLinqJustification)]
