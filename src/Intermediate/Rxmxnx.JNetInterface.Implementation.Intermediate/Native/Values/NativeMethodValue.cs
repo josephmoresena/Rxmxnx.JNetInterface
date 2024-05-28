@@ -6,6 +6,8 @@
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2376,
                  Justification = CommonConstants.BinaryStructJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct NativeMethodValue
 {
 	/// <summary>
