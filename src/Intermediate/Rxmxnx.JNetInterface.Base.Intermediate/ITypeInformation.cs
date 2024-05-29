@@ -46,4 +46,18 @@ public interface ITypeInformation
 		}
 		return end - offset;
 	}
+
+	/// <summary>
+	/// Retrieves printable text hash.
+	/// </summary>
+	/// <param name="hash">Class hash.</param>
+	/// <param name="lastChar">Last char hash.</param>
+	/// <returns>A read-only UTF-16 char span.</returns>
+	[ExcludeFromCodeCoverage]
+	internal static ReadOnlySpan<Char> GetPrintableHash(String hash, out String lastChar)
+	{
+		ReadOnlySpan<Char> hashSpan = hash;
+		lastChar = hashSpan[^1] == default ? @"\0" : $"{hashSpan[^1]}";
+		return hashSpan[..^1];
+	}
 }

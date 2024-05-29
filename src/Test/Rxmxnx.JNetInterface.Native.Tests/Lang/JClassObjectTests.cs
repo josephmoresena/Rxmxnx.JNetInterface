@@ -61,7 +61,8 @@ public sealed class JClassObjectTests
 		             objectMetadata.ObjectSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar);
 		Assert.Equal(jClass.ArrayDimension, objectMetadata.ArrayDimension);
 		Assert.Equal(jClass.Hash, objectMetadata.Hash);
-		Assert.Equal($"{jClass.Name} {jClass.Reference}", jClass.ToString());
+		Assert.Equal(!jClass.Reference.IsDefault ? $"{jClass.Name} {jClass.Reference}" : $"{jClass.Name}",
+		             jClass.ToString());
 
 		JSerializableObject jSerializable = jClass.CastTo<JSerializableObject>();
 		JAnnotatedElementObject jAnnotated = (jClass as ILocalObject).CastTo<JAnnotatedElementObject>();
@@ -168,6 +169,9 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClassObj.IsInterface, metadata.IsInterface);
 		Assert.Equal(jClassObj.IsEnum, metadata.IsEnum);
 		Assert.Equal(jClassObj.Hash, metadata.Hash);
+
+		Assert.Equal(!jClassObj.Reference.IsDefault ? $"{jClassObj.Name} {jClassObj.Reference}" : $"{jClassObj.Name}",
+		             jClassObj.ToString());
 	}
 	[Theory]
 	[InlineData(true)]
