@@ -57,7 +57,7 @@ jobs:
           dotnet build-server shutdown
           dotnet restore src /nr:false
           dotnet build-server shutdown
-          dotnet build src --no-restore --configuration release --disable-build-servers /nr:false
+          dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
           if ($LastExitCode -ne 0) { exit $LastExitCode }  
           dotnet test src --verbosity detailed --collect:"XPlat Code Coverage" --results-directory TestResults/  --logger "trx;verbosity=detailed" --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
           if ($LastExitCode -ne 0) { exit $LastExitCode }  
