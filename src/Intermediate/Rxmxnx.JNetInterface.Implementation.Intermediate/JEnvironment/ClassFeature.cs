@@ -19,7 +19,7 @@ partial class JEnvironment
 		public JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass)
 		{
 			if (jClass is null) return default;
-			JTrace.GetTypeMetadata(jClass);
+			JTrace.GetMetadataOrFindClass(jClass);
 			if (MetadataHelper.GetMetadata(jClass.Hash) is { } result) // Is well-known class?
 			{
 				JTrace.UseTypeMetadata(jClass, result);

@@ -50,23 +50,12 @@ internal static partial class JTrace
 			callerMethod);
 	}
 	/// <summary>
-	/// Writes a category name and retrieving class reference using a <see cref="JClassObject"/> instance
-	/// to the trace listeners.
+	/// Writes a category name and retrieving class reference or retrieving type metadata using a
+	/// <see cref="JClassObject"/> instance to the trace listeners.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void FindClass(JClassObject jClass, [CallerMemberName] String callerMethod = "")
-	{
-		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"{jClass.Name}", callerMethod);
-	}
-	/// <summary>
-	/// Writes a category name and retrieving type metadata using a <see cref="JClassObject"/> instance
-	/// to the trace listeners.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	/// <param name="callerMethod">Caller member name.</param>
-	public static void GetTypeMetadata(JClassObject jClass, [CallerMemberName] String callerMethod = "")
+	public static void GetMetadataOrFindClass(JClassObject jClass, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine($"{jClass.Name}", callerMethod);
