@@ -4,18 +4,20 @@
 /// Unmanaged type for <see cref="ThreadCreationArgs"/> value.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct VirtualMachineArgumentValue(Int32 version, Byte* name, JGlobalRef group)
 {
 	/// <summary>
 	/// JNI Version.
 	/// </summary>
-	public Int32 Version { get; init; } = version;
+	public readonly Int32 Version = version;
 	/// <summary>
 	/// Pointer to thread name.
 	/// </summary>
-	public Byte* Name { get; init; } = name;
+	public readonly Byte* Name = name;
 	/// <summary>
 	/// Global reference to thread group.
 	/// </summary>
-	public JGlobalRef Group { get; init; } = group;
+	public readonly JGlobalRef Group = group;
 }

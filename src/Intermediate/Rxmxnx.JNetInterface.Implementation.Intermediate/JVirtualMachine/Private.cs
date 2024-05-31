@@ -89,7 +89,7 @@ public partial class JVirtualMachine
 	{
 		JGlobalRef threadGroupRef = jniTransaction.Add<JGlobalRef>(args.ThreadGroup);
 		Int32 version = args.Version < IVirtualMachine.MinimalVersion ? IVirtualMachine.MinimalVersion : args.Version;
-		VirtualMachineArgumentValue arg = new() { Name = namePtr, Group = threadGroupRef, Version = version, };
+		VirtualMachineArgumentValue arg = new(version, namePtr, threadGroupRef);
 		return arg;
 	}
 }

@@ -4,6 +4,8 @@
 /// Unmanaged type for <see cref="JVirtualMachineInitArg"/> value.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe partial struct VirtualMachineInitArgumentValue : INativeType<VirtualMachineInitArgumentValue>
 {
 	static JNativeType INativeType.Type => JNativeType.JVirtualMachineInitArgument;
