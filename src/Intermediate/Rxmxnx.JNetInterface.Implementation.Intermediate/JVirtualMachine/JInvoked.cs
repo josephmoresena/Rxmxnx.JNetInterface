@@ -10,24 +10,20 @@ public partial class JVirtualMachine
 	private sealed class Invoked : JVirtualMachine, IInvokedVirtualMachine
 	{
 		/// <summary>
-		/// Indicates whether current instance is disposable.
-		/// </summary>
-		private readonly Boolean _isDisposable;
-		/// <summary>
 		/// Indicates whether current instance is disposed.
 		/// </summary>
 		private readonly IMutableWrapper<Boolean> _isDisposed;
 
 		/// <inheritdoc/>
-		public override Boolean IsAlive => !this._isDisposable || !this._isDisposed.Value;
+		public override Boolean IsAlive => !this.IsDisposable || !this._isDisposed.Value;
 		/// <inheritdoc/>
-		public override Boolean IsDisposable => this._isDisposable;
+		public override Boolean IsDisposable { get; }
 
 		/// <inheritdoc/>
 		public Invoked(JVirtualMachineRef vmRef) : base(vmRef)
 		{
 			this._isDisposed = IMutableReference<Boolean>.Create();
-			this._isDisposable = true;
+			this.IsDisposable = true;
 		}
 		/// <summary>
 		/// Constructor.
@@ -36,14 +32,14 @@ public partial class JVirtualMachine
 		public Invoked(JVirtualMachine vm) : base(vm._cache)
 		{
 			Invoked? invoked = vm as Invoked;
-			this._isDisposable = invoked is not null;
+			this.IsDisposable = invoked is not null;
 			this._isDisposed = invoked?._isDisposed ?? IMutableReference<Boolean>.Create();
 		}
 
 		/// <inheritdoc/>
 		public unsafe void Dispose()
 		{
-			if (!this._isDisposable || this._isDisposed.Value) return;
+			if (!this.IsDisposable || this._isDisposed.Value) return;
 			this._cache.ClearCache();
 			JResult result = this._cache.GetInvokeInterface().DestroyVirtualMachine(this._cache.Reference);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);

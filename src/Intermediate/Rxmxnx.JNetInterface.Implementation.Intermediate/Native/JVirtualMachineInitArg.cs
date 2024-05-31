@@ -15,7 +15,7 @@ public sealed partial record JVirtualMachineInitArg
 	/// <summary>
 	/// Initialize options.
 	/// </summary>
-	public IList<JVirtualMachineInitOption> Options { get; }
+	public IList<JVirtualMachineInitOption> Options { get; init; }
 	/// <summary>
 	/// Indicates whether initialization ignores any unrecognized option.
 	/// </summary>
@@ -35,12 +35,13 @@ public sealed partial record JVirtualMachineInitArg
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">A <see cref="VirtualMachineInitArgumentValue"/> value.</param>
-	internal JVirtualMachineInitArg(VirtualMachineInitArgumentValue value)
+	internal unsafe JVirtualMachineInitArg(VirtualMachineInitArgumentValue value)
 	{
 		this._version = value.Version;
-		this.IgnoreUnrecognized = value.IgnoreUnrecognized == JBoolean.TrueValue;
-		this.Options = new OptionList(
-			JVirtualMachineInitOption.GetOptions(
-				MemoryMarshal.CreateSpan(ref value.Options.Reference, value.OptionsLength)));
+		this.IgnoreUnrecognized = value.IgnoreUnrecognized.Value;
+		this.Options = new OptionList(JVirtualMachineInitOption.GetOptions(
+			                              MemoryMarshal.CreateSpan(
+				                              ref Unsafe.AsRef<VirtualMachineInitOptionValue>(value.Options),
+				                              value.OptionsLength)));
 	}
 }

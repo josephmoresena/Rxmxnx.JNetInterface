@@ -219,6 +219,11 @@ public sealed class JClassObjectTests
 		Assert.Equal(IntPtr.Zero, entries[2].Pointer);
 		Assert.Equal(IntPtr.Zero, entries[3].Pointer);
 
+		Assert.Null(entries[0].Delegate);
+		Assert.Null(entries[1].Delegate);
+		Assert.Null(entries[2].Delegate);
+		Assert.Null(entries[3].Delegate);
+
 		if (!useList)
 			jClassObj.Register(entries[0], entries[1], entries[2], entries[3]);
 		else
@@ -310,7 +315,6 @@ public sealed class JClassObjectTests
 	internal void GetModuleTest(Boolean nullModule)
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
-		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
 		JObjectLocalRef localRef = JClassObjectTests.fixture.Create<JObjectLocalRef>();
 		using JClassObject jClass = new(env);
 		using JClassObject jModuleClass = new(jClass, IClassType.GetMetadata<JModuleObject>());

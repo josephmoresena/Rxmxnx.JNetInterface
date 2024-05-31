@@ -45,10 +45,9 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		if (!classRef.IsDefault)
-			Trace.WriteLine($"{classRef} name: {classInformation[0]}", callerMethod);
-		else
-			Trace.WriteLine($"name: {classInformation[0]}", callerMethod);
+		Trace.WriteLine(
+			!classRef.IsDefault ? $"{classRef} name: {classInformation[0]}" : $"name: {classInformation[0]}",
+			callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and retrieving class reference using a <see cref="JClassObject"/> instance
@@ -219,7 +218,7 @@ internal static partial class JTrace
 		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine(objectRef, callerMethod);
+		Trace.WriteLine(objectRef.ToString(), callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and creation of local reference to the trace listeners.

@@ -12,26 +12,22 @@ partial class JEnvironment
 		/// </summary>
 		private readonly ThreadCreationArgs _args;
 		/// <summary>
-		/// Indicates whether the current instance is disposable.
-		/// </summary>
-		private readonly Boolean _isDisposable;
-		/// <summary>
 		/// Indicates whether the current instance is disposed.
 		/// </summary>
 		private readonly IMutableWrapper<Boolean> _isDisposed;
 
-		public override Boolean IsAttached => !this._isDisposable || !this._isDisposed.Value;
+		public override Boolean IsAttached => !this.IsDisposable || !this._isDisposed.Value;
 		/// <inheritdoc/>
 		public override Boolean IsDaemon => this._args.IsDaemon;
 		/// <inheritdoc/>
-		public override Boolean IsDisposable => this._isDisposable;
+		public override Boolean IsDisposable { get; }
 
 		/// <inheritdoc/>
 		public JThread(IVirtualMachine vm, JEnvironmentRef envRef, ThreadCreationArgs args) : base(vm, envRef)
 		{
 			this._args = args;
 			this._isDisposed = IMutableReference<Boolean>.Create();
-			this._isDisposable = true;
+			this.IsDisposable = true;
 		}
 		/// <summary>
 		/// Constructor.
@@ -40,7 +36,7 @@ partial class JEnvironment
 		public JThread(JEnvironment env) : base(env._cache)
 		{
 			JThread? thread = env as JThread;
-			this._isDisposable = false;
+			this.IsDisposable = false;
 			this._isDisposed = thread?._isDisposed ?? IMutableReference<Boolean>.Create();
 			this._args = thread?._args ?? new();
 		}
@@ -54,7 +50,7 @@ partial class JEnvironment
 		/// <inheritdoc/>
 		public void Dispose()
 		{
-			if (!this._isDisposable || this._isDisposed.Value) return;
+			if (!this.IsDisposable || this._isDisposed.Value) return;
 			this._cache.FreeReferences();
 			JVirtualMachine.DetachCurrentThread(this._cache.VirtualMachine.Reference, this.Reference,
 			                                    this._cache.Thread);

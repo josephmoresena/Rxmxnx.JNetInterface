@@ -114,11 +114,7 @@ partial class JEnvironment
 				jGlobal = new(jLocal, this.CreateGlobalRef(localRef));
 			}
 
-			if (jGlobal.IsDefault)
-			{
-				JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
-				jGlobal.SetValue(this.CreateGlobalRef(localRef));
-			}
+			this.ReloadGlobal(jGlobal, jniTransaction, jLocal);
 			return (TGlobal)(Object)this.VirtualMachine.Register(jGlobal);
 		}
 		public JWeak CreateWeak(JGlobalBase jGlobal)

@@ -123,5 +123,17 @@ partial class JEnvironment
 		/// </returns>
 		private Boolean IsMainOrDefault(JGlobalBase jGlobal)
 			=> jGlobal.IsDefault || this.IsMainGlobal(jGlobal as JGlobal);
+		/// <summary>
+		/// Reloads <paramref name="jGlobal"/> with a new global reference.
+		/// </summary>
+		/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
+		/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
+		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+		private void ReloadGlobal(JGlobal jGlobal, INativeTransaction jniTransaction, JLocalObject jLocal)
+		{
+			if (!jGlobal.IsDefault) return;
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, jLocal);
+			jGlobal.SetValue(this.CreateGlobalRef(localRef));
+		}
 	}
 }

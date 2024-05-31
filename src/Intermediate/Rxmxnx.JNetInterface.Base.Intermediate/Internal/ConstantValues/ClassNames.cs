@@ -6,31 +6,6 @@
 internal static class ClassNames
 {
 	/// <summary>
-	/// JNI representation of <c>java.lang</c> package.
-	/// </summary>
-	public const String LangPackage = "java/lang/";
-	/// <summary>
-	/// JNI representation of <c>java.io</c> package.
-	/// </summary>
-	public const String IoPackage = "java/io/";
-	/// <summary>
-	/// JNI representation of <c>java.nio</c> package.
-	/// </summary>
-	public const String NioPackage = "java/nio/";
-	/// <summary>
-	/// JNI representation of <c>java.lang.reflect</c> package.
-	/// </summary>
-	public const String ReflectPackage = ClassNames.LangPackage + "reflect/";
-	/// <summary>
-	/// JNI representation of <c>java.lang.Annotation</c> package.
-	/// </summary>
-	public const String AnnotationPackage = ClassNames.LangPackage + "annotation/";
-	/// <summary>
-	/// JNI representation of <c>sun.nio.ch</c> package.
-	/// </summary>
-	public const String SunNioChPackage = "sun/nio/ch/";
-
-	/// <summary>
 	/// Java class name of primitive <c>void</c> class.
 	/// </summary>
 	public const String VoidPrimitive = "void";
@@ -127,14 +102,6 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.Throwable</c> class.
 	/// </summary>
 	public const String ThrowableObject = ClassNames.LangPackage + "Throwable";
-	/// <summary>
-	/// JNI name of <c>java.lang.ThreadGroup</c> class.
-	/// </summary>
-	public const String ThreadGroupObject = ClassNames.LangPackage + "ThreadGroup";
-	/// <summary>
-	/// JNI name of <c>java.lang.System</c> class.
-	/// </summary>
-	public const String SystemObject = ClassNames.LangPackage + "System";
 	/// <summary>
 	/// JNI name of <c>java.lang.Cloneable</c> interface.
 	/// </summary>
@@ -364,4 +331,31 @@ internal static class ClassNames
 	/// JNI name of <c>java.lang.annotation.Target</c> annotation.
 	/// </summary>
 	public const String TargetAnnotation = ClassNames.AnnotationPackage + "Target";
+
+	#region Package Name
+	/// <summary>
+	/// JNI representation of <c>java.lang</c> package.
+	/// </summary>
+	private const String LangPackage = "java/lang/";
+	/// <summary>
+	/// JNI representation of <c>java.io</c> package.
+	/// </summary>
+	private const String IoPackage = "java/io/";
+	/// <summary>
+	/// JNI representation of <c>java.nio</c> package.
+	/// </summary>
+	private const String NioPackage = "java/nio/";
+	/// <summary>
+	/// JNI representation of <c>java.lang.reflect</c> package.
+	/// </summary>
+	private const String ReflectPackage = ClassNames.LangPackage + "reflect/";
+	/// <summary>
+	/// JNI representation of <c>java.lang.Annotation</c> package.
+	/// </summary>
+	private const String AnnotationPackage = ClassNames.LangPackage + "annotation/";
+	/// <summary>
+	/// JNI representation of <c>sun.nio.ch</c> package.
+	/// </summary>
+	private const String SunNioChPackage = "sun/nio/ch/";
+	#endregion
 }

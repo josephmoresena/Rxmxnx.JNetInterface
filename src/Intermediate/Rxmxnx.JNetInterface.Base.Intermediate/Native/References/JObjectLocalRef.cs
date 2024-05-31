@@ -12,24 +12,19 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INativeType<JObj
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JObject;
 
-	/// <summary>
-	/// Internal native-signed integer
-	/// </summary>
-	private readonly IntPtr _value;
-
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value;
+	public IntPtr Pointer { get; }
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
-	public JObjectLocalRef() => this._value = IntPtr.Zero;
+	public JObjectLocalRef() => this.Pointer = IntPtr.Zero;
 
 	[ExcludeFromCodeCoverage]
 	JObjectLocalRef IWrapper<JObjectLocalRef>.Value => this;
 
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this._value.GetHashCode();
+	public override Int32 GetHashCode() => this.Pointer.GetHashCode();
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj) => JObjectLocalRef.Equals(this, obj);
 

@@ -18,7 +18,7 @@ public partial interface IReferenceType
 		/// </summary>
 		public JClassObject Class
 		{
-			readonly get => this._instance.Class!;
+			get => this._instance.Class!;
 			init => this._instance.Class = value;
 		}
 		/// <summary>
@@ -26,7 +26,7 @@ public partial interface IReferenceType
 		/// </summary>
 		public JObjectLocalRef LocalReference
 		{
-			readonly get => this._instance.LocalReference;
+			get => this._instance.LocalReference;
 			init => this._instance.LocalReference = value;
 		}
 
@@ -36,7 +36,7 @@ public partial interface IReferenceType
 		[ExcludeFromCodeCoverage]
 		internal Boolean RealClass
 		{
-			readonly get => this._instance.OverrideClass;
+			get => this._instance.OverrideClass;
 			init => this._instance.OverrideClass = value;
 		}
 
@@ -57,6 +57,6 @@ public partial interface IReferenceType
 		/// from current instance.
 		/// </summary>
 		/// <returns>A <see cref="InternalClassInitializer"/> value.</returns>
-		internal readonly InternalClassInitializer ToInternal() => this._instance;
+		internal InternalClassInitializer ToInternal() => this._instance;
 	}
 }

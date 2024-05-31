@@ -22,7 +22,7 @@ public sealed class PrimitiveObjectTests
 	[Fact]
 	internal void DoubleTest() => PrimitiveObjectTests.Test<Double>();
 
-	private static void Test<T>() where T : unmanaged, IEquatable<T>, IComparable, IConvertible
+	private static void Test<T>() where T : unmanaged, IEquatable<T>, IComparable, IConvertible, IComparable<T>
 	{
 		CString className = (CString)PrimitiveObjectTests.fixture.Create<String>();
 		CString signature = (CString)PrimitiveObjectTests.fixture.Create<String>();
@@ -64,7 +64,7 @@ public sealed class PrimitiveObjectTests
 		Assert.Equal(idx, bytes.Length);
 	}
 	private static void EqualityTest<T>(JPrimitiveObject.Generic<T> obj, JPrimitiveObject.Generic<T> obj2)
-		where T : unmanaged, IEquatable<T>, IComparable, IConvertible
+		where T : unmanaged, IEquatable<T>, IComparable, IConvertible, IComparable<T>
 	{
 		PrimitiveObjectProxy<T> copy = new(obj.ObjectClassName, obj.ObjectSignature, obj.Value);
 		Boolean equals = obj.Value.Equals(obj2.Value);
@@ -102,7 +102,7 @@ public sealed class PrimitiveObjectTests
 		Assert.Equal(comparable, (obj as IComparable).CompareTo(obj2));
 	}
 	private static void ConvertibleTest<T>(IPrimitiveValue<T> obj)
-		where T : unmanaged, IEquatable<T>, IComparable, IConvertible
+		where T : unmanaged, IEquatable<T>, IComparable, IConvertible, IComparable<T>
 	{
 		PrimitiveObjectTests.ConvertibleTest(obj.Value, obj, c => c.GetTypeCode());
 		PrimitiveObjectTests.ConvertibleTest(obj.Value, obj, c => c.ToBoolean(default));

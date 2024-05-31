@@ -107,7 +107,7 @@ internal static class NativeGenerator
 		NativeGenerator.Generate(context, NativeGenerator.method);
 	}
 
-	private static void Generate(GeneratorExecutionContext context, NativeMethodGenerator method)
+	private static void Generate(GeneratorExecutionContext context, NativeMethodGenerator generator)
 	{
 		StringBuilder strBuildDoc = new();
 		StringBuilder strBuildArgType = new();
@@ -125,17 +125,17 @@ internal static class NativeGenerator
 			StringBuilder strBuildSource = new();
 
 			strBuildSource.AppendLine(NativeGenerator.SourceNamespace);
-			strBuildSource.AppendLine(method.Documentation);
+			strBuildSource.AppendLine(generator.Documentation);
 			strBuildSource.AppendLine(strBuildDoc.ToString());
-			strBuildSource.Append(method.DefinitionPrefix);
+			strBuildSource.Append(generator.DefinitionPrefix);
 			strBuildSource.Append(strBuildArgType);
-			strBuildSource.AppendLine(method.DefinitionSuffix);
+			strBuildSource.AppendLine(generator.DefinitionSuffix);
 			strBuildSource.Append(strBuildCons);
-			strBuildSource.Append(method.BodyPrefix);
+			strBuildSource.Append(generator.BodyPrefix);
 			strBuildSource.Append(strBuildArg);
-			strBuildSource.AppendLine(method.BodySuffix);
+			strBuildSource.AppendLine(generator.BodySuffix);
 
-			context.AddSource($"{method.TypeName}.g{i:000}.cs", strBuildSource.ToString());
+			context.AddSource($"{generator.TypeName}.g{i:000}.cs", strBuildSource.ToString());
 		}
 	}
 	private static void PrepareFile(StringBuilder strBuildDoc, StringBuilder strBuildArgType, StringBuilder strBuildArg,

@@ -65,19 +65,17 @@ public partial class JLocalObject
 			/// <inheritdoc cref="Object.ToString()"/>
 			private String GetStringValue()
 			{
-				if (this._stringValue is null)
-				{
-					ReadOnlySpan<Byte> arraySignature = this.Class.ClassSignature;
-					CString elementName = JArrayObject.GetElementName(arraySignature, out Int32 dimension);
-					CString elementGenericName =
-						JArrayObject.GetElementName(this.TypeMetadata.Signature, out Int32 genericDimension);
-					String result =
-						$"{elementName.ToString().Replace('/', '.')}[{this.Length}]{String.Concat(Enumerable.Repeat("[]", dimension - 1))}";
-					this._stringValue =
-						genericDimension != dimension || !elementGenericName.AsSpan().SequenceEqual(elementName) ?
-							$"{this.TypeMetadata.Signature} {result}" :
-							result;
-				}
+				if (this._stringValue is not null) return this._stringValue;
+				ReadOnlySpan<Byte> arraySignature = this.Class.ClassSignature;
+				CString elementName = JArrayObject.GetElementName(arraySignature, out Int32 dimension);
+				CString elementGenericName =
+					JArrayObject.GetElementName(this.TypeMetadata.Signature, out Int32 genericDimension);
+				String result =
+					$"{elementName.ToString().Replace('/', '.')}[{this.Length}]{String.Concat(Enumerable.Repeat("[]", dimension - 1))}";
+				this._stringValue =
+					genericDimension != dimension || !elementGenericName.AsSpan().SequenceEqual(elementName) ?
+						$"{this.TypeMetadata.Signature} {result}" :
+						result;
 				return this._stringValue;
 			}
 		}

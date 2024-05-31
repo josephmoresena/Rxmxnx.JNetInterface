@@ -7,7 +7,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface IPrimitiveValue<TValue> : IObject, IComparable, IConvertible, IWrapper<TValue>, IComparable<TValue>
-	where TValue : unmanaged, IComparable, IConvertible, IEquatable<TValue>
+	where TValue : unmanaged, IComparable, IConvertible, IEquatable<TValue>, IComparable<TValue>
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	Int32 IComparable.CompareTo(Object? obj)
@@ -18,8 +18,7 @@ internal interface IPrimitiveValue<TValue> : IObject, IComparable, IConvertible,
 			_ => this.Value.CompareTo(obj),
 		};
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	Int32 IComparable<TValue>.CompareTo(TValue other)
-		=> (this.Value as IComparable<TValue>)?.CompareTo(other) ?? this.Value.CompareTo(other);
+	Int32 IComparable<TValue>.CompareTo(TValue other) => this.Value.CompareTo(other);
 	TypeCode IConvertible.GetTypeCode() => this.Value.GetTypeCode();
 	Boolean IConvertible.ToBoolean(IFormatProvider? provider) => this.Value.ToBoolean(provider);
 	Byte IConvertible.ToByte(IFormatProvider? provider) => this.Value.ToByte(provider);

@@ -2,6 +2,9 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 
 internal partial struct NativeInterface
 {
+	/// <inheritdoc/>
+	public static Int32 RequiredVersion => 0x00010002;
+
 	/// <summary>
 	/// Information of <see cref="ClassFunctionSet.DefineClass"/>
 	/// </summary>

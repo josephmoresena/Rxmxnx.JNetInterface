@@ -42,6 +42,16 @@ public partial class JStringObject
 		this._utf8Length = jString._utf8Length;
 		this._value = jString._value;
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
+	private JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
+	{
+		this._length ??= this.Environment.StringFeature.GetLength(jGlobal);
+		this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(jGlobal);
+	}
 
 	/// <summary>
 	/// Retrieves UTF-16 chars.

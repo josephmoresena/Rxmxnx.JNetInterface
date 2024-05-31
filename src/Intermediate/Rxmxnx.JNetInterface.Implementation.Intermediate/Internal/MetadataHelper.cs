@@ -152,16 +152,13 @@ internal static partial class MetadataHelper
 	private static Boolean? IsAssignableFrom(JReferenceTypeMetadata? fromMetadata, JReferenceTypeMetadata? toMetadata)
 	{
 		Boolean? result = MetadataHelper.IsBasicAssignable(fromMetadata, toMetadata);
-		if (result.HasValue && !result.Value)
-		{
-			String forwardKey = MetadataHelper.GetAssignationKey(fromMetadata!, toMetadata!);
-			if (MetadataHelper.assignationCache.TryGetValue(forwardKey, out result)) return result;
-			String backwardKey = MetadataHelper.GetAssignationKey(toMetadata!, fromMetadata!);
-			result = MetadataHelper.GetAssignation(fromMetadata!, toMetadata!);
-			MetadataHelper.assignationCache.TryAdd(forwardKey, result);
-			MetadataHelper.assignationCache.TryAdd(backwardKey,
-			                                       result.HasValue && result.Value ? null : result ?? true);
-		}
+		if (!result.HasValue || result.Value) return result;
+		String forwardKey = MetadataHelper.GetAssignationKey(fromMetadata!, toMetadata!);
+		if (MetadataHelper.assignationCache.TryGetValue(forwardKey, out result)) return result;
+		String backwardKey = MetadataHelper.GetAssignationKey(toMetadata!, fromMetadata!);
+		result = MetadataHelper.GetAssignation(fromMetadata!, toMetadata!);
+		MetadataHelper.assignationCache.TryAdd(forwardKey, result);
+		MetadataHelper.assignationCache.TryAdd(backwardKey, result.HasValue && result.Value ? null : result ?? true);
 		return result;
 	}
 	/// <summary>
@@ -209,8 +206,9 @@ internal static partial class MetadataHelper
 				break;
 			}
 		}
-		if (MetadataHelper.HasInterface(toMetadata, fromMetadata as JInterfaceTypeMetadata)) return default;
-		return MetadataHelper.HasInterface(fromMetadata, toMetadata as JInterfaceTypeMetadata);
+		return !MetadataHelper.HasInterface(toMetadata, fromMetadata as JInterfaceTypeMetadata) ?
+			MetadataHelper.HasInterface(fromMetadata, toMetadata as JInterfaceTypeMetadata) :
+			default(Boolean?);
 	}
 	/// <summary>
 	/// Indicates whether <paramref name="classMetadata"/> is forward assignable to
