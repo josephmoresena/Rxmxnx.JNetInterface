@@ -3,6 +3,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static partial class MetadataHelper
 {
 	/// <summary>
+	/// Object metadata.
+	/// </summary>
+	public static readonly JClassTypeMetadata ObjectMetadata = IClassType.GetMetadata<JLocalObject>();
+	/// <summary>
 	/// Object array metadata.
 	/// </summary>
 	public static readonly JArrayTypeMetadata ObjectArrayMetadata = IArrayType.GetArrayMetadata<JLocalObject>();

@@ -50,15 +50,29 @@ internal static partial class JTrace
 			callerMethod);
 	}
 	/// <summary>
-	/// Writes a category name and retrieving class reference using a <see cref="JClassObject"/> instance
-	/// to the trace listeners.
+	/// Writes a category name and retrieving class reference or retrieving type metadata using a
+	/// <see cref="JClassObject"/> instance to the trace listeners.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void FindClass(JClassObject jClass, [CallerMemberName] String callerMethod = "")
+	public static void GetMetadataOrFindClass(JClassObject jClass, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine($"{jClass.Name}", callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and retrieving type metadata for <paramref name="jClass"/> using
+	/// super <see cref="JClassObject"/> instance.
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="jSuperClass">A super <see cref="JClassObject"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void GetSuperTypeMetadata(JClassObject jClass, JClassObject jSuperClass,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"{jClass.Name} <- {jSuperClass.Name}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and registiring reference instance to the trace listeners.
@@ -100,14 +114,15 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void Unload<TGlobalRef>(Boolean isAttached, Boolean isAlive, TGlobalRef globalRef,
 		[CallerMemberName] String callerMethod = "")
-		where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>
+		where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>,
+		IEqualityOperators<TGlobalRef, TGlobalRef, Boolean>
 	{
 		if (!IVirtualMachine.TraceEnabled && globalRef.Value == default) return;
 		if (!isAttached)
 			Trace.WriteLine($"Unable to remove {globalRef}. Thread is not attached.", callerMethod);
 		else if (!isAlive)
 			Trace.WriteLine($"Unable to {globalRef}. JVM is not alive.", callerMethod);
-		else
+		else if (globalRef != default)
 			Trace.WriteLine($"{globalRef} removed.", callerMethod);
 	}
 	/// <summary>
@@ -242,5 +257,32 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(result.ToTraceText(), callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and using type metadata for <paramref name="jClass"/>
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void UseTypeMetadata(JClassObject jClass, JReferenceTypeMetadata typeMetadata,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"{jClass.Name} uses type metadata from {typeMetadata.ClassName}.", callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and using type metadata for <paramref name="arraySignature"/>
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="arraySignature">Array JNI signature.</param>
+	/// <param name="typeMetadata">A <see cref="JArrayTypeMetadata"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void UseTypeMetadata(ReadOnlySpan<Byte> arraySignature, JArrayTypeMetadata typeMetadata,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled || arraySignature.SequenceEqual(typeMetadata.ClassName)) return;
+		Trace.WriteLine($"{Encoding.UTF8.GetString(arraySignature)} uses type metadata from {typeMetadata.ClassName}.",
+		                callerMethod);
 	}
 }

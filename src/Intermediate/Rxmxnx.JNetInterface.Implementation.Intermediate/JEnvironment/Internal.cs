@@ -35,8 +35,7 @@ partial class JEnvironment
 	internal unsafe JGlobalRef GetClassGlobalRef(ClassObjectMetadata metadata)
 	{
 		JClassLocalRef classRef;
-		if (metadata.ClassSignature.Length == 1)
-			//Primitive Class
+		if (metadata.ClassSignature.Length == 1) // Is primitive class?
 			classRef = this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
 		else
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(metadata.Name.AsSpan()))

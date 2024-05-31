@@ -128,7 +128,7 @@ partial class JEnvironment
 		{
 			if (jClass.ClassSignature.Length == 1)
 				return this.FindPrimitiveClass(jClass.ClassSignature[0]);
-			JTrace.FindClass(jClass);
+			JTrace.GetMetadataOrFindClass(jClass);
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(jClass.Name.AsSpan()))
 				return this.FindClass(new IntPtr(ptr));
 		}
