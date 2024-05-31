@@ -35,7 +35,7 @@ internal static class NativeValidationUtilities
 		{
 			if (superInterfaceType == interfaceType)
 				throw new InvalidOperationException(
-					$"{interfaceName.ToCString()} type can't extend an interface type which extends it.");
+					$"{interfaceName.GetString()} type can't extend an interface type which extends it.");
 		}
 	}
 	/// <summary>
@@ -50,7 +50,7 @@ internal static class NativeValidationUtilities
 	public static void ThrowIfSameType(ReadOnlySpan<Byte> className, Type classType, Type baseClassType)
 	{
 		if (classType == baseClassType)
-			throw new InvalidOperationException($"{className.ToCString()} class and super class can't be the same.");
+			throw new InvalidOperationException($"{className.GetString()} class and super class can't be the same.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="className"/> can't extend a class whose super-classes are
@@ -68,7 +68,7 @@ internal static class NativeValidationUtilities
 	{
 		if (!baseTypes.IsProperSupersetOf(baseBaseTypes))
 			throw new InvalidOperationException(
-				$"{className.ToCString()} type can't be based on a type which is derived from it.");
+				$"{className.GetString()} type can't be based on a type which is derived from it.");
 	}
 	/// <summary>
 	/// Throws an exception if current data type is annotation.
@@ -84,7 +84,7 @@ internal static class NativeValidationUtilities
 	{
 		if (!isAnnotation) return;
 		throw new InvalidOperationException(
-			$"Unable to extend {interfaceMetadata.ClassName}. {typeName.ToCString()} is an annotation.");
+			$"Unable to extend {interfaceMetadata.ClassName}. {typeName.GetString()} is an annotation.");
 	}
 	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
@@ -99,7 +99,7 @@ internal static class NativeValidationUtilities
 	{
 		String implementationType = isClass ? "implements" : "extends";
 		throw new NotImplementedException(
-			$"{typeName.ToCString()} type doesn't {implementationType} {interfaceMetadata.ClassName} interface.");
+			$"{typeName.GetString()} type doesn't {implementationType} {interfaceMetadata.ClassName} interface.");
 	}
 	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> if current datatype is not implementing
@@ -120,7 +120,7 @@ internal static class NativeValidationUtilities
 		String implementationType = isClass ? "implements" : "extends";
 		String interfacesName = notContained.Count == 1 ? "superinterface" : "superinterfaces";
 		throw new NotImplementedException(
-			$"{typeName.ToCString()} type doesn't {implementationType} {String.Join(", ", notContained)} {interfacesName} of {interfaceMetadata.ClassName} interface.");
+			$"{typeName.GetString()} type doesn't {implementationType} {String.Join(", ", notContained)} {interfacesName} of {interfaceMetadata.ClassName} interface.");
 	}
 
 	/// <summary>
@@ -138,10 +138,10 @@ internal static class NativeValidationUtilities
 	public static void ThrowIfInvalidOrdinal(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list, Int32 ordinal)
 	{
 		if (ordinal < 0)
-			throw new ArgumentException($"Any ordinal for {enumTypeName.ToCString()} type must be zero or positive.");
+			throw new ArgumentException($"Any ordinal for {enumTypeName.GetString()} type must be zero or positive.");
 		if (list.HasOrdinal(ordinal))
 			throw new InvalidOperationException(
-				$"{enumTypeName.ToCString()} has already a field with ({ordinal}) ordinal.");
+				$"{enumTypeName.GetString()} has already a field with ({ordinal}) ordinal.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="hash"/> is an invalid field name hash.
@@ -158,10 +158,10 @@ internal static class NativeValidationUtilities
 	public static void ThrowIfInvalidHash(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list, String hash)
 	{
 		if (String.IsNullOrWhiteSpace(hash))
-			throw new ArgumentException($"Any name for {enumTypeName.ToCString()} type must be non-empty.");
+			throw new ArgumentException($"Any name for {enumTypeName.GetString()} type must be non-empty.");
 		if (list.HasHash(hash))
 			throw new InvalidOperationException(
-				$"{enumTypeName.ToCString()} has already a field with '{list[list[hash]]}' name.");
+				$"{enumTypeName.GetString()} has already a field with '{list[list[hash]]}' name.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="list"/> is invalid.
@@ -176,7 +176,7 @@ internal static class NativeValidationUtilities
 		IReadOnlySet<Int32> missing = list.GetMissingFields(out Int32 count, out Int32 maxOrdinal);
 		if (missing.Count <= 0 && maxOrdinal == count - 1)
 			return;
-		String message = $"The enum field list for {enumTypeName.ToCString()} is invalid. " +
+		String message = $"The enum field list for {enumTypeName.GetString()} is invalid. " +
 			$"Count: {count}. Maximum ordinal: {maxOrdinal}. " +
 			(missing.Count > 0 ? $"Missing values: {String.Join(", ", missing)}." : "");
 		throw new InvalidOperationException(message);
@@ -202,8 +202,8 @@ internal static class NativeValidationUtilities
 			expectedBuilder = $"{nameof(JThrowableObject)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
 
 		throw !String.IsNullOrWhiteSpace(expectedBuilder) ?
-			new InvalidOperationException($"To build {className.ToCString()} type metadata use {expectedBuilder}.") :
-			new($"{className.ToCString()} is invalid reference type.");
+			new InvalidOperationException($"To build {className.GetString()} type metadata use {expectedBuilder}.") :
+			new($"{className.GetString()} is invalid reference type.");
 	}
 
 	/// <summary>
@@ -211,5 +211,6 @@ internal static class NativeValidationUtilities
 	/// </summary>
 	/// <param name="utf8Span">A UTF-8 byte span.</param>
 	/// <returns>A <see cref="CString"/> instance.</returns>
-	private static CString ToCString(this ReadOnlySpan<Byte> utf8Span) => new(utf8Span);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static String GetString(this ReadOnlySpan<Byte> utf8Span) => Encoding.UTF8.GetString(utf8Span);
 }

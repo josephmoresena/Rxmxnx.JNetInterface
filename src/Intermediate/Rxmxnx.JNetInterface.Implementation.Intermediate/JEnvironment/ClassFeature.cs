@@ -19,6 +19,7 @@ partial class JEnvironment
 		public JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass)
 		{
 			if (jClass is null) return default;
+			JTrace.GetTypeMetadata(jClass);
 			if (MetadataHelper.GetMetadata(jClass.Hash) is { } result) // Is well-known class?
 				return result;
 			using LocalFrame _ = new(this._env, 2);
@@ -42,10 +43,7 @@ partial class JEnvironment
 					.GetMetadata<JShortObject>(),
 				UnicodeObjectSignatures.ArraySignaturePrefixChar => this._env.GetArrayTypeMetadata(
 					jClass.ClassSignature),
-				_ => !jClass.IsInterface ?
-					JEnvironment.GetSuperClassMetadata(jClass) :
-					this._env.GetSuperInterfaceMetadata(jClass) ??
-					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>(),
+				_ => this._env.GetSuperTypeMetadata(jClass),
 			};
 		}
 		public JModuleObject? GetModule(JClassObject jClass)

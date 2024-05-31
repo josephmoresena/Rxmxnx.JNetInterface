@@ -61,6 +61,31 @@ internal static partial class JTrace
 		Trace.WriteLine($"{jClass.Name}", callerMethod);
 	}
 	/// <summary>
+	/// Writes a category name and retrieving type metadata using a <see cref="JClassObject"/> instance
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void GetTypeMetadata(JClassObject jClass, [CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"{jClass.Name}", callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and retrieving type metadata for <paramref name="jClass"/> using
+	/// super <see cref="JClassObject"/> instance.
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="jSuperClass">A super <see cref="JClassObject"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void GetSuperTypeMetadata(JClassObject jClass, JClassObject jSuperClass,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"{jClass.Name} <- {jSuperClass.Name}", callerMethod);
+	}
+	/// <summary>
 	/// Writes a category name and registiring reference instance to the trace listeners.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
@@ -243,5 +268,32 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(result.ToTraceText(), callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and using type metadata for <paramref name="jClass"/>
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void UseTypeMetadata(JClassObject jClass, JReferenceTypeMetadata typeMetadata,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"{jClass.Name} uses type metadata from {typeMetadata.ClassName}.", callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and using type metadata for <paramref name="arraySignature"/>
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="arraySignature">Array JNI signature.</param>
+	/// <param name="typeMetadata">A <see cref="JArrayTypeMetadata"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void UseTypeMetadata(ReadOnlySpan<Byte> arraySignature, JArrayTypeMetadata typeMetadata,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled || arraySignature.SequenceEqual(typeMetadata.ClassName)) return;
+		Trace.WriteLine($"{Encoding.UTF8.GetString(arraySignature)} uses type metadata from {typeMetadata.ClassName}.",
+		                callerMethod);
 	}
 }
