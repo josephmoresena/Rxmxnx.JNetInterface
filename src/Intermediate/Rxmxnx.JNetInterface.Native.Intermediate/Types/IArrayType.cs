@@ -13,9 +13,6 @@ public interface IArrayType : IReferenceType
 	[ReadOnly(true)]
 	static abstract JArrayTypeMetadata Metadata { get; }
 
-	static JTypeKind IDataType.Kind => JTypeKind.Array;
-	static Type IDataType.FamilyType => typeof(JArrayObject);
-
 	/// <summary>
 	/// Retrieves the metadata for given array type.
 	/// Current type metadata.

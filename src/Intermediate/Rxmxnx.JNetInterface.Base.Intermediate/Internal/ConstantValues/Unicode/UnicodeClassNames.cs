@@ -12,13 +12,6 @@ internal static partial class UnicodeClassNames
 	[DefaultValue(ClassNames.ClassObject)]
 	public static readonly CString ClassObject;
 
-	/// <inheritdoc cref="ClassNames.ThreadGroupObject"/>
-	[DefaultValue(ClassNames.ThreadGroupObject)]
-	public static readonly CString ThreadGroupObject;
-	/// <inheritdoc cref="ClassNames.SystemObject"/>
-	[DefaultValue(ClassNames.SystemObject)]
-	public static readonly CString SystemObject;
-
 	/// <inheritdoc cref="ClassNames.VoidObject"/>
 	[DefaultValue(ClassNames.VoidObject)]
 	public static partial ReadOnlySpan<Byte> VoidObject();
@@ -232,6 +225,12 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.ProxyObject"/>
 	[DefaultValue(ClassNames.ProxyObject)]
 	public static partial ReadOnlySpan<Byte> ProxyObject();
+	/// <inheritdoc cref="ClassNames.ModuleObject"/>
+	[DefaultValue(ClassNames.ModuleObject)]
+	public static partial ReadOnlySpan<Byte> ModuleObject();
+	/// <inheritdoc cref="ClassNames.ThreadObject"/>
+	[DefaultValue(ClassNames.ThreadObject)]
+	public static partial ReadOnlySpan<Byte> ThreadObject();
 	/// <inheritdoc cref="ClassNames.MemberInterface"/>
 	[DefaultValue(ClassNames.MemberInterface)]
 	public static partial ReadOnlySpan<Byte> MemberInterface();
@@ -244,6 +243,9 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.ReadableInterface"/>
 	[DefaultValue(ClassNames.ReadableInterface)]
 	public static partial ReadOnlySpan<Byte> ReadableInterface();
+	/// <inheritdoc cref="ClassNames.RunnableInterface"/>
+	[DefaultValue(ClassNames.RunnableInterface)]
+	public static partial ReadOnlySpan<Byte> RunnableInterface();
 	/// <inheritdoc cref="ClassNames.ElementTypeEnum"/>
 	[DefaultValue(ClassNames.ElementTypeEnum)]
 	public static partial ReadOnlySpan<Byte> ElementTypeEnum();

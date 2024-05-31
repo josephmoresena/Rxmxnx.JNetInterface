@@ -61,7 +61,8 @@ public sealed class JClassObjectTests
 		             objectMetadata.ObjectSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar);
 		Assert.Equal(jClass.ArrayDimension, objectMetadata.ArrayDimension);
 		Assert.Equal(jClass.Hash, objectMetadata.Hash);
-		Assert.Equal($"{jClass.Name} {jClass.Reference}", jClass.ToString());
+		Assert.Equal(!jClass.Reference.IsDefault ? $"{jClass.Name} {jClass.Reference}" : $"{jClass.Name}",
+		             jClass.ToString());
 
 		JSerializableObject jSerializable = jClass.CastTo<JSerializableObject>();
 		JAnnotatedElementObject jAnnotated = (jClass as ILocalObject).CastTo<JAnnotatedElementObject>();
@@ -168,6 +169,9 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClassObj.IsInterface, metadata.IsInterface);
 		Assert.Equal(jClassObj.IsEnum, metadata.IsEnum);
 		Assert.Equal(jClassObj.Hash, metadata.Hash);
+
+		Assert.Equal(!jClassObj.Reference.IsDefault ? $"{jClassObj.Name} {jClassObj.Reference}" : $"{jClassObj.Name}",
+		             jClassObj.ToString());
 	}
 	[Theory]
 	[InlineData(true)]
@@ -214,6 +218,11 @@ public sealed class JClassObjectTests
 		Assert.Equal(IntPtr.Zero, entries[1].Pointer);
 		Assert.Equal(IntPtr.Zero, entries[2].Pointer);
 		Assert.Equal(IntPtr.Zero, entries[3].Pointer);
+
+		Assert.Null(entries[0].Delegate);
+		Assert.Null(entries[1].Delegate);
+		Assert.Null(entries[2].Delegate);
+		Assert.Null(entries[3].Delegate);
 
 		if (!useList)
 			jClassObj.Register(entries[0], entries[1], entries[2], entries[3]);
@@ -298,6 +307,22 @@ public sealed class JClassObjectTests
 
 		Assert.Equal(jSuperClass, jClass.GetSuperClass());
 		env.ClassFeature.Received(1).GetSuperClass(jClass);
+	}
+
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	internal void GetModuleTest(Boolean nullModule)
+	{
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		JObjectLocalRef localRef = JClassObjectTests.fixture.Create<JObjectLocalRef>();
+		using JClassObject jClass = new(env);
+		using JClassObject jModuleClass = new(jClass, IClassType.GetMetadata<JModuleObject>());
+		using JModuleObject? jModule = !nullModule ? new(jModuleClass, localRef) : default;
+
+		env.ClassFeature.GetModule(jClass).Returns(jModule);
+		Assert.Equal(jModule, jClass.GetModule());
+		env.ClassFeature.Received(1).GetModule(jClass);
 	}
 	[Theory]
 	[InlineData(true)]

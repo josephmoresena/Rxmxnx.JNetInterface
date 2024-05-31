@@ -7,10 +7,10 @@ internal partial class JPrimitiveObject
 	/// </summary>
 	/// <typeparam name="TValue">A <see langword="unmanaged"/> type.</typeparam>
 	public abstract partial class Generic<TValue> : JPrimitiveObject, IPrimitiveType, IPrimitiveValue<TValue>
-		where TValue : unmanaged, IEquatable<TValue>, IComparable, IConvertible
+		where TValue : unmanaged, IEquatable<TValue>, IComparable, IConvertible, IComparable<TValue>
 	{
 		static JTypeKind IDataType.Kind => JTypeKind.Primitive;
-		static Type? IDataType.FamilyType => typeof(TValue);
+		static Type IDataType.FamilyType => typeof(TValue);
 
 		/// <summary>
 		/// Size of the current type in bytes.

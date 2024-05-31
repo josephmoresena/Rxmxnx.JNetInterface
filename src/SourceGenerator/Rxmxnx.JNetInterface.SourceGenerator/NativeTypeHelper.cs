@@ -131,6 +131,9 @@ internal sealed record NativeTypeHelper
 			"JValue" => String.Empty,
 			"JInvokeInterface" => String.Empty,
 			"JNativeInterface" => String.Empty,
+			"JObjectLocalRef" => "Pointer",
+			"JFieldId" => "Pointer",
+			"JMethodId" => "Pointer",
 			_ => "_value",
 		};
 

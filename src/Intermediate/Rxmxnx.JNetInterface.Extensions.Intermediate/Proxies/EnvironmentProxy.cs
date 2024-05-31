@@ -39,6 +39,8 @@ public abstract partial class EnvironmentProxy
 	public abstract TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
 	/// <inheritdoc/>
 	public abstract void DescribeException();
+	/// <inheritdoc/>
+	public abstract Boolean? IsVirtual(JThreadObject jThread);
 
 	#region IArrayFeature
 	/// <inheritdoc cref="IArrayFeature.GetCopy{TPrimitive}(JArrayObject{TPrimitive}, Span{TPrimitive}, Int32)"/>

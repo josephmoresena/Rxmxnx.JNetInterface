@@ -78,6 +78,8 @@ public sealed class JInterfaceObjectTests
 	internal void AppendableTest() => JInterfaceObjectTests.InterfaceObjectTest<JAppendableObject>();
 	[Fact]
 	internal void ReadableTest() => JInterfaceObjectTests.InterfaceObjectTest<JReadableObject>();
+	[Fact]
+	internal void RunnableTest() => JInterfaceObjectTests.InterfaceObjectTest<JRunnableObject>();
 
 	private static void InterfaceObjectTest<TInterface>()
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>

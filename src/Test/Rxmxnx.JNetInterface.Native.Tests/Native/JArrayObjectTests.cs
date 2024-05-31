@@ -129,6 +129,12 @@ public sealed class JArrayObjectTests
 	[InlineData(3)]
 	internal void StackTraceElementTest(Byte initializer)
 		=> JArrayObjectTests.ObjectArrayTest<JStackTraceElementObject>(initializer);
+	[Theory]
+	[InlineData(0)]
+	[InlineData(1)]
+	[InlineData(2)]
+	[InlineData(3)]
+	internal void ModuleTest(Byte initializer) => JArrayObjectTests.ObjectArrayTest<JModuleObject>(initializer);
 
 	[Theory]
 	[InlineData(0)]

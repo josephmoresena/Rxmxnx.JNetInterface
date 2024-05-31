@@ -28,9 +28,10 @@ public partial class JLocalObject
 					this, (proxyMetadata, interfaceMetadata) => interfaceMetadata.SetAssignable(proxyMetadata));
 			}
 			/// <inheritdoc/>
-			public Proxy(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
-			/// <inheritdoc/>
 			public Proxy(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
+
+			/// <inheritdoc/>
+			private Proxy(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 		}
 	}
 }

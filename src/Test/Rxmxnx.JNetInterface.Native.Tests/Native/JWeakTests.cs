@@ -117,7 +117,7 @@ public sealed class JWeakTests : GlobalObjectTestsBase
 		Assert.False(jWeak.InstanceOf<JStringObject>());
 
 		env.ClassFeature.IsInstanceOf(jWeak, jClassClass).Returns(true);
-		jWeak.InstanceOf(jClassClass);
+		_ = jWeak.InstanceOf(jClassClass);
 		env.ClassFeature.Received(1).IsInstanceOf(jWeak, jClassClass);
 
 		env.JniSecure().Returns(jniSecure.GetValueOrDefault());

@@ -98,11 +98,10 @@ partial class JEnvironment
 		private JClassObject GetClass(JClassLocalRef classRef, Boolean isLocalRef,
 			ClassObjectMetadata? classObjectMetadata)
 		{
-			JClassObject result;
-			if (classObjectMetadata is null)
-				result = this.GetClass(classRef, isLocalRef);
-			else
-				result = this.GetClass(classObjectMetadata.Name, isLocalRef ? classRef : default);
+			JClassLocalRef assignableRef = isLocalRef ? classRef : default;
+			JClassObject result = classObjectMetadata is null ?
+				this.GetClass(classRef, isLocalRef) :
+				this.GetClass(classObjectMetadata.Name, assignableRef);
 			return this.Register(result);
 		}
 		/// <summary>
@@ -280,6 +279,19 @@ partial class JEnvironment
 			if (classObjectMetadata is not null)
 				ILocalObject.ProcessMetadata(result, classObjectMetadata);
 			return result;
+		}
+		/// <summary>
+		/// Retrieves the <see cref="JModuleObject"/> instance from <paramref name="classRef"/>.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <returns>A <see cref="JModuleObject"/> instance.</returns>
+		private unsafe JModuleObject GetModule(JClassLocalRef classRef)
+		{
+			ref readonly NativeInterface9 nativeInterface =
+				ref this.GetNativeInterface<NativeInterface9>(NativeInterface9.GetModuleInfo);
+			JObjectLocalRef localRef = nativeInterface.GetModule(this.Reference, classRef);
+			if (localRef == default) this.CheckJniError();
+			return new(this.GetClass<JModuleObject>(), localRef);
 		}
 	}
 }

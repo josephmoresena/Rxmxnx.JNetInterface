@@ -5,10 +5,6 @@ public partial class JVirtualMachine
 	private sealed partial record VirtualMachineCache
 	{
 		/// <summary>
-		/// Delegate cache.
-		/// </summary>
-		private readonly DelegateHelperCache _delegateCache;
-		/// <summary>
 		/// Global object dictionary.
 		/// </summary>
 		private readonly ConcurrentDictionary<JGlobalRef, WeakReference<JGlobal>> _globalObjects = new();

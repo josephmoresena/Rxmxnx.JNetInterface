@@ -2,11 +2,6 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 
 public partial record JDataTypeMetadata
 {
-	/// <summary>
-	/// Escape for Java class name -> JNI class name.
-	/// </summary>
-	private static readonly CString classNameEscape = new(() => "./"u8);
-
 	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
 	private readonly CString _arraySignature;
 	/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
@@ -90,5 +85,13 @@ public partial record JDataTypeMetadata
 	/// <param name="classNameChar">A Java class name char.</param>
 	/// <returns>A JNI class name char.</returns>
 	private static Byte EscapeClassNameChar(Byte classNameChar)
-		=> classNameChar == JDataTypeMetadata.classNameEscape[0] ? JDataTypeMetadata.classNameEscape[1] : classNameChar;
+	{
+		ReadOnlySpan<Byte> escapeSpan = JDataTypeMetadata.GetEscapeSpan();
+		return classNameChar == escapeSpan[0] ? escapeSpan[1] : classNameChar;
+	}
+	/// <summary>
+	/// Escape for Java class name -> JNI class name.
+	/// </summary>
+	/// <returns>A read-only binary span.</returns>
+	public static ReadOnlySpan<Byte> GetEscapeSpan() => "./"u8;
 }

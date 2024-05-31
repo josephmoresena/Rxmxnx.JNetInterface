@@ -129,4 +129,13 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// JNI pending exception describe.
 	/// </summary>
 	void DescribeException();
+
+	/// <summary>
+	/// Indicates whether <paramref name="jThread"/> is virtual.
+	/// </summary>
+	/// <param name="jThread"></param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jThread"/> is virtual; otherwise, <seealso langword="false"/>.
+	/// </returns>
+	Boolean? IsVirtual(JThreadObject jThread);
 }

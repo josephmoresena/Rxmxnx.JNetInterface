@@ -24,13 +24,6 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// </summary>
 	internal static String FakeVoidHash => JVoidTypeMetadata.FakeHash;
 
-	/// <inheritdoc cref="SizeOf"/>
-	private readonly Int32 _sizeOf;
-	/// <summary>
-	/// CLR underline type.
-	/// </summary>
-	private readonly Type _underlineType;
-
 	/// <summary>
 	/// JNI name for the current type wrapper class.
 	/// </summary>
@@ -42,7 +35,7 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <summary>
 	/// Underline primitive CLR type.
 	/// </summary>
-	public Type UnderlineType => this._underlineType;
+	public Type UnderlineType { get; }
 	/// <summary>
 	/// Native primitive type.
 	/// </summary>
@@ -50,7 +43,7 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <summary>
 	/// Size of the current primitive type in bytes.
 	/// </summary>
-	public override Int32 SizeOf => this._sizeOf;
+	public override Int32 SizeOf { get; }
 
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Primitive;
@@ -63,13 +56,18 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	internal CStringSequence WrapperInformation { get; }
 
 	/// <summary>
-	/// Constructor.
+	/// Private constructor.
 	/// </summary>
-	private JPrimitiveTypeMetadata() : base(JPrimitiveTypeMetadata.voidInformation)
+	/// <param name="sizeOf">Size of the current primitive type in bytes.</param>
+	/// <param name="underlineType">Underline primitive CLR type.</param>
+	/// <param name="information">nternal sequence information.</param>
+	/// <param name="wrapperClassName">Wrapper class JNI name of the current primitive type.</param>
+	private JPrimitiveTypeMetadata(Int32 sizeOf, Type underlineType, CStringSequence information,
+		ReadOnlySpan<Byte> wrapperClassName) : base(information)
 	{
-		this._sizeOf = default;
-		this._underlineType = typeof(void);
-		this.WrapperInformation = JDataTypeMetadata.CreateInformationSequence(UnicodeClassNames.VoidObject());
+		this.SizeOf = sizeOf;
+		this.UnderlineType = underlineType;
+		this.WrapperInformation = JDataTypeMetadata.CreateInformationSequence(wrapperClassName);
 	}
 	/// <summary>
 	/// Constructor.
@@ -82,8 +80,8 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	private protected JPrimitiveTypeMetadata(Int32 sizeOf, Type underlineType, ReadOnlySpan<Byte> signature,
 		ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(className, signature)
 	{
-		this._sizeOf = sizeOf;
-		this._underlineType = underlineType;
+		this.SizeOf = sizeOf;
+		this.UnderlineType = underlineType;
 		this.WrapperInformation = JDataTypeMetadata.CreateInformationSequence(wrapperClassName);
 	}
 

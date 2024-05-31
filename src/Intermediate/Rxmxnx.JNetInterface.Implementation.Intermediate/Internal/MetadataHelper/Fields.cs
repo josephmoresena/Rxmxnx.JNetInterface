@@ -80,8 +80,6 @@ internal static partial class MetadataHelper
 		},
 		{ IDataType.GetHash<JArrayObject<JClassObject>>(), IReferenceType.GetMetadata<JArrayObject<JClassObject>>() },
 		{ IDataType.GetHash<JArrayObject<JStringObject>>(), IReferenceType.GetMetadata<JArrayObject<JStringObject>>() },
-		{ IDataType.GetHash<JArrayObject<JNumberObject>>(), IReferenceType.GetMetadata<JArrayObject<JNumberObject>>() },
-		{ IDataType.GetHash<JArrayObject<JEnumObject>>(), IReferenceType.GetMetadata<JArrayObject<JEnumObject>>() },
 		{
 			IDataType.GetHash<JArrayObject<JThrowableObject>>(),
 			IReferenceType.GetMetadata<JArrayObject<JThrowableObject>>()
@@ -90,34 +88,6 @@ internal static partial class MetadataHelper
 			IDataType.GetHash<JArrayObject<JStackTraceElementObject>>(),
 			IReferenceType.GetMetadata<JArrayObject<JStackTraceElementObject>>()
 		},
-		{
-			IDataType.GetHash<JArrayObject<JClassLoaderObject>>(),
-			IReferenceType.GetMetadata<JArrayObject<JClassLoaderObject>>()
-		},
-		{ IDataType.GetHash<JArrayObject<JBufferObject>>(), IReferenceType.GetMetadata<JArrayObject<JBufferObject>>() },
-		{
-			IDataType.GetHash<JArrayObject<JAccessibleObject>>(),
-			IReferenceType.GetMetadata<JArrayObject<JAccessibleObject>>()
-		},
-		{
-			IDataType.GetHash<JArrayObject<JExecutableObject>>(),
-			IReferenceType.GetMetadata<JArrayObject<JExecutableObject>>()
-		},
-		{ IDataType.GetHash<JArrayObject<JMethodObject>>(), IReferenceType.GetMetadata<JArrayObject<JMethodObject>>() },
-		{
-			IDataType.GetHash<JArrayObject<JConstructorObject>>(),
-			IReferenceType.GetMetadata<JArrayObject<JConstructorObject>>()
-		},
-		{ IDataType.GetHash<JArrayObject<JFieldObject>>(), IReferenceType.GetMetadata<JArrayObject<JFieldObject>>() },
-		{
-			IDataType.GetHash<JArrayObject<JExceptionObject>>(),
-			IReferenceType.GetMetadata<JArrayObject<JExceptionObject>>()
-		},
-		{
-			IDataType.GetHash<JArrayObject<JRuntimeExceptionObject>>(),
-			IReferenceType.GetMetadata<JArrayObject<JRuntimeExceptionObject>>()
-		},
-		{ IDataType.GetHash<JArrayObject<JErrorObject>>(), IReferenceType.GetMetadata<JArrayObject<JErrorObject>>() },
 
 		// Wrapper object arrays //
 		{
@@ -162,6 +132,7 @@ internal static partial class MetadataHelper
 		{ IDataType.GetHash<JReadableObject>(), IReferenceType.GetMetadata<JReadableObject>() },
 		{ IDataType.GetHash<JDirectBufferObject>(), IReferenceType.GetMetadata<JDirectBufferObject>() },
 		{ IDataType.GetHash<JAnnotationObject>(), IReferenceType.GetMetadata<JAnnotationObject>() },
+		{ IDataType.GetHash<JRunnableObject>(), IReferenceType.GetMetadata<JRunnableObject>() },
 
 		// Annotation Package //
 		{ IDataType.GetHash<JElementTypeObject>(), IReferenceType.GetMetadata<JElementTypeObject>() },
@@ -209,6 +180,10 @@ internal static partial class MetadataHelper
 			IReferenceType.GetMetadata<JStringIndexOutOfBoundsExceptionObject>()
 		},
 		{ IDataType.GetHash<JArrayStoreExceptionObject>(), IReferenceType.GetMetadata<JArrayStoreExceptionObject>() },
+
+		//JNI > 9 Object
+		{ IDataType.GetHash<JModuleObject>(), IReferenceType.GetMetadata<JModuleObject>() },
+		{ IDataType.GetHash<JThreadObject>(), IReferenceType.GetMetadata<JThreadObject>() },
 	};
 	/// <summary>
 	/// Primitive reflection dictionary.

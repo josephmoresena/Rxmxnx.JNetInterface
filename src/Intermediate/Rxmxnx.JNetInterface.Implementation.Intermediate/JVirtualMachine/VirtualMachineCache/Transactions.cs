@@ -21,19 +21,19 @@ public partial class JVirtualMachine
 			where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 			=> JniTransactionHandle.CreateMemoryAdapter(jArray, referenceKind, critical, this._transactions);
 		/// <summary>
-		/// Indicates whether given <paramref name="jRef"/> is begin using by a transaction.
+		/// Indicates whether given <paramref name="jniRef"/> is begin using by a transaction.
 		/// </summary>
-		/// <param name="jRef">A <see cref="IntPtr"/> value.</param>
+		/// <param name="jniRef">A <see cref="IntPtr"/> value.</param>
 		/// <returns>
-		/// <see langword="true"/> if <paramref name="jRef"/> is begin using by a transaction;
+		/// <see langword="true"/> if <paramref name="jniRef"/> is begin using by a transaction;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
-		public Boolean InTransaction(IntPtr jRef)
+		public Boolean InTransaction(IntPtr jniRef)
 		{
 			Boolean result = false;
 			Parallel.ForEach(this._transactions.Values, (t, s) =>
 			{
-				if (!t.Contains(jRef)) return;
+				if (!t.Contains(jniRef)) return;
 				result = true;
 				s.Stop();
 			});

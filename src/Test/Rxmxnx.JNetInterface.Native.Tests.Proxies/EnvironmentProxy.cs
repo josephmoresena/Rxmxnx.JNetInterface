@@ -28,6 +28,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 	public abstract TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func);
 	public abstract TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
 	public abstract void DescribeException();
+	public abstract Boolean? IsVirtual(JThreadObject jThread);
 
 	public static EnvironmentProxy CreateEnvironment(Boolean isProxy = false, VirtualMachineProxy? vm = default)
 	{

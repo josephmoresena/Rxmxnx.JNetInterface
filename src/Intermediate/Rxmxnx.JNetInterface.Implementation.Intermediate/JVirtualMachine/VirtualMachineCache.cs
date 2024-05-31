@@ -35,8 +35,6 @@ public partial class JVirtualMachine
 		/// <param name="vmRef">A <see cref="JVirtualMachineRef"/> reference.</param>
 		public VirtualMachineCache(JVirtualMachine vm, JVirtualMachineRef vmRef) : base(vm)
 		{
-			this._delegateCache = new();
-
 			this._vm = vm;
 			this.Reference = vmRef;
 			this.ThreadCache = new(vm);
@@ -47,11 +45,10 @@ public partial class JVirtualMachine
 		/// </summary>
 		/// <returns>A managed <see cref="InvokeInterface"/> reference from current instance.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public ref readonly InvokeInterface GetInvokeInterface()
+		public unsafe ref readonly InvokeInterface GetInvokeInterface()
 		{
 			ref readonly JVirtualMachineValue refValue = ref this.Reference.Reference;
-			ref readonly JInvokeInterface refInvoke = ref refValue.Reference;
-			return ref NativeUtilities.Transform<JInvokeInterface, InvokeInterface>(in refInvoke);
+			return ref Unsafe.AsRef<InvokeInterface>(refValue.Pointer.ToPointer());
 		}
 		/// <summary>
 		/// Register a <see cref="JGlobal"/> instance.

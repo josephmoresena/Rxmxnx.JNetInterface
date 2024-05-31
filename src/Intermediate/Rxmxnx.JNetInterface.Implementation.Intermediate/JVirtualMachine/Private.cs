@@ -46,7 +46,7 @@ public partial class JVirtualMachine
 		using INativeTransaction jniTransaction = this.CreateTransaction(1);
 		fixed (Byte* ptr = &MemoryMarshal.GetReference((ReadOnlySpan<Byte>)args.Name))
 		{
-			VirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, new(ptr), args);
+			VirtualMachineArgumentValue arg = JVirtualMachine.CreateAttachArgument(jniTransaction, ptr, args);
 			JResult result = JVirtualMachine.AttachThread(this, args.IsDaemon, arg, out JEnvironmentRef envRef);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 			env = this._cache.ThreadCache.Get(envRef, out _, args);
@@ -84,15 +84,12 @@ public partial class JVirtualMachine
 	/// <param name="namePtr">Pointer to thread name.</param>
 	/// <param name="args">A <see cref="ThreadCreationArgs"/> instance.</param>
 	/// <returns>A <see cref="VirtualMachineArgumentValue"/> value.</returns>
-	private static VirtualMachineArgumentValue CreateAttachArgument(INativeTransaction jniTransaction, IntPtr namePtr,
-		ThreadCreationArgs args)
+	private static unsafe VirtualMachineArgumentValue CreateAttachArgument(INativeTransaction jniTransaction,
+		Byte* namePtr, ThreadCreationArgs args)
 	{
 		JGlobalRef threadGroupRef = jniTransaction.Add<JGlobalRef>(args.ThreadGroup);
 		Int32 version = args.Version < IVirtualMachine.MinimalVersion ? IVirtualMachine.MinimalVersion : args.Version;
-		VirtualMachineArgumentValue arg = new()
-		{
-			Name = (ReadOnlyValPtr<Byte>)namePtr, Group = threadGroupRef, Version = version,
-		};
+		VirtualMachineArgumentValue arg = new(version, namePtr, threadGroupRef);
 		return arg;
 	}
 }
