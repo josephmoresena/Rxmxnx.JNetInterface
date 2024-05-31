@@ -100,14 +100,15 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void Unload<TGlobalRef>(Boolean isAttached, Boolean isAlive, TGlobalRef globalRef,
 		[CallerMemberName] String callerMethod = "")
-		where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>
+		where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>,
+		IEqualityOperators<TGlobalRef, TGlobalRef, Boolean>
 	{
 		if (!IVirtualMachine.TraceEnabled && globalRef.Value == default) return;
 		if (!isAttached)
 			Trace.WriteLine($"Unable to remove {globalRef}. Thread is not attached.", callerMethod);
 		else if (!isAlive)
 			Trace.WriteLine($"Unable to {globalRef}. JVM is not alive.", callerMethod);
-		else
+		else if (globalRef != default)
 			Trace.WriteLine($"{globalRef} removed.", callerMethod);
 	}
 	/// <summary>

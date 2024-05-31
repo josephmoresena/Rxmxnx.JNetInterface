@@ -19,7 +19,7 @@ partial class JEnvironment
 		public JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass)
 		{
 			if (jClass is null) return default;
-			if (MetadataHelper.GetMetadata(jClass.Hash) is { } result)
+			if (MetadataHelper.GetMetadata(jClass.Hash) is { } result) // Is well-known class?
 				return result;
 			using LocalFrame _ = new(this._env, 2);
 			return jClass.ClassSignature[0] switch
@@ -43,8 +43,8 @@ partial class JEnvironment
 				UnicodeObjectSignatures.ArraySignaturePrefixChar => this._env.GetArrayTypeMetadata(
 					jClass.ClassSignature),
 				_ => !jClass.IsInterface ?
-					JEnvironment.GetClassMetadata(jClass) :
-					this._env.GetInterfaceMetadata(jClass) ??
+					JEnvironment.GetSuperClassMetadata(jClass) :
+					this._env.GetSuperInterfaceMetadata(jClass) ??
 					(JReferenceTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>(),
 			};
 		}
