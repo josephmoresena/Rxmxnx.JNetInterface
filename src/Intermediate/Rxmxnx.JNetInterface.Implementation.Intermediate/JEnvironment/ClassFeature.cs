@@ -21,9 +21,12 @@ partial class JEnvironment
 			if (jClass is null) return default;
 			JTrace.GetTypeMetadata(jClass);
 			if (MetadataHelper.GetMetadata(jClass.Hash) is { } result) // Is well-known class?
+			{
+				JTrace.UseTypeMetadata(jClass, result);
 				return result;
+			}
 			using LocalFrame _ = new(this._env, 2);
-			return jClass.ClassSignature[0] switch
+			result = jClass.ClassSignature[0] switch
 			{
 				UnicodePrimitiveSignatures.BooleanSignatureChar => (JClassTypeMetadata)MetadataHelper
 					.GetMetadata<JBooleanObject>(),
@@ -45,6 +48,10 @@ partial class JEnvironment
 					jClass.ClassSignature),
 				_ => this._env.GetSuperTypeMetadata(jClass),
 			};
+
+			if (jClass.ClassSignature.Length == 1) // Primitive class should use WrapperClassMetadata.
+				JTrace.UseTypeMetadata(jClass, result);
+			return result;
 		}
 		public JModuleObject? GetModule(JClassObject jClass)
 		{
