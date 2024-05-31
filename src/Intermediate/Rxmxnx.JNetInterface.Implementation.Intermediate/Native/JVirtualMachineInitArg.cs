@@ -35,6 +35,8 @@ public sealed partial record JVirtualMachineInitArg
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">A <see cref="VirtualMachineInitArgumentValue"/> value.</param>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	internal unsafe JVirtualMachineInitArg(VirtualMachineInitArgumentValue value)
 	{
 		this._version = value.Version;
