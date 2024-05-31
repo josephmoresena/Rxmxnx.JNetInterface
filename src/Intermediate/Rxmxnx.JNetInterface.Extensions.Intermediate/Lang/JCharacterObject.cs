@@ -29,7 +29,7 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
 	/// <inheritdoc/>
-	public override String ToString() => this.Value.ToString()!;
+	public override String ToString() => this.Value.ToString();
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override String ToTraceText()

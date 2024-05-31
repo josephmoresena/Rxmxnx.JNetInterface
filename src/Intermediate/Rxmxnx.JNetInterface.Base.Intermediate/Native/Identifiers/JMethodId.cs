@@ -11,25 +11,20 @@ public readonly partial struct JMethodId : IAccessibleIdentifierType<JMethodId>
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JMethod;
 
-	/// <summary>
-	/// Internal native-signed integer
-	/// </summary>
-	private readonly IntPtr _value;
-
 	/// <inheritdoc/>
-	public IntPtr Pointer => this._value;
+	public IntPtr Pointer { get; }
 
 	/// <summary>
 	/// Parameterless constructor.
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public JMethodId() => this._value = IntPtr.Zero;
+	public JMethodId() => this.Pointer = IntPtr.Zero;
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => this._value.GetHashCode();
+	public override Int32 GetHashCode() => this.Pointer.GetHashCode();
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Boolean Equals([NotNullWhen(true)] Object? obj)
-		=> obj is JMethodId methodId && this._value.Equals(methodId._value);
+		=> obj is JMethodId methodId && this.Pointer.Equals(methodId.Pointer);
 }

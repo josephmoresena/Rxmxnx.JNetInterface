@@ -23,14 +23,4 @@ public partial class JStringObject
 	internal JStringObject(JClassObject jStringClass, JStringLocalRef stringRef, Int32 utf8Length) :
 		base(jStringClass, stringRef.Value)
 		=> this._utf8Length = utf8Length;
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <param name="jGlobal"><see cref="JGlobalBase"/> instance.</param>
-	internal JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
-	{
-		this._length ??= this.Environment.StringFeature.GetLength(jGlobal);
-		this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(jGlobal);
-	}
 }

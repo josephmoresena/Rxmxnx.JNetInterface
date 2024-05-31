@@ -140,7 +140,7 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 		Assert.False(jGlobal.InstanceOf<JStringObject>());
 
 		env.ClassFeature.IsInstanceOf(jGlobal, jClassClass).Returns(true);
-		jGlobal.InstanceOf(jClassClass);
+		_ = jGlobal.InstanceOf(jClassClass);
 		env.ClassFeature.Received(1).IsInstanceOf(jGlobal, jClassClass);
 
 		env.JniSecure().Returns(jniSecure.GetValueOrDefault());

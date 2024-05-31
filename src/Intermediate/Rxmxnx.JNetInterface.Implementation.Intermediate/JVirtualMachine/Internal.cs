@@ -63,11 +63,9 @@ public partial class JVirtualMachine
 	internal ClassObjectMetadata? LoadMetadataGlobal(JGlobalBase jGlobal)
 	{
 		ClassObjectMetadata? result = jGlobal.ObjectMetadata as ClassObjectMetadata;
-		if (result is not null && !this._cache.GlobalClassCache.ContainsHash(result.Hash))
-		{
-			JTrace.LoadClassMetadata(result);
-			this._cache.GlobalClassCache[result.Hash] = new(this, result, default);
-		}
+		if (result is null || this._cache.GlobalClassCache.ContainsHash(result.Hash)) return result;
+		JTrace.LoadClassMetadata(result);
+		this._cache.GlobalClassCache[result.Hash] = new(this, result, default);
 		return result;
 	}
 	/// <summary>

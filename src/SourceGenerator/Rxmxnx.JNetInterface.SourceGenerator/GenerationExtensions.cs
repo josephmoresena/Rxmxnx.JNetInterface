@@ -28,10 +28,10 @@ internal static partial class GenerationExtensions
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static IImmutableSet<String> GetInterfacesNames(this INamedTypeSymbol typeSymbol)
 	{
-		if (typeSymbol is { TypeKind: TypeKind.Struct, IsRefLikeType: false, } ||
-		    typeSymbol is { TypeKind: TypeKind.Class, IsStatic: false, })
-			return typeSymbol.AllInterfaces.Select(i => i.ToString()).ToImmutableHashSet();
-		return ImmutableHashSet<String>.Empty;
+		return typeSymbol is { TypeKind: TypeKind.Struct, IsRefLikeType: false, } or
+			{ TypeKind: TypeKind.Class, IsStatic: false, } ?
+			typeSymbol.AllInterfaces.Select(i => i.ToString()).ToImmutableHashSet() :
+			ImmutableHashSet<String>.Empty;
 	}
 	/// <summary>
 	/// Retrieves the abbreviation of given number ordinal.
@@ -47,8 +47,7 @@ internal static partial class GenerationExtensions
 		if (textNumber.EndsWith("13")) return "th";
 		if (textNumber.EndsWith("1")) return "st";
 		if (textNumber.EndsWith("2")) return "nd";
-		if (textNumber.EndsWith("3")) return "rd";
-		return "th";
+		return textNumber.EndsWith("3") ? "rd" : "th";
 	}
 
 	/// <summary>

@@ -192,15 +192,9 @@ public partial class JLocalObject
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType(className, typeof(TClass), typeof(TObject));
-			IReadOnlySet<Type> interfaceTypes = ImmutableHashSet<Type>.Empty;
-			if (IVirtualMachine.MetadataValidationEnabled)
-			{
-				IReadOnlySet<Type> baseTypes = IClassType<TObject>.TypeBaseTypes;
-				IReadOnlySet<Type> baseBaseTypes = IClassType<TClass>.TypeBaseTypes;
-				NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
-				interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
-			}
-			return new(className, modifier, IClassType.GetMetadata<TClass>(), interfaceTypes);
+			return !IVirtualMachine.MetadataValidationEnabled ?
+				new(className, modifier, IClassType.GetMetadata<TClass>(), ImmutableHashSet<Type>.Empty) :
+				TypeMetadataBuilder<TClass>.CreateWithValidation<TObject>(className, modifier);
 		}
 
 		/// <summary>
@@ -224,5 +218,23 @@ public partial class JLocalObject
 			JClassTypeMetadata? baseMetadata = default)
 			=> new ClassTypeMetadata(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0,
 			                         baseMetadata ?? IClassType.GetMetadata<JLocalObject>());
+
+		/// <summary>
+		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance with validation.
+		/// </summary>
+		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
+		/// <returns>A new <see cref="TypeMetadataBuilder{TObject}"/> instance.</returns>
+		private static TypeMetadataBuilder<TObject> CreateWithValidation<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
+			ReadOnlySpan<Byte> className, JTypeModifier modifier) where TObject : TClass, IClassType<TObject>
+		{
+			IReadOnlySet<Type> baseTypes = IClassType<TObject>.TypeBaseTypes;
+			IReadOnlySet<Type> baseBaseTypes = IClassType<TClass>.TypeBaseTypes;
+			NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
+			IReadOnlySet<Type> interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
+			return new(className, modifier, IClassType.GetMetadata<TClass>(), interfaceTypes);
+		}
 	}
 }

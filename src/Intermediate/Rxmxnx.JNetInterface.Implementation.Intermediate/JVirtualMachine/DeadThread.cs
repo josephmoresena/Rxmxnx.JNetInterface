@@ -24,7 +24,7 @@ public partial class JVirtualMachine
 		}
 		TElement? IArrayFeature.GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
 			where TElement : default
-			=> DeadThread.ThrowInvalidResult<TElement>();
+			=> DeadThread.ThrowInvalidResult<TElement?>();
 		void IArrayFeature.SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
 			where TElement : default
 			=> DeadThread.ThrowInvalidResult<Byte>();

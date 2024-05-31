@@ -8,4 +8,4 @@ namespace Rxmxnx.JNetInterface.Internal;
                  Justification = CommonConstants.ClassJustification)]
 internal sealed class PrimitiveWrapperConstructor<TPrimitive>()
 	: JConstructorDefinition(JArgumentMetadata.Get<TPrimitive>())
-	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive> { }
+	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;

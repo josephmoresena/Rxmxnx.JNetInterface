@@ -16,27 +16,27 @@ internal readonly partial struct JInvokeInterface : INativeType<JInvokeInterface
 	/// </summary>
 #pragma warning disable CS0169
 	private readonly ComReserved _reserved;
-#pragma warning restore CS0169
 
 	/// <summary>
 	/// Pointer to <c>DestroyJavaVM</c> function. Unloads a JVM and reclaims its resources.
 	/// </summary>
-	internal IntPtr DestroyJavaVmPointer { get; [ExcludeFromCodeCoverage] init; }
+	internal readonly IntPtr DestroyJavaVmPointer;
 	/// <summary>
 	/// Pointer to <c>AttachCurrentThread</c> function. Attaches the current thread to a JVM.
 	/// </summary>
-	internal IntPtr AttachCurrentThreadPointer { get; [ExcludeFromCodeCoverage] init; }
+	internal readonly IntPtr AttachCurrentThreadPointer;
 	/// <summary>
 	/// Pointer to <c>DetachCurrentThread</c> function. Detaches the current thread from a JVM.
 	/// </summary>
-	internal IntPtr DetachCurrentThreadPointer { get; [ExcludeFromCodeCoverage] init; }
+	internal readonly IntPtr DetachCurrentThreadPointer;
 	/// <summary>
 	/// Pointer to <c>GetEnv</c> function. Retrieves the <c>JNIEnv</c> pointer for the current thread.
 	/// </summary>
-	internal IntPtr GetEnvPointer { get; [ExcludeFromCodeCoverage] init; }
+	internal readonly IntPtr GetEnvPointer;
 	/// <summary>
 	/// Pointer to <c>AttachCurrentThreadAsDaemon</c> function. Same as AttachCurrentThread, but the
 	/// newly-created <c>java.lang.Thread</c> instance is a daemon.
 	/// </summary>
-	internal IntPtr AttachCurrentThreadAsDaemonPointer { get; [ExcludeFromCodeCoverage] init; }
+	internal readonly IntPtr AttachCurrentThreadAsDaemonPointer;
+#pragma warning restore CS0169
 }

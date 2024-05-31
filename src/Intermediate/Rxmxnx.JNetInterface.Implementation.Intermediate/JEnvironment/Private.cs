@@ -70,11 +70,10 @@ partial class JEnvironment
 			elementSignature[1..^1] :
 			elementSignature;
 		JReferenceTypeMetadata? elementMetadata = MetadataHelper.GetMetadata(elementClassName);
-		if (elementMetadata is null)
-		{
-			JClassObject elementClass = this._cache.GetClass(elementClassName);
-			elementMetadata = this._cache.GetTypeMetadata(elementClass);
-		}
+		if (elementMetadata is not null)
+			return elementMetadata.GetArrayMetadata() ?? MetadataHelper.ObjectArrayMetadata;
+		JClassObject elementClass = this._cache.GetClass(elementClassName);
+		elementMetadata = this._cache.GetTypeMetadata(elementClass);
 		return elementMetadata.GetArrayMetadata() ?? MetadataHelper.ObjectArrayMetadata;
 	}
 	/// <summary>
@@ -136,20 +135,21 @@ partial class JEnvironment
 	private ThrowableException? GetThrown()
 	{
 		ThrowableException? jniException = this._cache.Thrown as ThrowableException;
-		if (jniException is null && this._cache.Thrown is not null)
-			if (!this._cache.JniSecure(JniSafetyLevels.ErrorSafe))
-			{
-				throw this._cache.Thrown;
-			}
-			else
-			{
-				JThrowableLocalRef throwableRef = this._cache.GetPendingException();
-				if (!throwableRef.IsDefault)
-				{
-					jniException = this._cache.CreateThrowableException(throwableRef);
-					this._cache.ThrowJniException(jniException, false);
-				}
-			}
+		if (jniException is not null || this._cache.Thrown is null) return jniException;
+		if (!this._cache.JniSecure(JniSafetyLevels.ErrorSafe))
+			throw this._cache.Thrown;
+		return this.ParseException(this._cache.GetPendingException());
+	}
+	/// <summary>
+	/// Parses <paramref name="throwableRef"/> to a <see cref="ThrowableException"/> instance.
+	/// </summary>
+	/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
+	private ThrowableException? ParseException(JThrowableLocalRef throwableRef)
+	{
+		if (throwableRef.IsDefault) return default;
+		ThrowableException jniException = this._cache.CreateThrowableException(throwableRef);
+		this._cache.ThrowJniException(jniException, false);
 		return jniException;
 	}
 	/// <summary>

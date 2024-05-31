@@ -12,13 +12,6 @@ internal static partial class UnicodeClassNames
 	[DefaultValue(ClassNames.ClassObject)]
 	public static readonly CString ClassObject;
 
-	/// <inheritdoc cref="ClassNames.ThreadGroupObject"/>
-	[DefaultValue(ClassNames.ThreadGroupObject)]
-	public static readonly CString ThreadGroupObject;
-	/// <inheritdoc cref="ClassNames.SystemObject"/>
-	[DefaultValue(ClassNames.SystemObject)]
-	public static readonly CString SystemObject;
-
 	/// <inheritdoc cref="ClassNames.VoidObject"/>
 	[DefaultValue(ClassNames.VoidObject)]
 	public static partial ReadOnlySpan<Byte> VoidObject();

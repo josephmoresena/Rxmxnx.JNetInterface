@@ -174,10 +174,12 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	}
 
 	/// <inheritdoc/>
-	public override String ToString() => JObject.GetObjectIdentifier(this.Name, this.Reference);
+	public override String ToString()
+		=> !this.Reference.IsDefault ? JObject.GetObjectIdentifier(this.Name, this.Reference) : $"{this.Name}";
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
-	public override String ToTraceText() => $"{this} hash: {this.GetPrintableHash(out String lastChar)}{lastChar}";
+	public override String ToTraceText()
+		=> $"{this} hash: {ITypeInformation.GetPrintableHash(this.Hash, out String lastChar)}{lastChar}";
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

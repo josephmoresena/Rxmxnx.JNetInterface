@@ -22,6 +22,10 @@ public record JNativeCallEntry : IFixedPointer
 	/// Definition hash.
 	/// </summary>
 	public String Hash => this._definition.Hash;
+	/// <summary>
+	/// Managed function.
+	/// </summary>
+	public virtual Delegate? Delegate => default;
 
 	/// <summary>
 	/// Constructor.
@@ -54,14 +58,14 @@ public record JNativeCallEntry : IFixedPointer
 	public static JNativeCallEntry Create(JFunctionDefinition definition, IntPtr ptr) => new(ptr, definition);
 	/// <summary>
 	/// Creates a <see cref="JNativeCallEntry"/> instance using <paramref name="definition"/> and
-	/// <paramref name="del"/>.
+	/// <paramref name="managedFunction"/>.
 	/// </summary>
 	/// <typeparam name="T">Type of call.</typeparam>
 	/// <param name="definition">Java call definition.</param>
-	/// <param name="del">Delegate.</param>
+	/// <param name="managedFunction">Delegate.</param>
 	/// <returns>A <see cref="JNativeCallEntry"/> instance.</returns>
-	public static JNativeCallEntry Create<T>(JMethodDefinition definition, T del) where T : Delegate
-		=> new GenericEntry<T>(del, definition);
+	public static JNativeCallEntry Create<T>(JMethodDefinition definition, T managedFunction) where T : Delegate
+		=> new GenericEntry<T>(managedFunction, definition);
 	/// <summary>
 	/// Creates a <see cref="JNativeCallEntry"/> instance using <paramref name="definition"/> and
 	/// <paramref name="del"/>.
@@ -78,10 +82,8 @@ public record JNativeCallEntry : IFixedPointer
 	/// </summary>
 	private sealed record GenericEntry<T> : JNativeCallEntry where T : Delegate
 	{
-		/// <summary>
-		/// Delegate.
-		/// </summary>
-		private readonly T _del;
+		/// <inheritdoc/>
+		public override Delegate? Delegate { get; }
 
 		/// <summary>
 		/// Constructor.
@@ -89,6 +91,6 @@ public record JNativeCallEntry : IFixedPointer
 		/// <param name="del">Delegate.</param>
 		/// <param name="definition">Definition.</param>
 		public GenericEntry(T del, JCallDefinition definition) : base(del.GetUnsafeIntPtr(), definition)
-			=> this._del = del;
+			=> this.Delegate = del;
 	}
 }

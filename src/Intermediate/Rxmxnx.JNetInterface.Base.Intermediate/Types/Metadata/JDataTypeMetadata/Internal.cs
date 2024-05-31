@@ -18,7 +18,7 @@ public partial record JDataTypeMetadata
 	/// <returns>A <see cref="CString"/> containing JNI class name.</returns>
 	internal static CString JniEscapeClassName(CString className)
 	{
-		CString classNameF = !className.Contains(JDataTypeMetadata.classNameEscape[0]) ?
+		CString classNameF = !className.Contains(JDataTypeMetadata.GetEscapeSpan()[0]) ?
 			className :
 			CString.Create(className.Select(JDataTypeMetadata.EscapeClassNameChar).ToArray());
 		return classNameF;
@@ -30,7 +30,7 @@ public partial record JDataTypeMetadata
 	/// <returns>A <see cref="CString"/> containing JNI class name.</returns>
 	internal static ReadOnlySpan<Byte> JniEscapeClassName(ReadOnlySpan<Byte> className)
 	{
-		if (!className.Contains(JDataTypeMetadata.classNameEscape[0])) return className;
+		if (!className.Contains(JDataTypeMetadata.GetEscapeSpan()[0])) return className;
 		Byte[] classNameBytes = new Byte[className.Length];
 		for (Int32 i = 0; i < className.Length; i++)
 			classNameBytes[i] = JDataTypeMetadata.EscapeClassNameChar(className[i]);

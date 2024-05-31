@@ -66,25 +66,17 @@ public sealed record JVirtualMachineInitOption
 		return new(list);
 	}
 	/// <summary>
-	/// Creates a <see cref="IFixedContext{JVirtualMachineInitOptionValue}.IDisposable"/> from <see cref="CStringSequence"/>
+	/// Creates a <see cref="Memory{JVirtualMachineInitOptionValue}"/> from <see cref="CStringSequence"/>
 	/// instance.
 	/// </summary>
 	/// <param name="sequence">A fixed <see cref="CStringSequence"/> instance with UTF-8 text.</param>
-	/// <returns>A <see cref="IFixedContext{JVirtualMachineInitOptionValue}.IDisposable"/> array.</returns>
-	internal static IFixedContext<VirtualMachineInitOptionValue>.IDisposable GetContext(CStringSequence sequence)
+	/// <returns>A <see cref="Memory{JVirtualMachineInitOptionValue}"/> array.</returns>
+	internal static Span<VirtualMachineInitOptionValue> GetSpan(CStringSequence sequence)
 	{
 		VirtualMachineInitOptionValue[] arr = new VirtualMachineInitOptionValue[sequence.Count / 2];
 		for (Int32 i = 0; i < arr.Length; i += 2)
-		{
-			arr[i] = new()
-			{
-				Name = sequence[i].AsSpan().GetUnsafeValPtr(),
-				ExtraInfo = sequence[i + 1].AsSpan().GetUnsafeValPtr(),
-			};
-		}
-		Memory<VirtualMachineInitOptionValue> mem = arr.AsMemory();
-		IFixedContext<VirtualMachineInitOptionValue>.IDisposable ctx = mem.GetFixedContext();
-		return ctx;
+			arr[i] = new(sequence[i].AsSpan().GetUnsafeValPtr(), sequence[i + 1].AsSpan().GetUnsafeValPtr());
+		return arr.AsSpan();
 	}
 
 	/// <summary>

@@ -60,9 +60,13 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// Removes the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
 	/// <param name="reference">A <see cref="JVirtualMachineRef"/> reference.</param>
-	public static void RemoveVirtualMachine(JVirtualMachineRef reference)
+	/// <returns>
+	/// <set langword="true"/> if the <see cref="IVirtualMachine"/> instance referenced by
+	/// <paramref name="reference"/> was removed successfully; otherwise, <see langword="false"/>.
+	/// </returns>
+	public static Boolean RemoveVirtualMachine(JVirtualMachineRef reference)
 	{
 		ReferenceCache.Instance.Get(reference, out _)._cache.ClearCache();
-		ReferenceCache.Instance.Remove(reference);
+		return ReferenceCache.Instance.Remove(reference);
 	}
 }

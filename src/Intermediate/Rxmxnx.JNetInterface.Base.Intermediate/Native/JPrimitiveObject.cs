@@ -48,7 +48,7 @@ internal abstract partial class JPrimitiveObject : JObject
 /// <typeparam name="TPrimitive">Type of java primitive value.</typeparam>
 internal sealed partial class JPrimitiveObject<TPrimitive> : JPrimitiveObject.Generic<TPrimitive>, IPrimitiveType,
 	IEquatable<JPrimitiveObject<TPrimitive>>
-	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEquatable<TPrimitive>
+	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IEquatable<TPrimitive>, IComparable<TPrimitive>
 {
 	/// <inheritdoc/>
 	public override Int32 SizeOf => IPrimitiveType.GetMetadata<TPrimitive>().SizeOf;

@@ -68,17 +68,6 @@ public partial class JClassObject
 		this._isAnnotation = this._isInterface.Value && modifier.HasFlag(JModifierObject.Modifiers.Annotation);
 		return result;
 	}
-	/// <summary>
-	/// Retrieves printable text hash.
-	/// </summary>
-	/// <returns>A read-only UTF-16 char span.</returns>
-	[ExcludeFromCodeCoverage]
-	private ReadOnlySpan<Char> GetPrintableHash(out String lastChar)
-	{
-		ReadOnlySpan<Char> hash = this.Hash;
-		lastChar = hash[^1] == default ? @"\0" : $"{hash[^1]}";
-		return hash[..^1];
-	}
 
 	static JClassObject IClassType<JClassObject>.Create(IReferenceType.ClassInitializer initializer)
 	{

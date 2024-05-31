@@ -10,27 +10,22 @@
 public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObjectDefinition>
 {
 	/// <summary>
-	/// Internal <see cref="CStringSequence"/> containing the name and descriptor of accessible object.
-	/// </summary>
-	private readonly CStringSequence _sequence;
-
-	/// <summary>
 	/// Definition name.
 	/// </summary>
-	public CString Name => this._sequence[0];
+	public CString Name => this.Information[0];
 	/// <summary>
 	/// Definition descriptor.
 	/// </summary>
-	public CString Descriptor => this._sequence[1];
+	public CString Descriptor => this.Information[1];
 	/// <summary>
 	/// Definition hash.
 	/// </summary>
-	public String Hash => this._sequence.ToString();
+	public String Hash => this.Information.ToString();
 
 	/// <summary>
 	/// Accessible object information.
 	/// </summary>
-	internal CStringSequence Information => this._sequence;
+	internal CStringSequence Information { get; }
 
 	/// <summary>
 	/// The format used for <see cref="JAccessibleObjectDefinition.ToString()"/> method.
@@ -43,28 +38,28 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <param name="sequence">
 	/// <see cref="CStringSequence"/> containing the name and descriptor of the accessible object.
 	/// </param>
-	private protected JAccessibleObjectDefinition(CStringSequence sequence) => this._sequence = sequence;
+	private protected JAccessibleObjectDefinition(CStringSequence sequence) => this.Information = sequence;
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>
 	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
 	private protected JAccessibleObjectDefinition(JAccessibleObjectDefinition definition)
-		=> this._sequence = definition._sequence;
+		=> this.Information = definition.Information;
 
 	/// <inheritdoc/>
 	public Boolean Equals(JAccessibleObjectDefinition? other)
 	{
 		if (other is null) return false;
 		if (Object.ReferenceEquals(this, other)) return true;
-		return this._sequence.Equals(other._sequence) && this.ToStringFormat == other.ToStringFormat;
+		return this.Information.Equals(other.Information) && this.ToStringFormat == other.ToStringFormat;
 	}
 
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj) => this.Equals(obj as JAccessibleObjectDefinition);
 	/// <inheritdoc/>
-	public override String ToString() => String.Format(this.ToStringFormat, this._sequence[0], this._sequence[1]);
+	public override String ToString() => String.Format(this.ToStringFormat, this.Information[0], this.Information[1]);
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this._sequence.GetHashCode();
+	public override Int32 GetHashCode() => this.Information.GetHashCode();
 
 	/// <inheritdoc cref="Object.ToString()"/>
 	/// <remarks>Use this method for trace.</remarks>

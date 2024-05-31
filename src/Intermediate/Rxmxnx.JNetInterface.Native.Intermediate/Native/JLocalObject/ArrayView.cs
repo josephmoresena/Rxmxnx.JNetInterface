@@ -14,7 +14,7 @@ public partial class JLocalObject
 	public abstract partial class ArrayView : View<JArrayObject>, IDataType, IDisposable
 	{
 		static JTypeKind IDataType.Kind => JTypeKind.Array;
-		static Type? IDataType.FamilyType => typeof(JArrayObject);
+		static Type IDataType.FamilyType => typeof(JArrayObject);
 
 		/// <summary>
 		/// Array length.
@@ -36,7 +36,7 @@ public partial class JLocalObject
 		}
 
 		/// <inheritdoc/>
-		public override String ToString() => this.Object.ToString()!;
+		public override String ToString() => this.Object.ToString();
 
 		/// <summary>
 		/// Retrieves a <see cref="JArrayObject"/> instance from <paramref name="jLocal"/>.

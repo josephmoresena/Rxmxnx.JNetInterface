@@ -26,6 +26,7 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 	/// Retrieves the type of given object reference.
 	/// </summary>
 	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JReferenceType> GetObjectRefType;
+
 	/// <summary>
 	/// Information of <see cref="NativeInterface6.GetObjectRefType"/>
 	/// </summary>

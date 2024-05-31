@@ -21,11 +21,11 @@ internal sealed partial class ObjectLifetime(
 	/// <summary>
 	/// Internal id.
 	/// </summary>
-	public Int64 Id => this._id;
+	public Int64 Id { get; } = jObject.Id;
 	/// <summary>
 	/// <see cref="IEnvironment"/> instance.
 	/// </summary>
-	public IEnvironment Environment => this._env;
+	public IEnvironment Environment { get; } = env;
 	/// <summary>
 	/// Indicates whether this instance is disposed.
 	/// </summary>
@@ -119,9 +119,9 @@ internal sealed partial class ObjectLifetime(
 	/// <returns>The loaded <see cref="JGlobalBase"/> object for the current instance.</returns>
 	public JGlobalBase? GetGlobalObject()
 	{
-		if (this._global is not null && this._global.IsMinimalValid(this._env))
+		if (this._global is not null && this._global.IsMinimalValid(this.Environment))
 			return this._global;
-		if (this._weak is not null && this._weak.IsMinimalValid(this._env))
+		if (this._weak is not null && this._weak.IsMinimalValid(this.Environment))
 			return this._weak;
 		return default;
 	}
@@ -133,7 +133,7 @@ internal sealed partial class ObjectLifetime(
 	public JClassObject GetLoadClassObject(JLocalObject jLocal)
 	{
 		if (this._class is not null && this._isRealClass) return this._class;
-		this._class = this._env.ClassFeature.GetObjectClass(jLocal);
+		this._class = this.Environment.ClassFeature.GetObjectClass(jLocal);
 		this._isRealClass = true;
 		return this._class;
 	}
@@ -144,9 +144,9 @@ internal sealed partial class ObjectLifetime(
 	/// <returns><see cref="JGlobal"/> for <paramref name="jLocal"/>.</returns>
 	public JGlobal GetLoadGlobalObject(JLocalObject jLocal)
 	{
-		if (!JGlobalBase.IsValid(this._global, this._env))
+		if (!JGlobalBase.IsValid(this._global, this.Environment))
 		{
-			this._global = this._env.ReferenceFeature.Create<JGlobal>(jLocal);
+			this._global = this.Environment.ReferenceFeature.Create<JGlobal>(jLocal);
 			this._global.AssignationCache.Merge(this._assignableTypes);
 		}
 		else
@@ -162,9 +162,9 @@ internal sealed partial class ObjectLifetime(
 	/// <returns><see cref="JGlobal"/> for <paramref name="jLocal"/>.</returns>
 	public JWeak GetLoadWeakObject(JLocalObject jLocal)
 	{
-		if (!JGlobalBase.IsValid(this._weak, this._env))
+		if (!JGlobalBase.IsValid(this._weak, this.Environment))
 		{
-			this._weak = this._env.ReferenceFeature.Create<JWeak>(jLocal);
+			this._weak = this.Environment.ReferenceFeature.Create<JWeak>(jLocal);
 			this._weak.AssignationCache.Merge(this._assignableTypes);
 		}
 		else
@@ -181,7 +181,7 @@ internal sealed partial class ObjectLifetime(
 	public void SetClass(ObjectMetadata instanceMetadata)
 	{
 		if (!instanceMetadata.ObjectClassName.AsSpan().SequenceEqual(this._class?.Name))
-			this._class = instanceMetadata.GetClass(this._env);
+			this._class = instanceMetadata.GetClass(this.Environment);
 		this._isRealClass = true;
 	}
 	/// <summary>
@@ -208,12 +208,11 @@ internal sealed partial class ObjectLifetime(
 
 		if (result.HasValue)
 			return result.Value;
-		if (JGlobalBase.IsValid(this._global, this._env))
+		if (JGlobalBase.IsValid(this._global, this.Environment))
 			return this._global.InstanceOf<TDataType>();
-		if (JGlobalBase.IsValid(this._weak, this._env))
-			return this._weak.InstanceOf<TDataType>();
-
-		return this._env.ClassFeature.IsInstanceOf<TDataType>(jLocal);
+		return JGlobalBase.IsValid(this._weak, this.Environment) ?
+			this._weak.InstanceOf<TDataType>() :
+			this.Environment.ClassFeature.IsInstanceOf<TDataType>(jLocal);
 	}
 
 	/// <summary>
@@ -240,8 +239,9 @@ internal sealed partial class ObjectLifetime(
 		Boolean isClass = jLocal is JClassObject;
 		this.Unload(jLocal.Id, isClass);
 		this.Secondary?.Unload(jLocal.Id, isClass);
-		if (this._objects.Count > this._classCounter.Value || this._env.ReferenceFeature.IsParameter(jLocal)) return;
-		if (this._env.ReferenceFeature.Unload(jLocal)) this.Dispose();
+		if (this._objects.Count > this._classCounter.Value ||
+		    this.Environment.ReferenceFeature.IsParameter(jLocal)) return;
+		if (this.Environment.ReferenceFeature.Unload(jLocal)) this.Dispose();
 	}
 	/// <summary>
 	/// Unloads current <see cref="JGlobalBase"/> instance.
@@ -302,7 +302,7 @@ internal sealed partial class ObjectLifetime(
 	public Boolean HasValidGlobal<TGlobal>() where TGlobal : JGlobalBase
 	{
 		TGlobal? jGlobal = this._global as TGlobal ?? this._weak as TGlobal;
-		return jGlobal is not null && !jGlobal.IsDefault && jGlobal.IsValid(this._env);
+		return jGlobal is not null && !jGlobal.IsDefault && jGlobal.IsValid(this.Environment);
 	}
 	/// <summary>
 	/// Sets current <see cref="JGlobal"/> object.

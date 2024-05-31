@@ -11,15 +11,13 @@ namespace Rxmxnx.JNetInterface.Native.Values;
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe partial struct NativeInterface : INativeInterface<NativeInterface>
 {
-	/// <inheritdoc/>
-	public static Int32 RequiredVersion => 0x00010002;
-
 	/// <summary>
 	/// Internal reserved entries.
 	/// </summary>
 #pragma warning disable CS0169
 	private readonly JNativeInterface.ComReserved _reserved;
 #pragma warning restore CS0169
+
 	/// <inheritdoc cref="JNativeInterface.GetVersionPointer"/>
 	public readonly delegate* unmanaged<JEnvironmentRef, Int32> GetVersion;
 	/// <summary>

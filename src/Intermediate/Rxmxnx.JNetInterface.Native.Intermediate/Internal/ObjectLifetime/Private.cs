@@ -11,14 +11,6 @@ internal partial class ObjectLifetime
 	/// </summary>
 	private readonly IMutableWrapper<Int32> _classCounter = IMutableWrapper<Int32>.Create();
 	/// <summary>
-	/// Internal <see cref="IEnvironment"/> instance.
-	/// </summary>
-	private readonly IEnvironment _env = env;
-	/// <summary>
-	/// Internal id.
-	/// </summary>
-	private readonly Int64 _id = jObject.Id;
-	/// <summary>
 	/// Indicates whether current instance is not disposable.
 	/// </summary>
 	private readonly Boolean _isDisposable = isDisposable;

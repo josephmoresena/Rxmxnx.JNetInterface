@@ -100,19 +100,22 @@ public sealed unsafe record JVirtualMachineLibrary
 	{
 		CStringSequence sequence = JVirtualMachineInitOption.GetOptionsSequence(arg.Options);
 		using IFixedPointer.IDisposable fPtr = sequence.GetFixedPointer();
-		using IFixedContext<VirtualMachineInitOptionValue>.IDisposable options =
-			JVirtualMachineInitOption.GetContext(sequence);
-		VirtualMachineInitArgumentValue value = new()
+		Span<VirtualMachineInitOptionValue> options = JVirtualMachineInitOption.GetSpan(sequence);
+		fixed (VirtualMachineInitOptionValue* ptr = &MemoryMarshal.GetReference(options))
 		{
-			Version = arg.Version,
-			OptionsLength = options.Values.Length,
-			Options = options.ValuePointer,
-			IgnoreUnrecognized = ((JBoolean)arg.IgnoreUnrecognized).ByteValue,
-		};
-		JResult result =
-			this._functions.CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef, in value);
-		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-		return JVirtualMachine.GetVirtualMachine(vmRef, envRef, out env);
+			VirtualMachineInitArgumentValue value = new()
+			{
+				Version = arg.Version,
+				OptionsLength = options.Length,
+				Options = ptr,
+				IgnoreUnrecognized = arg.IgnoreUnrecognized,
+			};
+			JResult result =
+				this._functions.CreateVirtualMachine(out JVirtualMachineRef vmRef, out JEnvironmentRef envRef,
+				                                     in value);
+			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
+			return JVirtualMachine.GetVirtualMachine(vmRef, envRef, out env);
+		}
 	}
 	/// <summary>
 	/// Retrieves all of the created <see cref="IVirtualMachine"/> instances.
@@ -156,15 +159,13 @@ public sealed unsafe record JVirtualMachineLibrary
 		IntPtr? handle = NativeUtilities.LoadNativeLib(libraryPath);
 		if (!handle.HasValue) return default;
 		Span<IntPtr> functions = stackalloc IntPtr[3];
-		if (!NativeLibrary.TryGetExport(handle.Value, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
-		                                out functions[0]) ||
-		    !NativeLibrary.TryGetExport(handle.Value, JVirtualMachineLibrary.CreateVirtualMachineName,
-		                                out functions[1]) || !NativeLibrary.TryGetExport(
+		if (NativeLibrary.TryGetExport(handle.Value, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
+		                               out functions[0]) &&
+		    NativeLibrary.TryGetExport(handle.Value, JVirtualMachineLibrary.CreateVirtualMachineName,
+		                               out functions[1]) && NativeLibrary.TryGetExport(
 			    handle.Value, JVirtualMachineLibrary.GetCreatedVirtualMachinesName, out functions[2]))
-		{
-			NativeLibrary.Free(handle.Value);
-			return default;
-		}
-		return new(handle.Value, functions.AsValues<IntPtr, InvocationFunctionSet>()[0]);
+			return new(handle.Value, functions.AsValues<IntPtr, InvocationFunctionSet>()[0]);
+		NativeLibrary.Free(handle.Value);
+		return default;
 	}
 }

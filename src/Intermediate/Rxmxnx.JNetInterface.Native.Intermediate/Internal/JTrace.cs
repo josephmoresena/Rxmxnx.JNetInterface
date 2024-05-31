@@ -45,7 +45,9 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"{classRef}, Name: {classInformation[0]}", callerMethod);
+		Trace.WriteLine(
+			!classRef.IsDefault ? $"{classRef} name: {classInformation[0]}" : $"name: {classInformation[0]}",
+			callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and retrieving class reference using a <see cref="JClassObject"/> instance
@@ -79,7 +81,7 @@ internal static partial class JTrace
 	public static void Unload(Boolean isRegistered, Boolean isAttached, Boolean isAlive, JObjectLocalRef localRef,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!IVirtualMachine.TraceEnabled && localRef == default) return;
 		if (!isRegistered)
 			Trace.WriteLine($"Unable to remove unregistered {localRef}.", callerMethod);
 		else if (!isAttached)
@@ -100,7 +102,7 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 		where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!IVirtualMachine.TraceEnabled && globalRef.Value == default) return;
 		if (!isAttached)
 			Trace.WriteLine($"Unable to remove {globalRef}. Thread is not attached.", callerMethod);
 		else if (!isAlive)
@@ -125,10 +127,11 @@ internal static partial class JTrace
 		if (!IVirtualMachine.TraceEnabled) return;
 		String memoryText = isCritical ? "Critical memory" : "Memory";
 		if (!isAttached)
-			Trace.WriteLine($"Unable to release {memoryText} 0x{pointer:0x8} {objectRef}. Thread is not attached.",
-			                callerMethod);
+			Trace.WriteLine(
+				$"Unable to release {memoryText.ToLower()} 0x{pointer:0x8} {objectRef}. Thread is not attached.",
+				callerMethod);
 		else if (!isAlive)
-			Trace.WriteLine($"Unable to release {memoryText} 0x{pointer:0x8} {objectRef}. JVM is not alive.",
+			Trace.WriteLine($"Unable to release {memoryText.ToLower()} 0x{pointer:0x8} {objectRef}. JVM is not alive.",
 			                callerMethod);
 		else if (!released)
 			Trace.WriteLine($"Error attempting to release {memoryText} 0x{pointer:0x8} {objectRef}.", callerMethod);
@@ -215,7 +218,7 @@ internal static partial class JTrace
 		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine(objectRef, callerMethod);
+		Trace.WriteLine(objectRef.ToString(), callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and creation of local reference to the trace listeners.

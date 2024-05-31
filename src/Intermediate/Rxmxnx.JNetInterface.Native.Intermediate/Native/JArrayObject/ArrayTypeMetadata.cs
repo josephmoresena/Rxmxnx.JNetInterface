@@ -32,12 +32,11 @@ public partial class JArrayObject<TElement>
 		internal override Boolean IsInstance(JReferenceObject jObject)
 		{
 			Boolean result = jObject is IArrayObject<TElement>;
-			if (!result && this.ElementMetadata.Kind != JTypeKind.Primitive && jObject is JArrayObject jArray)
-			{
-				JReferenceTypeMetadata elementMetadata = (JReferenceTypeMetadata)this.ElementMetadata;
-				if (jArray.TypeMetadata.ElementMetadata is JReferenceTypeMetadata otherElementMetadata)
-					result = otherElementMetadata.TypeOf(elementMetadata);
-			}
+			if (result || this.ElementMetadata.Kind == JTypeKind.Primitive || jObject is not JArrayObject jArray)
+				return result || jObject.InstanceOf<JArrayObject<TElement>>();
+			JReferenceTypeMetadata elementMetadata = (JReferenceTypeMetadata)this.ElementMetadata;
+			if (jArray.TypeMetadata.ElementMetadata is JReferenceTypeMetadata otherElementMetadata)
+				result = otherElementMetadata.TypeOf(elementMetadata);
 			return result || jObject.InstanceOf<JArrayObject<TElement>>();
 		}
 		/// <inheritdoc/>

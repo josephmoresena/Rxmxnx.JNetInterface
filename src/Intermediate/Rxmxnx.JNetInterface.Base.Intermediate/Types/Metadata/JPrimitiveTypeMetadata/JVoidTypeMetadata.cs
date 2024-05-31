@@ -5,7 +5,9 @@ public partial record JPrimitiveTypeMetadata
 	/// <summary>
 	/// Stores the metadata for Java <c>void</c> type.
 	/// </summary>
-	private sealed record JVoidTypeMetadata : JPrimitiveTypeMetadata
+	private sealed record JVoidTypeMetadata()
+		: JPrimitiveTypeMetadata(0, typeof(void), JPrimitiveTypeMetadata.voidInformation,
+		                         UnicodeClassNames.VoidObject())
 	{
 		/// <summary>
 		/// <c>void</c> class fake hash.
@@ -21,11 +23,6 @@ public partial record JPrimitiveTypeMetadata
 		public override JNativeType NativeType => default;
 		/// <inheritdoc/>
 		public override JArgumentMetadata ArgumentMetadata => CommonValidationUtilities.ThrowVoidArgument();
-
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public JVoidTypeMetadata() { }
 
 #if PACKAGE
 		/// <inheritdoc/>
