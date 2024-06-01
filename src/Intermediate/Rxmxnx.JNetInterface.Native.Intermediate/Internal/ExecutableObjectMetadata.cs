@@ -1,5 +1,9 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
+/// <summary>
+/// This record stores the metadata of a <see cref="JExecutableObject"/> in order to create a
+/// <see cref="JGlobalBase"/> instance.
+/// </summary>
 internal sealed record ExecutableObjectMetadata : ObjectMetadata
 {
 	/// <summary>

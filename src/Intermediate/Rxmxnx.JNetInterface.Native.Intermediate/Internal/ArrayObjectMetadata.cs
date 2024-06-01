@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// This record stores the metadata of a <see cref="JArrayObject"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
-public sealed record ArrayObjectMetadata : ObjectMetadata
+internal sealed record ArrayObjectMetadata : ObjectMetadata
 {
 	/// <summary>
 	/// Internal array length.
