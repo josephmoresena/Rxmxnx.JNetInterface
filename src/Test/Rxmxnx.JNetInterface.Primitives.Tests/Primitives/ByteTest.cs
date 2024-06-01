@@ -30,9 +30,6 @@ public sealed class ByteTest : PrimitiveTestBase
 
 		Assert.Equal(ClassNames.ByteObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.ByteObject().SequenceEqual(metadata.WrapperClassName));
-
-		using IFixedPointer.IDisposable fPtr = (metadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, metadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	[Fact]
 	private void ConstructorsTest()

@@ -160,8 +160,5 @@ public class JElementTypeObjectTests
 		Assert.True(typeMetadata.IsInstance(jElementType0));
 		Assert.True(typeMetadata.IsInstance(jElementType1));
 		Assert.True(typeMetadata.IsInstance(jElementType2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 }

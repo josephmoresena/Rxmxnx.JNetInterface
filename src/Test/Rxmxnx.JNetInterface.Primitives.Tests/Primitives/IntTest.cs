@@ -30,9 +30,6 @@ public sealed class IntTest : PrimitiveTestBase
 
 		Assert.Equal(ClassNames.IntegerObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.IntegerObject().SequenceEqual(metadata.WrapperClassName));
-
-		using IFixedPointer.IDisposable fPtr = (metadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, metadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	[Fact]
 	private void ConstructorsTest()

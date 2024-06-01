@@ -191,9 +191,6 @@ public sealed class NumberObjectTests
 		Assert.True(typeMetadata.IsInstance(jNumberObject0));
 		Assert.True(typeMetadata.IsInstance(jNumberObject0));
 		Assert.True(typeMetadata.IsInstance(jNumberObject0));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	private static void ValueTest<TPrimitive, TNumber>(Func<JClassObject, JObjectLocalRef, TPrimitive, TNumber> creator,
 		Boolean? useMetadata = default)

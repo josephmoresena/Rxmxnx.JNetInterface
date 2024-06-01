@@ -139,9 +139,6 @@ public sealed class JErrorObjectTests
 		Assert.True(typeMetadata.IsInstance(jError0));
 		Assert.True(typeMetadata.IsInstance(jError1));
 		Assert.True(typeMetadata.IsInstance(jError2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	[Theory]
 	[InlineData(true)]

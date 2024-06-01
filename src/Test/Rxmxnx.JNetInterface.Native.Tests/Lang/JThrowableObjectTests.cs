@@ -155,9 +155,6 @@ public sealed class JThrowableObjectTests
 		Assert.True(typeMetadata.IsInstance(jThrowable0));
 		Assert.True(typeMetadata.IsInstance(jThrowable1));
 		Assert.True(typeMetadata.IsInstance(jThrowable2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	[Theory]
 	[InlineData(true)]

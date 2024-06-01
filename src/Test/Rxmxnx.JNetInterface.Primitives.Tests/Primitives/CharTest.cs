@@ -29,9 +29,6 @@ public sealed class CharTest : PrimitiveTestBase
 
 		Assert.Equal(ClassNames.CharacterObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.CharacterObject().SequenceEqual(metadata.WrapperClassName));
-
-		using IFixedPointer.IDisposable fPtr = (metadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, metadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	[Fact]
 	private void ConstructorsTest()

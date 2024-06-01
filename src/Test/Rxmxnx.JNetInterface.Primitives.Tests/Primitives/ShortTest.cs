@@ -30,9 +30,6 @@ public sealed class ShortTest : PrimitiveTestBase
 
 		Assert.Equal(ClassNames.ShortObject, metadata.WrapperClassName.ToString());
 		Assert.True(UnicodeClassNames.ShortObject().SequenceEqual(metadata.WrapperClassName));
-
-		using IFixedPointer.IDisposable fPtr = (metadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, metadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	[Fact]
 	private void ConstructorsTest()

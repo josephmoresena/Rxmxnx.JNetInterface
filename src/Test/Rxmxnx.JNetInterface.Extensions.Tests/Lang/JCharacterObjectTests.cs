@@ -121,9 +121,6 @@ public sealed class JCharacterObjectTests
 		Assert.True(typeMetadata.IsInstance(jCharacterObject0));
 		Assert.True(typeMetadata.IsInstance(jCharacterObject1));
 		Assert.True(typeMetadata.IsInstance(jCharacterObject2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	[Theory]
 	[InlineData]

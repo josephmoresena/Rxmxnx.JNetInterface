@@ -40,8 +40,6 @@ public abstract partial record JDataTypeMetadata : ITypeInformation
 
 	[ExcludeFromCodeCoverage]
 	JTypeModifier? ITypeInformation.Modifier => this.Modifier;
-	[ExcludeFromCodeCoverage]
-	IFixedPointer.IDisposable ITypeInformation.GetClassNameFixedPointer() => this._sequence.GetFixedPointer();
 
 #if PACKAGE
 	/// <summary>

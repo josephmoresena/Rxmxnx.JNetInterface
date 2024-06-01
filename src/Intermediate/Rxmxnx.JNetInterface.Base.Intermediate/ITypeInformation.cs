@@ -25,10 +25,6 @@ public interface ITypeInformation
 	/// Modifier of the current type.
 	/// </summary>
 	JTypeModifier? Modifier { get; }
-	/// <summary>
-	/// Retrieve fixed pointer of class name.
-	/// </summary>
-	IFixedPointer.IDisposable GetClassNameFixedPointer();
 
 	/// <summary>
 	/// Retrieves length of a segment in <paramref name="utf8Sequence"/>

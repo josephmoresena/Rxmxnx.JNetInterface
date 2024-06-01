@@ -98,8 +98,5 @@ public class JNumberObjectTests
 		Assert.True(typeMetadata.IsInstance(jNumber0));
 		Assert.True(typeMetadata.IsInstance(jNumber1));
 		Assert.True(typeMetadata.IsInstance(jNumber2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 }
