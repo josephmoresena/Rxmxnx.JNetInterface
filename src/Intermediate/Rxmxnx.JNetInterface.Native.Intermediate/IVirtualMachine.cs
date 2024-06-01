@@ -13,7 +13,7 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <summary>
 	/// Capacity for Throwable.getStackTrace()
 	/// </summary>
-	internal const Int32 GetStackTraceCapacity = 10;
+	internal const Int32 GetStackTraceCapacity = 5;
 	/// <summary>
 	/// Capacity Class.getModifiers(), Class.getName() and FindClass()
 	/// </summary>
@@ -21,11 +21,11 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <summary>
 	/// Capacity Class.getModifiers(), Class.getName() and FindClass()
 	/// </summary>
-	internal const Int32 GetAccessibleDefinitionCapacity = 5;
+	internal const Int32 GetAccessibleDefinitionCapacity = 3;
 	/// <summary>
 	/// Capacity Class.getModifiers(), Class.getSuperclass() and Class.getName()
 	/// </summary>
-	internal const Int32 GetTypeMetadataCapacity = 8;
+	internal const Int32 GetSuperTypeCapacity = 5;
 	/// <summary>
 	/// Capacity Throwable.message()
 	/// </summary>
@@ -34,10 +34,6 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// Capacity GetObjectArrayElement()
 	/// </summary>
 	internal const Int32 IndexOfObjectCapacity = 5;
-	/// <summary>
-	/// Capacity Class.getModifiers(), Class.getInterfaces() and Class.getName()
-	/// </summary>
-	internal const Int32 GetSuperInterfaceMetadataCapacity = 10;
 	/// <summary>
 	/// Capacity GetObjectClass()
 	/// </summary>

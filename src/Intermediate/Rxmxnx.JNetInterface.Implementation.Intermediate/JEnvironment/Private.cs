@@ -101,7 +101,7 @@ partial class JEnvironment
 
 		hashes ??= [];
 		using JArrayObject<JClassObject> interfaces = jClass.GetInterfaces();
-		using LocalFrame _ = new(this, IVirtualMachine.GetSuperInterfaceMetadataCapacity);
+		using LocalFrame _ = new(this, IVirtualMachine.GetSuperTypeCapacity);
 		foreach (JClassObject? interfaceClass in interfaces)
 		{
 			using (interfaceClass)
@@ -166,7 +166,7 @@ partial class JEnvironment
 	private JReferenceTypeMetadata GetSuperTypeMetadata(JClassObject jClass)
 	{
 		if (!jClass.IsInterface)
-			return JEnvironment.GetSuperClassMetadata(jClass);
+			return JEnvironment.GetSuperClassMetadata(this, jClass);
 		JReferenceTypeMetadata? result = this.GetSuperInterfaceMetadata(jClass);
 		if (result is not null) return result;
 
@@ -178,8 +178,9 @@ partial class JEnvironment
 	/// superclass.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 	/// <returns>A <see cref="JClassTypeMetadata"/> instance.</returns>
-	private static JClassTypeMetadata GetSuperClassMetadata(JClassObject jClass)
+	private static JClassTypeMetadata GetSuperClassMetadata(JEnvironment env, JClassObject jClass)
 	{
 		if (jClass.IsEnum) // Enums should use java.lang.Enum metadata.
 		{
@@ -189,6 +190,7 @@ partial class JEnvironment
 		}
 
 		Boolean checkProxy = true;
+		using LocalFrame _ = new(env, IVirtualMachine.GetSuperTypeCapacity);
 		while (jClass.GetSuperClass() is { } superClass)
 		{
 			JTrace.GetSuperTypeMetadata(jClass, superClass);
