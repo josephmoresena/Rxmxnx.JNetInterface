@@ -25,7 +25,7 @@ partial class JEnvironment
 				JTrace.UseTypeMetadata(jClass, result);
 				return result;
 			}
-			using LocalFrame _ = new(this._env, 10);
+			using LocalFrame _ = new(this._env, IVirtualMachine.GetTypeMetadataCapacity);
 			result = jClass.ClassSignature[0] switch
 			{
 				UnicodePrimitiveSignatures.BooleanSignatureChar => (JClassTypeMetadata)MetadataHelper

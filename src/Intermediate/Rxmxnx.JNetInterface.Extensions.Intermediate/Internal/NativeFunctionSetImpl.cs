@@ -140,7 +140,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jClass.Environment;
 		modifiers = NativeFunctionSetImpl.GetClassModifiers(jClass);
 		return jClass.IsArray ?
-			env.WithFrame(10, jClass, NativeFunctionSetImpl.IsFinalArrayType) :
+			env.WithFrame(IVirtualMachine.IsFinalArrayCapacity, jClass, NativeFunctionSetImpl.IsFinalArrayType) :
 			modifiers.HasFlag(JModifierObject.Modifiers.Final);
 	}
 	/// <inheritdoc/>

@@ -325,4 +325,11 @@ internal static partial class JTrace
 			$"thread: {Environment.CurrentManagedThreadId} {Encoding.UTF8.GetString(arraySignature)} uses type metadata from {typeMetadata.ClassName}.",
 			callerMethod);
 	}
+	public static void InvokeAt(IThread thread, [CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {thread.Reference} name: {thread.Name} daemon: {thread.Daemon}.",
+			callerMethod);
+	}
 }

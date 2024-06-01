@@ -20,7 +20,8 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public StackTraceInfo[] StackTrace
-		=> this._stackTrace ??= this.Environment.WithFrame(10, this, JThrowableObject.GetStackTraceInfo);
+		=> this._stackTrace ??=
+			this.Environment.WithFrame(IVirtualMachine.GetStackTraceCapacity, this, JThrowableObject.GetStackTraceInfo);
 
 	/// <inheritdoc/>
 	protected JThrowableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

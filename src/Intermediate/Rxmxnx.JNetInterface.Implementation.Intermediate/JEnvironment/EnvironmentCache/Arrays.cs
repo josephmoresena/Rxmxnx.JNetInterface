@@ -51,12 +51,13 @@ partial class JEnvironment
 			JArrayLocalRef arrayRef = jniTransaction.Add(jArray);
 			JObjectLocalRef localRef = jniTransaction.Add(item);
 			JObjectArrayLocalRef objectArrayRef = JObjectArrayLocalRef.FromReference(in arrayRef);
-			using LocalFrame _ = new(this._env, 5);
+			using LocalFrame _ = new(this._env, IVirtualMachine.IndexOfObjectCapacity);
 			for (Int32 i = 0; i < jArray.Length; i++)
 			{
 				JObjectLocalRef itemLocalRef = this.GetObjectArrayElement(objectArrayRef, i);
 				if (localRef == itemLocalRef || this._env.IsSame(localRef, itemLocalRef))
 					return i;
+				this._env.DeleteLocalRef(localRef);
 			}
 			return -1;
 		}

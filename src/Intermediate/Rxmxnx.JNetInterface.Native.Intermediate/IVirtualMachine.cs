@@ -11,6 +11,39 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	public const Int32 MinimalVersion = 0x00010006;
 
 	/// <summary>
+	/// Capacity for Throwable.getStackTrace()
+	/// </summary>
+	internal const Int32 GetStackTraceCapacity = 10;
+	/// <summary>
+	/// Capacity Class.getModifiers(), Class.getName() and FindClass()
+	/// </summary>
+	internal const Int32 IsFinalArrayCapacity = 5;
+	/// <summary>
+	/// Capacity Class.getModifiers(), Class.getName() and FindClass()
+	/// </summary>
+	internal const Int32 GetAccessibleDefinitionCapacity = 5;
+	/// <summary>
+	/// Capacity Class.getModifiers(), Class.getSuperclass() and Class.getName()
+	/// </summary>
+	internal const Int32 GetTypeMetadataCapacity = 8;
+	/// <summary>
+	/// Capacity Throwable.message()
+	/// </summary>
+	internal const Int32 CreateThrowableExceptionCapacity = 5;
+	/// <summary>
+	/// Capacity GetObjectArrayElement()
+	/// </summary>
+	internal const Int32 IndexOfObjectCapacity = 5;
+	/// <summary>
+	/// Capacity Class.getModifiers(), Class.getInterfaces() and Class.getName()
+	/// </summary>
+	internal const Int32 GetSuperInterfaceMetadataCapacity = 10;
+	/// <summary>
+	/// Capacity GetObjectClass()
+	/// </summary>
+	internal const Int32 GetObjectClassCapacity = 10;
+
+	/// <summary>
 	/// Indicates whether trace output is enabled.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
