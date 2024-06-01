@@ -142,7 +142,7 @@ partial class JEnvironment
 		{
 			this.ClearException();
 
-			using LocalFrame _ = new(this._env, 5);
+			using LocalFrame _ = new(this._env, 10);
 			JClassObject jClass =
 				this._env.GetObjectClass(throwableRef.Value, out JReferenceTypeMetadata throwableMetadata);
 			String message = this.GetThrowableMessage(throwableRef);

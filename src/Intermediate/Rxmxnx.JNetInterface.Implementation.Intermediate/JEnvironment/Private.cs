@@ -101,7 +101,7 @@ partial class JEnvironment
 
 		hashes ??= [];
 		using JArrayObject<JClassObject> interfaces = jClass.GetInterfaces();
-		using LocalFrame _ = new(this, 2);
+		using LocalFrame _ = new(this, 5);
 		foreach (JClassObject? interfaceClass in interfaces)
 		{
 			// Super interface was already checked.

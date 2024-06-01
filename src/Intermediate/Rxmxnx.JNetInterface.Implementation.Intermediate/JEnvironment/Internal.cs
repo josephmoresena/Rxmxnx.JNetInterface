@@ -212,7 +212,7 @@ partial class JEnvironment
 	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
 	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata metadata)
 	{
-		using LocalFrame frame = new(this, 2);
+		using LocalFrame frame = new(this, 5);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
 		JClassObject jClass = this._cache.GetClass(classRef, true);
 		frame[jClass.LocalReference] = jClass.Lifetime.GetCacheable();

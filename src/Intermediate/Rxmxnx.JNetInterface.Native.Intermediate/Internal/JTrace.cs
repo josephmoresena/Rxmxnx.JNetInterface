@@ -107,7 +107,7 @@ internal static partial class JTrace
 	public static void Unload(Boolean isRegistered, Boolean isAttached, Boolean isAlive, JObjectLocalRef localRef,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled && localRef == default) return;
+		if (!IVirtualMachine.TraceEnabled || localRef == default) return;
 		if (!isRegistered)
 			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} Unable to remove unregistered {localRef}.",
 			                callerMethod);
@@ -134,7 +134,7 @@ internal static partial class JTrace
 		where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>,
 		IEqualityOperators<TGlobalRef, TGlobalRef, Boolean>
 	{
-		if (!IVirtualMachine.TraceEnabled && globalRef.Value == default) return;
+		if (!IVirtualMachine.TraceEnabled || globalRef == default) return;
 		if (!isAttached)
 			Trace.WriteLine(
 				$"thread: {Environment.CurrentManagedThreadId} Unable to remove {globalRef}. Thread is not attached.",
@@ -142,7 +142,7 @@ internal static partial class JTrace
 		else if (!isAlive)
 			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} Unable to {globalRef}. JVM is not alive.",
 			                callerMethod);
-		else if (globalRef != default)
+		else
 			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {globalRef} removed.", callerMethod);
 	}
 	/// <summary>
