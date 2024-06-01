@@ -104,20 +104,23 @@ partial class JEnvironment
 		using LocalFrame _ = new(this, 5);
 		foreach (JClassObject? interfaceClass in interfaces)
 		{
-			// Super interface was already checked.
-			if (hashes.Contains(interfaceClass!.Hash)) continue;
-			JTrace.GetSuperTypeMetadata(jClass, interfaceClass);
-
-			// Super interface is well-known
-			if (MetadataHelper.GetMetadata(interfaceClass.Hash) is JInterfaceTypeMetadata superInterfaceMetadata)
+			using (interfaceClass)
 			{
-				JTrace.UseTypeMetadata(jClass, superInterfaceMetadata);
-				return superInterfaceMetadata;
-			}
+				// Super interface was already checked.
+				if (hashes.Contains(interfaceClass!.Hash)) continue;
+				JTrace.GetSuperTypeMetadata(jClass, interfaceClass);
 
-			hashes.Add(interfaceClass.Hash);
-			if (this.GetSuperInterfaceMetadata(interfaceClass, hashes) is { } metadata)
-				return metadata;
+				// Super interface is well-known
+				if (MetadataHelper.GetMetadata(interfaceClass.Hash) is JInterfaceTypeMetadata superInterfaceMetadata)
+				{
+					JTrace.UseTypeMetadata(jClass, superInterfaceMetadata);
+					return superInterfaceMetadata;
+				}
+
+				hashes.Add(interfaceClass.Hash);
+				if (this.GetSuperInterfaceMetadata(interfaceClass, hashes) is { } metadata)
+					return metadata;
+			}
 		}
 		return default;
 	}

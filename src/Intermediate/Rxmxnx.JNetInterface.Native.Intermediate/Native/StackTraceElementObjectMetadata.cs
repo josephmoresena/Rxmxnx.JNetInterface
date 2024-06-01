@@ -1,15 +1,15 @@
-namespace Rxmxnx.JNetInterface.Internal;
+namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
 /// This record stores the metadata of a <see cref="JStackTraceElementObject"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
-internal sealed record StackTraceElementObjectMetadata : ObjectMetadata
+public sealed record StackTraceElementObjectMetadata : ObjectMetadata
 {
 	/// <summary>
 	/// Stack trace information.
 	/// </summary>
-	public StackTraceInfo? Information { get; init; }
+	public StackTraceInfo? Information { get; internal init; }
 
 	/// <inheritdoc/>
 	internal StackTraceElementObjectMetadata(ObjectMetadata metadata) : base(metadata)
@@ -17,6 +17,11 @@ internal sealed record StackTraceElementObjectMetadata : ObjectMetadata
 		if (metadata is StackTraceElementObjectMetadata traceElementMetadata)
 			this.Information = traceElementMetadata.Information;
 	}
+
+	/// <inheritdoc/>
+	private StackTraceElementObjectMetadata(StackTraceElementObjectMetadata traceElementMetadata) :
+		base(traceElementMetadata)
+		=> this.Information = traceElementMetadata.Information;
 
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="StackTraceElementObjectMetadata"/> to

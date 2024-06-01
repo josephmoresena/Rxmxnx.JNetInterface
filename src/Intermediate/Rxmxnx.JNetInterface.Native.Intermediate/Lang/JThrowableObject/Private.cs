@@ -37,7 +37,10 @@ public partial class JThrowableObject
 		if (stackTrace.Count == 0) return [];
 		StackTraceInfo[] result = new StackTraceInfo[stackTrace.Count];
 		for (Int32 i = 0; i < result.Length; i++)
-			result[i] = (StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]);
+		{
+			using (stackTrace[i])
+				result[i] = (StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]);
+		}
 		return result;
 	}
 
