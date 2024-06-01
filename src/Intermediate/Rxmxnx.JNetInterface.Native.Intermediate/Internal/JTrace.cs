@@ -24,7 +24,7 @@ internal static partial class JTrace
 	/// <summary>
 	/// Writes a category name and error occured attempted to retrieve array metadata using reflection to the trace listeners.
 	/// </summary>
-	/// <param name="elementSignature">Element signature.</param>
+	/// <param name="elementSignature">Array element signature.</param>
 	/// <param name="ex">A <see cref="Exception"/> instance.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void GetArrayArrayMetadataWithReflectionError(CString elementSignature, Exception ex,
@@ -46,8 +46,9 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
-			!classRef.IsDefault ? $"{classRef} name: {classInformation[0]}" : $"name: {classInformation[0]}",
-			callerMethod);
+			!classRef.IsDefault ?
+				$"thread: {Environment.CurrentManagedThreadId} {classRef} name: {classInformation[0]}" :
+				$"thread: {Environment.CurrentManagedThreadId} name: {classInformation[0]}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and retrieving class reference or retrieving type metadata using a
@@ -58,7 +59,17 @@ internal static partial class JTrace
 	public static void GetMetadataOrFindClass(JClassObject jClass, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"{jClass.Name}", callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jClass.Name}", callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and retrieving class reference using class name to the trace listeners.
+	/// </summary>
+	/// <param name="className">Class name.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void FindClass(CString className, [CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {className}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and retrieving type metadata for <paramref name="jClass"/> using
@@ -72,7 +83,8 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"{jClass.Name} <- {jSuperClass.Name}", callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jClass.Name} <- {jSuperClass.Name}",
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and registiring reference instance to the trace listeners.
@@ -82,7 +94,7 @@ internal static partial class JTrace
 	public static void RegisterObject(JReferenceObject? jObject, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled || jObject is null) return;
-		Trace.WriteLine(jObject.ToTraceText(), callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jObject.ToTraceText()}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and deleting local reference to the trace listeners.
@@ -97,13 +109,18 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled && localRef == default) return;
 		if (!isRegistered)
-			Trace.WriteLine($"Unable to remove unregistered {localRef}.", callerMethod);
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} Unable to remove unregistered {localRef}.",
+			                callerMethod);
 		else if (!isAttached)
-			Trace.WriteLine($"Unable to remove {localRef}. Thread is not attached.", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} Unable to remove {localRef}. Thread is not attached.",
+				callerMethod);
 		else if (!isAlive)
-			Trace.WriteLine($"Unable to remove {localRef}. JVM is not alive.", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} Unable to remove {localRef}. JVM is not alive.",
+				callerMethod);
 		else
-			Trace.WriteLine($"{localRef} removed.", callerMethod);
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} removed.", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and deleting global reference to the trace listeners.
@@ -119,11 +136,14 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled && globalRef.Value == default) return;
 		if (!isAttached)
-			Trace.WriteLine($"Unable to remove {globalRef}. Thread is not attached.", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} Unable to remove {globalRef}. Thread is not attached.",
+				callerMethod);
 		else if (!isAlive)
-			Trace.WriteLine($"Unable to {globalRef}. JVM is not alive.", callerMethod);
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} Unable to {globalRef}. JVM is not alive.",
+			                callerMethod);
 		else if (globalRef != default)
-			Trace.WriteLine($"{globalRef} removed.", callerMethod);
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {globalRef} removed.", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and releasing native memory to the trace listeners.
@@ -143,15 +163,20 @@ internal static partial class JTrace
 		String memoryText = isCritical ? "Critical memory" : "Memory";
 		if (!isAttached)
 			Trace.WriteLine(
-				$"Unable to release {memoryText.ToLower()} 0x{pointer:0x8} {objectRef}. Thread is not attached.",
+				$"thread: {Environment.CurrentManagedThreadId} Unable to release {memoryText.ToLower()} 0x{pointer:0x8} {objectRef}. Thread is not attached.",
 				callerMethod);
 		else if (!isAlive)
-			Trace.WriteLine($"Unable to release {memoryText.ToLower()} 0x{pointer:0x8} {objectRef}. JVM is not alive.",
-			                callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} Unable to release {memoryText.ToLower()} 0x{pointer:0x8} {objectRef}. JVM is not alive.",
+				callerMethod);
 		else if (!released)
-			Trace.WriteLine($"Error attempting to release {memoryText} 0x{pointer:0x8} {objectRef}.", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} Error attempting to release {memoryText} 0x{pointer:0x8} {objectRef}.",
+				callerMethod);
 		else
-			Trace.WriteLine($"{memoryText} 0x{pointer:0x8} {objectRef} released.", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} {memoryText} 0x{pointer:0x8} {objectRef} released.",
+				callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and exiting monitor to the trace listeners.
@@ -165,13 +190,19 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!isAttached)
-			Trace.WriteLine($"Unable to exit monitor {localRef}. Thread is not attached.", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} Unable to exit monitor {localRef}. Thread is not attached.",
+				callerMethod);
 		else if (!isAlive)
-			Trace.WriteLine($"Unable to exit monitor {localRef}. JVM is not alive.", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} Unable to exit monitor {localRef}. JVM is not alive.",
+				callerMethod);
 		else if (!exited)
-			Trace.WriteLine($"Error attempting to exit monitor {localRef}.", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} Error attempting to exit monitor {localRef}.",
+				callerMethod);
 		else
-			Trace.WriteLine($"Exited monitor {localRef}.", callerMethod);
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} Exited monitor {localRef}.", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and parsing object as class instance to the trace listeners.
@@ -189,7 +220,9 @@ internal static partial class JTrace
 			return;
 		}
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"{classRef} {referenceType} {classObjectMetadata}.", callerMethod);
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {classRef} {referenceType} {classObjectMetadata}.",
+			callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and retrieving class information to the trace listeners.
@@ -201,7 +234,7 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"{classRef} {referenceType}.", callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {referenceType}.", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and loading global class object to the trace listeners.
@@ -211,7 +244,7 @@ internal static partial class JTrace
 	public static void LoadGlobalClass(JClassObject jClass, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine(jClass.ToTraceText(), callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jClass.ToTraceText()}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and loading class metadata to the trace listeners.
@@ -222,7 +255,8 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine(classObjectMetadata.ToTraceText(), callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classObjectMetadata.ToTraceText()}",
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and creation of local reference to the trace listeners.
@@ -233,7 +267,7 @@ internal static partial class JTrace
 		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine(objectRef.ToString(), callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {objectRef}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and creation of local reference to the trace listeners.
@@ -246,7 +280,10 @@ internal static partial class JTrace
 		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine(localRef != default ? $"{objectRef} -> {localRef}" : $"{objectRef} Error.", callerMethod);
+		Trace.WriteLine(
+			localRef != default ?
+				$"thread: {Environment.CurrentManagedThreadId} {objectRef} -> {localRef}" :
+				$"thread: {Environment.CurrentManagedThreadId} {objectRef} Error.", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and finallization call to the trace listeners.
@@ -256,7 +293,7 @@ internal static partial class JTrace
 	public static void FinalizeCall(JLocalObject result, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine(result.ToTraceText(), callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {result.ToTraceText()}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and using type metadata for <paramref name="jClass"/>
@@ -269,7 +306,9 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"{jClass.Name} uses type metadata from {typeMetadata.ClassName}.", callerMethod);
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} uses type metadata from {typeMetadata.ClassName}.",
+			callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and using type metadata for <paramref name="arraySignature"/>
@@ -282,7 +321,8 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled || arraySignature.SequenceEqual(typeMetadata.ClassName)) return;
-		Trace.WriteLine($"{Encoding.UTF8.GetString(arraySignature)} uses type metadata from {typeMetadata.ClassName}.",
-		                callerMethod);
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {Encoding.UTF8.GetString(arraySignature)} uses type metadata from {typeMetadata.ClassName}.",
+			callerMethod);
 	}
 }

@@ -45,12 +45,11 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="namePtr">A pointer to class name.</param>
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		public unsafe JClassLocalRef FindClass(IntPtr namePtr)
+		public unsafe JClassLocalRef FindClass(Byte* namePtr)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
-			JClassLocalRef result =
-				nativeInterface.ClassFunctions.FindClass(this.Reference, (ReadOnlyValPtr<Byte>)namePtr);
+			JClassLocalRef result = nativeInterface.ClassFunctions.FindClass(this.Reference, namePtr);
 			if (result.IsDefault) this.CheckJniError();
 			return result;
 		}

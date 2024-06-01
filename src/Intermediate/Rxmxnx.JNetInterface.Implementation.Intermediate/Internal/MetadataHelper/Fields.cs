@@ -172,6 +172,10 @@ internal static partial class MetadataHelper
 			IReferenceType.GetMetadata<JInstantiationExceptionObject>()
 		},
 		{
+			IDataType.GetHash<JClassNotFoundExceptionObject>(),
+			IReferenceType.GetMetadata<JClassNotFoundExceptionObject>()
+		},
+		{
 			IDataType.GetHash<JIndexOutOfBoundsExceptionObject>(),
 			IReferenceType.GetMetadata<JIndexOutOfBoundsExceptionObject>()
 		},

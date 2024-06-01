@@ -16,8 +16,9 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(jLocal is null ? //Static?
-			                $"{jClass.ToTraceText()} {definition.ToTraceText()}" :
-			                $"{jLocal.ToTraceText()} {definition.ToTraceText()}", callerMethod);
+			                $"thread: {Environment.CurrentManagedThreadId} {jClass.ToTraceText()} {definition.ToTraceText()}" :
+			                $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}",
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the assignment of a value to a field to the trace listeners.
@@ -35,8 +36,9 @@ internal static partial class JTrace
 			(value as JReferenceObject)?.ToString() ?? $"{value.ObjectSignature}: {value}" :
 			"value: null";
 		Trace.WriteLine(jLocal is null ? //Static?
-			                $"{jClass.ToTraceText()} {definition.ToTraceText()} {textValue}" :
-			                $"{jLocal.ToTraceText()} {definition.ToTraceText()} {textValue}", callerMethod);
+			                $"thread: {Environment.CurrentManagedThreadId} {jClass.ToTraceText()} {definition.ToTraceText()} {textValue}" :
+			                $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()} {textValue}",
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the assignment of a value to a primitive field to the trace listeners.
@@ -70,13 +72,17 @@ internal static partial class JTrace
 		StringBuilder strBuilder = new();
 		if (jLocal is null)
 			if (UnicodeMethodNames.Constructor().SequenceEqual(definition.Name))
-				strBuilder.AppendLine($"{jClass.Name} {definition.ToTraceText()}");
+				strBuilder.AppendLine(
+					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
 			else
-				strBuilder.AppendLine($"{jClass.Name} static {definition.ToTraceText()}");
+				strBuilder.AppendLine(
+					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} static {definition.ToTraceText()}");
 		else if (nonVirtual)
-			strBuilder.AppendLine($"{jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
+			strBuilder.AppendLine(
+				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {jClass.Name} non-virtual {definition.ToTraceText()}");
 		else
-			strBuilder.AppendLine($"{jLocal.ToTraceText()} {definition.ToTraceText()}");
+			strBuilder.AppendLine(
+				$"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}");
 		for (Int32 i = 0; i < args.Length; i++)
 		{
 			switch (args[i])
@@ -108,8 +114,9 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(localRef == default ? //Static?
-			                $"{classRef} {fieldId} {signature}: {value}" :
-			                $"{localRef} {fieldId} {signature}: {value}", callerMethod);
+			                $"thread: {Environment.CurrentManagedThreadId} {classRef} {fieldId} {(Char)signature}: {value}" :
+			                $"thread: {Environment.CurrentManagedThreadId} {localRef} {fieldId} {(Char)signature}: {value}",
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the assignment of a value to an object field to the trace listeners.
@@ -124,8 +131,8 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(localRef == default ? //Static?
-			                $"{classRef} {fieldId} {value}" :
-			                $"{localRef} {fieldId} {value}", callerMethod);
+			                $"thread: {Environment.CurrentManagedThreadId} {classRef} {fieldId} {value}" :
+			                $"thread: {Environment.CurrentManagedThreadId} {localRef} {fieldId} {value}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the retrieval of a primitive field to the trace listeners.
@@ -141,8 +148,9 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(localRef == default ? //Static?
-			                $"{classRef} {fieldId} Result {signature}: {result}" :
-			                $"{localRef} {fieldId} Result {signature}: {result}", callerMethod);
+			                $"thread: {Environment.CurrentManagedThreadId} {classRef} {fieldId} Result {(Char)signature}: {result}" :
+			                $"thread: {Environment.CurrentManagedThreadId} {localRef} {fieldId} Result {(Char)signature}: {result}",
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the retrieval of an object field to the trace listeners.
@@ -157,8 +165,9 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(localRef == default ? //Static?
-			                $"{classRef} {fieldId} Result {result}" :
-			                $"{localRef} {fieldId} Result {result}", callerMethod);
+			                $"thread: {Environment.CurrentManagedThreadId} {classRef} {fieldId} Result {result}" :
+			                $"thread: {Environment.CurrentManagedThreadId} {localRef} {fieldId} Result {result}",
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the invocation of a primitive function to the trace listeners.
@@ -174,11 +183,17 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		if (localRef == default) //Static
-			Trace.WriteLine($"{classRef} {methodId} Result {signature}: {result}", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId} Result {(Char)signature}: {result}",
+				callerMethod);
 		else if (classRef.IsDefault) //Instance
-			Trace.WriteLine($"{localRef} {methodId} Result {signature}: {result}", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} {localRef} {methodId} Result {(Char)signature}: {result}",
+				callerMethod);
 		else //Non-Virtual
-			Trace.WriteLine($"{localRef} {classRef} {methodId} Result {signature}: {result}", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} {localRef} {classRef} {methodId} Result {(Char)signature}: {result}",
+				callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the invocation of an object function to the trace listeners.
@@ -196,12 +211,16 @@ internal static partial class JTrace
 
 		if (localRef == default) //Static or Constructor
 			Trace.WriteLine(
-				!isConstructor ? $"{classRef} {methodId} Result {result}" : $"{classRef} {methodId} New {result}",
-				callerMethod);
+				!isConstructor ?
+					$"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId} Result {result}" :
+					$"{classRef} {methodId} New {result}", callerMethod);
 		else if (classRef.IsDefault) //Instance
-			Trace.WriteLine($"{localRef} {methodId} Result {result}", callerMethod);
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {methodId} Result {result}",
+			                callerMethod);
 		else //Non-Virtual
-			Trace.WriteLine($"{localRef} {classRef} {methodId} Result {result}", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} {localRef} {classRef} {methodId} Result {result}",
+				callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the call of method to the trace listeners.
@@ -216,11 +235,12 @@ internal static partial class JTrace
 		if (!IVirtualMachine.TraceEnabled) return;
 
 		if (localRef == default) //Static
-			Trace.WriteLine($"{classRef} {methodId}", callerMethod);
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId}", callerMethod);
 		else if (classRef.IsDefault) //Instance
-			Trace.WriteLine($"{localRef} {methodId}", callerMethod);
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {methodId}", callerMethod);
 		else //Non-Virtual
-			Trace.WriteLine($"{localRef} {classRef} {methodId}", callerMethod);
+			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} {classRef} {methodId}",
+			                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the retrieving accessible identifier to the trace listeners.
@@ -232,7 +252,8 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"{classRef} {definition.ToTraceText()}", callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {definition.ToTraceText()}",
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the retrieving accessible identifier to the trace listeners.
@@ -249,8 +270,9 @@ internal static partial class JTrace
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
 			accessibleId != default ?
-				$"{classRef} {definition.ToTraceText()} {accessibleId}" :
-				$"{classRef} {definition.ToTraceText()} Not found.", callerMethod);
+				$"thread: {Environment.CurrentManagedThreadId} {classRef} {definition.ToTraceText()} {accessibleId}" :
+				$"thread: {Environment.CurrentManagedThreadId} {classRef} {definition.ToTraceText()} Not found.",
+			callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the retrieving access cache to the trace listeners.
@@ -263,6 +285,9 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine(exists ? $"{classRef} {type} Found." : $"{classRef} Not found.", callerMethod);
+		Trace.WriteLine(
+			exists ?
+				$"thread: {Environment.CurrentManagedThreadId} {classRef} {type} Found." :
+				$"thread: {Environment.CurrentManagedThreadId} {classRef} Not found.", callerMethod);
 	}
 }

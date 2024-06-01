@@ -39,7 +39,10 @@ partial class JEnvironment
 			classRef = this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
 		else
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(metadata.Name.AsSpan()))
-				classRef = this._cache.FindClass(new(ptr));
+			{
+				JTrace.FindClass(metadata.Name);
+				classRef = this._cache.FindClass(ptr);
+			}
 		try
 		{
 			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value);

@@ -163,6 +163,9 @@ internal static partial class UnicodeClassNames
 	/// <inheritdoc cref="ClassNames.InstantiationExceptionObject"/>
 	[DefaultValue(ClassNames.InstantiationExceptionObject)]
 	public static partial ReadOnlySpan<Byte> InstantiationExceptionObject();
+	/// <inheritdoc cref="ClassNames.ClassNotFoundExceptionObject"/>
+	[DefaultValue(ClassNames.ClassNotFoundExceptionObject)]
+	public static partial ReadOnlySpan<Byte> ClassNotFoundExceptionObject();
 	/// <inheritdoc cref="ClassNames.IndexOutOfBoundsExceptionObject"/>
 	[DefaultValue(ClassNames.IndexOutOfBoundsExceptionObject)]
 	public static partial ReadOnlySpan<Byte> IndexOutOfBoundsExceptionObject();
