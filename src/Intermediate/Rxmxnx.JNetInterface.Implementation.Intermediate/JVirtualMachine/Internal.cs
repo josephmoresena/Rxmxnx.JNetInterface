@@ -60,6 +60,11 @@ public partial class JVirtualMachine
 		lifetime.SetGlobal(jGlobal);
 		return jGlobal;
 	}
+	/// <summary>
+	/// Retrieves class metadata from current <see cref="JGlobalBase"/> instance.
+	/// </summary>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <returns>A <see cref="ClassObjectMetadata"/> instance.</returns>
 	internal ClassObjectMetadata? LoadMetadataGlobal(JGlobalBase jGlobal)
 	{
 		ClassObjectMetadata? result = jGlobal.ObjectMetadata as ClassObjectMetadata;
