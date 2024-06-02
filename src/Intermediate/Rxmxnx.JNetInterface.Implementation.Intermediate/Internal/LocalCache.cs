@@ -15,6 +15,10 @@ internal record LocalCache
 	private readonly LocalCache? _previous;
 
 	/// <summary>
+	/// Internal id.
+	/// </summary>
+	public readonly Guid Id = Guid.NewGuid();
+	/// <summary>
 	/// Lifetime for <paramref name="localRef"/>.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
@@ -22,7 +26,7 @@ internal record LocalCache
 	{
 		set
 		{
-			Boolean add = !(this._previous?.Contains(localRef) ?? localRef == default);
+			Boolean add = !(this._previous?.IsRegistered(localRef) ?? localRef == default);
 			if (add) this._objects[localRef] = value;
 		}
 	}
@@ -44,15 +48,24 @@ internal record LocalCache
 	}
 
 	/// <summary>
-	/// Indicates whether current value is contained by cache.
+	/// Indicates whether current value is registered in the cache three.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by current cache three; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+	public Boolean IsRegistered(JObjectLocalRef localRef)
+		=> this.Contains(localRef) || (this._previous?.IsRegistered(localRef) ?? localRef == default);
+	/// <summary>
+	/// Indicates whether current value is contained by current cache.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
 	/// <returns>
 	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by current cache; otherwise,
 	/// <see langword="false"/>.
 	/// </returns>
-	public Boolean Contains(JObjectLocalRef localRef)
-		=> this._objects.ContainsKey(localRef) || (this._previous?.Contains(localRef) ?? localRef == default);
+	public Boolean Contains(JObjectLocalRef localRef) => this._objects.ContainsKey(localRef);
 	/// <summary>
 	/// Clear current cache.
 	/// </summary>

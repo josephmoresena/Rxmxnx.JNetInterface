@@ -46,11 +46,15 @@ partial class JEnvironment
 		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 	}
 	/// <summary>
-	/// Creates a new global reference to <paramref name="jLocal"/>.
+	/// Deletes the current local reference frame.
 	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private JGlobalRef CreateGlobalRef(JReferenceObject jLocal)
-		=> this._cache.CreateGlobalRef(jLocal.As<JObjectLocalRef>());
+	/// <param name="id"></param>
+	/// <param name="result">Current result.</param>
+	private void DeleteLocalFrame(Guid id, JLocalObject? result)
+	{
+		this._cache.DeleteLocalFrame(result);
+		JTrace.DeleteObjectCache(id, result);
+	}
 	/// <summary>
 	/// Retrieves the <see cref="JArrayTypeMetadata"/> instance for given <paramref name="arraySignature"/>.
 	/// </summary>

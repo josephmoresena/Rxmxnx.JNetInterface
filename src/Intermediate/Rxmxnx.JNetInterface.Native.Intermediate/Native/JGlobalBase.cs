@@ -40,15 +40,17 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="createReference">Indicates whether a local reference should be created.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from current global instance.</returns>
 	public TReference
-		AsLocal<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>(IEnvironment env)
-		where TReference : JReferenceObject, IReferenceType<TReference>
+		AsLocal<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>(IEnvironment env,
+			Boolean createReference = false) where TReference : JReferenceObject, IReferenceType<TReference>
 	{
 		JReferenceTypeMetadata metadata = IReferenceType.GetMetadata<TReference>();
 		JReferenceTypeMetadata typeMetadata = this.ObjectMetadata.TypeMetadata ??
 			metadata as JClassTypeMetadata ?? IClassType.GetMetadata<JLocalObject>();
 		JLocalObject jLocal = typeMetadata.ParseInstance(env, this);
+		if (createReference) env.ReferenceFeature.LocalLoad(this, jLocal);
 		return (TReference)metadata.ParseInstance(jLocal, true);
 	}
 

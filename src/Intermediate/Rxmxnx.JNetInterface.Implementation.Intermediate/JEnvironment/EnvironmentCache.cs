@@ -148,5 +148,18 @@ partial class JEnvironment
 			String message = this.GetThrowableMessage(throwableRef);
 			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
 		}
+		/// <summary>
+		/// Deletes the current local reference frame.
+		/// </summary>
+		/// <param name="result">Current result.</param>
+		public unsafe void DeleteLocalFrame(JLocalObject? result)
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.PopLocalFrameInfo);
+			JObjectLocalRef localRef = result?.LocalReference ?? default;
+			localRef = nativeInterface.ReferenceFunctions.PopLocalFrame(this.Reference, localRef);
+			result?.SetValue(localRef);
+			this.Register(result);
+		}
 	}
 }

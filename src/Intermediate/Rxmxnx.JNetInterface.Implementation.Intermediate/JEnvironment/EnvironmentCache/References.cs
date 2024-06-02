@@ -41,21 +41,15 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
 		/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
-		/// <param name="deleteGlobal">Indicates whether global reference must be deleted.</param>
-		public void CreateLocalRef(JGlobalRef globalRef, JLocalObject? result, Boolean deleteGlobal = true)
+		public void CreateLocalRef<TObjectRef>(TObjectRef globalRef, JLocalObject? result)
+			where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>,
+			IEqualityOperators<TObjectRef, TObjectRef, Boolean>
 		{
 			if (globalRef == default || result is not null) return;
-			try
-			{
-				JTrace.CreateLocalRef(globalRef);
-				JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
-				JLocalObject jLocal = this.Register(result)!;
-				jLocal.SetValue(localRef);
-			}
-			finally
-			{
-				if (deleteGlobal) this._env.DeleteGlobalRef(globalRef);
-			}
+			JTrace.CreateLocalRef(globalRef);
+			JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
+			JLocalObject jLocal = this.Register(result)!;
+			jLocal.SetValue(localRef);
 		}
 		/// <summary>
 		/// Creates a global reference from <paramref name="localRef"/>.

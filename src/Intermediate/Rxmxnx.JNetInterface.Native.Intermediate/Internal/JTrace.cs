@@ -325,11 +325,45 @@ internal static partial class JTrace
 			$"thread: {Environment.CurrentManagedThreadId} {Encoding.UTF8.GetString(arraySignature)} uses type metadata from {typeMetadata.ClassName}.",
 			callerMethod);
 	}
+	/// <summary>
+	/// Writes a category name and invoking action at <paramref name="thread"/>
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="thread">A <see cref="IThread"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
 	public static void InvokeAt(IThread thread, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
-			$"thread: {Environment.CurrentManagedThreadId} {thread.Reference} name: {thread.Name} daemon: {thread.Daemon}.",
+			$"thread: {Environment.CurrentManagedThreadId} {thread.Reference} name: {thread.Name} daemon: {thread.Daemon}",
+			callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and setting local cache with <paramref name="cacheId"/> identifier.
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="cacheId">A <see cref="Guid"/> cache identifier.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void SetObjectCache(Guid cacheId, [CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} cache: {cacheId}", callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and deleting local cache with <paramref name="cacheId"/> identifier.
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="cacheId">A <see cref="Guid"/> cache identifier.</param>
+	/// <param name="result">Resulting object.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void DeleteObjectCache(Guid cacheId, JLocalObject? result,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine(
+			result is null ?
+				$"thread: {Environment.CurrentManagedThreadId} cache: {cacheId}" :
+				$"thread: {Environment.CurrentManagedThreadId} cache: {cacheId} result: {result?.ToTraceText()}",
 			callerMethod);
 	}
 }

@@ -122,13 +122,21 @@ partial class JEnvironment
 			JWeakRef weakRef = this.CreateWeakGlobalRef(jGlobal);
 			return this.VirtualMachine.Register(new JWeak(jGlobal, weakRef));
 		}
+		public void LocalLoad(JGlobalBase jGlobal, JLocalObject jLocal)
+		{
+			if (jLocal.LocalReference != default) return;
+			if (jGlobal is JGlobal)
+				this.CreateLocalRef(jGlobal.As<JGlobalRef>(), jLocal);
+			else
+				this.CreateLocalRef(jGlobal.As<JWeakRef>(), jLocal);
+		}
 		public Boolean Unload(JLocalObject? jLocal)
 		{
 			if (jLocal is null) return false;
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.LocalReference;
-			Boolean isRegistered = this._objects.Contains(localRef);
+			Boolean isRegistered = this._objects.IsRegistered(localRef);
 			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
 			try
 			{

@@ -37,7 +37,7 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <summary>
 	/// Capacity GetObjectClass()
 	/// </summary>
-	internal const Int32 GetObjectClassCapacity = 10;
+	internal const Int32 GetObjectClassCapacity = 5;
 
 	/// <summary>
 	/// Indicates whether trace output is enabled.

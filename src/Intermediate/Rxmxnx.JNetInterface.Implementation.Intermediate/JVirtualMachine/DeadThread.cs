@@ -142,6 +142,12 @@ public partial class JVirtualMachine
 		}
 		TGlobal IReferenceFeature.Create<TGlobal>(JLocalObject jLocal) => DeadThread.ThrowInvalidResult<TGlobal>();
 		JWeak IReferenceFeature.CreateWeak(JGlobalBase jGlobal) => DeadThread.ThrowInvalidResult<JWeak>();
+		void IReferenceFeature.LocalLoad(JGlobalBase jGlobal, JLocalObject jLocal)
+		{
+			if (IVirtualMachine.TraceEnabled)
+				Trace.WriteLine(
+					$"Unable to locally load {jGlobal}. JVM {this.VirtualMachine.Reference} was destroyed.");
+		}
 		Boolean IReferenceFeature.Unload(JLocalObject jLocal)
 		{
 			if (IVirtualMachine.TraceEnabled)
