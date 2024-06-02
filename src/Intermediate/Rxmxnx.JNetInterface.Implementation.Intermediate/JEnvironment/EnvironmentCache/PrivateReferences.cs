@@ -34,7 +34,7 @@ partial class JEnvironment
 		private TObject? Register<TObject>(TObject? jObject) where TObject : IDataType<TObject>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject as JReferenceObject);
-			JTrace.RegisterObject(jObject as JReferenceObject);
+			JTrace.RegisterObject(jObject as JReferenceObject, this._objects.Id, this._objects.Name);
 			this.LoadClass(jObject as JClassObject);
 			if (jObject is ILocalObject jLocal && jLocal.LocalReference != default)
 				this._objects[jLocal.LocalReference] = jLocal.Lifetime.GetCacheable();
@@ -103,7 +103,8 @@ partial class JEnvironment
 		{
 			if (isRegistered && this._env.IsAttached && this.VirtualMachine.IsAlive)
 				this._env.DeleteLocalRef(localRef);
-			JTrace.Unload(isRegistered, this._env.IsAttached, this.VirtualMachine.IsAlive, localRef);
+			JTrace.Unload(isRegistered, this._env.IsAttached, this.VirtualMachine.IsAlive, localRef, this._objects.Id,
+			              this._objects.Name);
 		}
 		/// <summary>
 		/// Unloads <paramref name="weakRef"/>.

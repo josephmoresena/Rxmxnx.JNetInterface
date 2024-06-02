@@ -61,9 +61,7 @@ public readonly ref partial struct JNativeCallAdapter
 		{
 			JEnvironment env = this._callAdapter._env;
 			Builder.ThrowIfNotLocalReference(env, localRef);
-			JClassObject jClass =
-				(env as IEnvironment).WithFrame(IVirtualMachine.GetObjectClassCapacity, (env, localRef),
-				                                Builder.GetObjectClass);
+			JClassObject jClass = JEnvironment.GetClassObject(env, localRef);
 			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
 				throw new ArgumentException($"A {jClass.Name} instance is not {env.ClassObject.Name} instance.");
 		}
@@ -74,9 +72,7 @@ public readonly ref partial struct JNativeCallAdapter
 		{
 			JEnvironment env = this._callAdapter._env;
 			if (validateReference) Builder.ThrowIfNotLocalReference(env, localRef);
-			(JClassObject result, typeMetadata) = (env as IEnvironment).WithFrame(
-				IVirtualMachine.GetObjectClassCapacity, (env, localRef), Builder.GetObjectClassWithMetadata);
-			return result;
+			return env.GetObjectClass(localRef, out typeMetadata);
 		}
 		/// <summary>
 		/// Retrieves initial final <typaramref name="TObject"/> instance for <paramref name="localRef"/>.

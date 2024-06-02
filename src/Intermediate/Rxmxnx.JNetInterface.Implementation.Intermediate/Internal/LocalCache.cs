@@ -31,20 +31,25 @@ internal record LocalCache
 			if (add) this._objects[localRef] = value;
 		}
 	}
+	/// <summary>
+	/// Name of cache.
+	/// </summary>
+	public virtual String Name => "initial";
 	/// <see cref="IEnvironment.LocalCapacity"/>
 	public virtual Int32? Capacity { get; set; }
 	/// <summary>
-	/// Indicates whether current instance es initial.
+	/// Current class cache.
 	/// </summary>
-	public Boolean Initial => this._previous is null;
+	public ClassCache ClassCache { get; set; }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	public LocalCache()
+	public LocalCache(ClassCache classCache)
 	{
 		this._objects = new();
 		this.Id = Guid.NewGuid();
+		this.ClassCache = classCache;
 	}
 	/// <summary>
 	/// Constructor.
@@ -55,14 +60,15 @@ internal record LocalCache
 		this._previous = previous;
 		this._objects = new();
 		this.Id = Guid.NewGuid();
+		this.ClassCache = previous.ClassCache;
 	}
 
 	/// <summary>
-	/// Indicates whether current value is registered in the cache three.
+	/// Indicates whether current value is registered in the cache tree.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by current cache three; otherwise,
+	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by current cache tree; otherwise,
 	/// <see langword="false"/>.
 	/// </returns>
 	public Boolean IsRegistered(JObjectLocalRef localRef)
@@ -84,11 +90,12 @@ internal record LocalCache
 	/// <param name="recursive">Indicates whether current clear must do recursively.</param>
 	public void ClearCache(JEnvironment env, Boolean recursive, JObjectLocalRef exclude = default)
 	{
-		this._objects.Remove(exclude); // Removes excluded result.
+		if (this._objects.Remove(exclude)) // Removes excluded result and unloads its class cache.
+			this.ClassCache.Unload(JClassLocalRef.FromReference(in exclude));
 
 		JObjectLocalRef[] keys = this._objects.Keys.ToArray();
 		foreach (JObjectLocalRef key in keys)
-			this._objects[key].Dispose(); // Clears reference of each object in current cache.
+			this.Remove(key); // Removes each reference in cache.
 
 		if (this._previous is null || !Object.ReferenceEquals(env.LocalCache, this))
 			return; // Current cache is initial or is not active.
@@ -106,7 +113,9 @@ internal record LocalCache
 	{
 		if (!this._objects.Remove(localRef, out ObjectLifetime? lifetime))
 			this._previous?.Remove(localRef);
-		lifetime?.Dispose();
+		if (lifetime is null) return;
+		lifetime.Dispose(); // Disposes current instance.
+		this.ClassCache.Unload(JClassLocalRef.FromReference(localRef)); // Unloads class cache.
 	}
 	/// <summary>
 	/// Indicates whether <paramref name="localRef"/> is JNI method parameter reference.

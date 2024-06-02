@@ -150,16 +150,5 @@ public readonly ref partial struct JNativeCallAdapter
 			if (env.GetReferenceType(localRef) != JReferenceType.LocalRefType)
 				throw new ArgumentException("JNI call only allow local references.");
 		}
-		/// <inheritdoc
-		///     cref="JEnvironment.GetObjectClass(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,out Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata)"/>
-		private static (JClassObject jClass, JReferenceTypeMetadata typeMetadata) GetObjectClassWithMetadata(
-			(JEnvironment env, JObjectLocalRef localRef) args)
-			=> (args.env.GetObjectClass(args.localRef, out JReferenceTypeMetadata typeMetadata), typeMetadata);
-		/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
-		private static JClassObject GetObjectClass((JEnvironment env, JObjectLocalRef localRef) args)
-		{
-			JClassLocalRef classRef = args.env.GetObjectClass(args.localRef);
-			return args.env.GetClass(classRef);
-		}
 	}
 }

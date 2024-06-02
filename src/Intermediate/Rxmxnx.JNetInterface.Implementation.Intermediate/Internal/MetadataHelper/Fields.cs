@@ -224,4 +224,13 @@ internal static partial class MetadataHelper
 	/// Runtime metadata assignation dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<String, Boolean?> assignationCache = new();
+
+	/// <summary>
+	/// Runtime class metadata dictionary.
+	/// </summary>
+	private static readonly ConcurrentDictionary<String, String> classTree = new();
+	/// <summary>
+	/// Runtime view metadata dictionary.
+	/// </summary>
+	private static readonly ConcurrentDictionary<String, (HashSet<String> hashes, Object lockObj)> viewTree = new();
 }

@@ -90,11 +90,16 @@ internal static partial class JTrace
 	/// Writes a category name and registiring reference instance to the trace listeners.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="cacheId">Cache identifier.</param>
+	/// <param name="cacheName">Type of cache.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void RegisterObject(JReferenceObject? jObject, [CallerMemberName] String callerMethod = "")
+	public static void RegisterObject(JReferenceObject? jObject, Guid cacheId, String cacheName,
+		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled || jObject is null) return;
-		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jObject.ToTraceText()}", callerMethod);
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {jObject.ToTraceText()} at {cacheName} cache {cacheId}",
+			callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and deleting local reference to the trace listeners.
@@ -103,9 +108,11 @@ internal static partial class JTrace
 	/// <param name="isAttached">Indicates whether current thread is attached to VM.</param>
 	/// <param name="isAlive">Indicates whether current VM is alive.</param>
 	/// <param name="localRef">A local object reference.</param>
+	/// <param name="cacheId">Cache identifier.</param>
+	/// <param name="cacheName">Type of cache.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void Unload(Boolean isRegistered, Boolean isAttached, Boolean isAlive, JObjectLocalRef localRef,
-		[CallerMemberName] String callerMethod = "")
+		Guid cacheId, String cacheName, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled || localRef == default) return;
 		if (!isRegistered)
@@ -120,7 +127,9 @@ internal static partial class JTrace
 				$"thread: {Environment.CurrentManagedThreadId} Unable to remove {localRef}. JVM is not alive.",
 				callerMethod);
 		else
-			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} removed.", callerMethod);
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} {localRef} removed from {cacheName} cache {cacheId}.",
+				callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and deleting global reference to the trace listeners.
@@ -343,11 +352,12 @@ internal static partial class JTrace
 	/// to the trace listeners.
 	/// </summary>
 	/// <param name="cacheId">A <see cref="Guid"/> cache identifier.</param>
+	/// <param name="nameCache">Type of cache.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void SetObjectCache(Guid cacheId, [CallerMemberName] String callerMethod = "")
+	public static void SetObjectCache(Guid cacheId, String nameCache, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} cache: {cacheId}", callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {nameCache} cache: {cacheId}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and deleting local cache with <paramref name="cacheId"/> identifier.
@@ -362,8 +372,8 @@ internal static partial class JTrace
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
 			result is null ?
-				$"thread: {Environment.CurrentManagedThreadId} cache: {cacheId}" :
-				$"thread: {Environment.CurrentManagedThreadId} cache: {cacheId} result: {result?.ToTraceText()}",
+				$"thread: {Environment.CurrentManagedThreadId} local cache: {cacheId}" :
+				$"thread: {Environment.CurrentManagedThreadId} local cache: {cacheId} result: {result?.ToTraceText()}",
 			callerMethod);
 	}
 }

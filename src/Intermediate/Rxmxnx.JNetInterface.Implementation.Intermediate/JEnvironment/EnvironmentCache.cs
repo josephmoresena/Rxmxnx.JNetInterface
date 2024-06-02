@@ -39,6 +39,7 @@ partial class JEnvironment
 		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(env)
 		{
 			this._env = env;
+			this._objects = new(this._classes);
 
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
@@ -142,7 +143,6 @@ partial class JEnvironment
 		{
 			this.ClearException();
 
-			using LocalFrame _ = new(this._env, IVirtualMachine.CreateThrowableExceptionCapacity);
 			JClassObject jClass =
 				this._env.GetObjectClass(throwableRef.Value, out JReferenceTypeMetadata throwableMetadata);
 			String message = this.GetThrowableMessage(throwableRef);

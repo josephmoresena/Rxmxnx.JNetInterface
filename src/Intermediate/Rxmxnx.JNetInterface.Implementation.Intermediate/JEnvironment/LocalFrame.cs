@@ -42,6 +42,8 @@ partial class JEnvironment
 			get => base.Capacity;
 			set => throw new InvalidOperationException("Current stack frame is fixed.");
 		}
+		/// <inheritdoc/>
+		public override String Name => "local";
 
 		/// <summary>
 		/// Constructor.
@@ -81,8 +83,12 @@ partial class JEnvironment
 		/// <inheritdoc/>
 		public override void Remove(JObjectLocalRef localRef)
 		{
-			if (this.Contains(localRef))
-				this._references.Remove(localRef); // localRef is owned by current frame.
+			if (this.Contains(localRef)) // localRef is owned by current frame.
+			{
+				this._references.Remove(localRef);
+				if (this._result?.LocalReference == localRef) // Result is removed.
+					this._result = default;
+			}
 			base.Remove(localRef);
 		}
 
@@ -103,9 +109,9 @@ partial class JEnvironment
 		private void FinalizeFrame(JEnvironment? env)
 		{
 			if (env is null) return;
-			this._references.Clear();
-			this.ClearCache(env, false, this._result?.LocalReference ?? default);
-			env.DeleteLocalFrame(this.Id, this._result);
+			JLocalObject? result = this._result;
+			this.ClearCache(env, false, result?.LocalReference ?? default);
+			env.DeleteLocalFrame(this, result);
 		}
 	}
 }

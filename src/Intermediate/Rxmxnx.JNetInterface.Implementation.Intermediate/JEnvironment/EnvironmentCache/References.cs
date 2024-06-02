@@ -73,8 +73,6 @@ partial class JEnvironment
 			if (jLocal is null) return;
 			JObjectLocalRef localRef = jLocal.LocalReference;
 			this._objects.Remove(localRef);
-			if (jLocal is JClassObject)
-				this._classes.Unload(JClassLocalRef.FromReference(in localRef));
 		}
 	}
 }
