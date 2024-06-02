@@ -44,8 +44,10 @@ public sealed class JExceptionObjectTests
 		env.FunctionSet.GetMessage(jException).Returns(jStringMessage);
 		env.FunctionSet.GetStackTrace(jException).Returns(stackTraceElements);
 		env.ArrayFeature.GetElement(stackTraceElements, Arg.Any<Int32>()).Returns(c => elements[(Int32)c[1]]);
-		env.WithFrame(Arg.Any<Int32>(), jException, Arg.Any<Func<JExceptionObject, StackTraceInfo[]>>())
-		   .Returns(c => (c[2] as Func<JExceptionObject, StackTraceInfo[]>)!.Invoke((JExceptionObject)c[1]));
+		env.WithFrame(Arg.Any<Int32>(), stackTraceElements,
+		              Arg.Any<Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>>()).Returns(
+			c => (c[2] as Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>)!.Invoke(
+				(JArrayObject<JStackTraceElementObject>)c[1]));
 
 		ILocalObject.ProcessMetadata(jException, throwableMetadata);
 

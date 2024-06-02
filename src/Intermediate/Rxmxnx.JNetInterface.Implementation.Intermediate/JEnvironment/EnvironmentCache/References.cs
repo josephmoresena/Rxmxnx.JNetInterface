@@ -23,11 +23,7 @@ partial class JEnvironment
 			this._objects.Capacity = capacity;
 		}
 		/// <inheritdoc cref="JEnvironment.SetObjectCache(LocalCache?)"/>
-		public void SetObjectCache(LocalCache localCache)
-		{
-			if (!localCache.Initial) JTrace.SetObjectCache(localCache.Id);
-			this._objects = localCache;
-		}
+		public void SetObjectCache(LocalCache localCache) => this._objects = localCache;
 		/// <summary>
 		/// Retrieves local cache.
 		/// </summary>

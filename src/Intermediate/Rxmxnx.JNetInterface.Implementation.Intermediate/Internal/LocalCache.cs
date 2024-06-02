@@ -36,7 +36,7 @@ internal record LocalCache
 	/// <summary>
 	/// Indicates whether current instance es initial.
 	/// </summary>
-	public Boolean Initial => this._previous is not null;
+	public Boolean Initial => this._previous is null;
 
 	/// <summary>
 	/// Constructor.

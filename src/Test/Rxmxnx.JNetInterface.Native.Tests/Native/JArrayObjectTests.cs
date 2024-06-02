@@ -274,12 +274,16 @@ public sealed class JArrayObjectTests
 		JArrayTypeMetadata arrayTypeMetadata = IArrayType.GetMetadata<JArrayObject<TElement>>();
 		String textValue = arrayTypeMetadata.ToString();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JArrayLocalRef arrayRef = JArrayObjectTests.fixture.Create<JArrayLocalRef>();
 		JGlobalRef globalRef = JArrayObjectTests.fixture.Create<JGlobalRef>();
 		using JClassObject jClass = new(env);
 		using JClassObject jArrayClass = new(jClass, arrayTypeMetadata);
 		using JLocalObject jLocal = new(jArrayClass, arrayRef.Value);
 		using JGlobal jGlobal = new(env.VirtualMachine, new(jArrayClass), globalRef);
+
+		env.VirtualMachine.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>())
+		   .ReturnsForAnyArgs(thread);
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(arrayTypeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

@@ -83,14 +83,7 @@ internal sealed partial class ObjectLifetime(
 		if (this._isDisposed.Value) return;
 		this._value.Value = default;
 		this._isDisposed.Value = true;
-		try
-		{
-			this.Secondary?.Dispose();
-		}
-		finally
-		{
-			if (!this._isDisposable) this._isDisposed.Value = true;
-		}
+		this.Secondary?.Dispose();
 	}
 	/// <summary>
 	/// Sets the current instance value.

@@ -88,12 +88,16 @@ public sealed class JInterfaceObjectTests
 
 		JInterfaceTypeMetadata interfaceTypeMetadata = IInterfaceType.GetMetadata<TInterface>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JObjectLocalRef localRef = JInterfaceObjectTests.fixture.Create<JObjectLocalRef>();
 		JGlobalRef globalRef = JInterfaceObjectTests.fixture.Create<JGlobalRef>();
 		using JClassObject jClass = new(env);
 		using JClassObject interfaceClass = new(jClass, interfaceTypeMetadata);
 		using JLocalObject jLocal = new(interfaceClass, localRef);
 		using JGlobal jGlobal = new(env.VirtualMachine, new(interfaceClass), globalRef);
+
+		env.VirtualMachine.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>())
+		   .ReturnsForAnyArgs(thread);
 
 		Assert.Null(interfaceTypeMetadata.ParseInstance(default));
 		Assert.Null(interfaceTypeMetadata.ProxyMetadata.ParseInstance(default));

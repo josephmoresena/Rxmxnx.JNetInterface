@@ -26,8 +26,11 @@ partial class JEnvironment
 	/// Sets current object cache.
 	/// </summary>
 	/// <param name="localCache">A <see cref="LocalCache"/> instance.</param>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal void SetObjectCache(LocalCache localCache) => this._cache.SetObjectCache(localCache);
+	internal void SetObjectCache(LocalCache localCache)
+	{
+		if (!localCache.Initial) JTrace.SetObjectCache(localCache.Id);
+		this._cache.SetObjectCache(localCache);
+	}
 	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
