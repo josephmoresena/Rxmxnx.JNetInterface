@@ -17,7 +17,8 @@ internal record LocalCache
 	/// <summary>
 	/// Internal id.
 	/// </summary>
-	public readonly Guid Id = Guid.NewGuid();
+	public readonly Guid Id;
+
 	/// <summary>
 	/// Lifetime for <paramref name="localRef"/>.
 	/// </summary>
@@ -32,11 +33,19 @@ internal record LocalCache
 	}
 	/// <see cref="IEnvironment.LocalCapacity"/>
 	public virtual Int32? Capacity { get; set; }
+	/// <summary>
+	/// Indicates whether current instance es initial.
+	/// </summary>
+	public Boolean Initial => this._previous is not null;
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	public LocalCache() => this._objects = new();
+	public LocalCache()
+	{
+		this._objects = new();
+		this.Id = Guid.NewGuid();
+	}
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -45,6 +54,7 @@ internal record LocalCache
 	{
 		this._previous = previous;
 		this._objects = new();
+		this.Id = Guid.NewGuid();
 	}
 
 	/// <summary>
@@ -70,7 +80,7 @@ internal record LocalCache
 	/// Clear current cache.
 	/// </summary>
 	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-	/// <param name="recursive">Indicates whether current clear must done recursively.</param>
+	/// <param name="recursive">Indicates whether current clear must do recursively.</param>
 	public void ClearCache(JEnvironment env, Boolean recursive)
 	{
 		JObjectLocalRef[] keys = this._objects.Keys.ToArray();
@@ -89,8 +99,9 @@ internal record LocalCache
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	public virtual void Remove(JObjectLocalRef localRef)
 	{
-		if (!this._objects.Remove(localRef))
+		if (!this._objects.Remove(localRef, out ObjectLifetime? lifetime))
 			this._previous?.Remove(localRef);
+		lifetime?.Dispose();
 	}
 	/// <summary>
 	/// Indicates whether <paramref name="localRef"/> is JNI method parameter reference.

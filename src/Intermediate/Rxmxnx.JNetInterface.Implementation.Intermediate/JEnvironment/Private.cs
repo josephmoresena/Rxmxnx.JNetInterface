@@ -50,6 +50,7 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="id"></param>
 	/// <param name="result">Current result.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private void DeleteLocalFrame(Guid id, JLocalObject? result)
 	{
 		this._cache.DeleteLocalFrame(result);
@@ -96,35 +97,39 @@ partial class JEnvironment
 	/// Retrieves the <see cref="JInterfaceTypeMetadata"/> instance from <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JInterfaceTypeMetadata"/> instance.</returns>
+	private JInterfaceTypeMetadata? GetSuperInterfaceMetadata(JClassObject jClass)
+	{
+		if (jClass.IsAnnotation) // Annotations should use java.lang.annotation.Annotation metadata.
+			return (JInterfaceTypeMetadata)MetadataHelper.GetMetadata<JAnnotationObject>();
+		return this.GetSuperInterfaceMetadata(jClass, []);
+	}
+	/// <summary>
+	/// Retrieves the <see cref="JInterfaceTypeMetadata"/> instance from <paramref name="jClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="hashes">Set of interface validated hashes.</param>
 	/// <returns>A <see cref="JInterfaceTypeMetadata"/> instance.</returns>
-	private JInterfaceTypeMetadata? GetSuperInterfaceMetadata(JClassObject jClass, HashSet<String>? hashes = default)
+	private JInterfaceTypeMetadata? GetSuperInterfaceMetadata(JClassObject jClass, HashSet<String> hashes)
 	{
-		if (hashes is null && jClass.IsAnnotation) // Annotations should use java.lang.annotation.Annotation metadata.
-			return (JInterfaceTypeMetadata)MetadataHelper.GetMetadata<JAnnotationObject>();
-
-		hashes ??= [];
 		using JArrayObject<JClassObject> interfaces = jClass.GetInterfaces();
 		using LocalFrame _ = new(this, IVirtualMachine.GetSuperTypeCapacity);
 		foreach (JClassObject? interfaceClass in interfaces)
 		{
-			using (interfaceClass)
+			// Super interface was already checked.
+			if (hashes.Contains(interfaceClass!.Hash)) continue;
+			JTrace.GetSuperTypeMetadata(jClass, interfaceClass);
+
+			// Super interface is well-known
+			if (MetadataHelper.GetMetadata(interfaceClass.Hash) is JInterfaceTypeMetadata superInterfaceMetadata)
 			{
-				// Super interface was already checked.
-				if (hashes.Contains(interfaceClass!.Hash)) continue;
-				JTrace.GetSuperTypeMetadata(jClass, interfaceClass);
-
-				// Super interface is well-known
-				if (MetadataHelper.GetMetadata(interfaceClass.Hash) is JInterfaceTypeMetadata superInterfaceMetadata)
-				{
-					JTrace.UseTypeMetadata(jClass, superInterfaceMetadata);
-					return superInterfaceMetadata;
-				}
-
-				hashes.Add(interfaceClass.Hash);
-				if (this.GetSuperInterfaceMetadata(interfaceClass, hashes) is { } metadata)
-					return metadata;
+				JTrace.UseTypeMetadata(jClass, superInterfaceMetadata);
+				return superInterfaceMetadata;
 			}
+
+			hashes.Add(interfaceClass.Hash);
+			if (this.GetSuperInterfaceMetadata(interfaceClass, hashes) is { } metadata)
+				return metadata;
 		}
 		return default;
 	}
@@ -194,43 +199,46 @@ partial class JEnvironment
 		}
 
 		Boolean checkProxy = true;
-		using LocalFrame _ = new(env, IVirtualMachine.GetSuperTypeCapacity);
-		while (jClass.GetSuperClass() is { } superClass)
+		using (LocalFrame _ = new(env, IVirtualMachine.GetSuperTypeCapacity))
 		{
-			JTrace.GetSuperTypeMetadata(jClass, superClass);
-
-			// Super class is java.lang.Object.
-			if (UnicodeClassNames.Object.AsSpan().SequenceEqual(superClass.Name))
-				break;
-
-			// Super class is java.lang.reflect.Proxy.
-			if (checkProxy && UnicodeClassNames.ProxyObject().SequenceEqual(superClass.Name))
+			while (jClass.GetSuperClass() is { } superClass)
 			{
-				using JArrayObject<JClassObject> interfaces = superClass.GetInterfaces();
-				if (interfaces.Length > 0 &&
-				    jClass.Environment.ClassFeature.GetTypeMetadata(interfaces[0]) is JInterfaceTypeMetadata
-					    interfaceMetadata)
+				JTrace.GetSuperTypeMetadata(jClass, superClass);
+
+				// Super class is java.lang.Object.
+				if (UnicodeClassNames.Object.AsSpan().SequenceEqual(superClass.Name))
+					break;
+
+				// Super class is java.lang.reflect.Proxy.
+				if (checkProxy && UnicodeClassNames.ProxyObject().SequenceEqual(superClass.Name))
 				{
-					// Use interface proxy metadata.
-					JTrace.UseTypeMetadata(jClass, interfaceMetadata.ProxyMetadata);
-					return interfaceMetadata.ProxyMetadata;
+					using JArrayObject<JClassObject> interfaces = superClass.GetInterfaces();
+					if (interfaces.Length > 0 &&
+					    jClass.Environment.ClassFeature.GetTypeMetadata(interfaces[0]) is JInterfaceTypeMetadata
+						    interfaceMetadata)
+					{
+						// Use interface proxy metadata.
+						JTrace.UseTypeMetadata(jClass, interfaceMetadata.ProxyMetadata);
+						return interfaceMetadata.ProxyMetadata;
+					}
+
+					// No interface proxy metadata, we should use java.lang.reflect.Proxy metadata.
+					JClassTypeMetadata proxyTypeMetadata =
+						(JClassTypeMetadata)MetadataHelper.GetMetadata<JProxyObject>();
+					JTrace.UseTypeMetadata(jClass, proxyTypeMetadata);
+					return proxyTypeMetadata;
+				}
+				checkProxy = false;
+
+				// Super class is well-known
+				if (MetadataHelper.GetMetadata(superClass.Name) is JClassTypeMetadata classMetadata)
+				{
+					JTrace.UseTypeMetadata(jClass, classMetadata);
+					return classMetadata;
 				}
 
-				// No interface proxy metadata, we should use java.lang.reflect.Proxy metadata.
-				JClassTypeMetadata proxyTypeMetadata = (JClassTypeMetadata)MetadataHelper.GetMetadata<JProxyObject>();
-				JTrace.UseTypeMetadata(jClass, proxyTypeMetadata);
-				return proxyTypeMetadata;
+				jClass = superClass;
 			}
-			checkProxy = false;
-
-			// Super class is well-known
-			if (MetadataHelper.GetMetadata(superClass.Name) is JClassTypeMetadata classMetadata)
-			{
-				JTrace.UseTypeMetadata(jClass, classMetadata);
-				return classMetadata;
-			}
-
-			jClass = superClass;
 		}
 
 		JClassTypeMetadata objectTypeMetadata = (JClassTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>();
