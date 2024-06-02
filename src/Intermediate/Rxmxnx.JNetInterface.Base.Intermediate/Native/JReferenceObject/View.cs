@@ -35,6 +35,20 @@ public partial class JReferenceObject
 		private protected override IDisposable GetSynchronizer() => this.GetObject().GetSynchronizer();
 		/// <inheritdoc/>
 		private protected override ReadOnlySpan<Byte> AsSpan() => this.GetObject().AsSpan();
+		/// <inheritdoc/>
+		[ExcludeFromCodeCoverage]
+		private protected override void CopyTo(Span<Byte> span, ref Int32 offset) => this.GetObject().AsSpan();
+		/// <inheritdoc/>
+		[ExcludeFromCodeCoverage]
+		private protected override void CopyTo(Span<JValue> span, Int32 index) => this.GetObject().AsSpan();
+		/// <inheritdoc/>
+		[ExcludeFromCodeCoverage]
+		private protected override Boolean Same(JReferenceObject jObject)
+			=> Object.ReferenceEquals(this, jObject) || this.GetObject().Same(jObject);
+
+		/// <inheritdoc/>
+		[ExcludeFromCodeCoverage]
+		public override String ToTraceText() => this.GetObject().ToTraceText();
 
 		/// <summary>
 		/// Retrieves viewed object.
@@ -61,10 +75,6 @@ public partial class JReferenceObject
 		private protected View(TObject jObject) : base(jObject) => this.Object = jObject;
 
 		TObject IWrapper<TObject>.Value => this.Object;
-
-		/// <inheritdoc/>
-		[ExcludeFromCodeCoverage]
-		public override String ToTraceText() => this.Object.ToTraceText();
 
 		/// <inheritdoc/>
 		private protected override JReferenceObject GetObject() => this.Object;
