@@ -80,18 +80,23 @@ internal record LocalCache
 	/// Clear current cache.
 	/// </summary>
 	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+	/// <param name="exclude">A <see cref="JObjectLocalRef"/> reference to exclude.</param>
 	/// <param name="recursive">Indicates whether current clear must do recursively.</param>
-	public void ClearCache(JEnvironment env, Boolean recursive)
+	public void ClearCache(JEnvironment env, Boolean recursive, JObjectLocalRef exclude = default)
 	{
+		this._objects.Remove(exclude); // Removes excluded result.
+
 		JObjectLocalRef[] keys = this._objects.Keys.ToArray();
 		foreach (JObjectLocalRef key in keys)
-			this._objects[key].Dispose();
+			this._objects[key].Dispose(); // Clears reference of each object in current cache.
 
-		if (this._previous is null || !Object.ReferenceEquals(env.LocalCache, this)) return;
+		if (this._previous is null || !Object.ReferenceEquals(env.LocalCache, this))
+			return; // Current cache is initial or is not active.
+
 		if (!recursive)
-			env.SetObjectCache(this._previous);
+			env.SetObjectCache(this._previous); // Restores to previous cache.
 		else
-			this._previous.ClearCache(env, recursive);
+			this._previous.ClearCache(env, recursive, exclude);
 	}
 	/// <summary>
 	/// Removes current local reference.

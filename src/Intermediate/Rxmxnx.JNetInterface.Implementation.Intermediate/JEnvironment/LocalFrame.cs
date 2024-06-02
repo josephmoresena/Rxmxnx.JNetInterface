@@ -103,7 +103,7 @@ partial class JEnvironment
 		{
 			if (env is null) return;
 			this._references.Clear();
-			this.ClearCache(env, false);
+			this.ClearCache(env, false, this._result?.LocalReference ?? default);
 			env.DeleteLocalFrame(this.Id, this._result);
 		}
 	}
