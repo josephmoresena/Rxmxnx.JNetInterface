@@ -253,6 +253,10 @@ internal static class ClassNames
 	/// </summary>
 	public const String ClassNotFoundExceptionObject = ClassNames.LangPackage + "ClassNotFoundException";
 	/// <summary>
+	/// JNI name of <c>java.lang.NullPointerException</c> class.
+	/// </summary>
+	public const String NullPointerExceptionObject = ClassNames.LangPackage + "NullPointerException";
+	/// <summary>
 	/// JNI name of <c>java.lang.IndexOutOfBoundsException</c> class.
 	/// </summary>
 	public const String IndexOutOfBoundsExceptionObject = ClassNames.LangPackage + "IndexOutOfBoundsException";

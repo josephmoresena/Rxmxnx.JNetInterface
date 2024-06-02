@@ -12,7 +12,7 @@ public sealed record StackTraceInfo
 	/// <summary>
 	/// The name of the source file containing the execution point
 	/// </summary>
-	public String FileName { get; init; }
+	public String? FileName { get; init; }
 	/// <summary>
 	/// The line number of the source line containing the execution point
 	/// </summary>
@@ -32,7 +32,6 @@ public sealed record StackTraceInfo
 	public StackTraceInfo()
 	{
 		this.ClassName = default!;
-		this.FileName = default!;
 		this.MethodName = default!;
 	}
 

@@ -33,15 +33,13 @@ public partial class JThrowableObject
 	/// </summary>
 	/// <param name="stackTrace">A <see cref="JStackTraceElementObject"/> array.</param>
 	/// <returns>A <see cref="StackTraceInfo"/> array.</returns>
+	/// <remarks>This method runs within a local frame. Any local references created will be deleted.</remarks>
 	private static StackTraceInfo[] GetStackTraceInfo(IReadOnlyList<JStackTraceElementObject> stackTrace)
 	{
 		if (stackTrace.Count == 0) return [];
 		StackTraceInfo[] result = new StackTraceInfo[stackTrace.Count];
 		for (Int32 i = 0; i < result.Length; i++)
-		{
-			using (stackTrace[i])
-				result[i] = (StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]);
-		}
+			result[i] = (StackTraceElementObjectMetadata)ILocalObject.CreateMetadata(stackTrace[i]);
 		return result;
 	}
 

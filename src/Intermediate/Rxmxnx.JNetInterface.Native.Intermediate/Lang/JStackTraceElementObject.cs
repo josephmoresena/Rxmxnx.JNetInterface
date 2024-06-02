@@ -15,7 +15,7 @@ public sealed partial class JStackTraceElementObject : JLocalObject, IClassType<
 	/// The name of the source file containing the execution point
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public String FileName => this._fileName ??= this.GetFileName();
+	public String? FileName => this._fileName ??= this.GetFileName();
 	/// <summary>
 	/// The line number of the source line containing the execution point
 	/// </summary>

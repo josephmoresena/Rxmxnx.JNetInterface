@@ -41,7 +41,7 @@ public abstract class NativeFunctionSet
 	/// </summary>
 	/// <param name="jStackTraceElement">A <see cref="JStackTraceElementObject"/> instance.</param>
 	/// <returns>The name of the source file containing the execution point.</returns>
-	public abstract JStringObject GetFileName(JStackTraceElementObject jStackTraceElement);
+	public abstract JStringObject? GetFileName(JStackTraceElementObject jStackTraceElement);
 	/// <summary>
 	/// Returns the name of the method containing the execution point represented by this stack trace element.
 	/// </summary>

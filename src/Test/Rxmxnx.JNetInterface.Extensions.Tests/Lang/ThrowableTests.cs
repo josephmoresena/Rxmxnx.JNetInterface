@@ -34,6 +34,10 @@ public sealed class ThrowableTests
 	[Fact]
 	internal void NoClassDefFoundErrorObjectTest() => ThrowableTests.ThrowableTest<JNoClassDefFoundErrorObject>();
 	[Fact]
+	internal void ClassNotFoundExceptionObjectTest() => ThrowableTests.ThrowableTest<JClassNotFoundExceptionObject>();
+	[Fact]
+	internal void NullPointerExceptionTest() => ThrowableTests.ThrowableTest<JNullPointerExceptionObject>();
+	[Fact]
 	internal void NoSuchFieldErrorTest() => ThrowableTests.ThrowableTest<JNoSuchFieldErrorObject>();
 	[Fact]
 	internal void NoSuchMethodErrorTest() => ThrowableTests.ThrowableTest<JNoSuchMethodErrorObject>();

@@ -81,7 +81,8 @@ partial class JEnvironment
 		/// <inheritdoc/>
 		public override void Remove(JObjectLocalRef localRef)
 		{
-			if (!this.Contains(localRef)) this._references.Remove(localRef);
+			if (this.Contains(localRef))
+				this._references.Remove(localRef); // localRef is owned by current frame.
 			base.Remove(localRef);
 		}
 
