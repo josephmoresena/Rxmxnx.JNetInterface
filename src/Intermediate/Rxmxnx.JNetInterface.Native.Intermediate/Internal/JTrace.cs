@@ -373,7 +373,7 @@ internal static partial class JTrace
 		Trace.WriteLine(
 			result is null ?
 				$"thread: {Environment.CurrentManagedThreadId} local cache: {cacheId}" :
-				$"thread: {Environment.CurrentManagedThreadId} local cache: {cacheId} result: {result?.ToTraceText()}",
+				$"thread: {Environment.CurrentManagedThreadId} local cache: {cacheId} result: {result.ToTraceText()}",
 			callerMethod);
 	}
 }

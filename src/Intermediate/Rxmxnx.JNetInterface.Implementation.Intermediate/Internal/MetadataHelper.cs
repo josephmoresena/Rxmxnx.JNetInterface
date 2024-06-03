@@ -40,17 +40,11 @@ internal static partial class MetadataHelper
 	public static JReferenceTypeMetadata? GetMetadata(String hash)
 	{
 		JReferenceTypeMetadata? result = MetadataHelper.runtimeMetadata.GetValueOrDefault(hash);
+		if (result is not null) return result;
 		if (MetadataHelper.classTree.TryGetValue(hash, out String? value))
 			result = MetadataHelper.GetMetadata(value); // Retrieves metadata from cache.
-		else if (MetadataHelper.viewTree.TryGetValue(hash, out (HashSet<String> hashes, Object lockObj) tree))
-			lock (tree.lockObj)
-			{
-				foreach (String hashView in tree.hashes)
-				{
-					if (MetadataHelper.GetMetadata(hashView) is { } viewResult)
-						return viewResult;
-				}
-			}
+		else if (MetadataHelper.viewTree.TryGetValue(hash, out HashesSet? set))
+			result = set.GetViewMetadata();
 		return result;
 	}
 	/// <summary>
@@ -167,13 +161,12 @@ internal static partial class MetadataHelper
 	public static void RegisterSuperView(String hashView, String superViewHash)
 	{
 		if (hashView.AsSpan().SequenceEqual(superViewHash)) return;
-		if (!MetadataHelper.viewTree.TryGetValue(hashView, out (HashSet<String> hashes, Object lockObj) tree))
+		if (!MetadataHelper.viewTree.TryGetValue(hashView, out HashesSet? set))
 		{
-			tree = new() { hashes = [], lockObj = new(), };
-			MetadataHelper.viewTree[hashView] = tree;
+			set = new();
+			MetadataHelper.viewTree[hashView] = set;
 		}
-		lock (tree.lockObj)
-			tree.hashes.Add(superViewHash);
+		set.Add(superViewHash);
 	}
 
 	/// <summary>

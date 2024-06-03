@@ -232,5 +232,5 @@ internal static partial class MetadataHelper
 	/// <summary>
 	/// Runtime view metadata dictionary.
 	/// </summary>
-	private static readonly ConcurrentDictionary<String, (HashSet<String> hashes, Object lockObj)> viewTree = new();
+	private static readonly ConcurrentDictionary<String, HashesSet> viewTree = new();
 }

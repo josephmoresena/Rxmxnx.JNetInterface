@@ -15,7 +15,7 @@ internal static class CommonConstants
 	public const String CSharpSquid = "csharpsquid";
 	public const String Aot = "AOT";
 	public const String CheckId0051 = "IDE0051:Remove unused private members";
-	public const String CheckIdS1144 = "S1144:Remove the unused private field";
+	public const String CheckIdS1144 = "S1144:Unused private types or members should be removed";
 	public const String CheckIdS2292 = "S2292:Trivial properties should be auto-implemented";
 	public const String CheckIdS3881 = "S3881:\"IDisposable\" should be implemented correctly";
 	public const String CheckIdS110 = "S110:Inheritance tree of classes should not be too deep";
@@ -68,4 +68,6 @@ internal static class CommonConstants
 	public const String NonStandardTraceJustification = "Not standard trace is required.";
 	public const String PrimitiveCallJustification = "Primitive call generalization.";
 	public const String SecureUnsafeCodeJustification = "JNI code is secure to use.";
+	public const String OnlyInternalInstantiationJustification =
+		"Only internal code is allowed to build an instance of current type.";
 }

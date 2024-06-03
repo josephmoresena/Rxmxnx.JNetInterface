@@ -4,6 +4,8 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This record stores the metadata of a <see cref="JStackTraceElementObject"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
+                 Justification = CommonConstants.OnlyInternalInstantiationJustification)]
 public sealed record StackTraceElementObjectMetadata : ObjectMetadata
 {
 	/// <summary>
