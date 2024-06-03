@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface;
 
 /// <summary>
-/// This class is a JNI instance created from an invalid <see cref="JVirtualMachine"/> instance.
+/// This class is a JNI instance created from an invalid <see cref="IVirtualMachine"/> instance.
 /// </summary>
-/// <param name="VirtualMachine">A <see cref="JVirtualMachine"/> instance.</param>
+/// <param name="VirtualMachine">A <see cref="IVirtualMachine"/> instance.</param>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6670,
                  Justification = CommonConstants.NonStandardTraceJustification)]
 internal sealed record DeadThread(IVirtualMachine VirtualMachine)
