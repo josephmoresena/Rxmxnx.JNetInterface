@@ -104,8 +104,5 @@ public class JThreadObjectTests
 		Assert.True(typeMetadata.IsInstance(jThread0));
 		Assert.True(typeMetadata.IsInstance(jThread1));
 		Assert.True(typeMetadata.IsInstance(jThread2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 }

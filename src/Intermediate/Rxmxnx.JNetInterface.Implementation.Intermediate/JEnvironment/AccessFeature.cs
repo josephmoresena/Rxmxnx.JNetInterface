@@ -415,7 +415,8 @@ partial class JEnvironment
 		public JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
 			JClassObject? returnType)
 		{
-			using LocalFrame _ = new(this._env, parameterTypes.Length + 2);
+			using LocalFrame _ =
+				new(this._env, parameterTypes.Length + IVirtualMachine.GetAccessibleDefinitionCapacity);
 			JArgumentMetadata[] args = EnvironmentCache.GetCallMetadata(parameterTypes!);
 			if (returnType is null) return JConstructorDefinition.Create(args);
 			IReflectionMetadata? returnMetadata = EnvironmentCache.GetReflectionMetadata(returnType);

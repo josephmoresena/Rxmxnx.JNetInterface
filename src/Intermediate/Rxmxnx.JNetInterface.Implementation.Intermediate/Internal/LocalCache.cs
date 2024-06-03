@@ -15,6 +15,11 @@ internal record LocalCache
 	private readonly LocalCache? _previous;
 
 	/// <summary>
+	/// Internal id.
+	/// </summary>
+	public readonly Guid Id;
+
+	/// <summary>
 	/// Lifetime for <paramref name="localRef"/>.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
@@ -22,17 +27,30 @@ internal record LocalCache
 	{
 		set
 		{
-			Boolean add = !(this._previous?.Contains(localRef) ?? localRef == default);
+			Boolean add = !(this._previous?.IsRegistered(localRef) ?? localRef == default);
 			if (add) this._objects[localRef] = value;
 		}
 	}
+	/// <summary>
+	/// Name of cache.
+	/// </summary>
+	public virtual String Name => "initial";
 	/// <see cref="IEnvironment.LocalCapacity"/>
 	public virtual Int32? Capacity { get; set; }
+	/// <summary>
+	/// Current class cache.
+	/// </summary>
+	public ClassCache ClassCache { get; set; }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	public LocalCache() => this._objects = new();
+	public LocalCache(ClassCache classCache)
+	{
+		this._objects = new();
+		this.Id = Guid.NewGuid();
+		this.ClassCache = classCache;
+	}
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -41,34 +59,51 @@ internal record LocalCache
 	{
 		this._previous = previous;
 		this._objects = new();
+		this.Id = Guid.NewGuid();
+		this.ClassCache = previous.ClassCache;
 	}
 
 	/// <summary>
-	/// Indicates whether current value is contained by cache.
+	/// Indicates whether current value is registered in the cache tree.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by current cache tree; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+	public Boolean IsRegistered(JObjectLocalRef localRef)
+		=> this.Contains(localRef) || (this._previous?.IsRegistered(localRef) ?? localRef == default);
+	/// <summary>
+	/// Indicates whether current value is contained by current cache.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
 	/// <returns>
 	/// <see langword="true"/> if <paramref name="localRef"/> is already registered by current cache; otherwise,
 	/// <see langword="false"/>.
 	/// </returns>
-	public Boolean Contains(JObjectLocalRef localRef)
-		=> this._objects.ContainsKey(localRef) || (this._previous?.Contains(localRef) ?? localRef == default);
+	public Boolean Contains(JObjectLocalRef localRef) => this._objects.ContainsKey(localRef);
 	/// <summary>
 	/// Clear current cache.
 	/// </summary>
 	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-	/// <param name="recursive">Indicates whether current clear must done recursively.</param>
-	public void ClearCache(JEnvironment env, Boolean recursive)
+	/// <param name="exclude">A <see cref="JObjectLocalRef"/> reference to exclude.</param>
+	/// <param name="recursive">Indicates whether current clear must do recursively.</param>
+	public void ClearCache(JEnvironment env, Boolean recursive, JObjectLocalRef exclude = default)
 	{
+		if (this._objects.Remove(exclude)) // Removes excluded result and unloads its class cache.
+			this.ClassCache.Unload(JClassLocalRef.FromReference(in exclude));
+
 		JObjectLocalRef[] keys = this._objects.Keys.ToArray();
 		foreach (JObjectLocalRef key in keys)
-			this._objects[key].Dispose();
+			this.Remove(key); // Removes each reference in cache.
 
-		if (this._previous is null || !Object.ReferenceEquals(env.LocalCache, this)) return;
+		if (this._previous is null || !Object.ReferenceEquals(env.LocalCache, this))
+			return; // Current cache is initial or is not active.
+
 		if (!recursive)
-			env.SetObjectCache(this._previous);
+			env.SetObjectCache(this._previous); // Restores to previous cache.
 		else
-			this._previous.ClearCache(env, recursive);
+			this._previous.ClearCache(env, recursive, exclude);
 	}
 	/// <summary>
 	/// Removes current local reference.
@@ -76,8 +111,11 @@ internal record LocalCache
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	public virtual void Remove(JObjectLocalRef localRef)
 	{
-		if (!this._objects.Remove(localRef))
+		if (!this._objects.Remove(localRef, out ObjectLifetime? lifetime))
 			this._previous?.Remove(localRef);
+		if (lifetime is null) return;
+		lifetime.Dispose(); // Disposes current instance.
+		this.ClassCache.Unload(JClassLocalRef.FromReference(localRef)); // Unloads class cache.
 	}
 	/// <summary>
 	/// Indicates whether <paramref name="localRef"/> is JNI method parameter reference.

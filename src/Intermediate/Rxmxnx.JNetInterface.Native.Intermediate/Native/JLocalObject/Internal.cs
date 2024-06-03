@@ -72,6 +72,15 @@ public partial class JLocalObject
 	/// <inheritdoc/>
 	private protected override Boolean Same(JReferenceObject jObject)
 		=> base.Same(jObject) || this.Environment.IsSameObject(this, jObject);
+	/// <inheritdoc/>
+	private protected override void CopyTo(Span<JValue> span, Int32 index)
+		=> NativeUtilities.AsBytes(in this.As<JObjectLocalRef>()).CopyTo(span[index].AsBytes());
+	/// <inheritdoc/>
+	private protected override void CopyTo(Span<Byte> span, ref Int32 offset)
+	{
+		NativeUtilities.AsBytes(in this.As<JObjectLocalRef>()).CopyTo(span[offset..]);
+		offset += NativeUtilities.PointerSize;
+	}
 
 	/// <summary>
 	/// Indicates whether <see cref="IDataType{TDataType}"/> CLR type is the CLR type of

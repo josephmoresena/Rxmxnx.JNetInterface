@@ -403,9 +403,6 @@ public sealed class JClassObjectTests
 		env.ClassFeature.Received(1).AsClassObject(jLocal);
 		env.ClassFeature.Received(1).AsClassObject(jGlobal);
 		env.ClassFeature.Received(1).IsInstanceOf<JClassObject>(jLocal);
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	[Fact]
 	internal void VoidMetadataTest()

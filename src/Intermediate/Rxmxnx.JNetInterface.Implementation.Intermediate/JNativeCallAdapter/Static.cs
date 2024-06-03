@@ -134,4 +134,21 @@ public readonly ref partial struct JNativeCallAdapter
 		jLocal = result.CreateInitialObject<TObject>(localRef);
 		return result;
 	}
+
+	public readonly ref partial struct Builder
+	{
+		/// <summary>
+		/// Throws an exception if <paramref name="localRef"/> is not a local reference.
+		/// </summary>
+		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+		/// <exception cref="ArgumentException">
+		/// Throws an exception if <paramref name="localRef"/> is not a local reference.
+		/// </exception>
+		private static void ThrowIfNotLocalReference(JEnvironment env, JObjectLocalRef localRef)
+		{
+			if (env.GetReferenceType(localRef) != JReferenceType.LocalRefType)
+				throw new ArgumentException("JNI call only allow local references.");
+		}
+	}
 }

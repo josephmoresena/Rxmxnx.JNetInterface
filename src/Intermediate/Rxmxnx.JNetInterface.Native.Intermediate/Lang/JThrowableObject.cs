@@ -19,8 +19,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// Throwable stack trace.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public StackTraceInfo[] StackTrace
-		=> this._stackTrace ??= this.Environment.WithFrame(5, this, JThrowableObject.GetStackTraceInfo);
+	public StackTraceInfo[] StackTrace => this._stackTrace ??= this.GetStackTrace();
 
 	/// <inheritdoc/>
 	protected JThrowableObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
@@ -59,8 +58,12 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 		if (this.StackTrace.Length <= 0) return result;
 		StringBuilder strBuild = new(result);
 		foreach (StackTraceInfo t in this.StackTrace)
-			strBuild.AppendLine(t.ToTraceText());
-		result = strBuild.ToString();
+		{
+			strBuild.AppendLine();
+			strBuild.Append('\t');
+			strBuild.Append(t.ToTraceText());
+		}
+		result = strBuild.ToString().Trim();
 		return result;
 	}
 	/// <inheritdoc/>

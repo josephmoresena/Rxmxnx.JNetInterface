@@ -9,6 +9,7 @@ public abstract partial class ReferenceFeatureProxy : IReferenceFeature
 	public abstract void MonitorExit(JObjectLocalRef localRef);
 	public abstract TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase;
 	public abstract JWeak CreateWeak(JGlobalBase jGlobal);
+	public void LocalLoad(JGlobalBase jGlobal, JLocalObject jLocal) { throw new NotImplementedException(); }
 	public abstract Boolean Unload(JLocalObject jLocal);
 	public abstract Boolean Unload(JGlobalBase jGlobal);
 	public abstract Boolean IsParameter(JLocalObject jLocal);

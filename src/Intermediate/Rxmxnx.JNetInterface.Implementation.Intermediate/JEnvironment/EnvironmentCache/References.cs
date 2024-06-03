@@ -23,7 +23,7 @@ partial class JEnvironment
 			this._objects.Capacity = capacity;
 		}
 		/// <inheritdoc cref="JEnvironment.SetObjectCache(LocalCache?)"/>
-		public void SetObjectCache(LocalCache localCache) { this._objects = localCache; }
+		public void SetObjectCache(LocalCache localCache) => this._objects = localCache;
 		/// <summary>
 		/// Retrieves local cache.
 		/// </summary>
@@ -35,27 +35,6 @@ partial class JEnvironment
 		{
 			this._objects.ClearCache(this._env, true);
 			this._cancellation.Cancel();
-		}
-		/// <summary>
-		/// Creates a new local reference for <paramref name="result"/>.
-		/// </summary>
-		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
-		/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
-		/// <param name="deleteGlobal">Indicates whether global reference must be deleted.</param>
-		public void CreateLocalRef(JGlobalRef globalRef, JLocalObject? result, Boolean deleteGlobal = true)
-		{
-			if (globalRef == default || result is not null) return;
-			try
-			{
-				JTrace.CreateLocalRef(globalRef);
-				JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
-				JLocalObject jLocal = this.Register(result)!;
-				jLocal.SetValue(localRef);
-			}
-			finally
-			{
-				if (deleteGlobal) this._env.DeleteGlobalRef(globalRef);
-			}
 		}
 		/// <summary>
 		/// Creates a global reference from <paramref name="localRef"/>.
@@ -79,8 +58,6 @@ partial class JEnvironment
 			if (jLocal is null) return;
 			JObjectLocalRef localRef = jLocal.LocalReference;
 			this._objects.Remove(localRef);
-			if (jLocal is JClassObject)
-				this._classes.Unload(JClassLocalRef.FromReference(in localRef));
 		}
 	}
 }

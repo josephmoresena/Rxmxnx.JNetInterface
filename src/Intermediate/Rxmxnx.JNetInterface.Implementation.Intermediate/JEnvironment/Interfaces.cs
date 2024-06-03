@@ -67,30 +67,16 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 	}
 	TResult IEnvironment.WithFrame<TResult>(Int32 capacity, Func<TResult> func)
 	{
-		TResult? result;
-		JGlobalRef globalRef;
-		JLocalObject? localResult;
-		using (LocalFrame localFrame = new(this, capacity))
-		{
-			this._cache.CheckJniError();
-			result = func();
-			localResult = localFrame.GetGlobalResult(result, out globalRef);
-		}
-		this._cache.CreateLocalRef(globalRef, localResult);
+		using LocalFrame localFrame = new(this, capacity);
+		TResult result = func();
+		localFrame.SetResult(result);
 		return result;
 	}
 	TResult IEnvironment.WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
 	{
-		TResult? result;
-		JGlobalRef globalRef;
-		JLocalObject? localResult;
-		using (LocalFrame localFrame = new(this, capacity))
-		{
-			this._cache.CheckJniError();
-			result = func(state);
-			localResult = localFrame.GetGlobalResult(result, out globalRef);
-		}
-		this._cache.CreateLocalRef(globalRef, localResult);
+		using LocalFrame localFrame = new(this, capacity);
+		TResult result = func(state);
+		localFrame.SetResult(result);
 		return result;
 	}
 	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other)

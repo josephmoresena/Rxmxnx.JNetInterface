@@ -34,6 +34,10 @@ public sealed class ThrowableTests
 	[Fact]
 	internal void NoClassDefFoundErrorObjectTest() => ThrowableTests.ThrowableTest<JNoClassDefFoundErrorObject>();
 	[Fact]
+	internal void ClassNotFoundExceptionObjectTest() => ThrowableTests.ThrowableTest<JClassNotFoundExceptionObject>();
+	[Fact]
+	internal void NullPointerExceptionTest() => ThrowableTests.ThrowableTest<JNullPointerExceptionObject>();
+	[Fact]
 	internal void NoSuchFieldErrorTest() => ThrowableTests.ThrowableTest<JNoSuchFieldErrorObject>();
 	[Fact]
 	internal void NoSuchMethodErrorTest() => ThrowableTests.ThrowableTest<JNoSuchMethodErrorObject>();
@@ -87,8 +91,10 @@ public sealed class ThrowableTests
 		env.FunctionSet.GetMessage(jThrowable).Returns(jStringMessage);
 		env.FunctionSet.GetStackTrace(jThrowable).Returns(stackTraceElements);
 		env.ArrayFeature.GetElement(stackTraceElements, Arg.Any<Int32>()).Returns(c => elements[(Int32)c[1]]);
-		env.WithFrame(Arg.Any<Int32>(), jThrowable, Arg.Any<Func<TThrowable, StackTraceInfo[]>>())
-		   .Returns(c => (c[2] as Func<TThrowable, StackTraceInfo[]>)!.Invoke((TThrowable)c[1]));
+		env.WithFrame(Arg.Any<Int32>(), stackTraceElements,
+		              Arg.Any<Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>>()).Returns(
+			c => (c[2] as Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>)!.Invoke(
+				(JArrayObject<JStackTraceElementObject>)c[1]));
 
 		ILocalObject.ProcessMetadata(jThrowable, throwableMetadata);
 
@@ -177,9 +183,6 @@ public sealed class ThrowableTests
 		Assert.True(typeMetadata.IsInstance(jThrowable0));
 		Assert.True(typeMetadata.IsInstance(jThrowable1));
 		Assert.True(typeMetadata.IsInstance(jThrowable2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	private static void ThrowTest<TThrowable>(Boolean fail)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>

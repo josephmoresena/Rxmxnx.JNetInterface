@@ -18,10 +18,13 @@ internal sealed record CallFrame : LocalCache, IDisposable
 	/// </summary>
 	private readonly Dictionary<JObjectLocalRef, JLocalObject> _parameters = [];
 
+	/// <inheritdoc/>
+	public override String Name => "call";
+
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="env"></param>
+	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 	public CallFrame(JEnvironment env) : base(env.LocalCache) => this._env = env;
 	/// <inheritdoc/>
 	public void Dispose()

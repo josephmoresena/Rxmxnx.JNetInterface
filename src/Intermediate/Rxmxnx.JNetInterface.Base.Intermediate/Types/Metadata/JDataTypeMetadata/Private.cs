@@ -93,5 +93,5 @@ public partial record JDataTypeMetadata
 	/// Escape for Java class name -> JNI class name.
 	/// </summary>
 	/// <returns>A read-only binary span.</returns>
-	public static ReadOnlySpan<Byte> GetEscapeSpan() => "./"u8;
+	private static ReadOnlySpan<Byte> GetEscapeSpan() => "./"u8;
 }

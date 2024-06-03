@@ -64,12 +64,12 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		return bytes.AsValue<Int32>();
 	}
 	/// <inheritdoc/>
-	public override JStringObject GetFileName(JStackTraceElementObject jStackTraceElement)
+	public override JStringObject? GetFileName(JStackTraceElementObject jStackTraceElement)
 	{
 		IEnvironment env = jStackTraceElement.Environment;
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
 		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getFileNameDefinition, jStackTraceElement,
-		                                  stackTraceElementClass)!;
+		                                  stackTraceElementClass);
 	}
 	/// <inheritdoc/>
 	public override JStringObject GetMethodName(JStackTraceElementObject jStackTraceElement)
@@ -140,7 +140,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jClass.Environment;
 		modifiers = NativeFunctionSetImpl.GetClassModifiers(jClass);
 		return jClass.IsArray ?
-			env.WithFrame(4, jClass, NativeFunctionSetImpl.IsFinalArrayType) :
+			env.WithFrame(IVirtualMachine.IsFinalArrayCapacity, jClass, NativeFunctionSetImpl.IsFinalArrayType) :
 			modifiers.HasFlag(JModifierObject.Modifiers.Final);
 	}
 	/// <inheritdoc/>

@@ -127,8 +127,5 @@ public class JStackTraceElementObjectTests
 		Assert.True(typeMetadata.IsInstance(jStackTraceElement0));
 		Assert.True(typeMetadata.IsInstance(jStackTraceElement1));
 		Assert.True(typeMetadata.IsInstance(jStackTraceElement2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 }

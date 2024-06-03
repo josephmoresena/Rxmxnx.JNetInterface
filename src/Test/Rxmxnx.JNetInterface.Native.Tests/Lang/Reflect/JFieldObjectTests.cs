@@ -175,8 +175,5 @@ public class JFieldObjectTests
 
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JFieldObject>(Arg.Any<JReferenceObject>());
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 }

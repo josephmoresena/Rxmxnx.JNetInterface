@@ -1,3 +1,5 @@
+using JLocalObject = Rxmxnx.JNetInterface.Native.JLocalObject;
+
 namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
@@ -16,12 +18,17 @@ partial class JEnvironment
 		/// </summary>
 		private readonly List<JObjectLocalRef> _references;
 
+		/// <summary>
+		/// Local frame result.
+		/// </summary>
+		private JLocalObject? _result;
+
 		/// <inheritdoc/>
 		public override ObjectLifetime this[JObjectLocalRef localRef]
 		{
 			set
 			{
-				if (!this.Contains(localRef))
+				if (!this.IsRegistered(localRef))
 				{
 					this.ValidateQueue();
 					this._references.Add(localRef);
@@ -35,6 +42,8 @@ partial class JEnvironment
 			get => base.Capacity;
 			set => throw new InvalidOperationException("Current stack frame is fixed.");
 		}
+		/// <inheritdoc/>
+		public override String Name => "local";
 
 		/// <summary>
 		/// Constructor.
@@ -44,38 +53,42 @@ partial class JEnvironment
 		public LocalFrame(JEnvironment env, Int32 capacity) : base(env._cache.GetLocalCache())
 		{
 			env.CreateLocalFrame(capacity);
+			env._cache.CheckJniError();
 
 			base.Capacity = capacity;
 			this._env = env;
 			this._references = new(capacity);
-			env.SetObjectCache(this);
+
+			this._env.SetObjectCache(this);
 		}
 		/// <inheritdoc/>
 		public void Dispose()
 		{
-			this._references.Clear();
-			this.ClearCache(this._env, false);
+			if (this._result is not null && !this.Contains(this._result.LocalReference))
+				this._result = default; //Result is not contained in the local frame.
+			this.FinalizeFrame(this._env);
 		}
 		/// <summary>
-		/// Creates a new global reference to <paramref name="result"/>.
+		/// Sets result for local frame.
 		/// </summary>
 		/// <typeparam name="TResult">Result type.</typeparam>
-		/// <param name="result">A <typeparamref name="TResult"/> instance.</param>
-		/// <param name="globalRef">Output. A temporal <see cref="JGlobalRef"/> reference.</param>
-		/// <returns>A <see cref="JLocalObject"/> instance.</returns>
-		public JLocalObject? GetGlobalResult<TResult>(TResult result, out JGlobalRef globalRef)
+		/// <param name="result">A <typeparamref name="TResult"/> result.</param>
+		public void SetResult<TResult>(TResult result)
 		{
-			globalRef = default;
-			if (result is not JLocalObject { IsDefault: false, } jLocal || jLocal.Lifetime.HasValidGlobal<JGlobal>())
-				return default;
-			globalRef = this._env.CreateGlobalRef(jLocal);
-			return jLocal;
+			JLocalObject? jObject = result as JLocalObject ?? ILocalViewObject.GetObject(result as ILocalViewObject);
+			if (jObject is null) return;
+			this._result = jObject;
 		}
 
 		/// <inheritdoc/>
 		public override void Remove(JObjectLocalRef localRef)
 		{
-			this._references.Remove(localRef);
+			if (this.Contains(localRef)) // localRef is owned by current frame.
+			{
+				this._references.Remove(localRef);
+				if (this._result?.LocalReference == localRef) // Result is removed.
+					this._result = default;
+			}
 			base.Remove(localRef);
 		}
 
@@ -86,8 +99,19 @@ partial class JEnvironment
 		{
 			if (this._references.Count < this.Capacity) return;
 			JObjectLocalRef localRef = this._references[0];
-			this._references.Remove(localRef);
+			this._references.RemoveAt(0);
 			base.Remove(localRef);
+		}
+		/// <summary>
+		/// Finalizes current frame.
+		/// </summary>
+		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+		private void FinalizeFrame(JEnvironment? env)
+		{
+			if (env is null) return;
+			JLocalObject? result = this._result;
+			this.ClearCache(env, false, result?.LocalReference ?? default);
+			env.DeleteLocalFrame(this, result);
 		}
 	}
 }

@@ -38,7 +38,15 @@ internal static partial class MetadataHelper
 	/// <param name="hash">A JNI class hash.</param>
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
 	public static JReferenceTypeMetadata? GetMetadata(String hash)
-		=> MetadataHelper.runtimeMetadata.GetValueOrDefault(hash);
+	{
+		JReferenceTypeMetadata? result = MetadataHelper.runtimeMetadata.GetValueOrDefault(hash);
+		if (result is not null) return result;
+		if (MetadataHelper.classTree.TryGetValue(hash, out String? value))
+			result = MetadataHelper.GetMetadata(value); // Retrieves metadata from cache.
+		else if (MetadataHelper.viewTree.TryGetValue(hash, out HashesSet? set))
+			result = set.GetViewMetadata();
+		return result;
+	}
 	/// <summary>
 	/// Retrieves metadata from class name.
 	/// </summary>
@@ -134,6 +142,31 @@ internal static partial class MetadataHelper
 		JReferenceTypeMetadata? fromMetadata = MetadataHelper.GetMetadata(jClass.Hash);
 		JReferenceTypeMetadata? toMetadata = MetadataHelper.GetMetadata(otherClass.Hash);
 		return MetadataHelper.IsAssignableFrom(fromMetadata, toMetadata);
+	}
+	/// <summary>
+	/// Register class tree.
+	/// </summary>
+	/// <param name="hashClass">Hash class.</param>
+	/// <param name="superClassHash">Super class hash.</param>
+	public static void RegisterSuperClass(String hashClass, String superClassHash)
+	{
+		if (hashClass.AsSpan().SequenceEqual(superClassHash)) return;
+		MetadataHelper.classTree[hashClass] = superClassHash;
+	}
+	/// <summary>
+	/// Register class tree.
+	/// </summary>
+	/// <param name="hashView">Hash class view.</param>
+	/// <param name="superViewHash">Super view hash.</param>
+	public static void RegisterSuperView(String hashView, String superViewHash)
+	{
+		if (hashView.AsSpan().SequenceEqual(superViewHash)) return;
+		if (!MetadataHelper.viewTree.TryGetValue(hashView, out HashesSet? set))
+		{
+			set = new();
+			MetadataHelper.viewTree[hashView] = set;
+		}
+		set.Add(superViewHash);
 	}
 
 	/// <summary>

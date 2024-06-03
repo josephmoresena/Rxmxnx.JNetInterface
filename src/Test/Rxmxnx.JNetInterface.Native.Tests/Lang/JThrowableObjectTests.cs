@@ -46,8 +46,10 @@ public sealed class JThrowableObjectTests
 		env.FunctionSet.GetMessage(jThrowable).Returns(jStringMessage);
 		env.FunctionSet.GetStackTrace(jThrowable).Returns(stackTraceElements);
 		env.ArrayFeature.GetElement(stackTraceElements, Arg.Any<Int32>()).Returns(c => elements[(Int32)c[1]]);
-		env.WithFrame(Arg.Any<Int32>(), jThrowable, Arg.Any<Func<JThrowableObject, StackTraceInfo[]>>())
-		   .Returns(c => (c[2] as Func<JThrowableObject, StackTraceInfo[]>)!.Invoke((JThrowableObject)c[1]));
+		env.WithFrame(Arg.Any<Int32>(), stackTraceElements,
+		              Arg.Any<Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>>()).Returns(
+			c => (c[2] as Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>)!.Invoke(
+				(JArrayObject<JStackTraceElementObject>)c[1]));
 
 		ILocalObject.ProcessMetadata(jThrowable, throwableMetadata);
 
@@ -78,7 +80,11 @@ public sealed class JThrowableObjectTests
 		{
 			StringBuilder strBuild = new(toString);
 			foreach (StackTraceInfo t in jThrowable.StackTrace)
-				strBuild.AppendLine(t.ToTraceText());
+			{
+				strBuild.AppendLine();
+				strBuild.Append('\t');
+				strBuild.Append(t.ToTraceText());
+			}
 			toString = strBuild.ToString();
 		}
 		Assert.Equal(toString, jThrowable.ToString());
@@ -155,9 +161,6 @@ public sealed class JThrowableObjectTests
 		Assert.True(typeMetadata.IsInstance(jThrowable0));
 		Assert.True(typeMetadata.IsInstance(jThrowable1));
 		Assert.True(typeMetadata.IsInstance(jThrowable2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 	[Theory]
 	[InlineData(true)]

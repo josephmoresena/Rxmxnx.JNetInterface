@@ -25,6 +25,12 @@ public partial interface IReferenceFeature
 	/// </returns>
 	JWeak CreateWeak(JGlobalBase jGlobal);
 	/// <summary>
+	/// Reloads <paramref name="jLocal"/> with a local reference created from <paramref name="jGlobal"/>
+	/// </summary>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	void LocalLoad(JGlobalBase jGlobal, JLocalObject jLocal);
+	/// <summary>
 	/// Unloads the local reference of <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>

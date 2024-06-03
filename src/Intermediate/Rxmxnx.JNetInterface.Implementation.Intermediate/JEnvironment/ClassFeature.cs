@@ -25,7 +25,6 @@ partial class JEnvironment
 				JTrace.UseTypeMetadata(jClass, result);
 				return result;
 			}
-			using LocalFrame _ = new(this._env, 2);
 			result = jClass.ClassSignature[0] switch
 			{
 				UnicodePrimitiveSignatures.BooleanSignatureChar => (JClassTypeMetadata)MetadataHelper
@@ -45,7 +44,7 @@ partial class JEnvironment
 				UnicodePrimitiveSignatures.ShortSignatureChar => (JClassTypeMetadata)MetadataHelper
 					.GetMetadata<JShortObject>(),
 				UnicodeObjectSignatures.ArraySignaturePrefixChar => this._env.GetArrayTypeMetadata(
-					jClass.ClassSignature),
+					jClass.ClassSignature, jClass.Hash),
 				_ => this._env.GetSuperTypeMetadata(jClass),
 			};
 
@@ -91,7 +90,12 @@ partial class JEnvironment
 			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TDataType>();
 			return this.GetOrFindClass(metadata);
 		}
-		public JClassObject GetObjectClass(JLocalObject jLocal) => this.GetClass(jLocal.ObjectClassName);
+		public JClassObject GetObjectClass(JLocalObject jLocal)
+		{
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JObjectLocalRef localRef = jniTransaction.Add(jLocal);
+			return JEnvironment.GetClassObject(this._env, localRef);
+		}
 		public unsafe JClassObject? GetSuperClass(JClassObject jClass)
 		{
 			if (MetadataHelper.GetMetadata(jClass.Hash)?.BaseMetadata is { } metadata)

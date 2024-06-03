@@ -172,6 +172,11 @@ internal static partial class MetadataHelper
 			IReferenceType.GetMetadata<JInstantiationExceptionObject>()
 		},
 		{
+			IDataType.GetHash<JClassNotFoundExceptionObject>(),
+			IReferenceType.GetMetadata<JClassNotFoundExceptionObject>()
+		},
+		{ IDataType.GetHash<JNullPointerExceptionObject>(), IReferenceType.GetMetadata<JNullPointerExceptionObject>() },
+		{
 			IDataType.GetHash<JIndexOutOfBoundsExceptionObject>(),
 			IReferenceType.GetMetadata<JIndexOutOfBoundsExceptionObject>()
 		},
@@ -219,4 +224,13 @@ internal static partial class MetadataHelper
 	/// Runtime metadata assignation dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<String, Boolean?> assignationCache = new();
+
+	/// <summary>
+	/// Runtime class metadata dictionary.
+	/// </summary>
+	private static readonly ConcurrentDictionary<String, String> classTree = new();
+	/// <summary>
+	/// Runtime view metadata dictionary.
+	/// </summary>
+	private static readonly ConcurrentDictionary<String, HashesSet> viewTree = new();
 }

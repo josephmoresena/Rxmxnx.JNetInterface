@@ -39,6 +39,7 @@ partial class JEnvironment
 		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(env)
 		{
 			this._env = env;
+			this._objects = new(this._classes);
 
 			this.VirtualMachine = vm;
 			this.Reference = envRef;
@@ -142,11 +143,23 @@ partial class JEnvironment
 		{
 			this.ClearException();
 
-			using LocalFrame _ = new(this._env, 5);
 			JClassObject jClass =
 				this._env.GetObjectClass(throwableRef.Value, out JReferenceTypeMetadata throwableMetadata);
 			String message = this.GetThrowableMessage(throwableRef);
 			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
+		}
+		/// <summary>
+		/// Deletes the current local reference frame.
+		/// </summary>
+		/// <param name="result">Current result.</param>
+		public unsafe void DeleteLocalFrame(JLocalObject? result)
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.PopLocalFrameInfo);
+			JObjectLocalRef localRef = result?.LocalReference ?? default;
+			localRef = nativeInterface.ReferenceFunctions.PopLocalFrame(this.Reference, localRef);
+			result?.SetValue(localRef);
+			this.Register(result);
 		}
 	}
 }

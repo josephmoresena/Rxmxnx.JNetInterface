@@ -130,7 +130,7 @@ partial class JEnvironment
 				return this.FindPrimitiveClass(jClass.ClassSignature[0]);
 			JTrace.GetMetadataOrFindClass(jClass);
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(jClass.Name.AsSpan()))
-				return this.FindClass(new IntPtr(ptr));
+				return this.FindClass(ptr);
 		}
 		/// <summary>
 		/// Retrieves class from cache or loads it using JNI.
@@ -150,7 +150,10 @@ partial class JEnvironment
 				JClassLocalRef classRef = this._objects.FindClassParameter(classInformation.Hash);
 				if (classRef.IsDefault)
 					fixed (Byte* ptr = &MemoryMarshal.GetReference(classInformation.ClassName.AsSpan()))
-						classRef = this.FindClass(new IntPtr(ptr));
+					{
+						JTrace.FindClass(classInformation.ClassName);
+						classRef = this.FindClass(ptr);
+					}
 				result = new(this.ClassObject, classInformation, classRef);
 			}
 			return this.Register(result);

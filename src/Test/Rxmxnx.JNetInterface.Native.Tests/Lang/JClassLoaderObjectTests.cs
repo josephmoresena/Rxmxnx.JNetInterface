@@ -95,8 +95,5 @@ public class JClassLoaderObjectTests
 		Assert.True(typeMetadata.IsInstance(jClassLoader0));
 		Assert.True(typeMetadata.IsInstance(jClassLoader1));
 		Assert.True(typeMetadata.IsInstance(jClassLoader2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 }

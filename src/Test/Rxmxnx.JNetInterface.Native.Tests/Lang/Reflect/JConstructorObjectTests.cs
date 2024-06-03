@@ -210,8 +210,5 @@ public class JConstructorObjectTests
 
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JConstructorObject>(Arg.Any<JReferenceObject>());
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 }

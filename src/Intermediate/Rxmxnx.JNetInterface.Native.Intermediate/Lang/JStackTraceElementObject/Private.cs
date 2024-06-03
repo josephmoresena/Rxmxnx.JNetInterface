@@ -54,10 +54,10 @@ public partial class JStackTraceElementObject
 	/// Returns the name of the source file containing the execution point represented by this stack trace element.
 	/// </summary>
 	/// <returns>The name of the source file containing the execution point.</returns>
-	private String GetFileName()
+	private String? GetFileName()
 	{
-		using JStringObject fileName = this.Environment.FunctionSet.GetFileName(this);
-		return fileName.Value;
+		using JStringObject? fileName = this.Environment.FunctionSet.GetFileName(this);
+		return fileName?.Value;
 	}
 	/// <summary>
 	/// Returns the name of the method containing the execution point represented by this stack trace element.

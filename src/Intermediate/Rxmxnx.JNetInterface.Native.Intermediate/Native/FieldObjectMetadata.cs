@@ -1,32 +1,37 @@
-namespace Rxmxnx.JNetInterface.Internal;
+namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
 /// This record stores the metadata of a <see cref="JFieldObject"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
-internal sealed record FieldObjectMetadata : ObjectMetadata
+public sealed record FieldObjectMetadata : ObjectMetadata
 {
 	/// <summary>
 	/// Field definition.
 	/// </summary>
-	public JFieldDefinition? Definition { get; init; }
+	public JFieldDefinition? Definition { get; internal init; }
 	/// <summary>
 	/// JNI declaring class hash.
 	/// </summary>
-	public String? ClassHash { get; init; }
-
+	public String? ClassHash { get; internal init; }
 	/// <summary>
 	/// JNI field id.
 	/// </summary>
-	internal JFieldId? FieldId { get; init; }
+	public JFieldId? FieldId { get; internal init; }
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
+	/// <inheritdoc/>
 	public FieldObjectMetadata(ObjectMetadata metadata) : base(metadata)
 	{
 		if (metadata is not FieldObjectMetadata fieldMetadata) return;
+		this.Definition = fieldMetadata.Definition;
+		this.ClassHash = fieldMetadata.ClassHash;
+		this.FieldId = fieldMetadata.FieldId;
+	}
+
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	private FieldObjectMetadata(FieldObjectMetadata fieldMetadata) : base(fieldMetadata)
+	{
 		this.Definition = fieldMetadata.Definition;
 		this.ClassHash = fieldMetadata.ClassHash;
 		this.FieldId = fieldMetadata.FieldId;

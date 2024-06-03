@@ -21,6 +21,4 @@ internal sealed class TypeInformation(
 	public JTypeKind Kind => kind;
 	/// <inheritdoc/>
 	public JTypeModifier? Modifier => modifier;
-	/// <inheritdoc/>
-	public IFixedPointer.IDisposable GetClassNameFixedPointer() => sequence.GetFixedPointer();
 }

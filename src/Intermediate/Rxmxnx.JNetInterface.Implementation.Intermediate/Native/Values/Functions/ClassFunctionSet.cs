@@ -20,7 +20,7 @@ internal readonly unsafe struct ClassFunctionSet
 	/// Pointer to <c>FindClass</c> function.
 	/// Loads a locally-defined class with the specified name.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, ReadOnlyValPtr<Byte>, JClassLocalRef> FindClass;
+	public readonly delegate* unmanaged<JEnvironmentRef, Byte*, JClassLocalRef> FindClass;
 
 	/// <summary>
 	/// Pointer to <c>FromReflectedMethod</c> function.

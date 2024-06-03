@@ -1,10 +1,10 @@
-namespace Rxmxnx.JNetInterface.Internal;
+namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
 /// This record stores the metadata of a <see cref="JClassObject"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
-internal sealed record ClassObjectMetadata : ObjectMetadata
+public sealed record ClassObjectMetadata : ObjectMetadata
 {
 	/// <summary>
 	/// <see cref="ClassObjectMetadata"/> instance for Java <c>void</c> type.
@@ -14,41 +14,38 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 	/// <summary>
 	/// Class name of the current object.
 	/// </summary>
-	public CString Name { get; init; }
+	public CString Name { get; internal init; }
 	/// <summary>
 	/// Class signature of the current object.
 	/// </summary>
-	public CString ClassSignature { get; init; }
+	public CString ClassSignature { get; internal init; }
 	/// <summary>
 	/// Indicates whether the class of the current object is final.
 	/// </summary>
-	public Boolean? IsFinal { get; init; }
+	public Boolean? IsFinal { get; internal init; }
 	/// <summary>
 	/// Indicates whether the class of the current type is interface.
 	/// </summary>
-	public Boolean? IsInterface { get; init; }
+	public Boolean? IsInterface { get; internal init; }
 	/// <summary>
 	/// Indicates whether the class of the current type is enum.
 	/// </summary>
-	public Boolean? IsEnum { get; init; }
+	public Boolean? IsEnum { get; internal init; }
 	/// <summary>
 	/// Indicates whether the class of the current type is annotation.
 	/// </summary>
-	public Boolean? IsAnnotation { get; init; }
+	public Boolean? IsAnnotation { get; internal init; }
 	/// <summary>
 	/// Array type dimension.
 	/// </summary>
-	public Int32? ArrayDimension { get; init; }
+	public Int32? ArrayDimension { get; internal init; }
 	/// <summary>
 	/// Class hash of the current object.
 	/// </summary>
-	public String Hash { get; init; }
+	public String Hash { get; internal init; }
 
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
-	public ClassObjectMetadata(ObjectMetadata metadata) : base(metadata)
+	/// <inheritdoc/>
+	internal ClassObjectMetadata(ObjectMetadata metadata) : base(metadata)
 	{
 		ClassObjectMetadata? classMetadata = metadata as ClassObjectMetadata;
 		this.Name = classMetadata?.Name!;
@@ -95,6 +92,19 @@ internal sealed record ClassObjectMetadata : ObjectMetadata
 		}
 		if (metadata.Modifier.HasValue)
 			this.IsFinal = metadata.Modifier == JTypeModifier.Final;
+	}
+	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
+	private ClassObjectMetadata(ClassObjectMetadata classMetadata) : base(classMetadata)
+	{
+		this.Name = classMetadata.Name;
+		this.ClassSignature = classMetadata.ClassSignature;
+		this.Hash = classMetadata.Hash;
+		this.IsInterface = classMetadata.IsInterface;
+		this.IsEnum = classMetadata.IsEnum;
+		this.IsAnnotation = classMetadata.IsAnnotation;
+		this.IsFinal = classMetadata.IsFinal;
+		this.ArrayDimension = classMetadata.ArrayDimension;
 	}
 
 	/// <inheritdoc/>

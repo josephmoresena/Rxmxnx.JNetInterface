@@ -26,7 +26,11 @@ partial class JEnvironment
 	/// Sets current object cache.
 	/// </summary>
 	/// <param name="localCache">A <see cref="LocalCache"/> instance.</param>
-	internal void SetObjectCache(LocalCache localCache) => this._cache.SetObjectCache(localCache);
+	internal void SetObjectCache(LocalCache localCache)
+	{
+		JTrace.SetObjectCache(localCache.Id, localCache.Name);
+		this._cache.SetObjectCache(localCache);
+	}
 	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
@@ -39,7 +43,10 @@ partial class JEnvironment
 			classRef = this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
 		else
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(metadata.Name.AsSpan()))
-				classRef = this._cache.FindClass(new(ptr));
+			{
+				JTrace.FindClass(metadata.Name);
+				classRef = this._cache.FindClass(ptr);
+			}
 		try
 		{
 			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value);
@@ -179,29 +186,6 @@ partial class JEnvironment
 	internal JClassObject GetClass<TObject>() where TObject : JReferenceObject, IReferenceType<TObject>
 		=> this._cache.GetClass<TObject>();
 	/// <summary>
-	/// Deletes <paramref name="localRef"/>.
-	/// </summary>
-	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to remove.</param>
-	internal unsafe void DeleteLocalRef(JObjectLocalRef localRef)
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteLocalRefInfo);
-		nativeInterface.ReferenceFunctions.DeleteLocalRef.DeleteRef(this.Reference, localRef);
-	}
-	/// <summary>
-	/// Retrieves object class reference.
-	/// </summary>
-	/// <param name="localRef">Object instance to get class.</param>
-	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-	internal unsafe JClassLocalRef GetObjectClass(JObjectLocalRef localRef)
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectClassInfo);
-		JClassLocalRef classRef = nativeInterface.ObjectFunctions.GetObjectClass(this.Reference, localRef);
-		if (classRef.IsDefault) this._cache.CheckJniError();
-		return classRef;
-	}
-	/// <summary>
 	/// Retrieves the class object and instantiation metadata.
 	/// </summary>
 	/// <param name="localRef">Object instance to get class.</param>
@@ -209,7 +193,7 @@ partial class JEnvironment
 	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
 	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata metadata)
 	{
-		using LocalFrame frame = new(this, 2);
+		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
 		JClassObject jClass = this._cache.GetClass(classRef, true);
 		frame[jClass.LocalReference] = jClass.Lifetime.GetCacheable();
@@ -270,5 +254,15 @@ partial class JEnvironment
 		if (value is null)
 			return ReadOnlySpan<Byte>.Empty;
 		return value.IsNullTerminated ? value.AsSpan() : (CString)value.Clone();
+	}
+
+	/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
+	public static JClassObject GetClassObject(JEnvironment env, JObjectLocalRef localRef)
+	{
+		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
+		JClassLocalRef classRef = env.GetObjectClass(localRef);
+		JClassObject jClass = env.GetClass(classRef);
+		frame[jClass.LocalReference] = jClass.Lifetime.GetCacheable();
+		return jClass;
 	}
 }

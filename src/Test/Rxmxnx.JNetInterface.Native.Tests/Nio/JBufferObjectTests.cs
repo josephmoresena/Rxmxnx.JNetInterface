@@ -115,8 +115,5 @@ public class JBufferObjectTests
 		Assert.True(typeMetadata.IsInstance(jBuffer0));
 		Assert.True(typeMetadata.IsInstance(jBuffer1));
 		Assert.True(typeMetadata.IsInstance(jBuffer2));
-
-		using IFixedPointer.IDisposable fPtr = (typeMetadata as ITypeInformation).GetClassNameFixedPointer();
-		Assert.Equal(fPtr.Pointer, typeMetadata.ClassName.AsSpan().GetUnsafeIntPtr());
 	}
 }

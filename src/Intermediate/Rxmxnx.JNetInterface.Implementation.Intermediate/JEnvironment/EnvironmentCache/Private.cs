@@ -26,7 +26,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Object cache.
 		/// </summary>
-		private LocalCache _objects = new();
+		private LocalCache _objects;
 		/// <summary>
 		/// Amount of bytes used from stack.
 		/// </summary>
@@ -220,7 +220,7 @@ partial class JEnvironment
 			}
 			JLocalObject jLocal = typeMetadata.CreateInstance(jClass, localRef, true);
 			TResult result = (TResult)(Object)metadata.ParseInstance(jLocal, true);
-			if (localRef != (result as JLocalObject)!.LocalReference && register)
+			if (localRef != jLocal.LocalReference && register)
 				this._env.DeleteLocalRef(localRef);
 			return register ? this.Register(result) : result;
 		}
