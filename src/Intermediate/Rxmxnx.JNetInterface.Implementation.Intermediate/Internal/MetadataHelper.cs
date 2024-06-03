@@ -158,7 +158,6 @@ internal static partial class MetadataHelper
 	{
 		if (hashClass.AsSpan().SequenceEqual(superClassHash)) return;
 		MetadataHelper.classTree[hashClass] = superClassHash;
-		//MetadataHelper.As
 	}
 	/// <summary>
 	/// Register class tree.
