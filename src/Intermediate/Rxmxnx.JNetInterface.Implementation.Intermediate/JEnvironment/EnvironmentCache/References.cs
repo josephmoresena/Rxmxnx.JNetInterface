@@ -37,21 +37,6 @@ partial class JEnvironment
 			this._cancellation.Cancel();
 		}
 		/// <summary>
-		/// Creates a new local reference for <paramref name="result"/>.
-		/// </summary>
-		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
-		/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
-		public void CreateLocalRef<TObjectRef>(TObjectRef globalRef, JLocalObject? result)
-			where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>,
-			IEqualityOperators<TObjectRef, TObjectRef, Boolean>
-		{
-			if (globalRef == default || result is not null) return;
-			JTrace.CreateLocalRef(globalRef);
-			JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
-			JLocalObject jLocal = this.Register(result)!;
-			jLocal.SetValue(localRef);
-		}
-		/// <summary>
 		/// Creates a global reference from <paramref name="localRef"/>.
 		/// </summary>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>

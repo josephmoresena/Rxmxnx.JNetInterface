@@ -123,7 +123,7 @@ public partial class JVirtualMachine
 	/// <see langword="true"/> if <paramref name="weakRef"/> can be removed safely;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	internal Boolean SecureRemove(JWeakRef weakRef) => this._cache.InTransaction(weakRef.Pointer);
+	internal Boolean SecureRemove(JWeakRef weakRef) => !this._cache.InTransaction(weakRef.Pointer);
 	/// <summary>
 	/// Indicates whether <paramref name="globalRef"/> can be removed safely.
 	/// </summary>
@@ -132,7 +132,7 @@ public partial class JVirtualMachine
 	/// <see langword="true"/> if <paramref name="globalRef"/> can be removed safely;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
-	internal Boolean SecureRemove(JGlobalRef globalRef) => this._cache.InTransaction(globalRef.Pointer);
+	internal Boolean SecureRemove(JGlobalRef globalRef) => !this._cache.InTransaction(globalRef.Pointer);
 	/// <summary>
 	/// Indicates whether <paramref name="localRef"/> can be removed safely.
 	/// </summary>

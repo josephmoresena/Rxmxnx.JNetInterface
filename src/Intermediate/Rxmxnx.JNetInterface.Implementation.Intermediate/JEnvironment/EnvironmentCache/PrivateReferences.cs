@@ -136,5 +136,21 @@ partial class JEnvironment
 		/// </returns>
 		private Boolean IsMainOrDefault(JGlobalBase jGlobal)
 			=> jGlobal.IsDefault || this.IsMainGlobal(jGlobal as JGlobal);
+		/// <summary>
+		/// Creates a new local reference for <paramref name="result"/>.
+		/// </summary>
+		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
+		/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
+		private void CreateLocalRef<TObjectRef>(TObjectRef globalRef, JLocalObject? result)
+			where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>,
+			IEqualityOperators<TObjectRef, TObjectRef, Boolean>
+		{
+			if (globalRef == default || result is null) return;
+			JTrace.CreateLocalRef(globalRef);
+			JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
+			if (localRef == default) this.CheckJniError();
+			result.SetValue(localRef);
+			this.Register(result);
+		}
 	}
 }
