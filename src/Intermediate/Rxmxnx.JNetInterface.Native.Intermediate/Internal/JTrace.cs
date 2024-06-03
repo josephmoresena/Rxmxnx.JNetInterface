@@ -96,10 +96,11 @@ internal static partial class JTrace
 	public static void RegisterObject(JReferenceObject? jObject, Guid cacheId, String cacheName,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled || jObject is null) return;
-		Trace.WriteLine(
-			$"thread: {Environment.CurrentManagedThreadId} {jObject.ToTraceText()} at {cacheName} cache {cacheId}",
-			callerMethod);
+		if (!IVirtualMachine.TraceEnabled) return;
+		if (jObject is not null)
+			Trace.WriteLine(
+				$"thread: {Environment.CurrentManagedThreadId} {jObject.ToTraceText()} at {cacheName} cache {cacheId}",
+				callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and deleting local reference to the trace listeners.
@@ -114,7 +115,8 @@ internal static partial class JTrace
 	public static void Unload(Boolean isRegistered, Boolean isAttached, Boolean isAlive, JObjectLocalRef localRef,
 		Guid cacheId, String cacheName, [CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled || localRef == default) return;
+		if (!IVirtualMachine.TraceEnabled) return;
+		if (localRef == default) return;
 		if (!isRegistered)
 			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} Unable to remove unregistered {localRef}.",
 			                callerMethod);
@@ -143,7 +145,8 @@ internal static partial class JTrace
 		where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>,
 		IEqualityOperators<TGlobalRef, TGlobalRef, Boolean>
 	{
-		if (!IVirtualMachine.TraceEnabled || globalRef == default) return;
+		if (!IVirtualMachine.TraceEnabled) return;
+		if (globalRef == default) return;
 		if (!isAttached)
 			Trace.WriteLine(
 				$"thread: {Environment.CurrentManagedThreadId} Unable to remove {globalRef}. Thread is not attached.",
@@ -329,7 +332,7 @@ internal static partial class JTrace
 	public static void UseTypeMetadata(ReadOnlySpan<Byte> arraySignature, JArrayTypeMetadata typeMetadata,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled || arraySignature.SequenceEqual(typeMetadata.ClassName)) return;
+		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
 			$"thread: {Environment.CurrentManagedThreadId} {Encoding.UTF8.GetString(arraySignature)} uses type metadata from {typeMetadata.ClassName}.",
 			callerMethod);
