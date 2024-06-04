@@ -140,7 +140,7 @@ internal static partial class JTrace
 	/// <param name="isAlive">Indicates whether current VM is alive.</param>
 	/// <param name="globalRef">A global object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void Unload<TGlobalRef>(Boolean isAttached, Boolean isAlive, TGlobalRef globalRef,
+	public static void UnloadGlobal<TGlobalRef>(Boolean isAttached, Boolean isAlive, TGlobalRef globalRef,
 		[CallerMemberName] String callerMethod = "")
 		where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>,
 		IEqualityOperators<TGlobalRef, TGlobalRef, Boolean>
@@ -275,7 +275,7 @@ internal static partial class JTrace
 	/// </summary>
 	/// <param name="objectRef">A JNI object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, [CallerMemberName] String callerMethod = "")
+	public static void CreatingLocalRef<TObjectRef>(TObjectRef objectRef, [CallerMemberName] String callerMethod = "")
 		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;

@@ -114,7 +114,7 @@ partial class JEnvironment
 		{
 			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				this._env.DeleteWeakGlobalRef(weakRef);
-			JTrace.Unload(this._env.IsAttached, this.VirtualMachine.IsAlive, weakRef);
+			JTrace.UnloadGlobal(this._env.IsAttached, this.VirtualMachine.IsAlive, weakRef);
 		}
 		/// <summary>
 		/// Unloads <paramref name="globalRef"/>.
@@ -124,7 +124,7 @@ partial class JEnvironment
 		{
 			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				this._env.DeleteGlobalRef(globalRef);
-			JTrace.Unload(this._env.IsAttached, this.VirtualMachine.IsAlive, globalRef);
+			JTrace.UnloadGlobal(this._env.IsAttached, this.VirtualMachine.IsAlive, globalRef);
 		}
 		/// <summary>
 		/// Indicates whether <paramref name="jGlobal"/> is a main global object or default.
@@ -146,7 +146,7 @@ partial class JEnvironment
 			IEqualityOperators<TObjectRef, TObjectRef, Boolean>
 		{
 			if (globalRef == default || result is null) return;
-			JTrace.CreateLocalRef(globalRef);
+			JTrace.CreatingLocalRef(globalRef);
 			JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
 			if (localRef == default) this.CheckJniError();
 			result.SetValue(localRef);

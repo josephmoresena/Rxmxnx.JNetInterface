@@ -248,7 +248,7 @@ internal static partial class JTrace
 	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void GetAccessibleId(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
+	public static void GettingAccessibleId(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
