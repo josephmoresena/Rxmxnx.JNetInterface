@@ -11,8 +11,7 @@
             <attribute internal="RemoveAttributeInstances"/>
         </type>
     </assembly>
-    <assembly fullname="Rxmxnx.JNetInterface.Base.Intermediate" feature="System.AggressiveAttributeTrimming"
-              featurevalue="true">
+    <assembly fullname="Rxmxnx.JNetInterface.Base.Intermediate">
         <type fullname="System.ComponentModel.EditorBrowsableAttribute">
             <attribute internal="RemoveAttributeInstances"/>
         </type>

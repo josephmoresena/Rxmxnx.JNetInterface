@@ -147,15 +147,7 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		if (globalRef == default) return;
-		if (!isAttached)
-			Trace.WriteLine(
-				$"thread: {Environment.CurrentManagedThreadId} Unable to remove {globalRef}. Thread is not attached.",
-				callerMethod);
-		else if (!isAlive)
-			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} Unable to {globalRef}. JVM is not alive.",
-			                callerMethod);
-		else
-			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {globalRef} removed.", callerMethod);
+		JTrace.UnloadNonGenericGlobal(isAttached, isAlive, $"{globalRef}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and releasing native memory to the trace listeners.
@@ -172,23 +164,8 @@ internal static partial class JTrace
 		where TObjectRef : unmanaged, IObjectReferenceType<TObjectRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		String memoryText = isCritical ? "Critical memory" : "Memory";
-		if (!isAttached)
-			Trace.WriteLine(
-				$"thread: {Environment.CurrentManagedThreadId} Unable to release {memoryText.ToLower()} 0x{pointer:0x8} {objectRef}. Thread is not attached.",
-				callerMethod);
-		else if (!isAlive)
-			Trace.WriteLine(
-				$"thread: {Environment.CurrentManagedThreadId} Unable to release {memoryText.ToLower()} 0x{pointer:0x8} {objectRef}. JVM is not alive.",
-				callerMethod);
-		else if (!released)
-			Trace.WriteLine(
-				$"thread: {Environment.CurrentManagedThreadId} Error attempting to release {memoryText} 0x{pointer:0x8} {objectRef}.",
-				callerMethod);
-		else
-			Trace.WriteLine(
-				$"thread: {Environment.CurrentManagedThreadId} {memoryText} 0x{pointer:0x8} {objectRef} released.",
-				callerMethod);
+		JTrace.ReleaseNonGenericMemory(isCritical, isAttached, isAlive, released, pointer, $"{objectRef}",
+		                               callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and exiting monitor to the trace listeners.
@@ -279,7 +256,7 @@ internal static partial class JTrace
 		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {objectRef}", callerMethod);
+		JTrace.CreatingNonGenericLocalRef($"{objectRef}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and creation of local reference to the trace listeners.
@@ -292,10 +269,7 @@ internal static partial class JTrace
 		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine(
-			localRef != default ?
-				$"thread: {Environment.CurrentManagedThreadId} {objectRef} -> {localRef}" :
-				$"thread: {Environment.CurrentManagedThreadId} {objectRef} Error.", callerMethod);
+		JTrace.CreateNonGenericLocalRef($"{objectRef}", localRef, callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and finallization call to the trace listeners.

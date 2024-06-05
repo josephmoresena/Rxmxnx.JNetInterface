@@ -46,6 +46,8 @@ public partial class JLocalObject
 				[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TOtherInterface>()
 				where TOtherInterface : JInterfaceObject<TOtherInterface>, IInterfaceType<TOtherInterface>
 			{
+				NativeValidationUtilities.ThrowIfSameType(this._builder.DataTypeName, typeof(TInterface),
+				                                          typeof(TOtherInterface), true);
 				if (IVirtualMachine.MetadataValidationEnabled)
 				{
 					IReadOnlySet<Type> superInterfacesType = IReferenceType<TOtherInterface>.TypeInterfaces;

@@ -76,6 +76,15 @@
             <method name="GetAccessibleId" body="stub"/>
             <method signature="System.Void GetAccessCache(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.JReferenceType,System.Boolean,System.String)"
                     body="stub"/>
+            <!-- NonGenerics -->
+            <method signature="System.Void UnloadNonGenericGlobal(System.Boolean,System.Boolean,System.String,System.String)"
+                    body="stub"/>
+            <method signature="System.Void ReleaseNonGenericMemory(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.IntPtr,System.String,System.String)"
+                    body="stub"/>
+            <method signature="System.Void CreatingNonGenericLocalRef(System.String,System.String)"
+                    body="stub"/>
+            <method signature="System.Void CreateNonGenericLocalRef(System.String,Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,System.String)"
+                    body="stub"/>
         </type>
     </assembly>
 </linker>
