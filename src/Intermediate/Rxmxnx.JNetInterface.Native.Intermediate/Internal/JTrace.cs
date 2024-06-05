@@ -252,11 +252,11 @@ internal static partial class JTrace
 	/// </summary>
 	/// <param name="objectRef">A JNI object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void CreatingLocalRef<TObjectRef>(TObjectRef objectRef, [CallerMemberName] String callerMethod = "")
+	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, [CallerMemberName] String callerMethod = "")
 		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		JTrace.CreatingNonGenericLocalRef($"{objectRef}", callerMethod);
+		JTrace.CreateNonGenericLocalRef($"{objectRef}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and creation of local reference to the trace listeners.

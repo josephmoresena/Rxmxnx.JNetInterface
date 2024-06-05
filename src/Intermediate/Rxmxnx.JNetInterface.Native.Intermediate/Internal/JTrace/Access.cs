@@ -33,7 +33,7 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		String textValue = value is not null ?
-			(value as JReferenceObject)?.ToString() ?? $"{value.ObjectSignature}: {value}" :
+			(value as JReferenceObject)?.ToTraceText() ?? $"{value.ObjectSignature}: {value}" :
 			"value: null";
 		Trace.WriteLine(jLocal is null ? //Static?
 			                $"thread: {Environment.CurrentManagedThreadId} {jClass.ToTraceText()} {definition.ToTraceText()} {textValue}" :
@@ -248,7 +248,7 @@ internal static partial class JTrace
 	/// <param name="classRef"><see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void GettingAccessibleId(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
+	public static void GetAccessibleId(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;

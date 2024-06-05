@@ -146,7 +146,7 @@ partial class JEnvironment
 			IEqualityOperators<TObjectRef, TObjectRef, Boolean>
 		{
 			if (globalRef == default || result is null) return;
-			JTrace.CreatingLocalRef(globalRef);
+			JTrace.CreateLocalRef(globalRef);
 			JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
 			if (localRef == default) this.CheckJniError();
 			result.SetValue(localRef);

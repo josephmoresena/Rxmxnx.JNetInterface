@@ -66,10 +66,9 @@ public partial class JLocalObject
 					                                                     this._kind is not JTypeKind.Interface);
 
 				// Validates superinterfaces from current interface.
-				HashSet<CString> notContained = [];
-				metadata.Interfaces.ForEach((this._interfaceTypes, notContained),
-				                            TypeMetadataBuilder.ValidateSuperinterface);
-				NativeValidationUtilities.ThrowIfInvalidImplementation(this.DataTypeName, metadata, notContained,
+				SuperInterfaceValidationState state = new() { Interfaces = this._interfaceTypes, NotContained = [], };
+				metadata.Interfaces.ForEach(state, TypeMetadataBuilder.ValidateSuperinterface);
+				NativeValidationUtilities.ThrowIfInvalidImplementation(this.DataTypeName, metadata, state.NotContained,
 				                                                       this._kind is not JTypeKind.Interface);
 			}
 			this._interfaces ??= [];
@@ -86,14 +85,13 @@ public partial class JLocalObject
 		/// <summary>
 		/// Checks implementation of a the superinterface type from <paramref name="interfaceMetadata"/>.
 		/// </summary>
-		/// <param name="args">Interface type set and non-implemented interface name set.</param>
+		/// <param name="state">A <see cref="SuperInterfaceValidationState"/> instance.</param>
 		/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
-		private static void ValidateSuperinterface(
-			(IReadOnlySet<Type> interfaceTypes, HashSet<CString> notContained) args,
+		private static void ValidateSuperinterface(SuperInterfaceValidationState state,
 			JInterfaceTypeMetadata interfaceMetadata)
 		{
-			if (!args.interfaceTypes.Contains(interfaceMetadata.InterfaceType))
-				args.notContained.Add(interfaceMetadata.ClassName);
+			if (!state.Interfaces.Contains(interfaceMetadata.InterfaceType))
+				state.NotContained.Add(interfaceMetadata.ClassName);
 		}
 	}
 
@@ -195,7 +193,7 @@ public partial class JLocalObject
 			NativeValidationUtilities.ThrowIfSameType(className, typeof(TClass), typeof(TObject));
 			return !IVirtualMachine.MetadataValidationEnabled ?
 				new(className, modifier, IClassType.GetMetadata<TClass>(), ImmutableHashSet<Type>.Empty) :
-				TypeMetadataBuilder<TClass>.CreateWithValidation<TObject>(className, modifier);
+				TypeMetadataBuilder<TClass>.CreateWithBaseValidation<TObject>(className, modifier);
 		}
 
 		/// <summary>
@@ -227,7 +225,7 @@ public partial class JLocalObject
 		/// <param name="className">Class name of the current type.</param>
 		/// <param name="modifier">Modifier of the current type.</param>
 		/// <returns>A new <see cref="TypeMetadataBuilder{TObject}"/> instance.</returns>
-		private static TypeMetadataBuilder<TObject> CreateWithValidation<
+		private static TypeMetadataBuilder<TObject> CreateWithBaseValidation<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
 			ReadOnlySpan<Byte> className, JTypeModifier modifier) where TObject : TClass, IClassType<TObject>
 		{

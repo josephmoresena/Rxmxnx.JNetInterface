@@ -61,7 +61,7 @@ internal static partial class JTrace
 	/// </summary>
 	/// <param name="objectRefText">A JNI object reference text.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	private static void CreatingNonGenericLocalRef(String objectRefText, String callerMethod)
+	private static void CreateNonGenericLocalRef(String objectRefText, String callerMethod)
 	{
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {objectRefText}", callerMethod);
 	}

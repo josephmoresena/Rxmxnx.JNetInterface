@@ -36,6 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <!--<RuntimeHostConfigurationOption Include="JNetInterface.EnableTrace" Value="true" Trim="true"/>-->
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="System.AggressiveAttributeTrimming" Value="true" Trim="true"/>
     </ItemGroup>

@@ -30,8 +30,10 @@
                     body="stub"/>
             <method signature="System.Void Unload(System.Boolean,System.Boolean,System.Boolean,Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,System.Guid,System.String,System.String)"
                     body="stub"/>
-            <method name="UnloadGlobal" body="stub"/>
-            <method name="ReleaseMemory" body="stub"/>
+            <method signature="System.Void UnloadGlobal`1(System.Boolean,System.Boolean,,System.String)"
+                    body="stub"/>
+            <method signature="System.Void ReleaseMemory`1(System.Boolean,System.Boolean,System.Boolean,System.Boolean,,System.IntPtr,System.String)"
+                    body="stub"/>
             <method signature="System.Void MonitorExit(System.Boolean,System.Boolean,System.Boolean,Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,System.String)"
                     body="stub"/>
             <method signature="System.Void AsClassObject(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.JReferenceType,Rxmxnx.JNetInterface.Native.ClassObjectMetadata,System.String)"
@@ -42,8 +44,9 @@
                     body="stub"/>
             <method signature="System.Void LoadClassMetadata(Rxmxnx.JNetInterface.Native.ClassObjectMetadata,System.String)"
                     body="stub"/>
-            <method name="CreatingLocalRef" body="stub"/>
-            <method name="CreateLocalRef" body="stub"/>
+            <method signature="System.Void CreateLocalRef`1(,System.String)" body="stub"/>
+            <method signature="System.Void CreateLocalRef`1(,Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,System.String)"
+                    body="stub"/>
             <method signature="System.Void FinalizeCall(Rxmxnx.JNetInterface.Native.JLocalObject,System.String)"
                     body="stub"/>
             <method signature="System.Void UseTypeMetadata(Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata,System.String)"
@@ -57,23 +60,28 @@
             <!-- Access -->
             <method signature="System.Void GetField(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JFieldDefinition,System.String)"
                     body="stub"/>
-            <method name="SetField" body="stub"/>
+            <method signature="System.Void SetField`1(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JFieldDefinition,,System.String)"
+                    body="stub"/>
             <method signature="System.Void CallMethod(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JCallDefinition,System.Boolean,Rxmxnx.JNetInterface.IObject[],System.String)"
                     body="stub"/>
-            <method name="SetPrimitiveField" body="stub"/>
+            <method signature="System.Void SetPrimitiveField`1(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Byte,Rxmxnx.JNetInterface.Native.Identifiers.JFieldId,,System.String)"
+                    body="stub"/>
             <method signature="System.Void SetObjectField(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.Identifiers.JFieldId,Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,System.String)"
                     body="stub"/>
-            <method name="GetPrimitiveField" body="stub"/>
+            <method signature="System.Void GetPrimitiveField`1(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Byte,Rxmxnx.JNetInterface.Native.Identifiers.JFieldId,,System.String)"
+                    body="stub"/>
             <method signature="System.Void GetObjectField(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.Identifiers.JFieldId,Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,System.String)"
                     body="stub"/>
-            <method name="CallPrimitiveFunction" body="stub"/>
+            <method signature="System.Void CallPrimitiveFunction`1(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Byte,Rxmxnx.JNetInterface.Native.Identifiers.JMethodId,,System.String)"
+                    body="stub"/>
             <method signature="System.Void CallObjectFunction(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.Identifiers.JMethodId,Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,System.Boolean,System.String)"
                     body="stub"/>
             <method signature="System.Void CallMethod(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.Identifiers.JMethodId,System.String)"
                     body="stub"/>
-            <method signature="System.Void GettingAccessibleId(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.Access.JAccessibleObjectDefinition,System.String)"
+            <method signature="System.Void GetAccessibleId(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.Access.JAccessibleObjectDefinition,System.String)"
                     body="stub"/>
-            <method name="GetAccessibleId" body="stub"/>
+            <method signature="System.Void GetAccessibleId`1(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.Access.JAccessibleObjectDefinition,,System.String)"
+                    body="stub"/>
             <method signature="System.Void GetAccessCache(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.JReferenceType,System.Boolean,System.String)"
                     body="stub"/>
             <!-- NonGenerics -->
@@ -81,10 +89,68 @@
                     body="stub"/>
             <method signature="System.Void ReleaseNonGenericMemory(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.IntPtr,System.String,System.String)"
                     body="stub"/>
-            <method signature="System.Void CreatingNonGenericLocalRef(System.String,System.String)"
+            <method signature="System.Void CreateNonGenericLocalRef(System.String,System.String)"
                     body="stub"/>
             <method signature="System.Void CreateNonGenericLocalRef(System.String,Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,System.String)"
                     body="stub"/>
+        </type>
+    </assembly>
+    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.Internal.NativeValidationUtilities"
+              feature="JNetInterface.DisableMetadataValidation"
+              featurevalue="true" featuredefault="false">
+            <method signature="System.Void ThrowIfAnnotation(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Boolean)"
+                    body="stub"/>
+            <method signature="System.Void ThrowInvalidImplementation(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Boolean)"
+                    body="stub"/>
+            <method signature="System.Void ThrowInvalidImplementation(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Collections.Generic.IReadOnlySet&lt;Rxmxnx.PInvoke.CString&gt;,System.Boolean)"
+                    body="stub"/>
+            <method signature="System.Void ThrowIfInvalidExtension(System.ReadOnlySpan&lt;System.Type&gt;,System.Collections.Generic.IReadOnlySet&lt;System.Type&gt;)"
+                    body="stub"/>
+            <method signature="System.Void ThrowIfInvalidList(System.ReadOnlySpan&lt;System.Type&gt;,Rxmxnx.JNetInterface.IEnumFieldList)"
+                    body="stub"/>
+        </type>
+    </assembly>
+    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.Native.JLocalObject.TypeMetadataBuilder"
+              feature="JNetInterface.DisableMetadataValidation"
+              featurevalue="true" featuredefault="false">
+            <method signature="System.Void ValidateSuperinterface(Rxmxnx.JNetInterface.Internal.SuperInterfaceValidationState,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata)"
+                    body="stub"/>
+        </type>
+    </assembly>
+    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.Native.JLocalObject.TypeMetadataBuilder`1"
+              feature="JNetInterface.DisableMetadataValidation"
+              featurevalue="true" featuredefault="false">
+            <method signature="System.Void CreateWithBaseValidation`1(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Type.JTypeModifier)"
+                    body="stub"/>
+            <method signature="System.Void CreateWithValidation(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JClassTypeMetadata,Rxmxnx.JNetInterface.Type.JTypeModifier)"
+                    body="stub"/>
+        </type>
+    </assembly>
+    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.Lang.JThrowableObject.TypeMetadataBuilder`1"
+              feature="JNetInterface.DisableMetadataValidation"
+              featurevalue="true" featuredefault="false">
+            <method signature="System.Void CreateWithBaseValidation`1(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Type.JTypeModifier)"
+                    body="stub"/>
+            <method signature="System.Void CreateWithValidation(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JClassTypeMetadata,Rxmxnx.JNetInterface.Type.JTypeModifier)"
+                    body="stub"/>
+        </type>
+    </assembly>
+    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.Types.IReferenceType`1"
+              feature="JNetInterface.DisableMetadataValidation"
+              featurevalue="true" featuredefault="false">
+            <method signature="System.Boolean get_TypeInterfaces()" body="stub"/>
+        </type>
+    </assembly>
+    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.Types.IClassType`1"
+              feature="JNetInterface.DisableMetadataValidation"
+              featurevalue="true" featuredefault="false">
+            <method signature="System.Boolean get_TypeBaseTypes()" body="stub"/>
         </type>
     </assembly>
 </linker>

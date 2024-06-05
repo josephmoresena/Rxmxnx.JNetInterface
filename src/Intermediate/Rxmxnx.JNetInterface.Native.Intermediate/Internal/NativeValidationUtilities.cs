@@ -117,7 +117,7 @@ internal static class NativeValidationUtilities
 	/// some superinterfaces of <paramref name="interfaceMetadata"/>.
 	/// </exception>
 	public static void ThrowIfInvalidImplementation(ReadOnlySpan<Byte> typeName,
-		JInterfaceTypeMetadata interfaceMetadata, ISet<CString> notContained, Boolean isClass)
+		JInterfaceTypeMetadata interfaceMetadata, IReadOnlySet<CString> notContained, Boolean isClass)
 	{
 		if (notContained.Count == 0) return;
 		String implementationType = isClass ? "implements" : "extends";
