@@ -69,11 +69,12 @@ public partial class JThrowableObject
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			IReadOnlySet<Type> interfaceTypes = IReferenceType<TThrowable>.TypeInterfaces;
 			JClassTypeMetadata baseMetadata = typeof(TThrowable) != typeof(JThrowableObject) ?
 				IClassType.GetMetadata<JThrowableObject>() :
 				IClassType.GetMetadata<JLocalObject>();
-			return new(className, modifier, baseMetadata, interfaceTypes);
+			return !IVirtualMachine.MetadataValidationEnabled ?
+				new(className, modifier, baseMetadata, ImmutableHashSet<Type>.Empty) :
+				TypeMetadataBuilder<TThrowable>.CreateWithValidation(className, baseMetadata, modifier);
 		}
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
@@ -89,11 +90,40 @@ public partial class JThrowableObject
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType(className, typeof(TThrowable), typeof(TObject));
+			return !IVirtualMachine.MetadataValidationEnabled ?
+				new(className, modifier, IClassType.GetMetadata<TThrowable>(), ImmutableHashSet<Type>.Empty) :
+				TypeMetadataBuilder<TThrowable>.CreateWithValidation<TObject>(className, modifier);
+		}
+
+		/// <summary>
+		/// Creates a new <see cref="TypeMetadataBuilder{TObject}"/> instance with validation.
+		/// </summary>
+		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
+		/// <returns>A new <see cref="TypeMetadataBuilder{TObject}"/> instance.</returns>
+		private static TypeMetadataBuilder<TObject> CreateWithValidation<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
+			ReadOnlySpan<Byte> className, JTypeModifier modifier) where TObject : TThrowable, IThrowableType<TObject>
+		{
 			IReadOnlySet<Type> baseTypes = IClassType<TObject>.TypeBaseTypes;
 			IReadOnlySet<Type> baseBaseTypes = IClassType<TThrowable>.TypeBaseTypes;
 			NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
 			IReadOnlySet<Type> interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
 			return new(className, modifier, IClassType.GetMetadata<TThrowable>(), interfaceTypes);
+		}
+		/// <summary>
+		/// Creates a new <see cref="TypeMetadataBuilder{TThrowable}"/> instance with validation.
+		/// </summary>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="baseMetadata">Base metadata.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
+		/// <returns>A new <see cref="TypeMetadataBuilder{TThrowable}"/> instance.</returns>
+		private static TypeMetadataBuilder<TThrowable> CreateWithValidation(ReadOnlySpan<Byte> className,
+			JClassTypeMetadata? baseMetadata, JTypeModifier modifier)
+		{
+			IReadOnlySet<Type> interfaceTypes = IReferenceType<TThrowable>.TypeInterfaces;
+			return new(className, modifier, baseMetadata, interfaceTypes);
 		}
 	}
 }

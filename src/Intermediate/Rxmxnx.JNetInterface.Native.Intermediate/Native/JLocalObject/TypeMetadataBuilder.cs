@@ -163,7 +163,7 @@ public partial class JLocalObject
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
+		/// Creates a new <see cref="TypeMetadataBuilder{TClass}"/> instance.
 		/// </summary>
 		/// <param name="className">Class name of the current type.</param>
 		/// <param name="modifier">Modifier of the current type.</param>
@@ -172,19 +172,20 @@ public partial class JLocalObject
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			IReadOnlySet<Type> interfaceTypes = IReferenceType<TClass>.TypeInterfaces;
 			JClassTypeMetadata? baseMetadata = !JLocalObject.IsObjectType<TClass>() ?
 				IClassType.GetMetadata<JLocalObject>() :
 				default;
-			return new(className, modifier, baseMetadata, interfaceTypes);
+			return !IVirtualMachine.MetadataValidationEnabled ?
+				new(className, modifier, baseMetadata, ImmutableHashSet<Type>.Empty) :
+				TypeMetadataBuilder<TClass>.CreateWithValidation(className, baseMetadata, modifier);
 		}
 		/// <summary>
-		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
+		/// Creates a new <see cref="TypeMetadataBuilder{TOBject}"/> instance.
 		/// </summary>
 		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
 		/// <param name="className">Class name of the current type.</param>
 		/// <param name="modifier">Modifier of the current type.</param>
-		/// <returns>A new <see cref="TypeMetadataBuilder{TClass}"/> instance.</returns>
+		/// <returns>A new <see cref="TypeMetadataBuilder{TObject}"/> instance.</returns>
 		public static TypeMetadataBuilder<TObject>
 			Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
 				ReadOnlySpan<Byte> className, JTypeModifier modifier = JTypeModifier.Extensible)
@@ -220,7 +221,7 @@ public partial class JLocalObject
 			                         baseMetadata ?? IClassType.GetMetadata<JLocalObject>());
 
 		/// <summary>
-		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance with validation.
+		/// Creates a new <see cref="TypeMetadataBuilder{TObject}"/> instance with validation.
 		/// </summary>
 		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
 		/// <param name="className">Class name of the current type.</param>
@@ -235,6 +236,19 @@ public partial class JLocalObject
 			NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
 			IReadOnlySet<Type> interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
 			return new(className, modifier, IClassType.GetMetadata<TClass>(), interfaceTypes);
+		}
+		/// <summary>
+		/// Creates a new <see cref="TypeMetadataBuilder{TClass}"/> instance with validation.
+		/// </summary>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="baseMetadata">Base metadata.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
+		/// <returns>A new <see cref="TypeMetadataBuilder{TObject}"/> instance.</returns>
+		private static TypeMetadataBuilder<TClass> CreateWithValidation(ReadOnlySpan<Byte> className,
+			JClassTypeMetadata? baseMetadata, JTypeModifier modifier)
+		{
+			IReadOnlySet<Type> interfaceTypes = IReferenceType<TClass>.TypeInterfaces;
+			return new(className, modifier, baseMetadata, interfaceTypes);
 		}
 	}
 }
