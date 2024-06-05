@@ -139,18 +139,4 @@
                     body="stub"/>
         </type>
     </assembly>
-    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
-        <type fullname="Rxmxnx.JNetInterface.Types.IReferenceType`1"
-              feature="JNetInterface.DisableMetadataValidation"
-              featurevalue="true" featuredefault="false">
-            <method signature="System.Boolean get_TypeInterfaces()" body="stub"/>
-        </type>
-    </assembly>
-    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
-        <type fullname="Rxmxnx.JNetInterface.Types.IClassType`1"
-              feature="JNetInterface.DisableMetadataValidation"
-              featurevalue="true" featuredefault="false">
-            <method signature="System.Boolean get_TypeBaseTypes()" body="stub"/>
-        </type>
-    </assembly>
 </linker>

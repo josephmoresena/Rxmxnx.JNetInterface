@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<linker>
-    <assembly fullname="Rxmxnx.JNetInterface.Base.Intermediate">
-        <type fullname="System.Diagnostics.CodeAnalysis.SuppressMessageAttribute">
-            <attribute internal="RemoveAttributeInstances"/>
-        </type>
-    </assembly>
-</linker>
