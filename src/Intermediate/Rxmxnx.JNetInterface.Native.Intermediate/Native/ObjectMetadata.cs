@@ -25,7 +25,7 @@ public record ObjectMetadata
 	{
 		this.ObjectClassName = jClass.Name;
 		this.ObjectSignature = jClass.ClassSignature;
-		if (jClass.Name.SequenceEqual(UnicodeClassNames.ClassObject))
+		if (jClass.Name.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject))
 			this.TypeMetadata = IClassType.GetMetadata<JClassObject>();
 		else
 			this.TypeMetadata = typeMetadata ?? jClass.Environment.ClassFeature.GetTypeMetadata(jClass);
