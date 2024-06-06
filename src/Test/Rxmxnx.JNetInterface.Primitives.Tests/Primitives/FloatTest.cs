@@ -24,7 +24,6 @@ public sealed class FloatTest : PrimitiveTestBase
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JFloat>();
 
 		Assert.True(UnicodeClassNames.FloatPrimitive().SequenceEqual(metadata.ClassName));
-		Assert.Equal(PrimitiveSignatures.FloatSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.FloatSignatureChar, metadata.Signature[0]);
 
 		Assert.True("java/lang/Float"u8.SequenceEqual(metadata.WrapperClassName));

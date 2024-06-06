@@ -6,11 +6,14 @@
 internal static partial class UnicodeObjectSignatures
 {
 	/// <inheritdoc cref="ObjectSignatures.ObjectSignaturePrefix"/>
-	public const Byte ObjectSignaturePrefixChar = (Byte)ObjectSignatures.ObjectSignaturePrefixChar;
+	public const Byte ObjectSignaturePrefixChar = (Byte)'L';
 	/// <inheritdoc cref="ObjectSignatures.ObjectSignatureSuffix"/>
-	public const Byte ObjectSignatureSuffixChar = (Byte)ObjectSignatures.ObjectSignatureSuffixChar;
-	/// <inheritdoc cref="ObjectSignatures.ArraySignaturePrefix"/>
-	public const Byte ArraySignaturePrefixChar = (Byte)ObjectSignatures.ArraySignaturePrefixChar;
+	public const Byte ObjectSignatureSuffixChar = (Byte)';';
+	/// <summary>
+	/// Prefix for both array declaration in JNI signature for methods and properties and
+	/// for JNI name of array classes.
+	/// </summary>
+	public const Byte ArraySignaturePrefixChar = (Byte)'[';
 
 	/// <inheritdoc cref="ObjectSignatures.ObjectSignature"/>
 	[DefaultValue(ObjectSignatures.ObjectSignature)]

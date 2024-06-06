@@ -24,7 +24,6 @@ public sealed class ShortTest : PrimitiveTestBase
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JShort>();
 
 		Assert.True(UnicodeClassNames.ShortPrimitive().SequenceEqual(metadata.ClassName));
-		Assert.Equal(PrimitiveSignatures.ShortSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.ShortSignatureChar, metadata.Signature[0]);
 
 		Assert.True("java/lang/Short"u8.SequenceEqual(metadata.WrapperClassName));

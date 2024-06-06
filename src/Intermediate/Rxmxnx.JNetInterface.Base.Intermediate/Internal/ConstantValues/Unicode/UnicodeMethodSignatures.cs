@@ -5,8 +5,12 @@
 /// </summary>
 internal static partial class UnicodeMethodSignatures
 {
-	/// <inheritdoc cref="MethodSignatures.MethodParameterPrefixChar"/>
-	public const Byte MethodParameterPrefixChar = (Byte)MethodSignatures.MethodParameterPrefixChar;
-	/// <inheritdoc cref="MethodSignatures.MethodParameterSuffixChar"/>
-	public const Byte MethodParameterSuffixChar = (Byte)MethodSignatures.MethodParameterSuffixChar;
+	/// <summary>
+	/// Prefix for the parameters declaration in the JNI signature for methods.
+	/// </summary>
+	public const Byte MethodParameterPrefixChar = (Byte)'(';
+	/// <summary>
+	/// Suffix for the parameters declaration in the JNI signature for methods.
+	/// </summary>
+	public const Byte MethodParameterSuffixChar = (Byte)')';
 }

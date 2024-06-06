@@ -5,22 +5,40 @@ namespace Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode;
 /// </summary>
 internal static partial class UnicodePrimitiveSignatures
 {
-	/// <inheritdoc cref="PrimitiveSignatures.VoidSignatureChar"/>
-	public const Byte VoidSignatureChar = (Byte)PrimitiveSignatures.VoidSignatureChar;
-	/// <inheritdoc cref="PrimitiveSignatures.BooleanSignature"/>
-	public const Byte BooleanSignatureChar = (Byte)PrimitiveSignatures.BooleanSignatureChar;
-	/// <inheritdoc cref="PrimitiveSignatures.ByteSignature"/>
-	public const Byte ByteSignatureChar = (Byte)PrimitiveSignatures.ByteSignatureChar;
-	/// <inheritdoc cref="PrimitiveSignatures.CharSignature"/>
-	public const Byte CharSignatureChar = (Byte)PrimitiveSignatures.JCharSignatureChar;
-	/// <inheritdoc cref="PrimitiveSignatures.DoubleSignature"/>
-	public const Byte DoubleSignatureChar = (Byte)PrimitiveSignatures.DoubleSignatureChar;
-	/// <inheritdoc cref="PrimitiveSignatures.FloatSignature"/>
-	public const Byte FloatSignatureChar = (Byte)PrimitiveSignatures.FloatSignatureChar;
-	/// <inheritdoc cref="PrimitiveSignatures.IntSignature"/>
-	public const Byte IntSignatureChar = (Byte)PrimitiveSignatures.IntSignatureChar;
-	/// <inheritdoc cref="PrimitiveSignatures.LongSignature"/>
-	public const Byte LongSignatureChar = (Byte)PrimitiveSignatures.LongSignatureChar;
-	/// <inheritdoc cref="PrimitiveSignatures.ShortSignature"/>
-	public const Byte ShortSignatureChar = (Byte)PrimitiveSignatures.ShortSignatureChar;
+	/// <summary>
+	/// JNI signature for primitive <c>void</c>.
+	/// </summary>
+	public const Byte VoidSignatureChar = (Byte)'V';
+	/// <summary>
+	/// JNI signature for primitive <c>boolean</c>.
+	/// </summary>
+	public const Byte BooleanSignatureChar = (Byte)'Z';
+	/// <summary>
+	/// JNI signature for primitive <c>byte</c>.
+	/// </summary>
+	public const Byte ByteSignatureChar = (Byte)'B';
+	/// <summary>
+	/// JNI signature for primitive <c>char</c>.
+	/// </summary>
+	public const Byte CharSignatureChar = (Byte)'C';
+	/// <summary>
+	/// JNI signature for primitive <c>double</c>.
+	/// </summary>
+	public const Byte DoubleSignatureChar = (Byte)'D';
+	/// <summary>
+	/// JNI signature for primitive <c>float</c>.
+	/// </summary>
+	public const Byte FloatSignatureChar = (Byte)'F';
+	/// <summary>
+	/// JNI signature for primitive <c>int</c>.
+	/// </summary>
+	public const Byte IntSignatureChar = (Byte)'I';
+	/// <summary>
+	/// JNI signature for primitive <c>long</c>.
+	/// </summary>
+	public const Byte LongSignatureChar = (Byte)'J';
+	/// <summary>
+	/// JNI signature for primitive <c>short</c>.
+	/// </summary>
+	public const Byte ShortSignatureChar = (Byte)'S';
 }

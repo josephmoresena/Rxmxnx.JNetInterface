@@ -23,7 +23,6 @@ public sealed class CharTest : PrimitiveTestBase
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JChar>();
 
 		Assert.True(UnicodeClassNames.CharPrimitive().SequenceEqual(metadata.ClassName));
-		Assert.Equal(PrimitiveSignatures.CharSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.CharSignatureChar, metadata.Signature[0]);
 
 		Assert.True("java/lang/Character"u8.SequenceEqual(metadata.WrapperClassName));
