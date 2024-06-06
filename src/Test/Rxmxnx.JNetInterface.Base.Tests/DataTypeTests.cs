@@ -68,7 +68,7 @@ public sealed class DataTypeTests
 		Assert.Equal(default, voidMetadata.NativeType);
 		Assert.True(ReadOnlySpan<Byte>.Empty.SequenceEqual(voidMetadata.ArraySignature));
 		Assert.Equal(0, voidMetadata.SizeOf);
-		Assert.Equal(UnicodePrimitiveSignatures.VoidSignatureChar, voidMetadata.Signature[0]);
+		Assert.Equal(CommonNames.VoidSignatureChar, voidMetadata.Signature[0]);
 		Assert.Equal(JTypeModifier.Final, voidMetadata.Modifier);
 		Assert.True(wrapperInformation[0].SequenceEqual(voidMetadata.WrapperClassName));
 		Assert.True(wrapperInformation[1].SequenceEqual(voidMetadata.WrapperClassSignature));

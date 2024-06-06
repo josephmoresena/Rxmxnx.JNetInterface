@@ -54,22 +54,22 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 		dimension = JClassObject.GetArrayDimension(this.Class.ClassSignature);
 		switch (this.Class.ClassSignature[dimension])
 		{
-			case UnicodePrimitiveSignatures.BooleanSignatureChar:
-				return ClassNames.BooleanPrimitive;
-			case UnicodePrimitiveSignatures.ByteSignatureChar:
-				return ClassNames.BytePrimitive;
-			case UnicodePrimitiveSignatures.CharSignatureChar:
-				return ClassNames.CharPrimitive;
-			case UnicodePrimitiveSignatures.DoubleSignatureChar:
-				return ClassNames.DoublePrimitive;
-			case UnicodePrimitiveSignatures.FloatSignatureChar:
-				return ClassNames.FloatPrimitive;
-			case UnicodePrimitiveSignatures.IntSignatureChar:
-				return ClassNames.IntPrimitive;
-			case UnicodePrimitiveSignatures.LongSignatureChar:
-				return ClassNames.LongPrimitive;
-			case UnicodePrimitiveSignatures.ShortSignatureChar:
-				return ClassNames.ShortPrimitive;
+			case CommonNames.BooleanSignatureChar:
+				return CommonNames.BooleanPrimitive;
+			case CommonNames.ByteSignatureChar:
+				return CommonNames.BytePrimitive;
+			case CommonNames.CharSignatureChar:
+				return CommonNames.CharPrimitive;
+			case CommonNames.DoubleSignatureChar:
+				return CommonNames.DoublePrimitive;
+			case CommonNames.FloatSignatureChar:
+				return CommonNames.FloatPrimitive;
+			case CommonNames.IntSignatureChar:
+				return CommonNames.IntPrimitive;
+			case CommonNames.LongSignatureChar:
+				return CommonNames.LongPrimitive;
+			case CommonNames.ShortSignatureChar:
+				return CommonNames.ShortPrimitive;
 			default:
 				CString objectElementName = this.Class.ClassSignature[(dimension + 1)..^1];
 				Int32 elementNameLength = Encoding.UTF8.GetCharCount(objectElementName);

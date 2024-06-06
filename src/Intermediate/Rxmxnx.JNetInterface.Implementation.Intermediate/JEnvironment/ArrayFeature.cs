@@ -17,22 +17,22 @@ partial class JEnvironment
 					ref this.GetArrayFunctions(metadata.Signature[0], ArrayFunctionSet.PrimitiveFunction.NewArray);
 				arrayRef = metadata.Signature[0] switch
 				{
-					UnicodePrimitiveSignatures.BooleanSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewBooleanArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.ByteSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewByteArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.CharSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewCharArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.DoubleSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewDoubleArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.FloatSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewFloatArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.IntSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewIntArray
-						.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.LongSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewLongArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.ShortSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewShortArray.NewArray(this.Reference, length).ArrayValue,
+					CommonNames.BooleanSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewBooleanArray
+					                                                  .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.ByteSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewByteArray
+					                                               .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.CharSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewCharArray
+					                                               .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.DoubleSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewDoubleArray
+					                                                 .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.FloatSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewFloatArray
+					                                                .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.IntSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewIntArray
+					                                              .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.LongSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewLongArray
+					                                               .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.ShortSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewShortArray
+					                                                .NewArray(this.Reference, length).ArrayValue,
 					_ => arrayRef,
 				};
 				if (arrayRef.IsDefault) this.CheckJniError();

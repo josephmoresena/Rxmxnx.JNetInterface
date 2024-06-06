@@ -8,9 +8,8 @@ public partial class JLocalObject
 	/// Datatype metadata.
 	/// </summary>
 	internal static readonly TypeMetadata ObjectClassMetadata = TypeMetadataBuilder<JLocalObject>
-	                                                            .Create(UnicodeClassNames.Object)
-	                                                            .WithSignature(UnicodeObjectSignatures.ObjectSignature)
-	                                                            .Build();
+	                                                            .Create(CommonNames.Object)
+	                                                            .WithSignature(CommonNames.ObjectSignature).Build();
 
 	static TypeMetadata IClassType<JLocalObject>.Metadata => JLocalObject.ObjectClassMetadata;
 	static Type IDataType.FamilyType => typeof(JLocalObject);

@@ -27,23 +27,15 @@ partial class JEnvironment
 			}
 			result = jClass.ClassSignature[0] switch
 			{
-				UnicodePrimitiveSignatures.BooleanSignatureChar => (JClassTypeMetadata)MetadataHelper
-					.GetMetadata<JBooleanObject>(),
-				UnicodePrimitiveSignatures.ByteSignatureChar => (JClassTypeMetadata)MetadataHelper
-					.GetMetadata<JByteObject>(),
-				UnicodePrimitiveSignatures.CharSignatureChar => (JClassTypeMetadata)MetadataHelper
-					.GetMetadata<JCharacterObject>(),
-				UnicodePrimitiveSignatures.DoubleSignatureChar => (JClassTypeMetadata)MetadataHelper
-					.GetMetadata<JDoubleObject>(),
-				UnicodePrimitiveSignatures.FloatSignatureChar => (JClassTypeMetadata)MetadataHelper
-					.GetMetadata<JFloatObject>(),
-				UnicodePrimitiveSignatures.IntSignatureChar => (JClassTypeMetadata)MetadataHelper
-					.GetMetadata<JIntegerObject>(),
-				UnicodePrimitiveSignatures.LongSignatureChar => (JClassTypeMetadata)MetadataHelper
-					.GetMetadata<JLongObject>(),
-				UnicodePrimitiveSignatures.ShortSignatureChar => (JClassTypeMetadata)MetadataHelper
-					.GetMetadata<JShortObject>(),
-				UnicodeObjectSignatures.ArraySignaturePrefixChar => this._env.GetArrayTypeMetadata(
+				CommonNames.BooleanSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JBooleanObject>(),
+				CommonNames.ByteSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JByteObject>(),
+				CommonNames.CharSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JCharacterObject>(),
+				CommonNames.DoubleSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JDoubleObject>(),
+				CommonNames.FloatSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JFloatObject>(),
+				CommonNames.IntSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JIntegerObject>(),
+				CommonNames.LongSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JLongObject>(),
+				CommonNames.ShortSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JShortObject>(),
+				CommonNames.ArraySignaturePrefixChar => this._env.GetArrayTypeMetadata(
 					jClass.ClassSignature, jClass.Hash),
 				_ => this._env.GetSuperTypeMetadata(jClass),
 			};

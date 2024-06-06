@@ -23,8 +23,8 @@ public sealed class ByteTest : PrimitiveTestBase
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JByte>();
 
-		Assert.True(UnicodeClassNames.BytePrimitive().SequenceEqual(metadata.ClassName));
-		Assert.Equal(UnicodePrimitiveSignatures.ByteSignatureChar, metadata.Signature[0]);
+		Assert.True("byte"u8.SequenceEqual(metadata.ClassName));
+		Assert.Equal(CommonNames.ByteSignatureChar, metadata.Signature[0]);
 
 		Assert.True("java/lang/Byte"u8.SequenceEqual(metadata.WrapperClassName));
 	}

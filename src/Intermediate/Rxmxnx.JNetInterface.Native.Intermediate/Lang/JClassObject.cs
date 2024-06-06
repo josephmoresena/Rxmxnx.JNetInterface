@@ -57,7 +57,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <summary>
 	/// Indicates whether the current class is an array.
 	/// </summary>
-	public Boolean IsArray => this.ClassSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar;
+	public Boolean IsArray => this.ClassSignature[0] == CommonNames.ArraySignaturePrefixChar;
 	/// <summary>
 	/// Indicates whether the current class is an array.
 	/// </summary>

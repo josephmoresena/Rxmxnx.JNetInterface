@@ -23,8 +23,8 @@ public sealed class IntTest : PrimitiveTestBase
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JInt>();
 
-		Assert.True(UnicodeClassNames.IntPrimitive().SequenceEqual(metadata.ClassName));
-		Assert.Equal(UnicodePrimitiveSignatures.IntSignatureChar, metadata.Signature[0]);
+		Assert.True("int"u8.SequenceEqual(metadata.ClassName));
+		Assert.Equal(CommonNames.IntSignatureChar, metadata.Signature[0]);
 
 		Assert.True("java/lang/Integer"u8.SequenceEqual(metadata.WrapperClassName));
 	}

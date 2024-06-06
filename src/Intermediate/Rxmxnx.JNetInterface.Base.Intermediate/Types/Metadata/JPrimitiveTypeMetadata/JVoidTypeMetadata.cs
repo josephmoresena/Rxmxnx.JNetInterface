@@ -12,7 +12,7 @@ public partial record JPrimitiveTypeMetadata
 		/// <c>void</c> class fake hash.
 		/// </summary>
 		public static readonly String FakeHash =
-			JDataTypeMetadata.CreateInformationSequence(UnicodeClassNames.VoidPrimitive()).ToString();
+			JDataTypeMetadata.CreateInformationSequence(CommonNames.VoidPrimitive()).ToString();
 
 		/// <summary>
 		/// CLR type for <see langword="void"/>.

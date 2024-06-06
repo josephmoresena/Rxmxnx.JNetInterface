@@ -13,8 +13,7 @@ public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableCom
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JDouble, Double>.TypeMetadataBuilder
-		.Create(UnicodeClassNames.DoublePrimitive(), UnicodePrimitiveSignatures.DoubleSignatureChar)
-		.WithWrapperClassName("java/lang/Double"u8).Build();
+		.Create("double"u8, CommonNames.DoubleSignatureChar).WithWrapperClassName("java/lang/Double"u8).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;

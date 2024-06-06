@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public class JProxyObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.ProxyObject);
+	private static readonly CString className = new(CommonNames.ProxyObject);
 	private static readonly CString classSignature = CString.Concat("L"u8, JProxyObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JProxyObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JProxyObjectTests.className, JProxyObjectTests.classSignature,

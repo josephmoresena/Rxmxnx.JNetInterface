@@ -67,11 +67,10 @@ partial class JEnvironment
 		// Element signature is Array signature without [ prefix.
 		ReadOnlySpan<Byte> elementSignature = arraySignature[1..];
 		// Object class name is signature without L prefix and ; suffix.
-		ReadOnlySpan<Byte> elementClassName =
-			elementSignature[^1] == UnicodeObjectSignatures.ObjectSignatureSuffixChar ?
-				elementSignature[1..^1] :
-				elementSignature;
-		if (elementSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
+		ReadOnlySpan<Byte> elementClassName = elementSignature[^1] == CommonNames.ObjectSignatureSuffixChar ?
+			elementSignature[1..^1] :
+			elementSignature;
+		if (elementSignature[0] == CommonNames.ArraySignaturePrefixChar)
 		{
 			// Is well-known array class? Primitive arrays are always well-known.
 			if (MetadataHelper.GetArrayMetadata(elementSignature) is { } elementArrayMetadata)
@@ -248,11 +247,11 @@ partial class JEnvironment
 				MetadataHelper.RegisterSuperClass(jClass.Hash, superClass.Hash);
 
 				// Super class is java.lang.Object.
-				if (UnicodeClassNames.Object.AsSpan().SequenceEqual(superClass.Name))
+				if (CommonNames.Object.AsSpan().SequenceEqual(superClass.Name))
 					break;
 
 				// Super class is java.lang.reflect.Proxy.
-				if (checkProxy && UnicodeClassNames.ProxyObject().SequenceEqual(superClass.Name))
+				if (checkProxy && CommonNames.ProxyObject().SequenceEqual(superClass.Name))
 				{
 					using JArrayObject<JClassObject> interfaces = superClass.GetInterfaces();
 					if (interfaces.Length > 0 &&

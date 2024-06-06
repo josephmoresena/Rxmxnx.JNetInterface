@@ -103,28 +103,28 @@ partial class JEnvironment
 		{
 			switch (definition.Descriptor[0])
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					JTrace.SetField<JBoolean>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					JTrace.SetField<JByte>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					JTrace.SetField<JChar>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					JTrace.SetField<JDouble>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					JTrace.SetField<JFloat>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					JTrace.SetField<JInt>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					JTrace.SetField<JLong>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					JTrace.SetField<JShort>(jLocal, jClass, definition, bytes);
 					break;
 			}

@@ -1,4 +1,4 @@
-﻿namespace Rxmxnx.JNetInterface.Internal.ConstantValues;
+﻿namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
 /// Internal class of constant <see cref="String"/> values.
@@ -11,9 +11,9 @@ internal static class CommonConstants
 	public const String InvalidPrimitiveTypeMessage = "Invalid primitive type.";
 	public const String InvalidSignatureMessage = "Invalid signature.";
 
+	#region SuppressMessage
 	public const String CodeQuality = "CodeQuality";
 	public const String CSharpSquid = "csharpsquid";
-	public const String Aot = "AOT";
 	public const String CheckId0051 = "IDE0051:Remove unused private members";
 	public const String CheckIdS1144 = "S1144:Unused private types or members should be removed";
 	public const String CheckIdS2292 = "S2292:Trivial properties should be auto-implemented";
@@ -70,4 +70,5 @@ internal static class CommonConstants
 	public const String SecureUnsafeCodeJustification = "JNI code is secure to use.";
 	public const String OnlyInternalInstantiationJustification =
 		"Only internal code is allowed to build an instance of current type.";
+	#endregion
 }

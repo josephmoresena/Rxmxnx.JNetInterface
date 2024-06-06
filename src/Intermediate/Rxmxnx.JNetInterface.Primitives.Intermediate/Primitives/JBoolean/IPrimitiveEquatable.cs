@@ -8,7 +8,7 @@ public partial struct JBoolean : IPrimitiveEquatable, ISpanParsable<JBoolean>
 	/// <inheritdoc cref="IEquatable{JPrimitiveObject}.Equals(JPrimitiveObject)"/>
 	private Boolean Equals(JPrimitiveObject? other)
 	{
-		if (other is null || other.ObjectSignature[0] != UnicodePrimitiveSignatures.BooleanSignatureChar)
+		if (other is null || other.ObjectSignature[0] != CommonNames.BooleanSignatureChar)
 			return false;
 		return this._value == other.ToByte();
 	}

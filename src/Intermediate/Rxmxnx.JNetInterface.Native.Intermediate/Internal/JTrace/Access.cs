@@ -71,7 +71,7 @@ internal static partial class JTrace
 		if (!IVirtualMachine.TraceEnabled) return;
 		StringBuilder strBuilder = new();
 		if (jLocal is null)
-			if (UnicodeMethodNames.Constructor().SequenceEqual(definition.Name))
+			if (CommonNames.Constructor().SequenceEqual(definition.Name))
 				strBuilder.AppendLine(
 					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
 			else

@@ -51,14 +51,14 @@ public partial class JLocalObject
 			public override String ToTraceText()
 				=> $"{this.TypeMetadata.ElementMetadata.Signature[0] switch
 				{
-					UnicodePrimitiveSignatures.BooleanSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JBooleanArrayLocalRef>()),
-					UnicodePrimitiveSignatures.ByteSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JByteArrayLocalRef>()),
-					UnicodePrimitiveSignatures.CharSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JCharArrayLocalRef>()),
-					UnicodePrimitiveSignatures.DoubleSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JDoubleArrayLocalRef>()),
-					UnicodePrimitiveSignatures.FloatSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JFloatArrayLocalRef>()),
-					UnicodePrimitiveSignatures.IntSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JIntArrayLocalRef>()),
-					UnicodePrimitiveSignatures.LongSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JLongArrayLocalRef>()),
-					UnicodePrimitiveSignatures.ShortSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JShortArrayLocalRef>()),
+					CommonNames.BooleanSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JBooleanArrayLocalRef>()),
+					CommonNames.ByteSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JByteArrayLocalRef>()),
+					CommonNames.CharSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JCharArrayLocalRef>()),
+					CommonNames.DoubleSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JDoubleArrayLocalRef>()),
+					CommonNames.FloatSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JFloatArrayLocalRef>()),
+					CommonNames.IntSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JIntArrayLocalRef>()),
+					CommonNames.LongSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JLongArrayLocalRef>()),
+					CommonNames.ShortSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JShortArrayLocalRef>()),
 					_ => JObject.GetObjectIdentifier(this.Class.Name, this.As<JObjectArrayLocalRef>()),
 				}} length: {this.Length}";
 

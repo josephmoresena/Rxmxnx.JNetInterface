@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JClassObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = UnicodeClassNames.ClassObject;
+	private static readonly CString className = CommonNames.ClassObject;
 	private static readonly CString classSignature = CString.Concat("L"u8, JClassObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JClassObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JClassObjectTests.className, JClassObjectTests.classSignature,
@@ -57,8 +57,7 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClass.IsInterface, objectMetadata.IsInterface);
 		Assert.Equal(jClass.IsEnum, objectMetadata.IsEnum);
 		Assert.Equal(jClass.IsAnnotation, objectMetadata.IsAnnotation);
-		Assert.Equal(jClass.IsArray,
-		             objectMetadata.ObjectSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar);
+		Assert.Equal(jClass.IsArray, objectMetadata.ObjectSignature[0] == CommonNames.ArraySignaturePrefixChar);
 		Assert.Equal(jClass.ArrayDimension, objectMetadata.ArrayDimension);
 		Assert.Equal(jClass.Hash, objectMetadata.Hash);
 		Assert.Equal(!jClass.Reference.IsDefault ? $"{jClass.Name} {jClass.Reference}" : $"{jClass.Name}",
@@ -140,7 +139,7 @@ public sealed class JClassObjectTests
 		if (call < 3)
 			Assert.Equal(hash0, jClassObj.Hash);
 
-		Assert.Equal(signature0[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar, jClassObj.IsArray);
+		Assert.Equal(signature0[0] == CommonNames.ArraySignaturePrefixChar, jClassObj.IsArray);
 		Assert.Equal(signature0.Length == 1, jClassObj.IsPrimitive);
 		Assert.Equal(JClassObject.GetArrayDimension(signature0), jClassObj.ArrayDimension);
 

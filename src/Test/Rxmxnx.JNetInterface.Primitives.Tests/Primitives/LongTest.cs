@@ -23,8 +23,8 @@ public sealed class LongTest : PrimitiveTestBase
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JLong>();
 
-		Assert.True(UnicodeClassNames.LongPrimitive().SequenceEqual(metadata.ClassName));
-		Assert.Equal(UnicodePrimitiveSignatures.LongSignatureChar, metadata.Signature[0]);
+		Assert.True("long"u8.SequenceEqual(metadata.ClassName));
+		Assert.Equal(CommonNames.LongSignatureChar, metadata.Signature[0]);
 
 		Assert.True("java/lang/Long"u8.SequenceEqual(metadata.WrapperClassName));
 	}

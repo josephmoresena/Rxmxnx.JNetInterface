@@ -24,14 +24,14 @@ partial class JEnvironment
 		{
 			using JClassObject wrapperClass = signature switch
 			{
-				UnicodePrimitiveSignatures.BooleanSignatureChar => this.GetClass<JBooleanObject>(),
-				UnicodePrimitiveSignatures.ByteSignatureChar => this.GetClass<JByteObject>(),
-				UnicodePrimitiveSignatures.CharSignatureChar => this.GetClass<JCharacterObject>(),
-				UnicodePrimitiveSignatures.DoubleSignatureChar => this.GetClass<JDoubleObject>(),
-				UnicodePrimitiveSignatures.FloatSignatureChar => this.GetClass<JFloatObject>(),
-				UnicodePrimitiveSignatures.IntSignatureChar => this.GetClass<JIntegerObject>(),
-				UnicodePrimitiveSignatures.LongSignatureChar => this.GetClass<JLongObject>(),
-				UnicodePrimitiveSignatures.ShortSignatureChar => this.GetClass<JShortObject>(),
+				CommonNames.BooleanSignatureChar => this.GetClass<JBooleanObject>(),
+				CommonNames.ByteSignatureChar => this.GetClass<JByteObject>(),
+				CommonNames.CharSignatureChar => this.GetClass<JCharacterObject>(),
+				CommonNames.DoubleSignatureChar => this.GetClass<JDoubleObject>(),
+				CommonNames.FloatSignatureChar => this.GetClass<JFloatObject>(),
+				CommonNames.IntSignatureChar => this.GetClass<JIntegerObject>(),
+				CommonNames.LongSignatureChar => this.GetClass<JLongObject>(),
+				CommonNames.ShortSignatureChar => this.GetClass<JShortObject>(),
 				_ => this.GetClass<JVoidObject>(),
 			};
 			JObjectLocalRef localRef =

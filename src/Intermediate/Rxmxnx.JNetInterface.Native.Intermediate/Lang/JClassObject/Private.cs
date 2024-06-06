@@ -8,8 +8,8 @@ public partial class JClassObject
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JClassObject>
-	                                                    .Create(UnicodeClassNames.ClassObject, JTypeModifier.Final)
-	                                                    .WithSignature(UnicodeObjectSignatures.ClassObjectSignature)
+	                                                    .Create(CommonNames.ClassObject, JTypeModifier.Final)
+	                                                    .WithSignature(CommonNames.ClassObjectSignature)
 	                                                    .Implements<JSerializableObject>()
 	                                                    .Implements<JAnnotatedElementObject>()
 	                                                    .Implements<JGenericDeclarationObject>()

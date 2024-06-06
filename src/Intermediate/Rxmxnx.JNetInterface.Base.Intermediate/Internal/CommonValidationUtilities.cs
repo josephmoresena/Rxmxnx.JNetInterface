@@ -116,7 +116,7 @@ internal static class CommonValidationUtilities
 		Byte prefix = signature[0];
 		Byte suffix = signature[^1];
 
-		if (prefix == UnicodeObjectSignatures.ArraySignaturePrefixChar)
+		if (prefix == CommonNames.ArraySignaturePrefixChar)
 			switch (signature.Length)
 			{
 				case 2:
@@ -126,12 +126,11 @@ internal static class CommonValidationUtilities
 					break;
 				case <= 3:
 					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
-				case > 3 when signature[1] != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
-					suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar:
+				case > 3 when signature[1] != CommonNames.ObjectSignaturePrefixChar ||
+					suffix != CommonNames.ObjectSignatureSuffixChar:
 					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 			}
-		else if (prefix != UnicodeObjectSignatures.ObjectSignaturePrefixChar ||
-		         suffix != UnicodeObjectSignatures.ObjectSignatureSuffixChar)
+		else if (prefix != CommonNames.ObjectSignaturePrefixChar || suffix != CommonNames.ObjectSignatureSuffixChar)
 			throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 	}
 	/// <summary>
@@ -162,14 +161,14 @@ internal static class CommonValidationUtilities
 	{
 		switch (signature)
 		{
-			case UnicodePrimitiveSignatures.BooleanSignatureChar:
-			case UnicodePrimitiveSignatures.ByteSignatureChar:
-			case UnicodePrimitiveSignatures.CharSignatureChar:
-			case UnicodePrimitiveSignatures.DoubleSignatureChar:
-			case UnicodePrimitiveSignatures.FloatSignatureChar:
-			case UnicodePrimitiveSignatures.IntSignatureChar:
-			case UnicodePrimitiveSignatures.LongSignatureChar:
-			case UnicodePrimitiveSignatures.ShortSignatureChar:
+			case CommonNames.BooleanSignatureChar:
+			case CommonNames.ByteSignatureChar:
+			case CommonNames.CharSignatureChar:
+			case CommonNames.DoubleSignatureChar:
+			case CommonNames.FloatSignatureChar:
+			case CommonNames.IntSignatureChar:
+			case CommonNames.LongSignatureChar:
+			case CommonNames.ShortSignatureChar:
 				return;
 		}
 		throw new ArgumentException("Invalid primitive signature.");

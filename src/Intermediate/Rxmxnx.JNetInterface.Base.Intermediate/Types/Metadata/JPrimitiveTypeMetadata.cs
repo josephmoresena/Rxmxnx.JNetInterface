@@ -8,11 +8,9 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <summary>
 	/// Java <c>void</c> type information.
 	/// </summary>
-	private static readonly CStringSequence voidInformation = new(UnicodeClassNames.VoidPrimitive(),
-	                                                              stackalloc Byte[1]
-	                                                              {
-		                                                              UnicodePrimitiveSignatures.VoidSignatureChar,
-	                                                              }, ReadOnlySpan<Byte>.Empty);
+	private static readonly CStringSequence voidInformation = new(CommonNames.VoidPrimitive(),
+	                                                              stackalloc Byte[1] { CommonNames.VoidSignatureChar, },
+	                                                              ReadOnlySpan<Byte>.Empty);
 
 	/// <summary>
 	/// <see cref="JPrimitiveTypeMetadata"/> instance for Java <c>void</c> type.

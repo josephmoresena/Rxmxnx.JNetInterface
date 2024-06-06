@@ -11,7 +11,7 @@ public class JProxyObject : JLocalObject, IClassType<JProxyObject>
 	/// class metadata.
 	/// </summary>
 	internal static readonly TypeMetadata ProxyTypeMetadata = TypeMetadataBuilder<JProxyObject>
-	                                                          .Create(UnicodeClassNames.ProxyObject()).Build();
+	                                                          .Create(CommonNames.ProxyObject()).Build();
 
 	static TypeMetadata IClassType<JProxyObject>.Metadata => JProxyObject.ProxyTypeMetadata;
 
