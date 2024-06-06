@@ -71,21 +71,9 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 			case CommonNames.ShortSignatureChar:
 				return CommonNames.ShortPrimitive;
 			default:
-				CString objectElementName = this.Class.ClassSignature[(dimension + 1)..^1];
-				Int32 elementNameLength = Encoding.UTF8.GetCharCount(objectElementName);
-				return String.Create(elementNameLength, objectElementName, JArrayObject.WriteObjectElementName);
+				ObjectArrayElementHelper helper = new(this.Class.ClassSignature, dimension);
+				return helper.ToString();
 		}
-	}
-
-	/// <summary>
-	/// Wirtes in <paramref name="buffer"/> <paramref name="elementName"/>
-	/// </summary>
-	/// <param name="buffer">UTF-16 buffer.</param>
-	/// <param name="elementName">UTF-8 object class name.</param>
-	private static void WriteObjectElementName(Span<Char> buffer, CString elementName)
-	{
-		Encoding.UTF8.GetChars(elementName, buffer); // Decodes UTF-8 chars.
-		buffer.Replace('/', '.'); // Escapes chars.
 	}
 }
 
