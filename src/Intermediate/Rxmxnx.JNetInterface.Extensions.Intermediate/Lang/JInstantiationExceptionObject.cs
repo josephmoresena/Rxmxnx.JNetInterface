@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JInstantiationExceptionObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.InstantiationException</c> instance.
 /// </summary>
@@ -11,11 +13,11 @@ public class JInstantiationExceptionObject : JReflectiveOperationExceptionObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JInstantiationExceptionObject> typeMetadata =
-		TypeMetadataBuilder<JReflectiveOperationExceptionObject>
-			.Create<JInstantiationExceptionObject>(UnicodeClassNames.InstantiationExceptionObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JReflectiveOperationExceptionObject>
+	                                                    .Create<JInstantiationExceptionObject>(
+		                                                    "java/lang/InstantiationException"u8).Build();
 
-	static JThrowableTypeMetadata<JInstantiationExceptionObject> IThrowableType<JInstantiationExceptionObject>.Metadata
+	static TypeMetadata IThrowableType<JInstantiationExceptionObject>.Metadata
 		=> JInstantiationExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>

@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JErrorObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.ErrorObject);
+	private static readonly CString className = new("java/lang/Error"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JErrorObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JErrorObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JErrorObjectTests.className, JErrorObjectTests.classSignature,

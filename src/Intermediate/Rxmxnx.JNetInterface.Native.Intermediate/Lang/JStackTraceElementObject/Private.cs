@@ -1,17 +1,17 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JClassTypeMetadata<JStackTraceElementObject>;
+
 public partial class JStackTraceElementObject
 {
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JStackTraceElementObject> typeMetadata =
-		TypeMetadataBuilder<JStackTraceElementObject>
-			.Create(UnicodeClassNames.StackTraceElementObject(), JTypeModifier.Final).Implements<JSerializableObject>()
-			.Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JStackTraceElementObject>
+	                                                    .Create("java/lang/StackTraceElement"u8, JTypeModifier.Final)
+	                                                    .Implements<JSerializableObject>().Build();
 
-	static JClassTypeMetadata<JStackTraceElementObject> IClassType<JStackTraceElementObject>.Metadata
-		=> JStackTraceElementObject.typeMetadata;
+	static TypeMetadata IClassType<JStackTraceElementObject>.Metadata => JStackTraceElementObject.typeMetadata;
 
 	/// <inheritdoc cref="JStackTraceElementObject.ClassName"/>
 	private String? _className;

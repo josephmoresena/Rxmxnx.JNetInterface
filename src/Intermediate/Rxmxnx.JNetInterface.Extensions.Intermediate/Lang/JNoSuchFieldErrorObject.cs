@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JNoSuchFieldErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.NoSuchFieldError</c> instance.
 /// </summary>
@@ -10,12 +12,11 @@ public class JNoSuchFieldErrorObject : JIncompatibleClassChangeErrorObject, IThr
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JNoSuchFieldErrorObject> typeMetadata =
-		TypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
-			.Create<JNoSuchFieldErrorObject>(UnicodeClassNames.NoSuchFieldErrorObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
+	                                                    .Create<JNoSuchFieldErrorObject>("java/lang/NoSuchFieldError"u8)
+	                                                    .Build();
 
-	static JThrowableTypeMetadata<JNoSuchFieldErrorObject> IThrowableType<JNoSuchFieldErrorObject>.Metadata
-		=> JNoSuchFieldErrorObject.typeMetadata;
+	static TypeMetadata IThrowableType<JNoSuchFieldErrorObject>.Metadata => JNoSuchFieldErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JNoSuchFieldErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

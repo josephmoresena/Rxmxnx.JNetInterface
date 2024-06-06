@@ -1,15 +1,16 @@
 namespace Rxmxnx.JNetInterface.Nio;
 
+using TypeMetadata = JClassTypeMetadata<JBufferObject>;
+
 public partial class JBufferObject
 {
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JBufferObject> metadata = TypeMetadataBuilder<JBufferObject>
-	                                                                     .Create(UnicodeClassNames.BufferObject(),
-		                                                                     JTypeModifier.Abstract).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
+	                                                    .Create("java/nio/Buffer"u8, JTypeModifier.Abstract).Build();
 
-	static JClassTypeMetadata<JBufferObject> IClassType<JBufferObject>.Metadata => JBufferObject.metadata;
+	static TypeMetadata IClassType<JBufferObject>.Metadata => JBufferObject.typeMetadata;
 
 	/// <inheritdoc cref="JBufferObject.Address"/>
 	private IntPtr? _address;

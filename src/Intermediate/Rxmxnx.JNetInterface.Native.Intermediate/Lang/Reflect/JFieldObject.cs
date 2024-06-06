@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
+using TypeMetadata = JClassTypeMetadata<JFieldObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Field</c> instance.
 /// </summary>
@@ -8,13 +10,12 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JFieldObject> metadata = TypeMetadataBuilder<JAccessibleObject>
-	                                                                    .Create<JFieldObject>(
-		                                                                    UnicodeClassNames.FieldObject(),
-		                                                                    JTypeModifier.Final)
-	                                                                    .Implements<JMemberObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JAccessibleObject>
+	                                                    .Create<JFieldObject>(
+		                                                    "java/lang/reflect/Field"u8, JTypeModifier.Final)
+	                                                    .Implements<JMemberObject>().Build();
 
-	static JClassTypeMetadata<JFieldObject> IClassType<JFieldObject>.Metadata => JFieldObject.metadata;
+	static TypeMetadata IClassType<JFieldObject>.Metadata => JFieldObject.typeMetadata;
 
 	/// <summary>
 	/// Field JNI definition.

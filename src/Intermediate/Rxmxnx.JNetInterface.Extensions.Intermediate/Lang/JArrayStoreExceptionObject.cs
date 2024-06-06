@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JArrayStoreExceptionObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.ArrayStoreException</c> instance.
 /// </summary>
@@ -10,12 +12,11 @@ public class JArrayStoreExceptionObject : JIndexOutOfBoundsExceptionObject, IThr
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JArrayStoreExceptionObject> typeMetadata =
-		TypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
-			.Create<JArrayStoreExceptionObject>(UnicodeClassNames.ArrayStoreExceptionObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
+	                                                    .Create<JArrayStoreExceptionObject>(
+		                                                    "java/lang/ArrayStoreException"u8).Build();
 
-	static JThrowableTypeMetadata<JArrayStoreExceptionObject> IThrowableType<JArrayStoreExceptionObject>.Metadata
-		=> JArrayStoreExceptionObject.typeMetadata;
+	static TypeMetadata IThrowableType<JArrayStoreExceptionObject>.Metadata => JArrayStoreExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JArrayStoreExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JRuntimeExceptionObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.RuntimeException</c> instance.
 /// </summary>
@@ -8,12 +10,11 @@ public class JRuntimeExceptionObject : JExceptionObject, IThrowableType<JRuntime
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JRuntimeExceptionObject> typeMetadata =
-		TypeMetadataBuilder<JExceptionObject>
-			.Create<JRuntimeExceptionObject>(UnicodeClassNames.RuntimeExceptionObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExceptionObject>
+	                                                    .Create<JRuntimeExceptionObject>("java/lang/RuntimeException"u8)
+	                                                    .Build();
 
-	static JThrowableTypeMetadata<JRuntimeExceptionObject> IThrowableType<JRuntimeExceptionObject>.Metadata
-		=> JRuntimeExceptionObject.typeMetadata;
+	static TypeMetadata IThrowableType<JRuntimeExceptionObject>.Metadata => JRuntimeExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JRuntimeExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

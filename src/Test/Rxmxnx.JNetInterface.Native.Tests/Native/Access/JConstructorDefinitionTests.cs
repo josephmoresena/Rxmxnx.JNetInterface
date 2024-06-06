@@ -75,7 +75,7 @@ public sealed class JConstructorDefinitionTests
 		using JClassObject jConstructorClass = new(jClass, IDataType.GetMetadata<JConstructorObject>(), classRef1);
 		using TDataType? instance =
 			!isAbstract && !typeMetadata.ClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject) &&
-			!typeMetadata.ClassName.AsSpan().SequenceEqual(UnicodeClassNames.StringObject()) ?
+			!typeMetadata.ClassName.AsSpan().SequenceEqual("java/lang/String"u8) ?
 				Assert.IsType<TDataType>(
 					typeMetadata.ParseInstance(typeMetadata.CreateInstance(jClass, localRef0, true))) :
 				default;
@@ -128,7 +128,7 @@ public sealed class JConstructorDefinitionTests
 		using JClassObject jConstructorClass = new(jClass, IDataType.GetMetadata<JConstructorObject>(), classRef1);
 		using TDataType? instance =
 			!isAbstract && !typeMetadata.ClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject) &&
-			!typeMetadata.ClassName.AsSpan().SequenceEqual(UnicodeClassNames.StringObject()) ?
+			!typeMetadata.ClassName.AsSpan().SequenceEqual("java/lang/String"u8) ?
 				Assert.IsType<TDataType>(
 					typeMetadata.ParseInstance(typeMetadata.CreateInstance(jClass, localRef0, true))) :
 				default;

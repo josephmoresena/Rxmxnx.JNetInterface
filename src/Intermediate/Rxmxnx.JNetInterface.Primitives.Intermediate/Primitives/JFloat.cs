@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
+using TypeMetadata = JPrimitiveTypeMetadata<JFloat>;
+
 /// <summary>
 /// Primitive <c>float</c>. Represents a single-precision floating-point number.
 /// </summary>
@@ -10,18 +12,14 @@ public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableCompa
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata<JFloat> typeMetadata = IPrimitiveType<JFloat, Single>
-	                                                                      .TypeMetadataBuilder
-	                                                                      .Create(UnicodeClassNames.FloatPrimitive(),
-		                                                                      UnicodePrimitiveSignatures
-			                                                                      .FloatSignatureChar)
-	                                                                      .WithWrapperClassName(
-		                                                                      UnicodeClassNames.FloatObject()).Build();
+	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JFloat, Single>.TypeMetadataBuilder
+		.Create(UnicodeClassNames.FloatPrimitive(), UnicodePrimitiveSignatures.FloatSignatureChar)
+		.WithWrapperClassName("java/lang/Float"u8).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloat;
 
-	static JPrimitiveTypeMetadata<JFloat> IPrimitiveType<JFloat>.Metadata => JFloat.typeMetadata;
+	static TypeMetadata IPrimitiveType<JFloat>.Metadata => JFloat.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JFloat.Type;
 
 	/// <summary>

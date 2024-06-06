@@ -1,5 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Primitives;
 
+using TypeMetadata = JPrimitiveTypeMetadata<JBoolean>;
+
 /// <summary>
 /// Primitive <c>boolean</c>. Represents a Boolean (<see langword="true"/> or <see langword="false"/>) value.
 /// </summary>
@@ -10,20 +12,14 @@ public readonly partial struct JBoolean : INativeType<JBoolean>, ISelfEquatableC
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata<JBoolean> typeMetadata = IPrimitiveType<JBoolean, Boolean>
-	                                                                        .TypeMetadataBuilder
-	                                                                        .Create(
-		                                                                        UnicodeClassNames.BooleanPrimitive(),
-		                                                                        UnicodePrimitiveSignatures
-			                                                                        .BooleanSignatureChar)
-	                                                                        .WithWrapperClassName(
-		                                                                        UnicodeClassNames.BooleanObject())
-	                                                                        .Build();
+	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JBoolean, Boolean>.TypeMetadataBuilder
+		.Create(UnicodeClassNames.BooleanPrimitive(), UnicodePrimitiveSignatures.BooleanSignatureChar)
+		.WithWrapperClassName("java/lang/Boolean"u8).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JBoolean;
 
-	static JPrimitiveTypeMetadata<JBoolean> IPrimitiveType<JBoolean>.Metadata => JBoolean.typeMetadata;
+	static TypeMetadata IPrimitiveType<JBoolean>.Metadata => JBoolean.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JBoolean.Type;
 
 	/// <summary>

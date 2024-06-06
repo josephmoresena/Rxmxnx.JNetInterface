@@ -66,16 +66,10 @@ public partial class JLocalObject
 			private String GetStringValue()
 			{
 				if (this._stringValue is not null) return this._stringValue;
-				ReadOnlySpan<Byte> arraySignature = this.Class.ClassSignature;
-				CString elementName = JArrayObject.GetElementName(arraySignature, out Int32 dimension);
-				CString elementGenericName =
-					JArrayObject.GetElementName(this.TypeMetadata.Signature, out Int32 genericDimension);
-				String result =
-					$"{elementName.ToString().Replace('/', '.')}[{this.Length}]{String.Concat(Enumerable.Repeat("[]", dimension - 1))}";
-				this._stringValue =
-					genericDimension != dimension || !elementGenericName.AsSpan().SequenceEqual(elementName) ?
-						$"{this.TypeMetadata.Signature} {result}" :
-						result;
+				Boolean matchClass = this.Class.ClassSignature.AsSpan().SequenceEqual(this.TypeMetadata.Signature);
+				String elementName = this.GetElementName(out Int32 dimension);
+				String value = $"{elementName}[{this.Length}]{String.Concat(Enumerable.Repeat("[]", dimension - 1))}";
+				this._stringValue = matchClass ? value : $"{this.TypeMetadata.Signature} {value}";
 				return this._stringValue;
 			}
 		}

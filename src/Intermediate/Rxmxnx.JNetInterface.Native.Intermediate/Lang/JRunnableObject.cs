@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JInterfaceTypeMetadata<JRunnableObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.Runnable</c> instance.
 /// </summary>
@@ -10,11 +12,10 @@ public sealed class JRunnableObject : JInterfaceObject<JRunnableObject>, IInterf
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JRunnableObject> typeMetadata =
-		TypeMetadataBuilder<JRunnableObject>.Create(UnicodeClassNames.RunnableInterface()).Build();
+	private static readonly TypeMetadata typeMetadata =
+		TypeMetadataBuilder<JRunnableObject>.Create("java/lang/Runnable"u8).Build();
 
-	static JInterfaceTypeMetadata<JRunnableObject> IInterfaceType<JRunnableObject>.Metadata
-		=> JRunnableObject.typeMetadata;
+	static TypeMetadata IInterfaceType<JRunnableObject>.Metadata => JRunnableObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JRunnableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

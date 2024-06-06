@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public class JThreadObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.ThreadObject);
+	private static readonly CString className = new("java/lang/Thread"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JThreadObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JThreadObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JThreadObjectTests.className, JThreadObjectTests.classSignature,

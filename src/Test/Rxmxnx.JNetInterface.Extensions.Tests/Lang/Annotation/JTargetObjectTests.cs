@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang.Annotation;
 public class JTargetObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.TargetAnnotation);
+	private static readonly CString className = new("java/lang/annotation/Target"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JTargetObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JTargetObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JTargetObjectTests.className, JTargetObjectTests.classSignature,

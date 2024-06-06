@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JInterfaceTypeMetadata<JCharSequenceObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.CharSequence</c> instance.
 /// </summary>
@@ -10,11 +12,10 @@ public sealed class JCharSequenceObject : JInterfaceObject<JCharSequenceObject>,
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JCharSequenceObject> typeMetadata =
-		TypeMetadataBuilder<JCharSequenceObject>.Create(UnicodeClassNames.CharSequenceInterface()).Build();
+	private static readonly TypeMetadata typeMetadata =
+		TypeMetadataBuilder<JCharSequenceObject>.Create("java/lang/CharSequence"u8).Build();
 
-	static JInterfaceTypeMetadata<JCharSequenceObject> IInterfaceType<JCharSequenceObject>.Metadata
-		=> JCharSequenceObject.typeMetadata;
+	static TypeMetadata IInterfaceType<JCharSequenceObject>.Metadata => JCharSequenceObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JCharSequenceObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

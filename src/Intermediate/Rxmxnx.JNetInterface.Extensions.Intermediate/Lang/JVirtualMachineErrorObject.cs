@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JVirtualMachineErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.VirtualMachineError</c> instance.
 /// </summary>
@@ -8,12 +10,11 @@ public class JVirtualMachineErrorObject : JErrorObject, IThrowableType<JVirtualM
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JVirtualMachineErrorObject> typeMetadata =
-		TypeMetadataBuilder<JErrorObject>
-			.Create<JVirtualMachineErrorObject>(UnicodeClassNames.VirtualMachineErrorObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JErrorObject>
+	                                                    .Create<JVirtualMachineErrorObject>(
+		                                                    "java/lang/VirtualMachineError"u8).Build();
 
-	static JThrowableTypeMetadata<JVirtualMachineErrorObject> IThrowableType<JVirtualMachineErrorObject>.Metadata
-		=> JVirtualMachineErrorObject.typeMetadata;
+	static TypeMetadata IThrowableType<JVirtualMachineErrorObject>.Metadata => JVirtualMachineErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JVirtualMachineErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

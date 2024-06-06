@@ -1,15 +1,16 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JThrowableObject>;
+
 public partial class JThrowableObject
 {
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JThrowableObject> typeMetadata =
-		TypeMetadataBuilder<JThrowableObject>.Create(UnicodeClassNames.ThrowableObject())
-		                                     .Implements<JSerializableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JThrowableObject>
+	                                                    .Create("java/lang/Throwable"u8)
+	                                                    .Implements<JSerializableObject>().Build();
 
-	static JThrowableTypeMetadata<JThrowableObject> IThrowableType<JThrowableObject>.Metadata
-		=> JThrowableObject.typeMetadata;
+	static TypeMetadata IThrowableType<JThrowableObject>.Metadata => JThrowableObject.typeMetadata;
 	static Type IDataType.FamilyType => typeof(JThrowableObject);
 }

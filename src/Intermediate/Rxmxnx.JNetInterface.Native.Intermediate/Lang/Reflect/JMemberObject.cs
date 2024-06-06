@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
+using TypeMetadata = JInterfaceTypeMetadata<JMemberObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Member</c> instance.
 /// </summary>
@@ -10,12 +12,10 @@ public sealed class JMemberObject : JInterfaceObject<JMemberObject>, IInterfaceT
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JMemberObject> metadata = TypeMetadataBuilder<JMemberObject>
-	                                                                         .Create(
-		                                                                         UnicodeClassNames.MemberInterface())
-	                                                                         .Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JMemberObject>
+	                                                    .Create("java/lang/reflect/Member"u8).Build();
 
-	static JInterfaceTypeMetadata<JMemberObject> IInterfaceType<JMemberObject>.Metadata => JMemberObject.metadata;
+	static TypeMetadata IInterfaceType<JMemberObject>.Metadata => JMemberObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JMemberObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

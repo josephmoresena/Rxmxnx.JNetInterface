@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.Error</c> instance.
 /// </summary>
@@ -8,10 +10,10 @@ public class JErrorObject : JThrowableObject, IThrowableType<JErrorObject>
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JErrorObject> typeMetadata = TypeMetadataBuilder<JThrowableObject>
-		.Create<JErrorObject>(UnicodeClassNames.ErrorObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JThrowableObject>
+	                                                    .Create<JErrorObject>("java/lang/Error"u8).Build();
 
-	static JThrowableTypeMetadata<JErrorObject> IThrowableType<JErrorObject>.Metadata => JErrorObject.typeMetadata;
+	static TypeMetadata IThrowableType<JErrorObject>.Metadata => JErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

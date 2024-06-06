@@ -47,24 +47,45 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 	/// <summary>
 	/// Retrieves array element class name.
 	/// </summary>
-	/// <param name="arraySignature">A JNI array signature.</param>
 	/// <param name="dimension">Output. Array dimension.</param>
 	/// <returns>Element class name.</returns>
-	protected static CString GetElementName(ReadOnlySpan<Byte> arraySignature, out Int32 dimension)
+	private protected String GetElementName(out Int32 dimension)
 	{
-		dimension = JClassObject.GetArrayDimension(arraySignature);
-		return new(arraySignature[dimension] switch
+		dimension = JClassObject.GetArrayDimension(this.Class.ClassSignature);
+		switch (this.Class.ClassSignature[dimension])
 		{
-			UnicodePrimitiveSignatures.BooleanSignatureChar => UnicodeClassNames.BooleanPrimitive(),
-			UnicodePrimitiveSignatures.ByteSignatureChar => UnicodeClassNames.BytePrimitive(),
-			UnicodePrimitiveSignatures.CharSignatureChar => UnicodeClassNames.CharPrimitive(),
-			UnicodePrimitiveSignatures.DoubleSignatureChar => UnicodeClassNames.DoublePrimitive(),
-			UnicodePrimitiveSignatures.FloatSignatureChar => UnicodeClassNames.FloatPrimitive(),
-			UnicodePrimitiveSignatures.IntSignatureChar => UnicodeClassNames.IntPrimitive(),
-			UnicodePrimitiveSignatures.LongSignatureChar => UnicodeClassNames.LongPrimitive(),
-			UnicodePrimitiveSignatures.ShortSignatureChar => UnicodeClassNames.ShortPrimitive(),
-			_ => arraySignature[(dimension + 1)..^1],
-		});
+			case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				return ClassNames.BooleanPrimitive;
+			case UnicodePrimitiveSignatures.ByteSignatureChar:
+				return ClassNames.BytePrimitive;
+			case UnicodePrimitiveSignatures.CharSignatureChar:
+				return ClassNames.CharPrimitive;
+			case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				return ClassNames.DoublePrimitive;
+			case UnicodePrimitiveSignatures.FloatSignatureChar:
+				return ClassNames.FloatPrimitive;
+			case UnicodePrimitiveSignatures.IntSignatureChar:
+				return ClassNames.IntPrimitive;
+			case UnicodePrimitiveSignatures.LongSignatureChar:
+				return ClassNames.LongPrimitive;
+			case UnicodePrimitiveSignatures.ShortSignatureChar:
+				return ClassNames.ShortPrimitive;
+			default:
+				CString objectElementName = this.Class.ClassSignature[(dimension + 1)..^1];
+				Int32 elementNameLength = Encoding.UTF8.GetCharCount(objectElementName);
+				return String.Create(elementNameLength, objectElementName, JArrayObject.WriteObjectElementName);
+		}
+	}
+
+	/// <summary>
+	/// Wirtes in <paramref name="buffer"/> <paramref name="elementName"/>
+	/// </summary>
+	/// <param name="buffer">UTF-16 buffer.</param>
+	/// <param name="elementName">UTF-8 object class name.</param>
+	private static void WriteObjectElementName(Span<Char> buffer, CString elementName)
+	{
+		Encoding.UTF8.GetChars(elementName, buffer); // Decodes UTF-8 chars.
+		buffer.Replace('/', '.'); // Escapes chars.
 	}
 }
 

@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JExceptionInInitializerErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.ExceptionInInitializerError</c> instance.
 /// </summary>
@@ -11,12 +13,11 @@ public class JExceptionInInitializerErrorObject : JLinkageErrorObject,
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JExceptionInInitializerErrorObject> typeMetadata =
-		TypeMetadataBuilder<JLinkageErrorObject>
-			.Create<JExceptionInInitializerErrorObject>(UnicodeClassNames.ExceptionInInitializerErrorObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
+	                                                    .Create<JExceptionInInitializerErrorObject>(
+		                                                    "java/lang/ExceptionInInitializerError"u8).Build();
 
-	static JThrowableTypeMetadata<JExceptionInInitializerErrorObject> IThrowableType<JExceptionInInitializerErrorObject>
-		.Metadata
+	static TypeMetadata IThrowableType<JExceptionInInitializerErrorObject>.Metadata
 		=> JExceptionInInitializerErrorObject.typeMetadata;
 
 	/// <inheritdoc/>

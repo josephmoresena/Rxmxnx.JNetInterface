@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JArrayIndexOutOfBoundsExceptionObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.ArrayIndexOutOfBoundsException</c> instance.
 /// </summary>
@@ -11,13 +13,11 @@ public class JArrayIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsExceptionO
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JArrayIndexOutOfBoundsExceptionObject> typeMetadata =
-		TypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
-			.Create<JArrayIndexOutOfBoundsExceptionObject>(UnicodeClassNames.ArrayIndexOutOfBoundsExceptionObject())
-			.Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
+	                                                    .Create<JArrayIndexOutOfBoundsExceptionObject>(
+		                                                    "java/lang/ArrayIndexOutOfBoundsException"u8).Build();
 
-	static JThrowableTypeMetadata<JArrayIndexOutOfBoundsExceptionObject>
-		IThrowableType<JArrayIndexOutOfBoundsExceptionObject>.Metadata
+	static TypeMetadata IThrowableType<JArrayIndexOutOfBoundsExceptionObject>.Metadata
 		=> JArrayIndexOutOfBoundsExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>

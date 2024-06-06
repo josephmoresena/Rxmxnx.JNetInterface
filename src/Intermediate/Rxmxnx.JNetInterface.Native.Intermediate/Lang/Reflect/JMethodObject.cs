@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
+using TypeMetadata = JClassTypeMetadata<JMethodObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Method</c> instance.
 /// </summary>
@@ -8,12 +10,11 @@ public sealed class JMethodObject : JExecutableObject, IClassType<JMethodObject>
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JMethodObject> metadata = TypeMetadataBuilder<JExecutableObject>
-	                                                                     .Create<JMethodObject>(
-		                                                                     UnicodeClassNames.MethodObject(),
-		                                                                     JTypeModifier.Final).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExecutableObject>
+	                                                    .Create<JMethodObject>(
+		                                                    "java/lang/reflect/Method"u8, JTypeModifier.Final).Build();
 
-	static JClassTypeMetadata<JMethodObject> IClassType<JMethodObject>.Metadata => JMethodObject.metadata;
+	static TypeMetadata IClassType<JMethodObject>.Metadata => JMethodObject.typeMetadata;
 
 	/// <inheritdoc/>
 	internal JMethodObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition,

@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JClassFormatErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.ClassFormatError</c> instance.
 /// </summary>
@@ -10,12 +12,11 @@ public class JClassFormatErrorObject : JLinkageErrorObject, IThrowableType<JClas
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JClassFormatErrorObject> typeMetadata =
-		TypeMetadataBuilder<JLinkageErrorObject>
-			.Create<JClassFormatErrorObject>(UnicodeClassNames.ClassFormatErrorObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
+	                                                    .Create<JClassFormatErrorObject>("java/lang/ClassFormatError"u8)
+	                                                    .Build();
 
-	static JThrowableTypeMetadata<JClassFormatErrorObject> IThrowableType<JClassFormatErrorObject>.Metadata
-		=> JClassFormatErrorObject.typeMetadata;
+	static TypeMetadata IThrowableType<JClassFormatErrorObject>.Metadata => JClassFormatErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JClassFormatErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

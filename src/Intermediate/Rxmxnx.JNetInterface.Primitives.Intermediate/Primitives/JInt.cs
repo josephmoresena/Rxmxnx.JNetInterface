@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
+using TypeMetadata = JPrimitiveTypeMetadata<JInt>;
+
 /// <summary>
 /// Primitive <c>int</c>. Represents a primitive 32-bit signed integer.
 /// </summary>
@@ -10,14 +12,14 @@ public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparabl
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata<JInt> typeMetadata = IPrimitiveType<JInt, Int32>.TypeMetadataBuilder
+	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JInt, Int32>.TypeMetadataBuilder
 		.Create(UnicodeClassNames.IntPrimitive(), UnicodePrimitiveSignatures.IntSignatureChar)
-		.WithWrapperClassName(UnicodeClassNames.IntegerObject()).Build();
+		.WithWrapperClassName("java/lang/Integer"u8).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JInt;
 
-	static JPrimitiveTypeMetadata<JInt> IPrimitiveType<JInt>.Metadata => JInt.typeMetadata;
+	static TypeMetadata IPrimitiveType<JInt>.Metadata => JInt.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JInt.Type;
 
 	/// <summary>

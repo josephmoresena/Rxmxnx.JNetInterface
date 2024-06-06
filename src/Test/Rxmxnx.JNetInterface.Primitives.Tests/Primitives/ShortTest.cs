@@ -23,13 +23,11 @@ public sealed class ShortTest : PrimitiveTestBase
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JShort>();
 
-		Assert.Equal(ClassNames.ShortPrimitive, metadata.ClassName.ToString());
 		Assert.True(UnicodeClassNames.ShortPrimitive().SequenceEqual(metadata.ClassName));
 		Assert.Equal(PrimitiveSignatures.ShortSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.ShortSignatureChar, metadata.Signature[0]);
 
-		Assert.Equal(ClassNames.ShortObject, metadata.WrapperClassName.ToString());
-		Assert.True(UnicodeClassNames.ShortObject().SequenceEqual(metadata.WrapperClassName));
+		Assert.True("java/lang/Short"u8.SequenceEqual(metadata.WrapperClassName));
 	}
 	[Fact]
 	private void ConstructorsTest()

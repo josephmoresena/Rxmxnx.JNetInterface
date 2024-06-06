@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JLinkageErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.LinkageError</c> instance.
 /// </summary>
@@ -8,11 +10,11 @@ public class JLinkageErrorObject : JErrorObject, IThrowableType<JLinkageErrorObj
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JLinkageErrorObject> typeMetadata = TypeMetadataBuilder<JErrorObject>
-		.Create<JLinkageErrorObject>(UnicodeClassNames.LinkageErrorObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JErrorObject>
+	                                                    .Create<JLinkageErrorObject>("java/lang/LinkageError"u8)
+	                                                    .Build();
 
-	static JThrowableTypeMetadata<JLinkageErrorObject> IThrowableType<JLinkageErrorObject>.Metadata
-		=> JLinkageErrorObject.typeMetadata;
+	static TypeMetadata IThrowableType<JLinkageErrorObject>.Metadata => JLinkageErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JLinkageErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

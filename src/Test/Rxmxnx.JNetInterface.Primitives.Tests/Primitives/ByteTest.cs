@@ -23,13 +23,11 @@ public sealed class ByteTest : PrimitiveTestBase
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JByte>();
 
-		Assert.Equal(ClassNames.BytePrimitive, metadata.ClassName.ToString());
 		Assert.True(UnicodeClassNames.BytePrimitive().SequenceEqual(metadata.ClassName));
 		Assert.Equal(PrimitiveSignatures.ByteSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.ByteSignatureChar, metadata.Signature[0]);
 
-		Assert.Equal(ClassNames.ByteObject, metadata.WrapperClassName.ToString());
-		Assert.True(UnicodeClassNames.ByteObject().SequenceEqual(metadata.WrapperClassName));
+		Assert.True("java/lang/Byte"u8.SequenceEqual(metadata.WrapperClassName));
 	}
 	[Fact]
 	private void ConstructorsTest()

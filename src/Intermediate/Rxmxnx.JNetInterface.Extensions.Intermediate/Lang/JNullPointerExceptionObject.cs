@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JNullPointerExceptionObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.NullPointerException</c> instance.
 /// </summary>
@@ -10,11 +12,11 @@ public class JNullPointerExceptionObject : JRuntimeExceptionObject, IThrowableTy
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JNullPointerExceptionObject> typeMetadata =
-		TypeMetadataBuilder<JRuntimeExceptionObject>
-			.Create<JNullPointerExceptionObject>(UnicodeClassNames.NullPointerExceptionObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JRuntimeExceptionObject>
+	                                                    .Create<JNullPointerExceptionObject>(
+		                                                    "java/lang/NullPointerException"u8).Build();
 
-	static JThrowableTypeMetadata<JNullPointerExceptionObject> IThrowableType<JNullPointerExceptionObject>.Metadata
+	static TypeMetadata IThrowableType<JNullPointerExceptionObject>.Metadata
 		=> JNullPointerExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>

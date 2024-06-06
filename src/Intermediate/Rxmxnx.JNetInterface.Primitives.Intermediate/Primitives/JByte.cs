@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
+using TypeMetadata = JPrimitiveTypeMetadata<JByte>;
+
 /// <summary>
 /// Primitive <c>byte</c>. Represents a 8-bit signed integer.
 /// </summary>
@@ -9,18 +11,14 @@ public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableCompara
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata<JByte> typeMetadata = IPrimitiveType<JByte, SByte>
-	                                                                     .TypeMetadataBuilder
-	                                                                     .Create(UnicodeClassNames.BytePrimitive(),
-		                                                                     UnicodePrimitiveSignatures
-			                                                                     .ByteSignatureChar)
-	                                                                     .WithWrapperClassName(
-		                                                                     UnicodeClassNames.ByteObject()).Build();
+	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JByte, SByte>.TypeMetadataBuilder
+		.Create(UnicodeClassNames.BytePrimitive(), UnicodePrimitiveSignatures.ByteSignatureChar)
+		.WithWrapperClassName("java/lang/Byte"u8).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JByte;
 
-	static JPrimitiveTypeMetadata<JByte> IPrimitiveType<JByte>.Metadata => JByte.typeMetadata;
+	static TypeMetadata IPrimitiveType<JByte>.Metadata => JByte.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JByte.Type;
 
 	/// <summary>

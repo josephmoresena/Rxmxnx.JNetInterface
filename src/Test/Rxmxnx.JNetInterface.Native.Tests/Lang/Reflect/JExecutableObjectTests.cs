@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang.Reflect;
 public class JExecutableObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.ExecutableObject);
+	private static readonly CString className = new("java/lang/reflect/Executable"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JExecutableObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JExecutableObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JExecutableObjectTests.className,

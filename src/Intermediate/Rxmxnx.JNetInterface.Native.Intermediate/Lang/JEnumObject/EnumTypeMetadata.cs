@@ -19,7 +19,7 @@ public partial class JEnumObject
 			/// <inheritdoc/>
 			public override IInterfaceSet Interfaces => this._interfaces;
 			/// <inheritdoc/>
-			public override JClassTypeMetadata BaseMetadata => JEnumObject.enumClassMetadata;
+			public override JClassTypeMetadata BaseMetadata => JEnumObject.typeMetadata;
 			/// <inheritdoc/>
 			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TEnum>();
 			/// <inheritdoc/>
@@ -34,8 +34,7 @@ public partial class JEnumObject
 				builder.DataTypeName, builder.Signature)
 			{
 				this._fields = fields;
-				this._interfaces =
-					InterfaceSet.GetClassInterfaces(JEnumObject.enumClassMetadata, builder.GetInterfaceSet());
+				this._interfaces = InterfaceSet.GetClassInterfaces(JEnumObject.typeMetadata, builder.GetInterfaceSet());
 			}
 
 			/// <inheritdoc/>

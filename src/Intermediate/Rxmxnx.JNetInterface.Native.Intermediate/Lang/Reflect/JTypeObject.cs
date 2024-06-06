@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
+using TypeMetadata = JInterfaceTypeMetadata<JTypeObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Type</c> instance.
 /// </summary>
@@ -10,12 +12,10 @@ public sealed class JTypeObject : JInterfaceObject<JTypeObject>, IInterfaceType<
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JTypeObject> typeMetadata = TypeMetadataBuilder<JTypeObject>
-	                                                                           .Create(
-		                                                                           UnicodeClassNames.TypeInterface())
-	                                                                           .Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JTypeObject>
+	                                                    .Create("java/lang/reflect/Type"u8).Build();
 
-	static JInterfaceTypeMetadata<JTypeObject> IInterfaceType<JTypeObject>.Metadata => JTypeObject.typeMetadata;
+	static TypeMetadata IInterfaceType<JTypeObject>.Metadata => JTypeObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JTypeObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

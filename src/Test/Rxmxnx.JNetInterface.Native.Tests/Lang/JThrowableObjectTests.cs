@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JThrowableObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.ThrowableObject);
+	private static readonly CString className = new("java/lang/Throwable"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JThrowableObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JThrowableObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JThrowableObjectTests.className,

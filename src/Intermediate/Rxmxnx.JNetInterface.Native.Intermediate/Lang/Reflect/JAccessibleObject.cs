@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
+using TypeMetadata = JClassTypeMetadata<JAccessibleObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.AccessibleObject</c> instance.
 /// </summary>
@@ -8,13 +10,11 @@ public class JAccessibleObject : JLocalObject, IClassType<JAccessibleObject>, II
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JAccessibleObject> metadata = TypeMetadataBuilder<JAccessibleObject>
-	                                                                         .Create(
-		                                                                         UnicodeClassNames.AccessibleObject())
-	                                                                         .Implements<JAnnotatedElementObject>()
-	                                                                         .Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JAccessibleObject>
+	                                                    .Create("java/lang/reflect/AccessibleObject"u8)
+	                                                    .Implements<JAnnotatedElementObject>().Build();
 
-	static JClassTypeMetadata<JAccessibleObject> IClassType<JAccessibleObject>.Metadata => JAccessibleObject.metadata;
+	static TypeMetadata IClassType<JAccessibleObject>.Metadata => JAccessibleObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private protected JAccessibleObject(JClassObject jClass, JObjectLocalRef localRef) : base(jClass, localRef) { }

@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Nio;
 
+using TypeMetadata = JClassTypeMetadata<JLongBufferObject>;
+
 /// <summary>
 /// This class represents a local <c>java.nio.LongBuffer</c> instance.
 /// </summary>
@@ -8,13 +10,12 @@ public class JLongBufferObject : JBufferObject<JLong>, IClassType<JLongBufferObj
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JLongBufferObject> metadata = TypeMetadataBuilder<JBufferObject>
-	                                                                         .Create<JLongBufferObject>(
-		                                                                         UnicodeClassNames.LongBufferObject(),
-		                                                                         JTypeModifier.Abstract)
-	                                                                         .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
+	                                                    .Create<JLongBufferObject>("java/nio/LongBuffer"u8,
+		                                                    JTypeModifier.Abstract).Implements<JComparableObject>()
+	                                                    .Build();
 
-	static JClassTypeMetadata<JLongBufferObject> IClassType<JLongBufferObject>.Metadata => JLongBufferObject.metadata;
+	static TypeMetadata IClassType<JLongBufferObject>.Metadata => JLongBufferObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JLongBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

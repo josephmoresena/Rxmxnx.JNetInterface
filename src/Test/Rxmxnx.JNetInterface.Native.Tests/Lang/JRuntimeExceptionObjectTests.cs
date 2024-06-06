@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JRuntimeExceptionObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.RuntimeExceptionObject);
+	private static readonly CString className = new("java/lang/RuntimeException"u8);
 	private static readonly CString classSignature =
 		CString.Concat("L"u8, JRuntimeExceptionObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JRuntimeExceptionObjectTests.classSignature);

@@ -6,8 +6,7 @@ public partial record JPrimitiveTypeMetadata
 	/// Stores the metadata for Java <c>void</c> type.
 	/// </summary>
 	private sealed record JVoidTypeMetadata()
-		: JPrimitiveTypeMetadata(0, typeof(void), JPrimitiveTypeMetadata.voidInformation,
-		                         UnicodeClassNames.VoidObject())
+		: JPrimitiveTypeMetadata(0, typeof(void), JPrimitiveTypeMetadata.voidInformation, "java/lang/Void"u8)
 	{
 		/// <summary>
 		/// <c>void</c> class fake hash.

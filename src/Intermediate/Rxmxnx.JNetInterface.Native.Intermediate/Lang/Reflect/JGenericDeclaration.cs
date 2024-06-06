@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
+using TypeMetadata = JInterfaceTypeMetadata<JGenericDeclarationObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.GenericDeclaration</c> instance.
 /// </summary>
@@ -11,12 +13,11 @@ public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclara
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JGenericDeclarationObject> typeMetadata =
-		TypeMetadataBuilder<JGenericDeclarationObject>.Create(UnicodeClassNames.GenericDeclarationInterface())
-		                                              .Extends<JAnnotatedElementObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JGenericDeclarationObject>
+	                                                    .Create("java/lang/reflect/GenericDeclaration"u8)
+	                                                    .Extends<JAnnotatedElementObject>().Build();
 
-	static JInterfaceTypeMetadata<JGenericDeclarationObject> IInterfaceType<JGenericDeclarationObject>.Metadata
-		=> JGenericDeclarationObject.typeMetadata;
+	static TypeMetadata IInterfaceType<JGenericDeclarationObject>.Metadata => JGenericDeclarationObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JGenericDeclarationObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

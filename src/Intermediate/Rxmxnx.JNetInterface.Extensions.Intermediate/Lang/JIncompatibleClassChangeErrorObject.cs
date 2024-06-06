@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JIncompatibleClassChangeErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.IncompatibleClassChangeError</c> instance.
 /// </summary>
@@ -11,13 +13,11 @@ public class JIncompatibleClassChangeErrorObject : JLinkageErrorObject,
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JIncompatibleClassChangeErrorObject> typeMetadata =
-		TypeMetadataBuilder<JLinkageErrorObject>
-			.Create<JIncompatibleClassChangeErrorObject>(UnicodeClassNames.IncompatibleClassChangeErrorObject())
-			.Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
+	                                                    .Create<JIncompatibleClassChangeErrorObject>(
+		                                                    "java/lang/IncompatibleClassChangeError"u8).Build();
 
-	static JThrowableTypeMetadata<JIncompatibleClassChangeErrorObject>
-		IThrowableType<JIncompatibleClassChangeErrorObject>.Metadata
+	static TypeMetadata IThrowableType<JIncompatibleClassChangeErrorObject>.Metadata
 		=> JIncompatibleClassChangeErrorObject.typeMetadata;
 
 	/// <inheritdoc/>

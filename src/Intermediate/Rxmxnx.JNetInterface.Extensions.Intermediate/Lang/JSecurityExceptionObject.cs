@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JSecurityExceptionObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.SecurityException</c> instance.
 /// </summary>
@@ -10,12 +12,11 @@ public class JSecurityExceptionObject : JRuntimeExceptionObject, IThrowableType<
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JSecurityExceptionObject> typeMetadata =
-		TypeMetadataBuilder<JRuntimeExceptionObject>
-			.Create<JSecurityExceptionObject>(UnicodeClassNames.SecurityExceptionObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JRuntimeExceptionObject>
+	                                                    .Create<JSecurityExceptionObject>(
+		                                                    "java/lang/SecurityException"u8).Build();
 
-	static JThrowableTypeMetadata<JSecurityExceptionObject> IThrowableType<JSecurityExceptionObject>.Metadata
-		=> JSecurityExceptionObject.typeMetadata;
+	static TypeMetadata IThrowableType<JSecurityExceptionObject>.Metadata => JSecurityExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JSecurityExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

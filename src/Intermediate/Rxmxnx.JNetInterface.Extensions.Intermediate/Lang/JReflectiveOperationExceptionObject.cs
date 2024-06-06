@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JReflectiveOperationExceptionObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.ReflectiveOperationException</c> instance.
 /// </summary>
@@ -8,13 +10,11 @@ public class JReflectiveOperationExceptionObject : JExceptionObject, IThrowableT
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JReflectiveOperationExceptionObject> typeMetadata =
-		TypeMetadataBuilder<JExceptionObject>
-			.Create<JReflectiveOperationExceptionObject>(UnicodeClassNames.ReflectiveOperationExceptionObject())
-			.Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExceptionObject>
+	                                                    .Create<JReflectiveOperationExceptionObject>(
+		                                                    "java/lang/ReflectiveOperationException"u8).Build();
 
-	static JThrowableTypeMetadata<JReflectiveOperationExceptionObject>
-		IThrowableType<JReflectiveOperationExceptionObject>.Metadata
+	static TypeMetadata IThrowableType<JReflectiveOperationExceptionObject>.Metadata
 		=> JReflectiveOperationExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>

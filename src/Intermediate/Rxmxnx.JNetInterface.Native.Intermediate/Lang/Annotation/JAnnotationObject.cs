@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Annotation;
 
+using TypeMetadata = JInterfaceTypeMetadata<JAnnotationObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.annotation.Annotation</c> instance.
 /// </summary>
@@ -10,11 +12,10 @@ public sealed class JAnnotationObject : JInterfaceObject<JAnnotationObject>, IIn
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JAnnotationObject> typeMetadata =
-		TypeMetadataBuilder<JAnnotationObject>.Create(UnicodeClassNames.AnnotationInterface()).Build();
+	private static readonly TypeMetadata typeMetadata =
+		TypeMetadataBuilder<JAnnotationObject>.Create("java/lang/annotation/Annotation"u8).Build();
 
-	static JInterfaceTypeMetadata<JAnnotationObject> IInterfaceType<JAnnotationObject>.Metadata
-		=> JAnnotationObject.typeMetadata;
+	static TypeMetadata IInterfaceType<JAnnotationObject>.Metadata => JAnnotationObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JAnnotationObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

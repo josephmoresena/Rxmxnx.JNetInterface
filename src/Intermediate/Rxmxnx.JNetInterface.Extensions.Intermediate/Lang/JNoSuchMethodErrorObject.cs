@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JNoSuchMethodErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.NoSuchMethodError</c> instance.
 /// </summary>
@@ -10,12 +12,11 @@ public class JNoSuchMethodErrorObject : JIncompatibleClassChangeErrorObject, ITh
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JNoSuchMethodErrorObject> typeMetadata =
-		TypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
-			.Create<JNoSuchMethodErrorObject>(UnicodeClassNames.NoSuchMethodErrorObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
+	                                                    .Create<JNoSuchMethodErrorObject>(
+		                                                    "java/lang/NoSuchMethodError"u8).Build();
 
-	static JThrowableTypeMetadata<JNoSuchMethodErrorObject> IThrowableType<JNoSuchMethodErrorObject>.Metadata
-		=> JNoSuchMethodErrorObject.typeMetadata;
+	static TypeMetadata IThrowableType<JNoSuchMethodErrorObject>.Metadata => JNoSuchMethodErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JNoSuchMethodErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

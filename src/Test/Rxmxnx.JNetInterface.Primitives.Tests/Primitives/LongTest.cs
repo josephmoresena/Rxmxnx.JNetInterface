@@ -23,13 +23,11 @@ public sealed class LongTest : PrimitiveTestBase
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JLong>();
 
-		Assert.Equal(ClassNames.LongPrimitive, metadata.ClassName.ToString());
 		Assert.True(UnicodeClassNames.LongPrimitive().SequenceEqual(metadata.ClassName));
 		Assert.Equal(PrimitiveSignatures.LongSignature, metadata.Signature.ToString());
 		Assert.Equal(UnicodePrimitiveSignatures.LongSignatureChar, metadata.Signature[0]);
 
-		Assert.Equal(ClassNames.LongObject, metadata.WrapperClassName.ToString());
-		Assert.True(UnicodeClassNames.LongObject().SequenceEqual(metadata.WrapperClassName));
+		Assert.True("java/lang/Long"u8.SequenceEqual(metadata.WrapperClassName));
 	}
 	[Fact]
 	private void ConstructorsTest()

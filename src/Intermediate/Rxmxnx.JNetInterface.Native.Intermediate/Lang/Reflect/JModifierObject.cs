@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
+using TypeMetadata = JClassTypeMetadata<JModifierObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Modifier</c> instance.
 /// </summary>
@@ -81,11 +83,10 @@ public class JModifierObject : JLocalObject, IClassType<JModifierObject>
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JModifierObject> metadata = TypeMetadataBuilder<JModifierObject>
-	                                                                       .Create(UnicodeClassNames.ModifierObject())
-	                                                                       .Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JModifierObject>
+	                                                    .Create("java/lang/reflect/Modifier"u8).Build();
 
-	static JClassTypeMetadata<JModifierObject> IClassType<JModifierObject>.Metadata => JModifierObject.metadata;
+	static TypeMetadata IClassType<JModifierObject>.Metadata => JModifierObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JModifierObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

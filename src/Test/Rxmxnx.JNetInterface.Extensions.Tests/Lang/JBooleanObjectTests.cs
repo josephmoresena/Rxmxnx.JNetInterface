@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JBooleanObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.BooleanObject);
+	private static readonly CString className = new("java/lang/Boolean"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JBooleanObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JBooleanObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JBooleanObjectTests.className,

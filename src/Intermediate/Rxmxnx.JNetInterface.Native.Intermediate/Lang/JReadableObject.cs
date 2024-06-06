@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JInterfaceTypeMetadata<JReadableObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.Readable</c> instance.
 /// </summary>
@@ -10,11 +12,10 @@ public sealed class JReadableObject : JInterfaceObject<JReadableObject>, IInterf
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JReadableObject> typeMetadata =
-		TypeMetadataBuilder<JReadableObject>.Create(UnicodeClassNames.ReadableInterface()).Build();
+	private static readonly TypeMetadata typeMetadata =
+		TypeMetadataBuilder<JReadableObject>.Create("java/lang/Readable"u8).Build();
 
-	static JInterfaceTypeMetadata<JReadableObject> IInterfaceType<JReadableObject>.Metadata
-		=> JReadableObject.typeMetadata;
+	static TypeMetadata IInterfaceType<JReadableObject>.Metadata => JReadableObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JReadableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
