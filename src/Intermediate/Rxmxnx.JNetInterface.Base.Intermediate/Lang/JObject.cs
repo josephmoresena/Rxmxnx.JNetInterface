@@ -79,13 +79,13 @@ public abstract class JObject : IObject, IEquatable<JObject>
 		=> jObject is null || jObject.IsDefaultInstance();
 
 	/// <summary>
-	/// Retrieves an object identifier using <paramref name="className"/> and <paramref name="objRef"/>.
+	/// Retrieves an object identifier using <paramref name="classSignature"/> and <paramref name="objRef"/>.
 	/// </summary>
 	/// <typeparam name="TObjectRef">Type of <see cref="IObjectReferenceType"/>.</typeparam>
-	/// <param name="className">Object class name.</param>
+	/// <param name="classSignature">Object class signature.</param>
 	/// <param name="objRef">Object reference.</param>
-	/// <returns>An object identifier using <paramref name="className"/> and <paramref name="objRef"/>.</returns>
-	internal static String GetObjectIdentifier<TObjectRef>(CString className, TObjectRef objRef)
+	/// <returns>An object identifier using <paramref name="classSignature"/> and <paramref name="objRef"/>.</returns>
+	internal static String GetObjectIdentifier<TObjectRef>(CString classSignature, TObjectRef objRef)
 		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
-		=> $"{className} {objRef}";
+		=> $"{ClassNameHelper.GetClassName(classSignature)} {objRef}";
 }

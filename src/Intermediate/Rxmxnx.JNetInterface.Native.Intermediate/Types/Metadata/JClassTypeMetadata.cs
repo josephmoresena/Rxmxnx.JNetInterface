@@ -30,7 +30,7 @@ public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 /// </summary>
 public abstract partial record JClassTypeMetadata<
 	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : JClassTypeMetadata
-	where TClass : JReferenceObject, IClassType<TClass>
+	where TClass : JLocalObject, IClassType<TClass>
 {
 	/// <inheritdoc/>
 	public override Type Type => typeof(TClass);

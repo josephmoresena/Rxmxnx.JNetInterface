@@ -65,7 +65,7 @@ public abstract partial class
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override String ToTraceText()
-		=> $"{JObject.GetObjectIdentifier(this.Class.Name, this.Reference)} {IPrimitiveType.GetMetadata<TValue>().Signature}: {this.Value}";
+		=> $"{JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference)} {IPrimitiveType.GetMetadata<TValue>().Signature}: {this.Value}";
 
 	/// <inheritdoc cref="IPrimitiveWrapperType{TNumber, TValue}.Create(IEnvironment, Nullable{TValue})"/>
 	[return: NotNullIfNotNull(nameof(value))]

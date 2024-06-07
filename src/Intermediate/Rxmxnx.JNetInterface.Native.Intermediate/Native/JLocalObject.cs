@@ -58,10 +58,10 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 		where TReference : JReferenceObject, IReferenceType<TReference>
 		=> this.CastTo<TReference>(this, dispose);
 	/// <inheritdoc/>
-	public override String ToString() => JObject.GetObjectIdentifier(this.Class.Name, this.Reference);
+	public override String ToString() => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference);
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
-	public override String ToTraceText() => JObject.GetObjectIdentifier(this.Class.Name, this.Reference);
+	public override String ToTraceText() => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference);
 
 	/// <summary>
 	/// Indicates whether current instance is an instance of <paramref name="jClass"/>.

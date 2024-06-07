@@ -74,7 +74,7 @@ public partial class JThrowableObject
 				IClassType.GetMetadata<JLocalObject>();
 			return !IVirtualMachine.MetadataValidationEnabled ?
 				new(className, modifier, baseMetadata, ImmutableHashSet<Type>.Empty) :
-				TypeMetadataBuilder<TThrowable>.CreateWithValidation(className, baseMetadata, modifier);
+				new(className, modifier, baseMetadata, IReferenceType<TThrowable>.TypeInterfaces);
 		}
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
@@ -90,9 +90,12 @@ public partial class JThrowableObject
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType(className, typeof(TThrowable), typeof(TObject));
-			return !IVirtualMachine.MetadataValidationEnabled ?
-				new(className, modifier, IClassType.GetMetadata<TThrowable>(), ImmutableHashSet<Type>.Empty) :
-				TypeMetadataBuilder<TThrowable>.CreateWithValidation<TObject>(className, modifier);
+			if (!IVirtualMachine.MetadataValidationEnabled)
+				return new(className, modifier, IClassType.GetMetadata<TThrowable>(), ImmutableHashSet<Type>.Empty);
+			NativeValidationUtilities.ValidateBaseTypes(className, IClassType<TObject>.TypeBaseTypes,
+			                                            IClassType<TThrowable>.TypeBaseTypes);
+			return new(className, modifier, IClassType.GetMetadata<TThrowable>(),
+			           IReferenceType<TObject>.TypeInterfaces);
 		}
 
 		/// <summary>

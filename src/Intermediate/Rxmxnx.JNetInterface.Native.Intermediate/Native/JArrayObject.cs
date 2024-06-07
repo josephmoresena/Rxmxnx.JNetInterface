@@ -52,28 +52,8 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 	private protected String GetElementName(out Int32 dimension)
 	{
 		dimension = JClassObject.GetArrayDimension(this.Class.ClassSignature);
-		switch (this.Class.ClassSignature[dimension])
-		{
-			case CommonNames.BooleanSignatureChar:
-				return CommonNames.BooleanPrimitive;
-			case CommonNames.ByteSignatureChar:
-				return CommonNames.BytePrimitive;
-			case CommonNames.CharSignatureChar:
-				return CommonNames.CharPrimitive;
-			case CommonNames.DoubleSignatureChar:
-				return CommonNames.DoublePrimitive;
-			case CommonNames.FloatSignatureChar:
-				return CommonNames.FloatPrimitive;
-			case CommonNames.IntSignatureChar:
-				return CommonNames.IntPrimitive;
-			case CommonNames.LongSignatureChar:
-				return CommonNames.LongPrimitive;
-			case CommonNames.ShortSignatureChar:
-				return CommonNames.ShortPrimitive;
-			default:
-				ObjectArrayElementHelper helper = new(this.Class.ClassSignature, dimension);
-				return helper.ToString();
-		}
+		CString classSignature = this.Class.ClassSignature;
+		return ClassNameHelper.GetClassName(classSignature, dimension);
 	}
 }
 

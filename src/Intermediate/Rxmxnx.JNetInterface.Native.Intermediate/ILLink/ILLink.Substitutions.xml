@@ -5,14 +5,6 @@
               featurevalue="false" featuredefault="true">
             <method signature="System.Boolean get_TraceEnabled()" body="stub" value="false"/>
         </type>
-    </assembly>
-    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
-        <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableMetadataValidation"
-              featurevalue="true" featuredefault="false">
-            <method signature="System.Boolean get_MetadataValidationEnabled()" body="stub" value="false"/>
-        </type>
-    </assembly>
-    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
         <type fullname="Rxmxnx.JNetInterface.Internal.JTrace" feature="JNetInterface.EnableTrace"
               featurevalue="false" featuredefault="true">
             <method signature="System.Void ReflectGetArrayArrayMetadataMethodError(System.Exception,System.String)"
@@ -94,49 +86,41 @@
             <method signature="System.Void CreateNonGenericLocalRef(System.String,Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,System.String)"
                     body="stub"/>
         </type>
-    </assembly>
-    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableMetadataValidation"
+              featurevalue="true">
+            <method signature="System.Boolean get_MetadataValidationEnabled()" body="stub" value="false"/>
+        </type>
         <type fullname="Rxmxnx.JNetInterface.Internal.NativeValidationUtilities"
               feature="JNetInterface.DisableMetadataValidation"
-              featurevalue="true" featuredefault="false">
-            <method signature="System.Void ThrowIfAnnotation(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Boolean)"
+              featurevalue="true">
+            <method signature="System.Void ThrowIfAnnotation(System.ReadOnlySpan`1&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Boolean)"
                     body="stub"/>
-            <method signature="System.Void ThrowInvalidImplementation(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Boolean)"
+            <method signature="System.Void ThrowInvalidImplementation(System.ReadOnlySpan`1&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Boolean)"
                     body="stub"/>
-            <method signature="System.Void ThrowInvalidImplementation(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Collections.Generic.IReadOnlySet&lt;Rxmxnx.PInvoke.CString&gt;,System.Boolean)"
+            <method signature="System.Void ThrowIfInvalidImplementation(System.ReadOnlySpan`1&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Collections.Generic.IReadOnlySet`1&lt;Rxmxnx.PInvoke.CString&gt;,System.Boolean)"
                     body="stub"/>
-            <method signature="System.Void ThrowIfInvalidExtension(System.ReadOnlySpan&lt;System.Type&gt;,System.Collections.Generic.IReadOnlySet&lt;System.Type&gt;)"
+            <method signature="System.Void ThrowIfInvalidExtension(System.ReadOnlySpan`1&lt;System.Byte&gt;,System.Type,System.Collections.Generic.IReadOnlySet`1&lt;System.Type&gt;)"
                     body="stub"/>
-            <method signature="System.Void ThrowIfInvalidList(System.ReadOnlySpan&lt;System.Type&gt;,Rxmxnx.JNetInterface.IEnumFieldList)"
+            <method signature="System.Void ThrowIfInvalidList(System.ReadOnlySpan`1&lt;System.Byte&gt;,Rxmxnx.JNetInterface.IEnumFieldList)"
                     body="stub"/>
         </type>
-    </assembly>
-    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
-        <type fullname="Rxmxnx.JNetInterface.Native.JLocalObject.TypeMetadataBuilder"
+        <type fullname="Rxmxnx.JNetInterface.Native.JLocalObject/TypeMetadataBuilder"
               feature="JNetInterface.DisableMetadataValidation"
-              featurevalue="true" featuredefault="false">
+              featurevalue="true">
             <method signature="System.Void ValidateSuperinterface(Rxmxnx.JNetInterface.Internal.SuperInterfaceValidationState,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata)"
                     body="stub"/>
         </type>
-    </assembly>
-    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
-        <type fullname="Rxmxnx.JNetInterface.Native.JLocalObject.TypeMetadataBuilder`1"
+        <type fullname="Rxmxnx.JNetInterface.Types.IReferenceType`1"
               feature="JNetInterface.DisableMetadataValidation"
-              featurevalue="true" featuredefault="false">
-            <method signature="System.Void CreateWithBaseValidation`1(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Type.JTypeModifier)"
-                    body="stub"/>
-            <method signature="System.Void CreateWithValidation(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JClassTypeMetadata,Rxmxnx.JNetInterface.Type.JTypeModifier)"
-                    body="stub"/>
+              featurevalue="true">
+            <method signature="System.Collections.Generic.IReadOnlySet`1&lt;System.Type&gt; get_TypeInterfaces()"
+                    body="remove"/>
         </type>
-    </assembly>
-    <assembly fullname="Rxmxnx.JNetInterface.Native.Intermediate">
-        <type fullname="Rxmxnx.JNetInterface.Lang.JThrowableObject.TypeMetadataBuilder`1"
+        <type fullname="Rxmxnx.JNetInterface.Types.IClassType`1"
               feature="JNetInterface.DisableMetadataValidation"
-              featurevalue="true" featuredefault="false">
-            <method signature="System.Void CreateWithBaseValidation`1(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Type.JTypeModifier)"
-                    body="stub"/>
-            <method signature="System.Void CreateWithValidation(System.ReadOnlySpan&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JClassTypeMetadata,Rxmxnx.JNetInterface.Type.JTypeModifier)"
-                    body="stub"/>
+              featurevalue="true">
+            <method signature="System.Collections.Generic.IReadOnlySet`1&lt;System.Type&gt; get_TypeBaseTypes()"
+                    body="remove"/>
         </type>
     </assembly>
 </linker>
