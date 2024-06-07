@@ -30,6 +30,7 @@ public abstract partial record JArrayTypeMetadata
 	[ExcludeFromCodeCoverage]
 	static JArrayTypeMetadata()
 	{
+		if (!IVirtualMachine.NestingArrayAutoGenerationEnabled) return;
 		try
 		{
 			JArrayTypeMetadata.getArrayArrayMetadataInfo = JArrayTypeMetadata.ReflectGetArrayArrayMetadataMethod();
@@ -79,8 +80,9 @@ public abstract partial record JArrayTypeMetadata
 		{
 			return typeof(JArrayObject<TElement>);
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
+			JTrace.GetArrayTypeError(ex, IDataType.GetMetadata<TElement>().ArraySignature);
 			return default;
 		}
 	}
@@ -109,6 +111,7 @@ public abstract partial record JArrayTypeMetadata
 	private static JArrayTypeMetadata? TryGetArrayArrayMetadataWithReflection(CString elementSignature,
 		Type typeofElement)
 	{
+		if (!IVirtualMachine.NestingArrayAutoGenerationEnabled) return default;
 		try
 		{
 			return JArrayTypeMetadata.GetArrayArrayMetadataWithReflection(typeofElement);

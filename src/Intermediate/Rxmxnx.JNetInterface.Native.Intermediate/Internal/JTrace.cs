@@ -22,6 +22,18 @@ internal static partial class JTrace
 			callerMethod);
 	}
 	/// <summary>
+	/// Writes a category name and error occured attempted to reflect GetArrayType to the trace listeners.
+	/// </summary>
+	/// <param name="ex">A <see cref="Exception"/> instance.</param>
+	/// <param name="arraySignature">Data type name.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void GetArrayTypeError(Exception ex, CString arraySignature,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"Unable to retrieve CLR type of {arraySignature}. {ex.Message}", callerMethod);
+	}
+	/// <summary>
 	/// Writes a category name and error occured attempted to retrieve array metadata using reflection to the trace listeners.
 	/// </summary>
 	/// <param name="elementSignature">Array element signature.</param>

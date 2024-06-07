@@ -9,6 +9,8 @@
               featurevalue="false" featuredefault="true">
             <method signature="System.Void ReflectGetArrayArrayMetadataMethodError(System.Exception,System.String)"
                     body="stub"/>
+            <method signature="System.Void GetArrayTypeError(System.Exception,Rxmxnx.PInvoke.CString,System.String)"
+                    body="stub"/>
             <method signature="System.Void GetArrayArrayMetadataWithReflectionError(Rxmxnx.PInvoke.CString,System.Exception,System.String)"
                     body="stub"/>
             <method signature="System.Void GetClass(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.PInvoke.CStringSequence,System.String)"
@@ -120,6 +122,24 @@
               feature="JNetInterface.DisableMetadataValidation"
               featurevalue="true">
             <method signature="System.Collections.Generic.IReadOnlySet`1&lt;System.Type&gt; get_TypeBaseTypes()"
+                    body="remove"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableNestingArrayAutoGeneration"
+              featurevalue="true">
+            <method signature="System.Boolean get_NestingArrayAutoGenerationEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.Types.Metadata.JArrayTypeMetadata"
+              feature="JNetInterface.DisableNestingArrayAutoGeneration"
+              featurevalue="true">
+            <method signature="System.Reflection.MethodInfo ReflectGetArrayArrayMetadataMethod()"
+                    body="remove"/>
+            <method signature="Rxmxnx.JNetInterface.Types.Metadata.JArrayTypeMetadata GetArrayArrayMetadataWithReflection(System.Type)"
+                    body="remove"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.Types.IArrayType"
+              feature="JNetInterface.DisableNestingArrayAutoGeneration"
+              featurevalue="true">
+            <method signature="Rxmxnx.JNetInterface.Types.Metadata.JArrayTypeMetadata GetArrayArrayMetadata`1()"
                     body="remove"/>
         </type>
     </assembly>
