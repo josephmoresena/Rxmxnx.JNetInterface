@@ -18,11 +18,6 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 	public static readonly JPrimitiveTypeMetadata VoidMetadata = new JVoidTypeMetadata();
 
 	/// <summary>
-	/// Fake class hash for primitive void.
-	/// </summary>
-	internal static String FakeVoidHash => JVoidTypeMetadata.FakeHash;
-
-	/// <summary>
 	/// JNI name for the current type wrapper class.
 	/// </summary>
 	public CString WrapperClassSignature => this.WrapperInformation[1];

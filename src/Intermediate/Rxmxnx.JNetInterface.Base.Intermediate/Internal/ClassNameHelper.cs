@@ -28,7 +28,10 @@ internal readonly struct ClassNameHelper
 		this._classSignature = classSignature;
 		this._offset = arrayDimension +
 			(classSignature[arrayDimension] == CommonNames.ObjectSignaturePrefixChar ? 1 : 0);
-		this._padding = classSignature[^1] == CommonNames.ObjectSignatureSuffixChar ? 1 : 0;
+		this._padding = classSignature[^1] == CommonNames.ObjectSignatureSuffixChar &&
+			classSignature[arrayDimension] == CommonNames.ObjectSignaturePrefixChar ?
+				1 :
+				0;
 	}
 
 	/// <inheritdoc/>

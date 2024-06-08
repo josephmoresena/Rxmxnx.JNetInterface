@@ -6,31 +6,132 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static partial class MetadataHelper
 {
 	/// <summary>
-	/// Retrieves metadata from hash.
+	/// Retrieves <see cref="JArgumentMetadata"/> metadata for <paramref name="jClass"/>.
 	/// </summary>
-	/// <param name="className">A java type name.</param>
-	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
-	public static IReflectionMetadata? GetReflectionMetadata(ReadOnlySpan<Byte> className)
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <returns>A <see cref="JArgumentMetadata"/> instance.</returns>
+	public static JArgumentMetadata GetArgumentMetadata(JClassObject jClass)
 	{
-		CStringSequence information = MetadataHelper.GetClassInformation(className, true);
-		String hash = information.ToString();
-		IReflectionMetadata? result;
+		switch (jClass.ClassSignature[0])
+		{
+			case CommonNames.BooleanSignatureChar:
+				return JArgumentMetadata.Get<JBoolean>();
+			case CommonNames.ByteSignatureChar:
+				return JArgumentMetadata.Get<JByte>();
+			case CommonNames.CharSignatureChar:
+				return JArgumentMetadata.Get<JChar>();
+			case CommonNames.DoubleSignatureChar:
+				return JArgumentMetadata.Get<JDouble>();
+			case CommonNames.FloatSignatureChar:
+				return JArgumentMetadata.Get<JFloat>();
+			case CommonNames.IntSignatureChar:
+				return JArgumentMetadata.Get<JInt>();
+			case CommonNames.LongSignatureChar:
+				return JArgumentMetadata.Get<JLong>();
+			case CommonNames.ShortSignatureChar:
+				return JArgumentMetadata.Get<JShort>();
+			default:
+				if (MetadataHelper.runtimeMetadata.TryGetValue(jClass.Hash, out JReferenceTypeMetadata? typeMetadata))
+				{
+					MetadataHelper.reflectionMetadata.TryRemove(jClass.Hash, out _); // Removes unknown if exists.
+					return typeMetadata.ArgumentMetadata;
+				}
+				if (MetadataHelper.reflectionMetadata.TryGetValue(jClass.Hash, out UnknownReflectionMetadata? unknown))
+					return unknown.ArgumentMetadata;
 
-		if (MetadataHelper.primitiveReflectionMetadata.TryGetValue(hash, out IReflectionMetadata? primitiveMetadata))
-		{
-			result = primitiveMetadata;
+				// Create unknown metadata for reflection.
+				unknown = new(jClass.Name);
+				MetadataHelper.reflectionMetadata[jClass.Hash] = unknown;
+				return unknown.ArgumentMetadata;
 		}
-		else if (MetadataHelper.runtimeMetadata.TryGetValue(hash, out JReferenceTypeMetadata? metadata))
+	}
+	/// <summary>
+	/// Retrieves <see cref="JFieldDefinition"/> metadata for <paramref name="jClass"/> and
+	/// <paramref name="fieldName"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="fieldName">Definition field name.</param>
+	/// <returns>A <see cref="JFieldDefinition"/> instance.</returns>
+	public static JFieldDefinition GetFieldDefinition(JClassObject jClass, ReadOnlySpan<Byte> fieldName)
+	{
+		switch (jClass.ClassSignature[0])
 		{
-			result = metadata;
-			MetadataHelper.reflectionMetadata.TryRemove(hash, out _);
+			case CommonNames.BooleanSignatureChar:
+				return new JFieldDefinition<JBoolean>(fieldName);
+			case CommonNames.ByteSignatureChar:
+				return new JFieldDefinition<JByte>(fieldName);
+			case CommonNames.CharSignatureChar:
+				return new JFieldDefinition<JChar>(fieldName);
+			case CommonNames.DoubleSignatureChar:
+				return new JFieldDefinition<JDouble>(fieldName);
+			case CommonNames.FloatSignatureChar:
+				return new JFieldDefinition<JFloat>(fieldName);
+			case CommonNames.IntSignatureChar:
+				return new JFieldDefinition<JInt>(fieldName);
+			case CommonNames.LongSignatureChar:
+				return new JFieldDefinition<JLong>(fieldName);
+			case CommonNames.ShortSignatureChar:
+				return new JFieldDefinition<JShort>(fieldName);
+			default:
+				if (MetadataHelper.runtimeMetadata.TryGetValue(jClass.Hash, out JReferenceTypeMetadata? typeMetadata))
+				{
+					MetadataHelper.reflectionMetadata.TryRemove(jClass.Hash, out _); // Removes unknown if exists.
+					return typeMetadata.CreateFieldDefinition(fieldName);
+				}
+				if (MetadataHelper.reflectionMetadata.TryGetValue(jClass.Hash, out UnknownReflectionMetadata? unknown))
+					return unknown.CreateFieldDefinition(fieldName);
+
+				// Create unknown metadata for reflection.
+				unknown = new(jClass.Name);
+				MetadataHelper.reflectionMetadata[jClass.Hash] = unknown;
+				return unknown.CreateFieldDefinition(fieldName);
 		}
-		else
+	}
+	/// <summary>
+	/// Retrieves <see cref="JFieldDefinition"/> metadata for <paramref name="jClass"/>,
+	/// <paramref name="callName"/> and <paramref name="paramsMetadata"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="callName">Definition call name.</param>
+	/// <param name="paramsMetadata">Definition parameters metadata.</param>
+	/// <returns>A <see cref="JCallDefinition"/> instance.</returns>
+	public static JCallDefinition GetCallDefinition(JClassObject jClass, ReadOnlySpan<Byte> callName,
+		JArgumentMetadata[] paramsMetadata)
+	{
+		switch (jClass.ClassSignature[0])
 		{
-			result = new UnknownReflectionMetadata(information[1]);
-			MetadataHelper.reflectionMetadata[hash] = result;
+			case CommonNames.VoidSignatureChar: // Void call is a Method.
+				return JMethodDefinition.Create(callName, paramsMetadata);
+			case CommonNames.BooleanSignatureChar:
+				return JFunctionDefinition<JBoolean>.Create(callName, paramsMetadata);
+			case CommonNames.ByteSignatureChar:
+				return JFunctionDefinition<JByte>.Create(callName, paramsMetadata);
+			case CommonNames.CharSignatureChar:
+				return JFunctionDefinition<JChar>.Create(callName, paramsMetadata);
+			case CommonNames.DoubleSignatureChar:
+				return JFunctionDefinition<JDouble>.Create(callName, paramsMetadata);
+			case CommonNames.FloatSignatureChar:
+				return JFunctionDefinition<JFloat>.Create(callName, paramsMetadata);
+			case CommonNames.IntSignatureChar:
+				return JFunctionDefinition<JInt>.Create(callName, paramsMetadata);
+			case CommonNames.LongSignatureChar:
+				return JFunctionDefinition<JLong>.Create(callName, paramsMetadata);
+			case CommonNames.ShortSignatureChar:
+				return JFunctionDefinition<JShort>.Create(callName, paramsMetadata);
+			default:
+				if (MetadataHelper.runtimeMetadata.TryGetValue(jClass.Hash, out JReferenceTypeMetadata? typeMetadata))
+				{
+					MetadataHelper.reflectionMetadata.TryRemove(jClass.Hash, out _); // Removes unknown if exists.
+					return typeMetadata.CreateFunctionDefinition(callName, paramsMetadata);
+				}
+				if (MetadataHelper.reflectionMetadata.TryGetValue(jClass.Hash, out UnknownReflectionMetadata? unknown))
+					return unknown.CreateFunctionDefinition(callName, paramsMetadata);
+
+				// Create unknown metadata for reflection.
+				unknown = new(jClass.Name);
+				MetadataHelper.reflectionMetadata[jClass.Hash] = unknown;
+				return unknown.CreateFunctionDefinition(callName, paramsMetadata);
 		}
-		return result;
 	}
 	/// <summary>
 	/// Retrieves metadata from hash.

@@ -73,8 +73,6 @@ public sealed class DataTypeTests
 		Assert.True(wrapperInformation[0].SequenceEqual(voidMetadata.WrapperClassName));
 		Assert.True(wrapperInformation[1].SequenceEqual(voidMetadata.WrapperClassSignature));
 		Assert.Equal(wrapperInformation, voidMetadata.WrapperInformation);
-		Assert.Equal(JPrimitiveTypeMetadata.FakeVoidHash,
-		             JDataTypeMetadata.CreateInformationSequence(voidMetadata.ClassName).ToString());
 
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.ArgumentMetadata);
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.CreateInstance(Array.Empty<Byte>()));

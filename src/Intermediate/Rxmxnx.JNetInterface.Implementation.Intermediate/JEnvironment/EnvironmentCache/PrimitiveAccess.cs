@@ -496,5 +496,22 @@ partial class JEnvironment
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
 			JTrace.CallPrimitiveFunction(localRef, default, signature, methodId, result);
 		}
+		/// <summary>
+		/// Retrieves a <see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.
+		/// </summary>
+		/// <param name="parameterTypes">A <see cref="JClassObject"/> list.</param>
+		/// <returns><see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.</returns>
+		private JArgumentMetadata[] GetCallMetadata(JArrayObject<JClassObject> parameterTypes)
+		{
+			JArgumentMetadata[] args = new JArgumentMetadata[parameterTypes.Length];
+			JObjectArrayLocalRef objectArrayRef = parameterTypes.As<JObjectArrayLocalRef>();
+			for (Int32 i = 0; i < parameterTypes.Length; i++)
+			{
+				JObjectLocalRef localRef = this.GetObjectArrayElement(objectArrayRef, i);
+				JClassObject jClass = this.GetClass(JClassLocalRef.FromReference(in localRef), true);
+				args[i] = MetadataHelper.GetArgumentMetadata(jClass);
+			}
+			return args;
+		}
 	}
 }

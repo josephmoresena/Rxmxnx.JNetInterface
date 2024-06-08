@@ -195,23 +195,6 @@ internal static partial class MetadataHelper
 		{ IDataType.GetHash<JThreadObject>(), IReferenceType.GetMetadata<JThreadObject>() },
 	};
 	/// <summary>
-	/// Primitive reflection dictionary.
-	/// </summary>
-	private static readonly Dictionary<String, IReflectionMetadata?> primitiveReflectionMetadata = new()
-	{
-		// Basic objects //
-		{ JPrimitiveTypeMetadata.FakeVoidHash, default },
-		{ PrimitiveReflectionMetadata<JBoolean>.FakeHash, PrimitiveReflectionMetadata<JBoolean>.Instance },
-		{ PrimitiveReflectionMetadata<JByte>.FakeHash, PrimitiveReflectionMetadata<JByte>.Instance },
-		{ PrimitiveReflectionMetadata<JChar>.FakeHash, PrimitiveReflectionMetadata<JChar>.Instance },
-		{ PrimitiveReflectionMetadata<JDouble>.FakeHash, PrimitiveReflectionMetadata<JDouble>.Instance },
-		{ PrimitiveReflectionMetadata<JFloat>.FakeHash, PrimitiveReflectionMetadata<JFloat>.Instance },
-		{ PrimitiveReflectionMetadata<JInt>.FakeHash, PrimitiveReflectionMetadata<JInt>.Instance },
-		{ PrimitiveReflectionMetadata<JLong>.FakeHash, PrimitiveReflectionMetadata<JLong>.Instance },
-		{ PrimitiveReflectionMetadata<JShort>.FakeHash, PrimitiveReflectionMetadata<JShort>.Instance },
-	};
-
-	/// <summary>
 	/// Runtime metadata dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<String, JReferenceTypeMetadata> runtimeMetadata =
@@ -219,7 +202,7 @@ internal static partial class MetadataHelper
 	/// <summary>
 	/// Runtime metadata dictionary.
 	/// </summary>
-	private static readonly ConcurrentDictionary<String, IReflectionMetadata> reflectionMetadata = new();
+	private static readonly ConcurrentDictionary<String, UnknownReflectionMetadata> reflectionMetadata = new();
 	/// <summary>
 	/// Runtime metadata assignation dictionary.
 	/// </summary>

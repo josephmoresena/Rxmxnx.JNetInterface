@@ -417,19 +417,15 @@ partial class JEnvironment
 		{
 			using LocalFrame _ =
 				new(this._env, parameterTypes.Length + IVirtualMachine.GetAccessibleDefinitionCapacity);
-			JArgumentMetadata[] args = EnvironmentCache.GetCallMetadata(parameterTypes!);
+			JArgumentMetadata[] args = this.GetCallMetadata(parameterTypes!);
 			if (returnType is null) return JConstructorDefinition.Create(args);
-			IReflectionMetadata? returnMetadata = EnvironmentCache.GetReflectionMetadata(returnType);
 			using JNativeMemory<Byte> mem = memberName.GetNativeUtf8Chars();
-			return returnMetadata is null ?
-				JMethodDefinition.Create(mem.Values, args) :
-				returnMetadata.CreateFunctionDefinition(mem.Values, args);
+			return MetadataHelper.GetCallDefinition(returnType, mem.Values, args);
 		}
 		public JFieldDefinition GetDefinition(JStringObject memberName, JClassObject fieldType)
 		{
-			IReflectionMetadata returnMetadata = EnvironmentCache.GetReflectionMetadata(fieldType)!;
 			using JNativeMemory<Byte> mem = memberName.GetNativeUtf8Chars();
-			return returnMetadata.CreateFieldDefinition(mem.Values);
+			return MetadataHelper.GetFieldDefinition(fieldType, mem.Values);
 		}
 		public JMethodObject GetReflectedFunction(JFunctionDefinition definition, JClassObject declaringClass,
 			Boolean isStatic)

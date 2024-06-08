@@ -67,8 +67,8 @@ public partial class JLocalObject
 				}
 				/// <inheritdoc/>
 				internal override JFunctionDefinition<TInterface> CreateFunctionDefinition(
-					ReadOnlySpan<Byte> functionName, JArgumentMetadata[] metadata)
-					=> JFunctionDefinition<TInterface>.Create(functionName, metadata);
+					ReadOnlySpan<Byte> functionName, JArgumentMetadata[] paramsMetadata)
+					=> JFunctionDefinition<TInterface>.Create(functionName, paramsMetadata);
 				/// <inheritdoc/>
 				internal override JFieldDefinition<TInterface> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
 					=> new(fieldName);

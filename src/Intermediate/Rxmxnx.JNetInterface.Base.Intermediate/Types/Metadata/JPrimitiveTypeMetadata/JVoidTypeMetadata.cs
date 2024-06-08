@@ -9,12 +9,6 @@ public partial record JPrimitiveTypeMetadata
 		: JPrimitiveTypeMetadata(0, typeof(void), JPrimitiveTypeMetadata.voidInformation, "java/lang/Void"u8)
 	{
 		/// <summary>
-		/// <c>void</c> class fake hash.
-		/// </summary>
-		public static readonly String FakeHash =
-			JDataTypeMetadata.CreateInformationSequence(CommonNames.VoidPrimitive()).ToString();
-
-		/// <summary>
 		/// CLR type for <see langword="void"/>.
 		/// </summary>
 		public override Type Type => typeof(void);

@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IReflectionMetadata
+public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata
 {
 	/// <inheritdoc/>
 	public override Int32 SizeOf => NativeUtilities.PointerSize;
@@ -18,12 +18,6 @@ public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata, IRefl
 	/// Set of interfaces metadata of the current type implements.
 	/// </summary>
 	public abstract IInterfaceSet Interfaces { get; }
-
-	JFunctionDefinition IReflectionMetadata.CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
-		JArgumentMetadata[] metadata)
-		=> this.CreateFunctionDefinition(functionName, metadata);
-	JFieldDefinition IReflectionMetadata.CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
-		=> this.CreateFieldDefinition(fieldName);
 
 	/// <summary>
 	/// Indicates whether <paramref name="jObject"/> is an instance of the current type.
