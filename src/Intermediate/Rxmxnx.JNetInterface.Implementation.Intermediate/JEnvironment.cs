@@ -76,10 +76,6 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._cache.GetHashCode();
-	/// <summary>
-	/// Checks JNI occurred error.
-	/// </summary>
-	public void CheckJniError() => this._cache.CheckJniError();
 
 	/// <summary>
 	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance

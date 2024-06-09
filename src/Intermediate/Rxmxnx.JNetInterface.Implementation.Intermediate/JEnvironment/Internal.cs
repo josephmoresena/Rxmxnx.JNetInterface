@@ -233,6 +233,11 @@ partial class JEnvironment
 		fixed (Byte* ptr = &MemoryMarshal.GetReference(errorMessage))
 			nativeInterface.ErrorFunctions.FatalError(this.Reference, ptr);
 	}
+	/// <summary>
+	/// Checks JNI occurred error.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal void CheckJniError() => this._cache.CheckJniError();
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
@@ -249,15 +254,14 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="value">A <see cref="CString"/> instance.</param>
 	/// <returns>A binary read-only span from <paramref name="value"/>.</returns>
-	public static ReadOnlySpan<Byte> GetSafeSpan(CString? value)
+	internal static ReadOnlySpan<Byte> GetSafeSpan(CString? value)
 	{
 		if (value is null)
 			return ReadOnlySpan<Byte>.Empty;
 		return value.IsNullTerminated ? value.AsSpan() : (CString)value.Clone();
 	}
-
 	/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
-	public static JClassObject GetClassObject(JEnvironment env, JObjectLocalRef localRef)
+	internal static JClassObject GetClassObject(JEnvironment env, JObjectLocalRef localRef)
 	{
 		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = env.GetObjectClass(localRef);
