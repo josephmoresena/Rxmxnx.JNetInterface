@@ -62,7 +62,7 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 /// Represents error that occur during JNI calls.
 /// </summary>
 /// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
-public sealed class
+internal sealed class
 	ThrowableException<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable> :
 	ThrowableException, IThrowableException<TThrowable> where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 {

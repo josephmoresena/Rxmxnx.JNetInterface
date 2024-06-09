@@ -185,10 +185,11 @@ public static class Program
 					Console.WriteLine($"{i}: {jLocal}");
 				}
 			}
-			catch (ThrowableException ex)
+			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
-				Console.WriteLine(ex.Message);
+				if (ex is JniException)
+					env.PendingException = default;
 			}
 		}
 		finally
