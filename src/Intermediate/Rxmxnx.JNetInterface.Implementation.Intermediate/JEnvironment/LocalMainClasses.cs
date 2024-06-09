@@ -11,19 +11,19 @@ partial class JEnvironment
 		protected LocalMainClasses(IEnvironment env)
 		{
 			this.ClassObject = new(env);
-			this.ThrowableObject = new(this.ClassObject, MetadataHelper.GetMetadata<JThrowableObject>());
+			this.ThrowableObject = new(this.ClassObject, MetadataHelper.GetExactMetadata<JThrowableObject>());
 			this.StackTraceElementObject =
-				new(this.ClassObject, MetadataHelper.GetMetadata<JStackTraceElementObject>());
+				new(this.ClassObject, MetadataHelper.GetExactMetadata<JStackTraceElementObject>());
 
 			this.VoidPrimitive = new(this.ClassObject, JPrimitiveTypeMetadata.VoidMetadata);
-			this.BooleanPrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JBoolean>());
-			this.BytePrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JByte>());
-			this.CharPrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JChar>());
-			this.DoublePrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JDouble>());
-			this.FloatPrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JFloat>());
-			this.IntPrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JInt>());
-			this.LongPrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JLong>());
-			this.ShortPrimitive = new(this.ClassObject, MetadataHelper.GetMetadata<JShort>());
+			this.BooleanPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JBoolean>());
+			this.BytePrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JByte>());
+			this.CharPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JChar>());
+			this.DoublePrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JDouble>());
+			this.FloatPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JFloat>());
+			this.IntPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JInt>());
+			this.LongPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JLong>());
+			this.ShortPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JShort>());
 		}
 
 		/// <summary>

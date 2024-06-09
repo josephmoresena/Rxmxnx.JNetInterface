@@ -30,6 +30,9 @@ jobs:
     - name: Patch Native ILLink.Substitutions
       working-directory: ./src/Intermediate/Rxmxnx.JNetInterface.Native.Intermediate/ILLink
       run: sed -i -z 's/Rxmxnx.JNetInterface.Native.Intermediate/Rxmxnx.JNetInterface.Core/g;' ILLink.Substitutions.xml
+    - name: Patch Implementation ILLink.Substitutions
+      working-directory: ./src/Intermediate/Rxmxnx.JNetInterface.Implementation.Intermediate/ILLink
+      run: sed -i -z 's/Rxmxnx.JNetInterface.Implementation.Intermediate/Rxmxnx.JNetInterface/g;' ILLink.Substitutions.xml
     - name: Extract public key
       working-directory: ./package
       run: echo "${SNK_BASE64}" | base64 -d > Rxmxnx.JNetInterface.snk

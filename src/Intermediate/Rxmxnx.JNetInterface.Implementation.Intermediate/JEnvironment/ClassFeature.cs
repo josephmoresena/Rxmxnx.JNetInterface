@@ -27,14 +27,16 @@ partial class JEnvironment
 			}
 			result = jClass.ClassSignature[0] switch
 			{
-				CommonNames.BooleanSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JBooleanObject>(),
-				CommonNames.ByteSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JByteObject>(),
-				CommonNames.CharSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JCharacterObject>(),
-				CommonNames.DoubleSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JDoubleObject>(),
-				CommonNames.FloatSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JFloatObject>(),
-				CommonNames.IntSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JIntegerObject>(),
-				CommonNames.LongSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JLongObject>(),
-				CommonNames.ShortSignatureChar => (JClassTypeMetadata)MetadataHelper.GetMetadata<JShortObject>(),
+				CommonNames.BooleanSignatureChar =>
+					(JClassTypeMetadata)MetadataHelper.GetExactMetadata<JBooleanObject>(),
+				CommonNames.ByteSignatureChar => (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JByteObject>(),
+				CommonNames.CharSignatureChar =>
+					(JClassTypeMetadata)MetadataHelper.GetExactMetadata<JCharacterObject>(),
+				CommonNames.DoubleSignatureChar => (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JDoubleObject>(),
+				CommonNames.FloatSignatureChar => (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JFloatObject>(),
+				CommonNames.IntSignatureChar => (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JIntegerObject>(),
+				CommonNames.LongSignatureChar => (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JLongObject>(),
+				CommonNames.ShortSignatureChar => (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JShortObject>(),
 				CommonNames.ArraySignaturePrefixChar => this._env.GetArrayTypeMetadata(
 					jClass.ClassSignature, jClass.Hash),
 				_ => this._env.GetSuperTypeMetadata(jClass),
@@ -79,7 +81,7 @@ partial class JEnvironment
 		}
 		public JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TDataType>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TDataType>();
 			return this.GetOrFindClass(metadata);
 		}
 		public JClassObject GetObjectClass(JLocalObject jLocal)
@@ -90,9 +92,13 @@ partial class JEnvironment
 		}
 		public unsafe JClassObject? GetSuperClass(JClassObject jClass)
 		{
-			if (MetadataHelper.GetMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
-				return this.GetOrFindClass(metadata);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
+			if (jClass.IsPrimitive || jClass.IsInterface || jClass.Name.AsSpan().SequenceEqual(CommonNames.Object))
+				return default; // Primitive classes, Interfaces classes or Object class has no super-class.
+			if (jClass.ClassSignature[0] == CommonNames.ArraySignaturePrefixChar)
+				return this.GetClass<JLocalObject>(); // Super-class of Array classes is Object class.
+			if (MetadataHelper.GetExactMetadata(jClass.Hash)?.BaseMetadata is { } metadata)
+				return this.GetOrFindClass(metadata); // Well-known class.
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			ImplementationValidationUtilities.ThrowIfDefault(jClass);
@@ -104,6 +110,7 @@ partial class JEnvironment
 			{
 				JClassObject jSuperClass = this.AsClassObject(superClassRef);
 				if (jSuperClass.LocalReference != superClassRef.Value) this._env.DeleteLocalRef(superClassRef.Value);
+				MetadataHelper.RegisterSuperClass(jClass.Hash, jSuperClass.Hash);
 				return jSuperClass;
 			}
 			this.CheckJniError();
@@ -152,7 +159,7 @@ partial class JEnvironment
 				ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
 			where TDataType : JLocalObject, IReferenceType<TDataType>
 		{
-			ITypeInformation metadata = MetadataHelper.GetMetadata<TDataType>();
+			ITypeInformation metadata = MetadataHelper.GetExactMetadata<TDataType>();
 			return this.LoadClass(metadata, rawClassBytes, jClassLoader);
 		}
 		public void GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)

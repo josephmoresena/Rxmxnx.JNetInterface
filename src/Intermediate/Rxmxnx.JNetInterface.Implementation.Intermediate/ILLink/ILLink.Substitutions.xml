@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+    <assembly fullname="Rxmxnx.JNetInterface.Implementation.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine"
+              feature="JNetInterface.DisableBuiltInThrowableAutoRegistration"
+              featurevalue="true">
+            <method signature="System.Boolean get_BuiltInThrowableAutoRegistered()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.Internal.MetadataHelper"
+              feature="JNetInterface.DisableBuiltInThrowableAutoRegistration"
+              featurevalue="true">
+            <method signature="System.Void BuiltInThrowableRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
+                    body="stub"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableReflectionAutoRegistration"
+              featurevalue="true">
+            <method signature="System.Boolean get_ReflectionAutoRegistered()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.Internal.MetadataHelper"
+              feature="JNetInterface.DisableReflectionAutoRegistration"
+              featurevalue="true">
+            <method signature="System.Void BuiltInThrowableRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
+                    body="stub"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableNioAutoRegistration"
+              featurevalue="true">
+            <method signature="System.Boolean get_NioAutoRegistered()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.Internal.MetadataHelper"
+              feature="JNetInterface.DisableNioAutoRegistration"
+              featurevalue="true">
+            <method signature="System.Void NioRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
+                    body="stub"/>
+        </type>
+    </assembly>
+</linker>

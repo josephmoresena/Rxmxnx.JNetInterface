@@ -38,8 +38,10 @@
     <ItemGroup>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.EnableTrace" Value="true" Trim="true"/>-->
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableBuiltInThrowableAutoRegistration" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableReflectionAutoRegistration" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableNioAutoRegistration" Value="true" Trim="true"/>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableNestingArrayAutoGeneration" Value="true" Trim="true"/>-->
-        <RuntimeHostConfigurationOption Include="System.AggressiveAttributeTrimming" Value="true" Trim="true"/>
     </ItemGroup>
 
 </Project>

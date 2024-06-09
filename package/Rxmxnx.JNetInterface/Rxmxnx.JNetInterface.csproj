@@ -26,6 +26,12 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Rxmxnx.JNetInterface.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\ILLink\ILLink.Substitutions.xml">
+      <LogicalName>ILLink.Substitutions.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>

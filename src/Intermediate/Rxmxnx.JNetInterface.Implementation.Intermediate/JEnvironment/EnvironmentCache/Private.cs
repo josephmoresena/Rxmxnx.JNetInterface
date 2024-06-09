@@ -179,7 +179,7 @@ partial class JEnvironment
 			this.CheckJniError();
 			if (localRef == default) return default;
 
-			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TResult>();
+			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TResult>();
 			JReferenceTypeMetadata typeMetadata;
 			JClassObject jClass;
 			if (metadata.Modifier != JTypeModifier.Final)
@@ -189,7 +189,7 @@ partial class JEnvironment
 			else
 			{
 				jClass = this.GetClass<TResult>();
-				typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TResult>();
+				typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TResult>();
 			}
 			JLocalObject jLocal = typeMetadata.CreateInstance(jClass, localRef, true);
 			TResult result = (TResult)(Object)metadata.ParseInstance(jLocal, true);
@@ -266,7 +266,8 @@ partial class JEnvironment
 			String? message) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			JClassObject jClass = this.GetClass<TThrowable>();
-			JReferenceTypeMetadata throwableMetadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TThrowable>();
+			JReferenceTypeMetadata throwableMetadata =
+				(JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TThrowable>();
 			this.ClearException();
 			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
 		}

@@ -11,7 +11,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfInvalidArrayLength(length);
 			JArrayLocalRef arrayRef = default;
-			if (MetadataHelper.GetMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
+			if (MetadataHelper.GetExactMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
 			{
 				ref readonly ArrayFunctionSet arrayFunctions =
 					ref this.GetArrayFunctions(metadata.Signature[0], ArrayFunctionSet.PrimitiveFunction.NewArray);
@@ -49,7 +49,7 @@ partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			JArrayObject<TElement> result;
-			if (MetadataHelper.GetMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
+			if (MetadataHelper.GetExactMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
 			{
 				result = this.CreateArray<TElement>(length);
 				this.FillPrimitiveArray(result, metadata, initialElement);
@@ -76,7 +76,7 @@ partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -93,7 +93,7 @@ partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -111,7 +111,7 @@ partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
 				return this.IndexOfObject(jArray, item as JReferenceObject);
@@ -127,7 +127,7 @@ partial class JEnvironment
 			ArgumentNullException.ThrowIfNull(array);
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(array.Length);
 
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 				this.CopyToPrimitive(jArray, primitiveMetadata.SizeOf, array, arrayIndex);
 			else

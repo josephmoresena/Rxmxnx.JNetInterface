@@ -140,10 +140,9 @@ partial class JEnvironment
 		private unsafe JClassObject GetOrFindClass(ITypeInformation classInformation)
 		{
 			if (this._classes.TryGetValue(classInformation.Hash, out JClassObject? result)) return result;
-			if (MetadataHelper.GetMetadata(classInformation.Hash) is { } metadata)
-				//Class is found in metadata cache.
+			if (MetadataHelper.GetExactMetadata(classInformation.Hash) is { } metadata)
 			{
-				result = new(this.ClassObject, metadata);
+				result = new(this.ClassObject, metadata); //Class is found in metadata cache.
 			}
 			else
 			{

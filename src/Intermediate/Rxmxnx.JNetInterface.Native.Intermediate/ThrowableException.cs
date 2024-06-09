@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// Represents error that occur during JNI calls.
 /// </summary>
-public abstract partial class ThrowableException : JniException, IThrowableException
+public abstract partial class ThrowableException : JniException, IThrowableException<JThrowableObject>
 {
 	/// <summary>
 	/// Global throwable instance.

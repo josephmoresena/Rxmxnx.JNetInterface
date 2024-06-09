@@ -84,7 +84,7 @@ public readonly ref partial struct JNativeCallAdapter
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
 			JEnvironment env = this._callAdapter._env;
-			JClassTypeMetadata metadata = (JClassTypeMetadata)MetadataHelper.GetMetadata<TObject>();
+			JClassTypeMetadata metadata = (JClassTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
 			JClassObject jClass = env.GetClass<TObject>();
 			if (!JLocalObject.IsClassType<TObject>())
 			{
