@@ -36,8 +36,6 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	public IVirtualMachine VirtualMachine => this._cache.VirtualMachine;
 	/// <inheritdoc/>
 	public Int32 Version => this._cache.Version;
-	/// <inheritdoc/>
-	public Boolean JniSecure() => this._cache.JniSecure();
 
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
@@ -70,11 +68,18 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	}
 
 	/// <inheritdoc/>
+	public Boolean JniSecure() => this._cache.JniSecure();
+
+	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj)
 		=> (obj is JEnvironment other && this._cache.Equals(other._cache)) ||
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this._cache.GetHashCode();
+	/// <summary>
+	/// Checks JNI occurred error.
+	/// </summary>
+	public void CheckJniError() => this._cache.CheckJniError();
 
 	/// <summary>
 	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance

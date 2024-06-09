@@ -25,7 +25,11 @@ internal sealed record CallFrame : LocalCache, IDisposable
 	/// Constructor.
 	/// </summary>
 	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-	public CallFrame(JEnvironment env) : base(env.LocalCache) => this._env = env;
+	public CallFrame(JEnvironment env) : base(env.LocalCache)
+	{
+		this._env = env;
+		env.CheckJniError();
+	}
 	/// <inheritdoc/>
 	public void Dispose()
 	{

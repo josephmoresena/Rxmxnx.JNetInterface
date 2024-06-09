@@ -356,10 +356,10 @@ partial class JEnvironment
 		/// Throws if <paramref name="jniException"/> is not null and <paramref name="throwException"/> is
 		/// <see langword="true"/>.
 		/// </exception>
-		private void ThrowJniException(JniException? jniException, Boolean throwException)
+		private void SetPendingException(JniException jniException, Boolean throwException)
 		{
 			this.Thrown = jniException;
-			if (this.Thrown is not null && throwException) throw this.Thrown;
+			if (throwException) throw this.Thrown;
 		}
 		/// <summary>
 		/// Deletes and clears unregister <see cref="JLocalObject"/> instance.
