@@ -145,6 +145,7 @@ public sealed class JErrorObjectTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
+#pragma warning disable CA1859
 	internal void ThrowTest(Boolean fail)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JErrorObject>();
@@ -221,6 +222,7 @@ public sealed class JErrorObjectTests
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jError);
 		env.FunctionSet.Received(1).GetMessage(jError);
 	}
+#pragma warning restore CA1859
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]

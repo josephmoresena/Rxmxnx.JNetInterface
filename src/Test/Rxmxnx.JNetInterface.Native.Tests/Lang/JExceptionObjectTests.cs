@@ -151,6 +151,7 @@ public sealed class JExceptionObjectTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
+#pragma warning disable CA1859
 	internal void ThrowTest(Boolean fail)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JExceptionObject>();
@@ -228,6 +229,7 @@ public sealed class JExceptionObjectTests
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jException);
 		env.FunctionSet.Received(1).GetMessage(jException);
 	}
+#pragma warning restore CA1859
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]

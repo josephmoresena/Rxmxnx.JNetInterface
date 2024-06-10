@@ -156,6 +156,7 @@ public sealed class JRuntimeExceptionObjectTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
+#pragma warning disable CA1859
 	internal void ThrowTest(Boolean fail)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JRuntimeExceptionObject>();
@@ -239,6 +240,7 @@ public sealed class JRuntimeExceptionObjectTests
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jRuntimeException);
 		env.FunctionSet.Received(1).GetMessage(jRuntimeException);
 	}
+#pragma warning restore CA1859
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]

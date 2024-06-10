@@ -166,6 +166,7 @@ public sealed class JThrowableObjectTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
+#pragma warning disable CA1859
 	internal void ThrowTest(Boolean fail)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JThrowableObject>();
@@ -235,6 +236,7 @@ public sealed class JThrowableObjectTests
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jThrowable);
 		env.FunctionSet.Received(1).GetMessage(jThrowable);
 	}
+#pragma warning restore CA1859
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]

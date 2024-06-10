@@ -32,8 +32,8 @@ internal static partial class MetadataHelper
 			=> this.FromHash.AsSpan().SequenceEqual(obj.FromHash) && this.ToHash.AsSpan().SequenceEqual(obj.ToHash);
 
 		/// <inheritdoc/>
-		public override Int32 GetHashCode() => HashCode.Combine(this.FromHash, this.ToHash);
-		/// <inheritdoc/>
 		public override Boolean Equals(Object? obj) => obj is AssignationKey key && this.Equals(key);
+		/// <inheritdoc/>
+		public override Int32 GetHashCode() => HashCode.Combine(this.FromHash, this.ToHash);
 	}
 }

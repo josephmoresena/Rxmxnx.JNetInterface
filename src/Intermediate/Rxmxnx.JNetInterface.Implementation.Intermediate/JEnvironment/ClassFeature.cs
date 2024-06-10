@@ -117,6 +117,8 @@ partial class JEnvironment
 			this.CheckJniError();
 			return default;
 		}
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2234,
+		                 Justification = CommonConstants.BackwardOperationJustification)]
 		public Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
@@ -124,20 +126,18 @@ partial class JEnvironment
 			Boolean? result = MetadataHelper.IsAssignable(jClass, otherClass);
 			if (result.HasValue) return result.Value; // Cached assignation.
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			{
-				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-				JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
-				result = this.IsAssignableFrom(classRef, otherClassRef);
-				this.CheckJniError();
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
+			result = this.IsAssignableFrom(classRef, otherClassRef);
+			this.CheckJniError();
 
-				if (result.Value) // If true, inverse is false.
-					return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
+			if (result.Value) // If true, inverse is false.
+				return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
 
-				// Checks inverse assignation.
-				Boolean inverseResult = this.IsAssignableFrom(otherClass, jClass);
-				MetadataHelper.SetAssignable(otherClass, jClass, inverseResult);
-				this.CheckJniError();
-			}
+			// Checks inverse assignation.
+			Boolean inverseResult = this.IsAssignableFrom(otherClass, jClass);
+			MetadataHelper.SetAssignable(otherClass, jClass, inverseResult);
+			this.CheckJniError();
 			return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
 		}
 		public Boolean IsInstanceOf(JReferenceObject jObject, JClassObject jClass)
