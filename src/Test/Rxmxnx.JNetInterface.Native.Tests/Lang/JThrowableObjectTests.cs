@@ -75,7 +75,8 @@ public sealed class JThrowableObjectTests
 
 		Assert.Equal(throwableRef, jThrowable.Reference);
 
-		String toString = $"{jThrowable.Class.Name} {jThrowable.Reference} {jThrowable.Message}";
+		String toString =
+			$"{jThrowable.Class.Name.ToString().Replace('/', '.')} {jThrowable.Reference} {jThrowable.Message}";
 		if (jThrowable.StackTrace.Length > 0)
 		{
 			StringBuilder strBuild = new(toString);

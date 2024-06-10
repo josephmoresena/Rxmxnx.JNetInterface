@@ -7,7 +7,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 /// Java compiler.
 /// </summary>
 [ExcludeFromCodeCoverage]
-public sealed partial record JCompiler
+public sealed partial class JCompiler
 {
 	/// <summary>
 	/// Sdk path.

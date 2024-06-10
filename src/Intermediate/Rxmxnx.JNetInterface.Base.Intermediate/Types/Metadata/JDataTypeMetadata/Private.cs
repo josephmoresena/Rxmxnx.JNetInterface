@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
-public partial record JDataTypeMetadata
+public partial class JDataTypeMetadata
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
 	private readonly CString _arraySignature;

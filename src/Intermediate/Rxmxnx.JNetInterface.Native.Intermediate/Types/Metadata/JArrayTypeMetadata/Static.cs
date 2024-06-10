@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
                  Justification = CommonConstants.ReflectionFreeModeJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3011,
                  Justification = CommonConstants.ReflectionPrivateUseJustification)]
-public abstract partial record JArrayTypeMetadata
+public abstract partial class JArrayTypeMetadata
 {
 	/// <summary>
 	/// Name of <see cref="IArrayType.GetArrayArrayMetadata{TElement}"/> method.

@@ -7,7 +7,7 @@ public partial class JLocalObject
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IClassType"/> type.
 		/// </summary>
-		internal sealed record ClassTypeMetadata : JClassTypeMetadata<TClass>
+		internal sealed class ClassTypeMetadata : JClassTypeMetadata<TClass>
 		{
 			/// <inheritdoc cref="JReferenceTypeMetadata.BaseMetadata"/>
 			private readonly JClassTypeMetadata? _baseMetadata;
@@ -54,6 +54,9 @@ public partial class JLocalObject
 			public override String ToString()
 				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 
+			/// <inheritdoc/>
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			internal override JClassObject GetClass(IEnvironment env) => env.ClassFeature.GetClass<TClass>();
 			/// <inheritdoc/>
 			internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 				Boolean realClass = false)

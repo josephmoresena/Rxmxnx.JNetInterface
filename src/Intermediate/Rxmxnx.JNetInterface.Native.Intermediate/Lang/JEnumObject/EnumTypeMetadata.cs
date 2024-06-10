@@ -7,7 +7,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IEnumType"/> type.
 		/// </summary>
-		internal sealed record EnumTypeMetadata : JEnumTypeMetadata<TEnum>
+		internal sealed class EnumTypeMetadata : JEnumTypeMetadata<TEnum>
 		{
 			/// <inheritdoc cref="JEnumTypeMetadata.Fields"/>
 			private readonly IEnumFieldList _fields;
@@ -43,6 +43,9 @@ public partial class JEnumObject
 			/// <inheritdoc/>
 			public override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TEnum>();
 
+			/// <inheritdoc/>
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			internal override JClassObject GetClass(IEnvironment env) => env.ClassFeature.GetClass<TEnum>();
 			/// <inheritdoc/>
 			internal override JEnumObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 				Boolean realClass = false)

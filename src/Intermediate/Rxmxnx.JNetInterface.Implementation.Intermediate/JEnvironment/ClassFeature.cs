@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache : IClassFeature
+	private sealed partial class EnvironmentCache : IClassFeature
 	{
 		public JClassObject AsClassObject(JClassLocalRef classRef) => this.Register(this.GetClass(classRef, true));
 		public JClassObject AsClassObject(JReferenceObject jObject)
@@ -37,6 +37,7 @@ partial class JEnvironment
 				CommonNames.IntSignatureChar => (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JIntegerObject>(),
 				CommonNames.LongSignatureChar => (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JLongObject>(),
 				CommonNames.ShortSignatureChar => (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JShortObject>(),
+				CommonNames.VoidSignatureChar => (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JVoidObject>(),
 				CommonNames.ArraySignaturePrefixChar => this._env.GetArrayTypeMetadata(
 					jClass.ClassSignature, jClass.Hash),
 				_ => this._env.GetSuperTypeMetadata(jClass),
@@ -116,20 +117,28 @@ partial class JEnvironment
 			this.CheckJniError();
 			return default;
 		}
-		public unsafe Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
+		public Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
 		{
-			Boolean? result = MetadataHelper.IsAssignableFrom(jClass, otherClass);
-			if (result.HasValue) return result.Value;
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			ImplementationValidationUtilities.ThrowIfProxy(otherClass);
+			Boolean? result = MetadataHelper.IsAssignable(jClass, otherClass);
+			if (result.HasValue) return result.Value; // Cached assignation.
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
-			ref readonly NativeInterface nativeInterface =
-				ref this.GetNativeInterface<NativeInterface>(NativeInterface.IsAssignableFromInfo);
-			result = nativeInterface.ClassFunctions.IsAssignableFrom(this.Reference, classRef, otherClassRef).Value;
-			this.CheckJniError();
-			return result.Value;
+			{
+				JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+				JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
+				result = this.IsAssignableFrom(classRef, otherClassRef);
+				this.CheckJniError();
+
+				if (result.Value) // If true, inverse is false.
+					return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
+
+				// Checks inverse assignation.
+				Boolean inverseResult = this.IsAssignableFrom(otherClass, jClass);
+				MetadataHelper.SetAssignable(otherClass, jClass, inverseResult);
+				this.CheckJniError();
+			}
+			return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
 		}
 		public Boolean IsInstanceOf(JReferenceObject jObject, JClassObject jClass)
 		{

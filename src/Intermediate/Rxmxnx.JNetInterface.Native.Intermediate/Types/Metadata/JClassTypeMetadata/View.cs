@@ -1,13 +1,13 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
-public partial record JClassTypeMetadata<TClass>
+public partial class JClassTypeMetadata<TClass>
 {
 	/// <summary>
 	/// This record stores the view metadata for a class <see cref="IDataType"/> type.
 	/// </summary>
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public abstract record View : JClassTypeMetadata<TClass>
+	public abstract class View : JClassTypeMetadata<TClass>
 	{
 		/// <summary>
 		/// Internal instance.
@@ -22,13 +22,15 @@ public partial record JClassTypeMetadata<TClass>
 		public override IInterfaceSet Interfaces => this._metadata.Interfaces;
 
 		/// <inheritdoc/>
-		private protected View(JClassTypeMetadata<TClass> metadata) : base(metadata) => this._metadata = metadata;
+		private protected View(JClassTypeMetadata<TClass> metadata) : base(metadata.Information)
+			=> this._metadata = metadata;
 
 		/// <inheritdoc/>
 		internal override Boolean IsInstance(JReferenceObject jObject) => this._metadata.IsInstance(jObject);
-		/// <inheritdoc/>
-		public override String ToString() => base.ToString();
 
+		/// <inheritdoc/>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		internal override JClassObject GetClass(IEnvironment env) => this._metadata.GetClass(env);
 		/// <inheritdoc/>
 		internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 			Boolean realClass = false)

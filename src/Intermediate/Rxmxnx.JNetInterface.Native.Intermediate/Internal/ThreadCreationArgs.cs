@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This record stored information for Thread creation.
 /// </summary>
-internal sealed class ThreadCreationArgs
+internal readonly struct ThreadCreationArgs
 {
 	/// <summary>
 	/// Thread Name.
@@ -20,7 +20,7 @@ internal sealed class ThreadCreationArgs
 	/// <summary>
 	/// JNI Version.
 	/// </summary>
-	public Int32 Version { get; init; } = IVirtualMachine.MinimalVersion;
+	public Int32 Version { get; init; }
 
 	/// <summary>
 	/// Creates a <see cref="ThreadCreationArgs"/> instance from <paramref name="purpose"/>.
@@ -28,7 +28,7 @@ internal sealed class ThreadCreationArgs
 	/// <param name="purpose">Thread purpose.</param>
 	/// <returns>A <see cref="ThreadCreationArgs"/> instance.</returns>
 	public static ThreadCreationArgs Create(ThreadPurpose purpose)
-		=> new() { Name = ThreadCreationArgs.GetThreadName(purpose), };
+		=> new() { Name = ThreadCreationArgs.GetThreadName(purpose), Version = IVirtualMachine.MinimalVersion, };
 
 	/// <summary>
 	/// Retrieves the name for purposed thread.

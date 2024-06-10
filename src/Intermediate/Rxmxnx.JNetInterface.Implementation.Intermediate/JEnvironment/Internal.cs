@@ -182,22 +182,19 @@ partial class JEnvironment
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	internal JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference = false)
 		=> this._cache.GetClass(classRef, keepReference);
-	/// <inheritdoc cref="IClassFeature.GetClass{TObject}()"/>
-	internal JClassObject GetClass<TObject>() where TObject : JReferenceObject, IReferenceType<TObject>
-		=> this._cache.GetClass<TObject>();
 	/// <summary>
 	/// Retrieves the class object and instantiation metadata.
 	/// </summary>
 	/// <param name="localRef">Object instance to get class.</param>
-	/// <param name="metadata">Output. Instantiation metadata.</param>
+	/// <param name="typeMetadata">Output. Instantiation metadata.</param>
 	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
-	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata metadata)
+	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
 	{
 		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
 		JClassObject jClass = this._cache.GetClass(classRef, true);
 		frame[jClass.LocalReference] = jClass.Lifetime.GetCacheable();
-		metadata = this._cache.GetTypeMetadata(jClass);
+		typeMetadata = this._cache.GetTypeMetadata(jClass);
 		return jClass;
 	}
 

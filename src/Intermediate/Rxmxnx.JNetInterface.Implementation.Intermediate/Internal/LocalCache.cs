@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Local object cache.
 /// </summary>
-internal record LocalCache
+internal class LocalCache
 {
 	/// <summary>
 	/// Object dictionary.

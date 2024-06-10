@@ -42,7 +42,7 @@ public partial class JLocalObject
 		/// <returns>Current instance.</returns>
 		public void WithSignature(ReadOnlySpan<Byte> signature)
 		{
-			CommonValidationUtilities.ThrowIfInvalidSignature(signature, false);
+			CommonValidationUtilities.ThrowIfInvalidObjectSignature(signature);
 			this.Signature = signature;
 		}
 
@@ -83,7 +83,7 @@ public partial class JLocalObject
 			=> this._interfaces ?? (IReadOnlySet<JInterfaceTypeMetadata>)ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
 
 		/// <summary>
-		/// Checks implementation of a the superinterface type from <paramref name="interfaceMetadata"/>.
+		/// Checks implementation of the superinterface type from <paramref name="interfaceMetadata"/>.
 		/// </summary>
 		/// <param name="state">A <see cref="SuperInterfaceValidationState"/> instance.</param>
 		/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
@@ -124,7 +124,8 @@ public partial class JLocalObject
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata, IReadOnlySet<Type> interfaceTypes)
 		{
-			NativeValidationUtilities.ThrowIfInvalidTypeBuilder(className, TClass.FamilyType);
+			if (IVirtualMachine.MetadataValidationEnabled)
+				NativeValidationUtilities.ThrowIfInvalidTypeBuilder(className, TClass.FamilyType);
 			this._builder = new(className, JTypeKind.Class, interfaceTypes);
 			this._baseMetadata = baseMetadata;
 			this._modifier = modifier;
@@ -191,11 +192,9 @@ public partial class JLocalObject
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
 			NativeValidationUtilities.ThrowIfSameType(className, typeof(TClass), typeof(TObject));
-			if (!IVirtualMachine.MetadataValidationEnabled)
-				return new(className, modifier, IClassType.GetMetadata<TClass>(), ImmutableHashSet<Type>.Empty);
-			NativeValidationUtilities.ValidateBaseTypes(className, IClassType<TObject>.TypeBaseTypes,
-			                                            IClassType<TClass>.TypeBaseTypes);
-			return new(className, modifier, IClassType.GetMetadata<TClass>(), IReferenceType<TObject>.TypeInterfaces);
+			return !IVirtualMachine.MetadataValidationEnabled ?
+				new(className, modifier, IClassType.GetMetadata<TClass>(), ImmutableHashSet<Type>.Empty) :
+				TypeMetadataBuilder<TClass>.CreateWithValidation<TObject>(className, modifier);
 		}
 
 		/// <summary>
@@ -219,5 +218,23 @@ public partial class JLocalObject
 			JClassTypeMetadata? baseMetadata = default)
 			=> new ClassTypeMetadata(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0,
 			                         baseMetadata ?? IClassType.GetMetadata<JLocalObject>());
+
+		/// <summary>
+		/// Creates a new <see cref="TypeMetadataBuilder{TObject}"/> instance with validation.
+		/// </summary>
+		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
+		/// <param name="className">Class name of the current type.</param>
+		/// <param name="modifier">Modifier of the current type.</param>
+		/// <returns>A new <see cref="TypeMetadataBuilder{TObject}"/> instance.</returns>
+		private static TypeMetadataBuilder<TObject> CreateWithValidation<
+			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
+			ReadOnlySpan<Byte> className, JTypeModifier modifier) where TObject : TClass, IClassType<TObject>
+		{
+			IReadOnlySet<Type> baseTypes = IClassType<TObject>.TypeBaseTypes;
+			IReadOnlySet<Type> baseBaseTypes = IClassType<TClass>.TypeBaseTypes;
+			NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
+			IReadOnlySet<Type> interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
+			return new(className, modifier, IClassType.GetMetadata<TClass>(), interfaceTypes);
+		}
 	}
 }

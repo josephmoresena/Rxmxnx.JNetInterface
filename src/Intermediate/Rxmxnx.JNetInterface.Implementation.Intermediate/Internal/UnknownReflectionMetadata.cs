@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
-/// This record stores a reflection metadata for an unknown <see cref="IReferenceType"/> type.
+/// This class stores a reflection metadata for an unknown <see cref="IReferenceType"/> type.
 /// </summary>
-internal sealed class UnknownReflectionMetadata
+internal readonly struct UnknownReflectionMetadata
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArgumentMetadata"/>
 	public JArgumentMetadata ArgumentMetadata { get; }

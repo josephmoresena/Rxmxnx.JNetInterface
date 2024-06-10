@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
 		/// Cancellation token.
@@ -180,17 +180,7 @@ partial class JEnvironment
 			if (localRef == default) return default;
 
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TResult>();
-			JReferenceTypeMetadata typeMetadata;
-			JClassObject jClass;
-			if (metadata.Modifier != JTypeModifier.Final)
-			{
-				jClass = this._env.GetObjectClass(localRef, out typeMetadata);
-			}
-			else
-			{
-				jClass = this.GetClass<TResult>();
-				typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TResult>();
-			}
+			JClassObject jClass = this.GetObjectClass(localRef, metadata, out JReferenceTypeMetadata typeMetadata);
 			JLocalObject jLocal = typeMetadata.CreateInstance(jClass, localRef, true);
 			TResult result = (TResult)(Object)metadata.ParseInstance(jLocal, true);
 			if (localRef != jLocal.LocalReference && register)

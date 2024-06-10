@@ -1,11 +1,11 @@
 namespace Rxmxnx.JNetInterface.Native;
 
-public sealed partial record JVirtualMachineInitArg
+public sealed partial class JVirtualMachineInitArg
 {
 	/// <summary>
-	/// Internal option list record.
+	/// Internal option list class.
 	/// </summary>
-	private sealed record OptionList : IList<JVirtualMachineInitOption>
+	private sealed class OptionList : IList<JVirtualMachineInitOption>
 	{
 		/// <summary>
 		/// Internal list.

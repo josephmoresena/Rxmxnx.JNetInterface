@@ -9,7 +9,7 @@ public partial class JLocalObject
 			/// <summary>
 			/// This record stores the metadata for a class <see cref="IInterfaceType"/> type.
 			/// </summary>
-			internal sealed record InterfaceTypeMetadata : JInterfaceTypeMetadata<TInterface>
+			internal sealed class InterfaceTypeMetadata : JInterfaceTypeMetadata<TInterface>
 			{
 				/// <inheritdoc cref="JReferenceTypeMetadata.Interfaces"/>
 				private readonly IInterfaceSet _interfaces;
@@ -18,8 +18,6 @@ public partial class JLocalObject
 				public override Type InterfaceType => typeof(IInterfaceObject<TInterface>);
 				/// <inheritdoc/>
 				public override Type Type => typeof(TInterface);
-				/// <inheritdoc/>
-				public override JClassTypeMetadata ProxyMetadata => Proxy<TInterface>.ProxyMetadata;
 				/// <inheritdoc/>
 				public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TInterface>();
 				/// <inheritdoc/>
@@ -42,6 +40,9 @@ public partial class JLocalObject
 				public override JArrayTypeMetadata GetArrayMetadata()
 					=> JReferenceTypeMetadata.GetArrayMetadata<TInterface>();
 
+				/// <inheritdoc/>
+				[MethodImpl(MethodImplOptions.AggressiveInlining)]
+				internal override JClassObject GetClass(IEnvironment env) => env.ClassFeature.GetClass<TInterface>();
 				/// <inheritdoc/>
 				internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 					Boolean realClass = false)

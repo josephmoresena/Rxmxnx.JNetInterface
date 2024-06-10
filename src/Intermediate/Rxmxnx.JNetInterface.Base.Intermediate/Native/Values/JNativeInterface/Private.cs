@@ -23,7 +23,7 @@ internal readonly partial struct JNativeInterface
 	/// </summary>
 	[InlineArray(228)]
 	[StructLayout(LayoutKind.Sequential)]
-	private record struct Operations
+	private struct Operations
 	{
 		private IntPtr _reserved0;
 	}

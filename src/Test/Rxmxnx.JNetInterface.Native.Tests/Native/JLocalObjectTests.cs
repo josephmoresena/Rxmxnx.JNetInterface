@@ -111,7 +111,8 @@ public sealed class JLocalObjectTests
 		Assert.Equal(jGlobal, jLocal.Global);
 		Assert.Equal(nCase == 0, jLocal.IsDefaultInstance());
 		Assert.Equal(jLocal.LocalReference, jLocal.LocalAs<JClassLocalRef>().Value);
-		Assert.Equal($"{jObjectClass.Name} {jLocal.As<JObjectLocalRef>()}", jLocal.ToString());
+		Assert.Equal($"{jObjectClass.Name.ToString().Replace('/', '.')} {jLocal.As<JObjectLocalRef>()}",
+		             jLocal.ToString());
 		Assert.Equal(nCase switch
 		{
 			2 => jWeak,

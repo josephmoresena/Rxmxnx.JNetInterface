@@ -7,7 +7,7 @@ internal partial struct JniTransactionHandle
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3459,
 	                 Justification = CommonConstants.ReferenceableFieldJustification)]
-	private abstract record FixedTransaction : INativeTransaction
+	private abstract class FixedTransaction : INativeTransaction
 	{
 		/// <summary>
 		/// Transaction capacity.

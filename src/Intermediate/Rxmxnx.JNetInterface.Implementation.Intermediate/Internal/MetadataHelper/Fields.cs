@@ -26,11 +26,6 @@ internal static partial class MetadataHelper
 		IDataType.GetHash<JLong>(), IDataType.GetHash<JShort>());
 
 	/// <summary>
-	/// Separator class assignability.
-	/// </summary>
-	private static readonly CString assignableTo = new(() => " -> "u8);
-
-	/// <summary>
 	/// Basic metadata dictionary.
 	/// </summary>
 	private static readonly Dictionary<String, JReferenceTypeMetadata> initialMetadata = new()
@@ -90,7 +85,7 @@ internal static partial class MetadataHelper
 	/// <summary>
 	/// Runtime metadata assignation dictionary.
 	/// </summary>
-	private static readonly ConcurrentDictionary<String, Boolean?> assignationCache = new();
+	private static readonly ConcurrentDictionary<AssignationKey, Boolean> assignationCache = new();
 
 	/// <summary>
 	/// Runtime class metadata dictionary.

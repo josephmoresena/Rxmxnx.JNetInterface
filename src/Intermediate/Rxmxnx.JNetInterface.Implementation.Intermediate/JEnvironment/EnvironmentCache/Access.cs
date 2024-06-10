@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
 		/// Sets a static object field to given <paramref name="classRef"/> reference.

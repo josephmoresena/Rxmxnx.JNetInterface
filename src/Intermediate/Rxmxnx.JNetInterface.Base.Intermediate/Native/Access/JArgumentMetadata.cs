@@ -3,14 +3,14 @@
 /// <summary>
 /// This record stores the metadata for a parameter <see cref="IDataType"/> type.
 /// </summary>
-public sealed record JArgumentMetadata
+public sealed class JArgumentMetadata
 {
 	/// <summary>
-	/// Method argument type signature.
+	/// Type signature.
 	/// </summary>
 	public CString Signature { get; private init; }
 	/// <summary>
-	/// Method argument type size in bytes.
+	/// Type size in bytes.
 	/// </summary>
 	public Int32 Size { get; private init; }
 
@@ -42,7 +42,7 @@ public sealed record JArgumentMetadata
 	/// <returns>A <see cref="JArgumentMetadata"/> from <paramref name="signature"/> value</returns>
 	public static JArgumentMetadata Create(ReadOnlySpan<Byte> signature)
 	{
-		CommonValidationUtilities.ThrowIfInvalidSignature(signature, false);
+		CommonValidationUtilities.ThrowIfInvalidObjectSignature(signature);
 		return new(CString.Create(signature), NativeUtilities.PointerSize);
 	}
 

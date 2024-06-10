@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Stores initial classes.
 /// </summary>
-internal abstract record MainClasses<TClass> where TClass : JReferenceObject
+internal abstract class MainClasses<TClass> where TClass : JReferenceObject
 {
 	/// <summary>
 	/// Class for <see cref="JClassObject"/>

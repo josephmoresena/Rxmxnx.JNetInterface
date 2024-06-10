@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private abstract record LocalMainClasses : MainClasses<JClassObject>
+	private abstract class LocalMainClasses : MainClasses<JClassObject>
 	{
 		/// <summary>
 		/// Constructor.

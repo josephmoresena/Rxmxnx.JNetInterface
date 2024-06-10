@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <typeparam name="TCreationArg">Type of creation argument.</typeparam>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2436,
                  Justification = "All generic parameters are needed.")]
-internal abstract record ReferenceHelperCache<TObject, TReference, TCreationArg>
+internal abstract class ReferenceHelperCache<TObject, TReference, TCreationArg>
 	where TObject : class, IWrapper<TReference> where TReference : unmanaged, INativeReferenceType<TReference>
 {
 	/// <summary>

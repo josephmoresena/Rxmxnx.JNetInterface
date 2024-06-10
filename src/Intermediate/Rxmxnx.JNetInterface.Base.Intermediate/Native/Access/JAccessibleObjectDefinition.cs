@@ -95,14 +95,15 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator !=(JAccessibleObjectDefinition? left, JAccessibleObjectDefinition? right)
 		=> !(left == right);
+
 	/// <summary>
 	/// Retrieves a valid signature from <paramref name="signature"/>.
 	/// </summary>
 	/// <param name="signature">A signature to validate.</param>
 	/// <returns><paramref name="signature"/> if is a valid signature.</returns>
-	protected static ReadOnlySpan<Byte> ValidateSignature(ReadOnlySpan<Byte> signature)
+	private protected static ReadOnlySpan<Byte> ValidateSignature(ReadOnlySpan<Byte> signature)
 	{
-		CommonValidationUtilities.ThrowIfInvalidSignature(signature, false);
+		CommonValidationUtilities.ThrowIfInvalidObjectSignature(signature);
 		return signature;
 	}
 }

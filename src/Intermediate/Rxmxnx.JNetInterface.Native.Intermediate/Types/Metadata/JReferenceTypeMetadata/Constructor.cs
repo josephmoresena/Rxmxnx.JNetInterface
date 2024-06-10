@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
-public abstract partial record JReferenceTypeMetadata
+public abstract partial class JReferenceTypeMetadata
 {
 	/// <summary>
 	/// Constructor.

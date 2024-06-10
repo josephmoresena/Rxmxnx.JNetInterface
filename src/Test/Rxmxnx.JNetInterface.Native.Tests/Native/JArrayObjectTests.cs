@@ -237,8 +237,9 @@ public sealed class JArrayObjectTests
 		Assert.Equal(typeof(JArrayObject<>).MakeGenericType(arrayTypeMetadata.ElementMetadata.Type), jArray.GetType());
 		Assert.Equal(length, Assert.IsType<ArrayObjectMetadata>(ILocalObject.CreateMetadata(jArray)).Length);
 		Assert.Equal(jArray.ToString(), jArray.Object.ToString());
-		Assert.Equal($"{jArray.Object.Class.Name} {jArray.As<JObjectArrayLocalRef>()} length: {jArray.Length}",
-		             jArray.ToTraceText());
+		Assert.Equal(
+			$"{jArray.Object.Class.Name.ToString().Replace('/', '.')} {jArray.As<JObjectArrayLocalRef>()} length: {jArray.Length}",
+			jArray.ToTraceText());
 
 		Assert.Equal(jArray.Object, localView.Object);
 		Assert.Equal(jArray.Object, (localView as IViewObject).Object);

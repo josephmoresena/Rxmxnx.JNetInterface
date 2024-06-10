@@ -1,7 +1,13 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
-public abstract partial record JReferenceTypeMetadata
+public abstract partial class JReferenceTypeMetadata
 {
+	/// <summary>
+	/// Retrieves the class for current data type.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <returns>A <see cref="JClassObject"/> instance.</returns>
+	internal abstract JClassObject GetClass(IEnvironment env);
 	/// <summary>
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="localRef"/> using
 	/// <paramref name="jClass"/>.

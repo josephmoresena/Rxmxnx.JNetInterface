@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-/// This record stores a VM initialization argument.
+/// This class stores a VM initialization argument.
 /// </summary>
-public sealed partial record JVirtualMachineInitArg
+public sealed partial class JVirtualMachineInitArg
 {
 	/// <inheritdoc cref="JVirtualMachineInitArg.Version"/>
 	private readonly Int32 _version;

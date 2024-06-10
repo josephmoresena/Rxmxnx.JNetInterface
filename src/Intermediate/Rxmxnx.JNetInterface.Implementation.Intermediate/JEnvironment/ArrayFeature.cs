@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache : IArrayFeature
+	private sealed partial class EnvironmentCache : IArrayFeature
 	{
 		public unsafe JArrayObject<TElement> CreateArray<TElement>(Int32 length)
 			where TElement : IObject, IDataType<TElement>

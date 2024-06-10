@@ -11,7 +11,7 @@ internal readonly partial struct JInvokeInterface
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	[InlineArray(3)]
-	internal record struct ComReserved
+	internal struct ComReserved
 	{
 #pragma warning disable CS0169
 		private IntPtr _reserved0;

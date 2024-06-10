@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
 		/// Load main classes.
@@ -294,6 +294,47 @@ partial class JEnvironment
 			JObjectLocalRef localRef = nativeInterface.GetModule(this.Reference, classRef);
 			if (localRef == default) this.CheckJniError();
 			return new(this.GetClass<JModuleObject>(), localRef);
+		}
+		/// <summary>
+		/// Indicates whether <paramref name="classRef"/> is assignable to <paramref name="otherClassRef"/>.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="otherClassRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <returns>
+		/// <see langword="true"/> if <paramref name="classRef"/> is assignable to <paramref name="otherClassRef"/>;
+		/// otherwise, <see langword="false"/>.
+		/// </returns>
+		private unsafe Boolean IsAssignableFrom(JClassLocalRef classRef, JClassLocalRef otherClassRef)
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.IsAssignableFromInfo);
+			Boolean classResult = nativeInterface.ClassFunctions
+			                                     .IsAssignableFrom(this.Reference, classRef, otherClassRef).Value;
+			return classResult;
+		}
+		/// <summary>
+		/// Retrieves the class object and instantiation metadata.
+		/// </summary>
+		/// <param name="localRef">Object instance to get class.</param>
+		/// <param name="currentMetadata">Current type metadata.</param>
+		/// <param name="typeMetadata">Output. Instantiation metadata.</param>
+		/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
+		private JClassObject GetObjectClass(JObjectLocalRef localRef, JReferenceTypeMetadata currentMetadata,
+			out JReferenceTypeMetadata typeMetadata)
+		{
+			JClassObject jClass;
+			if (currentMetadata.Modifier != JTypeModifier.Final)
+			{
+				// If the modifier is not final, we should try to obtain more approximate type metadata.
+				jClass = this._env.GetObjectClass(localRef, out typeMetadata);
+			}
+			else
+			{
+				// If the modifier is final, we can use exact metadata.
+				jClass = currentMetadata.GetClass(this._env);
+				typeMetadata = currentMetadata;
+			}
+			return jClass;
 		}
 	}
 }

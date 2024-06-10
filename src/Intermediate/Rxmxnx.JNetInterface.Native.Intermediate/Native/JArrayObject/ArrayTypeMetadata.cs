@@ -5,7 +5,7 @@ public partial class JArrayObject<TElement>
 	/// <summary>
 	/// This record stores the metadata for a class <see cref="IArrayType"/> type.
 	/// </summary>
-	private sealed record ArrayTypeMetadata : JArrayTypeMetadata
+	private sealed class ArrayTypeMetadata : JArrayTypeMetadata
 	{
 		/// <summary>
 		/// Metadata array instance.
@@ -46,6 +46,10 @@ public partial class JArrayObject<TElement>
 		public override JArrayTypeMetadata? GetArrayMetadata()
 			=> JArrayTypeMetadata.GetArrayArrayMetadata(this.ArraySignature, typeof(TElement));
 
+		/// <inheritdoc/>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		internal override JClassObject GetClass(IEnvironment env)
+			=> env.ClassFeature.GetClass<JArrayObject<TElement>>();
 		/// <inheritdoc/>
 		internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 			Boolean realClass = false)

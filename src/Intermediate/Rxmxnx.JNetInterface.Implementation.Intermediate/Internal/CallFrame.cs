@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Call reference frame
 /// </summary>
-internal sealed record CallFrame : LocalCache, IDisposable
+internal sealed class CallFrame : LocalCache, IDisposable
 {
 	/// <summary>
 	/// Class dictionary.

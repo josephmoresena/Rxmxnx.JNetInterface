@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for an array <see cref="IDataType"/> type.
 /// </summary>
-public abstract partial record JArrayTypeMetadata : JClassTypeMetadata
+public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 {
 	/// <summary>
 	/// Element type of the current array metadata.

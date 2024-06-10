@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache : IReferenceFeature
+	private sealed partial class EnvironmentCache : IReferenceFeature
 	{
 		public IDisposable GetSynchronizer(JReferenceObject jObject)
 		{

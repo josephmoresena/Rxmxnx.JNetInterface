@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public abstract partial record JReferenceTypeMetadata : JDataTypeMetadata
+public abstract partial class JReferenceTypeMetadata : JDataTypeMetadata
 {
 	/// <inheritdoc/>
 	public override Int32 SizeOf => NativeUtilities.PointerSize;

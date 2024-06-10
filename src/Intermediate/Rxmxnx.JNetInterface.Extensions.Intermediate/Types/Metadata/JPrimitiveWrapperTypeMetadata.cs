@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// This record stores the metadata for a primitive wrapper class <see cref="IDataType"/> type.
 /// </summary>
 /// <typeparam name="TWrapper">Type of java primitive wrapper class datatype.</typeparam>
-public sealed record
+public sealed class
 	JPrimitiveWrapperTypeMetadata<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TWrapper> : JClassTypeMetadata<TWrapper>
 	.
@@ -36,14 +36,7 @@ public sealed record
 	/// </summary>
 	/// <returns>A string that represents the primitive argument of the current object.</returns>
 	private String GetPrimitiveArgumentSimplifiedString()
-	{
-		try
-		{
-			return this.PrimitiveArgumentMetadata.ToSimplifiedString();
-		}
-		catch (Exception)
-		{
-			return String.Empty;
-		}
-	}
+		=> this.PrimitiveMetadata.Type == typeof(void) ?
+			String.Empty :
+			this.PrimitiveArgumentMetadata.ToSimplifiedString();
 }

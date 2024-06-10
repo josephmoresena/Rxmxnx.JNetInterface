@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 public partial class JVirtualMachine
 {
-	private sealed partial record VirtualMachineCache
+	private sealed partial class VirtualMachineCache
 	{
 		/// <inheritdoc/>
 		public override void LoadMainClasses(JEnvironment env)

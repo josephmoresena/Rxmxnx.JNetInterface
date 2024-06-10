@@ -100,37 +100,21 @@ public sealed class JInterfaceObjectTests
 		   .ReturnsForAnyArgs(thread);
 
 		Assert.Null(interfaceTypeMetadata.ParseInstance(default));
-		Assert.Null(interfaceTypeMetadata.ProxyMetadata.ParseInstance(default));
 		Assert.Null(interfaceTypeMetadata.ParseInstance(env, default));
-		Assert.Null(interfaceTypeMetadata.ProxyMetadata.ParseInstance(env, default));
 		Assert.Null(interfaceTypeMetadata.CreateException(jGlobal));
-		Assert.Null(interfaceTypeMetadata.ProxyMetadata.CreateException(jGlobal));
 
 		env.ClassFeature.GetClass(interfaceTypeMetadata.ClassName).Returns(interfaceClass);
 		env.GetReferenceType(jGlobal).Returns(JReferenceType.GlobalRefType);
 
 		using JLocalObject jLocal0 = interfaceTypeMetadata.CreateInstance(interfaceClass, localRef);
-		using JLocalObject jLocal1 = interfaceTypeMetadata.ProxyMetadata.CreateInstance(interfaceClass, localRef);
 		using JLocalObject jLocal2 = interfaceTypeMetadata.ParseInstance(env, jGlobal);
-		using JLocalObject jLocal3 = interfaceTypeMetadata.ProxyMetadata.ParseInstance(env, jGlobal);
 		using TInterface instance = Assert.IsType<TInterface>(interfaceTypeMetadata.ParseInstance(jLocal));
-		using JLocalObject instanceProxy = (JLocalObject)interfaceTypeMetadata.ProxyMetadata.ParseInstance(jLocal);
-		using JLocalObject instanceProxyD =
-			(JLocalObject)interfaceTypeMetadata.ProxyMetadata.ParseInstance(jLocal, true);
 
-		Assert.Equal(jLocal0.GetType(), jLocal1.GetType());
 		Assert.Equal(jLocal0.GetType(), jLocal2.GetType());
-		Assert.Equal(jLocal0.GetType(), jLocal3.GetType());
 		Assert.Equal(jLocal, instance.Object);
-		Assert.Equal(jLocal0.GetType(), instanceProxy.GetType());
 		Assert.Equal(localRef, jLocal0.LocalReference);
-		Assert.Equal(localRef, (jLocal1 as ILocalObject).LocalReference);
 		Assert.Equal(default, jLocal2.LocalReference);
-		Assert.Equal(default, (jLocal3 as ILocalObject).LocalReference);
 		Assert.Equal(jGlobal.Reference, jLocal2.As<JGlobalRef>());
-		Assert.Equal(jGlobal.Reference, jLocal3.As<JGlobalRef>());
-		Assert.Equal(jLocal.LocalReference, instanceProxy.LocalReference);
-		Assert.Equal(jLocal.LocalReference, (instanceProxyD as ILocalObject).LocalReference);
 		Assert.Equal(jLocal.LocalReference, (instance as ILocalObject).LocalReference);
 
 		Assert.Equal(instance.Object.Reference, instance.Reference);
@@ -140,12 +124,12 @@ public sealed class JInterfaceObjectTests
 		HashSet<JInterfaceTypeMetadata> interfaceList = [];
 		foreach (JInterfaceTypeMetadata interfaceMetadata in interfaceTypeMetadata.Interfaces)
 		{
-			JReferenceObject jObject0 = interfaceMetadata.ParseInstance(jLocal1);
-			JReferenceObject jObject1 = interfaceMetadata.ParseInstance(jLocal1, true);
+			JReferenceObject jObject0 = interfaceMetadata.ParseInstance(jLocal0);
+			JReferenceObject jObject1 = interfaceMetadata.ParseInstance(jLocal0, true);
 			Assert.Equal(interfaceMetadata.Type, jObject0.GetType());
-			Assert.Equal(jLocal1, (jObject0 as IWrapper<JLocalObject>)!.Value);
+			Assert.Equal(jLocal0, (jObject0 as IWrapper<JLocalObject>)!.Value);
 			Assert.Equal(interfaceMetadata.Type, jObject1.GetType());
-			Assert.Equal(jLocal1, (jObject1 as IWrapper<JLocalObject>)!.Value);
+			Assert.Equal(jLocal0, (jObject1 as IWrapper<JLocalObject>)!.Value);
 
 			Assert.True(interfaceTypeMetadata.Interfaces.Contains(interfaceMetadata));
 			interfaceList.Add(interfaceMetadata);
@@ -158,13 +142,11 @@ public sealed class JInterfaceObjectTests
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 	{
 		JInterfaceTypeMetadata interfaceTypeMetadata = IInterfaceType.GetMetadata<TInterface>();
-		JClassTypeMetadata proxyTypeMetadata = IClassType.GetMetadata<JProxyObject>();
 		String textValue = interfaceTypeMetadata.ToString();
 
 		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
 		Assert.Contains(interfaceTypeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
 		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {interfaceTypeMetadata.Hash} }}", textValue);
-		Assert.Equal(proxyTypeMetadata.ToString(), interfaceTypeMetadata.ProxyMetadata.ToString());
 
 		Assert.Equal(typeof(JLocalObject.InterfaceView), EnvironmentProxy.GetFamilyType<JLocalObject.InterfaceView>());
 		Assert.Equal(JTypeKind.Interface, EnvironmentProxy.GetKind<JLocalObject.InterfaceView>());
@@ -173,8 +155,5 @@ public sealed class JInterfaceObjectTests
 		Assert.IsType<JFunctionDefinition<TInterface>>(
 			interfaceTypeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFieldDefinition<TInterface>>(interfaceTypeMetadata.CreateFieldDefinition("fieldName"u8));
-
-		Assert.Equal(proxyTypeMetadata.ClassName, interfaceTypeMetadata.ProxyMetadata.ClassName);
-		Assert.Equal(proxyTypeMetadata.Signature, interfaceTypeMetadata.ProxyMetadata.Signature);
 	}
 }

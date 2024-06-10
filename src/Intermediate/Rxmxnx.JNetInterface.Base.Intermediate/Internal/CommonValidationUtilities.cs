@@ -98,20 +98,13 @@ internal static class CommonValidationUtilities
 	/// Throws an exception if <paramref name="signature"/> is invalid.
 	/// </summary>
 	/// <param name="signature">Signature.</param>
-	/// <param name="allowPrimitive">Indicates whether allow primitive signatures.</param>
 	/// <exception cref="ArgumentException">
 	/// Throws an exception if <paramref name="signature"/> is invalid.
 	/// </exception>
-	public static void ThrowIfInvalidSignature(ReadOnlySpan<Byte> signature, Boolean allowPrimitive)
+	public static void ThrowIfInvalidObjectSignature(ReadOnlySpan<Byte> signature)
 	{
 		if (signature.IsEmpty) throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
-
-		if (signature.Length == 1)
-		{
-			if (!allowPrimitive)
-				throw new ArgumentException("Signature not allowed.");
-			CommonValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[0]);
-		}
+		if (signature.Length == 1) throw new ArgumentException("Signature not allowed.");
 
 		Byte prefix = signature[0];
 		Byte suffix = signature[^1];
@@ -119,11 +112,6 @@ internal static class CommonValidationUtilities
 		if (prefix == CommonNames.ArraySignaturePrefixChar)
 			switch (signature.Length)
 			{
-				case 2:
-					if (!allowPrimitive)
-						throw new ArgumentException("Array signature not allowed.");
-					CommonValidationUtilities.ThrowIfInvalidPrimitiveSignature(signature[1]);
-					break;
 				case <= 3:
 					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 				case > 3 when signature[1] != CommonNames.ObjectSignaturePrefixChar ||
@@ -148,29 +136,5 @@ internal static class CommonValidationUtilities
 		if (value.IsEmpty)
 			throw new InvalidOperationException($"{paramName} must be non-empty string");
 		return value;
-	}
-
-	/// <summary>
-	/// Throws an exception if <paramref name="signature"/> is not valid primitive signature.
-	/// </summary>
-	/// <param name="signature">A signature char.</param>
-	/// <exception cref="ArgumentException">
-	/// Throws an exception if <paramref name="signature"/> is not valid primitive signature.
-	/// </exception>
-	private static void ThrowIfInvalidPrimitiveSignature(Byte signature)
-	{
-		switch (signature)
-		{
-			case CommonNames.BooleanSignatureChar:
-			case CommonNames.ByteSignatureChar:
-			case CommonNames.CharSignatureChar:
-			case CommonNames.DoubleSignatureChar:
-			case CommonNames.FloatSignatureChar:
-			case CommonNames.IntSignatureChar:
-			case CommonNames.LongSignatureChar:
-			case CommonNames.ShortSignatureChar:
-				return;
-		}
-		throw new ArgumentException("Invalid primitive signature.");
 	}
 }

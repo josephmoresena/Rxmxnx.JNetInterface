@@ -12,7 +12,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache : INioFeature
+	private sealed partial class EnvironmentCache : INioFeature
 	{
 		public unsafe TDirectBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)
 		{

@@ -36,7 +36,7 @@ internal static partial class MetadataHelper
 					MetadataHelper.reflectionMetadata.TryRemove(jClass.Hash, out _); // Removes unknown if exists.
 					return typeMetadata.ArgumentMetadata;
 				}
-				if (MetadataHelper.reflectionMetadata.TryGetValue(jClass.Hash, out UnknownReflectionMetadata? unknown))
+				if (MetadataHelper.reflectionMetadata.TryGetValue(jClass.Hash, out UnknownReflectionMetadata unknown))
 					return unknown.ArgumentMetadata;
 
 				// Create unknown metadata for reflection.
@@ -78,7 +78,7 @@ internal static partial class MetadataHelper
 					MetadataHelper.reflectionMetadata.TryRemove(jClass.Hash, out _); // Removes unknown if exists.
 					return typeMetadata.CreateFieldDefinition(fieldName);
 				}
-				if (MetadataHelper.reflectionMetadata.TryGetValue(jClass.Hash, out UnknownReflectionMetadata? unknown))
+				if (MetadataHelper.reflectionMetadata.TryGetValue(jClass.Hash, out UnknownReflectionMetadata unknown))
 					return unknown.CreateFieldDefinition(fieldName);
 
 				// Create unknown metadata for reflection.
@@ -124,7 +124,7 @@ internal static partial class MetadataHelper
 					MetadataHelper.reflectionMetadata.TryRemove(jClass.Hash, out _); // Removes unknown if exists.
 					return typeMetadata.CreateFunctionDefinition(callName, paramsMetadata);
 				}
-				if (MetadataHelper.reflectionMetadata.TryGetValue(jClass.Hash, out UnknownReflectionMetadata? unknown))
+				if (MetadataHelper.reflectionMetadata.TryGetValue(jClass.Hash, out UnknownReflectionMetadata unknown))
 					return unknown.CreateFunctionDefinition(callName, paramsMetadata);
 
 				// Create unknown metadata for reflection.
@@ -249,11 +249,29 @@ internal static partial class MetadataHelper
 	/// <paramref name="otherClass"/>; <see langword="null"/> if an object of <paramref name="otherClass"/>
 	/// can be safely cast to <paramref name="jClass"/>; otherwise, <see langword="false"/>.
 	/// </returns>
-	public static Boolean? IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
+	public static Boolean? IsAssignable(JClassObject jClass, JClassObject otherClass)
 	{
-		JReferenceTypeMetadata? fromMetadata = MetadataHelper.GetMetadata(jClass.Hash);
-		JReferenceTypeMetadata? toMetadata = MetadataHelper.GetMetadata(otherClass.Hash);
-		return MetadataHelper.IsAssignableFrom(fromMetadata, toMetadata);
+		AssignationKey key = new() { FromHash = jClass.Hash, ToHash = otherClass.Hash, };
+		if (key.IsSame) return true;
+		if (MetadataHelper.assignationCache.TryGetValue(key, out Boolean result))
+			return result;
+		return MetadataHelper.assignationCache.ContainsKey(key.Reverse()) ? false : default(Boolean?);
+	}
+	/// <summary>
+	/// Sets <paramref name="isAssignable"/> as assignation from <paramref name="jClass"/> to
+	/// <paramref name="otherClass"/>.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="otherClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="isAssignable">
+	/// Indicates whether assignation from <paramref name="jClass"/> to <paramref name="otherClass"/> is allowed.
+	/// </param>
+	/// <returns>Value from <paramref name="isAssignable"/></returns>
+	public static Boolean SetAssignable(JClassObject jClass, JClassObject otherClass, Boolean isAssignable)
+	{
+		AssignationKey key = new() { FromHash = jClass.Hash, ToHash = otherClass.Hash, };
+		MetadataHelper.assignationCache[key] = isAssignable;
+		return isAssignable;
 	}
 	/// <summary>
 	/// Register class tree.
@@ -262,8 +280,10 @@ internal static partial class MetadataHelper
 	/// <param name="superClassHash">Super class hash.</param>
 	public static void RegisterSuperClass(String hashClass, String superClassHash)
 	{
-		if (hashClass.AsSpan().SequenceEqual(superClassHash)) return;
-		MetadataHelper.classTree[hashClass] = superClassHash;
+		AssignationKey assignationKey = new() { FromHash = hashClass, ToHash = superClassHash, };
+		if (assignationKey.IsSame) return;
+		MetadataHelper.classTree[assignationKey.FromHash] = assignationKey.ToHash;
+		MetadataHelper.assignationCache[assignationKey] = true;
 	}
 	/// <summary>
 	/// Register class tree.
@@ -272,12 +292,14 @@ internal static partial class MetadataHelper
 	/// <param name="superViewHash">Super view hash.</param>
 	public static void RegisterSuperView(String hashView, String superViewHash)
 	{
-		if (hashView.AsSpan().SequenceEqual(superViewHash)) return;
-		if (!MetadataHelper.viewTree.TryGetValue(hashView, out HashesSet? set))
+		AssignationKey assignationKey = new() { FromHash = hashView, ToHash = superViewHash, };
+		if (assignationKey.IsSame) return;
+		if (!MetadataHelper.viewTree.TryGetValue(assignationKey.FromHash, out HashesSet? set))
 		{
 			set = new();
 			MetadataHelper.viewTree[hashView] = set;
 		}
 		set.Add(superViewHash);
+		MetadataHelper.assignationCache[assignationKey] = true;
 	}
 }

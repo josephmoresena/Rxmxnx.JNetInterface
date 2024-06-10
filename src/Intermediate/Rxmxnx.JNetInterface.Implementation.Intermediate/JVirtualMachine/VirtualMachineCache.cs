@@ -3,11 +3,11 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine
 {
 	/// <summary>
-	/// This record stores cache for a <see cref="JVirtualMachine"/> instance.
+	/// This class stores cache for a <see cref="JVirtualMachine"/> instance.
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-	private sealed partial record VirtualMachineCache : GlobalMainClasses
+	private sealed partial class VirtualMachineCache : GlobalMainClasses
 	{
 		/// <summary>
 		/// Global cache.

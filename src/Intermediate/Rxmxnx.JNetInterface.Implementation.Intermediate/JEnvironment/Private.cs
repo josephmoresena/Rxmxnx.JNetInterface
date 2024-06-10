@@ -227,8 +227,8 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-	/// <returns>A <see cref="JClassTypeMetadata"/> instance.</returns>
-	private static JClassTypeMetadata GetSuperClassMetadata(JEnvironment env, JClassObject jClass)
+	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
+	private static JReferenceTypeMetadata GetSuperClassMetadata(JEnvironment env, JClassObject jClass)
 	{
 		if (jClass.IsEnum) // Enums should use java.lang.Enum metadata.
 		{
@@ -259,9 +259,9 @@ partial class JEnvironment
 						    interfaceMetadata)
 					{
 						// Use interface proxy metadata.
-						JTrace.UseTypeMetadata(jClass, interfaceMetadata.ProxyMetadata);
+						JTrace.UseTypeMetadata(jClass, interfaceMetadata);
 						MetadataHelper.RegisterSuperClass(jClass.Hash, interfaceMetadata.Hash);
-						return interfaceMetadata.ProxyMetadata;
+						return interfaceMetadata; // If proxy, type metadata is an interface metadata.
 					}
 
 					// No interface proxy metadata, we should use java.lang.reflect.Proxy metadata.

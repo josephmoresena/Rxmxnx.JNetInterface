@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-/// This record stores an option for a VM initialization.
+/// This class stores an option for a VM initialization.
 /// </summary>
-public sealed record JVirtualMachineInitOption
+public sealed class JVirtualMachineInitOption
 {
 	/// <summary>
 	/// Option name.

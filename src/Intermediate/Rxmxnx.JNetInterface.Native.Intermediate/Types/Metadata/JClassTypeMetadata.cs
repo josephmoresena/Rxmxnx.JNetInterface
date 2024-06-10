@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for a class <see cref="IDataType"/> type.
 /// </summary>
-public abstract record JClassTypeMetadata : JReferenceTypeMetadata
+public abstract class JClassTypeMetadata : JReferenceTypeMetadata
 {
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Class;
@@ -28,7 +28,7 @@ public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 /// <summary>
 /// This record stores the metadata for a class <see cref="IDataType"/> type.
 /// </summary>
-public abstract partial record JClassTypeMetadata<
+public abstract partial class JClassTypeMetadata<
 	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : JClassTypeMetadata
 	where TClass : JLocalObject, IClassType<TClass>
 {
@@ -43,8 +43,6 @@ public abstract partial record JClassTypeMetadata<
 	/// <inheritdoc/>
 	private protected JClassTypeMetadata(CStringSequence information) : base(information) { }
 
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
 	/// <inheritdoc/>
 	public override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();
 

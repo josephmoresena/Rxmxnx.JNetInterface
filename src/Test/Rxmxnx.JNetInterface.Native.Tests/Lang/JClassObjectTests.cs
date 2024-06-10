@@ -113,7 +113,7 @@ public sealed class JClassObjectTests
 	{
 		ITypeInformation information = Substitute.For<ITypeInformation>();
 		CString className0 = (CString)JClassObjectTests.fixture.Create<String>();
-		CString signature0 = (CString)JClassObjectTests.fixture.Create<String>();
+		CString signature0 = CString.Concat("L"u8, className0, ";"u8);
 		String hash0 = JClassObjectTests.fixture.Create<String>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
@@ -169,8 +169,10 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClassObj.IsEnum, metadata.IsEnum);
 		Assert.Equal(jClassObj.Hash, metadata.Hash);
 
-		Assert.Equal(!jClassObj.Reference.IsDefault ? $"{jClassObj.Name} {jClassObj.Reference}" : $"{jClassObj.Name}",
-		             jClassObj.ToString());
+		Assert.Equal(
+			!jClassObj.Reference.IsDefault ?
+				$"{jClassObj.Name.ToString().Replace('/', '.')} {jClassObj.Reference}" :
+				$"{jClassObj.Name}", jClassObj.ToString());
 	}
 	[Theory]
 	[InlineData(true)]
@@ -260,7 +262,8 @@ public sealed class JClassObjectTests
 		Assert.Equal(classObjectMetadata.Name, jStringClass.Name);
 		Assert.Equal(classObjectMetadata.ClassSignature, jStringClass.ClassSignature);
 
-		Assert.Equal($"{classObjectMetadata.Name} {jStringClass.Reference}", jStringClass.ToString());
+		Assert.Equal($"{classObjectMetadata.Name.ToString().Replace('/', '.')} {jStringClass.Reference}",
+		             jStringClass.ToString());
 	}
 	[Theory]
 	[InlineData(true)]

@@ -1,11 +1,11 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
-public partial record JPrimitiveTypeMetadata
+public partial class JPrimitiveTypeMetadata
 {
 	/// <summary>
 	/// Stores the metadata for Java <c>void</c> type.
 	/// </summary>
-	private sealed record JVoidTypeMetadata()
+	private sealed class JVoidTypeMetadata()
 		: JPrimitiveTypeMetadata(0, typeof(void), JPrimitiveTypeMetadata.voidInformation, "java/lang/Void"u8)
 	{
 		/// <summary>
