@@ -215,8 +215,7 @@ internal interface IPrimitiveNumericType<TPrimitive> : IPrimitiveNumericType
 /// <typeparam name="TValue">Type of the .NET equivalent number.</typeparam>
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal partial interface
-	IPrimitiveNumericType<TPrimitive, TValue> : IPrimitiveNumericType<TPrimitive>, INumericValue<TValue>,
-	IPrimitiveType<TPrimitive, TValue>
+	IPrimitiveNumericType<TPrimitive, TValue> : IPrimitiveNumericType<TPrimitive>, IPrimitiveType<TPrimitive, TValue>
 	where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>, IPrimitiveEquatable
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryNumber<TValue>,

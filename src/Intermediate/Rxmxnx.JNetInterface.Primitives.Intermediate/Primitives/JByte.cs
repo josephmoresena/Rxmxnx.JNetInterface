@@ -5,7 +5,7 @@ using TypeMetadata = JPrimitiveTypeMetadata<JByte>;
 /// <summary>
 /// Primitive <c>byte</c>. Represents a 8-bit signed integer.
 /// </summary>
-public readonly partial struct JByte : INativeType<JByte>, ISelfEquatableComparable<JByte>,
+public readonly partial struct JByte : INativeType<JByte>, IComparable<JByte>, IEquatable<JByte>,
 	IPrimitiveIntegerType<JByte, SByte>, IPrimitiveSignedType<JByte, SByte>
 {
 	/// <summary>

@@ -6,7 +6,7 @@ using TypeMetadata = JPrimitiveTypeMetadata<JInt>;
 /// Primitive <c>int</c>. Represents a primitive 32-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JInt : INativeType<JInt>, ISelfEquatableComparable<JInt>,
+public readonly partial struct JInt : INativeType<JInt>, IComparable<JInt>, IEquatable<JInt>,
 	IPrimitiveIntegerType<JInt, Int32>, IPrimitiveSignedType<JInt, Int32>
 {
 	/// <summary>

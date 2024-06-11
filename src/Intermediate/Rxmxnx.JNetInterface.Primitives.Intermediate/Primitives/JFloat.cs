@@ -6,7 +6,7 @@ using TypeMetadata = JPrimitiveTypeMetadata<JFloat>;
 /// Primitive <c>float</c>. Represents a single-precision floating-point number.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JFloat : INativeType<JFloat>, ISelfEquatableComparable<JFloat>,
+public readonly partial struct JFloat : INativeType<JFloat>, IComparable<JFloat>, IEquatable<JFloat>,
 	IPrimitiveFloatingPointType<JFloat, Single>, IPrimitiveSignedType<JFloat, Single>
 {
 	/// <summary>

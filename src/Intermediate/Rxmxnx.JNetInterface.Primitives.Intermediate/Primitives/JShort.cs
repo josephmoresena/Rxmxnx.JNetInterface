@@ -6,7 +6,7 @@ using TypeMetadata = JPrimitiveTypeMetadata<JShort>;
 /// Primitive <c>short</c>. Represents a primitive 16-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JShort : INativeType<JShort>, ISelfEquatableComparable<JShort>,
+public readonly partial struct JShort : INativeType<JShort>, IComparable<JShort>, IEquatable<JShort>,
 	IPrimitiveIntegerType<JShort, Int16>, IPrimitiveSignedType<JShort, Int16>
 {
 	/// <summary>

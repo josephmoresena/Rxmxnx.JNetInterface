@@ -6,7 +6,7 @@ using TypeMetadata = JPrimitiveTypeMetadata<JLong>;
 /// Primitive <c>long</c>. Represents a primitive 64-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableComparable<JLong>,
+public readonly partial struct JLong : INativeType<JLong>, IComparable<JLong>, IEquatable<JLong>,
 	IPrimitiveIntegerType<JLong, Int64>, IPrimitiveSignedType<JLong, Int64>
 {
 	/// <summary>
