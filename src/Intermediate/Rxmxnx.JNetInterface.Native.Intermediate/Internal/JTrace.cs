@@ -154,7 +154,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void UnloadGlobal<TGlobalRef>(Boolean isAttached, Boolean isAlive, TGlobalRef globalRef,
 		[CallerMemberName] String callerMethod = "")
-		where TGlobalRef : unmanaged, IObjectGlobalReferenceType, INativeType<TGlobalRef>,
+		where TGlobalRef : unmanaged, IObjectGlobalReferenceType, INativeType,
 		IEqualityOperators<TGlobalRef, TGlobalRef, Boolean>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
@@ -265,7 +265,7 @@ internal static partial class JTrace
 	/// <param name="objectRef">A JNI object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, [CallerMemberName] String callerMethod = "")
-		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
+		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		JTrace.CreateNonGenericLocalRef($"{objectRef}", callerMethod);
@@ -278,7 +278,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, JObjectLocalRef localRef,
 		[CallerMemberName] String callerMethod = "")
-		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
+		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		JTrace.CreateNonGenericLocalRef($"{objectRef}", localRef, callerMethod);

@@ -142,7 +142,7 @@ partial class JEnvironment
 		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
 		/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
 		private void CreateLocalRef<TObjectRef>(TObjectRef globalRef, JLocalObject? result)
-			where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>,
+			where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>,
 			IEqualityOperators<TObjectRef, TObjectRef, Boolean>
 		{
 			if (globalRef == default || result is null) return;

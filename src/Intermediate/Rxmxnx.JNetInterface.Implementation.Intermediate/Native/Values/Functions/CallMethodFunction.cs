@@ -10,7 +10,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct CallMethodFunction<TReceiver>
-	where TReceiver : unmanaged, INativeType<TReceiver>, IWrapper<JObjectLocalRef>
+	where TReceiver : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 {
 	/// <summary>
 	/// Internal reserved entries.

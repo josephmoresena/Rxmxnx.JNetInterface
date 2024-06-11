@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// <typeparam name="TReceiver">Type of receiver.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
 internal readonly struct MethodFunctionSet<TReceiver>
-	where TReceiver : unmanaged, INativeType<TReceiver>, IWrapper<JObjectLocalRef>
+	where TReceiver : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 {
 	/// <summary>
 	/// Pointers to <c>GetMethodID</c> function.

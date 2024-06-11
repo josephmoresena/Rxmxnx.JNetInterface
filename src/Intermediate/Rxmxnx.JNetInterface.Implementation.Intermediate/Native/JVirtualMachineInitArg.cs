@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class stores a VM initialization argument.
 /// </summary>
-public sealed partial class JVirtualMachineInitArg
+public sealed class JVirtualMachineInitArg
 {
 	/// <inheritdoc cref="JVirtualMachineInitArg.Version"/>
 	private readonly Int32 _version;
@@ -20,6 +20,11 @@ public sealed partial class JVirtualMachineInitArg
 	/// Indicates whether initialization ignores any unrecognized option.
 	/// </summary>
 	public Boolean IgnoreUnrecognized { get; init; }
+
+	/// <summary>
+	/// Options text.
+	/// </summary>
+	private String OptionsString => $"[{String.Join(", ", this.Options.Select(o => o.ToSimplifiedString()))}]";
 
 	/// <summary>
 	/// Constructor.
@@ -41,9 +46,12 @@ public sealed partial class JVirtualMachineInitArg
 	{
 		this._version = value.Version;
 		this.IgnoreUnrecognized = value.IgnoreUnrecognized.Value;
-		this.Options = new OptionList(JVirtualMachineInitOption.GetOptions(
-			                              MemoryMarshal.CreateSpan(
-				                              ref Unsafe.AsRef<VirtualMachineInitOptionValue>(value.Options),
-				                              value.OptionsLength)));
+		this.Options = JVirtualMachineInitOption.GetOptions(
+			MemoryMarshal.CreateSpan(ref Unsafe.AsRef<VirtualMachineInitOptionValue>(value.Options),
+			                         value.OptionsLength));
 	}
+
+	/// <inheritdoc/>
+	public override String ToString()
+		=> $"{{ {nameof(JVirtualMachineInitArg.Version)} = 0x{this.Version:x8}, {nameof(JVirtualMachineInitArg.Options)} = {this.OptionsString}, {nameof(JVirtualMachineInitArg.IgnoreUnrecognized)} = {this.IgnoreUnrecognized} }}";
 }

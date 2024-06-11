@@ -8,8 +8,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TResult>
-	where TReceiver : unmanaged, IWrapper<JObjectLocalRef> where TResult : unmanaged, INativeType<TResult>
+internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TResult> where TReceiver : unmanaged, IWrapper
+	where TResult : unmanaged, INativeType
 {
 	/// <summary>
 	/// Pointer to <c>Get&lt;type&gt;Field</c> function.

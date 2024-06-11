@@ -90,7 +90,7 @@ public sealed class DataTypeTests
 	{
 		Assert.Equal(JNativeType.JObject, TPrimitive.JniType);
 	}
-	private static void NativeTypeTest<TNative>() where TNative : unmanaged, INativeType<TNative>
+	private static void NativeTypeTest<TNative>() where TNative : unmanaged, INativeType
 	{
 		Byte[] bytes = DataTypeTests.fixture.CreateMany<Byte>(NativeUtilities.SizeOf<TNative>()).ToArray();
 		ref TNative value = ref bytes.AsSpan().AsValue<TNative>();
@@ -126,10 +126,9 @@ public sealed class DataTypeTests
 		public abstract UInt64 ToUInt64(IFormatProvider? provider);
 	}
 
-	private readonly struct NativeProxy : INativeType<NativeProxy>
+	private readonly struct NativeProxy : INativeType
 	{
 		public static JNativeType Type;
 		static JNativeType INativeType.Type => NativeProxy.Type;
-		public override String ToString() => INativeType.ToString(this);
 	}
 }

@@ -41,8 +41,8 @@ public sealed class JReferenceTests
 	internal void JShortArrayLocalRefTest() => JReferenceTests.ArrayReferenceTest<JShortArrayLocalRef>();
 
 	private static void Test<TPointer>()
-		where TPointer : unmanaged, IFixedPointer, INativeType<TPointer>,
-		IEqualityOperators<TPointer, TPointer, Boolean>, IEquatable<TPointer>
+		where TPointer : unmanaged, IFixedPointer, INativeType, IEqualityOperators<TPointer, TPointer, Boolean>,
+		IEquatable<TPointer>
 	{
 		TPointer ref1 = JReferenceTests.CreatePointer<TPointer>();
 		TPointer ref2 = JReferenceTests.CreatePointer<TPointer>();
@@ -70,8 +70,8 @@ public sealed class JReferenceTests
 		Assert.Equal(IntPtr.Zero, new TPointer().Pointer);
 	}
 	private static void GlobalTest<TGlobalRef>()
-		where TGlobalRef : unmanaged, IFixedPointer, INativeType<TGlobalRef>,
-		IEqualityOperators<TGlobalRef, TGlobalRef, Boolean>, IEquatable<TGlobalRef>, IObjectGlobalReferenceType
+		where TGlobalRef : unmanaged, IFixedPointer, INativeType, IEqualityOperators<TGlobalRef, TGlobalRef, Boolean>,
+		IEquatable<TGlobalRef>, IObjectGlobalReferenceType
 	{
 		JReferenceTests.Test<TGlobalRef>();
 		TGlobalRef ref1 = JReferenceTests.CreatePointer<TGlobalRef>();
@@ -152,8 +152,8 @@ public sealed class JReferenceTests
 		Assert.Equal(ref1.Pointer != IntPtr.Size, ref1 != defRef.ArrayValue);
 	}
 	private static TPointer CreatePointer<TPointer>()
-		where TPointer : unmanaged, IFixedPointer, INativeType<TPointer>,
-		IEqualityOperators<TPointer, TPointer, Boolean>, IEquatable<TPointer>
+		where TPointer : unmanaged, IFixedPointer, INativeType, IEqualityOperators<TPointer, TPointer, Boolean>,
+		IEquatable<TPointer>
 	{
 		IntPtr ptr1 = JReferenceTests.fixture.CreateMany<Byte>(IntPtr.Size).ToArray().AsSpan().AsValue<IntPtr>();
 		return NativeUtilities.Transform<IntPtr, TPointer>(in ptr1);

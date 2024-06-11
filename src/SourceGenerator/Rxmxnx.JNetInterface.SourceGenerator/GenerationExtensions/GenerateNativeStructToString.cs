@@ -15,7 +15,7 @@ partial struct {1}
 {{
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override String ToString() => INativeType.ToString(this);
+	public override String ToString() => $""{{{1}.Type.GetTypeName()}}: {{{2}(this)}}"";
 }}
 #nullable restore";
 
@@ -24,12 +24,16 @@ partial struct {1}
 	/// </summary>
 	/// <param name="nativeSymbol">A type symbol of native structure.</param>
 	/// <param name="context">Generation context.</param>
+	/// <param name="isPointer">Indicates whether type symbol i.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GenerateNativeStructToString(this ISymbol nativeSymbol, GeneratorExecutionContext context)
+	public static void GenerateNativeStructToString(this ISymbol nativeSymbol, GeneratorExecutionContext context,
+		Boolean isPointer)
 	{
+		if (nativeSymbol.Name == "VirtualMachineInitArgumentValue") return;
 		String fileName = $"{nativeSymbol.Name}.ToString.g.cs";
+		String getTextValueName = !isPointer ? "INativeType.GetTextValue" : "INativeType.GetPointerText";
 		String source = String.Format(GenerationExtensions.NativeToStringFormat, nativeSymbol.ContainingNamespace,
-		                              nativeSymbol.Name);
+		                              nativeSymbol.Name, getTextValueName);
 		context.AddSource(fileName, source);
 	}
 }

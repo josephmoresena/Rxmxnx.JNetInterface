@@ -122,7 +122,7 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	/// <returns>A <typeparamref name="TGlobalReference"/> reference.</returns>
 	TGlobalReference Add<TGlobalReference>(JGlobalBase? jGlobal)
-		where TGlobalReference : unmanaged, IObjectGlobalReferenceType, INativeType<TGlobalReference>
+		where TGlobalReference : unmanaged, IObjectGlobalReferenceType, INativeType
 	{
 		if (jGlobal is null) return default;
 		TGlobalReference nativeRef = jGlobal.As<TGlobalReference>();

@@ -209,7 +209,7 @@ partial class JEnvironment
 	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
 	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
 	internal unsafe JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
-		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
+		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.NewLocalRefInfo);

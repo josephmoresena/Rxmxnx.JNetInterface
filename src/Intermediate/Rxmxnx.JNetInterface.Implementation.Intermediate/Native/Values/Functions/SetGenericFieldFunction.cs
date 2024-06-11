@@ -9,7 +9,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct SetGenericFieldFunction<TReceiver, TResult>
-	where TReceiver : unmanaged, IWrapper<JObjectLocalRef> where TResult : unmanaged, INativeType<TResult>
+	where TReceiver : unmanaged, IWrapper<JObjectLocalRef> where TResult : unmanaged, INativeType
 {
 	/// <summary>
 	/// Pointer to <c>Set&lt;type&gt;Field</c> function.

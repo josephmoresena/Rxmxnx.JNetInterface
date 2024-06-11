@@ -19,7 +19,7 @@ internal interface IObjectReferenceType : IFixedPointer, IWrapper<JObjectLocalRe
 /// <typeparam name="TObject">Type of <see cref="IArrayReferenceType"/>.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface IObjectReferenceType<TObject> : IObjectReferenceType, INativeType<TObject>
+internal interface IObjectReferenceType<out TObject> : IObjectReferenceType
 	where TObject : unmanaged, IObjectReferenceType<TObject>
 {
 	/// <summary>

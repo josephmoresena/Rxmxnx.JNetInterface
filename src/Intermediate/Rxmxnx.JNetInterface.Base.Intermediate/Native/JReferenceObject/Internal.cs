@@ -85,7 +85,7 @@ public partial class JReferenceObject
 	/// <typeparam name="TReference">Type of value.</typeparam>
 	/// <returns>A read-only reference of <typeparamref name="TReference"/> value.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal virtual ref readonly TReference As<TReference>() where TReference : unmanaged, INativeType<TReference>
+	internal virtual ref readonly TReference As<TReference>() where TReference : unmanaged, INativeType
 		=> ref this.AsSpan().AsValue<TReference>();
 	/// <summary>
 	/// Interprets the current instance a <typeparamref name="TReference"/> value.
@@ -93,6 +93,6 @@ public partial class JReferenceObject
 	/// <typeparam name="TReference">Type of value.</typeparam>
 	/// <returns>A <typeparamref name="TReference"/> value.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal virtual TReference To<TReference>() where TReference : unmanaged, INativeType<TReference>
+	internal virtual TReference To<TReference>() where TReference : unmanaged, INativeType
 		=> this.AsSpan().AsValue<TReference>();
 }

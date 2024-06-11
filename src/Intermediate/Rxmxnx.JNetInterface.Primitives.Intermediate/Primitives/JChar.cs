@@ -6,7 +6,7 @@ using TypeMetadata = JPrimitiveTypeMetadata<JChar>;
 /// Primitive <c>char</c>. Represents a character as a UTF-16 code unit.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JChar : INativeType<JChar>, IComparable<JChar>, IEquatable<JChar>,
+public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatable<JChar>,
 	IPrimitiveIntegerType<JChar, Char>
 {
 	/// <summary>

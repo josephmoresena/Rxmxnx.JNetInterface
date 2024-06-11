@@ -13,7 +13,7 @@ internal interface INativeReferenceType : IFixedPointer, INativeType;
 /// <typeparam name="TSelf">Type of <see cref="INativeReferenceType{TSelf}"/>.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal interface INativeReferenceType<TSelf> : INativeReferenceType, INativeType<TSelf>
+internal interface INativeReferenceType<TSelf> : INativeReferenceType
 	where TSelf : unmanaged, INativeReferenceType<TSelf>;
 
 /// <summary>

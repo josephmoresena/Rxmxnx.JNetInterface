@@ -23,7 +23,7 @@ public partial class JLocalObject
 	/// <typeparam name="TReference">Type of value.</typeparam>
 	/// <returns>A read-only reference of <typeparamref name="TReference"/> value.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal ref readonly TReference LocalAs<TReference>() where TReference : unmanaged, INativeType<TReference>
+	internal ref readonly TReference LocalAs<TReference>() where TReference : unmanaged, INativeType
 		=> ref base.As<TReference>();
 
 	/// <summary>

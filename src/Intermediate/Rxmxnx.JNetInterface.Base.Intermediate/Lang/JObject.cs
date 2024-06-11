@@ -86,6 +86,6 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <param name="objRef">Object reference.</param>
 	/// <returns>An object identifier using <paramref name="classSignature"/> and <paramref name="objRef"/>.</returns>
 	internal static String GetObjectIdentifier<TObjectRef>(CString classSignature, TObjectRef objRef)
-		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
+		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 		=> $"{ClassNameHelper.GetClassName(classSignature)} {objRef}";
 }

@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct DeleteRefFunction<TReference>
-	where TReference : unmanaged, INativeType<TReference>, IWrapper<JObjectLocalRef>
+	where TReference : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 {
 	/// <summary>
 	/// Pointer to <c>Delete<typeparamref name="TReference"/>Ref</c> function.
