@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JIntArrayLocalRef : IArrayReferenceType, IObjectReferenceType<JIntArrayLocalRef>
+public readonly partial struct JIntArrayLocalRef : IArrayReferenceType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JIntArray;

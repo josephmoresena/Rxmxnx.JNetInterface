@@ -37,10 +37,10 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <param name="result">A <see cref="JClassObject"/> result.</param>
 	/// <typeparam name="TResult">Type of reference result.</typeparam>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
-	private TResult FinalizeCall<TResult>(JLocalObject? result) where TResult : unmanaged, IObjectReferenceType<TResult>
+	private TResult FinalizeCall<TResult>(JLocalObject? result) where TResult : unmanaged, IObjectReferenceType
 	{
 		JObjectLocalRef jniResult = this.FinalizeCall(result);
-		return TResult.FromReference(in jniResult);
+		return NativeUtilities.Transform<JObjectLocalRef, TResult>(in jniResult);
 	}
 
 	public readonly ref partial struct Builder

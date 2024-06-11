@@ -81,9 +81,8 @@ public sealed class JReferenceTests
 		Assert.True(ref1.Value.Equals(ref1));
 	}
 	private static void ObjectReferenceTest<TObjectRef>()
-		where TObjectRef : unmanaged, IObjectReferenceType<TObjectRef>,
-		IEqualityOperators<TObjectRef, TObjectRef, Boolean>, IEquatable<TObjectRef>,
-		IEqualityOperators<TObjectRef, JObjectLocalRef, Boolean>
+		where TObjectRef : unmanaged, IObjectReferenceType, IEqualityOperators<TObjectRef, TObjectRef, Boolean>,
+		IEquatable<TObjectRef>, IEqualityOperators<TObjectRef, JObjectLocalRef, Boolean>
 	{
 		JReferenceTests.Test<TObjectRef>();
 		TObjectRef ref1 = JReferenceTests.CreatePointer<TObjectRef>();
@@ -115,12 +114,9 @@ public sealed class JReferenceTests
 		Assert.Equal(ref1.Pointer != ref2.Pointer, ref1 != ref2);
 		Assert.Equal(ref1.Pointer == IntPtr.Size, ref1 == defRef.Value);
 		Assert.Equal(ref1.Pointer != IntPtr.Size, ref1 != defRef.Value);
-
-		Assert.Equal(ref1, TObjectRef.FromReference(ref1.Value));
-		Assert.Equal(ref2, TObjectRef.FromReference(ref2.Value));
 	}
 	private static void ArrayReferenceTest<TArrayRef>()
-		where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType<TArrayRef>,
+		where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType,
 		IEqualityOperators<TArrayRef, TArrayRef, Boolean>, IEquatable<TArrayRef>,
 		IEqualityOperators<TArrayRef, JObjectLocalRef, Boolean>, IEqualityOperators<TArrayRef, JArrayLocalRef, Boolean>,
 		IEquatable<JArrayLocalRef>

@@ -173,7 +173,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void ReleaseMemory<TObjectRef>(Boolean isCritical, Boolean isAttached, Boolean isAlive,
 		Boolean released, TObjectRef objectRef, IntPtr pointer, [CallerMemberName] String callerMethod = "")
-		where TObjectRef : unmanaged, IObjectReferenceType<TObjectRef>
+		where TObjectRef : unmanaged, IObjectReferenceType
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		JTrace.ReleaseNonGenericMemory(isCritical, isAttached, isAlive, released, pointer, $"{objectRef}",

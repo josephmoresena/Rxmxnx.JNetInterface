@@ -6,7 +6,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JClassLocalRef : IObjectReferenceType<JClassLocalRef>
+public readonly partial struct JClassLocalRef : IObjectReferenceType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JClass;
