@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct FromReflectedFunction<TAccessible>
-	where TAccessible : unmanaged, IAccessibleIdentifierType<TAccessible>
+	where TAccessible : unmanaged, IAccessibleIdentifierType
 {
 	/// <summary>
 	/// Pointer to <c>FromReflected<typeparamref name="TAccessible"/></c> function.

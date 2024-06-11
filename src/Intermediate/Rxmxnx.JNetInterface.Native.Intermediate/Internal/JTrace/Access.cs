@@ -264,7 +264,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void GetAccessibleId<TAccessibleId>(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
 		TAccessibleId accessibleId, [CallerMemberName] String callerMethod = "")
-		where TAccessibleId : unmanaged, IAccessibleIdentifierType<TAccessibleId>,
+		where TAccessibleId : unmanaged, IAccessibleIdentifierType,
 		IEqualityOperators<TAccessibleId, TAccessibleId, Boolean>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;

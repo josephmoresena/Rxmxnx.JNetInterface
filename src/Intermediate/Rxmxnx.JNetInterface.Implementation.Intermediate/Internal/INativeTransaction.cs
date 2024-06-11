@@ -122,7 +122,7 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	/// <returns>A <typeparamref name="TGlobalReference"/> reference.</returns>
 	TGlobalReference Add<TGlobalReference>(JGlobalBase? jGlobal)
-		where TGlobalReference : unmanaged, IObjectGlobalReferenceType<TGlobalReference>
+		where TGlobalReference : unmanaged, IObjectGlobalReferenceType, INativeType<TGlobalReference>
 	{
 		if (jGlobal is null) return default;
 		TGlobalReference nativeRef = jGlobal.As<TGlobalReference>();
@@ -135,7 +135,8 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 	/// <typeparam name="TReference">A <see cref="IArrayReferenceType"/> type.</typeparam>
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> reference.</returns>
-	TReference Add<TReference>(JArrayObject? jArray) where TReference : unmanaged, IArrayReferenceType<TReference>
+	TReference Add<TReference>(JArrayObject? jArray)
+		where TReference : unmanaged, IArrayReferenceType, IObjectReferenceType<TReference>
 	{
 		if (jArray is null) return default;
 		TReference arrayRef = jArray.As<TReference>();

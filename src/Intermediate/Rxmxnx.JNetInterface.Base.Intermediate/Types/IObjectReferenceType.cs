@@ -16,7 +16,7 @@ internal interface IObjectReferenceType : IFixedPointer, IWrapper<JObjectLocalRe
 /// <summary>
 /// This interface exposes a java object local reference.
 /// </summary>
-/// <typeparam name="TObject">Type of <see cref="IArrayReferenceType{TArray}"/>.</typeparam>
+/// <typeparam name="TObject">Type of <see cref="IArrayReferenceType"/>.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface IObjectReferenceType<TObject> : IObjectReferenceType, INativeType<TObject>

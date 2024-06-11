@@ -154,7 +154,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void UnloadGlobal<TGlobalRef>(Boolean isAttached, Boolean isAlive, TGlobalRef globalRef,
 		[CallerMemberName] String callerMethod = "")
-		where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>,
+		where TGlobalRef : unmanaged, IObjectGlobalReferenceType, INativeType<TGlobalRef>,
 		IEqualityOperators<TGlobalRef, TGlobalRef, Boolean>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
