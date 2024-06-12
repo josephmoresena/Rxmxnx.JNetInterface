@@ -184,6 +184,7 @@ public sealed class ThrowableTests
 		Assert.True(typeMetadata.IsInstance(jThrowable1));
 		Assert.True(typeMetadata.IsInstance(jThrowable2));
 	}
+#pragma warning disable CA1859
 	private static void ThrowTest<TThrowable>(Boolean fail)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 	{
@@ -270,4 +271,5 @@ public sealed class ThrowableTests
 		IThrowableException<TThrowable> exceptionT = (IThrowableException<TThrowable>)exception;
 		exceptionT.WithSafeInvoke(t => Assert.Equal(typeMetadata.Type, t.GetType()));
 	}
+#pragma warning restore CA1859
 }
