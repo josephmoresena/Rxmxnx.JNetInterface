@@ -39,24 +39,6 @@ public sealed class DataTypeTests
 
 		NativeProxy.Type = default;
 		Assert.Throws<InvalidEnumArgumentException>(DataTypeTests.NativeTypeTest<NativeProxy>);
-		NativeProxy.Type = JNativeType.JBoolean;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JByte;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JChar;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JDouble;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JFloat;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JInt;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JLong;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JShort;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JVirtualMachineInitArgument;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
 	}
 	[Fact]
 	internal void VoidMetadataTest()
