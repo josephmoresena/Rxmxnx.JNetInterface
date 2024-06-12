@@ -6,6 +6,8 @@ using TypeMetadata = JPrimitiveTypeMetadata<JBoolean>;
 /// Primitive <c>boolean</c>. Represents a Boolean (<see langword="true"/> or <see langword="false"/>) value.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1210,
+                 Justification = CommonConstants.NoBooleanComparisonOperatorsJustification)]
 public readonly partial struct JBoolean : INativeType, IComparable<JBoolean>, IEquatable<JBoolean>,
 	IPrimitiveType<JBoolean, Boolean>
 {

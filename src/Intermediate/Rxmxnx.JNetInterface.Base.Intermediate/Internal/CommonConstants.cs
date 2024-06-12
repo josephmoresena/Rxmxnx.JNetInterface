@@ -63,6 +63,7 @@ internal static class CommonConstants
 		"There is no static field, but abstract/virtual property.";
 	public const String DefaultValueTypeJustification = "Default value for ValueType is not null.";
 	public const String NoStringComparisonOperatorsJustification = "System.String has no comparison operators.";
+	public const String NoBooleanComparisonOperatorsJustification = "System.Boolean has no comparison operators.";
 	public const String ClassJustification = "Type needs class inheritance.";
 	public const String NonStandardLinqJustification = "Linq is not needed.";
 	public const String NonStandardTraceJustification = "Not standard trace is required.";
