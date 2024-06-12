@@ -6,7 +6,7 @@ namespace Rxmxnx.JNetInterface.Types;
 public enum JTypeKind : Byte
 {
 	/// <summary>
-	/// Indicates current type is a undefined.
+	/// Indicates current type is undefined.
 	/// </summary>
 	Undefined = 0,
 	/// <summary>

@@ -9,7 +9,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2436,
                  Justification = "All generic parameters are needed.")]
 internal abstract class ReferenceHelperCache<TObject, TReference, TCreationArg>
-	where TObject : class, IWrapper<TReference> where TReference : unmanaged, INativeReferenceType<TReference>
+	where TObject : class, IWrapper<TReference> where TReference : unmanaged, INativeReferenceType
 {
 	/// <summary>
 	/// Dictionary of objects.
