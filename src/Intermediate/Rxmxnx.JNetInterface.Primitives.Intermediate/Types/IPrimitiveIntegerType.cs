@@ -15,8 +15,7 @@ internal interface IPrimitiveIntegerType : IPrimitiveNumericType;
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal interface
-	IPrimitiveIntegerType<TPrimitive, TValue> : IPrimitiveIntegerType, IIntegerValue<TValue>,
-	IPrimitiveNumericType<TPrimitive, TValue>
+	IPrimitiveIntegerType<TPrimitive, TValue> : IPrimitiveIntegerType, IPrimitiveNumericType<TPrimitive, TValue>
 	where TPrimitive : unmanaged, IPrimitiveIntegerType<TPrimitive, TValue>, IComparable<TPrimitive>,
 	IEquatable<TPrimitive>, IPrimitiveEquatable
 	where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>, IBinaryInteger<TValue>

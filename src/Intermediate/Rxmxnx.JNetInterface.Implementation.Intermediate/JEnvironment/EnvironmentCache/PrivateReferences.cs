@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
 		/// Creates a <see cref="JWeakRef"/> from <paramref name="jObject"/>.
@@ -114,7 +114,7 @@ partial class JEnvironment
 		{
 			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				this._env.DeleteWeakGlobalRef(weakRef);
-			JTrace.Unload(this._env.IsAttached, this.VirtualMachine.IsAlive, weakRef);
+			JTrace.UnloadGlobal(this._env.IsAttached, this.VirtualMachine.IsAlive, weakRef);
 		}
 		/// <summary>
 		/// Unloads <paramref name="globalRef"/>.
@@ -124,7 +124,7 @@ partial class JEnvironment
 		{
 			if (this._env.IsAttached && this.VirtualMachine.IsAlive)
 				this._env.DeleteGlobalRef(globalRef);
-			JTrace.Unload(this._env.IsAttached, this.VirtualMachine.IsAlive, globalRef);
+			JTrace.UnloadGlobal(this._env.IsAttached, this.VirtualMachine.IsAlive, globalRef);
 		}
 		/// <summary>
 		/// Indicates whether <paramref name="jGlobal"/> is a main global object or default.
@@ -142,7 +142,7 @@ partial class JEnvironment
 		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
 		/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
 		private void CreateLocalRef<TObjectRef>(TObjectRef globalRef, JLocalObject? result)
-			where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>,
+			where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>,
 			IEqualityOperators<TObjectRef, TObjectRef, Boolean>
 		{
 			if (globalRef == default || result is null) return;

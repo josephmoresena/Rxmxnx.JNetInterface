@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang.Reflect;
 public class JConstructorObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.ConstructorObject);
+	private static readonly CString className = new("java/lang/reflect/Constructor"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JConstructorObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JConstructorObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JConstructorObjectTests.className,

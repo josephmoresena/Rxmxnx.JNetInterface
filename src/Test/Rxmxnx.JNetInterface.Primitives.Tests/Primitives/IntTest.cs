@@ -23,13 +23,10 @@ public sealed class IntTest : PrimitiveTestBase
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JInt>();
 
-		Assert.Equal(ClassNames.IntPrimitive, metadata.ClassName.ToString());
-		Assert.True(UnicodeClassNames.IntPrimitive().SequenceEqual(metadata.ClassName));
-		Assert.Equal(PrimitiveSignatures.IntSignature, metadata.Signature.ToString());
-		Assert.Equal(UnicodePrimitiveSignatures.IntSignatureChar, metadata.Signature[0]);
+		Assert.True("int"u8.SequenceEqual(metadata.ClassName));
+		Assert.Equal(CommonNames.IntSignatureChar, metadata.Signature[0]);
 
-		Assert.Equal(ClassNames.IntegerObject, metadata.WrapperClassName.ToString());
-		Assert.True(UnicodeClassNames.IntegerObject().SequenceEqual(metadata.WrapperClassName));
+		Assert.True("java/lang/Integer"u8.SequenceEqual(metadata.WrapperClassName));
 	}
 	[Fact]
 	private void ConstructorsTest()

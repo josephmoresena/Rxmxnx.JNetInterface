@@ -15,7 +15,7 @@ public interface IClassType : IReferenceType
 	/// <typeparam name="TClass">Type of the current java class datatype.</typeparam>
 	/// <returns>The <see cref="JClassTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public new static JClassTypeMetadata GetMetadata<TClass>() where TClass : JReferenceObject, IClassType<TClass>
+	public new static JClassTypeMetadata GetMetadata<TClass>() where TClass : JLocalObject, IClassType<TClass>
 		=> (JClassTypeMetadata)IDataType.GetMetadata<TClass>();
 }
 
@@ -25,27 +25,12 @@ public interface IClassType : IReferenceType
 /// <typeparam name="TClass">Type of java class type.</typeparam>
 public interface
 	IClassType<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : IClassType,
-	IReferenceType<TClass> where TClass : JReferenceObject, IClassType<TClass>
+	IReferenceType<TClass> where TClass : JLocalObject, IClassType<TClass>
 {
-	/// <summary>
-	/// Cached type interface set.
-	/// </summary>
-	private static readonly WeakReference<BaseTypeHelper<TClass>?> typeBaseTypeSet = new(default);
-
 	/// <summary>
 	/// Retrieves current type base type set.
 	/// </summary>
-	internal static IReadOnlySet<Type> TypeBaseTypes
-	{
-		get
-		{
-			if (IClassType<TClass>.typeBaseTypeSet.TryGetTarget(out BaseTypeHelper<TClass>? result))
-				return result.Set;
-			result = new();
-			IClassType<TClass>.typeBaseTypeSet.SetTarget(result);
-			return result.Set;
-		}
-	}
+	internal static IReadOnlySet<Type> TypeBaseTypes => BaseTypeHelper<TClass>.TypeBaseTypes;
 
 	/// <summary>
 	/// Current type metadata.

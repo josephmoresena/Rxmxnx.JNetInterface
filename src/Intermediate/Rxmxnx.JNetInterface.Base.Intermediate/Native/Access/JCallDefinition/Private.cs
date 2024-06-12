@@ -32,7 +32,7 @@ public abstract partial class JCallDefinition
 		sizes = new Int32[metadata.Length];
 
 		using MemoryStream memory = new();
-		memory.WriteByte(UnicodeMethodSignatures.MethodParameterPrefixChar);
+		memory.WriteByte(CommonNames.MethodParameterPrefixChar);
 		for (Int32 i = 0; i < metadata.Length; i++)
 		{
 			ReadOnlySpan<Byte> signature = metadata[i].Signature.AsSpan();
@@ -41,7 +41,7 @@ public abstract partial class JCallDefinition
 			sizes[i] = metadata[i].Size;
 			if (signature.Length > 1) referenceCount++;
 		}
-		memory.WriteByte(UnicodeMethodSignatures.MethodParameterSuffixChar);
+		memory.WriteByte(CommonNames.MethodParameterSuffixChar);
 		memory.Write(returnSignature);
 		memory.WriteByte(default);
 		return memory.ToArray();

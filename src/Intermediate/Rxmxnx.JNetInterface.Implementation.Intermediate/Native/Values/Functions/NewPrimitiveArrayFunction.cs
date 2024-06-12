@@ -9,8 +9,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct NewPrimitiveArrayFunction<TPrimitiveType, TArrayRef>
-	where TPrimitiveType : unmanaged, INativeType<TPrimitiveType>, IPrimitiveType<TPrimitiveType>
-	where TArrayRef : unmanaged, IArrayReferenceType<TArrayRef>
+	where TPrimitiveType : unmanaged, INativeType, IPrimitiveType<TPrimitiveType>
+	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
 {
 	/// <summary>
 	/// Pointer to <c>New&lt;PrimitiveType&gt;Array</c> function.

@@ -5,7 +5,7 @@ internal partial struct JniTransactionHandle
 	/// <summary>
 	/// Represents a JNI native array memory adapter.
 	/// </summary>
-	private sealed record NativeArrayMemoryAdapter<TPrimitive> : NativeMemoryAdapter
+	private sealed class NativeArrayMemoryAdapter<TPrimitive> : NativeMemoryAdapter
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		/// <inheritdoc cref="UnaryTransaction.LocalRef"/>

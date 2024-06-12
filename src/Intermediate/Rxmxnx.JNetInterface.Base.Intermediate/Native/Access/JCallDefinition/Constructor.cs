@@ -8,7 +8,7 @@ public abstract partial class JCallDefinition
 	/// <param name="name">Call defined name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	private protected JCallDefinition(ReadOnlySpan<Byte> name, params JArgumentMetadata[] metadata) : this(
-		name, stackalloc Byte[1] { UnicodePrimitiveSignatures.VoidSignatureChar, }, metadata) { }
+		name, stackalloc Byte[1] { CommonNames.VoidSignatureChar, }, metadata) { }
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>

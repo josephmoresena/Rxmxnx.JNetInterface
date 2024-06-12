@@ -6,7 +6,7 @@
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
-internal readonly partial struct JInvokeInterface : INativeType<JInvokeInterface>
+internal readonly partial struct JInvokeInterface : INativeType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JInvokeInterface;

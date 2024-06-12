@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Nio;
 
+using TypeMetadata = JClassTypeMetadata<JShortBufferObject>;
+
 /// <summary>
 /// This class represents a local <c>java.nio.ShortBuffer</c> instance.
 /// </summary>
@@ -8,14 +10,12 @@ public class JShortBufferObject : JBufferObject<JShort>, IClassType<JShortBuffer
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JShortBufferObject> metadata = TypeMetadataBuilder<JBufferObject>
-	                                                                          .Create<JShortBufferObject>(
-		                                                                          UnicodeClassNames.ShortBufferObject(),
-		                                                                          JTypeModifier.Abstract)
-	                                                                          .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
+	                                                    .Create<JShortBufferObject>(
+		                                                    "java/nio/ShortBuffer"u8, JTypeModifier.Abstract)
+	                                                    .Implements<JComparableObject>().Build();
 
-	static JClassTypeMetadata<JShortBufferObject> IClassType<JShortBufferObject>.Metadata
-		=> JShortBufferObject.metadata;
+	static TypeMetadata IClassType<JShortBufferObject>.Metadata => JShortBufferObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JShortBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

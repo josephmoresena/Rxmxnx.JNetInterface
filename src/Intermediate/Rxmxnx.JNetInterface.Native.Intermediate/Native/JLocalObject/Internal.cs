@@ -1,14 +1,17 @@
 namespace Rxmxnx.JNetInterface.Native;
 
+using TypeMetadata = JClassTypeMetadata<JLocalObject>;
+
 public partial class JLocalObject
 {
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	internal static readonly JClassTypeMetadata<JLocalObject> ObjectClassMetadata = TypeMetadataBuilder<JLocalObject>
-		.Create(UnicodeClassNames.Object).WithSignature(UnicodeObjectSignatures.ObjectSignature).Build();
+	internal static readonly TypeMetadata ObjectClassMetadata = TypeMetadataBuilder<JLocalObject>
+	                                                            .Create(CommonNames.Object)
+	                                                            .WithSignature(CommonNames.ObjectSignature).Build();
 
-	static JClassTypeMetadata<JLocalObject> IClassType<JLocalObject>.Metadata => JLocalObject.ObjectClassMetadata;
+	static TypeMetadata IClassType<JLocalObject>.Metadata => JLocalObject.ObjectClassMetadata;
 	static Type IDataType.FamilyType => typeof(JLocalObject);
 
 	/// <inheritdoc cref="ILocalObject.Lifetime"/>
@@ -20,7 +23,7 @@ public partial class JLocalObject
 	/// <typeparam name="TReference">Type of value.</typeparam>
 	/// <returns>A read-only reference of <typeparamref name="TReference"/> value.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal ref readonly TReference LocalAs<TReference>() where TReference : unmanaged, INativeType<TReference>
+	internal ref readonly TReference LocalAs<TReference>() where TReference : unmanaged, INativeType
 		=> ref base.As<TReference>();
 
 	/// <summary>
@@ -72,15 +75,6 @@ public partial class JLocalObject
 	/// <inheritdoc/>
 	private protected override Boolean Same(JReferenceObject jObject)
 		=> base.Same(jObject) || this.Environment.IsSameObject(this, jObject);
-	/// <inheritdoc/>
-	private protected override void CopyTo(Span<JValue> span, Int32 index)
-		=> NativeUtilities.AsBytes(in this.As<JObjectLocalRef>()).CopyTo(span[index].AsBytes());
-	/// <inheritdoc/>
-	private protected override void CopyTo(Span<Byte> span, ref Int32 offset)
-	{
-		NativeUtilities.AsBytes(in this.As<JObjectLocalRef>()).CopyTo(span[offset..]);
-		offset += NativeUtilities.PointerSize;
-	}
 
 	/// <summary>
 	/// Indicates whether <see cref="IDataType{TDataType}"/> CLR type is the CLR type of

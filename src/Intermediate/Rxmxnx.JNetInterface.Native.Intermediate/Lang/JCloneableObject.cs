@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JInterfaceTypeMetadata<JCloneableObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.Cloneable</c> instance.
 /// </summary>
@@ -10,11 +12,10 @@ public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInte
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JCloneableObject> typeMetadata =
-		TypeMetadataBuilder<JCloneableObject>.Create(UnicodeClassNames.CloneableInterface()).Build();
+	private static readonly TypeMetadata typeMetadata =
+		TypeMetadataBuilder<JCloneableObject>.Create("java/lang/Cloneable"u8).Build();
 
-	static JInterfaceTypeMetadata<JCloneableObject> IInterfaceType<JCloneableObject>.Metadata
-		=> JCloneableObject.typeMetadata;
+	static TypeMetadata IInterfaceType<JCloneableObject>.Metadata => JCloneableObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JCloneableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

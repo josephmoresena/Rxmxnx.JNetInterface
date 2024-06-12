@@ -7,7 +7,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
-internal record struct MethodOffset
+internal struct MethodOffset
 {
 #pragma warning disable CS0169
 	private IntPtr _reserved0;

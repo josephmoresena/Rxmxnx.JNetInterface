@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JRuntimeExceptionObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.RuntimeExceptionObject);
+	private static readonly CString className = new("java/lang/RuntimeException"u8);
 	private static readonly CString classSignature =
 		CString.Concat("L"u8, JRuntimeExceptionObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JRuntimeExceptionObjectTests.classSignature);
@@ -156,6 +156,7 @@ public sealed class JRuntimeExceptionObjectTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
+#pragma warning disable CA1859
 	internal void ThrowTest(Boolean fail)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JRuntimeExceptionObject>();
@@ -239,6 +240,7 @@ public sealed class JRuntimeExceptionObjectTests
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jRuntimeException);
 		env.FunctionSet.Received(1).GetMessage(jRuntimeException);
 	}
+#pragma warning restore CA1859
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]

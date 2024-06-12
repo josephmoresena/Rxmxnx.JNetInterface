@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-public partial record JCompiler
+public partial class JCompiler
 {
 	public static JCompiler[] GetCompilers()
 	{

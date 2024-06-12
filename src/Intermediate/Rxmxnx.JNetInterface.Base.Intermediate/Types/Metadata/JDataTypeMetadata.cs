@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for a reference <see cref="IDataType"/> type.
 /// </summary>
-public abstract partial record JDataTypeMetadata : ITypeInformation
+public abstract partial class JDataTypeMetadata : ITypeInformation
 {
 	/// <summary>
 	/// Array signature for the current type.

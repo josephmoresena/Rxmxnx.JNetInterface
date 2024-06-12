@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
-public partial record JDataTypeMetadata
+public partial class JDataTypeMetadata
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
 	private readonly CString _arraySignature;
@@ -20,7 +20,7 @@ public partial record JDataTypeMetadata
 	/// <returns>A <see cref="CStringSequence"/> containing JNI information.</returns>
 	private static CStringSequence CreateInformationSequence(ReadOnlyFixedMemoryList memoryList)
 	{
-		Boolean isArray = memoryList[0].Bytes[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar;
+		Boolean isArray = memoryList[0].Bytes[0] == CommonNames.ArraySignaturePrefixChar;
 		Int32 signatureAdditionalChars = isArray ? 0 : 2;
 		Int32 signatureLength = memoryList[1].Bytes.Length > 0 ?
 			memoryList[1].Bytes.Length :
@@ -52,7 +52,7 @@ public partial record JDataTypeMetadata
 					break;
 				case 2:
 				{
-					span[0] = UnicodeObjectSignatures.ArraySignaturePrefixChar;
+					span[0] = CommonNames.ArraySignaturePrefixChar;
 					if (arg[1].Bytes.Length > 0)
 						arg[1].Bytes.CopyTo(span[1..]);
 					else
@@ -68,15 +68,15 @@ public partial record JDataTypeMetadata
 	/// <param name="className">JNI class name.</param>
 	private static void WriteSignature(Span<Byte> span, ReadOnlySpan<Byte> className)
 	{
-		if (className[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
+		if (className[0] == CommonNames.ArraySignaturePrefixChar)
 		{
 			className.CopyTo(span);
 		}
 		else
 		{
-			span[0] = UnicodeObjectSignatures.ObjectSignaturePrefixChar;
+			span[0] = CommonNames.ObjectSignaturePrefixChar;
 			className.CopyTo(span[1..]);
-			span[^1] = UnicodeObjectSignatures.ObjectSignatureSuffixChar;
+			span[^1] = CommonNames.ObjectSignatureSuffixChar;
 		}
 	}
 	/// <summary>

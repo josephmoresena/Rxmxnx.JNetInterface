@@ -7,7 +7,7 @@ internal readonly partial struct JNativeInterface
 	/// </summary>
 	[InlineArray(4)]
 	[StructLayout(LayoutKind.Sequential)]
-	internal record struct ComReserved
+	internal struct ComReserved
 	{
 		private IntPtr _reserved0;
 	}

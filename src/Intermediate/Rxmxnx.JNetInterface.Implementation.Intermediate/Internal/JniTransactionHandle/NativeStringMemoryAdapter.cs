@@ -5,7 +5,7 @@ internal partial struct JniTransactionHandle
 	/// <summary>
 	/// Represents a JNI native string memory adapter.
 	/// </summary>
-	private sealed record NativeStringMemoryAdapter : NativeMemoryAdapter
+	private sealed class NativeStringMemoryAdapter : NativeMemoryAdapter
 	{
 		/// <summary>
 		/// Indicates whether current adapter is for UTF-8 chars.

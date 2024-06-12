@@ -5,7 +5,7 @@ public partial class JArrayObject<TElement>
 	/// <summary>
 	/// This record stores the metadata for a class <see cref="IArrayType"/> type.
 	/// </summary>
-	private sealed record ArrayTypeMetadata : JArrayTypeMetadata
+	private sealed class ArrayTypeMetadata : JArrayTypeMetadata
 	{
 		/// <summary>
 		/// Metadata array instance.
@@ -47,6 +47,10 @@ public partial class JArrayObject<TElement>
 			=> JArrayTypeMetadata.GetArrayArrayMetadata(this.ArraySignature, typeof(TElement));
 
 		/// <inheritdoc/>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		internal override JClassObject GetClass(IEnvironment env)
+			=> env.ClassFeature.GetClass<JArrayObject<TElement>>();
+		/// <inheritdoc/>
 		internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 			Boolean realClass = false)
 			=> new Generic<TElement>(jClass, localRef, realClass);
@@ -67,8 +71,8 @@ public partial class JArrayObject<TElement>
 		}
 		/// <inheritdoc/>
 		internal override JFunctionDefinition<JArrayObject<TElement>> CreateFunctionDefinition(
-			ReadOnlySpan<Byte> functionName, JArgumentMetadata[] metadata)
-			=> JFunctionDefinition<JArrayObject<TElement>>.Create(functionName, metadata);
+			ReadOnlySpan<Byte> functionName, JArgumentMetadata[] paramsMetadata)
+			=> JFunctionDefinition<JArrayObject<TElement>>.Create(functionName, paramsMetadata);
 		/// <inheritdoc/>
 		internal override JFieldDefinition<JArrayObject<TElement>> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
 			=> new(fieldName);

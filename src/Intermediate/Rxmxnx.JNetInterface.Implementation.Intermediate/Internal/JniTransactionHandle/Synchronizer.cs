@@ -5,7 +5,7 @@ internal partial struct JniTransactionHandle
 	/// <summary>
 	/// Represents a JNI Enter/Exit monitor transaction.
 	/// </summary>
-	private sealed record Synchronizer : UnaryTransaction
+	private sealed class Synchronizer : UnaryTransaction
 	{
 		/// <summary>
 		/// A <see cref="IEnvironment"/> instance.

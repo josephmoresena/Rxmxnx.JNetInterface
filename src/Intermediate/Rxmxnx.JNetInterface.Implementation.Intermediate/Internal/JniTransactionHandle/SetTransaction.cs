@@ -7,7 +7,7 @@ internal partial struct JniTransactionHandle
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3459,
 	                 Justification = CommonConstants.ReferenceableFieldJustification)]
-	private sealed record SetTransaction : INativeTransaction
+	private sealed class SetTransaction : INativeTransaction
 	{
 		/// <summary>
 		/// Lock object.

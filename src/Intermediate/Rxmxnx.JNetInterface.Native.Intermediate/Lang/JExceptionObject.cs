@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JExceptionObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.Exception</c> instance.
 /// </summary>
@@ -8,11 +10,10 @@ public class JExceptionObject : JThrowableObject, IThrowableType<JExceptionObjec
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JExceptionObject> typeMetadata =
-		TypeMetadataBuilder<JThrowableObject>.Create<JExceptionObject>(UnicodeClassNames.ExceptionObject()).Build();
+	private static readonly TypeMetadata typeMetadata =
+		TypeMetadataBuilder<JThrowableObject>.Create<JExceptionObject>("java/lang/Exception"u8).Build();
 
-	static JThrowableTypeMetadata<JExceptionObject> IThrowableType<JExceptionObject>.Metadata
-		=> JExceptionObject.typeMetadata;
+	static TypeMetadata IThrowableType<JExceptionObject>.Metadata => JExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JExceptionObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

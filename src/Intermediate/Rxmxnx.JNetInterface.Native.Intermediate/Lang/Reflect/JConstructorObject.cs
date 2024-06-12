@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
+using TypeMetadata = JClassTypeMetadata<JConstructorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Constructor</c> instance.
 /// </summary>
@@ -8,13 +10,12 @@ public sealed class JConstructorObject : JExecutableObject, IClassType<JConstruc
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JConstructorObject> metadata = TypeMetadataBuilder<JExecutableObject>
-	                                                                          .Create<JConstructorObject>(
-		                                                                          UnicodeClassNames.ConstructorObject(),
-		                                                                          JTypeModifier.Final).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExecutableObject>
+	                                                    .Create<JConstructorObject>(
+		                                                    "java/lang/reflect/Constructor"u8, JTypeModifier.Final)
+	                                                    .Build();
 
-	static JClassTypeMetadata<JConstructorObject> IClassType<JConstructorObject>.Metadata
-		=> JConstructorObject.metadata;
+	static TypeMetadata IClassType<JConstructorObject>.Metadata => JConstructorObject.typeMetadata;
 
 	/// <summary>
 	/// Executable JNI definition.

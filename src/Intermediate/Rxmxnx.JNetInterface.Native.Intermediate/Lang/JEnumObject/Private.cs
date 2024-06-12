@@ -1,15 +1,18 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JClassTypeMetadata<JEnumObject>;
+
 public partial class JEnumObject
 {
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JEnumObject> enumClassMetadata = JLocalObject
-		.TypeMetadataBuilder<JEnumObject>.Create(UnicodeClassNames.EnumObject(), JTypeModifier.Abstract)
-		.Implements<JSerializableObject>().Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.TypeMetadataBuilder<JEnumObject>
+	                                                                .Create("java/lang/Enum"u8, JTypeModifier.Abstract)
+	                                                                .Implements<JSerializableObject>()
+	                                                                .Implements<JComparableObject>().Build();
 
-	static JClassTypeMetadata<JEnumObject> IClassType<JEnumObject>.Metadata => JEnumObject.enumClassMetadata;
+	static TypeMetadata IClassType<JEnumObject>.Metadata => JEnumObject.typeMetadata;
 
 	/// <summary>
 	/// String of enum value.

@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Nio;
 
+using TypeMetadata = JClassTypeMetadata<JDoubleBufferObject>;
+
 /// <summary>
 /// This class represents a local <c>java.nio.DoubleBuffer</c> instance.
 /// </summary>
@@ -8,15 +10,12 @@ public class JDoubleBufferObject : JBufferObject<JDouble>, IClassType<JDoubleBuf
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JDoubleBufferObject> metadata = TypeMetadataBuilder<JBufferObject>
-	                                                                           .Create<JDoubleBufferObject>(
-		                                                                           UnicodeClassNames
-			                                                                           .DoubleBufferObject(),
-		                                                                           JTypeModifier.Abstract)
-	                                                                           .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
+	                                                    .Create<JDoubleBufferObject>(
+		                                                    "java/nio/DoubleBuffer"u8, JTypeModifier.Abstract)
+	                                                    .Implements<JComparableObject>().Build();
 
-	static JClassTypeMetadata<JDoubleBufferObject> IClassType<JDoubleBufferObject>.Metadata
-		=> JDoubleBufferObject.metadata;
+	static TypeMetadata IClassType<JDoubleBufferObject>.Metadata => JDoubleBufferObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JDoubleBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

@@ -11,14 +11,9 @@ public partial class JLocalObject
 		                 Justification = CommonConstants.StaticAbstractPropertyUseJustification)]
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
 		                 Justification = CommonConstants.InternalInheritanceJustification)]
-		private protected sealed partial class Proxy<TInterface> : JProxyObject, IInterfaceObject<TInterface>
+		private protected sealed class Proxy<TInterface> : JProxyObject, IInterfaceObject<TInterface>
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			/// <summary>
-			/// Proxy metadata.
-			/// </summary>
-			public static readonly JClassTypeMetadata ProxyMetadata = new ProxyTypeMetadata();
-
 			/// <inheritdoc/>
 			public Proxy(IReferenceType.ClassInitializer initializer) : base(initializer)
 			{
@@ -29,9 +24,6 @@ public partial class JLocalObject
 			}
 			/// <inheritdoc/>
 			public Proxy(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
-
-			/// <inheritdoc/>
-			private Proxy(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 		}
 	}
 }

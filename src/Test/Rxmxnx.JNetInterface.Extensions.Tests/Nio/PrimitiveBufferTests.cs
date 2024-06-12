@@ -349,35 +349,35 @@ public sealed class PrimitiveBufferTests
 		JPrimitiveTypeMetadata primitiveTypeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
 		switch (primitiveTypeMetadata.Signature[0])
 		{
-			case UnicodePrimitiveSignatures.BooleanSignatureChar:
+			case CommonNames.BooleanSignatureChar:
 				PrimitiveBufferTests.fixture.CreateMany<Boolean>(length).ToArray().AsSpan().AsBytes()
 				                    .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.ByteSignatureChar:
+			case CommonNames.ByteSignatureChar:
 				PrimitiveBufferTests.fixture.CreateMany<SByte>(length).ToArray().AsSpan().AsBytes()
 				                    .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.CharSignatureChar:
+			case CommonNames.CharSignatureChar:
 				PrimitiveBufferTests.fixture.CreateMany<Char>(length).ToArray().AsSpan().AsBytes()
 				                    .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.DoubleSignatureChar:
+			case CommonNames.DoubleSignatureChar:
 				PrimitiveBufferTests.fixture.CreateMany<Double>(length).ToArray().AsSpan().AsBytes()
 				                    .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.FloatSignatureChar:
+			case CommonNames.FloatSignatureChar:
 				PrimitiveBufferTests.fixture.CreateMany<Single>(length).ToArray().AsSpan().AsBytes()
 				                    .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.IntSignatureChar:
+			case CommonNames.IntSignatureChar:
 				PrimitiveBufferTests.fixture.CreateMany<Int32>(length).ToArray().AsSpan().AsBytes()
 				                    .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.LongSignatureChar:
+			case CommonNames.LongSignatureChar:
 				PrimitiveBufferTests.fixture.CreateMany<Int64>(length).ToArray().AsSpan().AsBytes()
 				                    .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.ShortSignatureChar:
+			case CommonNames.ShortSignatureChar:
 				PrimitiveBufferTests.fixture.CreateMany<Int16>(length).ToArray().AsSpan().AsBytes()
 				                    .CopyTo(result.AsSpan().AsBytes());
 				break;

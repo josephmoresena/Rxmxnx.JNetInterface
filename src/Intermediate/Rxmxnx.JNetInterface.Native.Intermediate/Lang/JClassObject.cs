@@ -57,7 +57,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <summary>
 	/// Indicates whether the current class is an array.
 	/// </summary>
-	public Boolean IsArray => this.ClassSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar;
+	public Boolean IsArray => this.ClassSignature[0] == CommonNames.ArraySignaturePrefixChar;
 	/// <summary>
 	/// Indicates whether the current class is an array.
 	/// </summary>
@@ -175,7 +175,9 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 
 	/// <inheritdoc/>
 	public override String ToString()
-		=> !this.Reference.IsDefault ? JObject.GetObjectIdentifier(this.Name, this.Reference) : $"{this.Name}";
+		=> !this.Reference.IsDefault ?
+			JObject.GetObjectIdentifier(this.ClassSignature, this.Reference) :
+			$"{this.Name}";
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override String ToTraceText()
@@ -210,6 +212,12 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		this._arrayDimension = classMetadata.ArrayDimension;
 	}
 
+	/// <summary>
+	/// Retrieves the java class for <c>void</c>.
+	/// </summary>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <returns>The class instance with given class name.</returns>
+	public static JClassObject GetVoidClass(IEnvironment env) => env.ClassFeature.VoidPrimitive;
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.
 	/// </summary>

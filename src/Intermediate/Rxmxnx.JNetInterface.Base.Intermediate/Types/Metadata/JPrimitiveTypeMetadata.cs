@@ -3,26 +3,19 @@
 /// <summary>
 /// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
 /// </summary>
-public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
+public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 {
 	/// <summary>
 	/// Java <c>void</c> type information.
 	/// </summary>
-	private static readonly CStringSequence voidInformation = new(UnicodeClassNames.VoidPrimitive(),
-	                                                              stackalloc Byte[1]
-	                                                              {
-		                                                              UnicodePrimitiveSignatures.VoidSignatureChar,
-	                                                              }, ReadOnlySpan<Byte>.Empty);
+	private static readonly CStringSequence voidInformation = new(CommonNames.VoidPrimitive(),
+	                                                              stackalloc Byte[1] { CommonNames.VoidSignatureChar, },
+	                                                              ReadOnlySpan<Byte>.Empty);
 
 	/// <summary>
 	/// <see cref="JPrimitiveTypeMetadata"/> instance for Java <c>void</c> type.
 	/// </summary>
 	public static readonly JPrimitiveTypeMetadata VoidMetadata = new JVoidTypeMetadata();
-
-	/// <summary>
-	/// Fake class hash for primitive void.
-	/// </summary>
-	internal static String FakeVoidHash => JVoidTypeMetadata.FakeHash;
 
 	/// <summary>
 	/// JNI name for the current type wrapper class.
@@ -103,14 +96,11 @@ public abstract partial record JPrimitiveTypeMetadata : JDataTypeMetadata
 /// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
 /// </summary>
 /// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
-public abstract record JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetadata
+public abstract class JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetadata
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {
 	/// <inheritdoc/>
 	private protected JPrimitiveTypeMetadata(Type underlineType, ReadOnlySpan<Byte> signature,
 		ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> wrapperClassName) : base(
 		NativeUtilities.SizeOf<TPrimitive>(), underlineType, signature, className, wrapperClassName) { }
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
 }

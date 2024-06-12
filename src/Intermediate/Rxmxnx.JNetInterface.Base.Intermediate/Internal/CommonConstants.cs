@@ -1,4 +1,4 @@
-﻿namespace Rxmxnx.JNetInterface.Internal.ConstantValues;
+﻿namespace Rxmxnx.JNetInterface.Internal;
 
 /// <summary>
 /// Internal class of constant <see cref="String"/> values.
@@ -11,9 +11,9 @@ internal static class CommonConstants
 	public const String InvalidPrimitiveTypeMessage = "Invalid primitive type.";
 	public const String InvalidSignatureMessage = "Invalid signature.";
 
+	#region SuppressMessage
 	public const String CodeQuality = "CodeQuality";
 	public const String CSharpSquid = "csharpsquid";
-	public const String Aot = "AOT";
 	public const String CheckId0051 = "IDE0051:Remove unused private members";
 	public const String CheckIdS1144 = "S1144:Unused private types or members should be removed";
 	public const String CheckIdS2292 = "S2292:Trivial properties should be auto-implemented";
@@ -63,6 +63,7 @@ internal static class CommonConstants
 		"There is no static field, but abstract/virtual property.";
 	public const String DefaultValueTypeJustification = "Default value for ValueType is not null.";
 	public const String NoStringComparisonOperatorsJustification = "System.String has no comparison operators.";
+	public const String NoBooleanComparisonOperatorsJustification = "System.Boolean has no comparison operators.";
 	public const String ClassJustification = "Type needs class inheritance.";
 	public const String NonStandardLinqJustification = "Linq is not needed.";
 	public const String NonStandardTraceJustification = "Not standard trace is required.";
@@ -70,4 +71,5 @@ internal static class CommonConstants
 	public const String SecureUnsafeCodeJustification = "JNI code is secure to use.";
 	public const String OnlyInternalInstantiationJustification =
 		"Only internal code is allowed to build an instance of current type.";
+	#endregion
 }

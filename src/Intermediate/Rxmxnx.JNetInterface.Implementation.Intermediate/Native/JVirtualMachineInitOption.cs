@@ -1,9 +1,9 @@
 namespace Rxmxnx.JNetInterface.Native;
 
 /// <summary>
-/// This record stores an option for a VM initialization.
+/// This class stores an option for a VM initialization.
 /// </summary>
-public sealed record JVirtualMachineInitOption
+public sealed class JVirtualMachineInitOption
 {
 	/// <summary>
 	/// Option name.
@@ -43,11 +43,11 @@ public sealed record JVirtualMachineInitOption
 	/// </summary>
 	/// <param name="values">A read-only span of <see cref="VirtualMachineInitOptionValue"/> values.</param>
 	/// <returns>A <see cref="JVirtualMachineInitOption"/> array.</returns>
-	internal static List<JVirtualMachineInitOption> GetOptions(ReadOnlySpan<VirtualMachineInitOptionValue> values)
+	internal static JVirtualMachineInitOption[] GetOptions(ReadOnlySpan<VirtualMachineInitOptionValue> values)
 	{
-		List<JVirtualMachineInitOption> result = new(values.Length);
+		JVirtualMachineInitOption[] result = new JVirtualMachineInitOption[values.Length];
 		for (Int32 i = 0; i < values.Length; i++)
-			result.Add(new(values[i]));
+			result[i] = new(values[i]);
 		return result;
 	}
 	/// <summary>
@@ -57,11 +57,12 @@ public sealed record JVirtualMachineInitOption
 	/// <returns>A <see cref="CStringSequence"/> instance.</returns>
 	internal static CStringSequence GetOptionsSequence(IList<JVirtualMachineInitOption> options)
 	{
-		List<CString> list = new(options.Count * 2);
-		foreach (JVirtualMachineInitOption option in options)
+		CString[] list = new CString[options.Count * 2];
+		for (Int32 index = 0; index < options.Count; index++)
 		{
-			list.Add(option.Name);
-			list.Add(option.ExtraInfo);
+			JVirtualMachineInitOption option = options[index];
+			list[index * 2] = option.Name;
+			list[index * 2 + 1] = option.ExtraInfo;
 		}
 		return new(list);
 	}

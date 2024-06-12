@@ -39,24 +39,6 @@ public sealed class DataTypeTests
 
 		NativeProxy.Type = default;
 		Assert.Throws<InvalidEnumArgumentException>(DataTypeTests.NativeTypeTest<NativeProxy>);
-		NativeProxy.Type = JNativeType.JBoolean;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JByte;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JChar;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JDouble;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JFloat;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JInt;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JLong;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JShort;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
-		NativeProxy.Type = JNativeType.JVirtualMachineInitArgument;
-		DataTypeTests.NativeTypeTest<NativeProxy>();
 	}
 	[Fact]
 	internal void VoidMetadataTest()
@@ -68,13 +50,11 @@ public sealed class DataTypeTests
 		Assert.Equal(default, voidMetadata.NativeType);
 		Assert.True(ReadOnlySpan<Byte>.Empty.SequenceEqual(voidMetadata.ArraySignature));
 		Assert.Equal(0, voidMetadata.SizeOf);
-		Assert.Equal(UnicodePrimitiveSignatures.VoidSignatureChar, voidMetadata.Signature[0]);
+		Assert.Equal(CommonNames.VoidSignatureChar, voidMetadata.Signature[0]);
 		Assert.Equal(JTypeModifier.Final, voidMetadata.Modifier);
 		Assert.True(wrapperInformation[0].SequenceEqual(voidMetadata.WrapperClassName));
 		Assert.True(wrapperInformation[1].SequenceEqual(voidMetadata.WrapperClassSignature));
 		Assert.Equal(wrapperInformation, voidMetadata.WrapperInformation);
-		Assert.Equal(JPrimitiveTypeMetadata.FakeVoidHash,
-		             JDataTypeMetadata.CreateInformationSequence(voidMetadata.ClassName).ToString());
 
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.ArgumentMetadata);
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.CreateInstance(Array.Empty<Byte>()));
@@ -92,7 +72,7 @@ public sealed class DataTypeTests
 	{
 		Assert.Equal(JNativeType.JObject, TPrimitive.JniType);
 	}
-	private static void NativeTypeTest<TNative>() where TNative : unmanaged, INativeType<TNative>
+	private static void NativeTypeTest<TNative>() where TNative : unmanaged, INativeType
 	{
 		Byte[] bytes = DataTypeTests.fixture.CreateMany<Byte>(NativeUtilities.SizeOf<TNative>()).ToArray();
 		ref TNative value = ref bytes.AsSpan().AsValue<TNative>();
@@ -128,10 +108,9 @@ public sealed class DataTypeTests
 		public abstract UInt64 ToUInt64(IFormatProvider? provider);
 	}
 
-	private readonly struct NativeProxy : INativeType<NativeProxy>
+	private readonly struct NativeProxy : INativeType
 	{
 		public static JNativeType Type;
 		static JNativeType INativeType.Type => NativeProxy.Type;
-		public override String ToString() => INativeType.ToString(this);
 	}
 }

@@ -3,11 +3,11 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine
 {
 	/// <summary>
-	/// This record stores cache for a <see cref="JVirtualMachine"/> instance.
+	/// This class stores cache for a <see cref="JVirtualMachine"/> instance.
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-	private sealed partial record VirtualMachineCache : GlobalMainClasses
+	private sealed partial class VirtualMachineCache : GlobalMainClasses
 	{
 		/// <summary>
 		/// Global cache.
@@ -61,7 +61,7 @@ public partial class JVirtualMachine
 			if (jGlobal is null || jGlobal.IsDefault) return jGlobal;
 			using IThread thread = this._vm.CreateThread(ThreadPurpose.CheckGlobalReference);
 			this._globalObjects[jGlobal.Reference] = new(jGlobal.GetCacheable(thread));
-			if (UnicodeClassNames.ClassObject.SequenceEqual(jGlobal.ObjectMetadata.ObjectClassName))
+			if (CommonNames.ClassObject.AsSpan().SequenceEqual(jGlobal.ObjectMetadata.ObjectClassName))
 				this.GlobalClassCache.Load(jGlobal.As<JClassLocalRef>());
 			return jGlobal;
 		}
@@ -75,7 +75,7 @@ public partial class JVirtualMachine
 		{
 			if (jWeak is null || jWeak.IsDefault) return jWeak;
 			this._weakObjects[jWeak.Reference] = new(jWeak);
-			if (UnicodeClassNames.ClassObject.SequenceEqual(jWeak.ObjectMetadata.ObjectClassName))
+			if (CommonNames.ClassObject.AsSpan().SequenceEqual(jWeak.ObjectMetadata.ObjectClassName))
 				this.WeakClassCache.Load(jWeak.As<JClassLocalRef>());
 			return jWeak;
 		}

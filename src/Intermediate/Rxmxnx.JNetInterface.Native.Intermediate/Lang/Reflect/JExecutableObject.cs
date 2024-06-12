@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
+using TypeMetadata = JClassTypeMetadata<JExecutableObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Executable</c> instance.
 /// </summary>
@@ -9,14 +11,13 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JExecutableObject> metadata = TypeMetadataBuilder<JAccessibleObject>
-	                                                                         .Create<JExecutableObject>(
-		                                                                         UnicodeClassNames.ExecutableObject(),
-		                                                                         JTypeModifier.Abstract)
-	                                                                         .Implements<JGenericDeclarationObject>()
-	                                                                         .Implements<JMemberObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JAccessibleObject>
+	                                                    .Create<JExecutableObject>(
+		                                                    "java/lang/reflect/Executable"u8, JTypeModifier.Abstract)
+	                                                    .Implements<JGenericDeclarationObject>()
+	                                                    .Implements<JMemberObject>().Build();
 
-	static JClassTypeMetadata<JExecutableObject> IClassType<JExecutableObject>.Metadata => JExecutableObject.metadata;
+	static TypeMetadata IClassType<JExecutableObject>.Metadata => JExecutableObject.typeMetadata;
 
 	/// <summary>
 	/// Executable JNI definition.

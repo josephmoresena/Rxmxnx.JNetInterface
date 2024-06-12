@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JInterfaceTypeMetadata<JComparableObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.Comparable</c> instance.
 /// </summary>
@@ -10,11 +12,10 @@ public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IIn
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JComparableObject> typeMetadata =
-		TypeMetadataBuilder<JComparableObject>.Create(UnicodeClassNames.ComparableInterface()).Build();
+	private static readonly TypeMetadata typeMetadata =
+		TypeMetadataBuilder<JComparableObject>.Create("java/lang/Comparable"u8).Build();
 
-	static JInterfaceTypeMetadata<JComparableObject> IInterfaceType<JComparableObject>.Metadata
-		=> JComparableObject.typeMetadata;
+	static TypeMetadata IInterfaceType<JComparableObject>.Metadata => JComparableObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JComparableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

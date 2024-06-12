@@ -47,24 +47,13 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 	/// <summary>
 	/// Retrieves array element class name.
 	/// </summary>
-	/// <param name="arraySignature">A JNI array signature.</param>
 	/// <param name="dimension">Output. Array dimension.</param>
 	/// <returns>Element class name.</returns>
-	protected static CString GetElementName(ReadOnlySpan<Byte> arraySignature, out Int32 dimension)
+	private protected String GetElementName(out Int32 dimension)
 	{
-		dimension = JClassObject.GetArrayDimension(arraySignature);
-		return new(arraySignature[dimension] switch
-		{
-			UnicodePrimitiveSignatures.BooleanSignatureChar => UnicodeClassNames.BooleanPrimitive(),
-			UnicodePrimitiveSignatures.ByteSignatureChar => UnicodeClassNames.BytePrimitive(),
-			UnicodePrimitiveSignatures.CharSignatureChar => UnicodeClassNames.CharPrimitive(),
-			UnicodePrimitiveSignatures.DoubleSignatureChar => UnicodeClassNames.DoublePrimitive(),
-			UnicodePrimitiveSignatures.FloatSignatureChar => UnicodeClassNames.FloatPrimitive(),
-			UnicodePrimitiveSignatures.IntSignatureChar => UnicodeClassNames.IntPrimitive(),
-			UnicodePrimitiveSignatures.LongSignatureChar => UnicodeClassNames.LongPrimitive(),
-			UnicodePrimitiveSignatures.ShortSignatureChar => UnicodeClassNames.ShortPrimitive(),
-			_ => arraySignature[(dimension + 1)..^1],
-		});
+		dimension = JClassObject.GetArrayDimension(this.Class.ClassSignature);
+		CString classSignature = this.Class.ClassSignature;
+		return ClassNameHelper.GetClassName(classSignature, dimension);
 	}
 }
 

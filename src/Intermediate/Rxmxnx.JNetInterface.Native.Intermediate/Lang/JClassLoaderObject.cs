@@ -1,15 +1,16 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JClassTypeMetadata<JClassLoaderObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.ClassLoader</c> instance.
 /// </summary>
 public class JClassLoaderObject : JLocalObject, IClassType<JClassLoaderObject>
 {
-	private static readonly JClassTypeMetadata<JClassLoaderObject> typeMetadata =
-		TypeMetadataBuilder<JClassLoaderObject>.Create(UnicodeClassNames.ClassLoaderObject()).Build();
+	private static readonly TypeMetadata typeMetadata =
+		TypeMetadataBuilder<JClassLoaderObject>.Create("java/lang/ClassLoader"u8).Build();
 
-	static JClassTypeMetadata<JClassLoaderObject> IClassType<JClassLoaderObject>.Metadata
-		=> JClassLoaderObject.typeMetadata;
+	static TypeMetadata IClassType<JClassLoaderObject>.Metadata => JClassLoaderObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JClassLoaderObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

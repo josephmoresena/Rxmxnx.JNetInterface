@@ -29,8 +29,6 @@
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Io"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
-        <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues"/>
-        <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Reflect"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Annotation"/>
@@ -54,8 +52,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="ILLink\ILLink.LinkAttributes.xml">
-            <LogicalName>ILLink.LinkAttributes.xml</LogicalName>
+        <EmbeddedResource Include="ILLink\ILLink.Substitutions.xml">
+            <LogicalName>ILLink.Substitutions.xml</LogicalName>
         </EmbeddedResource>
     </ItemGroup>
 

@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
 		/// Release used bytes from stack.

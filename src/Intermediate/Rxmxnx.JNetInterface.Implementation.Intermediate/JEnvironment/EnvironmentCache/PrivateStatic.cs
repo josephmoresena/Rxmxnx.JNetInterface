@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
 		/// Maximum number of bytes usable on stack.
@@ -17,34 +17,6 @@ partial class JEnvironment
 		private static readonly IFixedContext<Byte>.IDisposable zeroByteContext =
 			ValPtr<Byte>.Zero.GetUnsafeFixedContext(0);
 
-		/// <summary>
-		/// Retrieves the <see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.
-		/// </summary>
-		/// <param name="returnType">A <see cref="JClassObject"/> instance.</param>
-		/// <returns><see cref="IReflectionMetadata"/> instance for <paramref name="returnType"/>.</returns>
-		private static IReflectionMetadata? GetReflectionMetadata(JClassObject returnType)
-		{
-			using JStringObject className = NativeFunctionSetImpl.Instance.GetClassName(returnType);
-			using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
-			return MetadataHelper.GetReflectionMetadata(mem.Values);
-		}
-		/// <summary>
-		/// Retrieves a <see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.
-		/// </summary>
-		/// <param name="parameterTypes">A <see cref="JClassObject"/> list.</param>
-		/// <returns><see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.</returns>
-		private static JArgumentMetadata[] GetCallMetadata(IReadOnlyList<JClassObject> parameterTypes)
-		{
-			JArgumentMetadata[] args = new JArgumentMetadata[parameterTypes.Count];
-			for (Int32 i = 0; i < parameterTypes.Count; i++)
-			{
-				using JClassObject jClass = parameterTypes[i];
-				using JStringObject className = NativeFunctionSetImpl.Instance.GetClassName(jClass);
-				using JNativeMemory<Byte> mem = className.GetNativeUtf8Chars();
-				args[i] = MetadataHelper.GetReflectionMetadata(mem.Values)!.ArgumentMetadata;
-			}
-			return args;
-		}
 		/// <summary>
 		/// Retrieves JNI version for <paramref name="envRef"/>.
 		/// </summary>
@@ -103,28 +75,28 @@ partial class JEnvironment
 		{
 			switch (definition.Descriptor[0])
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					JTrace.SetField<JBoolean>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					JTrace.SetField<JByte>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					JTrace.SetField<JChar>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					JTrace.SetField<JDouble>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					JTrace.SetField<JFloat>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					JTrace.SetField<JInt>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					JTrace.SetField<JLong>(jLocal, jClass, definition, bytes);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					JTrace.SetField<JShort>(jLocal, jClass, definition, bytes);
 					break;
 			}

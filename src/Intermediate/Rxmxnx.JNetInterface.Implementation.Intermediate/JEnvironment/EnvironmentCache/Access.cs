@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
 		/// Sets a static object field to given <paramref name="classRef"/> reference.
@@ -128,8 +128,7 @@ partial class JEnvironment
 			where TResult : IDataType<TResult>
 		{
 			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
-				ref this.GetInstanceMethodFunctions(UnicodeObjectSignatures.ObjectSignaturePrefixChar,
-				                                    !classRef.IsDefault);
+				ref this.GetInstanceMethodFunctions(CommonNames.ObjectSignaturePrefixChar, !classRef.IsDefault);
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
 			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
@@ -224,7 +223,7 @@ partial class JEnvironment
 			IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
-				ref this.GetInstanceMethodFunctions(UnicodePrimitiveSignatures.VoidSignatureChar, !classRef.IsDefault);
+				ref this.GetInstanceMethodFunctions(CommonNames.VoidSignatureChar, !classRef.IsDefault);
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
 			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,

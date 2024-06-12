@@ -7,7 +7,7 @@ namespace Rxmxnx.JNetInterface.Types;
 public interface
 	IUninstantiableType<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TUninstantiable> : IClassType<
-	TUninstantiable> where TUninstantiable : JReferenceObject, IUninstantiableType<TUninstantiable>
+	TUninstantiable> where TUninstantiable : JLocalObject, IUninstantiableType<TUninstantiable>
 {
 	static TUninstantiable IClassType<TUninstantiable>.Create(ClassInitializer initializer)
 		=> CommonValidationUtilities.ThrowInvalidInstantiation<TUninstantiable>();

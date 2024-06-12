@@ -7,7 +7,7 @@ partial class JEnvironment
 	/// <summary>
 	/// Local reference frame
 	/// </summary>
-	private sealed record LocalFrame : LocalCache, IDisposable
+	private sealed class LocalFrame : LocalCache, IDisposable
 	{
 		/// <summary>
 		/// A <see cref="JEnvironment"/> instance.

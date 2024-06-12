@@ -22,13 +22,10 @@ public sealed class CharTest : PrimitiveTestBase
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JChar>();
 
-		Assert.Equal(ClassNames.CharPrimitive, metadata.ClassName.ToString());
-		Assert.True(UnicodeClassNames.CharPrimitive().SequenceEqual(metadata.ClassName));
-		Assert.Equal(PrimitiveSignatures.CharSignature, metadata.Signature.ToString());
-		Assert.Equal(UnicodePrimitiveSignatures.CharSignatureChar, metadata.Signature[0]);
+		Assert.True("char"u8.SequenceEqual(metadata.ClassName));
+		Assert.Equal(CommonNames.CharSignatureChar, metadata.Signature[0]);
 
-		Assert.Equal(ClassNames.CharacterObject, metadata.WrapperClassName.ToString());
-		Assert.True(UnicodeClassNames.CharacterObject().SequenceEqual(metadata.WrapperClassName));
+		Assert.True("java/lang/Character"u8.SequenceEqual(metadata.WrapperClassName));
 	}
 	[Fact]
 	private void ConstructorsTest()

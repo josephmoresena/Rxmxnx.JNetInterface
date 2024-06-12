@@ -23,13 +23,10 @@ public sealed class FloatTest : PrimitiveTestBase
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JFloat>();
 
-		Assert.Equal(ClassNames.FloatPrimitive, metadata.ClassName.ToString());
-		Assert.True(UnicodeClassNames.FloatPrimitive().SequenceEqual(metadata.ClassName));
-		Assert.Equal(PrimitiveSignatures.FloatSignature, metadata.Signature.ToString());
-		Assert.Equal(UnicodePrimitiveSignatures.FloatSignatureChar, metadata.Signature[0]);
+		Assert.True("float"u8.SequenceEqual(metadata.ClassName));
+		Assert.Equal(CommonNames.FloatSignatureChar, metadata.Signature[0]);
 
-		Assert.Equal(ClassNames.FloatObject, metadata.WrapperClassName.ToString());
-		Assert.True(UnicodeClassNames.FloatObject().SequenceEqual(metadata.WrapperClassName));
+		Assert.True("java/lang/Float"u8.SequenceEqual(metadata.WrapperClassName));
 	}
 	[Fact]
 	private void ConstructorsTest()

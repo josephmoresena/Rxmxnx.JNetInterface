@@ -15,7 +15,7 @@ public partial class JClassObject
 	internal static Int32 GetArrayDimension(ReadOnlySpan<Byte> classSignature)
 	{
 		Int32 dimension = 0;
-		while (classSignature[dimension] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
+		while (classSignature[dimension] == CommonNames.ArraySignaturePrefixChar)
 			dimension++;
 		return dimension;
 	}

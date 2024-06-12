@@ -77,8 +77,8 @@ public sealed record ClassObjectMetadata : ObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
-	private ClassObjectMetadata(ITypeInformation metadata) : base(UnicodeClassNames.ClassObject,
-	                                                              UnicodeObjectSignatures.ClassObjectSignature)
+	private ClassObjectMetadata(ITypeInformation metadata) : base(CommonNames.ClassObject,
+	                                                              CommonNames.ClassObjectSignature)
 	{
 		this.Name = metadata.ClassName;
 		this.ClassSignature = metadata.Signature;

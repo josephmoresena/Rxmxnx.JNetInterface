@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Nio;
 
+using TypeMetadata = JClassTypeMetadata<JCharBufferObject>;
+
 /// <summary>
 /// This class represents a local <c>java.nio.CharBuffer</c> instance.
 /// </summary>
@@ -9,15 +11,13 @@ public class JCharBufferObject : JBufferObject<JChar>, IClassType<JCharBufferObj
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JCharBufferObject> metadata = TypeMetadataBuilder<JBufferObject>
-	                                                                         .Create<JCharBufferObject>(
-		                                                                         UnicodeClassNames.CharBufferObject(),
-		                                                                         JTypeModifier.Abstract)
-	                                                                         .Implements<JComparableObject>()
-	                                                                         .Implements<JAppendableObject>()
-	                                                                         .Implements<JReadableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
+	                                                    .Create<JCharBufferObject>(
+		                                                    "java/ nio/ CharBuffer"u8, JTypeModifier.Abstract)
+	                                                    .Implements<JComparableObject>().Implements<JAppendableObject>()
+	                                                    .Implements<JReadableObject>().Build();
 
-	static JClassTypeMetadata<JCharBufferObject> IClassType<JCharBufferObject>.Metadata => JCharBufferObject.metadata;
+	static TypeMetadata IClassType<JCharBufferObject>.Metadata => JCharBufferObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JCharBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

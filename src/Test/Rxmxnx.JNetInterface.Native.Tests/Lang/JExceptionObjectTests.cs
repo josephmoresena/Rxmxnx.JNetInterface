@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JExceptionObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.ExceptionObject);
+	private static readonly CString className = new("java/lang/Exception"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JExceptionObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JExceptionObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JExceptionObjectTests.className,
@@ -151,6 +151,7 @@ public sealed class JExceptionObjectTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
+#pragma warning disable CA1859
 	internal void ThrowTest(Boolean fail)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JExceptionObject>();
@@ -228,6 +229,7 @@ public sealed class JExceptionObjectTests
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jException);
 		env.FunctionSet.Received(1).GetMessage(jException);
 	}
+#pragma warning restore CA1859
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]

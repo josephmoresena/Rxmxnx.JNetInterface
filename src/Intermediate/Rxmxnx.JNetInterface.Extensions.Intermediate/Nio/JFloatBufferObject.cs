@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Nio;
 
+using TypeMetadata = JClassTypeMetadata<JFloatBufferObject>;
+
 /// <summary>
 /// This class represents a local <c>java.nio.FloatBuffer</c> instance.
 /// </summary>
@@ -8,14 +10,12 @@ public class JFloatBufferObject : JBufferObject<JFloat>, IClassType<JFloatBuffer
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JFloatBufferObject> metadata = TypeMetadataBuilder<JBufferObject>
-	                                                                          .Create<JFloatBufferObject>(
-		                                                                          UnicodeClassNames.FloatBufferObject(),
-		                                                                          JTypeModifier.Abstract)
-	                                                                          .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
+	                                                    .Create<JFloatBufferObject>(
+		                                                    "java/nio/FloatBuffer"u8, JTypeModifier.Abstract)
+	                                                    .Implements<JComparableObject>().Build();
 
-	static JClassTypeMetadata<JFloatBufferObject> IClassType<JFloatBufferObject>.Metadata
-		=> JFloatBufferObject.metadata;
+	static TypeMetadata IClassType<JFloatBufferObject>.Metadata => JFloatBufferObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JFloatBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JNoClassDefFoundErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.NoSuchFieldError</c> instance.
 /// </summary>
@@ -10,11 +12,11 @@ public class JNoClassDefFoundErrorObject : JLinkageErrorObject, IThrowableType<J
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JNoClassDefFoundErrorObject> typeMetadata =
-		TypeMetadataBuilder<JLinkageErrorObject>
-			.Create<JNoClassDefFoundErrorObject>(UnicodeClassNames.NoClassDefFoundErrorObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
+	                                                    .Create<JNoClassDefFoundErrorObject>(
+		                                                    "java/lang/NoClassDefFoundError"u8).Build();
 
-	static JThrowableTypeMetadata<JNoClassDefFoundErrorObject> IThrowableType<JNoClassDefFoundErrorObject>.Metadata
+	static TypeMetadata IThrowableType<JNoClassDefFoundErrorObject>.Metadata
 		=> JNoClassDefFoundErrorObject.typeMetadata;
 
 	/// <inheritdoc/>

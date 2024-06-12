@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JArrayLocalRef : IObjectReferenceType<JArrayLocalRef>
+public readonly partial struct JArrayLocalRef : IObjectReferenceType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JArray;

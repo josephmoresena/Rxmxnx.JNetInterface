@@ -5,129 +5,122 @@ internal partial class NativeFunctionSetImpl
 	/// <summary>
 	/// <c>Enum.name()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JStringObject> nameDefinition = new(UnicodeMethodNames.Name());
+	private static readonly JFunctionDefinition<JStringObject> nameDefinition = new("name"u8);
 	/// <summary>
 	/// <c>Enum.ordinal()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JInt> ordinalDefinition = new(UnicodeMethodNames.Ordinal());
+	private static readonly JFunctionDefinition<JInt> ordinalDefinition = new("ordinal"u8);
 	/// <summary>
 	/// <c>StackTraceElement.getClass()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JStringObject> getClassDefinition =
-		new(UnicodeMethodNames.GetClassName());
+	private static readonly JFunctionDefinition<JStringObject> getClassDefinition = new("getClassName"u8);
 	/// <summary>
 	/// <c>StackTraceElement.getLineNumber()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JInt> getLineNumberDefinition = new(UnicodeMethodNames.GetLineNumber());
+	private static readonly JFunctionDefinition<JInt> getLineNumberDefinition = new("getLineNumber"u8);
 	/// <summary>
 	/// <c>StackTraceElement.getFileName()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JStringObject> getFileNameDefinition =
-		new(UnicodeMethodNames.GetFileName());
+	private static readonly JFunctionDefinition<JStringObject> getFileNameDefinition = new("getFileName"u8);
 	/// <summary>
 	/// <c>StackTraceElement.getMethodName()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JStringObject> getMethodNameDefinition =
-		new(UnicodeMethodNames.GetMethodName());
+	private static readonly JFunctionDefinition<JStringObject> getMethodNameDefinition = new("getMethodName"u8);
 	/// <summary>
 	/// <c>StackTraceElement.isNativeMethod()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JBoolean> isNativeMethodDefinition =
-		new(UnicodeMethodNames.IsNativeMethod());
+	private static readonly JFunctionDefinition<JBoolean> isNativeMethodDefinition = new("isNativeMethod"u8);
 
 	/// <summary>
 	/// <c>Number.byteValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JByte> byteValueDefinition = new(UnicodeMethodNames.ByteValue());
+	private static readonly JFunctionDefinition<JByte> byteValueDefinition = new("byteValue"u8);
 	/// <summary>
 	/// <c>Number.doubleValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JDouble> doubleValueDefinition = new(UnicodeMethodNames.DoubleValue());
+	private static readonly JFunctionDefinition<JDouble> doubleValueDefinition = new("doubleValue"u8);
 	/// <summary>
 	/// <c>Number.shortValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JShort> shortValueDefinition = new(UnicodeMethodNames.ShortValue());
+	private static readonly JFunctionDefinition<JShort> shortValueDefinition = new("shortValue"u8);
 	/// <summary>
 	/// <c>Number.intValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JInt> intValueDefinition = new(UnicodeMethodNames.IntValue());
+	private static readonly JFunctionDefinition<JInt> intValueDefinition = new("intValue"u8);
 	/// <summary>
 	/// <c>Number.longValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JLong> longValueDefinition = new(UnicodeMethodNames.LongValue());
+	private static readonly JFunctionDefinition<JLong> longValueDefinition = new("longValue"u8);
 	/// <summary>
 	/// <c>Number.floatValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JFloat> floatValueDefinition = new(UnicodeMethodNames.FloatValue());
+	private static readonly JFunctionDefinition<JFloat> floatValueDefinition = new("floatValue"u8);
 	/// <summary>
 	/// <c>Throwable.getStackTrace()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JArrayObject<JStackTraceElementObject>> getStackTraceDefinition =
-		new(UnicodeMethodNames.GetStackTrace());
+		new("getStackTrace"u8);
 
 	/// <summary>
 	/// <c>Class.getModifiers()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JInt> getModifiersDefinition = new(UnicodeMethodNames.GetModifiers());
+	private static readonly JFunctionDefinition<JInt> getModifiersDefinition = new("getModifiers"u8);
 	/// <summary>
 	/// <c>Class.getInterfaces()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JArrayObject<JClassObject>> getInterfacesDefinition =
-		new(UnicodeMethodNames.GetInterfaces());
+		new("getInterfaces"u8);
 
 	/// <summary>
 	/// <c>Buffer.isDirect()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JBoolean> isDirectBuffer = new(UnicodeMethodNames.IsDirect());
+	private static readonly JFunctionDefinition<JBoolean> isDirectBuffer = new("isDirect"u8);
 	/// <summary>
 	/// <c>Buffer.capacity()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JLong> bufferCapacity = new(UnicodeMethodNames.Capacity());
+	private static readonly JFunctionDefinition<JLong> bufferCapacity = new("capacity"u8);
 
 	/// <summary>
 	/// <c>Member.getDeclaringClass()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JClassObject> getDeclaringClass =
-		new(UnicodeMethodNames.GetDeclaringClass());
+	private static readonly JFunctionDefinition<JClassObject> getDeclaringClass = new("getDeclaringClass"u8);
 
 	/// <summary>
 	/// <c>Executable.getParameterTypes()</c> definition.
 	/// </summary>
 	private static readonly JFunctionDefinition<JArrayObject<JClassObject>> getParameterTypes =
-		new(UnicodeMethodNames.GetParameterTypes());
+		new("getParameterTypes"u8);
 	/// <summary>
 	/// <c>Method.getReturnType()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JClassObject> getReturnType = new(UnicodeMethodNames.GetReturnType());
+	private static readonly JFunctionDefinition<JClassObject> getReturnType = new("getReturnType"u8);
 	/// <summary>
 	/// <c>Field.getType()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JClassObject> getType = new(UnicodeMethodNames.GetFieldType());
+	private static readonly JFunctionDefinition<JClassObject> getType = new("getType"u8);
 
 	/// <summary>
 	/// <c>Class.getName()</c> or <c>Member.getName()</c> definition.
 	/// </summary>
-	public static readonly JFunctionDefinition<JStringObject> GetNameDefinition = new(UnicodeMethodNames.GetName());
+	public static readonly JFunctionDefinition<JStringObject> GetNameDefinition = new("getName"u8);
 	/// <summary>
 	/// <c>Class.isPrimitive()</c> definition.
 	/// </summary>
-	public static readonly JFunctionDefinition<JBoolean> IsPrimitiveDefinition = new(UnicodeMethodNames.IsPrimitive());
+	public static readonly JFunctionDefinition<JBoolean> IsPrimitiveDefinition = new("isPrimitive"u8);
 
 	/// <summary>
 	/// <c>Throwable.getMessage()</c> definition.
 	/// </summary>
-	public static readonly JFunctionDefinition<JStringObject> GetMessageDefinition =
-		new(UnicodeMethodNames.GetMessage());
+	public static readonly JFunctionDefinition<JStringObject> GetMessageDefinition = new("getMessage"u8);
 
 	/// <summary>
 	/// <c>Boolean.booleanValue()</c> definition.
 	/// </summary>
-	public static readonly JFunctionDefinition<JBoolean>
-		BooleanValueDefinition = new(UnicodeMethodNames.BooleanValue());
+	public static readonly JFunctionDefinition<JBoolean> BooleanValueDefinition = new("booleanValue"u8);
 	/// <summary>
 	/// <c>Character.charValue()</c> definition.
 	/// </summary>
-	public static readonly JFunctionDefinition<JChar> CharValueDefinition = new(UnicodeMethodNames.CharValue());
+	public static readonly JFunctionDefinition<JChar> CharValueDefinition = new("charValue"u8);
 
 	/// <summary>
 	/// Constructor <c>java.lang.Boolean(boolean)</c>
@@ -165,7 +158,7 @@ internal partial class NativeFunctionSetImpl
 	/// <summary>
 	/// The class instance representing the primitive type in wrapper classes.
 	/// </summary>
-	public static readonly JFieldDefinition<JClassObject> PrimitiveTypeDefinition = new(UnicodeMethodNames.TypeField());
+	public static readonly JFieldDefinition<JClassObject> PrimitiveTypeDefinition = new("TYPE"u8);
 
 	/// <summary>
 	/// Indicates whether an array class is final.

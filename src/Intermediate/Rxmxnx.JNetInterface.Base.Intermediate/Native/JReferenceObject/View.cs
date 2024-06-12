@@ -37,12 +37,6 @@ public partial class JReferenceObject
 		private protected override ReadOnlySpan<Byte> AsSpan() => this.GetObject().AsSpan();
 		/// <inheritdoc/>
 		[ExcludeFromCodeCoverage]
-		private protected override void CopyTo(Span<Byte> span, ref Int32 offset) => this.GetObject().AsSpan();
-		/// <inheritdoc/>
-		[ExcludeFromCodeCoverage]
-		private protected override void CopyTo(Span<JValue> span, Int32 index) => this.GetObject().AsSpan();
-		/// <inheritdoc/>
-		[ExcludeFromCodeCoverage]
 		private protected override Boolean Same(JReferenceObject jObject)
 			=> Object.ReferenceEquals(this, jObject) || this.GetObject().Same(jObject);
 

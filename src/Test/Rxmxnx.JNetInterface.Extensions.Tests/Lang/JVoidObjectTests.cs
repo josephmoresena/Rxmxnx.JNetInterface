@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JVoidObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.VoidObject);
+	private static readonly CString className = new("java/lang/Void"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JVoidObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JVoidObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JVoidObjectTests.className, JVoidObjectTests.classSignature,

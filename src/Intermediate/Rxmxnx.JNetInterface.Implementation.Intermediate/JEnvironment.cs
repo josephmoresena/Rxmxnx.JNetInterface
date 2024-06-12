@@ -36,8 +36,6 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	public IVirtualMachine VirtualMachine => this._cache.VirtualMachine;
 	/// <inheritdoc/>
 	public Int32 Version => this._cache.Version;
-	/// <inheritdoc/>
-	public Boolean JniSecure() => this._cache.JniSecure();
 
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
@@ -68,6 +66,9 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 		JObjectLocalRef localRef = jniTransaction.Add(jThread);
 		return nativeInterface.IsVirtualThread(this.Reference, localRef).Value;
 	}
+
+	/// <inheritdoc/>
+	public Boolean JniSecure() => this._cache.JniSecure();
 
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj)

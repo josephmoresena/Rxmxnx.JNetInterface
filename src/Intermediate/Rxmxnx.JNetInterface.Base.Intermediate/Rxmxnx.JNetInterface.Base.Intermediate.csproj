@@ -22,10 +22,9 @@
         <Using Include="System.Numerics"/>
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="System.Text"/>
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
-        <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues"/>
-        <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues.Unicode"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
@@ -38,12 +37,6 @@
 
     <ItemGroup>
         <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="1.2.2"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="ILLink\ILLink.LinkAttributes.xml">
-            <LogicalName>ILLink.LinkAttributes.xml</LogicalName>
-        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

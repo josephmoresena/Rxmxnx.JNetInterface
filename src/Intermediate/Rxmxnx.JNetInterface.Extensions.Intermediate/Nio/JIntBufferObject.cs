@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Nio;
 
+using TypeMetadata = JClassTypeMetadata<JIntBufferObject>;
+
 /// <summary>
 /// This class represents a local <c>java.nio.IntBuffer</c> instance.
 /// </summary>
@@ -8,13 +10,12 @@ public class JIntBufferObject : JBufferObject<JInt>, IClassType<JIntBufferObject
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JIntBufferObject> metadata = TypeMetadataBuilder<JBufferObject>
-	                                                                        .Create<JIntBufferObject>(
-		                                                                        UnicodeClassNames.IntBufferObject(),
-		                                                                        JTypeModifier.Abstract)
-	                                                                        .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
+	                                                    .Create<JIntBufferObject>(
+		                                                    "java/nio/IntBuffer"u8, JTypeModifier.Abstract)
+	                                                    .Implements<JComparableObject>().Build();
 
-	static JClassTypeMetadata<JIntBufferObject> IClassType<JIntBufferObject>.Metadata => JIntBufferObject.metadata;
+	static TypeMetadata IClassType<JIntBufferObject>.Metadata => JIntBufferObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JIntBufferObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

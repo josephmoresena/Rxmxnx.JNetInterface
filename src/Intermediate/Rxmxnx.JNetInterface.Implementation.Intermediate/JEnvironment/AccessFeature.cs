@@ -6,7 +6,7 @@ partial class JEnvironment
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache : IAccessFeature
+	private sealed partial class EnvironmentCache : IAccessFeature
 	{
 		public void GetPrimitiveField(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 			JFieldDefinition definition)
@@ -72,7 +72,7 @@ partial class JEnvironment
 		public TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
 			where TField : IObject, IDataType<TField>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -94,7 +94,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
@@ -111,7 +111,7 @@ partial class JEnvironment
 		public void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
 			TField? value) where TField : IObject, IDataType<TField>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -134,7 +134,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
@@ -152,7 +152,7 @@ partial class JEnvironment
 		public TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
 			where TField : IObject, IDataType<TField>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -168,7 +168,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
@@ -186,7 +186,7 @@ partial class JEnvironment
 		public void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
 			where TField : IObject, IDataType<TField>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -206,7 +206,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jField.Definition);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TField>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(3);
 			_ = jniTransaction.Add(jField);
 			JFieldId fieldId = jField.FieldId;
@@ -247,7 +247,7 @@ partial class JEnvironment
 		public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args) where TResult : IDataType<TResult>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TResult>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TResult>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -265,7 +265,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jMethod);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TResult>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TResult>();
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
 			_ = jniTransaction.Add(jMethod);
@@ -301,7 +301,7 @@ partial class JEnvironment
 		public TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
 			Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TResult>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TResult>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -323,7 +323,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jMethod);
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TResult>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TResult>();
 			Int32 initialCapacity = nonVirtual ? 3 : 2;
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(initialCapacity + definition.ReferenceCount);
@@ -417,19 +417,15 @@ partial class JEnvironment
 		{
 			using LocalFrame _ =
 				new(this._env, parameterTypes.Length + IVirtualMachine.GetAccessibleDefinitionCapacity);
-			JArgumentMetadata[] args = EnvironmentCache.GetCallMetadata(parameterTypes!);
+			JArgumentMetadata[] args = this.GetCallMetadata(parameterTypes!);
 			if (returnType is null) return JConstructorDefinition.Create(args);
-			IReflectionMetadata? returnMetadata = EnvironmentCache.GetReflectionMetadata(returnType);
 			using JNativeMemory<Byte> mem = memberName.GetNativeUtf8Chars();
-			return returnMetadata is null ?
-				JMethodDefinition.Create(mem.Values, args) :
-				returnMetadata.CreateFunctionDefinition(mem.Values, args);
+			return MetadataHelper.GetCallDefinition(returnType, mem.Values, args);
 		}
 		public JFieldDefinition GetDefinition(JStringObject memberName, JClassObject fieldType)
 		{
-			IReflectionMetadata returnMetadata = EnvironmentCache.GetReflectionMetadata(fieldType)!;
 			using JNativeMemory<Byte> mem = memberName.GetNativeUtf8Chars();
-			return returnMetadata.CreateFieldDefinition(mem.Values);
+			return MetadataHelper.GetFieldDefinition(fieldType, mem.Values);
 		}
 		public JMethodObject GetReflectedFunction(JFunctionDefinition definition, JClassObject declaringClass,
 			Boolean isStatic)

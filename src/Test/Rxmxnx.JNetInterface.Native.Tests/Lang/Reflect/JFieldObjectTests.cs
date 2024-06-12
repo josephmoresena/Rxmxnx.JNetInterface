@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang.Reflect;
 public class JFieldObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.FieldObject);
+	private static readonly CString className = new("java/lang/reflect/Field"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JFieldObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JFieldObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JFieldObjectTests.className, JFieldObjectTests.classSignature,

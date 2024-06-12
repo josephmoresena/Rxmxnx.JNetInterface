@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for an interface <see cref="IDataType"/> type.
 /// </summary>
-public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
+public abstract class JInterfaceTypeMetadata : JReferenceTypeMetadata
 {
 	/// <summary>
 	/// CLR interface type.
@@ -14,10 +14,6 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 	public override JTypeKind Kind { get; }
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier => JTypeModifier.Abstract;
-	/// <summary>
-	/// Proxy class metadata.
-	/// </summary>
-	public abstract JClassTypeMetadata ProxyMetadata { get; }
 
 	/// <summary>
 	/// Constructor.
@@ -43,15 +39,12 @@ public abstract record JInterfaceTypeMetadata : JReferenceTypeMetadata
 /// This record stores the metadata for an interface <see cref="IDataType"/> type.
 /// </summary>
 /// <typeparam name="TInterface">Type of java interface type.</typeparam>
-public abstract record JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetadata
+public abstract class JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetadata
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {
 	/// <inheritdoc/>
 	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, ReadOnlySpan<Byte> signature,
 		Boolean isAnnotation) : base(interfaceName, signature, isAnnotation) { }
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
 
 	/// <inheritdoc/>
 	internal override Boolean IsInstance(JReferenceObject jObject)

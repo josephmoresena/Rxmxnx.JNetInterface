@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Io;
 
+using TypeMetadata = JInterfaceTypeMetadata<JSerializableObject>;
+
 /// <summary>
 /// This class represents a local <c>java.io.Serializable</c> instance.
 /// </summary>
@@ -10,11 +12,10 @@ public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>,
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JSerializableObject> typeMetadata =
-		TypeMetadataBuilder<JSerializableObject>.Create(UnicodeClassNames.SerializableInterface()).Build();
+	private static readonly TypeMetadata typeMetadata =
+		TypeMetadataBuilder<JSerializableObject>.Create("java/io/Serializable"u8).Build();
 
-	static JInterfaceTypeMetadata<JSerializableObject> IInterfaceType<JSerializableObject>.Metadata
-		=> JSerializableObject.typeMetadata;
+	static TypeMetadata IInterfaceType<JSerializableObject>.Metadata => JSerializableObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JSerializableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

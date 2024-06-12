@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JIndexOutOfBoundsExceptionObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.IndexOutOfBoundsException</c> instance.
 /// </summary>
@@ -11,12 +13,11 @@ public class JIndexOutOfBoundsExceptionObject : JRuntimeExceptionObject,
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JIndexOutOfBoundsExceptionObject> typeMetadata =
-		TypeMetadataBuilder<JRuntimeExceptionObject>
-			.Create<JIndexOutOfBoundsExceptionObject>(UnicodeClassNames.IndexOutOfBoundsExceptionObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JRuntimeExceptionObject>
+	                                                    .Create<JIndexOutOfBoundsExceptionObject>(
+		                                                    "java/lang/IndexOutOfBoundsException"u8).Build();
 
-	static JThrowableTypeMetadata<JIndexOutOfBoundsExceptionObject> IThrowableType<JIndexOutOfBoundsExceptionObject>.
-		Metadata
+	static TypeMetadata IThrowableType<JIndexOutOfBoundsExceptionObject>.Metadata
 		=> JIndexOutOfBoundsExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>

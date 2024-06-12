@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JClassObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = UnicodeClassNames.ClassObject;
+	private static readonly CString className = CommonNames.ClassObject;
 	private static readonly CString classSignature = CString.Concat("L"u8, JClassObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JClassObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JClassObjectTests.className, JClassObjectTests.classSignature,
@@ -57,8 +57,7 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClass.IsInterface, objectMetadata.IsInterface);
 		Assert.Equal(jClass.IsEnum, objectMetadata.IsEnum);
 		Assert.Equal(jClass.IsAnnotation, objectMetadata.IsAnnotation);
-		Assert.Equal(jClass.IsArray,
-		             objectMetadata.ObjectSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar);
+		Assert.Equal(jClass.IsArray, objectMetadata.ObjectSignature[0] == CommonNames.ArraySignaturePrefixChar);
 		Assert.Equal(jClass.ArrayDimension, objectMetadata.ArrayDimension);
 		Assert.Equal(jClass.Hash, objectMetadata.Hash);
 		Assert.Equal(!jClass.Reference.IsDefault ? $"{jClass.Name} {jClass.Reference}" : $"{jClass.Name}",
@@ -114,7 +113,7 @@ public sealed class JClassObjectTests
 	{
 		ITypeInformation information = Substitute.For<ITypeInformation>();
 		CString className0 = (CString)JClassObjectTests.fixture.Create<String>();
-		CString signature0 = (CString)JClassObjectTests.fixture.Create<String>();
+		CString signature0 = CString.Concat("L"u8, className0, ";"u8);
 		String hash0 = JClassObjectTests.fixture.Create<String>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
@@ -140,7 +139,7 @@ public sealed class JClassObjectTests
 		if (call < 3)
 			Assert.Equal(hash0, jClassObj.Hash);
 
-		Assert.Equal(signature0[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar, jClassObj.IsArray);
+		Assert.Equal(signature0[0] == CommonNames.ArraySignaturePrefixChar, jClassObj.IsArray);
 		Assert.Equal(signature0.Length == 1, jClassObj.IsPrimitive);
 		Assert.Equal(JClassObject.GetArrayDimension(signature0), jClassObj.ArrayDimension);
 
@@ -170,8 +169,10 @@ public sealed class JClassObjectTests
 		Assert.Equal(jClassObj.IsEnum, metadata.IsEnum);
 		Assert.Equal(jClassObj.Hash, metadata.Hash);
 
-		Assert.Equal(!jClassObj.Reference.IsDefault ? $"{jClassObj.Name} {jClassObj.Reference}" : $"{jClassObj.Name}",
-		             jClassObj.ToString());
+		Assert.Equal(
+			!jClassObj.Reference.IsDefault ?
+				$"{jClassObj.Name.ToString().Replace('/', '.')} {jClassObj.Reference}" :
+				$"{jClassObj.Name}", jClassObj.ToString());
 	}
 	[Theory]
 	[InlineData(true)]
@@ -261,7 +262,8 @@ public sealed class JClassObjectTests
 		Assert.Equal(classObjectMetadata.Name, jStringClass.Name);
 		Assert.Equal(classObjectMetadata.ClassSignature, jStringClass.ClassSignature);
 
-		Assert.Equal($"{classObjectMetadata.Name} {jStringClass.Reference}", jStringClass.ToString());
+		Assert.Equal($"{classObjectMetadata.Name.ToString().Replace('/', '.')} {jStringClass.Reference}",
+		             jStringClass.ToString());
 	}
 	[Theory]
 	[InlineData(true)]

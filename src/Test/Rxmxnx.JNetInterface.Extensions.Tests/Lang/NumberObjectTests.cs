@@ -306,22 +306,22 @@ public sealed class NumberObjectTests
 		env.ClassFeature.GetClass<TNumber>().Returns(jPrimitiveWrapperClass);
 		switch (IDataType.GetMetadata<TPrimitive>().Signature[0])
 		{
-			case UnicodePrimitiveSignatures.ByteSignatureChar:
+			case CommonNames.ByteSignatureChar:
 				env.ClassFeature.ByteObject.Returns(_ => env.ClassFeature.GetClass<TNumber>());
 				break;
-			case UnicodePrimitiveSignatures.DoubleSignatureChar:
+			case CommonNames.DoubleSignatureChar:
 				env.ClassFeature.DoubleObject.Returns(_ => env.ClassFeature.GetClass<TNumber>());
 				break;
-			case UnicodePrimitiveSignatures.FloatSignatureChar:
+			case CommonNames.FloatSignatureChar:
 				env.ClassFeature.FloatObject.Returns(_ => env.ClassFeature.GetClass<TNumber>());
 				break;
-			case UnicodePrimitiveSignatures.IntSignatureChar:
+			case CommonNames.IntSignatureChar:
 				env.ClassFeature.IntegerObject.Returns(_ => env.ClassFeature.GetClass<TNumber>());
 				break;
-			case UnicodePrimitiveSignatures.LongSignatureChar:
+			case CommonNames.LongSignatureChar:
 				env.ClassFeature.LongObject.Returns(_ => env.ClassFeature.GetClass<TNumber>());
 				break;
-			case UnicodePrimitiveSignatures.ShortSignatureChar:
+			case CommonNames.ShortSignatureChar:
 				env.ClassFeature.ShortObject.Returns(_ => env.ClassFeature.GetClass<TNumber>());
 				break;
 		}

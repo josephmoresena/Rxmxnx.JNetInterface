@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JClassTypeMetadata<JModuleObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.Module</c> instance.
 /// </summary>
@@ -8,13 +10,11 @@ public sealed class JModuleObject : JLocalObject, IClassType<JModuleObject>, IIn
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JModuleObject> typeMetadata = TypeMetadataBuilder<JModuleObject>
-	                                                                         .Create(UnicodeClassNames.ModuleObject(),
-		                                                                         JTypeModifier.Final)
-	                                                                         .Implements<JAnnotatedElementObject>()
-	                                                                         .Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JModuleObject>
+	                                                    .Create("java/lang/Module"u8, JTypeModifier.Final)
+	                                                    .Implements<JAnnotatedElementObject>().Build();
 
-	static JClassTypeMetadata<JModuleObject> IClassType<JModuleObject>.Metadata => JModuleObject.typeMetadata;
+	static TypeMetadata IClassType<JModuleObject>.Metadata => JModuleObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JModuleObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

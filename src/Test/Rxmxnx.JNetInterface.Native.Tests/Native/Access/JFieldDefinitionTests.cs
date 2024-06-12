@@ -87,9 +87,9 @@ public sealed class JFieldDefinitionTests
 		using JClassObject jClass = new(jClassClass, typeMetadata, classRef0);
 		using JClassObject jFieldClass = new(jClass, IDataType.GetMetadata<JFieldObject>(), classRef1);
 		using TDataType? instance =
-			typeMetadata.Signature[0] != UnicodeObjectSignatures.ArraySignaturePrefixChar &&
-			!typeMetadata.ClassName.AsSpan().SequenceEqual(UnicodeClassNames.ClassObject) &&
-			!typeMetadata.ClassName.AsSpan().SequenceEqual(UnicodeClassNames.StringObject()) ?
+			typeMetadata.Signature[0] != CommonNames.ArraySignaturePrefixChar &&
+			!typeMetadata.ClassName.AsSpan().SequenceEqual(CommonNames.ClassObject) &&
+			!typeMetadata.ClassName.AsSpan().SequenceEqual("java/lang/String"u8) ?
 				Assert.IsType<TDataType>(
 					typeMetadata.ParseInstance(typeMetadata.CreateInstance(jClass, localRef0, true))) :
 				default;

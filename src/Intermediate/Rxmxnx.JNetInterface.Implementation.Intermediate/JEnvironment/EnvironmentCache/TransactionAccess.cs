@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
 		/// Uses <paramref name="jObject"/> into <paramref name="jniTransaction"/>.
@@ -52,20 +52,18 @@ partial class JEnvironment
 			{
 				switch (args[i])
 				{
-					case null:
-						result[i] = JValue.Empty;
-						continue;
-					case IPrimitiveType:
-						args[i]!.CopyTo(result, i);
+					case IPrimitiveType primitive:
+						primitive.CopyTo(result, i);
 						break;
-					default:
-						JReferenceObject referenceObject = (args[i] as JReferenceObject)!;
+					case JReferenceObject referenceObject:
 						ImplementationValidationUtilities.ThrowIfProxy(referenceObject);
 						this.ReloadClass(referenceObject as JClassObject);
 						ImplementationValidationUtilities.ThrowIfDefault(referenceObject, $"Invalid object at {i}.");
-						jniTransaction.Add(referenceObject);
-						args[i]!.CopyTo(result, i);
+						result[i].Transform<JValue, JObjectLocalRef>() = jniTransaction.Add(referenceObject);
 						break;
+					default:
+						result[i] = JValue.Empty;
+						continue;
 				}
 			}
 			return result;

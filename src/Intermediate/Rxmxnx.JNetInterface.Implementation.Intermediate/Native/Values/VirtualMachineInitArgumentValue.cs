@@ -6,11 +6,10 @@
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-internal readonly unsafe partial struct VirtualMachineInitArgumentValue : INativeType<VirtualMachineInitArgumentValue>
+internal readonly unsafe struct VirtualMachineInitArgumentValue : INativeType
 {
-	static JNativeType INativeType.Type => JNativeType.JVirtualMachineInitArgument;
-	String INativeType.TextValue
-		=> $"Version: 0x{this.Version:x8} Options: {this.OptionsLength} Ignore Unrecognized: {this.IgnoreUnrecognized.Value}";
+	/// <inheritdoc/>
+	public static JNativeType Type => JNativeType.JVirtualMachineInitArgument;
 
 	/// <summary>
 	/// JNI version.

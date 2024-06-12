@@ -3,11 +3,11 @@ namespace Rxmxnx.JNetInterface;
 partial class JEnvironment
 {
 	/// <summary>
-	/// This record stores cache for a <see cref="JEnvironment"/> instance.
+	/// This class stores cache for a <see cref="JEnvironment"/> instance.
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache : LocalMainClasses
+	private sealed partial class EnvironmentCache : LocalMainClasses
 	{
 		/// <inheritdoc cref="JEnvironment.Reference"/>
 		public readonly JEnvironmentRef Reference;
@@ -77,15 +77,16 @@ partial class JEnvironment
 			{
 				ref readonly NativeInterface nativeInterface =
 					ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
-				if (!nativeInterface.ExceptionCheck(this.Reference).Value) return;
-				this.ThrowJniException(CriticalException.Instance, true);
+				if (nativeInterface.ExceptionCheck(this.Reference).Value)
+					this.SetPendingException(CriticalException.Instance, true);
 			}
 			else
 			{
 				JThrowableLocalRef throwableRef = this.GetPendingException();
-				if (throwableRef.IsDefault) return;
-				this.ThrowJniException(this.CreateThrowableException(throwableRef), true);
+				if (!throwableRef.IsDefault)
+					this.ThrowJniException(this.CreateThrowableException(throwableRef), true);
 			}
+			this.Thrown = default; // Clears current exception.
 		}
 		/// <inheritdoc cref="IEnvironment.JniSecure"/>
 		/// <param name="level">JNI call level.</param>
@@ -105,23 +106,29 @@ partial class JEnvironment
 		/// </exception>
 		public void ThrowJniException(ThrowableException? throwableException, Boolean throwException)
 		{
-			if (this.Thrown == throwableException) return;
+			if (this.Thrown == throwableException)
+			{
+				if (this.Thrown is not null && throwException)
+					throw this.Thrown; // Rethrows pending exception.
+				return;
+			}
+			if (throwableException is null)
+			{
+				this.Thrown = default; // Clears pending exception.
+				this.ClearException();
+				return;
+			}
+
 			try
 			{
-				ImplementationValidationUtilities.ThrowIfProxy(throwableException?.Global);
-				this.ThrowJniException(throwableException as JniException, throwException);
+				ImplementationValidationUtilities.ThrowIfProxy(throwableException.Global);
+				ImplementationValidationUtilities.ThrowIfDefault(throwableException.Global);
+				this.SetPendingException(throwableException, throwException);
 			}
 			finally
 			{
-				if (throwableException is null)
-				{
-					this.ClearException();
-				}
-				else
-				{
-					ImplementationValidationUtilities.ThrowIfDefault(throwableException.Global);
-					this.Throw(throwableException.Global.As<JThrowableLocalRef>());
-				}
+				// Throws current exception in JNI
+				this.Throw(throwableException.Global.As<JThrowableLocalRef>());
 			}
 		}
 		/// <summary>

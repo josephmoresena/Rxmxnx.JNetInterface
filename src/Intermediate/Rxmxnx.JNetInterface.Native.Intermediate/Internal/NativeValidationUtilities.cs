@@ -39,18 +39,21 @@ internal static class NativeValidationUtilities
 		}
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="classType"/> and <paramref name="className"/> are the same type.
+	/// Throws an exception if <paramref name="baseType"/> and <paramref name="typeName"/> are the same type.
 	/// </summary>
-	/// <param name="className">Class name.</param>
-	/// <param name="classType">Class type.</param>
+	/// <param name="typeName">Class name.</param>
+	/// <param name="baseType">Class type.</param>
 	/// <param name="baseClassType">Super class type.</param>
+	/// <param name="isInterface">Indicates whether current type is an interface.</param>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="classType"/> and <paramref name="className"/> are the same type.
+	/// Throws an exception if <paramref name="baseType"/> and <paramref name="typeName"/> are the same type.
 	/// </exception>
-	public static void ThrowIfSameType(ReadOnlySpan<Byte> className, Type classType, Type baseClassType)
+	public static void ThrowIfSameType(ReadOnlySpan<Byte> typeName, Type baseType, Type baseClassType,
+		Boolean isInterface = false)
 	{
-		if (classType == baseClassType)
-			throw new InvalidOperationException($"{className.GetString()} class and super class can't be the same.");
+		if (baseType != baseClassType) return;
+		String type = isInterface ? "interface" : "class";
+		throw new InvalidOperationException($"{typeName.GetString()} {type} and super {type} can't be the same.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="className"/> can't extend a class whose super-classes are
@@ -114,7 +117,7 @@ internal static class NativeValidationUtilities
 	/// some superinterfaces of <paramref name="interfaceMetadata"/>.
 	/// </exception>
 	public static void ThrowIfInvalidImplementation(ReadOnlySpan<Byte> typeName,
-		JInterfaceTypeMetadata interfaceMetadata, ISet<CString> notContained, Boolean isClass)
+		JInterfaceTypeMetadata interfaceMetadata, IReadOnlySet<CString> notContained, Boolean isClass)
 	{
 		if (notContained.Count == 0) return;
 		String implementationType = isClass ? "implements" : "extends";

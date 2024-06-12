@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JClassNotFoundExceptionObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.ClassNotFoundException</c> instance.
 /// </summary>
@@ -11,11 +13,11 @@ public class JClassNotFoundExceptionObject : JReflectiveOperationExceptionObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JClassNotFoundExceptionObject> typeMetadata =
-		TypeMetadataBuilder<JReflectiveOperationExceptionObject>
-			.Create<JClassNotFoundExceptionObject>(UnicodeClassNames.ClassNotFoundExceptionObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JReflectiveOperationExceptionObject>
+	                                                    .Create<JClassNotFoundExceptionObject>(
+		                                                    "java/lang/ClassNotFoundException"u8).Build();
 
-	static JThrowableTypeMetadata<JClassNotFoundExceptionObject> IThrowableType<JClassNotFoundExceptionObject>.Metadata
+	static TypeMetadata IThrowableType<JClassNotFoundExceptionObject>.Metadata
 		=> JClassNotFoundExceptionObject.typeMetadata;
 
 	/// <inheritdoc/>

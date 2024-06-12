@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This identifier may be valid until it is explicitly unloaded.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JWeakRef : IObjectGlobalReferenceType<JWeakRef>
+public readonly partial struct JWeakRef : IObjectGlobalReferenceType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JWeak;

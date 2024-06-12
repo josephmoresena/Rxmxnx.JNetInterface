@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Nio;
 public class JBufferObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.BufferObject);
+	private static readonly CString className = new("java/nio/Buffer"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JBufferObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JBufferObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JBufferObjectTests.className, JBufferObjectTests.classSignature,

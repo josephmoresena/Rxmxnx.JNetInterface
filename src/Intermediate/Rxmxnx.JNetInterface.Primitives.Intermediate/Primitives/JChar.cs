@@ -1,23 +1,24 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
+using TypeMetadata = JPrimitiveTypeMetadata<JChar>;
+
 /// <summary>
 /// Primitive <c>char</c>. Represents a character as a UTF-16 code unit.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JChar : INativeType<JChar>, ISelfEquatableComparable<JChar>,
+public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatable<JChar>,
 	IPrimitiveIntegerType<JChar, Char>
 {
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata<JChar> typeMetadata = IPrimitiveType<JChar, Char>.TypeMetadataBuilder
-		.Create(UnicodeClassNames.CharPrimitive(), UnicodePrimitiveSignatures.CharSignatureChar)
-		.WithWrapperClassName(UnicodeClassNames.CharacterObject()).Build();
+	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JChar, Char>.TypeMetadataBuilder
+		.Create("char"u8, CommonNames.CharSignatureChar).WithWrapperClassName("java/lang/Character"u8).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JChar;
 
-	static JPrimitiveTypeMetadata<JChar> IPrimitiveType<JChar>.Metadata => JChar.typeMetadata;
+	static TypeMetadata IPrimitiveType<JChar>.Metadata => JChar.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JChar.Type;
 
 	/// <summary>

@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JClassCircularityErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.ClassCircularityError</c> instance.
 /// </summary>
@@ -10,11 +12,11 @@ public class JClassCircularityErrorObject : JLinkageErrorObject, IThrowableType<
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JClassCircularityErrorObject> typeMetadata =
-		TypeMetadataBuilder<JLinkageErrorObject>
-			.Create<JClassCircularityErrorObject>(UnicodeClassNames.ClassCircularityErrorObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
+	                                                    .Create<JClassCircularityErrorObject>(
+		                                                    "java/lang/ClassCircularityError"u8).Build();
 
-	static JThrowableTypeMetadata<JClassCircularityErrorObject> IThrowableType<JClassCircularityErrorObject>.Metadata
+	static TypeMetadata IThrowableType<JClassCircularityErrorObject>.Metadata
 		=> JClassCircularityErrorObject.typeMetadata;
 
 	/// <inheritdoc/>

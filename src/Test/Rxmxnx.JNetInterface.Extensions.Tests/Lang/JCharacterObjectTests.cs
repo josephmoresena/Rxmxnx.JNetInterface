@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JCharacterObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.CharacterObject);
+	private static readonly CString className = new("java/lang/Character"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JCharacterObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JCharacterObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JCharacterObjectTests.className,

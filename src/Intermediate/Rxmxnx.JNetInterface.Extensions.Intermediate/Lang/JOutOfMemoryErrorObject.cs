@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JThrowableTypeMetadata<JOutOfMemoryErrorObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.OutOfMemoryError</c> instance.
 /// </summary>
@@ -10,12 +12,11 @@ public class JOutOfMemoryErrorObject : JVirtualMachineErrorObject, IThrowableTyp
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JThrowableTypeMetadata<JOutOfMemoryErrorObject> typeMetadata =
-		TypeMetadataBuilder<JVirtualMachineErrorObject>
-			.Create<JOutOfMemoryErrorObject>(UnicodeClassNames.OutOfMemoryErrorObject()).Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JVirtualMachineErrorObject>
+	                                                    .Create<JOutOfMemoryErrorObject>("java/lang/OutOfMemoryError"u8)
+	                                                    .Build();
 
-	static JThrowableTypeMetadata<JOutOfMemoryErrorObject> IThrowableType<JOutOfMemoryErrorObject>.Metadata
-		=> JOutOfMemoryErrorObject.typeMetadata;
+	static TypeMetadata IThrowableType<JOutOfMemoryErrorObject>.Metadata => JOutOfMemoryErrorObject.typeMetadata;
 
 	/// <inheritdoc/>
 	protected JOutOfMemoryErrorObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

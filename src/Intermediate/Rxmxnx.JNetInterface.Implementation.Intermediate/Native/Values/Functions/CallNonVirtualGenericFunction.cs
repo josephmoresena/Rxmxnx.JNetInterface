@@ -9,7 +9,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
                  Justification = CommonConstants.BinaryStructJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-internal readonly unsafe struct CallNonVirtualGenericFunction<TResult> where TResult : unmanaged, INativeType<TResult>
+internal readonly unsafe struct CallNonVirtualGenericFunction<TResult> where TResult : unmanaged, INativeType
 {
 	/// <summary>
 	/// Internal reserved entries.

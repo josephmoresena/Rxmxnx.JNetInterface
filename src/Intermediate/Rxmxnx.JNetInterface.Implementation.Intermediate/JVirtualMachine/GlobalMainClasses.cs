@@ -5,7 +5,7 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// Stores initial global classes.
 	/// </summary>
-	private abstract record GlobalMainClasses : MainClasses<JGlobal>
+	private abstract class GlobalMainClasses : MainClasses<JGlobal>
 	{
 		/// <summary>
 		/// Metadata for <see cref="JClassObject"/>.

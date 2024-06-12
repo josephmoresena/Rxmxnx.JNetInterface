@@ -5,7 +5,7 @@
 /// </summary>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2292,
                  Justification = CommonConstants.BinaryStructJustification)]
-internal readonly partial struct JNativeInterface : INativeType<JNativeInterface>
+internal readonly partial struct JNativeInterface : INativeType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JNativeInterface;

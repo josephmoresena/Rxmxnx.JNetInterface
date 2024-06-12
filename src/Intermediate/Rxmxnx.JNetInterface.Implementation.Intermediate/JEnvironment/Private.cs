@@ -67,19 +67,18 @@ partial class JEnvironment
 		// Element signature is Array signature without [ prefix.
 		ReadOnlySpan<Byte> elementSignature = arraySignature[1..];
 		// Object class name is signature without L prefix and ; suffix.
-		ReadOnlySpan<Byte> elementClassName =
-			elementSignature[^1] == UnicodeObjectSignatures.ObjectSignatureSuffixChar ?
-				elementSignature[1..^1] :
-				elementSignature;
-		if (elementSignature[0] == UnicodeObjectSignatures.ArraySignaturePrefixChar)
+		ReadOnlySpan<Byte> elementClassName = elementSignature[^1] == CommonNames.ObjectSignatureSuffixChar ?
+			elementSignature[1..^1] :
+			elementSignature;
+		if (elementSignature[0] == CommonNames.ArraySignaturePrefixChar)
 		{
 			// Is well-known array class? Primitive arrays are always well-known.
-			if (MetadataHelper.GetArrayMetadata(elementSignature) is { } elementArrayMetadata)
+			if (MetadataHelper.GetExactArrayMetadata(elementSignature) is { } elementArrayMetadata)
 				return elementArrayMetadata;
 
 			// Iterates over array element.
 			CStringSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);
-			if (MetadataHelper.GetArrayMetadata(
+			if (MetadataHelper.GetExactArrayMetadata(
 				    this.GetArrayTypeMetadata(elementSignature, elementClassInformation.ToString())) is
 			    { } arrayArrayMetadata)
 				return arrayArrayMetadata;
@@ -89,7 +88,7 @@ partial class JEnvironment
 			return MetadataHelper.ObjectArrayArrayMetadata;
 		}
 
-		JReferenceTypeMetadata? elementMetadata = MetadataHelper.GetMetadata(elementClassName);
+		JReferenceTypeMetadata? elementMetadata = MetadataHelper.GetExactMetadata(elementClassName);
 		if (elementMetadata is null) // Element is not well-known class.
 		{
 			JClassObject elementClass = this._cache.GetClass(elementClassName);
@@ -97,7 +96,7 @@ partial class JEnvironment
 		}
 
 		JArrayTypeMetadata arrayTypeMetadata =
-			MetadataHelper.GetArrayMetadata(elementMetadata) ?? MetadataHelper.ObjectArrayMetadata;
+			MetadataHelper.GetExactArrayMetadata(elementMetadata) ?? MetadataHelper.ObjectArrayMetadata;
 		JTrace.UseTypeMetadata(arraySignature, arrayTypeMetadata);
 		if (arrayHash != arrayTypeMetadata.Hash)
 			MetadataHelper.RegisterSuperView(arrayHash, arrayTypeMetadata.Hash);
@@ -114,7 +113,7 @@ partial class JEnvironment
 
 		// Annotations should use java.lang.annotation.Annotation metadata.
 		JInterfaceTypeMetadata annotationMetadata =
-			(JInterfaceTypeMetadata)MetadataHelper.GetMetadata<JAnnotationObject>();
+			(JInterfaceTypeMetadata)MetadataHelper.GetExactMetadata<JAnnotationObject>();
 		MetadataHelper.RegisterSuperView(jClass.Hash, annotationMetadata.Hash);
 		return annotationMetadata;
 	}
@@ -228,12 +227,12 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-	/// <returns>A <see cref="JClassTypeMetadata"/> instance.</returns>
-	private static JClassTypeMetadata GetSuperClassMetadata(JEnvironment env, JClassObject jClass)
+	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
+	private static JReferenceTypeMetadata GetSuperClassMetadata(JEnvironment env, JClassObject jClass)
 	{
 		if (jClass.IsEnum) // Enums should use java.lang.Enum metadata.
 		{
-			JClassTypeMetadata enumTypeMetadata = (JClassTypeMetadata)MetadataHelper.GetMetadata<JEnumObject>();
+			JClassTypeMetadata enumTypeMetadata = (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JEnumObject>();
 			JTrace.UseTypeMetadata(jClass, enumTypeMetadata);
 			MetadataHelper.RegisterSuperClass(jClass.Hash, enumTypeMetadata.Hash);
 			return enumTypeMetadata;
@@ -248,11 +247,11 @@ partial class JEnvironment
 				MetadataHelper.RegisterSuperClass(jClass.Hash, superClass.Hash);
 
 				// Super class is java.lang.Object.
-				if (UnicodeClassNames.Object.AsSpan().SequenceEqual(superClass.Name))
+				if (CommonNames.Object.AsSpan().SequenceEqual(superClass.Name))
 					break;
 
 				// Super class is java.lang.reflect.Proxy.
-				if (checkProxy && UnicodeClassNames.ProxyObject().SequenceEqual(superClass.Name))
+				if (checkProxy && CommonNames.ProxyObject().SequenceEqual(superClass.Name))
 				{
 					using JArrayObject<JClassObject> interfaces = superClass.GetInterfaces();
 					if (interfaces.Length > 0 &&
@@ -260,21 +259,21 @@ partial class JEnvironment
 						    interfaceMetadata)
 					{
 						// Use interface proxy metadata.
-						JTrace.UseTypeMetadata(jClass, interfaceMetadata.ProxyMetadata);
+						JTrace.UseTypeMetadata(jClass, interfaceMetadata);
 						MetadataHelper.RegisterSuperClass(jClass.Hash, interfaceMetadata.Hash);
-						return interfaceMetadata.ProxyMetadata;
+						return interfaceMetadata; // If proxy, type metadata is an interface metadata.
 					}
 
 					// No interface proxy metadata, we should use java.lang.reflect.Proxy metadata.
 					JClassTypeMetadata proxyTypeMetadata =
-						(JClassTypeMetadata)MetadataHelper.GetMetadata<JProxyObject>();
+						(JClassTypeMetadata)MetadataHelper.GetExactMetadata<JProxyObject>();
 					JTrace.UseTypeMetadata(jClass, proxyTypeMetadata);
 					return proxyTypeMetadata;
 				}
 				checkProxy = false;
 
 				// Super class is well-known
-				if (MetadataHelper.GetMetadata(superClass.Name) is JClassTypeMetadata classMetadata)
+				if (MetadataHelper.GetExactMetadata(superClass.Hash) is JClassTypeMetadata classMetadata)
 				{
 					JTrace.UseTypeMetadata(jClass, classMetadata);
 					return classMetadata;
@@ -283,7 +282,7 @@ partial class JEnvironment
 			}
 		}
 
-		JClassTypeMetadata objectTypeMetadata = (JClassTypeMetadata)MetadataHelper.GetMetadata<JLocalObject>();
+		JClassTypeMetadata objectTypeMetadata = (JClassTypeMetadata)MetadataHelper.GetExactMetadata<JLocalObject>();
 		JTrace.UseTypeMetadata(jClass, objectTypeMetadata);
 		MetadataHelper.RegisterSuperClass(jClass.Hash, objectTypeMetadata.Hash);
 		return objectTypeMetadata;

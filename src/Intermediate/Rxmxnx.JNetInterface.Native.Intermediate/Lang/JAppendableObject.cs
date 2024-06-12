@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JInterfaceTypeMetadata<JAppendableObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.Appendable</c> instance.
 /// </summary>
@@ -10,11 +12,10 @@ public sealed class JAppendableObject : JInterfaceObject<JAppendableObject>, IIn
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JInterfaceTypeMetadata<JAppendableObject> typeMetadata =
-		TypeMetadataBuilder<JAppendableObject>.Create(UnicodeClassNames.AppendableInterface()).Build();
+	private static readonly TypeMetadata typeMetadata =
+		TypeMetadataBuilder<JAppendableObject>.Create("java/lang/Appendable"u8).Build();
 
-	static JInterfaceTypeMetadata<JAppendableObject> IInterfaceType<JAppendableObject>.Metadata
-		=> JAppendableObject.typeMetadata;
+	static TypeMetadata IInterfaceType<JAppendableObject>.Metadata => JAppendableObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private JAppendableObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }

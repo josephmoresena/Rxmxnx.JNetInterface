@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JErrorObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.ErrorObject);
+	private static readonly CString className = new("java/lang/Error"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JErrorObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JErrorObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JErrorObjectTests.className, JErrorObjectTests.classSignature,
@@ -145,6 +145,7 @@ public sealed class JErrorObjectTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
+#pragma warning disable CA1859
 	internal void ThrowTest(Boolean fail)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JErrorObject>();
@@ -221,6 +222,7 @@ public sealed class JErrorObjectTests
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jError);
 		env.FunctionSet.Received(1).GetMessage(jError);
 	}
+#pragma warning restore CA1859
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]

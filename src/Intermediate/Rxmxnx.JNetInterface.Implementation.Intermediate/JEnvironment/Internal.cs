@@ -182,22 +182,19 @@ partial class JEnvironment
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	internal JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference = false)
 		=> this._cache.GetClass(classRef, keepReference);
-	/// <inheritdoc cref="IClassFeature.GetClass{TObject}()"/>
-	internal JClassObject GetClass<TObject>() where TObject : JReferenceObject, IReferenceType<TObject>
-		=> this._cache.GetClass<TObject>();
 	/// <summary>
 	/// Retrieves the class object and instantiation metadata.
 	/// </summary>
 	/// <param name="localRef">Object instance to get class.</param>
-	/// <param name="metadata">Output. Instantiation metadata.</param>
+	/// <param name="typeMetadata">Output. Instantiation metadata.</param>
 	/// <returns>Object's class <see cref="JClassObject"/> instance</returns>
-	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata metadata)
+	internal JClassObject GetObjectClass(JObjectLocalRef localRef, out JReferenceTypeMetadata typeMetadata)
 	{
 		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
 		JClassObject jClass = this._cache.GetClass(classRef, true);
 		frame[jClass.LocalReference] = jClass.Lifetime.GetCacheable();
-		metadata = this._cache.GetTypeMetadata(jClass);
+		typeMetadata = this._cache.GetTypeMetadata(jClass);
 		return jClass;
 	}
 
@@ -212,7 +209,7 @@ partial class JEnvironment
 	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
 	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
 	internal unsafe JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
-		where TObjectRef : unmanaged, INativeType<TObjectRef>, IWrapper<JObjectLocalRef>
+		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.NewLocalRefInfo);
@@ -233,6 +230,11 @@ partial class JEnvironment
 		fixed (Byte* ptr = &MemoryMarshal.GetReference(errorMessage))
 			nativeInterface.ErrorFunctions.FatalError(this.Reference, ptr);
 	}
+	/// <summary>
+	/// Checks JNI occurred error.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal void CheckJniError() => this._cache.CheckJniError();
 
 	/// <summary>
 	/// Retrieves the <see cref="IEnvironment"/> instance referenced by <paramref name="reference"/>.
@@ -249,15 +251,14 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="value">A <see cref="CString"/> instance.</param>
 	/// <returns>A binary read-only span from <paramref name="value"/>.</returns>
-	public static ReadOnlySpan<Byte> GetSafeSpan(CString? value)
+	internal static ReadOnlySpan<Byte> GetSafeSpan(CString? value)
 	{
 		if (value is null)
 			return ReadOnlySpan<Byte>.Empty;
 		return value.IsNullTerminated ? value.AsSpan() : (CString)value.Clone();
 	}
-
 	/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
-	public static JClassObject GetClassObject(JEnvironment env, JObjectLocalRef localRef)
+	internal static JClassObject GetClassObject(JEnvironment env, JObjectLocalRef localRef)
 	{
 		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = env.GetObjectClass(localRef);

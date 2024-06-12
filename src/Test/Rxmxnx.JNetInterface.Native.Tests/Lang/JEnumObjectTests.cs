@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public class JEnumObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.EnumObject);
+	private static readonly CString className = new("java/lang/Enum"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JEnumObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JEnumObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JEnumObjectTests.className, JEnumObjectTests.classSignature,

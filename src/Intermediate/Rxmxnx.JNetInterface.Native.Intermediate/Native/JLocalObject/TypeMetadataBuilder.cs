@@ -42,7 +42,7 @@ public partial class JLocalObject
 		/// <returns>Current instance.</returns>
 		public void WithSignature(ReadOnlySpan<Byte> signature)
 		{
-			CommonValidationUtilities.ThrowIfInvalidSignature(signature, false);
+			CommonValidationUtilities.ThrowIfInvalidObjectSignature(signature);
 			this.Signature = signature;
 		}
 
@@ -66,10 +66,9 @@ public partial class JLocalObject
 					                                                     this._kind is not JTypeKind.Interface);
 
 				// Validates superinterfaces from current interface.
-				HashSet<CString> notContained = [];
-				metadata.Interfaces.ForEach((this._interfaceTypes, notContained),
-				                            TypeMetadataBuilder.ValidateSuperinterface);
-				NativeValidationUtilities.ThrowIfInvalidImplementation(this.DataTypeName, metadata, notContained,
+				SuperInterfaceValidationState state = new() { Interfaces = this._interfaceTypes, NotContained = [], };
+				metadata.Interfaces.ForEach(state, TypeMetadataBuilder.ValidateSuperinterface);
+				NativeValidationUtilities.ThrowIfInvalidImplementation(this.DataTypeName, metadata, state.NotContained,
 				                                                       this._kind is not JTypeKind.Interface);
 			}
 			this._interfaces ??= [];
@@ -84,16 +83,15 @@ public partial class JLocalObject
 			=> this._interfaces ?? (IReadOnlySet<JInterfaceTypeMetadata>)ImmutableHashSet<JInterfaceTypeMetadata>.Empty;
 
 		/// <summary>
-		/// Checks implementation of a the superinterface type from <paramref name="interfaceMetadata"/>.
+		/// Checks implementation of the superinterface type from <paramref name="interfaceMetadata"/>.
 		/// </summary>
-		/// <param name="args">Interface type set and non-implemented interface name set.</param>
+		/// <param name="state">A <see cref="SuperInterfaceValidationState"/> instance.</param>
 		/// <param name="interfaceMetadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
-		private static void ValidateSuperinterface(
-			(IReadOnlySet<Type> interfaceTypes, HashSet<CString> notContained) args,
+		private static void ValidateSuperinterface(SuperInterfaceValidationState state,
 			JInterfaceTypeMetadata interfaceMetadata)
 		{
-			if (!args.interfaceTypes.Contains(interfaceMetadata.InterfaceType))
-				args.notContained.Add(interfaceMetadata.ClassName);
+			if (!state.Interfaces.Contains(interfaceMetadata.InterfaceType))
+				state.NotContained.Add(interfaceMetadata.ClassName);
 		}
 	}
 
@@ -126,7 +124,8 @@ public partial class JLocalObject
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> className, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata, IReadOnlySet<Type> interfaceTypes)
 		{
-			NativeValidationUtilities.ThrowIfInvalidTypeBuilder(className, TClass.FamilyType);
+			if (IVirtualMachine.MetadataValidationEnabled)
+				NativeValidationUtilities.ThrowIfInvalidTypeBuilder(className, TClass.FamilyType);
 			this._builder = new(className, JTypeKind.Class, interfaceTypes);
 			this._baseMetadata = baseMetadata;
 			this._modifier = modifier;
@@ -163,7 +162,7 @@ public partial class JLocalObject
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
+		/// Creates a new <see cref="TypeMetadataBuilder{TClass}"/> instance.
 		/// </summary>
 		/// <param name="className">Class name of the current type.</param>
 		/// <param name="modifier">Modifier of the current type.</param>
@@ -172,19 +171,20 @@ public partial class JLocalObject
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			IReadOnlySet<Type> interfaceTypes = IReferenceType<TClass>.TypeInterfaces;
 			JClassTypeMetadata? baseMetadata = !JLocalObject.IsObjectType<TClass>() ?
 				IClassType.GetMetadata<JLocalObject>() :
 				default;
-			return new(className, modifier, baseMetadata, interfaceTypes);
+			return !IVirtualMachine.MetadataValidationEnabled ?
+				new(className, modifier, baseMetadata, ImmutableHashSet<Type>.Empty) :
+				new(className, modifier, baseMetadata, IReferenceType<TClass>.TypeInterfaces);
 		}
 		/// <summary>
-		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
+		/// Creates a new <see cref="TypeMetadataBuilder{TOBject}"/> instance.
 		/// </summary>
 		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
 		/// <param name="className">Class name of the current type.</param>
 		/// <param name="modifier">Modifier of the current type.</param>
-		/// <returns>A new <see cref="TypeMetadataBuilder{TClass}"/> instance.</returns>
+		/// <returns>A new <see cref="TypeMetadataBuilder{TObject}"/> instance.</returns>
 		public static TypeMetadataBuilder<TObject>
 			Create<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
 				ReadOnlySpan<Byte> className, JTypeModifier modifier = JTypeModifier.Extensible)
@@ -220,7 +220,7 @@ public partial class JLocalObject
 			                         baseMetadata ?? IClassType.GetMetadata<JLocalObject>());
 
 		/// <summary>
-		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance with validation.
+		/// Creates a new <see cref="TypeMetadataBuilder{TObject}"/> instance with validation.
 		/// </summary>
 		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
 		/// <param name="className">Class name of the current type.</param>

@@ -51,31 +51,27 @@ public partial class JLocalObject
 			public override String ToTraceText()
 				=> $"{this.TypeMetadata.ElementMetadata.Signature[0] switch
 				{
-					UnicodePrimitiveSignatures.BooleanSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JBooleanArrayLocalRef>()),
-					UnicodePrimitiveSignatures.ByteSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JByteArrayLocalRef>()),
-					UnicodePrimitiveSignatures.CharSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JCharArrayLocalRef>()),
-					UnicodePrimitiveSignatures.DoubleSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JDoubleArrayLocalRef>()),
-					UnicodePrimitiveSignatures.FloatSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JFloatArrayLocalRef>()),
-					UnicodePrimitiveSignatures.IntSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JIntArrayLocalRef>()),
-					UnicodePrimitiveSignatures.LongSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JLongArrayLocalRef>()),
-					UnicodePrimitiveSignatures.ShortSignatureChar => JObject.GetObjectIdentifier(this.Class.Name, this.As<JShortArrayLocalRef>()),
-					_ => JObject.GetObjectIdentifier(this.Class.Name, this.As<JObjectArrayLocalRef>()),
+					CommonNames.BooleanSignatureChar => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.As<JBooleanArrayLocalRef>()),
+					CommonNames.ByteSignatureChar => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.As<JByteArrayLocalRef>()),
+					CommonNames.CharSignatureChar => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.As<JCharArrayLocalRef>()),
+					CommonNames.DoubleSignatureChar => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.As<JDoubleArrayLocalRef>()),
+					CommonNames.FloatSignatureChar => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.As<JFloatArrayLocalRef>()),
+					CommonNames.IntSignatureChar => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.As<JIntArrayLocalRef>()),
+					CommonNames.LongSignatureChar => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.As<JLongArrayLocalRef>()),
+					CommonNames.ShortSignatureChar => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.As<JShortArrayLocalRef>()),
+					_ => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.As<JObjectArrayLocalRef>()),
 				}} length: {this.Length}";
 
 			/// <inheritdoc cref="Object.ToString()"/>
 			private String GetStringValue()
 			{
 				if (this._stringValue is not null) return this._stringValue;
-				ReadOnlySpan<Byte> arraySignature = this.Class.ClassSignature;
-				CString elementName = JArrayObject.GetElementName(arraySignature, out Int32 dimension);
-				CString elementGenericName =
-					JArrayObject.GetElementName(this.TypeMetadata.Signature, out Int32 genericDimension);
-				String result =
-					$"{elementName.ToString().Replace('/', '.')}[{this.Length}]{String.Concat(Enumerable.Repeat("[]", dimension - 1))}";
-				this._stringValue =
-					genericDimension != dimension || !elementGenericName.AsSpan().SequenceEqual(elementName) ?
-						$"{this.TypeMetadata.Signature} {result}" :
-						result;
+				Boolean matchClass = this.Class.ClassSignature.AsSpan().SequenceEqual(this.TypeMetadata.Signature);
+				String elementName = this.GetElementName(out Int32 dimension);
+				String value = $"{elementName}[{this.Length}]{String.Concat(Enumerable.Repeat("[]", dimension - 1))}";
+				this._stringValue = matchClass ?
+					value :
+					$"{value} {ClassNameHelper.GetClassName(this.TypeMetadata.Signature)}";
 				return this._stringValue;
 			}
 		}

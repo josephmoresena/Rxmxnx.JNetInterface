@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JThrowableObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.ThrowableObject);
+	private static readonly CString className = new("java/lang/Throwable"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JThrowableObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JThrowableObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JThrowableObjectTests.className,
@@ -75,7 +75,8 @@ public sealed class JThrowableObjectTests
 
 		Assert.Equal(throwableRef, jThrowable.Reference);
 
-		String toString = $"{jThrowable.Class.Name} {jThrowable.Reference} {jThrowable.Message}";
+		String toString =
+			$"{jThrowable.Class.Name.ToString().Replace('/', '.')} {jThrowable.Reference} {jThrowable.Message}";
 		if (jThrowable.StackTrace.Length > 0)
 		{
 			StringBuilder strBuild = new(toString);
@@ -165,6 +166,7 @@ public sealed class JThrowableObjectTests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
+#pragma warning disable CA1859
 	internal void ThrowTest(Boolean fail)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JThrowableObject>();
@@ -234,6 +236,7 @@ public sealed class JThrowableObjectTests
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jThrowable);
 		env.FunctionSet.Received(1).GetMessage(jThrowable);
 	}
+#pragma warning restore CA1859
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]

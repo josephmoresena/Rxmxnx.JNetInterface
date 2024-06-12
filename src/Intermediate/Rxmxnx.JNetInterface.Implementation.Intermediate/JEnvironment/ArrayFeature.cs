@@ -4,35 +4,35 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache : IArrayFeature
+	private sealed partial class EnvironmentCache : IArrayFeature
 	{
 		public unsafe JArrayObject<TElement> CreateArray<TElement>(Int32 length)
 			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfInvalidArrayLength(length);
 			JArrayLocalRef arrayRef = default;
-			if (MetadataHelper.GetMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
+			if (MetadataHelper.GetExactMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
 			{
 				ref readonly ArrayFunctionSet arrayFunctions =
 					ref this.GetArrayFunctions(metadata.Signature[0], ArrayFunctionSet.PrimitiveFunction.NewArray);
 				arrayRef = metadata.Signature[0] switch
 				{
-					UnicodePrimitiveSignatures.BooleanSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewBooleanArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.ByteSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewByteArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.CharSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewCharArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.DoubleSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewDoubleArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.FloatSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewFloatArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.IntSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewIntArray
-						.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.LongSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewLongArray.NewArray(this.Reference, length).ArrayValue,
-					UnicodePrimitiveSignatures.ShortSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions
-						.NewShortArray.NewArray(this.Reference, length).ArrayValue,
+					CommonNames.BooleanSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewBooleanArray
+					                                                  .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.ByteSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewByteArray
+					                                               .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.CharSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewCharArray
+					                                               .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.DoubleSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewDoubleArray
+					                                                 .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.FloatSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewFloatArray
+					                                                .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.IntSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewIntArray
+					                                              .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.LongSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewLongArray
+					                                               .NewArray(this.Reference, length).ArrayValue,
+					CommonNames.ShortSignatureChar => arrayFunctions.NewPrimitiveArrayFunctions.NewShortArray
+					                                                .NewArray(this.Reference, length).ArrayValue,
 					_ => arrayRef,
 				};
 				if (arrayRef.IsDefault) this.CheckJniError();
@@ -49,7 +49,7 @@ partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			JArrayObject<TElement> result;
-			if (MetadataHelper.GetMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
+			if (MetadataHelper.GetExactMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
 			{
 				result = this.CreateArray<TElement>(length);
 				this.FillPrimitiveArray(result, metadata, initialElement);
@@ -76,7 +76,7 @@ partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -93,7 +93,7 @@ partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> buffer = stackalloc Byte[primitiveMetadata.SizeOf];
@@ -111,7 +111,7 @@ partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
 				return this.IndexOfObject(jArray, item as JReferenceObject);
@@ -127,7 +127,7 @@ partial class JEnvironment
 			ArgumentNullException.ThrowIfNull(array);
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(array.Length);
 
-			JDataTypeMetadata metadata = MetadataHelper.GetMetadata<TElement>();
+			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 				this.CopyToPrimitive(jArray, primitiveMetadata.SizeOf, array, arrayIndex);
 			else

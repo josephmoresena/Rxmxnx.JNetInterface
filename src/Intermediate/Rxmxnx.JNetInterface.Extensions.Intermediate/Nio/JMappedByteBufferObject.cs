@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Nio;
 
+using TypeMetadata = JClassTypeMetadata<JMappedByteBufferObject>;
+
 /// <summary>
 /// This class represents a local <c>java.nio.MappedByteBuffer</c> instance.
 /// </summary>
@@ -10,12 +12,11 @@ public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByte
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JMappedByteBufferObject> metadata =
-		TypeMetadataBuilder<JByteBufferObject>
-			.Create<JMappedByteBufferObject>(UnicodeClassNames.MappedByteBufferObject(), JTypeModifier.Abstract)
-			.Build();
-	static JClassTypeMetadata<JMappedByteBufferObject> IClassType<JMappedByteBufferObject>.Metadata
-		=> JMappedByteBufferObject.metadata;
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JByteBufferObject>
+	                                                    .Create<JMappedByteBufferObject>(
+		                                                    "java/nio/MappedByteBuffer"u8, JTypeModifier.Abstract)
+	                                                    .Build();
+	static TypeMetadata IClassType<JMappedByteBufferObject>.Metadata => JMappedByteBufferObject.typeMetadata;
 
 	/// <inheritdoc/>
 	private protected JMappedByteBufferObject(JClassObject jClass, JObjectLocalRef localRef) :

@@ -48,10 +48,6 @@ partial struct {1} : IWrapper<JArrayLocalRef>, IEqualityOperators<{1}, JArrayLoc
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal static {1} FromReference(in JArrayLocalRef arrayRef) 
 		=> NativeUtilities.Transform<JArrayLocalRef, {1}>(arrayRef);
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static {1} IArrayReferenceType<{1}>.FromReference(in JArrayLocalRef arrayRef)
-		=> {1}.FromReference(in arrayRef);
 }}
 #nullable restore";
 

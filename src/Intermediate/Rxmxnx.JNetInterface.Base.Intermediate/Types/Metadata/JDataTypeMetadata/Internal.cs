@@ -1,7 +1,12 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
-public partial record JDataTypeMetadata
+public partial class JDataTypeMetadata
 {
+	/// <summary>
+	/// Internal sequence.
+	/// </summary>
+	internal CStringSequence Information => this._sequence;
+
 	/// <summary>
 	/// Creates hash from given parameters.
 	/// </summary>

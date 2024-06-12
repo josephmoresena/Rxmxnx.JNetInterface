@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 public partial class JVirtualMachine
 {
-	private sealed partial record VirtualMachineCache
+	private sealed partial class VirtualMachineCache
 	{
 		/// <inheritdoc cref="JVirtualMachine.CreateTransaction(Int32)"/>
 		public INativeTransaction CreateTransaction(Int32 capacity)

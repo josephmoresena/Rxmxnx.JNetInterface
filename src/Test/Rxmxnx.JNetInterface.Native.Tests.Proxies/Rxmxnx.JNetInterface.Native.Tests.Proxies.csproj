@@ -22,7 +22,6 @@
 
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
-        <Using Include="Rxmxnx.JNetInterface.Internal.ConstantValues"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Reflect"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Annotation"/>

@@ -7,7 +7,7 @@
 /// </summary>
 /// <remarks>This handle is valid only for the thread who owns the reference.</remarks>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JObjectLocalRef : IFixedPointer, INativeType<JObjectLocalRef>, IWrapper<JObjectLocalRef>
+public readonly partial struct JObjectLocalRef : IFixedPointer, INativeType, IWrapper<JObjectLocalRef>
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JObject;

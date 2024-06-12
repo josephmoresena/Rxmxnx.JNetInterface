@@ -6,7 +6,7 @@ public abstract class GlobalObjectTestsBase
 	protected static readonly IFixture Fixture = new Fixture().RegisterReferences();
 
 	private protected static ConcurrentBag<TGlobalRef> ConfigureFinalizer<TGlobalRef>(VirtualMachineProxy vm,
-		ThreadProxy thread, Boolean unload) where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>
+		ThreadProxy thread, Boolean unload) where TGlobalRef : unmanaged, IObjectGlobalReferenceType, INativeType
 	{
 		ConcurrentBag<TGlobalRef> result = [];
 
@@ -31,7 +31,7 @@ public abstract class GlobalObjectTestsBase
 	}
 	private protected static async Task FinalizerCheckTestAsync<TGlobalRef>(ThreadProxy thread,
 		ConcurrentBag<TGlobalRef> references, TGlobalRef globalRef)
-		where TGlobalRef : unmanaged, IObjectGlobalReferenceType<TGlobalRef>
+		where TGlobalRef : unmanaged, IObjectGlobalReferenceType, INativeType
 	{
 		GC.Collect();
 		GC.Collect();

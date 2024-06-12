@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface;
 /// </summary>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-public sealed unsafe record JVirtualMachineLibrary
+public sealed unsafe class JVirtualMachineLibrary
 {
 	/// <summary>
 	/// Name of <c>JNI_GetDefaultJavaVMInitArgs</c> function.

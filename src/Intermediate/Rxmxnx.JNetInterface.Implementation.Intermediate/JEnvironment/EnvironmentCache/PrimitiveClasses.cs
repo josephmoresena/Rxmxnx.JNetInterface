@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		JClassObject IClassFeature.EnumObject => this.GetClass<JEnumObject>();
 		JClassObject IClassFeature.VoidObject => this.GetClass<JVoidObject>();
@@ -24,21 +24,20 @@ partial class JEnvironment
 		{
 			using JClassObject wrapperClass = signature switch
 			{
-				UnicodePrimitiveSignatures.BooleanSignatureChar => this.GetClass<JBooleanObject>(),
-				UnicodePrimitiveSignatures.ByteSignatureChar => this.GetClass<JByteObject>(),
-				UnicodePrimitiveSignatures.CharSignatureChar => this.GetClass<JCharacterObject>(),
-				UnicodePrimitiveSignatures.DoubleSignatureChar => this.GetClass<JDoubleObject>(),
-				UnicodePrimitiveSignatures.FloatSignatureChar => this.GetClass<JFloatObject>(),
-				UnicodePrimitiveSignatures.IntSignatureChar => this.GetClass<JIntegerObject>(),
-				UnicodePrimitiveSignatures.LongSignatureChar => this.GetClass<JLongObject>(),
-				UnicodePrimitiveSignatures.ShortSignatureChar => this.GetClass<JShortObject>(),
+				CommonNames.BooleanSignatureChar => this.GetClass<JBooleanObject>(),
+				CommonNames.ByteSignatureChar => this.GetClass<JByteObject>(),
+				CommonNames.CharSignatureChar => this.GetClass<JCharacterObject>(),
+				CommonNames.DoubleSignatureChar => this.GetClass<JDoubleObject>(),
+				CommonNames.FloatSignatureChar => this.GetClass<JFloatObject>(),
+				CommonNames.IntSignatureChar => this.GetClass<JIntegerObject>(),
+				CommonNames.LongSignatureChar => this.GetClass<JLongObject>(),
+				CommonNames.ShortSignatureChar => this.GetClass<JShortObject>(),
 				_ => this.GetClass<JVoidObject>(),
 			};
 			JObjectLocalRef localRef =
 				this.GetStaticObjectField(wrapperClass, NativeFunctionSetImpl.PrimitiveTypeDefinition);
 			return JClassLocalRef.FromReference(in localRef);
 		}
-
 		/// <summary>
 		/// Retrieves primitive class instance for <paramref name="className"/>.
 		/// </summary>

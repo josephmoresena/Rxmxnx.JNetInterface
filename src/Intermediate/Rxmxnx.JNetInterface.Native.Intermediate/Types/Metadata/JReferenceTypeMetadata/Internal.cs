@@ -1,7 +1,13 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
-public abstract partial record JReferenceTypeMetadata
+public abstract partial class JReferenceTypeMetadata
 {
+	/// <summary>
+	/// Retrieves the class for current data type.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <returns>A <see cref="JClassObject"/> instance.</returns>
+	internal abstract JClassObject GetClass(IEnvironment env);
 	/// <summary>
 	/// Creates a <see cref="IDataType"/> instance from <paramref name="localRef"/> using
 	/// <paramref name="jClass"/>.
@@ -42,9 +48,19 @@ public abstract partial record JReferenceTypeMetadata
 		String? exceptionMessage = default)
 		=> default;
 
-	/// <inheritdoc cref="IReflectionMetadata.CreateFunctionDefinition(ReadOnlySpan{Byte}, JArgumentMetadata[])"/>
+	/// <summary>
+	/// Creates a <see cref="JFunctionDefinition"/> instance from <paramref name="functionName"/> and
+	/// <paramref name="paramsMetadata"/>.
+	/// </summary>
+	/// <param name="functionName">Function name.</param>
+	/// <param name="paramsMetadata">Metadata of the types of call arguments.</param>
+	/// <returns>A new <see cref="JFunctionDefinition"/> instance.</returns>
 	internal abstract JFunctionDefinition CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
-		JArgumentMetadata[] metadata);
-	/// <inheritdoc cref="IReflectionMetadata.CreateFieldDefinition(ReadOnlySpan{Byte})"/>
+		JArgumentMetadata[] paramsMetadata);
+	/// <summary>
+	/// Creates a <see cref="JFunctionDefinition"/> instance from <paramref name="fieldName"/>.
+	/// </summary>
+	/// <param name="fieldName">Field name.</param>
+	/// <returns>A new <see cref="JFieldDefinition"/> instance.</returns>
 	internal abstract JFieldDefinition CreateFieldDefinition(ReadOnlySpan<Byte> fieldName);
 }

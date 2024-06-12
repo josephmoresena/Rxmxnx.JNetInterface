@@ -1,28 +1,24 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
+using TypeMetadata = JPrimitiveTypeMetadata<JDouble>;
+
 /// <summary>
 /// Primitive <c>double</c>. Represents a double-precision floating-point number.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JDouble : INativeType<JDouble>, ISelfEquatableComparable<JDouble>,
+public readonly partial struct JDouble : INativeType, IComparable<JDouble>, IEquatable<JDouble>,
 	IPrimitiveFloatingPointType<JDouble, Double>, IPrimitiveSignedType<JDouble, Double>
 {
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata<JDouble> typeMetadata = IPrimitiveType<JDouble, Double>
-	                                                                       .TypeMetadataBuilder
-	                                                                       .Create(UnicodeClassNames.DoublePrimitive(),
-		                                                                       UnicodePrimitiveSignatures
-			                                                                       .DoubleSignatureChar)
-	                                                                       .WithWrapperClassName(
-		                                                                       UnicodeClassNames.DoubleObject())
-	                                                                       .Build();
+	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JDouble, Double>.TypeMetadataBuilder
+		.Create("double"u8, CommonNames.DoubleSignatureChar).WithWrapperClassName("java/lang/Double"u8).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;
 
-	static JPrimitiveTypeMetadata<JDouble> IPrimitiveType<JDouble>.Metadata => JDouble.typeMetadata;
+	static TypeMetadata IPrimitiveType<JDouble>.Metadata => JDouble.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JDouble.Type;
 
 	/// <summary>

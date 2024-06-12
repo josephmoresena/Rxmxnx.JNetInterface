@@ -37,7 +37,7 @@ public readonly ref partial struct JNativeCallAdapter
 		internal TObject CreateInitialObject<TObject>(JObjectLocalRef localRef)
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
-			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetMetadata<TObject>();
+			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
 			if (metadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
 			if (JLocalObject.IsObjectType<TObject>())
 				return (TObject)(Object)this.CreateInitialObject(localRef);

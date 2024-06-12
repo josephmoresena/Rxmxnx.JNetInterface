@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
 		/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
@@ -166,28 +166,28 @@ partial class JEnvironment
 				ref this.GetArrayFunctions(signature, ArrayFunctionSet.PrimitiveFunction.GetElements);
 			switch (signature)
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					return arrayFunctions.GetElementsFunctions.GetBooleanArrayElements.Get(
 						this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					return arrayFunctions.GetElementsFunctions.GetByteArrayElements.Get(
 						this.Reference, JByteArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					return arrayFunctions.GetElementsFunctions.GetCharArrayElements.Get(
 						this.Reference, JCharArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					return arrayFunctions.GetElementsFunctions.GetDoubleArrayElements.Get(
 						this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					return arrayFunctions.GetElementsFunctions.GetFloatArrayElements.Get(
 						this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					return arrayFunctions.GetElementsFunctions.GetIntArrayElements.Get(
 						this.Reference, JIntArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					return arrayFunctions.GetElementsFunctions.GetLongArrayElements.Get(
 						this.Reference, JLongArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					return arrayFunctions.GetElementsFunctions.GetShortArrayElements.Get(
 						this.Reference, JShortArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
 			}
@@ -201,42 +201,42 @@ partial class JEnvironment
 				ref this.GetArrayFunctions(signature, ArrayFunctionSet.PrimitiveFunction.ReleaseElements);
 			switch (signature)
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseBooleanArrayElements.Release(
 						this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef),
 						(ReadOnlyValPtr<JBoolean>)pointer, mode);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseByteArrayElements.Release(
 						this.Reference, JByteArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JByte>)pointer,
 						mode);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseCharArrayElements.Release(
 						this.Reference, JCharArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JChar>)pointer,
 						mode);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseDoubleArrayElements.Release(
 						this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef),
 						(ReadOnlyValPtr<JDouble>)pointer, mode);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseFloatArrayElements.Release(
 						this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JFloat>)pointer,
 						mode);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseIntArrayElements.Release(
 						this.Reference, JIntArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JInt>)pointer,
 						mode);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseLongArrayElements.Release(
 						this.Reference, JLongArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JLong>)pointer,
 						mode);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					arrayFunctions.ReleaseElementsFunctions.ReleaseShortArrayElements.Release(
 						this.Reference, JShortArrayLocalRef.FromReference(in arrayRef), (ReadOnlyValPtr<JShort>)pointer,
 						mode);
@@ -260,42 +260,42 @@ partial class JEnvironment
 				ref this.GetArrayFunctions(signature[0], ArrayFunctionSet.PrimitiveFunction.GetRegion);
 			switch (signature[0])
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					JBooleanArrayLocalRef jBooleanArrayRef = jniTransaction.Add<JBooleanArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.GetBooleanArrayRegion.Get(
 						this.Reference, jBooleanArrayRef, index, count, (ValPtr<JBoolean>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					JByteArrayLocalRef jByteArrayRef = jniTransaction.Add<JByteArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.GetByteArrayRegion.Get(
 						this.Reference, jByteArrayRef, index, count, (ValPtr<JByte>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					JCharArrayLocalRef jCharArrayRef = jniTransaction.Add<JCharArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.GetCharArrayRegion.Get(
 						this.Reference, jCharArrayRef, index, count, (ValPtr<JChar>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					JDoubleArrayLocalRef jDoubleArrayRef = jniTransaction.Add<JDoubleArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.GetDoubleArrayRegion.Get(
 						this.Reference, jDoubleArrayRef, index, count, (ValPtr<JDouble>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					JFloatArrayLocalRef jFloatArrayRef = jniTransaction.Add<JFloatArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.GetFloatArrayRegion.Get(this.Reference, jFloatArrayRef, index, count,
 					                                                       (ValPtr<JFloat>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					JIntArrayLocalRef jIntArrayRef = jniTransaction.Add<JIntArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.GetIntArrayRegion.Get(
 						this.Reference, jIntArrayRef, index, count, (ValPtr<JInt>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					JLongArrayLocalRef jLongArrayRef = jniTransaction.Add<JLongArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.GetLongArrayRegion.Get(
 						this.Reference, jLongArrayRef, index, count, (ValPtr<JLong>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					JShortArrayLocalRef jShortArrayRef = jniTransaction.Add<JShortArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.GetShortArrayRegion.Get(this.Reference, jShortArrayRef, index, count,
 					                                                       (ValPtr<JShort>)bufferPtr);
@@ -319,42 +319,42 @@ partial class JEnvironment
 				ref this.GetArrayFunctions(signature[0], ArrayFunctionSet.PrimitiveFunction.SetRegion);
 			switch (signature[0])
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					JBooleanArrayLocalRef jBooleanArrayRef = jniTransaction.Add<JBooleanArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.SetBooleanArrayRegion.Set(
 						this.Reference, jBooleanArrayRef, index, count, (ReadOnlyValPtr<JBoolean>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					JByteArrayLocalRef jByteArrayRef = jniTransaction.Add<JByteArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.SetByteArrayRegion.Set(this.Reference, jByteArrayRef, index, count,
 					                                                      (ReadOnlyValPtr<JByte>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					JCharArrayLocalRef jCharArrayRef = jniTransaction.Add<JCharArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.SetCharArrayRegion.Set(this.Reference, jCharArrayRef, index, count,
 					                                                      (ReadOnlyValPtr<JChar>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					JDoubleArrayLocalRef jDoubleArrayRef = jniTransaction.Add<JDoubleArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.SetDoubleArrayRegion.Set(
 						this.Reference, jDoubleArrayRef, index, count, (ReadOnlyValPtr<JDouble>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					JFloatArrayLocalRef jFloatArrayRef = jniTransaction.Add<JFloatArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.SetFloatArrayRegion.Set(this.Reference, jFloatArrayRef, index, count,
 					                                                       (ReadOnlyValPtr<JFloat>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					JIntArrayLocalRef jIntArrayRef = jniTransaction.Add<JIntArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.SetIntArrayRegion.Set(this.Reference, jIntArrayRef, index, count,
 					                                                     (ReadOnlyValPtr<JInt>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					JLongArrayLocalRef jLongArrayRef = jniTransaction.Add<JLongArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.SetLongArrayRegion.Set(this.Reference, jLongArrayRef, index, count,
 					                                                      (ReadOnlyValPtr<JLong>)bufferPtr);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					JShortArrayLocalRef jShortArrayRef = jniTransaction.Add<JShortArrayLocalRef>(jArray);
 					arrayFunctions.RegionFunctions.SetShortArrayRegion.Set(this.Reference, jShortArrayRef, index, count,
 					                                                       (ReadOnlyValPtr<JShort>)bufferPtr);

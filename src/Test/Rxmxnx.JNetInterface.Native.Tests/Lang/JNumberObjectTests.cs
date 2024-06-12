@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public class JNumberObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = new(UnicodeClassNames.NumberObject);
+	private static readonly CString className = new("java/lang/Number"u8);
 	private static readonly CString classSignature = CString.Concat("L"u8, JNumberObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JNumberObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JNumberObjectTests.className, JNumberObjectTests.classSignature,

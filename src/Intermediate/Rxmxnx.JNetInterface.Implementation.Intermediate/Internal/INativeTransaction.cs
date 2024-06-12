@@ -97,7 +97,7 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 	/// <typeparam name="TReference">A <see cref="INativeReferenceType"/> type.</typeparam>
 	/// <param name="nativeRef">A <typeparamref name="TReference"/> reference.</param>
 	/// <returns><paramref name="nativeRef"/>.</returns>
-	TReference Add<TReference>(TReference nativeRef) where TReference : unmanaged, IObjectReferenceType<TReference>
+	TReference Add<TReference>(TReference nativeRef) where TReference : unmanaged, IObjectReferenceType
 	{
 		this.Add(nativeRef.Value);
 		return nativeRef;
@@ -108,8 +108,7 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 	/// <typeparam name="TReference">A <see cref="IObjectReferenceType"/> type.</typeparam>
 	/// <param name="jReferenceObject">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> reference.</returns>
-	TReference Add<TReference>(JReferenceObject? jReferenceObject)
-		where TReference : unmanaged, IObjectReferenceType<TReference>
+	TReference Add<TReference>(JReferenceObject? jReferenceObject) where TReference : unmanaged, IObjectReferenceType
 	{
 		if (jReferenceObject is null) return default;
 		TReference nativeRef = jReferenceObject.As<TReference>();
@@ -122,7 +121,7 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	/// <returns>A <typeparamref name="TGlobalReference"/> reference.</returns>
 	TGlobalReference Add<TGlobalReference>(JGlobalBase? jGlobal)
-		where TGlobalReference : unmanaged, IObjectGlobalReferenceType<TGlobalReference>
+		where TGlobalReference : unmanaged, IObjectGlobalReferenceType, INativeType
 	{
 		if (jGlobal is null) return default;
 		TGlobalReference nativeRef = jGlobal.As<TGlobalReference>();
@@ -135,7 +134,8 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 	/// <typeparam name="TReference">A <see cref="IArrayReferenceType"/> type.</typeparam>
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> reference.</returns>
-	TReference Add<TReference>(JArrayObject? jArray) where TReference : unmanaged, IArrayReferenceType<TReference>
+	TReference Add<TReference>(JArrayObject? jArray)
+		where TReference : unmanaged, IArrayReferenceType, IObjectReferenceType
 	{
 		if (jArray is null) return default;
 		TReference arrayRef = jArray.As<TReference>();

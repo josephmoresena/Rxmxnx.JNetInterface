@@ -7,7 +7,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// This record stores the metadata for a class <see cref="IEnumType"/> type.
 		/// </summary>
-		internal sealed record EnumTypeMetadata : JEnumTypeMetadata<TEnum>
+		internal sealed class EnumTypeMetadata : JEnumTypeMetadata<TEnum>
 		{
 			/// <inheritdoc cref="JEnumTypeMetadata.Fields"/>
 			private readonly IEnumFieldList _fields;
@@ -19,7 +19,7 @@ public partial class JEnumObject
 			/// <inheritdoc/>
 			public override IInterfaceSet Interfaces => this._interfaces;
 			/// <inheritdoc/>
-			public override JClassTypeMetadata BaseMetadata => JEnumObject.enumClassMetadata;
+			public override JClassTypeMetadata BaseMetadata => JEnumObject.typeMetadata;
 			/// <inheritdoc/>
 			public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TEnum>();
 			/// <inheritdoc/>
@@ -34,8 +34,7 @@ public partial class JEnumObject
 				builder.DataTypeName, builder.Signature)
 			{
 				this._fields = fields;
-				this._interfaces =
-					InterfaceSet.GetClassInterfaces(JEnumObject.enumClassMetadata, builder.GetInterfaceSet());
+				this._interfaces = InterfaceSet.GetClassInterfaces(JEnumObject.typeMetadata, builder.GetInterfaceSet());
 			}
 
 			/// <inheritdoc/>
@@ -44,6 +43,9 @@ public partial class JEnumObject
 			/// <inheritdoc/>
 			public override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TEnum>();
 
+			/// <inheritdoc/>
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			internal override JClassObject GetClass(IEnvironment env) => env.ClassFeature.GetClass<TEnum>();
 			/// <inheritdoc/>
 			internal override JEnumObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 				Boolean realClass = false)
@@ -60,8 +62,8 @@ public partial class JEnumObject
 			}
 			/// <inheritdoc/>
 			internal override JFunctionDefinition<TEnum> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
-				JArgumentMetadata[] metadata)
-				=> JFunctionDefinition<TEnum>.Create(functionName, metadata);
+				JArgumentMetadata[] paramsMetadata)
+				=> JFunctionDefinition<TEnum>.Create(functionName, paramsMetadata);
 			/// <inheritdoc/>
 			internal override JFieldDefinition<TEnum> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
 				=> new(fieldName);

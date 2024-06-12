@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JClassTypeMetadata<JThreadObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.Thread</c> instance.
 /// </summary>
@@ -8,11 +10,10 @@ public class JThreadObject : JLocalObject, IClassType<JThreadObject>, IInterface
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JThreadObject> typeMetadata = TypeMetadataBuilder<JThreadObject>
-	                                                                         .Create(UnicodeClassNames.ThreadObject())
-	                                                                         .Implements<JRunnableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JThreadObject>.Create("java/lang/Thread"u8)
+		.Implements<JRunnableObject>().Build();
 
-	static JClassTypeMetadata<JThreadObject> IClassType<JThreadObject>.Metadata => JThreadObject.typeMetadata;
+	static TypeMetadata IClassType<JThreadObject>.Metadata => JThreadObject.typeMetadata;
 
 	/// <summary>
 	/// Indicates whether current thread is virtual.

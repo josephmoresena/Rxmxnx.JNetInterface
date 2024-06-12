@@ -5,7 +5,7 @@ internal partial struct JniTransactionHandle
 	/// <summary>
 	/// Represents a JNI native memory adapter.
 	/// </summary>
-	private abstract record NativeMemoryAdapter : UnaryTransaction, INativeMemoryAdapter
+	private abstract class NativeMemoryAdapter : UnaryTransaction, INativeMemoryAdapter
 	{
 		/// <summary>
 		/// Synchronized instance.

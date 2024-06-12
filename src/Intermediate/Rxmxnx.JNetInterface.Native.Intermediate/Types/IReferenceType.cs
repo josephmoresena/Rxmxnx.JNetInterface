@@ -34,24 +34,9 @@ public interface
 	IDataType<TReference> where TReference : JReferenceObject, IReferenceType<TReference>
 {
 	/// <summary>
-	/// Cached type interface set.
-	/// </summary>
-	private static readonly WeakReference<TypeInterfaceHelper<TReference>?> typeInterfaces = new(default);
-
-	/// <summary>
 	/// Retrieves current type interfaces set.
 	/// </summary>
-	internal static IReadOnlySet<Type> TypeInterfaces
-	{
-		get
-		{
-			if (IReferenceType<TReference>.typeInterfaces.TryGetTarget(out TypeInterfaceHelper<TReference>? result))
-				return result.Set;
-			result = new();
-			IReferenceType<TReference>.typeInterfaces.SetTarget(result);
-			return result.Set;
-		}
-	}
+	internal static IReadOnlySet<Type> TypeInterfaces => TypeInterfaceHelper<TReference>.TypeInterfaces;
 
 	/// <summary>
 	/// Creates a <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.

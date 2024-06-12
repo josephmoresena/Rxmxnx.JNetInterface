@@ -33,7 +33,7 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		String textValue = value is not null ?
-			(value as JReferenceObject)?.ToString() ?? $"{value.ObjectSignature}: {value}" :
+			(value as JReferenceObject)?.ToTraceText() ?? $"{value.ObjectSignature}: {value}" :
 			"value: null";
 		Trace.WriteLine(jLocal is null ? //Static?
 			                $"thread: {Environment.CurrentManagedThreadId} {jClass.ToTraceText()} {definition.ToTraceText()} {textValue}" :
@@ -71,7 +71,7 @@ internal static partial class JTrace
 		if (!IVirtualMachine.TraceEnabled) return;
 		StringBuilder strBuilder = new();
 		if (jLocal is null)
-			if (UnicodeMethodNames.Constructor().SequenceEqual(definition.Name))
+			if (CommonNames.Constructor().SequenceEqual(definition.Name))
 				strBuilder.AppendLine(
 					$"thread: {Environment.CurrentManagedThreadId} {jClass.Name} {definition.ToTraceText()}");
 			else
@@ -264,7 +264,7 @@ internal static partial class JTrace
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void GetAccessibleId<TAccessibleId>(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
 		TAccessibleId accessibleId, [CallerMemberName] String callerMethod = "")
-		where TAccessibleId : unmanaged, IAccessibleIdentifierType<TAccessibleId>,
+		where TAccessibleId : unmanaged, IAccessibleIdentifierType,
 		IEqualityOperators<TAccessibleId, TAccessibleId, Boolean>
 	{
 		if (!IVirtualMachine.TraceEnabled) return;

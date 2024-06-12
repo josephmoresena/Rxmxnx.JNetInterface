@@ -43,14 +43,14 @@ public sealed class PrimitiveArrayTests
 			JClassLocalRef classRef = PrimitiveArrayTests.fixture.Create<JClassLocalRef>();
 			Object traceArrayRef = arrayTypeMetadata.Signature[1] switch
 			{
-				UnicodePrimitiveSignatures.BooleanSignatureChar => JBooleanArrayLocalRef.FromReference(arrayRef),
-				UnicodePrimitiveSignatures.ByteSignatureChar => JByteArrayLocalRef.FromReference(arrayRef),
-				UnicodePrimitiveSignatures.CharSignatureChar => JCharArrayLocalRef.FromReference(arrayRef),
-				UnicodePrimitiveSignatures.DoubleSignatureChar => JDoubleArrayLocalRef.FromReference(arrayRef),
-				UnicodePrimitiveSignatures.FloatSignatureChar => JFloatArrayLocalRef.FromReference(arrayRef),
-				UnicodePrimitiveSignatures.IntSignatureChar => JIntArrayLocalRef.FromReference(arrayRef),
-				UnicodePrimitiveSignatures.LongSignatureChar => JLongArrayLocalRef.FromReference(arrayRef),
-				UnicodePrimitiveSignatures.ShortSignatureChar => JShortArrayLocalRef.FromReference(arrayRef),
+				CommonNames.BooleanSignatureChar => JBooleanArrayLocalRef.FromReference(arrayRef),
+				CommonNames.ByteSignatureChar => JByteArrayLocalRef.FromReference(arrayRef),
+				CommonNames.CharSignatureChar => JCharArrayLocalRef.FromReference(arrayRef),
+				CommonNames.DoubleSignatureChar => JDoubleArrayLocalRef.FromReference(arrayRef),
+				CommonNames.FloatSignatureChar => JFloatArrayLocalRef.FromReference(arrayRef),
+				CommonNames.IntSignatureChar => JIntArrayLocalRef.FromReference(arrayRef),
+				CommonNames.LongSignatureChar => JLongArrayLocalRef.FromReference(arrayRef),
+				CommonNames.ShortSignatureChar => JShortArrayLocalRef.FromReference(arrayRef),
 				_ => JObjectArrayLocalRef.FromReference(arrayRef),
 			};
 
@@ -283,35 +283,35 @@ public sealed class PrimitiveArrayTests
 		JPrimitiveTypeMetadata primitiveTypeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
 		switch (primitiveTypeMetadata.Signature[0])
 		{
-			case UnicodePrimitiveSignatures.BooleanSignatureChar:
+			case CommonNames.BooleanSignatureChar:
 				PrimitiveArrayTests.fixture.CreateMany<Boolean>(length).ToArray().AsSpan().AsBytes()
 				                   .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.ByteSignatureChar:
+			case CommonNames.ByteSignatureChar:
 				PrimitiveArrayTests.fixture.CreateMany<SByte>(length).ToArray().AsSpan().AsBytes()
 				                   .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.CharSignatureChar:
+			case CommonNames.CharSignatureChar:
 				PrimitiveArrayTests.fixture.CreateMany<Char>(length).ToArray().AsSpan().AsBytes()
 				                   .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.DoubleSignatureChar:
+			case CommonNames.DoubleSignatureChar:
 				PrimitiveArrayTests.fixture.CreateMany<Double>(length).ToArray().AsSpan().AsBytes()
 				                   .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.FloatSignatureChar:
+			case CommonNames.FloatSignatureChar:
 				PrimitiveArrayTests.fixture.CreateMany<Single>(length).ToArray().AsSpan().AsBytes()
 				                   .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.IntSignatureChar:
+			case CommonNames.IntSignatureChar:
 				PrimitiveArrayTests.fixture.CreateMany<Int32>(length).ToArray().AsSpan().AsBytes()
 				                   .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.LongSignatureChar:
+			case CommonNames.LongSignatureChar:
 				PrimitiveArrayTests.fixture.CreateMany<Int64>(length).ToArray().AsSpan().AsBytes()
 				                   .CopyTo(result.AsSpan().AsBytes());
 				break;
-			case UnicodePrimitiveSignatures.ShortSignatureChar:
+			case CommonNames.ShortSignatureChar:
 				PrimitiveArrayTests.fixture.CreateMany<Int16>(length).ToArray().AsSpan().AsBytes()
 				                   .CopyTo(result.AsSpan().AsBytes());
 				break;

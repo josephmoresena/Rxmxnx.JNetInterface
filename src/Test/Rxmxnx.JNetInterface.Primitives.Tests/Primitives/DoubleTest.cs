@@ -23,13 +23,10 @@ public sealed class DoubleTest : PrimitiveTestBase
 	{
 		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<JDouble>();
 
-		Assert.Equal(ClassNames.DoublePrimitive, metadata.ClassName.ToString());
-		Assert.True(UnicodeClassNames.DoublePrimitive().SequenceEqual(metadata.ClassName));
-		Assert.Equal(PrimitiveSignatures.DoubleSignature, metadata.Signature.ToString());
-		Assert.Equal(UnicodePrimitiveSignatures.DoubleSignatureChar, metadata.Signature[0]);
+		Assert.True("double"u8.SequenceEqual(metadata.ClassName));
+		Assert.Equal(CommonNames.DoubleSignatureChar, metadata.Signature[0]);
 
-		Assert.Equal(ClassNames.DoubleObject, metadata.WrapperClassName.ToString());
-		Assert.True(UnicodeClassNames.DoubleObject().SequenceEqual(metadata.WrapperClassName));
+		Assert.True("java/lang/Double"u8.SequenceEqual(metadata.WrapperClassName));
 	}
 	[Fact]
 	private void ConstructorsTest()

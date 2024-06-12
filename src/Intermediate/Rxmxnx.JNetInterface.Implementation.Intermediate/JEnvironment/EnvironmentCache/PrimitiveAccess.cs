@@ -4,7 +4,7 @@ partial class JEnvironment
 {
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
-	private sealed partial record EnvironmentCache
+	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
 		/// Sets a primitive static field.
@@ -20,35 +20,35 @@ partial class JEnvironment
 				ref this.GetStaticFieldFunctions(signature, false);
 			switch (signature)
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					this.SetPrimitiveStaticField(classRef, bytes, signature, fieldId,
 					                             in staticFieldFunctions.SetBooleanField);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					this.SetPrimitiveStaticField(classRef, bytes, signature, fieldId,
 					                             in staticFieldFunctions.SetByteField);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					this.SetPrimitiveStaticField(classRef, bytes, signature, fieldId,
 					                             in staticFieldFunctions.SetCharField);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					this.SetPrimitiveStaticField(classRef, bytes, signature, fieldId,
 					                             in staticFieldFunctions.SetDoubleField);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					this.SetPrimitiveStaticField(classRef, bytes, signature, fieldId,
 					                             in staticFieldFunctions.SetFloatField);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					this.SetPrimitiveStaticField(classRef, bytes, signature, fieldId,
 					                             in staticFieldFunctions.SetIntField);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					this.SetPrimitiveStaticField(classRef, bytes, signature, fieldId,
 					                             in staticFieldFunctions.SetLongField);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					this.SetPrimitiveStaticField(classRef, bytes, signature, fieldId,
 					                             in staticFieldFunctions.SetShortField);
 					break;
@@ -66,7 +66,7 @@ partial class JEnvironment
 		/// <param name="setValue">Action to set value.</param>
 		private unsafe void SetPrimitiveStaticField<TPrimitive>(JClassLocalRef classRef, ReadOnlySpan<Byte> bytes,
 			Byte signature, JFieldId fieldId, ref readonly SetGenericFieldFunction<JClassLocalRef, TPrimitive> setValue)
-			where TPrimitive : unmanaged, INativeType<TPrimitive>, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive value = MemoryMarshal.AsRef<TPrimitive>(bytes);
 			setValue.Set(this.Reference, classRef, fieldId, value);
@@ -86,31 +86,31 @@ partial class JEnvironment
 				ref this.GetInstanceFieldFunctions(signature, false);
 			switch (signature)
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					this.SetPrimitiveField(localRef, bytes, signature, fieldId,
 					                       in instanceFieldFunctions.SetBooleanField);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					this.SetPrimitiveField(localRef, bytes, signature, fieldId, in instanceFieldFunctions.SetByteField);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					this.SetPrimitiveField(localRef, bytes, signature, fieldId, in instanceFieldFunctions.SetCharField);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					this.SetPrimitiveField(localRef, bytes, signature, fieldId,
 					                       in instanceFieldFunctions.SetDoubleField);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					this.SetPrimitiveField(localRef, bytes, signature, fieldId,
 					                       in instanceFieldFunctions.SetFloatField);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					this.SetPrimitiveField(localRef, bytes, signature, fieldId, in instanceFieldFunctions.SetIntField);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					this.SetPrimitiveField(localRef, bytes, signature, fieldId, in instanceFieldFunctions.SetLongField);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					this.SetPrimitiveField(localRef, bytes, signature, fieldId,
 					                       in instanceFieldFunctions.SetShortField);
 					break;
@@ -129,7 +129,7 @@ partial class JEnvironment
 		private unsafe void SetPrimitiveField<TPrimitive>(JObjectLocalRef localRef, ReadOnlySpan<Byte> bytes,
 			Byte signature, JFieldId fieldId,
 			ref readonly SetGenericFieldFunction<JObjectLocalRef, TPrimitive> setValue)
-			where TPrimitive : unmanaged, INativeType<TPrimitive>, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive value = MemoryMarshal.AsRef<TPrimitive>(bytes);
 			setValue.Set(this.Reference, localRef, fieldId, value);
@@ -149,35 +149,35 @@ partial class JEnvironment
 				ref this.GetStaticFieldFunctions(signature, true);
 			switch (signature)
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					this.GetPrimitiveStaticField(bytes, classRef, signature, fieldId,
 					                             in staticFieldFunctions.GetBooleanField);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					this.GetPrimitiveStaticField(bytes, classRef, signature, fieldId,
 					                             in staticFieldFunctions.GetByteField);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					this.GetPrimitiveStaticField(bytes, classRef, signature, fieldId,
 					                             in staticFieldFunctions.GetCharField);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					this.GetPrimitiveStaticField(bytes, classRef, signature, fieldId,
 					                             in staticFieldFunctions.GetDoubleField);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					this.GetPrimitiveStaticField(bytes, classRef, signature, fieldId,
 					                             in staticFieldFunctions.GetFloatField);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					this.GetPrimitiveStaticField(bytes, classRef, signature, fieldId,
 					                             in staticFieldFunctions.GetIntField);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					this.GetPrimitiveStaticField(bytes, classRef, signature, fieldId,
 					                             in staticFieldFunctions.GetLongField);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					this.GetPrimitiveStaticField(bytes, classRef, signature, fieldId,
 					                             in staticFieldFunctions.GetShortField);
 					break;
@@ -195,7 +195,7 @@ partial class JEnvironment
 		/// <param name="getValue">Function to get value.</param>
 		private unsafe void GetPrimitiveStaticField<TPrimitive>(Span<Byte> bytes, JClassLocalRef classRef,
 			Byte signature, JFieldId fieldId, ref readonly GetGenericFieldFunction<JClassLocalRef, TPrimitive> getValue)
-			where TPrimitive : unmanaged, INativeType<TPrimitive>, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = getValue.Get(this.Reference, classRef, fieldId);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
@@ -214,31 +214,31 @@ partial class JEnvironment
 				ref this.GetInstanceFieldFunctions(signature, true);
 			switch (signature)
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					this.GetPrimitiveField(bytes, localRef, signature, fieldId,
 					                       in instanceFieldFunctions.GetBooleanField);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					this.GetPrimitiveField(bytes, localRef, signature, fieldId, in instanceFieldFunctions.GetByteField);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					this.GetPrimitiveField(bytes, localRef, signature, fieldId, in instanceFieldFunctions.GetCharField);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					this.GetPrimitiveField(bytes, localRef, signature, fieldId,
 					                       in instanceFieldFunctions.GetDoubleField);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					this.GetPrimitiveField(bytes, localRef, signature, fieldId,
 					                       in instanceFieldFunctions.GetFloatField);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					this.GetPrimitiveField(bytes, localRef, signature, fieldId, in instanceFieldFunctions.GetIntField);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					this.GetPrimitiveField(bytes, localRef, signature, fieldId, in instanceFieldFunctions.GetLongField);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					this.GetPrimitiveField(bytes, localRef, signature, fieldId,
 					                       in instanceFieldFunctions.GetShortField);
 					break;
@@ -256,7 +256,7 @@ partial class JEnvironment
 		/// <param name="getValue">Function to get value.</param>
 		private unsafe void GetPrimitiveField<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
 			JFieldId fieldId, ref readonly GetGenericFieldFunction<JObjectLocalRef, TPrimitive> getValue)
-			where TPrimitive : unmanaged, INativeType<TPrimitive>, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = getValue.Get(this.Reference, localRef, fieldId);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
@@ -287,35 +287,35 @@ partial class JEnvironment
 			{
 				switch (signature)
 				{
-					case UnicodePrimitiveSignatures.BooleanSignatureChar:
+					case CommonNames.BooleanSignatureChar:
 						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallBooleanMethod);
 						break;
-					case UnicodePrimitiveSignatures.ByteSignatureChar:
+					case CommonNames.ByteSignatureChar:
 						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallByteMethod);
 						break;
-					case UnicodePrimitiveSignatures.CharSignatureChar:
+					case CommonNames.CharSignatureChar:
 						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallCharMethod);
 						break;
-					case UnicodePrimitiveSignatures.DoubleSignatureChar:
+					case CommonNames.DoubleSignatureChar:
 						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallDoubleMethod);
 						break;
-					case UnicodePrimitiveSignatures.FloatSignatureChar:
+					case CommonNames.FloatSignatureChar:
 						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallFloatMethod);
 						break;
-					case UnicodePrimitiveSignatures.IntSignatureChar:
+					case CommonNames.IntSignatureChar:
 						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallIntMethod);
 						break;
-					case UnicodePrimitiveSignatures.LongSignatureChar:
+					case CommonNames.LongSignatureChar:
 						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallLongMethod);
 						break;
-					case UnicodePrimitiveSignatures.ShortSignatureChar:
+					case CommonNames.ShortSignatureChar:
 						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallShortMethod);
 						break;
@@ -338,7 +338,7 @@ partial class JEnvironment
 		private unsafe void CallPrimitiveStaticFunction<TPrimitive>(Span<Byte> bytes, JClassLocalRef classRef,
 			Byte signature, JMethodId methodId, JValue* ptr,
 			in CallGenericFunction<JClassLocalRef, TPrimitive> callFunction)
-			where TPrimitive : unmanaged, INativeType<TPrimitive>, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = callFunction.Call(this.Reference, classRef, methodId, ptr);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
@@ -361,42 +361,42 @@ partial class JEnvironment
 				ref this.GetInstanceMethodFunctions(signature, true);
 			switch (signature)
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualBooleanMethod);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualByteMethod);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualCharMethod);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualDoubleMethod);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualFloatMethod);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualIntMethod);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualLongMethod);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					this.CallPrimitiveNonVirtualFunction(bytes, localRef, classRef, signature, methodId, ptr,
 					                                     in instanceMethodFunctions.NonVirtualFunctions
 						                                     .CallNonVirtualShortMethod);
@@ -419,7 +419,7 @@ partial class JEnvironment
 		private unsafe void CallPrimitiveNonVirtualFunction<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef,
 			JClassLocalRef classRef, Byte signature, JMethodId methodId, JValue* ptr,
 			in CallNonVirtualGenericFunction<TPrimitive> callFunction)
-			where TPrimitive : unmanaged, INativeType<TPrimitive>, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = callFunction.Call(this.Reference, localRef, classRef, methodId, ptr);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
@@ -441,35 +441,35 @@ partial class JEnvironment
 				ref this.GetInstanceMethodFunctions(signature, false);
 			switch (signature)
 			{
-				case UnicodePrimitiveSignatures.BooleanSignatureChar:
+				case CommonNames.BooleanSignatureChar:
 					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallBooleanMethod);
 					break;
-				case UnicodePrimitiveSignatures.ByteSignatureChar:
+				case CommonNames.ByteSignatureChar:
 					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallByteMethod);
 					break;
-				case UnicodePrimitiveSignatures.CharSignatureChar:
+				case CommonNames.CharSignatureChar:
 					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallCharMethod);
 					break;
-				case UnicodePrimitiveSignatures.DoubleSignatureChar:
+				case CommonNames.DoubleSignatureChar:
 					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallDoubleMethod);
 					break;
-				case UnicodePrimitiveSignatures.FloatSignatureChar:
+				case CommonNames.FloatSignatureChar:
 					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallFloatMethod);
 					break;
-				case UnicodePrimitiveSignatures.IntSignatureChar:
+				case CommonNames.IntSignatureChar:
 					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallIntMethod);
 					break;
-				case UnicodePrimitiveSignatures.LongSignatureChar:
+				case CommonNames.LongSignatureChar:
 					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallLongMethod);
 					break;
-				case UnicodePrimitiveSignatures.ShortSignatureChar:
+				case CommonNames.ShortSignatureChar:
 					this.CallPrimitiveFunction(bytes, localRef, signature, methodId, ptr,
 					                           in instanceMethodFunctions.MethodFunctions.CallShortMethod);
 					break;
@@ -490,11 +490,28 @@ partial class JEnvironment
 		private unsafe void CallPrimitiveFunction<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef,
 			Byte signature, JMethodId methodId, JValue* ptr,
 			in CallGenericFunction<JObjectLocalRef, TPrimitive> callFunction)
-			where TPrimitive : unmanaged, INativeType<TPrimitive>, IPrimitiveType<TPrimitive>
+			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = callFunction.Call(this.Reference, localRef, methodId, ptr);
 			MemoryMarshal.AsRef<TPrimitive>(bytes) = result;
 			JTrace.CallPrimitiveFunction(localRef, default, signature, methodId, result);
+		}
+		/// <summary>
+		/// Retrieves a <see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.
+		/// </summary>
+		/// <param name="parameterTypes">A <see cref="JClassObject"/> list.</param>
+		/// <returns><see cref="JArgumentMetadata"/> array from <paramref name="parameterTypes"/>.</returns>
+		private JArgumentMetadata[] GetCallMetadata(JArrayObject<JClassObject> parameterTypes)
+		{
+			JArgumentMetadata[] args = new JArgumentMetadata[parameterTypes.Length];
+			JObjectArrayLocalRef objectArrayRef = parameterTypes.As<JObjectArrayLocalRef>();
+			for (Int32 i = 0; i < parameterTypes.Length; i++)
+			{
+				JObjectLocalRef localRef = this.GetObjectArrayElement(objectArrayRef, i);
+				JClassObject jClass = this.GetClass(JClassLocalRef.FromReference(in localRef), true);
+				args[i] = MetadataHelper.GetArgumentMetadata(jClass);
+			}
+			return args;
 		}
 	}
 }

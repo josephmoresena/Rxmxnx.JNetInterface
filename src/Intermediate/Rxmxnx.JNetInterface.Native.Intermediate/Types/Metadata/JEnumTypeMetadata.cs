@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for an enum <see cref="IDataType"/> type.
 /// </summary>
-public abstract record JEnumTypeMetadata : JClassTypeMetadata
+public abstract class JEnumTypeMetadata : JClassTypeMetadata
 {
 	/// <summary>
 	/// List of fields representing each enum value.
@@ -31,14 +31,11 @@ public abstract record JEnumTypeMetadata : JClassTypeMetadata
 /// This record stores the metadata for an enum <see cref="IDataType"/> type.
 /// </summary>
 /// <typeparam name="TEnum">Type of java enum type.</typeparam>
-public abstract record JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
+public abstract class JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {
 	/// <inheritdoc/>
 	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
-
-	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
 
 	/// <inheritdoc/>
 	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TEnum;

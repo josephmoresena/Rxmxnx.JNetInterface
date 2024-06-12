@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
+using TypeMetadata = JClassTypeMetadata<JProxyObject>;
+
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.Proxy</c> instance.
 /// </summary>
@@ -8,10 +10,10 @@ public class JProxyObject : JLocalObject, IClassType<JProxyObject>
 	/// <summary>
 	/// class metadata.
 	/// </summary>
-	internal static readonly JClassTypeMetadata<JProxyObject> ProxyTypeMetadata = TypeMetadataBuilder<JProxyObject>
-		.Create(UnicodeClassNames.ProxyObject()).Build();
+	internal static readonly TypeMetadata ProxyTypeMetadata = TypeMetadataBuilder<JProxyObject>
+	                                                          .Create(CommonNames.ProxyObject()).Build();
 
-	static JClassTypeMetadata<JProxyObject> IClassType<JProxyObject>.Metadata => JProxyObject.ProxyTypeMetadata;
+	static TypeMetadata IClassType<JProxyObject>.Metadata => JProxyObject.ProxyTypeMetadata;
 
 	/// <inheritdoc/>
 	protected JProxyObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

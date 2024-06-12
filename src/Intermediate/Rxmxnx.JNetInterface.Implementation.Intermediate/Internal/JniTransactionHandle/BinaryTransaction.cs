@@ -5,7 +5,7 @@ internal partial struct JniTransactionHandle
 	/// <summary>
 	/// Represents a JNI transaction with two references.
 	/// </summary>
-	private sealed record BinaryTransaction : FixedTransaction
+	private sealed class BinaryTransaction : FixedTransaction
 	{
 		/// <summary>
 		/// Internal transaction reference 1.

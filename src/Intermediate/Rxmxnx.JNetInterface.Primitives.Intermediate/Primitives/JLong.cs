@@ -1,27 +1,24 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
+using TypeMetadata = JPrimitiveTypeMetadata<JLong>;
+
 /// <summary>
 /// Primitive <c>long</c>. Represents a primitive 64-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JLong : INativeType<JLong>, ISelfEquatableComparable<JLong>,
+public readonly partial struct JLong : INativeType, IComparable<JLong>, IEquatable<JLong>,
 	IPrimitiveIntegerType<JLong, Int64>, IPrimitiveSignedType<JLong, Int64>
 {
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JPrimitiveTypeMetadata<JLong> typeMetadata = IPrimitiveType<JLong, Int64>
-	                                                                     .TypeMetadataBuilder
-	                                                                     .Create(UnicodeClassNames.LongPrimitive(),
-		                                                                     UnicodePrimitiveSignatures
-			                                                                     .LongSignatureChar)
-	                                                                     .WithWrapperClassName(
-		                                                                     UnicodeClassNames.LongObject()).Build();
+	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JLong, Int64>.TypeMetadataBuilder
+		.Create("long"u8, CommonNames.LongSignatureChar).WithWrapperClassName("java/lang/Long"u8).Build();
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JLong;
 
-	static JPrimitiveTypeMetadata<JLong> IPrimitiveType<JLong>.Metadata => JLong.typeMetadata;
+	static TypeMetadata IPrimitiveType<JLong>.Metadata => JLong.typeMetadata;
 	static JNativeType IPrimitiveType.JniType => JLong.Type;
 
 	/// <summary>

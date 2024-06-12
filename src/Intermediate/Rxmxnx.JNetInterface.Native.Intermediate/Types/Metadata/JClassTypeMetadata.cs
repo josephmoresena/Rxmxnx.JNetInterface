@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for a class <see cref="IDataType"/> type.
 /// </summary>
-public abstract record JClassTypeMetadata : JReferenceTypeMetadata
+public abstract class JClassTypeMetadata : JReferenceTypeMetadata
 {
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Class;
@@ -28,9 +28,9 @@ public abstract record JClassTypeMetadata : JReferenceTypeMetadata
 /// <summary>
 /// This record stores the metadata for a class <see cref="IDataType"/> type.
 /// </summary>
-public abstract partial record JClassTypeMetadata<
+public abstract partial class JClassTypeMetadata<
 	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : JClassTypeMetadata
-	where TClass : JReferenceObject, IClassType<TClass>
+	where TClass : JLocalObject, IClassType<TClass>
 {
 	/// <inheritdoc/>
 	public override Type Type => typeof(TClass);
@@ -44,16 +44,14 @@ public abstract partial record JClassTypeMetadata<
 	private protected JClassTypeMetadata(CStringSequence information) : base(information) { }
 
 	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
-	/// <inheritdoc/>
 	public override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();
 
 	/// <inheritdoc/>
 	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TClass || jObject.InstanceOf<TClass>();
 	/// <inheritdoc/>
 	internal override JFunctionDefinition<TClass> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
-		JArgumentMetadata[] metadata)
-		=> JFunctionDefinition<TClass>.Create(functionName, metadata);
+		JArgumentMetadata[] paramsMetadata)
+		=> JFunctionDefinition<TClass>.Create(functionName, paramsMetadata);
 	/// <inheritdoc/>
 	internal override JFieldDefinition<TClass> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName) => new(fieldName);
 }

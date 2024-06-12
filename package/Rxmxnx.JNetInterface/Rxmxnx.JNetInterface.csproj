@@ -28,8 +28,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <EmbeddedResource Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\ILLink\ILLink.LinkAttributes.xml">
-      <LogicalName>ILLink.LinkAttributes.xml</LogicalName>
+    <EmbeddedResource Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\ILLink\ILLink.Substitutions.xml">
+      <LogicalName>ILLink.Substitutions.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 

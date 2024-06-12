@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Nio;
 
+using TypeMetadata = JClassTypeMetadata<JDirectByteBufferObject>;
+
 /// <summary>
 /// This class represents a local <c>java.nio.DirectByteBuffer</c> instance.
 /// </summary>
@@ -13,13 +15,11 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JDirectByteBufferObject> metadata =
-		TypeMetadataBuilder<JMappedByteBufferObject>
-			.Create<JDirectByteBufferObject>(UnicodeClassNames.DirectByteBufferObject())
-			.Implements<JDirectBufferObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JMappedByteBufferObject>
+	                                                    .Create<JDirectByteBufferObject>("java/nio/DirectByteBuffer"u8)
+	                                                    .Implements<JDirectBufferObject>().Build();
 
-	static JClassTypeMetadata<JDirectByteBufferObject> IClassType<JDirectByteBufferObject>.Metadata
-		=> JDirectByteBufferObject.metadata;
+	static TypeMetadata IClassType<JDirectByteBufferObject>.Metadata => JDirectByteBufferObject.typeMetadata;
 
 	/// <summary>
 	/// Internal memory.

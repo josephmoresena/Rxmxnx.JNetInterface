@@ -1,17 +1,19 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JClassTypeMetadata<JStringObject>;
+
 public partial class JStringObject
 {
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JStringObject> typeMetadata = TypeMetadataBuilder<JStringObject>
-	                                                                         .Create(UnicodeClassNames.StringObject(),
-		                                                                         JTypeModifier.Final)
-	                                                                         .Implements<JSerializableObject>()
-	                                                                         .Implements<JComparableObject>()
-	                                                                         .Implements<JCharSequenceObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JStringObject>
+	                                                    .Create("java/lang/String"u8, JTypeModifier.Final)
+	                                                    .Implements<JSerializableObject>()
+	                                                    .Implements<JComparableObject>()
+	                                                    .Implements<JCharSequenceObject>().Build();
 
+	// ReSharper disable once UseSymbolAlias
 	static JClassTypeMetadata<JStringObject> IClassType<JStringObject>.Metadata => JStringObject.typeMetadata;
 
 	/// <summary>

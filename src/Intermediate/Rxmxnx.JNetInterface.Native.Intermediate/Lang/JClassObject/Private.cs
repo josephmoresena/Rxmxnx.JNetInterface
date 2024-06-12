@@ -1,22 +1,22 @@
 namespace Rxmxnx.JNetInterface.Lang;
 
+using TypeMetadata = JClassTypeMetadata<JClassObject>;
+
 public partial class JClassObject
 {
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly JClassTypeMetadata<JClassObject> typeMetadata = TypeMetadataBuilder<JClassObject>
-	                                                                        .Create(UnicodeClassNames.ClassObject,
-		                                                                        JTypeModifier.Final)
-	                                                                        .WithSignature(
-		                                                                        UnicodeObjectSignatures
-			                                                                        .ClassObjectSignature)
-	                                                                        .Implements<JSerializableObject>()
-	                                                                        .Implements<JAnnotatedElementObject>()
-	                                                                        .Implements<JGenericDeclarationObject>()
-	                                                                        .Implements<JTypeObject>().Build();
+	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JClassObject>
+	                                                    .Create(CommonNames.ClassObject, JTypeModifier.Final)
+	                                                    .WithSignature(CommonNames.ClassObjectSignature)
+	                                                    .Implements<JSerializableObject>()
+	                                                    .Implements<JAnnotatedElementObject>()
+	                                                    .Implements<JGenericDeclarationObject>()
+	                                                    .Implements<JTypeObject>().Build();
 
-	static JClassTypeMetadata<JClassObject> IClassType<JClassObject>.Metadata => JClassObject.typeMetadata;
+	static TypeMetadata IClassType<JClassObject>.Metadata => JClassObject.typeMetadata;
+
 	/// <summary>
 	/// Array class dimension.
 	/// </summary>
