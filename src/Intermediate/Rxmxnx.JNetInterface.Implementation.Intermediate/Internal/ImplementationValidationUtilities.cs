@@ -18,6 +18,18 @@ public static class ImplementationValidationUtilities
 			throw new ArgumentException($"Invalid JReferenceObject ({nameofObject}).");
 	}
 	/// <summary>
+	/// Throws an exception if <paramref name="objectMetadata"/> is proxy.
+	/// </summary>
+	/// <param name="objectMetadata">A <see cref="ObjectMetadata"/> instance.</param>
+	/// <param name="nameofObject">Name of <paramref name="objectMetadata"/>.</param>
+	/// <exception cref="ArgumentException">Throws an exception if <paramref name="objectMetadata"/> is proxy.</exception>
+	public static void ThrowIfProxy(ObjectMetadata? objectMetadata,
+		[CallerArgumentExpression(nameof(objectMetadata))] String nameofObject = "")
+	{
+		if (objectMetadata is not null && objectMetadata.FromProxy.GetValueOrDefault())
+			throw new ArgumentException($"Invalid ObjectMetadata ({nameofObject}).");
+	}
+	/// <summary>
 	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
 	/// </summary>
 	/// <param name="definition">A <see cref="JAccessibleObjectDefinition"/> instance.</param>

@@ -74,6 +74,15 @@ public partial class JVirtualMachine
 		return result;
 	}
 	/// <summary>
+	/// Retrieves class metadata for given hash.
+	/// </summary>
+	/// <param name="classHash">Class hash.</param>
+	/// <returns>A <see cref="ITypeInformation"/> instance.</returns>
+	internal ITypeInformation? GetClassInformation(String classHash)
+		=> this._cache.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal) ?
+			jGlobal.ObjectMetadata as ITypeInformation :
+			default;
+	/// <summary>
 	/// Retrieves <see cref="AccessCache"/> for <paramref name="classRef"/>.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>

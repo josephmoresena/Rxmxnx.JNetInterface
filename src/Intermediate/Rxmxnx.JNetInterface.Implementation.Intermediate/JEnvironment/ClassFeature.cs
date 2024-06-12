@@ -73,20 +73,26 @@ partial class JEnvironment
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
 			return this.GetOrFindClass(new TypeInformation(classInformation));
 		}
-		public JClassObject GetClass(String classHash)
-		{
-			if (this._classes.TryGetValue(classHash, out JClassObject? jClass))
-				return jClass;
-			CStringSequence classInformation = MetadataHelper.GetClassInformation(classHash);
-			return this.GetOrFindClass(new TypeInformation(classInformation));
-		}
 		public JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TDataType>();
 			return this.GetOrFindClass(metadata);
 		}
+		public JClassObject GetClass(ITypeInformation classInformation)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(classInformation as ObjectMetadata);
+			return this.GetOrFindClass(classInformation);
+		}
+		public JClassObject GetObjectClass(ObjectMetadata objectMetadata)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(objectMetadata);
+			ITypeInformation information = this.VirtualMachine.GetClassInformation(objectMetadata.ObjectClassHash) ??
+				new TypeInformation(MetadataHelper.GetClassInformation(objectMetadata.ObjectClassHash));
+			return this.GetOrFindClass(information);
+		}
 		public JClassObject GetObjectClass(JLocalObject jLocal)
 		{
+			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jLocal);
 			return JEnvironment.GetClassObject(this._env, localRef);

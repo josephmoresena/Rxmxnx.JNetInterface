@@ -142,12 +142,14 @@ partial class JEnvironment
 			if (this._classes.TryGetValue(classInformation.Hash, out JClassObject? result)) return result;
 			if (MetadataHelper.GetExactMetadata(classInformation.Hash) is { } metadata)
 			{
-				result = new(this.ClassObject, metadata); //Class is found in metadata cache.
+				// Class is found in type metadata cache.
+				result = new(this.ClassObject, metadata);
 			}
 			else
 			{
 				JClassLocalRef classRef = this._objects.FindClassParameter(classInformation.Hash);
-				if (classRef.IsDefault)
+				if (classRef.IsDefault && classInformation is not ClassObjectMetadata)
+					// Only find class by name if class was not in the runtime class cache.
 					fixed (Byte* ptr = &MemoryMarshal.GetReference(classInformation.ClassName.AsSpan()))
 					{
 						JTrace.FindClass(classInformation.ClassName);

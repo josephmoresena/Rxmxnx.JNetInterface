@@ -21,14 +21,7 @@ public abstract partial class EnvironmentProxy
 	JClassObject IClassFeature.IntegerObject => this.GetClass<JIntegerObject>();
 	JClassObject IClassFeature.LongObject => this.GetClass<JLongObject>();
 	JClassObject IClassFeature.ShortObject => this.GetClass<JShortObject>();
-
-	JClassObject IClassFeature.GetClass(ReadOnlySpan<Byte> className) => this.GetClass(new(className));
-	JClassObject IClassFeature.GetClass(String classHash)
-	{
-		ReadOnlySpan<Byte> classInformation = classHash.AsSpan().AsBytes();
-		Int32 classNameLength = ITypeInformation.GetSegmentLength(classInformation, 0);
-		return this.GetClass(new(classInformation[..classNameLength]));
-	}
+	JClassObject IClassFeature.GetClass(ReadOnlySpan<Byte> className) => this.GetClass(new CString(className));
 	JClassObject IClassFeature.LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 		JClassLoaderObject? jClassLoader)
 		=> this.LoadClass(new(className), rawClassBytes.ToArray(), jClassLoader);

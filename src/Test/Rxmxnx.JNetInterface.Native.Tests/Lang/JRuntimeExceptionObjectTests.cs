@@ -194,6 +194,8 @@ public sealed class JRuntimeExceptionObjectTests
 		});
 		thread.ReferenceFeature.CreateWeak(jGlobal).Returns(jWeak);
 		thread.ClassFeature.GetClass(JRuntimeExceptionObjectTests.className).Returns(jRuntimeExceptionClass);
+		thread.ClassFeature.GetObjectClass(Arg.Any<ObjectMetadata>())
+		      .Returns(c => thread.ClassFeature.GetClass((c[0] as ObjectMetadata)!.ObjectClassName));
 		thread.GetReferenceType(jWeak).Returns(JReferenceType.WeakGlobalRefType);
 		thread.IsSameObject(jWeak, default).Returns(false);
 
@@ -216,11 +218,14 @@ public sealed class JRuntimeExceptionObjectTests
 			Assert.Equal(jWeak, exception.WithSafeInvoke(t => t.Weak));
 
 			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
-			thread.ClassFeature.Received(2).GetClass(JRuntimeExceptionObjectTests.className);
+			thread.ClassFeature.Received(2)
+			      .GetObjectClass(
+				      Arg.Is<ObjectMetadata>(
+					      m => m.ObjectClassName.SequenceEqual(JRuntimeExceptionObjectTests.className)));
 			thread.Received(3).GetReferenceType(jWeak);
 			thread.Received(3).IsSameObject(jWeak, default);
 
-			IThrowableException<JThrowableObject> exceptionT = (IThrowableException<JThrowableObject>)exception;
+			IThrowableException<JThrowableObject> exceptionT = exception;
 			IThrowableException<JExceptionObject> exceptionE = (IThrowableException<JExceptionObject>)exception;
 			IThrowableException<JRuntimeExceptionObject> exceptionO =
 				(IThrowableException<JRuntimeExceptionObject>)exception;

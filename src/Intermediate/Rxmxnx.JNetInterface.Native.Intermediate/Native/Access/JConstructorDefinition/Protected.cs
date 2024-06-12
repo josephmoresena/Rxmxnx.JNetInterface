@@ -5,8 +5,7 @@ public partial class JConstructorDefinition
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	protected JConstructorDefinition(params JArgumentMetadata[] metadata) :
-		base(CommonNames.Constructor(), metadata) { }
+	protected JConstructorDefinition(params JArgumentMetadata[] metadata) : base(CommonNames.Constructor, metadata) { }
 
 	/// <summary>
 	/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>

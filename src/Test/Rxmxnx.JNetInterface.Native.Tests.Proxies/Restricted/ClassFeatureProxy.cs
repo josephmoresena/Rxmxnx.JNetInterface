@@ -26,13 +26,14 @@ public abstract partial class ClassFeatureProxy : IClassFeature
 
 	public abstract JClassObject AsClassObject(JClassLocalRef classRef);
 	public abstract JClassObject AsClassObject(JReferenceObject jObject);
+	public abstract JClassObject GetObjectClass(ObjectMetadata objectMetadata);
+	public abstract JClassObject GetClass(ITypeInformation typeInformation);
 	public abstract JClassObject GetObjectClass(JLocalObject jLocal);
 	public abstract JClassObject? GetSuperClass(JClassObject jClass);
 	public abstract Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass);
 	public abstract Boolean IsInstanceOf(JReferenceObject jObject, JClassObject jClass);
 	public abstract Boolean IsInstanceOf<TDataType>(JReferenceObject jObject)
 		where TDataType : JReferenceObject, IDataType<TDataType>;
-	public abstract JClassObject GetClass(String classHash);
 	public abstract JReferenceTypeMetadata GetTypeMetadata(JClassObject? jClass);
 	public abstract JModuleObject? GetModule(JClassObject jClass);
 	public abstract void ThrowNew<TThrowable>(CString? message, Boolean throwException)

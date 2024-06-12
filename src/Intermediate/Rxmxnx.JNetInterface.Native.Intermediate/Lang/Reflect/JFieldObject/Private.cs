@@ -3,9 +3,9 @@ namespace Rxmxnx.JNetInterface.Lang.Reflect;
 public partial class JFieldObject : ILocalObject
 {
 	/// <summary>
-	/// Class hash for declaring class.
+	/// Class metadata for declaring class.
 	/// </summary>
-	private String? _classHash;
+	private ITypeInformation? _classInformation;
 	/// <inheritdoc cref="JFieldObject.Definition"/>
 	private JFieldDefinition? _fieldDefinition;
 	/// <inheritdoc cref="JFieldObject.FieldId"/>
@@ -15,7 +15,7 @@ public partial class JFieldObject : ILocalObject
 		=> new FieldObjectMetadata(base.CreateMetadata())
 		{
 			Definition = this.Definition,
-			ClassHash = this._classHash ?? this.DeclaringClass.Hash,
+			ClassInformation = this._classInformation ?? this.DeclaringClass.GetInformation(),
 			FieldId = this._fieldId,
 		};
 
@@ -46,7 +46,7 @@ public partial class JFieldObject : ILocalObject
 		base.ProcessMetadata(instanceMetadata);
 		if (instanceMetadata is not FieldObjectMetadata fieldMetadata) return;
 		this._fieldDefinition = fieldMetadata.Definition;
-		this._classHash = fieldMetadata.ClassHash;
+		this._classInformation = fieldMetadata.ClassInformation;
 		this._fieldId = fieldMetadata.FieldId;
 	}
 

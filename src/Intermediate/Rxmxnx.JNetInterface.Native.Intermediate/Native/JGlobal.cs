@@ -38,7 +38,7 @@ public sealed class JGlobal : JGlobalBase
 	/// <param name="metadata"><see cref="ObjectMetadata"/> instance.</param>
 	/// <param name="globalRef">Global reference.</param>
 	internal JGlobal(IVirtualMachine vm, ObjectMetadata metadata, JGlobalRef globalRef) : base(vm, metadata, globalRef)
-		=> this.IsDisposable = !metadata.ObjectClassName.AsSpan().SequenceEqual(CommonNames.ClassObject);
+		=> this.IsDisposable = !CommonNames.ClassObject.SequenceEqual(metadata.ObjectClassName);
 	/// <summary>
 	/// Constructor.
 	/// </summary>

@@ -9,12 +9,6 @@ public partial interface IClassFeature
 	/// <returns>The class instance with given class name.</returns>
 	internal JClassObject GetClass(ReadOnlySpan<Byte> className);
 	/// <summary>
-	/// Retrieves the java class named <paramref name="classHash"/>.
-	/// </summary>
-	/// <param name="classHash">Class name.</param>
-	/// <returns>The class instance with given class name.</returns>
-	internal JClassObject GetClass(String classHash);
-	/// <summary>
 	/// Loads a java class from its binary information into the current VM.
 	/// </summary>
 	/// <param name="className">Name of class to load.</param>

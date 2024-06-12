@@ -172,6 +172,11 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 		IEnvironment env = this.Environment;
 		return env.ClassFeature.GetModule(this);
 	}
+	/// <summary>
+	/// Retrieves a <see cref="ITypeInformation"/> from current instance.
+	/// </summary>
+	/// <returns>A <see cref="ITypeInformation"/> instance.</returns>
+	public ITypeInformation GetInformation() => (ITypeInformation)this.CreateMetadata();
 
 	/// <inheritdoc/>
 	public override String ToString()

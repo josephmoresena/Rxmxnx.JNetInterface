@@ -181,6 +181,8 @@ public sealed class JErrorObjectTests
 		});
 		thread.ReferenceFeature.CreateWeak(jGlobal).Returns(jWeak);
 		thread.ClassFeature.GetClass(JErrorObjectTests.className).Returns(jErrorClass);
+		thread.ClassFeature.GetObjectClass(Arg.Any<ObjectMetadata>())
+		      .Returns(c => thread.ClassFeature.GetClass((c[0] as ObjectMetadata)!.ObjectClassName));
 		thread.GetReferenceType(jWeak).Returns(JReferenceType.WeakGlobalRefType);
 		thread.IsSameObject(jWeak, default).Returns(false);
 
@@ -203,10 +205,13 @@ public sealed class JErrorObjectTests
 
 			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
 			thread.ClassFeature.Received(2).GetClass(JErrorObjectTests.className);
+			thread.ClassFeature.Received(2)
+			      .GetObjectClass(
+				      Arg.Is<ObjectMetadata>(m => m.ObjectClassName.SequenceEqual(JErrorObjectTests.className)));
 			thread.Received(3).GetReferenceType(jWeak);
 			thread.Received(3).IsSameObject(jWeak, default);
 
-			IThrowableException<JThrowableObject> exceptionT = (IThrowableException<JThrowableObject>)exception;
+			IThrowableException<JThrowableObject> exceptionT = exception;
 			IThrowableException<JErrorObject> exceptionO = (IThrowableException<JErrorObject>)exception;
 
 			exceptionT.WithSafeInvoke(t => Assert.Equal(typeof(JErrorObject), t.GetType()));

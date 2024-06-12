@@ -137,4 +137,17 @@ internal static class CommonValidationUtilities
 			throw new InvalidOperationException($"{paramName} must be non-empty string");
 		return value;
 	}
+	/// <summary>
+	/// Throws an exception if proxy flags not match.
+	/// </summary>
+	/// <param name="isProxyObject">Object proxy flag.</param>
+	/// <param name="isMetadataProxy">Metadata proxy flag.</param>
+	public static void ThrowIfNoProxyMatch(Boolean isProxyObject, Boolean isMetadataProxy)
+	{
+		if (isProxyObject == isMetadataProxy) return;
+		String message = isProxyObject ?
+			"A proxy object can't process a non-proxy metadata" :
+			"A non-proxy object can't process a proxy metadata.";
+		throw new InvalidOperationException(message);
+	}
 }
