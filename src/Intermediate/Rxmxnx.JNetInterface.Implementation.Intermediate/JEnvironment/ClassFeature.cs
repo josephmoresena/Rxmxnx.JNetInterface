@@ -95,7 +95,9 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jLocal);
-			return JEnvironment.GetClassObject(this._env, localRef);
+			JClassLocalRef classRef = this._env.GetObjectClass(localRef);
+			JClassObject jClass = this.GetClass(classRef, true);
+			return this.Register(jClass);
 		}
 		public unsafe JClassObject? GetSuperClass(JClassObject jClass)
 		{

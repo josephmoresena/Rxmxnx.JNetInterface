@@ -16,7 +16,7 @@ internal sealed class CallFrame : LocalCache, IDisposable
 	/// <summary>
 	/// Parameters dictionary.
 	/// </summary>
-	private readonly Dictionary<JObjectLocalRef, JLocalObject> _parameters = [];
+	private readonly Dictionary<JObjectLocalRef, ILocalObject> _parameters = [];
 
 	/// <inheritdoc/>
 	public override String Name => "call";
@@ -46,7 +46,10 @@ internal sealed class CallFrame : LocalCache, IDisposable
 	/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	public void RegisterParameter(JObjectLocalRef localRef, JLocalObject jLocal)
-		=> this._parameters.Add(localRef, jLocal);
+	{
+		this._parameters.Add(localRef, jLocal);
+		this[localRef] = jLocal.Lifetime.GetCacheable();
+	}
 	/// <summary>
 	/// Registers a class in current call frame.
 	/// </summary>
@@ -58,6 +61,18 @@ internal sealed class CallFrame : LocalCache, IDisposable
 		this._classes.TryAdd(jClass.Hash, classRef);
 		this._env.ClassCache.Load(classRef);
 		this._env.LoadClass(jClass);
+	}
+	/// <summary>
+	/// Registers a class in current call frame.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="classView">A <see cref="JLocalObject.View{JClassObject}"/> instance.</param>
+	public void RegisterParameter(JClassLocalRef classRef, JLocalObject.View<JClassObject> classView)
+	{
+		this._parameters.Add(classRef.Value, classView);
+		this[classRef.Value] = (classView as ILocalViewObject).Lifetime;
+		this._classes.TryAdd(classView.Object.Hash, classRef);
+		this._env.ClassCache.Load(classRef);
 	}
 
 	/// <summary>
@@ -73,7 +88,7 @@ internal sealed class CallFrame : LocalCache, IDisposable
 		=> this._classes.TryGetValue(hash, out JClassLocalRef result) ? result : base.FindClassParameter(hash);
 	/// <inheritdoc/>
 	public override ObjectLifetime? GetLifetime(JObjectLocalRef localRef)
-		=> this._parameters.TryGetValue(localRef, out JLocalObject? jLocal) ?
+		=> this._parameters.TryGetValue(localRef, out ILocalObject? jLocal) ?
 			jLocal.Lifetime :
 			base.GetLifetime(localRef);
 

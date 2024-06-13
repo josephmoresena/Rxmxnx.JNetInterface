@@ -193,7 +193,7 @@ partial class JEnvironment
 		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
 		JClassObject jClass = this._cache.GetClass(classRef, true);
-		frame[jClass.LocalReference] = jClass.Lifetime.GetCacheable();
+		this.LoadClass(jClass); // Runtime class loading.
 		typeMetadata = this._cache.GetTypeMetadata(jClass);
 		return jClass;
 	}
@@ -202,6 +202,7 @@ partial class JEnvironment
 	/// Loads in current cache given class.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal void LoadClass(JClassObject jClass) => this._cache.LoadClass(jClass);
 	/// <summary>
 	/// Creates a new local reference for <paramref name="objectRef"/>.
@@ -258,12 +259,12 @@ partial class JEnvironment
 		return value.IsNullTerminated ? value.AsSpan() : (CString)value.Clone();
 	}
 	/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
-	internal static JClassObject GetClassObject(JEnvironment env, JObjectLocalRef localRef)
+	internal static JClassObject GetObjectClass(JEnvironment env, JObjectLocalRef localRef)
 	{
 		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = env.GetObjectClass(localRef);
 		JClassObject jClass = env.GetClass(classRef);
-		frame[jClass.LocalReference] = jClass.Lifetime.GetCacheable();
+		env.LoadClass(jClass); // Runtime class loading.
 		return jClass;
 	}
 }

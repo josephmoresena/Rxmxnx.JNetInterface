@@ -22,7 +22,7 @@ public readonly ref partial struct JNativeCallAdapter
 			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
 			{
 				JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
-				this._callAdapter._cache[localRef] = result.Lifetime;
+				this._callAdapter._cache.RegisterParameter(localRef, result);
 				return result;
 			}
 			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
@@ -56,15 +56,16 @@ public readonly ref partial struct JNativeCallAdapter
 			JEnvironment env = this._callAdapter._env;
 			if (validateReference) this.ThrowIfNotClassObject(classRef.Value);
 			JClassObject result = env.GetClass(classRef, true);
-			// Check if class reference is owned by this call.
 			if (classRef == result.LocalReference)
 			{
-				this._callAdapter._cache[classRef.Value] = result.Lifetime;
+				// Class is owned by this class.
+				this._callAdapter._cache.RegisterParameter(classRef, result);
 			}
 			else
 			{
+				// Class is not owned by this class. A ClassView is registered instead.
 				CallClassView callClassView = new(classRef, result);
-				this._callAdapter._cache[classRef.Value] = callClassView.Lifetime;
+				this._callAdapter._cache.RegisterParameter(classRef, callClassView);
 			}
 			return result;
 		}
