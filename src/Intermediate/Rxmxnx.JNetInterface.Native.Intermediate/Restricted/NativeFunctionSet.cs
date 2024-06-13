@@ -7,6 +7,8 @@ namespace Rxmxnx.JNetInterface.Restricted;
 [EditorBrowsable(EditorBrowsableState.Never)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4136,
                  Justification = CommonConstants.NoMethodOverloadingJustification)]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1694,
+                 Justification = CommonConstants.InternalInheritanceJustification)]
 public abstract class NativeFunctionSet
 {
 	/// <summary>
