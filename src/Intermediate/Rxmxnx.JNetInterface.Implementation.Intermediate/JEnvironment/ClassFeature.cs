@@ -78,15 +78,15 @@ partial class JEnvironment
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TDataType>();
 			return this.GetOrFindClass(metadata);
 		}
-		public JClassObject GetClass(ITypeInformation classInformation)
+		public JClassObject GetClass(ITypeInformation typeInformation)
 		{
-			ImplementationValidationUtilities.ThrowIfProxy(classInformation as ObjectMetadata);
-			return this.GetOrFindClass(classInformation);
+			ImplementationValidationUtilities.ThrowIfProxy(typeInformation as ObjectMetadata);
+			return this.GetOrFindClass(typeInformation);
 		}
 		public JClassObject GetObjectClass(ObjectMetadata objectMetadata)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(objectMetadata);
-			ITypeInformation information = this.VirtualMachine.GetClassInformation(objectMetadata.ObjectClassHash) ??
+			ITypeInformation information = this.VirtualMachine.GetTypeInformation(objectMetadata.ObjectClassHash) ??
 				new TypeInformation(MetadataHelper.GetClassInformation(objectMetadata.ObjectClassHash));
 			return this.GetOrFindClass(information);
 		}
@@ -168,8 +168,8 @@ partial class JEnvironment
 			JClassLoaderObject? jClassLoader = default)
 		{
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
-			ITypeInformation metadata = new TypeInformation(classInformation);
-			return this.LoadClass(metadata, rawClassBytes, jClassLoader);
+			ITypeInformation typeInformation = new TypeInformation(classInformation);
+			return this.LoadClass(typeInformation, rawClassBytes, jClassLoader);
 		}
 		public JClassObject
 			LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(

@@ -78,7 +78,7 @@ public partial class JVirtualMachine
 	/// </summary>
 	/// <param name="classHash">Class hash.</param>
 	/// <returns>A <see cref="ITypeInformation"/> instance.</returns>
-	internal ITypeInformation? GetClassInformation(String classHash)
+	internal ITypeInformation? GetTypeInformation(String classHash)
 		=> this._cache.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal) ?
 			jGlobal.ObjectMetadata as ITypeInformation :
 			default;
