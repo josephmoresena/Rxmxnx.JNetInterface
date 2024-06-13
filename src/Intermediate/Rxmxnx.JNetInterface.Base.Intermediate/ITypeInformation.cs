@@ -27,22 +27,24 @@ public interface ITypeInformation
 	JTypeModifier? Modifier { get; }
 
 	/// <summary>
-	/// Retrieves length of a segment in <paramref name="utf8Sequence"/>
+	/// Retrieves UTF-8 segment.
 	/// </summary>
-	/// <param name="utf8Sequence">A read-only byte span.</param>
-	/// <param name="offset">Offset to start.</param>
-	/// <returns>Length of segment end.</returns>
-	internal static Int32 GetSegmentLength(ReadOnlySpan<Byte> utf8Sequence, Int32 offset)
+	/// <param name="source">Reference. UTF-8 sequence.</param>
+	/// <returns>A UTF-8 segment.</returns>
+	internal static ReadOnlySpan<Byte> GetSegment(ref ReadOnlySpan<Byte> source)
 	{
-		Int32 end = offset;
-		while (utf8Sequence.Length > end)
+		Int32 end = 0;
+		while (end < source.Length)
 		{
-			if (utf8Sequence[end] == default) break;
+			if (source[end] == default) break; // Null UTF-8 char is segment end.
 			end++;
 		}
-		return end - offset;
+		// Creates segment slice.
+		ReadOnlySpan<Byte> segment = source[..end];
+		// Removes segment from source.
+		source = source.Length > end + 1 ? source[(end + 1)..] : ReadOnlySpan<Byte>.Empty;
+		return segment;
 	}
-
 	/// <summary>
 	/// Retrieves printable text hash.
 	/// </summary>
