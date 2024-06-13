@@ -37,7 +37,7 @@ public class JExecutableObjectTests
 		env.FunctionSet.GetName(jExecutable).Returns(jStringExecutableName);
 		env.FunctionSet.GetReturnType(jExecutable).Returns(jStringClass);
 		env.FunctionSet.GetParameterTypes(jExecutable).Returns(jArrayParameters);
-		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
+		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringExecutableName, jArrayParameters, jStringClass)
 		   .Returns(executableDefinition);
 		env.AccessFeature.GetMethodId(jExecutable).Returns(methodId);
@@ -48,7 +48,7 @@ public class JExecutableObjectTests
 			                             {
 				                             Definition = executableDefinition,
 				                             MethodId = methodId,
-				                             ClassHash = jClass.Hash,
+				                             ClassInformation = jClass.GetInformation(),
 			                             } :
 			                             new ObjectMetadata(jExecutableClass));
 
@@ -58,7 +58,7 @@ public class JExecutableObjectTests
 		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
 		Assert.Equal(executableDefinition, objectMetadata.Definition);
-		Assert.Equal(jClass.Hash, objectMetadata.ClassHash);
+		Assert.Equal(jClass.GetInformation(), objectMetadata.ClassInformation);
 		Assert.Equal(useMetadata ? methodId : null, objectMetadata.MethodId);
 		Assert.Equal(objectMetadata, new(objectMetadata));
 
@@ -83,7 +83,7 @@ public class JExecutableObjectTests
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetName(jExecutable);
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetReturnType(jExecutable);
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetParameterTypes(jExecutable);
-		env.ClassFeature.Received(1).GetClass(jClass.Hash);
+		env.ClassFeature.Received(1).GetClass(jClass.GetInformation());
 		env.AccessFeature.Received(useMetadata ? 0 : 1).GetDefinition(jStringExecutableName, jArrayParameters,
 		                                                              jStringClass);
 		env.AccessFeature.Received(0).GetMethodId(jExecutable);

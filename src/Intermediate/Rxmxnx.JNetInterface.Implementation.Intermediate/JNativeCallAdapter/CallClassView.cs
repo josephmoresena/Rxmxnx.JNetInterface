@@ -13,11 +13,6 @@ public readonly ref partial struct JNativeCallAdapter
 		private readonly ObjectLifetime _lifetime;
 
 		/// <summary>
-		/// Call lifetime.
-		/// </summary>
-		public ObjectLifetime Lifetime => this._lifetime;
-
-		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>

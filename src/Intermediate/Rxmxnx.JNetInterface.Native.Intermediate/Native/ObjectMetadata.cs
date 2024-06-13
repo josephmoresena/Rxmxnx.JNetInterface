@@ -12,6 +12,14 @@ public record ObjectMetadata
 	public CString ObjectSignature { get; }
 
 	/// <summary>
+	/// Indicates whether current instance is proxy.
+	/// </summary>
+	internal Boolean? FromProxy { get; }
+	/// <summary>
+	/// Object class hash.
+	/// </summary>
+	internal String ObjectClassHash { get; }
+	/// <summary>
 	/// Class type metadata.
 	/// </summary>
 	internal JReferenceTypeMetadata? TypeMetadata { get; }
@@ -25,10 +33,23 @@ public record ObjectMetadata
 	{
 		this.ObjectClassName = jClass.Name;
 		this.ObjectSignature = jClass.ClassSignature;
-		if (jClass.Name.AsSpan().SequenceEqual(CommonNames.ClassObject))
+		this.ObjectClassHash = jClass.Hash;
+		this.FromProxy = jClass.IsProxy;
+		if (CommonNames.ClassObject.SequenceEqual(jClass.Name))
 			this.TypeMetadata = IClassType.GetMetadata<JClassObject>();
 		else
 			this.TypeMetadata = typeMetadata ?? jClass.Environment.ClassFeature.GetTypeMetadata(jClass);
+	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="typeMetadata"><see cref="JReferenceTypeMetadata"/> instance.</param>
+	internal ObjectMetadata(JDataTypeMetadata typeMetadata)
+	{
+		this.ObjectClassName = typeMetadata.ClassName;
+		this.ObjectSignature = typeMetadata.Signature;
+		this.ObjectClassHash = typeMetadata.Hash;
+		this.TypeMetadata = typeMetadata as JReferenceTypeMetadata;
 	}
 
 	/// <summary>
@@ -39,29 +60,12 @@ public record ObjectMetadata
 	{
 		this.ObjectClassName = metadata.ObjectClassName;
 		this.ObjectSignature = metadata.ObjectSignature;
+		this.ObjectClassHash = metadata.ObjectClassHash;
+		this.FromProxy = metadata.FromProxy;
 		this.TypeMetadata = metadata.TypeMetadata;
-	}
-
-	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="objectClassName">Class name of the current instance.</param>
-	/// <param name="objectSignature">Class signature of the current instance.</param>
-	private protected ObjectMetadata(CString objectClassName, CString objectSignature)
-	{
-		this.ObjectClassName = objectClassName;
-		this.ObjectSignature = objectSignature;
-		this.TypeMetadata = IClassType.GetMetadata<JClassObject>();
 	}
 
 	/// <inheritdoc cref="Object.ToString()"/>
 	/// <remarks>Use this method for trace.</remarks>
 	public virtual String ToTraceText() => this.ToString();
-
-	/// <summary>
-	/// Retrieves the java class for the current object.
-	/// </summary>
-	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
-	/// <returns>The class instance for the current object.</returns>
-	internal JClassObject GetClass(IEnvironment env) => env.ClassFeature.GetClass(this.ObjectClassName);
 }

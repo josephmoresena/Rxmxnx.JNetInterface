@@ -9,6 +9,10 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
 	/// <inheritdoc/>
+	public abstract JClassObject GetClass(ITypeInformation typeInformation);
+	/// <inheritdoc/>
+	public abstract JClassObject GetObjectClass(ObjectMetadata objectMetadata);
+	/// <inheritdoc/>
 	public abstract JClassObject GetObjectClass(JLocalObject jLocal);
 	/// <inheritdoc/>
 	public abstract JClassObject? GetSuperClass(JClassObject jClass);

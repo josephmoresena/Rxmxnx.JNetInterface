@@ -135,25 +135,27 @@ partial class JEnvironment
 		/// <summary>
 		/// Retrieves class from cache or loads it using JNI.
 		/// </summary>
-		/// <param name="classInformation">A <see cref="ITypeInformation"/> instance.</param>
+		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
-		private unsafe JClassObject GetOrFindClass(ITypeInformation classInformation)
+		private unsafe JClassObject GetOrFindClass(ITypeInformation typeInformation)
 		{
-			if (this._classes.TryGetValue(classInformation.Hash, out JClassObject? result)) return result;
-			if (MetadataHelper.GetExactMetadata(classInformation.Hash) is { } metadata)
+			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result)) return result;
+			if (MetadataHelper.GetExactMetadata(typeInformation.Hash) is { } metadata)
 			{
-				result = new(this.ClassObject, metadata); //Class is found in metadata cache.
+				// Class is found in type metadata cache.
+				result = new(this.ClassObject, metadata);
 			}
 			else
 			{
-				JClassLocalRef classRef = this._objects.FindClassParameter(classInformation.Hash);
-				if (classRef.IsDefault)
-					fixed (Byte* ptr = &MemoryMarshal.GetReference(classInformation.ClassName.AsSpan()))
+				JClassLocalRef classRef = this._objects.FindClassParameter(typeInformation.Hash);
+				if (classRef.IsDefault && typeInformation is not ClassObjectMetadata)
+					// Only find class by name if class was not in the runtime class cache.
+					fixed (Byte* ptr = &MemoryMarshal.GetReference(typeInformation.ClassName.AsSpan()))
 					{
-						JTrace.FindClass(classInformation.ClassName);
+						JTrace.FindClass(typeInformation.ClassName);
 						classRef = this.FindClass(ptr);
 					}
-				result = new(this.ClassObject, classInformation, classRef);
+				result = new(this.ClassObject, typeInformation, classRef);
 			}
 			return this.Register(result);
 		}
@@ -178,22 +180,22 @@ partial class JEnvironment
 		/// <summary>
 		/// Loads a java class from its binary information into the current VM.
 		/// </summary>
-		/// <param name="metadata">A <see cref="ITypeInformation"/> instance.</param>
+		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
 		/// <param name="buffer">Binary span with class information.</param>
 		/// <param name="jClassLoader">The object used as class loader.</param>
 		/// <returns>Loaded <see cref="JClassObject"/> instance.</returns>
-		private JClassObject LoadClass(ITypeInformation metadata, ReadOnlySpan<Byte> buffer,
+		private JClassObject LoadClass(ITypeInformation typeInformation, ReadOnlySpan<Byte> buffer,
 			JClassLoaderObject? jClassLoader)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClassLoader);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JObjectLocalRef localRef = jniTransaction.Add(jClassLoader);
-			JClassLocalRef classRef = this.DefineClass(metadata.ClassName, buffer, localRef);
-			if (this._classes.TryGetValue(metadata.Hash, out JClassObject? result))
+			JClassLocalRef classRef = this.DefineClass(typeInformation.ClassName, buffer, localRef);
+			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
 				//Class found in metadata cache.
 				this.DefineExistingClass(result, jniTransaction, classRef);
 			else
-				result = new(this.ClassObject, metadata, classRef);
+				result = new(this.ClassObject, typeInformation, classRef);
 			return this.Register(result);
 		}
 		/// <summary>

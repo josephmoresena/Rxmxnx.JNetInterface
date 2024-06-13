@@ -251,7 +251,7 @@ partial class JEnvironment
 					break;
 
 				// Super class is java.lang.reflect.Proxy.
-				if (checkProxy && CommonNames.ProxyObject().SequenceEqual(superClass.Name))
+				if (checkProxy && CommonNames.ProxyObject.SequenceEqual(superClass.Name))
 				{
 					using JArrayObject<JClassObject> interfaces = superClass.GetInterfaces();
 					if (interfaces.Length > 0 &&

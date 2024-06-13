@@ -3,12 +3,21 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class is a JNI instance created from an invalid <see cref="IVirtualMachine"/> instance.
 /// </summary>
-/// <param name="VirtualMachine">A <see cref="IVirtualMachine"/> instance.</param>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6670,
                  Justification = CommonConstants.NonStandardTraceJustification)]
-internal sealed record DeadThread(IVirtualMachine VirtualMachine)
-	: IThread, IReferenceFeature, IStringFeature, IArrayFeature, IClassFeature
+internal sealed class DeadThread : IThread, IReferenceFeature, IStringFeature, IArrayFeature, IClassFeature
 {
+	/// <summary>
+	/// A <see cref="IVirtualMachine"/> instance.
+	/// </summary>
+	private IVirtualMachine VirtualMachine { get; }
+
+	/// <summary>
+	/// This class is a JNI instance created from an invalid <see cref="IVirtualMachine"/> instance.
+	/// </summary>
+	/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
+	public DeadThread(IVirtualMachine vm) => this.VirtualMachine = vm;
+
 	JArrayObject<TElement> IArrayFeature.CreateArray<TElement>(Int32 length)
 		=> DeadThread.ThrowInvalidResult<JArrayObject<TElement>>();
 	JArrayObject<TElement> IArrayFeature.CreateArray<TElement>(Int32 length, TElement initialElement)
@@ -82,6 +91,10 @@ internal sealed record DeadThread(IVirtualMachine VirtualMachine)
 	JClassObject IClassFeature.AsClassObject(JClassLocalRef classRef) => DeadThread.ThrowInvalidResult<JClassObject>();
 	JClassObject IClassFeature.AsClassObject(JReferenceObject jObject) => DeadThread.ThrowInvalidResult<JClassObject>();
 	JClassObject IClassFeature.GetClass<TDataType>() => DeadThread.ThrowInvalidResult<JClassObject>();
+	JClassObject IClassFeature.GetObjectClass(ObjectMetadata objectMetadata)
+		=> DeadThread.ThrowInvalidResult<JClassObject>();
+	JClassObject IClassFeature.GetClass(ITypeInformation typeInformation)
+		=> DeadThread.ThrowInvalidResult<JClassObject>();
 	JClassObject IClassFeature.GetObjectClass(JLocalObject jLocal) => DeadThread.ThrowInvalidResult<JClassObject>();
 	JClassObject? IClassFeature.GetSuperClass(JClassObject jClass) => DeadThread.ThrowInvalidResult<JClassObject?>();
 	Boolean IClassFeature.IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
@@ -104,7 +117,6 @@ internal sealed record DeadThread(IVirtualMachine VirtualMachine)
 	void IClassFeature.ThrowNew<TThrowable>(String? message, Boolean throwException)
 		=> DeadThread.ThrowInvalidResult<Byte>();
 	JClassObject IClassFeature.GetClass(ReadOnlySpan<Byte> className) => DeadThread.ThrowInvalidResult<JClassObject>();
-	JClassObject IClassFeature.GetClass(String classHash) => DeadThread.ThrowInvalidResult<JClassObject>();
 	JClassObject IClassFeature.LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 		JClassLoaderObject? jClassLoader)
 		=> DeadThread.ThrowInvalidResult<JClassObject>();

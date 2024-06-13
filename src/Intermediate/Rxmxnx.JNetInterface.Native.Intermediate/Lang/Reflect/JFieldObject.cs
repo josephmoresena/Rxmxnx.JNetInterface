@@ -29,10 +29,10 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 		get
 		{
 			IEnvironment env = this.Environment;
-			if (!String.IsNullOrWhiteSpace(this._classHash))
-				return env.ClassFeature.GetClass(this._classHash);
+			if (this._classInformation is not null)
+				return env.ClassFeature.GetClass(this._classInformation);
 			JClassObject result = env.FunctionSet.GetDeclaringClass(this);
-			this._classHash = result.Hash;
+			this._classInformation = result.GetInformation();
 			return result;
 		}
 	}
@@ -52,7 +52,7 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 		JClassObject declaringClass) : base(jClass, localRef)
 	{
 		this._fieldDefinition = definition;
-		this._classHash = declaringClass.Hash;
+		this._classInformation = declaringClass.GetInformation();
 	}
 
 	/// <inheritdoc/>

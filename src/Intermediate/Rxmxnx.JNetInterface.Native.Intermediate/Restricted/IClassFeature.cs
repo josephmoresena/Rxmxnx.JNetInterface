@@ -26,11 +26,23 @@ public partial interface IClassFeature
 	/// <returns>The class instance for given type.</returns>
 	JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
 	/// <summary>
+	/// Retrieves the java class for <paramref name="typeInformation"/>
+	/// </summary>
+	/// <param name="typeInformation">A <see cref="ClassObjectMetadata"/> instance.</param>
+	/// <returns>The class instance of <paramref name="typeInformation"/>.</returns>
+	JClassObject GetClass(ITypeInformation typeInformation);
+	/// <summary>
 	/// Retrieves the java class of <paramref name="jLocal"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>The class instance of <paramref name="jLocal"/>.</returns>
 	JClassObject GetObjectClass(JLocalObject jLocal);
+	/// <summary>
+	/// Retrieves the java class of <paramref name="objectMetadata"/>
+	/// </summary>
+	/// <param name="objectMetadata">A <see cref="ObjectMetadata"/> instance.</param>
+	/// <returns>The class instance of <paramref name="objectMetadata"/>.</returns>
+	JClassObject GetObjectClass(ObjectMetadata objectMetadata);
 	/// <summary>
 	/// Retrieves the java super class of given class instance.
 	/// </summary>

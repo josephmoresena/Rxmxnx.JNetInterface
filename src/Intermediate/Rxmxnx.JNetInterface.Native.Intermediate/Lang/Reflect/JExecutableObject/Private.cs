@@ -5,9 +5,9 @@ public partial class JExecutableObject : ILocalObject
 	/// <inheritdoc cref="JExecutableObject.Definition"/>
 	private JCallDefinition? _callDefinition;
 	/// <summary>
-	/// Class hash for declaring class.
+	/// Class information for declaring class.
 	/// </summary>
-	private String? _classHash;
+	private ITypeInformation? _classInformation;
 	/// <inheritdoc cref="JExecutableObject.MethodId"/>
 	private JMethodId? _methodId;
 
@@ -15,7 +15,7 @@ public partial class JExecutableObject : ILocalObject
 		=> new ExecutableObjectMetadata(base.CreateMetadata())
 		{
 			Definition = this.Definition,
-			ClassHash = this._classHash ?? this.DeclaringClass.Hash,
+			ClassInformation = this._classInformation ?? this.DeclaringClass.GetInformation(),
 			MethodId = this._methodId,
 		};
 
@@ -47,7 +47,7 @@ public partial class JExecutableObject : ILocalObject
 		base.ProcessMetadata(instanceMetadata);
 		if (instanceMetadata is not ExecutableObjectMetadata executableMetadata) return;
 		this._callDefinition = executableMetadata.Definition;
-		this._classHash = executableMetadata.ClassHash;
+		this._classInformation = executableMetadata.ClassInformation;
 		this._methodId = executableMetadata.MethodId;
 	}
 

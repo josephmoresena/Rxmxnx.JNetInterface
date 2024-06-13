@@ -31,10 +31,10 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 		get
 		{
 			IEnvironment env = this.Environment;
-			if (!String.IsNullOrWhiteSpace(this._classHash))
-				return env.ClassFeature.GetClass(this._classHash);
+			if (this._classInformation is not null)
+				return env.ClassFeature.GetClass(this._classInformation);
 			JClassObject result = env.FunctionSet.GetDeclaringClass(this);
-			this._classHash = result.Hash;
+			this._classInformation = result.GetInformation();
 			return result;
 		}
 	}
@@ -54,7 +54,7 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 		JClassObject declaringClass) : base(jClass, localRef)
 	{
 		this._callDefinition = definition;
-		this._classHash = declaringClass.Hash;
+		this._classInformation = declaringClass.GetInformation();
 	}
 
 	/// <inheritdoc/>

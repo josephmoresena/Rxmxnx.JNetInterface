@@ -11,9 +11,9 @@ public sealed record ExecutableObjectMetadata : ObjectMetadata
 	/// </summary>
 	public JCallDefinition? Definition { get; internal init; }
 	/// <summary>
-	/// JNI declaring class hash.
+	/// Declaring class information.
 	/// </summary>
-	public String? ClassHash { get; internal init; }
+	public ITypeInformation? ClassInformation { get; internal init; }
 	/// <summary>
 	/// JNI method id.
 	/// </summary>
@@ -24,7 +24,7 @@ public sealed record ExecutableObjectMetadata : ObjectMetadata
 	{
 		if (metadata is not ExecutableObjectMetadata executableMetadata) return;
 		this.Definition = executableMetadata.Definition;
-		this.ClassHash = executableMetadata.ClassHash;
+		this.ClassInformation = executableMetadata.ClassInformation;
 		this.MethodId = executableMetadata.MethodId;
 	}
 
@@ -33,7 +33,7 @@ public sealed record ExecutableObjectMetadata : ObjectMetadata
 	private ExecutableObjectMetadata(ExecutableObjectMetadata executableMetadata) : base(executableMetadata)
 	{
 		this.Definition = executableMetadata.Definition;
-		this.ClassHash = executableMetadata.ClassHash;
+		this.ClassInformation = executableMetadata.ClassInformation;
 		this.MethodId = executableMetadata.MethodId;
 	}
 }

@@ -221,6 +221,8 @@ public sealed class ThrowableTests
 		});
 		thread.ReferenceFeature.CreateWeak(jGlobal).Returns(jWeak);
 		thread.ClassFeature.GetClass(typeMetadata.ClassName).Returns(jThrowableClass);
+		thread.ClassFeature.GetObjectClass(Arg.Any<ObjectMetadata>())
+		      .Returns(c => thread.ClassFeature.GetClass((c[0] as ObjectMetadata)!.ObjectClassName));
 		thread.GetReferenceType(jWeak).Returns(JReferenceType.WeakGlobalRefType);
 		thread.IsSameObject(jWeak, default).Returns(false);
 
@@ -243,6 +245,8 @@ public sealed class ThrowableTests
 
 			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
 			thread.ClassFeature.Received(2).GetClass(typeMetadata.ClassName);
+			env.ClassFeature.GetClass(Arg.Any<ITypeInformation>())
+			   .Returns(c => env.ClassFeature.GetClass((c[1] as ITypeInformation)!.ClassName));
 			thread.Received(3).GetReferenceType(jWeak);
 			thread.Received(3).IsSameObject(jWeak, default);
 

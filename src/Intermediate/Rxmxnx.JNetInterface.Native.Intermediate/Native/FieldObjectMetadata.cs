@@ -11,9 +11,9 @@ public sealed record FieldObjectMetadata : ObjectMetadata
 	/// </summary>
 	public JFieldDefinition? Definition { get; internal init; }
 	/// <summary>
-	/// JNI declaring class hash.
+	/// Declaring class information.
 	/// </summary>
-	public String? ClassHash { get; internal init; }
+	public ITypeInformation? ClassInformation { get; internal init; }
 	/// <summary>
 	/// JNI field id.
 	/// </summary>
@@ -24,7 +24,7 @@ public sealed record FieldObjectMetadata : ObjectMetadata
 	{
 		if (metadata is not FieldObjectMetadata fieldMetadata) return;
 		this.Definition = fieldMetadata.Definition;
-		this.ClassHash = fieldMetadata.ClassHash;
+		this.ClassInformation = fieldMetadata.ClassInformation;
 		this.FieldId = fieldMetadata.FieldId;
 	}
 
@@ -33,7 +33,7 @@ public sealed record FieldObjectMetadata : ObjectMetadata
 	private FieldObjectMetadata(FieldObjectMetadata fieldMetadata) : base(fieldMetadata)
 	{
 		this.Definition = fieldMetadata.Definition;
-		this.ClassHash = fieldMetadata.ClassHash;
+		this.ClassInformation = fieldMetadata.ClassInformation;
 		this.FieldId = fieldMetadata.FieldId;
 	}
 }

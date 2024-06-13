@@ -61,7 +61,7 @@ public readonly ref partial struct JNativeCallAdapter
 		{
 			JEnvironment env = this._callAdapter._env;
 			Builder.ThrowIfNotLocalReference(env, localRef);
-			JClassObject jClass = JEnvironment.GetClassObject(env, localRef);
+			JClassObject jClass = JEnvironment.GetObjectClass(env, localRef);
 			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
 				throw new ArgumentException($"A {jClass.Name} instance is not {env.ClassObject.Name} instance.");
 		}

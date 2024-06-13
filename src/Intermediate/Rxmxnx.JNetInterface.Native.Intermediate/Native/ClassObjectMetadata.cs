@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This record stores the metadata of a <see cref="JClassObject"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
-public sealed record ClassObjectMetadata : ObjectMetadata
+public sealed record ClassObjectMetadata : ObjectMetadata, ITypeInformation
 {
 	/// <summary>
 	/// <see cref="ClassObjectMetadata"/> instance for Java <c>void</c> type.
@@ -12,15 +12,20 @@ public sealed record ClassObjectMetadata : ObjectMetadata
 	public static readonly ClassObjectMetadata VoidMetadata = new(JPrimitiveTypeMetadata.VoidMetadata);
 
 	/// <summary>
-	/// Class name of the current object.
+	/// Class modifier.
+	/// </summary>
+	private readonly JTypeModifier? _modifier;
+
+	/// <summary>
+	/// Class name of the current type.
 	/// </summary>
 	public CString Name { get; internal init; }
 	/// <summary>
-	/// Class signature of the current object.
+	/// Class signature of the current type.
 	/// </summary>
 	public CString ClassSignature { get; internal init; }
 	/// <summary>
-	/// Indicates whether the class of the current object is final.
+	/// Indicates whether the class of the current type is final.
 	/// </summary>
 	public Boolean? IsFinal { get; internal init; }
 	/// <summary>
@@ -39,10 +44,6 @@ public sealed record ClassObjectMetadata : ObjectMetadata
 	/// Array type dimension.
 	/// </summary>
 	public Int32? ArrayDimension { get; internal init; }
-	/// <summary>
-	/// Class hash of the current object.
-	/// </summary>
-	public String Hash { get; internal init; }
 
 	/// <inheritdoc/>
 	internal ClassObjectMetadata(ObjectMetadata metadata) : base(metadata)
@@ -56,6 +57,8 @@ public sealed record ClassObjectMetadata : ObjectMetadata
 		this.IsAnnotation = classMetadata?.IsAnnotation;
 		this.IsFinal = classMetadata?.IsFinal;
 		this.ArrayDimension = classMetadata?.ArrayDimension;
+
+		this._modifier = classMetadata?._modifier;
 	}
 	/// <summary>
 	/// Constructor.
@@ -71,19 +74,21 @@ public sealed record ClassObjectMetadata : ObjectMetadata
 		this.IsAnnotation = jClass.IsAnnotation;
 		this.IsFinal = jClass.IsFinal;
 		this.ArrayDimension = jClass.ArrayDimension;
+
+		this._modifier = this.TypeMetadata?.Modifier;
 	}
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
-	private ClassObjectMetadata(ITypeInformation metadata) : base(CommonNames.ClassObject,
-	                                                              CommonNames.ClassObjectSignature)
+	private ClassObjectMetadata(ITypeInformation metadata) : base(IClassType.GetMetadata<JClassObject>())
 	{
 		this.Name = metadata.ClassName;
 		this.ClassSignature = metadata.Signature;
 		this.Hash = metadata.Hash;
 		this.ArrayDimension = JClassObject.GetArrayDimension(metadata.Signature);
+		this._modifier = metadata.Modifier;
 		if (metadata.Kind is not JTypeKind.Undefined)
 		{
 			this.IsInterface = metadata.Kind is JTypeKind.Interface or JTypeKind.Annotation;
@@ -105,7 +110,17 @@ public sealed record ClassObjectMetadata : ObjectMetadata
 		this.IsAnnotation = classMetadata.IsAnnotation;
 		this.IsFinal = classMetadata.IsFinal;
 		this.ArrayDimension = classMetadata.ArrayDimension;
+		this._modifier = classMetadata._modifier;
 	}
+	/// <summary>
+	/// Class hash of the current type.
+	/// </summary>
+	public String Hash { get; internal init; }
+
+	CString ITypeInformation.ClassName => this.Name;
+	CString ITypeInformation.Signature => this.ClassSignature;
+	JTypeKind ITypeInformation.Kind => ClassObjectMetadata.GetKind(this);
+	JTypeModifier? ITypeInformation.Modifier => this.IsFinal.GetValueOrDefault() ? JTypeModifier.Final : this._modifier;
 
 	/// <inheritdoc/>
 	public override String ToTraceText()
@@ -120,5 +135,25 @@ public sealed record ClassObjectMetadata : ObjectMetadata
 	{
 		JDataTypeMetadata metadata = IDataType.GetMetadata<TDataType>();
 		return new(metadata);
+	}
+
+	/// <summary>
+	/// Retrieves <see cref="JTypeKind"/> value from <paramref name="classMetadata"/>.
+	/// </summary>
+	/// <param name="classMetadata">A <see cref="ClassObjectMetadata"/> instance.</param>
+	/// <returns>A <see cref="JTypeKind"/> value.</returns>
+	private static JTypeKind GetKind(ClassObjectMetadata classMetadata)
+	{
+		if (classMetadata.ClassSignature.Length == 1)
+			return JTypeKind.Primitive;
+		if (classMetadata.ArrayDimension > 0 || classMetadata.ClassSignature[0] == CommonNames.ArraySignaturePrefixChar)
+			return JTypeKind.Array;
+		if (classMetadata.IsAnnotation.GetValueOrDefault())
+			return JTypeKind.Annotation;
+		if (classMetadata.IsInterface.GetValueOrDefault())
+			return JTypeKind.Interface;
+		if (classMetadata.IsEnum.GetValueOrDefault())
+			return JTypeKind.Enum;
+		return classMetadata.IsFinal.HasValue ? JTypeKind.Class : JTypeKind.Undefined;
 	}
 }

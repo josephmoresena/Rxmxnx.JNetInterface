@@ -9,7 +9,6 @@ public partial class JClassObject
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JClassObject>
 	                                                    .Create(CommonNames.ClassObject, JTypeModifier.Final)
-	                                                    .WithSignature(CommonNames.ClassObjectSignature)
 	                                                    .Implements<JSerializableObject>()
 	                                                    .Implements<JAnnotatedElementObject>()
 	                                                    .Implements<JGenericDeclarationObject>()

@@ -302,27 +302,19 @@ internal static class CommonNames
 	/// </summary>
 	public static readonly CString Object = new(() => "java/lang/Object"u8);
 	/// <summary>
-	/// JNI name of <c>java.lang.Class&lt;?&gt;</c> class.
-	/// </summary>
-	public static readonly CString ClassObject = new(() => "java/lang/Class"u8);
-	/// <summary>
 	/// JNI signature for <c>java.lang.Object</c> object.
 	/// </summary>
 	public static readonly CString ObjectSignature = new(() => "Ljava/lang/Object;"u8);
 	/// <summary>
-	/// JNI signature for <c>java.lang.Class&lt;?&gt;</c> object.
+	/// JNI name of <c>java.lang.Class&lt;?&gt;</c> class.
 	/// </summary>
-	public static readonly CString ClassObjectSignature = new(() => "Ljava/lang/Class;"u8);
-	/// <summary>
-	/// Java class name of primitive <c>void</c> class.
-	/// </summary>
-	public static ReadOnlySpan<Byte> VoidPrimitive() => "void"u8;
+	public static ReadOnlySpan<Byte> ClassObject => "java/lang/Class"u8;
 	/// <summary>
 	/// JNI name of <c>java.lang.reflect.Proxy</c> class.
 	/// </summary>
-	public static ReadOnlySpan<Byte> ProxyObject() => "java/lang/reflect/Proxy"u8;
+	public static ReadOnlySpan<Byte> ProxyObject => "java/lang/reflect/Proxy"u8;
 	/// <summary>
 	/// JNI name for class constructors.
 	/// </summary>
-	public static ReadOnlySpan<Byte> Constructor() => "<init>"u8;
+	public static ReadOnlySpan<Byte> Constructor => "<init>"u8;
 }

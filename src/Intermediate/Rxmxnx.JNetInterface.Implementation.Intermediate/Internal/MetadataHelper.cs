@@ -232,11 +232,10 @@ internal static partial class MetadataHelper
 	public static CStringSequence GetClassInformation(String hash)
 	{
 		ReadOnlySpan<Byte> classInformation = hash.AsSpan().AsBytes();
-		Int32 classNameLength = ITypeInformation.GetSegmentLength(classInformation, 0);
-		Int32 signatureLength = ITypeInformation.GetSegmentLength(classInformation, classNameLength + 1);
-		Int32 arraySignatureLength = ITypeInformation.GetSegmentLength(classInformation, signatureLength + 1);
-		return new(classInformation[..classNameLength], classInformation[(classNameLength + 1)..signatureLength],
-		           classInformation[(signatureLength + 1)..arraySignatureLength]);
+		ReadOnlySpan<Byte> className = ITypeInformation.GetSegment(ref classInformation);
+		ReadOnlySpan<Byte> classSignature = ITypeInformation.GetSegment(ref classInformation);
+		ReadOnlySpan<Byte> arraySignature = ITypeInformation.GetSegment(ref classInformation);
+		return new(className, classSignature, arraySignature);
 	}
 	/// <summary>
 	/// Determines statically whether an object of <paramref name="jClass"/> can be safely cast to

@@ -43,13 +43,12 @@ public partial class JLocalObject
 	/// Creates the object metadata for the current instance.
 	/// </summary>
 	/// <returns>The object metadata for the current instance.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	protected virtual ObjectMetadata CreateMetadata() => new(this.Lifetime.GetLoadClassObject(this));
 	/// <summary>
 	/// Process the object metadata.
 	/// </summary>
 	/// <param name="instanceMetadata">The object metadata for the current instance.</param>
-	protected virtual void ProcessMetadata(ObjectMetadata instanceMetadata)
-	{
-		this.Lifetime.SetClass(instanceMetadata);
-	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	protected virtual void ProcessMetadata(ObjectMetadata instanceMetadata) => this.Lifetime.SetClass(instanceMetadata);
 }

@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 public sealed class JClassObjectTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly CString className = CommonNames.ClassObject;
+	private static readonly CString className = new(CommonNames.ClassObject);
 	private static readonly CString classSignature = CString.Concat("L"u8, JClassObjectTests.className, ";"u8);
 	private static readonly CString arraySignature = CString.Concat("["u8, JClassObjectTests.classSignature);
 	private static readonly CStringSequence hash = new(JClassObjectTests.className, JClassObjectTests.classSignature,
@@ -256,6 +256,7 @@ public sealed class JClassObjectTests
 		ILocalObject.ProcessMetadata(jStringClass, classObjectMetadata);
 
 		env.ClassFeature.Received(0).GetClass(Arg.Any<CString>());
+		env.ClassFeature.Received(0).GetClass(Arg.Any<ITypeInformation>());
 
 		Assert.Equal(classObjectMetadata.ObjectClassName, jStringClass.ObjectClassName);
 		Assert.Equal(classObjectMetadata.ObjectSignature, jStringClass.ObjectSignature);

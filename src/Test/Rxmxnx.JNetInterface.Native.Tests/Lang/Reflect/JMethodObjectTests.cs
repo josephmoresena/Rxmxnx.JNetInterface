@@ -37,7 +37,7 @@ public class JMethodObjectTests
 		env.FunctionSet.GetName(jMethod).Returns(jStringMethodName);
 		env.FunctionSet.GetReturnType(jMethod).Returns(default(JClassObject));
 		env.FunctionSet.GetParameterTypes(jMethod).Returns(jArrayParameters);
-		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
+		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringMethodName, jArrayParameters, default).Returns(methodDefinition);
 		env.AccessFeature.GetMethodId(jMethod).Returns(methodId);
 
@@ -49,7 +49,7 @@ public class JMethodObjectTests
 		env.FunctionSet.Received(initDefinition ? 0 : 1).GetDeclaringClass(jMethod);
 		env.FunctionSet.Received(initDefinition ? 0 : 1).GetName(jMethod);
 		env.FunctionSet.Received(initDefinition ? 0 : 1).GetReturnType(jMethod);
-		env.ClassFeature.Received(initDefinition ? 1 : 0).GetClass(jClass.Hash);
+		env.ClassFeature.Received(initDefinition ? 1 : 0).GetClass(jClass.GetInformation());
 		env.AccessFeature.Received(initDefinition ? 0 : 1).GetDefinition(jStringMethodName, jArrayParameters, default);
 		env.AccessFeature.Received(1).GetMethodId(jMethod);
 
@@ -81,7 +81,7 @@ public class JMethodObjectTests
 		env.FunctionSet.GetName(jMethod).Returns(jStringMethodName);
 		env.FunctionSet.GetReturnType(jMethod).Returns(default(JClassObject));
 		env.FunctionSet.GetParameterTypes(jMethod).Returns(jArrayParameters);
-		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
+		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringMethodName, jArrayParameters, default).Returns(methodDefinition);
 		env.AccessFeature.GetMethodId(jMethod).Returns(methodId);
 
@@ -90,7 +90,7 @@ public class JMethodObjectTests
 			useMetadata ?
 				new ExecutableObjectMetadata(new(jMethodClass))
 				{
-					Definition = methodDefinition, MethodId = methodId, ClassHash = jClass.Hash,
+					Definition = methodDefinition, MethodId = methodId, ClassInformation = jClass.GetInformation(),
 				} :
 				new ObjectMetadata(jMethodClass));
 
@@ -100,7 +100,7 @@ public class JMethodObjectTests
 		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
 		Assert.Equal(methodDefinition, objectMetadata.Definition);
-		Assert.Equal(jClass.Hash, objectMetadata.ClassHash);
+		Assert.Equal(jClass.GetInformation(), objectMetadata.ClassInformation);
 		Assert.Equal(useMetadata ? methodId : null, objectMetadata.MethodId);
 		Assert.Equal(objectMetadata, new(objectMetadata));
 
@@ -126,7 +126,7 @@ public class JMethodObjectTests
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetName(jMethod);
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetReturnType(jMethod);
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetParameterTypes(jMethod);
-		env.ClassFeature.Received(1).GetClass(jClass.Hash);
+		env.ClassFeature.Received(1).GetClass(jClass.GetInformation());
 		env.AccessFeature.Received(useMetadata ? 0 : 1).GetDefinition(jStringMethodName, jArrayParameters, default);
 		env.AccessFeature.Received(0).GetMethodId(jMethod);
 

@@ -33,7 +33,7 @@ public class JFieldObjectTests
 		env.FunctionSet.GetDeclaringClass(jField).Returns(jClass);
 		env.FunctionSet.GetName(jField).Returns(jStringFieldName);
 		env.FunctionSet.GetFieldType(jField).Returns(jStringClass);
-		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
+		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringFieldName, jStringClass).Returns(fieldDefinition);
 		env.AccessFeature.GetFieldId(jField).Returns(fieldId);
 
@@ -45,7 +45,7 @@ public class JFieldObjectTests
 		env.FunctionSet.Received(initDefinition ? 0 : 1).GetDeclaringClass(jField);
 		env.FunctionSet.Received(initDefinition ? 0 : 1).GetName(jField);
 		env.FunctionSet.Received(initDefinition ? 0 : 1).GetFieldType(jField);
-		env.ClassFeature.Received(initDefinition ? 1 : 0).GetClass(jClass.Hash);
+		env.ClassFeature.Received(initDefinition ? 1 : 0).GetClass(jClass.GetInformation());
 		env.AccessFeature.Received(initDefinition ? 0 : 1).GetDefinition(jStringFieldName, jStringClass);
 		env.AccessFeature.Received(1).GetFieldId(jField);
 
@@ -73,7 +73,7 @@ public class JFieldObjectTests
 		env.FunctionSet.GetDeclaringClass(jField).Returns(jClass);
 		env.FunctionSet.GetName(jField).Returns(jStringFieldName);
 		env.FunctionSet.GetFieldType(jField).Returns(jStringClass);
-		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
+		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringFieldName, jStringClass).Returns(fieldDefinition);
 		env.AccessFeature.GetFieldId(jField).Returns(fieldId);
 
@@ -82,7 +82,7 @@ public class JFieldObjectTests
 			useMetadata ?
 				new FieldObjectMetadata(new(jFieldClass))
 				{
-					Definition = fieldDefinition, FieldId = fieldId, ClassHash = jClass.Hash,
+					Definition = fieldDefinition, FieldId = fieldId, ClassInformation = jClass.GetInformation(),
 				} :
 				new ObjectMetadata(jFieldClass));
 
@@ -91,7 +91,7 @@ public class JFieldObjectTests
 		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
 		Assert.Equal(fieldDefinition, objectMetadata.Definition);
-		Assert.Equal(jClass.Hash, objectMetadata.ClassHash);
+		Assert.Equal(jClass.GetInformation(), objectMetadata.ClassInformation);
 		Assert.Equal(useMetadata ? fieldId : null, objectMetadata.FieldId);
 		Assert.Equal(objectMetadata, new(objectMetadata));
 
@@ -108,7 +108,7 @@ public class JFieldObjectTests
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetDeclaringClass(jField);
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetName(jField);
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetFieldType(jField);
-		env.ClassFeature.Received(0).GetClass(jClass.Hash);
+		env.ClassFeature.Received(0).GetClass(jClass.GetInformation());
 		env.AccessFeature.Received(useMetadata ? 0 : 1).GetDefinition(jStringFieldName, jStringClass);
 		env.AccessFeature.Received(0).GetFieldId(jField);
 	}

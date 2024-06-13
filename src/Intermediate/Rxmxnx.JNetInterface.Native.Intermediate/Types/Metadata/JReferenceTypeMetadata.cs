@@ -29,8 +29,7 @@ public abstract partial class JReferenceTypeMetadata : JDataTypeMetadata
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean IsInstance(IEnvironment env, JReferenceObject? jObject)
-		=> jObject is null || this.IsInstance(jObject) ||
-			env.ClassFeature.IsInstanceOf(jObject, env.ClassFeature.GetClass(this.Hash));
+		=> jObject is null || this.IsInstance(jObject) || env.ClassFeature.IsInstanceOf(jObject, this.GetClass(env));
 
 	/// <summary>
 	/// Indicates whether an instance of the current type is instance of the type of

@@ -104,6 +104,8 @@ public sealed class JInterfaceObjectTests
 		Assert.Null(interfaceTypeMetadata.CreateException(jGlobal));
 
 		env.ClassFeature.GetClass(interfaceTypeMetadata.ClassName).Returns(interfaceClass);
+		env.ClassFeature.GetClass(Arg.Any<ITypeInformation>())
+		   .Returns(c => env.ClassFeature.GetClass((c[0] as ITypeInformation)!.ClassName));
 		env.GetReferenceType(jGlobal).Returns(JReferenceType.GlobalRefType);
 
 		using JLocalObject jLocal0 = interfaceTypeMetadata.CreateInstance(interfaceClass, localRef);

@@ -38,7 +38,7 @@ public class JConstructorObjectTests
 		env.FunctionSet.GetName(jConstructor).Returns(jStringConstructorName);
 		env.FunctionSet.GetReturnType(jConstructor).Returns(default(JClassObject));
 		env.FunctionSet.GetParameterTypes(jConstructor).Returns(jArrayParameters);
-		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
+		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringConstructorName, jArrayParameters, default).Returns(methodDefinition);
 		env.AccessFeature.GetMethodId(jConstructor).Returns(methodId);
 
@@ -50,7 +50,7 @@ public class JConstructorObjectTests
 		env.FunctionSet.Received(initDefinition ? 0 : 1).GetDeclaringClass(jConstructor);
 		env.FunctionSet.Received(initDefinition ? 0 : 1).GetName(jConstructor);
 		env.FunctionSet.Received(initDefinition ? 0 : 1).GetReturnType(jConstructor);
-		env.ClassFeature.Received(initDefinition ? 1 : 0).GetClass(jClass.Hash);
+		env.ClassFeature.Received(initDefinition ? 1 : 0).GetClass(jClass.GetInformation());
 		env.AccessFeature.Received(initDefinition ? 0 : 1)
 		   .GetDefinition(jStringConstructorName, jArrayParameters, default);
 		env.AccessFeature.Received(1).GetMethodId(jConstructor);
@@ -83,7 +83,7 @@ public class JConstructorObjectTests
 		env.FunctionSet.GetName(jConstructor).Returns(jStringConstructorName);
 		env.FunctionSet.GetReturnType(jConstructor).Returns(default(JClassObject));
 		env.FunctionSet.GetParameterTypes(jConstructor).Returns(jArrayParameters);
-		env.ClassFeature.GetClass(jClass.Hash).Returns(jClass);
+		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.AccessFeature.GetDefinition(jStringConstructorName, jArrayParameters, default).Returns(methodDefinition);
 		env.AccessFeature.GetMethodId(jConstructor).Returns(methodId);
 
@@ -93,7 +93,7 @@ public class JConstructorObjectTests
 			                             {
 				                             Definition = methodDefinition,
 				                             MethodId = methodId,
-				                             ClassHash = jClass.Hash,
+				                             ClassInformation = jClass.GetInformation(),
 			                             } :
 			                             new ObjectMetadata(jConstructorClass));
 
@@ -103,7 +103,7 @@ public class JConstructorObjectTests
 		Assert.Equal(typeMetadata.ClassName, objectMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, objectMetadata.ObjectSignature);
 		Assert.Equal(methodDefinition, objectMetadata.Definition);
-		Assert.Equal(jClass.Hash, objectMetadata.ClassHash);
+		Assert.Equal(jClass.GetInformation(), objectMetadata.ClassInformation);
 		Assert.Equal(useMetadata ? methodId : null, objectMetadata.MethodId);
 		Assert.Equal(objectMetadata, new(objectMetadata));
 
@@ -129,7 +129,7 @@ public class JConstructorObjectTests
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetName(jConstructor);
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetReturnType(jConstructor);
 		env.FunctionSet.Received(useMetadata ? 0 : 1).GetParameterTypes(jConstructor);
-		env.ClassFeature.Received(1).GetClass(jClass.Hash);
+		env.ClassFeature.Received(1).GetClass(jClass.GetInformation());
 		env.AccessFeature.Received(useMetadata ? 0 : 1)
 		   .GetDefinition(jStringConstructorName, jArrayParameters, default);
 		env.AccessFeature.Received(0).GetMethodId(jConstructor);

@@ -174,7 +174,11 @@ internal sealed partial class ObjectLifetime(
 	public void SetClass(ObjectMetadata instanceMetadata)
 	{
 		if (!instanceMetadata.ObjectClassName.AsSpan().SequenceEqual(this._class?.Name))
-			this._class = instanceMetadata.GetClass(this.Environment);
+			// Class in metadata is current class.
+			this._class = this.Environment.ClassFeature.GetObjectClass(instanceMetadata);
+		else if (instanceMetadata.FromProxy.HasValue)
+			// If metadata is from runtime, we need to check proxy flags.
+			CommonValidationUtilities.ThrowIfNoProxyMatch(this._class!.IsProxy, instanceMetadata.FromProxy.Value);
 		this._isRealClass = true;
 	}
 	/// <summary>
