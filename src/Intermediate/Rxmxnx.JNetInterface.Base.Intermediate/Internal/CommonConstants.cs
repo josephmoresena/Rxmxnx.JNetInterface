@@ -35,6 +35,7 @@ internal static class CommonConstants
 	public const String CheckIdS1006 = "S1006:Use the default parameter value defined in the overridden method";
 	public const String CheckIdS1210 =
 		"S1210:\"Equals\" and the comparison operators should be overridden when implementing \"IComparable\"";
+	public const String CheckIdS1694 = "S1694:An abstract class should have both abstract and concrete methods";
 	public const String CheckIdS1206 = "S1206:\"Equals(Object)\" and \"GetHashCode()\" should be overridden in pairs";
 	public const String CheckIdS2094 = "S2094:Classes should not be empty.";
 	public const String CheckIdS3267 = "S3267:Loops should be simplified with \"LINQ\" expressions";
@@ -71,5 +72,6 @@ internal static class CommonConstants
 	public const String SecureUnsafeCodeJustification = "JNI code is secure to use.";
 	public const String OnlyInternalInstantiationJustification =
 		"Only internal code is allowed to build an instance of current type.";
+	public const String NonGenericInGenericTypeJustification = "Non-generic type is declared inside a generic type.";
 	#endregion
 }
