@@ -90,9 +90,12 @@ partial class JEnvironment
 		}
 		public TGlobal Create<TGlobal>(JLocalObject jLocal) where TGlobal : JGlobalBase
 		{
+			JClassObject? jClass = jLocal as JClassObject;
 			if (typeof(TGlobal) == typeof(JWeak))
 			{
-				JWeakRef weakRef = this.CreateWeakGlobalRef(jLocal);
+				JWeakRef weakRef = jClass is not null ?
+					this.CreateWeakGlobalRef(jClass) :
+					this.CreateWeakGlobalRef(jLocal);
 				return (TGlobal)(Object)this.VirtualMachine.Register(new JWeak(jLocal, weakRef));
 			}
 
@@ -100,7 +103,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JGlobal? jGlobal;
 
-			if (jLocal is JClassObject jClass)
+			if (jClass is not null)
 			{
 				jGlobal = this.LoadGlobal(jClass);
 			}

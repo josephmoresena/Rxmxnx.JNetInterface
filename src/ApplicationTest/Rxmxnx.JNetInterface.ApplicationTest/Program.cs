@@ -51,7 +51,7 @@ public static class Program
 	}
 	private static void PrintMetadataInfo()
 	{
-		Program.PrintBuiltIntMetadata();
+		Program.PrintBuiltInMetadata();
 		Program.PrintArrayMetadata(JArrayObject<JBoolean>.Metadata, 5);
 		Program.PrintArrayMetadata(JArrayObject<JByte>.Metadata, 5);
 		Program.PrintArrayMetadata(JArrayObject<JChar>.Metadata, 5);
@@ -68,13 +68,18 @@ public static class Program
 	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata, Int32 dimension)
 	{
 		Console.WriteLine(arrMetadata.ElementMetadata.Signature);
+		Boolean stopMetadata = false;
 		for (Int32 i = 0; i < dimension; i++)
 		{
 			Console.WriteLine(arrMetadata.Signature);
 			if (arrMetadata.GetArrayMetadata() is not { } arrMet2)
+			{
+				stopMetadata = true;
 				break;
+			}
 			arrMetadata = arrMet2;
 		}
+		if (!stopMetadata) Console.WriteLine(arrMetadata.Signature);
 		Program.PrintNestedArrayMetadata(arrMetadata);
 	}
 	private static void PrintNestedArrayMetadata(JArrayTypeMetadata? arrMetadata, Boolean printCurrent = false)
@@ -86,7 +91,7 @@ public static class Program
 			arrMetadata = arrMetadata.ElementMetadata as JArrayTypeMetadata;
 		}
 	}
-	private static void PrintBuiltIntMetadata()
+	private static void PrintBuiltInMetadata()
 	{
 		Console.WriteLine("====== Primitive types ======");
 		Console.WriteLine(JPrimitiveTypeMetadata.VoidMetadata);

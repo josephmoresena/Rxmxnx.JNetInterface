@@ -235,7 +235,7 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jObject.ToTraceText} -> {className}.",
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jObject.ToTraceText()} -> {className}.",
 		                callerMethod);
 	}
 	/// <summary>
@@ -282,17 +282,6 @@ internal static partial class JTrace
 	/// Writes a category name and creation of local reference to the trace listeners.
 	/// </summary>
 	/// <param name="objectRef">A JNI object reference.</param>
-	/// <param name="callerMethod">Caller member name.</param>
-	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, [CallerMemberName] String callerMethod = "")
-		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
-	{
-		if (!IVirtualMachine.TraceEnabled) return;
-		JTrace.CreateNonGenericLocalRef($"{objectRef}", callerMethod);
-	}
-	/// <summary>
-	/// Writes a category name and creation of local reference to the trace listeners.
-	/// </summary>
-	/// <param name="objectRef">A JNI object reference.</param>
 	/// <param name="localRef">Local JNI object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, JObjectLocalRef localRef,
@@ -301,6 +290,20 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		JTrace.CreateNonGenericLocalRef($"{objectRef}", localRef, callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and creation of global reference to the trace listeners.
+	/// </summary>
+	/// <param name="localRef">Local JNI object reference.</param>
+	/// <param name="globalRef">A JNI global object reference.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void CreateGlobalRef<TObjectRef>(JObjectLocalRef localRef, TObjectRef globalRef,
+		[CallerMemberName] String callerMethod = "")
+		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>, IObjectGlobalReferenceType,
+		IEqualityOperators<TObjectRef, TObjectRef, Boolean>
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		JTrace.CreateNonGenericGlobalRef(localRef, globalRef != default ? $"{globalRef}" : String.Empty, callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and finallization call to the trace listeners.
@@ -449,6 +452,34 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} instance of {classRef}.",
+		                callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and removing <paramref name="classRef"/> from <paramref name="jClass"/>
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="jClass">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void ClearClass(JClassLocalRef classRef, JReferenceObject jClass,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} cleared from {jClass.ToTraceText()}.",
+		                callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and loading <paramref name="classRef"/> to <paramref name="jClass"/>
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void ReloadClass(JClassLocalRef classRef, JClassObject jClass,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} loaded to {jClass.ToTraceText()}.",
 		                callerMethod);
 	}
 }

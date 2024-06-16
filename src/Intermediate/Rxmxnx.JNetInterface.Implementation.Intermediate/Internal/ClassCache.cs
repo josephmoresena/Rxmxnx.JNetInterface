@@ -56,7 +56,8 @@ internal class ClassCache(JReferenceType type)
 		foreach (String hash in references.Keys)
 		{
 			this.Unload(references[hash]);
-			this.SetAsUnloaded(hash, references[hash]);
+			if (this._type is JReferenceType.LocalRefType)
+				this.SetAsUnloaded(hash, references[hash]);
 		}
 	}
 	/// <summary>
@@ -136,7 +137,8 @@ internal sealed class ClassCache<TClass>(JReferenceType type) : ClassCache(type)
 	protected override void SetAsUnloaded(String hash, JClassLocalRef classRef)
 	{
 		if (!this._classes.TryGetValue(hash, out TClass? jClass)) return;
-		if ((jClass as JLocalObject)?.LocalReference == classRef.Value)
-			jClass.ClearValue();
+		if ((jClass as ILocalObject)?.LocalReference != classRef.Value) return;
+		jClass.ClearValue();
+		JTrace.ClearClass(classRef, jClass);
 	}
 }
