@@ -95,7 +95,7 @@ internal partial class ObjectLifetime
 	private void LoadNewValue(JLocalObject jLocal, JObjectLocalRef localRef)
 	{
 		this._value.Value = localRef;
-		this._isDisposed.Value = localRef != default;
+		this._isDisposed.Value = localRef == default;
 		this.Load(jLocal);
 	}
 	/// <summary>

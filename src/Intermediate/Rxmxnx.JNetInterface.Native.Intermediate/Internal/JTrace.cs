@@ -465,8 +465,9 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} cleared from {jClass.ToTraceText()}.",
-		                callerMethod);
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {classRef} cleared from {jClass.ToTraceText()} view: {jClass is ILocalViewObject}.",
+			callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and loading <paramref name="classRef"/> to <paramref name="jClass"/>

@@ -137,8 +137,8 @@ internal sealed class ClassCache<TClass>(JReferenceType type) : ClassCache(type)
 	protected override void SetAsUnloaded(String hash, JClassLocalRef classRef)
 	{
 		if (!this._classes.TryGetValue(hash, out TClass? jClass)) return;
-		if ((jClass as ILocalObject)?.LocalReference != classRef.Value) return;
-		jClass.ClearValue();
+		if (jClass is not ILocalObject localClass || localClass.LocalReference != classRef.Value) return;
+		localClass.Lifetime.GetCacheable().Dispose();
 		JTrace.ClearClass(classRef, jClass);
 	}
 }
