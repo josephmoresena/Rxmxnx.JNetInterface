@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Tests;
 public sealed class DataTypeTests
 {
 	private static readonly IFixture fixture = new Fixture();
-	private static readonly IReadOnlySet<JNativeType> nativeTypes =
+	private static readonly HashSet<JNativeType> nativeTypes =
 		(Enum.GetValuesAsUnderlyingType<JNativeType>() as JNativeType[])!.ToHashSet();
 
 	[Fact]
