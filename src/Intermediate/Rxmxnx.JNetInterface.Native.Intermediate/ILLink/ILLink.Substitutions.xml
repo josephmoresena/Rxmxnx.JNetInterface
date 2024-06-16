@@ -32,9 +32,11 @@
                     body="stub"/>
             <method signature="System.Void AsClassObject(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.JReferenceType,Rxmxnx.JNetInterface.Native.ClassObjectMetadata,System.String)"
                     body="stub"/>
+            <method signature="System.Void AsClassObject(Rxmxnx.PInvoke.CString,Rxmxnx.JNetInterface.Native.JReferenceObject,System.String)"
+                    body="stub"/>
             <method signature="System.Void GetClassInfo(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.JNetInterface.Native.JReferenceType,System.String)"
                     body="stub"/>
-            <method signature="System.Void LoadGlobalClass(Rxmxnx.JNetInterface.Lang.JClassObject,System.String)"
+            <method signature="System.Void LoadGlobalClass(Rxmxnx.JNetInterface.Lang.JClassObject,System.Boolean,Rxmxnx.JNetInterface.Native.References.JGlobalRef,System.String)"
                     body="stub"/>
             <method signature="System.Void LoadClassMetadata(Rxmxnx.JNetInterface.Native.ClassObjectMetadata,System.String)"
                     body="stub"/>
@@ -50,6 +52,14 @@
             <method signature="System.Void InvokeAt(Rxmxnx.JNetInterface.IThread,System.String)" body="stub"/>
             <method signature="System.Void SetObjectCache(System.Guid,System.String,System.String)" body="stub"/>
             <method signature="System.Void DeleteObjectCache(System.Guid,Rxmxnx.JNetInterface.Native.JLocalObject,System.String)"
+                    body="stub"/>
+            <method signature="System.Void GetTypeInformation(System.String,Rxmxnx.JNetInterface.ITypeInformation,System.String)"
+                    body="stub"/>
+            <method signature="System.Void ClassFound(Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata,System.String)"
+                    body="stub"/>
+            <method signature="System.Void ClassFound(Rxmxnx.JNetInterface.Lang.JClassObject,System.String)"
+                    body="stub"/>
+            <method signature="System.Void ClassFound(Rxmxnx.JNetInterface.ITypeInformation,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.String)"
                     body="stub"/>
             <!-- Access -->
             <method signature="System.Void GetField(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JFieldDefinition,System.String)"

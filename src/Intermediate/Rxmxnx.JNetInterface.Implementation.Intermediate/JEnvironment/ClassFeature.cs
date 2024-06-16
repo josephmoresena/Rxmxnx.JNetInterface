@@ -67,7 +67,6 @@ partial class JEnvironment
 			CString? utf8Message = (CString?)message;
 			this.ThrowNew<TThrowable>(utf8Message, throwException, message);
 		}
-
 		public JClassObject GetClass(ReadOnlySpan<Byte> className)
 		{
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);

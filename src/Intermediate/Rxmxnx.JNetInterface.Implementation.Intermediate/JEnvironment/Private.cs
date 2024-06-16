@@ -218,6 +218,7 @@ partial class JEnvironment
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectClassInfo);
 		JClassLocalRef classRef = nativeInterface.ObjectFunctions.GetObjectClass(this.Reference, localRef);
 		if (classRef.IsDefault) this._cache.CheckJniError();
+		JTrace.GetObjectClass(localRef, classRef);
 		return classRef;
 	}
 
