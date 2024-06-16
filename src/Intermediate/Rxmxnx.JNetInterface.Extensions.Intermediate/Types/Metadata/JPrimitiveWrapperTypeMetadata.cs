@@ -15,13 +15,10 @@ public sealed class
 	/// </summary>
 	public JPrimitiveTypeMetadata PrimitiveMetadata => TWrapper.PrimitiveMetadata;
 	/// <summary>
-	/// Primitive class name.
-	/// </summary>
-	public CString PrimitiveClassName => this.PrimitiveMetadata.ClassName;
-	/// <summary>
 	/// Primitive argument metadata.
 	/// </summary>
-	public JArgumentMetadata PrimitiveArgumentMetadata => this.PrimitiveMetadata.ArgumentMetadata;
+	public JArgumentMetadata? PrimitiveArgumentMetadata
+		=> this.PrimitiveMetadata.Type != typeof(void) ? this.PrimitiveMetadata.ArgumentMetadata : default;
 
 	/// <inheritdoc/>
 	internal JPrimitiveWrapperTypeMetadata(JClassTypeMetadata<TWrapper> metadata) : base(metadata) { }
@@ -30,13 +27,7 @@ public sealed class
 	private protected override ClassProperty GetPrimaryProperty()
 		=> new()
 		{
-			PropertyName = nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveClassName),
-			Value = $"{this.PrimitiveClassName}",
+			PropertyName = nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveMetadata),
+			Value = ClassNameHelper.GetClassName(this.PrimitiveMetadata.Signature),
 		};
-	/// <inheritdoc/>
-	private protected override IAppendableProperty? GetSecondaryProperty()
-		=> this.PrimitiveMetadata.Type != typeof(void) ?
-			this.PrimitiveArgumentMetadata.ToAppendableProperty(
-				nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveArgumentMetadata)) :
-			default;
 }

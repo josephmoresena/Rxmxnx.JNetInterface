@@ -27,19 +27,13 @@ public partial class JEnumObject
 			public void AppendValue(StringBuilder stringBuilder)
 			{
 				Boolean first = true;
-				stringBuilder.Append(MetadataTextUtilities.OpenArray);
+				MetadataTextUtilities.AppendArrayBegin(stringBuilder);
 				foreach (Int32 ordinal in this._ordinalDictionary.Keys)
 				{
-					if (!first)
-						stringBuilder.Append(MetadataTextUtilities.Separator);
+					MetadataTextUtilities.AppendItem(stringBuilder, ordinal, $"{this[ordinal]}", first);
 					first = false;
-					stringBuilder.Append(MetadataTextUtilities.OpenObject);
-					stringBuilder.Append(ordinal);
-					stringBuilder.Append(MetadataTextUtilities.Separator);
-					stringBuilder.Append($"{this[ordinal]}");
-					stringBuilder.Append(MetadataTextUtilities.CloseObject);
 				}
-				stringBuilder.Append(MetadataTextUtilities.CloseArray);
+				MetadataTextUtilities.AppendArrayEnd(stringBuilder, first);
 			}
 
 			/// <inheritdoc/>

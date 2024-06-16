@@ -5,7 +5,7 @@ internal partial class InterfaceSet
 	/// <summary>
 	/// Array interface set.
 	/// </summary>
-	private sealed class ArrayInterfaceSet : IInterfaceSet
+	private sealed class ArrayInterfaceSet : IAppendableInterfaceSet
 	{
 		/// <summary>
 		/// Array set instance.

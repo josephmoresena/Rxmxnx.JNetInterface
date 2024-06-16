@@ -1,16 +1,18 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial class InterfaceSet : IAppendableProperty
+/// <summary>
+/// Appendable interface metadata set.
+/// </summary>
+internal interface IAppendableInterfaceSet : IInterfaceSet, IAppendableProperty
 {
-	/// <inheritdoc/>
-	public String PropertyName => nameof(JReferenceTypeMetadata.Interfaces);
+	String IAppendableProperty.PropertyName => nameof(JReferenceTypeMetadata.Interfaces);
 
-	/// <inheritdoc/>
-	public void AppendValue(StringBuilder stringBuilder)
+	void IAppendableProperty.AppendValue(StringBuilder stringBuilder)
 	{
-		stringBuilder.Append(MetadataTextUtilities.OpenArray);
-		this.ForEach(new AppendHelper(stringBuilder), AppendHelper.Append);
-		stringBuilder.Append(MetadataTextUtilities.CloseArray);
+		AppendHelper helper = new(stringBuilder);
+		MetadataTextUtilities.AppendArrayBegin(stringBuilder);
+		this.ForEach(helper, AppendHelper.Append);
+		MetadataTextUtilities.AppendArrayEnd(stringBuilder, helper.First);
 	}
 
 	/// <summary>
@@ -26,7 +28,7 @@ internal partial class InterfaceSet : IAppendableProperty
 		/// <summary>
 		/// Indicates whether current interface is the first one.
 		/// </summary>
-		private Boolean _first = true;
+		public Boolean First { get; private set; } = true;
 
 		/// <summary>
 		/// Appends <paramref name="metadata"/> name to internal <see cref="StringBuilder"/> instance.
@@ -35,11 +37,9 @@ internal partial class InterfaceSet : IAppendableProperty
 		/// <param name="metadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
 		public static void Append(AppendHelper helper, JInterfaceTypeMetadata metadata)
 		{
-			if (!helper._first)
-				helper._stringBuilder.Append(MetadataTextUtilities.Separator);
-
-			helper._first = false;
-			helper._stringBuilder.Append($"{metadata.ClassName}");
+			MetadataTextUtilities.AppendItem(helper._stringBuilder, ClassNameHelper.GetClassName(metadata.Signature),
+			                                 helper.First);
+			helper.First = false;
 		}
 	}
 }

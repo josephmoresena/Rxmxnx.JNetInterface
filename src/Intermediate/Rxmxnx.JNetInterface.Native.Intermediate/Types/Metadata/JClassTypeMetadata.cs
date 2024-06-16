@@ -8,11 +8,6 @@ public abstract partial class JClassTypeMetadata : JReferenceTypeMetadata
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Class;
 
-	/// <summary>
-	/// Base class name.
-	/// </summary>
-	public CString? BaseClassName => this.BaseMetadata?.ClassName;
-
 	/// <inheritdoc/>
 	private protected JClassTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
@@ -27,7 +22,7 @@ public abstract partial class JClassTypeMetadata : JReferenceTypeMetadata
 			new()
 			{
 				PropertyName = nameof(JReferenceTypeMetadata.BaseMetadata),
-				Value = $"{this.BaseMetadata?.ClassName}",
+				Value = ClassNameHelper.GetClassName(this.BaseMetadata.Signature),
 			} :
 			default;
 	/// <summary>

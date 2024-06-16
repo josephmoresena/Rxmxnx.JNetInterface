@@ -48,6 +48,8 @@ internal readonly struct ClassNameHelper
 	{
 		switch (classSignature[dimension])
 		{
+			case CommonNames.VoidSignatureChar:
+				return CommonNames.VoidPrimitive;
 			case CommonNames.BooleanSignatureChar:
 				return CommonNames.BooleanPrimitive;
 			case CommonNames.ByteSignatureChar:

@@ -3,7 +3,7 @@
 /// <summary>
 /// This record stores the metadata for a parameter <see cref="IDataType"/> type.
 /// </summary>
-public sealed partial class JArgumentMetadata
+public sealed class JArgumentMetadata
 {
 	/// <summary>
 	/// Type signature.

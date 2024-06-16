@@ -184,7 +184,7 @@ public static class JNativeTypeExtensions
 			JNativeType.JField => CommonNames.JFieldIdName,
 			JNativeType.JMethod => CommonNames.JMethodIdName,
 
-			JNativeType.Void => CommonNames.JVoidName,
+			JNativeType.Void => CommonNames.VoidPrimitive,
 			JNativeType.JBoolean => CommonNames.JBooleanName,
 			JNativeType.JByte => CommonNames.JByteName,
 			JNativeType.JChar => CommonNames.JCharName,

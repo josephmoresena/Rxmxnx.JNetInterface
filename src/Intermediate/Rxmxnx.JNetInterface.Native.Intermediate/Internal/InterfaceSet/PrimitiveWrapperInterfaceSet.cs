@@ -5,7 +5,7 @@ internal partial class InterfaceSet
 	/// <summary>
 	/// Primitive wrapper class interface set.
 	/// </summary>
-	private sealed class PrimitiveWrapperInterfaceSet : IInterfaceSet
+	private sealed class PrimitiveWrapperInterfaceSet : IAppendableInterfaceSet
 	{
 		/// <summary>
 		/// Array set instance.

@@ -62,10 +62,9 @@ public sealed class DataTypeTests
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.ArgumentMetadata);
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.CreateInstance(Array.Empty<Byte>()));
 		String dataTypeString = $"{{ {nameof(JDataTypeMetadata.ClassName)} = {voidMetadata.ClassName}, " +
-			$"{nameof(JDataTypeMetadata.Type)} = {voidMetadata.Type}, " +
 			$"{nameof(JDataTypeMetadata.Kind)} = {voidMetadata.Kind}, " +
-			$"{nameof(JPrimitiveTypeMetadata.UnderlineType)} = {voidMetadata.UnderlineType}, " +
 			$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {voidMetadata.WrapperClassName}, " +
+			$"{nameof(JDataTypeMetadata.Type)} = {voidMetadata.Type}, " +
 			$"{nameof(JDataTypeMetadata.Hash)} = {ITypeInformation.GetPrintableHash(voidMetadata.Hash, out String lastChar)}{lastChar} }}";
 		Assert.Equal(dataTypeString, voidMetadata.ToString());
 	}

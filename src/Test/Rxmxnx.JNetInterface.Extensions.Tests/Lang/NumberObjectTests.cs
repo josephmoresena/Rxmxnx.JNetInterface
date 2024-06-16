@@ -157,7 +157,6 @@ public sealed class NumberObjectTests
 		Assert.Equal(IDataType.GetMetadata<JNumberObject>(), typeMetadata.BaseMetadata);
 		Assert.Equal(primitiveTypeMetadata.WrapperClassName, typeMetadata.ClassName);
 		Assert.Equal(primitiveTypeMetadata.WrapperClassSignature, typeMetadata.Signature);
-		Assert.Equal(primitiveTypeMetadata.ClassName, typeMetadata.PrimitiveClassName);
 		Assert.Equal(primitiveTypeMetadata, typeMetadata.PrimitiveMetadata);
 		Assert.Equal(primitiveTypeMetadata.ArgumentMetadata, typeMetadata.PrimitiveArgumentMetadata);
 		Assert.IsType<JFunctionDefinition<TNumber>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
