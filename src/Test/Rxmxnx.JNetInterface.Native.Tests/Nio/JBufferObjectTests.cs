@@ -61,7 +61,7 @@ public class JBufferObjectTests
 	internal void MetadataTest(Boolean disposeParse)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JBufferObject>();
-		String textValue = typeMetadata.ToString();
+		String? textValue = typeMetadata.ToString();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
@@ -73,9 +73,9 @@ public class JBufferObjectTests
 		using JLocalObject jLocal = new(env, localRef, jBufferClass);
 		using JGlobal jGlobal = new(vm, new(jBufferClass, IClassType.GetMetadata<JBufferObject>()), globalRef);
 
-		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
-		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.Hash} }}", textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.ToPrintableHash()} }}", textValue);
 
 		Assert.Equal(JTypeModifier.Abstract, typeMetadata.Modifier);
 		Assert.Equal(IntPtr.Size, typeMetadata.SizeOf);

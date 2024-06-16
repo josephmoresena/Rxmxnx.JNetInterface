@@ -7,7 +7,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// Internal implementation of <see cref="IEnumFieldList"/>.
 		/// </summary>
-		private sealed record EnumFieldList : IEnumFieldList
+		private sealed class EnumFieldList : IEnumFieldList, IAppendableProperty
 		{
 			/// <summary>
 			/// Enum ordinal dictionary.
@@ -21,16 +21,42 @@ public partial class JEnumObject
 			/// Enum ordinal dictionary.
 			/// </summary>
 			private readonly Dictionary<Int32, String> _ordinalDictionary = [];
+			/// <inheritdoc/>
+			public String PropertyName => nameof(JEnumTypeMetadata.Fields);
+			/// <inheritdoc/>
+			public void AppendValue(StringBuilder stringBuilder)
+			{
+				Boolean first = true;
+				stringBuilder.Append(MetadataTextUtilities.OpenArray);
+				foreach (Int32 ordinal in this._ordinalDictionary.Keys)
+				{
+					if (!first)
+						stringBuilder.Append(MetadataTextUtilities.Separator);
+					first = false;
+					stringBuilder.Append(MetadataTextUtilities.OpenObject);
+					stringBuilder.Append(ordinal);
+					stringBuilder.Append(MetadataTextUtilities.Separator);
+					stringBuilder.Append($"{this[ordinal]}");
+					stringBuilder.Append(MetadataTextUtilities.CloseObject);
+				}
+				stringBuilder.Append(MetadataTextUtilities.CloseArray);
+			}
 
-			CString IEnumFieldList.this[Int32 ordinal] => this._nameDictionary[this._ordinalDictionary[ordinal]];
-			Int32 IEnumFieldList.this[ReadOnlySpan<Byte> name]
-				=> this._hashDictionary[Convert.ToHexString(name).ToLower()];
-			Int32 IEnumFieldList.this[String hash] => this._hashDictionary[hash];
-			Int32 IEnumFieldList.Count => this._nameDictionary.Count;
+			/// <inheritdoc/>
+			public Int32 Count => this._nameDictionary.Count;
+			/// <inheritdoc/>
+			public CString this[Int32 ordinal] => this._nameDictionary[this._ordinalDictionary[ordinal]];
+			/// <inheritdoc/>
+			public Int32 this[ReadOnlySpan<Byte> name] => this._hashDictionary[Convert.ToHexString(name).ToLower()];
+			/// <inheritdoc/>
+			public Int32 this[String hash] => this._hashDictionary[hash];
 
-			Boolean IEnumFieldList.HasOrdinal(Int32 ordinal) => this._ordinalDictionary.ContainsKey(ordinal);
-			Boolean IEnumFieldList.HasHash(String hash) => this._hashDictionary.ContainsKey(hash);
-			IReadOnlySet<Int32> IEnumFieldList.GetMissingFields(out Int32 count, out Int32 maxOrdinal)
+			/// <inheritdoc/>
+			public Boolean HasOrdinal(Int32 ordinal) => this._ordinalDictionary.ContainsKey(ordinal);
+			/// <inheritdoc/>
+			public Boolean HasHash(String hash) => this._hashDictionary.ContainsKey(hash);
+			/// <inheritdoc/>
+			public IReadOnlySet<Int32> GetMissingFields(out Int32 count, out Int32 maxOrdinal)
 			{
 				Int32[] defined = [.. this._ordinalDictionary.Keys,];
 				HashSet<Int32> result = Enumerable.Range(0, defined.Length).ToHashSet();
@@ -39,7 +65,6 @@ public partial class JEnumObject
 				result.ExceptWith(defined);
 				return result;
 			}
-
 			/// <summary>
 			/// Adds a new enum field.
 			/// </summary>
@@ -66,10 +91,6 @@ public partial class JEnumObject
 					NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
 				return this;
 			}
-
-			/// <inheritdoc/>
-			public override String ToString()
-				=> $"[{String.Join(", ", this._ordinalDictionary.Select(p => $"{{ {p.Key}, {this._nameDictionary[p.Value]} }}"))}]";
 		}
 	}
 }

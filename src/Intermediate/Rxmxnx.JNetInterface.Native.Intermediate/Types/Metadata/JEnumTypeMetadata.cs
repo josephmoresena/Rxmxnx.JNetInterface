@@ -23,8 +23,10 @@ public abstract class JEnumTypeMetadata : JClassTypeMetadata
 	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
 
-	/// <inheritdoc/>
-	public override String ToString() => $"{base.ToString()}{nameof(JEnumTypeMetadata.Fields)} = {this.Fields}, ";
+	/// <summary>
+	/// Fields property.
+	/// </summary>
+	private protected override IAppendableProperty? GetPrimaryProperty() => this.Fields as IAppendableProperty;
 }
 
 /// <summary>

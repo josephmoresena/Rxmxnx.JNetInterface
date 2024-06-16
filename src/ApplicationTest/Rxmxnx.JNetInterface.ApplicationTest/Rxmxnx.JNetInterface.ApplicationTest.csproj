@@ -36,6 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.EnableTrace" Value="true" Trim="true"/>-->
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableBuiltInThrowableAutoRegistration" Value="true" Trim="true"/>

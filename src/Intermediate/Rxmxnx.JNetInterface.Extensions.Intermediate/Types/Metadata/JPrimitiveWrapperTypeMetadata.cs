@@ -27,16 +27,16 @@ public sealed class
 	internal JPrimitiveWrapperTypeMetadata(JClassTypeMetadata<TWrapper> metadata) : base(metadata) { }
 
 	/// <inheritdoc/>
-	public override String ToString()
-		=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveClassName)} = {this.PrimitiveClassName}, " +
-			$"{nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveArgumentMetadata)} = {this.GetPrimitiveArgumentSimplifiedString()}, {nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
-
-	/// <summary>
-	/// Returns a string that represents the primitive argument of the current instance.
-	/// </summary>
-	/// <returns>A string that represents the primitive argument of the current object.</returns>
-	private String GetPrimitiveArgumentSimplifiedString()
-		=> this.PrimitiveMetadata.Type == typeof(void) ?
-			String.Empty :
-			this.PrimitiveArgumentMetadata.ToSimplifiedString();
+	private protected override ClassProperty GetPrimaryProperty()
+		=> new()
+		{
+			PropertyName = nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveClassName),
+			Value = $"{this.PrimitiveClassName}",
+		};
+	/// <inheritdoc/>
+	private protected override IAppendableProperty? GetSecondaryProperty()
+		=> this.PrimitiveMetadata.Type != typeof(void) ?
+			this.PrimitiveArgumentMetadata.ToAppendableProperty(
+				nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveArgumentMetadata)) :
+			default;
 }

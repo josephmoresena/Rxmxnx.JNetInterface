@@ -61,10 +61,6 @@ public abstract partial class JReferenceTypeMetadata : JDataTypeMetadata
 	/// </returns>
 	internal abstract Boolean IsInstance(JReferenceObject jObject);
 
-	/// <inheritdoc/>
-	public override String ToString()
-		=> $"{base.ToString()}{nameof(JReferenceTypeMetadata.Interfaces)} = {this.Interfaces}, ";
-
 	/// <summary>
 	/// Retrieves the <see cref="JArrayTypeMetadata"/> for <typeparamref name="TReference"/>
 	/// </summary>

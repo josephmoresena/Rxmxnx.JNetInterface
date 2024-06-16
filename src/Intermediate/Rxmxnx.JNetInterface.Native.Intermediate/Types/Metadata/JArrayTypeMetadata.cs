@@ -63,8 +63,14 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	public override Boolean TypeOf(JReferenceTypeMetadata otherMetadata)
 		=> otherMetadata is JArrayTypeMetadata arrayMetadata ? this.TypeOf(arrayMetadata) : base.TypeOf(otherMetadata);
 
-	/// <inheritdoc/>
-	public override String ToString()
-		=> $"{base.ToString()}{nameof(JArrayTypeMetadata.ElementClassName)} = {this.ElementClassName}, " +
-			$"{nameof(JArrayTypeMetadata.Dimension)} = {this.Dimension}, ";
+	/// <summary>
+	/// Element class name property.
+	/// </summary>
+	private protected override ClassProperty GetPrimaryProperty()
+		=> new() { PropertyName = nameof(JArrayTypeMetadata.ElementClassName), Value = $"{this.ElementClassName}", };
+	/// <summary>
+	/// Array dimension property.
+	/// </summary>
+	private protected override ClassProperty GetSecondaryProperty()
+		=> new() { PropertyName = nameof(JArrayTypeMetadata.Dimension), Value = $"{this.Dimension}", };
 }

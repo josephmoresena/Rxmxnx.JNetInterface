@@ -273,7 +273,7 @@ public sealed class JArrayObjectTests
 	{
 		JReferenceTypeMetadata elementTypeMetadata = IReferenceType.GetMetadata<TElement>();
 		JArrayTypeMetadata arrayTypeMetadata = IArrayType.GetMetadata<JArrayObject<TElement>>();
-		String textValue = arrayTypeMetadata.ToString();
+		String? textValue = arrayTypeMetadata.ToString();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
 		JArrayLocalRef arrayRef = JArrayObjectTests.fixture.Create<JArrayLocalRef>();
@@ -286,9 +286,9 @@ public sealed class JArrayObjectTests
 		env.VirtualMachine.InitializeThread(Arg.Any<CString?>(), Arg.Any<JGlobalBase?>(), Arg.Any<Int32>())
 		   .ReturnsForAnyArgs(thread);
 
-		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.StartsWith("{", textValue);
 		Assert.Contains(arrayTypeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
-		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {arrayTypeMetadata.Hash} }}", textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {arrayTypeMetadata.ToPrintableHash()} }}", textValue);
 
 		Assert.Equal(typeof(JArrayObject), EnvironmentProxy.GetFamilyType<JArrayObject>());
 		Assert.Equal(JTypeKind.Array, EnvironmentProxy.GetKind<JArrayObject>());

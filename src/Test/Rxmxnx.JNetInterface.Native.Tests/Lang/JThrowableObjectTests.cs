@@ -96,7 +96,7 @@ public sealed class JThrowableObjectTests
 	internal void MetadataTest(Boolean disposeParse)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JThrowableObject>();
-		String textValue = typeMetadata.ToString();
+		String? textValue = typeMetadata.ToString();
 		String exceptionMessage = JThrowableObjectTests.fixture.Create<String>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
@@ -109,9 +109,9 @@ public sealed class JThrowableObjectTests
 		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
 		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JThrowableObject>()), globalRef);
 
-		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
-		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.Hash} }}", textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.ToPrintableHash()} }}", textValue);
 
 		Assert.Equal(JTypeModifier.Extensible, typeMetadata.Modifier);
 		Assert.Equal(IntPtr.Size, typeMetadata.SizeOf);

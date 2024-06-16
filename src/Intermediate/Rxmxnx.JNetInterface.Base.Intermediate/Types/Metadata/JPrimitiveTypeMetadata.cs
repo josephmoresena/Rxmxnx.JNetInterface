@@ -15,6 +15,17 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <see cref="JPrimitiveTypeMetadata"/> instance for Java <c>void</c> type.
 	/// </summary>
 	public static readonly JPrimitiveTypeMetadata VoidMetadata = new JVoidTypeMetadata();
+#if !PACKAGE
+	/// <summary>
+	/// Indicates whether detailed a ToString() is available for type metadata instances.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	private static Boolean TypeMetadataToStringEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => !AppContext.TryGetSwitch("JNetInterface.DisableTypeMetadataToString", out Boolean disable) || !disable;
+	}
+#endif
 
 	/// <summary>
 	/// JNI name for the current type wrapper class.
@@ -85,10 +96,14 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 	public abstract IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes);
 
 	/// <inheritdoc/>
-	public override String ToString()
-		=> base.ToString() + $"{nameof(JPrimitiveTypeMetadata.UnderlineType)} = {this.UnderlineType}, " +
-			$"{nameof(JPrimitiveTypeMetadata.NativeType)} = {this.NativeType}, " +
-			$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {this.WrapperClassName}, ";
+	public override String? ToString()
+#if !PACKAGE
+		=> JPrimitiveTypeMetadata.TypeMetadataToStringEnabled ?
+#else
+		=> IVirtualMachine.TypeMetadataToStringEnabled ?
+#endif
+			MetadataTextUtilities.GetString(this) :
+			base.ToString();
 }
 
 /// <summary>

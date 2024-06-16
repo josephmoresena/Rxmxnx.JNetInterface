@@ -45,7 +45,7 @@ public class JThreadObjectTests
 	internal void MetadataTest(Boolean disposeParse)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JThreadObject>();
-		String textValue = typeMetadata.ToString();
+		String? textValue = typeMetadata.ToString();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
@@ -57,9 +57,9 @@ public class JThreadObjectTests
 		using JLocalObject jLocal = new(env, localRef, jThreadClass);
 		using JGlobal jGlobal = new(vm, new(jThreadClass, IClassType.GetMetadata<JThreadObject>()), globalRef);
 
-		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
-		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.Hash} }}", textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.ToPrintableHash()} }}", textValue);
 
 		Assert.Equal(JTypeModifier.Extensible, typeMetadata.Modifier);
 		Assert.Equal(IntPtr.Size, typeMetadata.SizeOf);

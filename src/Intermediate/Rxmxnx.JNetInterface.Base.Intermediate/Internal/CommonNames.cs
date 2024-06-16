@@ -33,6 +33,10 @@ internal static class CommonNames
 	public const String JFieldIdName = "jfieldID";
 
 	/// <summary>
+	/// JNI name of <c>void</c>.
+	/// </summary>
+	public const String JVoidName = "void";
+	/// <summary>
 	/// JNI name of <c>jboolean</c> value.
 	/// </summary>
 	public const String JBooleanName = "jboolean";

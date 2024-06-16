@@ -142,5 +142,9 @@
             <method signature="Rxmxnx.JNetInterface.Types.Metadata.JArrayTypeMetadata GetArrayArrayMetadata`1()"
                     body="remove"/>
         </type>
+        <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableTypeMetadataToString"
+              featurevalue="true">
+            <method signature="System.Boolean get_TypeMetadataToStringEnabled()" body="stub" value="false"/>
+        </type>
     </assembly>
 </linker>

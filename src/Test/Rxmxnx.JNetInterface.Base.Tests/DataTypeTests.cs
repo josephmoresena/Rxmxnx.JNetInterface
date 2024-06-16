@@ -4,6 +4,8 @@ namespace Rxmxnx.JNetInterface.Tests;
 public sealed class DataTypeTests
 {
 	private static readonly IFixture fixture = new Fixture();
+	private static readonly IReadOnlySet<JNativeType> nativeTypes =
+		(Enum.GetValuesAsUnderlyingType<JNativeType>() as JNativeType[])!.ToHashSet();
 
 	[Fact]
 	internal void Test() { DataTypeTests.PrimitiveTest<PrimitiveProxy>(); }
@@ -37,7 +39,8 @@ public sealed class DataTypeTests
 		DataTypeTests.NativeTypeTest<JValue>();
 		DataTypeTests.NativeTypeTest<JVirtualMachineValue>();
 
-		NativeProxy.Type = default;
+		NativeProxy.Type = (JNativeType)Enumerable.Range(Byte.MinValue, Byte.MaxValue)
+		                                          .First(x => !DataTypeTests.nativeTypes.Contains((JNativeType)x));
 		Assert.Throws<InvalidEnumArgumentException>(DataTypeTests.NativeTypeTest<NativeProxy>);
 	}
 	[Fact]
@@ -58,13 +61,12 @@ public sealed class DataTypeTests
 
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.ArgumentMetadata);
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.CreateInstance(Array.Empty<Byte>()));
-		String dataTypeString =
-			$"{nameof(JDataTypeMetadata)} {{ {nameof(JDataTypeMetadata.Type)} = {voidMetadata.Type}, " +
+		String dataTypeString = $"{{ {nameof(JDataTypeMetadata.ClassName)} = {voidMetadata.ClassName}, " +
+			$"{nameof(JDataTypeMetadata.Type)} = {voidMetadata.Type}, " +
 			$"{nameof(JDataTypeMetadata.Kind)} = {voidMetadata.Kind}, " +
 			$"{nameof(JPrimitiveTypeMetadata.UnderlineType)} = {voidMetadata.UnderlineType}, " +
-			$"{nameof(JPrimitiveTypeMetadata.NativeType)} = {voidMetadata.NativeType}, " +
 			$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {voidMetadata.WrapperClassName}, " +
-			$"{nameof(JDataTypeMetadata.Hash)} = {voidMetadata.Hash} }}";
+			$"{nameof(JDataTypeMetadata.Hash)} = {ITypeInformation.GetPrintableHash(voidMetadata.Hash, out String lastChar)}{lastChar} }}";
 		Assert.Equal(dataTypeString, voidMetadata.ToString());
 	}
 

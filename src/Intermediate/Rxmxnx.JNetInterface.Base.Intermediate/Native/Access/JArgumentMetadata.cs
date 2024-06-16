@@ -3,7 +3,7 @@
 /// <summary>
 /// This record stores the metadata for a parameter <see cref="IDataType"/> type.
 /// </summary>
-public sealed class JArgumentMetadata
+public sealed partial class JArgumentMetadata
 {
 	/// <summary>
 	/// Type signature.
@@ -24,10 +24,6 @@ public sealed class JArgumentMetadata
 		this.Signature = signature;
 		this.Size = size;
 	}
-
-	/// <inheritdoc cref="Object.ToString()"/>
-	internal String ToSimplifiedString()
-		=> $"{{ {nameof(JArgumentMetadata.Signature)} = {this.Signature}, {nameof(JArgumentMetadata.Size)} = {this.Size} }}";
 
 	/// <summary>
 	/// Retrieves the <see cref="JArgumentMetadata"/> for <typeparamref name="TArg"/> type.

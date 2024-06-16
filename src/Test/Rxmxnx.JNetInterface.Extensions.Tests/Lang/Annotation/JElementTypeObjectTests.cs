@@ -70,7 +70,7 @@ public class JElementTypeObjectTests
 	internal void MetadataTest(Boolean disposeParse)
 	{
 		JEnumTypeMetadata typeMetadata = IEnumType.GetMetadata<JElementTypeObject>();
-		String textValue = typeMetadata.ToString();
+		String? textValue = typeMetadata.ToString();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
@@ -82,9 +82,9 @@ public class JElementTypeObjectTests
 		using JLocalObject jLocal = new(env, localRef, jElementTypeClass);
 		using JGlobal jGlobal = new(vm, new(jElementTypeClass, IEnumType.GetMetadata<JElementTypeObject>()), globalRef);
 
-		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
-		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.Hash} }}", textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.ToPrintableHash()} }}", textValue);
 
 		Assert.Equal(JTypeModifier.Final, typeMetadata.Modifier);
 		Assert.Equal(IntPtr.Size, typeMetadata.SizeOf);

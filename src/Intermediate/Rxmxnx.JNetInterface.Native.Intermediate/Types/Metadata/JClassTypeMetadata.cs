@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 /// <summary>
 /// This record stores the metadata for a class <see cref="IDataType"/> type.
 /// </summary>
-public abstract class JClassTypeMetadata : JReferenceTypeMetadata
+public abstract partial class JClassTypeMetadata : JReferenceTypeMetadata
 {
 	/// <inheritdoc/>
 	public override JTypeKind Kind => JTypeKind.Class;
@@ -19,10 +19,32 @@ public abstract class JClassTypeMetadata : JReferenceTypeMetadata
 	/// <inheritdoc/>
 	private protected JClassTypeMetadata(CStringSequence information) : base(information) { }
 
+	/// <summary>
+	/// Base type property.
+	/// </summary>
+	private protected ClassProperty? GetBaseTypeProperty()
+		=> this.BaseMetadata is not null ?
+			new()
+			{
+				PropertyName = nameof(JReferenceTypeMetadata.BaseMetadata),
+				Value = $"{this.BaseMetadata?.ClassName}",
+			} :
+			default;
+	/// <summary>
+	/// Additional property.
+	/// </summary>
+	private protected virtual IAppendableProperty? GetPrimaryProperty() => default;
+	/// <summary>
+	/// Additional property.
+	/// </summary>
+	private protected virtual IAppendableProperty? GetSecondaryProperty() => default;
+
 	/// <inheritdoc/>
-	public override String ToString()
-		=> $"{base.ToString()}{nameof(JDataTypeMetadata.Modifier)} = {this.Modifier}, " +
-			$"{nameof(JClassTypeMetadata.BaseClassName)} = {this.BaseClassName}, ";
+	public override String? ToString()
+		=> IVirtualMachine.TypeMetadataToStringEnabled ?
+			MetadataTextUtilities.GetString(this, this.InterfaceProperties, this.GetBaseTypeProperty(),
+			                                this.GetPrimaryProperty(), this.GetSecondaryProperty()) :
+			base.ToString();
 }
 
 /// <summary>

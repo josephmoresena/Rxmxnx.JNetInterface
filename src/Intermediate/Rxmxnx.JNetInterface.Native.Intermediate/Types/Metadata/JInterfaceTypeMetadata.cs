@@ -26,7 +26,10 @@ public abstract class JInterfaceTypeMetadata : JReferenceTypeMetadata
 		=> this.Kind = !isAnnotation ? JTypeKind.Interface : JTypeKind.Annotation;
 
 	/// <inheritdoc/>
-	public override String ToString() => base.ToString();
+	public override String? ToString()
+		=> IVirtualMachine.TypeMetadataToStringEnabled ?
+			MetadataTextUtilities.GetString(this, this.InterfaceProperties) :
+			base.ToString();
 
 	/// <summary>
 	/// Sets <paramref name="proxy"/> instance as assignable to current type.

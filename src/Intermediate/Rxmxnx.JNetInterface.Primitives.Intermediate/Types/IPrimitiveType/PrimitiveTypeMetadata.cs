@@ -40,10 +40,6 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 
 			/// <inheritdoc/>
 			public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes) => bytes.ToValue<TPrimitive>();
-			/// <inheritdoc/>
-			public override String ToString()
-				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
-
 #if PACKAGE
 			/// <inheritdoc/>
 			public override JArrayTypeMetadata GetArrayMetadata() 
