@@ -23,14 +23,18 @@ public abstract class JEnumTypeMetadata : JClassTypeMetadata
 	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
 		className, signature) { }
 
-	/// <inheritdoc/>
-	public override String ToString() => $"{base.ToString()}{nameof(JEnumTypeMetadata.Fields)} = {this.Fields}, ";
+	/// <summary>
+	/// Fields property.
+	/// </summary>
+	private protected override IAppendableProperty? GetPrimaryProperty() => this.Fields as IAppendableProperty;
 }
 
 /// <summary>
 /// This record stores the metadata for an enum <see cref="IDataType"/> type.
 /// </summary>
 /// <typeparam name="TEnum">Type of java enum type.</typeparam>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract class JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 {
 	/// <inheritdoc/>

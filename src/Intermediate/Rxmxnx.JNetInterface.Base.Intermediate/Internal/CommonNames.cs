@@ -209,6 +209,10 @@ internal static class CommonNames
 	public const String JGlobalRefName = "jobject-global";
 
 	/// <summary>
+	/// Java class name of primitive <c>void</c> class.
+	/// </summary>
+	public const String VoidPrimitive = "void";
+	/// <summary>
 	/// Java class name of primitive <c>boolean</c> class.
 	/// </summary>
 	public const String BooleanPrimitive = "boolean";

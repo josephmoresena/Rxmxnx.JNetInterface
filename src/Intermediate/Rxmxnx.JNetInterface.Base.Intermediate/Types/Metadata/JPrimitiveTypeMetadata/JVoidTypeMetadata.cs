@@ -13,7 +13,7 @@ public partial class JPrimitiveTypeMetadata
 		/// </summary>
 		public override Type Type => typeof(void);
 		/// <inheritdoc/>
-		public override JNativeType NativeType => default;
+		public override JNativeType NativeType => JNativeType.Void;
 		/// <inheritdoc/>
 		public override JArgumentMetadata ArgumentMetadata => CommonValidationUtilities.ThrowVoidArgument();
 
@@ -25,13 +25,5 @@ public partial class JPrimitiveTypeMetadata
 		/// <inheritdoc/>
 		public override IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes)
 			=> CommonValidationUtilities.ThrowVoidInstantiation();
-		/// <inheritdoc/>
-		public override String ToString()
-			=> $"{nameof(JDataTypeMetadata)} {{ {nameof(JDataTypeMetadata.Type)} = {this.Type}, " +
-				$"{nameof(JDataTypeMetadata.Kind)} = {this.Kind}, " +
-				$"{nameof(JPrimitiveTypeMetadata.UnderlineType)} = {this.UnderlineType}, " +
-				$"{nameof(JPrimitiveTypeMetadata.NativeType)} = {this.NativeType}, " +
-				$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {this.WrapperClassName}, " +
-				$"{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
 	}
 }

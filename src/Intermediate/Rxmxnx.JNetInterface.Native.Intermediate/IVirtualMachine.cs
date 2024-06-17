@@ -74,6 +74,15 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 				(!AppContext.TryGetSwitch("JNetInterface.DisableNestingArrayAutoGeneration", out Boolean disable) ||
 					!disable);
 	}
+	/// <summary>
+	/// Indicates whether detailed a ToString() is available for type metadata instances.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean TypeMetadataToStringEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => !AppContext.TryGetSwitch("JNetInterface.DisableTypeMetadataToString", out Boolean disable) || !disable;
+	}
 
 	/// <summary>
 	/// JNI reference to the interface.
@@ -90,6 +99,8 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// Retrieves the <see cref="IEnvironment"/> instance for the current thread.
 	/// </summary>
 	/// <returns>The <see cref="IEnvironment"/> instance for the current thread.</returns>
+	[Browsable(false)]
+	[EditorBrowsable(EditorBrowsableState.Advanced)]
 	IEnvironment? GetEnvironment();
 	/// <summary>
 	/// Attaches the current thread to the virtual machine.

@@ -63,7 +63,7 @@ public class JStackTraceElementObjectTests
 	internal void MetadataTest(Boolean disposeParse)
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JStackTraceElementObject>();
-		String textValue = typeMetadata.ToString();
+		String? textValue = typeMetadata.ToString();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
 		ThreadProxy thread = ThreadProxy.CreateEnvironment(env);
@@ -76,9 +76,9 @@ public class JStackTraceElementObjectTests
 		using JGlobal jGlobal =
 			new(vm, new(jStackTraceElementClass, IClassType.GetMetadata<JStackTraceElementObject>()), globalRef);
 
-		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
-		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.Hash} }}", textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.ToPrintableHash()} }}", textValue);
 
 		Assert.Equal(JTypeModifier.Final, typeMetadata.Modifier);
 		Assert.Equal(IntPtr.Size, typeMetadata.SizeOf);

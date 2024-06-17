@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
-public partial interface IAccessFeature
+internal partial interface IAccessFeature
 {
 	/// <summary>
 	/// Invokes a static function on given <see cref="JClassObject"/> instance.

@@ -16,6 +16,10 @@ public static class ProxyTestsExtensions
 		fixture.Register<IFixture, JMethodId>(ProxyTestsExtensions.CreateReference<JMethodId>);
 		return fixture;
 	}
+	public static String ToSimplifiedString(this JArgumentMetadata argumentMetadata)
+		=> $"{{ {nameof(JArgumentMetadata.Signature)} = {argumentMetadata.Signature}, {nameof(JArgumentMetadata.Size)} = {argumentMetadata.Size} }}";
+	public static String ToPrintableHash(this JReferenceTypeMetadata typeMetadata)
+		=> $"{ITypeInformation.GetPrintableHash(typeMetadata.Hash, out String lastChar)}{lastChar}";
 	public static JStackTraceElementObject CreateStackTrace(this StackTraceInfo info, JClassObject jClass,
 		JObjectLocalRef localRef = default)
 	{

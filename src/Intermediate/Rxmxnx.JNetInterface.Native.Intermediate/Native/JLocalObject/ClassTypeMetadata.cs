@@ -51,10 +51,6 @@ public partial class JLocalObject
 			}
 
 			/// <inheritdoc/>
-			public override String ToString()
-				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
-
-			/// <inheritdoc/>
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			internal override JClassObject GetClass(IEnvironment env) => env.ClassFeature.GetClass<TClass>();
 			/// <inheritdoc/>

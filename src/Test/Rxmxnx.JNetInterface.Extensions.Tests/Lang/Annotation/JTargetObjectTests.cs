@@ -52,15 +52,15 @@ public class JTargetObjectTests
 	{
 		JInterfaceTypeMetadata interfaceTypeMetadata = IInterfaceType.GetMetadata<JTargetObject>();
 		JClassTypeMetadata proxyTypeMetadata = IClassType.GetMetadata<JProxyObject>();
-		String textValue = interfaceTypeMetadata.ToString();
+		String? textValue = interfaceTypeMetadata.ToString();
 
 		Assert.Equal(JTargetObjectTests.hash.ToString(), interfaceTypeMetadata.Hash);
 		Assert.Equal(JTargetObjectTests.hash.ToString(), IDataType.GetHash<JTargetObject>());
 		Assert.True(interfaceTypeMetadata.Interfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()));
 
-		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.StartsWith("{", textValue);
 		Assert.Contains(interfaceTypeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
-		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {interfaceTypeMetadata.Hash} }}", textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {interfaceTypeMetadata.ToPrintableHash()} }}", textValue);
 
 		Assert.Equal(typeof(JAnnotationObject), EnvironmentProxy.GetFamilyType<JTargetObject>());
 		Assert.Equal(JTypeKind.Annotation, EnvironmentProxy.GetKind<JTargetObject>());

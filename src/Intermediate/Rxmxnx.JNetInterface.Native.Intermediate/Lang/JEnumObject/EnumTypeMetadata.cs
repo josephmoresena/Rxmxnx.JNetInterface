@@ -38,9 +38,6 @@ public partial class JEnumObject
 			}
 
 			/// <inheritdoc/>
-			public override String ToString()
-				=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
-			/// <inheritdoc/>
 			public override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TEnum>();
 
 			/// <inheritdoc/>

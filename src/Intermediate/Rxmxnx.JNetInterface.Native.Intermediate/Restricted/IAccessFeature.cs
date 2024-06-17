@@ -3,9 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes JNI accessing feature.
 /// </summary>
-[Browsable(false)]
-[EditorBrowsable(EditorBrowsableState.Never)]
-public partial interface IAccessFeature
+internal partial interface IAccessFeature
 {
 	/// <summary>
 	/// Retrieves a field from given <see cref="JLocalObject"/> instance.

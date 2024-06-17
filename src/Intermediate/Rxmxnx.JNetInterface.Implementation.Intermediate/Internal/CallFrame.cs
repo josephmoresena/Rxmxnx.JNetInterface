@@ -59,7 +59,6 @@ internal sealed class CallFrame : LocalCache, IDisposable
 	{
 		this.RegisterParameter(classRef.Value, jClass);
 		this._classes.TryAdd(jClass.Hash, classRef);
-		this._env.ClassCache.Load(classRef);
 		this._env.LoadClass(jClass);
 	}
 	/// <summary>

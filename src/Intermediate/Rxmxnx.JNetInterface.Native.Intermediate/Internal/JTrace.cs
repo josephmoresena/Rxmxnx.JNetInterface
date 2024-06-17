@@ -226,6 +226,19 @@ internal static partial class JTrace
 			callerMethod);
 	}
 	/// <summary>
+	/// Writes a category name and parsing object as class instance to the trace listeners.
+	/// </summary>
+	/// <param name="className">Class name.</param>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void AsClassObject(CString className, JReferenceObject jObject,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jObject.ToTraceText()} -> {className}.",
+		                callerMethod);
+	}
+	/// <summary>
 	/// Writes a category name and retrieving class information to the trace listeners.
 	/// </summary>
 	/// <param name="classRef">Class reference.</param>
@@ -241,11 +254,17 @@ internal static partial class JTrace
 	/// Writes a category name and loading global class object to the trace listeners.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="found">Indicates whether global class object was found.</param>
+	/// <param name="globalRef">A <see cref="JGlobalRef"/> instance.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void LoadGlobalClass(JClassObject jClass, [CallerMemberName] String callerMethod = "")
+	public static void LoadGlobalClass(JClassObject jClass, Boolean found, JGlobalRef globalRef,
+		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jClass.ToTraceText()}", callerMethod);
+		String referenceText = globalRef != default ? $" {globalRef}" : String.Empty;
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {jClass.ToTraceText()}{referenceText} {(!found ? "created" : "found")}.",
+			callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and loading class metadata to the trace listeners.
@@ -263,17 +282,6 @@ internal static partial class JTrace
 	/// Writes a category name and creation of local reference to the trace listeners.
 	/// </summary>
 	/// <param name="objectRef">A JNI object reference.</param>
-	/// <param name="callerMethod">Caller member name.</param>
-	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, [CallerMemberName] String callerMethod = "")
-		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
-	{
-		if (!IVirtualMachine.TraceEnabled) return;
-		JTrace.CreateNonGenericLocalRef($"{objectRef}", callerMethod);
-	}
-	/// <summary>
-	/// Writes a category name and creation of local reference to the trace listeners.
-	/// </summary>
-	/// <param name="objectRef">A JNI object reference.</param>
 	/// <param name="localRef">Local JNI object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	public static void CreateLocalRef<TObjectRef>(TObjectRef objectRef, JObjectLocalRef localRef,
@@ -282,6 +290,20 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		JTrace.CreateNonGenericLocalRef($"{objectRef}", localRef, callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and creation of global reference to the trace listeners.
+	/// </summary>
+	/// <param name="localRef">Local JNI object reference.</param>
+	/// <param name="globalRef">A JNI global object reference.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void CreateGlobalRef<TObjectRef>(JObjectLocalRef localRef, TObjectRef globalRef,
+		[CallerMemberName] String callerMethod = "")
+		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>, IObjectGlobalReferenceType,
+		IEqualityOperators<TObjectRef, TObjectRef, Boolean>
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		JTrace.CreateNonGenericGlobalRef(localRef, globalRef != default ? $"{globalRef}" : String.Empty, callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and finallization call to the trace listeners.
@@ -364,5 +386,101 @@ internal static partial class JTrace
 				$"thread: {Environment.CurrentManagedThreadId} local cache: {cacheId}" :
 				$"thread: {Environment.CurrentManagedThreadId} local cache: {cacheId} result: {result.ToTraceText()}",
 			callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and retrieving type information using a class hash to the trace listeners.
+	/// </summary>
+	/// <param name="classHash">A class hash.</param>
+	/// <param name="result">Found <see cref="ITypeInformation"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void GetTypeInformation(String classHash, ITypeInformation? result,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine(
+			result is not null ?
+				$"thread: {Environment.CurrentManagedThreadId} {result.ClassName} found in runtime cache." :
+				$"thread: {Environment.CurrentManagedThreadId} {CStringSequence.Parse(classHash)[0]} not found in runtime cache.",
+			callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and retrieving class to the trace listeners.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void ClassFound(JClassObject jClass, [CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {jClass.Name} found in current environment.",
+		                callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and retrieving class using it's type metadata to the trace listeners.
+	/// </summary>
+	/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void ClassFound(JReferenceTypeMetadata typeMetadata, [CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {typeMetadata.ClassName} found in type metadata cache.",
+			callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and retrieving a loaded class to the trace listeners.
+	/// </summary>
+	/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void ClassFound(ITypeInformation typeInformation, JClassLocalRef classRef,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		if (classRef.IsDefault) return;
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {typeInformation.ClassName} already loaded {classRef}.",
+			callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and retrieving the class from an instance object to the trace listeners.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void GetObjectClass(JObjectLocalRef localRef, JClassLocalRef classRef,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {localRef} instance of {classRef}.",
+		                callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and removing <paramref name="classRef"/> from <paramref name="jClass"/>
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="jClass">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void ClearClass(JClassLocalRef classRef, JReferenceObject jClass,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine(
+			$"thread: {Environment.CurrentManagedThreadId} {classRef} cleared from {jClass.ToTraceText()} view: {jClass is ILocalViewObject}.",
+			callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and loading <paramref name="classRef"/> to <paramref name="jClass"/>
+	/// to the trace listeners.
+	/// </summary>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	public static void ReloadClass(JClassLocalRef classRef, JClassObject jClass,
+		[CallerMemberName] String callerMethod = "")
+	{
+		if (!IVirtualMachine.TraceEnabled) return;
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} loaded to {jClass.ToTraceText()}.",
+		                callerMethod);
 	}
 }

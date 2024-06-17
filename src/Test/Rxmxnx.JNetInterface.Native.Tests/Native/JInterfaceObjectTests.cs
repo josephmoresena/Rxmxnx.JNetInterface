@@ -144,11 +144,11 @@ public sealed class JInterfaceObjectTests
 		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 	{
 		JInterfaceTypeMetadata interfaceTypeMetadata = IInterfaceType.GetMetadata<TInterface>();
-		String textValue = interfaceTypeMetadata.ToString();
+		String? textValue = interfaceTypeMetadata.ToString();
 
-		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.StartsWith("{", textValue);
 		Assert.Contains(interfaceTypeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
-		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {interfaceTypeMetadata.Hash} }}", textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {interfaceTypeMetadata.ToPrintableHash()} }}", textValue);
 
 		Assert.Equal(typeof(JLocalObject.InterfaceView), EnvironmentProxy.GetFamilyType<JLocalObject.InterfaceView>());
 		Assert.Equal(JTypeKind.Interface, EnvironmentProxy.GetKind<JLocalObject.InterfaceView>());

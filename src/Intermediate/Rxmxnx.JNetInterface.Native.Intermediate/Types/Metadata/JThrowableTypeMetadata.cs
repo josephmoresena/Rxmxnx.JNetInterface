@@ -14,10 +14,6 @@ public sealed class
 	internal JThrowableTypeMetadata(JClassTypeMetadata<TThrowable> metadata) : base(metadata) { }
 
 	/// <inheritdoc/>
-	public override String ToString()
-		=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
-
-	/// <inheritdoc/>
 	internal override ThrowableException CreateException(JGlobalBase jGlobalThrowable,
 		String? exceptionMessage = default)
 		=> new ThrowableException<TThrowable>(jGlobalThrowable, exceptionMessage);

@@ -63,23 +63,27 @@ public sealed class PrimitiveTypeTests
 		IEquatable<TPrimitive>, IEqualityOperators<TPrimitive, TPrimitive, Boolean>, IPrimitiveEquatable
 		where TValue : unmanaged, IComparable, IConvertible, IComparable<TValue>, IEquatable<TValue>
 	{
-		JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
-		String textValue = metadata.ToString();
+		JPrimitiveTypeMetadata typeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
+		String? textValue = typeMetadata.ToString();
+		String argumentText =
+			$"{{ {nameof(JArgumentMetadata.Signature)} = {typeMetadata.ArgumentMetadata.Signature}, {nameof(JArgumentMetadata.Size)} = {typeMetadata.ArgumentMetadata.Size} }}";
 
 		Assert.Equal(JTypeKind.Primitive, TPrimitive.Kind);
-		Assert.Equal(metadata, TPrimitive.Metadata);
+		Assert.Equal(typeMetadata, TPrimitive.Metadata);
 		Assert.Null(TPrimitive.FamilyType);
-		Assert.Equal(JTypeModifier.Final, metadata.Modifier);
-		Assert.Equal(NativeUtilities.SizeOf<TPrimitive>(), metadata.SizeOf);
-		Assert.Equal(typeof(TValue), metadata.UnderlineType);
-		Assert.Equal(typeof(TPrimitive), metadata.Type);
-		Assert.Equal(1, metadata.Signature.Length);
-		Assert.Equal(value, metadata.CreateInstance(value.AsBytes()));
-		Assert.Equal(metadata.ArgumentMetadata, JArgumentMetadata.Get<TPrimitive>());
+		Assert.Equal(JTypeModifier.Final, typeMetadata.Modifier);
+		Assert.Equal(NativeUtilities.SizeOf<TPrimitive>(), typeMetadata.SizeOf);
+		Assert.Equal(typeof(TValue), typeMetadata.UnderlineType);
+		Assert.Equal(typeof(TPrimitive), typeMetadata.Type);
+		Assert.Equal(1, typeMetadata.Signature.Length);
+		Assert.Equal(value, typeMetadata.CreateInstance(value.AsBytes()));
+		Assert.Equal(typeMetadata.ArgumentMetadata, JArgumentMetadata.Get<TPrimitive>());
 
-		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
-		Assert.Contains(metadata.ArgumentMetadata.ToSimplifiedString(), textValue);
-		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {metadata.Hash} }}", textValue);
+		Assert.StartsWith("{", textValue);
+		Assert.Contains(argumentText, textValue);
+		Assert.EndsWith(
+			$"{nameof(JDataTypeMetadata.Hash)} = {ITypeInformation.GetPrintableHash(typeMetadata.Hash, out String lastChar)}{lastChar} }}",
+			textValue);
 
 		Assert.Equal(JNativeType.JObject, PrimitiveTypeImpl.GetNativeType<PrimitiveTypeImpl>());
 	}

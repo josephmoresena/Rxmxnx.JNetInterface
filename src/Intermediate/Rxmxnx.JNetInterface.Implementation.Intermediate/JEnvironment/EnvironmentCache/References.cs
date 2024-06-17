@@ -46,6 +46,7 @@ partial class JEnvironment
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewGlobalRefInfo);
 			JGlobalRef globalRef = nativeInterface.ReferenceFunctions.NewGlobalRef.NewRef(this.Reference, localRef);
+			JTrace.CreateGlobalRef(localRef, globalRef);
 			if (globalRef == default) this.CheckJniError();
 			return globalRef;
 		}

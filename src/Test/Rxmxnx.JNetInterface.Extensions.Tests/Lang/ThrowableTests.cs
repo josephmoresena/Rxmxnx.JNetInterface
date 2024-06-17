@@ -125,7 +125,7 @@ public sealed class ThrowableTests
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<TThrowable>();
-		String textValue = typeMetadata.ToString();
+		String? textValue = typeMetadata.ToString();
 		String exceptionMessage = ThrowableTests.fixture.Create<String>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
@@ -138,9 +138,9 @@ public sealed class ThrowableTests
 		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
 		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<TThrowable>()), globalRef);
 
-		Assert.StartsWith($"{nameof(JDataTypeMetadata)} {{", textValue);
+		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
-		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.Hash} }}", textValue);
+		Assert.EndsWith($"{nameof(JDataTypeMetadata.Hash)} = {typeMetadata.ToPrintableHash()} }}", textValue);
 
 		Assert.Equal(JTypeModifier.Extensible, typeMetadata.Modifier);
 		Assert.Equal(IntPtr.Size, typeMetadata.SizeOf);

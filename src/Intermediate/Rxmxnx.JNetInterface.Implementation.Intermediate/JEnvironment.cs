@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class implements the <see cref="IVirtualMachine"/> interface.
 /// </summary>
+[EditorBrowsable(EditorBrowsableState.Advanced)]
 public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironment, JEnvironment, Boolean>
 {
 	/// <summary>

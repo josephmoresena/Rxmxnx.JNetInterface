@@ -11,16 +11,50 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 		/// <returns>A <see cref="JWeakRef"/> reference.</returns>
-		private unsafe JWeakRef CreateWeakGlobalRef(JReferenceObject jObject)
+		private JWeakRef CreateWeakGlobalRef(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
-			if (jObject is JClassObject jClass) this.ReloadClass(jClass);
 			ImplementationValidationUtilities.ThrowIfDefault(jObject);
+			using LocalFrame _ = new(this._env, IVirtualMachine.GetObjectClassCapacity);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JObjectLocalRef localRef = this.UseObject(jniTransaction, jObject);
+			return this.CreateWeakGlobalRef(localRef);
+		}
+		/// <summary>
+		/// Creates a <see cref="JWeakRef"/> from <paramref name="jClass"/>.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <returns>A <see cref="JWeakRef"/> reference.</returns>
+		private JWeakRef CreateWeakGlobalRef(JClassObject jClass)
+		{
+			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
+			if (!classRef.IsDefault) return this.CreateWeakGlobalRef(classRef.Value);
+			try
+			{
+				classRef = this.FindClass(jClass);
+				JTrace.ReloadClass(classRef, jClass);
+				return this.CreateWeakGlobalRef(classRef.Value);
+			}
+			finally
+			{
+				if (!classRef.IsDefault)
+				{
+					this._env.DeleteLocalRef(classRef.Value);
+					JTrace.ClearClass(classRef, jClass);
+				}
+			}
+		}
+		/// <summary>
+		/// Creates a <see cref="JWeakRef"/> from <paramref name="localRef"/>.
+		/// </summary>
+		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+		/// <returns>A <see cref="JWeakRef"/> reference.</returns>
+		private unsafe JWeakRef CreateWeakGlobalRef(JObjectLocalRef localRef)
+		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewWeakGlobalRefInfo);
-			JObjectLocalRef localRef = this.UseObject(jniTransaction, jObject);
 			JWeakRef weakRef = nativeInterface.WeakGlobalFunctions.NewWeakGlobalRef.NewRef(this.Reference, localRef);
+			JTrace.CreateGlobalRef(localRef, weakRef);
 			if (weakRef == default) this.CheckJniError();
 			return weakRef;
 		}
@@ -50,22 +84,27 @@ partial class JEnvironment
 		{
 			if (jClass is null) return default;
 			JGlobal result = this.VirtualMachine.LoadGlobal(jClass);
-			JObjectLocalRef localRef = jClass.As<JObjectLocalRef>();
+			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
 			switch (result.IsDefault)
 			{
-				case true when localRef == default:
+				case true when classRef.IsDefault:
 					try
 					{
-						localRef = this.FindClass(jClass).Value;
-						this.ReloadGlobal(result, localRef);
+						classRef = this.FindClass(jClass);
+						JTrace.ReloadClass(classRef, jClass);
+						this.ReloadGlobal(result, classRef.Value);
 					}
 					finally
 					{
-						if (localRef != default) this._env.DeleteLocalRef(localRef);
+						if (!classRef.IsDefault)
+						{
+							this._env.DeleteLocalRef(classRef.Value);
+							JTrace.ClearClass(classRef, jClass);
+						}
 					}
 					break;
 				case true:
-					this.ReloadGlobal(result, localRef);
+					this.ReloadGlobal(result, classRef.Value);
 					break;
 			}
 			return result;
@@ -146,7 +185,6 @@ partial class JEnvironment
 			IEqualityOperators<TObjectRef, TObjectRef, Boolean>
 		{
 			if (globalRef == default || result is null) return;
-			JTrace.CreateLocalRef(globalRef);
 			JObjectLocalRef localRef = this._env.CreateLocalRef(globalRef);
 			if (localRef == default) this.CheckJniError();
 			result.SetValue(localRef);

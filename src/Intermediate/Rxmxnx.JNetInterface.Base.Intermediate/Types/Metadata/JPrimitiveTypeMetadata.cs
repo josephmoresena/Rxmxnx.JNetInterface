@@ -85,16 +85,22 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 	public abstract IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes);
 
 	/// <inheritdoc/>
-	public override String ToString()
-		=> base.ToString() + $"{nameof(JPrimitiveTypeMetadata.UnderlineType)} = {this.UnderlineType}, " +
-			$"{nameof(JPrimitiveTypeMetadata.NativeType)} = {this.NativeType}, " +
-			$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {this.WrapperClassName}, ";
+	public override String? ToString()
+#if !PACKAGE
+		=> MetadataTextUtilities.TypeMetadataToStringEnabled ?
+#else
+		=> IVirtualMachine.TypeMetadataToStringEnabled ?
+#endif
+			MetadataTextUtilities.GetString(this) :
+			base.ToString();
 }
 
 /// <summary>
 /// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
 /// </summary>
 /// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract class JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetadata
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {

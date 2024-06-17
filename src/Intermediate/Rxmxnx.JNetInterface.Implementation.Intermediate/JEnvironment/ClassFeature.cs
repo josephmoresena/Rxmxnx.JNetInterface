@@ -67,16 +67,17 @@ partial class JEnvironment
 			CString? utf8Message = (CString?)message;
 			this.ThrowNew<TThrowable>(utf8Message, throwException, message);
 		}
-
 		public JClassObject GetClass(ReadOnlySpan<Byte> className)
 		{
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
-			return this.GetOrFindClass(new TypeInformation(classInformation));
+			ITypeInformation typeInformation = this.VirtualMachine.GetTypeInformation(classInformation.ToString()) ??
+				new TypeInformation(classInformation);
+			return this.GetOrFindClass(typeInformation);
 		}
 		public JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>
 		{
-			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TDataType>();
-			return this.GetOrFindClass(metadata);
+			JDataTypeMetadata typeInformation = MetadataHelper.GetExactMetadata<TDataType>();
+			return this.GetOrFindClass(typeInformation);
 		}
 		public JClassObject GetClass(ITypeInformation typeInformation)
 		{
@@ -86,9 +87,9 @@ partial class JEnvironment
 		public JClassObject GetObjectClass(ObjectMetadata objectMetadata)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(objectMetadata);
-			ITypeInformation information = this.VirtualMachine.GetTypeInformation(objectMetadata.ObjectClassHash) ??
-				new TypeInformation(MetadataHelper.GetClassInformation(objectMetadata.ObjectClassHash));
-			return this.GetOrFindClass(information);
+			ITypeInformation typeInformation = this.VirtualMachine.GetTypeInformation(objectMetadata.ObjectClassHash) ??
+				new TypeInformation(CStringSequence.Parse(objectMetadata.ObjectClassHash));
+			return this.GetOrFindClass(typeInformation);
 		}
 		public JClassObject GetObjectClass(JLocalObject jLocal)
 		{

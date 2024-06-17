@@ -36,7 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="1.2.2"/>
+        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="1.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -71,6 +71,12 @@
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Rxmxnx.JNetInterface.Extensions.Tests</_Parameter1>
         </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="ILLink\ILLink.Substitutions.xml">
+            <LogicalName>ILLink.Substitutions.xml</LogicalName>
+        </EmbeddedResource>
     </ItemGroup>
 
 </Project>

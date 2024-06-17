@@ -60,15 +60,6 @@ internal static partial class JTrace
 	/// Writes a category name and creation of local reference to the trace listeners.
 	/// </summary>
 	/// <param name="objectRefText">A JNI object reference text.</param>
-	/// <param name="callerMethod">Caller member name.</param>
-	private static void CreateNonGenericLocalRef(String objectRefText, String callerMethod)
-	{
-		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {objectRefText}", callerMethod);
-	}
-	/// <summary>
-	/// Writes a category name and creation of local reference to the trace listeners.
-	/// </summary>
-	/// <param name="objectRefText">A JNI object reference text.</param>
 	/// <param name="localRef">Local JNI object reference.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	private static void CreateNonGenericLocalRef(String objectRefText, JObjectLocalRef localRef, String callerMethod)
@@ -77,5 +68,18 @@ internal static partial class JTrace
 			localRef != default ?
 				$"thread: {Environment.CurrentManagedThreadId} {objectRefText} -> {localRef}" :
 				$"thread: {Environment.CurrentManagedThreadId} {objectRefText} Error.", callerMethod);
+	}
+	/// <summary>
+	/// Writes a category name and creation of global reference to the trace listeners.
+	/// </summary>
+	/// <param name="localRef">Local JNI object reference.</param>
+	/// <param name="objectRefText">A JNI global object reference text.</param>
+	/// <param name="callerMethod">Caller member name.</param>
+	private static void CreateNonGenericGlobalRef(JObjectLocalRef localRef, String objectRefText, String callerMethod)
+	{
+		Trace.WriteLine(
+			!String.IsNullOrEmpty(objectRefText) ?
+				$"thread: {Environment.CurrentManagedThreadId} {localRef} -> {objectRefText}" :
+				$"thread: {Environment.CurrentManagedThreadId} {localRef} Error.", callerMethod);
 	}
 }

@@ -3,9 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes a JNI referencing feature.
 /// </summary>
-[Browsable(false)]
-[EditorBrowsable(EditorBrowsableState.Never)]
-public partial interface IReferenceFeature
+internal partial interface IReferenceFeature
 {
 	/// <summary>
 	/// Creates a <typeparamref name="TGlobal"/> instance loaded for given <see cref="JLocalObject"/> instance.

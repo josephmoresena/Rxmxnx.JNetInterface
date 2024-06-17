@@ -3,6 +3,11 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public abstract partial class JReferenceTypeMetadata
 {
 	/// <summary>
+	/// Interfaces properties.
+	/// </summary>
+	private protected IAppendableProperty? InterfaceProperties => this.Interfaces as IAppendableProperty;
+
+	/// <summary>
 	/// Retrieves the class for current data type.
 	/// </summary>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>

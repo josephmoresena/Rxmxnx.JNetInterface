@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+    <assembly fullname="Rxmxnx.JNetInterface.Base.Intermediate">
+        <type fullname="Rxmxnx.JNetInterface.Internal.MetadataTextUtilities"
+              feature="JNetInterface.DisableTypeMetadataToString"
+              featurevalue="true">
+            <method signature="System.Boolean get_TypeMetadataToStringEnabled()" body="stub" value="false"/>
+        </type>
+    </assembly>
+</linker>

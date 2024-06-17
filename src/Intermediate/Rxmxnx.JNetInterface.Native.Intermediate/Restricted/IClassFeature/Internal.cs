@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
-public partial interface IClassFeature
+internal partial interface IClassFeature
 {
 	/// <summary>
 	/// Retrieves the java class named <paramref name="className"/>.

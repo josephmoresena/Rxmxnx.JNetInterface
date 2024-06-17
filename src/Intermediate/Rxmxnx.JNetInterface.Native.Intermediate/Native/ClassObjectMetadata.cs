@@ -117,9 +117,13 @@ public sealed record ClassObjectMetadata : ObjectMetadata, ITypeInformation
 	/// </summary>
 	public String Hash { get; internal init; }
 
+	[ExcludeFromCodeCoverage]
 	CString ITypeInformation.ClassName => this.Name;
+	[ExcludeFromCodeCoverage]
 	CString ITypeInformation.Signature => this.ClassSignature;
+	[ExcludeFromCodeCoverage]
 	JTypeKind ITypeInformation.Kind => ClassObjectMetadata.GetKind(this);
+	[ExcludeFromCodeCoverage]
 	JTypeModifier? ITypeInformation.Modifier => this.IsFinal.GetValueOrDefault() ? JTypeModifier.Final : this._modifier;
 
 	/// <inheritdoc/>

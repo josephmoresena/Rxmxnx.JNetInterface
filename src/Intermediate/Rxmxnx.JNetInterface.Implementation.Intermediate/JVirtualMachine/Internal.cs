@@ -50,13 +50,15 @@ public partial class JVirtualMachine
 	internal JGlobal LoadGlobal(JClassObject jClass)
 	{
 		ObjectLifetime lifetime = jClass.Lifetime;
+		Boolean found = true;
 		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
 		{
-			JTrace.LoadGlobalClass(jClass);
 			ClassObjectMetadata metadata = new(jClass);
 			jGlobal = new(this, metadata, default);
+			found = false;
 			this._cache.GlobalClassCache[jClass.Hash] = jGlobal;
 		}
+		JTrace.LoadGlobalClass(jClass, found, jGlobal.Reference);
 		lifetime.SetGlobal(jGlobal);
 		return jGlobal;
 	}
@@ -79,9 +81,13 @@ public partial class JVirtualMachine
 	/// <param name="classHash">Class hash.</param>
 	/// <returns>A <see cref="ITypeInformation"/> instance.</returns>
 	internal ITypeInformation? GetTypeInformation(String classHash)
-		=> this._cache.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal) ?
-			jGlobal.ObjectMetadata as ITypeInformation :
-			default;
+	{
+		ITypeInformation? result = default;
+		if (this._cache.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal))
+			result = jGlobal.ObjectMetadata as ITypeInformation;
+		JTrace.GetTypeInformation(classHash, result);
+		return result;
+	}
 	/// <summary>
 	/// Retrieves <see cref="AccessCache"/> for <paramref name="classRef"/>.
 	/// </summary>

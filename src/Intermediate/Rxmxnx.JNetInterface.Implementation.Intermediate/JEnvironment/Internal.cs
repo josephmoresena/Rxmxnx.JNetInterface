@@ -193,7 +193,7 @@ partial class JEnvironment
 		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
 		JClassObject jClass = this._cache.GetClass(classRef, true);
-		this.LoadClass(jClass); // Runtime class loading.
+		this._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		typeMetadata = this._cache.GetTypeMetadata(jClass);
 		return jClass;
 	}
@@ -264,7 +264,7 @@ partial class JEnvironment
 		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = env.GetObjectClass(localRef);
 		JClassObject jClass = env.GetClass(classRef);
-		env.LoadClass(jClass); // Runtime class loading.
+		env._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		return jClass;
 	}
 }

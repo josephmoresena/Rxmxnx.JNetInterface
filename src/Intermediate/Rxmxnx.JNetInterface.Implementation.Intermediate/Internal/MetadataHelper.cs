@@ -225,19 +225,6 @@ internal static partial class MetadataHelper
 		return JDataTypeMetadata.CreateInformationSequence(jniClassName);
 	}
 	/// <summary>
-	/// Retrieves the class has from current <paramref name="hash"/>.
-	/// </summary>
-	/// <param name="hash">A JNI class hash.</param>
-	/// <returns><see cref="CStringSequence"/> with class information for given type.</returns>
-	public static CStringSequence GetClassInformation(String hash)
-	{
-		ReadOnlySpan<Byte> classInformation = hash.AsSpan().AsBytes();
-		ReadOnlySpan<Byte> className = ITypeInformation.GetSegment(ref classInformation);
-		ReadOnlySpan<Byte> classSignature = ITypeInformation.GetSegment(ref classInformation);
-		ReadOnlySpan<Byte> arraySignature = ITypeInformation.GetSegment(ref classInformation);
-		return new(className, classSignature, arraySignature);
-	}
-	/// <summary>
 	/// Determines statically whether an object of <paramref name="jClass"/> can be safely cast to
 	/// <paramref name="otherClass"/>.
 	/// </summary>

@@ -23,11 +23,6 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	public Int32 Dimension { get; }
 
 	/// <summary>
-	/// Element class name.
-	/// </summary>
-	public CString ElementClassName => this.ElementMetadata.ClassName;
-
-	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="signature">JNI signature for the current array type.</param>
@@ -47,7 +42,7 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	/// </summary>
 	/// <param name="otherMetadata">A <see cref="JArrayTypeMetadata"/> instance.</param>
 	/// <returns>
-	/// <see langword="true"/> if an instance of the current current type is instance of
+	/// <see langword="true"/> if an instance of the current type is instance of
 	/// the current type of <paramref name="otherMetadata"/>; otherwise, <see langword="false"/>.
 	/// </returns>
 	public Boolean TypeOf(JArrayTypeMetadata otherMetadata)
@@ -63,8 +58,18 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	public override Boolean TypeOf(JReferenceTypeMetadata otherMetadata)
 		=> otherMetadata is JArrayTypeMetadata arrayMetadata ? this.TypeOf(arrayMetadata) : base.TypeOf(otherMetadata);
 
-	/// <inheritdoc/>
-	public override String ToString()
-		=> $"{base.ToString()}{nameof(JArrayTypeMetadata.ElementClassName)} = {this.ElementClassName}, " +
-			$"{nameof(JArrayTypeMetadata.Dimension)} = {this.Dimension}, ";
+	/// <summary>
+	/// Element class name property.
+	/// </summary>
+	private protected override ClassProperty GetPrimaryProperty()
+		=> new()
+		{
+			PropertyName = nameof(JArrayTypeMetadata.ElementMetadata),
+			Value = ClassNameHelper.GetClassName(this.ElementMetadata.Signature),
+		};
+	/// <summary>
+	/// Array dimension property.
+	/// </summary>
+	private protected override ClassProperty GetSecondaryProperty()
+		=> new() { PropertyName = nameof(JArrayTypeMetadata.Dimension), Value = $"{this.Dimension}", };
 }

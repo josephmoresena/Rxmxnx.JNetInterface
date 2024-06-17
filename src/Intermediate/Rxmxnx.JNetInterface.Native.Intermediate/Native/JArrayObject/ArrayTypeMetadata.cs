@@ -42,9 +42,6 @@ public partial class JArrayObject<TElement>
 			return result || jObject.InstanceOf<JArrayObject<TElement>>();
 		}
 		/// <inheritdoc/>
-		public override String ToString()
-			=> $"{nameof(JDataTypeMetadata)} {{ {base.ToString()}{nameof(JDataTypeMetadata.Hash)} = {this.Hash} }}";
-		/// <inheritdoc/>
 		public override JArrayTypeMetadata? GetArrayMetadata()
 			=> JArrayTypeMetadata.GetArrayArrayMetadata(this.ArraySignature, typeof(TElement));
 

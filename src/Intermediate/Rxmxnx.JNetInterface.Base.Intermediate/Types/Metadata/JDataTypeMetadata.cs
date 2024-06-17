@@ -48,11 +48,4 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>
 	public abstract JArrayTypeMetadata? GetArrayMetadata();
 #endif
-
-	/// <inheritdoc/>
-	public override String ToString()
-		=> $"{nameof(JDataTypeMetadata.ClassName)} = {this.ClassName}, " +
-			$"{nameof(JDataTypeMetadata.Type)} = {this.Type}, " + $"{nameof(JDataTypeMetadata.Kind)} = {this.Kind}, " +
-			$"{nameof(JDataTypeMetadata.ArgumentMetadata)} = {this.ArgumentMetadata.ToSimplifiedString()}, " +
-			$"{nameof(JDataTypeMetadata.ArraySignature)} = {this.ArraySignature}, ";
 }

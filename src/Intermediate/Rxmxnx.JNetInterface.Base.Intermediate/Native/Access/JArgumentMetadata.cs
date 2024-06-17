@@ -25,9 +25,15 @@ public sealed class JArgumentMetadata
 		this.Size = size;
 	}
 
-	/// <inheritdoc cref="Object.ToString()"/>
-	internal String ToSimplifiedString()
-		=> $"{{ {nameof(JArgumentMetadata.Signature)} = {this.Signature}, {nameof(JArgumentMetadata.Size)} = {this.Size} }}";
+	/// <inheritdoc/>
+	public override String? ToString()
+#if !PACKAGE
+		=> MetadataTextUtilities.TypeMetadataToStringEnabled ?
+#else
+		=> IVirtualMachine.TypeMetadataToStringEnabled ?
+#endif
+			MetadataTextUtilities.GetString(this) :
+			base.ToString();
 
 	/// <summary>
 	/// Retrieves the <see cref="JArgumentMetadata"/> for <typeparamref name="TArg"/> type.

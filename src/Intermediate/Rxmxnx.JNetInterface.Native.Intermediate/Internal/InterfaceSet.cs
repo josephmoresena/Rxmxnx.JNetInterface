@@ -3,16 +3,12 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Interface record set.
 /// </summary>
-internal partial class InterfaceSet : IInterfaceSet
+internal partial class InterfaceSet : IAppendableInterfaceSet
 {
 	/// <summary>
 	/// Internal set.
 	/// </summary>
 	private readonly ImmutableHashSet<JInterfaceTypeMetadata> _internalSet;
-	/// <summary>
-	/// Internal set.
-	/// </summary>
-	private String? _stringRepresentation;
 
 	/// <summary>
 	/// Constructor.
@@ -44,13 +40,6 @@ internal partial class InterfaceSet : IInterfaceSet
 		{
 			InterfaceSet.CloseSetOperation(isNew);
 		}
-	}
-	/// <inheritdoc/>
-	public override String ToString()
-	{
-		if (String.IsNullOrEmpty(this._stringRepresentation))
-			this._stringRepresentation = $"[{String.Join(", ", this.GetEnumerable().Select(i => i.ClassName))}]";
-		return this._stringRepresentation;
 	}
 
 	/// <summary>

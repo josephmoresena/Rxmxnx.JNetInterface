@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
-public partial interface IStringFeature
+internal partial interface IStringFeature
 {
 	/// <summary>
 	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="data"/>.

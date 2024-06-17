@@ -129,8 +129,10 @@ partial class JEnvironment
 			if (jClass.ClassSignature.Length == 1)
 				return this.FindPrimitiveClass(jClass.ClassSignature[0]);
 			JTrace.GetMetadataOrFindClass(jClass);
+			JClassLocalRef classRef;
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(jClass.Name.AsSpan()))
-				return this.FindClass(ptr);
+				classRef = this.FindClass(ptr);
+			return classRef;
 		}
 		/// <summary>
 		/// Retrieves class from cache or loads it using JNI.
@@ -139,11 +141,16 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private unsafe JClassObject GetOrFindClass(ITypeInformation typeInformation)
 		{
-			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result)) return result;
+			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
+			{
+				JTrace.ClassFound(result);
+				return result;
+			}
 			if (MetadataHelper.GetExactMetadata(typeInformation.Hash) is { } metadata)
 			{
 				// Class is found in type metadata cache.
 				result = new(this.ClassObject, metadata);
+				JTrace.ClassFound(metadata);
 			}
 			else
 			{
@@ -155,6 +162,9 @@ partial class JEnvironment
 						JTrace.FindClass(typeInformation.ClassName);
 						classRef = this.FindClass(ptr);
 					}
+				else
+					JTrace.ClassFound(typeInformation, classRef);
+
 				result = new(this.ClassObject, typeInformation, classRef);
 			}
 			return this.Register(result);
@@ -282,6 +292,7 @@ partial class JEnvironment
 			}
 			if (classObjectMetadata is not null)
 				ILocalObject.ProcessMetadata(result, classObjectMetadata);
+			JTrace.AsClassObject(result.Name, jObject);
 			return result;
 		}
 		/// <summary>

@@ -27,25 +27,6 @@ public interface ITypeInformation
 	JTypeModifier? Modifier { get; }
 
 	/// <summary>
-	/// Retrieves UTF-8 segment.
-	/// </summary>
-	/// <param name="source">Reference. UTF-8 sequence.</param>
-	/// <returns>A UTF-8 segment.</returns>
-	internal static ReadOnlySpan<Byte> GetSegment(ref ReadOnlySpan<Byte> source)
-	{
-		Int32 end = 0;
-		while (end < source.Length)
-		{
-			if (source[end] == default) break; // Null UTF-8 char is segment end.
-			end++;
-		}
-		// Creates segment slice.
-		ReadOnlySpan<Byte> segment = source[..end];
-		// Removes segment from source.
-		source = source.Length > end + 1 ? source[(end + 1)..] : ReadOnlySpan<Byte>.Empty;
-		return segment;
-	}
-	/// <summary>
 	/// Retrieves printable text hash.
 	/// </summary>
 	/// <param name="hash">Class hash.</param>
