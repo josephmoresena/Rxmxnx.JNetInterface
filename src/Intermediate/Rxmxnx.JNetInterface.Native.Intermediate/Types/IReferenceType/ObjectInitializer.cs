@@ -9,6 +9,8 @@ public partial interface IReferenceType
 	/// Constructor.
 	/// </remarks>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	[Browsable(false)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	protected readonly ref struct ObjectInitializer(JLocalObject jLocal)
 	{
 		/// <summary>

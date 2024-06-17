@@ -15,17 +15,6 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <see cref="JPrimitiveTypeMetadata"/> instance for Java <c>void</c> type.
 	/// </summary>
 	public static readonly JPrimitiveTypeMetadata VoidMetadata = new JVoidTypeMetadata();
-#if !PACKAGE
-	/// <summary>
-	/// Indicates whether detailed a ToString() is available for type metadata instances.
-	/// </summary>
-	[ExcludeFromCodeCoverage]
-	private static Boolean TypeMetadataToStringEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => !AppContext.TryGetSwitch("JNetInterface.DisableTypeMetadataToString", out Boolean disable) || !disable;
-	}
-#endif
 
 	/// <summary>
 	/// JNI name for the current type wrapper class.
@@ -98,7 +87,7 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <inheritdoc/>
 	public override String? ToString()
 #if !PACKAGE
-		=> JPrimitiveTypeMetadata.TypeMetadataToStringEnabled ?
+		=> MetadataTextUtilities.TypeMetadataToStringEnabled ?
 #else
 		=> IVirtualMachine.TypeMetadataToStringEnabled ?
 #endif
@@ -110,6 +99,8 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 /// This record stores the metadata for a value <see cref="IPrimitiveType"/> type.
 /// </summary>
 /// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract class JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetadata
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {

@@ -8,7 +8,7 @@ using TDirectBuffer =
 #endif
 	;
 
-public partial interface INioFeature
+internal partial interface INioFeature
 {
 	/// <summary>
 	/// Creates a direct <see cref="JBufferObject"/> instance.

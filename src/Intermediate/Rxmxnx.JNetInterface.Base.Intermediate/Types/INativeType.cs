@@ -3,8 +3,6 @@
 /// <summary>
 /// This interface exposes a java native value.
 /// </summary>
-[Browsable(false)]
-[EditorBrowsable(EditorBrowsableState.Never)]
 internal interface INativeType
 {
 	/// <summary>

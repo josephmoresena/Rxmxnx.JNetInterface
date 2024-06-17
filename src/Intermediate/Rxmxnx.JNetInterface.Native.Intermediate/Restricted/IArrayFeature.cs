@@ -3,9 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes JNI array feature.
 /// </summary>
-[Browsable(false)]
-[EditorBrowsable(EditorBrowsableState.Never)]
-public partial interface IArrayFeature
+internal partial interface IArrayFeature
 {
 	/// <summary>
 	/// Creates an empty <see cref="JArrayObject{TElement}"/> instance.

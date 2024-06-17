@@ -3,9 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes a JNI string provider instance.
 /// </summary>
-[Browsable(false)]
-[EditorBrowsable(EditorBrowsableState.Never)]
-public partial interface IStringFeature
+internal partial interface IStringFeature
 {
 	/// <summary>
 	/// Retrieves the length of given <see cref="JReferenceObject"/> instance.

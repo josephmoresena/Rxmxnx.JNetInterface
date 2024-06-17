@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
-public partial interface IArrayFeature
+internal partial interface IArrayFeature
 {
 	/// <summary>
 	/// Retrieves a pointer to <paramref name="arrayRef"/> elements.

@@ -99,6 +99,8 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// Retrieves the <see cref="IEnvironment"/> instance for the current thread.
 	/// </summary>
 	/// <returns>The <see cref="IEnvironment"/> instance for the current thread.</returns>
+	[Browsable(false)]
+	[EditorBrowsable(EditorBrowsableState.Advanced)]
 	IEnvironment? GetEnvironment();
 	/// <summary>
 	/// Attaches the current thread to the virtual machine.

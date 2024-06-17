@@ -3,9 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes JNI classing feature.
 /// </summary>
-[Browsable(false)]
-[EditorBrowsable(EditorBrowsableState.Never)]
-public partial interface IClassFeature
+internal partial interface IClassFeature
 {
 	/// <summary>
 	/// Retrieves the current <paramref name="classRef"/> reference as <see cref="JClassObject"/>.

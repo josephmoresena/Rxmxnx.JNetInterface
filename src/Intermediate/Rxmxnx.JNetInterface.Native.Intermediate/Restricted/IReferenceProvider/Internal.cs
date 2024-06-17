@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Restricted;
 
-public partial interface IReferenceFeature
+internal partial interface IReferenceFeature
 {
 	/// <summary>
 	/// Retrieves <see cref="ObjectLifetime"/> instance for <paramref name="initializer"/>.

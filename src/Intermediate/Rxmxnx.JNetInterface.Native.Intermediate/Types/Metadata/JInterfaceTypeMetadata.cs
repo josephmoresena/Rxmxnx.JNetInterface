@@ -42,6 +42,8 @@ public abstract class JInterfaceTypeMetadata : JReferenceTypeMetadata
 /// This record stores the metadata for an interface <see cref="IDataType"/> type.
 /// </summary>
 /// <typeparam name="TInterface">Type of java interface type.</typeparam>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract class JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetadata
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {

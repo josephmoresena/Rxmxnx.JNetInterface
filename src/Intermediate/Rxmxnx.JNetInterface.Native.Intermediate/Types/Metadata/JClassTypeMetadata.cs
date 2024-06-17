@@ -45,6 +45,8 @@ public abstract partial class JClassTypeMetadata : JReferenceTypeMetadata
 /// <summary>
 /// This record stores the metadata for a class <see cref="IDataType"/> type.
 /// </summary>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract partial class JClassTypeMetadata<
 	[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass> : JClassTypeMetadata
 	where TClass : JLocalObject, IClassType<TClass>

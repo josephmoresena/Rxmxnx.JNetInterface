@@ -3,9 +3,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
 /// <summary>
 /// This interface exposes JNI Native I/O feature.
 /// </summary>
-[Browsable(false)]
-[EditorBrowsable(EditorBrowsableState.Never)]
-public partial interface INioFeature
+internal partial interface INioFeature
 {
 	/// <summary>
 	/// Retrieves the starting address of the memory region referenced by <paramref name="buffer"/>.

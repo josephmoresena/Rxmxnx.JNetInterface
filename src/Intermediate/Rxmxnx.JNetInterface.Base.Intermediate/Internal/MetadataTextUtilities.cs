@@ -5,6 +5,18 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </summary>
 internal static class MetadataTextUtilities
 {
+#if !PACKAGE
+	/// <summary>
+	/// Indicates whether detailed a ToString() is available for type metadata instances.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean TypeMetadataToStringEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => !AppContext.TryGetSwitch("JNetInterface.DisableTypeMetadataToString", out Boolean disable) || !disable;
+	}
+#endif
+
 	/// <summary>
 	/// Retrieves a detailed report with <paramref name="typeMetadata"/> information.
 	/// </summary>
@@ -52,6 +64,17 @@ internal static class MetadataTextUtilities
 		MetadataTextUtilities.AppendHash(strBuild, typeMetadata.Hash);
 		MetadataTextUtilities.AppendObjectEnd(strBuild);
 
+		return strBuild.ToString();
+	}
+	/// <summary>
+	/// Retrieves a detailed report with <paramref name="argumentMetadata"/> information.
+	/// </summary>
+	/// <param name="argumentMetadata">A <see cref="JArgumentMetadata"/> instance.</param>
+	/// <returns>A detailed string representation of <paramref name="argumentMetadata"/>.</returns>
+	public static String GetString(JArgumentMetadata argumentMetadata)
+	{
+		StringBuilder strBuild = new();
+		MetadataTextUtilities.AppendProperty(strBuild, argumentMetadata, false);
 		return strBuild.ToString();
 	}
 	/// <summary>
@@ -146,13 +169,16 @@ internal static class MetadataTextUtilities
 	/// </summary>
 	/// <param name="strBuild">A <see cref="StringBuilder"/> instance.</param>
 	/// <param name="property">Property instance.</param>
-	private static void AppendProperty(StringBuilder strBuild, JArgumentMetadata property)
+	/// <param name="withSeparator">
+	/// Indicates whether after to append property the separator should be appended.
+	/// </param>
+	private static void AppendProperty(StringBuilder strBuild, JArgumentMetadata property, Boolean withSeparator = true)
 	{
 		MetadataTextUtilities.AppendObjectBegin(strBuild);
 		MetadataTextUtilities.AppendProperty(strBuild, nameof(JArgumentMetadata.Signature), $"{property.Signature}");
 		MetadataTextUtilities.AppendProperty(strBuild, nameof(JArgumentMetadata.Size), $"{property.Size}", false);
 		MetadataTextUtilities.AppendObjectEnd(strBuild);
-		MetadataTextUtilities.AppendSeparator(strBuild, true);
+		MetadataTextUtilities.AppendSeparator(strBuild, withSeparator);
 	}
 	/// <summary>
 	/// Appends to <paramref name="strBuild"/> the element separator.
