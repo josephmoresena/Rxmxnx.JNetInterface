@@ -19,4 +19,15 @@ public partial class Program : IManagedCallback
 	}
 	JInt IManagedCallback.GetInt(JLocalObject jLocal) => Environment.CurrentManagedThreadId;
 	void IManagedCallback.PassString(JLocalObject jLocal, JStringObject? jString) => Console.WriteLine(jString?.Value);
+
+	static JIntegerObject? IManagedCallback.SumArray(JClassObject jClass, JArrayObject<JInt>? jArray)
+	{
+		if (jArray is null) return default;
+		IEnvironment env = jClass.Environment;
+		JInt result = 0;
+		using JPrimitiveMemory<JInt> intElements = jArray.GetElements();
+		foreach (JInt element in intElements.Values)
+			result += element;
+		return JNumberObject<JInt, JIntegerObject>.Create(env, result);
+	}
 }

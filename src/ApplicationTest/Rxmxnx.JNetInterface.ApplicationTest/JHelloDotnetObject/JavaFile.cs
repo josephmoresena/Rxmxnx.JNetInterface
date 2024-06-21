@@ -17,6 +17,8 @@ public class HelloDotnet {
     public native int getNativeInt();
     public native void passNativeString(String value);
 
+    public static native Integer sumArray(int[] value);
+
     public static void main(String[] args) {
         if (args == null)
             System.out.println(""args: null"");
@@ -28,9 +30,19 @@ public class HelloDotnet {
         HelloDotnet instance = new HelloDotnet();
         LocalDateTime load = LocalDateTime.now();
         String runtime_information = HelloDotnet.getRuntimeInformation(load);
+        int[] intArr = HelloDotnet.getIntArray(10);
+
+        System.out.println(""==== getNativeString() ===="");
         System.out.println(instance.getNativeString());
+
+        System.out.println(""==== getNativeInt() ===="");
         System.out.println(instance.getNativeInt());
+
+        System.out.println(""==== passNativeString(String) ===="");
         instance.passNativeString(runtime_information);
+
+        System.out.println(""==== sumArray(int[]) ===="");
+        System.out.println(HelloDotnet.sumArray(intArr));
     }
 
     public static Object getRandomObject(int value) {
@@ -102,6 +114,13 @@ public class HelloDotnet {
                 + ""JVM Vendor: "" + jvmVendor + ""\n""
                 + ""Runtime Name: "" + runtimeName + ""\n""
                 + ""Runtime Version: "" + runtimeVersion;
+    }
+    private static int[] getIntArray(int length) {
+        int[] arr = new int[length];
+        for (int i = 0; i < length; i++) {
+            arr[i] = i;
+        }
+        return arr;
     }
 }";
 }

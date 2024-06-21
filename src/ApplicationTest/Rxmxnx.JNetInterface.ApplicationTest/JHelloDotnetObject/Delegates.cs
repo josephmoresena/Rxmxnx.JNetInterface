@@ -10,4 +10,7 @@ internal partial class JHelloDotnetObject
 
 	private delegate void PassStringDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JStringLocalRef stringRef);
+
+	private delegate JObjectLocalRef SumArrayDelegate(JEnvironmentRef envRef, JClassLocalRef classRef,
+		JIntArrayLocalRef intArrayRef);
 }

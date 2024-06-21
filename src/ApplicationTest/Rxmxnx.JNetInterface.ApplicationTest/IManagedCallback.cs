@@ -11,4 +11,6 @@ internal interface IManagedCallback
 	JStringObject? GetString(JLocalObject jLocal);
 	JInt GetInt(JLocalObject jLocal);
 	void PassString(JLocalObject jLocal, JStringObject? jString);
+
+	static abstract JIntegerObject? SumArray(JClassObject jClass, JArrayObject<JInt>? jArray);
 }

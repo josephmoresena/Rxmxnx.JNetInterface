@@ -41,15 +41,27 @@ internal partial class JHelloDotnetObject
 			JniCallback jniCallback = new(managed);
 			helloDotnetClass.Register(new List<JNativeCallEntry>
 			{
-				JNativeCallEntry.Create<GetStringDelegate>(
-					new JFunctionDefinition<JStringObject>("getNativeString"u8),
-					jniCallback.GetString),
-				JNativeCallEntry.Create<GetIntDelegate>(
-					new JFunctionDefinition<JInt>("getNativeInt"u8), jniCallback.GetInt),
-				JNativeCallEntry.Create<PassStringDelegate>(
-					new StringConsumerDefinition("passNativeString"u8),
-					jniCallback.PassString),
+				JNativeCallEntry.Create<GetStringDelegate>(new JFunctionDefinition<JStringObject>("getNativeString"u8),
+				                                           jniCallback.GetString),
+				JNativeCallEntry.Create<GetIntDelegate>(new JFunctionDefinition<JInt>("getNativeInt"u8),
+				                                        jniCallback.GetInt),
+				JNativeCallEntry.Create<PassStringDelegate>(new StringConsumerDefinition("passNativeString"u8),
+				                                            jniCallback.PassString),
+				// Statics
+				JNativeCallEntry.Create<SumArrayDelegate>(
+					new PrimitiveSumArrayDefinition<JIntegerObject, JInt>("sumArray"u8),
+					JniCallback.SumArray<TManaged>),
 			});
+		}
+
+		private static JObjectLocalRef SumArray<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef,
+			JIntArrayLocalRef intArrayRef) where TManaged : IManagedCallback
+		{
+			JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(envRef, classRef, out JClassObject jClass)
+			                                                   .WithParameter(
+				                                                   intArrayRef, out JArrayObject<JInt>? jArray).Build();
+			JIntegerObject? result = TManaged.SumArray(jClass, jArray);
+			return callAdapter.FinalizeCall(result);
 		}
 	}
 }

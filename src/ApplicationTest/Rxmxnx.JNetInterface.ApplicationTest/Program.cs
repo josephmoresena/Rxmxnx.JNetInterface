@@ -57,7 +57,7 @@ public partial class Program
 				for (JInt i = 0; i < count; i++)
 				{
 					using JLocalObject? jLocal = GetRandomObjectDefinition.Instance.Invoke(helloJniClass, i);
-					Console.WriteLine($"{i}: {jLocal}");
+					Console.WriteLine($"getRandomObject({i}) -> {jLocal}");
 				}
 			}
 			catch (ThrowableException ex)
