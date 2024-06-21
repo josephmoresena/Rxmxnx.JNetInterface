@@ -53,40 +53,38 @@ internal static partial class MetadataHelper
 	/// <param name="result">Runtime metadata cache.</param>
 	private static void BuiltInThrowableRegistration(IDictionary<String, JReferenceTypeMetadata> result)
 	{
-		result.Add(IDataType.GetHash<JLinkageErrorObject>(), IReferenceType.GetMetadata<JLinkageErrorObject>());
-		result.Add(IDataType.GetHash<JClassCircularityErrorObject>(),
-		           IReferenceType.GetMetadata<JClassCircularityErrorObject>());
-		result.Add(IDataType.GetHash<JClassFormatErrorObject>(), IReferenceType.GetMetadata<JClassFormatErrorObject>());
-		result.Add(IDataType.GetHash<JExceptionInInitializerErrorObject>(),
-		           IReferenceType.GetMetadata<JExceptionInInitializerErrorObject>());
-		result.Add(IDataType.GetHash<JIncompatibleClassChangeErrorObject>(),
-		           IReferenceType.GetMetadata<JIncompatibleClassChangeErrorObject>());
-		result.Add(IDataType.GetHash<JNoSuchFieldErrorObject>(), IReferenceType.GetMetadata<JNoSuchFieldErrorObject>());
-		result.Add(IDataType.GetHash<JNoSuchMethodErrorObject>(),
-		           IReferenceType.GetMetadata<JNoSuchMethodErrorObject>());
-		result.Add(IDataType.GetHash<JNoClassDefFoundErrorObject>(),
-		           IReferenceType.GetMetadata<JNoClassDefFoundErrorObject>());
-		result.Add(IDataType.GetHash<JVirtualMachineErrorObject>(),
-		           IReferenceType.GetMetadata<JVirtualMachineErrorObject>());
-		result.Add(IDataType.GetHash<JOutOfMemoryErrorObject>(), IReferenceType.GetMetadata<JOutOfMemoryErrorObject>());
-		result.Add(IDataType.GetHash<JSecurityExceptionObject>(),
-		           IReferenceType.GetMetadata<JSecurityExceptionObject>());
-		result.Add(IDataType.GetHash<JReflectiveOperationExceptionObject>(),
-		           IReferenceType.GetMetadata<JReflectiveOperationExceptionObject>());
-		result.Add(IDataType.GetHash<JInstantiationExceptionObject>(),
-		           IReferenceType.GetMetadata<JInstantiationExceptionObject>());
-		result.Add(IDataType.GetHash<JClassNotFoundExceptionObject>(),
-		           IReferenceType.GetMetadata<JClassNotFoundExceptionObject>());
-		result.Add(IDataType.GetHash<JNullPointerExceptionObject>(),
-		           IReferenceType.GetMetadata<JNullPointerExceptionObject>());
-		result.Add(IDataType.GetHash<JIndexOutOfBoundsExceptionObject>(),
-		           IReferenceType.GetMetadata<JIndexOutOfBoundsExceptionObject>());
-		result.Add(IDataType.GetHash<JArrayIndexOutOfBoundsExceptionObject>(),
-		           IReferenceType.GetMetadata<JArrayIndexOutOfBoundsExceptionObject>());
-		result.Add(IDataType.GetHash<JStringIndexOutOfBoundsExceptionObject>(),
-		           IReferenceType.GetMetadata<JStringIndexOutOfBoundsExceptionObject>());
-		result.Add(IDataType.GetHash<JArrayStoreExceptionObject>(),
-		           IReferenceType.GetMetadata<JArrayStoreExceptionObject>());
+		MetadataHelper.InitialRegister<JLinkageErrorObject>(result);
+		MetadataHelper.InitialRegister<JClassCircularityErrorObject>(result);
+		MetadataHelper.InitialRegister<JUnsatisfiedLinkErrorObject>(result);
+		MetadataHelper.InitialRegister<JClassFormatErrorObject>(result);
+		MetadataHelper.InitialRegister<JExceptionInInitializerErrorObject>(result);
+		MetadataHelper.InitialRegister<JIncompatibleClassChangeErrorObject>(result);
+		MetadataHelper.InitialRegister<JNoSuchFieldErrorObject>(result);
+		MetadataHelper.InitialRegister<JNoSuchMethodErrorObject>(result);
+		MetadataHelper.InitialRegister<JNoClassDefFoundErrorObject>(result);
+		MetadataHelper.InitialRegister<JVirtualMachineErrorObject>(result);
+		MetadataHelper.InitialRegister<JInternalErrorObject>(result);
+		MetadataHelper.InitialRegister<JOutOfMemoryErrorObject>(result);
+		MetadataHelper.InitialRegister<JSecurityExceptionObject>(result);
+		MetadataHelper.InitialRegister<JInterruptedExceptionObject>(result);
+		MetadataHelper.InitialRegister<JParseExceptionObject>(result);
+		MetadataHelper.InitialRegister<JIoExceptionObject>(result);
+		MetadataHelper.InitialRegister<JFileNotFoundExceptionObject>(result);
+		MetadataHelper.InitialRegister<JMalformedUrlExceptionObject>(result);
+		MetadataHelper.InitialRegister<JReflectiveOperationExceptionObject>(result);
+		MetadataHelper.InitialRegister<JInstantiationExceptionObject>(result);
+		MetadataHelper.InitialRegister<JClassNotFoundExceptionObject>(result);
+		MetadataHelper.InitialRegister<JInvocationTargetExceptionObject>(result);
+		MetadataHelper.InitialRegister<JArrayStoreExceptionObject>(result);
+		MetadataHelper.InitialRegister<JNullPointerExceptionObject>(result);
+		MetadataHelper.InitialRegister<JIllegalStateExceptionObject>(result);
+		MetadataHelper.InitialRegister<JClassCastExceptionObject>(result);
+		MetadataHelper.InitialRegister<JArithmeticExceptionObject>(result);
+		MetadataHelper.InitialRegister<JIllegalArgumentExceptionObject>(result);
+		MetadataHelper.InitialRegister<JNumberFormatExceptionObject>(result);
+		MetadataHelper.InitialRegister<JIndexOutOfBoundsExceptionObject>(result);
+		MetadataHelper.InitialRegister<JArrayIndexOutOfBoundsExceptionObject>(result);
+		MetadataHelper.InitialRegister<JStringIndexOutOfBoundsExceptionObject>(result);
 	}
 	/// <summary>
 	/// Registers all reflection types metadata.
@@ -95,21 +93,21 @@ internal static partial class MetadataHelper
 	private static void ReflectionRegistration(IDictionary<String, JReferenceTypeMetadata> result)
 	{
 		// Classes
-		result.Add(IDataType.GetHash<JClassLoaderObject>(), IReferenceType.GetMetadata<JClassLoaderObject>());
-		result.Add(IDataType.GetHash<JThreadObject>(), IReferenceType.GetMetadata<JThreadObject>());
-		result.Add(IDataType.GetHash<JModuleObject>(), IReferenceType.GetMetadata<JModuleObject>());
-		result.Add(IDataType.GetHash<JModifierObject>(), IReferenceType.GetMetadata<JModifierObject>());
-		result.Add(IDataType.GetHash<JAccessibleObject>(), IReferenceType.GetMetadata<JAccessibleObject>());
-		result.Add(IDataType.GetHash<JExecutableObject>(), IReferenceType.GetMetadata<JExecutableObject>());
-		result.Add(IDataType.GetHash<JMethodObject>(), IReferenceType.GetMetadata<JMethodObject>());
-		result.Add(IDataType.GetHash<JConstructorObject>(), IReferenceType.GetMetadata<JConstructorObject>());
+		MetadataHelper.InitialRegister<JClassLoaderObject>(result);
+		MetadataHelper.InitialRegister<JThreadObject>(result);
+		MetadataHelper.InitialRegister<JModuleObject>(result);
+		MetadataHelper.InitialRegister<JModifierObject>(result);
+		MetadataHelper.InitialRegister<JAccessibleObject>(result);
+		MetadataHelper.InitialRegister<JExecutableObject>(result);
+		MetadataHelper.InitialRegister<JMethodObject>(result);
+		MetadataHelper.InitialRegister<JConstructorObject>(result);
 		// Interfaces
-		result.Add(IDataType.GetHash<JMemberObject>(), IReferenceType.GetMetadata<JMemberObject>());
-		result.Add(IDataType.GetHash<JRunnableObject>(), IReferenceType.GetMetadata<JRunnableObject>());
+		MetadataHelper.InitialRegister<JMemberObject>(result);
+		MetadataHelper.InitialRegister<JRunnableObject>(result);
 		// Enums
-		result.Add(IDataType.GetHash<JElementTypeObject>(), IReferenceType.GetMetadata<JElementTypeObject>());
-		// Annotation
-		result.Add(IDataType.GetHash<JTargetObject>(), IReferenceType.GetMetadata<JTargetObject>());
+		MetadataHelper.InitialRegister<JElementTypeObject>(result);
+		// Annotations
+		MetadataHelper.InitialRegister<JTargetObject>(result);
 	}
 	/// <summary>
 	/// Registers all NIO types metadata.
@@ -118,19 +116,32 @@ internal static partial class MetadataHelper
 	private static void NioRegistration(IDictionary<String, JReferenceTypeMetadata> result)
 	{
 		// Classes
-		result.Add(IDataType.GetHash<JBufferObject>(), IReferenceType.GetMetadata<JBufferObject>());
-		result.Add(IDataType.GetHash<JByteBufferObject>(), IReferenceType.GetMetadata<JByteBufferObject>());
-		result.Add(IDataType.GetHash<JCharBufferObject>(), IReferenceType.GetMetadata<JCharBufferObject>());
-		result.Add(IDataType.GetHash<JDoubleBufferObject>(), IReferenceType.GetMetadata<JDoubleBufferObject>());
-		result.Add(IDataType.GetHash<JFloatBufferObject>(), IReferenceType.GetMetadata<JFloatBufferObject>());
-		result.Add(IDataType.GetHash<JIntBufferObject>(), IReferenceType.GetMetadata<JIntBufferObject>());
-		result.Add(IDataType.GetHash<JLongBufferObject>(), IReferenceType.GetMetadata<JLongBufferObject>());
-		result.Add(IDataType.GetHash<JShortBufferObject>(), IReferenceType.GetMetadata<JShortBufferObject>());
-		result.Add(IDataType.GetHash<JMappedByteBufferObject>(), IReferenceType.GetMetadata<JMappedByteBufferObject>());
-		result.Add(IDataType.GetHash<JDirectByteBufferObject>(), IReferenceType.GetMetadata<JDirectByteBufferObject>());
+		MetadataHelper.InitialRegister<JBufferObject>(result);
+		MetadataHelper.InitialRegister<JByteBufferObject>(result);
+		MetadataHelper.InitialRegister<JCharBufferObject>(result);
+		MetadataHelper.InitialRegister<JDoubleBufferObject>(result);
+		MetadataHelper.InitialRegister<JFloatBufferObject>(result);
+		MetadataHelper.InitialRegister<JIntBufferObject>(result);
+		MetadataHelper.InitialRegister<JLongBufferObject>(result);
+		MetadataHelper.InitialRegister<JShortBufferObject>(result);
+		MetadataHelper.InitialRegister<JMappedByteBufferObject>(result);
+		MetadataHelper.InitialRegister<JDirectByteBufferObject>(result);
 		// Interfaces
-		result.Add(IDataType.GetHash<JAppendableObject>(), IReferenceType.GetMetadata<JAppendableObject>());
-		result.Add(IDataType.GetHash<JReadableObject>(), IReferenceType.GetMetadata<JReadableObject>());
-		result.Add(IDataType.GetHash<JDirectBufferObject>(), IReferenceType.GetMetadata<JDirectBufferObject>());
+		MetadataHelper.InitialRegister<JAppendableObject>(result);
+		MetadataHelper.InitialRegister<JReadableObject>(result);
+		MetadataHelper.InitialRegister<JDirectBufferObject>(result);
+	}
+	/// <summary>
+	/// Registers <typeparamref name="TReference"/> metadata.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	/// <param name="result">Runtime metadata cache.</param>
+	private static void
+		InitialRegister<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>(
+			IDictionary<String, JReferenceTypeMetadata> result)
+		where TReference : JReferenceObject, IReferenceType<TReference>
+	{
+		JReferenceTypeMetadata typeMetadata = IReferenceType.GetMetadata<TReference>();
+		result.Add(typeMetadata.Hash, typeMetadata);
 	}
 }
