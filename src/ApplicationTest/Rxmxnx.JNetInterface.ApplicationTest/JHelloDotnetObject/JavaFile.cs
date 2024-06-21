@@ -4,31 +4,39 @@ internal partial class JHelloDotnetObject
 {
 	public const String JavaCode = @"package com.rxmxnx.dotnet.test;
 
-public class HelloDotnet {
+import java.lang.management.ManagementFactory;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
-    public static void main(String[] args){
-        if (args == null)
-            System.out.println(""Args: Null"");
-        else {
-            System.out.println(""Args: "" + args.length);
-            for(String str : args)
-                System.out.println(str);    
-        }
-        
-        HelloDotnet instance = new HelloDotnet();
-        System.out.println(instance.getNativeString());
-        System.out.println(instance.getNativeInt());
-        instance.passNativeString(""texto XD"");
-    }
+public class HelloDotnet {
+    public static final int COUNT_RANDOM = 14;
     
     public native String getNativeString();
     public native int getNativeInt();
     public native void passNativeString(String value);
 
+    public static void main(String[] args) {
+        if (args == null)
+            System.out.println(""args: null"");
+        else {
+            System.out.println(""args: "" + args.length);
+            for(String str : args)
+                System.out.println(str);    
+        }
+        HelloDotnet instance = new HelloDotnet();
+        LocalDateTime load = LocalDateTime.now();
+        String runtime_information = HelloDotnet.getRuntimeInformation(load);
+        System.out.println(instance.getNativeString());
+        System.out.println(instance.getNativeInt());
+        instance.passNativeString(runtime_information);
+    }
+
     public static Object getRandomObject(int value) {
         switch (value) {
             case 1:
-                return ""texto random"";
+                return HelloDotnet.getThreadInfo();
             case 2:
                 return -1;
             case 3:
@@ -57,6 +65,43 @@ public class HelloDotnet {
                 return null;
         }
     }
-    public static final int COUNT_RANDOM = 14;
+
+    private static String getThreadInfo() {
+        Thread currentThread = Thread.currentThread();
+        String threadName = currentThread.getName();
+        long threadId = currentThread.getId();
+
+        return threadName.isEmpty() ? ""Thread ID: "" + threadId : ""Thread Name: "" + threadName + "", Thread ID: "" + threadId;
+    }
+    private static String getRuntimeInformation(LocalDateTime call) {
+        long load_ms = ManagementFactory.getRuntimeMXBean().getStartTime();
+        LocalDateTime load = Instant.ofEpochMilli(load_ms)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        String os = System.getProperty(""os.name"");
+        String osArch = System.getProperty(""os.arch"");
+        String osVersion = System.getProperty(""os.version"");
+        String user = System.getProperty(""user.name"");
+        String currentPath = System.getProperty(""user.dir"");
+        String jvmVersion = System.getProperty(""java.version"");
+        String jvmVendor = System.getProperty(""java.vendor"");
+        String runtimeName = ManagementFactory.getRuntimeMXBean().getVmName();
+        String runtimeVersion = ManagementFactory.getRuntimeMXBean().getSpecVersion();
+        int cores = Runtime.getRuntime().availableProcessors();
+
+        return ""Load: "" + load.format(DateTimeFormatter.ofPattern(""yyyy-MM-dd HH:mm:ss.SSS"")) + ""\n""
+                + ""Call: "" + call.format(DateTimeFormatter.ofPattern(""yyyy-MM-dd HH:mm:ss.SSS"")) + ""\n""
+                + ""Number of Cores: "" + cores + ""\n""
+                + ""OS: "" + os + ""\n""
+                + ""OS Arch: "" + osArch + ""\n""
+                + ""OS Version: "" + osVersion + ""\n""
+                + ""User: "" + user + ""\n""
+                + ""Current Path: "" + currentPath + ""\n""
+                + ""Process Arch: "" + osArch + ""\n""
+                + ""JVM Version: "" + jvmVersion + ""\n""
+                + ""JVM Vendor: "" + jvmVendor + ""\n""
+                + ""Runtime Name: "" + runtimeName + ""\n""
+                + ""Runtime Version: "" + runtimeVersion;
+    }
 }";
 }
