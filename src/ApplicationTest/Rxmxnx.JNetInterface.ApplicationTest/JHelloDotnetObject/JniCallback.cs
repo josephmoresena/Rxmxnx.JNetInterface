@@ -47,10 +47,13 @@ internal partial class JHelloDotnetObject
 				                                        jniCallback.GetInt),
 				JNativeCallEntry.Create<PassStringDelegate>(new StringConsumerDefinition("passNativeString"u8),
 				                                            jniCallback.PassString),
-				// Statics
+				// Static
 				JNativeCallEntry.Create<SumArrayDelegate>(
 					new PrimitiveSumArrayDefinition<JIntegerObject, JInt>("sumArray"u8),
 					JniCallback.SumArray<TManaged>),
+				JNativeCallEntry.Create<GetIntArrayArrayDelegate>(
+					new InitPrimitiveArrayArrayDefinition<JInt>("getIntArrayArray"u8),
+					JniCallback.GetIntArrayArray<TManaged>),
 			});
 		}
 
@@ -61,6 +64,15 @@ internal partial class JHelloDotnetObject
 			                                                   .WithParameter(
 				                                                   intArrayRef, out JArrayObject<JInt>? jArray).Build();
 			JIntegerObject? result = TManaged.SumArray(jClass, jArray);
+			return callAdapter.FinalizeCall(result);
+		}
+
+		private static JArrayLocalRef GetIntArrayArray<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef,
+			Int32 length) where TManaged : IManagedCallback
+		{
+			JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(envRef, classRef, out JClassObject jClass)
+			                                                   .Build();
+			JArrayObject<JArrayObject<JInt>>? result = TManaged.GetIntArrayArray(jClass, length);
 			return callAdapter.FinalizeCall(result);
 		}
 	}

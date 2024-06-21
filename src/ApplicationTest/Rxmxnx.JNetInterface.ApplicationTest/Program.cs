@@ -52,7 +52,9 @@ public partial class Program
 				if (IVirtualMachine.TypeMetadataToStringEnabled) Program.PrintVirtualMachineInfo(env, vm, jvmLib);
 				Program programInstance = new(vm);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, programInstance);
+				Console.WriteLine("==== Begin psvm ===");
 				JMainMethodDefinition.Instance.Invoke(helloJniClass, args);
+				Console.WriteLine("==== End psvm ===");
 				JInt count = new JFieldDefinition<JInt>("COUNT_RANDOM"u8).StaticGet(helloJniClass);
 				for (JInt i = 0; i < count; i++)
 				{

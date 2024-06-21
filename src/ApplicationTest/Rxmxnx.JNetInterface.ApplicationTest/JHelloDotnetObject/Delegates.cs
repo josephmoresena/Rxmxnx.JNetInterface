@@ -13,4 +13,7 @@ internal partial class JHelloDotnetObject
 
 	private delegate JObjectLocalRef SumArrayDelegate(JEnvironmentRef envRef, JClassLocalRef classRef,
 		JIntArrayLocalRef intArrayRef);
+
+	private delegate JArrayLocalRef GetIntArrayArrayDelegate(JEnvironmentRef envRef, JClassLocalRef classRef,
+		Int32 length);
 }

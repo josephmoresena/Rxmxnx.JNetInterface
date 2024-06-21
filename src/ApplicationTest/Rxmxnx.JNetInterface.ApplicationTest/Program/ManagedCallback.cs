@@ -1,6 +1,7 @@
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Primitives;
+using Rxmxnx.JNetInterface.Types;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
@@ -23,11 +24,41 @@ public partial class Program : IManagedCallback
 	static JIntegerObject? IManagedCallback.SumArray(JClassObject jClass, JArrayObject<JInt>? jArray)
 	{
 		if (jArray is null) return default;
-		IEnvironment env = jClass.Environment;
-		JInt result = 0;
-		using JPrimitiveMemory<JInt> intElements = jArray.GetElements();
-		foreach (JInt element in intElements.Values)
-			result += element;
-		return JNumberObject<JInt, JIntegerObject>.Create(env, result);
+		try
+		{
+			IEnvironment env = jClass.Environment;
+			JInt result = 0;
+			using JPrimitiveMemory<JInt> intElements = jArray.GetElements();
+			foreach (JInt element in intElements.Values)
+				result += element;
+			return JNumberObject<JInt, JIntegerObject>.Create(env, result);
+		}
+		catch (JniException)
+		{
+			return default;
+		}
+	}
+	static JArrayObject<JArrayObject<JInt>>? IManagedCallback.GetIntArrayArray(JClassObject jClass, Int32 length)
+	{
+		try
+		{
+			IEnvironment env = jClass.Environment;
+			JArrayObject<JArrayObject<JInt>> jArrayArray = JArrayObject<JArrayObject<JInt>>.Create(env, length);
+			for (Int32 i = 0; i < length; i++)
+			{
+				using JArrayObject<JInt> jArray = JArrayObject<JInt>.Create(env, length);
+				using (JPrimitiveMemory<JInt> intElements = jArray.GetCriticalElements(JMemoryReferenceKind.Local))
+				{
+					for (Int32 j = 0; j < length; j++)
+						intElements.Values[j] = i + j;
+				}
+				jArrayArray[i] = jArray;
+			}
+			return jArrayArray;
+		}
+		catch (JniException)
+		{
+			return default;
+		}
 	}
 }

@@ -18,6 +18,7 @@ public class HelloDotnet {
     public native void passNativeString(String value);
 
     public static native Integer sumArray(int[] value);
+    public static native int[][] getIntArrayArray(int length);
 
     public static void main(String[] args) {
         if (args == null)
@@ -43,6 +44,15 @@ public class HelloDotnet {
 
         System.out.println(""==== sumArray(int[]) ===="");
         System.out.println(HelloDotnet.sumArray(intArr));
+
+        System.out.println(""==== getIntArrayArray(int) ===="");
+        int[][] i2arr = HelloDotnet.getIntArrayArray(3);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                 System.out.print("" "" + i2arr[i][j]);
+            }
+            System.out.println();
+        }
     }
 
     public static Object getRandomObject(int value) {
@@ -122,5 +132,6 @@ public class HelloDotnet {
         }
         return arr;
     }
+    
 }";
 }
