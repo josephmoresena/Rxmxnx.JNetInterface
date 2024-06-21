@@ -6,14 +6,17 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public partial class Program : IManagedCallback
 {
-	private Program(IVirtualMachine vm) => this.VirtualMachine = vm;
-	public IVirtualMachine VirtualMachine { get; }
+	private readonly IVirtualMachine _vm;
 
-	public JStringObject? GetString(JLocalObject jLocal)
+	private Program(IVirtualMachine vm) => this._vm = vm;
+
+	IVirtualMachine IManagedCallback.VirtualMachine => this._vm;
+
+	JStringObject IManagedCallback.GetString(JLocalObject jLocal)
 	{
 		IEnvironment env = jLocal.Environment;
 		return JStringObject.Create(env, $"Hello from .NET, {Environment.MachineName}");
 	}
-	public JInt GetInt(JLocalObject jLocal) => Environment.CurrentManagedThreadId;
-	public void PassString(JLocalObject jLocal, JStringObject? jString) => Console.WriteLine(jString?.Value);
+	JInt IManagedCallback.GetInt(JLocalObject jLocal) => Environment.CurrentManagedThreadId;
+	void IManagedCallback.PassString(JLocalObject jLocal, JStringObject? jString) => Console.WriteLine(jString?.Value);
 }
