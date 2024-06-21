@@ -53,6 +53,34 @@ public sealed class ThrowableTests
 		=> ThrowableTests.ThrowableTest<JStringIndexOutOfBoundsExceptionObject>();
 	[Fact]
 	internal void VirtualMachineErrorTest() => ThrowableTests.ThrowableTest<JVirtualMachineErrorObject>();
+	[Fact]
+	internal void FileNotFoundExceptionTest() => ThrowableTests.ThrowableTest<JFileNotFoundExceptionObject>();
+	[Fact]
+	internal void IoExceptionTest() => ThrowableTests.ThrowableTest<JIoExceptionObject>();
+	[Fact]
+	internal void MalformedUrlExceptionTest() => ThrowableTests.ThrowableTest<JMalformedUrlExceptionObject>();
+	[Fact]
+	internal void InvocationTargetExceptionTest() => ThrowableTests.ThrowableTest<JInvocationTargetExceptionObject>();
+	[Fact]
+	internal void ParseExceptionTest() => ThrowableTests.ThrowableTest<JParseExceptionObject>();
+	[Fact]
+	internal void ArithmeticExceptionTest() => ThrowableTests.ThrowableTest<JArithmeticExceptionObject>();
+	[Fact]
+	internal void ClassCastExceptionTest() => ThrowableTests.ThrowableTest<JClassCastExceptionObject>();
+	[Fact]
+	internal void IllegalArgumentExceptionTest() => ThrowableTests.ThrowableTest<JIllegalArgumentExceptionObject>();
+	[Fact]
+	internal void IllegalStateExceptionTest() => ThrowableTests.ThrowableTest<JIllegalStateExceptionObject>();
+	[Fact]
+	internal void InternalErrorTest() => ThrowableTests.ThrowableTest<JInternalErrorObject>();
+	[Fact]
+	internal void InterruptedExceptionTest() => ThrowableTests.ThrowableTest<JInterruptedExceptionObject>();
+	[Fact]
+	internal void NumberFormatExceptionTest() => ThrowableTests.ThrowableTest<JNumberFormatExceptionObject>();
+	[Fact]
+	internal void UnsatisfiedLinkErrorTest() => ThrowableTests.ThrowableTest<JUnsatisfiedLinkErrorObject>();
+	[Fact]
+	internal void IllegalAccessExceptionTest() => ThrowableTests.ThrowableTest<JIllegalAccessExceptionObject>();
 
 	private static void ThrowableTest<TThrowable>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 	{

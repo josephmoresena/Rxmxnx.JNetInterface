@@ -74,6 +74,7 @@ internal static partial class MetadataHelper
 		MetadataHelper.InitialRegister<JReflectiveOperationExceptionObject>(result);
 		MetadataHelper.InitialRegister<JInstantiationExceptionObject>(result);
 		MetadataHelper.InitialRegister<JClassNotFoundExceptionObject>(result);
+		MetadataHelper.InitialRegister<JIllegalAccessExceptionObject>(result);
 		MetadataHelper.InitialRegister<JInvocationTargetExceptionObject>(result);
 		MetadataHelper.InitialRegister<JArrayStoreExceptionObject>(result);
 		MetadataHelper.InitialRegister<JNullPointerExceptionObject>(result);

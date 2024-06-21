@@ -12,13 +12,14 @@ import java.time.format.DateTimeFormatter;
 
 public class HelloDotnet {
     public static final int COUNT_RANDOM = 14;
+
+    private String s_field;
     
     public native String getNativeString();
     public native int getNativeInt();
     public native void passNativeString(String value);
-
-    public static native Integer sumArray(int[] value);
-    public static native int[][] getIntArrayArray(int length);
+    
+    private native void accessStringField();
 
     public static void main(String[] args) {
         if (args == null)
@@ -32,6 +33,8 @@ public class HelloDotnet {
         LocalDateTime load = LocalDateTime.now();
         String runtime_information = HelloDotnet.getRuntimeInformation(load);
         int[] intArr = HelloDotnet.getIntArray(10);
+
+        instance.s_field = ""AbCdEfGhiJkMlNoPqRsTuVwXyZ"";
 
         System.out.println(""==== getNativeString() ===="");
         System.out.println(instance.getNativeString());
@@ -53,6 +56,10 @@ public class HelloDotnet {
             }
             System.out.println();
         }
+
+        System.out.println(""==== accessStringField() ===="");
+        instance.accessStringField();
+        System.out.println(""s_field = "" + instance.s_field);
     }
 
     public static Object getRandomObject(int value) {
@@ -133,5 +140,7 @@ public class HelloDotnet {
         return arr;
     }
     
+    private static native Integer sumArray(int[] value);
+    private static native int[][] getIntArrayArray(int length);
 }";
 }

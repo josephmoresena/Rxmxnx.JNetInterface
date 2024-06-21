@@ -34,6 +34,14 @@ internal partial class JHelloDotnetObject
 			managed.PassString(jLocal, jString);
 			callAdapter.FinalizeCall();
 		}
+		private void AccessStringField(JEnvironmentRef envRef, JObjectLocalRef localRef)
+		{
+			JNativeCallAdapter callAdapter = JNativeCallAdapter
+			                                 .Create(managed.VirtualMachine, envRef, localRef, out JLocalObject jLocal)
+			                                 .Build();
+			managed.AccessStringField(jLocal);
+			callAdapter.FinalizeCall();
+		}
 
 		public static void RegisterNativeMethods<TManaged>(JClassObject helloDotnetClass, TManaged managed)
 			where TManaged : IManagedCallback
@@ -47,6 +55,8 @@ internal partial class JHelloDotnetObject
 				                                        jniCallback.GetInt),
 				JNativeCallEntry.Create<PassStringDelegate>(new StringConsumerDefinition("passNativeString"u8),
 				                                            jniCallback.PassString),
+				JNativeCallEntry.Create<AccessFieldDelegate>(new JMethodDefinition("accessStringField"u8),
+				                                             jniCallback.AccessStringField),
 				// Static
 				JNativeCallEntry.Create<SumArrayDelegate>(
 					new PrimitiveSumArrayDefinition<JIntegerObject, JInt>("sumArray"u8),

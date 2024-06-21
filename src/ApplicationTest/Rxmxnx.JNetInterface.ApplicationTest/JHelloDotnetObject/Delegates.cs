@@ -16,4 +16,6 @@ internal partial class JHelloDotnetObject
 
 	private delegate JArrayLocalRef GetIntArrayArrayDelegate(JEnvironmentRef envRef, JClassLocalRef classRef,
 		Int32 length);
+
+	private delegate void AccessFieldDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
 }

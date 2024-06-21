@@ -1,5 +1,6 @@
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
+using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 
@@ -20,6 +21,17 @@ public partial class Program : IManagedCallback
 	}
 	JInt IManagedCallback.GetInt(JLocalObject jLocal) => Environment.CurrentManagedThreadId;
 	void IManagedCallback.PassString(JLocalObject jLocal, JStringObject? jString) => Console.WriteLine(jString?.Value);
+	void IManagedCallback.AccessStringField(JLocalObject jLocal)
+	{
+		IEnvironment env = jLocal.Environment;
+		JFieldDefinition<JStringObject> sField = new("s_field"u8);
+		using JStringObject? jString = sField.Get(jLocal);
+		Console.WriteLine($"s_field -> {jString?.Value}");
+		using JNativeMemory<Byte>? utf8Chars = jString?.GetNativeUtf8Chars();
+		ReadOnlySpan<Byte> span = utf8Chars is not null ? utf8Chars.Values : ReadOnlySpan<Byte>.Empty;
+		using JStringObject newString = JStringObject.Create(env, Convert.ToHexString(span));
+		sField.Set(jLocal, newString);
+	}
 
 	static JIntegerObject? IManagedCallback.SumArray(JClassObject jClass, JArrayObject<JInt>? jArray)
 	{
