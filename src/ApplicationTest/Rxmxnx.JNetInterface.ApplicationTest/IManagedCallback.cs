@@ -6,6 +6,8 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 internal interface IManagedCallback
 {
+	static virtual IVirtualMachine TypeVirtualMachine { get; set; } = default!;
+
 	IVirtualMachine VirtualMachine { get; }
 
 	JStringObject? GetString(JLocalObject jLocal);

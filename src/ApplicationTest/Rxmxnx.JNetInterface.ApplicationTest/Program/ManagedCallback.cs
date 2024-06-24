@@ -46,7 +46,7 @@ public partial class Program : IManagedCallback
 			env.DescribeException();
 			if (e is ThrowableException te)
 			{
-				Console.WriteLine("=== Print Throwable ===");
+				Console.WriteLine($"=== {te.EnvironmentRef} thread: {te.ThreadId} === ");
 				Console.WriteLine(te.WithSafeInvoke(t => t.ToString()));
 			}
 			env.PendingException = default;

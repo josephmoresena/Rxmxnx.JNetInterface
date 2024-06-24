@@ -6,6 +6,15 @@ namespace Rxmxnx.JNetInterface;
 public abstract partial class ThrowableException : JniException, IThrowableException<JThrowableObject>
 {
 	/// <summary>
+	/// Environment reference.
+	/// </summary>
+	public JEnvironmentRef EnvironmentRef { get; }
+	/// <summary>
+	/// Exception thread identifier.
+	/// </summary>
+	public Int32 ThreadId { get; }
+
+	/// <summary>
 	/// Global throwable instance.
 	/// </summary>
 	internal JGlobalBase Global { get; }
@@ -16,7 +25,11 @@ public abstract partial class ThrowableException : JniException, IThrowableExcep
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> throwable instance.</param>
 	/// <param name="message">Exception message.</param>
 	private protected ThrowableException(JGlobalBase jGlobal, String? message) : base(message: message)
-		=> this.Global = jGlobal;
+	{
+		this.ThreadId = Environment.CurrentManagedThreadId;
+		this.Global = jGlobal;
+		this.EnvironmentRef = this.Global.VirtualMachine.GetEnvironment()!.Reference;
+	}
 
 	/// <inheritdoc/>
 	public void WithSafeInvoke(Action<JThrowableObject> action) => this.WithSafeInvokeBase(action);
@@ -76,7 +89,7 @@ internal sealed class
 	/// <param name="action">A <see cref="Action{JThrowableObject}"/> delegate.</param>
 	public void WithSafeInvoke(Action<TThrowable> action)
 	{
-		JThrowableCall call = new(this.Global, action);
+		JThrowableCall call = new(this.Global, this.ThreadId, action);
 		Task.Factory.StartNew(ThrowableException.WithSafeInvoke<TThrowable>, call, TaskCreationOptions.LongRunning)
 		    .Wait();
 	}
@@ -88,7 +101,7 @@ internal sealed class
 	/// <returns>Execution result of <paramref name="func"/>.</returns>
 	public TResult WithSafeInvoke<TResult>(Func<TThrowable, TResult> func)
 	{
-		JThrowableCall call = new(this.Global, func);
+		JThrowableCall call = new(this.Global, this.ThreadId, func);
 		return Task.Factory.StartNew(ThrowableException.WithSafeInvoke<TThrowable, TResult>, call,
 		                             TaskCreationOptions.LongRunning).Result;
 	}

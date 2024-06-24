@@ -271,8 +271,11 @@ public sealed class ThrowableTests
 				Assert.Equal(exceptionMessage, t.Message);
 				Assert.Equal(typeMetadata.ClassName, t.ObjectClassName);
 				Assert.Equal(typeMetadata.Signature, t.ObjectSignature);
+				Assert.Equal(exception.ThreadId, t.ThreadId);
 			});
 			Assert.Equal(jWeak, exception.WithSafeInvoke(t => t.Weak));
+			Assert.Equal(env.Reference, exception.EnvironmentRef);
+			Assert.Equal(Environment.CurrentManagedThreadId, exception.ThreadId);
 
 			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
 			thread.ClassFeature.Received(2).GetClass(typeMetadata.ClassName);

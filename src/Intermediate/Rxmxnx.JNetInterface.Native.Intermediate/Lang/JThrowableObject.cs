@@ -54,8 +54,9 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// <inheritdoc/>
 	public override String ToString()
 	{
+		String threadInformation = this.ThreadId.HasValue ? $"[{this.ThreadId}] " : String.Empty;
 		String result =
-			$"{JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference)} [{System.Environment.CurrentManagedThreadId}] {this.Message}";
+			$"{JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference)} {threadInformation}{this.Message}";
 		if (this.StackTrace.Length <= 0) return result;
 		StringBuilder strBuild = new(result);
 		foreach (StackTraceInfo t in this.StackTrace)

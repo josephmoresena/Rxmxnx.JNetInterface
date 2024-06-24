@@ -13,4 +13,9 @@ public partial class JThrowableObject
 
 	static TypeMetadata IThrowableType<JThrowableObject>.Metadata => JThrowableObject.typeMetadata;
 	static Type IDataType.FamilyType => typeof(JThrowableObject);
+
+	/// <summary>
+	/// Throwable exception thread identifier.
+	/// </summary>
+	internal Int32? ThreadId { get; set; }
 }

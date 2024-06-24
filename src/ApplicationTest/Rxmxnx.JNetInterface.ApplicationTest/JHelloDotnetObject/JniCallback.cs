@@ -61,6 +61,7 @@ internal partial class JHelloDotnetObject
 			where TManaged : IManagedCallback
 		{
 			JniCallback jniCallback = new(managed);
+			TManaged.TypeVirtualMachine = managed.VirtualMachine;
 			helloDotnetClass.Register(new List<JNativeCallEntry>
 			{
 				JNativeCallEntry.Create<GetStringDelegate>(
@@ -85,25 +86,28 @@ internal partial class JHelloDotnetObject
 		private static JObjectLocalRef SumArray<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef,
 			JIntArrayLocalRef intArrayRef) where TManaged : IManagedCallback
 		{
-			JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(envRef, classRef, out JClassObject jClass)
-			                                                   .WithParameter(
-				                                                   intArrayRef, out JArrayObject<JInt>? jArray).Build();
+			JNativeCallAdapter callAdapter = JNativeCallAdapter
+			                                 .Create(TManaged.TypeVirtualMachine, envRef, classRef,
+			                                         out JClassObject jClass)
+			                                 .WithParameter(intArrayRef, out JArrayObject<JInt>? jArray).Build();
 			JIntegerObject? result = TManaged.SumArray(jClass, jArray);
 			return callAdapter.FinalizeCall(result);
 		}
 		private static JArrayLocalRef GetIntArrayArray<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef,
 			Int32 length) where TManaged : IManagedCallback
 		{
-			JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(envRef, classRef, out JClassObject jClass)
-			                                                   .Build();
+			JNativeCallAdapter callAdapter = JNativeCallAdapter
+			                                 .Create(TManaged.TypeVirtualMachine, envRef, classRef,
+			                                         out JClassObject jClass).Build();
 			JArrayObject<JArrayObject<JInt>>? result = TManaged.GetIntArrayArray(jClass, length);
 			return callAdapter.FinalizeCall(result);
 		}
 		private static void PrintClass<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef)
 			where TManaged : IManagedCallback
 		{
-			JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(envRef, classRef, out JClassObject jClass)
-			                                                   .Build();
+			JNativeCallAdapter callAdapter = JNativeCallAdapter
+			                                 .Create(TManaged.TypeVirtualMachine, envRef, classRef,
+			                                         out JClassObject jClass).Build();
 			TManaged.PrintClass(jClass);
 			callAdapter.FinalizeCall();
 		}

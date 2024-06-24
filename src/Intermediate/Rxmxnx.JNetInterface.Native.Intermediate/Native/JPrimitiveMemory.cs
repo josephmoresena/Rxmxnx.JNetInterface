@@ -49,6 +49,8 @@ public sealed class JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedConte
 			base.ReleaseMode = value.GetValueOrDefault();
 		}
 	}
+	/// <inheritdoc/>
+	public Span<TPrimitive> Values => this._context.Values;
 
 	/// <inheritdoc/>
 	internal JPrimitiveMemory(INativeMemoryAdapter adapter) : base(adapter)
@@ -61,9 +63,6 @@ public sealed class JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedConte
 	/// <param name="context">A <see cref="IFixedContext{TPrimitive}"/> instance.</param>
 	private JPrimitiveMemory(JNativeMemory mem, IFixedContext<TPrimitive> context) : base(mem)
 		=> this._context = context;
-
-	/// <inheritdoc/>
-	public Span<TPrimitive> Values => this._context.Values;
 
 	IReadOnlyFixedContext<TDestination> IReadOnlyFixedContext<TPrimitive>.
 		Transformation<TDestination>(out IReadOnlyFixedMemory residual)
