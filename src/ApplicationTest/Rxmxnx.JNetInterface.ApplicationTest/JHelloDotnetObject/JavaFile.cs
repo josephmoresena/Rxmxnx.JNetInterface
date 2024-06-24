@@ -70,7 +70,8 @@ public class HelloDotnet {
         try {
             instance.throwNative();
         } catch (Exception e) {
-            System.out.println(""Thrown:\n\t"" + e);
+            System.out.println(""==== catch(Exception) ===="");
+            System.out.println(e);
         }
 
         System.out.println(""==== printClass() ===="");
