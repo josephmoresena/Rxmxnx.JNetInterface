@@ -155,8 +155,8 @@ public class HelloDotnet {
         return arr;
     }
     
-    private static native void printClass();
     private static native Integer sumArray(int[] value);
     private static native int[][] getIntArrayArray(int length);
+    private static native void printClass();
 }";
 }
