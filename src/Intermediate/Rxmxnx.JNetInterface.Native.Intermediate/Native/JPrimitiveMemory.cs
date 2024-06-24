@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a primitive memory block.
 /// </summary>
-public abstract record JPrimitiveMemory : JNativeMemory, IFixedContext<Byte>
+public abstract class JPrimitiveMemory : JNativeMemory, IFixedContext<Byte>
 {
 	/// <inheritdoc/>
 	private protected JPrimitiveMemory(INativeMemoryAdapter adapter) : base(adapter, false) { }
@@ -29,7 +29,7 @@ public abstract record JPrimitiveMemory : JNativeMemory, IFixedContext<Byte>
 /// This class represents a primitive memory block.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> in memory block.</typeparam>
-public sealed record JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedContext<TPrimitive>
+public sealed class JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedContext<TPrimitive>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {
 	/// <summary>

@@ -61,6 +61,7 @@ public partial class Program
 					using JLocalObject? jLocal = GetRandomObjectDefinition.Instance.Invoke(helloJniClass, i);
 					Console.WriteLine($"getRandomObject({i}) -> {jLocal}");
 				}
+				helloJniClass.UnregisterNativeCalls();
 			}
 			catch (ThrowableException ex)
 			{

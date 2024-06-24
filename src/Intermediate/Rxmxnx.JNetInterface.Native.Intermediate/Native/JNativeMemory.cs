@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
                  Justification = CommonConstants.InternalInheritanceJustification)]
-public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
+public abstract class JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 {
 	/// <summary>
 	/// Internal memory adapter.
@@ -48,6 +48,16 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	{
 		this._adapter = adapter;
 		this._context = adapter.GetReadOnlyContext(this);
+	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="memory"><see cref="JNativeMemory"/> instance.</param>
+	private protected JNativeMemory(JNativeMemory memory)
+	{
+		this._adapter = memory._adapter;
+		this._context = memory._context;
+		this._disposed = memory._disposed;
 	}
 	/// <summary>
 	/// Constructor.
@@ -100,7 +110,7 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 /// This class represents a native memory block.
 /// </summary>
 /// <typeparam name="TValue">Value type in memory block.</typeparam>
-public sealed record JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContext<TValue> where TValue : unmanaged
+public sealed class JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContext<TValue> where TValue : unmanaged
 {
 	/// <summary>
 	/// Internal memory context.

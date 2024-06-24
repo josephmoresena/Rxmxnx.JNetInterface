@@ -11,11 +11,7 @@ public partial class Program : IManagedCallback
 {
 	private readonly IVirtualMachine _vm;
 
-	private Program(IVirtualMachine vm)
-	{
-		JVirtualMachine.Register<JNullPointerExceptionObject>();
-		this._vm = vm;
-	}
+	private Program(IVirtualMachine vm) => this._vm = vm;
 
 	IVirtualMachine IManagedCallback.VirtualMachine => this._vm;
 

@@ -10,6 +10,12 @@ internal partial class JHelloDotnetObject
 {
 	private sealed class JniCallback(IManagedCallback managed)
 	{
+		static JniCallback()
+		{
+			JVirtualMachine.Register<JNullPointerExceptionObject>();
+			JVirtualMachine.Register<JHelloDotnetObject>();
+		}
+
 		private JStringLocalRef GetString(JEnvironmentRef envRef, JObjectLocalRef localRef)
 		{
 			JNativeCallAdapter callAdapter = JNativeCallAdapter

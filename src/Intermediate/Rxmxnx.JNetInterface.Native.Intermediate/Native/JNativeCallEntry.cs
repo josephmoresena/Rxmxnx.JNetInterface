@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// Java native call entry.
 /// </summary>
-public record JNativeCallEntry : IFixedPointer
+public class JNativeCallEntry : IFixedPointer
 {
 	/// <summary>
 	/// Represents a parameterless instance method delegate.
@@ -114,7 +114,7 @@ public record JNativeCallEntry : IFixedPointer
 	/// <summary>
 	/// Java native method entry.
 	/// </summary>
-	private sealed record GenericEntry<T> : JNativeCallEntry where T : Delegate
+	private sealed class GenericEntry<T> : JNativeCallEntry where T : Delegate
 	{
 		/// <inheritdoc/>
 		public override Delegate? Delegate { get; }
