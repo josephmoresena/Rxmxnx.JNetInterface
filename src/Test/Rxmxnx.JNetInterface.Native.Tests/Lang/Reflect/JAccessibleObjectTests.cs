@@ -68,8 +68,10 @@ public class JAccessibleObjectTests
 		Assert.Equal(JAccessibleObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JAccessibleObjectTests.hash.ToString(), IDataType.GetHash<JAccessibleObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JAccessibleObject>>(
+		Assert.IsType<JFunctionDefinition<JAccessibleObject>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JAccessibleObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JAccessibleObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JAccessibleObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JAccessibleObject>());

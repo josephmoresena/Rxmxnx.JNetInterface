@@ -44,7 +44,10 @@ public sealed class JLocalObjectTests
 		Assert.Equal(JLocalObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JLocalObjectTests.hash.ToString(), IDataType.GetHash<JLocalObject>());
 		Assert.Null(typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JLocalObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JLocalObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JLocalObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JLocalObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JLocalObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JLocalObject>());

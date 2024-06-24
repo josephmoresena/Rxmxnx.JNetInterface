@@ -159,7 +159,10 @@ public sealed class NumberObjectTests
 		Assert.Equal(primitiveTypeMetadata.WrapperClassSignature, typeMetadata.Signature);
 		Assert.Equal(primitiveTypeMetadata, typeMetadata.PrimitiveMetadata);
 		Assert.Equal(primitiveTypeMetadata.ArgumentMetadata, typeMetadata.PrimitiveArgumentMetadata);
-		Assert.IsType<JFunctionDefinition<TNumber>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<TNumber>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<TNumber>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<TNumber>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<TNumber>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<TNumber>());

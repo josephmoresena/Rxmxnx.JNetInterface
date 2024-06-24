@@ -43,7 +43,10 @@ public sealed class JVoidObjectTests
 		Assert.Equal(JVoidObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JVoidObjectTests.hash.ToString(), IDataType.GetHash<JVoidObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JVoidObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JVoidObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JVoidObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JVoidObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JVoidObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JVoidObject>());

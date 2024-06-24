@@ -72,7 +72,10 @@ public class JThreadObjectTests
 		Assert.Equal(JThreadObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JThreadObjectTests.hash.ToString(), IDataType.GetHash<JThreadObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JThreadObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JThreadObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JThreadObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JThreadObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JThreadObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JThreadObject>());

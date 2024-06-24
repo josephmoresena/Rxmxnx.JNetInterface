@@ -18,8 +18,13 @@ public class HelloDotnet {
     public native String getNativeString();
     public native int getNativeInt();
     public native void passNativeString(String value);
+
+    private void throwException() throws NullPointerException {
+        throw new NullPointerException(""Thrown from Java code."");
+    }
     
     private native void accessStringField();
+    private native void throwNative() throws IllegalArgumentException;
 
     public static void main(String[] args) {
         if (args == null)
@@ -60,6 +65,16 @@ public class HelloDotnet {
         System.out.println(""==== accessStringField() ===="");
         instance.accessStringField();
         System.out.println(""s_field = "" + instance.s_field);
+
+        System.out.println(""==== throwNative() ===="");
+        try {
+            instance.throwNative();
+        } catch (Exception e) {
+            System.out.println(""Thrown:\n\t"" + e);
+        }
+
+        System.out.println(""==== printClass() ===="");
+        HelloDotnet.printClass();
     }
 
     public static Object getRandomObject(int value) {
@@ -140,6 +155,7 @@ public class HelloDotnet {
         return arr;
     }
     
+    private static native void printClass();
     private static native Integer sumArray(int[] value);
     private static native int[][] getIntArrayArray(int length);
 }";

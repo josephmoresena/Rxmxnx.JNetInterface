@@ -54,7 +54,8 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// <inheritdoc/>
 	public override String ToString()
 	{
-		String result = $"{JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference)} {this.Message}";
+		String result =
+			$"{JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference)} [{System.Environment.CurrentManagedThreadId}] {this.Message}";
 		if (this.StackTrace.Length <= 0) return result;
 		StringBuilder strBuild = new(result);
 		foreach (StackTraceInfo t in this.StackTrace)

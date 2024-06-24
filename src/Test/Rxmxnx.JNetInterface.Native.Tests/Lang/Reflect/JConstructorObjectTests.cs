@@ -23,7 +23,7 @@ public class JConstructorObjectTests
 		JObjectLocalRef localRef = JConstructorObjectTests.fixture.Create<JObjectLocalRef>();
 		JArrayLocalRef arrayRef = JConstructorObjectTests.fixture.Create<JArrayLocalRef>();
 		JMethodId methodId = JConstructorObjectTests.fixture.Create<JMethodId>();
-		JConstructorDefinition methodDefinition = new();
+		JConstructorDefinition.Parameterless methodDefinition = new();
 		using JClassObject jClass = new(env);
 		using JClassObject jConstructorClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
@@ -68,7 +68,7 @@ public class JConstructorObjectTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = JConstructorObjectTests.fixture.Create<JObjectLocalRef>();
 		JArrayLocalRef arrayRef = JConstructorObjectTests.fixture.Create<JArrayLocalRef>();
-		JConstructorDefinition methodDefinition = new();
+		JConstructorDefinition.Parameterless methodDefinition = new();
 		JMethodId methodId = JConstructorObjectTests.fixture.Create<JMethodId>();
 		using JClassObject jClass = new(env);
 		using JClassObject jConstructorClass = new(jClass, typeMetadata);
@@ -174,8 +174,10 @@ public class JConstructorObjectTests
 		Assert.Equal(JConstructorObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JConstructorObjectTests.hash.ToString(), IDataType.GetHash<JConstructorObject>());
 		Assert.Equal(IDataType.GetMetadata<JExecutableObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JConstructorObject>>(
+		Assert.IsType<JFunctionDefinition<JConstructorObject>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JConstructorObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JConstructorObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JConstructorObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JConstructorObject>());

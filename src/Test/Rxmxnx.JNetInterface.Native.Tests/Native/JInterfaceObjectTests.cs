@@ -154,8 +154,11 @@ public sealed class JInterfaceObjectTests
 		Assert.Equal(JTypeKind.Interface, EnvironmentProxy.GetKind<JLocalObject.InterfaceView>());
 		Assert.Equal(typeof(JLocalObject.InterfaceView), EnvironmentProxy.GetFamilyType<TInterface>());
 		Assert.Equal(JTypeKind.Interface, EnvironmentProxy.GetKind<JLocalObject.InterfaceView>());
-		Assert.IsType<JFunctionDefinition<TInterface>>(
+		Assert.IsType<JFunctionDefinition<TInterface>.Parameterless>(
 			interfaceTypeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<TInterface>>(
+			interfaceTypeMetadata.CreateFunctionDefinition("functionName"u8,
+			                                               [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<TInterface>>(interfaceTypeMetadata.CreateFieldDefinition("fieldName"u8));
 	}
 }

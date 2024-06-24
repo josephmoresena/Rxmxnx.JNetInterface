@@ -9,7 +9,7 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// Constructor.
 	/// </summary>
 	/// <remarks>This constructor should be never inherited.</remarks>
-	public JConstructorDefinition() : this([]) { }
+	private protected JConstructorDefinition() : this([]) { }
 
 	/// <summary>
 	/// Retrieves a <see cref="JConstructorObject"/> reflected from current definition on
@@ -22,6 +22,24 @@ public partial class JConstructorDefinition : JCallDefinition
 		IEnvironment env = declaringClass.Environment;
 		return env.AccessFeature.GetReflectedConstructor(this, declaringClass);
 	}
+
+	/// <summary>
+	/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>
+	/// which matches with current definition passing the default value for each argument.
+	/// </summary>
+	/// <param name="jClass">An <see cref="JClassObject"/> instance.</param>
+	/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
+	private protected JLocalObject New(JClassObject jClass)
+		=> this.New<JLocalObject>(jClass, this.CreateArgumentsArray());
+	/// <summary>
+	/// Creates a new <typeparamref name="TObject"/> instance using a constructor which matches with
+	/// current definition passing the default value for each argument.
+	/// </summary>
+	/// <typeparam name="TObject">A <see cref="IClassType{TClass}"/> type.</typeparam>
+	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
+	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
+	private protected TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
+		=> this.New<TObject>(env.ClassFeature.GetClass<TObject>(), this.CreateArgumentsArray());
 
 	/// <summary>
 	/// Creates a new <typeparamref name="TObject"/> instance using a constructor on <paramref name="jClass"/>
@@ -55,5 +73,6 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// </summary>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JConstructorDefinition"/> instance.</returns>
-	internal static JConstructorDefinition Create(JArgumentMetadata[] metadata) => new(metadata);
+	internal static JConstructorDefinition Create(JArgumentMetadata[] metadata)
+		=> metadata.Length > 0 ? new JConstructorDefinition(metadata) : new Parameterless();
 }

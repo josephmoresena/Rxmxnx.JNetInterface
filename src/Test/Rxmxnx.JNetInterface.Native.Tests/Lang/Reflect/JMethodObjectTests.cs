@@ -22,7 +22,7 @@ public class JMethodObjectTests
 		JObjectLocalRef localRef = JMethodObjectTests.fixture.Create<JObjectLocalRef>();
 		JArrayLocalRef arrayRef = JMethodObjectTests.fixture.Create<JArrayLocalRef>();
 		JMethodId methodId = JMethodObjectTests.fixture.Create<JMethodId>();
-		JMethodDefinition methodDefinition = new("methodName"u8);
+		JMethodDefinition.Parameterless methodDefinition = new("methodName"u8);
 		using JClassObject jClass = new(env);
 		using JClassObject jMethodClass = new(jClass, typeMetadata);
 		using JClassObject jStringClass = new(jClass, stringTypeMetadata);
@@ -66,7 +66,7 @@ public class JMethodObjectTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = JMethodObjectTests.fixture.Create<JObjectLocalRef>();
 		JArrayLocalRef arrayRef = JMethodObjectTests.fixture.Create<JArrayLocalRef>();
-		JMethodDefinition methodDefinition = new("methodName"u8);
+		JMethodDefinition.Parameterless methodDefinition = new("methodName"u8);
 		JMethodId methodId = JMethodObjectTests.fixture.Create<JMethodId>();
 		using JClassObject jClass = new(env);
 		using JClassObject jMethodClass = new(jClass, typeMetadata);
@@ -170,7 +170,10 @@ public class JMethodObjectTests
 		Assert.Equal(JMethodObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JMethodObjectTests.hash.ToString(), IDataType.GetHash<JMethodObject>());
 		Assert.Equal(IDataType.GetMetadata<JExecutableObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JMethodObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JMethodObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JMethodObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JMethodObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JMethodObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JMethodObject>());

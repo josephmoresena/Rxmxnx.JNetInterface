@@ -87,8 +87,10 @@ public sealed class JCharacterObjectTests
 		Assert.Equal(JCharacterObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JCharacterObjectTests.hash.ToString(), IDataType.GetHash<JCharacterObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JCharacterObject>>(
+		Assert.IsType<JFunctionDefinition<JCharacterObject>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JCharacterObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JCharacterObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JCharacterObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JCharacterObject>());

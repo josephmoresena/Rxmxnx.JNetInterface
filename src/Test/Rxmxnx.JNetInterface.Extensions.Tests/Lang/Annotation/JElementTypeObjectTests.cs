@@ -97,8 +97,10 @@ public class JElementTypeObjectTests
 		Assert.Equal(JElementTypeObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JElementTypeObjectTests.hash.ToString(), IDataType.GetHash<JElementTypeObject>());
 		Assert.Equal(IDataType.GetMetadata<JEnumObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JElementTypeObject>>(
+		Assert.IsType<JFunctionDefinition<JElementTypeObject>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JElementTypeObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JElementTypeObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JEnumObject), EnvironmentProxy.GetFamilyType<JElementTypeObject>());
 		Assert.Equal(JTypeKind.Enum, EnvironmentProxy.GetKind<JElementTypeObject>());

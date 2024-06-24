@@ -84,7 +84,7 @@ public sealed class JFunctionDefinitionTests
 		String functionName = JFunctionDefinitionTests.fixture.Create<String>();
 		String parameterlessDescriptor = $"(){TDataType.Argument.Signature}";
 		CStringSequence seq = new(functionName, parameterlessDescriptor);
-		JFunctionDefinition<TDataType> functionDefinition = new((CString)functionName);
+		JFunctionDefinition<TDataType>.Parameterless functionDefinition = new((CString)functionName);
 		JObjectLocalRef localRef0 = JFunctionDefinitionTests.fixture.Create<JObjectLocalRef>();
 		JObjectLocalRef localRef1 = JFunctionDefinitionTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef0 = JFunctionDefinitionTests.fixture.Create<JClassLocalRef>();

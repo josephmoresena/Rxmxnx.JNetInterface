@@ -360,7 +360,10 @@ public sealed class JClassObjectTests
 		Assert.Equal(JClassObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JClassObjectTests.hash.ToString(), IDataType.GetHash<JClassObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JClassObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JClassObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JClassObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JClassObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JClassObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JClassObject>());

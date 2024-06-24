@@ -87,7 +87,10 @@ public sealed class JBooleanObjectTests
 		Assert.Equal(JBooleanObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JBooleanObjectTests.hash.ToString(), IDataType.GetHash<JBooleanObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JBooleanObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JBooleanObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JBooleanObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JBooleanObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JBooleanObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JBooleanObject>());

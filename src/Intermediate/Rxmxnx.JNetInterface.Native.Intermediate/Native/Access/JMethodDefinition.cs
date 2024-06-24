@@ -6,13 +6,6 @@
 public partial class JMethodDefinition : JCallDefinition
 {
 	/// <summary>
-	/// Constructor.
-	/// </summary>
-	/// <param name="methodName">Method name.</param>
-	/// <remarks>This constructor should be never inherited.</remarks>
-	public JMethodDefinition(ReadOnlySpan<Byte> methodName) : base(methodName) { }
-
-	/// <summary>
 	/// Retrieves a <see cref="JMethodObject"/> reflected from current definition on
 	/// <paramref name="declaringClass"/>.
 	/// </summary>

@@ -64,8 +64,11 @@ public class JTargetObjectTests
 
 		Assert.Equal(typeof(JAnnotationObject), EnvironmentProxy.GetFamilyType<JTargetObject>());
 		Assert.Equal(JTypeKind.Annotation, EnvironmentProxy.GetKind<JTargetObject>());
-		Assert.IsType<JFunctionDefinition<JTargetObject>>(
+		Assert.IsType<JFunctionDefinition<JTargetObject>.Parameterless>(
 			interfaceTypeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JTargetObject>>(
+			interfaceTypeMetadata.CreateFunctionDefinition("functionName"u8,
+			                                               [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JTargetObject>>(interfaceTypeMetadata.CreateFieldDefinition("fieldName"u8));
 	}
 }

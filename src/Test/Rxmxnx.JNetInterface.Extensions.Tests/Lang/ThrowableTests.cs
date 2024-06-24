@@ -177,7 +177,10 @@ public sealed class ThrowableTests
 		Assert.Equal(JTypeKind.Class, typeMetadata.Kind);
 		Assert.Equal(ThrowableTests.getMetadata.MakeGenericMethod(typeof(TThrowable).BaseType!).Invoke(default, []),
 		             typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<TThrowable>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<TThrowable>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<TThrowable>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<TThrowable>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JExceptionObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JExceptionObject>());

@@ -108,8 +108,10 @@ public sealed class JExceptionObjectTests
 		Assert.Equal(JExceptionObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JExceptionObjectTests.hash.ToString(), IDataType.GetHash<JExceptionObject>());
 		Assert.Equal(IDataType.GetMetadata<JThrowableObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JExceptionObject>>(
+		Assert.IsType<JFunctionDefinition<JExceptionObject>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JExceptionObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JExceptionObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JExceptionObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JExceptionObject>());

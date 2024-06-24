@@ -313,7 +313,10 @@ public sealed class PrimitiveBufferTests
 		Assert.Equal(typeof(TBuffer), typeMetadata.Type);
 		Assert.Equal(JTypeKind.Class, typeMetadata.Kind);
 		Assert.Equal(baseMetadata, typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<TBuffer>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<TBuffer>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<TBuffer>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<TBuffer>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<TBuffer>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<TBuffer>());

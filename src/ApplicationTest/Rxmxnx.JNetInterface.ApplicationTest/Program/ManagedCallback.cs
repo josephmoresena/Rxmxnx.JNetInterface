@@ -3,6 +3,7 @@ using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
+using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
@@ -10,7 +11,11 @@ public partial class Program : IManagedCallback
 {
 	private readonly IVirtualMachine _vm;
 
-	private Program(IVirtualMachine vm) => this._vm = vm;
+	private Program(IVirtualMachine vm)
+	{
+		JVirtualMachine.Register<JNullPointerExceptionObject>();
+		this._vm = vm;
+	}
 
 	IVirtualMachine IManagedCallback.VirtualMachine => this._vm;
 
@@ -31,6 +36,30 @@ public partial class Program : IManagedCallback
 		ReadOnlySpan<Byte> span = utf8Chars is not null ? utf8Chars.Values : ReadOnlySpan<Byte>.Empty;
 		using JStringObject newString = JStringObject.Create(env, Convert.ToHexString(span));
 		sField.Set(jLocal, newString);
+	}
+	void IManagedCallback.Throw(JLocalObject jLocal)
+	{
+		IEnvironment env = jLocal.Environment;
+		try
+		{
+			JMethodDefinition.Parameterless throwMethod = new("throwException"u8);
+			throwMethod.Invoke(jLocal);
+		}
+		catch (Exception e)
+		{
+			env.DescribeException();
+			if (e is ThrowableException te)
+			{
+				Console.WriteLine("=== Print Throwable ===");
+				Console.WriteLine(te.WithSafeInvoke(t => t.ToString()));
+			}
+			env.PendingException = default;
+		}
+		finally
+		{
+			CString message = new(() => "Thrown from C# code."u8);
+			JThrowableObject.ThrowNew<JIllegalArgumentExceptionObject>(env, message);
+		}
 	}
 
 	static JIntegerObject? IManagedCallback.SumArray(JClassObject jClass, JArrayObject<JInt>? jArray)
@@ -73,4 +102,5 @@ public partial class Program : IManagedCallback
 			return default;
 		}
 	}
+	static void IManagedCallback.PrintClass(JClassObject jClass) => Console.WriteLine(jClass.ToString());
 }

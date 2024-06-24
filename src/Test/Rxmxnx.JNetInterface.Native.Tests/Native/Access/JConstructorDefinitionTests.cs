@@ -64,7 +64,7 @@ public sealed class JConstructorDefinitionTests
 		Boolean isAbstract = typeMetadata.Modifier == JTypeModifier.Abstract;
 		CStringSequence seq = new(JConstructorDefinitionTests.MethodName,
 		                          JConstructorDefinitionTests.VoidParameterlessDescriptor);
-		JConstructorDefinition constructorDefinition = new();
+		JConstructorDefinition.Parameterless constructorDefinition = new();
 		JObjectLocalRef localRef0 = JConstructorDefinitionTests.fixture.Create<JObjectLocalRef>();
 		JObjectLocalRef localRef1 = JConstructorDefinitionTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef0 = JConstructorDefinitionTests.fixture.Create<JClassLocalRef>();
@@ -90,9 +90,9 @@ public sealed class JConstructorDefinitionTests
 
 		Assert.False(constructorDefinition.Equals(default));
 		Assert.True(constructorDefinition.Equals((Object)constructorDefinition));
-		Assert.True(constructorDefinition.Equals((Object)new JConstructorDefinition()));
+		Assert.True(constructorDefinition.Equals((Object)new JConstructorDefinition.Parameterless()));
 		Assert.True(constructorDefinition.Equals(
-			            (Object)new JMethodDefinition((CString)JConstructorDefinitionTests.MethodName)));
+			            (Object)new JMethodDefinition.Parameterless((CString)JConstructorDefinitionTests.MethodName)));
 		Assert.Equal(0, constructorDefinition.Count);
 		Assert.Equal(0, constructorDefinition.ReferenceCount);
 		Assert.Equal(0, constructorDefinition.Size);

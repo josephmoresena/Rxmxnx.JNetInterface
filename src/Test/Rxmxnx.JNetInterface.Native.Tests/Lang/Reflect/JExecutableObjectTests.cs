@@ -128,8 +128,10 @@ public class JExecutableObjectTests
 		Assert.Equal(JExecutableObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JExecutableObjectTests.hash.ToString(), IDataType.GetHash<JExecutableObject>());
 		Assert.Equal(IDataType.GetMetadata<JAccessibleObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JExecutableObject>>(
+		Assert.IsType<JFunctionDefinition<JExecutableObject>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JExecutableObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JExecutableObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JExecutableObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JExecutableObject>());
