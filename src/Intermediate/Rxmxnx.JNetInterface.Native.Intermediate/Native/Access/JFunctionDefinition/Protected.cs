@@ -11,22 +11,6 @@ public partial class JFunctionDefinition<TResult>
 		functionName, IDataType.GetMetadata<TResult>().Signature, metadata) { }
 
 	/// <summary>
-	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition passing the
-	/// default value for each argument.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? Invoke(JLocalObject jLocal) => this.Invoke(jLocal, this.CreateArgumentsArray());
-	/// <summary>
-	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition but using the
-	/// implementation declared on <paramref name="jClass"/> passing the default value for each argument.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? Invoke(JLocalObject jLocal, JClassObject jClass)
-		=> this.Invoke(jLocal, jClass, this.CreateArgumentsArray());
-	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
@@ -52,15 +36,6 @@ public partial class JFunctionDefinition<TResult>
 	}
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition but using the
-	/// implementation declared on <paramref name="jClass"/> passing the default value for each argument.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass)
-		=> this.InvokeNonVirtual(jLocal, jClass, this.CreateArgumentsArray());
-	/// <summary>
-	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition but using the
 	/// implementation declared on <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
@@ -72,12 +47,6 @@ public partial class JFunctionDefinition<TResult>
 		IEnvironment env = jLocal.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jLocal, jClass, this, true, args);
 	}
-	/// <summary>
-	/// Invokes a static function on <paramref name="jClass"/> which matches with current definition.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? StaticInvoke(JClassObject jClass) => this.StaticInvoke(jClass, this.CreateArgumentsArray());
 	/// <summary>
 	/// Invokes a static function on <paramref name="jClass"/> which matches with current definition
 	/// passing the default value for each argument.

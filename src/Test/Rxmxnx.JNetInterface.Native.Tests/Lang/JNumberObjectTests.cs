@@ -66,7 +66,10 @@ public class JNumberObjectTests
 		Assert.Equal(JNumberObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JNumberObjectTests.hash.ToString(), IDataType.GetHash<JNumberObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JNumberObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JNumberObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JNumberObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JNumberObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JNumberObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JNumberObject>());

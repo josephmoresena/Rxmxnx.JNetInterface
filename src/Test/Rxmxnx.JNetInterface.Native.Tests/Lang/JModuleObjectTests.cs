@@ -67,7 +67,10 @@ public class JModuleObjectTests
 		Assert.Equal(JModuleObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JModuleObjectTests.hash.ToString(), IDataType.GetHash<JModuleObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JModuleObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JModuleObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JModuleObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JModuleObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JModuleObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JModuleObject>());

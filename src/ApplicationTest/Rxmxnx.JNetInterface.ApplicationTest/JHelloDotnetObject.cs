@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
+using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
@@ -21,9 +22,13 @@ internal sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHel
 	private JHelloDotnetObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	private JHelloDotnetObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 
-	public static event Func<String> GetStringEvent = default!;
-	public static event Func<Int32> GetIntegerEvent = default!;
-	public static event Action<String> PassStringEvent = default!;
+	public static JClassObject LoadClass<TManaged>(IEnvironment env, Byte[] classByteCode, TManaged managed)
+		where TManaged : IManagedCallback
+	{
+		JClassObject result = JClassObject.LoadClass<JHelloDotnetObject>(env, classByteCode);
+		JniCallback.RegisterNativeMethods(result, managed);
+		return result;
+	}
 
 	static JHelloDotnetObject IClassType<JHelloDotnetObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);

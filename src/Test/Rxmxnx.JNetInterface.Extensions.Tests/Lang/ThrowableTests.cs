@@ -53,6 +53,34 @@ public sealed class ThrowableTests
 		=> ThrowableTests.ThrowableTest<JStringIndexOutOfBoundsExceptionObject>();
 	[Fact]
 	internal void VirtualMachineErrorTest() => ThrowableTests.ThrowableTest<JVirtualMachineErrorObject>();
+	[Fact]
+	internal void FileNotFoundExceptionTest() => ThrowableTests.ThrowableTest<JFileNotFoundExceptionObject>();
+	[Fact]
+	internal void IoExceptionTest() => ThrowableTests.ThrowableTest<JIoExceptionObject>();
+	[Fact]
+	internal void MalformedUrlExceptionTest() => ThrowableTests.ThrowableTest<JMalformedUrlExceptionObject>();
+	[Fact]
+	internal void InvocationTargetExceptionTest() => ThrowableTests.ThrowableTest<JInvocationTargetExceptionObject>();
+	[Fact]
+	internal void ParseExceptionTest() => ThrowableTests.ThrowableTest<JParseExceptionObject>();
+	[Fact]
+	internal void ArithmeticExceptionTest() => ThrowableTests.ThrowableTest<JArithmeticExceptionObject>();
+	[Fact]
+	internal void ClassCastExceptionTest() => ThrowableTests.ThrowableTest<JClassCastExceptionObject>();
+	[Fact]
+	internal void IllegalArgumentExceptionTest() => ThrowableTests.ThrowableTest<JIllegalArgumentExceptionObject>();
+	[Fact]
+	internal void IllegalStateExceptionTest() => ThrowableTests.ThrowableTest<JIllegalStateExceptionObject>();
+	[Fact]
+	internal void InternalErrorTest() => ThrowableTests.ThrowableTest<JInternalErrorObject>();
+	[Fact]
+	internal void InterruptedExceptionTest() => ThrowableTests.ThrowableTest<JInterruptedExceptionObject>();
+	[Fact]
+	internal void NumberFormatExceptionTest() => ThrowableTests.ThrowableTest<JNumberFormatExceptionObject>();
+	[Fact]
+	internal void UnsatisfiedLinkErrorTest() => ThrowableTests.ThrowableTest<JUnsatisfiedLinkErrorObject>();
+	[Fact]
+	internal void IllegalAccessExceptionTest() => ThrowableTests.ThrowableTest<JIllegalAccessExceptionObject>();
 
 	private static void ThrowableTest<TThrowable>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 	{
@@ -149,7 +177,10 @@ public sealed class ThrowableTests
 		Assert.Equal(JTypeKind.Class, typeMetadata.Kind);
 		Assert.Equal(ThrowableTests.getMetadata.MakeGenericMethod(typeof(TThrowable).BaseType!).Invoke(default, []),
 		             typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<TThrowable>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<TThrowable>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<TThrowable>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<TThrowable>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JExceptionObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JExceptionObject>());
@@ -240,8 +271,11 @@ public sealed class ThrowableTests
 				Assert.Equal(exceptionMessage, t.Message);
 				Assert.Equal(typeMetadata.ClassName, t.ObjectClassName);
 				Assert.Equal(typeMetadata.Signature, t.ObjectSignature);
+				Assert.Equal(exception.ThreadId, t.ThreadId);
 			});
 			Assert.Equal(jWeak, exception.WithSafeInvoke(t => t.Weak));
+			Assert.Equal(env.Reference, exception.EnvironmentRef);
+			Assert.Equal(Environment.CurrentManagedThreadId, exception.ThreadId);
 
 			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
 			thread.ClassFeature.Received(2).GetClass(typeMetadata.ClassName);

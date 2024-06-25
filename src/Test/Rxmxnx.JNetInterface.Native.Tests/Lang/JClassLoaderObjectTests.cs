@@ -65,8 +65,10 @@ public class JClassLoaderObjectTests
 		Assert.Equal(JClassLoaderObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JClassLoaderObjectTests.hash.ToString(), IDataType.GetHash<JClassLoaderObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JClassLoaderObject>>(
+		Assert.IsType<JFunctionDefinition<JClassLoaderObject>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JClassLoaderObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JClassLoaderObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JClassLoaderObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JClassLoaderObject>());

@@ -5,7 +5,7 @@ public partial class ThrowableException
 	/// <summary>
 	/// Helper to perform a call over a <see cref="JThrowableObject"/> instance.
 	/// </summary>
-	internal sealed record JThrowableCall
+	private protected sealed class JThrowableCall
 	{
 		/// <summary>
 		/// A <see cref="JThrowableObject"/> delegate.
@@ -15,15 +15,21 @@ public partial class ThrowableException
 		/// A <see cref="JGlobalBase"/> instance.
 		/// </summary>
 		private readonly JGlobalBase _global;
+		/// <summary>
+		/// Exception thread identifier.
+		/// </summary>
+		private readonly Int32 _threadId;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="global">A global throwable instance.</param>
+		/// <param name="threadId">Exception thread id.</param>
 		/// <param name="del">A throwable delegate.</param>
-		public JThrowableCall(JGlobalBase global, Delegate del)
+		public JThrowableCall(JGlobalBase global, Int32 threadId, Delegate del)
 		{
 			this._global = global;
+			this._threadId = threadId;
 			this._delegate = del;
 		}
 
@@ -38,6 +44,7 @@ public partial class ThrowableException
 			JTrace.InvokeAt(env);
 			using JWeak jWeak = env.ReferenceFeature.CreateWeak(this._global);
 			using TThrowable throwableT = jWeak.AsLocal<TThrowable>(env);
+			throwableT.ThreadId = this._threadId;
 			(this._delegate as Action<TThrowable>)!(throwableT);
 			this._global.RefreshMetadata(throwableT);
 		}
@@ -54,6 +61,7 @@ public partial class ThrowableException
 			JTrace.InvokeAt(env);
 			using JWeak jWeak = env.ReferenceFeature.CreateWeak(this._global);
 			TThrowable throwableT = jWeak.AsLocal<TThrowable>(env);
+			throwableT.ThreadId = this._threadId;
 			TResult result = (this._delegate as Func<TThrowable, TResult>)!(throwableT);
 			this._global.RefreshMetadata(throwableT);
 			return result;

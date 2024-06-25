@@ -73,5 +73,7 @@ public partial class JFunctionDefinition<TResult>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	internal static JFunctionDefinition<TResult> Create(ReadOnlySpan<Byte> functionName,
 		params JArgumentMetadata[] metadata)
-		=> new(functionName, metadata);
+		=> metadata.Length > 0 ?
+			new JFunctionDefinition<TResult>(functionName, metadata) :
+			new Parameterless(functionName);
 }

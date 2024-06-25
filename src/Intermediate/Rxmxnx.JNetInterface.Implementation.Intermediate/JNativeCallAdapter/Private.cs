@@ -89,7 +89,8 @@ public readonly ref partial struct JNativeCallAdapter
 			if (!JLocalObject.IsClassType<TObject>())
 			{
 				Builder.ThrowIfNotLocalReference(env, localRef);
-				return (TObject)(Object)metadata.CreateInstance(jClass, localRef, true);
+				JLocalObject jLocal = metadata.CreateInstance(jClass, localRef, true);
+				return (TObject)metadata.ParseInstance(jLocal);
 			}
 			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 			return (TObject)(Object)this.CreateInitialClass(classRef, true);

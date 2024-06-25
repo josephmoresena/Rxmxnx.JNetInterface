@@ -18,7 +18,7 @@ public sealed class JMethodDefinitionTests
 	{
 		String methodName = JMethodDefinitionTests.fixture.Create<String>();
 		CStringSequence seq = new(methodName, JMethodDefinitionTests.VoidParameterlessDescriptor);
-		JMethodDefinition methodDefinition = new((CString)methodName);
+		JMethodDefinition.Parameterless methodDefinition = new((CString)methodName);
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = JMethodDefinitionTests.fixture.Create<JObjectLocalRef>();
 		JStringLocalRef stringRef = JMethodDefinitionTests.fixture.Create<JStringLocalRef>();
@@ -37,7 +37,7 @@ public sealed class JMethodDefinitionTests
 
 		Assert.False(methodDefinition.Equals(default));
 		Assert.True(methodDefinition.Equals((Object)methodDefinition));
-		Assert.True(methodDefinition.Equals((Object)new JMethodDefinition((CString)methodName)));
+		Assert.True(methodDefinition.Equals((Object)new JMethodDefinition.Parameterless((CString)methodName)));
 		Assert.Equal(0, methodDefinition.Count);
 		Assert.Equal(0, methodDefinition.ReferenceCount);
 		Assert.Equal(0, methodDefinition.Size);

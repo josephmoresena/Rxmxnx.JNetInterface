@@ -145,7 +145,10 @@ public class JFieldObjectTests
 		Assert.Equal(JFieldObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JFieldObjectTests.hash.ToString(), IDataType.GetHash<JFieldObject>());
 		Assert.Equal(IDataType.GetMetadata<JAccessibleObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JFieldObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JFieldObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JFieldObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JFieldObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JFieldObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JFieldObject>());

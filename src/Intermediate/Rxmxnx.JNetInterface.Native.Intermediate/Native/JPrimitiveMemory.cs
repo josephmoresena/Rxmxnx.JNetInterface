@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a primitive memory block.
 /// </summary>
-public abstract record JPrimitiveMemory : JNativeMemory, IFixedContext<Byte>
+public abstract class JPrimitiveMemory : JNativeMemory, IFixedContext<Byte>
 {
 	/// <inheritdoc/>
 	private protected JPrimitiveMemory(INativeMemoryAdapter adapter) : base(adapter, false) { }
@@ -29,7 +29,7 @@ public abstract record JPrimitiveMemory : JNativeMemory, IFixedContext<Byte>
 /// This class represents a primitive memory block.
 /// </summary>
 /// <typeparam name="TPrimitive">Type of <see cref="IPrimitiveType"/> in memory block.</typeparam>
-public sealed record JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedContext<TPrimitive>
+public sealed class JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedContext<TPrimitive>
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {
 	/// <summary>
@@ -49,6 +49,8 @@ public sealed record JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedCont
 			base.ReleaseMode = value.GetValueOrDefault();
 		}
 	}
+	/// <inheritdoc/>
+	public Span<TPrimitive> Values => this._context.Values;
 
 	/// <inheritdoc/>
 	internal JPrimitiveMemory(INativeMemoryAdapter adapter) : base(adapter)
@@ -61,9 +63,6 @@ public sealed record JPrimitiveMemory<TPrimitive> : JPrimitiveMemory, IFixedCont
 	/// <param name="context">A <see cref="IFixedContext{TPrimitive}"/> instance.</param>
 	private JPrimitiveMemory(JNativeMemory mem, IFixedContext<TPrimitive> context) : base(mem)
 		=> this._context = context;
-
-	/// <inheritdoc/>
-	public Span<TPrimitive> Values => this._context.Values;
 
 	IReadOnlyFixedContext<TDestination> IReadOnlyFixedContext<TPrimitive>.
 		Transformation<TDestination>(out IReadOnlyFixedMemory residual)

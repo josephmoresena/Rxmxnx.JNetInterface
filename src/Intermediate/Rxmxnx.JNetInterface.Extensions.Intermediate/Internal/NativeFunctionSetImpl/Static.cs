@@ -5,122 +5,126 @@ internal partial class NativeFunctionSetImpl
 	/// <summary>
 	/// <c>Enum.name()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JStringObject> nameDefinition = new("name"u8);
+	private static readonly JFunctionDefinition<JStringObject>.Parameterless nameDefinition = new("name"u8);
 	/// <summary>
 	/// <c>Enum.ordinal()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JInt> ordinalDefinition = new("ordinal"u8);
+	private static readonly JFunctionDefinition<JInt>.Parameterless ordinalDefinition = new("ordinal"u8);
 	/// <summary>
 	/// <c>StackTraceElement.getClass()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JStringObject> getClassDefinition = new("getClassName"u8);
+	private static readonly JFunctionDefinition<JStringObject>.Parameterless getClassDefinition = new("getClassName"u8);
 	/// <summary>
 	/// <c>StackTraceElement.getLineNumber()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JInt> getLineNumberDefinition = new("getLineNumber"u8);
+	private static readonly JFunctionDefinition<JInt>.Parameterless getLineNumberDefinition = new("getLineNumber"u8);
 	/// <summary>
 	/// <c>StackTraceElement.getFileName()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JStringObject> getFileNameDefinition = new("getFileName"u8);
+	private static readonly JFunctionDefinition<JStringObject>.Parameterless getFileNameDefinition =
+		new("getFileName"u8);
 	/// <summary>
 	/// <c>StackTraceElement.getMethodName()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JStringObject> getMethodNameDefinition = new("getMethodName"u8);
+	private static readonly JFunctionDefinition<JStringObject>.Parameterless getMethodNameDefinition =
+		new("getMethodName"u8);
 	/// <summary>
 	/// <c>StackTraceElement.isNativeMethod()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JBoolean> isNativeMethodDefinition = new("isNativeMethod"u8);
+	private static readonly JFunctionDefinition<JBoolean>.Parameterless isNativeMethodDefinition =
+		new("isNativeMethod"u8);
 
 	/// <summary>
 	/// <c>Number.byteValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JByte> byteValueDefinition = new("byteValue"u8);
+	private static readonly JFunctionDefinition<JByte>.Parameterless byteValueDefinition = new("byteValue"u8);
 	/// <summary>
 	/// <c>Number.doubleValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JDouble> doubleValueDefinition = new("doubleValue"u8);
+	private static readonly JFunctionDefinition<JDouble>.Parameterless doubleValueDefinition = new("doubleValue"u8);
 	/// <summary>
 	/// <c>Number.shortValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JShort> shortValueDefinition = new("shortValue"u8);
+	private static readonly JFunctionDefinition<JShort>.Parameterless shortValueDefinition = new("shortValue"u8);
 	/// <summary>
 	/// <c>Number.intValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JInt> intValueDefinition = new("intValue"u8);
+	private static readonly JFunctionDefinition<JInt>.Parameterless intValueDefinition = new("intValue"u8);
 	/// <summary>
 	/// <c>Number.longValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JLong> longValueDefinition = new("longValue"u8);
+	private static readonly JFunctionDefinition<JLong>.Parameterless longValueDefinition = new("longValue"u8);
 	/// <summary>
 	/// <c>Number.floatValue()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JFloat> floatValueDefinition = new("floatValue"u8);
+	private static readonly JFunctionDefinition<JFloat>.Parameterless floatValueDefinition = new("floatValue"u8);
 	/// <summary>
 	/// <c>Throwable.getStackTrace()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JArrayObject<JStackTraceElementObject>> getStackTraceDefinition =
-		new("getStackTrace"u8);
+	private static readonly JFunctionDefinition<JArrayObject<JStackTraceElementObject>>.Parameterless
+		getStackTraceDefinition = new("getStackTrace"u8);
 
 	/// <summary>
 	/// <c>Class.getModifiers()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JInt> getModifiersDefinition = new("getModifiers"u8);
+	private static readonly JFunctionDefinition<JInt>.Parameterless getModifiersDefinition = new("getModifiers"u8);
 	/// <summary>
 	/// <c>Class.getInterfaces()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JArrayObject<JClassObject>> getInterfacesDefinition =
+	private static readonly JFunctionDefinition<JArrayObject<JClassObject>>.Parameterless getInterfacesDefinition =
 		new("getInterfaces"u8);
 
 	/// <summary>
 	/// <c>Buffer.isDirect()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JBoolean> isDirectBuffer = new("isDirect"u8);
+	private static readonly JFunctionDefinition<JBoolean>.Parameterless isDirectBuffer = new("isDirect"u8);
 	/// <summary>
 	/// <c>Buffer.capacity()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JLong> bufferCapacity = new("capacity"u8);
+	private static readonly JFunctionDefinition<JLong>.Parameterless bufferCapacity = new("capacity"u8);
 
 	/// <summary>
 	/// <c>Member.getDeclaringClass()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JClassObject> getDeclaringClass = new("getDeclaringClass"u8);
+	private static readonly JFunctionDefinition<JClassObject>.Parameterless getDeclaringClass =
+		new("getDeclaringClass"u8);
 
 	/// <summary>
 	/// <c>Executable.getParameterTypes()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JArrayObject<JClassObject>> getParameterTypes =
+	private static readonly JFunctionDefinition<JArrayObject<JClassObject>>.Parameterless getParameterTypes =
 		new("getParameterTypes"u8);
 	/// <summary>
 	/// <c>Method.getReturnType()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JClassObject> getReturnType = new("getReturnType"u8);
+	private static readonly JFunctionDefinition<JClassObject>.Parameterless getReturnType = new("getReturnType"u8);
 	/// <summary>
 	/// <c>Field.getType()</c> definition.
 	/// </summary>
-	private static readonly JFunctionDefinition<JClassObject> getType = new("getType"u8);
+	private static readonly JFunctionDefinition<JClassObject>.Parameterless getType = new("getType"u8);
 
 	/// <summary>
 	/// <c>Class.getName()</c> or <c>Member.getName()</c> definition.
 	/// </summary>
-	public static readonly JFunctionDefinition<JStringObject> GetNameDefinition = new("getName"u8);
+	public static readonly JFunctionDefinition<JStringObject>.Parameterless GetNameDefinition = new("getName"u8);
 	/// <summary>
 	/// <c>Class.isPrimitive()</c> definition.
 	/// </summary>
-	public static readonly JFunctionDefinition<JBoolean> IsPrimitiveDefinition = new("isPrimitive"u8);
+	public static readonly JFunctionDefinition<JBoolean>.Parameterless IsPrimitiveDefinition = new("isPrimitive"u8);
 
 	/// <summary>
 	/// <c>Throwable.getMessage()</c> definition.
 	/// </summary>
-	public static readonly JFunctionDefinition<JStringObject> GetMessageDefinition = new("getMessage"u8);
+	public static readonly JFunctionDefinition<JStringObject>.Parameterless GetMessageDefinition = new("getMessage"u8);
 
 	/// <summary>
 	/// <c>Boolean.booleanValue()</c> definition.
 	/// </summary>
-	public static readonly JFunctionDefinition<JBoolean> BooleanValueDefinition = new("booleanValue"u8);
+	public static readonly JFunctionDefinition<JBoolean>.Parameterless BooleanValueDefinition = new("booleanValue"u8);
 	/// <summary>
 	/// <c>Character.charValue()</c> definition.
 	/// </summary>
-	public static readonly JFunctionDefinition<JChar> CharValueDefinition = new("charValue"u8);
+	public static readonly JFunctionDefinition<JChar>.Parameterless CharValueDefinition = new("charValue"u8);
 
 	/// <summary>
 	/// Constructor <c>java.lang.Boolean(boolean)</c>

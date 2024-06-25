@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
                  Justification = CommonConstants.InternalInheritanceJustification)]
-public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
+public abstract partial class JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 {
 	/// <summary>
 	/// Internal memory adapter.
@@ -26,6 +26,8 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// Indicates whether current sequence is critical.
 	/// </summary>
 	public Boolean Critical => this._adapter.Critical;
+	/// <inheritdoc/>
+	public IntPtr Pointer => this._context.Pointer;
 
 	/// <summary>
 	/// Internal fixed memory.
@@ -52,6 +54,16 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="memory"><see cref="JNativeMemory"/> instance.</param>
+	private protected JNativeMemory(JNativeMemory memory)
+	{
+		this._adapter = memory._adapter;
+		this._context = memory._context;
+		this._disposed = memory._disposed;
+	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
 	/// <param name="adapter"><see cref="INativeMemoryAdapter"/> instance.</param>
 	/// <param name="isReadOnly">Indicates current memory block is read-only.</param>
 	private protected JNativeMemory(INativeMemoryAdapter adapter, Boolean isReadOnly)
@@ -59,22 +71,6 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 		this._adapter = adapter;
 		this._context = isReadOnly ? adapter.GetReadOnlyContext(this) : adapter.GetContext(this);
 	}
-
-	/// <inheritdoc/>
-	public void Dispose()
-	{
-		this.ReleaseUnmanagedResources();
-		GC.SuppressFinalize(this);
-	}
-	/// <inheritdoc/>
-	public IntPtr Pointer => this._context.Pointer;
-
-	IReadOnlyFixedContext<Byte> IReadOnlyFixedMemory.AsBinaryContext() => this;
-	ReadOnlySpan<Byte> IReadOnlyFixedMemory.Bytes => this._context.Bytes;
-	ReadOnlySpan<Byte> IReadOnlyFixedMemory<Byte>.Values => this._context.Bytes;
-	IReadOnlyFixedContext<TDestination> IReadOnlyFixedContext<Byte>.
-		Transformation<TDestination>(out IReadOnlyFixedMemory residual)
-		=> this._context.Transformation<TDestination>(out residual);
 
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
@@ -85,27 +81,21 @@ public abstract record JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 	/// </summary>
 	/// <returns>A <see cref="IReadOnlyFixedContext{Byte}"/> instance</returns>
 	internal IReadOnlyFixedContext<Byte> GetBinaryContext() => this._context;
-
-	/// <inheritdoc cref="IDisposable.Dispose"/>
-	private void ReleaseUnmanagedResources()
-	{
-		if (this._disposed.Value) return;
-		this._disposed.Value = true;
-		this._adapter.Release(this.ReleaseMode);
-		this._context.Dispose();
-	}
 }
 
 /// <summary>
 /// This class represents a native memory block.
 /// </summary>
 /// <typeparam name="TValue">Value type in memory block.</typeparam>
-public sealed record JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContext<TValue> where TValue : unmanaged
+public sealed class JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContext<TValue> where TValue : unmanaged
 {
 	/// <summary>
 	/// Internal memory context.
 	/// </summary>
 	private readonly IReadOnlyFixedContext<TValue> _context;
+
+	/// <inheritdoc/>
+	public ReadOnlySpan<TValue> Values => this._context.Values;
 
 	/// <inheritdoc/>
 	internal JNativeMemory(INativeMemoryAdapter adapter) : base(adapter)
@@ -117,9 +107,6 @@ public sealed record JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContex
 	/// <param name="context">A <see cref="IReadOnlyFixedContext{TPrimitive}"/> instance.</param>
 	internal JNativeMemory(JNativeMemory mem, IReadOnlyFixedContext<TValue> context) : base(mem)
 		=> this._context = context;
-
-	/// <inheritdoc/>
-	public ReadOnlySpan<TValue> Values => this._context.Values;
 
 	IReadOnlyFixedContext<TDestination> IReadOnlyFixedContext<TValue>.
 		Transformation<TDestination>(out IReadOnlyFixedMemory residual)

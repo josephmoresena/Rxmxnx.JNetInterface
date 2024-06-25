@@ -296,8 +296,10 @@ public sealed class JArrayObjectTests
 		Assert.Equal(JTypeKind.Array, EnvironmentProxy.GetKind<JArrayObject<TElement>>());
 		Assert.Equal(elementTypeMetadata is JArrayTypeMetadata, arrayTypeMetadata.Dimension > 1);
 		Assert.Equal(arrayTypeMetadata, elementTypeMetadata.GetArrayMetadata());
-		Assert.IsType<JFunctionDefinition<JArrayObject<TElement>>>(
+		Assert.IsType<JFunctionDefinition<JArrayObject<TElement>>.Parameterless>(
 			arrayTypeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JArrayObject<TElement>>>(
+			arrayTypeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JArrayObject<TElement>>>(arrayTypeMetadata.CreateFieldDefinition("fieldName"u8));
 
 		env.GetReferenceType(jGlobal).Returns(JReferenceType.GlobalRefType);

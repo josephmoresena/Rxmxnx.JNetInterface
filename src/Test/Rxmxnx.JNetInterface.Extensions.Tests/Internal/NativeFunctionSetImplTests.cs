@@ -556,7 +556,7 @@ public sealed class NativeFunctionSetImplTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JObjectLocalRef localRef = NativeFunctionSetImplTests.fixture.Create<JObjectLocalRef>();
 		TPrimitive value = (TPrimitive)NativeFunctionSetImplTests.fixture.Create<Double>();
-		JFunctionDefinition<TPrimitive> definition = new(functionName);
+		JFunctionDefinition<TPrimitive>.Parameterless definition = new(functionName);
 		using JClassObject jClass = new(env);
 		using JClassObject jNumberClass = new(jClass, typeMetadata);
 		using JNumberObject jNumber =

@@ -110,8 +110,10 @@ public sealed class JRuntimeExceptionObjectTests
 		Assert.Equal(JRuntimeExceptionObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JRuntimeExceptionObjectTests.hash.ToString(), IDataType.GetHash<JRuntimeExceptionObject>());
 		Assert.Equal(IDataType.GetMetadata<JExceptionObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JRuntimeExceptionObject>>(
+		Assert.IsType<JFunctionDefinition<JRuntimeExceptionObject>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JRuntimeExceptionObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JRuntimeExceptionObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JRuntimeExceptionObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JRuntimeExceptionObject>());

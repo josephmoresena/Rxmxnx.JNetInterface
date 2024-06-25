@@ -32,6 +32,7 @@
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Reflect"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Annotation"/>
+        <Using Include="Rxmxnx.JNetInterface.Net"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
@@ -42,6 +43,7 @@
         <Using Include="Rxmxnx.JNetInterface.Nio.Ch"/>
         <Using Include="Rxmxnx.JNetInterface.Primitives"/>
         <Using Include="Rxmxnx.JNetInterface.Restricted"/>
+        <Using Include="Rxmxnx.JNetInterface.Text"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
         <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
     </ItemGroup>

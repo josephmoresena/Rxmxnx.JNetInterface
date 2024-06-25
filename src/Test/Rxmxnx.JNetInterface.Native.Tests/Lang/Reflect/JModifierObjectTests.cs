@@ -64,8 +64,10 @@ public class JModifierObjectTests
 		Assert.Equal(JModifierObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JModifierObjectTests.hash.ToString(), IDataType.GetHash<JModifierObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JModifierObject>>(
+		Assert.IsType<JFunctionDefinition<JModifierObject>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JModifierObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JModifierObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JModifierObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JModifierObject>());

@@ -88,7 +88,10 @@ public class JBufferObjectTests
 		Assert.Equal(JBufferObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JBufferObjectTests.hash.ToString(), IDataType.GetHash<JBufferObject>());
 		Assert.Equal(IDataType.GetMetadata<JLocalObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JBufferObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JBufferObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JBufferObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JBufferObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JLocalObject), EnvironmentProxy.GetFamilyType<JBufferObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JBufferObject>());

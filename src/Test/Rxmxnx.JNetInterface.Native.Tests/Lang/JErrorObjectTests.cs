@@ -105,7 +105,10 @@ public sealed class JErrorObjectTests
 		Assert.Equal(JErrorObjectTests.hash.ToString(), typeMetadata.Hash);
 		Assert.Equal(JErrorObjectTests.hash.ToString(), IDataType.GetHash<JErrorObject>());
 		Assert.Equal(IDataType.GetMetadata<JThrowableObject>(), typeMetadata.BaseMetadata);
-		Assert.IsType<JFunctionDefinition<JErrorObject>>(typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JErrorObject>.Parameterless>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
+		Assert.IsType<JFunctionDefinition<JErrorObject>>(
+			typeMetadata.CreateFunctionDefinition("functionName"u8, [JArgumentMetadata.Get<JStringObject>(),]));
 		Assert.IsType<JFieldDefinition<JErrorObject>>(typeMetadata.CreateFieldDefinition("fieldName"u8));
 		Assert.Equal(typeof(JThrowableObject), EnvironmentProxy.GetFamilyType<JErrorObject>());
 		Assert.Equal(JTypeKind.Class, EnvironmentProxy.GetKind<JErrorObject>());
