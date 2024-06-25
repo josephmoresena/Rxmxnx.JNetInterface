@@ -14,6 +14,7 @@ public partial class Program
 	public static async Task Main(String[] args)
 	{
 		if (IVirtualMachine.TypeMetadataToStringEnabled) Program.PrintMetadataInfo();
+		Boolean reflectionDisabled = !$"{typeof(Program)}".Contains(nameof(Program));
 
 		JCompiler? compiler = args.Length == 3 ?
 			new() { JdkPath = args[0], CompilerPath = args[1], LibraryPath = args[2], } :
@@ -28,8 +29,13 @@ public partial class Program
 		Byte[] helloJniByteCode = await compiler.CompileHelloJniClassAsync();
 		JVirtualMachineLibrary jvmLib = compiler.GetLibrary();
 
-		Program.Execute(jvmLib, helloJniByteCode, $"System Path: {Environment.SystemDirectory}",
-		                $"Runtime Name: {RuntimeInformation.FrameworkDescription}");
+		String[] jMainArgs = reflectionDisabled ?
+			[$"System Path: {Environment.SystemDirectory}",] :
+			[
+				$"System Path: {Environment.SystemDirectory}",
+				$"Runtime Name: {RuntimeInformation.FrameworkDescription}",
+			];
+		Program.Execute(jvmLib, helloJniByteCode, jMainArgs);
 
 		Console.WriteLine($"{nameof(Program)}: {typeof(Program)}");
 		Console.WriteLine($"{nameof(IVirtualMachine.TraceEnabled)}: {IVirtualMachine.TraceEnabled}");
