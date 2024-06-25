@@ -5,6 +5,8 @@ public partial class JMethodDefinition
 	/// <summary>
 	/// This class stores a parameterless method definition.
 	/// </summary>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
+	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	public sealed class Parameterless(ReadOnlySpan<Byte> methodName) : JMethodDefinition(methodName)
 	{
 		/// <summary>

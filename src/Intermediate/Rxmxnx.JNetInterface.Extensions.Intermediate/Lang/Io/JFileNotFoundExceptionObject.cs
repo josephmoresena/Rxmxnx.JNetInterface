@@ -5,6 +5,8 @@ using TypeMetadata = JThrowableTypeMetadata<JFileNotFoundExceptionObject>;
 /// <summary>
 /// This class represents a local <c>java.io.FileNotFoundException</c> instance.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
+                 Justification = CommonConstants.JavaInheritanceJustification)]
 public class JFileNotFoundExceptionObject : JIoExceptionObject, IThrowableType<JFileNotFoundExceptionObject>
 {
 	/// <summary>

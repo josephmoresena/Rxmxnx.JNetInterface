@@ -5,6 +5,8 @@ public partial class JFunctionDefinition<TResult>
 	/// <summary>
 	/// This class stores a parameterless function definition.
 	/// </summary>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
+	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	public sealed class Parameterless(ReadOnlySpan<Byte> functionName) : JFunctionDefinition<TResult>(functionName)
 	{
 		/// <summary>

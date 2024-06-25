@@ -71,26 +71,6 @@ public class JNativeCallEntry : IFixedPointer
 	/// <returns>A <see cref="JNativeCallEntry"/> instance.</returns>
 	public static JNativeCallEntry Create(JFunctionDefinition definition, IntPtr ptr) => new(ptr, definition);
 	/// <summary>
-	/// Creates a <see cref="JNativeCallEntry"/> instance using parameterless definition and
-	/// instance parameterless method delegate.
-	/// </summary>
-	/// <param name="definition">Java parameterless method call definition.</param>
-	/// <param name="del">Instance parameterless method definition.</param>
-	/// <returns>A <see cref="JNativeCallEntry"/> instance.</returns>
-	public static JNativeCallEntry CreateParameterless(JMethodDefinition.Parameterless definition,
-		ParameterlessInstanceMethodDelegate del)
-		=> new GenericEntry<ParameterlessInstanceMethodDelegate>(del, definition);
-	/// <summary>
-	/// Creates a <see cref="JNativeCallEntry"/> instance using parameterless definition and
-	/// static parameterless method delegate.
-	/// </summary>
-	/// <param name="definition">Java parameterless method call definition.</param>
-	/// <param name="del">Static parameterless method definition.</param>
-	/// <returns>A <see cref="JNativeCallEntry"/> instance.</returns>
-	public static JNativeCallEntry CreateParameterless(JMethodDefinition.Parameterless definition,
-		ParameterlessStaticMethodDelegate del)
-		=> new GenericEntry<ParameterlessStaticMethodDelegate>(del, definition);
-	/// <summary>
 	/// Creates a <see cref="JNativeCallEntry"/> instance using <paramref name="definition"/> and
 	/// <paramref name="managedFunction"/>.
 	/// </summary>
@@ -110,6 +90,27 @@ public class JNativeCallEntry : IFixedPointer
 	/// <returns>A <see cref="JNativeCallEntry"/> instance.</returns>
 	public static JNativeCallEntry Create<T>(JFunctionDefinition definition, T del) where T : Delegate
 		=> new GenericEntry<T>(del, definition);
+
+	/// <summary>
+	/// Creates a <see cref="JNativeCallEntry"/> instance using parameterless definition and
+	/// instance parameterless method delegate.
+	/// </summary>
+	/// <param name="definition">Java parameterless method call definition.</param>
+	/// <param name="del">Instance parameterless method definition.</param>
+	/// <returns>A <see cref="JNativeCallEntry"/> instance.</returns>
+	public static JNativeCallEntry CreateParameterless(JMethodDefinition.Parameterless definition,
+		ParameterlessInstanceMethodDelegate del)
+		=> new GenericEntry<ParameterlessInstanceMethodDelegate>(del, definition);
+	/// <summary>
+	/// Creates a <see cref="JNativeCallEntry"/> instance using parameterless definition and
+	/// static parameterless method delegate.
+	/// </summary>
+	/// <param name="definition">Java parameterless method call definition.</param>
+	/// <param name="del">Static parameterless method definition.</param>
+	/// <returns>A <see cref="JNativeCallEntry"/> instance.</returns>
+	public static JNativeCallEntry CreateParameterless(JMethodDefinition.Parameterless definition,
+		ParameterlessStaticMethodDelegate del)
+		=> new GenericEntry<ParameterlessStaticMethodDelegate>(del, definition);
 
 	/// <summary>
 	/// Java native method entry.

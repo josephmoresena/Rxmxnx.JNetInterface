@@ -5,6 +5,8 @@ public partial class JConstructorDefinition
 	/// <summary>
 	/// This class stores a parameterless constructor definition.
 	/// </summary>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
+	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	public sealed class Parameterless : JConstructorDefinition
 	{
 		/// <summary>
