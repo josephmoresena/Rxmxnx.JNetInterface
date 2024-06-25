@@ -15,14 +15,22 @@ public partial class Program : IManagedCallback
 
 	IVirtualMachine IManagedCallback.VirtualMachine => this._vm;
 
-	JStringObject IManagedCallback.GetString(JLocalObject jLocal)
+	JStringObject IManagedCallback.GetHelloString(JLocalObject jLocal)
 	{
 		IEnvironment env = jLocal.Environment;
 		return JStringObject.Create(env, $"Hello from .NET, {Environment.MachineName}");
 	}
-	JInt IManagedCallback.GetInt(JLocalObject jLocal) => Environment.CurrentManagedThreadId;
-	void IManagedCallback.PassString(JLocalObject jLocal, JStringObject? jString) => Console.WriteLine(jString?.Value);
-	void IManagedCallback.AccessStringField(JLocalObject jLocal)
+	JInt IManagedCallback.GetThreadId(JLocalObject jLocal)
+	{
+		Console.WriteLine(jLocal.Class);
+		return Environment.CurrentManagedThreadId;
+	}
+	void IManagedCallback.PrintRuntimeInformation(JLocalObject jLocal, JStringObject? jString)
+	{
+		Console.WriteLine(jLocal);
+		Console.WriteLine(jString?.Value);
+	}
+	void IManagedCallback.ProcessField(JLocalObject jLocal)
 	{
 		IEnvironment env = jLocal.Environment;
 		JFieldDefinition<JStringObject> sField = new("s_field"u8);

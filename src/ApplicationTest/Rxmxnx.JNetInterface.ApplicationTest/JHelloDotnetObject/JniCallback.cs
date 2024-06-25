@@ -10,42 +10,39 @@ internal partial class JHelloDotnetObject
 {
 	private sealed class JniCallback(IManagedCallback managed)
 	{
-		static JniCallback()
-		{
-			JVirtualMachine.Register<JNullPointerExceptionObject>();
-			JVirtualMachine.Register<JHelloDotnetObject>();
-		}
+		static JniCallback() { JVirtualMachine.Register<JNullPointerExceptionObject>(); }
 
-		private JStringLocalRef GetString(JEnvironmentRef envRef, JObjectLocalRef localRef)
+		private JStringLocalRef GetHelloString(JEnvironmentRef envRef, JObjectLocalRef localRef)
 		{
 			JNativeCallAdapter callAdapter = JNativeCallAdapter
 			                                 .Create(managed.VirtualMachine, envRef, localRef, out JLocalObject jLocal)
 			                                 .Build();
-			JStringObject? result = managed.GetString(jLocal);
+			JStringObject? result = managed.GetHelloString(jLocal);
 			return callAdapter.FinalizeCall(result);
 		}
-		private JInt GetInt(JEnvironmentRef envRef, JObjectLocalRef localRef)
+		private JInt GetThreadId(JEnvironmentRef envRef, JObjectLocalRef localRef)
 		{
 			JNativeCallAdapter callAdapter = JNativeCallAdapter
 			                                 .Create(managed.VirtualMachine, envRef, localRef, out JLocalObject jLocal)
 			                                 .Build();
-			JInt value = managed.GetInt(jLocal);
+			JInt value = managed.GetThreadId(jLocal);
 			return callAdapter.FinalizeCall(value);
 		}
-		private void PassString(JEnvironmentRef envRef, JObjectLocalRef localRef, JStringLocalRef stringRef)
+		private void PrintRuntimeInformation(JEnvironmentRef envRef, JObjectLocalRef localRef,
+			JStringLocalRef stringRef)
 		{
 			JNativeCallAdapter callAdapter = JNativeCallAdapter
 			                                 .Create(managed.VirtualMachine, envRef, localRef, out JLocalObject jLocal)
 			                                 .WithParameter(stringRef, out JStringObject? jString).Build();
-			managed.PassString(jLocal, jString);
+			managed.PrintRuntimeInformation(jLocal, jString);
 			callAdapter.FinalizeCall();
 		}
-		private void AccessStringField(JEnvironmentRef envRef, JObjectLocalRef localRef)
+		private void FieldAccess(JEnvironmentRef envRef, JObjectLocalRef localRef)
 		{
 			JNativeCallAdapter callAdapter = JNativeCallAdapter
 			                                 .Create(managed.VirtualMachine, envRef, localRef, out JLocalObject jLocal)
 			                                 .Build();
-			managed.AccessStringField(jLocal);
+			managed.ProcessField(jLocal);
 			callAdapter.FinalizeCall();
 		}
 		private void Throw(JEnvironmentRef envRef, JObjectLocalRef localRef)
@@ -65,13 +62,14 @@ internal partial class JHelloDotnetObject
 			helloDotnetClass.Register(new List<JNativeCallEntry>
 			{
 				JNativeCallEntry.Create<GetStringDelegate>(
-					new JFunctionDefinition<JStringObject>.Parameterless("getNativeString"u8), jniCallback.GetString),
-				JNativeCallEntry.Create<GetIntDelegate>(new JFunctionDefinition<JInt>.Parameterless("getNativeInt"u8),
-				                                        jniCallback.GetInt),
-				JNativeCallEntry.Create<PassStringDelegate>(new StringConsumerDefinition("passNativeString"u8),
-				                                            jniCallback.PassString),
-				JNativeCallEntry.CreateParameterless(new("accessStringField"u8), jniCallback.AccessStringField),
-				JNativeCallEntry.CreateParameterless(new("throwNative"u8), jniCallback.Throw),
+					new JFunctionDefinition<JStringObject>.Parameterless("getHelloString"u8),
+					jniCallback.GetHelloString),
+				JNativeCallEntry.Create<GetThreadIdDelegate>(
+					new JFunctionDefinition<JInt>.Parameterless("getThreadId"u8), jniCallback.GetThreadId),
+				JNativeCallEntry.Create<PrintRuntimeInformationDelegate>(
+					new StringConsumerDefinition("printRuntimeInformation"u8), jniCallback.PrintRuntimeInformation),
+				JNativeCallEntry.CreateParameterless(new("nativeFieldAccess"u8), jniCallback.FieldAccess),
+				JNativeCallEntry.CreateParameterless(new("nativeThrow"u8), jniCallback.Throw),
 				// Static
 				JNativeCallEntry.Create<SumArrayDelegate>(
 					new PrimitiveSumArrayDefinition<JIntegerObject, JInt>("sumArray"u8),

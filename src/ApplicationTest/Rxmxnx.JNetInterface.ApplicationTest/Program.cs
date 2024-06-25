@@ -55,11 +55,11 @@ public partial class Program
 				Console.WriteLine("==== Begin psvm ===");
 				JMainMethodDefinition.Instance.Invoke(helloJniClass, args);
 				Console.WriteLine("==== End psvm ===");
-				JInt count = new JFieldDefinition<JInt>("COUNT_RANDOM"u8).StaticGet(helloJniClass);
+				JInt count = new JFieldDefinition<JInt>("COUNT"u8).StaticGet(helloJniClass);
 				for (JInt i = 0; i < count; i++)
 				{
-					using JLocalObject? jLocal = GetRandomObjectDefinition.Instance.Invoke(helloJniClass, i);
-					Console.WriteLine($"getRandomObject({i}) -> {jLocal}");
+					using JLocalObject? jLocal = GetObjectDefinition.Instance.Invoke(helloJniClass, i);
+					Console.WriteLine($"getObject({i}) -> {jLocal}");
 				}
 				helloJniClass.UnregisterNativeCalls();
 			}

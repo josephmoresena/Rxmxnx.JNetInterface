@@ -10,11 +10,11 @@ internal interface IManagedCallback
 
 	IVirtualMachine VirtualMachine { get; }
 
-	JStringObject? GetString(JLocalObject jLocal);
-	JInt GetInt(JLocalObject jLocal);
-	void PassString(JLocalObject jLocal, JStringObject? jString);
+	JStringObject? GetHelloString(JLocalObject jLocal);
+	JInt GetThreadId(JLocalObject jLocal);
+	void PrintRuntimeInformation(JLocalObject jLocal, JStringObject? jString);
 
-	void AccessStringField(JLocalObject jLocal);
+	void ProcessField(JLocalObject jLocal);
 	void Throw(JLocalObject jLocal);
 
 	static abstract JIntegerObject? SumArray(JClassObject jClass, JArrayObject<JInt>? jArray);

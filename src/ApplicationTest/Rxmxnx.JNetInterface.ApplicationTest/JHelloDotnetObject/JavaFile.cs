@@ -11,20 +11,20 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class HelloDotnet {
-    public static final int COUNT_RANDOM = 14;
+    public static final int COUNT = 14;
 
     private String s_field;
     
-    public native String getNativeString();
-    public native int getNativeInt();
-    public native void passNativeString(String value);
+    public native String getHelloString();
+    public native int getThreadId();
+    public native void printRuntimeInformation(String runtime_information);
 
     private void throwException() throws NullPointerException {
         throw new NullPointerException(""Thrown from Java code."");
     }
     
-    private native void accessStringField();
-    private native void throwNative() throws IllegalArgumentException;
+    private native void nativeFieldAccess();
+    private native void nativeThrow() throws IllegalArgumentException;
 
     public static void main(String[] args) {
         if (args == null)
@@ -41,14 +41,14 @@ public class HelloDotnet {
 
         instance.s_field = ""AbCdEfGhiJkMlNoPqRsTuVwXyZ"";
 
-        System.out.println(""==== getNativeString() ===="");
-        System.out.println(instance.getNativeString());
+        System.out.println(""==== getHelloString() ===="");
+        System.out.println(instance.getHelloString());
 
-        System.out.println(""==== getNativeInt() ===="");
-        System.out.println(instance.getNativeInt());
+        System.out.println(""==== getThreadId() ===="");
+        System.out.println(instance.getThreadId());
 
-        System.out.println(""==== passNativeString(String) ===="");
-        instance.passNativeString(runtime_information);
+        System.out.println(""==== printRuntimeInformation(String) ===="");
+        instance.printRuntimeInformation(runtime_information);
 
         System.out.println(""==== sumArray(int[]) ===="");
         System.out.println(HelloDotnet.sumArray(intArr));
@@ -62,13 +62,13 @@ public class HelloDotnet {
             System.out.println();
         }
 
-        System.out.println(""==== accessStringField() ===="");
-        instance.accessStringField();
+        System.out.println(""==== nativeFieldAccess() ===="");
+        instance.nativeFieldAccess();
         System.out.println(""s_field = "" + instance.s_field);
 
-        System.out.println(""==== throwNative() ===="");
+        System.out.println(""==== nativeThrow() ===="");
         try {
-            instance.throwNative();
+            instance.nativeThrow();
         } catch (Exception e) {
             System.out.println(""==== catch(Exception) ===="");
             System.out.println(e);
@@ -78,7 +78,7 @@ public class HelloDotnet {
         HelloDotnet.printClass();
     }
 
-    public static Object getRandomObject(int value) {
+    public static Object getObject(int value) {
         switch (value) {
             case 1:
                 return HelloDotnet.getThreadInfo();
