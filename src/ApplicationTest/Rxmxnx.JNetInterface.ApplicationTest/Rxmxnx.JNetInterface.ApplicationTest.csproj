@@ -32,10 +32,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="HelloJni.java"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>-->
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableNestingArrayAutoGeneration" Value="true" Trim="true"/>-->
