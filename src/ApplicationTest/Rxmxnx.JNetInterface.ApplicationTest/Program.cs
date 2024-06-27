@@ -71,8 +71,8 @@ public partial class Program
 			}
 			catch (ThrowableException ex)
 			{
-				Console.WriteLine(ex.Message);
-				Console.WriteLine(ex.Message);
+				Console.WriteLine(ex.WithSafeInvoke(t => t.ToString()));
+				env.PendingException = default;
 			}
 		}
 		finally
