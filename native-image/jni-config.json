@@ -1,0 +1,298 @@
+[
+  {
+    "name": "java.lang.Void",
+    "fields": [
+      { "name": "TYPE" }
+    ]
+  },
+  {
+    "name": "java.lang.Boolean",
+    "fields": [
+      { "name": "TYPE" }
+    ],
+    "methods": [
+      {
+        "name": "booleanValue",
+        "parameterTypes": []
+      }
+    ],
+    "constructors": [
+      {
+        "parameterTypes": [
+          "boolean"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Byte",
+    "fields": [
+      { "name": "TYPE" }
+    ],
+    "constructors": [
+      {
+        "parameterTypes": [
+          "byte"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Character",
+    "fields": [
+      { "name": "TYPE" }
+    ],
+    "methods": [
+      {
+        "name": "charValue",
+        "parameterTypes": []
+      }
+    ],
+    "constructors": [
+      {
+        "parameterTypes": [
+          "char"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Double",
+    "fields": [
+      { "name": "TYPE" }
+    ],
+    "constructors": [
+      {
+        "parameterTypes": [
+          "double"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Float",
+    "fields": [
+      { "name": "TYPE" }
+    ],
+    "constructors": [
+      {
+        "parameterTypes": [
+          "float"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Integer",
+    "fields": [
+      { "name": "TYPE" }
+    ],
+    "constructors": [
+      {
+        "parameterTypes": [
+          "int"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Long",
+    "fields": [
+      { "name": "TYPE" }
+    ],
+    "constructors": [
+      {
+        "parameterTypes": [
+          "long"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Short",
+    "fields": [
+      { "name": "TYPE" }
+    ],
+    "constructors": [
+      {
+        "parameterTypes": [
+          "short"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Number",
+    "methods": [
+      {
+        "name": "byteValue",
+        "parameterTypes": []
+      },
+      {
+        "name": "doubleValue",
+        "parameterTypes": []
+      },
+      {
+        "name": "shortValue",
+        "parameterTypes": []
+      },
+      {
+        "name": "intValue",
+        "parameterTypes": []
+      },
+      {
+        "name": "longValue",
+        "parameterTypes": []
+      },
+      {
+        "name": "floatValue",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "[Z"
+  },
+  {
+    "name": "[B"
+  },
+  {
+    "name": "[C"
+  },
+  {
+    "name": "[D"
+  },
+  {
+    "name": "[F"
+  },
+  {
+    "name": "[I"
+  },
+  {
+    "name": "[J"
+  },
+  {
+    "name": "[S"
+  },
+  {
+    "name": "java.lang.Class",
+    "methods": [
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "isPrimitive",
+        "parameterTypes": []
+      },
+      {
+        "name": "getModifiers",
+        "parameterTypes": []
+      },
+      {
+        "name": "getInterfaces",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Throwable",
+    "methods": [
+      {
+        "name": "getMessage",
+        "parameterTypes": []
+      },
+      {
+        "name": "getStackTrace",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.StackTraceElement",
+    "methods": [
+      {
+        "name": "getClassName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getLineNumber",
+        "parameterTypes": []
+      },
+      {
+        "name": "getFileName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getMethodName",
+        "parameterTypes": []
+      },
+      {
+        "name": "isNativeMethod",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Enum",
+    "methods": [
+      {
+        "name": "name",
+        "parameterTypes": []
+      },
+      {
+        "name": "ordinal",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.nio.Buffer",
+    "methods": [
+      {
+        "name": "isDirect",
+        "parameterTypes": []
+      },
+      {
+        "name": "capacity",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Member",
+    "methods": [
+      {
+        "name": "getDeclaringClass",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Executable",
+    "methods": [
+      {
+        "name": "getParameterTypes",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Method",
+    "methods": [
+      {
+        "name": "getReturnType",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Field",
+    "methods": [
+      {
+        "name": "getType",
+        "parameterTypes": []
+      }
+    ]
+  }
+]
