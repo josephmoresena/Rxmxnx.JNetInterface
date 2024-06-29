@@ -16,7 +16,7 @@ partial class JEnvironment
 		private unsafe void GetStringRegion(JStringObject jString, IntPtr charsPtr, Int32 startIndex, Int32 length)
 		{
 			ref readonly NativeInterface nativeInterface =
-				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringLengthInfo);
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringRegionInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JStringLocalRef stringRef = jniTransaction.Add(jString);
 			nativeInterface.StringRegionFunctions.Utf16.GetStringRegion(this.Reference, stringRef, startIndex, length,
