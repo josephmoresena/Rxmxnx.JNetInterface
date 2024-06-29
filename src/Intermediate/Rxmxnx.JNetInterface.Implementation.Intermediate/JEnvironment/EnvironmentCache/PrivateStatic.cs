@@ -40,10 +40,10 @@ partial class JEnvironment
 			try
 			{
 				cache.Thread.Join();
-				JVirtualMachine.RemoveEnvironment(cache.VirtualMachine.Reference, cache.Reference);
 			}
 			finally
 			{
+				JVirtualMachine.RemoveEnvironment(cache.VirtualMachine.Reference, cache.Reference);
 				cache._cancellation.Dispose();
 			}
 		}

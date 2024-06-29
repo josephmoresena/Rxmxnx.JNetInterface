@@ -138,7 +138,7 @@ public sealed class JErrorObjectTests
 
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JErrorObject>(Arg.Any<JReferenceObject>());
-		Assert.Equal(jGlobal, exception.Global);
+		Assert.Equal(jGlobal, exception.GlobalThrowable);
 		Assert.Equal(exceptionMessage, exception.Message);
 
 		Assert.True(typeMetadata.IsInstance(jError0));
@@ -193,7 +193,7 @@ public sealed class JErrorObjectTests
 		{
 			ThrowableException exception = Assert.Throws<ThrowableException<JErrorObject>>(() => jError.Throw());
 			Assert.Equal(exceptionMessage, exception.Message);
-			Assert.Equal(jGlobal, exception.Global);
+			Assert.Equal(jGlobal, exception.GlobalThrowable);
 			Assert.Equal(mutableException.Value, exception);
 
 			exception.WithSafeInvoke(t =>

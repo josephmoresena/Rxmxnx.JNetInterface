@@ -148,7 +148,7 @@ public sealed class JRuntimeExceptionObjectTests
 
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JRuntimeExceptionObject>(Arg.Any<JReferenceObject>());
-		Assert.Equal(jGlobal, exception.Global);
+		Assert.Equal(jGlobal, exception.GlobalThrowable);
 		Assert.Equal(exceptionMessage, exception.Message);
 
 		Assert.True(typeMetadata.IsInstance(jRuntimeException0));
@@ -206,7 +206,7 @@ public sealed class JRuntimeExceptionObjectTests
 			ThrowableException exception =
 				Assert.Throws<ThrowableException<JRuntimeExceptionObject>>(() => jRuntimeException.Throw());
 			Assert.Equal(exceptionMessage, exception.Message);
-			Assert.Equal(jGlobal, exception.Global);
+			Assert.Equal(jGlobal, exception.GlobalThrowable);
 			Assert.Equal(mutableException.Value, exception);
 
 			exception.WithSafeInvoke(t =>
