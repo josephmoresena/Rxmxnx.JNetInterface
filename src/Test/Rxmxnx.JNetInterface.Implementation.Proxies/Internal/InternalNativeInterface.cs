@@ -1,7 +1,3 @@
-using Rxmxnx.JNetInterface.Native.Identifiers;
-using Rxmxnx.JNetInterface.Native.Values.Functions;
-using Rxmxnx.JNetInterface.Primitives;
-
 namespace Rxmxnx.JNetInterface.Tests.Internal;
 
 [StructLayout(LayoutKind.Sequential)]
@@ -46,8 +42,8 @@ internal unsafe struct InternalNativeInterface
 #pragma warning disable CS0169
 	private readonly MethodOffset _newObjectOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JObjectLocalRef>
-		NewObject;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>,
+		JObjectLocalRef> NewObject;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef> GetObjectClass;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JBoolean> IsInstanceOf;
 
@@ -56,102 +52,103 @@ internal unsafe struct InternalNativeInterface
 #pragma warning disable CS0169
 	private readonly MethodOffset _callObjectMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JObjectLocalRef>
-		CallObjectMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>,
+		JObjectLocalRef> CallObjectMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callBooleanMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JBoolean>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JBoolean>
 		CallBooleanMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callByteMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JByte>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JByte>
 		CallByteMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callCharMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JChar>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JChar>
 		CallCharMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callShortMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JShort>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JShort>
 		CallShortMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callIntMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JInt> CallIntMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JInt>
+		CallIntMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callLongMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JLong>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JLong>
 		CallLongMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callFloatMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JFloat>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JFloat>
 		CallFloatMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callDoubleMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JDouble>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JDouble>
 		CallDoubleMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callVoidMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, void>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, void>
 		CallVoidMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualObjectMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>,
-		JObjectLocalRef> CallNonVirtualObjectMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+		ReadOnlyValPtr<JValueWrapper>, JObjectLocalRef> CallNonVirtualObjectMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualBooleanMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>,
-		JBoolean> CallNonVirtualBooleanMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+		ReadOnlyValPtr<JValueWrapper>, JBoolean> CallNonVirtualBooleanMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualByteMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>,
-		JByte> CallNonVirtualByteMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+		ReadOnlyValPtr<JValueWrapper>, JByte> CallNonVirtualByteMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualCharMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>,
-		JChar> CallNonVirtualCharMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+		ReadOnlyValPtr<JValueWrapper>, JChar> CallNonVirtualCharMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualShortMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>,
-		JShort > CallNonVirtualShortMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+		ReadOnlyValPtr<JValueWrapper>, JShort > CallNonVirtualShortMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualIntMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JInt
-		> CallNonVirtualIntMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+		ReadOnlyValPtr<JValueWrapper>, JInt > CallNonVirtualIntMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualLongMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>,
-		JLong> CallNonVirtualLongMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+		ReadOnlyValPtr<JValueWrapper>, JLong> CallNonVirtualLongMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualFloatMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>,
-		JFloat > CallNonVirtualFloatMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+		ReadOnlyValPtr<JValueWrapper>, JFloat > CallNonVirtualFloatMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualDoubleMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>,
-		JDouble> CallNonVirtualDoubleMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+		ReadOnlyValPtr<JValueWrapper>, JDouble> CallNonVirtualDoubleMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callNonVirtualVoidMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValue>, void
-		> CallNonVirtualVoidMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId,
+		ReadOnlyValPtr<JValueWrapper>, void > CallNonVirtualVoidMethod;
 
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, ReadOnlyValPtr<Byte>, ReadOnlyValPtr<Byte>, JFieldId>
 		GetFieldId;
@@ -179,52 +176,52 @@ internal unsafe struct InternalNativeInterface
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticObjectMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JObjectLocalRef>
-		CallStaticObjectMethod;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>,
+		JObjectLocalRef> CallStaticObjectMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticBooleanMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JBoolean>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JBoolean>
 		CallStaticBooleanMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticByteMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JByte>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JByte>
 		CallStaticByteMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticCharMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JChar>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JChar>
 		CallStaticCharMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticShortMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JShort>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JShort>
 		CallStaticShortMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticIntMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JInt>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JInt>
 		CallStaticIntMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticLongMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JLong>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JLong>
 		CallStaticLongMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticFloatMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JFloat>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JFloat>
 		CallStaticFloatMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticDoubleMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, JDouble>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JDouble>
 		CallStaticDoubleMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticVoidMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValue>, void>
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, void>
 		CallStaticVoidMethod;
 
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, ReadOnlyValPtr<Byte>, ReadOnlyValPtr<Byte>, JFieldId>
@@ -248,16 +245,16 @@ internal unsafe struct InternalNativeInterface
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JFloat, void> SetStaticFloatField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JDouble, void> SetStaticDoubleField;
 
-	public delegate* unmanaged<JEnvironmentRef, Char*, Int32, JStringLocalRef> NewString;
+	public delegate* unmanaged<JEnvironmentRef, ReadOnlyValPtr<Char>, Int32, JStringLocalRef> NewString;
 	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32> GetStringLength;
 	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ValPtr<JBoolean>, ReadOnlyValPtr<Char>> GetStringChars;
 	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ReadOnlyValPtr<Char>, void> ReleaseStringChars;
 
-	public delegate* unmanaged<JEnvironmentRef, Byte*, JStringLocalRef> NewStringUtf;
+	public delegate* unmanaged<JEnvironmentRef, ReadOnlyValPtr<Byte>, JStringLocalRef> NewStringUtf;
 	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32> GetStringUtfLength;
 	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ValPtr<JBoolean>, ReadOnlyValPtr<Char>>
 		GetStringUtfChars;
-	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ReadOnlyValPtr<Char>, void> ReleaseStringUtfChars;
+	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ReadOnlyValPtr<Byte>, void> ReleaseStringUtfChars;
 
 	public delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, Int32> GetArrayLength;
 
@@ -341,8 +338,8 @@ internal unsafe struct InternalNativeInterface
 	public delegate* unmanaged<JEnvironmentRef, JDoubleArrayLocalRef, Int32, Int32, ReadOnlyValPtr<JDouble>, void>
 		SetDoubleArrayRegion;
 
-	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, ReadOnlyValPtr<NativeMethodValue>, Int32, JResult>
-		RegisterNatives;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, ReadOnlyValPtr<NativeMethodValueWrapper>, Int32, JResult
+		> RegisterNatives;
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JResult> UnregisterNatives;
 
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JResult> MonitorEnter;
@@ -350,31 +347,28 @@ internal unsafe struct InternalNativeInterface
 
 	public delegate* unmanaged<JEnvironmentRef, ValPtr<JVirtualMachineRef>, JResult> GetVirtualMachine;
 
-	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32, Int32, ReadOnlyValPtr<Char>, void>
-		GetStringRegion;
-	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32, Int32, ReadOnlyValPtr<Byte>, void>
-		GetStringUtfRegion;
+	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32, Int32, ValPtr<Char>, void> GetStringRegion;
+	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32, Int32, ValPtr<Byte>, void> GetStringUtfRegion;
 
 	public delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, ValPtr<JBoolean>, ValPtr<Byte>>
 		GetPrimitiveArrayCritical;
 	public delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, ValPtr<Byte>, JReleaseMode, void>
 		ReleasePrimitiveArrayCritical;
 
-	public readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ValPtr<JBoolean>, ReadOnlyValPtr<Char>>
+	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ValPtr<JBoolean>, ReadOnlyValPtr<Char>>
 		GetStringCritical;
-	public readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ReadOnlyValPtr<Char>, void>
-		ReleaseStringCritical;
+	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ReadOnlyValPtr<Char>, void> ReleaseStringCritical;
 
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JWeakRef> NewWeakGlobalRef;
-	public readonly delegate* unmanaged<JEnvironmentRef, JWeakRef, void> DeleteWeakGlobalRef;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JWeakRef> NewWeakGlobalRef;
+	public delegate* unmanaged<JEnvironmentRef, JWeakRef, void> DeleteWeakGlobalRef;
 
-	public readonly delegate* unmanaged<JEnvironmentRef, JBoolean> ExceptionCheck;
+	public delegate* unmanaged<JEnvironmentRef, JBoolean> ExceptionCheck;
 
-	public readonly delegate* unmanaged<JEnvironmentRef, IntPtr, Int64, JObjectLocalRef> NewDirectByteBuffer;
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, IntPtr> GetDirectBufferAddress;
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, Int64> GetDirectBufferCapacity;
+	public delegate* unmanaged<JEnvironmentRef, IntPtr, Int64, JObjectLocalRef> NewDirectByteBuffer;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, IntPtr> GetDirectBufferAddress;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, Int64> GetDirectBufferCapacity;
 
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JReferenceType> GetObjectRefType;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JReferenceType> GetObjectRefType;
 
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JObjectLocalRef> GetModule;
 
