@@ -324,7 +324,8 @@ partial class JEnvironment
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowInfo);
-			nativeInterface.ErrorFunctions.Throw(this.Reference, throwableRef);
+			JResult result = nativeInterface.ErrorFunctions.Throw(this.Reference, throwableRef);
+			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		}
 		/// <summary>
 		/// Clears pending JNI exception.
