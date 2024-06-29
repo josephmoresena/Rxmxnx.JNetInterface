@@ -41,7 +41,7 @@ internal readonly unsafe struct ReferenceFunctionSet
 	public readonly DeleteRefFunction<JObjectLocalRef> DeleteLocalRef;
 	/// <summary>
 	/// Pointer to <c>IsSameObject</c> function.
-	/// Tests whether two references refer to the same Java object.
+	/// Tests whether two references to refer to the same Java object.
 	/// </summary>
 	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JObjectLocalRef, JBoolean> IsSameObject;
 	/// <summary>

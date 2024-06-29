@@ -121,14 +121,14 @@ partial class JEnvironment
 
 			try
 			{
-				ImplementationValidationUtilities.ThrowIfProxy(throwableException.Global);
-				ImplementationValidationUtilities.ThrowIfDefault(throwableException.Global);
+				ImplementationValidationUtilities.ThrowIfProxy(throwableException.GlobalThrowable);
+				ImplementationValidationUtilities.ThrowIfDefault(throwableException.GlobalThrowable);
 				this.SetPendingException(throwableException, throwException);
 			}
 			finally
 			{
 				// Throws current exception in JNI
-				this.Throw(throwableException.Global.As<JThrowableLocalRef>());
+				this.Throw(throwableException.ThrowableRef);
 			}
 		}
 		/// <summary>

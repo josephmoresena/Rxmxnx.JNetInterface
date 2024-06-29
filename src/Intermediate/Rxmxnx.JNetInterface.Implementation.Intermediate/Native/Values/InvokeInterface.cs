@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.Native.Values;
                  Justification = CommonConstants.BinaryStructJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-internal unsafe struct InvokeInterface
+internal readonly unsafe struct InvokeInterface
 {
 	/// <summary>
 	/// Internal reserved entries.
@@ -18,15 +18,15 @@ internal unsafe struct InvokeInterface
 #pragma warning restore CS0169
 
 	/// <inheritdoc cref="JInvokeInterface.DestroyJavaVmPointer"/>
-	public delegate* unmanaged<JVirtualMachineRef, JResult> DestroyVirtualMachine;
+	public readonly delegate* unmanaged<JVirtualMachineRef, JResult> DestroyVirtualMachine;
 	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadPointer"/>
-	public delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, in VirtualMachineArgumentValue, JResult>
-		AttachCurrentThread;
+	public readonly delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, in VirtualMachineArgumentValue, JResult
+		> AttachCurrentThread;
 	/// <inheritdoc cref="JInvokeInterface.DetachCurrentThreadPointer"/>
-	public delegate* unmanaged<JVirtualMachineRef, JResult> DetachCurrentThread;
+	public readonly delegate* unmanaged<JVirtualMachineRef, JResult> DetachCurrentThread;
 	/// <inheritdoc cref="JInvokeInterface.GetEnvPointer"/>
-	public delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, Int32, JResult> GetEnv;
+	public readonly delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, Int32, JResult> GetEnv;
 	/// <inheritdoc cref="JInvokeInterface.AttachCurrentThreadAsDaemonPointer"/>
-	public delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, in VirtualMachineArgumentValue, JResult>
-		AttachCurrentThreadAsDaemon;
+	public readonly delegate* unmanaged<JVirtualMachineRef, out JEnvironmentRef, in VirtualMachineArgumentValue, JResult
+		> AttachCurrentThreadAsDaemon;
 }
