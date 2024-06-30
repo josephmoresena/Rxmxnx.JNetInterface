@@ -21,6 +21,7 @@
         <Using Include="NSubstitute"/>
 
         <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.References"/>
     </ItemGroup>
 
     <ItemGroup>
