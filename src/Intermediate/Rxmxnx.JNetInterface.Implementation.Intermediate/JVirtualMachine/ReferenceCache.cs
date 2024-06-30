@@ -14,7 +14,7 @@ public partial class JVirtualMachine
 
 		/// <inheritdoc/>
 		protected override JVirtualMachine Create(JVirtualMachineRef reference, Boolean isDestroyable)
-			=> !isDestroyable ? new(reference) : new Invoked(reference);
+			=> !isDestroyable ? new JVirtualMachine(reference) : new Invoked(reference);
 		/// <inheritdoc/>
 		protected override void Destroy(JVirtualMachine instance)
 		{
