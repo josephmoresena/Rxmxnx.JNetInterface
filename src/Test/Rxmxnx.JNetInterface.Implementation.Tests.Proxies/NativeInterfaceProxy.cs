@@ -9,7 +9,7 @@ public abstract class NativeInterfaceProxy
 
 	public abstract JClassLocalRef DefineClass(ReadOnlyValPtr<Byte> className, JObjectLocalRef classLoader,
 		IntPtr byteCode, Int32 byteLength);
-	public abstract JClassLocalRef FindClass(ValPtr<Byte> className);
+	public abstract JClassLocalRef FindClass(ReadOnlyValPtr<Byte> className);
 	public abstract JMethodId FromReflectedMethod(JObjectLocalRef executableRef);
 	public abstract JFieldId FromReflectedField(JObjectLocalRef fieldRef);
 	public abstract JObjectLocalRef ToReflectedMethod(JClassLocalRef classRef, JMethodId methodId, JBoolean isStatic);

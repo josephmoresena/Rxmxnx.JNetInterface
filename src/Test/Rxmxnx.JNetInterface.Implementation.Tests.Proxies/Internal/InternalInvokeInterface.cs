@@ -13,10 +13,10 @@ internal unsafe struct InternalInvokeInterface
 #pragma warning restore CS0169
 
 	public delegate* unmanaged<JVirtualMachineRef, JResult> DestroyVirtualMachine;
-	public delegate* unmanaged<JVirtualMachineRef, ValPtr<JEnvironmentRef>,
-		ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>, JResult> AttachCurrentThread;
+	public delegate* unmanaged<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValueWrapper*, JResult>
+		AttachCurrentThread;
 	public delegate* unmanaged<JVirtualMachineRef, JResult> DetachCurrentThread;
-	public delegate* unmanaged<JVirtualMachineRef, ValPtr<JEnvironmentRef>, Int32, JResult> GetEnv;
-	public delegate* unmanaged<JVirtualMachineRef, ValPtr<JEnvironmentRef>,
-		ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>, JResult> AttachCurrentThreadAsDaemon;
+	public delegate* unmanaged<JVirtualMachineRef, JEnvironmentRef*, Int32, JResult> GetEnv;
+	public delegate* unmanaged<JVirtualMachineRef, JEnvironmentRef*, VirtualMachineArgumentValueWrapper*, JResult>
+		AttachCurrentThreadAsDaemon;
 }
