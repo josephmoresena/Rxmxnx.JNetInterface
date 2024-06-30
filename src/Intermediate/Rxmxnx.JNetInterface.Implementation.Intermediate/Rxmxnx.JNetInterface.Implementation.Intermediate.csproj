@@ -61,7 +61,10 @@
 
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>Rxmxnx.JNetInterface.Implementation.Proxies</_Parameter1>
+            <_Parameter1>Rxmxnx.JNetInterface.Implementation.Tests.Proxies</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>Rxmxnx.JNetInterface.Implementation.Tests</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
 
