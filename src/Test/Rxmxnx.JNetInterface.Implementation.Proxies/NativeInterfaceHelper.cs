@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
+[ExcludeFromCodeCoverage]
 public static partial class NativeInterfaceHelper
 {
 	public static JEnvironmentRef InitializeProxy(NativeInterfaceProxy proxy)

@@ -1,5 +1,8 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
+[ExcludeFromCodeCoverage]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
+                 Justification = CommonConstants.AbstractProxyJustification)]
 public abstract class InvokeInterfaceProxy
 {
 	public abstract JResult DestroyVirtualMachine();

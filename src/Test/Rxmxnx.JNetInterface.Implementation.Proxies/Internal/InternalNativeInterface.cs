@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Tests.Internal;
 
+[ExcludeFromCodeCoverage]
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]

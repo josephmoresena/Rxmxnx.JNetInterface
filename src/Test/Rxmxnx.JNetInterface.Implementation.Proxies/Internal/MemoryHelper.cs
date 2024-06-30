@@ -1,6 +1,7 @@
-namespace Rxmxnx.JNetInterface.Tests;
+namespace Rxmxnx.JNetInterface.Tests.Internal;
 
-public sealed unsafe class MemoryHelper
+[ExcludeFromCodeCoverage]
+internal sealed unsafe class MemoryHelper
 {
 	private readonly IntPtr _value;
 	private readonly IntPtr[] _values;

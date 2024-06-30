@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
+[ExcludeFromCodeCoverage]
 public static partial class InvokeInterfaceHelper
 {
 	public static JVirtualMachineRef InitializeProxy(InvokeInterfaceProxy proxy)
