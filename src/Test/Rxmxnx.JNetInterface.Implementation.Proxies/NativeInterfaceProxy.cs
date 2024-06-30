@@ -157,8 +157,8 @@ public abstract class NativeInterfaceProxy
 
 	public abstract JObjectArrayLocalRef NewObjectArray(Int32 arrayLength, JClassLocalRef elementClass,
 		JObjectLocalRef initialElement);
-	public abstract JObjectLocalRef GetObjectArrayElement(JArrayLocalRef arrayRef, Int32 index);
-	public abstract void GetObjectArrayElement(JArrayLocalRef arrayRef, Int32 index, JObjectLocalRef value);
+	public abstract JObjectLocalRef GetObjectArrayElement(JObjectArrayLocalRef arrayRef, Int32 index);
+	public abstract void SetObjectArrayElement(JObjectArrayLocalRef arrayRef, Int32 index, JObjectLocalRef value);
 
 	public abstract JBooleanArrayLocalRef NewBooleanArray(Int32 arrayLength);
 	public abstract JByteArrayLocalRef NewByteArray(Int32 arrayLength);
@@ -180,36 +180,35 @@ public abstract class NativeInterfaceProxy
 
 	public abstract void ReleaseBooleanArrayElements(JBooleanArrayLocalRef arrayRef, ReadOnlyValPtr<JBoolean> elements,
 		JReleaseMode mode);
-	public abstract void ReleaseByteArrayElements(JBooleanArrayLocalRef arrayRef, ReadOnlyValPtr<JByte> elements,
+	public abstract void ReleaseByteArrayElements(JByteArrayLocalRef arrayRef, ReadOnlyValPtr<JByte> elements,
 		JReleaseMode mode);
-	public abstract void ReleaseCharArrayElements(JBooleanArrayLocalRef arrayRef, ReadOnlyValPtr<JChar> elements,
+	public abstract void ReleaseCharArrayElements(JCharArrayLocalRef arrayRef, ReadOnlyValPtr<JChar> elements,
 		JReleaseMode mode);
-	public abstract void ReleaseShortArrayElements(JBooleanArrayLocalRef arrayRef, ReadOnlyValPtr<JShort> elements,
+	public abstract void ReleaseShortArrayElements(JShortArrayLocalRef arrayRef, ReadOnlyValPtr<JShort> elements,
 		JReleaseMode mode);
-	public abstract void ReleaseIntArrayElements(JBooleanArrayLocalRef arrayRef, ReadOnlyValPtr<JInt> elements,
+	public abstract void ReleaseIntArrayElements(JIntArrayLocalRef arrayRef, ReadOnlyValPtr<JInt> elements,
 		JReleaseMode mode);
-	public abstract void ReleaseLongArrayElements(JBooleanArrayLocalRef arrayRef, ReadOnlyValPtr<JLong> elements,
+	public abstract void ReleaseLongArrayElements(JLongArrayLocalRef arrayRef, ReadOnlyValPtr<JLong> elements,
 		JReleaseMode mode);
-	public abstract void ReleaseFloatArrayElements(JBooleanArrayLocalRef arrayRef, ReadOnlyValPtr<JFloat> elements,
+	public abstract void ReleaseFloatArrayElements(JFloatArrayLocalRef arrayRef, ReadOnlyValPtr<JFloat> elements,
 		JReleaseMode mode);
-	public abstract void ReleaseDoubleArrayElements(JBooleanArrayLocalRef arrayRef, ReadOnlyValPtr<JDouble> elements,
+	public abstract void ReleaseDoubleArrayElements(JDoubleArrayLocalRef arrayRef, ReadOnlyValPtr<JDouble> elements,
 		JReleaseMode mode);
 
 	public abstract void GetBooleanArrayRegion(JBooleanArrayLocalRef arrayRef, Int32 start, Int32 count,
 		ValPtr<JBoolean> buffer);
-	public abstract void GetByteArrayRegion(JBooleanArrayLocalRef arrayRef, Int32 start, Int32 count,
+	public abstract void GetByteArrayRegion(JByteArrayLocalRef arrayRef, Int32 start, Int32 count,
 		ValPtr<JByte> buffer);
-	public abstract void GetCharArrayRegion(JBooleanArrayLocalRef arrayRef, Int32 start, Int32 count,
+	public abstract void GetCharArrayRegion(JCharArrayLocalRef arrayRef, Int32 start, Int32 count,
 		ValPtr<JChar> buffer);
-	public abstract void GetShortArrayRegion(JBooleanArrayLocalRef arrayRef, Int32 start, Int32 count,
+	public abstract void GetShortArrayRegion(JShortArrayLocalRef arrayRef, Int32 start, Int32 count,
 		ValPtr<JShort> buffer);
-	public abstract void GetIntArrayRegion(JBooleanArrayLocalRef arrayRef, Int32 start, Int32 count,
-		ValPtr<JInt> buffer);
-	public abstract void GetLongArrayRegion(JBooleanArrayLocalRef arrayRef, Int32 start, Int32 count,
+	public abstract void GetIntArrayRegion(JIntArrayLocalRef arrayRef, Int32 start, Int32 count, ValPtr<JInt> buffer);
+	public abstract void GetLongArrayRegion(JLongArrayLocalRef arrayRef, Int32 start, Int32 count,
 		ValPtr<JLong> buffer);
-	public abstract void GetFloatArrayRegion(JBooleanArrayLocalRef arrayRef, Int32 start, Int32 count,
+	public abstract void GetFloatArrayRegion(JFloatArrayLocalRef arrayRef, Int32 start, Int32 count,
 		ValPtr<JFloat> buffer);
-	public abstract void GetDoubleArrayRegion(JBooleanArrayLocalRef arrayRef, Int32 start, Int32 count,
+	public abstract void GetDoubleArrayRegion(JDoubleArrayLocalRef arrayRef, Int32 start, Int32 count,
 		ValPtr<JDouble> buffer);
 
 	public abstract JResult RegisterNatives(JClassLocalRef classRef,
@@ -229,10 +228,10 @@ public abstract class NativeInterfaceProxy
 		JReleaseMode mode);
 
 	public abstract ReadOnlyValPtr<Char> GetStringCritical(JStringLocalRef stringRef, ValPtr<JBoolean> isCopy);
-	public abstract ReadOnlyValPtr<Char> ReleaseStringCritical(JStringLocalRef stringRef, ValPtr<Char> critical);
+	public abstract void ReleaseStringCritical(JStringLocalRef stringRef, ReadOnlyValPtr<Char> critical);
 
 	public abstract JWeakRef NewWeakGlobalRef(JObjectLocalRef localRef);
-	public abstract void DeleteWeakGlobalRef(JGlobalRef weakRef);
+	public abstract void DeleteWeakGlobalRef(JWeakRef weakRef);
 
 	public abstract JBoolean ExceptionCheck();
 

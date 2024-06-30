@@ -167,7 +167,7 @@ internal unsafe struct InternalNativeInterface
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JChar, void> SetCharField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JShort, void> SetShortField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JInt, void> SetIntField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JLong> SetLongField;
+	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JLong, void> SetLongField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JFloat, void> SetFloatField;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JDouble, void> SetDoubleField;
 
@@ -176,74 +176,74 @@ internal unsafe struct InternalNativeInterface
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticObjectMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>,
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>,
 		JObjectLocalRef> CallStaticObjectMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticBooleanMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JBoolean>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JBoolean>
 		CallStaticBooleanMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticByteMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JByte>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JByte>
 		CallStaticByteMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticCharMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JChar>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JChar>
 		CallStaticCharMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticShortMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JShort>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JShort>
 		CallStaticShortMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticIntMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JInt>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JInt>
 		CallStaticIntMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticLongMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JLong>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JLong>
 		CallStaticLongMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticFloatMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JFloat>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JFloat>
 		CallStaticFloatMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticDoubleMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JDouble>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, JDouble>
 		CallStaticDoubleMethod;
 #pragma warning disable CS0169
 	private readonly MethodOffset _callStaticVoidMethodOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, void>
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, ReadOnlyValPtr<JValueWrapper>, void>
 		CallStaticVoidMethod;
 
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, ReadOnlyValPtr<Byte>, ReadOnlyValPtr<Byte>, JFieldId>
 		GetStaticFieldId;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JObjectLocalRef> GetStaticObjectField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JBoolean> GetStaticBooleanField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JByte> GetStaticByteField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JChar> GetStaticCharField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JShort> GetStaticShortField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JInt> GetStaticIntField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JLong> GetStaticLongField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JFloat> GetStaticFloatField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JDouble> GetStaticDoubleField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JObjectLocalRef, void> SetStaticObjectField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JBoolean, void> SetStaticBooleanField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JByte, void> SetStaticByteField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JChar, void> SetStaticCharField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JShort, void> SetStaticShortField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JInt, void> SetStaticIntField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JLong> SetStaticLongField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JFloat, void> SetStaticFloatField;
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JFieldId, JDouble, void> SetStaticDoubleField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JObjectLocalRef> GetStaticObjectField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JBoolean> GetStaticBooleanField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JByte> GetStaticByteField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JChar> GetStaticCharField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JShort> GetStaticShortField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JInt> GetStaticIntField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JLong> GetStaticLongField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JFloat> GetStaticFloatField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JDouble> GetStaticDoubleField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JObjectLocalRef, void> SetStaticObjectField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JBoolean, void> SetStaticBooleanField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JByte, void> SetStaticByteField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JChar, void> SetStaticCharField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JShort, void> SetStaticShortField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JInt, void> SetStaticIntField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JLong, void> SetStaticLongField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JFloat, void> SetStaticFloatField;
+	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JFieldId, JDouble, void> SetStaticDoubleField;
 
 	public delegate* unmanaged<JEnvironmentRef, ReadOnlyValPtr<Char>, Int32, JStringLocalRef> NewString;
 	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32> GetStringLength;
@@ -252,7 +252,7 @@ internal unsafe struct InternalNativeInterface
 
 	public delegate* unmanaged<JEnvironmentRef, ReadOnlyValPtr<Byte>, JStringLocalRef> NewStringUtf;
 	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32> GetStringUtfLength;
-	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ValPtr<JBoolean>, ReadOnlyValPtr<Char>>
+	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ValPtr<JBoolean>, ReadOnlyValPtr<Byte>>
 		GetStringUtfChars;
 	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, ReadOnlyValPtr<Byte>, void> ReleaseStringUtfChars;
 
