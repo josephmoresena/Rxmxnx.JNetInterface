@@ -16,7 +16,7 @@ public abstract class InvokeInterfaceProxy
 	public JGlobalRef LongGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef ShortGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 
-	public JVirtualMachineRef Reference { get; internal set; }
+	public JVirtualMachineRef Reference { get; private set; }
 
 	public abstract JResult DestroyVirtualMachine();
 	public abstract JResult AttachCurrentThread(ValPtr<JEnvironmentRef> envRef,
@@ -25,4 +25,11 @@ public abstract class InvokeInterfaceProxy
 	public abstract JResult GetEnv(ValPtr<JEnvironmentRef> envRef, Int32 version);
 	public abstract JResult AttachCurrentThreadAsDaemon(ValPtr<JEnvironmentRef> envRef,
 		ReadOnlyValPtr<VirtualMachineArgumentValueWrapper> arg);
+
+	public static InvokeInterfaceProxy CreateProxy()
+	{
+		InvokeInterfaceProxy? proxy = Substitute.For<InvokeInterfaceProxy>();
+		proxy.Reference = ReferenceHelper.InitializeProxy(proxy);
+		return proxy;
+	}
 }

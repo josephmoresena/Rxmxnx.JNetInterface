@@ -15,6 +15,7 @@
 
     <ItemGroup>
         <Using Include="AutoFixture"/>
+        <Using Include="NSubstitute"/>
         <Using Include="System.Buffers"/>
         <Using Include="System.Collections.Concurrent"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>

@@ -792,7 +792,14 @@ internal unsafe partial class ReferenceHelper
 
 	[UnmanagedCallersOnly]
 	private static JResult GetVirtualMachine(JEnvironmentRef envRef, JVirtualMachineRef* vmRef)
-		=> ReferenceHelper.nativeProxies[envRef].GetVirtualMachine((ValPtr<JVirtualMachineRef>)(IntPtr)vmRef);
+	{
+		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		if (proxy is not { UseDefaultClassRef: true, VirtualMachine: not null, })
+			return proxy.GetVirtualMachine((ValPtr<JVirtualMachineRef>)(IntPtr)vmRef);
+
+		Unsafe.AsRef<JVirtualMachineRef>(vmRef) = proxy.VirtualMachine.Reference;
+		return JResult.Ok;
+	}
 
 	[UnmanagedCallersOnly]
 	private static void GetStringRegion(JEnvironmentRef envRef, JStringLocalRef stringRef, Int32 start, Int32 count,

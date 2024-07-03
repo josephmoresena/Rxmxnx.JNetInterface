@@ -4,9 +4,11 @@ namespace Rxmxnx.JNetInterface.Tests;
 public abstract class NativeInterfaceProxy
 {
 	public InvokeInterfaceProxy? VirtualMachine { get; set; }
-	public JEnvironmentRef Reference { get; internal set; }
+	public JEnvironmentRef Reference { get; private set; }
 
 	public Boolean UseDefaultClassRef { get; set; } = true;
+	public Boolean UseVirtualMachineRef { get; set; } = true;
+
 	public JClassLocalRef ClassLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef ThrowableLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef StackTraceObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
@@ -42,7 +44,7 @@ public abstract class NativeInterfaceProxy
 	{
 		if (ReferenceHelper.IsClassName<JClassObject>(className))
 			return this.ClassLocalRef;
-		if (ReferenceHelper.IsClassName<JThreadObject>(className))
+		if (ReferenceHelper.IsClassName<JThrowableObject>(className))
 			return this.ThrowableLocalRef;
 		if (ReferenceHelper.IsClassName<JStackTraceElementObject>(className))
 			return this.StackTraceObjectLocalRef;
@@ -385,4 +387,24 @@ public abstract class NativeInterfaceProxy
 	public abstract JObjectLocalRef GetModule(JClassLocalRef classRef);
 
 	public abstract JBoolean IsVirtualThread(JObjectLocalRef threadRef);
+
+	public static NativeInterfaceProxy CreateProxy(InvokeInterfaceProxy vmProxy)
+	{
+		NativeInterfaceProxy? proxy = Substitute.For<NativeInterfaceProxy>();
+		proxy.Reference = ReferenceHelper.InitializeProxy(proxy);
+		proxy.VirtualMachine = vmProxy;
+		proxy.GetVersion().Returns(IVirtualMachine.MinimalVersion);
+		return proxy;
+	}
+	public static NativeInterfaceProxy CreateProxy(Boolean attachThread = true)
+	{
+		NativeInterfaceProxy? proxy = Substitute.For<NativeInterfaceProxy>();
+		proxy.VirtualMachine = InvokeInterfaceProxy.CreateProxy();
+		proxy.Reference = ReferenceHelper.InitializeProxy(proxy);
+		if (attachThread)
+			proxy.VirtualMachine.When(v => v.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()))
+			     .Do(c => ((ValPtr<JEnvironmentRef>)c[0]).Reference = proxy.Reference);
+		proxy.GetVersion().Returns(IVirtualMachine.MinimalVersion);
+		return proxy;
+	}
 }
