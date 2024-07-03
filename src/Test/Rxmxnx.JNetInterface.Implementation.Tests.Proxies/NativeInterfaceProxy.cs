@@ -1,10 +1,148 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
-[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
-                 Justification = CommonConstants.AbstractProxyJustification)]
 public abstract class NativeInterfaceProxy
 {
+	public InvokeInterfaceProxy? VirtualMachine { get; set; }
+	public JEnvironmentRef Reference { get; internal set; }
+
+	public Boolean UseDefaultClassRef { get; set; } = true;
+	public JClassLocalRef ClassLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef ThrowableLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef StackTraceObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef VoidObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef BooleanObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef ByteObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef CharacterObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef DoubleObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef FloatObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef IntegerObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef LongObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef ShortObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef VoidPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef BooleanPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef BytePrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef CharPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef DoublePrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef FloatPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef IntPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef LongPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef ShortPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JFieldId VoidTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
+	public JFieldId BooleanTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
+	public JFieldId ByteTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
+	public JFieldId CharacterTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
+	public JFieldId DoubleTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
+	public JFieldId FloatTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
+	public JFieldId IntegerTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
+	public JFieldId LongTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
+	public JFieldId ShortTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
+
+	public unsafe JClassLocalRef? GetMainClassLocalRef(Byte* className)
+	{
+		if (ReferenceHelper.IsClassName<JClassObject>(className))
+			return this.ClassLocalRef;
+		if (ReferenceHelper.IsClassName<JThreadObject>(className))
+			return this.ThrowableLocalRef;
+		if (ReferenceHelper.IsClassName<JStackTraceElementObject>(className))
+			return this.StackTraceObjectLocalRef;
+		if (ReferenceHelper.IsClassName<JVoidObject>(className))
+			return this.VoidObjectLocalRef;
+		if (ReferenceHelper.IsClassName<JBooleanObject>(className))
+			return this.BooleanObjectLocalRef;
+		if (ReferenceHelper.IsClassName<JByteObject>(className))
+			return this.ByteObjectLocalRef;
+		if (ReferenceHelper.IsClassName<JCharacterObject>(className))
+			return this.CharacterObjectLocalRef;
+		if (ReferenceHelper.IsClassName<JDoubleObject>(className))
+			return this.DoubleObjectLocalRef;
+		if (ReferenceHelper.IsClassName<JFloatObject>(className))
+			return this.FloatObjectLocalRef;
+		if (ReferenceHelper.IsClassName<JIntegerObject>(className))
+			return this.IntegerObjectLocalRef;
+		if (ReferenceHelper.IsClassName<JLongObject>(className))
+			return this.LongObjectLocalRef;
+		if (ReferenceHelper.IsClassName<JShortObject>(className))
+			return this.ShortObjectLocalRef;
+		return null;
+	}
+	public JGlobalRef? GetMainClassGlobalRef(JClassLocalRef classRef)
+	{
+		if (this.VirtualMachine is null) return default;
+		if (classRef == this.ClassLocalRef)
+			return this.VirtualMachine.ClassGlobalRef;
+		if (classRef == this.ThrowableLocalRef)
+			return this.VirtualMachine.ThrowableGlobalRef;
+		if (classRef == this.StackTraceObjectLocalRef)
+			return this.VirtualMachine.StackTraceElementGlobalRef;
+		if (classRef == this.StackTraceObjectLocalRef)
+			return this.VirtualMachine.StackTraceElementGlobalRef;
+		if (classRef == this.VoidPrimitiveClassRef)
+			return this.VirtualMachine.VoidGlobalRef;
+		if (classRef == this.BooleanPrimitiveClassRef)
+			return this.VirtualMachine.BooleanGlobalRef;
+		if (classRef == this.BytePrimitiveClassRef)
+			return this.VirtualMachine.ByteGlobalRef;
+		if (classRef == this.CharPrimitiveClassRef)
+			return this.VirtualMachine.CharGlobalRef;
+		if (classRef == this.DoublePrimitiveClassRef)
+			return this.VirtualMachine.DoubleGlobalRef;
+		if (classRef == this.FloatPrimitiveClassRef)
+			return this.VirtualMachine.FloatGlobalRef;
+		if (classRef == this.IntPrimitiveClassRef)
+			return this.VirtualMachine.IntGlobalRef;
+		if (classRef == this.LongPrimitiveClassRef)
+			return this.VirtualMachine.LongGlobalRef;
+		if (classRef == this.ShortPrimitiveClassRef)
+			return this.VirtualMachine.ShortGlobalRef;
+		return null;
+	}
+	public unsafe JFieldId? GetPrimitiveWrapperClassTypeField(JClassLocalRef classRef, Byte* fieldName)
+	{
+		if (!ReferenceHelper.IsTypeField(fieldName)) return default;
+		if (classRef == this.VoidObjectLocalRef)
+			return this.VoidTypeFieldId;
+		if (classRef == this.BooleanObjectLocalRef)
+			return this.BooleanTypeFieldId;
+		if (classRef == this.ByteObjectLocalRef)
+			return this.ByteTypeFieldId;
+		if (classRef == this.CharacterObjectLocalRef)
+			return this.CharacterTypeFieldId;
+		if (classRef == this.DoubleObjectLocalRef)
+			return this.DoubleTypeFieldId;
+		if (classRef == this.FloatObjectLocalRef)
+			return this.FloatTypeFieldId;
+		if (classRef == this.IntegerObjectLocalRef)
+			return this.IntegerTypeFieldId;
+		if (classRef == this.LongObjectLocalRef)
+			return this.LongTypeFieldId;
+		if (classRef == this.ShortObjectLocalRef)
+			return this.ShortTypeFieldId;
+		return null;
+	}
+	public JClassLocalRef? GetPrimitiveClass(JClassLocalRef classRef, JFieldId fieldId)
+	{
+		if (classRef == this.VoidObjectLocalRef && fieldId == this.VoidTypeFieldId)
+			return this.VoidPrimitiveClassRef;
+		if (classRef == this.BooleanObjectLocalRef && fieldId == this.BooleanTypeFieldId)
+			return this.BooleanPrimitiveClassRef;
+		if (classRef == this.ByteObjectLocalRef && fieldId == this.ByteTypeFieldId)
+			return this.BytePrimitiveClassRef;
+		if (classRef == this.CharacterObjectLocalRef && fieldId == this.CharacterTypeFieldId)
+			return this.CharPrimitiveClassRef;
+		if (classRef == this.DoubleObjectLocalRef && fieldId == this.DoubleTypeFieldId)
+			return this.DoublePrimitiveClassRef;
+		if (classRef == this.FloatObjectLocalRef && fieldId == this.FloatTypeFieldId)
+			return this.FloatPrimitiveClassRef;
+		if (classRef == this.IntegerObjectLocalRef && fieldId == this.IntegerTypeFieldId)
+			return this.IntPrimitiveClassRef;
+		if (classRef == this.LongObjectLocalRef && fieldId == this.LongTypeFieldId)
+			return this.LongPrimitiveClassRef;
+		if (classRef == this.ShortObjectLocalRef && fieldId == this.ShortTypeFieldId)
+			return this.ShortPrimitiveClassRef;
+		return null;
+	}
+
 	public abstract Int32 GetVersion();
 
 	public abstract JClassLocalRef DefineClass(ReadOnlyValPtr<Byte> className, JObjectLocalRef classLoader,
