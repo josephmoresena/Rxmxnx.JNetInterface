@@ -40,6 +40,8 @@ public abstract class NativeInterfaceProxy
 	public JFieldId LongTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
 	public JFieldId ShortTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
 
+	~NativeInterfaceProxy() { ReferenceHelper.FinalizeProxy(this.Reference); }
+
 	public unsafe JClassLocalRef? GetMainClassLocalRef(Byte* className)
 	{
 		if (ReferenceHelper.IsClassName<JClassObject>(className))

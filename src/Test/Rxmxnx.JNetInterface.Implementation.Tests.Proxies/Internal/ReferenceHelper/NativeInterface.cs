@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Tests.Internal;
 
+[ExcludeFromCodeCoverage]
 internal unsafe partial class ReferenceHelper
 {
 	private static readonly InternalNativeInterface[] nativeInterface =
@@ -170,8 +171,10 @@ internal unsafe partial class ReferenceHelper
 		},
 	];
 	private static readonly ConcurrentDictionary<JEnvironmentRef, NativeInterfaceProxy> nativeProxies = new();
+	private static readonly GCHandle
+		nativeHandle = GCHandle.Alloc(ReferenceHelper.nativeInterface, GCHandleType.Pinned);
 	private static readonly MemoryHelper nativeHelper =
-		new((IntPtr)ReferenceHelper.nativeInterface.AsMemory().Pin().Pointer, Int16.MaxValue);
+		new(ReferenceHelper.nativeHandle.AddrOfPinnedObject(), Int16.MaxValue);
 
 	[UnmanagedCallersOnly]
 	private static Int32 GetVersion(JEnvironmentRef envRef) => ReferenceHelper.nativeProxies[envRef].GetVersion();
@@ -277,47 +280,38 @@ internal unsafe partial class ReferenceHelper
 		Byte* methodDescriptor)
 		=> ReferenceHelper.nativeProxies[envRef].GetMethodId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)methodName,
 		                                                     (ReadOnlyValPtr<Byte>)(IntPtr)methodDescriptor);
-	[UnmanagedCallersOnly]
 	private static JObjectLocalRef CallObjectMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallObjectMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JBoolean CallBooleanMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallBooleanMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JByte CallByteMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallByteMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JChar CallCharMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallCharMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JShort CallShortMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallShortMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JInt CallIntMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallIntMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JLong CallLongMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallLongMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JFloat CallFloatMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallFloatMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JDouble CallDoubleMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
@@ -327,55 +321,46 @@ internal unsafe partial class ReferenceHelper
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallVoidMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JObjectLocalRef CallNonVirtualObjectMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallNonVirtualObjectMethod(localRef, classRef, methodId,
 		                                              (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JBoolean CallNonVirtualBooleanMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallNonVirtualBooleanMethod(localRef, classRef, methodId,
 		                                               (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JByte CallNonVirtualByteMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallNonVirtualByteMethod(localRef, classRef, methodId,
 		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JChar CallNonVirtualCharMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallNonVirtualCharMethod(localRef, classRef, methodId,
 		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JShort CallNonVirtualShortMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallNonVirtualShortMethod(localRef, classRef, methodId,
 		                                             (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JInt CallNonVirtualIntMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallNonVirtualIntMethod(localRef, classRef, methodId,
 		                                           (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JLong CallNonVirtualLongMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallNonVirtualLongMethod(localRef, classRef, methodId,
 		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JFloat CallNonVirtualFloatMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallNonVirtualFloatMethod(localRef, classRef, methodId,
 		                                             (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JDouble CallNonVirtualDoubleMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
@@ -393,60 +378,42 @@ internal unsafe partial class ReferenceHelper
 		Byte* fieldDescriptor)
 		=> ReferenceHelper.nativeProxies[envRef].GetFieldId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)fieldName,
 		                                                    (ReadOnlyValPtr<Byte>)(IntPtr)fieldDescriptor);
-	[UnmanagedCallersOnly]
 	private static JObjectLocalRef GetObjectField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetObjectField(localRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JBoolean GetBooleanField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetBooleanField(localRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JByte GetByteField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetByteField(localRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JChar GetCharField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetCharField(localRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JShort GetShortField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetShortField(localRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JInt GetIntField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetIntField(localRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JLong GetLongField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetLongField(localRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JFloat GetFloatField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetFloatField(localRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JDouble GetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetDoubleField(localRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static void SetObjectField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId,
 		JObjectLocalRef value)
 		=> ReferenceHelper.nativeProxies[envRef].SetObjectField(localRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetBooleanField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId,
 		JBoolean value)
 		=> ReferenceHelper.nativeProxies[envRef].SetBooleanField(localRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetByteField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JByte value)
 		=> ReferenceHelper.nativeProxies[envRef].SetByteField(localRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetCharField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JChar value)
 		=> ReferenceHelper.nativeProxies[envRef].SetCharField(localRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetShortField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JShort value)
 		=> ReferenceHelper.nativeProxies[envRef].SetShortField(localRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetIntField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JInt value)
 		=> ReferenceHelper.nativeProxies[envRef].SetIntField(localRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetLongField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JLong value)
 		=> ReferenceHelper.nativeProxies[envRef].SetLongField(localRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetFloatField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JFloat value)
 		=> ReferenceHelper.nativeProxies[envRef].SetFloatField(localRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId,
 		JDouble value)
 		=> ReferenceHelper.nativeProxies[envRef].SetDoubleField(localRef, fieldId, value);
@@ -456,47 +423,38 @@ internal unsafe partial class ReferenceHelper
 		Byte* methodDescriptor)
 		=> ReferenceHelper.nativeProxies[envRef].GetStaticMethodId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)methodName,
 		                                                           (ReadOnlyValPtr<Byte>)(IntPtr)methodDescriptor);
-	[UnmanagedCallersOnly]
 	private static JObjectLocalRef CallStaticObjectMethod(JEnvironmentRef envRef, JClassLocalRef classRef,
 		JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallStaticObjectMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JBoolean CallStaticBooleanMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallStaticBooleanMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JByte CallStaticByteMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallStaticByteMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JChar CallStaticCharMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallStaticCharMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JShort CallStaticShortMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallStaticShortMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JInt CallStaticIntMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallStaticIntMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JLong CallStaticLongMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallStaticLongMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JFloat CallStaticFloatMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
 		                  .CallStaticFloatMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
-	[UnmanagedCallersOnly]
 	private static JDouble CallStaticDoubleMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
@@ -518,7 +476,6 @@ internal unsafe partial class ReferenceHelper
 		return proxy.GetPrimitiveWrapperClassTypeField(classRef, fieldName) ?? proxy.GetStaticFieldId(
 			classRef, (ReadOnlyValPtr<Byte>)(IntPtr)fieldName, (ReadOnlyValPtr<Byte>)(IntPtr)fieldDescriptor);
 	}
-	[UnmanagedCallersOnly]
 	private static JObjectLocalRef GetStaticObjectField(JEnvironmentRef envRef, JClassLocalRef classRef,
 		JFieldId fieldId)
 	{
@@ -526,62 +483,45 @@ internal unsafe partial class ReferenceHelper
 		if (!proxy.UseDefaultClassRef) return proxy.GetStaticObjectField(classRef, fieldId);
 		return proxy.GetPrimitiveClass(classRef, fieldId)?.Value ?? proxy.GetStaticObjectField(classRef, fieldId);
 	}
-	[UnmanagedCallersOnly]
 	private static JBoolean GetStaticBooleanField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetStaticBooleanField(classRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JByte GetStaticByteField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetStaticByteField(classRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JChar GetStaticCharField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetStaticCharField(classRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JShort GetStaticShortField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetStaticShortField(classRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JInt GetStaticIntField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetStaticIntField(classRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JLong GetStaticLongField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetStaticLongField(classRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JFloat GetStaticFloatField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetStaticFloatField(classRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static JDouble GetStaticDoubleField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
 		=> ReferenceHelper.nativeProxies[envRef].GetStaticDoubleField(classRef, fieldId);
-	[UnmanagedCallersOnly]
 	private static void SetStaticObjectField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JObjectLocalRef value)
 		=> ReferenceHelper.nativeProxies[envRef].SetStaticObjectField(classRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetStaticBooleanField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JBoolean value)
 		=> ReferenceHelper.nativeProxies[envRef].SetStaticBooleanField(classRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetStaticByteField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JByte value)
 		=> ReferenceHelper.nativeProxies[envRef].SetStaticByteField(classRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetStaticCharField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JChar value)
 		=> ReferenceHelper.nativeProxies[envRef].SetStaticCharField(classRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetStaticShortField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JShort value)
 		=> ReferenceHelper.nativeProxies[envRef].SetStaticShortField(classRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetStaticIntField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId, JInt value)
 		=> ReferenceHelper.nativeProxies[envRef].SetStaticIntField(classRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetStaticLongField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JLong value)
 		=> ReferenceHelper.nativeProxies[envRef].SetStaticLongField(classRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetStaticFloatField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JFloat value)
 		=> ReferenceHelper.nativeProxies[envRef].SetStaticFloatField(classRef, fieldId, value);
-	[UnmanagedCallersOnly]
 	private static void SetStaticDoubleField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JDouble value)
 		=> ReferenceHelper.nativeProxies[envRef].SetStaticDoubleField(classRef, fieldId, value);

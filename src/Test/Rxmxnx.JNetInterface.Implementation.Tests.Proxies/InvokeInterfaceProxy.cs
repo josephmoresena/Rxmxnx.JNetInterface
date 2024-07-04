@@ -18,6 +18,8 @@ public abstract class InvokeInterfaceProxy
 
 	public JVirtualMachineRef Reference { get; private set; }
 
+	~InvokeInterfaceProxy() { ReferenceHelper.FinalizeProxy(this.Reference); }
+
 	public abstract JResult DestroyVirtualMachine();
 	public abstract JResult AttachCurrentThread(ValPtr<JEnvironmentRef> envRef,
 		ReadOnlyValPtr<VirtualMachineArgumentValueWrapper> arg);

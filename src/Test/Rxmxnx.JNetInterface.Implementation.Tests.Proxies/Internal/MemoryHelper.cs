@@ -23,8 +23,9 @@ internal sealed unsafe class MemoryHelper
 			for (Int32 i = 0; i < this._values.Length; i++)
 			{
 				if (this._values[i] == this._value) continue;
+				Int32 offset = i * sizeof(IntPtr);
 				this._values[i] = this._value;
-				return this.Address + i;
+				return this.Address + offset;
 			}
 		}
 		return default;

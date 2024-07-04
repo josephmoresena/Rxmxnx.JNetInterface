@@ -14,8 +14,10 @@ internal static unsafe partial class ReferenceHelper
 			GetEnv = &ReferenceHelper.GetEnv,
 		},
 	];
+	private static readonly GCHandle
+		invokeHandle = GCHandle.Alloc(ReferenceHelper.invokeInterface, GCHandleType.Pinned);
 	private static readonly MemoryHelper invokeHelper =
-		new((IntPtr)ReferenceHelper.invokeInterface.AsMemory().Pin().Pointer, Int16.MaxValue);
+		new(ReferenceHelper.invokeHandle.AddrOfPinnedObject(), Int16.MaxValue);
 
 	[UnmanagedCallersOnly]
 	private static JResult DestroyVirtualMachine(JVirtualMachineRef vmRef)
