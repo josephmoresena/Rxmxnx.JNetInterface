@@ -6,7 +6,9 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
-	internal void SimpleTest(Boolean isProxy)
+	[InlineData(true, false)]
+	[InlineData(false, false)]
+	internal void SimpleTest(Boolean isProxy, Boolean minVersion = true)
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
@@ -19,6 +21,7 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
 		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
+		env.Version.Returns(IVirtualMachine.MinimalVersion - (minVersion ? 0 : 1));
 
 		DateTime currentDate = DateTime.Now;
 		using JClassObject jClassClass = new(env);
@@ -61,7 +64,7 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 
 		env.ReferenceFeature.Received(1).Create<JGlobal>(jClassClass);
 		env.Received(2).IsValidationAvoidable(jGlobal2);
-		env.Received(1).GetReferenceType(jGlobal2);
+		env.Received(minVersion ? 1 : 0).GetReferenceType(jGlobal2);
 
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
 

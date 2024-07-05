@@ -56,7 +56,12 @@ public sealed class JGlobal : JGlobalBase
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)
-		=> base.IsValid(env) && env.GetReferenceType(this) == JReferenceType.GlobalRefType;
+	{
+		if (!base.IsValid(env)) return false;
+		// Avoid Reference type check in JNI < 0x00010006
+		return env.Version < IVirtualMachine.MinimalVersion ||
+			env.GetReferenceType(this) == JReferenceType.GlobalRefType;
+	}
 
 	/// <inheritdoc cref="JGlobalBase.Load(ObjectLifetime)"/>
 	internal new JGlobal? Load(ObjectLifetime lifetime) => base.Load(lifetime) as JGlobal;

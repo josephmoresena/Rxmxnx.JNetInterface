@@ -81,7 +81,11 @@ public sealed class JLocalObjectTests
 	[InlineData(1)]
 	[InlineData(2)]
 	[InlineData(3)]
-	internal void GetSynchronizeTest(Byte nCase)
+	[InlineData(0, false)]
+	[InlineData(1, false)]
+	[InlineData(2, false)]
+	[InlineData(3, false)]
+	internal void GetSynchronizeTest(Byte nCase, Boolean minVersion = true)
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		VirtualMachineProxy vm = env.VirtualMachine;
@@ -94,6 +98,7 @@ public sealed class JLocalObjectTests
 		vm.InitializeThread(Arg.Any<CString?>()).Returns(thread);
 		env.ReferenceFeature.Unload(Arg.Any<JGlobal>()).Returns(true);
 		env.IsValidationAvoidable(Arg.Any<JGlobalBase>()).Returns(true);
+		env.Version.Returns(IVirtualMachine.MinimalVersion - (minVersion ? 0 : 1));
 
 		using IDisposable synchronizer = Substitute.For<IDisposable>();
 		using JClassObject jClassClass = new(env);
@@ -162,7 +167,7 @@ public sealed class JLocalObjectTests
 		Assert.Equal(nCase > 2, jLocal.Lifetime.HasValidGlobal<JGlobal>());
 
 		env.Received(nCase > 1 ? 1 : 0).GetReferenceType(jWeak);
-		env.Received(nCase > 2 ? 1 : 0).GetReferenceType(jGlobal);
+		env.Received(nCase > 2 && minVersion ? 1 : 0).GetReferenceType(jGlobal);
 	}
 
 	[Fact]
