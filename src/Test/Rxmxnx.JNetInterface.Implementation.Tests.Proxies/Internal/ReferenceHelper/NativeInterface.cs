@@ -734,7 +734,7 @@ internal unsafe partial class ReferenceHelper
 	private static JResult GetVirtualMachine(JEnvironmentRef envRef, JVirtualMachineRef* vmRef)
 	{
 		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
-		if (proxy is not { UseDefaultClassRef: true, VirtualMachine: not null, })
+		if (proxy is { UseVirtualMachineRef: false, })
 			return proxy.GetVirtualMachine((ValPtr<JVirtualMachineRef>)(IntPtr)vmRef);
 
 		Unsafe.AsRef<JVirtualMachineRef>(vmRef) = proxy.VirtualMachine.Reference;

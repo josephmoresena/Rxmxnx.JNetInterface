@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Tests;
 [ExcludeFromCodeCoverage]
 public abstract class NativeInterfaceProxy
 {
-	public InvokeInterfaceProxy? VirtualMachine { get; set; }
+	public InvokeInterfaceProxy VirtualMachine { get; private set; } = default!;
 	public JEnvironmentRef Reference { get; private set; }
 
 	public Boolean UseDefaultClassRef { get; set; } = true;
@@ -392,7 +392,7 @@ public abstract class NativeInterfaceProxy
 
 	public static NativeInterfaceProxy CreateProxy(InvokeInterfaceProxy vmProxy)
 	{
-		NativeInterfaceProxy? proxy = Substitute.For<NativeInterfaceProxy>();
+		NativeInterfaceProxy proxy = Substitute.For<NativeInterfaceProxy>();
 		proxy.Reference = ReferenceHelper.InitializeProxy(proxy);
 		proxy.VirtualMachine = vmProxy;
 		proxy.GetVersion().Returns(IVirtualMachine.MinimalVersion);
@@ -400,7 +400,7 @@ public abstract class NativeInterfaceProxy
 	}
 	public static NativeInterfaceProxy CreateProxy(Boolean attachThread = true)
 	{
-		NativeInterfaceProxy? proxy = Substitute.For<NativeInterfaceProxy>();
+		NativeInterfaceProxy proxy = Substitute.For<NativeInterfaceProxy>();
 		proxy.VirtualMachine = InvokeInterfaceProxy.CreateProxy();
 		proxy.Reference = ReferenceHelper.InitializeProxy(proxy);
 		if (attachThread)

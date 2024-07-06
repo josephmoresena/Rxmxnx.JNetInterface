@@ -15,42 +15,20 @@ internal readonly unsafe struct NativeMethodValue
 	/// </summary>
 	public static readonly Int32 Size = sizeof(NativeMethodValue);
 
-	/// <summary>
-	/// Pointer to method name.
-	/// </summary>
-#pragma warning disable CS0169
-	private readonly Byte* _name;
-	/// <summary>
-	/// Pointer to method signature.
-	/// </summary>
-	private readonly Byte* _signature;
-	/// <summary>
-	/// Pointer to method implementation.
-	/// </summary>
-	private readonly void* _function;
 #pragma warning restore CS0169
 
 	/// <summary>
 	/// Pointer to method name.
 	/// </summary>
-	private Byte* Name
-	{
-		init => this._name = value;
-	}
+	public Byte* Name { get; init; }
 	/// <summary>
 	/// Pointer to method signature.
 	/// </summary>
-	private Byte* Signature
-	{
-		init => this._signature = value;
-	}
+	public Byte* Signature { get; init; }
 	/// <summary>
 	/// Pointer to method implementation.
 	/// </summary>
-	private void* Pointer
-	{
-		init => this._function = value;
-	}
+	public void* Pointer { get; init; }
 
 	/// <summary>
 	/// Creates a <see cref="NativeMethodValue"/> from <paramref name="entry"/>.

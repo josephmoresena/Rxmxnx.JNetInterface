@@ -1,9 +1,11 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
-public readonly struct NativeMethodValueWrapper : IWrapper<NativeMethodValue>
+public readonly unsafe struct NativeMethodValueWrapper
 {
-	internal NativeMethodValue Value { get; init; }
+	private readonly NativeMethodValue _value;
 
-	NativeMethodValue IWrapper<NativeMethodValue>.Value => this.Value;
+	public IntPtr SignaturePtr => (IntPtr)this._value.Signature;
+	public IntPtr Function => (IntPtr)this._value.Pointer;
+	public IntPtr NamePtr => (IntPtr)this._value.Name;
 }

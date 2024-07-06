@@ -30,7 +30,7 @@ public abstract class InvokeInterfaceProxy
 
 	public static InvokeInterfaceProxy CreateProxy()
 	{
-		InvokeInterfaceProxy? proxy = Substitute.For<InvokeInterfaceProxy>();
+		InvokeInterfaceProxy proxy = Substitute.For<InvokeInterfaceProxy>();
 		proxy.Reference = ReferenceHelper.InitializeProxy(proxy);
 		return proxy;
 	}

@@ -82,7 +82,8 @@ public sealed class JVirtualMachineTests
 		}
 		finally
 		{
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine!.Reference));
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 		}
 	}
 
@@ -94,9 +95,9 @@ public sealed class JVirtualMachineTests
 
 		try
 		{
-			proxyEnv.VirtualMachine!.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(result);
-			proxyEnv.VirtualMachine!.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
-			                                             Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
+			proxyEnv.VirtualMachine.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(result);
+			proxyEnv.VirtualMachine.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
+			                                            Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
 			        .Returns(result);
 			JniException ex =
 				Assert.Throws<JniException>(() => JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference));
@@ -110,7 +111,8 @@ public sealed class JVirtualMachineTests
 		}
 		finally
 		{
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine!.Reference));
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 		}
 	}
 
@@ -130,42 +132,159 @@ public sealed class JVirtualMachineTests
 			IVirtualMachine? vm = default;
 			if (jniVersion >= 0x00010002)
 			{
-				vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine!.Reference);
+				vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
 			}
 			else
 			{
 				Exception ex = Assert.Throws<InvalidOperationException>(
-					() => JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine!.Reference));
+					() => JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference));
 				Assert.Equal(
 					$"Current JNI version (0x{jniVersion:x8}) is invalid to call FindClass. JNI required: 0x{0x00010002:x8}",
 					ex.Message);
 			}
 
-			proxyEnv.VirtualMachine!.Received(1).GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>());
-			proxyEnv.VirtualMachine!.Received(0).AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
-			                                                         Arg.Any<ReadOnlyValPtr<
-				                                                         VirtualMachineArgumentValueWrapper>>());
+			proxyEnv.VirtualMachine.Received(1).GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>());
+			proxyEnv.VirtualMachine.Received(0).AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
+			                                                        Arg.Any<ReadOnlyValPtr<
+				                                                        VirtualMachineArgumentValueWrapper>>());
 			if (vm is null) return;
 			IEnvironment env = vm.GetEnvironment()!;
 			JWeakRef weakRef = JVirtualMachineTests.fixture.Create<JWeakRef>();
 
 			proxyEnv.GetObjectRefType(Arg.Any<JObjectLocalRef>()).Returns(JReferenceType.GlobalRefType);
 			Assert.True(env.ClassFeature.VoidPrimitive.Global.IsValid(env));
-			proxyEnv.Received(0).GetObjectRefType(proxyEnv.VirtualMachine!.VoidGlobalRef.Value);
+			proxyEnv.Received(0).GetObjectRefType(proxyEnv.VirtualMachine.VoidGlobalRef.Value);
 			proxyEnv.GetObjectRefType(Arg.Any<JObjectLocalRef>()).Returns(JReferenceType.WeakGlobalRefType);
 			proxyEnv.NewWeakGlobalRef(proxyEnv.VirtualMachine.VoidGlobalRef.Value).Returns(weakRef);
 			Assert.Equal(weakRef, env.ClassFeature.VoidPrimitive.Weak.Reference);
 			Assert.Throws<InvalidOperationException>(() => env.ClassFeature.VoidPrimitive.Weak.IsValid(env));
-			proxyEnv.Received(0).GetObjectRefType(proxyEnv.VirtualMachine!.VoidGlobalRef.Value);
+			proxyEnv.Received(0).GetObjectRefType(proxyEnv.VirtualMachine.VoidGlobalRef.Value);
 
 			proxyEnv.Received(0).GetObjectRefType(weakRef.Value);
 		}
 		finally
 		{
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine!.Reference));
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 		}
 	}
 
 	[Fact]
 	internal void RemoveVirtualMachineFalseTest() => Assert.False(JVirtualMachine.RemoveVirtualMachine(default));
+
+	[Fact]
+	internal void FatalErrorTest()
+	{
+		String fatalErrorMessage = JVirtualMachineTests.fixture.Create<String>();
+		CString fatalErrorUtf8Message = (CString)fatalErrorMessage;
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		try
+		{
+			proxyEnv.UseVirtualMachineRef = false;
+			proxyEnv.When(e => e.GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>()))
+			        .Do(c => ((ValPtr<JVirtualMachineRef>)c[0]).Reference = proxyEnv.VirtualMachine.Reference);
+			proxyEnv.GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>()).Returns(JResult.Ok);
+
+			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			proxyEnv.Received(1).GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>());
+			IVirtualMachine vm = env.VirtualMachine;
+
+			proxyEnv.When(e => e.FatalError(Arg.Any<ReadOnlyValPtr<Byte>>())).Do(c =>
+			{
+				CString cstr = ((ReadOnlyValPtr<Byte>)c[0]).Pointer.GetUnsafeCString(fatalErrorUtf8Message.Length);
+				Assert.Equal(fatalErrorUtf8Message, cstr);
+			});
+
+			vm.FatalError(fatalErrorMessage);
+			proxyEnv.Received(1).FatalError(Arg.Any<ReadOnlyValPtr<Byte>>());
+
+			proxyEnv.ClearReceivedCalls();
+
+			vm.FatalError(fatalErrorUtf8Message);
+			proxyEnv.Received(1).FatalError(Arg.Any<ReadOnlyValPtr<Byte>>());
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+		}
+	}
+
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	[InlineData(true, true)]
+	[InlineData(false, true)]
+	[InlineData(true, false, true)]
+	[InlineData(false, false, true)]
+	[InlineData(true, true, true)]
+	[InlineData(false, true, true)]
+	internal void InitializeThreadTest(Boolean daemon, Boolean removeAttachedThread = false,
+		Boolean useThreadGroup = false)
+	{
+		JGlobalRef globalRef = useThreadGroup ? JVirtualMachineTests.fixture.Create<JGlobalRef>() : default;
+		CString threadName = (CString)JVirtualMachineTests.fixture.Create<String>();
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		try
+		{
+			proxyEnv.VirtualMachine.When(v => v.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
+			                                                        Arg.Any<ReadOnlyValPtr<
+				                                                        VirtualMachineArgumentValueWrapper>>())).Do(c =>
+			{
+				((ValPtr<JEnvironmentRef>)c[0]).Reference = proxyEnv.Reference;
+				VirtualMachineArgumentValueWrapper arg = ((ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>)c[1])
+					.Reference;
+				Assert.Equal(threadName, arg.NamePtr.GetUnsafeCString(threadName.Length));
+				Assert.Equal(globalRef, arg.Group);
+				Assert.Equal(IVirtualMachine.MinimalVersion, arg.Version);
+			});
+			proxyEnv.VirtualMachine.When(v => v.AttachCurrentThreadAsDaemon(Arg.Any<ValPtr<JEnvironmentRef>>(),
+			                                                                Arg.Any<ReadOnlyValPtr<
+				                                                                VirtualMachineArgumentValueWrapper>>()))
+			        .Do(c =>
+			        {
+				        ((ValPtr<JEnvironmentRef>)c[0]).Reference = proxyEnv.Reference;
+				        VirtualMachineArgumentValueWrapper arg =
+					        ((ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>)c[1])
+					        .Reference;
+				        Assert.Equal(threadName, arg.NamePtr.GetUnsafeCString(threadName.Length));
+				        Assert.Equal(globalRef, arg.Group);
+				        Assert.Equal(IVirtualMachine.MinimalVersion, arg.Version);
+			        });
+			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			using JGlobal? threadGroup =
+				useThreadGroup ? JVirtualMachineTests.CreateThreadGroup(vm, globalRef) : default;
+
+			if (removeAttachedThread)
+				JVirtualMachine.RemoveEnvironment(vm.Reference, proxyEnv.Reference);
+			proxyEnv.VirtualMachine.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>())
+			        .Returns(JResult.DetachedThreadError);
+			proxyEnv.ClearReceivedCalls();
+			proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+			using IThread thread = !daemon ?
+				vm.InitializeThread(threadName, threadGroup) :
+				vm.InitializeDaemon(threadName, threadGroup);
+			proxyEnv.VirtualMachine.Received(!daemon ? 1 : 0).AttachCurrentThread(
+				Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>());
+			proxyEnv.VirtualMachine.Received(daemon ? 1 : 0).AttachCurrentThreadAsDaemon(
+				Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>());
+
+			proxyEnv.VirtualMachine.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(JResult.Ok);
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+		}
+	}
+
+	private static JGlobal CreateThreadGroup(IVirtualMachine vm, JGlobalRef globalRef)
+	{
+		EnvironmentProxy proxy = EnvironmentProxy.CreateEnvironment();
+		JClassObject jClassClass = new(proxy);
+		CStringSequence classInformation = MetadataHelper.GetClassInformation("java/lang/ThreadGroup"u8, false);
+		JClassObject classLoaderClass = new(jClassClass, new TypeInformation(classInformation));
+		return new(vm, new(classLoaderClass), globalRef);
+	}
 }

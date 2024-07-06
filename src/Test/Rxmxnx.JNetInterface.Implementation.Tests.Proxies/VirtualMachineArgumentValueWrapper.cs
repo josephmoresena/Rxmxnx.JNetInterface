@@ -1,9 +1,11 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
-public readonly struct VirtualMachineArgumentValueWrapper : IWrapper<VirtualMachineArgumentValue>
+public readonly unsafe struct VirtualMachineArgumentValueWrapper
 {
-	internal VirtualMachineArgumentValue Value { get; init; }
+	private readonly VirtualMachineArgumentValue _value;
 
-	VirtualMachineArgumentValue IWrapper<VirtualMachineArgumentValue>.Value => this.Value;
+	public JGlobalRef Group => this._value.Group;
+	public Int32 Version => this._value.Version;
+	public IntPtr NamePtr => (IntPtr)this._value.Name;
 }
