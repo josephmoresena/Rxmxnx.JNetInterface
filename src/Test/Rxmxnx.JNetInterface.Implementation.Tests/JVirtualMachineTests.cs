@@ -58,7 +58,7 @@ public sealed class JVirtualMachineTests
 			});
 
 			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyVm.Reference);
-			Assert.IsType<JVirtualMachine>(vm);
+			JVirtualMachine jvm = Assert.IsType<JVirtualMachine>(vm);
 			proxyVm.Received(1).GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>());
 			proxyVm.Received(attached ? 0 : 1).AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
 			                                                       Arg.Any<ReadOnlyValPtr<
@@ -72,6 +72,8 @@ public sealed class JVirtualMachineTests
 			proxyVm.ClearReceivedCalls();
 			proxyEnv.ClearReceivedCalls();
 
+			Assert.True(jvm.IsAlive);
+			Assert.False(jvm.IsDisposable);
 			Assert.Equal(vm, JVirtualMachine.GetVirtualMachine(proxyVm.Reference));
 
 			proxyEnv.Received(0).GetVersion();
