@@ -274,6 +274,8 @@ public sealed class JVirtualMachineTests
 		}
 		finally
 		{
+			if (useThreadGroup)
+				proxyEnv.Received(1).DeleteGlobalRef(globalRef);
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 		}
