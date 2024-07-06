@@ -44,7 +44,7 @@ partial class JEnvironment
 		/// <inheritdoc cref="IThread.Name"/>
 		public override CString Name => this._args.Name ?? CString.Zero;
 
-		Boolean IThread.Attached => !this.IsDisposable;
+		Boolean IThread.Attached => this.IsAttached;
 		Boolean IThread.Daemon => this.IsDaemon;
 
 		/// <inheritdoc/>
