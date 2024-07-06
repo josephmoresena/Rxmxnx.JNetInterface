@@ -257,7 +257,15 @@ public sealed class JVirtualMachineTests
 			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
 			using JGlobal? threadGroup =
 				useThreadGroup ? JVirtualMachineTests.CreateThreadGroup(vm, globalRef) : default;
+			env = (vm as JVirtualMachine)!.GetEnvironment(proxyEnv.Reference);
 
+			Assert.True(env.IsAttached);
+			Assert.True(env.NoProxy);
+			Assert.False(env.IsDisposable);
+			Assert.Equal(IVirtualMachine.MinimalVersion, env.Version);
+			Assert.False(env.IsDaemon);
+			Assert.True(env.NoProxy);
+			Assert.Equal(CString.Zero, env.Name);
 			if (removeAttachedThread)
 				JVirtualMachine.RemoveEnvironment(vm.Reference, proxyEnv.Reference);
 			proxyEnv.VirtualMachine.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>())
@@ -276,6 +284,7 @@ public sealed class JVirtualMachineTests
 			Assert.Equal(IVirtualMachine.MinimalVersion, env.Version);
 			Assert.Equal(removeAttachedThread && daemon, env.IsDaemon);
 			Assert.True(env.NoProxy);
+			Assert.Equal(removeAttachedThread ? threadName : CString.Zero, env.Name);
 			proxyEnv.VirtualMachine.Received(!daemon ? 1 : 0).AttachCurrentThread(
 				Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>());
 			proxyEnv.VirtualMachine.Received(daemon ? 1 : 0).AttachCurrentThreadAsDaemon(
