@@ -147,6 +147,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// </exception>
 		private static void ThrowIfNotLocalReference(JEnvironment env, JObjectLocalRef localRef)
 		{
+			if (env.Version < IVirtualMachine.MinimalVersion || !JVirtualMachine.CheckRefTypeNativeCallEnabled) return;
 			if (env.GetReferenceType(localRef) != JReferenceType.LocalRefType)
 				throw new ArgumentException("JNI call only allow local references.");
 		}

@@ -307,8 +307,11 @@ internal unsafe partial class ReferenceHelper
 	[UnmanagedCallersOnly]
 	private static JMethodId GetMethodId(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* methodName,
 		Byte* methodDescriptor)
-		=> ReferenceHelper.nativeProxies[envRef].GetMethodId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)methodName,
-		                                                     (ReadOnlyValPtr<Byte>)(IntPtr)methodDescriptor);
+	{
+		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		return (proxy.UseDefaultClassRef ? proxy.GetMainMethodId(classRef, methodName) : default) ?? proxy.GetMethodId(
+			classRef, (ReadOnlyValPtr<Byte>)(IntPtr)methodName, (ReadOnlyValPtr<Byte>)(IntPtr)methodDescriptor);
+	}
 	private static JObjectLocalRef CallObjectMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JMethodId methodId, JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
@@ -499,11 +502,9 @@ internal unsafe partial class ReferenceHelper
 		Byte* fieldDescriptor)
 	{
 		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
-		if (!proxy.UseDefaultClassRef)
-			return proxy.GetStaticFieldId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)fieldName,
-			                              (ReadOnlyValPtr<Byte>)(IntPtr)fieldDescriptor);
-		return proxy.GetPrimitiveWrapperClassTypeField(classRef, fieldName) ?? proxy.GetStaticFieldId(
-			classRef, (ReadOnlyValPtr<Byte>)(IntPtr)fieldName, (ReadOnlyValPtr<Byte>)(IntPtr)fieldDescriptor);
+		return (proxy.UseDefaultClassRef ? proxy.GetPrimitiveWrapperClassTypeField(classRef, fieldName) : default) ??
+			proxy.GetStaticFieldId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)fieldName,
+			                       (ReadOnlyValPtr<Byte>)(IntPtr)fieldDescriptor);
 	}
 	private static JObjectLocalRef GetStaticObjectField(JEnvironmentRef envRef, JClassLocalRef classRef,
 		JFieldId fieldId)

@@ -26,7 +26,6 @@ public sealed class JNativeCallAdapterTests
 	[InlineData(false, CallResult.Nested)]
 	internal void UnknownParameterlessCallTest(Boolean useVm, CallResult result = CallResult.Void)
 	{
-		Int32 threadId = Environment.CurrentManagedThreadId;
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JNativeCallAdapter adapter = default;
 		try
@@ -58,7 +57,10 @@ public sealed class JNativeCallAdapterTests
 					case CallResult.Array:
 						using (JArrayObject jArray =
 						       JNativeCallAdapterTests.CreateArray(proxyEnv, Random.Shared.Next(0, 10)))
+						{
 							Assert.Equal(jArray.Reference, adapter.FinalizeCall(jArray));
+							Assert.True(jArray.IsDefault);
+						}
 						break;
 					case CallResult.Class:
 						Assert.Equal(proxyEnv.VirtualMachine.ClassGlobalRef.Value,
@@ -66,7 +68,10 @@ public sealed class JNativeCallAdapterTests
 						break;
 					case CallResult.Object:
 						using (JLocalObject jLocal = JNativeCallAdapterTests.CreateObject(proxyEnv))
+						{
 							Assert.Equal(jLocal.Reference, adapter.FinalizeCall(jLocal));
+							Assert.True(jLocal.IsDefault);
+						}
 						break;
 					case CallResult.Primitive:
 						JDouble primitive = JNativeCallAdapterTests.fixture.Create<Double>();
@@ -74,11 +79,17 @@ public sealed class JNativeCallAdapterTests
 						break;
 					case CallResult.Throwable:
 						using (JThrowableObject jThrowable = JNativeCallAdapterTests.CreateThrowable(proxyEnv))
+						{
 							Assert.Equal(jThrowable.Reference, adapter.FinalizeCall(jThrowable));
+							Assert.True(jThrowable.IsDefault);
+						}
 						break;
 					case CallResult.String:
 						using (JStringObject jString = JNativeCallAdapterTests.CreateString(proxyEnv, "text"))
+						{
 							Assert.Equal(jString.Reference, adapter.FinalizeCall(jString));
+							Assert.True(jString.IsDefault);
+						}
 						break;
 					case CallResult.Global:
 						using (JLocalObject jLocal = JNativeCallAdapterTests.CreateObject(proxyEnv))
@@ -86,9 +97,162 @@ public sealed class JNativeCallAdapterTests
 						{
 							Assert.Equal(jGlobal.Reference.Value,
 							             adapter.FinalizeCall(jGlobal.AsLocal<JLocalObject>(env)));
+							Assert.False(jGlobal.IsDefault);
+							Assert.True(jLocal.IsDefault);
 						}
 						break;
 				}
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
+		}
+	}
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	[InlineData(true, CallResult.Primitive)]
+	[InlineData(false, CallResult.Primitive)]
+	[InlineData(true, CallResult.Object)]
+	[InlineData(false, CallResult.Object)]
+	[InlineData(true, CallResult.Class)]
+	[InlineData(false, CallResult.Class)]
+	[InlineData(true, CallResult.Throwable)]
+	[InlineData(false, CallResult.Throwable)]
+	[InlineData(true, CallResult.Global)]
+	[InlineData(false, CallResult.Global)]
+	[InlineData(true, CallResult.Array)]
+	[InlineData(false, CallResult.Array)]
+	[InlineData(true, CallResult.String)]
+	[InlineData(false, CallResult.String)]
+	[InlineData(true, CallResult.Nested)]
+	[InlineData(false, CallResult.Nested)]
+	[InlineData(true, CallResult.Void, true)]
+	[InlineData(false, CallResult.Void, true)]
+	[InlineData(true, CallResult.Primitive, true)]
+	[InlineData(false, CallResult.Primitive, true)]
+	[InlineData(true, CallResult.Object, true)]
+	[InlineData(false, CallResult.Object, true)]
+	[InlineData(true, CallResult.Class, true)]
+	[InlineData(false, CallResult.Class, true)]
+	[InlineData(true, CallResult.Throwable, true)]
+	[InlineData(false, CallResult.Throwable, true)]
+	[InlineData(true, CallResult.Global, true)]
+	[InlineData(false, CallResult.Global, true)]
+	[InlineData(true, CallResult.Array, true)]
+	[InlineData(false, CallResult.Array, true)]
+	[InlineData(true, CallResult.String, true)]
+	[InlineData(false, CallResult.String, true)]
+	[InlineData(true, CallResult.Nested, true)]
+	[InlineData(false, CallResult.Nested, true)]
+	[InlineData(true, CallResult.Parameter, true)]
+	[InlineData(false, CallResult.Parameter, true)]
+	internal void InstanceParameterlessCallTest(Boolean useVm, CallResult result = CallResult.Void,
+		Boolean registerClass = false)
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JNativeCallAdapter adapter = default;
+		JObjectLocalRef localRef = JNativeCallAdapterTests.fixture.Create<JObjectLocalRef>();
+		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
+		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
+		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<JTestObject>();
+		JLocalObject? jObject = default;
+		using IReadOnlyFixedContext<Char>.IDisposable ctx = classTypeMetadata.Information.ToString().AsMemory()
+		                                                                     .GetFixedContext();
+		if (registerClass)
+			JVirtualMachine.Register<JTestObject>();
+		registerClass |= MetadataHelper.GetMetadata(classTypeMetadata.Hash) is not null;
+		try
+		{
+			proxyEnv.GetObjectClass(localRef).Returns(classRef);
+			proxyEnv.GetObjectRefType(localRef).Returns(JReferenceType.LocalRefType);
+			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
+			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
+			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
+			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
+			proxyEnv.UseVirtualMachineRef = false;
+			proxyEnv.When(e => e.GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>()))
+			        .Do(c => ((ValPtr<JVirtualMachineRef>)c[0]).Reference = proxyEnv.VirtualMachine.Reference);
+			adapter = useVm ?
+				JNativeCallAdapter.Create(JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference),
+				                          proxyEnv.Reference, localRef, out jObject).Build() :
+				JNativeCallAdapter.Create(proxyEnv.Reference, localRef, out jObject).Build();
+			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			Assert.Equal(vm.GetEnvironment(), adapter.Environment);
+			proxyEnv.Received(!useVm ? 1 : 0).GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>());
+			proxyEnv.Received(1).GetObjectClass(localRef);
+			proxyEnv.Received(1).CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
+			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			proxyEnv.Received(1).GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>());
+			proxyEnv.Received(1).GetStringUtfLength(strRef);
+			proxyEnv.Received(1).GetObjectRefType(localRef);
+
+			if (registerClass)
+				Assert.IsType<JTestObject>(jObject);
+		}
+		finally
+		{
+			IEnvironment? env = adapter.Environment;
+			if (env is not null)
+				switch (result)
+				{
+					case CallResult.Void:
+						adapter.FinalizeCall();
+						break;
+					case CallResult.Nested:
+						JNativeCallAdapterTests.NestedAdapterTest(proxyEnv);
+						adapter.FinalizeCall();
+						break;
+					case CallResult.Array:
+						using (JArrayObject jArray =
+						       JNativeCallAdapterTests.CreateArray(proxyEnv, Random.Shared.Next(0, 10)))
+						{
+							Assert.Equal(jArray.Reference, adapter.FinalizeCall(jArray));
+							Assert.True(jArray.IsDefault);
+						}
+						break;
+					case CallResult.Class:
+						Assert.Equal(proxyEnv.VirtualMachine.ClassGlobalRef.Value,
+						             adapter.FinalizeCall(env.ClassFeature.ClassObject).Value);
+						break;
+					case CallResult.Object:
+						using (JLocalObject jLocal = JNativeCallAdapterTests.CreateObject(proxyEnv))
+						{
+							Assert.Equal(jLocal.Reference, adapter.FinalizeCall(jLocal));
+							Assert.True(jLocal.IsDefault);
+						}
+						break;
+					case CallResult.Primitive:
+						JDouble primitive = JNativeCallAdapterTests.fixture.Create<Double>();
+						Assert.Equal(primitive, adapter.FinalizeCall(primitive));
+						break;
+					case CallResult.Throwable:
+						using (JThrowableObject jThrowable = JNativeCallAdapterTests.CreateThrowable(proxyEnv))
+						{
+							Assert.Equal(jThrowable.Reference, adapter.FinalizeCall(jThrowable));
+							Assert.True(jThrowable.IsDefault);
+						}
+						break;
+					case CallResult.String:
+						using (JStringObject jString = JNativeCallAdapterTests.CreateString(proxyEnv, "text"))
+						{
+							Assert.Equal(jString.Reference, adapter.FinalizeCall(jString));
+							Assert.True(jString.IsDefault);
+						}
+						break;
+					case CallResult.Global:
+						using (JLocalObject jLocal = JNativeCallAdapterTests.CreateObject(proxyEnv))
+						using (JGlobal jGlobal = JNativeCallAdapterTests.CreateGlobal(proxyEnv, jLocal))
+						{
+							Assert.Equal(jGlobal.Reference.Value,
+							             adapter.FinalizeCall(jGlobal.AsLocal<JLocalObject>(env)));
+							Assert.False(jGlobal.IsDefault);
+							Assert.True(jLocal.IsDefault);
+						}
+						break;
+					case CallResult.Parameter:
+						Assert.Equal(localRef, adapter.FinalizeCall(jObject));
+						break;
+				}
+			Assert.True(JObject.IsNullOrDefault(jObject));
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
 		}

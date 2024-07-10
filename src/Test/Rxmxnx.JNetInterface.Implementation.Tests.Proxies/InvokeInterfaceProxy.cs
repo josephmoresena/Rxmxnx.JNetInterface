@@ -15,6 +15,17 @@ public abstract class InvokeInterfaceProxy
 	public JGlobalRef IntGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef LongGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef ShortGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
+	public JMethodId ClassGetNameMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId ClassIsPrimitiveMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId ClassGetModifiersMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId ClassGetInterfacesMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId ThrowableGetMessageMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId ThrowableGetStackTraceMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId StackTraceElementGetClassNameMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId StackTraceElementGetLineNumberMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId StackTraceElementGetFileNameMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId StackTraceElementGetMethodNameMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
+	public JMethodId StackTraceElementIsNativeMethodMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
 
 	public JVirtualMachineRef Reference { get; private set; }
 

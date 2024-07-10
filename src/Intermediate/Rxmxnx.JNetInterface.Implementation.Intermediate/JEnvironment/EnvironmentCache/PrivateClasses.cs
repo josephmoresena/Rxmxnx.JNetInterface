@@ -274,8 +274,7 @@ partial class JEnvironment
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
-			JReferenceType referenceType = this._env.GetReferenceType(classRef.Value);
-			Boolean isLocalRef = referenceType == JReferenceType.LocalRefType;
+			Boolean isLocalRef = this.IsLocalObject(jObject, out JReferenceType referenceType);
 			ClassObjectMetadata? classObjectMetadata = this.GetClassObjectMetadata(jObject);
 			JTrace.AsClassObject(classRef, referenceType, classObjectMetadata);
 			JClassObject result = this.GetClass(classRef, isLocalRef, classObjectMetadata);
@@ -349,6 +348,24 @@ partial class JEnvironment
 				typeMetadata = currentMetadata;
 			}
 			return jClass;
+		}
+		/// <summary>
+		/// Indicates whether <paramref name="jObject"/> is a local object.
+		/// </summary>
+		/// <param name="jObject">A <paramref name="jObject"/> instance.</param>
+		/// <param name="referenceType">Output. Type of reference used by <paramref name="jObject"/>.</param>
+		/// <returns>
+		/// <see langword="true"/> if <paramref name="jObject"/> is a local object; otherwise, <see langword="false"/>.
+		/// </returns>
+		private Boolean IsLocalObject(JReferenceObject jObject, out JReferenceType referenceType)
+		{
+			JObjectLocalRef localRef = jObject.As<JObjectLocalRef>();
+			referenceType = this.Version < IVirtualMachine.MinimalVersion ?
+				jObject is JLocalObject jLocal && jLocal.LocalReference == localRef ?
+					JReferenceType.LocalRefType :
+					JReferenceType.InvalidRefType :
+				this._env.GetReferenceType(localRef);
+			return referenceType == JReferenceType.LocalRefType;
 		}
 	}
 }

@@ -195,8 +195,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(jClass);
-			JReferenceType referenceType = this._env.GetReferenceType(classRef.Value);
-			Boolean isLocalRef = referenceType == JReferenceType.LocalRefType;
+			Boolean isLocalRef = this.IsLocalObject(jClass, out JReferenceType referenceType);
 			JTrace.GetClassInfo(classRef, referenceType);
 			if (classRef.IsDefault) throw new ArgumentException("Unloaded class.");
 			JClassObject loadedClass = this.GetClass(classRef, isLocalRef);

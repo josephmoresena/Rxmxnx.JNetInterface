@@ -46,6 +46,15 @@ public partial class JVirtualMachine : IVirtualMachine
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => AppContext.TryGetSwitch("JNetInterface.EnableFinalUserTypeRuntime", out Boolean enable) && enable;
 	}
+	/// <summary>
+	/// Indicates whether native call should check parameter references type at runtime.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean CheckRefTypeNativeCallEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => !AppContext.TryGetSwitch("JNetInterface.DisableCheckRefTypeNativeCall", out Boolean disable) || !disable;
+	}
 
 	/// <summary>
 	/// Indicates whether the current virtual machine remains alive.

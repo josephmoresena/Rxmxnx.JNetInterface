@@ -128,6 +128,42 @@ public abstract class NativeInterfaceProxy
 			return this.ShortTypeFieldId;
 		return null;
 	}
+	public unsafe JMethodId? GetMainMethodId(JClassLocalRef classRef, Byte* methodName)
+	{
+		if (classRef.Value == this.VirtualMachine.ClassGlobalRef.Value || classRef == this.ClassLocalRef)
+		{
+			if (ReferenceHelper.IsGetNameMethod(methodName))
+				return this.VirtualMachine.ClassGetNameMethodId;
+			if (ReferenceHelper.IsIsPrimitiveMethod(methodName))
+				return this.VirtualMachine.ClassIsPrimitiveMethodId;
+			if (ReferenceHelper.IsGetModifiersMethod(methodName))
+				return this.VirtualMachine.ClassGetModifiersMethodId;
+			if (ReferenceHelper.IsGetInterfacesMethod(methodName))
+				return this.VirtualMachine.ClassGetInterfacesMethodId;
+		}
+		else if (classRef.Value == this.VirtualMachine.ThrowableGlobalRef.Value || classRef == this.ThrowableLocalRef)
+		{
+			if (ReferenceHelper.IsGetMessageMethod(methodName))
+				return this.VirtualMachine.ThrowableGetMessageMethodId;
+			if (ReferenceHelper.IsGetStackTraceMethod(methodName))
+				return this.VirtualMachine.ThrowableGetStackTraceMethodId;
+		}
+		else if (classRef.Value == this.VirtualMachine.StackTraceElementGlobalRef.Value ||
+		         classRef == this.StackTraceObjectLocalRef)
+		{
+			if (ReferenceHelper.IsGetClassNameMethod(methodName))
+				return this.VirtualMachine.StackTraceElementGetClassNameMethodId;
+			if (ReferenceHelper.IsGetLineNumberMethod(methodName))
+				return this.VirtualMachine.StackTraceElementGetLineNumberMethodId;
+			if (ReferenceHelper.IsGetFileNameMethod(methodName))
+				return this.VirtualMachine.StackTraceElementGetFileNameMethodId;
+			if (ReferenceHelper.IsGetMethodNameMethod(methodName))
+				return this.VirtualMachine.StackTraceElementGetMethodNameMethodId;
+			if (ReferenceHelper.IsIsNativeMethodMethod(methodName))
+				return this.VirtualMachine.StackTraceElementIsNativeMethodMethodId;
+		}
+		return default;
+	}
 	public JClassLocalRef? GetPrimitiveClass(JClassLocalRef classRef, JFieldId fieldId)
 	{
 		if (classRef == this.VoidObjectLocalRef && fieldId == this.VoidTypeFieldId)

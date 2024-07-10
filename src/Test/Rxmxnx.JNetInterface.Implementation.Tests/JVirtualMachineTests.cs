@@ -327,7 +327,8 @@ public sealed class JVirtualMachineTests
 	private static Task RegisterTestObject()
 		=> Task.Factory.StartNew(() =>
 		{
-			if (JTestObject.GetThreadMetadata() is null)
-				Assert.True(JVirtualMachine.Register<JTestObject>());
+			Boolean register = JVirtualMachine.Register<JTestObject>();
+			if (register)
+				Assert.NotNull(JTestObject.GetThreadMetadata());
 		}, TaskCreationOptions.LongRunning);
 }
