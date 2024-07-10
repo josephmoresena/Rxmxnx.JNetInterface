@@ -74,6 +74,10 @@ internal static partial class MetadataHelper
 		{ IDataType.GetHash<JAnnotationObject>(), IReferenceType.GetMetadata<JAnnotationObject>() },
 	};
 	/// <summary>
+	/// Builtin metadata dictionary.
+	/// </summary>
+	private static readonly HashSet<String> builtInFinal = [];
+	/// <summary>
 	/// Runtime metadata dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<String, JReferenceTypeMetadata> runtimeMetadata =

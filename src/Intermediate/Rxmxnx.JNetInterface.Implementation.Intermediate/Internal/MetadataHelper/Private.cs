@@ -144,5 +144,25 @@ internal static partial class MetadataHelper
 	{
 		JReferenceTypeMetadata typeMetadata = IReferenceType.GetMetadata<TReference>();
 		result.Add(typeMetadata.Hash, typeMetadata);
+		if (typeMetadata.Modifier == JTypeModifier.Final)
+			MetadataHelper.builtInFinal.Add(typeMetadata.Hash);
+	}
+	/// <summary>
+	/// Indicates whether the type of <paramref name="typeMetadata"/> is built-in final type.
+	/// </summary>
+	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if the type of <paramref name="typeMetadata"/> is built-in final type;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	private static Boolean IsBuiltInFinalType(JDataTypeMetadata typeMetadata)
+	{
+		if (typeMetadata is JEnumTypeMetadata) return true;
+		if (JProxyObject.ProxyTypeMetadata.Equals((typeMetadata as JReferenceTypeMetadata)?.BaseMetadata))
+			return true;
+		if (MetadataHelper.initialMetadata.ContainsKey(typeMetadata.Hash) ||
+		    MetadataHelper.builtInFinal.Contains(typeMetadata.Hash)) return true;
+		return typeMetadata is JArrayTypeMetadata arrayTypeMetadata &&
+			MetadataHelper.IsBuiltInFinalType(arrayTypeMetadata.ElementMetadata);
 	}
 }

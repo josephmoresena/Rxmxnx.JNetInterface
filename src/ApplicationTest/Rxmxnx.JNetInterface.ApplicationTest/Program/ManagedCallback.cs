@@ -107,4 +107,23 @@ public partial class Program : IManagedCallback
 		}
 	}
 	static void IManagedCallback.PrintClass(JClassObject jClass) => Console.WriteLine(jClass.ToString());
+	static JClassObject IManagedCallback.GetVoidClass(JClassObject jClass)
+	{
+		IEnvironment env = jClass.Environment;
+		return JClassObject.GetVoidClass(env);
+	}
+	static JArrayObject<JClassObject> IManagedCallback.GetPrimitiveClasses(JClassObject jClass)
+	{
+		IEnvironment env = jClass.Environment;
+		JArrayObject<JClassObject> result = JArrayObject<JClassObject>.Create(env, 8);
+		result[0] = JClassObject.GetClass<JBoolean>(env);
+		result[1] = JClassObject.GetClass<JByte>(env);
+		result[2] = JClassObject.GetClass<JChar>(env);
+		result[3] = JClassObject.GetClass<JDouble>(env);
+		result[4] = JClassObject.GetClass<JFloat>(env);
+		result[5] = JClassObject.GetClass<JInt>(env);
+		result[6] = JClassObject.GetClass<JLong>(env);
+		result[7] = JClassObject.GetClass<JShort>(env);
+		return result;
+	}
 }

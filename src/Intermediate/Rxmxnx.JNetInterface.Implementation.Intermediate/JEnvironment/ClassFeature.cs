@@ -6,6 +6,15 @@ partial class JEnvironment
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial class EnvironmentCache : IClassFeature
 	{
+		JClassObject IClassFeature.VoidPrimitive
+		{
+			get
+			{
+				if (!this._objects.Equals(this) && this.VoidPrimitive.IsDefault) this.LoadClass(this.VoidPrimitive);
+				return this.VoidPrimitive;
+			}
+		}
+
 		public JClassObject AsClassObject(JClassLocalRef classRef) => this.Register(this.GetClass(classRef, true));
 		public JClassObject AsClassObject(JReferenceObject jObject)
 		{

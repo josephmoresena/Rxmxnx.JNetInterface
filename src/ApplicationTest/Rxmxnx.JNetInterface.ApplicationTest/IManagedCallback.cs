@@ -20,4 +20,6 @@ internal interface IManagedCallback
 	static abstract JIntegerObject? SumArray(JClassObject jClass, JArrayObject<JInt>? jArray);
 	static abstract JArrayObject<JArrayObject<JInt>>? GetIntArrayArray(JClassObject jClass, Int32 length);
 	static abstract void PrintClass(JClassObject jClass);
+	static abstract JClassObject GetVoidClass(JClassObject jClass);
+	static abstract JArrayObject<JClassObject> GetPrimitiveClasses(JClassObject jClass);
 }

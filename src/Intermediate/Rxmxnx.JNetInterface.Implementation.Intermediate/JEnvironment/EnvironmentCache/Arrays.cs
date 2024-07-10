@@ -36,7 +36,7 @@ partial class JEnvironment
 			where TElement : IObject, IDataType<TElement>
 		{
 			JObjectLocalRef localRef = this.GetObjectArrayElement(arrayRef, index);
-			return this.CreateObject<TElement>(localRef, true);
+			return this.CreateObject<TElement>(localRef, true, MetadataHelper.IsFinalType<TElement>());
 		}
 		/// <summary>
 		/// Determines the index of a specific item in <paramref name="jArray"/>.

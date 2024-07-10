@@ -38,6 +38,16 @@ public partial class JVirtualMachine : IVirtualMachine
 	}
 
 	/// <summary>
+	/// Indicates whether final user-types should be treated as real classes at runtime.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean FinalUserTypeRuntimeEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => AppContext.TryGetSwitch("JNetInterface.EnableFinalUserTypeRuntime", out Boolean enable) && enable;
+	}
+
+	/// <summary>
 	/// Indicates whether the current virtual machine remains alive.
 	/// </summary>
 	public virtual Boolean IsAlive => true;

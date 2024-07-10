@@ -14,6 +14,15 @@ public static class ProxyTestsExtensions
 		fixture.Register<IFixture, JWeakRef>(ProxyTestsExtensions.CreateReference<JWeakRef>);
 		fixture.Register<IFixture, JFieldId>(ProxyTestsExtensions.CreateReference<JFieldId>);
 		fixture.Register<IFixture, JMethodId>(ProxyTestsExtensions.CreateReference<JMethodId>);
+
+		fixture.Register<IFixture, JObjectArrayLocalRef>(ProxyTestsExtensions.CreateReference<JObjectArrayLocalRef>);
+		fixture.Register<IFixture, JBooleanArrayLocalRef>(ProxyTestsExtensions.CreateReference<JBooleanArrayLocalRef>);
+		fixture.Register<IFixture, JByteArrayLocalRef>(ProxyTestsExtensions.CreateReference<JByteArrayLocalRef>);
+		fixture.Register<IFixture, JCharArrayLocalRef>(ProxyTestsExtensions.CreateReference<JCharArrayLocalRef>);
+		fixture.Register<IFixture, JDoubleArrayLocalRef>(ProxyTestsExtensions.CreateReference<JDoubleArrayLocalRef>);
+		fixture.Register<IFixture, JFloatArrayLocalRef>(ProxyTestsExtensions.CreateReference<JFloatArrayLocalRef>);
+		fixture.Register<IFixture, JLongArrayLocalRef>(ProxyTestsExtensions.CreateReference<JLongArrayLocalRef>);
+		fixture.Register<IFixture, JShortArrayLocalRef>(ProxyTestsExtensions.CreateReference<JShortArrayLocalRef>);
 		return fixture;
 	}
 	public static String ToSimplifiedString(this JArgumentMetadata argumentMetadata)

@@ -256,14 +256,43 @@ internal unsafe partial class ReferenceHelper
 		=> ReferenceHelper.nativeProxies[envRef].IsSameObject(localRef1, localRef2);
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef NewLocalRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> ReferenceHelper.nativeProxies[envRef].NewLocalRef(localRef);
+	{
+		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		if (proxy.UseDefaultClassRef)
+		{
+			if (proxy.VirtualMachine.ClassGlobalRef.Value == localRef)
+				return proxy.ClassLocalRef.Value;
+			if (proxy.VirtualMachine.ThrowableGlobalRef.Value == localRef)
+				return proxy.ThrowableLocalRef.Value;
+			if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
+				return proxy.StackTraceObjectLocalRef.Value;
+			if (proxy.VirtualMachine.VoidGlobalRef.Value == localRef)
+				return proxy.VoidPrimitiveClassRef.Value;
+			if (proxy.VirtualMachine.BooleanGlobalRef.Value == localRef)
+				return proxy.BooleanPrimitiveClassRef.Value;
+			if (proxy.VirtualMachine.ByteGlobalRef.Value == localRef)
+				return proxy.BytePrimitiveClassRef.Value;
+			if (proxy.VirtualMachine.CharGlobalRef.Value == localRef)
+				return proxy.CharPrimitiveClassRef.Value;
+			if (proxy.VirtualMachine.DoubleGlobalRef.Value == localRef)
+				return proxy.DoublePrimitiveClassRef.Value;
+			if (proxy.VirtualMachine.FloatGlobalRef.Value == localRef)
+				return proxy.FloatPrimitiveClassRef.Value;
+			if (proxy.VirtualMachine.IntGlobalRef.Value == localRef)
+				return proxy.IntPrimitiveClassRef.Value;
+			if (proxy.VirtualMachine.LongGlobalRef.Value == localRef)
+				return proxy.LongPrimitiveClassRef.Value;
+			if (proxy.VirtualMachine.ShortGlobalRef.Value == localRef)
+				return proxy.ShortPrimitiveClassRef.Value;
+		}
+		return proxy.NewLocalRef(localRef);
+	}
 	[UnmanagedCallersOnly]
 	private static JResult EnsureLocalCapacity(JEnvironmentRef envRef, Int32 capacity)
 		=> ReferenceHelper.nativeProxies[envRef].EnsureLocalCapacity(capacity);
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef AllocObject(JEnvironmentRef envRef, JClassLocalRef classRef)
 		=> ReferenceHelper.nativeProxies[envRef].AllocObject(classRef);
-	[UnmanagedCallersOnly]
 	private static JObjectLocalRef NewObject(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId constructorId,
 		JValueWrapper* args)
 		=> ReferenceHelper.nativeProxies[envRef]
@@ -793,7 +822,37 @@ internal unsafe partial class ReferenceHelper
 
 	[UnmanagedCallersOnly]
 	private static JReferenceType GetObjectRefType(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> ReferenceHelper.nativeProxies[envRef].GetObjectRefType(localRef);
+	{
+		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		if (proxy.UseDefaultClassRef)
+		{
+			if (proxy.VirtualMachine.ClassGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.ThrowableGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.VoidGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.BooleanGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.ByteGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.CharGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.DoubleGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.FloatGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.IntGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.LongGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.ShortGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+		}
+		return proxy.GetObjectRefType(localRef);
+	}
 
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef GetModule(JEnvironmentRef envRef, JClassLocalRef classRef)

@@ -45,6 +45,8 @@ public partial class Program
 			$"{nameof(IVirtualMachine.NestingArrayAutoGenerationEnabled)}: {IVirtualMachine.NestingArrayAutoGenerationEnabled}");
 		Console.WriteLine(
 			$"{nameof(IVirtualMachine.TypeMetadataToStringEnabled)}: {IVirtualMachine.TypeMetadataToStringEnabled}");
+		Console.WriteLine(
+			$"{nameof(JVirtualMachine.FinalUserTypeRuntimeEnabled)}: {JVirtualMachine.FinalUserTypeRuntimeEnabled}");
 	}
 	private static void Execute(JVirtualMachineLibrary jvmLib, Byte[] classByteCode, params String[] args)
 	{

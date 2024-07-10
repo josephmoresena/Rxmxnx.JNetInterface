@@ -172,15 +172,19 @@ partial class JEnvironment
 		/// <typeparam name="TResult">A <see cref="IDataType"/> type.</typeparam>
 		/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="register">Indicates whether object must be registered.</param>
+		/// <param name="useTypeClass">Indicates whether object must use <typeparamref name="TResult"/> class.</param>
 		/// <returns>A <typeparamref name="TResult"/> instance.</returns>
-		private TResult? CreateObject<TResult>(JObjectLocalRef localRef, Boolean register)
+		private TResult? CreateObject<TResult>(JObjectLocalRef localRef, Boolean register, Boolean useTypeClass)
 			where TResult : IDataType<TResult>
 		{
 			this.CheckJniError();
 			if (localRef == default) return default;
 
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TResult>();
-			JClassObject jClass = this.GetObjectClass(localRef, metadata, out JReferenceTypeMetadata typeMetadata);
+			JReferenceTypeMetadata typeMetadata = metadata;
+			JClassObject jClass = useTypeClass ?
+				this.GetClass<TResult>() :
+				this.GetObjectClass(localRef, metadata, out typeMetadata);
 			JLocalObject jLocal = typeMetadata.CreateInstance(jClass, localRef, true);
 			TResult result = (TResult)(Object)metadata.ParseInstance(jLocal, true);
 			if (localRef != jLocal.LocalReference && register)

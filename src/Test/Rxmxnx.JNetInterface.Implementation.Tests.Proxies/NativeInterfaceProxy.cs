@@ -3,6 +3,10 @@ namespace Rxmxnx.JNetInterface.Tests;
 [ExcludeFromCodeCoverage]
 public abstract class NativeInterfaceProxy
 {
+	public static readonly JThrowableLocalRef NoThrowable = default;
+	public static readonly JBoolean JniFalse = default;
+	public static readonly JBoolean JniTrue = default;
+
 	public InvokeInterfaceProxy VirtualMachine { get; private set; } = default!;
 	public JEnvironmentRef Reference { get; private set; }
 
@@ -396,6 +400,8 @@ public abstract class NativeInterfaceProxy
 		proxy.Reference = ReferenceHelper.InitializeProxy(proxy);
 		proxy.VirtualMachine = vmProxy;
 		proxy.GetVersion().Returns(IVirtualMachine.MinimalVersion);
+		proxy.ExceptionOccurred().Returns(NativeInterfaceProxy.NoThrowable);
+		proxy.ExceptionCheck().Returns(NativeInterfaceProxy.JniFalse);
 		return proxy;
 	}
 	public static NativeInterfaceProxy CreateProxy(Boolean attachThread = true)
@@ -407,6 +413,8 @@ public abstract class NativeInterfaceProxy
 			proxy.VirtualMachine.When(v => v.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()))
 			     .Do(c => ((ValPtr<JEnvironmentRef>)c[0]).Reference = proxy.Reference);
 		proxy.GetVersion().Returns(IVirtualMachine.MinimalVersion);
+		proxy.ExceptionOccurred().Returns(NativeInterfaceProxy.NoThrowable);
+		proxy.ExceptionCheck().Returns(NativeInterfaceProxy.JniFalse);
 		return proxy;
 	}
 }

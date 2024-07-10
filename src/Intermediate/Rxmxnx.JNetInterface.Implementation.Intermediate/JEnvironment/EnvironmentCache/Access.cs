@@ -86,7 +86,7 @@ partial class JEnvironment
 				nativeInterface.InstanceFieldFunctions.GetObjectField.Get(this.Reference, localRef, fieldId);
 			JTrace.GetObjectField(localRef, default, fieldId, resultLocalRef);
 			this.CheckJniError();
-			return this.CreateObject<TField>(resultLocalRef, true);
+			return this.CreateObject<TField>(resultLocalRef, true, MetadataHelper.IsFinalType<TField>());
 		}
 		/// <summary>
 		/// Retrieves a <see cref="JObjectLocalRef"/> reflected from current definition on
@@ -146,7 +146,7 @@ partial class JEnvironment
 			}
 			JTrace.CallObjectFunction(localRef, classRef, methodId, resultLocalRef, false);
 			this.CheckJniError();
-			return this.CreateObject<TResult>(resultLocalRef, true);
+			return this.CreateObject<TResult>(resultLocalRef, true, MetadataHelper.IsFinalType<TResult>());
 		}
 		/// <summary>
 		/// Invokes a primitive function on given <see cref="JObjectLocalRef"/> reference.
@@ -208,7 +208,7 @@ partial class JEnvironment
 			}
 			JTrace.CallObjectFunction(default, classRef, methodId, localRef, false);
 			this.CheckJniError();
-			return this.CreateObject<TResult>(localRef, true);
+			return this.CreateObject<TResult>(localRef, true, MetadataHelper.IsFinalType<TResult>());
 		}
 		/// <summary>
 		/// Invokes a method on given <see cref="JObjectLocalRef"/> reference.

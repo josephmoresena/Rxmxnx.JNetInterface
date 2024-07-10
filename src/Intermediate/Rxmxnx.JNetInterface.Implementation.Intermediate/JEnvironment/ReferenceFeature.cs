@@ -19,7 +19,8 @@ partial class JEnvironment
 				return new(this._env, jLocal, initializer.LocalReference)
 				{
 					Class = initializer.Class,
-					IsRealClass = initializer.Class is not null && initializer.Class.IsFinal,
+					IsRealClass = initializer.Class is not null &&
+						(initializer.Class.IsFinal || initializer.OverrideClass),
 				};
 			result.Load(jLocal);
 			if (!result.IsRealClass && initializer.OverrideClass && initializer.Class is not null)
@@ -135,7 +136,7 @@ partial class JEnvironment
 		}
 		public Boolean Unload(JLocalObject? jLocal)
 		{
-			if (jLocal is null) return false;
+			if (jLocal is null || jLocal.LocalReference == default) return false;
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.LocalReference;

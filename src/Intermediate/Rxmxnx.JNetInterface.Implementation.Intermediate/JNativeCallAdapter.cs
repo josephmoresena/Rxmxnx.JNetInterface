@@ -13,7 +13,7 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	public void FinalizeCall() => this._cache.Dispose();
+	public void FinalizeCall() => this._cache?.Dispose();
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
@@ -33,13 +33,14 @@ public readonly ref partial struct JNativeCallAdapter
 	public JObjectLocalRef FinalizeCall(JLocalObject? result)
 	{
 		JObjectLocalRef jniResult = default;
-		if (result is not null && !result.IsDefault)
+		if (result is JClassObject jClass) this._env.LoadClass(jClass);
+		if (result is not null)
 		{
 			JTrace.FinalizeCall(result);
 			jniResult = result.LocalReference;
-			if (jniResult == default)
-				jniResult = this._env.CreateLocalRef(result.Reference);
-			else
+			if (jniResult == default && result.Reference != default)
+				jniResult = result.Reference;
+			else if (this._cache.Contains(jniResult))
 				this._cache.Remove(jniResult);
 		}
 		this.FinalizeCall();

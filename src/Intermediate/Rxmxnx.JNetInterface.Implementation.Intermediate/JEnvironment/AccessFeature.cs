@@ -161,7 +161,7 @@ partial class JEnvironment
 			}
 			JTrace.GetField(default, jClass, definition);
 			JObjectLocalRef localRef = this.GetStaticObjectField(jClass, definition);
-			return this.CreateObject<TField>(localRef, true);
+			return this.CreateObject<TField>(localRef, true, MetadataHelper.IsFinalType<TField>());
 		}
 		public TField? GetStaticField<TField>(JFieldObject jField, JFieldDefinition definition)
 			where TField : IDataType<TField>, IObject
@@ -177,7 +177,7 @@ partial class JEnvironment
 			{
 				JTrace.GetField(default, jField.DeclaringClass, definition);
 				JObjectLocalRef localRef = this.GetStaticObjectField(classRef, fieldId);
-				return this.CreateObject<TField>(localRef, true);
+				return this.CreateObject<TField>(localRef, true, MetadataHelper.IsFinalType<TField>());
 			}
 			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
 			this.GetPrimitiveStaticField(bytes, classRef, definition.Descriptor[^1], fieldId);
@@ -228,7 +228,7 @@ partial class JEnvironment
 		{
 			JObjectLocalRef localRef = this.NewObject(jClass, definition, args);
 			JTrace.CallMethod(default, jClass, definition, false, args);
-			return this.CreateObject<TObject>(localRef, true)!;
+			return this.CreateObject<TObject>(localRef, true, true)!;
 		}
 		public TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 			IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
@@ -242,7 +242,7 @@ partial class JEnvironment
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jConstructor.DeclaringClass));
 			JObjectLocalRef localRef = this.NewObject(definition, classRef, args, jniTransaction, methodId);
 			JTrace.CallMethod(default, jConstructor.DeclaringClass, definition, false, args);
-			return this.CreateObject<TObject>(localRef, true)!;
+			return this.CreateObject<TObject>(localRef, true, true)!;
 		}
 		public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 			IObject?[] args) where TResult : IDataType<TResult>

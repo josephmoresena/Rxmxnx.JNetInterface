@@ -6,6 +6,21 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static partial class MetadataHelper
 {
 	/// <summary>
+	/// Indicates whether <typeparamref name="TDataType"/> is final type.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType{TDataType}"/> type</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if <typeparamref name="TDataType"/> is final type;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public static Boolean IsFinalType<TDataType>() where TDataType : IDataType<TDataType>
+	{
+		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TDataType>();
+		if (typeMetadata.Modifier is not JTypeModifier.Final)
+			return false;
+		return JVirtualMachine.FinalUserTypeRuntimeEnabled || MetadataHelper.IsBuiltInFinalType(typeMetadata);
+	}
+	/// <summary>
 	/// Retrieves <see cref="JArgumentMetadata"/> metadata for <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>

@@ -13,7 +13,7 @@ public partial class JVirtualMachine
 			this.GlobalClassCache[this.ThrowableMetadata.Hash] = this.ThrowableObject;
 			this.GlobalClassCache[this.StackTraceElementMetadata.Hash] = this.StackTraceElementObject;
 
-			this.GlobalClassCache[this.BooleanMetadata.Hash] = this.VoidPrimitive;
+			this.GlobalClassCache[ClassObjectMetadata.VoidMetadata.Hash] = this.VoidPrimitive;
 			this.GlobalClassCache[this.BooleanMetadata.Hash] = this.BooleanPrimitive;
 			this.GlobalClassCache[this.ByteMetadata.Hash] = this.BytePrimitive;
 			this.GlobalClassCache[this.CharMetadata.Hash] = this.CharPrimitive;

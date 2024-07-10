@@ -144,6 +144,7 @@ partial class JEnvironment
 			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
 			{
 				JTrace.ClassFound(result);
+				if (!this._objects.Equals(this) && result.IsDefault) this.LoadClass(result);
 				return result;
 			}
 			if (MetadataHelper.GetExactMetadata(typeInformation.Hash) is { } metadata)

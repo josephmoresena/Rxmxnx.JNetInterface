@@ -42,7 +42,7 @@ internal unsafe struct InternalNativeInterface
 #pragma warning disable CS0169
 	private readonly MethodOffset _newObjectOffset;
 #pragma warning restore CS0169
-	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JMethodId, JValueWrapper*, JObjectLocalRef> NewObject;
+	public delegate* managed<JEnvironmentRef, JClassLocalRef, JMethodId, JValueWrapper*, JObjectLocalRef> NewObject;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef> GetObjectClass;
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JBoolean> IsInstanceOf;
 
