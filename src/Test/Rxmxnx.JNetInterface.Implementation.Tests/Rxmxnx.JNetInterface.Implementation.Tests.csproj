@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <Using Include="System.Collections"/>
+        <Using Include="System.Collections.Concurrent"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>

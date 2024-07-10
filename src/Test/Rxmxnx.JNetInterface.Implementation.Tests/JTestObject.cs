@@ -4,20 +4,33 @@ namespace Rxmxnx.JNetInterface.Tests;
 public sealed class JTestObject : JLocalObject, IClassType<JTestObject>
 {
 	public const String ClassNamePrefix = "rxmxnx/jnetinterface/test/Test";
+	private static readonly ConcurrentDictionary<Int32, JClassTypeMetadata> metadatas = new();
 
 	[ThreadStatic]
 	private static JClassTypeMetadata<JTestObject>? metadata;
 
 	static JClassTypeMetadata<JTestObject> IClassType<JTestObject>.Metadata
-		=> JTestObject.metadata ??= TypeMetadataBuilder<JTestObject>
-		                            .Create(
-			                            (CString)
-			                            $"{JTestObject.ClassNamePrefix}{Random.Shared.Next()}${Guid.NewGuid():N}")
-		                            .Build();
+	{
+		get
+		{
+			if (JTestObject.metadata is not null)
+				return JTestObject.metadata;
+			JTestObject.metadata = TypeMetadataBuilder<JTestObject>
+			                       .Create(
+				                       (CString)
+				                       $"{JTestObject.ClassNamePrefix}{Random.Shared.Next()}${Guid.NewGuid():N}")
+			                       .Build();
+			JTestObject.metadatas[System.Environment.CurrentManagedThreadId] = JTestObject.metadata;
+			return JTestObject.metadata;
+		}
+	}
 
 	private JTestObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	private JTestObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	private JTestObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
+
+	public static JClassTypeMetadata? GetThreadMetadata()
+		=> JTestObject.metadatas.GetValueOrDefault(System.Environment.CurrentManagedThreadId);
 	static JTestObject IClassType<JTestObject>.Create(IReferenceType.ClassInitializer initializer) => new(initializer);
 	static JTestObject IClassType<JTestObject>.Create(IReferenceType.ObjectInitializer initializer) => new(initializer);
 	static JTestObject IClassType<JTestObject>.Create(IReferenceType.GlobalInitializer initializer) => new(initializer);

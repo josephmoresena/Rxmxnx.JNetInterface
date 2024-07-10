@@ -305,6 +305,17 @@ public sealed class JVirtualMachineTests
 		}
 	}
 
+	[Fact]
+	internal async Task RegisterTest()
+	{
+		Assert.False(JVirtualMachine.Register<JClassObject>());
+		Assert.True(JVirtualMachine.Register<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JClassObject>>>>>());
+		await Task.WhenAll(JVirtualMachineTests.RegisterTestObject(), JVirtualMachineTests.RegisterTestObject(),
+		                   JVirtualMachineTests.RegisterTestObject(), JVirtualMachineTests.RegisterTestObject(),
+		                   JVirtualMachineTests.RegisterTestObject(), JVirtualMachineTests.RegisterTestObject(),
+		                   JVirtualMachineTests.RegisterTestObject(), JVirtualMachineTests.RegisterTestObject());
+	}
+
 	private static JGlobal CreateThreadGroup(IVirtualMachine vm, JGlobalRef globalRef)
 	{
 		EnvironmentProxy proxy = EnvironmentProxy.CreateEnvironment();
@@ -313,4 +324,10 @@ public sealed class JVirtualMachineTests
 		JClassObject classLoaderClass = new(jClassClass, new TypeInformation(classInformation));
 		return new(vm, new(classLoaderClass), globalRef);
 	}
+	private static Task RegisterTestObject()
+		=> Task.Factory.StartNew(() =>
+		{
+			if (JTestObject.GetThreadMetadata() is null)
+				Assert.True(JVirtualMachine.Register<JTestObject>());
+		}, TaskCreationOptions.LongRunning);
 }
