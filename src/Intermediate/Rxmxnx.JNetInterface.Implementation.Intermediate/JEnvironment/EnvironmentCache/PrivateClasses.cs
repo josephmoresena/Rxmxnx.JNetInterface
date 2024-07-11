@@ -360,11 +360,13 @@ partial class JEnvironment
 		private Boolean IsLocalObject(JReferenceObject jObject, out JReferenceType referenceType)
 		{
 			JObjectLocalRef localRef = jObject.As<JObjectLocalRef>();
-			referenceType = this.Version < IVirtualMachine.MinimalVersion ?
-				jObject is JLocalObject jLocal && jLocal.LocalReference == localRef ?
-					JReferenceType.LocalRefType :
-					JReferenceType.InvalidRefType :
-				this._env.GetReferenceType(localRef);
+			if (this.Version < IVirtualMachine.MinimalVersion)
+			{
+				Boolean result = jObject is ILocalObject jLocal && jLocal.LocalReference == localRef;
+				referenceType = result ? JReferenceType.LocalRefType : JReferenceType.InvalidRefType;
+				return result;
+			}
+			referenceType = this._env.GetReferenceType(localRef);
 			return referenceType == JReferenceType.LocalRefType;
 		}
 	}
