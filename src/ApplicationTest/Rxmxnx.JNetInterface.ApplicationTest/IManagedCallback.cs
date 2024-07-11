@@ -9,7 +9,11 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 internal interface IManagedCallback
 {
 	[ExcludeFromCodeCoverage]
-	static virtual IVirtualMachine TypeVirtualMachine { get; set; } = default!;
+	static virtual IVirtualMachine TypeVirtualMachine
+	{
+		[ExcludeFromCodeCoverage] get;
+		[ExcludeFromCodeCoverage] set;
+	} = default!;
 
 	IVirtualMachine VirtualMachine { get; }
 
