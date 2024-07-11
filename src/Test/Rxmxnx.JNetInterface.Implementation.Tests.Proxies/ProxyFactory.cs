@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
+[ExcludeFromCodeCoverage]
 public sealed class ProxyFactory
 {
 	private readonly MemoryHelper<JVirtualMachineRef> _invokeMemory;
