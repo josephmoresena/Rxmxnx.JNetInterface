@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Primitives;
@@ -6,6 +8,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 internal interface IManagedCallback
 {
+	[ExcludeFromCodeCoverage]
 	static virtual IVirtualMachine TypeVirtualMachine { get; set; } = default!;
 
 	IVirtualMachine VirtualMachine { get; }
