@@ -12,7 +12,7 @@ public sealed class JVirtualMachineTests
 		{
 			if (JVirtualMachineTests.factory.TryGetTarget(out ProxyFactory? result))
 				return result;
-			result = new(50);
+			result = new(50, 50);
 			JVirtualMachineTests.factory.SetTarget(result);
 			return result;
 		}
