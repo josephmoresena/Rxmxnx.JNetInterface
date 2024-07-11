@@ -127,8 +127,11 @@ partial class JEnvironment
 	{
 		using JArrayObject<JClassObject> interfaces = jClass.GetInterfaces();
 		using LocalFrame _ = new(this, IVirtualMachine.GetSuperTypeCapacity);
-		foreach (JClassObject? interfaceClass in interfaces)
+		JArrayLocalRef arrayRef = interfaces.Reference;
+		for (Int32 i = 0; i < interfaces.Length; i++)
 		{
+			JClassObject interfaceClass = this._cache.GetInterfaceClass(arrayRef, i);
+
 			// Super interface was already checked.
 			if (hashes.Contains(interfaceClass!.Hash)) continue;
 			JTrace.GetSuperTypeMetadata(jClass, interfaceClass);
@@ -255,9 +258,11 @@ partial class JEnvironment
 				if (checkProxy && CommonNames.ProxyObject.SequenceEqual(superClass.Name))
 				{
 					using JArrayObject<JClassObject> interfaces = superClass.GetInterfaces();
-					if (interfaces.Length > 0 &&
-					    jClass.Environment.ClassFeature.GetTypeMetadata(interfaces[0]) is JInterfaceTypeMetadata
-						    interfaceMetadata)
+					JClassObject? interfaceClassRef = interfaces.Length > 0 ?
+						env._cache.GetInterfaceClass(interfaces.Reference, 0) : // Retrieves first interface class.
+						default;
+
+					if (env._cache.GetTypeMetadata(interfaceClassRef) is JInterfaceTypeMetadata interfaceMetadata)
 					{
 						// Use interface proxy metadata.
 						JTrace.UseTypeMetadata(jClass, interfaceMetadata);

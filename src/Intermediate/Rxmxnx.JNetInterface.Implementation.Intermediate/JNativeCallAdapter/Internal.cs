@@ -55,7 +55,7 @@ public readonly ref partial struct JNativeCallAdapter
 		{
 			JEnvironment env = this._callAdapter._env;
 			if (validateReference) this.ThrowIfNotClassObject(classRef.Value);
-			JClassObject result = env.GetClass(classRef, true);
+			JClassObject result = env.GetReferenceTypeClass(classRef, true);
 			if (classRef == result.LocalReference)
 			{
 				// Class is owned by this class.

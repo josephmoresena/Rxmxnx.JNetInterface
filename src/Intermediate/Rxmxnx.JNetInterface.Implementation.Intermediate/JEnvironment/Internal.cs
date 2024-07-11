@@ -180,8 +180,8 @@ partial class JEnvironment
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
-	internal JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference = false)
-		=> this._cache.GetClass(classRef, keepReference);
+	internal JClassObject GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference = false)
+		=> this._cache.GetClass(classRef, keepReference, true);
 	/// <summary>
 	/// Retrieves the class object and instantiation metadata.
 	/// </summary>
@@ -192,7 +192,7 @@ partial class JEnvironment
 	{
 		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
-		JClassObject jClass = this._cache.GetClass(classRef, true);
+		JClassObject jClass = this._cache.GetClass(classRef, true, true);
 		this._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		typeMetadata = this._cache.GetTypeMetadata(jClass);
 		return jClass;
@@ -263,7 +263,7 @@ partial class JEnvironment
 	{
 		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = env.GetObjectClass(localRef);
-		JClassObject jClass = env.GetClass(classRef);
+		JClassObject jClass = env.GetReferenceTypeClass(classRef);
 		env._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		return jClass;
 	}

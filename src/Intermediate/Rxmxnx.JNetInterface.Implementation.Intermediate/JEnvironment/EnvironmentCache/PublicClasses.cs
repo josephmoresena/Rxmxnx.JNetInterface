@@ -15,10 +15,11 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
+		/// <param name="isReferenceType">Indicates whether class reference is from a reference type.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
-		public JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference)
+		public JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference, Boolean isReferenceType)
 		{
-			using JStringObject jString = this.GetClassName(classRef, out Boolean isPrimitive);
+			using JStringObject jString = this.GetClassName(classRef, isReferenceType, out Boolean isPrimitive);
 			try
 			{
 				using JNativeMemory<Byte> utf8Text = jString.GetNativeUtf8Chars();
@@ -64,6 +65,18 @@ partial class JEnvironment
 			JClassLocalRef result = nativeInterface.ClassFunctions.FindClass(this.Reference, namePtr);
 			if (result.IsDefault) this.CheckJniError();
 			return result;
+		}
+		/// <summary>
+		/// Retrieves class element from interfaces class array.
+		/// </summary>
+		/// <param name="arrayRef">A <see cref="JArrayLocalRef"/> reference.</param>
+		/// <param name="index">Element index.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		public JClassObject GetInterfaceClass(JArrayLocalRef arrayRef, Int32 index)
+		{
+			JObjectLocalRef localRef =
+				this.GetObjectArrayElement(JObjectArrayLocalRef.FromReference(in arrayRef), index);
+			return this.AsClassObject(JClassLocalRef.FromReference(in localRef), true);
 		}
 	}
 }

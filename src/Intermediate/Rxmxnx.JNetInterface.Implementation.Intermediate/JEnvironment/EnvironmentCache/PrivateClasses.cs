@@ -28,14 +28,15 @@ partial class JEnvironment
 		/// Retrieves a <see cref="JStringObject"/> containing class name.
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="isReferenceType">Indicates whether class reference is from a reference type.</param>
 		/// <param name="isPrimitive">Output. Indicates whether class is primitive.</param>
 		/// <returns>A <see cref="JStringObject"/> instance.</returns>
-		private JStringObject GetClassName(JClassLocalRef classRef, out Boolean isPrimitive)
+		private JStringObject GetClassName(JClassLocalRef classRef, Boolean isReferenceType, out Boolean isPrimitive)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			AccessCache access = this.GetAccess(jniTransaction, this.ClassObject);
 			jniTransaction.Add(classRef);
-			isPrimitive = this.IsPrimitiveClass(classRef, access);
+			isPrimitive = !isReferenceType && this.IsPrimitiveClass(classRef, access);
 			return this.GetClassName(classRef, access);
 		}
 		/// <summary>
@@ -100,7 +101,7 @@ partial class JEnvironment
 		{
 			JClassLocalRef assignableRef = isLocalRef ? classRef : default;
 			JClassObject result = classObjectMetadata is null ?
-				this.GetClass(classRef, isLocalRef) :
+				this.GetClass(classRef, isLocalRef, false) :
 				this.GetClass(classObjectMetadata.Name, assignableRef);
 			return this.Register(result);
 		}
@@ -369,5 +370,13 @@ partial class JEnvironment
 			referenceType = this._env.GetReferenceType(localRef);
 			return referenceType == JReferenceType.LocalRefType;
 		}
+		/// <summary>
+		/// Retrieves the current <paramref name="classRef"/> reference as <see cref="JClassObject"/>.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="isReferenceType">Indicates whether class reference is from a reference type.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject AsClassObject(JClassLocalRef classRef, Boolean isReferenceType)
+			=> this.Register(this.GetClass(classRef, true, isReferenceType));
 	}
 }

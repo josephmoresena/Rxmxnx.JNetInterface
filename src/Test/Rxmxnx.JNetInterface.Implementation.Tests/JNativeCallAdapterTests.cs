@@ -151,6 +151,8 @@ public sealed class JNativeCallAdapterTests
 	[InlineData(false, CallResult.String)]
 	[InlineData(true, CallResult.Nested)]
 	[InlineData(false, CallResult.Nested)]
+	[InlineData(true, CallResult.Parameter)]
+	[InlineData(false, CallResult.Parameter)]
 	[InlineData(true, CallResult.Void, true)]
 	[InlineData(false, CallResult.Void, true)]
 	[InlineData(true, CallResult.Primitive, true)]
