@@ -47,13 +47,24 @@ public partial class JVirtualMachine : IVirtualMachine
 		get => AppContext.TryGetSwitch("JNetInterface.EnableFinalUserTypeRuntime", out Boolean enable) && enable;
 	}
 	/// <summary>
-	/// Indicates whether native call should check parameter references type at runtime.
+	/// Indicates whether native call adapters should check parameter references type.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean CheckRefTypeNativeCallEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => !AppContext.TryGetSwitch("JNetInterface.DisableCheckRefTypeNativeCall", out Boolean disable) || !disable;
+	}
+	/// <summary>
+	/// Indicates whether native call adapters should check parameter class object class.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean CheckClassRefNativeCallEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get
+			=> !AppContext.TryGetSwitch("JNetInterface.DisableCheckClassRefNativeCall", out Boolean disable) ||
+				!disable;
 	}
 
 	/// <summary>

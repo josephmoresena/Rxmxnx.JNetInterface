@@ -61,7 +61,9 @@ public readonly ref partial struct JNativeCallAdapter
 		{
 			JEnvironment env = this._callAdapter._env;
 			Builder.ThrowIfNotLocalReference(env, localRef);
-			JClassObject jClass = JEnvironment.GetObjectClass(env, localRef);
+			JClassObject jClass = JVirtualMachine.CheckClassRefNativeCallEnabled ?
+				JEnvironment.GetObjectClass(env, localRef) :
+				env.ClassObject;
 			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
 				throw new ArgumentException($"A {jClass.Name} instance is not {env.ClassObject.Name} instance.");
 		}
@@ -84,16 +86,36 @@ public readonly ref partial struct JNativeCallAdapter
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
 			JEnvironment env = this._callAdapter._env;
-			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
-			JClassObject jClass = metadata.GetClass(env);
+			JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
+			JClassObject jClass = typeMetadata.GetClass(env);
 			if (!JLocalObject.IsClassType<TObject>())
 			{
 				Builder.ThrowIfNotLocalReference(env, localRef);
-				JLocalObject jLocal = metadata.CreateInstance(jClass, localRef, true);
-				return (TObject)metadata.ParseInstance(jLocal);
+				return (TObject)this.CreateObject(jClass, localRef, typeMetadata, typeMetadata);
 			}
 			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 			return (TObject)(Object)this.CreateInitialClass(classRef, true);
+		}
+		/// <summary>
+		/// Creates an object of type <paramref name="typeMetadata"/> using <paramref name="jClass"/> and
+		/// <paramref name="localRef"/>.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="classMetadata"><paramref name="jClass"/> type metadata.</param>
+		/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+		/// <returns>
+		/// Creates an object of type <paramref name="typeMetadata"/> using <paramref name="jClass"/> and
+		/// <paramref name="localRef"/>.
+		/// </returns>
+		private JReferenceObject CreateObject(JClassObject jClass, JObjectLocalRef localRef,
+			JReferenceTypeMetadata classMetadata, JReferenceTypeMetadata typeMetadata)
+		{
+			JLocalObject jLocal = classMetadata.CreateInstance(jClass, localRef, true);
+			Boolean disposeParse = typeMetadata.Modifier != JTypeModifier.Final && classMetadata != typeMetadata;
+			JReferenceObject result = typeMetadata.ParseInstance(jLocal, disposeParse);
+			this._callAdapter._cache.RegisterParameter(localRef, result as ILocalObject ?? jLocal);
+			return result;
 		}
 	}
 }

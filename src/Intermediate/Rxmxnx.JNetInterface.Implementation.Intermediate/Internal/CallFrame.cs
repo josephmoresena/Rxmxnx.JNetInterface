@@ -45,7 +45,7 @@ internal sealed class CallFrame : LocalCache, IDisposable
 	/// </summary>
 	/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	public void RegisterParameter(JObjectLocalRef localRef, JLocalObject jLocal)
+	public void RegisterParameter(JObjectLocalRef localRef, ILocalObject jLocal)
 	{
 		this._parameters.Add(localRef, jLocal);
 		this[localRef] = jLocal.Lifetime.GetCacheable();

@@ -37,13 +37,12 @@ public readonly ref partial struct JNativeCallAdapter
 		internal TObject CreateInitialObject<TObject>(JObjectLocalRef localRef)
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
-			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
-			if (metadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
+			JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
+			if (typeMetadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
 			if (JLocalObject.IsObjectType<TObject>())
 				return (TObject)(Object)this.CreateInitialObject(localRef);
 			JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata classMetadata, true);
-			JLocalObject jLocal = classMetadata.CreateInstance(jClass, localRef, true);
-			return (TObject)metadata.ParseInstance(jLocal, true);
+			return (TObject)this.CreateObject(jClass, localRef, classMetadata, typeMetadata);
 		}
 		/// <summary>
 		/// Retrieves initial <see cref="JLocalObject"/> instance for <paramref name="classRef"/>.

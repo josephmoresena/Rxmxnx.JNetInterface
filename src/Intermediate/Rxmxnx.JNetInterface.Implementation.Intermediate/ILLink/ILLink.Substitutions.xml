@@ -40,5 +40,9 @@
               featurevalue="false">
             <method signature="System.Boolean get_CheckRefTypeNativeCallEnabled()" body="stub" value="false"/>
         </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableCheckClassRefNativeCall"
+              featurevalue="false">
+            <method signature="System.Boolean get_CheckClassRefNativeCallEnabled()" body="stub" value="false"/>
+        </type>
     </assembly>
 </linker>
