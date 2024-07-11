@@ -51,7 +51,7 @@ public partial class JGlobalBase
 	/// <inheritdoc/>
 	private protected override IDisposable GetSynchronizer()
 	{
-		IThread env = this.VirtualMachine.CreateThread(ThreadPurpose.SynchronizeGlobalReference);
+		using IThread env = this.VirtualMachine.CreateThread(ThreadPurpose.SynchronizeGlobalReference);
 		return env.ReferenceFeature.GetSynchronizer(this);
 	}
 	/// <inheritdoc/>

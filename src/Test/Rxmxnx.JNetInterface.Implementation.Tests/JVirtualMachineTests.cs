@@ -4,13 +4,26 @@ namespace Rxmxnx.JNetInterface.Tests;
 public sealed class JVirtualMachineTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
+	private static readonly WeakReference<ProxyFactory?> factory = new(default);
+
+	private static ProxyFactory Factory
+	{
+		get
+		{
+			if (JVirtualMachineTests.factory.TryGetTarget(out ProxyFactory? result))
+				return result;
+			result = new(40);
+			JVirtualMachineTests.factory.SetTarget(result);
+			return result;
+		}
+	}
 
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
 	internal unsafe void GetVirtualMachineTest(Boolean attached)
 	{
-		InvokeInterfaceProxy proxyVm = InvokeInterfaceProxy.CreateProxy();
+		InvokeInterfaceProxy proxyVm = InvokeInterfaceProxy.CreateProxy(JVirtualMachineTests.Factory);
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(proxyVm);
 		try
 		{
@@ -93,7 +106,7 @@ public sealed class JVirtualMachineTests
 	internal void GetVirtualMachineErrorTest()
 	{
 		JResult result = (JResult)Random.Shared.Next(-6, -1);
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(false);
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(JVirtualMachineTests.Factory, false);
 
 		try
 		{
@@ -126,7 +139,7 @@ public sealed class JVirtualMachineTests
 	[InlineData(0x00010005)]
 	internal void GetVirtualMachineVersionErrorTest(Int32 jniVersion)
 	{
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(JVirtualMachineTests.Factory);
 		try
 		{
 			proxyEnv.GetVersion().Returns(jniVersion);
@@ -179,7 +192,7 @@ public sealed class JVirtualMachineTests
 	{
 		String fatalErrorMessage = JVirtualMachineTests.fixture.Create<String>();
 		CString fatalErrorUtf8Message = (CString)fatalErrorMessage;
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(JVirtualMachineTests.Factory);
 		try
 		{
 			proxyEnv.UseVirtualMachineRef = false;
@@ -226,7 +239,7 @@ public sealed class JVirtualMachineTests
 	{
 		JGlobalRef globalRef = useThreadGroup ? JVirtualMachineTests.fixture.Create<JGlobalRef>() : default;
 		CString threadName = (CString)JVirtualMachineTests.fixture.Create<String>();
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(JVirtualMachineTests.Factory);
 		JEnvironment? env = default;
 		try
 		{

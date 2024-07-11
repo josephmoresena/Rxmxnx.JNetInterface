@@ -44,7 +44,7 @@ public abstract class NativeInterfaceProxy
 	public JFieldId LongTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
 	public JFieldId ShortTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
 
-	~NativeInterfaceProxy() { ReferenceHelper.FinalizeProxy(this.Reference); }
+	~NativeInterfaceProxy() { this.VirtualMachine?.Factory?.FinalizeProxy(this.Reference); }
 
 	public unsafe JClassLocalRef? GetMainClassLocalRef(Byte* className)
 	{
@@ -76,7 +76,6 @@ public abstract class NativeInterfaceProxy
 	}
 	public JGlobalRef? GetMainClassGlobalRef(JClassLocalRef classRef)
 	{
-		if (this.VirtualMachine is null) return default;
 		if (classRef == this.ClassLocalRef)
 			return this.VirtualMachine.ClassGlobalRef;
 		if (classRef == this.ThrowableLocalRef)
@@ -433,18 +432,18 @@ public abstract class NativeInterfaceProxy
 	public static NativeInterfaceProxy CreateProxy(InvokeInterfaceProxy vmProxy)
 	{
 		NativeInterfaceProxy proxy = Substitute.For<NativeInterfaceProxy>();
-		proxy.Reference = ReferenceHelper.InitializeProxy(proxy);
 		proxy.VirtualMachine = vmProxy;
+		proxy.Reference = vmProxy.Factory.InitializeProxy(proxy);
 		proxy.GetVersion().Returns(IVirtualMachine.MinimalVersion);
 		proxy.ExceptionOccurred().Returns(NativeInterfaceProxy.NoThrowable);
 		proxy.ExceptionCheck().Returns(NativeInterfaceProxy.JniFalse);
 		return proxy;
 	}
-	public static NativeInterfaceProxy CreateProxy(Boolean attachThread = true)
+	public static NativeInterfaceProxy CreateProxy(ProxyFactory factory, Boolean attachThread = true)
 	{
 		NativeInterfaceProxy proxy = Substitute.For<NativeInterfaceProxy>();
-		proxy.VirtualMachine = InvokeInterfaceProxy.CreateProxy();
-		proxy.Reference = ReferenceHelper.InitializeProxy(proxy);
+		proxy.VirtualMachine = InvokeInterfaceProxy.CreateProxy(factory);
+		proxy.Reference = proxy.VirtualMachine.Factory.InitializeProxy(proxy);
 		if (attachThread)
 			proxy.VirtualMachine.When(v => v.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()))
 			     .Do(c => ((ValPtr<JEnvironmentRef>)c[0]).Reference = proxy.Reference);

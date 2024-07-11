@@ -3,31 +3,8 @@ namespace Rxmxnx.JNetInterface.Tests.Internal;
 internal static partial class ReferenceHelper
 {
 	public static readonly IFixture Fixture = new Fixture().RegisterReferences();
-
-	public static JVirtualMachineRef InitializeProxy(InvokeInterfaceProxy proxy)
-	{
-		IntPtr ptr = ReferenceHelper.invokeHelper.Get();
-		JVirtualMachineRef result = NativeUtilities.Transform<IntPtr, JVirtualMachineRef>(ptr);
-		ReferenceHelper.invokeProxies[result] = proxy;
-		return result;
-	}
-	public static void FinalizeProxy(JVirtualMachineRef vmRef)
-	{
-		ReferenceHelper.invokeProxies.TryRemove(vmRef, out _);
-		ReferenceHelper.nativeHelper.Free(vmRef.Pointer);
-	}
-	public static JEnvironmentRef InitializeProxy(NativeInterfaceProxy proxy)
-	{
-		IntPtr ptr = ReferenceHelper.nativeHelper.Get();
-		JEnvironmentRef result = NativeUtilities.Transform<IntPtr, JEnvironmentRef>(ptr);
-		ReferenceHelper.nativeProxies[result] = proxy;
-		return result;
-	}
-	public static void FinalizeProxy(JEnvironmentRef envRef)
-	{
-		ReferenceHelper.nativeProxies.TryRemove(envRef, out _);
-		ReferenceHelper.nativeHelper.Free(envRef.Pointer);
-	}
+	public static readonly ConcurrentDictionary<JEnvironmentRef, NativeInterfaceProxy> NativeProxies = new();
+	public static readonly ConcurrentDictionary<JVirtualMachineRef, InvokeInterfaceProxy> InvokeProxies = new();
 
 	public static unsafe Boolean IsClassName<TDataType>(Byte* className) where TDataType : IDataType<TDataType>
 	{

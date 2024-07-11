@@ -206,7 +206,7 @@ public partial class JVirtualMachine
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	internal static void RemoveEnvironment(JVirtualMachineRef vmRef, JEnvironmentRef envRef)
 	{
-		JVirtualMachine vm = ReferenceCache.Instance.Get(vmRef, out _);
-		vm._cache.ThreadCache.Remove(envRef);
+		JVirtualMachine? vm = ReferenceCache.Instance.Get(vmRef);
+		vm?._cache.ThreadCache.Remove(envRef);
 	}
 }

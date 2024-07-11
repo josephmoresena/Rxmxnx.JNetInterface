@@ -52,8 +52,9 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	public static IDisposable CreateSynchronizer(IEnvironment env, JReferenceObject jObject,
 		IDictionary<Guid, INativeTransaction> transactions)
 	{
-		Synchronizer result = JniTransactionHandle.Initialize<Synchronizer>(new(env, jObject), transactions);
-		result.Activate();
+		Synchronizer result =
+			JniTransactionHandle.Initialize<Synchronizer>(new(env.VirtualMachine, jObject), transactions);
+		result.Activate(env);
 		return result;
 	}
 	/// <summary>

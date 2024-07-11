@@ -28,8 +28,9 @@ public abstract class InvokeInterfaceProxy
 	public JMethodId StackTraceElementIsNativeMethodMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
 
 	public JVirtualMachineRef Reference { get; private set; }
+	public ProxyFactory Factory { get; private set; } = default!;
 
-	~InvokeInterfaceProxy() { ReferenceHelper.FinalizeProxy(this.Reference); }
+	~InvokeInterfaceProxy() { this.Factory?.FinalizeProxy(this.Reference); }
 
 	public abstract JResult DestroyVirtualMachine();
 	public abstract JResult AttachCurrentThread(ValPtr<JEnvironmentRef> envRef,
@@ -39,10 +40,11 @@ public abstract class InvokeInterfaceProxy
 	public abstract JResult AttachCurrentThreadAsDaemon(ValPtr<JEnvironmentRef> envRef,
 		ReadOnlyValPtr<VirtualMachineArgumentValueWrapper> arg);
 
-	public static InvokeInterfaceProxy CreateProxy()
+	public static InvokeInterfaceProxy CreateProxy(ProxyFactory factory)
 	{
 		InvokeInterfaceProxy proxy = Substitute.For<InvokeInterfaceProxy>();
-		proxy.Reference = ReferenceHelper.InitializeProxy(proxy);
+		proxy.Factory = factory;
+		proxy.Reference = factory.InitializeProxy(proxy);
 		return proxy;
 	}
 }

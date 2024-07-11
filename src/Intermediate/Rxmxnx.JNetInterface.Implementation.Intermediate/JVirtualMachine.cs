@@ -70,7 +70,27 @@ public partial class JVirtualMachine : IVirtualMachine
 	{
 		if (!this.IsAlive) return new DeadThread(this);
 		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
-		return this.AttachThread(args);
+		try
+		{
+			return this.AttachThread(args);
+		}
+		catch (Exception)
+		{
+			switch (purpose)
+			{
+				case ThreadPurpose.ReleaseSequence:
+				case ThreadPurpose.RemoveGlobalReference:
+				case ThreadPurpose.CheckGlobalReference:
+				case ThreadPurpose.CheckAssignability:
+				case ThreadPurpose.SynchronizeGlobalReference:
+					return new DeadThread(this);
+				case ThreadPurpose.ExceptionExecution:
+				case ThreadPurpose.CreateGlobalReference:
+				case ThreadPurpose.FatalError:
+				default:
+					throw;
+			}
+		}
 	}
 	IThread IVirtualMachine.InitializeThread(CString? threadName, JGlobalBase? threadGroup, Int32 version)
 		=> this.AttachThread(new() { Name = threadName, ThreadGroup = threadGroup, Version = version, });

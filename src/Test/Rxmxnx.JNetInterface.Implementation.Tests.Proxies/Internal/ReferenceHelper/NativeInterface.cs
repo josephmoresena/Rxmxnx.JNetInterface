@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Tests.Internal;
 [ExcludeFromCodeCoverage]
 internal unsafe partial class ReferenceHelper
 {
-	private static readonly InternalNativeInterface[] nativeInterface =
+	public static readonly InternalNativeInterface[] NativeInterface =
 	[
 		new()
 		{
@@ -170,94 +170,89 @@ internal unsafe partial class ReferenceHelper
 			IsVirtualThread = &ReferenceHelper.IsVirtualThread,
 		},
 	];
-	private static readonly ConcurrentDictionary<JEnvironmentRef, NativeInterfaceProxy> nativeProxies = new();
-	private static readonly GCHandle
-		nativeHandle = GCHandle.Alloc(ReferenceHelper.nativeInterface, GCHandleType.Pinned);
-	private static readonly MemoryHelper nativeHelper =
-		new(ReferenceHelper.nativeHandle.AddrOfPinnedObject(), Int16.MaxValue);
 
 	[UnmanagedCallersOnly]
-	private static Int32 GetVersion(JEnvironmentRef envRef) => ReferenceHelper.nativeProxies[envRef].GetVersion();
+	private static Int32 GetVersion(JEnvironmentRef envRef) => ReferenceHelper.NativeProxies[envRef].GetVersion();
 
 	[UnmanagedCallersOnly]
 	private static JClassLocalRef DefineClass(JEnvironmentRef envRef, Byte* className, JObjectLocalRef classLoader,
 		IntPtr byteCode, Int32 byteLength)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .DefineClass((ReadOnlyValPtr<Byte>)(IntPtr)className, classLoader, byteCode, byteLength);
 	[UnmanagedCallersOnly]
 	private static JClassLocalRef FindClass(JEnvironmentRef envRef, Byte* className)
 	{
-		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		NativeInterfaceProxy proxy = ReferenceHelper.NativeProxies[envRef];
 		if (!proxy.UseDefaultClassRef) proxy.FindClass((ReadOnlyValPtr<Byte>)(IntPtr)className);
 		return proxy.GetMainClassLocalRef(className) ?? proxy.FindClass((ReadOnlyValPtr<Byte>)(IntPtr)className);
 	}
 	[UnmanagedCallersOnly]
 	private static JMethodId FromReflectedMethod(JEnvironmentRef envRef, JObjectLocalRef executableRef)
-		=> ReferenceHelper.nativeProxies[envRef].FromReflectedMethod(executableRef);
+		=> ReferenceHelper.NativeProxies[envRef].FromReflectedMethod(executableRef);
 	[UnmanagedCallersOnly]
 	private static JFieldId FromReflectedField(JEnvironmentRef envRef, JObjectLocalRef fieldRef)
-		=> ReferenceHelper.nativeProxies[envRef].FromReflectedField(fieldRef);
+		=> ReferenceHelper.NativeProxies[envRef].FromReflectedField(fieldRef);
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef ToReflectedMethod(JEnvironmentRef envRef, JClassLocalRef classRef,
 		JMethodId methodId, JBoolean isStatic)
-		=> ReferenceHelper.nativeProxies[envRef].ToReflectedMethod(classRef, methodId, isStatic);
+		=> ReferenceHelper.NativeProxies[envRef].ToReflectedMethod(classRef, methodId, isStatic);
 	[UnmanagedCallersOnly]
 	private static JClassLocalRef GetSuperclass(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> ReferenceHelper.nativeProxies[envRef].GetSuperclass(classRef);
+		=> ReferenceHelper.NativeProxies[envRef].GetSuperclass(classRef);
 	[UnmanagedCallersOnly]
 	private static JBoolean IsAssignableFrom(JEnvironmentRef envRef, JClassLocalRef classFromRef,
 		JClassLocalRef classToRef)
-		=> ReferenceHelper.nativeProxies[envRef].IsAssignableFrom(classFromRef, classToRef);
+		=> ReferenceHelper.NativeProxies[envRef].IsAssignableFrom(classFromRef, classToRef);
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef ToReflectedField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JBoolean isStatic)
-		=> ReferenceHelper.nativeProxies[envRef].ToReflectedField(classRef, fieldId, isStatic);
+		=> ReferenceHelper.NativeProxies[envRef].ToReflectedField(classRef, fieldId, isStatic);
 
 	[UnmanagedCallersOnly]
 	private static JResult Throw(JEnvironmentRef envRef, JThrowableLocalRef throwableRef)
-		=> ReferenceHelper.nativeProxies[envRef].Throw(throwableRef);
+		=> ReferenceHelper.NativeProxies[envRef].Throw(throwableRef);
 	[UnmanagedCallersOnly]
 	private static JResult ThrowNew(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* message)
-		=> ReferenceHelper.nativeProxies[envRef].ThrowNew(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)message);
+		=> ReferenceHelper.NativeProxies[envRef].ThrowNew(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)message);
 	[UnmanagedCallersOnly]
 	private static JThrowableLocalRef ExceptionOccurred(JEnvironmentRef envRef)
-		=> ReferenceHelper.nativeProxies[envRef].ExceptionOccurred();
+		=> ReferenceHelper.NativeProxies[envRef].ExceptionOccurred();
 	[UnmanagedCallersOnly]
 	private static void ExceptionDescribe(JEnvironmentRef envRef)
-		=> ReferenceHelper.nativeProxies[envRef].ExceptionDescribe();
+		=> ReferenceHelper.NativeProxies[envRef].ExceptionDescribe();
 	[UnmanagedCallersOnly]
 	private static void ExceptionClear(JEnvironmentRef envRef)
-		=> ReferenceHelper.nativeProxies[envRef].ExceptionClear();
+		=> ReferenceHelper.NativeProxies[envRef].ExceptionClear();
 	[UnmanagedCallersOnly]
 	private static void FatalError(JEnvironmentRef envRef, Byte* message)
-		=> ReferenceHelper.nativeProxies[envRef].FatalError((ReadOnlyValPtr<Byte>)(IntPtr)message);
+		=> ReferenceHelper.NativeProxies[envRef].FatalError((ReadOnlyValPtr<Byte>)(IntPtr)message);
 
 	[UnmanagedCallersOnly]
 	private static JResult PushLocalFrame(JEnvironmentRef envRef, Int32 capacity)
-		=> ReferenceHelper.nativeProxies[envRef].PushLocalFrame(capacity);
+		=> ReferenceHelper.NativeProxies[envRef].PushLocalFrame(capacity);
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef PopLocalFrame(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> ReferenceHelper.nativeProxies[envRef].PopLocalFrame(localRef);
+		=> ReferenceHelper.NativeProxies[envRef].PopLocalFrame(localRef);
 	[UnmanagedCallersOnly]
 	private static JGlobalRef NewGlobalRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
-		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		NativeInterfaceProxy proxy = ReferenceHelper.NativeProxies[envRef];
 		if (!proxy.UseDefaultClassRef) return proxy.NewGlobalRef(localRef);
 		return proxy.GetMainClassGlobalRef(JClassLocalRef.FromReference(in localRef)) ?? proxy.NewGlobalRef(localRef);
 	}
 	[UnmanagedCallersOnly]
 	private static void DeleteGlobalRef(JEnvironmentRef envRef, JGlobalRef globalRef)
-		=> ReferenceHelper.nativeProxies[envRef].DeleteGlobalRef(globalRef);
+		=> ReferenceHelper.NativeProxies[envRef].DeleteGlobalRef(globalRef);
 	[UnmanagedCallersOnly]
 	private static void DeleteLocalRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> ReferenceHelper.nativeProxies[envRef].DeleteLocalRef(localRef);
+		=> ReferenceHelper.NativeProxies[envRef].DeleteLocalRef(localRef);
 	[UnmanagedCallersOnly]
 	private static JBoolean IsSameObject(JEnvironmentRef envRef, JObjectLocalRef localRef1, JObjectLocalRef localRef2)
-		=> ReferenceHelper.nativeProxies[envRef].IsSameObject(localRef1, localRef2);
+		=> ReferenceHelper.NativeProxies[envRef].IsSameObject(localRef1, localRef2);
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef NewLocalRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
-		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		NativeInterfaceProxy proxy = ReferenceHelper.NativeProxies[envRef];
 		if (proxy.UseDefaultClassRef)
 		{
 			if (proxy.VirtualMachine.ClassGlobalRef.Value == localRef)
@@ -289,219 +284,219 @@ internal unsafe partial class ReferenceHelper
 	}
 	[UnmanagedCallersOnly]
 	private static JResult EnsureLocalCapacity(JEnvironmentRef envRef, Int32 capacity)
-		=> ReferenceHelper.nativeProxies[envRef].EnsureLocalCapacity(capacity);
+		=> ReferenceHelper.NativeProxies[envRef].EnsureLocalCapacity(capacity);
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef AllocObject(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> ReferenceHelper.nativeProxies[envRef].AllocObject(classRef);
+		=> ReferenceHelper.NativeProxies[envRef].AllocObject(classRef);
 	private static JObjectLocalRef NewObject(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId constructorId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .NewObject(classRef, constructorId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static JClassLocalRef GetObjectClass(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> ReferenceHelper.nativeProxies[envRef].GetObjectClass(localRef);
+		=> ReferenceHelper.NativeProxies[envRef].GetObjectClass(localRef);
 	[UnmanagedCallersOnly]
 	private static JBoolean IsInstanceOf(JEnvironmentRef envRef, JObjectLocalRef localRef, JClassLocalRef classRef)
-		=> ReferenceHelper.nativeProxies[envRef].IsInstanceOf(localRef, classRef);
+		=> ReferenceHelper.NativeProxies[envRef].IsInstanceOf(localRef, classRef);
 
 	[UnmanagedCallersOnly]
 	private static JMethodId GetMethodId(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* methodName,
 		Byte* methodDescriptor)
 	{
-		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		NativeInterfaceProxy proxy = ReferenceHelper.NativeProxies[envRef];
 		return (proxy.UseDefaultClassRef ? proxy.GetMainMethodId(classRef, methodName) : default) ?? proxy.GetMethodId(
 			classRef, (ReadOnlyValPtr<Byte>)(IntPtr)methodName, (ReadOnlyValPtr<Byte>)(IntPtr)methodDescriptor);
 	}
 	private static JObjectLocalRef CallObjectMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallObjectMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JBoolean CallBooleanMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallBooleanMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JByte CallByteMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallByteMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JChar CallCharMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallCharMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JShort CallShortMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallShortMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JInt CallIntMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallIntMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JLong CallLongMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallLongMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JFloat CallFloatMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallFloatMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JDouble CallDoubleMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallDoubleMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static void CallVoidMethod(JEnvironmentRef envRef, JObjectLocalRef localRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallVoidMethod(localRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JObjectLocalRef CallNonVirtualObjectMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallNonVirtualObjectMethod(localRef, classRef, methodId,
 		                                              (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JBoolean CallNonVirtualBooleanMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallNonVirtualBooleanMethod(localRef, classRef, methodId,
 		                                               (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JByte CallNonVirtualByteMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallNonVirtualByteMethod(localRef, classRef, methodId,
 		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JChar CallNonVirtualCharMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallNonVirtualCharMethod(localRef, classRef, methodId,
 		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JShort CallNonVirtualShortMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallNonVirtualShortMethod(localRef, classRef, methodId,
 		                                             (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JInt CallNonVirtualIntMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallNonVirtualIntMethod(localRef, classRef, methodId,
 		                                           (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JLong CallNonVirtualLongMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallNonVirtualLongMethod(localRef, classRef, methodId,
 		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JFloat CallNonVirtualFloatMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallNonVirtualFloatMethod(localRef, classRef, methodId,
 		                                             (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JDouble CallNonVirtualDoubleMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallNonVirtualDoubleMethod(localRef, classRef, methodId,
 		                                              (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static void CallNonVirtualVoidMethod(JEnvironmentRef envRef, JObjectLocalRef localRef,
 		JClassLocalRef classRef, JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallNonVirtualVoidMethod(localRef, classRef, methodId,
 		                                            (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 
 	[UnmanagedCallersOnly]
 	private static JFieldId GetFieldId(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* fieldName,
 		Byte* fieldDescriptor)
-		=> ReferenceHelper.nativeProxies[envRef].GetFieldId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)fieldName,
+		=> ReferenceHelper.NativeProxies[envRef].GetFieldId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)fieldName,
 		                                                    (ReadOnlyValPtr<Byte>)(IntPtr)fieldDescriptor);
 	private static JObjectLocalRef GetObjectField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetObjectField(localRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetObjectField(localRef, fieldId);
 	private static JBoolean GetBooleanField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetBooleanField(localRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetBooleanField(localRef, fieldId);
 	private static JByte GetByteField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetByteField(localRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetByteField(localRef, fieldId);
 	private static JChar GetCharField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetCharField(localRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetCharField(localRef, fieldId);
 	private static JShort GetShortField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetShortField(localRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetShortField(localRef, fieldId);
 	private static JInt GetIntField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetIntField(localRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetIntField(localRef, fieldId);
 	private static JLong GetLongField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetLongField(localRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetLongField(localRef, fieldId);
 	private static JFloat GetFloatField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetFloatField(localRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetFloatField(localRef, fieldId);
 	private static JDouble GetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetDoubleField(localRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetDoubleField(localRef, fieldId);
 	private static void SetObjectField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId,
 		JObjectLocalRef value)
-		=> ReferenceHelper.nativeProxies[envRef].SetObjectField(localRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetObjectField(localRef, fieldId, value);
 	private static void SetBooleanField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId,
 		JBoolean value)
-		=> ReferenceHelper.nativeProxies[envRef].SetBooleanField(localRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetBooleanField(localRef, fieldId, value);
 	private static void SetByteField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JByte value)
-		=> ReferenceHelper.nativeProxies[envRef].SetByteField(localRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetByteField(localRef, fieldId, value);
 	private static void SetCharField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JChar value)
-		=> ReferenceHelper.nativeProxies[envRef].SetCharField(localRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetCharField(localRef, fieldId, value);
 	private static void SetShortField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JShort value)
-		=> ReferenceHelper.nativeProxies[envRef].SetShortField(localRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetShortField(localRef, fieldId, value);
 	private static void SetIntField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JInt value)
-		=> ReferenceHelper.nativeProxies[envRef].SetIntField(localRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetIntField(localRef, fieldId, value);
 	private static void SetLongField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JLong value)
-		=> ReferenceHelper.nativeProxies[envRef].SetLongField(localRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetLongField(localRef, fieldId, value);
 	private static void SetFloatField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId, JFloat value)
-		=> ReferenceHelper.nativeProxies[envRef].SetFloatField(localRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetFloatField(localRef, fieldId, value);
 	private static void SetDoubleField(JEnvironmentRef envRef, JObjectLocalRef localRef, JFieldId fieldId,
 		JDouble value)
-		=> ReferenceHelper.nativeProxies[envRef].SetDoubleField(localRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetDoubleField(localRef, fieldId, value);
 
 	[UnmanagedCallersOnly]
 	private static JMethodId GetStaticMethodId(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* methodName,
 		Byte* methodDescriptor)
-		=> ReferenceHelper.nativeProxies[envRef].GetStaticMethodId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)methodName,
+		=> ReferenceHelper.NativeProxies[envRef].GetStaticMethodId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)methodName,
 		                                                           (ReadOnlyValPtr<Byte>)(IntPtr)methodDescriptor);
 	private static JObjectLocalRef CallStaticObjectMethod(JEnvironmentRef envRef, JClassLocalRef classRef,
 		JMethodId methodId, JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallStaticObjectMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JBoolean CallStaticBooleanMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallStaticBooleanMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JByte CallStaticByteMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallStaticByteMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JChar CallStaticCharMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallStaticCharMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JShort CallStaticShortMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallStaticShortMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JInt CallStaticIntMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallStaticIntMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JLong CallStaticLongMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallStaticLongMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JFloat CallStaticFloatMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallStaticFloatMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	private static JDouble CallStaticDoubleMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallStaticDoubleMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 	[UnmanagedCallersOnly]
 	private static void CallStaticVoidMethod(JEnvironmentRef envRef, JClassLocalRef classRef, JMethodId methodId,
 		JValueWrapper* args)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .CallStaticVoidMethod(classRef, methodId, (ReadOnlyValPtr<JValueWrapper>)(IntPtr)args);
 
 	[UnmanagedCallersOnly]
 	private static JFieldId GetStaticFieldId(JEnvironmentRef envRef, JClassLocalRef classRef, Byte* fieldName,
 		Byte* fieldDescriptor)
 	{
-		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		NativeInterfaceProxy proxy = ReferenceHelper.NativeProxies[envRef];
 		return (proxy.UseDefaultClassRef ? proxy.GetPrimitiveWrapperClassTypeField(classRef, fieldName) : default) ??
 			proxy.GetStaticFieldId(classRef, (ReadOnlyValPtr<Byte>)(IntPtr)fieldName,
 			                       (ReadOnlyValPtr<Byte>)(IntPtr)fieldDescriptor);
@@ -509,261 +504,261 @@ internal unsafe partial class ReferenceHelper
 	private static JObjectLocalRef GetStaticObjectField(JEnvironmentRef envRef, JClassLocalRef classRef,
 		JFieldId fieldId)
 	{
-		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		NativeInterfaceProxy proxy = ReferenceHelper.NativeProxies[envRef];
 		if (!proxy.UseDefaultClassRef) return proxy.GetStaticObjectField(classRef, fieldId);
 		return proxy.GetPrimitiveClass(classRef, fieldId)?.Value ?? proxy.GetStaticObjectField(classRef, fieldId);
 	}
 	private static JBoolean GetStaticBooleanField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetStaticBooleanField(classRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetStaticBooleanField(classRef, fieldId);
 	private static JByte GetStaticByteField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetStaticByteField(classRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetStaticByteField(classRef, fieldId);
 	private static JChar GetStaticCharField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetStaticCharField(classRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetStaticCharField(classRef, fieldId);
 	private static JShort GetStaticShortField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetStaticShortField(classRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetStaticShortField(classRef, fieldId);
 	private static JInt GetStaticIntField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetStaticIntField(classRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetStaticIntField(classRef, fieldId);
 	private static JLong GetStaticLongField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetStaticLongField(classRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetStaticLongField(classRef, fieldId);
 	private static JFloat GetStaticFloatField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetStaticFloatField(classRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetStaticFloatField(classRef, fieldId);
 	private static JDouble GetStaticDoubleField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId)
-		=> ReferenceHelper.nativeProxies[envRef].GetStaticDoubleField(classRef, fieldId);
+		=> ReferenceHelper.NativeProxies[envRef].GetStaticDoubleField(classRef, fieldId);
 	private static void SetStaticObjectField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JObjectLocalRef value)
-		=> ReferenceHelper.nativeProxies[envRef].SetStaticObjectField(classRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetStaticObjectField(classRef, fieldId, value);
 	private static void SetStaticBooleanField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JBoolean value)
-		=> ReferenceHelper.nativeProxies[envRef].SetStaticBooleanField(classRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetStaticBooleanField(classRef, fieldId, value);
 	private static void SetStaticByteField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JByte value)
-		=> ReferenceHelper.nativeProxies[envRef].SetStaticByteField(classRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetStaticByteField(classRef, fieldId, value);
 	private static void SetStaticCharField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JChar value)
-		=> ReferenceHelper.nativeProxies[envRef].SetStaticCharField(classRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetStaticCharField(classRef, fieldId, value);
 	private static void SetStaticShortField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JShort value)
-		=> ReferenceHelper.nativeProxies[envRef].SetStaticShortField(classRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetStaticShortField(classRef, fieldId, value);
 	private static void SetStaticIntField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId, JInt value)
-		=> ReferenceHelper.nativeProxies[envRef].SetStaticIntField(classRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetStaticIntField(classRef, fieldId, value);
 	private static void SetStaticLongField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JLong value)
-		=> ReferenceHelper.nativeProxies[envRef].SetStaticLongField(classRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetStaticLongField(classRef, fieldId, value);
 	private static void SetStaticFloatField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JFloat value)
-		=> ReferenceHelper.nativeProxies[envRef].SetStaticFloatField(classRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetStaticFloatField(classRef, fieldId, value);
 	private static void SetStaticDoubleField(JEnvironmentRef envRef, JClassLocalRef classRef, JFieldId fieldId,
 		JDouble value)
-		=> ReferenceHelper.nativeProxies[envRef].SetStaticDoubleField(classRef, fieldId, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetStaticDoubleField(classRef, fieldId, value);
 
 	[UnmanagedCallersOnly]
 	private static JStringLocalRef NewString(JEnvironmentRef envRef, Char* chars, Int32 length)
-		=> ReferenceHelper.nativeProxies[envRef].NewString((ValPtr<Char>)(IntPtr)chars, length);
+		=> ReferenceHelper.NativeProxies[envRef].NewString((ValPtr<Char>)(IntPtr)chars, length);
 	[UnmanagedCallersOnly]
 	private static Int32 GetStringLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
-		=> ReferenceHelper.nativeProxies[envRef].GetStringLength(stringRef);
+		=> ReferenceHelper.NativeProxies[envRef].GetStringLength(stringRef);
 	[UnmanagedCallersOnly]
 	private static Char* GetStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, JBoolean* isCopy)
-		=> (Char*)ReferenceHelper.nativeProxies[envRef].GetStringChars(stringRef, (ValPtr<JBoolean>)(IntPtr)isCopy)
+		=> (Char*)ReferenceHelper.NativeProxies[envRef].GetStringChars(stringRef, (ValPtr<JBoolean>)(IntPtr)isCopy)
 		                         .Pointer;
 	[UnmanagedCallersOnly]
 	private static void ReleaseStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, Char* chars)
-		=> ReferenceHelper.nativeProxies[envRef].ReleaseStringChars(stringRef, (ReadOnlyValPtr<Char>)(IntPtr)chars);
+		=> ReferenceHelper.NativeProxies[envRef].ReleaseStringChars(stringRef, (ReadOnlyValPtr<Char>)(IntPtr)chars);
 
 	[UnmanagedCallersOnly]
 	private static JStringLocalRef NewStringUtf(JEnvironmentRef envRef, Byte* chars)
-		=> ReferenceHelper.nativeProxies[envRef].NewStringUtf((ReadOnlyValPtr<Byte>)(IntPtr)chars);
+		=> ReferenceHelper.NativeProxies[envRef].NewStringUtf((ReadOnlyValPtr<Byte>)(IntPtr)chars);
 	[UnmanagedCallersOnly]
 	private static Int32 GetStringUtfLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
-		=> ReferenceHelper.nativeProxies[envRef].GetStringUtfLength(stringRef);
+		=> ReferenceHelper.NativeProxies[envRef].GetStringUtfLength(stringRef);
 	[UnmanagedCallersOnly]
 	private static Byte* GetStringUtfChars(JEnvironmentRef envRef, JStringLocalRef stringRef, JBoolean* isCopy)
-		=> (Byte*)ReferenceHelper.nativeProxies[envRef].GetStringUtfChars(stringRef, (ValPtr<JBoolean>)(IntPtr)isCopy)
+		=> (Byte*)ReferenceHelper.NativeProxies[envRef].GetStringUtfChars(stringRef, (ValPtr<JBoolean>)(IntPtr)isCopy)
 		                         .Pointer;
 	[UnmanagedCallersOnly]
 	private static void ReleaseStringUtfChars(JEnvironmentRef envRef, JStringLocalRef stringRef, Byte* chars)
-		=> ReferenceHelper.nativeProxies[envRef].ReleaseStringUtfChars(stringRef, (ReadOnlyValPtr<Byte>)(IntPtr)chars);
+		=> ReferenceHelper.NativeProxies[envRef].ReleaseStringUtfChars(stringRef, (ReadOnlyValPtr<Byte>)(IntPtr)chars);
 
 	[UnmanagedCallersOnly]
 	private static Int32 GetArrayLength(JEnvironmentRef envRef, JArrayLocalRef arrayRef)
-		=> ReferenceHelper.nativeProxies[envRef].GetArrayLength(arrayRef);
+		=> ReferenceHelper.NativeProxies[envRef].GetArrayLength(arrayRef);
 
 	[UnmanagedCallersOnly]
 	private static JObjectArrayLocalRef NewObjectArray(JEnvironmentRef envRef, Int32 arrayLength,
 		JClassLocalRef elementClass, JObjectLocalRef initialElement)
-		=> ReferenceHelper.nativeProxies[envRef].NewObjectArray(arrayLength, elementClass, initialElement);
+		=> ReferenceHelper.NativeProxies[envRef].NewObjectArray(arrayLength, elementClass, initialElement);
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef GetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef arrayRef,
 		Int32 index)
-		=> ReferenceHelper.nativeProxies[envRef].GetObjectArrayElement(arrayRef, index);
+		=> ReferenceHelper.NativeProxies[envRef].GetObjectArrayElement(arrayRef, index);
 	[UnmanagedCallersOnly]
 	private static void SetObjectArrayElement(JEnvironmentRef envRef, JObjectArrayLocalRef arrayRef, Int32 index,
 		JObjectLocalRef value)
-		=> ReferenceHelper.nativeProxies[envRef].SetObjectArrayElement(arrayRef, index, value);
+		=> ReferenceHelper.NativeProxies[envRef].SetObjectArrayElement(arrayRef, index, value);
 
 	[UnmanagedCallersOnly]
 	private static JBooleanArrayLocalRef NewBooleanArray(JEnvironmentRef envRef, Int32 arrayLength)
-		=> ReferenceHelper.nativeProxies[envRef].NewBooleanArray(arrayLength);
+		=> ReferenceHelper.NativeProxies[envRef].NewBooleanArray(arrayLength);
 	[UnmanagedCallersOnly]
 	private static JByteArrayLocalRef NewByteArray(JEnvironmentRef envRef, Int32 arrayLength)
-		=> ReferenceHelper.nativeProxies[envRef].NewByteArray(arrayLength);
+		=> ReferenceHelper.NativeProxies[envRef].NewByteArray(arrayLength);
 	[UnmanagedCallersOnly]
 	private static JCharArrayLocalRef NewCharArray(JEnvironmentRef envRef, Int32 arrayLength)
-		=> ReferenceHelper.nativeProxies[envRef].NewCharArray(arrayLength);
+		=> ReferenceHelper.NativeProxies[envRef].NewCharArray(arrayLength);
 	[UnmanagedCallersOnly]
 	private static JShortArrayLocalRef NewShortArray(JEnvironmentRef envRef, Int32 arrayLength)
-		=> ReferenceHelper.nativeProxies[envRef].NewShortArray(arrayLength);
+		=> ReferenceHelper.NativeProxies[envRef].NewShortArray(arrayLength);
 	[UnmanagedCallersOnly]
 	private static JIntArrayLocalRef NewIntArray(JEnvironmentRef envRef, Int32 arrayLength)
-		=> ReferenceHelper.nativeProxies[envRef].NewIntArray(arrayLength);
+		=> ReferenceHelper.NativeProxies[envRef].NewIntArray(arrayLength);
 	[UnmanagedCallersOnly]
 	private static JLongArrayLocalRef NewLongArray(JEnvironmentRef envRef, Int32 arrayLength)
-		=> ReferenceHelper.nativeProxies[envRef].NewLongArray(arrayLength);
+		=> ReferenceHelper.NativeProxies[envRef].NewLongArray(arrayLength);
 	[UnmanagedCallersOnly]
 	private static JFloatArrayLocalRef NewFloatArray(JEnvironmentRef envRef, Int32 arrayLength)
-		=> ReferenceHelper.nativeProxies[envRef].NewFloatArray(arrayLength);
+		=> ReferenceHelper.NativeProxies[envRef].NewFloatArray(arrayLength);
 	[UnmanagedCallersOnly]
 	private static JDoubleArrayLocalRef NewDoubleArray(JEnvironmentRef envRef, Int32 arrayLength)
-		=> ReferenceHelper.nativeProxies[envRef].NewDoubleArray(arrayLength);
+		=> ReferenceHelper.NativeProxies[envRef].NewDoubleArray(arrayLength);
 
 	[UnmanagedCallersOnly]
 	private static JBoolean* GetBooleanArrayElements(JEnvironmentRef envRef, JBooleanArrayLocalRef arrayRef,
 		JBoolean* isCopy)
-		=> (JBoolean*)ReferenceHelper.nativeProxies[envRef]
+		=> (JBoolean*)ReferenceHelper.NativeProxies[envRef]
 		                             .GetBooleanArrayElements(arrayRef, (ValPtr<JBoolean>)(IntPtr)isCopy).Pointer;
 	[UnmanagedCallersOnly]
 	private static JByte* GetByteArrayElements(JEnvironmentRef envRef, JByteArrayLocalRef arrayRef, JBoolean* isCopy)
-		=> (JByte*)ReferenceHelper.nativeProxies[envRef]
+		=> (JByte*)ReferenceHelper.NativeProxies[envRef]
 		                          .GetByteArrayElements(arrayRef, (ValPtr<JBoolean>)(IntPtr)isCopy).Pointer;
 	[UnmanagedCallersOnly]
 	private static JChar* GetCharArrayElements(JEnvironmentRef envRef, JCharArrayLocalRef arrayRef, JBoolean* isCopy)
-		=> (JChar*)ReferenceHelper.nativeProxies[envRef]
+		=> (JChar*)ReferenceHelper.NativeProxies[envRef]
 		                          .GetCharArrayElements(arrayRef, (ValPtr<JBoolean>)(IntPtr)isCopy).Pointer;
 	[UnmanagedCallersOnly]
 	private static JShort* GetShortArrayElements(JEnvironmentRef envRef, JShortArrayLocalRef arrayRef, JBoolean* isCopy)
-		=> (JShort*)ReferenceHelper.nativeProxies[envRef]
+		=> (JShort*)ReferenceHelper.NativeProxies[envRef]
 		                           .GetShortArrayElements(arrayRef, (ValPtr<JBoolean>)(IntPtr)isCopy).Pointer;
 	[UnmanagedCallersOnly]
 	private static JInt* GetIntArrayElements(JEnvironmentRef envRef, JIntArrayLocalRef arrayRef, JBoolean* isCopy)
-		=> (JInt*)ReferenceHelper.nativeProxies[envRef].GetIntArrayElements(arrayRef, (ValPtr<JBoolean>)(IntPtr)isCopy)
+		=> (JInt*)ReferenceHelper.NativeProxies[envRef].GetIntArrayElements(arrayRef, (ValPtr<JBoolean>)(IntPtr)isCopy)
 		                         .Pointer;
 	[UnmanagedCallersOnly]
 	private static JLong* GetLongArrayElements(JEnvironmentRef envRef, JLongArrayLocalRef arrayRef, JBoolean* isCopy)
-		=> (JLong*)ReferenceHelper.nativeProxies[envRef]
+		=> (JLong*)ReferenceHelper.NativeProxies[envRef]
 		                          .GetLongArrayElements(arrayRef, (ValPtr<JBoolean>)(IntPtr)isCopy).Pointer;
 	[UnmanagedCallersOnly]
 	private static JFloat* GetFloatArrayElements(JEnvironmentRef envRef, JFloatArrayLocalRef arrayRef, JBoolean* isCopy)
-		=> (JFloat*)ReferenceHelper.nativeProxies[envRef]
+		=> (JFloat*)ReferenceHelper.NativeProxies[envRef]
 		                           .GetFloatArrayElements(arrayRef, (ValPtr<JBoolean>)(IntPtr)isCopy).Pointer;
 	[UnmanagedCallersOnly]
 	private static JDouble* GetDoubleArrayElements(JEnvironmentRef envRef, JDoubleArrayLocalRef arrayRef,
 		JBoolean* isCopy)
-		=> (JDouble*)ReferenceHelper.nativeProxies[envRef]
+		=> (JDouble*)ReferenceHelper.NativeProxies[envRef]
 		                            .GetDoubleArrayElements(arrayRef, (ValPtr<JBoolean>)(IntPtr)isCopy).Pointer;
 
 	[UnmanagedCallersOnly]
 	private static void ReleaseBooleanArrayElements(JEnvironmentRef envRef, JBooleanArrayLocalRef arrayRef,
 		JBoolean* elements, JReleaseMode mode)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .ReleaseBooleanArrayElements(arrayRef, (ReadOnlyValPtr<JBoolean>)(IntPtr)elements, mode);
 	[UnmanagedCallersOnly]
 	private static void ReleaseByteArrayElements(JEnvironmentRef envRef, JByteArrayLocalRef arrayRef, JByte* elements,
 		JReleaseMode mode)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .ReleaseByteArrayElements(arrayRef, (ReadOnlyValPtr<JByte>)(IntPtr)elements, mode);
 	[UnmanagedCallersOnly]
 	private static void ReleaseCharArrayElements(JEnvironmentRef envRef, JCharArrayLocalRef arrayRef, JChar* elements,
 		JReleaseMode mode)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .ReleaseCharArrayElements(arrayRef, (ReadOnlyValPtr<JChar>)(IntPtr)elements, mode);
 	[UnmanagedCallersOnly]
 	private static void ReleaseShortArrayElements(JEnvironmentRef envRef, JShortArrayLocalRef arrayRef,
 		JShort* elements, JReleaseMode mode)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .ReleaseShortArrayElements(arrayRef, (ReadOnlyValPtr<JShort>)(IntPtr)elements, mode);
 	[UnmanagedCallersOnly]
 	private static void ReleaseIntArrayElements(JEnvironmentRef envRef, JIntArrayLocalRef arrayRef, JInt* elements,
 		JReleaseMode mode)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .ReleaseIntArrayElements(arrayRef, (ReadOnlyValPtr<JInt>)(IntPtr)elements, mode);
 	[UnmanagedCallersOnly]
 	private static void ReleaseLongArrayElements(JEnvironmentRef envRef, JLongArrayLocalRef arrayRef, JLong* elements,
 		JReleaseMode mode)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .ReleaseLongArrayElements(arrayRef, (ReadOnlyValPtr<JLong>)(IntPtr)elements, mode);
 	[UnmanagedCallersOnly]
 	private static void ReleaseFloatArrayElements(JEnvironmentRef envRef, JFloatArrayLocalRef arrayRef,
 		JFloat* elements, JReleaseMode mode)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .ReleaseFloatArrayElements(arrayRef, (ReadOnlyValPtr<JFloat>)(IntPtr)elements, mode);
 	[UnmanagedCallersOnly]
 	private static void ReleaseDoubleArrayElements(JEnvironmentRef envRef, JDoubleArrayLocalRef arrayRef,
 		JDouble* elements, JReleaseMode mode)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .ReleaseDoubleArrayElements(arrayRef, (ReadOnlyValPtr<JDouble>)(IntPtr)elements, mode);
 
 	[UnmanagedCallersOnly]
 	private static void GetBooleanArrayRegion(JEnvironmentRef envRef, JBooleanArrayLocalRef arrayRef, Int32 start,
 		Int32 count, JBoolean* buffer)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .GetBooleanArrayRegion(arrayRef, start, count, (ValPtr<JBoolean>)(IntPtr)buffer);
 	[UnmanagedCallersOnly]
 	private static void GetByteArrayRegion(JEnvironmentRef envRef, JByteArrayLocalRef arrayRef, Int32 start,
 		Int32 count, JByte* buffer)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .GetByteArrayRegion(arrayRef, start, count, (ValPtr<JByte>)(IntPtr)buffer);
 	[UnmanagedCallersOnly]
 	private static void GetCharArrayRegion(JEnvironmentRef envRef, JCharArrayLocalRef arrayRef, Int32 start,
 		Int32 count, JChar* buffer)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .GetCharArrayRegion(arrayRef, start, count, (ValPtr<JChar>)(IntPtr)buffer);
 	[UnmanagedCallersOnly]
 	private static void GetShortArrayRegion(JEnvironmentRef envRef, JShortArrayLocalRef arrayRef, Int32 start,
 		Int32 count, JShort* buffer)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .GetShortArrayRegion(arrayRef, start, count, (ValPtr<JShort>)(IntPtr)buffer);
 	[UnmanagedCallersOnly]
 	private static void GetIntArrayRegion(JEnvironmentRef envRef, JIntArrayLocalRef arrayRef, Int32 start, Int32 count,
 		JInt* buffer)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .GetIntArrayRegion(arrayRef, start, count, (ValPtr<JInt>)(IntPtr)buffer);
 	[UnmanagedCallersOnly]
 	private static void GetLongArrayRegion(JEnvironmentRef envRef, JLongArrayLocalRef arrayRef, Int32 start,
 		Int32 count, JLong* buffer)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .GetLongArrayRegion(arrayRef, start, count, (ValPtr<JLong>)(IntPtr)buffer);
 	[UnmanagedCallersOnly]
 	private static void GetFloatArrayRegion(JEnvironmentRef envRef, JFloatArrayLocalRef arrayRef, Int32 start,
 		Int32 count, JFloat* buffer)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .GetFloatArrayRegion(arrayRef, start, count, (ValPtr<JFloat>)(IntPtr)buffer);
 	[UnmanagedCallersOnly]
 	private static void GetDoubleArrayRegion(JEnvironmentRef envRef, JDoubleArrayLocalRef arrayRef, Int32 start,
 		Int32 count, JDouble* buffer)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .GetDoubleArrayRegion(arrayRef, start, count, (ValPtr<JDouble>)(IntPtr)buffer);
 
 	[UnmanagedCallersOnly]
 	private static JResult RegisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef,
 		NativeMethodValueWrapper* methodEntries, Int32 count)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .RegisterNatives(classRef, (ReadOnlyValPtr<NativeMethodValueWrapper>)(IntPtr)methodEntries,
 		                                   count);
 	[UnmanagedCallersOnly]
 	private static JResult UnregisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> ReferenceHelper.nativeProxies[envRef].UnregisterNatives(classRef);
+		=> ReferenceHelper.NativeProxies[envRef].UnregisterNatives(classRef);
 
 	[UnmanagedCallersOnly]
 	private static JResult MonitorEnter(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> ReferenceHelper.nativeProxies[envRef].MonitorEnter(localRef);
+		=> ReferenceHelper.NativeProxies[envRef].MonitorEnter(localRef);
 	[UnmanagedCallersOnly]
 	private static JResult MonitorExit(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> ReferenceHelper.nativeProxies[envRef].MonitorEnter(localRef);
+		=> ReferenceHelper.NativeProxies[envRef].MonitorEnter(localRef);
 
 	[UnmanagedCallersOnly]
 	private static JResult GetVirtualMachine(JEnvironmentRef envRef, JVirtualMachineRef* vmRef)
 	{
-		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		NativeInterfaceProxy proxy = ReferenceHelper.NativeProxies[envRef];
 		if (proxy is { UseVirtualMachineRef: false, })
 			return proxy.GetVirtualMachine((ValPtr<JVirtualMachineRef>)(IntPtr)vmRef);
 
@@ -774,57 +769,57 @@ internal unsafe partial class ReferenceHelper
 	[UnmanagedCallersOnly]
 	private static void GetStringRegion(JEnvironmentRef envRef, JStringLocalRef stringRef, Int32 start, Int32 count,
 		Char* buffer)
-		=> ReferenceHelper.nativeProxies[envRef].GetStringRegion(stringRef, start, count, (ValPtr<Char>)(IntPtr)buffer);
+		=> ReferenceHelper.NativeProxies[envRef].GetStringRegion(stringRef, start, count, (ValPtr<Char>)(IntPtr)buffer);
 	[UnmanagedCallersOnly]
 	private static void GetStringUtfRegion(JEnvironmentRef envRef, JStringLocalRef stringRef, Int32 start, Int32 count,
 		Byte* buffer)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .GetStringUtfRegion(stringRef, start, count, (ValPtr<Byte>)(IntPtr)buffer);
 
 	[UnmanagedCallersOnly]
 	private static Byte* GetPrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, JBoolean* isCopy)
-		=> (Byte*)ReferenceHelper.nativeProxies[envRef]
+		=> (Byte*)ReferenceHelper.NativeProxies[envRef]
 		                         .GetPrimitiveArrayCritical(arrayRef, (ValPtr<JBoolean>)(IntPtr)isCopy).Pointer;
 	[UnmanagedCallersOnly]
 	private static void ReleasePrimitiveArrayCritical(JEnvironmentRef envRef, JArrayLocalRef arrayRef, Byte* critical,
 		JReleaseMode mode)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .ReleasePrimitiveArrayCritical(arrayRef, (ValPtr<Byte>)(IntPtr)critical, mode);
 
 	[UnmanagedCallersOnly]
 	private static Char* GetStringCritical(JEnvironmentRef envRef, JStringLocalRef stringRef, JBoolean* isCopy)
-		=> (Char*)ReferenceHelper.nativeProxies[envRef].GetStringCritical(stringRef, (ValPtr<JBoolean>)(IntPtr)isCopy)
+		=> (Char*)ReferenceHelper.NativeProxies[envRef].GetStringCritical(stringRef, (ValPtr<JBoolean>)(IntPtr)isCopy)
 		                         .Pointer;
 	[UnmanagedCallersOnly]
 	private static void ReleaseStringCritical(JEnvironmentRef envRef, JStringLocalRef stringRef, Char* critical)
-		=> ReferenceHelper.nativeProxies[envRef]
+		=> ReferenceHelper.NativeProxies[envRef]
 		                  .ReleaseStringCritical(stringRef, (ReadOnlyValPtr<Char>)(IntPtr)critical);
 
 	[UnmanagedCallersOnly]
 	private static JWeakRef NewWeakGlobalRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> ReferenceHelper.nativeProxies[envRef].NewWeakGlobalRef(localRef);
+		=> ReferenceHelper.NativeProxies[envRef].NewWeakGlobalRef(localRef);
 	[UnmanagedCallersOnly]
 	private static void DeleteWeakGlobalRef(JEnvironmentRef envRef, JWeakRef weakRef)
-		=> ReferenceHelper.nativeProxies[envRef].DeleteWeakGlobalRef(weakRef);
+		=> ReferenceHelper.NativeProxies[envRef].DeleteWeakGlobalRef(weakRef);
 
 	[UnmanagedCallersOnly]
 	private static JBoolean ExceptionCheck(JEnvironmentRef envRef)
-		=> ReferenceHelper.nativeProxies[envRef].ExceptionCheck();
+		=> ReferenceHelper.NativeProxies[envRef].ExceptionCheck();
 
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef NewDirectByteBuffer(JEnvironmentRef envRef, IntPtr address, Int64 capacity)
-		=> ReferenceHelper.nativeProxies[envRef].NewDirectByteBuffer(address, capacity);
+		=> ReferenceHelper.NativeProxies[envRef].NewDirectByteBuffer(address, capacity);
 	[UnmanagedCallersOnly]
 	private static IntPtr GetDirectBufferAddress(JEnvironmentRef envRef, JObjectLocalRef bufferRef)
-		=> ReferenceHelper.nativeProxies[envRef].GetDirectBufferAddress(bufferRef);
+		=> ReferenceHelper.NativeProxies[envRef].GetDirectBufferAddress(bufferRef);
 	[UnmanagedCallersOnly]
 	private static Int64 GetDirectBufferCapacity(JEnvironmentRef envRef, JObjectLocalRef bufferRef)
-		=> ReferenceHelper.nativeProxies[envRef].GetDirectBufferCapacity(bufferRef);
+		=> ReferenceHelper.NativeProxies[envRef].GetDirectBufferCapacity(bufferRef);
 
 	[UnmanagedCallersOnly]
 	private static JReferenceType GetObjectRefType(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{
-		NativeInterfaceProxy proxy = ReferenceHelper.nativeProxies[envRef];
+		NativeInterfaceProxy proxy = ReferenceHelper.NativeProxies[envRef];
 		if (proxy.UseDefaultClassRef)
 		{
 			if (proxy.VirtualMachine.ClassGlobalRef.Value == localRef)
@@ -857,9 +852,9 @@ internal unsafe partial class ReferenceHelper
 
 	[UnmanagedCallersOnly]
 	private static JObjectLocalRef GetModule(JEnvironmentRef envRef, JClassLocalRef classRef)
-		=> ReferenceHelper.nativeProxies[envRef].GetModule(classRef);
+		=> ReferenceHelper.NativeProxies[envRef].GetModule(classRef);
 
 	[UnmanagedCallersOnly]
 	private static JBoolean IsVirtualThread(JEnvironmentRef envRef, JObjectLocalRef threadRef)
-		=> ReferenceHelper.nativeProxies[envRef].IsVirtualThread(threadRef);
+		=> ReferenceHelper.NativeProxies[envRef].IsVirtualThread(threadRef);
 }

@@ -4,6 +4,31 @@ namespace Rxmxnx.JNetInterface.Tests;
 public sealed class JNativeCallAdapterTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
+	private static readonly WeakReference<ProxyFactory?> unknownParameterlessFactory = new(default);
+	private static readonly WeakReference<ProxyFactory?> instanceParameterlessFactory = new(default);
+
+	private static ProxyFactory UnknownParameterlessFactory
+	{
+		get
+		{
+			if (JNativeCallAdapterTests.unknownParameterlessFactory.TryGetTarget(out ProxyFactory? result))
+				return result;
+			result = new(50);
+			JNativeCallAdapterTests.unknownParameterlessFactory.SetTarget(result);
+			return result;
+		}
+	}
+	private static ProxyFactory InstanceParameterlessFactory
+	{
+		get
+		{
+			if (JNativeCallAdapterTests.instanceParameterlessFactory.TryGetTarget(out ProxyFactory? result))
+				return result;
+			result = new(100);
+			JNativeCallAdapterTests.instanceParameterlessFactory.SetTarget(result);
+			return result;
+		}
+	}
 
 	[Theory]
 	[InlineData(true)]
@@ -26,7 +51,8 @@ public sealed class JNativeCallAdapterTests
 	[InlineData(false, CallResult.Nested)]
 	internal void UnknownParameterlessCallTest(Boolean useVm, CallResult result = CallResult.Void)
 	{
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		NativeInterfaceProxy proxyEnv =
+			NativeInterfaceProxy.CreateProxy(JNativeCallAdapterTests.UnknownParameterlessFactory);
 		JNativeCallAdapter adapter = default;
 		try
 		{
@@ -148,7 +174,8 @@ public sealed class JNativeCallAdapterTests
 	internal void InstanceParameterlessCallTest(Boolean useVm, CallResult result = CallResult.Void,
 		Boolean registerClass = false)
 	{
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		NativeInterfaceProxy proxyEnv =
+			NativeInterfaceProxy.CreateProxy(JNativeCallAdapterTests.InstanceParameterlessFactory);
 		JNativeCallAdapter adapter = default;
 		JObjectLocalRef localRef = JNativeCallAdapterTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
