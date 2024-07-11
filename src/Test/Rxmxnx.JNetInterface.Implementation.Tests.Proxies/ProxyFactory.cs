@@ -1,16 +1,10 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
-public sealed class ProxyFactory
+public sealed class ProxyFactory(UInt32 maxThreads)
 {
-	private readonly MemoryHelper<JVirtualMachineRef> _invokeMemory;
-	private readonly MemoryHelper<JEnvironmentRef> _nativeMemory;
-
-	public ProxyFactory(UInt32 maxThreads)
-	{
-		this._invokeMemory = new(ReferenceHelper.InvokeInterface.AsMemory().Pin(), (Int32)(maxThreads / 2 + 1));
-		this._nativeMemory = new(ReferenceHelper.NativeInterface.AsMemory().Pin(), (Int32)maxThreads);
-	}
+	private readonly MemoryHelper<JVirtualMachineRef> _invokeMemory = new(ReferenceHelper.InvokeInterface.AsMemory().Pin(), (Int32)(maxThreads / 2 + 1));
+	private readonly MemoryHelper<JEnvironmentRef> _nativeMemory = new(ReferenceHelper.NativeInterface.AsMemory().Pin(), (Int32)maxThreads);
 
 	internal JVirtualMachineRef InitializeProxy(InvokeInterfaceProxy proxy)
 	{
