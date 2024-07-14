@@ -1,32 +1,27 @@
 namespace Rxmxnx.JNetInterface.Tests.Internal;
 
 [ExcludeFromCodeCoverage]
-internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, IFixedPointer
+internal sealed unsafe class MemoryHelper<TPointer> : IDisposable where TPointer : unmanaged, IFixedPointer
 {
-	private readonly TPointer _value;
-	private readonly TPointer[] _values;
+	private readonly IntPtr _noValue;
+	private readonly IntPtr _value;
+	private readonly IntPtr[] _values;
 
 	private MemoryHandle _externalHandle;
 	private MemoryHandle _localHandle;
 
-	public MemoryHelper(IntPtr value, Int32 count)
-	{
-		this._value = NativeUtilities.Transform<IntPtr, TPointer>(in value);
-		this._values = new TPointer[count];
-		this._localHandle = this._values.AsMemory().Pin();
-	}
 	public MemoryHelper(MemoryHandle handle, Int32 count)
 	{
 		this._externalHandle = handle;
-		IntPtr value = (IntPtr)handle.Pointer;
-		this._value = NativeUtilities.Transform<IntPtr, TPointer>(in value);
-		this._values = new TPointer[count];
+		this._values = new IntPtr[count];
+		this._value = (IntPtr)handle.Pointer;
+		this._noValue = this._value + IntPtr.Size;
 		this._localHandle = this._values.AsMemory().Pin();
 	}
-	~MemoryHelper()
+	public void Dispose()
 	{
-		this._localHandle.Dispose();
-		this._externalHandle.Dispose();
+		this.ReleaseUnmanagedResources();
+		GC.SuppressFinalize(this);
 	}
 
 	public TPointer Get()
@@ -35,11 +30,11 @@ internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, 
 		{
 			for (Int32 i = 0; i < this._values.Length; i++)
 			{
-				if (this._values[i].Pointer == this._value.Pointer) continue;
+				if (this._values[i] == this._value) continue;
 				Int32 offset = i * sizeof(TPointer);
 				this._values[i] = this._value;
 				IntPtr result = (IntPtr)this._localHandle.Pointer + offset;
-				return NativeUtilities.Transform<IntPtr, TPointer>(result);
+				return NativeUtilities.Transform<IntPtr, TPointer>(in result);
 			}
 		}
 		throw new InsufficientMemoryException();
@@ -47,12 +42,54 @@ internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, 
 	public Boolean Free(TPointer value)
 	{
 		Boolean result = false;
-		Int32 index = (value.Pointer - (IntPtr)this._localHandle.Pointer).ToInt32();
+		IntPtr ptr = (IntPtr)this._localHandle.Pointer;
 		lock (this._values)
 		{
-			if (index >= this._values.Length) return result;
-			result = this._values[index].Pointer == this._value.Pointer;
-			this._values[index] = this._value;
+			Int32 index = MemoryHelper<TPointer>.GetIndex(value.Pointer, ptr, this._values.Length);
+			if (index < 0) return result;
+			result = this._values[index] == this._value;
+			this._values[index] = this._noValue;
+		}
+		return result;
+	}
+	public void Free(Action<TPointer> free)
+	{
+		lock (this._values)
+		{
+			Span<IntPtr> span = this._values;
+			foreach (ref IntPtr value in span)
+			{
+				try
+				{
+					if (value != this._value) continue;
+					IntPtr valuePtr = value.GetUnsafeIntPtr();
+					free(NativeUtilities.Transform<IntPtr, TPointer>(in valuePtr));
+				}
+				catch (Exception)
+				{
+					// ignored
+				}
+				finally
+				{
+					value = this._noValue;
+				}
+			}
+		}
+	}
+	private void ReleaseUnmanagedResources()
+	{
+		this._externalHandle.Dispose();
+		this._localHandle.Dispose();
+	}
+	~MemoryHelper() { this.ReleaseUnmanagedResources(); }
+	private static Int32 GetIndex(IntPtr value, IntPtr ptr, Int32 length)
+	{
+		if (value < ptr) return -1;
+		Int32 result = 0;
+		while (ptr + result * sizeof(TPointer) < value)
+		{
+			if (result >= length) return -1;
+			result++;
 		}
 		return result;
 	}

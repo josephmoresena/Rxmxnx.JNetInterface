@@ -75,7 +75,8 @@ public readonly ref partial struct JNativeCallAdapter
 	/// </summary>
 	/// <param name="result">A <see cref="JClassObject"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
-	public JObjectArrayLocalRef FinalizeCall(JArrayObject<JLocalObject>? result)
+	public JObjectArrayLocalRef FinalizeCall<TElement>(JArrayObject<TElement>? result)
+		where TElement : JReferenceObject, IReferenceType<TElement>
 		=> this.FinalizeCall<JObjectArrayLocalRef>(result);
 	/// <summary>
 	/// Finalizes call.

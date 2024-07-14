@@ -104,7 +104,7 @@ internal partial class JHelloDotnetObject
 			                                 .Create(TManaged.TypeVirtualMachine, envRef, classRef,
 			                                         out JClassObject jClass).Build();
 			JArrayObject<JArrayObject<JInt>>? result = TManaged.GetIntArrayArray(jClass, length);
-			return callAdapter.FinalizeCall(result);
+			return callAdapter.FinalizeCall(result).ArrayValue;
 		}
 		private static void PrintClass<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef)
 			where TManaged : IManagedCallback
@@ -122,7 +122,7 @@ internal partial class JHelloDotnetObject
 			                                 .Create(TManaged.TypeVirtualMachine, envRef, classRef,
 			                                         out JClassObject jClass).Build();
 			JArrayObject<JClassObject> mainClasses = TManaged.GetPrimitiveClasses(jClass);
-			return callAdapter.FinalizeCall(mainClasses);
+			return callAdapter.FinalizeCall(mainClasses).ArrayValue;
 		}
 		private static JClassLocalRef GetVoidClass<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef)
 			where TManaged : IManagedCallback
