@@ -47,7 +47,7 @@ internal sealed class CallFrame : LocalCache, IDisposable
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	public void RegisterParameter(JObjectLocalRef localRef, ILocalObject jLocal)
 	{
-		this._parameters.Add(localRef, jLocal);
+		this._parameters.TryAdd(localRef, jLocal);
 		this[localRef] = jLocal.Lifetime.GetCacheable();
 	}
 	/// <summary>
@@ -68,7 +68,7 @@ internal sealed class CallFrame : LocalCache, IDisposable
 	/// <param name="classView">A <see cref="JLocalObject.View{JClassObject}"/> instance.</param>
 	public void RegisterParameter(JClassLocalRef classRef, JLocalObject.View<JClassObject> classView)
 	{
-		this._parameters.Add(classRef.Value, classView);
+		this._parameters.TryAdd(classRef.Value, classView);
 		this[classRef.Value] = (classView as ILocalViewObject).Lifetime;
 		this._classes.TryAdd(classView.Object.Hash, classRef);
 		this._env.ClassCache.Load(classRef);
