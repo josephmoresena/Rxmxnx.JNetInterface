@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests.Internal;
 
 [ExcludeFromCodeCoverage]
-internal sealed unsafe class MemoryHelper<TPointer> : IDisposable where TPointer : unmanaged, IFixedPointer
+internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, IFixedPointer
 {
 	private readonly IntPtr _noValue;
 	private readonly IntPtr _value;
@@ -17,11 +17,6 @@ internal sealed unsafe class MemoryHelper<TPointer> : IDisposable where TPointer
 		this._value = (IntPtr)handle.Pointer;
 		this._noValue = this._value + IntPtr.Size;
 		this._localHandle = this._values.AsMemory().Pin();
-	}
-	public void Dispose()
-	{
-		this.ReleaseUnmanagedResources();
-		GC.SuppressFinalize(this);
 	}
 
 	public TPointer Get()

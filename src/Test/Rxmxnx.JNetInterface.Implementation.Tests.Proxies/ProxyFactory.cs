@@ -1,17 +1,16 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
-public sealed class ProxyFactory(UInt32 maxVm, UInt32 maxThreads) : IDisposable
+public sealed class ProxyFactory
 {
-	private readonly MemoryHelper<JVirtualMachineRef> _invokeMemory =
-		new(ReferenceHelper.InvokeInterface.AsMemory().Pin(), (Int32)maxVm);
-	private readonly MemoryHelper<JEnvironmentRef> _nativeMemory =
-		new(ReferenceHelper.NativeInterface.AsMemory().Pin(), (Int32)maxThreads);
+	public static readonly ProxyFactory Instance = new(UInt16.MaxValue, UInt16.MaxValue);
+	private readonly MemoryHelper<JVirtualMachineRef> _invokeMemory;
+	private readonly MemoryHelper<JEnvironmentRef> _nativeMemory;
 
-	public void Dispose()
+	private ProxyFactory(UInt32 maxVm, UInt32 maxThreads)
 	{
-		this.Dispose(true);
-		GC.SuppressFinalize(this);
+		this._invokeMemory = new(ReferenceHelper.InvokeInterface.AsMemory().Pin(), (Int32)maxVm);
+		this._nativeMemory = new(ReferenceHelper.NativeInterface.AsMemory().Pin(), (Int32)maxThreads);
 	}
 
 	internal JVirtualMachineRef InitializeProxy(InvokeInterfaceProxy proxy)
@@ -36,25 +35,4 @@ public sealed class ProxyFactory(UInt32 maxVm, UInt32 maxThreads) : IDisposable
 		if (this._nativeMemory.Free(envRef))
 			ReferenceHelper.NativeProxies.TryRemove(envRef, out _);
 	}
-	private void ReleaseUnmanagedResources()
-	{
-		this._nativeMemory.Free(e => ReferenceHelper.NativeProxies.TryRemove(e, out _));
-		this._invokeMemory.Free(vm => ReferenceHelper.InvokeProxies.TryRemove(vm, out _));
-	}
-	private void Dispose(Boolean disposing)
-	{
-		this.ReleaseUnmanagedResources();
-		if (!disposing) return;
-		this._invokeMemory.Dispose();
-		this._nativeMemory.Dispose();
-	}
-	~ProxyFactory() { this.Dispose(false); }
-}
-
-[ExcludeFromCodeCoverage]
-public sealed class ProxyFactory<TTest> : IDisposable where TTest : class, IProxyRequest<TTest>
-{
-	private readonly ProxyFactory _value = new(TTest.MaxVms, TTest.MaxThreads);
-	public void Dispose() { this._value.Dispose(); }
-	public static implicit operator ProxyFactory(ProxyFactory<TTest> factory) => factory._value;
 }

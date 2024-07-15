@@ -1,8 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
-public sealed partial class JNativeCallAdapterTests(ProxyFactory<JNativeCallAdapterTests> factory)
-	: IClassFixture<ProxyFactory<JNativeCallAdapterTests>>, IProxyRequest<JNativeCallAdapterTests>
+public sealed partial class JNativeCallAdapterTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 	public static UInt32 MaxThreads => 0x800;

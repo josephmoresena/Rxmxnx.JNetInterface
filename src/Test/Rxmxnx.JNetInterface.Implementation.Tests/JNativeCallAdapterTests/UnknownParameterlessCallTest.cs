@@ -43,7 +43,7 @@ public partial class JNativeCallAdapterTests
 	[InlineData(false, CallResult.Nested)]
 	internal void UnknownParameterlessCallTest(Boolean useVm, CallResult result = CallResult.Void)
 	{
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(factory);
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(ProxyFactory.Instance);
 		JNativeCallAdapter adapter = default;
 		try
 		{

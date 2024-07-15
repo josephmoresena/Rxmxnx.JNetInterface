@@ -47,7 +47,7 @@ public partial class JNativeCallAdapterTests
 	[InlineData(false, CallResult.Parameter)]
 	internal void TypedObjectParameterCallTest(Boolean useVm, CallResult result = CallResult.Void)
 	{
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(factory);
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(ProxyFactory.Instance);
 		JNativeCallAdapter adapter = default;
 		JObjectLocalRef localRef = JNativeCallAdapterTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
