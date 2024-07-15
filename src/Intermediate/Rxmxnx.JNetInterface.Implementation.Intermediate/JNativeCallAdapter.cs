@@ -186,6 +186,17 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
+		/// Appends to current call a <see cref="JArrayObject"/> parameter.
+		/// </summary>
+		/// <param name="arrayRef">A parameter <see cref="JArrayLocalRef"/> reference.</param>
+		/// <param name="jArray">A <see cref="JArrayObject"/> instance from <paramref name="arrayRef"/>.</param>
+		/// <returns>Current <see cref="Builder"/> instance.</returns>
+		public Builder WithParameter(JArrayLocalRef arrayRef, out JArrayObject jArray)
+		{
+			jArray = (JArrayObject)this.CreateInitialObject<JLocalObject>(arrayRef.Value);
+			return this;
+		}
+		/// <summary>
 		/// Appends to current call a <see cref="JBoolean"/> array parameter.
 		/// </summary>
 		/// <param name="arrayRef">A parameter <see cref="JBooleanArrayLocalRef"/> reference.</param>
