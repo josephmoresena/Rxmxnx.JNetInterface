@@ -16,8 +16,7 @@ public sealed class JTestObject : JLocalObject, IClassType<JTestObject>
 			if (JTestObject.metadata is not null)
 				return JTestObject.metadata;
 			JTestObject.metadata = TypeMetadataBuilder<JTestObject>.Create(
-				(CString)$"{JTestObject.ClassNamePrefix}{Random.Shared.Next()}${Guid.NewGuid():N}",
-				Random.Shared.Next(0, 10) > 5 ? JTypeModifier.Final : JTypeModifier.Extensible).Build();
+				(CString)$"{JTestObject.ClassNamePrefix}{Random.Shared.Next()}${Guid.NewGuid():N}").Build();
 			JTestObject.metadatas[System.Environment.CurrentManagedThreadId] = JTestObject.metadata;
 			return JTestObject.metadata;
 		}

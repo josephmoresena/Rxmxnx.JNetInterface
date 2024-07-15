@@ -39,8 +39,6 @@ public readonly ref partial struct JNativeCallAdapter
 		{
 			JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
 			if (typeMetadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
-			if (JLocalObject.IsObjectType<TObject>())
-				return (TObject)(Object)this.CreateInitialObject(localRef);
 			JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata classMetadata, true);
 			return (TObject)this.CreateObject(jClass, localRef, classMetadata, typeMetadata);
 		}
