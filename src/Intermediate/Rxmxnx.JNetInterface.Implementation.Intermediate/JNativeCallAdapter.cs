@@ -310,6 +310,18 @@ public readonly ref partial struct JNativeCallAdapter
 			return this;
 		}
 		/// <summary>
+		/// Appends to current call a <see cref="JThrowableObject"/> parameter.
+		/// </summary>
+		/// <param name="throwableRef">A parameter <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance from <paramref name="throwableRef"/>.</param>
+		/// <returns>Current <see cref="Builder"/> instance.</returns>
+		public Builder WithParameter<TThrowable>(JThrowableLocalRef throwableRef, out TThrowable jThrowable)
+			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		{
+			jThrowable = this.CreateInitialObject<TThrowable>(throwableRef.Value);
+			return this;
+		}
+		/// <summary>
 		/// Appends to current call a <typeparamref name="TElement"/> array parameter.
 		/// </summary>
 		/// <typeparam name="TElement">A <see cref="IDataType"/> type.</typeparam>
