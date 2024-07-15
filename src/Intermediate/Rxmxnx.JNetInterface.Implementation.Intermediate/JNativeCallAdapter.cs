@@ -279,9 +279,10 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="arrayRef">A parameter <see cref="JObjectArrayLocalRef"/> reference.</param>
 		/// <param name="jArray">A <see cref="JArrayObject{JLocalObject}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
-		public Builder WithParameter(JObjectArrayLocalRef arrayRef, out JArrayObject<JLocalObject> jArray)
+		public Builder WithParameter<TElement>(JObjectArrayLocalRef arrayRef, out JArrayObject<TElement> jArray)
+			where TElement : JReferenceObject, IReferenceType<TElement>
 		{
-			jArray = this.CreateInitialObject<JArrayObject<JLocalObject>>(arrayRef.Value);
+			jArray = this.CreateInitialObject<JArrayObject<TElement>>(arrayRef.Value);
 			return this;
 		}
 		/// <summary>
@@ -292,7 +293,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="jLocal">A <typeparamref name="TObject"/> instance from <paramref name="localRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
 		public Builder WithParameter<TObject>(JObjectLocalRef localRef, out TObject jLocal)
-			where TObject : JLocalObject, IReferenceType<TObject>
+			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
 			if (JLocalObject.IsObjectType<TObject>())
 			{
