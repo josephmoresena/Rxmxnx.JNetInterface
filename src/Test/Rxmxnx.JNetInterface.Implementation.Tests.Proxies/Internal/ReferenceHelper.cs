@@ -129,6 +129,8 @@ internal static partial class ReferenceHelper
 		{
 			InvokeInterfaceProxy? result = ReferenceHelper.invokeProxies.GetValueOrDefault(vmRef);
 			if (result is not null && result.Reference.Reference.Pointer != ptr) result = default;
+			if (result?.AllowedThread != null && result.AllowedThread != Environment.CurrentManagedThreadId)
+				result = default;
 			return result ?? InvokeInterfaceProxy.Detached;
 		}
 	}

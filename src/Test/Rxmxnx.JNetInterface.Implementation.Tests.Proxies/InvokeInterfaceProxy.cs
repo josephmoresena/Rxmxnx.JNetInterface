@@ -30,6 +30,7 @@ public abstract class InvokeInterfaceProxy
 	public JMethodId StackTraceElementIsNativeMethodMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
 
 	public JVirtualMachineRef Reference { get; private set; }
+	public Int32? AllowedThread { get; set; } = Environment.CurrentManagedThreadId;
 
 	public abstract JResult DestroyVirtualMachine();
 	public abstract JResult AttachCurrentThread(ValPtr<JEnvironmentRef> envRef,
