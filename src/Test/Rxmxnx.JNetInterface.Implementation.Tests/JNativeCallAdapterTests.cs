@@ -424,54 +424,54 @@ public sealed partial class JNativeCallAdapterTests
 
 		parameters.Add(JNativeCallAdapterTests.CreateModule(proxyEnv, builder, refs[0]));
 		parameters.Add(JNativeCallAdapterTests.CreateBooleanArray(proxyEnv, builder,
-		                                                          refs[1]
-			                                                          .Transform<JObjectLocalRef,
-				                                                          JBooleanArrayLocalRef>()));
+		                                                          JBooleanArrayLocalRef.FromReference(in refs[1])));
 		parameters.Add(JNativeCallAdapterTests.CreateByteArray(proxyEnv, builder,
-		                                                       refs[2]
-			                                                       .Transform<JObjectLocalRef, JByteArrayLocalRef>()));
+		                                                       JByteArrayLocalRef.FromReference(in refs[2])));
 		parameters.Add(JNativeCallAdapterTests.CreateCharArray(proxyEnv, builder,
-		                                                       refs[3]
-			                                                       .Transform<JObjectLocalRef, JCharArrayLocalRef>()));
+		                                                       JCharArrayLocalRef.FromReference(in refs[3])));
 		parameters.Add(JNativeCallAdapterTests.CreateDoubleArray(proxyEnv, builder,
-		                                                         refs[4]
-			                                                         .Transform<JObjectLocalRef,
-				                                                         JDoubleArrayLocalRef>()));
+		                                                         JDoubleArrayLocalRef.FromReference(in refs[4])));
 		parameters.Add(JNativeCallAdapterTests.CreateFloatArray(proxyEnv, builder,
-		                                                        refs[5]
-			                                                        .Transform<JObjectLocalRef,
-				                                                        JFloatArrayLocalRef>()));
+		                                                        JFloatArrayLocalRef.FromReference(in refs[5])));
 		parameters.Add(JNativeCallAdapterTests.CreateIntArray(
-			               proxyEnv, builder, refs[6].Transform<JObjectLocalRef, JIntArrayLocalRef>()));
+			               proxyEnv, builder, JIntArrayLocalRef.FromReference(in refs[6])));
 		parameters.Add(JNativeCallAdapterTests.CreateLongArray(proxyEnv, builder,
-		                                                       refs[7]
-			                                                       .Transform<JObjectLocalRef, JLongArrayLocalRef>()));
+		                                                       JLongArrayLocalRef.FromReference(in refs[7])));
 		parameters.Add(JNativeCallAdapterTests.CreateShortArray(proxyEnv, builder,
-		                                                        refs[8]
-			                                                        .Transform<JObjectLocalRef,
-				                                                        JShortArrayLocalRef>()));
+		                                                        JShortArrayLocalRef.FromReference(in refs[8])));
 		parameters.Add(JNativeCallAdapterTests.CreateClassArray(proxyEnv, builder,
-		                                                        refs[9]
-			                                                        .Transform<JObjectLocalRef,
-				                                                        JObjectArrayLocalRef>()));
+		                                                        JObjectArrayLocalRef.FromReference(in refs[9])));
 		parameters.Add(JNativeCallAdapterTests.CreateClassArray(proxyEnv, builder,
-		                                                        refs[10]
-			                                                        .Transform<JObjectLocalRef,
-				                                                        JObjectArrayLocalRef>()));
+		                                                        JObjectArrayLocalRef.FromReference(in refs[10])));
 		parameters.Add(JNativeCallAdapterTests.CreateArray(proxyEnv, builder,
-		                                                   refs[11].Transform<JObjectLocalRef, JArrayLocalRef>(),
-		                                                   false));
+		                                                   JArrayLocalRef.FromReference(in refs[11]), false));
 		parameters.Add(JNativeCallAdapterTests.CreateArray(proxyEnv, builder,
-		                                                   refs[12].Transform<JObjectLocalRef, JArrayLocalRef>(),
-		                                                   true));
+		                                                   JArrayLocalRef.FromReference(in refs[12]), true));
 		parameters.Add(JNativeCallAdapterTests.CreateTestArray<JStringObject>(
-			               proxyEnv, builder, refs[13].Transform<JObjectLocalRef, JArrayLocalRef>()));
+			               proxyEnv, builder, JArrayLocalRef.FromReference(in refs[13])));
 		parameters.Add(JNativeCallAdapterTests.CreateTestArray<JThrowableObject>(
-			               proxyEnv, builder, refs[14].Transform<JObjectLocalRef, JArrayLocalRef>()));
+			               proxyEnv, builder, JArrayLocalRef.FromReference(in refs[14])));
 		parameters.Add(JNativeCallAdapterTests.CreateTestArray<JLong>(
-			               proxyEnv, builder, refs[15].Transform<JObjectLocalRef, JArrayLocalRef>()));
+			               proxyEnv, builder, JArrayLocalRef.FromReference(in refs[15])));
 		parameters.Add(JNativeCallAdapterTests.CreateString(
-			               proxyEnv, builder, refs[16].Transform<JObjectLocalRef, JStringLocalRef>()));
+			               proxyEnv, builder, JStringLocalRef.FromReference(in refs[16])));
+		parameters.Add(
+			JNativeCallAdapterTests.CreateThrowable(proxyEnv, builder, JThrowableLocalRef.FromReference(in refs[17])));
+		parameters.Add(
+			JNativeCallAdapterTests.CreateTypedThrowable<JRuntimeExceptionObject>(
+				proxyEnv, builder, JThrowableLocalRef.FromReference(in refs[18])));
+
+		Int32 actualCount = parameters.Count;
+		for (Int32 i = 0; i < actualCount; i++)
+		{
+			JLocalObject? jLocal0 = parameters[i];
+			JLocalObject jLocal1 =
+				JNativeCallAdapterTests.CreateDuplicatedParameter(proxyEnv, builder, jLocal0?.Class, refs[i]);
+			Assert.False(Object.ReferenceEquals(jLocal0, jLocal1));
+			Assert.Equal(jLocal0?.Lifetime, jLocal1.Lifetime);
+			Assert.Equal(jLocal0?.GetType(), jLocal1.GetType());
+			parameters.Add(jLocal1);
+		}
 
 		return builder.Build();
 	}
@@ -774,6 +774,110 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			JNativeCallAdapterTests.FinalizeFinalTypedObject(proxyEnv, stringRef.Value);
 			proxyEnv.Received(0).GetStringLength(stringRef);
+		}
+	}
+	private static JThrowableObject CreateThrowable(NativeInterfaceProxy proxyEnv, JNativeCallAdapter.Builder builder,
+		JThrowableLocalRef throwableRef)
+	{
+		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
+		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
+		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<JThrowableObject>();
+		Boolean final = classTypeMetadata.Modifier == JTypeModifier.Final;
+
+		proxyEnv.ClearReceivedCalls();
+		proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+		try
+		{
+			proxyEnv.GetObjectRefType(throwableRef.Value).Returns(JReferenceType.LocalRefType);
+			proxyEnv.GetObjectClass(throwableRef.Value).Returns(classRef);
+			proxyEnv.GetObjectRefType(throwableRef.Value).Returns(JReferenceType.LocalRefType);
+			using IReadOnlyFixedContext<Char>.IDisposable ctx = classTypeMetadata.Information.ToString().AsMemory()
+				.GetFixedContext();
+			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
+			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
+			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
+			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
+
+			_ = builder.WithParameter(throwableRef, out JThrowableObject result);
+			Assert.Equal(throwableRef, result.Reference);
+			Assert.Equal(result.Environment.ClassFeature.GetClass<JThrowableObject>(), result.Class);
+			return result;
+		}
+		finally
+		{
+			proxyEnv.Received(1).GetObjectRefType(throwableRef.Value);
+			proxyEnv.Received(final ? 0 : 1).GetObjectClass(Arg.Any<JObjectLocalRef>());
+			proxyEnv.Received(final ? 0 : 1).GetStringUtfLength(strRef);
+			proxyEnv.Received(final ? 0 : 1).GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>());
+			proxyEnv.Received(final ? 0 : 1).CallObjectMethod(classRef.Value,
+			                                                  proxyEnv.VirtualMachine.ClassGetNameMethodId,
+			                                                  ReadOnlyValPtr<JValueWrapper>.Zero);
+			proxyEnv.Received(0).GetSuperclass(Arg.Any<JClassLocalRef>());
+			proxyEnv.Received(0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
+		}
+	}
+	private static JThrowableObject CreateTypedThrowable<TThrowable>(NativeInterfaceProxy proxyEnv,
+		JNativeCallAdapter.Builder builder, JThrowableLocalRef throwableRef)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+	{
+		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
+		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
+		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<TThrowable>();
+		Boolean final = classTypeMetadata.Modifier == JTypeModifier.Final;
+
+		proxyEnv.ClearReceivedCalls();
+		proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+		try
+		{
+			proxyEnv.GetObjectRefType(throwableRef.Value).Returns(JReferenceType.LocalRefType);
+			proxyEnv.GetObjectClass(throwableRef.Value).Returns(classRef);
+			proxyEnv.GetObjectRefType(throwableRef.Value).Returns(JReferenceType.LocalRefType);
+			using IReadOnlyFixedContext<Char>.IDisposable ctx = classTypeMetadata.Information.ToString().AsMemory()
+				.GetFixedContext();
+			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
+			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
+			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
+			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
+
+			_ = builder.WithParameter(throwableRef, out TThrowable result);
+			Assert.Equal(throwableRef, result.Reference);
+			Assert.Equal(result.Environment.ClassFeature.GetClass<TThrowable>(), result.Class);
+			return result;
+		}
+		finally
+		{
+			proxyEnv.Received(1).GetObjectRefType(throwableRef.Value);
+			proxyEnv.Received(final ? 0 : 1).GetObjectClass(Arg.Any<JObjectLocalRef>());
+			proxyEnv.Received(final ? 0 : 1).GetStringUtfLength(strRef);
+			proxyEnv.Received(final ? 0 : 1).GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>());
+			proxyEnv.Received(final ? 0 : 1).CallObjectMethod(classRef.Value,
+			                                                  proxyEnv.VirtualMachine.ClassGetNameMethodId,
+			                                                  ReadOnlyValPtr<JValueWrapper>.Zero);
+			proxyEnv.Received(0).GetSuperclass(Arg.Any<JClassLocalRef>());
+			proxyEnv.Received(0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
+		}
+	}
+	private static JLocalObject CreateDuplicatedParameter(NativeInterfaceProxy proxyEnv,
+		JNativeCallAdapter.Builder builder, JClassObject? jClass, JObjectLocalRef localRef)
+	{
+		proxyEnv.ClearReceivedCalls();
+		proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+		try
+		{
+			_ = builder.WithParameter(localRef, out JLocalObject result);
+			Assert.Equal(localRef, result.Reference);
+			Assert.Equal(jClass, result.Class);
+			return result;
+		}
+		finally
+		{
+			proxyEnv.Received(0).GetObjectRefType(localRef);
+			proxyEnv.Received(0).GetObjectClass(Arg.Any<JObjectLocalRef>());
+			proxyEnv.Received(0).GetSuperclass(Arg.Any<JClassLocalRef>());
+			proxyEnv.Received(0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 		}
 	}
 }
