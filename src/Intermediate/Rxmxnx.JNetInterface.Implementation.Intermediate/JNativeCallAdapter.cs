@@ -352,7 +352,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <returns>A <see cref="JNativeCallAdapter"/> instance.</returns>
 		public JNativeCallAdapter Build()
 		{
-			this._callAdapter._cache.Activate();
+			this._callAdapter._cache.Activate(out _);
 			return this._callAdapter;
 		}
 	}

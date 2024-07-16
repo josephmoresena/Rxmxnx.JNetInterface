@@ -111,11 +111,20 @@ public readonly ref partial struct JNativeCallAdapter
 		private JReferenceObject CreateObject(JClassObject jClass, JObjectLocalRef localRef,
 			JReferenceTypeMetadata classMetadata, JReferenceTypeMetadata typeMetadata)
 		{
-			JLocalObject jLocal = classMetadata.CreateInstance(jClass, localRef, true);
-			Boolean disposeParse = typeMetadata.Modifier != JTypeModifier.Final && classMetadata != typeMetadata;
-			JReferenceObject result = typeMetadata.ParseInstance(jLocal, disposeParse);
-			this._callAdapter._cache.RegisterParameter(localRef, result as ILocalObject ?? jLocal);
-			return result;
+			JEnvironment env = this._callAdapter._env;
+			this._callAdapter._cache.Activate(out LocalCache previous);
+			try
+			{
+				JLocalObject jLocal = classMetadata.CreateInstance(jClass, localRef, true);
+				Boolean disposeParse = typeMetadata.Modifier != JTypeModifier.Final && classMetadata != typeMetadata;
+				JReferenceObject result = typeMetadata.ParseInstance(jLocal, disposeParse);
+				this._callAdapter._cache.RegisterParameter(localRef, result as ILocalObject ?? jLocal);
+				return result;
+			}
+			finally
+			{
+				env.SetObjectCache(previous);
+			}
 		}
 	}
 }

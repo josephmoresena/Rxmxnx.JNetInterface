@@ -77,7 +77,13 @@ internal sealed class CallFrame : LocalCache, IDisposable
 	/// <summary>
 	/// Sets current instance as current object cache.
 	/// </summary>
-	public void Activate() => this._env.SetObjectCache(this);
+	/// <param name="previous"></param>
+	public void Activate(out LocalCache previous)
+	{
+		previous = this._env.LocalCache;
+		this.SetPrevious(previous);
+		this._env.SetObjectCache(this);
+	}
 
 	/// <inheritdoc/>
 	public override Boolean IsParameter(JObjectLocalRef localRef)

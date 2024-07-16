@@ -9,15 +9,15 @@ internal class LocalCache
 	/// Object dictionary.
 	/// </summary>
 	private readonly Dictionary<JObjectLocalRef, ObjectLifetime> _objects;
-	/// <summary>
-	/// Previous cache.
-	/// </summary>
-	private readonly LocalCache? _previous;
 
 	/// <summary>
 	/// Internal id.
 	/// </summary>
 	public readonly Guid Id;
+	/// <summary>
+	/// Previous cache.
+	/// </summary>
+	private LocalCache? _previous;
 
 	/// <summary>
 	/// Lifetime for <paramref name="localRef"/>.
@@ -55,12 +55,11 @@ internal class LocalCache
 	/// Constructor.
 	/// </summary>
 	/// <param name="previous">Previous instance.</param>
-	public LocalCache(LocalCache previous)
+	protected LocalCache(LocalCache previous) : this(previous.ClassCache)
 	{
 		this._previous = previous;
 		this._objects = new();
 		this.Id = Guid.NewGuid();
-		this.ClassCache = previous.ClassCache;
 	}
 
 	/// <summary>
@@ -141,4 +140,8 @@ internal class LocalCache
 	/// <returns>The <see cref="ObjectLifetime"/> instance associated with <paramref name="localRef"/>.</returns>
 	public virtual ObjectLifetime? GetLifetime(JObjectLocalRef localRef)
 		=> this._objects.GetValueOrDefault(localRef) ?? this._previous?.GetLifetime(localRef);
+	/// <summary>
+	/// Sets previous cache.
+	/// </summary>
+	protected void SetPrevious(LocalCache previous) => this._previous = previous;
 }

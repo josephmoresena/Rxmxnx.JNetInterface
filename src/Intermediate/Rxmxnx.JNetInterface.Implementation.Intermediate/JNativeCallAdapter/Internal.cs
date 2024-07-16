@@ -18,12 +18,20 @@ public readonly ref partial struct JNativeCallAdapter
 		internal JLocalObject CreateInitialObject(JObjectLocalRef localRef)
 		{
 			JEnvironment env = this._callAdapter._env;
-			JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata metadata, true);
-			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
+			this._callAdapter._cache.Activate(out LocalCache previous);
+			try
 			{
-				JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
-				this._callAdapter._cache.RegisterParameter(localRef, result);
-				return result;
+				JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata metadata, true);
+				if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
+				{
+					JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
+					this._callAdapter._cache.RegisterParameter(localRef, result);
+					return result;
+				}
+			}
+			finally
+			{
+				env.SetObjectCache(previous);
 			}
 			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 			return this.CreateInitialClass(classRef);
