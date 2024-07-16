@@ -73,6 +73,11 @@ public readonly ref partial struct JNativeCallAdapter
 			Boolean validateReference = false)
 		{
 			JEnvironment env = this._callAdapter._env;
+			if (env.LocalCache.GetLifetime(localRef)?.Class is { } jClass)
+			{
+				typeMetadata = (env as IEnvironment).ClassFeature.GetTypeMetadata(jClass);
+				return jClass;
+			}
 			if (validateReference) Builder.ThrowIfNotLocalReference(env, localRef);
 			return env.GetObjectClass(localRef, out typeMetadata);
 		}
