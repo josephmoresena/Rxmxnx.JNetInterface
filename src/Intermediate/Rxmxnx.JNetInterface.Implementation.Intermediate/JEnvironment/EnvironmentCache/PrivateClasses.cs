@@ -136,6 +136,20 @@ partial class JEnvironment
 			return classRef;
 		}
 		/// <summary>
+		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="namePtr"/> as class name.
+		/// </summary>
+		/// <param name="namePtr">A pointer to class name.</param>
+		/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
+		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+		private unsafe JClassLocalRef FindClass(Byte* namePtr, Boolean withNoCheckError = false)
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
+			JClassLocalRef result = nativeInterface.ClassFunctions.FindClass(this.Reference, namePtr);
+			if (result.IsDefault && !withNoCheckError) this.CheckJniError();
+			return result;
+		}
+		/// <summary>
 		/// Retrieves class from cache or loads it using JNI.
 		/// </summary>
 		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
@@ -169,20 +183,6 @@ partial class JEnvironment
 				result = new(this.ClassObject, typeInformation, classRef);
 			}
 			return this.Register(result);
-		}
-		/// <summary>
-		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="namePtr"/> as class name.
-		/// </summary>
-		/// <param name="namePtr">A pointer to class name.</param>
-		/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
-		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		private unsafe JClassLocalRef FindClass(Byte* namePtr, Boolean withNoCheckError = false)
-		{
-			ref readonly NativeInterface nativeInterface =
-				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
-			JClassLocalRef result = nativeInterface.ClassFunctions.FindClass(this.Reference, namePtr);
-			if (result.IsDefault) this.CheckJniError();
-			return result;
 		}
 		/// <summary>
 		/// Retrieves primitive wrapper class from primitive signature.
