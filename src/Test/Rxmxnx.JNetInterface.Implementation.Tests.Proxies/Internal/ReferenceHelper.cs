@@ -124,12 +124,22 @@ internal static partial class ReferenceHelper
 
 	private static InvokeInterfaceProxy GetProxy(JVirtualMachineRef vmRef)
 	{
+		IntPtr ptr = ReferenceHelper.InvokeInterface.AsSpan().GetUnsafeIntPtr();
 		lock (ReferenceHelper.invokeLock)
-			return ReferenceHelper.invokeProxies.GetValueOrDefault(vmRef) ?? InvokeInterfaceProxy.Detached;
+		{
+			InvokeInterfaceProxy? result = ReferenceHelper.invokeProxies.GetValueOrDefault(vmRef);
+			if (result is not null && result.Reference.Reference.Pointer != ptr) result = default;
+			return result ?? InvokeInterfaceProxy.Detached;
+		}
 	}
 	private static NativeInterfaceProxy GetProxy(JEnvironmentRef envRef)
 	{
+		IntPtr ptr = ReferenceHelper.NativeInterface.AsSpan().GetUnsafeIntPtr();
 		lock (ReferenceHelper.nativeLock)
-			return ReferenceHelper.nativeProxies.GetValueOrDefault(envRef) ?? NativeInterfaceProxy.Detached;
+		{
+			NativeInterfaceProxy? result = ReferenceHelper.nativeProxies.GetValueOrDefault(envRef);
+			if (result is not null && result.Reference.Reference.Pointer != ptr) result = default;
+			return result ?? NativeInterfaceProxy.Detached;
+		}
 	}
 }

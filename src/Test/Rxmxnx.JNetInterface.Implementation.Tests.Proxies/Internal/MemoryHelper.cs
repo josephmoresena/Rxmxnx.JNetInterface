@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Tests.Internal;
 [ExcludeFromCodeCoverage]
 internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, IFixedPointer
 {
+	private readonly Queue<Int32> _toFree = new(Byte.MaxValue);
+	private readonly HashSet<Int32> _busy;
 	private readonly IntPtr _noValue;
 	private readonly IntPtr _value;
 	private readonly IntPtr[] _values;
@@ -16,6 +18,7 @@ internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, 
 		this._values = new IntPtr[count];
 		this._value = (IntPtr)handle.Pointer;
 		this._noValue = this._value + sizeOf;
+		this._busy = new(count);
 		this._localHandle = this._values.AsMemory().Pin();
 	}
 
@@ -23,52 +26,37 @@ internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, 
 	{
 		lock (this._values)
 		{
-			for (Int32 i = 0; i < this._values.Length; i++)
+			while (this._busy.Count < this._values.Length)
 			{
-				if (this._values[i] == this._value) continue;
-				Int32 offset = i * sizeof(TPointer);
-				this._values[i] = this._value;
+				Int32 index = Random.Shared.Next(0, this._values.Length);
+				if (!this._busy.Add(index)) continue;
+				this._values[index] = this._value;
+				Int32 offset = index * sizeof(TPointer);
 				IntPtr result = (IntPtr)this._localHandle.Pointer + offset;
+				this.Free(index);
 				return NativeUtilities.Transform<IntPtr, TPointer>(in result);
 			}
 		}
 		throw new InsufficientMemoryException();
 	}
-	public Boolean Free(TPointer value)
+	public void Free(TPointer value)
 	{
-		Boolean result = false;
 		IntPtr ptr = (IntPtr)this._localHandle.Pointer;
 		lock (this._values)
 		{
 			Int32 index = MemoryHelper<TPointer>.GetIndex(value.Pointer, ptr, this._values.Length);
-			if (index < 0) return result;
-			result = this._values[index] == this._value;
+			if (index < 0) return;
 			this._values[index] = this._noValue;
+			this._toFree.Enqueue(index);
 		}
-		return result;
 	}
-	public void Free(Action<TPointer> free)
+	private void Free(Int32 exclude)
 	{
-		lock (this._values)
+		if (this._toFree.Count < Byte.MaxValue) return;
+		while (this._toFree.Count > SByte.MaxValue)
 		{
-			Span<IntPtr> span = this._values;
-			foreach (ref IntPtr value in span)
-			{
-				try
-				{
-					if (value != this._value) continue;
-					IntPtr valuePtr = value.GetUnsafeIntPtr();
-					free(NativeUtilities.Transform<IntPtr, TPointer>(in valuePtr));
-				}
-				catch (Exception)
-				{
-					// ignored
-				}
-				finally
-				{
-					value = this._noValue;
-				}
-			}
+			Int32 indexToFree = this._toFree.Dequeue();
+			if (indexToFree != exclude) this._busy.Remove(indexToFree);
 		}
 	}
 	private void ReleaseUnmanagedResources()
