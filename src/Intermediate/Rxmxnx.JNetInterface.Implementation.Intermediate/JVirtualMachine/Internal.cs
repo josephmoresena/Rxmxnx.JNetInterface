@@ -194,8 +194,9 @@ public partial class JVirtualMachine
 	internal static unsafe void DetachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef envRef, Thread thread)
 	{
 		ImplementationValidationUtilities.ThrowIfDifferentThread(envRef, thread);
-		JVirtualMachine vm = ReferenceCache.Instance.Get(vmRef, out _);
-		JResult result = vm._cache.GetInvokeInterface().DetachCurrentThread(vm._cache.Reference);
+		JVirtualMachine? vm = ReferenceCache.Instance.Get(vmRef);
+		JResult result = vm?._cache.GetInvokeInterface().DetachCurrentThread(vm._cache.Reference) ??
+			JResult.DetachedThreadError;
 		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 	}
 	/// <summary>

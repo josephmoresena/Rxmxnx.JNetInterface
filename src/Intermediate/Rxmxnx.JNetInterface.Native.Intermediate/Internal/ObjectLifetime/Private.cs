@@ -99,6 +99,16 @@ internal partial class ObjectLifetime
 		this.Load(jLocal);
 	}
 	/// <summary>
+	/// Indicates whether <paramref name="jLocal"/> is unloadable in current conditions.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="feature">A <see cref="IReferenceFeature"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jLocal"/> is unloadable; otherwise, <see langword="false"/>.
+	/// </returns>
+	private Boolean IsUnloadable(JLocalObject jLocal, IReferenceFeature? feature)
+		=> feature is null || this._objects.Count > this._classCounter.Value || feature.IsParameter(jLocal);
+	/// <summary>
 	/// Unloads the given object from the current instance.
 	/// </summary>
 	/// <param name="id">Object identifier.</param>

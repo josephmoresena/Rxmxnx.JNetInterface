@@ -5,7 +5,7 @@ public partial class JNativeCallAdapterTests
 	[Fact]
 	internal void UnknownParametersCallTest()
 	{
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(ProxyFactory.Instance);
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JNativeCallAdapter adapter = default;
 		List<JLocalObject?> parameters = [];
 		try

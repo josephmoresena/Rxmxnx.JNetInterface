@@ -236,8 +236,7 @@ internal sealed partial class ObjectLifetime(
 		Boolean isClass = jLocal is JClassObject;
 		this.Unload(jLocal.Id, isClass);
 		this.Secondary?.Unload(jLocal.Id, isClass);
-		if (this._objects.Count > this._classCounter.Value ||
-		    this.Environment.ReferenceFeature.IsParameter(jLocal)) return;
+		if (this.IsUnloadable(jLocal, jLocal.Environment.ReferenceFeature)) return;
 		if (this.Environment.ReferenceFeature.Unload(jLocal)) this.Dispose();
 	}
 	/// <summary>

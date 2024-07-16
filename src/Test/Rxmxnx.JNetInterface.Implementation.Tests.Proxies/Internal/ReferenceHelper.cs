@@ -2,9 +2,59 @@ namespace Rxmxnx.JNetInterface.Tests.Internal;
 
 internal static partial class ReferenceHelper
 {
+	private static readonly Object invokeLock = new();
+	private static readonly Object nativeLock = new();
+
 	public static readonly IFixture Fixture = new Fixture().RegisterReferences();
-	public static readonly ConcurrentDictionary<JEnvironmentRef, NativeInterfaceProxy> NativeProxies = new();
-	public static readonly ConcurrentDictionary<JVirtualMachineRef, InvokeInterfaceProxy> InvokeProxies = new();
+
+	private static readonly Dictionary<JEnvironmentRef, NativeInterfaceProxy> nativeProxies = new(Byte.MaxValue);
+	private static readonly Dictionary<JVirtualMachineRef, InvokeInterfaceProxy> invokeProxies = new(Byte.MaxValue);
+
+	public static Boolean Contains(NativeInterfaceProxy proxy)
+	{
+		lock (ReferenceHelper.nativeLock)
+			return Object.ReferenceEquals(proxy, ReferenceHelper.nativeProxies.GetValueOrDefault(proxy.Reference));
+	}
+	public static InvokeInterfaceProxy Initialize(InvokeInterfaceProxy proxy)
+	{
+		lock (ReferenceHelper.invokeLock)
+			ReferenceHelper.invokeProxies[proxy.Reference] = proxy;
+		return proxy;
+	}
+	public static NativeInterfaceProxy Initialize(NativeInterfaceProxy proxy)
+	{
+		lock (ReferenceHelper.nativeLock)
+			ReferenceHelper.nativeProxies[proxy.Reference] = proxy;
+		return proxy;
+	}
+	public static void FinalizeProxy(InvokeInterfaceProxy proxy)
+	{
+		lock (ReferenceHelper.invokeLock)
+		{
+			if (Object.ReferenceEquals(proxy, ReferenceHelper.invokeProxies.GetValueOrDefault(proxy.Reference)))
+				ReferenceHelper.invokeProxies.Remove(proxy.Reference, out _);
+			proxy.ClearReceivedCalls();
+			proxy.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(JResult.DetachedThreadError);
+			proxy.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
+			                          Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
+			     .Returns(JResult.DetachedThreadError);
+			ProxyFactory.Instance.InvokeMemory.Free(proxy.Reference);
+		}
+	}
+	public static void FinalizeProxy(NativeInterfaceProxy proxy, Boolean finalizeVm)
+	{
+		lock (ReferenceHelper.nativeLock)
+		{
+			Boolean remove =
+				Object.ReferenceEquals(proxy, ReferenceHelper.nativeProxies.GetValueOrDefault(proxy.Reference));
+			if (remove)
+				ReferenceHelper.nativeProxies.Remove(proxy.Reference, out _);
+			proxy.ClearReceivedCalls();
+			proxy.GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>()).Returns(JResult.DetachedThreadError);
+			if (remove && finalizeVm) ReferenceHelper.FinalizeProxy(proxy.VirtualMachine);
+			ProxyFactory.Instance.NativeMemory.Free(proxy.Reference);
+		}
+	}
 
 	public static unsafe Boolean IsClassName<TDataType>(Byte* className) where TDataType : IDataType<TDataType>
 	{
@@ -70,5 +120,16 @@ internal static partial class ReferenceHelper
 	{
 		fixed (Byte* isNativeMethodName = NativeFunctionSetImpl.IsNativeMethodDefinition.Name)
 			return methodName == isNativeMethodName;
+	}
+
+	private static InvokeInterfaceProxy GetProxy(JVirtualMachineRef vmRef)
+	{
+		lock (ReferenceHelper.invokeLock)
+			return ReferenceHelper.invokeProxies.GetValueOrDefault(vmRef) ?? InvokeInterfaceProxy.Detached;
+	}
+	private static NativeInterfaceProxy GetProxy(JEnvironmentRef envRef)
+	{
+		lock (ReferenceHelper.nativeLock)
+			return ReferenceHelper.nativeProxies.GetValueOrDefault(envRef) ?? NativeInterfaceProxy.Detached;
 	}
 }

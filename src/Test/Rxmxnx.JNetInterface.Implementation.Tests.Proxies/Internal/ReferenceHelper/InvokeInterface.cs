@@ -24,14 +24,12 @@ internal static unsafe partial class ReferenceHelper
 
 	[UnmanagedCallersOnly]
 	private static JResult DestroyVirtualMachine(JVirtualMachineRef vmRef)
-		=> ReferenceHelper.InvokeProxies.GetValueOrDefault(vmRef)?.DestroyVirtualMachine() ??
-			JResult.DetachedThreadError;
+		=> ReferenceHelper.GetProxy(vmRef).DestroyVirtualMachine();
 	[UnmanagedCallersOnly]
 	private static JResult GetEnv(JVirtualMachineRef vmRef, JEnvironmentRef* envRefPtr, Int32 version)
 	{
 		ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
-		return ReferenceHelper.InvokeProxies.GetValueOrDefault(vmRef)?.GetEnv(envRef.GetUnsafeValPtr(), version) ??
-			JResult.DetachedThreadError;
+		return ReferenceHelper.GetProxy(vmRef).GetEnv(envRef.GetUnsafeValPtr(), version);
 	}
 	[UnmanagedCallersOnly]
 	private static JResult AttachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef* envRefPtr,
@@ -39,9 +37,7 @@ internal static unsafe partial class ReferenceHelper
 	{
 		ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
 		ref VirtualMachineArgumentValueWrapper argRef = ref Unsafe.AsRef<VirtualMachineArgumentValueWrapper>(argPtr);
-		return ReferenceHelper.InvokeProxies.GetValueOrDefault(vmRef)
-		                      ?.AttachCurrentThread(envRef.GetUnsafeValPtr(), argRef.GetUnsafeValPtr()) ??
-			JResult.DetachedThreadError;
+		return ReferenceHelper.GetProxy(vmRef).AttachCurrentThread(envRef.GetUnsafeValPtr(), argRef.GetUnsafeValPtr());
 	}
 	[UnmanagedCallersOnly]
 	private static JResult AttachCurrentThreadAsDaemon(JVirtualMachineRef vmRef, JEnvironmentRef* envRefPtr,
@@ -49,11 +45,10 @@ internal static unsafe partial class ReferenceHelper
 	{
 		ref JEnvironmentRef envRef = ref Unsafe.AsRef<JEnvironmentRef>(envRefPtr);
 		ref VirtualMachineArgumentValueWrapper argRef = ref Unsafe.AsRef<VirtualMachineArgumentValueWrapper>(argPtr);
-		return ReferenceHelper.InvokeProxies.GetValueOrDefault(vmRef)
-		                      ?.AttachCurrentThreadAsDaemon(envRef.GetUnsafeValPtr(), argRef.GetUnsafeValPtr()) ??
-			JResult.DetachedThreadError;
+		return ReferenceHelper.GetProxy(vmRef)
+		                      .AttachCurrentThreadAsDaemon(envRef.GetUnsafeValPtr(), argRef.GetUnsafeValPtr());
 	}
 	[UnmanagedCallersOnly]
 	private static JResult DetachCurrentThread(JVirtualMachineRef vmRef)
-		=> ReferenceHelper.InvokeProxies.GetValueOrDefault(vmRef)?.DetachCurrentThread() ?? JResult.DetachedThreadError;
+		=> ReferenceHelper.GetProxy(vmRef).DetachCurrentThread();
 }

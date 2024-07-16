@@ -88,7 +88,7 @@ public partial class JNativeCallAdapterTests
 	internal void AgnosticTypedInstanceParameterlessCallTest(Boolean useVm, CallResult result = CallResult.Void,
 		Boolean registerClass = false)
 	{
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(ProxyFactory.Instance);
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JNativeCallAdapter adapter = default;
 		JObjectLocalRef localRef = JNativeCallAdapterTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();

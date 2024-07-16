@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Tests;
 [ExcludeFromCodeCoverage]
 public abstract class InvokeInterfaceProxy
 {
+	internal static InvokeInterfaceProxy Detached = InvokeInterfaceProxy.CreateDetached();
+
 	public JGlobalRef ClassGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef ThrowableGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef StackTraceElementGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
@@ -28,9 +30,6 @@ public abstract class InvokeInterfaceProxy
 	public JMethodId StackTraceElementIsNativeMethodMethodId { get; } = ReferenceHelper.Fixture.Create<JMethodId>();
 
 	public JVirtualMachineRef Reference { get; private set; }
-	public ProxyFactory Factory { get; private set; } = default!;
-
-	~InvokeInterfaceProxy() { this.Factory?.FinalizeProxy(this.Reference); }
 
 	public abstract JResult DestroyVirtualMachine();
 	public abstract JResult AttachCurrentThread(ValPtr<JEnvironmentRef> envRef,
@@ -40,11 +39,27 @@ public abstract class InvokeInterfaceProxy
 	public abstract JResult AttachCurrentThreadAsDaemon(ValPtr<JEnvironmentRef> envRef,
 		ReadOnlyValPtr<VirtualMachineArgumentValueWrapper> arg);
 
-	public static InvokeInterfaceProxy CreateProxy(ProxyFactory factory)
+	public void FinalizeProxy() => ReferenceHelper.FinalizeProxy(this);
+
+	public static InvokeInterfaceProxy CreateProxy()
 	{
 		InvokeInterfaceProxy proxy = Substitute.For<InvokeInterfaceProxy>();
-		proxy.Factory = factory;
-		proxy.Reference = factory.InitializeProxy(proxy);
+		proxy.Reference = ProxyFactory.Instance.InvokeMemory.Get();
+		return ReferenceHelper.Initialize(proxy);
+	}
+
+	private static InvokeInterfaceProxy CreateDetached()
+	{
+		InvokeInterfaceProxy proxy = Substitute.For<InvokeInterfaceProxy>();
+		proxy.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(JResult.DetachedThreadError);
+		proxy.AttachCurrentThread(Arg.Any<ValPtr<JEnvironmentRef>>(),
+		                          Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
+		     .Returns(JResult.DetachedThreadError);
+		proxy.AttachCurrentThreadAsDaemon(Arg.Any<ValPtr<JEnvironmentRef>>(),
+		                                  Arg.Any<ReadOnlyValPtr<VirtualMachineArgumentValueWrapper>>())
+		     .Returns(JResult.DetachedThreadError);
+		proxy.DetachCurrentThread().Returns(JResult.DetachedThreadError);
+		proxy.DestroyVirtualMachine().Returns(JResult.DetachedThreadError);
 		return proxy;
 	}
 }

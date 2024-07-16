@@ -23,7 +23,7 @@ partial class JEnvironment
 		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
 		/// <returns>JNI version for <paramref name="envRef"/>.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static unsafe Int32 GetVersion(JEnvironmentRef envRef)
+		public static unsafe Int32 GetVersion(JEnvironmentRef envRef)
 		{
 			ref readonly JEnvironmentValue refValue = ref envRef.Reference;
 			ref readonly NativeInterface nativeInterface =

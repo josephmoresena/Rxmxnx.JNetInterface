@@ -9,17 +9,6 @@ partial class JEnvironment
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial class EnvironmentCache : LocalMainClasses
 	{
-		/// <inheritdoc cref="JEnvironment.Reference"/>
-		public readonly JEnvironmentRef Reference;
-		/// <summary>
-		/// Managed thread.
-		/// </summary>
-		public readonly Thread Thread;
-		/// <inheritdoc cref="IEnvironment.Version"/>
-		public readonly Int32 Version;
-
-		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
-		public readonly JVirtualMachine VirtualMachine;
 		/// <summary>
 		/// Current thrown exception.
 		/// </summary>
@@ -35,16 +24,13 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
-		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(env)
+		/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(vm, envRef, env)
 		{
 			this._env = env;
 			this._objects = new(this._classes);
 
-			this.VirtualMachine = vm;
-			this.Reference = envRef;
-			this.Version = EnvironmentCache.GetVersion(envRef);
-			this.Thread = Thread.CurrentThread;
+			if (this.Version < NativeInterface.RequiredVersion) return; // Avoid class loading if unsupported version.
 
 			Task.Factory.StartNew(EnvironmentCache.FinalizeCache, this, this._cancellation.Token);
 			this.LoadMainClasses();

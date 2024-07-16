@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Tests;
 [ExcludeFromCodeCoverage]
 public abstract class NativeInterfaceProxy
 {
+	internal static NativeInterfaceProxy Detached = NativeInterfaceProxy.CreateDetached();
+
 	public static readonly JThrowableLocalRef NoThrowable = default;
 	public static readonly JBoolean JniFalse = default;
 	public static readonly JBoolean JniTrue = default;
@@ -43,8 +45,6 @@ public abstract class NativeInterfaceProxy
 	public JFieldId IntegerTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
 	public JFieldId LongTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
 	public JFieldId ShortTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
-
-	~NativeInterfaceProxy() { this.VirtualMachine?.Factory?.FinalizeProxy(this.Reference); }
 
 	public unsafe JClassLocalRef? GetMainClassLocalRef(Byte* className)
 	{
@@ -429,27 +429,48 @@ public abstract class NativeInterfaceProxy
 
 	public abstract JBoolean IsVirtualThread(JObjectLocalRef threadRef);
 
+	public void FinalizeProxy(Boolean finalizeVm) => ReferenceHelper.FinalizeProxy(this, finalizeVm);
+
 	public static NativeInterfaceProxy CreateProxy(InvokeInterfaceProxy vmProxy)
 	{
 		NativeInterfaceProxy proxy = Substitute.For<NativeInterfaceProxy>();
 		proxy.VirtualMachine = vmProxy;
-		proxy.Reference = vmProxy.Factory.InitializeProxy(proxy);
-		proxy.GetVersion().Returns(IVirtualMachine.MinimalVersion);
-		proxy.ExceptionOccurred().Returns(NativeInterfaceProxy.NoThrowable);
-		proxy.ExceptionCheck().Returns(NativeInterfaceProxy.JniFalse);
-		return proxy;
+		proxy.Reference = ProxyFactory.Instance.NativeMemory.Get();
+		NativeInterfaceProxy.InitializeProxy(proxy, IVirtualMachine.MinimalVersion);
+		return ReferenceHelper.Initialize(proxy);
 	}
-	public static NativeInterfaceProxy CreateProxy(ProxyFactory factory, Boolean attachThread = true)
+	public static NativeInterfaceProxy CreateProxy(Boolean attachThread = true)
 	{
 		NativeInterfaceProxy proxy = Substitute.For<NativeInterfaceProxy>();
-		proxy.VirtualMachine = InvokeInterfaceProxy.CreateProxy(factory);
-		proxy.Reference = proxy.VirtualMachine.Factory.InitializeProxy(proxy);
+		proxy.VirtualMachine = InvokeInterfaceProxy.CreateProxy();
+		proxy.Reference = ProxyFactory.Instance.NativeMemory.Get();
 		if (attachThread)
 			proxy.VirtualMachine.When(v => v.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()))
 			     .Do(c => ((ValPtr<JEnvironmentRef>)c[0]).Reference = proxy.Reference);
-		proxy.GetVersion().Returns(IVirtualMachine.MinimalVersion);
-		proxy.ExceptionOccurred().Returns(NativeInterfaceProxy.NoThrowable);
-		proxy.ExceptionCheck().Returns(NativeInterfaceProxy.JniFalse);
+		NativeInterfaceProxy.InitializeProxy(proxy, IVirtualMachine.MinimalVersion);
+		return ReferenceHelper.Initialize(proxy);
+	}
+	private static NativeInterfaceProxy CreateDetached()
+	{
+		NativeInterfaceProxy proxy = Substitute.For<NativeInterfaceProxy>();
+		proxy.VirtualMachine = InvokeInterfaceProxy.Detached;
+		proxy.GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>()).Returns(JResult.DetachedThreadError);
+		proxy.MonitorExit(Arg.Any<JObjectLocalRef>()).Returns(JResult.ExitingError);
+		NativeInterfaceProxy.InitializeProxy(proxy, -1);
 		return proxy;
+	}
+
+	private static void InitializeProxy(NativeInterfaceProxy proxy, Int32 version)
+	{
+		try
+		{
+			proxy.GetVersion().Returns(version);
+			proxy.ExceptionOccurred().Returns(NativeInterfaceProxy.NoThrowable);
+			proxy.ExceptionCheck().Returns(NativeInterfaceProxy.JniFalse);
+		}
+		catch (Exception)
+		{
+			// ignored
+		}
 	}
 }

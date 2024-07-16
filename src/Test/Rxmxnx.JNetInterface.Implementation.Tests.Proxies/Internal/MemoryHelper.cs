@@ -10,12 +10,12 @@ internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, 
 	private MemoryHandle _externalHandle;
 	private MemoryHandle _localHandle;
 
-	public MemoryHelper(MemoryHandle handle, Int32 count)
+	public MemoryHelper(MemoryHandle handle, Int32 sizeOf, Int32 count)
 	{
 		this._externalHandle = handle;
 		this._values = new IntPtr[count];
 		this._value = (IntPtr)handle.Pointer;
-		this._noValue = this._value + IntPtr.Size;
+		this._noValue = this._value + sizeOf;
 		this._localHandle = this._values.AsMemory().Pin();
 	}
 

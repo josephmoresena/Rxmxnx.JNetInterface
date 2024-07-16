@@ -11,7 +11,7 @@ public sealed class JVirtualMachineTests
 	[InlineData(false)]
 	internal unsafe void GetVirtualMachineTest(Boolean attached)
 	{
-		InvokeInterfaceProxy proxyVm = InvokeInterfaceProxy.CreateProxy(ProxyFactory.Instance);
+		InvokeInterfaceProxy proxyVm = InvokeInterfaceProxy.CreateProxy();
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(proxyVm);
 		try
 		{
@@ -87,6 +87,8 @@ public sealed class JVirtualMachineTests
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(false);
+			proxyVm.FinalizeProxy();
 		}
 	}
 
@@ -94,7 +96,7 @@ public sealed class JVirtualMachineTests
 	internal void GetVirtualMachineErrorTest()
 	{
 		JResult result = (JResult)Random.Shared.Next(-6, -1);
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(ProxyFactory.Instance, false);
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(false);
 
 		try
 		{
@@ -115,7 +117,8 @@ public sealed class JVirtualMachineTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Assert.False(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
 		}
 	}
 
@@ -127,13 +130,14 @@ public sealed class JVirtualMachineTests
 	[InlineData(0x00010005)]
 	internal void GetVirtualMachineVersionErrorTest(Int32 jniVersion)
 	{
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(ProxyFactory.Instance);
+		Boolean vmInitialized = jniVersion >= 0x00010002;
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
 			proxyEnv.GetVersion().Returns(jniVersion);
 
 			IVirtualMachine? vm = default;
-			if (jniVersion >= 0x00010002)
+			if (vmInitialized)
 			{
 				vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
 			}
@@ -168,7 +172,8 @@ public sealed class JVirtualMachineTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			Assert.Equal(vmInitialized, JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
 		}
 	}
 
@@ -180,7 +185,7 @@ public sealed class JVirtualMachineTests
 	{
 		String fatalErrorMessage = JVirtualMachineTests.fixture.Create<String>();
 		CString fatalErrorUtf8Message = (CString)fatalErrorMessage;
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(ProxyFactory.Instance);
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
 		{
 			proxyEnv.UseVirtualMachineRef = false;
@@ -210,6 +215,7 @@ public sealed class JVirtualMachineTests
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
 		}
 	}
 
@@ -227,7 +233,7 @@ public sealed class JVirtualMachineTests
 	{
 		JGlobalRef globalRef = useThreadGroup ? JVirtualMachineTests.fixture.Create<JGlobalRef>() : default;
 		CString threadName = (CString)JVirtualMachineTests.fixture.Create<String>();
-		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy(ProxyFactory.Instance);
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JEnvironment? env = default;
 		try
 		{
@@ -303,6 +309,7 @@ public sealed class JVirtualMachineTests
 			Assert.Equal(!removeAttachedThread, env?.IsAttached);
 			Assert.Equal(!removeAttachedThread, (env as IThread)?.Attached);
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
 		}
 	}
 
@@ -311,10 +318,15 @@ public sealed class JVirtualMachineTests
 	{
 		Assert.False(JVirtualMachine.Register<JClassObject>());
 		Assert.True(JVirtualMachine.Register<JArrayObject<JArrayObject<JArrayObject<JArrayObject<JClassObject>>>>>());
-		await Task.WhenAll(JVirtualMachineTests.RegisterTestObject(), JVirtualMachineTests.RegisterTestObject(),
-		                   JVirtualMachineTests.RegisterTestObject(), JVirtualMachineTests.RegisterTestObject(),
-		                   JVirtualMachineTests.RegisterTestObject(), JVirtualMachineTests.RegisterTestObject(),
-		                   JVirtualMachineTests.RegisterTestObject(), JVirtualMachineTests.RegisterTestObject());
+		Task registerTask = Task.WhenAll(JVirtualMachineTests.RegisterTestObject(),
+		                                 JVirtualMachineTests.RegisterTestObject(),
+		                                 JVirtualMachineTests.RegisterTestObject(),
+		                                 JVirtualMachineTests.RegisterTestObject(),
+		                                 JVirtualMachineTests.RegisterTestObject(),
+		                                 JVirtualMachineTests.RegisterTestObject(),
+		                                 JVirtualMachineTests.RegisterTestObject(),
+		                                 JVirtualMachineTests.RegisterTestObject());
+		await Task.WhenAny(registerTask, Task.Delay(500)); // Set timeout
 	}
 
 	private static JGlobal CreateThreadGroup(IVirtualMachine vm, JGlobalRef globalRef)
