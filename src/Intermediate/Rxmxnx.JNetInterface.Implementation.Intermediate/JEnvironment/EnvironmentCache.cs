@@ -168,5 +168,14 @@ partial class JEnvironment
 			result?.SetValue(localRef);
 			this.Register(result);
 		}
+		/// <summary>
+		/// Clears pending JNI exception.
+		/// </summary>
+		public unsafe void ClearException()
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);
+			nativeInterface.ErrorFunctions.ExceptionClear(this.Reference);
+		}
 	}
 }

@@ -36,17 +36,11 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="metadata">Class metadata name.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal unsafe JGlobalRef GetClassGlobalRef(ClassObjectMetadata metadata)
+	internal JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata metadata)
 	{
-		JClassLocalRef classRef;
-		if (metadata.ClassSignature.Length == 1) // Is primitive class?
-			classRef = this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
-		else
-			fixed (Byte* ptr = &MemoryMarshal.GetReference(metadata.Name.AsSpan()))
-			{
-				JTrace.FindClass(metadata.Name);
-				classRef = this._cache.FindClass(ptr);
-			}
+		JClassLocalRef classRef = metadata.ClassSignature.Length == 1 ?
+			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]) :
+			this._cache.FindMainClass(metadata.Name);
 		try
 		{
 			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value);

@@ -332,15 +332,6 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		}
 		/// <summary>
-		/// Clears pending JNI exception.
-		/// </summary>
-		private unsafe void ClearException()
-		{
-			ref readonly NativeInterface nativeInterface =
-				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);
-			nativeInterface.ErrorFunctions.ExceptionClear(this.Reference);
-		}
-		/// <summary>
 		/// Sets <paramref name="jniException"/> as managed pending exception and throws it.
 		/// </summary>
 		/// <param name="throwException">

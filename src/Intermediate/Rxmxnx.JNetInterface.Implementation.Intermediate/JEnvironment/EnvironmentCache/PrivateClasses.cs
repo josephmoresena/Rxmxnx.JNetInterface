@@ -145,8 +145,7 @@ partial class JEnvironment
 			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
 			{
 				JTrace.ClassFound(result);
-				if (!this._objects.Equals(this) && result.IsDefault) this.LoadClass(result);
-				return result;
+				return this.GetLoadedClass(result);
 			}
 			if (MetadataHelper.GetExactMetadata(typeInformation.Hash) is { } metadata)
 			{
@@ -170,6 +169,62 @@ partial class JEnvironment
 				result = new(this.ClassObject, typeInformation, classRef);
 			}
 			return this.Register(result);
+		}
+		/// <summary>
+		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="namePtr"/> as class name.
+		/// </summary>
+		/// <param name="namePtr">A pointer to class name.</param>
+		/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
+		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+		private unsafe JClassLocalRef FindClass(Byte* namePtr, Boolean withNoCheckError = false)
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
+			JClassLocalRef result = nativeInterface.ClassFunctions.FindClass(this.Reference, namePtr);
+			if (result.IsDefault) this.CheckJniError();
+			return result;
+		}
+		/// <summary>
+		/// Retrieves primitive wrapper class from primitive signature.
+		/// </summary>
+		/// <param name="signature">JNI primitive signature.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject GetPrimitiveWrapperClass(Byte signature)
+		{
+			JClassTypeMetadata wrapperTypeInformation = (JClassTypeMetadata)(signature switch
+			{
+				CommonNames.BooleanSignatureChar => MetadataHelper.GetExactMetadata<JBooleanObject>(),
+				CommonNames.ByteSignatureChar => MetadataHelper.GetExactMetadata<JByteObject>(),
+				CommonNames.CharSignatureChar => MetadataHelper.GetExactMetadata<JCharacterObject>(),
+				CommonNames.DoubleSignatureChar => MetadataHelper.GetExactMetadata<JDoubleObject>(),
+				CommonNames.FloatSignatureChar => MetadataHelper.GetExactMetadata<JFloatObject>(),
+				CommonNames.IntSignatureChar => MetadataHelper.GetExactMetadata<JIntegerObject>(),
+				CommonNames.LongSignatureChar => MetadataHelper.GetExactMetadata<JLongObject>(),
+				CommonNames.ShortSignatureChar => MetadataHelper.GetExactMetadata<JShortObject>(),
+				_ => MetadataHelper.GetExactMetadata<JVoidObject>(),
+			});
+
+			if (this._classes.TryGetValue(wrapperTypeInformation.Hash, out JClassObject? wrapperClass))
+			{
+				JTrace.ClassFound(wrapperClass);
+			}
+			else
+			{
+				wrapperClass = this.GetLoadedClass(new(this.ClassObject, wrapperTypeInformation));
+				JTrace.ClassFound(wrapperTypeInformation);
+			}
+			return wrapperClass;
+		}
+		/// <summary>
+		/// Loads <paramref name="jClass"/> in the current class cache and retrieves the same instance.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <returns><paramref name="jClass"/> same instance.</returns>
+		[return: NotNullIfNotNull(nameof(jClass))]
+		private JClassObject? GetLoadedClass(JClassObject? jClass)
+		{
+			if (!this._objects.Equals(this) && JObject.IsNullOrDefault(jClass)) this.LoadClass(jClass);
+			return jClass;
 		}
 		/// <summary>
 		/// Indicates whether the object referenced by <paramref name="localRef"/> is an instance

@@ -54,17 +54,21 @@ partial class JEnvironment
 			frame[classRef.Value] = jClass.Lifetime.GetCacheable();
 		}
 		/// <summary>
-		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="namePtr"/> as class name.
+		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="className"/>.
 		/// </summary>
-		/// <param name="namePtr">A pointer to class name.</param>
+		/// <param name="className">JNI main class name.</param>
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		public unsafe JClassLocalRef FindClass(Byte* namePtr)
+		public unsafe JClassLocalRef FindMainClass(CString className)
 		{
-			ref readonly NativeInterface nativeInterface =
-				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
-			JClassLocalRef result = nativeInterface.ClassFunctions.FindClass(this.Reference, namePtr);
-			if (result.IsDefault) this.CheckJniError();
-			return result;
+			JClassLocalRef classRef;
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(className.AsSpan()))
+			{
+				JTrace.FindClass(className);
+				classRef = this.FindClass(ptr, true);
+			}
+			if (!classRef.IsDefault) return classRef;
+			this.ClearException(); // Clears JNI exception.
+			throw new InvalidOperationException($"Main class {className} is not available for JNI access.");
 		}
 		/// <summary>
 		/// Retrieves class element from interfaces class array.

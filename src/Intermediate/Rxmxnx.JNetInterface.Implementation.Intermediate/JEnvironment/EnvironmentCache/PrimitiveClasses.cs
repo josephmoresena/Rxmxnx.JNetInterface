@@ -22,21 +22,27 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
 		public JClassLocalRef FindPrimitiveClass(Byte signature)
 		{
-			using JClassObject wrapperClass = signature switch
+			JClassObject wrapperClass = this.GetPrimitiveWrapperClass(signature);
+			JFieldDefinition fieldDefinition = NativeFunctionSetImpl.PrimitiveTypeDefinition;
+			if (!JObject.IsNullOrDefault(wrapperClass))
 			{
-				CommonNames.BooleanSignatureChar => this.GetClass<JBooleanObject>(),
-				CommonNames.ByteSignatureChar => this.GetClass<JByteObject>(),
-				CommonNames.CharSignatureChar => this.GetClass<JCharacterObject>(),
-				CommonNames.DoubleSignatureChar => this.GetClass<JDoubleObject>(),
-				CommonNames.FloatSignatureChar => this.GetClass<JFloatObject>(),
-				CommonNames.IntSignatureChar => this.GetClass<JIntegerObject>(),
-				CommonNames.LongSignatureChar => this.GetClass<JLongObject>(),
-				CommonNames.ShortSignatureChar => this.GetClass<JShortObject>(),
-				_ => this.GetClass<JVoidObject>(),
-			};
-			JObjectLocalRef localRef =
-				this.GetStaticObjectField(wrapperClass, NativeFunctionSetImpl.PrimitiveTypeDefinition);
-			return JClassLocalRef.FromReference(in localRef);
+				JObjectLocalRef localRef = this.GetStaticObjectField(wrapperClass, fieldDefinition);
+				return JClassLocalRef.FromReference(in localRef);
+			}
+
+			JClassLocalRef classRef = this.FindMainClass(wrapperClass.Name);
+			try
+			{
+				JFieldId typeFieldId = this._env.GetStaticFieldId(fieldDefinition, classRef);
+				JObjectLocalRef localRef = this.GetStaticObjectField(classRef, typeFieldId);
+				if (localRef != default) return JClassLocalRef.FromReference(in localRef);
+			}
+			finally
+			{
+				this._env.DeleteLocalRef(classRef.Value);
+			}
+			this.ClearException(); // Clears JNI exception.
+			throw new InvalidOperationException($"Primitive class {(Char)signature} is not available for JNI access.");
 		}
 		/// <summary>
 		/// Retrieves primitive class instance for <paramref name="className"/>.
