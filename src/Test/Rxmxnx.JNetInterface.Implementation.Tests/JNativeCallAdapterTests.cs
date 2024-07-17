@@ -791,7 +791,6 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(throwableRef.Value).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetObjectClass(throwableRef.Value).Returns(classRef);
-			proxyEnv.GetObjectRefType(throwableRef.Value).Returns(JReferenceType.LocalRefType);
 			using IReadOnlyFixedContext<Char>.IDisposable ctx = classTypeMetadata.Information.ToString().AsMemory()
 				.GetFixedContext();
 			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
@@ -833,7 +832,6 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(throwableRef.Value).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetObjectClass(throwableRef.Value).Returns(classRef);
-			proxyEnv.GetObjectRefType(throwableRef.Value).Returns(JReferenceType.LocalRefType);
 			using IReadOnlyFixedContext<Char>.IDisposable ctx = classTypeMetadata.Information.ToString().AsMemory()
 				.GetFixedContext();
 			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);

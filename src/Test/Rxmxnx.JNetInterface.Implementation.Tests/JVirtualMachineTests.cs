@@ -286,6 +286,7 @@ public sealed class JVirtualMachineTests
 			env = Assert.IsType<JEnvironment.JThread>(thread);
 
 			Assert.Null((env as IEnvironment).LocalCapacity);
+			Assert.Null((env as IEnvironment).PendingException);
 			Assert.Equal(removeAttachedThread, env.IsDisposable);
 			Assert.True(env.IsAttached);
 			Assert.Equal(IVirtualMachine.MinimalVersion, env.Version);
@@ -300,6 +301,18 @@ public sealed class JVirtualMachineTests
 			proxyEnv.VirtualMachine.GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>()).Returns(JResult.Ok);
 			Assert.Equal(removeAttachedThread && daemon, env.IsDaemon);
 			Assert.True(thread.Attached);
+
+			proxyEnv.EnsureLocalCapacity(SByte.MaxValue).Returns(JResult.Ok);
+			proxyEnv.EnsureLocalCapacity(Byte.MaxValue).Returns(JResult.MemoryError);
+
+			thread.LocalCapacity = SByte.MaxValue;
+			proxyEnv.Received(1).EnsureLocalCapacity(SByte.MaxValue);
+			Assert.Equal(SByte.MaxValue, thread.LocalCapacity);
+
+			JniException ex = Assert.Throws<JniException>(() => thread.LocalCapacity = Byte.MaxValue);
+			proxyEnv.Received(1).EnsureLocalCapacity(Byte.MaxValue);
+			Assert.Equal(JResult.MemoryError, ex.Result);
+			Assert.Equal(SByte.MaxValue, thread.LocalCapacity);
 		}
 		finally
 		{
@@ -338,10 +351,28 @@ public sealed class JVirtualMachineTests
 		return new(vm, new(classLoaderClass), globalRef);
 	}
 	private static Task RegisterTestObject()
-		=> Task.Factory.StartNew(() =>
+	{
+		TaskCompletionSource tcs = new();
+		Thread registrationThread = new(() =>
 		{
 			Boolean register = JVirtualMachine.Register<JTestObject>();
 			if (register)
 				Assert.NotNull(JTestObject.GetThreadMetadata());
-		}, TaskCreationOptions.LongRunning);
+		});
+		Thread wrapperThread = new(() =>
+		{
+			try
+			{
+				registrationThread.Start();
+				registrationThread.Join();
+				tcs.SetResult();
+			}
+			catch (Exception ex)
+			{
+				tcs.SetException(ex);
+			}
+		});
+		wrapperThread.Start();
+		return tcs.Task;
+	}
 }

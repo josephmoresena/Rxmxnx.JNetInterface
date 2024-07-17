@@ -65,7 +65,7 @@ partial class JEnvironment
 		public void Dispose()
 		{
 			if (this._result is not null && !this.Contains(this._result.LocalReference))
-				this._result = default; //Result is not contained in the local frame.
+				this._result = default; // Result is not contained in the local frame.
 			this.FinalizeFrame(this._env);
 		}
 		/// <summary>

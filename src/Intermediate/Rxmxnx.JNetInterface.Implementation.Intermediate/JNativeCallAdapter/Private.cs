@@ -93,13 +93,8 @@ public readonly ref partial struct JNativeCallAdapter
 			JEnvironment env = this._callAdapter._env;
 			JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
 			JClassObject jClass = typeMetadata.GetClass(env);
-			if (!JLocalObject.IsClassType<TObject>())
-			{
-				Builder.ThrowIfNotLocalReference(env, localRef);
-				return (TObject)this.CreateObject(jClass, localRef, typeMetadata, typeMetadata);
-			}
-			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
-			return (TObject)(Object)this.CreateInitialClass(classRef, true);
+			Builder.ThrowIfNotLocalReference(env, localRef);
+			return (TObject)this.CreateObject(jClass, localRef, typeMetadata, typeMetadata);
 		}
 		/// <summary>
 		/// Creates an object of type <paramref name="typeMetadata"/> using <paramref name="jClass"/> and
