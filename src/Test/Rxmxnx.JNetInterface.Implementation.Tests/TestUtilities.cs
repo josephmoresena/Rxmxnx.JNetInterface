@@ -1,0 +1,209 @@
+namespace Rxmxnx.JNetInterface.Tests;
+
+[ExcludeFromCodeCoverage]
+internal static class TestUtilities
+{
+	private static readonly IFixture fixture = new Fixture().RegisterReferences();
+
+	public static TPointer InvertPointer<TPointer>(in TPointer ptr) where TPointer : unmanaged, IFixedPointer
+	{
+		IntPtr value = ~ptr.Pointer;
+		return NativeUtilities.Transform<IntPtr, TPointer>(in value);
+	}
+	public static JStringObject CreateString(NativeInterfaceProxy proxyEnv, String text)
+	{
+		IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
+		JStringLocalRef stringRef = TestUtilities.fixture.Create<JStringLocalRef>();
+		proxyEnv.ClearReceivedCalls();
+		proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+		using IReadOnlyFixedMemory<Char>.IDisposable ctx = text.AsMemory().GetFixedContext();
+		proxyEnv.NewString(ctx.ValuePointer, text.Length).Returns(stringRef);
+		JStringObject jString = JStringObject.Create(vm.GetEnvironment()!, text);
+		proxyEnv.Received(1).NewString(ctx.ValuePointer, text.Length);
+
+		proxyEnv.ClearReceivedCalls();
+		proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+		return jString;
+	}
+	public static JArrayObject<JClassObject> CreateClassArray(NativeInterfaceProxy proxyEnv, Int32 length)
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JObjectLocalRef localRef = JClassObject.GetClass<JClassObject>(env).Global.Reference.Value;
+		JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
+		JObjectArrayLocalRef arrayRef = TestUtilities.fixture.Create<JObjectArrayLocalRef>();
+		proxyEnv.NewObjectArray(length, classRef, Arg.Any<JObjectLocalRef>()).Returns(arrayRef);
+		JArrayObject<JClassObject> result = JArrayObject<JClassObject>.Create(env, length);
+		Assert.Equal(arrayRef.ArrayValue, result.Reference);
+		return result;
+	}
+	public static JArrayObject<JBoolean> CreateBooleanArray(NativeInterfaceProxy proxyEnv, Int32 length)
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JBooleanArrayLocalRef arrayRef = TestUtilities.fixture.Create<JBooleanArrayLocalRef>();
+		proxyEnv.NewBooleanArray(length).Returns(arrayRef);
+		JArrayObject<JBoolean> result = JArrayObject<JBoolean>.Create(env, length);
+		Assert.Equal(arrayRef.ArrayValue, result.Reference);
+		return result;
+	}
+	public static JArrayObject<JByte> CreateByteArray(NativeInterfaceProxy proxyEnv, Int32 length)
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JByteArrayLocalRef arrayRef = TestUtilities.fixture.Create<JByteArrayLocalRef>();
+		proxyEnv.NewByteArray(length).Returns(arrayRef);
+		JArrayObject<JByte> result = JArrayObject<JByte>.Create(env, length);
+		Assert.Equal(arrayRef.ArrayValue, result.Reference);
+		return result;
+	}
+	public static JArrayObject<JChar> CreateCharArray(NativeInterfaceProxy proxyEnv, Int32 length)
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JCharArrayLocalRef arrayRef = TestUtilities.fixture.Create<JCharArrayLocalRef>();
+		proxyEnv.NewCharArray(length).Returns(arrayRef);
+		JArrayObject<JChar> result = JArrayObject<JChar>.Create(env, length);
+		Assert.Equal(arrayRef.ArrayValue, result.Reference);
+		return result;
+	}
+	public static JArrayObject<JDouble> CreateDoubleArray(NativeInterfaceProxy proxyEnv, Int32 length)
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JDoubleArrayLocalRef arrayRef = TestUtilities.fixture.Create<JDoubleArrayLocalRef>();
+		proxyEnv.NewDoubleArray(length).Returns(arrayRef);
+		JArrayObject<JDouble> result = JArrayObject<JDouble>.Create(env, length);
+		Assert.Equal(arrayRef.ArrayValue, result.Reference);
+		return result;
+	}
+	public static JArrayObject<JFloat> CreateFloatArray(NativeInterfaceProxy proxyEnv, Int32 length)
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JFloatArrayLocalRef arrayRef = TestUtilities.fixture.Create<JFloatArrayLocalRef>();
+		proxyEnv.NewFloatArray(length).Returns(arrayRef);
+		JArrayObject<JFloat> result = JArrayObject<JFloat>.Create(env, length);
+		Assert.Equal(arrayRef.ArrayValue, result.Reference);
+		return result;
+	}
+	public static JArrayObject<JInt> CreateIntArray(NativeInterfaceProxy proxyEnv, Int32 length)
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JIntArrayLocalRef arrayRef = TestUtilities.fixture.Create<JIntArrayLocalRef>();
+		proxyEnv.NewIntArray(length).Returns(arrayRef);
+		JArrayObject<JInt> result = JArrayObject<JInt>.Create(env, length);
+		Assert.Equal(arrayRef.ArrayValue, result.Reference);
+		return result;
+	}
+	public static JArrayObject<JLong> CreateLongArray(NativeInterfaceProxy proxyEnv, Int32 length)
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JLongArrayLocalRef arrayRef = TestUtilities.fixture.Create<JLongArrayLocalRef>();
+		proxyEnv.NewLongArray(length).Returns(arrayRef);
+		JArrayObject<JLong> result = JArrayObject<JLong>.Create(env, length);
+		Assert.Equal(arrayRef.ArrayValue, result.Reference);
+		return result;
+	}
+	public static JArrayObject<JShort> CreateShortArray(NativeInterfaceProxy proxyEnv, Int32 length)
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JShortArrayLocalRef arrayRef = TestUtilities.fixture.Create<JShortArrayLocalRef>();
+		proxyEnv.NewShortArray(length).Returns(arrayRef);
+		JArrayObject<JShort> result = JArrayObject<JShort>.Create(env, length);
+		Assert.Equal(arrayRef.ArrayValue, result.Reference);
+		return result;
+	}
+	public static JLocalObject CreateObject(NativeInterfaceProxy proxyEnv)
+	{
+		proxyEnv.ClearReceivedCalls();
+		proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JConstructorDefinition.Parameterless constructor = new();
+		JObjectLocalRef localRef = TestUtilities.fixture.Create<JObjectLocalRef>();
+		JClassLocalRef classRef = TestUtilities.fixture.Create<JClassLocalRef>();
+		JMethodId methodId = TestUtilities.fixture.Create<JMethodId>();
+		using IReadOnlyFixedMemory<Char>.IDisposable ctx = constructor.Information.ToString().AsMemory()
+		                                                              .GetFixedContext();
+		using IReadOnlyFixedMemory<Char>.IDisposable ctx2 = IDataType.GetMetadata<JLocalObject>().Information.ToString()
+		                                                             .AsMemory().GetFixedContext();
+		proxyEnv.FindClass((ReadOnlyValPtr<Byte>)ctx2.Pointer).Returns(classRef);
+		proxyEnv.GetMethodId(classRef, (ReadOnlyValPtr<Byte>)ctx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>())
+		        .Returns(methodId);
+		proxyEnv.NewObject(classRef, methodId, ReadOnlyValPtr<JValueWrapper>.Zero).Returns(localRef);
+
+		JLocalObject jLocal = constructor.New<JLocalObject>(env);
+		try
+		{
+			Assert.Equal(localRef, jLocal.Reference);
+			proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx2.Pointer);
+			proxyEnv.Received(1)
+			        .GetMethodId(classRef, (ReadOnlyValPtr<Byte>)ctx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(1).NewObject(classRef, methodId, ReadOnlyValPtr<JValueWrapper>.Zero);
+			return jLocal;
+		}
+		finally
+		{
+			JClassObject.GetClass<JLocalObject>(env).Dispose(); // Avoid GC disposing.
+		}
+	}
+	public static JThrowableObject CreateThrowable(NativeInterfaceProxy proxyEnv)
+	{
+		proxyEnv.ClearReceivedCalls();
+		proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		JConstructorDefinition constructor =
+			JConstructorDefinition.Create([JArgumentMetadata.Create<JStringObject>(),]);
+		JThrowableLocalRef throwableRef = TestUtilities.fixture.Create<JThrowableLocalRef>();
+		JClassLocalRef classRef = TestUtilities.fixture.Create<JClassLocalRef>();
+		JMethodId methodId = TestUtilities.fixture.Create<JMethodId>();
+		using IReadOnlyFixedMemory<Char>.IDisposable ctx = constructor.Information.ToString().AsMemory()
+		                                                              .GetFixedContext();
+		using IReadOnlyFixedMemory<Char>.IDisposable ctx2 = IDataType.GetMetadata<JErrorObject>().Information.ToString()
+		                                                             .AsMemory().GetFixedContext();
+		proxyEnv.FindClass((ReadOnlyValPtr<Byte>)ctx2.Pointer).Returns(classRef);
+		proxyEnv.GetMethodId(classRef, (ReadOnlyValPtr<Byte>)ctx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>())
+		        .Returns(methodId);
+		proxyEnv.NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>()).Returns(throwableRef.Value);
+
+		using JStringObject jString = TestUtilities.CreateString(proxyEnv, "Error message");
+		JStringLocalRef stringRef = jString.Reference;
+
+		proxyEnv.When(e => e.NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>())).Do(c =>
+		{
+			JObjectLocalRef localRef = stringRef.Value;
+			ReadOnlyValPtr<JValueWrapper> args = (ReadOnlyValPtr<JValueWrapper>)c[2];
+			Assert.True(NativeUtilities.AsBytes(in args.Reference)[..IntPtr.Size]
+			                           .SequenceEqual(NativeUtilities.AsBytes(in localRef)));
+		});
+
+		JThrowableObject jThrowable =
+			JConstructorDefinition.New<JErrorObject>(constructor, JClassObject.GetClass<JErrorObject>(env), [jString,]);
+		try
+		{
+			Assert.Equal(throwableRef, jThrowable.Reference);
+			proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx2.Pointer);
+			proxyEnv.Received(1)
+			        .GetMethodId(classRef, (ReadOnlyValPtr<Byte>)ctx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(1).NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+			return jThrowable;
+		}
+		finally
+		{
+			JClassObject.GetClass<JErrorObject>(env).Dispose(); // Avoid GC disposing.
+		}
+	}
+	public static JGlobal CreateGlobal(NativeInterfaceProxy proxyEnv, JLocalObject jLocal)
+	{
+		proxyEnv.ClearReceivedCalls();
+		proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+		JGlobalRef globalRef = TestUtilities.fixture.Create<JGlobalRef>();
+		proxyEnv.NewGlobalRef(jLocal.Reference).Returns(globalRef);
+		proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
+
+		JGlobal jGlobal = jLocal.Global;
+
+		Assert.Equal(globalRef, jGlobal.Reference);
+		proxyEnv.Received(1).NewGlobalRef(jLocal.LocalReference);
+		return jGlobal;
+	}
+}
