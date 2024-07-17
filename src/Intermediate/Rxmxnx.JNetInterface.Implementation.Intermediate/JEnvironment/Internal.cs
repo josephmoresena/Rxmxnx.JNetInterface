@@ -38,18 +38,23 @@ partial class JEnvironment
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
 	internal JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata metadata)
 	{
-		JClassLocalRef classRef = metadata.ClassSignature.Length == 1 ?
+		Boolean isPrimitive = metadata.ClassSignature.Length == 1;
+		JClassLocalRef classRef = isPrimitive ?
 			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]) :
 			this._cache.FindMainClass(metadata.Name);
 		try
 		{
-			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value);
-			return globalRef;
+			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value, true);
+			if (globalRef != default) return globalRef;
 		}
 		finally
 		{
 			this.DeleteLocalRef(classRef.Value);
 		}
+
+		(this as IEnvironment).DescribeException();
+		this._cache.ClearException(); // Clears JNI exception.
+		throw new InvalidOperationException($"Error creating JNI global reference to {isPrimitive} class.");
 	}
 	/// <summary>
 	/// Deletes <paramref name="globalRef"/>.
@@ -97,8 +102,10 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
 	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	internal unsafe JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+	internal unsafe JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef,
+		Boolean withNoCheckError = false)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticFieldIdInfo);
@@ -110,7 +117,7 @@ partial class JEnvironment
 				this.Reference, classRef, namePtr, signaturePtr);
 		}
 		JTrace.GetAccessibleId(classRef, definition, fieldId);
-		if (fieldId == default) this._cache.CheckJniError();
+		if (fieldId == default && !withNoCheckError) this._cache.CheckJniError();
 		return fieldId;
 	}
 	/// <summary>

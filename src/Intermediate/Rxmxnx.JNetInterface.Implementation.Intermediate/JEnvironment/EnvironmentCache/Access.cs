@@ -59,15 +59,17 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="fieldId">A <see cref="JFieldId"/> identifier.</param>
+		/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
 		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
-		private unsafe JObjectLocalRef GetStaticObjectField(JClassLocalRef classRef, JFieldId fieldId)
+		private unsafe JObjectLocalRef GetStaticObjectField(JClassLocalRef classRef, JFieldId fieldId,
+			Boolean withNoCheckError = false)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticObjectFieldInfo);
 			JObjectLocalRef localRef =
 				nativeInterface.StaticFieldFunctions.GetObjectField.Get(this.Reference, classRef, fieldId);
 			JTrace.GetObjectField(default, classRef, fieldId, localRef);
-			this.CheckJniError();
+			if (!withNoCheckError) this.CheckJniError();
 			return localRef;
 		}
 		/// <summary>

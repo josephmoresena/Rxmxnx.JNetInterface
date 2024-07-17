@@ -67,7 +67,9 @@ partial class JEnvironment
 				classRef = this.FindClass(ptr, true);
 			}
 			if (!classRef.IsDefault) return classRef;
-			this.ClearException(); // Clears JNI exception.
+
+			(this._env as IEnvironment).DescribeException();
+			this.ClearException();
 			throw new InvalidOperationException($"Main class {className} is not available for JNI access.");
 		}
 		/// <summary>

@@ -33,15 +33,20 @@ partial class JEnvironment
 			JClassLocalRef classRef = this.FindMainClass(wrapperClass.Name);
 			try
 			{
-				JFieldId typeFieldId = this._env.GetStaticFieldId(fieldDefinition, classRef);
-				JObjectLocalRef localRef = this.GetStaticObjectField(classRef, typeFieldId);
-				if (localRef != default) return JClassLocalRef.FromReference(in localRef);
+				JFieldId typeFieldId = this._env.GetStaticFieldId(fieldDefinition, classRef, true);
+				if (typeFieldId != default)
+				{
+					JObjectLocalRef localRef = this.GetStaticObjectField(classRef, typeFieldId, true);
+					if (localRef != default) return JClassLocalRef.FromReference(in localRef);
+				}
 			}
 			finally
 			{
 				this._env.DeleteLocalRef(classRef.Value);
 			}
-			this.ClearException(); // Clears JNI exception.
+
+			(this._env as IEnvironment).DescribeException();
+			this.ClearException();
 			throw new InvalidOperationException($"Primitive class {(Char)signature} is not available for JNI access.");
 		}
 		/// <summary>
