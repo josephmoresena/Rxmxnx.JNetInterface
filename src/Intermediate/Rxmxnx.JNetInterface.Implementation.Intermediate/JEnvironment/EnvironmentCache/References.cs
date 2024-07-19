@@ -31,11 +31,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Release all references.
 		/// </summary>
-		public void FreeReferences()
-		{
-			this._objects.ClearCache(this._env, true);
-			this._cancellation.Cancel();
-		}
+		public void FreeReferences() => this._objects.ClearCache(this._env, true);
 		/// <summary>
 		/// Creates a global reference from <paramref name="localRef"/>.
 		/// </summary>

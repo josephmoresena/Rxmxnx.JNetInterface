@@ -32,7 +32,6 @@ partial class JEnvironment
 
 			if (this.Version < NativeInterface.RequiredVersion) return; // Avoid class loading if unsupported version.
 
-			Task.Factory.StartNew(EnvironmentCache.FinalizeCache, this, this._cancellation.Token);
 			this.LoadMainClasses();
 		}
 

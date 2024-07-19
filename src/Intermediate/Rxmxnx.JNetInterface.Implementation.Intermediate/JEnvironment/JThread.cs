@@ -51,11 +51,11 @@ partial class JEnvironment
 		public void Dispose()
 		{
 			if (!this.IsDisposable || this._isDisposed.Value) return;
+			this._isDisposed.Value = true;
+			JVirtualMachine.RemoveEnvironment(this._cache.VirtualMachine.Reference, this.Reference);
 			this._cache.FreeReferences();
 			JVirtualMachine.DetachCurrentThread(this._cache.VirtualMachine.Reference, this.Reference,
 			                                    this._cache.Thread);
-			this._isDisposed.Value = true;
-			JVirtualMachine.RemoveEnvironment(this._cache.VirtualMachine.Reference, this.Reference);
 		}
 	}
 }

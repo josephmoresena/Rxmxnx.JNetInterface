@@ -7,10 +7,6 @@ partial class JEnvironment
 	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
-		/// Cancellation token.
-		/// </summary>
-		private readonly CancellationTokenSource _cancellation = new();
-		/// <summary>
 		/// Class cache.
 		/// </summary>
 		private readonly ClassCache<JClassObject> _classes = new(JReferenceType.LocalRefType);

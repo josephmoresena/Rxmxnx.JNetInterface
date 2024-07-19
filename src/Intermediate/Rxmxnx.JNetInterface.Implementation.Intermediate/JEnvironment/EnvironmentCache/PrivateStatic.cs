@@ -31,23 +31,6 @@ partial class JEnvironment
 			return nativeInterface.GetVersion(envRef);
 		}
 		/// <summary>
-		/// Cache finalize method.
-		/// </summary>
-		/// <param name="obj">A <see cref="EnvironmentCache"/> instance.</param>
-		private static void FinalizeCache(Object? obj)
-		{
-			if (obj is not EnvironmentCache cache) return;
-			try
-			{
-				cache.Thread.Join();
-			}
-			finally
-			{
-				JVirtualMachine.RemoveEnvironment(cache.VirtualMachine.Reference, cache.Reference);
-				cache._cancellation.Dispose();
-			}
-		}
-		/// <summary>
 		/// Creates a <see cref="IFixedContext{Byte}.IDisposable"/> instance from an span created in heap.
 		/// </summary>
 		/// <param name="count">Number of allocated bytes.</param>
