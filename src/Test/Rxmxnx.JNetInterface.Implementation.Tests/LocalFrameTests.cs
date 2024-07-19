@@ -157,7 +157,7 @@ public sealed class LocalFrameTests
 			});
 			proxyEnv.ClearReceivedCalls();
 			proxyEnv.VirtualMachine.ClearReceivedCalls();
-			using JStringObject result = (env as IEnvironment).WithFrame(capacity, env, e =>
+			using JStringObject result = (env as IEnvironment).WithFrame(capacity, env, _ =>
 			{
 				proxyEnv.Received(1).PushLocalFrame(capacity);
 				JStringObject result = TestUtilities.CreateString(proxyEnv, text);
@@ -197,7 +197,7 @@ public sealed class LocalFrameTests
 			proxyEnv.ClearReceivedCalls();
 			proxyEnv.VirtualMachine.ClearReceivedCalls();
 
-			using JStringObject result = (env as IEnvironment).WithFrame(capacity, jString, e =>
+			using JStringObject result = (env as IEnvironment).WithFrame(capacity, jString, _ =>
 			{
 				proxyEnv.Received(1).PushLocalFrame(capacity);
 				return jString;

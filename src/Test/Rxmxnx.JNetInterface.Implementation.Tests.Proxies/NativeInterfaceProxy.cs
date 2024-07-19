@@ -27,15 +27,15 @@ public abstract class NativeInterfaceProxy
 	public JClassLocalRef IntegerObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef LongObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef ShortObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
-	public JClassLocalRef VoidPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
-	public JClassLocalRef BooleanPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
-	public JClassLocalRef BytePrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
-	public JClassLocalRef CharPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
-	public JClassLocalRef DoublePrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
-	public JClassLocalRef FloatPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
-	public JClassLocalRef IntPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
-	public JClassLocalRef LongPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
-	public JClassLocalRef ShortPrimitiveClassRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef VoidPrimitiveLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef BooleanPrimitiveLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef BytePrimitiveLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef CharPrimitiveLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef DoublePrimitiveLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef FloatPrimitiveLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef IntPrimitiveLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef LongPrimitiveLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef ShortPrimitiveLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JFieldId VoidTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
 	public JFieldId BooleanTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
 	public JFieldId ByteTypeFieldId { get; } = ReferenceHelper.Fixture.Create<JFieldId>();
@@ -84,23 +84,23 @@ public abstract class NativeInterfaceProxy
 			return this.VirtualMachine.StackTraceElementGlobalRef;
 		if (classRef == this.StackTraceObjectLocalRef)
 			return this.VirtualMachine.StackTraceElementGlobalRef;
-		if (classRef == this.VoidPrimitiveClassRef)
+		if (classRef == this.VoidPrimitiveLocalRef)
 			return this.VirtualMachine.VoidGlobalRef;
-		if (classRef == this.BooleanPrimitiveClassRef)
+		if (classRef == this.BooleanPrimitiveLocalRef)
 			return this.VirtualMachine.BooleanGlobalRef;
-		if (classRef == this.BytePrimitiveClassRef)
+		if (classRef == this.BytePrimitiveLocalRef)
 			return this.VirtualMachine.ByteGlobalRef;
-		if (classRef == this.CharPrimitiveClassRef)
+		if (classRef == this.CharPrimitiveLocalRef)
 			return this.VirtualMachine.CharGlobalRef;
-		if (classRef == this.DoublePrimitiveClassRef)
+		if (classRef == this.DoublePrimitiveLocalRef)
 			return this.VirtualMachine.DoubleGlobalRef;
-		if (classRef == this.FloatPrimitiveClassRef)
+		if (classRef == this.FloatPrimitiveLocalRef)
 			return this.VirtualMachine.FloatGlobalRef;
-		if (classRef == this.IntPrimitiveClassRef)
+		if (classRef == this.IntPrimitiveLocalRef)
 			return this.VirtualMachine.IntGlobalRef;
-		if (classRef == this.LongPrimitiveClassRef)
+		if (classRef == this.LongPrimitiveLocalRef)
 			return this.VirtualMachine.LongGlobalRef;
-		if (classRef == this.ShortPrimitiveClassRef)
+		if (classRef == this.ShortPrimitiveLocalRef)
 			return this.VirtualMachine.ShortGlobalRef;
 		return null;
 	}
@@ -166,23 +166,23 @@ public abstract class NativeInterfaceProxy
 	public JClassLocalRef? GetPrimitiveClass(JClassLocalRef classRef, JFieldId fieldId)
 	{
 		if (classRef == this.VoidObjectLocalRef && fieldId == this.VoidTypeFieldId)
-			return this.VoidPrimitiveClassRef;
+			return this.VoidPrimitiveLocalRef;
 		if (classRef == this.BooleanObjectLocalRef && fieldId == this.BooleanTypeFieldId)
-			return this.BooleanPrimitiveClassRef;
+			return this.BooleanPrimitiveLocalRef;
 		if (classRef == this.ByteObjectLocalRef && fieldId == this.ByteTypeFieldId)
-			return this.BytePrimitiveClassRef;
+			return this.BytePrimitiveLocalRef;
 		if (classRef == this.CharacterObjectLocalRef && fieldId == this.CharacterTypeFieldId)
-			return this.CharPrimitiveClassRef;
+			return this.CharPrimitiveLocalRef;
 		if (classRef == this.DoubleObjectLocalRef && fieldId == this.DoubleTypeFieldId)
-			return this.DoublePrimitiveClassRef;
+			return this.DoublePrimitiveLocalRef;
 		if (classRef == this.FloatObjectLocalRef && fieldId == this.FloatTypeFieldId)
-			return this.FloatPrimitiveClassRef;
+			return this.FloatPrimitiveLocalRef;
 		if (classRef == this.IntegerObjectLocalRef && fieldId == this.IntegerTypeFieldId)
-			return this.IntPrimitiveClassRef;
+			return this.IntPrimitiveLocalRef;
 		if (classRef == this.LongObjectLocalRef && fieldId == this.LongTypeFieldId)
-			return this.LongPrimitiveClassRef;
+			return this.LongPrimitiveLocalRef;
 		if (classRef == this.ShortObjectLocalRef && fieldId == this.ShortTypeFieldId)
-			return this.ShortPrimitiveClassRef;
+			return this.ShortPrimitiveLocalRef;
 		return null;
 	}
 

@@ -347,7 +347,7 @@ internal unsafe partial class ReferenceHelper
 	private static JClassLocalRef FindClass(JEnvironmentRef envRef, Byte* className)
 	{
 		NativeInterfaceProxy proxy = ReferenceHelper.GetProxy(envRef);
-		if (!proxy.UseDefaultClassRef) proxy.FindClass((ReadOnlyValPtr<Byte>)(IntPtr)className);
+		if (!proxy.UseDefaultClassRef) return proxy.FindClass((ReadOnlyValPtr<Byte>)(IntPtr)className);
 		return proxy.GetMainClassLocalRef(className) ?? proxy.FindClass((ReadOnlyValPtr<Byte>)(IntPtr)className);
 	}
 	[UnmanagedCallersOnly]
@@ -434,23 +434,23 @@ internal unsafe partial class ReferenceHelper
 			if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
 				return proxy.StackTraceObjectLocalRef.Value;
 			if (proxy.VirtualMachine.VoidGlobalRef.Value == localRef)
-				return proxy.VoidPrimitiveClassRef.Value;
+				return proxy.VoidPrimitiveLocalRef.Value;
 			if (proxy.VirtualMachine.BooleanGlobalRef.Value == localRef)
-				return proxy.BooleanPrimitiveClassRef.Value;
+				return proxy.BooleanPrimitiveLocalRef.Value;
 			if (proxy.VirtualMachine.ByteGlobalRef.Value == localRef)
-				return proxy.BytePrimitiveClassRef.Value;
+				return proxy.BytePrimitiveLocalRef.Value;
 			if (proxy.VirtualMachine.CharGlobalRef.Value == localRef)
-				return proxy.CharPrimitiveClassRef.Value;
+				return proxy.CharPrimitiveLocalRef.Value;
 			if (proxy.VirtualMachine.DoubleGlobalRef.Value == localRef)
-				return proxy.DoublePrimitiveClassRef.Value;
+				return proxy.DoublePrimitiveLocalRef.Value;
 			if (proxy.VirtualMachine.FloatGlobalRef.Value == localRef)
-				return proxy.FloatPrimitiveClassRef.Value;
+				return proxy.FloatPrimitiveLocalRef.Value;
 			if (proxy.VirtualMachine.IntGlobalRef.Value == localRef)
-				return proxy.IntPrimitiveClassRef.Value;
+				return proxy.IntPrimitiveLocalRef.Value;
 			if (proxy.VirtualMachine.LongGlobalRef.Value == localRef)
-				return proxy.LongPrimitiveClassRef.Value;
+				return proxy.LongPrimitiveLocalRef.Value;
 			if (proxy.VirtualMachine.ShortGlobalRef.Value == localRef)
-				return proxy.ShortPrimitiveClassRef.Value;
+				return proxy.ShortPrimitiveLocalRef.Value;
 		}
 		return proxy.NewLocalRef(localRef);
 	}

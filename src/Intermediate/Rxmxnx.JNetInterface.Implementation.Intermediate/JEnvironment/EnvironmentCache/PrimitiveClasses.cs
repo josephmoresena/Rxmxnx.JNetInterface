@@ -4,7 +4,6 @@ partial class JEnvironment
 {
 	private sealed partial class EnvironmentCache
 	{
-		JClassObject IClassFeature.EnumObject => this.GetClass<JEnumObject>();
 		JClassObject IClassFeature.VoidObject => this.GetClass<JVoidObject>();
 		JClassObject IClassFeature.BooleanObject => this.GetClass<JBooleanObject>();
 		JClassObject IClassFeature.ByteObject => this.GetClass<JByteObject>();
@@ -30,7 +29,7 @@ partial class JEnvironment
 				return JClassLocalRef.FromReference(in localRef);
 			}
 
-			JClassLocalRef classRef = this.FindMainClass(wrapperClass.Name);
+			JClassLocalRef classRef = this.FindMainClass(new(wrapperClass));
 			try
 			{
 				JFieldId typeFieldId = this._env.GetStaticFieldId(fieldDefinition, classRef, true);
@@ -47,7 +46,8 @@ partial class JEnvironment
 
 			(this._env as IEnvironment).DescribeException();
 			this.ClearException();
-			throw new InvalidOperationException($"Primitive class {(Char)signature} is not available for JNI access.");
+			throw new NotSupportedException(
+				$"Primitive class {ClassNameHelper.GetPrimitiveClassName(signature)} is not available for JNI access.");
 		}
 		/// <summary>
 		/// Retrieves primitive class instance for <paramref name="className"/>.

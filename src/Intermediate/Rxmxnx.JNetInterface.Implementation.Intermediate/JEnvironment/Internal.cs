@@ -34,14 +34,14 @@ partial class JEnvironment
 	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
-	/// <param name="metadata">Class metadata name.</param>
+	/// <param name="metadata">Class metadata.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
 	internal JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata metadata)
 	{
 		Boolean isPrimitive = metadata.ClassSignature.Length == 1;
 		JClassLocalRef classRef = isPrimitive ?
 			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]) :
-			this._cache.FindMainClass(metadata.Name);
+			this._cache.FindMainClass(metadata);
 		try
 		{
 			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value, true);
@@ -54,7 +54,8 @@ partial class JEnvironment
 
 		(this as IEnvironment).DescribeException();
 		this._cache.ClearException(); // Clears JNI exception.
-		throw new InvalidOperationException($"Error creating JNI global reference to {isPrimitive} class.");
+		throw new NotSupportedException(
+			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(metadata.ClassSignature)} class.");
 	}
 	/// <summary>
 	/// Deletes <paramref name="globalRef"/>.
