@@ -13,7 +13,14 @@ partial class JEnvironment
 		/// Current thrown exception.
 		/// </summary>
 		public JniException? Thrown { get; private set; }
-
+		/// <summary>
+		/// Maximum number of bytes usable from stack.
+		/// </summary>
+		public Int32 MaxStackBytes { get; private set; } = EnvironmentCache.MinStackBytes;
+		/// <summary>
+		/// Amount of bytes used from stack.
+		/// </summary>
+		public Int32 UsedStackBytes { get; private set; }
 		/// <summary>
 		/// Ensured capacity.
 		/// </summary>
@@ -161,6 +168,20 @@ partial class JEnvironment
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);
 			nativeInterface.ErrorFunctions.ExceptionClear(this.Reference);
+		}
+		/// <summary>
+		/// Sets number of bytes usable by JNI calls from stack.
+		/// </summary>
+		/// <param name="value">Value.</param>
+		public void SetUsableStackBytes(Int32 value)
+		{
+			Int32 min = EnvironmentCache.MinStackBytes > this.UsedStackBytes ?
+				EnvironmentCache.MinStackBytes :
+				this.UsedStackBytes;
+			if (value < min)
+				throw new ArgumentOutOfRangeException(nameof(value),
+				                                      $"Usable stack bytes should be greater or equal to {min}.");
+			this.MaxStackBytes = value;
 		}
 	}
 }

@@ -15,6 +15,10 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
 	public abstract ThrowableException? PendingException { get; set; }
 	/// <inheritdoc/>
+	public abstract Int32 UsedStackBytes { get; }
+	/// <inheritdoc/>
+	public abstract Int32 UsableStackBytes { get; set; }
+	/// <inheritdoc/>
 	public abstract JEnvironmentRef Reference { get; }
 	/// <inheritdoc/>
 	public abstract Int32 Version { get; }

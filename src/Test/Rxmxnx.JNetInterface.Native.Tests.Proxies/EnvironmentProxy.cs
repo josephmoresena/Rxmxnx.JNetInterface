@@ -4,13 +4,15 @@ namespace Rxmxnx.JNetInterface.Tests;
 public abstract partial class EnvironmentProxy : IEnvironment
 {
 	public abstract VirtualMachineProxy VirtualMachine { get; }
-
 	public abstract AccessFeatureProxy AccessFeature { get; }
 	public abstract ClassFeatureProxy ClassFeature { get; }
 	public abstract ReferenceFeatureProxy ReferenceFeature { get; }
 	public abstract StringFeatureProxy StringFeature { get; }
 	public abstract ArrayFeatureProxy ArrayFeature { get; }
 	public abstract NioFeatureProxy NioFeature { get; }
+
+	public abstract Int32 UsedStackBytes { get; }
+	public abstract Int32 UsableStackBytes { get; set; }
 	public abstract JEnvironmentRef Reference { get; }
 	public abstract Int32 Version { get; }
 	public abstract ThrowableException? PendingException { get; set; }

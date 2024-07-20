@@ -23,10 +23,6 @@ partial class JEnvironment
 		/// Object cache.
 		/// </summary>
 		private LocalCache _objects;
-		/// <summary>
-		/// Amount of bytes used from stack.
-		/// </summary>
-		private Int32 _usedStackBytes;
 
 		/// <summary>
 		/// Retrieves <see cref="AccessCache"/> for <paramref name="jClass"/>.
@@ -198,9 +194,9 @@ partial class JEnvironment
 		/// </returns>
 		private Boolean UseStackAlloc(Int32 requiredBytes)
 		{
-			this._usedStackBytes += requiredBytes;
-			if (this._usedStackBytes <= EnvironmentCache.MaxStackBytes) return true;
-			this._usedStackBytes -= requiredBytes;
+			this.UsedStackBytes += requiredBytes;
+			if (this.UsedStackBytes <= this.MaxStackBytes) return true;
+			this.UsedStackBytes -= requiredBytes;
 			return false;
 		}
 		/// <summary>

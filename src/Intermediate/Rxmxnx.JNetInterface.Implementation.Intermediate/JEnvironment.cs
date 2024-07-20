@@ -37,6 +37,14 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	public IVirtualMachine VirtualMachine => this._cache.VirtualMachine;
 	/// <inheritdoc/>
 	public Int32 Version => this._cache.Version;
+	/// <inheritdoc/>
+	public Int32 UsedStackBytes => this._cache.UsedStackBytes;
+	/// <inheritdoc/>
+	public Int32 UsableStackBytes
+	{
+		get => this._cache.UsedStackBytes;
+		set => this._cache.SetUsableStackBytes(value);
+	}
 
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{

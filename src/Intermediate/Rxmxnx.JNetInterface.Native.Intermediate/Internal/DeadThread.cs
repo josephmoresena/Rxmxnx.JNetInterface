@@ -246,6 +246,12 @@ internal sealed class DeadThread : IThread, IReferenceFeature, IStringFeature, I
 		get => DeadThread.ThrowInvalidResult<ThrowableException?>();
 		set => _ = DeadThread.ThrowInvalidResult<ThrowableException?>() ?? value;
 	}
+	Int32 IEnvironment.UsedStackBytes => DeadThread.ThrowInvalidResult<Int32>();
+	Int32 IEnvironment.UsableStackBytes
+	{
+		get => DeadThread.ThrowInvalidResult<Int32>();
+		set => _ = value + DeadThread.ThrowInvalidResult<Int32>();
+	}
 	IAccessFeature IEnvironment.AccessFeature => DeadThread.ThrowInvalidResult<IAccessFeature>();
 	IClassFeature IEnvironment.ClassFeature => this;
 	IReferenceFeature IEnvironment.ReferenceFeature => this;

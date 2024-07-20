@@ -8,7 +8,7 @@ partial class JEnvironment
 		/// Release used bytes from stack.
 		/// </summary>
 		/// <param name="usedBytes">Amount of used bytes.</param>
-		private void FreeStack(Int32 usedBytes) { this._usedStackBytes -= usedBytes; }
+		private void FreeStack(Int32 usedBytes) { this.UsedStackBytes -= usedBytes; }
 
 		/// <summary>
 		/// Disposable object to free stack bytes.

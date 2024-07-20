@@ -27,6 +27,15 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	ThrowableException? PendingException { get; set; }
 
 	/// <summary>
+	/// Actual number of bytes used by JNI calls from stack.
+	/// </summary>
+	Int32 UsedStackBytes { get; }
+	/// <summary>
+	/// Actual number of bytes usable by JNI calls from stack.
+	/// </summary>
+	Int32 UsableStackBytes { get; set; }
+
+	/// <summary>
 	/// Accessing feature.
 	/// </summary>
 	internal IAccessFeature AccessFeature { get; }

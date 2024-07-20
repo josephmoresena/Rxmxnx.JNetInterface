@@ -7,9 +7,9 @@ partial class JEnvironment
 	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
-		/// Maximum number of bytes usable on stack.
+		/// Minimum number of bytes usable from stack.
 		/// </summary>
-		private const Int32 MaxStackBytes = 128;
+		private const Int32 MinStackBytes = 128;
 
 		/// <summary>
 		/// Disposable context for zero pointer.
