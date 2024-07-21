@@ -40,13 +40,18 @@ public readonly partial struct JByte : IPrimitiveEquatable
 	static explicit IPrimitiveNumericType<JByte>.operator JByte(JByte jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JByte>.operator JDouble(JByte jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JByte>.operator JFloat(JByte jPrimitive) => jPrimitive;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JByte>.operator Single(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator JInt(JByte jPrimitive) => jPrimitive;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JByte>.operator Int32(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator JLong(JByte jPrimitive) => jPrimitive;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JByte>.operator Int64(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator JShort(JByte jPrimitive) => jPrimitive;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JByte>.operator Int16(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator SByte(JByte jPrimitive) => jPrimitive._value;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JByte>.operator Char(JByte jPrimitive) => (Char)jPrimitive._value;
 }
