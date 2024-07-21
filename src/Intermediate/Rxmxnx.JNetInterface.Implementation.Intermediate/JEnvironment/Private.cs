@@ -66,11 +66,11 @@ partial class JEnvironment
 	{
 		// Element signature is Array signature without [ prefix.
 		ReadOnlySpan<Byte> elementSignature = arraySignature[1..];
-		ReadOnlySpan<Byte> elementClassName = elementSignature[0] != CommonNames.ArraySignaturePrefixChar ?
+		ReadOnlySpan<Byte> elementClassName = elementSignature;
+		if (elementSignature[0] != CommonNames.ArraySignaturePrefixChar &&
+		    elementSignature[^1] == CommonNames.ObjectSignatureSuffixChar)
 			// Object class name is signature without L prefix and ; suffix.
-			elementSignature[^1] == CommonNames.ObjectSignatureSuffixChar ? elementSignature[1..^1] : elementSignature :
-			// Array class name is signature.
-			elementSignature;
+			elementClassName = elementSignature[1..^1];
 		CStringSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);
 		String elementHash = elementClassInformation.ToString();
 		if (elementSignature[0] == CommonNames.ArraySignaturePrefixChar)

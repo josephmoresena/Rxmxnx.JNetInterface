@@ -37,7 +37,7 @@ public partial class JNativeCallAdapterTests
 		}
 	}
 
-	private static JLocalObject CreateErrorParameter(NativeInterfaceProxy proxyEnv, JNativeCallAdapter.Builder builder,
+	private static JErrorObject CreateErrorParameter(NativeInterfaceProxy proxyEnv, JNativeCallAdapter.Builder builder,
 		Boolean initial)
 	{
 		proxyEnv.ClearReceivedCalls();
@@ -110,7 +110,7 @@ public partial class JNativeCallAdapterTests
 			pointers.ForEach(f => f.Dispose());
 		}
 	}
-	private static JLocalObject CreateProxyParameter(NativeInterfaceProxy proxyEnv, JNativeCallAdapter.Builder builder,
+	private static JProxyObject CreateProxyParameter(NativeInterfaceProxy proxyEnv, JNativeCallAdapter.Builder builder,
 		Boolean initial)
 	{
 		proxyEnv.ClearReceivedCalls();
@@ -210,7 +210,7 @@ public partial class JNativeCallAdapterTests
 			pointers.ForEach(f => f.Dispose());
 		}
 	}
-	private static JLocalObject CreateErrorArrayParameter(NativeInterfaceProxy proxyEnv,
+	private static JArrayObject CreateErrorArrayParameter(NativeInterfaceProxy proxyEnv,
 		JNativeCallAdapter.Builder builder, Boolean initial)
 	{
 		proxyEnv.ClearReceivedCalls();
@@ -307,7 +307,7 @@ public partial class JNativeCallAdapterTests
 			pointers.ForEach(f => f.Dispose());
 		}
 	}
-	private static JLocalObject CreateInterfaceArrayParameter(NativeInterfaceProxy proxyEnv,
+	private static JArrayObject CreateInterfaceArrayParameter(NativeInterfaceProxy proxyEnv,
 		JNativeCallAdapter.Builder builder, Boolean initial)
 	{
 		proxyEnv.ClearReceivedCalls();
@@ -414,7 +414,7 @@ public partial class JNativeCallAdapterTests
 			pointers.ForEach(f => f.Dispose());
 		}
 	}
-	private static JLocalObject CreateEnumArrayParameter(NativeInterfaceProxy proxyEnv,
+	private static JArrayObject CreateEnumArrayParameter(NativeInterfaceProxy proxyEnv,
 		JNativeCallAdapter.Builder builder, Boolean initial)
 	{
 		proxyEnv.ClearReceivedCalls();

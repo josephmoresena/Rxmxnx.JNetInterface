@@ -54,8 +54,12 @@ public partial class JVirtualMachine
 		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
 		{
 			WellKnownRuntimeTypeInformation typeMetadata = MetadataHelper.GetExactMetadata(jClass.Hash);
-			JTypeKind kind = typeMetadata.Kind is null && jClass.ClassSignature.Length == 1 ? JTypeKind.Primitive :
-				jClass.ArrayDimension > 0 ? JTypeKind.Array : typeMetadata.Kind ?? JTypeKind.Undefined;
+			JTypeKind kind = jClass switch
+			{
+				{ IsPrimitive: true, } => JTypeKind.Primitive,
+				{ ArrayDimension: > 0, } => JTypeKind.Array,
+				_ => typeMetadata.Kind ?? JTypeKind.Undefined,
+			};
 			ClassObjectMetadata metadata = new(jClass, kind, typeMetadata.IsFinal);
 			jGlobal = new(this, metadata, default);
 			found = false;

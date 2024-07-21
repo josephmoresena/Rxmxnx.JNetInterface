@@ -21,8 +21,12 @@ internal readonly struct WellKnownRuntimeTypeInformation
 	/// <param name="typeKind">A <see cref="JTypeKind"/> to implicitly convert.</param>
 	public static implicit operator WellKnownRuntimeTypeInformation(JTypeKind? typeKind)
 	{
-		Boolean? isFinal = typeKind is JTypeKind.Enum or JTypeKind.Primitive ? true :
-			typeKind is JTypeKind.Interface or JTypeKind.Annotation ? false : null;
+		Boolean? isFinal = typeKind switch
+		{
+			JTypeKind.Enum or JTypeKind.Primitive => true,
+			JTypeKind.Interface or JTypeKind.Annotation => false,
+			_ => null,
+		};
 		return new() { Kind = typeKind, IsFinal = isFinal, };
 	}
 	/// <summary>

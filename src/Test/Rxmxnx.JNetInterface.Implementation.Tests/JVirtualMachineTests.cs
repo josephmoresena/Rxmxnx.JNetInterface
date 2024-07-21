@@ -4,52 +4,6 @@ namespace Rxmxnx.JNetInterface.Tests;
 public sealed partial class JVirtualMachineTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-	private static readonly IReadOnlyDictionary<MainClass, JDataTypeMetadata> mainMetadata =
-		new Dictionary<MainClass, JDataTypeMetadata>
-		{
-			{ MainClass.Class, IDataType.GetMetadata<JClassObject>() },
-			{ MainClass.Throwable, IDataType.GetMetadata<JThrowableObject>() },
-			{ MainClass.StackTraceElement, IDataType.GetMetadata<JStackTraceElementObject>() },
-			{ MainClass.VoidObject, IDataType.GetMetadata<JVoidObject>() },
-			{ MainClass.BooleanObject, IDataType.GetMetadata<JBooleanObject>() },
-			{ MainClass.ByteObject, IDataType.GetMetadata<JByteObject>() },
-			{ MainClass.CharacterObject, IDataType.GetMetadata<JCharacterObject>() },
-			{ MainClass.DoubleObject, IDataType.GetMetadata<JDoubleObject>() },
-			{ MainClass.FloatObject, IDataType.GetMetadata<JFloatObject>() },
-			{ MainClass.IntegerObject, IDataType.GetMetadata<JIntegerObject>() },
-			{ MainClass.LongObject, IDataType.GetMetadata<JLongObject>() },
-			{ MainClass.ShortObject, IDataType.GetMetadata<JShortObject>() },
-			{ MainClass.VoidPrimitive, JPrimitiveTypeMetadata.VoidMetadata },
-			{ MainClass.BooleanPrimitive, IDataType.GetMetadata<JBoolean>() },
-			{ MainClass.BytePrimitive, IDataType.GetMetadata<JByte>() },
-			{ MainClass.CharPrimitive, IDataType.GetMetadata<JChar>() },
-			{ MainClass.DoublePrimitive, IDataType.GetMetadata<JDouble>() },
-			{ MainClass.FloatPrimitive, IDataType.GetMetadata<JFloat>() },
-			{ MainClass.IntPrimitive, IDataType.GetMetadata<JInt>() },
-			{ MainClass.LongPrimitive, IDataType.GetMetadata<JLong>() },
-			{ MainClass.ShortPrimitive, IDataType.GetMetadata<JShort>() },
-		};
-	private static readonly IReadOnlyDictionary<MainClass, MainClass> mainWrapper = new Dictionary<MainClass, MainClass>
-	{
-		{ MainClass.VoidObject, MainClass.VoidPrimitive },
-		{ MainClass.BooleanObject, MainClass.BooleanPrimitive },
-		{ MainClass.ByteObject, MainClass.BytePrimitive },
-		{ MainClass.CharacterObject, MainClass.CharPrimitive },
-		{ MainClass.DoubleObject, MainClass.DoublePrimitive },
-		{ MainClass.FloatObject, MainClass.FloatPrimitive },
-		{ MainClass.IntegerObject, MainClass.IntPrimitive },
-		{ MainClass.LongObject, MainClass.LongPrimitive },
-		{ MainClass.ShortObject, MainClass.ShortPrimitive },
-		{ MainClass.VoidPrimitive, MainClass.VoidObject },
-		{ MainClass.BooleanPrimitive, MainClass.BooleanObject },
-		{ MainClass.BytePrimitive, MainClass.ByteObject },
-		{ MainClass.CharPrimitive, MainClass.CharacterObject },
-		{ MainClass.DoublePrimitive, MainClass.DoubleObject },
-		{ MainClass.FloatPrimitive, MainClass.FloatObject },
-		{ MainClass.IntPrimitive, MainClass.IntegerObject },
-		{ MainClass.LongPrimitive, MainClass.LongObject },
-		{ MainClass.ShortPrimitive, MainClass.ShortObject },
-	};
 
 	[Fact]
 	internal async Task RegisterTest()
@@ -235,4 +189,52 @@ public sealed partial class JVirtualMachineTests
 		mainTypeField.Add(MainClass.ShortObject, proxyEnv.ShortTypeFieldId);
 		return mainTypeField;
 	}
+#pragma warning disable CA1859
+	private static readonly IReadOnlyDictionary<MainClass, JDataTypeMetadata> mainMetadata =
+		new Dictionary<MainClass, JDataTypeMetadata>
+		{
+			{ MainClass.Class, IDataType.GetMetadata<JClassObject>() },
+			{ MainClass.Throwable, IDataType.GetMetadata<JThrowableObject>() },
+			{ MainClass.StackTraceElement, IDataType.GetMetadata<JStackTraceElementObject>() },
+			{ MainClass.VoidObject, IDataType.GetMetadata<JVoidObject>() },
+			{ MainClass.BooleanObject, IDataType.GetMetadata<JBooleanObject>() },
+			{ MainClass.ByteObject, IDataType.GetMetadata<JByteObject>() },
+			{ MainClass.CharacterObject, IDataType.GetMetadata<JCharacterObject>() },
+			{ MainClass.DoubleObject, IDataType.GetMetadata<JDoubleObject>() },
+			{ MainClass.FloatObject, IDataType.GetMetadata<JFloatObject>() },
+			{ MainClass.IntegerObject, IDataType.GetMetadata<JIntegerObject>() },
+			{ MainClass.LongObject, IDataType.GetMetadata<JLongObject>() },
+			{ MainClass.ShortObject, IDataType.GetMetadata<JShortObject>() },
+			{ MainClass.VoidPrimitive, JPrimitiveTypeMetadata.VoidMetadata },
+			{ MainClass.BooleanPrimitive, IDataType.GetMetadata<JBoolean>() },
+			{ MainClass.BytePrimitive, IDataType.GetMetadata<JByte>() },
+			{ MainClass.CharPrimitive, IDataType.GetMetadata<JChar>() },
+			{ MainClass.DoublePrimitive, IDataType.GetMetadata<JDouble>() },
+			{ MainClass.FloatPrimitive, IDataType.GetMetadata<JFloat>() },
+			{ MainClass.IntPrimitive, IDataType.GetMetadata<JInt>() },
+			{ MainClass.LongPrimitive, IDataType.GetMetadata<JLong>() },
+			{ MainClass.ShortPrimitive, IDataType.GetMetadata<JShort>() },
+		};
+	private static readonly IReadOnlyDictionary<MainClass, MainClass> mainWrapper = new Dictionary<MainClass, MainClass>
+	{
+		{ MainClass.VoidObject, MainClass.VoidPrimitive },
+		{ MainClass.BooleanObject, MainClass.BooleanPrimitive },
+		{ MainClass.ByteObject, MainClass.BytePrimitive },
+		{ MainClass.CharacterObject, MainClass.CharPrimitive },
+		{ MainClass.DoubleObject, MainClass.DoublePrimitive },
+		{ MainClass.FloatObject, MainClass.FloatPrimitive },
+		{ MainClass.IntegerObject, MainClass.IntPrimitive },
+		{ MainClass.LongObject, MainClass.LongPrimitive },
+		{ MainClass.ShortObject, MainClass.ShortPrimitive },
+		{ MainClass.VoidPrimitive, MainClass.VoidObject },
+		{ MainClass.BooleanPrimitive, MainClass.BooleanObject },
+		{ MainClass.BytePrimitive, MainClass.ByteObject },
+		{ MainClass.CharPrimitive, MainClass.CharacterObject },
+		{ MainClass.DoublePrimitive, MainClass.DoubleObject },
+		{ MainClass.FloatPrimitive, MainClass.FloatObject },
+		{ MainClass.IntPrimitive, MainClass.IntegerObject },
+		{ MainClass.LongPrimitive, MainClass.LongObject },
+		{ MainClass.ShortPrimitive, MainClass.ShortObject },
+	};
+#pragma warning restore CA1859
 }
