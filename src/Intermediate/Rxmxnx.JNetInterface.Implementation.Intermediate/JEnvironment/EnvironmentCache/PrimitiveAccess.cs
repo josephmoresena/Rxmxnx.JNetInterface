@@ -508,7 +508,7 @@ partial class JEnvironment
 			for (Int32 i = 0; i < parameterTypes.Length; i++)
 			{
 				JObjectLocalRef localRef = this.GetObjectArrayElement(objectArrayRef, i);
-				JClassObject jClass = this.GetClass(JClassLocalRef.FromReference(in localRef), true, false);
+				JClassObject jClass = this.GetClass(JClassLocalRef.FromReference(in localRef), true);
 				args[i] = MetadataHelper.GetArgumentMetadata(jClass);
 			}
 			return args;

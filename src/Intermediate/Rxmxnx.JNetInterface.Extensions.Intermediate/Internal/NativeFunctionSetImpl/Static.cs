@@ -180,7 +180,7 @@ internal partial class NativeFunctionSetImpl
 		if (dimension + 1 == arrayClass.ClassSignature.Length) return true;
 		IEnvironment env = arrayClass.Environment;
 		JClassObject elementClass = env.ClassFeature.GetClass(arrayClass.ClassSignature.AsSpan()[(dimension + 1)..^1]);
-		return NativeFunctionSetImpl.GetClassModifiers(elementClass).HasFlag(JModifierObject.Modifiers.Final);
+		return elementClass.IsFinal;
 	}
 	/// <summary>
 	/// Indicates whether a non-array class is final.

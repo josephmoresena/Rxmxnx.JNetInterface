@@ -13,7 +13,7 @@
                     body="stub"/>
             <method signature="System.Void GetArrayArrayMetadataWithReflectionError(Rxmxnx.PInvoke.CString,System.Exception,System.String)"
                     body="stub"/>
-            <method signature="System.Void GetClass(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.PInvoke.CStringSequence,System.String)"
+            <method signature="System.Void GetClass(Rxmxnx.JNetInterface.Native.References.JClassLocalRef,Rxmxnx.PInvoke.CString,System.String)"
                     body="stub"/>
             <method signature="System.Void GetMetadataOrFindClass(Rxmxnx.JNetInterface.Lang.JClassObject,System.String)"
                     body="stub"/>

@@ -29,7 +29,7 @@ partial class JEnvironment
 				return JClassLocalRef.FromReference(in localRef);
 			}
 
-			JClassLocalRef classRef = this.FindMainClass(new(wrapperClass));
+			JClassLocalRef classRef = this.FindMainClass(wrapperClass.Name, wrapperClass.ClassSignature);
 			try
 			{
 				JFieldId typeFieldId = this._env.GetStaticFieldId(fieldDefinition, classRef, true);

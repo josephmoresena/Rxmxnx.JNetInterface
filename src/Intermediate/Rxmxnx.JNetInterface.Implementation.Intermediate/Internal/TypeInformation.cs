@@ -5,11 +5,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </summary>
 /// <param name="sequence">A <see cref="CStringSequence"/> containg class information.</param>
 /// <param name="kind">A <see cref="JTypeKind"/> value.</param>
-/// <param name="modifier">A <see cref="JTypeModifier"/> value.</param>
-internal sealed class TypeInformation(
-	CStringSequence sequence,
-	JTypeKind kind = default,
-	JTypeModifier? modifier = default) : ITypeInformation
+/// <param name="isFinal">Indicates whether current type is final.</param>
+internal sealed class TypeInformation(CStringSequence sequence, JTypeKind kind = default, Boolean? isFinal = default)
+	: ITypeInformation
 {
 	/// <inheritdoc/>
 	public CString ClassName => sequence[0];
@@ -20,5 +18,15 @@ internal sealed class TypeInformation(
 	/// <inheritdoc/>
 	public JTypeKind Kind => kind;
 	/// <inheritdoc/>
-	public JTypeModifier? Modifier => modifier;
+	public Boolean? IsFinal => isFinal ?? this.IsFinalType();
+
+	/// <summary>
+	/// Indicates whether current type is final.
+	/// </summary>
+	/// <returns>Computed is final flag.</returns>
+	private Boolean? IsFinalType()
+	{
+		if (this.Kind is JTypeKind.Primitive or JTypeKind.Enum) return true;
+		return this.Kind is JTypeKind.Interface or JTypeKind.Annotation ? false : null;
+	}
 }

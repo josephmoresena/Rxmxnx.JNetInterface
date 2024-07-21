@@ -612,7 +612,8 @@ public sealed class NativeFunctionSetImplTests
 		   .CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jClass, jClassClass, definition, false, []);
 		if (jClassElement is null) return;
 		env.ClassFeature.Received(count).GetClass(jClassElement.Name);
-		env.AccessFeature.Received(count)
+		// We are calling JClassObject.IsFinal which is always initialized when class is created from IDataType<T>
+		env.AccessFeature.Received(0)
 		   .CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jClassElement, jClassClass, definition, false, []);
 	}
 	private static JDataTypeMetadata GetElementMetadata<TDataType>() where TDataType : IDataType<TDataType>

@@ -41,7 +41,7 @@ partial class JEnvironment
 		Boolean isPrimitive = metadata.ClassSignature.Length == 1;
 		JClassLocalRef classRef = isPrimitive ?
 			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]) :
-			this._cache.FindMainClass(metadata);
+			this._cache.FindMainClass(metadata.Name, metadata.ClassSignature);
 		try
 		{
 			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value, true);
@@ -183,7 +183,7 @@ partial class JEnvironment
 	/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	internal JClassObject GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference = false)
-		=> this._cache.GetClass(classRef, keepReference, true);
+		=> this._cache.GetClass(classRef, keepReference, JTypeKind.Undefined);
 	/// <summary>
 	/// Retrieves the class object and instantiation metadata.
 	/// </summary>
@@ -194,7 +194,7 @@ partial class JEnvironment
 	{
 		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
-		JClassObject jClass = this._cache.GetClass(classRef, true, true);
+		JClassObject jClass = this._cache.GetClass(classRef, true, JTypeKind.Class);
 		this._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		typeMetadata = this._cache.GetTypeMetadata(jClass);
 		return jClass;

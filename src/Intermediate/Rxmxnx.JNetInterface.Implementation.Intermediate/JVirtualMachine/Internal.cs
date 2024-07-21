@@ -53,7 +53,10 @@ public partial class JVirtualMachine
 		Boolean found = true;
 		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
 		{
-			ClassObjectMetadata metadata = new(jClass);
+			WellKnownRuntimeTypeInformation typeMetadata = MetadataHelper.GetExactMetadata(jClass.Hash);
+			JTypeKind kind = typeMetadata.Kind is null && jClass.ClassSignature.Length == 1 ? JTypeKind.Primitive :
+				jClass.ArrayDimension > 0 ? JTypeKind.Array : typeMetadata.Kind ?? JTypeKind.Undefined;
+			ClassObjectMetadata metadata = new(jClass, kind, typeMetadata.IsFinal);
 			jGlobal = new(this, metadata, default);
 			found = false;
 			this._cache.GlobalClassCache[jClass.Hash] = jGlobal;

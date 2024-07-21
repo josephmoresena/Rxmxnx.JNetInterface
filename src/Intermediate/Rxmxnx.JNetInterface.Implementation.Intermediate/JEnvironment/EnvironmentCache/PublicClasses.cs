@@ -15,10 +15,12 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
-		/// <param name="isReferenceType">Indicates whether class reference is from a reference type.</param>
+		/// <param name="runtimeInformation">Runtime known type information.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
-		public JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference, Boolean isReferenceType)
+		public JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference,
+			WellKnownRuntimeTypeInformation runtimeInformation = default)
 		{
+			Boolean isReferenceType = runtimeInformation.Kind is not null and not JTypeKind.Primitive;
 			using JStringObject jString = this.GetClassName(classRef, isReferenceType, out Boolean isPrimitive);
 			try
 			{
@@ -26,7 +28,7 @@ partial class JEnvironment
 				JClassLocalRef usableClassRef = keepReference ? classRef : default;
 				JClassObject jClass = isPrimitive ?
 					this.GetPrimitiveClass(utf8Text.Values) :
-					this.GetClass(utf8Text.Values, usableClassRef);
+					this.GetClass(utf8Text.Values, usableClassRef, runtimeInformation);
 				return jClass;
 			}
 			finally
@@ -54,16 +56,17 @@ partial class JEnvironment
 			frame[classRef.Value] = jClass.Lifetime.GetCacheable();
 		}
 		/// <summary>
-		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="metadata"/>.
+		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="className"/>.
 		/// </summary>
-		/// <param name="metadata">Class metadata.</param>
+		/// <param name="className">Class name.</param>
+		/// <param name="signature">Class JNI signature.</param>
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
-		public unsafe JClassLocalRef FindMainClass(ClassObjectMetadata metadata)
+		public unsafe JClassLocalRef FindMainClass(CString className, CString signature)
 		{
 			JClassLocalRef classRef;
-			fixed (Byte* ptr = &MemoryMarshal.GetReference(metadata.Name.AsSpan()))
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(className.AsSpan()))
 			{
-				JTrace.FindClass(metadata.Name);
+				JTrace.FindClass(className);
 				classRef = this.FindClass(ptr, true);
 			}
 			if (!classRef.IsDefault) return classRef;
@@ -71,7 +74,7 @@ partial class JEnvironment
 			(this._env as IEnvironment).DescribeException();
 			this.ClearException();
 			throw new NotSupportedException(
-				$"Main class {ClassNameHelper.GetClassName(metadata.ClassSignature)} is not available for JNI access.");
+				$"Main class {ClassNameHelper.GetClassName(signature)} is not available for JNI access.");
 		}
 		/// <summary>
 		/// Retrieves class element from interfaces class array.
@@ -83,7 +86,7 @@ partial class JEnvironment
 		{
 			JObjectLocalRef localRef =
 				this.GetObjectArrayElement(JObjectArrayLocalRef.FromReference(in arrayRef), index);
-			return this.AsClassObject(JClassLocalRef.FromReference(in localRef), true);
+			return this.AsClassObject(JClassLocalRef.FromReference(in localRef), JTypeKind.Interface);
 		}
 	}
 }

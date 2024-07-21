@@ -39,6 +39,12 @@ public static class ProxyTestsExtensions
 		ILocalObject.ProcessMetadata(element, objectMetadata);
 		return element;
 	}
+	public static ReadOnlySpan<Byte> GetByteSpan(this ReadOnlyValPtr<Byte> valPtr, Int32 maxLength = 100)
+	{
+		Int32 length = 0;
+		while ((valPtr + length).Reference != default && length < maxLength) length++;
+		return valPtr.Pointer.GetUnsafeReadOnlySpan<Byte>(length);
+	}
 
 	private static T CreateReference<T>(IFixture fixture) where T : unmanaged, IFixedPointer
 	{
