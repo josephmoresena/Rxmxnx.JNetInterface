@@ -40,14 +40,19 @@ public readonly partial struct JLong : IPrimitiveEquatable
 	static explicit IPrimitiveNumericType<JLong>.operator JLong(JLong jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JLong>.operator JFloat(JLong jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JLong>.operator JDouble(JLong jPrimitive) => jPrimitive;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JLong>.operator SByte(JLong jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<SByte>();
 	static explicit IPrimitiveNumericType<JLong>.operator Int64(JLong jPrimitive) => jPrimitive._value;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JLong>.operator Int16(JLong jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Int16>();
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JLong>.operator Single(JLong jPrimitive) => jPrimitive._value;
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JLong>.operator Int32(JLong jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Int32>();
+	[ExcludeFromCodeCoverage]
 	static explicit IPrimitiveNumericType<JLong>.operator Char(JLong jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<Char>();
 }
