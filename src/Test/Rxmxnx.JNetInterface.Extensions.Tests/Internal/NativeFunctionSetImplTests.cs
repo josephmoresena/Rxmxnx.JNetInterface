@@ -612,6 +612,8 @@ public sealed class NativeFunctionSetImplTests
 		   .CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jClass, jClassClass, definition, false, []);
 		if (jClassElement is null) return;
 		env.ClassFeature.Received(count).GetClass(jClassElement.Name);
+		// To optimize JNI calls, element TypeMetadata should be pre-computed.
+		env.ClassFeature.Received(count).GetTypeMetadata(jClassElement);
 		// We are calling JClassObject.IsFinal which is always initialized when class is created from IDataType<T>
 		env.AccessFeature.Received(0)
 		   .CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jClassElement, jClassClass, definition, false, []);

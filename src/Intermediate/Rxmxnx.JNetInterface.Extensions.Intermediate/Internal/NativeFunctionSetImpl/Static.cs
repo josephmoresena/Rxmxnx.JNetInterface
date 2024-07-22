@@ -180,6 +180,7 @@ internal partial class NativeFunctionSetImpl
 		if (dimension + 1 == arrayClass.ClassSignature.Length) return true;
 		IEnvironment env = arrayClass.Environment;
 		JClassObject elementClass = env.ClassFeature.GetClass(arrayClass.ClassSignature.AsSpan()[(dimension + 1)..^1]);
+		_ = env.ClassFeature.GetTypeMetadata(elementClass);
 		return elementClass.IsFinal;
 	}
 	/// <summary>

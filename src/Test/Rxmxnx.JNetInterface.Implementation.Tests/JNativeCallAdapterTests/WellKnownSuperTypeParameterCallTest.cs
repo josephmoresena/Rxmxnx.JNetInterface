@@ -276,7 +276,7 @@ public partial class JNativeCallAdapterTests
 		{
 			proxyEnv.Received(1).GetObjectRefType(localRef);
 			proxyEnv.Received(1).GetObjectClass(localRef);
-			proxyEnv.Received(initial ? 2 : 0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(initial ? 1 : 0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(initial ? 1 : 0).GetSuperclass(elementClassRef);
 			proxyEnv.Received(1).GetStringUtfLength(strRef0);
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfLength(strRef1);
@@ -378,7 +378,7 @@ public partial class JNativeCallAdapterTests
 		{
 			proxyEnv.Received(1).GetObjectRefType(localRef);
 			proxyEnv.Received(1).GetObjectClass(localRef);
-			proxyEnv.Received(initial ? 2 : 0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(initial ? 1 : 0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(0).GetSuperclass(elementClassRef);
 			proxyEnv.Received(initial ? 1 : 0).CallObjectMethod(elementClassRef.Value,
 			                                                    proxyEnv.VirtualMachine.ClassGetInterfacesMethodId,
@@ -480,7 +480,7 @@ public partial class JNativeCallAdapterTests
 		{
 			proxyEnv.Received(1).GetObjectRefType(localRef);
 			proxyEnv.Received(1).GetObjectClass(localRef);
-			proxyEnv.Received(initial ? 2 : 0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(initial ? 1 : 0).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(initial ? 1 : 0).GetSuperclass(elementClassRef);
 			proxyEnv.Received(1).GetStringUtfLength(strRef0);
 			proxyEnv.Received(initial ? 1 : 0).GetStringUtfLength(strRef1);
