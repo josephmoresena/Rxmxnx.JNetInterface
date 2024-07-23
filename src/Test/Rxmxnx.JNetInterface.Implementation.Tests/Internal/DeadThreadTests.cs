@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Tests;
+namespace Rxmxnx.JNetInterface.Tests.Internal;
 
 [ExcludeFromCodeCoverage]
 public class DeadThreadTests
