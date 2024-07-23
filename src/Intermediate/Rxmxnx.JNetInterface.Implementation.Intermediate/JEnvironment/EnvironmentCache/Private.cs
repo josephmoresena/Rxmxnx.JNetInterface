@@ -23,6 +23,10 @@ partial class JEnvironment
 		/// Object cache.
 		/// </summary>
 		private LocalCache _objects;
+		/// <summary>
+		/// Indicates whether current thread is building a JNI throwable exception.
+		/// </summary>
+		private Boolean _buildingException;
 
 		/// <summary>
 		/// Retrieves <see cref="AccessCache"/> for <paramref name="jClass"/>.

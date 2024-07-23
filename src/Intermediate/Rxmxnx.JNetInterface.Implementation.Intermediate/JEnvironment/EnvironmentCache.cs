@@ -65,7 +65,7 @@ partial class JEnvironment
 		/// </summary>
 		public unsafe void CheckJniError()
 		{
-			if (this._criticalCount > 0)
+			if (this._criticalCount > 0 || this._buildingException)
 			{
 				ref readonly NativeInterface nativeInterface =
 					ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
@@ -76,7 +76,12 @@ partial class JEnvironment
 			{
 				JThrowableLocalRef throwableRef = this.GetPendingException();
 				if (!throwableRef.IsDefault)
-					this.ThrowJniException(this.CreateThrowableException(throwableRef), true);
+				{
+					this._buildingException = true; // To avoid CheckJniError stack overflow.
+					ThrowableException jniException = this.CreateThrowableException(throwableRef);
+					this._buildingException = false;
+					this.ThrowJniException(jniException, true);
+				}
 			}
 			this.Thrown = default; // Clears current exception.
 		}
@@ -141,10 +146,22 @@ partial class JEnvironment
 		public ThrowableException CreateThrowableException(JThrowableLocalRef throwableRef)
 		{
 			this.ClearException();
+			JClassObject jClass = this.ThrowableObject;
+			JReferenceTypeMetadata throwableMetadata =
+				(JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<JThreadObject>();
+			String? message = default;
 
-			JClassObject jClass =
-				this._env.GetObjectClass(throwableRef.Value, out JReferenceTypeMetadata throwableMetadata);
-			String message = this.GetThrowableMessage(throwableRef);
+			try
+			{
+				jClass = this._env.GetObjectClass(throwableRef.Value, out throwableMetadata);
+				message = this.GetThrowableMessage(throwableRef);
+			}
+			catch (CriticalException)
+			{
+				if (!this._buildingException) throw;
+				(this._env as IEnvironment).DescribeException();
+				this.ClearException();
+			}
 			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
 		}
 		/// <summary>
