@@ -237,6 +237,22 @@ partial class JEnvironment
 		JTrace.GetObjectClass(localRef, classRef);
 		return classRef;
 	}
+	/// <summary>
+	/// Creates a new local reference for <paramref name="objectRef"/>.
+	/// </summary>
+	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
+	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
+	private unsafe JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
+		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.NewLocalRefInfo);
+		JObjectLocalRef localRef =
+			nativeInterface.ReferenceFunctions.NewLocalRef.NewRef(this.Reference, objectRef.Value);
+		JTrace.CreateLocalRef(objectRef, localRef);
+		if (localRef == default) this._cache.CheckJniError();
+		return localRef;
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="JClassTypeMetadata"/> instance from <paramref name="jClass"/>
@@ -308,6 +324,7 @@ partial class JEnvironment
 	}
 	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
 #pragma warning disable CA1859
+	[ExcludeFromCodeCoverage]
 	private static Boolean? EqualEquatable<TEquatable>(IEquatable<TEquatable>? obj, TEquatable? other)
 	{
 		if (obj is null || other is null) return default;

@@ -207,22 +207,6 @@ partial class JEnvironment
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal void LoadClass(JClassObject jClass) => this._cache.LoadClass(jClass);
 	/// <summary>
-	/// Creates a new local reference for <paramref name="objectRef"/>.
-	/// </summary>
-	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
-	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
-	internal unsafe JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
-		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.NewLocalRefInfo);
-		JObjectLocalRef localRef =
-			nativeInterface.ReferenceFunctions.NewLocalRef.NewRef(this.Reference, objectRef.Value);
-		JTrace.CreateLocalRef(objectRef, localRef);
-		if (localRef == default) this._cache.CheckJniError();
-		return localRef;
-	}
-	/// <summary>
 	/// Sends JNI fatal error signal to VM.
 	/// </summary>
 	/// <param name="errorMessage">Error message.</param>
@@ -256,8 +240,7 @@ partial class JEnvironment
 	/// <returns>A binary read-only span from <paramref name="value"/>.</returns>
 	internal static ReadOnlySpan<Byte> GetSafeSpan(CString? value)
 	{
-		if (value is null)
-			return ReadOnlySpan<Byte>.Empty;
+		if (value is null) return ReadOnlySpan<Byte>.Empty;
 		return value.IsNullTerminated ? value.AsSpan() : (CString)value.Clone();
 	}
 	/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
