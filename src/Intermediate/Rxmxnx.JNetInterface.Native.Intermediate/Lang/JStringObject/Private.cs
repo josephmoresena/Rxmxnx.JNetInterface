@@ -60,8 +60,8 @@ public partial class JStringObject
 	/// </summary>
 	/// <param name="chars">Span to copy chars to.</param>
 	/// <param name="arg">Operation arguments.</param>
-	private static void GetChars(Span<Char> chars, (JStringObject jStr, Int32 startIndex) arg)
-		=> arg.jStr.Get(chars, arg.startIndex);
+	private static void GetChars(Span<Char> chars, (JStringObject jString, Int32 startIndex) arg)
+		=> arg.jString.Get(chars, arg.startIndex);
 
 	static JStringObject IClassType<JStringObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer.WithClass<JStringObject>());
