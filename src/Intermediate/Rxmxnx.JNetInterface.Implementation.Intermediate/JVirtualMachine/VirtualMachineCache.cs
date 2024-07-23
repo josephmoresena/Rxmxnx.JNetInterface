@@ -110,7 +110,7 @@ public partial class JVirtualMachine
 			this.WeakClassCache.Clear();
 			if (globalKeys.Length == 0 && weakKeys.Length == 0) return;
 			using IThread thread = this._vm.CreateThread(ThreadPurpose.RemoveGlobalReference);
-			JEnvironment env = (JEnvironment)thread;
+			if (thread is not JEnvironment env) return;
 			foreach (JWeakRef key in weakKeys)
 			{
 				if (this._weakObjects.Remove(key, out WeakReference<JWeak>? weak) &&
