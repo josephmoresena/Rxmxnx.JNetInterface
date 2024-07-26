@@ -50,7 +50,7 @@ public class JModuleObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jModuleClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jModuleClass);
-		using JGlobal jGlobal = new(vm, new(jModuleClass, IClassType.GetMetadata<JModuleObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jModuleClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

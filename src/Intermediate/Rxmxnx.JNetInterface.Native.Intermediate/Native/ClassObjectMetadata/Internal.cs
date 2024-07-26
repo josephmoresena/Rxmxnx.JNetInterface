@@ -22,7 +22,7 @@ public partial record ClassObjectMetadata
 	/// <param name="kind">Class kind.</param>
 	/// <param name="isFinal">Indicates whether class type is final.</param>
 	internal ClassObjectMetadata(JClassObject jClass, JTypeKind kind = JTypeKind.Undefined, Boolean? isFinal = default)
-		: base(jClass.Class, IClassType.GetMetadata<JClassObject>())
+		: base(jClass.Class)
 	{
 		this.Name = jClass.Name;
 		this.ClassSignature = jClass.ClassSignature;

@@ -146,7 +146,7 @@ partial class JEnvironment
 		public ThrowableException CreateThrowableException(JThrowableLocalRef throwableRef)
 		{
 			this.ClearException();
-			JClassObject jClass = this.ThrowableObject;
+			JClassObject jClass = this.GetClass<JThrowableObject>();
 			JReferenceTypeMetadata throwableMetadata =
 				(JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<JThreadObject>();
 			String? message = default;

@@ -47,8 +47,7 @@ public class JClassLoaderObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jClassLoaderClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jClassLoaderClass);
-		using JGlobal jGlobal = new(vm, new(jClassLoaderClass, IClassType.GetMetadata<JClassLoaderObject>()),
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jClassLoaderClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

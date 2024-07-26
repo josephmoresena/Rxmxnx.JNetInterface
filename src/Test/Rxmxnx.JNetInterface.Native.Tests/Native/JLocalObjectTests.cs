@@ -27,7 +27,7 @@ public sealed class JLocalObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jObjectClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jObjectClass);
-		using JGlobal jGlobal = new(vm, new(jObjectClass, IClassType.GetMetadata<JLocalObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jObjectClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

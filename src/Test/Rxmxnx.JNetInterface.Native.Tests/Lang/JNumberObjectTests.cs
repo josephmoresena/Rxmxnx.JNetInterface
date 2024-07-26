@@ -49,7 +49,7 @@ public class JNumberObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jNumberClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jNumberClass);
-		using JGlobal jGlobal = new(vm, new(jNumberClass, IClassType.GetMetadata<JNumberObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jNumberClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

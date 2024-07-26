@@ -19,26 +19,17 @@ public record ObjectMetadata
 	/// Object class hash.
 	/// </summary>
 	internal String ObjectClassHash { get; }
-	/// <summary>
-	/// Class type metadata.
-	/// </summary>
-	internal JReferenceTypeMetadata? TypeMetadata { get; }
 
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
-	/// <param name="typeMetadata"><see cref="JReferenceTypeMetadata"/> instance.</param>
-	internal ObjectMetadata(JClassObject jClass, JReferenceTypeMetadata? typeMetadata = default)
+	internal ObjectMetadata(JClassObject jClass)
 	{
 		this.ObjectClassName = jClass.Name;
 		this.ObjectSignature = jClass.ClassSignature;
 		this.ObjectClassHash = jClass.Hash;
 		this.FromProxy = jClass.IsProxy;
-		if (CommonNames.ClassObject.SequenceEqual(jClass.Name))
-			this.TypeMetadata = IClassType.GetMetadata<JClassObject>();
-		else
-			this.TypeMetadata = typeMetadata ?? jClass.Environment.ClassFeature.GetTypeMetadata(jClass);
 	}
 	/// <summary>
 	/// Constructor.
@@ -49,7 +40,6 @@ public record ObjectMetadata
 		this.ObjectClassName = typeMetadata.ClassName;
 		this.ObjectSignature = typeMetadata.Signature;
 		this.ObjectClassHash = typeMetadata.Hash;
-		this.TypeMetadata = typeMetadata as JReferenceTypeMetadata;
 	}
 
 	/// <summary>
@@ -62,7 +52,6 @@ public record ObjectMetadata
 		this.ObjectSignature = metadata.ObjectSignature;
 		this.ObjectClassHash = metadata.ObjectClassHash;
 		this.FromProxy = metadata.FromProxy;
-		this.TypeMetadata = metadata.TypeMetadata;
 	}
 
 	/// <inheritdoc cref="Object.ToString()"/>

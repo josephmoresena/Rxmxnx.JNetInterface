@@ -91,7 +91,7 @@ public sealed class JExceptionObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jExceptionClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jExceptionClass);
-		using JGlobal jGlobal = new(vm, new(jExceptionClass, IClassType.GetMetadata<JExceptionObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jExceptionClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -213,8 +213,8 @@ public sealed class JExceptionObjectTests
 			Assert.Equal(jWeak, exception.WithSafeInvoke(t => t.Weak));
 
 			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
-			thread.ClassFeature.Received(2).GetClass(JExceptionObjectTests.className);
-			thread.ClassFeature.Received(2)
+			thread.ClassFeature.Received(4).GetClass(JExceptionObjectTests.className);
+			thread.ClassFeature.Received(4)
 			      .GetObjectClass(
 				      Arg.Is<ObjectMetadata>(m => m.ObjectClassName.SequenceEqual(JExceptionObjectTests.className)));
 			thread.Received(3).GetReferenceType(jWeak);
@@ -260,7 +260,7 @@ public sealed class JExceptionObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject jExceptionClass = new(jClass, IClassType.GetMetadata<JExceptionObject>());
 
-		ThrowableObjectMetadata throwableMetadata = new(jExceptionClass, typeMetadata, message);
+		ThrowableObjectMetadata throwableMetadata = new(jExceptionClass, message);
 		Assert.Equal(typeMetadata.ClassName, throwableMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, throwableMetadata.ObjectSignature);
 		Assert.Equal(message, throwableMetadata.Message);

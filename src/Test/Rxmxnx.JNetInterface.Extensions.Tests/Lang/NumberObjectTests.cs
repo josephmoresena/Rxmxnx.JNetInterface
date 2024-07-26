@@ -142,7 +142,7 @@ public sealed class NumberObjectTests
 			NumberObjectTests.GetPrimitiveWrapperClass<TPrimitive, TNumber>(
 				env, jClass, out JPrimitiveWrapperTypeMetadata<TNumber> typeMetadata);
 		using JLocalObject jLocal = new(env, localRef, jPrimitiveWrapperClass);
-		using JGlobal jGlobal = new(vm, new(jPrimitiveWrapperClass, IClassType.GetMetadata<TNumber>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jPrimitiveWrapperClass), globalRef);
 		String? textValue = typeMetadata.ToString();
 
 		Assert.StartsWith("{", textValue);

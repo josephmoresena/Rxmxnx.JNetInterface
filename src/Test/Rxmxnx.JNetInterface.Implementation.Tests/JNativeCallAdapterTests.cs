@@ -198,8 +198,9 @@ public sealed partial class JNativeCallAdapterTests
 		Assert.True(JObject.IsNullOrDefault(testObject));
 		Assert.True(JObject.IsNullOrDefault(testObject?.Class));
 		JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
-		JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
 		GC.Collect();
+		GC.WaitForPendingFinalizers();
+		JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
 		proxyEnv.FinalizeProxy(true);
 	}
 	private static void FinalizeFinalTypedObject(NativeInterfaceProxy proxyEnv, JObjectLocalRef localRef)

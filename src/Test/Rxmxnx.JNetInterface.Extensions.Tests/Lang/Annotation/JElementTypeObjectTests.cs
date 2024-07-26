@@ -80,7 +80,7 @@ public class JElementTypeObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jElementTypeClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jElementTypeClass);
-		using JGlobal jGlobal = new(vm, new(jElementTypeClass, IEnumType.GetMetadata<JElementTypeObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jElementTypeClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

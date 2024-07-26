@@ -15,6 +15,10 @@ partial class JEnvironment
 		/// </summary>
 		private readonly JEnvironment _env;
 		/// <summary>
+		/// Indicates whether current thread is building a JNI throwable exception.
+		/// </summary>
+		private Boolean _buildingException;
+		/// <summary>
 		/// Number of active critical sequences.
 		/// </summary>
 		private Int32 _criticalCount;
@@ -23,10 +27,6 @@ partial class JEnvironment
 		/// Object cache.
 		/// </summary>
 		private LocalCache _objects;
-		/// <summary>
-		/// Indicates whether current thread is building a JNI throwable exception.
-		/// </summary>
-		private Boolean _buildingException;
 
 		/// <summary>
 		/// Retrieves <see cref="AccessCache"/> for <paramref name="jClass"/>.
@@ -272,7 +272,7 @@ partial class JEnvironment
 		private ThrowableException CreateThrowableException(JClassObject jClass,
 			JReferenceTypeMetadata throwableMetadata, String? message, JThrowableLocalRef throwableRef)
 		{
-			ThrowableObjectMetadata objectMetadata = new(jClass, throwableMetadata, message);
+			ThrowableObjectMetadata objectMetadata = new(jClass, message);
 			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
 			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, globalRef);
 
@@ -313,6 +313,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, throwableRef.Value, getNameId, default);
+			if (localRef == default) this.CheckJniError();
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}

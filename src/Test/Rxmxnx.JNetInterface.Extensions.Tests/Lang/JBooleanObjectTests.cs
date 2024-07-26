@@ -70,7 +70,7 @@ public sealed class JBooleanObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jBooleanObjectClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jBooleanObjectClass);
-		using JGlobal jGlobal = new(vm, new(jBooleanObjectClass, IClassType.GetMetadata<JBooleanObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jBooleanObjectClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

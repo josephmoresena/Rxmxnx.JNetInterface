@@ -53,6 +53,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, classRef.Value, getNameId, default);
+			if (localRef == default) this.CheckJniError();
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}
@@ -72,6 +73,7 @@ partial class JEnvironment
 			JBoolean result =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallBooleanMethod.Call(
 					this.Reference, classRef.Value, isPrimitiveId, default);
+			this.CheckJniError();
 			return result.Value;
 		}
 		/// <summary>

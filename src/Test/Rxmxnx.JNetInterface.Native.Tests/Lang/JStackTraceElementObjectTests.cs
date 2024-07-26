@@ -73,8 +73,7 @@ public class JStackTraceElementObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jStackTraceElementClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jStackTraceElementClass);
-		using JGlobal jGlobal =
-			new(vm, new(jStackTraceElementClass, IClassType.GetMetadata<JStackTraceElementObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jStackTraceElementClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

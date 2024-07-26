@@ -71,7 +71,7 @@ public class JBufferObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jBufferClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jBufferClass);
-		using JGlobal jGlobal = new(vm, new(jBufferClass, IClassType.GetMetadata<JBufferObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jBufferClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

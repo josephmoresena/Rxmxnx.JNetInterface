@@ -85,6 +85,8 @@ public sealed partial class JVirtualMachineTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 			proxyEnv.FinalizeProxy(true);
 		}

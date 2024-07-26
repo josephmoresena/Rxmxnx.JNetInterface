@@ -69,8 +69,7 @@ public sealed class JCharacterObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jCharacterObjectClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jCharacterObjectClass);
-		using JGlobal jGlobal = new(vm, new(jCharacterObjectClass, IClassType.GetMetadata<JCharacterObject>()),
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jCharacterObjectClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

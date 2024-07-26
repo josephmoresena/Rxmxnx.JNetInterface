@@ -141,6 +141,8 @@ public class DeadThreadTests
 		finally
 		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 		}
 	}
