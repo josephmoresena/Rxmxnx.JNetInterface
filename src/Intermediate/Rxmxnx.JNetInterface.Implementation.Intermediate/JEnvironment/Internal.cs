@@ -52,7 +52,7 @@ partial class JEnvironment
 			this.DeleteLocalRef(classRef.Value);
 		}
 
-		(this as IEnvironment).DescribeException();
+		this.DescribeException();
 		this._cache.ClearException(); // Clears JNI exception.
 		throw new NotSupportedException(
 			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(metadata.ClassSignature)} class.");

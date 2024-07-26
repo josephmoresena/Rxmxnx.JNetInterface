@@ -44,7 +44,7 @@ partial class JEnvironment
 				this._env.DeleteLocalRef(classRef.Value);
 			}
 
-			(this._env as IEnvironment).DescribeException();
+			this._env.DescribeException();
 			this.ClearException();
 			throw new NotSupportedException(
 				$"Primitive class {ClassNameHelper.GetPrimitiveClassName(signature)} is not available for JNI access.");

@@ -132,21 +132,32 @@ partial class JEnvironment
 		public ThrowableException CreateThrowableException(JThrowableLocalRef throwableRef)
 		{
 			this.ClearException();
-			JClassObject jClass = this.GetClass<JThrowableObject>();
-			JReferenceTypeMetadata throwableMetadata =
-				(JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<JThreadObject>();
+			JReferenceTypeMetadata? throwableMetadata = default;
 			String? message = default;
+			JClassObject jClass;
 
 			try
 			{
 				jClass = this._env.GetObjectClass(throwableRef.Value, out throwableMetadata);
+			}
+			catch (CriticalException)
+			{
+				// Unable to retrieve throwable object class.
+				jClass = this.GetClass<JThrowableObject>(); // Retrieves java.lang.Throwable class.
+				if (!this._buildingException) throw;
+				this._env.DescribeException();
+				this.Thrown = null;
+			}
+			try
+			{
 				message = this.GetThrowableMessage(throwableRef);
 			}
 			catch (CriticalException)
 			{
+				// Unable to retrieve throwable object message.
 				if (!this._buildingException) throw;
-				(this._env as IEnvironment).DescribeException();
-				this.ClearException();
+				this._env.DescribeException();
+				this.Thrown = null;
 			}
 			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
 		}

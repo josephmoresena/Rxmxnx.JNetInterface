@@ -71,7 +71,7 @@ partial class JEnvironment
 			}
 			if (!classRef.IsDefault) return classRef;
 
-			(this._env as IEnvironment).DescribeException();
+			this._env.DescribeException();
 			this.ClearException();
 			throw new NotSupportedException(
 				$"Main class {ClassNameHelper.GetClassName(signature)} is not available for JNI access.");

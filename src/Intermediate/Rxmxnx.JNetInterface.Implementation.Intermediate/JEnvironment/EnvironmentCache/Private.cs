@@ -256,8 +256,8 @@ partial class JEnvironment
 			String? message) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			JClassObject jClass = this.GetClass<TThrowable>();
-			JReferenceTypeMetadata throwableMetadata =
-				(JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TThrowable>();
+			JReferenceTypeMetadata? throwableMetadata =
+				MetadataHelper.GetExactMetadata<TThrowable>() as JReferenceTypeMetadata;
 			this.ClearException();
 			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
 		}
@@ -270,14 +270,29 @@ partial class JEnvironment
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
 		private ThrowableException CreateThrowableException(JClassObject jClass,
-			JReferenceTypeMetadata throwableMetadata, String? message, JThrowableLocalRef throwableRef)
+			JReferenceTypeMetadata? throwableMetadata, String? message, JThrowableLocalRef throwableRef)
 		{
 			ThrowableObjectMetadata objectMetadata = new(jClass, message);
-			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
-			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, globalRef);
-
-			this._env.DeleteLocalRef(throwableRef.Value);
-			return throwableMetadata.CreateException(jGlobalThrowable, message)!;
+			try
+			{
+				JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
+				JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, globalRef);
+				return throwableMetadata?.CreateException(jGlobalThrowable, message) ??
+					// Use java.lang.Throwable type metadata.
+					JThrowableObject.CreateException(jGlobalThrowable, message);
+			}
+			catch (CriticalException)
+			{
+				// Unable to create throwable global object reference.
+				if (!this._buildingException) throw;
+				this._env.DescribeException();
+				this.Throw(throwableRef); // Throws pending exception at JNI.
+				throw;
+			}
+			finally
+			{
+				this._env.DeleteLocalRef(throwableRef.Value);
+			}
 		}
 		/// <summary>
 		/// Retrieves throwable message.
@@ -287,7 +302,7 @@ partial class JEnvironment
 		private String GetThrowableMessage(JThrowableLocalRef throwableRef)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			AccessCache access = this.GetAccess(jniTransaction, this.ThrowableObject);
+			AccessCache access = this.GetAccess(jniTransaction, this.GetClass<JThrowableObject>());
 			jniTransaction.Add(throwableRef);
 			using JStringObject throwableMessage = this.GetThrowableMessage(throwableRef, access);
 			try
@@ -380,8 +395,16 @@ partial class JEnvironment
 			JThrowableLocalRef throwableRef = this.GetPendingException();
 			if (throwableRef.IsDefault) return;
 			this._buildingException = true; // To avoid CheckJniError stack overflow.
-			ThrowableException jniException = this.CreateThrowableException(throwableRef);
-			this._buildingException = false;
+			ThrowableException jniException;
+			try
+			{
+				jniException = this.CreateThrowableException(throwableRef);
+			}
+			finally
+			{
+				// Restores initial CheckJniError state.
+				this._buildingException = false;
+			}
 			this.ThrowJniException(jniException, true);
 		}
 		/// <summary>
@@ -392,7 +415,10 @@ partial class JEnvironment
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
 			if (!nativeInterface.ExceptionCheck(this.Reference).Value) return;
-			this.SetPendingException(CriticalException.Instance, true);
+			CriticalException criticalException = this._criticalCount > 0 ?
+				CriticalException.Instance :
+				CriticalException.UnknownInstance;
+			this.SetPendingException(criticalException, true);
 		}
 	}
 }

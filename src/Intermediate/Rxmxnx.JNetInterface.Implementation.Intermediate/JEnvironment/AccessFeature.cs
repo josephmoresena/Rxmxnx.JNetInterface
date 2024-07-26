@@ -394,7 +394,7 @@ partial class JEnvironment
 				}
 				this.CheckJniError();
 				ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-				this.VirtualMachine.RegisterNatives(this.ClassObject.Hash, calls);
+				this.VirtualMachine.RegisterNatives(jClass.Hash, calls);
 			}
 			finally
 			{
@@ -410,7 +410,7 @@ partial class JEnvironment
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			JResult jResult = nativeInterface.NativeRegistryFunctions.UnregisterNatives(this.Reference, classRef);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(jResult);
-			this.VirtualMachine.UnregisterNatives(this.ClassObject.Hash);
+			this.VirtualMachine.UnregisterNatives(jClass.Hash);
 		}
 		public JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
 			JClassObject? returnType)

@@ -91,11 +91,7 @@ public sealed class ExceptionHandlingTests
 			proxyEnv.ClearReceivedCalls();
 			proxyEnv.VirtualMachine.ClearReceivedCalls();
 
-			proxyEnv.FindClass(Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(c =>
-			{
-				exceptionOccurred.Value = throwableRef;
-				return default;
-			});
+			proxyEnv.ExceptionCheck().Returns(_ => exceptionOccurred.Value != NativeInterfaceProxy.NoThrowable);
 			proxyEnv.ExceptionOccurred().Returns(_ =>
 			{
 				try
@@ -108,7 +104,15 @@ public sealed class ExceptionHandlingTests
 						exceptionOccurred.Value = default;
 				}
 			});
-			proxyEnv.ExceptionCheck().Returns(_ => exceptionOccurred.Value != NativeInterfaceProxy.NoThrowable);
+			proxyEnv.When(e => e.ExceptionClear()).Do(_ => exceptionOccurred.Value = default);
+			proxyEnv.When(e => e.Throw(Arg.Any<JThrowableLocalRef>()))
+			        .Do(c => exceptionOccurred.Value = (JThrowableLocalRef)c[0]);
+
+			proxyEnv.FindClass(Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(c =>
+			{
+				exceptionOccurred.Value = throwableRef;
+				return default;
+			});
 			proxyEnv.GetObjectClass(throwableRef.Value).Returns(classRef);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(classNameRef.Value);
