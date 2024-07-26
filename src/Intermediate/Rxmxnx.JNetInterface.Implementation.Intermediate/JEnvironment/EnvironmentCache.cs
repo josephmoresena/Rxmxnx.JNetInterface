@@ -63,26 +63,12 @@ partial class JEnvironment
 		/// <summary>
 		/// Checks JNI occurred error.
 		/// </summary>
-		public unsafe void CheckJniError()
+		public void CheckJniError()
 		{
 			if (this._criticalCount > 0 || this._buildingException)
-			{
-				ref readonly NativeInterface nativeInterface =
-					ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
-				if (nativeInterface.ExceptionCheck(this.Reference).Value)
-					this.SetPendingException(CriticalException.Instance, true);
-			}
+				this.ExceptionCheck();
 			else
-			{
-				JThrowableLocalRef throwableRef = this.GetPendingException();
-				if (!throwableRef.IsDefault)
-				{
-					this._buildingException = true; // To avoid CheckJniError stack overflow.
-					ThrowableException jniException = this.CreateThrowableException(throwableRef);
-					this._buildingException = false;
-					this.ThrowJniException(jniException, true);
-				}
-			}
+				this.ExceptionOccurred();
 			this.Thrown = default; // Clears current exception.
 		}
 		/// <inheritdoc cref="IEnvironment.JniSecure"/>

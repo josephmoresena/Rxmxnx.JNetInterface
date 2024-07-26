@@ -372,5 +372,27 @@ partial class JEnvironment
 			ValPtr<Byte> ptr = (ValPtr<Byte>)stackSpan.GetUnsafeIntPtr();
 			return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
 		}
+		/// <summary>
+		/// Checks and throws a Throwable exception in non-critical state.
+		/// </summary>
+		private void ExceptionOccurred()
+		{
+			JThrowableLocalRef throwableRef = this.GetPendingException();
+			if (throwableRef.IsDefault) return;
+			this._buildingException = true; // To avoid CheckJniError stack overflow.
+			ThrowableException jniException = this.CreateThrowableException(throwableRef);
+			this._buildingException = false;
+			this.ThrowJniException(jniException, true);
+		}
+		/// <summary>
+		/// Checks and throws a JNI exception in critical or nested state.
+		/// </summary>
+		private unsafe void ExceptionCheck()
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
+			if (!nativeInterface.ExceptionCheck(this.Reference).Value) return;
+			this.SetPendingException(CriticalException.Instance, true);
+		}
 	}
 }
