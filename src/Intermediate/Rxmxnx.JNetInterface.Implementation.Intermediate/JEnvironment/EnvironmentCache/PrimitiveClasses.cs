@@ -64,11 +64,13 @@ partial class JEnvironment
 				4 => className[0] switch
 				{
 					0x62 //b
-						=> this.BooleanPrimitive,
+						=> this.BytePrimitive,
 					0x63 //c
 						=> this.CharPrimitive,
 					0x6C //l
 						=> this.LongPrimitive,
+					0x76 //v
+						=> this.VoidPrimitive,
 					_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 				},
 				5 => className[0] switch
