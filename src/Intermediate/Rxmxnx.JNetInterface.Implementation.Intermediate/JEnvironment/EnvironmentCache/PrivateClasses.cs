@@ -34,7 +34,7 @@ partial class JEnvironment
 		private JStringObject GetClassName(JClassLocalRef classRef, Boolean isReferenceType, out Boolean isPrimitive)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			AccessCache access = this.GetAccess(jniTransaction, this.ClassObject);
+			AccessCache access = this.GetAccess(jniTransaction, this.GetClass<JClassObject>());
 			jniTransaction.Add(classRef);
 			isPrimitive = !isReferenceType && this.IsPrimitiveClass(classRef, access);
 			return this.GetClassName(classRef, access);

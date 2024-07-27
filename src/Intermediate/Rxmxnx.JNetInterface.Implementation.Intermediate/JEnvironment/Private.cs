@@ -194,7 +194,7 @@ partial class JEnvironment
 	/// <param name="throwableException">A <see cref="ThrowableException"/> instance.</param>
 	private void SetThrown(ThrowableException? throwableException)
 	{
-		if (this._cache.Thrown is CriticalException)
+		if (Object.ReferenceEquals(CriticalException.Instance, this._cache.Thrown))
 			throw this._cache.Thrown;
 		this._cache.ThrowJniException(throwableException, false);
 	}
