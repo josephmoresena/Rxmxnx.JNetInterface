@@ -55,10 +55,8 @@ public partial class JNativeCallAdapterTests
 		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<JTestObject>();
 		JClassTypeMetadata classClassTypeMetadata = IClassType.GetMetadata<JClassObject>();
 		JClassObject? testClass = default;
-		using IReadOnlyFixedContext<Char>.IDisposable classCtx =
-			classClassTypeMetadata.Information.ToString().AsMemory().GetFixedContext();
-		using IReadOnlyFixedContext<Char>.IDisposable ctx = classTypeMetadata.Information.ToString().AsMemory()
-		                                                                     .GetFixedContext();
+		using IFixedPointer.IDisposable classCtx = classClassTypeMetadata.Information.GetFixedPointer();
+		using IFixedPointer.IDisposable ctx = classTypeMetadata.Information.GetFixedPointer();
 		try
 		{
 			proxyEnv.GetObjectClass(classRef.Value).Returns(proxyEnv.ClassLocalRef);

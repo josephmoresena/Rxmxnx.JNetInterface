@@ -175,7 +175,7 @@ public partial class JVirtualMachine
 	/// Unregister any native method for given class.
 	/// </summary>
 	/// <param name="classHash">Class hash.</param>
-	public void UnregisterNatives(String classHash) => this._cache.NativesCache.Clear(classHash);
+	internal void UnregisterNatives(String classHash) => this._cache.NativesCache.Clear(classHash);
 
 	/// <summary>
 	/// Retrieves the <see cref="IInvokedVirtualMachine"/> instance referenced by <paramref name="reference"/>.

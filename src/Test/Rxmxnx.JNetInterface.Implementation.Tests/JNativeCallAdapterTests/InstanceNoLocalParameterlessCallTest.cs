@@ -23,8 +23,7 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetVersion().Returns(version);
 			proxyEnv.GetObjectRefType(localRef).Returns(JReferenceType.InvalidRefType);
 			proxyEnv.GetObjectClass(localRef).Returns(classRef);
-			using IReadOnlyFixedContext<Char>.IDisposable ctx = classTypeMetadata.Information.ToString().AsMemory()
-				.GetFixedContext();
+			using IFixedPointer.IDisposable ctx = classTypeMetadata.Information.GetFixedPointer();
 			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);

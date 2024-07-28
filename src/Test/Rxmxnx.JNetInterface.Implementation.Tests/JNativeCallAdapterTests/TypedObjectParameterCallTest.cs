@@ -54,8 +54,7 @@ public partial class JNativeCallAdapterTests
 		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<JTestObject>();
 		JTestObject? testObject = default;
-		using IReadOnlyFixedContext<Char>.IDisposable ctx = classTypeMetadata.Information.ToString().AsMemory()
-		                                                                     .GetFixedContext();
+		using IFixedPointer.IDisposable ctx = classTypeMetadata.Information.GetFixedPointer();
 		try
 		{
 			proxyEnv.GetObjectClass(localRef).Returns(classRef);
