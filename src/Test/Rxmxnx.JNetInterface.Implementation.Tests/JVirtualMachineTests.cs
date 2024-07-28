@@ -91,6 +91,136 @@ public sealed partial class JVirtualMachineTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
+	[Theory]
+	[InlineData(false)]
+	[InlineData(true)]
+	internal void InvocationTest(Boolean forceLocal)
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JLocalObject? jLocal = default;
+		JGlobal? jGlobal = default;
+		JWeak? jWeak = default;
+		try
+		{
+			using IInvokedVirtualMachine invoked = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference,
+				proxyEnv.Reference, out IEnvironment env);
+			Assert.Equal(proxyEnv.VirtualMachine.Reference, invoked.Reference);
+			Assert.Equal(proxyEnv.Reference, env.Reference);
+			Assert.True((invoked as JVirtualMachine)!.IsAlive);
+			Assert.True((env as JEnvironment)!.IsAttached);
+
+			JGlobalRef globalRef = JVirtualMachineTests.fixture.Create<JGlobalRef>();
+			JWeakRef weakRef = JVirtualMachineTests.fixture.Create<JWeakRef>();
+			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
+			proxyEnv.GetObjectRefType(weakRef.Value).Returns(JReferenceType.WeakGlobalRefType);
+			proxyEnv.NewWeakGlobalRef(proxyEnv.VoidObjectLocalRef.Value).Returns(weakRef);
+			proxyEnv.NewWeakGlobalRef(globalRef.Value).Returns(weakRef);
+			proxyEnv.NewGlobalRef(proxyEnv.VoidObjectLocalRef.Value).Returns(globalRef);
+			proxyEnv.NewGlobalRef(weakRef.Value).Returns(globalRef);
+			proxyEnv.NewObject(proxyEnv.VoidObjectLocalRef, Arg.Any<JMethodId>(), ReadOnlyValPtr<JValueWrapper>.Zero)
+			        .Returns(JVirtualMachineTests.fixture.Create<JObjectLocalRef>());
+
+			Assert.True((invoked as JVirtualMachine)!.IsAlive);
+
+			jLocal = env.ClassFeature.VoidObject;
+			jWeak = jLocal.Weak;
+			jGlobal = jLocal.Global;
+		}
+		finally
+		{
+			Assert.Equal(default, (jLocal?.LocalReference).GetValueOrDefault());
+			Assert.NotEqual(default, (jWeak?.Reference).GetValueOrDefault());
+			Assert.NotEqual(default, (jGlobal?.Reference).GetValueOrDefault());
+
+			Assert.Throws<InvalidOperationException>(() => Assert.True(JObject.IsNullOrDefault(jLocal)));
+			Assert.False(JObject.IsNullOrDefault(jWeak));
+			Assert.False(JObject.IsNullOrDefault(jGlobal));
+
+			if (forceLocal) jLocal?.SetValue(proxyEnv.VoidObjectLocalRef);
+
+			jLocal?.Dispose();
+			jWeak?.Dispose();
+			jGlobal?.Dispose();
+
+			Assert.True(JObject.IsNullOrDefault(jLocal));
+			Assert.True(JObject.IsNullOrDefault(jWeak));
+			Assert.True(JObject.IsNullOrDefault(jGlobal));
+
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
+			Assert.False(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
+	[Fact]
+	internal void NestedInvocationTest()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		try
+		{
+			using IInvokedVirtualMachine invoked = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference,
+				proxyEnv.Reference, out IEnvironment env);
+			Assert.Equal(proxyEnv.VirtualMachine.Reference, invoked.Reference);
+			Assert.Equal(proxyEnv.Reference, env.Reference);
+			Assert.True((invoked as JVirtualMachine)!.IsAlive);
+			Assert.True((env as JEnvironment)!.IsAttached);
+
+			using (IInvokedVirtualMachine invoked2 =
+			       JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference,
+			                                         out IEnvironment env2))
+			{
+				Assert.Equal(proxyEnv.VirtualMachine.Reference, invoked.Reference);
+				Assert.Equal(proxyEnv.Reference, env.Reference);
+				Assert.Same(invoked, invoked2);
+				Assert.Same(env, env2);
+
+				Assert.True((invoked2 as JVirtualMachine)!.IsAlive);
+				Assert.True((env2 as JEnvironment)!.IsAttached);
+			}
+
+			Assert.False((invoked as JVirtualMachine)!.IsAlive);
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
+			Assert.False(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
+	[Fact]
+	internal void NoInvocationTest()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		try
+		{
+			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
+			using (IInvokedVirtualMachine invoked = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference,
+				       proxyEnv.Reference, out IEnvironment env))
+			{
+				Assert.NotSame(vm, invoked);
+				Assert.Same(vm.GetEnvironment(), env);
+
+				Assert.Equal(proxyEnv.VirtualMachine.Reference, invoked.Reference);
+				Assert.Equal(proxyEnv.Reference, env.Reference);
+				Assert.True((invoked as JVirtualMachine)!.IsAlive);
+				Assert.True((env as JEnvironment)!.IsAttached);
+			}
+
+			Assert.True((vm as JVirtualMachine)!.IsAlive);
+			Assert.True((vm.GetEnvironment() as JEnvironment)!.IsAttached);
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
 
 	private static JGlobal CreateThreadGroup(IVirtualMachine vm, JGlobalRef globalRef)
 	{

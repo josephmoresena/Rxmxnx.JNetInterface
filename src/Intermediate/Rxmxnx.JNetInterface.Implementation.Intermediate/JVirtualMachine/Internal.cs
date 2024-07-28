@@ -178,12 +178,12 @@ public partial class JVirtualMachine
 	public void UnregisterNatives(String classHash) => this._cache.NativesCache.Clear(classHash);
 
 	/// <summary>
-	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
+	/// Retrieves the <see cref="IInvokedVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
 	/// <param name="reference">A <see cref="JVirtualMachineRef"/> reference.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	/// <param name="env">Output. <see cref="IEnvironment"/> instance.</param>
-	/// <returns>The <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.</returns>
+	/// <returns>The <see cref="IInvokedVirtualMachine"/> instance referenced by <paramref name="reference"/>.</returns>
 	internal static IInvokedVirtualMachine GetVirtualMachine(JVirtualMachineRef reference, JEnvironmentRef envRef,
 		out IEnvironment env)
 	{
