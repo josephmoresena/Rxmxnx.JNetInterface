@@ -9,7 +9,7 @@ using Rxmxnx.JNetInterface.Primitives;
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 [ExcludeFromCodeCoverage]
-public partial class Program
+public static partial class Program
 {
 	public static async Task Main(String[] args)
 	{
