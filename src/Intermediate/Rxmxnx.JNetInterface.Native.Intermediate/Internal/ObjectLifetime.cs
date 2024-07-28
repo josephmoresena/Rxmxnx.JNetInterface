@@ -201,8 +201,10 @@ internal sealed partial class ObjectLifetime(
 	/// </returns>
 	public Boolean InstanceOf<TDataType>(JLocalObject jLocal) where TDataType : JReferenceObject, IDataType<TDataType>
 	{
-		Boolean? result = this.InstanceOf<TDataType>();
+		if (IDataType.GetMetadata<TDataType>().ClassName.AsSpan().SequenceEqual(this._class?.Name))
+			return true;
 
+		Boolean? result = this.InstanceOf<TDataType>();
 		if (result.HasValue)
 			return result.Value;
 		if (JGlobalBase.IsValid(this._global, this.Environment))

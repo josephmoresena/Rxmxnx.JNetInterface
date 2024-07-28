@@ -37,6 +37,7 @@ public partial class Program
 			];
 		Program.Execute(jvmLib, helloJniByteCode, jMainArgs);
 
+		Console.WriteLine("==== Feature Switches ====");
 		Console.WriteLine($"{nameof(Program)}: {typeof(Program)}");
 		Console.WriteLine($"{nameof(IVirtualMachine.TraceEnabled)}: {IVirtualMachine.TraceEnabled}");
 		Console.WriteLine(

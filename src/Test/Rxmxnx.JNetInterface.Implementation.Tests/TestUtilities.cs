@@ -120,10 +120,8 @@ internal static class TestUtilities
 		JObjectLocalRef localRef = TestUtilities.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef = TestUtilities.fixture.Create<JClassLocalRef>();
 		JMethodId methodId = TestUtilities.fixture.Create<JMethodId>();
-		using IReadOnlyFixedMemory<Char>.IDisposable ctx = constructor.Information.ToString().AsMemory()
-		                                                              .GetFixedContext();
-		using IReadOnlyFixedMemory<Char>.IDisposable ctx2 = IDataType.GetMetadata<JLocalObject>().Information.ToString()
-		                                                             .AsMemory().GetFixedContext();
+		using IFixedPointer.IDisposable ctx = constructor.Information.GetFixedPointer();
+		using IFixedPointer.IDisposable ctx2 = IDataType.GetMetadata<JLocalObject>().Information.GetFixedPointer();
 		proxyEnv.FindClass((ReadOnlyValPtr<Byte>)ctx2.Pointer).Returns(classRef);
 		proxyEnv.GetMethodId(classRef, (ReadOnlyValPtr<Byte>)ctx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>())
 		        .Returns(methodId);
@@ -155,10 +153,8 @@ internal static class TestUtilities
 		JThrowableLocalRef throwableRef = TestUtilities.fixture.Create<JThrowableLocalRef>();
 		JClassLocalRef classRef = TestUtilities.fixture.Create<JClassLocalRef>();
 		JMethodId methodId = TestUtilities.fixture.Create<JMethodId>();
-		using IReadOnlyFixedMemory<Char>.IDisposable ctx = constructor.Information.ToString().AsMemory()
-		                                                              .GetFixedContext();
-		using IReadOnlyFixedMemory<Char>.IDisposable ctx2 = IDataType.GetMetadata<JErrorObject>().Information.ToString()
-		                                                             .AsMemory().GetFixedContext();
+		using IFixedPointer.IDisposable ctx = constructor.Information.GetFixedPointer();
+		using IFixedPointer.IDisposable ctx2 = IDataType.GetMetadata<JErrorObject>().Information.GetFixedPointer();
 		proxyEnv.FindClass((ReadOnlyValPtr<Byte>)ctx2.Pointer).Returns(classRef);
 		proxyEnv.GetMethodId(classRef, (ReadOnlyValPtr<Byte>)ctx.Pointer, Arg.Any<ReadOnlyValPtr<Byte>>())
 		        .Returns(methodId);
@@ -205,5 +201,45 @@ internal static class TestUtilities
 		Assert.Equal(globalRef, jGlobal.Reference);
 		proxyEnv.Received(1).NewGlobalRef(jLocal.LocalReference);
 		return jGlobal;
+	}
+	public static JLocalObject CreateWrapper<TPrimitive>(NativeInterfaceProxy proxyEnv, TPrimitive primitive)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	{
+		proxyEnv.ClearReceivedCalls();
+		proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+		JPrimitiveTypeMetadata primitiveMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		IClassFeature classFeature = env.ClassFeature;
+		JObjectLocalRef localRef = TestUtilities.fixture.Create<JObjectLocalRef>();
+		JMethodId methodId = TestUtilities.fixture.Create<JMethodId>();
+
+		proxyEnv.GetMethodId(Arg.Any<JClassLocalRef>(), Arg.Any<ReadOnlyValPtr<Byte>>(),
+		                     Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(methodId);
+		proxyEnv.NewObject(Arg.Any<JClassLocalRef>(), methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>())
+		        .Returns(localRef);
+
+		JLocalObject? result = ClassNameHelper.GetClassName(primitiveMetadata.ClassName) switch
+		{
+			CommonNames.BooleanPrimitive => JBooleanObject.Create(env, (JBoolean)(Object)primitive),
+			CommonNames.BytePrimitive => JNumberObject<JByte, JByteObject>.Create(env, (JByte)(Object)primitive),
+			CommonNames.CharPrimitive => JCharacterObject.Create(env, (JChar)(Object)primitive),
+			CommonNames.DoublePrimitive =>
+				JNumberObject<JDouble, JDoubleObject>.Create(env, (JDouble)(Object)primitive),
+			CommonNames.FloatPrimitive => JNumberObject<JFloat, JFloatObject>.Create(env, (JFloat)(Object)primitive),
+			CommonNames.IntPrimitive => JNumberObject<JInt, JIntegerObject>.Create(env, (JInt)(Object)primitive),
+			CommonNames.LongPrimitive => JNumberObject<JLong, JLongObject>.Create(env, (JLong)(Object)primitive),
+			CommonNames.ShortPrimitive => JNumberObject<JShort, JShortObject>.Create(env, (JShort)(Object)primitive),
+			_ => default,
+		};
+		try
+		{
+			Assert.Equal(localRef, result?.LocalReference);
+			return result!;
+		}
+		finally
+		{
+			result?.Class.Dispose();
+		}
 	}
 }
