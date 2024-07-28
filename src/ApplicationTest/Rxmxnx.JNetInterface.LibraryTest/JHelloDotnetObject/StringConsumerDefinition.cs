@@ -5,7 +5,7 @@ using Rxmxnx.JNetInterface.Native.Access;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal partial class JHelloDotnetObject
+public partial class JHelloDotnetObject
 {
 	[SuppressMessage("csharpsquid", "S2094:Classes should not be empty.",
 	                 Justification = "Type needs class inheritance.")]

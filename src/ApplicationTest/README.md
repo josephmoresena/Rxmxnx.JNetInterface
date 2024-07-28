@@ -1,6 +1,10 @@
 # Application Test
 This application is designed to show the capabilities and potential of using JNetInterface in .NET applications that interact with a JVM instance.
 
+## Library Test
+The library test project contains the core of Application test. <br/>
+If the library is published with NativeAOT, the resulting binary can be used as JNI library for `com.rxmxnx.dotnet.test.HelloDotNet` natives methods registration. 
+
 ## Disclaimer
 In this project, `JNetInterface` is utilized through `intermediate libraries` instead of direct `NuGet packages`.
 

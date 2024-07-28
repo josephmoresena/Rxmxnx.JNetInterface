@@ -6,7 +6,7 @@ using Rxmxnx.JNetInterface.Primitives;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal partial class JHelloDotnetObject
+public partial class JHelloDotnetObject
 {
 	private sealed class JniCallback(IManagedCallback managed)
 	{

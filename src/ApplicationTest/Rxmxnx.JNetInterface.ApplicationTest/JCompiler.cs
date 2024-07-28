@@ -34,7 +34,7 @@ public sealed partial class JCompiler
 		{
 			File.Delete(javaFilePath);
 			File.Delete(classFilePath);
-			await File.WriteAllTextAsync(javaFilePath, JHelloDotnetObject.JavaCode);
+			await File.WriteAllTextAsync(javaFilePath, JCompiler.JavaCode);
 			ProcessStartInfo info = new(Path.Combine(this.JdkPath, this.CompilerPath))
 			{
 				ArgumentList = { javaFilePath, },

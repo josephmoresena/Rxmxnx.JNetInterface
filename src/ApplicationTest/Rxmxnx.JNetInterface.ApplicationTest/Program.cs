@@ -37,17 +37,7 @@ public partial class Program
 			];
 		Program.Execute(jvmLib, helloJniByteCode, jMainArgs);
 
-		Console.WriteLine("==== Feature Switches ====");
-		Console.WriteLine($"{nameof(Program)}: {typeof(Program)}");
-		Console.WriteLine($"{nameof(IVirtualMachine.TraceEnabled)}: {IVirtualMachine.TraceEnabled}");
-		Console.WriteLine(
-			$"{nameof(IVirtualMachine.MetadataValidationEnabled)}: {IVirtualMachine.MetadataValidationEnabled}");
-		Console.WriteLine(
-			$"{nameof(IVirtualMachine.NestingArrayAutoGenerationEnabled)}: {IVirtualMachine.NestingArrayAutoGenerationEnabled}");
-		Console.WriteLine(
-			$"{nameof(IVirtualMachine.TypeMetadataToStringEnabled)}: {IVirtualMachine.TypeMetadataToStringEnabled}");
-		Console.WriteLine(
-			$"{nameof(JVirtualMachine.FinalUserTypeRuntimeEnabled)}: {JVirtualMachine.FinalUserTypeRuntimeEnabled}");
+		IManagedCallback.PrintSwitches();
 	}
 	private static void Execute(JVirtualMachineLibrary jvmLib, Byte[] classByteCode, params String[] args)
 	{
@@ -59,8 +49,8 @@ public partial class Program
 			try
 			{
 				if (IVirtualMachine.TypeMetadataToStringEnabled) Program.PrintVirtualMachineInfo(env, vm, jvmLib);
-				Program programInstance = new(vm);
-				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, programInstance);
+				IManagedCallback.Default managedInstance = new(vm);
+				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance);
 				Console.WriteLine("==== Begin psvm ===");
 				JMainMethodDefinition.Instance.Invoke(helloJniClass, args);
 				Console.WriteLine("==== End psvm ===");

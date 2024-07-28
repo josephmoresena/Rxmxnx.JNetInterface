@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal partial class JHelloDotnetObject
+public partial class JCompiler
 {
 	public const String JavaCode = @"package com.rxmxnx.dotnet.test;
 

@@ -6,7 +6,7 @@ using Rxmxnx.JNetInterface.Primitives;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal interface IManagedCallback
+public partial interface IManagedCallback
 {
 	[ExcludeFromCodeCoverage]
 	static virtual IVirtualMachine TypeVirtualMachine
@@ -29,4 +29,20 @@ internal interface IManagedCallback
 	static abstract void PrintClass(JClassObject jClass);
 	static abstract JClassObject GetVoidClass(JClassObject jClass);
 	static abstract JArrayObject<JClassObject> GetPrimitiveClasses(JClassObject jClass);
+
+	[ExcludeFromCodeCoverage]
+	public static void PrintSwitches()
+	{
+		Console.WriteLine("==== Feature Switches ====");
+		Console.WriteLine($"{nameof(IManagedCallback)}: {typeof(IManagedCallback)}");
+		Console.WriteLine($"{nameof(IVirtualMachine.TraceEnabled)}: {IVirtualMachine.TraceEnabled}");
+		Console.WriteLine(
+			$"{nameof(IVirtualMachine.MetadataValidationEnabled)}: {IVirtualMachine.MetadataValidationEnabled}");
+		Console.WriteLine(
+			$"{nameof(IVirtualMachine.NestingArrayAutoGenerationEnabled)}: {IVirtualMachine.NestingArrayAutoGenerationEnabled}");
+		Console.WriteLine(
+			$"{nameof(IVirtualMachine.TypeMetadataToStringEnabled)}: {IVirtualMachine.TypeMetadataToStringEnabled}");
+		Console.WriteLine(
+			$"{nameof(JVirtualMachine.FinalUserTypeRuntimeEnabled)}: {JVirtualMachine.FinalUserTypeRuntimeEnabled}");
+	}
 }

@@ -3,7 +3,7 @@ using Rxmxnx.JNetInterface.Primitives;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal partial class JHelloDotnetObject
+public partial class JHelloDotnetObject
 {
 	private delegate JStringLocalRef GetStringDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
 	private delegate JInt GetThreadIdDelegate(JEnvironmentRef envRef, JObjectLocalRef localRef);
