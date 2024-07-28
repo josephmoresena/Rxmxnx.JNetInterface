@@ -56,38 +56,22 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		/// <exception cref="ArgumentException">Non-primitive class.</exception>
 		private JClassObject GetPrimitiveClass(ReadOnlySpan<Byte> className)
-			=> className.Length switch
+		{
+			if (className.Length is < 3 or > 7)
+				throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
+			return className[0] switch
 			{
-				3 => className[0] == 0x69 /*i*/ ?
-					this.IntPrimitive :
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
-				4 => className[0] switch
-				{
-					0x62 //b
-						=> this.BytePrimitive,
-					0x63 //c
-						=> this.CharPrimitive,
-					0x6C //l
-						=> this.LongPrimitive,
-					0x76 //v
-						=> this.VoidPrimitive,
-					_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
-				},
-				5 => className[0] switch
-				{
-					0x66 //f
-						=> this.FloatPrimitive,
-					0x73 //l
-						=> this.ShortPrimitive,
-					_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
-				},
-				6 => className[0] == 0x64 /*d*/ ?
-					this.DoublePrimitive :
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
-				7 => className[0] == 0x62 /*b*/ ?
-					this.BooleanPrimitive :
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+				(Byte)'b' when "boolean"u8.SequenceEqual(className) => this.BooleanPrimitive,
+				(Byte)'b' when "byte"u8.SequenceEqual(className) => this.BytePrimitive,
+				(Byte)'c' when "char"u8.SequenceEqual(className) => this.CharPrimitive,
+				(Byte)'d' when "double"u8.SequenceEqual(className) => this.DoublePrimitive,
+				(Byte)'f' when "float"u8.SequenceEqual(className) => this.FloatPrimitive,
+				(Byte)'i' when "int"u8.SequenceEqual(className) => this.IntPrimitive,
+				(Byte)'l' when "long"u8.SequenceEqual(className) => this.LongPrimitive,
+				(Byte)'s' when "short"u8.SequenceEqual(className) => this.ShortPrimitive,
+				(Byte)'v' when "void"u8.SequenceEqual(className) => this.VoidPrimitive,
 				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 			};
+		}
 	}
 }
