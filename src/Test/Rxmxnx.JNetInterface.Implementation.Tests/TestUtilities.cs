@@ -242,4 +242,17 @@ internal static class TestUtilities
 			result?.Class.Dispose();
 		}
 	}
+	public static JNativeCallEntry GetInstanceEntry(JMethodDefinition.Parameterless definition,
+		out ObjectTracker tracker)
+	{
+		NativeVoidParameterless<JObjectLocalRef> instanceMethod = new();
+		tracker = new() { WeakReference = new(instanceMethod), FinalizerFlag = instanceMethod.IsDisposed, };
+		return JNativeCallEntry.CreateParameterless(definition, instanceMethod.VoidCall);
+	}
+	public static JNativeCallEntry GetStaticEntry(JMethodDefinition.Parameterless definition, out ObjectTracker tracker)
+	{
+		NativeVoidParameterless<JClassLocalRef> instanceMethod = new();
+		tracker = new() { WeakReference = new(instanceMethod), FinalizerFlag = instanceMethod.IsDisposed, };
+		return JNativeCallEntry.CreateParameterless(definition, instanceMethod.VoidCall);
+	}
 }

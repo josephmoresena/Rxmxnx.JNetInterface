@@ -26,8 +26,8 @@ public partial class JVirtualMachineTests
 			using (JClassObject jClass = JClassObject.GetClass<JTestObject>(env))
 			{
 				jClass.Register([
-					JVirtualMachineTests.GetInstanceEntry(method1, out ObjectTracker? tracker1),
-					JVirtualMachineTests.GetStaticEntry(method2, out ObjectTracker tracker2),
+					TestUtilities.GetInstanceEntry(method1, out ObjectTracker? tracker1),
+					TestUtilities.GetStaticEntry(method2, out ObjectTracker tracker2),
 				]);
 				GC.Collect(2, GCCollectionMode.Aggressive);
 				GC.WaitForPendingFinalizers();
@@ -47,7 +47,7 @@ public partial class JVirtualMachineTests
 				using (JClassObject jClass = JClassObject.GetClass<JTestObject>(env))
 				{
 					jClass.Register([
-						JVirtualMachineTests.GetStaticEntry(method2, out ObjectTracker tracker2),
+						TestUtilities.GetStaticEntry(method2, out ObjectTracker tracker2),
 					]);
 					trackers.Add(tracker2);
 				}
@@ -60,7 +60,7 @@ public partial class JVirtualMachineTests
 				using (JClassObject jClass = JClassObject.GetClass<JTestObject>(env))
 				{
 					jClass.Register([
-						JVirtualMachineTests.GetInstanceEntry(method1, out ObjectTracker? tracker1),
+						TestUtilities.GetInstanceEntry(method1, out ObjectTracker? tracker1),
 					]);
 					trackers.Add(tracker1);
 				}

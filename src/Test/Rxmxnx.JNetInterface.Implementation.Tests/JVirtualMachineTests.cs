@@ -222,20 +222,6 @@ public sealed partial class JVirtualMachineTests
 		}
 	}
 
-	private static JNativeCallEntry GetInstanceEntry(JMethodDefinition.Parameterless definition,
-		out ObjectTracker tracker)
-	{
-		NativeVoidParameterless<JObjectLocalRef> instanceMethod = new();
-		tracker = new() { WeakReference = new(instanceMethod), FinalizerFlag = instanceMethod.IsDisposed, };
-		return JNativeCallEntry.CreateParameterless(definition, instanceMethod.VoidCall);
-	}
-	private static JNativeCallEntry GetStaticEntry(JMethodDefinition.Parameterless definition,
-		out ObjectTracker tracker)
-	{
-		NativeVoidParameterless<JClassLocalRef> instanceMethod = new();
-		tracker = new() { WeakReference = new(instanceMethod), FinalizerFlag = instanceMethod.IsDisposed, };
-		return JNativeCallEntry.CreateParameterless(definition, instanceMethod.VoidCall);
-	}
 	private static JGlobal CreateThreadGroup(IVirtualMachine vm, JGlobalRef globalRef)
 	{
 		EnvironmentProxy proxy = EnvironmentProxy.CreateEnvironment();
