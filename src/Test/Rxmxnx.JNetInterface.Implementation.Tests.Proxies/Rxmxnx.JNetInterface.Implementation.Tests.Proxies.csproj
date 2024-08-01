@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rxmxnx.JNetInterface.Tests</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Native.Tests.Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="AutoFixture"/>
+        <Using Include="NSubstitute"/>
+        <Using Include="System.Buffers"/>
+        <Using Include="System.Collections.Concurrent"/>
+        <Using Include="System.Diagnostics.CodeAnalysis"/>
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="System.Runtime.CompilerServices"/>
+        <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang"/>
+        <Using Include="Rxmxnx.JNetInterface.Native"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.References"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Values.Functions"/>
+        <Using Include="Rxmxnx.JNetInterface.Primitives"/>
+        <Using Include="Rxmxnx.JNetInterface.Restricted"/>
+        <Using Include="Rxmxnx.JNetInterface.Tests.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Types"/>
+    </ItemGroup>
+</Project>

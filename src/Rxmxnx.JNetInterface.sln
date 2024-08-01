@@ -35,6 +35,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Native
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Extensions.Tests", "Test\Rxmxnx.JNetInterface.Extensions.Tests\Rxmxnx.JNetInterface.Extensions.Tests.csproj", "{A3AE576A-CC53-4B83-8FE8-EA3831C7BB18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Implementation.Tests.Proxies", "Test\Rxmxnx.JNetInterface.Implementation.Tests.Proxies\Rxmxnx.JNetInterface.Implementation.Tests.Proxies.csproj", "{639163D7-56CE-4798-9029-D1608CB500C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Implementation.Tests", "Test\Rxmxnx.JNetInterface.Implementation.Tests\Rxmxnx.JNetInterface.Implementation.Tests.csproj", "{09335E44-DBED-43D8-96F7-23FF0795C013}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.LibraryTest", "ApplicationTest\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj", "{BA6F5BF8-90D0-459C-ACA2-021DC2B59010}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +98,18 @@ Global
 		{A3AE576A-CC53-4B83-8FE8-EA3831C7BB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3AE576A-CC53-4B83-8FE8-EA3831C7BB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3AE576A-CC53-4B83-8FE8-EA3831C7BB18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{639163D7-56CE-4798-9029-D1608CB500C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{639163D7-56CE-4798-9029-D1608CB500C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{639163D7-56CE-4798-9029-D1608CB500C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{639163D7-56CE-4798-9029-D1608CB500C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09335E44-DBED-43D8-96F7-23FF0795C013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09335E44-DBED-43D8-96F7-23FF0795C013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09335E44-DBED-43D8-96F7-23FF0795C013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09335E44-DBED-43D8-96F7-23FF0795C013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA6F5BF8-90D0-459C-ACA2-021DC2B59010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA6F5BF8-90D0-459C-ACA2-021DC2B59010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA6F5BF8-90D0-459C-ACA2-021DC2B59010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA6F5BF8-90D0-459C-ACA2-021DC2B59010}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DEDEE978-C19C-4E9E-8734-2ABD5A3304B3} = {50F4F862-0CEC-43BE-8863-947064F7829C}
@@ -106,5 +124,8 @@ Global
 		{41FB8164-C22F-42D9-9DAE-F5C68C7B33D4} = {98AF75B1-A773-4B05-82C8-D3F7865C20BE}
 		{A10E8EBC-1C36-4E5A-803A-1B78BAEF8F05} = {98AF75B1-A773-4B05-82C8-D3F7865C20BE}
 		{A3AE576A-CC53-4B83-8FE8-EA3831C7BB18} = {98AF75B1-A773-4B05-82C8-D3F7865C20BE}
+		{639163D7-56CE-4798-9029-D1608CB500C3} = {98AF75B1-A773-4B05-82C8-D3F7865C20BE}
+		{09335E44-DBED-43D8-96F7-23FF0795C013} = {98AF75B1-A773-4B05-82C8-D3F7865C20BE}
+		{BA6F5BF8-90D0-459C-ACA2-021DC2B59010} = {25D4B3AE-0B35-405E-A2C8-9D8678949152}
 	EndGlobalSection
 EndGlobal

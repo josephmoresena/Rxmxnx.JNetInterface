@@ -24,11 +24,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -39,6 +35,9 @@
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableBuiltInThrowableAutoRegistration" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableReflectionAutoRegistration" Value="true" Trim="true"/>
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableNioAutoRegistration" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.EnableFinalUserTypeRuntime" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.CheckRefTypeNativeCallEnabled" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableCheckClassRefNativeCall" Value="true" Trim="true"/>
     </ItemGroup>
 
 </Project>

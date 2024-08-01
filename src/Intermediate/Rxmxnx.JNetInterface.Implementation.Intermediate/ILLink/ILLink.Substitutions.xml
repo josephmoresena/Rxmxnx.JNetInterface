@@ -32,5 +32,17 @@
             <method signature="System.Void NioRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
                     body="stub"/>
         </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.EnableFinalUserTypeRuntime"
+              featurevalue="false" featuredefault="true">
+            <method signature="System.Boolean get_FinalUserTypeRuntimeEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableCheckRefTypeNativeCall"
+              featurevalue="false">
+            <method signature="System.Boolean get_CheckRefTypeNativeCallEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableCheckClassRefNativeCall"
+              featurevalue="false">
+            <method signature="System.Boolean get_CheckClassRefNativeCallEnabled()" body="stub" value="false"/>
+        </type>
     </assembly>
 </linker>

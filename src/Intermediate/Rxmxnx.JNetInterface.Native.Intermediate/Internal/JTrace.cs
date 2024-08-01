@@ -51,16 +51,15 @@ internal static partial class JTrace
 	/// to the trace listeners.
 	/// </summary>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	/// <param name="classInformation">A <see cref="CStringSequence"/> containing class information.</param>
+	/// <param name="className">JNI class name.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void GetClass(JClassLocalRef classRef, CStringSequence classInformation,
-		[CallerMemberName] String callerMethod = "")
+	public static void GetClass(JClassLocalRef classRef, CString className, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
 			!classRef.IsDefault ?
-				$"thread: {Environment.CurrentManagedThreadId} {classRef} name: {classInformation[0]}" :
-				$"thread: {Environment.CurrentManagedThreadId} name: {classInformation[0]}", callerMethod);
+				$"thread: {Environment.CurrentManagedThreadId} {classRef} name: {className}" :
+				$"thread: {Environment.CurrentManagedThreadId} name: {className}", callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and retrieving class reference or retrieving type metadata using a

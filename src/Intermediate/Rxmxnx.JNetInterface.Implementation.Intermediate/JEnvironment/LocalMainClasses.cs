@@ -4,12 +4,32 @@ partial class JEnvironment
 {
 	private abstract class LocalMainClasses : MainClasses<JClassObject>
 	{
+		/// <inheritdoc cref="JEnvironment.Reference"/>
+		public readonly JEnvironmentRef Reference;
+		/// <summary>
+		/// Managed thread.
+		/// </summary>
+		public readonly Thread Thread = Thread.CurrentThread;
+		/// <inheritdoc cref="IEnvironment.Version"/>
+		public readonly Int32 Version;
+		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
+		public readonly JVirtualMachine VirtualMachine;
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
+		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
+		/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 		/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-		protected LocalMainClasses(IEnvironment env)
+		protected LocalMainClasses(JVirtualMachine vm, JEnvironmentRef envRef, IEnvironment env)
 		{
+			this.VirtualMachine = vm;
+			this.Reference = envRef;
+			this.Version = EnvironmentCache.GetVersion(envRef);
+
+			if (this.Version < NativeInterface.RequiredVersion)
+				return; // Avoid class instantiation if unsupported version.
+
 			this.ClassObject = new(env);
 			this.ThrowableObject = new(this.ClassObject, MetadataHelper.GetExactMetadata<JThrowableObject>());
 			this.StackTraceElementObject =

@@ -3,11 +3,6 @@ namespace Rxmxnx.JNetInterface.Lang;
 public partial class JClassObject
 {
 	/// <summary>
-	/// CLR type of object metadata.
-	/// </summary>
-	internal static readonly Type MetadataType = typeof(ClassObjectMetadata);
-
-	/// <summary>
 	/// Retrieves array dimension for given class signature.
 	/// </summary>
 	/// <param name="classSignature">JNI class signature.</param>

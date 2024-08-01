@@ -51,7 +51,7 @@ public partial class JVirtualMachine
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 			env = this._cache.ThreadCache.Get(envRef, out _, args);
 		}
-		return (IThread)env;
+		return env as IThread ?? new JEnvironment.JThread(env);
 	}
 	/// <summary>
 	/// Initialize main classes.

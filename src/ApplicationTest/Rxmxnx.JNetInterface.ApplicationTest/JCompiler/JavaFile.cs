@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal partial class JHelloDotnetObject
+public partial class JCompiler
 {
 	public const String JavaCode = @"package com.rxmxnx.dotnet.test;
 
@@ -76,6 +76,14 @@ public class HelloDotnet {
 
         System.out.println(""==== printClass() ===="");
         HelloDotnet.printClass();
+
+        System.out.println(""==== getVoidClass() ===="");
+        System.out.println(HelloDotnet.getVoidClass());
+        System.out.println(""==== getMainClasses() ===="");
+        Class[] primitiveClasses = HelloDotnet.getPrimitiveClasses();
+        for (int i = 0; i < primitiveClasses.length; i++) {
+            System.out.println(i + "" = "" + primitiveClasses[i].getName());
+        }
     }
 
     public static Object getObject(int value) {
@@ -159,5 +167,7 @@ public class HelloDotnet {
     private static native Integer sumArray(int[] value);
     private static native int[][] getIntArrayArray(int length);
     private static native void printClass();
+    private static native Class getVoidClass();
+    private static native Class[] getPrimitiveClasses();
 }";
 }

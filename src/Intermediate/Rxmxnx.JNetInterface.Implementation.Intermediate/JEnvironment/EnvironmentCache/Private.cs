@@ -7,10 +7,6 @@ partial class JEnvironment
 	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
-		/// Cancellation token.
-		/// </summary>
-		private readonly CancellationTokenSource _cancellation = new();
-		/// <summary>
 		/// Class cache.
 		/// </summary>
 		private readonly ClassCache<JClassObject> _classes = new(JReferenceType.LocalRefType);
@@ -18,6 +14,10 @@ partial class JEnvironment
 		/// Main <see cref="JEnvironment"/> instance.
 		/// </summary>
 		private readonly JEnvironment _env;
+		/// <summary>
+		/// Indicates whether current thread is building a JNI throwable exception.
+		/// </summary>
+		private Boolean _buildingException;
 		/// <summary>
 		/// Number of active critical sequences.
 		/// </summary>
@@ -27,10 +27,6 @@ partial class JEnvironment
 		/// Object cache.
 		/// </summary>
 		private LocalCache _objects;
-		/// <summary>
-		/// Amount of bytes used from stack.
-		/// </summary>
-		private Int32 _usedStackBytes;
 
 		/// <summary>
 		/// Retrieves <see cref="AccessCache"/> for <paramref name="jClass"/>.
@@ -172,15 +168,19 @@ partial class JEnvironment
 		/// <typeparam name="TResult">A <see cref="IDataType"/> type.</typeparam>
 		/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="register">Indicates whether object must be registered.</param>
+		/// <param name="useTypeClass">Indicates whether object must use <typeparamref name="TResult"/> class.</param>
 		/// <returns>A <typeparamref name="TResult"/> instance.</returns>
-		private TResult? CreateObject<TResult>(JObjectLocalRef localRef, Boolean register)
+		private TResult? CreateObject<TResult>(JObjectLocalRef localRef, Boolean register, Boolean useTypeClass)
 			where TResult : IDataType<TResult>
 		{
 			this.CheckJniError();
 			if (localRef == default) return default;
 
 			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TResult>();
-			JClassObject jClass = this.GetObjectClass(localRef, metadata, out JReferenceTypeMetadata typeMetadata);
+			JReferenceTypeMetadata typeMetadata = metadata;
+			JClassObject jClass = useTypeClass ?
+				this.GetClass<TResult>() :
+				this.GetObjectClass(localRef, metadata, out typeMetadata);
 			JLocalObject jLocal = typeMetadata.CreateInstance(jClass, localRef, true);
 			TResult result = (TResult)(Object)metadata.ParseInstance(jLocal, true);
 			if (localRef != jLocal.LocalReference && register)
@@ -198,9 +198,9 @@ partial class JEnvironment
 		/// </returns>
 		private Boolean UseStackAlloc(Int32 requiredBytes)
 		{
-			this._usedStackBytes += requiredBytes;
-			if (this._usedStackBytes <= EnvironmentCache.MaxStackBytes) return true;
-			this._usedStackBytes -= requiredBytes;
+			this.UsedStackBytes += requiredBytes;
+			if (this.UsedStackBytes <= this.MaxStackBytes) return true;
+			this.UsedStackBytes -= requiredBytes;
 			return false;
 		}
 		/// <summary>
@@ -256,8 +256,8 @@ partial class JEnvironment
 			String? message) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			JClassObject jClass = this.GetClass<TThrowable>();
-			JReferenceTypeMetadata throwableMetadata =
-				(JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TThrowable>();
+			JReferenceTypeMetadata? throwableMetadata =
+				MetadataHelper.GetExactMetadata<TThrowable>() as JReferenceTypeMetadata;
 			this.ClearException();
 			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
 		}
@@ -270,14 +270,29 @@ partial class JEnvironment
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
 		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
 		private ThrowableException CreateThrowableException(JClassObject jClass,
-			JReferenceTypeMetadata throwableMetadata, String? message, JThrowableLocalRef throwableRef)
+			JReferenceTypeMetadata? throwableMetadata, String? message, JThrowableLocalRef throwableRef)
 		{
-			ThrowableObjectMetadata objectMetadata = new(jClass, throwableMetadata, message);
-			JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
-			JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, globalRef);
-
-			this._env.DeleteLocalRef(throwableRef.Value);
-			return throwableMetadata.CreateException(jGlobalThrowable, message)!;
+			ThrowableObjectMetadata objectMetadata = new(jClass, message);
+			try
+			{
+				JGlobalRef globalRef = this.CreateGlobalRef(throwableRef.Value);
+				JGlobal jGlobalThrowable = new(this.VirtualMachine, objectMetadata, globalRef);
+				return throwableMetadata?.CreateException(jGlobalThrowable, message) ??
+					// Use java.lang.Throwable type metadata.
+					JThrowableObject.CreateException(jGlobalThrowable, message);
+			}
+			catch (CriticalException)
+			{
+				// Unable to create throwable global object reference.
+				if (!this._buildingException) throw;
+				this._env.DescribeException();
+				this.Throw(throwableRef); // Throws pending exception at JNI.
+				throw;
+			}
+			finally
+			{
+				this._env.DeleteLocalRef(throwableRef.Value);
+			}
 		}
 		/// <summary>
 		/// Retrieves throwable message.
@@ -287,7 +302,7 @@ partial class JEnvironment
 		private String GetThrowableMessage(JThrowableLocalRef throwableRef)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			AccessCache access = this.GetAccess(jniTransaction, this.ThrowableObject);
+			AccessCache access = this.GetAccess(jniTransaction, this.GetClass<JThrowableObject>());
 			jniTransaction.Add(throwableRef);
 			using JStringObject throwableMessage = this.GetThrowableMessage(throwableRef, access);
 			try
@@ -313,6 +328,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, throwableRef.Value, getNameId, default);
+			if (localRef == default) this.CheckJniError();
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}
@@ -326,15 +342,6 @@ partial class JEnvironment
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowInfo);
 			JResult result = nativeInterface.ErrorFunctions.Throw(this.Reference, throwableRef);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-		}
-		/// <summary>
-		/// Clears pending JNI exception.
-		/// </summary>
-		private unsafe void ClearException()
-		{
-			ref readonly NativeInterface nativeInterface =
-				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);
-			nativeInterface.ErrorFunctions.ExceptionClear(this.Reference);
 		}
 		/// <summary>
 		/// Sets <paramref name="jniException"/> as managed pending exception and throws it.
@@ -379,6 +386,39 @@ partial class JEnvironment
 			StackDisposable disposable = new(this, stackSpan.Length);
 			ValPtr<Byte> ptr = (ValPtr<Byte>)stackSpan.GetUnsafeIntPtr();
 			return ptr.GetUnsafeFixedContext(stackSpan.Length, disposable);
+		}
+		/// <summary>
+		/// Checks and throws a Throwable exception in non-critical state.
+		/// </summary>
+		private void ExceptionOccurred()
+		{
+			JThrowableLocalRef throwableRef = this.GetPendingException();
+			if (throwableRef.IsDefault) return;
+			this._buildingException = true; // To avoid CheckJniError stack overflow.
+			ThrowableException jniException;
+			try
+			{
+				jniException = this.CreateThrowableException(throwableRef);
+			}
+			finally
+			{
+				// Restores initial CheckJniError state.
+				this._buildingException = false;
+			}
+			this.ThrowJniException(jniException, true);
+		}
+		/// <summary>
+		/// Checks and throws a JNI exception in critical or nested state.
+		/// </summary>
+		private unsafe void ExceptionCheck()
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
+			if (!nativeInterface.ExceptionCheck(this.Reference).Value) return;
+			CriticalException criticalException = this._criticalCount > 0 ?
+				CriticalException.Instance :
+				CriticalException.UnknownInstance;
+			this.SetPendingException(criticalException, true);
 		}
 	}
 }

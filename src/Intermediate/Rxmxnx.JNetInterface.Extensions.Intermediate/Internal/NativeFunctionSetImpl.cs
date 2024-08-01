@@ -17,7 +17,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jEnum.Environment;
 		JClassObject enumClass = env.ClassFeature.EnumObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.nameDefinition, jEnum, enumClass)!;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.NameDefinition, jEnum, enumClass)!;
 	}
 	/// <inheritdoc/>
 	public override JStringObject GetName<TMember>(TMember jMember)
@@ -32,7 +32,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jEnum.Environment;
 		JClassObject enumClass = env.ClassFeature.EnumObject;
 		Span<Byte> bytes = stackalloc Byte[sizeof(Int32)];
-		env.AccessFeature.CallPrimitiveFunction(bytes, jEnum, enumClass, NativeFunctionSetImpl.ordinalDefinition, false,
+		env.AccessFeature.CallPrimitiveFunction(bytes, jEnum, enumClass, NativeFunctionSetImpl.OrdinalDefinition, false,
 		                                        []);
 		return bytes.AsValue<Int32>();
 	}
@@ -50,7 +50,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jStackTraceElement.Environment;
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getClassDefinition, jStackTraceElement,
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetClassNameDefinition, jStackTraceElement,
 		                                  stackTraceElementClass)!;
 	}
 	/// <inheritdoc/>
@@ -60,7 +60,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		Span<Byte> bytes = stackalloc Byte[sizeof(Int32)];
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
 		env.AccessFeature.CallPrimitiveFunction(bytes, jStackTraceElement, stackTraceElementClass,
-		                                        NativeFunctionSetImpl.getLineNumberDefinition, false, []);
+		                                        NativeFunctionSetImpl.GetLineNumberDefinition, false, []);
 		return bytes.AsValue<Int32>();
 	}
 	/// <inheritdoc/>
@@ -68,7 +68,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jStackTraceElement.Environment;
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getFileNameDefinition, jStackTraceElement,
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetFileNameDefinition, jStackTraceElement,
 		                                  stackTraceElementClass);
 	}
 	/// <inheritdoc/>
@@ -76,7 +76,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jStackTraceElement.Environment;
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getMethodNameDefinition, jStackTraceElement,
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetMethodNameDefinition, jStackTraceElement,
 		                                  stackTraceElementClass)!;
 	}
 	/// <inheritdoc/>
@@ -86,7 +86,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		Span<Byte> bytes = stackalloc Byte[1];
 		JClassObject stackTraceElementClass = env.ClassFeature.StackTraceElementObject;
 		env.AccessFeature.CallPrimitiveFunction(bytes, jStackTraceElement, stackTraceElementClass,
-		                                        NativeFunctionSetImpl.isNativeMethodDefinition, false, []);
+		                                        NativeFunctionSetImpl.IsNativeMethodDefinition, false, []);
 		return bytes[0] == JBoolean.TrueValue;
 	}
 
@@ -98,12 +98,12 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		JClassObject numberClass = env.ClassFeature.NumberObject;
 		JFunctionDefinition functionDefinition = metadata.NativeType switch
 		{
-			JNativeType.JByte => NativeFunctionSetImpl.byteValueDefinition,
-			JNativeType.JShort => NativeFunctionSetImpl.shortValueDefinition,
-			JNativeType.JInt => NativeFunctionSetImpl.intValueDefinition,
-			JNativeType.JLong => NativeFunctionSetImpl.longValueDefinition,
-			JNativeType.JFloat => NativeFunctionSetImpl.floatValueDefinition,
-			_ => NativeFunctionSetImpl.doubleValueDefinition,
+			JNativeType.JByte => NativeFunctionSetImpl.ByteValueDefinition,
+			JNativeType.JShort => NativeFunctionSetImpl.ShortValueDefinition,
+			JNativeType.JInt => NativeFunctionSetImpl.IntValueDefinition,
+			JNativeType.JLong => NativeFunctionSetImpl.LongValueDefinition,
+			JNativeType.JFloat => NativeFunctionSetImpl.FloatValueDefinition,
+			_ => NativeFunctionSetImpl.DoubleValueDefinition,
 		};
 		Span<Byte> bytes = stackalloc Byte[metadata.SizeOf];
 		env.AccessFeature.CallPrimitiveFunction(bytes, jNumber, numberClass, functionDefinition, false, []);
@@ -122,7 +122,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jThrowable.Environment;
 		JClassObject throwableClass = env.ClassFeature.ThrowableObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getStackTraceDefinition, jThrowable, throwableClass)!;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetStackTraceDefinition, jThrowable, throwableClass)!;
 	}
 	/// <inheritdoc/>
 	public override Boolean IsPrimitiveClass(JClassObject jClass)
@@ -148,7 +148,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jClass.Environment;
 		JClassObject classClass = env.ClassFeature.ClassObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getInterfacesDefinition, jClass, classClass)!;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetInterfacesDefinition, jClass, classClass)!;
 	}
 
 	/// <inheritdoc/>
@@ -157,7 +157,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jBuffer.Environment;
 		Span<Byte> bytes = stackalloc Byte[1];
 		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferObject,
-		                                        NativeFunctionSetImpl.isDirectBuffer, false, []);
+		                                        NativeFunctionSetImpl.IsDirectBufferDefinition, false, []);
 		return bytes[0] == JBoolean.TrueValue;
 	}
 	/// <inheritdoc/>
@@ -166,7 +166,7 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		IEnvironment env = jBuffer.Environment;
 		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
 		env.AccessFeature.CallPrimitiveFunction(bytes, jBuffer, env.ClassFeature.BufferObject,
-		                                        NativeFunctionSetImpl.bufferCapacity, false, []);
+		                                        NativeFunctionSetImpl.BufferCapacityDefinition, false, []);
 		return bytes.AsValue<Int64>();
 	}
 	/// <inheritdoc/>
@@ -174,14 +174,15 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 	{
 		IEnvironment env = jMember.Environment;
 		JClassObject memberInterface = env.ClassFeature.GetClass<JMemberObject>();
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getDeclaringClass, jMember, memberInterface)!;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetDeclaringClassDefinition, jMember, memberInterface)!;
 	}
 	/// <inheritdoc/>
 	public override JArrayObject<JClassObject> GetParameterTypes(JExecutableObject jExecutable)
 	{
 		IEnvironment env = jExecutable.Environment;
 		JClassObject executableClass = env.ClassFeature.GetClass<JExecutableObject>();
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getParameterTypes, jExecutable, executableClass)!;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetParameterTypesDefinition, jExecutable,
+		                                  executableClass)!;
 	}
 	/// <inheritdoc/>
 	public override JClassObject? GetReturnType(JExecutableObject jMethod)
@@ -191,13 +192,13 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 
 		IEnvironment env = jMethod.Environment;
 		JClassObject methodClass = env.ClassFeature.MethodObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getReturnType, jMethod, methodClass);
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetReturnTypeDefinition, jMethod, methodClass);
 	}
 	/// <inheritdoc/>
 	public override JClassObject GetFieldType(JFieldObject jField)
 	{
 		IEnvironment env = jField.Environment;
 		JClassObject fieldClass = env.ClassFeature.FieldObject;
-		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.getType, jField, fieldClass)!;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetTypeDefinition, jField, fieldClass)!;
 	}
 }

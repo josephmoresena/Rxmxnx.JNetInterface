@@ -6,7 +6,7 @@ using Rxmxnx.JNetInterface.Primitives;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal partial class JHelloDotnetObject
+public partial class JHelloDotnetObject
 {
 	private sealed class JniCallback(IManagedCallback managed)
 	{
@@ -78,6 +78,12 @@ internal partial class JHelloDotnetObject
 					new InitPrimitiveArrayArrayDefinition<JInt>("getIntArrayArray"u8),
 					JniCallback.GetIntArrayArray<TManaged>),
 				JNativeCallEntry.CreateParameterless(new("printClass"u8), JniCallback.PrintClass<TManaged>),
+				JNativeCallEntry.Create<GetClassArrayDelegate>(
+					new JFunctionDefinition<JArrayObject<JClassObject>>.Parameterless("getPrimitiveClasses"u8),
+					JniCallback.GetPrimitiveClasses<TManaged>),
+				JNativeCallEntry.Create<GetClassDelegate>(
+					new JFunctionDefinition<JClassObject>.Parameterless("getVoidClass"u8),
+					JniCallback.GetVoidClass<TManaged>),
 			});
 		}
 
@@ -98,7 +104,7 @@ internal partial class JHelloDotnetObject
 			                                 .Create(TManaged.TypeVirtualMachine, envRef, classRef,
 			                                         out JClassObject jClass).Build();
 			JArrayObject<JArrayObject<JInt>>? result = TManaged.GetIntArrayArray(jClass, length);
-			return callAdapter.FinalizeCall(result);
+			return callAdapter.FinalizeCall(result).ArrayValue;
 		}
 		private static void PrintClass<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef)
 			where TManaged : IManagedCallback
@@ -108,6 +114,24 @@ internal partial class JHelloDotnetObject
 			                                         out JClassObject jClass).Build();
 			TManaged.PrintClass(jClass);
 			callAdapter.FinalizeCall();
+		}
+		private static JArrayLocalRef GetPrimitiveClasses<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef)
+			where TManaged : IManagedCallback
+		{
+			JNativeCallAdapter callAdapter = JNativeCallAdapter
+			                                 .Create(TManaged.TypeVirtualMachine, envRef, classRef,
+			                                         out JClassObject jClass).Build();
+			JArrayObject<JClassObject> mainClasses = TManaged.GetPrimitiveClasses(jClass);
+			return callAdapter.FinalizeCall(mainClasses).ArrayValue;
+		}
+		private static JClassLocalRef GetVoidClass<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef)
+			where TManaged : IManagedCallback
+		{
+			JNativeCallAdapter callAdapter = JNativeCallAdapter
+			                                 .Create(TManaged.TypeVirtualMachine, envRef, classRef,
+			                                         out JClassObject jClass).Build();
+			JClassObject voidClass = TManaged.GetVoidClass(jClass);
+			return callAdapter.FinalizeCall(voidClass);
 		}
 	}
 }

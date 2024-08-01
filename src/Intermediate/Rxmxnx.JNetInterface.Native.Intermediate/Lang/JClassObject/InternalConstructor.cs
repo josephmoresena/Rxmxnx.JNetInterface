@@ -38,8 +38,7 @@ public partial class JClassObject
 			this._isAnnotation = metadata.Kind is JTypeKind.Annotation;
 			this._isEnum = metadata.Kind is JTypeKind.Enum;
 		}
-		if (metadata.Modifier.HasValue)
-			this._isFinal = metadata.Modifier is JTypeModifier.Final;
+		this._isFinal = metadata.IsFinal;
 	}
 	/// <summary>
 	/// Constructor.

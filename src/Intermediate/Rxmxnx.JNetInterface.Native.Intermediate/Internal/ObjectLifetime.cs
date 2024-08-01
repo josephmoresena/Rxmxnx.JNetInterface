@@ -201,8 +201,10 @@ internal sealed partial class ObjectLifetime(
 	/// </returns>
 	public Boolean InstanceOf<TDataType>(JLocalObject jLocal) where TDataType : JReferenceObject, IDataType<TDataType>
 	{
-		Boolean? result = this.InstanceOf<TDataType>();
+		if (IDataType.GetMetadata<TDataType>().ClassName.AsSpan().SequenceEqual(this._class?.Name))
+			return true;
 
+		Boolean? result = this.InstanceOf<TDataType>();
 		if (result.HasValue)
 			return result.Value;
 		if (JGlobalBase.IsValid(this._global, this.Environment))
@@ -236,8 +238,7 @@ internal sealed partial class ObjectLifetime(
 		Boolean isClass = jLocal is JClassObject;
 		this.Unload(jLocal.Id, isClass);
 		this.Secondary?.Unload(jLocal.Id, isClass);
-		if (this._objects.Count > this._classCounter.Value ||
-		    this.Environment.ReferenceFeature.IsParameter(jLocal)) return;
+		if (this.IsUnloadable(jLocal, jLocal.Environment.ReferenceFeature)) return;
 		if (this.Environment.ReferenceFeature.Unload(jLocal)) this.Dispose();
 	}
 	/// <summary>

@@ -6,7 +6,7 @@ partial class JEnvironment
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial class EnvironmentCache : IClassFeature
 	{
-		public JClassObject AsClassObject(JClassLocalRef classRef) => this.Register(this.GetClass(classRef, true));
+		public JClassObject AsClassObject(JClassLocalRef classRef) => this.AsClassObject(classRef, default);
 		public JClassObject AsClassObject(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
@@ -97,7 +97,8 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JObjectLocalRef localRef = jniTransaction.Add(jLocal);
 			JClassLocalRef classRef = this._env.GetObjectClass(localRef);
-			JClassObject jClass = this.GetClass(classRef, true);
+			JTypeKind kind = jLocal is JArrayObject ? JTypeKind.Array : JTypeKind.Class;
+			JClassObject jClass = this.GetClass(classRef, true, kind);
 			return this.Register(jClass);
 		}
 		public unsafe JClassObject? GetSuperClass(JClassObject jClass)
@@ -118,7 +119,8 @@ partial class JEnvironment
 				jniTransaction.Add(nativeInterface.ClassFunctions.GetSuperclass(this.Reference, classRef));
 			if (!superClassRef.IsDefault)
 			{
-				JClassObject jSuperClass = this.AsClassObject(superClassRef);
+				JClassObject jSuperClass =
+					this.AsClassObject(superClassRef, new() { Kind = JTypeKind.Class, IsFinal = false, });
 				if (jSuperClass.LocalReference != superClassRef.Value) this._env.DeleteLocalRef(superClassRef.Value);
 				MetadataHelper.RegisterSuperClass(jClass.Hash, jSuperClass.Hash);
 				return jSuperClass;
@@ -186,8 +188,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jClass);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add(jClass);
-			JReferenceType referenceType = this._env.GetReferenceType(classRef.Value);
-			Boolean isLocalRef = referenceType == JReferenceType.LocalRefType;
+			Boolean isLocalRef = this.IsLocalObject(jClass, out JReferenceType referenceType);
 			JTrace.GetClassInfo(classRef, referenceType);
 			if (classRef.IsDefault) throw new ArgumentException("Unloaded class.");
 			JClassObject loadedClass = this.GetClass(classRef, isLocalRef);

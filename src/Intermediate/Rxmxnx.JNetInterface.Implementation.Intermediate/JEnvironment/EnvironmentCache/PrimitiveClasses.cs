@@ -4,7 +4,6 @@ partial class JEnvironment
 {
 	private sealed partial class EnvironmentCache
 	{
-		JClassObject IClassFeature.EnumObject => this.GetClass<JEnumObject>();
 		JClassObject IClassFeature.VoidObject => this.GetClass<JVoidObject>();
 		JClassObject IClassFeature.BooleanObject => this.GetClass<JBooleanObject>();
 		JClassObject IClassFeature.ByteObject => this.GetClass<JByteObject>();
@@ -22,21 +21,33 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
 		public JClassLocalRef FindPrimitiveClass(Byte signature)
 		{
-			using JClassObject wrapperClass = signature switch
+			JClassObject wrapperClass = this.GetPrimitiveWrapperClass(signature);
+			JFieldDefinition fieldDefinition = NativeFunctionSetImpl.PrimitiveTypeDefinition;
+			if (!JObject.IsNullOrDefault(wrapperClass))
 			{
-				CommonNames.BooleanSignatureChar => this.GetClass<JBooleanObject>(),
-				CommonNames.ByteSignatureChar => this.GetClass<JByteObject>(),
-				CommonNames.CharSignatureChar => this.GetClass<JCharacterObject>(),
-				CommonNames.DoubleSignatureChar => this.GetClass<JDoubleObject>(),
-				CommonNames.FloatSignatureChar => this.GetClass<JFloatObject>(),
-				CommonNames.IntSignatureChar => this.GetClass<JIntegerObject>(),
-				CommonNames.LongSignatureChar => this.GetClass<JLongObject>(),
-				CommonNames.ShortSignatureChar => this.GetClass<JShortObject>(),
-				_ => this.GetClass<JVoidObject>(),
-			};
-			JObjectLocalRef localRef =
-				this.GetStaticObjectField(wrapperClass, NativeFunctionSetImpl.PrimitiveTypeDefinition);
-			return JClassLocalRef.FromReference(in localRef);
+				JObjectLocalRef localRef = this.GetStaticObjectField(wrapperClass, fieldDefinition);
+				return JClassLocalRef.FromReference(in localRef);
+			}
+
+			JClassLocalRef classRef = this.FindMainClass(wrapperClass.Name, wrapperClass.ClassSignature);
+			try
+			{
+				JFieldId typeFieldId = this._env.GetStaticFieldId(fieldDefinition, classRef, true);
+				if (typeFieldId != default)
+				{
+					JObjectLocalRef localRef = this.GetStaticObjectField(classRef, typeFieldId, true);
+					if (localRef != default) return JClassLocalRef.FromReference(in localRef);
+				}
+			}
+			finally
+			{
+				this._env.DeleteLocalRef(classRef.Value);
+			}
+
+			this._env.DescribeException();
+			this.ClearException();
+			throw new NotSupportedException(
+				$"Primitive class {ClassNameHelper.GetPrimitiveClassName(signature)} is not available for JNI access.");
 		}
 		/// <summary>
 		/// Retrieves primitive class instance for <paramref name="className"/>.
@@ -45,36 +56,22 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		/// <exception cref="ArgumentException">Non-primitive class.</exception>
 		private JClassObject GetPrimitiveClass(ReadOnlySpan<Byte> className)
-			=> className.Length switch
+		{
+			if (className.Length is < 3 or > 7)
+				throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
+			return className[0] switch
 			{
-				3 => className[0] == 0x69 /*i*/ ?
-					this.IntPrimitive :
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
-				4 => className[0] switch
-				{
-					0x62 //b
-						=> this.BooleanPrimitive,
-					0x63 //c
-						=> this.CharPrimitive,
-					0x6C //l
-						=> this.LongPrimitive,
-					_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
-				},
-				5 => className[0] switch
-				{
-					0x66 //f
-						=> this.FloatPrimitive,
-					0x73 //l
-						=> this.ShortPrimitive,
-					_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
-				},
-				6 => className[0] == 0x64 /*d*/ ?
-					this.DoublePrimitive :
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
-				7 => className[0] == 0x62 /*b*/ ?
-					this.BooleanPrimitive :
-					throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+				(Byte)'b' when "boolean"u8.SequenceEqual(className) => this.BooleanPrimitive,
+				(Byte)'b' when "byte"u8.SequenceEqual(className) => this.BytePrimitive,
+				(Byte)'c' when "char"u8.SequenceEqual(className) => this.CharPrimitive,
+				(Byte)'d' when "double"u8.SequenceEqual(className) => this.DoublePrimitive,
+				(Byte)'f' when "float"u8.SequenceEqual(className) => this.FloatPrimitive,
+				(Byte)'i' when "int"u8.SequenceEqual(className) => this.IntPrimitive,
+				(Byte)'l' when "long"u8.SequenceEqual(className) => this.LongPrimitive,
+				(Byte)'s' when "short"u8.SequenceEqual(className) => this.ShortPrimitive,
+				(Byte)'v' when "void"u8.SequenceEqual(className) => this.VoidPrimitive,
 				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
 			};
+		}
 	}
 }

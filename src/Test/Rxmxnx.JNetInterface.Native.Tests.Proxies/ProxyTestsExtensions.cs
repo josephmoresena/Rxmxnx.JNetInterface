@@ -14,6 +14,16 @@ public static class ProxyTestsExtensions
 		fixture.Register<IFixture, JWeakRef>(ProxyTestsExtensions.CreateReference<JWeakRef>);
 		fixture.Register<IFixture, JFieldId>(ProxyTestsExtensions.CreateReference<JFieldId>);
 		fixture.Register<IFixture, JMethodId>(ProxyTestsExtensions.CreateReference<JMethodId>);
+
+		fixture.Register<IFixture, JObjectArrayLocalRef>(ProxyTestsExtensions.CreateReference<JObjectArrayLocalRef>);
+		fixture.Register<IFixture, JBooleanArrayLocalRef>(ProxyTestsExtensions.CreateReference<JBooleanArrayLocalRef>);
+		fixture.Register<IFixture, JByteArrayLocalRef>(ProxyTestsExtensions.CreateReference<JByteArrayLocalRef>);
+		fixture.Register<IFixture, JCharArrayLocalRef>(ProxyTestsExtensions.CreateReference<JCharArrayLocalRef>);
+		fixture.Register<IFixture, JDoubleArrayLocalRef>(ProxyTestsExtensions.CreateReference<JDoubleArrayLocalRef>);
+		fixture.Register<IFixture, JFloatArrayLocalRef>(ProxyTestsExtensions.CreateReference<JFloatArrayLocalRef>);
+		fixture.Register<IFixture, JIntArrayLocalRef>(ProxyTestsExtensions.CreateReference<JIntArrayLocalRef>);
+		fixture.Register<IFixture, JLongArrayLocalRef>(ProxyTestsExtensions.CreateReference<JLongArrayLocalRef>);
+		fixture.Register<IFixture, JShortArrayLocalRef>(ProxyTestsExtensions.CreateReference<JShortArrayLocalRef>);
 		return fixture;
 	}
 	public static String ToSimplifiedString(this JArgumentMetadata argumentMetadata)
@@ -28,6 +38,12 @@ public static class ProxyTestsExtensions
 		StackTraceElementObjectMetadata objectMetadata = new(new(jClass)) { Information = info, };
 		ILocalObject.ProcessMetadata(element, objectMetadata);
 		return element;
+	}
+	public static ReadOnlySpan<Byte> GetByteSpan(this ReadOnlyValPtr<Byte> valPtr, Int32 maxLength = 100)
+	{
+		Int32 length = 0;
+		while ((valPtr + length).Reference != default && length < maxLength) length++;
+		return valPtr.Pointer.GetUnsafeReadOnlySpan<Byte>(length);
 	}
 
 	private static T CreateReference<T>(IFixture fixture) where T : unmanaged, IFixedPointer

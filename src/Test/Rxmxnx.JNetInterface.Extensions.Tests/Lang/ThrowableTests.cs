@@ -164,7 +164,7 @@ public sealed class ThrowableTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jThrowableClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
-		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<TThrowable>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jThrowableClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -208,7 +208,7 @@ public sealed class ThrowableTests
 
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<TThrowable>(Arg.Any<JReferenceObject>());
-		Assert.Equal(jGlobal, exception.Global);
+		Assert.Equal(jGlobal, exception.GlobalThrowable);
 		Assert.Equal(exceptionMessage, exception.Message);
 
 		Assert.True(typeMetadata.IsInstance(jThrowable0));
@@ -261,7 +261,7 @@ public sealed class ThrowableTests
 		{
 			ThrowableException exception = Assert.Throws<ThrowableException<TThrowable>>(() => jThrowable.Throw());
 			Assert.Equal(exceptionMessage, exception.Message);
-			Assert.Equal(jGlobal, exception.Global);
+			Assert.Equal(jGlobal, exception.GlobalThrowable);
 			Assert.Equal(mutableException.Value, exception);
 
 			exception.WithSafeInvoke(t =>
@@ -278,9 +278,9 @@ public sealed class ThrowableTests
 			Assert.Equal(Environment.CurrentManagedThreadId, exception.ThreadId);
 
 			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
-			thread.ClassFeature.Received(2).GetClass(typeMetadata.ClassName);
-			env.ClassFeature.GetClass(Arg.Any<ITypeInformation>())
-			   .Returns(c => env.ClassFeature.GetClass((c[1] as ITypeInformation)!.ClassName));
+			thread.ClassFeature.Received(4).GetClass(typeMetadata.ClassName);
+			thread.ClassFeature.Received(4)
+			      .GetObjectClass(Arg.Is<ObjectMetadata>(m => m.ObjectClassName.SequenceEqual(typeMetadata.ClassName)));
 			thread.Received(3).GetReferenceType(jWeak);
 			thread.Received(3).IsSameObject(jWeak, default);
 

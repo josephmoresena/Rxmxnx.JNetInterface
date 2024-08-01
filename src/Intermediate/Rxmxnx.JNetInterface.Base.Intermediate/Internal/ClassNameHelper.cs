@@ -71,6 +71,28 @@ internal readonly struct ClassNameHelper
 				return helper.ToString();
 		}
 	}
+	/// <summary>
+	/// Retrieves class name from primitive signature.
+	/// </summary>
+	/// <param name="primitiveSignature">JNI primitive signature.</param>
+	/// <returns>Class name.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static String GetPrimitiveClassName(Byte primitiveSignature)
+	{
+		return primitiveSignature switch
+		{
+			CommonNames.VoidSignatureChar => CommonNames.VoidPrimitive,
+			CommonNames.BooleanSignatureChar => CommonNames.BooleanPrimitive,
+			CommonNames.ByteSignatureChar => CommonNames.BytePrimitive,
+			CommonNames.CharSignatureChar => CommonNames.CharPrimitive,
+			CommonNames.DoubleSignatureChar => CommonNames.DoublePrimitive,
+			CommonNames.FloatSignatureChar => CommonNames.FloatPrimitive,
+			CommonNames.IntSignatureChar => CommonNames.IntPrimitive,
+			CommonNames.LongSignatureChar => CommonNames.LongPrimitive,
+			CommonNames.ShortSignatureChar => CommonNames.ShortPrimitive,
+			_ => String.Empty,
+		};
+	}
 
 	/// <summary>
 	/// Defines an explicit conversion of a given <see cref="ClassNameHelper"/> to

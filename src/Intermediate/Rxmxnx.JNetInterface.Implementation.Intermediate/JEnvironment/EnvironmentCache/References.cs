@@ -31,23 +31,20 @@ partial class JEnvironment
 		/// <summary>
 		/// Release all references.
 		/// </summary>
-		public void FreeReferences()
-		{
-			this._objects.ClearCache(this._env, true);
-			this._cancellation.Cancel();
-		}
+		public void FreeReferences() => this._objects.ClearCache(this._env, true);
 		/// <summary>
 		/// Creates a global reference from <paramref name="localRef"/>.
 		/// </summary>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+		/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
 		/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-		public unsafe JGlobalRef CreateGlobalRef(JObjectLocalRef localRef)
+		public unsafe JGlobalRef CreateGlobalRef(JObjectLocalRef localRef, Boolean withNoCheckError = false)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewGlobalRefInfo);
 			JGlobalRef globalRef = nativeInterface.ReferenceFunctions.NewGlobalRef.NewRef(this.Reference, localRef);
 			JTrace.CreateGlobalRef(localRef, globalRef);
-			if (globalRef == default) this.CheckJniError();
+			if (globalRef == default && !withNoCheckError) this.CheckJniError();
 			return globalRef;
 		}
 		/// <summary>

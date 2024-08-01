@@ -13,6 +13,8 @@ public partial class JDataTypeMetadata
 	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
 	private readonly CString _signature;
 
+	Boolean? ITypeInformation.IsFinal => this.Modifier is JTypeModifier.Final;
+
 	/// <summary>
 	/// Creates hash from given parameters.
 	/// </summary>

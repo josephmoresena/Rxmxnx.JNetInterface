@@ -6,6 +6,21 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal static partial class MetadataHelper
 {
 	/// <summary>
+	/// Indicates whether <typeparamref name="TDataType"/> is final type.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType{TDataType}"/> type</typeparam>
+	/// <returns>
+	/// <see langword="true"/> if <typeparamref name="TDataType"/> is final type;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public static Boolean IsFinalType<TDataType>() where TDataType : IDataType<TDataType>
+	{
+		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TDataType>();
+		if (typeMetadata.Modifier is not JTypeModifier.Final)
+			return false;
+		return JVirtualMachine.FinalUserTypeRuntimeEnabled || MetadataHelper.IsBuiltInFinalType(typeMetadata);
+	}
+	/// <summary>
 	/// Retrieves <see cref="JArgumentMetadata"/> metadata for <paramref name="jClass"/>.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
@@ -149,24 +164,14 @@ internal static partial class MetadataHelper
 		return result;
 	}
 	/// <summary>
-	/// Retrieves metadata from class name.
-	/// </summary>
-	/// <param name="className">A JNI class name.</param>
-	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
-	public static JReferenceTypeMetadata? GetExactMetadata(ReadOnlySpan<Byte> className)
-	{
-		CStringSequence classInformation = MetadataHelper.GetClassInformation(className, false);
-		return MetadataHelper.runtimeMetadata.GetValueOrDefault(classInformation.ToString());
-	}
-	/// <summary>
-	/// Retrieves metadata from hash.
+	/// Retrieves exact metadata from hash.
 	/// </summary>
 	/// <param name="hash">A JNI class hash.</param>
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
 	public static JReferenceTypeMetadata? GetExactMetadata(String hash)
 		=> MetadataHelper.runtimeMetadata.GetValueOrDefault(hash);
 	/// <summary>
-	/// Retrieves <see cref="JDataTypeMetadata"/> metadata.
+	/// Retrieves exact <see cref="JDataTypeMetadata"/> metadata.
 	/// </summary>
 	/// <typeparam name="TDataType">A <see cref="IDataType{TDataType}"/> type.</typeparam>
 	/// <returns>A <see cref="JDataTypeMetadata"/> metadata.</returns>
@@ -176,21 +181,19 @@ internal static partial class MetadataHelper
 		return IDataType.GetMetadata<TDataType>();
 	}
 	/// <summary>
-	/// Retrieves array metadata from element class name.
+	/// Retrieves exact array metadata from element class hash.
 	/// </summary>
-	/// <param name="elementClassName">A JNI class name.</param>
+	/// <param name="elementHash">A JNI class hash.</param>
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
-	public static JArrayTypeMetadata? GetExactArrayMetadata(ReadOnlySpan<Byte> elementClassName)
+	public static JArrayTypeMetadata? GetExactArrayMetadata(String elementHash)
 	{
-		CStringSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);
-		JReferenceTypeMetadata? elementMetadata =
-			MetadataHelper.runtimeMetadata.GetValueOrDefault(elementClassInformation.ToString());
+		JReferenceTypeMetadata? elementMetadata = MetadataHelper.runtimeMetadata.GetValueOrDefault(elementHash);
 		JArrayTypeMetadata? result = elementMetadata?.GetArrayMetadata();
 		MetadataHelper.Register(result);
 		return result;
 	}
 	/// <summary>
-	/// Retrieves array metadata from <paramref name="elementMetadata"/>.
+	/// Retrieves exact array metadata from <paramref name="elementMetadata"/>.
 	/// </summary>
 	/// <param name="elementMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> instance.</returns>

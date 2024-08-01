@@ -37,6 +37,14 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	public IVirtualMachine VirtualMachine => this._cache.VirtualMachine;
 	/// <inheritdoc/>
 	public Int32 Version => this._cache.Version;
+	/// <inheritdoc/>
+	public Int32 UsedStackBytes => this._cache.UsedStackBytes;
+	/// <inheritdoc/>
+	public Int32 UsableStackBytes
+	{
+		get => this._cache.MaxStackBytes;
+		set => this._cache.SetUsableStackBytes(value);
+	}
 
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
@@ -49,12 +57,6 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 		using LocalFrame _ = new(this, capacity);
 		this._cache.CheckJniError();
 		action(state);
-	}
-	unsafe void IEnvironment.DescribeException()
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionDescribeInfo);
-		nativeInterface.ErrorFunctions.ExceptionDescribe(this.Reference);
 	}
 	unsafe Boolean? IEnvironment.IsVirtual(JThreadObject jThread)
 	{
@@ -70,12 +72,21 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 
 	/// <inheritdoc/>
 	public Boolean JniSecure() => this._cache.JniSecure();
+	/// <inheritdoc/>
+	public unsafe void DescribeException()
+	{
+		ref readonly NativeInterface nativeInterface =
+			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionDescribeInfo);
+		nativeInterface.ErrorFunctions.ExceptionDescribe(this.Reference);
+	}
 
 	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
 	public override Boolean Equals(Object? obj)
 		=> (obj is JEnvironment other && this._cache.Equals(other._cache)) ||
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
 	public override Int32 GetHashCode() => this._cache.GetHashCode();
 
 	/// <summary>
@@ -88,6 +99,7 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <see langword="true"/> if the value of <paramref name="left"/> is the same as the value
 	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator ==(JEnvironment? left, JEnvironment? right) => left?.Equals(right) ?? right is null;
 	/// <summary>
@@ -100,6 +112,7 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <see langword="true"/> if the value of <paramref name="left"/> is different from the value
 	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator !=(JEnvironment? left, JEnvironment? right) => !(left == right);
 }

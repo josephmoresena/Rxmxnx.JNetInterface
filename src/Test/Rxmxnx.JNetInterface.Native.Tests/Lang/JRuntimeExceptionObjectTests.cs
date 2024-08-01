@@ -92,8 +92,7 @@ public sealed class JRuntimeExceptionObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jRuntimeExceptionClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jRuntimeExceptionClass);
-		using JGlobal jGlobal = new(vm, new(jRuntimeExceptionClass, IClassType.GetMetadata<JRuntimeExceptionObject>()),
-		                            globalRef);
+		using JGlobal jGlobal = new(vm, new(jRuntimeExceptionClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -148,7 +147,7 @@ public sealed class JRuntimeExceptionObjectTests
 
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JRuntimeExceptionObject>(Arg.Any<JReferenceObject>());
-		Assert.Equal(jGlobal, exception.Global);
+		Assert.Equal(jGlobal, exception.GlobalThrowable);
 		Assert.Equal(exceptionMessage, exception.Message);
 
 		Assert.True(typeMetadata.IsInstance(jRuntimeException0));
@@ -206,7 +205,7 @@ public sealed class JRuntimeExceptionObjectTests
 			ThrowableException exception =
 				Assert.Throws<ThrowableException<JRuntimeExceptionObject>>(() => jRuntimeException.Throw());
 			Assert.Equal(exceptionMessage, exception.Message);
-			Assert.Equal(jGlobal, exception.Global);
+			Assert.Equal(jGlobal, exception.GlobalThrowable);
 			Assert.Equal(mutableException.Value, exception);
 
 			exception.WithSafeInvoke(t =>
@@ -220,7 +219,7 @@ public sealed class JRuntimeExceptionObjectTests
 			Assert.Equal(jWeak, exception.WithSafeInvoke(t => t.Weak));
 
 			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
-			thread.ClassFeature.Received(2)
+			thread.ClassFeature.Received(4)
 			      .GetObjectClass(
 				      Arg.Is<ObjectMetadata>(
 					      m => m.ObjectClassName.SequenceEqual(JRuntimeExceptionObjectTests.className)));
@@ -271,7 +270,7 @@ public sealed class JRuntimeExceptionObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject jRuntimeExceptionClass = new(jClass, IClassType.GetMetadata<JRuntimeExceptionObject>());
 
-		ThrowableObjectMetadata throwableMetadata = new(jRuntimeExceptionClass, typeMetadata, message);
+		ThrowableObjectMetadata throwableMetadata = new(jRuntimeExceptionClass, message);
 		Assert.Equal(typeMetadata.ClassName, throwableMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, throwableMetadata.ObjectSignature);
 		Assert.Equal(message, throwableMetadata.Message);

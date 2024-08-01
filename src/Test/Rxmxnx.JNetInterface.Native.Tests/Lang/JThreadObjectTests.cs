@@ -55,7 +55,7 @@ public class JThreadObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jThreadClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jThreadClass);
-		using JGlobal jGlobal = new(vm, new(jThreadClass, IClassType.GetMetadata<JThreadObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jThreadClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

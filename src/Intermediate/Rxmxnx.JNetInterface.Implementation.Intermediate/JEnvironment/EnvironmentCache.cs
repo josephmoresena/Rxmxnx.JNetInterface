@@ -9,22 +9,18 @@ partial class JEnvironment
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial class EnvironmentCache : LocalMainClasses
 	{
-		/// <inheritdoc cref="JEnvironment.Reference"/>
-		public readonly JEnvironmentRef Reference;
-		/// <summary>
-		/// Managed thread.
-		/// </summary>
-		public readonly Thread Thread;
-		/// <inheritdoc cref="IEnvironment.Version"/>
-		public readonly Int32 Version;
-
-		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
-		public readonly JVirtualMachine VirtualMachine;
 		/// <summary>
 		/// Current thrown exception.
 		/// </summary>
 		public JniException? Thrown { get; private set; }
-
+		/// <summary>
+		/// Maximum number of bytes usable from stack.
+		/// </summary>
+		public Int32 MaxStackBytes { get; private set; } = EnvironmentCache.MinStackBytes;
+		/// <summary>
+		/// Amount of bytes used from stack.
+		/// </summary>
+		public Int32 UsedStackBytes { get; private set; }
 		/// <summary>
 		/// Ensured capacity.
 		/// </summary>
@@ -35,18 +31,14 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-		/// <param name="envRef">A <see cref="JEnvironmentRef"/> instance.</param>
-		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(env)
+		/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
+		public EnvironmentCache(JVirtualMachine vm, JEnvironment env, JEnvironmentRef envRef) : base(vm, envRef, env)
 		{
 			this._env = env;
 			this._objects = new(this._classes);
 
-			this.VirtualMachine = vm;
-			this.Reference = envRef;
-			this.Version = EnvironmentCache.GetVersion(envRef);
-			this.Thread = Thread.CurrentThread;
+			if (this.Version < NativeInterface.RequiredVersion) return; // Avoid class loading if unsupported version.
 
-			Task.Factory.StartNew(EnvironmentCache.FinalizeCache, this, this._cancellation.Token);
 			this.LoadMainClasses();
 		}
 
@@ -71,21 +63,12 @@ partial class JEnvironment
 		/// <summary>
 		/// Checks JNI occurred error.
 		/// </summary>
-		public unsafe void CheckJniError()
+		public void CheckJniError()
 		{
-			if (this._criticalCount > 0)
-			{
-				ref readonly NativeInterface nativeInterface =
-					ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
-				if (nativeInterface.ExceptionCheck(this.Reference).Value)
-					this.SetPendingException(CriticalException.Instance, true);
-			}
+			if (this._criticalCount > 0 || this._buildingException)
+				this.ExceptionCheck();
 			else
-			{
-				JThrowableLocalRef throwableRef = this.GetPendingException();
-				if (!throwableRef.IsDefault)
-					this.ThrowJniException(this.CreateThrowableException(throwableRef), true);
-			}
+				this.ExceptionOccurred();
 			this.Thrown = default; // Clears current exception.
 		}
 		/// <inheritdoc cref="IEnvironment.JniSecure"/>
@@ -121,14 +104,14 @@ partial class JEnvironment
 
 			try
 			{
-				ImplementationValidationUtilities.ThrowIfProxy(throwableException.Global);
-				ImplementationValidationUtilities.ThrowIfDefault(throwableException.Global);
+				ImplementationValidationUtilities.ThrowIfProxy(throwableException.GlobalThrowable);
+				ImplementationValidationUtilities.ThrowIfDefault(throwableException.GlobalThrowable);
 				this.SetPendingException(throwableException, throwException);
 			}
 			finally
 			{
 				// Throws current exception in JNI
-				this.Throw(throwableException.Global.As<JThrowableLocalRef>());
+				this.Throw(throwableException.ThrowableRef);
 			}
 		}
 		/// <summary>
@@ -149,10 +132,33 @@ partial class JEnvironment
 		public ThrowableException CreateThrowableException(JThrowableLocalRef throwableRef)
 		{
 			this.ClearException();
+			JReferenceTypeMetadata? throwableMetadata = default;
+			String? message = default;
+			JClassObject jClass;
 
-			JClassObject jClass =
-				this._env.GetObjectClass(throwableRef.Value, out JReferenceTypeMetadata throwableMetadata);
-			String message = this.GetThrowableMessage(throwableRef);
+			try
+			{
+				jClass = this._env.GetObjectClass(throwableRef.Value, out throwableMetadata);
+			}
+			catch (CriticalException)
+			{
+				// Unable to retrieve throwable object class.
+				jClass = this.GetClass<JThrowableObject>(); // Retrieves java.lang.Throwable class.
+				if (!this._buildingException) throw;
+				this._env.DescribeException();
+				this.Thrown = null;
+			}
+			try
+			{
+				message = this.GetThrowableMessage(throwableRef);
+			}
+			catch (CriticalException)
+			{
+				// Unable to retrieve throwable object message.
+				if (!this._buildingException) throw;
+				this._env.DescribeException();
+				this.Thrown = null;
+			}
 			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
 		}
 		/// <summary>
@@ -167,6 +173,29 @@ partial class JEnvironment
 			localRef = nativeInterface.ReferenceFunctions.PopLocalFrame(this.Reference, localRef);
 			result?.SetValue(localRef);
 			this.Register(result);
+		}
+		/// <summary>
+		/// Clears pending JNI exception.
+		/// </summary>
+		public unsafe void ClearException()
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionClearInfo);
+			nativeInterface.ErrorFunctions.ExceptionClear(this.Reference);
+		}
+		/// <summary>
+		/// Sets number of bytes usable by JNI calls from stack.
+		/// </summary>
+		/// <param name="value">Value.</param>
+		public void SetUsableStackBytes(Int32 value)
+		{
+			Int32 min = EnvironmentCache.MinStackBytes > this.UsedStackBytes ?
+				EnvironmentCache.MinStackBytes :
+				this.UsedStackBytes;
+			if (value < min)
+				throw new ArgumentOutOfRangeException(nameof(value),
+				                                      $"Usable stack bytes should be greater or equal to {min}.");
+			this.MaxStackBytes = value;
 		}
 	}
 }

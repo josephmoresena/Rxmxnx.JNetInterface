@@ -26,7 +26,7 @@ public sealed class JVoidObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jVoidObjectClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jVoidObjectClass);
-		using JGlobal jGlobal = new(vm, new(jVoidObjectClass, IClassType.GetMetadata<JVoidObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jVoidObjectClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

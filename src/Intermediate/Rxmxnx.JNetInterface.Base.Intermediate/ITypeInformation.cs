@@ -22,9 +22,9 @@ public interface ITypeInformation
 	/// </summary>
 	JTypeKind Kind { get; }
 	/// <summary>
-	/// Modifier of the current type.
+	/// Indicates whether current type is final;
 	/// </summary>
-	JTypeModifier? Modifier { get; }
+	Boolean? IsFinal { get; }
 
 	/// <summary>
 	/// Retrieves printable text hash.

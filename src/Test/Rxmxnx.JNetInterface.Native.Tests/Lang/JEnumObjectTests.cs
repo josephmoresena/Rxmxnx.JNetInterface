@@ -70,7 +70,7 @@ public class JEnumObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jEnumClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, localRef, jEnumClass);
-		using JGlobal jGlobal = new(vm, new(jEnumClass, IClassType.GetMetadata<JEnumObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jEnumClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

@@ -91,19 +91,19 @@ public partial class JVirtualMachine
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 		public virtual void LoadMainClasses(JEnvironment env)
 		{
-			this.ClassObject.SetValue(env.GetClassGlobalRef(this.ClassMetadata));
-			this.ThrowableObject.SetValue(env.GetClassGlobalRef(this.ThrowableMetadata));
-			this.StackTraceElementObject.SetValue(env.GetClassGlobalRef(this.StackTraceElementMetadata));
+			this.ClassObject.SetValue(env.GetMainClassGlobalRef(this.ClassMetadata));
+			this.ThrowableObject.SetValue(env.GetMainClassGlobalRef(this.ThrowableMetadata));
+			this.StackTraceElementObject.SetValue(env.GetMainClassGlobalRef(this.StackTraceElementMetadata));
 
-			this.VoidPrimitive.SetValue(env.GetClassGlobalRef(ClassObjectMetadata.VoidMetadata));
-			this.BooleanPrimitive.SetValue(env.GetClassGlobalRef(this.BooleanMetadata));
-			this.BytePrimitive.SetValue(env.GetClassGlobalRef(this.ByteMetadata));
-			this.CharPrimitive.SetValue(env.GetClassGlobalRef(this.CharMetadata));
-			this.DoublePrimitive.SetValue(env.GetClassGlobalRef(this.DoubleMetadata));
-			this.FloatPrimitive.SetValue(env.GetClassGlobalRef(this.FloatMetadata));
-			this.IntPrimitive.SetValue(env.GetClassGlobalRef(this.IntMetadata));
-			this.LongPrimitive.SetValue(env.GetClassGlobalRef(this.LongMetadata));
-			this.ShortPrimitive.SetValue(env.GetClassGlobalRef(this.ShortMetadata));
+			this.VoidPrimitive.SetValue(env.GetMainClassGlobalRef(ClassObjectMetadata.VoidMetadata));
+			this.BooleanPrimitive.SetValue(env.GetMainClassGlobalRef(this.BooleanMetadata));
+			this.BytePrimitive.SetValue(env.GetMainClassGlobalRef(this.ByteMetadata));
+			this.CharPrimitive.SetValue(env.GetMainClassGlobalRef(this.CharMetadata));
+			this.DoublePrimitive.SetValue(env.GetMainClassGlobalRef(this.DoubleMetadata));
+			this.FloatPrimitive.SetValue(env.GetMainClassGlobalRef(this.FloatMetadata));
+			this.IntPrimitive.SetValue(env.GetMainClassGlobalRef(this.IntMetadata));
+			this.LongPrimitive.SetValue(env.GetMainClassGlobalRef(this.LongMetadata));
+			this.ShortPrimitive.SetValue(env.GetMainClassGlobalRef(this.ShortMetadata));
 		}
 	}
 }

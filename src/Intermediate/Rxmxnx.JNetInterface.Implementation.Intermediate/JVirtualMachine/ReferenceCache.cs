@@ -14,7 +14,7 @@ public partial class JVirtualMachine
 
 		/// <inheritdoc/>
 		protected override JVirtualMachine Create(JVirtualMachineRef reference, Boolean isDestroyable)
-			=> !isDestroyable ? new(reference) : new Invoked(reference);
+			=> !isDestroyable ? new JVirtualMachine(reference) : new Invoked(reference);
 		/// <inheritdoc/>
 		protected override void Destroy(JVirtualMachine instance)
 		{
@@ -28,7 +28,16 @@ public partial class JVirtualMachine
 		public override JVirtualMachine Get(JVirtualMachineRef reference, out Boolean isNew, Boolean arg = false)
 		{
 			JVirtualMachine result = base.Get(reference, out isNew, arg);
-			if (isNew) result.InitializeClasses();
+			try
+			{
+				if (isNew)
+					result.InitializeClasses();
+			}
+			catch (Exception)
+			{
+				this.Remove(reference); // Remove at initialization error.
+				throw;
+			}
 			return result;
 		}
 	}

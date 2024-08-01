@@ -120,7 +120,7 @@ public sealed class JStringObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jStringClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, stringRef.Value, jStringClass);
-		using JGlobal jGlobal = new(vm, new(jStringClass, IClassType.GetMetadata<JStringObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jStringClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

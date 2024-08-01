@@ -8,13 +8,9 @@ internal partial struct JniTransactionHandle
 	private sealed class Synchronizer : UnaryTransaction
 	{
 		/// <summary>
-		/// A <see cref="IEnvironment"/> instance.
+		/// A <see cref="IVirtualMachine"/> instance.
 		/// </summary>
-		private readonly IEnvironment _env;
-		/// <summary>
-		/// Synchronized instance.
-		/// </summary>
-		private readonly JReferenceObject _jObject;
+		private readonly IVirtualMachine _vm;
 
 		/// <summary>
 		/// Indicates whether current monitor is active.
@@ -24,41 +20,33 @@ internal partial struct JniTransactionHandle
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+		/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-		public Synchronizer(IEnvironment env, JReferenceObject jObject)
+		public Synchronizer(IVirtualMachine vm, JReferenceObject jObject)
 		{
-			this._env = env;
+			this._vm = vm;
 			(this as INativeTransaction).Add(jObject);
-			this._jObject = jObject;
 		}
 
 		/// <summary>
 		/// Activates the instance monitor.
 		/// </summary>
-		public void Activate()
+		public void Activate(IEnvironment env)
 		{
 			if (this._active) return;
-			this._env.ReferenceFeature.MonitorEnter(this.LocalRef);
+			env.ReferenceFeature.MonitorEnter(this.LocalRef);
 			this._active = false;
 		}
 
+		/// <inheritdoc/>
 		protected override void Dispose(Boolean disposing)
 		{
-			if (disposing && !this.Disposed)
-				try
-				{
-					if (this._active)
-					{
-						this._env.ReferenceFeature.MonitorExit(this.LocalRef);
-						this._active = false;
-					}
-				}
-				finally
-				{
-					if (this._jObject is JGlobalBase && this._env is IDisposable thread)
-						thread.Dispose();
-				}
+			if (disposing && !this.Disposed && this._active)
+			{
+				using IThread thread = this._vm.CreateThread(ThreadPurpose.SynchronizeGlobalReference);
+				thread.ReferenceFeature.MonitorExit(this.LocalRef);
+				this._active = false;
+			}
 			base.Dispose(disposing);
 		}
 	}

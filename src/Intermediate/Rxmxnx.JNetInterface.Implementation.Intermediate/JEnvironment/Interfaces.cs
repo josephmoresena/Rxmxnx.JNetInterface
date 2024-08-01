@@ -79,8 +79,10 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 		localFrame.SetResult(result);
 		return result;
 	}
+	[ExcludeFromCodeCoverage]
 	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other)
 		=> other is not null && this.Reference == other.Reference && this.NoProxy == other.NoProxy;
+	[ExcludeFromCodeCoverage]
 	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
 		=> other is not null && this._cache.Equals(other._cache);
 }

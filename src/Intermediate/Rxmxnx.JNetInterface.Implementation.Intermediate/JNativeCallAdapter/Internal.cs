@@ -18,12 +18,20 @@ public readonly ref partial struct JNativeCallAdapter
 		internal JLocalObject CreateInitialObject(JObjectLocalRef localRef)
 		{
 			JEnvironment env = this._callAdapter._env;
-			JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata metadata, true);
-			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
+			this._callAdapter._cache.Activate(out LocalCache previous);
+			try
 			{
-				JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
-				this._callAdapter._cache.RegisterParameter(localRef, result);
-				return result;
+				JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata metadata, true);
+				if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
+				{
+					JLocalObject result = metadata.CreateInstance(jClass, localRef, true);
+					this._callAdapter._cache.RegisterParameter(localRef, result);
+					return result;
+				}
+			}
+			finally
+			{
+				env.SetObjectCache(previous);
 			}
 			JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 			return this.CreateInitialClass(classRef);
@@ -37,13 +45,10 @@ public readonly ref partial struct JNativeCallAdapter
 		internal TObject CreateInitialObject<TObject>(JObjectLocalRef localRef)
 			where TObject : JReferenceObject, IReferenceType<TObject>
 		{
-			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
-			if (metadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
-			if (JLocalObject.IsObjectType<TObject>())
-				return (TObject)(Object)this.CreateInitialObject(localRef);
+			JReferenceTypeMetadata typeMetadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TObject>();
+			if (typeMetadata.Modifier == JTypeModifier.Final) return this.CreateFinalObject<TObject>(localRef);
 			JClassObject jClass = this.GetObjectClass(localRef, out JReferenceTypeMetadata classMetadata, true);
-			JLocalObject jLocal = classMetadata.CreateInstance(jClass, localRef, true);
-			return (TObject)metadata.ParseInstance(jLocal, true);
+			return (TObject)this.CreateObject(jClass, localRef, classMetadata, typeMetadata);
 		}
 		/// <summary>
 		/// Retrieves initial <see cref="JLocalObject"/> instance for <paramref name="classRef"/>.
@@ -55,7 +60,7 @@ public readonly ref partial struct JNativeCallAdapter
 		{
 			JEnvironment env = this._callAdapter._env;
 			if (validateReference) this.ThrowIfNotClassObject(classRef.Value);
-			JClassObject result = env.GetClass(classRef, true);
+			JClassObject result = env.GetReferenceTypeClass(classRef, true);
 			if (classRef == result.LocalReference)
 			{
 				// Class is owned by this class.

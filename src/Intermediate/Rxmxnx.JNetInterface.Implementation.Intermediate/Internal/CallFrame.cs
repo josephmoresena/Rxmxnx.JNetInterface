@@ -45,9 +45,9 @@ internal sealed class CallFrame : LocalCache, IDisposable
 	/// </summary>
 	/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	public void RegisterParameter(JObjectLocalRef localRef, JLocalObject jLocal)
+	public void RegisterParameter(JObjectLocalRef localRef, ILocalObject jLocal)
 	{
-		this._parameters.Add(localRef, jLocal);
+		this._parameters.TryAdd(localRef, jLocal);
 		this[localRef] = jLocal.Lifetime.GetCacheable();
 	}
 	/// <summary>
@@ -68,7 +68,7 @@ internal sealed class CallFrame : LocalCache, IDisposable
 	/// <param name="classView">A <see cref="JLocalObject.View{JClassObject}"/> instance.</param>
 	public void RegisterParameter(JClassLocalRef classRef, JLocalObject.View<JClassObject> classView)
 	{
-		this._parameters.Add(classRef.Value, classView);
+		this._parameters.TryAdd(classRef.Value, classView);
 		this[classRef.Value] = (classView as ILocalViewObject).Lifetime;
 		this._classes.TryAdd(classView.Object.Hash, classRef);
 		this._env.ClassCache.Load(classRef);
@@ -77,7 +77,13 @@ internal sealed class CallFrame : LocalCache, IDisposable
 	/// <summary>
 	/// Sets current instance as current object cache.
 	/// </summary>
-	public void Activate() => this._env.SetObjectCache(this);
+	/// <param name="previous"></param>
+	public void Activate(out LocalCache previous)
+	{
+		previous = this._env.LocalCache;
+		this.SetPrevious(previous);
+		this._env.SetObjectCache(this);
+	}
 
 	/// <inheritdoc/>
 	public override Boolean IsParameter(JObjectLocalRef localRef)

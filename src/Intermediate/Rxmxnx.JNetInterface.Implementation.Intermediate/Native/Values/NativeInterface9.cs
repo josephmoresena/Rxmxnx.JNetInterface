@@ -9,7 +9,7 @@ namespace Rxmxnx.JNetInterface.Native.Values;
                  Justification = CommonConstants.BinaryStructJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-internal unsafe struct NativeInterface9 : INativeInterface<NativeInterface9>
+internal readonly unsafe struct NativeInterface9 : INativeInterface<NativeInterface9>
 {
 	/// <inheritdoc/>
 	public static Int32 RequiredVersion => 0x00090000;
@@ -31,7 +31,7 @@ internal unsafe struct NativeInterface9 : INativeInterface<NativeInterface9>
 	/// If the class represents a primitive type or <c>void</c>, then the Module object for the <c>java.base</c> module is
 	/// returned.
 	/// </remarks>
-	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JObjectLocalRef> GetModule;
+	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JObjectLocalRef> GetModule;
 
 	/// <summary>
 	/// Information of <see cref="NativeInterface9.GetModule"/>

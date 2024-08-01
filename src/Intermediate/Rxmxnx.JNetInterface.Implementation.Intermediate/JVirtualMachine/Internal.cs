@@ -53,7 +53,14 @@ public partial class JVirtualMachine
 		Boolean found = true;
 		if (!this._cache.GlobalClassCache.TryGetValue(jClass.Hash, out JGlobal? jGlobal))
 		{
-			ClassObjectMetadata metadata = new(jClass);
+			WellKnownRuntimeTypeInformation typeMetadata = MetadataHelper.GetExactMetadata(jClass.Hash);
+			JTypeKind kind = jClass switch
+			{
+				{ IsPrimitive: true, } => JTypeKind.Primitive,
+				{ ArrayDimension: > 0, } => JTypeKind.Array,
+				_ => typeMetadata.Kind ?? JTypeKind.Undefined,
+			};
+			ClassObjectMetadata metadata = new(jClass, kind, typeMetadata.IsFinal);
 			jGlobal = new(this, metadata, default);
 			found = false;
 			this._cache.GlobalClassCache[jClass.Hash] = jGlobal;
@@ -168,15 +175,15 @@ public partial class JVirtualMachine
 	/// Unregister any native method for given class.
 	/// </summary>
 	/// <param name="classHash">Class hash.</param>
-	public void UnregisterNatives(String classHash) => this._cache.NativesCache.Clear(classHash);
+	internal void UnregisterNatives(String classHash) => this._cache.NativesCache.Clear(classHash);
 
 	/// <summary>
-	/// Retrieves the <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.
+	/// Retrieves the <see cref="IInvokedVirtualMachine"/> instance referenced by <paramref name="reference"/>.
 	/// </summary>
 	/// <param name="reference">A <see cref="JVirtualMachineRef"/> reference.</param>
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	/// <param name="env">Output. <see cref="IEnvironment"/> instance.</param>
-	/// <returns>The <see cref="IVirtualMachine"/> instance referenced by <paramref name="reference"/>.</returns>
+	/// <returns>The <see cref="IInvokedVirtualMachine"/> instance referenced by <paramref name="reference"/>.</returns>
 	internal static IInvokedVirtualMachine GetVirtualMachine(JVirtualMachineRef reference, JEnvironmentRef envRef,
 		out IEnvironment env)
 	{
@@ -194,8 +201,9 @@ public partial class JVirtualMachine
 	internal static unsafe void DetachCurrentThread(JVirtualMachineRef vmRef, JEnvironmentRef envRef, Thread thread)
 	{
 		ImplementationValidationUtilities.ThrowIfDifferentThread(envRef, thread);
-		JVirtualMachine vm = ReferenceCache.Instance.Get(vmRef, out _);
-		JResult result = vm._cache.GetInvokeInterface().DetachCurrentThread(vm._cache.Reference);
+		JVirtualMachine? vm = ReferenceCache.Instance.Get(vmRef);
+		JResult result = vm?._cache.GetInvokeInterface().DetachCurrentThread(vm._cache.Reference) ??
+			JResult.DetachedThreadError;
 		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 	}
 	/// <summary>
@@ -206,7 +214,7 @@ public partial class JVirtualMachine
 	/// <param name="envRef">A <see cref="JEnvironmentRef"/> reference.</param>
 	internal static void RemoveEnvironment(JVirtualMachineRef vmRef, JEnvironmentRef envRef)
 	{
-		JVirtualMachine vm = ReferenceCache.Instance.Get(vmRef, out _);
-		vm._cache.ThreadCache.Remove(envRef);
+		JVirtualMachine? vm = ReferenceCache.Instance.Get(vmRef);
+		vm?._cache.ThreadCache.Remove(envRef);
 	}
 }

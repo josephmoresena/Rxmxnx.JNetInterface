@@ -28,14 +28,15 @@ partial class JEnvironment
 		/// Retrieves a <see cref="JStringObject"/> containing class name.
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="isReferenceType">Indicates whether class reference is from a reference type.</param>
 		/// <param name="isPrimitive">Output. Indicates whether class is primitive.</param>
 		/// <returns>A <see cref="JStringObject"/> instance.</returns>
-		private JStringObject GetClassName(JClassLocalRef classRef, out Boolean isPrimitive)
+		private JStringObject GetClassName(JClassLocalRef classRef, Boolean isReferenceType, out Boolean isPrimitive)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			AccessCache access = this.GetAccess(jniTransaction, this.ClassObject);
+			AccessCache access = this.GetAccess(jniTransaction, this.GetClass<JClassObject>());
 			jniTransaction.Add(classRef);
-			isPrimitive = this.IsPrimitiveClass(classRef, access);
+			isPrimitive = !isReferenceType && this.IsPrimitiveClass(classRef, access);
 			return this.GetClassName(classRef, access);
 		}
 		/// <summary>
@@ -52,6 +53,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallObjectMethod.Call(
 					this.Reference, classRef.Value, getNameId, default);
+			if (localRef == default) this.CheckJniError();
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return new(jStringClass, localRef.Transform<JObjectLocalRef, JStringLocalRef>());
 		}
@@ -71,6 +73,7 @@ partial class JEnvironment
 			JBoolean result =
 				nativeInterface.InstanceMethodFunctions.MethodFunctions.CallBooleanMethod.Call(
 					this.Reference, classRef.Value, isPrimitiveId, default);
+			this.CheckJniError();
 			return result.Value;
 		}
 		/// <summary>
@@ -100,8 +103,8 @@ partial class JEnvironment
 		{
 			JClassLocalRef assignableRef = isLocalRef ? classRef : default;
 			JClassObject result = classObjectMetadata is null ?
-				this.GetClass(classRef, isLocalRef) :
-				this.GetClass(classObjectMetadata.Name, assignableRef);
+				this.GetClass(classRef, isLocalRef, (WellKnownRuntimeTypeInformation)classObjectMetadata) :
+				this.GetClass(classObjectMetadata, assignableRef);
 			return this.Register(result);
 		}
 		/// <summary>
@@ -109,13 +112,32 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="className">Class name.</param>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="runtimeInformation">Runtime known type information.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
-		private JClassObject GetClass(ReadOnlySpan<Byte> className, JClassLocalRef classRef)
+		private JClassObject GetClass(ReadOnlySpan<Byte> className, JClassLocalRef classRef,
+			WellKnownRuntimeTypeInformation runtimeInformation)
 		{
 			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, true);
-			JTrace.GetClass(classRef, classInformation);
+			JTrace.GetClass(classRef, classInformation[0]);
 			if (!this._classes.TryGetValue(classInformation.ToString(), out JClassObject? jClass))
-				jClass = new(this.ClassObject, new TypeInformation(classInformation), classRef);
+			{
+				JTypeKind kind = classInformation[1][0] == CommonNames.ArraySignaturePrefixChar ?
+					JTypeKind.Array :
+					runtimeInformation.Kind.GetValueOrDefault();
+				ITypeInformation typeInformation =
+					// If well-known type, we should use exact metadata.
+					(ITypeInformation?)MetadataHelper.GetExactMetadata(classInformation.ToString()) ??
+					new TypeInformation(classInformation, kind, runtimeInformation.IsFinal);
+				jClass = new(this.ClassObject, typeInformation, classRef);
+			}
+			if (jClass.LocalReference == default && classRef.Value != default) jClass.SetValue(classRef);
+			return jClass;
+		}
+		private JClassObject GetClass(ITypeInformation typeInformation, JClassLocalRef classRef)
+		{
+			JTrace.GetClass(classRef, typeInformation.ClassName);
+			if (!this._classes.TryGetValue(typeInformation.Hash, out JClassObject? jClass))
+				jClass = new(this.ClassObject, typeInformation, classRef);
 			if (jClass.LocalReference == default && classRef.Value != default) jClass.SetValue(classRef);
 			return jClass;
 		}
@@ -135,6 +157,20 @@ partial class JEnvironment
 			return classRef;
 		}
 		/// <summary>
+		/// Retrieves a <see cref="JClassLocalRef"/> using <paramref name="namePtr"/> as class name.
+		/// </summary>
+		/// <param name="namePtr">A pointer to class name.</param>
+		/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
+		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+		private unsafe JClassLocalRef FindClass(Byte* namePtr, Boolean withNoCheckError = false)
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.FindClassInfo);
+			JClassLocalRef result = nativeInterface.ClassFunctions.FindClass(this.Reference, namePtr);
+			if (result.IsDefault && !withNoCheckError) this.CheckJniError();
+			return result;
+		}
+		/// <summary>
 		/// Retrieves class from cache or loads it using JNI.
 		/// </summary>
 		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
@@ -144,7 +180,7 @@ partial class JEnvironment
 			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
 			{
 				JTrace.ClassFound(result);
-				return result;
+				return this.GetLoadedClass(result);
 			}
 			if (MetadataHelper.GetExactMetadata(typeInformation.Hash) is { } metadata)
 			{
@@ -168,6 +204,48 @@ partial class JEnvironment
 				result = new(this.ClassObject, typeInformation, classRef);
 			}
 			return this.Register(result);
+		}
+		/// <summary>
+		/// Retrieves primitive wrapper class from primitive signature.
+		/// </summary>
+		/// <param name="signature">JNI primitive signature.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject GetPrimitiveWrapperClass(Byte signature)
+		{
+			JClassTypeMetadata wrapperTypeInformation = (JClassTypeMetadata)(signature switch
+			{
+				CommonNames.BooleanSignatureChar => MetadataHelper.GetExactMetadata<JBooleanObject>(),
+				CommonNames.ByteSignatureChar => MetadataHelper.GetExactMetadata<JByteObject>(),
+				CommonNames.CharSignatureChar => MetadataHelper.GetExactMetadata<JCharacterObject>(),
+				CommonNames.DoubleSignatureChar => MetadataHelper.GetExactMetadata<JDoubleObject>(),
+				CommonNames.FloatSignatureChar => MetadataHelper.GetExactMetadata<JFloatObject>(),
+				CommonNames.IntSignatureChar => MetadataHelper.GetExactMetadata<JIntegerObject>(),
+				CommonNames.LongSignatureChar => MetadataHelper.GetExactMetadata<JLongObject>(),
+				CommonNames.ShortSignatureChar => MetadataHelper.GetExactMetadata<JShortObject>(),
+				_ => MetadataHelper.GetExactMetadata<JVoidObject>(),
+			});
+
+			if (this._classes.TryGetValue(wrapperTypeInformation.Hash, out JClassObject? wrapperClass))
+			{
+				JTrace.ClassFound(wrapperClass);
+			}
+			else
+			{
+				wrapperClass = this.GetLoadedClass(new(this.ClassObject, wrapperTypeInformation));
+				JTrace.ClassFound(wrapperTypeInformation);
+			}
+			return wrapperClass;
+		}
+		/// <summary>
+		/// Loads <paramref name="jClass"/> in the current class cache and retrieves the same instance.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <returns><paramref name="jClass"/> same instance.</returns>
+		[return: NotNullIfNotNull(nameof(jClass))]
+		private JClassObject? GetLoadedClass(JClassObject? jClass)
+		{
+			if (!this._objects.Equals(this) && JObject.IsNullOrDefault(jClass)) this.LoadClass(jClass);
+			return jClass;
 		}
 		/// <summary>
 		/// Indicates whether the object referenced by <paramref name="localRef"/> is an instance
@@ -273,8 +351,7 @@ partial class JEnvironment
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			JClassLocalRef classRef = jniTransaction.Add<JClassLocalRef>(jObject);
-			JReferenceType referenceType = this._env.GetReferenceType(classRef.Value);
-			Boolean isLocalRef = referenceType == JReferenceType.LocalRefType;
+			Boolean isLocalRef = this.IsLocalObject(jObject, out JReferenceType referenceType);
 			ClassObjectMetadata? classObjectMetadata = this.GetClassObjectMetadata(jObject);
 			JTrace.AsClassObject(classRef, referenceType, classObjectMetadata);
 			JClassObject result = this.GetClass(classRef, isLocalRef, classObjectMetadata);
@@ -349,5 +426,33 @@ partial class JEnvironment
 			}
 			return jClass;
 		}
+		/// <summary>
+		/// Indicates whether <paramref name="jObject"/> is a local object.
+		/// </summary>
+		/// <param name="jObject">A <paramref name="jObject"/> instance.</param>
+		/// <param name="referenceType">Output. Type of reference used by <paramref name="jObject"/>.</param>
+		/// <returns>
+		/// <see langword="true"/> if <paramref name="jObject"/> is a local object; otherwise, <see langword="false"/>.
+		/// </returns>
+		private Boolean IsLocalObject(JReferenceObject jObject, out JReferenceType referenceType)
+		{
+			JObjectLocalRef localRef = jObject.As<JObjectLocalRef>();
+			if (this.Version < IVirtualMachine.MinimalVersion)
+			{
+				Boolean result = jObject is ILocalObject jLocal && jLocal.LocalReference == localRef;
+				referenceType = result ? JReferenceType.LocalRefType : JReferenceType.InvalidRefType;
+				return result;
+			}
+			referenceType = this._env.GetReferenceType(localRef);
+			return referenceType == JReferenceType.LocalRefType;
+		}
+		/// <summary>
+		/// Retrieves the current <paramref name="classRef"/> reference as <see cref="JClassObject"/>.
+		/// </summary>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="runtimeInformation">Runtime known type information.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject AsClassObject(JClassLocalRef classRef, WellKnownRuntimeTypeInformation runtimeInformation)
+			=> this.Register(this.GetClass(classRef, true, runtimeInformation));
 	}
 }

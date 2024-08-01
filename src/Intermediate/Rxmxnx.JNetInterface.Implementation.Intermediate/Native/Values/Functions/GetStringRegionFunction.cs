@@ -14,6 +14,6 @@ internal readonly unsafe struct GetStringRegionFunction<TChar>
 	/// Pointer to <c>GetStringRegion</c> function.
 	/// Copies a number of characters from the string object to the given buffer.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32, Int32, ReadOnlyValPtr<TChar>, void>
+	public readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int32, Int32, ValPtr<TChar>, void>
 		GetStringRegion;
 }

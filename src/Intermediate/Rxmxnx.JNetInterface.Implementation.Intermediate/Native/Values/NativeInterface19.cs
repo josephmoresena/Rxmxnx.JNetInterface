@@ -9,7 +9,7 @@ namespace Rxmxnx.JNetInterface.Native.Values;
                  Justification = CommonConstants.BinaryStructJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-internal unsafe struct NativeInterface19 : INativeInterface<NativeInterface19>
+internal readonly unsafe struct NativeInterface19 : INativeInterface<NativeInterface19>
 {
 	/// <inheritdoc/>
 	public static Int32 RequiredVersion => 0x00130000;
@@ -25,7 +25,7 @@ internal unsafe struct NativeInterface19 : INativeInterface<NativeInterface19>
 	/// Pointer to <c>IsVirtualThread</c> function.
 	/// Tests whether an object is a virtual Thread.
 	/// </summary>
-	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JBoolean> IsVirtualThread;
+	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JBoolean> IsVirtualThread;
 
 	/// <summary>
 	/// Information of <see cref="NativeInterface19.IsVirtualThread"/>

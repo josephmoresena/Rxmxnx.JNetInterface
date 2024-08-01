@@ -107,7 +107,7 @@ public sealed class JThrowableObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jThrowableClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
-		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JThrowableObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jThrowableClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);
@@ -158,7 +158,7 @@ public sealed class JThrowableObjectTests
 
 		env.ClassFeature.Received(0).GetObjectClass(jLocal);
 		env.ClassFeature.Received(0).IsInstanceOf<JThrowableObject>(Arg.Any<JReferenceObject>());
-		Assert.Equal(jGlobal, exception.Global);
+		Assert.Equal(jGlobal, exception.GlobalThrowable);
 		Assert.Equal(exceptionMessage, exception.Message);
 
 		Assert.True(typeMetadata.IsInstance(jThrowable0));
@@ -214,7 +214,7 @@ public sealed class JThrowableObjectTests
 			ThrowableException exception =
 				Assert.Throws<ThrowableException<JThrowableObject>>(() => jThrowable.Throw());
 			Assert.Equal(exceptionMessage, exception.Message);
-			Assert.Equal(jGlobal, exception.Global);
+			Assert.Equal(jGlobal, exception.GlobalThrowable);
 			Assert.Equal(mutableException.Value, exception);
 
 			exception.WithSafeInvoke(t =>
@@ -228,8 +228,8 @@ public sealed class JThrowableObjectTests
 			Assert.Equal(jWeak, exception.WithSafeInvoke(t => t.Weak));
 
 			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
-			thread.ClassFeature.Received(2).GetClass(JThrowableObjectTests.className);
-			thread.ClassFeature.Received(2)
+			thread.ClassFeature.Received(4).GetClass(JThrowableObjectTests.className);
+			thread.ClassFeature.Received(4)
 			      .GetObjectClass(
 				      Arg.Is<ObjectMetadata>(m => m.ObjectClassName.SequenceEqual(JThrowableObjectTests.className)));
 			thread.Received(3).GetReferenceType(jWeak);
@@ -267,7 +267,7 @@ public sealed class JThrowableObjectTests
 		using JClassObject jClass = new(env);
 		using JClassObject jThrowableClass = new(jClass, IClassType.GetMetadata<JThrowableObject>());
 
-		ThrowableObjectMetadata throwableMetadata = new(jThrowableClass, typeMetadata, message);
+		ThrowableObjectMetadata throwableMetadata = new(jThrowableClass, message);
 		Assert.Equal(typeMetadata.ClassName, throwableMetadata.ObjectClassName);
 		Assert.Equal(typeMetadata.Signature, throwableMetadata.ObjectSignature);
 		Assert.Equal(message, throwableMetadata.Message);

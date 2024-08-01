@@ -38,9 +38,6 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	/// <inheritdoc/>
 	public String Hash => this._sequence.ToString();
 
-	[ExcludeFromCodeCoverage]
-	JTypeModifier? ITypeInformation.Modifier => this.Modifier;
-
 #if PACKAGE
 	/// <summary>
 	/// Creates a <see cref="JArrayTypeMetadata"/> from current instance.

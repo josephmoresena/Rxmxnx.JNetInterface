@@ -31,10 +31,11 @@ public partial class JGlobalBase
 	/// Refresh current metadata instance.
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	internal void RefreshMetadata(ILocalObject jLocal) { this.ObjectMetadata = ILocalObject.CreateMetadata(jLocal); }
+	internal void RefreshMetadata(ILocalObject jLocal) => this.ObjectMetadata = ILocalObject.CreateMetadata(jLocal);
 	/// <inheritdoc/>
 	private protected override Boolean IsInstanceOf<TDataType>()
 	{
+		if (this.ObjectClassName.AsSpan().SequenceEqual(IDataType.GetMetadata<TDataType>().ClassName)) return true;
 		Boolean? result = this.AssignationCache.IsAssignableTo<TDataType>();
 		if (result.HasValue) return result.Value;
 		return this.JniSecure() ?
@@ -51,7 +52,7 @@ public partial class JGlobalBase
 	/// <inheritdoc/>
 	private protected override IDisposable GetSynchronizer()
 	{
-		IThread env = this.VirtualMachine.CreateThread(ThreadPurpose.SynchronizeGlobalReference);
+		using IThread env = this.VirtualMachine.CreateThread(ThreadPurpose.SynchronizeGlobalReference);
 		return env.ReferenceFeature.GetSynchronizer(this);
 	}
 	/// <inheritdoc/>

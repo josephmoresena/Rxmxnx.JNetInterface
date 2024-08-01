@@ -18,4 +18,13 @@ public partial class JThrowableObject
 	/// Throwable exception thread identifier.
 	/// </summary>
 	internal Int32? ThreadId { get; set; }
+
+	/// <summary>
+	/// Creates an exception instance from a <see cref="JGlobalBase"/> throwable instance.
+	/// </summary>
+	/// <param name="jGlobalThrowable">A <see cref="JGlobalBase"/> throwable instance.</param>
+	/// <param name="exceptionMessage">Exception message.</param>
+	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
+	internal static ThrowableException CreateException(JGlobalBase jGlobalThrowable, String? exceptionMessage)
+		=> IClassType.GetMetadata<JThrowableObject>().CreateException(jGlobalThrowable, exceptionMessage)!;
 }

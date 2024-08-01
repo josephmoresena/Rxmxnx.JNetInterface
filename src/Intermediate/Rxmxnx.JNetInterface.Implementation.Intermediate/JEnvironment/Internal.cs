@@ -34,28 +34,28 @@ partial class JEnvironment
 	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
-	/// <param name="metadata">Class metadata name.</param>
+	/// <param name="metadata">Class metadata.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal unsafe JGlobalRef GetClassGlobalRef(ClassObjectMetadata metadata)
+	internal JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata metadata)
 	{
-		JClassLocalRef classRef;
-		if (metadata.ClassSignature.Length == 1) // Is primitive class?
-			classRef = this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
-		else
-			fixed (Byte* ptr = &MemoryMarshal.GetReference(metadata.Name.AsSpan()))
-			{
-				JTrace.FindClass(metadata.Name);
-				classRef = this._cache.FindClass(ptr);
-			}
+		Boolean isPrimitive = metadata.ClassSignature.Length == 1;
+		JClassLocalRef classRef = isPrimitive ?
+			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]) :
+			this._cache.FindMainClass(metadata.Name, metadata.ClassSignature);
 		try
 		{
-			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value);
-			return globalRef;
+			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value, true);
+			if (globalRef != default) return globalRef;
 		}
 		finally
 		{
 			this.DeleteLocalRef(classRef.Value);
 		}
+
+		this.DescribeException();
+		this._cache.ClearException(); // Clears JNI exception.
+		throw new NotSupportedException(
+			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(metadata.ClassSignature)} class.");
 	}
 	/// <summary>
 	/// Deletes <paramref name="globalRef"/>.
@@ -103,8 +103,10 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="definition">A <see cref="JFieldDefinition"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
 	/// <returns>A <see cref="JFieldId"/> identifier.</returns>
-	internal unsafe JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef)
+	internal unsafe JFieldId GetStaticFieldId(JFieldDefinition definition, JClassLocalRef classRef,
+		Boolean withNoCheckError = false)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.GetStaticFieldIdInfo);
@@ -116,7 +118,7 @@ partial class JEnvironment
 				this.Reference, classRef, namePtr, signaturePtr);
 		}
 		JTrace.GetAccessibleId(classRef, definition, fieldId);
-		if (fieldId == default) this._cache.CheckJniError();
+		if (fieldId == default && !withNoCheckError) this._cache.CheckJniError();
 		return fieldId;
 	}
 	/// <summary>
@@ -180,8 +182,8 @@ partial class JEnvironment
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
-	internal JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference = false)
-		=> this._cache.GetClass(classRef, keepReference);
+	internal JClassObject GetReferenceTypeClass(JClassLocalRef classRef, Boolean keepReference = false)
+		=> this._cache.GetClass(classRef, keepReference, JTypeKind.Undefined);
 	/// <summary>
 	/// Retrieves the class object and instantiation metadata.
 	/// </summary>
@@ -192,7 +194,7 @@ partial class JEnvironment
 	{
 		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
-		JClassObject jClass = this._cache.GetClass(classRef, true);
+		JClassObject jClass = this._cache.GetClass(classRef, true, JTypeKind.Class);
 		this._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		typeMetadata = this._cache.GetTypeMetadata(jClass);
 		return jClass;
@@ -204,22 +206,6 @@ partial class JEnvironment
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal void LoadClass(JClassObject jClass) => this._cache.LoadClass(jClass);
-	/// <summary>
-	/// Creates a new local reference for <paramref name="objectRef"/>.
-	/// </summary>
-	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
-	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
-	internal unsafe JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
-		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
-	{
-		ref readonly NativeInterface nativeInterface =
-			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.NewLocalRefInfo);
-		JObjectLocalRef localRef =
-			nativeInterface.ReferenceFunctions.NewLocalRef.NewRef(this.Reference, objectRef.Value);
-		JTrace.CreateLocalRef(objectRef, localRef);
-		if (localRef == default) this._cache.CheckJniError();
-		return localRef;
-	}
 	/// <summary>
 	/// Sends JNI fatal error signal to VM.
 	/// </summary>
@@ -254,8 +240,7 @@ partial class JEnvironment
 	/// <returns>A binary read-only span from <paramref name="value"/>.</returns>
 	internal static ReadOnlySpan<Byte> GetSafeSpan(CString? value)
 	{
-		if (value is null)
-			return ReadOnlySpan<Byte>.Empty;
+		if (value is null) return ReadOnlySpan<Byte>.Empty;
 		return value.IsNullTerminated ? value.AsSpan() : (CString)value.Clone();
 	}
 	/// <inheritdoc cref="JEnvironment.GetObjectClass(JObjectLocalRef)"/>
@@ -263,7 +248,7 @@ partial class JEnvironment
 	{
 		using LocalFrame frame = new(env, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = env.GetObjectClass(localRef);
-		JClassObject jClass = env.GetClass(classRef);
+		JClassObject jClass = env.GetReferenceTypeClass(classRef);
 		env._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		return jClass;
 	}

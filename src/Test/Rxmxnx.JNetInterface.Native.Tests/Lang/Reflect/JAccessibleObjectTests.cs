@@ -51,7 +51,7 @@ public class JAccessibleObjectTests
 		using JClassObject jClassClass = new(env);
 		using JClassObject jThrowableClass = new(jClassClass, typeMetadata, classRef);
 		using JLocalObject jLocal = new(env, throwableRef.Value, jThrowableClass);
-		using JGlobal jGlobal = new(vm, new(jThrowableClass, IClassType.GetMetadata<JAccessibleObject>()), globalRef);
+		using JGlobal jGlobal = new(vm, new(jThrowableClass), globalRef);
 
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(typeMetadata.ArgumentMetadata.ToSimplifiedString(), textValue);

@@ -408,7 +408,7 @@ public sealed class JClassObjectTests
 		env.ClassFeature.Received(1).AsClassObject(classRef);
 		env.ClassFeature.Received(1).AsClassObject(jLocal);
 		env.ClassFeature.Received(1).AsClassObject(jGlobal);
-		env.ClassFeature.Received(1).IsInstanceOf<JClassObject>(jLocal);
+		env.ClassFeature.Received(0).IsInstanceOf<JClassObject>(jLocal);
 	}
 	[Fact]
 	internal void VoidMetadataTest()

@@ -38,6 +38,36 @@ public partial class JVirtualMachine : IVirtualMachine
 	}
 
 	/// <summary>
+	/// Indicates whether final user-types should be treated as real classes at runtime.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean FinalUserTypeRuntimeEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => AppContext.TryGetSwitch("JNetInterface.EnableFinalUserTypeRuntime", out Boolean enable) && enable;
+	}
+	/// <summary>
+	/// Indicates whether native call adapters should check parameter references type.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean CheckRefTypeNativeCallEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => !AppContext.TryGetSwitch("JNetInterface.DisableCheckRefTypeNativeCall", out Boolean disable) || !disable;
+	}
+	/// <summary>
+	/// Indicates whether native call adapters should check parameter class object class.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean CheckClassRefNativeCallEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get
+			=> !AppContext.TryGetSwitch("JNetInterface.DisableCheckClassRefNativeCall", out Boolean disable) ||
+				!disable;
+	}
+
+	/// <summary>
 	/// Indicates whether the current virtual machine remains alive.
 	/// </summary>
 	public virtual Boolean IsAlive => true;
@@ -51,7 +81,27 @@ public partial class JVirtualMachine : IVirtualMachine
 	{
 		if (!this.IsAlive) return new DeadThread(this);
 		ThreadCreationArgs args = ThreadCreationArgs.Create(purpose);
-		return this.AttachThread(args);
+		try
+		{
+			return this.AttachThread(args);
+		}
+		catch (Exception)
+		{
+			switch (purpose)
+			{
+				case ThreadPurpose.ReleaseSequence:
+				case ThreadPurpose.RemoveGlobalReference:
+				case ThreadPurpose.CheckGlobalReference:
+				case ThreadPurpose.CheckAssignability:
+				case ThreadPurpose.SynchronizeGlobalReference:
+					return new DeadThread(this);
+				case ThreadPurpose.ExceptionExecution:
+				case ThreadPurpose.CreateGlobalReference:
+				case ThreadPurpose.FatalError:
+				default:
+					throw;
+			}
+		}
 	}
 	IThread IVirtualMachine.InitializeThread(CString? threadName, JGlobalBase? threadGroup, Int32 version)
 		=> this.AttachThread(new() { Name = threadName, ThreadGroup = threadGroup, Version = version, });
@@ -98,7 +148,7 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// </returns>
 	public static Boolean RemoveVirtualMachine(JVirtualMachineRef reference)
 	{
-		ReferenceCache.Instance.Get(reference, out _)._cache.ClearCache();
+		ReferenceCache.Instance.Get(reference)?._cache.ClearCache();
 		return ReferenceCache.Instance.Remove(reference);
 	}
 }

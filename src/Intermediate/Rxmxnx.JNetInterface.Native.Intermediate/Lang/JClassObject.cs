@@ -32,7 +32,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	{
 		get
 		{
-			if (this._className is null)
+			if (this._signature is null)
 				this.LoadClassInformation();
 			return this._signature!;
 		}

@@ -1,6 +1,10 @@
 # Application Test
 This application is designed to show the capabilities and potential of using JNetInterface in .NET applications that interact with a JVM instance.
 
+## Library Test
+The library test project contains the core of Application test. <br/>
+If the library is published with NativeAOT, the resulting binary can be used as JNI library for `com.rxmxnx.dotnet.test.HelloDotNet` natives methods registration. 
+
 ## Disclaimer
 In this project, `JNetInterface` is utilized through `intermediate libraries` instead of direct `NuGet packages`.
 
@@ -49,6 +53,8 @@ public class HelloDotnet {
     private static native Integer sumArray(int[] value);
     private static native int[][] getIntArrayArray(int length);
     private static native void printClass();
+    private static native Class getVoidClass();
+    private static native Class[] getPrimitiveClasses();
 }
 ```
 
@@ -97,6 +103,8 @@ internal interface IManagedCallback
 	static abstract JIntegerObject? SumArray(JClassObject jClass, JArrayObject<JInt>? jArray);
 	static abstract JArrayObject<JArrayObject<JInt>>? GetIntArrayArray(JClassObject jClass, Int32 length);
 	static abstract void PrintClass(JClassObject jClass);
+	static abstract JClassObject GetVoidClass(JClassObject jClass);
+	static abstract JArrayObject<JClassObject> GetPrimitiveClasses(JClassObject jClass);
 }
 ```
 

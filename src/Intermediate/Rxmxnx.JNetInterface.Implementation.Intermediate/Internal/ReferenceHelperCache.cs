@@ -50,6 +50,17 @@ internal abstract class ReferenceHelperCache<TObject, TReference, TCreationArg>
 			weak.SetTarget(result);
 		return result;
 	}
+	/// <summary>
+	/// Retrieves a <typeparamref name="TObject"/> instance from <paramref name="reference"/>.
+	/// </summary>
+	/// <param name="reference">A reference pointer to <typeparamref name="TObject"/> instance.</param>
+	/// <returns>A <typeparamref name="TObject"/> instance.</returns>
+	public TObject? Get(TReference reference)
+	{
+		if (this._objects.TryGetValue(reference.Pointer, out WeakReference<TObject>? weak) &&
+		    weak.TryGetTarget(out TObject? result)) return result;
+		return default;
+	}
 
 	/// <summary>
 	/// Removes the <typeparamref name="TObject"/> instance of <paramref name="reference"/>.
