@@ -3,9 +3,9 @@ namespace Rxmxnx.JNetInterface.Tests.Internal;
 [ExcludeFromCodeCoverage]
 internal sealed unsafe class MemoryHelper<TPointer> where TPointer : unmanaged, IFixedPointer
 {
-	private readonly Queue<Int32> _toFree = new(Byte.MaxValue);
 	private readonly HashSet<Int32> _busy;
 	private readonly IntPtr _noValue;
+	private readonly Queue<Int32> _toFree = new(Byte.MaxValue);
 	private readonly IntPtr _value;
 	private readonly IntPtr[] _values;
 
