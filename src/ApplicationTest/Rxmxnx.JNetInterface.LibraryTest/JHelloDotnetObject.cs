@@ -2,6 +2,8 @@ using System.Diagnostics.CodeAnalysis;
 
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
+using Rxmxnx.JNetInterface.Native.Access;
+using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 
@@ -33,6 +35,16 @@ public sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHello
 	{
 		using JClassObject jClass = JClassObject.GetClass<JHelloDotnetObject>(env);
 		JniCallback.RegisterNativeMethods(jClass, managed);
+		JHelloDotnetObject.GetObject(jClass);
+	}
+	public static void GetObject(JClassObject helloJniClass)
+	{
+		JInt count = new JFieldDefinition<JInt>("COUNT"u8).StaticGet(helloJniClass);
+		for (JInt i = 0; i < count; i++)
+		{
+			using JLocalObject? jLocal = GetObjectDefinition.Instance.Invoke(helloJniClass, i);
+			Console.WriteLine($"getObject({i}) -> {jLocal}");
+		}
 	}
 
 	static JHelloDotnetObject IClassType<JHelloDotnetObject>.Create(IReferenceType.ClassInitializer initializer)

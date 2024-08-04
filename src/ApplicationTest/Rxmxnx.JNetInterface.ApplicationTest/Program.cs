@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
-using Rxmxnx.JNetInterface.Primitives;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
@@ -54,12 +53,7 @@ public static partial class Program
 				Console.WriteLine("==== Begin psvm ===");
 				JMainMethodDefinition.Instance.Invoke(helloJniClass, args);
 				Console.WriteLine("==== End psvm ===");
-				JInt count = new JFieldDefinition<JInt>("COUNT"u8).StaticGet(helloJniClass);
-				for (JInt i = 0; i < count; i++)
-				{
-					using JLocalObject? jLocal = GetObjectDefinition.Instance.Invoke(helloJniClass, i);
-					Console.WriteLine($"getObject({i}) -> {jLocal}");
-				}
+				JHelloDotnetObject.GetObject(helloJniClass);
 				helloJniClass.UnregisterNativeCalls();
 			}
 			catch (ThrowableException ex)
