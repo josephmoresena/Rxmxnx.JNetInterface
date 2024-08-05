@@ -38,7 +38,8 @@ public abstract partial class JNativeMemory : IReadOnlyFixedContext<Byte>, IDisp
 /// This class represents a native memory block.
 /// </summary>
 /// <typeparam name="TValue">Value type in memory block.</typeparam>
-public sealed partial class JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContext<TValue> where TValue : unmanaged
+public sealed partial class JNativeMemory<TValue> : JNativeMemory, IReadOnlyFixedContext<TValue>
+	where TValue : unmanaged
 {
 	/// <summary>
 	/// Internal memory context.
