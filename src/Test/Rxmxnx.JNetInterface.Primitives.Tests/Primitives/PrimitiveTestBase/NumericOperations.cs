@@ -263,4 +263,112 @@ public partial class PrimitiveTestBase
 		Assert.Equal(TValue.CreateSaturating(T.MinValue), TPrimitive.CreateSaturating(T.MinValue).Value);
 		Assert.Equal(TValue.CreateTruncating(T.MinValue), TPrimitive.CreateTruncating(T.MinValue).Value);
 	}
+	private static void CreationTest<TPrimitive, TValue>(TPrimitive primitive)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
+		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
+	{
+		TPrimitive[] values = [primitive, TPrimitive.MinValue, TPrimitive.MaxValue,];
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, Byte>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, Char>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, Int16>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, Int32>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, Int64>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, SByte>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, UInt16>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, UInt32>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, UInt64>(values);
+
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, Double>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, Half>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, Single>(values);
+
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, JByte>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, JChar>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, JShort>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, JInt>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, JLong>(values);
+
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, JDouble>(values);
+		PrimitiveTestBase.CreationTest<TPrimitive, TValue, JFloat>(values);
+	}
+	private static void CreationTest<TPrimitive, TValue, TNumber>(TPrimitive[] primitives)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,
+		IEquatable<TPrimitive>, IPrimitiveNumericType<TPrimitive, TValue>, IPrimitiveEquatable,
+		IBinaryNumber<TPrimitive>, INumberBase<TPrimitive>, IMinMaxValue<TPrimitive>
+		where TValue : unmanaged, IConvertible, IMinMaxValue<TValue>, IBinaryNumber<TValue>, INumberBase<TValue>
+		where TNumber : unmanaged, INumberBase<TNumber>, IMinMaxValue<TNumber>
+	{
+		HashSet<TNumber> numbers = [];
+		foreach (TPrimitive primitive in primitives)
+		{
+			try
+			{
+				TNumber number = TNumber.CreateChecked(primitive);
+				Assert.Equal(number, TNumber.CreateChecked(primitive.Value));
+				numbers.Add(number);
+			}
+			catch (Exception e)
+			{
+				Assert.Equal(
+					e.Message, Assert.ThrowsAny<Exception>(() => TNumber.CreateChecked(primitive.Value)).Message);
+			}
+			try
+			{
+				TNumber number = TNumber.CreateSaturating(primitive);
+				Assert.Equal(number, TNumber.CreateSaturating(primitive.Value));
+				numbers.Add(number);
+			}
+			catch (Exception e)
+			{
+				Assert.Equal(
+					e.Message, Assert.ThrowsAny<Exception>(() => TNumber.CreateSaturating(primitive.Value)).Message);
+			}
+			try
+			{
+				TNumber number = TNumber.CreateTruncating(primitive);
+				Assert.Equal(number, TNumber.CreateTruncating(primitive.Value));
+				numbers.Add(number);
+			}
+			catch (Exception e)
+			{
+				Assert.Equal(
+					e.Message, Assert.ThrowsAny<Exception>(() => TNumber.CreateTruncating(primitive.Value)).Message);
+			}
+		}
+
+		numbers.Add(TNumber.MaxValue);
+		numbers.Add(TNumber.MinValue);
+		foreach (TNumber number in numbers)
+		{
+			try
+			{
+				TValue value = TPrimitive.CreateChecked(number).Value;
+				Assert.Equal(value, TValue.CreateChecked(number));
+			}
+			catch (Exception e)
+			{
+				Assert.Equal(e.Message, Assert.ThrowsAny<Exception>(() => TValue.CreateChecked(number)).Message);
+			}
+			try
+			{
+				TValue value = TPrimitive.CreateSaturating(number).Value;
+				Assert.Equal(value, TValue.CreateSaturating(number));
+			}
+			catch (Exception e)
+			{
+				Assert.Equal(e.Message, Assert.ThrowsAny<Exception>(() => TValue.CreateSaturating(number)).Message);
+			}
+			try
+			{
+				TValue value = TPrimitive.CreateTruncating(number).Value;
+				Assert.Equal(value, TValue.CreateTruncating(number));
+			}
+			catch (Exception e)
+			{
+				Assert.Equal(e.Message, Assert.ThrowsAny<Exception>(() => TValue.CreateTruncating(number)).Message);
+			}
+		}
+	}
 }

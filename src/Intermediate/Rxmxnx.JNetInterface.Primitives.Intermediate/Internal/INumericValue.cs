@@ -12,16 +12,9 @@ internal interface INumericValue<TPrimitive, TValue> : IBinaryNumber<TPrimitive>
 	IBinaryNumber<TPrimitive>, IPrimitiveEquatable
 	where TValue : unmanaged, IBinaryNumber<TValue>, IMinMaxValue<TValue>, IConvertible
 {
-	static Int32 INumberBase<TPrimitive>.Radix => 2;
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static Boolean INumberBase<TPrimitive>.IsCanonical(TPrimitive value) => true;
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static Boolean INumberBase<TPrimitive>.IsComplexNumber(TPrimitive value) => false;
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	static Boolean INumberBase<TPrimitive>.IsImaginaryNumber(TPrimitive value) => false;
-
-	static Boolean INumberBase<TPrimitive>.TryConvertFromChecked<TOther>(TOther value, out TPrimitive result)
+	/// <inheritdoc cref="INumberBase{TPrimitive}.TryConvertFromChecked{TOther}(TOther, out TPrimitive)"/>
+	protected new static Boolean TryConvertFromChecked<TOther>(TOther value, out TPrimitive result)
+		where TOther : INumberBase<TOther>
 	{
 		Unsafe.SkipInit(out result);
 		if (typeof(TOther) != typeof(TPrimitive) && typeof(TOther) != typeof(TValue))
@@ -29,7 +22,9 @@ internal interface INumericValue<TPrimitive, TValue> : IBinaryNumber<TPrimitive>
 		result = Unsafe.As<TOther, TPrimitive>(ref value);
 		return true;
 	}
-	static Boolean INumberBase<TPrimitive>.TryConvertFromSaturating<TOther>(TOther value, out TPrimitive result)
+	/// <inheritdoc cref="INumberBase{TPrimitive}.TryConvertFromSaturating{TOther}(TOther, out TPrimitive)"/>
+	protected new static Boolean TryConvertFromSaturating<TOther>(TOther value, out TPrimitive result)
+		where TOther : INumberBase<TOther>
 	{
 		Unsafe.SkipInit(out result);
 		if (typeof(TOther) != typeof(TPrimitive) && typeof(TOther) != typeof(TValue))
@@ -37,7 +32,9 @@ internal interface INumericValue<TPrimitive, TValue> : IBinaryNumber<TPrimitive>
 		result = Unsafe.As<TOther, TPrimitive>(ref value);
 		return true;
 	}
-	static Boolean INumberBase<TPrimitive>.TryConvertFromTruncating<TOther>(TOther value, out TPrimitive result)
+	/// <inheritdoc cref="INumberBase{TPrimitive}.TryConvertFromTruncating{TOther}(TOther, out TPrimitive)"/>
+	protected new static Boolean TryConvertFromTruncating<TOther>(TOther value, out TPrimitive result)
+		where TOther : INumberBase<TOther>
 	{
 		Unsafe.SkipInit(out result);
 		if (typeof(TOther) != typeof(TPrimitive) && typeof(TOther) != typeof(TValue))
@@ -45,7 +42,9 @@ internal interface INumericValue<TPrimitive, TValue> : IBinaryNumber<TPrimitive>
 		result = Unsafe.As<TOther, TPrimitive>(ref value);
 		return true;
 	}
-	static Boolean INumberBase<TPrimitive>.TryConvertToChecked<TOther>(TPrimitive value, out TOther result)
+	/// <inheritdoc cref="INumberBase{TPrimitive}.TryConvertToChecked{TOther}(TPrimitive, out TOther)"/>
+	protected new static Boolean TryConvertToChecked<TOther>(TPrimitive value, out TOther result)
+		where TOther : INumberBase<TOther>
 	{
 		if (typeof(TOther) != typeof(TPrimitive) && typeof(TOther) != typeof(TValue))
 			return TValue.TryConvertToChecked(value.Value, out result!);
@@ -53,7 +52,9 @@ internal interface INumericValue<TPrimitive, TValue> : IBinaryNumber<TPrimitive>
 		Unsafe.As<TOther, TValue>(ref result) = value.Value;
 		return true;
 	}
-	static Boolean INumberBase<TPrimitive>.TryConvertToSaturating<TOther>(TPrimitive value, out TOther result)
+	/// <inheritdoc cref="INumberBase{TPrimitive}.TryConvertToSaturating{TOther}(TPrimitive, out TOther)"/>
+	protected new static Boolean TryConvertToSaturating<TOther>(TPrimitive value, out TOther result)
+		where TOther : INumberBase<TOther>
 	{
 		if (typeof(TOther) != typeof(TPrimitive) && typeof(TOther) != typeof(TValue))
 			return TValue.TryConvertToSaturating(value.Value, out result!);
@@ -61,7 +62,9 @@ internal interface INumericValue<TPrimitive, TValue> : IBinaryNumber<TPrimitive>
 		Unsafe.As<TOther, TValue>(ref result) = value.Value;
 		return true;
 	}
-	static Boolean INumberBase<TPrimitive>.TryConvertToTruncating<TOther>(TPrimitive value, out TOther result)
+	/// <inheritdoc cref="INumberBase{TPrimitive}.TryConvertToTruncating{TOther}(TPrimitive, out TOther)"/>
+	protected new static Boolean TryConvertToTruncating<TOther>(TPrimitive value, out TOther result)
+		where TOther : INumberBase<TOther>
 	{
 		if (typeof(TOther) != typeof(TPrimitive) && typeof(TOther) != typeof(TValue))
 			return TValue.TryConvertToTruncating(value.Value, out result!);

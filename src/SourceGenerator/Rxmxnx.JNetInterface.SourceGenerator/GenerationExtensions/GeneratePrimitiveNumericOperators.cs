@@ -21,6 +21,30 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>, IN
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static Boolean INumberBase<{1}>.IsZero({1} value) => value._value == 0;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static Boolean INumberBase<{1}>.IsCanonical({1} value) => true;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static Boolean INumberBase<{1}>.IsComplexNumber({1} value) => false;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static Boolean INumberBase<{1}>.IsImaginaryNumber({1} value) => false;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static Boolean INumberBase<{1}>.TryConvertFromChecked<TOther>(TOther value, out {1} result) 
+		=> INumericValue<{1}, {2}>.TryConvertFromChecked(value, out result);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static Boolean INumberBase<{1}>.TryConvertFromSaturating<TOther>(TOther value, out {1} result) 
+		=> INumericValue<{1}, {2}>.TryConvertFromSaturating(value, out result);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static Boolean INumberBase<{1}>.TryConvertFromTruncating<TOther>(TOther value, out {1} result) 
+		=> INumericValue<{1}, {2}>.TryConvertFromTruncating(value, out result);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static Boolean INumberBase<{1}>.TryConvertToChecked<TOther>({1} value, out TOther result) 
+		=> INumericValue<{1}, {2}>.TryConvertToChecked(value, out result);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static Boolean INumberBase<{1}>.TryConvertToSaturating<TOther>({1} value, out TOther result) 
+		=> INumericValue<{1}, {2}>.TryConvertToSaturating(value, out result);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static Boolean INumberBase<{1}>.TryConvertToTruncating<TOther>({1} value, out TOther result) 
+		=> INumericValue<{1}, {2}>.TryConvertToTruncating(value, out result);
 {4}
 
     /// <inheritdoc cref=""IComparisonOperators{{TSelf, TOther, Boolean}}.op_GreaterThan(TSelf, TOther)"" />
@@ -72,6 +96,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>, IN
 
 	static {1} IMinMaxValue<{1}>.MinValue => {1}.MinValue;
 	static {1} IMinMaxValue<{1}>.MaxValue => {1}.MaxValue;
+	static Int32 INumberBase<{1}>.Radix => 2;
 }}
 #nullable restore";
 
