@@ -119,6 +119,7 @@ public class HelloDotnet {
         }
     }
 
+    @SuppressWarnings(""deprecation"")
     private static String getThreadInfo() {
         Thread currentThread = Thread.currentThread();
         String threadName = currentThread.getName();

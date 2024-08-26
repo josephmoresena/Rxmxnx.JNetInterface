@@ -166,7 +166,8 @@ public sealed class JLocalObjectTests
 		Assert.Equal(nCase > 1, jLocal.Lifetime.HasValidGlobal<JWeak>());
 		Assert.Equal(nCase > 2, jLocal.Lifetime.HasValidGlobal<JGlobal>());
 
-		env.Received(nCase > 1 ? 1 : 0).GetReferenceType(jWeak);
+		// JNI < 1.6 Support
+		env.Received(nCase > 1 && minVersion ? 1 : 0).GetReferenceType(jWeak);
 		env.Received(nCase > 2 && minVersion ? 1 : 0).GetReferenceType(jGlobal);
 	}
 

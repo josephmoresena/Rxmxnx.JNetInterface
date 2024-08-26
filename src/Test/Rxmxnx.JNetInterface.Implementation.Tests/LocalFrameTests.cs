@@ -141,7 +141,7 @@ public sealed class LocalFrameTests
 		}
 	}
 	[Fact]
-	internal void WithFrameLocalResult()
+	internal void WithFrameLocalResultTest()
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		Int32 capacity = LocalFrameTests.fixture.Create<Byte>();
@@ -179,7 +179,7 @@ public sealed class LocalFrameTests
 		}
 	}
 	[Fact]
-	internal void WithFrameNoLocalResult()
+	internal void WithFrameNoLocalResultTest()
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		Int32 capacity = LocalFrameTests.fixture.Create<Byte>();
@@ -211,6 +211,40 @@ public sealed class LocalFrameTests
 		finally
 		{
 			GC.Collect();
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
+	[Fact]
+	internal void WithFrameNoStateTest()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		Int32 capacity = LocalFrameTests.fixture.Create<Byte>();
+		String text = LocalFrameTests.fixture.Create<String>();
+		JStringLocalRef stringRef = default;
+		try
+		{
+			JEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+
+			proxyEnv.PushLocalFrame(capacity).Returns(JResult.Ok);
+			proxyEnv.PopLocalFrame(Arg.Any<JObjectLocalRef>()).Returns(c =>
+			{
+				JObjectLocalRef p0 = (JObjectLocalRef)c[0];
+				return p0 != default ? TestUtilities.InvertPointer(p0) : default;
+			});
+			proxyEnv.ClearReceivedCalls();
+			proxyEnv.VirtualMachine.ClearReceivedCalls();
+			(env as IEnvironment).WithFrame(
+				capacity,
+				() =>
+				{
+					Assert.Equal(Environment.CurrentManagedThreadId,
+					             (env as IEnvironment).WithFrame(capacity, () => Environment.CurrentManagedThreadId));
+				});
+		}
+		finally
+		{
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 			proxyEnv.FinalizeProxy(true);

@@ -33,8 +33,8 @@ public sealed class JWeak : JGlobalBase
 
 	/// <inheritdoc/>
 	public override Boolean IsValid(IEnvironment env)
-		=> base.IsValid(env) && env.GetReferenceType(this) == JReferenceType.WeakGlobalRefType &&
-			!env.IsSameObject(this, default);
+		=> base.IsValid(env) && (env.Version < IVirtualMachine.MinimalVersion ||
+			env.GetReferenceType(this) == JReferenceType.WeakGlobalRefType) && !env.IsSameObject(this, default);
 
 	/// <inheritdoc cref="JGlobalBase.Load(ObjectLifetime)"/>
 	internal new JWeak? Load(ObjectLifetime lifetime) => base.Load(lifetime) as JWeak;

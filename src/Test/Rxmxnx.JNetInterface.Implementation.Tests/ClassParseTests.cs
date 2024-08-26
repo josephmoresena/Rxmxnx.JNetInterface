@@ -5,10 +5,13 @@ public sealed class ClassParseTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
-	[Fact]
-	private static void ClassTest()
+	[Theory]
+	[InlineData]
+	[InlineData(true)]
+	private static void ClassTest(Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
@@ -28,9 +31,12 @@ public sealed class ClassParseTests
 	[Theory]
 	[InlineData(false)]
 	[InlineData(true)]
-	private static void GlobalTest(Boolean useNew)
+	[InlineData(false, true)]
+	[InlineData(true, true)]
+	private static void GlobalTest(Boolean useNew, Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
 		try
 		{
 			JGlobalRef globalRef = ClassParseTests.fixture.Create<JGlobalRef>();
@@ -58,9 +64,12 @@ public sealed class ClassParseTests
 	[Theory]
 	[InlineData(false)]
 	[InlineData(true)]
-	private static void WeakTest(Boolean useNew)
+	[InlineData(false, true)]
+	[InlineData(true, true)]
+	private static void WeakTest(Boolean useNew, Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
 		try
 		{
 			JWeakRef weakRef = ClassParseTests.fixture.Create<JWeakRef>();
@@ -87,9 +96,12 @@ public sealed class ClassParseTests
 	[Theory]
 	[InlineData(false)]
 	[InlineData(true)]
-	private static void LocalTest(Boolean sameRef)
+	[InlineData(false, true)]
+	[InlineData(true, true)]
+	private static void LocalTest(Boolean sameRef, Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
 		try
 		{
 			JGlobalRef globalRef = ClassParseTests.fixture.Create<JGlobalRef>();
@@ -123,7 +135,8 @@ public sealed class ClassParseTests
 
 			using JLocalObject localObject = IClassType.GetMetadata<JLocalObject>()
 			                                           .CreateInstance(env.ClassFeature.ClassObject, localRef, true);
-			Assert.Equal(classFeature.VoidObject, classFeature.AsClassObject(localObject));
+			using JClassObject jClass = classFeature.AsClassObject(localObject);
+			Assert.Equal(classFeature.VoidObject, jClass);
 
 			if (sameRef)
 			{
@@ -163,6 +176,42 @@ public sealed class ClassParseTests
 			proxyEnv.Received(1).IsInstanceOf(wrapperValue.Reference,
 			                                  JClassLocalRef.FromReference(
 				                                  proxyEnv.VirtualMachine.ClassGlobalRef.Value));
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
+	[Fact]
+	private static void InfoTest()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		try
+		{
+			JClassLocalRef classRef = ClassParseTests.fixture.Create<JClassLocalRef>();
+			JStringLocalRef stringRef = ClassParseTests.fixture.Create<JStringLocalRef>();
+			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			JDataTypeMetadata typeMetadata = IDataType.GetMetadata<JTestObject>();
+			using JClassObject jClass = new(env.ClassFeature.ClassObject, classRef);
+			using IFixedPointer.IDisposable fCtx = IClassType.GetMetadata<JTestObject>().Information.GetFixedPointer();
+
+			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
+			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(stringRef.Value);
+			proxyEnv.GetStringUtfLength(stringRef).Returns(typeMetadata.ClassName.Length);
+			proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>())
+			        .Returns((ReadOnlyValPtr<Byte>)fCtx.Pointer);
+
+			Assert.Equal(typeMetadata.ClassName, jClass.Name);
+			Assert.Equal(typeMetadata.Hash, jClass.Hash);
+
+			proxyEnv.Received(1).CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
+			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
+			proxyEnv.Received(1).CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
+			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
 		}
 		finally
 		{
