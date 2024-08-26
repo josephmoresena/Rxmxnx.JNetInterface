@@ -70,6 +70,12 @@ public partial class JLocalObject
 				JLocalObject.Validate<TClass>(jGlobal);
 				return TClass.Create(new IReferenceType.GlobalInitializer { Global = jGlobal, Environment = env, });
 			}
+			/// <inheritdoc/>
+			internal override Boolean IsValidForType(Type type, out JTypeKind typeKind)
+			{
+				typeKind = TClass.Kind;
+				return type == this.Type && this.Kind == TClass.Kind;
+			}
 		}
 	}
 }

@@ -58,7 +58,7 @@ internal static partial class ReferenceHelper
 
 	public static unsafe Boolean IsClassName<TDataType>(Byte* className) where TDataType : IDataType<TDataType>
 	{
-		fixed (Byte* dataTypeName = TDataType.Metadata.ClassName)
+		fixed (Byte* dataTypeName = IDataType<TDataType>.GetMetadata().ClassName)
 			return className == dataTypeName;
 	}
 	public static unsafe Boolean IsTypeField(Byte* fieldName)
