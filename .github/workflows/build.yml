@@ -67,3 +67,41 @@ jobs:
           if ($LastExitCode -ne 0) { exit $LastExitCode }  
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
           if ($LastExitCode -ne 0) { exit $LastExitCode }  
+          
+  run-linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup NativeAOT pre-requisites
+      run: sudo apt-get install clang zlib1g-dev libkrb5-dev --assume-yes
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+     - name: 'Set up latest Oracle JDK 21'
+        uses: oracle-actions/setup-java@v4
+        with:
+          website: oracle.com
+          release: 21
+    - name: Publish
+      run: |
+         dotnet run src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest
+  run-naot-linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup NativeAOT pre-requisites
+      run: sudo apt-get install clang zlib1g-dev libkrb5-dev --assume-yes
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+     - name: 'Set up latest Oracle JDK 21'
+        uses: oracle-actions/setup-java@v4
+        with:
+          website: oracle.com
+          release: 21
+    - name: Publish
+      run: |
+         dotnet build src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest -r linux-x64 --artifacts-path .
+         ./Rxmxnx.JNetInterface.ApplicationTest
