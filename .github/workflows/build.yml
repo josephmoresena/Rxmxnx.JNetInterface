@@ -83,25 +83,10 @@ jobs:
       with:
         java-version: 21
         distribution: 'oracle'
-    - name: Publish
+    - name: Framework run
       run: |
-         dotnet run src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest
-  run-naot-linux-x64:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup NativeAOT pre-requisites
-      run: sudo apt-get install clang zlib1g-dev libkrb5-dev --assume-yes
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: 21
-        distribution: 'oracle'
-    - name: Publish
+         dotnet run src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
+    - name: NativeAOT run
       run: |
-         dotnet build src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest -r linux-x64 --artifacts-path .
+         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 --artifacts-path .
          ./Rxmxnx.JNetInterface.ApplicationTest
