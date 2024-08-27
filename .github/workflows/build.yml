@@ -83,9 +83,12 @@ jobs:
          wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb
          sudo apt install ./jdk-21_linux-x64_bin.deb
     - name: Framework run
-      run: |
-         dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
+      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
     - name: NativeAOT run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64
+         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+    - name: NativeAOT-RFM run
+      run: |
+         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 /p:IlcDisableReflection=true
          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
