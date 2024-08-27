@@ -66,8 +66,7 @@ jobs:
           dotnet test src --verbosity detailed --collect:"XPlat Code Coverage" --results-directory TestResults/  --logger "trx;verbosity=detailed" --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
           if ($LastExitCode -ne 0) { exit $LastExitCode }  
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-          if ($LastExitCode -ne 0) { exit $LastExitCode }  
-          
+          if ($LastExitCode -ne 0) { exit $LastExitCode }          
   run-linux-x64:
     runs-on: ubuntu-latest
     steps:
