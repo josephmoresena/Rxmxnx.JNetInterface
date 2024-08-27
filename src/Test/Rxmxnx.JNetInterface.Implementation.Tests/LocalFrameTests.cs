@@ -221,8 +221,6 @@ public sealed class LocalFrameTests
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		Int32 capacity = LocalFrameTests.fixture.Create<Byte>();
-		String text = LocalFrameTests.fixture.Create<String>();
-		JStringLocalRef stringRef = default;
 		try
 		{
 			JEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);

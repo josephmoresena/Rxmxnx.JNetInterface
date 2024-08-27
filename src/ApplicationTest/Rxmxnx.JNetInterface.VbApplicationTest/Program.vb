@@ -1,9 +1,10 @@
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Runtime.InteropServices
 Imports Rxmxnx.JNetInterface.Lang
 Imports Rxmxnx.JNetInterface.Native
 Imports Rxmxnx.JNetInterface.Native.Access
 
-<CodeAnalysis.ExcludeFromCodeCoverage>
+<ExcludeFromCodeCoverage>
 Partial Module Program
     Sub Main(args As String())
         MainAsync(args).Wait()
@@ -34,12 +35,11 @@ Partial Module Program
         Dim jvmLib As JVirtualMachineLibrary = compiler.GetLibrary()
 
         Dim jMainArgs As String() = If(reflectionDisabled,
-                                       New String() {$"System Path: {Environment.SystemDirectory}"},
-                                       New String() { _
-                                                        $"System Path: {Environment.SystemDirectory}",
-                                                        $"Runtime Name: {RuntimeInformation.FrameworkDescription}"
-                                                    }
-                                       )
+                                       {$"System Path: {Environment.SystemDirectory}"},
+                                       { _
+                                           $"System Path: {Environment.SystemDirectory}",
+                                           $"Runtime Name: {RuntimeInformation.FrameworkDescription}"
+                                       })
 
         Execute(jvmLib, helloJniByteCode, jMainArgs)
 

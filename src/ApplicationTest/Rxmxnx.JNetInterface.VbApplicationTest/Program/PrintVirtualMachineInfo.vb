@@ -1,12 +1,14 @@
+Imports System.Text
 Imports Rxmxnx.PInvoke
 
 Partial Module Program
     Private Sub PrintVirtualMachineInfo(env As IEnvironment, vm As IInvokedVirtualMachine,
                                         jvmLib As JVirtualMachineLibrary)
         PrintAttachedThreadInfo(env)
-        PrintAttachThreadInfo(vm, "Main thread Re-Attached", env)
-        Dim jvmT As Task = Task.Factory.StartNew(AddressOf PrintAttachedThreadInfo, vm, TaskCreationOptions.LongRunning)
-        jvmT.Wait()
+        PrintAttachThreadInfo(vm, Encoding.UTF8.GetBytes("Main thread Re-Attached\0"), env)
+        Dim jvmTask As Task = Task.Factory.StartNew(AddressOf PrintAttachedThreadInfo, vm,
+                                                    TaskCreationOptions.LongRunning)
+        jvmTask.Wait()
         Console.WriteLine($"Supported version: 0x{jvmLib.GetLatestSupportedVersion():x8}")
         Dim vms As IVirtualMachine() = jvmLib.GetCreatedVirtualMachines()
         For Each jvm In vms
@@ -18,8 +20,8 @@ Partial Module Program
         If Not TypeOf obj Is IVirtualMachine Then Return
         Dim vm = DirectCast(obj, IVirtualMachine)
         Console.WriteLine($"New Thread {vm.GetEnvironment() Is Nothing}")
-        PrintAttachThreadInfo(vm, "New thread 1")
-        PrintAttachThreadInfo(vm, "New thread 2")
+        PrintAttachThreadInfo(vm, Encoding.UTF8.GetBytes("New thread 1\0"))
+        PrintAttachThreadInfo(vm, Encoding.UTF8.GetBytes("New thread 2\0"))
     End Sub
 
     Private Sub PrintAttachedThreadInfo(env As IEnvironment)
@@ -40,7 +42,7 @@ Partial Module Program
         Using thread As IThread = vm.InitializeThread(threadName)
             PrintAttachedThreadInfo(thread)
             If env Is Nothing Then
-                PrintAttachThreadInfo(vm, CString.Concat(threadName, " Nested"), thread)
+                PrintAttachThreadInfo(vm, CString.Concat(threadName, Encoding.UTF8.GetBytes(" Nested\0")), thread)
             End If
         End Using
 

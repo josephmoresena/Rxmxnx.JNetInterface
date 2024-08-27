@@ -9,6 +9,7 @@
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
         <InvariantGlobalization>true</InvariantGlobalization>
         <TrimMode>full</TrimMode>
+        <OptionStrict>On</OptionStrict>
     </PropertyGroup>
 
     <PropertyGroup>

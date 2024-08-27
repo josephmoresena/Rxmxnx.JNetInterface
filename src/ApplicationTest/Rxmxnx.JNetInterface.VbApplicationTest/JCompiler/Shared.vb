@@ -9,10 +9,8 @@ public Partial Class JCompiler
         If RuntimeInformation.IsOSPlatform(OSPlatform.OSX) Then
             Return GetMacCompilers()
         End If
-        Return _
-            If _
-                (RuntimeInformation.IsOSPlatform(OSPlatform.Linux), GetLinuxCompilers(),
-                 Array.Empty (Of JCompiler)())
+        Return If (RuntimeInformation.IsOSPlatform(OSPlatform.Linux), GetLinuxCompilers(),
+                   Array.Empty (Of JCompiler)())
     End Function
 
     Private Shared Function GetWindowsCompilers() As JCompiler()
@@ -44,7 +42,7 @@ public Partial Class JCompiler
                            Let _
                            javacFile = jdkDirectory.GetFiles(javacName, SearchOption.AllDirectories).FirstOrDefault()
                            Let jvmFile = jdkDirectory.GetFiles(jvmName, SearchOption.AllDirectories).FirstOrDefault()
-                           Where Not javacFile Is Nothing And Not jvmFile Is Nothing Select new JCompiler() With {
+                           Where javacFile IsNot Nothing AndAlso jvmFile IsNot Nothing Select new JCompiler() With {
                            .JdkPath = jdkDirectory.FullName,
                            .CompilerPath = Path.GetRelativePath(jdkDirectory.FullName, javacFile.FullName),
                            .LibraryPath = Path.GetRelativePath(jdkDirectory.FullName, jvmFile.FullName)})
