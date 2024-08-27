@@ -8,11 +8,7 @@ on:
 jobs:
   build:
     name: Build and analyze
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
+    runs-on: ubuntu-latest
     env:
       DOTNET_CLI_USE_MSBUILD_SERVER: false
     steps:
@@ -82,13 +78,25 @@ jobs:
       run: |
          wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb
          sudo apt install ./jdk-21_linux-x64_bin.deb
-    - name: Framework run
+    - name: C# Framework run
       run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
-    - name: NativeAOT run
+    - name: C# NativeAOT run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64
          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-    - name: NativeAOT-RFM run
+    - name: C# NativeAOT-RFM run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 /p:IlcDisableReflection=true
          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+    - name: Vb Framework run
+      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj
+    - name: Vb NativeAOT run
+      run: |
+         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r linux-x64
+         src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
+    - name: F# Framework run
+      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj
+    - name: F# NativeAOT run
+      run: |
+         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r linux-x64
+         src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
