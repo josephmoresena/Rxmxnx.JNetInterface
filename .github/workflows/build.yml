@@ -148,7 +148,7 @@ jobs:
     - name: Set up JDK 21
       shell: pwsh
       run: |
-          wget -Uri https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.msi
+          curl.exe -O https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.msi
           msiexec jdk-21_windows-x64_bin.msi /qn 
     - name: C# Framework run
       run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj
