@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
+        <TargetFramework>net8.0</TargetFramework>
+        <PublishAot>true</PublishAot>
+        <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
+        <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <TrimMode>full</TrimMode>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <RootAllApplicationAssemblies>false</RootAllApplicationAssemblies>
+        <TrimUnusedDependencies>true</TrimUnusedDependencies>
+        <IlcOptimizationPreference>Size</IlcOptimizationPreference>
+        <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+        <IlcTrimMetadata>true</IlcTrimMetadata>
+        <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+        <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
+        <IlcDisableReflection>false</IlcDisableReflection>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="JCompiler.fs"/>
+        <Compile Include="Program.fs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>-->
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
+        <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableNestingArrayAutoGeneration" Value="true" Trim="true"/>-->
+        <!--<RuntimeHostConfigurationOption Include="JNetInterface.EnableTrace" Value="true" Trim="true"/>-->
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableBuiltInThrowableAutoRegistration" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableReflectionAutoRegistration" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableNioAutoRegistration" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.EnableFinalUserTypeRuntime" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.CheckRefTypeNativeCallEnabled" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableCheckClassRefNativeCall" Value="true" Trim="true"/>
+    </ItemGroup>
+
+</Project>

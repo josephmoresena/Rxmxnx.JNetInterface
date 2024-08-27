@@ -1,8 +1,7 @@
-namespace Rxmxnx.JNetInterface.ApplicationTest;
-
-public partial class JCompiler
-{
-	private const String JavaCode = @"package com.rxmxnx.dotnet.test;
+public Partial Class JCompiler
+    Private _
+        Const JavaCode As String =
+        "package com.rxmxnx.dotnet.test;
 
 import java.lang.management.ManagementFactory;
 import java.time.Instant;
@@ -170,5 +169,5 @@ public class HelloDotnet {
     private static native void printClass();
     private static native Class getVoidClass();
     private static native Class[] getPrimitiveClasses();
-}";
-}
+}"
+End Class
