@@ -3,6 +3,7 @@ Imports Rxmxnx.JNetInterface.Lang
 Imports Rxmxnx.JNetInterface.Native
 Imports Rxmxnx.JNetInterface.Native.Access
 
+<CodeAnalysis.ExcludeFromCodeCoverage>
 Partial Module Program
     Sub Main(args As String())
         MainAsync(args).Wait()

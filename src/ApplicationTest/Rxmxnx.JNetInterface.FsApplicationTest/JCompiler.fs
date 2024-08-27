@@ -1,13 +1,15 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest
 
 open System
+open System.Diagnostics.CodeAnalysis
 open System.IO
 open System.Diagnostics
 open System.Runtime.InteropServices
 open System.Threading.Tasks
 open Rxmxnx.JNetInterface
 
-type JCompiler() =
+[<ExcludeFromCodeCoverage>]
+type JCompiler() =    
     [<Literal>]
     let JavaCode =
         """package com.rxmxnx.dotnet.test;

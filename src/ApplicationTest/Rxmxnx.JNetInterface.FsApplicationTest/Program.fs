@@ -1,3 +1,4 @@
+[<System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage>]
 module Program
 
 open System

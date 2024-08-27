@@ -1,5 +1,6 @@
 Imports System.IO
 
+<CodeAnalysis.ExcludeFromCodeCoverage>
 public NotInheritable Partial Class JCompiler
     Public Property JdkPath As String
     Public Property CompilerPath As String
