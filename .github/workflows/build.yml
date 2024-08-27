@@ -85,8 +85,8 @@ jobs:
         distribution: 'oracle'
     - name: Framework run
       run: |
-         dotnet run src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
+         dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
     - name: NativeAOT run
       run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 --artifacts-path .
+         dotnet publish --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 --artifacts-path .
          ./Rxmxnx.JNetInterface.ApplicationTest
