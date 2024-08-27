@@ -131,9 +131,9 @@ jobs:
     - name: F# NativeAOT run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r osx-x64
-         src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net8.0/osx-x64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
+         sudo src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net8.0/osx-x64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
     - name: C# NativeAOT-RFM run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-x64 /p:IlcDisableReflection=true
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/osx-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+         sudo src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/osx-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
          

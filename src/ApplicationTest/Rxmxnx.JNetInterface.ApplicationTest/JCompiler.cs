@@ -55,6 +55,9 @@ public sealed partial class JCompiler
 	/// </summary>
 	/// <returns>A <see cref="JVirtualMachineLibrary"/> instance.</returns>
 	public JVirtualMachineLibrary GetLibrary()
-		=> JVirtualMachineLibrary.LoadLibrary(Path.Combine(this.JdkPath, this.LibraryPath)) ??
-			throw new InvalidOperationException("Invalid JVM library.");
+	{
+		String libraryPath = Path.Combine(this.JdkPath, this.LibraryPath);
+		return JVirtualMachineLibrary.LoadLibrary(Path.Combine(this.JdkPath, this.LibraryPath)) ??
+			throw new InvalidOperationException($"Invalid JVM library. {libraryPath}");
+	}
 }
