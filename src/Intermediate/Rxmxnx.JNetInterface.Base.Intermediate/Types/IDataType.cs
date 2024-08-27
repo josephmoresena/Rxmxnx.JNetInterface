@@ -58,5 +58,10 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 
 	/// <inheritdoc cref="IDataType{TDataType}.Metadata"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal static JDataTypeMetadata GetMetadata() => TDataType.Metadata;
+	internal static JDataTypeMetadata GetMetadata()
+	{
+		JDataTypeMetadata typeMetadata = TDataType.Metadata;
+		CommonValidationUtilities.ThrowIfInvalidMetadata(typeof(TDataType), typeMetadata);
+		return typeMetadata;
+	}
 }
