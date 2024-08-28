@@ -8,7 +8,7 @@ public partial class JLocalObject
 	public abstract class
 		Uninstantiable<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TUninstantiable> : JLocalObject
-		where TUninstantiable : Uninstantiable<TUninstantiable>, IUninstantiableType<TUninstantiable>, new()
+		where TUninstantiable : Uninstantiable<TUninstantiable>, IUninstantiableType<TUninstantiable>
 	{
 		/// <inheritdoc/>
 		public override CString ObjectClassName => IReferenceType.GetMetadata<TUninstantiable>().ClassName;
