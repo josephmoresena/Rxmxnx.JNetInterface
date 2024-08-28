@@ -25,7 +25,7 @@ Partial Module Program
         PrintArrayMetadata(JArrayObject (Of JStringObject).Metadata, 5)
     End Sub
 
-    <Scope: SuppressMessage("vbnet", "S3385")>
+    <SuppressMessage("vbnet", "S3385")>
     Private Sub PrintArrayMetadata(arrMetadata As JArrayTypeMetadata, dimension As Integer)
         Console.WriteLine(arrMetadata.ElementMetadata.Signature)
         Dim stopMetadata = False
