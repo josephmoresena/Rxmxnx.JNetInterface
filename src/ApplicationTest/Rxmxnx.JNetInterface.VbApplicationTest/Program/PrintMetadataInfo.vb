@@ -33,12 +33,11 @@ Partial Module Program
             Dim arrMet2 As JArrayTypeMetadata = arrMetadata.GetArrayMetadata()
             If arrMet2 Is Nothing Then
                 stopMetadata = True
-                Goto FinalPrint
+                Exit For
             End If
             arrMetadata = arrMet2
         Next
-
-        FinalPrint:
+        
         If Not stopMetadata Then
             Console.WriteLine(arrMetadata.Signature)
         End If
