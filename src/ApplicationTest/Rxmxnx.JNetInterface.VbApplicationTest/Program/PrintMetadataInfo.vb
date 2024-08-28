@@ -1,3 +1,4 @@
+Imports System.Diagnostics.CodeAnalysis
 Imports Rxmxnx.JNetInterface.Io
 Imports Rxmxnx.JNetInterface.Lang
 Imports Rxmxnx.JNetInterface.Lang.Annotation
@@ -24,6 +25,7 @@ Partial Module Program
         PrintArrayMetadata(JArrayObject (Of JStringObject).Metadata, 5)
     End Sub
 
+    <Scope: SuppressMessage("vbnet", "S3385")>
     Private Sub PrintArrayMetadata(arrMetadata As JArrayTypeMetadata, dimension As Integer)
         Console.WriteLine(arrMetadata.ElementMetadata.Signature)
         Dim stopMetadata = False
@@ -37,7 +39,7 @@ Partial Module Program
             End If
             arrMetadata = arrMet2
         Next
-        
+
         If Not stopMetadata Then
             Console.WriteLine(arrMetadata.Signature)
         End If
