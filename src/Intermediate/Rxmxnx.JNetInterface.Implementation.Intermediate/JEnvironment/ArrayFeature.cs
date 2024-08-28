@@ -6,8 +6,7 @@ partial class JEnvironment
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial class EnvironmentCache : IArrayFeature
 	{
-		public unsafe JArrayObject<TElement> CreateArray<TElement>(Int32 length)
-			where TElement : IObject, IDataType<TElement>
+		public unsafe JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfInvalidArrayLength(length);
 			JArrayLocalRef arrayRef = default;
@@ -46,7 +45,7 @@ partial class JEnvironment
 			                                                 length));
 		}
 		public JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement)
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			JArrayObject<TElement> result;
 			if (MetadataHelper.GetExactMetadata<TElement>() is JPrimitiveTypeMetadata metadata)
@@ -73,7 +72,7 @@ partial class JEnvironment
 			return result;
 		}
 		public unsafe TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
@@ -90,7 +89,7 @@ partial class JEnvironment
 			return this.GetElementObject<TElement>(arrayRef, index);
 		}
 		public unsafe void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
@@ -108,7 +107,7 @@ partial class JEnvironment
 			}
 		}
 		public Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item)
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
@@ -121,7 +120,7 @@ partial class JEnvironment
 			return this.IndexOfPrimitive(jArray, itemSpan);
 		}
 		public void CopyTo<TElement>(JArrayObject<TElement> jArray, TElement?[] array, Int32 arrayIndex)
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
 			ArgumentNullException.ThrowIfNull(array);

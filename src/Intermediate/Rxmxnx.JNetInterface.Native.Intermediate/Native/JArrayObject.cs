@@ -63,8 +63,7 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 /// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
-public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView
-	where TElement : IObject, IDataType<TElement>
+public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView where TElement : IDataType<TElement>
 {
 	/// <summary>
 	/// Metadata array instance.

@@ -9,7 +9,7 @@ open System.Threading.Tasks
 open Rxmxnx.JNetInterface
 
 [<ExcludeFromCodeCoverage>]
-type JCompiler() =    
+type JCompiler() =
     [<Literal>]
     let JavaCode =
         """package com.rxmxnx.dotnet.test;

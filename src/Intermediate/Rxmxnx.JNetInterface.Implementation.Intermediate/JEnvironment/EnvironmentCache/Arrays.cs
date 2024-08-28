@@ -33,7 +33,7 @@ partial class JEnvironment
 		/// <param name="index">Element index.</param>
 		/// <returns>The element with <paramref name="index"/> on <paramref name="arrayRef"/>.</returns>
 		private TElement? GetElementObject<TElement>(JObjectArrayLocalRef arrayRef, Int32 index)
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			JObjectLocalRef localRef = this.GetObjectArrayElement(arrayRef, index);
 			return this.CreateObject<TElement>(localRef, true, MetadataHelper.IsFinalType<TElement>());
@@ -103,7 +103,7 @@ partial class JEnvironment
 		/// The zero-based index in <paramref name="array"/> at which copying begins.
 		/// </param>
 		private void CopyToPrimitive<TElement>(JArrayObject jArray, Int32 sizeOf, TElement?[] array, Int32 arrayIndex)
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			using MemoryHandle handle = array.AsMemory().Pin();
@@ -135,7 +135,7 @@ partial class JEnvironment
 		/// The zero-based index in <paramref name="array"/> at which copying begins.
 		/// </param>
 		private void CopyToObject<TElement>(JArrayObject jArray, IList<TElement?> array, Int32 arrayIndex)
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(array.Count + 1);
 			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
@@ -390,7 +390,7 @@ partial class JEnvironment
 		/// <param name="initialElement">A <see cref="IDataType"/> primitive value.</param>
 		/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
 		private unsafe void FillPrimitiveArray<TElement>(JArrayObject jArray, JDataTypeMetadata metadata,
-			TElement initialElement) where TElement : IObject, IDataType<TElement>
+			TElement initialElement) where TElement : IDataType<TElement>
 		{
 			Int32 requiredBytes = metadata.SizeOf * jArray.Length;
 			using StackDisposable stackDisposable =

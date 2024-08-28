@@ -11,7 +11,7 @@ public partial class JLocalObject
 		[Browsable(false)]
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected sealed class Generic<TElement> : JArrayObject, IArrayObject<TElement>
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			/// <summary>
 			/// String value.
