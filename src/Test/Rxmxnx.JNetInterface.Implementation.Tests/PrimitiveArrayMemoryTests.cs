@@ -73,13 +73,29 @@ public sealed class PrimitiveArrayMemoryTests
 			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef, default);
 			using IFixedContext<TPrimitive>.IDisposable fMem = value.AsMemory().GetFixedContext();
 			ValPtr<Byte> valPtr = fMem.AsBinaryContext().ValuePointer;
+			Boolean isCopy = PrimitiveArrayMemoryTests.fixture.Create<Boolean>();
 
 			proxyEnv.NewGlobalRef(arrayRef.Value).Returns(globalRef);
 			proxyEnv.NewWeakGlobalRef(arrayRef.Value).Returns(weakRef);
 			proxyEnv.GetArrayLength(arrayRef).Returns(value.Length);
-			proxyEnv.GetPrimitiveArrayCritical(arrayRef, Arg.Any<ValPtr<JBoolean>>()).Returns(valPtr);
-			proxyEnv.GetPrimitiveArrayCritical(wArrayRef, Arg.Any<ValPtr<JBoolean>>()).Returns(valPtr);
-			proxyEnv.GetPrimitiveArrayCritical(gArrayRef, Arg.Any<ValPtr<JBoolean>>()).Returns(valPtr);
+			proxyEnv.GetPrimitiveArrayCritical(arrayRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
+			proxyEnv.GetPrimitiveArrayCritical(wArrayRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
+			proxyEnv.GetPrimitiveArrayCritical(gArrayRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
 			proxyEnv.GetObjectRefType(weakRef.Value).Returns(JReferenceType.WeakGlobalRefType);
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 
@@ -87,6 +103,7 @@ public sealed class PrimitiveArrayMemoryTests
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
 			Assert.Null(seq.ReleaseMode);
+			Assert.False(seq.Copy);
 			seq.ReleaseMode = JReleaseMode.Abort;
 			Assert.Null(seq.ReleaseMode);
 
