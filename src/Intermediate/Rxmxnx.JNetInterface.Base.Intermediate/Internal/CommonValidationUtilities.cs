@@ -157,10 +157,8 @@ internal static class CommonValidationUtilities
 	/// <param name="dataTypeMetadata">Datatype metadata.</param>
 	public static void ThrowIfInvalidMetadata(Type typeOfT, JDataTypeMetadata dataTypeMetadata)
 	{
-		if (dataTypeMetadata.IsValidForType(typeOfT, out JTypeKind kind)) return;
-		String message = typeOfT != dataTypeMetadata.Type ?
-			$"Datatype metadata for {dataTypeMetadata.ClassName} doesn't match with {typeOfT} type." :
-			$"Datatype metadata for {dataTypeMetadata.ClassName} doesn't match with {kind} kind";
-		throw new ArgumentException(message);
+		if (dataTypeMetadata.IsValidForType(typeOfT)) return;
+		throw new ArgumentException(
+			$"Datatype metadata for {dataTypeMetadata.ClassName} doesn't match with {typeOfT} type.");
 	}
 }

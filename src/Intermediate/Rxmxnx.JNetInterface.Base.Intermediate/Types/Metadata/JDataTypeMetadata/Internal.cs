@@ -13,11 +13,7 @@ public partial class JDataTypeMetadata
 	/// <returns>
 	/// <see langword="true"/> if current instance is valid for current type; otherwise, <see langword="false"/>.
 	/// </returns>
-	internal virtual Boolean IsValidForType(Type type, out JTypeKind typeKind)
-	{
-		typeKind = this.Kind;
-		return this.Type == type;
-	}
+	internal Boolean IsValidForType(Type type) => this.Type == type;
 
 	/// <summary>
 	/// Creates hash from given parameters.
