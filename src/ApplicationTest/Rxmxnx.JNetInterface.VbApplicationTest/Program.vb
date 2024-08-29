@@ -12,7 +12,7 @@ Partial Module Program
 
     Private Async Function MainAsync(args As String()) As Task
         If IVirtualMachine.TypeMetadataToStringEnabled Then
-            PrintMetadataInfo()
+            JRuntimeInfo.PrintMetadataInfo()
         End If
 
         Dim reflectionDisabled As Boolean = Not $"{GetType(Program)}".Contains(NameOf(Program))
@@ -56,7 +56,7 @@ Partial Module Program
             Using vm As IInvokedVirtualMachine = jvmLib.CreateVirtualMachine(initArgs, env)
                 Try
                     If IVirtualMachine.TypeMetadataToStringEnabled Then
-                        PrintVirtualMachineInfo(env, vm, jvmLib)
+                        JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib)
                     End If
 
                     Dim managedInstance As New IManagedCallback.Default(vm)

@@ -8,11 +8,11 @@ using Rxmxnx.JNetInterface.Native.Access;
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 [ExcludeFromCodeCoverage]
-public static partial class Program
+public static class Program
 {
 	public static async Task Main(String[] args)
 	{
-		if (IVirtualMachine.TypeMetadataToStringEnabled) Program.PrintMetadataInfo();
+		if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintMetadataInfo();
 		Boolean reflectionDisabled = !$"{typeof(Program)}".Contains(nameof(Program));
 
 		JCompiler? compiler = args.Length == 3 ?
@@ -47,7 +47,7 @@ public static partial class Program
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{
-				if (IVirtualMachine.TypeMetadataToStringEnabled) Program.PrintVirtualMachineInfo(env, vm, jvmLib);
+				if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
 				IManagedCallback.Default managedInstance = new(vm);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance);
 				Console.WriteLine("==== Begin psvm ===");

@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 using Rxmxnx.JNetInterface.Io;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Lang.Annotation;
@@ -6,27 +8,45 @@ using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
+using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-public partial class Program
+/// <summary>
+/// Java compiler.
+/// </summary>
+[ExcludeFromCodeCoverage]
+public static class JRuntimeInfo
 {
-	private static void PrintMetadataInfo()
+	public static void PrintMetadataInfo()
 	{
-		Program.PrintBuiltInMetadata();
-		Program.PrintArrayMetadata(JArrayObject<JBoolean>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JByte>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JChar>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JDouble>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JFloat>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JLong>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JShort>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JLocalObject>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JClassObject>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JThrowableObject>.Metadata, 5);
-		Program.PrintArrayMetadata(JArrayObject<JStringObject>.Metadata, 5);
+		JRuntimeInfo.PrintBuiltInMetadata();
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JBoolean>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JByte>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JChar>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JDouble>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JFloat>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JInt>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JLong>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JShort>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JLocalObject>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JClassObject>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JThrowableObject>.Metadata, 5);
+		JRuntimeInfo.PrintArrayMetadata(JArrayObject<JStringObject>.Metadata, 5);
 	}
+	public static void PrintVirtualMachineInfo(IEnvironment env, IInvokedVirtualMachine vm,
+		JVirtualMachineLibrary jvmLib)
+	{
+		JRuntimeInfo.PrintAttachedThreadInfo(env);
+		JRuntimeInfo.PrintAttachThreadInfo(vm, new(() => "Main thread Re-Attached"u8), env);
+		Task jvmT = Task.Factory.StartNew(JRuntimeInfo.PrintAttachedThreadInfo, vm, TaskCreationOptions.LongRunning);
+		jvmT.Wait();
+		Console.WriteLine($"Supported version: 0x{jvmLib.GetLatestSupportedVersion():x8}");
+		IVirtualMachine[] vms = jvmLib.GetCreatedVirtualMachines();
+		foreach (IVirtualMachine jvm in vms)
+			Console.WriteLine($"VM: {jvm.Reference} Type: {jvm.GetType()}");
+	}
+
 	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata, Int32 dimension)
 	{
 		Console.WriteLine(arrMetadata.ElementMetadata.Signature);
@@ -42,7 +62,7 @@ public partial class Program
 			arrMetadata = arrMet2;
 		}
 		if (!stopMetadata) Console.WriteLine(arrMetadata.Signature);
-		Program.PrintNestedArrayMetadata(arrMetadata);
+		JRuntimeInfo.PrintNestedArrayMetadata(arrMetadata);
 	}
 	private static void PrintNestedArrayMetadata(JArrayTypeMetadata? arrMetadata, Boolean printCurrent = false)
 	{
@@ -108,5 +128,34 @@ public partial class Program
 		Console.WriteLine(IDataType.GetMetadata<JGenericDeclarationObject>());
 		Console.WriteLine(IDataType.GetMetadata<JTypeObject>());
 		Console.WriteLine(IDataType.GetMetadata<JAnnotationObject>());
+	}
+	private static void PrintAttachedThreadInfo(Object? obj)
+	{
+		if (obj is not IVirtualMachine vm) return;
+		Console.WriteLine($"New Thread {vm.GetEnvironment() is null}");
+		JRuntimeInfo.PrintAttachThreadInfo(vm, new(() => "New thread 1"u8));
+		JRuntimeInfo.PrintAttachThreadInfo(vm, new(() => "New thread 2"u8));
+	}
+	private static void PrintAttachedThreadInfo(IEnvironment env)
+	{
+		IVirtualMachine vm = env.VirtualMachine;
+		Console.WriteLine(vm.Reference);
+		Console.WriteLine($"VM Version: 0x{env.Version:x8}");
+		Console.WriteLine(
+			$"Ref Equality: {env.Equals(vm.GetEnvironment())} - Instance Equality: {Object.ReferenceEquals(env, vm.GetEnvironment())}");
+		Console.WriteLine($"Thread: {Environment.CurrentManagedThreadId} {env.Reference} Type: {env.GetType()}");
+	}
+	private static void PrintAttachThreadInfo(IVirtualMachine vm, CString threadName, IEnvironment? env = default)
+	{
+		Boolean attached = vm.GetEnvironment() is null;
+		Console.WriteLine(env is null ? $"Thread new: {attached}" : $"Thread attached: {attached}");
+		using (IThread thread = vm.InitializeThread(threadName))
+		{
+			JRuntimeInfo.PrintAttachedThreadInfo(thread);
+
+			if (env is null)
+				JRuntimeInfo.PrintAttachThreadInfo(vm, CString.Concat(threadName, " Nested"u8), thread);
+		}
+		Console.WriteLine($"Thread detached: {vm.GetEnvironment() is null}");
 	}
 }

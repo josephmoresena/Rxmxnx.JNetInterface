@@ -45,6 +45,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Rxmxnx.JNetInterface.VbAppl
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Rxmxnx.JNetInterface.FsApplicationTest", "ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj", "{5CACD07C-8BFE-4E4A-991E-9C79A2FB1A3E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.ConsoleTest", "ApplicationTest\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj", "{04630441-D09E-4566-B07F-E575FBCB2405}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -122,6 +124,10 @@ Global
 		{5CACD07C-8BFE-4E4A-991E-9C79A2FB1A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CACD07C-8BFE-4E4A-991E-9C79A2FB1A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CACD07C-8BFE-4E4A-991E-9C79A2FB1A3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04630441-D09E-4566-B07F-E575FBCB2405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04630441-D09E-4566-B07F-E575FBCB2405}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04630441-D09E-4566-B07F-E575FBCB2405}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04630441-D09E-4566-B07F-E575FBCB2405}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DEDEE978-C19C-4E9E-8734-2ABD5A3304B3} = {50F4F862-0CEC-43BE-8863-947064F7829C}
@@ -141,5 +147,6 @@ Global
 		{BA6F5BF8-90D0-459C-ACA2-021DC2B59010} = {25D4B3AE-0B35-405E-A2C8-9D8678949152}
 		{37A83634-74AE-462F-A80C-DCFAA2958C46} = {25D4B3AE-0B35-405E-A2C8-9D8678949152}
 		{5CACD07C-8BFE-4E4A-991E-9C79A2FB1A3E} = {25D4B3AE-0B35-405E-A2C8-9D8678949152}
+		{04630441-D09E-4566-B07F-E575FBCB2405} = {25D4B3AE-0B35-405E-A2C8-9D8678949152}
 	EndGlobalSection
 EndGlobal

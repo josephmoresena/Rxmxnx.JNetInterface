@@ -10,6 +10,8 @@
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
         <InvariantGlobalization>true</InvariantGlobalization>
         <TrimMode>full</TrimMode>
+        <IsPackable>false</IsPackable>
+        <IsTrimmable>true</IsTrimmable>
         <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
     </PropertyGroup>
 
