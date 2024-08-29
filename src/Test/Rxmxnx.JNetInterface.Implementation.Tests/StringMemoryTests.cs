@@ -25,13 +25,14 @@ public sealed class StringMemoryTests
 
 			using JStringObject jString = new(env.ClassFeature.StringObject, stringRef);
 			using IReadOnlyFixedContext<Char>.IDisposable fMem = value.AsMemory().GetFixedContext();
+			ReadOnlyValPtr<Char> valPtr = fMem.ValuePointer;
 
 			proxyEnv.NewGlobalRef(stringRef.Value).Returns(globalRef);
 			proxyEnv.NewWeakGlobalRef(stringRef.Value).Returns(weakRef);
 			proxyEnv.GetStringLength(stringRef).Returns(value.Length);
-			proxyEnv.GetStringCritical(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(fMem.ValuePointer);
-			proxyEnv.GetStringCritical(wStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(fMem.ValuePointer);
-			proxyEnv.GetStringCritical(gStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(fMem.ValuePointer);
+			proxyEnv.GetStringCritical(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(valPtr);
+			proxyEnv.GetStringCritical(wStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(valPtr);
+			proxyEnv.GetStringCritical(gStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(valPtr);
 			proxyEnv.GetObjectRefType(weakRef.Value).Returns(JReferenceType.WeakGlobalRefType);
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 
@@ -74,8 +75,10 @@ public sealed class StringMemoryTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
-	[Fact]
-	internal void CriticalNestedFailTest()
+	[Theory]
+	[InlineData(false)]
+	[InlineData(true)]
+	internal void CriticalNestedFailTest(Boolean isCopy)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
@@ -86,13 +89,20 @@ public sealed class StringMemoryTests
 
 			using JStringObject jString = new(env.ClassFeature.StringObject, stringRef);
 			using IReadOnlyFixedContext<Char>.IDisposable fMem = value.AsMemory().GetFixedContext();
+			ReadOnlyValPtr<Char> valPtr = fMem.ValuePointer;
 
 			proxyEnv.GetStringLength(stringRef).Returns(value.Length);
-			proxyEnv.GetStringCritical(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(fMem.ValuePointer);
+			proxyEnv.GetStringCritical(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
 
 			using JNativeMemory<Char> seq = jString.GetCriticalChars(JMemoryReferenceKind.Local);
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
+			Assert.False(seq.Copy);
 
 			proxyEnv.ClearReceivedCalls();
 
@@ -118,7 +128,10 @@ public sealed class StringMemoryTests
 	[InlineData(JMemoryReferenceKind.Local)]
 	[InlineData(JMemoryReferenceKind.ThreadIndependent)]
 	[InlineData(JMemoryReferenceKind.ThreadUnrestricted)]
-	internal void CharsTest(JMemoryReferenceKind referenceKind)
+	[InlineData(JMemoryReferenceKind.Local, true)]
+	[InlineData(JMemoryReferenceKind.ThreadIndependent, true)]
+	[InlineData(JMemoryReferenceKind.ThreadUnrestricted, true)]
+	internal void CharsTest(JMemoryReferenceKind referenceKind, Boolean isCopy = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JWeakRef weakRef = StringMemoryTests.fixture.Create<JWeakRef>();
@@ -134,19 +147,36 @@ public sealed class StringMemoryTests
 
 			using JStringObject jString = new(env.ClassFeature.StringObject, stringRef);
 			using IReadOnlyFixedContext<Char>.IDisposable fMem = value.AsMemory().GetFixedContext();
+			ReadOnlyValPtr<Char> valPtr = fMem.ValuePointer;
 
 			proxyEnv.NewGlobalRef(stringRef.Value).Returns(globalRef);
 			proxyEnv.NewWeakGlobalRef(stringRef.Value).Returns(weakRef);
 			proxyEnv.GetStringLength(stringRef).Returns(value.Length);
-			proxyEnv.GetStringChars(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(fMem.ValuePointer);
-			proxyEnv.GetStringChars(wStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(fMem.ValuePointer);
-			proxyEnv.GetStringChars(gStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(fMem.ValuePointer);
+			proxyEnv.GetStringChars(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
+			proxyEnv.GetStringChars(wStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
+			proxyEnv.GetStringChars(gStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
 			proxyEnv.GetObjectRefType(weakRef.Value).Returns(JReferenceType.WeakGlobalRefType);
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 
 			using JNativeMemory<Char> seq = jString.GetNativeChars(referenceKind);
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
+			Assert.Equal(isCopy, seq.Copy);
 
 			proxyEnv.Received(1).GetStringLength(stringRef);
 			proxyEnv.Received(0).GetStringCritical(Arg.Any<JStringLocalRef>(), Arg.Any<ValPtr<JBoolean>>());
@@ -185,7 +215,10 @@ public sealed class StringMemoryTests
 	[InlineData(JMemoryReferenceKind.Local)]
 	[InlineData(JMemoryReferenceKind.ThreadIndependent)]
 	[InlineData(JMemoryReferenceKind.ThreadUnrestricted)]
-	internal void UtfCharsTest(JMemoryReferenceKind referenceKind)
+	[InlineData(JMemoryReferenceKind.Local, true)]
+	[InlineData(JMemoryReferenceKind.ThreadIndependent, true)]
+	[InlineData(JMemoryReferenceKind.ThreadUnrestricted, true)]
+	internal void UtfCharsTest(JMemoryReferenceKind referenceKind, Boolean isCopy = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JWeakRef weakRef = StringMemoryTests.fixture.Create<JWeakRef>();
@@ -202,20 +235,37 @@ public sealed class StringMemoryTests
 
 			using JStringObject jString = new(env.ClassFeature.StringObject, stringRef);
 			using IReadOnlyFixedContext<Byte>.IDisposable fMem = valueUtf.AsMemory().GetFixedContext();
+			ReadOnlyValPtr<Byte> valPtr = fMem.ValuePointer;
 
 			proxyEnv.NewGlobalRef(stringRef.Value).Returns(globalRef);
 			proxyEnv.NewWeakGlobalRef(stringRef.Value).Returns(weakRef);
 			proxyEnv.GetStringLength(stringRef).Returns(value.Length);
 			proxyEnv.GetStringUtfLength(stringRef).Returns(valueUtf.Length);
-			proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(fMem.ValuePointer);
-			proxyEnv.GetStringUtfChars(wStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(fMem.ValuePointer);
-			proxyEnv.GetStringUtfChars(gStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(fMem.ValuePointer);
+			proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
+			proxyEnv.GetStringUtfChars(wStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
+			proxyEnv.GetStringUtfChars(gStringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
 			proxyEnv.GetObjectRefType(weakRef.Value).Returns(JReferenceType.WeakGlobalRefType);
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 
 			using JNativeMemory<Byte> seq = jString.GetNativeUtf8Chars(referenceKind);
 			Assert.Equal(valueUtf.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
+			Assert.Equal(isCopy, seq.Copy);
 
 			proxyEnv.Received(referenceKind != JMemoryReferenceKind.Local ? 1 : 0).GetStringLength(stringRef);
 			proxyEnv.Received(1).GetStringUtfLength(stringRef);
