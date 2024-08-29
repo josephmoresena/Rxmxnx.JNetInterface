@@ -4,19 +4,19 @@ namespace Rxmxnx.JNetInterface.Tests.Restricted;
 public abstract partial class AccessFeatureProxy : IAccessFeature
 {
 	public abstract TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
-		where TField : IObject, IDataType<TField>;
+		where TField : IDataType<TField>;
 	public abstract TField? GetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition)
 		where TField : IDataType<TField>, IObject;
 	public abstract void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
-		TField? value) where TField : IObject, IDataType<TField>;
+		TField? value) where TField : IDataType<TField>;
 	public abstract void SetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition,
 		TField? value) where TField : IDataType<TField>, IObject;
 	public abstract TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
-		where TField : IObject, IDataType<TField>;
+		where TField : IDataType<TField>;
 	public abstract TField? GetStaticField<TField>(JFieldObject jField, JFieldDefinition definition)
 		where TField : IDataType<TField>, IObject;
 	public abstract void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
-		where TField : IObject, IDataType<TField>;
+		where TField : IDataType<TField>;
 	public abstract void SetStaticField<TField>(JFieldObject jField, JFieldDefinition definition, TField? value)
 		where TField : IDataType<TField>, IObject;
 	public abstract TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,

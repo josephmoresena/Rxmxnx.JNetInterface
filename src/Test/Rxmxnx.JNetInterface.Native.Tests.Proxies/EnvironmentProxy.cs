@@ -35,6 +35,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 	public static EnvironmentProxy CreateEnvironment(Boolean isProxy = false, VirtualMachineProxy? vm = default)
 	{
 		EnvironmentProxy env = Substitute.For<EnvironmentProxy>();
+		env.Version.Returns(IVirtualMachine.MinimalVersion);
 		env.VirtualMachine.Returns(vm ?? Substitute.For<VirtualMachineProxy>());
 		env.NoProxy.Returns(!isProxy);
 		env.AccessFeature.Returns(Substitute.For<AccessFeatureProxy>());

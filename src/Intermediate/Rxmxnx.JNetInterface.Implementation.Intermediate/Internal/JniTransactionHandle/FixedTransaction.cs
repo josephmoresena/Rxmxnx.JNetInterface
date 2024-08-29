@@ -47,6 +47,7 @@ internal partial struct JniTransactionHandle
 		public JObjectLocalRef Add(JObjectLocalRef localRef)
 		{
 			if (localRef == default) return default;
+			if (this.Contains(localRef.Pointer)) return localRef; // Prevent duplicate references.
 			this._count++;
 			if (this._count > this._transactionCapacity)
 				throw new InvalidOperationException(

@@ -11,7 +11,7 @@ internal partial interface IArrayFeature
 	/// <typeparam name="TElement">Type of array element.</typeparam>
 	/// <param name="length">New array length.</param>
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
-	JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IObject, IDataType<TElement>;
+	JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IDataType<TElement>;
 	/// <summary>
 	/// Creates a <paramref name="initialElement"/> filled <see cref="JArrayObject{TElement}"/> instance.
 	/// </summary>
@@ -20,7 +20,7 @@ internal partial interface IArrayFeature
 	/// <param name="initialElement">Instance to set each array element.</param>
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
 	JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement)
-		where TElement : IObject, IDataType<TElement>;
+		where TElement : IDataType<TElement>;
 	/// <summary>
 	/// Retrieves the array length from <paramref name="jObject"/>
 	/// </summary>
@@ -34,8 +34,7 @@ internal partial interface IArrayFeature
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 	/// <param name="index">Element index.</param>
 	/// <returns>The element with <paramref name="index"/> on <paramref name="jArray"/>.</returns>
-	TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
-		where TElement : IObject, IDataType<TElement>;
+	TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index) where TElement : IDataType<TElement>;
 	/// <summary>
 	/// Sets the element with <paramref name="index"/> on <paramref name="jArray"/>.
 	/// </summary>
@@ -44,7 +43,7 @@ internal partial interface IArrayFeature
 	/// <param name="index">Element index.</param>
 	/// <param name="value">Element value.</param>
 	void SetElement<TElement>(JArrayObject<TElement> jArray, Int32 index, TElement? value)
-		where TElement : IObject, IDataType<TElement>;
+		where TElement : IDataType<TElement>;
 	/// <summary>
 	/// Determines the index of a specific item in <paramref name="jArray"/>.
 	/// </summary>
@@ -52,8 +51,7 @@ internal partial interface IArrayFeature
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 	/// <param name="item">The object to locate in <paramref name="jArray"/>.</param>
 	/// <returns>The index of <paramref name="item"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
-	Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item)
-		where TElement : IObject, IDataType<TElement>;
+	Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item) where TElement : IDataType<TElement>;
 	/// <summary>
 	/// Copies the elements of the <paramref name="jArray"/> to an <see cref="T:System.Array"/>,
 	/// starting at a particular <see cref="T:System.Array"/> index.
@@ -79,7 +77,7 @@ internal partial interface IArrayFeature
 	/// destination <paramref name="array"/>.
 	/// </exception>
 	void CopyTo<TElement>(JArrayObject<TElement> jArray, TElement?[] array, Int32 arrayIndex)
-		where TElement : IObject, IDataType<TElement>;
+		where TElement : IDataType<TElement>;
 	/// <summary>
 	/// Copies <paramref name="jArray"/> elements into <paramref name="elements"/>.
 	/// </summary>

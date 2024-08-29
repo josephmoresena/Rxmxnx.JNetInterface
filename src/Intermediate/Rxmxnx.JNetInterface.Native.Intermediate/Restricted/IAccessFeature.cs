@@ -14,7 +14,7 @@ internal partial interface IAccessFeature
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <returns><typeparamref name="TField"/> field instance.</returns>
 	TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
-		where TField : IObject, IDataType<TField>;
+		where TField : IDataType<TField>;
 	/// <summary>
 	/// Retrieves a reflected field on <paramref name="jField"/>.
 	/// </summary>
@@ -34,7 +34,7 @@ internal partial interface IAccessFeature
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <param name="value">The field value to set to.</param>
 	void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition, TField? value)
-		where TField : IObject, IDataType<TField>;
+		where TField : IDataType<TField>;
 	/// <summary>
 	/// Sets a reflected field on <paramref name="jField"/>.
 	/// </summary>
@@ -52,8 +52,7 @@ internal partial interface IAccessFeature
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <returns><typeparamref name="TField"/> field instance.</returns>
-	TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
-		where TField : IObject, IDataType<TField>;
+	TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition) where TField : IDataType<TField>;
 	/// <summary>
 	/// Retrieves a reflected static field on <paramref name="jField"/>.
 	/// </summary>
@@ -71,7 +70,7 @@ internal partial interface IAccessFeature
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <param name="value">The field value to set to.</param>
 	void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
-		where TField : IObject, IDataType<TField>;
+		where TField : IDataType<TField>;
 	/// <summary>
 	/// Sets a reflected static field on <paramref name="jField"/>.
 	/// </summary>

@@ -1,18 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Library</OutputType>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
         <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
         <PublishAot>true</PublishAot>
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
         <InvariantGlobalization>true</InvariantGlobalization>
         <TrimMode>full</TrimMode>
-        <IsPackable>false</IsPackable>
-        <IsTrimmable>true</IsTrimmable>
-        <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -27,11 +23,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="Program.fs"/>
     </ItemGroup>
 
     <ItemGroup>

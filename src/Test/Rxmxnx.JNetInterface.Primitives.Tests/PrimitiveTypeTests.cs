@@ -69,7 +69,7 @@ public sealed class PrimitiveTypeTests
 			$"{{ {nameof(JArgumentMetadata.Signature)} = {typeMetadata.ArgumentMetadata.Signature}, {nameof(JArgumentMetadata.Size)} = {typeMetadata.ArgumentMetadata.Size} }}";
 
 		Assert.Equal(JTypeKind.Primitive, TPrimitive.Kind);
-		Assert.Equal(typeMetadata, TPrimitive.Metadata);
+		Assert.Equal(typeMetadata, IDataType<TPrimitive>.GetMetadata());
 		Assert.Null(TPrimitive.FamilyType);
 		Assert.Equal(JTypeModifier.Final, typeMetadata.Modifier);
 		Assert.Equal(NativeUtilities.SizeOf<TPrimitive>(), typeMetadata.SizeOf);

@@ -70,7 +70,7 @@ partial class JEnvironment
 			this.CallPrimitiveFunction(bytes, definition, localRef, classRef, args, jniTransaction, methodId);
 		}
 		public TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
-			where TField : IObject, IDataType<TField>
+			where TField : IDataType<TField>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
@@ -109,7 +109,7 @@ partial class JEnvironment
 			return (TField)primitiveMetadata.CreateInstance(bytes);
 		}
 		public void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
-			TField? value) where TField : IObject, IDataType<TField>
+			TField? value) where TField : IDataType<TField>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
@@ -150,7 +150,7 @@ partial class JEnvironment
 			this.SetObjectField(localRef, value, jniTransaction, fieldId);
 		}
 		public TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
-			where TField : IObject, IDataType<TField>
+			where TField : IDataType<TField>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
@@ -184,7 +184,7 @@ partial class JEnvironment
 			return (TField)primitiveMetadata.CreateInstance(bytes);
 		}
 		public void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
-			where TField : IObject, IDataType<TField>
+			where TField : IDataType<TField>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TField>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)

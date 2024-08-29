@@ -150,4 +150,15 @@ internal static class CommonValidationUtilities
 			"A non-proxy object can't process a proxy metadata.";
 		throw new InvalidOperationException(message);
 	}
+	/// <summary>
+	/// Throws an exception if CLR type doesn't match with metadata type.
+	/// </summary>
+	/// <param name="typeOfT">Datatype CLR type.</param>
+	/// <param name="dataTypeMetadata">Datatype metadata.</param>
+	public static void ThrowIfInvalidMetadata(Type typeOfT, JDataTypeMetadata dataTypeMetadata)
+	{
+		if (dataTypeMetadata.IsValidForType(typeOfT)) return;
+		throw new ArgumentException(
+			$"Datatype metadata for {dataTypeMetadata.ClassName} doesn't match with {typeOfT} type.");
+	}
 }

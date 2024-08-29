@@ -15,7 +15,7 @@ partial class JEnvironment
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 		private unsafe void SetStaticObjectField<TField>(JClassLocalRef classRef, TField? value,
-			INativeTransaction jniTransaction, JFieldId fieldId) where TField : IObject, IDataType<TField>
+			INativeTransaction jniTransaction, JFieldId fieldId) where TField : IDataType<TField>
 		{
 			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JReferenceObject);
 			ref readonly NativeInterface nativeInterface =
@@ -32,7 +32,7 @@ partial class JEnvironment
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 		private unsafe void SetObjectField<TField>(JObjectLocalRef localRef, TField? value,
-			INativeTransaction jniTransaction, JFieldId fieldId) where TField : IObject, IDataType<TField>
+			INativeTransaction jniTransaction, JFieldId fieldId) where TField : IDataType<TField>
 		{
 			JObjectLocalRef valueLocalRef = this.UseObject(jniTransaction, value as JReferenceObject);
 			ref readonly NativeInterface nativeInterface =
@@ -80,7 +80,7 @@ partial class JEnvironment
 		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 		/// <returns><typeparamref name="TField"/> field instance.</returns>
 		private unsafe TField? GetObjectField<TField>(JObjectLocalRef localRef, JFieldId fieldId)
-			where TField : IObject, IDataType<TField>
+			where TField : IDataType<TField>
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetObjectFieldInfo);

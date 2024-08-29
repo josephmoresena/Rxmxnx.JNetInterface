@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public partial class JCompiler
 {
-	public const String JavaCode = @"package com.rxmxnx.dotnet.test;
+	private const String JavaCode = @"package com.rxmxnx.dotnet.test;
 
 import java.lang.management.ManagementFactory;
 import java.time.Instant;
@@ -119,6 +119,7 @@ public class HelloDotnet {
         }
     }
 
+    @SuppressWarnings(""deprecation"")
     private static String getThreadInfo() {
         Thread currentThread = Thread.currentThread();
         String threadName = currentThread.getName();

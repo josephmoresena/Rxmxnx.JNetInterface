@@ -21,7 +21,7 @@ public interface IDataType
 	/// <returns>The <see cref="JDataTypeMetadata"/> instance for given type.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static JDataTypeMetadata GetMetadata<TDataType>() where TDataType : IDataType<TDataType>
-		=> TDataType.Metadata;
+		=> IDataType<TDataType>.GetMetadata();
 	/// <summary>
 	/// Retrieves the hash for given type.
 	/// </summary>
@@ -38,7 +38,7 @@ public interface IDataType
 /// <typeparam name="TDataType">Type of the current Java datatype.</typeparam>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2743,
                  Justification = CommonConstants.StaticAbstractPropertyUseJustification)]
-public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
+public interface IDataType<out TDataType> : IDataType, IObject where TDataType : IDataType<TDataType>
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArgumentMetadata"/>
 	internal static virtual JArgumentMetadata Argument { get; } = JArgumentMetadata.Create<TDataType>();
@@ -46,6 +46,22 @@ public interface IDataType<out TDataType> : IDataType where TDataType : IDataTyp
 	/// <summary>
 	/// Current type metadata.
 	/// </summary>
+	/// <remarks>
+	/// This property is publicly exposed only to support F#;
+	/// The implementation property should match with the implementation on IPrimitiveType, IClassType, IInterfaceType, or
+	/// IEnumType.
+	/// </remarks>
 	[ReadOnly(true)]
-	internal static abstract JDataTypeMetadata Metadata { get; }
+	[Browsable(false)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	protected static abstract JDataTypeMetadata Metadata { get; }
+
+	/// <inheritdoc cref="IDataType{TDataType}.Metadata"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal static JDataTypeMetadata GetMetadata()
+	{
+		JDataTypeMetadata typeMetadata = TDataType.Metadata;
+		CommonValidationUtilities.ThrowIfInvalidMetadata(typeof(TDataType), typeMetadata);
+		return typeMetadata;
+	}
 }

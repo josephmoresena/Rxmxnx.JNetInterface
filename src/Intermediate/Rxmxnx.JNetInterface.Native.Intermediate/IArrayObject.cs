@@ -4,4 +4,4 @@ namespace Rxmxnx.JNetInterface;
 /// This interface exposes an <c>[]</c> instance.
 /// </summary>
 /// <typeparam name="TElement">Element type of array.</typeparam>
-public interface IArrayObject<out TElement> : IObject where TElement : IObject, IDataType<TElement>;
+public interface IArrayObject<out TElement> : IObject where TElement : IDataType<TElement>;

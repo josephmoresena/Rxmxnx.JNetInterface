@@ -12,15 +12,15 @@ public sealed partial class JCompiler
 	/// <summary>
 	/// Sdk path.
 	/// </summary>
-	public String JdkPath { get; init; } = default!;
+	public String JdkPath { get; set; } = default!;
 	/// <summary>
 	/// JAVAC path.
 	/// </summary>
-	public String CompilerPath { get; init; } = default!;
+	public String CompilerPath { get; set; } = default!;
 	/// <summary>
 	/// JVM library path.
 	/// </summary>
-	public String LibraryPath { get; init; } = default!;
+	public String LibraryPath { get; set; } = default!;
 
 	/// <summary>
 	/// Compiles HelloJni java class.
@@ -55,6 +55,9 @@ public sealed partial class JCompiler
 	/// </summary>
 	/// <returns>A <see cref="JVirtualMachineLibrary"/> instance.</returns>
 	public JVirtualMachineLibrary GetLibrary()
-		=> JVirtualMachineLibrary.LoadLibrary(Path.Combine(this.JdkPath, this.LibraryPath)) ??
-			throw new InvalidOperationException("Invalid JVM library.");
+	{
+		String libraryPath = Path.Combine(this.JdkPath, this.LibraryPath);
+		return JVirtualMachineLibrary.LoadLibrary(Path.Combine(this.JdkPath, this.LibraryPath)) ??
+			throw new InvalidOperationException($"Invalid JVM library. {libraryPath}");
+	}
 }

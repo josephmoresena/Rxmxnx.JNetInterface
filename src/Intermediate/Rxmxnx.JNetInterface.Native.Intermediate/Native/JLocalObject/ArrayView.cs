@@ -47,7 +47,7 @@ public partial class JLocalObject
 		/// </param>
 		/// <returns>A <see cref="JArrayObject"/> instance from current global instance.</returns>
 		internal static JArrayObject ParseArray<TElement>(JLocalObject jLocal, Boolean dispose = false)
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			IEnvironment env = jLocal.Environment;
 			if (jLocal is JArrayObject result) return result;

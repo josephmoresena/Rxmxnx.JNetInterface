@@ -15,7 +15,21 @@ public partial class JCompiler
 
 	private static JCompiler[] GetWindowsCompilers()
 	{
-		String javaPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Java");
+		Environment.SpecialFolder folder = !Environment.Is64BitOperatingSystem || Environment.Is64BitProcess ?
+			Environment.SpecialFolder.ProgramFiles :
+			Environment.SpecialFolder.ProgramFilesX86; //WOW64 support
+		String rootPath;
+		try
+		{
+			rootPath = Environment.GetFolderPath(folder);
+		}
+		catch (Exception)
+		{
+			rootPath = folder is Environment.SpecialFolder.ProgramFiles ?
+				@"C:\Program Files" :
+				@"C:\Program Files (x86)";
+		}
+		String javaPath = Path.Combine(rootPath, "Java");
 		return JCompiler.GetCompilers(javaPath, "jdk-*", "javac.exe", "jvm.dll");
 	}
 	private static JCompiler[] GetMacCompilers()

@@ -14,6 +14,7 @@ public abstract class ThreadProxy : EnvironmentProxy, IThread
 	public new static ThreadProxy CreateEnvironment(Boolean isProxy, VirtualMachineProxy? vm = default)
 	{
 		ThreadProxy env = Substitute.For<ThreadProxy>();
+		env.Version.Returns(IVirtualMachine.MinimalVersion);
 		env.VirtualMachine.Returns(vm ?? Substitute.For<VirtualMachineProxy>());
 		env.NoProxy.Returns(!isProxy);
 		env.AccessFeature.Returns(Substitute.For<AccessFeatureProxy>());
@@ -28,6 +29,7 @@ public abstract class ThreadProxy : EnvironmentProxy, IThread
 	public static ThreadProxy CreateEnvironment(EnvironmentProxy proxy)
 	{
 		ThreadProxy thread = Substitute.For<ThreadProxy>();
+		thread.Version.Returns(c => proxy.Version);
 		thread.VirtualMachine.Returns(c => proxy.VirtualMachine);
 		thread.NoProxy.Returns(c => proxy.NoProxy);
 		thread.AccessFeature.Returns(c => proxy.AccessFeature);

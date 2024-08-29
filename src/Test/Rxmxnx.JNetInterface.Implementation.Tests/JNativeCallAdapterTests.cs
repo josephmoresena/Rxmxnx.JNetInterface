@@ -511,7 +511,7 @@ public sealed partial class JNativeCallAdapterTests
 		}
 	}
 	private static JArrayObject<TDataType> CreateTestArray<TDataType>(NativeInterfaceProxy proxyEnv,
-		JNativeCallAdapter.Builder builder, JArrayLocalRef arrayRef) where TDataType : IObject, IDataType<TDataType>
+		JNativeCallAdapter.Builder builder, JArrayLocalRef arrayRef) where TDataType : IDataType<TDataType>
 	{
 		proxyEnv.ClearReceivedCalls();
 		proxyEnv.VirtualMachine.ClearReceivedCalls();

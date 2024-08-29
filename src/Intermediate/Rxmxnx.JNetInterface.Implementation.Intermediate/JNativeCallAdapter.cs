@@ -340,7 +340,7 @@ public readonly ref partial struct JNativeCallAdapter
 		/// <param name="jArray">A <see cref="JArrayObject{TElement}"/> instance from <paramref name="arrayRef"/>.</param>
 		/// <returns>Current <see cref="Builder"/> instance.</returns>
 		public Builder WithParameter<TElement>(JArrayLocalRef arrayRef, out JArrayObject<TElement> jArray)
-			where TElement : IObject, IDataType<TElement>
+			where TElement : IDataType<TElement>
 		{
 			jArray = this.CreateInitialObject<JArrayObject<TElement>>(arrayRef.Value);
 			return this;

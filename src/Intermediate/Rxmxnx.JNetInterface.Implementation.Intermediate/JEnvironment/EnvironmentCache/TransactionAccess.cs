@@ -59,7 +59,8 @@ partial class JEnvironment
 						ImplementationValidationUtilities.ThrowIfProxy(referenceObject);
 						this.ReloadClass(referenceObject as JClassObject);
 						ImplementationValidationUtilities.ThrowIfDefault(referenceObject, $"Invalid object at {i}.");
-						result[i].Transform<JValue, JObjectLocalRef>() = jniTransaction.Add(referenceObject);
+						ref JObjectLocalRef localRef = ref Unsafe.As<JValue, JObjectLocalRef>(ref result[i]);
+						localRef = jniTransaction.Add(referenceObject);
 						break;
 					default:
 						result[i] = JValue.Empty;

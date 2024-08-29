@@ -118,7 +118,7 @@ public sealed unsafe class JVirtualMachineLibrary
 		}
 	}
 	/// <summary>
-	/// Retrieves all of the created <see cref="IVirtualMachine"/> instances.
+	/// Retrieves all the created <see cref="IVirtualMachine"/> instances.
 	/// </summary>
 	/// <returns>A read-only list of <see cref="IVirtualMachine"/> instances.</returns>
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
@@ -132,7 +132,7 @@ public sealed unsafe class JVirtualMachineLibrary
 	}
 
 	/// <summary>
-	/// Retrieves all of the created <see cref="JVirtualMachineRef"/> instances.
+	/// Retrieves all the created <see cref="JVirtualMachineRef"/> instances.
 	/// </summary>
 	/// <param name="vmCount">Number of elements to retrieve.</param>
 	/// <param name="result">Output. JNI call result.</param>

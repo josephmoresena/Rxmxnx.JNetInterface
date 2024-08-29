@@ -44,9 +44,13 @@ public partial class JVirtualMachineTests
 			proxyEnv.GetObjectRefType(Arg.Any<JObjectLocalRef>()).Returns(JReferenceType.WeakGlobalRefType);
 			proxyEnv.NewWeakGlobalRef(proxyEnv.VirtualMachine.VoidGlobalRef.Value).Returns(weakRef);
 			Assert.Equal(weakRef, env.ClassFeature.VoidPrimitive.Weak.Reference);
-			Assert.Throws<InvalidOperationException>(() => env.ClassFeature.VoidPrimitive.Weak.IsValid(env));
-			proxyEnv.Received(0).GetObjectRefType(proxyEnv.VirtualMachine.VoidGlobalRef.Value);
 
+			if (jniVersion < NativeInterface.RequiredVersion)
+				Assert.Throws<InvalidOperationException>(() => env.ClassFeature.VoidPrimitive.Weak.IsValid(env));
+			else // JNI < 1.6 support 
+				_ = env.ClassFeature.VoidPrimitive.Weak.IsValid(env);
+
+			proxyEnv.Received(0).GetObjectRefType(proxyEnv.VirtualMachine.VoidGlobalRef.Value);
 			proxyEnv.Received(0).GetObjectRefType(weakRef.Value);
 		}
 		finally

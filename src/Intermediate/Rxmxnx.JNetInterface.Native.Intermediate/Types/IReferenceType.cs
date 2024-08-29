@@ -43,5 +43,11 @@ public interface
 	/// </summary>
 	/// <param name="initializer">A <see cref="IReferenceType.ObjectInitializer"/> instance.</param>
 	/// <returns>A <typeparamref name="TReference"/> instance from <paramref name="initializer"/>.</returns>
+	/// <remarks>
+	/// This method is publicly exposed only to support F#;
+	/// The implementation property should match with the implementation on IClassType, IInterfaceType, or IEnumType.
+	/// </remarks>
+	[Browsable(false)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	protected static abstract TReference Create(ObjectInitializer initializer);
 }

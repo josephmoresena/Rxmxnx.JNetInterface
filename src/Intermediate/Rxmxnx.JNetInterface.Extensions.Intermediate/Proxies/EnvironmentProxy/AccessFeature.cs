@@ -4,25 +4,25 @@ public abstract partial class EnvironmentProxy
 {
 	/// <inheritdoc/>
 	public abstract TField? GetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition)
-		where TField : IObject, IDataType<TField>;
+		where TField : IDataType<TField>;
 	/// <inheritdoc/>
 	public abstract TField? GetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition)
 		where TField : IDataType<TField>, IObject;
 	/// <inheritdoc/>
 	public abstract void SetField<TField>(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
-		TField? value) where TField : IObject, IDataType<TField>;
+		TField? value) where TField : IDataType<TField>;
 	/// <inheritdoc/>
 	public abstract void SetField<TField>(JFieldObject jField, JLocalObject jLocal, JFieldDefinition definition,
 		TField? value) where TField : IDataType<TField>, IObject;
 	/// <inheritdoc/>
 	public abstract TField? GetStaticField<TField>(JClassObject jClass, JFieldDefinition definition)
-		where TField : IObject, IDataType<TField>;
+		where TField : IDataType<TField>;
 	/// <inheritdoc/>
 	public abstract TField? GetStaticField<TField>(JFieldObject jField, JFieldDefinition definition)
 		where TField : IDataType<TField>, IObject;
 	/// <inheritdoc/>
 	public abstract void SetStaticField<TField>(JClassObject jClass, JFieldDefinition definition, TField? value)
-		where TField : IObject, IDataType<TField>;
+		where TField : IDataType<TField>;
 	/// <inheritdoc/>
 	public abstract void SetStaticField<TField>(JFieldObject jField, JFieldDefinition definition, TField? value)
 		where TField : IDataType<TField>, IObject;

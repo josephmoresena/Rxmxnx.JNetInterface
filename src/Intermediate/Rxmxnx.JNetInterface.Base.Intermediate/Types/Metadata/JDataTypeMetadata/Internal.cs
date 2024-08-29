@@ -8,6 +8,14 @@ public partial class JDataTypeMetadata
 	internal CStringSequence Information => this._sequence;
 
 	/// <summary>
+	/// Indicates current instance is valid for current datatype.
+	/// </summary>
+	/// <returns>
+	/// <see langword="true"/> if current instance is valid for current type; otherwise, <see langword="false"/>.
+	/// </returns>
+	internal Boolean IsValidForType(Type type) => this.Type == type;
+
+	/// <summary>
 	/// Creates hash from given parameters.
 	/// </summary>
 	/// <param name="className">JNI name of the current type.</param>
