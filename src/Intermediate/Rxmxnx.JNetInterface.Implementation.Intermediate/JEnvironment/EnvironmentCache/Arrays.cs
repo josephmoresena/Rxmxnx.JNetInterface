@@ -164,35 +164,46 @@ partial class JEnvironment
 		{
 			ref readonly ArrayFunctionSet arrayFunctions =
 				ref this.GetArrayFunctions(signature, ArrayFunctionSet.PrimitiveFunction.GetElements);
+			IntPtr result = default;
 			switch (signature)
 			{
 				case CommonNames.BooleanSignatureChar:
-					return arrayFunctions.GetElementsFunctions.GetBooleanArrayElements.Get(
+					result = arrayFunctions.GetElementsFunctions.GetBooleanArrayElements.Get(
 						this.Reference, JBooleanArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+					break;
 				case CommonNames.ByteSignatureChar:
-					return arrayFunctions.GetElementsFunctions.GetByteArrayElements.Get(
+					result = arrayFunctions.GetElementsFunctions.GetByteArrayElements.Get(
 						this.Reference, JByteArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+					break;
 				case CommonNames.CharSignatureChar:
-					return arrayFunctions.GetElementsFunctions.GetCharArrayElements.Get(
+					result = arrayFunctions.GetElementsFunctions.GetCharArrayElements.Get(
 						this.Reference, JCharArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+					break;
 				case CommonNames.DoubleSignatureChar:
-					return arrayFunctions.GetElementsFunctions.GetDoubleArrayElements.Get(
+					result = arrayFunctions.GetElementsFunctions.GetDoubleArrayElements.Get(
 						this.Reference, JDoubleArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+					break;
 				case CommonNames.FloatSignatureChar:
-					return arrayFunctions.GetElementsFunctions.GetFloatArrayElements.Get(
+					result = arrayFunctions.GetElementsFunctions.GetFloatArrayElements.Get(
 						this.Reference, JFloatArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+					break;
 				case CommonNames.IntSignatureChar:
-					return arrayFunctions.GetElementsFunctions.GetIntArrayElements.Get(
+					result = arrayFunctions.GetElementsFunctions.GetIntArrayElements.Get(
 						this.Reference, JIntArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+					break;
 				case CommonNames.LongSignatureChar:
-					return arrayFunctions.GetElementsFunctions.GetLongArrayElements.Get(
+					result = arrayFunctions.GetElementsFunctions.GetLongArrayElements.Get(
 						this.Reference, JLongArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+					break;
 				case CommonNames.ShortSignatureChar:
-					return arrayFunctions.GetElementsFunctions.GetShortArrayElements.Get(
+					result = arrayFunctions.GetElementsFunctions.GetShortArrayElements.Get(
 						this.Reference, JShortArrayLocalRef.FromReference(in arrayRef), out isCopyJ);
+					break;
+				default:
+					isCopyJ = false;
+					break;
 			}
-			isCopyJ = false;
-			return default;
+			return result;
 		}
 		private unsafe void ReleasePrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, IntPtr pointer,
 			JReleaseMode mode)
