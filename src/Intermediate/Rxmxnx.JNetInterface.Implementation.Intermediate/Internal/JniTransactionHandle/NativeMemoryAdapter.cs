@@ -61,7 +61,12 @@ internal partial struct JniTransactionHandle
 		}
 
 		/// <inheritdoc/>
-		public virtual void Release(JReleaseMode mode = JReleaseMode.Free) => this.Dispose();
+		public virtual void Release(JReleaseMode mode = JReleaseMode.Free)
+		{
+			this.Dispose();
+			if (this._source is JGlobalBase jGlobal)
+				jGlobal.Dispose(); // Delete global reference.
+		}
 
 		/// <summary>
 		/// Activates current memory adapter.
@@ -74,7 +79,7 @@ internal partial struct JniTransactionHandle
 		{
 			base.Dispose(disposing);
 			if (disposing && !this.Disposed && this._source is JGlobalBase jGlobal)
-				jGlobal.Dispose();
+				jGlobal.Dispose(); // Release exclusive global references
 		}
 
 		/// <summary>
