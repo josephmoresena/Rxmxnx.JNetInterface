@@ -32,7 +32,7 @@ public sealed class MetadataTypeTests
 		static JClassTypeMetadata<InvalidType> IClassType<InvalidType>.Metadata
 			=> (JClassTypeMetadata<InvalidType>)InvalidType.Metadata!;
 		static JDataTypeMetadata IDataType<InvalidType>.Metadata => InvalidType.Metadata!;
-		public static JDataTypeMetadata CreateMetadata(ReadOnlySpan<Byte> typeName)
+		public static JClassTypeMetadata<InvalidType> CreateMetadata(ReadOnlySpan<Byte> typeName)
 			=> TypeMetadataBuilder<InvalidType>.Create(typeName, JTypeModifier.Final).Build();
 	}
 }
