@@ -48,11 +48,11 @@ public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldO
 	/// <param name="localRef">Local object reference.</param>
 	/// <param name="definition">Field definition.</param>
 	/// <param name="declaringClass">Declaring class.</param>
-	internal JFieldObject(JClassObject jClass, JObjectLocalRef localRef, JFieldDefinition definition,
-		JClassObject declaringClass) : base(jClass, localRef)
+	internal JFieldObject(JClassObject jClass, JObjectLocalRef localRef, JFieldDefinition? definition = default,
+		JClassObject? declaringClass = default) : base(jClass, localRef)
 	{
 		this._fieldDefinition = definition;
-		this._classInformation = declaringClass.GetInformation();
+		this._classInformation = declaringClass?.GetInformation();
 	}
 
 	/// <inheritdoc/>
