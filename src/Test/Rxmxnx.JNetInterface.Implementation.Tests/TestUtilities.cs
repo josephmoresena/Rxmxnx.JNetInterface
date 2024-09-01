@@ -255,4 +255,78 @@ internal static class TestUtilities
 		tracker = new() { WeakReference = new(instanceMethod), FinalizerFlag = instanceMethod.IsDisposed, };
 		return JNativeCallEntry.CreateParameterless(definition, instanceMethod.VoidCall);
 	}
+	public static JArgumentMetadata[] GetArgumentsMetadata(this CallType callType)
+		=> callType switch
+		{
+			CallType.SingleValue => [JArgumentMetadata.Get<JInt>(),],
+			CallType.SingleObject => [JArgumentMetadata.Get<JStringObject>(),],
+			CallType.Values =>
+			[
+				JArgumentMetadata.Get<JInt>(),
+				JArgumentMetadata.Get<JDouble>(),
+				JArgumentMetadata.Get<JBoolean>(),
+			],
+			CallType.Objects =>
+			[
+				JArgumentMetadata.Get<JStringObject>(),
+				JArgumentMetadata.Get<JClassObject>(),
+				JArgumentMetadata.Get<JThrowableObject>(),
+			],
+			CallType.Mixed =>
+			[
+				JArgumentMetadata.Get<JInt>(),
+				JArgumentMetadata.Get<JStringObject>(),
+				JArgumentMetadata.Get<JDouble>(),
+				JArgumentMetadata.Get<JClassObject>(),
+				JArgumentMetadata.Get<JBoolean>(),
+				JArgumentMetadata.Get<JThrowableObject>(),
+			],
+			_ => [],
+		};
+	public static IObject[] GetArgumentsValues(this CallType callType, NativeInterfaceProxy proxyEnv)
+		=> callType switch
+		{
+			CallType.SingleValue => [(JInt)TestUtilities.fixture.Create<Int32>(),],
+			CallType.SingleObject => [TestUtilities.CreateString(proxyEnv, TestUtilities.fixture.Create<String>()),],
+			CallType.Values =>
+			[
+				(JInt)TestUtilities.fixture.Create<Int32>(), (JDouble)TestUtilities.fixture.Create<Double>(),
+				(JBoolean)TestUtilities.fixture.Create<Boolean>(),
+			],
+			CallType.Objects =>
+			[
+				TestUtilities.CreateString(proxyEnv, TestUtilities.fixture.Create<String>()),
+				(JEnvironment.GetEnvironment(proxyEnv.Reference) as IEnvironment)!.ClassFeature.ClassObject,
+				TestUtilities.CreateThrowable(proxyEnv),
+			],
+			CallType.Mixed =>
+			[
+				(JInt)TestUtilities.fixture.Create<Int32>(),
+				TestUtilities.CreateString(proxyEnv, TestUtilities.fixture.Create<String>()),
+				(JDouble)TestUtilities.fixture.Create<Double>(),
+				(JEnvironment.GetEnvironment(proxyEnv.Reference) as IEnvironment).ClassFeature.ClassObject,
+				(JBoolean)TestUtilities.fixture.Create<Boolean>(), TestUtilities.CreateThrowable(proxyEnv),
+			],
+			_ => [],
+		};
+	public static Expression<Predicate<ReadOnlyValPtr<JValueWrapper>>> GetArgsPtr(IObject[] args)
+	{
+		Func<ReadOnlyValPtr<JValueWrapper>, Boolean> f = ptr =>
+		{
+			using IReadOnlyFixedContext<JValueWrapper>.IDisposable ctx = ptr.GetUnsafeFixedContext(args.Length);
+			Span<Byte> byteSpan = stackalloc Byte[JValue.Size];
+			ReadOnlySpan<Byte> blank = stackalloc Byte[JValue.Size];
+			for (Int32 i = 0; i < args.Length; i++)
+			{
+				blank.CopyTo(byteSpan);
+				args[i].CopyTo(byteSpan);
+				if (!NativeUtilities.AsBytes(in ctx.Values[i]).SequenceEqual(byteSpan))
+					return false;
+			}
+			return true;
+		};
+		ParameterExpression parameter = Expression.Parameter(typeof(ReadOnlyValPtr<JValueWrapper>), "ptr");
+		Expression body = Expression.Invoke(Expression.Constant(f), parameter);
+		return Expression.Lambda<Predicate<ReadOnlyValPtr<JValueWrapper>>>(body, parameter);
+	}
 }
