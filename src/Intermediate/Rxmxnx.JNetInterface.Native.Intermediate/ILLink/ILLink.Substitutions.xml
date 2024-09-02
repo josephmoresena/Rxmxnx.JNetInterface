@@ -71,7 +71,7 @@
                     body="stub"/>
             <method signature="System.Void SetField`1(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JFieldDefinition,,System.String)"
                     body="stub"/>
-            <method signature="System.Void CallMethod(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JCallDefinition,System.Boolean,Rxmxnx.JNetInterface.IObject[],System.String)"
+            <method signature="System.Void CallMethod(Rxmxnx.JNetInterface.Native.JLocalObject,Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Native.Access.JCallDefinition,System.Boolean,System.ReadOnlySpan`1&lt;Rxmxnx.JNetInterface.IObject&gt;,System.String)"
                     body="stub"/>
             <method signature="System.Void SetPrimitiveField`1(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.Byte,Rxmxnx.JNetInterface.Native.Identifiers.JFieldId,,System.String)"
                     body="stub"/>
