@@ -30,7 +30,7 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// <param name="jClass">An <see cref="JClassObject"/> instance.</param>
 	/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
 	private protected JLocalObject New(JClassObject jClass)
-		=> this.New<JLocalObject>(jClass, this.CreateArgumentsArray());
+		=> this.New<JLocalObject>(jClass, ReadOnlySpan<IObject?>.Empty);
 	/// <summary>
 	/// Creates a new <typeparamref name="TObject"/> instance using a constructor which matches with
 	/// current definition passing the default value for each argument.
@@ -39,7 +39,7 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
 	private protected TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
-		=> this.New<TObject>(env.ClassFeature.GetClass<TObject>(), this.CreateArgumentsArray());
+		=> this.New<TObject>(env.ClassFeature.GetClass<TObject>(), ReadOnlySpan<IObject?>.Empty);
 
 	/// <summary>
 	/// Creates a new <typeparamref name="TObject"/> instance using a constructor on <paramref name="jClass"/>
@@ -49,7 +49,8 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <typeparamref name="TObject"/>.</returns>
-	private TObject New<TObject>(JClassObject jClass, IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
+	private TObject New<TObject>(JClassObject jClass, ReadOnlySpan<IObject?> args)
+		where TObject : JLocalObject, IClassType<TObject>
 	{
 		NativeValidationUtilities.ThrowIfAbstractClass(IClassType.GetMetadata<TObject>());
 		IEnvironment env = jClass.Environment;
@@ -65,14 +66,14 @@ public partial class JConstructorDefinition : JCallDefinition
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	internal static TObject New<TObject>(JConstructorDefinition definition, JClassObject jClass,
-		IObject?[]? args = default) where TObject : JLocalObject, IClassType<TObject>
-		=> definition.New<TObject>(jClass, args ?? definition.CreateArgumentsArray());
+		ReadOnlySpan<IObject?> args = default) where TObject : JLocalObject, IClassType<TObject>
+		=> definition.New<TObject>(jClass, args);
 
 	/// <summary>
 	/// Create a <see cref="JConstructorDefinition"/> instance for <paramref name="metadata"/>.
 	/// </summary>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>A <see cref="JConstructorDefinition"/> instance.</returns>
-	internal static JConstructorDefinition Create(JArgumentMetadata[] metadata)
+	internal static JConstructorDefinition Create(ReadOnlySpan<JArgumentMetadata> metadata)
 		=> metadata.Length > 0 ? new JConstructorDefinition(metadata) : new Parameterless();
 }

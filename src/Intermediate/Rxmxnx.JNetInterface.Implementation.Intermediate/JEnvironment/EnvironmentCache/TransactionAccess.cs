@@ -41,14 +41,14 @@ partial class JEnvironment
 		/// Retrieves <paramref name="argSpan"/> as a <see cref="JValue"/> span containing <paramref name="args"/> information.
 		/// </summary>
 		/// <param name="jniTransaction">A <see cref="INativeTransaction"/> transaction.</param>
-		/// <param name="args">A <see cref="IObject"/> array.</param>
+		/// <param name="args">A <see cref="IObject"/> span.</param>
 		/// <param name="argSpan">Destination span.</param>
 		/// <exception cref="InvalidOperationException">Invalid object.</exception>
-		private Span<JValue> CopyAsJValue(INativeTransaction jniTransaction, IReadOnlyList<IObject?> args,
+		private Span<JValue> CopyAsJValue(INativeTransaction jniTransaction, ReadOnlySpan<IObject?> args,
 			Span<Byte> argSpan)
 		{
 			Span<JValue> result = argSpan.AsValues<Byte, JValue>();
-			for (Int32 i = 0; i < args.Count; i++)
+			for (Int32 i = 0; i < args.Length; i++)
 			{
 				switch (args[i])
 				{

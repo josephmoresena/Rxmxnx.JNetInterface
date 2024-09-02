@@ -102,74 +102,81 @@ public sealed class JMethodDefinitionTests
 		                                         Arg.Is<IObject?[]>(a => JMethodDefinitionTests.IsEmptyArgs(a)));
 
 		methodDefinition.Invoke(jLocal, parameters);
-		env.AccessFeature.Received(1).CallMethod(jLocal, jLocal.Class, methodDefinition, false, parameters);
+		env.AccessFeature.Received(1).CallMethod(jLocal, jLocal.Class, methodDefinition, false,
+		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		methodDefinition.Invoke(jLocal, jClass, parameters);
-		env.AccessFeature.Received(1).CallMethod(jLocal, jClass, methodDefinition, false, parameters);
+		env.AccessFeature.Received(1).CallMethod(jLocal, jClass, methodDefinition, false,
+		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		methodDefinition.InvokeNonVirtual(jLocal, jClass);
 		env.AccessFeature.Received(1).CallMethod(jLocal, jClass, methodDefinition, true,
 		                                         Arg.Is<IObject?[]>(a => JMethodDefinitionTests.IsEmptyArgs(a)));
 
 		methodDefinition.InvokeNonVirtual(jLocal, jClass, parameters);
-		env.AccessFeature.Received(1).CallMethod(jLocal, jClass, methodDefinition, true, parameters);
+		env.AccessFeature.Received(1).CallMethod(jLocal, jClass, methodDefinition, true,
+		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		methodDefinition.StaticInvoke(jStringClass);
 		env.AccessFeature.Received(1).CallStaticMethod(jStringClass, methodDefinition,
 		                                               Arg.Is<IObject?[]>(a => JMethodDefinitionTests.IsEmptyArgs(a)));
 
 		methodDefinition.StaticInvoke(jClass, parameters);
-		env.AccessFeature.Received(1).CallStaticMethod(jClass, methodDefinition, parameters);
+		env.AccessFeature.Received(1)
+		   .CallStaticMethod(jClass, methodDefinition, Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		methodDefinition.InvokeReflected(jMethod, jLocal);
 		env.AccessFeature.Received(1).CallMethod(jMethod, jLocal, methodDefinition, false,
 		                                         Arg.Is<IObject?[]>(a => JMethodDefinitionTests.IsEmptyArgs(a)));
 
 		methodDefinition.InvokeReflected(jMethod, jLocal, parameters);
-		env.AccessFeature.Received(1).CallMethod(jMethod, jLocal, methodDefinition, false, parameters);
+		env.AccessFeature.Received(1).CallMethod(jMethod, jLocal, methodDefinition, false,
+		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		methodDefinition.InvokeNonVirtualReflected(jMethod, jLocal);
 		env.AccessFeature.Received(1).CallMethod(jMethod, jLocal, methodDefinition, true,
 		                                         Arg.Is<IObject?[]>(a => JMethodDefinitionTests.IsEmptyArgs(a)));
 
 		methodDefinition.InvokeNonVirtualReflected(jMethod, jLocal, parameters);
-		env.AccessFeature.Received(1).CallMethod(jMethod, jLocal, methodDefinition, true, parameters);
+		env.AccessFeature.Received(1).CallMethod(jMethod, jLocal, methodDefinition, true,
+		                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		methodDefinition.InvokeStaticReflected(jMethod);
 		env.AccessFeature.Received(1).CallStaticMethod(jMethod, methodDefinition,
 		                                               Arg.Is<IObject?[]>(a => JMethodDefinitionTests.IsEmptyArgs(a)));
 
 		methodDefinition.InvokeStaticReflected(jMethod, parameters);
-		env.AccessFeature.Received(1).CallStaticMethod(jMethod, methodDefinition, parameters);
+		env.AccessFeature.Received(1)
+		   .CallStaticMethod(jMethod, methodDefinition, Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 	}
 
 	private static Boolean IsEmptyArgs(IReadOnlyCollection<IObject?> cArgs)
-		=> cArgs.Count == JMethodDefinitionTests.args.Length && cArgs.All(o => o is null);
+		=> (cArgs.Count == JMethodDefinitionTests.args.Length || cArgs.Count == 0) && cArgs.All(o => o is null);
 
 	private class JFakeMethodDefinition(ReadOnlySpan<Byte> methodName, params JArgumentMetadata[] metadata)
 		: JMethodDefinition(methodName, metadata)
 	{
 		public new void Invoke(JLocalObject jLocal) => base.Invoke(jLocal);
 		public new void Invoke(JLocalObject jLocal, JClassObject jClass) => base.Invoke(jLocal, jClass);
-		public new void Invoke(JLocalObject jLocal, IObject?[] args) => base.Invoke(jLocal, args);
-		public new void Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
+		public void Invoke(JLocalObject jLocal, IObject?[] args) => base.Invoke(jLocal, args);
+		public void Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 			=> base.Invoke(jLocal, jClass, args);
 		public new void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass)
 			=> base.InvokeNonVirtual(jLocal, jClass);
-		public new void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
+		public void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 			=> base.InvokeNonVirtual(jLocal, jClass, args);
 		public new void StaticInvoke(JClassObject jClass) => base.StaticInvoke(jClass);
-		public new void StaticInvoke(JClassObject jClass, IObject?[] args) => base.StaticInvoke(jClass, args);
+		public void StaticInvoke(JClassObject jClass, IObject?[] args) => base.StaticInvoke(jClass, args);
 		public new void InvokeReflected(JMethodObject jMethod, JLocalObject jLocal)
 			=> base.InvokeReflected(jMethod, jLocal);
-		public new void InvokeReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
+		public void InvokeReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
 			=> base.InvokeReflected(jMethod, jLocal, args);
 		public new void InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal)
 			=> base.InvokeNonVirtualReflected(jMethod, jLocal);
-		public new void InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
+		public void InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
 			=> base.InvokeNonVirtualReflected(jMethod, jLocal, args);
 		public new void InvokeStaticReflected(JMethodObject jMethod) => base.InvokeStaticReflected(jMethod);
-		public new void InvokeStaticReflected(JMethodObject jMethod, IObject?[] args)
+		public void InvokeStaticReflected(JMethodObject jMethod, IObject?[] args)
 			=> base.InvokeStaticReflected(jMethod, args);
 	}
 }

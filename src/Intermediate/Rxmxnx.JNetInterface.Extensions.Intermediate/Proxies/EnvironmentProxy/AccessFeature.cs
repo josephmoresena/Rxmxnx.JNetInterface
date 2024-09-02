@@ -27,34 +27,6 @@ public abstract partial class EnvironmentProxy
 	public abstract void SetStaticField<TField>(JFieldObject jField, JFieldDefinition definition, TField? value)
 		where TField : IDataType<TField>, IObject;
 	/// <inheritdoc/>
-	public abstract TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
-		IObject?[] args) where TObject : JLocalObject, IDataType<TObject>;
-	/// <inheritdoc/>
-	public abstract TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
-		IObject?[] args) where TObject : JLocalObject, IClassType<TObject>;
-	/// <inheritdoc/>
-	public abstract TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
-		IObject?[] args) where TResult : IDataType<TResult>;
-	/// <inheritdoc/>
-	public abstract TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition definition,
-		IObject?[] args) where TResult : IDataType<TResult>;
-	/// <inheritdoc/>
-	public abstract void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, IObject?[] args);
-	/// <inheritdoc/>
-	public abstract void CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition, IObject?[] args);
-	/// <inheritdoc/>
-	public abstract TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass,
-		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>;
-	/// <inheritdoc/>
-	public abstract TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal,
-		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>;
-	/// <inheritdoc/>
-	public abstract void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
-		Boolean nonVirtual, IObject?[] args);
-	/// <inheritdoc/>
-	public abstract void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition,
-		Boolean nonVirtual, IObject?[] args);
-	/// <inheritdoc/>
 	public abstract void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls);
 	/// <inheritdoc/>
 	public abstract void ClearNatives(JClassObject jClass);
@@ -79,4 +51,38 @@ public abstract partial class EnvironmentProxy
 	public abstract JMethodId GetMethodId(JExecutableObject jExecutable);
 	/// <inheritdoc/>
 	public abstract JFieldId GetFieldId(JFieldObject jField);
+	/// <inheritdoc cref="IAccessFeature.CallConstructor{TObject}(JClassObject, JConstructorDefinition, ReadOnlySpan{IObject})"/>
+	public abstract TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
+		IObject?[] args) where TObject : JLocalObject, IDataType<TObject>;
+	/// <inheritdoc
+	///     cref="IAccessFeature.CallConstructor{TObject}(JConstructorObject, JConstructorDefinition, ReadOnlySpan{IObject})"/>
+	public abstract TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
+		IObject?[] args) where TObject : JLocalObject, IClassType<TObject>;
+	/// <inheritdoc cref="IAccessFeature.CallConstructor{TObject}(JClassObject, JConstructorDefinition, ReadOnlySpan{IObject})"/>
+	public abstract TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
+		IObject?[] args) where TResult : IDataType<TResult>;
+	/// <inheritdoc
+	///     cref="IAccessFeature.CallStaticFunction{TObject}(JMethodObject, JFunctionDefinition, ReadOnlySpan{IObject})"/>
+	public abstract TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition definition,
+		IObject?[] args) where TResult : IDataType<TResult>;
+	/// <inheritdoc cref="IAccessFeature.CallStaticMethod(JClassObject, JMethodDefinition, ReadOnlySpan{IObject})"/>
+	public abstract void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, IObject?[] args);
+	/// <inheritdoc cref="IAccessFeature.CallStaticMethod(JMethodObject, JMethodDefinition, ReadOnlySpan{IObject})"/>
+	public abstract void CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition, IObject?[] args);
+	/// <inheritdoc
+	///     cref="IAccessFeature.CallFunction{TObject}(JLocalObject, JClassObject, JFunctionDefinition, Boolean, ReadOnlySpan{IObject})"/>
+	public abstract TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass,
+		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>;
+	/// <inheritdoc
+	///     cref="IAccessFeature.CallFunction{TObject}(JMethodObject, JLocalObject, JFunctionDefinition, Boolean, ReadOnlySpan{IObject})"/>
+	public abstract TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal,
+		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>;
+	/// <inheritdoc
+	///     cref="IAccessFeature.CallMethod(JLocalObject, JClassObject, JMethodDefinition, Boolean, ReadOnlySpan{IObject})"/>
+	public abstract void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
+		Boolean nonVirtual, IObject?[] args);
+	/// <inheritdoc
+	///     cref="IAccessFeature.CallMethod(JMethodObject, JLocalObject, JMethodDefinition, Boolean, ReadOnlySpan{IObject})"/>
+	public abstract void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition,
+		Boolean nonVirtual, IObject?[] args);
 }

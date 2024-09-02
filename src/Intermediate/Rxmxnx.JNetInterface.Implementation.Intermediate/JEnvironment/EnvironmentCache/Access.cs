@@ -126,7 +126,7 @@ partial class JEnvironment
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 		private unsafe TResult? CallObjectFunction<TResult>(JFunctionDefinition definition, JObjectLocalRef localRef,
-			JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
+			JClassLocalRef classRef, ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
 			where TResult : IDataType<TResult>
 		{
 			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
@@ -161,8 +161,8 @@ partial class JEnvironment
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 		private unsafe void CallPrimitiveFunction(Span<Byte> bytes, JFunctionDefinition definition,
-			JObjectLocalRef localRef, JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction,
-			JMethodId methodId)
+			JObjectLocalRef localRef, JClassLocalRef classRef, ReadOnlySpan<IObject?> args,
+			INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
@@ -191,7 +191,7 @@ partial class JEnvironment
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 		/// <returns><typeparamref name="TResult"/> function result.</returns>
 		private unsafe TResult? CallObjectStaticFunction<TResult>(JFunctionDefinition definition,
-			JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
+			JClassLocalRef classRef, ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
 			where TResult : IDataType<TResult>
 		{
 			ref readonly NativeInterface nativeInterface =
@@ -222,7 +222,7 @@ partial class JEnvironment
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 		private unsafe void CallMethod(JMethodDefinition definition, JObjectLocalRef localRef, JClassLocalRef classRef,
-			IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
+			ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			ref readonly InstanceMethodFunctionSet instanceMethodFunctions =
 				ref this.GetInstanceMethodFunctions(CommonNames.VoidSignatureChar, !classRef.IsDefault);
@@ -252,8 +252,8 @@ partial class JEnvironment
 		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-		private unsafe void CallStaticMethod(JMethodDefinition definition, JClassLocalRef classRef, IObject?[] args,
-			INativeTransaction jniTransaction, JMethodId methodId)
+		private unsafe void CallStaticMethod(JMethodDefinition definition, JClassLocalRef classRef,
+			ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.CallStaticVoidMethodInfo);
@@ -277,7 +277,7 @@ partial class JEnvironment
 		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
 		private JObjectLocalRef NewObject(JClassObject jClass, JConstructorDefinition definition,
-			params IObject?[] args)
+			ReadOnlySpan<IObject?> args)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
@@ -296,7 +296,7 @@ partial class JEnvironment
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 		/// <returns>A <see cref="JObjectLocalRef"/> reference.</returns>
 		private unsafe JObjectLocalRef NewObject(JConstructorDefinition definition, JClassLocalRef classRef,
-			IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
+			ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewObjectInfo);

@@ -16,12 +16,43 @@ public partial class AccessFeatureProxy
 		=> bytes.WithSafeFixed((this, jClass, definition), AccessFeatureProxy.SetPrimitiveStaticField);
 
 	void IAccessFeature.CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
-		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args)
-		=> bytes.WithSafeFixed((this, jLocal, jClass, definition, nonVirtual, args),
+		JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args)
+		=> bytes.WithSafeFixed((this, jLocal, jClass, definition, nonVirtual, args.ToArray()),
 		                       AccessFeatureProxy.CallPrimitiveFunction);
 	void IAccessFeature.CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass,
-		JFunctionDefinition definition, IObject?[] args)
-		=> bytes.WithSafeFixed((this, jClass, definition, args), AccessFeatureProxy.CallPrimitiveStaticFunction);
+		JFunctionDefinition definition, ReadOnlySpan<IObject?> args)
+		=> bytes.WithSafeFixed((this, jClass, definition, args.ToArray()),
+		                       AccessFeatureProxy.CallPrimitiveStaticFunction);
+
+	TObject IAccessFeature.CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
+		ReadOnlySpan<IObject?> args)
+		=> this.CallConstructor<TObject>(jClass, definition, args.ToArray());
+	TObject IAccessFeature.CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
+		ReadOnlySpan<IObject?> args)
+		=> this.CallConstructor<TObject>(jConstructor, definition, args.ToArray());
+	TResult? IAccessFeature.CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
+		ReadOnlySpan<IObject?> args) where TResult : default
+		=> this.CallStaticFunction<TResult>(jClass, definition, args.ToArray());
+	TResult? IAccessFeature.CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition definition,
+		ReadOnlySpan<IObject?> args) where TResult : default
+		=> this.CallStaticFunction<TResult>(jMethod, definition, args.ToArray());
+	void IAccessFeature.CallStaticMethod(JClassObject jClass, JMethodDefinition definition, ReadOnlySpan<IObject?> args)
+		=> this.CallStaticMethod(jClass, definition, args.ToArray());
+	void IAccessFeature.CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition,
+		ReadOnlySpan<IObject?> args)
+		=> this.CallStaticMethod(jMethod, definition, args.ToArray());
+	TResult? IAccessFeature.CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass,
+		JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args) where TResult : default
+		=> this.CallFunction<TResult>(jLocal, jClass, definition, nonVirtual, args.ToArray());
+	TResult? IAccessFeature.CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal,
+		JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args) where TResult : default
+		=> this.CallFunction<TResult>(jMethod, jLocal, definition, nonVirtual, args.ToArray());
+	void IAccessFeature.CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
+		Boolean nonVirtual, ReadOnlySpan<IObject?> args)
+		=> this.CallMethod(jLocal, jClass, definition, nonVirtual, args.ToArray());
+	void IAccessFeature.CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition,
+		Boolean nonVirtual, ReadOnlySpan<IObject?> args)
+		=> this.CallMethod(jMethod, jLocal, definition, nonVirtual, args.ToArray());
 
 	private static void GetPrimitiveField(in IFixedMemory mem,
 		(AccessFeatureProxy feature, JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition) args)

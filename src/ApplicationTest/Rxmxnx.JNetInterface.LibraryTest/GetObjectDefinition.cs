@@ -24,9 +24,5 @@ public class GetObjectDefinition : JFunctionDefinition<JLocalObject>
 	private GetObjectDefinition() : base("getObject"u8, JArgumentMetadata.Get<JInt>()) { }
 
 	public JLocalObject? Invoke(JClassObject helloDotnetClass, JInt value)
-	{
-		IObject?[] invokeArgs = this.CreateArgumentsArray();
-		invokeArgs[0] = value;
-		return this.StaticInvoke(helloDotnetClass, invokeArgs);
-	}
+		=> this.StaticInvoke(helloDotnetClass, [value,]);
 }

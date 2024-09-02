@@ -66,7 +66,7 @@ internal static partial class JTrace
 	/// <param name="args">Call parameters.</param>
 	/// <param name="callerMethod">Caller member name.</param>
 	internal static void CallMethod(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
-		Boolean nonVirtual, IObject?[] args, [CallerMemberName] String callerMethod = "")
+		Boolean nonVirtual, ReadOnlySpan<IObject?> args, [CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		StringBuilder strBuilder = new();

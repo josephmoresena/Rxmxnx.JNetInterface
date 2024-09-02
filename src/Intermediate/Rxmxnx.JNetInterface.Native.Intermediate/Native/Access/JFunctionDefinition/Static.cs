@@ -13,7 +13,7 @@ public abstract partial class JFunctionDefinition
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	internal static TResult? Invoke<TResult>(JFunctionDefinition<TResult> definition, JLocalObject jLocal,
-		JClassObject? jClass = default, Boolean nonVirtual = false, IObject?[]? args = default)
+		JClassObject? jClass = default, Boolean nonVirtual = false, ReadOnlySpan<IObject?> args = default)
 		where TResult : IDataType<TResult>
 		=> JFunctionDefinition<TResult>.Invoke(definition, jLocal, jClass, nonVirtual, args);
 	/// <summary>
@@ -26,7 +26,7 @@ public abstract partial class JFunctionDefinition
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	internal static TResult? StaticInvoke<TResult>(JFunctionDefinition<TResult> definition, JClassObject jClass,
-		IObject?[]? args = default) where TResult : IDataType<TResult>
+		ReadOnlySpan<IObject?> args = default) where TResult : IDataType<TResult>
 		=> JFunctionDefinition<TResult>.StaticInvoke(definition, jClass, args);
 }
 
@@ -42,11 +42,11 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	internal static TResult? Invoke(JFunctionDefinition<TResult> definition, JLocalObject jLocal,
-		JClassObject? jClass = default, Boolean nonVirtual = false, IObject?[]? args = default)
+		JClassObject? jClass = default, Boolean nonVirtual = false, ReadOnlySpan<IObject?> args = default)
 	{
 		IEnvironment env = jLocal.Environment;
 		return env.AccessFeature.CallInternalFunction<TResult>(jLocal, jClass ?? jLocal.Class, definition, nonVirtual,
-		                                                       args ?? definition.CreateArgumentsArray());
+		                                                       args);
 	}
 	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jClass"/> which matches with current definition
@@ -57,11 +57,10 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	internal static TResult? StaticInvoke(JFunctionDefinition<TResult> definition, JClassObject jClass,
-		IObject?[]? args = default)
+		ReadOnlySpan<IObject?> args = default)
 	{
 		IEnvironment env = jClass.Environment;
-		return env.AccessFeature.CallInternalStaticFunction<TResult>(jClass, definition,
-		                                                             args ?? definition.CreateArgumentsArray());
+		return env.AccessFeature.CallInternalStaticFunction<TResult>(jClass, definition, args);
 	}
 
 	/// <summary>
@@ -72,7 +71,7 @@ public partial class JFunctionDefinition<TResult>
 	/// <returns>A <see cref="JFunctionDefinition{TResult}"/> instance.</returns>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	internal static JFunctionDefinition<TResult> Create(ReadOnlySpan<Byte> functionName,
-		params JArgumentMetadata[] metadata)
+		ReadOnlySpan<JArgumentMetadata> metadata = default)
 		=> metadata.Length > 0 ?
 			new JFunctionDefinition<TResult>(functionName, metadata) :
 			new Parameterless(functionName);

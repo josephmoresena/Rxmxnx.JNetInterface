@@ -25,7 +25,7 @@ public abstract partial class JCallDefinition
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	/// <returns>Method descriptor.</returns>
 	private static CString CreateDescriptor(ReadOnlySpan<Byte> returnSignature, out Int32 totalSize, out Int32[] sizes,
-		out Int32 referenceCount, params JArgumentMetadata[] metadata)
+		out Int32 referenceCount, ReadOnlySpan<JArgumentMetadata> metadata)
 	{
 		referenceCount = 0;
 		totalSize = 0;
