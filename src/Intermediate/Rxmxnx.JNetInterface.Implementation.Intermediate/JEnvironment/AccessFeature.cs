@@ -51,7 +51,7 @@ partial class JEnvironment
 			this.SetPrimitiveStaticField(jClass.Reference, bytes, definition.Descriptor[^1], fieldId);
 		}
 		public void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
-			ReadOnlySpan<IObject?> args)
+			ReadOnlySpan<IObject?> args = default)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
@@ -59,7 +59,7 @@ partial class JEnvironment
 			this.CallPrimitiveStaticFunction(bytes, definition, jClass.Reference, args, jniTransaction, methodId);
 		}
 		public void CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
-			JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args)
+			JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args = default)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);

@@ -5,6 +5,8 @@ internal partial class NativeFunctionSetImpl
 	/// <summary>
 	/// Single object buffer.
 	/// </summary>
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
+	                 Justification = CommonConstants.BinaryStructJustification)]
 	[InlineArray(1)]
 	public struct SingleObjectBuffer
 	{
