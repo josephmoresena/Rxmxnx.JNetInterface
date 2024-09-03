@@ -263,13 +263,13 @@ partial class JEnvironment
 		/// <param name="index">Region start index.</param>
 		/// <param name="count">Number of elements in region.</param>
 		/// <exception cref="ArgumentException"/>
-		private unsafe void GetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IntPtr bufferPtr,
-			Int32 index, Int32 count = 1)
+		private unsafe void GetPrimitiveArrayRegion(JArrayObject jArray, Byte signature, IntPtr bufferPtr, Int32 index,
+			Int32 count = 1)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			ref readonly ArrayFunctionSet arrayFunctions =
-				ref this.GetArrayFunctions(signature[0], ArrayFunctionSet.PrimitiveFunction.GetRegion);
-			switch (signature[0])
+				ref this.GetArrayFunctions(signature, ArrayFunctionSet.PrimitiveFunction.GetRegion);
+			switch (signature)
 			{
 				case CommonNames.BooleanSignatureChar:
 					JBooleanArrayLocalRef jBooleanArrayRef = jniTransaction.Add<JBooleanArrayLocalRef>(jArray);
@@ -322,13 +322,13 @@ partial class JEnvironment
 		/// <param name="index">Region start index.</param>
 		/// <param name="count">Number of elements in region.</param>
 		/// <exception cref="ArgumentException"/>
-		private unsafe void SetPrimitiveArrayRegion(JArrayObject jArray, CString signature, IntPtr bufferPtr,
-			Int32 index, Int32 count = 1)
+		private unsafe void SetPrimitiveArrayRegion(JArrayObject jArray, Byte signature, IntPtr bufferPtr, Int32 index,
+			Int32 count = 1)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
 			ref readonly ArrayFunctionSet arrayFunctions =
-				ref this.GetArrayFunctions(signature[0], ArrayFunctionSet.PrimitiveFunction.SetRegion);
-			switch (signature[0])
+				ref this.GetArrayFunctions(signature, ArrayFunctionSet.PrimitiveFunction.SetRegion);
+			switch (signature)
 			{
 				case CommonNames.BooleanSignatureChar:
 					JBooleanArrayLocalRef jBooleanArrayRef = jniTransaction.Add<JBooleanArrayLocalRef>(jArray);
@@ -413,7 +413,7 @@ partial class JEnvironment
 			while (offset < requiredBytes)
 				initialElement.CopyTo(buffer, ref offset);
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(buffer))
-				this.SetPrimitiveArrayRegion(jArray, metadata.Signature, new(ptr), 0, jArray.Length);
+				this.SetPrimitiveArrayRegion(jArray, metadata.Signature[0], new(ptr), 0, jArray.Length);
 		}
 	}
 }
