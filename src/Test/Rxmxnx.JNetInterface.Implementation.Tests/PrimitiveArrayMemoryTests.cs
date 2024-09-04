@@ -247,7 +247,7 @@ public sealed class PrimitiveArrayMemoryTests
 			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<TPrimitive>().ToArray();
 
 			using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
-			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef, default);
+			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
 			using IFixedContext<TPrimitive>.IDisposable fMem = value.AsMemory().GetFixedContext();
 			ValPtr<Byte> valPtr = fMem.AsBinaryContext().ValuePointer;
 			Boolean isCopy = PrimitiveArrayMemoryTests.fixture.Create<Boolean>();
@@ -334,7 +334,7 @@ public sealed class PrimitiveArrayMemoryTests
 			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<TPrimitive>().ToArray();
 
 			using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
-			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef, default);
+			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
 			using IFixedContext<TPrimitive>.IDisposable fMem = value.AsMemory().GetFixedContext();
 			ValPtr<Byte> valPtr = fMem.AsBinaryContext().ValuePointer;
 
@@ -518,7 +518,7 @@ public sealed class PrimitiveArrayMemoryTests
 		JArrayLocalRef arrayRef = PrimitiveArrayMemoryTests.fixture.Create<JArrayLocalRef>();
 
 		using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
-		using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef, default);
+		using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
 		using IFixedContext<TPrimitive>.IDisposable fMem = value.AsMemory().GetFixedContext();
 		ValPtr<Byte> valPtr = fMem.AsBinaryContext().ValuePointer;
 
