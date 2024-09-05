@@ -172,7 +172,8 @@ partial class JEnvironment
 	{
 		ThrowableException? jniException = this._cache.Thrown as ThrowableException;
 		if (jniException is not null || this._cache.Thrown is null) return jniException;
-		if (!this._cache.JniSecure(JniSafetyLevels.ErrorSafe))
+		if (!this._cache.JniSecure(JniSafetyLevels.ErrorSafe) && this._cache.HasPendingException())
+			// Do not throw if not pending JNI exception.
 			throw this._cache.Thrown;
 		return this.ParseException(this._cache.GetPendingException());
 	}
@@ -194,7 +195,8 @@ partial class JEnvironment
 	/// <param name="throwableException">A <see cref="ThrowableException"/> instance.</param>
 	private void SetThrown(ThrowableException? throwableException)
 	{
-		if (Object.ReferenceEquals(CriticalException.Instance, this._cache.Thrown))
+		if (Object.ReferenceEquals(CriticalException.Instance, this._cache.Thrown) && this._cache.HasPendingException())
+			// Do not throw if not pending JNI exception
 			throw this._cache.Thrown;
 		this._cache.ThrowJniException(throwableException, false);
 	}

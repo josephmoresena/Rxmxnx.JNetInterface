@@ -247,7 +247,7 @@ public sealed class PrimitiveArrayMemoryTests
 			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<TPrimitive>().ToArray();
 
 			using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
-			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef, default);
+			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
 			using IFixedContext<TPrimitive>.IDisposable fMem = value.AsMemory().GetFixedContext();
 			ValPtr<Byte> valPtr = fMem.AsBinaryContext().ValuePointer;
 			Boolean isCopy = PrimitiveArrayMemoryTests.fixture.Create<Boolean>();
@@ -297,6 +297,7 @@ public sealed class PrimitiveArrayMemoryTests
 			        .GetPrimitiveArrayCritical(wArrayRef, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(referenceKind is JMemoryReferenceKind.ThreadUnrestricted ? 1 : 0)
 			        .GetPrimitiveArrayCritical(gArrayRef, Arg.Any<ValPtr<JBoolean>>());
+			PrimitiveArrayMemoryTests.NestedFailTest<TPrimitive>(proxyEnv);
 		}
 		finally
 		{
@@ -333,7 +334,7 @@ public sealed class PrimitiveArrayMemoryTests
 			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<TPrimitive>().ToArray();
 
 			using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
-			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef, default);
+			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
 			using IFixedContext<TPrimitive>.IDisposable fMem = value.AsMemory().GetFixedContext();
 			ValPtr<Byte> valPtr = fMem.AsBinaryContext().ValuePointer;
 
@@ -507,5 +508,48 @@ public sealed class PrimitiveArrayMemoryTests
 			arrayRef.Transform<JArrayLocalRef, JLongArrayLocalRef>(), Arg.Any<ReadOnlyValPtr<JLong>>(), releaseMode);
 		proxyEnv.Received(signature == CommonNames.ShortSignatureChar ? count : 0).ReleaseShortArrayElements(
 			arrayRef.Transform<JArrayLocalRef, JShortArrayLocalRef>(), Arg.Any<ReadOnlyValPtr<JShort>>(), releaseMode);
+	}
+
+	private static void NestedFailTest<TPrimitive>(NativeInterfaceProxy proxyEnv)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<TPrimitive>().ToArray();
+		JArrayLocalRef arrayRef = PrimitiveArrayMemoryTests.fixture.Create<JArrayLocalRef>();
+
+		using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
+		using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
+		using IFixedContext<TPrimitive>.IDisposable fMem = value.AsMemory().GetFixedContext();
+		ValPtr<Byte> valPtr = fMem.AsBinaryContext().ValuePointer;
+
+		proxyEnv.GetArrayLength(arrayRef).Returns(value.Length);
+		proxyEnv.GetPrimitiveArrayCritical(arrayRef, Arg.Any<ValPtr<JBoolean>>()).Returns(valPtr);
+		PrimitiveArrayMemoryTests.ConfigureGetElements(proxyEnv, ref arrayRef, false, valPtr.Pointer);
+
+		// Clears non-existing exception.
+		env.PendingException = default;
+
+		JNativeMemory<TPrimitive> seq = jArray.GetElements();
+		Assert.Equal(value.Length, seq.Values.Length);
+		Assert.Equal(fMem.Pointer, seq.Pointer);
+
+		JNativeMemory<TPrimitive> seqCritical = jArray.GetCriticalElements(JMemoryReferenceKind.Local);
+		Assert.Equal(value.Length, seq.Values.Length);
+		Assert.Equal(fMem.Pointer, seq.Pointer);
+
+		proxyEnv.ExceptionCheck().Returns(true);
+		Assert.Throws<CriticalException>(() => seq.Dispose());
+
+		proxyEnv.ExceptionCheck().Returns(false);
+		env.PendingException = default;
+
+		proxyEnv.ExceptionCheck().Returns(true);
+		Assert.Throws<CriticalException>(() => seqCritical.Dispose());
+
+		proxyEnv.ExceptionCheck().Returns(false);
+		env.PendingException = default;
+
+		seq.Dispose();
+		seqCritical.Dispose();
 	}
 }

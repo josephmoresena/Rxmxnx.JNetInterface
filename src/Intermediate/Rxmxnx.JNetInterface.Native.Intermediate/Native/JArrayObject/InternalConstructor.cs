@@ -35,7 +35,7 @@ public partial class JArrayObject<TElement>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="jArrayRef">Local array reference.</param>
 	/// <param name="length">Array length.</param>
-	internal JArrayObject(JClassObject jClass, JArrayLocalRef jArrayRef, Int32? length) : base(
+	internal JArrayObject(JClassObject jClass, JArrayLocalRef jArrayRef, Int32? length = default) : base(
 		new Generic<TElement>(jClass, jArrayRef, length)) { }
 	/// <inheritdoc/>
 	private JArrayObject(JArrayObject jArray) : base(jArray) { }

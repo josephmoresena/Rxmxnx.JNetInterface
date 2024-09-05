@@ -34,7 +34,9 @@ internal static class TestUtilities
 		JClassLocalRef classRef = JClassLocalRef.FromReference(in localRef);
 		JObjectArrayLocalRef arrayRef = TestUtilities.fixture.Create<JObjectArrayLocalRef>();
 		proxyEnv.NewObjectArray(length, classRef, Arg.Any<JObjectLocalRef>()).Returns(arrayRef);
-		JArrayObject<JClassObject> result = JArrayObject<JClassObject>.Create(env, length);
+		Boolean withInitial = Random.Shared.Next(0, 2) < 1;
+		JArrayObject<JClassObject> result =
+			TestUtilities.CreateArray(env, length, withInitial, env.ClassFeature.ClassObject);
 		Assert.Equal(arrayRef.ArrayValue, result.Reference);
 		return result;
 	}
@@ -43,7 +45,9 @@ internal static class TestUtilities
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 		JBooleanArrayLocalRef arrayRef = TestUtilities.fixture.Create<JBooleanArrayLocalRef>();
 		proxyEnv.NewBooleanArray(length).Returns(arrayRef);
-		JArrayObject<JBoolean> result = JArrayObject<JBoolean>.Create(env, length);
+		JBoolean value = TestUtilities.fixture.Create<Boolean>();
+		Boolean withInitial = Random.Shared.Next(0, 2) < 1;
+		JArrayObject<JBoolean> result = TestUtilities.CreateArray(env, length, withInitial, value);
 		Assert.Equal(arrayRef.ArrayValue, result.Reference);
 		return result;
 	}
@@ -52,7 +56,9 @@ internal static class TestUtilities
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 		JByteArrayLocalRef arrayRef = TestUtilities.fixture.Create<JByteArrayLocalRef>();
 		proxyEnv.NewByteArray(length).Returns(arrayRef);
-		JArrayObject<JByte> result = JArrayObject<JByte>.Create(env, length);
+		JByte value = TestUtilities.fixture.Create<SByte>();
+		Boolean withInitial = Random.Shared.Next(0, 2) < 1;
+		JArrayObject<JByte> result = TestUtilities.CreateArray(env, length, withInitial, value);
 		Assert.Equal(arrayRef.ArrayValue, result.Reference);
 		return result;
 	}
@@ -61,7 +67,9 @@ internal static class TestUtilities
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 		JCharArrayLocalRef arrayRef = TestUtilities.fixture.Create<JCharArrayLocalRef>();
 		proxyEnv.NewCharArray(length).Returns(arrayRef);
-		JArrayObject<JChar> result = JArrayObject<JChar>.Create(env, length);
+		JChar value = TestUtilities.fixture.Create<Char>();
+		Boolean withInitial = Random.Shared.Next(0, 2) < 1;
+		JArrayObject<JChar> result = TestUtilities.CreateArray(env, length, withInitial, value);
 		Assert.Equal(arrayRef.ArrayValue, result.Reference);
 		return result;
 	}
@@ -70,7 +78,9 @@ internal static class TestUtilities
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 		JDoubleArrayLocalRef arrayRef = TestUtilities.fixture.Create<JDoubleArrayLocalRef>();
 		proxyEnv.NewDoubleArray(length).Returns(arrayRef);
-		JArrayObject<JDouble> result = JArrayObject<JDouble>.Create(env, length);
+		JDouble value = TestUtilities.fixture.Create<Double>();
+		Boolean withInitial = Random.Shared.Next(0, 2) < 1;
+		JArrayObject<JDouble> result = TestUtilities.CreateArray(env, length, withInitial, value);
 		Assert.Equal(arrayRef.ArrayValue, result.Reference);
 		return result;
 	}
@@ -79,7 +89,9 @@ internal static class TestUtilities
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 		JFloatArrayLocalRef arrayRef = TestUtilities.fixture.Create<JFloatArrayLocalRef>();
 		proxyEnv.NewFloatArray(length).Returns(arrayRef);
-		JArrayObject<JFloat> result = JArrayObject<JFloat>.Create(env, length);
+		JFloat value = TestUtilities.fixture.Create<Single>();
+		Boolean withInitial = Random.Shared.Next(0, 2) < 1;
+		JArrayObject<JFloat> result = TestUtilities.CreateArray(env, length, withInitial, value);
 		Assert.Equal(arrayRef.ArrayValue, result.Reference);
 		return result;
 	}
@@ -88,7 +100,9 @@ internal static class TestUtilities
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 		JIntArrayLocalRef arrayRef = TestUtilities.fixture.Create<JIntArrayLocalRef>();
 		proxyEnv.NewIntArray(length).Returns(arrayRef);
-		JArrayObject<JInt> result = JArrayObject<JInt>.Create(env, length);
+		JInt value = TestUtilities.fixture.Create<Int32>();
+		Boolean withInitial = Random.Shared.Next(0, 2) < 1;
+		JArrayObject<JInt> result = TestUtilities.CreateArray(env, length, withInitial, value);
 		Assert.Equal(arrayRef.ArrayValue, result.Reference);
 		return result;
 	}
@@ -97,7 +111,9 @@ internal static class TestUtilities
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 		JLongArrayLocalRef arrayRef = TestUtilities.fixture.Create<JLongArrayLocalRef>();
 		proxyEnv.NewLongArray(length).Returns(arrayRef);
-		JArrayObject<JLong> result = JArrayObject<JLong>.Create(env, length);
+		JLong value = TestUtilities.fixture.Create<Int64>();
+		Boolean withInitial = Random.Shared.Next(0, 2) < 1;
+		JArrayObject<JLong> result = TestUtilities.CreateArray(env, length, withInitial, value);
 		Assert.Equal(arrayRef.ArrayValue, result.Reference);
 		return result;
 	}
@@ -106,7 +122,9 @@ internal static class TestUtilities
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 		JShortArrayLocalRef arrayRef = TestUtilities.fixture.Create<JShortArrayLocalRef>();
 		proxyEnv.NewShortArray(length).Returns(arrayRef);
-		JArrayObject<JShort> result = JArrayObject<JShort>.Create(env, length);
+		JShort value = TestUtilities.fixture.Create<Int16>();
+		Boolean withInitial = Random.Shared.Next(0, 2) < 1;
+		JArrayObject<JShort> result = TestUtilities.CreateArray(env, length, withInitial, value);
 		Assert.Equal(arrayRef.ArrayValue, result.Reference);
 		return result;
 	}
@@ -255,4 +273,83 @@ internal static class TestUtilities
 		tracker = new() { WeakReference = new(instanceMethod), FinalizerFlag = instanceMethod.IsDisposed, };
 		return JNativeCallEntry.CreateParameterless(definition, instanceMethod.VoidCall);
 	}
+	public static JArgumentMetadata[] GetArgumentsMetadata(this CallType callType)
+		=> callType switch
+		{
+			CallType.SingleValue => [JArgumentMetadata.Get<JInt>(),],
+			CallType.SingleObject => [JArgumentMetadata.Get<JStringObject>(),],
+			CallType.Values =>
+			[
+				JArgumentMetadata.Get<JInt>(),
+				JArgumentMetadata.Get<JDouble>(),
+				JArgumentMetadata.Get<JBoolean>(),
+			],
+			CallType.Objects =>
+			[
+				JArgumentMetadata.Get<JStringObject>(),
+				JArgumentMetadata.Get<JClassObject>(),
+				JArgumentMetadata.Get<JThrowableObject>(),
+			],
+			CallType.Mixed =>
+			[
+				JArgumentMetadata.Get<JInt>(),
+				JArgumentMetadata.Get<JStringObject>(),
+				JArgumentMetadata.Get<JDouble>(),
+				JArgumentMetadata.Get<JClassObject>(),
+				JArgumentMetadata.Get<JBoolean>(),
+				JArgumentMetadata.Get<JThrowableObject>(),
+			],
+			_ => [],
+		};
+	public static IObject[] GetArgumentsValues(this CallType callType, NativeInterfaceProxy proxyEnv)
+		=> callType switch
+		{
+			CallType.SingleValue => [(JInt)TestUtilities.fixture.Create<Int32>(),],
+			CallType.SingleObject => [TestUtilities.CreateString(proxyEnv, TestUtilities.fixture.Create<String>()),],
+			CallType.Values =>
+			[
+				(JInt)TestUtilities.fixture.Create<Int32>(), (JDouble)TestUtilities.fixture.Create<Double>(),
+				(JBoolean)TestUtilities.fixture.Create<Boolean>(),
+			],
+			CallType.Objects =>
+			[
+				TestUtilities.CreateString(proxyEnv, TestUtilities.fixture.Create<String>()),
+				(JEnvironment.GetEnvironment(proxyEnv.Reference) as IEnvironment)!.ClassFeature.ClassObject,
+				TestUtilities.CreateThrowable(proxyEnv),
+			],
+			CallType.Mixed =>
+			[
+				(JInt)TestUtilities.fixture.Create<Int32>(),
+				TestUtilities.CreateString(proxyEnv, TestUtilities.fixture.Create<String>()),
+				(JDouble)TestUtilities.fixture.Create<Double>(),
+				(JEnvironment.GetEnvironment(proxyEnv.Reference) as IEnvironment).ClassFeature.ClassObject,
+				(JBoolean)TestUtilities.fixture.Create<Boolean>(), TestUtilities.CreateThrowable(proxyEnv),
+			],
+			_ => [],
+		};
+	public static Expression<Predicate<ReadOnlyValPtr<JValueWrapper>>> GetArgsPtr(IObject[] args)
+	{
+		Func<ReadOnlyValPtr<JValueWrapper>, Boolean> f = ptr =>
+		{
+			using IReadOnlyFixedContext<JValueWrapper>.IDisposable ctx = ptr.GetUnsafeFixedContext(args.Length);
+			Span<Byte> byteSpan = stackalloc Byte[JValue.Size];
+			ReadOnlySpan<Byte> blank = stackalloc Byte[JValue.Size];
+			for (Int32 i = 0; i < args.Length; i++)
+			{
+				blank.CopyTo(byteSpan);
+				args[i].CopyTo(byteSpan);
+				if (!NativeUtilities.AsBytes(in ctx.Values[i]).SequenceEqual(byteSpan))
+					return false;
+			}
+			return true;
+		};
+		ParameterExpression parameter = Expression.Parameter(typeof(ReadOnlyValPtr<JValueWrapper>), "ptr");
+		Expression body = Expression.Invoke(Expression.Constant(f), parameter);
+		return Expression.Lambda<Predicate<ReadOnlyValPtr<JValueWrapper>>>(body, parameter);
+	}
+	private static JArrayObject<TElement> CreateArray<TElement>(IEnvironment env, Int32 length, Boolean withInitial,
+		TElement? initial) where TElement : IDataType<TElement>
+		=> withInitial ?
+			JArrayObject<TElement>.Create(env, length) :
+			JArrayObject<TElement>.Create(env, length, initial!);
 }

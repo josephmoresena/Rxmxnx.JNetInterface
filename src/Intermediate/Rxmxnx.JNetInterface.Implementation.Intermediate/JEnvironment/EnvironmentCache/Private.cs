@@ -410,11 +410,9 @@ partial class JEnvironment
 		/// <summary>
 		/// Checks and throws a JNI exception in critical or nested state.
 		/// </summary>
-		private unsafe void ExceptionCheck()
+		private void ExceptionCheck()
 		{
-			ref readonly NativeInterface nativeInterface =
-				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
-			if (!nativeInterface.ExceptionCheck(this.Reference).Value) return;
+			if (!this.HasPendingException()) return;
 			CriticalException criticalException = this._criticalCount > 0 ?
 				CriticalException.Instance :
 				CriticalException.UnknownInstance;

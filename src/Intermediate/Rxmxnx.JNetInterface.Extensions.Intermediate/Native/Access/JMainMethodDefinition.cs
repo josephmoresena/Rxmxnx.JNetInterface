@@ -13,7 +13,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	private JMainMethodDefinition() : base("main"u8, JArgumentMetadata.Get<JArrayObject<JStringObject>>()) { }
+	private JMainMethodDefinition() : base("main"u8, [JArgumentMetadata.Get<JArrayObject<JStringObject>>(),]) { }
 
 	/// <summary>
 	/// Invokes method defined in <paramref name="mainClass"/> with null args.
@@ -41,7 +41,8 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	{
 		try
 		{
-			IObject?[] invokeArgs = this.CreateArgumentsArray();
+			NativeFunctionSetImpl.SingleObjectBuffer buffer = new();
+			Span<IObject?> invokeArgs = NativeFunctionSetImpl.SingleObjectBuffer.GetSpan(ref buffer);
 			invokeArgs[0] = args;
 			this.StaticInvoke(mainClass, invokeArgs);
 		}

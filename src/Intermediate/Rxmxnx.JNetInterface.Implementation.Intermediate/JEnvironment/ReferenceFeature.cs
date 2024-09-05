@@ -34,53 +34,56 @@ partial class JEnvironment
 			JClassObject jClass;
 			JObjectLocalRef localRef;
 			JLocalObject result;
+			NativeFunctionSetImpl.SingleObjectBuffer buffer = new();
+			Span<IObject?> span = NativeFunctionSetImpl.SingleObjectBuffer.GetSpan(ref buffer);
+			span[0] = primitive;
 			switch (metadata.Signature[0])
 			{
 				case CommonNames.BooleanSignatureChar:
 					jClass = this.GetClass<JBooleanObject>();
-					localRef = this.NewObject(jClass, NativeFunctionSetImpl.BooleanConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.BooleanConstructor, span);
 					result = new JBooleanObject(jClass, localRef,
 					                            NativeUtilities.Transform<TPrimitive, JBoolean>(in primitive));
 					break;
 				case CommonNames.ByteSignatureChar:
 					jClass = this.GetClass<JByteObject>();
-					localRef = this.NewObject(jClass, NativeFunctionSetImpl.ByteConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.ByteConstructor, span);
 					result = new JByteObject(jClass, localRef,
 					                         NativeUtilities.Transform<TPrimitive, JByte>(in primitive));
 					break;
 				case CommonNames.CharSignatureChar:
 					jClass = this.GetClass<JCharacterObject>();
-					localRef = this.NewObject(jClass, NativeFunctionSetImpl.CharacterConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.CharacterConstructor, span);
 					result = new JCharacterObject(jClass, localRef,
 					                              NativeUtilities.Transform<TPrimitive, JChar>(in primitive));
 					break;
 				case CommonNames.DoubleSignatureChar:
 					jClass = this.GetClass<JDoubleObject>();
-					localRef = this.NewObject(jClass, NativeFunctionSetImpl.DoubleConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.DoubleConstructor, span);
 					result = new JDoubleObject(jClass, localRef,
 					                           NativeUtilities.Transform<TPrimitive, JDouble>(in primitive));
 					break;
 				case CommonNames.FloatSignatureChar:
 					jClass = this.GetClass<JFloatObject>();
-					localRef = this.NewObject(jClass, NativeFunctionSetImpl.FloatConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.FloatConstructor, span);
 					result = new JFloatObject(jClass, localRef,
 					                          NativeUtilities.Transform<TPrimitive, JFloat>(in primitive));
 					break;
 				case CommonNames.IntSignatureChar:
 					jClass = this.GetClass<JIntegerObject>();
-					localRef = this.NewObject(jClass, NativeFunctionSetImpl.IntegerConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.IntegerConstructor, span);
 					result = new JIntegerObject(jClass, localRef,
 					                            NativeUtilities.Transform<TPrimitive, JInt>(in primitive));
 					break;
 				case CommonNames.LongSignatureChar:
 					jClass = this.GetClass<JLongObject>();
-					localRef = this.NewObject(jClass, NativeFunctionSetImpl.LongConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.LongConstructor, span);
 					result = new JLongObject(jClass, localRef,
 					                         NativeUtilities.Transform<TPrimitive, JLong>(in primitive));
 					break;
 				case CommonNames.ShortSignatureChar: //S
 					jClass = this.GetClass<JShortObject>();
-					localRef = this.NewObject(jClass, NativeFunctionSetImpl.ShortConstructor, primitive);
+					localRef = this.NewObject(jClass, NativeFunctionSetImpl.ShortConstructor, span);
 					result = new JShortObject(jClass, localRef,
 					                          NativeUtilities.Transform<TPrimitive, JShort>(in primitive));
 					break;

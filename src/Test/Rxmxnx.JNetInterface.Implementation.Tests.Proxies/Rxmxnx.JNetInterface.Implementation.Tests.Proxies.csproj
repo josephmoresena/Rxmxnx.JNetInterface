@@ -34,4 +34,11 @@
         <Using Include="Rxmxnx.JNetInterface.Tests.Internal"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>Rxmxnx.JNetInterface.Implementation.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
 </Project>

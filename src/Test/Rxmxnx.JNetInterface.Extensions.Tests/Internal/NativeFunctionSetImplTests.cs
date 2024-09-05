@@ -338,7 +338,7 @@ public sealed class NativeFunctionSetImplTests
 		JArrayLocalRef arrayRef = NativeFunctionSetImplTests.fixture.Create<JArrayLocalRef>();
 		using JClassObject jClass = new(env);
 		using JClassObject jClassArrayClass = new(jClass, IClassType.GetMetadata<JClassObject>().GetArrayMetadata()!);
-		using JArrayObject<JClassObject> interfaces = new(jClassArrayClass, arrayRef, default);
+		using JArrayObject<JClassObject> interfaces = new(jClassArrayClass, arrayRef);
 
 		env.ClassFeature.GetClass<JClassObject>().Returns(jClass);
 		env.AccessFeature.CallFunction<JArrayObject<JClassObject>>(jClass, jClass, definition, false, [])

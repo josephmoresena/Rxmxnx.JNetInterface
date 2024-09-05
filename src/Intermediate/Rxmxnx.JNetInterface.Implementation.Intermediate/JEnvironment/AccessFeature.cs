@@ -51,7 +51,7 @@ partial class JEnvironment
 			this.SetPrimitiveStaticField(jClass.Reference, bytes, definition.Descriptor[^1], fieldId);
 		}
 		public void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
-			IObject?[] args)
+			ReadOnlySpan<IObject?> args = default)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
@@ -59,7 +59,7 @@ partial class JEnvironment
 			this.CallPrimitiveStaticFunction(bytes, definition, jClass.Reference, args, jniTransaction, methodId);
 		}
 		public void CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
-			JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args)
+			JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args = default)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
@@ -223,15 +223,15 @@ partial class JEnvironment
 				this.SetPrimitiveStaticField(classRef, bytes, definition.Descriptor[^1], fieldId);
 			}
 		}
-		public TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition, IObject?[] args)
-			where TObject : JLocalObject, IDataType<TObject>
+		public TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
+			ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IDataType<TObject>
 		{
 			JObjectLocalRef localRef = this.NewObject(jClass, definition, args);
 			JTrace.CallMethod(default, jClass, definition, false, args);
 			return this.CreateObject<TObject>(localRef, true, true)!;
 		}
 		public TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
-			IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
+			ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jConstructor);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jConstructor.Definition);
@@ -245,7 +245,7 @@ partial class JEnvironment
 			return this.CreateObject<TObject>(localRef, true, true)!;
 		}
 		public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
-			IObject?[] args) where TResult : IDataType<TResult>
+			ReadOnlySpan<IObject?> args) where TResult : IDataType<TResult>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TResult>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
@@ -261,7 +261,7 @@ partial class JEnvironment
 			return this.CallObjectStaticFunction<TResult>(definition, jClass.Reference, args, jniTransaction, methodId);
 		}
 		public TResult? CallStaticFunction<TResult>(JMethodObject jMethod, JFunctionDefinition definition,
-			IObject?[] args) where TResult : IDataType<TResult>
+			ReadOnlySpan<IObject?> args) where TResult : IDataType<TResult>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jMethod);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
@@ -278,7 +278,7 @@ partial class JEnvironment
 			this.CallPrimitiveStaticFunction(bytes, definition, classRef, args, jniTransaction, methodId);
 			return (TResult)primitiveMetadata.CreateInstance(bytes);
 		}
-		public void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, IObject?[] args)
+		public void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, ReadOnlySpan<IObject?> args)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
@@ -286,7 +286,7 @@ partial class JEnvironment
 			JTrace.CallMethod(default, jClass, definition, false, args);
 			this.CallStaticMethod(definition, jClass.Reference, args, jniTransaction, methodId);
 		}
-		public void CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition, IObject?[] args)
+		public void CallStaticMethod(JMethodObject jMethod, JMethodDefinition definition, ReadOnlySpan<IObject?> args)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jMethod);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jMethod.Definition);
@@ -299,7 +299,7 @@ partial class JEnvironment
 			this.CallStaticMethod(definition, classRef, args, jniTransaction, methodId);
 		}
 		public TResult? CallFunction<TResult>(JLocalObject jLocal, JClassObject jClass, JFunctionDefinition definition,
-			Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>
+			Boolean nonVirtual, ReadOnlySpan<IObject?> args) where TResult : IDataType<TResult>
 		{
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TResult>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
@@ -318,7 +318,8 @@ partial class JEnvironment
 			return this.CallObjectFunction<TResult>(definition, localRef, classRef, args, jniTransaction, methodId);
 		}
 		public TResult? CallFunction<TResult>(JMethodObject jMethod, JLocalObject jLocal,
-			JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args) where TResult : IDataType<TResult>
+			JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args)
+			where TResult : IDataType<TResult>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jMethod);
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
@@ -340,7 +341,7 @@ partial class JEnvironment
 			return (TResult)primitiveMetadata.CreateInstance(bytes);
 		}
 		public void CallMethod(JLocalObject jLocal, JClassObject jClass, JMethodDefinition definition,
-			Boolean nonVirtual, IObject?[] args)
+			Boolean nonVirtual, ReadOnlySpan<IObject?> args)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
@@ -352,7 +353,7 @@ partial class JEnvironment
 			this.CallMethod(definition, localRef, classRef, args, jniTransaction, methodId);
 		}
 		public void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition,
-			Boolean nonVirtual, IObject?[] args)
+			Boolean nonVirtual, ReadOnlySpan<IObject?> args)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jMethod);
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
@@ -417,7 +418,7 @@ partial class JEnvironment
 		{
 			using LocalFrame _ =
 				new(this._env, parameterTypes.Length + IVirtualMachine.GetAccessibleDefinitionCapacity);
-			JArgumentMetadata[] args = this.GetCallMetadata(parameterTypes!);
+			JArgumentMetadata[] args = this.GetCallMetadata(parameterTypes);
 			if (returnType is null) return JConstructorDefinition.Create(args);
 			using JNativeMemory<Byte> mem = memberName.GetNativeUtf8Chars();
 			return MetadataHelper.GetCallDefinition(returnType, mem.Values, args);

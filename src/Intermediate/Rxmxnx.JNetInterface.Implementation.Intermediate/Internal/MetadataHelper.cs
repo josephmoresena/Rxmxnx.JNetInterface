@@ -111,7 +111,7 @@ internal static partial class MetadataHelper
 	/// <param name="paramsMetadata">Definition parameters metadata.</param>
 	/// <returns>A <see cref="JCallDefinition"/> instance.</returns>
 	public static JCallDefinition GetCallDefinition(JClassObject jClass, ReadOnlySpan<Byte> callName,
-		JArgumentMetadata[] paramsMetadata)
+		ReadOnlySpan<JArgumentMetadata> paramsMetadata)
 	{
 		switch (jClass.ClassSignature[0])
 		{

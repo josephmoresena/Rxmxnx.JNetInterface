@@ -116,6 +116,9 @@ public sealed class StringMemoryTests
 			Assert.Throws<CriticalException>(() => env.PendingException = default);
 
 			proxyEnv.ExceptionCheck().Returns(false);
+
+			proxyEnv.ClearReceivedCalls();
+			StringMemoryTests.NestedFailTest(proxyEnv);
 		}
 		finally
 		{
@@ -301,5 +304,61 @@ public sealed class StringMemoryTests
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 			proxyEnv.FinalizeProxy(true);
 		}
+	}
+	private static void NestedFailTest(NativeInterfaceProxy proxyEnv)
+	{
+		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+		String value = StringMemoryTests.fixture.Create<String>();
+		CStringSequence utf = new(value);
+		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
+
+		using JStringObject jString = new(env.ClassFeature.StringObject, stringRef);
+		using IReadOnlyFixedContext<Char>.IDisposable fMem = value.AsMemory().GetFixedContext();
+		using IFixedPointer.IDisposable fUtfMem = utf.GetFixedPointer();
+		ReadOnlyValPtr<Char> valPtr = fMem.ValuePointer;
+		ReadOnlyValPtr<Byte> valUtfPtr = (ReadOnlyValPtr<Byte>)fUtfMem.Pointer;
+
+		proxyEnv.GetStringLength(stringRef).Returns(value.Length);
+		proxyEnv.GetStringUtfLength(stringRef).Returns(utf[0].Length);
+		proxyEnv.GetStringChars(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(valPtr);
+		proxyEnv.GetStringCritical(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(valPtr);
+		proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>()).Returns(valUtfPtr);
+
+		// Clears non-existing exception.
+		env.PendingException = default;
+
+		JNativeMemory<Char> seq = jString.GetNativeChars();
+		Assert.Equal(value.Length, seq.Values.Length);
+		Assert.Equal(fMem.Pointer, seq.Pointer);
+
+		JNativeMemory<Char> seqCritical = jString.GetCriticalChars(JMemoryReferenceKind.Local);
+		Assert.Equal(value.Length, seqCritical.Values.Length);
+		Assert.Equal(fMem.Pointer, seqCritical.Pointer);
+
+		JNativeMemory<Byte> seqUtf = jString.GetNativeUtf8Chars();
+		Assert.Equal(utf[0].Length, seqUtf.Values.Length);
+		Assert.Equal(valUtfPtr.Pointer, seqUtf.Pointer);
+
+		proxyEnv.ExceptionCheck().Returns(true);
+		Assert.Throws<CriticalException>(() => seq.Dispose());
+
+		proxyEnv.ExceptionCheck().Returns(false);
+		env.PendingException = default;
+
+		proxyEnv.ExceptionCheck().Returns(true);
+		Assert.Throws<CriticalException>(() => seqCritical.Dispose());
+
+		proxyEnv.ExceptionCheck().Returns(false);
+		env.PendingException = default;
+
+		proxyEnv.ExceptionCheck().Returns(true);
+		Assert.Throws<CriticalException>(() => seqUtf.Dispose());
+
+		proxyEnv.ExceptionCheck().Returns(false);
+		env.PendingException = default;
+
+		seq.Dispose();
+		seqCritical.Dispose();
+		seqUtf.Dispose();
 	}
 }

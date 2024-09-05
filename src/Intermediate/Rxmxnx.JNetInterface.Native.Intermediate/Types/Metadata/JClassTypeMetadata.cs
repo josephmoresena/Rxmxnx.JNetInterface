@@ -69,7 +69,7 @@ public abstract partial class JClassTypeMetadata<
 	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TClass || jObject.InstanceOf<TClass>();
 	/// <inheritdoc/>
 	internal override JFunctionDefinition<TClass> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
-		JArgumentMetadata[] paramsMetadata)
+		ReadOnlySpan<JArgumentMetadata> paramsMetadata)
 		=> JFunctionDefinition<TClass>.Create(functionName, paramsMetadata);
 	/// <inheritdoc/>
 	internal override JFieldDefinition<TClass> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName) => new(fieldName);

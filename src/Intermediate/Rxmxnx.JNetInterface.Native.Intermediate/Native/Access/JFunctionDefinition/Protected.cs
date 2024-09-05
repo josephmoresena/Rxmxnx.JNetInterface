@@ -7,7 +7,14 @@ public partial class JFunctionDefinition<TResult>
 	/// </summary>
 	/// <param name="functionName">Function name.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
-	protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, params JArgumentMetadata[] metadata) : base(
+	protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, params JArgumentMetadata[] metadata) : this(
+		functionName, metadata.AsSpan()) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="functionName">Function name.</param>
+	/// <param name="metadata">Metadata of the types of call arguments.</param>
+	protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<JArgumentMetadata> metadata) : base(
 		functionName, IDataType.GetMetadata<TResult>().Signature, metadata) { }
 
 	/// <summary>
@@ -16,7 +23,7 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? Invoke(JLocalObject jLocal, IObject?[] args)
+	protected TResult? Invoke(JLocalObject jLocal, ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jLocal.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jLocal, jLocal.Class, this, false, args);
@@ -29,7 +36,7 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
+	protected TResult? Invoke(JLocalObject jLocal, JClassObject jClass, ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jLocal.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jLocal, jClass, this, false, args);
@@ -42,7 +49,7 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
+	protected TResult? InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jLocal.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jLocal, jClass, this, true, args);
@@ -54,7 +61,7 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? StaticInvoke(JClassObject jClass, IObject?[] args)
+	protected TResult? StaticInvoke(JClassObject jClass, ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jClass.Environment;
 		return env.AccessFeature.CallStaticFunction<TResult>(jClass, this, args);
@@ -66,7 +73,7 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	protected TResult? InvokeReflected(JMethodObject jMethod, JLocalObject jLocal)
-		=> this.InvokeReflected(jMethod, jLocal, this.CreateArgumentsArray());
+		=> this.InvokeReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
 	/// <summary>
 	/// Invokes a reflected function which matches with current definition.
 	/// </summary>
@@ -74,7 +81,7 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? InvokeReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
+	protected TResult? InvokeReflected(JMethodObject jMethod, JLocalObject jLocal, ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jMethod.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jMethod, jLocal, this, false, args);
@@ -86,7 +93,7 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	protected TResult? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal)
-		=> this.InvokeNonVirtualReflected(jMethod, jLocal, this.CreateArgumentsArray());
+		=> this.InvokeNonVirtualReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
 	/// <summary>
 	/// Invokes a reflected function which matches with current definition.
 	/// </summary>
@@ -94,7 +101,8 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
+	protected TResult? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal,
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jMethod.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jMethod, jLocal, this, true, args);
@@ -105,14 +113,14 @@ public partial class JFunctionDefinition<TResult>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	protected TResult? InvokeStaticReflected(JMethodObject jMethod)
-		=> this.InvokeStaticReflected(jMethod, this.CreateArgumentsArray());
+		=> this.InvokeStaticReflected(jMethod, ReadOnlySpan<IObject?>.Empty);
 	/// <summary>
 	/// Invokes a reflected static function which matches with current definition.
 	/// </summary>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? InvokeStaticReflected(JMethodObject jMethod, IObject?[] args)
+	protected TResult? InvokeStaticReflected(JMethodObject jMethod, ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jMethod.Environment;
 		return env.AccessFeature.CallStaticFunction<TResult>(jMethod, this, args);

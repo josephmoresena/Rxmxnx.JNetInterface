@@ -148,6 +148,14 @@ internal unsafe partial class ReferenceHelper
 			GetLongArrayRegion = &ReferenceHelper.GetLongArrayRegion,
 			GetFloatArrayRegion = &ReferenceHelper.GetFloatArrayRegion,
 			GetDoubleArrayRegion = &ReferenceHelper.GetDoubleArrayRegion,
+			SetBooleanArrayRegion = &ReferenceHelper.SetBooleanArrayRegion,
+			SetByteArrayRegion = &ReferenceHelper.SetByteArrayRegion,
+			SetCharArrayRegion = &ReferenceHelper.SetCharArrayRegion,
+			SetShortArrayRegion = &ReferenceHelper.SetShortArrayRegion,
+			SetIntArrayRegion = &ReferenceHelper.SetIntArrayRegion,
+			SetLongArrayRegion = &ReferenceHelper.SetLongArrayRegion,
+			SetFloatArrayRegion = &ReferenceHelper.SetFloatArrayRegion,
+			SetDoubleArrayRegion = &ReferenceHelper.SetDoubleArrayRegion,
 			RegisterNatives = &ReferenceHelper.RegisterNatives,
 			UnregisterNatives = &ReferenceHelper.UnregisterNatives,
 			MonitorEnter = &ReferenceHelper.MonitorEnter,
@@ -312,6 +320,14 @@ internal unsafe partial class ReferenceHelper
 			GetLongArrayRegion = &ReferenceHelper.GetLongArrayRegion,
 			GetFloatArrayRegion = &ReferenceHelper.GetFloatArrayRegion,
 			GetDoubleArrayRegion = &ReferenceHelper.GetDoubleArrayRegion,
+			SetBooleanArrayRegion = &ReferenceHelper.SetBooleanArrayRegion,
+			SetByteArrayRegion = &ReferenceHelper.SetByteArrayRegion,
+			SetCharArrayRegion = &ReferenceHelper.SetCharArrayRegion,
+			SetShortArrayRegion = &ReferenceHelper.SetShortArrayRegion,
+			SetIntArrayRegion = &ReferenceHelper.SetIntArrayRegion,
+			SetLongArrayRegion = &ReferenceHelper.SetLongArrayRegion,
+			SetFloatArrayRegion = &ReferenceHelper.SetFloatArrayRegion,
+			SetDoubleArrayRegion = &ReferenceHelper.SetDoubleArrayRegion,
 			RegisterNatives = &ReferenceHelper.RegisterNatives,
 			UnregisterNatives = &ReferenceHelper.UnregisterNatives,
 			MonitorEnter = &ReferenceHelper.MonitorEnter,
@@ -902,6 +918,47 @@ internal unsafe partial class ReferenceHelper
 		Int32 count, JDouble* buffer)
 		=> ReferenceHelper.GetProxy(envRef)
 		                  .GetDoubleArrayRegion(arrayRef, start, count, (ValPtr<JDouble>)(IntPtr)buffer);
+
+	[UnmanagedCallersOnly]
+	private static void SetBooleanArrayRegion(JEnvironmentRef envRef, JBooleanArrayLocalRef arrayRef, Int32 start,
+		Int32 count, JBoolean* buffer)
+		=> ReferenceHelper.GetProxy(envRef)
+		                  .SetBooleanArrayRegion(arrayRef, start, count, (ReadOnlyValPtr<JBoolean>)(IntPtr)buffer);
+	[UnmanagedCallersOnly]
+	private static void SetByteArrayRegion(JEnvironmentRef envRef, JByteArrayLocalRef arrayRef, Int32 start,
+		Int32 count, JByte* buffer)
+		=> ReferenceHelper.GetProxy(envRef)
+		                  .SetByteArrayRegion(arrayRef, start, count, (ReadOnlyValPtr<JByte>)(IntPtr)buffer);
+	[UnmanagedCallersOnly]
+	private static void SetCharArrayRegion(JEnvironmentRef envRef, JCharArrayLocalRef arrayRef, Int32 start,
+		Int32 count, JChar* buffer)
+		=> ReferenceHelper.GetProxy(envRef)
+		                  .SetCharArrayRegion(arrayRef, start, count, (ReadOnlyValPtr<JChar>)(IntPtr)buffer);
+	[UnmanagedCallersOnly]
+	private static void SetShortArrayRegion(JEnvironmentRef envRef, JShortArrayLocalRef arrayRef, Int32 start,
+		Int32 count, JShort* buffer)
+		=> ReferenceHelper.GetProxy(envRef)
+		                  .SetShortArrayRegion(arrayRef, start, count, (ReadOnlyValPtr<JShort>)(IntPtr)buffer);
+	[UnmanagedCallersOnly]
+	private static void SetIntArrayRegion(JEnvironmentRef envRef, JIntArrayLocalRef arrayRef, Int32 start, Int32 count,
+		JInt* buffer)
+		=> ReferenceHelper.GetProxy(envRef)
+		                  .SetIntArrayRegion(arrayRef, start, count, (ReadOnlyValPtr<JInt>)(IntPtr)buffer);
+	[UnmanagedCallersOnly]
+	private static void SetLongArrayRegion(JEnvironmentRef envRef, JLongArrayLocalRef arrayRef, Int32 start,
+		Int32 count, JLong* buffer)
+		=> ReferenceHelper.GetProxy(envRef)
+		                  .SetLongArrayRegion(arrayRef, start, count, (ReadOnlyValPtr<JLong>)(IntPtr)buffer);
+	[UnmanagedCallersOnly]
+	private static void SetFloatArrayRegion(JEnvironmentRef envRef, JFloatArrayLocalRef arrayRef, Int32 start,
+		Int32 count, JFloat* buffer)
+		=> ReferenceHelper.GetProxy(envRef)
+		                  .SetFloatArrayRegion(arrayRef, start, count, (ReadOnlyValPtr<JFloat>)(IntPtr)buffer);
+	[UnmanagedCallersOnly]
+	private static void SetDoubleArrayRegion(JEnvironmentRef envRef, JDoubleArrayLocalRef arrayRef, Int32 start,
+		Int32 count, JDouble* buffer)
+		=> ReferenceHelper.GetProxy(envRef)
+		                  .SetDoubleArrayRegion(arrayRef, start, count, (ReadOnlyValPtr<JDouble>)(IntPtr)buffer);
 
 	[UnmanagedCallersOnly]
 	private static JResult RegisterNatives(JEnvironmentRef envRef, JClassLocalRef classRef,

@@ -39,4 +39,14 @@ public interface IObject
 	/// <param name="span">Binary span.</param>
 	/// <param name="index">Index to copy current value.</param>
 	internal void CopyTo(Span<JValue> span, Int32 index);
+	/// <summary>
+	/// Indicates current instance is default value.
+	/// </summary>
+	/// <returns><see langword="true"/> if current instance is default; otherwise, <see langword="false"/>.</returns>
+	internal Boolean IsDefault()
+	{
+		Span<Byte> values = stackalloc Byte[JValue.Size];
+		this.CopyTo(values);
+		return values.SequenceEqual(NativeUtilities.AsBytes(in JValue.Empty));
+	}
 }

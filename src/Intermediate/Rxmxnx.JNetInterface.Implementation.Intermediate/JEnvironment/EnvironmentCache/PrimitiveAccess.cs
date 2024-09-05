@@ -272,7 +272,7 @@ partial class JEnvironment
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
 		private unsafe void CallPrimitiveStaticFunction(Span<Byte> bytes, JFunctionDefinition definition,
-			JClassLocalRef classRef, IObject?[] args, INativeTransaction jniTransaction, JMethodId methodId)
+			JClassLocalRef classRef, ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			Byte signature = definition.Descriptor[^1];
 			ref readonly MethodFunctionSet<JClassLocalRef> staticMethodFunctions =
@@ -504,6 +504,16 @@ partial class JEnvironment
 		private JArgumentMetadata[] GetCallMetadata(JArrayObject<JClassObject> parameterTypes)
 		{
 			JArgumentMetadata[] args = new JArgumentMetadata[parameterTypes.Length];
+			this.GetCallMetadata(parameterTypes, args);
+			return args;
+		}
+		/// <summary>
+		/// Fills <paramref name="args"/> with <paramref name="parameterTypes"/> metadata types.
+		/// </summary>
+		/// <param name="parameterTypes">A <see cref="JClassObject"/> list.</param>
+		/// <param name="args">A <see cref="JArgumentMetadata"/> span.</param>
+		private void GetCallMetadata(JArrayObject<JClassObject> parameterTypes, Span<JArgumentMetadata> args)
+		{
 			JObjectArrayLocalRef objectArrayRef = parameterTypes.As<JObjectArrayLocalRef>();
 			for (Int32 i = 0; i < parameterTypes.Length; i++)
 			{
@@ -511,7 +521,6 @@ partial class JEnvironment
 				JClassObject jClass = this.GetClass(JClassLocalRef.FromReference(in localRef), true);
 				args[i] = MetadataHelper.GetArgumentMetadata(jClass);
 			}
-			return args;
 		}
 	}
 }

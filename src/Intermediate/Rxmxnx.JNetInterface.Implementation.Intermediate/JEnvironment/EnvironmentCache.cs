@@ -125,6 +125,16 @@ partial class JEnvironment
 			return nativeInterface.ErrorFunctions.ExceptionOccurred(this.Reference);
 		}
 		/// <summary>
+		/// Checks if there is a pending JNI exception.
+		/// </summary>
+		/// <returns><see langword="true"/> if there is pending JNI exception; otherwise, <see langword="false"/>.</returns>
+		public unsafe Boolean HasPendingException()
+		{
+			ref readonly NativeInterface nativeInterface =
+				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ExceptionCheckInfo);
+			return nativeInterface.ExceptionCheck(this.Reference).Value;
+		}
+		/// <summary>
 		/// Creates JNI exception from <paramref name="throwableRef"/>.
 		/// </summary>
 		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>

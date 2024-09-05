@@ -395,6 +395,23 @@ public abstract class NativeInterfaceProxy
 	public abstract void GetDoubleArrayRegion(JDoubleArrayLocalRef arrayRef, Int32 start, Int32 count,
 		ValPtr<JDouble> buffer);
 
+	public abstract void SetBooleanArrayRegion(JBooleanArrayLocalRef arrayRef, Int32 start, Int32 count,
+		ReadOnlyValPtr<JBoolean> buffer);
+	public abstract void SetByteArrayRegion(JByteArrayLocalRef arrayRef, Int32 start, Int32 count,
+		ReadOnlyValPtr<JByte> buffer);
+	public abstract void SetCharArrayRegion(JCharArrayLocalRef arrayRef, Int32 start, Int32 count,
+		ReadOnlyValPtr<JChar> buffer);
+	public abstract void SetShortArrayRegion(JShortArrayLocalRef arrayRef, Int32 start, Int32 count,
+		ReadOnlyValPtr<JShort> buffer);
+	public abstract void SetIntArrayRegion(JIntArrayLocalRef arrayRef, Int32 start, Int32 count,
+		ReadOnlyValPtr<JInt> buffer);
+	public abstract void SetLongArrayRegion(JLongArrayLocalRef arrayRef, Int32 start, Int32 count,
+		ReadOnlyValPtr<JLong> buffer);
+	public abstract void SetFloatArrayRegion(JFloatArrayLocalRef arrayRef, Int32 start, Int32 count,
+		ReadOnlyValPtr<JFloat> buffer);
+	public abstract void SetDoubleArrayRegion(JDoubleArrayLocalRef arrayRef, Int32 start, Int32 count,
+		ReadOnlyValPtr<JDouble> buffer);
+
 	public abstract JResult RegisterNatives(JClassLocalRef classRef,
 		ReadOnlyValPtr<NativeMethodValueWrapper> methodEntries, Int32 count);
 	public abstract JResult UnregisterNatives(JClassLocalRef classRef);

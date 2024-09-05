@@ -12,7 +12,7 @@ public abstract partial class JFunctionDefinition : JCallDefinition
 	/// <param name="returnTypeSignature">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnTypeSignature,
-		params JArgumentMetadata[] metadata) : base(functionName, returnTypeSignature, metadata) { }
+		ReadOnlySpan<JArgumentMetadata> metadata = default) : base(functionName, returnTypeSignature, metadata) { }
 	/// <inheritdoc/>
 	private protected JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
 
@@ -60,7 +60,7 @@ public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TR
 	/// <param name="returnTypeSignature">Method return type defined signature.</param>
 	/// <param name="metadata">Metadata of the types of call arguments.</param>
 	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnTypeSignature,
-		params JArgumentMetadata[] metadata) : base(functionName, returnTypeSignature, metadata) { }
+		ReadOnlySpan<JArgumentMetadata> metadata) : base(functionName, returnTypeSignature, metadata) { }
 	/// <summary>
 	/// Internal Constructor.
 	/// </summary>
@@ -73,7 +73,7 @@ public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TR
 	/// </summary>
 	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	private protected TResult? Invoke(JLocalObject jLocal) => this.Invoke(jLocal, this.CreateArgumentsArray());
+	private protected TResult? Invoke(JLocalObject jLocal) => this.Invoke(jLocal, ReadOnlySpan<IObject?>.Empty);
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition but using the
 	/// implementation declared on <paramref name="jClass"/> passing the default value for each argument.
@@ -82,7 +82,7 @@ public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TR
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	private protected TResult? Invoke(JLocalObject jLocal, JClassObject jClass)
-		=> this.Invoke(jLocal, jClass, this.CreateArgumentsArray());
+		=> this.Invoke(jLocal, jClass, ReadOnlySpan<IObject?>.Empty);
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition but using the
 	/// implementation declared on <paramref name="jClass"/> passing the default value for each argument.
@@ -91,12 +91,12 @@ public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TR
 	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	private protected TResult? InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass)
-		=> this.InvokeNonVirtual(jLocal, jClass, this.CreateArgumentsArray());
+		=> this.InvokeNonVirtual(jLocal, jClass, ReadOnlySpan<IObject?>.Empty);
 	/// <summary>
 	/// Invokes a static function on <paramref name="jClass"/> which matches with current definition.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <returns><typeparamref name="TResult"/> function result.</returns>
 	private protected TResult? StaticInvoke(JClassObject jClass)
-		=> this.StaticInvoke(jClass, this.CreateArgumentsArray());
+		=> this.StaticInvoke(jClass, ReadOnlySpan<IObject?>.Empty);
 }

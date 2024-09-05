@@ -19,6 +19,21 @@ public abstract partial class AccessFeatureProxy : IAccessFeature
 		where TField : IDataType<TField>;
 	public abstract void SetStaticField<TField>(JFieldObject jField, JFieldDefinition definition, TField? value)
 		where TField : IDataType<TField>, IObject;
+	public abstract void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls);
+	public abstract void ClearNatives(JClassObject jClass);
+	public abstract JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
+		JClassObject? returnType);
+	public abstract JFieldDefinition GetDefinition(JStringObject memberName, JClassObject fieldType);
+	public abstract JMethodObject GetReflectedMethod(JMethodDefinition definition, JClassObject declaringClass,
+		Boolean isStatic);
+	public abstract JMethodObject GetReflectedFunction(JFunctionDefinition definition, JClassObject declaringClass,
+		Boolean isStatic);
+	public abstract JConstructorObject GetReflectedConstructor(JConstructorDefinition definition,
+		JClassObject declaringClass);
+	public abstract JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
+		Boolean isStatic);
+	public abstract JMethodId GetMethodId(JExecutableObject jExecutable);
+	public abstract JFieldId GetFieldId(JFieldObject jField);
 	public abstract TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
 		IObject?[] args) where TObject : JLocalObject, IDataType<TObject>;
 	public abstract TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
@@ -37,21 +52,6 @@ public abstract partial class AccessFeatureProxy : IAccessFeature
 		Boolean nonVirtual, IObject?[] args);
 	public abstract void CallMethod(JMethodObject jMethod, JLocalObject jLocal, JMethodDefinition definition,
 		Boolean nonVirtual, IObject?[] args);
-	public abstract void RegisterNatives(JClassObject jClass, IReadOnlyList<JNativeCallEntry> calls);
-	public abstract void ClearNatives(JClassObject jClass);
-	public abstract JCallDefinition GetDefinition(JStringObject memberName, JArrayObject<JClassObject> parameterTypes,
-		JClassObject? returnType);
-	public abstract JFieldDefinition GetDefinition(JStringObject memberName, JClassObject fieldType);
-	public abstract JMethodObject GetReflectedMethod(JMethodDefinition definition, JClassObject declaringClass,
-		Boolean isStatic);
-	public abstract JMethodObject GetReflectedFunction(JFunctionDefinition definition, JClassObject declaringClass,
-		Boolean isStatic);
-	public abstract JConstructorObject GetReflectedConstructor(JConstructorDefinition definition,
-		JClassObject declaringClass);
-	public abstract JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
-		Boolean isStatic);
-	public abstract JMethodId GetMethodId(JExecutableObject jExecutable);
-	public abstract JFieldId GetFieldId(JFieldObject jField);
 	public abstract void GetPrimitiveField(IFixedMemory bytes, JLocalObject jLocal, JClassObject jClass,
 		JFieldDefinition definition);
 	public abstract void GetPrimitiveStaticField(IFixedMemory bytes, JClassObject jClass, JFieldDefinition definition);

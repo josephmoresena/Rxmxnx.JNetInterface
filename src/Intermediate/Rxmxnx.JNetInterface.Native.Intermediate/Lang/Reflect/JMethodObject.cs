@@ -17,8 +17,8 @@ public sealed class JMethodObject : JExecutableObject, IClassType<JMethodObject>
 	static TypeMetadata IClassType<JMethodObject>.Metadata => JMethodObject.typeMetadata;
 
 	/// <inheritdoc/>
-	internal JMethodObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition definition,
-		JClassObject declaringClass) : base(jClass, localRef, definition, declaringClass) { }
+	internal JMethodObject(JClassObject jClass, JObjectLocalRef localRef, JCallDefinition? definition = default,
+		JClassObject? declaringClass = default) : base(jClass, localRef, definition, declaringClass) { }
 
 	/// <inheritdoc/>
 	private JMethodObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }

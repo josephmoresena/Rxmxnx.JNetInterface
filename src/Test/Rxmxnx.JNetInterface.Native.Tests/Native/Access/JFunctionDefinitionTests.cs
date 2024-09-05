@@ -186,12 +186,13 @@ public sealed class JFunctionDefinitionTests
 			                                                      a => JFunctionDefinitionTests.IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.Invoke(jMethod, parameters));
-		env.AccessFeature.Received(1)
-		   .CallFunction<TDataType>((JLocalObject)jMethod, jMethod.Class, functionDefinition, false, parameters);
+		env.AccessFeature.Received(1).CallFunction<TDataType>((JLocalObject)jMethod, jMethod.Class, functionDefinition,
+		                                                      false,
+		                                                      Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.Invoke(jMethod, jClass, parameters));
-		env.AccessFeature.Received(1)
-		   .CallFunction<TDataType>((JLocalObject)jMethod, jClass, functionDefinition, false, parameters);
+		env.AccessFeature.Received(1).CallFunction<TDataType>((JLocalObject)jMethod, jClass, functionDefinition, false,
+		                                                      Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeNonVirtual(jMethod, jClass));
 		env.AccessFeature.Received(1).CallFunction<TDataType>((JLocalObject)jMethod, jClass, functionDefinition, true,
@@ -199,8 +200,8 @@ public sealed class JFunctionDefinitionTests
 			                                                      a => JFunctionDefinitionTests.IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeNonVirtual(jMethod, jClass, parameters));
-		env.AccessFeature.Received(1)
-		   .CallFunction<TDataType>((JLocalObject)jMethod, jClass, functionDefinition, true, parameters);
+		env.AccessFeature.Received(1).CallFunction<TDataType>((JLocalObject)jMethod, jClass, functionDefinition, true,
+		                                                      Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.StaticInvoke(jMethodClass));
 		env.AccessFeature.Received(1).CallStaticFunction<TDataType>(jMethodClass, functionDefinition,
@@ -208,7 +209,9 @@ public sealed class JFunctionDefinitionTests
 			                                                            a => JFunctionDefinitionTests.IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.StaticInvoke(jClass, parameters));
-		env.AccessFeature.Received(1).CallStaticFunction<TDataType>(jClass, functionDefinition, parameters);
+		env.AccessFeature.Received(1)
+		   .CallStaticFunction<TDataType>(jClass, functionDefinition,
+		                                  Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeReflected(jMethod, jClass));
 		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, (JLocalObject)jClass, functionDefinition, false,
@@ -216,7 +219,8 @@ public sealed class JFunctionDefinitionTests
 			                                                      a => JFunctionDefinitionTests.IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeReflected(jMethod, jMethod, parameters));
-		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, jMethod, functionDefinition, false, parameters);
+		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, jMethod, functionDefinition, false,
+		                                                      Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeNonVirtualReflected(jMethod, jMethodClass));
 		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, (JLocalObject)jMethodClass, functionDefinition,
@@ -225,7 +229,8 @@ public sealed class JFunctionDefinitionTests
 			                                                      a => JFunctionDefinitionTests.IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeNonVirtualReflected(jMethod, jMethod, parameters));
-		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, jMethod, functionDefinition, true, parameters);
+		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, jMethod, functionDefinition, true,
+		                                                      Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeStaticReflected(jMethod));
 		env.AccessFeature.Received(1).CallStaticFunction<TDataType>(jMethod, functionDefinition,
@@ -233,7 +238,9 @@ public sealed class JFunctionDefinitionTests
 			                                                            a => JFunctionDefinitionTests.IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeStaticReflected(jMethod, parameters));
-		env.AccessFeature.Received(1).CallStaticFunction<TDataType>(jMethod, functionDefinition, parameters);
+		env.AccessFeature.Received(1)
+		   .CallStaticFunction<TDataType>(jMethod, functionDefinition,
+		                                  Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 	}
 	private static void NonTypedTest<TDataType>() where TDataType : JReferenceObject, IReferenceType<TDataType>
 	{
@@ -343,32 +350,32 @@ public sealed class JFunctionDefinitionTests
 		                                     Arg.Is<IObject?[]>(i => i.SequenceEqual(parameters)));
 	}
 	private static Boolean IsEmptyArgs(IReadOnlyCollection<IObject?> cArgs)
-		=> cArgs.Count == JFunctionDefinitionTests.args.Length && cArgs.All(o => o is null);
+		=> (cArgs.Count == JFunctionDefinitionTests.args.Length || cArgs.Count == 0) && cArgs.All(o => o is null);
 
 	private class JFakeFunctionDefinition<TResult>(ReadOnlySpan<Byte> functionName, params JArgumentMetadata[] metadata)
 		: JFunctionDefinition<TResult>(functionName, metadata) where TResult : JReferenceObject, IReferenceType<TResult>
 	{
 		public new TResult? Invoke(JLocalObject jLocal) => base.Invoke(jLocal);
 		public new TResult? Invoke(JLocalObject jLocal, JClassObject jClass) => base.Invoke(jLocal, jClass);
-		public new TResult? Invoke(JLocalObject jLocal, IObject?[] args) => base.Invoke(jLocal, args);
-		public new TResult? Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
+		public TResult? Invoke(JLocalObject jLocal, IObject?[] args) => base.Invoke(jLocal, args);
+		public TResult? Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 			=> base.Invoke(jLocal, jClass, args);
 		public new TResult? InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass)
 			=> base.InvokeNonVirtual(jLocal, jClass);
-		public new TResult? InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
+		public TResult? InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 			=> base.InvokeNonVirtual(jLocal, jClass, args);
 		public new TResult? StaticInvoke(JClassObject jClass) => base.StaticInvoke(jClass);
-		public new TResult? StaticInvoke(JClassObject jClass, IObject?[] args) => base.StaticInvoke(jClass, args);
+		public TResult? StaticInvoke(JClassObject jClass, IObject?[] args) => base.StaticInvoke(jClass, args);
 		public new TResult? InvokeReflected(JMethodObject jMethod, JLocalObject jLocal)
 			=> base.InvokeReflected(jMethod, jLocal);
-		public new TResult? InvokeReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
+		public TResult? InvokeReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
 			=> base.InvokeReflected(jMethod, jLocal, args);
 		public new TResult? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal)
 			=> base.InvokeNonVirtualReflected(jMethod, jLocal);
-		public new TResult? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
+		public TResult? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
 			=> base.InvokeNonVirtualReflected(jMethod, jLocal, args);
 		public new TResult? InvokeStaticReflected(JMethodObject jMethod) => base.InvokeStaticReflected(jMethod);
-		public new TResult? InvokeStaticReflected(JMethodObject jMethod, IObject?[] args)
+		public TResult? InvokeStaticReflected(JMethodObject jMethod, IObject?[] args)
 			=> base.InvokeStaticReflected(jMethod, args);
 	}
 }

@@ -59,7 +59,7 @@ public partial class JEnumObject
 			}
 			/// <inheritdoc/>
 			internal override JFunctionDefinition<TEnum> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
-				JArgumentMetadata[] paramsMetadata)
+				ReadOnlySpan<JArgumentMetadata> paramsMetadata)
 				=> JFunctionDefinition<TEnum>.Create(functionName, paramsMetadata);
 			/// <inheritdoc/>
 			internal override JFieldDefinition<TEnum> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)

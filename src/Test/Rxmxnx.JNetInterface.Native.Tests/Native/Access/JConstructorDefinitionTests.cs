@@ -182,13 +182,17 @@ public sealed class JConstructorDefinitionTests
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.New(jClass, parameters));
-		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jClass, constructorDefinition, parameters);
+		env.AccessFeature.Received(1)
+		   .CallConstructor<JLocalObject>(jClass, constructorDefinition,
+		                                  Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.New<TDataType>(env, parameters));
 		env.ClassFeature.Received(1).GetClass<TDataType>();
-		env.AccessFeature.Received(1).CallConstructor<TDataType>(jClass, constructorDefinition, parameters);
+		env.AccessFeature.Received(1)
+		   .CallConstructor<TDataType>(jClass, constructorDefinition,
+		                               Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -208,33 +212,36 @@ public sealed class JConstructorDefinitionTests
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.NewReflected(jConstructor, parameters));
-		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jConstructor, constructorDefinition, parameters);
+		env.AccessFeature.Received(1)
+		   .CallConstructor<JLocalObject>(jConstructor, constructorDefinition,
+		                                  Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.NewReflected<TDataType>(jConstructor, parameters));
-		env.AccessFeature.Received(1).CallConstructor<TDataType>(jConstructor, constructorDefinition, parameters);
+		env.AccessFeature.Received(1)
+		   .CallConstructor<TDataType>(jConstructor, constructorDefinition,
+		                               Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 	}
 	private static Boolean IsEmptyArgs(IReadOnlyCollection<IObject?> cArgs)
-		=> cArgs.Count == JConstructorDefinitionTests.args.Length && cArgs.All(o => o is null);
+		=> (cArgs.Count == JConstructorDefinitionTests.args.Length || cArgs.Count == 0) && cArgs.All(o => o is null);
 
 	private class JFakeConstructor(params JArgumentMetadata[] metadata) : JConstructorDefinition(metadata)
 	{
 		public new JLocalObject New(JClassObject jClass) => base.New(jClass);
 		public new TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
 			=> base.New<TObject>(env);
-		public new JLocalObject New(JClassObject jClass, IObject?[] args) => base.New(jClass, args);
-		public new TObject New<TObject>(IEnvironment env, IObject?[] args)
-			where TObject : JLocalObject, IClassType<TObject>
+		public JLocalObject New(JClassObject jClass, IObject?[] args) => base.New(jClass, args);
+		public TObject New<TObject>(IEnvironment env, IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
 			=> base.New<TObject>(env, args);
 		public new JLocalObject NewReflected(JConstructorObject jConstructorObject)
 			=> base.NewReflected(jConstructorObject);
-		public new JLocalObject NewReflected(JConstructorObject jConstructorObject, IObject?[] args)
+		public JLocalObject NewReflected(JConstructorObject jConstructorObject, IObject?[] args)
 			=> base.NewReflected(jConstructorObject, args);
 		public new TObject NewReflected<TObject>(JConstructorObject jConstructorObject)
 			where TObject : JLocalObject, IClassType<TObject>
 			=> base.NewReflected<TObject>(jConstructorObject);
-		public new TObject NewReflected<TObject>(JConstructorObject jConstructorObject, IObject?[] args)
+		public TObject NewReflected<TObject>(JConstructorObject jConstructorObject, IObject?[] args)
 			where TObject : JLocalObject, IClassType<TObject>
 			=> base.NewReflected<TObject>(jConstructorObject, args);
 	}

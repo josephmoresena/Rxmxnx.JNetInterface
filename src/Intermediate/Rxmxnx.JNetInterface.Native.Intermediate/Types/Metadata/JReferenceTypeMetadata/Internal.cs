@@ -61,7 +61,7 @@ public abstract partial class JReferenceTypeMetadata
 	/// <param name="paramsMetadata">Metadata of the types of call arguments.</param>
 	/// <returns>A new <see cref="JFunctionDefinition"/> instance.</returns>
 	internal abstract JFunctionDefinition CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
-		JArgumentMetadata[] paramsMetadata);
+		ReadOnlySpan<JArgumentMetadata> paramsMetadata);
 	/// <summary>
 	/// Creates a <see cref="JFunctionDefinition"/> instance from <paramref name="fieldName"/>.
 	/// </summary>
