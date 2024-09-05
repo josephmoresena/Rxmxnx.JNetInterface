@@ -14,9 +14,9 @@ internal readonly struct UnknownReflectionMetadata
 	public UnknownReflectionMetadata(ReadOnlySpan<Byte> signature)
 		=> this.ArgumentMetadata = JArgumentMetadata.Create(signature);
 
-	/// <inheritdoc cref="JReferenceTypeMetadata.CreateFunctionDefinition(ReadOnlySpan{Byte},JArgumentMetadata[])"/>
+	/// <inheritdoc cref="JReferenceTypeMetadata.CreateFunctionDefinition(ReadOnlySpan{Byte},ReadOnlySpan{JArgumentMetadata})"/>
 	public JFunctionDefinition CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
-		JArgumentMetadata[] paramsMetadata)
+		ReadOnlySpan<JArgumentMetadata> paramsMetadata)
 		=> new JNonTypedFunctionDefinition(functionName, this.ArgumentMetadata.Signature, paramsMetadata);
 	/// <inheritdoc cref="JReferenceTypeMetadata.CreateFieldDefinition(ReadOnlySpan{Byte})"/>
 	public JFieldDefinition CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)

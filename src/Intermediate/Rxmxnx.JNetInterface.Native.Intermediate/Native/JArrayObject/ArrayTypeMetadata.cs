@@ -70,7 +70,7 @@ public partial class JArrayObject<TElement>
 		}
 		/// <inheritdoc/>
 		internal override JFunctionDefinition<JArrayObject<TElement>> CreateFunctionDefinition(
-			ReadOnlySpan<Byte> functionName, JArgumentMetadata[] paramsMetadata)
+			ReadOnlySpan<Byte> functionName, ReadOnlySpan<JArgumentMetadata> paramsMetadata)
 			=> JFunctionDefinition<JArrayObject<TElement>>.Create(functionName, paramsMetadata);
 		/// <inheritdoc/>
 		internal override JFieldDefinition<JArrayObject<TElement>> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
