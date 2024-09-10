@@ -72,11 +72,12 @@ public sealed class JVirtualMachineInitArg
 	/// <returns>A <see cref="CStringSequence"/> instance.</returns>
 	private static unsafe CStringSequence GetOptions(VirtualMachineInitArgumentValue value)
 	{
+		if (value.OptionsLength == 0) return CStringSequence.Create(ReadOnlySpan<Char>.Empty);
 		ReadOnlySpan<VirtualMachineInitOptionValue> optionsValue = new(value.Options, value.OptionsLength);
 		CString[] options = new CString[optionsValue.Length];
-		for (Int32 i = 0; i < options.Length; i++)
+		for (Int32 i = 0; i < optionsValue.Length; i++)
 			options[i] = JVirtualMachineInitArg.GetUnsafeCString(optionsValue[i].OptionString);
-		return options.Length > 0 ? new(options) : CStringSequence.Create(ReadOnlySpan<Char>.Empty);
+		return new(options);
 	}
 	/// <summary>
 	/// Retrieves an unsafe <see cref="CString"/> from given pointer.
