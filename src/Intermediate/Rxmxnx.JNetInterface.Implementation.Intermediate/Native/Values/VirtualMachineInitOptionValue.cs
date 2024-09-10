@@ -6,12 +6,12 @@
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-internal readonly struct VirtualMachineInitOptionValue(ReadOnlyValPtr<Byte> name, IntPtr extraInfo)
+internal readonly struct VirtualMachineInitOptionValue(ReadOnlyValPtr<Byte> optionString, IntPtr extraInfo = default)
 {
 	/// <summary>
 	/// Pointer to option name.
 	/// </summary>
-	public readonly ReadOnlyValPtr<Byte> Name = name;
+	public readonly ReadOnlyValPtr<Byte> OptionString = optionString;
 	/// <summary>
 	/// Pointer to option extra info.
 	/// </summary>

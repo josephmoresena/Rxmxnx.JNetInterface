@@ -98,9 +98,11 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
 	public IInvokedVirtualMachine CreateVirtualMachine(JVirtualMachineInitArg arg, out IEnvironment env)
 	{
-		CStringSequence sequence = JVirtualMachineInitOption.GetOptionsSequence(arg.Options);
+		CStringSequence sequence = arg.Options;
 		using IFixedPointer.IDisposable fPtr = sequence.GetFixedPointer();
-		Span<VirtualMachineInitOptionValue> options = JVirtualMachineInitOption.GetSpan(sequence);
+		// Avoid heap allocation.
+		Span<VirtualMachineInitOptionValue> options = stackalloc VirtualMachineInitOptionValue[sequence.Count];
+		arg.CopyOptions(options);
 		fixed (VirtualMachineInitOptionValue* ptr = &MemoryMarshal.GetReference(options))
 		{
 			VirtualMachineInitArgumentValue value = new()
@@ -154,18 +156,30 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="libraryPath"/> is a
 	/// valid JVM library; otherwise, <see langword="null"/>.
 	/// </returns>
+	[ExcludeFromCodeCoverage]
 	public static JVirtualMachineLibrary? LoadLibrary(String libraryPath)
 	{
 		IntPtr? handle = NativeUtilities.LoadNativeLib(libraryPath);
-		if (!handle.HasValue) return default;
+		return handle.HasValue ? JVirtualMachineLibrary.Create(handle.Value) : default;
+	}
+	/// <summary>
+	/// Creates a virtual machine library using loaded JVM library.
+	/// </summary>
+	/// <param name="handle">Handle of loaded JVM library.</param>
+	/// <returns>
+	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="handle"/> is
+	/// valid for a JVM library; otherwise, <see langword="null"/>.
+	/// </returns>
+	[ExcludeFromCodeCoverage]
+	public static JVirtualMachineLibrary? Create(IntPtr handle)
+	{
 		Span<IntPtr> functions = stackalloc IntPtr[3];
-		if (NativeLibrary.TryGetExport(handle.Value, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
+		if (NativeLibrary.TryGetExport(handle, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
 		                               out functions[0]) &&
-		    NativeLibrary.TryGetExport(handle.Value, JVirtualMachineLibrary.CreateVirtualMachineName,
-		                               out functions[1]) && NativeLibrary.TryGetExport(
-			    handle.Value, JVirtualMachineLibrary.GetCreatedVirtualMachinesName, out functions[2]))
-			return new(handle.Value, functions.AsValues<IntPtr, InvocationFunctionSet>()[0]);
-		NativeLibrary.Free(handle.Value);
+		    NativeLibrary.TryGetExport(handle, JVirtualMachineLibrary.CreateVirtualMachineName, out functions[1]) &&
+		    NativeLibrary.TryGetExport(handle, JVirtualMachineLibrary.GetCreatedVirtualMachinesName, out functions[2]))
+			return new(handle, Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]));
+		NativeLibrary.Free(handle);
 		return default;
 	}
 }
