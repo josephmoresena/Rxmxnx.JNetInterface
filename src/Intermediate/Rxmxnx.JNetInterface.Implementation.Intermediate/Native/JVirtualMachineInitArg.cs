@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class stores a VM initialization argument.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 public sealed class JVirtualMachineInitArg
 {
 	/// <inheritdoc cref="JVirtualMachineInitArg.Version"/>
@@ -74,8 +76,7 @@ public sealed class JVirtualMachineInitArg
 		CString[] options = new CString[optionsValue.Length];
 		for (Int32 i = 0; i < options.Length; i++)
 			options[i] = JVirtualMachineInitArg.GetUnsafeCString(optionsValue[i].OptionString);
-		CStringSequence result = options.Length > 0 ? new(options) : CStringSequence.Create(ReadOnlySpan<Char>.Empty);
-		return result;
+		return options.Length > 0 ? new(options) : CStringSequence.Create(ReadOnlySpan<Char>.Empty);
 	}
 	/// <summary>
 	/// Retrieves an unsafe <see cref="CString"/> from given pointer.

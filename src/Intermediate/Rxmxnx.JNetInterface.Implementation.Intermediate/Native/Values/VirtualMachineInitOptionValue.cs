@@ -1,7 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
-/// Unmanaged type for <see cref="JVirtualMachineInitOption"/> value.
+/// Unmanaged type for <c>JavaVMOption</c> value.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
