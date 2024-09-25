@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 21
-          distribution: 'oracle'
+          distribution: 'zulu'
 
       - uses: actions/checkout@v4
         with:
@@ -25,7 +25,7 @@ jobs:
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
         with:
-          path: ~\sonar\cache
+          path: ~/sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
@@ -57,12 +57,9 @@ jobs:
           dotnet build-server shutdown
           dotnet restore src /nr:false
           dotnet build-server shutdown
-          dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
-          if ($LastExitCode -ne 0) { exit $LastExitCode }  
+          dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1 /p:SonarBuild=true
           dotnet test src --verbosity detailed --collect:"XPlat Code Coverage" --results-directory TestResults/  --logger "trx;verbosity=detailed" --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-          if ($LastExitCode -ne 0) { exit $LastExitCode }  
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-          if ($LastExitCode -ne 0) { exit $LastExitCode }  
+          ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
       
       - name: Patch Native ILLink.Substitutions
         working-directory: ./src/Intermediate/Rxmxnx.JNetInterface.Native.Intermediate/ILLink

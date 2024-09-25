@@ -11,6 +11,10 @@
         <TrimMode>full</TrimMode>
         <OptionStrict>On</OptionStrict>
     </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(SonarBuild)' == 'true'">
+        <BuildProject>false</BuildProject>
+    </PropertyGroup>
 
     <PropertyGroup>
         <RootAllApplicationAssemblies>false</RootAllApplicationAssemblies>
