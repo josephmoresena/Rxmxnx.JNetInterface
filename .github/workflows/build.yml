@@ -42,7 +42,6 @@ jobs:
         shell: pwsh
         run: |
           New-Item -Path ./.sonar/scanner -ItemType Directory
-          dotnet tool install --global dotnet-coverage
           dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
           
       - name: Build and analyze
@@ -52,11 +51,14 @@ jobs:
         shell: pwsh
         run: |
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**.SourceGenerator/**/*.cs,**ApplicationTest/**/*" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml /d:sonar.cpd.exclusions="**Test/*.cs"
-          dotnet clean src --configuration release /nr:false 
+          dotnet clean src --configuration release /nr:false
           dotnet restore src /nr:false /maxcpucount:1
           dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
+          if ($LastExitCode -ne 0) { exit $LastExitCode }  
           dotnet test src --verbosity detailed --collect:"XPlat Code Coverage" --results-directory TestResults/  --logger "trx;verbosity=detailed" --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+          if ($LastExitCode -ne 0) { exit $LastExitCode }  
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          if ($LastExitCode -ne 0) { exit $LastExitCode }  
       
       - name: Patch Native ILLink.Substitutions
         working-directory: ./src/Intermediate/Rxmxnx.JNetInterface.Native.Intermediate/ILLink
