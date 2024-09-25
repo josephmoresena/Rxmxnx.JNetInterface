@@ -44,6 +44,12 @@ jobs:
           New-Item -Path ./.sonar/scanner -ItemType Directory
           dotnet build-server shutdown
           dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
+
+      - name: Remove ApplicationTest
+        shell: pwsh
+        run: |
+          find src/ApplicationTest -name "*.*proj" -exec dotnet sln src remove {} \;
+          rm -rf src/ApplicationTest
           
       - name: Build and analyze
         env:
@@ -53,7 +59,6 @@ jobs:
         run: |
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**.SourceGenerator/**/*.cs,**ApplicationTest/**/*" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml /d:sonar.cpd.exclusions="**Test/*.cs"
           dotnet build-server shutdown
-          find src/ApplicationTest -name "*.*proj" -exec dotnet sln src remove {} \;
           dotnet clean src --configuration release /nr:false
           dotnet build-server shutdown
           dotnet restore src /nr:false
