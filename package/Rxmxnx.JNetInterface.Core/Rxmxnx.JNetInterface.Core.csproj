@@ -1,99 +1,99 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>./$(AssemblyName).xml</DocumentationFile>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <ExcludeXmlAssemblyFiles>false</ExcludeXmlAssemblyFiles>
-    <IsPackable>true</IsPackable>
-    <Deterministic>true</Deterministic>
-    <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <IsTrimmable>true</IsTrimmable>
-    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
-    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
-    <LangVersion>latest</LangVersion>
-    <DefineConstants>$(DefineConstants);PACKAGE</DefineConstants>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(PUBLIC_KEY)' != ''">
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\Rxmxnx.JNetInterface.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <EmbeddedResource Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\ILLink\ILLink.Substitutions.xml">
-      <LogicalName>ILLink.Substitutions.xml</LogicalName>
-    </EmbeddedResource>
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DocumentationFile>./$(AssemblyName).xml</DocumentationFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <ExcludeXmlAssemblyFiles>false</ExcludeXmlAssemblyFiles>
+        <IsPackable>true</IsPackable>
+        <Deterministic>true</Deterministic>
+        <CheckEolTargetFramework>false</CheckEolTargetFramework>
+        <IsTrimmable>true</IsTrimmable>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+        <LangVersion>latest</LangVersion>
+        <DefineConstants>$(DefineConstants);PACKAGE</DefineConstants>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
-  </ItemGroup>
+    <PropertyGroup Condition="'$(PUBLIC_KEY)' != ''">
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\Rxmxnx.JNetInterface.snk</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="1.2.3"/>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\ILLink\ILLink.Substitutions.xml">
+            <LogicalName>ILLink.Substitutions.xml</LogicalName>
+        </EmbeddedResource>
+    </ItemGroup>
 
-  <ItemGroup>
-    <InternalsVisibleTo Condition="'$(PUBLIC_KEY)' != ''" Include="Rxmxnx.JNetInterface, PublicKey=$(PUBLIC_KEY)" />
-    <InternalsVisibleTo Condition="'$(PUBLIC_KEY)' == ''" Include="Rxmxnx.JNetInterface" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\**\*.cs">
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </Compile>
-    <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\**\*.cs">
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </Compile>
-    <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\**\*.cs">
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </Compile>
-    <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\**\*.cs">
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </Compile>
-    <Compile Remove="..\..\src\Intermediate\**\obj\**\*.*;..\..\Intermediate\**\bin\**\*.*" />
-    <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\**\*.GlobalUsings.g.cs" />
-    <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\**\*.GlobalUsings.g.cs" />
-    <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\**\*.GlobalUsings.g.cs" />
-    <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\**\*.GlobalUsings.g.cs" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="1.5.1"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Include="PACKAGE.md" Pack="true" PackagePath="/" />
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="LICENSE.md" />
-  </ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Condition="'$(PUBLIC_KEY)' != ''" Include="Rxmxnx.JNetInterface, PublicKey=$(PUBLIC_KEY)"/>
+        <InternalsVisibleTo Condition="'$(PUBLIC_KEY)' == ''" Include="Rxmxnx.JNetInterface"/>
+    </ItemGroup>
 
-  <PropertyGroup>
-    <Authors>Joseph Moreno</Authors>
-    <Product>Rxmxnx.JNetInterface</Product>
-    <Description>
-        Rxmxnx.JNetInterface.Core provides an API to use JNI in a high level .NET code.
-    </Description>
-    <Copyright>Copyright © Joseph Moreno 2024</Copyright>
-    <Summary>
-        Rxmxnx.JNetInterface.Core provides an API to use JNI in a high level .NET code.
-    </Summary>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <Title>Rxmxnx.JNetInterface.Core</Title>
-    <PackageId>Rxmxnx.JNetInterface.Core</PackageId>
-    <PackageTags>
-        PInvoke;Binary;Unmanaged;Memory;NativeAOT;JNI;JNA;Java;JVM;
-        JDK;JRE;NDK;Android;Bionic;FFI;;JNICALL;JNIEXPORT;JNI_OnLoad;JNI_CreateJavaVM;
-        JObject;JClass;JString;JThrowable;JArray;
-        JBoolean;JByte;JChar;JDouble;JFloat;JInt;JLong;JShort
-    </PackageTags>
-    <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-  </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\**\*.cs">
+            <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </Compile>
+        <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\**\*.cs">
+            <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </Compile>
+        <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\**\*.cs">
+            <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </Compile>
+        <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\**\*.cs">
+            <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </Compile>
+        <Compile Remove="..\..\src\Intermediate\**\obj\**\*.*;..\..\Intermediate\**\bin\**\*.*"/>
+        <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\**\*.GlobalUsings.g.cs"/>
+        <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\**\*.GlobalUsings.g.cs"/>
+        <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\**\*.GlobalUsings.g.cs"/>
+        <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\**\*.GlobalUsings.g.cs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="PACKAGE.md" Pack="true" PackagePath="/"/>
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="LICENSE.md"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <Authors>Joseph Moreno</Authors>
+        <Product>Rxmxnx.JNetInterface</Product>
+        <Description>
+            Rxmxnx.JNetInterface.Core provides an API to use JNI in a high level .NET code.
+        </Description>
+        <Copyright>Copyright © Joseph Moreno 2024</Copyright>
+        <Summary>
+            Rxmxnx.JNetInterface.Core provides an API to use JNI in a high level .NET code.
+        </Summary>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <Title>Rxmxnx.JNetInterface.Core</Title>
+        <PackageId>Rxmxnx.JNetInterface.Core</PackageId>
+        <PackageTags>
+            PInvoke;Binary;Unmanaged;Memory;NativeAOT;JNI;JNA;Java;JVM;
+            JDK;JRE;NDK;Android;Bionic;FFI;;JNICALL;JNIEXPORT;JNI_OnLoad;JNI_CreateJavaVM;
+            JObject;JClass;JString;JThrowable;JArray;
+            JBoolean;JByte;JChar;JDouble;JFloat;JInt;JLong;JShort
+        </PackageTags>
+        <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    </PropertyGroup>
 
 </Project>
