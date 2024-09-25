@@ -46,7 +46,7 @@ jobs:
           dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
 
       - name: Remove ApplicationTest
-        shell: pwsh
+        shell: bash
         run: |
           find src/ApplicationTest -name "*.*proj" -exec dotnet sln src remove {} \;
           rm -rf src/ApplicationTest
