@@ -6,44 +6,39 @@
         <Nullable>enable</Nullable>
         <RootNamespace>Rxmxnx.JNetInterface.Tests</RootNamespace>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>Rxmxnx.JNetInterface.Native.Tests</_Parameter1>
-        </AssemblyAttribute>
+        <ProjectReference Include="..\..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
+        <ProjectReference Include="..\Rxmxnx.JNetInterface.Native.Tests.Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <Using Include="AutoFixture"/>
         <Using Include="NSubstitute"/>
+        <Using Include="System.Buffers"/>
+        <Using Include="System.Collections.Concurrent"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
-
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
-        <Using Include="Rxmxnx.JNetInterface.Lang.Reflect"/>
-        <Using Include="Rxmxnx.JNetInterface.Lang.Annotation"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>
-        <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Identifiers"/>
         <Using Include="Rxmxnx.JNetInterface.Native.References"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Values"/>
-        <Using Include="Rxmxnx.JNetInterface.Nio"/>
+        <Using Include="Rxmxnx.JNetInterface.Native.Values.Functions"/>
+        <Using Include="Rxmxnx.JNetInterface.Primitives"/>
         <Using Include="Rxmxnx.JNetInterface.Restricted"/>
-        <Using Include="Rxmxnx.JNetInterface.Tests.Restricted"/>
+        <Using Include="Rxmxnx.JNetInterface.Tests.Internal"/>
         <Using Include="Rxmxnx.JNetInterface.Types"/>
-        <Using Include="Rxmxnx.JNetInterface.Types.Metadata"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="AutoFixture" Version="4.18.1"/>
-        <PackageReference Include="NSubstitute" Version="5.1.0"/>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>Rxmxnx.JNetInterface.Implementation.Tests</_Parameter1>
+        </AssemblyAttribute>
     </ItemGroup>
 
 </Project>
