@@ -50,14 +50,16 @@ jobs:
           find src/ApplicationTest -name "*.*proj" -exec dotnet sln src remove {} \;
           rm -rf src/ApplicationTest
           
-      - name: Build and analyze
+      - name: Clean test results
+        run: rm -rf TestResults/
+          
+      - name: Build and analyze0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: pwsh
         run: |
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
-          dotnet clean src --configuration release
           dotnet restore src
           dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
           dotnet test src --verbosity detailed --collect:"XPlat Code Coverage" --results-directory TestResults/  --logger "trx;verbosity=detailed" --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover 
