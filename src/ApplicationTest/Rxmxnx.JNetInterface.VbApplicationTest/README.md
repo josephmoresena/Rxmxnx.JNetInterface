@@ -1,13 +1,17 @@
 # Visual Basic .NET Support
 
-`JNetInterface` is partially compatible with Visual Basic .NET because the latter does not support many of the modern 
+`JNetInterface` is partially compatible with Visual Basic .NET because the latter does not support many of the modern
 .NET features such as ref structs and static members in interfaces.
 
-Thus, any application or library in Visual Basic .NET can use the APIs and types exposed in `JNetInterface` (or in F# 
+Thus, any application or library in Visual Basic .NET can use the APIs and types exposed in `JNetInterface` (or in F#
 or C# assemblies derived from it), but it will not be able to create Java reference types as in C# or F#.
 
 ## Primitives
-In C#, `JNetInterface` uses operators to convert from one primitive type to another. In Visual Basic .NET, `widening` can be used natively, but to use `narrowing` (which is implemented in C# through explicit operators), you must use the functions `CBool`, `CSByte`, `CChar`, `CDbl`, `CSng`, `CInt`, `CLng`, and `CShort` on the `Value` property of each primitive type.
+
+In C#, `JNetInterface` uses operators to convert from one primitive type to another. In Visual Basic .NET, `widening`
+can be used natively, but to use `narrowing` (which is implemented in C# through explicit operators), you must use the
+functions `CBool`, `CSByte`, `CChar`, `CDbl`, `CSng`, `CInt`, `CLng`, and `CShort` on the `Value` property of each
+primitive type.
 
 ```vb
 Dim booleanValue As JBoolean = True
