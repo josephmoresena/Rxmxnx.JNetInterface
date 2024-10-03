@@ -5,7 +5,7 @@ public partial class JDataTypeMetadata
 	/// <summary>
 	/// Internal sequence.
 	/// </summary>
-	internal CStringSequence Information => this._sequence;
+	internal TypeInfoSequence Information => this._info;
 
 	/// <summary>
 	/// Indicates current instance is valid for current datatype.

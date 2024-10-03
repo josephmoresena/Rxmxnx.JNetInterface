@@ -30,8 +30,7 @@ public partial class JEnumObject
 			/// </summary>
 			/// <param name="builder">A <see cref="JLocalObject.TypeMetadataBuilder"/> instance.</param>
 			/// <param name="fields">Enum field list.</param>
-			public EnumTypeMetadata(TypeMetadataBuilder builder, IEnumFieldList fields) : base(
-				builder.DataTypeName, builder.Signature)
+			public EnumTypeMetadata(TypeMetadataBuilder builder, IEnumFieldList fields) : base(builder.DataTypeName)
 			{
 				this._fields = fields;
 				this._interfaces = InterfaceSet.GetClassInterfaces(JEnumObject.typeMetadata, builder.GetInterfaceSet());

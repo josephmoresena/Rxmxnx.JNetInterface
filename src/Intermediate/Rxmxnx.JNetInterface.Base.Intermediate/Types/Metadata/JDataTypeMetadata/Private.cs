@@ -2,16 +2,10 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 
 public partial class JDataTypeMetadata
 {
-	/// <inheritdoc cref="JDataTypeMetadata.ArraySignature"/>
-	private readonly CString _arraySignature;
-	/// <inheritdoc cref="JDataTypeMetadata.ClassName"/>
-	private readonly CString _className;
 	/// <summary>
-	/// Internal sequence information.
+	/// Internal information.
 	/// </summary>
-	private readonly CStringSequence _sequence;
-	/// <inheritdoc cref="JDataTypeMetadata.Signature"/>
-	private readonly CString _signature;
+	private readonly TypeInfoSequence _info;
 
 	Boolean? ITypeInformation.IsFinal => this.Modifier is JTypeModifier.Final;
 

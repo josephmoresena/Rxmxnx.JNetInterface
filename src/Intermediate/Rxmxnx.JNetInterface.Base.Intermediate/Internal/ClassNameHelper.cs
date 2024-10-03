@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Helper for class name retrieving.
 /// </summary>
-internal readonly struct ClassNameHelper
+internal readonly partial struct ClassNameHelper
 {
 	/// <summary>
 	/// Array class name.

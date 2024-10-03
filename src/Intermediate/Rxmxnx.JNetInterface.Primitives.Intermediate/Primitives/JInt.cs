@@ -1,19 +1,30 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JInt>;
+using IPrimitiveValueType = IPrimitiveType<JInt, Int32>;
+using IPrimitiveIntegerType = IPrimitiveIntegerType<JInt, Int32>;
+using IPrimitiveSignedType = IPrimitiveSignedType<JInt, Int32>;
 
 /// <summary>
 /// Primitive <c>int</c>. Represents a primitive 32-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JInt : INativeType, IComparable<JInt>, IEquatable<JInt>,
-	IPrimitiveIntegerType<JInt, Int32>, IPrimitiveSignedType<JInt, Int32>
+public readonly partial struct JInt : INativeType, IComparable<JInt>, IEquatable<JInt>, IPrimitiveIntegerType,
+	IPrimitiveSignedType
 {
+	/// <summary>
+	/// Primitive type info.
+	/// </summary>
+	private static readonly TypeInfoSequence primitiveInfo = new(ClassNameHelper.IntPrimitiveHash, 3, 1);
+	/// <summary>
+	/// Wrapper type info.
+	/// </summary>
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.IntegerObjectHash, 17, 19);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JInt, Int32>.TypeMetadataBuilder
-		.Create("int"u8, CommonNames.IntSignatureChar).WithWrapperClassName("java/lang/Integer"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new IPrimitiveValueType.PrimitiveTypeMetadata(JInt.primitiveInfo, JInt.wrapperInfo);
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JInt;

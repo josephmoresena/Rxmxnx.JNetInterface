@@ -1,19 +1,30 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JFloat>;
+using IPrimitiveValueType = IPrimitiveType<JFloat, Single>;
+using IPrimitiveFloatingPointType = IPrimitiveFloatingPointType<JFloat, Single>;
+using IPrimitiveSignedType = IPrimitiveSignedType<JFloat, Single>;
 
 /// <summary>
 /// Primitive <c>float</c>. Represents a single-precision floating-point number.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JFloat : INativeType, IComparable<JFloat>, IEquatable<JFloat>,
-	IPrimitiveFloatingPointType<JFloat, Single>, IPrimitiveSignedType<JFloat, Single>
+	IPrimitiveFloatingPointType, IPrimitiveSignedType
 {
+	/// <summary>
+	/// Primitive type info.
+	/// </summary>
+	private static readonly TypeInfoSequence primitiveInfo = new(ClassNameHelper.FloatPrimitiveHash, 5, 1);
+	/// <summary>
+	/// Wrapper type info.
+	/// </summary>
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.FloatObjectHash, 15, 17);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JFloat, Single>.TypeMetadataBuilder
-		.Create("float"u8, CommonNames.FloatSignatureChar).WithWrapperClassName("java/lang/Float"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new IPrimitiveValueType.PrimitiveTypeMetadata(JFloat.primitiveInfo, JFloat.wrapperInfo);
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JFloat;

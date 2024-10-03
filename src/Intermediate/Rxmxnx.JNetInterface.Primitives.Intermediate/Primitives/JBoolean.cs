@@ -1,6 +1,7 @@
 ﻿namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JBoolean>;
+using IPrimitiveValueType = IPrimitiveType<JBoolean, Boolean>;
 
 /// <summary>
 /// Primitive <c>boolean</c>. Represents a Boolean (<see langword="true"/> or <see langword="false"/>) value.
@@ -8,14 +9,21 @@ using TypeMetadata = JPrimitiveTypeMetadata<JBoolean>;
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1210,
                  Justification = CommonConstants.NoBooleanComparisonOperatorsJustification)]
-public readonly partial struct JBoolean : INativeType, IComparable<JBoolean>, IEquatable<JBoolean>,
-	IPrimitiveType<JBoolean, Boolean>
+public readonly partial struct JBoolean : INativeType, IComparable<JBoolean>, IEquatable<JBoolean>, IPrimitiveValueType
 {
+	/// <summary>
+	/// Primitive type info.
+	/// </summary>
+	private static readonly TypeInfoSequence primitiveInfo = new(ClassNameHelper.BooleanPrimitiveHash, 7, 1);
+	/// <summary>
+	/// Wrapper type info.
+	/// </summary>
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.BooleanObjectHash, 17, 19);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JBoolean, Boolean>.TypeMetadataBuilder
-		.Create("boolean"u8, CommonNames.BooleanSignatureChar).WithWrapperClassName("java/lang/Boolean"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new IPrimitiveValueType.PrimitiveTypeMetadata(JBoolean.primitiveInfo, JBoolean.wrapperInfo);
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JBoolean;

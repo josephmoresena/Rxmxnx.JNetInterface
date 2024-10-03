@@ -57,7 +57,7 @@ public sealed class DataTypeTests
 		Assert.Equal(JTypeModifier.Final, voidMetadata.Modifier);
 		Assert.True(wrapperInformation[0].SequenceEqual(voidMetadata.WrapperClassName));
 		Assert.True(wrapperInformation[1].SequenceEqual(voidMetadata.WrapperClassSignature));
-		Assert.Equal(wrapperInformation, voidMetadata.WrapperInformation);
+		Assert.Equal(wrapperInformation.ToString(), voidMetadata.WrapperInformation.ToString());
 
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.ArgumentMetadata);
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.CreateInstance(Array.Empty<Byte>()));

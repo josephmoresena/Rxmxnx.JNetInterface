@@ -1,18 +1,29 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JByte>;
+using IPrimitiveValueType = IPrimitiveType<JByte, SByte>;
+using IPrimitiveIntegerType = IPrimitiveIntegerType<JByte, SByte>;
+using IPrimitiveSignedType = IPrimitiveSignedType<JByte, SByte>;
 
 /// <summary>
-/// Primitive <c>byte</c>. Represents a 8-bit signed integer.
+/// Primitive <c>byte</c>. Represents an 8-bit signed integer.
 /// </summary>
-public readonly partial struct JByte : INativeType, IComparable<JByte>, IEquatable<JByte>,
-	IPrimitiveIntegerType<JByte, SByte>, IPrimitiveSignedType<JByte, SByte>
+public readonly partial struct JByte : INativeType, IComparable<JByte>, IEquatable<JByte>, IPrimitiveIntegerType,
+	IPrimitiveSignedType
 {
+	/// <summary>
+	/// Primitive type info.
+	/// </summary>
+	private static readonly TypeInfoSequence primitiveInfo = new(ClassNameHelper.BytePrimitiveHash, 4, 1);
+	/// <summary>
+	/// Wrapper type info.
+	/// </summary>
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.ByteObjectHash, 14, 16);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JByte, SByte>.TypeMetadataBuilder
-		.Create("byte"u8, CommonNames.ByteSignatureChar).WithWrapperClassName("java/lang/Byte"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new IPrimitiveValueType.PrimitiveTypeMetadata(JByte.primitiveInfo, JByte.wrapperInfo);
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JByte;

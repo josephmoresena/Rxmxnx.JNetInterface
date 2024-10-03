@@ -30,6 +30,8 @@ public static class ProxyTestsExtensions
 		=> $"{{ {nameof(JArgumentMetadata.Signature)} = {argumentMetadata.Signature}, {nameof(JArgumentMetadata.Size)} = {argumentMetadata.Size} }}";
 	public static String ToPrintableHash(this JReferenceTypeMetadata typeMetadata)
 		=> $"{ITypeInformation.GetPrintableHash(typeMetadata.Hash, out String lastChar)}{lastChar}";
+	internal static IFixedPointer.IDisposable GetFixedPointer(this TypeInfoSequence info)
+		=> info.ToString().AsMemory().GetFixedContext();
 	public static JStackTraceElementObject CreateStackTrace(this StackTraceInfo info, JClassObject jClass,
 		JObjectLocalRef localRef = default)
 	{

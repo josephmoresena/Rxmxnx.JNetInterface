@@ -6,9 +6,7 @@ public abstract partial class JReferenceTypeMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="className">Class name of the current type.</param>
-	/// <param name="signature">JNI signature for the current type.</param>
-	private protected JReferenceTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
-		className, signature) { }
+	private protected JReferenceTypeMetadata(ReadOnlySpan<Byte> className) : base(className) { }
 	/// <inheritdoc/>
-	private protected JReferenceTypeMetadata(CStringSequence information) : base(information) { }
+	private protected JReferenceTypeMetadata(TypeInfoSequence information) : base(information) { }
 }

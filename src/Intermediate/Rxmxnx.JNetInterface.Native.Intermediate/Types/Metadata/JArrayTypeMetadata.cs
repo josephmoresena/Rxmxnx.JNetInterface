@@ -28,8 +28,7 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	/// <param name="signature">JNI signature for the current array type.</param>
 	/// <param name="final">Indicates whether element type is final.</param>
 	/// <param name="dimension">Array dimension.</param>
-	private protected JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Boolean final, Int32 dimension) : base(
-		signature, signature)
+	private protected JArrayTypeMetadata(ReadOnlySpan<Byte> signature, Boolean final, Int32 dimension) : base(signature)
 	{
 		this.Dimension = dimension;
 		this.Modifier = final ? JTypeModifier.Final : JTypeModifier.Extensible;
