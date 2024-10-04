@@ -10,7 +10,7 @@ public partial class JLocalObject
 		/// <typeparam name="TInterface">Type of interface.</typeparam>
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-		protected ref partial struct TypeMetadataBuilder<
+		protected ref struct TypeMetadataBuilder<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
@@ -61,7 +61,8 @@ public partial class JLocalObject
 			/// Creates the <see cref="JReferenceTypeMetadata"/> instance.
 			/// </summary>
 			/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
-			public readonly JInterfaceTypeMetadata<TInterface> Build() => new InterfaceTypeMetadata(this._builder);
+			public readonly JInterfaceTypeMetadata<TInterface> Build()
+				=> new InterfaceTypeMetadata<TInterface>(this._builder);
 
 			/// <summary>
 			/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.

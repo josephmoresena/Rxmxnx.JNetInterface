@@ -11,7 +11,7 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	/// <summary>
 	/// Type information.
 	/// </summary>
-	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.AccessibleObjectHash, 34);
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ExecutableHash, 28);
 	/// <summary>
 	/// Type interfaces.
 	/// </summary>

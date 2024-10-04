@@ -10,10 +10,14 @@ using TypeMetadata = JInterfaceTypeMetadata<JRunnableObject>;
 public sealed class JRunnableObject : JInterfaceObject<JRunnableObject>, IInterfaceType<JRunnableObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.RunnableHash, 18);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata =
-		TypeMetadataBuilder<JRunnableObject>.Create("java/lang/Runnable"u8).Build();
+		JLocalObject.InterfaceView.CreateBuiltInMetadata<JRunnableObject>(JRunnableObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JRunnableObject>.Metadata => JRunnableObject.typeMetadata;
 

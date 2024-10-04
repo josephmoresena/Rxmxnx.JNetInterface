@@ -11,10 +11,15 @@ public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElement
 	IInterfaceType<JAnnotatedElementObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.AnnotatedElementHash, 34);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JAnnotatedElementObject>
-	                                                    .Create("java/lang/reflect/AnnotatedElement"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		JLocalObject.InterfaceView.CreateBuiltInMetadata<JAnnotatedElementObject>(
+			JAnnotatedElementObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JAnnotatedElementObject>.Metadata => JAnnotatedElementObject.typeMetadata;
 

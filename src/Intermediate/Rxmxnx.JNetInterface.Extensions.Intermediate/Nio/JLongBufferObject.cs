@@ -10,7 +10,7 @@ public class JLongBufferObject : JBufferObject<JLong>, IClassType<JLongBufferObj
 	/// <summary>
 	/// Type information.
 	/// </summary>
-	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.LongBufferHash, 20);
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.LongBufferHash, 19);
 	/// <summary>
 	/// Type metadata.
 	/// </summary>

@@ -10,10 +10,15 @@ using TypeMetadata = JInterfaceTypeMetadata<JSerializableObject>;
 public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>, IInterfaceType<JSerializableObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.SerializableHash, 20);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata =
-		TypeMetadataBuilder<JSerializableObject>.Create("java/io/Serializable"u8).Build();
+		JLocalObject.InterfaceView.CreateBuiltInMetadata<JSerializableObject>(
+			JSerializableObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JSerializableObject>.Metadata => JSerializableObject.typeMetadata;
 

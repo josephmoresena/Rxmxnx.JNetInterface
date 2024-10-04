@@ -3,6 +3,24 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 [ExcludeFromCodeCoverage]
 public sealed class NumberObjectTests
 {
+	private static readonly Dictionary<Type, CString> classNames = new()
+	{
+		{ typeof(JByteObject), new("java/lang/Byte"u8) },
+		{ typeof(JDoubleObject), new("java/lang/Double"u8) },
+		{ typeof(JFloatObject), new("java/lang/Float"u8) },
+		{ typeof(JIntegerObject), new("java/lang/Integer"u8) },
+		{ typeof(JLongObject), new("java/lang/Long"u8) },
+		{ typeof(JShortObject), new("java/lang/Short"u8) },
+	};
+	private static readonly Dictionary<Type, CString> classSignatures =
+		NumberObjectTests.classNames.ToDictionary(p => p.Key, p => CString.Concat("L"u8, p.Value, ";"u8));
+	private static readonly Dictionary<Type, CString> arraySignatures =
+		NumberObjectTests.classSignatures.ToDictionary(p => p.Key, p => CString.Concat("["u8, p.Value));
+	private static readonly Dictionary<Type, CStringSequence> hashes =
+		NumberObjectTests.classSignatures.Keys.ToDictionary(
+			t => t,
+			t => new CStringSequence(NumberObjectTests.classNames[t], NumberObjectTests.classSignatures[t],
+			                         NumberObjectTests.arraySignatures[t]));
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	[Fact]
@@ -159,6 +177,10 @@ public sealed class NumberObjectTests
 		Assert.Equal(primitiveTypeMetadata.WrapperClassSignature, typeMetadata.Signature);
 		Assert.Equal(primitiveTypeMetadata, typeMetadata.PrimitiveMetadata);
 		Assert.Equal(primitiveTypeMetadata.ArgumentMetadata, typeMetadata.PrimitiveArgumentMetadata);
+		Assert.Equal(NumberObjectTests.classNames[typeof(TNumber)], typeMetadata.ClassName);
+		Assert.Equal(NumberObjectTests.classSignatures[typeof(TNumber)], typeMetadata.Signature);
+		Assert.Equal(NumberObjectTests.arraySignatures[typeof(TNumber)], typeMetadata.ArraySignature);
+		Assert.Equal(NumberObjectTests.hashes[typeof(TNumber)].ToString(), typeMetadata.Hash);
 		Assert.IsType<JFunctionDefinition<TNumber>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFunctionDefinition<TNumber>>(

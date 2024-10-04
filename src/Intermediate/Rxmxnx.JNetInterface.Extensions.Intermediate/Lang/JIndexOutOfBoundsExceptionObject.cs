@@ -13,7 +13,7 @@ public class JIndexOutOfBoundsExceptionObject : JRuntimeExceptionObject,
 	/// <summary>
 	/// Datatype information.
 	/// </summary>
-	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.RuntimeExceptionHash, 26);
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IndexOutOfBoundsExceptionHash, 35);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

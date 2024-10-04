@@ -10,10 +10,15 @@ using TypeMetadata = JInterfaceTypeMetadata<JCloneableObject>;
 public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInterfaceType<JCloneableObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.CloneableHash, 19);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata =
-		TypeMetadataBuilder<JCloneableObject>.Create("java/lang/Cloneable"u8).Build();
+		JLocalObject.InterfaceView.CreateBuiltInMetadata<JCloneableObject>(
+			JCloneableObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JCloneableObject>.Metadata => JCloneableObject.typeMetadata;
 

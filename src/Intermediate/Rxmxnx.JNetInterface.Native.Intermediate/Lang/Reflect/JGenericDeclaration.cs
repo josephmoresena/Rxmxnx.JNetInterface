@@ -11,11 +11,15 @@ public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclara
 	IInterfaceType<JGenericDeclarationObject>, IInterfaceObject<JAnnotatedElementObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.GenericDeclarationHash, 36);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JGenericDeclarationObject>
-	                                                    .Create("java/lang/reflect/GenericDeclaration"u8)
-	                                                    .Extends<JAnnotatedElementObject>().Build();
+	private static readonly TypeMetadata typeMetadata =
+		JLocalObject.InterfaceView.CreateBuiltInMetadata<JGenericDeclarationObject>(
+			JGenericDeclarationObject.typeInfo, InterfaceSet.AnnotatedElementSet);
 
 	static TypeMetadata IInterfaceType<JGenericDeclarationObject>.Metadata => JGenericDeclarationObject.typeMetadata;
 

@@ -12,7 +12,7 @@ public class JIllegalArgumentExceptionObject : JRuntimeExceptionObject, IThrowab
 	/// <summary>
 	/// Datatype information.
 	/// </summary>
-	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IllegalArgumentExceptionHash, 32);
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IllegalArgumentExceptionHash, 34);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

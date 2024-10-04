@@ -3,6 +3,31 @@ namespace Rxmxnx.JNetInterface.Tests.Native;
 [ExcludeFromCodeCoverage]
 public sealed class JInterfaceObjectTests
 {
+	private static readonly Dictionary<Type, CString> classNames = new()
+	{
+		{ typeof(JAnnotatedElementObject), new("java/lang/reflect/AnnotatedElement"u8) },
+		{ typeof(JAnnotationObject), new("java/lang/annotation/Annotation"u8) },
+		{ typeof(JAppendableObject), new("java/lang/Appendable"u8) },
+		{ typeof(JCharSequenceObject), new("java/lang/CharSequence"u8) },
+		{ typeof(JCloneableObject), new("java/lang/Cloneable"u8) },
+		{ typeof(JComparableObject), new("java/lang/Comparable"u8) },
+		{ typeof(JDirectBufferObject), new("sun/nio/ch/DirectBuffer"u8) },
+		{ typeof(JGenericDeclarationObject), new("java/lang/reflect/GenericDeclaration"u8) },
+		{ typeof(JMemberObject), new("java/lang/reflect/Member"u8) },
+		{ typeof(JReadableObject), new("java/lang/Readable"u8) },
+		{ typeof(JRunnableObject), new("java/lang/Runnable"u8) },
+		{ typeof(JSerializableObject), new("java/io/Serializable"u8) },
+		{ typeof(JTypeObject), new("java/lang/reflect/Type"u8) },
+	};
+	private static readonly Dictionary<Type, CString> classSignatures =
+		JInterfaceObjectTests.classNames.ToDictionary(p => p.Key, p => CString.Concat("L"u8, p.Value, ";"u8));
+	private static readonly Dictionary<Type, CString> arraySignatures =
+		JInterfaceObjectTests.classSignatures.ToDictionary(p => p.Key, p => CString.Concat("["u8, p.Value));
+	private static readonly Dictionary<Type, CStringSequence> hashes =
+		JInterfaceObjectTests.classSignatures.Keys.ToDictionary(
+			t => t,
+			t => new CStringSequence(JInterfaceObjectTests.classNames[t], JInterfaceObjectTests.classSignatures[t],
+			                         JInterfaceObjectTests.arraySignatures[t]));
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	[Fact]
@@ -11,14 +36,20 @@ public sealed class JInterfaceObjectTests
 		InterfaceSet emptyInterfaces = InterfaceSet.Empty;
 		IInterfaceSet arrayInterfaces = InterfaceSet.ArraySet;
 		IInterfaceSet annotationInterfaces = InterfaceSet.AnnotationSet;
-		IInterfaceSet primitiveWrapperInterfaces = InterfaceSet.SerializableComparableSet;
+		IInterfaceSet serializableComparableInterfaces = InterfaceSet.SerializableComparableSet;
+		IInterfaceSet comparableInterfaces = InterfaceSet.ComparableSet;
+		IInterfaceSet serializableInterfaces = InterfaceSet.SerializableSet;
+		IInterfaceSet annotatedElementInterfaces = InterfaceSet.AnnotatedElementSet;
 
 		Assert.Contains(IInterfaceType.GetMetadata<JCloneableObject>(), arrayInterfaces.ToArray());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), arrayInterfaces.ToArray());
 		Assert.Empty(emptyInterfaces.ToArray());
 		Assert.Contains(IInterfaceType.GetMetadata<JAnnotationObject>(), annotationInterfaces.ToArray());
-		Assert.Contains(IInterfaceType.GetMetadata<JComparableObject>(), primitiveWrapperInterfaces.ToArray());
-		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), primitiveWrapperInterfaces.ToArray());
+		Assert.Contains(IInterfaceType.GetMetadata<JComparableObject>(), serializableComparableInterfaces.ToArray());
+		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), serializableComparableInterfaces.ToArray());
+		Assert.Contains(IInterfaceType.GetMetadata<JComparableObject>(), comparableInterfaces.ToArray());
+		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), serializableInterfaces.ToArray());
+		Assert.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>(), annotatedElementInterfaces.ToArray());
 
 		Assert.True(arrayInterfaces.Contains(IInterfaceType.GetMetadata<JCloneableObject>()));
 		Assert.True(arrayInterfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
@@ -31,16 +62,24 @@ public sealed class JInterfaceObjectTests
 		Assert.True(annotationInterfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()));
 		Assert.False(annotationInterfaces.Contains(IInterfaceType.GetMetadata<JComparableObject>()));
 		Assert.False(annotationInterfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
-		Assert.True(primitiveWrapperInterfaces.Contains(IInterfaceType.GetMetadata<JComparableObject>()));
-		Assert.True(primitiveWrapperInterfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
-		Assert.False(primitiveWrapperInterfaces.Contains(IInterfaceType.GetMetadata<JCloneableObject>()));
-		Assert.False(primitiveWrapperInterfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()));
+		Assert.True(serializableComparableInterfaces.Contains(IInterfaceType.GetMetadata<JComparableObject>()));
+		Assert.True(serializableComparableInterfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
+		Assert.False(serializableComparableInterfaces.Contains(IInterfaceType.GetMetadata<JCloneableObject>()));
+		Assert.False(serializableComparableInterfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()));
+		Assert.True(comparableInterfaces.Contains(IInterfaceType.GetMetadata<JComparableObject>()));
+		Assert.False(comparableInterfaces.Contains(IInterfaceType.GetMetadata<JCloneableObject>()));
+		Assert.True(serializableInterfaces.Contains(IInterfaceType.GetMetadata<JSerializableObject>()));
+		Assert.False(serializableInterfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()));
+		Assert.True(comparableInterfaces.Contains(IInterfaceType.GetMetadata<JComparableObject>()));
+		Assert.False(comparableInterfaces.Contains(IInterfaceType.GetMetadata<JCloneableObject>()));
+		Assert.True(annotatedElementInterfaces.Contains(IInterfaceType.GetMetadata<JAnnotatedElementObject>()));
+		Assert.False(annotatedElementInterfaces.Contains(IInterfaceType.GetMetadata<JAnnotationObject>()));
 
 		List<JInterfaceTypeMetadata> interfaces = [];
 		arrayInterfaces.ForEach(default(Object), (_, i) => interfaces.Add(i));
 		emptyInterfaces.ForEach(default(Object), (_, i) => interfaces.Add(i));
 		annotationInterfaces.ForEach(default(Object), (_, i) => interfaces.Add(i));
-		primitiveWrapperInterfaces.ForEach(default(Object), (_, i) => interfaces.Add(i));
+		serializableComparableInterfaces.ForEach(default(Object), (_, i) => interfaces.Add(i));
 
 		Assert.Equal(IInterfaceType.GetMetadata<JSerializableObject>(), interfaces[0]);
 		Assert.Equal(IInterfaceType.GetMetadata<JCloneableObject>(), interfaces[1]);
@@ -51,7 +90,7 @@ public sealed class JInterfaceObjectTests
 		Assert.False(arrayInterfaces.Contains(JFakeInterfaceObject.TypeMetadata));
 		Assert.False(emptyInterfaces.Contains(JFakeInterfaceObject.TypeMetadata));
 		Assert.False(annotationInterfaces.Contains(JFakeInterfaceObject.TypeMetadata));
-		Assert.False(primitiveWrapperInterfaces.Contains(JFakeInterfaceObject.TypeMetadata));
+		Assert.False(serializableComparableInterfaces.Contains(JFakeInterfaceObject.TypeMetadata));
 	}
 
 	[Fact]
@@ -154,6 +193,10 @@ public sealed class JInterfaceObjectTests
 		Assert.Equal(JTypeKind.Interface, EnvironmentProxy.GetKind<JLocalObject.InterfaceView>());
 		Assert.Equal(typeof(JLocalObject.InterfaceView), EnvironmentProxy.GetFamilyType<TInterface>());
 		Assert.Equal(JTypeKind.Interface, EnvironmentProxy.GetKind<JLocalObject.InterfaceView>());
+		Assert.Equal(JInterfaceObjectTests.classNames[typeof(TInterface)], interfaceTypeMetadata.ClassName);
+		Assert.Equal(JInterfaceObjectTests.classSignatures[typeof(TInterface)], interfaceTypeMetadata.Signature);
+		Assert.Equal(JInterfaceObjectTests.arraySignatures[typeof(TInterface)], interfaceTypeMetadata.ArraySignature);
+		Assert.Equal(JInterfaceObjectTests.hashes[typeof(TInterface)].ToString(), interfaceTypeMetadata.Hash);
 		Assert.IsType<JFunctionDefinition<TInterface>.Parameterless>(
 			interfaceTypeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFunctionDefinition<TInterface>>(

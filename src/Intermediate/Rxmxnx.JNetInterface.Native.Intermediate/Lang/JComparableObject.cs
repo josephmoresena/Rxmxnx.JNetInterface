@@ -10,10 +10,15 @@ using TypeMetadata = JInterfaceTypeMetadata<JComparableObject>;
 public sealed class JComparableObject : JInterfaceObject<JComparableObject>, IInterfaceType<JComparableObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ComparableHash, 20);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata =
-		TypeMetadataBuilder<JComparableObject>.Create("java/lang/Comparable"u8).Build();
+		JLocalObject.InterfaceView.CreateBuiltInMetadata<JComparableObject>(
+			JComparableObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JComparableObject>.Metadata => JComparableObject.typeMetadata;
 

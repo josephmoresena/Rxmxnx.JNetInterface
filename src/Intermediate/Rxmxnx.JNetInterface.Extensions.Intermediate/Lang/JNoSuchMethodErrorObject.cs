@@ -12,7 +12,7 @@ public class JNoSuchMethodErrorObject : JIncompatibleClassChangeErrorObject, ITh
 	/// <summary>
 	/// Datatype information.
 	/// </summary>
-	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.NoSuchMethodErrorHash, 26);
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.NoSuchMethodErrorHash, 27);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

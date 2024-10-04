@@ -12,7 +12,7 @@ public class JSecurityExceptionObject : JRuntimeExceptionObject, IThrowableType<
 	/// <summary>
 	/// Datatype information.
 	/// </summary>
-	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.SecurityExceptionHash, 26);
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.SecurityExceptionHash, 27);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

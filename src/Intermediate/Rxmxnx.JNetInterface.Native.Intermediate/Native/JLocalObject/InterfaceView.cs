@@ -27,5 +27,18 @@ public partial class JLocalObject
 			this.Object.Dispose();
 			GC.SuppressFinalize(this);
 		}
+
+		/// <summary>
+		/// Creates the <see cref="JInterfaceTypeMetadata{TInterface}"/> metadata instance for built-in types.
+		/// </summary>
+		/// <typeparam name="TInterface"><see cref="IClassType{TInterface}"/> type.</typeparam>
+		/// <param name="information">Interface type information.</param>
+		/// <param name="interfaces">Interface interfaces metadata set.</param>
+		/// <returns>A <see cref="JInterfaceTypeMetadata{TInterface}"/> instance.</returns>
+		private protected static JInterfaceTypeMetadata<TInterface>
+			CreateBuiltInMetadata<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>(
+				TypeInfoSequence information, IInterfaceSet interfaces)
+			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+			=> new InterfaceTypeMetadata<TInterface>(information, interfaces);
 	}
 }

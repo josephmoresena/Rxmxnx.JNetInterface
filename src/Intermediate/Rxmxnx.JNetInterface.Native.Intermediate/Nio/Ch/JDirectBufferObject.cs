@@ -12,10 +12,15 @@ using TypeMetadata = JInterfaceTypeMetadata<JDirectBufferObject>;
 public sealed class JDirectBufferObject : JInterfaceObject<JDirectBufferObject>, IInterfaceType<JDirectBufferObject>
 {
 	/// <summary>
-	/// Type metadata.
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.DirectBufferHash, 23);
+	/// <summary>
+	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata =
-		TypeMetadataBuilder<JDirectBufferObject>.Create("sun/nio/ch/DirectBuffer"u8).Build();
+		JLocalObject.InterfaceView.CreateBuiltInMetadata<JDirectBufferObject>(
+			JDirectBufferObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JDirectBufferObject>.Metadata => JDirectBufferObject.typeMetadata;
 

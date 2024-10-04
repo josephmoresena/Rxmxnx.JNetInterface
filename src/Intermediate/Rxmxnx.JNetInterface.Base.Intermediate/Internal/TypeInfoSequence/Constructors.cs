@@ -15,7 +15,7 @@ internal partial class TypeInfoSequence
 		this.Hash = hash;
 		this.ClassName = CString.Create<State>(new(this.Hash, classNameLength));
 		this.Signature = CString.Create<State>(new(this.Hash, signatureLength, classNameLength + 1));
-		this.ArraySignature = arraySignatureOffset < this.Hash.Length * 2 ?
+		this.ArraySignature = this.Hash.Length * 2 - arraySignatureOffset > 2 ?
 			CString.Create<State>(new(this.Hash, signatureLength + 1, arraySignatureOffset)) :
 			CString.Empty;
 	}

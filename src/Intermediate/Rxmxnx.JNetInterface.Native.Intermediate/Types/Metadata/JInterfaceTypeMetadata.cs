@@ -23,6 +23,13 @@ public abstract class JInterfaceTypeMetadata : JReferenceTypeMetadata
 	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, Boolean isAnnotation) :
 		base(interfaceName)
 		=> this.Kind = !isAnnotation ? JTypeKind.Interface : JTypeKind.Annotation;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="information">Internal sequence information.</param>
+	/// <param name="isAnnotation">Indicates whether current type is an annotation.</param>
+	private protected JInterfaceTypeMetadata(TypeInfoSequence information, Boolean isAnnotation) : base(information)
+		=> this.Kind = !isAnnotation ? JTypeKind.Interface : JTypeKind.Annotation;
 
 	/// <inheritdoc/>
 	public override String? ToString()
@@ -49,6 +56,9 @@ public abstract class JInterfaceTypeMetadata<TInterface> : JInterfaceTypeMetadat
 	/// <inheritdoc/>
 	private protected JInterfaceTypeMetadata(ReadOnlySpan<Byte> interfaceName, Boolean isAnnotation) : base(
 		interfaceName, isAnnotation) { }
+	/// <inheritdoc/>
+	private protected JInterfaceTypeMetadata(TypeInfoSequence information, Boolean isAnnotation) : base(
+		information, isAnnotation) { }
 
 	/// <inheritdoc/>
 	internal override Boolean IsInstance(JReferenceObject jObject)

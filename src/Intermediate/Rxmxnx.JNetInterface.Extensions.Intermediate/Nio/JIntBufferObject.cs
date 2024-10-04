@@ -10,7 +10,7 @@ public class JIntBufferObject : JBufferObject<JInt>, IClassType<JIntBufferObject
 	/// <summary>
 	/// Type information.
 	/// </summary>
-	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IntBufferHash, 20);
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IntBufferHash, 18);
 	/// <summary>
 	/// Type metadata.
 	/// </summary>

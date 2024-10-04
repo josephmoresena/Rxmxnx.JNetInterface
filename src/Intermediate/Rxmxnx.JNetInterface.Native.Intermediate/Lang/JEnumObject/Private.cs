@@ -12,7 +12,7 @@ public partial class JEnumObject
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JEnumObject>(
-		JEnumObject.typeInfo, JTypeModifier.Final, InterfaceSet.SerializableComparableSet);
+		JEnumObject.typeInfo, JTypeModifier.Abstract, InterfaceSet.SerializableComparableSet);
 
 	static TypeMetadata IClassType<JEnumObject>.Metadata => JEnumObject.typeMetadata;
 

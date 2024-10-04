@@ -12,7 +12,7 @@ public partial class JNumberObject
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JNumberObject>(
-		JNumberObject.typeInfo, JTypeModifier.Final, InterfaceSet.SerializableSet);
+		JNumberObject.typeInfo, JTypeModifier.Abstract, InterfaceSet.SerializableSet);
 
 	static TypeMetadata IClassType<JNumberObject>.Metadata => JNumberObject.typeMetadata;
 

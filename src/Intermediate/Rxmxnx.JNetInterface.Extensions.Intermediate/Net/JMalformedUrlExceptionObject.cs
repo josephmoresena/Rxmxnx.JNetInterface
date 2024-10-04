@@ -12,7 +12,7 @@ public class JMalformedUrlExceptionObject : JIoExceptionObject, IThrowableType<J
 	/// <summary>
 	/// Datatype information.
 	/// </summary>
-	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.MalformedUrlExceptionHash, 20);
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.MalformedUrlExceptionHash, 30);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

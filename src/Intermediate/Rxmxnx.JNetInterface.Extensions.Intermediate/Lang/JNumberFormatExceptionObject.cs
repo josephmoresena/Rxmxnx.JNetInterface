@@ -13,7 +13,7 @@ public class JNumberFormatExceptionObject : JIllegalArgumentExceptionObject,
 	/// <summary>
 	/// Datatype information.
 	/// </summary>
-	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.NumberFormatExceptionHash, 30);
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.NumberFormatExceptionHash, 31);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
