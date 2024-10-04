@@ -2,6 +2,17 @@ namespace Rxmxnx.JNetInterface.Internal;
 
 internal partial struct ClassNameHelper
 {
+	#region java.io
+	/// <summary>
+	/// Hash for <c>java.io.FileNotFoundException</c> type.
+	/// </summary>
+	public const String FileNotFoundExceptionHash = "慪慶椯⽯楆敬潎䙴畯摮硅散瑰潩n橌癡⽡潩䘯汩乥瑯潆湵䕤捸灥楴湯;䱛慪慶椯⽯楆敬潎䙴畯摮硅散瑰潩㭮\0";
+	/// <summary>
+	/// Hash for <c>java.io.IoException</c> type.
+	/// </summary>
+	public const String IoExceptionHash = "慪慶椯⽯佉硅散瑰潩n橌癡⽡潩䤯䕏捸灥楴湯;䱛慪慶椯⽯佉硅散瑰潩㭮\0";
+	#endregion
+
 	#region java.Lang
 	/// <summary>
 	/// Hash for <c>java.lang.Error</c> type.

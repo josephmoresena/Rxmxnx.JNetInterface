@@ -11,11 +11,16 @@ public class JExceptionInInitializerErrorObject : JLinkageErrorObject,
 	IThrowableType<JExceptionInInitializerErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ExceptionInInitializerErrorHash, 37);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
-	                                                    .Create<JExceptionInInitializerErrorObject>(
-		                                                    "java/lang/ExceptionInInitializerError"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JExceptionInInitializerErrorObject>(
+			    JExceptionInInitializerErrorObject.typeInfo, IClassType.GetMetadata<JLinkageErrorObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JExceptionInInitializerErrorObject>.Metadata
 		=> JExceptionInInitializerErrorObject.typeMetadata;

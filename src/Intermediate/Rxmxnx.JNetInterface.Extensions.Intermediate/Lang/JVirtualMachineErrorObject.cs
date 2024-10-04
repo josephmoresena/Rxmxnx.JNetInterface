@@ -8,11 +8,15 @@ using TypeMetadata = JThrowableTypeMetadata<JVirtualMachineErrorObject>;
 public class JVirtualMachineErrorObject : JErrorObject, IThrowableType<JVirtualMachineErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.VirtualMachineErrorHash, 29);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JErrorObject>
-	                                                    .Create<JVirtualMachineErrorObject>(
-		                                                    "java/lang/VirtualMachineError"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JVirtualMachineErrorObject>(
+			    JVirtualMachineErrorObject.typeInfo, IClassType.GetMetadata<JErrorObject>(), JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JVirtualMachineErrorObject>.Metadata => JVirtualMachineErrorObject.typeMetadata;
 

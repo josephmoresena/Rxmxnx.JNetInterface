@@ -10,11 +10,17 @@ using TypeMetadata = JThrowableTypeMetadata<JNoClassDefFoundErrorObject>;
 public class JNoClassDefFoundErrorObject : JLinkageErrorObject, IThrowableType<JNoClassDefFoundErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.NoClassDefFoundErrorHash, 30);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
-	                                                    .Create<JNoClassDefFoundErrorObject>(
-		                                                    "java/lang/NoClassDefFoundError"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JNoClassDefFoundErrorObject>(JNoClassDefFoundErrorObject.typeInfo,
+		                                                                    IClassType
+			                                                                    .GetMetadata<JLinkageErrorObject>(),
+		                                                                    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JNoClassDefFoundErrorObject>.Metadata
 		=> JNoClassDefFoundErrorObject.typeMetadata;

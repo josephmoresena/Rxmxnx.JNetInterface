@@ -10,11 +10,16 @@ using TypeMetadata = JThrowableTypeMetadata<JIllegalStateExceptionObject>;
 public class JIllegalStateExceptionObject : JRuntimeExceptionObject, IThrowableType<JIllegalStateExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IllegalStateExceptionHash, 31);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JRuntimeExceptionObject>
-	                                                    .Create<JIllegalStateExceptionObject>(
-		                                                    "java/lang/IllegalStateException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JIllegalStateExceptionObject>(
+			    JIllegalStateExceptionObject.typeInfo, IClassType.GetMetadata<JRuntimeExceptionObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JIllegalStateExceptionObject>.Metadata
 		=> JIllegalStateExceptionObject.typeMetadata;

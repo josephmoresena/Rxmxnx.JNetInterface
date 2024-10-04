@@ -8,11 +8,16 @@ using TypeMetadata = JThrowableTypeMetadata<JRuntimeExceptionObject>;
 public class JRuntimeExceptionObject : JExceptionObject, IThrowableType<JRuntimeExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.RuntimeExceptionHash, 26);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExceptionObject>
-	                                                    .Create<JRuntimeExceptionObject>("java/lang/RuntimeException"u8)
-	                                                    .Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JRuntimeExceptionObject>(JRuntimeExceptionObject.typeInfo,
+		                                                                IClassType.GetMetadata<JExceptionObject>(),
+		                                                                JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JRuntimeExceptionObject>.Metadata => JRuntimeExceptionObject.typeMetadata;
 

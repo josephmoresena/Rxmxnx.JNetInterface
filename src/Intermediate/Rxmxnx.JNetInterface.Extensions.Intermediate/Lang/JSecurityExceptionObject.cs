@@ -10,11 +10,16 @@ using TypeMetadata = JThrowableTypeMetadata<JSecurityExceptionObject>;
 public class JSecurityExceptionObject : JRuntimeExceptionObject, IThrowableType<JSecurityExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.SecurityExceptionHash, 26);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JRuntimeExceptionObject>
-	                                                    .Create<JSecurityExceptionObject>(
-		                                                    "java/lang/SecurityException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JSecurityExceptionObject>(
+			    JSecurityExceptionObject.typeInfo, IClassType.GetMetadata<JRuntimeExceptionObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JSecurityExceptionObject>.Metadata => JSecurityExceptionObject.typeMetadata;
 

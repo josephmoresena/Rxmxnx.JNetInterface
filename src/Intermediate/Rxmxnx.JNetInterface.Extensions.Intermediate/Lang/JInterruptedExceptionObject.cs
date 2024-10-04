@@ -8,11 +8,16 @@ using TypeMetadata = JThrowableTypeMetadata<JInterruptedExceptionObject>;
 public class JInterruptedExceptionObject : JExceptionObject, IThrowableType<JInterruptedExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.InterruptedExceptionHash, 30);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExceptionObject>
-	                                                    .Create<JInterruptedExceptionObject>(
-		                                                    "java/lang/InterruptedException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JInterruptedExceptionObject>(JInterruptedExceptionObject.typeInfo,
+		                                                                    IClassType.GetMetadata<JExceptionObject>(),
+		                                                                    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JInterruptedExceptionObject>.Metadata
 		=> JInterruptedExceptionObject.typeMetadata;

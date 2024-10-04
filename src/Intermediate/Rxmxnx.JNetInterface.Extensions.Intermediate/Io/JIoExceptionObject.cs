@@ -8,10 +8,16 @@ using TypeMetadata = JThrowableTypeMetadata<JIoExceptionObject>;
 public class JIoExceptionObject : JExceptionObject, IThrowableType<JIoExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IoExceptionHash, 19);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExceptionObject>
-	                                                    .Create<JIoExceptionObject>("java/io/IOException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JIoExceptionObject>(JIoExceptionObject.typeInfo,
+		                                                           IClassType.GetMetadata<JExceptionObject>(),
+		                                                           JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JIoExceptionObject>.Metadata => JIoExceptionObject.typeMetadata;
 

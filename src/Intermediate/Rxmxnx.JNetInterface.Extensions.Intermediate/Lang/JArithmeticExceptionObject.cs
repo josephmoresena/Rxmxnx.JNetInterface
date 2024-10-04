@@ -10,11 +10,17 @@ using TypeMetadata = JThrowableTypeMetadata<JArithmeticExceptionObject>;
 public class JArithmeticExceptionObject : JRuntimeExceptionObject, IThrowableType<JArithmeticExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ArithmeticExceptionHash, 29);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JRuntimeExceptionObject>
-	                                                    .Create<JArithmeticExceptionObject>(
-		                                                    "java/lang/ArithmeticException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JArithmeticExceptionObject>(JArithmeticExceptionObject.typeInfo,
+		                                                                   IClassType
+			                                                                   .GetMetadata<JRuntimeExceptionObject>(),
+		                                                                   JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JArithmeticExceptionObject>.Metadata => JArithmeticExceptionObject.typeMetadata;
 

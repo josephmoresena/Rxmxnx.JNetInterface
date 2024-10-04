@@ -10,11 +10,16 @@ using TypeMetadata = JThrowableTypeMetadata<JArrayStoreExceptionObject>;
 public class JArrayStoreExceptionObject : JIndexOutOfBoundsExceptionObject, IThrowableType<JArrayStoreExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ArrayStoreExceptionHash, 29);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
-	                                                    .Create<JArrayStoreExceptionObject>(
-		                                                    "java/lang/ArrayStoreException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JArrayStoreExceptionObject>(
+			    JArrayStoreExceptionObject.typeInfo, IClassType.GetMetadata<JIndexOutOfBoundsExceptionObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JArrayStoreExceptionObject>.Metadata => JArrayStoreExceptionObject.typeMetadata;
 

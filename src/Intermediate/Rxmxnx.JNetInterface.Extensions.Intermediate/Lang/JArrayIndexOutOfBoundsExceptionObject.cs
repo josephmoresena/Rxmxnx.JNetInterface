@@ -11,11 +11,16 @@ public class JArrayIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsExceptionO
 	IThrowableType<JArrayIndexOutOfBoundsExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ArrayIndexOutOfBoundsExceptionHash, 40);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JIndexOutOfBoundsExceptionObject>
-	                                                    .Create<JArrayIndexOutOfBoundsExceptionObject>(
-		                                                    "java/lang/ArrayIndexOutOfBoundsException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JArrayIndexOutOfBoundsExceptionObject>(
+			    JArrayIndexOutOfBoundsExceptionObject.typeInfo,
+			    IClassType.GetMetadata<JIndexOutOfBoundsExceptionObject>(), JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JArrayIndexOutOfBoundsExceptionObject>.Metadata
 		=> JArrayIndexOutOfBoundsExceptionObject.typeMetadata;

@@ -10,11 +10,17 @@ using TypeMetadata = JThrowableTypeMetadata<JFileNotFoundExceptionObject>;
 public class JFileNotFoundExceptionObject : JIoExceptionObject, IThrowableType<JFileNotFoundExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.FileNotFoundExceptionHash, 29);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JIoExceptionObject>
-	                                                    .Create<JFileNotFoundExceptionObject>(
-		                                                    "java/io/FileNotFoundException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JFileNotFoundExceptionObject>(JFileNotFoundExceptionObject.typeInfo,
+		                                                                     IClassType
+			                                                                     .GetMetadata<JIoExceptionObject>(),
+		                                                                     JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JFileNotFoundExceptionObject>.Metadata
 		=> JFileNotFoundExceptionObject.typeMetadata;

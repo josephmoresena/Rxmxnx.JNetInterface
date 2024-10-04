@@ -69,9 +69,7 @@ public partial class JThrowableObject
 			JTypeModifier modifier = JTypeModifier.Extensible)
 		{
 			CommonValidationUtilities.ValidateNotEmpty(className);
-			JClassTypeMetadata baseMetadata = typeof(TThrowable) != typeof(JThrowableObject) ?
-				IClassType.GetMetadata<JThrowableObject>() :
-				IClassType.GetMetadata<JLocalObject>();
+			JClassTypeMetadata baseMetadata = IClassType.GetMetadata<JThrowableObject>();
 			return !IVirtualMachine.MetadataValidationEnabled ?
 				new(className, modifier, baseMetadata, ImmutableHashSet<Type>.Empty) :
 				new(className, modifier, baseMetadata, IReferenceType<TThrowable>.TypeInterfaces);

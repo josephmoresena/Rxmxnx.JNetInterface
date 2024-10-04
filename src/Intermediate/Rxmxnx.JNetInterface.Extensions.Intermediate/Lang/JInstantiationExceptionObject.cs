@@ -11,11 +11,18 @@ public class JInstantiationExceptionObject : JReflectiveOperationExceptionObject
 	IThrowableType<JInstantiationExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.InstantiationExceptionHash, 32);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JReflectiveOperationExceptionObject>
-	                                                    .Create<JInstantiationExceptionObject>(
-		                                                    "java/lang/InstantiationException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JInstantiationExceptionObject>(JInstantiationExceptionObject.typeInfo,
+		                                                                      IClassType
+			                                                                      .GetMetadata<
+				                                                                      JReflectiveOperationExceptionObject>(),
+		                                                                      JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JInstantiationExceptionObject>.Metadata
 		=> JInstantiationExceptionObject.typeMetadata;

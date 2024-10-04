@@ -8,11 +8,16 @@ using TypeMetadata = JThrowableTypeMetadata<JReflectiveOperationExceptionObject>
 public class JReflectiveOperationExceptionObject : JExceptionObject, IThrowableType<JReflectiveOperationExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ReflectiveOperationExceptionHash, 38);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExceptionObject>
-	                                                    .Create<JReflectiveOperationExceptionObject>(
-		                                                    "java/lang/ReflectiveOperationException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JReflectiveOperationExceptionObject>(
+			    JReflectiveOperationExceptionObject.typeInfo, IClassType.GetMetadata<JExceptionObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JReflectiveOperationExceptionObject>.Metadata
 		=> JReflectiveOperationExceptionObject.typeMetadata;

@@ -11,11 +11,18 @@ public class JClassNotFoundExceptionObject : JReflectiveOperationExceptionObject
 	IThrowableType<JClassNotFoundExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ClassNotFoundExceptionHash, 32);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JReflectiveOperationExceptionObject>
-	                                                    .Create<JClassNotFoundExceptionObject>(
-		                                                    "java/lang/ClassNotFoundException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JClassNotFoundExceptionObject>(JClassNotFoundExceptionObject.typeInfo,
+		                                                                      IClassType
+			                                                                      .GetMetadata<
+				                                                                      JReflectiveOperationExceptionObject>(),
+		                                                                      JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JClassNotFoundExceptionObject>.Metadata
 		=> JClassNotFoundExceptionObject.typeMetadata;
