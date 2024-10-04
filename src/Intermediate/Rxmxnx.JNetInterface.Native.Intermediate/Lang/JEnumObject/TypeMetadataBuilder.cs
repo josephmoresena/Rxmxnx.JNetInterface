@@ -8,7 +8,7 @@ public partial class JEnumObject
 	/// <typeparam name="TEnum">Type of enum.</typeparam>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-	protected new ref partial struct TypeMetadataBuilder<
+	protected new ref struct TypeMetadataBuilder<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TEnum>
 		where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>
 	{
@@ -72,7 +72,7 @@ public partial class JEnumObject
 		/// </summary>
 		/// <returns>A new <see cref="JEnumTypeMetadata{TEnum}"/> instance.</returns>
 		public readonly JEnumTypeMetadata<TEnum> Build()
-			=> new EnumTypeMetadata(this._builder, this._enumFields.Validate(this._builder.DataTypeName));
+			=> new EnumTypeMetadata<TEnum>(this._builder, this._enumFields.Validate(this._builder.DataTypeName));
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.

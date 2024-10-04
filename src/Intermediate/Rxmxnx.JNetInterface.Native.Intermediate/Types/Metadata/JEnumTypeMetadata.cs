@@ -20,6 +20,8 @@ public abstract class JEnumTypeMetadata : JClassTypeMetadata
 	/// </summary>
 	/// <param name="className">Enum name of the current type.</param>
 	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className) : base(className) { }
+	/// <inheritdoc/>
+	private protected JEnumTypeMetadata(TypeInfoSequence information) : base(information) { }
 
 	/// <summary>
 	/// Fields property.
@@ -37,6 +39,8 @@ public abstract class JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum :
 {
 	/// <inheritdoc/>
 	private protected JEnumTypeMetadata(ReadOnlySpan<Byte> className) : base(className) { }
+	/// <inheritdoc/>
+	private protected JEnumTypeMetadata(TypeInfoSequence information) : base(information) { }
 
 	/// <inheritdoc/>
 	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TEnum;

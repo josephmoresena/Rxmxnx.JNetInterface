@@ -58,23 +58,6 @@ public partial class JLocalObject
 		/// <param name="interfaces">Interfaces metadata set.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public ClassTypeMetadata(TypeInfoSequence information, JTypeModifier modifier, JClassTypeMetadata? baseMetadata,
-			ImmutableHashSet<JInterfaceTypeMetadata>? interfaces) : base(information)
-		{
-			this._modifier = modifier;
-			this._interfaces = interfaces is not null ?
-				InterfaceSet.GetClassInterfaces(baseMetadata, interfaces) :
-				InterfaceSet.Empty;
-			this._baseMetadata = baseMetadata;
-		}
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		/// <param name="information">Internal sequence information.</param>
-		/// <param name="modifier">Modifier of the current type.</param>
-		/// <param name="baseMetadata">Base type of the current type metadata.</param>
-		/// <param name="interfaces">Interfaces metadata set.</param>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public ClassTypeMetadata(TypeInfoSequence information, JTypeModifier modifier, JClassTypeMetadata? baseMetadata,
 			IInterfaceSet interfaces) : base(information)
 		{
 			this._modifier = modifier;
