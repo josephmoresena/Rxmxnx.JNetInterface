@@ -5,10 +5,14 @@ using TypeMetadata = JClassTypeMetadata<JBufferObject>;
 public partial class JBufferObject
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.BufferHash, 15);
+	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
-	                                                    .Create("java/nio/Buffer"u8, JTypeModifier.Abstract).Build();
+	private static readonly TypeMetadata typeMetadata =
+		JLocalObject.CreateBuiltInMetadata<JBufferObject>(JBufferObject.typeInfo, JTypeModifier.Abstract);
 
 	static TypeMetadata IClassType<JBufferObject>.Metadata => JBufferObject.typeMetadata;
 

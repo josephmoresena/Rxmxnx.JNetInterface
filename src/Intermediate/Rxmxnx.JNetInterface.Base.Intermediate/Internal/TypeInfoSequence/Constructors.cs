@@ -22,6 +22,13 @@ internal partial class TypeInfoSequence
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="hash">Type hash.</param>
+	/// <param name="classNameLength">Class name length.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public TypeInfoSequence(String hash, Int32 classNameLength) : this(hash, classNameLength, classNameLength + 2) { }
+	/// <summary>
+	/// Constructor.
+	/// </summary>
 	/// <param name="className">Class name.</param>
 	/// <param name="escape">Indicates whether <paramref name="className"/> should be escaped to JNI.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -19,7 +19,7 @@ public readonly partial struct JShort : INativeType, IComparable<JShort>, IEquat
 	/// <summary>
 	/// Wrapper type info.
 	/// </summary>
-	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.ShortObjectHash, 15, 17);
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.ShortObjectHash, 15);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

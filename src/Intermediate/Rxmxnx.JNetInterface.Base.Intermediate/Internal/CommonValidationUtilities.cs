@@ -92,7 +92,7 @@ internal static class CommonValidationUtilities
 	public static void ThrowIfInvalidCast(JDataTypeMetadata typeMetadata, Boolean allowedCast)
 	{
 		if (!allowedCast)
-			throw new InvalidCastException($"The current instance can't be casted to {typeMetadata.ClassName} type.");
+			throw new InvalidCastException($"The current instance can't be cast to {typeMetadata.ClassName} type.");
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="signature"/> is invalid.

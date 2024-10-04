@@ -18,7 +18,7 @@ public readonly partial struct JBoolean : INativeType, IComparable<JBoolean>, IE
 	/// <summary>
 	/// Wrapper type info.
 	/// </summary>
-	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.BooleanObjectHash, 17, 19);
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.BooleanObjectHash, 17);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

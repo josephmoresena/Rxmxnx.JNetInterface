@@ -282,7 +282,7 @@ partial class JEnvironment
 				MetadataHelper.RegisterSuperClass(jClass.Hash, superClass.Hash);
 
 				// Super class is java.lang.Object.
-				if (CommonNames.Object.AsSpan().SequenceEqual(superClass.Name))
+				if (CommonNames.Object.SequenceEqual(superClass.Name))
 					break;
 
 				// Super class is java.lang.reflect.Proxy.

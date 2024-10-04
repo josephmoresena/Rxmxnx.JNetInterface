@@ -3,19 +3,19 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal partial class InterfaceSet
 {
 	/// <summary>
-	/// Primitive wrapper class interface set.
+	/// Serializable and Comparable class interface set.
 	/// </summary>
-	private sealed class PrimitiveWrapperInterfaceSet : IAppendableInterfaceSet
+	private sealed class SerializableComparableInterfaceSet : IAppendableInterfaceSet
 	{
 		/// <summary>
 		/// Array set instance.
 		/// </summary>
-		public static readonly IInterfaceSet Instance = new PrimitiveWrapperInterfaceSet();
+		public static readonly IInterfaceSet Instance = new SerializableComparableInterfaceSet();
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		private PrimitiveWrapperInterfaceSet() { }
+		private SerializableComparableInterfaceSet() { }
 
 		[ExcludeFromCodeCoverage]
 		IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();

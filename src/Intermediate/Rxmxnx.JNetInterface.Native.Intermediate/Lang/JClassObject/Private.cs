@@ -5,14 +5,24 @@ using TypeMetadata = JClassTypeMetadata<JClassObject>;
 public partial class JClassObject
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ClassHash, 15);
+	/// <summary>
+	/// Datatype interfaces.
+	/// </summary>
+	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+	[
+		IInterfaceType.GetMetadata<JSerializableObject>(),
+		IInterfaceType.GetMetadata<JAnnotatedElementObject>(),
+		IInterfaceType.GetMetadata<JGenericDeclarationObject>(),
+		IInterfaceType.GetMetadata<JTypeObject>(),
+	];
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JClassObject>
-	                                                    .Create(CommonNames.ClassObject, JTypeModifier.Final)
-	                                                    .Implements<JSerializableObject>()
-	                                                    .Implements<JAnnotatedElementObject>()
-	                                                    .Implements<JGenericDeclarationObject>()
-	                                                    .Implements<JTypeObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JClassObject>(
+		JClassObject.typeInfo, JTypeModifier.Final, (InterfaceSet)JClassObject.typeInterfaces);
 
 	static TypeMetadata IClassType<JClassObject>.Metadata => JClassObject.typeMetadata;
 

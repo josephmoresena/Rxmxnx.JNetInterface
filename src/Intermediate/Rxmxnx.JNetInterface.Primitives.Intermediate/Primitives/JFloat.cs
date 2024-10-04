@@ -19,7 +19,7 @@ public readonly partial struct JFloat : INativeType, IComparable<JFloat>, IEquat
 	/// <summary>
 	/// Wrapper type info.
 	/// </summary>
-	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.FloatObjectHash, 15, 17);
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.FloatObjectHash, 15);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

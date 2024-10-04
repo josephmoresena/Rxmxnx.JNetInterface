@@ -8,12 +8,15 @@ using TypeMetadata = JClassTypeMetadata<JFloatBufferObject>;
 public class JFloatBufferObject : JBufferObject<JFloat>, IClassType<JFloatBufferObject>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.FloatBufferHash, 20);
+	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
-	                                                    .Create<JFloatBufferObject>(
-		                                                    "java/nio/FloatBuffer"u8, JTypeModifier.Abstract)
-	                                                    .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JFloatBufferObject>(
+		JFloatBufferObject.typeInfo, IClassType.GetMetadata<JBufferObject>(), JTypeModifier.Abstract,
+		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JFloatBufferObject>.Metadata => JFloatBufferObject.typeMetadata;
 

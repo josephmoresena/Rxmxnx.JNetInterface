@@ -8,12 +8,15 @@ using TypeMetadata = JClassTypeMetadata<JByteBufferObject>;
 public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObject>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ByteBufferHash, 19);
+	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
-	                                                    .Create<JByteBufferObject>(
-		                                                    "java/nio/ByteBuffer"u8, JTypeModifier.Abstract)
-	                                                    .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JByteBufferObject>(
+		JByteBufferObject.typeInfo, IClassType.GetMetadata<JBufferObject>(), JTypeModifier.Abstract,
+		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JByteBufferObject>.Metadata => JByteBufferObject.typeMetadata;
 

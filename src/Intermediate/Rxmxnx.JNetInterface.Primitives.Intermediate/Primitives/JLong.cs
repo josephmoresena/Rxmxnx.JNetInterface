@@ -19,7 +19,7 @@ public readonly partial struct JLong : INativeType, IComparable<JLong>, IEquatab
 	/// <summary>
 	/// Wrapper type info.
 	/// </summary>
-	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.LongObjectHash, 14, 16);
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.LongObjectHash, 14);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

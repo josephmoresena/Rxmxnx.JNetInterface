@@ -8,10 +8,14 @@ using TypeMetadata = JClassTypeMetadata<JProxyObject>;
 public class JProxyObject : JLocalObject, IClassType<JProxyObject>
 {
 	/// <summary>
-	/// class metadata.
+	/// Datatype information.
 	/// </summary>
-	internal static readonly TypeMetadata ProxyTypeMetadata = TypeMetadataBuilder<JProxyObject>
-	                                                          .Create(CommonNames.ProxyObject).Build();
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ProxyHash, 23);
+	/// <summary>
+	/// Datatype metadata.
+	/// </summary>
+	internal static readonly TypeMetadata ProxyTypeMetadata =
+		JLocalObject.CreateBuiltInMetadata<JProxyObject>(JProxyObject.typeInfo, JTypeModifier.Extensible);
 
 	static TypeMetadata IClassType<JProxyObject>.Metadata => JProxyObject.ProxyTypeMetadata;
 

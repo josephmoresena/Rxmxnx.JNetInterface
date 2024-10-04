@@ -101,7 +101,7 @@ public partial class JLocalObject
 	/// <typeparam name="TClass">Type of <c/>java.lang.Object<c/> class.</typeparam>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-	protected ref partial struct TypeMetadataBuilder<
+	protected ref struct TypeMetadataBuilder<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass>
 		where TClass : JLocalObject, IClassType<TClass>
 	{
@@ -148,7 +148,7 @@ public partial class JLocalObject
 		/// </summary>
 		/// <returns>A new <see cref="JDataTypeMetadata"/> instance.</returns>
 		public readonly JClassTypeMetadata<TClass> Build()
-			=> new ClassTypeMetadata(this._builder, this._modifier, this._baseMetadata);
+			=> new ClassTypeMetadata<TClass>(this._builder, this._modifier, this._baseMetadata);
 
 		/// <summary>
 		/// Sets the type signature.
@@ -206,18 +206,7 @@ public partial class JLocalObject
 		/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
 		internal static JClassTypeMetadata<TClass> Build(TypeMetadataBuilder builder, JTypeModifier modifier,
 			JClassTypeMetadata? baseMetadata)
-			=> new ClassTypeMetadata(builder, modifier, baseMetadata);
-		/// <summary>
-		/// Creates a <see cref="JClassTypeMetadata{TClass}"/> instance for <paramref name="primitiveMetadata"/>
-		/// wrapper class.
-		/// </summary>
-		/// <param name="primitiveMetadata">A <see cref="JPrimitiveTypeMetadata"/> instance.</param>
-		/// <param name="baseMetadata">Base type metadata of the current type.</param>
-		/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
-		internal static JClassTypeMetadata<TClass> Build(JPrimitiveTypeMetadata primitiveMetadata,
-			JClassTypeMetadata? baseMetadata = default)
-			=> new ClassTypeMetadata(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0,
-			                         baseMetadata ?? IClassType.GetMetadata<JLocalObject>());
+			=> new ClassTypeMetadata<TClass>(builder, modifier, baseMetadata);
 
 		/// <summary>
 		/// Creates a new <see cref="TypeMetadataBuilder{TObject}"/> instance with validation.

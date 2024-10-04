@@ -11,7 +11,7 @@ public sealed class JInterfaceObjectTests
 		InterfaceSet emptyInterfaces = InterfaceSet.Empty;
 		IInterfaceSet arrayInterfaces = InterfaceSet.ArraySet;
 		IInterfaceSet annotationInterfaces = InterfaceSet.AnnotationSet;
-		IInterfaceSet primitiveWrapperInterfaces = InterfaceSet.PrimitiveWrapperSet;
+		IInterfaceSet primitiveWrapperInterfaces = InterfaceSet.SerializableComparableSet;
 
 		Assert.Contains(IInterfaceType.GetMetadata<JCloneableObject>(), arrayInterfaces.ToArray());
 		Assert.Contains(IInterfaceType.GetMetadata<JSerializableObject>(), arrayInterfaces.ToArray());

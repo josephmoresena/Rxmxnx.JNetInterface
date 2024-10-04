@@ -19,7 +19,7 @@ public readonly partial struct JDouble : INativeType, IComparable<JDouble>, IEqu
 	/// <summary>
 	/// Wrapper type info.
 	/// </summary>
-	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.DoubleObjectHash, 16, 18);
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.DoubleObjectHash, 16);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

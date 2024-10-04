@@ -8,10 +8,22 @@ using TypeMetadata = JClassTypeMetadata<JThreadObject>;
 public class JThreadObject : JLocalObject, IClassType<JThreadObject>, IInterfaceObject<JRunnableObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ThreadHash, 16);
+	/// <summary>
+	/// Datatype interfaces.
+	/// </summary>
+	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+	[
+		IInterfaceType.GetMetadata<JRunnableObject>(),
+	];
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JThreadObject>.Create("java/lang/Thread"u8)
-		.Implements<JRunnableObject>().Build();
+	private static readonly TypeMetadata typeMetadata =
+		JLocalObject.CreateBuiltInMetadata<JThreadObject>(JThreadObject.typeInfo, JTypeModifier.Extensible,
+		                                                  (InterfaceSet)JThreadObject.typeInterfaces);
 
 	static TypeMetadata IClassType<JThreadObject>.Metadata => JThreadObject.typeMetadata;
 

@@ -7,8 +7,15 @@ using TypeMetadata = JClassTypeMetadata<JClassLoaderObject>;
 /// </summary>
 public class JClassLoaderObject : JLocalObject, IClassType<JClassLoaderObject>
 {
+	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ClassLoaderHash, 21);
+	/// <summary>
+	/// Datatype metadata.
+	/// </summary>
 	private static readonly TypeMetadata typeMetadata =
-		TypeMetadataBuilder<JClassLoaderObject>.Create("java/lang/ClassLoader"u8).Build();
+		JLocalObject.CreateBuiltInMetadata<JClassLoaderObject>(JClassLoaderObject.typeInfo, JTypeModifier.Extensible);
 
 	static TypeMetadata IClassType<JClassLoaderObject>.Metadata => JClassLoaderObject.typeMetadata;
 

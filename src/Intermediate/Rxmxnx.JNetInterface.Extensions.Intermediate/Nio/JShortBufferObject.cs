@@ -8,12 +8,15 @@ using TypeMetadata = JClassTypeMetadata<JShortBufferObject>;
 public class JShortBufferObject : JBufferObject<JShort>, IClassType<JShortBufferObject>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ShortBufferHash, 20);
+	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
-	                                                    .Create<JShortBufferObject>(
-		                                                    "java/nio/ShortBuffer"u8, JTypeModifier.Abstract)
-	                                                    .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JShortBufferObject>(
+		JShortBufferObject.typeInfo, IClassType.GetMetadata<JBufferObject>(), JTypeModifier.Abstract,
+		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JShortBufferObject>.Metadata => JShortBufferObject.typeMetadata;
 

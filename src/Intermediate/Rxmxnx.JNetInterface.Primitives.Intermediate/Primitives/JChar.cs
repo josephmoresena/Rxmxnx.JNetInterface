@@ -17,7 +17,7 @@ public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatab
 	/// <summary>
 	/// Wrapper type info.
 	/// </summary>
-	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.CharacterObjectHash, 19, 22);
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.CharacterObjectHash, 19);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

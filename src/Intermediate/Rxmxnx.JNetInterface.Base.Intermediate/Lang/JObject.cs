@@ -6,6 +6,11 @@
 public abstract class JObject : IObject, IEquatable<JObject>
 {
 	/// <summary>
+	/// Object type information.
+	/// </summary>
+	internal static TypeInfoSequence TypeInfo = new(ClassNameHelper.ObjectHash, 16);
+
+	/// <summary>
 	/// Object class name.
 	/// </summary>
 	public abstract CString ObjectClassName { get; }

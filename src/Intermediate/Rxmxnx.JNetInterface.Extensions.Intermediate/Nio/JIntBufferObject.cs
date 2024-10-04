@@ -8,12 +8,15 @@ using TypeMetadata = JClassTypeMetadata<JIntBufferObject>;
 public class JIntBufferObject : JBufferObject<JInt>, IClassType<JIntBufferObject>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IntBufferHash, 20);
+	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
-	                                                    .Create<JIntBufferObject>(
-		                                                    "java/nio/IntBuffer"u8, JTypeModifier.Abstract)
-	                                                    .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JIntBufferObject>(
+		JIntBufferObject.typeInfo, IClassType.GetMetadata<JBufferObject>(), JTypeModifier.Abstract,
+		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JIntBufferObject>.Metadata => JIntBufferObject.typeMetadata;
 

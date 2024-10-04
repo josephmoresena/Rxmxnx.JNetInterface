@@ -8,12 +8,16 @@ using TypeMetadata = JClassTypeMetadata<JConstructorObject>;
 public sealed class JConstructorObject : JExecutableObject, IClassType<JConstructorObject>
 {
 	/// <summary>
-	/// class metadata.
+	/// Datatype information.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExecutableObject>
-	                                                    .Create<JConstructorObject>(
-		                                                    "java/lang/reflect/Constructor"u8, JTypeModifier.Final)
-	                                                    .Build();
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ConstructorHash, 29);
+	/// <summary>
+	/// Datatype metadata.
+	/// </summary>
+	private static readonly TypeMetadata typeMetadata =
+		JLocalObject.CreateBuiltInMetadata<JConstructorObject>(JConstructorObject.typeInfo,
+		                                                       IClassType.GetMetadata<JExecutableObject>(),
+		                                                       JTypeModifier.Final);
 
 	static TypeMetadata IClassType<JConstructorObject>.Metadata => JConstructorObject.typeMetadata;
 

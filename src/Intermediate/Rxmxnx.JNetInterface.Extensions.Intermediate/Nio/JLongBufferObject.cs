@@ -8,12 +8,15 @@ using TypeMetadata = JClassTypeMetadata<JLongBufferObject>;
 public class JLongBufferObject : JBufferObject<JLong>, IClassType<JLongBufferObject>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.LongBufferHash, 20);
+	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
-	                                                    .Create<JLongBufferObject>("java/nio/LongBuffer"u8,
-		                                                    JTypeModifier.Abstract).Implements<JComparableObject>()
-	                                                    .Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JLongBufferObject>(
+		JLongBufferObject.typeInfo, IClassType.GetMetadata<JBufferObject>(), JTypeModifier.Abstract,
+		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JLongBufferObject>.Metadata => JLongBufferObject.typeMetadata;
 

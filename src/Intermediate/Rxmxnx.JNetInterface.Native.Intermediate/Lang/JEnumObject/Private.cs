@@ -5,12 +5,14 @@ using TypeMetadata = JClassTypeMetadata<JEnumObject>;
 public partial class JEnumObject
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.EnumHash, 14);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = JLocalObject.TypeMetadataBuilder<JEnumObject>
-	                                                                .Create("java/lang/Enum"u8, JTypeModifier.Abstract)
-	                                                                .Implements<JSerializableObject>()
-	                                                                .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JEnumObject>(
+		JEnumObject.typeInfo, JTypeModifier.Final, InterfaceSet.SerializableComparableSet);
 
 	static TypeMetadata IClassType<JEnumObject>.Metadata => JEnumObject.typeMetadata;
 

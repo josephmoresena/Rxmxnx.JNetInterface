@@ -19,7 +19,7 @@ public readonly partial struct JInt : INativeType, IComparable<JInt>, IEquatable
 	/// <summary>
 	/// Wrapper type info.
 	/// </summary>
-	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.IntegerObjectHash, 17, 19);
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.IntegerObjectHash, 17);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>

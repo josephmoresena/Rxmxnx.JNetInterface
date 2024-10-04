@@ -7,9 +7,8 @@ public partial class JLocalObject
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	internal static readonly TypeMetadata ObjectClassMetadata = TypeMetadataBuilder<JLocalObject>
-	                                                            .Create(CommonNames.Object)
-	                                                            .WithSignature(CommonNames.ObjectSignature).Build();
+	internal static readonly TypeMetadata ObjectClassMetadata =
+		JLocalObject.CreateBuiltInMetadata<JLocalObject>(JObject.TypeInfo, JTypeModifier.Extensible);
 
 	static TypeMetadata IClassType<JLocalObject>.Metadata => JLocalObject.ObjectClassMetadata;
 	static Type IDataType.FamilyType => typeof(JLocalObject);
@@ -100,7 +99,7 @@ public partial class JLocalObject
 		=> typeof(TDataType) == typeof(JClassObject);
 
 	/// <summary>
-	/// Throws an exception if <paramref name="jObject"/> cannot be casted to
+	/// Throws an exception if <paramref name="jObject"/> cannot be cast to
 	/// <typeparamref name="TDataType"/> instance.
 	/// </summary>
 	/// <typeparam name="TDataType"><see langword="IDatatype"/> type.</typeparam>
@@ -109,7 +108,7 @@ public partial class JLocalObject
 	///     <paramref name="jObject"/>
 	/// </returns>
 	/// <exception cref="InvalidCastException">
-	/// Throws an exception if the instance cannot be casted to <typeparamref name="TDataType"/> instance.
+	/// Throws an exception if the instance cannot be cast to <typeparamref name="TDataType"/> instance.
 	/// </exception>
 	internal static void Validate<TDataType>(JReferenceObject jObject)
 		where TDataType : JReferenceObject, IDataType<TDataType>
@@ -119,4 +118,64 @@ public partial class JLocalObject
 		if (jObject is not TDataType)
 			CommonValidationUtilities.ThrowIfInvalidCast(typeMetadata, typeMetadata.IsInstance(jObject));
 	}
+	/// <summary>
+	/// Creates the <see cref="JClassTypeMetadata{TClass}"/> metadata instance for built-in types.
+	/// </summary>
+	/// <typeparam name="TClass"><see cref="IClassType{TClass}"/> type.</typeparam>
+	/// <param name="information">Class type information.</param>
+	/// <param name="modifier">Modifier of the current type.</param>
+	/// <param name="interfaces">Class interfaces metadata set.</param>
+	/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
+	private protected static JClassTypeMetadata<TClass>
+		CreateBuiltInMetadata<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass>(
+			TypeInfoSequence information, JTypeModifier modifier, IInterfaceSet? interfaces = default)
+		where TClass : JLocalObject, IClassType<TClass>
+	{
+		JClassTypeMetadata? baseMetadata = !JLocalObject.IsObjectType<TClass>() ?
+			IClassType.GetMetadata<JLocalObject>() :
+			default;
+		return new ClassTypeMetadata<TClass>(information, modifier, baseMetadata, interfaces ?? InterfaceSet.Empty);
+	}
+	/// <summary>
+	/// Creates the <see cref="JClassTypeMetadata{TClass}"/> metadata instance for built-in types.
+	/// </summary>
+	/// <typeparam name="TClass"><see cref="IClassType{TClass}"/> type.</typeparam>
+	/// <param name="information">Class type information.</param>
+	/// <param name="modifier">Modifier of the current type.</param>
+	/// <param name="baseMetadata">Super class type metadata.</param>
+	/// <param name="interfaces">Class interfaces metadata set.</param>
+	/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
+	private protected static JClassTypeMetadata<TClass>
+		CreateBuiltInMetadata<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass>(
+			TypeInfoSequence information, JClassTypeMetadata baseMetadata, JTypeModifier modifier,
+			IInterfaceSet? interfaces = default) where TClass : JLocalObject, IClassType<TClass>
+		=> new ClassTypeMetadata<TClass>(information, modifier, baseMetadata, interfaces ?? baseMetadata.Interfaces);
+	/// <summary>
+	/// Creates the <see cref="JClassTypeMetadata{TClass}"/> metadata instance for built-in types.
+	/// </summary>
+	/// <typeparam name="TClass"><see cref="IClassType{TClass}"/> type.</typeparam>
+	/// <param name="information">Class type information.</param>
+	/// <param name="modifier">Modifier of the current type.</param>
+	/// <param name="baseMetadata">Super class type metadata.</param>
+	/// <param name="interfaces">Class interfaces metadata set.</param>
+	/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
+	private protected static JClassTypeMetadata<TClass>
+		CreateBuiltInMetadata<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass>(
+			TypeInfoSequence information, JClassTypeMetadata baseMetadata, JTypeModifier modifier,
+			ImmutableHashSet<JInterfaceTypeMetadata> interfaces) where TClass : JLocalObject, IClassType<TClass>
+		=> new ClassTypeMetadata<TClass>(information, modifier, baseMetadata,
+		                                 InterfaceSet.GetClassInterfaces(baseMetadata, interfaces));
+	/// <summary>
+	/// Creates a <see cref="JClassTypeMetadata{TClass}"/> instance for <paramref name="primitiveMetadata"/>
+	/// wrapper class.
+	/// </summary>
+	/// <param name="primitiveMetadata">A <see cref="JPrimitiveTypeMetadata"/> instance.</param>
+	/// <param name="baseMetadata">Base type metadata of the current type.</param>
+	/// <returns>A <see cref="JClassTypeMetadata{TClass}"/> instance.</returns>
+	private protected static JClassTypeMetadata<TClass>
+		CreateBuiltInMetadata<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass>(
+			JPrimitiveTypeMetadata primitiveMetadata, JClassTypeMetadata? baseMetadata = default)
+		where TClass : JLocalObject, IClassType<TClass>
+		=> new ClassTypeMetadata<TClass>(primitiveMetadata.WrapperInformation, primitiveMetadata.SizeOf == 0,
+		                                 baseMetadata ?? IClassType.GetMetadata<JLocalObject>());
 }

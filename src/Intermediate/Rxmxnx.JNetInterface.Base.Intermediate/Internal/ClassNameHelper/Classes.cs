@@ -85,7 +85,7 @@ internal partial struct ClassNameHelper
 	/// <summary>
 	/// Hash for <c>java.nio.CharBuffer</c> type.
 	/// </summary>
-	public const String CharBufferHash = "慪慶\u202f楮⽯䌠慨䉲晵敦r橌癡⽡渠潩\u202f桃牡畂晦牥;䱛慪慶\u202f楮⽯䌠慨䉲晵敦㭲\0";
+	public const String CharBufferHash = "慪慶港潩䌯慨䉲晵敦r橌癡⽡楮⽯桃牡畂晦牥;䱛慪慶港潩䌯慨䉲晵敦㭲\0";
 	/// <summary>
 	/// Hash for <c>java.nio.DirectByteBuffer</c> type.
 	/// </summary>

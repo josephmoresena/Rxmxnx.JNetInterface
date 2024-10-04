@@ -18,7 +18,7 @@ public readonly partial struct JByte : INativeType, IComparable<JByte>, IEquatab
 	/// <summary>
 	/// Wrapper type info.
 	/// </summary>
-	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.ByteObjectHash, 14, 16);
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.ByteObjectHash, 14);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
