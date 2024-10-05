@@ -88,7 +88,8 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(objectMetadata);
 			ITypeInformation typeInformation = this.VirtualMachine.GetTypeInformation(objectMetadata.ObjectClassHash) ??
-				new TypeInformation(CStringSequence.Parse(objectMetadata.ObjectClassHash));
+				new TypeInformation(new(objectMetadata.ObjectClassHash, objectMetadata.ObjectClassName.Length,
+				                        objectMetadata.ObjectSignature.Length));
 			return this.GetOrFindClass(typeInformation);
 		}
 		public JClassObject GetObjectClass(JLocalObject jLocal)
