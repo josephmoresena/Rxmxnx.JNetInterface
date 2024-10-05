@@ -226,7 +226,7 @@ public sealed partial class JVirtualMachineTests
 	{
 		EnvironmentProxy proxy = EnvironmentProxy.CreateEnvironment();
 		JClassObject jClassClass = new(proxy);
-		CStringSequence classInformation = MetadataHelper.GetClassInformation("java/lang/ThreadGroup"u8, false);
+		TypeInfoSequence classInformation = MetadataHelper.GetClassInformation("java/lang/ThreadGroup"u8, false);
 		JClassObject classLoaderClass = new(jClassClass, new TypeInformation(classInformation));
 		return new(vm, new(classLoaderClass), globalRef);
 	}

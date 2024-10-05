@@ -6,13 +6,13 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <param name="sequence">A <see cref="CStringSequence"/> containg class information.</param>
 /// <param name="kind">A <see cref="JTypeKind"/> value.</param>
 /// <param name="isFinal">Indicates whether current type is final.</param>
-internal sealed class TypeInformation(CStringSequence sequence, JTypeKind kind = default, Boolean? isFinal = default)
+internal sealed class TypeInformation(TypeInfoSequence sequence, JTypeKind kind = default, Boolean? isFinal = default)
 	: ITypeInformation
 {
 	/// <inheritdoc/>
-	public CString ClassName => sequence[0];
+	public CString ClassName => sequence.ClassName;
 	/// <inheritdoc/>
-	public CString Signature => sequence[1];
+	public CString Signature => sequence.Signature;
 	/// <inheritdoc/>
 	public String Hash => sequence.ToString();
 	/// <inheritdoc/>

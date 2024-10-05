@@ -49,7 +49,7 @@ public partial class JNativeCallAdapterTests
 		JClassLocalRef superClassRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
 		JStringLocalRef strRef0 = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JStringLocalRef strRef1 = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
-		CStringSequence classInformation =
+		TypeInfoSequence classInformation =
 			MetadataHelper.GetClassInformation("rxmxnx/jnetinterface/test/SubError"u8, false);
 		JClassTypeMetadata errorTypeMetadata = IClassType.GetMetadata<JErrorObject>();
 		List<IFixedPointer.IDisposable> pointers =
@@ -63,7 +63,7 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetObjectRefType(localRef).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetObjectClass(localRef).Returns(classRef);
 			proxyEnv.GetSuperclass(classRef).Returns(superClassRef);
-			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation[0].Length);
+			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.ClassName.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(errorTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
@@ -125,7 +125,7 @@ public partial class JNativeCallAdapterTests
 		JStringLocalRef strRef1 = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JStringLocalRef strRef2 = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JObjectArrayLocalRef arrayRef = JNativeCallAdapterTests.fixture.Create<JObjectArrayLocalRef>();
-		CStringSequence classInformation = MetadataHelper.GetClassInformation("jdk/proxy2/$Proxy1000"u8, false);
+		TypeInfoSequence classInformation = MetadataHelper.GetClassInformation("jdk/proxy2/$Proxy1000"u8, false);
 		JClassTypeMetadata proxyTypeMetadata = IClassType.GetMetadata<JProxyObject>();
 		JInterfaceTypeMetadata interfaceTypeMetadata = IInterfaceType.GetMetadata<JSerializableObject>();
 		List<IFixedPointer.IDisposable> pointers =
@@ -140,7 +140,7 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetObjectRefType(localRef).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetObjectClass(localRef).Returns(classRef);
 			proxyEnv.GetSuperclass(classRef).Returns(superClassRef);
-			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation[0].Length);
+			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.ClassName.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(proxyTypeMetadata.ClassName.Length);
 			proxyEnv.GetStringUtfLength(strRef2).Returns(interfaceTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
@@ -227,7 +227,7 @@ public partial class JNativeCallAdapterTests
 		JStringLocalRef strRef1 = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		CString arrayClassName = new(() => "[[[[Lrxmxnx/jnetinterface/test/SubErrorA;"u8);
 		CString elementName = arrayClassName[5..^1];
-		CStringSequence classInformation = MetadataHelper.GetClassInformation(arrayClassName, false);
+		TypeInfoSequence classInformation = MetadataHelper.GetClassInformation(arrayClassName, false);
 		JClassTypeMetadata errorTypeMetadata = IClassType.GetMetadata<JErrorObject>();
 		List<IFixedPointer.IDisposable> pointers =
 		[
@@ -246,7 +246,7 @@ public partial class JNativeCallAdapterTests
 				return className.SequenceEqual(elementName) ? elementClassRef : default;
 			});
 			proxyEnv.GetSuperclass(elementClassRef).Returns(elementSuperClassRef);
-			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation[0].Length);
+			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.ClassName.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(errorTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
@@ -326,7 +326,7 @@ public partial class JNativeCallAdapterTests
 		JObjectArrayLocalRef arrayRef = JNativeCallAdapterTests.fixture.Create<JObjectArrayLocalRef>();
 		CString arrayClassName = new(() => "[[[[Lrxmxnx/jnetinterface/test/InterfaceTest;"u8);
 		CString elementName = arrayClassName[5..^1];
-		CStringSequence classInformation = MetadataHelper.GetClassInformation(arrayClassName, false);
+		TypeInfoSequence classInformation = MetadataHelper.GetClassInformation(arrayClassName, false);
 		JInterfaceTypeMetadata serializableTypeMetadata = IInterfaceType.GetMetadata<JSerializableObject>();
 		List<IFixedPointer.IDisposable> pointers =
 		[
@@ -348,7 +348,7 @@ public partial class JNativeCallAdapterTests
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(arrayRef.Value);
 			proxyEnv.GetArrayLength(arrayRef.ArrayValue).Returns(1);
 			proxyEnv.GetObjectArrayElement(arrayRef, 0).Returns(interfaceClassRef.Value);
-			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation[0].Length);
+			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.ClassName.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(serializableTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
@@ -431,7 +431,7 @@ public partial class JNativeCallAdapterTests
 		JStringLocalRef strRef1 = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		CString arrayClassName = new(() => "[[[[Lrxmxnx/jnetinterface/test/EnumTest;"u8);
 		CString elementName = arrayClassName[5..^1];
-		CStringSequence classInformation = MetadataHelper.GetClassInformation(arrayClassName, false);
+		TypeInfoSequence classInformation = MetadataHelper.GetClassInformation(arrayClassName, false);
 		JClassTypeMetadata enumTypeMetadata = IClassType.GetMetadata<JEnumObject>();
 		List<IFixedPointer.IDisposable> pointers =
 		[
@@ -450,7 +450,7 @@ public partial class JNativeCallAdapterTests
 				return className.SequenceEqual(elementName) ? elementClassRef : default;
 			});
 			proxyEnv.GetSuperclass(elementClassRef).Returns(elementSuperClassRef);
-			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation[0].Length);
+			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.ClassName.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(enumTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
