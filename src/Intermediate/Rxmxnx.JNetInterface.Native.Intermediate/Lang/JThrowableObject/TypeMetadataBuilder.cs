@@ -62,21 +62,6 @@ public partial class JThrowableObject
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
 		/// </summary>
-		/// <param name="className">Class name of the current type.</param>
-		/// <param name="modifier">Modifier of the current type.</param>
-		/// <returns>A new <see cref="TypeMetadataBuilder{TThrowable}"/> instance.</returns>
-		public static TypeMetadataBuilder<TThrowable> Create(ReadOnlySpan<Byte> className,
-			JTypeModifier modifier = JTypeModifier.Extensible)
-		{
-			CommonValidationUtilities.ValidateNotEmpty(className);
-			JClassTypeMetadata baseMetadata = IClassType.GetMetadata<JThrowableObject>();
-			return !IVirtualMachine.MetadataValidationEnabled ?
-				new(className, modifier, baseMetadata, ImmutableHashSet<Type>.Empty) :
-				new(className, modifier, baseMetadata, IReferenceType<TThrowable>.TypeInterfaces);
-		}
-		/// <summary>
-		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
-		/// </summary>
 		/// <typeparam name="TObject">Extension type <see cref="IDataType"/> type.</typeparam>
 		/// <param name="className">Class name of the current type.</param>
 		/// <param name="modifier">Modifier of the current type.</param>

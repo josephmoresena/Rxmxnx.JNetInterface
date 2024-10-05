@@ -61,7 +61,7 @@ public partial class JEnumObject
 		/// <param name="offset">Enum value ordinal offset.</param>
 		/// <param name="names">Enum value names.</param>
 		/// <returns>Current instance.</returns>
-		public readonly TypeMetadataBuilder<TEnum> AppendValues(Int32 offset = 0, params CString[] names)
+		public readonly TypeMetadataBuilder<TEnum> AppendValues(Int32 offset, ReadOnlySpan<CString> names)
 		{
 			for (Int32 i = 0; i < names.Length; i++)
 				this._enumFields.AddField(this._builder.DataTypeName, i + offset, names[i]);
