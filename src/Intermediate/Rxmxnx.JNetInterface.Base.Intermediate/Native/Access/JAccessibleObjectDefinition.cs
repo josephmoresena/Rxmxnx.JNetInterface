@@ -12,11 +12,11 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <summary>
 	/// Definition name.
 	/// </summary>
-	public CString Name => this.Information[0];
+	public CString Name => this.Information.Name;
 	/// <summary>
 	/// Definition descriptor.
 	/// </summary>
-	public CString Descriptor => this.Information[1];
+	public CString Descriptor => this.Information.Descriptor;
 	/// <summary>
 	/// Definition hash.
 	/// </summary>
@@ -25,7 +25,7 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <summary>
 	/// Accessible object information.
 	/// </summary>
-	internal CStringSequence Information { get; }
+	internal AccessibleInfoSequence Information { get; }
 
 	/// <summary>
 	/// The format used for <see cref="JAccessibleObjectDefinition.ToString()"/> method.
@@ -36,9 +36,9 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// Internal constructor.
 	/// </summary>
 	/// <param name="sequence">
-	/// <see cref="CStringSequence"/> containing the name and descriptor of the accessible object.
+	/// <see cref="AccessibleInfoSequence"/> containing the name and descriptor of the accessible object.
 	/// </param>
-	private protected JAccessibleObjectDefinition(CStringSequence sequence) => this.Information = sequence;
+	private protected JAccessibleObjectDefinition(AccessibleInfoSequence sequence) => this.Information = sequence;
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>
@@ -57,7 +57,8 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj) => this.Equals(obj as JAccessibleObjectDefinition);
 	/// <inheritdoc/>
-	public override String ToString() => String.Format(this.ToStringFormat, this.Information[0], this.Information[1]);
+	public override String ToString()
+		=> String.Format(this.ToStringFormat, this.Information.Name, this.Information.Descriptor);
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Information.GetHashCode();
 

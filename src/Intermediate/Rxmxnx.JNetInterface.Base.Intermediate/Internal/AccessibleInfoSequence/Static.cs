@@ -13,6 +13,7 @@ internal sealed partial class AccessibleInfoSequence
 		ReadOnlySpan<Byte> nameSpan = arg.GetNameSpan();
 		ReadOnlySpan<Byte> returnTypeSpan = arg.GetReturnTypeSpan();
 		ReadOnlySpan<JArgumentMetadata> argsSpan = arg.GetArgumentsSpan();
+
 		nameSpan.CopyTo(buffer);
 		buffer = AccessibleInfoSequence.WriteCallArguments(buffer[(nameSpan.Length + 1)..], argsSpan);
 		returnTypeSpan.CopyTo(buffer);
@@ -35,12 +36,25 @@ internal sealed partial class AccessibleInfoSequence
 	/// Retrieves the needed length to write the all call arguments signature.
 	/// </summary>
 	/// <param name="args">List of call arguments.</param>
+	/// <param name="callSize">Total size in bytes of call parameters.</param>
+	/// <param name="referenceCount">Reference counts.</param>
+	/// <param name="sizes">Arguments sizes.</param>
 	/// <returns>Needed length to write the all call arguments signature.</returns>
-	private static Int32 GetArgumentLength(ReadOnlySpan<JArgumentMetadata> args)
+	private static Int32 GetArgumentLength(ReadOnlySpan<JArgumentMetadata> args, out Int32 callSize,
+		out Int32 referenceCount, out Int32[] sizes)
 	{
 		Int32 result = 0;
-		foreach (JArgumentMetadata arg in args)
-			result = arg.Signature.Length;
+		callSize = 0;
+		referenceCount = 0;
+		sizes = args.Length > 0 ? new Int32[args.Length] : [];
+		for (Int32 i = 0; i < args.Length; i++)
+		{
+			Int32 length = args[i].Signature.Length;
+			result += length;
+			callSize += args[i].Size;
+			sizes[i] = args[i].Size;
+			if (length > 1) referenceCount++;
+		}
 		return result;
 	}
 	/// <summary>
@@ -55,12 +69,11 @@ internal sealed partial class AccessibleInfoSequence
 		buffer = buffer[1..];
 		foreach (JArgumentMetadata arg in args)
 		{
-			ReadOnlySpan<Byte> argSignatureSpan = arg.Signature.AsSpan();
-			argSignatureSpan.CopyTo(buffer);
-			buffer = buffer[argSignatureSpan.Length..];
+			ReadOnlySpan<Byte> signature = arg.Signature.AsSpan();
+			signature.CopyTo(buffer);
+			buffer = buffer[signature.Length..];
 		}
-		buffer = buffer[1..];
-		buffer[1] = CommonNames.MethodParameterSuffixChar;
-		return buffer[2..];
+		buffer[0] = CommonNames.MethodParameterSuffixChar;
+		return buffer[1..];
 	}
 }

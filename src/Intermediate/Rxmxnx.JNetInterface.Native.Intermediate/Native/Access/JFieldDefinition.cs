@@ -13,8 +13,9 @@ public abstract class JFieldDefinition : JAccessibleObjectDefinition
 	/// </summary>
 	/// <param name="name">Field name.</param>
 	/// <param name="signature">Signature field.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private protected JFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : base(
-		new CStringSequence(name, signature)) { }
+		AccessibleInfoSequence.CreateFieldInfo(name, signature)) { }
 	/// <inheritdoc/>
 	private protected JFieldDefinition(JFieldDefinition definition) : base(definition) { }
 

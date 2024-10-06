@@ -13,8 +13,4 @@ internal sealed partial class TypeInfoSequence : InfoSequenceBase
 	/// JNI signature for array instances of this type.
 	/// </summary>
 	public CString ArraySignature { get; }
-
-	/// <inheritdoc/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override String ToString() => this.Hash;
 }
