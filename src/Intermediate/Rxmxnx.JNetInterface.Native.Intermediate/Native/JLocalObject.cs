@@ -36,7 +36,7 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	}
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this.Lifetime.Class?.Name ?? JObject.TypeInfo.ClassName;
+	public override CString ObjectClassName => this.Lifetime.Class?.Name ?? JObject.TypeInfo.Name;
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
 	public override CString ObjectSignature => this.Lifetime.Class?.ClassSignature ?? JObject.TypeInfo.Signature;
 	/// <summary>

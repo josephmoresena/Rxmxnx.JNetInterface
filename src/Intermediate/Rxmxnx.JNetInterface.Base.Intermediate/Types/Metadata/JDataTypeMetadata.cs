@@ -32,7 +32,7 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	public abstract JTypeKind Kind { get; }
 
 	/// <inheritdoc/>
-	public CString ClassName => this._info.ClassName;
+	public CString ClassName => this._info.Name;
 	/// <inheritdoc/>
 	public CString Signature => this._info.Signature;
 	/// <inheritdoc/>

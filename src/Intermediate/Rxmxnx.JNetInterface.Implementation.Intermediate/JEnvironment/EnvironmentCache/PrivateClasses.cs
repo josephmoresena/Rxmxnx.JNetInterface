@@ -118,10 +118,10 @@ partial class JEnvironment
 			WellKnownRuntimeTypeInformation runtimeInformation)
 		{
 			TypeInfoSequence classInformation = MetadataHelper.GetClassInformation(className, true);
-			JTrace.GetClass(classRef, classInformation.ClassName);
+			JTrace.GetClass(classRef, classInformation.Name);
 			if (!this._classes.TryGetValue(classInformation.ToString(), out JClassObject? jClass))
 			{
-				JTypeKind kind = classInformation.ClassName[0] == CommonNames.ArraySignaturePrefixChar ?
+				JTypeKind kind = classInformation.Name[0] == CommonNames.ArraySignaturePrefixChar ?
 					JTypeKind.Array :
 					runtimeInformation.Kind.GetValueOrDefault();
 				ITypeInformation typeInformation =

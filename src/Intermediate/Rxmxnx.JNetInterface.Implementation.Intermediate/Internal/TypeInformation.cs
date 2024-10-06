@@ -10,7 +10,7 @@ internal sealed class TypeInformation(TypeInfoSequence sequence, JTypeKind kind 
 	: ITypeInformation
 {
 	/// <inheritdoc/>
-	public CString ClassName => sequence.ClassName;
+	public CString ClassName => sequence.Name;
 	/// <inheritdoc/>
 	public CString Signature => sequence.Signature;
 	/// <inheritdoc/>

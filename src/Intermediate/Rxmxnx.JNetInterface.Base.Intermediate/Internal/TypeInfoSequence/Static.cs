@@ -3,6 +3,32 @@ namespace Rxmxnx.JNetInterface.Internal;
 internal partial class TypeInfoSequence
 {
 	/// <summary>
+	/// Creates hash from <paramref name="className"/>.
+	/// </summary>
+	/// <param name="className">Reference type class name.</param>
+	/// <param name="escape">Indicates whether <paramref name="className"/> sould be escaped.</param>
+	/// <param name="isArray">Output. Indicates whether <paramref name="className"/> is for array class.</param>
+	/// <returns>Type hash.</returns>
+	private static unsafe String CreateHash(ReadOnlySpan<Byte> className, Boolean escape, out Boolean isArray)
+	{
+		// To create TypeInfoSequence instance we use JNI class name.
+		ReadOnlySpan<Byte> jniClassName = escape ?
+			className :
+			TypeInfoSequence.JniEscapeClassName(stackalloc Byte[className.Length], className);
+		// Buffer length should hold at least 3 times the class name, 3 null-characters and 1 array prefix char.
+		Int32 bufferLength = 3 * className.Length + 4;
+		isArray = className[0] == CommonNames.ArraySignaturePrefixChar;
+		// If class is not an array, signature and class name are different, so we need hold signature
+		// prefix and suffix 2 times.
+		if (!isArray) bufferLength += 4;
+		fixed (Byte* char0 = &MemoryMarshal.GetReference(jniClassName))
+		{
+			SpanState state = new(char0, jniClassName.Length, isArray);
+			Int32 stringLength = bufferLength / sizeof(Char) + bufferLength % sizeof(Char);
+			return String.Create(stringLength, state, TypeInfoSequence.CreateInfoSequence);
+		}
+	}
+	/// <summary>
 	/// Retrieves escaped JNI class name.
 	/// </summary>
 	/// <param name="jniClassName">Span to hold JNI class name.</param>

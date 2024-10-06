@@ -17,7 +17,7 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <summary>
 	/// JNI signature for the current type wrapper class.
 	/// </summary>
-	public CString WrapperClassName => this.WrapperInformation.ClassName;
+	public CString WrapperClassName => this.WrapperInformation.Name;
 	/// <summary>
 	/// Underline primitive CLR type.
 	/// </summary>

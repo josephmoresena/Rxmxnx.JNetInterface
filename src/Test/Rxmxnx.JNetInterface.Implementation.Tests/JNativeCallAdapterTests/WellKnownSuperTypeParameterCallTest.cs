@@ -63,7 +63,7 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetObjectRefType(localRef).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetObjectClass(localRef).Returns(classRef);
 			proxyEnv.GetSuperclass(classRef).Returns(superClassRef);
-			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.ClassName.Length);
+			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.Name.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(errorTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
@@ -140,7 +140,7 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetObjectRefType(localRef).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetObjectClass(localRef).Returns(classRef);
 			proxyEnv.GetSuperclass(classRef).Returns(superClassRef);
-			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.ClassName.Length);
+			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.Name.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(proxyTypeMetadata.ClassName.Length);
 			proxyEnv.GetStringUtfLength(strRef2).Returns(interfaceTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
@@ -246,7 +246,7 @@ public partial class JNativeCallAdapterTests
 				return className.SequenceEqual(elementName) ? elementClassRef : default;
 			});
 			proxyEnv.GetSuperclass(elementClassRef).Returns(elementSuperClassRef);
-			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.ClassName.Length);
+			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.Name.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(errorTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
@@ -348,7 +348,7 @@ public partial class JNativeCallAdapterTests
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(arrayRef.Value);
 			proxyEnv.GetArrayLength(arrayRef.ArrayValue).Returns(1);
 			proxyEnv.GetObjectArrayElement(arrayRef, 0).Returns(interfaceClassRef.Value);
-			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.ClassName.Length);
+			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.Name.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(serializableTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
@@ -450,7 +450,7 @@ public partial class JNativeCallAdapterTests
 				return className.SequenceEqual(elementName) ? elementClassRef : default;
 			});
 			proxyEnv.GetSuperclass(elementClassRef).Returns(elementSuperClassRef);
-			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.ClassName.Length);
+			proxyEnv.GetStringUtfLength(strRef0).Returns(classInformation.Name.Length);
 			proxyEnv.GetStringUtfLength(strRef1).Returns(enumTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef0.Value);
