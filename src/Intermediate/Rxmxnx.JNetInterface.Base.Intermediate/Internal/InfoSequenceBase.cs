@@ -14,6 +14,8 @@ internal abstract class InfoSequenceBase(String hash, Int32 nameLength) : IEquat
 	/// Information hash.
 	/// </summary>
 	public String Hash { get; } = hash;
+	/// <inheritdoc/>
+	public Boolean Equals(InfoSequenceBase? other) => this.Hash.Equals(other?.Hash);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -22,9 +24,21 @@ internal abstract class InfoSequenceBase(String hash, Int32 nameLength) : IEquat
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Int32 GetHashCode() => this.Hash.GetHashCode();
 	/// <inheritdoc/>
-	public Boolean Equals(InfoSequenceBase? other) => this.Hash.Equals(other?.Hash);
-	/// <inheritdoc/>
 	public override Boolean Equals(Object? obj) => this.Equals(obj as InfoSequenceBase);
+
+	/// <summary>
+	/// Retrieves printable text hash.
+	/// </summary>
+	/// <param name="hash">Class hash.</param>
+	/// <param name="lastChar">Last char hash.</param>
+	/// <returns>A read-only UTF-16 char span.</returns>
+	[ExcludeFromCodeCoverage]
+	public static ReadOnlySpan<Char> GetPrintableHash(String hash, out String lastChar)
+	{
+		ReadOnlySpan<Char> hashSpan = hash;
+		lastChar = hashSpan[^1] == default ? @"\0" : $"{hashSpan[^1]}";
+		return hashSpan[..^1];
+	}
 
 	/// <inheritdoc/>
 	public static Boolean operator ==(InfoSequenceBase? left, InfoSequenceBase? right)

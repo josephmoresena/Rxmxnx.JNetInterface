@@ -186,7 +186,7 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override String ToTraceText()
-		=> $"{this} hash: {ITypeInformation.GetPrintableHash(this.Hash, out String lastChar)}{lastChar}";
+		=> $"{this} hash: {InfoSequenceBase.GetPrintableHash(this.Hash, out String lastChar)}{lastChar}";
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()

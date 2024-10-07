@@ -202,7 +202,7 @@ internal static class MetadataTextUtilities
 	/// <param name="hash">Hash to append.</param>
 	private static void AppendHash(StringBuilder strBuild, String hash)
 	{
-		ReadOnlySpan<Char> printableHash = ITypeInformation.GetPrintableHash(hash, out String lastChar);
+		ReadOnlySpan<Char> printableHash = InfoSequenceBase.GetPrintableHash(hash, out String lastChar);
 		strBuild.Append(nameof(JDataTypeMetadata.Hash));
 		MetadataTextUtilities.AppendEquals(strBuild);
 		strBuild.Append(printableHash);

@@ -65,7 +65,7 @@ public sealed class DataTypeTests
 			$"{nameof(JDataTypeMetadata.Kind)} = {voidMetadata.Kind}, " +
 			$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {ClassNameHelper.GetClassName(voidMetadata.WrapperClassSignature)}, " +
 			$"{nameof(JDataTypeMetadata.Type)} = {voidMetadata.Type}, " +
-			$"{nameof(JDataTypeMetadata.Hash)} = {ITypeInformation.GetPrintableHash(voidMetadata.Hash, out String lastChar)}{lastChar} }}";
+			$"{nameof(JDataTypeMetadata.Hash)} = {InfoSequenceBase.GetPrintableHash(voidMetadata.Hash, out String lastChar)}{lastChar} }}";
 		Assert.Equal(dataTypeString, voidMetadata.ToString());
 	}
 

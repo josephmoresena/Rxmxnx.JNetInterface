@@ -29,7 +29,7 @@ public static class ProxyTestsExtensions
 	public static String ToSimplifiedString(this JArgumentMetadata argumentMetadata)
 		=> $"{{ {nameof(JArgumentMetadata.Signature)} = {argumentMetadata.Signature}, {nameof(JArgumentMetadata.Size)} = {argumentMetadata.Size} }}";
 	public static String ToPrintableHash(this JReferenceTypeMetadata typeMetadata)
-		=> $"{ITypeInformation.GetPrintableHash(typeMetadata.Hash, out String lastChar)}{lastChar}";
+		=> $"{InfoSequenceBase.GetPrintableHash(typeMetadata.Hash, out String lastChar)}{lastChar}";
 	internal static IFixedPointer.IDisposable GetFixedPointer(this InfoSequenceBase info)
 		=> info.ToString().AsMemory().GetFixedContext();
 	internal static IFixedPointer.IDisposable GetFixedPointer(this TypeInfoSequence info,
