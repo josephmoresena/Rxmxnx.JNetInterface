@@ -99,7 +99,8 @@ public sealed class ObjectCallTests
 		JMethodId methodId = ObjectCallTests.fixture.Create<JMethodId>();
 		JDataTypeMetadata metadata = IDataType.GetMetadata<JThrowableObject>();
 		using IFixedPointer.IDisposable infoDef = def.Information.GetFixedPointer();
-		using IFixedPointer.IDisposable ctxClass = metadata.Information.GetFixedPointer();
+		using IFixedPointer.IDisposable ctxClass =
+			metadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)infoDef.Pointer;
 		JObjectLocalRef localRef = jLocal?.Reference ?? default;
 		Boolean isNonVirtual = jClass is not null && jLocal is not null;
@@ -115,7 +116,7 @@ public sealed class ObjectCallTests
 		proxyEnv.CallObjectMethod(proxyEnv.ThrowableLocalRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 		                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
 		proxyEnv.GetStringUtfLength(strRef).Returns(metadata.ClassName.Length);
-		proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctxClass.Pointer);
+		proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 		proxyEnv.GetMethodId(Arg.Any<JClassLocalRef>(), namePtr, Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(methodId);
 		proxyEnv.GetStaticMethodId(Arg.Any<JClassLocalRef>(), namePtr, Arg.Any<ReadOnlyValPtr<Byte>>())
 		        .Returns(methodId);
@@ -151,5 +152,6 @@ public sealed class ObjectCallTests
 		jLocal?.Class.Dispose();
 		jLocal?.Dispose();
 		jThrowable?.Class.Dispose();
+		nameCtx.Dispose();
 	}
 }

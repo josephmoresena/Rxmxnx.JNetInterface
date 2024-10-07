@@ -55,8 +55,10 @@ public partial class JNativeCallAdapterTests
 		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<JTestObject>();
 		JClassTypeMetadata classClassTypeMetadata = IClassType.GetMetadata<JClassObject>();
 		JClassObject? testClass = default;
-		using IFixedPointer.IDisposable classCtx = classClassTypeMetadata.Information.GetFixedPointer();
-		using IFixedPointer.IDisposable ctx = classTypeMetadata.Information.GetFixedPointer();
+		using IFixedPointer.IDisposable classCtx =
+			classClassTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameClassCtx);
+		using IFixedPointer.IDisposable ctx =
+			classTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		try
 		{
 			proxyEnv.GetObjectClass(classRef.Value).Returns(proxyEnv.ClassLocalRef);
@@ -67,9 +69,10 @@ public partial class JNativeCallAdapterTests
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
 			proxyEnv.CallObjectMethod(proxyEnv.ClassLocalRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(clsStrRef.Value);
-			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
+			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
+			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 			proxyEnv.GetStringUtfChars(clsStrRef, Arg.Any<ValPtr<JBoolean>>())
-			        .Returns((ReadOnlyValPtr<Byte>)classCtx.Pointer);
+			        .Returns((ReadOnlyValPtr<Byte>)nameClassCtx.Pointer);
 			proxyEnv.UseVirtualMachineRef = false;
 			proxyEnv.When(e => e.GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>()))
 			        .Do(c => ((ValPtr<JVirtualMachineRef>)c[0]).Reference = proxyEnv.VirtualMachine.Reference);
@@ -100,6 +103,8 @@ public partial class JNativeCallAdapterTests
 		}
 		finally
 		{
+			nameCtx.Dispose();
+			nameClassCtx.Dispose();
 			JNativeCallAdapterTests.FinalizeTest(proxyEnv, result, adapter, testClass: testClass, classRef: classRef);
 		}
 	}

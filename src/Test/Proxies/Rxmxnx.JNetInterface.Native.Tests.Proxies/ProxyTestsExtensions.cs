@@ -32,6 +32,19 @@ public static class ProxyTestsExtensions
 		=> $"{ITypeInformation.GetPrintableHash(typeMetadata.Hash, out String lastChar)}{lastChar}";
 	internal static IFixedPointer.IDisposable GetFixedPointer(this InfoSequenceBase info)
 		=> info.ToString().AsMemory().GetFixedContext();
+	internal static IFixedPointer.IDisposable GetFixedPointer(this TypeInfoSequence info,
+		out IFixedPointer.IDisposable nameCtx)
+	{
+		Int32 nameLength = info.Name.Length + 1;
+		String uName = String.Create(nameLength / 2 + nameLength % 2, info.Name, (s, n) =>
+		{
+			Span<Byte> bytes = s.AsBytes();
+			ReadOnlySpan<Byte> source = n.AsSpan();
+			for (Int32 i = 0; i < source.Length; i++) bytes[i] = source[i] != (Byte)'/' ? source[i] : (Byte)'.';
+		});
+		nameCtx = uName.AsMemory().GetFixedContext();
+		return info.ToString().AsMemory().GetFixedContext();
+	}
 	public static JStackTraceElementObject CreateStackTrace(this StackTraceInfo info, JClassObject jClass,
 		JObjectLocalRef localRef = default)
 	{

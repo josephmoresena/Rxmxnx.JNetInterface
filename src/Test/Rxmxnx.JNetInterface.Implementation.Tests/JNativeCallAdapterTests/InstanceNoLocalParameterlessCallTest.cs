@@ -18,16 +18,18 @@ public partial class JNativeCallAdapterTests
 		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<JStringObject>();
 		Boolean throwsException = version >= IVirtualMachine.MinimalVersion;
+		using IFixedPointer.IDisposable ctx =
+			classTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		try
 		{
 			proxyEnv.GetVersion().Returns(version);
 			proxyEnv.GetObjectRefType(localRef).Returns(JReferenceType.InvalidRefType);
 			proxyEnv.GetObjectClass(localRef).Returns(classRef);
-			using IFixedPointer.IDisposable ctx = classTypeMetadata.Information.GetFixedPointer();
 			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
-			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
+			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
+			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
 			if (throwsException)
 			{
@@ -52,6 +54,7 @@ public partial class JNativeCallAdapterTests
 		}
 		finally
 		{
+			nameCtx.Dispose();
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference);
 			proxyEnv.FinalizeProxy(true);

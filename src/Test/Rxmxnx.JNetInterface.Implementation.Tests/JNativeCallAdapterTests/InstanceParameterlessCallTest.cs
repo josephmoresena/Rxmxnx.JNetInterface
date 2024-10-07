@@ -95,7 +95,8 @@ public partial class JNativeCallAdapterTests
 		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<JTestObject>();
 		JLocalObject? testObject = default;
-		using IFixedPointer.IDisposable ctx = classTypeMetadata.Information.GetFixedPointer();
+		using IFixedPointer.IDisposable ctx =
+			classTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		if (registerClass)
 			JVirtualMachine.Register<JTestObject>();
 		registerClass |= MetadataHelper.GetMetadata(classTypeMetadata.Hash) is not null;
@@ -106,7 +107,8 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
-			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
+			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
+			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 			proxyEnv.UseVirtualMachineRef = false;
 			proxyEnv.When(e => e.GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>()))
 			        .Do(c => ((ValPtr<JVirtualMachineRef>)c[0]).Reference = proxyEnv.VirtualMachine.Reference);
@@ -130,6 +132,7 @@ public partial class JNativeCallAdapterTests
 		}
 		finally
 		{
+			nameCtx.Dispose();
 			JNativeCallAdapterTests.FinalizeTest(proxyEnv, result, adapter, testObject, localRef);
 		}
 	}

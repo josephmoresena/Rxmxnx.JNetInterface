@@ -19,6 +19,8 @@ public partial class ExceptionHandlingTests
 	internal unsafe void ExceptionOccurredTest(ExceptionOccurredError error = ExceptionOccurredError.None)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JClassTypeMetadata throwableMetadata = IClassType.GetMetadata<JClassNotFoundExceptionObject>();
+		using IFixedPointer.IDisposable clsCtx = throwableMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
@@ -28,10 +30,9 @@ public partial class ExceptionHandlingTests
 			JStringLocalRef messageRef = ExceptionHandlingTests.fixture.Create<JStringLocalRef>();
 			JThrowableLocalRef throwableRef = ExceptionHandlingTests.fixture.Create<JThrowableLocalRef>();
 			JClassLocalRef classRef = ExceptionHandlingTests.fixture.Create<JClassLocalRef>();
-			JClassTypeMetadata throwableMetadata = IClassType.GetMetadata<JClassNotFoundExceptionObject>();
 			IMutableWrapper<JThrowableLocalRef> exceptionOccurred = IMutableWrapper.Create<JThrowableLocalRef>();
 
-			using IFixedPointer.IDisposable clsCtx = throwableMetadata.Information.GetFixedPointer();
+			ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)nameCtx.Pointer;
 
 			proxyEnv.ClearReceivedCalls();
 			proxyEnv.VirtualMachine.ClearReceivedCalls();
@@ -104,7 +105,7 @@ public partial class ExceptionHandlingTests
 				if (!error.HasFlag(ExceptionOccurredError.ClassNameUtfChars))
 				{
 					exceptionOccurred.Value = default;
-					return (ReadOnlyValPtr<Byte>)throwableMetadata.Information.ToString().AsSpan().GetUnsafeIntPtr();
+					return namePtr;
 				}
 				exceptionOccurred.Value = ExceptionHandlingTests.fixture.Create<JThrowableLocalRef>();
 				return default;
@@ -207,6 +208,7 @@ public partial class ExceptionHandlingTests
 		}
 		finally
 		{
+			nameCtx.Dispose();
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
