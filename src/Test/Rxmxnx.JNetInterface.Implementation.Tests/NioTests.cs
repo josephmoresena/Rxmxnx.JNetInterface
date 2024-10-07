@@ -28,7 +28,7 @@ public sealed class NioTests
 			proxyEnv.ClearReceivedCalls();
 			proxyEnv.VirtualMachine.ClearReceivedCalls();
 
-			proxyEnv.NewDirectByteBuffer(Arg.Any<IntPtr>(), Arg.Any<Int64>()).Returns(c =>
+			proxyEnv.NewDirectByteBuffer(Arg.Any<IntPtr>(), Arg.Any<Int64>()).Returns(_ =>
 			{
 				JObjectLocalRef localRef = NioTests.fixture.Create<JObjectLocalRef>();
 				bufferRefs.Add(localRef);

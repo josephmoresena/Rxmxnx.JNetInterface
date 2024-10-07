@@ -66,16 +66,6 @@ internal partial class DeadThread
 	/// Writes IsInstanceOf{TDataType}(JReferenceObject) method call to the trace listeners.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
-	private void IsInstanceOfTrace<TDataType>(JReferenceObject jObject) where TDataType : IDataType<TDataType>
-	{
-		if (IVirtualMachine.TraceEnabled)
-			Trace.WriteLine(
-				$"Unable to determine if {jObject.As<JObjectLocalRef>()} is an instance of {IDataType.GetMetadata<TDataType>().ClassName} class. JVM {this.VirtualMachine.Reference} was destroyed.");
-	}
-	/// <summary>
-	/// Writes IsInstanceOf{TDataType}(JReferenceObject) method call to the trace listeners.
-	/// </summary>
-	[ExcludeFromCodeCoverage]
 	private void IsInstanceOfTrace(JReferenceObject jObject, CString className)
 	{
 		if (IVirtualMachine.TraceEnabled)

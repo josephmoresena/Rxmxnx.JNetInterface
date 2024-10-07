@@ -228,7 +228,6 @@ internal static class TestUtilities
 
 		JPrimitiveTypeMetadata primitiveMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
-		IClassFeature classFeature = env.ClassFeature;
 		JObjectLocalRef localRef = TestUtilities.fixture.Create<JObjectLocalRef>();
 		JMethodId methodId = TestUtilities.fixture.Create<JMethodId>();
 
@@ -314,7 +313,7 @@ internal static class TestUtilities
 			CallType.Objects =>
 			[
 				TestUtilities.CreateString(proxyEnv, TestUtilities.fixture.Create<String>()),
-				(JEnvironment.GetEnvironment(proxyEnv.Reference) as IEnvironment)!.ClassFeature.ClassObject,
+				(JEnvironment.GetEnvironment(proxyEnv.Reference) as IEnvironment).ClassFeature.ClassObject,
 				TestUtilities.CreateThrowable(proxyEnv),
 			],
 			CallType.Mixed =>

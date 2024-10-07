@@ -23,7 +23,7 @@ public class DeadThreadTests
 		try
 		{
 			proxyEnv.NewWeakGlobalRef(Arg.Any<JObjectLocalRef>())
-			        .Returns(c => DeadThreadTests.fixture.Create<JWeakRef>());
+			        .Returns(_ => DeadThreadTests.fixture.Create<JWeakRef>());
 
 			using JClassObject jClass = JEnvironment.GetEnvironment(proxyEnv.Reference).ClassObject;
 			using JGlobal jGlobal = jClass.Global;
