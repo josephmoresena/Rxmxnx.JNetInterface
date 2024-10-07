@@ -13,8 +13,8 @@ internal partial class TypeInfoSequence
 	{
 		// To create TypeInfoSequence instance we use JNI class name.
 		ReadOnlySpan<Byte> jniClassName = escape ?
-			className :
-			TypeInfoSequence.JniEscapeClassName(stackalloc Byte[className.Length], className);
+			TypeInfoSequence.JniEscapeClassName(stackalloc Byte[className.Length], className) :
+			className;
 		// Buffer length should hold at least 3 times the class name, 3 null-characters and 1 array prefix char.
 		Int32 bufferLength = 3 * className.Length + 4;
 		isArray = className[0] == CommonNames.ArraySignaturePrefixChar;
