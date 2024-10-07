@@ -15,6 +15,9 @@ public abstract partial class JFunctionDefinition : JCallDefinition
 		ReadOnlySpan<JArgumentMetadata> metadata = default) : base(functionName, returnTypeSignature, metadata) { }
 	/// <inheritdoc/>
 	private protected JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
+	/// <inheritdoc/>
+	private protected JFunctionDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes,
+		Int32 referenceCount) : base(info, callSize, sizes, referenceCount) { }
 
 	/// <summary>
 	/// Retrieves a <see cref="JMethodObject"/> reflected from current definition on
@@ -47,12 +50,10 @@ public abstract partial class JFunctionDefinition : JCallDefinition
 public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TResult : IDataType<TResult>
 {
 	/// <summary>
-	/// Constructor.
+	/// Internal Constructor.
 	/// </summary>
-	/// <param name="functionName">Function name.</param>
-	/// <remarks>This constructor should be never inherited.</remarks>
-	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName) : base(functionName,
-		IDataType.GetMetadata<TResult>().Signature) { }
+	/// <param name="definition">Function definition name.</param>
+	internal JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
 	/// <summary>
 	/// Internal Constructor.
 	/// </summary>
@@ -62,10 +63,15 @@ public partial class JFunctionDefinition<TResult> : JFunctionDefinition where TR
 	private protected JFunctionDefinition(ReadOnlySpan<Byte> functionName, ReadOnlySpan<Byte> returnTypeSignature,
 		ReadOnlySpan<JArgumentMetadata> metadata) : base(functionName, returnTypeSignature, metadata) { }
 	/// <summary>
-	/// Internal Constructor.
+	/// Constructor.
 	/// </summary>
-	/// <param name="definition">Function definition name.</param>
-	internal JFunctionDefinition(JFunctionDefinition definition) : base(definition) { }
+	/// <param name="functionName">Function name.</param>
+	/// <remarks>This constructor should be never inherited.</remarks>
+	private JFunctionDefinition(ReadOnlySpan<Byte> functionName) : base(functionName,
+	                                                                    IDataType.GetMetadata<TResult>().Signature) { }
+	/// <inheritdoc/>
+	private JFunctionDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes, Int32 referenceCount) :
+		base(info, callSize, sizes, referenceCount) { }
 
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition passing the

@@ -7,7 +7,7 @@ public partial class JConstructorDefinition
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-	public sealed class Parameterless : JConstructorDefinition
+	public sealed class Parameterless() : JConstructorDefinition([])
 	{
 		/// <summary>
 		/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>

@@ -7,7 +7,7 @@
 [EditorBrowsable(EditorBrowsableState.Never)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4035,
                  Justification = CommonConstants.InternalInheritanceJustification)]
-public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObjectDefinition>
+public abstract partial class JAccessibleObjectDefinition : IEquatable<JAccessibleObjectDefinition>
 {
 	/// <summary>
 	/// Definition name.
@@ -35,10 +35,10 @@ public abstract class JAccessibleObjectDefinition : IEquatable<JAccessibleObject
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>
-	/// <param name="sequence">
+	/// <param name="info">
 	/// <see cref="AccessibleInfoSequence"/> containing the name and descriptor of the accessible object.
 	/// </param>
-	private protected JAccessibleObjectDefinition(AccessibleInfoSequence sequence) => this.Information = sequence;
+	private protected JAccessibleObjectDefinition(AccessibleInfoSequence info) => this.Information = info;
 	/// <summary>
 	/// Internal constructor.
 	/// </summary>

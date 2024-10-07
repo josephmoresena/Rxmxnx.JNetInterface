@@ -32,4 +32,18 @@ public abstract partial class JCallDefinition
 		this._sizes = definition._sizes;
 		this._referenceCount = definition._referenceCount;
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="info">Call information.</param>
+	/// <param name="callSize">Total size in bytes of call parameters.</param>
+	/// <param name="sizes">Arguments sizes.</param>
+	/// <param name="referenceCount">Reference counts.</param>
+	private protected JCallDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes, Int32 referenceCount)
+		: base(info)
+	{
+		this._callSize = callSize;
+		this._sizes = sizes;
+		this._referenceCount = referenceCount;
+	}
 }

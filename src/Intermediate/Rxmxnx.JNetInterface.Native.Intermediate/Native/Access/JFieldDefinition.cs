@@ -18,6 +18,8 @@ public abstract class JFieldDefinition : JAccessibleObjectDefinition
 		AccessibleInfoSequence.CreateFieldInfo(name, signature)) { }
 	/// <inheritdoc/>
 	private protected JFieldDefinition(JFieldDefinition definition) : base(definition) { }
+	/// <inheritdoc/>
+	private protected JFieldDefinition(AccessibleInfoSequence info) : base(info) { }
 
 	/// <summary>
 	/// Retrieves a <see cref="JFieldObject"/> reflected from current definition on
@@ -60,6 +62,8 @@ public sealed class JFieldDefinition<TField> : JFieldDefinition where TField : I
 	public JFieldDefinition(ReadOnlySpan<Byte> name) : base(name, IDataType.GetMetadata<TField>().Signature) { }
 	/// <inheritdoc/>
 	internal JFieldDefinition(JFieldDefinition definition) : base(definition) { }
+	/// <inheritdoc/>
+	internal JFieldDefinition(AccessibleInfoSequence info) : base(info) { }
 
 	/// <summary>
 	/// Retrieves the value of a field on <paramref name="jLocal"/> which matches with current definition.
