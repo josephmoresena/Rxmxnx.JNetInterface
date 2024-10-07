@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Internal type information sequence.
 /// </summary>
-internal sealed partial class AccessibleInfoSequence : InfoSequenceBase
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+internal sealed unsafe partial class AccessibleInfoSequence : InfoSequenceBase
 {
 	/// <summary>
 	/// Accessible member descriptor.
@@ -27,7 +29,7 @@ internal sealed partial class AccessibleInfoSequence : InfoSequenceBase
 	/// <param name="returnType">Return type signature.</param>
 	/// <returns>A <see cref="AccessibleInfoSequence"/> instance.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static unsafe AccessibleInfoSequence CreateFieldInfo(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType)
+	public static AccessibleInfoSequence CreateFieldInfo(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType)
 	{
 		Int32 bufferLength = name.Length + returnType.Length + 2;
 		fixed (Byte* nameChr0 = &MemoryMarshal.GetReference(name))
@@ -50,7 +52,7 @@ internal sealed partial class AccessibleInfoSequence : InfoSequenceBase
 	/// <param name="referenceCount">Reference counts.</param>
 	/// <returns>A <see cref="AccessibleInfoSequence"/> instance.</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static unsafe AccessibleInfoSequence CreateCallInfo(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType,
+	public static AccessibleInfoSequence CreateCallInfo(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> returnType,
 		ReadOnlySpan<JArgumentMetadata> args, out Int32 callSize, out Int32[] sizes, out Int32 referenceCount)
 	{
 		Int32 descriptorLength = returnType.Length +

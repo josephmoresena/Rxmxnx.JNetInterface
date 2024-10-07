@@ -5,12 +5,12 @@ public partial class JEnumObject
 	/// <summary>
 	/// Internal implementation of <see cref="IEnumFieldList"/>.
 	/// </summary>
-	private sealed partial class EnumFieldList : IEnumFieldList, IAppendableProperty
+	private sealed partial class FieldList : IEnumFieldList, IAppendableProperty
 	{
 		/// <summary>
 		/// Empty field list.
 		/// </summary>
-		public static readonly EnumFieldList Empty = new();
+		public static readonly FieldList Empty = new();
 
 		/// <inheritdoc/>
 		public String PropertyName => nameof(JEnumTypeMetadata.Fields);
@@ -69,11 +69,11 @@ public partial class JEnumObject
 		/// </summary>
 		/// <param name="enumTypeName">Enum type name.</param>
 		/// <returns>The current instance.</returns>
-		public EnumFieldList Validate(ReadOnlySpan<Byte> enumTypeName)
+		public FieldList Validate(ReadOnlySpan<Byte> enumTypeName)
 		{
 			if (IVirtualMachine.MetadataValidationEnabled)
 				NativeValidationUtilities.ThrowIfInvalidList(enumTypeName, this);
-			return this;
+			return this.Count != 0 ? this : FieldList.Empty;
 		}
 	}
 }

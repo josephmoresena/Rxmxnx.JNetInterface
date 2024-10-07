@@ -33,7 +33,7 @@ public partial class JEnumObject
 	/// </summary>
 	/// <param name="values">Span of enum values.</param>
 	/// <returns>A <see cref="IEnumFieldList"/> instance.</returns>
-	private protected static IEnumFieldList CreateFieldList(ReadOnlySpan<CString> values) => new EnumFieldList(values);
+	private protected static IEnumFieldList CreateFieldList(ReadOnlySpan<CString> values) => new FieldList(values);
 	/// <summary>
 	/// Creates the <see cref="JClassTypeMetadata{TClass}"/> metadata instance for built-in types.
 	/// </summary>

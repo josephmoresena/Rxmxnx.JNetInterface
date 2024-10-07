@@ -20,7 +20,8 @@ public partial class ExceptionHandlingTests
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JClassTypeMetadata throwableMetadata = IClassType.GetMetadata<JClassNotFoundExceptionObject>();
-		using IFixedPointer.IDisposable clsCtx = throwableMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
+		using IFixedPointer.IDisposable clsCtx =
+			throwableMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);

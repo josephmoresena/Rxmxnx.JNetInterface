@@ -80,7 +80,9 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 /// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public abstract class JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetadata
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+public abstract unsafe class JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetadata
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {
 	/// <summary>
@@ -89,7 +91,7 @@ public abstract class JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetadat
 	/// <param name="underlineType">Underline primitive CLR type.</param>
 	/// <param name="information">Internal information.</param>
 	/// <param name="wrapperInformation">Wrapper class information.</param>
-	private protected unsafe JPrimitiveTypeMetadata(Type underlineType, TypeInfoSequence information,
+	private protected JPrimitiveTypeMetadata(Type underlineType, TypeInfoSequence information,
 		TypeInfoSequence wrapperInformation) :
 		base(sizeof(TPrimitive), underlineType, information, wrapperInformation) { }
 }

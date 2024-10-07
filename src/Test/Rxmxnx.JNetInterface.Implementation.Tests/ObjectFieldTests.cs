@@ -77,7 +77,8 @@ public sealed class ObjectFieldTests
 		JFieldId fieldId = ObjectFieldTests.fixture.Create<JFieldId>();
 		JDataTypeMetadata metadata = IDataType.GetMetadata<JThrowableObject>();
 		using IFixedPointer.IDisposable infoDef = def.Information.GetFixedPointer();
-		using IFixedPointer.IDisposable ctxClass = metadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
+		using IFixedPointer.IDisposable ctxClass =
+			metadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)infoDef.Pointer;
 		JObjectLocalRef localRef = jLocal?.Reference ?? default;
 		Boolean isStatic = jClass is not null && jLocal is null;

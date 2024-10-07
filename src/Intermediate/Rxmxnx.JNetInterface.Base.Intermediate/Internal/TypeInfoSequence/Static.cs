@@ -1,6 +1,8 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial class TypeInfoSequence
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+internal unsafe partial class TypeInfoSequence
 {
 	/// <summary>
 	/// Creates hash from <paramref name="className"/>.
@@ -9,7 +11,7 @@ internal partial class TypeInfoSequence
 	/// <param name="escape">Indicates whether <paramref name="className"/> sould be escaped.</param>
 	/// <param name="isArray">Output. Indicates whether <paramref name="className"/> is for array class.</param>
 	/// <returns>Type hash.</returns>
-	private static unsafe String CreateHash(ReadOnlySpan<Byte> className, Boolean escape, out Boolean isArray)
+	private static String CreateHash(ReadOnlySpan<Byte> className, Boolean escape, out Boolean isArray)
 	{
 		// To create TypeInfoSequence instance we use JNI class name.
 		ReadOnlySpan<Byte> jniClassName = escape ?

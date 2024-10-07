@@ -1,6 +1,8 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal sealed partial class AccessibleInfoSequence
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+internal sealed unsafe partial class AccessibleInfoSequence
 {
 	/// <summary>
 	/// State for buffer creation.
@@ -9,7 +11,7 @@ internal sealed partial class AccessibleInfoSequence
 	/// <param name="nameLength">Name length.</param>
 	/// <param name="returnTypeChr0">Pointer to UTF-8 return type.</param>
 	/// <param name="returnTypeLength">Return type length.</param>
-	private readonly unsafe struct FieldSpanState(
+	private readonly struct FieldSpanState(
 		Byte* nameChr0,
 		Int32 nameLength,
 		Byte* returnTypeChr0,

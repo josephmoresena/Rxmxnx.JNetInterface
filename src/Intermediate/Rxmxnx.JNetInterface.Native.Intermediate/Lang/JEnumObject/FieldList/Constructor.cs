@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 
 public partial class JEnumObject
 {
-	private sealed partial class EnumFieldList
+	private sealed partial class FieldList
 	{
 		/// <summary>
 		/// Enum ordinal dictionary.
@@ -20,7 +20,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// Parameterless constructor.
 		/// </summary>
-		public EnumFieldList()
+		public FieldList()
 		{
 			this._hashDictionary = [];
 			this._nameDictionary = [];
@@ -31,7 +31,7 @@ public partial class JEnumObject
 		/// </summary>
 		/// <param name="values">Values span.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public EnumFieldList(ReadOnlySpan<CString> values)
+		public FieldList(ReadOnlySpan<CString> values)
 		{
 			this._hashDictionary = new(values.Length);
 			this._nameDictionary = new(values.Length);

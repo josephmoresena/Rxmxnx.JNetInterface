@@ -8,7 +8,7 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	/// <summary>
 	/// Object type information.
 	/// </summary>
-	internal static TypeInfoSequence TypeInfo = new(ClassNameHelper.ObjectHash, 16);
+	internal static readonly TypeInfoSequence TypeInfo = new(ClassNameHelper.ObjectHash, 16);
 
 	/// <summary>
 	/// Object class name.

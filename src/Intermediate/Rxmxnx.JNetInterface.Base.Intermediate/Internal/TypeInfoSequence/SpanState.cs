@@ -1,6 +1,8 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
-internal partial class TypeInfoSequence
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+internal unsafe partial class TypeInfoSequence
 {
 	/// <summary>
 	/// State for buffer creation.
@@ -8,7 +10,7 @@ internal partial class TypeInfoSequence
 	/// <param name="chr0">Pointer to UTF-8 class name.</param>
 	/// <param name="length">Class name length.</param>
 	/// <param name="isArray">Indicates whether current class is an array.</param>
-	private readonly unsafe struct SpanState(Byte* chr0, Int32 length, Boolean isArray)
+	private readonly struct SpanState(Byte* chr0, Int32 length, Boolean isArray)
 	{
 		/// <summary>
 		/// Indicates whether current class is an array.

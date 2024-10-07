@@ -19,7 +19,7 @@ public partial class JEnumObject
 		/// <summary>
 		/// Enum field list.
 		/// </summary>
-		private readonly EnumFieldList _enumFields;
+		private readonly FieldList _fields;
 
 		/// <summary>
 		/// Constructor.
@@ -29,7 +29,7 @@ public partial class JEnumObject
 		private TypeMetadataBuilder(ReadOnlySpan<Byte> enumTypeName, IReadOnlySet<Type> interfaceTypes)
 		{
 			this._builder = new(enumTypeName, JTypeKind.Enum, interfaceTypes);
-			this._enumFields = new();
+			this._fields = new();
 		}
 
 		/// <summary>
@@ -52,7 +52,7 @@ public partial class JEnumObject
 		/// <returns>Current instance.</returns>
 		public readonly TypeMetadataBuilder<TEnum> AppendValue(Int32 ordinal, CString name)
 		{
-			this._enumFields.AddField(this._builder.DataTypeName, ordinal, name);
+			this._fields.AddField(this._builder.DataTypeName, ordinal, name);
 			return this;
 		}
 		/// <summary>
@@ -64,7 +64,7 @@ public partial class JEnumObject
 		public readonly TypeMetadataBuilder<TEnum> AppendValues(Int32 offset, ReadOnlySpan<CString> names)
 		{
 			for (Int32 i = 0; i < names.Length; i++)
-				this._enumFields.AddField(this._builder.DataTypeName, i + offset, names[i]);
+				this._fields.AddField(this._builder.DataTypeName, i + offset, names[i]);
 			return this;
 		}
 		/// <summary>
@@ -72,7 +72,7 @@ public partial class JEnumObject
 		/// </summary>
 		/// <returns>A new <see cref="JEnumTypeMetadata{TEnum}"/> instance.</returns>
 		public readonly JEnumTypeMetadata<TEnum> Build()
-			=> new EnumTypeMetadata<TEnum>(this._builder, this._enumFields.Validate(this._builder.DataTypeName));
+			=> new EnumTypeMetadata<TEnum>(this._builder, this._fields.Validate(this._builder.DataTypeName));
 
 		/// <summary>
 		/// Creates a new <see cref="JReferenceTypeMetadata"/> instance.
