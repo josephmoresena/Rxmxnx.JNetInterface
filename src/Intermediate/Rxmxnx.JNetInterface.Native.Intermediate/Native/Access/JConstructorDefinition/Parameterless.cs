@@ -7,8 +7,14 @@ public partial class JConstructorDefinition
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-	public sealed class Parameterless() : JConstructorDefinition([])
+	public sealed class Parameterless() : JConstructorDefinition(Parameterless.info, 0, [], 0)
 	{
+		/// <summary>
+		/// Information for <c>ctor()</c>.
+		/// </summary>
+		private static readonly AccessibleInfoSequence info =
+			new(JAccessibleObjectDefinition.ParameterlessConstructorHash, 6, 3);
+
 		/// <summary>
 		/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>
 		/// which matches with current definition.

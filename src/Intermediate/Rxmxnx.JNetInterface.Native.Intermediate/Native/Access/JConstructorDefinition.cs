@@ -6,7 +6,7 @@
 public partial class JConstructorDefinition : JCallDefinition
 {
 	/// <inheritdoc/>
-	internal JConstructorDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes, Int32 referenceCount) :
+	private JConstructorDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes, Int32 referenceCount) :
 		base(info, callSize, sizes, referenceCount) { }
 
 	/// <summary>

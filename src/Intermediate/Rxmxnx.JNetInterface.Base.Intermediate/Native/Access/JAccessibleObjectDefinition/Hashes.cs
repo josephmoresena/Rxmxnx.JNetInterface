@@ -146,4 +146,8 @@ public abstract partial class JAccessibleObjectDefinition
 	/// Hash for <c>java.lang.Class TYPE</c>.
 	/// </summary>
 	internal const String PrimitiveTypeFieldHash = "奔䕐䰀慪慶氯湡⽧汃獡㭳\0";
+	/// <summary>
+	/// Hash for <c>ctor()</c>.
+	/// </summary>
+	internal const String ParameterlessConstructorHash = "椼楮㹴⠀嘩\0";
 }
