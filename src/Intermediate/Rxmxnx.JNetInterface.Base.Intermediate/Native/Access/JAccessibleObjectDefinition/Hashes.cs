@@ -150,4 +150,8 @@ public abstract partial class JAccessibleObjectDefinition
 	/// Hash for <c>ctor()</c>.
 	/// </summary>
 	internal const String ParameterlessConstructorHash = "椼楮㹴⠀嘩\0";
+	/// <summary>
+	/// Hash for <c>main(java.lang.String[])</c>.
+	/// </summary>
+	internal const String MainMethodHash = "慭湩⠀䱛慪慶氯湡⽧瑓楲杮⤻V";
 }

@@ -6,6 +6,10 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 public sealed class JMainMethodDefinition : JMethodDefinition
 {
 	/// <summary>
+	/// Information for <c>main(java.lang.String[])</c>.
+	/// </summary>
+	private static readonly AccessibleInfoSequence info = new(JAccessibleObjectDefinition.MainMethodHash, 4, 22);
+	/// <summary>
 	/// Instance.
 	/// </summary>
 	public static readonly JMainMethodDefinition Instance = new();
@@ -13,7 +17,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	private JMainMethodDefinition() : base("main"u8, [JArgumentMetadata.Get<JArrayObject<JStringObject>>(),]) { }
+	private JMainMethodDefinition() : base(JMainMethodDefinition.info, IntPtr.Size, [IntPtr.Size,], 1) { }
 
 	/// <summary>
 	/// Invokes method defined in <paramref name="mainClass"/> with null args.
