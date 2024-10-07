@@ -6,6 +6,15 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2094,
                  Justification = CommonConstants.ClassJustification)]
-internal sealed class PrimitiveWrapperConstructor<TPrimitive>()
-	: JConstructorDefinition([JArgumentMetadata.Get<TPrimitive>(),])
-	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>;
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+internal sealed unsafe class PrimitiveWrapperConstructor<TPrimitive>(AccessibleInfoSequence info)
+	: JConstructorDefinition(info, PrimitiveWrapperConstructor<TPrimitive>.sizes[0],
+	                         PrimitiveWrapperConstructor<TPrimitive>.sizes, 0)
+	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+{
+	/// <summary>
+	/// Call sizes.
+	/// </summary>
+	private static readonly Int32[] sizes = [sizeof(TPrimitive),];
+}

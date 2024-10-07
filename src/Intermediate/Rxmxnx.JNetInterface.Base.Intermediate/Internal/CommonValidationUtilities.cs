@@ -122,20 +122,18 @@ internal static class CommonValidationUtilities
 			throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
+	/// Throws an exception if <paramref name="value"/> is <see cref="ReadOnlySpan{Byte}.Empty"/>.
 	/// </summary>
 	/// <param name="value">A UTF-8 string.</param>
 	/// <param name="paramName">The name of <paramref name="value"/>.</param>
-	/// <returns>A non-empty <see cref="CString"/> instance.</returns>
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="value"/> is <see langword="null"/> or <see cref="CString.Empty"/>.
 	/// </exception>
-	public static ReadOnlySpan<Byte> ValidateNotEmpty(ReadOnlySpan<Byte> value,
+	public static void ValidateNotEmpty(ReadOnlySpan<Byte> value,
 		[CallerArgumentExpression(nameof(value))] String paramName = "")
 	{
 		if (value.IsEmpty)
 			throw new InvalidOperationException($"{paramName} must be non-empty string");
-		return value;
 	}
 	/// <summary>
 	/// Throws an exception if proxy flags not match.

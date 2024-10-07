@@ -6,8 +6,8 @@
 public partial class JConstructorDefinition : JCallDefinition
 {
 	/// <inheritdoc/>
-	private JConstructorDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes, Int32 referenceCount) :
-		base(info, callSize, sizes, referenceCount) { }
+	private protected JConstructorDefinition(AccessibleInfoSequence info, Int32 callSize, Int32[] sizes,
+		Int32 referenceCount) : base(info, callSize, sizes, referenceCount) { }
 
 	/// <summary>
 	/// Retrieves a <see cref="JConstructorObject"/> reflected from current definition on

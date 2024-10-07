@@ -50,8 +50,8 @@ internal static class MetadataTextUtilities
 				if (typeMetadata.Kind is JTypeKind.Class)
 					MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Modifier),
 					                                     $"{typeMetadata.Modifier}");
-				for (Int32 i = 0; i < properties.Length; i++)
-					MetadataTextUtilities.AppendProperty(strBuild, properties[i]);
+				foreach (IAppendableProperty? t in properties.AsSpan())
+					MetadataTextUtilities.AppendProperty(strBuild, t);
 				break;
 		}
 		if (!isVoid)
