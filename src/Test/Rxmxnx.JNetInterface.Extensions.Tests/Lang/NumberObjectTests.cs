@@ -24,6 +24,16 @@ public sealed class NumberObjectTests
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	[Fact]
+	internal void ConstructorDefinitionTest()
+	{
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.ByteConstructor);
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.DoubleConstructor);
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.FloatConstructor);
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.IntegerConstructor);
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.LongConstructor);
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.ShortConstructor);
+	}
+	[Fact]
 	internal void ByteTest()
 	{
 		Func<JClassObject, JObjectLocalRef, JByte, JByteObject> creator = (e, c, v) => new(e, c, v);
@@ -366,5 +376,17 @@ public sealed class NumberObjectTests
 			Assert.Throws(e.GetType(), () => equatable.Equals(primitive));
 			Assert.Throws(e.GetType(), () => equatable.Equals((JObject)primitive));
 		}
+	}
+	private static void DefinitionTest<TPrimitive>(PrimitiveWrapperConstructor<TPrimitive> constructor)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IPrimitiveEquatable, IEquatable<TPrimitive>
+	{
+		JArgumentMetadata arg = JArgumentMetadata.Get<TPrimitive>();
+		JAccessibleObjectDefinition definition = JConstructorDefinition.Create([arg,]);
+		Assert.Equal(constructor, definition);
+		Assert.Equal(constructor.Name, definition.Name);
+		Assert.Equal(constructor.Descriptor, definition.Descriptor);
+		Assert.Equal(constructor.Hash, definition.Hash);
+		Assert.Equal(constructor.Name, "<init>"u8);
+		Assert.Equal(constructor.Descriptor, (CString)$"({arg.Signature})V");
 	}
 }

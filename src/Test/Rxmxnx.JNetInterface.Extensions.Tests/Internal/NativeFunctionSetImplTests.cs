@@ -6,6 +6,15 @@ public sealed class NativeFunctionSetImplTests
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	[Fact]
+	internal void TypeFieldTest()
+	{
+		JFieldDefinition<JClassObject> definition = new("TYPE"u8);
+		Assert.Equal(definition, NativeFunctionSetImpl.PrimitiveTypeDefinition);
+		Assert.Equal(definition.Name, NativeFunctionSetImpl.PrimitiveTypeDefinition.Name);
+		Assert.Equal(definition.Descriptor, NativeFunctionSetImpl.PrimitiveTypeDefinition.Descriptor);
+		Assert.Equal(definition.Hash, NativeFunctionSetImpl.PrimitiveTypeDefinition.Hash);
+	}
+	[Fact]
 	internal void GetEnumNameTest()
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JEnumObject>();

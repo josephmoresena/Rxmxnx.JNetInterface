@@ -11,7 +11,17 @@ public sealed class JBooleanObjectTests
 	private static readonly CStringSequence hash = new(JBooleanObjectTests.className,
 	                                                   JBooleanObjectTests.classSignature,
 	                                                   JBooleanObjectTests.arraySignature);
-
+	[Fact]
+	internal void ConstructorDefinitionTest()
+	{
+		JAccessibleObjectDefinition definition = JConstructorDefinition.Create([JArgumentMetadata.Get<JBoolean>(),]);
+		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor, definition);
+		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Name, definition.Name);
+		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Descriptor, definition.Descriptor);
+		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Hash, definition.Hash);
+		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Name,  "<init>"u8);
+		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Descriptor, "(Z)V"u8);
+	}
 	[Fact]
 	internal void CreateMetadataTest()
 	{

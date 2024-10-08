@@ -13,6 +13,17 @@ public sealed class JCharacterObjectTests
 	                                                   JCharacterObjectTests.arraySignature);
 
 	[Fact]
+	internal void ConstructorDefinitionTest()
+	{
+		JAccessibleObjectDefinition definition = JConstructorDefinition.Create([JArgumentMetadata.Get<JChar>(),]);
+		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor, definition);
+		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Name, definition.Name);
+		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Descriptor, definition.Descriptor);
+		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Hash, definition.Hash);
+		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Name,  "<init>"u8);
+		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Descriptor, "(C)V"u8);
+	}
+	[Fact]
 	internal void CreateMetadataTest()
 	{
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JCharacterObject>();
