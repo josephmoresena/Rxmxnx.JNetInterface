@@ -20,7 +20,7 @@ public sealed class JCharacterObjectTests
 		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Name, definition.Name);
 		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Descriptor, definition.Descriptor);
 		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Hash, definition.Hash);
-		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Name,  "<init>"u8);
+		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Name, "<init>"u8);
 		Assert.Equal(NativeFunctionSetImpl.CharacterConstructor.Descriptor, "(C)V"u8);
 	}
 	[Fact]

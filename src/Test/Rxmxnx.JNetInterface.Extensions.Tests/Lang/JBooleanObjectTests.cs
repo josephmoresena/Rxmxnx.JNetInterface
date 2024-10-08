@@ -19,7 +19,7 @@ public sealed class JBooleanObjectTests
 		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Name, definition.Name);
 		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Descriptor, definition.Descriptor);
 		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Hash, definition.Hash);
-		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Name,  "<init>"u8);
+		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Name, "<init>"u8);
 		Assert.Equal(NativeFunctionSetImpl.BooleanConstructor.Descriptor, "(Z)V"u8);
 	}
 	[Fact]
