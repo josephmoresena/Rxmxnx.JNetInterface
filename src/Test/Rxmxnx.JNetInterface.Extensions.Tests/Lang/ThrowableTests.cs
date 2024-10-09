@@ -3,6 +3,51 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 [ExcludeFromCodeCoverage]
 public sealed class ThrowableTests
 {
+	private static readonly Dictionary<Type, CString> classNames = new()
+	{
+		{ typeof(JArithmeticExceptionObject), new("java/lang/ArithmeticException"u8) },
+		{ typeof(JArrayIndexOutOfBoundsExceptionObject), new("java/lang/ArrayIndexOutOfBoundsException"u8) },
+		{ typeof(JArrayStoreExceptionObject), new("java/lang/ArrayStoreException"u8) },
+		{ typeof(JClassCastExceptionObject), new("java/lang/ClassCastException"u8) },
+		{ typeof(JClassCircularityErrorObject), new("java/lang/ClassCircularityError"u8) },
+		{ typeof(JClassFormatErrorObject), new("java/lang/ClassFormatError"u8) },
+		{ typeof(JClassNotFoundExceptionObject), new("java/lang/ClassNotFoundException"u8) },
+		{ typeof(JExceptionInInitializerErrorObject), new("java/lang/ExceptionInInitializerError"u8) },
+		{ typeof(JFileNotFoundExceptionObject), new("java/io/FileNotFoundException"u8) },
+		{ typeof(JIllegalAccessExceptionObject), new("java/lang/IllegalAccessException"u8) },
+		{ typeof(JIllegalArgumentExceptionObject), new("java/lang/IllegalArgumentException"u8) },
+		{ typeof(JIllegalStateExceptionObject), new("java/lang/IllegalStateException"u8) },
+		{ typeof(JIncompatibleClassChangeErrorObject), new("java/lang/IncompatibleClassChangeError"u8) },
+		{ typeof(JIndexOutOfBoundsExceptionObject), new("java/lang/IndexOutOfBoundsException"u8) },
+		{ typeof(JInstantiationExceptionObject), new("java/lang/InstantiationException"u8) },
+		{ typeof(JInternalErrorObject), new("java/lang/InternalError"u8) },
+		{ typeof(JInterruptedExceptionObject), new("java/lang/InterruptedException"u8) },
+		{ typeof(JInvocationTargetExceptionObject), new("java/lang/reflect/InvocationTargetException"u8) },
+		{ typeof(JIoExceptionObject), new("java/io/IOException"u8) },
+		{ typeof(JLinkageErrorObject), new("java/lang/LinkageError"u8) },
+		{ typeof(JMalformedUrlExceptionObject), new("java/net/MalformedURLException"u8) },
+		{ typeof(JNoClassDefFoundErrorObject), new("java/lang/NoClassDefFoundError"u8) },
+		{ typeof(JNoSuchFieldErrorObject), new("java/lang/NoSuchFieldError"u8) },
+		{ typeof(JNoSuchMethodErrorObject), new("java/lang/NoSuchMethodError"u8) },
+		{ typeof(JNullPointerExceptionObject), new("java/lang/NullPointerException"u8) },
+		{ typeof(JNumberFormatExceptionObject), new("java/lang/NumberFormatException"u8) },
+		{ typeof(JOutOfMemoryErrorObject), new("java/lang/OutOfMemoryError"u8) },
+		{ typeof(JParseExceptionObject), new("java/text/ParseException"u8) },
+		{ typeof(JReflectiveOperationExceptionObject), new("java/lang/ReflectiveOperationException"u8) },
+		{ typeof(JSecurityExceptionObject), new("java/lang/SecurityException"u8) },
+		{ typeof(JStringIndexOutOfBoundsExceptionObject), new("java/lang/StringIndexOutOfBoundsException"u8) },
+		{ typeof(JUnsatisfiedLinkErrorObject), new("java/lang/UnsatisfiedLinkError"u8) },
+		{ typeof(JVirtualMachineErrorObject), new("java/lang/VirtualMachineError"u8) },
+	};
+	private static readonly Dictionary<Type, CString> classSignatures =
+		ThrowableTests.classNames.ToDictionary(p => p.Key, p => CString.Concat("L"u8, p.Value, ";"u8));
+	private static readonly Dictionary<Type, CString> arraySignatures =
+		ThrowableTests.classSignatures.ToDictionary(p => p.Key, p => CString.Concat("["u8, p.Value));
+	private static readonly Dictionary<Type, CStringSequence> hashes =
+		ThrowableTests.classSignatures.Keys.ToDictionary(
+			t => t,
+			t => new CStringSequence(ThrowableTests.classNames[t], ThrowableTests.classSignatures[t],
+			                         ThrowableTests.arraySignatures[t]));
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 	private static readonly MethodInfo getMetadata =
 		typeof(IClassType).GetMethod(nameof(IClassType.GetMetadata), BindingFlags.Public | BindingFlags.Static)!;
@@ -175,6 +220,10 @@ public sealed class ThrowableTests
 		Assert.Equal(JArrayObject<TThrowable>.Metadata, typeMetadata.GetArrayMetadata());
 		Assert.Equal(typeof(TThrowable), typeMetadata.Type);
 		Assert.Equal(JTypeKind.Class, typeMetadata.Kind);
+		Assert.Equal(ThrowableTests.classNames[typeof(TThrowable)], typeMetadata.ClassName);
+		Assert.Equal(ThrowableTests.classSignatures[typeof(TThrowable)], typeMetadata.Signature);
+		Assert.Equal(ThrowableTests.arraySignatures[typeof(TThrowable)], typeMetadata.ArraySignature);
+		Assert.Equal(ThrowableTests.hashes[typeof(TThrowable)].ToString(), typeMetadata.Hash);
 		Assert.Equal(ThrowableTests.getMetadata.MakeGenericMethod(typeof(TThrowable).BaseType!).Invoke(default, []),
 		             typeMetadata.BaseMetadata);
 		Assert.IsType<JFunctionDefinition<TThrowable>.Parameterless>(

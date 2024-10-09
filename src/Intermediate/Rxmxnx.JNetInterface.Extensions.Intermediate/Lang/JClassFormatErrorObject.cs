@@ -10,11 +10,16 @@ using TypeMetadata = JThrowableTypeMetadata<JClassFormatErrorObject>;
 public class JClassFormatErrorObject : JLinkageErrorObject, IThrowableType<JClassFormatErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ClassFormatErrorHash, 26);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
-	                                                    .Create<JClassFormatErrorObject>("java/lang/ClassFormatError"u8)
-	                                                    .Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JClassFormatErrorObject>(JClassFormatErrorObject.typeInfo,
+		                                                                IClassType.GetMetadata<JLinkageErrorObject>(),
+		                                                                JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JClassFormatErrorObject>.Metadata => JClassFormatErrorObject.typeMetadata;
 

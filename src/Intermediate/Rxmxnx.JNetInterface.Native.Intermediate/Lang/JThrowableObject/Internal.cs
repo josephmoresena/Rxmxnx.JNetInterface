@@ -5,11 +5,15 @@ using TypeMetadata = JThrowableTypeMetadata<JThrowableObject>;
 public partial class JThrowableObject
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ThrowableHash, 19);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JThrowableObject>
-	                                                    .Create("java/lang/Throwable"u8)
-	                                                    .Implements<JSerializableObject>().Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JThrowableObject>(JThrowableObject.typeInfo, JTypeModifier.Extensible,
+		                                                         InterfaceSet.SerializableSet));
 
 	static TypeMetadata IThrowableType<JThrowableObject>.Metadata => JThrowableObject.typeMetadata;
 	static Type IDataType.FamilyType => typeof(JThrowableObject);

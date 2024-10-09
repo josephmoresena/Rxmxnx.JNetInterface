@@ -9,10 +9,9 @@ public abstract partial class JClassTypeMetadata : JReferenceTypeMetadata
 	public override JTypeKind Kind => JTypeKind.Class;
 
 	/// <inheritdoc/>
-	private protected JClassTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
-		className, signature) { }
+	private protected JClassTypeMetadata(ReadOnlySpan<Byte> className) : base(className) { }
 	/// <inheritdoc/>
-	private protected JClassTypeMetadata(CStringSequence information) : base(information) { }
+	private protected JClassTypeMetadata(TypeInfoSequence information) : base(information) { }
 
 	/// <summary>
 	/// Base type property.
@@ -57,10 +56,9 @@ public abstract partial class JClassTypeMetadata<
 	public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TClass>();
 
 	/// <inheritdoc/>
-	private protected JClassTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature) : base(
-		className, signature) { }
+	private protected JClassTypeMetadata(ReadOnlySpan<Byte> className) : base(className) { }
 	/// <inheritdoc/>
-	private protected JClassTypeMetadata(CStringSequence information) : base(information) { }
+	private protected JClassTypeMetadata(TypeInfoSequence information) : base(information) { }
 
 	/// <inheritdoc/>
 	public override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();

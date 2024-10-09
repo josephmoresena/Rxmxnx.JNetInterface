@@ -1,19 +1,30 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JDouble>;
+using IPrimitiveValueType = IPrimitiveType<JDouble, Double>;
+using IPrimitiveFloatingPointType = IPrimitiveFloatingPointType<JDouble, Double>;
+using IPrimitiveSignedType = IPrimitiveSignedType<JDouble, Double>;
 
 /// <summary>
 /// Primitive <c>double</c>. Represents a double-precision floating-point number.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct JDouble : INativeType, IComparable<JDouble>, IEquatable<JDouble>,
-	IPrimitiveFloatingPointType<JDouble, Double>, IPrimitiveSignedType<JDouble, Double>
+	IPrimitiveFloatingPointType, IPrimitiveSignedType
 {
+	/// <summary>
+	/// Primitive type info.
+	/// </summary>
+	private static readonly TypeInfoSequence primitiveInfo = new(ClassNameHelper.DoublePrimitiveHash, 6, 1);
+	/// <summary>
+	/// Wrapper type info.
+	/// </summary>
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.DoubleObjectHash, 16);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JDouble, Double>.TypeMetadataBuilder
-		.Create("double"u8, CommonNames.DoubleSignatureChar).WithWrapperClassName("java/lang/Double"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new IPrimitiveValueType.PrimitiveTypeMetadata(JDouble.primitiveInfo, JDouble.wrapperInfo);
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JDouble;

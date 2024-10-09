@@ -8,11 +8,14 @@ using TypeMetadata = JClassTypeMetadata<JAccessibleObject>;
 public class JAccessibleObject : JLocalObject, IClassType<JAccessibleObject>, IInterfaceObject<JAnnotatedElementObject>
 {
 	/// <summary>
-	/// class metadata.
+	/// Datatype information.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JAccessibleObject>
-	                                                    .Create("java/lang/reflect/AccessibleObject"u8)
-	                                                    .Implements<JAnnotatedElementObject>().Build();
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.AccessibleObjectHash, 34);
+	/// <summary>
+	/// Datatype metadata.
+	/// </summary>
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JAccessibleObject>(
+		JAccessibleObject.typeInfo, JTypeModifier.Extensible, InterfaceSet.AnnotatedElementSet);
 
 	static TypeMetadata IClassType<JAccessibleObject>.Metadata => JAccessibleObject.typeMetadata;
 

@@ -9,7 +9,7 @@ namespace Rxmxnx.JNetInterface.Restricted;
                  Justification = CommonConstants.NoMethodOverloadingJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1694,
                  Justification = CommonConstants.InternalInheritanceJustification)]
-public abstract class NativeFunctionSet
+public abstract partial class NativeFunctionSet
 {
 	/// <summary>
 	/// Returns the name of the current instance.

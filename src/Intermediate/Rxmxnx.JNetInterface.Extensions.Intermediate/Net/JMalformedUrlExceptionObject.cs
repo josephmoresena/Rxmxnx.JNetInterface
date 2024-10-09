@@ -10,11 +10,17 @@ using TypeMetadata = JThrowableTypeMetadata<JMalformedUrlExceptionObject>;
 public class JMalformedUrlExceptionObject : JIoExceptionObject, IThrowableType<JMalformedUrlExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.MalformedUrlExceptionHash, 30);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JIoExceptionObject>
-	                                                    .Create<JMalformedUrlExceptionObject>(
-		                                                    "java/net/MalformedURLException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JMalformedUrlExceptionObject>(JMalformedUrlExceptionObject.typeInfo,
+		                                                                     IClassType
+			                                                                     .GetMetadata<JIoExceptionObject>(),
+		                                                                     JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JMalformedUrlExceptionObject>.Metadata
 		=> JMalformedUrlExceptionObject.typeMetadata;

@@ -28,7 +28,7 @@ public sealed class NioTests
 			proxyEnv.ClearReceivedCalls();
 			proxyEnv.VirtualMachine.ClearReceivedCalls();
 
-			proxyEnv.NewDirectByteBuffer(Arg.Any<IntPtr>(), Arg.Any<Int64>()).Returns(c =>
+			proxyEnv.NewDirectByteBuffer(Arg.Any<IntPtr>(), Arg.Any<Int64>()).Returns(_ =>
 			{
 				JObjectLocalRef localRef = NioTests.fixture.Create<JObjectLocalRef>();
 				bufferRefs.Add(localRef);
@@ -74,6 +74,9 @@ public sealed class NioTests
 	internal void UnknownTest(Boolean isDirect)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JBufferObject>();
+		using IFixedPointer.IDisposable fCtx =
+			typeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		try
 		{
 			JObjectLocalRef localRef = NioTests.fixture.Create<JObjectLocalRef>();
@@ -81,8 +84,6 @@ public sealed class NioTests
 			JStringLocalRef stringRef = NioTests.fixture.Create<JStringLocalRef>();
 			JMethodId getCapacityId = NioTests.fixture.Create<JMethodId>();
 			JMethodId isDirectId = NioTests.fixture.Create<JMethodId>();
-			JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JBufferObject>();
-			using IFixedPointer.IDisposable fCtx = typeMetadata.Information.GetFixedPointer();
 			using IFixedPointer.IDisposable isDirectCtx =
 				NativeFunctionSetImpl.IsDirectBufferDefinition.Information.GetFixedPointer();
 			using IFixedPointer.IDisposable getCapacityCtx =
@@ -96,7 +97,7 @@ public sealed class NioTests
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(stringRef.Value);
 			proxyEnv.GetStringUtfLength(stringRef).Returns(typeMetadata.ClassName.Length);
 			proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>())
-			        .Returns((ReadOnlyValPtr<Byte>)fCtx.Pointer);
+			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
 			proxyEnv.GetDirectBufferAddress(localRef).Returns(address.GetValueOrDefault());
 			proxyEnv.GetDirectBufferCapacity(localRef).Returns(capacity);
@@ -133,6 +134,7 @@ public sealed class NioTests
 		}
 		finally
 		{
+			nameCtx.Dispose();
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 			proxyEnv.FinalizeProxy(true);

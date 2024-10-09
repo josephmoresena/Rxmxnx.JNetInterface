@@ -5,11 +5,14 @@ using TypeMetadata = JClassTypeMetadata<JNumberObject>;
 public partial class JNumberObject
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.NumberHash, 16);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JNumberObject>
-	                                                    .Create("java/lang/Number"u8, JTypeModifier.Abstract)
-	                                                    .Implements<JSerializableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JNumberObject>(
+		JNumberObject.typeInfo, JTypeModifier.Abstract, InterfaceSet.SerializableSet);
 
 	static TypeMetadata IClassType<JNumberObject>.Metadata => JNumberObject.typeMetadata;
 

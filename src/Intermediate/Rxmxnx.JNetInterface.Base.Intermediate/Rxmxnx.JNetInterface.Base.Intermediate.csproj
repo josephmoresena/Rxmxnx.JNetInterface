@@ -12,6 +12,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <ExcludeXmlAssemblyFiles>false</ExcludeXmlAssemblyFiles>
         <LangVersion>latest</LangVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>

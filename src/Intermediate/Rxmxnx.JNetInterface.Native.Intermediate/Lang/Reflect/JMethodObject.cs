@@ -8,11 +8,16 @@ using TypeMetadata = JClassTypeMetadata<JMethodObject>;
 public sealed class JMethodObject : JExecutableObject, IClassType<JMethodObject>
 {
 	/// <summary>
-	/// class metadata.
+	/// Datatype information.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExecutableObject>
-	                                                    .Create<JMethodObject>(
-		                                                    "java/lang/reflect/Method"u8, JTypeModifier.Final).Build();
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.MethodHash, 24);
+	/// <summary>
+	/// Datatype metadata.
+	/// </summary>
+	private static readonly TypeMetadata typeMetadata =
+		JLocalObject.CreateBuiltInMetadata<JMethodObject>(JMethodObject.typeInfo,
+		                                                  IClassType.GetMetadata<JExecutableObject>(),
+		                                                  JTypeModifier.Final);
 
 	static TypeMetadata IClassType<JMethodObject>.Metadata => JMethodObject.typeMetadata;
 

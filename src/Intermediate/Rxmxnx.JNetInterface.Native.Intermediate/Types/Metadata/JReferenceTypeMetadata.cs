@@ -91,6 +91,6 @@ public abstract partial class JReferenceTypeMetadata : JDataTypeMetadata
 				return true;
 			metadata = metadata.BaseMetadata;
 		}
-		return otherMetadata.ClassName.AsSpan().SequenceEqual(CommonNames.Object);
+		return CommonNames.Object.SequenceEqual(otherMetadata.ClassName);
 	}
 }

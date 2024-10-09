@@ -101,6 +101,9 @@ public sealed class ClassParseTests
 	private static void LocalTest(Boolean sameRef, Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JVoidObject>();
+		using IFixedPointer.IDisposable clsCtx =
+			typeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
 		try
 		{
@@ -118,8 +121,6 @@ public sealed class ClassParseTests
 				proxyEnv.VoidObjectLocalRef.Value :
 				ClassParseTests.fixture.Create<JObjectLocalRef>();
 			JStringLocalRef stringRef = ClassParseTests.fixture.Create<JStringLocalRef>();
-			JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JVoidObject>();
-			using IFixedPointer.IDisposable clsCtx = typeMetadata.Information.GetFixedPointer();
 
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
 			IClassFeature classFeature = env.ClassFeature;
@@ -127,7 +128,7 @@ public sealed class ClassParseTests
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(stringRef.Value);
 			proxyEnv.GetStringUtfLength(stringRef).Returns(typeMetadata.ClassName.Length);
 			proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>())
-			        .Returns((ReadOnlyValPtr<Byte>)clsCtx.Pointer);
+			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
 			if (sameRef)
 				Assert.Throws<InvalidOperationException>(
@@ -152,6 +153,7 @@ public sealed class ClassParseTests
 		}
 		finally
 		{
+			nameCtx.Dispose();
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();

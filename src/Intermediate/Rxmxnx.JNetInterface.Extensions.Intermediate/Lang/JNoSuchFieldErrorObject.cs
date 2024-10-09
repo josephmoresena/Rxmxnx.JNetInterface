@@ -10,11 +10,18 @@ using TypeMetadata = JThrowableTypeMetadata<JNoSuchFieldErrorObject>;
 public class JNoSuchFieldErrorObject : JIncompatibleClassChangeErrorObject, IThrowableType<JNoSuchFieldErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.NoSuchFieldErrorHash, 26);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JIncompatibleClassChangeErrorObject>
-	                                                    .Create<JNoSuchFieldErrorObject>("java/lang/NoSuchFieldError"u8)
-	                                                    .Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JNoSuchFieldErrorObject>(JNoSuchFieldErrorObject.typeInfo,
+		                                                                IClassType
+			                                                                .GetMetadata<
+				                                                                JIncompatibleClassChangeErrorObject>(),
+		                                                                JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JNoSuchFieldErrorObject>.Metadata => JNoSuchFieldErrorObject.typeMetadata;
 

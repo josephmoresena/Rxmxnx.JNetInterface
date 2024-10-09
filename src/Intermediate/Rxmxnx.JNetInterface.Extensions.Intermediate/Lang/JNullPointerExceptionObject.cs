@@ -10,11 +10,17 @@ using TypeMetadata = JThrowableTypeMetadata<JNullPointerExceptionObject>;
 public class JNullPointerExceptionObject : JRuntimeExceptionObject, IThrowableType<JNullPointerExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.NullPointerExceptionHash, 30);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JRuntimeExceptionObject>
-	                                                    .Create<JNullPointerExceptionObject>(
-		                                                    "java/lang/NullPointerException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JNullPointerExceptionObject>(JNullPointerExceptionObject.typeInfo,
+		                                                                    IClassType
+			                                                                    .GetMetadata<JRuntimeExceptionObject>(),
+		                                                                    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JNullPointerExceptionObject>.Metadata
 		=> JNullPointerExceptionObject.typeMetadata;

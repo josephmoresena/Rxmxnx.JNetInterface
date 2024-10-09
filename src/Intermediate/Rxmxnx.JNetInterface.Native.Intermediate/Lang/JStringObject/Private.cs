@@ -5,13 +5,23 @@ using TypeMetadata = JClassTypeMetadata<JStringObject>;
 public partial class JStringObject
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.StringHash, 16);
+	/// <summary>
+	/// Datatype interfaces.
+	/// </summary>
+	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+	[
+		IInterfaceType.GetMetadata<JSerializableObject>(),
+		IInterfaceType.GetMetadata<JComparableObject>(),
+		IInterfaceType.GetMetadata<JCharSequenceObject>(),
+	];
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JStringObject>
-	                                                    .Create("java/lang/String"u8, JTypeModifier.Final)
-	                                                    .Implements<JSerializableObject>()
-	                                                    .Implements<JComparableObject>()
-	                                                    .Implements<JCharSequenceObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JStringObject>(
+		JStringObject.typeInfo, JTypeModifier.Final, (InterfaceSet)JStringObject.typeInterfaces);
 
 	// ReSharper disable once UseSymbolAlias
 	static JClassTypeMetadata<JStringObject> IClassType<JStringObject>.Metadata => JStringObject.typeMetadata;

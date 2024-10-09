@@ -117,11 +117,11 @@ partial class JEnvironment
 		private JClassObject GetClass(ReadOnlySpan<Byte> className, JClassLocalRef classRef,
 			WellKnownRuntimeTypeInformation runtimeInformation)
 		{
-			CStringSequence classInformation = MetadataHelper.GetClassInformation(className, true);
-			JTrace.GetClass(classRef, classInformation[0]);
+			TypeInfoSequence classInformation = MetadataHelper.GetClassInformation(className, true);
+			JTrace.GetClass(classRef, classInformation.Name);
 			if (!this._classes.TryGetValue(classInformation.ToString(), out JClassObject? jClass))
 			{
-				JTypeKind kind = classInformation[1][0] == CommonNames.ArraySignaturePrefixChar ?
+				JTypeKind kind = classInformation.Name[0] == CommonNames.ArraySignaturePrefixChar ?
 					JTypeKind.Array :
 					runtimeInformation.Kind.GetValueOrDefault();
 				ITypeInformation typeInformation =

@@ -8,12 +8,22 @@ using TypeMetadata = JClassTypeMetadata<JFieldObject>;
 public sealed partial class JFieldObject : JAccessibleObject, IClassType<JFieldObject>, IInterfaceObject<JMemberObject>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.FieldHash, 23);
+	/// <summary>
+	/// Type interfaces.
+	/// </summary>
+	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+	[
+		IInterfaceType.GetMetadata<JMemberObject>(),
+	];
+	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JAccessibleObject>
-	                                                    .Create<JFieldObject>(
-		                                                    "java/lang/reflect/Field"u8, JTypeModifier.Final)
-	                                                    .Implements<JMemberObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JFieldObject>(
+		JFieldObject.typeInfo, IClassType.GetMetadata<JAccessibleObject>(), JTypeModifier.Final,
+		JFieldObject.typeInterfaces);
 
 	static TypeMetadata IClassType<JFieldObject>.Metadata => JFieldObject.typeMetadata;
 

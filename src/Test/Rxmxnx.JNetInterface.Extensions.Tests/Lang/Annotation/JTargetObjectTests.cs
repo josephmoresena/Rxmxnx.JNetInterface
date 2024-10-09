@@ -51,7 +51,6 @@ public class JTargetObjectTests
 	internal void MetadataTest()
 	{
 		JInterfaceTypeMetadata interfaceTypeMetadata = IInterfaceType.GetMetadata<JTargetObject>();
-		JClassTypeMetadata proxyTypeMetadata = IClassType.GetMetadata<JProxyObject>();
 		String? textValue = interfaceTypeMetadata.ToString();
 
 		Assert.Equal(JTargetObjectTests.hash.ToString(), interfaceTypeMetadata.Hash);

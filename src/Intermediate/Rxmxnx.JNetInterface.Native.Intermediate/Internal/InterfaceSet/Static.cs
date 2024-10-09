@@ -21,9 +21,21 @@ internal partial class InterfaceSet
 	/// </summary>
 	public static readonly IInterfaceSet AnnotationSet = AnnotationInterfaceSet.Instance;
 	/// <summary>
-	/// Primitive wrapper interface set.
+	/// Serializable interface set.
 	/// </summary>
-	public static readonly IInterfaceSet PrimitiveWrapperSet = PrimitiveWrapperInterfaceSet.Instance;
+	public static readonly IInterfaceSet SerializableSet = SerializableInterfaceSet.Instance;
+	/// <summary>
+	/// Comparable interface set.
+	/// </summary>
+	public static readonly IInterfaceSet ComparableSet = ComparableInterfaceSet.Instance;
+	/// <summary>
+	/// AnnotatedElement interface set.
+	/// </summary>
+	public static readonly IInterfaceSet AnnotatedElementSet = AnnotatedElementInterfaceSet.Instance;
+	/// <summary>
+	/// Serializable and Comparable interface set.
+	/// </summary>
+	public static readonly IInterfaceSet SerializableComparableSet = SerializableComparableInterfaceSet.Instance;
 
 	/// <summary>
 	/// Retrieves a set with class interfaces.
@@ -39,12 +51,30 @@ internal partial class InterfaceSet
 		return interfaces.Count == 0 ? baseMetadata.Interfaces : new ClassInterfaceSet(baseMetadata, [.. interfaces,]);
 	}
 	/// <summary>
+	/// Retrieves a set with class interfaces.
+	/// </summary>
+	/// <param name="baseMetadata">A <see cref="JClassTypeMetadata"/> instance.</param>
+	/// <param name="interfaces">A <see cref="ImmutableHashSet{JInterfaceTypeMetadata}"/> instance.</param>
+	/// <returns>A <see cref="IInterfaceSet"/> instance.</returns>
+	public static IInterfaceSet GetClassInterfaces(JClassTypeMetadata baseMetadata,
+		ImmutableHashSet<JInterfaceTypeMetadata> interfaces)
+		=> interfaces.Count == 0 ? baseMetadata.Interfaces : new ClassInterfaceSet(baseMetadata, interfaces);
+	/// <summary>
 	/// Retrieves a set with interface super interfaces.
 	/// </summary>
 	/// <param name="interfaces">A <see cref="IReadOnlySet{JInterfaceTypeMetadata}"/> instance.</param>
 	/// <returns>A <see cref="IInterfaceSet"/> instance.</returns>
 	public static IInterfaceSet GetInterfaceInterfaces(IReadOnlySet<JInterfaceTypeMetadata> interfaces)
 		=> interfaces.Count == 0 ? InterfaceSet.Empty : new InterfaceInterfaceSet([.. interfaces,]);
+
+	/// <summary>
+	/// Defines an explicit conversion of a given <see cref="ImmutableHashSet{JInterfaceTypeMetadata}"/> to
+	/// <see cref="InterfaceSet"/>.
+	/// </summary>
+	/// <param name="interfaces">A <see cref="ImmutableHashSet{JInterfaceTypeMetadata}"/> to implicitly convert.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static explicit operator InterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> interfaces)
+		=> new(interfaces);
 
 	/// <summary>
 	/// Initializes an operation and retrieves operation hash set.

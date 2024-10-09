@@ -8,12 +8,15 @@ using TypeMetadata = JClassTypeMetadata<JDoubleBufferObject>;
 public class JDoubleBufferObject : JBufferObject<JDouble>, IClassType<JDoubleBufferObject>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.DoubleBufferHash, 21);
+	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
-	                                                    .Create<JDoubleBufferObject>(
-		                                                    "java/nio/DoubleBuffer"u8, JTypeModifier.Abstract)
-	                                                    .Implements<JComparableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JDoubleBufferObject>(
+		JDoubleBufferObject.typeInfo, IClassType.GetMetadata<JBufferObject>(), JTypeModifier.Abstract,
+		InterfaceSet.ComparableSet);
 
 	static TypeMetadata IClassType<JDoubleBufferObject>.Metadata => JDoubleBufferObject.typeMetadata;
 

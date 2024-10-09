@@ -10,11 +10,16 @@ using TypeMetadata = JThrowableTypeMetadata<JClassCircularityErrorObject>;
 public class JClassCircularityErrorObject : JLinkageErrorObject, IThrowableType<JClassCircularityErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ClassCircularityErrorHash, 31);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
-	                                                    .Create<JClassCircularityErrorObject>(
-		                                                    "java/lang/ClassCircularityError"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JClassCircularityErrorObject>(
+			    JClassCircularityErrorObject.typeInfo, IClassType.GetMetadata<JLinkageErrorObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JClassCircularityErrorObject>.Metadata
 		=> JClassCircularityErrorObject.typeMetadata;

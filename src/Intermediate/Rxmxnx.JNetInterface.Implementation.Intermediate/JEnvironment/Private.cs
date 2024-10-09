@@ -71,7 +71,7 @@ partial class JEnvironment
 		    elementSignature[^1] == CommonNames.ObjectSignatureSuffixChar)
 			// Object class name is signature without L prefix and ; suffix.
 			elementClassName = elementSignature[1..^1];
-		CStringSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);
+		TypeInfoSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);
 		String elementHash = elementClassInformation.ToString();
 		if (elementSignature[0] == CommonNames.ArraySignaturePrefixChar)
 			return this.GetArrayArrayTypeMetadata(arraySignature, arrayHash, elementSignature, elementHash);
@@ -282,7 +282,7 @@ partial class JEnvironment
 				MetadataHelper.RegisterSuperClass(jClass.Hash, superClass.Hash);
 
 				// Super class is java.lang.Object.
-				if (CommonNames.Object.AsSpan().SequenceEqual(superClass.Name))
+				if (CommonNames.Object.SequenceEqual(superClass.Name))
 					break;
 
 				// Super class is java.lang.reflect.Proxy.

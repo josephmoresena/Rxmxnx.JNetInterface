@@ -8,8 +8,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimitiveWrapperType<JShortObject, JShort>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JShortObject> typeMetadata =
-		new(TypeMetadataBuilder<JShortObject>.Build(IPrimitiveType.GetMetadata<JShort>(),
-		                                            IClassType.GetMetadata<JNumberObject>()));
+		new(JLocalObject.CreateBuiltInMetadata<JShortObject>(IPrimitiveType.GetMetadata<JShort>(),
+		                                                     IClassType.GetMetadata<JNumberObject>()));
 
 	static JPrimitiveWrapperTypeMetadata<JShortObject> IPrimitiveWrapperType<JShortObject>.Metadata
 		=> JShortObject.typeMetadata;

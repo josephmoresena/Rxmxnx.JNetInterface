@@ -8,11 +8,16 @@ using TypeMetadata = JThrowableTypeMetadata<JLinkageErrorObject>;
 public class JLinkageErrorObject : JErrorObject, IThrowableType<JLinkageErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.LinkageErrorHash, 22);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JErrorObject>
-	                                                    .Create<JLinkageErrorObject>("java/lang/LinkageError"u8)
-	                                                    .Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JLinkageErrorObject>(JLinkageErrorObject.typeInfo,
+		                                                            IClassType.GetMetadata<JErrorObject>(),
+		                                                            JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JLinkageErrorObject>.Metadata => JLinkageErrorObject.typeMetadata;
 

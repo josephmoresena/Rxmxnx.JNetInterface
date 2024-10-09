@@ -13,11 +13,22 @@ public class JDirectByteBufferObject : JMappedByteBufferObject, IClassType<JDire
 	IDirectBufferObject<JByte>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.DirectByteBufferHash, 25);
+	/// <summary>
+	/// Type interfaces.
+	/// </summary>
+	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+	[
+		IInterfaceType.GetMetadata<JDirectBufferObject>(),
+	];
+	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JMappedByteBufferObject>
-	                                                    .Create<JDirectByteBufferObject>("java/nio/DirectByteBuffer"u8)
-	                                                    .Implements<JDirectBufferObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JDirectByteBufferObject>(
+		JDirectByteBufferObject.typeInfo, IClassType.GetMetadata<JMappedByteBufferObject>(), JTypeModifier.Extensible,
+		JDirectByteBufferObject.typeInterfaces);
 
 	static TypeMetadata IClassType<JDirectByteBufferObject>.Metadata => JDirectByteBufferObject.typeMetadata;
 

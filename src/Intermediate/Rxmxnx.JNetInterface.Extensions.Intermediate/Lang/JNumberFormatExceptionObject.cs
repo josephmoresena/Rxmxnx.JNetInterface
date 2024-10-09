@@ -11,11 +11,18 @@ public class JNumberFormatExceptionObject : JIllegalArgumentExceptionObject,
 	IThrowableType<JNumberFormatExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.NumberFormatExceptionHash, 31);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JIllegalArgumentExceptionObject>
-	                                                    .Create<JNumberFormatExceptionObject>(
-		                                                    "java/lang/NumberFormatException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JNumberFormatExceptionObject>(JNumberFormatExceptionObject.typeInfo,
+		                                                                     IClassType
+			                                                                     .GetMetadata<
+				                                                                     JIllegalArgumentExceptionObject>(),
+		                                                                     JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JNumberFormatExceptionObject>.Metadata
 		=> JNumberFormatExceptionObject.typeMetadata;

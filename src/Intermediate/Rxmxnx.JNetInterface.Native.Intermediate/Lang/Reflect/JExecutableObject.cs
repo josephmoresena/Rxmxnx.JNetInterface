@@ -9,13 +9,23 @@ public partial class JExecutableObject : JAccessibleObject, IClassType<JExecutab
 	IInterfaceObject<JGenericDeclarationObject>, IInterfaceObject<JMemberObject>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ExecutableHash, 28);
+	/// <summary>
+	/// Type interfaces.
+	/// </summary>
+	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+	[
+		IInterfaceType.GetMetadata<JGenericDeclarationObject>(),
+		IInterfaceType.GetMetadata<JMemberObject>(),
+	];
+	/// <summary>
 	/// class metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JAccessibleObject>
-	                                                    .Create<JExecutableObject>(
-		                                                    "java/lang/reflect/Executable"u8, JTypeModifier.Abstract)
-	                                                    .Implements<JGenericDeclarationObject>()
-	                                                    .Implements<JMemberObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JExecutableObject>(
+		JExecutableObject.typeInfo, IClassType.GetMetadata<JAccessibleObject>(), JTypeModifier.Abstract,
+		JExecutableObject.typeInterfaces);
 
 	static TypeMetadata IClassType<JExecutableObject>.Metadata => JExecutableObject.typeMetadata;
 

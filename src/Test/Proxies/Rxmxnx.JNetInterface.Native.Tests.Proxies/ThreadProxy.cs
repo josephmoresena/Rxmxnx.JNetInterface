@@ -29,16 +29,16 @@ public abstract class ThreadProxy : EnvironmentProxy, IThread
 	public static ThreadProxy CreateEnvironment(EnvironmentProxy proxy)
 	{
 		ThreadProxy thread = Substitute.For<ThreadProxy>();
-		thread.Version.Returns(c => proxy.Version);
-		thread.VirtualMachine.Returns(c => proxy.VirtualMachine);
-		thread.NoProxy.Returns(c => proxy.NoProxy);
-		thread.AccessFeature.Returns(c => proxy.AccessFeature);
-		thread.ClassFeature.Returns(c => proxy.ClassFeature);
-		thread.ReferenceFeature.Returns(c => proxy.ReferenceFeature);
-		thread.StringFeature.Returns(c => proxy.StringFeature);
-		thread.ArrayFeature.Returns(c => proxy.ArrayFeature);
-		thread.NioFeature.Returns(c => proxy.NioFeature);
-		thread.FunctionSet.Returns(c => proxy.FunctionSet);
+		thread.Version.Returns(_ => proxy.Version);
+		thread.VirtualMachine.Returns(_ => proxy.VirtualMachine);
+		thread.NoProxy.Returns(_ => proxy.NoProxy);
+		thread.AccessFeature.Returns(_ => proxy.AccessFeature);
+		thread.ClassFeature.Returns(_ => proxy.ClassFeature);
+		thread.ReferenceFeature.Returns(_ => proxy.ReferenceFeature);
+		thread.StringFeature.Returns(_ => proxy.StringFeature);
+		thread.ArrayFeature.Returns(_ => proxy.ArrayFeature);
+		thread.NioFeature.Returns(_ => proxy.NioFeature);
+		thread.FunctionSet.Returns(_ => proxy.FunctionSet);
 		return thread;
 	}
 }

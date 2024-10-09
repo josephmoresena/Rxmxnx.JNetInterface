@@ -3,8 +3,36 @@ namespace Rxmxnx.JNetInterface.Tests.Lang;
 [ExcludeFromCodeCoverage]
 public sealed class NumberObjectTests
 {
+	private static readonly Dictionary<Type, CString> classNames = new()
+	{
+		{ typeof(JByteObject), new("java/lang/Byte"u8) },
+		{ typeof(JDoubleObject), new("java/lang/Double"u8) },
+		{ typeof(JFloatObject), new("java/lang/Float"u8) },
+		{ typeof(JIntegerObject), new("java/lang/Integer"u8) },
+		{ typeof(JLongObject), new("java/lang/Long"u8) },
+		{ typeof(JShortObject), new("java/lang/Short"u8) },
+	};
+	private static readonly Dictionary<Type, CString> classSignatures =
+		NumberObjectTests.classNames.ToDictionary(p => p.Key, p => CString.Concat("L"u8, p.Value, ";"u8));
+	private static readonly Dictionary<Type, CString> arraySignatures =
+		NumberObjectTests.classSignatures.ToDictionary(p => p.Key, p => CString.Concat("["u8, p.Value));
+	private static readonly Dictionary<Type, CStringSequence> hashes =
+		NumberObjectTests.classSignatures.Keys.ToDictionary(
+			t => t,
+			t => new CStringSequence(NumberObjectTests.classNames[t], NumberObjectTests.classSignatures[t],
+			                         NumberObjectTests.arraySignatures[t]));
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
+	[Fact]
+	internal void ConstructorDefinitionTest()
+	{
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.ByteConstructor);
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.DoubleConstructor);
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.FloatConstructor);
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.IntegerConstructor);
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.LongConstructor);
+		NumberObjectTests.DefinitionTest(NativeFunctionSetImpl.ShortConstructor);
+	}
 	[Fact]
 	internal void ByteTest()
 	{
@@ -159,6 +187,10 @@ public sealed class NumberObjectTests
 		Assert.Equal(primitiveTypeMetadata.WrapperClassSignature, typeMetadata.Signature);
 		Assert.Equal(primitiveTypeMetadata, typeMetadata.PrimitiveMetadata);
 		Assert.Equal(primitiveTypeMetadata.ArgumentMetadata, typeMetadata.PrimitiveArgumentMetadata);
+		Assert.Equal(NumberObjectTests.classNames[typeof(TNumber)], typeMetadata.ClassName);
+		Assert.Equal(NumberObjectTests.classSignatures[typeof(TNumber)], typeMetadata.Signature);
+		Assert.Equal(NumberObjectTests.arraySignatures[typeof(TNumber)], typeMetadata.ArraySignature);
+		Assert.Equal(NumberObjectTests.hashes[typeof(TNumber)].ToString(), typeMetadata.Hash);
 		Assert.IsType<JFunctionDefinition<TNumber>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFunctionDefinition<TNumber>>(
@@ -344,5 +376,17 @@ public sealed class NumberObjectTests
 			Assert.Throws(e.GetType(), () => equatable.Equals(primitive));
 			Assert.Throws(e.GetType(), () => equatable.Equals((JObject)primitive));
 		}
+	}
+	private static void DefinitionTest<TPrimitive>(PrimitiveWrapperConstructor<TPrimitive> constructor)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IPrimitiveEquatable, IEquatable<TPrimitive>
+	{
+		JArgumentMetadata arg = JArgumentMetadata.Get<TPrimitive>();
+		JAccessibleObjectDefinition definition = JConstructorDefinition.Create([arg,]);
+		Assert.Equal(constructor, definition);
+		Assert.Equal(constructor.Name, definition.Name);
+		Assert.Equal(constructor.Descriptor, definition.Descriptor);
+		Assert.Equal(constructor.Hash, definition.Hash);
+		Assert.Equal(constructor.Name, "<init>"u8);
+		Assert.Equal(constructor.Descriptor, (CString)$"({arg.Signature})V");
 	}
 }

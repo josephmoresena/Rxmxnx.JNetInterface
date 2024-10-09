@@ -8,11 +8,14 @@ public sealed class JMainMethodDefinitionTests
 	[Fact]
 	internal void InformationTest()
 	{
+		JMethodDefinition definition =
+			JMethodDefinition.Create("main"u8, [JArgumentMetadata.Get<JArrayObject<JStringObject>>(),]);
 		Assert.True("main"u8.SequenceEqual(JMainMethodDefinition.Instance.Name));
 		Assert.True("([Ljava/lang/String;)V"u8.SequenceEqual(JMainMethodDefinition.Instance.Descriptor));
 		Assert.Equal(1, JMainMethodDefinition.Instance.Count);
 		Assert.Single(JMainMethodDefinition.Instance.Sizes);
 		Assert.Equal(IntPtr.Size, JMainMethodDefinition.Instance.Sizes[0]);
+		Assert.Equal(JMainMethodDefinition.Instance, definition);
 	}
 	[Fact]
 	internal void InvokeWithNullArgsTest()

@@ -10,12 +10,15 @@ using TypeMetadata = JClassTypeMetadata<JMappedByteBufferObject>;
 public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByteBufferObject>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.MappedByteBufferHash, 25);
+	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JByteBufferObject>
-	                                                    .Create<JMappedByteBufferObject>(
-		                                                    "java/nio/MappedByteBuffer"u8, JTypeModifier.Abstract)
-	                                                    .Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JMappedByteBufferObject>(
+		JMappedByteBufferObject.typeInfo, IClassType.GetMetadata<JByteBufferObject>(), JTypeModifier.Abstract);
+
 	static TypeMetadata IClassType<JMappedByteBufferObject>.Metadata => JMappedByteBufferObject.typeMetadata;
 
 	/// <inheritdoc/>

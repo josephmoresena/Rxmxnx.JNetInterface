@@ -10,11 +10,16 @@ using TypeMetadata = JThrowableTypeMetadata<JUnsatisfiedLinkErrorObject>;
 public class JUnsatisfiedLinkErrorObject : JLinkageErrorObject, IThrowableType<JUnsatisfiedLinkErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.UnsatisfiedLinkErrorHash, 30);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
-	                                                    .Create<JUnsatisfiedLinkErrorObject>(
-		                                                    "java/lang/UnsatisfiedLinkError"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JUnsatisfiedLinkErrorObject>(
+			    JUnsatisfiedLinkErrorObject.typeInfo, IClassType.GetMetadata<JLinkageErrorObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JUnsatisfiedLinkErrorObject>.Metadata
 		=> JUnsatisfiedLinkErrorObject.typeMetadata;

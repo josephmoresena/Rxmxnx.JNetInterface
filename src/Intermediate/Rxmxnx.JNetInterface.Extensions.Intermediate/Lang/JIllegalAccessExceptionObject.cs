@@ -11,11 +11,16 @@ public class JIllegalAccessExceptionObject : JReflectiveOperationExceptionObject
 	IThrowableType<JIllegalAccessExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IllegalAccessExceptionHash, 32);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JReflectiveOperationExceptionObject>
-	                                                    .Create<JIllegalAccessExceptionObject>(
-		                                                    "java/lang/IllegalAccessException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JIllegalAccessExceptionObject>(
+			    JIllegalAccessExceptionObject.typeInfo, IClassType.GetMetadata<JReflectiveOperationExceptionObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JIllegalAccessExceptionObject>.Metadata
 		=> JIllegalAccessExceptionObject.typeMetadata;

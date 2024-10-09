@@ -81,10 +81,14 @@ public class JModifierObject : JLocalObject, IClassType<JModifierObject>
 	public const Modifiers PrimitiveModifiers = Modifiers.Abstract | Modifiers.Final | Modifiers.Public;
 
 	/// <summary>
-	/// class metadata.
+	/// Datatype information.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JModifierObject>
-	                                                    .Create("java/lang/reflect/Modifier"u8).Build();
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ModifierHash, 26);
+	/// <summary>
+	/// Datatype metadata.
+	/// </summary>
+	private static readonly TypeMetadata typeMetadata =
+		JLocalObject.CreateBuiltInMetadata<JModifierObject>(JModifierObject.typeInfo, JTypeModifier.Extensible);
 
 	static TypeMetadata IClassType<JModifierObject>.Metadata => JModifierObject.typeMetadata;
 

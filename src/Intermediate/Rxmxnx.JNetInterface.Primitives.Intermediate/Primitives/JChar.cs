@@ -1,19 +1,28 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JChar>;
+using IPrimitiveValueType = IPrimitiveType<JChar, Char>;
+using IPrimitiveIntegerType = IPrimitiveIntegerType<JChar, Char>;
 
 /// <summary>
 /// Primitive <c>char</c>. Represents a character as a UTF-16 code unit.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatable<JChar>,
-	IPrimitiveIntegerType<JChar, Char>
+public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatable<JChar>, IPrimitiveIntegerType
 {
+	/// <summary>
+	/// Primitive type info.
+	/// </summary>
+	private static readonly TypeInfoSequence primitiveInfo = new(ClassNameHelper.CharPrimitiveHash, 4, 1);
+	/// <summary>
+	/// Wrapper type info.
+	/// </summary>
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.CharacterObjectHash, 19);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JChar, Char>.TypeMetadataBuilder
-		.Create("char"u8, CommonNames.CharSignatureChar).WithWrapperClassName("java/lang/Character"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new IPrimitiveValueType.PrimitiveTypeMetadata(JChar.primitiveInfo, JChar.wrapperInfo);
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JChar;

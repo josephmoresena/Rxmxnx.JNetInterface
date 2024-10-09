@@ -10,11 +10,16 @@ using TypeMetadata = JThrowableTypeMetadata<JClassCastExceptionObject>;
 public class JClassCastExceptionObject : JRuntimeExceptionObject, IThrowableType<JClassCastExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ClassCastExceptionHash, 28);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JRuntimeExceptionObject>
-	                                                    .Create<JClassCastExceptionObject>(
-		                                                    "java/lang/ClassCastException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JClassCastExceptionObject>(
+			    JClassCastExceptionObject.typeInfo, IClassType.GetMetadata<JRuntimeExceptionObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JClassCastExceptionObject>.Metadata => JClassCastExceptionObject.typeMetadata;
 

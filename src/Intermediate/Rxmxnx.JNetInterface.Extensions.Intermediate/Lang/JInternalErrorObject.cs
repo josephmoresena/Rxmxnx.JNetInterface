@@ -10,11 +10,17 @@ using TypeMetadata = JThrowableTypeMetadata<JInternalErrorObject>;
 public class JInternalErrorObject : JVirtualMachineErrorObject, IThrowableType<JInternalErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.InternalErrorHash, 23);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JVirtualMachineErrorObject>
-	                                                    .Create<JInternalErrorObject>("java/lang/InternalError"u8)
-	                                                    .Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JInternalErrorObject>(JInternalErrorObject.typeInfo,
+		                                                             IClassType
+			                                                             .GetMetadata<JVirtualMachineErrorObject>(),
+		                                                             JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JInternalErrorObject>.Metadata => JInternalErrorObject.typeMetadata;
 

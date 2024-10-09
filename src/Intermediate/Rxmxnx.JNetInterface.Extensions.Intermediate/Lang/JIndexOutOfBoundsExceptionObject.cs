@@ -11,11 +11,16 @@ public class JIndexOutOfBoundsExceptionObject : JRuntimeExceptionObject,
 	IThrowableType<JIndexOutOfBoundsExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IndexOutOfBoundsExceptionHash, 35);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JRuntimeExceptionObject>
-	                                                    .Create<JIndexOutOfBoundsExceptionObject>(
-		                                                    "java/lang/IndexOutOfBoundsException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JIndexOutOfBoundsExceptionObject>(
+			    JIndexOutOfBoundsExceptionObject.typeInfo, IClassType.GetMetadata<JRuntimeExceptionObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JIndexOutOfBoundsExceptionObject>.Metadata
 		=> JIndexOutOfBoundsExceptionObject.typeMetadata;

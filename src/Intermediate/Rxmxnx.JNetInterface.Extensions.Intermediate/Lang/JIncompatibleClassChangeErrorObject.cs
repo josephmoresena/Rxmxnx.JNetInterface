@@ -11,11 +11,16 @@ public class JIncompatibleClassChangeErrorObject : JLinkageErrorObject,
 	IThrowableType<JIncompatibleClassChangeErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.IncompatibleClassChangeErrorHash, 38);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JLinkageErrorObject>
-	                                                    .Create<JIncompatibleClassChangeErrorObject>(
-		                                                    "java/lang/IncompatibleClassChangeError"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JIncompatibleClassChangeErrorObject>(
+			    JIncompatibleClassChangeErrorObject.typeInfo, IClassType.GetMetadata<JLinkageErrorObject>(),
+			    JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JIncompatibleClassChangeErrorObject>.Metadata
 		=> JIncompatibleClassChangeErrorObject.typeMetadata;

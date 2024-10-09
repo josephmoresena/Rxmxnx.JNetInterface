@@ -7,7 +7,7 @@ public sealed class JVoidObject : JLocalObject.Uninstantiable<JVoidObject>, IPri
 	IPrimitiveWrapperType<JVoidObject>, IUninstantiableType<JVoidObject>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JVoidObject> typeMetadata =
-		new(TypeMetadataBuilder<JVoidObject>.Build(JPrimitiveTypeMetadata.VoidMetadata));
+		new(JLocalObject.CreateBuiltInMetadata<JVoidObject>(JPrimitiveTypeMetadata.VoidMetadata));
 
 	static JPrimitiveWrapperTypeMetadata<JVoidObject> IPrimitiveWrapperType<JVoidObject>.Metadata
 		=> JVoidObject.typeMetadata;

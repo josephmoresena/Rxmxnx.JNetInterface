@@ -10,10 +10,14 @@ using TypeMetadata = JInterfaceTypeMetadata<JMemberObject>;
 public sealed class JMemberObject : JInterfaceObject<JMemberObject>, IInterfaceType<JMemberObject>
 {
 	/// <summary>
-	/// class metadata.
+	/// Datatype information.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JMemberObject>
-	                                                    .Create("java/lang/reflect/Member"u8).Build();
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.MemberHash, 24);
+	/// <summary>
+	/// Datatype metadata.
+	/// </summary>
+	private static readonly TypeMetadata typeMetadata =
+		JLocalObject.InterfaceView.CreateBuiltInMetadata<JMemberObject>(JMemberObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JMemberObject>.Metadata => JMemberObject.typeMetadata;
 

@@ -8,11 +8,16 @@ using TypeMetadata = JThrowableTypeMetadata<JParseExceptionObject>;
 public class JParseExceptionObject : JExceptionObject, IThrowableType<JParseExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ParseExceptionHash, 24);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JExceptionObject>
-	                                                    .Create<JParseExceptionObject>("java/text/ParseException"u8)
-	                                                    .Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JParseExceptionObject>(JParseExceptionObject.typeInfo,
+		                                                              IClassType.GetMetadata<JExceptionObject>(),
+		                                                              JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JParseExceptionObject>.Metadata => JParseExceptionObject.typeMetadata;
 

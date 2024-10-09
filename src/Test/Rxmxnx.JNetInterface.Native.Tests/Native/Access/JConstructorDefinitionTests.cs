@@ -13,6 +13,22 @@ public sealed class JConstructorDefinitionTests
 		$"({String.Concat(JConstructorDefinitionTests.args.Select(a => a.Signature))})V";
 
 	[Fact]
+	internal void ParameterlessTest()
+	{
+		JConstructorDefinition definition = JConstructorDefinition.Create([]);
+		ReadOnlySpan<JConstructorDefinition.Parameterless> span = [new(), new(), new(), new(),];
+		foreach (JAccessibleObjectDefinition def in span)
+		{
+			Assert.Equal(definition, def);
+			Assert.Equal(definition.Name, def.Name);
+			Assert.Equal(definition.Descriptor, def.Descriptor);
+			Assert.Equal(definition.Hash, def.Hash);
+			Assert.Equal("<init>"u8, def.Name);
+			Assert.Equal("()V"u8, def.Descriptor);
+			Assert.True(Object.ReferenceEquals(JAccessibleObjectDefinition.ParameterlessConstructorHash, def.Hash));
+		}
+	}
+	[Fact]
 	internal void ObjectTest() => JConstructorDefinitionTests.ConstructorClassTest<JLocalObject>();
 	[Fact]
 	internal void ClassTest() => JConstructorDefinitionTests.ConstructorClassTest<JClassObject>();

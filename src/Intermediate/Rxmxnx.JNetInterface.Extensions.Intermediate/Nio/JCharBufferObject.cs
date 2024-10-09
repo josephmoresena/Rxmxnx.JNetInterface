@@ -9,13 +9,25 @@ public class JCharBufferObject : JBufferObject<JChar>, IClassType<JCharBufferObj
 	IInterfaceObject<JAppendableObject>, IInterfaceObject<JReadableObject>
 {
 	/// <summary>
+	/// Type information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.CharBufferHash, 19);
+	/// <summary>
+	/// Type interfaces.
+	/// </summary>
+	private static readonly ImmutableHashSet<JInterfaceTypeMetadata> typeInterfaces =
+	[
+		IInterfaceType.GetMetadata<JComparableObject>(),
+		IInterfaceType.GetMetadata<JCharSequenceObject>(),
+		IInterfaceType.GetMetadata<JAppendableObject>(),
+		IInterfaceType.GetMetadata<JReadableObject>(),
+	];
+	/// <summary>
 	/// Type metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JBufferObject>
-	                                                    .Create<JCharBufferObject>(
-		                                                    "java/ nio/ CharBuffer"u8, JTypeModifier.Abstract)
-	                                                    .Implements<JComparableObject>().Implements<JAppendableObject>()
-	                                                    .Implements<JReadableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JCharBufferObject>(
+		JCharBufferObject.typeInfo, IClassType.GetMetadata<JBufferObject>(), JTypeModifier.Abstract,
+		JCharBufferObject.typeInterfaces);
 
 	static TypeMetadata IClassType<JCharBufferObject>.Metadata => JCharBufferObject.typeMetadata;
 

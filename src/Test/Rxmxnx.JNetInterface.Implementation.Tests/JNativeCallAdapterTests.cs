@@ -22,7 +22,8 @@ public sealed partial class JNativeCallAdapterTests
 		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JStringLocalRef clsStrRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JClassTypeMetadata classClassTypeMetadata = IClassType.GetMetadata<JClassObject>();
-		using IFixedPointer.IDisposable classCtx = classClassTypeMetadata.Information.GetFixedPointer();
+		using IFixedPointer.IDisposable classCtx =
+			classClassTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameNameCtx);
 		using IReadOnlyFixedContext<Char>.IDisposable ctx = jClass.Hash.AsMemory().GetFixedContext();
 		proxyEnv.GetObjectClass(classRef.Value).Returns(proxyEnv.ClassLocalRef);
 		proxyEnv.GetObjectRefType(classRef.Value).Returns(JReferenceType.LocalRefType);
@@ -34,7 +35,7 @@ public sealed partial class JNativeCallAdapterTests
 		                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(clsStrRef.Value);
 		proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
 		proxyEnv.GetStringUtfChars(clsStrRef, Arg.Any<ValPtr<JBoolean>>())
-		        .Returns((ReadOnlyValPtr<Byte>)classCtx.Pointer);
+		        .Returns((ReadOnlyValPtr<Byte>)nameNameCtx.Pointer);
 
 		JNativeCallAdapter adapter =
 			JNativeCallAdapter.Create(proxyEnv.Reference, classRef, out JClassObject jClass2).Build();
@@ -42,6 +43,7 @@ public sealed partial class JNativeCallAdapterTests
 		Assert.True(Object.ReferenceEquals(jClass, jClass2));
 		Assert.Equal(jClass.Reference, adapter.FinalizeCall(jClass2));
 		Assert.Equal(orClasRef.IsDefault, JObject.IsNullOrDefault(jClass));
+		nameNameCtx.Dispose();
 	}
 	private static void FinalizeTest(NativeInterfaceProxy proxyEnv, CallResult result, JNativeCallAdapter adapter,
 		JLocalObject? testObject = default, JObjectLocalRef localRef = default, JClassObject? testClass = default,
@@ -482,16 +484,18 @@ public sealed partial class JNativeCallAdapterTests
 		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JArrayTypeMetadata arrayTypeMetadata =
 			primitive ? JArrayObject<JInt>.Metadata : JArrayObject<JClassObject>.Metadata;
+		using IFixedPointer.IDisposable ctx =
+			arrayTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 
 		try
 		{
 			proxyEnv.GetObjectClass(arrayRef.Value).Returns(classRef);
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
-			using IFixedPointer.IDisposable ctx = arrayTypeMetadata.Information.GetFixedPointer();
 			proxyEnv.GetStringUtfLength(strRef).Returns(arrayTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
-			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
+			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
+			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
 			_ = builder.WithParameter(arrayRef, out JArrayObject result);
 			Assert.Equal(arrayRef, result.Reference);
@@ -500,6 +504,7 @@ public sealed partial class JNativeCallAdapterTests
 		}
 		finally
 		{
+			nameCtx.Dispose();
 			proxyEnv.Received(1).GetObjectRefType(arrayRef.Value);
 			proxyEnv.Received(1).GetObjectClass(Arg.Any<JObjectLocalRef>());
 			proxyEnv.Received(1).GetStringUtfLength(strRef);
@@ -521,15 +526,18 @@ public sealed partial class JNativeCallAdapterTests
 		JArrayTypeMetadata arrayTypeMetadata = JArrayObject<TDataType>.Metadata;
 		Boolean final = arrayTypeMetadata.Modifier == JTypeModifier.Final;
 
+		using IFixedPointer.IDisposable ctx =
+			arrayTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
+
 		try
 		{
 			proxyEnv.GetObjectClass(arrayRef.Value).Returns(classRef);
 			proxyEnv.GetObjectRefType(arrayRef.Value).Returns(JReferenceType.LocalRefType);
-			using IFixedPointer.IDisposable ctx = arrayTypeMetadata.Information.GetFixedPointer();
 			proxyEnv.GetStringUtfLength(strRef).Returns(arrayTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
-			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
+			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
+			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
 			_ = builder.WithParameter(arrayRef, out JArrayObject<TDataType> result);
 			Assert.Equal(arrayRef, result.Reference);
@@ -538,6 +546,7 @@ public sealed partial class JNativeCallAdapterTests
 		}
 		finally
 		{
+			nameCtx.Dispose();
 			proxyEnv.Received(1).GetObjectRefType(arrayRef.Value);
 			proxyEnv.Received(final ? 0 : 1).GetObjectClass(Arg.Any<JObjectLocalRef>());
 			proxyEnv.Received(final ? 0 : 1).GetStringUtfLength(strRef);
@@ -578,6 +587,8 @@ public sealed partial class JNativeCallAdapterTests
 		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<JThrowableObject>();
 		Boolean final = classTypeMetadata.Modifier == JTypeModifier.Final;
+		using IFixedPointer.IDisposable ctx =
+			classTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 
 		proxyEnv.ClearReceivedCalls();
 		proxyEnv.VirtualMachine.ClearReceivedCalls();
@@ -586,11 +597,11 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(throwableRef.Value).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetObjectClass(throwableRef.Value).Returns(classRef);
-			using IFixedPointer.IDisposable ctx = classTypeMetadata.Information.GetFixedPointer();
 			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
-			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
+			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
+			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
 			_ = builder.WithParameter(throwableRef, out JThrowableObject result);
 			Assert.Equal(throwableRef, result.Reference);
@@ -599,6 +610,7 @@ public sealed partial class JNativeCallAdapterTests
 		}
 		finally
 		{
+			nameCtx.Dispose();
 			proxyEnv.Received(1).GetObjectRefType(throwableRef.Value);
 			proxyEnv.Received(final ? 0 : 1).GetObjectClass(Arg.Any<JObjectLocalRef>());
 			proxyEnv.Received(final ? 0 : 1).GetStringUtfLength(strRef);
@@ -618,6 +630,8 @@ public sealed partial class JNativeCallAdapterTests
 		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<TThrowable>();
 		Boolean final = classTypeMetadata.Modifier == JTypeModifier.Final;
+		using IFixedPointer.IDisposable ctx =
+			classTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 
 		proxyEnv.ClearReceivedCalls();
 		proxyEnv.VirtualMachine.ClearReceivedCalls();
@@ -626,11 +640,11 @@ public sealed partial class JNativeCallAdapterTests
 		{
 			proxyEnv.GetObjectRefType(throwableRef.Value).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetObjectClass(throwableRef.Value).Returns(classRef);
-			using IFixedPointer.IDisposable ctx = classTypeMetadata.Information.GetFixedPointer();
 			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
-			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctx.Pointer);
+			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
+			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
 			_ = builder.WithParameter(throwableRef, out TThrowable result);
 			Assert.Equal(throwableRef, result.Reference);
@@ -639,6 +653,7 @@ public sealed partial class JNativeCallAdapterTests
 		}
 		finally
 		{
+			nameCtx.Dispose();
 			proxyEnv.Received(1).GetObjectRefType(throwableRef.Value);
 			proxyEnv.Received(final ? 0 : 1).GetObjectClass(Arg.Any<JObjectLocalRef>());
 			proxyEnv.Received(final ? 0 : 1).GetStringUtfLength(strRef);

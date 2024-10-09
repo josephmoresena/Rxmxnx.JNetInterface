@@ -7,8 +7,19 @@ public partial class JFunctionDefinition<TResult>
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-	public sealed class Parameterless(ReadOnlySpan<Byte> functionName) : JFunctionDefinition<TResult>(functionName)
+	public sealed class Parameterless : JFunctionDefinition<TResult>
 	{
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="functionName">Function name.</param>
+		public Parameterless(ReadOnlySpan<Byte> functionName) : base(functionName) { }
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="info">Function information.</param>
+		internal Parameterless(AccessibleInfoSequence info) : base(info, 0, [], 0) { }
+
 		/// <summary>
 		/// Invokes a function on <paramref name="jLocal"/> which matches with current definition.
 		/// </summary>

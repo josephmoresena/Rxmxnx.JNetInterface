@@ -10,10 +10,15 @@ using TypeMetadata = JInterfaceTypeMetadata<JCharSequenceObject>;
 public sealed class JCharSequenceObject : JInterfaceObject<JCharSequenceObject>, IInterfaceType<JCharSequenceObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.CharSequenceHash, 22);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata =
-		TypeMetadataBuilder<JCharSequenceObject>.Create("java/lang/CharSequence"u8).Build();
+		JLocalObject.InterfaceView.CreateBuiltInMetadata<JCharSequenceObject>(
+			JCharSequenceObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JCharSequenceObject>.Metadata => JCharSequenceObject.typeMetadata;
 

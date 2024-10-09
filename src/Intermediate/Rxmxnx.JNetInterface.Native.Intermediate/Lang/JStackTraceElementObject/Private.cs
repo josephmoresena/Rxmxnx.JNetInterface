@@ -5,11 +5,14 @@ using TypeMetadata = JClassTypeMetadata<JStackTraceElementObject>;
 public partial class JStackTraceElementObject
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.StackTraceElementHash, 27);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JStackTraceElementObject>
-	                                                    .Create("java/lang/StackTraceElement"u8, JTypeModifier.Final)
-	                                                    .Implements<JSerializableObject>().Build();
+	private static readonly TypeMetadata typeMetadata = JLocalObject.CreateBuiltInMetadata<JStackTraceElementObject>(
+		JStackTraceElementObject.typeInfo, JTypeModifier.Final, InterfaceSet.SerializableSet);
 
 	static TypeMetadata IClassType<JStackTraceElementObject>.Metadata => JStackTraceElementObject.typeMetadata;
 

@@ -6,23 +6,10 @@ public partial class JDataTypeMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="information">Internal sequence information.</param>
-	private protected JDataTypeMetadata(CStringSequence information)
-	{
-		this._sequence = information;
-		this._className = this._sequence[0];
-		this._signature = this._sequence[1];
-		this._arraySignature = this._sequence[2];
-	}
+	private protected JDataTypeMetadata(TypeInfoSequence information) => this._info = information;
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="className">JNI name of the current type.</param>
-	/// <param name="signature">JNI signature for the current type.</param>
-	private protected JDataTypeMetadata(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> signature = default)
-	{
-		this._sequence = JDataTypeMetadata.CreateInformationSequence(className, signature);
-		this._className = this._sequence[0];
-		this._signature = this._sequence[1];
-		this._arraySignature = this._sequence[2];
-	}
+	private protected JDataTypeMetadata(ReadOnlySpan<Byte> className) => this._info = new(className);
 }

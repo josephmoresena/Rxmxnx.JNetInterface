@@ -3,6 +3,27 @@ namespace Rxmxnx.JNetInterface.Tests.Nio;
 [ExcludeFromCodeCoverage]
 public sealed class PrimitiveBufferTests
 {
+	private static readonly Dictionary<Type, CString> classNames = new()
+	{
+		{ typeof(JByteBufferObject), new("java/nio/ByteBuffer"u8) },
+		{ typeof(JCharBufferObject), new("java/nio/CharBuffer"u8) },
+		{ typeof(JDoubleBufferObject), new("java/nio/DoubleBuffer"u8) },
+		{ typeof(JFloatBufferObject), new("java/nio/FloatBuffer"u8) },
+		{ typeof(JIntBufferObject), new("java/nio/IntBuffer"u8) },
+		{ typeof(JLongBufferObject), new("java/nio/LongBuffer"u8) },
+		{ typeof(JShortBufferObject), new("java/nio/ShortBuffer"u8) },
+		{ typeof(JMappedByteBufferObject), new("java/nio/MappedByteBuffer"u8) },
+		{ typeof(JDirectByteBufferObject), new("java/nio/DirectByteBuffer"u8) },
+	};
+	private static readonly Dictionary<Type, CString> classSignatures =
+		PrimitiveBufferTests.classNames.ToDictionary(p => p.Key, p => CString.Concat("L"u8, p.Value, ";"u8));
+	private static readonly Dictionary<Type, CString> arraySignatures =
+		PrimitiveBufferTests.classSignatures.ToDictionary(p => p.Key, p => CString.Concat("["u8, p.Value));
+	private static readonly Dictionary<Type, CStringSequence> hashes =
+		PrimitiveBufferTests.classSignatures.Keys.ToDictionary(
+			t => t,
+			t => new CStringSequence(PrimitiveBufferTests.classNames[t], PrimitiveBufferTests.classSignatures[t],
+			                         PrimitiveBufferTests.arraySignatures[t]));
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 	private static readonly MethodInfo getMetadata =
 		typeof(IClassType).GetMethod(nameof(IClassType.GetMetadata), BindingFlags.Public | BindingFlags.Static)!;
@@ -313,6 +334,10 @@ public sealed class PrimitiveBufferTests
 		Assert.Equal(typeof(TBuffer), typeMetadata.Type);
 		Assert.Equal(JTypeKind.Class, typeMetadata.Kind);
 		Assert.Equal(baseMetadata, typeMetadata.BaseMetadata);
+		Assert.Equal(PrimitiveBufferTests.classNames[typeof(TBuffer)], typeMetadata.ClassName);
+		Assert.Equal(PrimitiveBufferTests.classSignatures[typeof(TBuffer)], typeMetadata.Signature);
+		Assert.Equal(PrimitiveBufferTests.arraySignatures[typeof(TBuffer)], typeMetadata.ArraySignature);
+		Assert.Equal(PrimitiveBufferTests.hashes[typeof(TBuffer)].ToString(), typeMetadata.Hash);
 		Assert.IsType<JFunctionDefinition<TBuffer>.Parameterless>(
 			typeMetadata.CreateFunctionDefinition("functionName"u8, []));
 		Assert.IsType<JFunctionDefinition<TBuffer>>(

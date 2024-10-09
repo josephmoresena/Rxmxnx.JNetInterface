@@ -82,7 +82,7 @@ public sealed class PrimitiveTypeTests
 		Assert.StartsWith("{", textValue);
 		Assert.Contains(argumentText, textValue);
 		Assert.EndsWith(
-			$"{nameof(JDataTypeMetadata.Hash)} = {ITypeInformation.GetPrintableHash(typeMetadata.Hash, out String lastChar)}{lastChar} }}",
+			$"{nameof(JDataTypeMetadata.Hash)} = {InfoSequenceBase.GetPrintableHash(typeMetadata.Hash, out String lastChar)}{lastChar} }}",
 			textValue);
 
 		Assert.Equal(JNativeType.JObject, PrimitiveTypeImpl.GetNativeType<PrimitiveTypeImpl>());

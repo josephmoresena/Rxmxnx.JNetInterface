@@ -6,8 +6,18 @@ public partial class JPrimitiveTypeMetadata
 	/// Stores the metadata for Java <c>void</c> type.
 	/// </summary>
 	private sealed class JVoidTypeMetadata()
-		: JPrimitiveTypeMetadata(0, typeof(void), JPrimitiveTypeMetadata.voidInformation, "java/lang/Void"u8)
+		: JPrimitiveTypeMetadata(0, typeof(void), JVoidTypeMetadata.voidPrimitiveInfo,
+		                         JVoidTypeMetadata.voidWrapperInfo)
 	{
+		/// <summary>
+		/// Primitive type info.
+		/// </summary>
+		private static readonly TypeInfoSequence voidPrimitiveInfo = new(ClassNameHelper.VoidPrimitiveHash, 4, 1);
+		/// <summary>
+		/// Wrapper type info.
+		/// </summary>
+		private static readonly TypeInfoSequence voidWrapperInfo = new(ClassNameHelper.VoidObjectHash, 14, 16);
+
 		/// <summary>
 		/// CLR type for <see langword="void"/>.
 		/// </summary>

@@ -11,11 +11,16 @@ public class JInvocationTargetExceptionObject : JReflectiveOperationExceptionObj
 	IThrowableType<JInvocationTargetExceptionObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.InvocationTargetExceptionHash, 43);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JReflectiveOperationExceptionObject>
-	                                                    .Create<JInvocationTargetExceptionObject>(
-		                                                    "java/lang/reflect/InvocationTargetException"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JInvocationTargetExceptionObject>(
+			    JInvocationTargetExceptionObject.typeInfo,
+			    IClassType.GetMetadata<JReflectiveOperationExceptionObject>(), JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JInvocationTargetExceptionObject>.Metadata
 		=> JInvocationTargetExceptionObject.typeMetadata;

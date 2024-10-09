@@ -47,23 +47,28 @@ public sealed class JElementTypeObject : JEnumObject<JElementTypeObject>, IEnumT
 	}
 
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ElementTypeHash, 32);
+	/// <summary>
+	/// Datatype values.
+	/// </summary>
+	private static readonly IEnumFieldList typeValues = JEnumObject.CreateFieldList([
+		new(() => "TYPE"u8),
+		new(() => "FIELD"u8),
+		new(() => "METHOD"u8),
+		new(() => "PARAMETER"u8),
+		new(() => "CONSTRUCTOR"u8),
+		new(() => "LOCAL_VARIABLE"u8),
+		new(() => "ANNOTATION_TYPE"u8),
+		new(() => "PACKAGE"u8),
+	]);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JElementTypeObject>
-	                                                    .Create("java/lang/annotation/ElementType"u8)
-	                                                    .AppendValue((Int32)ElementType.Type, new(() => "TYPE"u8))
-	                                                    .AppendValue((Int32)ElementType.Field, new(() => "FIELD"u8))
-	                                                    .AppendValue((Int32)ElementType.Method, new(() => "METHOD"u8))
-	                                                    .AppendValue((Int32)ElementType.Parameter,
-	                                                                 new(() => "PARAMETER"u8))
-	                                                    .AppendValue((Int32)ElementType.Constructor,
-	                                                                 new(() => "CONSTRUCTOR"u8))
-	                                                    .AppendValue((Int32)ElementType.LocalVariable,
-	                                                                 new(() => "LOCAL_VARIABLE"u8))
-	                                                    .AppendValue((Int32)ElementType.AnnotationType,
-	                                                                 new(() => "ANNOTATION_TYPE"u8))
-	                                                    .AppendValue((Int32)ElementType.Package, new(() => "PACKAGE"u8))
-	                                                    .Build();
+	private static readonly TypeMetadata typeMetadata =
+		JEnumObject.CreateBuiltInMetadata<JElementTypeObject>(JElementTypeObject.typeInfo,
+		                                                      JElementTypeObject.typeValues);
 
 	static TypeMetadata IEnumType<JElementTypeObject>.Metadata => JElementTypeObject.typeMetadata;
 

@@ -8,11 +8,16 @@ using TypeMetadata = JThrowableTypeMetadata<JErrorObject>;
 public class JErrorObject : JThrowableObject, IThrowableType<JErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.ErrorHash, 15);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JThrowableObject>
-	                                                    .Create<JErrorObject>("java/lang/Error"u8).Build();
-
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JErrorObject>(JErrorObject.typeInfo,
+		                                                     IClassType.GetMetadata<JThrowableObject>(),
+		                                                     JTypeModifier.Extensible));
 	static TypeMetadata IThrowableType<JErrorObject>.Metadata => JErrorObject.typeMetadata;
 
 	/// <inheritdoc/>

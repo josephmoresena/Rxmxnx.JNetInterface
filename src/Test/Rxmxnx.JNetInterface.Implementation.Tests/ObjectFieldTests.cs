@@ -77,7 +77,8 @@ public sealed class ObjectFieldTests
 		JFieldId fieldId = ObjectFieldTests.fixture.Create<JFieldId>();
 		JDataTypeMetadata metadata = IDataType.GetMetadata<JThrowableObject>();
 		using IFixedPointer.IDisposable infoDef = def.Information.GetFixedPointer();
-		using IFixedPointer.IDisposable ctxClass = metadata.Information.GetFixedPointer();
+		using IFixedPointer.IDisposable ctxClass =
+			metadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
 		ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)infoDef.Pointer;
 		JObjectLocalRef localRef = jLocal?.Reference ?? default;
 		Boolean isStatic = jClass is not null && jLocal is null;
@@ -92,7 +93,7 @@ public sealed class ObjectFieldTests
 		proxyEnv.CallObjectMethod(proxyEnv.ThrowableLocalRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 		                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
 		proxyEnv.GetStringUtfLength(strRef).Returns(metadata.ClassName.Length);
-		proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)ctxClass.Pointer);
+		proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>()).Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 		proxyEnv.GetFieldId(Arg.Any<JClassLocalRef>(), namePtr, Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(fieldId);
 		proxyEnv.GetStaticFieldId(Arg.Any<JClassLocalRef>(), namePtr, Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(fieldId);
 
@@ -128,5 +129,6 @@ public sealed class ObjectFieldTests
 		jLocal?.Dispose();
 		jThrowable?.Class.Dispose();
 		setObject.Class.Dispose();
+		nameCtx.Dispose();
 	}
 }

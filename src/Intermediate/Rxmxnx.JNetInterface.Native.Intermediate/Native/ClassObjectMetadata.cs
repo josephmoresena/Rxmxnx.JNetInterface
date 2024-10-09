@@ -46,7 +46,7 @@ public sealed partial record ClassObjectMetadata : ObjectMetadata
 
 	/// <inheritdoc/>
 	public override String ToTraceText()
-		=> $"name: {this.Name} signature: {this.ClassSignature} final: {this.IsFinal} interface: {this.IsInterface} enum: {this.IsEnum} annotation: {this.IsAnnotation} hash: {ITypeInformation.GetPrintableHash(this.Hash, out String lastChar)}{lastChar}";
+		=> $"name: {this.Name} signature: {this.ClassSignature} final: {this.IsFinal} interface: {this.IsInterface} enum: {this.IsEnum} annotation: {this.IsAnnotation} hash: {InfoSequenceBase.GetPrintableHash(this.Hash, out String lastChar)}{lastChar}";
 
 	/// <summary>
 	/// Creates a <see cref="ClassObjectMetadata"/> for given <typeparamref name="TDataType"/> type.

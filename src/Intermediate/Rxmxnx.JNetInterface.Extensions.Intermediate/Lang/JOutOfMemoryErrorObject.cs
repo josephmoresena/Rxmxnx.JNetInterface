@@ -10,11 +10,17 @@ using TypeMetadata = JThrowableTypeMetadata<JOutOfMemoryErrorObject>;
 public class JOutOfMemoryErrorObject : JVirtualMachineErrorObject, IThrowableType<JOutOfMemoryErrorObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.OutOfMemoryErrorHash, 26);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = TypeMetadataBuilder<JVirtualMachineErrorObject>
-	                                                    .Create<JOutOfMemoryErrorObject>("java/lang/OutOfMemoryError"u8)
-	                                                    .Build();
+	private static readonly TypeMetadata typeMetadata =
+		new(JLocalObject.CreateBuiltInMetadata<JOutOfMemoryErrorObject>(JOutOfMemoryErrorObject.typeInfo,
+		                                                                IClassType
+			                                                                .GetMetadata<JVirtualMachineErrorObject>(),
+		                                                                JTypeModifier.Extensible));
 
 	static TypeMetadata IThrowableType<JOutOfMemoryErrorObject>.Metadata => JOutOfMemoryErrorObject.typeMetadata;
 

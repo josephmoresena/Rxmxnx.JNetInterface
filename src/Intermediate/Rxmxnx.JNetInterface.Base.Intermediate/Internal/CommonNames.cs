@@ -304,11 +304,7 @@ internal static class CommonNames
 	/// <summary>
 	/// JNI name of <c>java.lang.Object</c> class.
 	/// </summary>
-	public static readonly CString Object = new(() => "java/lang/Object"u8);
-	/// <summary>
-	/// JNI signature for <c>java.lang.Object</c> object.
-	/// </summary>
-	public static readonly CString ObjectSignature = new(() => "Ljava/lang/Object;"u8);
+	public static ReadOnlySpan<Byte> Object => "java/lang/Object"u8;
 	/// <summary>
 	/// JNI name of <c>java.lang.Class&lt;?&gt;</c> class.
 	/// </summary>

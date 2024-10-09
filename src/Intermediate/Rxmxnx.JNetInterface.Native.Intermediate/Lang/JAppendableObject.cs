@@ -10,10 +10,15 @@ using TypeMetadata = JInterfaceTypeMetadata<JAppendableObject>;
 public sealed class JAppendableObject : JInterfaceObject<JAppendableObject>, IInterfaceType<JAppendableObject>
 {
 	/// <summary>
+	/// Datatype information.
+	/// </summary>
+	private static readonly TypeInfoSequence typeInfo = new(ClassNameHelper.AppendableHash, 20);
+	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
 	private static readonly TypeMetadata typeMetadata =
-		TypeMetadataBuilder<JAppendableObject>.Create("java/lang/Appendable"u8).Build();
+		JLocalObject.InterfaceView.CreateBuiltInMetadata<JAppendableObject>(
+			JAppendableObject.typeInfo, InterfaceSet.Empty);
 
 	static TypeMetadata IInterfaceType<JAppendableObject>.Metadata => JAppendableObject.typeMetadata;
 

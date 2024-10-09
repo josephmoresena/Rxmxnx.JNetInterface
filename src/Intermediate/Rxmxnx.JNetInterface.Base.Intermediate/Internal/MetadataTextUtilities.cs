@@ -50,8 +50,8 @@ internal static class MetadataTextUtilities
 				if (typeMetadata.Kind is JTypeKind.Class)
 					MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Modifier),
 					                                     $"{typeMetadata.Modifier}");
-				for (Int32 i = 0; i < properties.Length; i++)
-					MetadataTextUtilities.AppendProperty(strBuild, properties[i]);
+				foreach (IAppendableProperty? t in properties.AsSpan())
+					MetadataTextUtilities.AppendProperty(strBuild, t);
 				break;
 		}
 		if (!isVoid)
@@ -202,7 +202,7 @@ internal static class MetadataTextUtilities
 	/// <param name="hash">Hash to append.</param>
 	private static void AppendHash(StringBuilder strBuild, String hash)
 	{
-		ReadOnlySpan<Char> printableHash = ITypeInformation.GetPrintableHash(hash, out String lastChar);
+		ReadOnlySpan<Char> printableHash = InfoSequenceBase.GetPrintableHash(hash, out String lastChar);
 		strBuild.Append(nameof(JDataTypeMetadata.Hash));
 		MetadataTextUtilities.AppendEquals(strBuild);
 		strBuild.Append(printableHash);

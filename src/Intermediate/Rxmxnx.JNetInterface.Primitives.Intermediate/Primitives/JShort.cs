@@ -1,19 +1,30 @@
 namespace Rxmxnx.JNetInterface.Primitives;
 
 using TypeMetadata = JPrimitiveTypeMetadata<JShort>;
+using IPrimitiveValueType = IPrimitiveType<JShort, Int16>;
+using IPrimitiveIntegerType = IPrimitiveIntegerType<JShort, Int16>;
+using IPrimitiveSignedType = IPrimitiveSignedType<JShort, Int16>;
 
 /// <summary>
 /// Primitive <c>short</c>. Represents a primitive 16-bit signed integer.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public readonly partial struct JShort : INativeType, IComparable<JShort>, IEquatable<JShort>,
-	IPrimitiveIntegerType<JShort, Int16>, IPrimitiveSignedType<JShort, Int16>
+public readonly partial struct JShort : INativeType, IComparable<JShort>, IEquatable<JShort>, IPrimitiveIntegerType,
+	IPrimitiveSignedType
 {
+	/// <summary>
+	/// Primitive type info.
+	/// </summary>
+	private static readonly TypeInfoSequence primitiveInfo = new(ClassNameHelper.ShortPrimitiveHash, 5, 1);
+	/// <summary>
+	/// Wrapper type info.
+	/// </summary>
+	private static readonly TypeInfoSequence wrapperInfo = new(ClassNameHelper.ShortObjectHash, 15);
 	/// <summary>
 	/// Datatype metadata.
 	/// </summary>
-	private static readonly TypeMetadata typeMetadata = IPrimitiveType<JShort, Int16>.TypeMetadataBuilder
-		.Create("short"u8, CommonNames.ShortSignatureChar).WithWrapperClassName("java/lang/Short"u8).Build();
+	private static readonly TypeMetadata typeMetadata =
+		new IPrimitiveValueType.PrimitiveTypeMetadata(JShort.primitiveInfo, JShort.wrapperInfo);
 
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JShort;

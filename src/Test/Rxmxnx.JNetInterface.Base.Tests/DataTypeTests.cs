@@ -57,7 +57,7 @@ public sealed class DataTypeTests
 		Assert.Equal(JTypeModifier.Final, voidMetadata.Modifier);
 		Assert.True(wrapperInformation[0].SequenceEqual(voidMetadata.WrapperClassName));
 		Assert.True(wrapperInformation[1].SequenceEqual(voidMetadata.WrapperClassSignature));
-		Assert.Equal(wrapperInformation, voidMetadata.WrapperInformation);
+		Assert.Equal(wrapperInformation.ToString(), voidMetadata.WrapperInformation.ToString());
 
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.ArgumentMetadata);
 		Assert.Throws<InvalidOperationException>(() => voidMetadata.CreateInstance(Array.Empty<Byte>()));
@@ -65,7 +65,7 @@ public sealed class DataTypeTests
 			$"{nameof(JDataTypeMetadata.Kind)} = {voidMetadata.Kind}, " +
 			$"{nameof(JPrimitiveTypeMetadata.WrapperClassName)} = {ClassNameHelper.GetClassName(voidMetadata.WrapperClassSignature)}, " +
 			$"{nameof(JDataTypeMetadata.Type)} = {voidMetadata.Type}, " +
-			$"{nameof(JDataTypeMetadata.Hash)} = {ITypeInformation.GetPrintableHash(voidMetadata.Hash, out String lastChar)}{lastChar} }}";
+			$"{nameof(JDataTypeMetadata.Hash)} = {InfoSequenceBase.GetPrintableHash(voidMetadata.Hash, out String lastChar)}{lastChar} }}";
 		Assert.Equal(dataTypeString, voidMetadata.ToString());
 	}
 

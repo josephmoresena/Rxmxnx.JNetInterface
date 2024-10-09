@@ -8,7 +8,7 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	/// <summary>
 	/// Array signature for the current type.
 	/// </summary>
-	public CString ArraySignature => this._arraySignature;
+	public CString ArraySignature => this._info.ArraySignature;
 
 	/// <summary>
 	/// Metadata argument for the current type.
@@ -32,11 +32,11 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	public abstract JTypeKind Kind { get; }
 
 	/// <inheritdoc/>
-	public CString ClassName => this._className;
+	public CString ClassName => this._info.Name;
 	/// <inheritdoc/>
-	public CString Signature => this._signature;
+	public CString Signature => this._info.Signature;
 	/// <inheritdoc/>
-	public String Hash => this._sequence.ToString();
+	public String Hash => this._info.ToString();
 
 #if PACKAGE
 	/// <summary>
