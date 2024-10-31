@@ -41,7 +41,7 @@ public partial class JEnumObject
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			this._builder.AppendInterface<TInterface>();
+			this._builder.AppendInterface<TInterface>(IClassType.GetMetadata<JEnumObject>());
 			return this;
 		}
 		/// <summary>

@@ -26,20 +26,8 @@ internal partial class InterfaceSet : IAppendableInterfaceSet
 	/// <inheritdoc/>
 	public virtual void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
 	{
-		HashSet<String> hashes = InterfaceSet.OpenSetOperation(this, out Boolean isNew, out Boolean isRecursive);
-		try
-		{
-			foreach (JInterfaceTypeMetadata interfaceMetadata in this._internalSet)
-			{
-				if (!hashes.Add(interfaceMetadata.Hash)) continue;
-				action(state, interfaceMetadata);
-				if (isRecursive) interfaceMetadata.Interfaces.ForEach(state, action);
-			}
-		}
-		finally
-		{
-			InterfaceSet.CloseSetOperation(isNew);
-		}
+		foreach (JInterfaceTypeMetadata interfaceMetadata in this._internalSet)
+			action(state, interfaceMetadata);
 	}
 
 	/// <summary>

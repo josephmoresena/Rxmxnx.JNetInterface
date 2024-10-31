@@ -34,7 +34,7 @@ public sealed class JInterfaceObjectTests
 	internal void InterfaceSetTest()
 	{
 		InterfaceSet emptyInterfaces = InterfaceSet.Empty;
-		IInterfaceSet arrayInterfaces = InterfaceSet.ArraySet;
+		IInterfaceSet arrayInterfaces = InterfaceSet.SerializableCloneableSet;
 		IInterfaceSet annotationInterfaces = InterfaceSet.AnnotationSet;
 		IInterfaceSet serializableComparableInterfaces = InterfaceSet.SerializableComparableSet;
 		IInterfaceSet comparableInterfaces = InterfaceSet.ComparableSet;

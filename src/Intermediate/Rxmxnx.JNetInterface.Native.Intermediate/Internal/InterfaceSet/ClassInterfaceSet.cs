@@ -5,9 +5,6 @@ internal partial class InterfaceSet
 	/// <summary>
 	/// Interface set for classes.
 	/// </summary>
-	/// <remarks>
-	/// Constructor.
-	/// </remarks>
 	/// <param name="baseMetadata">Base metadata.</param>
 	/// <param name="set">Interface set.</param>
 	private sealed class ClassInterfaceSet(
@@ -25,16 +22,8 @@ internal partial class InterfaceSet
 		/// <inheritdoc/>
 		public override void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
 		{
-			_ = InterfaceSet.OpenSetOperation(out Boolean isNew);
-			try
-			{
-				base.ForEach(state, action);
-				this._baseInterfaces.ForEach(state, action);
-			}
-			finally
-			{
-				InterfaceSet.CloseSetOperation(isNew);
-			}
+			base.ForEach(state, action);
+			this._baseInterfaces.ForEach(state, action);
 		}
 
 		/// <inheritdoc/>

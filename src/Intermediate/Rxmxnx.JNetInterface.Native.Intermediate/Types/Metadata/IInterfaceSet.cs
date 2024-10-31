@@ -6,6 +6,16 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public interface IInterfaceSet : IEnumerable<JInterfaceTypeMetadata>
 {
 	/// <summary>
+	/// Determines if the set contains a specific <typeparamref name="TInterface"/>.
+	/// </summary>
+	/// <typeparam name="TInterface">Type of <see cref="IInterfaceType{TInterface}"/></typeparam>
+	/// <returns>
+	/// <see langword="true"/> if found; otherwise <see langword="false"/>.
+	/// </returns>
+	Boolean Contains<TInterface>(JInterfaceTypeMetadata item)
+		where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+		=> this.Contains(IInterfaceType.GetMetadata<TInterface>());
+	/// <summary>
 	/// Determines if the set contains a specific item.
 	/// </summary>
 	/// <param name="item">The item to check if the set contains.</param>
