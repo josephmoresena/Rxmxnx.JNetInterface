@@ -267,16 +267,24 @@ public sealed partial class JVirtualMachineTests
 		mainGlobalRef.Add(MainClass.Class, proxyEnv.VirtualMachine.ClassGlobalRef);
 		mainGlobalRef.Add(MainClass.Throwable, proxyEnv.VirtualMachine.ThrowableGlobalRef);
 		mainGlobalRef.Add(MainClass.StackTraceElement, proxyEnv.VirtualMachine.StackTraceElementGlobalRef);
-
-		mainGlobalRef.Add(MainClass.VoidPrimitive, proxyEnv.VirtualMachine.VoidGlobalRef);
-		mainGlobalRef.Add(MainClass.BooleanPrimitive, proxyEnv.VirtualMachine.BooleanGlobalRef);
-		mainGlobalRef.Add(MainClass.BytePrimitive, proxyEnv.VirtualMachine.ByteGlobalRef);
-		mainGlobalRef.Add(MainClass.CharPrimitive, proxyEnv.VirtualMachine.CharGlobalRef);
-		mainGlobalRef.Add(MainClass.DoublePrimitive, proxyEnv.VirtualMachine.DoubleGlobalRef);
-		mainGlobalRef.Add(MainClass.FloatPrimitive, proxyEnv.VirtualMachine.FloatGlobalRef);
-		mainGlobalRef.Add(MainClass.IntPrimitive, proxyEnv.VirtualMachine.IntGlobalRef);
-		mainGlobalRef.Add(MainClass.LongPrimitive, proxyEnv.VirtualMachine.LongGlobalRef);
-		mainGlobalRef.Add(MainClass.ShortPrimitive, proxyEnv.VirtualMachine.ShortGlobalRef);
+		mainGlobalRef.Add(MainClass.VoidObject, proxyEnv.VirtualMachine.VoidGlobalRef);
+		mainGlobalRef.Add(MainClass.BooleanObject, proxyEnv.VirtualMachine.BooleanGlobalRef);
+		mainGlobalRef.Add(MainClass.ByteObject, proxyEnv.VirtualMachine.ByteGlobalRef);
+		mainGlobalRef.Add(MainClass.CharacterObject, proxyEnv.VirtualMachine.CharacterGlobalRef);
+		mainGlobalRef.Add(MainClass.DoubleObject, proxyEnv.VirtualMachine.DoubleGlobalRef);
+		mainGlobalRef.Add(MainClass.FloatObject, proxyEnv.VirtualMachine.FloatGlobalRef);
+		mainGlobalRef.Add(MainClass.IntegerObject, proxyEnv.VirtualMachine.IntegerGlobalRef);
+		mainGlobalRef.Add(MainClass.LongObject, proxyEnv.VirtualMachine.LongGlobalRef);
+		mainGlobalRef.Add(MainClass.ShortObject, proxyEnv.VirtualMachine.ShortGlobalRef);
+		mainGlobalRef.Add(MainClass.VoidPrimitive, proxyEnv.VirtualMachine.VoidPGlobalRef);
+		mainGlobalRef.Add(MainClass.BooleanPrimitive, proxyEnv.VirtualMachine.BooleanPGlobalRef);
+		mainGlobalRef.Add(MainClass.BytePrimitive, proxyEnv.VirtualMachine.BytePGlobalRef);
+		mainGlobalRef.Add(MainClass.CharPrimitive, proxyEnv.VirtualMachine.CharPGlobalRef);
+		mainGlobalRef.Add(MainClass.DoublePrimitive, proxyEnv.VirtualMachine.DoublePGlobalRef);
+		mainGlobalRef.Add(MainClass.FloatPrimitive, proxyEnv.VirtualMachine.FloatPGlobalRef);
+		mainGlobalRef.Add(MainClass.IntPrimitive, proxyEnv.VirtualMachine.IntPGlobalRef);
+		mainGlobalRef.Add(MainClass.LongPrimitive, proxyEnv.VirtualMachine.LongPGlobalRef);
+		mainGlobalRef.Add(MainClass.ShortPrimitive, proxyEnv.VirtualMachine.ShortPGlobalRef);
 		return mainGlobalRef;
 	}
 	private static Dictionary<MainClass, JClassLocalRef> GetMainLocalRef(NativeInterfaceProxy proxyEnv)

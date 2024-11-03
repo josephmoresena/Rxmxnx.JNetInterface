@@ -110,7 +110,8 @@ public partial class JVirtualMachineTests
 		Boolean noThrows = mainClass is MainClass.None || error is ClassLoadingError.None ||
 			(error == ClassLoadingError.TypeIdError && dataTypeMetadata?.Kind == JTypeKind.Primitive) ||
 			(error == ClassLoadingError.TypeIdError && auxTypeMedata is null) ||
-			(error == ClassLoadingError.CreateGlobal && auxTypeMedata?.Kind == JTypeKind.Primitive);
+			// By default, VoidObject is not a main class.
+			(error == ClassLoadingError.CreateGlobal && mainClass == MainClass.VoidObject);
 		Dictionary<MainClass, IFixedPointer.IDisposable> mainPointer = JVirtualMachineTests.GetMainNamePointer();
 		Dictionary<MainClass, JFieldId> mainTypeField = JVirtualMachineTests.GetTypeField(proxyEnv);
 		Dictionary<MainClass, JClassLocalRef> mainClassRef = JVirtualMachineTests.GetMainLocalRef(proxyEnv);
@@ -135,7 +136,8 @@ public partial class JVirtualMachineTests
 				IntPtr ptr = (ReadOnlyValPtr<Byte>)c[1];
 				if (ptr != typePtr.Pointer) return default;
 				foreach (MainClass mClass in mainTypeField.Keys.Where(
-					         mClass => mainClassRef[mClass] == classRef &&
+					         mClass => (mainClassRef[mClass] == classRef ||
+							         mainGlobalRef[mClass].Value == classRef.Value) &&
 						         (error != ClassLoadingError.TypeIdError || mClass != mainClass)))
 					return mainTypeField[mClass];
 				return default;
@@ -146,7 +148,8 @@ public partial class JVirtualMachineTests
 				JFieldId fieldId = (JFieldId)c[1];
 				foreach (MainClass mClass in mainClassRef.Keys.Where(
 					         mClass => JVirtualMachineTests.mainWrapper.TryGetValue(mClass, out MainClass wClass) &&
-						         mainClassRef[wClass] == classRef && mainTypeField[wClass] == fieldId &&
+						         (mainClassRef[wClass] == classRef || mainGlobalRef[wClass].Value == classRef.Value) &&
+						         mainTypeField[wClass] == fieldId &&
 						         (error != ClassLoadingError.FindClass || mClass != mainClass)))
 					return mainClassRef[mClass].Value;
 				return default;

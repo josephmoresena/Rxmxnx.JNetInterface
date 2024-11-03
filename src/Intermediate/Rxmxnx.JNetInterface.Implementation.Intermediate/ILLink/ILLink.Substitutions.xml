@@ -44,5 +44,45 @@
               featurevalue="false">
             <method signature="System.Boolean get_CheckClassRefNativeCallEnabled()" body="stub" value="false"/>
         </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.EnableVoidObjectMainClass"
+              featurevalue="false" featuredefault="true">
+            <method signature="System.Boolean get_VoidObjectMainClassEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableBooleanObjectMainClass"
+              featurevalue="false">
+            <method signature="System.Boolean get_BooleanObjectMainClassEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableByteObjectMainClass"
+              featurevalue="false">
+            <method signature="System.Boolean get_ByteObjectMainClassEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableCharacterObjectMainClass"
+              featurevalue="false">
+            <method signature="System.Boolean get_CharacterObjectMainClassEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableDoubleObjectMainClass"
+              featurevalue="false">
+            <method signature="System.Boolean get_DoubleObjectMainClassEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableFloatObjectMainClass"
+              featurevalue="false">
+            <method signature="System.Boolean get_FloatObjectMainClassEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableIntegerObjectMainClass"
+              featurevalue="false">
+            <method signature="System.Boolean get_IntegerObjectMainClassEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableLongObjectMainClass"
+              featurevalue="false">
+            <method signature="System.Boolean get_LongObjectMainClassEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisableShortObjectMainClass"
+              featurevalue="false">
+            <method signature="System.Boolean get_ShortObjectMainClassEnabled()" body="stub" value="false"/>
+        </type>
+        <type fullname="Rxmxnx.JNetInterface.JVirtualMachine" feature="JNetInterface.DisablePrimitiveMainClasses"
+              featurevalue="false">
+            <method signature="System.Boolean get_PrimitiveMainClassesEnabled()" body="stub" value="false"/>
+        </type>
     </assembly>
 </linker>

@@ -4,16 +4,6 @@ partial class JEnvironment
 {
 	private sealed partial class EnvironmentCache
 	{
-		JClassObject IClassFeature.VoidObject => this.GetClass<JVoidObject>();
-		JClassObject IClassFeature.BooleanObject => this.GetClass<JBooleanObject>();
-		JClassObject IClassFeature.ByteObject => this.GetClass<JByteObject>();
-		JClassObject IClassFeature.CharacterObject => this.GetClass<JCharacterObject>();
-		JClassObject IClassFeature.DoubleObject => this.GetClass<JDoubleObject>();
-		JClassObject IClassFeature.FloatObject => this.GetClass<JFloatObject>();
-		JClassObject IClassFeature.IntegerObject => this.GetClass<JIntegerObject>();
-		JClassObject IClassFeature.LongObject => this.GetClass<JLongObject>();
-		JClassObject IClassFeature.ShortObject => this.GetClass<JShortObject>();
-
 		/// <summary>
 		/// Retrieves a <see cref="JClassLocalRef"/> reference for primitive class.
 		/// </summary>
@@ -22,26 +12,31 @@ partial class JEnvironment
 		public JClassLocalRef FindPrimitiveClass(Byte signature)
 		{
 			JClassObject wrapperClass = this.GetPrimitiveWrapperClass(signature);
-			JFieldDefinition fieldDefinition = NativeFunctionSetImpl.PrimitiveTypeDefinition;
 			if (!JObject.IsNullOrDefault(wrapperClass))
 			{
+				JFieldDefinition fieldDefinition = NativeFunctionSetImpl.PrimitiveTypeDefinition;
 				JObjectLocalRef localRef = this.GetStaticObjectField(wrapperClass, fieldDefinition);
 				return JClassLocalRef.FromReference(in localRef);
 			}
 
 			JClassLocalRef classRef = this.FindMainClass(wrapperClass.Name, wrapperClass.ClassSignature);
+			return this.FindPrimitiveClass(classRef, signature);
+		}
+		public JClassLocalRef FindPrimitiveClass(JClassLocalRef wrapperClassRef, Byte signature)
+		{
 			try
 			{
-				JFieldId typeFieldId = this._env.GetStaticFieldId(fieldDefinition, classRef, true);
+				JFieldId typeFieldId =
+					this._env.GetStaticFieldId(NativeFunctionSetImpl.PrimitiveTypeDefinition, wrapperClassRef, true);
 				if (typeFieldId != default)
 				{
-					JObjectLocalRef localRef = this.GetStaticObjectField(classRef, typeFieldId, true);
+					JObjectLocalRef localRef = this.GetStaticObjectField(wrapperClassRef, typeFieldId, true);
 					if (localRef != default) return JClassLocalRef.FromReference(in localRef);
 				}
 			}
 			finally
 			{
-				this._env.DeleteLocalRef(classRef.Value);
+				this._env.DeleteLocalRef(wrapperClassRef.Value);
 			}
 
 			this._env.DescribeException();

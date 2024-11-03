@@ -37,17 +37,23 @@ public sealed class ClassParseTests
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
+		using IFixedPointer.IDisposable fCtx = IClassType.GetMetadata<JEnumObject>().Information.GetFixedPointer();
 		try
 		{
-			JGlobalRef globalRef = ClassParseTests.fixture.Create<JGlobalRef>();
-			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
-			proxyEnv.NewGlobalRef(proxyEnv.VoidObjectLocalRef.Value).Returns(globalRef);
-
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			JClassLocalRef classRef = ClassParseTests.fixture.Create<JClassLocalRef>();
+			JGlobalRef globalRef = ClassParseTests.fixture.Create<JGlobalRef>();
+			ReadOnlyValPtr<Byte> namePtr = (ReadOnlyValPtr<Byte>)fCtx.Pointer;
+
+			proxyEnv.GetObjectRefType(classRef.Value).Returns(JReferenceType.LocalRefType);
+			proxyEnv.FindClass(namePtr).Returns(classRef);
+			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
+			proxyEnv.NewGlobalRef(classRef.Value).Returns(globalRef);
+
 			IClassFeature classFeature = env.ClassFeature;
-			JGlobal jGlobal = useNew ? classFeature.VoidObject.Global : new(classFeature.VoidObject, globalRef);
+			JGlobal jGlobal = useNew ? classFeature.EnumObject.Global : new(classFeature.EnumObject, globalRef);
 			Assert.Equal(classFeature.VoidObject, classFeature.AsClassObject(jGlobal));
-			if (useNew) Assert.Equal(jGlobal, classFeature.VoidObject.Global);
+			if (useNew) Assert.Equal(jGlobal, classFeature.EnumObject.Global);
 
 			proxyEnv.Received(0).IsInstanceOf(globalRef.Value,
 			                                  JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ClassGlobalRef));
@@ -107,7 +113,7 @@ public sealed class ClassParseTests
 		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
 		try
 		{
-			JGlobalRef globalRef = ClassParseTests.fixture.Create<JGlobalRef>();
+			JGlobalRef globalRef = proxyEnv.VirtualMachine.VoidGlobalRef;
 			JWeakRef weakRef = ClassParseTests.fixture.Create<JWeakRef>();
 			proxyEnv.GetObjectRefType(globalRef.Value).Returns(JReferenceType.GlobalRefType);
 			proxyEnv.GetObjectRefType(weakRef.Value).Returns(JReferenceType.WeakGlobalRefType);
