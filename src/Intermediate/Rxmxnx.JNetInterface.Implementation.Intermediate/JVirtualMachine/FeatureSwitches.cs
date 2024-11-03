@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface;
 
-public partial class JVirtualMachine : IVirtualMachine
+public partial class JVirtualMachine
 {
 	/// <summary>
 	/// Indicates whether metadata for built-in throwable objects should be auto-registered.
