@@ -38,21 +38,24 @@ partial class JEnvironment
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
 	internal JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata metadata)
 	{
-		JClassLocalRef classRef = this._cache.FindMainClass(metadata.Name, metadata.ClassSignature);
-		return this.GetMainClassGlobalRef(metadata, classRef);
-	}
-	/// <summary>
-	/// Retrieves a global reference for given class name.
-	/// </summary>
-	/// <param name="metadata">Class metadata.</param>
-	/// <param name="wClassGlobal">Wrapper class global instance.</param>
-	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal JGlobalRef GetPrimitiveMainClassGlobalRef(ClassObjectMetadata metadata, JGlobalBase? wClassGlobal)
-	{
-		JClassLocalRef classRef = !JObject.IsNullOrDefault(wClassGlobal) ?
-			this._cache.FindPrimitiveClass(wClassGlobal.As<JClassLocalRef>(), metadata.ClassSignature[0]) :
-			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]);
-		return this.GetMainClassGlobalRef(metadata, classRef);
+		Boolean isPrimitive = metadata.ClassSignature.Length == 1;
+		JClassLocalRef classRef = isPrimitive ?
+			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]) :
+			this._cache.FindMainClass(metadata.Name, metadata.ClassSignature);
+		try
+		{
+			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value, true);
+			if (globalRef != default) return globalRef;
+		}
+		finally
+		{
+			this.DeleteLocalRef(classRef.Value);
+		}
+
+		this.DescribeException();
+		this._cache.ClearException(); // Clears JNI exception.
+		throw new NotSupportedException(
+			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(metadata.ClassSignature)} class.");
 	}
 	/// <summary>
 	/// Deletes <paramref name="globalRef"/>.

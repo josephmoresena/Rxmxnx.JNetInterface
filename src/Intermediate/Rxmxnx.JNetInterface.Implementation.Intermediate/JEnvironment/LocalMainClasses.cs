@@ -56,68 +56,19 @@ partial class JEnvironment
 		/// </returns>
 		protected Boolean IsMainGlobal(JGlobal? jGlobal)
 		{
-			if (jGlobal?.ObjectMetadata is not ClassObjectMetadata classMetadata) return false;
+			if (jGlobal is null) return false;
 			JVirtualMachine vm = (jGlobal.VirtualMachine as JVirtualMachine)!;
-			return classMetadata.Hash switch
-			{
-				ClassNameHelper.ClassHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.ClassObject),
-				ClassNameHelper.ThrowableHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.ThrowableObject),
-				ClassNameHelper.StackTraceElementHash => LocalMainClasses.IsMainGlobal(
-					jGlobal, vm, this.StackTraceElementObject),
-				// Primitive classes.
-				ClassNameHelper.VoidPrimitiveHash => JVirtualMachine.PrimitiveMainClassesEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.VoidPrimitive),
-				ClassNameHelper.BooleanPrimitiveHash => JVirtualMachine.PrimitiveMainClassesEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.BooleanPrimitive),
-				ClassNameHelper.BytePrimitiveHash => JVirtualMachine.PrimitiveMainClassesEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.BytePrimitive),
-				ClassNameHelper.CharPrimitiveHash => JVirtualMachine.PrimitiveMainClassesEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.CharPrimitive),
-				ClassNameHelper.DoublePrimitiveHash => JVirtualMachine.PrimitiveMainClassesEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.DoublePrimitive),
-				ClassNameHelper.FloatPrimitiveHash => JVirtualMachine.PrimitiveMainClassesEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.FloatPrimitive),
-				ClassNameHelper.IntPrimitiveHash => JVirtualMachine.PrimitiveMainClassesEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.IntPrimitive),
-				ClassNameHelper.LongPrimitiveHash => JVirtualMachine.PrimitiveMainClassesEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.LongPrimitive),
-				ClassNameHelper.ShortPrimitiveHash => JVirtualMachine.PrimitiveMainClassesEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.ShortPrimitive),
-				// Only if feature enable wrapper class are main.
-				ClassNameHelper.VoidObjectHash => JVirtualMachine.VoidObjectMainClassEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.VoidObject),
-				ClassNameHelper.BooleanObjectHash => JVirtualMachine.BooleanObjectMainClassEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.BooleanObject),
-				ClassNameHelper.ByteObjectHash => JVirtualMachine.ByteObjectMainClassEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.ByteObject),
-				ClassNameHelper.CharacterObjectHash => JVirtualMachine.CharacterObjectMainClassEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.CharacterObject),
-				ClassNameHelper.DoubleObjectHash => JVirtualMachine.DoubleObjectMainClassEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.DoubleObject),
-				ClassNameHelper.FloatObjectHash => JVirtualMachine.FloatObjectMainClassEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.FloatObject),
-				ClassNameHelper.IntegerObjectHash => JVirtualMachine.IntegerObjectMainClassEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.IntegerObject),
-				ClassNameHelper.LongObjectHash => JVirtualMachine.LongObjectMainClassEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.LongObject),
-				ClassNameHelper.ShortObjectHash => JVirtualMachine.ShortObjectMainClassEnabled &&
-					LocalMainClasses.IsMainGlobal(jGlobal, vm, this.ShortObject),
-				_ => false,
-			};
+			return Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.ClassObject)) ||
+				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.ThrowableObject)) ||
+				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.StackTraceElementObject)) ||
+				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.BooleanPrimitive)) ||
+				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.BytePrimitive)) ||
+				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.CharPrimitive)) ||
+				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.DoublePrimitive)) ||
+				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.FloatPrimitive)) ||
+				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.IntPrimitive)) ||
+				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.LongPrimitive)) ||
+				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.ShortPrimitive));
 		}
-
-		/// <summary>
-		/// Indicates whether <paramref name="jGlobal"/> is <paramref name="mainClass"/>.
-		/// </summary>
-		/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
-		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
-		/// <param name="mainClass">Local <see cref="JClassObject"/> main instance.</param>
-		/// <returns>
-		/// <see langword="true"/> if <paramref name="jGlobal"/> is main global class; otherwise;
-		/// <see langword="false"/>.
-		/// </returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static Boolean IsMainGlobal(JGlobal jGlobal, JVirtualMachine vm, JClassObject mainClass)
-			=> Object.ReferenceEquals(jGlobal, vm.LoadGlobal(mainClass));
 	}
 }

@@ -42,25 +42,6 @@ partial class JEnvironment
 			this.LoadMainClasses();
 		}
 
-		/// <inheritdoc cref="IClassFeature.VoidObject"/>
-		public override JClassObject VoidObject => this.GetClass<JVoidObject>();
-		/// <inheritdoc cref="IClassFeature.BooleanObject"/>
-		public override JClassObject BooleanObject => this.GetClass<JBooleanObject>();
-		/// <inheritdoc cref="IClassFeature.ByteObject"/>
-		public override JClassObject ByteObject => this.GetClass<JByteObject>();
-		/// <inheritdoc cref="IClassFeature.CharacterObject"/>
-		public override JClassObject CharacterObject => this.GetClass<JCharacterObject>();
-		/// <inheritdoc cref="IClassFeature.DoubleObject"/>
-		public override JClassObject DoubleObject => this.GetClass<JDoubleObject>();
-		/// <inheritdoc cref="IClassFeature.FloatObject"/>
-		public override JClassObject FloatObject => this.GetClass<JFloatObject>();
-		/// <inheritdoc cref="IClassFeature.IntegerObject"/>
-		public override JClassObject IntegerObject => this.GetClass<JIntegerObject>();
-		/// <inheritdoc cref="IClassFeature.LongObject"/>
-		public override JClassObject LongObject => this.GetClass<JLongObject>();
-		/// <inheritdoc cref="IClassFeature.ShortObject"/>
-		public override JClassObject ShortObject => this.GetClass<JShortObject>();
-
 		/// <summary>
 		/// Retrieves managed <see cref="NativeInterface"/> reference from current instance.
 		/// </summary>
