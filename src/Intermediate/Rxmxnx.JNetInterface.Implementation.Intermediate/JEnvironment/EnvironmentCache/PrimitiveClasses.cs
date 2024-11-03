@@ -22,33 +22,44 @@ partial class JEnvironment
 		public JClassLocalRef FindPrimitiveClass(Byte signature)
 		{
 			JClassObject wrapperClass = this.GetPrimitiveWrapperClass(signature);
-			JFieldDefinition fieldDefinition = NativeFunctionSetImpl.PrimitiveTypeDefinition;
 			if (!JObject.IsNullOrDefault(wrapperClass))
 			{
+				JFieldDefinition fieldDefinition = NativeFunctionSetImpl.PrimitiveTypeDefinition;
 				JObjectLocalRef localRef = this.GetStaticObjectField(wrapperClass, fieldDefinition);
 				return JClassLocalRef.FromReference(in localRef);
 			}
 
 			JClassLocalRef classRef = this.FindMainClass(wrapperClass.Name, wrapperClass.ClassSignature);
+			return this.FindPrimitiveClass(classRef, ClassNameHelper.GetPrimitiveClassName(signature));
+		}
+		/// <summary>
+		/// Retrieves a <see cref="JClassLocalRef"/> reference for primitive class.
+		/// </summary>
+		/// <param name="wClassRef">Wrapper class reference.</param>
+		/// <param name="className">Primitive class name.</param>
+		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
+		public JClassLocalRef FindPrimitiveClass(JClassLocalRef wClassRef, String className)
+		{
 			try
 			{
-				JFieldId typeFieldId = this._env.GetStaticFieldId(fieldDefinition, classRef, true);
+				JFieldId typeFieldId =
+					this._env.GetStaticFieldId(NativeFunctionSetImpl.PrimitiveTypeDefinition, wClassRef, true);
 				if (typeFieldId != default)
 				{
-					JObjectLocalRef localRef = this.GetStaticObjectField(classRef, typeFieldId, true);
+					JObjectLocalRef localRef = this.GetStaticObjectField(wClassRef, typeFieldId, true);
 					if (localRef != default) return JClassLocalRef.FromReference(in localRef);
 				}
 			}
 			finally
 			{
-				this._env.DeleteLocalRef(classRef.Value);
+				this._env.DeleteLocalRef(wClassRef.Value);
 			}
 
 			this._env.DescribeException();
 			this.ClearException();
-			throw new NotSupportedException(
-				$"Primitive class {ClassNameHelper.GetPrimitiveClassName(signature)} is not available for JNI access.");
+			throw new NotSupportedException($"Primitive class {className} is not available for JNI access.");
 		}
+
 		/// <summary>
 		/// Retrieves primitive class instance for <paramref name="className"/>.
 		/// </summary>

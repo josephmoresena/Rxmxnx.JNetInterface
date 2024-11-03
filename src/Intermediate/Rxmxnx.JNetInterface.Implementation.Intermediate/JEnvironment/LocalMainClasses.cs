@@ -15,6 +15,31 @@ partial class JEnvironment
 		/// <inheritdoc cref="JEnvironment.VirtualMachine"/>
 		public readonly JVirtualMachine VirtualMachine;
 
+		/// <inheritdoc/>
+		public override JClassObject ClassObject { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject ThrowableObject { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject StackTraceElementObject { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject VoidPrimitive { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject BooleanPrimitive { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject BytePrimitive { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject CharPrimitive { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject DoublePrimitive { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject FloatPrimitive { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject IntPrimitive { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject LongPrimitive { get; } = default!;
+		/// <inheritdoc/>
+		public override JClassObject ShortPrimitive { get; } = default!;
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -30,20 +55,21 @@ partial class JEnvironment
 			if (this.Version < NativeInterface.RequiredVersion)
 				return; // Avoid class instantiation if unsupported version.
 
-			this.ClassObject = new(env);
-			this.ThrowableObject = new(this.ClassObject, MetadataHelper.GetExactMetadata<JThrowableObject>());
-			this.StackTraceElementObject =
-				new(this.ClassObject, MetadataHelper.GetExactMetadata<JStackTraceElementObject>());
+			JClassObject jClass = new(env); // java.lang.Class<?> class.
 
-			this.VoidPrimitive = new(this.ClassObject, JPrimitiveTypeMetadata.VoidMetadata);
-			this.BooleanPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JBoolean>());
-			this.BytePrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JByte>());
-			this.CharPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JChar>());
-			this.DoublePrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JDouble>());
-			this.FloatPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JFloat>());
-			this.IntPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JInt>());
-			this.LongPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JLong>());
-			this.ShortPrimitive = new(this.ClassObject, MetadataHelper.GetExactMetadata<JShort>());
+			this.ClassObject = jClass;
+			this.ThrowableObject = new(jClass, MetadataHelper.GetExactMetadata<JThrowableObject>());
+			this.StackTraceElementObject = new(jClass, MetadataHelper.GetExactMetadata<JStackTraceElementObject>());
+
+			this.VoidPrimitive = new(jClass, JPrimitiveTypeMetadata.VoidMetadata);
+			this.BooleanPrimitive = new(jClass, MetadataHelper.GetExactMetadata<JBoolean>());
+			this.BytePrimitive = new(jClass, MetadataHelper.GetExactMetadata<JByte>());
+			this.CharPrimitive = new(jClass, MetadataHelper.GetExactMetadata<JChar>());
+			this.DoublePrimitive = new(jClass, MetadataHelper.GetExactMetadata<JDouble>());
+			this.FloatPrimitive = new(jClass, MetadataHelper.GetExactMetadata<JFloat>());
+			this.IntPrimitive = new(jClass, MetadataHelper.GetExactMetadata<JInt>());
+			this.LongPrimitive = new(jClass, MetadataHelper.GetExactMetadata<JLong>());
+			this.ShortPrimitive = new(jClass, MetadataHelper.GetExactMetadata<JShort>());
 		}
 
 		/// <summary>
@@ -56,19 +82,41 @@ partial class JEnvironment
 		/// </returns>
 		protected Boolean IsMainGlobal(JGlobal? jGlobal)
 		{
-			if (jGlobal is null) return false;
+			if (jGlobal?.ObjectMetadata is not ClassObjectMetadata classMetadata) return false;
 			JVirtualMachine vm = (jGlobal.VirtualMachine as JVirtualMachine)!;
-			return Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.ClassObject)) ||
-				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.ThrowableObject)) ||
-				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.StackTraceElementObject)) ||
-				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.BooleanPrimitive)) ||
-				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.BytePrimitive)) ||
-				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.CharPrimitive)) ||
-				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.DoublePrimitive)) ||
-				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.FloatPrimitive)) ||
-				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.IntPrimitive)) ||
-				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.LongPrimitive)) ||
-				Object.ReferenceEquals(jGlobal, vm.LoadGlobal(this.ShortPrimitive));
+			return classMetadata.Hash switch
+			{
+				ClassNameHelper.ClassHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.ClassObject),
+				ClassNameHelper.ThrowableHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.ThrowableObject),
+				ClassNameHelper.StackTraceElementHash => LocalMainClasses.IsMainGlobal(
+					jGlobal, vm, this.StackTraceElementObject),
+				// Primitive classes.
+				ClassNameHelper.VoidPrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.VoidPrimitive),
+				ClassNameHelper.BooleanPrimitiveHash => LocalMainClasses.IsMainGlobal(
+					jGlobal, vm, this.BooleanPrimitive),
+				ClassNameHelper.BytePrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.BytePrimitive),
+				ClassNameHelper.CharPrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.CharPrimitive),
+				ClassNameHelper.DoublePrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.DoublePrimitive),
+				ClassNameHelper.FloatPrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.FloatPrimitive),
+				ClassNameHelper.IntPrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.IntPrimitive),
+				ClassNameHelper.LongPrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.LongPrimitive),
+				ClassNameHelper.ShortPrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.ShortPrimitive),
+				_ => false,
+			};
 		}
+
+		/// <summary>
+		/// Indicates whether <paramref name="jGlobal"/> is <paramref name="mainClass"/>.
+		/// </summary>
+		/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
+		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
+		/// <param name="mainClass">Local <see cref="JClassObject"/> main instance.</param>
+		/// <returns>
+		/// <see langword="true"/> if <paramref name="jGlobal"/> is main global class; otherwise;
+		/// <see langword="false"/>.
+		/// </returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static Boolean IsMainGlobal(JGlobal jGlobal, JVirtualMachine vm, JClassObject mainClass)
+			=> Object.ReferenceEquals(jGlobal, vm.LoadGlobal(mainClass));
 	}
 }

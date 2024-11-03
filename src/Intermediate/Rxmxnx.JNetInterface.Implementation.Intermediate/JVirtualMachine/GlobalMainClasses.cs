@@ -53,6 +53,31 @@ public partial class JVirtualMachine
 		/// </summary>
 		protected ClassObjectMetadata ShortMetadata { get; }
 
+		/// <inheritdoc/>
+		public override JGlobal ClassObject { get; }
+		/// <inheritdoc/>
+		public override JGlobal ThrowableObject { get; }
+		/// <inheritdoc/>
+		public override JGlobal StackTraceElementObject { get; }
+		/// <inheritdoc/>
+		public override JGlobal VoidPrimitive { get; }
+		/// <inheritdoc/>
+		public override JGlobal BooleanPrimitive { get; }
+		/// <inheritdoc/>
+		public override JGlobal BytePrimitive { get; }
+		/// <inheritdoc/>
+		public override JGlobal CharPrimitive { get; }
+		/// <inheritdoc/>
+		public override JGlobal DoublePrimitive { get; }
+		/// <inheritdoc/>
+		public override JGlobal FloatPrimitive { get; }
+		/// <inheritdoc/>
+		public override JGlobal IntPrimitive { get; }
+		/// <inheritdoc/>
+		public override JGlobal LongPrimitive { get; }
+		/// <inheritdoc/>
+		public override JGlobal ShortPrimitive { get; }
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -95,15 +120,15 @@ public partial class JVirtualMachine
 			this.ThrowableObject.SetValue(env.GetMainClassGlobalRef(this.ThrowableMetadata));
 			this.StackTraceElementObject.SetValue(env.GetMainClassGlobalRef(this.StackTraceElementMetadata));
 
-			this.VoidPrimitive.SetValue(env.GetMainClassGlobalRef(ClassObjectMetadata.VoidMetadata));
-			this.BooleanPrimitive.SetValue(env.GetMainClassGlobalRef(this.BooleanMetadata));
-			this.BytePrimitive.SetValue(env.GetMainClassGlobalRef(this.ByteMetadata));
-			this.CharPrimitive.SetValue(env.GetMainClassGlobalRef(this.CharMetadata));
-			this.DoublePrimitive.SetValue(env.GetMainClassGlobalRef(this.DoubleMetadata));
-			this.FloatPrimitive.SetValue(env.GetMainClassGlobalRef(this.FloatMetadata));
-			this.IntPrimitive.SetValue(env.GetMainClassGlobalRef(this.IntMetadata));
-			this.LongPrimitive.SetValue(env.GetMainClassGlobalRef(this.LongMetadata));
-			this.ShortPrimitive.SetValue(env.GetMainClassGlobalRef(this.ShortMetadata));
+			this.VoidPrimitive.SetValue(env.GetPrimitiveMainClassGlobalRef(ClassObjectMetadata.VoidMetadata));
+			this.BooleanPrimitive.SetValue(env.GetPrimitiveMainClassGlobalRef(this.BooleanMetadata));
+			this.BytePrimitive.SetValue(env.GetPrimitiveMainClassGlobalRef(this.ByteMetadata));
+			this.CharPrimitive.SetValue(env.GetPrimitiveMainClassGlobalRef(this.CharMetadata));
+			this.DoublePrimitive.SetValue(env.GetPrimitiveMainClassGlobalRef(this.DoubleMetadata));
+			this.FloatPrimitive.SetValue(env.GetPrimitiveMainClassGlobalRef(this.FloatMetadata));
+			this.IntPrimitive.SetValue(env.GetPrimitiveMainClassGlobalRef(this.IntMetadata));
+			this.LongPrimitive.SetValue(env.GetPrimitiveMainClassGlobalRef(this.LongMetadata));
+			this.ShortPrimitive.SetValue(env.GetPrimitiveMainClassGlobalRef(this.ShortMetadata));
 		}
 	}
 }
