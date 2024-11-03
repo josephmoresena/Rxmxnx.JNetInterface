@@ -49,40 +49,57 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean TraceEnabled
+#if !PACKAGE
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => AppContext.TryGetSwitch("JNetInterface.EnableTrace", out Boolean enable) && enable;
 	}
+#else
+		=> false;
+#endif
 	/// <summary>
 	/// Indicates whether metadata validation is enabled.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean MetadataValidationEnabled
+#if !PACKAGE
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => !AppContext.TryGetSwitch("JNetInterface.DisableMetadataValidation", out Boolean disable) || !disable;
 	}
+#else
+		=> true;
+#endif
 	/// <summary>
 	/// Indicates whether metadata for nesting array is auto-generated.
 	/// </summary>
+	/// <remarks>In reflection-free mode this feature is unavailable.</remarks>
 	[ExcludeFromCodeCoverage]
 	public static Boolean NestingArrayAutoGenerationEnabled
+#if !PACKAGE
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get
-			=> !IVirtualMachine.disabledReflection && // In reflection-free mode this feature is unavailable.
+			=> !IVirtualMachine.disabledReflection &&
 				(!AppContext.TryGetSwitch("JNetInterface.DisableNestingArrayAutoGeneration", out Boolean disable) ||
 					!disable);
 	}
+#else
+		=> !IVirtualMachine.disabledReflection;
+#endif
 	/// <summary>
 	/// Indicates whether detailed a ToString() is available for type metadata instances.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean TypeMetadataToStringEnabled
+#if !PACKAGE
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => !AppContext.TryGetSwitch("JNetInterface.DisableTypeMetadataToString", out Boolean disable) || !disable;
 	}
+#else
+		=> true;
+#endif
 
 	/// <summary>
 	/// JNI reference to the interface.

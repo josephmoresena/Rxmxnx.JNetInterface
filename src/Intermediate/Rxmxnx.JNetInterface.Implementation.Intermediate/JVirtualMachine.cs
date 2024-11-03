@@ -10,30 +10,42 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean FinalUserTypeRuntimeEnabled
+#if !PACKAGE
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => AppContext.TryGetSwitch("JNetInterface.EnableFinalUserTypeRuntime", out Boolean enable) && enable;
 	}
+#else
+		=> true;
+#endif
 	/// <summary>
 	/// Indicates whether native call adapters should check parameter references type.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean CheckRefTypeNativeCallEnabled
+#if !PACKAGE
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => !AppContext.TryGetSwitch("JNetInterface.DisableCheckRefTypeNativeCall", out Boolean disable) || !disable;
 	}
+#else
+		=> true;
+#endif
 	/// <summary>
 	/// Indicates whether native call adapters should check parameter class object class.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean CheckClassRefNativeCallEnabled
+#if !PACKAGE
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get
 			=> !AppContext.TryGetSwitch("JNetInterface.DisableCheckClassRefNativeCall", out Boolean disable) ||
 				!disable;
 	}
+#else
+		=> true;
+#endif
 
 	/// <summary>
 	/// Indicates whether the current virtual machine remains alive.
