@@ -87,15 +87,15 @@ public partial class PrimitiveClassesTests
 			fakeMethodDefinition.StaticInvoke(longPrimitiveClass);
 			fakeMethodDefinition.StaticInvoke(shortPrimitiveClass);
 
-			Assert.Equal(proxyEnv.VirtualMachine.VoidGlobalRef.Value, voidPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.BooleanGlobalRef.Value, booleanPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.ByteGlobalRef.Value, bytePrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.CharGlobalRef.Value, charPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.DoubleGlobalRef.Value, doublePrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.FloatGlobalRef.Value, floatPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.IntGlobalRef.Value, intPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.LongGlobalRef.Value, longPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.ShortGlobalRef.Value, shortPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.VoidPGlobalRef.Value, voidPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.BooleanPGlobalRef.Value, booleanPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.BytePGlobalRef.Value, bytePrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.CharPGlobalRef.Value, charPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.DoublePGlobalRef.Value, doublePrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.FloatPGlobalRef.Value, floatPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.IntPGlobalRef.Value, intPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.LongPGlobalRef.Value, longPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.ShortPGlobalRef.Value, shortPrimitiveClass.Reference.Value);
 
 			Assert.Equal(proxyEnv.VoidPrimitiveLocalRef.Value, voidPrimitiveClass.LocalReference);
 			Assert.Equal(proxyEnv.BooleanPrimitiveLocalRef.Value, booleanPrimitiveClass.LocalReference);

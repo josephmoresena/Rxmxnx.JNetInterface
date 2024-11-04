@@ -260,8 +260,10 @@ partial class JEnvironment
 	/// </summary>
 	/// <param name="classMetadata">Class metadata.</param>
 	/// <param name="classRef">A local class reference.</param>
+	/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	private JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata classMetadata, JClassLocalRef classRef)
+	private JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata classMetadata, JClassLocalRef classRef,
+		Boolean deleteLocalRef = true)
 	{
 		try
 		{
@@ -270,7 +272,8 @@ partial class JEnvironment
 		}
 		finally
 		{
-			this.DeleteLocalRef(classRef.Value);
+			if (deleteLocalRef)
+				this.DeleteLocalRef(classRef.Value);
 		}
 
 		this.DescribeException();

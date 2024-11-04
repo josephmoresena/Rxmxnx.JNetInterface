@@ -65,9 +65,10 @@ public partial class JVirtualMachine
 			found = false;
 			this._cache.GlobalClassCache[jClass.Hash] = jGlobal;
 		}
-		JTrace.LoadGlobalClass(jClass, found, jGlobal.Reference);
 		lifetime.SetGlobal(jGlobal);
-		if (JVirtualMachine.userMainClasses.ContainsKey(jClass.Hash)) this._cache.SetMainGlobal(jClass.Hash, jGlobal);
+		if (JVirtualMachine.userMainClasses.ContainsKey(jClass.Hash))
+			this._cache.SetMainGlobal(jClass.Hash, jGlobal); // Load main global class.
+		JTrace.LoadGlobalClass(jClass, found, jGlobal.Reference);
 		return jGlobal;
 	}
 	/// <summary>

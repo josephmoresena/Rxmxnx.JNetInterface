@@ -85,21 +85,28 @@ partial class JEnvironment
 		{
 			if (jClass is null) return default;
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			if (!classRef.IsDefault) return classRef;
-			classRef = this.FindClass(jClass);
-			if (JVirtualMachine.IsMainClass(jClass.Hash))
+			if (classRef.IsDefault)
 			{
-				//TODO: Check reload main class.
-				JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
-				ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
-				this.VirtualMachine.SetMainGlobal(classMetadata.Hash, jGlobal);
+				classRef = this.FindClass(jClass);
+				if (!JVirtualMachine.IsMainClass(jClass.Hash))
+					jClass.SetValue(classRef);
+				else
+					classRef = this.ReloadMainClass(jClass, classRef, true);
+				this.Register(jClass);
 			}
-			else
+			else if (JVirtualMachine.IsMainClass(jClass.Hash))
 			{
-				jClass.SetValue(classRef);
+				classRef = this.ReloadMainClass(jClass, classRef, false);
 			}
-			this.Register(jClass);
 			return classRef;
+		}
+		private JClassLocalRef ReloadMainClass(JClassObject jClass, JClassLocalRef classRef, Boolean deleteLocalRef)
+		{
+			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
+			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
+			jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
+			this.VirtualMachine.SetMainGlobal(classMetadata.Hash, jGlobal);
+			return jGlobal.As<JClassLocalRef>();
 		}
 		/// <summary>
 		/// Retrieves the current <paramref name="classRef"/> instance as <see cref="JClassObject"/>.
