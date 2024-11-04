@@ -131,4 +131,14 @@ public partial class JVirtualMachine : IVirtualMachine
 		ReferenceCache.Instance.Get(reference)?._cache.ClearCache();
 		return ReferenceCache.Instance.Remove(reference);
 	}
+	/// <summary>
+	/// Sets <typeparamref name="TReference"/> as main class.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	public static void SetMainClass<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
+	{
+		String hash = MetadataHelper.GetExactMetadata<TReference>().Hash;
+		if (!JVirtualMachine.userMainClasses.ContainsKey(hash))
+			JVirtualMachine.userMainClasses.TryAdd(hash, ClassObjectMetadata.Create<TReference>());
+	}
 }

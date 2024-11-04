@@ -101,7 +101,7 @@ partial class JEnvironment
 				ClassNameHelper.IntPrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.IntPrimitive),
 				ClassNameHelper.LongPrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.LongPrimitive),
 				ClassNameHelper.ShortPrimitiveHash => LocalMainClasses.IsMainGlobal(jGlobal, vm, this.ShortPrimitive),
-				_ => false,
+				_ => vm.IsMainGlobal(classMetadata.Hash, jGlobal),
 			};
 		}
 

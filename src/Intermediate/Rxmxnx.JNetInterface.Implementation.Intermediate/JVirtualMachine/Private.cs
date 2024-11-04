@@ -5,6 +5,12 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine
 {
 	/// <summary>
+	/// User main classes dictionary.
+	/// </summary>
+	private static readonly ConcurrentDictionary<String, ClassObjectMetadata> userMainClasses =
+		JVirtualMachine.CreateMainClassesDictionary();
+
+	/// <summary>
 	/// <see cref="JVirtualMachine"/> cache.
 	/// </summary>
 	private readonly VirtualMachineCache _cache;
@@ -62,6 +68,17 @@ public partial class JVirtualMachine
 		JEnvironment env = this.GetEnvironment(thread.Reference);
 		this._cache.LoadMainClasses(env);
 	}
+	/// <summary>
+	/// Creates global instance for <paramref name="classMetadata"/>
+	/// </summary>
+	/// <param name="classMetadata">A <see cref="ClassObjectMetadata"/> instance.</param>
+	private void CreateGlobalClass(ClassObjectMetadata classMetadata)
+	{
+		JGlobal globalClass = new(this, classMetadata, default);
+		this._cache.GlobalClassCache[classMetadata.Hash] = globalClass;
+		if (JVirtualMachine.userMainClasses.ContainsKey(classMetadata.Hash))
+			this._cache.SetMainGlobal(classMetadata.Hash, globalClass);
+	}
 
 	/// <summary>
 	/// Attach current thread to VM.
@@ -91,5 +108,15 @@ public partial class JVirtualMachine
 		Int32 version = args.Version < IVirtualMachine.MinimalVersion ? IVirtualMachine.MinimalVersion : args.Version;
 		VirtualMachineArgumentValue arg = new(version, namePtr, threadGroupRef);
 		return arg;
+	}
+	/// <summary>
+	/// Creates user main classes dictionary.
+	/// </summary>
+	/// <returns>A <see cref="ConcurrentDictionary{String,ClassObjectMetadata}"/> instance.</returns>
+	private static ConcurrentDictionary<String, ClassObjectMetadata> CreateMainClassesDictionary()
+	{
+		ConcurrentDictionary<String, ClassObjectMetadata> mainClasses = new();
+		//TODO: New global features.
+		return mainClasses;
 	}
 }

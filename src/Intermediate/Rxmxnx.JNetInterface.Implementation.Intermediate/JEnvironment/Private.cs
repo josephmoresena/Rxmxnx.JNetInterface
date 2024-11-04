@@ -258,10 +258,10 @@ partial class JEnvironment
 	/// <summary>
 	/// Retrieves a global reference for given class reference.
 	/// </summary>
-	/// <param name="metadata">Class metadata.</param>
+	/// <param name="classMetadata">Class metadata.</param>
 	/// <param name="classRef">A local class reference.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	private JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata metadata, JClassLocalRef classRef)
+	private JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata classMetadata, JClassLocalRef classRef)
 	{
 		try
 		{
@@ -276,7 +276,7 @@ partial class JEnvironment
 		this.DescribeException();
 		this._cache.ClearException(); // Clears JNI exception.
 		throw new NotSupportedException(
-			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(metadata.ClassSignature)} class.");
+			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(classMetadata.ClassSignature)} class.");
 	}
 
 	/// <summary>

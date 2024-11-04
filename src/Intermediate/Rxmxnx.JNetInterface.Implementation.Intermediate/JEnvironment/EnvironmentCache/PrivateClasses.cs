@@ -87,7 +87,17 @@ partial class JEnvironment
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
 			if (!classRef.IsDefault) return classRef;
 			classRef = this.FindClass(jClass);
-			jClass.SetValue(classRef);
+			if (JVirtualMachine.IsMainClass(jClass.Hash))
+			{
+				//TODO: Check reload main class.
+				JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
+				ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
+				this.VirtualMachine.SetMainGlobal(classMetadata.Hash, jGlobal);
+			}
+			else
+			{
+				jClass.SetValue(classRef);
+			}
 			this.Register(jClass);
 			return classRef;
 		}
@@ -119,6 +129,7 @@ partial class JEnvironment
 		{
 			TypeInfoSequence classInformation = MetadataHelper.GetClassInformation(className, true);
 			JTrace.GetClass(classRef, classInformation.Name);
+			//TODO: Get main class.
 			if (!this._classes.TryGetValue(classInformation.ToString(), out JClassObject? jClass))
 			{
 				JTypeKind kind = classInformation.Name[0] == CommonNames.ArraySignaturePrefixChar ?
@@ -136,6 +147,7 @@ partial class JEnvironment
 		private JClassObject GetClass(ITypeInformation typeInformation, JClassLocalRef classRef)
 		{
 			JTrace.GetClass(classRef, typeInformation.ClassName);
+			//TODO: Get main class.
 			if (!this._classes.TryGetValue(typeInformation.Hash, out JClassObject? jClass))
 				jClass = new(this.ClassObject, typeInformation, classRef);
 			if (jClass.LocalReference == default && classRef.Value != default) jClass.SetValue(classRef);
@@ -279,6 +291,7 @@ partial class JEnvironment
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
 			JObjectLocalRef localRef = jniTransaction.Add(jClassLoader);
 			JClassLocalRef classRef = this.DefineClass(typeInformation.ClassName, buffer, localRef);
+			//TODO: Define main class.
 			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
 				//Class found in metadata cache.
 				this.DefineExistingClass(result, jniTransaction, classRef);
