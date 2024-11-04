@@ -7,7 +7,7 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract JWeak CreateWeak(JGlobalBase jGlobal);
 	/// <inheritdoc/>
-	public void LocalLoad(JGlobalBase jGlobal, JLocalObject jLocal) { throw new NotImplementedException(); }
+	public abstract void LocalLoad(JGlobalBase jGlobal, JLocalObject jLocal);
 	/// <inheritdoc/>
 	public abstract Boolean Unload(JLocalObject jLocal);
 	/// <inheritdoc/>

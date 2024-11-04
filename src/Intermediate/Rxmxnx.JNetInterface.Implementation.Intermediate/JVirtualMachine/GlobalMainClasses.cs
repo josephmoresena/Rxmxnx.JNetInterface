@@ -93,7 +93,7 @@ public partial class JVirtualMachine
 			this.ClassObject.SetValue(env.GetMainClassGlobalRef(this._classMetadata));
 			this.ThrowableObject.SetValue(env.GetMainClassGlobalRef(this._throwableMetadata));
 			this.StackTraceElementObject.SetValue(env.GetMainClassGlobalRef(this._stackTraceElementMetadata));
-
+			this.LoadUserMainClasses(env);
 			this.LoadPrimitiveMainClasses(env);
 		}
 		/// <summary>

@@ -65,6 +65,46 @@ public partial class JVirtualMachine
 				this._mainClasses.TryAdd(classMetadata.Hash, new(vm, this._classMetadata, default));
 		}
 		/// <summary>
+		/// Loads user global classes.
+		/// </summary>
+		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+		private void LoadUserMainClasses(JEnvironment env)
+		{
+			foreach (String hash in JVirtualMachine.userMainClasses.Keys)
+			{
+				if (!this._mainClasses.TryGetValue(hash, out JGlobal? jGlobal) || !jGlobal.IsDefault) continue;
+				try
+				{
+					jGlobal.SetValue(env.GetMainClassGlobalRef(JVirtualMachine.userMainClasses[hash]));
+				}
+				catch (Exception)
+				{
+					switch (hash)
+					{
+						case ClassNameHelper.VoidObjectHash:
+						case ClassNameHelper.BooleanObjectHash:
+						case ClassNameHelper.ByteObjectHash:
+						case ClassNameHelper.CharacterObjectHash:
+						case ClassNameHelper.DoubleObjectHash:
+						case ClassNameHelper.FloatObjectHash:
+						case ClassNameHelper.IntegerObjectHash:
+						case ClassNameHelper.LongObjectHash:
+						case ClassNameHelper.ShortObjectHash:
+						case ClassNameHelper.EnumHash:
+						case ClassNameHelper.BufferHash:
+						case ClassNameHelper.MemberHash:
+						case ClassNameHelper.ExecutableHash:
+						case ClassNameHelper.MethodHash:
+						case ClassNameHelper.FieldHash:
+							throw;
+						default:
+							// If class is not built-in, VM initialization may should continue.
+							continue;
+					}
+				}
+			}
+		}
+		/// <summary>
 		/// Loads primitive global classes.
 		/// </summary>
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
