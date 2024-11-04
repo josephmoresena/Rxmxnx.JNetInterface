@@ -113,8 +113,6 @@ public partial class JVirtualMachine
 	/// Creates user main classes dictionary.
 	/// </summary>
 	/// <returns>A <see cref="ConcurrentDictionary{String,ClassObjectMetadata}"/> instance.</returns>
-	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
-	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 	private static ConcurrentDictionary<String, ClassObjectMetadata> CreateMainClassesDictionary()
 	{
 		ConcurrentDictionary<String, ClassObjectMetadata> mainClasses = new();

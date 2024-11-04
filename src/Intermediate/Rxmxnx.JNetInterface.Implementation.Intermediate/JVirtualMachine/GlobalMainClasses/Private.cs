@@ -139,6 +139,8 @@ public partial class JVirtualMachine
 		/// </summary>
 		/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
 		/// <returns>A <see cref="ConcurrentDictionary{String, Global}"/> instance.</returns>
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
+		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
 		private static ConcurrentDictionary<String, JGlobal> CreateMainClassesDictionary(IVirtualMachine vm)
 		{
 			ConcurrentDictionary<String, JGlobal> result = new();
