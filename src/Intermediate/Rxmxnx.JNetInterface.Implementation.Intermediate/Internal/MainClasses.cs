@@ -3,6 +3,8 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Stores initial classes.
 /// </summary>
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1694,
+                 Justification = CommonConstants.InternalInheritanceJustification)]
 internal abstract class MainClasses<TClass> where TClass : JReferenceObject
 {
 	/// <summary>
