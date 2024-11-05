@@ -137,8 +137,8 @@ jobs:
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
-        java-version: 21
-        distribution: 'oracle'
+        java-version: '21'
+        distribution: 'zulu'
     - name: C# Framework run
       run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
     - name: Vb Framework run
