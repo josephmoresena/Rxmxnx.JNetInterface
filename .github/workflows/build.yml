@@ -82,6 +82,11 @@ jobs:
   run-linux:
     runs-on: ubuntu-latest
     steps:
+    - name: Set up JDK 1.8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'oracle'
     - uses: actions/checkout@v4
     - name: Setup NativeAOT pre-requisites
       run: sudo apt-get install clang zlib1g-dev libkrb5-dev --assume-yes
@@ -119,6 +124,11 @@ jobs:
   run-macOS:
     runs-on: macos-latest
     steps:
+    - name: Set up JDK 1.8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'oracle'
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -155,6 +165,11 @@ jobs:
   run-windows:
     runs-on: windows-latest
     steps:
+    - name: Set up JDK 1.8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'oracle'
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
