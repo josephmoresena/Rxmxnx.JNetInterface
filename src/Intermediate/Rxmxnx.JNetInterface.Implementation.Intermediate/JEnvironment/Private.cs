@@ -281,6 +281,23 @@ partial class JEnvironment
 		throw new NotSupportedException(
 			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(classMetadata.ClassSignature)} class.");
 	}
+	/// <summary>
+	/// Indicates whether validation of <paramref name="jGlobal"/> can be avoided.
+	/// </summary>
+	/// <param name="cache">A <see cref="EnvironmentCache"/> instance.</param>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jGlobal"/> validation can be avoided;
+	/// otherwise, <see langword="false"/>;
+	/// </returns>
+	private static Boolean IsValidationAvoidable(EnvironmentCache? cache, JGlobalBase jGlobal)
+	{
+		if (cache is null || !cache.VirtualMachine.SecureRemove(jGlobal.As<JObjectLocalRef>())) return true;
+		Boolean isWeak = jGlobal is JWeak;
+		if (!isWeak && jGlobal.ObjectMetadata is ClassObjectMetadata classObjectMetadata)
+			return MetadataHelper.MainClassHashes.Contains(classObjectMetadata.Hash);
+		return Random.Shared.Next(0, 10) > (!isWeak ? 5 : 2);
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="JClassTypeMetadata"/> instance from <paramref name="jClass"/>
