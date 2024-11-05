@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.Lang;
@@ -44,6 +45,8 @@ public static class Program
 		{
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
 			if (IVirtualMachine.TypeMetadataToStringEnabled) Console.WriteLine(initArgs);
+			if (IVirtualMachine.TraceEnabled)
+				initArgs = new(initArgs.Version) { Options = new("-verbose:jni", "-verbose:class", "-verbose:gc"), };
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{
