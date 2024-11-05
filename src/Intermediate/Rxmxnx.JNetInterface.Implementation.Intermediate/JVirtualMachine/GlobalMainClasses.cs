@@ -94,7 +94,8 @@ public partial class JVirtualMachine
 			this.ThrowableObject.SetValue(env.GetMainClassGlobalRef(this._throwableMetadata));
 			this.StackTraceElementObject.SetValue(env.GetMainClassGlobalRef(this._stackTraceElementMetadata));
 			this.LoadUserMainClasses(env);
-			this.LoadPrimitiveMainClasses(env);
+			if (MainClasses.PrimitiveMainClassesEnabled)
+				this.LoadPrimitiveMainClasses(env);
 		}
 		/// <summary>
 		/// Loads main classes in <paramref name="classCache"/>.

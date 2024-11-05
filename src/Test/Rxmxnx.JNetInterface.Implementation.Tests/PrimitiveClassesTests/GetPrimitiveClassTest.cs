@@ -20,14 +20,14 @@ public partial class PrimitiveClassesTests
 			using JClassObject shortObjectClass = env.ClassFeature.ShortObject;
 
 			Assert.True(JObject.IsNullOrDefault(voidObjectClass));
-			Assert.True(JObject.IsNullOrDefault(byteObjectClass));
-			Assert.True(JObject.IsNullOrDefault(booleanObjectClass));
-			Assert.True(JObject.IsNullOrDefault(characterObjectClass));
-			Assert.True(JObject.IsNullOrDefault(doubleObjectClass));
-			Assert.True(JObject.IsNullOrDefault(floatObjectClass));
-			Assert.True(JObject.IsNullOrDefault(integerObjectClass));
-			Assert.True(JObject.IsNullOrDefault(longObjectClass));
-			Assert.True(JObject.IsNullOrDefault(shortObjectClass));
+			Assert.False(JObject.IsNullOrDefault(byteObjectClass));
+			Assert.False(JObject.IsNullOrDefault(booleanObjectClass));
+			Assert.False(JObject.IsNullOrDefault(characterObjectClass));
+			Assert.False(JObject.IsNullOrDefault(doubleObjectClass));
+			Assert.False(JObject.IsNullOrDefault(floatObjectClass));
+			Assert.False(JObject.IsNullOrDefault(integerObjectClass));
+			Assert.False(JObject.IsNullOrDefault(longObjectClass));
+			Assert.False(JObject.IsNullOrDefault(shortObjectClass));
 
 			// Needed to load class.
 			PrimitiveClassesTests.WrapperInstanceAssert(proxyEnv, env);

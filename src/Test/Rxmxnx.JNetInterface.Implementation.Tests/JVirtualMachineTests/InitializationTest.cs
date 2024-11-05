@@ -110,8 +110,8 @@ public partial class JVirtualMachineTests
 		Boolean noThrows = mainClass is MainClass.None || error is ClassLoadingError.None ||
 			(error == ClassLoadingError.TypeIdError && dataTypeMetadata?.Kind == JTypeKind.Primitive) ||
 			(error == ClassLoadingError.TypeIdError && auxTypeMedata is null) ||
-			// TODO: Wrapper class as main classes.
-			(error == ClassLoadingError.CreateGlobal && auxTypeMedata?.Kind == JTypeKind.Primitive);
+			// By default java.lang.Void is not a main class.
+			(error == ClassLoadingError.CreateGlobal && mainClass is MainClass.VoidObject);
 		Dictionary<MainClass, IFixedPointer.IDisposable> mainPointer = JVirtualMachineTests.GetMainNamePointer();
 		Dictionary<MainClass, JFieldId> mainTypeField = JVirtualMachineTests.GetTypeField(proxyEnv);
 		Dictionary<MainClass, JClassLocalRef> mainClassRef = JVirtualMachineTests.GetMainLocalRef(proxyEnv);

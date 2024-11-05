@@ -30,7 +30,15 @@ partial class JEnvironment
 			}
 
 			JClassLocalRef classRef = this.FindMainClass(wrapperClass.Name, wrapperClass.ClassSignature);
-			return this.FindPrimitiveClass(classRef, ClassNameHelper.GetPrimitiveClassName(signature));
+			try
+			{
+				return this.FindPrimitiveClass(classRef, ClassNameHelper.GetPrimitiveClassName(signature));
+			}
+			finally
+			{
+				// Deletes wrapper class local reference.
+				this._env.DeleteLocalRef(classRef.Value);
+			}
 		}
 		/// <summary>
 		/// Retrieves a <see cref="JClassLocalRef"/> reference for primitive class.
@@ -40,19 +48,12 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>
 		public JClassLocalRef FindPrimitiveClass(JClassLocalRef wClassRef, String className)
 		{
-			try
+			JFieldId typeFieldId =
+				this._env.GetStaticFieldId(NativeFunctionSetImpl.PrimitiveTypeDefinition, wClassRef, true);
+			if (typeFieldId != default)
 			{
-				JFieldId typeFieldId =
-					this._env.GetStaticFieldId(NativeFunctionSetImpl.PrimitiveTypeDefinition, wClassRef, true);
-				if (typeFieldId != default)
-				{
-					JObjectLocalRef localRef = this.GetStaticObjectField(wClassRef, typeFieldId, true);
-					if (localRef != default) return JClassLocalRef.FromReference(in localRef);
-				}
-			}
-			finally
-			{
-				this._env.DeleteLocalRef(wClassRef.Value);
+				JObjectLocalRef localRef = this.GetStaticObjectField(wClassRef, typeFieldId, true);
+				if (localRef != default) return JClassLocalRef.FromReference(in localRef);
 			}
 
 			this._env.DescribeException();

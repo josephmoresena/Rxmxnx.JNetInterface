@@ -103,6 +103,7 @@ partial class JEnvironment
 		private JClassLocalRef ReloadMainClass(JClassObject jClass, JClassLocalRef classRef, Boolean deleteLocalRef)
 		{
 			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
+			if (!jGlobal.IsDefault) return classRef;
 			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
 			jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
 			this.VirtualMachine.SetMainGlobal(classMetadata.Hash, jGlobal);

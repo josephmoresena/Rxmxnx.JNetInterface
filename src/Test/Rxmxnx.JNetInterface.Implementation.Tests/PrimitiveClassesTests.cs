@@ -40,6 +40,38 @@ public sealed partial class PrimitiveClassesTests
 			{ proxyEnv.IntegerObjectLocalRef, PrimitiveClassesTests.fixture.Create<JMethodId>() },
 			{ proxyEnv.LongObjectLocalRef, PrimitiveClassesTests.fixture.Create<JMethodId>() },
 			{ proxyEnv.ShortObjectLocalRef, PrimitiveClassesTests.fixture.Create<JMethodId>() },
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.BooleanGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JMethodId>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ByteGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JMethodId>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.CharacterGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JMethodId>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.DoubleGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JMethodId>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.FloatGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JMethodId>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.IntegerGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JMethodId>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.LongGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JMethodId>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ShortGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JMethodId>()
+			},
 		};
 		Dictionary<JClassLocalRef, JObjectLocalRef> newRefs = new()
 		{
@@ -52,6 +84,42 @@ public sealed partial class PrimitiveClassesTests
 			{ proxyEnv.IntegerObjectLocalRef, PrimitiveClassesTests.fixture.Create<JObjectLocalRef>() },
 			{ proxyEnv.LongObjectLocalRef, PrimitiveClassesTests.fixture.Create<JObjectLocalRef>() },
 			{ proxyEnv.ShortObjectLocalRef, PrimitiveClassesTests.fixture.Create<JObjectLocalRef>() },
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.VoidGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JObjectLocalRef>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.BooleanGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JObjectLocalRef>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ByteGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JObjectLocalRef>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.CharacterGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JObjectLocalRef>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.DoubleGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JObjectLocalRef>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.FloatGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JObjectLocalRef>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.IntegerGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JObjectLocalRef>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.LongGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JObjectLocalRef>()
+			},
+			{
+				JClassLocalRef.FromReference(proxyEnv.VirtualMachine.ShortGlobalRef),
+				PrimitiveClassesTests.fixture.Create<JObjectLocalRef>()
+			},
 		};
 
 		// Create Wrapper instance in order to load class.

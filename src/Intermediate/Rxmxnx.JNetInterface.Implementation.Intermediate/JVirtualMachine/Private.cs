@@ -8,7 +8,7 @@ public partial class JVirtualMachine
 	/// User main classes dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<String, ClassObjectMetadata> userMainClasses =
-		JVirtualMachine.CreateMainClassesDictionary();
+		MainClasses.CreateMainClassesDictionary();
 
 	/// <summary>
 	/// <see cref="JVirtualMachine"/> cache.
@@ -108,15 +108,5 @@ public partial class JVirtualMachine
 		Int32 version = args.Version < IVirtualMachine.MinimalVersion ? IVirtualMachine.MinimalVersion : args.Version;
 		VirtualMachineArgumentValue arg = new(version, namePtr, threadGroupRef);
 		return arg;
-	}
-	/// <summary>
-	/// Creates user main classes dictionary.
-	/// </summary>
-	/// <returns>A <see cref="ConcurrentDictionary{String,ClassObjectMetadata}"/> instance.</returns>
-	private static ConcurrentDictionary<String, ClassObjectMetadata> CreateMainClassesDictionary()
-	{
-		ConcurrentDictionary<String, ClassObjectMetadata> mainClasses = new();
-		//TODO: New global features.
-		return mainClasses;
 	}
 }
