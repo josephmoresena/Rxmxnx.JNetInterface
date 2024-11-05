@@ -86,7 +86,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: '8'
-        distribution: 'oracle'
+        distribution: 'microsoft'
     - uses: actions/checkout@v4
     - name: Setup NativeAOT pre-requisites
       run: sudo apt-get install clang zlib1g-dev libkrb5-dev --assume-yes
@@ -128,7 +128,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: '8'
-        distribution: 'oracle'
+        distribution: 'microsoft'
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -169,7 +169,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: '8'
-        distribution: 'oracle'
+        distribution: 'microsoft'
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
