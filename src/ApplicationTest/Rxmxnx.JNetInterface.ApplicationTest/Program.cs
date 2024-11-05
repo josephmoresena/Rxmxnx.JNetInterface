@@ -17,7 +17,7 @@ public static class Program
 
 		JCompiler? compiler = args.Length == 3 ?
 			new() { JdkPath = args[0], CompilerPath = args[1], LibraryPath = args[2], } :
-			JCompiler.GetCompilers().FirstOrDefault();
+			Program.GetCompiler();
 
 		if (compiler is null)
 		{
@@ -37,6 +37,14 @@ public static class Program
 		Program.Execute(jvmLib, helloJniByteCode, jMainArgs);
 
 		IManagedCallback.PrintSwitches();
+	}
+	private static JCompiler? GetCompiler()
+	{
+		JCompiler[] compilers = JCompiler.GetCompilers();
+		JCompiler? selected = compilers.FirstOrDefault();
+		foreach (JCompiler compiler in compilers)
+			Console.WriteLine($"{compiler.JdkPath} {(compiler == selected ? '*' : ' ')}");
+		return selected;
 	}
 	private static void Execute(JVirtualMachineLibrary jvmLib, Byte[] classByteCode, params String[] args)
 	{
@@ -62,6 +70,10 @@ public static class Program
 			{
 				Console.WriteLine(ex.WithSafeInvoke(t => t.ToString()));
 				env.PendingException = default;
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
 			}
 		}
 		finally
