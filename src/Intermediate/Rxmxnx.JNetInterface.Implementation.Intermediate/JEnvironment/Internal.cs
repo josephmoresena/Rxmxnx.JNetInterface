@@ -194,7 +194,7 @@ partial class JEnvironment
 	{
 		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
-		JClassObject jClass = this._cache.GetClass(classRef, true, JTypeKind.Class);
+		JClassObject jClass = this._cache.GetClass(classRef, true, JTypeKind.Class, true);
 		this._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		typeMetadata = this._cache.GetTypeMetadata(jClass);
 		return jClass;
