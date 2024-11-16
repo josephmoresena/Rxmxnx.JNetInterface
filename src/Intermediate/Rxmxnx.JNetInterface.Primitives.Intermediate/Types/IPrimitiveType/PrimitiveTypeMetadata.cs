@@ -28,7 +28,7 @@ internal partial interface IPrimitiveType<TPrimitive, TValue>
 #if PACKAGE
 		/// <inheritdoc/>
 		public override JArrayTypeMetadata GetArrayMetadata() 
-			=> IArrayType.GetMetadata<JArrayObject<TPrimitive>>();
+			=> (JArrayTypeMetadata)IArrayType.GetArrayArrayMetadata<TPrimitive>().ElementMetadata;
 #endif
 	}
 }
