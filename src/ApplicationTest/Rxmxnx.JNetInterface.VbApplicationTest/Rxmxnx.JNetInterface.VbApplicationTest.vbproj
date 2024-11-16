@@ -25,7 +25,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
