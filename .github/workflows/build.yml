@@ -88,7 +88,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
     - name: Set up JDK 21
       run: |
          wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb
@@ -123,7 +123,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
@@ -159,12 +159,18 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
-    - name: Set up JDK 21
+        dotnet-version: 9.0.x
+    - name: Set up JDK 21 (x64)
       shell: pwsh
       run: |
           curl.exe -O https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.msi
           Start-Process msiexec.exe -Wait -ArgumentList '/I jdk-21_windows-x64_bin.msi /quiet'
+    - name: Set up JDK 8 (x86)
+      shell: pwsh
+      run: |
+          curl -C - --header "Cookie: oraclelicense=accept-securebackup-cookie" -O https://download.oracle.com/otn/java/jdk/8u431-b10/0d8f12bc927a4e2c9f8568ca567db4ee/jdk-8u431-windows-i586.exe
+
+          Start-Process jdk-8u431-windows-i586.exe -Wait -ArgumentList '/s'
     - name: C# Framework run
       run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj
     - name: Vb Framework run
