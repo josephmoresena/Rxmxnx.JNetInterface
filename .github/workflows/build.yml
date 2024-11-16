@@ -168,9 +168,8 @@ jobs:
     - name: Set up JDK 8 (x86)
       shell: pwsh
       run: |
-          curl -C - --header "Cookie: oraclelicense=accept-securebackup-cookie" -O https://download.oracle.com/otn/java/jdk/8u431-b10/0d8f12bc927a4e2c9f8568ca567db4ee/jdk-8u431-windows-i586.exe
-
-          Start-Process jdk-8u431-windows-i586.exe -Wait -ArgumentList '/s'
+          curl -O https://builds.openlogic.com/downloadJDK/openlogic-openjdk/8u432-b06/openlogic-openjdk-8u432-b06-windows-x32.msi
+          Start-Process msiexec.exe -Wait -ArgumentList '/I openlogic-openjdk-8u432-b06-windows-x32.msi /quiet'
     - name: C# Framework run
       run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj
     - name: Vb Framework run
