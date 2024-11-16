@@ -102,19 +102,19 @@ jobs:
     - name: C# NativeAOT run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net*/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
     - name: Vb NativeAOT run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r linux-x64
-         src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
+         src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net*/linux-x64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
     - name: F# NativeAOT run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r linux-x64
-         src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
+         src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net*/linux-x64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
     - name: C# NativeAOT-RFM run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 /p:IlcDisableReflection=true
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net*/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
          
   run-macOS:
     runs-on: macos-latest
@@ -138,19 +138,19 @@ jobs:
     - name: C# NativeAOT run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net*/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
     - name: Vb NativeAOT run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r osx-arm64
-         src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net8.0/osx-arm64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
+         src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net*/osx-arm64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
     - name: F# NativeAOT run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r osx-arm64
-         src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net8.0/osx-arm64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
+         src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net*/osx-arm64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
     - name: C# NativeAOT-RFM run
       run: |
          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64 /p:IlcDisableReflection=true
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net*/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
          
   run-windows:
     runs-on: windows-latest
@@ -179,17 +179,17 @@ jobs:
     - name: C# NativeAOT run
       run: |
          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
+         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net*\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
     - name: Vb NativeAOT run
       run: |
          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r win-x64
-         src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.VbApplicationTest.exe
+         src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\bin\Release\net*\win-x64\publish\Rxmxnx.JNetInterface.VbApplicationTest.exe
     - name: F# NativeAOT run
       run: |
          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r win-x64
-         src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.FsApplicationTest.exe
+         src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\bin\Release\net*\win-x64\publish\Rxmxnx.JNetInterface.FsApplicationTest.exe
     - name: C# NativeAOT-RFM run
       run: |
          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64 /p:IlcDisableReflection=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
+         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net*\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
          
