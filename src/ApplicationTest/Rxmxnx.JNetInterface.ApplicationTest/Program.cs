@@ -34,15 +34,8 @@ public static class Program
 				$"System Path: {Environment.SystemDirectory}",
 				$"Runtime Name: {RuntimeInformation.FrameworkDescription}",
 			];
-		try
-		{
-			Program.Execute(jvmLib, helloJniByteCode, jMainArgs);
-		}
-		catch (Exception e)
-		{
-			Console.WriteLine(e);
-			//throw;
-		}
+
+		Program.Execute(jvmLib, helloJniByteCode, jMainArgs);
 
 		IManagedCallback.PrintSwitches();
 	}

@@ -163,8 +163,8 @@ jobs:
     - name: Set up JDK 21
       shell: pwsh
       run: |
-          curl.exe -O https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I jdk-21_windows-x64_bin.msi /quiet'
+          curl.exe -O https://cfdownload.adobe.com/pub/adobe/coldfusion/java/java8/java8u431/jdk/jdk-8u431-windows-i586.exe
+          Start-Process jdk-8u431-windows-i586.exe -Wait -ArgumentList '/s ADDLOCAL="ToolsFeature,SourceFeature"'
     - name: Set up JDK 8 (x86)
       shell: pwsh
       if: false
@@ -198,5 +198,5 @@ jobs:
     - name: C# NativeAOT run (x86)
       if: false
       run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe "C:\Program Files (x86)\OpenLogic\jdk-8.0.432.06-hotspot" "bin\javac.exe" "jre\bin\server\jvm.dll"
+         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86 /p:EnableTrace=true
+         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
