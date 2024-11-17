@@ -169,8 +169,7 @@ jobs:
       shell: pwsh
       run: |
           curl -O https://builds.openlogic.com/downloadJDK/openlogic-openjdk/8u432-b06/openlogic-openjdk-8u432-b06-windows-x32.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I openlogic-openjdk-8u432-b06-windows-x32.msi /quiet /l*v openlogic_x86.txt'
-          type openlogic_x86.txt
+          Start-Process msiexec.exe -Wait -ArgumentList '/I openlogic-openjdk-8u432-b06-windows-x32.msi /quiet'
           cd "C:\Program Files (x86)\OpenLogic"
           Get-ChildItem -Recurse | ForEach-Object { $_.FullName } | Format-Table
     - name: C# Framework run
@@ -198,4 +197,4 @@ jobs:
     - name: C# NativeAOT run (x86)
       run: |
          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe "C:\Program Files (x86)\OpenLogic\jdk-8.0.32.06-hotspot" "bin\javac.exe" "jre\bin\server\jvm.dll"
+         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe "C:\Program Files (x86)\OpenLogic\jdk-8.0.432.06-hotspot" "bin\javac.exe" "jre\bin\server\jvm.dll"
