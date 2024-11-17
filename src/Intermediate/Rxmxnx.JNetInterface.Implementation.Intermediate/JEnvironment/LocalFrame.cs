@@ -91,6 +91,9 @@ partial class JEnvironment
 			}
 			base.Remove(localRef);
 		}
+		/// <inheritdoc/>
+		public override Boolean IsFromLocalFrame(JObjectLocalRef localRef)
+			=> this.Contains(localRef) || base.IsFromLocalFrame(localRef);
 
 		/// <summary>
 		/// Validates current queue.

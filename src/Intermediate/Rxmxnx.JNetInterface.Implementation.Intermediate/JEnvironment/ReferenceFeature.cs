@@ -141,12 +141,13 @@ partial class JEnvironment
 		{
 			if (jLocal is null || jLocal.LocalReference == default) return false;
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
+
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.LocalReference;
 			LocalCache objects = this._objects;
-			Boolean isRegistered = objects.IsRegistered(localRef);
+			Boolean isRegistered = this._objects.IsRegistered(localRef);
 			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
-			if (JLocalObject.FinalizerExecution && isRegistered && objects is LocalFrame)
+			if (JLocalObject.FinalizerExecution && isRegistered && objects.IsFromLocalFrame(localRef))
 				// Required to avoid finalizer calls JNI when object is at local frame.
 				return false;
 			try
