@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PublishAot>true</PublishAot>
@@ -13,6 +12,7 @@
         <IsPackable>false</IsPackable>
         <IsTrimmable>true</IsTrimmable>
         <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     </PropertyGroup>
 
     <PropertyGroup>
