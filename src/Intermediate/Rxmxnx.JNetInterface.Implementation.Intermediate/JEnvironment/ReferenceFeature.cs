@@ -143,8 +143,12 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jLocal);
 			Boolean isClass = jLocal is JClassObject;
 			JObjectLocalRef localRef = jLocal.LocalReference;
-			Boolean isRegistered = this._objects.IsRegistered(localRef);
+			LocalCache objects = this._objects;
+			Boolean isRegistered = objects.IsRegistered(localRef);
 			if (!this.VirtualMachine.SecureRemove(localRef)) return false;
+			if (JLocalObject.FinalizerExecution && isRegistered && objects is LocalFrame)
+				// Required to avoid finalizer calls JNI when object is at local frame.
+				return false;
 			try
 			{
 				this.Unload(isRegistered, localRef);

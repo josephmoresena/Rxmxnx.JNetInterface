@@ -41,7 +41,7 @@ public static class Program
 	private static JCompiler? GetCompiler()
 	{
 		JCompiler[] compilers = JCompiler.GetCompilers();
-		JCompiler? selected = compilers.FirstOrDefault();
+		JCompiler? selected = compilers.LastOrDefault();
 		foreach (JCompiler compiler in compilers)
 			Console.WriteLine($"{compiler.JdkPath} {(compiler == selected ? '*' : ' ')}");
 		return selected;

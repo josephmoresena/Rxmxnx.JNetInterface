@@ -9,6 +9,10 @@ public partial class JLocalObject
 	/// </summary>
 	internal static readonly TypeMetadata ObjectClassMetadata =
 		JLocalObject.CreateBuiltInMetadata<JLocalObject>(JObject.TypeInfo, JTypeModifier.Extensible);
+	/// <summary>
+	/// Indicates finalizer is at execution.
+	/// </summary>
+	internal static Boolean FinalizerExecution => JLocalObject.finalizerExecution;
 
 	static TypeMetadata IClassType<JLocalObject>.Metadata => JLocalObject.ObjectClassMetadata;
 	static Type IDataType.FamilyType => typeof(JLocalObject);
