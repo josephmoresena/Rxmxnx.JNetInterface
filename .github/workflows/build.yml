@@ -173,7 +173,7 @@ jobs:
           cd "C:\Program Files (x86)\OpenLogic"
           Get-ChildItem -Recurse | ForEach-Object { $_.FullName } | Format-Table
     - name: C# Framework run
-      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj /p:USE_NET80=true
+      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj
     - name: Vb Framework run
       run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj /p:USE_NET80=true
     - name: F# Framework run
