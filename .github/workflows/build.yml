@@ -113,7 +113,7 @@ jobs:
          src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
     - name: C# NativeAOT-RFM run
       run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 /p:IlcDisableReflection=true -f net8.0
+         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 /p:IlcDisableReflection=true /p:USE_NET80=true
          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
          
   run-macOS:
@@ -149,7 +149,7 @@ jobs:
          src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
     - name: C# NativeAOT-RFM run
       run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64 /p:IlcDisableReflection=true -f net8.0
+         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64 /p:IlcDisableReflection=true /p:USE_NET80=true
          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
          
   run-windows:
@@ -194,5 +194,5 @@ jobs:
          src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
     - name: C# NativeAOT run (x86)
       run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86 -f net9.0
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe "C:\\Program Files (x86)\\OpenLogic\\jdk-8.0.32.06-hotspot" "bin\\javac.exe" "jre\\bin\\server\\jvm.dll"
+         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86
+         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe "C:\\Program Files (x86)\\OpenLogic\\jdk-8.0.32.06-hotspot" "bin\\javac.exe" "jre\\bin\\server\\jvm.dll"
