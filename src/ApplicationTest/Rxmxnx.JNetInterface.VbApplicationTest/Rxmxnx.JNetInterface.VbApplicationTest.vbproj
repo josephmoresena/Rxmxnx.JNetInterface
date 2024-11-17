@@ -3,13 +3,13 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
-        <TargetFramework>net9.0</TargetFramework>
         <PublishAot>true</PublishAot>
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
         <InvariantGlobalization>true</InvariantGlobalization>
         <TrimMode>full</TrimMode>
         <OptionStrict>On</OptionStrict>
+        <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
     </PropertyGroup>
 
     <PropertyGroup>
