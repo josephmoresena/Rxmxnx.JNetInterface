@@ -195,4 +195,4 @@ jobs:
     - name: C# NativeAOT run (x86)
       run: |
          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe "C:\\Program Files (x86)\\OpenLogic\\jdk-8.0.32.06-hotspot" "bin\\javac.exe" "jre\\bin\\server\\jvm.dll"
+         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe "C:\Program Files (x86)\OpenLogic\jdk-8.0.32.06-hotspot" "bin\javac.exe" "jre\bin\server\jvm.dll"
