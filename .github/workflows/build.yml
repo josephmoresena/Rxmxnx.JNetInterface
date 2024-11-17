@@ -166,11 +166,11 @@ jobs:
           curl.exe -O https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.msi
           Start-Process msiexec.exe -Wait -ArgumentList '/I jdk-21_windows-x64_bin.msi /quiet'
     - name: C# Framework run
-      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -f net9.0
+      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -f net8.0
     - name: Vb Framework run
-      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj -f net9.0
+      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj -f net8.0
     - name: F# Framework run
-      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj -f net9.0
+      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj -f net8.0
     - name: C# NativeAOT run
       run: |
          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64
