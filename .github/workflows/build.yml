@@ -167,7 +167,6 @@ jobs:
           Start-Process msiexec.exe -Wait -ArgumentList '/I jdk-21_windows-x64_bin.msi /quiet'
     - name: Set up JDK 8 (x86)
       shell: pwsh
-      if: false
       run: |
           curl.exe -O https://cfdownload.adobe.com/pub/adobe/coldfusion/java/java8/java8u431/jdk/jdk-8u431-windows-i586.exe
           Start-Process jdk-8u431-windows-i586.exe -Wait -ArgumentList '/s ADDLOCAL="ToolsFeature,SourceFeature"'
@@ -194,7 +193,6 @@ jobs:
          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64 /p:IlcDisableReflection=true /p:USE_NET80=true
          src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
     - name: C# NativeAOT run (x86)
-      if: false
       run: |
          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86 /p:ENABLE_TRACE=true
          src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
