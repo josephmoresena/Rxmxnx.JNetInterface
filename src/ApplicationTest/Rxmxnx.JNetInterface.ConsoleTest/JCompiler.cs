@@ -57,7 +57,7 @@ public sealed partial class JCompiler
 	public JVirtualMachineLibrary GetLibrary()
 	{
 		String libraryPath = Path.Combine(this.JdkPath, this.LibraryPath);
-		return JVirtualMachineLibrary.LoadLibrary(Path.Combine(this.JdkPath, this.LibraryPath)) ??
+		return JVirtualMachineLibrary.LoadLibrary(libraryPath) ??
 			throw new InvalidOperationException($"Invalid JVM library. {libraryPath}");
 	}
 }

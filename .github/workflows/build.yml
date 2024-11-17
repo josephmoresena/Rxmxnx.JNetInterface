@@ -169,7 +169,10 @@ jobs:
       shell: pwsh
       run: |
           curl -O https://builds.openlogic.com/downloadJDK/openlogic-openjdk/8u432-b06/openlogic-openjdk-8u432-b06-windows-x32.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I openlogic-openjdk-8u432-b06-windows-x32.msi /quiet'
+          Start-Process msiexec.exe -Wait -ArgumentList '/I openlogic-openjdk-8u432-b06-windows-x32.msi /quiet /l*v openlogic_x86.txt'
+          type openlogic_x86.txt
+          cd "C:\Program Files (x86)\OpenLogic"
+          Get-ChildItem -Recurse | ForEach-Object { $_.FullName } | Format-Table
     - name: C# Framework run
       run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj /p:USE_NET80=true
     - name: Vb Framework run
