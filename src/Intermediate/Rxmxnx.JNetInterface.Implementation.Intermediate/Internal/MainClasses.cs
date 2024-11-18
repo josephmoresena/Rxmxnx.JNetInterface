@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </summary>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1694,
                  Justification = CommonConstants.InternalInheritanceJustification)]
-public abstract class MainClasses
+internal abstract class MainClasses
 {
 	/// <summary>
 	/// Indicates whether <see cref="JVoidObject"/> class is a main class.
@@ -99,7 +99,7 @@ public abstract class MainClasses
 /// <typeparam name="TClass">Type of class.</typeparam>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1694,
                  Justification = CommonConstants.InternalInheritanceJustification)]
-public abstract class MainClasses<TClass> : MainClasses where TClass : JReferenceObject
+internal abstract class MainClasses<TClass> : MainClasses where TClass : JReferenceObject
 {
 	/// <summary>
 	/// Class for <see cref="JClassObject"/>

@@ -75,18 +75,7 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// </summary>
 	/// <remarks>In reflection-free mode this feature is unavailable.</remarks>
 	[ExcludeFromCodeCoverage]
-	public static Boolean NestingArrayAutoGenerationEnabled
-#if !PACKAGE
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get
-			=> !IVirtualMachine.disabledReflection &&
-				(!AppContext.TryGetSwitch("JNetInterface.DisableNestingArrayAutoGeneration", out Boolean disable) ||
-					!disable);
-	}
-#else
-		=> !IVirtualMachine.disabledReflection;
-#endif
+	public static Boolean NestingArrayAutoGenerationEnabled => !IVirtualMachine.disabledReflection;
 	/// <summary>
 	/// Indicates whether detailed a ToString() is available for type metadata instances.
 	/// </summary>

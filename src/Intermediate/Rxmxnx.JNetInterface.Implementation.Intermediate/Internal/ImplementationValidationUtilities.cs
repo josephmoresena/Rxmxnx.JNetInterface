@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Utility class for argument validation in current implementation.
 /// </summary>
-public static class ImplementationValidationUtilities
+internal static class ImplementationValidationUtilities
 {
 	/// <summary>
 	/// Throws an exception if <paramref name="jObject"/> is proxy.
