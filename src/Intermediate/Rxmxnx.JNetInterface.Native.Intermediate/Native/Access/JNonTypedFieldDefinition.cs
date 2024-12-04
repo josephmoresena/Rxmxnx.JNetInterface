@@ -3,9 +3,6 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// <summary>
 /// This class stores a non-typed class field definition.
 /// </summary>
-/// <remarks>
-/// Constructor.
-/// </remarks>
 /// <param name="name">Field name.</param>
 /// <param name="signature">Signature field.</param>
 public sealed class JNonTypedFieldDefinition(ReadOnlySpan<Byte> name, ReadOnlySpan<Byte> signature) : JFieldDefinition(

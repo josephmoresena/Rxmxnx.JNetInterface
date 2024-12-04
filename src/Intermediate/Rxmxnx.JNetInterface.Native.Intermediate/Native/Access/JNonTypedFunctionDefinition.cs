@@ -3,13 +3,10 @@ namespace Rxmxnx.JNetInterface.Native.Access;
 /// <summary>
 /// This class stores a non-typed class function definition.
 /// </summary>
-/// <remarks>
-/// Constructor.
-/// </remarks>
 /// <param name="functionName">Function name.</param>
 /// <param name="returnTypeSignature">Method return type defined signature.</param>
 /// <param name="metadata">Metadata of the types of call arguments.</param>
-internal sealed class JNonTypedFunctionDefinition(
+public sealed class JNonTypedFunctionDefinition(
 	ReadOnlySpan<Byte> functionName,
 	ReadOnlySpan<Byte> returnTypeSignature,
 	ReadOnlySpan<JArgumentMetadata> metadata = default) : JFunctionDefinition<JLocalObject>(functionName,
