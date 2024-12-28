@@ -79,9 +79,9 @@ jobs:
       - name: Pack core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
         run: |
-          dotnet pack -c Release /p:Version=9999.99.99.99-tmp
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
           ls -sh bin/Release/net*/Rxmxnx.JNetInterface.Core.dll
-          ls -sh bin/Release/Rxmxnx.JNetInterface.Core*.*nupkg
+          ls -sh ../Nuget/Rxmxnx.JNetInterface.Core*.*nupkg
       - name: Pack main assembly
         working-directory: ./package/Rxmxnx.JNetInterface
         run:  |
