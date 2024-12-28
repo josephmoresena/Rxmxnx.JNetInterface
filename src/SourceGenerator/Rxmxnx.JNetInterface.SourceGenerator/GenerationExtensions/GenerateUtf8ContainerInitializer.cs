@@ -62,7 +62,9 @@ partial class {1}
 		String source = String.Format(GenerationExtensions.StaticConstructorFormat,
 		                              utf8ClassContainerSymbol.ContainingNamespace, utf8ClassContainerSymbol.Name,
 		                              strBuild, strBuildProp);
+#pragma warning disable RS1035
 		context.AddSource(fileName, source);
+#pragma warning restore RS1035
 	}
 
 	/// <summary>

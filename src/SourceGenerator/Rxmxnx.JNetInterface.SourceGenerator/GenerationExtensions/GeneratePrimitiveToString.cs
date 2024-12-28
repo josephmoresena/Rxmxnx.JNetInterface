@@ -32,6 +32,8 @@ partial struct {1}
 		String fileName = $"{primitiveSymbol.Name}.ToString.g.cs";
 		String source = String.Format(GenerationExtensions.PrimitiveToStringFormat, primitiveSymbol.ContainingNamespace,
 		                              primitiveSymbol.Name, valueName);
+#pragma warning disable RS1035
 		context.AddSource(fileName, source);
+#pragma warning restore RS1035
 	}
 }

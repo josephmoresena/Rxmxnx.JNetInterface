@@ -249,6 +249,8 @@ partial struct {1} : IFloatingPointIeee754<{1}>
 		String fileName = $"{numericSymbol.Name}.FloatingPoint.g.cs";
 		String source = String.Format(GenerationExtensions.NumericFloatingPointOperatorsFormat,
 		                              numericSymbol.ContainingNamespace, numericSymbol.Name, underlineType);
+#pragma warning disable RS1035
 		context.AddSource(fileName, source);
+#pragma warning restore RS1035
 	}
 }

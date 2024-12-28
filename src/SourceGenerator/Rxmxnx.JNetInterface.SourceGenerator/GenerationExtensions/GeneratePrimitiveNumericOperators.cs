@@ -421,6 +421,8 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>, IN
 		String source = String.Format(GenerationExtensions.NumericPrimitiveOperatorsFormat,
 		                              numericSymbol.ContainingNamespace, numericSymbol.Name, underlineType, formattable,
 		                              numerics);
+#pragma warning disable RS1035
 		context.AddSource(fileName, source);
+#pragma warning restore RS1035
 	}
 }

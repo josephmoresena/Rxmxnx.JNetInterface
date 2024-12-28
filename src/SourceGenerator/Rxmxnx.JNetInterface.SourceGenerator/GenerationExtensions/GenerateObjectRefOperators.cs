@@ -78,6 +78,8 @@ partial struct {1} : IEqualityOperators<{1}, JObjectLocalRef, Boolean>
 			String.Format(GenerationExtensions.ObjectRefOverrideFormat, equalFunction);
 		String source = String.Format(GenerationExtensions.ObjectRefFormat, objRefSymbol.ContainingNamespace,
 		                              objRefSymbol.Name, overrides);
+#pragma warning disable RS1035
 		context.AddSource(fileName, source);
+#pragma warning restore RS1035
 	}
 }

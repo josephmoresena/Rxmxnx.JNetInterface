@@ -17,6 +17,10 @@ jobs:
         with:
           java-version: 21
           distribution: 'zulu'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.x
 
       - uses: actions/checkout@v4
         with:
@@ -53,7 +57,7 @@ jobs:
       - name: Clean test results
         run: rm -rf TestResults/
           
-      - name: Build and analyze0
+      - name: Build and analyze Sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

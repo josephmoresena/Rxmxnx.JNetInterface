@@ -34,6 +34,8 @@ partial struct {1}
 		String getTextValueName = !isPointer ? "INativeType.GetTextValue" : "INativeType.GetPointerText";
 		String source = String.Format(GenerationExtensions.NativeToStringFormat, nativeSymbol.ContainingNamespace,
 		                              nativeSymbol.Name, getTextValueName);
+#pragma warning disable RS1035
 		context.AddSource(fileName, source);
+#pragma warning restore RS1035
 	}
 }

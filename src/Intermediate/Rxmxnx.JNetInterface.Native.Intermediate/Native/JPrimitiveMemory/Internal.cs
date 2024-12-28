@@ -11,7 +11,11 @@ public abstract class JPrimitiveMemory : JNativeMemory, IFixedContext<Byte>
 	private protected JPrimitiveMemory(JNativeMemory mem) : base(mem) { }
 
 	IFixedContext<Byte> IFixedMemory.AsBinaryContext() => this;
+	[ExcludeFromCodeCoverage]
+	IFixedContext<Object> IFixedMemory.AsObjectContext() => (IFixedContext<Object>)this;
 	Span<Byte> IFixedMemory.Bytes => this.GetBinaryContext().Bytes;
+	[ExcludeFromCodeCoverage]
+	Span<Object> IFixedMemory.Objects => Span<Object>.Empty;
 	Span<Byte> IFixedMemory<Byte>.Values => this.GetBinaryContext().Values;
 	IFixedContext<TDestination> IFixedContext<Byte>.Transformation<TDestination>(out IFixedMemory residual)
 		=> this.GetBinaryContext().Transformation<TDestination>(out residual);

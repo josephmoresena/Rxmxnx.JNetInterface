@@ -39,6 +39,8 @@ partial struct {1} : IEquatable<{1}>, IEqualityOperators<{1}, {1}, Boolean>
 		String fileName = $"{nativeSymbol.Name}.Pointer.g.cs";
 		String source = String.Format(GenerationExtensions.NativePointerOperatorsFormat,
 		                              nativeSymbol.ContainingNamespace, nativeSymbol.Name, valueName);
+#pragma warning disable RS1035
 		context.AddSource(fileName, source);
+#pragma warning restore RS1035
 	}
 }
