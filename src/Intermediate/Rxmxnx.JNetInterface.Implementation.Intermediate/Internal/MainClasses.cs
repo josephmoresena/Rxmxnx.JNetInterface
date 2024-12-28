@@ -82,6 +82,7 @@ internal abstract class MainClasses
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <param name="isMainClass">Indicates whether <typeparamref name="TReference"/> is main class.</param>
 	/// <param name="mainClasses">Main classes dictionary.</param>
+#pragma warning disable CA1859
 	private static void AppendMainClass<TReference>(Boolean isMainClass,
 		IDictionary<String, ClassObjectMetadata> mainClasses)
 		where TReference : JReferenceObject, IReferenceType<TReference>
@@ -91,6 +92,7 @@ internal abstract class MainClasses
 		if (!mainClasses.ContainsKey(hash))
 			mainClasses.TryAdd(hash, ClassObjectMetadata.Create<TReference>());
 	}
+#pragma warning restore CA1859
 }
 
 /// <summary>

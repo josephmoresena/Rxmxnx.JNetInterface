@@ -64,7 +64,9 @@ public sealed partial class JVirtualMachineTests
 			        .Do(c => ((ValPtr<JVirtualMachineRef>)c[0]).Reference = proxyEnv.VirtualMachine.Reference);
 			proxyEnv.GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>()).Returns(JResult.Ok);
 
+#pragma warning disable CA1859
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+#pragma warning restore CA1859
 			proxyEnv.Received(1).GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>());
 			IVirtualMachine vm = env.VirtualMachine;
 
