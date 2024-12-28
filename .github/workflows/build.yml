@@ -78,10 +78,16 @@ jobs:
         run: sed -i -z 's/Rxmxnx.JNetInterface.Implementation.Intermediate/Rxmxnx.JNetInterface/g;' ILLink.Substitutions.xml
       - name: Pack core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
-        run: dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
+        run: |
+          dotnet pack -c Release /p:Version=9999.99.99.99-tmp
+          ls -sh bin/Release/net*/Rxmxnx.JNetInterface.Core.dll
+          ls -sh bin/Release/Rxmxnx.JNetInterface.Core*.*nupkg
       - name: Pack main assembly
         working-directory: ./package/Rxmxnx.JNetInterface
-        run: dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
+        run:  |
+          dotnet pack -c Release /p:Version=9999.99.99.99-tmp
+          ls -sh bin/Release/net*/Rxmxnx.JNetInterface.dll
+          ls -sh bin/Release/Rxmxnx.JNetInterface*.*nupkg
           
   run-linux:
     runs-on: ubuntu-latest
