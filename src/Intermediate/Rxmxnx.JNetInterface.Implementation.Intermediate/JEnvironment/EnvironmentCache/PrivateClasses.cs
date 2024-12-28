@@ -139,7 +139,6 @@ partial class JEnvironment
 		{
 			TypeInfoSequence classInformation = MetadataHelper.GetClassInformation(className, true);
 			JTrace.GetClass(classRef, classInformation.Name);
-			//TODO: Get main class.
 			if (!this._classes.TryGetValue(classInformation.ToString(), out JClassObject? jClass))
 			{
 				JTypeKind kind = classInformation.Name[0] == CommonNames.ArraySignaturePrefixChar ?

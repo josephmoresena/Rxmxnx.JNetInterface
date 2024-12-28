@@ -35,7 +35,9 @@ public partial class JLocalObject
 	/// </param>
 	protected virtual void Dispose(Boolean disposing)
 	{
+#pragma warning disable S2696
 		JLocalObject.finalizerExecution = !disposing;
+#pragma warning disable S2696
 		try
 		{
 			//Disposed or uninstantiated object.
