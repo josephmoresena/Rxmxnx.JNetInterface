@@ -45,7 +45,7 @@ public partial class JNativeCallAdapterTests
 	[InlineData(false, CallResult.NestedStatic)]
 	[InlineData(true, CallResult.Parameter)]
 	[InlineData(false, CallResult.Parameter)]
-	internal void AgnosticClassParameterCallTest(Boolean useVm, CallResult result = CallResult.Void)
+	internal void IndeterminateStaticParameterlessCallTest(Boolean useVm, CallResult result = CallResult.Void)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JNativeCallAdapter adapter = default;
@@ -76,11 +76,10 @@ public partial class JNativeCallAdapterTests
 			proxyEnv.UseVirtualMachineRef = false;
 			proxyEnv.When(e => e.GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>()))
 			        .Do(c => ((ValPtr<JVirtualMachineRef>)c[0]).Reference = proxyEnv.VirtualMachine.Reference);
-			JNativeCallAdapter.Builder adapterBuilder = useVm ?
+			adapter = useVm ?
 				JNativeCallAdapter.Create(JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference),
-				                          proxyEnv.Reference) :
-				JNativeCallAdapter.Create(proxyEnv.Reference);
-			adapter = adapterBuilder.WithParameter(classRef.Value, out JLocalObject jLocal).Build();
+				                          proxyEnv.Reference, classRef.Value, out JLocalObject jLocal).Build() :
+				JNativeCallAdapter.Create(proxyEnv.Reference, classRef.Value, out jLocal).Build();
 			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
 			testClass = Assert.IsType<JClassObject>(jLocal);
 			Assert.Equal(vm.GetEnvironment(), adapter.Environment);
