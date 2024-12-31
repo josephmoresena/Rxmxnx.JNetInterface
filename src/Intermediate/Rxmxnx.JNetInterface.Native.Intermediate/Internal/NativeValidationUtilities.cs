@@ -208,6 +208,18 @@ internal static class NativeValidationUtilities
 			new InvalidOperationException($"To build {className.GetString()} type metadata use {expectedBuilder}.") :
 			new($"{className.GetString()} is invalid reference type.");
 	}
+	/// <summary>
+	/// Throws an exception if <paramref name="callDefinition"/> is not a <see cref="JConstructorDefinition"/> instance.
+	/// </summary>
+	/// <param name="callDefinition">A <see cref="JCallDefinition"/> instance.</param>
+	/// <returns><paramref name="callDefinition"/> as <see cref="JConstructorDefinition"/> instance.</returns>
+	/// <exception cref="NotImplementedException"></exception>
+	public static JConstructorDefinition ThrowIfNotConstructor(JCallDefinition callDefinition)
+	{
+		if (callDefinition is not JConstructorDefinition definition)
+			throw new InvalidOperationException("Current call definition is not a constructor.");
+		return definition;
+	}
 
 	/// <summary>
 	/// Extension for <see cref="CString"/> creation.
