@@ -276,7 +276,8 @@ public sealed class PrimitiveArrayTests
 
 		Assert.Equal(value0, value1);
 	}
-	private static TPrimitive[] CreatePrimitiveArray<TPrimitive>(Int32 length)
+
+	public static TPrimitive[] CreatePrimitiveArray<TPrimitive>(Int32 length)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		TPrimitive[] result = new TPrimitive[length];

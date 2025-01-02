@@ -16,4 +16,17 @@ public abstract class IndeterminateCallTestsBase
 		Assert.Equal(IndeterminateResult.Empty.LongValue, empty.LongValue);
 		Assert.Equal(IndeterminateResult.Empty.ShortValue, empty.ShortValue);
 	}
+	protected static void Compare(IndeterminateResult reference, IndeterminateResult result)
+	{
+		Assert.Equal(reference.Signature, result.Signature);
+		Assert.Equal(reference.Object, result.Object);
+		Assert.Equal(reference.BooleanValue, result.BooleanValue);
+		Assert.Equal(reference.ByteValue, result.ByteValue);
+		Assert.Equal(reference.CharValue, result.CharValue);
+		Assert.Equal(reference.DoubleValue, result.DoubleValue);
+		Assert.Equal(reference.FloatValue, result.FloatValue);
+		Assert.Equal(reference.IntValue, result.IntValue);
+		Assert.Equal(reference.LongValue, result.LongValue);
+		Assert.Equal(reference.ShortValue, result.ShortValue);
+	}
 }
