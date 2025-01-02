@@ -1,6 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
 [ExcludeFromCodeCoverage]
+#pragma warning disable CA1859
 public sealed class PrimitiveArrayTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
@@ -320,3 +321,4 @@ public sealed class PrimitiveArrayTests
 		return result;
 	}
 }
+#pragma warning restore CA1859
