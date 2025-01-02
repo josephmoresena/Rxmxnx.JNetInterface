@@ -38,6 +38,7 @@ public sealed class ConstructorTests : IndeterminateCallTestsBase
 
 		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, []));
 		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, true, []));
+		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, false, []));
 	}
 	[Fact]
 	internal void ObjectTest() => ConstructorTests.Test<JLocalObject>();
