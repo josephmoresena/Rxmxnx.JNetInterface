@@ -55,7 +55,7 @@ public abstract partial class IndeterminateCall
 		if (signature.Length == 1)
 		{
 			IndeterminateResult result = new(out Span<Byte> bytes, signature);
-			env.AccessFeature.CallPrimitiveStaticFunction(bytes, jClass, definition, args);
+			env.AccessFeature.CallStaticPrimitiveFunction(bytes, jClass, definition, args);
 			return result;
 		}
 
@@ -145,28 +145,28 @@ public abstract partial class IndeterminateCall
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
-				IndeterminateCall.ReflectedPrimitiveStaticFunctionCall<JBoolean>(bytes, definition, jFunction, args);
+				IndeterminateCall.ReflectedStaticPrimitiveFunctionCall<JBoolean>(bytes, definition, jFunction, args);
 				break;
 			case CommonNames.ByteSignatureChar:
-				IndeterminateCall.ReflectedPrimitiveStaticFunctionCall<JByte>(bytes, definition, jFunction, args);
+				IndeterminateCall.ReflectedStaticPrimitiveFunctionCall<JByte>(bytes, definition, jFunction, args);
 				break;
 			case CommonNames.CharSignatureChar:
-				IndeterminateCall.ReflectedPrimitiveStaticFunctionCall<JChar>(bytes, definition, jFunction, args);
+				IndeterminateCall.ReflectedStaticPrimitiveFunctionCall<JChar>(bytes, definition, jFunction, args);
 				break;
 			case CommonNames.DoubleSignatureChar:
-				IndeterminateCall.ReflectedPrimitiveStaticFunctionCall<JDouble>(bytes, definition, jFunction, args);
+				IndeterminateCall.ReflectedStaticPrimitiveFunctionCall<JDouble>(bytes, definition, jFunction, args);
 				break;
 			case CommonNames.FloatSignatureChar:
-				IndeterminateCall.ReflectedPrimitiveStaticFunctionCall<JFloat>(bytes, definition, jFunction, args);
+				IndeterminateCall.ReflectedStaticPrimitiveFunctionCall<JFloat>(bytes, definition, jFunction, args);
 				break;
 			case CommonNames.IntSignatureChar:
-				IndeterminateCall.ReflectedPrimitiveStaticFunctionCall<JInt>(bytes, definition, jFunction, args);
+				IndeterminateCall.ReflectedStaticPrimitiveFunctionCall<JInt>(bytes, definition, jFunction, args);
 				break;
 			case CommonNames.LongSignatureChar:
-				IndeterminateCall.ReflectedPrimitiveStaticFunctionCall<JLong>(bytes, definition, jFunction, args);
+				IndeterminateCall.ReflectedStaticPrimitiveFunctionCall<JLong>(bytes, definition, jFunction, args);
 				break;
 			case CommonNames.ShortSignatureChar:
-				IndeterminateCall.ReflectedPrimitiveStaticFunctionCall<JShort>(bytes, definition, jFunction, args);
+				IndeterminateCall.ReflectedStaticPrimitiveFunctionCall<JShort>(bytes, definition, jFunction, args);
 				break;
 		}
 		return result;
@@ -295,7 +295,7 @@ public abstract partial class IndeterminateCall
 	/// <param name="jMethod">Reflected function object.</param>
 	/// <param name="args">Function arguments.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	private static void ReflectedPrimitiveStaticFunctionCall<TPrimitive>(Span<Byte> bytes,
+	private static void ReflectedStaticPrimitiveFunctionCall<TPrimitive>(Span<Byte> bytes,
 		JFunctionDefinition definition, JMethodObject jMethod, ReadOnlySpan<IObject?> args)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{

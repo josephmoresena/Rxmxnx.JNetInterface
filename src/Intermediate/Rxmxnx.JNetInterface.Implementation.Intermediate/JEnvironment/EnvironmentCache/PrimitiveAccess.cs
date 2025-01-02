@@ -271,7 +271,7 @@ partial class JEnvironment
 		/// <param name="args">The <see cref="IObject"/> array with call arguments.</param>
 		/// <param name="jniTransaction"><see cref="INativeTransaction"/> instance.</param>
 		/// <param name="methodId"><see cref="JMethodId"/> identifier.</param>
-		private unsafe void CallPrimitiveStaticFunction(Span<Byte> bytes, JFunctionDefinition definition,
+		private unsafe void CallStaticPrimitiveFunction(Span<Byte> bytes, JFunctionDefinition definition,
 			JClassLocalRef classRef, ReadOnlySpan<IObject?> args, INativeTransaction jniTransaction, JMethodId methodId)
 		{
 			Byte signature = definition.Descriptor[^1];
@@ -288,35 +288,35 @@ partial class JEnvironment
 				switch (signature)
 				{
 					case CommonNames.BooleanSignatureChar:
-						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallBooleanMethod);
 						break;
 					case CommonNames.ByteSignatureChar:
-						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallByteMethod);
 						break;
 					case CommonNames.CharSignatureChar:
-						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallCharMethod);
 						break;
 					case CommonNames.DoubleSignatureChar:
-						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallDoubleMethod);
 						break;
 					case CommonNames.FloatSignatureChar:
-						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallFloatMethod);
 						break;
 					case CommonNames.IntSignatureChar:
-						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallIntMethod);
 						break;
 					case CommonNames.LongSignatureChar:
-						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallLongMethod);
 						break;
 					case CommonNames.ShortSignatureChar:
-						this.CallPrimitiveStaticFunction(bytes, classRef, signature, methodId, ptr,
+						this.CallStaticPrimitiveFunction(bytes, classRef, signature, methodId, ptr,
 						                                 staticMethodFunctions.CallShortMethod);
 						break;
 				}
@@ -335,7 +335,7 @@ partial class JEnvironment
 		/// <param name="callFunction">Function to invoke function.</param>
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
 		                 Justification = CommonConstants.PrimitiveCallJustification)]
-		private unsafe void CallPrimitiveStaticFunction<TPrimitive>(Span<Byte> bytes, JClassLocalRef classRef,
+		private unsafe void CallStaticPrimitiveFunction<TPrimitive>(Span<Byte> bytes, JClassLocalRef classRef,
 			Byte signature, JMethodId methodId, JValue* ptr,
 			in CallGenericFunction<JClassLocalRef, TPrimitive> callFunction)
 			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>

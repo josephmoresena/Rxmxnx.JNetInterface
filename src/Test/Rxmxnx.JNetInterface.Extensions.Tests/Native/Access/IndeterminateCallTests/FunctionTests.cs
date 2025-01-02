@@ -370,7 +370,7 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 			IFixedMemory mem = (IFixedMemory)c[0];
 			primitiveArray.AsSpan().AsBytes().CopyTo(mem.Bytes);
 		});
-		env.AccessFeature.When(a => a.CallPrimitiveStaticFunction(Arg.Any<IFixedMemory>(), Arg.Any<JClassObject>(),
+		env.AccessFeature.When(a => a.CallStaticPrimitiveFunction(Arg.Any<IFixedMemory>(), Arg.Any<JClassObject>(),
 		                                                          (JFunctionDefinition)call.Definition,
 		                                                          Arg.Any<IObject?[]>())).Do(c =>
 		{
@@ -412,7 +412,7 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		env.AccessFeature.ClearReceivedCalls();
 
 		call.StaticMethodCall(jStringClass, parameters);
-		env.AccessFeature.Received(1).CallPrimitiveStaticFunction(Arg.Any<IFixedMemory>(), jStringClass,
+		env.AccessFeature.Received(1).CallStaticPrimitiveFunction(Arg.Any<IFixedMemory>(), jStringClass,
 		                                                          (JFunctionDefinition)call.Definition,
 		                                                          Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
@@ -460,7 +460,7 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateCallTestsBase.Compare(result, call.StaticFunctionCall(jStringClass, parameters));
-		env.AccessFeature.Received(1).CallPrimitiveStaticFunction(Arg.Any<IFixedMemory>(), jStringClass,
+		env.AccessFeature.Received(1).CallStaticPrimitiveFunction(Arg.Any<IFixedMemory>(), jStringClass,
 		                                                          (JFunctionDefinition)call.Definition,
 		                                                          Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
@@ -509,7 +509,7 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		env.AccessFeature.ClearReceivedCalls();
 
 		IndeterminateCallTestsBase.Compare(result, call.StaticFunctionCall(jStringClass, parameters));
-		env.AccessFeature.Received(1).CallPrimitiveStaticFunction(Arg.Any<IFixedMemory>(), jStringClass,
+		env.AccessFeature.Received(1).CallStaticPrimitiveFunction(Arg.Any<IFixedMemory>(), jStringClass,
 		                                                          (JFunctionDefinition)call.Definition,
 		                                                          Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 

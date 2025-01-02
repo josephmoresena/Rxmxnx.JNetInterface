@@ -87,7 +87,7 @@ internal partial interface IAccessFeature
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
 	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
-	internal void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
+	internal void CallStaticPrimitiveFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
 		ReadOnlySpan<IObject?> args = default);
 	/// <summary>
 	/// Invokes a primitive function on given <see cref="JLocalObject"/> instance and returns its result.
