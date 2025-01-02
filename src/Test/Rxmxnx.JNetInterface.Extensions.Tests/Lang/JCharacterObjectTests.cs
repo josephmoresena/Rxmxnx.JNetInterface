@@ -180,6 +180,9 @@ public sealed class JCharacterObjectTests
 		                                                   jCharacterObject);
 		JCharacterObjectTests.PrimitiveEqualityTest<JShort>(JCharacterObjectTests.fixture.Create<Int16>(), value,
 		                                                    jCharacterObject);
+
+		JCharacterObjectTests.IndeterminateValueTest(jCharacterObject);
+		JCharacterObjectTests.IndeterminateValueTest(default);
 	}
 	[Fact]
 	internal void ToObjectTest()
@@ -215,5 +218,18 @@ public sealed class JCharacterObjectTests
 			Assert.Throws(e.GetType(), () => equatable.Equals(primitive));
 			Assert.Throws(e.GetType(), () => equatable.Equals((JObject)primitive));
 		}
+	}
+	private static void IndeterminateValueTest(JCharacterObject? jCharacterObject)
+	{
+		IndeterminateResult result = new(jCharacterObject, IDataType.GetMetadata<JCharacterObject>().Signature);
+		Assert.Equal(jCharacterObject, result.Object);
+		Assert.Equal(jCharacterObject is not null, result.BooleanValue);
+		Assert.Equal((JShort)(jCharacterObject?.Value ?? default), result.ByteValue);
+		Assert.Equal(jCharacterObject?.Value ?? default, result.CharValue);
+		Assert.Equal((JShort)(jCharacterObject?.Value ?? default), result.DoubleValue);
+		Assert.Equal((JShort)(jCharacterObject?.Value ?? default), result.FloatValue);
+		Assert.Equal((JShort)(jCharacterObject?.Value ?? default), result.IntValue);
+		Assert.Equal((JShort)(jCharacterObject?.Value ?? default), result.LongValue);
+		Assert.Equal((JShort)(jCharacterObject?.Value ?? default), result.ShortValue);
 	}
 }

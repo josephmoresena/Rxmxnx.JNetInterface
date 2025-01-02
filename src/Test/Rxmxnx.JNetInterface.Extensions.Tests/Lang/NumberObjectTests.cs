@@ -304,6 +304,9 @@ public sealed class NumberObjectTests
 		NumberObjectTests.PrimitiveEqualityTest<JLong>(NumberObjectTests.fixture.Create<Int64>(), value, jNumberObject);
 		NumberObjectTests.PrimitiveEqualityTest<JShort>(NumberObjectTests.fixture.Create<Int16>(), value,
 		                                                jNumberObject);
+
+		NumberObjectTests.IndeterminateValueTest<TPrimitive, TNumber>(jNumberObject);
+		NumberObjectTests.IndeterminateValueTest<TPrimitive, TNumber>(default);
 	}
 	private static void ToObjectTest<TPrimitive, TNumber>(
 		Func<JClassObject, JObjectLocalRef, TPrimitive, TNumber> creator0,
@@ -388,5 +391,22 @@ public sealed class NumberObjectTests
 		Assert.Equal(constructor.Hash, definition.Hash);
 		Assert.Equal(constructor.Name, "<init>"u8);
 		Assert.Equal(constructor.Descriptor, (CString)$"({arg.Signature})V");
+	}
+	private static void IndeterminateValueTest<TPrimitive, TNumber>(TNumber? jNumberObject)
+		where TNumber : JNumberObject<TPrimitive>, IPrimitiveWrapperType<TNumber>
+		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>, IPrimitiveType<TPrimitive>,
+		IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
+	{
+		IndeterminateResult result = new(jNumberObject, IDataType.GetMetadata<TNumber>().Signature);
+		TPrimitive primitive = jNumberObject?.GetValue<TPrimitive>() ?? default;
+		Assert.Equal(jNumberObject, result.Object);
+		Assert.Equal(jNumberObject is not null, result.BooleanValue);
+		Assert.Equal((JByte)primitive, result.ByteValue);
+		Assert.Equal((JChar)primitive, result.CharValue);
+		Assert.Equal((JDouble)primitive, result.DoubleValue);
+		Assert.Equal((JFloat)primitive, result.FloatValue);
+		Assert.Equal((JInt)primitive, result.IntValue);
+		Assert.Equal((JLong)primitive, result.LongValue);
+		Assert.Equal((JShort)primitive, result.ShortValue);
 	}
 }
