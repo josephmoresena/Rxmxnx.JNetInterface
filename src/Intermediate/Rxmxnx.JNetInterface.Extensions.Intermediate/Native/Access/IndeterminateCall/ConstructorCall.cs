@@ -12,16 +12,7 @@ public abstract partial class IndeterminateCall
 		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(this.Definition);
 		return IndeterminateCall.NewCall<JLocalObject>(definition, jClass, args);
 	}
-	/// <summary>
-	/// Invokes a constructor on given <see cref="JClassObject"/> instance.
-	/// </summary>
-	/// <param name="jConstructor">Reflected constructor instance.</param>
-	/// <param name="args">Method arguments.</param>
-	public JLocalObject NewCall(JConstructorObject jConstructor, ReadOnlySpan<IObject?> args)
-	{
-		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(this.Definition);
-		return IndeterminateCall.NewCall<JLocalObject>(definition, jConstructor, args);
-	}
+
 	/// <summary>
 	/// Invokes a constructor on given <see cref="JClassObject"/> instance.
 	/// </summary>
@@ -36,17 +27,28 @@ public abstract partial class IndeterminateCall
 		JClassObject jClass = JClassObject.GetClass<TObject>(env);
 		return IndeterminateCall.NewCall<TObject>(definition, jClass, args);
 	}
+
+	/// <summary>
+	/// Invokes a constructor on given <see cref="JClassObject"/> instance.
+	/// </summary>
+	/// <param name="jConstructor">Reflected constructor instance.</param>
+	/// <param name="args">Method arguments.</param>
+	public static JLocalObject ReflectedNewCall(JConstructorObject jConstructor, ReadOnlySpan<IObject?> args)
+	{
+		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(jConstructor.Definition);
+		return IndeterminateCall.ReflectedNewCall<JLocalObject>(definition, jConstructor, args);
+	}
 	/// <summary>
 	/// Invokes a constructor on given <see cref="JClassObject"/> instance.
 	/// </summary>
 	/// <typeparam name="TObject">A <see cref="IClassType{TObject}"/> type.</typeparam>
 	/// <param name="jConstructor">Reflected constructor instance.</param>
 	/// <param name="args">Method arguments.</param>
-	public TObject NewCall<TObject>(JConstructorObject jConstructor, ReadOnlySpan<IObject?> args)
+	public static TObject ReflectedNewCall<TObject>(JConstructorObject jConstructor, ReadOnlySpan<IObject?> args)
 		where TObject : JLocalObject, IClassType<TObject>
 	{
 		NativeValidationUtilities.ThrowIfAbstractClass(IClassType.GetMetadata<TObject>());
-		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(this.Definition);
-		return IndeterminateCall.NewCall<TObject>(definition, jConstructor, args);
+		JConstructorDefinition definition = NativeValidationUtilities.ThrowIfNotConstructor(jConstructor.Definition);
+		return IndeterminateCall.ReflectedNewCall<TObject>(definition, jConstructor, args);
 	}
 }

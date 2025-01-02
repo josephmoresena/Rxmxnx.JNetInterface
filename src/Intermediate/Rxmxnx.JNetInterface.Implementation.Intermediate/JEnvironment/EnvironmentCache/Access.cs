@@ -97,7 +97,7 @@ partial class JEnvironment
 		/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
 		/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
 		/// <param name="isStatic">
-		/// Indicates whether <paramref name="definition"/> matches with an static method in <paramref name="declaringClass"/>.
+		/// Indicates whether <paramref name="definition"/> matches with a static method in <paramref name="declaringClass"/>.
 		/// </param>
 		/// <returns>A <see cref="JMethodObject"/> instance.</returns>
 		private unsafe JObjectLocalRef GetReflectedCall(JCallDefinition definition, JClassObject declaringClass,
