@@ -204,9 +204,11 @@ public sealed class JBooleanObjectTests
 		env.ReferenceFeature.Received(1).CreateWrapper(value);
 	}
 
+#pragma warning disable CA1859
 	private static void PrimitiveEqualityTest<TPrimitive>(TPrimitive primitive, IPrimitiveType value,
 		IPrimitiveEquatable equatable)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IPrimitiveEquatable, IEquatable<TPrimitive>
+#pragma warning restore CA1859
 	{
 		try
 		{

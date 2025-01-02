@@ -104,7 +104,9 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		MethodInfo methodInfo = typeofT.IsValueType ?
 			FunctionTests.primitiveTestInfo.MakeGenericMethod(typeofT) :
 			FunctionTests.objectTestInfo.MakeGenericMethod(typeofT);
-		methodInfo.CreateDelegate<Action>()();
+		Action? action = methodInfo.CreateDelegate<Action>();
+		Assert.NotNull(action);
+		action();
 	}
 
 	private static void ParameterlessTest<TDataType>() where TDataType : IDataType<TDataType>
