@@ -132,14 +132,13 @@ public readonly ref struct IndeterminateResult
 	/// <summary>
 	/// Primitive constructor.
 	/// </summary>
-	/// <param name="primitive">Output. Binary span.</param>
+	/// <param name="primitive">Primitive value as <see cref="Int64"/>.</param>
 	/// <param name="signature">Definition signature.</param>
-	internal IndeterminateResult(out Span<Byte> primitive, ReadOnlySpan<Byte> signature)
+	internal IndeterminateResult(Int64 primitive, ReadOnlySpan<Byte> signature)
 	{
-		this._primitive = default;
+		this._primitive = primitive;
 		this.Object = default;
 		this.Signature = signature;
-		primitive = MemoryMarshal.CreateSpan(ref this._primitive, 1).AsBytes();
 	}
 
 	/// <summary>

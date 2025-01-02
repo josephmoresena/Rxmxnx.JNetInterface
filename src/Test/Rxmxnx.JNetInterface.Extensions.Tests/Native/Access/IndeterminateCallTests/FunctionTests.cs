@@ -133,11 +133,13 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		using JClassObject jClass = new(env);
 
-		IndeterminateResult result = new(default, typeMetadata.Signature);
+		IndeterminateResult result = new(0, typeMetadata.Signature);
 
 		IndeterminateCallTestsBase.Compare(result, call.FunctionCall(jClass, []));
 		IndeterminateCallTestsBase.Compare(result, call.FunctionCall(jClass, jClass, true, []));
 		IndeterminateCallTestsBase.Compare(result, call.StaticFunctionCall(jClass, []));
+
+		Assert.Null((IndeterminateCall?)default(JFunctionDefinition<TDataType>));
 	}
 	private static void ObjectTest<TDataType>() where TDataType : JLocalObject, IClassType<TDataType>
 	{
@@ -405,7 +407,7 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		   .CallStaticFunction<TDataType>(Arg.Any<JMethodObject>(), (JFunctionDefinition)call.Definition,
 		                                  Arg.Any<IObject?[]>()).Returns(primitiveArray[0]);
 
-		IndeterminateResult result = new(out Span<Byte> bytes, typeMetadata.Signature);
+		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
 		primitiveArray.AsSpan().AsBytes().CopyTo(bytes);
 
 		call.MethodCall(jString, parameters);
@@ -463,6 +465,8 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
+
+		IndeterminateResult result = new(MemoryMarshal.Cast<Byte, Int64>(bytes)[0], typeMetadata.Signature);
 
 		IndeterminateCallTestsBase.Compare(result, call.FunctionCall(jString, parameters));
 		env.AccessFeature.Received(1).CallPrimitiveFunction(Arg.Any<IFixedMemory>(), jString, jString.Class,

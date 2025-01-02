@@ -30,9 +30,9 @@ public abstract partial class IndeterminateCall
 
 		if (signature.Length == 1)
 		{
-			IndeterminateResult result = new(out Span<Byte> bytes, signature);
+			Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
 			env.AccessFeature.CallPrimitiveFunction(bytes, jLocal, jClass, definition, nonVirtual, args);
-			return result;
+			return new(MemoryMarshal.Cast<Byte, Int64>(bytes)[0], signature);
 		}
 
 		JLocalObject? jObject =
@@ -54,9 +54,9 @@ public abstract partial class IndeterminateCall
 
 		if (signature.Length == 1)
 		{
-			IndeterminateResult result = new(out Span<Byte> bytes, signature);
+			Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
 			env.AccessFeature.CallStaticPrimitiveFunction(bytes, jClass, definition, args);
-			return result;
+			return new(MemoryMarshal.Cast<Byte, Int64>(bytes)[0], signature);
 		}
 
 		JLocalObject? jObject = env.AccessFeature.CallStaticFunction<JLocalObject>(jClass, definition, args);
@@ -84,7 +84,7 @@ public abstract partial class IndeterminateCall
 			return new(jObject, returnType);
 		}
 
-		IndeterminateResult result = new(out Span<Byte> bytes, returnType);
+		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
@@ -120,7 +120,7 @@ public abstract partial class IndeterminateCall
 					bytes, definition, jFunction, jLocal, nonVirtual, args);
 				break;
 		}
-		return result;
+		return new(MemoryMarshal.Cast<Byte, Int64>(bytes)[0], returnType);
 	}
 	/// <summary>
 	/// Invokes a static function on the declaring class of given <see cref="JMethodObject"/> instance and
@@ -141,7 +141,7 @@ public abstract partial class IndeterminateCall
 			return new(jObject, returnType);
 		}
 
-		IndeterminateResult result = new(out Span<Byte> bytes, returnType);
+		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
@@ -169,7 +169,7 @@ public abstract partial class IndeterminateCall
 				IndeterminateCall.ReflectedStaticPrimitiveFunctionCall<JShort>(bytes, definition, jFunction, args);
 				break;
 		}
-		return result;
+		return new(MemoryMarshal.Cast<Byte, Int64>(bytes)[0], returnType);
 	}
 	/// <summary>
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.

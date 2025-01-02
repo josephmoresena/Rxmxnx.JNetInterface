@@ -1,3 +1,5 @@
+using JMethodDefinition = Rxmxnx.JNetInterface.Native.Access.JMethodDefinition;
+
 namespace Rxmxnx.JNetInterface.Tests.Native.Access.IndeterminateCallTests;
 
 [ExcludeFromCodeCoverage]
@@ -33,6 +35,8 @@ public sealed class MethodTests : IndeterminateCallTestsBase
 		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, []));
 		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, true, []));
 		IndeterminateCallTestsBase.EmptyCompare(call.StaticFunctionCall(jClass, []));
+
+		Assert.Null((IndeterminateCall?)default(JMethodDefinition));
 	}
 
 	[Fact]

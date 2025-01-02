@@ -42,9 +42,11 @@ public sealed class ConstructorTests : IndeterminateCallTestsBase
 		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, []));
 		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, true, []));
 		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, false, []));
-		IndeterminateCallTestsBase.Compare(new(default, jClass.ClassSignature), call.StaticFunctionCall(jClass, []));
+		IndeterminateCallTestsBase.Compare(new(0, jClass.ClassSignature), call.StaticFunctionCall(jClass, []));
 
 		call.StaticMethodCall(jClass, []);
+		
+		Assert.Null((IndeterminateCall?)default(JConstructorDefinition));
 	}
 	[Fact]
 	internal void ObjectTest() => ConstructorTests.Test<JLocalObject>();
