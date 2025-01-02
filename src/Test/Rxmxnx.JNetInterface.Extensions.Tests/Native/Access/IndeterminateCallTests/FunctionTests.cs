@@ -76,6 +76,7 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 	[InlineData(typeof(JBoolean))]
 	[InlineData(typeof(JByte))]
 	[InlineData(typeof(JChar))]
+	[InlineData(typeof(JDouble))]
 	[InlineData(typeof(JFloat))]
 	[InlineData(typeof(JInt))]
 	[InlineData(typeof(JLong))]
@@ -256,6 +257,17 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		env.AccessFeature.ClearReceivedCalls();
 
 		Assert.Equal(localRef, instance?.LocalReference ?? localRef);
+		IndeterminateCall.ReflectedMethodCall(jMethod, jString, parameters);
+		env.AccessFeature.Received(1).CallFunction<JLocalObject>(jMethod, jString,
+		                                                         (JFunctionDefinition)jMethod.Definition, false,
+		                                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+		Assert.Equal(default, instance?.LocalReference ?? default);
+		instance?.SetValue(localRef);
+
+		env.ClassFeature.ClearReceivedCalls();
+		env.AccessFeature.ClearReceivedCalls();
+
+		Assert.Equal(localRef, instance?.LocalReference ?? localRef);
 		IndeterminateCall.ReflectedMethodCall(jMethod, jString, true, parameters);
 		env.AccessFeature.Received(1).CallFunction<JLocalObject>(jMethod, jString,
 		                                                         (JFunctionDefinition)jMethod.Definition, true,
@@ -303,6 +315,15 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		                                                               (JFunctionDefinition)call.Definition,
 		                                                               Arg.Is<IObject[]>(
 			                                                               a => a.SequenceEqual(parameters)));
+
+		env.ClassFeature.ClearReceivedCalls();
+		env.AccessFeature.ClearReceivedCalls();
+
+		IndeterminateCallTestsBase.Compare(result,
+		                                   IndeterminateCall.ReflectedFunctionCall(jMethod, jString, parameters));
+		env.AccessFeature.Received(1).CallFunction<JLocalObject>(jMethod, jString,
+		                                                         (JFunctionDefinition)jMethod.Definition, false,
+		                                                         Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -419,6 +440,14 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
+		IndeterminateCall.ReflectedMethodCall(jMethod, jString, parameters);
+		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, jString, (JFunctionDefinition)jMethod.Definition,
+		                                                      false,
+		                                                      Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+
+		env.ClassFeature.ClearReceivedCalls();
+		env.AccessFeature.ClearReceivedCalls();
+
 		IndeterminateCall.ReflectedMethodCall(jMethod, jString, true, parameters);
 		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, jString, (JFunctionDefinition)jMethod.Definition,
 		                                                      true,
@@ -512,6 +541,15 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		env.AccessFeature.Received(1).CallStaticPrimitiveFunction(Arg.Any<IFixedMemory>(), jStringClass,
 		                                                          (JFunctionDefinition)call.Definition,
 		                                                          Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
+
+		env.ClassFeature.ClearReceivedCalls();
+		env.AccessFeature.ClearReceivedCalls();
+
+		IndeterminateCallTestsBase.Compare(result,
+		                                   IndeterminateCall.ReflectedFunctionCall(jMethod, jString, parameters));
+		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, jString, (JFunctionDefinition)jMethod.Definition,
+		                                                      false,
+		                                                      Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();

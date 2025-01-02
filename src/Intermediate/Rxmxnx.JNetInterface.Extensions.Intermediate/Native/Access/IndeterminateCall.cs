@@ -14,6 +14,7 @@ public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 	/// </summary>
 	public JCallDefinition Definition { get; }
 
+	[ExcludeFromCodeCoverage]
 	JCallDefinition IWrapper<JCallDefinition>.Value => this.Definition;
 
 	/// <summary>

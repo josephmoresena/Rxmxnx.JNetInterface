@@ -19,10 +19,13 @@ public sealed class ConstructorTests : IndeterminateCallTestsBase
 		IndeterminateCall methodCall = IndeterminateCall.CreateMethodDefinition(CommonNames.Constructor, []);
 		IndeterminateCall functionCall =
 			IndeterminateCall.CreateFunctionDefinition(default!, CommonNames.Constructor, []);
+		IndeterminateCall functionCallGeneric =
+			IndeterminateCall.CreateFunctionDefinition<JInt>(CommonNames.Constructor, []);
 
 		Assert.Equal(call.Definition, operatorCall.Definition);
 		Assert.Equal(call.Definition, methodCall.Definition);
 		Assert.Equal(call.Definition, functionCall.Definition);
+		Assert.Equal(call.Definition, functionCallGeneric.Definition);
 		Assert.Equal(call.Definition.Name, operatorCall.Definition.Name);
 		Assert.Equal(call.Definition.Descriptor, operatorCall.Definition.Descriptor);
 		Assert.Equal(call.Definition.Hash, operatorCall.Definition.Hash);
@@ -40,6 +43,8 @@ public sealed class ConstructorTests : IndeterminateCallTestsBase
 		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, true, []));
 		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, false, []));
 		IndeterminateCallTestsBase.Compare(new(default, jClass.ClassSignature), call.StaticFunctionCall(jClass, []));
+
+		call.StaticMethodCall(jClass, []);
 	}
 	[Fact]
 	internal void ObjectTest() => ConstructorTests.Test<JLocalObject>();
@@ -124,6 +129,8 @@ public sealed class ConstructorTests : IndeterminateCallTestsBase
 		Assert.Equal(definition, functionCall.Definition);
 		Assert.Equal([CommonNames.VoidSignatureChar,], call.ReturnType);
 
+		env.ReferenceFeature.Unload(Arg.Any<JLocalObject>()).Returns(true);
+		env.ClassFeature.GetClass(jClass.GetInformation()).Returns(jClass);
 		env.ClassFeature.GetClass<TDataType>().Returns(jClass);
 		env.AccessFeature
 		   .CallConstructor<JLocalObject>(jClass, (JConstructorDefinition)call.Definition, Arg.Any<IObject?[]>())
@@ -164,10 +171,13 @@ public sealed class ConstructorTests : IndeterminateCallTestsBase
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 
+		Assert.Equal(localRef, instance?.LocalReference ?? localRef);
 		call.StaticMethodCall(jClass, parameters);
 		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jClass, (JConstructorDefinition)call.Definition,
 		                                                            Arg.Is<IObject[]>(
 			                                                            a => a.SequenceEqual(parameters)));
+		Assert.Equal(default, instance?.LocalReference ?? default);
+		instance?.SetValue(localRef);
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -183,5 +193,24 @@ public sealed class ConstructorTests : IndeterminateCallTestsBase
 		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jConstructor, jConstructor.Definition,
 		                                                            Arg.Is<IObject[]>(
 			                                                            a => a.SequenceEqual(parameters)));
+
+		env.ClassFeature.ClearReceivedCalls();
+		env.AccessFeature.ClearReceivedCalls();
+
+		Assert.Equal(instance, IndeterminateCall.ReflectedStaticFunctionCall(jConstructor, parameters).Object);
+		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jConstructor, jConstructor.Definition,
+		                                                            Arg.Is<IObject[]>(
+			                                                            a => a.SequenceEqual(parameters)));
+
+		env.ClassFeature.ClearReceivedCalls();
+		env.AccessFeature.ClearReceivedCalls();
+
+		Assert.Equal(localRef, instance?.LocalReference ?? localRef);
+		IndeterminateCall.ReflectedStaticMethodCall(jConstructor, parameters);
+		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jConstructor, jConstructor.Definition,
+		                                                            Arg.Is<IObject[]>(
+			                                                            a => a.SequenceEqual(parameters)));
+		Assert.Equal(default, instance?.LocalReference ?? default);
+		instance?.SetValue(localRef);
 	}
 }
