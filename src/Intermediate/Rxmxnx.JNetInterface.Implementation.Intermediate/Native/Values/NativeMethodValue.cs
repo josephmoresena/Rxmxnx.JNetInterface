@@ -20,15 +20,15 @@ internal readonly unsafe struct NativeMethodValue
 	/// <summary>
 	/// Pointer to method name.
 	/// </summary>
-	public Byte* Name { get; init; }
+	public Byte* Name { [ExcludeFromCodeCoverage] get; init; }
 	/// <summary>
 	/// Pointer to method signature.
 	/// </summary>
-	public Byte* Signature { get; init; }
+	public Byte* Signature { [ExcludeFromCodeCoverage] get; init; }
 	/// <summary>
 	/// Pointer to method implementation.
 	/// </summary>
-	public void* Pointer { get; init; }
+	public void* Pointer { [ExcludeFromCodeCoverage] get; init; }
 
 	/// <summary>
 	/// Creates a <see cref="NativeMethodValue"/> from <paramref name="entry"/>.

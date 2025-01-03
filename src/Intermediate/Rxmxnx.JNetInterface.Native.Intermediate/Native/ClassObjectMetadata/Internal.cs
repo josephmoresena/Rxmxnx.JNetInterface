@@ -53,6 +53,7 @@ public partial record ClassObjectMetadata
 	/// </summary>
 	/// <param name="classMetadata">A <see cref="ClassObjectMetadata"/> instance.</param>
 	/// <returns>A <see cref="JTypeKind"/> value.</returns>
+	[ExcludeFromCodeCoverage]
 	internal static JTypeKind? GetKind(ClassObjectMetadata? classMetadata)
 	{
 		if (classMetadata is null) return default;
