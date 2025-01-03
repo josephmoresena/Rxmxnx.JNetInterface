@@ -37,6 +37,8 @@ public sealed class MethodTests : IndeterminateCallTestsBase
 		IndeterminateCallTestsBase.EmptyCompare(call.StaticFunctionCall(jClass, []));
 
 		Assert.Null((IndeterminateCall?)default(JMethodDefinition));
+		Assert.Throws<InvalidOperationException>(() => call.NewCall(jClass, []));
+		Assert.Throws<InvalidOperationException>(() => call.NewCall<JLocalObject>(env, []));
 	}
 
 	[Fact]

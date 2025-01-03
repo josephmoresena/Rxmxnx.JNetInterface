@@ -104,9 +104,17 @@ public sealed class FunctionTests : IndeterminateCallTestsBase
 		MethodInfo methodInfo = typeofT.IsValueType ?
 			FunctionTests.primitiveTestInfo.MakeGenericMethod(typeofT) :
 			FunctionTests.objectTestInfo.MakeGenericMethod(typeofT);
-		Action? action = methodInfo.CreateDelegate<Action>();
-		Assert.NotNull(action);
+		Action action = methodInfo.CreateDelegate<Action>();
 		action();
+
+		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
+		using JClassObject jClass = new(env);
+		IndeterminateCall call =
+			IndeterminateCall.CreateFunctionDefinition(JArgumentMetadata.Create("Lpackage/FakeClass;"u8), "funcName"u8,
+			                                           []);
+
+		Assert.Throws<InvalidOperationException>(() => call.NewCall(jClass, []));
+		Assert.Throws<InvalidOperationException>(() => call.NewCall<JLocalObject>(env, []));
 	}
 
 	private static void ParameterlessTest<TDataType>() where TDataType : IDataType<TDataType>

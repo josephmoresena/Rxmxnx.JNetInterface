@@ -32,7 +32,7 @@ public partial class JEnumObject
 		/// <inheritdoc/>
 		public CString this[Int32 ordinal] => this._nameDictionary[this._ordinalDictionary[ordinal]];
 		/// <inheritdoc/>
-		public Int32 this[ReadOnlySpan<Byte> name] => this._hashDictionary[Convert.ToHexString(name).ToLower()];
+		public Int32 this[ReadOnlySpan<Byte> name] => this[Convert.ToHexString(name).ToLower()];
 		/// <inheritdoc/>
 		public Int32 this[String hash] => this._hashDictionary[hash];
 		/// <inheritdoc/>

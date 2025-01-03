@@ -75,19 +75,4 @@ public partial class JDataTypeMetadata
 			span[^1] = CommonNames.ObjectSignatureSuffixChar;
 		}
 	}
-	/// <summary>
-	/// Escapes Java class name char to JNI class name.
-	/// </summary>
-	/// <param name="classNameChar">A Java class name char.</param>
-	/// <returns>A JNI class name char.</returns>
-	private static Byte EscapeClassNameChar(Byte classNameChar)
-	{
-		ReadOnlySpan<Byte> escapeSpan = JDataTypeMetadata.GetEscapeSpan();
-		return classNameChar == escapeSpan[0] ? escapeSpan[1] : classNameChar;
-	}
-	/// <summary>
-	/// Escape for Java class name -> JNI class name.
-	/// </summary>
-	/// <returns>A read-only binary span.</returns>
-	private static ReadOnlySpan<Byte> GetEscapeSpan() => "./"u8;
 }

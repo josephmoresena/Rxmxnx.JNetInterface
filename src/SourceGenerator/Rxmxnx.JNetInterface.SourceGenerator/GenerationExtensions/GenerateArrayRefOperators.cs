@@ -13,6 +13,7 @@ namespace {0};
 
 partial struct {1} : IWrapper<JArrayLocalRef>, IEqualityOperators<{1}, JArrayLocalRef, Boolean>
 {{
+	[ExcludeFromCodeCoverage]
 	JArrayLocalRef IWrapper<JArrayLocalRef>.Value => this.ArrayValue;
 
 	/// <summary>

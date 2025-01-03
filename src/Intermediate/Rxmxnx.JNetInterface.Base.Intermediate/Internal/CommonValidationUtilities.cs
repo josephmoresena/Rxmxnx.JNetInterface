@@ -61,6 +61,7 @@ internal static class CommonValidationUtilities
 	/// Throws an <see cref="InvalidOperationException"/> attempting to create a void value.
 	/// </summary>
 	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+	[ExcludeFromCodeCoverage]
 	public static Boolean ThrowVoidEquality()
 		=> throw new InvalidOperationException("A Void instance can't be equatable.");
 	/// <summary>

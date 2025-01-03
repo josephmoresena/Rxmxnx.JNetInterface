@@ -9,7 +9,9 @@ internal partial class JPrimitiveObject
 	public abstract partial class Generic<TValue> : JPrimitiveObject, IPrimitiveType, IPrimitiveValue<TValue>
 		where TValue : unmanaged, IEquatable<TValue>, IComparable, IConvertible, IComparable<TValue>
 	{
+		[ExcludeFromCodeCoverage]
 		static JTypeKind IDataType.Kind => JTypeKind.Primitive;
+		[ExcludeFromCodeCoverage]
 		static Type IDataType.FamilyType => typeof(TValue);
 
 		/// <summary>
