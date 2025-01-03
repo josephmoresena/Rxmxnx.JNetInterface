@@ -28,13 +28,30 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	/// Invokes method defined in <paramref name="mainClass"/>.
 	/// </summary>
 	/// <param name="mainClass">A Java main class.</param>
-	/// <param name="args">Arguments.</param>
-	public void Invoke(JClassObject mainClass, params String?[] args)
+	/// <param name="args">Array arguments.</param>
+	public void Invoke(JClassObject mainClass,
+#if !NET9_0_OR_GREATER
+		params
+#endif
+		String?[]? args)
 	{
 		IEnvironment env = mainClass.Environment;
-		using JArrayObject<JStringObject> jArgs = JMainMethodDefinition.CreateArgsArray(env, args);
+		using JArrayObject<JStringObject>? jArgs = JMainMethodDefinition.CreateArgsArray(env, args);
 		this.InvokeMain(mainClass, jArgs);
 	}
+#if NET9_0_OR_GREATER
+	/// <summary>
+	/// Invokes method defined in <paramref name="mainClass"/>.
+	/// </summary>
+	/// <param name="mainClass">A Java main class.</param>
+	/// <param name="args">Arguments read-only span.</param>
+	public void Invoke(JClassObject mainClass, params ReadOnlySpan<String?> args)
+	{
+		IEnvironment env = mainClass.Environment;
+		using JArrayObject<JStringObject>? jArgs = JMainMethodDefinition.CreateArgsArray(env, args);
+		this.InvokeMain(mainClass, jArgs);
+	}
+#endif
 
 	/// <summary>
 	/// Invokes current definition as static method in <paramref name="mainClass"/>.
@@ -68,6 +85,22 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	private static JArrayObject<JStringObject>? CreateArgsArray(IEnvironment env, String?[]? args = default)
 	{
 		if (args is null) return default;
+		return JMainMethodDefinition.CreateArgsArray(env, args.AsSpan());
+	}
+	/// <summary>
+	/// Creates a <see cref="JArrayObject{JStringObject}"/> in order to invoke PSVM method.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="args">A read-only span <see cref="String"/>.</param>
+	/// <returns>
+	/// A <see cref="JArrayObject{JStringObject}"/> instance containing each value from <paramref name="args"/>.
+	/// </returns>
+	private static JArrayObject<JStringObject> CreateArgsArray(IEnvironment env,
+#if NET9_0_OR_GREATER
+		params
+#endif
+			ReadOnlySpan<String?> args)
+	{
 		JArrayObject<JStringObject> jArgs = JArrayObject<JStringObject>.Create(env, args.Length);
 		for (Int32 i = 0; i < args.Length; i++)
 		{
