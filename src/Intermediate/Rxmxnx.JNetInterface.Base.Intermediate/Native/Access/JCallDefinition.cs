@@ -36,5 +36,6 @@ public abstract partial class JCallDefinition : JAccessibleObjectDefinition
 	/// Creates the argument array for the current call.
 	/// </summary>
 	/// <returns>A new array to be used as argument for the current call.</returns>
+	[ExcludeFromCodeCoverage]
 	protected IObject?[] CreateArgumentsArray() => this._sizes.Length != 0 ? new IObject?[this._sizes.Length] : [];
 }

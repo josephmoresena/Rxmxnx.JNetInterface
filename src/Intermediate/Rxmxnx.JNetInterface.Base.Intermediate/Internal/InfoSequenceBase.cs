@@ -14,8 +14,6 @@ internal abstract class InfoSequenceBase(String hash, Int32 nameLength) : IEquat
 	/// Information hash.
 	/// </summary>
 	public String Hash { get; } = hash;
-	/// <inheritdoc/>
-	public Boolean Equals(InfoSequenceBase? other) => this.Hash.Equals(other?.Hash);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -26,6 +24,8 @@ internal abstract class InfoSequenceBase(String hash, Int32 nameLength) : IEquat
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]
 	public override Boolean Equals(Object? obj) => this.Equals(obj as InfoSequenceBase);
+	/// <inheritdoc/>
+	public Boolean Equals(InfoSequenceBase? other) => this.Hash.Equals(other?.Hash);
 
 	/// <summary>
 	/// Retrieves printable text hash.
