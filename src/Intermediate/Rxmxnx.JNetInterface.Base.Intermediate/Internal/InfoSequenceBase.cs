@@ -3,8 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Base class for information sequence.
 /// </summary>
-internal abstract class InfoSequenceBase(String hash, Int32 nameLength) : IEquatable<InfoSequenceBase>,
-	IEqualityOperators<InfoSequenceBase, InfoSequenceBase, Boolean>
+internal abstract partial class InfoSequenceBase(String hash, Int32 nameLength)
 {
 	/// <summary>
 	/// Information name.
@@ -21,11 +20,6 @@ internal abstract class InfoSequenceBase(String hash, Int32 nameLength) : IEquat
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override Int32 GetHashCode() => this.Hash.GetHashCode();
-	/// <inheritdoc/>
-	[ExcludeFromCodeCoverage]
-	public override Boolean Equals(Object? obj) => this.Equals(obj as InfoSequenceBase);
-	/// <inheritdoc/>
-	public Boolean Equals(InfoSequenceBase? other) => this.Hash.Equals(other?.Hash);
 
 	/// <summary>
 	/// Retrieves printable text hash.
@@ -41,14 +35,6 @@ internal abstract class InfoSequenceBase(String hash, Int32 nameLength) : IEquat
 		return hashSpan[..^1];
 	}
 
-	/// <inheritdoc/>
-	[ExcludeFromCodeCoverage]
-	public static Boolean operator ==(InfoSequenceBase? left, InfoSequenceBase? right)
-		=> left?.Equals(right) ?? right is null;
-	/// <inheritdoc/>
-	[ExcludeFromCodeCoverage]
-	public static Boolean operator !=(InfoSequenceBase? left, InfoSequenceBase? right) => !(left == right);
-
 	/// <summary>
 	/// State for retrieve functional <see cref="CString"/>.
 	/// </summary>
@@ -57,12 +43,21 @@ internal abstract class InfoSequenceBase(String hash, Int32 nameLength) : IEquat
 	/// <param name="offset">UTF-8 text offset.</param>
 	protected readonly struct ItemState(String buffer, Int32 length, Int32 offset = 0) : IUtf8FunctionState<ItemState>
 	{
+		/// <summary>
+		/// Internal buffer.
+		/// </summary>
 		private readonly String _buffer = buffer;
+		/// <summary>
+		/// Buffer length.
+		/// </summary>
 		private readonly Int32 _length = length;
 		private readonly Range _range = new(offset, offset + length);
 
+		/// <inheritdoc/>
 		public static ReadOnlySpan<Byte> GetSpan(ItemState state) => state._buffer.AsSpan().AsBytes()[state._range];
-		public static Int32 GetLength(ItemState state) => state._length;
+		/// <inheritdoc/>
+		public static Int32 GetLength(in ItemState state) => state._length;
+		/// <inheritdoc/>
 		public Boolean IsNullTerminated => true;
 	}
 }

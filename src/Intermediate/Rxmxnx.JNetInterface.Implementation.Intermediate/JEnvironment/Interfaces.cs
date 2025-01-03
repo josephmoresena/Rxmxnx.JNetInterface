@@ -17,7 +17,8 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 	INioFeature IEnvironment.NioFeature => this._cache;
 	NativeFunctionSet IEnvironment.FunctionSet => NativeFunctionSetImpl.Instance;
 
-	Boolean IEnvironment.IsValidationAvoidable(JGlobalBase jGlobal) => JEnvironment.IsValidationAvoidable(this._cache, jGlobal);
+	Boolean IEnvironment.IsValidationAvoidable(JGlobalBase jGlobal)
+		=> JEnvironment.IsValidationAvoidable(this._cache, jGlobal);
 	JReferenceType IEnvironment.GetReferenceType(JObject jObject)
 	{
 		if (jObject is not JReferenceObject jRefObj || jRefObj.IsDefault || jRefObj.IsProxy)

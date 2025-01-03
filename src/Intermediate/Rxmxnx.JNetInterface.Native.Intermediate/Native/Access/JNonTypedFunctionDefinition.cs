@@ -12,9 +12,9 @@ public sealed class JNonTypedFunctionDefinition(
 #if NET9_0_OR_GREATER
 	params
 #endif
-		ReadOnlySpan<JArgumentMetadata> metadata
+	ReadOnlySpan<JArgumentMetadata> metadata
 #if !NET9_0_OR_GREATER
-	= default
+		= default
 #endif
 ) : JFunctionDefinition<JLocalObject>(functionName, JAccessibleObjectDefinition.ValidateSignature(returnTypeSignature),
                                       metadata)
@@ -24,9 +24,9 @@ public sealed class JNonTypedFunctionDefinition(
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args
+		ReadOnlySpan<IObject?> args
 #if !NET9_0_OR_GREATER
-	= default
+			= default
 #endif
 	)
 		=> base.Invoke(jLocal, args);
@@ -35,9 +35,9 @@ public sealed class JNonTypedFunctionDefinition(
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args
+		ReadOnlySpan<IObject?> args
 #if !NET9_0_OR_GREATER
-	= default
+			= default
 #endif
 	)
 		=> base.Invoke(jLocal, jClass, args);
@@ -46,9 +46,9 @@ public sealed class JNonTypedFunctionDefinition(
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args
+		ReadOnlySpan<IObject?> args
 #if !NET9_0_OR_GREATER
-	= default
+			= default
 #endif
 	)
 		=> base.InvokeNonVirtual(jLocal, jClass, args);
@@ -57,9 +57,9 @@ public sealed class JNonTypedFunctionDefinition(
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args
+		ReadOnlySpan<IObject?> args
 #if !NET9_0_OR_GREATER
-	= default
+			= default
 #endif
 	)
 		=> base.StaticInvoke(jClass, args);
@@ -69,9 +69,9 @@ public sealed class JNonTypedFunctionDefinition(
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args
+		ReadOnlySpan<IObject?> args
 #if !NET9_0_OR_GREATER
-	= default
+			= default
 #endif
 	)
 		=> base.InvokeReflected(jMethod, jLocal, args);
@@ -81,9 +81,9 @@ public sealed class JNonTypedFunctionDefinition(
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args
+		ReadOnlySpan<IObject?> args
 #if !NET9_0_OR_GREATER
-	= default
+			= default
 #endif
 	)
 		=> base.InvokeNonVirtualReflected(jMethod, jLocal, args);
@@ -92,9 +92,9 @@ public sealed class JNonTypedFunctionDefinition(
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args
+		ReadOnlySpan<IObject?> args
 #if !NET9_0_OR_GREATER
-	= default
+			= default
 #endif
 	)
 		=> base.InvokeStaticReflected(jMethod, args);

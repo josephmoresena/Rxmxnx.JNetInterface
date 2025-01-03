@@ -10,7 +10,7 @@
         <IsTrimmable>true</IsTrimmable>
         <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
     </PropertyGroup>
-    
+
     <PropertyGroup Condition="'$(JNI_LIBRARY)' == 'true'">
         <PublishAot>true</PublishAot>
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>

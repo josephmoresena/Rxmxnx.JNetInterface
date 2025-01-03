@@ -33,7 +33,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 #if !NET9_0_OR_GREATER
 		params
 #endif
-		String?[]? args)
+			String?[]? args)
 	{
 		IEnvironment env = mainClass.Environment;
 		using JArrayObject<JStringObject>? jArgs = JMainMethodDefinition.CreateArgsArray(env, args);
@@ -99,7 +99,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<String?> args)
+		ReadOnlySpan<String?> args)
 	{
 		JArrayObject<JStringObject> jArgs = JArrayObject<JStringObject>.Create(env, args.Length);
 		for (Int32 i = 0; i < args.Length; i++)

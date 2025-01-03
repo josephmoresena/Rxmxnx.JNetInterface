@@ -55,7 +55,7 @@ public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<JArgumentMetadata> args)
+		ReadOnlySpan<JArgumentMetadata> args)
 	{
 		JConstructorDefinition definition = JConstructorDefinition.Create(args);
 		return new Constructor(definition);
@@ -70,7 +70,7 @@ public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<JArgumentMetadata> args)
+		ReadOnlySpan<JArgumentMetadata> args)
 	{
 		if (CommonNames.Constructor.SequenceEqual(methodName))
 			return IndeterminateCall.CreateConstructorDefinition(args);
@@ -90,7 +90,7 @@ public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<JArgumentMetadata> args)
+		ReadOnlySpan<JArgumentMetadata> args)
 	{
 		if (CommonNames.Constructor.SequenceEqual(functionName))
 			return IndeterminateCall.CreateConstructorDefinition(args);
@@ -111,7 +111,7 @@ public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<JArgumentMetadata> args) where TResult : IDataType<TResult>
+		ReadOnlySpan<JArgumentMetadata> args) where TResult : IDataType<TResult>
 	{
 		if (CommonNames.Constructor.SequenceEqual(functionName))
 			return IndeterminateCall.CreateConstructorDefinition(args);

@@ -11,7 +11,7 @@ public partial class JFunctionDefinition<TResult>
 #if !NET9_0_OR_GREATER
 		params
 #endif
-		JArgumentMetadata[] metadata) : this(functionName, metadata.AsSpan()) { }
+			JArgumentMetadata[] metadata) : this(functionName, metadata.AsSpan()) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -21,8 +21,8 @@ public partial class JFunctionDefinition<TResult>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<JArgumentMetadata> metadata) : base(functionName, IDataType.GetMetadata<TResult>().Signature,
-			                                                 metadata) { }
+		ReadOnlySpan<JArgumentMetadata> metadata) : base(functionName, IDataType.GetMetadata<TResult>().Signature,
+		                                                 metadata) { }
 
 	/// <summary>
 	/// Invokes a function on <paramref name="jLocal"/> which matches with current definition.
@@ -34,7 +34,7 @@ public partial class JFunctionDefinition<TResult>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jLocal.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jLocal, jLocal.Class, this, false, args);
@@ -51,7 +51,7 @@ public partial class JFunctionDefinition<TResult>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jLocal.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jLocal, jClass, this, false, args);
@@ -68,7 +68,7 @@ public partial class JFunctionDefinition<TResult>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jLocal.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jLocal, jClass, this, true, args);
@@ -84,7 +84,7 @@ public partial class JFunctionDefinition<TResult>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jClass.Environment;
 		return env.AccessFeature.CallStaticFunction<TResult>(jClass, this, args);
@@ -108,7 +108,7 @@ public partial class JFunctionDefinition<TResult>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jMethod.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jMethod, jLocal, this, false, args);
@@ -132,7 +132,7 @@ public partial class JFunctionDefinition<TResult>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jMethod.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jMethod, jLocal, this, true, args);
@@ -154,7 +154,7 @@ public partial class JFunctionDefinition<TResult>
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jMethod.Environment;
 		return env.AccessFeature.CallStaticFunction<TResult>(jMethod, this, args);

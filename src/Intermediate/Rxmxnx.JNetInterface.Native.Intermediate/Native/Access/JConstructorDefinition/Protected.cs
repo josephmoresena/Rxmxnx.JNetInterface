@@ -9,7 +9,7 @@ public partial class JConstructorDefinition
 #if !NET9_0_OR_GREATER
 		params
 #endif
-		JArgumentMetadata[] metadata) : this(metadata.AsSpan()) { }
+			JArgumentMetadata[] metadata) : this(metadata.AsSpan()) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -17,7 +17,7 @@ public partial class JConstructorDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<JArgumentMetadata> metadata) : base(CommonNames.Constructor, metadata) { }
+		ReadOnlySpan<JArgumentMetadata> metadata) : base(CommonNames.Constructor, metadata) { }
 
 	/// <summary>
 	/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>
@@ -30,7 +30,7 @@ public partial class JConstructorDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 		=> this.New<JLocalObject>(jClass, args);
 	/// <summary>
 	/// Creates a new <typeparamref name="TObject"/> instance using a constructor which matches with
@@ -44,7 +44,7 @@ public partial class JConstructorDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
+		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 		=> this.New<TObject>(env.ClassFeature.GetClass<TObject>(), args);
 	/// <summary>
 	/// Invokes a reflected constructor which matches with current definition
@@ -65,7 +65,7 @@ public partial class JConstructorDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 		=> this.NewReflected<JLocalObject>(jConstructor, args);
 	/// <summary>
 	/// Invokes a reflected constructor which matches with current definition.
@@ -87,7 +87,7 @@ public partial class JConstructorDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
+		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 	{
 		NativeValidationUtilities.ThrowIfAbstractClass(IClassType.GetMetadata<TObject>());
 		IEnvironment env = jConstructor.Environment;

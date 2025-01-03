@@ -30,7 +30,8 @@ internal partial class InterfaceSet
 	/// <summary>
 	/// Array interface set.
 	/// </summary>
-	public static readonly IInterfaceSet SerializableCloneableSet = GenericInterfaceSet<JSerializableObject, JCloneableObject>.Instance;
+	public static readonly IInterfaceSet SerializableCloneableSet =
+		GenericInterfaceSet<JSerializableObject, JCloneableObject>.Instance;
 
 	/// <summary>
 	/// Retrieves a set with class interfaces.
@@ -61,7 +62,7 @@ internal partial class InterfaceSet
 	/// <returns>A <see cref="IInterfaceSet"/> instance.</returns>
 	public static IInterfaceSet GetInterfaceInterfaces(IReadOnlySet<JInterfaceTypeMetadata> interfaces)
 		=> interfaces.Count == 0 ? InterfaceSet.Empty : new InterfaceInterfaceSet([.. interfaces,]);
-	
+
 	/// <summary>
 	/// Indicates whether if <paramref name="item"/> and <paramref name="local"/> are same.
 	/// </summary>

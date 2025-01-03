@@ -5,7 +5,6 @@ namespace Rxmxnx.JNetInterface.Tests;
 public sealed class PrimitiveArrayTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
-
 	[Fact]
 	internal void BooleanTest() => PrimitiveArrayTests.PrimitiveArrayTest<JBoolean>();
 	[Fact]
@@ -22,7 +21,6 @@ public sealed class PrimitiveArrayTests
 	internal void LongTest() => PrimitiveArrayTests.PrimitiveArrayTest<JLong>();
 	[Fact]
 	internal void ShortTest() => PrimitiveArrayTests.PrimitiveArrayTest<JShort>();
-
 	private static void PrimitiveArrayTest<TPrimitive>() where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		JPrimitiveTypeMetadata primitiveTypeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
@@ -32,7 +30,6 @@ public sealed class PrimitiveArrayTests
 		PrimitiveArrayTests.SetTest<TPrimitive>();
 		PrimitiveArrayTests.MemoryTest<TPrimitive>();
 	}
-
 	private static void ToStringTest(JArrayTypeMetadata arrayTypeMetadata, ITypeInformation primitiveTypeMetadata)
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
@@ -277,7 +274,6 @@ public sealed class PrimitiveArrayTests
 
 		Assert.Equal(value0, value1);
 	}
-
 	public static TPrimitive[] CreatePrimitiveArray<TPrimitive>(Int32 length)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{

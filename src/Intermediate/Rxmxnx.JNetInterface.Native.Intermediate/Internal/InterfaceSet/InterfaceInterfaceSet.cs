@@ -17,8 +17,10 @@ internal partial class InterfaceSet
 			if (base.Contains(item)) return true;
 			using ImmutableHashSet<JInterfaceTypeMetadata>.Enumerator enumerator = this._internalSet.GetEnumerator();
 			while (enumerator.MoveNext())
+			{
 				if (enumerator.Current.Interfaces.Contains(item))
 					return true;
+			}
 			return false;
 		}
 

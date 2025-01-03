@@ -45,7 +45,7 @@ public sealed class ConstructorTests : IndeterminateCallTestsBase
 		IndeterminateCallTestsBase.Compare(new(0, jClass.ClassSignature), call.StaticFunctionCall(jClass, []));
 
 		call.StaticMethodCall(jClass, []);
-		
+
 		Assert.Null((IndeterminateCall?)default(JConstructorDefinition));
 	}
 	[Fact]

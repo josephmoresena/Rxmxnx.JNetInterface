@@ -11,7 +11,7 @@ public partial class JMethodDefinition
 #if !NET9_0_OR_GREATER
 		params
 #endif
-		JArgumentMetadata[] metadata) : this(methodName, metadata.AsSpan()) { }
+			JArgumentMetadata[] metadata) : this(methodName, metadata.AsSpan()) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
@@ -21,7 +21,7 @@ public partial class JMethodDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<JArgumentMetadata> metadata) : base(methodName, metadata) { }
+		ReadOnlySpan<JArgumentMetadata> metadata) : base(methodName, metadata) { }
 
 	/// <summary>
 	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition.
@@ -32,7 +32,7 @@ public partial class JMethodDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jLocal.Environment;
 		env.AccessFeature.CallMethod(jLocal, jLocal.Class, this, false, args);
@@ -48,7 +48,7 @@ public partial class JMethodDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jLocal.Environment;
 		env.AccessFeature.CallMethod(jLocal, jClass, this, false, args);
@@ -64,7 +64,7 @@ public partial class JMethodDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jLocal.Environment;
 		env.AccessFeature.CallMethod(jLocal, jClass, this, true, args);
@@ -78,7 +78,7 @@ public partial class JMethodDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jClass.Environment;
 		env.AccessFeature.CallStaticMethod(jClass, this, args);
@@ -100,7 +100,7 @@ public partial class JMethodDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jMethod.Environment;
 		env.AccessFeature.CallMethod(jMethod, jLocal, this, false, args);
@@ -122,7 +122,7 @@ public partial class JMethodDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jMethod.Environment;
 		env.AccessFeature.CallMethod(jMethod, jLocal, this, true, args);
@@ -142,7 +142,7 @@ public partial class JMethodDefinition
 #if NET9_0_OR_GREATER
 		params
 #endif
-			ReadOnlySpan<IObject?> args)
+		ReadOnlySpan<IObject?> args)
 	{
 		IEnvironment env = jMethod.Environment;
 		env.AccessFeature.CallStaticMethod(jMethod, this, args);

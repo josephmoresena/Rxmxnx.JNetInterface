@@ -8,4 +8,6 @@
 [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface)](https://www.nuget.org/packages/Rxmxnx.JNetInterface/)
 
 ## Description
-Rxmxnx.JNetInterface provides an implementation of the Java Native Interface and Invocation API for use within the .NET ecosystem.
+
+Rxmxnx.JNetInterface provides an implementation of the Java Native Interface and Invocation API for use within the .NET
+ecosystem.
