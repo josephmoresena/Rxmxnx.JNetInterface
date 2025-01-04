@@ -80,14 +80,28 @@ jobs:
         working-directory: ./package/Rxmxnx.JNetInterface.Core
         run: |
           dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
-          ls -sh bin/Release/net*/Rxmxnx.JNetInterface.Core.dll
-          ls -sh ../Nuget/Rxmxnx.JNetInterface.Core*.*nupkg
+          for package in ../Nuget/Rxmxnx.JNetInterface.Core*.*nupkg; do
+            echo "-----------------------------------"
+            TEMP_DIR=$(mktemp -d)
+            unzip -q "$package" -d "$TEMP_DIR"
+            ls -sh "$package"
+            tree "$TEMP_DIR" -h --noreport | tail -n +2 | sed "s|$TEMP_DIR/||"
+            rm -rf "$TEMP_DIR"
+          done
+          echo "-----------------------------------"
       - name: Pack main assembly
         working-directory: ./package/Rxmxnx.JNetInterface
         run:  |
           dotnet pack -c Release /p:Version=9999.99.99.99-tmp
-          ls -sh bin/Release/net*/Rxmxnx.JNetInterface.dll
-          ls -sh bin/Release/Rxmxnx.JNetInterface*.*nupkg
+          for package in bin/Release/Rxmxnx.JNetInterface*.*nupkg; do
+            echo "-----------------------------------"
+            TEMP_DIR=$(mktemp -d)
+            unzip -q "$package" -d "$TEMP_DIR"
+            ls -sh "$package"
+            tree "$TEMP_DIR" -h --noreport | tail -n +2 | sed "s|$TEMP_DIR/||"
+            rm -rf "$TEMP_DIR"
+          done
+          echo "-----------------------------------"
           
   run-linux:
     runs-on: ubuntu-latest
