@@ -34,28 +34,28 @@ partial class JEnvironment
 	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
-	/// <param name="metadata">Class metadata.</param>
+	/// <param name="classMetadata">Class metadata.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata metadata)
+	internal JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata classMetadata)
 	{
-		Boolean isPrimitive = metadata.ClassSignature.Length == 1;
-		JClassLocalRef classRef = isPrimitive ?
-			this._cache.FindPrimitiveClass(metadata.ClassSignature[0]) :
-			this._cache.FindMainClass(metadata.Name, metadata.ClassSignature);
-		try
-		{
-			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value, true);
-			if (globalRef != default) return globalRef;
-		}
-		finally
-		{
-			this.DeleteLocalRef(classRef.Value);
-		}
-
-		this.DescribeException();
-		this._cache.ClearException(); // Clears JNI exception.
-		throw new NotSupportedException(
-			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(metadata.ClassSignature)} class.");
+		JClassLocalRef classRef = this._cache.FindMainClass(classMetadata.Name, classMetadata.ClassSignature);
+		return this.GetMainClassGlobalRef(classMetadata, classRef);
+	}
+	/// <summary>
+	/// Retrieves a global reference for given class name.
+	/// </summary>
+	/// <param name="classMetadata">Class metadata.</param>
+	/// <param name="wClassGlobal">Wrapper class global instance.</param>
+	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
+	internal JGlobalRef GetPrimitiveMainClassGlobalRef(ClassObjectMetadata classMetadata,
+		JGlobalBase? wClassGlobal = default)
+	{
+		Byte signature = classMetadata.ClassSignature[0];
+		String className = ClassNameHelper.GetPrimitiveClassName(signature);
+		JClassLocalRef classRef = !JObject.IsNullOrDefault(wClassGlobal) ?
+			this._cache.FindPrimitiveClass(wClassGlobal.As<JClassLocalRef>(), className) :
+			this._cache.FindPrimitiveClass(signature);
+		return this.GetMainClassGlobalRef(classMetadata, classRef);
 	}
 	/// <summary>
 	/// Deletes <paramref name="globalRef"/>.
@@ -194,7 +194,7 @@ partial class JEnvironment
 	{
 		using LocalFrame frame = new(this, IVirtualMachine.GetObjectClassCapacity);
 		JClassLocalRef classRef = this.GetObjectClass(localRef);
-		JClassObject jClass = this._cache.GetClass(classRef, true, JTypeKind.Class);
+		JClassObject jClass = this._cache.GetClass(classRef, true, JTypeKind.Class, true);
 		this._cache.LoadClass(frame, classRef, jClass); // Runtime class loading.
 		typeMetadata = this._cache.GetTypeMetadata(jClass);
 		return jClass;

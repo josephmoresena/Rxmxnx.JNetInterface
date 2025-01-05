@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This class stores a reflection metadata for an unknown <see cref="IReferenceType"/> type.
 /// </summary>
+[ExcludeFromCodeCoverage]
 internal readonly struct UnknownReflectionMetadata
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArgumentMetadata"/>

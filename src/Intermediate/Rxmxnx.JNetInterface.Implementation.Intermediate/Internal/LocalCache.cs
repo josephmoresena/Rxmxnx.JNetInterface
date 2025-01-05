@@ -127,7 +127,17 @@ internal class LocalCache
 	public virtual Boolean IsParameter(JObjectLocalRef localRef)
 		=> localRef != default && (this._previous?.IsParameter(localRef) ?? false);
 	/// <summary>
-	/// Retrieves class reference according with <paramref name="hash"/>.
+	/// Indicates whether <paramref name="localRef"/> is from a local frame.
+	/// </summary>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="localRef"/> is from a local frame;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	public virtual Boolean IsFromLocalFrame(JObjectLocalRef localRef)
+		=> localRef != default && (this._previous?.IsFromLocalFrame(localRef) ?? false);
+	/// <summary>
+	/// Retrieves class reference according to <paramref name="hash"/>.
 	/// </summary>
 	/// <param name="hash">Class hash.</param>
 	/// <returns>A <see cref="JClassLocalRef"/> reference.</returns>

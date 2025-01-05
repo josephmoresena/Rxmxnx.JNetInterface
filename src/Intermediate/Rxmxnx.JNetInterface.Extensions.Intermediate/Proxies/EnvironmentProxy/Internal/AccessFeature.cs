@@ -56,7 +56,7 @@ public abstract partial class EnvironmentProxy
 		ReadOnlySpan<Byte> bytes)
 		=> definition.PrimitiveStaticSet(jClass, bytes);
 
-	void IAccessFeature.CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass,
+	void IAccessFeature.CallStaticPrimitiveFunction(Span<Byte> bytes, JClassObject jClass,
 		JFunctionDefinition definition, ReadOnlySpan<IObject?> args)
 		=> definition.PrimitiveStaticInvoke(bytes, jClass, args.ToArray());
 	void IAccessFeature.CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,

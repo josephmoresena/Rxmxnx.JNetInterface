@@ -199,13 +199,13 @@ internal interface IPrimitiveNumericType<TPrimitive> : IPrimitiveNumericType
 	/// </summary>
 	/// <param name="value">A <see cref="Double"/> value.</param>
 	/// <returns>A <typeparamref name="TPrimitive"/> value.</returns>
-	protected static abstract TPrimitive FromDouble(Double value);
+	public static abstract TPrimitive FromDouble(Double value);
 	/// <summary>
 	/// Creates a <see cref="Double"/> value from <typeparamref name="TPrimitive"/>.
 	/// </summary>
 	/// <param name="value">A <typeparamref name="TPrimitive"/> value.</param>
 	/// <returns>A <see cref="Double"/> value.</returns>
-	protected static abstract Double ToDouble(TPrimitive value);
+	public static abstract Double ToDouble(TPrimitive value);
 }
 
 /// <summary>

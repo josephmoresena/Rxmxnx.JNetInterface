@@ -18,13 +18,7 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 	NativeFunctionSet IEnvironment.FunctionSet => NativeFunctionSetImpl.Instance;
 
 	Boolean IEnvironment.IsValidationAvoidable(JGlobalBase jGlobal)
-	{
-		if (!this._cache.VirtualMachine.SecureRemove(jGlobal.As<JObjectLocalRef>())) return true;
-		Boolean isWeak = jGlobal is JWeak;
-		if (!isWeak && jGlobal.ObjectMetadata is ClassObjectMetadata classObjectMetadata)
-			return MetadataHelper.MainClassHashes.Contains(classObjectMetadata.Hash);
-		return Random.Shared.Next(0, 10) > (!isWeak ? 5 : 2);
-	}
+		=> JEnvironment.IsValidationAvoidable(this._cache, jGlobal);
 	JReferenceType IEnvironment.GetReferenceType(JObject jObject)
 	{
 		if (jObject is not JReferenceObject jRefObj || jRefObj.IsDefault || jRefObj.IsProxy)

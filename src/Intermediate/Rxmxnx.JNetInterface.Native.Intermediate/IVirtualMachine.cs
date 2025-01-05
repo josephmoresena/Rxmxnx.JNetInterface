@@ -40,11 +40,6 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	internal const Int32 GetObjectClassCapacity = 5;
 
 	/// <summary>
-	/// Flag to check if reflection is disabled.
-	/// </summary>
-	private static readonly Boolean disabledReflection = !typeof(String).ToString().Contains(nameof(String));
-
-	/// <summary>
 	/// Indicates whether trace output is enabled.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
@@ -65,12 +60,13 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <summary>
 	/// Indicates whether metadata for nesting array is auto-generated.
 	/// </summary>
+	/// <remarks>In reflection-free mode this feature is unavailable.</remarks>
 	[ExcludeFromCodeCoverage]
 	public static Boolean NestingArrayAutoGenerationEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get
-			=> !IVirtualMachine.disabledReflection && // In reflection-free mode this feature is unavailable.
+			=> !AotInfo.IsReflectionDisabled &&
 				(!AppContext.TryGetSwitch("JNetInterface.DisableNestingArrayAutoGeneration", out Boolean disable) ||
 					!disable);
 	}

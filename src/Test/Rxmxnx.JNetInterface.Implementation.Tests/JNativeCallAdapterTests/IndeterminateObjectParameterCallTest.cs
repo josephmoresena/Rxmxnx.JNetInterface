@@ -45,66 +45,96 @@ public partial class JNativeCallAdapterTests
 	[InlineData(false, CallResult.NestedStatic)]
 	[InlineData(true, CallResult.Parameter)]
 	[InlineData(false, CallResult.Parameter)]
-	internal void AgnosticStaticParameterlessCallTest(Boolean useVm, CallResult result = CallResult.Void)
+	[InlineData(true, CallResult.Void, true)]
+	[InlineData(false, CallResult.Void, true)]
+	[InlineData(true, CallResult.Primitive, true)]
+	[InlineData(false, CallResult.Primitive, true)]
+	[InlineData(true, CallResult.Object, true)]
+	[InlineData(false, CallResult.Object, true)]
+	[InlineData(true, CallResult.Class, true)]
+	[InlineData(false, CallResult.Class, true)]
+	[InlineData(true, CallResult.Throwable, true)]
+	[InlineData(false, CallResult.Throwable, true)]
+	[InlineData(true, CallResult.Global, true)]
+	[InlineData(false, CallResult.Global, true)]
+	[InlineData(true, CallResult.Array, true)]
+	[InlineData(false, CallResult.Array, true)]
+	[InlineData(true, CallResult.PrimitiveArray, true)]
+	[InlineData(false, CallResult.PrimitiveArray, true)]
+	[InlineData(true, CallResult.ObjectArray, true)]
+	[InlineData(false, CallResult.ObjectArray, true)]
+	[InlineData(true, CallResult.BooleanArray, true)]
+	[InlineData(false, CallResult.BooleanArray, true)]
+	[InlineData(true, CallResult.ByteArray, true)]
+	[InlineData(false, CallResult.ByteArray, true)]
+	[InlineData(true, CallResult.CharArray, true)]
+	[InlineData(false, CallResult.CharArray, true)]
+	[InlineData(true, CallResult.DoubleArray, true)]
+	[InlineData(false, CallResult.DoubleArray, true)]
+	[InlineData(true, CallResult.FloatArray, true)]
+	[InlineData(false, CallResult.FloatArray, true)]
+	[InlineData(true, CallResult.IntArray, true)]
+	[InlineData(false, CallResult.IntArray, true)]
+	[InlineData(true, CallResult.LongArray, true)]
+	[InlineData(false, CallResult.LongArray, true)]
+	[InlineData(true, CallResult.ShortArray, true)]
+	[InlineData(false, CallResult.ShortArray, true)]
+	[InlineData(true, CallResult.String, true)]
+	[InlineData(false, CallResult.String, true)]
+	[InlineData(true, CallResult.Nested, true)]
+	[InlineData(false, CallResult.Nested, true)]
+	[InlineData(true, CallResult.Parameter, true)]
+	[InlineData(false, CallResult.Parameter, true)]
+	internal void IndeterminateObjectParameterCallTest(Boolean useVm, CallResult result = CallResult.Void,
+		Boolean registerClass = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JNativeCallAdapter adapter = default;
+		JObjectLocalRef localRef = JNativeCallAdapterTests.fixture.Create<JObjectLocalRef>();
 		JClassLocalRef classRef = JNativeCallAdapterTests.fixture.Create<JClassLocalRef>();
 		JStringLocalRef strRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
-		JStringLocalRef clsStrRef = JNativeCallAdapterTests.fixture.Create<JStringLocalRef>();
 		JClassTypeMetadata classTypeMetadata = IClassType.GetMetadata<JTestObject>();
-		JClassTypeMetadata classClassTypeMetadata = IClassType.GetMetadata<JClassObject>();
-		JClassObject? testClass = default;
-		using IFixedPointer.IDisposable classCtx =
-			classClassTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameClassCtx);
+		JLocalObject? testObject = default;
 		using IFixedPointer.IDisposable ctx =
 			classTypeMetadata.Information.GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
+		if (registerClass)
+			JVirtualMachine.Register<JTestObject>();
+		registerClass |= MetadataHelper.GetMetadata(classTypeMetadata.Hash) is not null;
 		try
 		{
-			proxyEnv.GetObjectClass(classRef.Value).Returns(proxyEnv.ClassLocalRef);
-			proxyEnv.GetObjectRefType(classRef.Value).Returns(JReferenceType.LocalRefType);
+			proxyEnv.GetObjectClass(localRef).Returns(classRef);
+			proxyEnv.GetObjectRefType(localRef).Returns(JReferenceType.LocalRefType);
 			proxyEnv.GetStringUtfLength(strRef).Returns(classTypeMetadata.ClassName.Length);
-			proxyEnv.GetStringUtfLength(clsStrRef).Returns(classClassTypeMetadata.ClassName.Length);
 			proxyEnv.CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(strRef.Value);
-			proxyEnv.CallObjectMethod(proxyEnv.ClassLocalRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                          ReadOnlyValPtr<JValueWrapper>.Zero).Returns(clsStrRef.Value);
 			proxyEnv.GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>())
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
-			proxyEnv.GetStringUtfChars(clsStrRef, Arg.Any<ValPtr<JBoolean>>())
-			        .Returns((ReadOnlyValPtr<Byte>)nameClassCtx.Pointer);
 			proxyEnv.UseVirtualMachineRef = false;
 			proxyEnv.When(e => e.GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>()))
 			        .Do(c => ((ValPtr<JVirtualMachineRef>)c[0]).Reference = proxyEnv.VirtualMachine.Reference);
-			adapter = useVm ?
+			JNativeCallAdapter.Builder adapterBuilder = useVm ?
 				JNativeCallAdapter.Create(JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference),
-				                          proxyEnv.Reference, classRef.Value, out JLocalObject jLocal).Build() :
-				JNativeCallAdapter.Create(proxyEnv.Reference, classRef.Value, out jLocal).Build();
+				                          proxyEnv.Reference) :
+				JNativeCallAdapter.Create(proxyEnv.Reference);
+			adapter = adapterBuilder.WithParameter(localRef, out testObject).Build();
 			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
-			testClass = Assert.IsType<JClassObject>(jLocal);
 			Assert.Equal(vm.GetEnvironment(), adapter.Environment);
 			proxyEnv.Received(!useVm ? 1 : 0).GetVirtualMachine(Arg.Any<ValPtr<JVirtualMachineRef>>());
-			proxyEnv.Received(1).GetObjectClass(classRef.Value);
+			proxyEnv.Received(1).GetObjectClass(localRef);
 			proxyEnv.Received(1).CallObjectMethod(classRef.Value, proxyEnv.VirtualMachine.ClassGetNameMethodId,
-			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
-			proxyEnv.Received(1).CallObjectMethod(proxyEnv.ClassLocalRef.Value,
-			                                      proxyEnv.VirtualMachine.ClassGetNameMethodId,
 			                                      ReadOnlyValPtr<JValueWrapper>.Zero);
 			proxyEnv.Received(1).GetStringUtfChars(strRef, Arg.Any<ValPtr<JBoolean>>());
 			proxyEnv.Received(1).GetStringUtfLength(strRef);
-			proxyEnv.Received(1).GetStringUtfLength(clsStrRef);
-			proxyEnv.Received(1).GetObjectRefType(classRef.Value);
-			proxyEnv.Received(0).CallBooleanMethod(classRef.Value, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
+			proxyEnv.Received(1).GetObjectRefType(localRef);
+			proxyEnv.Received(0).CallBooleanMethod(localRef, proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
 			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
-			proxyEnv.Received(0).CallBooleanMethod(proxyEnv.ClassLocalRef.Value,
-			                                       proxyEnv.VirtualMachine.ClassIsPrimitiveMethodId,
-			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
+			if (registerClass)
+				Assert.IsType<JTestObject>(testObject);
 		}
 		finally
 		{
 			nameCtx.Dispose();
-			nameClassCtx.Dispose();
-			JNativeCallAdapterTests.FinalizeTest(proxyEnv, result, adapter, testClass: testClass, classRef: classRef);
+			JNativeCallAdapterTests.FinalizeTest(proxyEnv, result, adapter, testObject, localRef);
 		}
 	}
 }

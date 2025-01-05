@@ -19,7 +19,9 @@ internal static partial class GenerationExtensions
 	/// <returns>The enumeration of declared types in the generator context..</returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static IEnumerable<INamedTypeSymbol> GetSourceTypeSymbols(this GeneratorExecutionContext context)
+#pragma warning disable RS1035
 		=> GenerationExtensions.GetTypeSymbols(context.Compilation.SourceModule.GlobalNamespace);
+#pragma warning restore RS1035
 	/// <summary>
 	/// Retrieves a set of implemented interfaces' names in type symbol.
 	/// </summary>

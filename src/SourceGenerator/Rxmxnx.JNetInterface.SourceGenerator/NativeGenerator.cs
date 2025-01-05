@@ -135,7 +135,9 @@ internal static class NativeGenerator
 			strBuildSource.Append(strBuildArg);
 			strBuildSource.AppendLine(generator.BodySuffix);
 
+#pragma warning disable RS1035
 			context.AddSource($"{generator.TypeName}.g{i:000}.cs", strBuildSource.ToString());
+#pragma warning restore RS1035
 		}
 	}
 	private static void PrepareFile(StringBuilder strBuildDoc, StringBuilder strBuildArgType, StringBuilder strBuildArg,

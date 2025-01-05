@@ -29,6 +29,7 @@ public partial class JClassTypeMetadata<TClass>
 		internal override Boolean IsInstance(JReferenceObject jObject) => this._metadata.IsInstance(jObject);
 
 		/// <inheritdoc/>
+		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal override JClassObject GetClass(IEnvironment env) => this._metadata.GetClass(env);
 		/// <inheritdoc/>

@@ -86,6 +86,7 @@ public sealed class PrimitiveTypeTests
 			textValue);
 
 		Assert.Equal(JNativeType.JObject, PrimitiveTypeImpl.GetNativeType<PrimitiveTypeImpl>());
+		Assert.Equal(argumentText, JArgumentMetadata.Get<TPrimitive>().ToString());
 	}
 	private static void EqualityTest<TPrimitive, TValue>(TPrimitive value, TPrimitive value2)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive, TValue>, IComparable<TPrimitive>,

@@ -68,4 +68,10 @@
         </AssemblyAttribute>
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="..\..\..\package\Rxmxnx.JNetInterface\PACKAGE.md">
+            <Link>PACKAGE.md</Link>
+        </Content>
+    </ItemGroup>
+
 </Project>

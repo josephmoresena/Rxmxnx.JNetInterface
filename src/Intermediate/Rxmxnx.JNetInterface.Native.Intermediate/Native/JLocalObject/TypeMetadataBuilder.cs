@@ -34,14 +34,41 @@ public partial class JLocalObject
 		/// Appends an interface to current type definition.
 		/// </summary>
 		/// <typeparam name="TInterface"><see cref="IDataType"/> interface type.</typeparam>
-		/// <returns>Current instance.</returns>
 		public void AppendInterface<TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			if (IVirtualMachine.MetadataValidationEnabled)
-				NativeValidationUtilities.ThrowIfAnnotation(this.DataTypeName, IInterfaceType.GetMetadata<TInterface>(),
-				                                            this.IsAnnotation);
 			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
+			this.AppendInterface(metadata);
+		}
+
+		/// <summary>
+		/// Appends an interface to current type definition.
+		/// </summary>
+		/// <param name="baseMetadata">Current type base definition.</param>
+		/// <typeparam name="TInterface"></typeparam>
+		public void AppendInterface<TInterface>(JClassTypeMetadata? baseMetadata)
+			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
+		{
+			JInterfaceTypeMetadata metadata = IInterfaceType.GetMetadata<TInterface>();
+			if (baseMetadata is not null && baseMetadata.Interfaces.Contains(metadata)) return;
+			this.AppendInterface(metadata);
+			if (this._interfaces is not null)
+				metadata.Interfaces.ForEach(
+					new SuperInterfaceImplementationState
+					{
+						BaseInterfaces = baseMetadata?.BaseMetadata?.Interfaces ?? InterfaceSet.Empty,
+						Interfaces = this._interfaces!,
+					}, TypeMetadataBuilder.AppendSuperinterface);
+		}
+
+		/// <summary>
+		/// Appends an interface to current type definition.
+		/// </summary>
+		/// <param name="metadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
+		private void AppendInterface(JInterfaceTypeMetadata metadata)
+		{
+			if (IVirtualMachine.MetadataValidationEnabled)
+				NativeValidationUtilities.ThrowIfAnnotation(this.DataTypeName, metadata, this.IsAnnotation);
 			if (IVirtualMachine.MetadataValidationEnabled)
 			{
 				// Validates current interface.
@@ -76,6 +103,17 @@ public partial class JLocalObject
 		{
 			if (!state.Interfaces.Contains(interfaceMetadata.InterfaceType))
 				state.NotContained.Add(interfaceMetadata.ClassName);
+		}
+		/// <summary>
+		/// Appends a superinterface to current type definition.
+		/// </summary>
+		/// <param name="state">A <see cref="SuperInterfaceImplementationState"/> instance.</param>
+		/// <param name="metadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
+		private static void AppendSuperinterface(SuperInterfaceImplementationState state,
+			JInterfaceTypeMetadata metadata)
+		{
+			if (!state.BaseInterfaces.Contains(metadata))
+				state.Interfaces.Add(metadata);
 		}
 	}
 
@@ -124,7 +162,7 @@ public partial class JLocalObject
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			this._builder.AppendInterface<TInterface>();
+			this._builder.AppendInterface<TInterface>(this._baseMetadata);
 			return this;
 		}
 		/// <summary>

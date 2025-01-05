@@ -255,6 +255,49 @@ partial class JEnvironment
 		if (localRef == default) this._cache.CheckJniError();
 		return localRef;
 	}
+	/// <summary>
+	/// Retrieves a global reference for given class reference.
+	/// </summary>
+	/// <param name="classMetadata">Class metadata.</param>
+	/// <param name="classRef">A local class reference.</param>
+	/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
+	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
+	private JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata classMetadata, JClassLocalRef classRef,
+		Boolean deleteLocalRef = true)
+	{
+		try
+		{
+			JGlobalRef globalRef = this._cache.CreateGlobalRef(classRef.Value, true);
+			if (globalRef != default) return globalRef;
+		}
+		finally
+		{
+			if (deleteLocalRef)
+				this.DeleteLocalRef(classRef.Value);
+		}
+
+		this.DescribeException();
+		this._cache.ClearException(); // Clears JNI exception.
+		throw new NotSupportedException(
+			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(classMetadata.ClassSignature)} class.");
+	}
+	/// <summary>
+	/// Indicates whether validation of <paramref name="jGlobal"/> can be avoided.
+	/// </summary>
+	/// <param name="cache">A <see cref="EnvironmentCache"/> instance.</param>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jGlobal"/> validation can be avoided;
+	/// otherwise, <see langword="false"/>;
+	/// </returns>
+	private static Boolean IsValidationAvoidable(EnvironmentCache? cache, JGlobalBase jGlobal)
+	{
+		if (cache is null || !cache.VirtualMachine.SecureRemove(jGlobal.As<JObjectLocalRef>())) return true;
+		Boolean isWeak = jGlobal is JWeak;
+		if (!isWeak && jGlobal.ObjectMetadata is ClassObjectMetadata classObjectMetadata)
+			return MetadataHelper.MainClassHashes.Contains(classObjectMetadata.Hash);
+		return Random.Shared.Next(0, 10) > (!isWeak ? 5 : 2);
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="JClassTypeMetadata"/> instance from <paramref name="jClass"/>

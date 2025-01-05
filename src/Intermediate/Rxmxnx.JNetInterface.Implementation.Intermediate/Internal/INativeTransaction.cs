@@ -66,18 +66,6 @@ internal interface INativeTransaction : IReferenceable<JniTransactionHandle>, ID
 		return this.Add(stringRef);
 	}
 	/// <summary>
-	/// Adds to current transaction <paramref name="jThrowable"/> instance reference.
-	/// </summary>
-	/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance.</param>
-	/// <returns>A <see cref="JArrayLocalRef"/> reference.</returns>
-	JThrowableLocalRef Add(JThrowableObject? jThrowable)
-	{
-		if (jThrowable is null) return default;
-		JThrowableLocalRef throwableRef = jThrowable.As<JThrowableLocalRef>();
-		this.Add(throwableRef.Value);
-		return throwableRef;
-	}
-	/// <summary>
 	/// Adds to current transaction <paramref name="jArray"/> instance reference.
 	/// </summary>
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>

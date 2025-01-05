@@ -8,7 +8,7 @@ internal readonly struct SuperInterfaceValidationState
 	/// <summary>
 	/// Current interface types.
 	/// </summary>
-	public IReadOnlySet<Type> Interfaces { get; init; }
+	public IReadOnlySet<Type> Interfaces { [ExcludeFromCodeCoverage] get; init; }
 	/// <summary>
 	/// Name of excluded interfaces.
 	/// </summary>

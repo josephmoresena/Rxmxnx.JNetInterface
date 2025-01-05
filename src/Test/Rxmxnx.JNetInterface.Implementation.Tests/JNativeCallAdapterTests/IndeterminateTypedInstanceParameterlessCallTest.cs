@@ -85,7 +85,7 @@ public partial class JNativeCallAdapterTests
 	[InlineData(false, CallResult.Nested, true)]
 	[InlineData(true, CallResult.Parameter, true)]
 	[InlineData(false, CallResult.Parameter, true)]
-	internal void AgnosticTypedInstanceParameterlessCallTest(Boolean useVm, CallResult result = CallResult.Void,
+	internal void IndeterminateTypedInstanceParameterlessCallTest(Boolean useVm, CallResult result = CallResult.Void,
 		Boolean registerClass = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();

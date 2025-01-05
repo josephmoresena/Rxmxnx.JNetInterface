@@ -35,9 +35,19 @@ public partial class JLocalObject
 	/// </param>
 	protected virtual void Dispose(Boolean disposing)
 	{
-		//Disposed or uninstantiated object.
-		if (this.Lifetime is { IsDisposed: true, } or null) return;
-		this.Lifetime.Unload(this);
+#pragma warning disable S2696
+		JLocalObject.finalizerExecution = !disposing;
+#pragma warning disable S2696
+		try
+		{
+			//Disposed or uninstantiated object.
+			if (this.Lifetime is { IsDisposed: true, } or null) return;
+			this.Lifetime.Unload(this);
+		}
+		finally
+		{
+			JLocalObject.finalizerExecution = false;
+		}
 	}
 	/// <summary>
 	/// Creates the object metadata for the current instance.

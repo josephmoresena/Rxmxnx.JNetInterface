@@ -39,12 +39,22 @@ public static class JRuntimeInfo
 	{
 		JRuntimeInfo.PrintAttachedThreadInfo(env);
 		JRuntimeInfo.PrintAttachThreadInfo(vm, new(() => "Main thread Re-Attached"u8), env);
-		Task jvmT = Task.Factory.StartNew(JRuntimeInfo.PrintAttachedThreadInfo, vm, TaskCreationOptions.LongRunning);
-		jvmT.Wait();
+		JRuntimeInfo.PrintVirtualMachineInfoAsync(vm).Wait();
 		Console.WriteLine($"Supported version: 0x{jvmLib.GetLatestSupportedVersion():x8}");
 		IVirtualMachine[] vms = jvmLib.GetCreatedVirtualMachines();
 		foreach (IVirtualMachine jvm in vms)
 			Console.WriteLine($"VM: {jvm.Reference} Type: {jvm.GetType()}");
+	}
+	private static async Task PrintVirtualMachineInfoAsync(IInvokedVirtualMachine vm)
+	{
+		try
+		{
+			await Task.Factory.StartNew(JRuntimeInfo.PrintAttachedThreadInfo, vm, TaskCreationOptions.LongRunning);
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
+		}
 	}
 
 	private static void PrintArrayMetadata(JArrayTypeMetadata arrMetadata, Int32 dimension)

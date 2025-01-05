@@ -60,6 +60,6 @@ public abstract partial class AccessFeatureProxy : IAccessFeature
 		IReadOnlyFixedMemory mem);
 	public abstract void CallPrimitiveFunction(IFixedMemory mem, JLocalObject jLocal, JClassObject jClass,
 		JFunctionDefinition definition, Boolean nonVirtual, IObject?[] args);
-	protected abstract void CallPrimitiveStaticFunction(IFixedMemory mem, JClassObject jClass,
+	public abstract void CallStaticPrimitiveFunction(IFixedMemory mem, JClassObject jClass,
 		JFunctionDefinition definition, IObject?[] args);
 }

@@ -2,20 +2,24 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework Condition="'$(USE_NET80)' != 'true'">net9.0</TargetFramework>
+        <TargetFramework Condition="'$(USE_NET80)' == 'true'">net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PublishAot>true</PublishAot>
-        <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
-        <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
-        <InvariantGlobalization>true</InvariantGlobalization>
-        <TrimMode>full</TrimMode>
         <IsPackable>false</IsPackable>
         <IsTrimmable>true</IsTrimmable>
         <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
     </PropertyGroup>
 
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(JNI_LIBRARY)' == 'true'">
+        <PublishAot>true</PublishAot>
+        <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
+        <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <TrimMode>full</TrimMode>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(JNI_LIBRARY)' == 'true'">
         <RootAllApplicationAssemblies>false</RootAllApplicationAssemblies>
         <TrimUnusedDependencies>true</TrimUnusedDependencies>
         <IlcOptimizationPreference>Size</IlcOptimizationPreference>
@@ -34,7 +38,7 @@
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(JNI_LIBRARY)' == 'true'">
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>-->
         <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
         <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableNestingArrayAutoGeneration" Value="true" Trim="true"/>-->

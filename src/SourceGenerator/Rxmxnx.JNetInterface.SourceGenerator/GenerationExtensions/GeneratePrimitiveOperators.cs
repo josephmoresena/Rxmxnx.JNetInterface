@@ -64,6 +64,8 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 		String source = String.Format(GenerationExtensions.PrimitiveOperatorsFormat,
 		                              primitiveSymbol.ContainingNamespace, primitiveSymbol.Name, underlineType,
 		                              valueName, equalityComplement);
+#pragma warning disable RS1035
 		context.AddSource(fileName, source);
+#pragma warning restore RS1035
 	}
 }

@@ -45,7 +45,7 @@ public partial class JThrowableObject
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>()
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{
-			this._builder.AppendInterface<TInterface>();
+			this._builder.AppendInterface<TInterface>(this._baseMetadata);
 			return this;
 		}
 		/// <summary>

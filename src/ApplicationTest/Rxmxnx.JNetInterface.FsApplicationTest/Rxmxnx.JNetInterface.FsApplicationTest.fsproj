@@ -2,8 +2,9 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
+        <TargetFramework Condition="'$(USE_NET80)' != 'true'">net9.0</TargetFramework>
+        <TargetFramework Condition="'$(USE_NET80)' == 'true'">net8.0</TargetFramework>
         <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
-        <TargetFramework>net8.0</TargetFramework>
         <PublishAot>true</PublishAot>
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
         <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
@@ -24,7 +25,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.LibraryTest\Rxmxnx.JNetInterface.LibraryTest.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

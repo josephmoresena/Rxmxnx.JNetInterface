@@ -169,8 +169,7 @@ public static class JNativeTypeExtensions
 	/// <param name="nativeType"><see cref="JNativeType"/> value.</param>
 	/// <returns>The name of <paramref name="nativeType"/> value.</returns>
 	public static String GetTypeName(this JNativeType nativeType)
-	{
-		return nativeType switch
+		=> nativeType switch
 		{
 			JNativeType.JEnvironmentRef => CommonNames.JEnvironmentRefName,
 			JNativeType.JVirtualMachineRef => CommonNames.JVirtualMachineRefName,
@@ -218,5 +217,4 @@ public static class JNativeTypeExtensions
 			JNativeType.JValue => CommonNames.JValueName,
 			_ => CommonValidationUtilities.ThrowInvalidNativeType(nativeType),
 		};
-	}
 }

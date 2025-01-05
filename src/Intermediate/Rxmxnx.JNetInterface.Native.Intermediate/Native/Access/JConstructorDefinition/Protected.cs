@@ -5,12 +5,19 @@ public partial class JConstructorDefinition
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	protected JConstructorDefinition(params JArgumentMetadata[] metadata) : this(metadata.AsSpan()) { }
+	protected JConstructorDefinition(
+#if !NET9_0_OR_GREATER
+		params
+#endif
+			JArgumentMetadata[] metadata) : this(metadata.AsSpan()) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	protected JConstructorDefinition(ReadOnlySpan<JArgumentMetadata> metadata) :
-		base(CommonNames.Constructor, metadata) { }
+	protected JConstructorDefinition(
+#if NET9_0_OR_GREATER
+		params
+#endif
+		ReadOnlySpan<JArgumentMetadata> metadata) : base(CommonNames.Constructor, metadata) { }
 
 	/// <summary>
 	/// Creates a new <see cref="JLocalObject"/> instance using a constructor on <paramref name="jClass"/>
@@ -19,7 +26,11 @@ public partial class JConstructorDefinition
 	/// <param name="jClass">An <see cref="JClassObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
-	protected JLocalObject New(JClassObject jClass, ReadOnlySpan<IObject?> args)
+	protected JLocalObject New(JClassObject jClass,
+#if NET9_0_OR_GREATER
+		params
+#endif
+		ReadOnlySpan<IObject?> args)
 		=> this.New<JLocalObject>(jClass, args);
 	/// <summary>
 	/// Creates a new <typeparamref name="TObject"/> instance using a constructor which matches with
@@ -29,8 +40,11 @@ public partial class JConstructorDefinition
 	/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
-	protected TObject New<TObject>(IEnvironment env, ReadOnlySpan<IObject?> args)
-		where TObject : JLocalObject, IClassType<TObject>
+	protected TObject New<TObject>(IEnvironment env,
+#if NET9_0_OR_GREATER
+		params
+#endif
+		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 		=> this.New<TObject>(env.ClassFeature.GetClass<TObject>(), args);
 	/// <summary>
 	/// Invokes a reflected constructor which matches with current definition
@@ -47,7 +61,11 @@ public partial class JConstructorDefinition
 	/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
-	protected JLocalObject NewReflected(JConstructorObject jConstructor, ReadOnlySpan<IObject?> args)
+	protected JLocalObject NewReflected(JConstructorObject jConstructor,
+#if NET9_0_OR_GREATER
+		params
+#endif
+		ReadOnlySpan<IObject?> args)
 		=> this.NewReflected<JLocalObject>(jConstructor, args);
 	/// <summary>
 	/// Invokes a reflected constructor which matches with current definition.
@@ -65,8 +83,11 @@ public partial class JConstructorDefinition
 	/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
 	/// <param name="args">The arguments to pass to.</param>
 	/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
-	protected TObject NewReflected<TObject>(JConstructorObject jConstructor, ReadOnlySpan<IObject?> args)
-		where TObject : JLocalObject, IClassType<TObject>
+	protected TObject NewReflected<TObject>(JConstructorObject jConstructor,
+#if NET9_0_OR_GREATER
+		params
+#endif
+		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 	{
 		NativeValidationUtilities.ThrowIfAbstractClass(IClassType.GetMetadata<TObject>());
 		IEnvironment env = jConstructor.Environment;

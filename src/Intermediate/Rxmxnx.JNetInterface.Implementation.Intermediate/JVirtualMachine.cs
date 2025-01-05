@@ -6,38 +6,6 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine : IVirtualMachine
 {
 	/// <summary>
-	/// Indicates whether metadata for built-in throwable objects should be auto-registered.
-	/// </summary>
-	[ExcludeFromCodeCoverage]
-	internal static Boolean BuiltInThrowableAutoRegistered
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get
-			=> !AppContext.TryGetSwitch("JNetInterface.DisableBuiltInThrowableAutoRegistration", out Boolean disable) ||
-				!disable;
-	}
-	/// <summary>
-	/// Indicates whether metadata for reflection objects should be auto-registered.
-	/// </summary>
-	[ExcludeFromCodeCoverage]
-	internal static Boolean ReflectionAutoRegistered
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get
-			=> !AppContext.TryGetSwitch("JNetInterface.DisableReflectionAutoRegistration", out Boolean disable) ||
-				!disable;
-	}
-	/// <summary>
-	/// Indicates whether metadata for NIO objects should be auto-registered.
-	/// </summary>
-	[ExcludeFromCodeCoverage]
-	internal static Boolean NioAutoRegistered
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => !AppContext.TryGetSwitch("JNetInterface.DisableNioAutoRegistration", out Boolean disable) || !disable;
-	}
-
-	/// <summary>
 	/// Indicates whether final user-types should be treated as real classes at runtime.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
@@ -150,5 +118,15 @@ public partial class JVirtualMachine : IVirtualMachine
 	{
 		ReferenceCache.Instance.Get(reference)?._cache.ClearCache();
 		return ReferenceCache.Instance.Remove(reference);
+	}
+	/// <summary>
+	/// Sets <typeparamref name="TReference"/> as main class.
+	/// </summary>
+	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	public static void SetMainClass<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
+	{
+		String hash = MetadataHelper.GetExactMetadata<TReference>().Hash;
+		if (!JVirtualMachine.userMainClasses.ContainsKey(hash))
+			JVirtualMachine.userMainClasses.TryAdd(hash, ClassObjectMetadata.Create<TReference>());
 	}
 }

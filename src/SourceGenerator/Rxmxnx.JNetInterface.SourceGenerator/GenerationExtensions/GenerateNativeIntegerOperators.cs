@@ -89,6 +89,8 @@ partial struct {1} : IBinaryInteger<{1}>, {4}<{1}>
 		String source = String.Format(GenerationExtensions.NumericIntegerOperatorsFormat,
 		                              numericSymbol.ContainingNamespace, numericSymbol.Name, underlineType, formattable,
 		                              signedUnsafe);
+#pragma warning disable RS1035
 		context.AddSource(fileName, source);
+#pragma warning restore RS1035
 	}
 }

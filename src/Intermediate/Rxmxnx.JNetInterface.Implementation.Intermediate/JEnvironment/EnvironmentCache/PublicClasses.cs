@@ -16,9 +16,10 @@ partial class JEnvironment
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 		/// <param name="keepReference">Indicates whether class reference should be assigned to created object.</param>
 		/// <param name="runtimeInformation">Runtime known type information.</param>
+		/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		public JClassObject GetClass(JClassLocalRef classRef, Boolean keepReference,
-			WellKnownRuntimeTypeInformation runtimeInformation = default)
+			WellKnownRuntimeTypeInformation runtimeInformation = default, Boolean deleteLocalRef = false)
 		{
 			Boolean isReferenceType = runtimeInformation.Kind is not null and not JTypeKind.Primitive;
 			using JStringObject jString = this.GetClassName(classRef, isReferenceType, out Boolean isPrimitive);
@@ -29,6 +30,8 @@ partial class JEnvironment
 				JClassObject jClass = isPrimitive ?
 					this.GetPrimitiveClass(utf8Text.Values) :
 					this.GetClass(utf8Text.Values, usableClassRef, runtimeInformation);
+				if (JVirtualMachine.IsMainClass(jClass.Hash))
+					this.LoadMainClass(jClass, classRef, deleteLocalRef);
 				return jClass;
 			}
 			finally

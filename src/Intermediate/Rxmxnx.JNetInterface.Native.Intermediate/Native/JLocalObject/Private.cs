@@ -2,6 +2,12 @@ namespace Rxmxnx.JNetInterface.Native;
 
 public partial class JLocalObject : ILocalObject
 {
+	/// <summary>
+	/// Indicates finalizer is at execution.
+	/// </summary>
+	[ThreadStatic]
+	private static Boolean finalizerExecution;
+
 	IVirtualMachine ILocalObject.VirtualMachine => this.Lifetime.Environment.VirtualMachine;
 	Boolean ILocalObject.IsProxy => this.IsProxy;
 	ObjectLifetime ILocalObject.Lifetime => this.Lifetime;

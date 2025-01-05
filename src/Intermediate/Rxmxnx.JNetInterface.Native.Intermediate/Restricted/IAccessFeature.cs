@@ -128,7 +128,7 @@ internal partial interface IAccessFeature
 	/// <param name="args">The <see cref="IObject"/> list with call arguments.</param>
 	void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, ReadOnlySpan<IObject?> args);
 	/// <summary>
-	/// Invokes an static method reflected on <paramref name="jMethod"/>.
+	/// Invokes a static method reflected on <paramref name="jMethod"/>.
 	/// </summary>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
@@ -214,7 +214,7 @@ internal partial interface IAccessFeature
 	/// <param name="definition"><see cref="JMethodDefinition"/> definition.</param>
 	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="isStatic">
-	/// Indicates whether <paramref name="definition"/> matches with an static method in <paramref name="declaringClass"/>.
+	/// Indicates whether <paramref name="definition"/> matches with a static method in <paramref name="declaringClass"/>.
 	/// </param>
 	/// <returns>A <see cref="JMethodObject"/> instance.</returns>
 	JMethodObject GetReflectedMethod(JMethodDefinition definition, JClassObject declaringClass, Boolean isStatic);
@@ -225,7 +225,7 @@ internal partial interface IAccessFeature
 	/// <param name="definition"><see cref="JFunctionDefinition"/> definition.</param>
 	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="isStatic">
-	/// Indicates whether <paramref name="definition"/> matches with an static method in <paramref name="declaringClass"/>.
+	/// Indicates whether <paramref name="definition"/> matches with a static method in <paramref name="declaringClass"/>.
 	/// </param>
 	/// <returns>A <see cref="JMethodObject"/> instance.</returns>
 	JMethodObject GetReflectedFunction(JFunctionDefinition definition, JClassObject declaringClass, Boolean isStatic);
@@ -244,7 +244,7 @@ internal partial interface IAccessFeature
 	/// <param name="definition"><see cref="JFieldDefinition"/> definition.</param>
 	/// <param name="declaringClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="isStatic">
-	/// Indicates whether <paramref name="definition"/> matches with an static field in <paramref name="declaringClass"/>.
+	/// Indicates whether <paramref name="definition"/> matches with a static field in <paramref name="declaringClass"/>.
 	/// </param>
 	/// <returns>A <see cref="JFieldObject"/> instance.</returns>
 	JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass, Boolean isStatic);

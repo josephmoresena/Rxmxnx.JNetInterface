@@ -433,14 +433,18 @@ public sealed class JClassObjectTests
 		JClassTypeMetadata stringTypeMetadata = IClassType.GetMetadata<JStringObject>();
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JClassLocalRef classRef = JClassObjectTests.fixture.Create<JClassLocalRef>();
+		JClassLocalRef classRef2 = JClassObjectTests.fixture.Create<JClassLocalRef>();
 		using JClassObject jClass = new(env);
 		using JClassObject jClassResult = new(jClass, classRef);
+		using JClassObject jClassVoid = new(jClass, JPrimitiveTypeMetadata.VoidMetadata, classRef2);
 
 		env.ClassFeature.GetClass<JStringObject>().Returns(jClassResult);
 		env.ClassFeature.GetClass(stringTypeMetadata.ClassName).Returns(jClassResult);
+		env.ClassFeature.VoidPrimitive.Returns(jClassVoid);
 
 		Assert.Equal(jClassResult, JClassObject.GetClass(env, stringTypeMetadata.ClassName));
 		Assert.Equal(jClassResult, JClassObject.GetClass<JStringObject>(env));
+		Assert.Equal(jClassVoid, JClassObject.GetVoidClass(env));
 	}
 	[Fact]
 	internal void LoadClassTest()

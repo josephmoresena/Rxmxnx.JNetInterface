@@ -15,7 +15,7 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	/// <inheritdoc/>
 	public override JTypeModifier Modifier { get; }
 	/// <inheritdoc/>
-	public override IInterfaceSet Interfaces => InterfaceSet.ArraySet;
+	public override IInterfaceSet Interfaces => InterfaceSet.SerializableCloneableSet;
 
 	/// <summary>
 	/// Array dimension.

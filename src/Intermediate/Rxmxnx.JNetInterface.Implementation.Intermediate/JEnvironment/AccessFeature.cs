@@ -50,13 +50,13 @@ partial class JEnvironment
 			EnvironmentCache.TraceSetPrimitiveField(default, jClass, definition, bytes);
 			this.SetPrimitiveStaticField(jClass.Reference, bytes, definition.Descriptor[^1], fieldId);
 		}
-		public void CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
+		public void CallStaticPrimitiveFunction(Span<Byte> bytes, JClassObject jClass, JFunctionDefinition definition,
 			ReadOnlySpan<IObject?> args = default)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
 			using INativeTransaction jniTransaction =
 				this.GetClassTransaction(jClass, definition, out JMethodId methodId);
-			this.CallPrimitiveStaticFunction(bytes, definition, jClass.Reference, args, jniTransaction, methodId);
+			this.CallStaticPrimitiveFunction(bytes, definition, jClass.Reference, args, jniTransaction, methodId);
 		}
 		public void CallPrimitiveFunction(Span<Byte> bytes, JLocalObject jLocal, JClassObject jClass,
 			JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args = default)
@@ -251,7 +251,7 @@ partial class JEnvironment
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 			{
 				Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
-				this.CallPrimitiveStaticFunction(bytes, jClass, definition, args);
+				this.CallStaticPrimitiveFunction(bytes, jClass, definition, args);
 				return (TResult)primitiveMetadata.CreateInstance(bytes);
 			}
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
@@ -275,7 +275,7 @@ partial class JEnvironment
 				return this.CallObjectStaticFunction<TResult>(definition, classRef, args, jniTransaction, methodId);
 			Span<Byte> bytes = stackalloc Byte[primitiveMetadata.SizeOf];
 			JTrace.CallMethod(default, jMethod.DeclaringClass, definition, false, args);
-			this.CallPrimitiveStaticFunction(bytes, definition, classRef, args, jniTransaction, methodId);
+			this.CallStaticPrimitiveFunction(bytes, definition, classRef, args, jniTransaction, methodId);
 			return (TResult)primitiveMetadata.CreateInstance(bytes);
 		}
 		public void CallStaticMethod(JClassObject jClass, JMethodDefinition definition, ReadOnlySpan<IObject?> args)

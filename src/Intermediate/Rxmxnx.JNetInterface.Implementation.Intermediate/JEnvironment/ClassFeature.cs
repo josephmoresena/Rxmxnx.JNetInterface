@@ -99,7 +99,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef = jniTransaction.Add(jLocal);
 			JClassLocalRef classRef = this._env.GetObjectClass(localRef);
 			JTypeKind kind = jLocal is JArrayObject ? JTypeKind.Array : JTypeKind.Class;
-			JClassObject jClass = this.GetClass(classRef, true, kind);
+			JClassObject jClass = this.GetClass(classRef, true, kind, true);
 			return this.Register(jClass);
 		}
 		public unsafe JClassObject? GetSuperClass(JClassObject jClass)

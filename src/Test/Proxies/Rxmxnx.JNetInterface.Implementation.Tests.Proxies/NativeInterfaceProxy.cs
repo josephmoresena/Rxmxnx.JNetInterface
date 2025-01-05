@@ -84,46 +84,66 @@ public abstract class NativeInterfaceProxy
 			return this.VirtualMachine.StackTraceElementGlobalRef;
 		if (classRef == this.StackTraceObjectLocalRef)
 			return this.VirtualMachine.StackTraceElementGlobalRef;
-		if (classRef == this.VoidPrimitiveLocalRef)
+
+		if (classRef == this.VoidObjectLocalRef)
 			return this.VirtualMachine.VoidGlobalRef;
-		if (classRef == this.BooleanPrimitiveLocalRef)
+		if (classRef == this.BooleanObjectLocalRef)
 			return this.VirtualMachine.BooleanGlobalRef;
-		if (classRef == this.BytePrimitiveLocalRef)
+		if (classRef == this.ByteObjectLocalRef)
 			return this.VirtualMachine.ByteGlobalRef;
-		if (classRef == this.CharPrimitiveLocalRef)
-			return this.VirtualMachine.CharGlobalRef;
-		if (classRef == this.DoublePrimitiveLocalRef)
+		if (classRef == this.CharacterObjectLocalRef)
+			return this.VirtualMachine.CharacterGlobalRef;
+		if (classRef == this.DoubleObjectLocalRef)
 			return this.VirtualMachine.DoubleGlobalRef;
-		if (classRef == this.FloatPrimitiveLocalRef)
+		if (classRef == this.FloatObjectLocalRef)
 			return this.VirtualMachine.FloatGlobalRef;
-		if (classRef == this.IntPrimitiveLocalRef)
-			return this.VirtualMachine.IntGlobalRef;
-		if (classRef == this.LongPrimitiveLocalRef)
+		if (classRef == this.IntegerObjectLocalRef)
+			return this.VirtualMachine.IntegerGlobalRef;
+		if (classRef == this.LongObjectLocalRef)
 			return this.VirtualMachine.LongGlobalRef;
-		if (classRef == this.ShortPrimitiveLocalRef)
+		if (classRef == this.ShortObjectLocalRef)
 			return this.VirtualMachine.ShortGlobalRef;
+
+		if (classRef == this.VoidPrimitiveLocalRef)
+			return this.VirtualMachine.VoidPGlobalRef;
+		if (classRef == this.BooleanPrimitiveLocalRef)
+			return this.VirtualMachine.BooleanPGlobalRef;
+		if (classRef == this.BytePrimitiveLocalRef)
+			return this.VirtualMachine.BytePGlobalRef;
+		if (classRef == this.CharPrimitiveLocalRef)
+			return this.VirtualMachine.CharPGlobalRef;
+		if (classRef == this.DoublePrimitiveLocalRef)
+			return this.VirtualMachine.DoublePGlobalRef;
+		if (classRef == this.FloatPrimitiveLocalRef)
+			return this.VirtualMachine.FloatPGlobalRef;
+		if (classRef == this.IntPrimitiveLocalRef)
+			return this.VirtualMachine.IntPGlobalRef;
+		if (classRef == this.LongPrimitiveLocalRef)
+			return this.VirtualMachine.LongPGlobalRef;
+		if (classRef == this.ShortPrimitiveLocalRef)
+			return this.VirtualMachine.ShortPGlobalRef;
 		return null;
 	}
 	public unsafe JFieldId? GetPrimitiveWrapperClassTypeField(JClassLocalRef classRef, Byte* fieldName)
 	{
 		if (!ReferenceHelper.IsTypeField(fieldName)) return default;
-		if (classRef == this.VoidObjectLocalRef)
+		if (classRef == this.VoidObjectLocalRef || classRef.Value == this.VirtualMachine.VoidGlobalRef.Value)
 			return this.VoidTypeFieldId;
-		if (classRef == this.BooleanObjectLocalRef)
+		if (classRef == this.BooleanObjectLocalRef || classRef.Value == this.VirtualMachine.BooleanGlobalRef.Value)
 			return this.BooleanTypeFieldId;
-		if (classRef == this.ByteObjectLocalRef)
+		if (classRef == this.ByteObjectLocalRef || classRef.Value == this.VirtualMachine.ByteGlobalRef.Value)
 			return this.ByteTypeFieldId;
-		if (classRef == this.CharacterObjectLocalRef)
+		if (classRef == this.CharacterObjectLocalRef || classRef.Value == this.VirtualMachine.CharacterGlobalRef.Value)
 			return this.CharacterTypeFieldId;
-		if (classRef == this.DoubleObjectLocalRef)
+		if (classRef == this.DoubleObjectLocalRef || classRef.Value == this.VirtualMachine.DoubleGlobalRef.Value)
 			return this.DoubleTypeFieldId;
-		if (classRef == this.FloatObjectLocalRef)
+		if (classRef == this.FloatObjectLocalRef || classRef.Value == this.VirtualMachine.FloatGlobalRef.Value)
 			return this.FloatTypeFieldId;
-		if (classRef == this.IntegerObjectLocalRef)
+		if (classRef == this.IntegerObjectLocalRef || classRef.Value == this.VirtualMachine.IntegerGlobalRef.Value)
 			return this.IntegerTypeFieldId;
-		if (classRef == this.LongObjectLocalRef)
+		if (classRef == this.LongObjectLocalRef || classRef.Value == this.VirtualMachine.LongGlobalRef.Value)
 			return this.LongTypeFieldId;
-		if (classRef == this.ShortObjectLocalRef)
+		if (classRef == this.ShortObjectLocalRef || classRef.Value == this.VirtualMachine.ShortGlobalRef.Value)
 			return this.ShortTypeFieldId;
 		return null;
 	}
@@ -165,23 +185,32 @@ public abstract class NativeInterfaceProxy
 	}
 	public JClassLocalRef? GetPrimitiveClass(JClassLocalRef classRef, JFieldId fieldId)
 	{
-		if (classRef == this.VoidObjectLocalRef && fieldId == this.VoidTypeFieldId)
+		if ((classRef == this.VoidObjectLocalRef || classRef.Value == this.VirtualMachine.VoidGlobalRef.Value) &&
+		    fieldId == this.VoidTypeFieldId)
 			return this.VoidPrimitiveLocalRef;
-		if (classRef == this.BooleanObjectLocalRef && fieldId == this.BooleanTypeFieldId)
+		if ((classRef == this.BooleanObjectLocalRef || classRef.Value == this.VirtualMachine.BooleanGlobalRef.Value) &&
+		    fieldId == this.BooleanTypeFieldId)
 			return this.BooleanPrimitiveLocalRef;
-		if (classRef == this.ByteObjectLocalRef && fieldId == this.ByteTypeFieldId)
+		if ((classRef == this.ByteObjectLocalRef || classRef.Value == this.VirtualMachine.ByteGlobalRef.Value) &&
+		    fieldId == this.ByteTypeFieldId)
 			return this.BytePrimitiveLocalRef;
-		if (classRef == this.CharacterObjectLocalRef && fieldId == this.CharacterTypeFieldId)
+		if ((classRef == this.CharacterObjectLocalRef ||
+			    classRef.Value == this.VirtualMachine.CharacterGlobalRef.Value) && fieldId == this.CharacterTypeFieldId)
 			return this.CharPrimitiveLocalRef;
-		if (classRef == this.DoubleObjectLocalRef && fieldId == this.DoubleTypeFieldId)
+		if ((classRef == this.DoubleObjectLocalRef || classRef.Value == this.VirtualMachine.DoubleGlobalRef.Value) &&
+		    fieldId == this.DoubleTypeFieldId)
 			return this.DoublePrimitiveLocalRef;
-		if (classRef == this.FloatObjectLocalRef && fieldId == this.FloatTypeFieldId)
+		if ((classRef == this.FloatObjectLocalRef || classRef.Value == this.VirtualMachine.FloatGlobalRef.Value) &&
+		    fieldId == this.FloatTypeFieldId)
 			return this.FloatPrimitiveLocalRef;
-		if (classRef == this.IntegerObjectLocalRef && fieldId == this.IntegerTypeFieldId)
+		if ((classRef == this.IntegerObjectLocalRef || classRef.Value == this.VirtualMachine.IntegerGlobalRef.Value) &&
+		    fieldId == this.IntegerTypeFieldId)
 			return this.IntPrimitiveLocalRef;
-		if (classRef == this.LongObjectLocalRef && fieldId == this.LongTypeFieldId)
+		if ((classRef == this.LongObjectLocalRef || classRef.Value == this.VirtualMachine.LongGlobalRef.Value) &&
+		    fieldId == this.LongTypeFieldId)
 			return this.LongPrimitiveLocalRef;
-		if (classRef == this.ShortObjectLocalRef && fieldId == this.ShortTypeFieldId)
+		if ((classRef == this.ShortObjectLocalRef || classRef.Value == this.VirtualMachine.ShortGlobalRef.Value) &&
+		    fieldId == this.ShortTypeFieldId)
 			return this.ShortPrimitiveLocalRef;
 		return null;
 	}

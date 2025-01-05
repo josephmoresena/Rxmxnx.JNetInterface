@@ -23,7 +23,13 @@ internal static class MetadataTextUtilities
 	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
 	/// <param name="properties">Additional properties to report.</param>
 	/// <returns>A detailed string representation of <paramref name="typeMetadata"/>.</returns>
-	public static String GetString(JDataTypeMetadata typeMetadata, params IAppendableProperty?[] properties)
+	public static String GetString(JDataTypeMetadata typeMetadata, params
+#if !NET9_0_OR_GREATER
+		IAppendableProperty?[]
+#else
+		ReadOnlySpan<IAppendableProperty?>
+#endif
+		properties)
 	{
 		StringBuilder strBuild = new();
 		Boolean isVoid = typeMetadata.ClassName.AsSpan().SequenceEqual(JPrimitiveTypeMetadata.VoidMetadata.ClassName);
@@ -50,7 +56,11 @@ internal static class MetadataTextUtilities
 				if (typeMetadata.Kind is JTypeKind.Class)
 					MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Modifier),
 					                                     $"{typeMetadata.Modifier}");
-				foreach (IAppendableProperty? t in properties.AsSpan())
+				foreach (IAppendableProperty? t in properties
+#if !NET9_0_OR_GREATER
+					         .AsSpan()
+#endif
+				        )
 					MetadataTextUtilities.AppendProperty(strBuild, t);
 				break;
 		}

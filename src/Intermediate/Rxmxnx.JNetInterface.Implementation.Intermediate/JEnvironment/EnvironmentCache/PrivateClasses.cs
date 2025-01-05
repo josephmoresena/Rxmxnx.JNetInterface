@@ -85,11 +85,29 @@ partial class JEnvironment
 		{
 			if (jClass is null) return default;
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			if (!classRef.IsDefault) return classRef;
-			classRef = this.FindClass(jClass);
-			jClass.SetValue(classRef);
-			this.Register(jClass);
+			if (classRef.IsDefault)
+			{
+				classRef = this.FindClass(jClass);
+				if (!JVirtualMachine.IsMainClass(jClass.Hash))
+					jClass.SetValue(classRef);
+				else
+					classRef = this.ReloadMainClass(jClass, classRef, true);
+				this.Register(jClass);
+			}
+			else if (JVirtualMachine.IsMainClass(jClass.Hash))
+			{
+				classRef = this.ReloadMainClass(jClass, classRef, false);
+			}
 			return classRef;
+		}
+		private JClassLocalRef ReloadMainClass(JClassObject jClass, JClassLocalRef classRef, Boolean deleteLocalRef)
+		{
+			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
+			if (!jGlobal.IsDefault) return classRef;
+			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
+			jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
+			this.VirtualMachine.SetMainGlobal(classMetadata.Hash, jGlobal);
+			return jGlobal.As<JClassLocalRef>();
 		}
 		/// <summary>
 		/// Retrieves the current <paramref name="classRef"/> instance as <see cref="JClassObject"/>.
@@ -105,6 +123,8 @@ partial class JEnvironment
 			JClassObject result = classObjectMetadata is null ?
 				this.GetClass(classRef, isLocalRef, (WellKnownRuntimeTypeInformation)classObjectMetadata) :
 				this.GetClass(classObjectMetadata, assignableRef);
+			if (JVirtualMachine.IsMainClass(result.Hash))
+				this.LoadMainClass(result, classRef, false);
 			return this.Register(result);
 		}
 		/// <summary>
@@ -133,6 +153,12 @@ partial class JEnvironment
 			if (jClass.LocalReference == default && classRef.Value != default) jClass.SetValue(classRef);
 			return jClass;
 		}
+		/// <summary>
+		/// Retrieves class instance for <paramref name="classRef"/>.
+		/// </summary>
+		/// <param name="typeInformation">Agnostic type information.</param>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private JClassObject GetClass(ITypeInformation typeInformation, JClassLocalRef classRef)
 		{
 			JTrace.GetClass(classRef, typeInformation.ClassName);
@@ -281,9 +307,15 @@ partial class JEnvironment
 			JClassLocalRef classRef = this.DefineClass(typeInformation.ClassName, buffer, localRef);
 			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
 				//Class found in metadata cache.
+			{
 				this.DefineExistingClass(result, jniTransaction, classRef);
+			}
 			else
+			{
 				result = new(this.ClassObject, typeInformation, classRef);
+				if (JVirtualMachine.IsMainClass(typeInformation.Hash))
+					this.LoadMainClass(result, classRef);
+			}
 			return this.Register(result);
 		}
 		/// <summary>
@@ -309,7 +341,7 @@ partial class JEnvironment
 			return classRef;
 		}
 		/// <summary>
-		/// Define class definition of existing class in metadata cache.
+		/// Define a existing class in metadata cache.
 		/// </summary>
 		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 		/// <param name="jniTransaction">A <see cref="INativeTransaction"/> instance.</param>
@@ -326,9 +358,26 @@ partial class JEnvironment
 			}
 			else
 			{
-				jClass.SetValue(classRef);
+				if (JVirtualMachine.IsMainClass(jClass.Hash))
+					this.LoadMainClass(jClass, classRef);
+				else
+					jClass.SetValue(classRef);
 				this._classes.Unload(classRefO);
 			}
+		}
+		/// <summary>
+		/// Loads <paramref name="jClass"/> as main class.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
+		private void LoadMainClass(JClassObject jClass, JClassLocalRef classRef, Boolean deleteLocalRef = true)
+		{
+			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
+			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
+			this.VirtualMachine.SetMainGlobal(jClass.Hash, jGlobal);
+			jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
+			if (deleteLocalRef) jClass.ClearValue();
 		}
 		/// <summary>
 		/// Retrieves the <see cref="ClassObjectMetadata"/> instance from <paramref name="jObject"/> metadata.

@@ -13,6 +13,7 @@ namespace {0};
 
 partial struct {1} : IWrapper<JArrayLocalRef>, IEqualityOperators<{1}, JArrayLocalRef, Boolean>
 {{
+	[ExcludeFromCodeCoverage]
 	JArrayLocalRef IWrapper<JArrayLocalRef>.Value => this.ArrayValue;
 
 	/// <summary>
@@ -62,6 +63,8 @@ partial struct {1} : IWrapper<JArrayLocalRef>, IEqualityOperators<{1}, JArrayLoc
 		String fileName = $"{arrayRefSymbol.Name}.ArrayRef.g.cs";
 		String source = String.Format(GenerationExtensions.ArrayRefFormat, arrayRefSymbol.ContainingNamespace,
 		                              arrayRefSymbol.Name);
+#pragma warning disable RS1035
 		context.AddSource(fileName, source);
+#pragma warning restore RS1035
 	}
 }

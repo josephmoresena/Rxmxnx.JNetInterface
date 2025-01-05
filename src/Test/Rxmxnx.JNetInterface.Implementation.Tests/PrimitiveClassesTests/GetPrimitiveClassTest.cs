@@ -20,14 +20,14 @@ public partial class PrimitiveClassesTests
 			using JClassObject shortObjectClass = env.ClassFeature.ShortObject;
 
 			Assert.True(JObject.IsNullOrDefault(voidObjectClass));
-			Assert.True(JObject.IsNullOrDefault(byteObjectClass));
-			Assert.True(JObject.IsNullOrDefault(booleanObjectClass));
-			Assert.True(JObject.IsNullOrDefault(characterObjectClass));
-			Assert.True(JObject.IsNullOrDefault(doubleObjectClass));
-			Assert.True(JObject.IsNullOrDefault(floatObjectClass));
-			Assert.True(JObject.IsNullOrDefault(integerObjectClass));
-			Assert.True(JObject.IsNullOrDefault(longObjectClass));
-			Assert.True(JObject.IsNullOrDefault(shortObjectClass));
+			Assert.False(JObject.IsNullOrDefault(byteObjectClass));
+			Assert.False(JObject.IsNullOrDefault(booleanObjectClass));
+			Assert.False(JObject.IsNullOrDefault(characterObjectClass));
+			Assert.False(JObject.IsNullOrDefault(doubleObjectClass));
+			Assert.False(JObject.IsNullOrDefault(floatObjectClass));
+			Assert.False(JObject.IsNullOrDefault(integerObjectClass));
+			Assert.False(JObject.IsNullOrDefault(longObjectClass));
+			Assert.False(JObject.IsNullOrDefault(shortObjectClass));
 
 			// Needed to load class.
 			PrimitiveClassesTests.WrapperInstanceAssert(proxyEnv, env);
@@ -104,15 +104,15 @@ public partial class PrimitiveClassesTests
 			using JClassObject shortPrimitiveClass =
 				NativeFunctionSetImpl.PrimitiveTypeDefinition.StaticGet(shortObjectClass)!;
 
-			Assert.Equal(proxyEnv.VirtualMachine.VoidGlobalRef.Value, voidPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.BooleanGlobalRef.Value, booleanPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.ByteGlobalRef.Value, bytePrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.CharGlobalRef.Value, charPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.DoubleGlobalRef.Value, doublePrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.FloatGlobalRef.Value, floatPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.IntGlobalRef.Value, intPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.LongGlobalRef.Value, longPrimitiveClass.Reference.Value);
-			Assert.Equal(proxyEnv.VirtualMachine.ShortGlobalRef.Value, shortPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.VoidPGlobalRef.Value, voidPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.BooleanPGlobalRef.Value, booleanPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.BytePGlobalRef.Value, bytePrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.CharPGlobalRef.Value, charPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.DoublePGlobalRef.Value, doublePrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.FloatPGlobalRef.Value, floatPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.IntPGlobalRef.Value, intPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.LongPGlobalRef.Value, longPrimitiveClass.Reference.Value);
+			Assert.Equal(proxyEnv.VirtualMachine.ShortPGlobalRef.Value, shortPrimitiveClass.Reference.Value);
 
 			Assert.Equal(default, voidPrimitiveClass.LocalReference);
 			Assert.Equal(default, booleanPrimitiveClass.LocalReference);

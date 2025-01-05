@@ -19,10 +19,10 @@ public partial class AccessFeatureProxy
 		JFunctionDefinition definition, Boolean nonVirtual, ReadOnlySpan<IObject?> args)
 		=> bytes.WithSafeFixed((this, jLocal, jClass, definition, nonVirtual, args.ToArray()),
 		                       AccessFeatureProxy.CallPrimitiveFunction);
-	void IAccessFeature.CallPrimitiveStaticFunction(Span<Byte> bytes, JClassObject jClass,
+	void IAccessFeature.CallStaticPrimitiveFunction(Span<Byte> bytes, JClassObject jClass,
 		JFunctionDefinition definition, ReadOnlySpan<IObject?> args)
 		=> bytes.WithSafeFixed((this, jClass, definition, args.ToArray()),
-		                       AccessFeatureProxy.CallPrimitiveStaticFunction);
+		                       AccessFeatureProxy.CallStaticPrimitiveFunction);
 
 	TObject IAccessFeature.CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
 		ReadOnlySpan<IObject?> args)
@@ -71,7 +71,7 @@ public partial class AccessFeatureProxy
 			nonVirtual, IObject?[] args) args)
 		=> args.feature.CallPrimitiveFunction(mem, args.jLocal, args.jClass, args.definition, args.nonVirtual,
 		                                      args.args);
-	private static void CallPrimitiveStaticFunction(in IFixedMemory mem,
+	private static void CallStaticPrimitiveFunction(in IFixedMemory mem,
 		(AccessFeatureProxy feature, JClassObject jClass, JFunctionDefinition definition, IObject?[] args) args)
-		=> args.feature.CallPrimitiveStaticFunction(mem, args.jClass, args.definition, args.args);
+		=> args.feature.CallStaticPrimitiveFunction(mem, args.jClass, args.definition, args.args);
 }

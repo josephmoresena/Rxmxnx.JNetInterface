@@ -181,6 +181,9 @@ public sealed class JBooleanObjectTests
 		                                                 jBooleanObject);
 		JBooleanObjectTests.PrimitiveEqualityTest<JShort>(JBooleanObjectTests.fixture.Create<Int16>(), value,
 		                                                  jBooleanObject);
+
+		JBooleanObjectTests.IndeterminateValueTest(jBooleanObject);
+		JBooleanObjectTests.IndeterminateValueTest(default);
 	}
 	[Fact]
 	internal void ToObjectTest()
@@ -201,9 +204,11 @@ public sealed class JBooleanObjectTests
 		env.ReferenceFeature.Received(1).CreateWrapper(value);
 	}
 
+#pragma warning disable CA1859
 	private static void PrimitiveEqualityTest<TPrimitive>(TPrimitive primitive, IPrimitiveType value,
 		IPrimitiveEquatable equatable)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>, IPrimitiveEquatable, IEquatable<TPrimitive>
+#pragma warning restore CA1859
 	{
 		try
 		{
@@ -216,5 +221,18 @@ public sealed class JBooleanObjectTests
 			Assert.Throws(e.GetType(), () => equatable.Equals(primitive));
 			Assert.Throws(e.GetType(), () => equatable.Equals((JObject)primitive));
 		}
+	}
+	private static void IndeterminateValueTest(JBooleanObject? jBooleanObject)
+	{
+		IndeterminateResult result = new(jBooleanObject, IDataType.GetMetadata<JBooleanObject>().Signature);
+		Assert.Equal(jBooleanObject, result.Object);
+		Assert.Equal(jBooleanObject?.Value ?? default, result.BooleanValue);
+		Assert.Equal(jBooleanObject?.Value.Value ?? false ? JByte.One : 0, result.ByteValue);
+		Assert.Equal(jBooleanObject?.Value.Value ?? false ? (JChar)JShort.One : '\0', result.CharValue);
+		Assert.Equal(jBooleanObject?.Value.Value ?? false ? JDouble.One : 0, result.DoubleValue);
+		Assert.Equal(jBooleanObject?.Value.Value ?? false ? JFloat.One : 0, result.FloatValue);
+		Assert.Equal(jBooleanObject?.Value.Value ?? false ? JInt.One : 0, result.IntValue);
+		Assert.Equal(jBooleanObject?.Value.Value ?? false ? JLong.One : 0, result.LongValue);
+		Assert.Equal(jBooleanObject?.Value.Value ?? false ? JShort.One : 0, result.ShortValue);
 	}
 }

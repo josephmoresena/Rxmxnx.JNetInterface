@@ -21,6 +21,7 @@ public sealed record StackTraceElementObjectMetadata : ObjectMetadata
 	}
 
 	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
 	private StackTraceElementObjectMetadata(StackTraceElementObjectMetadata traceElementMetadata) :
 		base(traceElementMetadata)
 		=> this.Information = traceElementMetadata.Information;
