@@ -40,55 +40,45 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	internal const Int32 GetObjectClassCapacity = 5;
 
 	/// <summary>
-	/// Flag to check if reflection is disabled.
-	/// </summary>
-	private static readonly Boolean disabledReflection = !typeof(String).ToString().Contains(nameof(String));
-
-	/// <summary>
 	/// Indicates whether trace output is enabled.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean TraceEnabled
-#if !PACKAGE
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => AppContext.TryGetSwitch("JNetInterface.EnableTrace", out Boolean enable) && enable;
 	}
-#else
-		=> false;
-#endif
 	/// <summary>
 	/// Indicates whether metadata validation is enabled.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean MetadataValidationEnabled
-#if !PACKAGE
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => !AppContext.TryGetSwitch("JNetInterface.DisableMetadataValidation", out Boolean disable) || !disable;
 	}
-#else
-		=> true;
-#endif
 	/// <summary>
 	/// Indicates whether metadata for nesting array is auto-generated.
 	/// </summary>
 	/// <remarks>In reflection-free mode this feature is unavailable.</remarks>
 	[ExcludeFromCodeCoverage]
-	public static Boolean NestingArrayAutoGenerationEnabled => !IVirtualMachine.disabledReflection;
+	public static Boolean NestingArrayAutoGenerationEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get
+			=> !AotInfo.IsReflectionDisabled &&
+				(!AppContext.TryGetSwitch("JNetInterface.DisableNestingArrayAutoGeneration", out Boolean disable) ||
+					!disable);
+	}
 	/// <summary>
 	/// Indicates whether detailed a ToString() is available for type metadata instances.
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public static Boolean TypeMetadataToStringEnabled
-#if !PACKAGE
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => !AppContext.TryGetSwitch("JNetInterface.DisableTypeMetadataToString", out Boolean disable) || !disable;
 	}
-#else
-		=> true;
-#endif
 
 	/// <summary>
 	/// JNI reference to the interface.
