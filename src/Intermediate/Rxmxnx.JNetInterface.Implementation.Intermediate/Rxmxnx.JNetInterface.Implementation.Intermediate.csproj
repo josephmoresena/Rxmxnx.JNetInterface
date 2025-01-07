@@ -69,6 +69,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="..\..\..\native-image\jni-config.json">
+            <Link>jni-config.json</Link>
+        </Content>
+        <Content Include="..\..\..\native-image\README.md">
+            <Link>NATIVE-IMAGE.md</Link>
+        </Content>
         <Content Include="..\..\..\package\Rxmxnx.JNetInterface\PACKAGE.md">
             <Link>PACKAGE.md</Link>
         </Content>
