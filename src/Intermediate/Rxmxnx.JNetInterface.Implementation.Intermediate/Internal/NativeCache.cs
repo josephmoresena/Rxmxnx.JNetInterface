@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Native method cache
 /// </summary>
-public sealed class NativeCache
+internal sealed class NativeCache
 {
 	/// <summary>
 	/// Class dictionary.
