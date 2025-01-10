@@ -18,7 +18,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 	public abstract ThrowableException? PendingException { get; set; }
 	public abstract Int32? LocalCapacity { get; set; }
 
-	public abstract NativeFunctionSet FunctionSet { get; }
+	public abstract NativeFunctionSetProxy FunctionSet { get; }
 	public abstract Boolean NoProxy { get; }
 
 	public abstract Boolean IsValidationAvoidable(JGlobalBase jGlobal);
@@ -32,6 +32,8 @@ public abstract partial class EnvironmentProxy : IEnvironment
 	public abstract void DescribeException();
 	public abstract Boolean? IsVirtual(JThreadObject jThread);
 
+	NativeFunctionSet IEnvironment.FunctionSet => this.FunctionSet;
+
 	public static EnvironmentProxy CreateEnvironment(Boolean isProxy = false, VirtualMachineProxy? vm = default)
 	{
 		EnvironmentProxy env = Substitute.For<EnvironmentProxy>();
@@ -44,7 +46,7 @@ public abstract partial class EnvironmentProxy : IEnvironment
 		env.StringFeature.Returns(Substitute.For<StringFeatureProxy>());
 		env.ArrayFeature.Returns(Substitute.For<ArrayFeatureProxy>());
 		env.NioFeature.Returns(Substitute.For<NioFeatureProxy>());
-		env.FunctionSet.Returns(Substitute.For<NativeFunctionSet>());
+		env.FunctionSet.Returns(Substitute.For<NativeFunctionSetProxy>());
 
 		env.ReferenceFeature.GetLifetime(Arg.Any<JLocalObject>(), Arg.Any<JObjectLocalRef>(), Arg.Any<JClassObject>(),
 		                                 Arg.Any<Boolean>()).ReturnsForAnyArgs(l =>
