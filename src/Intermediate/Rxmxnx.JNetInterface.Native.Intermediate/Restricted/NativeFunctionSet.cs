@@ -12,6 +12,11 @@ namespace Rxmxnx.JNetInterface.Restricted;
 public abstract partial class NativeFunctionSet
 {
 	/// <summary>
+	/// Internal constructor.
+	/// </summary>
+	private protected NativeFunctionSet() { }
+
+	/// <summary>
 	/// Returns the name of the current instance.
 	/// </summary>
 	/// <param name="jEnum">A <see cref="JEnumObject"/> instance.</param>

@@ -28,3 +28,24 @@ enable the implementation of unit tests without requiring a JVM.
 Unfortunately, some features of `JNetInterface` will not be available
 in [Visual Basic .NET](https://github.com/dotnet/vblang/issues/625), and some may require additional code to be used
 in [F#](https://github.com/dotnet/fsharp/issues/17605).
+
+---
+
+# Getting Started
+
+## Installation
+
+Install the library via NuGet:
+
+```cmd
+dotnet add package Rxmxnx.JNetInterface
+```
+
+If you don't need to link any actual JVM instance to your projects, you can simply use the core package.
+
+```cmd
+dotnet add package Rxmxnx.JNetInterface.Core
+```
+
+**Note:** This package currently supports .NET 8 and higher. Ensure your project targets a compatible framework before
+installing.

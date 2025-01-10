@@ -3,6 +3,11 @@ namespace Rxmxnx.JNetInterface.Proxies;
 public abstract partial class EnvironmentProxy
 {
 	/// <summary>
+	/// Java methods based <see cref="NativeFunctionSet"/> instance.
+	/// </summary>
+	public static NativeFunctionSet JniFunctionSet => NativeFunctionSetImpl.Instance;
+
+	/// <summary>
 	/// Creates a <see cref="JClassObject"/> for <c>java.lang.Class&lt;?&gt;</c> data type.
 	/// </summary>
 	/// <param name="env">A <see cref="EnvironmentProxy"/> instance.</param>
