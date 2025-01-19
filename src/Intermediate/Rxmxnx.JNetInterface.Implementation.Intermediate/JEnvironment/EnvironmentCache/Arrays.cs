@@ -406,14 +406,16 @@ partial class JEnvironment
 			Int32 requiredBytes = metadata.SizeOf * jArray.Length;
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(requiredBytes), requiredBytes);
+			Rented<Byte> rented = default;
 			Span<Byte> buffer = stackDisposable.UsingStack ?
 				stackalloc Byte[requiredBytes] :
-				EnvironmentCache.HeapAlloc<Byte>(requiredBytes);
+				EnvironmentCache.HeapAlloc(requiredBytes, ref rented);
 			Int32 offset = 0;
 			while (offset < requiredBytes)
 				initialElement.CopyTo(buffer, ref offset);
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(buffer))
 				this.SetPrimitiveArrayRegion(jArray, metadata.Signature[0], new(ptr), 0, jArray.Length);
+			rented.Free();
 		}
 	}
 }

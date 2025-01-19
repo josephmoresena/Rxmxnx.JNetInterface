@@ -378,9 +378,10 @@ partial class JEnvironment
 			Int32 requiredBytes = calls.Count * NativeMethodValue.Size;
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(requiredBytes), requiredBytes);
+			Rented<NativeMethodValue> rented = default;
 			Span<NativeMethodValue> buffer = stackDisposable.UsingStack ?
 				stackalloc NativeMethodValue[calls.Count] :
-				EnvironmentCache.HeapAlloc<NativeMethodValue>(calls.Count);
+				EnvironmentCache.HeapAlloc(calls.Count, ref rented);
 			for (Int32 i = 0; i < calls.Count; i++)
 				buffer[i] = NativeMethodValue.Create(calls[i], handles);
 			try
@@ -399,6 +400,7 @@ partial class JEnvironment
 			}
 			finally
 			{
+				rented.Free();
 				handles.ForEach(h => h.Dispose());
 			}
 		}

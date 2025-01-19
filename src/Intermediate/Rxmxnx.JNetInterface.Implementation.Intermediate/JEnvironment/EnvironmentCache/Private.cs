@@ -377,7 +377,7 @@ partial class JEnvironment
 		private StackDisposable GetStackDisposable(Boolean useStackAlloc, Int32 requiredBytes)
 			=> useStackAlloc && requiredBytes > 0 ? new(this, requiredBytes) : new();
 		/// <summary>
-		/// Creates a <see cref="IFixedContext{Byte}.IDisposable"/> instance from an span created in stack.
+		/// Creates a <see cref="IFixedContext{Byte}.IDisposable"/> instance from a span created in stack.
 		/// </summary>
 		/// <param name="stackSpan">A stack created span.</param>
 		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>

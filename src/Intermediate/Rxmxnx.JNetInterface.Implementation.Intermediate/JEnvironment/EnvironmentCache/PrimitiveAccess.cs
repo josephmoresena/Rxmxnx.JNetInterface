@@ -279,10 +279,11 @@ partial class JEnvironment
 				ref this.GetStaticMethodFunctions(signature);
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
+			Rented<Byte> rented = default;
 			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
 			                                        stackDisposable.UsingStack ?
 				                                        stackalloc Byte[requiredBytes] :
-				                                        EnvironmentCache.HeapAlloc<Byte>(requiredBytes));
+				                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
 			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
 				switch (signature)
@@ -321,6 +322,7 @@ partial class JEnvironment
 						break;
 				}
 			}
+			rented.Free();
 			this.CheckJniError();
 		}
 		/// <summary>

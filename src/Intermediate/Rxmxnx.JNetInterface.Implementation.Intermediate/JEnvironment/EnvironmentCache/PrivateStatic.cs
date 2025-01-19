@@ -15,7 +15,7 @@ partial class JEnvironment
 		/// Disposable context for zero pointer.
 		/// </summary>
 		private static readonly IFixedContext<Byte>.IDisposable zeroByteContext =
-			ValPtr<Byte>.Zero.GetUnsafeFixedContext(0);
+			default(Memory<Byte>).GetFixedContext();
 
 		/// <summary>
 		/// Retrieves JNI version for <paramref name="envRef"/>.
@@ -31,20 +31,26 @@ partial class JEnvironment
 			return nativeInterface.GetVersion(envRef);
 		}
 		/// <summary>
-		/// Creates a <see cref="IFixedContext{Byte}.IDisposable"/> instance from an span created in heap.
+		/// Creates a <see cref="IFixedContext{Byte}.IDisposable"/> instance from a span created in heap.
 		/// </summary>
 		/// <param name="count">Number of allocated bytes.</param>
 		/// <returns>A <see cref="IFixedContext{Byte}.IDisposable"/> instance</returns>
 		private static IFixedContext<Byte>.IDisposable AllocHeapContext(Int32 count)
-			=> count == 0 ? EnvironmentCache.zeroByteContext : new Byte[count].AsMemory().GetFixedContext();
+			=> count == 0 ? EnvironmentCache.zeroByteContext : ArrayPool<Byte>.Shared.RentFixed(count, true);
 		/// <summary>
 		/// Creates a <typeparamref name="T"/> span allocated in heap.
 		/// </summary>
 		/// <typeparam name="T">Type of elements in span.</typeparam>
 		/// <param name="count">Number of allocated elements.</param>
-		/// <returns>A <see cref="IFixedContext{T}.IDisposable"/> instance</returns>
-		private static Span<T> HeapAlloc<T>(Int32 count) where T : unmanaged
-			=> count == 0 ? Span<T>.Empty : new T[count].AsSpan();
+		/// <param name="rented">A <see cref="Rented{T}"/> reference.</param>
+		/// <returns>A <typeparamref name="T"/> span.</returns>
+		private static Span<T> HeapAlloc<T>(Int32 count, ref Rented<T> rented) where T : unmanaged
+		{
+			if (count == 0)
+				return Span<T>.Empty;
+			rented = new(count, out Span<T> result);
+			return result;
+		}
 		/// <summary>
 		/// Traces the assignment of a value to a primitive field.
 		/// </summary>
