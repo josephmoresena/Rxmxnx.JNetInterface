@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intermediate", "Intermediat
 		..\README.md = ..\README.md
 		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
 		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
+		..\package\Intermediate-to-Package.targets = ..\package\Intermediate-to-Package.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Base.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj", "{5E1EA92C-FDFA-48B2-9B36-65B4BCC946D5}"
@@ -53,8 +54,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.ConsoleTest", "ApplicationTest\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj", "{04630441-D09E-4566-B07F-E575FBCB2405}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxies", "Proxies", "{0BD9F0DE-ED40-46F7-9F5C-E1BECE87C030}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intermediate-to-Package", "..\package\Intermediate-to-Package.targets", "{444704C0-2B6E-4F3E-B676-62174BBA8E77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -158,6 +157,5 @@ Global
 		{0BD9F0DE-ED40-46F7-9F5C-E1BECE87C030} = {98AF75B1-A773-4B05-82C8-D3F7865C20BE}
 		{639163D7-56CE-4798-9029-D1608CB500C3} = {0BD9F0DE-ED40-46F7-9F5C-E1BECE87C030}
 		{A10E8EBC-1C36-4E5A-803A-1B78BAEF8F05} = {0BD9F0DE-ED40-46F7-9F5C-E1BECE87C030}
-		{444704C0-2B6E-4F3E-B676-62174BBA8E77} = {A149466C-7A87-4D2C-99A5-E9CA896DCC3F}
 	EndGlobalSection
 EndGlobal
