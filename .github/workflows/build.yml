@@ -4,7 +4,7 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [ opened, synchronize, reopened ]
 jobs:
   build:
     name: Build and analyze
@@ -53,10 +53,10 @@ jobs:
         run: |
           find src/ApplicationTest -name "*.*proj" -exec dotnet sln src remove {} \;
           rm -rf src/ApplicationTest
-          
+
       - name: Clean test results
         run: rm -rf TestResults/
-          
+
       - name: Build and analyze Sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -69,17 +69,10 @@ jobs:
           dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
           dotnet test src --verbosity detailed --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover 
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-      
-      - name: Patch Native ILLink.Substitutions
-        working-directory: ./src/Intermediate/Rxmxnx.JNetInterface.Native.Intermediate/ILLink
-        run: sed -i -z 's/Rxmxnx.JNetInterface.Native.Intermediate/Rxmxnx.JNetInterface.Core/g;' ILLink.Substitutions.xml
-      - name: Patch Implementation ILLink.Substitutions
-        working-directory: ./src/Intermediate/Rxmxnx.JNetInterface.Implementation.Intermediate/ILLink
-        run: sed -i -z 's/Rxmxnx.JNetInterface.Implementation.Intermediate/Rxmxnx.JNetInterface/g;' ILLink.Substitutions.xml
       - name: Pack core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
         run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
           for package in ../Nuget/Rxmxnx.JNetInterface.Core*.*nupkg; do
             echo "-----------------------------------"
             TEMP_DIR=$(mktemp -d)
@@ -91,8 +84,8 @@ jobs:
           echo "-----------------------------------"
       - name: Pack main assembly
         working-directory: ./package/Rxmxnx.JNetInterface
-        run:  |
-          dotnet pack -c Release /p:Version=9999.99.99.99-tmp
+        run: |
+          dotnet pack -c Release /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
           for package in bin/Release/Rxmxnx.JNetInterface*.*nupkg; do
             echo "-----------------------------------"
             TEMP_DIR=$(mktemp -d)
@@ -102,122 +95,122 @@ jobs:
             rm -rf "$TEMP_DIR"
           done
           echo "-----------------------------------"
-          
+  
   run-linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup NativeAOT pre-requisites
-      run: sudo apt-get install clang zlib1g-dev libkrb5-dev --assume-yes
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-    - name: Set up JDK 21
-      run: |
-         wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb
-         sudo apt install ./jdk-21_linux-x64_bin.deb
-    - name: C# Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
-    - name: Vb Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj
-    - name: F# Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj
-    - name: C# NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-    - name: Vb NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r linux-x64
-         src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
-    - name: F# NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r linux-x64
-         src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
-    - name: C# NativeAOT-RFM run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 /p:IlcDisableReflection=true /p:USE_NET80=true
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-         
+      - uses: actions/checkout@v4
+      - name: Setup NativeAOT pre-requisites
+        run: sudo apt-get install clang zlib1g-dev libkrb5-dev --assume-yes
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Set up JDK 21
+        run: |
+          wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb
+          sudo apt install ./jdk-21_linux-x64_bin.deb
+      - name: C# Framework run
+        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
+      - name: Vb Framework run
+        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj
+      - name: F# Framework run
+        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj
+      - name: C# NativeAOT run
+        run: |
+          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64
+          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+      - name: Vb NativeAOT run
+        run: |
+          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r linux-x64
+          src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
+      - name: F# NativeAOT run
+        run: |
+          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r linux-x64
+          src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
+      - name: C# NativeAOT-RFM run
+        run: |
+          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 /p:IlcDisableReflection=true /p:USE_NET80=true
+          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+  
   run-macOS:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: 21
-        distribution: 'oracle'
-    - name: C# Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
-    - name: Vb Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj
-    - name: F# Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj
-    - name: C# NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-    - name: Vb NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r osx-arm64
-         src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
-    - name: F# NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r osx-arm64
-         src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
-    - name: C# NativeAOT-RFM run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64 /p:IlcDisableReflection=true /p:USE_NET80=true
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-         
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'oracle'
+      - name: C# Framework run
+        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
+      - name: Vb Framework run
+        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj
+      - name: F# Framework run
+        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj
+      - name: C# NativeAOT run
+        run: |
+          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64
+          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+      - name: Vb NativeAOT run
+        run: |
+          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r osx-arm64
+          src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
+      - name: F# NativeAOT run
+        run: |
+          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r osx-arm64
+          src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
+      - name: C# NativeAOT-RFM run
+        run: |
+          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64 /p:IlcDisableReflection=true /p:USE_NET80=true
+          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
+  
   run-windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-    - name: Set up JDK 21
-      shell: pwsh
-      run: |
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Set up JDK 21
+        shell: pwsh
+        run: |
           curl.exe -O https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.msi
           Start-Process msiexec.exe -Wait -ArgumentList '/I jdk-21_windows-x64_bin.msi /quiet'
-    - name: Set up JDK 8 (x86)
-      shell: pwsh
-      run: |
+      - name: Set up JDK 8 (x86)
+        shell: pwsh
+        run: |
           curl.exe -O https://cfdownload.adobe.com/pub/adobe/coldfusion/java/java8/java8u431/jdk/jdk-8u431-windows-i586.exe
           Start-Process jdk-8u431-windows-i586.exe -Wait -ArgumentList '/s ADDLOCAL="ToolsFeature,SourceFeature"'
-    - name: C# Framework run
-      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj /p:USE_NET80=true
-    - name: Vb Framework run
-      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj /p:USE_NET80=true
-    - name: F# Framework run
-      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj /p:USE_NET80=true
-    - name: C# NativeAOT run
-      run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64 /p:USE_NET80=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
-    - name: Vb NativeAOT run
-      run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r win-x64 /p:USE_NET80=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.VbApplicationTest.exe
-    - name: F# NativeAOT run
-      run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r win-x64 /p:USE_NET80=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.FsApplicationTest.exe
-    - name: C# NativeAOT-RFM run
-      run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64 /p:IlcDisableReflection=true /p:USE_NET80=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
-    - name: C# NativeAOT run (x86)
-      run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86 /p:ENABLE_TRACE=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
-      continue-on-error: true
+      - name: C# Framework run
+        run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj /p:USE_NET80=true
+      - name: Vb Framework run
+        run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj /p:USE_NET80=true
+      - name: F# Framework run
+        run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj /p:USE_NET80=true
+      - name: C# NativeAOT run
+        run: |
+          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64 /p:USE_NET80=true
+          src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
+      - name: Vb NativeAOT run
+        run: |
+          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r win-x64 /p:USE_NET80=true
+          src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.VbApplicationTest.exe
+      - name: F# NativeAOT run
+        run: |
+          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r win-x64 /p:USE_NET80=true
+          src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.FsApplicationTest.exe
+      - name: C# NativeAOT-RFM run
+        run: |
+          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64 /p:IlcDisableReflection=true /p:USE_NET80=true
+          src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
+      - name: C# NativeAOT run (x86)
+        run: |
+          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86 /p:ENABLE_TRACE=true
+          src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
+        continue-on-error: true

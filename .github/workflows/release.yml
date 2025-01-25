@@ -2,7 +2,7 @@ name: Release to Nuget
 
 on:
   release:
-    types: [published]
+    types: [ published ]
 
 jobs:
   build:
@@ -14,33 +14,19 @@ jobs:
       PUBLIC_KEY: ${{ secrets.SN_PK }}
     
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.x
-    - name: Compile intermediate
-      working-directory: ./src/Intermediate
-      run: |
-          dotnet build -c Release ./Rxmxnx.JNetInterface.Base.Intermediate
-          dotnet build -c Release ./Rxmxnx.JNetInterface.Primitives.Intermediate
-          dotnet build -c Release ./Rxmxnx.JNetInterface.Native.Intermediate
-          dotnet build -c Release ./Rxmxnx.JNetInterface.Extensions.Intermediate
-          dotnet build -c Release ./Rxmxnx.JNetInterface.Implementation.Intermediate
-    - name: Patch Native ILLink.Substitutions
-      working-directory: ./src/Intermediate/Rxmxnx.JNetInterface.Native.Intermediate/ILLink
-      run: sed -i -z 's/Rxmxnx.JNetInterface.Native.Intermediate/Rxmxnx.JNetInterface.Core/g;' ILLink.Substitutions.xml
-    - name: Patch Implementation ILLink.Substitutions
-      working-directory: ./src/Intermediate/Rxmxnx.JNetInterface.Implementation.Intermediate/ILLink
-      run: sed -i -z 's/Rxmxnx.JNetInterface.Implementation.Intermediate/Rxmxnx.JNetInterface/g;' ILLink.Substitutions.xml
-    - name: Extract public key
-      working-directory: ./package
-      run: echo "${SNK_BASE64}" | base64 -d > Rxmxnx.JNetInterface.snk
-    - name: Create Core NuGet Package
-      working-directory: ./package/Rxmxnx.JNetInterface.Core
-      run: dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
-    - name: Create NuGet Package
-      working-directory: ./package/Rxmxnx.JNetInterface
-      run: dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
-    - name: Push NuGet Package
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.x
+      - name: Extract public key
+        working-directory: ./package
+        run: echo "${SNK_BASE64}" | base64 -d > Rxmxnx.JNetInterface.snk
+      - name: Create Core NuGet Package
+        working-directory: ./package/Rxmxnx.JNetInterface.Core
+        run: dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
+      - name: Create NuGet Package
+        working-directory: ./package/Rxmxnx.JNetInterface
+        run: dotnet pack -c Release -o ../Nuget /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/josephmoresena/Rxmxnx.JNetInterface/releases/tag/${{ github.event.release.tag_name }}"
+      - name: Push NuGet Package
+        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
