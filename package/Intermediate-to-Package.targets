@@ -47,7 +47,7 @@
         <!-- Build the intermediate projects unless explicitly skipped -->
         <MSBuild Condition="'$(NoIntermediateBuild)' != 'true'"
                  Projects="@(CsIntermediateProjects->'%(ProjectPath)')"
-                 Properties="Configuration=$(Configuration);Platform=$(Platform);TargetFramework=$(FirstTargetFramework)"
+                 Properties="Configuration=$(Configuration);Platform=$(Platform);TargetFramework=$(FirstTargetFramework);UseAnalizer=true"
                  BuildInParallel="false" Targets="Restore;Build"/>
     </Target>
 
@@ -58,9 +58,9 @@
     <Target Name="IncludeIntermediateSources" AfterTargets="BuildIntermediateProjects">
         <ItemGroup>
             <!-- Collect C# source files -->
-            <CsFiles Include="$(IntermediateSourceBasePath)\%(IntermediateAssemblyNames)\**\*.cs"/>
+            <CsFiles Include="$(IntermediateSourceBasePath)\'%(IntermediateAssemblyNames)'\**\*.cs"/>
             <!-- Collect global using directive files -->
-            <GlobalUsingFiles Include="$(IntermediateSourceBasePath)\%(IntermediateAssemblyNames)\**\*.GlobalUsings.g.cs"/>
+            <GlobalUsingFiles Include="$(IntermediateSourceBasePath)\'%(IntermediateAssemblyNames)'\**\*.GlobalUsings.g.cs"/>
 
             <!-- Add the collected source files to the compilation -->
             <Compile Include="@(CsFiles)">
