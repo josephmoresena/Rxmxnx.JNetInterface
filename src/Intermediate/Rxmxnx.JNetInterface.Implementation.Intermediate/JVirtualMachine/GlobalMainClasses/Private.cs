@@ -62,7 +62,7 @@ public partial class JVirtualMachine
 		private void AppendGlobal(IVirtualMachine vm, ClassObjectMetadata classMetadata)
 		{
 			if (!this._mainClasses.ContainsKey(classMetadata.Hash))
-				this._mainClasses.TryAdd(classMetadata.Hash, new(vm, this._classMetadata, default));
+				this._mainClasses.TryAdd(classMetadata.Hash, new(vm, classMetadata, default));
 		}
 		/// <summary>
 		/// Loads user global classes.

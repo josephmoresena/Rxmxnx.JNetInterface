@@ -4,6 +4,13 @@
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(JNI_LIBRARY)' == 'true'">
+        <NativeLib>Shared</NativeLib>
+        <IsWindowsHost>$([MSBuild]::IsOSPlatform('Windows'))</IsWindowsHost>
+        <AssemblyName Condition="$(IsWindowsHost) == 'true'">HelloJni</AssemblyName>
+        <AssemblyName Condition="$(IsWindowsHost) != 'true'">libHelloJni</AssemblyName>
+    </PropertyGroup>
+
     <Import Condition="'$(JNI_LIBRARY)' == 'true'" Project="..\JNetInterface-NativeAot.targets"/>
 
     <ItemGroup>

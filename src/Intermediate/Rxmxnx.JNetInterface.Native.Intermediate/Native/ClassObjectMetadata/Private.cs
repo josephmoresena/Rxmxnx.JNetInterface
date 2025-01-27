@@ -13,12 +13,10 @@ public partial record ClassObjectMetadata
 		this.Hash = metadata.Hash;
 		this.ArrayDimension = JClassObject.GetArrayDimension(metadata.Signature);
 		this.IsFinal = metadata.IsFinal;
-		if (metadata.Kind is not JTypeKind.Undefined)
-		{
-			this.IsInterface = metadata.Kind is JTypeKind.Interface or JTypeKind.Annotation;
-			this.IsAnnotation = metadata.Kind is JTypeKind.Annotation;
-			this.IsEnum = metadata.Kind is JTypeKind.Enum;
-		}
+		if (metadata.Kind is JTypeKind.Undefined) return;
+		this.IsInterface = metadata.Kind is JTypeKind.Interface or JTypeKind.Annotation;
+		this.IsAnnotation = metadata.Kind is JTypeKind.Annotation;
+		this.IsEnum = metadata.Kind is JTypeKind.Enum;
 	}
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]

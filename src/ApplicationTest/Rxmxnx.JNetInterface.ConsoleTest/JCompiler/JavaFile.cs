@@ -5,10 +5,8 @@ public partial class JCompiler
 	private const String JavaCode = @"package com.rxmxnx.dotnet.test;
 
 import java.lang.management.ManagementFactory;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class HelloDotnet {
     public static final int COUNT = 14;
@@ -35,7 +33,7 @@ public class HelloDotnet {
                 System.out.println(str);    
         }
         HelloDotnet instance = new HelloDotnet();
-        LocalDateTime load = LocalDateTime.now();
+        Date load = new Date();
         String runtime_information = HelloDotnet.getRuntimeInformation(load);
         int[] intArr = HelloDotnet.getIntArray(10);
 
@@ -127,11 +125,10 @@ public class HelloDotnet {
 
         return threadName.isEmpty() ? ""Thread ID: "" + threadId : ""Thread Name: "" + threadName + "", Thread ID: "" + threadId;
     }
-    private static String getRuntimeInformation(LocalDateTime call) {
+    private static String getRuntimeInformation(Date call) {
         long load_ms = ManagementFactory.getRuntimeMXBean().getStartTime();
-        LocalDateTime load = Instant.ofEpochMilli(load_ms)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+        Date load = new Date(load_ms);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(""yyyy-MM-dd HH:mm:ss.SSS"");
         String os = System.getProperty(""os.name"");
         String osArch = System.getProperty(""os.arch"");
         String osVersion = System.getProperty(""os.version"");
@@ -143,8 +140,8 @@ public class HelloDotnet {
         String runtimeVersion = ManagementFactory.getRuntimeMXBean().getSpecVersion();
         int cores = Runtime.getRuntime().availableProcessors();
 
-        return ""Load: "" + load.format(DateTimeFormatter.ofPattern(""yyyy-MM-dd HH:mm:ss.SSS"")) + ""\n""
-                + ""Call: "" + call.format(DateTimeFormatter.ofPattern(""yyyy-MM-dd HH:mm:ss.SSS"")) + ""\n""
+        return ""Load: "" + dateFormat.format(load) + ""\n""
+                + ""Call: "" + dateFormat.format(call) + ""\n""
                 + ""Number of Cores: "" + cores + ""\n""
                 + ""OS: "" + os + ""\n""
                 + ""OS Arch: "" + osArch + ""\n""
