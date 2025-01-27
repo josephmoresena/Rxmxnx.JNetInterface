@@ -23,6 +23,13 @@ partial class JEnvironment
 			this.Register(this.IntPrimitive);
 			this.Register(this.LongPrimitive);
 			this.Register(this.ShortPrimitive);
+
+			// Register main classes.
+			foreach (ITypeInformation? classObjectMetadata in JVirtualMachine.MainClassesInformation)
+			{
+				JClassObject mainClass = new(this.ClassObject, classObjectMetadata);
+				this.Register(mainClass);
+			}
 		}
 		/// <summary>
 		/// Retrieves a <see cref="JStringObject"/> containing class name.

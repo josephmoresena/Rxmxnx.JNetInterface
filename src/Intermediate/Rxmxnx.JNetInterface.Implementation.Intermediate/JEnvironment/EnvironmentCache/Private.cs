@@ -39,7 +39,7 @@ partial class JEnvironment
 		{
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			return this._classes[classRef] ?? this.VirtualMachine.GetAccess(classRef) ??
-				throw new ArgumentException("Invalid class object.", nameof(jClass));
+				throw new ArgumentException("Invalid class object.", jClass.ToTraceText());
 		}
 		/// <summary>
 		/// Retrieves managed <see cref="ArrayFunctionSet"/> reference from current instance.

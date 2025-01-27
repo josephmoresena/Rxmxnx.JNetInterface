@@ -70,16 +70,17 @@ public partial class JVirtualMachine
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 		private void LoadUserMainClasses(JEnvironment env)
 		{
-			foreach (String hash in JVirtualMachine.userMainClasses.Keys)
+			foreach (ITypeInformation typeInformation in JVirtualMachine.MainClassesInformation)
 			{
-				if (!this._mainClasses.TryGetValue(hash, out JGlobal? jGlobal) || !jGlobal.IsDefault) continue;
+				if (!this._mainClasses.TryGetValue(typeInformation.Hash, out JGlobal? jGlobal) ||
+				    !jGlobal.IsDefault) continue;
 				try
 				{
-					jGlobal.SetValue(env.GetMainClassGlobalRef(JVirtualMachine.userMainClasses[hash]));
+					jGlobal.SetValue(env.GetMainClassGlobalRef(typeInformation));
 				}
 				catch (Exception)
 				{
-					switch (hash)
+					switch (typeInformation.Hash)
 					{
 						case ClassNameHelper.VoidObjectHash:
 						case ClassNameHelper.BooleanObjectHash:

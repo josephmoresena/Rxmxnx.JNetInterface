@@ -258,11 +258,11 @@ partial class JEnvironment
 	/// <summary>
 	/// Retrieves a global reference for given class reference.
 	/// </summary>
-	/// <param name="classMetadata">Class metadata.</param>
+	/// <param name="typeInformation">Type information.</param>
 	/// <param name="classRef">A local class reference.</param>
 	/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	private JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata classMetadata, JClassLocalRef classRef,
+	private JGlobalRef GetMainClassGlobalRef(ITypeInformation typeInformation, JClassLocalRef classRef,
 		Boolean deleteLocalRef = true)
 	{
 		try
@@ -279,7 +279,7 @@ partial class JEnvironment
 		this.DescribeException();
 		this._cache.ClearException(); // Clears JNI exception.
 		throw new NotSupportedException(
-			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(classMetadata.ClassSignature)} class.");
+			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(typeInformation.ClassName)} class.");
 	}
 	/// <summary>
 	/// Indicates whether validation of <paramref name="jGlobal"/> can be avoided.

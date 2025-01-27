@@ -34,6 +34,10 @@ public partial class JVirtualMachine : IVirtualMachine
 			=> !AppContext.TryGetSwitch("JNetInterface.DisableCheckClassRefNativeCall", out Boolean disable) ||
 				!disable;
 	}
+	/// <summary>
+	/// Main classes' information.
+	/// </summary>
+	public static IEnumerable<ITypeInformation> MainClassesInformation => JVirtualMachine.userMainClasses.Values;
 
 	/// <summary>
 	/// Indicates whether the current virtual machine remains alive.

@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine
 {
 	/// <summary>
-	/// User main classes dictionary.
+	/// User main classes' dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<String, ClassObjectMetadata> userMainClasses =
 		MainClasses.CreateMainClassesDictionary();
