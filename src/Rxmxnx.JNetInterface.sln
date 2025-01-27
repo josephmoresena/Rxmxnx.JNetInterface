@@ -32,6 +32,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Primitives.Tests", "Test\Rxmxnx.JNetInterface.Primitives.Tests\Rxmxnx.JNetInterface.Primitives.Tests.csproj", "{2394C94D-2096-4DDF-9EF2-FE2D0E234909}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApplicationTest", "ApplicationTest", "{25D4B3AE-0B35-405E-A2C8-9D8678949152}"
+	ProjectSection(SolutionItems) = preProject
+		ApplicationTest\Directory.Build.props = ApplicationTest\Directory.Build.props
+		ApplicationTest\JNetInterface-NativeAot.targets = ApplicationTest\JNetInterface-NativeAot.targets
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.ApplicationTest", "ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj", "{3B30C3CF-A6FF-494F-8748-61D091D01252}"
 EndProject

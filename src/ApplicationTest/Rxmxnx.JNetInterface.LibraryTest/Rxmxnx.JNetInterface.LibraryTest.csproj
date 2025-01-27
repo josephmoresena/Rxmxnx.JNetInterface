@@ -2,33 +2,9 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework Condition="'$(USE_NET80)' != 'true'">net9.0</TargetFramework>
-        <TargetFramework Condition="'$(USE_NET80)' == 'true'">net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <IsPackable>false</IsPackable>
-        <IsTrimmable>true</IsTrimmable>
-        <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(JNI_LIBRARY)' == 'true'">
-        <PublishAot>true</PublishAot>
-        <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
-        <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
-        <InvariantGlobalization>true</InvariantGlobalization>
-        <TrimMode>full</TrimMode>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(JNI_LIBRARY)' == 'true'">
-        <RootAllApplicationAssemblies>false</RootAllApplicationAssemblies>
-        <TrimUnusedDependencies>true</TrimUnusedDependencies>
-        <IlcOptimizationPreference>Size</IlcOptimizationPreference>
-        <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
-        <IlcTrimMetadata>true</IlcTrimMetadata>
-        <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
-        <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
-        <IlcDisableReflection>false</IlcDisableReflection>
-    </PropertyGroup>
+    <Import Condition="'$(JNI_LIBRARY)' == 'true'" Project="..\JNetInterface-NativeAot.targets"/>
 
     <ItemGroup>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
@@ -36,19 +12,6 @@
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Native.Intermediate\Rxmxnx.JNetInterface.Native.Intermediate.csproj"/>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(JNI_LIBRARY)' == 'true'">
-        <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>-->
-        <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
-        <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableNestingArrayAutoGeneration" Value="true" Trim="true"/>-->
-        <!--<RuntimeHostConfigurationOption Include="JNetInterface.EnableTrace" Value="true" Trim="true"/>-->
-        <RuntimeHostConfigurationOption Include="JNetInterface.DisableBuiltInThrowableAutoRegistration" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.DisableReflectionAutoRegistration" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.DisableNioAutoRegistration" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.EnableFinalUserTypeRuntime" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.CheckRefTypeNativeCallEnabled" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.DisableCheckClassRefNativeCall" Value="true" Trim="true"/>
     </ItemGroup>
 
 </Project>

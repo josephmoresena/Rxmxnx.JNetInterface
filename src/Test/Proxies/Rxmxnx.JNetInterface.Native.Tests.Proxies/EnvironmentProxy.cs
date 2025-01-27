@@ -11,14 +11,14 @@ public abstract partial class EnvironmentProxy : IEnvironment
 	public abstract ArrayFeatureProxy ArrayFeature { get; }
 	public abstract NioFeatureProxy NioFeature { get; }
 
+	public abstract NativeFunctionSetProxy FunctionSet { get; }
+
 	public abstract Int32 UsedStackBytes { get; }
 	public abstract Int32 UsableStackBytes { get; set; }
 	public abstract JEnvironmentRef Reference { get; }
 	public abstract Int32 Version { get; }
 	public abstract ThrowableException? PendingException { get; set; }
 	public abstract Int32? LocalCapacity { get; set; }
-
-	public abstract NativeFunctionSetProxy FunctionSet { get; }
 	public abstract Boolean NoProxy { get; }
 
 	public abstract Boolean IsValidationAvoidable(JGlobalBase jGlobal);
