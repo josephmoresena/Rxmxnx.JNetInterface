@@ -18,7 +18,9 @@ partial class JEnvironment
 			// Register user main classes.
 			foreach (ITypeInformation? typeInformation in JVirtualMachine.MainClassesInformation)
 			{
-				JClassObject mainClass = new(this.ClassObject, typeInformation);
+				if (!this._classes.TryGetValue(typeInformation.Hash, out JClassObject? mainClass))
+					// Only creates JClassObject instance if not found in class cache.
+					mainClass = new(this.ClassObject, typeInformation);
 				this.Register(mainClass);
 			}
 
@@ -384,7 +386,11 @@ partial class JEnvironment
 			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
 			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
 			this.VirtualMachine.SetMainGlobal(jClass.Hash, jGlobal);
-			jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
+			if (jGlobal.IsDefault)
+				// Only loads global-reference if default.
+				jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
+			else if (deleteLocalRef)
+				this._env.DeleteLocalRef(classRef.Value);
 			if (deleteLocalRef) jClass.ClearValue();
 		}
 		/// <summary>
