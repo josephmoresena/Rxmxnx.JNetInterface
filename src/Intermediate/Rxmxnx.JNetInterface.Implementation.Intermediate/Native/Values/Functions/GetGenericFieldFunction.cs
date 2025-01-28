@@ -16,4 +16,5 @@ internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TResult> wher
 	/// </summary>
 	/// <remarks>Should it really be declared as managed?</remarks>
 	public readonly delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TResult> Get;
+	// Unmanaged + JDK < 17 + macOS X
 }
