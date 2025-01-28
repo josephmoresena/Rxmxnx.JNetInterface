@@ -15,6 +15,13 @@ partial class JEnvironment
 			this.Register(this.ThrowableObject);
 			this.Register(this.StackTraceElementObject);
 
+			// Register user main classes.
+			foreach (ITypeInformation? typeInformation in JVirtualMachine.MainClassesInformation)
+			{
+				JClassObject mainClass = new(this.ClassObject, typeInformation);
+				this.Register(mainClass);
+			}
+
 			this.Register(this.BooleanPrimitive);
 			this.Register(this.BytePrimitive);
 			this.Register(this.CharPrimitive);
@@ -23,13 +30,6 @@ partial class JEnvironment
 			this.Register(this.IntPrimitive);
 			this.Register(this.LongPrimitive);
 			this.Register(this.ShortPrimitive);
-
-			// Register main classes.
-			foreach (ITypeInformation? classObjectMetadata in JVirtualMachine.MainClassesInformation)
-			{
-				JClassObject mainClass = new(this.ClassObject, classObjectMetadata);
-				this.Register(mainClass);
-			}
 		}
 		/// <summary>
 		/// Retrieves a <see cref="JStringObject"/> containing class name.
@@ -210,6 +210,7 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private unsafe JClassObject GetOrFindClass(ITypeInformation typeInformation)
 		{
+			Boolean isInteger = typeInformation.Hash == ClassNameHelper.IntegerObjectHash;
 			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
 			{
 				JTrace.ClassFound(result);

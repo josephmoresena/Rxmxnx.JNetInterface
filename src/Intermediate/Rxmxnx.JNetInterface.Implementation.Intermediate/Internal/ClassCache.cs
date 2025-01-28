@@ -141,4 +141,16 @@ internal sealed class ClassCache<TClass>(JReferenceType type) : ClassCache(type)
 		localClass.Lifetime.GetCacheable().Dispose();
 		JTrace.ClearClass(classRef, jClass);
 	}
+	/// <summary>
+	/// Refresh access cache.
+	/// </summary>
+	public void RefreshAccess()
+	{
+		foreach (TClass jClass in this._classes.Values)
+		{
+			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
+			if (classRef.IsDefault) continue;
+			this.Load(classRef);
+		}
+	}
 }

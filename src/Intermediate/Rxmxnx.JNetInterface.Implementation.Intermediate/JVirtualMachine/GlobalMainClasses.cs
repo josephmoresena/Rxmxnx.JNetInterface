@@ -7,30 +7,34 @@ public partial class JVirtualMachine
 	/// </summary>
 	private abstract partial class GlobalMainClasses : MainClasses<JGlobal>
 	{
+		/// <summary>
+		/// Global cache.
+		/// </summary>
+		public readonly ClassCache<JGlobal> GlobalClassCache = new(JReferenceType.GlobalRefType);
 		/// <inheritdoc/>
-		public override JGlobal ClassObject => this._mainClasses[ClassNameHelper.ClassHash];
+		public override JGlobal ClassObject => this.GlobalClassCache[ClassNameHelper.ClassHash];
 		/// <inheritdoc/>
-		public override JGlobal ThrowableObject => this._mainClasses[ClassNameHelper.ThrowableHash];
+		public override JGlobal ThrowableObject => this.GlobalClassCache[ClassNameHelper.ThrowableHash];
 		/// <inheritdoc/>
-		public override JGlobal StackTraceElementObject => this._mainClasses[ClassNameHelper.StackTraceElementHash];
+		public override JGlobal StackTraceElementObject => this.GlobalClassCache[ClassNameHelper.StackTraceElementHash];
 		/// <inheritdoc/>
-		public override JGlobal VoidPrimitive => this._mainClasses[ClassNameHelper.VoidPrimitiveHash];
+		public override JGlobal VoidPrimitive => this.GlobalClassCache[ClassNameHelper.VoidPrimitiveHash];
 		/// <inheritdoc/>
-		public override JGlobal BooleanPrimitive => this._mainClasses[ClassNameHelper.BooleanPrimitiveHash];
+		public override JGlobal BooleanPrimitive => this.GlobalClassCache[ClassNameHelper.BooleanPrimitiveHash];
 		/// <inheritdoc/>
-		public override JGlobal BytePrimitive => this._mainClasses[ClassNameHelper.BytePrimitiveHash];
+		public override JGlobal BytePrimitive => this.GlobalClassCache[ClassNameHelper.BytePrimitiveHash];
 		/// <inheritdoc/>
-		public override JGlobal CharPrimitive => this._mainClasses[ClassNameHelper.CharPrimitiveHash];
+		public override JGlobal CharPrimitive => this.GlobalClassCache[ClassNameHelper.CharPrimitiveHash];
 		/// <inheritdoc/>
-		public override JGlobal DoublePrimitive => this._mainClasses[ClassNameHelper.DoublePrimitiveHash];
+		public override JGlobal DoublePrimitive => this.GlobalClassCache[ClassNameHelper.DoublePrimitiveHash];
 		/// <inheritdoc/>
-		public override JGlobal FloatPrimitive => this._mainClasses[ClassNameHelper.FloatPrimitiveHash];
+		public override JGlobal FloatPrimitive => this.GlobalClassCache[ClassNameHelper.FloatPrimitiveHash];
 		/// <inheritdoc/>
-		public override JGlobal IntPrimitive => this._mainClasses[ClassNameHelper.IntPrimitiveHash];
+		public override JGlobal IntPrimitive => this.GlobalClassCache[ClassNameHelper.IntPrimitiveHash];
 		/// <inheritdoc/>
-		public override JGlobal LongPrimitive => this._mainClasses[ClassNameHelper.LongPrimitiveHash];
+		public override JGlobal LongPrimitive => this.GlobalClassCache[ClassNameHelper.LongPrimitiveHash];
 		/// <inheritdoc/>
-		public override JGlobal ShortPrimitive => this._mainClasses[ClassNameHelper.ShortPrimitiveHash];
+		public override JGlobal ShortPrimitive => this.GlobalClassCache[ClassNameHelper.ShortPrimitiveHash];
 
 		/// <summary>
 		/// Constructor.
@@ -38,7 +42,7 @@ public partial class JVirtualMachine
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		protected GlobalMainClasses(IVirtualMachine vm)
 		{
-			this._mainClasses = GlobalMainClasses.CreateMainClassesDictionary(vm);
+			this._mainClasses = GlobalMainClasses.CreateMainClassesDictionary(vm, this.GlobalClassCache);
 
 			this._classMetadata = ClassObjectMetadata.Create<JClassObject>();
 			this._throwableMetadata = ClassObjectMetadata.Create<JThrowableObject>();
@@ -77,18 +81,24 @@ public partial class JVirtualMachine
 		/// <see langword="false"/>.
 		/// </returns>
 		public Boolean IsMainGlobal(String classHash, JGlobal jGlobal)
-			=> Object.ReferenceEquals(jGlobal, this._mainClasses.GetValueOrDefault(classHash));
+			=> this._mainClasses.ContainsKey(classHash) &&
+				Object.ReferenceEquals(jGlobal, this.GlobalClassCache[classHash]);
 		/// <summary>
 		/// Sets the class <paramref name="jGlobal"/> as a main global class.
 		/// </summary>
 		/// <param name="classHash">Class hash.</param>
 		/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
-		public void SetMainGlobal(String classHash, JGlobal jGlobal) => this._mainClasses.TryAdd(classHash, jGlobal);
+		public void SetMainGlobal(String classHash, JGlobal jGlobal)
+		{
+			this._mainClasses.TryAdd(classHash, true);
+			if (!this.GlobalClassCache.ContainsHash(classHash))
+				this.GlobalClassCache[classHash] = jGlobal;
+		}
 		/// <summary>
 		/// Loads global classes.
 		/// </summary>
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
-		public virtual void LoadMainClasses(JEnvironment env)
+		public void LoadMainClasses(JEnvironment env)
 		{
 			this.ClassObject.SetValue(env.GetMainClassGlobalRef(this._classMetadata));
 			this.ThrowableObject.SetValue(env.GetMainClassGlobalRef(this._throwableMetadata));
@@ -96,15 +106,7 @@ public partial class JVirtualMachine
 			this.LoadUserMainClasses(env);
 			if (MainClasses.PrimitiveMainClassesEnabled)
 				this.LoadPrimitiveMainClasses(env);
-		}
-		/// <summary>
-		/// Loads main classes in <paramref name="classCache"/>.
-		/// </summary>
-		/// <param name="classCache">A <see cref="ClassCache{JGlobal}"/> instance.</param>
-		protected void LoadMainClasses(ClassCache<JGlobal> classCache)
-		{
-			foreach (String hash in this._mainClasses.Keys)
-				classCache[hash] = this._mainClasses[hash];
+			this.GlobalClassCache.RefreshAccess();
 		}
 	}
 }

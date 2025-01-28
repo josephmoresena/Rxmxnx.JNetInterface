@@ -40,7 +40,7 @@ public partial class JVirtualMachine
 		/// <summary>
 		/// Main classes dictionary.
 		/// </summary>
-		private readonly ConcurrentDictionary<String, JGlobal> _mainClasses;
+		private readonly ConcurrentDictionary<String, Boolean> _mainClasses;
 		/// <summary>
 		/// Metadata for <see cref="JShort"/>.
 		/// </summary>
@@ -61,8 +61,14 @@ public partial class JVirtualMachine
 		/// <param name="classMetadata">A <see cref="_classMetadata"/> instance.</param>
 		private void AppendGlobal(IVirtualMachine vm, ClassObjectMetadata classMetadata)
 		{
-			if (!this._mainClasses.ContainsKey(classMetadata.Hash))
-				this._mainClasses.TryAdd(classMetadata.Hash, new(vm, classMetadata, default));
+			String hash = classMetadata.Hash;
+			if (!this.GlobalClassCache.TryGetValue(hash, out JGlobal? mainClass))
+			{
+				mainClass = new(vm, classMetadata, default);
+				this.GlobalClassCache[hash] = mainClass;
+			}
+			this._mainClasses.TryAdd(hash, true);
+			this.GlobalClassCache[classMetadata.Hash] = mainClass;
 		}
 		/// <summary>
 		/// Loads user global classes.
@@ -72,7 +78,7 @@ public partial class JVirtualMachine
 		{
 			foreach (ITypeInformation typeInformation in JVirtualMachine.MainClassesInformation)
 			{
-				if (!this._mainClasses.TryGetValue(typeInformation.Hash, out JGlobal? jGlobal) ||
+				if (!this.GlobalClassCache.TryGetValue(typeInformation.Hash, out JGlobal? jGlobal) ||
 				    !jGlobal.IsDefault) continue;
 				try
 				{
@@ -130,8 +136,8 @@ public partial class JVirtualMachine
 		private void LoadPrimitiveMainClass(JEnvironment env, ClassObjectMetadata classMetadata,
 			String wrapperClassHash)
 		{
-			JGlobal pGlobalClass = this._mainClasses[classMetadata.Hash];
-			this._mainClasses.TryGetValue(wrapperClassHash, out JGlobal? wGlobalClass);
+			JGlobal pGlobalClass = this.GlobalClassCache[classMetadata.Hash];
+			this.GlobalClassCache.TryGetValue(wrapperClassHash, out JGlobal? wGlobalClass);
 			pGlobalClass.SetValue(env.GetPrimitiveMainClassGlobalRef(classMetadata, wGlobalClass));
 		}
 
@@ -139,14 +145,21 @@ public partial class JVirtualMachine
 		/// Creates dictionary for main classes.
 		/// </summary>
 		/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
+		/// <param name="globalClassCache">A <see cref="ClassCache{JGlobal}"/> instance.</param>
 		/// <returns>A <see cref="ConcurrentDictionary{String, Global}"/> instance.</returns>
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-		private static ConcurrentDictionary<String, JGlobal> CreateMainClassesDictionary(IVirtualMachine vm)
+		private static ConcurrentDictionary<String, Boolean> CreateMainClassesDictionary(IVirtualMachine vm,
+			ClassCache<JGlobal> globalClassCache)
 		{
-			ConcurrentDictionary<String, JGlobal> result = new();
+			ConcurrentDictionary<String, Boolean> result = new();
 			foreach (String hash in JVirtualMachine.userMainClasses.Keys)
-				result.TryAdd(hash, new(vm, JVirtualMachine.userMainClasses[hash], default));
+			{
+				if (!globalClassCache.TryGetValue(hash, out JGlobal? mainClass))
+					mainClass = new(vm, JVirtualMachine.userMainClasses[hash], default);
+				globalClassCache[hash] = mainClass;
+				result.TryAdd(hash, true);
+			}
 			return result;
 		}
 	}
