@@ -8,6 +8,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <SigningKeyFile>..\Rxmxnx.JNetInterface.snk</SigningKeyFile>
     <IntermediateSourceBasePath>..\..\src\Intermediate</IntermediateSourceBasePath>
+    <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' != ''">$(Version)</CoreVersion>
+    <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' == ''">*</CoreVersion>
   </PropertyGroup>
 
   <Import Project="..\Intermediate-to-Package.targets" />
