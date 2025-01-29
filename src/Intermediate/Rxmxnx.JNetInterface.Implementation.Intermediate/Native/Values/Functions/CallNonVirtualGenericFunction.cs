@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// Set of function pointers to call Java non-virtual functions through JNI.
 /// </summary>
 /// <typeparam name="TResult">Type of return function.</typeparam>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Explicit)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
@@ -12,15 +12,60 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 internal readonly unsafe struct CallNonVirtualGenericFunction<TResult> where TResult : unmanaged, INativeType
 {
 	/// <summary>
-	/// Internal reserved entries.
+	/// Caller function pointers.
 	/// </summary>
-#pragma warning disable CS0169
-	private readonly MethodOffset _offset;
-#pragma warning restore CS0169
+	[FieldOffset(0)]
+	private readonly Managed _managed;
 	/// <summary>
-	/// Caller <c>A</c> function.
+	/// Caller function pointers.
+	/// </summary>
+	[FieldOffset(0)]
+	private readonly Unmanaged _unmanaged;
+
+	/// <summary>
+	/// Calls <c>A</c> function.
 	/// </summary>
 	/// <remarks>Should it really be declared as managed?</remarks>
-	public readonly delegate* managed<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, TResult>
-		Call;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public TResult Call(JEnvironmentRef envRef, JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
+		JValue* args)
+		=> MethodOffset.UseManagedGenericPointers ?
+			this._managed.Call(envRef, localRef, classRef, methodId, args) :
+			this._unmanaged.Call(envRef, localRef, classRef, methodId, args);
+
+#pragma warning disable CS0169
+#pragma warning disable CS0649
+	/// <summary>
+	/// Managed caller pointer
+	/// </summary>
+	private readonly struct Managed
+	{
+		/// <summary>
+		/// Internal reserved entries.
+		/// </summary>
+		private readonly MethodOffset _offset;
+		/// <summary>
+		/// Caller <c>A</c> function.
+		/// </summary>
+		public readonly delegate* managed<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, TResult>
+			Call;
+	}
+
+	/// <summary>
+	/// Unmanaged caller pointer
+	/// </summary>
+	private readonly struct Unmanaged
+	{
+		/// <summary>
+		/// Internal reserved entries.
+		/// </summary>
+		private readonly MethodOffset _offset;
+		/// <summary>
+		/// Caller <c>A</c> function.
+		/// </summary>
+		public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*,
+			TResult> Call;
+	}
+#pragma warning restore CS0169
+#pragma warning restore CS0649
 }
