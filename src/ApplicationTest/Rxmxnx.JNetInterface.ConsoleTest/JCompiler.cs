@@ -12,15 +12,23 @@ public sealed partial class JCompiler
 	/// <summary>
 	/// Sdk path.
 	/// </summary>
-	public String JdkPath { get; set; } = default!;
+	public String JdkPath { get; init; } = default!;
+	/// <summary>
+	/// JAVA path.
+	/// </summary>
+	public String ExecutablePath { get; init; } = default!;
 	/// <summary>
 	/// JAVAC path.
 	/// </summary>
-	public String CompilerPath { get; set; } = default!;
+	public String CompilerPath { get; init; } = default!;
 	/// <summary>
 	/// JVM library path.
 	/// </summary>
-	public String LibraryPath { get; set; } = default!;
+	public String LibraryPath { get; init; } = default!;
+	/// <summary>
+	/// JDK version.
+	/// </summary>
+	public Version JdkVersion { get; init; } = default!;
 
 	/// <summary>
 	/// Compiles HelloJni java class.
@@ -39,7 +47,7 @@ public sealed partial class JCompiler
 			{
 				ArgumentList = { javaFilePath, },
 			};
-			Process javac = Process.Start(info)!;
+			using Process javac = Process.Start(info)!;
 			await javac.WaitForExitAsync();
 			return await File.ReadAllBytesAsync(classFilePath);
 		}
