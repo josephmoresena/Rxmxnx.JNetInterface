@@ -80,7 +80,7 @@ public partial class JCompiler
 		Int32 offset = version.AsSpan().IndexOf(javacName);
 		Int32 endIndex = version.AsSpan().IndexOf(Environment.NewLine.AsSpan());
 
-		if (offset > 0) offset += javacName.Length;
+		if (offset >= 0) offset += javacName.Length;
 		if (endIndex < 0) endIndex = 0;
 
 		Span<Char> versionSpan = stackalloc Char[endIndex - offset];
