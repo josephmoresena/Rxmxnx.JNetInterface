@@ -120,7 +120,7 @@
         Assembly signing settings
         This settings enables signing the assembly if a signing key is available.
     -->
-    <PropertyGroup Condition="Exists('$(SigningKeyFile)')">
+    <PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\$(SigningKeyFile)')">
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>$(SigningKeyFile)</AssemblyOriginatorKeyFile>
     </PropertyGroup>
