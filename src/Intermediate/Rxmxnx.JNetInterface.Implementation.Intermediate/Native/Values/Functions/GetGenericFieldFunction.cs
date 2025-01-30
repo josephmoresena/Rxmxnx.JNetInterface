@@ -14,18 +14,15 @@ internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField> where
 	/// <summary>
 	/// Pointer to <c>Get&lt;type&gt;Field</c> function.
 	/// </summary>
-	public readonly delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField> _managedGet;
-	/// <summary>
-	/// Pointer to <c>Get&lt;type&gt;Field</c> function.
-	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TField> _unmanagedGet;
+	public readonly void* _ptr;
 
 	/// <summary>
 	/// Calls to <c>Get&lt;type&gt;Field</c> function.
 	/// </summary>
+	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TField Get(JEnvironmentRef envRef, TReceiver receiver, JFieldId fieldId)
 		=> MethodOffset.UseManagedGenericPointers ?
-			this._managedGet(envRef, receiver, fieldId) :
-			this._unmanagedGet(envRef, receiver, fieldId);
+			((delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField>)this._ptr)(envRef, receiver, fieldId) :
+			((delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TField>)this._ptr)(envRef, receiver, fieldId);
 }

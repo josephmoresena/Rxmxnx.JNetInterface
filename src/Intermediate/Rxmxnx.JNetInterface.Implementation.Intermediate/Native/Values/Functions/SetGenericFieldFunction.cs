@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// </summary>
 /// <typeparam name="TReceiver">Type of receiver field.</typeparam>
 /// <typeparam name="TField">Type of field.</typeparam>
-[StructLayout(LayoutKind.Explicit)]
+[StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal readonly unsafe struct SetGenericFieldFunction<TReceiver, TField>
@@ -14,23 +14,20 @@ internal readonly unsafe struct SetGenericFieldFunction<TReceiver, TField>
 	/// <summary>
 	/// Pointer to <c>Set&lt;type&gt;Field</c> function.
 	/// </summary>
-	[FieldOffset(0)]
-	private readonly delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField, void> _managedSet;
-	/// <summary>
-	/// Pointer to <c>Set&lt;type&gt;Field</c> function.
-	/// </summary>
-	[FieldOffset(0)]
-	private readonly delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField, void> _unmanagedSet;
+	private readonly void* _ptr;
 
 	/// <summary>
 	/// Calls <c>Set&lt;type&gt;Field</c> function.
 	/// </summary>
+	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void Set(JEnvironmentRef envRef, TReceiver receiver, JFieldId fieldId, TField value)
 	{
 		if (MethodOffset.UseManagedGenericPointers)
-			this._managedSet(envRef, receiver, fieldId, value);
+			((delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField, void>)this._ptr)(
+				envRef, receiver, fieldId, value);
 		else
-			this._unmanagedSet(envRef, receiver, fieldId, value);
+			((delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TField, void>)this._ptr)(
+				envRef, receiver, fieldId, value);
 	}
 }

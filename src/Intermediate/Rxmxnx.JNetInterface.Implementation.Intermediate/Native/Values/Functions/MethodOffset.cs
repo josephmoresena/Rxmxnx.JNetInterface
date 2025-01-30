@@ -10,9 +10,9 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 internal struct MethodOffset
 {
 	/// <summary>
-	/// Indicates whether generic calls should be done with managed function pointers.
+	/// Indicates whether generic JNI calls should be done with managed function pointers.
 	/// </summary>
-	internal static readonly Boolean UseManagedGenericPointers =
+	public static readonly Boolean UseManagedGenericPointers =
 		RuntimeInformation.ProcessArchitecture is Architecture.Arm;
 
 #pragma warning disable CS0169

@@ -174,12 +174,18 @@ public sealed unsafe class JVirtualMachineLibrary
 	public static JVirtualMachineLibrary? Create(IntPtr handle)
 	{
 		Span<IntPtr> functions = stackalloc IntPtr[3];
-		if (NativeLibrary.TryGetExport(handle, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
-		                               out functions[0]) &&
-		    NativeLibrary.TryGetExport(handle, JVirtualMachineLibrary.CreateVirtualMachineName, out functions[1]) &&
-		    NativeLibrary.TryGetExport(handle, JVirtualMachineLibrary.GetCreatedVirtualMachinesName, out functions[2]))
+		if (JVirtualMachineLibrary.TryGetJNIExport(handle, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
+		                                           out functions[0]) &&
+		    JVirtualMachineLibrary.TryGetJNIExport(handle, JVirtualMachineLibrary.CreateVirtualMachineName,
+		                                           out functions[1]) &&
+		    JVirtualMachineLibrary.TryGetJNIExport(handle, JVirtualMachineLibrary.GetCreatedVirtualMachinesName,
+		                                           out functions[2]))
 			return new(handle, Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]));
 		NativeLibrary.Free(handle);
 		return default;
 	}
+
+	private static Boolean TryGetJNIExport(IntPtr handle, String name, out IntPtr ptr)
+		=> NativeLibrary.TryGetExport(handle, name, out ptr) ||
+			NativeLibrary.TryGetExport(handle, name + "_Impl", out ptr);
 }

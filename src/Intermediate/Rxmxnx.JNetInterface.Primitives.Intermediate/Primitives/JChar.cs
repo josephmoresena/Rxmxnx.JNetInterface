@@ -33,6 +33,7 @@ public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatab
 	/// <summary>
 	/// Internal UTF-16 code unit character.
 	/// </summary>
+	[MarshalAs(UnmanagedType.U2)]
 	private readonly Char _value;
 
 	/// <summary>
