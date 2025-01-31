@@ -8,8 +8,8 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
-internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField> where TReceiver : unmanaged, IWrapper
-	where TField : unmanaged, INativeType
+internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField>
+	where TReceiver : unmanaged, IWrapper<JObjectLocalRef> where TField : unmanaged, INativeType
 {
 	/// <summary>
 	/// Pointer to <c>Get&lt;type&gt;Field</c> function.
@@ -22,7 +22,25 @@ internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField> where
 	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TField Get(JEnvironmentRef envRef, TReceiver receiver, JFieldId fieldId)
-		=> MethodOffset.UseManagedGenericPointers ?
-			((delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField>)this._ptr)(envRef, receiver, fieldId) :
-			((delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TField>)this._ptr)(envRef, receiver, fieldId);
+	{
+		if (MethodOffset.UseManagedGenericPointers)
+			return ((delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField>)this._ptr)(
+				envRef, receiver, fieldId);
+		try
+		{
+			return ((delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TField>)this._ptr)(
+				envRef, receiver, fieldId);
+		}
+		catch (Exception)
+		{
+#if !NET8_0
+			throw;
+#else
+			TField field = default;
+			NonGenericFunctionHelper.GetField(this._ptr, envRef, receiver.Value.Pointer, fieldId, sizeof(TField),
+			                                  Unsafe.AsPointer(ref field));
+			return field;
+#endif
+		}
+	}
 }

@@ -24,10 +24,24 @@ internal readonly unsafe struct SetGenericFieldFunction<TReceiver, TField>
 	public void Set(JEnvironmentRef envRef, TReceiver receiver, JFieldId fieldId, TField value)
 	{
 		if (MethodOffset.UseManagedGenericPointers)
+		{
 			((delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField, void>)this._ptr)(
 				envRef, receiver, fieldId, value);
-		else
+			return;
+		}
+		try
+		{
 			((delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TField, void>)this._ptr)(
 				envRef, receiver, fieldId, value);
+		}
+		catch (Exception)
+		{
+#if !NET8_0
+			throw;
+#else
+			NonGenericFunctionHelper.SetField(this._ptr, envRef, receiver.Value.Pointer, fieldId, sizeof(TField),
+			                                  Unsafe.AsPointer(ref value));
+#endif
+		}
 	}
 }

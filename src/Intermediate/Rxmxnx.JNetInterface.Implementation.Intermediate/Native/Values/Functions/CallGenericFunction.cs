@@ -28,9 +28,25 @@ internal readonly unsafe struct CallGenericFunction<TReceiver, TResult>
 	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TResult Call(JEnvironmentRef envRef, TReceiver receiver, JMethodId methodId, JValue* args)
-		=> MethodOffset.UseManagedGenericPointers ?
-			((delegate* managed<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult>)this._ptr)(
-				envRef, receiver, methodId, args) :
-			((delegate* unmanaged<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult>)this._ptr)(
+	{
+		if (MethodOffset.UseManagedGenericPointers)
+			return ((delegate* managed<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult>)this._ptr)(
 				envRef, receiver, methodId, args);
+		try
+		{
+			return ((delegate* unmanaged<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult>)this._ptr)(
+				envRef, receiver, methodId, args);
+		}
+		catch (Exception)
+		{
+#if !NET8_0
+			throw;
+#else
+			TResult result = default;
+			NonGenericFunctionHelper.CallMethod(this._ptr, envRef, receiver.Value.Pointer, methodId, args,
+			                                    sizeof(TResult), Unsafe.AsPointer(ref result));
+			return result;
+#endif
+		}
+	}
 }
