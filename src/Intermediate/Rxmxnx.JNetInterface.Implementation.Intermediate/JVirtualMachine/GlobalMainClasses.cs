@@ -17,24 +17,6 @@ public partial class JVirtualMachine
 		public override JGlobal ThrowableObject => this.GlobalClassCache[ClassNameHelper.ThrowableHash];
 		/// <inheritdoc/>
 		public override JGlobal StackTraceElementObject => this.GlobalClassCache[ClassNameHelper.StackTraceElementHash];
-		/// <inheritdoc/>
-		public override JGlobal VoidPrimitive => this.GlobalClassCache[ClassNameHelper.VoidPrimitiveHash];
-		/// <inheritdoc/>
-		public override JGlobal BooleanPrimitive => this.GlobalClassCache[ClassNameHelper.BooleanPrimitiveHash];
-		/// <inheritdoc/>
-		public override JGlobal BytePrimitive => this.GlobalClassCache[ClassNameHelper.BytePrimitiveHash];
-		/// <inheritdoc/>
-		public override JGlobal CharPrimitive => this.GlobalClassCache[ClassNameHelper.CharPrimitiveHash];
-		/// <inheritdoc/>
-		public override JGlobal DoublePrimitive => this.GlobalClassCache[ClassNameHelper.DoublePrimitiveHash];
-		/// <inheritdoc/>
-		public override JGlobal FloatPrimitive => this.GlobalClassCache[ClassNameHelper.FloatPrimitiveHash];
-		/// <inheritdoc/>
-		public override JGlobal IntPrimitive => this.GlobalClassCache[ClassNameHelper.IntPrimitiveHash];
-		/// <inheritdoc/>
-		public override JGlobal LongPrimitive => this.GlobalClassCache[ClassNameHelper.LongPrimitiveHash];
-		/// <inheritdoc/>
-		public override JGlobal ShortPrimitive => this.GlobalClassCache[ClassNameHelper.ShortPrimitiveHash];
 
 		/// <summary>
 		/// Constructor.

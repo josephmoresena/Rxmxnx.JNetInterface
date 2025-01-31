@@ -21,24 +21,42 @@ partial class JEnvironment
 		public override JClassObject ThrowableObject { get; } = default!;
 		/// <inheritdoc/>
 		public override JClassObject StackTraceElementObject { get; } = default!;
-		/// <inheritdoc/>
-		public override JClassObject VoidPrimitive { get; } = default!;
-		/// <inheritdoc/>
-		public override JClassObject BooleanPrimitive { get; } = default!;
-		/// <inheritdoc/>
-		public override JClassObject BytePrimitive { get; } = default!;
-		/// <inheritdoc/>
-		public override JClassObject CharPrimitive { get; } = default!;
-		/// <inheritdoc/>
-		public override JClassObject DoublePrimitive { get; } = default!;
-		/// <inheritdoc/>
-		public override JClassObject FloatPrimitive { get; } = default!;
-		/// <inheritdoc/>
-		public override JClassObject IntPrimitive { get; } = default!;
-		/// <inheritdoc/>
-		public override JClassObject LongPrimitive { get; } = default!;
-		/// <inheritdoc/>
-		public override JClassObject ShortPrimitive { get; } = default!;
+		/// <summary>
+		/// Class for Java <c>void</c> type.
+		/// </summary>
+		protected JClassObject VoidPrimitive { get; } = default!;
+		/// <summary>
+		/// Class for <see cref="JBoolean"/>.
+		/// </summary>
+		protected JClassObject BooleanPrimitive { get; } = default!;
+		/// <summary>
+		/// Class for <see cref="JByte"/>.
+		/// </summary>
+		protected JClassObject BytePrimitive { get; } = default!;
+		/// <summary>
+		/// Class for <see cref="JChar"/>.
+		/// </summary>
+		protected JClassObject CharPrimitive { get; } = default!;
+		/// <summary>
+		/// Class for <see cref="JDouble"/>.
+		/// </summary>
+		protected JClassObject DoublePrimitive { get; } = default!;
+		/// <summary>
+		/// Class for <see cref="JFloat"/>.
+		/// </summary>
+		protected JClassObject FloatPrimitive { get; } = default!;
+		/// <summary>
+		/// Class for <see cref="JInt"/>.
+		/// </summary>
+		protected JClassObject IntPrimitive { get; } = default!;
+		/// <summary>
+		/// Class for <see cref="JLong"/>.
+		/// </summary>
+		protected JClassObject LongPrimitive { get; } = default!;
+		/// <summary>
+		/// Class for <see cref="JShort"/>.
+		/// </summary>
+		protected JClassObject ShortPrimitive { get; } = default!;
 
 		/// <summary>
 		/// Constructor.
