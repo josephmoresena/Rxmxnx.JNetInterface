@@ -103,10 +103,9 @@ public partial class JVirtualMachine
 		public static Boolean IsBuiltInNumberType(String hash)
 			=> hash switch
 			{
-				ClassNameHelper.ByteObjectHash or
-				ClassNameHelper.DoubleObjectHash or ClassNameHelper.FloatObjectHash or
-				ClassNameHelper.IntegerObjectHash or ClassNameHelper.LongObjectHash or
-				ClassNameHelper.ShortObjectHash => true,
+				ClassNameHelper.ByteObjectHash or ClassNameHelper.DoubleObjectHash or ClassNameHelper.FloatObjectHash or
+					ClassNameHelper.IntegerObjectHash or ClassNameHelper.LongObjectHash or
+					ClassNameHelper.ShortObjectHash => true,
 				_ => false,
 			};
 	}
