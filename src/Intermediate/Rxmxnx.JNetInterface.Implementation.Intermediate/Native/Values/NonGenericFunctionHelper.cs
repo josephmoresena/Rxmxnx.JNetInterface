@@ -1,4 +1,4 @@
-namespace Rxmxnx.JNetInterface.Native.Values.Functions;
+namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
 /// Helper class to use non-generic function pointers.

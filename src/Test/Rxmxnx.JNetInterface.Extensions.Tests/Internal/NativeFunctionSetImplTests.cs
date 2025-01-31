@@ -269,6 +269,7 @@ public sealed class NativeFunctionSetImplTests
 	}
 
 	[Fact]
+#pragma warning disable CA1859
 	internal void GetClassClassNameTest()
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
@@ -286,6 +287,7 @@ public sealed class NativeFunctionSetImplTests
 		env.ClassFeature.Received(1).GetClass<JClassObject>();
 		env.AccessFeature.Received(1).CallFunction<JStringObject>(jClass, jClass, definition, false, []);
 	}
+#pragma warning restore CA1859
 	[Fact]
 	internal void IsPrimitiveClassTest()
 	{

@@ -16,6 +16,7 @@ public partial class ExceptionHandlingTests
 	[InlineData(ExceptionOccurredError.NewGlobalRef)]
 	[InlineData(ExceptionOccurredError.GetClassObject | ExceptionOccurredError.GetThrowableMessageString |
 		ExceptionOccurredError.NewGlobalRef)]
+#pragma warning disable CA1859
 	internal unsafe void ExceptionOccurredTest(ExceptionOccurredError error = ExceptionOccurredError.None)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
@@ -217,6 +218,7 @@ public partial class ExceptionHandlingTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
+#pragma warning restore CA1859
 
 	private static void ExceptionAssert(ExceptionOccurredError error, IEnvironment env, JGlobalRef globalRef,
 		String message)
