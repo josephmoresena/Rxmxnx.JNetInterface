@@ -33,7 +33,7 @@ internal readonly unsafe struct CallGenericFunction<TReceiver, TResult>
 			return ((delegate* managed<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult>)this._ptr)(
 				envRef, receiver, methodId, args);
 #if !NET8_0
-			return ((delegate* unmanaged<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult>)this._ptr)(
+			return ((delegate* unmanaged[Stdcall]<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult>)this._ptr)(
 				envRef, receiver, methodId, args);
 #else
 		TResult result = default;

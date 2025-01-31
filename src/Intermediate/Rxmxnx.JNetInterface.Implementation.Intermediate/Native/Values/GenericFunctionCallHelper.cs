@@ -25,47 +25,47 @@ internal static class GenericFunctionCallHelper
 		{
 			case JNativeType.JBoolean:
 				Unsafe.As<Byte, JBoolean>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JBoolean>)funcPtr)(
+					((delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JMethodId, JValue*, JBoolean>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JByte:
 				Unsafe.As<Byte, JByte>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JByte>)funcPtr)(
+					((delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JMethodId, JValue*, JByte>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JChar:
 				Unsafe.As<Byte, JChar>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JChar>)funcPtr)(
+					((delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JMethodId, JValue*, JChar>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JDouble:
 				Unsafe.As<Byte, JDouble>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JDouble>)funcPtr)(
+					((delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JMethodId, JValue*, JDouble>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JFloat:
 				Unsafe.As<Byte, JFloat>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JFloat>)funcPtr)(
+					((delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JMethodId, JValue*, JFloat>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JInt:
 				Unsafe.As<Byte, JInt>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JInt>)funcPtr)(
+					((delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JMethodId, JValue*, JInt>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JLong:
 				Unsafe.As<Byte, JLong>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JLong>)funcPtr)(
+					((delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JMethodId, JValue*, JLong>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JShort:
 				Unsafe.As<Byte, JShort>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JShort>)funcPtr)(
+					((delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JMethodId, JValue*, JShort>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 			default:
 				Unsafe.As<Byte, JObjectLocalRef>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JObjectLocalRef>)funcPtr)(
+					((delegate* unmanaged[Stdcall]<JEnvironmentRef, IntPtr, JMethodId, JValue*, JObjectLocalRef>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 		}
