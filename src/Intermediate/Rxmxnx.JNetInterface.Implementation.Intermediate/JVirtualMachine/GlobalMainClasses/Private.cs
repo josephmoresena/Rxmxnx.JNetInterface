@@ -79,38 +79,20 @@ public partial class JVirtualMachine
 			foreach (ITypeInformation typeInformation in JVirtualMachine.MainClassesInformation)
 			{
 				if (!this.GlobalClassCache.TryGetValue(typeInformation.Hash, out JGlobal? jGlobal) ||
-				    !jGlobal.IsDefault) continue;
+					!jGlobal.IsDefault) continue;
 				try
 				{
 					jGlobal.SetValue(env.GetMainClassGlobalRef(typeInformation));
 				}
 				catch (Exception)
 				{
-					switch (typeInformation.Hash)
-					{
-						case ClassNameHelper.VoidObjectHash:
-						case ClassNameHelper.BooleanObjectHash:
-						case ClassNameHelper.ByteObjectHash:
-						case ClassNameHelper.CharacterObjectHash:
-						case ClassNameHelper.DoubleObjectHash:
-						case ClassNameHelper.FloatObjectHash:
-						case ClassNameHelper.IntegerObjectHash:
-						case ClassNameHelper.LongObjectHash:
-						case ClassNameHelper.ShortObjectHash:
-						case ClassNameHelper.EnumHash:
-						case ClassNameHelper.BufferHash:
-						case ClassNameHelper.MemberHash:
-						case ClassNameHelper.ExecutableHash:
-						case ClassNameHelper.MethodHash:
-						case ClassNameHelper.FieldHash:
-							throw;
-						default:
-							// If class is not built-in, VM initialization may should continue.
-							continue;
-					}
+					if (GlobalMainClasses.IsBuiltInBasicType(typeInformation))
+						throw;
+					continue;
 				}
 			}
 		}
+
 		/// <summary>
 		/// Loads primitive global classes.
 		/// </summary>
@@ -148,7 +130,7 @@ public partial class JVirtualMachine
 		/// <param name="globalClassCache">A <see cref="ClassCache{JGlobal}"/> instance.</param>
 		/// <returns>A <see cref="ConcurrentDictionary{String, Global}"/> instance.</returns>
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
-		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+						 Justification = CommonConstants.NoMethodOverloadingJustification)]
 		private static ConcurrentDictionary<String, Boolean> CreateMainClassesDictionary(IVirtualMachine vm,
 			ClassCache<JGlobal> globalClassCache)
 		{
@@ -162,5 +144,24 @@ public partial class JVirtualMachine
 			}
 			return result;
 		}
+		/// <summary>
+		/// Indicates whether is built-in basic class.
+		/// </summary>
+		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
+		/// <returns>
+		/// <see langword="true"/> if <paramref name="typeInformation"/> is a basic built-in class; otherwise;
+		/// <see langword="false"/>.
+		/// </returns>
+		private static Boolean IsBuiltInBasicType(ITypeInformation typeInformation)
+			=> typeInformation.Hash switch
+			{
+				ClassNameHelper.VoidObjectHash or ClassNameHelper.BooleanObjectHash or
+				ClassNameHelper.CharacterObjectHash or ClassNameHelper.NumberHash or
+				ClassNameHelper.EnumHash or ClassNameHelper.BufferHash or
+				ClassNameHelper.MemberHash or ClassNameHelper.ExecutableHash or
+				ClassNameHelper.MethodHash or ClassNameHelper.FieldHash => true,
+				_ => !GlobalMainClasses.IsBuiltInNumberType(typeInformation.Hash),
+				// If class is not built-in, VM initialization may should continue.
+			};
 	}
 }

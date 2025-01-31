@@ -157,7 +157,7 @@ internal static partial class MetadataHelper
 	/// </returns>
 	private static Boolean IsBuiltInFinalType(JDataTypeMetadata typeMetadata)
 	{
-		if (typeMetadata is JEnumTypeMetadata) return true;
+		if (typeMetadata is JEnumTypeMetadata or JPrimitiveTypeMetadata) return true;
 		if (JProxyObject.ProxyTypeMetadata.Equals((typeMetadata as JReferenceTypeMetadata)?.BaseMetadata))
 			return true;
 		if (MetadataHelper.initialMetadata.ContainsKey(typeMetadata.Hash) ||

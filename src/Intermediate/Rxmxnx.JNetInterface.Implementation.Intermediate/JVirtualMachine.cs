@@ -132,5 +132,8 @@ public partial class JVirtualMachine : IVirtualMachine
 		String hash = MetadataHelper.GetExactMetadata<TReference>().Hash;
 		if (!JVirtualMachine.userMainClasses.ContainsKey(hash))
 			JVirtualMachine.userMainClasses.TryAdd(hash, ClassObjectMetadata.Create<TReference>());
+		if (GlobalMainClasses.IsBuiltInNumberType(hash) && 
+			!JVirtualMachine.userMainClasses.ContainsKey(ClassNameHelper.NumberHash))
+			JVirtualMachine.userMainClasses.TryAdd(hash, ClassObjectMetadata.Create<JNumberObject>());
 	}
 }

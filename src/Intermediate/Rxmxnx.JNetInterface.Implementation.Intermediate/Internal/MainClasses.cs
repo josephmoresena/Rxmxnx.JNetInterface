@@ -74,6 +74,13 @@ internal abstract class MainClasses
 		MainClasses.AppendMainClass<JIntegerObject>(MainClasses.IntegerObjectMainClassEnabled, mainClasses);
 		MainClasses.AppendMainClass<JLongObject>(MainClasses.LongObjectMainClassEnabled, mainClasses);
 		MainClasses.AppendMainClass<JShortObject>(MainClasses.ShortObjectMainClassEnabled, mainClasses);
+		MainClasses.AppendMainClass<JNumberObject>(
+			MainClasses.ByteObjectMainClassEnabled || 
+			MainClasses.DoubleObjectMainClassEnabled ||
+			MainClasses.FloatObjectMainClassEnabled ||
+			MainClasses.IntegerObjectMainClassEnabled ||
+			MainClasses.LongObjectMainClassEnabled ||
+			MainClasses.ShortObjectMainClassEnabled, mainClasses);
 		return mainClasses;
 	}
 	/// <summary>
