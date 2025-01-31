@@ -188,7 +188,7 @@ jobs:
           curl.exe -O https://cfdownload.adobe.com/pub/adobe/coldfusion/java/java8/java8u431/jdk/jdk-8u431-windows-i586.exe
           Start-Process jdk-8u431-windows-i586.exe -Wait -ArgumentList '/s ADDLOCAL="ToolsFeature,SourceFeature"'
       - name: C# Framework run
-        run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj /p:USE_NET80=false
+        run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj /p:USE_NET80=false /p:USE_JTRACE=true 
       - name: Vb Framework run
         run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj /p:USE_NET80=true
       - name: F# Framework run
