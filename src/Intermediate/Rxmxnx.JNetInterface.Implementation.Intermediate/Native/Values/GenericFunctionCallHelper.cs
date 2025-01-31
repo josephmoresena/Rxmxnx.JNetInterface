@@ -4,6 +4,8 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 /// Helper class to use function pointers in generic function calls.
 /// </summary>
 [ExcludeFromCodeCoverage]
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal static class GenericFunctionCallHelper
 {
 	/// <summary>

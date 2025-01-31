@@ -308,8 +308,7 @@ public sealed class JArrayObjectTests
 			Assert.IsType<JArrayObject<TElement>>(arrayTypeMetadata.ParseInstance(jLocal));
 		JArrayObject<TElement> jArray1 =
 			Assert.IsType<JArrayObject<TElement>>(arrayTypeMetadata.ParseInstance(jArray0));
-		using JArrayObject jArray2 =
-			Assert.IsAssignableFrom<JArrayObject>(arrayTypeMetadata.ParseInstance(env, jGlobal));
+		using JArrayObject jArray2 = Assert.IsType<JArrayObject>(arrayTypeMetadata.ParseInstance(env, jGlobal), false);
 		JArrayObject<JLocalObject> jArray3 = (JArrayObject<JLocalObject>)(JArrayObject)jArray1;
 		using JArrayObject<TElement> jArray4 = jLocal.CastTo<JArrayObject<TElement>>();
 		using JArrayObject<TElement> jArray5 =

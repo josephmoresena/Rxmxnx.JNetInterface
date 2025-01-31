@@ -229,29 +229,28 @@ public partial class ExceptionHandlingTests
 
 		if (error.HasFlag(ExceptionOccurredError.NewGlobalRef))
 		{
-			Assert.IsAssignableFrom<CriticalException>(jniException);
+			Assert.IsType<CriticalException>(jniException, false);
+			return;
 		}
+
+		ThrowableException throwableException = Assert.IsType<ThrowableException>(jniException, false);
+		Assert.Same(throwableException, env.PendingException);
+		Assert.Equal(globalRef.Value, throwableException.ThrowableRef.Value);
+		Assert.Equal(Environment.CurrentManagedThreadId, throwableException.ThreadId);
+		if (!error.HasFlag(ExceptionOccurredError.GetThrowableMessageMethod) &&
+		    !error.HasFlag(ExceptionOccurredError.GetThrowableMessageString) &&
+		    !error.HasFlag(ExceptionOccurredError.ThrowableMessageLength) &&
+		    !error.HasFlag(ExceptionOccurredError.ThrowableMessageGetRegion))
+			Assert.Equal(message, throwableException.Message);
 		else
-		{
-			ThrowableException throwableException = Assert.IsAssignableFrom<ThrowableException>(jniException);
-			Assert.Same(throwableException, env.PendingException);
-			Assert.Equal(globalRef.Value, throwableException.ThrowableRef.Value);
-			Assert.Equal(Environment.CurrentManagedThreadId, throwableException.ThreadId);
-			if (!error.HasFlag(ExceptionOccurredError.GetThrowableMessageMethod) &&
-			    !error.HasFlag(ExceptionOccurredError.GetThrowableMessageString) &&
-			    !error.HasFlag(ExceptionOccurredError.ThrowableMessageLength) &&
-			    !error.HasFlag(ExceptionOccurredError.ThrowableMessageGetRegion))
-				Assert.Equal(message, throwableException.Message);
-			else
-				Assert.Equal(Enum.GetName(JResult.Error), throwableException.Message);
-			if (!error.HasFlag(ExceptionOccurredError.GetClassObject) &&
-			    !error.HasFlag(ExceptionOccurredError.GetClassNameMethod) &&
-			    !error.HasFlag(ExceptionOccurredError.GetClassNameString) &&
-			    !error.HasFlag(ExceptionOccurredError.ClassNameUtfLength) &&
-			    !error.HasFlag(ExceptionOccurredError.ClassNameUtfChars))
-				Assert.IsType<ThrowableException<JClassNotFoundExceptionObject>>(throwableException);
-			else
-				Assert.IsType<ThrowableException<JThrowableObject>>(throwableException);
-		}
+			Assert.Equal(Enum.GetName(JResult.Error), throwableException.Message);
+		if (!error.HasFlag(ExceptionOccurredError.GetClassObject) &&
+		    !error.HasFlag(ExceptionOccurredError.GetClassNameMethod) &&
+		    !error.HasFlag(ExceptionOccurredError.GetClassNameString) &&
+		    !error.HasFlag(ExceptionOccurredError.ClassNameUtfLength) &&
+		    !error.HasFlag(ExceptionOccurredError.ClassNameUtfChars))
+			Assert.IsType<ThrowableException<JClassNotFoundExceptionObject>>(throwableException);
+		else
+			Assert.IsType<ThrowableException<JThrowableObject>>(throwableException);
 	}
 }
