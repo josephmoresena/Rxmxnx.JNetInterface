@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class HelloDotnet {
-    public static final int COUNT = 15;
+    public static final int COUNT = 20;
 
     private String s_field;
     
@@ -114,6 +114,16 @@ public class HelloDotnet {
                 return (float)Math.PI; 
             case 14:
                 return (long)1000; 
+            case 15:
+                return 'X'; 
+            case 16:
+                return false; 
+            case 17:
+                return (short)1033; 
+            case 18:
+                return (byte)120; 
+            case 19:
+                return true; 
             default:
                 return null;
         }

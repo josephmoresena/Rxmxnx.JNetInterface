@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 /// Helper class to use function pointers in generic function calls.
 /// </summary>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
-                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+				 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal static class GenericFunctionCallHelper
 {
 	/// <summary>
@@ -39,13 +39,13 @@ internal static class GenericFunctionCallHelper
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JDouble:
-				Unsafe.As<Byte, JDouble>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JDouble>)funcPtr)(
+				Unsafe.As<Byte, Double>(ref refValue) =
+					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, Double>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JFloat:
-				Unsafe.As<Byte, JFloat>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JFloat>)funcPtr)(
+				Unsafe.As<Byte, Single>(ref refValue) =
+					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, Single>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JInt:
@@ -76,7 +76,7 @@ internal static class GenericFunctionCallHelper
 	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
-	                 Justification = CommonConstants.PrimitiveCallJustification)]
+					 Justification = CommonConstants.PrimitiveCallJustification)]
 	public static unsafe void CallNonVirtualMethod(void* funcPtr, JNativeType resultType, JEnvironmentRef envRef,
 		JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId, JValue* args, ref Byte refValue)
 	{
@@ -98,13 +98,13 @@ internal static class GenericFunctionCallHelper
 						funcPtr)(envRef, localRef, classRef, methodId, args);
 				break;
 			case JNativeType.JDouble:
-				Unsafe.As<Byte, JDouble>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, JDouble
+				Unsafe.As<Byte, Double>(ref refValue) =
+					((delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, Double
 						>)funcPtr)(envRef, localRef, classRef, methodId, args);
 				break;
 			case JNativeType.JFloat:
-				Unsafe.As<Byte, JFloat>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, JFloat>)
+				Unsafe.As<Byte, Single>(ref refValue) =
+					((delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, Single>)
 						funcPtr)(envRef, localRef, classRef, methodId, args);
 				break;
 			case JNativeType.JInt:
@@ -153,13 +153,13 @@ internal static class GenericFunctionCallHelper
 					((delegate* unmanaged<JEnvironmentRef, IntPtr, JFieldId, JChar>)funcPtr)(envRef, receiver, fieldId);
 				break;
 			case JNativeType.JDouble:
-				Unsafe.As<Byte, JDouble>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JFieldId, JDouble>)funcPtr)(
+				Unsafe.As<Byte, Double>(ref refValue) =
+					((delegate* unmanaged<JEnvironmentRef, IntPtr, JFieldId, Double>)funcPtr)(
 						envRef, receiver, fieldId);
 				break;
 			case JNativeType.JFloat:
-				Unsafe.As<Byte, JFloat>(ref refValue) =
-					((delegate* unmanaged<JEnvironmentRef, IntPtr, JFieldId, JFloat>)funcPtr)(
+				Unsafe.As<Byte, Single>(ref refValue) =
+					((delegate* unmanaged<JEnvironmentRef, IntPtr, JFieldId, Single>)funcPtr)(
 						envRef, receiver, fieldId);
 				break;
 			case JNativeType.JInt:
@@ -208,13 +208,13 @@ internal static class GenericFunctionCallHelper
 				break;
 			case JNativeType.JDouble:
 
-				((delegate* unmanaged<JEnvironmentRef, IntPtr, JFieldId, JDouble, void>)funcPtr)(
-					envRef, receiver, fieldId, Unsafe.As<Byte, JDouble>(ref refValue));
+				((delegate* unmanaged<JEnvironmentRef, IntPtr, JFieldId, Double, void>)funcPtr)(
+					envRef, receiver, fieldId, Unsafe.As<Byte, Double>(ref refValue));
 				break;
 			case JNativeType.JFloat:
 
-				((delegate* unmanaged<JEnvironmentRef, IntPtr, JFieldId, JFloat, void>)funcPtr)(
-					envRef, receiver, fieldId, Unsafe.As<Byte, JFloat>(ref refValue));
+				((delegate* unmanaged<JEnvironmentRef, IntPtr, JFieldId, Single, void>)funcPtr)(
+					envRef, receiver, fieldId, Unsafe.As<Byte, Single>(ref refValue));
 				break;
 			case JNativeType.JInt:
 
