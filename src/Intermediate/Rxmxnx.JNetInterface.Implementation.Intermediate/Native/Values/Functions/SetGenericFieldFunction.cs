@@ -23,18 +23,7 @@ internal readonly unsafe struct SetGenericFieldFunction<TReceiver, TField>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void Set(JEnvironmentRef envRef, TReceiver receiver, JFieldId fieldId, TField value)
 	{
-		if (GenericFunctionCallHelper.UseManagedGenericPointers)
-		{
-			((delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField, void>)this._ptr)(
-				envRef, receiver, fieldId, value);
-			return;
-		}
-#if !NET8_0
-			((delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TField, void>)this._ptr)(
-				envRef, receiver, fieldId, value);
-#else
 		GenericFunctionCallHelper.SetField(this._ptr, TField.Type, envRef, receiver.Value.Pointer, fieldId,
 		                                   ref Unsafe.As<TField, Byte>(ref value));
-#endif
 	}
 }
