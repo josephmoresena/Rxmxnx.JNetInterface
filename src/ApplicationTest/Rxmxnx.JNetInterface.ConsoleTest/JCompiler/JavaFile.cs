@@ -113,7 +113,7 @@ public class HelloDotnet {
             case 13:
                 return (float)Math.PI; 
             case 14:
-                return (long)1; 
+                return (long)1000; 
             default:
                 return null;
         }
