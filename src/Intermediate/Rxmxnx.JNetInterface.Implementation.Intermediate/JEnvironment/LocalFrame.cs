@@ -92,6 +92,7 @@ partial class JEnvironment
 			base.Remove(localRef);
 		}
 		/// <inheritdoc/>
+		[ExcludeFromCodeCoverage]
 		public override Boolean IsFromLocalFrame(JObjectLocalRef localRef)
 			=> this.Contains(localRef) || base.IsFromLocalFrame(localRef);
 

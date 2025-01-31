@@ -3,7 +3,6 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 /// <summary>
 /// Helper class to use function pointers in generic function calls.
 /// </summary>
-[ExcludeFromCodeCoverage]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 internal static class GenericFunctionCallHelper
@@ -50,7 +49,7 @@ internal static class GenericFunctionCallHelper
 						envRef, receiver, methodId, args);
 				break;
 			case JNativeType.JInt:
-				Unsafe.As<Byte, JFloat>(ref refValue) =
+				Unsafe.As<Byte, JInt>(ref refValue) =
 					((delegate* unmanaged<JEnvironmentRef, IntPtr, JMethodId, JValue*, JInt>)funcPtr)(
 						envRef, receiver, methodId, args);
 				break;

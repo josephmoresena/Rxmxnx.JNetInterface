@@ -70,6 +70,7 @@ internal class ClassCache(JReferenceType type)
 	/// </summary>
 	/// <param name="hash">A class hash.</param>
 	/// <param name="classRef">Unloaded <see cref="JClassLocalRef"/> reference.</param>
+	[ExcludeFromCodeCoverage]
 	protected virtual void SetAsUnloaded(String hash, JClassLocalRef classRef) { }
 
 	/// <summary>
