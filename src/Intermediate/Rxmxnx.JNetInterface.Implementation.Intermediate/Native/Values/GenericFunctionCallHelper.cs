@@ -75,6 +75,8 @@ internal static class GenericFunctionCallHelper
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
+	                 Justification = CommonConstants.PrimitiveCallJustification)]
 	public static unsafe void CallNonVirtualMethod(void* funcPtr, JNativeType resultType, JEnvironmentRef envRef,
 		JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId, JValue* args, ref Byte refValue)
 	{
