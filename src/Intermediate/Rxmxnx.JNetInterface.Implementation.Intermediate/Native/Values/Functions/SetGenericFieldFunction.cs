@@ -33,8 +33,8 @@ internal readonly unsafe struct SetGenericFieldFunction<TReceiver, TField>
 			((delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TField, void>)this._ptr)(
 				envRef, receiver, fieldId, value);
 #else
-		NonGenericFunctionHelper.SetField(this._ptr, envRef, receiver.Value.Pointer, fieldId, sizeof(TField),
-		                                  Unsafe.AsPointer(ref value));
+		NonGenericFunctionHelper.SetField(this._ptr, TField.Type, envRef, receiver.Value.Pointer, fieldId,
+		                                  ref Unsafe.As<TField, Byte>(ref value));
 #endif
 	}
 }

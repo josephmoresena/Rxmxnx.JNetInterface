@@ -30,10 +30,10 @@ internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField>
 			return ((delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TField>)this._ptr)(
 				envRef, receiver, fieldId);
 #else
-		TField field = default;
-		NonGenericFunctionHelper.GetField(this._ptr, envRef, receiver.Value.Pointer, fieldId, sizeof(TField),
-		                                  Unsafe.AsPointer(ref field));
-		return field;
+		TField result = default;
+		NonGenericFunctionHelper.GetField(this._ptr, TField.Type, envRef, receiver.Value.Pointer, fieldId,
+		                                  ref Unsafe.As<TField, Byte>(ref result));
+		return result;
 #endif
 	}
 }

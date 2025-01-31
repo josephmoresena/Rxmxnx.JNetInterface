@@ -37,8 +37,8 @@ internal readonly unsafe struct CallGenericFunction<TReceiver, TResult>
 				envRef, receiver, methodId, args);
 #else
 		TResult result = default;
-		NonGenericFunctionHelper.CallMethod(this._ptr, envRef, receiver.Value.Pointer, methodId, args, sizeof(TResult),
-		                                    Unsafe.AsPointer(ref result));
+		NonGenericFunctionHelper.CallMethod(this._ptr, TResult.Type, envRef, receiver.Value.Pointer, methodId, args,
+		                                    ref Unsafe.As<TResult, Byte>(ref result));
 		return result;
 #endif
 	}
