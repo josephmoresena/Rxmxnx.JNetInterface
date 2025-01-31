@@ -23,7 +23,7 @@ internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TField Get(JEnvironmentRef envRef, TReceiver receiver, JFieldId fieldId)
 	{
-		if (MethodOffset.UseManagedGenericPointers)
+		if (GenericFunctionCallHelper.UseManagedGenericPointers)
 			return ((delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField>)this._ptr)(
 				envRef, receiver, fieldId);
 #if !NET8_0
@@ -31,8 +31,8 @@ internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField>
 				envRef, receiver, fieldId);
 #else
 		TField result = default;
-		NonGenericFunctionHelper.GetField(this._ptr, TField.Type, envRef, receiver.Value.Pointer, fieldId,
-		                                  ref Unsafe.As<TField, Byte>(ref result));
+		GenericFunctionCallHelper.GetField(this._ptr, TField.Type, envRef, receiver.Value.Pointer, fieldId,
+		                                   ref Unsafe.As<TField, Byte>(ref result));
 		return result;
 #endif
 	}

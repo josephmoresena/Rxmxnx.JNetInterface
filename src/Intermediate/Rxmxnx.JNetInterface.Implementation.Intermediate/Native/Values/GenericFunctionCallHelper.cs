@@ -1,11 +1,17 @@
 namespace Rxmxnx.JNetInterface.Native.Values;
 
 /// <summary>
-/// Helper class to use non-generic function pointers.
+/// Helper class to use function pointers in generic function calls.
 /// </summary>
 [ExcludeFromCodeCoverage]
-internal static class NonGenericFunctionHelper
+internal static class GenericFunctionCallHelper
 {
+	/// <summary>
+	/// Indicates whether generic JNI calls should be done with managed function pointers.
+	/// </summary>
+	public static readonly Boolean UseManagedGenericPointers =
+		RuntimeInformation.ProcessArchitecture is Architecture.Arm;
+
 	/// <summary>
 	/// Calls Call&lt;type&gt;Method<c>A</c> function.
 	/// </summary>

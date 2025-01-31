@@ -28,7 +28,7 @@ internal readonly unsafe struct CallNonVirtualGenericFunction<TResult> where TRe
 	public TResult Call(JEnvironmentRef envRef, JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
 		JValue* args)
 	{
-		if (MethodOffset.UseManagedGenericPointers)
+		if (GenericFunctionCallHelper.UseManagedGenericPointers)
 			return ((delegate* managed<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, TResult>)
 				this._ptr)(envRef, localRef, classRef, methodId, args);
 #if !NET8_0
@@ -36,8 +36,8 @@ internal readonly unsafe struct CallNonVirtualGenericFunction<TResult> where TRe
 				this._ptr)(envRef, localRef, classRef, methodId, args);
 #else
 		TResult result = default;
-		NonGenericFunctionHelper.CallNonVirtualMethod(this._ptr, TResult.Type, envRef, localRef, classRef, methodId,
-		                                              args, ref Unsafe.As<TResult, Byte>(ref result));
+		GenericFunctionCallHelper.CallNonVirtualMethod(this._ptr, TResult.Type, envRef, localRef, classRef, methodId,
+		                                               args, ref Unsafe.As<TResult, Byte>(ref result));
 		return result;
 #endif
 	}
