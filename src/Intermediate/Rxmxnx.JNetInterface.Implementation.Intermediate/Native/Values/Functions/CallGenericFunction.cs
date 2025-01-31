@@ -32,21 +32,14 @@ internal readonly unsafe struct CallGenericFunction<TReceiver, TResult>
 		if (MethodOffset.UseManagedGenericPointers)
 			return ((delegate* managed<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult>)this._ptr)(
 				envRef, receiver, methodId, args);
-		try
-		{
+#if !NET8_0
 			return ((delegate* unmanaged<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult>)this._ptr)(
 				envRef, receiver, methodId, args);
-		}
-		catch (Exception)
-		{
-#if !NET8_0
-			throw;
 #else
-			TResult result = default;
-			NonGenericFunctionHelper.CallMethod(this._ptr, envRef, receiver.Value.Pointer, methodId, args,
-			                                    sizeof(TResult), Unsafe.AsPointer(ref result));
-			return result;
+		TResult result = default;
+		NonGenericFunctionHelper.CallMethod(this._ptr, envRef, receiver.Value.Pointer, methodId, args, sizeof(TResult),
+		                                    Unsafe.AsPointer(ref result));
+		return result;
 #endif
-		}
 	}
 }

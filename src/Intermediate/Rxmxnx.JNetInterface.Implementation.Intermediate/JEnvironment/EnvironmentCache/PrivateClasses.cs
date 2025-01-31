@@ -212,7 +212,6 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private unsafe JClassObject GetOrFindClass(ITypeInformation typeInformation)
 		{
-			Boolean isInteger = typeInformation.Hash == ClassNameHelper.IntegerObjectHash;
 			if (this._classes.TryGetValue(typeInformation.Hash, out JClassObject? result))
 			{
 				JTrace.ClassFound(result);

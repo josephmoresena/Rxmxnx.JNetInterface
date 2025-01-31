@@ -26,21 +26,14 @@ internal readonly unsafe struct GetGenericFieldFunction<TReceiver, TField>
 		if (MethodOffset.UseManagedGenericPointers)
 			return ((delegate* managed<JEnvironmentRef, TReceiver, JFieldId, TField>)this._ptr)(
 				envRef, receiver, fieldId);
-		try
-		{
+#if !NET8_0
 			return ((delegate* unmanaged<JEnvironmentRef, TReceiver, JFieldId, TField>)this._ptr)(
 				envRef, receiver, fieldId);
-		}
-		catch (Exception)
-		{
-#if !NET8_0
-			throw;
 #else
-			TField field = default;
-			NonGenericFunctionHelper.GetField(this._ptr, envRef, receiver.Value.Pointer, fieldId, sizeof(TField),
-			                                  Unsafe.AsPointer(ref field));
-			return field;
+		TField field = default;
+		NonGenericFunctionHelper.GetField(this._ptr, envRef, receiver.Value.Pointer, fieldId, sizeof(TField),
+		                                  Unsafe.AsPointer(ref field));
+		return field;
 #endif
-		}
 	}
 }
