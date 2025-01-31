@@ -123,7 +123,8 @@ the primitive class must be loaded at that time), the following feature switches
 * The `java.lang.Void` class is a non-main class by default. Thus, while it is loaded when the JVM is instantiated, a
   permanent global reference is not created unless the `JNetInterface.EnableVoidObjectMainClass` feature switch is used.
 * The classes of primitive arrays are used for creating primitive arrays using `JNetInterface`.
-* If any wrapper class that is a subclass of `java.lang.Number` is set as a main class, `java.lang.Number` is also set as a main class.
+* If any wrapper class that is a subclass of `java.lang.Number` is set as a main class, `java.lang.Number` is also set
+  as a main class.
 
 ## Optional features classes
 
