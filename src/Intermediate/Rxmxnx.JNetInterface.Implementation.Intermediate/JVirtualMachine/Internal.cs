@@ -178,7 +178,17 @@ public partial class JVirtualMachine
 	internal void UnregisterNatives(String classHash) => this._cache.NativesCache.Clear(classHash);
 	/// <inheritdoc cref="GlobalMainClasses.IsMainGlobal(String, JGlobal)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	internal Boolean IsMainGlobal(String classHash, JGlobal jGlobal) => this._cache.IsMainGlobal(classHash, jGlobal);
+	internal Boolean IsMainGlobal(String classHash, JGlobal? jGlobal)
+		=> jGlobal is not null && this._cache.IsMainGlobal(classHash, jGlobal);
+	/// <summary>
+	/// Reloads global access for <paramref name="classHash"/>.
+	/// </summary>
+	/// <param name="classHash">Class hash.</param>
+	public void ReloadAccess(String classHash)
+	{
+		if (!this._cache.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal) || jGlobal.IsDefault) return;
+		this._cache.GlobalClassCache.Load(jGlobal.As<JClassLocalRef>());
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="IInvokedVirtualMachine"/> instance referenced by <paramref name="reference"/>.

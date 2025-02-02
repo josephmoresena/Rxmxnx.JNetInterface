@@ -93,29 +93,32 @@ partial class JEnvironment
 		private JClassLocalRef ReloadClass(JClassObject? jClass)
 		{
 			if (jClass is null) return default;
+			Boolean isMainClass = JVirtualMachine.IsMainClass(jClass.Hash);
+			JGlobal? jGlobal = isMainClass ? this.VirtualMachine.LoadGlobal(jClass) : default;
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			if (classRef.IsDefault)
+			Boolean findClass = classRef.IsDefault;
+
+			if (jGlobal is not null)
+			{
+				if (jGlobal.IsDefault)
+				{
+					if (findClass) classRef = this.FindClass(jClass);
+					ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
+					jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, findClass));
+					this.VirtualMachine.ReloadAccess(jClass.Hash);
+				}
+				// Always use the global reference if it is a main class.
+				classRef = jGlobal.As<JClassLocalRef>();
+			}
+			else if (findClass)
 			{
 				classRef = this.FindClass(jClass);
-				if (!JVirtualMachine.IsMainClass(jClass.Hash))
-					jClass.SetValue(classRef);
-				else
-					classRef = this.ReloadMainClass(jClass, classRef, true);
+				jClass.SetValue(classRef);
+				// Registers class in the current local frame.
 				this.Register(jClass);
 			}
-			else if (JVirtualMachine.IsMainClass(jClass.Hash))
-			{
-				classRef = this.ReloadMainClass(jClass, classRef, false);
-			}
+
 			return classRef;
-		}
-		private JClassLocalRef ReloadMainClass(JClassObject jClass, JClassLocalRef classRef, Boolean deleteLocalRef)
-		{
-			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
-			if (!jGlobal.IsDefault) return classRef;
-			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
-			jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
-			return jGlobal.As<JClassLocalRef>();
 		}
 		/// <summary>
 		/// Retrieves the current <paramref name="classRef"/> instance as <see cref="JClassObject"/>.
@@ -384,10 +387,15 @@ partial class JEnvironment
 			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
 			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
 			if (jGlobal.IsDefault)
+			{
 				// Only loads global-reference if is default.
 				jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
+				this.VirtualMachine.ReloadAccess(jClass.Hash);
+			}
 			else if (deleteLocalRef)
+			{
 				this._env.DeleteLocalRef(classRef.Value);
+			}
 			if (deleteLocalRef) jClass.ClearValue();
 		}
 		/// <summary>

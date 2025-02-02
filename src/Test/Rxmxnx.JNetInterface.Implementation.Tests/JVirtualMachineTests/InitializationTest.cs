@@ -168,7 +168,6 @@ public partial class JVirtualMachineTests
 			Assert.Equal(mainGlobalRef[MainClass.Throwable].Value, env.ClassFeature.ThrowableObject.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.StackTraceElement].Value,
 			             env.ClassFeature.StackTraceElementObject.Reference.Value);
-			Assert.Equal(mainGlobalRef[MainClass.NumberObject].Value, env.ClassFeature.NumberObject.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.VoidPrimitive].Value, env.ClassFeature.VoidPrimitive.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.BooleanPrimitive].Value,
 			             env.ClassFeature.BooleanPrimitive.Reference.Value);
@@ -182,6 +181,7 @@ public partial class JVirtualMachineTests
 			Assert.Equal(mainGlobalRef[MainClass.LongPrimitive].Value, env.ClassFeature.LongPrimitive.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.ShortPrimitive].Value,
 			             env.ClassFeature.ShortPrimitive.Reference.Value);
+			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.NumberObject));
 			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.VoidObject));
 			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.BooleanObject));
 			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.ByteObject));
