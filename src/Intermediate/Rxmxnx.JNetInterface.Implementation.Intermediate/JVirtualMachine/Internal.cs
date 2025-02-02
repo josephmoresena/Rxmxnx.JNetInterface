@@ -66,8 +66,6 @@ public partial class JVirtualMachine
 			this._cache.GlobalClassCache[jClass.Hash] = jGlobal;
 		}
 		lifetime.SetGlobal(jGlobal);
-		if (JVirtualMachine.userMainClasses.ContainsKey(jClass.Hash))
-			this._cache.SetMainGlobal(jClass.Hash, jGlobal); // Load main global class.
 		JTrace.LoadGlobalClass(jClass, found, jGlobal.Reference);
 		return jGlobal;
 	}
@@ -180,10 +178,7 @@ public partial class JVirtualMachine
 	internal void UnregisterNatives(String classHash) => this._cache.NativesCache.Clear(classHash);
 	/// <inheritdoc cref="GlobalMainClasses.IsMainGlobal(String, JGlobal)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Boolean IsMainGlobal(String classHash, JGlobal jGlobal) => this._cache.IsMainGlobal(classHash, jGlobal);
-	/// <inheritdoc cref="GlobalMainClasses.SetMainGlobal(String, JGlobal)"/>
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void SetMainGlobal(String classHash, JGlobal jGlobal) => this._cache.SetMainGlobal(classHash, jGlobal);
+	internal Boolean IsMainGlobal(String classHash, JGlobal jGlobal) => this._cache.IsMainGlobal(classHash, jGlobal);
 
 	/// <summary>
 	/// Retrieves the <see cref="IInvokedVirtualMachine"/> instance referenced by <paramref name="reference"/>.

@@ -269,6 +269,7 @@ public sealed partial class JVirtualMachineTests
 		mainGlobalRef.Add(MainClass.Class, proxyEnv.VirtualMachine.ClassGlobalRef);
 		mainGlobalRef.Add(MainClass.Throwable, proxyEnv.VirtualMachine.ThrowableGlobalRef);
 		mainGlobalRef.Add(MainClass.StackTraceElement, proxyEnv.VirtualMachine.StackTraceElementGlobalRef);
+		mainGlobalRef.Add(MainClass.NumberObject, proxyEnv.VirtualMachine.NumberGlobalRef);
 		mainGlobalRef.Add(MainClass.VoidObject, proxyEnv.VirtualMachine.VoidGlobalRef);
 		mainGlobalRef.Add(MainClass.BooleanObject, proxyEnv.VirtualMachine.BooleanGlobalRef);
 		mainGlobalRef.Add(MainClass.ByteObject, proxyEnv.VirtualMachine.ByteGlobalRef);
@@ -295,6 +296,7 @@ public sealed partial class JVirtualMachineTests
 		mainClassRef.Add(MainClass.Class, proxyEnv.ClassLocalRef);
 		mainClassRef.Add(MainClass.Throwable, proxyEnv.ThrowableLocalRef);
 		mainClassRef.Add(MainClass.StackTraceElement, proxyEnv.StackTraceObjectLocalRef);
+		mainClassRef.Add(MainClass.NumberObject, proxyEnv.NumberObjectLocalRef);
 
 		mainClassRef.Add(MainClass.VoidObject, proxyEnv.VoidObjectLocalRef);
 		mainClassRef.Add(MainClass.BooleanObject, proxyEnv.BooleanObjectLocalRef);
@@ -338,6 +340,7 @@ public sealed partial class JVirtualMachineTests
 			{ MainClass.Class, IDataType.GetMetadata<JClassObject>() },
 			{ MainClass.Throwable, IDataType.GetMetadata<JThrowableObject>() },
 			{ MainClass.StackTraceElement, IDataType.GetMetadata<JStackTraceElementObject>() },
+			{ MainClass.NumberObject, IDataType.GetMetadata<JNumberObject>() },
 			{ MainClass.VoidObject, IDataType.GetMetadata<JVoidObject>() },
 			{ MainClass.BooleanObject, IDataType.GetMetadata<JBooleanObject>() },
 			{ MainClass.ByteObject, IDataType.GetMetadata<JByteObject>() },

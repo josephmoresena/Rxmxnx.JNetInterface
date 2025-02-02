@@ -27,5 +27,6 @@ public partial class JVirtualMachineTests
 		LongPrimitive = 0x40000,
 		ShortObject = 0x80000,
 		ShortPrimitive = 0x100000,
+		NumberObject = 0x200000,
 	}
 }

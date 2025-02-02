@@ -123,9 +123,8 @@ public partial class JVirtualMachineTests
 			proxyEnv.FindClass(Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(c =>
 			{
 				IntPtr ptr = (ReadOnlyValPtr<Byte>)c[0];
-				foreach (MainClass mClass in mainClassRef.Keys.Where(
-					         mClass => mainPointer[mClass].Pointer == ptr &&
-						         (error != ClassLoadingError.FindClass || mClass != mainClass)))
+				MainClass mClass = mainClassRef.Keys.First(mClass => mainPointer[mClass].Pointer == ptr);
+				if (error != ClassLoadingError.FindClass || mClass != mainClass)
 					return mainClassRef[mClass];
 				return default;
 			});
@@ -135,10 +134,9 @@ public partial class JVirtualMachineTests
 				JClassLocalRef classRef = (JClassLocalRef)c[0];
 				IntPtr ptr = (ReadOnlyValPtr<Byte>)c[1];
 				if (ptr != typePtr.Pointer) return default;
-				foreach (MainClass mClass in mainTypeField.Keys.Where(
-					         mClass => (mainClassRef[mClass] == classRef ||
-							         mainGlobalRef[mClass].Value == classRef.Value) &&
-						         (error != ClassLoadingError.TypeIdError || mClass != mainClass)))
+				MainClass mClass = mainClassRef.Keys.First(mClass => mainClassRef[mClass] == classRef ||
+					                                           mainGlobalRef[mClass].Value == classRef.Value);
+				if (error != ClassLoadingError.TypeIdError || mClass != mainClass)
 					return mainTypeField[mClass];
 				return default;
 			});
@@ -146,20 +144,19 @@ public partial class JVirtualMachineTests
 			{
 				JClassLocalRef classRef = (JClassLocalRef)c[0];
 				JFieldId fieldId = (JFieldId)c[1];
-				foreach (MainClass mClass in mainClassRef.Keys.Where(
-					         mClass => JVirtualMachineTests.mainWrapper.TryGetValue(mClass, out MainClass wClass) &&
-						         (mainClassRef[wClass] == classRef || mainGlobalRef[wClass].Value == classRef.Value) &&
-						         mainTypeField[wClass] == fieldId &&
-						         (error != ClassLoadingError.FindClass || mClass != mainClass)))
+				MainClass mClass = mainClassRef.Keys.First(
+					mClass => JVirtualMachineTests.mainWrapper.TryGetValue(mClass, out MainClass wClass) &&
+						(mainClassRef[wClass] == classRef || mainGlobalRef[wClass].Value == classRef.Value) &&
+						mainTypeField[wClass] == fieldId);
+				if (error != ClassLoadingError.FindClass || mClass != mainClass)
 					return mainClassRef[mClass].Value;
 				return default;
 			});
 			proxyEnv.NewGlobalRef(Arg.Any<JObjectLocalRef>()).Returns(c =>
 			{
 				JObjectLocalRef localRef = (JObjectLocalRef)c[0];
-				foreach (MainClass mClass in mainClassRef.Keys.Where(
-					         mClass => mainClassRef[mClass].Value == localRef &&
-						         (error != ClassLoadingError.CreateGlobal || mClass != mainClass)))
+				MainClass mClass = mainClassRef.Keys.First(mClass => mainClassRef[mClass].Value == localRef);
+				if (error != ClassLoadingError.CreateGlobal || mClass != mainClass)
 					return mainGlobalRef[mClass];
 				return default;
 			});
@@ -171,6 +168,7 @@ public partial class JVirtualMachineTests
 			Assert.Equal(mainGlobalRef[MainClass.Throwable].Value, env.ClassFeature.ThrowableObject.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.StackTraceElement].Value,
 			             env.ClassFeature.StackTraceElementObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.NumberObject].Value, env.ClassFeature.NumberObject.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.VoidPrimitive].Value, env.ClassFeature.VoidPrimitive.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.BooleanPrimitive].Value,
 			             env.ClassFeature.BooleanPrimitive.Reference.Value);

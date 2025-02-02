@@ -24,8 +24,6 @@ public partial class JVirtualMachine
 		/// <param name="vm">A <see cref="JVirtualMachine"/> instance.</param>
 		protected GlobalMainClasses(IVirtualMachine vm)
 		{
-			this._mainClasses = GlobalMainClasses.CreateMainClassesDictionary(vm, this.GlobalClassCache);
-
 			this._classMetadata = ClassObjectMetadata.Create<JClassObject>();
 			this._throwableMetadata = ClassObjectMetadata.Create<JThrowableObject>();
 			this._stackTraceElementMetadata = ClassObjectMetadata.Create<JStackTraceElementObject>();
@@ -63,21 +61,8 @@ public partial class JVirtualMachine
 		/// <see langword="false"/>.
 		/// </returns>
 		public Boolean IsMainGlobal(String classHash, JGlobal jGlobal)
-			=> this._mainClasses.ContainsKey(classHash) &&
+			=> JVirtualMachine.userMainClasses.ContainsKey(classHash) &&
 				Object.ReferenceEquals(jGlobal, this.GlobalClassCache[classHash]);
-		/// <summary>
-		/// Sets the class <paramref name="jGlobal"/> as a main global class.
-		/// </summary>
-		/// <param name="classHash">Class hash.</param>
-		/// <param name="jGlobal">A <see cref="JGlobal"/> instance.</param>
-		public void SetMainGlobal(String classHash, JGlobal jGlobal)
-		{
-			this._mainClasses.TryAdd(classHash, true);
-			if (!this.GlobalClassCache.ContainsHash(classHash))
-				this.GlobalClassCache[classHash] = jGlobal;
-			if (GlobalMainClasses.IsBuiltInNumberType(classHash))
-				this._mainClasses.TryAdd(classHash, true);
-		}
 		/// <summary>
 		/// Loads global classes.
 		/// </summary>

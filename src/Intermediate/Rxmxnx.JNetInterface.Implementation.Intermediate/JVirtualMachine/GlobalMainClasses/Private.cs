@@ -38,10 +38,6 @@ public partial class JVirtualMachine
 		/// </summary>
 		private readonly ClassObjectMetadata _longMetadata;
 		/// <summary>
-		/// Main classes dictionary.
-		/// </summary>
-		private readonly ConcurrentDictionary<String, Boolean> _mainClasses;
-		/// <summary>
 		/// Metadata for <see cref="JShort"/>.
 		/// </summary>
 		private readonly ClassObjectMetadata _shortMetadata;
@@ -67,7 +63,6 @@ public partial class JVirtualMachine
 				mainClass = new(vm, classMetadata, default);
 				this.GlobalClassCache[hash] = mainClass;
 			}
-			this._mainClasses.TryAdd(hash, true);
 			this.GlobalClassCache[classMetadata.Hash] = mainClass;
 		}
 		/// <summary>
@@ -135,12 +130,10 @@ public partial class JVirtualMachine
 		{
 			ConcurrentDictionary<String, Boolean> result = new();
 			foreach (String hash in JVirtualMachine.userMainClasses.Keys)
-			{
-				if (!globalClassCache.TryGetValue(hash, out JGlobal? mainClass))
-					mainClass = new(vm, JVirtualMachine.userMainClasses[hash], default);
-				globalClassCache[hash] = mainClass;
+				// if (!globalClassCache.TryGetValue(hash, out JGlobal? mainClass))
+				// 	mainClass = new(vm, JVirtualMachine.userMainClasses[hash], default);
+				// globalClassCache[hash] = mainClass;
 				result.TryAdd(hash, true);
-			}
 			return result;
 		}
 		/// <summary>
@@ -158,7 +151,7 @@ public partial class JVirtualMachine
 					ClassNameHelper.CharacterObjectHash or ClassNameHelper.NumberHash or ClassNameHelper.EnumHash or
 					ClassNameHelper.BufferHash or ClassNameHelper.MemberHash or ClassNameHelper.ExecutableHash or
 					ClassNameHelper.MethodHash or ClassNameHelper.FieldHash => true,
-				_ => !GlobalMainClasses.IsBuiltInNumberType(typeInformation.Hash),
+				_ => GlobalMainClasses.IsBuiltInNumberType(typeInformation.Hash),
 				// If class is not built-in, VM initialization may should continue.
 			};
 	}

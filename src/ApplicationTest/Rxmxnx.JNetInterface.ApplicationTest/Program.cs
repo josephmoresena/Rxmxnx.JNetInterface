@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.Lang;
@@ -12,6 +13,8 @@ public static class Program
 {
 	public static async Task Main(String[] args)
 	{
+		using ConsoleTraceListener trace = new();
+		Trace.Listeners.Add(trace);
 		if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintMetadataInfo();
 		Boolean reflectionDisabled = !$"{typeof(Program)}".Contains(nameof(Program));
 
@@ -42,7 +45,7 @@ public static class Program
 	private static JCompiler? GetCompiler()
 	{
 		JCompiler[] compilers = JCompiler.GetCompilers();
-		JCompiler? selected = compilers.LastOrDefault();
+		JCompiler? selected = compilers.FirstOrDefault();
 		foreach (JCompiler compiler in compilers)
 			Console.WriteLine($"{compiler.JdkPath} {(compiler == selected ? '*' : ' ')}");
 		return selected;

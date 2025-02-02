@@ -76,8 +76,6 @@ public partial class JVirtualMachine
 	{
 		JGlobal globalClass = new(this, classMetadata, default);
 		this._cache.GlobalClassCache[classMetadata.Hash] = globalClass;
-		if (JVirtualMachine.userMainClasses.ContainsKey(classMetadata.Hash))
-			this._cache.SetMainGlobal(classMetadata.Hash, globalClass);
 	}
 
 	/// <summary>

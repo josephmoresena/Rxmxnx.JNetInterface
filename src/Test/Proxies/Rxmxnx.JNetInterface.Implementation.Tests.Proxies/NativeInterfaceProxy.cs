@@ -18,6 +18,7 @@ public abstract class NativeInterfaceProxy
 	public JClassLocalRef ClassLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef ThrowableLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef StackTraceObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
+	public JClassLocalRef NumberObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef VoidObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef BooleanObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
 	public JClassLocalRef ByteObjectLocalRef { get; } = ReferenceHelper.Fixture.Create<JClassLocalRef>();
@@ -54,6 +55,8 @@ public abstract class NativeInterfaceProxy
 			return this.ThrowableLocalRef;
 		if (ReferenceHelper.IsClassName<JStackTraceElementObject>(className))
 			return this.StackTraceObjectLocalRef;
+		if (ReferenceHelper.IsClassName<JNumberObject>(className))
+			return this.NumberObjectLocalRef;
 		if (ReferenceHelper.IsClassName<JVoidObject>(className))
 			return this.VoidObjectLocalRef;
 		if (ReferenceHelper.IsClassName<JBooleanObject>(className))
@@ -85,6 +88,8 @@ public abstract class NativeInterfaceProxy
 		if (classRef == this.StackTraceObjectLocalRef)
 			return this.VirtualMachine.StackTraceElementGlobalRef;
 
+		if (classRef == this.NumberObjectLocalRef)
+			return this.VirtualMachine.NumberGlobalRef;
 		if (classRef == this.VoidObjectLocalRef)
 			return this.VirtualMachine.VoidGlobalRef;
 		if (classRef == this.BooleanObjectLocalRef)

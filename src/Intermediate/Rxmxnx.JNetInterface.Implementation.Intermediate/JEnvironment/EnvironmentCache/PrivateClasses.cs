@@ -115,7 +115,6 @@ partial class JEnvironment
 			if (!jGlobal.IsDefault) return classRef;
 			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
 			jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
-			this.VirtualMachine.SetMainGlobal(classMetadata.Hash, jGlobal);
 			return jGlobal.As<JClassLocalRef>();
 		}
 		/// <summary>
@@ -384,9 +383,8 @@ partial class JEnvironment
 		{
 			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
 			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
-			this.VirtualMachine.SetMainGlobal(jClass.Hash, jGlobal);
 			if (jGlobal.IsDefault)
-				// Only loads global-reference if default.
+				// Only loads global-reference if is default.
 				jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
 			else if (deleteLocalRef)
 				this._env.DeleteLocalRef(classRef.Value);

@@ -449,6 +449,8 @@ internal unsafe partial class ReferenceHelper
 				return proxy.ThrowableLocalRef.Value;
 			if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
 				return proxy.StackTraceObjectLocalRef.Value;
+			if (proxy.VirtualMachine.NumberGlobalRef.Value == localRef)
+				return proxy.NumberObjectLocalRef.Value;
 
 			if (proxy.VirtualMachine.VoidGlobalRef.Value == localRef)
 				return proxy.VoidObjectLocalRef.Value;
@@ -1140,6 +1142,8 @@ internal unsafe partial class ReferenceHelper
 			if (proxy.VirtualMachine.ThrowableGlobalRef.Value == localRef)
 				return JReferenceType.GlobalRefType;
 			if (proxy.VirtualMachine.StackTraceElementGlobalRef.Value == localRef)
+				return JReferenceType.GlobalRefType;
+			if (proxy.VirtualMachine.NumberGlobalRef.Value == localRef)
 				return JReferenceType.GlobalRefType;
 
 			if (proxy.VirtualMachine.VoidGlobalRef.Value == localRef)
