@@ -7,7 +7,7 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// User main classes' dictionary.
 	/// </summary>
-	private static readonly ConcurrentDictionary<String, ClassObjectMetadata> userMainClasses =
+	private static readonly ConcurrentDictionary<String, JDataTypeMetadata> userMainClasses =
 		MainClasses.CreateMainClassesDictionary();
 
 	/// <summary>

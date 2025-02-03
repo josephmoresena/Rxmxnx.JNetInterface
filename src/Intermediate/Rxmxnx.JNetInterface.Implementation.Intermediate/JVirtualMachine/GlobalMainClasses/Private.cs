@@ -116,24 +116,5 @@ public partial class JVirtualMachine
 			this.GlobalClassCache.TryGetValue(wrapperClassHash, out JGlobal? wGlobalClass);
 			pGlobalClass.SetValue(env.GetPrimitiveMainClassGlobalRef(classMetadata, wGlobalClass));
 		}
-
-		/// <summary>
-		/// Indicates whether VM initialization can continue if the class for <paramref name="typeInformation"/> does not exist.
-		/// </summary>
-		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
-		/// <returns>
-		/// <see langword="true"/> if the class for <paramref name="typeInformation"/> is not mandatory for initialization;
-		/// otherwise, <see langword="false"/>.
-		/// </returns>
-		private static Boolean CanProceedWithout(ITypeInformation typeInformation)
-			=> typeInformation.Hash switch
-			{
-				ClassNameHelper.VoidObjectHash or ClassNameHelper.BooleanObjectHash or
-					ClassNameHelper.CharacterObjectHash or ClassNameHelper.NumberHash or ClassNameHelper.EnumHash or
-					ClassNameHelper.BufferHash or ClassNameHelper.MemberHash or ClassNameHelper.ExecutableHash or
-					ClassNameHelper.MethodHash or ClassNameHelper.FieldHash => true,
-				_ => GlobalMainClasses.IsBuiltInNumberType(typeInformation.Hash),
-				// If the class is not basic, VM initialization should continue.
-			};
 	}
 }

@@ -184,7 +184,8 @@ public partial class JVirtualMachine
 	/// Reloads global access for <paramref name="classHash"/>.
 	/// </summary>
 	/// <param name="classHash">Class hash.</param>
-	public void ReloadAccess(String classHash)
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal void ReloadAccess(String classHash)
 	{
 		if (!this._cache.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal) || jGlobal.IsDefault) return;
 		this._cache.GlobalClassCache.Load(jGlobal.As<JClassLocalRef>());
@@ -239,10 +240,4 @@ public partial class JVirtualMachine
 	/// <see langword="false"/>.
 	/// </returns>
 	internal static Boolean IsMainClass(String hash) => JVirtualMachine.userMainClasses.ContainsKey(hash);
-	/// <summary>
-	/// Sets the class for <paramref name="metadata"/> as a main class.
-	/// </summary>
-	/// <param name="metadata">A <see cref="ClassObjectMetadata"/> instance.</param>
-	internal static void SetMainClass(ClassObjectMetadata metadata)
-		=> JVirtualMachine.userMainClasses.TryAdd(metadata.Hash, metadata);
 }

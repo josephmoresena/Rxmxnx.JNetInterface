@@ -127,13 +127,10 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// Sets <typeparamref name="TReference"/> as main class.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	[ExcludeFromCodeCoverage]
 	public static void SetMainClass<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		String hash = MetadataHelper.GetExactMetadata<TReference>().Hash;
-		if (!JVirtualMachine.userMainClasses.ContainsKey(hash))
-			JVirtualMachine.userMainClasses.TryAdd(hash, ClassObjectMetadata.Create<TReference>());
-		if (GlobalMainClasses.IsBuiltInNumberType(hash) &&
-		    !JVirtualMachine.userMainClasses.ContainsKey(ClassNameHelper.NumberHash))
-			JVirtualMachine.userMainClasses.TryAdd(hash, ClassObjectMetadata.Create<JNumberObject>());
+		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TReference>();
+		MainClasses.AppendMainClass(JVirtualMachine.userMainClasses, typeMetadata);
 	}
 }
