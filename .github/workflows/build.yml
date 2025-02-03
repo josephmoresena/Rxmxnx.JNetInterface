@@ -143,6 +143,7 @@ jobs:
 
       - name: Check java-setup
         if: runner.os == 'Windows'
+        shell: cmd
         run: |
           echo %JAVA_HOME_8_X64%
           dir %JAVA_HOME_8_X64%
