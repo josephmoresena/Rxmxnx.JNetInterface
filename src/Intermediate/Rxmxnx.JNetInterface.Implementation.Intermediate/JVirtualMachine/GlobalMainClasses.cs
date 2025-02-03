@@ -77,21 +77,5 @@ public partial class JVirtualMachine
 				this.LoadPrimitiveMainClasses(env);
 			this.GlobalClassCache.RefreshAccess();
 		}
-		/// <summary>
-		/// Indicates whether is built-in number class.
-		/// </summary>
-		/// <param name="hash">Type hash.</param>
-		/// <returns>
-		/// <see langword="true"/> if the type for <paramref name="hash"/> is a basic built-in class; otherwise;
-		/// <see langword="false"/>.
-		/// </returns>
-		public static Boolean IsBuiltInNumberType(String hash)
-			=> hash switch
-			{
-				ClassNameHelper.ByteObjectHash or ClassNameHelper.DoubleObjectHash or ClassNameHelper.FloatObjectHash or
-					ClassNameHelper.IntegerObjectHash or ClassNameHelper.LongObjectHash or
-					ClassNameHelper.ShortObjectHash => true,
-				_ => false,
-			};
 	}
 }
