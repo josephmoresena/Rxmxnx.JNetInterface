@@ -95,6 +95,78 @@ jobs:
             rm -rf "$TEMP_DIR"
           done
           echo "-----------------------------------"
+  app-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup NativeAOT pre-requisites
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install clang zlib1g-dev libkrb5-dev \
+            gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf \
+            gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
+            libc6-dev-arm64-cross libc6-dev-armel-cross \
+            --assume-yes
+
+      - name: Instalar QEMU y binfmt
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt update
+          sudo apt install -y qemu-user-static binfmt-support
+          sudo update-binfmts --enable
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: Check java-setup
+        if: runner.os == 'Linux'
+        run: |
+          echo $JAVA_HOME_8_X64
+          ls $JAVA_HOME_8_X64
+          
+          echo $JAVA_HOME_11_X64
+          ls $JAVA_HOME_11_X64
+          
+          echo $JAVA_HOME_17_X64
+          ls $JAVA_HOME_17_X64
+          
+          echo $JAVA_HOME_21_X64
+          ls $JAVA_HOME_21_X64
+
+      - name: Check java-setup
+        if: runner.os == 'Windows'
+        run: |
+          echo %JAVA_HOME_8_X64%
+          dir %JAVA_HOME_8_X64%
+          
+          echo %JAVA_HOME_11_X64%
+          dir %JAVA_HOME_11_X64%
+          
+          echo %JAVA_HOME_17_X64%
+          dir %JAVA_HOME_17_X64%
+          
+          echo %JAVA_HOME_21_X64%
+          dir %JAVA_HOME_21_X64%     
+
+      - name: Check java-setup
+        if: runner.os == 'MacOS'
+        run: |
+          echo $JAVA_HOME_11_arm64
+          ls $JAVA_HOME_11_arm64
+          
+          echo $JAVA_HOME_17_arm64
+          ls $JAVA_HOME_17_arm64
+          
+          echo $JAVA_HOME_21_arm64
+          ls $JAVA_HOME_21_arm64
   
   run-linux:
     runs-on: ubuntu-latest
