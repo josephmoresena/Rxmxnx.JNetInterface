@@ -83,10 +83,7 @@ public sealed class JMainMethodDefinition : JMethodDefinition
 	/// </returns>
 	[return: NotNullIfNotNull(nameof(args))]
 	private static JArrayObject<JStringObject>? CreateArgsArray(IEnvironment env, String?[]? args = default)
-	{
-		if (args is null) return default;
-		return JMainMethodDefinition.CreateArgsArray(env, args.AsSpan());
-	}
+		=> args is not null ? JMainMethodDefinition.CreateArgsArray(env, args.AsSpan()) : default;
 	/// <summary>
 	/// Creates a <see cref="JArrayObject{JStringObject}"/> in order to invoke PSVM method.
 	/// </summary>

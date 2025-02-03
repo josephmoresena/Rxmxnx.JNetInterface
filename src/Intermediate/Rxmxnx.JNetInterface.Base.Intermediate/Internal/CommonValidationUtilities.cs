@@ -114,7 +114,6 @@ internal static class CommonValidationUtilities
 			switch (signature.Length)
 			{
 				case <= 3:
-					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 				case > 3 when signature[1] != CommonNames.ObjectSignaturePrefixChar ||
 					suffix != CommonNames.ObjectSignatureSuffixChar:
 					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);

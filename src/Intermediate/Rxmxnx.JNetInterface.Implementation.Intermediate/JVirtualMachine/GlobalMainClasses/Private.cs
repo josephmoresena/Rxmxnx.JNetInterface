@@ -81,7 +81,7 @@ public partial class JVirtualMachine
 				}
 				catch (Exception)
 				{
-					if (GlobalMainClasses.IsBuiltInBasicType(typeInformation))
+					if (!GlobalMainClasses.CanProceedWithout(typeInformation))
 						throw;
 				}
 			}
@@ -118,33 +118,14 @@ public partial class JVirtualMachine
 		}
 
 		/// <summary>
-		/// Creates dictionary for main classes.
-		/// </summary>
-		/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
-		/// <param name="globalClassCache">A <see cref="ClassCache{JGlobal}"/> instance.</param>
-		/// <returns>A <see cref="ConcurrentDictionary{String, Global}"/> instance.</returns>
-		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
-		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-		private static ConcurrentDictionary<String, Boolean> CreateMainClassesDictionary(IVirtualMachine vm,
-			ClassCache<JGlobal> globalClassCache)
-		{
-			ConcurrentDictionary<String, Boolean> result = new();
-			foreach (String hash in JVirtualMachine.userMainClasses.Keys)
-				// if (!globalClassCache.TryGetValue(hash, out JGlobal? mainClass))
-				// 	mainClass = new(vm, JVirtualMachine.userMainClasses[hash], default);
-				// globalClassCache[hash] = mainClass;
-				result.TryAdd(hash, true);
-			return result;
-		}
-		/// <summary>
-		/// Indicates whether is built-in basic class.
+		/// Indicates whether VM initialization can continue if the class for <paramref name="typeInformation"/> does not exist.
 		/// </summary>
 		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
 		/// <returns>
-		/// <see langword="true"/> if <paramref name="typeInformation"/> is a basic built-in class; otherwise;
-		/// <see langword="false"/>.
+		/// <see langword="true"/> if the class for <paramref name="typeInformation"/> is not mandatory for initialization;
+		/// otherwise, <see langword="false"/>.
 		/// </returns>
-		private static Boolean IsBuiltInBasicType(ITypeInformation typeInformation)
+		private static Boolean CanProceedWithout(ITypeInformation typeInformation)
 			=> typeInformation.Hash switch
 			{
 				ClassNameHelper.VoidObjectHash or ClassNameHelper.BooleanObjectHash or
@@ -152,7 +133,7 @@ public partial class JVirtualMachine
 					ClassNameHelper.BufferHash or ClassNameHelper.MemberHash or ClassNameHelper.ExecutableHash or
 					ClassNameHelper.MethodHash or ClassNameHelper.FieldHash => true,
 				_ => GlobalMainClasses.IsBuiltInNumberType(typeInformation.Hash),
-				// If class is not built-in, VM initialization may should continue.
+				// If the class is not basic, VM initialization should continue.
 			};
 	}
 }

@@ -31,9 +31,10 @@ internal static class NativeValidationUtilities
 	public static void ThrowIfInvalidExtension(ReadOnlySpan<Byte> interfaceName, Type interfaceType,
 		IReadOnlySet<Type> superInterfacesSet)
 	{
-		foreach (Type superInterfaceType in superInterfacesSet)
+		using IEnumerator<Type> enumerator = superInterfacesSet.GetEnumerator();
+		while (enumerator.MoveNext())
 		{
-			if (superInterfaceType == interfaceType)
+			if (enumerator.Current == interfaceType)
 				throw new InvalidOperationException(
 					$"{interfaceName.GetString()} type can't extend an interface type which extends it.");
 		}

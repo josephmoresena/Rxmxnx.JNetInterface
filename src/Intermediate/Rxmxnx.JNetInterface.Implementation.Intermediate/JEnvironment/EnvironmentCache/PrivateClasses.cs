@@ -388,7 +388,7 @@ partial class JEnvironment
 			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
 			if (jGlobal.IsDefault)
 			{
-				// Only loads global-reference if is default.
+				// A global-reference is created only if the existing one is default.
 				jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
 				this.VirtualMachine.ReloadAccess(jClass.Hash);
 			}
