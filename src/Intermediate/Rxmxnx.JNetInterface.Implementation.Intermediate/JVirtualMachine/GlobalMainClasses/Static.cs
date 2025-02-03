@@ -12,6 +12,7 @@ public partial class JVirtualMachine
 		/// <see langword="true"/> if the class for <paramref name="typeInformation"/> is not mandatory for initialization;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
+		[ExcludeFromCodeCoverage]
 		private static Boolean CanProceedWithout(ITypeInformation typeInformation)
 			=> typeInformation.Hash switch
 			{
