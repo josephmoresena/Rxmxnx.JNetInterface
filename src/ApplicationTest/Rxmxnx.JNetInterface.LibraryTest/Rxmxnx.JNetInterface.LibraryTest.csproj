@@ -9,6 +9,11 @@
         <IsWindowsHost>$([MSBuild]::IsOSPlatform('Windows'))</IsWindowsHost>
         <AssemblyName Condition="$(IsWindowsHost) == 'true'">HelloJni</AssemblyName>
         <AssemblyName Condition="$(IsWindowsHost) != 'true'">libHelloJni</AssemblyName>
+        <!-- Assembly name must specify which platform it was compiled for -->
+        <AssemblyName Condition="$(RuntimeIdentifier.ToLower().EndsWith('x86'))">$(AssemblyName).x86</AssemblyName>
+        <AssemblyName Condition="$(RuntimeIdentifier.ToLower().EndsWith('x64'))">$(AssemblyName).x64</AssemblyName>
+        <AssemblyName Condition="$(RuntimeIdentifier.ToLower().EndsWith('arm'))">$(AssemblyName).arm</AssemblyName>
+        <AssemblyName Condition="$(RuntimeIdentifier.ToLower().EndsWith('arm64'))">$(AssemblyName).arm64</AssemblyName>
     </PropertyGroup>
 
     <Import Condition="'$(JNI_LIBRARY)' == 'true'" Project="..\JNetInterface-NativeAot.targets"/>

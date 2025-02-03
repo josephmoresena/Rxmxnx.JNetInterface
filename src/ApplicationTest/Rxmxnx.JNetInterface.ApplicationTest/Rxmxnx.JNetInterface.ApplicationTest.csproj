@@ -2,12 +2,9 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
+        <AssemblyName>ApplicationTest.CSharp</AssemblyName>
     </PropertyGroup>
 
-    <Import Project="..\JNetInterface-NativeAot.targets"/>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
-    </ItemGroup>
+    <Import Project="..\JNetInterface-App.targets"/>
 
 </Project>

@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApplicationTest", "Applicat
 	ProjectSection(SolutionItems) = preProject
 		ApplicationTest\Directory.Build.props = ApplicationTest\Directory.Build.props
 		ApplicationTest\JNetInterface-NativeAot.targets = ApplicationTest\JNetInterface-NativeAot.targets
+		ApplicationTest\JNetInterface-Config.targets = ApplicationTest\JNetInterface-Config.targets
+		ApplicationTest\JNetInterface-App.targets = ApplicationTest\JNetInterface-App.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.ApplicationTest", "ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj", "{3B30C3CF-A6FF-494F-8748-61D091D01252}"

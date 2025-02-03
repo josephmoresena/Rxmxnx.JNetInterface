@@ -1,0 +1,21 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup Condition="'$(JNI_LIBRARY)' == 'true' Or '$(JNI_APP)' == 'true'">
+        <!-- Assembly name must specify which version of .NET it was compiled with -->
+        <AssemblyName>$(AssemblyName).$(TargetFramework)</AssemblyName>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>-->
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
+        <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableNestingArrayAutoGeneration" Value="true" Trim="true"/>-->
+        <RuntimeHostConfigurationOption Condition="'$(USE_JTRACE)' == 'true'" Include="JNetInterface.EnableTrace" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableBuiltInThrowableAutoRegistration" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableReflectionAutoRegistration" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableNioAutoRegistration" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.EnableFinalUserTypeRuntime" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.CheckRefTypeNativeCallEnabled" Value="true" Trim="true"/>
+        <RuntimeHostConfigurationOption Include="JNetInterface.DisableCheckClassRefNativeCall" Value="true" Trim="true"/>
+    </ItemGroup>
+
+</Project>

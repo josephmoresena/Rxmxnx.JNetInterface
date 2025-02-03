@@ -1,5 +1,18 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    
+    <Import Project="JNetInterface-Config.targets"/>
 
+    <PropertyGroup Condition="'$(IlcDisableReflection)' == 'true'">
+        <!-- Assembly name must specify that it was compiled in reflection-free mode -->
+        <AssemblyName>$(AssemblyName).RFM</AssemblyName>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(JNI_APP)' == 'true' And '$(IlcDisableReflection)' != 'true'">
+        <!-- Assembly name must specify that it was compiled with Native-AOT -->
+        <AssemblyName>$(AssemblyName).NAOT</AssemblyName>
+    </PropertyGroup>
+    
+    
     <PropertyGroup>
         <PublishAot>true</PublishAot>
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
@@ -15,24 +28,6 @@
         <IlcTrimMetadata>true</IlcTrimMetadata>
         <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
         <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
-        <IlcDisableReflection>false</IlcDisableReflection>
     </PropertyGroup>
-
-    <ItemGroup Condition="'$(JNI_LIBRARY)' != 'true'">
-        <ProjectReference Include="..\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableTypeMetadataToString" Value="true" Trim="true"/>-->
-        <RuntimeHostConfigurationOption Include="JNetInterface.DisableMetadataValidation" Value="true" Trim="true"/>
-        <!--<RuntimeHostConfigurationOption Include="JNetInterface.DisableNestingArrayAutoGeneration" Value="true" Trim="true"/>-->
-        <RuntimeHostConfigurationOption Condition="'$(USE_JTRACE)' == 'true'" Include="JNetInterface.EnableTrace" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.DisableBuiltInThrowableAutoRegistration" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.DisableReflectionAutoRegistration" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.DisableNioAutoRegistration" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.EnableFinalUserTypeRuntime" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.CheckRefTypeNativeCallEnabled" Value="true" Trim="true"/>
-        <RuntimeHostConfigurationOption Include="JNetInterface.DisableCheckClassRefNativeCall" Value="true" Trim="true"/>
-    </ItemGroup>
 
 </Project>
