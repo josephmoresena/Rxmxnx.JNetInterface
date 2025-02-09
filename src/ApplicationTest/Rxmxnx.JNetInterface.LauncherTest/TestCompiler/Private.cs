@@ -24,7 +24,7 @@ public partial class TestCompiler
 				a.Add($"/p:USE_NET80={s.Item3 is NetVersion.Net80}");
 				a.Add($"/p:USE_NET90={s.Item3 is NetVersion.Net90}");
 				a.Add($"/p:JNI_LIBRARY={s.Item4.HasFlag(Publish.JniLibrary)}");
-				a.Add($"/p:ReadyToRunPublish={s.Item4.HasFlag(Publish.ReadyToRun)}");
+				a.Add($"/p:PublishReadyToRun={s.Item4.HasFlag(Publish.ReadyToRun)}");
 				a.Add($"/p:NativeAOT={s.Item4.HasFlag(Publish.NativeAot)}");
 				a.Add($"/p:IlcDisableReflection={s.Item4.HasFlag(Publish.NoReflection)}");
 				a.Add($"/p:PublishDir={s.Item5}");
