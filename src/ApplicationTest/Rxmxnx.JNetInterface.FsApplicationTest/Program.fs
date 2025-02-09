@@ -7,6 +7,7 @@ open Microsoft.FSharp.Control
 open Microsoft.FSharp.Core
 open Rxmxnx.JNetInterface
 open Rxmxnx.JNetInterface.ApplicationTest
+open Rxmxnx.JNetInterface.Native
 open Rxmxnx.JNetInterface.Native.Access
 open Rxmxnx.PInvoke
 
@@ -16,7 +17,9 @@ let PrintException (env: IEnvironment, ex: ThrowableException) =
 
 let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string[]) =
     try
-        let initArgs = jvmLib.GetDefaultArgument()
+        let mutable initArgs = jvmLib.GetDefaultArgument()
+
+        initArgs <- JVirtualMachineInitArg(initArgs.Version, Options = CStringSequence [ "-Dno-native-load=true" ])
 
         if IVirtualMachine.TypeMetadataToStringEnabled then
             Console.WriteLine(initArgs)

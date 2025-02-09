@@ -3,6 +3,7 @@ Imports System.Runtime.InteropServices
 Imports Rxmxnx.JNetInterface.Lang
 Imports Rxmxnx.JNetInterface.Native
 Imports Rxmxnx.JNetInterface.Native.Access
+Imports Rxmxnx.PInvoke
 
 <ExcludeFromCodeCoverage>
 Partial Module Program
@@ -46,12 +47,18 @@ Partial Module Program
         IManagedCallback.PrintSwitches()
     End Function
 
+    Private ReadOnly VmOptions As String() = {"-Dno-native-load=true"}
+
     Private Sub Execute(jvmLib As JVirtualMachineLibrary, classByteCode As Byte(), ByVal ParamArray args As String())
+
         Try
             Dim initArgs As JVirtualMachineInitArg = jvmLib.GetDefaultArgument()
             If IVirtualMachine.TypeMetadataToStringEnabled Then
                 Console.WriteLine(initArgs)
             End If
+            initArgs = New JVirtualMachineInitArg(initArgs.Version) With  { 
+                .Options = New CStringSequence(VmOptions)}
+
             Dim env as IEnvironment = Nothing
             Using vm As IInvokedVirtualMachine = jvmLib.CreateVirtualMachine(initArgs, env)
                 Try

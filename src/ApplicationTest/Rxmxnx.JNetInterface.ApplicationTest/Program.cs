@@ -57,7 +57,12 @@ public static class Program
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
 			if (IVirtualMachine.TypeMetadataToStringEnabled) Console.WriteLine(initArgs);
 			if (IVirtualMachine.TraceEnabled)
-				initArgs = new(initArgs.Version) { Options = new("-verbose:jni", "-verbose:class", "-verbose:gc"), };
+				initArgs = new(initArgs.Version)
+				{
+					Options = new("-verbose:jni", "-verbose:class", "-verbose:gc", "-Dno-native-load=true"),
+				};
+			else
+				initArgs = new(initArgs.Version) { Options = new("-Dno-native-load=true"), };
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{
