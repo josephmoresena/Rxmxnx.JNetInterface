@@ -12,7 +12,7 @@ public abstract partial class Launcher
 		private readonly Dictionary<Jdk.JdkVersion, Jdk> _amd64 = new();
 		private readonly Dictionary<Jdk.JdkVersion, Jdk> _arm64 = new();
 
-		private Mac(DirectoryInfo publishDirectory, out Task initialize) : base(publishDirectory, OSPlatform.OSX)
+		private Mac(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory, OSPlatform.OSX)
 			=> initialize = this.Initialize();
 
 		private async Task Initialize()

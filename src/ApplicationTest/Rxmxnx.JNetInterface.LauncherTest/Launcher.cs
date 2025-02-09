@@ -4,7 +4,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public abstract partial class Launcher
 {
-	public DirectoryInfo PublishDirectory { get; set; }
+	public DirectoryInfo OutputDirectory { get; set; }
 	public OSPlatform Platform { get; }
 	public Architecture CurrentArch { get; }
 

@@ -7,12 +7,12 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 public partial class TestCompiler
 {
 	private static async Task CompileNet(String projectFile, String rid, NetVersion netVersion, Publish publish,
-		String publishDir)
+		String outputPath)
 	{
 		ExecuteState<ValueTuple<String, String, NetVersion, Publish, String>> state = new()
 		{
 			ExecutablePath = "dotnet",
-			ArgState = (projectFile, rid, netVersion, publish, publishDir),
+			ArgState = (projectFile, rid, netVersion, publish, outputPath),
 			AppendArgs = (s, a) =>
 			{
 				a.Add("publish");
@@ -27,7 +27,7 @@ public partial class TestCompiler
 				a.Add($"/p:PublishReadyToRun={s.Item4.HasFlag(Publish.ReadyToRun)}");
 				a.Add($"/p:NativeAOT={s.Item4.HasFlag(Publish.NativeAot)}");
 				a.Add($"/p:IlcDisableReflection={s.Item4.HasFlag(Publish.NoReflection)}");
-				a.Add($"/p:PublishDir={s.Item5}");
+				a.Add($"/p:CopyTargetTo={s.Item5}");
 			},
 			Notifier = ConsoleNotifier.Notifier,
 		};

@@ -10,7 +10,7 @@ DirectoryInfo outputDirectory = args.Length >= 2 ?
 Launcher launcher = await Launcher.Create(outputDirectory);
 
 Jdk minJdk = launcher.GetMinJdk();
-await TestCompiler.CompileClass(minJdk, launcher.PublishDirectory);
+await TestCompiler.CompileClass(minJdk, launcher.OutputDirectory);
 await TestCompiler.CompileNet(projectDirectory, launcher.RuntimeIdentifierPrefix, outputDirectory.FullName);
 
 await launcher.Execute();

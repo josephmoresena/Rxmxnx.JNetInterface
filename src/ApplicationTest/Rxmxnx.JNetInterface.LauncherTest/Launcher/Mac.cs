@@ -56,7 +56,7 @@ public abstract partial class Launcher
 			return result;
 		}
 
-		public static async Task<Launcher> Create(DirectoryInfo publishDirectory)
+		public static async Task<Launcher> CreateInstance(DirectoryInfo publishDirectory)
 		{
 			Mac result = new(publishDirectory, out Task initialize);
 			await initialize;

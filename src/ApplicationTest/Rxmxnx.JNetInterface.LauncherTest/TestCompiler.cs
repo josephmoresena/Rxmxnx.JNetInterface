@@ -69,7 +69,7 @@ public static partial class TestCompiler
 			directory.Delete(true);
 		}
 	}
-	public static async Task CompileNet(DirectoryInfo projectDirectory, String os, String publishPath)
+	public static async Task CompileNet(DirectoryInfo projectDirectory, String os, String outputPath)
 	{
 		Architecture[] architectures = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?
 			[Architecture.X86, Architecture.X64, Architecture.Arm64,] :
@@ -77,25 +77,24 @@ public static partial class TestCompiler
 				[Architecture.X64, Architecture.Arm, Architecture.Arm64,];
 
 		String? libProjectFile = projectDirectory.GetDirectories("*.LibraryTest", SearchOption.AllDirectories)
-		                                         .SelectMany(
-			                                         d => d.GetFiles("*.LibraryTest.csproj"))
+		                                         .SelectMany(d => d.GetFiles("*.LibraryTest.csproj"))
 		                                         .Select(f => f.FullName).FirstOrDefault();
 		String[] appProjectFiles = projectDirectory.GetDirectories("*.*ApplicationTest", SearchOption.AllDirectories)
-		                                           .SelectMany(d => d.GetFiles("*.*proj"))
-		                                           .Select(f => f.FullName).ToArray();
+		                                           .SelectMany(d => d.GetFiles("*.*proj")).Select(f => f.FullName)
+		                                           .ToArray();
 		foreach (String appProjectFile in appProjectFiles)
 		foreach (Architecture arch in architectures)
 		{
 			String rid = $"{os}-{Enum.GetName(arch)!.ToLower()}";
 			foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
 			{
-				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.SelfContained, publishPath);
-				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.ReadyToRun, publishPath);
+				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.SelfContained, outputPath);
+				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.ReadyToRun, outputPath);
 				if (!TestCompiler.NativeAotSupported(os, arch)) continue;
-				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot, publishPath);
+				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot, outputPath);
 				if (!appProjectFile.EndsWith(".csproj")) continue;
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot | Publish.NoReflection,
-				                              publishPath);
+				                              outputPath);
 			}
 		}
 		if (!String.IsNullOrEmpty(libProjectFile))
@@ -105,9 +104,9 @@ public static partial class TestCompiler
 				String rid = $"{os}-{Enum.GetName(arch)!.ToLower()}";
 				foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
 				{
-					await TestCompiler.CompileNet(libProjectFile, rid, netVersion, Publish.JniLibrary, publishPath);
+					await TestCompiler.CompileNet(libProjectFile, rid, netVersion, Publish.JniLibrary, outputPath);
 					await TestCompiler.CompileNet(libProjectFile, rid, netVersion,
-					                              Publish.JniLibrary | Publish.NoReflection, publishPath);
+					                              Publish.JniLibrary | Publish.NoReflection, outputPath);
 				}
 			}
 	}

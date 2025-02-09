@@ -16,7 +16,7 @@ public partial class Launcher
 			RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? OSPlatform.Linux : default;
 
 		if (platform == OSPlatform.OSX)
-			return await Mac.Create(outputDirectory);
+			return await Mac.CreateInstance(outputDirectory);
 
 		throw new InvalidOperationException("Unsupported platform");
 	}

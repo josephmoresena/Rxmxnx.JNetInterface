@@ -4,9 +4,9 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public partial class Launcher
 {
-	private Launcher(DirectoryInfo publishDirectory, OSPlatform platform)
+	private Launcher(DirectoryInfo outputDirectory, OSPlatform platform)
 	{
-		this.PublishDirectory = publishDirectory;
+		this.OutputDirectory = outputDirectory;
 		this.Platform = platform;
 		this.CurrentArch = RuntimeInformation.OSArchitecture;
 		Console.WriteLine($"{this.Platform} {this.CurrentArch} detected.");
