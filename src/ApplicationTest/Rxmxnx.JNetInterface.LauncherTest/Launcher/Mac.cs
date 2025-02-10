@@ -31,7 +31,7 @@ public abstract partial class Launcher
 			Architecture[] architectures = Enum.GetValues<Architecture>()
 			                                   .Where(a => a == this.CurrentArch || a == Architecture.X64).ToArray();
 			Dictionary<Architecture, FileInfo[]> archFiles = architectures.ToDictionary(
-				a => a, a => this.OutputDirectory.GetFiles($"ApplicationTest.osx-{Enum.GetName(a)!.ToLower()}.*"));
+				a => a, a => this.OutputDirectory.GetFiles($"ApplicationTest.*.osx-{Enum.GetName(a)!.ToLower()}.*"));
 			FileInfo? jarFile = this.OutputDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
 			foreach (Jdk jdk in architectures.SelectMany(a => this[a]))
 			{
@@ -56,7 +56,7 @@ public abstract partial class Launcher
 						};
 						ConsoleNotifier.Notifier.Result(await Utilities.Execute(state),
 						                                $"HelloJni.jar {jdk.JavaVersion} {jdk.JavaArchitecture} {netVersion} Reflection: {!noReflection.Value}");
-						if (netVersion > TestCompiler.NetVersion.Net80) return;
+						if (netVersion > TestCompiler.NetVersion.Net80) continue;
 						noReflection.Value = true;
 						ConsoleNotifier.Notifier.Result(await Utilities.Execute(state),
 						                                $"HelloJni.jar {jdk.JavaVersion} {jdk.JavaArchitecture} {netVersion} Reflection: {!noReflection.Value}");

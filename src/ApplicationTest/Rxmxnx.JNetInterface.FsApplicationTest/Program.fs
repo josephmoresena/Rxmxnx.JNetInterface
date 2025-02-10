@@ -54,13 +54,13 @@ let MainAsync () =
 
         let args = Environment.GetCommandLineArgs()
 
-        if args.Length < 1 then
+        if args.Length < 2 then
             raise (ArgumentException("Please set JVM library path."))
 
         let! helloJniByteCode = File.ReadAllBytesAsync("HelloDotnet.class") |> Async.AwaitTask
-        
+
         let jvmLib =
-            match  JVirtualMachineLibrary.LoadLibrary(args[0]) with
+            match JVirtualMachineLibrary.LoadLibrary(Array.last (args)) with
             | null -> raise (ArgumentException "Invalid JVM library.")
             | obj -> obj
 
