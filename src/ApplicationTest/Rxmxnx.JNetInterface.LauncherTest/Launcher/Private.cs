@@ -15,8 +15,8 @@ public partial class Launcher
 	private async Task<Jdk?> GetJdk(Jdk.JdkVersion version, Architecture arch)
 	{
 		if (!Launcher.GetEnvironmentVariables(arch).TryGetValue(version, out String? envVar)) return default;
-		String? jdkPath = Environment.GetEnvironmentVariable(envVar);
 		Jdk? result = default;
+		String? jdkPath = Environment.GetEnvironmentVariable(envVar);
 
 		if (!String.IsNullOrEmpty(jdkPath))
 			result = this.GetJdk(version, arch, jdkPath);
