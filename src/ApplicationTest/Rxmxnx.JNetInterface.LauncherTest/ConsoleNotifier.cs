@@ -45,13 +45,14 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 	public void Begin(ProcessStartInfo info)
 	{
 		String args = String.Join(' ', info.ArgumentList);
-		Console.WriteLine($"Starting... {info.WorkingDirectory} {info.FileName} {args}");
+		Console.WriteLine($"Starting... [{info.WorkingDirectory}] {info.FileName} {args}");
 	}
 	public void End(ProcessStartInfo info)
 	{
 		String args = String.Join(' ', info.ArgumentList);
-		Console.WriteLine($"Finished. {info.WorkingDirectory} {info.FileName} {args}");
+		Console.WriteLine($"Finished. [{info.WorkingDirectory}] {info.FileName} {args}");
 	}
+	public void Result(Int32 result, String executionName) => Console.WriteLine($"{executionName}: {result}");
 	void IPlatformNotifier.BeginDetection() => Console.WriteLine("Detecting platform...");
 	void IPlatformNotifier.EndDetection(OSPlatform platform, Architecture arch)
 		=> Console.WriteLine($"{platform} {arch} detected.");

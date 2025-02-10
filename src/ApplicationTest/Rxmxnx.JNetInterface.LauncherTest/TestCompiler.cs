@@ -90,7 +90,7 @@ public static partial class TestCompiler
 			{
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.SelfContained, outputPath);
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.ReadyToRun, outputPath);
-				if (!TestCompiler.NativeAotSupported(os, arch)) continue;
+				if (!TestCompiler.NativeAotSupported(arch)) continue;
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot, outputPath);
 				if (!appProjectFile.EndsWith(".csproj")) continue;
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot | Publish.NoReflection,
@@ -100,7 +100,7 @@ public static partial class TestCompiler
 		if (!String.IsNullOrEmpty(libProjectFile))
 			foreach (Architecture arch in architectures)
 			{
-				if (!TestCompiler.NativeAotSupported(os, arch)) continue;
+				if (!TestCompiler.NativeAotSupported(arch)) continue;
 				String rid = $"{os}-{Enum.GetName(arch)!.ToLower()}";
 				foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
 				{

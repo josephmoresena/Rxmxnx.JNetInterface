@@ -33,13 +33,14 @@ public partial class TestCompiler
 		};
 		await Utilities.Execute(state);
 	}
-	private static Boolean NativeAotSupported(String os, Architecture arch)
+	private static Boolean NativeAotSupported(Architecture arch)
 	{
 		Architecture currentArch = RuntimeInformation.OSArchitecture;
-		return arch == currentArch || os switch
+		return arch == currentArch || currentArch switch
 		{
-			"win" => arch is not Architecture.Arm64 && currentArch is not Architecture.X86,
-			"osx" => arch is not Architecture.Arm64,
+			Architecture.X86 => false,
+			Architecture.Arm => false,
+			Architecture.Armv6 => false,
 			_ => true,
 		};
 	}

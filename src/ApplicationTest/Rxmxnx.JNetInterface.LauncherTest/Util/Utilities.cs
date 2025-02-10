@@ -39,11 +39,11 @@ public static class Utilities
 
 		state.Notifier.End(state.Url, fs.Position, state.Destination);
 	}
-	public static async Task Execute(ExecuteState state, CancellationToken cancellationToken = default)
+	public static async Task<Int32> Execute(ExecuteState state, CancellationToken cancellationToken = default)
 	{
 		ProcessStartInfo info = new(state.ExecutablePath)
 		{
-			RedirectStandardError = true, RedirectStandardOutput = true, CreateNoWindow = false,
+			RedirectStandardError = false, RedirectStandardOutput = false, CreateNoWindow = false,
 		};
 		state.AppendArgs(info.ArgumentList);
 		if (!String.IsNullOrEmpty(state.WorkingDirectory)) info.WorkingDirectory = state.WorkingDirectory;
@@ -51,12 +51,14 @@ public static class Utilities
 		using Process prog = Process.Start(info)!;
 		await prog.WaitForExitAsync(cancellationToken);
 		state.Notifier?.End(info);
+		return prog.ExitCode;
 	}
-	public static async Task Execute<TState>(ExecuteState<TState> state, CancellationToken cancellationToken = default)
+	public static async Task<Int32> Execute<TState>(ExecuteState<TState> state,
+		CancellationToken cancellationToken = default)
 	{
 		ProcessStartInfo info = new(state.ExecutablePath)
 		{
-			RedirectStandardError = true, RedirectStandardOutput = true, CreateNoWindow = false,
+			RedirectStandardError = false, RedirectStandardOutput = false, CreateNoWindow = false,
 		};
 		state.AppendArgs(state.ArgState, info.ArgumentList);
 		if (!String.IsNullOrEmpty(state.WorkingDirectory)) info.WorkingDirectory = state.WorkingDirectory;
@@ -64,14 +66,15 @@ public static class Utilities
 		using Process prog = Process.Start(info)!;
 		await prog.WaitForExitAsync(cancellationToken);
 		state.Notifier?.End(info);
+		return prog.ExitCode;
 	}
-	public static async Task QemuExecute(QemuExecuteState state, CancellationToken cancellationToken = default)
+	public static async Task<Int32> QemuExecute(QemuExecuteState state, CancellationToken cancellationToken = default)
 	{
 		ProcessStartInfo info = new(state.QemuExecutable)
 		{
 			ArgumentList = { "-L", state.QemuRoot, state.ExecutablePath, },
-			RedirectStandardError = true,
-			RedirectStandardOutput = true,
+			RedirectStandardError = false,
+			RedirectStandardOutput = false,
 			CreateNoWindow = false,
 		};
 		state.AppendArgs(info.ArgumentList);
@@ -80,15 +83,16 @@ public static class Utilities
 		using Process prog = Process.Start(info)!;
 		await prog.WaitForExitAsync(cancellationToken);
 		state.Notifier?.End(info);
+		return prog.ExitCode;
 	}
-	public static async Task QemuExecute<TState>(QemuExecuteState<TState> state,
+	public static async Task<Int32> QemuExecute<TState>(QemuExecuteState<TState> state,
 		CancellationToken cancellationToken = default)
 	{
 		ProcessStartInfo info = new(state.QemuExecutable)
 		{
 			ArgumentList = { "-L", state.QemuRoot, state.ExecutablePath, },
-			RedirectStandardError = true,
-			RedirectStandardOutput = true,
+			RedirectStandardError = false,
+			RedirectStandardOutput = false,
 			CreateNoWindow = false,
 		};
 		state.AppendArgs(state.ArgState, info.ArgumentList);
@@ -97,5 +101,6 @@ public static class Utilities
 		using Process prog = Process.Start(info)!;
 		await prog.WaitForExitAsync(cancellationToken);
 		state.Notifier?.End(info);
+		return prog.ExitCode;
 	}
 }

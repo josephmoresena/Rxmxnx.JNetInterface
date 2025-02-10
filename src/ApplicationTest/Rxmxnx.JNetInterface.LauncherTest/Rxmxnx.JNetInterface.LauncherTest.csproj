@@ -8,4 +8,8 @@
         <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.0.4"/>
+    </ItemGroup>
+
 </Project>

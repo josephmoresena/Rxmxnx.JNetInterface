@@ -1,4 +1,5 @@
 Imports System.Diagnostics.CodeAnalysis
+Imports System.IO
 Imports System.Runtime.InteropServices
 Imports Rxmxnx.JNetInterface.Lang
 Imports Rxmxnx.JNetInterface.Native
@@ -16,26 +17,18 @@ Partial Module Program
             JRuntimeInfo.PrintMetadataInfo()
         End If
 
-        Dim reflectionDisabled As Boolean = Not $"{GetType(Program)}".Contains(NameOf(Program))
-
-        Dim compiler As JCompiler = If(args.Length = 3,
-                                       New JCompiler With {
-                                          .JdkPath = args(0),
-                                          .CompilerPath = args(1),
-                                          .LibraryPath = args(2)
-                                          },
-                                       JCompiler.GetCompilers().FirstOrDefault()
-                                       )
-
-        If compiler Is Nothing Then
-            Console.WriteLine("JDK not found.")
-            Return
+        If args.Length < 1 Then
+            Throw New ArgumentException("Please set JVM library path.")
         End If
 
-        Dim helloJniByteCode As Byte() = Await compiler.CompileHelloJniClassAsync()
-        Dim jvmLib As JVirtualMachineLibrary = compiler.GetLibrary()
+        Dim helloJniByteCode As Byte() = Await File.ReadAllBytesAsync("HelloDotnet.class")
+        Dim jvmLib As JVirtualMachineLibrary = JVirtualMachineLibrary.LoadLibrary(args(0))
 
-        Dim jMainArgs As String() = If(reflectionDisabled,
+        If jvmLib is Nothing Then
+            Throw New ArgumentException("Please set JVM library path.")
+        End If
+
+        Dim jMainArgs As String() = If(AotInfo.IsReflectionDisabled,
                                        {$"System Path: {Environment.SystemDirectory}"},
                                        { _
                                            $"System Path: {Environment.SystemDirectory}",

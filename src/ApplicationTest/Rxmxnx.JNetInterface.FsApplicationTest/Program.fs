@@ -2,6 +2,7 @@
 module Program
 
 open System
+open System.IO
 open System.Runtime.InteropServices
 open Microsoft.FSharp.Control
 open Microsoft.FSharp.Core
@@ -51,31 +52,26 @@ let MainAsync () =
         if IVirtualMachine.TypeMetadataToStringEnabled then
             JRuntimeInfo.PrintMetadataInfo()
 
-        let reflectionDisabled = not ("{typeof<CString>}".Contains(nameof CString))
         let args = Environment.GetCommandLineArgs()
 
-        let compiler =
-            if args.Length = 3 then
-                Some(JCompiler(JdkPath = args[0], CompilerPath = args[1], LibraryPath = args[2]))
+        if args.Length < 1 then
+            raise (ArgumentException("Please set JVM library path."))
+
+        let! helloJniByteCode = File.ReadAllBytesAsync("HelloDotnet.class") |> Async.AwaitTask
+        let jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0])
+
+        if jvmLib = null then
+            raise (ArgumentException("Invalid JVM library."))
+
+        let jMainArgs =
+            if AotInfo.IsReflectionDisabled then
+                [| $"System Path: %s{Environment.SystemDirectory}" |]
             else
-                JCompiler.GetCompilers() |> Seq.tryHead
+                [| $"System Path: %s{Environment.SystemDirectory}"
+                   $"Runtime Name: %s{RuntimeInformation.FrameworkDescription}" |]
 
-        if not compiler.IsSome then
-            Console.WriteLine("JDK not found.")
-        else
-            let comp = compiler.Value
-            let! helloJniByteCode = comp.CompileHelloJniClassAsync() |> Async.AwaitTask
-            let jvmLib = comp.GetLibrary()
-
-            let jMainArgs =
-                if reflectionDisabled then
-                    [| $"System Path: %s{Environment.SystemDirectory}" |]
-                else
-                    [| $"System Path: %s{Environment.SystemDirectory}"
-                       $"Runtime Name: %s{RuntimeInformation.FrameworkDescription}" |]
-
-            Execute(jvmLib, helloJniByteCode, jMainArgs)
-            IManagedCallback.PrintSwitches()
+        Execute(jvmLib, helloJniByteCode, jMainArgs)
+        IManagedCallback.PrintSwitches()
     }
 
 MainAsync() |> Async.RunSynchronously
