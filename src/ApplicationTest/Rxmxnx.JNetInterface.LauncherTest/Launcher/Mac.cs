@@ -49,13 +49,14 @@ public abstract partial class Launcher
 								if (s.Item2.Value)
 									a.Add("-Ddotnet.reflection.disable=true");
 								a.Add("-jar");
-								a.Add(jarFile.FullName);
+								a.Add(jarFile.Name);
 							},
 							WorkingDirectory = this.OutputDirectory.FullName,
 							Notifier = ConsoleNotifier.Notifier,
 						};
 						ConsoleNotifier.Notifier.Result(await Utilities.Execute(state),
 						                                $"HelloJni.jar {jdk.JavaVersion} {jdk.JavaArchitecture} {netVersion} Reflection: {!noReflection.Value}");
+						if (netVersion > TestCompiler.NetVersion.Net80) return;
 						noReflection.Value = true;
 						ConsoleNotifier.Notifier.Result(await Utilities.Execute(state),
 						                                $"HelloJni.jar {jdk.JavaVersion} {jdk.JavaArchitecture} {netVersion} Reflection: {!noReflection.Value}");

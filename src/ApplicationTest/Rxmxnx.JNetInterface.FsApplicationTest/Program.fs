@@ -58,10 +58,11 @@ let MainAsync () =
             raise (ArgumentException("Please set JVM library path."))
 
         let! helloJniByteCode = File.ReadAllBytesAsync("HelloDotnet.class") |> Async.AwaitTask
-        let jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0])
-
-        if jvmLib = null then
-            raise (ArgumentException("Invalid JVM library."))
+        
+        let jvmLib =
+            match  JVirtualMachineLibrary.LoadLibrary(args[0]) with
+            | null -> raise (ArgumentException "Invalid JVM library.")
+            | obj -> obj
 
         let jMainArgs =
             if AotInfo.IsReflectionDisabled then

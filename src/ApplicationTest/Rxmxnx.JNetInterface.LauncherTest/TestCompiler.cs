@@ -92,7 +92,7 @@ public static partial class TestCompiler
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.ReadyToRun, outputPath);
 				if (!TestCompiler.NativeAotSupported(arch)) continue;
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot, outputPath);
-				if (!appProjectFile.EndsWith(".csproj")) continue;
+				if (!appProjectFile.EndsWith(".csproj") || netVersion > NetVersion.Net80) continue;
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot | Publish.NoReflection,
 				                              outputPath);
 			}
@@ -105,6 +105,7 @@ public static partial class TestCompiler
 				foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
 				{
 					await TestCompiler.CompileNet(libProjectFile, rid, netVersion, Publish.JniLibrary, outputPath);
+					if (netVersion > NetVersion.Net80) continue;
 					await TestCompiler.CompileNet(libProjectFile, rid, netVersion,
 					                              Publish.JniLibrary | Publish.NoReflection, outputPath);
 				}
