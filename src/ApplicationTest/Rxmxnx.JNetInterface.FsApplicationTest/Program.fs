@@ -60,7 +60,7 @@ let MainAsync () =
         let! helloJniByteCode = File.ReadAllBytesAsync("HelloDotnet.class") |> Async.AwaitTask
 
         let jvmLib =
-            match JVirtualMachineLibrary.LoadLibrary(Array.last (args)) with
+            match JVirtualMachineLibrary.LoadLibrary(Array.last args) with
             | null -> raise (ArgumentException "Invalid JVM library.")
             | obj -> obj
 
