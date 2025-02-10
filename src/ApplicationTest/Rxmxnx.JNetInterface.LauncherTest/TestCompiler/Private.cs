@@ -50,8 +50,6 @@ public partial class TestCompiler
 				a.Add(s.Item2);
 				a.Add($"/p:USE_NET80={s.Item3 is NetVersion.Net80}");
 				a.Add($"/p:USE_NET90={s.Item3 is NetVersion.Net90}");
-				// a.Add($"/p:JNI_LIBRARY={s.Item1.Contains("LibraryTest")}");
-				// a.Add($"/p:NativeAOT={!s.Item1.Contains("LibraryTest")}");
 			},
 			Notifier = ConsoleNotifier.Notifier,
 		};
