@@ -50,10 +50,10 @@ public static class Program
 			if (IVirtualMachine.TraceEnabled)
 				initArgs = new(initArgs.Version)
 				{
-					Options = new("-verbose:jni", "-verbose:class", "-verbose:gc", "-Dno-native-load=true"),
+					Options = new("-verbose:jni", "-verbose:class", "-verbose:gc", "-DjniLib.load.disable=true"),
 				};
 			else
-				initArgs = new(initArgs.Version) { Options = new("-Dno-native-load=true"), };
+				initArgs = new(initArgs.Version) { Options = new("-DjniLib.load.disable=true"), };
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{

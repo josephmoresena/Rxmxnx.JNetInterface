@@ -47,8 +47,8 @@ public abstract partial class Launcher
 							{
 								a.Add($"-Ddotnet.runtime.version=net{s.Item1}.0");
 								if (s.Item2.Value)
-									a.Add("-Dno-reflection=true");
-								a.Add("jar");
+									a.Add("-Ddotnet.reflection.disable=true");
+								a.Add("-jar");
 								a.Add(jarFile.FullName);
 							},
 							WorkingDirectory = this.OutputDirectory.FullName,

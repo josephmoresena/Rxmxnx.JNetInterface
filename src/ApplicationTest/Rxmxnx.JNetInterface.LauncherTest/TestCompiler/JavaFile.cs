@@ -13,7 +13,7 @@ public class HelloDotnet {
     public static final int COUNT = 20;
 
     static {
-        if (!Boolean.parseBoolean(System.getProperty(""no-native-load"")))
+        if (!Boolean.parseBoolean(System.getProperty(""jniLib.load.disable"")))
             try {
                 System.loadLibrary(HelloDotnet.getLibraryName());
             }
@@ -215,7 +215,7 @@ public class HelloDotnet {
         if (dotnetVersion != null && !dotnetVersion.equals("""")) 
             libraryName += '.' + dotnetVersion;
         
-        if (Boolean.parseBoolean(System.getProperty(""no-reflection"")))
+        if (Boolean.parseBoolean(System.getProperty(""dotnet.reflection.disable"")))
             libraryName += "".RFM"";
         
         return libraryName;

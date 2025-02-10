@@ -20,7 +20,7 @@ let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string
     try
         let mutable initArgs = jvmLib.GetDefaultArgument()
 
-        initArgs <- JVirtualMachineInitArg(initArgs.Version, Options = CStringSequence [ "-Dno-native-load=true" ])
+        initArgs <- JVirtualMachineInitArg(initArgs.Version, Options = CStringSequence [ "-DjniLib.load.disable=true" ])
 
         if IVirtualMachine.TypeMetadataToStringEnabled then
             Console.WriteLine(initArgs)

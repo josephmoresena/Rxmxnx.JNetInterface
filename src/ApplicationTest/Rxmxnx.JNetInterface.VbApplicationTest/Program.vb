@@ -40,7 +40,7 @@ Partial Module Program
         IManagedCallback.PrintSwitches()
     End Function
 
-    Private ReadOnly VmOptions As String() = {"-Dno-native-load=true"}
+    Private ReadOnly VmOptions As String() = {"-DjniLib.load.disable=true"}
 
     Private Sub Execute(jvmLib As JVirtualMachineLibrary, classByteCode As Byte(), ByVal ParamArray args As String())
 
