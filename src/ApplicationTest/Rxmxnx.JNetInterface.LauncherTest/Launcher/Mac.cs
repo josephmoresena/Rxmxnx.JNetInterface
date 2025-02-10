@@ -52,7 +52,7 @@ public abstract partial class Launcher
 				File.Delete(tempFileName);
 			}
 			result = this.GetJdk(version, arch, jdkPath, out DirectoryInfo jdkDirectory)!;
-			Console.WriteLine($"Jdk {(Byte)version} {arch} downloaded [{jdkDirectory.FullName}].");
+			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
 			return result;
 		}
 
@@ -60,8 +60,7 @@ public abstract partial class Launcher
 		{
 			Mac result = new(publishDirectory, out Task initialize);
 			await initialize;
-
-			Console.WriteLine($"{result.Platform} {result.CurrentArch} initialized.");
+			ConsoleNotifier.PlatformNotifier.Initialization(result.Platform, result.CurrentArch);
 			return result;
 		}
 	}

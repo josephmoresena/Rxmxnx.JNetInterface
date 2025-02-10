@@ -9,7 +9,7 @@ public partial class Launcher
 		this.OutputDirectory = outputDirectory;
 		this.Platform = platform;
 		this.CurrentArch = RuntimeInformation.OSArchitecture;
-		Console.WriteLine($"{this.Platform} {this.CurrentArch} detected.");
+		ConsoleNotifier.PlatformNotifier.EndDetection(this.Platform, this.CurrentArch);
 	}
 
 	private async Task<Jdk?> GetJdk(Jdk.JdkVersion version, Architecture arch)
@@ -28,7 +28,7 @@ public partial class Launcher
 	{
 		Jdk? result = this.GetJdk(version, arch, jdkPath, out DirectoryInfo jdkDirectory);
 		if (result is not null)
-			Console.WriteLine($"Jdk {(Byte)version} {arch} found [{jdkDirectory.FullName}].");
+			ConsoleNotifier.PlatformNotifier.JdkFound(version, arch, jdkDirectory.FullName);
 		return result;
 	}
 	private Jdk? GetJdk(Jdk.JdkVersion version, Architecture arch, String jdkPath, out DirectoryInfo jdkDirectory)

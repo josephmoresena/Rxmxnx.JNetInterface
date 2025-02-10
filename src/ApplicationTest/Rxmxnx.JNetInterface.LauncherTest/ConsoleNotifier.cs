@@ -1,12 +1,15 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.ApplicationTest.Util;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier
+public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPlatformNotifier, IZipNotifier
 {
 	public static readonly ConsoleNotifier Notifier = new();
+	public static IPlatformNotifier PlatformNotifier => ConsoleNotifier.Notifier;
+	public static IZipNotifier ZipNotifier => ConsoleNotifier.Notifier;
 
 	private ConsoleNotifier() { }
 
@@ -49,6 +52,24 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier
 		String args = String.Join(' ', info.ArgumentList);
 		Console.WriteLine($"Finished. {info.WorkingDirectory} {info.FileName} {args}");
 	}
+	void IPlatformNotifier.BeginDetection() => Console.WriteLine("Detecting platform...");
+	void IPlatformNotifier.EndDetection(OSPlatform platform, Architecture arch)
+		=> Console.WriteLine($"{platform} {arch} detected.");
+	void IPlatformNotifier.Initialization(OSPlatform platform, Architecture arch)
+	{
+		Console.WriteLine($"{platform} {arch} initialized.");
+	}
+	void IPlatformNotifier.JdkDetection(Jdk.JdkVersion version, Architecture arch)
+		=> Console.WriteLine($"Looking for jdk {(Byte)version} {arch}...");
+	void IPlatformNotifier.JdkUnavailable(Jdk.JdkVersion version, Architecture arch)
+		=> Console.WriteLine($"Jdk {(Byte)version} {arch} unavailable.");
+	void IPlatformNotifier.JdkDownload(Jdk.JdkVersion version, Architecture arch, String jdkPath)
+		=> Console.WriteLine($"Jdk {(Byte)version} {arch} downloaded [{jdkPath}].");
+	void IPlatformNotifier.JdkFound(Jdk.JdkVersion version, Architecture arch, String jdkPath)
+		=> Console.WriteLine($"Jdk {(Byte)version} {arch} found [{jdkPath}].");
+	void IZipNotifier.BeginExtraction(String zipPath) => Console.WriteLine($"Extracting... {zipPath}.");
+	void IZipNotifier.EndExtraction(String zipPath, String destinationPath)
+		=> Console.WriteLine($"{zipPath} extracted to {destinationPath}.");
 
 	private static Double GetValue(Int64 total, out String unitName)
 	{

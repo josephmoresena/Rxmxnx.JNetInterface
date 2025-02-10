@@ -9,7 +9,7 @@ public partial class Launcher
 {
 	public static async Task<Launcher> Create(DirectoryInfo outputDirectory)
 	{
-		Console.WriteLine("Detecting platform...");
+		ConsoleNotifier.PlatformNotifier.BeginDetection();
 
 		OSPlatform platform = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? OSPlatform.Windows :
 			RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? OSPlatform.OSX :
@@ -52,8 +52,8 @@ public partial class Launcher
 	private static void ExtractZip(String zipFile, String destinationPath)
 	{
 		using ZipArchive archive = ZipFile.OpenRead(zipFile);
-		Console.WriteLine($"Extracting... {zipFile}.");
+		ConsoleNotifier.ZipNotifier.BeginExtraction(zipFile);
 		archive.ExtractToDirectory(destinationPath);
-		Console.WriteLine($"{zipFile} extracted to {destinationPath}.");
+		ConsoleNotifier.ZipNotifier.EndExtraction(zipFile, destinationPath);
 	}
 }

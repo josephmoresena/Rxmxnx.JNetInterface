@@ -30,11 +30,11 @@ public abstract partial class Launcher
 
 		private async Task AppendJdk(IDictionary<Jdk.JdkVersion, Jdk> jdks, Jdk.JdkVersion version, Architecture arch)
 		{
-			Console.WriteLine($"Looking for jdk {(Byte)version} {arch}...");
+			ConsoleNotifier.PlatformNotifier.JdkDetection(version, arch);
 			if (await this.GetJdk(version, arch) is { } jdk)
 				jdks.Add(version, jdk);
 			else
-				Console.WriteLine($"Jdk {(Byte)version} {arch} unavailable.");
+				ConsoleNotifier.PlatformNotifier.JdkUnavailable(version, arch);
 		}
 
 		private static async Task ExtractFromDmgPkgAsync(String tempFileName, String jdkPath,
