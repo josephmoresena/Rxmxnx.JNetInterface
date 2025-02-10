@@ -27,6 +27,9 @@ public static class Utilities
 			return;
 		}
 
+		Int32 cursorTop = -1;
+		Int32 textLength = 0;
+
 		while (!copyTask.IsCompleted)
 		{
 			Int64 previous = current;
@@ -34,7 +37,7 @@ public static class Utilities
 			if (copyTask.IsCompleted) break;
 			current = fs.Position;
 			if (previous != current)
-				state.Notifier.Progress(state.Url, size, current);
+				state.Notifier.Progress(state.Url, size, current, ref cursorTop, ref textLength);
 		}
 
 		state.Notifier.End(state.Url, fs.Position, state.Destination);

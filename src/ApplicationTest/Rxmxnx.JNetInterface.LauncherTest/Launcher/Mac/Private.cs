@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -9,30 +10,30 @@ public abstract partial class Launcher
 {
 	private sealed partial class Mac
 	{
-		private readonly Dictionary<Jdk.JdkVersion, Jdk> _amd64 = new();
-		private readonly Dictionary<Jdk.JdkVersion, Jdk> _arm64 = new();
+		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _amd64 = new();
+		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _arm64 = new();
 
 		private Mac(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory, OSPlatform.OSX)
 			=> initialize = this.Initialize();
 
 		private async Task Initialize()
 		{
-			foreach (Jdk.JdkVersion version in Enum.GetValues<Jdk.JdkVersion>())
+			List<Task> tasks = [];
+			foreach (Jdk.JdkVersion version in Enum.GetValues<Jdk.JdkVersion>().AsSpan())
 			{
-				Task arm64Task = this.CurrentArch == Architecture.Arm64 ?
-					this.AppendJdk(this._arm64, version, Architecture.Arm64) :
-					Task.FromResult<Jdk?>(default);
+				if (this.CurrentArch == Architecture.Arm64)
+					tasks.Add(this.AppendJdk(this._arm64, version, Architecture.Arm64));
 
-				await this.AppendJdk(this._amd64, version, Architecture.X64);
-				await arm64Task;
+				tasks.Add(this.AppendJdk(this._amd64, version, Architecture.X64));
 			}
+			await Task.WhenAll(tasks);
 		}
 
 		private async Task AppendJdk(IDictionary<Jdk.JdkVersion, Jdk> jdks, Jdk.JdkVersion version, Architecture arch)
 		{
 			ConsoleNotifier.PlatformNotifier.JdkDetection(version, arch);
 			if (await this.GetJdk(version, arch) is { } jdk)
-				jdks.Add(version, jdk);
+				jdks.TryAdd(version, jdk);
 			else
 				ConsoleNotifier.PlatformNotifier.JdkUnavailable(version, arch);
 		}
