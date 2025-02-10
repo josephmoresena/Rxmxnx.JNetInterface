@@ -7,12 +7,12 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 public partial class TestCompiler
 {
 	private static async Task CompileNet(String projectFile, String rid, NetVersion netVersion, Publish publish,
-		String outputPath)
+		String outputPath, Boolean buildDependencies = true)
 	{
-		ExecuteState<ValueTuple<String, String, NetVersion, Publish, String>> state = new()
+		ExecuteState<ValueTuple<String, String, NetVersion, Publish, String, Boolean>> state = new()
 		{
 			ExecutablePath = "dotnet",
-			ArgState = (projectFile, rid, netVersion, publish, outputPath),
+			ArgState = (projectFile, rid, netVersion, publish, outputPath, buildDependencies),
 			AppendArgs = (s, a) =>
 			{
 				a.Add("publish");
@@ -22,6 +22,7 @@ public partial class TestCompiler
 				a.Add("-r");
 				a.Add(s.Item2);
 				a.Add("/p:RestorePackages=false");
+				a.Add($"/p:BuildProjectReferences={buildDependencies}");
 				a.Add($"/p:USE_NET80={s.Item3 is NetVersion.Net80}");
 				a.Add($"/p:USE_NET90={s.Item3 is NetVersion.Net90}");
 				a.Add($"/p:JNI_LIBRARY={s.Item4.HasFlag(Publish.JniLibrary)}");

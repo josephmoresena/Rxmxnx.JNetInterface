@@ -105,16 +105,16 @@ public static partial class TestCompiler
 		await TestCompiler.CompileNet(libProjectFile, rid, netVersion, Publish.JniLibrary, outputPath);
 		if (netVersion > NetVersion.Net80) return;
 		await TestCompiler.CompileNet(libProjectFile, rid, netVersion, Publish.JniLibrary | Publish.NoReflection,
-		                              outputPath);
+		                              outputPath, false);
 	}
 	private static async Task CompileNetApp(String appProjectFile, NetVersion netVersion, String rid, String outputPath)
 	{
 		await TestCompiler.RestoreNet(appProjectFile, rid, netVersion);
 		await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.SelfContained, outputPath);
-		await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.ReadyToRun, outputPath);
-		await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot, outputPath);
+		await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.ReadyToRun, outputPath, false);
+		await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot, outputPath, false);
 		if (!appProjectFile.EndsWith(".csproj") || netVersion > NetVersion.Net80) return;
 		await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot | Publish.NoReflection,
-		                              outputPath);
+		                              outputPath, false);
 	}
 }
