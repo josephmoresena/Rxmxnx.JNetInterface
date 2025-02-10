@@ -33,7 +33,7 @@ public partial class TestCompiler
 		};
 		await Utilities.Execute(state);
 	}
-	private static Boolean NativeAotSupported(Architecture arch)
+	private static Boolean ArchSupported(Architecture arch)
 	{
 		Architecture currentArch = RuntimeInformation.OSArchitecture;
 		return arch == currentArch || currentArch switch

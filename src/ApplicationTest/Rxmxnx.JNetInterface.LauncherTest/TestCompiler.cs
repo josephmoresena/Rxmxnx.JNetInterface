@@ -88,9 +88,9 @@ public static partial class TestCompiler
 			String rid = $"{os}-{Enum.GetName(arch)!.ToLower()}";
 			foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
 			{
+				if (!TestCompiler.ArchSupported(arch)) continue;
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.SelfContained, outputPath);
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.ReadyToRun, outputPath);
-				if (!TestCompiler.NativeAotSupported(arch)) continue;
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot, outputPath);
 				if (!appProjectFile.EndsWith(".csproj") || netVersion > NetVersion.Net80) continue;
 				await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot | Publish.NoReflection,
@@ -100,7 +100,7 @@ public static partial class TestCompiler
 		if (!String.IsNullOrEmpty(libProjectFile))
 			foreach (Architecture arch in architectures)
 			{
-				if (!TestCompiler.NativeAotSupported(arch)) continue;
+				if (!TestCompiler.ArchSupported(arch)) continue;
 				String rid = $"{os}-{Enum.GetName(arch)!.ToLower()}";
 				foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
 				{
