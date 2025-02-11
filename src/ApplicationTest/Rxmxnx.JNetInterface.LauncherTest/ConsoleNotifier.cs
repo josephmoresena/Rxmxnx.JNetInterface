@@ -39,7 +39,14 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 
 		using Lock.Scope scope = ConsoleNotifier.consoleLock.EnterScope();
 		if (cursorTop == -1)
-			cursorTop = Console.CursorTop;
+			try
+			{
+				cursorTop = Console.CursorTop;
+			}
+			catch (Exception)
+			{
+				// Ignore
+			}
 
 		Console.SetCursorPosition(0, cursorTop);
 		Console.Write(text.PadRight(textLength));
