@@ -17,7 +17,7 @@ public partial class TestCompiler
 			args.Add("-c");
 			args.Add("Release");
 			args.Add("-r");
-			args.Add(compileArgs._args.Rid);
+			args.Add(compileArgs._args.RuntimeIdentifier);
 			args.Add("/p:RestorePackages=false");
 			args.Add($"/p:BuildProjectReferences={compileArgs.BuildDependencies}");
 			args.Add($"/p:USE_NET80={compileArgs._args.Version is NetVersion.Net80}");

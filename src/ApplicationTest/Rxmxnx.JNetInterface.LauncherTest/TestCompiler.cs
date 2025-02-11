@@ -8,55 +8,23 @@ public static partial class TestCompiler
 		DirectoryInfo directory = outputDirectory.CreateSubdirectory("jar");
 		try
 		{
-			DirectoryInfo classDirectoryPath = directory.CreateSubdirectory("com").CreateSubdirectory("rxmxnx")
-			                                            .CreateSubdirectory("dotnet").CreateSubdirectory("test");
-			DirectoryInfo nativeImagePath = directory.CreateSubdirectory("META-INF").CreateSubdirectory("native-image");
-			String javaFilePath = Path.Combine(classDirectoryPath.FullName, "HelloDotnet.java");
-			String classFilePath = Path.Combine(classDirectoryPath.FullName, "HelloDotnet.class");
-			String manifestPath = Path.Combine(outputDirectory.FullName, "MANIFEST.TXT");
-			String jniConfigPath = Path.Combine(nativeImagePath.FullName, "jni-config.json");
+			DirectoryInfo classDir = directory.CreateSubdirectory("com").CreateSubdirectory("rxmxnx")
+			                                  .CreateSubdirectory("dotnet").CreateSubdirectory("test");
+			DirectoryInfo nativeImageDir = directory.CreateSubdirectory("META-INF").CreateSubdirectory("native-image");
+
+			String classFilePath = Path.Combine(classDir.FullName, "HelloDotnet.class");
+			String jniConfigPath = Path.Combine(nativeImageDir.FullName, "jni-config.json");
 
 			directory.Delete(true);
 
-			classDirectoryPath.Create();
-			nativeImagePath.Create();
+			classDir.Create();
+			nativeImageDir.Create();
 
-			await File.WriteAllTextAsync(javaFilePath, TestCompiler.JavaCode);
-			await File.WriteAllTextAsync(manifestPath, TestCompiler.JarManifest);
+			await TestCompiler.CompileJavaClass(classDir.FullName, jdk);
+
 			await File.WriteAllTextAsync(jniConfigPath, TestCompiler.JniConfig);
 
-			await Utilities.Execute<CompileClassArgs>(new()
-			{
-				ExecutablePath = jdk.JavaCompiler,
-				ArgState = new()
-				{
-					JavaFilePath = javaFilePath,
-					Target = jdk.JavaVersion > JdkVersion.Jdk6 ?
-						"1.6" :
-						default,
-				},
-				AppendArgs = CompileClassArgs.Append,
-				Notifier = ConsoleNotifier.Notifier,
-			});
-
-			File.Delete(javaFilePath);
-
-			await Utilities.Execute<JarCreationArgs>(new()
-			{
-				ExecutablePath = jdk.JavaArchiver,
-				ArgState = new()
-				{
-					JarRoot = Path.GetRelativePath(
-						outputDirectory.FullName, directory.FullName),
-					JarFileName = "HelloJni.jar",
-					ManifestFileName = "MANIFEST.TXT",
-				},
-				AppendArgs = JarCreationArgs.Append,
-				Notifier = ConsoleNotifier.Notifier,
-				WorkingDirectory = outputDirectory.FullName,
-			});
-
-			File.Delete(manifestPath);
+			await TestCompiler.CreateJar(directory.FullName, jdk, outputDirectory.FullName);
 
 			File.Move(classFilePath, Path.Combine(outputDirectory.FullName, "HelloDotnet.class"), true);
 		}
@@ -87,30 +55,17 @@ public static partial class TestCompiler
 			foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
 			{
 				if (!String.IsNullOrEmpty(libProjectFile))
-					await TestCompiler.CompileNetLibrary(libProjectFile, netVersion, rid, outputPath);
+					await TestCompiler.CompileNetLibrary(
+						new() { ProjectFile = libProjectFile, RuntimeIdentifier = rid, Version = netVersion, },
+						outputPath);
 
 				foreach (String appProjectFile in appProjectFiles)
-					await TestCompiler.CompileNetApp(appProjectFile, netVersion, rid, outputPath);
+				{
+					await TestCompiler.CompileNetApp(
+						new() { ProjectFile = appProjectFile, RuntimeIdentifier = rid, Version = netVersion, },
+						outputPath);
+				}
 			}
 		}
-	}
-	private static async Task CompileNetLibrary(String libProjectFile, NetVersion netVersion, String rid,
-		String outputPath)
-	{
-		await TestCompiler.RestoreNet(libProjectFile, rid, netVersion);
-		await TestCompiler.CompileNet(libProjectFile, rid, netVersion, Publish.JniLibrary, outputPath);
-		if (netVersion > NetVersion.Net80) return;
-		await TestCompiler.CompileNet(libProjectFile, rid, netVersion, Publish.JniLibrary | Publish.NoReflection,
-		                              outputPath, false);
-	}
-	private static async Task CompileNetApp(String appProjectFile, NetVersion netVersion, String rid, String outputPath)
-	{
-		await TestCompiler.RestoreNet(appProjectFile, rid, netVersion);
-		await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.SelfContained, outputPath);
-		await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.ReadyToRun, outputPath, false);
-		await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot, outputPath, false);
-		if (!appProjectFile.EndsWith(".csproj") || netVersion > NetVersion.Net80) return;
-		await TestCompiler.CompileNet(appProjectFile, rid, netVersion, Publish.NativeAot | Publish.NoReflection,
-		                              outputPath, false);
 	}
 }

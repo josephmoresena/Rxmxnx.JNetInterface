@@ -2,50 +2,116 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public partial class TestCompiler
 {
-	private static async Task CompileNet(String projectFile, String rid, NetVersion netVersion, Publish publish,
-		String outputPath, Boolean buildDependencies = true)
+	private static async Task CompileJavaClass(String classPath, Jdk jdk)
 	{
-		ExecuteState<ValueTuple<String, String, NetVersion, Publish, String, Boolean>> state = new()
+		String javaFilePath = Path.Combine(classPath, "HelloDotnet.java");
+
+		try
+		{
+			await File.WriteAllTextAsync(javaFilePath, TestCompiler.JavaCode);
+			await Utilities.Execute<CompileClassArgs>(new()
+			{
+				ExecutablePath = jdk.JavaCompiler,
+				ArgState = new()
+				{
+					JavaFilePath = javaFilePath,
+					Target = jdk.JavaVersion > JdkVersion.Jdk6 ?
+						"1.6" :
+						default,
+				},
+				AppendArgs = CompileClassArgs.Append,
+				Notifier = ConsoleNotifier.Notifier,
+			});
+		}
+		finally
+		{
+			File.Delete(javaFilePath);
+		}
+	}
+	private static async Task CreateJar(String jarRootPath, Jdk jdk, String outputPath)
+	{
+		const String manifestName = "MANIFEST.TXT";
+		String manifestPath = Path.Combine(outputPath, manifestName);
+
+		try
+		{
+			await File.WriteAllTextAsync(outputPath, TestCompiler.JarManifest);
+			await Utilities.Execute<JarCreationArgs>(new()
+			{
+				ExecutablePath = jdk.JavaArchiver,
+				ArgState = new()
+				{
+					JarRoot =
+						Path.GetRelativePath(outputPath, jarRootPath),
+					JarFileName = "HelloJni.jar",
+					ManifestFileName = manifestName,
+				},
+				AppendArgs = JarCreationArgs.Append,
+				Notifier = ConsoleNotifier.Notifier,
+				WorkingDirectory = outputPath,
+			});
+		}
+		finally
+		{
+			File.Delete(manifestPath);
+		}
+	}
+	private static async Task CompileNetLibrary(RestoreNetArgs restoreArgs, String outputPath)
+	{
+		CompileNetArgs compileArgs = new(restoreArgs, outputPath)
+		{
+			BuildDependencies = true, Publish = Publish.JniLibrary,
+		};
+
+		await TestCompiler.RestoreNet(restoreArgs);
+
+		await TestCompiler.CompileNet(compileArgs);
+		if (restoreArgs.Version > NetVersion.Net80) return;
+		compileArgs.BuildDependencies = false;
+
+		compileArgs.Publish |= Publish.NoReflection;
+		await TestCompiler.CompileNet(compileArgs);
+	}
+	private static async Task CompileNetApp(RestoreNetArgs restoreArgs, String outputPath)
+	{
+		CompileNetArgs compileArgs = new(restoreArgs, outputPath)
+		{
+			BuildDependencies = true, Publish = Publish.SelfContained,
+		};
+
+		await TestCompiler.RestoreNet(restoreArgs);
+
+		await TestCompiler.CompileNet(compileArgs);
+		compileArgs.BuildDependencies = false;
+
+		compileArgs.Publish = Publish.ReadyToRun;
+		await TestCompiler.CompileNet(compileArgs);
+
+		compileArgs.Publish = Publish.NativeAot;
+		await TestCompiler.CompileNet(compileArgs);
+		if (!restoreArgs.ProjectFile.EndsWith(".csproj") || restoreArgs.Version > NetVersion.Net80) return;
+
+		compileArgs.Publish |= Publish.NoReflection;
+		await TestCompiler.CompileNet(compileArgs);
+	}
+	private static async Task CompileNet(CompileNetArgs args)
+	{
+		ExecuteState<CompileNetArgs> state = new()
 		{
 			ExecutablePath = "dotnet",
-			ArgState = (projectFile, rid, netVersion, publish, outputPath, buildDependencies),
-			AppendArgs = (s, a) =>
-			{
-				a.Add("publish");
-				a.Add(s.Item1);
-				a.Add("-c");
-				a.Add("Release");
-				a.Add("-r");
-				a.Add(s.Item2);
-				a.Add("/p:RestorePackages=false");
-				a.Add($"/p:BuildProjectReferences={buildDependencies}");
-				a.Add($"/p:USE_NET80={s.Item3 is NetVersion.Net80}");
-				a.Add($"/p:USE_NET90={s.Item3 is NetVersion.Net90}");
-				a.Add($"/p:JNI_LIBRARY={s.Item4.HasFlag(Publish.JniLibrary)}");
-				a.Add($"/p:PublishReadyToRun={s.Item4.HasFlag(Publish.ReadyToRun)}");
-				a.Add($"/p:NativeAOT={s.Item4.HasFlag(Publish.NativeAot)}");
-				a.Add($"/p:IlcDisableReflection={s.Item4.HasFlag(Publish.NoReflection)}");
-				a.Add($"/p:CopyTargetTo={s.Item5}");
-			},
+			ArgState = args,
+			AppendArgs = CompileNetArgs.Append,
 			Notifier = ConsoleNotifier.Notifier,
 		};
 		await Utilities.Execute(state);
 	}
-	private static async Task RestoreNet(String projectFile, String rid, NetVersion netVersion)
+	private static async Task RestoreNet(RestoreNetArgs args)
 	{
-		ExecuteState<ValueTuple<String, String, NetVersion>> state = new()
+		ExecuteState<RestoreNetArgs> state = new()
 		{
 			ExecutablePath = "dotnet",
-			ArgState = (projectFile, rid, netVersion),
-			AppendArgs = (s, a) =>
-			{
-				a.Add("restore");
-				a.Add(s.Item1);
-				a.Add("-r");
-				a.Add(s.Item2);
-				a.Add($"/p:USE_NET80={s.Item3 is NetVersion.Net80}");
-				a.Add($"/p:USE_NET90={s.Item3 is NetVersion.Net90}");
-			},
+			ArgState = args,
+			AppendArgs = RestoreNetArgs.Append,
 			Notifier = ConsoleNotifier.Notifier,
 		};
 		await Utilities.Execute(state);
