@@ -1,10 +1,6 @@
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-
-using Rxmxnx.JNetInterface.ApplicationTest.Util;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+[ExcludeFromCodeCoverage]
 public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPlatformNotifier, IZipNotifier
 {
 	public static readonly ConsoleNotifier Notifier = new();
@@ -81,13 +77,13 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 		=> ConsoleNotifier.WriteColoredLine(ConsoleColor.Green, $"{platform} {arch} detected.");
 	void IPlatformNotifier.Initialization(OSPlatform platform, Architecture arch)
 		=> ConsoleNotifier.WriteColoredLine(ConsoleColor.Green, $"{platform} {arch} initialized.");
-	void IPlatformNotifier.JdkDetection(Jdk.JdkVersion version, Architecture arch)
+	void IPlatformNotifier.JdkDetection(JdkVersion version, Architecture arch)
 		=> Console.WriteLine($"Looking for jdk {(Byte)version} {arch}...");
-	void IPlatformNotifier.JdkUnavailable(Jdk.JdkVersion version, Architecture arch)
+	void IPlatformNotifier.JdkUnavailable(JdkVersion version, Architecture arch)
 		=> ConsoleNotifier.WriteColoredLine(ConsoleColor.Red, $"Jdk {(Byte)version} {arch} unavailable.");
-	void IPlatformNotifier.JdkDownload(Jdk.JdkVersion version, Architecture arch, String jdkPath)
+	void IPlatformNotifier.JdkDownload(JdkVersion version, Architecture arch, String jdkPath)
 		=> ConsoleNotifier.WriteColoredLine(ConsoleColor.Green, $"Jdk {(Byte)version} {arch} downloaded [{jdkPath}].");
-	void IPlatformNotifier.JdkFound(Jdk.JdkVersion version, Architecture arch, String jdkPath)
+	void IPlatformNotifier.JdkFound(JdkVersion version, Architecture arch, String jdkPath)
 		=> ConsoleNotifier.WriteColoredLine(ConsoleColor.Green, $"Jdk {(Byte)version} {arch} found [{jdkPath}].");
 	void IZipNotifier.BeginExtraction(String zipPath)
 		=> ConsoleNotifier.WriteColoredLine(ConsoleColor.Blue, $"Extracting... {zipPath}.");

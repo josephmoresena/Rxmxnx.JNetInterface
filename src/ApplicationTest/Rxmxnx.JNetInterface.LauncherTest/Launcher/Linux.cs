@@ -1,13 +1,10 @@
-using System.Runtime.InteropServices;
-
-using Rxmxnx.JNetInterface.ApplicationTest.Util;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public abstract partial class Launcher
 {
-	private sealed partial class Linux : Launcher
+	private sealed partial class Linux : Launcher, ILauncher<Linux>
 	{
+		public static OSPlatform Platform => OSPlatform.Linux;
 		public override Architecture[] Architectures { get; }
 		public override String RuntimeIdentifierPrefix => "win";
 		public override IEnumerable<Jdk> this[Architecture arch]
@@ -23,17 +20,18 @@ public abstract partial class Launcher
 		protected override String JavaArchiverName => "jar";
 		protected override String JavaExecutableName => "java";
 		protected override String JavaCompilerName => "javac";
-		protected override String GetJavaLibraryName(Jdk.JdkVersion version) => "libjvm.so";
+		protected override String GetJavaLibraryName(JdkVersion version) => "libjvm.so";
 
 		public override Jdk GetMinJdk()
-			=> this.CurrentArch is Architecture.X64 ? this._amd64[Jdk.JdkVersion.Jdk6] :
-				this._isArmHf ? this._armhf[Jdk.JdkVersion.Jdk8] : this._arm64[Jdk.JdkVersion.Jdk8];
-		protected override async Task<Jdk> DownloadJdk(Jdk.JdkVersion version, Architecture arch)
+			=> this.CurrentArch is Architecture.X64 ? this._amd64[JdkVersion.Jdk6] :
+				this._isArmHf ? this._armhf[JdkVersion.Jdk8] : this._arm64[JdkVersion.Jdk8];
+
+		protected override async Task<Jdk> DownloadJdk(JdkVersion version, Architecture arch)
 		{
 			String jdkPath = $"jdk_{arch}_{version}";
 			if (this.GetJdk(version, arch, jdkPath) is { } result) return result;
 
-			IReadOnlyDictionary<Jdk.JdkVersion, String> urls = arch is Architecture.X64 ? Linux.amd64Url :
+			IReadOnlyDictionary<JdkVersion, String> urls = arch is Architecture.X64 ? Linux.amd64Url :
 				Linux.IsArmHf(arch) ? Linux.armhfUrl : Linux.arm64Url;
 			String tempFileName = Path.GetTempFileName();
 			try
@@ -46,7 +44,7 @@ public abstract partial class Launcher
 					Notifier = ConsoleNotifier.Notifier,
 				});
 
-				if (version is not Jdk.JdkVersion.Jdk6)
+				if (version is not JdkVersion.Jdk6)
 					await Launcher.ExtractTarGz(tempFileName, jdkPath);
 				else
 					await this.SelfExtractBinary(tempFileName, jdkPath);
@@ -60,20 +58,21 @@ public abstract partial class Launcher
 			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
 			return result;
 		}
-		protected override String? GetQemu(Architecture arch, out String qemuRoot)
+		protected override Task RunAppFile(FileInfo appFile, Jdk jdk)
 		{
+			Architecture arch = jdk.JavaArchitecture;
 			if (this.IsCurrentArch(arch) || (this.CurrentArch is Architecture.Arm64 && Linux.IsArmHf(arch)))
-				return base.GetQemu(arch, out qemuRoot);
-			(String qemuExe, qemuRoot) = Linux.qemu[arch];
-			return qemuExe;
+				return base.RunAppFile(appFile, jdk);
+			return this.RunAppQemu(appFile, jdk);
 		}
-
-		public static async Task<Launcher> CreateInstance(DirectoryInfo publishDirectory)
+		protected override Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk)
 		{
-			Linux result = new(publishDirectory, out Task initialize);
-			await initialize;
-			ConsoleNotifier.PlatformNotifier.Initialization(result.Platform, result.CurrentArch);
-			return result;
+			Architecture arch = jdk.JavaArchitecture;
+			if (this.IsCurrentArch(arch) || (this.CurrentArch is Architecture.Arm64 && Linux.IsArmHf(arch)))
+				return base.RunJarFile(jarArgs, jdk);
+			return this.RunJarQemu(jarArgs, jdk);
 		}
+		public static Linux Create(DirectoryInfo outputDirectory, out Task initTask)
+			=> new(outputDirectory, out initTask);
 	}
 }

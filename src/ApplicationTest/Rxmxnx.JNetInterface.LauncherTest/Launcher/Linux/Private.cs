@@ -1,20 +1,15 @@
-using System.Collections.Concurrent;
-using System.Runtime.InteropServices;
-
-using Rxmxnx.JNetInterface.ApplicationTest.Util;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public abstract partial class Launcher
 {
 	private partial class Linux
 	{
-		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _amd64 = new();
-		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _arm64 = new();
-		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _armhf = new();
+		private readonly ConcurrentDictionary<JdkVersion, Jdk> _amd64 = new();
+		private readonly ConcurrentDictionary<JdkVersion, Jdk> _arm64 = new();
+		private readonly ConcurrentDictionary<JdkVersion, Jdk> _armhf = new();
 		private readonly Boolean _isArmHf;
 
-		private Linux(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory, OSPlatform.Linux)
+		private Linux(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory)
 		{
 			this._isArmHf = Linux.IsArmHf(this.CurrentArch);
 			this.Architectures = Enum.GetValues<Architecture>()
@@ -25,7 +20,7 @@ public abstract partial class Launcher
 		private async Task Initialize()
 		{
 			List<Task> tasks = [];
-			foreach (Jdk.JdkVersion version in Enum.GetValues<Jdk.JdkVersion>().AsSpan())
+			foreach (JdkVersion version in Enum.GetValues<JdkVersion>().AsSpan())
 			{
 				tasks.Add(this.AppendJdk(this._arm64, version, Architecture.Arm64));
 				tasks.Add(this.AppendJdk(this._amd64, version, Architecture.X64));
@@ -36,11 +31,11 @@ public abstract partial class Launcher
 		private async Task SelfExtractBinary(String tempFileName, String jdkPath)
 		{
 			Task task = this.CurrentArch is Architecture.X64 ?
-				Linux.NoQemuExtract(tempFileName, jdkPath) :
-				Linux.QemuExtract(tempFileName, jdkPath);
+				Linux.RunSelfExtract(tempFileName, jdkPath) :
+				Linux.RunSelfExtractQemu(tempFileName, jdkPath);
 			await task;
 		}
-		private static async Task NoQemuExtract(String tempFileName, String jdkPath)
+		private static async Task RunSelfExtract(String tempFileName, String jdkPath)
 		{
 			ExecuteState state = new()
 			{
@@ -48,7 +43,7 @@ public abstract partial class Launcher
 			};
 			await Utilities.Execute(state);
 		}
-		private static async Task QemuExtract(String tempFileName, String jdkPath)
+		private static async Task RunSelfExtractQemu(String tempFileName, String jdkPath)
 		{
 			(String qemuExe, String qemuRoot) = Linux.qemu[Architecture.X64];
 			QemuExecuteState state = new()
@@ -61,6 +56,38 @@ public abstract partial class Launcher
 			};
 			await Utilities.QemuExecute(state);
 		}
+		private async Task RunAppQemu(FileInfo appFile, Jdk jdk)
+		{
+			(String qemuExe, String qemuRoot) = Linux.qemu[jdk.JavaArchitecture];
+			QemuExecuteState<AppArgs> state = new()
+			{
+				QemuRoot = qemuRoot,
+				QemuExecutable = qemuExe,
+				ExecutablePath = appFile.FullName,
+				ArgState = jdk,
+				AppendArgs = AppArgs.Append,
+				WorkingDirectory = this.OutputDirectory.FullName,
+				Notifier = ConsoleNotifier.Notifier,
+			};
+			Int32 result = await Utilities.QemuExecute(state);
+			ConsoleNotifier.Notifier.Result(result, appFile.Name);
+		}
+		private async Task<Int32> RunJarQemu(JarArgs jarArgs, Jdk jdk)
+		{
+			(String qemuExe, String qemuRoot) = Linux.qemu[jdk.JavaArchitecture];
+			QemuExecuteState<JarArgs> state = new()
+			{
+				QemuRoot = qemuRoot,
+				QemuExecutable = qemuExe,
+				ExecutablePath = jdk.JavaExecutable,
+				ArgState = jarArgs,
+				AppendArgs = JarArgs.Append,
+				WorkingDirectory = this.OutputDirectory.FullName,
+				Notifier = ConsoleNotifier.Notifier,
+			};
+			return await Utilities.QemuExecute(state);
+		}
+
 		private Boolean IsCurrentArch(Architecture arch)
 			=> arch == this.CurrentArch || (this._isArmHf && Linux.IsArmHf(arch));
 

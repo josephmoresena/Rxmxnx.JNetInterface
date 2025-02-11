@@ -14,3 +14,6 @@ await TestCompiler.CompileClass(minJdk, launcher.OutputDirectory);
 await TestCompiler.CompileNet(projectDirectory, launcher.RuntimeIdentifierPrefix, outputDirectory.FullName);
 
 await launcher.Execute();
+
+[ExcludeFromCodeCoverage]
+public static partial class Program;

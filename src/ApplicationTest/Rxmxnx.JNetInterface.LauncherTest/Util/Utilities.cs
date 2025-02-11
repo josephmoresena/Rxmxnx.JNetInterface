@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 
 public static class Utilities

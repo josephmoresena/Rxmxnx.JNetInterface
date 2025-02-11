@@ -1,11 +1,8 @@
-using System.Runtime.InteropServices;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public abstract partial class Launcher
 {
 	public DirectoryInfo OutputDirectory { get; set; }
-	public OSPlatform Platform { get; }
 	public Architecture CurrentArch { get; }
 
 	public virtual IEnumerable<Jdk> this[Architecture arch] => [];
@@ -27,7 +24,7 @@ public abstract partial class Launcher
 		foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]))
 		{
 			if (jarFile is not null)
-				foreach (TestCompiler.NetVersion netVersion in Enum.GetValues<TestCompiler.NetVersion>())
+				foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
 					await this.RunJarFile(jdk, jarFile, netVersion);
 
 			foreach (FileInfo appFile in archFiles[jdk.JavaArchitecture])
@@ -37,21 +34,40 @@ public abstract partial class Launcher
 
 	public abstract Jdk GetMinJdk();
 
-	protected abstract String GetJavaLibraryName(Jdk.JdkVersion version);
-	protected abstract Task<Jdk> DownloadJdk(Jdk.JdkVersion version, Architecture arch);
+	protected abstract String GetJavaLibraryName(JdkVersion version);
+	protected abstract Task<Jdk> DownloadJdk(JdkVersion version, Architecture arch);
 
-	protected virtual String? GetQemu(Architecture arch, out String qemuRoot)
-	{
-		qemuRoot = String.Empty;
-		return default;
-	}
-	protected virtual async Task AppendJdk(IDictionary<Jdk.JdkVersion, Jdk> jdks, Jdk.JdkVersion version,
-		Architecture arch)
+	protected virtual async Task AppendJdk(IDictionary<JdkVersion, Jdk> jdks, JdkVersion version, Architecture arch)
 	{
 		ConsoleNotifier.PlatformNotifier.JdkDetection(version, arch);
 		if (await this.GetJdk(version, arch) is { } jdk)
 			jdks.TryAdd(version, jdk);
 		else
 			ConsoleNotifier.PlatformNotifier.JdkUnavailable(version, arch);
+	}
+	protected virtual async Task RunAppFile(FileInfo appFile, Jdk jdk)
+	{
+		ExecuteState<AppArgs> state = new()
+		{
+			ExecutablePath = appFile.FullName,
+			ArgState = jdk,
+			AppendArgs = AppArgs.Append,
+			WorkingDirectory = this.OutputDirectory.FullName,
+			Notifier = ConsoleNotifier.Notifier,
+		};
+		Int32 result = await Utilities.Execute(state);
+		ConsoleNotifier.Notifier.Result(result, appFile.Name);
+	}
+	protected virtual async Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk)
+	{
+		ExecuteState<JarArgs> state = new()
+		{
+			ExecutablePath = jdk.JavaExecutable,
+			ArgState = jarArgs,
+			AppendArgs = JarArgs.Append,
+			WorkingDirectory = this.OutputDirectory.FullName,
+			Notifier = ConsoleNotifier.Notifier,
+		};
+		return await Utilities.Execute(state);
 	}
 }

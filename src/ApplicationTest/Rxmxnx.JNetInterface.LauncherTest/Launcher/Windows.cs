@@ -1,13 +1,10 @@
-using System.Runtime.InteropServices;
-
-using Rxmxnx.JNetInterface.ApplicationTest.Util;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public abstract partial class Launcher
 {
-	private sealed partial class Windows : Launcher
+	private sealed partial class Windows : Launcher, ILauncher<Windows>
 	{
+		public static OSPlatform Platform => OSPlatform.Windows;
 		public override Architecture[] Architectures { get; }
 		public override String RuntimeIdentifierPrefix => "win";
 		public override IEnumerable<Jdk> this[Architecture arch]
@@ -24,12 +21,10 @@ public abstract partial class Launcher
 		protected override String JavaCompilerName => "javac.exe";
 
 		public override Jdk GetMinJdk()
-			=> this.CurrentArch is Architecture.X86 ?
-				this._i686[Jdk.JdkVersion.Jdk6] :
-				this._amd64[Jdk.JdkVersion.Jdk6];
+			=> this.CurrentArch is Architecture.X86 ? this._i686[JdkVersion.Jdk6] : this._amd64[JdkVersion.Jdk6];
 
-		protected override String GetJavaLibraryName(Jdk.JdkVersion version) => "jvm.dll";
-		protected override async Task<Jdk> DownloadJdk(Jdk.JdkVersion version, Architecture arch)
+		protected override String GetJavaLibraryName(JdkVersion version) => "jvm.dll";
+		protected override async Task<Jdk> DownloadJdk(JdkVersion version, Architecture arch)
 		{
 			String jdkPath = $"jdk_{arch}_{version}";
 			if (this.GetJdk(version, arch, jdkPath) is { } result) return result;
@@ -39,7 +34,7 @@ public abstract partial class Launcher
 			if (!String.IsNullOrEmpty(installationPath) && this.GetJdk(version, arch, jdkPath) is { } installed)
 				return installed;
 
-			IReadOnlyDictionary<Jdk.JdkVersion, String> urls = arch is Architecture.X64 ? Windows.amd64Url :
+			IReadOnlyDictionary<JdkVersion, String> urls = arch is Architecture.X64 ? Windows.amd64Url :
 				arch is Architecture.X86 ? Windows.i686Url : Windows.arm64Url;
 			String tempFileName = Path.GetTempFileName();
 			try
@@ -51,7 +46,7 @@ public abstract partial class Launcher
 					Destination = tempFileName,
 					Notifier = ConsoleNotifier.Notifier,
 				});
-				if (version is not Jdk.JdkVersion.Jdk6)
+				if (version is not JdkVersion.Jdk6)
 				{
 					Launcher.ExtractZip(tempFileName, jdkPath);
 				}
@@ -73,19 +68,12 @@ public abstract partial class Launcher
 			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
 			return result;
 		}
-		protected override Task AppendJdk(IDictionary<Jdk.JdkVersion, Jdk> jdks, Jdk.JdkVersion version,
-			Architecture arch)
+		protected override Task AppendJdk(IDictionary<JdkVersion, Jdk> jdks, JdkVersion version, Architecture arch)
 		{
-			if (arch == Architecture.Arm64 && version is Jdk.JdkVersion.Jdk8) return Task.CompletedTask;
+			if (arch == Architecture.Arm64 && version is JdkVersion.Jdk8) return Task.CompletedTask;
 			return base.AppendJdk(jdks, version, arch);
 		}
-
-		public static async Task<Launcher> CreateInstance(DirectoryInfo publishDirectory)
-		{
-			Windows result = new(publishDirectory, out Task initialize);
-			await initialize;
-			ConsoleNotifier.PlatformNotifier.Initialization(result.Platform, result.CurrentArch);
-			return result;
-		}
+		public static Windows Create(DirectoryInfo outputDirectory, out Task initTask)
+			=> new(outputDirectory, out initTask);
 	}
 }

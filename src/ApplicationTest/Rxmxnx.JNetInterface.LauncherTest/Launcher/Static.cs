@@ -1,8 +1,3 @@
-using System.IO.Compression;
-using System.Runtime.InteropServices;
-
-using Rxmxnx.JNetInterface.ApplicationTest.Util;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public partial class Launcher
@@ -16,15 +11,25 @@ public partial class Launcher
 			RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? OSPlatform.Linux : default;
 
 		if (platform == OSPlatform.OSX)
-			return await Mac.CreateInstance(outputDirectory);
+			return await Launcher.Create<Mac>(outputDirectory);
 		if (platform == OSPlatform.Windows)
-			return await Windows.CreateInstance(outputDirectory);
+			return await Launcher.Create<Windows>(outputDirectory);
 		if (platform == OSPlatform.Linux)
-			return await Linux.CreateInstance(outputDirectory);
+			return await Launcher.Create<Linux>(outputDirectory);
 
 		throw new InvalidOperationException("Unsupported platform");
 	}
 
+	private static async Task<TLauncher> Create<TLauncher>(DirectoryInfo outputDirectory)
+		where TLauncher : Launcher, ILauncher<TLauncher>
+	{
+		TLauncher result = TLauncher.Create(outputDirectory, out Task initialize);
+		ConsoleNotifier.PlatformNotifier.EndDetection(TLauncher.Platform, result.CurrentArch);
+
+		await initialize;
+		ConsoleNotifier.PlatformNotifier.Initialization(TLauncher.Platform, result.CurrentArch);
+		return result;
+	}
 	private static async Task ExtractTarGz(String tarGzFile, String destinationPath,
 		CancellationToken cancellationToken = default)
 	{
@@ -43,7 +48,7 @@ public partial class Launcher
 		};
 		await Utilities.Execute(state, cancellationToken);
 	}
-	private static IReadOnlyDictionary<Jdk.JdkVersion, String> GetEnvironmentVariables(Architecture arch)
+	private static IReadOnlyDictionary<JdkVersion, String> GetEnvironmentVariables(Architecture arch)
 		=> arch switch
 		{
 			Architecture.Arm64 => Launcher.javaHomeArm64,

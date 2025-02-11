@@ -1,19 +1,13 @@
-using System.Collections.Concurrent;
-using System.Runtime.InteropServices;
-using System.Text;
-
-using Rxmxnx.JNetInterface.ApplicationTest.Util;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public abstract partial class Launcher
 {
 	private sealed partial class Mac
 	{
-		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _amd64 = new();
-		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _arm64 = new();
+		private readonly ConcurrentDictionary<JdkVersion, Jdk> _amd64 = new();
+		private readonly ConcurrentDictionary<JdkVersion, Jdk> _arm64 = new();
 
-		private Mac(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory, OSPlatform.OSX)
+		private Mac(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory)
 		{
 			this.Architectures = Enum.GetValues<Architecture>()
 			                         .Where(a => a == this.CurrentArch || a is Architecture.X64).ToArray();
@@ -23,7 +17,7 @@ public abstract partial class Launcher
 		private async Task Initialize()
 		{
 			List<Task> tasks = [];
-			foreach (Jdk.JdkVersion version in Enum.GetValues<Jdk.JdkVersion>().AsSpan())
+			foreach (JdkVersion version in Enum.GetValues<JdkVersion>().AsSpan())
 			{
 				if (this.CurrentArch is Architecture.Arm64)
 					tasks.Add(this.AppendJdk(this._arm64, version, Architecture.Arm64));

@@ -1,13 +1,10 @@
-using System.Runtime.InteropServices;
-
-using Rxmxnx.JNetInterface.ApplicationTest.Util;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public abstract partial class Launcher
 {
-	private sealed partial class Mac : Launcher
+	private sealed partial class Mac : Launcher, ILauncher<Mac>
 	{
+		public static OSPlatform Platform => OSPlatform.OSX;
 		public override Architecture[] Architectures { get; }
 		public override String RuntimeIdentifierPrefix => "osx";
 		public override IEnumerable<Jdk> this[Architecture arch]
@@ -22,16 +19,16 @@ public abstract partial class Launcher
 		protected override String JavaExecutableName => "java";
 		protected override String JavaCompilerName => "javac";
 
-		public override Jdk GetMinJdk() => this._amd64[Jdk.JdkVersion.Jdk6];
+		public override Jdk GetMinJdk() => this._amd64[JdkVersion.Jdk6];
 
-		protected override String GetJavaLibraryName(Jdk.JdkVersion version)
-			=> version is Jdk.JdkVersion.Jdk6 ? "libserver.dylib" : "libjvm.dylib";
+		protected override String GetJavaLibraryName(JdkVersion version)
+			=> version is JdkVersion.Jdk6 ? "libserver.dylib" : "libjvm.dylib";
 
-		protected override async Task<Jdk> DownloadJdk(Jdk.JdkVersion version, Architecture arch)
+		protected override async Task<Jdk> DownloadJdk(JdkVersion version, Architecture arch)
 		{
 			String jdkPath = $"jdk_{arch}_{version}";
 			if (this.GetJdk(version, arch, jdkPath) is { } result) return result;
-			IReadOnlyDictionary<Jdk.JdkVersion, String> urls = arch is Architecture.X64 ? Mac.amd64Url : Mac.arm64Url;
+			IReadOnlyDictionary<JdkVersion, String> urls = arch is Architecture.X64 ? Mac.amd64Url : Mac.arm64Url;
 			String tempFileName = Path.GetTempFileName();
 			try
 			{
@@ -42,7 +39,7 @@ public abstract partial class Launcher
 					Destination = tempFileName,
 					Notifier = ConsoleNotifier.Notifier,
 				});
-				if (version is not Jdk.JdkVersion.Jdk6)
+				if (version is not JdkVersion.Jdk6)
 					await Launcher.ExtractTarGz(tempFileName, jdkPath);
 				else
 					await Mac.ExtractFromDmgPkgAsync(tempFileName, jdkPath);
@@ -56,13 +53,7 @@ public abstract partial class Launcher
 			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
 			return result;
 		}
-
-		public static async Task<Launcher> CreateInstance(DirectoryInfo publishDirectory)
-		{
-			Mac result = new(publishDirectory, out Task initialize);
-			await initialize;
-			ConsoleNotifier.PlatformNotifier.Initialization(result.Platform, result.CurrentArch);
-			return result;
-		}
+		public static Mac Create(DirectoryInfo outputDirectory, out Task initTask)
+			=> new(outputDirectory, out initTask);
 	}
 }

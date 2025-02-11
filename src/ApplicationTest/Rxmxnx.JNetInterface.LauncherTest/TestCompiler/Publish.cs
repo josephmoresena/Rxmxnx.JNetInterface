@@ -2,12 +2,6 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public partial class TestCompiler
 {
-	public enum NetVersion : Byte
-	{
-		Net80 = 8,
-		Net90 = 9,
-	}
-
 	[Flags]
 	private enum Publish : Byte
 	{

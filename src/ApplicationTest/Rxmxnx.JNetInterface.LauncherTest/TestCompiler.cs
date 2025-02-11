@@ -1,9 +1,6 @@
-using System.Runtime.InteropServices;
-
-using Rxmxnx.JNetInterface.ApplicationTest.Util;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
+[ExcludeFromCodeCoverage]
 public static partial class TestCompiler
 {
 	public static async Task CompileClass(Jdk jdk, DirectoryInfo outputDirectory)
@@ -31,7 +28,7 @@ public static partial class TestCompiler
 			await Utilities.Execute<ValueTuple<String, Boolean>>(new()
 			{
 				ExecutablePath = jdk.JavaCompiler,
-				ArgState = (javaFilePath, jdk.JavaVersion > Jdk.JdkVersion.Jdk6),
+				ArgState = (javaFilePath, jdk.JavaVersion > JdkVersion.Jdk6),
 				AppendArgs = (s, a) =>
 				{
 					a.Add(s.Item1);

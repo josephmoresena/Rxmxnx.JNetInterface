@@ -1,19 +1,14 @@
-using System.Collections.Concurrent;
-using System.Runtime.InteropServices;
-
-using Rxmxnx.JNetInterface.ApplicationTest.Util;
-
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public abstract partial class Launcher
 {
 	private partial class Windows
 	{
-		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _amd64 = new();
-		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _arm64 = new();
-		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _i686 = new();
+		private readonly ConcurrentDictionary<JdkVersion, Jdk> _amd64 = new();
+		private readonly ConcurrentDictionary<JdkVersion, Jdk> _arm64 = new();
+		private readonly ConcurrentDictionary<JdkVersion, Jdk> _i686 = new();
 
-		private Windows(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory, OSPlatform.Windows)
+		private Windows(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory)
 		{
 			this.Architectures = Enum.GetValues<Architecture>()
 			                         .Where(a => a == this.CurrentArch || a is Architecture.X86 ||
@@ -25,7 +20,7 @@ public abstract partial class Launcher
 		private async Task Initialize()
 		{
 			List<Task> tasks = [];
-			foreach (Jdk.JdkVersion version in Enum.GetValues<Jdk.JdkVersion>().AsSpan())
+			foreach (JdkVersion version in Enum.GetValues<JdkVersion>().AsSpan())
 			{
 				if (this.CurrentArch is Architecture.Arm64)
 					tasks.Add(this.AppendJdk(this._arm64, version, Architecture.Arm64));
@@ -36,7 +31,7 @@ public abstract partial class Launcher
 			await Task.WhenAll(tasks);
 		}
 
-		private static String? GetInstallationPath(Architecture arch, Jdk.JdkVersion version)
+		private static String? GetInstallationPath(Architecture arch, JdkVersion version)
 		{
 			if (arch is not Architecture.X86 and not Architecture.X64) return default;
 			Environment.SpecialFolder programFilesFolder = arch is Architecture.X86 ?
@@ -45,8 +40,8 @@ public abstract partial class Launcher
 			DirectoryInfo programFilesDir = new(Windows.GetProgramFilesPath(programFilesFolder));
 			String versionPattern = version switch
 			{
-				Jdk.JdkVersion.Jdk6 => "1.6",
-				Jdk.JdkVersion.Jdk8 => "1.8",
+				JdkVersion.Jdk6 => "1.6",
+				JdkVersion.Jdk8 => "1.8",
 				_ => $"{(Byte)version}",
 			};
 
