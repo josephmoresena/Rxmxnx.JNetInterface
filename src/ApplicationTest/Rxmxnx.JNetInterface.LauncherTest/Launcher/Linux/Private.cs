@@ -30,6 +30,18 @@ public abstract partial class Launcher
 		}
 		private async Task SelfExtractBinary(String tempFileName, String jdkPath)
 		{
+			await Utilities.Execute<String>(new()
+			{
+				ExecutablePath = "chmod",
+				ArgState = tempFileName,
+				AppendArgs = (s, a) =>
+				{
+					a.Add("+x");
+					a.Add(tempFileName);
+				},
+				Notifier = ConsoleNotifier.Notifier,
+			});
+
 			Task task = this.CurrentArch is Architecture.X64 ?
 				Linux.RunSelfExtract(tempFileName, jdkPath) :
 				Linux.RunSelfExtractQemu(tempFileName, jdkPath);
