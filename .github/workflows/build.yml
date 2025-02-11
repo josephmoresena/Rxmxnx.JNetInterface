@@ -102,22 +102,75 @@ jobs:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
     steps:
       - uses: actions/checkout@v4
-
+      - name: APT deb822 sources
+        run: |
+          if [[ $ImageOS == "ubuntu24" ]]; then
+           sudo bash -c 'cat > /etc/apt/sources.list.d/ubuntu.sources <<EOF
+          Types: deb
+          URIs: http://archive.ubuntu.com/ubuntu/
+          Suites: noble
+          Components: main restricted universe
+          Architectures: amd64
+          
+          Types: deb
+          URIs: http://security.ubuntu.com/ubuntu/
+          Suites: noble-security
+          Components: main restricted universe
+          Architectures: amd64
+          
+          Types: deb
+          URIs: http://archive.ubuntu.com/ubuntu/
+          Suites: noble-updates
+          Components: main restricted universe
+          Architectures: amd64
+          
+          Types: deb
+          URIs: http://azure.ports.ubuntu.com/ubuntu-ports/
+          Suites: noble
+          Components: main restricted multiverse universe
+          Architectures: arm64
+  
+          Types: deb
+          URIs: http://azure.ports.ubuntu.com/ubuntu-ports/
+          Suites: noble-updates
+          Components: main restricted multiverse universe
+          Architectures: arm64
+          
+          Types: deb
+          URIs: http://azure.ports.ubuntu.com/ubuntu-ports/
+          Suites: noble-updates
+          Components: main restricted multiverse universe
+          Architectures: armhf
+          EOF'
+          fi
+          
       - name: Setup NativeAOT pre-requisites
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get install clang zlib1g-dev libkrb5-dev \
-            gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf \
-            gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
-            libc6-dev-arm64-cross libc6-dev-armel-cross \
-            --assume-yes
-
-      - name: Instalar QEMU y binfmt
-        if: runner.os == 'Linux'
-        run: |
+          sudo dpkg --add-architecture arm64
+          sudo dpkg --add-architecture armhf
+          
+          sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble main restricted
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+          EOF'
+          
+          sudo bash -c 'cat > /etc/apt/sources.list.d/armhf.list <<EOF
+          deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ noble main restricted
+          deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
+          deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+          EOF'
+          
+          sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+          sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
+          
           sudo apt update
-          sudo apt install -y qemu-user-static binfmt-support
-          sudo update-binfmts --enable
+          sudo apt-get install clang llvm zlib1g-dev libkrb5-dev \
+            qemu-user qemu-user-static \
+            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 libkrb5-dev:arm64 \
+            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf libkrb5-dev:armhf \
+            --assume-yes
 
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
@@ -125,165 +178,24 @@ jobs:
           dotnet-version: |
             8.0.x
             9.0.x
-
-      - name: Check java-setup
-        if: runner.os == 'Linux'
+            
+      - name: Run launcher
+        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
         run: |
-          echo $JAVA_HOME_8_X64
-          ls $JAVA_HOME_8_X64
+          dotnet run -c Release "../." "../../../artifacts"
           
-          echo $JAVA_HOME_11_X64
-          ls $JAVA_HOME_11_X64
-          
-          echo $JAVA_HOME_17_X64
-          ls $JAVA_HOME_17_X64
-          
-          echo $JAVA_HOME_21_X64
-          ls $JAVA_HOME_21_X64
-
-      - name: Check java-setup
-        if: runner.os == 'Windows'
-        shell: cmd
-        run: |
-          echo %JAVA_HOME_8_X64%
-          dir %JAVA_HOME_8_X64%
-          
-          echo %JAVA_HOME_11_X64%
-          dir %JAVA_HOME_11_X64%
-          
-          echo %JAVA_HOME_17_X64%
-          dir %JAVA_HOME_17_X64%
-          
-          echo %JAVA_HOME_21_X64%
-          dir %JAVA_HOME_21_X64%     
-
-      - name: Check java-setup
-        if: runner.os == 'MacOS'
-        run: |
-          echo $JAVA_HOME_11_arm64
-          ls $JAVA_HOME_11_arm64
-          
-          echo $JAVA_HOME_17_arm64
-          ls $JAVA_HOME_17_arm64
-          
-          echo $JAVA_HOME_21_arm64
-          ls $JAVA_HOME_21_arm64
-  
-  run-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup NativeAOT pre-requisites
-        run: sudo apt-get install clang zlib1g-dev libkrb5-dev --assume-yes
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - name: Create Native Artifact
         with:
-          dotnet-version: 9.0.x
-      - name: Set up JDK 21
-        run: |
-          wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb
-          sudo apt install ./jdk-21_linux-x64_bin.deb
-      - name: C# Framework run
-        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
-      - name: Vb Framework run
-        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj
-      - name: F# Framework run
-        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj
-      - name: C# NativeAOT run
-        run: |
-          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64
-          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-      - name: Vb NativeAOT run
-        run: |
-          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r linux-x64
-          src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
-      - name: F# NativeAOT run
-        run: |
-          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r linux-x64
-          src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
-      - name: C# NativeAOT-RFM run
-        run: |
-          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 /p:IlcDisableReflection=true /p:USE_NET80=true
-          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-  
-  run-macOS:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+          name: ${{ runner.os }}-Artifact
+          path: |
+            ./artifacts/*.class
+            ./artifacts/*.jar
+            ./artifacts/ApplicationTest*NAOT*
+            ./artifacts/ApplicationTest*RFM*
+            ./artifacts/*HelloJni.*    
+            
+      - name: Create Native Artifact Logs
         with:
-          dotnet-version: 9.0.x
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: 'oracle'
-      - name: C# Framework run
-        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
-      - name: Vb Framework run
-        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj
-      - name: F# Framework run
-        run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj
-      - name: C# NativeAOT run
-        run: |
-          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64
-          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-      - name: Vb NativeAOT run
-        run: |
-          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r osx-arm64
-          src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
-      - name: F# NativeAOT run
-        run: |
-          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r osx-arm64
-          src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
-      - name: C# NativeAOT-RFM run
-        run: |
-          dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64 /p:IlcDisableReflection=true /p:USE_NET80=true
-          src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-  
-  run-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
-      - name: Set up JDK 21
-        shell: pwsh
-        run: |
-          curl.exe -O https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I jdk-21_windows-x64_bin.msi /quiet'
-      - name: Set up JDK 8 (x86)
-        shell: pwsh
-        run: |
-          curl.exe -O https://cfdownload.adobe.com/pub/adobe/coldfusion/java/java8/java8u431/jdk/jdk-8u431-windows-i586.exe
-          Start-Process jdk-8u431-windows-i586.exe -Wait -ArgumentList '/s ADDLOCAL="ToolsFeature,SourceFeature"'
-      - name: C# Framework run
-        run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj /p:USE_NET80=true
-      - name: Vb Framework run
-        run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj /p:USE_NET80=true
-      - name: F# Framework run
-        run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj /p:USE_NET80=true
-      - name: C# NativeAOT run
-        run: |
-          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64 /p:USE_NET80=true
-          src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
-      - name: Vb NativeAOT run
-        run: |
-          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r win-x64 /p:USE_NET80=true
-          src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.VbApplicationTest.exe
-      - name: F# NativeAOT run
-        run: |
-          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r win-x64 /p:USE_NET80=true
-          src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.FsApplicationTest.exe
-      - name: C# NativeAOT-RFM run
-        run: |
-          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64 /p:IlcDisableReflection=true /p:USE_NET80=true
-          src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
-      - name: C# NativeAOT run (x86)
-        run: |
-          dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86 /p:ENABLE_TRACE=true
-          src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
-        continue-on-error: true
+          name: ${{ runner.os }}-Artifact-Logs
+          path: |
+            ./artifacts/native/*
