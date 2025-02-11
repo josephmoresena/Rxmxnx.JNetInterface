@@ -36,7 +36,7 @@ public abstract partial class Launcher
 	public abstract Jdk GetMinJdk();
 
 	protected abstract String GetJavaLibraryName(JdkVersion version);
-	protected abstract Task<Jdk> DownloadJdk(JdkVersion version, Architecture arch);
+	protected abstract Task<Jdk?> DownloadJdk(JdkVersion version, Architecture arch);
 
 	protected virtual async Task AppendJdk(IDictionary<JdkVersion, Jdk> jdks, JdkVersion version, Architecture arch)
 	{

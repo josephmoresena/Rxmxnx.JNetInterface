@@ -24,7 +24,7 @@ public abstract partial class Launcher
 			=> this.CurrentArch is Architecture.X86 ? this._i686[JdkVersion.Jdk6] : this._amd64[JdkVersion.Jdk6];
 
 		protected override String GetJavaLibraryName(JdkVersion version) => "jvm.dll";
-		protected override async Task<Jdk> DownloadJdk(JdkVersion version, Architecture arch)
+		protected override async Task<Jdk?> DownloadJdk(JdkVersion version, Architecture arch)
 		{
 			String jdkPath = $"jdk_{arch}_{version}";
 			if (this.GetJdk(version, arch, jdkPath) is { } result) return result;
@@ -39,6 +39,8 @@ public abstract partial class Launcher
 			String tempFileName = Path.GetTempFileName();
 			try
 			{
+				if (!urls.ContainsKey(version)) return default;
+				
 				Directory.CreateDirectory(jdkPath);
 				await Utilities.DownloadFileAsync(new()
 				{
@@ -64,7 +66,7 @@ public abstract partial class Launcher
 				File.Delete(tempFileName);
 			}
 
-			result = this.GetJdk(version, arch, jdkPath, out DirectoryInfo jdkDirectory)!;
+			result = this.GetJdk(version, arch, jdkPath, out DirectoryInfo jdkDirectory);
 			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
 			return result;
 		}

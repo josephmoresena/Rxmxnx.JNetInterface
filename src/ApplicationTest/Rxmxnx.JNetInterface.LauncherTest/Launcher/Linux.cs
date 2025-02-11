@@ -6,7 +6,7 @@ public abstract partial class Launcher
 	{
 		public static OSPlatform Platform => OSPlatform.Linux;
 		public override Architecture[] Architectures { get; }
-		public override String RuntimeIdentifierPrefix => "win";
+		public override String RuntimeIdentifierPrefix => "linux";
 		public override IEnumerable<Jdk> this[Architecture arch]
 			=> arch switch
 			{
@@ -26,7 +26,7 @@ public abstract partial class Launcher
 			=> this.CurrentArch is Architecture.X64 ? this._amd64[JdkVersion.Jdk6] :
 				this._isArmHf ? this._armhf[JdkVersion.Jdk8] : this._arm64[JdkVersion.Jdk8];
 
-		protected override async Task<Jdk> DownloadJdk(JdkVersion version, Architecture arch)
+		protected override async Task<Jdk?> DownloadJdk(JdkVersion version, Architecture arch)
 		{
 			String jdkPath = $"jdk_{arch}_{version}";
 			if (this.GetJdk(version, arch, jdkPath) is { } result) return result;
@@ -36,6 +36,8 @@ public abstract partial class Launcher
 			String tempFileName = Path.GetTempFileName();
 			try
 			{
+				if (!urls.ContainsKey(version)) return default;
+				
 				Directory.CreateDirectory(jdkPath);
 				await Utilities.DownloadFileAsync(new()
 				{
@@ -54,7 +56,7 @@ public abstract partial class Launcher
 				File.Delete(tempFileName);
 			}
 
-			result = this.GetJdk(version, arch, jdkPath, out DirectoryInfo jdkDirectory)!;
+			result = this.GetJdk(version, arch, jdkPath, out DirectoryInfo jdkDirectory);
 			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
 			return result;
 		}
