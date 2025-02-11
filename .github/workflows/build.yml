@@ -185,6 +185,7 @@ jobs:
           dotnet run -c Release "../." "../../../artifacts"
           
       - name: Create Native Artifact
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-Artifact
           path: |
@@ -195,6 +196,7 @@ jobs:
             ./artifacts/*HelloJni.*    
             
       - name: Create Native Artifact Logs
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-Artifact-Logs
           path: |
