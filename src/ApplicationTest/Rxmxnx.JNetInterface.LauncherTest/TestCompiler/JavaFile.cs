@@ -463,6 +463,12 @@ public class HelloDotnet {
     ""name"": ""java.lang.IllegalArgumentException""
   },
   {
+    ""name"": ""java.lang.Math""
+  },
+  {
+    ""name"": ""java.lang.Process""
+  },
+  {
     ""name"": ""[[I""
   },
   {

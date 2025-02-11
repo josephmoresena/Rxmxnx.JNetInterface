@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 
+[ExcludeFromCodeCoverage]
 public static class Utilities
 {
 	public static async Task DownloadFileAsync(DownloadGetState state, CancellationToken cancellationToken = default)

@@ -10,6 +10,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage"/>
+    </ItemGroup>
+
+    <ItemGroup>
         <Using Include="System.ComponentModel"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
         <Using Include="System.Globalization"/>

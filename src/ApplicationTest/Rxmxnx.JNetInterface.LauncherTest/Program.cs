@@ -10,8 +10,11 @@ DirectoryInfo outputDirectory = args.Length >= 2 ?
 Launcher launcher = await Launcher.Create(outputDirectory);
 
 Jdk minJdk = launcher.GetMinJdk();
+_ = Boolean.TryParse(Environment.GetEnvironmentVariable("JNETINTERFACE_ONLY_NATIVE_TEST"), out Boolean onlyNativeAot);
+
 await TestCompiler.CompileClass(minJdk, launcher.OutputDirectory);
-await TestCompiler.CompileNet(projectDirectory, launcher.RuntimeIdentifierPrefix, outputDirectory.FullName);
+await TestCompiler.CompileNet(projectDirectory, launcher.RuntimeIdentifierPrefix, outputDirectory.FullName,
+                              onlyNativeAot);
 
 await launcher.Execute();
 

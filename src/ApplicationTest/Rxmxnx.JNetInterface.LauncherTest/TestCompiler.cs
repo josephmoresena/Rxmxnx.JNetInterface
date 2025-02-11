@@ -33,7 +33,8 @@ public static partial class TestCompiler
 			directory.Delete(true);
 		}
 	}
-	public static async Task CompileNet(DirectoryInfo projectDirectory, String os, String outputPath)
+	public static async Task CompileNet(DirectoryInfo projectDirectory, String os, String outputPath,
+		Boolean onlyNativeAot = false)
 	{
 		Architecture[] architectures = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?
 			[Architecture.X86, Architecture.X64, Architecture.Arm64,] :
@@ -61,9 +62,13 @@ public static partial class TestCompiler
 
 				foreach (String appProjectFile in appProjectFiles)
 				{
-					await TestCompiler.CompileNetApp(
-						new() { ProjectFile = appProjectFile, RuntimeIdentifier = rid, Version = netVersion, },
-						outputPath);
+					await TestCompiler.CompileNetApp(onlyNativeAot,
+					                                 new()
+					                                 {
+						                                 ProjectFile = appProjectFile,
+						                                 RuntimeIdentifier = rid,
+						                                 Version = netVersion,
+					                                 }, outputPath);
 				}
 			}
 		}

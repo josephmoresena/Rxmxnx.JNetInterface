@@ -1,5 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 
+[ExcludeFromCodeCoverage]
 public readonly struct QemuExecuteState
 {
 	public String QemuExecutable { get; init; }
@@ -10,6 +11,7 @@ public readonly struct QemuExecuteState
 	public IExecutionNotifier? Notifier { get; init; }
 }
 
+[ExcludeFromCodeCoverage]
 public readonly struct QemuExecuteState<TState>
 {
 	public String QemuExecutable { get; init; }

@@ -72,7 +72,7 @@ public partial class TestCompiler
 		compileArgs.Publish |= Publish.NoReflection;
 		await TestCompiler.CompileNet(compileArgs);
 	}
-	private static async Task CompileNetApp(RestoreNetArgs restoreArgs, String outputPath)
+	private static async Task CompileNetApp(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, String outputPath)
 	{
 		CompileNetArgs compileArgs = new(restoreArgs, outputPath)
 		{
@@ -81,16 +81,21 @@ public partial class TestCompiler
 
 		await TestCompiler.RestoreNet(restoreArgs);
 
-		await TestCompiler.CompileNet(compileArgs);
-		compileArgs.BuildDependencies = false;
+		if (!onlyNativeAot)
+		{
+			await TestCompiler.CompileNet(compileArgs);
+			compileArgs.BuildDependencies = false;
 
-		compileArgs.Publish = Publish.ReadyToRun;
-		await TestCompiler.CompileNet(compileArgs);
+			compileArgs.Publish = Publish.ReadyToRun;
+			await TestCompiler.CompileNet(compileArgs);
+		}
 
 		compileArgs.Publish = Publish.NativeAot;
 		await TestCompiler.CompileNet(compileArgs);
+
 		if (!restoreArgs.ProjectFile.EndsWith(".csproj") || restoreArgs.Version > NetVersion.Net80) return;
 
+		compileArgs.BuildDependencies = false;
 		compileArgs.Publish |= Publish.NoReflection;
 		await TestCompiler.CompileNet(compileArgs);
 	}
