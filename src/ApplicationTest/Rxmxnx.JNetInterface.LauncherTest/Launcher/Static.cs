@@ -17,6 +17,10 @@ public partial class Launcher
 
 		if (platform == OSPlatform.OSX)
 			return await Mac.CreateInstance(outputDirectory);
+		if (platform == OSPlatform.Windows)
+			return await Windows.CreateInstance(outputDirectory);
+		if (platform == OSPlatform.Linux)
+			return await Linux.CreateInstance(outputDirectory);
 
 		throw new InvalidOperationException("Unsupported platform");
 	}

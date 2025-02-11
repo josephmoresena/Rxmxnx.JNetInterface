@@ -45,8 +45,6 @@ public partial class TestCompiler
 			{
 				a.Add("restore");
 				a.Add(s.Item1);
-				a.Add("-c");
-				a.Add("Release");
 				a.Add("-r");
 				a.Add(s.Item2);
 				a.Add($"/p:USE_NET80={s.Item3 is NetVersion.Net80}");

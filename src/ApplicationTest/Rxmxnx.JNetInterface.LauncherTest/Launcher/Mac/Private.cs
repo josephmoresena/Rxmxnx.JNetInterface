@@ -14,28 +14,23 @@ public abstract partial class Launcher
 		private readonly ConcurrentDictionary<Jdk.JdkVersion, Jdk> _arm64 = new();
 
 		private Mac(DirectoryInfo outputDirectory, out Task initialize) : base(outputDirectory, OSPlatform.OSX)
-			=> initialize = this.Initialize();
+		{
+			this.Architectures = Enum.GetValues<Architecture>()
+			                         .Where(a => a == this.CurrentArch || a is Architecture.X64).ToArray();
+			initialize = this.Initialize();
+		}
 
 		private async Task Initialize()
 		{
 			List<Task> tasks = [];
 			foreach (Jdk.JdkVersion version in Enum.GetValues<Jdk.JdkVersion>().AsSpan())
 			{
-				if (this.CurrentArch == Architecture.Arm64)
+				if (this.CurrentArch is Architecture.Arm64)
 					tasks.Add(this.AppendJdk(this._arm64, version, Architecture.Arm64));
 
 				tasks.Add(this.AppendJdk(this._amd64, version, Architecture.X64));
 			}
 			await Task.WhenAll(tasks);
-		}
-
-		private async Task AppendJdk(IDictionary<Jdk.JdkVersion, Jdk> jdks, Jdk.JdkVersion version, Architecture arch)
-		{
-			ConsoleNotifier.PlatformNotifier.JdkDetection(version, arch);
-			if (await this.GetJdk(version, arch) is { } jdk)
-				jdks.TryAdd(version, jdk);
-			else
-				ConsoleNotifier.PlatformNotifier.JdkUnavailable(version, arch);
 		}
 
 		private static async Task ExtractFromDmgPkgAsync(String tempFileName, String jdkPath,
