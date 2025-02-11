@@ -12,6 +12,10 @@
         <AssemblyName>$(AssemblyName).NAOT</AssemblyName>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm' And '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">
+        <LinkerFlavor>lld</LinkerFlavor>
+        <ObjCopyName>/usr/arm-linux-gnueabihf/bin/objcopy</ObjCopyName>
+    </PropertyGroup>
 
     <PropertyGroup>
         <PublishAot>true</PublishAot>

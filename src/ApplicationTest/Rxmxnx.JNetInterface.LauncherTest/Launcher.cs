@@ -22,6 +22,11 @@ public abstract partial class Launcher
 			a => this.OutputDirectory.GetFiles(
 				$"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.*"));
 		FileInfo? jarFile = this.OutputDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
+
+		HashSet<String> fileNames = archFiles.Values.SelectMany(ff => ff.Select(f => f.FullName)).ToHashSet();
+		if (jarFile is not null) fileNames.Add(jarFile.FullName);
+		ConsoleNotifier.ListFiles(this.OutputDirectory, fileNames);
+
 		foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]))
 		{
 			if (jarFile is not null)

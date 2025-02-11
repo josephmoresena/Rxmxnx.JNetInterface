@@ -14,7 +14,8 @@ public abstract partial class Launcher
 			this._isArmHf = Linux.IsArmHf(this.CurrentArch);
 			this.Architectures = Enum.GetValues<Architecture>()
 			                         .Where(a => this.IsCurrentArch(a) || Linux.IsArmHf(a) ||
-				                                (a is Architecture.X64 && Linux.IsArmHf(this.CurrentArch))).ToArray();
+				                                (a is Architecture.X64 or Architecture.Arm64 &&
+					                                !Linux.IsArmHf(this.CurrentArch))).ToArray();
 			initialize = this.Initialize();
 		}
 		private async Task Initialize()
