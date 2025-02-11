@@ -168,7 +168,7 @@ jobs:
           sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
           
           sudo apt update
-          sudo apt-get install --install-suggests clang llvm zlib1g-dev libkrb5-dev \
+          sudo apt-get install clang llvm zlib1g-dev libkrb5-dev \
             qemu-user qemu-user-static \
             binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 \
             binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf \
