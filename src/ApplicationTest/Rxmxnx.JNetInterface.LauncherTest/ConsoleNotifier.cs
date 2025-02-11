@@ -38,17 +38,18 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 		}
 
 		using Lock.Scope scope = ConsoleNotifier.consoleLock.EnterScope();
-		if (cursorTop == -1)
-			try
-			{
+		try
+		{
+			if (cursorTop == -1)
 				cursorTop = Console.CursorTop;
-			}
-			catch (Exception)
-			{
-				// Ignore
-			}
+			else
+				Console.SetCursorPosition(0, cursorTop);
+		}
+		catch (Exception)
+		{
+			// Ignore
+		}
 
-		Console.SetCursorPosition(0, cursorTop);
 		Console.Write(text.PadRight(textLength));
 		Console.WriteLine();
 		textLength = text.Length;
@@ -133,7 +134,7 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.Write($"{kvp.Key.PadRight(maxKeyLength)} | ");
 
-				Console.ForegroundColor = kvp.Value < 0 ? ConsoleColor.Red : ConsoleColor.Green;
+				Console.ForegroundColor = kvp.Value != 0 ? ConsoleColor.Red : ConsoleColor.Green;
 				Console.WriteLine($"{kvp.Value,5}");
 			}
 		}
