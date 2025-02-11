@@ -5,7 +5,7 @@
         <OptionStrict>On</OptionStrict>
         <AssemblyName>ApplicationTest.VbNet</AssemblyName>
     </PropertyGroup>
-    
+
     <Import Project="..\JNetInterface-App.targets"/>
 
 </Project>

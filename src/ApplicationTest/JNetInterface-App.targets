@@ -1,5 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    
+
     <PropertyGroup>
         <JNI_APP Condition="'$(RuntimeIdentifier)' != ''">true</JNI_APP>
         <!-- Assembly name must specify which platform it was compiled for -->
@@ -8,16 +8,16 @@
 
     <Import Condition="'$(NativeAOT)' != 'true'" Project="JNetInterface-Config.targets"/>
     <Import Condition="'$(NativeAOT)' == 'true'" Project="JNetInterface-NativeAot.targets"/>
-    
-    <PropertyGroup Condition="$(JNI_APP) == 'true' And '$(NativeAOT)' != 'true'" >
+
+    <PropertyGroup Condition="$(JNI_APP) == 'true' And '$(NativeAOT)' != 'true'">
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
         <!-- Assembly name must specify that it was compiled with ReadyToRun -->
         <AssemblyName Condition="$(PublishReadyToRun) == 'true'">$(AssemblyName).R2R</AssemblyName>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.ConsoleTest\Rxmxnx.JNetInterface.ConsoleTest.csproj"/>
     </ItemGroup>
-    
+
 </Project>
