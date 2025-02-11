@@ -188,7 +188,7 @@ jobs:
           
       - name: Run launcher (Windows)
         if: runner.os == 'Windows'
-        run: dotnet run -p "src\ApplicationTest\Rxmxnx.JNetInterface.LauncherTest\Rxmxnx.JNetInterface.LauncherTest.csproj" -c Release "src\ApplicationTest" "artifacts"
+        run: dotnet run --project "src\ApplicationTest\Rxmxnx.JNetInterface.LauncherTest\Rxmxnx.JNetInterface.LauncherTest.csproj" -c Release "src\ApplicationTest" "artifacts"
           
       - name: Create Native Artifact
         uses: actions/upload-artifact@v4
