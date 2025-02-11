@@ -59,11 +59,10 @@ public partial class Launcher
 		if (!Utilities.IsNativeAotSupported(jdk.JavaArchitecture, netVersion)) return;
 
 		JarArgs jarArgs = new() { Version = netVersion, JarName = jarFile.Name, };
-		String prefix =
-			$"HelloJni.jar ({jdk.JavaVersion}, {jdk.JavaArchitecture}, {netVersion}) Reflection-free mode: ";
+		String prefix = $"HelloJni.jar ({jdk.JavaVersion}, {jdk.JavaArchitecture}, {netVersion}";
 
 		Int32 result = await this.RunJarFile(jarArgs, jdk);
-		String name = $"{prefix}{jarArgs.NoReflection}";
+		String name = $"{prefix})";
 
 		ConsoleNotifier.Notifier.Result(result, name);
 		results.Add(name, result);
@@ -72,7 +71,7 @@ public partial class Launcher
 
 		jarArgs.NoReflection = true;
 		result = await this.RunJarFile(jarArgs, jdk);
-		name = $"{prefix}{jarArgs.NoReflection}";
+		name = $"{prefix}, no-reflection)";
 
 		ConsoleNotifier.Notifier.Result(result, name);
 		results.Add(name, result);

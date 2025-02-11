@@ -200,7 +200,7 @@ public class HelloDotnet {
         
         currentPath = currentPath.substring(0, currentPath.length() - 2);
         
-        if (!libraryPath.contains(currentPath))
+        if (!libraryPath.equals(currentPath) && !libraryPath.contains(currentPath + File.pathSeparator) && !libraryPath.contains(File.pathSeparator + currentPath))
             System.setProperty(""java.library.path"", currentPath + File.pathSeparator + libraryPath);
         
         if (arch.equals(""amd64"") || arch.equals(""x86_64""))
@@ -221,8 +221,7 @@ public class HelloDotnet {
         return libraryName;
     }
 }";
-	private const String JarManifest = @"Class-Path: .
-Main-Class: com.rxmxnx.dotnet.test.HelloDotnet
+	private const String JarManifest = @"Main-Class: com.rxmxnx.dotnet.test.HelloDotnet
 ";
 	private const String JniConfig = @"[
   {

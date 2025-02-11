@@ -17,29 +17,35 @@ public abstract partial class Launcher
 
 	public async Task Execute()
 	{
-		Dictionary<Architecture, FileInfo[]> archFiles = this.Architectures.ToDictionary(
-			a => a,
-			a => this.OutputDirectory.GetFiles(
-				$"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.*"));
-		FileInfo? jarFile = this.OutputDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
-
 		Dictionary<String, Int32> results = new();
 
-		foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]))
+		try
 		{
-			if (jarFile is not null)
-				foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
-					await this.RunJarFile(jdk, jarFile, netVersion, results);
+			Dictionary<Architecture, FileInfo[]> archFiles = this.Architectures.ToDictionary(
+				a => a,
+				a => this.OutputDirectory.GetFiles(
+					$"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.*"));
+			FileInfo? jarFile = this.OutputDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
 
-			foreach (FileInfo appFile in archFiles[jdk.JavaArchitecture])
+			foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]).ToHashSet())
 			{
-				String executionName =
-					$"{Path.GetRelativePath(this.OutputDirectory.FullName, appFile.FullName)} ({jdk.JavaVersion})";
-				results.Add(executionName, await this.RunAppFile(appFile, jdk, executionName));
+				if (jarFile is not null)
+					foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
+						await this.RunJarFile(jdk, jarFile, netVersion, results);
+
+				foreach (FileInfo appFile in archFiles[jdk.JavaArchitecture])
+				{
+					String executionName =
+						$"{Path.GetRelativePath(this.OutputDirectory.FullName, appFile.FullName)} ({jdk.JavaVersion})";
+					results.Add(executionName, await this.RunAppFile(appFile, jdk, executionName));
+				}
 			}
 		}
-
-		ConsoleNotifier.Results(results);
+		finally
+		{
+			if (results.Count > 0)
+				ConsoleNotifier.Results(results);
+		}
 	}
 
 	public abstract Jdk GetMinJdk();
