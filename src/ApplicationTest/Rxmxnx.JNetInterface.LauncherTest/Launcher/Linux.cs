@@ -37,7 +37,7 @@ public abstract partial class Launcher
 			try
 			{
 				if (!urls.ContainsKey(version)) return default;
-				
+
 				Directory.CreateDirectory(jdkPath);
 				await Utilities.DownloadFileAsync(new()
 				{
@@ -60,12 +60,12 @@ public abstract partial class Launcher
 			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
 			return result;
 		}
-		protected override Task RunAppFile(FileInfo appFile, Jdk jdk)
+		protected override Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName)
 		{
 			Architecture arch = jdk.JavaArchitecture;
 			if (this.IsCurrentArch(arch) || (this.CurrentArch is Architecture.Arm64 && Linux.IsArmHf(arch)))
-				return base.RunAppFile(appFile, jdk);
-			return this.RunAppQemu(appFile, jdk);
+				return base.RunAppFile(appFile, jdk, executionName);
+			return this.RunAppQemu(appFile, jdk, executionName);
 		}
 		protected override Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk)
 		{

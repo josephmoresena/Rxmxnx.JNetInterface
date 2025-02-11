@@ -54,16 +54,27 @@ public partial class Launcher
 			};
 		return default;
 	}
-	private async Task RunJarFile(Jdk jdk, FileInfo jarFile, NetVersion netVersion)
+	private async Task RunJarFile(Jdk jdk, FileInfo jarFile, NetVersion netVersion, Dictionary<String, Int32> results)
 	{
 		if (!Utilities.IsNativeAotSupported(jdk.JavaArchitecture, netVersion)) return;
 
 		JarArgs jarArgs = new() { Version = netVersion, JarName = jarFile.Name, };
-		ConsoleNotifier.Notifier.Result(await this.RunJarFile(jarArgs, jdk),
-		                                $"HelloJni.jar {jdk.JavaVersion} {jdk.JavaArchitecture} {netVersion} Reflection: {!jarArgs.NoReflection}");
+		String prefix =
+			$"HelloJni.jar ({jdk.JavaVersion}, {jdk.JavaArchitecture}, {netVersion}) Reflection-free mode: ";
+
+		Int32 result = await this.RunJarFile(jarArgs, jdk);
+		String name = $"{prefix}{jarArgs.NoReflection}";
+
+		ConsoleNotifier.Notifier.Result(result, name);
+		results.Add(name, result);
+
 		if (netVersion > NetVersion.Net80) return;
+
 		jarArgs.NoReflection = true;
-		ConsoleNotifier.Notifier.Result(await this.RunJarFile(jarArgs, jdk),
-		                                $"HelloJni.jar {jdk.JavaVersion} {jdk.JavaArchitecture} {netVersion} Reflection: {!jarArgs.NoReflection}");
+		result = await this.RunJarFile(jarArgs, jdk);
+		name = $"{prefix}{jarArgs.NoReflection}";
+
+		ConsoleNotifier.Notifier.Result(result, name);
+		results.Add(name, result);
 	}
 }

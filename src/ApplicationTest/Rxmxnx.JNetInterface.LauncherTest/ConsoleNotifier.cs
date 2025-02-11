@@ -118,4 +118,28 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 		Console.WriteLine(message);
 		Console.ResetColor();
 	}
+	public static void Results(Dictionary<String, Int32> results)
+	{
+		Int32 maxKeyLength = results.Keys.Max(k => k.Length);
+		using Lock.Scope scope = ConsoleNotifier.consoleLock.EnterScope();
+		try
+		{
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.WriteLine($"{"Test".PadRight(maxKeyLength)} | Exit code ");
+			Console.WriteLine(new String('-', maxKeyLength + 20));
+
+			foreach (KeyValuePair<String, Int32> kvp in results.OrderBy(kvp => kvp.Key))
+			{
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write($"{kvp.Key.PadRight(maxKeyLength)} | ");
+
+				Console.ForegroundColor = kvp.Value < 0 ? ConsoleColor.Red : ConsoleColor.Green;
+				Console.WriteLine($"{kvp.Value,5}");
+			}
+		}
+		finally
+		{
+			Console.ResetColor();
+		}
+	}
 }

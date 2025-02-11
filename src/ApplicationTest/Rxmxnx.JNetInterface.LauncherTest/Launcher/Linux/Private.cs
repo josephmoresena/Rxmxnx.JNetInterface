@@ -72,7 +72,7 @@ public abstract partial class Launcher
 			};
 			await Utilities.QemuExecute(state);
 		}
-		private async Task RunAppQemu(FileInfo appFile, Jdk jdk)
+		private async Task<Int32> RunAppQemu(FileInfo appFile, Jdk jdk, String executionName)
 		{
 			(String qemuExe, String qemuRoot) = Linux.qemu[jdk.JavaArchitecture];
 			QemuExecuteState<AppArgs> state = new()
@@ -86,7 +86,8 @@ public abstract partial class Launcher
 				Notifier = ConsoleNotifier.Notifier,
 			};
 			Int32 result = await Utilities.QemuExecute(state);
-			ConsoleNotifier.Notifier.Result(result, appFile.Name);
+			ConsoleNotifier.Notifier.Result(result, executionName);
+			return result;
 		}
 		private async Task<Int32> RunJarQemu(JarArgs jarArgs, Jdk jdk)
 		{

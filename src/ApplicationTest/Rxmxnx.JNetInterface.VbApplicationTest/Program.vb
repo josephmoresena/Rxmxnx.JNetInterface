@@ -13,10 +13,6 @@ Partial Module Program
     End Sub
 
     Private Async Function MainAsync(args As String()) As Task
-        If IVirtualMachine.TypeMetadataToStringEnabled Then
-            JRuntimeInfo.PrintMetadataInfo()
-        End If
-
         If args.Length < 1 Then
             Throw New ArgumentException("Please set JVM library path.")
         End If
@@ -46,19 +42,13 @@ Partial Module Program
 
         Try
             Dim initArgs As JVirtualMachineInitArg = jvmLib.GetDefaultArgument()
-            If IVirtualMachine.TypeMetadataToStringEnabled Then
-                Console.WriteLine(initArgs)
-            End If
+
             initArgs = New JVirtualMachineInitArg(initArgs.Version) With  { 
                 .Options = New CStringSequence(VmOptions)}
 
             Dim env as IEnvironment = Nothing
             Using vm As IInvokedVirtualMachine = jvmLib.CreateVirtualMachine(initArgs, env)
                 Try
-                    If IVirtualMachine.TypeMetadataToStringEnabled Then
-                        JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib)
-                    End If
-
                     Dim managedInstance As New IManagedCallback.Default(vm)
                     Using _
                         helloJniClass As JClassObject =

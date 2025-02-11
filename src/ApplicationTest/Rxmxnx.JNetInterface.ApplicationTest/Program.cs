@@ -13,7 +13,9 @@ public static class Program
 {
 	public static async Task Main(String[] args)
 	{
+#if NET8_0
 		if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintMetadataInfo();
+#endif
 
 		if (args.Length < 1)
 			throw new ArgumentException("Please set JVM library path.");
@@ -33,20 +35,14 @@ public static class Program
 
 		IManagedCallback.PrintSwitches();
 	}
-	private static JCompiler? GetCompiler()
-	{
-		JCompiler[] compilers = JCompiler.GetCompilers();
-		JCompiler? selected = compilers.LastOrDefault();
-		foreach (JCompiler compiler in compilers)
-			Console.WriteLine($"{compiler.JdkPath} {(compiler == selected ? '*' : ' ')}");
-		return selected;
-	}
 	private static void Execute(JVirtualMachineLibrary jvmLib, Byte[] classByteCode, params String[] args)
 	{
 		try
 		{
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
+#if NET8_0
 			if (IVirtualMachine.TypeMetadataToStringEnabled) Console.WriteLine(initArgs);
+#endif
 			if (IVirtualMachine.TraceEnabled)
 				initArgs = new(initArgs.Version)
 				{
@@ -57,7 +53,9 @@ public static class Program
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{
+#if NET8_0
 				if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
+#endif
 				IManagedCallback.Default managedInstance = new(vm);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance);
 				Console.WriteLine("==== Begin psvm ===");

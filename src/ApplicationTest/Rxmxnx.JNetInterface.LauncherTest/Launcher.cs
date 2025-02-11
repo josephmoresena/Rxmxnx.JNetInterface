@@ -23,15 +23,23 @@ public abstract partial class Launcher
 				$"ApplicationTest.*.{this.RuntimeIdentifierPrefix}-{Enum.GetName(a)!.ToLower()}.*"));
 		FileInfo? jarFile = this.OutputDirectory.GetFiles("HelloJni.jar").FirstOrDefault();
 
+		Dictionary<String, Int32> results = new();
+
 		foreach (Jdk jdk in this.Architectures.SelectMany(a => this[a]))
 		{
 			if (jarFile is not null)
 				foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
-					await this.RunJarFile(jdk, jarFile, netVersion);
+					await this.RunJarFile(jdk, jarFile, netVersion, results);
 
 			foreach (FileInfo appFile in archFiles[jdk.JavaArchitecture])
-				await this.RunAppFile(appFile, jdk);
+			{
+				String executionName =
+					$"{Path.GetRelativePath(this.OutputDirectory.FullName, appFile.FullName)} ({jdk.JavaVersion})";
+				results.Add(executionName, await this.RunAppFile(appFile, jdk, executionName));
+			}
 		}
+
+		ConsoleNotifier.Results(results);
 	}
 
 	public abstract Jdk GetMinJdk();
@@ -47,7 +55,7 @@ public abstract partial class Launcher
 		else
 			ConsoleNotifier.PlatformNotifier.JdkUnavailable(version, arch);
 	}
-	protected virtual async Task RunAppFile(FileInfo appFile, Jdk jdk)
+	protected virtual async Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName)
 	{
 		ExecuteState<AppArgs> state = new()
 		{
@@ -58,7 +66,8 @@ public abstract partial class Launcher
 			Notifier = ConsoleNotifier.Notifier,
 		};
 		Int32 result = await Utilities.Execute(state);
-		ConsoleNotifier.Notifier.Result(result, appFile.Name);
+		ConsoleNotifier.Notifier.Result(result, executionName);
+		return result;
 	}
 	protected virtual async Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk)
 	{

@@ -22,16 +22,10 @@ let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string
 
         initArgs <- JVirtualMachineInitArg(initArgs.Version, Options = CStringSequence [ "-DjniLib.load.disable=true" ])
 
-        if IVirtualMachine.TypeMetadataToStringEnabled then
-            Console.WriteLine(initArgs)
-
         let vm, env = jvmLib.CreateVirtualMachine(initArgs)
         use v = vm
 
         try
-            if IVirtualMachine.TypeMetadataToStringEnabled then
-                JRuntimeInfo.PrintVirtualMachineInfo(env, v, jvmLib)
-
             let managedInstance = IManagedCallback.Default(vm)
 
             use helloJniClass =
@@ -49,9 +43,6 @@ let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string
 
 let MainAsync () =
     async {
-        if IVirtualMachine.TypeMetadataToStringEnabled then
-            JRuntimeInfo.PrintMetadataInfo()
-
         let args = Environment.GetCommandLineArgs()
 
         if args.Length < 2 then

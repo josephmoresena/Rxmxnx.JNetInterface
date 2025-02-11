@@ -221,7 +221,8 @@ public class HelloDotnet {
         return libraryName;
     }
 }";
-	private const String JarManifest = @"Main-Class: com.rxmxnx.dotnet.test.HelloDotnet
+	private const String JarManifest = @"Class-Path: .
+Main-Class: com.rxmxnx.dotnet.test.HelloDotnet
 ";
 	private const String JniConfig = @"[
   {
