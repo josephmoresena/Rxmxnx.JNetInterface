@@ -95,6 +95,7 @@ jobs:
             rm -rf "$TEMP_DIR"
           done
           echo "-----------------------------------"
+          
   app-test:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -103,6 +104,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: APT deb822 sources
+        if: runner.os == 'Linux'
         run: |
           if [[ $ImageOS == "ubuntu24" ]]; then
            sudo bash -c 'cat > /etc/apt/sources.list.d/ubuntu.sources <<EOF
@@ -168,8 +170,8 @@ jobs:
           sudo apt update
           sudo apt-get install clang llvm zlib1g-dev libkrb5-dev \
             qemu-user qemu-user-static \
-            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 libkrb5-dev:arm64 \
-            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf libkrb5-dev:armhf \
+            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 \
+            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf \
             --assume-yes
 
       - name: Setup dotnet
