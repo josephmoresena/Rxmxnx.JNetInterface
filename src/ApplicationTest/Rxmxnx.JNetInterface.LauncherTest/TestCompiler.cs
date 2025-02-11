@@ -25,34 +25,33 @@ public static partial class TestCompiler
 			await File.WriteAllTextAsync(manifestPath, TestCompiler.JarManifest);
 			await File.WriteAllTextAsync(jniConfigPath, TestCompiler.JniConfig);
 
-			await Utilities.Execute<ValueTuple<String, Boolean>>(new()
+			await Utilities.Execute<CompileClassArgs>(new()
 			{
 				ExecutablePath = jdk.JavaCompiler,
-				ArgState = (javaFilePath, jdk.JavaVersion > JdkVersion.Jdk6),
-				AppendArgs = (s, a) =>
+				ArgState = new()
 				{
-					a.Add(s.Item1);
-					if (s.Item2)
-						a.Add("-target 1.6");
+					JavaFilePath = javaFilePath,
+					Target = jdk.JavaVersion > JdkVersion.Jdk6 ?
+						"1.6" :
+						default,
 				},
+				AppendArgs = CompileClassArgs.Append,
 				Notifier = ConsoleNotifier.Notifier,
 			});
 
 			File.Delete(javaFilePath);
 
-			await Utilities.Execute<String>(new()
+			await Utilities.Execute<JarCreationArgs>(new()
 			{
 				ExecutablePath = jdk.JavaArchiver,
-				ArgState = Path.GetRelativePath(outputDirectory.FullName, directory.FullName),
-				AppendArgs = (s, a) =>
+				ArgState = new()
 				{
-					a.Add("cfm");
-					a.Add("HelloJni.jar");
-					a.Add("MANIFEST.TXT");
-					a.Add("-C");
-					a.Add(s);
-					a.Add(".");
+					JarRoot = Path.GetRelativePath(
+						outputDirectory.FullName, directory.FullName),
+					JarFileName = "HelloJni.jar",
+					ManifestFileName = "MANIFEST.TXT",
 				},
+				AppendArgs = JarCreationArgs.Append,
 				Notifier = ConsoleNotifier.Notifier,
 				WorkingDirectory = outputDirectory.FullName,
 			});
