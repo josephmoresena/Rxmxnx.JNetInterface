@@ -3,8 +3,9 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <OptionStrict>On</OptionStrict>
+        <AssemblyName>ApplicationTest.VbNet</AssemblyName>
     </PropertyGroup>
 
-    <Import Project="..\JNetInterface-NativeAot.targets"/>
+    <Import Project="..\JNetInterface-App.targets"/>
 
 </Project>

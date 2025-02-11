@@ -9,4 +9,7 @@
         <TrimMode>full</TrimMode>
         <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
     </PropertyGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage"/>
+    </ItemGroup>
 </Project>

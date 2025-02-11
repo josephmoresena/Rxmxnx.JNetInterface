@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
+using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
@@ -13,25 +13,16 @@ public static class Program
 {
 	public static async Task Main(String[] args)
 	{
-		using ConsoleTraceListener trace = new();
-		Trace.Listeners.Add(trace);
 		if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintMetadataInfo();
-		Boolean reflectionDisabled = !$"{typeof(Program)}".Contains(nameof(Program));
 
-		JCompiler? compiler = args.Length == 3 ?
-			new() { JdkPath = args[0], CompilerPath = args[1], LibraryPath = args[2], } :
-			Program.GetCompiler();
+		if (args.Length < 1)
+			throw new ArgumentException("Please set JVM library path.");
 
-		if (compiler is null)
-		{
-			Console.WriteLine("JDK not found.");
-			return;
-		}
+		Byte[] helloJniByteCode = await File.ReadAllBytesAsync("HelloDotnet.class");
+		JVirtualMachineLibrary jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0]) ??
+			throw new ArgumentException("Invalid JVM library.");
 
-		Byte[] helloJniByteCode = await compiler.CompileHelloJniClassAsync();
-		JVirtualMachineLibrary jvmLib = compiler.GetLibrary();
-
-		String[] jMainArgs = reflectionDisabled ?
+		String[] jMainArgs = AotInfo.IsReflectionDisabled ?
 			[$"System Path: {Environment.SystemDirectory}",] :
 			[
 				$"System Path: {Environment.SystemDirectory}",
@@ -57,7 +48,12 @@ public static class Program
 			JVirtualMachineInitArg initArgs = jvmLib.GetDefaultArgument();
 			if (IVirtualMachine.TypeMetadataToStringEnabled) Console.WriteLine(initArgs);
 			if (IVirtualMachine.TraceEnabled)
-				initArgs = new(initArgs.Version) { Options = new("-verbose:jni", "-verbose:class", "-verbose:gc"), };
+				initArgs = new(initArgs.Version)
+				{
+					Options = new("-verbose:jni", "-verbose:class", "-verbose:gc", "-DjniLib.load.disable=true"),
+				};
+			else
+				initArgs = new(initArgs.Version) { Options = new("-DjniLib.load.disable=true"), };
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{
