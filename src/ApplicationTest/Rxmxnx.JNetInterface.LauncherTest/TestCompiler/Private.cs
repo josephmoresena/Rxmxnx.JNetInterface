@@ -6,9 +6,9 @@ public partial class TestCompiler
 	{
 		String javaFilePath = Path.Combine(classPath, "HelloDotnet.java");
 
+		await File.WriteAllTextAsync(javaFilePath, TestCompiler.JavaCode);
 		try
 		{
-			await File.WriteAllTextAsync(javaFilePath, TestCompiler.JavaCode);
 			await Utilities.Execute<CompileClassArgs>(new()
 			{
 				ExecutablePath = jdk.JavaCompiler,
@@ -33,9 +33,9 @@ public partial class TestCompiler
 		const String manifestName = "MANIFEST.TXT";
 		String manifestPath = Path.Combine(outputPath, manifestName);
 
+		await File.WriteAllTextAsync(manifestPath, TestCompiler.JarManifest);
 		try
 		{
-			await File.WriteAllTextAsync(outputPath, TestCompiler.JarManifest);
 			await Utilities.Execute<JarCreationArgs>(new()
 			{
 				ExecutablePath = jdk.JavaArchiver,
