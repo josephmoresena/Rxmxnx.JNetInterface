@@ -111,15 +111,4 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 		Console.WriteLine(message);
 		Console.ResetColor();
 	}
-	public static void ListFiles(DirectoryInfo outputDirectory, HashSet<String> fileNames)
-	{
-		foreach (FileInfo file in outputDirectory.GetFiles().AsSpan())
-		{
-			Console.Write(Path.GetRelativePath(outputDirectory.FullName, file.FullName));
-			if (fileNames.Contains(file.FullName))
-				Console.WriteLine(" *");
-			else
-				Console.WriteLine();
-		}
-	}
 }

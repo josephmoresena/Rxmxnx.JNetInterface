@@ -23,9 +23,12 @@ public abstract partial class Launcher
 			List<Task> tasks = [];
 			foreach (JdkVersion version in Enum.GetValues<JdkVersion>().AsSpan())
 			{
-				tasks.Add(this.AppendJdk(this._arm64, version, Architecture.Arm64));
-				tasks.Add(this.AppendJdk(this._amd64, version, Architecture.X64));
-				tasks.Add(this.AppendJdk(this._armhf, version, Architecture.X86));
+				if (!this._isArmHf)
+				{
+					tasks.Add(this.AppendJdk(this._amd64, version, Architecture.X64));
+					tasks.Add(this.AppendJdk(this._arm64, version, Architecture.Arm64));
+				}
+				tasks.Add(this.AppendJdk(this._armhf, version, Architecture.Arm));
 			}
 			await Task.WhenAll(tasks);
 		}
@@ -38,7 +41,7 @@ public abstract partial class Launcher
 				AppendArgs = (s, a) =>
 				{
 					a.Add("+x");
-					a.Add(tempFileName);
+					a.Add(s);
 				},
 				Notifier = ConsoleNotifier.Notifier,
 			});

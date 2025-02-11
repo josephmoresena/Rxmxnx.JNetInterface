@@ -192,7 +192,7 @@ public class HelloDotnet {
     private static native Class[] getPrimitiveClasses();
 
     private static String getLibraryName() {
-        String libraryName = ""helloJni"";
+        String libraryName = ""HelloJni"";
         String currentPath = new File(""."").getAbsolutePath();
         String libraryPath = System.getProperty(""java.library.path"");
         String dotnetVersion = System.getProperty(""dotnet.runtime.version"");

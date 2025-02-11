@@ -56,6 +56,8 @@ public partial class Launcher
 	}
 	private async Task RunJarFile(Jdk jdk, FileInfo jarFile, NetVersion netVersion)
 	{
+		if (!Utilities.IsNativeAotSupported(jdk.JavaArchitecture, netVersion)) return;
+
 		JarArgs jarArgs = new() { Version = netVersion, JarName = jarFile.Name, };
 		ConsoleNotifier.Notifier.Result(await this.RunJarFile(jarArgs, jdk),
 		                                $"HelloJni.jar {jdk.JavaVersion} {jdk.JavaArchitecture} {netVersion} Reflection: {!jarArgs.NoReflection}");

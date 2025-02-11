@@ -57,7 +57,7 @@ public static partial class TestCompiler
 			{
 				if (!String.IsNullOrEmpty(libProjectFile))
 					await TestCompiler.CompileNetLibrary(
-						new() { ProjectFile = libProjectFile, RuntimeIdentifier = rid, Version = netVersion, },
+						new() { ProjectFile = libProjectFile, RuntimeIdentifier = rid, Version = netVersion, }, arch,
 						outputPath);
 
 				foreach (String appProjectFile in appProjectFiles)
@@ -68,7 +68,7 @@ public static partial class TestCompiler
 						                                 ProjectFile = appProjectFile,
 						                                 RuntimeIdentifier = rid,
 						                                 Version = netVersion,
-					                                 }, outputPath);
+					                                 }, arch, outputPath);
 				}
 			}
 		}
