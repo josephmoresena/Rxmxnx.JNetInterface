@@ -45,10 +45,10 @@ public abstract partial class Launcher
 				_ => $"{(Byte)version}",
 			};
 
-			return programFilesDir.Exists ?
-				programFilesDir.GetDirectories($"*jdk*{versionPattern}*", SearchOption.AllDirectories)
-				               .FirstOrDefault(d => Windows.IsJdkDirectory(d.Name, versionPattern))?.FullName :
-				default;
+			if (!programFilesDir.Exists) return default;
+
+			return programFilesDir.GetDirectories($"*jdk*{versionPattern}*", Windows.searchOptions)
+			                      .FirstOrDefault(d => Windows.IsJdkDirectory(d.Name, versionPattern))?.FullName;
 		}
 		private static Boolean IsJdkDirectory(ReadOnlySpan<Char> directoryName, ReadOnlySpan<Char> versionPattern)
 		{

@@ -31,5 +31,9 @@ public abstract partial class Launcher
 			{ JdkVersion.Jdk17, "https://aka.ms/download-jdk/microsoft-jdk-17.0.14-windows-aarch64.zip" },
 			{ JdkVersion.Jdk21, "https://aka.ms/download-jdk/microsoft-jdk-21.0.6-windows-aarch64.zip" },
 		};
+		private static readonly EnumerationOptions searchOptions = new()
+		{
+			IgnoreInaccessible = true, RecurseSubdirectories = true, MaxRecursionDepth = 4,
+		};
 	}
 }
