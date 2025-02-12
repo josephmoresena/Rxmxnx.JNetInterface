@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-public abstract partial class Launcher
+public partial class Launcher
 {
 	private partial class Linux
 	{
@@ -44,7 +44,7 @@ public abstract partial class Launcher
 					a.Add(s);
 				},
 				Notifier = ConsoleNotifier.Notifier,
-			});
+			}, ConsoleNotifier.CancellationToken);
 
 			Task task = this.CurrentArch is Architecture.X64 ?
 				Linux.RunSelfExtract(tempFileName, jdkPath) :
@@ -57,7 +57,7 @@ public abstract partial class Launcher
 			{
 				ExecutablePath = tempFileName, AppendArgs = a => { }, WorkingDirectory = jdkPath,
 			};
-			await Utilities.Execute(state);
+			await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
 		}
 		private static async Task RunSelfExtractQemu(String tempFileName, String jdkPath)
 		{
@@ -70,7 +70,7 @@ public abstract partial class Launcher
 				AppendArgs = a => { },
 				WorkingDirectory = jdkPath,
 			};
-			await Utilities.QemuExecute(state);
+			await Utilities.QemuExecute(state, ConsoleNotifier.CancellationToken);
 		}
 		private async Task<Int32> RunAppQemu(FileInfo appFile, Jdk jdk, String executionName)
 		{
@@ -85,7 +85,7 @@ public abstract partial class Launcher
 				WorkingDirectory = this.OutputDirectory.FullName,
 				Notifier = ConsoleNotifier.Notifier,
 			};
-			Int32 result = await Utilities.QemuExecute(state);
+			Int32 result = await Utilities.QemuExecute(state, ConsoleNotifier.CancellationToken);
 			ConsoleNotifier.Notifier.Result(result, executionName);
 			return result;
 		}
@@ -102,7 +102,7 @@ public abstract partial class Launcher
 				WorkingDirectory = this.OutputDirectory.FullName,
 				Notifier = ConsoleNotifier.Notifier,
 			};
-			return await Utilities.QemuExecute(state);
+			return await Utilities.QemuExecute(state, ConsoleNotifier.CancellationToken);
 		}
 
 		private Boolean IsCurrentArch(Architecture arch)

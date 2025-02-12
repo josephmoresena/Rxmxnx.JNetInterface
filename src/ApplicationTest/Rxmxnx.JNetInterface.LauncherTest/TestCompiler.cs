@@ -22,7 +22,7 @@ public static partial class TestCompiler
 
 			await TestCompiler.CompileJavaClass(classDir.FullName, jdk);
 
-			await File.WriteAllTextAsync(jniConfigPath, TestCompiler.JniConfig);
+			await File.WriteAllTextAsync(jniConfigPath, TestCompiler.JniConfig, ConsoleNotifier.CancellationToken);
 
 			await TestCompiler.CreateJar(directory.FullName, jdk, outputDirectory.FullName);
 

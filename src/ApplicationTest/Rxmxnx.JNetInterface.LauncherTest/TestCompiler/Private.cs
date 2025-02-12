@@ -9,14 +9,15 @@ public partial class TestCompiler
 		await File.WriteAllTextAsync(javaFilePath, TestCompiler.JavaCode);
 		try
 		{
-			await Utilities.Execute<CompileClassArgs>(new()
-			{
-				ExecutablePath = jdk.JavaCompiler,
-				WorkingDirectory = classPath,
-				ArgState = new() { JavaFilePath = javaFilePath, },
-				AppendArgs = CompileClassArgs.Append,
-				Notifier = ConsoleNotifier.Notifier,
-			});
+			await Utilities.Execute<CompileClassArgs>(
+				new()
+				{
+					ExecutablePath = jdk.JavaCompiler,
+					WorkingDirectory = classPath,
+					ArgState = new() { JavaFilePath = javaFilePath, },
+					AppendArgs = CompileClassArgs.Append,
+					Notifier = ConsoleNotifier.Notifier,
+				}, ConsoleNotifier.CancellationToken);
 		}
 		finally
 		{
@@ -31,20 +32,20 @@ public partial class TestCompiler
 		await File.WriteAllTextAsync(manifestPath, TestCompiler.JarManifest);
 		try
 		{
-			await Utilities.Execute<JarCreationArgs>(new()
-			{
-				ExecutablePath = jdk.JavaArchiver,
-				ArgState = new()
+			await Utilities.Execute<JarCreationArgs>(
+				new()
 				{
-					JarRoot =
-						Path.GetRelativePath(outputPath, jarRootPath),
-					JarFileName = "HelloJni.jar",
-					ManifestFileName = manifestName,
-				},
-				AppendArgs = JarCreationArgs.Append,
-				Notifier = ConsoleNotifier.Notifier,
-				WorkingDirectory = outputPath,
-			});
+					ExecutablePath = jdk.JavaArchiver,
+					ArgState = new()
+					{
+						JarRoot = Path.GetRelativePath(outputPath, jarRootPath),
+						JarFileName = "HelloJni.jar",
+						ManifestFileName = manifestName,
+					},
+					AppendArgs = JarCreationArgs.Append,
+					Notifier = ConsoleNotifier.Notifier,
+					WorkingDirectory = outputPath,
+				}, ConsoleNotifier.CancellationToken);
 		}
 		finally
 		{
@@ -109,7 +110,7 @@ public partial class TestCompiler
 			AppendArgs = CompileNetArgs.Append,
 			Notifier = ConsoleNotifier.Notifier,
 		};
-		await Utilities.Execute(state);
+		await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
 	}
 	private static async Task RestoreNet(RestoreNetArgs args)
 	{
@@ -120,7 +121,7 @@ public partial class TestCompiler
 			AppendArgs = RestoreNetArgs.Append,
 			Notifier = ConsoleNotifier.Notifier,
 		};
-		await Utilities.Execute(state);
+		await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
 
 		state = new()
 		{
@@ -129,7 +130,7 @@ public partial class TestCompiler
 			AppendArgs = RestoreNetArgs.AppendList,
 			Notifier = ConsoleNotifier.Notifier,
 		};
-		await Utilities.Execute(state);
+		await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
 	}
 	private static Boolean ArchSupported(Architecture arch)
 	{

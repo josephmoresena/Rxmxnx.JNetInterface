@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-public abstract partial class Launcher
+public partial class Launcher
 {
 	private partial class Mac
 	{

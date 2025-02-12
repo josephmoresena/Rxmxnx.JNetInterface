@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-public abstract partial class Launcher
+public partial class Launcher
 {
 	private sealed partial class Linux : Launcher, ILauncher<Linux>
 	{
@@ -39,15 +39,12 @@ public abstract partial class Launcher
 				if (!urls.ContainsKey(version)) return default;
 
 				Directory.CreateDirectory(jdkPath);
-				await Utilities.DownloadFileAsync(new()
-				{
-					Url = urls[version],
-					Destination = tempFileName,
-					Notifier = ConsoleNotifier.Notifier,
-				});
+				await Utilities.DownloadFileAsync(
+					new() { Url = urls[version], Destination = tempFileName, Notifier = ConsoleNotifier.Notifier, },
+					ConsoleNotifier.CancellationToken);
 
 				if (version is not JdkVersion.Jdk6)
-					await Launcher.ExtractTarGz(tempFileName, jdkPath);
+					await Launcher.ExtractTarGz(tempFileName, jdkPath, ConsoleNotifier.CancellationToken);
 				else
 					await this.SelfExtractBinary(tempFileName, jdkPath);
 			}

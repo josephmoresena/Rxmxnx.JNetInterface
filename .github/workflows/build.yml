@@ -101,6 +101,8 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest, ubuntu-latest, macos-latest ]
+    env:
+      JNETINTERFACE_ONLY_NATIVE_TEST: false
     steps:
       - uses: actions/checkout@v4
       - name: APT deb822 sources
@@ -197,15 +199,11 @@ jobs:
           dotnet nuget add source "../../../package/Nuget/" -n TmpSource
 
       - name: Run launcher (Unix-like)
-        env:
-          JNETINTERFACE_ONLY_NATIVE_TEST: false
         if: runner.os != 'Windows'
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
         run: dotnet run -c Release "../." "../../../artifacts"
 
       - name: Run launcher (Windows)
-        env:
-          JNETINTERFACE_ONLY_NATIVE_TEST: false
         if: runner.os == 'Windows'
         run: dotnet run --project "src\ApplicationTest\Rxmxnx.JNetInterface.LauncherTest\Rxmxnx.JNetInterface.LauncherTest.csproj" -c Release "src\ApplicationTest" "artifacts"
 
@@ -218,7 +216,7 @@ jobs:
             ./artifacts/*.jar
             ./artifacts/ApplicationTest*NAOT*
             ./artifacts/ApplicationTest*RFM*
-            ./artifacts/*HelloJni.*    
+            ./artifacts/*HelloJni.* 
 
       - name: Create Native Artifact Logs
         uses: actions/upload-artifact@v4

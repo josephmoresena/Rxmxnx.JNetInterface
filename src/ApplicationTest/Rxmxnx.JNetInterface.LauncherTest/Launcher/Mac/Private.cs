@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-public abstract partial class Launcher
+public partial class Launcher
 {
 	private sealed partial class Mac
 	{
@@ -131,7 +131,7 @@ public abstract partial class Launcher
 					},
 					Notifier = ConsoleNotifier.Notifier,
 				};
-				await Utilities.Execute(state);
+				await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
 			}
 			finally
 			{

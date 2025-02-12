@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-public abstract partial class Launcher
+public partial class Launcher
 {
 	private partial class Windows
 	{
@@ -82,7 +82,7 @@ public abstract partial class Launcher
 				},
 				Notifier = ConsoleNotifier.Notifier,
 			};
-			await Utilities.Execute(state);
+			await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
 		}
 	}
 }

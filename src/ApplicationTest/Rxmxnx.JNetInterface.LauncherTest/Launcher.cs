@@ -71,7 +71,7 @@ public abstract partial class Launcher
 			WorkingDirectory = this.OutputDirectory.FullName,
 			Notifier = ConsoleNotifier.Notifier,
 		};
-		Int32 result = await Utilities.Execute(state);
+		Int32 result = await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
 		ConsoleNotifier.Notifier.Result(result, executionName);
 		return result;
 	}
@@ -85,6 +85,6 @@ public abstract partial class Launcher
 			WorkingDirectory = this.OutputDirectory.FullName,
 			Notifier = ConsoleNotifier.Notifier,
 		};
-		return await Utilities.Execute(state);
+		return await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
 	}
 }

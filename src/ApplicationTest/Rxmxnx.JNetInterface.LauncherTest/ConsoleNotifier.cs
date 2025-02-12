@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 [ExcludeFromCodeCoverage]
 public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPlatformNotifier, IZipNotifier
 {
+	public static readonly CancellationToken CancellationToken = ConsoleNotifier.CreateCancellationToken();
 	public static readonly ConsoleNotifier Notifier = new();
 
 	private static readonly Lock consoleLock = new();
@@ -98,27 +99,6 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 	void IZipNotifier.EndExtraction(String zipPath, String destinationPath)
 		=> ConsoleNotifier.WriteColoredLine(ConsoleColor.Green, $"{zipPath} extracted to {destinationPath}.");
 
-	private static Double GetValue(Int64 total, out String unitName)
-	{
-		const Int32 threshold = 1024;
-		ReadOnlySpan<String> unitNames = ["B", "KiB", "MiB", "GiB",];
-		Double value = total;
-		Int32 unit = 0;
-		while (unit < unitNames.Length && value >= threshold)
-		{
-			value /= 1024;
-			unit++;
-		}
-		unitName = unitNames[unit];
-		return value;
-	}
-	private static void WriteColoredLine(ConsoleColor color, String message)
-	{
-		using Lock.Scope scope = ConsoleNotifier.consoleLock.EnterScope();
-		Console.ForegroundColor = color;
-		Console.WriteLine(message);
-		Console.ResetColor();
-	}
 	public static void Results(Dictionary<String, Int32> results)
 	{
 		Int32 maxKeyLength = results.Keys.Max(k => k.Length);
@@ -142,5 +122,39 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 		{
 			Console.ResetColor();
 		}
+	}
+
+	private static Double GetValue(Int64 total, out String unitName)
+	{
+		const Int32 threshold = 1024;
+		ReadOnlySpan<String> unitNames = ["B", "KiB", "MiB", "GiB",];
+		Double value = total;
+		Int32 unit = 0;
+		while (unit < unitNames.Length && value >= threshold)
+		{
+			value /= 1024;
+			unit++;
+		}
+		unitName = unitNames[unit];
+		return value;
+	}
+	private static void WriteColoredLine(ConsoleColor color, String message)
+	{
+		using Lock.Scope scope = ConsoleNotifier.consoleLock.EnterScope();
+		Console.ForegroundColor = color;
+		Console.WriteLine(message);
+		Console.ResetColor();
+	}
+	private static CancellationToken CreateCancellationToken()
+	{
+		CancellationTokenSource cts = new();
+		Console.CancelKeyPress += (sender, e) =>
+		{
+			cts.Cancel();
+			e.Cancel = true;
+			cts.Dispose();
+		};
+		AppDomain.CurrentDomain.ProcessExit += (sender, e) => { cts.Cancel(); };
+		return cts.Token;
 	}
 }

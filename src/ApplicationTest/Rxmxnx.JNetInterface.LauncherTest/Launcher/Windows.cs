@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-public abstract partial class Launcher
+public partial class Launcher
 {
 	private sealed partial class Windows : Launcher, ILauncher<Windows>
 	{
@@ -40,14 +40,11 @@ public abstract partial class Launcher
 			try
 			{
 				if (!urls.ContainsKey(version)) return default;
-				
+
 				Directory.CreateDirectory(jdkPath);
-				await Utilities.DownloadFileAsync(new()
-				{
-					Url = urls[version],
-					Destination = tempFileName,
-					Notifier = ConsoleNotifier.Notifier,
-				});
+				await Utilities.DownloadFileAsync(
+					new() { Url = urls[version], Destination = tempFileName, Notifier = ConsoleNotifier.Notifier, },
+					ConsoleNotifier.CancellationToken);
 				if (version is not JdkVersion.Jdk6)
 				{
 					Launcher.ExtractZip(tempFileName, jdkPath);
