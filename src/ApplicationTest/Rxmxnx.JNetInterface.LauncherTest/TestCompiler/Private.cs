@@ -12,6 +12,7 @@ public partial class TestCompiler
 			await Utilities.Execute<CompileClassArgs>(new()
 			{
 				ExecutablePath = jdk.JavaCompiler,
+				WorkingDirectory = classPath,
 				ArgState = new()
 				{
 					Version = jdk.JavaVersion,
