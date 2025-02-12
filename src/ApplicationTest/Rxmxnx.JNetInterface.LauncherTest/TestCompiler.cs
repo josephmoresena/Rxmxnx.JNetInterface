@@ -26,9 +26,6 @@ public static partial class TestCompiler
 
 			await TestCompiler.CreateJar(directory.FullName, jdk, outputDirectory.FullName);
 
-			if (!File.Exists(Path.Combine(outputDirectory.FullName, "HelloDotnet.class")))
-				await TestCompiler.CompileJavaClass(classDir.FullName, jdk);
-
 			File.Move(classFilePath, Path.Combine(outputDirectory.FullName, "HelloDotnet.class"), true);
 		}
 		finally
