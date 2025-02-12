@@ -27,6 +27,7 @@
             <Artifact Remove="$(PublishDir)$(AssemblyName)*.dbg"/>
             <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Include="$(NativeIntermediateOutputPath)$(AssemblyName)*"/>
             <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).o"/>
+            <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).obj"/>
             <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).exports"/>
             <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).ilc.rsp"/>
         </ItemGroup>

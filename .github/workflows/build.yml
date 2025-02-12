@@ -194,7 +194,7 @@ jobs:
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LibraryTest
         run: |
           dotnet new nugetconfig
-          dotnet nuget add source ../../../package/Nuget/ -n TmpSource
+          dotnet nuget add source "../../../package/Nuget/" -n TmpSource
 
       - name: Run launcher (Unix-like)
         if: runner.os != 'Windows'

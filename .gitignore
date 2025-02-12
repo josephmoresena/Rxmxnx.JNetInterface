@@ -402,3 +402,4 @@ FodyWeavers.xsd
 **/.idea/
 /package/Nuget
 package/Rxmxnx.JNetInterface.snk
+src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest/nuget.config

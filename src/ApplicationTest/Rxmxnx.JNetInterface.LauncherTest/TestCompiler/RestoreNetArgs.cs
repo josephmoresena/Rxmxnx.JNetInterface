@@ -17,5 +17,12 @@ public partial class TestCompiler
 			args.Add($"/p:USE_NET80={restoreArgs.Version is NetVersion.Net80}");
 			args.Add($"/p:USE_NET90={restoreArgs.Version is NetVersion.Net90}");
 		}
+		public static void AppendList(RestoreNetArgs restoreArgs, Collection<String> args)
+		{
+			args.Add("list");
+			args.Add(restoreArgs.ProjectFile);
+			args.Add("package");
+			args.Add("--include-transitive");
+		}
 	}
 }
