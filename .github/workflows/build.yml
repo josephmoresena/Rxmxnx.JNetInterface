@@ -197,11 +197,15 @@ jobs:
           dotnet nuget add source "../../../package/Nuget/" -n TmpSource
 
       - name: Run launcher (Unix-like)
+        env:
+          JNETINTERFACE_ONLY_NATIVE_TEST: true
         if: runner.os != 'Windows'
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
         run: dotnet run -c Release "../." "../../../artifacts"
 
       - name: Run launcher (Windows)
+        env:
+          JNETINTERFACE_ONLY_NATIVE_TEST: true
         if: runner.os == 'Windows'
         run: dotnet run --project "src\ApplicationTest\Rxmxnx.JNetInterface.LauncherTest\Rxmxnx.JNetInterface.LauncherTest.csproj" -c Release "src\ApplicationTest" "artifacts"
 

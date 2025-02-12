@@ -56,9 +56,13 @@ public static partial class TestCompiler
 			foreach (NetVersion netVersion in Enum.GetValues<NetVersion>())
 			{
 				if (!String.IsNullOrEmpty(libProjectFile))
-					await TestCompiler.CompileNetLibrary(
-						new() { ProjectFile = libProjectFile, RuntimeIdentifier = rid, Version = netVersion, }, arch,
-						outputPath);
+					await TestCompiler.CompileNetLibrary(onlyNativeAot,
+					                                     new()
+					                                     {
+						                                     ProjectFile = libProjectFile,
+						                                     RuntimeIdentifier = rid,
+						                                     Version = netVersion,
+					                                     }, arch, outputPath);
 
 				foreach (String appProjectFile in appProjectFiles)
 				{

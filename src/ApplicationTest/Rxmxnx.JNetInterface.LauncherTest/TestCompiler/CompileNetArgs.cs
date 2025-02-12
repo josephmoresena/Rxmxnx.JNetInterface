@@ -7,6 +7,7 @@ public partial class TestCompiler
 		private readonly RestoreNetArgs _args = args;
 		private readonly String _outputPath = outputPath;
 
+		public Boolean EnableTrace { get; init; }
 		public Publish Publish { get; set; }
 		public Boolean BuildDependencies { get; set; }
 
@@ -27,8 +28,7 @@ public partial class TestCompiler
 			args.Add($"/p:NativeAOT={compileArgs.Publish.HasFlag(Publish.NativeAot)}");
 			args.Add($"/p:IlcDisableReflection={compileArgs.Publish.HasFlag(Publish.NoReflection)}");
 			args.Add($"/p:CopyTargetTo={compileArgs._outputPath}");
-			if (compileArgs.Publish.HasFlag(Publish.JniLibrary))
-				args.Add($"/p:USE_JTRACE={compileArgs.Publish.HasFlag(Publish.NoReflection)}");
+			args.Add($"/p:USE_JTRACE={compileArgs.EnableTrace}");
 		}
 	}
 }

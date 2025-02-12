@@ -85,6 +85,7 @@ partial class JEnvironment
 				Console.WriteLine("Created");
 				Console.WriteLine(JArrayObject<JChar>.Metadata.Hash);
 			}
+			Console.WriteLine("Found: " + MetadataHelper.GetExactMetadata(arrayHash));
 		}
 
 		TypeInfoSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);

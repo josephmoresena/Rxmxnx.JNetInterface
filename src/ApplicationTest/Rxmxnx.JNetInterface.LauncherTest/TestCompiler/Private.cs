@@ -51,13 +51,14 @@ public partial class TestCompiler
 			File.Delete(manifestPath);
 		}
 	}
-	private static async Task CompileNetLibrary(RestoreNetArgs restoreArgs, Architecture arch, String outputPath)
+	private static async Task CompileNetLibrary(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, Architecture arch,
+		String outputPath)
 	{
 		if (!Utilities.IsNativeAotSupported(arch, restoreArgs.Version)) return;
 
 		CompileNetArgs compileArgs = new(restoreArgs, outputPath)
 		{
-			BuildDependencies = true, Publish = Publish.JniLibrary,
+			EnableTrace = onlyNativeAot, BuildDependencies = true, Publish = Publish.JniLibrary,
 		};
 
 		await TestCompiler.RestoreNet(restoreArgs);
@@ -74,7 +75,7 @@ public partial class TestCompiler
 	{
 		CompileNetArgs compileArgs = new(restoreArgs, outputPath)
 		{
-			BuildDependencies = true, Publish = Publish.SelfContained,
+			EnableTrace = onlyNativeAot, BuildDependencies = true, Publish = Publish.SelfContained,
 		};
 
 		await TestCompiler.RestoreNet(restoreArgs);
