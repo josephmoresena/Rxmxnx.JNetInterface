@@ -10,7 +10,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 [ExcludeFromCodeCoverage]
 internal static class ExportedMethods
 {
-	private static ConsoleTraceListener? traceListener = default;
+	private static ConsoleTraceListener? traceListener;
 
 	[UnmanagedCallersOnly(EntryPoint = "JNI_OnLoad")]
 	private static Int32 LoadLibrary(JVirtualMachineRef vmRef, IntPtr _)

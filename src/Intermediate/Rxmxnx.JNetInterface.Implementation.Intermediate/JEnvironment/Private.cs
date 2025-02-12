@@ -71,6 +71,15 @@ partial class JEnvironment
 		    elementSignature[^1] == CommonNames.ObjectSignatureSuffixChar)
 			// Object class name is signature without L prefix and ; suffix.
 			elementClassName = elementSignature[1..^1];
+
+		if (elementSignature.Length == 1)
+		{
+			Console.WriteLine("Primitive signature!!!");
+			Console.WriteLine(new CString(arraySignature));
+			Console.WriteLine(CStringSequence.Parse(arrayHash).ToCString());
+			Console.WriteLine(new CString(elementSignature));
+		}
+
 		TypeInfoSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);
 		String elementHash = elementClassInformation.ToString();
 		if (elementSignature[0] == CommonNames.ArraySignaturePrefixChar)
