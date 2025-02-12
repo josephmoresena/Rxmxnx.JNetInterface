@@ -134,7 +134,22 @@ public sealed partial class JVirtualMachineTests
 			Assert.NotEqual(default, (jWeak?.Reference).GetValueOrDefault());
 			Assert.NotEqual(default, (jGlobal?.Reference).GetValueOrDefault());
 
-			Assert.Throws<InvalidOperationException>(() => Assert.True(JObject.IsNullOrDefault(jLocal)));
+			DateTime? lastGlobalCheck = jGlobal?.LastValidation;
+			DateTime? lastWeakCheck = jWeak?.LastValidation;
+			try
+			{
+				Assert.False(JObject.IsNullOrDefault(jLocal));
+				Assert.Equal(lastGlobalCheck, jGlobal?.LastValidation);
+			}
+			catch (InvalidOperationException)
+			{
+				// If not avoidable global reference check.
+				Assert.NotEqual(lastGlobalCheck, jGlobal?.LastValidation);
+			}
+			finally
+			{
+				Assert.Equal(lastWeakCheck, jWeak?.LastValidation);
+			}
 			Assert.False(JObject.IsNullOrDefault(jWeak));
 			Assert.False(JObject.IsNullOrDefault(jGlobal));
 

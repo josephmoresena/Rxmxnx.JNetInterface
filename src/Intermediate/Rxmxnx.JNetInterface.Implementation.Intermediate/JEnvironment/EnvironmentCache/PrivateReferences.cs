@@ -166,16 +166,6 @@ partial class JEnvironment
 			JTrace.UnloadGlobal(this._env.IsAttached, this.VirtualMachine.IsAlive, globalRef);
 		}
 		/// <summary>
-		/// Indicates whether <paramref name="jGlobal"/> is a main global object or default.
-		/// </summary>
-		/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
-		/// <returns>
-		/// <see langword="true"/> if <paramref name="jGlobal"/> is main global object or default;
-		/// otherwise, <see langword="false"/>.
-		/// </returns>
-		private Boolean IsMainOrDefault(JGlobalBase jGlobal)
-			=> jGlobal.IsDefault || this.IsMainGlobal(jGlobal as JGlobal);
-		/// <summary>
 		/// Creates a new local reference for <paramref name="result"/>.
 		/// </summary>
 		/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>

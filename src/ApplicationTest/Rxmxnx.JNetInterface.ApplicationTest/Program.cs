@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.Lang;
@@ -31,7 +32,26 @@ public static class Program
 				$"Runtime Name: {RuntimeInformation.FrameworkDescription}",
 			];
 
-		Program.Execute(jvmLib, helloJniByteCode, jMainArgs);
+		ConsoleTraceListener? listener = default;
+
+		if (IVirtualMachine.TraceEnabled)
+		{
+			listener = new();
+			Trace.Listeners.Add(listener);
+		}
+
+		try
+		{
+			Program.Execute(jvmLib, helloJniByteCode, jMainArgs);
+		}
+		finally
+		{
+			if (listener is not null)
+			{
+				Trace.Listeners.Remove(listener);
+				listener.Dispose();
+			}
+		}
 
 		IManagedCallback.PrintSwitches();
 	}

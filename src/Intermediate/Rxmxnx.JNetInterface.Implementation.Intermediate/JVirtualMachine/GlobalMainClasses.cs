@@ -61,8 +61,25 @@ public partial class JVirtualMachine
 		/// <see langword="false"/>.
 		/// </returns>
 		public Boolean IsMainGlobal(String classHash, JGlobal jGlobal)
-			=> JVirtualMachine.userMainClasses.ContainsKey(classHash) &&
-				Object.ReferenceEquals(jGlobal, this.GlobalClassCache[classHash]);
+			=> classHash switch
+			{
+				// Fundamental classes
+				ClassNameHelper.ClassHash => true,
+				ClassNameHelper.ThrowableHash => true,
+				ClassNameHelper.StackTraceElementHash => true,
+				// Primitive classes
+				ClassNameHelper.VoidPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
+				ClassNameHelper.BooleanPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
+				ClassNameHelper.BytePrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
+				ClassNameHelper.CharPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
+				ClassNameHelper.DoublePrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
+				ClassNameHelper.FloatPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
+				ClassNameHelper.IntPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
+				ClassNameHelper.LongPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
+				ClassNameHelper.ShortPrimitiveHash => MainClasses.PrimitiveMainClassesEnabled,
+				// User main classes
+				_ => JVirtualMachine.userMainClasses.ContainsKey(classHash),
+			} && Object.ReferenceEquals(jGlobal, this.GlobalClassCache[classHash]);
 		/// <summary>
 		/// Loads global classes.
 		/// </summary>

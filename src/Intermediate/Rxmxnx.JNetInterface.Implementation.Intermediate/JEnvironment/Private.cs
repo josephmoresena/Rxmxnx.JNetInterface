@@ -66,28 +66,19 @@ partial class JEnvironment
 	{
 		// Element signature is Array signature without [ prefix.
 		ReadOnlySpan<Byte> elementSignature = arraySignature[1..];
+
+		if (elementSignature.Length == 1)
+		{
+			JArrayTypeMetadata result = (JArrayTypeMetadata)MetadataHelper.GetExactMetadata(arrayHash)!;
+			JTrace.UseTypeMetadata(arraySignature, result);
+			return result;
+		}
+
 		ReadOnlySpan<Byte> elementClassName = elementSignature;
 		if (elementSignature[0] != CommonNames.ArraySignaturePrefixChar &&
 		    elementSignature[^1] == CommonNames.ObjectSignatureSuffixChar)
 			// Object class name is signature without L prefix and ; suffix.
 			elementClassName = elementSignature[1..^1];
-
-		if (elementSignature.Length == 1)
-		{
-			Console.WriteLine("Primitive signature!!!");
-			Console.WriteLine(new CString(arraySignature));
-			Console.WriteLine(CStringSequence.Parse(arrayHash).ToCString());
-			Console.WriteLine(new CString(elementSignature));
-			if (arrayHash != JArrayObject<JChar>.Metadata.Hash)
-			{
-				Console.WriteLine("Computed");
-				Console.WriteLine(arrayHash);
-				Console.WriteLine("Created");
-				Console.WriteLine(JArrayObject<JChar>.Metadata.Hash);
-			}
-			Console.WriteLine("Found: " + MetadataHelper.GetExactMetadata(arrayHash));
-		}
-
 		TypeInfoSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);
 		String elementHash = elementClassInformation.ToString();
 		if (elementSignature[0] == CommonNames.ArraySignaturePrefixChar)
@@ -311,8 +302,8 @@ partial class JEnvironment
 	{
 		if (cache is null || !cache.VirtualMachine.SecureRemove(jGlobal.As<JObjectLocalRef>())) return true;
 		Boolean isWeak = jGlobal is JWeak;
-		if (!isWeak && jGlobal.ObjectMetadata is ClassObjectMetadata classObjectMetadata)
-			return MetadataHelper.MainClassHashes.Contains(classObjectMetadata.Hash);
+		if (!isWeak && LocalMainClasses.IsMainGlobal(jGlobal as JGlobal))
+			return true;
 		return Random.Shared.Next(0, 10) > (!isWeak ? 5 : 2);
 	}
 

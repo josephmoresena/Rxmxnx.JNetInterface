@@ -164,10 +164,14 @@ public partial class JVirtualMachineTests
 			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
 			IEnvironment? env = vm.GetEnvironment()!;
 			Assert.Equal(proxyEnv.VirtualMachine.Reference, vm.Reference);
+
+			// Fundamental classes
 			Assert.Equal(mainGlobalRef[MainClass.Class].Value, env.ClassFeature.ClassObject.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.Throwable].Value, env.ClassFeature.ThrowableObject.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.StackTraceElement].Value,
 			             env.ClassFeature.StackTraceElementObject.Reference.Value);
+
+			// Primitive classes
 			Assert.Equal(mainGlobalRef[MainClass.VoidPrimitive].Value, env.ClassFeature.VoidPrimitive.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.BooleanPrimitive].Value,
 			             env.ClassFeature.BooleanPrimitive.Reference.Value);
@@ -181,16 +185,21 @@ public partial class JVirtualMachineTests
 			Assert.Equal(mainGlobalRef[MainClass.LongPrimitive].Value, env.ClassFeature.LongPrimitive.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.ShortPrimitive].Value,
 			             env.ClassFeature.ShortPrimitive.Reference.Value);
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.NumberObject));
+
+			// User main classes (default)
+			Assert.Equal(mainGlobalRef[MainClass.NumberObject].Value, env.ClassFeature.NumberObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.BooleanObject].Value, env.ClassFeature.BooleanObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.ByteObject].Value, env.ClassFeature.ByteObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.CharacterObject].Value,
+			             env.ClassFeature.CharacterObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.DoubleObject].Value, env.ClassFeature.DoubleObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.FloatObject].Value, env.ClassFeature.FloatObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.IntegerObject].Value, env.ClassFeature.IntegerObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.LongObject].Value, env.ClassFeature.LongObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.ShortObject].Value, env.ClassFeature.ShortObject.Reference.Value);
+
+			// java.lang.Void is not main by default.
 			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.VoidObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.BooleanObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.ByteObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.CharacterObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.DoubleObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.FloatObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.IntegerObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.LongObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.ShortObject));
 		}
 		catch (Exception ex)
 		{

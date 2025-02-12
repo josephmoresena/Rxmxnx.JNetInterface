@@ -165,7 +165,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jGlobal);
 			Boolean keepReference = false;
-			if (this.IsMainOrDefault(jGlobal)) return false;
+			if (EnvironmentCache.IsMainOrDefault(jGlobal)) return false;
 			try
 			{
 				if (jGlobal is JGlobal)

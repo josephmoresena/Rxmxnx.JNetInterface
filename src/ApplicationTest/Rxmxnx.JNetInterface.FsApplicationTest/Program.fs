@@ -2,6 +2,7 @@
 module Program
 
 open System
+open System.Diagnostics
 open System.IO
 open System.Runtime.InteropServices
 open Microsoft.FSharp.Control
@@ -62,7 +63,22 @@ let MainAsync () =
                 [| $"System Path: %s{Environment.SystemDirectory}"
                    $"Runtime Name: %s{RuntimeInformation.FrameworkDescription}" |]
 
-        Execute(jvmLib, helloJniByteCode, jMainArgs)
+        let mutable listener: ConsoleTraceListener option = None
+
+        if IVirtualMachine.TraceEnabled then
+            let newListener = new ConsoleTraceListener()
+            let _ = Trace.Listeners.Add(newListener)
+            listener <- Some newListener
+
+        try
+            Execute(jvmLib, helloJniByteCode, jMainArgs)
+        finally
+            match listener with
+            | Some l ->
+                Trace.Listeners.Remove(l)
+                l.Dispose()
+            | None -> ()
+
         IManagedCallback.PrintSwitches()
     }
 

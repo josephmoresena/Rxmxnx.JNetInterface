@@ -17,6 +17,12 @@ Partial Module Program
             Throw New ArgumentException("Please set JVM library path.")
         End If
 
+        Dim listener As ConsoleTraceListener = Nothing
+        If IVirtualMachine.TraceEnabled Then
+            listener = New ConsoleTraceListener()
+            Trace.Listeners.Add(listener)
+        End If
+
         Dim helloJniByteCode As Byte() = Await File.ReadAllBytesAsync("HelloDotnet.class")
         Dim jvmLib As JVirtualMachineLibrary = JVirtualMachineLibrary.LoadLibrary(args(0))
 
@@ -31,7 +37,14 @@ Partial Module Program
                                            $"Runtime Name: {RuntimeInformation.FrameworkDescription}"
                                        })
 
-        Execute(jvmLib, helloJniByteCode, jMainArgs)
+        Try
+            Execute(jvmLib, helloJniByteCode, jMainArgs)
+        Finally
+            IF Not IsNothing(listener) Then
+                Trace.Listeners.Remove(listener)
+                listener.Dispose()
+            End If
+        End Try
 
         IManagedCallback.PrintSwitches()
     End Function

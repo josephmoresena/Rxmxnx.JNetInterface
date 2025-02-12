@@ -31,6 +31,16 @@ partial class JEnvironment
 			return nativeInterface.GetVersion(envRef);
 		}
 		/// <summary>
+		/// Indicates whether <paramref name="jGlobal"/> is a main global object or default.
+		/// </summary>
+		/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+		/// <returns>
+		/// <see langword="true"/> if <paramref name="jGlobal"/> is main global object or default;
+		/// otherwise, <see langword="false"/>.
+		/// </returns>
+		private static Boolean IsMainOrDefault(JGlobalBase jGlobal)
+			=> jGlobal.IsDefault || LocalMainClasses.IsMainGlobal(jGlobal as JGlobal);
+		/// <summary>
 		/// Creates a <see cref="IFixedContext{Byte}.IDisposable"/> instance from a span created in heap.
 		/// </summary>
 		/// <param name="count">Number of allocated bytes.</param>
