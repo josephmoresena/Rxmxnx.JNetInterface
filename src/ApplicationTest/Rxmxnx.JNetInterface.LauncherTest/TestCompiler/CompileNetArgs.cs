@@ -27,7 +27,8 @@ public partial class TestCompiler
 			args.Add($"/p:NativeAOT={compileArgs.Publish.HasFlag(Publish.NativeAot)}");
 			args.Add($"/p:IlcDisableReflection={compileArgs.Publish.HasFlag(Publish.NoReflection)}");
 			args.Add($"/p:CopyTargetTo={compileArgs._outputPath}");
-			args.Add($"/p:USE_JTRACE={compileArgs.Publish.HasFlag(Publish.NoReflection)}");
+			if (compileArgs.Publish.HasFlag(Publish.JniLibrary))
+				args.Add($"/p:USE_JTRACE={compileArgs.Publish.HasFlag(Publish.NoReflection)}");
 		}
 	}
 }
