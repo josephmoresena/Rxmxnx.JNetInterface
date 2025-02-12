@@ -17,8 +17,6 @@ public partial class TestCompiler
 				AppendArgs = CompileClassArgs.Append,
 				Notifier = ConsoleNotifier.Notifier,
 			});
-
-			if (jdk.JavaArchitecture != RuntimeInformation.OSArchitecture) await Task.Delay(125);
 		}
 		finally
 		{
