@@ -78,6 +78,13 @@ partial class JEnvironment
 			Console.WriteLine(new CString(arraySignature));
 			Console.WriteLine(CStringSequence.Parse(arrayHash).ToCString());
 			Console.WriteLine(new CString(elementSignature));
+			if (arrayHash != JArrayObject<JChar>.Metadata.Hash)
+			{
+				Console.WriteLine("Computed");
+				Console.WriteLine(arrayHash);
+				Console.WriteLine("Created");
+				Console.WriteLine(JArrayObject<JChar>.Metadata.Hash);
+			}
 		}
 
 		TypeInfoSequence elementClassInformation = MetadataHelper.GetClassInformation(elementClassName, false);
