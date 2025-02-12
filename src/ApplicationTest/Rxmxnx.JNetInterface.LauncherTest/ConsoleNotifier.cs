@@ -129,7 +129,7 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 			Console.WriteLine($"{"Test".PadRight(maxKeyLength)} | Exit code ");
 			Console.WriteLine(new String('-', maxKeyLength + 20));
 
-			foreach (KeyValuePair<String, Int32> kvp in results.OrderBy(kvp => kvp.Key))
+			foreach (KeyValuePair<String, Int32> kvp in results.OrderBy(kvp => (Math.Abs(kvp.Value), kvp.Key)))
 			{
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.Write($"{kvp.Key.PadRight(maxKeyLength)} | ");
