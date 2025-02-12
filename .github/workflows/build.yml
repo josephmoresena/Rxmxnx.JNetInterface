@@ -181,6 +181,18 @@ jobs:
             8.0.x
             9.0.x
 
+      - name: Pack assemblies
+        working-directory: ./package/Rxmxnx.JNetInterface.Core
+        run: |
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
+
+      - name: Create nuget.config for tests
+        working-directory: ./src/ApplicationTest/
+        run: |
+          dotnet new nugetconfig
+          dotnet nuget add source ../../package/Nuget/ -n TmpSource
+
       - name: Run launcher (Unix-like)
         if: runner.os != 'Windows'
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest

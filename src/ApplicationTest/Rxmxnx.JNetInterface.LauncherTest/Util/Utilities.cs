@@ -8,6 +8,9 @@ public static class Utilities
 	public static async Task DownloadFileAsync(DownloadGetState state, CancellationToken cancellationToken = default)
 	{
 		using HttpClient httpClient = new();
+
+		httpClient.Timeout = TimeSpan.FromMinutes(5);
+
 		using HttpResponseMessage response =
 			await httpClient.GetAsync(state.Url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
