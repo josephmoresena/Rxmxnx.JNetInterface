@@ -14,20 +14,20 @@ public partial class TestCompiler
 			{
 				if (compileArgs.Version <= JdkVersion.Jdk8)
 				{
-					args.Add($"-target 1.{compileArgs.Target}");
-					args.Add($"-source 1.{compileArgs.Target}");
+					args.Add($"-target 1.{(Byte)compileArgs.Target}");
+					args.Add($"-source 1.{(Byte)compileArgs.Target}");
 				}
 				else
 				{
-					args.Add($"-target {compileArgs.Target}");
-					args.Add($"-source {compileArgs.Target}");
+					args.Add($"-target {(Byte)compileArgs.Target}");
+					args.Add($"-source {(Byte)compileArgs.Target}");
 				}
 			}
 			args.Add("-verbose");
 			args.Add(compileArgs.JavaFilePath);
 
 			if (compileArgs.Version > compileArgs.Target && compileArgs.Version > JdkVersion.Jdk17)
-				args.Add($"--release {compileArgs.Target}");
+				args.Add($"--release {(Byte)compileArgs.Target}");
 		}
 	}
 }
