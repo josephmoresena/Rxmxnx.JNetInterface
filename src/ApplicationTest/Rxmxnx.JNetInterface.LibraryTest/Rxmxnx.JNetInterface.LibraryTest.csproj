@@ -18,7 +18,7 @@
 
     <Import Condition="'$(JNI_LIBRARY)' == 'true'" Project="..\JNetInterface-NativeAot.targets"/>
 
-    <ItemGroup Condition="!Exists('$(MSBuildProjectDirectory)\..\..\package\nuget.config')">
+    <ItemGroup Condition="!Exists('nuget.config')">
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
@@ -26,7 +26,7 @@
         <ProjectReference Include="..\..\Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate\Rxmxnx.JNetInterface.Primitives.Intermediate.csproj"/>
     </ItemGroup>
 
-    <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)\..\..\package\nuget.config')">
+    <ItemGroup Condition="Exists('nuget.config')">
         <PackageReference Include="Rxmxnx.JNetInterface" Version="9999.99.99.99-tmp"/>
     </ItemGroup>
 
