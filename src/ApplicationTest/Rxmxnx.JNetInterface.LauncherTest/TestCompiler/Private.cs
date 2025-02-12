@@ -14,10 +14,11 @@ public partial class TestCompiler
 				ExecutablePath = jdk.JavaCompiler,
 				ArgState = new()
 				{
+					Version = jdk.JavaVersion,
 					JavaFilePath = javaFilePath,
-					Target = jdk.JavaVersion > JdkVersion.Jdk6 ?
-						"1.6" :
-						default,
+					Target = jdk.JavaVersion > JdkVersion.Jdk11 ?
+						JdkVersion.Jdk8 :
+						JdkVersion.Jdk6,
 				},
 				AppendArgs = CompileClassArgs.Append,
 				Notifier = ConsoleNotifier.Notifier,

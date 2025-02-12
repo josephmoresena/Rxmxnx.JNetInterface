@@ -29,15 +29,6 @@ public partial class JVirtualMachine
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
 		public Boolean InTransaction(IntPtr jniRef)
-		{
-			Boolean result = false;
-			Parallel.ForEach(this._transactions.Values, (t, s) =>
-			{
-				if (!t.Contains(jniRef)) return;
-				result = true;
-				s.Stop();
-			});
-			return result;
-		}
+			=> this._transactions.Values.AsParallel().Any(t => t.Contains(jniRef));
 	}
 }
