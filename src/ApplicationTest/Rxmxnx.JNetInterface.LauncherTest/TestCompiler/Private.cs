@@ -13,17 +13,12 @@ public partial class TestCompiler
 			{
 				ExecutablePath = jdk.JavaCompiler,
 				WorkingDirectory = classPath,
-				ArgState = new()
-				{
-					Version = jdk.JavaVersion,
-					JavaFilePath = javaFilePath,
-					Target = jdk.JavaVersion > JdkVersion.Jdk11 ?
-						JdkVersion.Jdk8 :
-						JdkVersion.Jdk6,
-				},
+				ArgState = new() { JavaFilePath = javaFilePath, },
 				AppendArgs = CompileClassArgs.Append,
 				Notifier = ConsoleNotifier.Notifier,
 			});
+
+			if (jdk.JavaArchitecture != RuntimeInformation.OSArchitecture) await Task.Delay(125);
 		}
 		finally
 		{
