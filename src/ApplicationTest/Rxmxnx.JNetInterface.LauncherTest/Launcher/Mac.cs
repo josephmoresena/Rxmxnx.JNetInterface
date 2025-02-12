@@ -19,7 +19,8 @@ public abstract partial class Launcher
 		protected override String JavaExecutableName => "java";
 		protected override String JavaCompilerName => "javac";
 
-		public override Jdk GetMinJdk() => this._amd64[JdkVersion.Jdk6];
+		public override Jdk GetMinJdk()
+			=> this.CurrentArch is Architecture.X64 ? this._amd64[JdkVersion.Jdk6] : this._arm64[JdkVersion.Jdk8];
 
 		protected override String GetJavaLibraryName(JdkVersion version)
 			=> version is JdkVersion.Jdk6 ? "libserver.dylib" : "libjvm.dylib";
@@ -33,7 +34,7 @@ public abstract partial class Launcher
 			try
 			{
 				if (!urls.ContainsKey(version)) return default;
-				
+
 				Directory.CreateDirectory(jdkPath);
 				await Utilities.DownloadFileAsync(new()
 				{
