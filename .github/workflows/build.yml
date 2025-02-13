@@ -207,9 +207,9 @@ jobs:
         shell: pwsh
         run: |
           if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "ApplicationTest" "artifacts"
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "ApplicationTest" "..\artifacts"
           } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "ApplicationTest" "artifacts"
+            ./Rxmxnx.JNetInterface.LauncherTest "ApplicationTest" "../artifacts"
           }
 
       - name: Create Native Artifact
@@ -225,7 +225,7 @@ jobs:
             ./artifacts/*HelloJni.* 
 
       - name: Create Native Artifact Logs
-        if: runner.arch != 'X64'
+        if: runner.arch == 'X64'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-Artifact-Logs
