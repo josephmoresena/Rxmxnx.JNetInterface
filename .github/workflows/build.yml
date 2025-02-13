@@ -196,16 +196,16 @@ jobs:
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LibraryTest
         run: |
           dotnet new nugetconfig
-          dotnet nuget add source "../../../package/Nuget/" -n TmpSource
-          dotnet publish
+          dotnet nuget add source "../../../package/Nuget/" -n TmpSource 
+          dotnet publish -verbosity:diag 
 
       - name: Run launcher
         shell: pwsh
         run: |
           if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts"
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" 
           } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts"
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" 
           }
 
       - name: Create Native Artifact
