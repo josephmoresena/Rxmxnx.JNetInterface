@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <PublishAot>true</PublishAot>
         <InvariantGlobalization>true</InvariantGlobalization>
-        <PublishDir Condition="'$(PublishDir)' == ''">..\..\</PublishDir>
+        <PublishDir Condition="'$(PublishDir)' == ''">..\..\..\</PublishDir>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     </PropertyGroup>
 

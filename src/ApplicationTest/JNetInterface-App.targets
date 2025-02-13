@@ -10,6 +10,8 @@
     <Import Condition="'$(NativeAOT)' == 'true'" Project="JNetInterface-NativeAot.targets"/>
 
     <PropertyGroup Condition="$(JNI_APP) == 'true' And '$(NativeAOT)' != 'true'">
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>None</DebugType>
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
         <!-- Assembly name must specify that it was compiled with ReadyToRun -->

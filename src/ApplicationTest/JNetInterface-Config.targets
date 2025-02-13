@@ -31,8 +31,12 @@
             <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).exports"/>
             <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).ilc.rsp"/>
         </ItemGroup>
+        
         <Copy Condition="'$(CopyTargetTo)' != ''" SourceFiles="@(Artifact)" DestinationFolder="$(CopyTargetTo)" SkipUnchangedFiles="false"/>
         <Copy Condition="'$(CopyTargetTo)' != '' And $(NativeIntermediateOutputPath) != ''" SourceFiles="@(NativeFiles)" DestinationFolder="$(CopyTargetTo)\native" SkipUnchangedFiles="false"/>
+
+        <!-- Remove NativeIntermediateOutput files -->
+        <Delete Condition="$(NativeIntermediateOutputPath) != ''" Files="$(NativeIntermediateOutputPath)$(AssemblyName)*"/>
     </Target>
 
 </Project>
