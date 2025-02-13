@@ -204,7 +204,13 @@ jobs:
 
       - name: Run launcher
         working-directory: ./src
-        run: Rxmxnx.JNetInterface.LauncherTest "ApplicationTest" "artifacts"
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "ApplicationTest" "artifacts"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "ApplicationTest" "artifacts"
+          }
 
       - name: Create Native Artifact
         if: runner.arch == 'X64'
