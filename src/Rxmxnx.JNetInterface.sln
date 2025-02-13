@@ -10,7 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intermediate", "Intermediate", "{A149466C-7A87-4D2C-99A5-E9CA896DCC3F}"
 	ProjectSection(SolutionItems) = preProject
 		..\README.md = ..\README.md
-		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
 		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
 		..\package\Intermediate-to-Package.targets = ..\package\Intermediate-to-Package.targets
 	EndProjectSection
@@ -37,6 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApplicationTest", "Applicat
 		ApplicationTest\JNetInterface-NativeAot.targets = ApplicationTest\JNetInterface-NativeAot.targets
 		ApplicationTest\JNetInterface-Config.targets = ApplicationTest\JNetInterface-Config.targets
 		ApplicationTest\JNetInterface-App.targets = ApplicationTest\JNetInterface-App.targets
+		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.ApplicationTest", "ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj", "{3B30C3CF-A6FF-494F-8748-61D091D01252}"
