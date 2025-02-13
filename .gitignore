@@ -403,3 +403,6 @@ FodyWeavers.xsd
 /package/Nuget
 package/Rxmxnx.JNetInterface.snk
 src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest/nuget.config
+Rxmxnx.JNetInterface.LauncherTest
+Rxmxnx.JNetInterface.LauncherTest.exe
+jdk_*_Jdk*/
