@@ -207,7 +207,7 @@ jobs:
         run: Rxmxnx.JNetInterface.LauncherTest "ApplicationTest" "artifacts"
 
       - name: Create Native Artifact
-        if: runner.arch != 'X64'
+        if: runner.arch == 'X64'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-Artifact
