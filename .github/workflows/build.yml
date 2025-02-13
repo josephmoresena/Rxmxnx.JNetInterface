@@ -192,20 +192,23 @@ jobs:
         run: |
           dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
 
-      - name: Publish launcher
+      - name: Create nuget.config for tests
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LibraryTest
         run: |
           dotnet new nugetconfig
-          dotnet nuget add source "../../../package/Nuget/" -n TmpSource 
-          dotnet publish -verbosity:diag 
+          dotnet nuget add source "../../../package/Nuget/" -n TmpSource
+
+      - name: Publish launcher
+        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
+        run: dotnet publish
 
       - name: Run launcher
         shell: pwsh
         run: |
           if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" 
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts"
           } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" 
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts"
           }
 
       - name: Create Native Artifact
