@@ -25,6 +25,7 @@
         <Using Include="System.Runtime.InteropServices"/>
         <Using Include="System.Text"/>
         <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.PInvoke.Localization"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
         <Using Include="Rxmxnx.JNetInterface.Internal.Localization"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>

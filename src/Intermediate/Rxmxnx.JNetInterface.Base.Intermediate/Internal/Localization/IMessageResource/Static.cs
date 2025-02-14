@@ -14,8 +14,8 @@ internal partial interface IMessageResource
 
 		return NativeUtilities.UserInterfaceIso639P1 switch
 		{
-			// Iso639P1.Es => IMessageResource.GetInstance<SpanishMessageResource>(),
-			// Iso639P1.Fr => IMessageResource.GetInstance<FrenchMessageResource>(),
+			Iso639P1.Es => IMessageResource.GetInstance<SpanishMessageResource>(),
+			Iso639P1.Fr => IMessageResource.GetInstance<FrenchMessageResource>(),
 			// Iso639P1.De => IMessageResource.GetInstance<GermanMessageResource>(),
 			// Iso639P1.Zh => IMessageResource.GetInstance<ChineseMessageResource>(),
 			// Iso639P1.Ja => IMessageResource.GetInstance<JapaneseMessageResource>(),
