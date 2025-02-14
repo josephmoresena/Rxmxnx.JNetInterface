@@ -123,6 +123,8 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 			Console.ResetColor();
 		}
 	}
+	public static CancellationTokenRegistration RegisterCancellation(CancellationTokenSource cts)
+		=> ConsoleNotifier.CancellationToken.Register(ConsoleNotifier.CancelSource, cts);
 
 	private static Double GetValue(Int64 total, out String unitName)
 	{
@@ -156,5 +158,10 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 		};
 		AppDomain.CurrentDomain.ProcessExit += (sender, e) => { cts.Cancel(); };
 		return cts.Token;
+	}
+	private static void CancelSource(Object? objSource)
+	{
+		if (objSource is not CancellationTokenSource cts) return;
+		cts.Cancel();
 	}
 }

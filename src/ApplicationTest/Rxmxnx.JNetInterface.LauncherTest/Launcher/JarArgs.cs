@@ -16,7 +16,7 @@ public partial class Launcher
 
 		public static void Append(JarArgs jarArgs, Collection<String> args)
 		{
-			args.Add($"-Djava.library.path=.");
+			args.Add("-Djava.library.path=.");
 			args.Add($"-Ddotnet.runtime.version=net{(Byte)jarArgs.Version}.0");
 			if (jarArgs.NoReflection)
 				args.Add("-Ddotnet.reflection.disable=true");
