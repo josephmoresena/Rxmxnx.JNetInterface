@@ -41,6 +41,7 @@ public partial class Launcher
 			jdkDirectory.GetFiles(this.JavaCompilerName, SearchOption.AllDirectories).FirstOrDefault();
 		FileInfo? jarFile = jdkDirectory.GetFiles(this.JavaArchiverName, SearchOption.AllDirectories).FirstOrDefault();
 		FileInfo? jvmFile = jdkDirectory.GetFiles(this.GetJavaLibraryName(version), SearchOption.AllDirectories)
+		                                .Where(f => String.IsNullOrEmpty(f.LinkTarget)) // Exclude symbolic links
 		                                .LastOrDefault(
 			                                f => f.FullName.Contains(
 				                                "server", StringComparison.InvariantCultureIgnoreCase));
