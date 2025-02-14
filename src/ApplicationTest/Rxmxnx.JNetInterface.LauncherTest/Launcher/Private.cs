@@ -35,16 +35,22 @@ public partial class Launcher
 	private Jdk? GetJdk(JdkVersion version, Architecture arch, DirectoryInfo jdkDirectory)
 	{
 		if (!jdkDirectory.Exists) return default;
+		List<String> excludedPath = jdkDirectory.GetDirectories("*", SearchOption.AllDirectories)
+		                                        .Where(d => !String.IsNullOrEmpty(d.LinkTarget)).Select(d => d.FullName)
+		                                        .ToList();
 		FileInfo? javaFile = jdkDirectory.GetFiles(this.JavaExecutableName, SearchOption.AllDirectories)
 		                                 .FirstOrDefault();
 		FileInfo? javacFile =
 			jdkDirectory.GetFiles(this.JavaCompilerName, SearchOption.AllDirectories).FirstOrDefault();
 		FileInfo? jarFile = jdkDirectory.GetFiles(this.JavaArchiverName, SearchOption.AllDirectories).FirstOrDefault();
 		FileInfo? jvmFile = jdkDirectory.GetFiles(this.GetJavaLibraryName(version), SearchOption.AllDirectories)
-		                                .Where(f => String.IsNullOrEmpty(f.LinkTarget)) // Exclude symbolic links
-		                                .LastOrDefault(
-			                                f => f.FullName.Contains(
-				                                "server", StringComparison.InvariantCultureIgnoreCase));
+		                                // Exclude symbolic links
+		                                .Where(f => excludedPath.TrueForAll(e => !f.FullName.Contains(e)))
+		                                .Where(f => !String.IsNullOrEmpty(f.LinkTarget))
+		                                .Where(f => f.FullName.Contains(
+			                                       "server", StringComparison.InvariantCultureIgnoreCase))
+		                                // Order
+		                                .OrderBy(f => f.FullName.Length).FirstOrDefault();
 		if (javaFile is not null && javacFile is not null && jarFile is not null && jvmFile is not null)
 			return new()
 			{
