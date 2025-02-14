@@ -115,7 +115,7 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 				Console.Write($"{kvp.Key.PadRight(maxKeyLength)} | ");
 
 				Console.ForegroundColor = kvp.Value != 0 ? ConsoleColor.Red : ConsoleColor.Green;
-				Console.WriteLine($"{kvp.Value,5}");
+				Console.WriteLine($"0x{kvp.Value:x8}");
 			}
 		}
 		finally
