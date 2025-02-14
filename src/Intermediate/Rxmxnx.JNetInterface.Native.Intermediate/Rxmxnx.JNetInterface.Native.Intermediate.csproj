@@ -36,6 +36,7 @@
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.Localization"/>
         <Using Include="Rxmxnx.JNetInterface.Io"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Reflect"/>

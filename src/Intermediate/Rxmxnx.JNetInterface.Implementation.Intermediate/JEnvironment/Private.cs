@@ -16,7 +16,7 @@ partial class JEnvironment
 	private JEnvironment(EnvironmentCache cache) => this._cache = cache;
 
 	/// <summary>
-	/// Tests whether two references refer to the same object.
+	/// Tests whether two references point to the same object.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <param name="otherRef">A <see cref="JObjectLocalRef"/> reference.</param>
@@ -286,8 +286,11 @@ partial class JEnvironment
 
 		this.DescribeException();
 		this._cache.ClearException(); // Clears JNI exception.
-		throw new NotSupportedException(
-			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(typeInformation.ClassName)} class.");
+
+		IMessageResource resource = IMessageResource.GetInstance();
+		String className = ClassNameHelper.GetClassName(typeInformation.ClassName);
+		String message = resource.MainClassGlobalError(className);
+		throw new NotSupportedException(message);
 	}
 	/// <summary>
 	/// Indicates whether validation of <paramref name="jGlobal"/> can be avoided.

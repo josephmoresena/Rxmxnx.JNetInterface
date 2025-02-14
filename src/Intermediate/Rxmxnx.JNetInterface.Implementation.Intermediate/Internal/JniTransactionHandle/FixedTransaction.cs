@@ -49,11 +49,18 @@ internal partial struct JniTransactionHandle
 			if (localRef == default) return default;
 			if (this.Contains(localRef.Pointer)) return localRef; // Prevent duplicate references.
 			this._count++;
-			if (this._count > this._transactionCapacity)
-				throw new InvalidOperationException(
-					$"This transaction can hold only {this._transactionCapacity} reference{(this._transactionCapacity != 1 ? "s" : "")}.");
-			this.PutValue(localRef);
-			return localRef;
+
+			if (this._count <= this._transactionCapacity)
+			{
+				this.PutValue(localRef);
+				return localRef;
+			}
+
+			IMessageResource resource = IMessageResource.GetInstance();
+			String message = this._transactionCapacity != 1 ?
+				resource.OverflowTransactionCapacity(this._transactionCapacity) :
+				resource.SingleReferenceTransaction;
+			throw new InvalidOperationException(message);
 		}
 
 		/// <inheritdoc/>

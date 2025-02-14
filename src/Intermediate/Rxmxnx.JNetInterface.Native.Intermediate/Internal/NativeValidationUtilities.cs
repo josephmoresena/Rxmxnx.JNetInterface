@@ -14,8 +14,10 @@ internal static class NativeValidationUtilities
 	/// </exception>
 	public static void ThrowIfAbstractClass(JClassTypeMetadata classTypeMetadata)
 	{
-		if (classTypeMetadata.Modifier == JTypeModifier.Abstract)
-			throw new InvalidOperationException($"{classTypeMetadata.ClassName} is an abstract type.");
+		if (classTypeMetadata.Modifier != JTypeModifier.Abstract) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.AbstractClass(classTypeMetadata.ClassName);
+		throw new InvalidOperationException(message);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="interfaceName"/> can't extend an interface whose super-interfaces are
@@ -34,9 +36,10 @@ internal static class NativeValidationUtilities
 		using IEnumerator<Type> enumerator = superInterfacesSet.GetEnumerator();
 		while (enumerator.MoveNext())
 		{
-			if (enumerator.Current == interfaceType)
-				throw new InvalidOperationException(
-					$"{interfaceName.GetString()} type can't extend an interface type which extends it.");
+			if (enumerator.Current != interfaceType) continue;
+			IMessageResource resource = IMessageResource.GetInstance();
+			String message = resource.InvalidInterfaceExtension(interfaceName.GetString());
+			throw new InvalidOperationException(message);
 		}
 	}
 	/// <summary>
@@ -53,8 +56,12 @@ internal static class NativeValidationUtilities
 		Boolean isInterface = false)
 	{
 		if (baseType != baseClassType) return;
-		String type = isInterface ? "interface" : "class";
-		throw new InvalidOperationException($"{typeName.GetString()} {type} and super {type} can't be the same.");
+		IMessageResource resource = IMessageResource.GetInstance();
+		String typeNameString = typeName.GetString();
+		String message = isInterface ?
+			resource.SameInterfaceExtension(typeNameString) :
+			resource.SameClassExtension(typeNameString);
+		throw new InvalidOperationException(message);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="className"/> can't extend a class whose super-classes are
@@ -62,7 +69,7 @@ internal static class NativeValidationUtilities
 	/// </summary>
 	/// <param name="className">Class name.</param>
 	/// <param name="baseTypes">Class base types.</param>
-	/// <param name="baseBaseTypes">Base calss base types.</param>
+	/// <param name="baseBaseTypes">Base class base types.</param>
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="className"/> can't extend a class whose super-classes are
 	/// <paramref name="baseBaseTypes"/>.
@@ -70,9 +77,10 @@ internal static class NativeValidationUtilities
 	public static void ValidateBaseTypes(ReadOnlySpan<Byte> className, IReadOnlySet<Type> baseTypes,
 		IReadOnlySet<Type> baseBaseTypes)
 	{
-		if (!baseTypes.IsProperSupersetOf(baseBaseTypes))
-			throw new InvalidOperationException(
-				$"{className.GetString()} type can't be based on a type which is derived from it.");
+		if (baseTypes.IsProperSupersetOf(baseBaseTypes)) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.InvalidDerivationType(className.GetString());
+		throw new InvalidOperationException(message);
 	}
 	/// <summary>
 	/// Throws an exception if current data type is annotation.
@@ -87,8 +95,9 @@ internal static class NativeValidationUtilities
 		Boolean isAnnotation)
 	{
 		if (!isAnnotation) return;
-		throw new InvalidOperationException(
-			$"Unable to extend {interfaceMetadata.ClassName}. {typeName.GetString()} is an annotation.");
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.AnnotationType(interfaceMetadata.ClassName, typeName.GetString());
+		throw new InvalidOperationException(message);
 	}
 	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> indicating current datatype is not implementing
@@ -101,9 +110,12 @@ internal static class NativeValidationUtilities
 	public static void ThrowInvalidImplementation(ReadOnlySpan<Byte> typeName, JInterfaceTypeMetadata interfaceMetadata,
 		Boolean isClass)
 	{
-		String implementationType = isClass ? "implements" : "extends";
-		throw new NotImplementedException(
-			$"{typeName.GetString()} type doesn't {implementationType} {interfaceMetadata.ClassName} interface.");
+		IMessageResource resource = IMessageResource.GetInstance();
+		String typeNameString = typeName.GetString();
+		String message = isClass ?
+			resource.InvalidImplementation(interfaceMetadata.ClassName, typeNameString) :
+			resource.InvalidExtension(interfaceMetadata.ClassName, typeNameString);
+		throw new NotImplementedException(message);
 	}
 	/// <summary>
 	/// Throws a <see cref="NotImplementedException"/> if current datatype is not implementing
@@ -121,10 +133,18 @@ internal static class NativeValidationUtilities
 		JInterfaceTypeMetadata interfaceMetadata, IReadOnlySet<CString> notContained, Boolean isClass)
 	{
 		if (notContained.Count == 0) return;
-		String implementationType = isClass ? "implements" : "extends";
-		String interfacesName = notContained.Count == 1 ? "superinterface" : "superinterfaces";
-		throw new NotImplementedException(
-			$"{typeName.GetString()} type doesn't {implementationType} {String.Join(", ", notContained)} {interfacesName} of {interfaceMetadata.ClassName} interface.");
+		IMessageResource resource = IMessageResource.GetInstance();
+		String typeNameString = typeName.GetString();
+		String message = isClass switch
+		{
+			true when notContained.Count == 1 => resource.InvalidImplementation(
+				interfaceMetadata.ClassName, typeNameString, notContained.First()),
+			true => resource.InvalidImplementation(interfaceMetadata.ClassName, typeNameString, notContained),
+			false when notContained.Count == 1 => resource.InvalidExtension(
+				interfaceMetadata.ClassName, typeNameString, notContained.First()),
+			_ => resource.InvalidExtension(interfaceMetadata.ClassName, typeNameString, notContained),
+		};
+		throw new NotImplementedException(message);
 	}
 
 	/// <summary>
@@ -141,11 +161,11 @@ internal static class NativeValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidOrdinal(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list, Int32 ordinal)
 	{
+		IMessageResource resource = IMessageResource.GetInstance();
 		if (ordinal < 0)
-			throw new ArgumentException($"Any ordinal for {enumTypeName.GetString()} type must be zero or positive.");
+			throw new ArgumentException(resource.InvalidOrdinal(enumTypeName.GetString()));
 		if (list.HasOrdinal(ordinal))
-			throw new InvalidOperationException(
-				$"{enumTypeName.GetString()} has already a field with ({ordinal}) ordinal.");
+			throw new InvalidOperationException(resource.DuplicateOrdinal(enumTypeName.GetString(), ordinal));
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="hash"/> is an invalid field name hash.
@@ -161,11 +181,12 @@ internal static class NativeValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidHash(ReadOnlySpan<Byte> enumTypeName, IEnumFieldList list, String hash)
 	{
+		IMessageResource resource = IMessageResource.GetInstance();
 		if (String.IsNullOrWhiteSpace(hash))
-			throw new ArgumentException($"Any name for {enumTypeName.GetString()} type must be non-empty.");
+			throw new ArgumentException(resource.InvalidValueName(enumTypeName.GetString()));
 		if (list.HasHash(hash))
 			throw new InvalidOperationException(
-				$"{enumTypeName.GetString()} has already a field with '{list[list[hash]]}' name.");
+				resource.DuplicateValueName(enumTypeName.GetString(), list[list[hash]]));
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="list"/> is invalid.
@@ -180,9 +201,11 @@ internal static class NativeValidationUtilities
 		IReadOnlySet<Int32> missing = list.GetMissingFields(out Int32 count, out Int32 maxOrdinal);
 		if (missing.Count <= 0 && maxOrdinal == count - 1)
 			return;
-		String message = $"The enum field list for {enumTypeName.GetString()} is invalid. " +
-			$"Count: {count}. Maximum ordinal: {maxOrdinal}. " +
-			(missing.Count > 0 ? $"Missing values: {String.Join(", ", missing)}." : "");
+		IMessageResource resource = IMessageResource.GetInstance();
+		String enumTypeNameString = enumTypeName.GetString();
+		String message = missing.Count > 0 ?
+			resource.InvalidValueList(enumTypeNameString, count, maxOrdinal, missing) :
+			resource.InvalidValueList(enumTypeNameString, count, maxOrdinal);
 		throw new InvalidOperationException(message);
 	}
 	/// <summary>
@@ -205,9 +228,12 @@ internal static class NativeValidationUtilities
 		else if (familyType == typeof(JThrowableObject))
 			expectedBuilder = $"{nameof(JThrowableObject)}.{nameof(JLocalObject.TypeMetadataBuilder)}";
 
-		throw !String.IsNullOrWhiteSpace(expectedBuilder) ?
-			new InvalidOperationException($"To build {className.GetString()} type metadata use {expectedBuilder}.") :
-			new($"{className.GetString()} is invalid reference type.");
+		IMessageResource resource = IMessageResource.GetInstance();
+		String typeName = className.GetString();
+		String message = !String.IsNullOrWhiteSpace(expectedBuilder) ?
+			resource.InvalidBuilderType(typeName, expectedBuilder) :
+			resource.InvalidReferenceType(typeName);
+		throw new InvalidOperationException(message);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="callDefinition"/> is not a <see cref="JConstructorDefinition"/> instance.
@@ -217,9 +243,9 @@ internal static class NativeValidationUtilities
 	/// <exception cref="NotImplementedException"></exception>
 	public static JConstructorDefinition ThrowIfNotConstructor(JCallDefinition callDefinition)
 	{
-		if (callDefinition is not JConstructorDefinition definition)
-			throw new InvalidOperationException("Current call definition is not a constructor.");
-		return definition;
+		if (callDefinition is JConstructorDefinition definition) return definition;
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new InvalidOperationException(resource.NotConstructorDefinition);
 	}
 
 	/// <summary>

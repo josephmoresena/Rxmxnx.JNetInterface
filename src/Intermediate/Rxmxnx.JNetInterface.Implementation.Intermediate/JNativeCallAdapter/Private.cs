@@ -64,8 +64,11 @@ public readonly ref partial struct JNativeCallAdapter
 			JClassObject jClass = JVirtualMachine.CheckClassRefNativeCallEnabled ?
 				JEnvironment.GetObjectClass(env, localRef) :
 				env.ClassObject;
-			if (!jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name))
-				throw new ArgumentException($"A {jClass.Name} instance is not {env.ClassObject.Name} instance.");
+
+			if (jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name)) return;
+			IMessageResource resource = IMessageResource.GetInstance();
+			String message = resource.NotTypeObject(jClass.Name, env.ClassObject.Name);
+			throw new ArgumentException(message);
 		}
 		/// <inheritdoc
 		///     cref="JEnvironment.GetObjectClass(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,out Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata)"/>

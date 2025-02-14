@@ -88,7 +88,7 @@ public sealed class InterfacesTests
 	{
 		CriticalException ex = CriticalException.Instance;
 		Assert.Equal(JResult.Error, ex.Result);
-		Assert.Equal(CommonConstants.CriticalExceptionMessage, ex.Message);
+		Assert.Equal(IMessageResource.GetInstance().CriticalExceptionMessage, ex.Message);
 	}
 	[Fact]
 	internal void LocalViewObjectTest()

@@ -39,7 +39,7 @@ partial class JEnvironment
 		{
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			return this._classes[classRef] ?? this.VirtualMachine.GetAccess(classRef) ??
-				throw new ArgumentException("Invalid class object.", jClass.ToTraceText());
+				throw new ArgumentException(IMessageResource.GetInstance().InvalidClass, jClass.ToTraceText());
 		}
 		/// <summary>
 		/// Retrieves managed <see cref="ArrayFunctionSet"/> reference from current instance.
@@ -61,7 +61,7 @@ partial class JEnvironment
 				CommonNames.IntSignatureChar => EnvironmentCache.GetIntArrayFunctionInfo(arrayFunction),
 				CommonNames.LongSignatureChar => EnvironmentCache.GetLongArrayFunctionInfo(arrayFunction),
 				CommonNames.ShortSignatureChar => EnvironmentCache.GetShortArrayFunctionInfo(arrayFunction),
-				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+				_ => throw new ArgumentException(IMessageResource.GetInstance().InvalidPrimitiveTypeMessage),
 			};
 			return ref this.GetNativeInterface<NativeInterface>(info).ArrayFunctions;
 		}
@@ -87,7 +87,7 @@ partial class JEnvironment
 				CommonNames.ShortSignatureChar => EnvironmentCache.GetShortInstanceMethodInfo(nonVirtual),
 				CommonNames.VoidSignatureChar => EnvironmentCache.GetVoidInstanceMethodInfo(nonVirtual),
 				CommonNames.ObjectSignaturePrefixChar => EnvironmentCache.GetObjectInstanceMethodInfo(nonVirtual),
-				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+				_ => throw new ArgumentException(IMessageResource.GetInstance().InvalidPrimitiveTypeMessage),
 			};
 			return ref this.GetNativeInterface<NativeInterface>(info).InstanceMethodFunctions;
 		}
@@ -110,7 +110,7 @@ partial class JEnvironment
 				CommonNames.LongSignatureChar => NativeInterface.CallStaticLongMethodInfo,
 				CommonNames.ShortSignatureChar => NativeInterface.CallStaticLongMethodInfo,
 				CommonNames.VoidSignatureChar => NativeInterface.CallStaticVoidMethodInfo,
-				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+				_ => throw new ArgumentException(IMessageResource.GetInstance().InvalidPrimitiveTypeMessage),
 			};
 			return ref this.GetNativeInterface<NativeInterface>(info).StaticMethodFunctions;
 		}
@@ -134,7 +134,7 @@ partial class JEnvironment
 				CommonNames.IntSignatureChar => EnvironmentCache.GetInstanceIntFieldFunctionInfo(getField),
 				CommonNames.LongSignatureChar => EnvironmentCache.GetInstanceLongFieldFunctionInfo(getField),
 				CommonNames.ShortSignatureChar => EnvironmentCache.GetInstanceShortFieldFunctionInfo(getField),
-				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+				_ => throw new ArgumentException(IMessageResource.GetInstance().InvalidPrimitiveTypeMessage),
 			};
 			return ref this.GetNativeInterface<NativeInterface>(info).InstanceFieldFunctions;
 		}
@@ -158,7 +158,7 @@ partial class JEnvironment
 				CommonNames.IntSignatureChar => EnvironmentCache.GetStaticIntFieldFunctionInfo(getField),
 				CommonNames.LongSignatureChar => EnvironmentCache.GetStaticLongFieldFunctionInfo(getField),
 				CommonNames.ShortSignatureChar => EnvironmentCache.GetStaticShortFieldFunctionInfo(getField),
-				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+				_ => throw new ArgumentException(IMessageResource.GetInstance().InvalidPrimitiveTypeMessage),
 			};
 			return ref this.GetNativeInterface<NativeInterface>(info).StaticFieldFunctions;
 		}

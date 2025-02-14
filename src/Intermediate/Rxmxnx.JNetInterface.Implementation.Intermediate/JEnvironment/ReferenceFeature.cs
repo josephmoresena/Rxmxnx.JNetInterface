@@ -88,7 +88,8 @@ partial class JEnvironment
 					                          NativeUtilities.Transform<TPrimitive, JShort>(in primitive));
 					break;
 				default:
-					throw new InvalidOperationException("Object is not primitive.");
+					IMessageResource resource = IMessageResource.GetInstance();
+					throw new InvalidOperationException(resource.NotPrimitiveObject);
 			}
 			return this.Register(result);
 		}

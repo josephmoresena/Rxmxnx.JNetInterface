@@ -362,18 +362,18 @@ partial class JEnvironment
 			JClassLocalRef classRef)
 		{
 			JClassLocalRef classRefO = jniTransaction.Add(jClass);
-			if (!classRefO.IsDefault && !this._env.IsSame(classRef.Value, default))
-			{
-				if (!this._env.IsSame(classRef.Value, classRefO.Value))
-					throw new InvalidOperationException("Redefinition class is unsupported.");
-			}
-			else
+			if (classRefO.IsDefault || this._env.IsSame(classRef.Value, default))
 			{
 				if (JVirtualMachine.IsMainClass(jClass.Hash))
 					this.LoadMainClass(jClass, classRef);
 				else
 					jClass.SetValue(classRef);
 				this._classes.Unload(classRefO);
+			}
+			else if (!this._env.IsSame(classRef.Value, classRefO.Value))
+			{
+				IMessageResource resource = IMessageResource.GetInstance();
+				throw new InvalidOperationException(resource.ClassRedefinition);
 			}
 		}
 		/// <summary>
