@@ -29,6 +29,7 @@
             <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).o"/>
             <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).obj"/>
             <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).exports"/>
+            <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).def"/>
             <NativeFiles Condition="$(NativeIntermediateOutputPath) != ''" Remove="$(NativeIntermediateOutputPath)$(AssemblyName).ilc.rsp"/>
         </ItemGroup>
 
