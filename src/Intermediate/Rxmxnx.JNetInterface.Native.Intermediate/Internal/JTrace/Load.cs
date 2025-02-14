@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace Rxmxnx.JNetInterface.Internal;
 
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6670,
@@ -64,7 +66,7 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
-			$"thread: {Environment.CurrentManagedThreadId} {envRef} defining {className} class {Convert.ToHexString(buffer)}.",
+			$"thread: {Environment.CurrentManagedThreadId} {envRef} defining {className} class {JTrace.GetSha256Hex(buffer)}.",
 			callerMethod);
 	}
 	/// <summary>
@@ -80,5 +82,16 @@ internal static partial class JTrace
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {envRef} defined {className} class {classRef}.",
 		                callerMethod);
+	}
+	/// <summary>
+	/// Retrieves hex string from <paramref name="bytes"/> hash.
+	/// </summary>
+	/// <param name="bytes">Binary class information.</param>
+	/// <returns>Sha256 hex.</returns>
+	private static String GetSha256Hex(ReadOnlySpan<Byte> bytes)
+	{
+		Span<Byte> hash = stackalloc Byte[32];
+		SHA256.TryHashData(bytes, hash, out _);
+		return Convert.ToHexString(hash);
 	}
 }
