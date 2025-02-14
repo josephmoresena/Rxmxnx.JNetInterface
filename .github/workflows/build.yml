@@ -10,7 +10,7 @@ jobs:
     name: Build and analyze
     runs-on: ubuntu-latest
     env:
-      DOTNET_CLI_USE_MSBUILD_SERVER: true
+      DOTNET_CLI_USE_MSBUILD_SERVER: false
     steps:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -102,7 +102,7 @@ jobs:
       matrix:
         os: [ windows-latest, ubuntu-latest, macos-latest, macos-13 ]
     env:
-      JNETINTERFACE_ONLY_NATIVE_TEST: false
+      JNETINTERFACE_ONLY_NATIVE_TEST: true
     steps:
       - uses: actions/checkout@v4
       - name: APT deb822 sources
