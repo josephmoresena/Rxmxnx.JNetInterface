@@ -77,7 +77,7 @@ public partial class JVirtualMachine
 				    !jGlobal.IsDefault) continue;
 				try
 				{
-					jGlobal.SetValue(env.GetMainClassGlobalRef(typeInformation));
+					GlobalMainClasses.LoadMainClass(env, jGlobal, typeInformation);
 				}
 				catch (Exception)
 				{
@@ -85,6 +85,18 @@ public partial class JVirtualMachine
 						throw;
 				}
 			}
+		}
+		/// <summary>
+		/// Loads main class.
+		/// </summary>
+		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+		/// <param name="mainClass">A <see cref="JGlobal"/> main class instance.</param>
+		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
+		private static void LoadMainClass(JEnvironment env, JGlobal mainClass, ITypeInformation typeInformation)
+		{
+			JGlobalRef globalRef = env.GetMainClassGlobalRef(typeInformation);
+			mainClass.SetValue(globalRef);
+			JTrace.MainClassLoaded(typeInformation.Signature, globalRef);
 		}
 
 		/// <summary>
@@ -114,7 +126,9 @@ public partial class JVirtualMachine
 		{
 			JGlobal pGlobalClass = this.GlobalClassCache[classMetadata.Hash];
 			this.GlobalClassCache.TryGetValue(wrapperClassHash, out JGlobal? wGlobalClass);
-			pGlobalClass.SetValue(env.GetPrimitiveMainClassGlobalRef(classMetadata, wGlobalClass));
+			JGlobalRef globalRef = env.GetPrimitiveMainClassGlobalRef(classMetadata, wGlobalClass);
+			pGlobalClass.SetValue(globalRef);
+			JTrace.MainClassLoaded(classMetadata.ClassSignature, globalRef);
 		}
 	}
 }

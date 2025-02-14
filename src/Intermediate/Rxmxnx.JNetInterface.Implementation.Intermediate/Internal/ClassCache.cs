@@ -152,6 +152,7 @@ internal sealed class ClassCache<TClass>(JReferenceType type) : ClassCache(type)
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
 			if (classRef.IsDefault) continue;
 			this.Load(classRef);
+			JTrace.AccessLoaded(jClass);
 		}
 	}
 }

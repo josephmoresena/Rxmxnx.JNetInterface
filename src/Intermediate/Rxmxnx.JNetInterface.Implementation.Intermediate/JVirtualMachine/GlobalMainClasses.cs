@@ -86,12 +86,14 @@ public partial class JVirtualMachine
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 		public void LoadMainClasses(JEnvironment env)
 		{
-			this.ClassObject.SetValue(env.GetMainClassGlobalRef(this._classMetadata));
-			this.ThrowableObject.SetValue(env.GetMainClassGlobalRef(this._throwableMetadata));
-			this.StackTraceElementObject.SetValue(env.GetMainClassGlobalRef(this._stackTraceElementMetadata));
+			JTrace.MainClassesLoading(env.VirtualMachine.Reference, env.Reference);
+			GlobalMainClasses.LoadMainClass(env, this.ClassObject, this._classMetadata);
+			GlobalMainClasses.LoadMainClass(env, this.ThrowableObject, this._throwableMetadata);
+			GlobalMainClasses.LoadMainClass(env, this.StackTraceElementObject, this._stackTraceElementMetadata);
 			this.LoadUserMainClasses(env);
 			if (MainClasses.PrimitiveMainClassesEnabled)
 				this.LoadPrimitiveMainClasses(env);
+			JTrace.MainClassesLoaded(env.VirtualMachine.Reference, env.Reference);
 			this.GlobalClassCache.RefreshAccess();
 		}
 	}
