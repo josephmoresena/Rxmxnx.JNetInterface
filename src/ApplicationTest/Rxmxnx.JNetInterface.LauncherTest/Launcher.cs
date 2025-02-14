@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 [ExcludeFromCodeCoverage]
 public abstract partial class Launcher
 {
-	public DirectoryInfo OutputDirectory { get; set; }
+	public DirectoryInfo OutputDirectory { get; }
 	public Architecture CurrentArch { get; }
 
 	public virtual IEnumerable<Jdk> this[Architecture arch] => [];

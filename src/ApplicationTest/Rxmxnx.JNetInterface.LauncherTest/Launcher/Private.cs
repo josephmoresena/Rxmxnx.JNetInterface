@@ -46,7 +46,7 @@ public partial class Launcher
 		FileInfo? jvmFile = jdkDirectory.GetFiles(this.GetJavaLibraryName(version), SearchOption.AllDirectories)
 		                                // Exclude symbolic links
 		                                .Where(f => excludedPath.TrueForAll(e => !f.FullName.Contains(e)))
-		                                .Where(f => !String.IsNullOrEmpty(f.LinkTarget))
+		                                .Where(f => String.IsNullOrEmpty(f.LinkTarget))
 		                                .Where(f => f.FullName.Contains(
 			                                       "server", StringComparison.InvariantCultureIgnoreCase))
 		                                // Order
