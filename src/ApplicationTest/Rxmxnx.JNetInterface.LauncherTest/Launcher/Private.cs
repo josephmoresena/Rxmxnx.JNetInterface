@@ -41,7 +41,9 @@ public partial class Launcher
 			jdkDirectory.GetFiles(this.JavaCompilerName, SearchOption.AllDirectories).FirstOrDefault();
 		FileInfo? jarFile = jdkDirectory.GetFiles(this.JavaArchiverName, SearchOption.AllDirectories).FirstOrDefault();
 		FileInfo? jvmFile = jdkDirectory.GetFiles(this.GetJavaLibraryName(version), SearchOption.AllDirectories)
-		                                .LastOrDefault();
+		                                .LastOrDefault(
+			                                f => f.FullName.Contains(
+				                                "server", StringComparison.InvariantCultureIgnoreCase));
 		if (javaFile is not null && javacFile is not null && jarFile is not null && jvmFile is not null)
 			return new()
 			{
