@@ -39,7 +39,7 @@ internal sealed class SpanishMessageResource : IMessageResource
 	String IMessageResource.InvalidGlobalObject => "Objeto global no válido.";
 	String IMessageResource.OnlyLocalReferencesAllowed => "Las llamadas JNI solo permiten referencias locales.";
 	String IMessageResource.ClassRedefinition => "No se admite la redefinición de una clase.";
-	String IMessageResource.StackTraceFixed => "El marco de pila actual está fijado.";
+	String IMessageResource.StackTraceFixed => "El marco de pila actual es inmutable.";
 	String IMessageResource.InvalidClass => "Objeto de clase no válido.";
 	String IMessageResource.UnloadedClass => "La clase ha sido descargada.";
 	String IMessageResource.NotClassObject => "El objeto no es una clase.";
@@ -106,9 +106,9 @@ internal sealed class SpanishMessageResource : IMessageResource
 	String IMessageResource.NotTypeObject(CString objectClassName, CString className)
 		=> $"{objectClassName} no es un objeto de tipo para {className}.";
 	String IMessageResource.MainClassGlobalError(String mainClassName)
-		=> $"Error global en la clase principal {mainClassName}.";
-	String IMessageResource.MainClassUnavailable(String mainClassName)
 		=> $"Error al crear una referencia global JNI para la clase {mainClassName}.";
+	String IMessageResource.MainClassUnavailable(String mainClassName)
+		=> $"La clase principal {mainClassName} no está disponible.";
 	String IMessageResource.PrimitiveClassUnavailable(String primitiveClassName)
 		=> $"La clase primitiva {primitiveClassName} no está disponible.";
 	String IMessageResource.OverflowTransactionCapacity(Int32 transactionCapacity)

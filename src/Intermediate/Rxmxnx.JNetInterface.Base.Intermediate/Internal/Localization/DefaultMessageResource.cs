@@ -37,7 +37,7 @@ internal sealed class DefaultMessageResource : IMessageResource
 	String IMessageResource.InvalidGlobalObject => "Invalid global object.";
 	String IMessageResource.OnlyLocalReferencesAllowed => "JNI calls only allow local references.";
 	String IMessageResource.ClassRedefinition => "Redefining a class is not supported.";
-	String IMessageResource.StackTraceFixed => "The current stack frame is fixed.";
+	String IMessageResource.StackTraceFixed => "The current stack frame is immutable.";
 	String IMessageResource.InvalidClass => "Invalid class object.";
 	String IMessageResource.UnloadedClass => "The class has been unloaded.";
 	String IMessageResource.NotClassObject => "The object is not a class.";
@@ -103,9 +103,8 @@ internal sealed class DefaultMessageResource : IMessageResource
 	String IMessageResource.NotTypeObject(CString objectClassName, CString className)
 		=> $"{objectClassName} is not a type object for {className}.";
 	String IMessageResource.MainClassGlobalError(String mainClassName)
-		=> $"Global error in main class {mainClassName}.";
-	String IMessageResource.MainClassUnavailable(String mainClassName)
 		=> $"Error while creating a JNI global reference for the {mainClassName} class.";
+	String IMessageResource.MainClassUnavailable(String mainClassName) => $"Main class {mainClassName} is unavailable.";
 	String IMessageResource.PrimitiveClassUnavailable(String primitiveClassName)
 		=> $"Primitive class {primitiveClassName} is unavailable.";
 	String IMessageResource.OverflowTransactionCapacity(Int32 transactionCapacity)

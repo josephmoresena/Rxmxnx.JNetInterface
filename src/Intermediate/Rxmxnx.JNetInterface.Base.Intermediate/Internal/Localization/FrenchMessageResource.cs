@@ -104,9 +104,9 @@ internal sealed class FrenchMessageResource : IMessageResource
 	String IMessageResource.NotTypeObject(CString objectClassName, CString className)
 		=> $"{objectClassName} n'est pas un objet de type pour {className}.";
 	String IMessageResource.MainClassGlobalError(String mainClassName)
-		=> $"Erreur globale dans la classe principale {mainClassName}.";
-	String IMessageResource.MainClassUnavailable(String mainClassName)
 		=> $"Erreur lors de la création d'une référence globale JNI pour la classe {mainClassName}.";
+	String IMessageResource.MainClassUnavailable(String mainClassName)
+		=> $"La classe principale {mainClassName} est indisponible.";
 	String IMessageResource.PrimitiveClassUnavailable(String primitiveClassName)
 		=> $"La classe primitive {primitiveClassName} est indisponible.";
 	String IMessageResource.OverflowTransactionCapacity(Int32 transactionCapacity)

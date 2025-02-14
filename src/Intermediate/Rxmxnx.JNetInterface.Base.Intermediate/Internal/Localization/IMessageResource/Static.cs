@@ -16,9 +16,9 @@ internal partial interface IMessageResource
 		{
 			Iso639P1.Es => IMessageResource.GetInstance<SpanishMessageResource>(),
 			Iso639P1.Fr => IMessageResource.GetInstance<FrenchMessageResource>(),
-			// Iso639P1.De => IMessageResource.GetInstance<GermanMessageResource>(),
-			// Iso639P1.Zh => IMessageResource.GetInstance<ChineseMessageResource>(),
-			// Iso639P1.Ja => IMessageResource.GetInstance<JapaneseMessageResource>(),
+			Iso639P1.De => IMessageResource.GetInstance<GermanMessageResource>(),
+			Iso639P1.Zh => IMessageResource.GetInstance<ChineseMessageResource>(),
+			Iso639P1.Ja => IMessageResource.GetInstance<JapaneseMessageResource>(),
 			// Iso639P1.Ru => IMessageResource.GetInstance<RussianMessageResource>(),
 			// Iso639P1.Ar => IMessageResource.GetInstance<ArabicMessageResource>(),
 			// Iso639P1.Pt => IMessageResource.GetInstance<PortugueseMessageResource>(),
