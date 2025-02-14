@@ -57,19 +57,20 @@ public partial class Launcher
 			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
 			return result;
 		}
-		protected override Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName)
+		protected override Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName,
+			CancellationToken cancellationToken)
 		{
 			Architecture arch = jdk.JavaArchitecture;
 			if (this.IsCurrentArch(arch) || (this.CurrentArch is Architecture.Arm64 && Linux.IsArmHf(arch)))
-				return base.RunAppFile(appFile, jdk, executionName);
-			return this.RunAppQemu(appFile, jdk, executionName);
+				return base.RunAppFile(appFile, jdk, executionName, cancellationToken);
+			return this.RunAppQemu(appFile, jdk, executionName, cancellationToken);
 		}
-		protected override Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk)
+		protected override Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk, CancellationToken cancellationToken)
 		{
 			Architecture arch = jdk.JavaArchitecture;
 			if (this.IsCurrentArch(arch) || (this.CurrentArch is Architecture.Arm64 && Linux.IsArmHf(arch)))
-				return base.RunJarFile(jarArgs, jdk);
-			return this.RunJarQemu(jarArgs, jdk);
+				return base.RunJarFile(jarArgs, jdk, cancellationToken);
+			return this.RunJarQemu(jarArgs, jdk, cancellationToken);
 		}
 		public static Linux Create(DirectoryInfo outputDirectory, out Task initTask)
 			=> new(outputDirectory, out initTask);

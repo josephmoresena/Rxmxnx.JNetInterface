@@ -61,8 +61,8 @@ public partial class Launcher
 		JarArgs jarArgs = new() { Version = netVersion, JarName = jarFile.Name, };
 		String prefix = $"HelloJni.jar ({jdk.JavaVersion}, {jdk.JavaArchitecture}, {netVersion}";
 
-		Int32 result = await this.RunJarFile(jarArgs, jdk);
 		String name = $"{prefix})";
+		Int32 result = await this.RunJarFile(jarArgs, jdk);
 
 		ConsoleNotifier.Notifier.Result(result, name);
 		results.Add(name, result);
@@ -70,10 +70,44 @@ public partial class Launcher
 		if (netVersion > NetVersion.Net80) return;
 
 		jarArgs.NoReflection = true;
-		result = await this.RunJarFile(jarArgs, jdk);
+		result = await this.RunJarFile(jarArgs, jdk, ConsoleNotifier.CancellationToken);
 		name = $"{prefix}, no-reflection)";
 
 		ConsoleNotifier.Notifier.Result(result, name);
 		results.Add(name, result);
+	}
+	private async Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk)
+	{
+		using CancellationTokenSource source = new(TimeSpan.FromMinutes(5));
+		CancellationTokenRegistration registry = ConsoleNotifier.RegisterCancellation(source);
+		try
+		{
+			return await this.RunJarFile(jarArgs, jdk, source.Token);
+		}
+		catch (OperationCanceledException)
+		{
+			return -1;
+		}
+		finally
+		{
+			registry.Unregister();
+		}
+	}
+	private async Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName)
+	{
+		using CancellationTokenSource source = new(TimeSpan.FromMinutes(5));
+		CancellationTokenRegistration registry = ConsoleNotifier.RegisterCancellation(source);
+		try
+		{
+			return await this.RunAppFile(appFile, jdk, executionName, ConsoleNotifier.CancellationToken);
+		}
+		catch (OperationCanceledException)
+		{
+			return -1;
+		}
+		finally
+		{
+			registry.Unregister();
+		}
 	}
 }

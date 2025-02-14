@@ -55,59 +55,6 @@ public partial class Launcher
 			ConsoleNotifier.PlatformNotifier.JdkDownload(version, arch, jdkDirectory.FullName);
 			return result;
 		}
-		protected override async Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk)
-		{
-			using CancellationTokenSource source = new(TimeSpan.FromMinutes(5));
-			CancellationTokenRegistration registry = ConsoleNotifier.RegisterCancellation(source);
-			try
-			{
-				ExecuteState<JarArgs> state = new()
-				{
-					ExecutablePath = jdk.JavaExecutable,
-					ArgState = jarArgs,
-					AppendArgs = JarArgs.Append,
-					WorkingDirectory = this.OutputDirectory.FullName,
-					Notifier = ConsoleNotifier.Notifier,
-				};
-				return await Utilities.Execute(state, source.Token);
-			}
-			catch (OperationCanceledException)
-			{
-				return -1;
-			}
-			finally
-			{
-				registry.Unregister();
-			}
-		}
-		protected override async Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName)
-		{
-			using CancellationTokenSource source = new(TimeSpan.FromMinutes(5));
-			CancellationTokenRegistration registry = ConsoleNotifier.RegisterCancellation(source);
-			Int32 result = -1;
-			try
-			{
-				ExecuteState<AppArgs> state = new()
-				{
-					ExecutablePath = appFile.FullName,
-					ArgState = jdk,
-					AppendArgs = AppArgs.Append,
-					WorkingDirectory = this.OutputDirectory.FullName,
-					Notifier = ConsoleNotifier.Notifier,
-				};
-				result = await Utilities.Execute(state, source.Token);
-			}
-			catch (OperationCanceledException)
-			{
-				result = -1;
-			}
-			finally
-			{
-				registry.Unregister();
-				ConsoleNotifier.Notifier.Result(result, executionName);
-			}
-			return result;
-		}
 
 		public static Mac Create(DirectoryInfo outputDirectory, out Task initTask)
 			=> new(outputDirectory, out initTask);

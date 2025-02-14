@@ -61,7 +61,8 @@ public abstract partial class Launcher
 		else
 			ConsoleNotifier.PlatformNotifier.JdkUnavailable(version, arch);
 	}
-	protected virtual async Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName)
+	protected virtual async Task<Int32> RunAppFile(FileInfo appFile, Jdk jdk, String executionName,
+		CancellationToken cancellationToken)
 	{
 		ExecuteState<AppArgs> state = new()
 		{
@@ -71,11 +72,11 @@ public abstract partial class Launcher
 			WorkingDirectory = this.OutputDirectory.FullName,
 			Notifier = ConsoleNotifier.Notifier,
 		};
-		Int32 result = await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+		Int32 result = await Utilities.Execute(state, cancellationToken);
 		ConsoleNotifier.Notifier.Result(result, executionName);
 		return result;
 	}
-	protected virtual async Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk)
+	protected virtual async Task<Int32> RunJarFile(JarArgs jarArgs, Jdk jdk, CancellationToken cancellationToken)
 	{
 		ExecuteState<JarArgs> state = new()
 		{
@@ -85,6 +86,6 @@ public abstract partial class Launcher
 			WorkingDirectory = this.OutputDirectory.FullName,
 			Notifier = ConsoleNotifier.Notifier,
 		};
-		return await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+		return await Utilities.Execute(state, cancellationToken);
 	}
 }

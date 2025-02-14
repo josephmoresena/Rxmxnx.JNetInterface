@@ -72,7 +72,8 @@ public partial class Launcher
 			};
 			await Utilities.QemuExecute(state, ConsoleNotifier.CancellationToken);
 		}
-		private async Task<Int32> RunAppQemu(FileInfo appFile, Jdk jdk, String executionName)
+		private async Task<Int32> RunAppQemu(FileInfo appFile, Jdk jdk, String executionName,
+			CancellationToken cancellationToken)
 		{
 			(String qemuExe, String qemuRoot) = Linux.qemu[jdk.JavaArchitecture];
 			QemuExecuteState<AppArgs> state = new()
@@ -85,11 +86,11 @@ public partial class Launcher
 				WorkingDirectory = this.OutputDirectory.FullName,
 				Notifier = ConsoleNotifier.Notifier,
 			};
-			Int32 result = await Utilities.QemuExecute(state, ConsoleNotifier.CancellationToken);
+			Int32 result = await Utilities.QemuExecute(state, cancellationToken);
 			ConsoleNotifier.Notifier.Result(result, executionName);
 			return result;
 		}
-		private async Task<Int32> RunJarQemu(JarArgs jarArgs, Jdk jdk)
+		private async Task<Int32> RunJarQemu(JarArgs jarArgs, Jdk jdk, CancellationToken cancellationToken)
 		{
 			(String qemuExe, String qemuRoot) = Linux.qemu[jdk.JavaArchitecture];
 			QemuExecuteState<JarArgs> state = new()
@@ -102,7 +103,7 @@ public partial class Launcher
 				WorkingDirectory = this.OutputDirectory.FullName,
 				Notifier = ConsoleNotifier.Notifier,
 			};
-			return await Utilities.QemuExecute(state, ConsoleNotifier.CancellationToken);
+			return await Utilities.QemuExecute(state, cancellationToken);
 		}
 
 		private Boolean IsCurrentArch(Architecture arch)
