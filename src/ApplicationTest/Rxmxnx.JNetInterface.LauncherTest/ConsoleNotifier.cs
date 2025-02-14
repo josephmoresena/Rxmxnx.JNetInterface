@@ -77,7 +77,7 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 	public void Result(Int32 result, String executionName)
 	{
 		ConsoleColor color = result == 0 ? ConsoleColor.Green : ConsoleColor.Red;
-		ConsoleNotifier.WriteColoredLine(color, $"{executionName}: {result}");
+		ConsoleNotifier.WriteColoredLine(color, $"{executionName}: 0x{result:x8}");
 	}
 
 	void IPlatformNotifier.BeginDetection()
@@ -150,14 +150,25 @@ public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPl
 	private static CancellationToken CreateCancellationToken()
 	{
 		CancellationTokenSource cts = new();
-		Console.CancelKeyPress += (sender, e) =>
+		Console.CancelKeyPress += (_, e) =>
+		{
+			e.Cancel = true;
+			ConsoleNotifier.CancelAndDispose(cts);
+		};
+		AppDomain.CurrentDomain.ProcessExit += (_, e) => { ConsoleNotifier.CancelAndDispose(cts); };
+		return cts.Token;
+	}
+	private static void CancelAndDispose(CancellationTokenSource cts)
+	{
+		try
 		{
 			cts.Cancel();
-			e.Cancel = true;
 			cts.Dispose();
-		};
-		AppDomain.CurrentDomain.ProcessExit += (sender, e) => { cts.Cancel(); };
-		return cts.Token;
+		}
+		catch (Exception)
+		{
+			// Ignore
+		}
 	}
 	private static void CancelSource(Object? objSource)
 	{
