@@ -34,12 +34,12 @@ partial class JEnvironment
 	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
-	/// <param name="classMetadata">Class metadata.</param>
+	/// <param name="typeInformation">Type information.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata classMetadata)
+	internal JGlobalRef GetMainClassGlobalRef(ITypeInformation typeInformation)
 	{
-		JClassLocalRef classRef = this._cache.FindMainClass(classMetadata.Name, classMetadata.ClassSignature);
-		return this.GetMainClassGlobalRef(classMetadata, classRef);
+		JClassLocalRef classRef = this._cache.FindMainClass(typeInformation.ClassName, typeInformation.Signature);
+		return this.GetMainClassGlobalRef(typeInformation, classRef);
 	}
 	/// <summary>
 	/// Retrieves a global reference for given class name.

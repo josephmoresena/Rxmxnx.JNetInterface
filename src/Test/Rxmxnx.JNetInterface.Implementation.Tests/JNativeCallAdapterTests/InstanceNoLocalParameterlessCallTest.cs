@@ -35,7 +35,7 @@ public partial class JNativeCallAdapterTests
 			{
 				Exception ex = Assert.Throws<ArgumentException>(
 					() => JNativeCallAdapter.Create(proxyEnv.Reference, localRef, out _).Build().FinalizeCall());
-				Assert.Equal("JNI call only allow local references.", ex.Message);
+				Assert.Equal(IMessageResource.GetInstance().OnlyLocalReferencesAllowed, ex.Message);
 			}
 			else
 			{

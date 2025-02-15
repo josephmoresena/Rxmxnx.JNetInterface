@@ -6,6 +6,7 @@ public sealed partial class ExceptionHandlingTests
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	[Fact]
+#pragma warning disable CA1859
 	internal void PendingExceptionTest()
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
@@ -70,4 +71,5 @@ public sealed partial class ExceptionHandlingTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
+#pragma warning restore CA1859
 }

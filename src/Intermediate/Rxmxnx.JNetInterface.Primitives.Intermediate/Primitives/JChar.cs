@@ -33,6 +33,7 @@ public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatab
 	/// <summary>
 	/// Internal UTF-16 code unit character.
 	/// </summary>
+	[MarshalAs(UnmanagedType.U2)]
 	private readonly Char _value;
 
 	/// <summary>
@@ -56,7 +57,7 @@ public readonly partial struct JChar : INativeType, IComparable<JChar>, IEquatab
 	public Int32 CompareTo(JChar other) => this._value.CompareTo(other._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => IPrimitiveType<JChar, Char>.Compare(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveValueType.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

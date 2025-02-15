@@ -10,10 +10,6 @@ public partial class JVirtualMachine
 	private sealed partial class VirtualMachineCache : GlobalMainClasses
 	{
 		/// <summary>
-		/// Global cache.
-		/// </summary>
-		public readonly ClassCache<JGlobal> GlobalClassCache = new(JReferenceType.GlobalRefType);
-		/// <summary>
 		/// <see cref="NativeCache"/> instance.
 		/// </summary>
 		public readonly NativeCache NativesCache = new();

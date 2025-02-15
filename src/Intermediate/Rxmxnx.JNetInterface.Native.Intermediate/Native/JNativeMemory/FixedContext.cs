@@ -4,7 +4,11 @@ public abstract partial class JNativeMemory
 {
 	IReadOnlyFixedContext<Byte> IReadOnlyFixedMemory.AsBinaryContext() => this;
 	[ExcludeFromCodeCoverage]
-	IReadOnlyFixedContext<Object> IReadOnlyFixedMemory.AsObjectContext() => throw new NotImplementedException();
+	IReadOnlyFixedContext<Object> IReadOnlyFixedMemory.AsObjectContext()
+	{
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new NotImplementedException(resource.UnmanagedMemoryContext);
+	}
 	[ExcludeFromCodeCoverage]
 	Boolean IReadOnlyFixedMemory.IsNullOrEmpty => this._disposed.Value || this._context.Bytes.IsEmpty;
 	ReadOnlySpan<Byte> IReadOnlyFixedMemory.Bytes => this._context.Bytes;

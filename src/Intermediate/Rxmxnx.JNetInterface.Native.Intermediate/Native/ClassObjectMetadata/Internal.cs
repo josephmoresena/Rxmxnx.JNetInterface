@@ -33,19 +33,13 @@ public partial record ClassObjectMetadata
 			jClass.IsInterface;
 		this.IsEnum = kind != JTypeKind.Undefined ? kind is JTypeKind.Enum : jClass.IsEnum;
 		this.IsAnnotation = kind != JTypeKind.Undefined ? kind is JTypeKind.Annotation : jClass.IsAnnotation;
-		this.IsFinal = isFinal;
-		switch (this.IsFinal)
+		this.IsFinal = isFinal switch
 		{
-			case null when kind is JTypeKind.Primitive or JTypeKind.Enum:
-				this.IsFinal = true;
-				break;
-			case null when kind is JTypeKind.Interface or JTypeKind.Annotation:
-				this.IsFinal = false;
-				break;
-			case null:
-				this.IsFinal = jClass.IsFinal;
-				break;
-		}
+			null when kind is JTypeKind.Primitive or JTypeKind.Enum => true,
+			null when kind is JTypeKind.Interface or JTypeKind.Annotation => false,
+			null => jClass.IsFinal,
+			_ => isFinal,
+		};
 	}
 
 	/// <summary>

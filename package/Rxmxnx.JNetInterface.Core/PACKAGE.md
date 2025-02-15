@@ -13,3 +13,7 @@ For example, it can be installed to use to create a .NET JNI code but isolated f
 APIs are restricted to prevent unauthorized access to sensitive and critical parts.
 Currently only `Rxmxnx.JNetInterface`, which implements interoperability between .NET and the JVM, has access to these
 restricted APIs.
+
+## JNI Proxies
+
+`Rxmxnx.JNetInterface.Core` includes some types that enable the implementation of unit tests without requiring a JVM.

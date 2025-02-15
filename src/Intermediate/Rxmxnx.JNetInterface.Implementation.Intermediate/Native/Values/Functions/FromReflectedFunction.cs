@@ -14,5 +14,18 @@ internal readonly unsafe struct FromReflectedFunction<TAccessible>
 	/// Pointer to <c>FromReflected<typeparamref name="TAccessible"/></c> function.
 	/// Converts a <c>java.lang.reflect</c> object to a <typeparamref name="TAccessible"/>.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, TAccessible> FromReflected;
+	private readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, IntPtr> _ptr;
+
+	/// <summary>
+	/// Pointer to <c>FromReflected<typeparamref name="TAccessible"/></c> function.
+	/// Converts a <c>java.lang.reflect</c> object to a <typeparamref name="TAccessible"/>.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public TAccessible FromReflected(JEnvironmentRef envRef, JObjectLocalRef localRef)
+	{
+		TAccessible result = default;
+		Unsafe.As<TAccessible, IntPtr>(ref result) = this._ptr(envRef, localRef);
+		return result;
+	}
 }

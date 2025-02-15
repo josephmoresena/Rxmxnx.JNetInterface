@@ -53,7 +53,7 @@ public sealed class LocalFrameTests
 				LocalCache cache = e.LocalCache;
 				Assert.Equal(capacity, cache.Capacity);
 				Exception ex = Assert.Throws<InvalidOperationException>(() => cache.Capacity = capacity + 1);
-				Assert.Equal("Current stack frame is fixed.", ex.Message);
+				Assert.Equal(IMessageResource.GetInstance().StackTraceFixed, ex.Message);
 				return e.ClassObject;
 			});
 			Assert.Equal(env.ClassObject, result);

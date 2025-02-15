@@ -5,7 +5,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// </summary>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1694,
                  Justification = CommonConstants.InternalInheritanceJustification)]
-internal abstract class MainClasses
+internal abstract partial class MainClasses
 {
 	/// <summary>
 	/// Indicates whether <see cref="JVoidObject"/> class is a main class.
@@ -59,40 +59,36 @@ internal abstract class MainClasses
 	public static Boolean PrimitiveMainClassesEnabled => true;
 
 	/// <summary>
-	/// Creates user main classes dictionary.
+	/// Creates user main classes' dictionary.
 	/// </summary>
-	/// <returns>A <see cref="ConcurrentDictionary{String,ClassObjectMetadata}"/> instance.</returns>
-	public static ConcurrentDictionary<String, ClassObjectMetadata> CreateMainClassesDictionary()
+	/// <returns>A <see cref="ConcurrentDictionary{String,JDataTypeMetadata}"/> instance.</returns>
+	public static ConcurrentDictionary<String, JDataTypeMetadata> CreateMainClassesDictionary()
 	{
-		ConcurrentDictionary<String, ClassObjectMetadata> mainClasses = new();
-		MainClasses.AppendMainClass<JVoidObject>(MainClasses.VoidObjectMainClassEnabled, mainClasses);
-		MainClasses.AppendMainClass<JBooleanObject>(MainClasses.BooleanObjectMainClassEnabled, mainClasses);
-		MainClasses.AppendMainClass<JByteObject>(MainClasses.ByteObjectMainClassEnabled, mainClasses);
-		MainClasses.AppendMainClass<JCharacterObject>(MainClasses.CharacterObjectMainClassEnabled, mainClasses);
-		MainClasses.AppendMainClass<JDoubleObject>(MainClasses.DoubleObjectMainClassEnabled, mainClasses);
-		MainClasses.AppendMainClass<JFloatObject>(MainClasses.FloatObjectMainClassEnabled, mainClasses);
-		MainClasses.AppendMainClass<JIntegerObject>(MainClasses.IntegerObjectMainClassEnabled, mainClasses);
-		MainClasses.AppendMainClass<JLongObject>(MainClasses.LongObjectMainClassEnabled, mainClasses);
-		MainClasses.AppendMainClass<JShortObject>(MainClasses.ShortObjectMainClassEnabled, mainClasses);
+		ConcurrentDictionary<String, JDataTypeMetadata> mainClasses = new();
+		MainClasses.AppendInitialClass<JVoidObject>(MainClasses.VoidObjectMainClassEnabled, mainClasses);
+		MainClasses.AppendInitialClass<JBooleanObject>(MainClasses.BooleanObjectMainClassEnabled, mainClasses);
+		MainClasses.AppendInitialClass<JByteObject>(MainClasses.ByteObjectMainClassEnabled, mainClasses);
+		MainClasses.AppendInitialClass<JCharacterObject>(MainClasses.CharacterObjectMainClassEnabled, mainClasses);
+		MainClasses.AppendInitialClass<JDoubleObject>(MainClasses.DoubleObjectMainClassEnabled, mainClasses);
+		MainClasses.AppendInitialClass<JFloatObject>(MainClasses.FloatObjectMainClassEnabled, mainClasses);
+		MainClasses.AppendInitialClass<JIntegerObject>(MainClasses.IntegerObjectMainClassEnabled, mainClasses);
+		MainClasses.AppendInitialClass<JLongObject>(MainClasses.LongObjectMainClassEnabled, mainClasses);
+		MainClasses.AppendInitialClass<JShortObject>(MainClasses.ShortObjectMainClassEnabled, mainClasses);
 		return mainClasses;
 	}
 	/// <summary>
-	/// Appends <typeparamref name="TReference"/> as main class.
+	/// Set main class.
 	/// </summary>
-	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
-	/// <param name="isMainClass">Indicates whether <typeparamref name="TReference"/> is main class.</param>
 	/// <param name="mainClasses">Main classes dictionary.</param>
-#pragma warning disable CA1859
-	private static void AppendMainClass<TReference>(Boolean isMainClass,
-		IDictionary<String, ClassObjectMetadata> mainClasses)
-		where TReference : JReferenceObject, IReferenceType<TReference>
+	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
+	[ExcludeFromCodeCoverage]
+	public static void AppendMainClass(IDictionary<String, JDataTypeMetadata> mainClasses,
+		JDataTypeMetadata typeMetadata)
 	{
-		if (!isMainClass) return;
-		String hash = MetadataHelper.GetExactMetadata<TReference>().Hash;
-		if (!mainClasses.ContainsKey(hash))
-			mainClasses.TryAdd(hash, ClassObjectMetadata.Create<TReference>());
+		if (mainClasses.ContainsKey(typeMetadata.Hash)) return;
+		mainClasses.TryAdd(typeMetadata.Hash, typeMetadata);
+		MainClasses.AppendMainClass(mainClasses, typeMetadata as JReferenceTypeMetadata);
 	}
-#pragma warning restore CA1859
 }
 
 /// <summary>
@@ -115,41 +111,4 @@ internal abstract class MainClasses<TClass> : MainClasses where TClass : JRefere
 	/// Class for <see cref="JStackTraceElementObject"/>
 	/// </summary>
 	public abstract TClass StackTraceElementObject { get; }
-
-	/// <summary>
-	/// Class for Java <c>void</c> type.
-	/// </summary>
-	public abstract TClass VoidPrimitive { get; }
-	/// <summary>
-	/// Class for <see cref="JBoolean"/>.
-	/// </summary>
-	public abstract TClass BooleanPrimitive { get; }
-	/// <summary>
-	/// Class for <see cref="JByte"/>.
-	/// </summary>
-	public abstract TClass BytePrimitive { get; }
-	/// <summary>
-	/// Class for <see cref="JChar"/>.
-	/// </summary>
-	public abstract TClass CharPrimitive { get; }
-	/// <summary>
-	/// Class for <see cref="JDouble"/>.
-	/// </summary>
-	public abstract TClass DoublePrimitive { get; }
-	/// <summary>
-	/// Class for <see cref="JFloat"/>.
-	/// </summary>
-	public abstract TClass FloatPrimitive { get; }
-	/// <summary>
-	/// Class for <see cref="JInt"/>.
-	/// </summary>
-	public abstract TClass IntPrimitive { get; }
-	/// <summary>
-	/// Class for <see cref="JLong"/>.
-	/// </summary>
-	public abstract TClass LongPrimitive { get; }
-	/// <summary>
-	/// Class for <see cref="JShort"/>.
-	/// </summary>
-	public abstract TClass ShortPrimitive { get; }
 }

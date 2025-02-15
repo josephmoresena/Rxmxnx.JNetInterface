@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PublishAot>true</PublishAot>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <PublishDir Condition="'$(PublishDir)' == ''">..\..\..\</PublishDir>
+        <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="System.Collections.Concurrent"/>
+        <Using Include="System.Collections.ObjectModel"/>
+        <Using Include="System.Diagnostics"/>
+        <Using Include="System.Diagnostics.CodeAnalysis"/>
+        <Using Include="System.IO.Compression"/>
+        <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="System.Text"/>
+
+        <Using Include="Rxmxnx.PInvoke"/>
+        <Using Include="Rxmxnx.JNetInterface.ApplicationTest.Util"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.0.5"/>
+    </ItemGroup>
+
+</Project>

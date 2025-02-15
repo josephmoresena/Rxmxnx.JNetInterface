@@ -38,10 +38,6 @@ public partial class JVirtualMachine
 		/// </summary>
 		private readonly ClassObjectMetadata _longMetadata;
 		/// <summary>
-		/// Main classes dictionary.
-		/// </summary>
-		private readonly ConcurrentDictionary<String, JGlobal> _mainClasses;
-		/// <summary>
 		/// Metadata for <see cref="JShort"/>.
 		/// </summary>
 		private readonly ClassObjectMetadata _shortMetadata;
@@ -61,8 +57,13 @@ public partial class JVirtualMachine
 		/// <param name="classMetadata">A <see cref="_classMetadata"/> instance.</param>
 		private void AppendGlobal(IVirtualMachine vm, ClassObjectMetadata classMetadata)
 		{
-			if (!this._mainClasses.ContainsKey(classMetadata.Hash))
-				this._mainClasses.TryAdd(classMetadata.Hash, new(vm, this._classMetadata, default));
+			String hash = classMetadata.Hash;
+			if (!this.GlobalClassCache.TryGetValue(hash, out JGlobal? mainClass))
+			{
+				mainClass = new(vm, classMetadata, default);
+				this.GlobalClassCache[hash] = mainClass;
+			}
+			this.GlobalClassCache[classMetadata.Hash] = mainClass;
 		}
 		/// <summary>
 		/// Loads user global classes.
@@ -70,40 +71,34 @@ public partial class JVirtualMachine
 		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
 		private void LoadUserMainClasses(JEnvironment env)
 		{
-			foreach (String hash in JVirtualMachine.userMainClasses.Keys)
+			foreach (ITypeInformation typeInformation in JVirtualMachine.MainClassesInformation)
 			{
-				if (!this._mainClasses.TryGetValue(hash, out JGlobal? jGlobal) || !jGlobal.IsDefault) continue;
+				if (!this.GlobalClassCache.TryGetValue(typeInformation.Hash, out JGlobal? jGlobal) ||
+				    !jGlobal.IsDefault) continue;
 				try
 				{
-					jGlobal.SetValue(env.GetMainClassGlobalRef(JVirtualMachine.userMainClasses[hash]));
+					GlobalMainClasses.LoadMainClass(env, jGlobal, typeInformation);
 				}
 				catch (Exception)
 				{
-					switch (hash)
-					{
-						case ClassNameHelper.VoidObjectHash:
-						case ClassNameHelper.BooleanObjectHash:
-						case ClassNameHelper.ByteObjectHash:
-						case ClassNameHelper.CharacterObjectHash:
-						case ClassNameHelper.DoubleObjectHash:
-						case ClassNameHelper.FloatObjectHash:
-						case ClassNameHelper.IntegerObjectHash:
-						case ClassNameHelper.LongObjectHash:
-						case ClassNameHelper.ShortObjectHash:
-						case ClassNameHelper.EnumHash:
-						case ClassNameHelper.BufferHash:
-						case ClassNameHelper.MemberHash:
-						case ClassNameHelper.ExecutableHash:
-						case ClassNameHelper.MethodHash:
-						case ClassNameHelper.FieldHash:
-							throw;
-						default:
-							// If class is not built-in, VM initialization may should continue.
-							continue;
-					}
+					if (!GlobalMainClasses.CanProceedWithout(typeInformation))
+						throw;
 				}
 			}
 		}
+		/// <summary>
+		/// Loads main class.
+		/// </summary>
+		/// <param name="env">A <see cref="JEnvironment"/> instance.</param>
+		/// <param name="mainClass">A <see cref="JGlobal"/> main class instance.</param>
+		/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
+		private static void LoadMainClass(JEnvironment env, JGlobal mainClass, ITypeInformation typeInformation)
+		{
+			JGlobalRef globalRef = env.GetMainClassGlobalRef(typeInformation);
+			mainClass.SetValue(globalRef);
+			JTrace.MainClassLoaded(typeInformation.Signature, globalRef);
+		}
+
 		/// <summary>
 		/// Loads primitive global classes.
 		/// </summary>
@@ -129,24 +124,11 @@ public partial class JVirtualMachine
 		private void LoadPrimitiveMainClass(JEnvironment env, ClassObjectMetadata classMetadata,
 			String wrapperClassHash)
 		{
-			JGlobal pGlobalClass = this._mainClasses[classMetadata.Hash];
-			this._mainClasses.TryGetValue(wrapperClassHash, out JGlobal? wGlobalClass);
-			pGlobalClass.SetValue(env.GetPrimitiveMainClassGlobalRef(classMetadata, wGlobalClass));
-		}
-
-		/// <summary>
-		/// Creates dictionary for main classes.
-		/// </summary>
-		/// <param name="vm">A <see cref="IVirtualMachine"/> instance.</param>
-		/// <returns>A <see cref="ConcurrentDictionary{String, Global}"/> instance.</returns>
-		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
-		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
-		private static ConcurrentDictionary<String, JGlobal> CreateMainClassesDictionary(IVirtualMachine vm)
-		{
-			ConcurrentDictionary<String, JGlobal> result = new();
-			foreach (String hash in JVirtualMachine.userMainClasses.Keys)
-				result.TryAdd(hash, new(vm, JVirtualMachine.userMainClasses[hash], default));
-			return result;
+			JGlobal pGlobalClass = this.GlobalClassCache[classMetadata.Hash];
+			this.GlobalClassCache.TryGetValue(wrapperClassHash, out JGlobal? wGlobalClass);
+			JGlobalRef globalRef = env.GetPrimitiveMainClassGlobalRef(classMetadata, wGlobalClass);
+			pGlobalClass.SetValue(globalRef);
+			JTrace.MainClassLoaded(classMetadata.ClassSignature, globalRef);
 		}
 	}
 }

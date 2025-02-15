@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Set of base types for given type.
 /// </summary>
-public sealed class BaseTypeHelper<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass>
+internal sealed class BaseTypeHelper<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TClass>
 {
 	/// <summary>
 	/// Cached type interface set.

@@ -8,4 +8,5 @@ public enum CallType
 	Values,
 	Objects,
 	Mixed,
+	MultipleValues,
 }

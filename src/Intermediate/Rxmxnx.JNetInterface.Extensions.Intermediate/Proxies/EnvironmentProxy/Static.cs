@@ -3,6 +3,11 @@ namespace Rxmxnx.JNetInterface.Proxies;
 public abstract partial class EnvironmentProxy
 {
 	/// <summary>
+	/// Java methods based <see cref="NativeFunctionSet"/> instance.
+	/// </summary>
+	public static NativeFunctionSet JniFunctionSet => NativeFunctionSetImpl.Instance;
+
+	/// <summary>
 	/// Creates a <see cref="JClassObject"/> for <c>java.lang.Class&lt;?&gt;</c> data type.
 	/// </summary>
 	/// <param name="env">A <see cref="EnvironmentProxy"/> instance.</param>
@@ -42,7 +47,7 @@ public abstract partial class EnvironmentProxy
 				JGlobalBase jGlobal => new JWeak(jGlobal, localRef.Transform<JObjectLocalRef, JWeakRef>()),
 				_ => result,
 			};
-		return (TGlobal?)result ?? throw new ArgumentException("Invalid global type.");
+		return (TGlobal?)result ?? throw new ArgumentException(IMessageResource.GetInstance().InvalidGlobalObject);
 	}
 	/// <summary>
 	/// Sets <paramref name="text"/> information as <paramref name="jString"/> value.
@@ -78,8 +83,8 @@ public abstract partial class EnvironmentProxy
 	[return: NotNullIfNotNull(nameof(jObject))]
 	private static TObject? ThrowIfNotProxy<TObject>(TObject? jObject) where TObject : JReferenceObject
 	{
-		if (jObject is not null && jObject.IsProxy)
-			throw new ArgumentException("Java Object must be proxy to perform this operation.");
-		return jObject;
+		if (jObject is null || !jObject.IsProxy) return jObject;
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new ArgumentException(resource.InvalidProxyObject);
 	}
 }

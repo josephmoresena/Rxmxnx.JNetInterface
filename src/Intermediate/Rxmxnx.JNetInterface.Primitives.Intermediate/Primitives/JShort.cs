@@ -58,7 +58,7 @@ public readonly partial struct JShort : INativeType, IComparable<JShort>, IEquat
 	public Int32 CompareTo(JShort other) => this._value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => IPrimitiveType<JShort, Int16>.Compare(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveValueType.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

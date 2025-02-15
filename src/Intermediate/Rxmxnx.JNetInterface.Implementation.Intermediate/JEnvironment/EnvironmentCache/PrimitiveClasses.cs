@@ -58,7 +58,10 @@ partial class JEnvironment
 
 			this._env.DescribeException();
 			this.ClearException();
-			throw new NotSupportedException($"Primitive class {className} is not available for JNI access.");
+
+			IMessageResource resource = IMessageResource.GetInstance();
+			String message = resource.PrimitiveClassUnavailable(className);
+			throw new NotSupportedException(message);
 		}
 
 		/// <summary>
@@ -69,8 +72,11 @@ partial class JEnvironment
 		/// <exception cref="ArgumentException">Non-primitive class.</exception>
 		private JClassObject GetPrimitiveClass(ReadOnlySpan<Byte> className)
 		{
+			IMessageResource resource = IMessageResource.GetInstance();
+
 			if (className.Length is < 3 or > 7)
-				throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage);
+				throw new ArgumentException(resource.InvalidPrimitiveTypeMessage);
+
 			return className[0] switch
 			{
 				(Byte)'b' when "boolean"u8.SequenceEqual(className) => this.BooleanPrimitive,
@@ -82,7 +88,7 @@ partial class JEnvironment
 				(Byte)'l' when "long"u8.SequenceEqual(className) => this.LongPrimitive,
 				(Byte)'s' when "short"u8.SequenceEqual(className) => this.ShortPrimitive,
 				(Byte)'v' when "void"u8.SequenceEqual(className) => this.VoidPrimitive,
-				_ => throw new ArgumentException(CommonConstants.InvalidPrimitiveTypeMessage),
+				_ => throw new ArgumentException(resource.InvalidPrimitiveTypeMessage),
 			};
 		}
 	}

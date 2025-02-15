@@ -239,8 +239,10 @@ public sealed class JConstructorDefinitionTests
 		   .CallConstructor<TDataType>(jConstructor, constructorDefinition,
 		                               Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 	}
+#pragma warning disable CA1859
 	private static Boolean IsEmptyArgs(IReadOnlyCollection<IObject?> cArgs)
 		=> (cArgs.Count == JConstructorDefinitionTests.args.Length || cArgs.Count == 0) && cArgs.All(o => o is null);
+#pragma warning restore CA1859
 
 	private class JFakeConstructor(params JArgumentMetadata[] metadata) : JConstructorDefinition(metadata)
 	{

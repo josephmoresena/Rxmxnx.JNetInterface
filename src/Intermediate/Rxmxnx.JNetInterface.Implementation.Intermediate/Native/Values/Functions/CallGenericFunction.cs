@@ -16,12 +16,22 @@ internal readonly unsafe struct CallGenericFunction<TReceiver, TResult>
 	/// <summary>
 	/// Internal reserved entries.
 	/// </summary>
-#pragma warning disable CS0169
 	private readonly MethodOffset _offset;
-#pragma warning restore CS0169
 	/// <summary>
-	/// Caller <c>A</c> function.
+	/// Managed caller <c>A</c> function.
 	/// </summary>
-	/// <remarks>Should it really be declared as managed?</remarks>
-	public readonly delegate* managed<JEnvironmentRef, TReceiver, JMethodId, JValue*, TResult> Call;
+	private readonly void* _ptr;
+
+	/// <summary>
+	/// Calls <c>A</c> function.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public TResult Call(JEnvironmentRef envRef, TReceiver receiver, JMethodId methodId, JValue* args)
+	{
+		TResult result = default;
+		GenericFunctionCallHelper.CallMethod(this._ptr, TResult.Type, envRef, receiver.Value.Pointer, methodId, args,
+		                                     ref Unsafe.As<TResult, Byte>(ref result));
+		return result;
+	}
 }

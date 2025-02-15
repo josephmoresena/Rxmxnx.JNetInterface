@@ -3,6 +3,7 @@ namespace Rxmxnx.JNetInterface.Tests;
 [ExcludeFromCodeCoverage]
 internal static class TestUtilities
 {
+	private static readonly Int32 multipleValueLength = 150;
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	public static TPointer InvertPointer<TPointer>(in TPointer ptr) where TPointer : unmanaged, IFixedPointer
@@ -283,6 +284,11 @@ internal static class TestUtilities
 				JArgumentMetadata.Get<JDouble>(),
 				JArgumentMetadata.Get<JBoolean>(),
 			],
+			CallType.MultipleValues => Enumerable.Repeat<JArgumentMetadata[]>([
+				JArgumentMetadata.Get<JInt>(),
+				JArgumentMetadata.Get<JDouble>(),
+				JArgumentMetadata.Get<JBoolean>(),
+			], TestUtilities.multipleValueLength).SelectMany(ar => ar).ToArray(),
 			CallType.Objects =>
 			[
 				JArgumentMetadata.Get<JStringObject>(),
@@ -310,6 +316,13 @@ internal static class TestUtilities
 				(JInt)TestUtilities.fixture.Create<Int32>(), (JDouble)TestUtilities.fixture.Create<Double>(),
 				(JBoolean)TestUtilities.fixture.Create<Boolean>(),
 			],
+			CallType.MultipleValues => Enumerable.Range(0, TestUtilities.multipleValueLength)
+			                                     .SelectMany(i => new IObject[]
+			                                     {
+				                                     (JInt)TestUtilities.fixture.Create<Int32>(),
+				                                     (JDouble)TestUtilities.fixture.Create<Double>(),
+				                                     (JBoolean)TestUtilities.fixture.Create<Boolean>(),
+			                                     }).ToArray(),
 			CallType.Objects =>
 			[
 				TestUtilities.CreateString(proxyEnv, TestUtilities.fixture.Create<String>()),

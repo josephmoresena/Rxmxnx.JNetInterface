@@ -78,7 +78,7 @@ public readonly partial struct JBoolean : INativeType, IComparable<JBoolean>, IE
 	public Int32 CompareTo(JBoolean other) => this.Value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => IPrimitiveType<JBoolean, Boolean>.Compare(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveValueType.Compare(this, obj);
 	/// <inheritdoc cref="Boolean.TryFormat(Span{Char}, out Int32)"/>
 	public Boolean TryFormat(Span<Char> destination, out Int32 charsWritten)
 		=> this.Value.TryFormat(destination, out charsWritten);

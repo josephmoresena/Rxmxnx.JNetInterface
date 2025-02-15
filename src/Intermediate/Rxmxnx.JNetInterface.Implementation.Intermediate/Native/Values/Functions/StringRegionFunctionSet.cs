@@ -8,7 +8,7 @@ internal readonly struct StringRegionFunctionSet
 {
 	/// <summary>
 	/// Pointer to <c>GetStringRegion</c> function.
-	/// Copies unicode characters from given java string.
+	/// Copies Unicode characters from given java string.
 	/// </summary>
 	public readonly GetStringRegionFunction<Char> Utf16;
 	/// <summary>

@@ -2,13 +2,17 @@
   {
     "name": "java.lang.Void",
     "fields": [
-      { "name": "TYPE" }
+      {
+        "name": "TYPE"
+      }
     ]
   },
   {
     "name": "java.lang.Boolean",
     "fields": [
-      { "name": "TYPE" }
+      {
+        "name": "TYPE"
+      }
     ],
     "methods": [
       {
@@ -27,7 +31,9 @@
   {
     "name": "java.lang.Byte",
     "fields": [
-      { "name": "TYPE" }
+      {
+        "name": "TYPE"
+      }
     ],
     "constructors": [
       {
@@ -40,7 +46,9 @@
   {
     "name": "java.lang.Character",
     "fields": [
-      { "name": "TYPE" }
+      {
+        "name": "TYPE"
+      }
     ],
     "methods": [
       {
@@ -59,7 +67,9 @@
   {
     "name": "java.lang.Double",
     "fields": [
-      { "name": "TYPE" }
+      {
+        "name": "TYPE"
+      }
     ],
     "constructors": [
       {
@@ -72,7 +82,9 @@
   {
     "name": "java.lang.Float",
     "fields": [
-      { "name": "TYPE" }
+      {
+        "name": "TYPE"
+      }
     ],
     "constructors": [
       {
@@ -85,7 +97,9 @@
   {
     "name": "java.lang.Integer",
     "fields": [
-      { "name": "TYPE" }
+      {
+        "name": "TYPE"
+      }
     ],
     "constructors": [
       {
@@ -98,7 +112,9 @@
   {
     "name": "java.lang.Long",
     "fields": [
-      { "name": "TYPE" }
+      {
+        "name": "TYPE"
+      }
     ],
     "constructors": [
       {
@@ -111,7 +127,9 @@
   {
     "name": "java.lang.Short",
     "fields": [
-      { "name": "TYPE" }
+      {
+        "name": "TYPE"
+      }
     ],
     "constructors": [
       {

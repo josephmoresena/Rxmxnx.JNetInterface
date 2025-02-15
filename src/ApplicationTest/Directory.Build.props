@@ -1,0 +1,15 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework Condition="'$(USE_NET80)' != 'true'">net9.0</TargetFramework>
+        <TargetFramework Condition="'$(USE_NET80)' == 'true'">net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <IsTrimmable>true</IsTrimmable>
+        <TrimMode>full</TrimMode>
+        <RootNamespace>Rxmxnx.JNetInterface.ApplicationTest</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage"/>
+    </ItemGroup>
+</Project>

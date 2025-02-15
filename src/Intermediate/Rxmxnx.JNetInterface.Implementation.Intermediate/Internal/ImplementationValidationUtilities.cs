@@ -14,8 +14,9 @@ internal static class ImplementationValidationUtilities
 	public static void ThrowIfProxy(JReferenceObject? jObject,
 		[CallerArgumentExpression(nameof(jObject))] String nameofObject = "")
 	{
-		if (jObject is not null && jObject.IsProxy)
-			throw new ArgumentException($"Invalid JReferenceObject ({nameofObject}).");
+		if (jObject is null || !jObject.IsProxy) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new ArgumentException(resource.InvalidReferenceObject, nameofObject);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="objectMetadata"/> is proxy.
@@ -26,8 +27,9 @@ internal static class ImplementationValidationUtilities
 	public static void ThrowIfProxy(ObjectMetadata? objectMetadata,
 		[CallerArgumentExpression(nameof(objectMetadata))] String nameofObject = "")
 	{
-		if (objectMetadata is not null && objectMetadata.FromProxy.GetValueOrDefault())
-			throw new ArgumentException($"Invalid ObjectMetadata ({nameofObject}).");
+		if (objectMetadata is null || !objectMetadata.FromProxy.GetValueOrDefault()) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new ArgumentException(resource.InvalidReferenceObject, nameofObject);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
@@ -40,8 +42,10 @@ internal static class ImplementationValidationUtilities
 	public static void ThrowIfNotMatchDefinition(JAccessibleObjectDefinition definition,
 		JAccessibleObjectDefinition otherDefinition)
 	{
-		if (definition.Hash != otherDefinition.Hash)
-			throw new ArgumentException($"[{definition}] Expected: [{otherDefinition}].");
+		if (definition.Hash == otherDefinition.Hash) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.DefinitionNotMatch(definition, otherDefinition);
+		throw new ArgumentException(message);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="result"/> is not <see cref="JResult.Ok"/>.
@@ -64,8 +68,8 @@ internal static class ImplementationValidationUtilities
 	/// <exception cref="InvalidOperationException">Throws an exception if <paramref name="jObject"/> is default.</exception>
 	public static void ThrowIfDefault(JReferenceObject jObject, String? message = default)
 	{
-		if (jObject.IsDefault && JObject.IsNullOrDefault(jObject))
-			throw new ArgumentException(message ?? "Disposed JReferenceObject.");
+		if (!jObject.IsDefault || !JObject.IsNullOrDefault(jObject)) return;
+		throw new ArgumentException(message ?? IMessageResource.GetInstance().DisposedObject);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="thread"/> is different to current thread.
@@ -78,9 +82,10 @@ internal static class ImplementationValidationUtilities
 	/// </exception>
 	public static void ThrowIfDifferentThread(JEnvironmentRef envRef, Thread thread)
 	{
-		if (thread != Thread.CurrentThread)
-			throw new InvalidOperationException(
-				$"JNI Environment ({envRef}) is assigned to another thread. Expected: {thread.ManagedThreadId} Current: {Environment.CurrentManagedThreadId}.");
+		if (thread == Thread.CurrentThread) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.DifferentThread(envRef, thread.ManagedThreadId);
+		throw new InvalidOperationException(message);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="length"/> is invalid.
@@ -91,8 +96,9 @@ internal static class ImplementationValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidArrayLength(Int32 length)
 	{
-		if (length < 0)
-			throw new ArgumentException("Array length must be zero or positive.", nameof(length));
+		if (length >= 0) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new ArgumentException(resource.InvalidArrayLength, nameof(length));
 	}
 	/// <summary>
 	/// Throws an exception if JVM is not alive.
@@ -101,8 +107,9 @@ internal static class ImplementationValidationUtilities
 	/// <exception cref="InvalidOperationException">Throws an exception if JVM is not alive.</exception>
 	public static void ThrowIfInvalidVirtualMachine(Boolean isAlive)
 	{
-		if (!isAlive)
-			throw new InvalidOperationException("Current JVM is not alive.");
+		if (isAlive) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new InvalidOperationException(resource.DeadVirtualMachine);
 	}
 	/// <summary>
 	/// Throws an exception if current thread is not attached to JVM.
@@ -111,8 +118,9 @@ internal static class ImplementationValidationUtilities
 	/// <exception cref="InvalidOperationException">Throws an exception if current thread is not attached to JVM</exception>
 	public static void ThrowIfNotAttached(Boolean isAttached)
 	{
-		if (!isAttached)
-			throw new InvalidOperationException("Current thread is not attached.");
+		if (isAttached) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new InvalidOperationException(resource.NotAttachedThread);
 	}
 	/// <summary>
 	/// Throws an exception if JNI execution is not secure.
@@ -124,23 +132,26 @@ internal static class ImplementationValidationUtilities
 	/// </exception>
 	public static void ThrowIfUnsafe(String functionName, Boolean jniSecure)
 	{
-		if (!jniSecure)
-			throw new InvalidOperationException($"Current JNI status is invalid to call {functionName}.");
+		if (jniSecure) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.CallOnUnsafe(functionName);
+		throw new InvalidOperationException(message);
 	}
 	/// <summary>
 	/// Throws an exception if JNI execution is not avaliable in current version.
 	/// </summary>
 	/// <param name="functionName">Name of JNI function.</param>
-	/// <param name="requiredVersion">Requried version to execute JNI function.</param>
+	/// <param name="requiredVersion">Required version to execute JNI function.</param>
 	/// <param name="currentVersion">Current version of JNI.</param>
 	/// <exception cref="NotImplementedException">
 	/// Throws an exception if JNI execution is not avaliable in current version.
 	/// </exception>
 	public static void ThrowIfInvalidVersion(String functionName, Int32 requiredVersion, Int32 currentVersion)
 	{
-		if (currentVersion < requiredVersion)
-			throw new InvalidOperationException(
-				$"Current JNI version (0x{currentVersion:x8}) is invalid to call {functionName}. JNI required: 0x{requiredVersion:x8}");
+		if (currentVersion >= requiredVersion) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.InvalidCallVersion(currentVersion, functionName, requiredVersion);
+		throw new InvalidOperationException(message);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="version"/> is invalid.
@@ -150,5 +161,9 @@ internal static class ImplementationValidationUtilities
 	/// Throws an exception if <paramref name="version"/> is invalid.
 	/// </exception>
 	public static Int32 ThrowIfInvalidVersion(Int32 version)
-		=> version > 0 ? version : throw new InvalidOperationException();
+	{
+		if (version > 0) return version;
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new InvalidOperationException(resource.IncompatibleLibrary);
+	}
 }

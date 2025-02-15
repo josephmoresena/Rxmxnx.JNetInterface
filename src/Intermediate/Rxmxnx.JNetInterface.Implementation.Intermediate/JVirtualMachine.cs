@@ -34,6 +34,10 @@ public partial class JVirtualMachine : IVirtualMachine
 			=> !AppContext.TryGetSwitch("JNetInterface.DisableCheckClassRefNativeCall", out Boolean disable) ||
 				!disable;
 	}
+	/// <summary>
+	/// Main classes' information.
+	/// </summary>
+	public static IEnumerable<ITypeInformation> MainClassesInformation => JVirtualMachine.userMainClasses.Values;
 
 	/// <summary>
 	/// Indicates whether the current virtual machine remains alive.
@@ -123,10 +127,10 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// Sets <typeparamref name="TReference"/> as main class.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+	[ExcludeFromCodeCoverage]
 	public static void SetMainClass<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
 	{
-		String hash = MetadataHelper.GetExactMetadata<TReference>().Hash;
-		if (!JVirtualMachine.userMainClasses.ContainsKey(hash))
-			JVirtualMachine.userMainClasses.TryAdd(hash, ClassObjectMetadata.Create<TReference>());
+		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TReference>();
+		MainClasses.AppendMainClass(JVirtualMachine.userMainClasses, typeMetadata);
 	}
 }

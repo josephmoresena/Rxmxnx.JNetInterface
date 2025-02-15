@@ -150,8 +150,10 @@ public sealed class JMethodDefinitionTests
 		   .CallStaticMethod(jMethod, methodDefinition, Arg.Is<IObject[]>(a => a.SequenceEqual(parameters)));
 	}
 
+#pragma warning disable CA1859
 	private static Boolean IsEmptyArgs(IReadOnlyCollection<IObject?> cArgs)
 		=> (cArgs.Count == JMethodDefinitionTests.args.Length || cArgs.Count == 0) && cArgs.All(o => o is null);
+#pragma warning restore CA1859
 
 	private class JFakeMethodDefinition(ReadOnlySpan<Byte> methodName, params JArgumentMetadata[] metadata)
 		: JMethodDefinition(methodName, metadata)

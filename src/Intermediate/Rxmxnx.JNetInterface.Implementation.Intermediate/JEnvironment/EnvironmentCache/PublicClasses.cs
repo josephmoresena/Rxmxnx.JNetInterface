@@ -76,8 +76,11 @@ partial class JEnvironment
 
 			this._env.DescribeException();
 			this.ClearException();
-			throw new NotSupportedException(
-				$"Main class {ClassNameHelper.GetClassName(signature)} is not available for JNI access.");
+
+			IMessageResource resource = IMessageResource.GetInstance();
+			String mainClassName = ClassNameHelper.GetClassName(signature);
+			String message = resource.MainClassUnavailable(mainClassName);
+			throw new NotSupportedException(message);
 		}
 		/// <summary>
 		/// Retrieves class element from interfaces class array.

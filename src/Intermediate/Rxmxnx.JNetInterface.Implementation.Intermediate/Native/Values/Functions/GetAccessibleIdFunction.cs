@@ -14,5 +14,18 @@ internal readonly unsafe struct GetAccessibleIdFunction<TAccessible>
 	/// Pointer to <c>Get&lt;type&gt;ID</c> function.
 	/// </summary>
 	/// <remarks>The accessible object is determined by its name and signature.</remarks>
-	public readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, Byte*, Byte*, TAccessible> GetId;
+	private readonly delegate* unmanaged<JEnvironmentRef, JClassLocalRef, Byte*, Byte*, IntPtr> _ptr;
+
+	/// <summary>
+	/// Pointer to <c>Get&lt;type&gt;ID</c> function.
+	/// </summary>
+	/// <remarks>The accessible object is determined by its name and signature.</remarks>
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public TAccessible GetId(JEnvironmentRef envRef, JClassLocalRef localRef, Byte* name, Byte* descriptor)
+	{
+		TAccessible result = default;
+		Unsafe.As<TAccessible, IntPtr>(ref result) = this._ptr(envRef, localRef, name, descriptor);
+		return result;
+	}
 }

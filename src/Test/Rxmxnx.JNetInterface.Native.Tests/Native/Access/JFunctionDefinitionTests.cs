@@ -349,8 +349,10 @@ public sealed class JFunctionDefinitionTests
 		   .CallStaticFunction<JLocalObject>(jMethod, functionDefinition,
 		                                     Arg.Is<IObject?[]>(i => i.SequenceEqual(parameters)));
 	}
+#pragma warning disable CA1859
 	private static Boolean IsEmptyArgs(IReadOnlyCollection<IObject?> cArgs)
 		=> (cArgs.Count == JFunctionDefinitionTests.args.Length || cArgs.Count == 0) && cArgs.All(o => o is null);
+#pragma warning restore CA1859
 
 	private class JFakeFunctionDefinition<TResult>(ReadOnlySpan<Byte> functionName, params JArgumentMetadata[] metadata)
 		: JFunctionDefinition<TResult>(functionName, metadata) where TResult : JReferenceObject, IReferenceType<TResult>

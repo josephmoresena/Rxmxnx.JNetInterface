@@ -88,7 +88,8 @@ partial class JEnvironment
 					                          NativeUtilities.Transform<TPrimitive, JShort>(in primitive));
 					break;
 				default:
-					throw new InvalidOperationException("Object is not primitive.");
+					IMessageResource resource = IMessageResource.GetInstance();
+					throw new InvalidOperationException(resource.NotPrimitiveObject);
 			}
 			return this.Register(result);
 		}
@@ -165,7 +166,7 @@ partial class JEnvironment
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jGlobal);
 			Boolean keepReference = false;
-			if (this.IsMainOrDefault(jGlobal)) return false;
+			if (EnvironmentCache.IsMainOrDefault(jGlobal)) return false;
 			try
 			{
 				if (jGlobal is JGlobal)

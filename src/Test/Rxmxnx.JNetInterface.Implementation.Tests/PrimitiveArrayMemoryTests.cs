@@ -510,6 +510,7 @@ public sealed class PrimitiveArrayMemoryTests
 			arrayRef.Transform<JArrayLocalRef, JShortArrayLocalRef>(), Arg.Any<ReadOnlyValPtr<JShort>>(), releaseMode);
 	}
 
+#pragma warning disable CA1859
 	private static void NestedFailTest<TPrimitive>(NativeInterfaceProxy proxyEnv)
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
@@ -552,4 +553,5 @@ public sealed class PrimitiveArrayMemoryTests
 		seq.Dispose();
 		seqCritical.Dispose();
 	}
+#pragma warning restore CA1859
 }

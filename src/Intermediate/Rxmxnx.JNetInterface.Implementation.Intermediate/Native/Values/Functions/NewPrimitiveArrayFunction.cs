@@ -14,5 +14,18 @@ internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef>
 	/// Pointer to <c>New&lt;PrimitiveType&gt;Array</c> function.
 	/// Constructs a new primitive array object.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, Int32, TArrayRef> NewArray;
+	private readonly delegate* unmanaged<JEnvironmentRef, Int32, IntPtr> _ptr;
+
+	/// <summary>
+	/// Pointer to <c>New&lt;PrimitiveType&gt;Array</c> function.
+	/// Constructs a new primitive array object.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public TArrayRef NewArray(JEnvironmentRef envRef, Int32 length)
+	{
+		TArrayRef result = default;
+		Unsafe.As<TArrayRef, IntPtr>(ref result) = this._ptr(envRef, length);
+		return result;
+	}
 }
