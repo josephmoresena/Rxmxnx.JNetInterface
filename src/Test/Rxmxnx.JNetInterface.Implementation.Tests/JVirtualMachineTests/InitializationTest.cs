@@ -204,19 +204,20 @@ public partial class JVirtualMachineTests
 		catch (Exception ex)
 		{
 			Assert.IsType<NotSupportedException>(ex);
+			IMessageResource resource = IMessageResource.GetInstance();
 			switch (error)
 			{
 				case ClassLoadingError.FindClass when dataTypeMetadata?.Kind != JTypeKind.Primitive:
-					Assert.Equal($"Main class {className} is not available for JNI access.", ex.Message);
+					Assert.Equal(resource.MainClassUnavailable(className!), ex.Message);
 					break;
 				case ClassLoadingError.FindClass when dataTypeMetadata?.Kind == JTypeKind.Primitive:
-					Assert.Equal($"Primitive class {className} is not available for JNI access.", ex.Message);
+					Assert.Equal(resource.PrimitiveClassUnavailable(className!), ex.Message);
 					break;
 				case ClassLoadingError.TypeIdError when dataTypeMetadata?.Kind != JTypeKind.Primitive:
-					Assert.Equal($"Primitive class {auxClassName} is not available for JNI access.", ex.Message);
+					Assert.Equal(resource.PrimitiveClassUnavailable(auxClassName!), ex.Message);
 					break;
 				case ClassLoadingError.CreateGlobal:
-					Assert.Equal($"Error creating JNI global reference to {className} class.", ex.Message);
+					Assert.Equal(resource.MainClassGlobalError(className!), ex.Message);
 					break;
 			}
 		}

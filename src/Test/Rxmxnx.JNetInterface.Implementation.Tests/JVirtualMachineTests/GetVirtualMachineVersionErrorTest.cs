@@ -25,9 +25,8 @@ public partial class JVirtualMachineTests
 			{
 				Exception ex = Assert.Throws<InvalidOperationException>(
 					() => JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference));
-				Assert.Equal(
-					$"Current JNI version (0x{jniVersion:x8}) is invalid to call FindClass. JNI required: 0x{0x00010002:x8}",
-					ex.Message);
+				Assert.Equal(IMessageResource.GetInstance().InvalidCallVersion(jniVersion, "FindClass", 0x00010002),
+				             ex.Message);
 			}
 
 			proxyEnv.VirtualMachine.Received(1).GetEnv(Arg.Any<ValPtr<JEnvironmentRef>>(), Arg.Any<Int32>());

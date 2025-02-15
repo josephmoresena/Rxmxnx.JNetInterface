@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 namespace Rxmxnx.JNetInterface.Internal;
 
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6670,
@@ -41,7 +39,8 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		String className = ClassNameHelper.GetClassName(classSignature);
-		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {className} {globalRef} loaded.", callerMethod);
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} class: {className} {globalRef} loaded.",
+		                callerMethod);
 	}
 	/// <summary>
 	/// Writes a category name and the main class access load.
@@ -66,7 +65,7 @@ internal static partial class JTrace
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
-			$"thread: {Environment.CurrentManagedThreadId} {envRef} defining {className} class {JTrace.GetSha256Hex(buffer)}.",
+			$"thread: {Environment.CurrentManagedThreadId} {envRef} defining class: {className} {JTrace.GetSha256Hex(buffer)}.",
 			callerMethod);
 	}
 	/// <summary>
@@ -80,7 +79,7 @@ internal static partial class JTrace
 		[CallerMemberName] String callerMethod = "")
 	{
 		if (!IVirtualMachine.TraceEnabled) return;
-		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {envRef} defined {className} class {classRef}.",
+		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {envRef} defined class: {className} {classRef}.",
 		                callerMethod);
 	}
 	/// <summary>

@@ -44,7 +44,7 @@ public sealed class CriticalException : JniException
 	/// <returns>A <see cref="CriticalException"/> instance updated.</returns>
 	private static CriticalException Update(String message, ref CriticalException? exception)
 	{
-		if (exception is null || message.AsSpan().SequenceEqual(exception.Message.AsSpan()))
+		if (exception is null || !message.AsSpan().SequenceEqual(exception.Message.AsSpan()))
 			exception = new(message);
 		return exception;
 	}

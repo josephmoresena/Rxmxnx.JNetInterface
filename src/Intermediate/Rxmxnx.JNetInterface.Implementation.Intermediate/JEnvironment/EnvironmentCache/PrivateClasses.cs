@@ -346,7 +346,7 @@ partial class JEnvironment
 			fixed (Byte* bufferPtr = &MemoryMarshal.GetReference(buffer))
 			{
 				JTrace.DefiningClass(this.Reference, className, buffer);
-				classRef = nativeInterface.ClassFunctions.DefineClass(this.Reference, namePtr, localRef, new(bufferPtr),
+				classRef = nativeInterface.ClassFunctions.DefineClass(this.Reference, namePtr, localRef, bufferPtr,
 				                                                      buffer.Length);
 			}
 			if (classRef.IsDefault) this.CheckJniError();
