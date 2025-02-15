@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Buffers;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
@@ -42,6 +43,7 @@ public static class Program
 
 		try
 		{
+			using MemoryHandle handle = helloJniByteCode.AsMemory().Pin();
 			Program.Execute(jvmLib, helloJniByteCode, jMainArgs);
 		}
 		finally
