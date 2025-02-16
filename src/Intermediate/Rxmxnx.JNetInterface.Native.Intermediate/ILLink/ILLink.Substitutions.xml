@@ -109,12 +109,14 @@
                     body="stub"/>
             <method signature="System.Void MainClassLoaded(Rxmxnx.PInvoke.CString,Rxmxnx.JNetInterface.Native.References.JGlobalRef,System.String)"
                     body="stub"/>
-            <method signature="System.Void MainClassLoaded(Rxmxnx.JNetInterface.Native.JReferenceObject,System.String)"
+            <method signature="System.Void AccessLoaded(Rxmxnx.JNetInterface.Native.JReferenceObject,System.String)"
                     body="stub"/>
             <method signature="System.Void DefiningClass(Rxmxnx.JNetInterface.Native.References.JEnvironmentRef,Rxmxnx.PInvoke.CString,System.ReadOnlySpan`1&lt;System.Byte&gt;,System.String)"
                     body="stub"/>
             <method signature="System.Void DefiningClass(Rxmxnx.JNetInterface.Native.References.JEnvironmentRef,Rxmxnx.PInvoke.CString,Rxmxnx.JNetInterface.Native.References.JClassLocalRef,System.String)"
                     body="stub"/>
+            <method signature="System.String GetSha256Hex(System.ReadOnlySpan`1&lt;System.Byte&gt;)"
+                    body="remove"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableMetadataValidation"
               featurevalue="true">
