@@ -280,7 +280,10 @@ jobs:
           mkdir ./hello-jni_apk/main/java/com
           mkdir ./hello-jni_apk/main/java/com/example
           mkdir ./hello-jni_apk/main/java/com/example/hellojni
-      
+          mkdir ./hello-jni_apk/class
+          mkdir ./hello-jni_apk/dex
+          
+          echo "${APK_KEYSTORE_BASE64}" | base64 -d > ./hello-jni_apk/jnetinterface-apk.keystore
       - name: Create Android java file
         working-directory: ./hello-jni_apk/main/java/com/example/hellojni
         run: |
@@ -353,13 +356,9 @@ jobs:
             </application>
           </manifest>' > AndroidManifest.xml
 
-      - name: Build bionic-libs
+      - name: Build Android Apk
         working-directory: ./hello-jni_apk
         run: |
-          mkdir class
-          mkdir dex
-          echo "${APK_KEYSTORE_BASE64}" | base64 -d > jnetinterface-apk.keystore
-          
           tree . -h --noreport
           
           $JAVA_HOME_8_X64/**/javac -d ./class/. -sourcepath ./main/java/ -bootclasspath $ANDROID_HOME/platforms/android-35/android.jar ./main/java/**/*.java
