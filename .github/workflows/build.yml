@@ -359,6 +359,11 @@ jobs:
       - name: Build Android Apk
         working-directory: ./hello-jni_apk
         run: |
+          echo ./main/java/**/*.java
+          
+          shopt -s globstar
+          echo ./main/java/**/*.java
+          
           $JAVA_HOME_8_X64/**/javac -d ./class -sourcepath ./main/java -bootclasspath $ANDROID_HOME/platforms/android-35/android.jar ./main/java/**/*.java 
           $ANDROID_HOME/build-tools/35.0.0/d8 --lib $ANDROID_HOME/platforms/android-35/android.jar --output dex/ class/**/*.class 
           $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml -I $ANDROID_HOME/platforms/android-35/android.jar -F jnetinterface-apptest.apk dex 
