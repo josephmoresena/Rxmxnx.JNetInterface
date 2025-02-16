@@ -233,10 +233,6 @@ jobs:
   
   android-test:
     runs-on: ubuntu-latest
-    env:
-      APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
-      APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-      APK_KEY_ALIAS: ${{ APK_KEY_ALIAS }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup dotnet
