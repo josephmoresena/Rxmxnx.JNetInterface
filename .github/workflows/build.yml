@@ -102,7 +102,7 @@ jobs:
       matrix:
         os: [ windows-latest, ubuntu-latest, macos-latest, macos-13 ]
     env:
-      JNETINTERFACE_ONLY_NATIVE_TEST: false
+      JNETINTERFACE_ONLY_NATIVE_TEST: true
     steps:
       - uses: actions/checkout@v4
       - name: APT deb822 sources
@@ -230,3 +230,143 @@ jobs:
           name: ${{ runner.os }}-Artifact-Logs
           path: |
             ./artifacts/native/*
+            
+  android-test:
+    runs-on: ubuntu-latest
+    env:
+      APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
+      APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+      APK_KEY_ALIAS: ${{ APK_KEY_ALIAS }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          
+      - name: Create core assembly
+        working-directory: ./package/Rxmxnx.JNetInterface.Core
+        run: |
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
+      - name: Pack main assembly
+        working-directory: ./package/Rxmxnx.JNetInterface
+        run: |
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
+          
+      - name: Clone NativeAOT-AndroidHelloJniLib
+        run: |
+          git config --global url.https://github.com/.insteadOf git://github.com/
+          git clone --single-branch --branch jnetinterface https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib.git
+          
+      - name: Create nuget.config for bionic-libs
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet new nugetconfig
+          dotnet nuget add source "../package/Nuget/" -n TmpSource
+          dotnet add package Rxmxnx.JNetInterface --version 9999.99.99.99-tmp
+          
+      - name: Build bionic-libs
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true -p:AssemblyName=libhello-jni -p:PublishDir=../lib/arm64
+          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true -p:AssemblyName=libhello-jni -p:PublishDir=../lib/armeabi-v7a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true -p:AssemblyName=libhello-jni -p:PublishDir=../lib/x86_64
+          
+      - name: Create Android project structure
+        run: |
+          mkdir ./hello-jni_apk 
+          mkdir ./hello-jni_apk/main
+          mkdir ./hello-jni_apk/main/java
+          mkdir ./hello-jni_apk/main/java/com
+          mkdir ./hello-jni_apk/main/java/com/example
+          mkdir ./hello-jni_apk/main/java/com/example/hellojni          
+      - name: Create Android java file
+        working-directory: ./hello-jni_apk/main/java/com/example/hellojni
+        run: |
+          echo 'package com.example.hellojni;
+          
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.view.Gravity;
+          import android.view.View;
+          import android.widget.LinearLayout;
+          import android.widget.TextView;
+          
+          public class HelloJni extends Activity {
+            static {
+              System.loadLibrary("hello-jni");
+            }
+            
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+              super.onCreate(savedInstanceState);
+              
+              LinearLayout rootLayout = new LinearLayout(this);
+              rootLayout.setOrientation(LinearLayout.VERTICAL);
+              rootLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+              ));
+              rootLayout.setGravity(Gravity.CENTER);
+              
+              TextView textView = new TextView(this);
+              textView.setText(stringFromJNI());
+              textView.setTextSize(12);
+              
+              LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+              );
+              textView.setLayoutParams(params);
+              
+              textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  textView.setText(stringFromJNI());
+                }
+              });
+              
+              rootLayout.addView(textView);
+              setContentView(rootLayout);
+            }
+            
+            private native String stringFromJNI();
+          }
+          ' > HelloJni.java 
+          
+      - name: Create Android manifest file
+        working-directory: ./hello-jni_apk/main
+        run: |
+          echo '<?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.hellojni" android:theme="@android:style/Theme.DeviceDefault">
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+            <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
+            <application android:label="JNetInterfaceTestApp">
+              <activity android:name=".HelloJni" android:label="JNetInterfaceTestApp">
+              <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+              </intent-filter>
+              </activity>
+            </application>
+          </manifest>' > AndroidManifest.xml
+          
+      - name: Build bionic-libs
+        working-directory: ./hello-jni_apk
+        run: |
+          mkdir class
+          mkdir dex
+          echo "${APK_KEYSTORE_BASE64}" | base64 -d > jnetinterface-apk.keystore
+          
+          $JAVA_HOME_8_X64/**/javac -d class/. -sourcepath main/java/ -bootclasspath $ANDROID_HOME/platforms/android-35/android.jar main/java/**/*.java
+          $ANDROID_HOME/build-tools/35.0.0/d8 --lib $ANDROID_HOME/platforms/android-35/android.jar --output dex/ class/**/*.class
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml -I $ANDROID_HOME/platforms/android-35/android.jar -F jnetinterface-apptest.apk dex
+          zip -ur jnetinterface-apptest.apk ./../lib/
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 --out jnetinterface-apptest-signed.apk jnetinterface-apptest.apk
+          $ANDROID_HOME/build-tools/35.0.0/zipalign -v 4 jnetinterface-apptest-signed.apk ./../jnetinterface-apptest.apk 
+          
+      - name: Create Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: jnetinterface-apptest.apk
