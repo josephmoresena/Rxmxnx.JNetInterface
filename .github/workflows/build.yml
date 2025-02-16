@@ -231,6 +231,7 @@ jobs:
           path: |
             ./artifacts/native/*
             
+            
   android-test:
     runs-on: ubuntu-latest
     env:
@@ -369,4 +370,5 @@ jobs:
       - name: Create Android Artifact
         uses: actions/upload-artifact@v4
         with:
+          name: android-Artifact
           path: jnetinterface-apptest.apk
