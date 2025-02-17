@@ -6,6 +6,15 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine : IVirtualMachine
 {
 	/// <summary>
+	/// Indicates whether trace output is enabled.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	public static Boolean TraceEnabled
+	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		get => AppContext.TryGetSwitch("JNetInterface.EnableTrace", out Boolean enable) && enable;
+	}
+	/// <summary>
 	/// Indicates whether final user-types should be treated as real classes at runtime.
 	/// </summary>
 	[ExcludeFromCodeCoverage]

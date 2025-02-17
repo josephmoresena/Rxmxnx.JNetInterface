@@ -65,7 +65,7 @@ let MainAsync () =
 
         let mutable listener: ConsoleTraceListener option = None
 
-        if IVirtualMachine.TraceEnabled then
+        if JVirtualMachine.TraceEnabled then
             let newListener = new ConsoleTraceListener()
             let _ = Trace.Listeners.Add(newListener)
             listener <- Some newListener

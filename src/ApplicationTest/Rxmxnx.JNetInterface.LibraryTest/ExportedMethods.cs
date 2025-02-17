@@ -15,7 +15,7 @@ internal static class ExportedMethods
 	[UnmanagedCallersOnly(EntryPoint = "JNI_OnLoad")]
 	private static Int32 LoadLibrary(JVirtualMachineRef vmRef, IntPtr _)
 	{
-		if (IVirtualMachine.TraceEnabled)
+		if (JVirtualMachine.TraceEnabled)
 		{
 			ExportedMethods.traceListener = new();
 			Trace.Listeners.Add(ExportedMethods.traceListener);

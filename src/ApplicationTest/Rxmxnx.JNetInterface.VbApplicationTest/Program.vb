@@ -18,7 +18,7 @@ Partial Module Program
         End If
 
         Dim listener As ConsoleTraceListener = Nothing
-        If IVirtualMachine.TraceEnabled Then
+        If JVirtualMachine.TraceEnabled Then
             listener = New ConsoleTraceListener()
             Trace.Listeners.Add(listener)
         End If

@@ -26,6 +26,8 @@
         <Using Include="System.Numerics"/>
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="System.Security.Cryptography"/>
+        <Using Include="System.Text"/>
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Io"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>

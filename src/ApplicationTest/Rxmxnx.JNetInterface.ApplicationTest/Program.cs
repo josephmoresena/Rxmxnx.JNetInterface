@@ -35,7 +35,7 @@ public static class Program
 
 		ConsoleTraceListener? listener = default;
 
-		if (IVirtualMachine.TraceEnabled)
+		if (JVirtualMachine.TraceEnabled)
 		{
 			listener = new();
 			Trace.Listeners.Add(listener);
@@ -65,7 +65,7 @@ public static class Program
 #if NET8_0
 			if (IVirtualMachine.TypeMetadataToStringEnabled) Console.WriteLine(initArgs);
 #endif
-			if (IVirtualMachine.TraceEnabled)
+			if (JVirtualMachine.TraceEnabled)
 				initArgs = new(initArgs.Version)
 				{
 					Options = new("-verbose:jni", "-verbose:class", "-verbose:gc", "-DjniLib.load.disable=true"),

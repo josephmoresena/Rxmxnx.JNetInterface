@@ -41,7 +41,6 @@ public partial class ThrowableException
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
-			JTrace.InvokeAt(env);
 			using JWeak jWeak = env.ReferenceFeature.CreateWeak(this._global);
 			using TThrowable throwableT = jWeak.AsLocal<TThrowable>(env);
 			throwableT.ThreadId = this._threadId;
@@ -58,7 +57,6 @@ public partial class ThrowableException
 			TResult>() where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
 			using IThread env = this._global.VirtualMachine.CreateThread(ThreadPurpose.ExceptionExecution);
-			JTrace.InvokeAt(env);
 			using JWeak jWeak = env.ReferenceFeature.CreateWeak(this._global);
 			TThrowable throwableT = jWeak.AsLocal<TThrowable>(env);
 			throwableT.ThreadId = this._threadId;

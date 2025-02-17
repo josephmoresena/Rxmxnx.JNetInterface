@@ -35,9 +35,9 @@ public abstract partial class JArrayTypeMetadata
 		{
 			JArrayTypeMetadata.getArrayArrayMetadataInfo = JArrayTypeMetadata.ReflectGetArrayArrayMetadataMethod();
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
-			JTrace.ReflectGetArrayArrayMetadataMethodError(ex);
+			// Ignore
 		}
 	}
 
@@ -80,9 +80,8 @@ public abstract partial class JArrayTypeMetadata
 		{
 			return typeof(JArrayObject<TElement>);
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
-			JTrace.GetArrayTypeError(ex, IDataType.GetMetadata<TElement>().ArraySignature);
 			return default;
 		}
 	}
@@ -116,9 +115,8 @@ public abstract partial class JArrayTypeMetadata
 		{
 			return JArrayTypeMetadata.GetArrayArrayMetadataWithReflection(typeofElement);
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
-			JTrace.GetArrayArrayMetadataWithReflectionError(elementSignature, ex);
 			return default;
 		}
 	}

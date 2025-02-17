@@ -35,7 +35,7 @@ public partial interface IManagedCallback
 	{
 		Console.WriteLine("==== Feature Switches ====");
 		Console.WriteLine($"{nameof(IManagedCallback)}: {typeof(IManagedCallback)}");
-		Console.WriteLine($"{nameof(IVirtualMachine.TraceEnabled)}: {IVirtualMachine.TraceEnabled}");
+		Console.WriteLine($"{nameof(JVirtualMachine.TraceEnabled)}: {JVirtualMachine.TraceEnabled}");
 		Console.WriteLine(
 			$"{nameof(IVirtualMachine.MetadataValidationEnabled)}: {IVirtualMachine.MetadataValidationEnabled}");
 		Console.WriteLine(
