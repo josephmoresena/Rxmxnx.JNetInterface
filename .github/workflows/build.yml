@@ -286,6 +286,7 @@ jobs:
           mkdir ./hello-jni_apk/dex
           
           echo "${APK_KEYSTORE_BASE64}" | base64 -d > ./hello-jni_apk/jnetinterface-apk.keystore
+          mv lib hello-jni_apk
       - name: Create Android java file
         working-directory: ./hello-jni_apk/main/java/com/example/hellojni
         run: |
@@ -378,7 +379,7 @@ jobs:
             -I $ANDROID_HOME/platforms/android-35/android.jar \
             -F jnetinterface-apptest.apk ./dex 
           
-          zip -ur jnetinterface-apptest.apk ./../lib/ 
+          zip -ur jnetinterface-apptest.apk lib/ 
           
           $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
             --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
