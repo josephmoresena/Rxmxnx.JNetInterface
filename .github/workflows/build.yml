@@ -102,7 +102,7 @@ jobs:
       matrix:
         os: [ windows-latest, ubuntu-latest, macos-latest, macos-13 ]
     env:
-      JNETINTERFACE_ONLY_NATIVE_TEST: true
+      JNETINTERFACE_ONLY_NATIVE_TEST: false
     steps:
       - uses: actions/checkout@v4
       - name: APT deb822 sources
@@ -233,10 +233,6 @@ jobs:
   
   android-test:
     runs-on: ubuntu-latest
-    env:
-      APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
-      APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-      APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup dotnet
@@ -256,7 +252,8 @@ jobs:
       - name: Clone NativeAOT-AndroidHelloJniLib
         run: |
           git config --global url.https://github.com/.insteadOf git://github.com/
-          git clone --single-branch --branch jnetinterface https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib.git
+          git clone --single-branch --branch jnetinterface \
+            https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib.git
 
       - name: Create nuget.config for bionic-libs
         working-directory: ./NativeAOT-AndroidHelloJniLib
@@ -268,9 +265,12 @@ jobs:
       - name: Build bionic-libs
         working-directory: ./NativeAOT-AndroidHelloJniLib
         run: |
-          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true -p:AssemblyName=libhello-jni -p:PublishDir=../lib/arm64
-          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true -p:AssemblyName=libhello-jni -p:PublishDir=../lib/armeabi-v7a
-          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true -p:AssemblyName=libhello-jni -p:PublishDir=../lib/x86_64
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib/arm64
+          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib/armeabi-v7a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib/x86_64
 
       - name: Create Android project structure
         run: |
@@ -357,13 +357,14 @@ jobs:
           </manifest>' > AndroidManifest.xml
 
       - name: Build Android Apk
+        env:
+          APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
         working-directory: ./hello-jni_apk
+        shell: bash
         run: |
-          echo ./main/java/**/*.java
-          
-          shopt -s globstar
-          echo ./main/java/**/*.java
-          
+          shopt -s globstar 
           $JAVA_HOME_8_X64/**/javac -d ./class -sourcepath ./main/java -bootclasspath $ANDROID_HOME/platforms/android-35/android.jar ./main/java/**/*.java 
           $ANDROID_HOME/build-tools/35.0.0/d8 --lib $ANDROID_HOME/platforms/android-35/android.jar --output dex/ class/**/*.class 
           $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml -I $ANDROID_HOME/platforms/android-35/android.jar -F jnetinterface-apptest.apk dex 
@@ -374,5 +375,5 @@ jobs:
       - name: Create Android Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android-Artifact
+          name: Android-Artifact
           path: jnetinterface-apptest.apk
