@@ -233,10 +233,6 @@ jobs:
   
   android-test:
     runs-on: ubuntu-latest
-    env:
-      APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
-      APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-      APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup dotnet
@@ -277,6 +273,8 @@ jobs:
             -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib/x86_64
 
       - name: Create Android project structure
+        env:
+          APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
         run: |
           mkdir ./hello-jni_apk 
           mkdir ./hello-jni_apk/main
@@ -361,6 +359,9 @@ jobs:
           </manifest>' > AndroidManifest.xml
 
       - name: Build Android Apk
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
         working-directory: ./hello-jni_apk
         shell: bash
         run: |
