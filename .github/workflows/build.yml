@@ -233,6 +233,10 @@ jobs:
   
   android-test:
     runs-on: ubuntu-latest
+    env:
+      APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
+      APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+      APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup dotnet
@@ -357,20 +361,26 @@ jobs:
           </manifest>' > AndroidManifest.xml
 
       - name: Build Android Apk
-        env:
-          APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
-          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
-          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
         working-directory: ./hello-jni_apk
         shell: bash
         run: |
           shopt -s globstar 
-          $JAVA_HOME_8_X64/**/javac -d ./class -sourcepath ./main/java -bootclasspath $ANDROID_HOME/platforms/android-35/android.jar ./main/java/**/*.java 
-          $ANDROID_HOME/build-tools/35.0.0/d8 --lib $ANDROID_HOME/platforms/android-35/android.jar --output dex/ class/**/*.class 
-          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml -I $ANDROID_HOME/platforms/android-35/android.jar -F jnetinterface-apptest.apk dex 
+          $JAVA_HOME_8_X64/**/javac -d ./class -sourcepath ./main/java \
+            -bootclasspath $ANDROID_HOME/platforms/android-35/android.jar \
+            ./main/java/**/*.java 
+          $ANDROID_HOME/build-tools/35.0.0/d8 --lib $ANDROID_HOME/platforms/android-35/android.jar \
+            --output ./dex \
+            class/**/*.class 
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
+            -I $ANDROID_HOME/platforms/android-35/android.jar \
+            -F jnetinterface-apptest.apk ./dex 
           zip -ur jnetinterface-apptest.apk ./../lib/ 
-          $ANDROID_HOME/build-tools/35.0.0/apksigner sign --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS --key-pass pass:$APK_KEY_PASS --min-sdk-version 21 --out jnetinterface-apptest-signed.apk jnetinterface-apptest.apk 
-          $ANDROID_HOME/build-tools/35.0.0/zipalign -v 4 jnetinterface-apptest-signed.apk ./../jnetinterface-apptest.apk 
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
+            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
+            --out jnetinterface-apptest-signed.apk jnetinterface-apptest.apk 
+          $ANDROID_HOME/build-tools/35.0.0/zipalign -v 4 jnetinterface-apptest-signed.apk \
+            ./../jnetinterface-apptest.apk 
 
       - name: Create Android Artifact
         uses: actions/upload-artifact@v4
