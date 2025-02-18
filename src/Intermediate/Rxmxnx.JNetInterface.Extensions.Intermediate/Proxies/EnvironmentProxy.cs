@@ -137,7 +137,7 @@ public abstract partial class EnvironmentProxy
 	public abstract JClassObject
 		LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(
 			Byte[] rawClassBytes,
-			JClassLoaderObject? jClassLoader = default) where TDataType : JLocalObject, IReferenceType<TDataType>;
+			JClassLoaderObject? jClassLoader = default) where TDataType : JReferenceObject, IReferenceType<TDataType>;
 	/// <summary>
 	/// Retrieves the class info.
 	/// </summary>

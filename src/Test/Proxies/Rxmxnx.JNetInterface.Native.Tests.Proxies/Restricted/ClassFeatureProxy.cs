@@ -47,5 +47,5 @@ public abstract partial class ClassFeatureProxy : IClassFeature
 	public abstract JClassObject LoadClass(CString className, Byte[] rawClassBytes,
 		JClassLoaderObject? jClassLoader = default);
 	public abstract JClassObject LoadClass<TDataType>(Byte[] rawClassBytes, JClassLoaderObject? jClassLoader = default)
-		where TDataType : JLocalObject, IReferenceType<TDataType>;
+		where TDataType : JReferenceObject, IReferenceType<TDataType>;
 }

@@ -180,7 +180,7 @@ partial class JEnvironment
 		public JClassObject
 			LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(
 				ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
-			where TDataType : JLocalObject, IReferenceType<TDataType>
+			where TDataType : JReferenceObject, IReferenceType<TDataType>
 		{
 			ITypeInformation metadata = MetadataHelper.GetExactMetadata<TDataType>();
 			return this.LoadClass(metadata, rawClassBytes, jClassLoader);

@@ -26,6 +26,7 @@ public sealed class JVirtualMachineInitArg
 	/// <summary>
 	/// Options text.
 	/// </summary>
+	[ExcludeFromCodeCoverage]
 	private String OptionsString => $"[{String.Join(", ", this.Options)}]";
 
 	/// <summary>
@@ -52,6 +53,7 @@ public sealed class JVirtualMachineInitArg
 	}
 
 	/// <inheritdoc/>
+	[ExcludeFromCodeCoverage]
 	public override String ToString()
 		=> $"{{ {nameof(JVirtualMachineInitArg.Version)} = 0x{this.Version:x8}, {nameof(JVirtualMachineInitArg.Options)} = {this.OptionsString}, {nameof(JVirtualMachineInitArg.IgnoreUnrecognized)} = {this.IgnoreUnrecognized} }}";
 
