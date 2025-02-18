@@ -61,8 +61,6 @@ internal sealed class SpanishMessageResource : IMessageResource
 	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
 		=> $"Los metadatos del tipo de datos para {className} no coinciden con el tipo {typeOfT}.";
 	String IMessageResource.AbstractClass(CString className) => $"{className} es un tipo abstracto.";
-	String IMessageResource.InvalidDerivationType(String typeName)
-		=> $"{typeName} no puede derivar de un tipo basado en él.";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} no puede extender una interfaz que lo extiende.";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)

@@ -64,25 +64,6 @@ internal static class NativeValidationUtilities
 		throw new InvalidOperationException(message);
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="className"/> can't extend a class whose super-classes are
-	/// <paramref name="baseBaseTypes"/>.
-	/// </summary>
-	/// <param name="className">Class name.</param>
-	/// <param name="baseTypes">Class base types.</param>
-	/// <param name="baseBaseTypes">Base class base types.</param>
-	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="className"/> can't extend a class whose super-classes are
-	/// <paramref name="baseBaseTypes"/>.
-	/// </exception>
-	public static void ValidateBaseTypes(ReadOnlySpan<Byte> className, IReadOnlySet<Type> baseTypes,
-		IReadOnlySet<Type> baseBaseTypes)
-	{
-		if (baseTypes.IsProperSupersetOf(baseBaseTypes)) return;
-		IMessageResource resource = IMessageResource.GetInstance();
-		String message = resource.InvalidDerivationType(className.GetString());
-		throw new InvalidOperationException(message);
-	}
-	/// <summary>
 	/// Throws an exception if current data type is annotation.
 	/// </summary>
 	/// <param name="typeName">Data type name.</param>

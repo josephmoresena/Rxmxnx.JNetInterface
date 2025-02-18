@@ -59,8 +59,6 @@ internal sealed class FrenchMessageResource : IMessageResource
 	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
 		=> $"Les métadonnées de type pour {className} ne correspondent pas au type {typeOfT}.";
 	String IMessageResource.AbstractClass(CString className) => $"{className} est un type abstrait.";
-	String IMessageResource.InvalidDerivationType(String typeName)
-		=> $"{typeName} ne peut pas hériter d'un type basé sur lui-même.";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} ne peut pas étendre une interface qui l'étend déjà.";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)

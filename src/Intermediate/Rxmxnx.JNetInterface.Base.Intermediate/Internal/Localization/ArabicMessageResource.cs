@@ -58,7 +58,6 @@ internal sealed class ArabicMessageResource : IMessageResource
 	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
 		=> $"بيانات التعريف للنوع {className} لا تتطابق مع النوع {typeOfT}.";
 	String IMessageResource.AbstractClass(CString className) => $"{className} هو نوع مجرد.";
-	String IMessageResource.InvalidDerivationType(String typeName) => $"{typeName} لا يمكن أن يرث من نوع يعتمد عليه.";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} لا يمكن أن يمدد واجهة تقوم بتمديده.";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)

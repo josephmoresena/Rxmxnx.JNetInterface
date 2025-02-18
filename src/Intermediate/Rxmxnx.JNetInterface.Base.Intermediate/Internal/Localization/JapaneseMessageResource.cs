@@ -56,7 +56,6 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
 		=> $"{className} のデータ型メタデータが {typeOfT} と一致しません。";
 	String IMessageResource.AbstractClass(CString className) => $"{className} は抽象型です。";
-	String IMessageResource.InvalidDerivationType(String typeName) => $"{typeName} は自身を基底とする型から派生できません。";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName) => $"{interfaceName} は拡張できません。";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} とそのスーパ・インターフェースは同じであってはなりません。";

@@ -164,10 +164,6 @@ internal partial interface IMessageResource
 	/// </summary>
 	String AbstractClass(CString className);
 	/// <summary>
-	/// Message for invalid derivation type exception.
-	/// </summary>
-	String InvalidDerivationType(String typeName);
-	/// <summary>
 	/// Message for invalid interface extension exception.
 	/// </summary>
 	String InvalidInterfaceExtension(String interfaceName);

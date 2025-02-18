@@ -59,8 +59,6 @@ internal sealed class RussianMessageResource : IMessageResource
 	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
 		=> $"Метаданные типа данных для {className} не соответствуют типу {typeOfT}.";
 	String IMessageResource.AbstractClass(CString className) => $"{className} является абстрактным типом.";
-	String IMessageResource.InvalidDerivationType(String typeName)
-		=> $"{typeName} не может быть унаследован от типа, основанного на нем.";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} не может расширять интерфейс, который уже его расширяет.";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)

@@ -60,8 +60,6 @@ internal sealed class GermanMessageResource : IMessageResource
 	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
 		=> $"Die Datentyp-Metadaten für {className} stimmen nicht mit dem Typ {typeOfT} überein.";
 	String IMessageResource.AbstractClass(CString className) => $"{className} ist ein abstrakter Typ.";
-	String IMessageResource.InvalidDerivationType(String typeName)
-		=> $"{typeName} kann nicht von einem Typ erben, der auf ihm basiert.";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} kann keine Schnittstelle erweitern, die sie bereits erweitert.";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)

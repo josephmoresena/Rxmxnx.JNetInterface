@@ -59,8 +59,6 @@ internal sealed class DefaultMessageResource : IMessageResource
 	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
 		=> $"Datatype metadata for {className} does not match type {typeOfT}.";
 	String IMessageResource.AbstractClass(CString className) => $"{className} is an abstract type.";
-	String IMessageResource.InvalidDerivationType(String typeName)
-		=> $"{typeName} cannot derive from a type that is based on it.";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} cannot extend an interface that extends it.";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)

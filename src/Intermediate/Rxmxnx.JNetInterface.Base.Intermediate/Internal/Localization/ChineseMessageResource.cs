@@ -55,7 +55,6 @@ internal sealed class ChineseMessageResource : IMessageResource
 	String IMessageResource.EmptyString(String paramName) => $"{paramName} 必须是非空字符串。";
 	String IMessageResource.InvalidMetadata(CString className, Type typeOfT) => $"{className} 的数据类型元数据与 {typeOfT} 不匹配。";
 	String IMessageResource.AbstractClass(CString className) => $"{className} 是抽象类型。";
-	String IMessageResource.InvalidDerivationType(String typeName) => $"{typeName} 不能派生自基于自身的类型。";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName) => $"{interfaceName} 不能扩展自身的超接口。";
 	String IMessageResource.SameInterfaceExtension(String interfaceName) => $"{interfaceName} 和其超接口不能相同。";
 	String IMessageResource.SameClassExtension(String className) => $"{className} 和其超类不能相同。";
