@@ -1,5 +1,3 @@
-using JLocalObject = Rxmxnx.JNetInterface.Native.JLocalObject;
-
 namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment

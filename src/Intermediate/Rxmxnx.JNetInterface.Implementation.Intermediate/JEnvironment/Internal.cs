@@ -61,7 +61,7 @@ partial class JEnvironment
 	/// Deletes <paramref name="globalRef"/>.
 	/// </summary>
 	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
-	internal unsafe void DeleteGlobalRef(JGlobalRef globalRef)
+	internal void DeleteGlobalRef(JGlobalRef globalRef)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteGlobalRefInfo);
@@ -71,7 +71,7 @@ partial class JEnvironment
 	/// Deletes <paramref name="weakRef"/>.
 	/// </summary>
 	/// <param name="weakRef">A <see cref="JWeakRef"/> reference.</param>
-	internal unsafe void DeleteWeakGlobalRef(JWeakRef weakRef)
+	internal void DeleteWeakGlobalRef(JWeakRef weakRef)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteWeakGlobalRefInfo);

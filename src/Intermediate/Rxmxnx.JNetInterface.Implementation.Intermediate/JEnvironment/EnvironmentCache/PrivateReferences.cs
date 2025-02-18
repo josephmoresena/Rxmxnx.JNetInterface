@@ -49,7 +49,7 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <returns>A <see cref="JWeakRef"/> reference.</returns>
-		private unsafe JWeakRef CreateWeakGlobalRef(JObjectLocalRef localRef)
+		private JWeakRef CreateWeakGlobalRef(JObjectLocalRef localRef)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewWeakGlobalRefInfo);

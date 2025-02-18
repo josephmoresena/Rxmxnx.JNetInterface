@@ -227,7 +227,7 @@ partial class JEnvironment
 	/// Deletes <paramref name="localRef"/>.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to remove.</param>
-	private unsafe void DeleteLocalRef(JObjectLocalRef localRef)
+	private void DeleteLocalRef(JObjectLocalRef localRef)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteLocalRefInfo);
@@ -252,7 +252,7 @@ partial class JEnvironment
 	/// </summary>
 	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
 	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
-	private unsafe JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
+	private JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
 		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 	{
 		ref readonly NativeInterface nativeInterface =

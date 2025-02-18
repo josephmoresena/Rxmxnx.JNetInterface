@@ -159,7 +159,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
 	[return: NotNullIfNotNull(nameof(data))]
 	public static JStringObject? Create(IEnvironment env, String? data)
-		=> data is not null ? env.StringFeature.Create(data) : default;
+		=> data is not null ? env.StringFeature.Create(data, data) : default;
 	/// <inheritdoc cref="JStringObject.Create(IEnvironment, String)"/>
 	public static JStringObject Create(IEnvironment env, ReadOnlySpan<Char> data) => env.StringFeature.Create(data);
 	/// <summary>

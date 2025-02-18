@@ -6,11 +6,12 @@ partial class JEnvironment
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial class EnvironmentCache : IStringFeature
 	{
-		public JStringObject Create(ReadOnlySpan<Char> data)
+		public JStringObject Create(ReadOnlySpan<Char> data, String? value)
 		{
 			JStringLocalRef stringRef = this.CreateString(data);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
-			return this.Register<JStringObject>(new(jStringClass, stringRef, data.ToString()));
+			value ??= data.ToString();
+			return this.Register<JStringObject>(new(jStringClass, stringRef, value));
 		}
 		public JStringObject Create(ReadOnlySpan<Byte> utf8Data)
 		{
@@ -18,7 +19,7 @@ partial class JEnvironment
 			JClassObject jStringClass = this.GetClass<JStringObject>();
 			return this.Register<JStringObject>(new(jStringClass, stringRef, utf8Data.Length));
 		}
-		public unsafe Int32 GetLength(JReferenceObject jObject)
+		public Int32 GetLength(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			ref readonly NativeInterface nativeInterface =
@@ -29,7 +30,7 @@ partial class JEnvironment
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
-		public unsafe Int32 GetUtf8Length(JReferenceObject jObject)
+		public Int32 GetUtf8Length(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			ref readonly NativeInterface nativeInterface =
@@ -46,7 +47,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, false);
 		}
-		public unsafe ReadOnlyValPtr<Char> GetSequence(JStringLocalRef stringRef, out Boolean isCopy)
+		public ReadOnlyValPtr<Char> GetSequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringCharsInfo);
@@ -62,7 +63,7 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			return this.VirtualMachine.CreateMemoryAdapter(jString, referenceKind, default);
 		}
-		public unsafe ReadOnlyValPtr<Byte> GetUtf8Sequence(JStringLocalRef stringRef, out Boolean isCopy)
+		public ReadOnlyValPtr<Byte> GetUtf8Sequence(JStringLocalRef stringRef, out Boolean isCopy)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringUtfCharsInfo);
@@ -88,7 +89,7 @@ partial class JEnvironment
 			this._criticalCount++;
 			return result;
 		}
-		public unsafe void ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
+		public void ReleaseSequence(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 		{
 			try
 			{
@@ -109,7 +110,7 @@ partial class JEnvironment
 				throw;
 			}
 		}
-		public unsafe void ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer)
+		public void ReleaseUtf8Sequence(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer)
 		{
 			try
 			{

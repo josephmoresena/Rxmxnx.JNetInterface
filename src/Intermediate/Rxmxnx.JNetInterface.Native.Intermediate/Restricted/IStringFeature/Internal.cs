@@ -6,8 +6,9 @@ internal partial interface IStringFeature
 	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="data"/>.
 	/// </summary>
 	/// <param name="data">UTF-16 string data.</param>
+	/// <param name="value">String value.</param>
 	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
-	internal JStringObject Create(ReadOnlySpan<Char> data);
+	internal JStringObject Create(ReadOnlySpan<Char> data, String? value = default);
 	/// <summary>
 	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="utf8Data"/>.
 	/// </summary>
