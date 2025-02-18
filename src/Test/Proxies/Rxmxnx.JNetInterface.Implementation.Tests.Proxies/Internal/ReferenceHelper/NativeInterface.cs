@@ -1061,7 +1061,7 @@ internal unsafe partial class ReferenceHelper
 		=> ReferenceHelper.GetProxy(envRef).MonitorEnter(localRef);
 	[UnmanagedCallersOnly]
 	private static JResult MonitorExit(JEnvironmentRef envRef, JObjectLocalRef localRef)
-		=> ReferenceHelper.GetProxy(envRef).MonitorEnter(localRef);
+		=> ReferenceHelper.GetProxy(envRef).MonitorExit(localRef);
 
 	[UnmanagedCallersOnly]
 	private static JResult GetVirtualMachine(JEnvironmentRef envRef, JVirtualMachineRef* vmRef)

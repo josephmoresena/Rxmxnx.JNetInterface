@@ -8,7 +8,7 @@ public sealed class ClassParseTests
 	[Theory]
 	[InlineData]
 	[InlineData(true)]
-	private static void ClassTest(Boolean lowerVersion = false)
+	internal void ClassTest(Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
@@ -33,7 +33,7 @@ public sealed class ClassParseTests
 	[InlineData(true)]
 	[InlineData(false, true)]
 	[InlineData(true, true)]
-	private static void GlobalTest(Boolean useNew, Boolean lowerVersion = false)
+	internal void GlobalTest(Boolean useNew, Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
@@ -66,7 +66,7 @@ public sealed class ClassParseTests
 	[InlineData(true)]
 	[InlineData(false, true)]
 	[InlineData(true, true)]
-	private static void WeakTest(Boolean useNew, Boolean lowerVersion = false)
+	internal void WeakTest(Boolean useNew, Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		if (lowerVersion) proxyEnv.GetVersion().Returns(NativeInterface4.RequiredVersion);
@@ -98,7 +98,7 @@ public sealed class ClassParseTests
 	[InlineData(true)]
 	[InlineData(false, true)]
 	[InlineData(true, true)]
-	private static void LocalTest(Boolean sameRef, Boolean lowerVersion = false)
+	internal void LocalTest(Boolean sameRef, Boolean lowerVersion = false)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JVoidObject>();
@@ -134,17 +134,18 @@ public sealed class ClassParseTests
 				Assert.Throws<InvalidOperationException>(
 					() => new JConstructorDefinition.Parameterless().New<JVoidObject>(env));
 
+			using JClassObject voidClass = classFeature.VoidObject;
 			using JLocalObject localObject = IClassType.GetMetadata<JLocalObject>()
 			                                           .CreateInstance(env.ClassFeature.ClassObject, localRef, true);
 			using JClassObject jClass = classFeature.AsClassObject(localObject);
-			Assert.Equal(classFeature.VoidObject, jClass);
+			Assert.Equal(voidClass, jClass);
 
 			if (sameRef)
 			{
 				using JWeak jWeak = localObject.Weak;
-				using JGlobal jGlobal = classFeature.VoidObject.Global;
+				using JGlobal jGlobal = voidClass.Global;
 
-				Assert.Equal(jWeak, classFeature.VoidObject.Weak);
+				Assert.Equal(jWeak, voidClass.Weak);
 				Assert.Equal(jGlobal, localObject.Global);
 			}
 
@@ -162,7 +163,7 @@ public sealed class ClassParseTests
 		}
 	}
 	[Fact]
-	private static void ErrorTest()
+	internal void ErrorTest()
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try
@@ -189,7 +190,7 @@ public sealed class ClassParseTests
 		}
 	}
 	[Fact]
-	private static void InfoTest()
+	internal void InfoTest()
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		try

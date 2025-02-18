@@ -35,7 +35,7 @@ internal partial struct JniTransactionHandle
 		{
 			if (this._active) return;
 			env.ReferenceFeature.MonitorEnter(this.LocalRef);
-			this._active = false;
+			this._active = true;
 		}
 
 		/// <inheritdoc/>

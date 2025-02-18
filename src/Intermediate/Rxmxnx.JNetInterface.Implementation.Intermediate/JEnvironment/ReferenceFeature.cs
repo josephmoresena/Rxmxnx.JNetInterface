@@ -218,6 +218,7 @@ partial class JEnvironment
 				result = nativeInterface.MonitorFunctions.MonitorExit(this.Reference, localRef);
 			}
 			JTrace.MonitorExit(this._env.IsAttached, this.VirtualMachine.IsAlive, result == JResult.Ok, localRef);
+			this.CheckJniError();
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		}
 	}

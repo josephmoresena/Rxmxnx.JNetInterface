@@ -32,7 +32,9 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	{
 		using IThread thread = this.VirtualMachine.CreateThread(ThreadPurpose.RemoveGlobalReference);
 		this.Dispose(true, thread);
-		GC.SuppressFinalize(this);
+		if (this.IsDefault)
+			// Reference is null
+			GC.SuppressFinalize(this);
 	}
 
 	/// <summary>
