@@ -95,6 +95,8 @@ public sealed partial class TypeMetadataBuilderTests
 			Assert.Throws<NotImplementedException>(() => InvalidExtension2.Metadata);
 		NotImplementedException invalidExtension3Exception =
 			Assert.Throws<NotImplementedException>(() => InvalidExtension3.Metadata);
+		InvalidOperationException circularExtensionException =
+			Assert.Throws<InvalidOperationException>(() => CircularSubInterface.Metadata);
 
 		IMessageResource resource = IMessageResource.GetInstance();
 
@@ -104,6 +106,8 @@ public sealed partial class TypeMetadataBuilderTests
 		Assert.Equal(
 			resource.AnnotationType(InvalidAnnotation.SerializableName, new CString(InvalidAnnotation.Name).ToString()),
 			annotationException.Message);
+		Assert.Equal(resource.InvalidInterfaceExtension(new CString(CircularSubInterface.Name).ToString()),
+		             circularExtensionException.Message);
 
 		Assert.Equal(
 			resource.InvalidImplementation(InvalidImplementation1.Error,
@@ -268,6 +272,30 @@ public sealed partial class TypeMetadataBuilderTests
 
 		private InvalidExtension3(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
 		static InvalidExtension3 IInterfaceType<InvalidExtension3>.Create(IReferenceType.ObjectInitializer initializer)
+			=> new(initializer);
+	}
+
+	private sealed class CircularSuperInterface : JInterfaceObject<CircularSuperInterface>,
+		IInterfaceType<CircularSuperInterface>, IInterfaceObject<CircularSubInterface>
+	{
+		public static JInterfaceTypeMetadata<CircularSuperInterface> Metadata
+			=> TypeMetadataBuilder<CircularSuperInterface>.Create("fake/invalid/CircularSuperInterface"u8).Build();
+		private CircularSuperInterface(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
+		static CircularSuperInterface IInterfaceType<CircularSuperInterface>.Create(
+			IReferenceType.ObjectInitializer initializer)
+			=> new(initializer);
+	}
+
+	private sealed class CircularSubInterface : JInterfaceObject<CircularSubInterface>,
+		IInterfaceType<CircularSubInterface>, IInterfaceObject<CircularSuperInterface>
+	{
+		public static ReadOnlySpan<Byte> Name => "fake/invalid/CircularSubInterface"u8;
+		public static JInterfaceTypeMetadata<CircularSubInterface> Metadata
+			=> TypeMetadataBuilder<CircularSubInterface>.Create(CircularSubInterface.Name)
+			                                            .Extends<CircularSuperInterface>().Build();
+		private CircularSubInterface(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
+		static CircularSubInterface IInterfaceType<CircularSubInterface>.Create(
+			IReferenceType.ObjectInitializer initializer)
 			=> new(initializer);
 	}
 }
