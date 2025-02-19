@@ -194,8 +194,8 @@ partial class JEnvironment
 			{
 				if (!keepReference)
 				{
-					jGlobal.ClearValue();
 					this.VirtualMachine.Remove(jGlobal);
+					jGlobal.ClearValue();
 				}
 			}
 			return true;

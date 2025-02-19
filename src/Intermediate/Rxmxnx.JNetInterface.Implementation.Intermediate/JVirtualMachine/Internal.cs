@@ -31,7 +31,6 @@ public partial class JVirtualMachine
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	internal void Remove(JGlobalBase? jGlobal)
 	{
-		if (jGlobal is null || jGlobal.IsDefault) return;
 		switch (jGlobal)
 		{
 			case JGlobal:
