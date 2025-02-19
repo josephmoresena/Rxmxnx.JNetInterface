@@ -59,7 +59,7 @@ public partial class JLocalObject : ILocalObject
 	/// <summary>
 	/// Indicates whether <paramref name="jLocal"/> is unloaded.
 	/// </summary>
-	/// <param name="jLocal">A <see cref="jLocal"/> instance.</param>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 	/// <returns>
 	/// <see langword="true"/> if <paramref name="jLocal"/> is loaded; otherwise; <see langword="false"/>.
 	/// </returns>
