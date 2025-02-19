@@ -6,7 +6,7 @@ partial class JEnvironment
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial class EnvironmentCache : IStringFeature
 	{
-		public JStringObject Create(ReadOnlySpan<Char> data, String? value)
+		public JStringObject Create(ReadOnlySpan<Char> data, String? value = default)
 		{
 			JStringLocalRef stringRef = this.CreateString(data);
 			JClassObject jStringClass = this.GetClass<JStringObject>();

@@ -147,7 +147,11 @@ public abstract partial class EnvironmentProxy
 	#endregion
 
 	#region IStringFeature
-	/// <inheritdoc cref="IStringFeature.Create(ReadOnlySpan{Char})"/>
+	/// <summary>
+	/// Creates a <see cref="JStringObject"/> instance initialized with <paramref name="data"/>.
+	/// </summary>
+	/// <param name="data">UTF-16 string data.</param>
+	/// <returns>A new <see cref="JStringObject"/> instance.</returns>
 	public abstract JStringObject Create(String data);
 	/// <inheritdoc cref="IStringFeature.Create(ReadOnlySpan{Byte})"/>
 	public abstract JStringObject Create(CString data);
