@@ -1,6 +1,5 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-[ExcludeFromCodeCoverage]
 public static partial class TestCompiler
 {
 	public static async Task CompileClass(Jdk jdk, DirectoryInfo outputDirectory)

@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -10,7 +8,6 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 /// <summary>
 /// Definition of <c>(I)Ljava.lang.Object</c> static java function;
 /// </summary>
-[ExcludeFromCodeCoverage]
 public class GetObjectDefinition : JFunctionDefinition<JLocalObject>
 {
 	/// <summary>

@@ -1,6 +1,5 @@
 ﻿using System.Buffers;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.Lang;
@@ -10,7 +9,6 @@ using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-[ExcludeFromCodeCoverage]
 public static class Program
 {
 	public static async Task Main(String[] args)
@@ -78,7 +76,7 @@ public static class Program
 #if NET8_0
 				if (IVirtualMachine.TypeMetadataToStringEnabled) JRuntimeInfo.PrintVirtualMachineInfo(env, vm, jvmLib);
 #endif
-				IManagedCallback.Default managedInstance = new(vm);
+				IManagedCallback.Default managedInstance = new(vm, Console.Out);
 				using JClassObject helloJniClass = JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance);
 				Console.WriteLine("==== Begin psvm ===");
 				JMainMethodDefinition.Instance.Invoke(helloJniClass, args);

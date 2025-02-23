@@ -1,6 +1,5 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 
-[ExcludeFromCodeCoverage]
 public readonly struct DownloadGetState
 {
 	public String Url { get; init; }

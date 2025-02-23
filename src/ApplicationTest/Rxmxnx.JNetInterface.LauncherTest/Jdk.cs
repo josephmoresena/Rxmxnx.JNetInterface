@@ -1,6 +1,5 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-[ExcludeFromCodeCoverage]
 public record Jdk
 {
 	public JdkVersion JavaVersion { get; init; }

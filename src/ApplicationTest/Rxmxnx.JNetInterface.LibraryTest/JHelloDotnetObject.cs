@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -12,7 +10,6 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 /// <summary>
 /// .NET representation of <c>com.rxmxnx.dotnet.test.HelloDotnet</c> java class.
 /// </summary>
-[ExcludeFromCodeCoverage]
 public sealed partial class JHelloDotnetObject : JLocalObject, IClassType<JHelloDotnetObject>
 {
 	public static JClassTypeMetadata<JHelloDotnetObject> Metadata { get; } = TypeMetadataBuilder<JHelloDotnetObject>

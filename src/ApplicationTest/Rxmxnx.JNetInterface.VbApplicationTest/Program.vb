@@ -1,4 +1,3 @@
-Imports System.Diagnostics.CodeAnalysis
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports Rxmxnx.JNetInterface.Lang
@@ -6,7 +5,6 @@ Imports Rxmxnx.JNetInterface.Native
 Imports Rxmxnx.JNetInterface.Native.Access
 Imports Rxmxnx.PInvoke
 
-<ExcludeFromCodeCoverage>
 Partial Module Program
     Sub Main(args As String())
         MainAsync(args).Wait()
@@ -62,7 +60,7 @@ Partial Module Program
             Dim env as IEnvironment = Nothing
             Using vm As IInvokedVirtualMachine = jvmLib.CreateVirtualMachine(initArgs, env)
                 Try
-                    Dim managedInstance As New IManagedCallback.Default(vm)
+                    Dim managedInstance As New IManagedCallback.Default(vm, Console.Out)
                     Using _
                         helloJniClass As JClassObject =
                             JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance)

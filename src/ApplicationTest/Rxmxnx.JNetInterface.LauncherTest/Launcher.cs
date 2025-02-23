@@ -1,6 +1,5 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-[ExcludeFromCodeCoverage]
 public abstract partial class Launcher
 {
 	public DirectoryInfo OutputDirectory { get; }

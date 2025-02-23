@@ -1,6 +1,5 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 
-[ExcludeFromCodeCoverage]
 public static class Utilities
 {
 	public static Boolean IsNativeAotSupported(Architecture arch, NetVersion netVersion)

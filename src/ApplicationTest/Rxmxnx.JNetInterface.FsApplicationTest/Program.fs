@@ -1,4 +1,3 @@
-[<System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage>]
 module Program
 
 open System
@@ -27,7 +26,7 @@ let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string
         use v = vm
 
         try
-            let managedInstance = IManagedCallback.Default(vm)
+            let managedInstance = IManagedCallback.Default(vm, Console.Out)
 
             use helloJniClass =
                 JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance)

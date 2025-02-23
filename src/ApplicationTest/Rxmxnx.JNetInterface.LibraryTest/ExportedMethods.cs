@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 using Rxmxnx.JNetInterface.Lang;
@@ -7,7 +6,6 @@ using Rxmxnx.JNetInterface.Native.References;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-[ExcludeFromCodeCoverage]
 internal static class ExportedMethods
 {
 	private static ConsoleTraceListener? traceListener;
@@ -23,7 +21,7 @@ internal static class ExportedMethods
 
 		IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(vmRef);
 		using IThread thread = vm.InitializeThread(new(() => "Load Thread"u8));
-		JHelloDotnetObject.SetCallback(thread, new IManagedCallback.Default(vm));
+		JHelloDotnetObject.SetCallback(thread, new IManagedCallback.Default(vm, Console.Out));
 		return IVirtualMachine.MinimalVersion;
 	}
 	[UnmanagedCallersOnly(EntryPoint = "JNI_OnUnload")]

@@ -17,6 +17,3 @@ await TestCompiler.CompileNet(projectDirectory, launcher.RuntimeIdentifierPrefix
                               onlyNativeAot);
 
 await launcher.Execute();
-
-[ExcludeFromCodeCoverage]
-public static partial class Program;

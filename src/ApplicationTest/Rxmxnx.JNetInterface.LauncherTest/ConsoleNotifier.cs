@@ -1,6 +1,5 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-[ExcludeFromCodeCoverage]
 public sealed class ConsoleNotifier : IDownloadNotifier, IExecutionNotifier, IPlatformNotifier, IZipNotifier
 {
 	public static readonly CancellationToken CancellationToken = ConsoleNotifier.CreateCancellationToken();

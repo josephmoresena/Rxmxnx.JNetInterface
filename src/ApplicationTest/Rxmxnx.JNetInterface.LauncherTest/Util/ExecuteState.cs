@@ -1,6 +1,5 @@
 namespace Rxmxnx.JNetInterface.ApplicationTest.Util;
 
-[ExcludeFromCodeCoverage]
 public readonly struct ExecuteState
 {
 	public String ExecutablePath { get; init; }
@@ -9,7 +8,6 @@ public readonly struct ExecuteState
 	public IExecutionNotifier? Notifier { get; init; }
 }
 
-[ExcludeFromCodeCoverage]
 public readonly struct ExecuteState<TState>
 {
 	public String ExecutablePath { get; init; }
