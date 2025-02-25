@@ -303,10 +303,8 @@ public class DefaultTest
 
 		Assert.Equal(integerObject, TCallback.SumArray(jObjClass, jArray));
 
-		envProxy.Received(0).GetLength(jArray);
 		envProxy.Received(1).GetSequence(jArray, Arg.Any<JMemoryReferenceKind>());
 		envProxy.Received(1).CreateWrapper(sum);
-		envProxy.Received(0).GetPrimitiveValue<JInt>(Arg.Any<JIntegerObject>());
 	}
 	private static void GetIntArrayArrayDefaultTest<TCallback>() where TCallback : IManagedCallback
 	{

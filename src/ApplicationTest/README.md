@@ -1,30 +1,31 @@
 # Application Test
-This application is designed to show the capabilities and potential of using JNetInterface in .NET applications that interact with a JVM instance.
+
+This application is designed to show the capabilities and potential of using JNetInterface in .NET applications that
+interact with a JVM instance.
 
 ## Library Test
+
 The library test project contains the core of Application test. <br/>
-If the library is published with NativeAOT, the resulting binary can be used as JNI library for `com.rxmxnx.dotnet.test.HelloDotNet` natives methods registration. 
+If the library is published with NativeAOT, the resulting binary can be used as JNI library for
+`com.rxmxnx.dotnet.test.HelloDotNet` natives methods registration.
 
 ## Disclaimer
+
 In this project, `JNetInterface` is utilized through `intermediate libraries` instead of direct `NuGet packages`.
 
 ## Use Case
-We utilize a Java class `com.rxmxnx.dotnet.test.HelloDotNet` that needs to be compiled and executed on a local JVM on 
+
+We utilize a Java class `com.rxmxnx.dotnet.test.HelloDotNet` that needs to be compiled and executed on a local JVM on
 the system where the .NET application runs. A minimum JDK version 6.0 is required.<br/>
-This main Java class has several native methods implemented within the .NET application. 
+This main Java class has several native methods implemented within the .NET application.
 The class must be loaded into the JVM through an invocation interface.<br/>
 The main Java class method needs to be executed from .NET, which in turn calls .NET code using JNI.<br/>
 
-Additionally, one Java method showcases the main functionality of `JNetInterface`: 
+Additionally, one Java method showcases the main functionality of `JNetInterface`:
 **Dynamic instantiation for registered types**.
+
 ```java
 package com.rxmxnx.dotnet.test;
-
-import java.lang.management.ManagementFactory;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 public class HelloDotnet {
     public static int COUNT;
@@ -59,23 +60,21 @@ public class HelloDotnet {
 ```
 
 ## Solution
-Initially, the application utilizes a class named `JCompiler` (external to `JNetInterface`) to locate the installed JDK 
-on the host computer.<br/>
-Using `JNetInterface`, we define the `JHelloDotnetObject` class representing the Java class 
-`com.rxmxnx.dotnet.test.HelloDotNet`. This class implements the static members of the `IClassType<JHelloDotnetObject>` 
-interface, providing runtime metadata necessary for JNI interoperability. 
-This interface is pivotal as it facilitates dynamic access and management of metadata associated with the Java class, 
-allowing type-safe interactions with the JVM.<br/>
-By implementing `IClassType<JHelloDotnetObject>`, the application maintains a structured approach to managing the Java 
-class, enhancing method invocation, object handling, and JVM interaction.<br>
-After locating the JDK, the Java code is compiled from `HelloDotnet.java` to `HelloDotnet.class`, 
-from which the bytecode's binary information is extracted.</br>
-`JNetInterface` then loads this into a JVM initialized via the `JVirtualMachineLibrary` API. 
 
-The native methods of `com.rxmxnx.dotnet.test.HelloDotNet` are handled through a strategy that differentiates the two 
+Using `JNetInterface`, we define the `JHelloDotnetObject` class representing the Java class
+`com.rxmxnx.dotnet.test.HelloDotNet`. This class implements the static members of the `IClassType<JHelloDotnetObject>`
+interface, providing runtime metadata necessary for JNI interoperability.
+This interface is pivotal as it facilitates dynamic access and management of metadata associated with the Java class,
+allowing type-safe interactions with the JVM.<br/>
+By implementing `IClassType<JHelloDotnetObject>`, the application maintains a structured approach to managing the Java
+class, enhancing method invocation, object handling, and JVM interaction.<br>
+`JNetInterface` then loads this into a JVM initialized via the `JVirtualMachineLibrary` API.
+
+The native methods of `com.rxmxnx.dotnet.test.HelloDotNet` are handled through a strategy that differentiates the two
 implicit concepts of `JNetInterface`: the managed abstraction and the unmanaged implementation of JNI.
 
 ### Managed abstraction
+
 Implemented through the `IManagedCallback` interface, leveraging C#'s
 [Static abstract members in interfaces](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-11.0/static-abstracts-in-interfaces)
 to handle both instance and static native methods efficiently.<br/>
@@ -109,7 +108,8 @@ internal interface IManagedCallback
 ```
 
 ### Unmanaged Part
-Managed by the `JniCallback` class, which acts as a bridge between the managed .NET code and unmanaged JNI code, 
+
+Managed by the `JniCallback` class, which acts as a bridge between the managed .NET code and unmanaged JNI code,
 ensuring correct routing and execution of native method calls with the help of `JNativeCallAdapter`.
 
 ```c#
@@ -171,8 +171,15 @@ internal partial class JHelloDotnetObject
     }
 }
 ```
+
 ### Dynamic instantiation
-The static method `getRandomObject` of the class `com.rxmxnx.dotnet.test.HelloDotNet` returns an instance of any class 
-depending on the input parameter value. 
-This method serves to demonstrate the adaptive capability of `JNetInterface` to correctly identify the managed type of 
+
+The static method `getRandomObject` of the class `com.rxmxnx.dotnet.test.HelloDotNet` returns an instance of any class
+depending on the input parameter value.
+This method serves to demonstrate the adaptive capability of `JNetInterface` to correctly identify the managed type of
 the returned object through a JNI call.
+
+### Unit Testing
+
+A [test project](./Rxmxnx.JNetInterface.ManagedTest/README.md) was created using Proxy objects to simulate the JVM
+behavior in `JNetInterface`. The test project runs on the class that implements `IManagedCallback`.
