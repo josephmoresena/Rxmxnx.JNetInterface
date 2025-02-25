@@ -118,11 +118,17 @@ public sealed class JConstructorDefinitionTests
 		Assert.Equal("{ Method: <init> Descriptor: ()V }", constructorDefinition.ToString());
 
 		if (!isAbstract)
+		{
 			Assert.Equal(instance, JConstructorDefinition.New<TDataType>(constructorDefinition, jClass));
+		}
 		else
-			Assert.Equal($"{typeMetadata.ClassName} is an abstract type.",
+		{
+			IMessageResource mangedResource = IMessageResource.GetInstance();
+			String message = mangedResource.AbstractClass(ClassNameHelper.GetClassName(typeMetadata.Signature));
+			Assert.Equal(message,
 			             Assert.Throws<InvalidOperationException>(
 				             () => JConstructorDefinition.New<TDataType>(constructorDefinition, jClass)).Message);
+		}
 
 		env.AccessFeature.Received(!isAbstract ? 1 : 0)
 		   .CallConstructor<TDataType>(jClass, constructorDefinition, Arg.Is<IObject?[]>(i => i.Length == 0));
