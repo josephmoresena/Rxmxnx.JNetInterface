@@ -197,13 +197,7 @@ jobs:
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LibraryTest
         run: |
           dotnet new nugetconfig
-          dotnet nuget add source "../../../package/Nuget/" -n TmpSource
-
-      - name: Run managed test
-        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.ManagedTest
-        run: |
-          dotnet build -c Release
-          dotnet test -c Release --logger "console;verbosity=detailed"
+          dotnet nuget add source "../../../package/Nuget/" -n TmpSource 
 
       - name: Publish launcher
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest

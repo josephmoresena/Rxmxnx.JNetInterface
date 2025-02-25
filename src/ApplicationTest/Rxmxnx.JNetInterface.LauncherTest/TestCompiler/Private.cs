@@ -52,6 +52,18 @@ public partial class TestCompiler
 			File.Delete(manifestPath);
 		}
 	}
+	private static async Task RunNetTest(RestoreNetArgs restoreArgs)
+	{
+		await TestCompiler.RestoreNet(restoreArgs);
+		ExecuteState<RestoreNetArgs> state = new()
+		{
+			ExecutablePath = "dotnet",
+			ArgState = restoreArgs,
+			AppendArgs = RestoreNetArgs.AppendTest,
+			Notifier = ConsoleNotifier.Notifier,
+		};
+		await Utilities.Execute(state, ConsoleNotifier.CancellationToken);
+	}
 	private static async Task CompileNetLibrary(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, Architecture arch,
 		String outputPath)
 	{

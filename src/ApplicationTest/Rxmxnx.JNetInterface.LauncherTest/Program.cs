@@ -7,6 +7,9 @@ DirectoryInfo projectDirectory = new(args[0]);
 DirectoryInfo outputDirectory = args.Length >= 2 ?
 	new(args[1]) :
 	new DirectoryInfo(Environment.CurrentDirectory).CreateSubdirectory("Output");
+
+await TestCompiler.RunManagedTest(projectDirectory);
+
 Launcher launcher = await Launcher.Create(outputDirectory);
 
 Jdk minJdk = launcher.GetMinJdk();
