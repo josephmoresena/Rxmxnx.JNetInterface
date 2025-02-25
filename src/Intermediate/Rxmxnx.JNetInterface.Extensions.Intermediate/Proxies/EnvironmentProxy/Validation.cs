@@ -15,22 +15,30 @@ public abstract partial class EnvironmentProxy
 		throw new ArgumentException(resource.InvalidProxyObject);
 	}
 	/// <summary>
-	/// Throws an exception if <paramref name="jClass"/> is not <paramref name="typeInformation"/> data type.
+	/// Throws an exception if <paramref name="jClass"/> is not <paramref name="typeMetadata"/> data type.
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance</param>
-	/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance</param>
+	/// <param name="typeMetadata">A <see cref="ITypeInformation"/> instance</param>
 	/// <exception cref="InvalidOperationException">
-	/// Throws an exception if <paramref name="jClass"/> is not <paramref name="typeInformation"/> data type.
+	/// Throws an exception if <paramref name="jClass"/> is not <paramref name="typeMetadata"/> data type.
 	/// </exception>
-	private static void ThrowIfNotClass(JClassObject jClass, ITypeInformation typeInformation)
+	private static void ThrowIfNotClass(JClassObject jClass, JDataTypeMetadata typeMetadata)
 	{
-		if (typeInformation.Hash.AsSpan().SequenceEqual(typeInformation.Hash) ||
-		    typeInformation.ClassName.SequenceEqual(jClass.Name)) return;
+		if (typeMetadata.Hash.AsSpan().SequenceEqual(typeMetadata.Hash) ||
+		    typeMetadata.ClassName.SequenceEqual(jClass.Name)) return;
 		IMessageResource resource = IMessageResource.GetInstance();
 		String objectClassName = ClassNameHelper.GetClassName(jClass.ClassSignature);
-		String className = ClassNameHelper.GetClassName(typeInformation.Signature);
+		String className = ClassNameHelper.GetClassName(typeMetadata.Signature);
 		throw new ArgumentException(resource.NotTypeObject(objectClassName, className));
 	}
+	/// <summary>
+	/// Throws an exception if <paramref name="jClass"/> is not <paramref name="elementMetadata"/> array data type.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance</param>
+	/// <param name="elementMetadata">A <see cref="JDataTypeMetadata"/> instance</param>
+	/// <exception cref="InvalidOperationException">
+	/// Throws an exception if <paramref name="jClass"/> is not <paramref name="elementMetadata"/> array data type.
+	/// </exception>
 	private static void ThrowIfNotArrayClass(JClassObject jClass, JDataTypeMetadata elementMetadata)
 	{
 		IMessageResource resource = IMessageResource.GetInstance();
