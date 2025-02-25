@@ -204,9 +204,9 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 
 #if !PACKAGE
 	/// <summary>
-	/// Retrieves the <see cref="JBoolean"/> value of <paramref name="JBooleanObject"/>.
+	/// Retrieves the <see cref="JBoolean"/> value of <paramref name="jBooleanObject"/>.
 	/// </summary>
-	/// <param name="jBooleanObject">A <see cref="JCharacterObject"/> instance.</param>
+	/// <param name="jBooleanObject">A <see cref="JBooleanObject"/> instance.</param>
 	/// <returns>A <see cref="JBoolean"/> value.</returns>
 	public static
 #else

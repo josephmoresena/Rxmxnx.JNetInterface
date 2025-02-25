@@ -63,7 +63,6 @@ public partial record ClassObjectMetadata
 		{
 			null when kind is JTypeKind.Primitive or JTypeKind.Enum => true,
 			null when kind is JTypeKind.Interface or JTypeKind.Annotation => false,
-			null => null,
 			_ => isFinal,
 		};
 	}
