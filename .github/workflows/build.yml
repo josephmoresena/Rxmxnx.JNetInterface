@@ -97,7 +97,7 @@ jobs:
           echo "-----------------------------------"
   
   app-test:
-    needs: [build]
+    needs: [ build ]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -199,6 +199,10 @@ jobs:
           dotnet new nugetconfig
           dotnet nuget add source "../../../package/Nuget/" -n TmpSource
 
+      - name: Run managed test
+        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.ManagedTest
+        run: dotnet test --logger "console;verbosity=detailed"
+
       - name: Publish launcher
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
         run: dotnet publish
@@ -233,7 +237,7 @@ jobs:
             ./artifacts/native/*
   
   android-test:
-    needs: [build]
+    needs: [ build ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

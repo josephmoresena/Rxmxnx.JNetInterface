@@ -36,6 +36,10 @@ public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TV
 		if (instanceMetadata is PrimitiveWrapperObjectMetadata<TValue> wrapperMetadata)
 			this._value = wrapperMetadata.Value;
 	}
+
+	/// <inheritdoc cref="IPrimitiveWrapperType{TWrapper}.SetPrimitiveValue"/>
+	[ExcludeFromCodeCoverage]
+	private protected void SetPrimitiveValue(TValue value) => this._value = value;
 }
 
 #pragma warning disable CS0659

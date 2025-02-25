@@ -289,10 +289,9 @@ public class DefaultTest
 		using IFixedContext<JInt>.IDisposable ctx = values.AsMemory().GetFixedContext();
 		using JArrayObject<JInt> jArray =
 			EnvironmentProxy.CreateArrayObject<JInt>(jArrClass, arrayRef.ArrayValue, values.Length);
-		using JIntegerObject integerObject = EnvironmentProxy.CreateObject(integerClass, localRef)
-		                                                     .CastTo<JIntegerObject>(true);
+		using JIntegerObject integerObject =
+			EnvironmentProxy.CreteWrapperObject<JIntegerObject>(integerClass, localRef, sum);
 
-		envProxy.GetPrimitiveValue<JInt>(integerObject).Returns(sum);
 		envProxy.CreateWrapper(sum).Returns(integerObject);
 		envProxy.GetSequence(jArray, Arg.Any<JMemoryReferenceKind>()).Returns(adapter);
 		adapter.Copy.Returns(true);

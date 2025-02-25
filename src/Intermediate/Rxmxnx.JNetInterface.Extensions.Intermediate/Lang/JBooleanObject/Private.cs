@@ -22,6 +22,10 @@ public sealed partial class JBooleanObject
 		this._value = jBooleanObject?._value;
 	}
 
+	[ExcludeFromCodeCoverage]
+	void IPrimitiveWrapperType<JBooleanObject>.SetPrimitiveValue(IPrimitiveType value)
+		=> this._value = value.ToBoolean(CultureInfo.InvariantCulture);
+
 	static JBooleanObject IClassType<JBooleanObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
 	static JBooleanObject IClassType<JBooleanObject>.Create(IReferenceType.ObjectInitializer initializer)

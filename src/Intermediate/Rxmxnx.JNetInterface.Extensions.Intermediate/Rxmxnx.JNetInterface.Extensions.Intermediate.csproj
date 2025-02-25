@@ -24,6 +24,7 @@
         <Using Include="System.Globalization"/>
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="System.Text"/>
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>

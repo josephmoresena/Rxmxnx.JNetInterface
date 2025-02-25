@@ -75,13 +75,32 @@ public abstract partial class EnvironmentProxy
 	/// </summary>
 	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 	/// <param name="stringRef">A <see cref="JStringLocalRef"/> reference.</param>
-	/// <param name="value">Initial string value.</param>
+	/// <param name="value">String value.</param>
 	/// <returns>A <see cref="JLocalObject"/> instance.</returns>
 	public static JStringObject CreateString(JClassObject jClass, JStringLocalRef stringRef, String? value = default)
 	{
 		EnvironmentProxy.ThrowIfNotProxy(jClass);
 		EnvironmentProxy.ThrowIfNotClass(jClass, IDataType.GetMetadata<JStringObject>());
 		return new(jClass, stringRef, value);
+	}
+	/// <summary>
+	/// Creates a <see cref="JLocalObject"/> instance.
+	/// </summary>
+	/// <typeparam name="TWrapper">Primitive wrapper type.</typeparam>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <param name="value">Primitive value.</param>
+	/// <returns>A <see cref="JLocalObject"/> instance.</returns>
+	public static TWrapper CreteWrapperObject<TWrapper>(JClassObject jClass, JObjectLocalRef localRef,
+		IPrimitiveType? value = default) where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper>
+	{
+		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<TWrapper>();
+		EnvironmentProxy.ThrowIfNotProxy(jClass);
+		EnvironmentProxy.ThrowIfNotClass(jClass, typeMetadata);
+		TWrapper result = (TWrapper)typeMetadata.CreateInstance(jClass, localRef, true);
+		if (value is not null)
+			result.SetPrimitiveValue(value);
+		return result;
 	}
 	/// <summary>
 	/// Creates a <see cref="JArrayObject{TDataType}"/> instance.
@@ -146,6 +165,17 @@ public abstract partial class EnvironmentProxy
 		return (TGlobal?)result ?? throw new ArgumentException(IMessageResource.GetInstance().InvalidGlobalObject);
 	}
 	/// <summary>
+	/// Sets <paramref name="length"/> as <paramref name="jArray"/>'s length.
+	/// </summary>
+	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
+	/// <param name="length">Array length value.</param>
+	public static void SetArrayLength(JArrayObject jArray, Int32 length)
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jArray);
+		ArrayObjectMetadata objectMetadata = new(new(jArray.Class)) { Length = length, };
+		ILocalObject.ProcessMetadata(jArray, objectMetadata);
+	}
+	/// <summary>
 	/// Sets <paramref name="text"/> information as <paramref name="jString"/> value.
 	/// </summary>
 	/// <param name="jString">A <see cref="JStringObject"/> instance.</param>
@@ -155,9 +185,24 @@ public abstract partial class EnvironmentProxy
 		EnvironmentProxy.ThrowIfNotProxy(jString);
 		StringObjectMetadata objectMetadata = new(new(jString.Class))
 		{
-			Value = text, Length = text.Length, Utf8Length = ((CString)text).Length,
+			Value = text, Length = text.Length, Utf8Length = Encoding.UTF8.GetByteCount(text),
 		};
 		ILocalObject.ProcessMetadata(jString, objectMetadata);
+	}
+	/// <summary>
+	/// Sets <paramref name="value"/> as <paramref name="jWrapper"/> value.
+	/// </summary>
+	/// <typeparam name="TWrapper">Primitive wrapper type.</typeparam>
+	/// <typeparam name="TPrimitive">Primitive type.</typeparam>
+	/// <param name="jWrapper">A <typeparamref name="TWrapper"/> instance.</param>
+	/// <param name="value">A <typeparamref name="TPrimitive"/> value.</param>
+	public static void SetValue<TWrapper, TPrimitive>(TWrapper jWrapper, TPrimitive value)
+		where TWrapper : JLocalObject, IPrimitiveWrapperType<TWrapper, TPrimitive>
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jWrapper);
+		PrimitiveWrapperObjectMetadata<TPrimitive> objectMetadata = new(new(jWrapper.Class)) { Value = value, };
+		ILocalObject.ProcessMetadata(jWrapper, objectMetadata);
 	}
 	/// <summary>
 	/// Sets <paramref name="info"/> information as <paramref name="element"/> information.

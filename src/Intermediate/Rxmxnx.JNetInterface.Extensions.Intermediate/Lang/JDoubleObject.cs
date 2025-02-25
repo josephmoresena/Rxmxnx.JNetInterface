@@ -26,6 +26,11 @@ public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrim
 	private JDoubleObject(IReferenceType.ObjectInitializer initializer) :
 		base(initializer.WithClass<JDoubleObject>()) { }
 
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IPrimitiveWrapperType<JDoubleObject>.SetPrimitiveValue(IPrimitiveType value)
+		=> base.SetPrimitiveValue(value.ToDouble(CultureInfo.InvariantCulture));
+
 	static JDoubleObject? IPrimitiveWrapperType<JDoubleObject, JDouble>.Create(IEnvironment env, JDouble? value)
 		=> value is not null ? (JDoubleObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 	static JDoubleObject IClassType<JDoubleObject>.Create(IReferenceType.ClassInitializer initializer)

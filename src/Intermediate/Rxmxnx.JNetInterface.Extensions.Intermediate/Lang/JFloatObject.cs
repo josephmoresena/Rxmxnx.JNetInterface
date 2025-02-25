@@ -25,6 +25,11 @@ public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimiti
 	/// <inheritdoc/>
 	private JFloatObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JFloatObject>()) { }
 
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IPrimitiveWrapperType<JFloatObject>.SetPrimitiveValue(IPrimitiveType value)
+		=> base.SetPrimitiveValue(value.ToSingle(CultureInfo.InvariantCulture));
+
 	static JFloatObject? IPrimitiveWrapperType<JFloatObject, JFloat>.Create(IEnvironment env, JFloat? value)
 		=> value is not null ? (JFloatObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 	static JFloatObject IClassType<JFloatObject>.Create(IReferenceType.ClassInitializer initializer)
