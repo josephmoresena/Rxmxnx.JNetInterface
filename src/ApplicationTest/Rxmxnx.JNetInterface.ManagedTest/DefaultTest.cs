@@ -252,17 +252,15 @@ public class DefaultTest
 
 	private static TNative CreateNative<TNative>() where TNative : unmanaged
 	{
+#pragma warning disable CA2020
 		IntPtr result;
-		if (RuntimeInformation.ProcessArchitecture is Architecture.Arm64 or Architecture.X64 or Architecture.LoongArch64
-#if NET9_0_OR_GREATER
-		    or Architecture.RiscV64
-#endif
-		   )
-#pragma warning disable
-			result = (IntPtr)Random.Shared.NextInt64();
-#pragma warning restore
+		if (RuntimeInformation.ProcessArchitecture is Architecture.Arm or Architecture.Armv6 or Architecture.Wasm or
+		    Architecture.X86)
+			result = Random.Shared.Next(); // 32 bit
 		else
-			result = Random.Shared.Next();
+			result = (IntPtr)Random.Shared.NextInt64(); // 64 bit
+#pragma warning restore CA2020
+
 		return Unsafe.As<IntPtr, TNative>(ref result);
 	}
 	private static void SumArrayDefaultTest<TCallback>() where TCallback : IManagedCallback
