@@ -253,8 +253,11 @@ public class DefaultTest
 	private static TNative CreateNative<TNative>() where TNative : unmanaged
 	{
 		IntPtr result;
-		if (RuntimeInformation.ProcessArchitecture is Architecture.Arm64 or Architecture.X64 or
-		    Architecture.LoongArch64 or Architecture.RiscV64)
+		if (RuntimeInformation.ProcessArchitecture is Architecture.Arm64 or Architecture.X64 or Architecture.LoongArch64
+#if NET9_0_OR_GREATER
+		    or Architecture.RiscV64
+#endif
+		   )
 #pragma warning disable
 			result = (IntPtr)Random.Shared.NextInt64();
 #pragma warning restore
