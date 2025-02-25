@@ -33,7 +33,8 @@ public partial class TestCompiler
 			args.Add(restoreArgs.ProjectFile);
 			args.Add($"/p:USE_NET80={restoreArgs.Version is NetVersion.Net80}");
 			args.Add($"/p:USE_NET90={restoreArgs.Version is NetVersion.Net90}");
-			args.Add("--logger \"console;verbosity=detailed\"");
+			args.Add("--logger");
+			args.Add("\"console;verbosity=detailed\"");
 		}
 	}
 }
