@@ -251,7 +251,7 @@ internal sealed partial class ObjectLifetime(
 
 		if (this.Environment.ReferenceFeature.Unload(jLocal))
 			this.Dispose(); // Local reference deleted.
-		else if (!JLocalObject.FinalizerExecution)
+		else if (!JLocalObject.FinalizerExecution && !jLocal.IsProxy)
 			this.Load(jLocal); // Reload required.
 	}
 	/// <summary>

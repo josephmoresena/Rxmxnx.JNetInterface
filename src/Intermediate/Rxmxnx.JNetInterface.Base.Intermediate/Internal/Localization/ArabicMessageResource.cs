@@ -51,36 +51,35 @@ internal sealed class ArabicMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "مكتبة JVM غير متوافقة.";
 	String IMessageResource.UnmanagedMemoryContext => "كتلة الذاكرة غير مدارة.";
 
-	String IMessageResource.InvalidInstantiation(CString className) => $"{className} ليس نوعًا قابلاً للإنشاء.";
+	String IMessageResource.InvalidInstantiation(String className) => $"{className} ليس نوعًا قابلاً للإنشاء.";
 	String IMessageResource.InvalidCastTo(Type type) => $"تحويل غير صالح إلى {type}.";
-	String IMessageResource.InvalidCastTo(CString className) => $"لا يمكن تحويل المثيل الحالي إلى النوع {className}.";
+	String IMessageResource.InvalidCastTo(String className) => $"لا يمكن تحويل المثيل الحالي إلى النوع {className}.";
 	String IMessageResource.EmptyString(String paramName) => $"يجب أن يكون {paramName} سلسلة غير فارغة.";
-	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
+	String IMessageResource.InvalidMetadata(String className, Type typeOfT)
 		=> $"بيانات التعريف للنوع {className} لا تتطابق مع النوع {typeOfT}.";
-	String IMessageResource.AbstractClass(CString className) => $"{className} هو نوع مجرد.";
+	String IMessageResource.AbstractClass(String className) => $"{className} هو نوع مجرد.";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} لا يمكن أن يمدد واجهة تقوم بتمديده.";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} والواجهة العليا لهما لا يمكن أن يكونا متطابقين.";
 	String IMessageResource.SameClassExtension(String className)
 		=> $"{className} والفئة العليا لهما لا يمكن أن يكونا متطابقين.";
-	String IMessageResource.AnnotationType(CString interfaceName, String annotationName)
+	String IMessageResource.AnnotationType(String interfaceName, String annotationName)
 		=> $"لا يمكن تمديد {interfaceName}. {annotationName} هو تعليق توضيحي.";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className)
 		=> $"{className} لا ينفذ {interfaceName}.";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className,
-		CString missingSuperInterface)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className, String missingSuperInterface)
 		=> $"{className} لا ينفذ {interfaceName}. المفقود: {missingSuperInterface}.";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className,
-		IReadOnlySet<CString> missingSuperInterfaces)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className,
+		IReadOnlySet<String> missingSuperInterfaces)
 		=> $"{className} لا ينفذ {interfaceName}. القيم المفقودة: {String.Join(", ", missingSuperInterfaces)}.";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName)
 		=> $"{interfaceName} لا يمكن أن يمتد {superInterfaceName}.";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName,
-		CString missingSuperInterface)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName,
+		String missingSuperInterface)
 		=> $"{interfaceName} لا يمكن أن يمتد {superInterfaceName}. مفقود: {missingSuperInterface}.";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName,
-		IReadOnlySet<CString> missingSuperInterfaces)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName,
+		IReadOnlySet<String> missingSuperInterfaces)
 		=> $"{interfaceName} لا يمكن أن يمتد {superInterfaceName}. القيم المفقودة: {String.Join(", ", missingSuperInterfaces)}.";
 
 	String IMessageResource.InvalidOrdinal(String enumTypeName)
@@ -99,7 +98,7 @@ internal sealed class ArabicMessageResource : IMessageResource
 	String IMessageResource.InvalidBuilderType(String typeName, String expectedBuilder)
 		=> $"يجب بناء {typeName} باستخدام {expectedBuilder}.";
 	String IMessageResource.InvalidReferenceType(String typeName) => $"{typeName} ليس نوع مرجع صالح.";
-	String IMessageResource.NotTypeObject(CString objectClassName, CString className)
+	String IMessageResource.NotTypeObject(String objectClassName, String className)
 		=> $"{objectClassName} ليس كائن نوع صالح لـ {className}.";
 
 	String IMessageResource.MainClassGlobalError(String mainClassName)
@@ -119,6 +118,7 @@ internal sealed class ArabicMessageResource : IMessageResource
 		=> $"بيئة JNI الحالية في حالة غير صالحة لاستدعاء {functionName} بأمان.";
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} يتطلب الإصدار 0x{requiredVersion:x8}، لكن الإصدار الحالي هو 0x{currentVersion:x8}.";
+	String IMessageResource.InvalidArrayClass(String className) => $"{className} ليس فئة مصفوفة.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

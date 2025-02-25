@@ -177,7 +177,8 @@ public sealed partial class TypeMetadataBuilderTests
 
 	private sealed class InvalidAnnotation : JAnnotationObject<InvalidAnnotation>, IInterfaceType<InvalidAnnotation>
 	{
-		public static CString SerializableName => IInterfaceType.GetMetadata<JSerializableObject>().ClassName;
+		public static String SerializableName
+			=> ClassNameHelper.GetClassName(IInterfaceType.GetMetadata<JSerializableObject>().Signature);
 		public static ReadOnlySpan<Byte> Name => "fake/invalid/InvalidSubInterface"u8;
 		public static JInterfaceTypeMetadata<InvalidAnnotation> Metadata
 			=> TypeMetadataBuilder<InvalidAnnotation>.Create(InvalidAnnotation.Name).Extends<JSerializableObject>()
@@ -191,8 +192,10 @@ public sealed partial class TypeMetadataBuilderTests
 		IInterfaceObject<JGenericDeclarationObject>, IInterfaceObject<JAnnotatedElementObject>,
 		IInterfaceObject<JCloneableObject>
 	{
-		public static readonly CString[] Interfaces =
-			IInterfaceType.GetMetadata<SubInterface>().Interfaces.Select(i => i.ClassName).ToArray();
+		public static readonly String[] Interfaces = IInterfaceType.GetMetadata<SubInterface>().Interfaces
+		                                                           .Select(
+			                                                           i => ClassNameHelper.GetClassName(i.Signature))
+		                                                           .ToArray();
 		public static ReadOnlySpan<Byte> Name => "fake/invalid/SubInterface"u8;
 		public static JInterfaceTypeMetadata<SubInterface> Metadata
 			=> TypeMetadataBuilder<SubInterface>.Create(SubInterface.Name).Extends<JGenericDeclarationObject>()
@@ -205,8 +208,10 @@ public sealed partial class TypeMetadataBuilderTests
 	private sealed class InvalidImplementation1 : JLocalObject.Uninstantiable<InvalidImplementation1>,
 		IInterfaceObject<JGenericDeclarationObject>, IUninstantiableType<InvalidImplementation1>
 	{
-		public static CString Missing => IInterfaceType.GetMetadata<JAnnotatedElementObject>().ClassName;
-		public static CString Error => IInterfaceType.GetMetadata<JGenericDeclarationObject>().ClassName;
+		public static String Missing
+			=> ClassNameHelper.GetClassName(IInterfaceType.GetMetadata<JAnnotatedElementObject>().Signature);
+		public static String Error
+			=> ClassNameHelper.GetClassName(IInterfaceType.GetMetadata<JGenericDeclarationObject>().Signature);
 		public static ReadOnlySpan<Byte> Name => "fake/invalid/InvalidImplementation1"u8;
 
 		public static JClassTypeMetadata<InvalidImplementation1> Metadata
@@ -227,7 +232,8 @@ public sealed partial class TypeMetadataBuilderTests
 	private sealed class InvalidImplementation3 : JLocalObject.Uninstantiable<InvalidImplementation3>,
 		IUninstantiableType<InvalidImplementation3>
 	{
-		public static CString Error => IInterfaceType.GetMetadata<JGenericDeclarationObject>().ClassName;
+		public static String Error
+			=> ClassNameHelper.GetClassName(IInterfaceType.GetMetadata<JGenericDeclarationObject>().Signature);
 		public static ReadOnlySpan<Byte> Name => "fake/invalid/InvalidImplementation3"u8;
 
 		public static JClassTypeMetadata<InvalidImplementation3> Metadata
@@ -238,8 +244,10 @@ public sealed partial class TypeMetadataBuilderTests
 	private sealed class InvalidExtension1 : JInterfaceObject<InvalidExtension1>,
 		IInterfaceObject<JGenericDeclarationObject>, IInterfaceType<InvalidExtension1>
 	{
-		public static CString Missing => IInterfaceType.GetMetadata<JAnnotatedElementObject>().ClassName;
-		public static CString Error => IInterfaceType.GetMetadata<JGenericDeclarationObject>().ClassName;
+		public static String Missing
+			=> ClassNameHelper.GetClassName(IInterfaceType.GetMetadata<JAnnotatedElementObject>().Signature);
+		public static String Error
+			=> ClassNameHelper.GetClassName(IInterfaceType.GetMetadata<JGenericDeclarationObject>().Signature);
 		public static ReadOnlySpan<Byte> Name => "fake/invalid/InvalidExtension1"u8;
 		public static JInterfaceTypeMetadata<InvalidExtension1> Metadata
 			=> TypeMetadataBuilder<InvalidExtension1>.Create(InvalidExtension1.Name)
@@ -264,7 +272,8 @@ public sealed partial class TypeMetadataBuilderTests
 
 	private sealed class InvalidExtension3 : JInterfaceObject<InvalidExtension3>, IInterfaceType<InvalidExtension3>
 	{
-		public static CString Error => IInterfaceType.GetMetadata<JGenericDeclarationObject>().ClassName;
+		public static String Error
+			=> ClassNameHelper.GetClassName(IInterfaceType.GetMetadata<JGenericDeclarationObject>().Signature);
 		public static ReadOnlySpan<Byte> Name => "fake/invalid/InvalidExtension3"u8;
 		public static JInterfaceTypeMetadata<InvalidExtension3> Metadata
 			=> TypeMetadataBuilder<InvalidExtension3>.Create(InvalidExtension3.Name)

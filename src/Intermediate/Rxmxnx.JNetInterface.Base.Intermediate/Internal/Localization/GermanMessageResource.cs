@@ -52,37 +52,36 @@ internal sealed class GermanMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "Inkompatible JVM-Bibliothek.";
 	String IMessageResource.UnmanagedMemoryContext => "Der Speicherblock ist nicht verwaltet.";
 
-	String IMessageResource.InvalidInstantiation(CString className) => $"{className} ist kein instanziierbarer Typ.";
+	String IMessageResource.InvalidInstantiation(String className) => $"{className} ist kein instanziierbarer Typ.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Ungültige Umwandlung in {type}.";
-	String IMessageResource.InvalidCastTo(CString className)
+	String IMessageResource.InvalidCastTo(String className)
 		=> $"Die aktuelle Instanz kann nicht in den Typ {className} umgewandelt werden.";
 	String IMessageResource.EmptyString(String paramName) => $"{paramName} muss eine nicht-leere Zeichenkette sein.";
-	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
+	String IMessageResource.InvalidMetadata(String className, Type typeOfT)
 		=> $"Die Datentyp-Metadaten für {className} stimmen nicht mit dem Typ {typeOfT} überein.";
-	String IMessageResource.AbstractClass(CString className) => $"{className} ist ein abstrakter Typ.";
+	String IMessageResource.AbstractClass(String className) => $"{className} ist ein abstrakter Typ.";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} kann keine Schnittstelle erweitern, die sie bereits erweitert.";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} und ihre übergeordnete Schnittstelle können nicht dieselbe sein.";
 	String IMessageResource.SameClassExtension(String className)
 		=> $"{className} und ihre Superklasse können nicht dieselbe sein.";
-	String IMessageResource.AnnotationType(CString interfaceName, String annotationName)
+	String IMessageResource.AnnotationType(String interfaceName, String annotationName)
 		=> $"Erweiterung von {interfaceName} nicht möglich. {annotationName} ist eine Annotation.";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className)
 		=> $"{className} implementiert {interfaceName} nicht.";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className,
-		CString missingSuperInterface)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className, String missingSuperInterface)
 		=> $"{className} implementiert {interfaceName} nicht. Fehlend: {missingSuperInterface}.";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className,
-		IReadOnlySet<CString> missingSuperInterfaces)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className,
+		IReadOnlySet<String> missingSuperInterfaces)
 		=> $"{className} implementiert {interfaceName} nicht. Fehlend: {String.Join(", ", missingSuperInterfaces)}.";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName)
 		=> $"{interfaceName} kann {superInterfaceName} nicht erweitern.";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName,
-		CString missingSuperInterface)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName,
+		String missingSuperInterface)
 		=> $"{interfaceName} kann {superInterfaceName} nicht erweitern. Fehlend: {missingSuperInterface}.";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName,
-		IReadOnlySet<CString> missingSuperInterfaces)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName,
+		IReadOnlySet<String> missingSuperInterfaces)
 		=> $"{interfaceName} kann {superInterfaceName} nicht erweitern. Fehlend: {String.Join(", ", missingSuperInterfaces)}.";
 	String IMessageResource.InvalidOrdinal(String enumTypeName)
 		=> $"Der Ordinalwert für {enumTypeName} muss null oder positiv sein.";
@@ -100,7 +99,7 @@ internal sealed class GermanMessageResource : IMessageResource
 	String IMessageResource.InvalidBuilderType(String typeName, String expectedBuilder)
 		=> $"{typeName} muss mit {expectedBuilder} erstellt werden.";
 	String IMessageResource.InvalidReferenceType(String typeName) => $"{typeName} ist kein gültiger Referenztyp.";
-	String IMessageResource.NotTypeObject(CString objectClassName, CString className)
+	String IMessageResource.NotTypeObject(String objectClassName, String className)
 		=> $"{objectClassName} ist kein Typobjekt für {className}.";
 	String IMessageResource.MainClassGlobalError(String mainClassName)
 		=> $"Fehler beim Erstellen einer JNI-Globalreferenz für die Klasse {mainClassName}.";
@@ -119,6 +118,7 @@ internal sealed class GermanMessageResource : IMessageResource
 		=> $"Die aktuelle JNI-Umgebung befindet sich in einem ungültigen Zustand, um {functionName} sicher aufzurufen.";
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} erfordert Version 0x{requiredVersion:x8}, aber die aktuelle Version ist 0x{currentVersion:x8}.";
+	String IMessageResource.InvalidArrayClass(String className) => $"{className} ist keine Array-Klasse.";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

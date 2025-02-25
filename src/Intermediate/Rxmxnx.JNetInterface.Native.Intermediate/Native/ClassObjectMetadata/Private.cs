@@ -6,7 +6,7 @@ public partial record ClassObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
-	private ClassObjectMetadata(ITypeInformation metadata) : base(IClassType.GetMetadata<JClassObject>())
+	private ClassObjectMetadata(ITypeInformation metadata) : base(IClassType.GetMetadata<JClassObject>(), null)
 	{
 		this.Name = metadata.ClassName;
 		this.ClassSignature = metadata.Signature;

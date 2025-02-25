@@ -67,7 +67,9 @@ public readonly ref partial struct JNativeCallAdapter
 
 			if (jClass.Name.AsSpan().SequenceEqual(env.ClassObject.Name)) return;
 			IMessageResource resource = IMessageResource.GetInstance();
-			String message = resource.NotTypeObject(jClass.Name, env.ClassObject.Name);
+			String objectClassName = ClassNameHelper.GetClassName(jClass.ClassSignature);
+			String className = ClassNameHelper.GetClassName(env.ClassObject.ClassSignature);
+			String message = resource.NotTypeObject(objectClassName, className);
 			throw new ArgumentException(message);
 		}
 		/// <inheritdoc

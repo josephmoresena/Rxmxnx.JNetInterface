@@ -12,5 +12,5 @@ internal readonly struct SuperInterfaceValidationState
 	/// <summary>
 	/// Name of excluded interfaces.
 	/// </summary>
-	public HashSet<CString> NotContained { get; init; }
+	public HashSet<String> NotContained { get; init; }
 }

@@ -12,6 +12,8 @@ public abstract partial class EnvironmentProxy
 	public abstract VirtualMachineProxy VirtualMachine { get; }
 	/// <inheritdoc/>
 	public abstract JClassObject ClassObject { get; }
+	/// <inheritdoc/>
+	public abstract JClassObject VoidPrimitive { get; }
 	/// <inheritdoc cref="IEnvironment.PendingException"/>
 	public abstract ThrowableException? PendingException { get; set; }
 	/// <inheritdoc/>
@@ -23,24 +25,81 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract Int32 Version { get; }
 	/// <inheritdoc/>
-	public abstract Int32? LocalCapacity { get; set; }
+	public virtual Int32? LocalCapacity { get; set; }
 
 	/// <inheritdoc/>
-	public abstract Boolean IsValidationAvoidable(JGlobalBase jGlobal);
+	public virtual Boolean IsValidationAvoidable(JGlobalBase jGlobal) => true;
 	/// <inheritdoc/>
-	public abstract JReferenceType GetReferenceType(JObject jObject);
+	public virtual JReferenceType GetReferenceType(JObject jObject)
+	{
+		return jObject switch
+		{
+			JGlobal => JReferenceType.GlobalRefType,
+			JWeak => JReferenceType.WeakGlobalRefType,
+			JLocalObject => JReferenceType.LocalRefType,
+			_ => JReferenceType.InvalidRefType,
+		};
+	}
 	/// <inheritdoc/>
 	public abstract Boolean IsSameObject(JObject jObject, JObject? jOther);
 	/// <inheritdoc/>
 	public abstract Boolean JniSecure();
 	/// <inheritdoc/>
-	public abstract void WithFrame(Int32 capacity, Action action);
+	public virtual void WithFrame(Int32 capacity, Action action)
+	{
+		Int32? oldCapacity = capacity;
+		try
+		{
+			this.LocalCapacity = capacity;
+			action();
+		}
+		finally
+		{
+			this.LocalCapacity = oldCapacity;
+		}
+	}
 	/// <inheritdoc/>
-	public abstract void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action);
+	public virtual void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
+	{
+		Int32? oldCapacity = capacity;
+		try
+		{
+			this.LocalCapacity = capacity;
+			action(state);
+		}
+		finally
+		{
+			this.LocalCapacity = oldCapacity;
+		}
+	}
 	/// <inheritdoc/>
-	public abstract TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func);
+	public virtual TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func)
+	{
+		Int32? oldCapacity = capacity;
+		try
+		{
+			this.LocalCapacity = capacity;
+			return func();
+		}
+		finally
+		{
+			this.LocalCapacity = oldCapacity;
+		}
+	}
 	/// <inheritdoc/>
-	public abstract TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
+	public virtual TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
+	{
+		Int32? oldCapacity = capacity;
+		try
+		{
+			this.LocalCapacity = capacity;
+			return func(state);
+		}
+		finally
+		{
+			this.LocalCapacity = oldCapacity;
+		}
+	}
 	/// <inheritdoc/>
 	public abstract void DescribeException();
 	/// <inheritdoc/>
@@ -141,9 +200,9 @@ public abstract partial class EnvironmentProxy
 	/// <summary>
 	/// Retrieves the class info.
 	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="jClass">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>A <see cref="ITypeInformation"/> instance.</returns>
-	public abstract ITypeInformation GetClassInfo(JClassObject jClass);
+	public abstract ITypeInformation GetClassInfo(JReferenceObject jClass);
 	#endregion
 
 	#region IStringFeature

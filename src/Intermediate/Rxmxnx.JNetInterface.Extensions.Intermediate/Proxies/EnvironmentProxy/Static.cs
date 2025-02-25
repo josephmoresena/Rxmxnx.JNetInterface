@@ -11,8 +11,57 @@ public abstract partial class EnvironmentProxy
 	/// Creates a <see cref="JClassObject"/> for <c>java.lang.Class&lt;?&gt;</c> data type.
 	/// </summary>
 	/// <param name="env">A <see cref="EnvironmentProxy"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
 	/// <returns>A <see cref="JClassObject"/> for <c>java.lang.Class&lt;?&gt;</c> data type.</returns>
-	public static JClassObject CreateClassObject(EnvironmentProxy env) => new(env);
+	public static JClassObject CreateClassObject(EnvironmentProxy env, JClassLocalRef classRef = default)
+	{
+		JClassObject result = new(env);
+		result.SetValue(classRef);
+		return result;
+	}
+	/// <summary>
+	/// Creates a <see cref="JClassObject"/> for <typeparamref name="TDataType"/> data type.
+	/// </summary>
+	/// <typeparam name="TDataType">A <see cref="IDataType{TDataType}"/> type.</typeparam>
+	/// <param name="jClass">The <c>java.lang.Class&lt;?&gt;</c> <see cref="JClassObject"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JClassObject"/> for <typeparamref name="TDataType"/> data type.</returns>
+	public static JClassObject CreateClassObject<TDataType>(JClassObject jClass, JClassLocalRef classRef = default)
+		where TDataType : IDataType<TDataType>
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jClass);
+		EnvironmentProxy.ThrowIfNotClass(jClass, IDataType.GetMetadata<JClassObject>());
+		return new(jClass, IDataType.GetMetadata<TDataType>(), classRef);
+	}
+	/// <summary>
+	/// Creates a <see cref="JClassObject"/> for <paramref name="className"/> data type.
+	/// </summary>
+	/// <param name="jClass">The <c>java.lang.Class&lt;?&gt;</c> <see cref="JClassObject"/> instance.</param>
+	/// <param name="className">Class name.</param>
+	/// <param name="kind">Class kind.</param>
+	/// <param name="isFinal">Indicates whether resulting class is final.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JClassObject"/> for <paramref name="className"/> data type.</returns>
+	public static JClassObject CreateClassObject(JClassObject jClass, ReadOnlySpan<Byte> className, JTypeKind kind,
+		Boolean? isFinal = default, JClassLocalRef classRef = default)
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jClass);
+		EnvironmentProxy.ThrowIfNotClass(jClass, IDataType.GetMetadata<JClassObject>());
+		ClassObjectMetadata classMetadata = new(jClass, new(className), kind, isFinal);
+		return new(jClass, classMetadata, classRef);
+	}
+	/// <summary>
+	/// Creates a <see cref="JClassObject"/> for <c>void</c> data type.
+	/// </summary>
+	/// <param name="jClass">The <c>java.lang.Class&lt;?&gt;</c> <see cref="JClassObject"/> instance.</param>
+	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JClassObject"/> for <c>void</c> data type.</returns>
+	public static JClassObject CreateVoidClassObject(JClassObject jClass, JClassLocalRef classRef = default)
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jClass);
+		EnvironmentProxy.ThrowIfNotClass(jClass, IDataType.GetMetadata<JClassObject>());
+		return new(jClass, JPrimitiveTypeMetadata.VoidMetadata, classRef);
+	}
 	/// <summary>
 	/// Creates a <see cref="JLocalObject"/> instance.
 	/// </summary>
@@ -21,6 +70,53 @@ public abstract partial class EnvironmentProxy
 	/// <returns>A <see cref="JLocalObject"/> instance.</returns>
 	public static JLocalObject CreateObject(JClassObject jClass, JObjectLocalRef localRef)
 		=> new(EnvironmentProxy.ThrowIfNotProxy(jClass), localRef);
+	/// <summary>
+	/// Creates a <see cref="JLocalObject"/> instance.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="stringRef">A <see cref="JStringLocalRef"/> reference.</param>
+	/// <param name="value">Initial string value.</param>
+	/// <returns>A <see cref="JLocalObject"/> instance.</returns>
+	public static JStringObject CreateString(JClassObject jClass, JStringLocalRef stringRef, String? value = default)
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jClass);
+		EnvironmentProxy.ThrowIfNotClass(jClass, IDataType.GetMetadata<JStringObject>());
+		return new(jClass, stringRef, value);
+	}
+	/// <summary>
+	/// Creates a <see cref="JArrayObject{TDataType}"/> instance.
+	/// </summary>
+	/// <typeparam name="TDataType">Array element type.</typeparam>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="arrayRef">A <see cref="JArrayLocalRef"/> reference.</param>
+	/// <param name="length">Array length.</param>
+	/// <returns>A <see cref="JArrayObject{TDataType}"/> instance.</returns>
+	public static JArrayObject<TDataType> CreateArrayObject<TDataType>(JClassObject jClass, JArrayLocalRef arrayRef,
+		Int32 length) where TDataType : IObject, IDataType<TDataType>
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jClass);
+		EnvironmentProxy.ThrowIfNotArrayClass(jClass, IDataType.GetMetadata<TDataType>());
+		return new(jClass, arrayRef, length);
+	}
+	/// <summary>
+	/// Creates a <see cref="ThrowableException"/> instance.
+	/// </summary>
+	/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
+	/// <param name="vm">A <see cref="VirtualMachineProxy"/> instance.</param>
+	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
+	/// <param name="jGlobal">Throwable global instance.</param>
+	/// <param name="message">Throwable message.</param>
+	/// <param name="stackTrace">Throwable stacktrace.</param>
+	/// <returns>A <see cref="ThrowableException"/> instance.</returns>
+	public static ThrowableException CreateException<TThrowable>(VirtualMachineProxy vm, JGlobalRef globalRef,
+		out JGlobalBase jGlobal, String? message = default, params StackTraceInfo[] stackTrace)
+		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+	{
+		JClassTypeMetadata throwableMetadata = IClassType.GetMetadata<TThrowable>();
+		ThrowableObjectMetadata objectMetadata = new(throwableMetadata, message, true) { StackTrace = stackTrace, };
+		jGlobal = new JGlobal(vm, objectMetadata, globalRef);
+		return throwableMetadata.CreateException(jGlobal, message)!;
+	}
 	/// <summary>
 	/// Creates a <typeparamref name="TGlobal"/> instance.
 	/// </summary>
@@ -74,17 +170,24 @@ public abstract partial class EnvironmentProxy
 		StackTraceElementObjectMetadata objectMetadata = new(new(element.Class)) { Information = info, };
 		ILocalObject.ProcessMetadata(element, objectMetadata);
 	}
-
 	/// <summary>
-	/// Throws an exception if <paramref name="jObject"/> is proxy.
+	/// Sets <see cref="JThrowableObject"/> instance.
+	/// </summary>
+	/// <param name="jThrowable">A <see cref="JThrowableObject"/> instance.</param>
+	/// <param name="threadId">Thread identifier to set to.</param>
+	public static void SetThreadId(JThrowableObject jThrowable, Int32? threadId)
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jThrowable);
+		jThrowable.ThreadId = threadId;
+	}
+	/// <summary>
+	/// Retrieves proxy identifier.
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
-	/// <exception cref="ArgumentException">Throws an exception if <paramref name="jObject"/> is proxy.</exception>
-	[return: NotNullIfNotNull(nameof(jObject))]
-	private static TObject? ThrowIfNotProxy<TObject>(TObject? jObject) where TObject : JReferenceObject
+	/// <returns>Proxy object identifier.</returns>
+	public static Int64 GetProxyId(JReferenceObject? jObject)
 	{
-		if (jObject is null || !jObject.IsProxy) return jObject;
-		IMessageResource resource = IMessageResource.GetInstance();
-		throw new ArgumentException(resource.InvalidProxyObject);
+		EnvironmentProxy.ThrowIfNotProxy(jObject);
+		return jObject?.Id ?? default;
 	}
 }

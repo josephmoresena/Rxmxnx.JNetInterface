@@ -49,32 +49,31 @@ internal sealed class ChineseMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "不兼容的 JVM 库。";
 	String IMessageResource.UnmanagedMemoryContext => "内存块未受管理。";
 
-	String IMessageResource.InvalidInstantiation(CString className) => $"{className} 不是可实例化的类型。";
+	String IMessageResource.InvalidInstantiation(String className) => $"{className} 不是可实例化的类型。";
 	String IMessageResource.InvalidCastTo(Type type) => $"无法转换为 {type}。";
-	String IMessageResource.InvalidCastTo(CString className) => $"当前实例无法转换为类型 {className}。";
+	String IMessageResource.InvalidCastTo(String className) => $"当前实例无法转换为类型 {className}。";
 	String IMessageResource.EmptyString(String paramName) => $"{paramName} 必须是非空字符串。";
-	String IMessageResource.InvalidMetadata(CString className, Type typeOfT) => $"{className} 的数据类型元数据与 {typeOfT} 不匹配。";
-	String IMessageResource.AbstractClass(CString className) => $"{className} 是抽象类型。";
+	String IMessageResource.InvalidMetadata(String className, Type typeOfT) => $"{className} 的数据类型元数据与 {typeOfT} 不匹配。";
+	String IMessageResource.AbstractClass(String className) => $"{className} 是抽象类型。";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName) => $"{interfaceName} 不能扩展自身的超接口。";
 	String IMessageResource.SameInterfaceExtension(String interfaceName) => $"{interfaceName} 和其超接口不能相同。";
 	String IMessageResource.SameClassExtension(String className) => $"{className} 和其超类不能相同。";
-	String IMessageResource.AnnotationType(CString interfaceName, String annotationName)
+	String IMessageResource.AnnotationType(String interfaceName, String annotationName)
 		=> $"无法扩展 {interfaceName}。{annotationName} 是一个注解。";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className)
 		=> $"{className} 没有实现 {interfaceName}。";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className,
-		CString missingSuperInterface)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className, String missingSuperInterface)
 		=> $"{className} 没有实现 {interfaceName}，缺少: {missingSuperInterface}。";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className,
-		IReadOnlySet<CString> missingSuperInterfaces)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className,
+		IReadOnlySet<String> missingSuperInterfaces)
 		=> $"{className} 没有实现 {interfaceName}，缺少: {String.Join(", ", missingSuperInterfaces)}。";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName)
 		=> $"{interfaceName} 不能扩展 {superInterfaceName}。";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName,
-		CString missingSuperInterface)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName,
+		String missingSuperInterface)
 		=> $"{interfaceName} 不能扩展 {superInterfaceName}，缺少: {missingSuperInterface}。";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName,
-		IReadOnlySet<CString> missingSuperInterfaces)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName,
+		IReadOnlySet<String> missingSuperInterfaces)
 		=> $"{interfaceName} 不能扩展 {superInterfaceName}，缺少: {String.Join(", ", missingSuperInterfaces)}。";
 	String IMessageResource.InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)
 		=> ChineseMessageResource.InvalidValueList(enumTypeName, count, maxOrdinal);
@@ -84,7 +83,7 @@ internal sealed class ChineseMessageResource : IMessageResource
 	String IMessageResource.InvalidBuilderType(String typeName, String expectedBuilder)
 		=> $"{typeName} 必须使用 {expectedBuilder} 进行构建。";
 	String IMessageResource.InvalidReferenceType(String typeName) => $"{typeName} 不是有效的引用类型。";
-	String IMessageResource.NotTypeObject(CString objectClassName, CString className)
+	String IMessageResource.NotTypeObject(String objectClassName, String className)
 		=> $"{objectClassName} 不是 {className} 的类型对象。";
 	String IMessageResource.MainClassGlobalError(String mainClassName) => $"创建 {mainClassName} 类的 JNI 全局引用时出错。";
 	String IMessageResource.MainClassUnavailable(String mainClassName) => $"主类 {mainClassName} 不可用。";
@@ -104,6 +103,7 @@ internal sealed class ChineseMessageResource : IMessageResource
 	String IMessageResource.CallOnUnsafe(String functionName) => $"当前 JNI 环境处于无效状态，无法安全调用 {functionName}。";
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} 需要版本 0x{requiredVersion:x8}，但当前版本为 0x{currentVersion:x8}。";
+	String IMessageResource.InvalidArrayClass(String className) => $"{className} 不是数组类。";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

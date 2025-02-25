@@ -142,7 +142,7 @@ internal partial interface IMessageResource
 	/// <summary>
 	/// Message for instantiation exception.
 	/// </summary>
-	String InvalidInstantiation(CString className);
+	String InvalidInstantiation(String className);
 	/// <summary>
 	/// Message for invalid casting exception.
 	/// </summary>
@@ -150,7 +150,7 @@ internal partial interface IMessageResource
 	/// <summary>
 	/// Message for invalid casting exception.
 	/// </summary>
-	String InvalidCastTo(CString className);
+	String InvalidCastTo(String className);
 	/// <summary>
 	/// Message for invalid casting exception.
 	/// </summary>
@@ -158,11 +158,11 @@ internal partial interface IMessageResource
 	/// <summary>
 	/// Message for invalid metadata exception.
 	/// </summary>
-	String InvalidMetadata(CString className, Type typeOfT);
+	String InvalidMetadata(String className, Type typeOfT);
 	/// <summary>
 	/// Message for abstract class exception.
 	/// </summary>
-	String AbstractClass(CString className);
+	String AbstractClass(String className);
 	/// <summary>
 	/// Message for invalid interface extension exception.
 	/// </summary>
@@ -178,32 +178,32 @@ internal partial interface IMessageResource
 	/// <summary>
 	/// Message for annotation type exception.
 	/// </summary>
-	String AnnotationType(CString interfaceName, String annotationName);
+	String AnnotationType(String interfaceName, String annotationName);
 	/// <summary>
 	/// Message for invalid interface implementation exception.
 	/// </summary>
-	String InvalidImplementation(CString interfaceName, String className);
+	String InvalidImplementation(String interfaceName, String className);
 	/// <summary>
 	/// Message for invalid interface implementation exception.
 	/// </summary>
-	String InvalidImplementation(CString interfaceName, String className, CString missingSuperInterface);
+	String InvalidImplementation(String interfaceName, String className, String missingSuperInterface);
 	/// <summary>
 	/// Message for invalid interface implementation exception.
 	/// </summary>
-	String InvalidImplementation(CString interfaceName, String className, IReadOnlySet<CString> missingSuperInterfaces);
+	String InvalidImplementation(String interfaceName, String className, IReadOnlySet<String> missingSuperInterfaces);
 	/// <summary>
 	/// Message for invalid interface extension exception.
 	/// </summary>
-	String InvalidExtension(CString superInterfaceName, String interfaceName);
+	String InvalidExtension(String superInterfaceName, String interfaceName);
 	/// <summary>
 	/// Message for invalid interface extension exception.
 	/// </summary>
-	String InvalidExtension(CString superInterfaceName, String interfaceName, CString missingSuperInterface);
+	String InvalidExtension(String superInterfaceName, String interfaceName, String missingSuperInterface);
 	/// <summary>
 	/// Message for invalid interface extension exception.
 	/// </summary>
-	String InvalidExtension(CString superInterfaceName, String interfaceName,
-		IReadOnlySet<CString> missingSuperInterfaces);
+	String InvalidExtension(String superInterfaceName, String interfaceName,
+		IReadOnlySet<String> missingSuperInterfaces);
 	/// <summary>
 	/// Message for invalid ordinal exception.
 	/// </summary>
@@ -239,7 +239,7 @@ internal partial interface IMessageResource
 	/// <summary>
 	/// Message for invalid class instance exception.
 	/// </summary>
-	String NotTypeObject(CString objectClassName, CString className);
+	String NotTypeObject(String objectClassName, String className);
 	/// <summary>
 	/// Message for main class global error exception.
 	/// </summary>
@@ -272,4 +272,8 @@ internal partial interface IMessageResource
 	/// Message for invalid call version exception.
 	/// </summary>
 	String InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion);
+	/// <summary>
+	/// Message for invalid array class exception.
+	/// </summary>
+	String InvalidArrayClass(String className);
 }

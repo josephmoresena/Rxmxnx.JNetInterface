@@ -41,6 +41,32 @@ public partial record ClassObjectMetadata
 			_ => isFinal,
 		};
 	}
+	/// <summary>
+	/// Constructor.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="typeInfo">Class information.</param>
+	/// <param name="kind">Class kind.</param>
+	/// <param name="isFinal">Indicates whether class type is final.</param>
+	[ExcludeFromCodeCoverage]
+	internal ClassObjectMetadata(JClassObject jClass, TypeInfoSequence typeInfo, JTypeKind kind = JTypeKind.Undefined,
+		Boolean? isFinal = default) : base(jClass)
+	{
+		this.Name = typeInfo.Name;
+		this.ClassSignature = typeInfo.Signature;
+		this.Hash = typeInfo.Hash;
+		this.ArrayDimension = typeInfo.Name.AsSpan().Count([CommonNames.ArraySignaturePrefixChar,]);
+		this.IsInterface = kind != JTypeKind.Undefined ? kind is JTypeKind.Interface or JTypeKind.Annotation : null;
+		this.IsEnum = kind != JTypeKind.Undefined ? kind is JTypeKind.Enum : null;
+		this.IsAnnotation = kind != JTypeKind.Undefined ? kind is JTypeKind.Annotation : null;
+		this.IsFinal = isFinal switch
+		{
+			null when kind is JTypeKind.Primitive or JTypeKind.Enum => true,
+			null when kind is JTypeKind.Interface or JTypeKind.Annotation => false,
+			null => null,
+			_ => isFinal,
+		};
+	}
 
 	/// <summary>
 	/// Retrieves <see cref="JTypeKind"/> value from <paramref name="classMetadata"/>.

@@ -51,37 +51,36 @@ internal sealed class RussianMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "Несовместимая библиотека JVM.";
 	String IMessageResource.UnmanagedMemoryContext => "Блок памяти не управляем.";
 
-	String IMessageResource.InvalidInstantiation(CString className) => $"{className} не является создаваемым типом.";
+	String IMessageResource.InvalidInstantiation(String className) => $"{className} не является создаваемым типом.";
 	String IMessageResource.InvalidCastTo(Type type) => $"Недопустимое приведение к {type}.";
-	String IMessageResource.InvalidCastTo(CString className)
+	String IMessageResource.InvalidCastTo(String className)
 		=> $"Текущий экземпляр не может быть приведен к типу {className}.";
 	String IMessageResource.EmptyString(String paramName) => $"{paramName} должен быть непустой строкой.";
-	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
+	String IMessageResource.InvalidMetadata(String className, Type typeOfT)
 		=> $"Метаданные типа данных для {className} не соответствуют типу {typeOfT}.";
-	String IMessageResource.AbstractClass(CString className) => $"{className} является абстрактным типом.";
+	String IMessageResource.AbstractClass(String className) => $"{className} является абстрактным типом.";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} не может расширять интерфейс, который уже его расширяет.";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} и его супер-интерфейс не могут быть одинаковыми.";
 	String IMessageResource.SameClassExtension(String className)
 		=> $"{className} и его суперкласс не могут быть одинаковыми.";
-	String IMessageResource.AnnotationType(CString interfaceName, String annotationName)
+	String IMessageResource.AnnotationType(String interfaceName, String annotationName)
 		=> $"Невозможно расширить {interfaceName}. {annotationName} является аннотацией.";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className)
 		=> $"{className} не реализует {interfaceName}.";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className,
-		CString missingSuperInterface)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className, String missingSuperInterface)
 		=> $"{className} не реализует {interfaceName}. Отсутствует: {missingSuperInterface}.";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className,
-		IReadOnlySet<CString> missingSuperInterfaces)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className,
+		IReadOnlySet<String> missingSuperInterfaces)
 		=> $"{className} не реализует {interfaceName}. Отсутствуют: {String.Join(", ", missingSuperInterfaces)}.";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName)
 		=> $"{interfaceName} не может расширять {superInterfaceName}.";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName,
-		CString missingSuperInterface)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName,
+		String missingSuperInterface)
 		=> $"{interfaceName} не может расширять {superInterfaceName}. Отсутствует: {missingSuperInterface}.";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName,
-		IReadOnlySet<CString> missingSuperInterfaces)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName,
+		IReadOnlySet<String> missingSuperInterfaces)
 		=> $"{interfaceName} не может расширять {superInterfaceName}. Отсутствуют: {String.Join(", ", missingSuperInterfaces)}.";
 	String IMessageResource.InvalidOrdinal(String enumTypeName)
 		=> $"Порядковый номер для {enumTypeName} должен быть нулевым или положительным.";
@@ -99,7 +98,7 @@ internal sealed class RussianMessageResource : IMessageResource
 		=> $"{typeName} должен быть построен с использованием {expectedBuilder}.";
 	String IMessageResource.InvalidReferenceType(String typeName)
 		=> $"{typeName} не является допустимым ссылочным типом.";
-	String IMessageResource.NotTypeObject(CString objectClassName, CString className)
+	String IMessageResource.NotTypeObject(String objectClassName, String className)
 		=> $"{objectClassName} не является объектом типа для {className}.";
 	String IMessageResource.MainClassGlobalError(String mainClassName)
 		=> $"Ошибка при создании глобальной ссылки JNI для класса {mainClassName}.";
@@ -117,6 +116,8 @@ internal sealed class RussianMessageResource : IMessageResource
 		=> $"Текущая среда JNI находится в некорректном состоянии для безопасного вызова {functionName}.";
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} требует версию 0x{requiredVersion:x8}, но текущая версия 0x{currentVersion:x8}.";
+	String IMessageResource.InvalidArrayClass(String className) => $"{className} не является классом массива.";
+
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)
 		=> $"Список полей перечисления для {enumTypeName} некорректен. Количество: {count}, Максимальный порядковый номер: {maxOrdinal}.";

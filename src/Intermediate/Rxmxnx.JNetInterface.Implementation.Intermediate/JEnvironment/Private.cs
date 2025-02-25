@@ -288,7 +288,7 @@ partial class JEnvironment
 		this._cache.ClearException(); // Clears JNI exception.
 
 		IMessageResource resource = IMessageResource.GetInstance();
-		String className = ClassNameHelper.GetClassName(typeInformation.ClassName);
+		String className = ClassNameHelper.GetClassName(typeInformation.Signature);
 		String message = resource.MainClassGlobalError(className);
 		throw new NotSupportedException(message);
 	}

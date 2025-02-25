@@ -177,4 +177,18 @@ public abstract partial class NativeFunctionSet
 	/// <param name="jField">A <see cref="JExecutableObject"/> instance.</param>
 	/// <returns>A <see cref="JClassObject"/> instance.</returns>
 	public abstract JClassObject GetFieldType(JFieldObject jField);
+#if PACKAGE
+	/// <summary>
+	/// Retrieves the <see cref="JBoolean"/> value of <paramref name="JBooleanObject"/>.
+	/// </summary>
+	/// <param name="jBooleanObject">A <see cref="JCharacterObject"/> instance.</param>
+	/// <returns>A <see cref="JBoolean"/> value.</returns>
+	public abstract JBoolean GetValue(JBooleanObject jBooleanObject);
+	/// <summary>
+	/// Retrieves the <see cref="JChar"/> value of <paramref name="jCharacterObject"/>.
+	/// </summary>
+	/// <param name="jCharacterObject">A <see cref="JCharacterObject"/> instance.</param>
+	/// <returns>A <see cref="JChar"/> value.</returns>
+	public abstract JChar GetValue(JCharacterObject jCharacterObject);
+#endif
 }

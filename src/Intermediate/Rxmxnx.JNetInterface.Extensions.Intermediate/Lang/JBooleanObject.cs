@@ -23,8 +23,12 @@ public sealed partial class JBooleanObject : JLocalObject, IPrimitiveEquatable,
 	/// Internal value.
 	/// </summary>
 	public JBoolean Value
-		=> this._value ??= JFunctionDefinition.Invoke(NativeFunctionSetImpl.BooleanValueDefinition, this,
-		                                              this.Environment.ClassFeature.BooleanObject);
+		=> this._value ??=
+#if !PACKAGE
+			NativeFunctionSetImpl.GetValue(this);
+#else
+			this.Environment.FunctionSet.GetValue(this);
+#endif
 
 	/// <inheritdoc/>
 	public Boolean Equals(JBoolean other) => this.Value.Equals(other);

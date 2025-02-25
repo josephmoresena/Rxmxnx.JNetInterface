@@ -2,7 +2,6 @@ namespace Rxmxnx.JNetInterface.Proxies;
 
 public abstract partial class EnvironmentProxy
 {
-	JClassObject IClassFeature.VoidPrimitive => new(this.ClassObject, JPrimitiveTypeMetadata.VoidMetadata);
 	JClassObject IClassFeature.BooleanPrimitive => this.GetClass<JBoolean>();
 	JClassObject IClassFeature.BytePrimitive => this.GetClass<JByte>();
 	JClassObject IClassFeature.CharPrimitive => this.GetClass<JChar>();

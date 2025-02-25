@@ -49,34 +49,33 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.IncompatibleLibrary => "互換性のない JVM ライブラリです。";
 	String IMessageResource.UnmanagedMemoryContext => "メモリブロックはアンマネージドです。";
 
-	String IMessageResource.InvalidInstantiation(CString className) => $"{className} はインスタンス化できない型です。";
+	String IMessageResource.InvalidInstantiation(String className) => $"{className} はインスタンス化できない型です。";
 	String IMessageResource.InvalidCastTo(Type type) => $"{type} へのキャストが無効です。";
-	String IMessageResource.InvalidCastTo(CString className) => $"現在のインスタンスは {className} 型にキャストできません。";
+	String IMessageResource.InvalidCastTo(String className) => $"現在のインスタンスは {className} 型にキャストできません。";
 	String IMessageResource.EmptyString(String paramName) => $"{paramName} は空でない文字列である必要があります。";
-	String IMessageResource.InvalidMetadata(CString className, Type typeOfT)
+	String IMessageResource.InvalidMetadata(String className, Type typeOfT)
 		=> $"{className} のデータ型メタデータが {typeOfT} と一致しません。";
-	String IMessageResource.AbstractClass(CString className) => $"{className} は抽象型です。";
+	String IMessageResource.AbstractClass(String className) => $"{className} は抽象型です。";
 	String IMessageResource.InvalidInterfaceExtension(String interfaceName) => $"{interfaceName} は拡張できません。";
 	String IMessageResource.SameInterfaceExtension(String interfaceName)
 		=> $"{interfaceName} とそのスーパ・インターフェースは同じであってはなりません。";
 	String IMessageResource.SameClassExtension(String className) => $"{className} とそのスーパークラスは同じであってはなりません。";
-	String IMessageResource.AnnotationType(CString interfaceName, String annotationName)
+	String IMessageResource.AnnotationType(String interfaceName, String annotationName)
 		=> $"{interfaceName} を拡張できません。{annotationName} はアノテーションです。";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className)
 		=> $"{className} は {interfaceName} を実装していません。";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className,
-		CString missingSuperInterface)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className, String missingSuperInterface)
 		=> $"{className} は {interfaceName} を実装していません。欠落: {missingSuperInterface}。";
-	String IMessageResource.InvalidImplementation(CString interfaceName, String className,
-		IReadOnlySet<CString> missingSuperInterfaces)
+	String IMessageResource.InvalidImplementation(String interfaceName, String className,
+		IReadOnlySet<String> missingSuperInterfaces)
 		=> $"{className} は {interfaceName} を実装していません。欠落: {String.Join(", ", missingSuperInterfaces)}。";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName)
 		=> $"{interfaceName} は {superInterfaceName} を拡張できません。";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName,
-		CString missingSuperInterface)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName,
+		String missingSuperInterface)
 		=> $"{interfaceName} は {superInterfaceName} を拡張できません。欠落: {missingSuperInterface}。";
-	String IMessageResource.InvalidExtension(CString superInterfaceName, String interfaceName,
-		IReadOnlySet<CString> missingSuperInterfaces)
+	String IMessageResource.InvalidExtension(String superInterfaceName, String interfaceName,
+		IReadOnlySet<String> missingSuperInterfaces)
 		=> $"{interfaceName} は {superInterfaceName} を拡張できません。欠落: {String.Join(", ", missingSuperInterfaces)}。";
 	String IMessageResource.InvalidOrdinal(String enumTypeName) => $"{enumTypeName} の序数は 0 以上である必要があります。";
 	String IMessageResource.DuplicateOrdinal(String enumTypeName, Int32 ordinal)
@@ -92,7 +91,7 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.InvalidBuilderType(String typeName, String expectedBuilder)
 		=> $"{typeName} は {expectedBuilder} を使用して構築する必要があります。";
 	String IMessageResource.InvalidReferenceType(String typeName) => $"{typeName} は無効な参照型です。";
-	String IMessageResource.NotTypeObject(CString objectClassName, CString className)
+	String IMessageResource.NotTypeObject(String objectClassName, String className)
 		=> $"{objectClassName} は {className} の型オブジェクトではありません。";
 	String IMessageResource.MainClassGlobalError(String mainClassName) => $"クラス {mainClassName} の JNI グローバル参照を作成できません。";
 	String IMessageResource.MainClassUnavailable(String mainClassName) => $"メインクラス {mainClassName} は利用できません。";
@@ -109,6 +108,7 @@ internal sealed class JapaneseMessageResource : IMessageResource
 	String IMessageResource.CallOnUnsafe(String functionName) => $"JNI 環境は現在、{functionName} を安全に呼び出すには無効な状態です。";
 	String IMessageResource.InvalidCallVersion(Int32 currentVersion, String functionName, Int32 requiredVersion)
 		=> $"{functionName} はバージョン 0x{requiredVersion:x8} を必要としますが、現在のバージョンは 0x{currentVersion:x8} です。";
+	String IMessageResource.InvalidArrayClass(String className) => $"{className} は配列クラスではありません。";
 
 	/// <inheritdoc cref="IMessageResource.InvalidValueList(String, Int32, Int32)"/>
 	private static String InvalidValueList(String enumTypeName, Int32 count, Int32 maxOrdinal)

@@ -27,9 +27,10 @@ public partial class JNativeCallAdapterTests
 			                                                              JClassLocalRef.FromReference(in localRef),
 			                                                              out _).Build().FinalizeCall());
 			Assert.Equal(
-				IMessageResource.GetInstance()
-				                .NotTypeObject(classTypeMetadata.ClassName,
-				                               IClassType.GetMetadata<JClassObject>().ClassName), ex.Message);
+				IMessageResource.GetInstance().NotTypeObject(ClassNameHelper.GetClassName(classTypeMetadata.Signature),
+				                                             ClassNameHelper.GetClassName(
+					                                             IClassType.GetMetadata<JClassObject>().Signature)),
+				ex.Message);
 
 			proxyEnv.Received(1).GetObjectRefType(localRef);
 			proxyEnv.Received(1).GetObjectClass(Arg.Any<JObjectLocalRef>());

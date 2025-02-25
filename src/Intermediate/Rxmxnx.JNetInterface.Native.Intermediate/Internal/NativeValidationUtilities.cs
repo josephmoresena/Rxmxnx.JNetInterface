@@ -16,7 +16,8 @@ internal static class NativeValidationUtilities
 	{
 		if (classTypeMetadata.Modifier != JTypeModifier.Abstract) return;
 		IMessageResource resource = IMessageResource.GetInstance();
-		String message = resource.AbstractClass(classTypeMetadata.ClassName);
+		String className = ClassNameHelper.GetClassName(classTypeMetadata.Signature);
+		String message = resource.AbstractClass(className);
 		throw new InvalidOperationException(message);
 	}
 	/// <summary>
@@ -77,7 +78,8 @@ internal static class NativeValidationUtilities
 	{
 		if (!isAnnotation) return;
 		IMessageResource resource = IMessageResource.GetInstance();
-		String message = resource.AnnotationType(interfaceMetadata.ClassName, typeName.GetString());
+		String interfaceName = ClassNameHelper.GetClassName(interfaceMetadata.Signature);
+		String message = resource.AnnotationType(interfaceName, typeName.GetString());
 		throw new InvalidOperationException(message);
 	}
 	/// <summary>
@@ -93,9 +95,10 @@ internal static class NativeValidationUtilities
 	{
 		IMessageResource resource = IMessageResource.GetInstance();
 		String typeNameString = typeName.GetString();
+		String interfaceName = ClassNameHelper.GetClassName(interfaceMetadata.Signature);
 		String message = isClass ?
-			resource.InvalidImplementation(interfaceMetadata.ClassName, typeNameString) :
-			resource.InvalidExtension(interfaceMetadata.ClassName, typeNameString);
+			resource.InvalidImplementation(interfaceName, typeNameString) :
+			resource.InvalidExtension(interfaceName, typeNameString);
 		throw new NotImplementedException(message);
 	}
 	/// <summary>
@@ -111,19 +114,20 @@ internal static class NativeValidationUtilities
 	/// some superinterfaces of <paramref name="interfaceMetadata"/>.
 	/// </exception>
 	public static void ThrowIfInvalidImplementation(ReadOnlySpan<Byte> typeName,
-		JInterfaceTypeMetadata interfaceMetadata, IReadOnlySet<CString> notContained, Boolean isClass)
+		JInterfaceTypeMetadata interfaceMetadata, IReadOnlySet<String> notContained, Boolean isClass)
 	{
 		if (notContained.Count == 0) return;
 		IMessageResource resource = IMessageResource.GetInstance();
 		String typeNameString = typeName.GetString();
+		String interfaceName = ClassNameHelper.GetClassName(interfaceMetadata.Signature);
 		String message = isClass switch
 		{
 			true when notContained.Count == 1 => resource.InvalidImplementation(
-				interfaceMetadata.ClassName, typeNameString, notContained.First()),
-			true => resource.InvalidImplementation(interfaceMetadata.ClassName, typeNameString, notContained),
+				interfaceName, typeNameString, notContained.First()),
+			true => resource.InvalidImplementation(interfaceName, typeNameString, notContained),
 			false when notContained.Count == 1 => resource.InvalidExtension(
-				interfaceMetadata.ClassName, typeNameString, notContained.First()),
-			_ => resource.InvalidExtension(interfaceMetadata.ClassName, typeNameString, notContained),
+				interfaceName, typeNameString, notContained.First()),
+			_ => resource.InvalidExtension(interfaceName, typeNameString, notContained),
 		};
 		throw new NotImplementedException(message);
 	}
