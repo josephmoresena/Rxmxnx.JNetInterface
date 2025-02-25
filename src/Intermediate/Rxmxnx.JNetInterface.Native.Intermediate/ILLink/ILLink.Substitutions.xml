@@ -12,7 +12,7 @@
                     body="stub"/>
             <method signature="System.Void ThrowInvalidImplementation(System.ReadOnlySpan`1&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Boolean)"
                     body="stub"/>
-            <method signature="System.Void ThrowIfInvalidImplementation(System.ReadOnlySpan`1&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Collections.Generic.IReadOnlySet`1&lt;Rxmxnx.PInvoke.CString&gt;,System.Boolean)"
+            <method signature="System.Void ThrowIfInvalidImplementation(System.ReadOnlySpan`1&lt;System.Byte&gt;,Rxmxnx.JNetInterface.Types.Metadata.JInterfaceTypeMetadata,System.Collections.Generic.IReadOnlySet`1&lt;System.String&gt;,System.Boolean)"
                     body="stub"/>
             <method signature="System.Void ThrowIfInvalidExtension(System.ReadOnlySpan`1&lt;System.Byte&gt;,System.Type,System.Collections.Generic.IReadOnlySet`1&lt;System.Type&gt;)"
                     body="stub"/>
