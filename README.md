@@ -134,17 +134,15 @@ The following table illustrates how data type mapping works.
 All types interoperable with JNI implement the `IObject` interface, and all types either extend or can be converted to
 the `JObject` class.
 
-                    ┌── `IViewObject` ──┬── `ILocalViewObject`
-      `IObject` ────┼── `ILocalObject` ─┼── `IInterfaceObject<>` 
-                    │                   └── `IArrayObject<>`
-                    │                   ┌── `IPrimitiveType` ──┐    
-                    └── `IDataType` ────┼── `IDataType<>` ─────┼── `IPrimitiveType<>` 
-                                        └── `IReferenceType` ──┼── `IReferenceType<>` ─┐          
-                                                               ├── `IArrayType`        │
-                                                               ├── `IEnumType` ────────┼── `IEnumType<>`
-                                                               ├── `IInterfaceType` ───┼── `IInterfaceType<>`
-                                                               └── `IClassType` ───────┼── `IClassType<>` ────────┬── `IThrowableType<>`
-                                                                                       │                          ├── `IPrimitiveWrapperType<>`
-                                                                                       └── `IUninstantiableType` ─┴── `IUninstantiableType<>`
-
-
+                    ┌──  IViewObject  ──┬──  ILocalViewObject 
+       IObject  ────┼──  ILocalObject  ─┼──  IInterfaceObject<>  
+                    │                   └──  IArrayObject<> 
+                    │                   ┌──  IPrimitiveType  ──┐    
+                    └──  IDataType  ────┼──  IDataType<>  ─────┼──  IPrimitiveType<>  
+                                        └──  IReferenceType  ──┼──  IReferenceType<>  ─┐          
+                                                               ├──  IArrayType         │
+                                                               ├──  IEnumType  ────────┼──  IEnumType<> 
+                                                               ├──  IInterfaceType  ───┼──  IInterfaceType<> 
+                                                               └──  IClassType  ───────┼──  IClassType<>  ────────┬──  IThrowableType<> 
+                                                                                       │                          ├──  IPrimitiveWrapperType<> 
+                                                                                       └──  IUninstantiableType  ─┴──  IUninstantiableType<> 
