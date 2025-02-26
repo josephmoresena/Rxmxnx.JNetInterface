@@ -3,7 +3,7 @@
 /// <summary>
 /// This interface exposes a java data type.
 /// </summary>
-public interface IDataType
+public interface IDataType : IObject
 {
 	/// <summary>
 	/// Datatype kind.
@@ -38,7 +38,7 @@ public interface IDataType
 /// <typeparam name="TDataType">Type of the current Java datatype.</typeparam>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2743,
                  Justification = CommonConstants.StaticAbstractPropertyUseJustification)]
-public interface IDataType<out TDataType> : IDataType, IObject where TDataType : IDataType<TDataType>
+public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArgumentMetadata"/>
 	internal static virtual JArgumentMetadata Argument { get; } = JArgumentMetadata.Create<TDataType>();

@@ -100,7 +100,7 @@ partial class JEnvironment
 		/// Indicates whether <paramref name="definition"/> matches with a static method in <paramref name="declaringClass"/>.
 		/// </param>
 		/// <returns>A <see cref="JMethodObject"/> instance.</returns>
-		private unsafe JObjectLocalRef GetReflectedCall(JCallDefinition definition, JClassObject declaringClass,
+		private JObjectLocalRef GetReflectedCall(JCallDefinition definition, JClassObject declaringClass,
 			Boolean isStatic)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(declaringClass);

@@ -5,7 +5,7 @@
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public interface IPrimitiveType : IObject, IDataType, IComparable, IConvertible
+public interface IPrimitiveType : IDataType, IComparable, IConvertible
 {
 	/// <summary>
 	/// Native primitive type.
