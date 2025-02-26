@@ -101,7 +101,9 @@ public sealed class PrimitiveObjectTests
 		Assert.Equal(comparable, (obj as IComparable).CompareTo(obj2.Value));
 		Assert.Equal(comparable, (obj as IComparable).CompareTo(obj2));
 	}
+#pragma warning disable CA1859
 	private static void ConvertibleTest<T>(IPrimitiveValue<T> obj)
+#pragma warning restore CA1859
 		where T : unmanaged, IEquatable<T>, IComparable, IConvertible, IComparable<T>
 	{
 		PrimitiveObjectTests.ConvertibleTest(obj.Value, obj, c => c.GetTypeCode());

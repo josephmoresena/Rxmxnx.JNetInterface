@@ -6,7 +6,7 @@ partial class JEnvironment
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
 	private sealed partial class EnvironmentCache : IArrayFeature
 	{
-		public unsafe JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IDataType<TElement>
+		public JArrayObject<TElement> CreateArray<TElement>(Int32 length) where TElement : IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfInvalidArrayLength(length);
 			JArrayLocalRef arrayRef = default;
@@ -131,7 +131,7 @@ partial class JEnvironment
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 				this.CopyToPrimitive(jArray, primitiveMetadata.SizeOf, array, arrayIndex);
 			else
-				this.CopyToObject(jArray, array, arrayIndex);
+				this.CopyToObject(jArray, array.AsSpan(), arrayIndex);
 		}
 		public INativeMemoryAdapter GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>

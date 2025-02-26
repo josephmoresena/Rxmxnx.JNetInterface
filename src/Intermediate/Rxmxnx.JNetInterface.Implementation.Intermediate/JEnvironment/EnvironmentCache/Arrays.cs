@@ -89,15 +89,15 @@ partial class JEnvironment
 			return -1;
 		}
 		/// <summary>
-		/// Copies the elements of the <paramref name="jArray"/> to an <see cref="T:System.Array"/>,
-		/// starting at a particular <see cref="T:System.Array"/> index.
+		/// Copies the elements of the <paramref name="jArray"/> to a <paramref name="array"/>,
+		/// starting at a particular index.
 		/// </summary>
 		/// <typeparam name="TElement">Type of <paramref name="jArray"/> element.</typeparam>
 		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 		/// <param name="sizeOf">Size of primitive value.</param>
 		/// <param name="array">
-		/// The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied
-		/// from <paramref name="jArray"/>. The <see cref="T:System.Array"/> must have zero-based indexing.
+		/// The one-dimensional <typeparamref name="TElement"/> array that is the destination of the elements copied
+		/// from <paramref name="jArray"/>.
 		/// </param>
 		/// <param name="arrayIndex">
 		/// The zero-based index in <paramref name="array"/> at which copying begins.
@@ -122,25 +122,25 @@ partial class JEnvironment
 			}
 		}
 		/// <summary>
-		/// Copies the elements of the <paramref name="jArray"/> to an <see cref="T:System.Array"/>,
-		/// starting at a particular <see cref="T:System.Array"/> index.
+		/// Copies the elements of the <paramref name="jArray"/> to a <typeparamref name="TElement"/> span,
+		/// starting at a particular index.
 		/// </summary>
 		/// <typeparam name="TElement">Type of <paramref name="jArray"/> element.</typeparam>
 		/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
-		/// <param name="array">
-		/// The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied
-		/// from <paramref name="jArray"/>. The <see cref="T:System.Array"/> must have zero-based indexing.
+		/// <param name="span">
+		/// A <typeparamref name="TElement"/> span that is the destination of the elements copied
+		/// from <paramref name="jArray"/>.
 		/// </param>
 		/// <param name="arrayIndex">
-		/// The zero-based index in <paramref name="array"/> at which copying begins.
+		/// The zero-based index in <paramref name="span"/> at which copying begins.
 		/// </param>
-		private void CopyToObject<TElement>(JArrayObject jArray, IList<TElement?> array, Int32 arrayIndex)
+		private void CopyToObject<TElement>(JArrayObject jArray, Span<TElement?> span, Int32 arrayIndex)
 			where TElement : IDataType<TElement>
 		{
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(array.Count + 1);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(span.Length + 1);
 			JObjectArrayLocalRef arrayRef = jniTransaction.Add<JObjectArrayLocalRef>(jArray);
-			for (Int32 i = 0; i < array.Count; i++)
-				array[i] = this.GetElementObject<TElement>(arrayRef, i + arrayIndex);
+			for (Int32 i = 0; i < span.Length; i++)
+				span[i] = this.GetElementObject<TElement>(arrayRef, i + arrayIndex);
 		}
 		/// <summary>
 		/// Retrieves <see cref="JObjectLocalRef"/> reference from <paramref name="arrayRef"/> at

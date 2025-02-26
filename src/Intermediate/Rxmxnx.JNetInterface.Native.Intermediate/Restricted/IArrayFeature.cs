@@ -53,25 +53,25 @@ internal partial interface IArrayFeature
 	/// <returns>The index of <paramref name="item"/> if found in <paramref name="jArray"/>; otherwise, -1.</returns>
 	Int32 IndexOf<TElement>(JArrayObject<TElement> jArray, TElement? item) where TElement : IDataType<TElement>;
 	/// <summary>
-	/// Copies the elements of the <paramref name="jArray"/> to an <see cref="T:System.Array"/>,
-	/// starting at a particular <see cref="T:System.Array"/> index.
+	/// Copies the elements of the <paramref name="jArray"/> to a <paramref name="array"/>,
+	/// starting at a particular index.
 	/// </summary>
 	/// <typeparam name="TElement">Type of <paramref name="jArray"/> element.</typeparam>
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
 	/// <param name="array">
-	/// The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied
-	/// from <paramref name="jArray"/>. The <see cref="T:System.Array"/> must have zero-based indexing.
+	/// The one-dimensional <typeparamref name="TElement"/> array that is the destination of the elements copied
+	/// from <paramref name="jArray"/>.
 	/// </param>
 	/// <param name="arrayIndex">
 	/// The zero-based index in <paramref name="array"/> at which copying begins.
 	/// </param>
-	/// <exception cref="T:System.ArgumentNullException">
+	/// <exception cref="ArgumentNullException">
 	/// <paramref name="array"/> is <see langword="null"/>.
 	/// </exception>
-	/// <exception cref="T:System.ArgumentOutOfRangeException">
+	/// <exception cref="ArgumentOutOfRangeException">
 	/// <paramref name="arrayIndex"/> is less than 0.
 	/// </exception>
-	/// <exception cref="T:System.ArgumentException">
+	/// <exception cref="ArgumentException">
 	/// The number of elements in the source <paramref name="jArray"/> is greater
 	/// than the available space from <paramref name="arrayIndex"/> to the end of the
 	/// destination <paramref name="array"/>.
