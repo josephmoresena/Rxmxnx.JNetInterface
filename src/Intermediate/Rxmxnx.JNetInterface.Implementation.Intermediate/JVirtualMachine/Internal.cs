@@ -31,7 +31,6 @@ public partial class JVirtualMachine
 	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
 	internal void Remove(JGlobalBase? jGlobal)
 	{
-		if (jGlobal is null || jGlobal.IsDefault) return;
 		switch (jGlobal)
 		{
 			case JGlobal:
@@ -66,8 +65,6 @@ public partial class JVirtualMachine
 			this._cache.GlobalClassCache[jClass.Hash] = jGlobal;
 		}
 		lifetime.SetGlobal(jGlobal);
-		if (JVirtualMachine.userMainClasses.ContainsKey(jClass.Hash))
-			this._cache.SetMainGlobal(jClass.Hash, jGlobal); // Load main global class.
 		JTrace.LoadGlobalClass(jClass, found, jGlobal.Reference);
 		return jGlobal;
 	}
@@ -180,10 +177,18 @@ public partial class JVirtualMachine
 	internal void UnregisterNatives(String classHash) => this._cache.NativesCache.Clear(classHash);
 	/// <inheritdoc cref="GlobalMainClasses.IsMainGlobal(String, JGlobal)"/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Boolean IsMainGlobal(String classHash, JGlobal jGlobal) => this._cache.IsMainGlobal(classHash, jGlobal);
-	/// <inheritdoc cref="GlobalMainClasses.SetMainGlobal(String, JGlobal)"/>
+	internal Boolean IsMainGlobal(String classHash, JGlobal? jGlobal)
+		=> jGlobal is not null && this._cache.IsMainGlobal(classHash, jGlobal);
+	/// <summary>
+	/// Reloads global access for <paramref name="classHash"/>.
+	/// </summary>
+	/// <param name="classHash">Class hash.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void SetMainGlobal(String classHash, JGlobal jGlobal) => this._cache.SetMainGlobal(classHash, jGlobal);
+	internal void ReloadAccess(String classHash)
+	{
+		if (!this._cache.GlobalClassCache.TryGetValue(classHash, out JGlobal? jGlobal) || jGlobal.IsDefault) return;
+		this._cache.GlobalClassCache.Load(jGlobal.As<JClassLocalRef>());
+	}
 
 	/// <summary>
 	/// Retrieves the <see cref="IInvokedVirtualMachine"/> instance referenced by <paramref name="reference"/>.
@@ -234,10 +239,4 @@ public partial class JVirtualMachine
 	/// <see langword="false"/>.
 	/// </returns>
 	internal static Boolean IsMainClass(String hash) => JVirtualMachine.userMainClasses.ContainsKey(hash);
-	/// <summary>
-	/// Sets the class for <paramref name="metadata"/> as a main class.
-	/// </summary>
-	/// <param name="metadata">A <see cref="ClassObjectMetadata"/> instance.</param>
-	internal static void SetMainClass(ClassObjectMetadata metadata)
-		=> JVirtualMachine.userMainClasses.TryAdd(metadata.Hash, metadata);
 }

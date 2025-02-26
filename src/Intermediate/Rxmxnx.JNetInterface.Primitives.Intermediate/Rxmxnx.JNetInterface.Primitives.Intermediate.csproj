@@ -16,7 +16,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
+        <ProjectReference Condition="'$(UseSourceGeneratorAssembly)' != 'true'" Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
+        <Analyzer Condition="'$(UseSourceGeneratorAssembly)' == 'true'" Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator/bin/Release/netstandard2.0/Rxmxnx.JNetInterface.SourceGenerator.dll"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -30,6 +31,7 @@
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.Localization"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Access"/>

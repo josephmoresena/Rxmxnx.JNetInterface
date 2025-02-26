@@ -34,12 +34,14 @@ public record ObjectMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
-	/// <param name="typeMetadata"><see cref="JReferenceTypeMetadata"/> instance.</param>
-	internal ObjectMetadata(JDataTypeMetadata typeMetadata)
+	/// <param name="typeInformation"><see cref="ITypeInformation"/> instance.</param>
+	/// <param name="fromProxy">Indicates whether the current instance is a dummy object (fake java object).</param>
+	private protected ObjectMetadata(ITypeInformation typeInformation, Boolean? fromProxy)
 	{
-		this.ObjectClassName = typeMetadata.ClassName;
-		this.ObjectSignature = typeMetadata.Signature;
-		this.ObjectClassHash = typeMetadata.Hash;
+		this.ObjectClassName = typeInformation.ClassName;
+		this.ObjectSignature = typeInformation.Signature;
+		this.ObjectClassHash = typeInformation.Hash;
+		this.FromProxy = fromProxy;
 	}
 
 	/// <summary>

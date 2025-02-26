@@ -134,6 +134,7 @@ internal class LocalCache
 	/// <see langword="true"/> if <paramref name="localRef"/> is from a local frame;
 	/// otherwise, <see langword="false"/>.
 	/// </returns>
+	[ExcludeFromCodeCoverage]
 	public virtual Boolean IsFromLocalFrame(JObjectLocalRef localRef)
 		=> localRef != default && (this._previous?.IsFromLocalFrame(localRef) ?? false);
 	/// <summary>

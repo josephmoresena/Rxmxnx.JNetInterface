@@ -40,15 +40,6 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	internal const Int32 GetObjectClassCapacity = 5;
 
 	/// <summary>
-	/// Indicates whether trace output is enabled.
-	/// </summary>
-	[ExcludeFromCodeCoverage]
-	public static Boolean TraceEnabled
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => AppContext.TryGetSwitch("JNetInterface.EnableTrace", out Boolean enable) && enable;
-	}
-	/// <summary>
 	/// Indicates whether metadata validation is enabled.
 	/// </summary>
 	[ExcludeFromCodeCoverage]

@@ -59,6 +59,7 @@ public partial class JHelloDotnetObject
 		{
 			JniCallback jniCallback = new(managed);
 			TManaged.TypeVirtualMachine = managed.VirtualMachine;
+			TManaged.TypeWriter = managed.Writer;
 			helloDotnetClass.Register(new List<JNativeCallEntry>
 			{
 				JNativeCallEntry.Create<GetStringDelegate>(
@@ -112,7 +113,7 @@ public partial class JHelloDotnetObject
 			JNativeCallAdapter callAdapter = JNativeCallAdapter
 			                                 .Create(TManaged.TypeVirtualMachine, envRef, classRef,
 			                                         out JClassObject jClass).Build();
-			TManaged.PrintClass(jClass);
+			TManaged.PrintClass(jClass, TManaged.TypeWriter);
 			callAdapter.FinalizeCall();
 		}
 		private static JArrayLocalRef GetPrimitiveClasses<TManaged>(JEnvironmentRef envRef, JClassLocalRef classRef)

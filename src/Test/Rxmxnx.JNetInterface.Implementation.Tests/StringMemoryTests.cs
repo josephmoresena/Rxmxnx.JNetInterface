@@ -305,6 +305,135 @@ public sealed class StringMemoryTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
+	[Fact]
+	internal void UtfCharsCreation()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
+		String text = StringMemoryTests.fixture.Create<String>();
+		Memory<Byte> utfText = Encoding.UTF8.GetBytes(text);
+
+		try
+		{
+			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			using MemoryHandle handle = text.AsMemory().Pin();
+			using MemoryHandle utfHandle = utfText.Pin();
+
+			proxyEnv.NewString((ReadOnlyValPtr<Char>)handle.ToIntPtr(), text.Length).Returns(stringRef);
+			proxyEnv.NewStringUtf((ReadOnlyValPtr<Byte>)utfHandle.ToIntPtr()).Returns(stringRef);
+			proxyEnv.GetStringLength(stringRef).Returns(text.Length);
+			proxyEnv.GetStringUtfLength(stringRef).Returns(utfText.Length);
+			proxyEnv.When(e => e.GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>())).Do(c =>
+			{
+				ValPtr<Char> ptr = (ValPtr<Char>)c[3];
+				text.CopyTo(ptr.Pointer.GetUnsafeSpan<Char>(text.Length));
+			});
+
+			using JStringObject jString = JStringObject.Create(env, utfText.Span);
+
+			Assert.Equal(text, jString.Value);
+			Assert.Equal(utfText.Length, jString.Utf8Length);
+			Assert.Equal(text.Length, jString.Length);
+			Assert.False(Object.ReferenceEquals(text, jString.Value));
+
+			proxyEnv.Received(0).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
+			proxyEnv.Received(1).NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(1).GetStringLength(stringRef);
+			proxyEnv.Received(0).GetStringUtfLength(stringRef);
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
+	[Fact]
+	internal void StringCreation()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
+		String text = StringMemoryTests.fixture.Create<String>();
+		Memory<Byte> utfText = Encoding.UTF8.GetBytes(text);
+
+		try
+		{
+			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			using MemoryHandle handle = text.AsMemory().Pin();
+			using MemoryHandle utfHandle = utfText.Pin();
+
+			proxyEnv.NewString((ReadOnlyValPtr<Char>)handle.ToIntPtr(), text.Length).Returns(stringRef);
+			proxyEnv.NewStringUtf((ReadOnlyValPtr<Byte>)utfHandle.ToIntPtr()).Returns(stringRef);
+			proxyEnv.GetStringLength(stringRef).Returns(text.Length);
+			proxyEnv.GetStringUtfLength(stringRef).Returns(utfText.Length);
+			proxyEnv.When(e => e.GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>())).Do(c =>
+			{
+				ValPtr<Char> ptr = (ValPtr<Char>)c[3];
+				text.CopyTo(ptr.Pointer.GetUnsafeSpan<Char>(text.Length));
+			});
+
+			using JStringObject jString = JStringObject.Create(env, text);
+
+			Assert.Equal(text, jString.Value);
+			Assert.Equal(utfText.Length, jString.Utf8Length);
+			Assert.Equal(text.Length, jString.Length);
+			Assert.True(Object.ReferenceEquals(text, jString.Value));
+
+			proxyEnv.Received(1).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
+			proxyEnv.Received(0).NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(0).GetStringLength(stringRef);
+			proxyEnv.Received(1).GetStringUtfLength(stringRef);
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
+	[Fact]
+	internal void CharsCreation()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
+		String text = StringMemoryTests.fixture.Create<String>();
+		Memory<Byte> utfText = Encoding.UTF8.GetBytes(text);
+
+		try
+		{
+			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			using MemoryHandle handle = text.AsMemory().Pin();
+			using MemoryHandle utfHandle = utfText.Pin();
+
+			proxyEnv.NewString((ReadOnlyValPtr<Char>)handle.ToIntPtr(), text.Length).Returns(stringRef);
+			proxyEnv.NewStringUtf((ReadOnlyValPtr<Byte>)utfHandle.ToIntPtr()).Returns(stringRef);
+			proxyEnv.GetStringLength(stringRef).Returns(text.Length);
+			proxyEnv.GetStringUtfLength(stringRef).Returns(utfText.Length);
+			proxyEnv.When(e => e.GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>())).Do(c =>
+			{
+				ValPtr<Char> ptr = (ValPtr<Char>)c[3];
+				text.CopyTo(ptr.Pointer.GetUnsafeSpan<Char>(text.Length));
+			});
+
+			using JStringObject jString = JStringObject.Create(env, text.AsSpan());
+
+			Assert.Equal(text, jString.Value);
+			Assert.Equal(utfText.Length, jString.Utf8Length);
+			Assert.Equal(text.Length, jString.Length);
+			Assert.False(Object.ReferenceEquals(text, jString.Value));
+
+			proxyEnv.Received(1).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
+			proxyEnv.Received(0).NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(0).GetStringLength(stringRef);
+			proxyEnv.Received(1).GetStringUtfLength(stringRef);
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
 	private static void NestedFailTest(NativeInterfaceProxy proxyEnv)
 	{
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);

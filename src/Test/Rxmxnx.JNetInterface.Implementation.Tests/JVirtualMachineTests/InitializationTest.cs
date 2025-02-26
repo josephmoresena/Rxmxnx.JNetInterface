@@ -123,9 +123,8 @@ public partial class JVirtualMachineTests
 			proxyEnv.FindClass(Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(c =>
 			{
 				IntPtr ptr = (ReadOnlyValPtr<Byte>)c[0];
-				foreach (MainClass mClass in mainClassRef.Keys.Where(
-					         mClass => mainPointer[mClass].Pointer == ptr &&
-						         (error != ClassLoadingError.FindClass || mClass != mainClass)))
+				MainClass mClass = mainClassRef.Keys.First(mClass => mainPointer[mClass].Pointer == ptr);
+				if (error != ClassLoadingError.FindClass || mClass != mainClass)
 					return mainClassRef[mClass];
 				return default;
 			});
@@ -135,10 +134,9 @@ public partial class JVirtualMachineTests
 				JClassLocalRef classRef = (JClassLocalRef)c[0];
 				IntPtr ptr = (ReadOnlyValPtr<Byte>)c[1];
 				if (ptr != typePtr.Pointer) return default;
-				foreach (MainClass mClass in mainTypeField.Keys.Where(
-					         mClass => (mainClassRef[mClass] == classRef ||
-							         mainGlobalRef[mClass].Value == classRef.Value) &&
-						         (error != ClassLoadingError.TypeIdError || mClass != mainClass)))
+				MainClass mClass = mainClassRef.Keys.First(mClass => mainClassRef[mClass] == classRef ||
+					                                           mainGlobalRef[mClass].Value == classRef.Value);
+				if (error != ClassLoadingError.TypeIdError || mClass != mainClass)
 					return mainTypeField[mClass];
 				return default;
 			});
@@ -146,20 +144,19 @@ public partial class JVirtualMachineTests
 			{
 				JClassLocalRef classRef = (JClassLocalRef)c[0];
 				JFieldId fieldId = (JFieldId)c[1];
-				foreach (MainClass mClass in mainClassRef.Keys.Where(
-					         mClass => JVirtualMachineTests.mainWrapper.TryGetValue(mClass, out MainClass wClass) &&
-						         (mainClassRef[wClass] == classRef || mainGlobalRef[wClass].Value == classRef.Value) &&
-						         mainTypeField[wClass] == fieldId &&
-						         (error != ClassLoadingError.FindClass || mClass != mainClass)))
+				MainClass mClass = mainClassRef.Keys.First(
+					mClass => JVirtualMachineTests.mainWrapper.TryGetValue(mClass, out MainClass wClass) &&
+						(mainClassRef[wClass] == classRef || mainGlobalRef[wClass].Value == classRef.Value) &&
+						mainTypeField[wClass] == fieldId);
+				if (error != ClassLoadingError.FindClass || mClass != mainClass)
 					return mainClassRef[mClass].Value;
 				return default;
 			});
 			proxyEnv.NewGlobalRef(Arg.Any<JObjectLocalRef>()).Returns(c =>
 			{
 				JObjectLocalRef localRef = (JObjectLocalRef)c[0];
-				foreach (MainClass mClass in mainClassRef.Keys.Where(
-					         mClass => mainClassRef[mClass].Value == localRef &&
-						         (error != ClassLoadingError.CreateGlobal || mClass != mainClass)))
+				MainClass mClass = mainClassRef.Keys.First(mClass => mainClassRef[mClass].Value == localRef);
+				if (error != ClassLoadingError.CreateGlobal || mClass != mainClass)
 					return mainGlobalRef[mClass];
 				return default;
 			});
@@ -167,10 +164,14 @@ public partial class JVirtualMachineTests
 			IVirtualMachine vm = JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference);
 			IEnvironment? env = vm.GetEnvironment()!;
 			Assert.Equal(proxyEnv.VirtualMachine.Reference, vm.Reference);
+
+			// Fundamental classes
 			Assert.Equal(mainGlobalRef[MainClass.Class].Value, env.ClassFeature.ClassObject.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.Throwable].Value, env.ClassFeature.ThrowableObject.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.StackTraceElement].Value,
 			             env.ClassFeature.StackTraceElementObject.Reference.Value);
+
+			// Primitive classes
 			Assert.Equal(mainGlobalRef[MainClass.VoidPrimitive].Value, env.ClassFeature.VoidPrimitive.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.BooleanPrimitive].Value,
 			             env.ClassFeature.BooleanPrimitive.Reference.Value);
@@ -184,32 +185,39 @@ public partial class JVirtualMachineTests
 			Assert.Equal(mainGlobalRef[MainClass.LongPrimitive].Value, env.ClassFeature.LongPrimitive.Reference.Value);
 			Assert.Equal(mainGlobalRef[MainClass.ShortPrimitive].Value,
 			             env.ClassFeature.ShortPrimitive.Reference.Value);
+
+			// User main classes (default)
+			Assert.Equal(mainGlobalRef[MainClass.NumberObject].Value, env.ClassFeature.NumberObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.BooleanObject].Value, env.ClassFeature.BooleanObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.ByteObject].Value, env.ClassFeature.ByteObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.CharacterObject].Value,
+			             env.ClassFeature.CharacterObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.DoubleObject].Value, env.ClassFeature.DoubleObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.FloatObject].Value, env.ClassFeature.FloatObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.IntegerObject].Value, env.ClassFeature.IntegerObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.LongObject].Value, env.ClassFeature.LongObject.Reference.Value);
+			Assert.Equal(mainGlobalRef[MainClass.ShortObject].Value, env.ClassFeature.ShortObject.Reference.Value);
+
+			// java.lang.Void is not main by default.
 			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.VoidObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.BooleanObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.ByteObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.CharacterObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.DoubleObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.FloatObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.IntegerObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.LongObject));
-			Assert.True(JObject.IsNullOrDefault(env.ClassFeature.ShortObject));
 		}
 		catch (Exception ex)
 		{
 			Assert.IsType<NotSupportedException>(ex);
+			IMessageResource resource = IMessageResource.GetInstance();
 			switch (error)
 			{
 				case ClassLoadingError.FindClass when dataTypeMetadata?.Kind != JTypeKind.Primitive:
-					Assert.Equal($"Main class {className} is not available for JNI access.", ex.Message);
+					Assert.Equal(resource.MainClassUnavailable(className!), ex.Message);
 					break;
 				case ClassLoadingError.FindClass when dataTypeMetadata?.Kind == JTypeKind.Primitive:
-					Assert.Equal($"Primitive class {className} is not available for JNI access.", ex.Message);
+					Assert.Equal(resource.PrimitiveClassUnavailable(className!), ex.Message);
 					break;
 				case ClassLoadingError.TypeIdError when dataTypeMetadata?.Kind != JTypeKind.Primitive:
-					Assert.Equal($"Primitive class {auxClassName} is not available for JNI access.", ex.Message);
+					Assert.Equal(resource.PrimitiveClassUnavailable(auxClassName!), ex.Message);
 					break;
 				case ClassLoadingError.CreateGlobal:
-					Assert.Equal($"Error creating JNI global reference to {className} class.", ex.Message);
+					Assert.Equal(resource.MainClassGlobalError(className!), ex.Message);
 					break;
 			}
 		}

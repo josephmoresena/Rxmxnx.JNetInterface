@@ -201,4 +201,39 @@ internal sealed partial class NativeFunctionSetImpl : NativeFunctionSet
 		JClassObject fieldClass = env.ClassFeature.FieldObject;
 		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.GetTypeDefinition, jField, fieldClass)!;
 	}
+
+#if !PACKAGE
+	/// <summary>
+	/// Retrieves the <see cref="JBoolean"/> value of <paramref name="jBooleanObject"/>.
+	/// </summary>
+	/// <param name="jBooleanObject">A <see cref="JBooleanObject"/> instance.</param>
+	/// <returns>A <see cref="JBoolean"/> value.</returns>
+	public static
+#else
+	/// <inheritdoc/>
+	public override
+#endif
+		JBoolean GetValue(JBooleanObject jBooleanObject)
+	{
+		IEnvironment env = jBooleanObject.Environment;
+		JClassObject jClass = env.ClassFeature.BooleanObject;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.BooleanValueDefinition, jBooleanObject, jClass);
+	}
+#if !PACKAGE
+	/// <summary>
+	/// Retrieves the <see cref="JChar"/> value of <paramref name="jCharacterObject"/>.
+	/// </summary>
+	/// <param name="jCharacterObject">A <see cref="JCharacterObject"/> instance.</param>
+	/// <returns>A <see cref="JChar"/> value.</returns>
+	public static
+#else
+	/// <inheritdoc/>
+	public override
+#endif
+		JChar GetValue(JCharacterObject jCharacterObject)
+	{
+		IEnvironment env = jCharacterObject.Environment;
+		JClassObject jClass = env.ClassFeature.CharacterObject;
+		return JFunctionDefinition.Invoke(NativeFunctionSetImpl.CharValueDefinition, jCharacterObject, jClass);
+	}
 }

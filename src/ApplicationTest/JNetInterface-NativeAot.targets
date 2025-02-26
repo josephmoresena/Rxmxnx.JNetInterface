@@ -1,0 +1,37 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <Import Project="JNetInterface-Config.targets"/>
+
+    <PropertyGroup Condition="'$(IlcDisableReflection)' == 'true'">
+        <!-- Assembly name must specify that it was compiled in reflection-free mode -->
+        <AssemblyName>$(AssemblyName).RFM</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(JNI_APP)' == 'true' And '$(IlcDisableReflection)' != 'true'">
+        <!-- Assembly name must specify that it was compiled with Native-AOT -->
+        <AssemblyName>$(AssemblyName).NAOT</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm' And '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">
+        <LinkerFlavor>lld</LinkerFlavor>
+        <ObjCopyName>/usr/arm-linux-gnueabihf/bin/objcopy</ObjCopyName>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PublishAot>true</PublishAot>
+        <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
+        <IlcGenerateDgmlFile>true</IlcGenerateDgmlFile>
+        <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <RootAllApplicationAssemblies>false</RootAllApplicationAssemblies>
+        <TrimUnusedDependencies>true</TrimUnusedDependencies>
+        <IlcOptimizationPreference>Size</IlcOptimizationPreference>
+        <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+        <IlcTrimMetadata>true</IlcTrimMetadata>
+        <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+        <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
+    </PropertyGroup>
+
+</Project>

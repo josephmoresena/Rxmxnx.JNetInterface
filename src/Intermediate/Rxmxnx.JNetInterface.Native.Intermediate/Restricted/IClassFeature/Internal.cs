@@ -26,7 +26,7 @@ internal partial interface IClassFeature
 	/// <returns>A new <see cref="JClassObject"/> instance.</returns>
 	internal JClassObject LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(
 		ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
-		where TDataType : JLocalObject, IReferenceType<TDataType>;
+		where TDataType : JReferenceObject, IReferenceType<TDataType>;
 	/// <summary>
 	/// Retrieves the class info.
 	/// </summary>

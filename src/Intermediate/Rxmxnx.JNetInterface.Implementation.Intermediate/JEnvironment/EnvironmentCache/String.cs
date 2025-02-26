@@ -13,7 +13,7 @@ partial class JEnvironment
 		/// <param name="charsPtr">Buffer memory address.</param>
 		/// <param name="startIndex">Region start index.</param>
 		/// <param name="length">Number of characters in region.</param>
-		private unsafe void GetStringRegion(JStringObject jString, IntPtr charsPtr, Int32 startIndex, Int32 length)
+		private void GetStringRegion(JStringObject jString, IntPtr charsPtr, Int32 startIndex, Int32 length)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringRegionInfo);
@@ -29,7 +29,7 @@ partial class JEnvironment
 		/// <param name="unitsPtr">UTF-8 buffer memory address.</param>
 		/// <param name="startIndex">Region start index.</param>
 		/// <param name="length">Number of UTF-8 characters in region.</param>
-		private unsafe void GetStringUtf8Region(JStringObject jString, IntPtr unitsPtr, Int32 startIndex, Int32 length)
+		private void GetStringUtf8Region(JStringObject jString, IntPtr unitsPtr, Int32 startIndex, Int32 length)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringUtfRegionInfo);

@@ -15,8 +15,9 @@ internal static class CommonValidationUtilities
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void ThrowIfInvalidType(Int32 sizeOf)
 	{
-		if (sizeOf > JValue.Size)
-			throw new InsufficientMemoryException("The requested value can't be contained in a JValue.");
+		if (sizeOf <= JValue.Size) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new InsufficientMemoryException(resource.InvalidType);
 	}
 	/// <summary>
 	/// Throws an <see cref="InvalidEnumArgumentException"/> for the specified <paramref name="nativeType"/>.
@@ -35,27 +36,39 @@ internal static class CommonValidationUtilities
 		where TReference : JReferenceObject, IDataType<TReference>
 	{
 		JDataTypeMetadata metadata = IDataType.GetMetadata<TReference>();
-		throw new InvalidOperationException($"{metadata.ClassName} not is an instantiable type.");
+		IMessageResource resource = IMessageResource.GetInstance();
+		String className = ClassNameHelper.GetClassName(metadata.Signature);
+		String message = resource.InvalidInstantiation(className);
+		throw new InvalidOperationException(message);
 	}
 	/// <summary>
 	/// Throws an <see cref="InvalidOperationException"/> attempting to retrieve a void argument.
 	/// </summary>
 	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
 	public static JArgumentMetadata ThrowVoidArgument()
-		=> throw new InvalidOperationException("The void type can't be an instance argument.");
+	{
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new InvalidOperationException(resource.VoidArgument);
+	}
 	/// <summary>
 	/// Throws an <see cref="InvalidOperationException"/> attempting to create a void value.
 	/// </summary>
 	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
 	public static IPrimitiveType ThrowVoidInstantiation()
-		=> throw new InvalidOperationException("A void value can't be created.");
+	{
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new InvalidOperationException(resource.VoidInstantiation);
+	}
 #if PACKAGE
 	/// <summary>
 	/// Throws an <see cref="InvalidOperationException"/> attempting to retrieve a void array metadata.
 	/// </summary>
 	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
 	public static JArrayTypeMetadata ThrowVoidArray()
-		=> throw new InvalidOperationException("The void type can't be element type of an array.");
+	{
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new InvalidOperationException(resource.VoidArray);
+	}
 #endif
 	/// <summary>
 	/// Throws an <see cref="InvalidOperationException"/> attempting to create a void value.
@@ -63,7 +76,10 @@ internal static class CommonValidationUtilities
 	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
 	[ExcludeFromCodeCoverage]
 	public static Boolean ThrowVoidEquality()
-		=> throw new InvalidOperationException("A Void instance can't be equatable.");
+	{
+		IMessageResource resource = IMessageResource.GetInstance();
+		throw new InvalidOperationException(resource.VoidEquality);
+	}
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> cannot be cast to <typeparamref name="TValue"/>.
 	/// </summary>
@@ -77,9 +93,12 @@ internal static class CommonValidationUtilities
 	/// </exception>
 	public static TValue ThrowIfInvalidCast<TValue>(IConvertible? value) where TValue : unmanaged
 	{
-		if (value is null)
-			throw new InvalidCastException($"Invalid cast to {typeof(TValue)}");
-		return (TValue)value.ToType(typeof(TValue), CultureInfo.CurrentCulture);
+		if (value is not null)
+			return (TValue)value.ToType(typeof(TValue), CultureInfo.CurrentCulture);
+
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.InvalidCastTo(typeof(TValue));
+		throw new InvalidCastException(message);
 	}
 	/// <summary>
 	/// Throws an exception if the instance cannot be cast to <paramref name="typeMetadata"/> instance.
@@ -92,8 +111,11 @@ internal static class CommonValidationUtilities
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void ThrowIfInvalidCast(JDataTypeMetadata typeMetadata, Boolean allowedCast)
 	{
-		if (!allowedCast)
-			throw new InvalidCastException($"The current instance can't be cast to {typeMetadata.ClassName} type.");
+		if (allowedCast) return;
+		IMessageResource resource = IMessageResource.GetInstance();
+		String className = ClassNameHelper.GetClassName(typeMetadata.Signature);
+		String message = resource.InvalidCastTo(className);
+		throw new InvalidCastException(message);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="signature"/> is invalid.
@@ -104,8 +126,10 @@ internal static class CommonValidationUtilities
 	/// </exception>
 	public static void ThrowIfInvalidObjectSignature(ReadOnlySpan<Byte> signature)
 	{
-		if (signature.IsEmpty) throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
-		if (signature.Length == 1) throw new ArgumentException("Signature not allowed.");
+		IMessageResource resource = IMessageResource.GetInstance();
+
+		if (signature.IsEmpty) throw new ArgumentException(resource.InvalidSignatureMessage);
+		if (signature.Length == 1) throw new ArgumentException(resource.SignatureNotAllowed);
 
 		Byte prefix = signature[0];
 		Byte suffix = signature[^1];
@@ -114,13 +138,12 @@ internal static class CommonValidationUtilities
 			switch (signature.Length)
 			{
 				case <= 3:
-					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
 				case > 3 when signature[1] != CommonNames.ObjectSignaturePrefixChar ||
 					suffix != CommonNames.ObjectSignatureSuffixChar:
-					throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
+					throw new ArgumentException(resource.InvalidSignatureMessage);
 			}
 		else if (prefix != CommonNames.ObjectSignaturePrefixChar || suffix != CommonNames.ObjectSignatureSuffixChar)
-			throw new ArgumentException(CommonConstants.InvalidSignatureMessage);
+			throw new ArgumentException(resource.InvalidSignatureMessage);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="value"/> is <see cref="ReadOnlySpan{Byte}.Empty"/>.
@@ -133,8 +156,11 @@ internal static class CommonValidationUtilities
 	public static void ValidateNotEmpty(ReadOnlySpan<Byte> value,
 		[CallerArgumentExpression(nameof(value))] String paramName = "")
 	{
-		if (value.IsEmpty)
-			throw new InvalidOperationException($"{paramName} must be non-empty string");
+		if (!value.IsEmpty) return;
+
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = resource.EmptyString(paramName);
+		throw new InvalidOperationException(message);
 	}
 	/// <summary>
 	/// Throws an exception if proxy flags not match.
@@ -144,9 +170,9 @@ internal static class CommonValidationUtilities
 	public static void ThrowIfNoProxyMatch(Boolean isProxyObject, Boolean isMetadataProxy)
 	{
 		if (isProxyObject == isMetadataProxy) return;
-		String message = isProxyObject ?
-			"A proxy object can't process a non-proxy metadata" :
-			"A non-proxy object can't process a proxy metadata.";
+
+		IMessageResource resource = IMessageResource.GetInstance();
+		String message = isProxyObject ? resource.ProxyOnNonProxyProcess : resource.NonProxyOnProxyProcess;
 		throw new InvalidOperationException(message);
 	}
 	/// <summary>
@@ -157,7 +183,10 @@ internal static class CommonValidationUtilities
 	public static void ThrowIfInvalidMetadata(Type typeOfT, JDataTypeMetadata dataTypeMetadata)
 	{
 		if (dataTypeMetadata.IsValidForType(typeOfT)) return;
-		throw new ArgumentException(
-			$"Datatype metadata for {dataTypeMetadata.ClassName} doesn't match with {typeOfT} type.");
+
+		IMessageResource resource = IMessageResource.GetInstance();
+		String className = ClassNameHelper.GetClassName(dataTypeMetadata.Signature);
+		String message = resource.InvalidMetadata(className, typeOfT);
+		throw new ArgumentException(message);
 	}
 }

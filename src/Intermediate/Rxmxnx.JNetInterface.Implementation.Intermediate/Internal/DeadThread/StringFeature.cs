@@ -22,7 +22,8 @@ internal partial class DeadThread : IStringFeature
 		=> this.ThrowInvalidResult<INativeMemoryAdapter>();
 	INativeMemoryAdapter IStringFeature.GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		=> this.ThrowInvalidResult<INativeMemoryAdapter>();
-	JStringObject IStringFeature.Create(ReadOnlySpan<Char> data) => this.ThrowInvalidResult<JStringObject>();
+	JStringObject IStringFeature.Create(ReadOnlySpan<Char> data, String? value)
+		=> this.ThrowInvalidResult<JStringObject>();
 	JStringObject IStringFeature.Create(ReadOnlySpan<Byte> utf8Data) => this.ThrowInvalidResult<JStringObject>();
 	ReadOnlyValPtr<Char> IStringFeature.GetSequence(JStringLocalRef stringRef, out Boolean isCopy)
 	{

@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 using Rxmxnx.JNetInterface.Io;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Lang.Annotation;
@@ -15,7 +13,6 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 /// <summary>
 /// Java compiler.
 /// </summary>
-[ExcludeFromCodeCoverage]
 public static class JRuntimeInfo
 {
 	public static void PrintMetadataInfo()

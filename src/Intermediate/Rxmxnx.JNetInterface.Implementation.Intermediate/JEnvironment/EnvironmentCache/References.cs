@@ -38,7 +38,7 @@ partial class JEnvironment
 		/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 		/// <param name="withNoCheckError">Indicates whether <see cref="CheckJniError"/> should not be called.</param>
 		/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-		public unsafe JGlobalRef CreateGlobalRef(JObjectLocalRef localRef, Boolean withNoCheckError = false)
+		public JGlobalRef CreateGlobalRef(JObjectLocalRef localRef, Boolean withNoCheckError = false)
 		{
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.NewGlobalRefInfo);

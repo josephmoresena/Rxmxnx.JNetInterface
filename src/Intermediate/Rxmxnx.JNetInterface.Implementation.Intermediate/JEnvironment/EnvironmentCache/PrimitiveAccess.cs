@@ -64,7 +64,7 @@ partial class JEnvironment
 		/// <param name="signature">Primitive char signature.</param>
 		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 		/// <param name="setValue">Action to set value.</param>
-		private unsafe void SetPrimitiveStaticField<TPrimitive>(JClassLocalRef classRef, ReadOnlySpan<Byte> bytes,
+		private void SetPrimitiveStaticField<TPrimitive>(JClassLocalRef classRef, ReadOnlySpan<Byte> bytes,
 			Byte signature, JFieldId fieldId, ref readonly SetGenericFieldFunction<JClassLocalRef, TPrimitive> setValue)
 			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
@@ -126,9 +126,8 @@ partial class JEnvironment
 		/// <param name="signature">Primitive char signature.</param>
 		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 		/// <param name="setValue">Action to set value.</param>
-		private unsafe void SetPrimitiveField<TPrimitive>(JObjectLocalRef localRef, ReadOnlySpan<Byte> bytes,
-			Byte signature, JFieldId fieldId,
-			ref readonly SetGenericFieldFunction<JObjectLocalRef, TPrimitive> setValue)
+		private void SetPrimitiveField<TPrimitive>(JObjectLocalRef localRef, ReadOnlySpan<Byte> bytes, Byte signature,
+			JFieldId fieldId, ref readonly SetGenericFieldFunction<JObjectLocalRef, TPrimitive> setValue)
 			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive value = MemoryMarshal.AsRef<TPrimitive>(bytes);
@@ -193,8 +192,8 @@ partial class JEnvironment
 		/// <param name="signature">Primitive char signature.</param>
 		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 		/// <param name="getValue">Function to get value.</param>
-		private unsafe void GetPrimitiveStaticField<TPrimitive>(Span<Byte> bytes, JClassLocalRef classRef,
-			Byte signature, JFieldId fieldId, ref readonly GetGenericFieldFunction<JClassLocalRef, TPrimitive> getValue)
+		private void GetPrimitiveStaticField<TPrimitive>(Span<Byte> bytes, JClassLocalRef classRef, Byte signature,
+			JFieldId fieldId, ref readonly GetGenericFieldFunction<JClassLocalRef, TPrimitive> getValue)
 			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
 			TPrimitive result = getValue.Get(this.Reference, classRef, fieldId);
@@ -254,7 +253,7 @@ partial class JEnvironment
 		/// <param name="signature">Primitive char signature.</param>
 		/// <param name="fieldId"><see cref="JFieldId"/> identifier.</param>
 		/// <param name="getValue">Function to get value.</param>
-		private unsafe void GetPrimitiveField<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
+		private void GetPrimitiveField<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef, Byte signature,
 			JFieldId fieldId, ref readonly GetGenericFieldFunction<JObjectLocalRef, TPrimitive> getValue)
 			where TPrimitive : unmanaged, INativeType, IPrimitiveType<TPrimitive>
 		{
@@ -279,10 +278,11 @@ partial class JEnvironment
 				ref this.GetStaticMethodFunctions(signature);
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(definition, out Int32 requiredBytes), requiredBytes);
+			Rented<Byte> rented = default;
 			Span<JValue> buffer = this.CopyAsJValue(jniTransaction, args,
 			                                        stackDisposable.UsingStack ?
 				                                        stackalloc Byte[requiredBytes] :
-				                                        EnvironmentCache.HeapAlloc<Byte>(requiredBytes));
+				                                        EnvironmentCache.HeapAlloc(requiredBytes, ref rented));
 			fixed (JValue* ptr = &MemoryMarshal.GetReference(buffer))
 			{
 				switch (signature)
@@ -321,6 +321,7 @@ partial class JEnvironment
 						break;
 				}
 			}
+			rented.Free();
 			this.CheckJniError();
 		}
 		/// <summary>

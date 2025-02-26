@@ -6,7 +6,8 @@ public partial class StringFeatureProxy
 		=> chars.WithSafeFixed((this, jString, startIndex), StringFeatureProxy.GetCopy);
 	void IStringFeature.GetUtf8Copy(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex)
 		=> utf8Units.WithSafeFixed((this, jString, startIndex), StringFeatureProxy.GetUtf8Copy);
-	JStringObject IStringFeature.Create(ReadOnlySpan<Char> data) => this.Create(data.ToString());
+	JStringObject IStringFeature.Create(ReadOnlySpan<Char> data, String? value)
+		=> this.Create(value ?? data.ToString());
 	JStringObject IStringFeature.Create(ReadOnlySpan<Byte> utf8Data) => this.Create(new CString(utf8Data));
 
 	private static void GetCopy(in IFixedContext<Char> mem,

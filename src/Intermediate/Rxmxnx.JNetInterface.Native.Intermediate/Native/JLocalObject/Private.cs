@@ -56,6 +56,16 @@ public partial class JLocalObject : ILocalObject
 	/// a <see cref="JArrayObject{TElement}"/> instance; otherwise, <see langword="false"/>.
 	/// </returns>
 	private static Boolean IsRealClass(JClassObject jClass, IObject jLocal) => jClass.IsFinal || jLocal is JArrayObject;
+	/// <summary>
+	/// Indicates whether <paramref name="jLocal"/> is unloaded.
+	/// </summary>
+	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jLocal"/> is loaded; otherwise; <see langword="false"/>.
+	/// </returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static Boolean IsUnloaded(JLocalObject? jLocal)
+		=> jLocal?.Lifetime is not { } lifetime || lifetime.IsUnloaded(jLocal);
 
 	static JLocalObject IClassType<JLocalObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);

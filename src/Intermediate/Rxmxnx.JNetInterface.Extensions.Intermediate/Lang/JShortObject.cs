@@ -25,6 +25,11 @@ public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimiti
 	/// <inheritdoc/>
 	private JShortObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JShortObject>()) { }
 
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IPrimitiveWrapperType<JShortObject>.SetPrimitiveValue(IPrimitiveType value)
+		=> base.SetPrimitiveValue(value.ToInt16(CultureInfo.InvariantCulture));
+
 	static JShortObject? IPrimitiveWrapperType<JShortObject, JShort>.Create(IEnvironment env, JShort? value)
 		=> value is not null ? (JShortObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 	static JShortObject IClassType<JShortObject>.Create(IReferenceType.ClassInitializer initializer)

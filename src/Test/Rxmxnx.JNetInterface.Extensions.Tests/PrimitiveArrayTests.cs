@@ -56,8 +56,7 @@ public sealed class PrimitiveArrayTests
 
 			using JClassObject jArrayClass = new(jClassClass, arrayTypeMetadata, classRef);
 			using JArrayObject jArray =
-				Assert.IsAssignableFrom<JArrayObject>(
-					arrayTypeMetadata.CreateInstance(jArrayClass, arrayRef.Value, true));
+				Assert.IsType<JArrayObject>(arrayTypeMetadata.CreateInstance(jArrayClass, arrayRef.Value, true), false);
 
 			Assert.Equal(arrayLength, jArray.Length);
 			Assert.Equal(jArrayClass, jArray.Class);

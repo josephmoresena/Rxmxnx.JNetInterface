@@ -12,8 +12,10 @@ partial class JEnvironment
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
 			if (jObject is JClassObject jClass) return jClass;
 			ImplementationValidationUtilities.ThrowIfDefault(jObject);
-			if (!jObject.InstanceOf<JClassObject>()) throw new ArgumentException("Object is not a class");
-			return this.AsClassObjectUnchecked(jObject);
+			if (jObject.InstanceOf<JClassObject>()) return this.AsClassObjectUnchecked(jObject);
+
+			IMessageResource resource = IMessageResource.GetInstance();
+			throw new ArgumentException(resource.NotClassObject);
 		}
 		[return: NotNullIfNotNull(nameof(jClass))]
 		public JReferenceTypeMetadata? GetTypeMetadata(JClassObject? jClass)
@@ -178,7 +180,7 @@ partial class JEnvironment
 		public JClassObject
 			LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(
 				ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
-			where TDataType : JLocalObject, IReferenceType<TDataType>
+			where TDataType : JReferenceObject, IReferenceType<TDataType>
 		{
 			ITypeInformation metadata = MetadataHelper.GetExactMetadata<TDataType>();
 			return this.LoadClass(metadata, rawClassBytes, jClassLoader);
@@ -191,7 +193,13 @@ partial class JEnvironment
 			JClassLocalRef classRef = jniTransaction.Add(jClass);
 			Boolean isLocalRef = this.IsLocalObject(jClass, out JReferenceType referenceType);
 			JTrace.GetClassInfo(classRef, referenceType);
-			if (classRef.IsDefault) throw new ArgumentException("Unloaded class.");
+
+			if (classRef.IsDefault)
+			{
+				IMessageResource resource = IMessageResource.GetInstance();
+				throw new ArgumentException(resource.UnloadedClass);
+			}
+
 			JClassObject loadedClass = this.GetClass(classRef, isLocalRef);
 			name = loadedClass.Name;
 			signature = loadedClass.ClassSignature;

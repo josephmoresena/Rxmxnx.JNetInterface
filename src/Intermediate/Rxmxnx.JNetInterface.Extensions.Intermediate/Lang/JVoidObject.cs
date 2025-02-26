@@ -19,4 +19,8 @@ public sealed class JVoidObject : JLocalObject.Uninstantiable<JVoidObject>, IPri
 		=> CommonValidationUtilities.ThrowVoidEquality();
 	[ExcludeFromCodeCoverage]
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => CommonValidationUtilities.ThrowVoidEquality();
+
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IPrimitiveWrapperType<JVoidObject>.SetPrimitiveValue(IPrimitiveType value) { }
 }

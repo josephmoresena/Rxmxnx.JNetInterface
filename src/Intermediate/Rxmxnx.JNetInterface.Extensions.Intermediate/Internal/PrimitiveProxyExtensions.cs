@@ -53,7 +53,7 @@ internal static class PrimitiveProxyExtensions
 					definition as JFunctionDefinition<JShort> ?? new(definition), jLocal, jClass, nonVirtual, args);
 				break;
 			default:
-				throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
+				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
 		}
 	}
 	/// <summary>
@@ -109,7 +109,7 @@ internal static class PrimitiveProxyExtensions
 						definition as JFunctionDefinition<JShort> ?? new(definition), jClass, args);
 				break;
 			default:
-				throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
+				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
 		}
 	}
 	/// <summary>
@@ -153,7 +153,7 @@ internal static class PrimitiveProxyExtensions
 					(definition as JFieldDefinition<JShort> ?? new(definition)).Get(jLocal, jClass);
 				break;
 			default:
-				throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
+				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
 		}
 	}
 	/// <summary>
@@ -193,7 +193,7 @@ internal static class PrimitiveProxyExtensions
 				bytes.AsValue<JShort>() = (definition as JFieldDefinition<JShort> ?? new(definition)).StaticGet(jClass);
 				break;
 			default:
-				throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
+				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
 		}
 	}
 	/// <summary>
@@ -237,7 +237,7 @@ internal static class PrimitiveProxyExtensions
 					jLocal, bytes.AsValue<JShort>(), jClass);
 				break;
 			default:
-				throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
+				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
 		}
 	}
 	/// <summary>
@@ -278,7 +278,7 @@ internal static class PrimitiveProxyExtensions
 				(definition as JFieldDefinition<JShort> ?? new(definition)).StaticSet(jClass, bytes.AsValue<JShort>());
 				break;
 			default:
-				throw new InvalidOperationException(CommonConstants.InvalidPrimitiveDefinitionMessage);
+				throw new InvalidOperationException(IMessageResource.GetInstance().InvalidPrimitiveDefinitionMessage);
 		}
 	}
 	/// <summary>
@@ -307,7 +307,7 @@ internal static class PrimitiveProxyExtensions
 				CommonNames.IntSignatureChar => jObject.AsPrimitive<JInt, Int32>(),
 				CommonNames.LongSignatureChar => jObject.AsPrimitive<JLong, Int64>(),
 				CommonNames.ShortSignatureChar => jObject.AsPrimitive<JShort, Int16>(),
-				_ => throw new InvalidOperationException("Object is not primitive."),
+				_ => throw new InvalidOperationException(IMessageResource.GetInstance().NotPrimitiveObject),
 			};
 		return obj;
 	}

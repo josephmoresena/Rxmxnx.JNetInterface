@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Proxies;
 
-public abstract partial class EnvironmentProxy : IEnvironment, IAccessFeature, IClassFeature, IReferenceFeature,
-	IStringFeature, IArrayFeature, INioFeature
+public abstract partial class EnvironmentProxy : NativeFunctionSet, IEnvironment, IAccessFeature, IClassFeature,
+	IReferenceFeature, IStringFeature, IArrayFeature, INioFeature
 {
 	Boolean IEnvironment.NoProxy => false;
 	IVirtualMachine IEnvironment.VirtualMachine => this.VirtualMachine;
@@ -12,5 +12,5 @@ public abstract partial class EnvironmentProxy : IEnvironment, IAccessFeature, I
 	IStringFeature IEnvironment.StringFeature => this;
 	IArrayFeature IEnvironment.ArrayFeature => this;
 	INioFeature IEnvironment.NioFeature => this;
-	NativeFunctionSet IEnvironment.FunctionSet => NativeFunctionSetImpl.Instance;
+	NativeFunctionSet IEnvironment.FunctionSet => this;
 }

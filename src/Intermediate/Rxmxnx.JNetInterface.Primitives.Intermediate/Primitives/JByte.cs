@@ -57,7 +57,7 @@ public readonly partial struct JByte : INativeType, IComparable<JByte>, IEquatab
 	public Int32 CompareTo(JByte other) => this._value.CompareTo(other._value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => IPrimitiveType<JByte, SByte>.Compare(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveValueType.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

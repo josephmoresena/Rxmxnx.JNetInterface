@@ -24,6 +24,11 @@ public sealed class JLongObject : JNumberObject<JLong, JLongObject>, IPrimitiveW
 	/// <inheritdoc/>
 	private JLongObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JLongObject>()) { }
 
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IPrimitiveWrapperType<JLongObject>.SetPrimitiveValue(IPrimitiveType value)
+		=> base.SetPrimitiveValue(value.ToInt64(CultureInfo.InvariantCulture));
+
 	static JLongObject? IPrimitiveWrapperType<JLongObject, JLong>.Create(IEnvironment env, JLong? value)
 		=> value is not null ? (JLongObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 	static JLongObject IClassType<JLongObject>.Create(IReferenceType.ClassInitializer initializer) => new(initializer);

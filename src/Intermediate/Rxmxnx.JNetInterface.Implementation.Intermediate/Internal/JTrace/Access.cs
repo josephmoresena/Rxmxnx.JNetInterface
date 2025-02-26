@@ -14,7 +14,7 @@ internal static partial class JTrace
 	public static void GetField(JLocalObject? jLocal, JClassObject jClass, JFieldDefinition definition,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(jLocal is null ? //Static?
 			                $"thread: {Environment.CurrentManagedThreadId} {jClass.ToTraceText()} {definition.ToTraceText()}" :
 			                $"thread: {Environment.CurrentManagedThreadId} {jLocal.ToTraceText()} {definition.ToTraceText()}",
@@ -31,7 +31,7 @@ internal static partial class JTrace
 	public static void SetField<TDataType>(JLocalObject? jLocal, JClassObject jClass, JFieldDefinition definition,
 		TDataType? value, [CallerMemberName] String callerMethod = "") where TDataType : IObject
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		String textValue = value is not null ?
 			(value as JReferenceObject)?.ToTraceText() ?? $"{value.ObjectSignature}: {value}" :
 			"value: null";
@@ -52,7 +52,7 @@ internal static partial class JTrace
 		ReadOnlySpan<Byte> bytes, [CallerMemberName] String callerMethod = "")
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		JPrimitiveTypeMetadata typeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
 		JTrace.SetField(jLocal, jClass, definition, typeMetadata.CreateInstance(bytes), callerMethod);
 	}
@@ -68,7 +68,7 @@ internal static partial class JTrace
 	internal static void CallMethod(JLocalObject? jLocal, JClassObject jClass, JCallDefinition definition,
 		Boolean nonVirtual, ReadOnlySpan<IObject?> args, [CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		StringBuilder strBuilder = new();
 		if (jLocal is null)
 			if (CommonNames.Constructor.SequenceEqual(definition.Name))
@@ -112,7 +112,7 @@ internal static partial class JTrace
 	public static void SetPrimitiveField<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
 		JFieldId fieldId, TValue value, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(localRef == default ? //Static?
 			                $"thread: {Environment.CurrentManagedThreadId} {classRef} {fieldId} {(Char)signature}: {value}" :
 			                $"thread: {Environment.CurrentManagedThreadId} {localRef} {fieldId} {(Char)signature}: {value}",
@@ -129,7 +129,7 @@ internal static partial class JTrace
 	public static void SetObjectField(JObjectLocalRef localRef, JClassLocalRef classRef, JFieldId fieldId,
 		JObjectLocalRef value, [CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(localRef == default ? //Static?
 			                $"thread: {Environment.CurrentManagedThreadId} {classRef} {fieldId} {value}" :
 			                $"thread: {Environment.CurrentManagedThreadId} {localRef} {fieldId} {value}", callerMethod);
@@ -146,7 +146,7 @@ internal static partial class JTrace
 	public static void GetPrimitiveField<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
 		JFieldId fieldId, TValue result, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(localRef == default ? //Static?
 			                $"thread: {Environment.CurrentManagedThreadId} {classRef} {fieldId} Result {(Char)signature}: {result}" :
 			                $"thread: {Environment.CurrentManagedThreadId} {localRef} {fieldId} Result {(Char)signature}: {result}",
@@ -163,7 +163,7 @@ internal static partial class JTrace
 	public static void GetObjectField(JObjectLocalRef localRef, JClassLocalRef classRef, JFieldId fieldId,
 		JObjectLocalRef result, [CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(localRef == default ? //Static?
 			                $"thread: {Environment.CurrentManagedThreadId} {classRef} {fieldId} Result {result}" :
 			                $"thread: {Environment.CurrentManagedThreadId} {localRef} {fieldId} Result {result}",
@@ -181,7 +181,7 @@ internal static partial class JTrace
 	public static void CallPrimitiveFunction<TValue>(JObjectLocalRef localRef, JClassLocalRef classRef, Byte signature,
 		JMethodId methodId, TValue result, [CallerMemberName] String callerMethod = "") where TValue : unmanaged
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		if (localRef == default) //Static
 			Trace.WriteLine(
 				$"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId} Result {(Char)signature}: {result}",
@@ -207,7 +207,7 @@ internal static partial class JTrace
 	public static void CallObjectFunction(JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
 		JObjectLocalRef result, Boolean isConstructor, [CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 
 		if (localRef == default) //Static or Constructor
 			Trace.WriteLine(
@@ -232,7 +232,7 @@ internal static partial class JTrace
 	public static void CallMethod(JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 
 		if (localRef == default) //Static
 			Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {methodId}", callerMethod);
@@ -251,7 +251,7 @@ internal static partial class JTrace
 	public static void GetAccessibleId(JClassLocalRef classRef, JAccessibleObjectDefinition definition,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {classRef} {definition.ToTraceText()}",
 		                callerMethod);
 	}
@@ -267,7 +267,7 @@ internal static partial class JTrace
 		where TAccessibleId : unmanaged, IAccessibleIdentifierType,
 		IEqualityOperators<TAccessibleId, TAccessibleId, Boolean>
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
 			accessibleId != default ?
 				$"thread: {Environment.CurrentManagedThreadId} {classRef} {definition.ToTraceText()} {accessibleId}" :
@@ -284,7 +284,7 @@ internal static partial class JTrace
 	public static void GetAccessCache(JClassLocalRef classRef, JReferenceType type, Boolean exists,
 		[CallerMemberName] String callerMethod = "")
 	{
-		if (!IVirtualMachine.TraceEnabled) return;
+		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine(
 			exists ?
 				$"thread: {Environment.CurrentManagedThreadId} {classRef} {type} Found." :

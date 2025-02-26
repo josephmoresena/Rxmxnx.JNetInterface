@@ -89,9 +89,6 @@ public partial class JThrowableObject
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
 			ReadOnlySpan<Byte> className, JTypeModifier modifier) where TObject : TThrowable, IThrowableType<TObject>
 		{
-			IReadOnlySet<Type> baseTypes = IClassType<TObject>.TypeBaseTypes;
-			IReadOnlySet<Type> baseBaseTypes = IClassType<TThrowable>.TypeBaseTypes;
-			NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
 			IReadOnlySet<Type> interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
 			return new(className, modifier, IClassType.GetMetadata<TThrowable>(), interfaceTypes);
 		}

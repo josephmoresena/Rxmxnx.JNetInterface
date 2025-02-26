@@ -37,6 +37,7 @@ public sealed class InterfacesTests
 		}
 	}
 	[Fact]
+#pragma warning disable CA1859
 	internal void ClassesTest()
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
@@ -81,12 +82,13 @@ public sealed class InterfacesTests
 		foreach (JClassObject jClass in classDictionary.Values)
 			jClass.Dispose();
 	}
+#pragma warning restore CA1859
 	[Fact]
 	internal void CriticalExceptionTest()
 	{
 		CriticalException ex = CriticalException.Instance;
 		Assert.Equal(JResult.Error, ex.Result);
-		Assert.Equal(CommonConstants.CriticalExceptionMessage, ex.Message);
+		Assert.Equal(IMessageResource.GetInstance().CriticalExceptionMessage, ex.Message);
 	}
 	[Fact]
 	internal void LocalViewObjectTest()

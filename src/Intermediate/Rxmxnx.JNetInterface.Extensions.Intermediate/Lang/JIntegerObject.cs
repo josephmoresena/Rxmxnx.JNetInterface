@@ -26,6 +26,11 @@ public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimi
 	private JIntegerObject(IReferenceType.ObjectInitializer initializer) :
 		base(initializer.WithClass<JIntegerObject>()) { }
 
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IPrimitiveWrapperType<JIntegerObject>.SetPrimitiveValue(IPrimitiveType value)
+		=> base.SetPrimitiveValue(value.ToInt32(CultureInfo.InvariantCulture));
+
 	static JIntegerObject? IPrimitiveWrapperType<JIntegerObject, JInt>.Create(IEnvironment env, JInt? value)
 		=> value is not null ? (JIntegerObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 	static JIntegerObject IClassType<JIntegerObject>.Create(IReferenceType.ClassInitializer initializer)

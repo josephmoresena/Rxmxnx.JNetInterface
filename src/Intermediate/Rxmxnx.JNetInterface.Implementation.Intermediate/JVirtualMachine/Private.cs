@@ -5,9 +5,9 @@ namespace Rxmxnx.JNetInterface;
 public partial class JVirtualMachine
 {
 	/// <summary>
-	/// User main classes dictionary.
+	/// User main classes' dictionary.
 	/// </summary>
-	private static readonly ConcurrentDictionary<String, ClassObjectMetadata> userMainClasses =
+	private static readonly ConcurrentDictionary<String, JDataTypeMetadata> userMainClasses =
 		MainClasses.CreateMainClassesDictionary();
 
 	/// <summary>
@@ -76,8 +76,6 @@ public partial class JVirtualMachine
 	{
 		JGlobal globalClass = new(this, classMetadata, default);
 		this._cache.GlobalClassCache[classMetadata.Hash] = globalClass;
-		if (JVirtualMachine.userMainClasses.ContainsKey(classMetadata.Hash))
-			this._cache.SetMainGlobal(classMetadata.Hash, globalClass);
 	}
 
 	/// <summary>

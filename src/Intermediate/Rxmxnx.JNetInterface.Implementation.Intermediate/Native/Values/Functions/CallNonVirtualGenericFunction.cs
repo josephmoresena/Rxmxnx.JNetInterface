@@ -14,13 +14,23 @@ internal readonly unsafe struct CallNonVirtualGenericFunction<TResult> where TRe
 	/// <summary>
 	/// Internal reserved entries.
 	/// </summary>
-#pragma warning disable CS0169
 	private readonly MethodOffset _offset;
-#pragma warning restore CS0169
 	/// <summary>
-	/// Caller <c>A</c> function.
+	/// Caller function pointers.
 	/// </summary>
-	/// <remarks>Should it really be declared as managed?</remarks>
-	public readonly delegate* managed<JEnvironmentRef, JObjectLocalRef, JClassLocalRef, JMethodId, JValue*, TResult>
-		Call;
+	private readonly void* _ptr;
+
+	/// <summary>
+	/// Calls <c>A</c> function.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public TResult Call(JEnvironmentRef envRef, JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId,
+		JValue* args)
+	{
+		TResult result = default;
+		GenericFunctionCallHelper.CallNonVirtualMethod(this._ptr, TResult.Type, envRef, localRef, classRef, methodId,
+		                                               args, ref Unsafe.As<TResult, Byte>(ref result));
+		return result;
+	}
 }

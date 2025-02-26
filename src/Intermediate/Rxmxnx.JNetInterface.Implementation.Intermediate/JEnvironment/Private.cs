@@ -16,7 +16,7 @@ partial class JEnvironment
 	private JEnvironment(EnvironmentCache cache) => this._cache = cache;
 
 	/// <summary>
-	/// Tests whether two references refer to the same object.
+	/// Tests whether two references point to the same object.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
 	/// <param name="otherRef">A <see cref="JObjectLocalRef"/> reference.</param>
@@ -66,6 +66,14 @@ partial class JEnvironment
 	{
 		// Element signature is Array signature without [ prefix.
 		ReadOnlySpan<Byte> elementSignature = arraySignature[1..];
+
+		if (elementSignature.Length == 1)
+		{
+			JArrayTypeMetadata result = (JArrayTypeMetadata)MetadataHelper.GetExactMetadata(arrayHash)!;
+			JTrace.UseTypeMetadata(arraySignature, result);
+			return result;
+		}
+
 		ReadOnlySpan<Byte> elementClassName = elementSignature;
 		if (elementSignature[0] != CommonNames.ArraySignaturePrefixChar &&
 		    elementSignature[^1] == CommonNames.ObjectSignatureSuffixChar)
@@ -219,7 +227,7 @@ partial class JEnvironment
 	/// Deletes <paramref name="localRef"/>.
 	/// </summary>
 	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference to remove.</param>
-	private unsafe void DeleteLocalRef(JObjectLocalRef localRef)
+	private void DeleteLocalRef(JObjectLocalRef localRef)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteLocalRefInfo);
@@ -244,7 +252,7 @@ partial class JEnvironment
 	/// </summary>
 	/// <typeparam name="TObjectRef">A <see cref="IWrapper{JObjectLocalRef}"/> type.</typeparam>
 	/// <param name="objectRef">A <see cref="IWrapper{JObjectLocalRef}"/> reference.</param>
-	private unsafe JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
+	private JObjectLocalRef CreateLocalRef<TObjectRef>(TObjectRef objectRef)
 		where TObjectRef : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 	{
 		ref readonly NativeInterface nativeInterface =
@@ -258,11 +266,11 @@ partial class JEnvironment
 	/// <summary>
 	/// Retrieves a global reference for given class reference.
 	/// </summary>
-	/// <param name="classMetadata">Class metadata.</param>
+	/// <param name="typeInformation">Type information.</param>
 	/// <param name="classRef">A local class reference.</param>
 	/// <param name="deleteLocalRef">Indicates whether local class reference should be deleted.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	private JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata classMetadata, JClassLocalRef classRef,
+	private JGlobalRef GetMainClassGlobalRef(ITypeInformation typeInformation, JClassLocalRef classRef,
 		Boolean deleteLocalRef = true)
 	{
 		try
@@ -278,8 +286,11 @@ partial class JEnvironment
 
 		this.DescribeException();
 		this._cache.ClearException(); // Clears JNI exception.
-		throw new NotSupportedException(
-			$"Error creating JNI global reference to {ClassNameHelper.GetClassName(classMetadata.ClassSignature)} class.");
+
+		IMessageResource resource = IMessageResource.GetInstance();
+		String className = ClassNameHelper.GetClassName(typeInformation.Signature);
+		String message = resource.MainClassGlobalError(className);
+		throw new NotSupportedException(message);
 	}
 	/// <summary>
 	/// Indicates whether validation of <paramref name="jGlobal"/> can be avoided.
@@ -294,8 +305,8 @@ partial class JEnvironment
 	{
 		if (cache is null || !cache.VirtualMachine.SecureRemove(jGlobal.As<JObjectLocalRef>())) return true;
 		Boolean isWeak = jGlobal is JWeak;
-		if (!isWeak && jGlobal.ObjectMetadata is ClassObjectMetadata classObjectMetadata)
-			return MetadataHelper.MainClassHashes.Contains(classObjectMetadata.Hash);
+		if (!isWeak && LocalMainClasses.IsMainGlobal(jGlobal as JGlobal))
+			return true;
 		return Random.Shared.Next(0, 10) > (!isWeak ? 5 : 2);
 	}
 

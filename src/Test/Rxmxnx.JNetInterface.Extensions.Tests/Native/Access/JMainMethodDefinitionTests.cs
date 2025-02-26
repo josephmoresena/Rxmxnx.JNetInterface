@@ -31,6 +31,7 @@ public sealed class JMainMethodDefinitionTests
 	[InlineData]
 	[InlineData(true)]
 	[InlineData(false)]
+#pragma warning disable CA1859
 	internal void InvokeTest(Boolean? nullInput = default)
 	{
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
@@ -70,4 +71,5 @@ public sealed class JMainMethodDefinitionTests
 
 		jArgs.Dispose();
 	}
+#pragma warning restore CA1859
 }

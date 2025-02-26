@@ -80,7 +80,7 @@ public partial class JNativeCallAdapterTests
 
 			_ = builder.WithParameter(localRef, out JLocalObject result);
 
-			return Assert.IsAssignableFrom<JErrorObject>(result);
+			return Assert.IsType<JErrorObject>(result, false);
 		}
 		finally
 		{
@@ -166,8 +166,8 @@ public partial class JNativeCallAdapterTests
 
 			_ = builder.WithParameter(localRef, out JLocalObject result);
 
-			return Assert.IsAssignableFrom<JProxyObject>(
-				Assert.IsAssignableFrom<IInterfaceObject<JSerializableObject>>(result));
+			return Assert.IsType<JProxyObject>(Assert.IsType<IInterfaceObject<JSerializableObject>>(result, false),
+			                                   false);
 		}
 		finally
 		{
@@ -267,7 +267,7 @@ public partial class JNativeCallAdapterTests
 			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
 
 			_ = builder.WithParameter(localRef, out JLocalObject result);
-			JArrayObject jArray = Assert.IsAssignableFrom<JArrayObject>(result);
+			JArrayObject jArray = Assert.IsType<JArrayObject>(result, false);
 			Assert.Equal(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JErrorObject>>>>.Metadata,
 			             jArray.TypeMetadata);
 			return jArray;
@@ -369,7 +369,7 @@ public partial class JNativeCallAdapterTests
 			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
 
 			_ = builder.WithParameter(localRef, out JLocalObject result);
-			JArrayObject jArray = Assert.IsAssignableFrom<JArrayObject>(result);
+			JArrayObject jArray = Assert.IsType<JArrayObject>(result, false);
 			Assert.Equal(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JSerializableObject>>>>.Metadata,
 			             jArray.TypeMetadata);
 			return jArray;
@@ -471,7 +471,7 @@ public partial class JNativeCallAdapterTests
 			                                       ReadOnlyValPtr<JValueWrapper>.Zero);
 
 			_ = builder.WithParameter(localRef, out JLocalObject result);
-			JArrayObject jArray = Assert.IsAssignableFrom<JArrayObject>(result);
+			JArrayObject jArray = Assert.IsType<JArrayObject>(result, false);
 			Assert.Equal(JArrayObject<JArrayObject<JArrayObject<JArrayObject<JEnumObject>>>>.Metadata,
 			             jArray.TypeMetadata);
 			return jArray;

@@ -15,6 +15,15 @@ partial class JEnvironment
 			this.Register(this.ThrowableObject);
 			this.Register(this.StackTraceElementObject);
 
+			// Register user main classes.
+			foreach (ITypeInformation? typeInformation in JVirtualMachine.MainClassesInformation)
+			{
+				if (!this._classes.TryGetValue(typeInformation.Hash, out JClassObject? mainClass))
+					// Only creates JClassObject instance if not found in class cache.
+					mainClass = new(this.ClassObject, typeInformation);
+				this.Register(mainClass);
+			}
+
 			this.Register(this.BooleanPrimitive);
 			this.Register(this.BytePrimitive);
 			this.Register(this.CharPrimitive);
@@ -84,30 +93,32 @@ partial class JEnvironment
 		private JClassLocalRef ReloadClass(JClassObject? jClass)
 		{
 			if (jClass is null) return default;
+			Boolean isMainClass = JVirtualMachine.IsMainClass(jClass.Hash);
+			JGlobal? jGlobal = isMainClass ? this.VirtualMachine.LoadGlobal(jClass) : default;
 			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			if (classRef.IsDefault)
+			Boolean findClass = classRef.IsDefault;
+
+			if (jGlobal is not null)
+			{
+				if (jGlobal.IsDefault)
+				{
+					if (findClass) classRef = this.FindClass(jClass);
+					ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
+					jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, findClass));
+					this.VirtualMachine.ReloadAccess(jClass.Hash);
+				}
+				// Always use the global reference if it is a main class.
+				classRef = jGlobal.As<JClassLocalRef>();
+			}
+			else if (findClass)
 			{
 				classRef = this.FindClass(jClass);
-				if (!JVirtualMachine.IsMainClass(jClass.Hash))
-					jClass.SetValue(classRef);
-				else
-					classRef = this.ReloadMainClass(jClass, classRef, true);
+				jClass.SetValue(classRef);
+				// Registers class in the current local frame.
 				this.Register(jClass);
 			}
-			else if (JVirtualMachine.IsMainClass(jClass.Hash))
-			{
-				classRef = this.ReloadMainClass(jClass, classRef, false);
-			}
+
 			return classRef;
-		}
-		private JClassLocalRef ReloadMainClass(JClassObject jClass, JClassLocalRef classRef, Boolean deleteLocalRef)
-		{
-			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
-			if (!jGlobal.IsDefault) return classRef;
-			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
-			jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
-			this.VirtualMachine.SetMainGlobal(classMetadata.Hash, jGlobal);
-			return jGlobal.As<JClassLocalRef>();
 		}
 		/// <summary>
 		/// Retrieves the current <paramref name="classRef"/> instance as <see cref="JClassObject"/>.
@@ -334,10 +345,12 @@ partial class JEnvironment
 			fixed (Byte* namePtr = &MemoryMarshal.GetReference(className.AsSpan()))
 			fixed (Byte* bufferPtr = &MemoryMarshal.GetReference(buffer))
 			{
-				classRef = nativeInterface.ClassFunctions.DefineClass(this.Reference, namePtr, localRef, new(bufferPtr),
+				JTrace.DefiningClass(this.Reference, className, buffer);
+				classRef = nativeInterface.ClassFunctions.DefineClass(this.Reference, namePtr, localRef, bufferPtr,
 				                                                      buffer.Length);
 			}
 			if (classRef.IsDefault) this.CheckJniError();
+			JTrace.DefiningClass(this.Reference, className, classRef);
 			return classRef;
 		}
 		/// <summary>
@@ -351,18 +364,18 @@ partial class JEnvironment
 			JClassLocalRef classRef)
 		{
 			JClassLocalRef classRefO = jniTransaction.Add(jClass);
-			if (!classRefO.IsDefault && !this._env.IsSame(classRef.Value, default))
-			{
-				if (!this._env.IsSame(classRef.Value, classRefO.Value))
-					throw new InvalidOperationException("Redefinition class is unsupported.");
-			}
-			else
+			if (classRefO.IsDefault || this._env.IsSame(classRef.Value, default))
 			{
 				if (JVirtualMachine.IsMainClass(jClass.Hash))
 					this.LoadMainClass(jClass, classRef);
 				else
 					jClass.SetValue(classRef);
 				this._classes.Unload(classRefO);
+			}
+			else if (!this._env.IsSame(classRef.Value, classRefO.Value))
+			{
+				IMessageResource resource = IMessageResource.GetInstance();
+				throw new InvalidOperationException(resource.ClassRedefinition);
 			}
 		}
 		/// <summary>
@@ -375,8 +388,16 @@ partial class JEnvironment
 		{
 			JGlobal jGlobal = this.VirtualMachine.LoadGlobal(jClass);
 			ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
-			this.VirtualMachine.SetMainGlobal(jClass.Hash, jGlobal);
-			jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
+			if (jGlobal.IsDefault)
+			{
+				// A global-reference is created only if the existing one is default.
+				jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, deleteLocalRef));
+				this.VirtualMachine.ReloadAccess(jClass.Hash);
+			}
+			else if (deleteLocalRef)
+			{
+				this._env.DeleteLocalRef(classRef.Value);
+			}
 			if (deleteLocalRef) jClass.ClearValue();
 		}
 		/// <summary>

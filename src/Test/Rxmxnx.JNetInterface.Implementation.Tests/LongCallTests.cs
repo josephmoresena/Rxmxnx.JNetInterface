@@ -12,6 +12,7 @@ public sealed class LongCallTests
 	[InlineData(CallType.Values)]
 	[InlineData(CallType.Objects)]
 	[InlineData(CallType.Mixed)]
+	[InlineData(CallType.MultipleValues)]
 	internal void InstanceTest(CallType callType)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
@@ -39,6 +40,7 @@ public sealed class LongCallTests
 	[InlineData(CallType.Values)]
 	[InlineData(CallType.Objects)]
 	[InlineData(CallType.Mixed)]
+	[InlineData(CallType.MultipleValues)]
 	internal void NonVirtualTest(CallType callType)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
@@ -67,6 +69,7 @@ public sealed class LongCallTests
 	[InlineData(CallType.Values)]
 	[InlineData(CallType.Objects)]
 	[InlineData(CallType.Mixed)]
+	[InlineData(CallType.MultipleValues)]
 	internal void StaticTest(CallType callType)
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();

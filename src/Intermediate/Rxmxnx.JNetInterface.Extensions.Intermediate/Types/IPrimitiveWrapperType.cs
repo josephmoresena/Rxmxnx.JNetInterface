@@ -24,6 +24,12 @@ public interface
 	internal static abstract JPrimitiveTypeMetadata PrimitiveMetadata { get; }
 
 	static JClassTypeMetadata<TWrapper> IClassType<TWrapper>.Metadata => TWrapper.Metadata;
+
+	/// <summary>
+	/// Sets the current instance value.
+	/// </summary>
+	/// <param name="value">Instance new value.</param>
+	internal void SetPrimitiveValue(IPrimitiveType value);
 }
 
 /// <summary>

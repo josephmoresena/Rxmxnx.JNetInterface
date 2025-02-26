@@ -20,7 +20,7 @@ public sealed class JGlobal : JGlobalBase
 	public JGlobalRef Reference => this.As<JGlobalRef>();
 
 	/// <summary>
-	/// Secondary <see cref="ObjectLifetime"/>
+	/// Secondary <see cref="JGlobal"/> instance.
 	/// </summary>
 	private JGlobal? Secondary => this._secondary.TryGetTarget(out JGlobal? result) ? result : default;
 

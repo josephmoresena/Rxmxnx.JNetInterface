@@ -10,6 +10,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="System.Buffers"/>
         <Using Include="System.Collections"/>
         <Using Include="System.Collections.Concurrent"/>
         <Using Include="System.Diagnostics.CodeAnalysis"/>
@@ -24,8 +29,10 @@
 
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.Localization"/>
         <Using Include="Rxmxnx.JNetInterface.Io"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
+        <Using Include="Rxmxnx.JNetInterface.Lang.Annotation"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Reflect"/>
         <Using Include="Rxmxnx.JNetInterface.Native"/>
         <Using Include="Rxmxnx.JNetInterface.Native.Access"/>
@@ -40,15 +47,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
-        <PackageReference Include="xunit" Version="2.9.2"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0"/>
+        <PackageReference Include="xunit" Version="2.9.3"/>
         <PackageReference Include="AutoFixture" Version="4.18.1"/>
         <PackageReference Include="NSubstitute" Version="5.3.0"/>
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0">
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="6.0.3">
+        <PackageReference Include="coverlet.collector" Version="6.0.4">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

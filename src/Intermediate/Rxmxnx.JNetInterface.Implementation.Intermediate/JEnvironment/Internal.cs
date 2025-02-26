@@ -34,12 +34,12 @@ partial class JEnvironment
 	/// <summary>
 	/// Retrieves a global reference for given class name.
 	/// </summary>
-	/// <param name="classMetadata">Class metadata.</param>
+	/// <param name="typeInformation">Type information.</param>
 	/// <returns>A <see cref="JGlobalRef"/> reference.</returns>
-	internal JGlobalRef GetMainClassGlobalRef(ClassObjectMetadata classMetadata)
+	internal JGlobalRef GetMainClassGlobalRef(ITypeInformation typeInformation)
 	{
-		JClassLocalRef classRef = this._cache.FindMainClass(classMetadata.Name, classMetadata.ClassSignature);
-		return this.GetMainClassGlobalRef(classMetadata, classRef);
+		JClassLocalRef classRef = this._cache.FindMainClass(typeInformation.ClassName, typeInformation.Signature);
+		return this.GetMainClassGlobalRef(typeInformation, classRef);
 	}
 	/// <summary>
 	/// Retrieves a global reference for given class name.
@@ -61,7 +61,7 @@ partial class JEnvironment
 	/// Deletes <paramref name="globalRef"/>.
 	/// </summary>
 	/// <param name="globalRef">A <see cref="JGlobalRef"/> reference.</param>
-	internal unsafe void DeleteGlobalRef(JGlobalRef globalRef)
+	internal void DeleteGlobalRef(JGlobalRef globalRef)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteGlobalRefInfo);
@@ -71,7 +71,7 @@ partial class JEnvironment
 	/// Deletes <paramref name="weakRef"/>.
 	/// </summary>
 	/// <param name="weakRef">A <see cref="JWeakRef"/> reference.</param>
-	internal unsafe void DeleteWeakGlobalRef(JWeakRef weakRef)
+	internal void DeleteWeakGlobalRef(JWeakRef weakRef)
 	{
 		ref readonly NativeInterface nativeInterface =
 			ref this._cache.GetNativeInterface<NativeInterface>(NativeInterface.DeleteWeakGlobalRefInfo);

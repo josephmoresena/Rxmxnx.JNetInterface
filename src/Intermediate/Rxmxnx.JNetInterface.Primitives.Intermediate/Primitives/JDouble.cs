@@ -58,7 +58,7 @@ public readonly partial struct JDouble : INativeType, IComparable<JDouble>, IEqu
 	public Int32 CompareTo(JDouble other) => this._value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => IPrimitiveType<JDouble, Double>.Compare(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveValueType.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

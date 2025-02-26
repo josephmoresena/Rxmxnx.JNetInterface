@@ -26,9 +26,12 @@
         <Using Include="System.Numerics"/>
         <Using Include="System.Runtime.CompilerServices"/>
         <Using Include="System.Runtime.InteropServices"/>
+        <Using Include="System.Security.Cryptography"/>
+        <Using Include="System.Text"/>
         <Using Include="Rxmxnx.PInvoke"/>
         <Using Include="Rxmxnx.JNetInterface.Io"/>
         <Using Include="Rxmxnx.JNetInterface.Internal"/>
+        <Using Include="Rxmxnx.JNetInterface.Internal.Localization"/>
         <Using Include="Rxmxnx.JNetInterface.Lang"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Reflect"/>
         <Using Include="Rxmxnx.JNetInterface.Lang.Annotation"/>
@@ -50,7 +53,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Extensions.Intermediate\Rxmxnx.JNetInterface.Extensions.Intermediate.csproj"/>
-        <ProjectReference Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
+        <ProjectReference Condition="'$(UseSourceGeneratorAssembly)' != 'true'" Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
+        <Analyzer Condition="'$(UseSourceGeneratorAssembly)' == 'true'" Include="..\..\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator/bin/Release/netstandard2.0/Rxmxnx.JNetInterface.SourceGenerator.dll"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -69,6 +73,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="..\..\..\native-image\jni-config.json">
+            <Link>jni-config.json</Link>
+        </Content>
+        <Content Include="..\..\..\native-image\README.md">
+            <Link>NATIVE-IMAGE.md</Link>
+        </Content>
         <Content Include="..\..\..\package\Rxmxnx.JNetInterface\PACKAGE.md">
             <Link>PACKAGE.md</Link>
         </Content>

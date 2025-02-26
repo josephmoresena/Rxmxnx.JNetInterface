@@ -54,8 +54,16 @@ internal readonly partial struct JniTransactionHandle : IDisposable
 	{
 		Synchronizer result =
 			JniTransactionHandle.Initialize<Synchronizer>(new(env.VirtualMachine, jObject), transactions);
-		result.Activate(env);
-		return result;
+		try
+		{
+			result.Activate(env);
+			return result;
+		}
+		catch (Exception)
+		{
+			result.Dispose();
+			throw;
+		}
 	}
 	/// <summary>
 	/// Creates a native memory adapter instance for <paramref name="jString"/>.

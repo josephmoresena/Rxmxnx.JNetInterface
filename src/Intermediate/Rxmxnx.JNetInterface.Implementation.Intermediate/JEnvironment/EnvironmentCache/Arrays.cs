@@ -160,7 +160,7 @@ partial class JEnvironment
 			if (localRef == default) this.CheckJniError();
 			return localRef;
 		}
-		private unsafe IntPtr GetPrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, out JBoolean isCopyJ)
+		private IntPtr GetPrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, out JBoolean isCopyJ)
 		{
 			ref readonly ArrayFunctionSet arrayFunctions =
 				ref this.GetArrayFunctions(signature, ArrayFunctionSet.PrimitiveFunction.GetElements);
@@ -205,7 +205,7 @@ partial class JEnvironment
 			}
 			return result;
 		}
-		private unsafe void ReleasePrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, IntPtr pointer,
+		private void ReleasePrimitiveArrayElements(JArrayLocalRef arrayRef, Byte signature, IntPtr pointer,
 			JReleaseMode mode)
 		{
 			ref readonly ArrayFunctionSet arrayFunctions =
@@ -263,7 +263,7 @@ partial class JEnvironment
 		/// <param name="index">Region start index.</param>
 		/// <param name="count">Number of elements in region.</param>
 		/// <exception cref="ArgumentException"/>
-		private unsafe void GetPrimitiveArrayRegion(JArrayObject jArray, Byte signature, IntPtr bufferPtr, Int32 index,
+		private void GetPrimitiveArrayRegion(JArrayObject jArray, Byte signature, IntPtr bufferPtr, Int32 index,
 			Int32 count = 1)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
@@ -322,7 +322,7 @@ partial class JEnvironment
 		/// <param name="index">Region start index.</param>
 		/// <param name="count">Number of elements in region.</param>
 		/// <exception cref="ArgumentException"/>
-		private unsafe void SetPrimitiveArrayRegion(JArrayObject jArray, Byte signature, IntPtr bufferPtr, Int32 index,
+		private void SetPrimitiveArrayRegion(JArrayObject jArray, Byte signature, IntPtr bufferPtr, Int32 index,
 			Int32 count = 1)
 		{
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
@@ -406,14 +406,16 @@ partial class JEnvironment
 			Int32 requiredBytes = metadata.SizeOf * jArray.Length;
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(requiredBytes), requiredBytes);
+			Rented<Byte> rented = default;
 			Span<Byte> buffer = stackDisposable.UsingStack ?
 				stackalloc Byte[requiredBytes] :
-				EnvironmentCache.HeapAlloc<Byte>(requiredBytes);
+				EnvironmentCache.HeapAlloc(requiredBytes, ref rented);
 			Int32 offset = 0;
 			while (offset < requiredBytes)
 				initialElement.CopyTo(buffer, ref offset);
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(buffer))
 				this.SetPrimitiveArrayRegion(jArray, metadata.Signature[0], new(ptr), 0, jArray.Length);
+			rented.Free();
 		}
 	}
 }

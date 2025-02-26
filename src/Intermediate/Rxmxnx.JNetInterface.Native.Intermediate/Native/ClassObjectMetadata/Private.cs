@@ -6,19 +6,17 @@ public partial record ClassObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata">A <see cref="JDataTypeMetadata"/> instance.</param>
-	private ClassObjectMetadata(ITypeInformation metadata) : base(IClassType.GetMetadata<JClassObject>())
+	private ClassObjectMetadata(ITypeInformation metadata) : base(IClassType.GetMetadata<JClassObject>(), null)
 	{
 		this.Name = metadata.ClassName;
 		this.ClassSignature = metadata.Signature;
 		this.Hash = metadata.Hash;
 		this.ArrayDimension = JClassObject.GetArrayDimension(metadata.Signature);
 		this.IsFinal = metadata.IsFinal;
-		if (metadata.Kind is not JTypeKind.Undefined)
-		{
-			this.IsInterface = metadata.Kind is JTypeKind.Interface or JTypeKind.Annotation;
-			this.IsAnnotation = metadata.Kind is JTypeKind.Annotation;
-			this.IsEnum = metadata.Kind is JTypeKind.Enum;
-		}
+		if (metadata.Kind is JTypeKind.Undefined) return;
+		this.IsInterface = metadata.Kind is JTypeKind.Interface or JTypeKind.Annotation;
+		this.IsAnnotation = metadata.Kind is JTypeKind.Annotation;
+		this.IsEnum = metadata.Kind is JTypeKind.Enum;
 	}
 	/// <inheritdoc/>
 	[ExcludeFromCodeCoverage]

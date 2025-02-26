@@ -70,6 +70,7 @@ internal class ClassCache(JReferenceType type)
 	/// </summary>
 	/// <param name="hash">A class hash.</param>
 	/// <param name="classRef">Unloaded <see cref="JClassLocalRef"/> reference.</param>
+	[ExcludeFromCodeCoverage]
 	protected virtual void SetAsUnloaded(String hash, JClassLocalRef classRef) { }
 
 	/// <summary>
@@ -140,5 +141,18 @@ internal sealed class ClassCache<TClass>(JReferenceType type) : ClassCache(type)
 		if (jClass is not ILocalObject localClass || localClass.LocalReference != classRef.Value) return;
 		localClass.Lifetime.GetCacheable().Dispose();
 		JTrace.ClearClass(classRef, jClass);
+	}
+	/// <summary>
+	/// Refresh access cache.
+	/// </summary>
+	public void RefreshAccess()
+	{
+		foreach (TClass jClass in this._classes.Values)
+		{
+			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
+			if (classRef.IsDefault) continue;
+			this.Load(classRef);
+			JTrace.AccessLoaded(jClass);
+		}
 	}
 }

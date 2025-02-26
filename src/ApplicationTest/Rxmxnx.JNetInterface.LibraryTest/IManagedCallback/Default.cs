@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -11,10 +9,10 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 public partial interface IManagedCallback
 {
-	[ExcludeFromCodeCoverage]
-	public sealed class Default(IVirtualMachine vm) : IManagedCallback
+	public sealed class Default(IVirtualMachine vm, TextWriter writer) : IManagedCallback
 	{
-		IVirtualMachine IManagedCallback.VirtualMachine => vm;
+		public IVirtualMachine VirtualMachine { get; } = vm;
+		public TextWriter Writer { get; } = writer;
 
 		JStringObject IManagedCallback.GetHelloString(JLocalObject jLocal)
 		{
@@ -23,20 +21,20 @@ public partial interface IManagedCallback
 		}
 		JInt IManagedCallback.GetThreadId(JLocalObject jLocal)
 		{
-			Console.WriteLine(jLocal.Class);
+			this.Writer.WriteLine(jLocal.Class);
 			return Environment.CurrentManagedThreadId;
 		}
 		void IManagedCallback.PrintRuntimeInformation(JLocalObject jLocal, JStringObject? jString)
 		{
-			Console.WriteLine(jLocal);
-			Console.WriteLine(jString?.Value);
+			this.Writer.WriteLine(jLocal);
+			this.Writer.WriteLine(jString?.Value);
 		}
 		void IManagedCallback.ProcessField(JLocalObject jLocal)
 		{
 			IEnvironment env = jLocal.Environment;
 			JFieldDefinition<JStringObject> sField = new("s_field"u8);
 			using JStringObject? jString = sField.Get(jLocal);
-			Console.WriteLine($"s_field -> {jString?.Value}");
+			this.Writer.WriteLine($"s_field -> {jString?.Value}");
 			using JNativeMemory<Byte>? utf8Chars = jString?.GetNativeUtf8Chars();
 			ReadOnlySpan<Byte> span = utf8Chars is not null ? utf8Chars.Values : ReadOnlySpan<Byte>.Empty;
 			using JStringObject newString = JStringObject.Create(env, Convert.ToHexString(span));
@@ -55,8 +53,8 @@ public partial interface IManagedCallback
 				env.DescribeException();
 				if (e is ThrowableException te)
 				{
-					Console.WriteLine($"=== {te.EnvironmentRef} thread: {te.ThreadId} === ");
-					Console.WriteLine(te.WithSafeInvoke(t => t.ToString()));
+					this.Writer.WriteLine($"=== {te.EnvironmentRef} thread: {te.ThreadId} === ");
+					this.Writer.WriteLine(te.WithSafeInvoke(t => t.ToString()));
 				}
 				env.PendingException = default;
 			}
@@ -107,7 +105,8 @@ public partial interface IManagedCallback
 				return default;
 			}
 		}
-		static void IManagedCallback.PrintClass(JClassObject jClass) => Console.WriteLine(jClass.ToString());
+		static void IManagedCallback.PrintClass(JClassObject jClass, TextWriter writer)
+			=> writer.WriteLine(jClass.ToString());
 		static JClassObject IManagedCallback.GetVoidClass(JClassObject jClass)
 		{
 			IEnvironment env = jClass.Environment;

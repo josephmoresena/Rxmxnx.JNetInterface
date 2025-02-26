@@ -6,49 +6,21 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <ExcludeXmlAssemblyFiles>false</ExcludeXmlAssemblyFiles>
-    <IsPackable>true</IsPackable>
-    <Deterministic>true</Deterministic>
-    <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsTrimmable>
-    <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0'))">true</IsTrimmable>
-    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
-    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0'))">true</IsAotCompatible>
-    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
-    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
-    <LangVersion>latest</LangVersion>
-    <DefineConstants>$(DefineConstants);PACKAGE</DefineConstants>
+    <SigningKeyFile>..\Rxmxnx.JNetInterface.snk</SigningKeyFile>
+    <IntermediateSourceBasePath>..\..\src\Intermediate</IntermediateSourceBasePath>
     <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' != ''">$(Version)</CoreVersion>
     <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' == ''">*</CoreVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(PUBLIC_KEY)' != ''">
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\Rxmxnx.JNetInterface.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+  <Import Project="..\Intermediate-to-Package.targets" />
+
+  <!-- Include intermediate assemblies -->
+  <ItemGroup>
+    <IntermediateAssemblyNames Include="Rxmxnx.JNetInterface.Implementation.Intermediate"/>
+  </ItemGroup>
   
   <ItemGroup>
-    <EmbeddedResource Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\ILLink\ILLink.Substitutions.xml">
-      <LogicalName>ILLink.Substitutions.xml</LogicalName>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator\Rxmxnx.JNetInterface.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netstandard2.0"/>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Rxmxnx.JNetInterface.Core" Version="$(CoreVersion)"/>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\**\*.cs">
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </Compile>
-    <Compile Remove="..\..\src\Intermediate\**\obj\**\*.*;..\..\Intermediate\**\bin\**\*.*" />
-    <Compile Include="..\..\src\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\**\*.GlobalUsings.g.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -77,10 +49,6 @@
     </PackageTags>
     <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
 </Project>

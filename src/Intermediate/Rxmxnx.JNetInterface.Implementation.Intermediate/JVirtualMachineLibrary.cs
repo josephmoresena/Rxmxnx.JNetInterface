@@ -174,12 +174,29 @@ public sealed unsafe class JVirtualMachineLibrary
 	public static JVirtualMachineLibrary? Create(IntPtr handle)
 	{
 		Span<IntPtr> functions = stackalloc IntPtr[3];
-		if (NativeLibrary.TryGetExport(handle, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
-		                               out functions[0]) &&
-		    NativeLibrary.TryGetExport(handle, JVirtualMachineLibrary.CreateVirtualMachineName, out functions[1]) &&
-		    NativeLibrary.TryGetExport(handle, JVirtualMachineLibrary.GetCreatedVirtualMachinesName, out functions[2]))
+		if (JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.GetDefaultVirtualMachineInitArgsName,
+		                                           out functions[0]) &&
+		    JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.CreateVirtualMachineName,
+		                                           out functions[1]) &&
+		    JVirtualMachineLibrary.TryGetJniExport(handle, JVirtualMachineLibrary.GetCreatedVirtualMachinesName,
+		                                           out functions[2]))
 			return new(handle, Unsafe.As<IntPtr, InvocationFunctionSet>(ref functions[0]));
 		NativeLibrary.Free(handle);
 		return default;
 	}
+
+	/// <summary>
+	/// Gets the address of JNI exported symbol and returns a value that indicates whether
+	/// the method call succeeded.
+	/// </summary>
+	/// <param name="handle">The native JVM library OS handle.</param>
+	/// <param name="name">The name of the exported JNI symbol.</param>
+	/// <param name="address">When the method returns, contains the symbol address, if it exists.</param>
+	/// <returns>
+	/// <see langword="true"/> if the address of the exported symbol was found successfully; otherwise,
+	/// <see langword="false"/>.
+	/// </returns>
+	private static Boolean TryGetJniExport(IntPtr handle, String name, out IntPtr address)
+		=> NativeLibrary.TryGetExport(handle, name, out address) ||
+			NativeLibrary.TryGetExport(handle, name + "_Impl", out address);
 }

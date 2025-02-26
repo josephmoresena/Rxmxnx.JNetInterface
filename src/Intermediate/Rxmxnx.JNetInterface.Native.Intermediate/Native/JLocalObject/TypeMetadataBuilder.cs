@@ -102,7 +102,7 @@ public partial class JLocalObject
 			JInterfaceTypeMetadata interfaceMetadata)
 		{
 			if (!state.Interfaces.Contains(interfaceMetadata.InterfaceType))
-				state.NotContained.Add(interfaceMetadata.ClassName);
+				state.NotContained.Add(ClassNameHelper.GetClassName(interfaceMetadata.Signature));
 		}
 		/// <summary>
 		/// Appends a superinterface to current type definition.
@@ -230,9 +230,6 @@ public partial class JLocalObject
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TObject>(
 			ReadOnlySpan<Byte> className, JTypeModifier modifier) where TObject : TClass, IClassType<TObject>
 		{
-			IReadOnlySet<Type> baseTypes = IClassType<TObject>.TypeBaseTypes;
-			IReadOnlySet<Type> baseBaseTypes = IClassType<TClass>.TypeBaseTypes;
-			NativeValidationUtilities.ValidateBaseTypes(className, baseTypes, baseBaseTypes);
 			IReadOnlySet<Type> interfaceTypes = IReferenceType<TObject>.TypeInterfaces;
 			return new(className, modifier, IClassType.GetMetadata<TClass>(), interfaceTypes);
 		}

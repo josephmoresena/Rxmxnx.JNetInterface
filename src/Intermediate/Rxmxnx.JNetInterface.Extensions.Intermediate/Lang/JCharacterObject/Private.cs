@@ -22,6 +22,10 @@ public sealed partial class JCharacterObject
 		this._value = jBooleanObject?._value;
 	}
 
+	[ExcludeFromCodeCoverage]
+	void IPrimitiveWrapperType<JCharacterObject>.SetPrimitiveValue(IPrimitiveType value)
+		=> this._value = value.ToChar(CultureInfo.InvariantCulture);
+
 	static JCharacterObject IClassType<JCharacterObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer);
 	static JCharacterObject IClassType<JCharacterObject>.Create(IReferenceType.ObjectInitializer initializer)

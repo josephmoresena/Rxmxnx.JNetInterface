@@ -27,7 +27,9 @@ public partial class JNativeCallAdapterTests
 			                                                              JClassLocalRef.FromReference(in localRef),
 			                                                              out _).Build().FinalizeCall());
 			Assert.Equal(
-				$"A {classTypeMetadata.ClassName} instance is not {IClassType.GetMetadata<JClassObject>().ClassName} instance.",
+				IMessageResource.GetInstance().NotTypeObject(ClassNameHelper.GetClassName(classTypeMetadata.Signature),
+				                                             ClassNameHelper.GetClassName(
+					                                             IClassType.GetMetadata<JClassObject>().Signature)),
 				ex.Message);
 
 			proxyEnv.Received(1).GetObjectRefType(localRef);

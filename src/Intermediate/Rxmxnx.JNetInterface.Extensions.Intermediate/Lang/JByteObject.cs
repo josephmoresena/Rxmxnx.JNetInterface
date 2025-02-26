@@ -24,6 +24,11 @@ public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveW
 	/// <inheritdoc/>
 	private JByteObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JByteObject>()) { }
 
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	void IPrimitiveWrapperType<JByteObject>.SetPrimitiveValue(IPrimitiveType value)
+		=> base.SetPrimitiveValue(value.ToSByte(CultureInfo.InvariantCulture));
+
 	static JByteObject? IPrimitiveWrapperType<JByteObject, JByte>.Create(IEnvironment env, JByte? value)
 		=> value is not null ? (JByteObject)env.ReferenceFeature.CreateWrapper(value.Value) : default;
 	static JByteObject IClassType<JByteObject>.Create(IReferenceType.ClassInitializer initializer) => new(initializer);

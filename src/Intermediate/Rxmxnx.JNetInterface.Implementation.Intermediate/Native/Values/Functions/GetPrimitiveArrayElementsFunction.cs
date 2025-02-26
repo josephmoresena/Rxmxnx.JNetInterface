@@ -16,5 +16,14 @@ internal readonly unsafe struct GetPrimitiveArrayElementsFunction<TPrimitiveType
 	/// Pointer to <c>Get&lt;PrimitiveType&gt;Elements</c> function.
 	/// Returns the body of the primitive array.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, TArrayRef, out JBoolean, ValPtr<TPrimitiveType>> Get;
+	private readonly delegate* unmanaged<JEnvironmentRef, JArrayLocalRef, out JBoolean, void*> _ptr;
+
+	/// <summary>
+	/// Pointer to <c>Get&lt;PrimitiveType&gt;Elements</c> function.
+	/// Returns the body of the primitive array.
+	/// </summary>
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public ValPtr<TPrimitiveType> Get(JEnvironmentRef envRef, TArrayRef arrayRef, out JBoolean isCopy)
+		=> (TPrimitiveType*)this._ptr(envRef, arrayRef.ArrayValue, out isCopy);
 }

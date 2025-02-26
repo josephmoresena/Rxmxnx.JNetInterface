@@ -32,7 +32,8 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	public void Dispose()
 	{
 		this.Dispose(true);
-		GC.SuppressFinalize(this);
+		if (JLocalObject.IsUnloaded(this))
+			GC.SuppressFinalize(this);
 	}
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>

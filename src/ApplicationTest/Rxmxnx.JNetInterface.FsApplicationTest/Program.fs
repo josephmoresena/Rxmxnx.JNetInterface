@@ -1,12 +1,14 @@
-[<System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage>]
 module Program
 
 open System
+open System.Diagnostics
+open System.IO
 open System.Runtime.InteropServices
 open Microsoft.FSharp.Control
 open Microsoft.FSharp.Core
 open Rxmxnx.JNetInterface
 open Rxmxnx.JNetInterface.ApplicationTest
+open Rxmxnx.JNetInterface.Native
 open Rxmxnx.JNetInterface.Native.Access
 open Rxmxnx.PInvoke
 
@@ -16,19 +18,15 @@ let PrintException (env: IEnvironment, ex: ThrowableException) =
 
 let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string[]) =
     try
-        let initArgs = jvmLib.GetDefaultArgument()
+        let mutable initArgs = jvmLib.GetDefaultArgument()
 
-        if IVirtualMachine.TypeMetadataToStringEnabled then
-            Console.WriteLine(initArgs)
+        initArgs <- JVirtualMachineInitArg(initArgs.Version, Options = CStringSequence [ "-DjniLib.load.disable=true" ])
 
         let vm, env = jvmLib.CreateVirtualMachine(initArgs)
         use v = vm
 
         try
-            if IVirtualMachine.TypeMetadataToStringEnabled then
-                JRuntimeInfo.PrintVirtualMachineInfo(env, v, jvmLib)
-
-            let managedInstance = IManagedCallback.Default(vm)
+            let managedInstance = IManagedCallback.Default(vm, Console.Out)
 
             use helloJniClass =
                 JHelloDotnetObject.LoadClass(env, classByteCode, managedInstance)
@@ -45,34 +43,42 @@ let Execute (jvmLib: JVirtualMachineLibrary, classByteCode: byte[], args: string
 
 let MainAsync () =
     async {
-        if IVirtualMachine.TypeMetadataToStringEnabled then
-            JRuntimeInfo.PrintMetadataInfo()
-
-        let reflectionDisabled = not ("{typeof<CString>}".Contains(nameof CString))
         let args = Environment.GetCommandLineArgs()
 
-        let compiler =
-            if args.Length = 3 then
-                Some(JCompiler(JdkPath = args[0], CompilerPath = args[1], LibraryPath = args[2]))
+        if args.Length < 2 then
+            raise (ArgumentException("Please set JVM library path."))
+
+        let! helloJniByteCode = File.ReadAllBytesAsync("HelloDotnet.class") |> Async.AwaitTask
+
+        let jvmLib =
+            match JVirtualMachineLibrary.LoadLibrary(Array.last args) with
+            | null -> raise (ArgumentException "Invalid JVM library.")
+            | obj -> obj
+
+        let jMainArgs =
+            if AotInfo.IsReflectionDisabled then
+                [| $"System Path: %s{Environment.SystemDirectory}" |]
             else
-                JCompiler.GetCompilers() |> Seq.tryHead
+                [| $"System Path: %s{Environment.SystemDirectory}"
+                   $"Runtime Name: %s{RuntimeInformation.FrameworkDescription}" |]
 
-        if not compiler.IsSome then
-            Console.WriteLine("JDK not found.")
-        else
-            let comp = compiler.Value
-            let! helloJniByteCode = comp.CompileHelloJniClassAsync() |> Async.AwaitTask
-            let jvmLib = comp.GetLibrary()
+        let mutable listener: ConsoleTraceListener option = None
 
-            let jMainArgs =
-                if reflectionDisabled then
-                    [| $"System Path: %s{Environment.SystemDirectory}" |]
-                else
-                    [| $"System Path: %s{Environment.SystemDirectory}"
-                       $"Runtime Name: %s{RuntimeInformation.FrameworkDescription}" |]
+        if JVirtualMachine.TraceEnabled then
+            let newListener = new ConsoleTraceListener()
+            let _ = Trace.Listeners.Add(newListener)
+            listener <- Some newListener
 
+        try
             Execute(jvmLib, helloJniByteCode, jMainArgs)
-            IManagedCallback.PrintSwitches()
+        finally
+            match listener with
+            | Some l ->
+                Trace.Listeners.Remove(l)
+                l.Dispose()
+            | None -> ()
+
+        IManagedCallback.PrintSwitches()
     }
 
 MainAsync() |> Async.RunSynchronously

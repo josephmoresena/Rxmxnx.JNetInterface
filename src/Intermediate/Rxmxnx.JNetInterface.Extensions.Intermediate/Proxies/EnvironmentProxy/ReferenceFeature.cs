@@ -9,9 +9,9 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract void LocalLoad(JGlobalBase jGlobal, JLocalObject jLocal);
 	/// <inheritdoc/>
-	public abstract Boolean Unload(JLocalObject jLocal);
+	public virtual Boolean Unload(JLocalObject jLocal) => true;
 	/// <inheritdoc/>
-	public abstract Boolean Unload(JGlobalBase jGlobal);
+	public virtual Boolean Unload(JGlobalBase jGlobal) => true;
 	/// <inheritdoc/>
 	public abstract Boolean IsParameter(JLocalObject jLocal);
 	/// <inheritdoc/>

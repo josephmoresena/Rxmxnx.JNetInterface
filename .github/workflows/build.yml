@@ -4,7 +4,7 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [ opened, synchronize, reopened ]
 jobs:
   build:
     name: Build and analyze
@@ -53,33 +53,26 @@ jobs:
         run: |
           find src/ApplicationTest -name "*.*proj" -exec dotnet sln src remove {} \;
           rm -rf src/ApplicationTest
-          
+
       - name: Clean test results
         run: rm -rf TestResults/
-          
+
       - name: Build and analyze Sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: pwsh
         run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
+          ./.sonar/scanner/dotnet-sonarscanner begin /k:"josephmoresena_Rxmxnx.JNetInterface" /o:"josephmoresena" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.scanAll=false /d:sonar.coverage.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cpd.exclusions="**Test.cs,**Tests.cs,**test.cs,**tests.cs,**/SourceGenerator/**/*.cs,**/ApplicationTest/**/*,**/Test/**/*.cs,**/Localization/**MessageResource.cs" /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml 
           dotnet build-server shutdown
           dotnet restore src
           dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
           dotnet test src --verbosity detailed --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover 
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-      
-      - name: Patch Native ILLink.Substitutions
-        working-directory: ./src/Intermediate/Rxmxnx.JNetInterface.Native.Intermediate/ILLink
-        run: sed -i -z 's/Rxmxnx.JNetInterface.Native.Intermediate/Rxmxnx.JNetInterface.Core/g;' ILLink.Substitutions.xml
-      - name: Patch Implementation ILLink.Substitutions
-        working-directory: ./src/Intermediate/Rxmxnx.JNetInterface.Implementation.Intermediate/ILLink
-        run: sed -i -z 's/Rxmxnx.JNetInterface.Implementation.Intermediate/Rxmxnx.JNetInterface/g;' ILLink.Substitutions.xml
       - name: Pack core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
         run: |
-          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
           for package in ../Nuget/Rxmxnx.JNetInterface.Core*.*nupkg; do
             echo "-----------------------------------"
             TEMP_DIR=$(mktemp -d)
@@ -91,8 +84,8 @@ jobs:
           echo "-----------------------------------"
       - name: Pack main assembly
         working-directory: ./package/Rxmxnx.JNetInterface
-        run:  |
-          dotnet pack -c Release /p:Version=9999.99.99.99-tmp
+        run: |
+          dotnet pack -c Release /p:Version=9999.99.99.99-tmp /p:NoIntermediateBuild=true
           for package in bin/Release/Rxmxnx.JNetInterface*.*nupkg; do
             echo "-----------------------------------"
             TEMP_DIR=$(mktemp -d)
@@ -102,122 +95,301 @@ jobs:
             rm -rf "$TEMP_DIR"
           done
           echo "-----------------------------------"
+  
+  app-test:
+    needs: [ build ]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-latest, macos-13 ]
+    env:
+      JNETINTERFACE_ONLY_NATIVE_TEST: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: APT deb822 sources
+        if: runner.os == 'Linux'
+        run: |
+          if [[ $ImageOS == "ubuntu24" ]]; then
+           sudo bash -c 'cat > /etc/apt/sources.list.d/ubuntu.sources <<EOF
+          Types: deb
+          URIs: https://archive.ubuntu.com/ubuntu/
+          Suites: noble
+          Components: main restricted universe
+          Architectures: amd64
           
-  run-linux:
+          Types: deb
+          URIs: https://security.ubuntu.com/ubuntu/
+          Suites: noble-security
+          Components: main restricted universe
+          Architectures: amd64
+          
+          Types: deb
+          URIs: https://archive.ubuntu.com/ubuntu/
+          Suites: noble-updates
+          Components: main restricted universe
+          Architectures: amd64
+          
+          Types: deb
+          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
+          Suites: noble
+          Components: main restricted multiverse universe
+          Architectures: arm64
+          
+          Types: deb
+          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
+          Suites: noble-updates
+          Components: main restricted multiverse universe
+          Architectures: arm64
+          
+          Types: deb
+          URIs: https://azure.ports.ubuntu.com/ubuntu-ports/
+          Suites: noble-updates
+          Components: main restricted multiverse universe
+          Architectures: armhf
+          EOF'
+          fi
+
+      - name: Setup NativeAOT pre-requisites
+        if: runner.os == 'Linux'
+        run: |
+          sudo dpkg --add-architecture arm64
+          sudo dpkg --add-architecture armhf
+          
+          sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
+          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
+          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
+          deb [arch=arm64] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+          EOF'
+          
+          sudo bash -c 'cat > /etc/apt/sources.list.d/armhf.list <<EOF
+          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble main restricted
+          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
+          deb [arch=armhf] https://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+          EOF'
+          
+          sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+          sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
+          
+          sudo apt update
+          sudo apt-get install clang llvm zlib1g-dev libkrb5-dev libssl-dev \
+            qemu-user qemu-user-static libicu74:arm64 libicu74:armhf \
+            binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 libssl-dev:arm64 \
+            binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf libssl-dev:armhf \
+            --assume-yes
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: Create core assembly
+        working-directory: ./package/Rxmxnx.JNetInterface.Core
+        run: |
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
+      - name: Pack main assembly
+        working-directory: ./package/Rxmxnx.JNetInterface
+        run: |
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
+
+      - name: Create nuget.config for tests
+        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LibraryTest
+        run: |
+          dotnet new nugetconfig
+          dotnet nuget add source "../../../package/Nuget/" -n TmpSource 
+
+      - name: Publish launcher
+        working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
+        run: dotnet publish
+
+      - name: Run launcher
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts"
+          }
+
+      - name: Create Native Artifact
+        if: runner.arch == 'X64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ runner.os }}-Artifact
+          path: |
+            ./artifacts/*.class
+            ./artifacts/*.jar
+            ./artifacts/ApplicationTest*NAOT*
+            ./artifacts/ApplicationTest*RFM*
+            ./artifacts/*HelloJni.* 
+
+      - name: Create Native Artifact Logs
+        if: runner.arch == 'X64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ runner.os }}-Artifact-Logs
+          path: |
+            ./artifacts/native/*
+  
+  android-test:
+    needs: [ build ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup NativeAOT pre-requisites
-      run: sudo apt-get install clang zlib1g-dev libkrb5-dev --assume-yes
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-    - name: Set up JDK 21
-      run: |
-         wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb
-         sudo apt install ./jdk-21_linux-x64_bin.deb
-    - name: C# Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
-    - name: Vb Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj
-    - name: F# Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj
-    - name: C# NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-    - name: Vb NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r linux-x64
-         src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
-    - name: F# NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r linux-x64
-         src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net9.0/linux-x64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
-    - name: C# NativeAOT-RFM run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r linux-x64 /p:IlcDisableReflection=true /p:USE_NET80=true
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/linux-x64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-         
-  run-macOS:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: 21
-        distribution: 'oracle'
-    - name: C# Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj
-    - name: Vb Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj
-    - name: F# Framework run
-      run: dotnet run --project src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj
-    - name: C# NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-    - name: Vb NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r osx-arm64
-         src/ApplicationTest/Rxmxnx.JNetInterface.VbApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.VbApplicationTest
-    - name: F# NativeAOT run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r osx-arm64
-         src/ApplicationTest/Rxmxnx.JNetInterface.FsApplicationTest/bin/Release/net9.0/osx-arm64/publish/./Rxmxnx.JNetInterface.FsApplicationTest
-    - name: C# NativeAOT-RFM run
-      run: |
-         dotnet publish src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest.csproj -r osx-arm64 /p:IlcDisableReflection=true /p:USE_NET80=true
-         src/ApplicationTest/Rxmxnx.JNetInterface.ApplicationTest/bin/Release/net8.0/osx-arm64/publish/./Rxmxnx.JNetInterface.ApplicationTest
-         
-  run-windows:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-    - name: Set up JDK 21
-      shell: pwsh
-      run: |
-          curl.exe -O https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I jdk-21_windows-x64_bin.msi /quiet'
-    - name: Set up JDK 8 (x86)
-      shell: pwsh
-      run: |
-          curl.exe -O https://cfdownload.adobe.com/pub/adobe/coldfusion/java/java8/java8u431/jdk/jdk-8u431-windows-i586.exe
-          Start-Process jdk-8u431-windows-i586.exe -Wait -ArgumentList '/s ADDLOCAL="ToolsFeature,SourceFeature"'
-    - name: C# Framework run
-      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj /p:USE_NET80=true
-    - name: Vb Framework run
-      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj /p:USE_NET80=true
-    - name: F# Framework run
-      run: dotnet run --project src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj /p:USE_NET80=true
-    - name: C# NativeAOT run
-      run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64 /p:USE_NET80=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
-    - name: Vb NativeAOT run
-      run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest.vbproj -r win-x64 /p:USE_NET80=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.VbApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.VbApplicationTest.exe
-    - name: F# NativeAOT run
-      run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest.fsproj -r win-x64 /p:USE_NET80=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.FsApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.FsApplicationTest.exe
-    - name: C# NativeAOT-RFM run
-      run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x64 /p:IlcDisableReflection=true /p:USE_NET80=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net8.0\win-x64\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
-    - name: C# NativeAOT run (x86)
-      run: |
-         dotnet publish src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest.csproj -r win-x86 /p:ENABLE_TRACE=true
-         src\ApplicationTest\Rxmxnx.JNetInterface.ApplicationTest\bin\Release\net9.0\win-x86\publish\Rxmxnx.JNetInterface.ApplicationTest.exe
-      continue-on-error: true
+      - uses: actions/checkout@v4
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Create core assembly
+        working-directory: ./package/Rxmxnx.JNetInterface.Core
+        run: |
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
+      - name: Pack main assembly
+        working-directory: ./package/Rxmxnx.JNetInterface
+        run: |
+          dotnet pack -c Release -o ../Nuget /p:Version=9999.99.99.99-tmp
+
+      - name: Clone NativeAOT-AndroidHelloJniLib
+        run: |
+          git config --global url.https://github.com/.insteadOf git://github.com/
+          git clone --single-branch --branch jnetinterface \
+            https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib.git
+
+      - name: Create nuget.config for bionic-libs
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet new nugetconfig
+          dotnet nuget add source "../package/Nuget/" -n TmpSource
+          dotnet add package Rxmxnx.JNetInterface --version 9999.99.99.99-tmp
+
+      - name: Build bionic-libs
+        working-directory: ./NativeAOT-AndroidHelloJniLib
+        run: |
+          dotnet publish -r linux-bionic-arm64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib/arm64-v8a
+          dotnet publish -r linux-bionic-arm -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib/armeabi-v7a
+          dotnet publish -r linux-bionic-x64 -p:DisableUnsupportedError=true -p:PublishAotUsingRuntimePack=true \
+            -p:AssemblyName=libhello-jni -p:CopyOutputSymbolsToPublishDirectory=false -p:PublishDir=../lib/x86_64
+
+      - name: Create Android project structure
+        env:
+          APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE }}
+        run: |
+          mkdir ./hello-jni_apk 
+          mkdir ./hello-jni_apk/main
+          mkdir ./hello-jni_apk/main/java
+          mkdir ./hello-jni_apk/main/java/com
+          mkdir ./hello-jni_apk/main/java/com/example
+          mkdir ./hello-jni_apk/main/java/com/example/hellojni
+          mkdir ./hello-jni_apk/class
+          mkdir ./hello-jni_apk/dex
+          
+          echo "${APK_KEYSTORE_BASE64}" | base64 -d > ./hello-jni_apk/jnetinterface-apk.keystore
+          mv lib hello-jni_apk
+      - name: Create Android java file
+        working-directory: ./hello-jni_apk/main/java/com/example/hellojni
+        run: |
+          echo 'package com.example.hellojni;
+          
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.view.Gravity;
+          import android.view.View;
+          import android.widget.LinearLayout;
+          import android.widget.TextView;
+          
+          public class HelloJni extends Activity {
+            static {
+              System.loadLibrary("hello-jni");
+            }
+          
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+              super.onCreate(savedInstanceState);
+          
+              LinearLayout rootLayout = new LinearLayout(this);
+              rootLayout.setOrientation(LinearLayout.VERTICAL);
+              rootLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+              ));
+              rootLayout.setGravity(Gravity.CENTER);
+          
+              TextView textView = new TextView(this);
+              textView.setText(stringFromJNI());
+              textView.setTextSize(12);
+          
+              LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+              );
+              textView.setLayoutParams(params);
+          
+              textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  textView.setText(stringFromJNI());
+                }
+              });
+          
+              rootLayout.addView(textView);
+              setContentView(rootLayout);
+            }
+          
+            private native String stringFromJNI();
+          }
+          ' > HelloJni.java 
+
+      - name: Create Android manifest file
+        working-directory: ./hello-jni_apk/main
+        run: |
+          echo '<?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.hellojni" android:theme="@android:style/Theme.DeviceDefault">
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+            <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
+            <application android:label="JNetInterfaceTestApp">
+              <activity android:name=".HelloJni" android:label="JNetInterfaceTestApp">
+              <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+              </intent-filter>
+              </activity>
+            </application>
+          </manifest>' > AndroidManifest.xml
+
+      - name: Build Android Apk
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+          APK_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        working-directory: ./hello-jni_apk
+        shell: bash
+        run: |
+          shopt -s globstar 
+          $JAVA_HOME_8_X64/**/javac -d ./class -sourcepath ./main/java \
+            -bootclasspath $ANDROID_HOME/platforms/android-35/android.jar \
+            ./main/java/**/*.java 
+          
+          $ANDROID_HOME/build-tools/35.0.0/d8 --lib $ANDROID_HOME/platforms/android-35/android.jar \
+            --output ./dex \
+            class/**/*.class 
+          
+          $ANDROID_HOME/build-tools/35.0.0/aapt package -f -M main/AndroidManifest.xml \
+            -I $ANDROID_HOME/platforms/android-35/android.jar \
+            -F jnetinterface-apptest.apk ./dex 
+          
+          zip -ur jnetinterface-apptest.apk lib/ 
+          
+          $ANDROID_HOME/build-tools/35.0.0/apksigner sign \
+            --ks jnetinterface-apk.keystore --ks-key-alias $APK_KEY_ALIAS --ks-pass pass:$APK_KEY_PASS \
+            --key-pass pass:$APK_KEY_PASS --min-sdk-version 15 \
+            --out ./../jnetinterface-apptest.apk jnetinterface-apptest.apk 
+
+      - name: Create Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-Artifact
+          path: jnetinterface-apptest.apk

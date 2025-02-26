@@ -18,6 +18,16 @@ public record ThrowableObjectMetadata : ObjectMetadata
 	/// <summary>
 	/// Constructor.
 	/// </summary>
+	/// <param name="typeInformation"><see cref="ITypeInformation"/> instance.</param>
+	/// <param name="message">Throwable message.</param>
+	/// <param name="fromProxy">Indicates whether the current instance is a dummy object (fake java object).</param>
+	[ExcludeFromCodeCoverage]
+	internal ThrowableObjectMetadata(ITypeInformation typeInformation, String? message, Boolean fromProxy) :
+		base(typeInformation, fromProxy)
+		=> this.Message = message;
+	/// <summary>
+	/// Constructor.
+	/// </summary>
 	/// <param name="jClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="message">Throwable message.</param>
 	internal ThrowableObjectMetadata(JClassObject jClass, String? message) : base(jClass) => this.Message = message;

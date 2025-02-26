@@ -9,6 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage"/>
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\..\..\Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate\Rxmxnx.JNetInterface.Implementation.Intermediate.csproj"/>
         <ProjectReference Include="..\Rxmxnx.JNetInterface.Native.Tests.Proxies\Rxmxnx.JNetInterface.Native.Tests.Proxies.csproj"/>
     </ItemGroup>

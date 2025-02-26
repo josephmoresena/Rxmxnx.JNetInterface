@@ -20,7 +20,13 @@ public sealed partial class JCharacterObject : JLocalObject, IPrimitiveEquatable
 	/// <summary>
 	/// Internal value.
 	/// </summary>
-	public JChar Value => this._value ??= JFunctionDefinition.Invoke(NativeFunctionSetImpl.CharValueDefinition, this);
+	public JChar Value
+		=> this._value ??=
+#if !PACKAGE
+			NativeFunctionSetImpl.GetValue(this);
+#else
+			this.Environment.FunctionSet.GetValue(this);
+#endif
 
 	/// <inheritdoc/>
 	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);

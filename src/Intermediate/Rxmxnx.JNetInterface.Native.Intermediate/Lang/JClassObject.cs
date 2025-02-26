@@ -267,6 +267,6 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 	public static JClassObject
 		LoadClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TDataType>(IEnvironment env,
 			ReadOnlySpan<Byte> rawClassBytes, JClassLoaderObject? jClassLoader = default)
-		where TDataType : JLocalObject, IReferenceType<TDataType>
+		where TDataType : JReferenceObject, IReferenceType<TDataType>
 		=> env.ClassFeature.LoadClass<TDataType>(rawClassBytes, jClassLoader);
 }

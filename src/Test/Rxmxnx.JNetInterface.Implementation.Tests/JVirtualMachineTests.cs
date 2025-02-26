@@ -134,7 +134,22 @@ public sealed partial class JVirtualMachineTests
 			Assert.NotEqual(default, (jWeak?.Reference).GetValueOrDefault());
 			Assert.NotEqual(default, (jGlobal?.Reference).GetValueOrDefault());
 
-			Assert.Throws<InvalidOperationException>(() => Assert.True(JObject.IsNullOrDefault(jLocal)));
+			DateTime? lastGlobalCheck = jGlobal?.LastValidation;
+			DateTime? lastWeakCheck = jWeak?.LastValidation;
+			try
+			{
+				Assert.False(JObject.IsNullOrDefault(jLocal));
+				Assert.Equal(lastGlobalCheck, jGlobal?.LastValidation);
+			}
+			catch (InvalidOperationException)
+			{
+				// If not avoidable global reference check.
+				Assert.NotEqual(lastGlobalCheck, jGlobal?.LastValidation);
+			}
+			finally
+			{
+				Assert.Equal(lastWeakCheck, jWeak?.LastValidation);
+			}
 			Assert.False(JObject.IsNullOrDefault(jWeak));
 			Assert.False(JObject.IsNullOrDefault(jGlobal));
 
@@ -269,6 +284,7 @@ public sealed partial class JVirtualMachineTests
 		mainGlobalRef.Add(MainClass.Class, proxyEnv.VirtualMachine.ClassGlobalRef);
 		mainGlobalRef.Add(MainClass.Throwable, proxyEnv.VirtualMachine.ThrowableGlobalRef);
 		mainGlobalRef.Add(MainClass.StackTraceElement, proxyEnv.VirtualMachine.StackTraceElementGlobalRef);
+		mainGlobalRef.Add(MainClass.NumberObject, proxyEnv.VirtualMachine.NumberGlobalRef);
 		mainGlobalRef.Add(MainClass.VoidObject, proxyEnv.VirtualMachine.VoidGlobalRef);
 		mainGlobalRef.Add(MainClass.BooleanObject, proxyEnv.VirtualMachine.BooleanGlobalRef);
 		mainGlobalRef.Add(MainClass.ByteObject, proxyEnv.VirtualMachine.ByteGlobalRef);
@@ -295,6 +311,7 @@ public sealed partial class JVirtualMachineTests
 		mainClassRef.Add(MainClass.Class, proxyEnv.ClassLocalRef);
 		mainClassRef.Add(MainClass.Throwable, proxyEnv.ThrowableLocalRef);
 		mainClassRef.Add(MainClass.StackTraceElement, proxyEnv.StackTraceObjectLocalRef);
+		mainClassRef.Add(MainClass.NumberObject, proxyEnv.NumberObjectLocalRef);
 
 		mainClassRef.Add(MainClass.VoidObject, proxyEnv.VoidObjectLocalRef);
 		mainClassRef.Add(MainClass.BooleanObject, proxyEnv.BooleanObjectLocalRef);
@@ -338,6 +355,7 @@ public sealed partial class JVirtualMachineTests
 			{ MainClass.Class, IDataType.GetMetadata<JClassObject>() },
 			{ MainClass.Throwable, IDataType.GetMetadata<JThrowableObject>() },
 			{ MainClass.StackTraceElement, IDataType.GetMetadata<JStackTraceElementObject>() },
+			{ MainClass.NumberObject, IDataType.GetMetadata<JNumberObject>() },
 			{ MainClass.VoidObject, IDataType.GetMetadata<JVoidObject>() },
 			{ MainClass.BooleanObject, IDataType.GetMetadata<JBooleanObject>() },
 			{ MainClass.ByteObject, IDataType.GetMetadata<JByteObject>() },

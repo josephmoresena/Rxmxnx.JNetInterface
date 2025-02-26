@@ -61,7 +61,7 @@ public partial class JVirtualMachineTests
 			                                                       Arg.Any<ReadOnlyValPtr<
 				                                                       VirtualMachineArgumentValueWrapper>>());
 			proxyEnv.Received(1).GetVersion();
-			proxyEnv.Received(12).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(13).FindClass(Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(9).GetStaticFieldId(Arg.Any<JClassLocalRef>(), Arg.Any<ReadOnlyValPtr<Byte>>(),
 			                                      Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(9).GetStaticObjectField(Arg.Any<JClassLocalRef>(), Arg.Any<JFieldId>());

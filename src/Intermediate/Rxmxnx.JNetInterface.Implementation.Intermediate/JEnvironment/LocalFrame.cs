@@ -1,5 +1,3 @@
-using JLocalObject = Rxmxnx.JNetInterface.Native.JLocalObject;
-
 namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
@@ -40,7 +38,7 @@ partial class JEnvironment
 		public override Int32? Capacity
 		{
 			get => base.Capacity;
-			set => throw new InvalidOperationException("Current stack frame is fixed.");
+			set => throw new InvalidOperationException(IMessageResource.GetInstance().StackTraceFixed);
 		}
 		/// <inheritdoc/>
 		public override String Name => "local";
@@ -92,6 +90,7 @@ partial class JEnvironment
 			base.Remove(localRef);
 		}
 		/// <inheritdoc/>
+		[ExcludeFromCodeCoverage]
 		public override Boolean IsFromLocalFrame(JObjectLocalRef localRef)
 			=> this.Contains(localRef) || base.IsFromLocalFrame(localRef);
 

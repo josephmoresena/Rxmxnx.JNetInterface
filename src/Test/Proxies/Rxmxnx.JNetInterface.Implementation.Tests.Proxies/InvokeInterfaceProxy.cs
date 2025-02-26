@@ -8,6 +8,7 @@ public abstract class InvokeInterfaceProxy
 	public JGlobalRef ClassGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef ThrowableGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef StackTraceElementGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
+	public JGlobalRef NumberGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef VoidGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef BooleanGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();
 	public JGlobalRef ByteGlobalRef { get; } = ReferenceHelper.Fixture.Create<JGlobalRef>();

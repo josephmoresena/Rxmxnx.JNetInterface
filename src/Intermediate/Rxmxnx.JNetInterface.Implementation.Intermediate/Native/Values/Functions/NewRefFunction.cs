@@ -18,5 +18,22 @@ internal readonly unsafe struct NewRefFunction<TReference>
 	/// Created references must be explicitly disposed of by calling
 	/// <c>Delete<typeparamref name="TReference"/>Ref()</c>.
 	/// </remarks>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, TReference> NewRef;
+	private readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, IntPtr> _ptr;
+
+	/// <summary>
+	/// Pointer to <c>New<typeparamref name="TReference"/>Ref</c> function.
+	/// Creates a new global reference to the object referred.
+	/// </summary>
+	/// <remarks>
+	/// Created references must be explicitly disposed of by calling
+	/// <c>Delete<typeparamref name="TReference"/>Ref()</c>.
+	/// </remarks>
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public TReference NewRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
+	{
+		TReference result = default;
+		Unsafe.As<TReference, IntPtr>(ref result) = this._ptr(envRef, localRef);
+		return result;
+	}
 }

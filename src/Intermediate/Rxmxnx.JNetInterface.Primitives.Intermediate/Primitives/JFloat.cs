@@ -58,7 +58,7 @@ public readonly partial struct JFloat : INativeType, IComparable<JFloat>, IEquat
 	public Int32 CompareTo(JFloat other) => this._value.CompareTo(other.Value);
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public Int32 CompareTo(Object? obj) => IPrimitiveType<JFloat, Single>.Compare(this, obj);
+	public Int32 CompareTo(Object? obj) => IPrimitiveValueType.Compare(this, obj);
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

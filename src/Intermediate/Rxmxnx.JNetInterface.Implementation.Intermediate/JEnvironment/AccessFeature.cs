@@ -378,9 +378,10 @@ partial class JEnvironment
 			Int32 requiredBytes = calls.Count * NativeMethodValue.Size;
 			using StackDisposable stackDisposable =
 				this.GetStackDisposable(this.UseStackAlloc(requiredBytes), requiredBytes);
+			Rented<NativeMethodValue> rented = default;
 			Span<NativeMethodValue> buffer = stackDisposable.UsingStack ?
 				stackalloc NativeMethodValue[calls.Count] :
-				EnvironmentCache.HeapAlloc<NativeMethodValue>(calls.Count);
+				EnvironmentCache.HeapAlloc(calls.Count, ref rented);
 			for (Int32 i = 0; i < calls.Count; i++)
 				buffer[i] = NativeMethodValue.Create(calls[i], handles);
 			try
@@ -399,6 +400,7 @@ partial class JEnvironment
 			}
 			finally
 			{
+				rented.Free();
 				handles.ForEach(h => h.Dispose());
 			}
 		}
@@ -446,7 +448,7 @@ partial class JEnvironment
 			JObjectLocalRef localRef = this.GetReflectedCall(definition, declaringClass, false);
 			return new(this.GetClass<JConstructorObject>(), localRef, definition, declaringClass);
 		}
-		public unsafe JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
+		public JFieldObject GetReflectedField(JFieldDefinition definition, JClassObject declaringClass,
 			Boolean isStatic)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(declaringClass);
@@ -463,7 +465,7 @@ partial class JEnvironment
 			if (localRef == default) this.CheckJniError();
 			return new(this.GetClass<JFieldObject>(), localRef, definition, declaringClass);
 		}
-		public unsafe JMethodId GetMethodId(JExecutableObject jExecutable)
+		public JMethodId GetMethodId(JExecutableObject jExecutable)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jExecutable);
 			ref readonly NativeInterface nativeInterface =
@@ -475,7 +477,7 @@ partial class JEnvironment
 			if (result == default) this.CheckJniError();
 			return result;
 		}
-		public unsafe JFieldId GetFieldId(JFieldObject jField)
+		public JFieldId GetFieldId(JFieldObject jField)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jField);
 			ref readonly NativeInterface nativeInterface =

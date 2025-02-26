@@ -213,7 +213,14 @@ internal sealed partial class ObjectLifetime(
 			this._weak.InstanceOf<TDataType>() :
 			this.Environment.ClassFeature.IsInstanceOf<TDataType>(jLocal);
 	}
-
+	/// <summary>
+	/// Indicates whether current object is loaded.
+	/// </summary>
+	/// <param name="jLocal">The java object to check.</param>
+	/// <returns>
+	/// <see langword="true"/> if <paramref name="jLocal"/> is loaded; otherwise; <see langword="false"/>.
+	/// </returns>
+	public Boolean IsUnloaded(JLocalObject jLocal) => !this._objects.ContainsKey(jLocal.Id);
 	/// <summary>
 	/// Loads the given object in the current instance.
 	/// </summary>
@@ -234,12 +241,18 @@ internal sealed partial class ObjectLifetime(
 	/// </returns>
 	public void Unload(JLocalObject jLocal)
 	{
-		if (!this._objects.ContainsKey(jLocal.Id)) return;
+		if (!this._objects.ContainsKey(jLocal.Id)) return; // No local object.
+
 		Boolean isClass = jLocal is JClassObject;
 		this.Unload(jLocal.Id, isClass);
 		this.Secondary?.Unload(jLocal.Id, isClass);
-		if (this.IsUnloadable(jLocal, jLocal.Environment.ReferenceFeature)) return;
-		if (this.Environment.ReferenceFeature.Unload(jLocal)) this.Dispose();
+
+		if (this.IsUnloadable(jLocal, jLocal.Environment.ReferenceFeature)) return; // Unloadable object.
+
+		if (this.Environment.ReferenceFeature.Unload(jLocal))
+			this.Dispose(); // Local reference deleted.
+		else if (!JLocalObject.FinalizerExecution && !jLocal.IsProxy)
+			this.Load(jLocal); // Reload required.
 	}
 	/// <summary>
 	/// Unloads current <see cref="JGlobalBase"/> instance.

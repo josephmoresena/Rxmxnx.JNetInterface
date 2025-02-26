@@ -16,13 +16,13 @@ public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TV
 	/// Internal value.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public TValue Value => this._value ??= this.GetValue<TValue>();
+	public TValue Value => this._value ??= base.GetValue<TValue>();
 
 	/// <inheritdoc/>
 	public override TPrimitive GetValue<TPrimitive>()
 	{
-		if (typeof(TPrimitive) != typeof(TValue) || this._value is null) return base.GetValue<TPrimitive>();
-		TValue result = this._value.Value;
+		if (typeof(TPrimitive) != typeof(TValue)) return base.GetValue<TPrimitive>();
+		TValue result = this.Value;
 		return NativeUtilities.Transform<TValue, TPrimitive>(in result);
 	}
 
@@ -36,6 +36,10 @@ public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TV
 		if (instanceMetadata is PrimitiveWrapperObjectMetadata<TValue> wrapperMetadata)
 			this._value = wrapperMetadata.Value;
 	}
+
+	/// <inheritdoc cref="IPrimitiveWrapperType{TWrapper}.SetPrimitiveValue"/>
+	[ExcludeFromCodeCoverage]
+	private protected void SetPrimitiveValue(TValue value) => this._value = value;
 }
 
 #pragma warning disable CS0659
