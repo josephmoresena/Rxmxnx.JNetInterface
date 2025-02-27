@@ -158,3 +158,58 @@ conversion to `JObject` occurs through boxing.
                                              │                   ┌──  JArrayObject 
                                              └──  JLocalObject ──┼──  JNumberObject  ──  JNumberObject<>  ──  JNumberObject<,>
                                                                  └──  JThrowableObject 
+
+### Type Metadata
+
+Type metadata objects allow `Rxmxnx.JNetInterface` to identify at runtime the types of Java objects referenced through
+JNI.  
+By leveraging the strong typing features of the .NET platform, it is possible to perform operations on object instances
+or their corresponding Java class instances.
+
+The metadata exposes the following properties:
+
+* **ClassName**: This name is the JNI name of the class identified by the metadata. For example, the class
+  `java.lang.String` (`JStringObject`) has the JNI name `java/lang/String`.
+* **Signature**: This signature allows identifying instances of the class represented by the metadata to access Java
+  fields or methods via JNI.  
+  For example:
+
+- `long` (`JLong`) has the signature `J`.
+- `java.lang.String` has the signature `Ljava/lang/String;`.
+
+* **ArraySignature**: This signature enables the automatic creation of the generic array type for the class identified
+  by the metadata.  
+  For example:
+    - `char` -> `char[]` (`JArrayObject<JChar>`) with the signature `[C`.
+    - `java.lang.String` -> `java.lang.String[]` (`JArrayObject<JStringObject>`) with the signature
+      `[Ljava/lang/String;`.
+* **SizeOf**: This property allows JNI calls to determine the memory size required to store the value returned by JNI.
+* **ArgumentMetadata**: Combines the signature of the current type with its memory size.
+* **Type**: CLR type of the .NET class or structure representing the class identified by the metadata.
+* **Kind**: Identifies the type of the Java class represented by the metadata. For example:
+    - `boolean` (`JBoolean`): Primitive.
+    - `java.lang.String`: Class.
+    - `java.lang.Object[]` (`JArrayObject<JLocalObject>`): Array.
+    - `java.io.Serializable` (`JSerializableObject`): Interface.
+    - `java.lang.annotation.ElementType` (`JElementTypeObject`): Enum.
+    - `java.lang.annotation.Target` (`JTargetObject`): Annotation.
+* **Modifier**: Identifies the modifier of the Java class represented by the metadata.
+    - `java.lang.String`: Final.
+    - `java.lang.Object`: Extensible.
+    - `java.lang.Number` (`JNumberObject`): Abstract.
+
+#### Argument Metadata
+
+Argument metadata objects allow defining access to Java methods and fields from JNI.  
+As previously mentioned, type metadata exposes a property to obtain the argument metadata for a specified type.  
+However, it is also possible to retrieve it using the static method `JArgumentMetadata.Get<T>()`, where `T` is a mapped
+type.
+
+Additionally, if a mapped type for the argument is not available, it can be created using the method
+`JArgumentMetadata.Create(ReadOnlySpan<Byte>)`,  
+where the read-only binary span contains the JNI type signature.
+
+For example, to create the signature for `java.util.Dictionary<K,V>`, its signature should be `Ljava/util/Dictionary;`.
+
+**Note:** Creating metadata for primitive types is not supported; to obtain them, the method
+`JArgumentMetadata.Get<TPrimitive>()` should be used.  
