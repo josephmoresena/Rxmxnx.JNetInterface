@@ -146,3 +146,15 @@ the `JObject` class.
                                                                └──  IClassType  ───────┼──  IClassType<>  ────────┬──  IThrowableType<> 
                                                                                        │                          ├──  IPrimitiveWrapperType<> 
                                                                                        └──  IUninstantiableType  ─┴──  IUninstantiableType<> 
+
+All instances of objects interoperable with JNI are instances of the `JObject` class. In the case of primitives, the
+conversion to `JObject` occurs through boxing.
+
+                    ┌──  JPrimitiveObject (Internal Boxing)                                       ┌──  JLocalObject.ArrayView  ──  JArrayObject<>
+       JObject  ────┤                        ┌──  JReferenceObject.View  ──  JLocalObject.View  ──┤
+                    │                        │                   ┌──  JWeak                       └──  JLocalObject.InterfaceView  ──  JInterfaceObject<>  ──  JInterfaceObject<>  ──  JAnnotationObject<>
+                    └──  JReferenceObject  ──┼──  JGlobalBase  ──┤
+                                             │                   └──  JGlobal
+                                             │                   ┌──  JArrayObject 
+                                             └──  JLocalObject ──┼──  JNumberObject  ──  JNumberObject<>  ──  JNumberObject<,>
+                                                                 └──  JThrowableObject 
