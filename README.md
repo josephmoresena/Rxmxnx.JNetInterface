@@ -198,6 +198,44 @@ The metadata exposes the following properties:
     - `java.lang.Object`: Extensible.
     - `java.lang.Number` (`JNumberObject`): Abstract.
 
+#### Metadata Builder
+
+Builders are classes found in the base classes used to initialize type metadata.  
+It is recommended to use a single metadata instance to improve runtime performance. <br/>  
+These types are `ref struct`, so they are not compatible with the Visual Basic language.
+
+* **`JLocalObject.TypeMetadataBuilder<>`**:  
+  This builder allows creating class-type metadata (`IClassType<>`).  
+  It must always be initialized with the JNI class name. It is also possible to specify whether the class is `Abstract`
+  or `Final`,  
+  or by default `Extensible` (which allows other classes to extend it). This can be done using the static method  
+  `Create(ReadOnlySpan<Byte>, JTypeModifier)`. <br/>  
+  To specify that the metadata class extends another class, the static method of the superclass builder  
+  `Create<>(ReadOnlySpan<Byte>, JTypeModifier)` must be used. <br/>  
+  The builder also allows specifying that the metadata class implements interfaces through the `.Implements<>()`
+  method.  
+  Note that the CLR type must implement the `IInterfaceObject<>` interface.
+
+* **`JLocalObject.InterfaceView.TypeMetadataBuilder<>`**:  
+  This builder allows creating interface or annotation-type metadata (`IInterfaceType<>`).  
+  It must always be initialized with the JNI class name. This can be done using the static method  
+  `Create(ReadOnlySpan<Byte>, JTypeModifier)`. <br/>  
+  The builder also allows specifying that the metadata interface extends other interfaces through the `.Extends<>()`
+  method.  
+  Note that the CLR type must implement the `IInterfaceObject<>` interface.
+
+* **`JThrowableObject.TypeMetadataBuilder<>`**:  
+  This builder allows creating throwable-type metadata (`IThrowableType<>`).  
+  It must always be initialized with the JNI class name. <br/>  
+  This builder is identical to `JLocalObject.TypeMetadataBuilder<>`, but the throwable superclass must always be
+  specified.
+
+* **`JEnumObject.TypeMetadataBuilder<>`**:  
+  This builder allows creating enum-type metadata (`IEnumObject<>`).  
+  It must always be initialized with the JNI class name. <br/>  
+  This builder is identical to `JLocalObject.TypeMetadataBuilder<>`, but no superclass can be specified,  
+  as all enum types extend the `java.lang.Enum` class.
+
 #### Argument Metadata
 
 Argument metadata objects allow defining access to Java methods and fields from JNI.  
