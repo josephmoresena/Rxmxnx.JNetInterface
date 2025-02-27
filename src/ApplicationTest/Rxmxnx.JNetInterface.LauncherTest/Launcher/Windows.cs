@@ -31,7 +31,8 @@ public partial class Launcher
 
 			String? installationPath = Windows.GetInstallationPath(arch, version);
 
-			if (!String.IsNullOrEmpty(installationPath) && this.GetJdk(version, arch, installationPath) is { } installed)
+			if (!String.IsNullOrEmpty(installationPath) &&
+			    this.GetJdk(version, arch, installationPath) is { } installed)
 				return installed;
 
 			IReadOnlyDictionary<JdkVersion, String> urls = arch is Architecture.X64 ? Windows.amd64Url :
