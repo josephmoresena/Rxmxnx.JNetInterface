@@ -203,13 +203,22 @@ jobs:
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
         run: dotnet publish
 
-      - name: Run launcher
+      - name: Run launcher (compile)
         shell: pwsh
         run: |
           if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts"
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "compile"
           } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts"
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "compile"
+          }
+
+      - name: Run launcher (run)
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "run"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run"
           }
 
       - name: Create Native Artifact
