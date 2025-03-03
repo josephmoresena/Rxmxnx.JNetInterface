@@ -39,7 +39,7 @@ public readonly partial struct JBoolean : INativeType, IComparable<JBoolean>, IE
 	/// <summary>
 	/// <see cref="Boolean"/> representation of the current instance.
 	/// </summary>
-	public Boolean Value => this._value.Equals(JBoolean.TrueValue);
+	public Boolean Value => !this._value.Equals(JBoolean.FalseValue);
 	/// <inheritdoc/>
 	public CString ObjectClassName => IPrimitiveType.GetMetadata<JBoolean>().ClassName;
 	/// <inheritdoc/>

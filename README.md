@@ -50,7 +50,7 @@ dotnet add package Rxmxnx.JNetInterface.Core
 **Note:** This package currently supports .NET 8 and higher. Ensure your project targets a compatible framework before
 installing.
 
-## How to use it?
+## Overview
 
 `Rxmxnx.JNetInterface` allows the use of JNI through high-level, safe APIs (Core Assembly) and a compatible
 implementation (Main Assembly) with the JVM. <br/>
@@ -59,14 +59,14 @@ The following table shows the equivalence between the different common JNI types
 
 | Java Type                | JNI Type      | Managed Type                  | Unmanaged Type        |
 |--------------------------|---------------|-------------------------------|-----------------------|
-| boolean                  | jboolean      | N/A                           | JBoolean              |
-| byte                     | jbyte         | N/A                           | JByte                 |
-| char                     | jchar         | N/A                           | JChar                 |
-| double                   | jdouble       | N/A                           | JDouble               |
-| float                    | jfloat        | N/A                           | JFloat                |
-| int                      | jint          | N/A                           | JInt                  |
-| long                     | jlong         | N/A                           | JLong                 |
-| short                    | jshort        | N/A                           | JShort                |
+| boolean                  | jboolean      | IWrapper<System.Boolean>      | JBoolean              |
+| byte                     | jbyte         | IWrapper<System.SByte>        | JByte                 |
+| char                     | jchar         | IWrapper<System.Char>         | JChar                 |
+| double                   | jdouble       | IWrapper<System.Double>       | JDouble               |
+| float                    | jfloat        | IWrapper<System.Single>       | JFloat                |
+| int                      | jint          | IWrapper<System.Int32>        | JInt                  |
+| long                     | jlong         | IWrapper<System.Int64>        | JLong                 |
+| short                    | jshort        | IWrapper<System.Int16>        | JShort                |
 | java.lang.Object         | jobject       | JLocalObject                  | JLocalRef             |
 | java.lang.Class&lt;?&gt; | jclass        | JClassObject <sup>2</sup>     | JClassLocalRef        |
 | java.lang.String         | jstring       | JStringObject                 | JStringLocalRef       |
