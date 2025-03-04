@@ -274,7 +274,7 @@ This access can be read (`get`) or write (`set`).
        JAccessibleObjectDefinition  ──  JFieldDefinition  ──┤
                                                             └──  JNonTypedFieldDefinition
 
-## Notes
+**Notes:**
 
 * The `JFieldDefinition<..>` type allows defining a Java field of a generic `IDataType<..>`, while  
   `JNonTypedFieldDefinition` allows defining fields of object types whose class is not mapped in  
@@ -301,8 +301,7 @@ To get or set a field using `Rxmxnx.JNetInterface`, the following options are av
 * `StaticSetReflected(JFieldObject, T)`: Sets a static field in the reflected class.
 
 **Note:** When using a class, if it has not been loaded (i.e., there is no active JNI reference in the current
-context),  
-a local reference will be loaded in the active frame.
+context), a local reference will be loaded in the active frame.
 
 #### Accessing Java Methods
 
