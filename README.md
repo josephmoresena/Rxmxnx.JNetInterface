@@ -159,6 +159,28 @@ conversion to `JObject` occurs through boxing.
                                              └──  JLocalObject ──┼──  JNumberObject  ──  JNumberObject<>  ──  JNumberObject<,>
                                                                  └──  JThrowableObject 
 
+##### Object Disposal and JNI References
+
+All instances of global and weak global objects, as well as local objects or their local views (`ILocalObject`),
+implement the `IDisposable` interface. When calling the `Dispose` method, `Rxmxnx.JNetInterface` will remove the JNI
+references associated with these instances.
+
+However, in some cases, calling `Dispose` might not immediately remove the JNI references. This can occur due to
+the following reasons:
+
+* The JNI reference is being used by another thread. This applies to global and weak global references.
+* The JNI reference is required for native memory guarantees by the JVM. The native memory associated with the
+  reference must be released before calling `Dispose()`.
+* The JNI reference is shared among multiple `JLocalObject` instances. In this case, `Dispose()` must be called on
+  each `JLocalObject` instance.
+* The `JLocalObject` or `ILocalObject` instance does not have a loaded local reference. The active reference is held
+  by an associated global or weak global reference.
+* The `JLocalObject` or `ILocalObject` instance was created within the scope of a call from Java to JNI as a parameter.
+  The behavior of JNI native call adapters will be detailed later.
+
+**Note:** In the context of a fixed temporary frame, it may not be necessary to explicitly release local references
+created within it, or some references may be released without calling the `Dispose()` method.
+
 ### Type Metadata
 
 Type metadata objects allow `Rxmxnx.JNetInterface` to identify at runtime the types of Java objects referenced through
@@ -342,11 +364,107 @@ Additional operations executed directly in JNI:
   `UnregisterNatives` function.
 * `GetModule()`: This method is only effective in JVM instances compatible with Java 9.0+.
 
+**Note:** When using a class, if it has not been loaded (i.e., there is no active JNI reference in the current
+context), a local reference will be loaded in the active frame.
+
 For more information on using these methods, refer to
 the [included example application](./src/ApplicationTest/README.md) in this repository.
 
 For more information about essential and main classes, please refer to the documentation on compatibility with
 [GraalVM Native Image](./native-image/README.md), where the implementation details are explained in greater depth.
+
+### Array Handling
+
+JNI allows the manipulation and creation of Java arrays from any type. `Rxmxnx.JNetInterface` exposes APIs through
+the `JArrayObject<>` class to achieve this goal.
+
+#### Array Creation
+
+To create a new array through JNI, `Rxmxnx.JNetInterface` exposes the following static methods in the generic class
+`JArrayObject<>`:
+
+* **Create(IEnvironment, Int32)**: Creates an array of the type specified by the generic class with the length given by
+  the integer value.
+* **Create(IEnvironment, Int32, T)**: Creates an array of the type specified by the generic class with the length given
+  by the integer value and fills it with the specified value instance. This method is recommended only for creating
+  non-primitive arrays.
+
+**Note:** The creation of arrays with elements of unmapped types is currently not available.
+
+#### Non-Generic Class
+
+In Java, arrays are views. For example, an instance of `java.lang.String[][]` can be treated as an instance of
+`java.lang.Object[]`, `java.lang.Object[][]`, or even `java.io.Serializable[][]`. However, despite the inherent
+polymorphism of views, arrays are instances of specific types. This instance is represented in `Rxmxnx.JNetInterface`
+as a non-generic `JArrayObject`.
+
+The properties exposed by this class are:
+
+* **Length**: Number of elements in the array.
+* **Reference**: JNI reference to the instance.
+
+#### Generic Class
+
+In `Rxmxnx.JNetInterface`, the generic class `JArrayObject<T>` encapsulates a non-generic `JArrayObject` instance
+to enable element retrieval and assignment operations. The generic type of this class represents the element type
+contained or "viewed" in the array instance.
+
+The properties exposed by this class are:
+
+* **Length**: Number of elements in the array.
+* **Reference**: JNI reference to the instance.
+
+**Note:** These properties are read directly from the underlying non-generic instance that supports the generic view.
+
+To get or set an array element, the class exposes an indexer. Additionally, this class implements various .NET
+interfaces
+such as `IList<T>` and `IReadOnlyList<T>`.
+
+#### Primitive Arrays
+
+Unlike non-primitive arrays, primitive-type arrays in Java are not polymorphic. Through JNI, it is possible to
+directly access the memory segment occupied by these arrays.
+
+For this reason, when the generic array type is detected as primitive, the following extensions become available:
+
+* **GetElements(JMemoryReferenceKind)**: Equivalent to JNI's `Get<PrimitiveType>ArrayElements` calls. The
+  `JMemoryReferenceKind` parameter allows `Rxmxnx.JNetInterface` to safely and efficiently use another JNI reference
+  to back native memory allocation.
+* **GetPrimitiveArrayCritical(JMemoryReferenceKind)**: Equivalent to the `GetPrimitiveArrayCritical` call. The
+  `JMemoryReferenceKind` parameter enables `Rxmxnx.JNetInterface` to safely and efficiently use another JNI reference
+  to pin memory.
+* **ToArray(Int32)**: Creates a .NET array of the primitive type, using `Get<PrimitiveType>ArrayRegion`. The integer
+  parameter acts as an offset for the copy.
+* **ToArray(Int32, Int32)**: Creates a .NET array of the primitive type, using `Get<PrimitiveType>ArrayRegion`. The
+  first integer serves as an offset for the copy, while the second specifies how many elements should be copied.
+* **Get(Span<T>, Int32)**: Uses `Get<PrimitiveType>ArrayRegion` to copy array elements into the provided span. The
+  integer parameter serves as an offset, and the span's length determines the number of elements to copy.
+* **Set(ReadOnlySpan<T>, Int32)**: Uses `Set<PrimitiveType>ArrayRegion` to copy elements from the span to the array.
+  The integer parameter serves as an offset, and the span's length determines the number of elements to copy.
+
+**Note:**
+
+* The `GetElements` and `GetPrimitiveArrayCritical` methods return a `JPrimitiveMemory<T>` instance, which
+  represents native/pinned memory accessible via JNI. This memory must be released using the `Dispose()` method.
+* The `JMemoryReferenceKind` value specifies whether to create an additional JNI reference to manage the native memory.
+  This is intended to allow free manipulation of that memory across different threads.
+
+##### Primitive Memory
+
+Primitive array memory in `Rxmxnx.JNetInterface` is represented as a fixed memory context through a memory adapter
+encapsulated in an instance of the `JPrimitiveMemory<T>` class. This memory allows both reading and writing.
+
+**Properties:**
+
+* **ReleaseMode**: Sets the release mode of the native memory. If the memory is critical (directly mapped to the array
+  in the JVM), this property is `null` and cannot be set.
+* **Values**: Provides access to native memory via a span.
+* **Copy**: Indicates whether the native memory is a copy of the array data.
+* **Critical**: Indicates whether the native memory is directly the array memory pinned by the JVM.
+* **Pointer**: Pointer to the native memory.
+
+**Note:** If the native memory was allocated with an exclusive JNI reference, releasing the memory will also release
+the associated JNI reference.
 
 ### Accessible Definitions
 
