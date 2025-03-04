@@ -7,6 +7,7 @@ public partial class JMethodDefinition
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+	[ExcludeFromCodeCoverage]
 	public sealed class Parameterless(ReadOnlySpan<Byte> methodName) : JMethodDefinition(methodName)
 	{
 		/// <summary>
@@ -42,7 +43,6 @@ public partial class JMethodDefinition
 		/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <returns>Function result.</returns>
-		[ExcludeFromCodeCoverage]
 		public void InvokeReflected(JMethodObject jMethod, JLocalObject jLocal)
 			=> base.InvokeReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
 		/// <summary>
@@ -51,7 +51,6 @@ public partial class JMethodDefinition
 		/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <returns>Function result.</returns>
-		[ExcludeFromCodeCoverage]
 		public void InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal)
 			=> base.InvokeNonVirtualReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
 		/// <summary>
@@ -59,7 +58,6 @@ public partial class JMethodDefinition
 		/// </summary>
 		/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 		/// <returns>Function result.</returns>
-		[ExcludeFromCodeCoverage]
 		public void InvokeStaticReflected(JMethodObject jMethod)
 			=> base.InvokeStaticReflected(jMethod, ReadOnlySpan<IObject?>.Empty);
 	}

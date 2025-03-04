@@ -249,7 +249,6 @@ These types are `ref struct`, so they are not compatible with the Visual Basic l
 release build, this validation can be disabled using the feature switch `JNetInterface.DisableMetadataValidation`,
 as its primary purpose is design-time validation.
 
-
 #### Jagged Array Type Metadata
 
 In Java, unlike .NET, there are no multidimensional arrays. Instead, Java uses arrays of arrays. Due to this definition,

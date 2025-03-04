@@ -7,6 +7,7 @@ public partial class JFunctionDefinition<TResult>
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+	[ExcludeFromCodeCoverage]
 	public sealed class Parameterless : JFunctionDefinition<TResult>
 	{
 		/// <summary>
@@ -56,7 +57,6 @@ public partial class JFunctionDefinition<TResult>
 		/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <returns>Function result.</returns>
-		[ExcludeFromCodeCoverage]
 		public TResult? InvokeReflected(JMethodObject jMethod, JLocalObject jLocal)
 			=> base.InvokeReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
 		/// <summary>
@@ -65,7 +65,6 @@ public partial class JFunctionDefinition<TResult>
 		/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 		/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
 		/// <returns>Function result.</returns>
-		[ExcludeFromCodeCoverage]
 		public TResult? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal)
 			=> base.InvokeNonVirtualReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
 		/// <summary>
@@ -73,7 +72,6 @@ public partial class JFunctionDefinition<TResult>
 		/// </summary>
 		/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
 		/// <returns>Function result.</returns>
-		[ExcludeFromCodeCoverage]
 		public TResult? InvokeStaticReflected(JMethodObject jMethod)
 			=> base.InvokeStaticReflected(jMethod, ReadOnlySpan<IObject?>.Empty);
 	}

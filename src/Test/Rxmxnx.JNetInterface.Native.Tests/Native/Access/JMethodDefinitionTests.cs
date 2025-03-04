@@ -164,7 +164,7 @@ public sealed class JMethodDefinitionTests
 		public void Invoke(JLocalObject jLocal, IObject?[] args) => base.Invoke(jLocal, args);
 		public void Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 			=> base.Invoke(jLocal, jClass, args);
-		public new void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass)
+		public void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass)
 			=> base.InvokeNonVirtual(jLocal, jClass, ReadOnlySpan<IObject?>.Empty);
 		public void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 			=> base.InvokeNonVirtual(jLocal, jClass, args);

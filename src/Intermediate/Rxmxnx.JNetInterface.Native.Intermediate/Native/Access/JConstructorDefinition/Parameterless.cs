@@ -7,6 +7,7 @@ public partial class JConstructorDefinition
 	/// </summary>
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+	[ExcludeFromCodeCoverage]
 	public sealed class Parameterless() : JConstructorDefinition(Parameterless.info, 0, [], 0)
 	{
 		/// <summary>
@@ -36,7 +37,6 @@ public partial class JConstructorDefinition
 		/// </summary>
 		/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
 		/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
-		[ExcludeFromCodeCoverage]
 		public JLocalObject NewReflected(JConstructorObject jConstructor)
 			=> base.NewReflected(jConstructor, ReadOnlySpan<IObject?>.Empty);
 		/// <summary>
@@ -45,7 +45,6 @@ public partial class JConstructorDefinition
 		/// <typeparam name="TObject">A <see cref="IClassType{TClass}"/> type.</typeparam>
 		/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
 		/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
-		[ExcludeFromCodeCoverage]
 		public TObject NewReflected<TObject>(JConstructorObject jConstructor)
 			where TObject : JLocalObject, IClassType<TObject>
 			=> base.NewReflected<TObject>(jConstructor, ReadOnlySpan<IObject?>.Empty);

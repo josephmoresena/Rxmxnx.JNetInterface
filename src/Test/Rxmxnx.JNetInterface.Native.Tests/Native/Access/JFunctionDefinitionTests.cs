@@ -377,7 +377,7 @@ public sealed class JFunctionDefinitionTests
 			=> base.InvokeNonVirtualReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
 		public TResult? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
 			=> base.InvokeNonVirtualReflected(jMethod, jLocal, args);
-		public new TResult? InvokeStaticReflected(JMethodObject jMethod)
+		public TResult? InvokeStaticReflected(JMethodObject jMethod)
 			=> base.InvokeStaticReflected(jMethod, ReadOnlySpan<IObject?>.Empty);
 		public TResult? InvokeStaticReflected(JMethodObject jMethod, IObject?[] args)
 			=> base.InvokeStaticReflected(jMethod, args);
