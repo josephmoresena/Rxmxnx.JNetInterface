@@ -158,26 +158,28 @@ public sealed class JMethodDefinitionTests
 	private class JFakeMethodDefinition(ReadOnlySpan<Byte> methodName, params JArgumentMetadata[] metadata)
 		: JMethodDefinition(methodName, metadata)
 	{
-		public new void Invoke(JLocalObject jLocal) => base.Invoke(jLocal);
-		public new void Invoke(JLocalObject jLocal, JClassObject jClass) => base.Invoke(jLocal, jClass);
+		public new void Invoke(JLocalObject jLocal) => base.Invoke(jLocal, ReadOnlySpan<IObject?>.Empty);
+		public new void Invoke(JLocalObject jLocal, JClassObject jClass)
+			=> base.Invoke(jLocal, jClass, ReadOnlySpan<IObject?>.Empty);
 		public void Invoke(JLocalObject jLocal, IObject?[] args) => base.Invoke(jLocal, args);
 		public void Invoke(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 			=> base.Invoke(jLocal, jClass, args);
 		public new void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass)
-			=> base.InvokeNonVirtual(jLocal, jClass);
+			=> base.InvokeNonVirtual(jLocal, jClass, ReadOnlySpan<IObject?>.Empty);
 		public void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass, IObject?[] args)
 			=> base.InvokeNonVirtual(jLocal, jClass, args);
-		public new void StaticInvoke(JClassObject jClass) => base.StaticInvoke(jClass);
+		public new void StaticInvoke(JClassObject jClass) => base.StaticInvoke(jClass, ReadOnlySpan<IObject?>.Empty);
 		public void StaticInvoke(JClassObject jClass, IObject?[] args) => base.StaticInvoke(jClass, args);
 		public new void InvokeReflected(JMethodObject jMethod, JLocalObject jLocal)
-			=> base.InvokeReflected(jMethod, jLocal);
+			=> base.InvokeReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
 		public void InvokeReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
 			=> base.InvokeReflected(jMethod, jLocal, args);
 		public new void InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal)
-			=> base.InvokeNonVirtualReflected(jMethod, jLocal);
+			=> base.InvokeNonVirtualReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
 		public void InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal, IObject?[] args)
 			=> base.InvokeNonVirtualReflected(jMethod, jLocal, args);
-		public new void InvokeStaticReflected(JMethodObject jMethod) => base.InvokeStaticReflected(jMethod);
+		public new void InvokeStaticReflected(JMethodObject jMethod)
+			=> base.InvokeStaticReflected(jMethod, ReadOnlySpan<IObject?>.Empty);
 		public void InvokeStaticReflected(JMethodObject jMethod, IObject?[] args)
 			=> base.InvokeStaticReflected(jMethod, args);
 	}

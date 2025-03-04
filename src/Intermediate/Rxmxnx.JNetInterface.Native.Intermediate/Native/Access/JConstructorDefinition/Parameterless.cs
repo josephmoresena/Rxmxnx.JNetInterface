@@ -21,7 +21,7 @@ public partial class JConstructorDefinition
 		/// </summary>
 		/// <param name="jClass">An <see cref="JClassObject"/> instance.</param>
 		/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
-		public new JLocalObject New(JClassObject jClass) => base.New(jClass);
+		public JLocalObject New(JClassObject jClass) => base.New(jClass, ReadOnlySpan<IObject?>.Empty);
 		/// <summary>
 		/// Creates a new <typeparamref name="TObject"/> instance using a constructor which matches with
 		/// current definition.
@@ -29,7 +29,23 @@ public partial class JConstructorDefinition
 		/// <typeparam name="TObject">A <see cref="IClassType{TClass}"/> type.</typeparam>
 		/// <param name="env"><see cref="IEnvironment"/> instance.</param>
 		/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
-		public new TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
-			=> base.New<TObject>(env);
+		public TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
+			=> base.New<TObject>(env, ReadOnlySpan<IObject?>.Empty);
+		/// <summary>
+		/// Invokes a reflected constructor which matches with current definition.
+		/// </summary>
+		/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
+		/// <returns>A new <see cref="JLocalObject"/> instance.</returns>
+		public JLocalObject NewReflected(JConstructorObject jConstructor)
+			=> base.NewReflected(jConstructor, ReadOnlySpan<IObject?>.Empty);
+		/// <summary>
+		/// Invokes a reflected constructor which matches with current definition.
+		/// </summary>
+		/// <typeparam name="TObject">A <see cref="IClassType{TClass}"/> type.</typeparam>
+		/// <param name="jConstructor">A <see cref="JConstructorObject"/> instance.</param>
+		/// <returns>A new <typeparamref name="TObject"/> instance.</returns>
+		public TObject NewReflected<TObject>(JConstructorObject jConstructor)
+			where TObject : JLocalObject, IClassType<TObject>
+			=> base.NewReflected<TObject>(jConstructor, ReadOnlySpan<IObject?>.Empty);
 	}
 }
