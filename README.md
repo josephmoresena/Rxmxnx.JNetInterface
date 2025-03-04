@@ -249,15 +249,6 @@ These types are `ref struct`, so they are not compatible with the Visual Basic l
 release build, this validation can be disabled using the feature switch `JNetInterface.DisableMetadataValidation`,
 as its primary purpose is design-time validation.
 
-#### Array type metadata
-
-Los metadatos de tipo de array son metadatos que se crean a través las instancias JArrayObject<..>. Esta clase es una
-vista que representa un array en Java.
-Toda metadata de tipos de datos permiten obtener la metadata de su tipo de array, por ejemplo:
-
-* long (JLong) -> long[] (JArrayObject<JLong>) cuyo nombre de clase [J.
-* java.lang.Exception (JExceptionObject) -> java.lang.Exception[] (JArrayObject<JExceptionObject>) cuyo nombre de clase
-  es [Ljava/lang/Exception;.
 
 #### Jagged Array Type Metadata
 
