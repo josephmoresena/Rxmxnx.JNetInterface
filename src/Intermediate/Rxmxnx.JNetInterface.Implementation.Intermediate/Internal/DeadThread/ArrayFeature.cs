@@ -6,6 +6,11 @@ internal partial class DeadThread : IArrayFeature
 		=> this.ThrowInvalidResult<JArrayObject<TElement>>();
 	JArrayObject<TElement> IArrayFeature.CreateArray<TElement>(Int32 length, TElement initialElement)
 		=> this.ThrowInvalidResult<JArrayObject<TElement>>();
+	JArrayObject<TElement> IArrayFeature.CreateArray<TElement>(JClassObject jClass, Int32 length)
+		=> this.ThrowInvalidResult<JArrayObject<TElement>>();
+	JArrayObject<TElement> IArrayFeature.CreateArray<TElement>(JClassObject jClass, Int32 length,
+		TElement initialElement)
+		=> this.ThrowInvalidResult<JArrayObject<TElement>>();
 	Int32 IArrayFeature.GetArrayLength(JReferenceObject jObject)
 	{
 		this.GetArrayLengthTrace(jObject);

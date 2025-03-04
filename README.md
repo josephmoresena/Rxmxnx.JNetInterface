@@ -386,10 +386,17 @@ To create a new array through JNI, `Rxmxnx.JNetInterface` exposes the following 
 * **Create(IEnvironment, Int32)**: Creates an array of the type specified by the generic class with the length given by
   the integer value.
 * **Create(IEnvironment, Int32, T)**: Creates an array of the type specified by the generic class with the length given
-  by the integer value and fills it with the specified value instance. This method is recommended only for creating
-  non-primitive arrays.
+  by the integer value and fills it with the specified value instance.
+* **Create(IEnvironment, Int32, JClassObject)**: Creates an array of the type specified by the generic class with the
+  length given by the integer value, using the provided class as the element type.
+* **Create(JClassObject, Int32, T)**: Creates an array of the type specified by the generic class with the length given
+  by the integer value and fills it with the specified value instance, using the provided class as the element type.
 
-**Note:** The creation of arrays with elements of unmapped types is currently not available.
+**Notes:**
+
+* If an array is created by specifying the element class, it must be compatible with the element type. In the
+  case of primitive arrays, only the corresponding primitive array class will be considered compatible.
+* Methods that initialize arrays with a specified value are only recommended for creating non-primitive arrays.
 
 #### Non-Generic Class
 
@@ -417,8 +424,7 @@ The properties exposed by this class are:
 **Note:** These properties are read directly from the underlying non-generic instance that supports the generic view.
 
 To get or set an array element, the class exposes an indexer. Additionally, this class implements various .NET
-interfaces
-such as `IList<T>` and `IReadOnlyList<T>`.
+interfaces such as `IList<T>` and `IReadOnlyList<T>`.
 
 #### Primitive Arrays
 

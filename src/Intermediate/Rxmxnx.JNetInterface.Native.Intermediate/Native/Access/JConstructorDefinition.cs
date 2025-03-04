@@ -33,6 +33,9 @@ public partial class JConstructorDefinition : JCallDefinition
 		where TObject : JLocalObject, IClassType<TObject>
 	{
 		IEnvironment env = jClass.Environment;
+		JClassTypeMetadata typeMetadata = IClassType.GetMetadata<TObject>();
+		if (typeMetadata.ClassName.AsSpan().SequenceEqual(jClass.Name.AsSpan()))
+			NativeValidationUtilities.ThrowIfAbstractClass(typeMetadata);
 		return env.AccessFeature.CallConstructor<TObject>(jClass, this, args);
 	}
 

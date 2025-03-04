@@ -7,6 +7,24 @@ partial class JEnvironment
 	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
+		/// Creates a <paramref name="initialElement"/> filled <see cref="JArrayObject{TElement}"/> instance.
+		/// </summary>
+		/// <param name="jClass">Element <see cref="JClassObject"/> instance.</param>
+		/// <param name="length">New array length.</param>
+		/// <param name="initialElement">Instance to set each array element.</param>
+		/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
+		private JArrayObject<TElement> CreateObjectArray<TElement>(JClassObject jClass, Int32 length,
+			JReferenceObject? initialElement) where TElement : IDataType<TElement>
+		{
+			ImplementationValidationUtilities.ThrowIfInvalidArrayLength(length);
+			JClassObject jArrayClass = this.GetArrayClass(jClass);
+			JArrayTypeMetadata arrayTypeMetadata = JArrayObject<TElement>.Metadata;
+			JArrayTypeMetadata arrayMetadata = (JArrayTypeMetadata)this.GetTypeMetadata(jArrayClass);
+			JArrayLocalRef arrayRef = this.NewObjectArray(length, jClass, initialElement);
+			JLocalObject instance = (JArrayObject)arrayMetadata.CreateInstance(jArrayClass, arrayRef.Value, true);
+			return this.Register((JArrayObject<TElement>)arrayTypeMetadata.ParseInstance(instance, true));
+		}
+		/// <summary>
 		/// Sets the object element with <paramref name="index"/> on <paramref name="jArray"/>.
 		/// </summary>
 		/// <param name="jArray">A <see cref="JReferenceObject"/> instance.</param>

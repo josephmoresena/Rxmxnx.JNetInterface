@@ -524,5 +524,42 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private JClassObject AsClassObject(JClassLocalRef classRef, WellKnownRuntimeTypeInformation runtimeInformation)
 			=> this.Register(this.GetClass(classRef, true, runtimeInformation));
+		/// <summary>
+		/// Computes the class compatibility with <typeparamref name="TDataType"/> instance.
+		/// </summary>
+		/// <typeparam name="TDataType">A <see cref="IDataType{TDataType}"/> type.</typeparam>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <param name="sameClass">
+		/// Output. Indicates whether <paramref name="jClass"/> is the class for <typeparamref name="TDataType"/> type.
+		/// </param>
+		private void CheckClassCompatibility<TDataType>(JClassObject jClass, out Boolean sameClass)
+			where TDataType : IDataType<TDataType>
+		{
+			JClassObject typeClass = this.GetClass<TDataType>();
+			sameClass = typeClass.Hash.AsSpan().SequenceEqual(jClass.Hash);
+
+			if (sameClass) return; // Same class type.
+
+			if (typeClass.IsPrimitive || jClass.IsPrimitive) // There is no compatibility between primitive types.
+				CommonValidationUtilities.ThrowIfInvalidCast(IDataType.GetMetadata<TDataType>(), false);
+
+			using LocalFrame _ = new(this._env, IVirtualMachine.GetObjectClassCapacity);
+			CommonValidationUtilities.ThrowIfInvalidCast(IDataType.GetMetadata<TDataType>(),
+			                                             this.IsAssignableFrom(jClass, typeClass));
+		}
+		/// <summary>
+		/// Retrieves the array class instance for given element class.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject GetArrayClass(JClassObject jClass)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
+			Int32 offset = 2 * jClass.ClassSignature.Length;
+			ReadOnlySpan<Byte> arrayClassName = jClass.Hash.AsSpan().AsBytes()[offset..];
+
+			using LocalFrame _ = new(this._env, IVirtualMachine.GetObjectClassCapacity);
+			return this.GetClass(arrayClassName);
+		}
 	}
 }

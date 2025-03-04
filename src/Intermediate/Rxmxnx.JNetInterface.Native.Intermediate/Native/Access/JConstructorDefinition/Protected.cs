@@ -45,10 +45,7 @@ public partial class JConstructorDefinition
 		params
 #endif
 		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
-	{
-		NativeValidationUtilities.ThrowIfAbstractClass(IClassType.GetMetadata<TObject>());
-		return this.New<TObject>(env.ClassFeature.GetClass<TObject>(), args);
-	}
+		=> this.New<TObject>(env.ClassFeature.GetClass<TObject>(), args);
 	/// <summary>
 	/// Invokes a reflected constructor which matches with current definition
 	/// passing the default value for each argument.

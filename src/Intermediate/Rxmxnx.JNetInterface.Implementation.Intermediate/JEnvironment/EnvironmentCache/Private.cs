@@ -188,6 +188,23 @@ partial class JEnvironment
 			return register ? this.Register(result) : result;
 		}
 		/// <summary>
+		/// Creates an object from given reference.
+		/// </summary>
+		/// <typeparam name="TResult">A <see cref="IDataType"/> type.</typeparam>
+		/// <param name="jClass">Object class.</param>
+		/// <param name="localRef">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <returns>A <typeparamref name="TResult"/> instance.</returns>
+		private TResult CreateObject<TResult>(JClassObject jClass, JObjectLocalRef localRef)
+			where TResult : IDataType<TResult>
+		{
+			this.CheckJniError();
+			JReferenceTypeMetadata metadata = (JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TResult>();
+			JReferenceTypeMetadata typeMetadata = this.GetTypeMetadata(jClass);
+			JLocalObject jLocal = typeMetadata.CreateInstance(jClass, localRef, true);
+			TResult result = (TResult)(Object)metadata.ParseInstance(jLocal, true);
+			return this.Register(result);
+		}
+		/// <summary>
 		/// Indicates whether current JNI call must use <see langword="stackalloc"/> or <see langword="new"/> to
 		/// hold JNI call parameter.
 		/// </summary>
