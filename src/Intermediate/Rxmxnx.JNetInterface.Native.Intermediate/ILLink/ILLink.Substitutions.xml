@@ -37,12 +37,12 @@
             <method signature="System.Collections.Generic.IReadOnlySet`1&lt;System.Type&gt; get_TypeBaseTypes()"
                     body="remove"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableNestingArrayAutoGeneration"
+        <type fullname="Rxmxnx.JNetInterface.IVirtualMachine" feature="JNetInterface.DisableJaggedArrayAutoGeneration"
               featurevalue="true">
-            <method signature="System.Boolean get_NestingArrayAutoGenerationEnabled()" body="stub" value="false"/>
+            <method signature="System.Boolean get_JaggedArrayAutoGenerationEnabled()" body="stub" value="false"/>
         </type>
         <type fullname="Rxmxnx.JNetInterface.Types.Metadata.JArrayTypeMetadata"
-              feature="JNetInterface.DisableNestingArrayAutoGeneration"
+              feature="JNetInterface.DisableJaggedArrayAutoGeneration"
               featurevalue="true">
             <method signature="System.Reflection.MethodInfo ReflectGetArrayArrayMetadataMethod()"
                     body="remove"/>

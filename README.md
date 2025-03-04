@@ -198,9 +198,14 @@ The metadata exposes the following properties:
     - `java.lang.Object`: Extensible.
     - `java.lang.Number` (`JNumberObject`): Abstract.
 
-**Note:** The hash of a data type (just like `JClassObject` instances) is the UTF-16 buffer used to store the UTF-8
-sequence containing the class name, the JNI signature of the class, and the name/signature of the array for the data
-type.
+**Notes:**
+
+* The hash of a data type (just like `JClassObject` instances) is the UTF-16 buffer used to store the UTF-8
+  sequence containing the class name, the JNI signature of the class, and the name/signature of the array for the data
+  type.
+* Type metadata has a special implementation of the `.ToString()` method, which may be unnecessary and inconvenient in a
+  release version of a product using `Rxmxnx.JNetInterface`. To disable this implementation, the feature switch
+  `JNetInterface.DisableTypeMetadataToString` can be used.
 
 #### Metadata Builder
 
@@ -239,6 +244,33 @@ These types are `ref struct`, so they are not compatible with the Visual Basic l
   It must always be initialized with the JNI class name. <br/>  
   This builder is identical to `JLocalObject.TypeMetadataBuilder<>`, but no superclass can be specified,  
   as all enum types extend the `java.lang.Enum` class.
+
+**Note:** All `TypeMetadataBuilder<>` instances perform runtime validations during their construction. However, for a
+release build, this validation can be disabled using the feature switch `JNetInterface.DisableMetadataValidation`,
+as its primary purpose is design-time validation.
+
+#### Array type metadata
+
+Los metadatos de tipo de array son metadatos que se crean a través las instancias JArrayObject<..>. Esta clase es una
+vista que representa un array en Java.
+Toda metadata de tipos de datos permiten obtener la metadata de su tipo de array, por ejemplo:
+
+* long (JLong) -> long[] (JArrayObject<JLong>) cuyo nombre de clase [J.
+* java.lang.Exception (JExceptionObject) -> java.lang.Exception[] (JArrayObject<JExceptionObject>) cuyo nombre de clase
+  es [Ljava/lang/Exception;.
+
+#### Jagged Array Type Metadata
+
+In Java, unlike .NET, there are no multidimensional arrays. Instead, Java uses arrays of arrays. Due to this definition,
+`Rxmxnx.JNetInterface` uses reflection to create the metadata for this type of array at runtime to ensure compatibility
+with NativeAOT.
+
+However, in reflection-free AOT mode, the automatic creation of these metadata at runtime is not possible.
+Therefore, a mechanism must be used to ensure the definition of `JArrayObject<..JArrayObject<...>..>`
+is available at runtime.
+
+Even if automatic metadata creation at runtime is not desired, this functionality can be disabled
+using the feature switch `JNetInterface.DisableJaggedArrayAutoGeneration`.
 
 ### Argument Metadata
 
