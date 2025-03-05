@@ -48,10 +48,10 @@ internal static partial class MetadataHelper
 			this._classTree = new();
 			this._viewTree = new();
 			if (JVirtualMachine.BuiltInThrowableAutoRegistered)
-				RuntimeMetadataStorage.BuiltInThrowableRegistration(this._runtimeMetadata);
+				MetadataHelper.BuiltInThrowableRegistration(this._runtimeMetadata);
 			if (JVirtualMachine.ReflectionAutoRegistered)
-				RuntimeMetadataStorage.ReflectionRegistration(this._runtimeMetadata);
-			if (JVirtualMachine.NioAutoRegistered) RuntimeMetadataStorage.NioRegistration(this._runtimeMetadata);
+				MetadataHelper.ReflectionRegistration(this._runtimeMetadata);
+			if (JVirtualMachine.NioAutoRegistered) MetadataHelper.NioRegistration(this._runtimeMetadata);
 		}
 
 		/// <summary>
