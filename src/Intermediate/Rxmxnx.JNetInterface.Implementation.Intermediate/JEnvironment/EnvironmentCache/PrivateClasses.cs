@@ -535,17 +535,19 @@ partial class JEnvironment
 		private void CheckClassCompatibility<TDataType>(JClassObject jClass, out Boolean sameClass)
 			where TDataType : IDataType<TDataType>
 		{
-			JClassObject typeClass = this.GetClass<TDataType>();
-			sameClass = typeClass.Hash.AsSpan().SequenceEqual(jClass.Hash);
+			JDataTypeMetadata elementTypeMetadata = MetadataHelper.GetExactMetadata<TDataType>();
+			sameClass = elementTypeMetadata.Hash.AsSpan().SequenceEqual(jClass.Hash);
 
 			if (sameClass) return; // Same class type.
 
-			if (typeClass.IsPrimitive || jClass.IsPrimitive) // There is no compatibility between primitive types.
-				CommonValidationUtilities.ThrowIfInvalidCast(IDataType.GetMetadata<TDataType>(), false);
+			if (elementTypeMetadata.Kind is JTypeKind.Primitive ||
+			    jClass.IsPrimitive) // There is no compatibility between primitive types.
+				CommonValidationUtilities.ThrowIfInvalidCast(elementTypeMetadata, false);
 
 			using LocalFrame _ = new(this._env, IVirtualMachine.GetObjectClassCapacity);
-			CommonValidationUtilities.ThrowIfInvalidCast(IDataType.GetMetadata<TDataType>(),
-			                                             this.IsAssignableFrom(jClass, typeClass));
+			JClassObject elementTypeClass = this.GetClass<TDataType>();
+			Boolean allowedCast = this.IsAssignableFrom(jClass, elementTypeClass);
+			CommonValidationUtilities.ThrowIfInvalidCast(elementTypeMetadata, allowedCast);
 		}
 		/// <summary>
 		/// Retrieves the array class instance for given element class.
@@ -555,8 +557,11 @@ partial class JEnvironment
 		private JClassObject GetArrayClass(JClassObject jClass)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			Int32 offset = 2 * jClass.ClassSignature.Length;
-			ReadOnlySpan<Byte> arrayClassName = jClass.Hash.AsSpan().AsBytes()[offset..];
+			Int32 elementTypeSignature = jClass.ClassSignature.Length;
+			Int32 offset = 2 * elementTypeSignature;
+			Int32 length = elementTypeSignature + 1;
+			ReadOnlySpan<Byte> typeInformationSpan = MemoryMarshal.AsBytes(jClass.Hash.AsSpan());
+			ReadOnlySpan<Byte> arrayClassName = typeInformationSpan[offset..(offset + length)];
 
 			using LocalFrame _ = new(this._env, IVirtualMachine.GetObjectClassCapacity);
 			return this.GetClass(arrayClassName);

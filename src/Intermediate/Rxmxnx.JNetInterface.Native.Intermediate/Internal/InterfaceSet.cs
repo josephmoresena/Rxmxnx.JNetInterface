@@ -25,6 +25,9 @@ internal partial class InterfaceSet : IAppendableInterfaceSet
 	public virtual Boolean Contains(JInterfaceTypeMetadata item) => this._internalSet.Contains(item);
 	/// <inheritdoc/>
 	public virtual void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
+#if NET9_0_OR_GREATER
+		where T : allows ref struct
+#endif
 	{
 		foreach (JInterfaceTypeMetadata interfaceMetadata in this._internalSet)
 			action(state, interfaceMetadata);
