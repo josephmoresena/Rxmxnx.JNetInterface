@@ -6,7 +6,7 @@
               featurevalue="true">
             <method signature="System.Boolean get_BuiltInThrowableAutoRegistered()" body="stub" value="false"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.Internal.MetadataHelper"
+        <type fullname="Rxmxnx.JNetInterface.Internal.MetadataHelper.RuntimeMetadataStorage"
               feature="JNetInterface.DisableBuiltInThrowableAutoRegistration"
               featurevalue="true">
             <method signature="System.Void BuiltInThrowableRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
@@ -16,7 +16,7 @@
               featurevalue="true">
             <method signature="System.Boolean get_ReflectionAutoRegistered()" body="stub" value="false"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.Internal.MetadataHelper"
+        <type fullname="Rxmxnx.JNetInterface.Internal.MetadataHelper.RuntimeMetadataStorage"
               feature="JNetInterface.DisableReflectionAutoRegistration"
               featurevalue="true">
             <method signature="System.Void BuiltInThrowableRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"
@@ -26,7 +26,7 @@
               featurevalue="true">
             <method signature="System.Boolean get_NioAutoRegistered()" body="stub" value="false"/>
         </type>
-        <type fullname="Rxmxnx.JNetInterface.Internal.MetadataHelper"
+        <type fullname="Rxmxnx.JNetInterface.Internal.MetadataHelper.RuntimeMetadataStorage"
               feature="JNetInterface.DisableNioAutoRegistration"
               featurevalue="true">
             <method signature="System.Void NioRegistration(System.Collections.Generic.IDictionary`2&lt;System.String,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata&gt;)"

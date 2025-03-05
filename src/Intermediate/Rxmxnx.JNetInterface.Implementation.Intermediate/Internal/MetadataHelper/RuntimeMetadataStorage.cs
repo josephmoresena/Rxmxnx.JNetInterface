@@ -32,7 +32,7 @@ internal static partial class MetadataHelper
 		/// Gets or Sets assignation.
 		/// </summary>
 		/// <param name="key"></param>
-		public Boolean this[AssignationKey key]
+		public Boolean this[in AssignationKey key]
 		{
 			set => this._assignationCache[key] = value;
 		}
@@ -111,7 +111,7 @@ internal static partial class MetadataHelper
 		/// <see langword="true"/> if <paramref name="key"/> is registered;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
-		public Boolean IsRegistered(AssignationKey key) => this._assignationCache.ContainsKey(key);
+		public Boolean IsRegistered(in AssignationKey key) => this._assignationCache.ContainsKey(key);
 		/// <summary>
 		/// Attempts to add the <paramref name="typeMetadata"/> to the current instance.
 		/// </summary>
@@ -142,7 +142,7 @@ internal static partial class MetadataHelper
 		/// <see langword="true"/> if <paramref name="key"/> was found into the current instance;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
-		public Boolean TryGetValue(AssignationKey key, out Boolean assignable)
+		public Boolean TryGetValue(in AssignationKey key, out Boolean assignable)
 			=> this._assignationCache.TryGetValue(key, out assignable);
 		/// <summary>
 		/// Tries to get the value associated with the specified hash in the current instance.
@@ -154,7 +154,7 @@ internal static partial class MetadataHelper
 		/// Registres the <see cref="AssignationKey"/> as super-class relationship.
 		/// </summary>
 		/// <param name="assignationKey">A <see cref="AssignationKey"/> instance.</param>
-		public void RegisterSuperClassRelationship(AssignationKey assignationKey)
+		public void RegisterSuperClassRelationship(in AssignationKey assignationKey)
 		{
 			this._classTree[assignationKey.FromHash] = assignationKey.ToHash;
 			this._assignationCache[assignationKey] = true;
@@ -163,7 +163,7 @@ internal static partial class MetadataHelper
 		/// Registres the <see cref="AssignationKey"/> as super-view relationship.
 		/// </summary>
 		/// <param name="assignationKey">A <see cref="AssignationKey"/> instance.</param>
-		public void RegisterSuperViewRelationship(AssignationKey assignationKey)
+		public void RegisterSuperViewRelationship(in AssignationKey assignationKey)
 		{
 			if (!this._viewTree.TryGetValue(assignationKey.FromHash, out HashesSet? set))
 			{
