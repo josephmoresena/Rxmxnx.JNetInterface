@@ -67,7 +67,9 @@ jobs:
           dotnet build-server shutdown
           dotnet restore src
           dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
-          dotnet test src --verbosity detailed --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover 
+          
+          dotnet test src --no-build --no-restore --configuration release --verbosity normal --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
       - name: Pack core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
