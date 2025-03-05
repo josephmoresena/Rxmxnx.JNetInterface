@@ -338,6 +338,7 @@ public sealed class StringMemoryTests
 
 			proxyEnv.Received(0).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
 			proxyEnv.Received(1).NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(1).GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>());
 			proxyEnv.Received(1).GetStringLength(stringRef);
 			proxyEnv.Received(0).GetStringUtfLength(stringRef);
 		}
@@ -381,6 +382,7 @@ public sealed class StringMemoryTests
 
 			proxyEnv.Received(1).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
 			proxyEnv.Received(0).NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(0).GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>());
 			proxyEnv.Received(0).GetStringLength(stringRef);
 			proxyEnv.Received(1).GetStringUtfLength(stringRef);
 		}
@@ -424,6 +426,7 @@ public sealed class StringMemoryTests
 
 			proxyEnv.Received(1).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
 			proxyEnv.Received(0).NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(1).GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>());
 			proxyEnv.Received(0).GetStringLength(stringRef);
 			proxyEnv.Received(1).GetStringUtfLength(stringRef);
 		}

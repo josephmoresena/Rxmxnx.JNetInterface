@@ -373,6 +373,102 @@ the [included example application](./src/ApplicationTest/README.md) in this repo
 For more information about essential and main classes, please refer to the documentation on compatibility with
 [GraalVM Native Image](./native-image/README.md), where the implementation details are explained in greater depth.
 
+### String Handling
+
+JNI allows special handling of `java.lang.String` instances (Java Strings). `Rxmxnx.JNetInterface` exposes these APIs
+through the `JStringObject` class.
+
+#### String Creation
+
+To create a new array through JNI, `Rxmxnx.JNetInterface` exposes the following static methods in the class
+`JStringObject`:
+
+* **Create(IEnvironment, String?)**: Creates a Java `String` from a .NET `String` instance. The .NET `String` is kept in
+  memory associated with the created instance. If the given `String` is null, it will return null. The value of the
+  `String` can be accessed through the `Value` property.
+* **Create(IEnvironment, ReadOnlySpan<Char>)**: Creates a Java `String` from a read-only span of UTF-16 characters. The
+  `Value` property will generate a JNI call to retrieve the instance's value.
+* **Create(IEnvironment, CString?)**: Creates a Java `String` from a `CString` instance. If the given `CString` is null,
+  it will return null. The `Utf8Length` property will be initialized with the length of the `CString`.
+* **Create(JClassObject, ReadOnlySpan<Byte>)**: Creates a Java `String` from a read-only span of UTF-8 bytes. The
+  `Utf8Length` property will be initialized with the length of the read-only span.
+
+*Note:* UTF-8 based creation methods comply with the following characteristics:
+
+- The UTF-8 text must end with a null UTF-8 character.
+- The termination character must not be part of the sequence. This is ensured in certain `CString` instances or .NET
+  UTF-8/ASCII literals.
+- The UTF-8 text must not contain null UTF-8 characters.
+
+The properties exposed by this class are:
+
+* **Length**: Number of UTF-16 characters in the Java string. If not initialized, a call to the JNI method
+  `GetStringLength` will be made.
+* **Utf8Length**: Number of UTF-8 units in the Java string. If not initialized, a call to the JNI method
+  `GetStringUTFLength` will be made.
+* **Value**: String value of the current Java string. If not initialized, a call to the JNI method `GetStringRegion`
+  will be made.
+* **Reference**: JNI reference to the instance.
+
+**Notes:**
+
+* The `JStringObject` class implements the following interfaces: `IEnumerable<Char>`, `IComparable`,
+  `IComparable<String?>`, and `IComparable<JStringObject?>`.
+* The characters and UTF-8 units of Java strings are represented by the CLR structures `System.Char` and `System.Byte`,
+  respectively.
+
+#### Native Characters
+
+JNI allows native access to the characters of a Java string. `Rxmxnx.JNetInterface` provides this functionality through
+the following methods:
+
+* **GetNativeChars(JMemoryReferenceKind)**: Equivalent to JNI's `GetStringChars` calls. The `JMemoryReferenceKind`
+  parameter allows `Rxmxnx.JNetInterface` to safely and efficiently use another JNI reference to back native memory
+  allocation.
+* **GetCriticalChars(JMemoryReferenceKind)**: Equivalent to the `GetStringCritical` call. The `JMemoryReferenceKind`
+  parameter enables `Rxmxnx.JNetInterface` to safely and efficiently use another JNI reference to pin memory.
+* **GetNativeUtf8Chars(JMemoryReferenceKind)**: Equivalent to JNI's `GetStringUTFChars` calls. The
+  `JMemoryReferenceKind` parameter allows `Rxmxnx.JNetInterface` to safely and efficiently use another JNI reference to
+  back native memory allocation.
+* **Get(Span<Char>, Int32)**: Equivalent to JNI's `GetStringRegion` calls. The integer serves as the offset for the
+  copy.
+* **GetUtf8(Span<Byte>, Int32)**: Equivalent to JNI's `GetStringUTFRegion` calls. The integer serves as the offset for
+  the copy.
+* **GetChars(Int32)**: Equivalent to JNI's `GetStringRegion` calls. The given integer serves as the starting point of
+  the substring.
+* **GetChars(Int32, Int32)**: Equivalent to JNI's `GetStringRegion` calls. The first given integer serves as the
+  starting point of the substring, and the second defines its length.
+* **GetUtf8(Int32)**: Equivalent to JNI's `GetStringUTFRegion` calls. The given integer serves as the starting point of
+  the UTF-8 substring.
+* **GetUtf8(Int32, Int32)**: Equivalent to JNI's `GetStringUTFRegion` calls. The first given integer serves as the
+  starting point of the UTF-8 substring, and the second defines its length.
+
+**Notes:**
+
+* The `GetNativeChars`, `GetNativeUtf8Chars` and `GetCriticalChars` methods return a `JNativeMemory<T>` instance, which
+  represents native/pinned read-only memory accessible via JNI. This memory must be released using the `Dispose()`
+  method.
+* The `JMemoryReferenceKind` value specifies whether to create an additional JNI reference to manage the native memory.
+  This is intended to allow free manipulation of that memory across different threads.
+* When the Value property is initialized the `GetChars` methods use it to create the substrings.
+
+##### Native Memory
+
+Native memory in `Rxmxnx.JNetInterface` is represented as a fixed memory context through a memory adapter
+encapsulated in an instance of the `JNativeMemomory<T>` class. This memory is read-only.
+
+**Properties:**
+
+* **ReleaseMode**: Sets the release mode of the native memory. If the memory is critical (directly mapped to the string
+  in the JVM), this property is `null` and cannot be set.
+* **Values**: Provides access to native memory via a rad-only span.
+* **Copy**: Indicates whether the native memory is a copy of the string data.
+* **Critical**: Indicates whether the native memory is directly the string memory pinned by the JVM.
+* **Pointer**: Pointer to the native memory.
+
+**Note:** If the native memory was allocated with an exclusive JNI reference, releasing the memory will also release
+the associated JNI reference.
+
 ### Array Handling
 
 JNI allows the manipulation and creation of Java arrays from any type. `Rxmxnx.JNetInterface` exposes APIs through
@@ -407,7 +503,7 @@ as a non-generic `JArrayObject`.
 
 The properties exposed by this class are:
 
-* **Length**: Number of elements in the array.
+* **Length**: Number of elements in the Java array.
 * **Reference**: JNI reference to the instance.
 
 #### Generic Class
@@ -418,7 +514,7 @@ contained or "viewed" in the array instance.
 
 The properties exposed by this class are:
 
-* **Length**: Number of elements in the array.
+* **Length**: Number of elements in the Java array.
 * **Reference**: JNI reference to the instance.
 
 **Note:** These properties are read directly from the underlying non-generic instance that supports the generic view.

@@ -10,8 +10,7 @@ partial class JEnvironment
 		{
 			JStringLocalRef stringRef = this.CreateString(data);
 			JClassObject jStringClass = this.GetClass<JStringObject>();
-			value ??= data.ToString();
-			return this.Register<JStringObject>(new(jStringClass, stringRef, value));
+			return this.Register<JStringObject>(new(jStringClass, stringRef, value, data.Length));
 		}
 		public JStringObject Create(ReadOnlySpan<Byte> utf8Data)
 		{

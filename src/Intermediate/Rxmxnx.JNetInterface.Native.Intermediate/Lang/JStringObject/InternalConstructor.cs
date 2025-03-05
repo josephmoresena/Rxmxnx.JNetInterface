@@ -8,11 +8,12 @@ public partial class JStringObject
 	/// <param name="jStringClass"><see cref="JClassObject"/> instance.</param>
 	/// <param name="stringRef">Local string reference.</param>
 	/// <param name="value">Internal value.</param>
-	internal JStringObject(JClassObject jStringClass, JStringLocalRef stringRef, String? value = default) : base(
-		jStringClass, stringRef.Value)
+	/// <param name="length">Internal value length.</param>
+	internal JStringObject(JClassObject jStringClass, JStringLocalRef stringRef, String? value = default,
+		Int32? length = default) : base(jStringClass, stringRef.Value)
 	{
 		this._value = value;
-		this._length = value?.Length;
+		this._length = value?.Length ?? length;
 	}
 	/// <summary>
 	/// Constructor.
