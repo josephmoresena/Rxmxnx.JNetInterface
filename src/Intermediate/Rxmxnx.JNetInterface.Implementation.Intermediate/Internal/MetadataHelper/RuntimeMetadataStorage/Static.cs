@@ -2,7 +2,7 @@ namespace Rxmxnx.JNetInterface.Internal;
 
 internal static partial class MetadataHelper
 {
-	private partial class RuntimeMetadataStorage
+	private sealed partial class RuntimeMetadataStorage
 	{
 		/// <summary>
 		/// Registers all built-in throwable types metadata.

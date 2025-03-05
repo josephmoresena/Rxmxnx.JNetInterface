@@ -276,7 +276,7 @@ internal static partial class MetadataHelper
 	{
 		AssignationKey assignationKey = new() { FromHash = hashClass, ToHash = superClassHash, };
 		if (assignationKey.IsSame) return;
-		MetadataHelper.storage.RegisterSuperClass(assignationKey);
+		MetadataHelper.storage.RegisterSuperClassRelationship(assignationKey);
 	}
 	/// <summary>
 	/// Register class tree.
@@ -287,6 +287,6 @@ internal static partial class MetadataHelper
 	{
 		AssignationKey assignationKey = new() { FromHash = hashView, ToHash = superViewHash, };
 		if (assignationKey.IsSame) return;
-		MetadataHelper.storage.RegisterSuperView(assignationKey);
+		MetadataHelper.storage.RegisterSuperViewRelationship(assignationKey);
 	}
 }

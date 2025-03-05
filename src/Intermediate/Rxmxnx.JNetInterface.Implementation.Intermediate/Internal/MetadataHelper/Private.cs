@@ -50,7 +50,7 @@ internal static partial class MetadataHelper
 		if (JProxyObject.ProxyTypeMetadata.Equals((typeMetadata as JReferenceTypeMetadata)?.BaseMetadata))
 			return true;
 
-		if (MetadataHelper.storage.IsBuiltInFinalType(typeMetadata.Hash))
+		if (MetadataHelper.storage.IsBuiltInAndFinalType(typeMetadata.Hash))
 			return true;
 
 		return typeMetadata is JArrayTypeMetadata arrayTypeMetadata &&

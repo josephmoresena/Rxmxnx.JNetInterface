@@ -89,7 +89,7 @@ internal static partial class MetadataHelper
 		/// <see langword="true"/> if <paramref name="hash"/> is for a final built-in type;
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
-		public Boolean IsBuiltInFinalType(String hash)
+		public Boolean IsBuiltInAndFinalType(String hash)
 		{
 			if (!this._builtInTypes.ContainsKey(hash)) return false;
 			return this._runtimeMetadata[hash].Modifier is JTypeModifier.Final;
@@ -154,7 +154,7 @@ internal static partial class MetadataHelper
 		/// Registres the <see cref="AssignationKey"/> as super-class relationship.
 		/// </summary>
 		/// <param name="assignationKey">A <see cref="AssignationKey"/> instance.</param>
-		public void RegisterSuperClass(AssignationKey assignationKey)
+		public void RegisterSuperClassRelationship(AssignationKey assignationKey)
 		{
 			this._classTree[assignationKey.FromHash] = assignationKey.ToHash;
 			this._assignationCache[assignationKey] = true;
@@ -163,7 +163,7 @@ internal static partial class MetadataHelper
 		/// Registres the <see cref="AssignationKey"/> as super-view relationship.
 		/// </summary>
 		/// <param name="assignationKey">A <see cref="AssignationKey"/> instance.</param>
-		public void RegisterSuperView(AssignationKey assignationKey)
+		public void RegisterSuperViewRelationship(AssignationKey assignationKey)
 		{
 			if (!this._viewTree.TryGetValue(assignationKey.FromHash, out HashesSet? set))
 			{
