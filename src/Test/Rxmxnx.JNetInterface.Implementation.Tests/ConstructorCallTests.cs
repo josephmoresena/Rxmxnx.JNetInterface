@@ -52,7 +52,7 @@ public sealed class ConstructorCallTests
 				       JConstructorDefinition.New<JLocalObject>(def, env.ClassFeature.ThrowableObject, args)))
 				Assert.Equal(result.Value, jThrowable.Reference.Value);
 
-			proxyEnv.Received(1).GetMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(0).GetMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(0).GetStaticMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 
 			proxyEnv.Received(1).NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
