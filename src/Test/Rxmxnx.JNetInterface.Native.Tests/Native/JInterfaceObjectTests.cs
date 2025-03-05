@@ -156,7 +156,7 @@ public sealed class JInterfaceObjectTests
 		Assert.Equal(localRef, jLocal0.LocalReference);
 		Assert.Equal(default, jLocal2.LocalReference);
 		Assert.Equal(jGlobal.Reference, jLocal2.As<JGlobalRef>());
-		Assert.Equal(jLocal.LocalReference, (instance as ILocalObject).LocalReference);
+		Assert.Equal(jLocal.LocalReference, instance.LocalReference);
 
 		Assert.Equal(instance.Object.Reference, instance.Reference);
 

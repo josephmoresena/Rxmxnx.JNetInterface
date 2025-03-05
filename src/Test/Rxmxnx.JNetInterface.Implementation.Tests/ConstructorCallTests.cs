@@ -35,10 +35,22 @@ public sealed class ConstructorCallTests
 			proxyEnv.GetMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>()).Returns(methodId);
 			proxyEnv.NewObject(classRef, methodId, Arg.Is(TestUtilities.GetArgsPtr(args))).Returns(result.Value);
 
-			using JThrowableObject jThrowable =
-				JConstructorDefinition.New<JThrowableObject>(def, env.ClassFeature.ThrowableObject, args);
+			using (JThrowableObject jThrowable =
+			       JConstructorDefinition.New<JThrowableObject>(def, env.ClassFeature.ThrowableObject, args))
+				Assert.Equal(result.Value, jThrowable.Reference.Value);
 
-			Assert.Equal(result.Value, jThrowable.Reference.Value);
+			proxyEnv.Received(1).GetMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(0).GetStaticMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
+
+			proxyEnv.Received(1).NewObject(classRef, methodId, Arg.Any<ReadOnlyValPtr<JValueWrapper>>());
+
+			proxyEnv.ClearReceivedCalls();
+			proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+			using (JThrowableObject jThrowable =
+			       Assert.IsType<JThrowableObject>(
+				       JConstructorDefinition.New<JLocalObject>(def, env.ClassFeature.ThrowableObject, args)))
+				Assert.Equal(result.Value, jThrowable.Reference.Value);
 
 			proxyEnv.Received(1).GetMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
 			proxyEnv.Received(0).GetStaticMethodId(classRef, namePtr, Arg.Any<ReadOnlyValPtr<Byte>>());
