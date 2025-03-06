@@ -890,7 +890,7 @@ not exceeded.
 ### Java Error Handling
 
 JNI allows handling errors and exceptions within native code. `Rxmxnx.JNetInterface` follows the same principle but in a
-more JNI-friendly manner.
+more NET-friendly manner.
 
 Just like in Java, the `java.Lang.Throwable` class hierarchy is:
 
