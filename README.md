@@ -884,13 +884,16 @@ class:
   temporary direct buffer of the specified capacity and executes the delegate, including a state object and returning
   its result. Once execution is completed, the buffer is discarded.
 
-**Note:** The `WithDirectBuffer` methods may allocate memory on the stack if the configured usable stack byte limit is
-not exceeded.
+**Notes:**
+
+- The `WithDirectBuffer` methods may allocate memory on the stack if the configured usable stack byte limit is not
+  exceeded.
+- In .NET 9.0+, the generic state type parameter allows `ref struct`.
 
 ### Java Error Handling
 
 JNI allows handling errors and exceptions within native code. `Rxmxnx.JNetInterface` follows the same principle but in a
-more NET-friendly manner.
+more .NET-friendly manner.
 
 Just like in Java, the `java.Lang.Throwable` class hierarchy is:
 
