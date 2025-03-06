@@ -94,7 +94,7 @@ The following table shows the equivalence between the different common JNI types
    handled specially to be loaded when needed.
 3. Definitions expose the APIs for performing JNI access calls and are internally used as keys to the identifiers.
 
-### Data Types
+### Java Data Types Mapping
 
 As shown in the previous table, `Rxmxnx.JNetInterface` provides a mapping of Java data types. This is achieved through
 the `IDataType` interface, and instances of `JDataTypeMetadata` are used for identification. <br/>  
@@ -181,7 +181,7 @@ the following reasons:
 **Note:** In the context of a fixed temporary frame, it may not be necessary to explicitly release local references
 created within it, or some references may be released without calling the `Dispose()` method.
 
-### Type Metadata
+#### Type Metadata
 
 Type metadata objects allow `Rxmxnx.JNetInterface` to identify at runtime the types of Java objects referenced through
 JNI.  
@@ -229,7 +229,7 @@ The metadata exposes the following properties:
   release version of a product using `Rxmxnx.JNetInterface`. To disable this implementation, the feature switch
   `JNetInterface.DisableTypeMetadataToString` can be used.
 
-#### Metadata Builder
+##### Metadata Builder
 
 Builders are classes found in the base classes used to initialize type metadata.  
 It is recommended to use a single metadata instance to improve runtime performance. <br/>  
@@ -271,7 +271,7 @@ These types are `ref struct`, so they are not compatible with the Visual Basic l
 release build, this validation can be disabled using the feature switch `JNetInterface.DisableMetadataValidation`,
 as its primary purpose is design-time validation.
 
-#### Jagged Array Type Metadata
+##### Jagged Array Type Metadata
 
 In Java, unlike .NET, there are no multidimensional arrays. Instead, Java uses arrays of arrays. Due to this definition,
 `Rxmxnx.JNetInterface` uses reflection to create the metadata for this type of array at runtime to ensure compatibility
@@ -284,7 +284,7 @@ is available at runtime.
 Even if automatic metadata creation at runtime is not desired, this functionality can be disabled
 using the feature switch `JNetInterface.DisableJaggedArrayAutoGeneration`.
 
-### Argument Metadata
+#### Argument Metadata
 
 Argument metadata objects allow defining access to Java methods and fields from JNI.  
 As previously mentioned, type metadata exposes a property to obtain the argument metadata for a specified type.  
@@ -300,7 +300,7 @@ For example, to create the signature for `java.util.Dictionary<K,V>`, its signat
 **Note:** Creating metadata for primitive types is not supported; to obtain them, the method
 `JArgumentMetadata.Get<TPrimitive>()` should be used.
 
-### Class Handling
+### Java Class Handling
 
 In JNI, handling `java.lang.Class<?>` instances is essential.
 
@@ -364,8 +364,11 @@ Additional operations executed directly in JNI:
   `UnregisterNatives` function.
 * `GetModule()`: This method is only effective in JVM instances compatible with Java 9.0+.
 
-**Note:** When using a class, if it has not been loaded (i.e., there is no active JNI reference in the current
-context), a local reference will be loaded in the active frame.
+**Notes:**
+
+* When using a class, if it has not been loaded (i.e., there is no active JNI reference in the current
+  context), a local reference will be loaded in the active frame.
+* The functionality of the `JNativeCallEntry` class will be detailed later.
 
 For more information on using these methods, refer to
 the [included example application](./src/ApplicationTest/README.md) in this repository.
@@ -373,7 +376,7 @@ the [included example application](./src/ApplicationTest/README.md) in this repo
 For more information about essential and main classes, please refer to the documentation on compatibility with
 [GraalVM Native Image](./native-image/README.md), where the implementation details are explained in greater depth.
 
-### String Handling
+### Java String Handling
 
 JNI allows special handling of `java.lang.String` instances (Java Strings). `Rxmxnx.JNetInterface` exposes these APIs
 through the `JStringObject` class.
@@ -469,7 +472,7 @@ encapsulated in an instance of the `JNativeMemomory<T>` class. This memory is re
 **Note:** If the native memory was allocated with an exclusive JNI reference, releasing the memory will also release
 the associated JNI reference.
 
-### Array Handling
+### Java Array Handling
 
 JNI allows the manipulation and creation of Java arrays from any type. `Rxmxnx.JNetInterface` exposes APIs through
 the `JArrayObject<>` class to achieve this goal.
@@ -568,10 +571,10 @@ encapsulated in an instance of the `JPrimitiveMemory<T>` class. This memory allo
 **Note:** If the native memory was allocated with an exclusive JNI reference, releasing the memory will also release
 the associated JNI reference.
 
-### Accessible Definitions
+### Java Member Handling
 
-Accessible definitions are objects that allow access to Java methods and fields (both class and instance) via JNI.  
-Every accessible definition is an instance of `JAccessibleObjectDefinition`.
+JNI allows the handling to Java class members. Accessible definitions are objects that allow access to Java methods and
+fields (both class and instance) via JNI. Every accessible definition is an instance of `JAccessibleObjectDefinition`.
 
 **Note:** Accessible definitions can be identified by their name and descriptor.  
 The hash of a definition is the UTF-16 buffer used to store the UTF-8 sequence containing these two elements.
@@ -615,7 +618,7 @@ To get or set a field using `Rxmxnx.JNetInterface`, the following options are av
 **Note:** When using a class, if it has not been loaded (i.e., there is no active JNI reference in the current
 context), a local reference will be loaded in the active frame.
 
-#### Accessing Java Methods
+#### Accessing Java Calls
 
 JNI allows access to both instance and class (static) methods in Java. When methods return a primitive value or an  
 object, they are referred to as functions.  
@@ -788,3 +791,49 @@ Thus:
 * The other primitive values might be different from their default values if the object in the result is an instance of
   `java.lang.Character` (`JCharObject`) or `java.lang.Number`, or if the actual primitive value in the result, when
   converted to the primitive type, differs from the default value.
+
+#### Defining Native Java Calls
+
+The `JNativeCallEntry` class allows defining the implementation of Java native methods and functions with compatible
+implementations created in .NET.  
+These methods must follow the JNI convention for parameter definitions, but they do not require the JNI naming
+convention.
+
+*Note:* The JNI conventions for parameters and method names will be detailed later.
+
+To create `JNativeCallEntry` instances, `Rxmxnx.JNetInterface` exposes the following static methods:
+
+- `Create(JMethodDefinition, IntPtr)`: Creates an instance that allows defining the .NET implementation of the native
+  method that matches the definition of the `JMethodDefinition` instance using an unmanaged pointer to the method.
+- `Create(JFunctionDefinition, IntPtr)`: Creates an instance that allows defining the .NET implementation of the native
+  function that matches the definition of the `JFunctionDefinition` instance using an unmanaged pointer to the method.
+- `Create<T>(JMethodDefinition, T)`: Creates an instance that allows defining the .NET implementation of the native
+  method that matches the definition of the `JMethodDefinition` instance using a managed delegate to the method.
+- `Create<T>(JFunctionDefinition, T)`: Creates an instance that allows defining the .NET implementation of the native
+  function that matches the definition of the `JFunctionDefinition` instance using a managed delegate to the method.
+- `CreateParameterless(ParameterlessInstanceMethodDelegate)`: Creates an instance that allows defining the .NET
+  implementation of a parameterless native instance method using a managed delegate to the method.
+- `CreateParameterless(ParameterlessStaticMethodDelegate)`: Creates an instance that allows defining the .NET
+  implementation of a parameterless native static method using a managed delegate to the method.
+
+**Notes:**
+
+- Creating instances with pointers is ideal when using unsafe contexts
+  and [function pointers](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code#function-pointers).
+- Creating instances with delegates keeps the delegate instance in memory and will only be collected by the GC when the
+  native implementation is replaced or removed.
+- Creating instances with delegates
+  uses [Marshalling](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.getfunctionpointerfordelegate).
+- The delegate type `ParameterlessInstanceMethodDelegate` represents a JNI native function without parameters (
+  `JEnvironmentRef, JObjectLocalRef`).
+- The delegate type `ParameterlessStaticMethodDelegate` represents a JNI native function without parameters (
+  `JEnvironmentRef, JClassLocalRef`).
+
+The `JNativeCallEntry` class exposes the following properties:
+
+- `Name`: Name of the native call. This property comes from the call definition used when creating the instance.
+- `Descriptor`: Descriptor of the native call. This property comes from the call definition used when creating the
+  instance.
+- `Hash`: Hash of the native call definition.
+- `Pointer`: Unmanaged pointer to the native implementation of the call.
+- `Delegate`: Delegate instance used for the native implementation of the call.
