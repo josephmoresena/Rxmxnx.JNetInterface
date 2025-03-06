@@ -32,6 +32,9 @@ internal partial interface INioFeature
 	/// <param name="state">The state object of type <typeparamref name="TState"/>.</param>
 	/// <param name="action">Action to execute.</param>
 	internal void WithDirectByteBuffer<TBuffer, TState>(Int32 capacity, TState state, Action<TBuffer, TState> action)
+#if NET9_0_OR_GREATER
+	where TState : allows ref struct
+#endif
 		where TBuffer : TDirectBuffer;
 	/// <summary>
 	/// Creates an ephemeral <c>java.nio.DirectByteBuffer</c> instance and executes <paramref name="func"/>.
@@ -54,5 +57,9 @@ internal partial interface INioFeature
 	/// <param name="func">Function to execute.</param>
 	/// <returns>The result of <paramref name="func"/> execution.</returns>
 	internal TResult WithDirectByteBuffer<TBuffer, TState, TResult>(Int32 capacity, TState state,
-		Func<TBuffer, TState, TResult> func) where TBuffer : TDirectBuffer;
+		Func<TBuffer, TState, TResult> func)
+#if NET9_0_OR_GREATER
+	where TState : allows ref struct
+#endif
+		where TBuffer : TDirectBuffer;
 }

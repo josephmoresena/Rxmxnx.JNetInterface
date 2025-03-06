@@ -837,3 +837,103 @@ The `JNativeCallEntry` class exposes the following properties:
 - `Hash`: Hash of the native call definition.
 - `Pointer`: Unmanaged pointer to the native implementation of the call.
 - `Delegate`: Delegate instance used for the native implementation of the call.
+
+### Direct Buffer Handling
+
+Since JNI 1.4, native handling of Java NIO (New Input/Output) buffers and the creation of direct buffers have been
+supported.
+
+The NIO object hierarchy may vary depending on the JVM implementation, but in `Rxmxnx.JNetInterface`, the following
+hierarchy is established:
+
+                                                ┌──  JDirectBufferObject
+       IInterfaceObject<JDirectBufferObject>  ──┴──  IDirectBufferObject  ──  IDirectBufferObject<>  ──┐
+                                           ┌──  JByteBuffer  ──  JMappedByteBufferObject  ─────────────┴──  JDirectByteBufferObject 
+                                           ├──  JCharBufferObject 
+                                           ├──  JDoubleBufferObject 
+       JBufferObject  ──  JByteBuffer<>  ──┼──  JFloatBufferObject 
+                                           ├──  JIntBufferObject 
+                                           ├──  JLongBufferObject 
+                                           └──  JShortBufferObject
+
+#### `JBufferObject` exposes the following properties:
+
+- **IsDirect**: Indicates whether the buffer is direct or managed by the JVM.
+- **Capacity**: The capacity in units of the primitive type of the buffer.
+- **Address**: Pointer to the buffer's memory. Valid only when the buffer is direct.
+
+**Note:** If this feature is not going to be used, it is recommended to disable the automatic registration of NIO types
+to improve performance using the feature switch `JNetInterface.DisableNioAutoRegistration`.
+
+#### Direct Buffer Creation
+
+Direct buffer creation is supported in `Rxmxnx.JNetInterface` through the following static methods of the `JByteBuffer`
+class:
+
+- `CreateDirectBuffer<T>(IEnvironment, Memory<T>)`: Creates a direct byte buffer using a `System.Memory<T>` instance,
+  which remains pinned until the created instance is discarded. The memory item type must be unmanaged.
+- `WithDirectBuffer(IEnvironment, Int32, Action<JByteBufferObject>)`: Creates a temporary direct buffer of the specified
+  capacity and executes the delegate. Once execution is completed, the buffer is discarded.
+- `WithDirectBuffer<TState>(IEnvironment, Int32, TState, Action<JByteBufferObject, TState>)`: Creates a temporary direct
+  buffer of the specified capacity and executes the delegate, including a state object. Once execution is completed, the
+  buffer is discarded.
+- `WithDirectBuffer<TResult>(IEnvironment, Int32, Func<JByteBufferObject, TResult>)`: Creates a temporary direct buffer
+  of the specified capacity and executes the delegate, returning its result. Once execution is completed, the buffer is
+  discarded.
+- `WithDirectBuffer<TState, TResult>(IEnvironment, Int32, TState, Func<JByteBufferObject, TState, TResult>)`: Creates a
+  temporary direct buffer of the specified capacity and executes the delegate, including a state object and returning
+  its result. Once execution is completed, the buffer is discarded.
+
+**Note:** The `WithDirectBuffer` methods may allocate memory on the stack if the configured usable stack byte limit is
+not exceeded.
+
+### Java Error Handling
+
+JNI allows handling errors and exceptions within native code. `Rxmxnx.JNetInterface` follows the same principle but in a
+more JNI-friendly manner.
+
+Just like in Java, the `java.Lang.Throwable` class hierarchy is:
+
+                           ┌──  JErrorObject
+                           │
+       JThrowableObject  ──┴──  JExceptionObject  ──  JRuntimeExceptionObject
+
+**Note:** `Rxmxnx.JNetInterface` provides several built-in `Throwable` types that may be thrown during basic operations.
+However, this can introduce additional memory and performance costs. To optimize performance, the automatic registration
+of these types can be disabled using the feature switch `JNetInterface.DisableBuiltInThrowableAutoRegistration`.
+
+The additional throwable types are:
+
+- `java.lang.LinkageError` (`JLinkageErrorObject`)
+- `java.lang.ClassCircularityError` (`JClassCircularityErrorObject`)
+- `java.lang.UnsatisfiedLinkError` (`JUnsatisfiedLinkErrorObject`)
+- `java.lang.ClassFormatError` (`JClassFormatErrorObject`)
+- `java.lang.ExceptionInInitializerError` (`JExceptionInInitializerErrorObject`)
+- `java.lang.IncompatibleClassChangeError` (`JIncompatibleClassChangeErrorObject`)
+- `java.lang.NoSuchFieldError` (`JNoSuchFieldErrorObject`)
+- `java.lang.NoSuchMethodError` (`JNoSuchMethodErrorObject`)
+- `java.lang.NoClassDefFoundError` (`JNoClassDefFoundErrorObject`)
+- `java.lang.VirtualMachineError` (`JVirtualMachineErrorObject`)
+- `java.lang.InternalError` (`JInternalErrorObject`)
+- `java.lang.OutOfMemoryError` (`JOutOfMemoryErrorObject`)
+- `java.lang.SecurityException` (`JSecurityExceptionObject`)
+- `java.lang.InterruptedException` (`JInterruptedExceptionObject`)
+- `java.text.ParseException` (`JParseExceptionObject`)
+- `java.io.IOException` (`JIoExceptionObject`)
+- `java.io.FileNotFoundException` (`JFileNotFoundExceptionObject`)
+- `java.net.MalformedURLException` (`JMalformedUrlExceptionObject`)
+- `java.lang.ReflectiveOperationException` (`JReflectiveOperationExceptionObject`)
+- `java.lang.InstantiationException` (`JInstantiationExceptionObject`)
+- `java.lang.ClassNotFoundException` (`JClassNotFoundExceptionObject`)
+- `java.lang.IllegalAccessException` (`JIllegalAccessExceptionObject`)
+- `java.lang.reflect.InvocationTargetException` (`JInvocationTargetExceptionObject`)
+- `java.lang.ArrayStoreException` (`JArrayStoreExceptionObject`)
+- `java.lang.NullPointerException` (`JNullPointerExceptionObject`)
+- `java.lang.IllegalStateException` (`JIllegalStateExceptionObject`)
+- `java.lang.ClassCastException` (`JClassCastExceptionObject`)
+- `java.lang.ArithmeticException` (`JArithmeticExceptionObject`)
+- `java.lang.IllegalArgumentException` (`JIllegalArgumentExceptionObject`)
+- `java.lang.NumberFormatException` (`JNumberFormatExceptionObject`)
+- `java.lang.IndexOutOfBoundsException` (`JIndexOutOfBoundsExceptionObject`)
+- `java.lang.ArrayIndexOutOfBoundsException` (`JArrayIndexOutOfBoundsExceptionObject`)
+- `java.lang.StringIndexOutOfBoundsException` (`JStringIndexOutOfBoundsExceptionObject`)

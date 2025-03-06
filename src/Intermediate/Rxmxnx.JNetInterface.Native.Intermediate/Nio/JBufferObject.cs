@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Nio;
 /// <summary>
 /// This class represents a local <c>java.nio.Buffer</c> instance.
 /// </summary>
-public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>, ILocalObject
+public partial class JBufferObject : JLocalObject, IClassType<JBufferObject>
 {
 	/// <summary>
 	/// Indicates whether the current instance is a direct buffer.
