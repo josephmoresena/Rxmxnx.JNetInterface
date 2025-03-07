@@ -40,5 +40,18 @@ internal static partial class MetadataHelper
 		{
 			lock (this._lock) this._set.Add(superViewHash);
 		}
+		/// <summary>
+		/// Determines whether <paramref name="superViewHash"/> is contained in the current set.
+		/// </summary>
+		/// <param name="superViewHash">Super view class hash.</param>
+		/// <returns>
+		/// <see langword="true"/> if <paramref name="superViewHash"/> is contained in the current set;
+		/// otherwise, <see langword="false"/>.
+		/// </returns>
+		public Boolean Contains(String superViewHash)
+		{
+			lock (this._lock)
+				return this._set.Contains(superViewHash);
+		}
 	}
 }

@@ -28,6 +28,10 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract JModuleObject? GetModule(JClassObject jClass);
 	/// <inheritdoc/>
+	public abstract void ThrowNew(JClassObject jClass, String? message, Boolean throwException);
+	/// <inheritdoc/>
+	public abstract void ThrowNew(JClassObject jClass, CString? message, Boolean throwException);
+	/// <inheritdoc/>
 	public abstract void ThrowNew<TThrowable>(CString? message, Boolean throwException)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 	/// <inheritdoc/>

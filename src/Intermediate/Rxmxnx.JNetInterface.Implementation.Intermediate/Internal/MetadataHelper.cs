@@ -237,19 +237,59 @@ internal static partial class MetadataHelper
 	/// </returns>
 	public static Boolean? IsAssignable(JClassObject jClass, JClassObject otherClass)
 	{
-		AssignationKey key = new() { FromHash = jClass.Hash, ToHash = otherClass.Hash, };
+		if (otherClass.Hash.AsSpan().SequenceEqual(ClassNameHelper.ObjectHash))
+			return true;
+		if (jClass.IsArray && otherClass.Hash switch
+		    {
+			    ClassNameHelper.CloneableHash => true,
+			    ClassNameHelper.SerializableHash => true,
+			    _ => false,
+		    })
+			return true;
 
+		Boolean fromView = jClass.IsInterface || jClass.IsArray;
+		Boolean toView = otherClass.IsInterface || otherClass.IsArray;
+
+		if (fromView != toView && fromView)
+			return false; // View to Class is not assignable.
+
+		AssignationKey key = new() { FromHash = jClass.Hash, ToHash = otherClass.Hash, };
+		return MetadataHelper.IsAssignable(key, fromView, toView);
+	}
+	private static Boolean? IsAssignable(AssignationKey key, Boolean fromView, Boolean toView)
+	{
 		if (key.IsSame) return true;
 
-		MetadataHelper.storage.InitializeBuiltIn(jClass.Hash);
-		MetadataHelper.storage.InitializeBuiltIn(otherClass.Hash);
+		MetadataHelper.storage.InitializeBuiltIn(key.FromHash);
+		MetadataHelper.storage.InitializeBuiltIn(key.ToHash);
 
 		if (MetadataHelper.storage.TryGetValue(key, out Boolean result))
 			return result;
+
+		if (toView && MetadataHelper.storage.GetHashesSet(key.FromHash) is { } hashesSet &&
+		    hashesSet.Contains(key.ToHash))
+		{
+			hashesSet.Add(key.ToHash);
+			return true;
+		}
+
+		if (!fromView && !toView && MetadataHelper.storage.GetSuperClassHash(key.FromHash) is { } superHash)
+		{
+			AssignationKey superKey = key with { FromHash = superHash, };
+			Boolean? isSuperAssignable = MetadataHelper.IsAssignable(superKey, fromView, toView);
+
+			if (isSuperAssignable.HasValue)
+			{
+				if (isSuperAssignable.Value)
+					MetadataHelper.storage.RegisterSuperClassRelationship(superKey);
+				return isSuperAssignable.Value;
+			}
+		}
+
 		if (MetadataHelper.storage.IsRegistered(key.Reverse()))
 			return false;
 
-		return MetadataHelper.storage.IsRegistered(key.Reverse()) ? false : default(Boolean?);
+		return null;
 	}
 	/// <summary>
 	/// Sets <paramref name="isAssignable"/> as assignation from <paramref name="jClass"/> to

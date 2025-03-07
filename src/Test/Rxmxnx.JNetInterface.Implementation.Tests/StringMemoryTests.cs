@@ -89,6 +89,11 @@ public sealed class StringMemoryTests
 
 			using JStringObject jString = new(env.ClassFeature.StringObject, stringRef);
 			using IReadOnlyFixedContext<Char>.IDisposable fMem = value.AsMemory().GetFixedContext();
+			using JGlobal jGlobalThrowable = new(env.VirtualMachine,
+			                                     new ThrowableObjectMetadata(new(env.ClassFeature.ThrowableObject))
+			                                     {
+				                                     Message = StringMemoryTests.fixture.Create<String>(),
+			                                     }, StringMemoryTests.fixture.Create<JGlobalRef>());
 			ReadOnlyValPtr<Char> valPtr = fMem.ValuePointer;
 
 			proxyEnv.GetStringLength(stringRef).Returns(value.Length);
@@ -113,8 +118,10 @@ public sealed class StringMemoryTests
 			proxyEnv.Received(1).ExceptionCheck();
 
 			Assert.Throws<CriticalException>(() => env.PendingException);
-			Assert.Throws<CriticalException>(() => env.PendingException = default);
-
+			Assert.Throws<CriticalException>(() => env.PendingException =
+				                                 new ThrowableException<JThrowableObject>(jGlobalThrowable, default));
+			// Support clear critical exception
+			env.PendingException = default;
 			proxyEnv.ExceptionCheck().Returns(false);
 
 			proxyEnv.ClearReceivedCalls();

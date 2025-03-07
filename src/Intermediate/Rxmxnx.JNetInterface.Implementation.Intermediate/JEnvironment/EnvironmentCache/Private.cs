@@ -223,7 +223,7 @@ partial class JEnvironment
 		/// <summary>
 		/// Throws an exception from <typeparamref name="TThrowable"/> type.
 		/// </summary>
-		/// <typeparam name="TThrowable"></typeparam>
+		/// <typeparam name="TThrowable">A <see cref="JThrowableObject"/> type.</typeparam>
 		/// <param name="utf8Message">
 		/// The message used to construct the <c>java.lang.Throwable</c> instance.
 		/// The string is encoded in modified UTF-8.
@@ -237,24 +237,46 @@ partial class JEnvironment
 		private void ThrowNew<TThrowable>(ReadOnlySpan<Byte> utf8Message, Boolean throwException, String? message)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
-			JResult result = this.ThrowNew<TThrowable>(utf8Message);
-			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
+			JClassObject jClass = this.GetClass<TThrowable>();
+			JReferenceTypeMetadata throwableMetadata =
+				(JReferenceTypeMetadata)MetadataHelper.GetExactMetadata<TThrowable>();
 
-			ThrowableException throwableException =
-				this.CreateThrowableException<TThrowable>(this.GetPendingException(), message);
-			this.ThrowJniException(throwableException, throwException);
+			this.ThrowNew(jClass, throwableMetadata, utf8Message, throwException, message);
 		}
 		/// <summary>
-		/// Constructs an <typeparamref name="TThrowable"/> exception with the message specified by
-		/// <paramref name="message"/> and causes that exception to be thrown.
+		/// Throws an exception from <see cref="JClassObject"/> instance.
 		/// </summary>
-		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <param name="throwableMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+		/// <param name="utf8Message">
+		/// The message used to construct the <c>java.lang.Throwable</c> instance.
+		/// The string is encoded in modified UTF-8.
+		/// </param>
+		/// <param name="throwException">
+		/// Indicates whether exception should be thrown in managed code.
+		/// </param>
+		/// <param name="message">
+		/// The message used to construct the <see cref="ThrowableException"/> instance.
+		/// </param>
+		private void ThrowNew(JClassObject jClass, JReferenceTypeMetadata throwableMetadata,
+			ReadOnlySpan<Byte> utf8Message, Boolean throwException, String? message)
+		{
+			ImplementationValidationUtilities.ThrowIfInvalidResult(this.ThrowNew(jClass, utf8Message));
+
+			ThrowableException throwableException = this.CreateThrowableException(jClass, throwableMetadata, message);
+			this.ThrowJniException(throwableException, throwException);
+		}
+
+		/// <summary>
+		/// Constructs an exception with the message specified by
+		/// <paramref name="message"/>, the class specified by <see cref="jClass"/> and causes that exception to be thrown.
+		/// </summary>
+		/// >
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 		/// <param name="message">Exception message.</param>
 		/// <returns>JNI code result.</returns>
-		private unsafe JResult ThrowNew<TThrowable>(ReadOnlySpan<Byte> message)
-			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		private unsafe JResult ThrowNew(JClassObject jClass, ReadOnlySpan<Byte> message)
 		{
-			JClassObject jClass = this.GetClass<TThrowable>();
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.ThrowNewInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
@@ -263,18 +285,16 @@ partial class JEnvironment
 				return nativeInterface.ErrorFunctions.ThrowNew(this.Reference, classRef, ptr);
 		}
 		/// <summary>
-		/// Creates JNI exception from <paramref name="throwableRef"/>.
+		/// Creates JNI exception from the thrown exception.
 		/// </summary>
-		/// <typeparam name="TThrowable">A <see cref="IThrowableType{TThrowable}"/> type.</typeparam>
-		/// <param name="throwableRef">A <see cref="JThrowableLocalRef"/> reference.</param>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <param name="throwableMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 		/// <param name="message">Throwable message.</param>
 		/// <returns>A <see cref="ThrowableException"/> exception.</returns>
-		private ThrowableException CreateThrowableException<TThrowable>(JThrowableLocalRef throwableRef,
-			String? message) where TThrowable : JThrowableObject, IThrowableType<TThrowable>
+		private ThrowableException CreateThrowableException(JClassObject jClass,
+			JReferenceTypeMetadata throwableMetadata, String? message)
 		{
-			JClassObject jClass = this.GetClass<TThrowable>();
-			JReferenceTypeMetadata? throwableMetadata =
-				MetadataHelper.GetExactMetadata<TThrowable>() as JReferenceTypeMetadata;
+			JThrowableLocalRef throwableRef = this.GetPendingException();
 			this.ClearException();
 			return this.CreateThrowableException(jClass, throwableMetadata, message, throwableRef);
 		}

@@ -45,6 +45,10 @@ internal partial class DeadThread : IClassFeature
 	JReferenceTypeMetadata? IClassFeature.GetTypeMetadata(JClassObject? jClass)
 		=> this.ThrowInvalidResult<JReferenceTypeMetadata?>();
 	JModuleObject? IClassFeature.GetModule(JClassObject jClass) => this.ThrowInvalidResult<JModuleObject?>();
+	void IClassFeature.ThrowNew(JClassObject jClass, String? message, Boolean throwException)
+		=> this.ThrowInvalidResult<Byte>();
+	void IClassFeature.ThrowNew(JClassObject jClass, CString? message, Boolean throwException)
+		=> this.ThrowInvalidResult<Byte>();
 	void IClassFeature.ThrowNew<TThrowable>(CString? message, Boolean throwException)
 		=> this.ThrowInvalidResult<Byte>();
 	void IClassFeature.ThrowNew<TThrowable>(String? message, Boolean throwException) => this.ThrowInvalidResult<Byte>();

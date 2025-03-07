@@ -57,6 +57,24 @@ partial class JEnvironment
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			return this.GetModule(classRef);
 		}
+		public void ThrowNew(JClassObject jClass, String? message, Boolean throwException)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
+			this.CheckClassCompatibility<JThrowableObject>(jClass, out _);
+
+			JReferenceTypeMetadata throwableMetadata = this.GetTypeMetadata(jClass);
+			CString? utf8Message = (CString?)message;
+			this.ThrowNew(jClass, throwableMetadata, utf8Message, throwException, message);
+		}
+		public void ThrowNew(JClassObject jClass, CString? message, Boolean throwException)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
+			this.CheckClassCompatibility<JThrowableObject>(jClass, out _);
+
+			JReferenceTypeMetadata throwableMetadata = this.GetTypeMetadata(jClass);
+			ReadOnlySpan<Byte> utf8Message = JEnvironment.GetSafeSpan(message);
+			this.ThrowNew(jClass, throwableMetadata, utf8Message, throwException, message?.ToString());
+		}
 		public void ThrowNew<TThrowable>(CString? message, Boolean throwException)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{

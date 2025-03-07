@@ -57,7 +57,9 @@ public partial class ExceptionHandlingTests
 			proxyEnv.When(e => e.Throw(Arg.Any<JThrowableLocalRef>()))
 			        .Do(c => { exceptionOccurred.Value = (JThrowableLocalRef)c[0]; });
 
+			using JClassObject jClass = env.ClassFeature.GetClass<TThrowable>();
 			ThrowableException ex;
+
 			if (throwException)
 			{
 				ex = utf8Message ?
@@ -81,8 +83,35 @@ public partial class ExceptionHandlingTests
 			proxyEnv.Received(1).ThrowNew(Arg.Any<JClassLocalRef>(), Arg.Any<ReadOnlyValPtr<Byte>>());
 
 			env.PendingException = default;
+
 			ex.GlobalThrowable.Dispose();
-			env.ClassFeature.GetClass<TThrowable>().Dispose();
+
+			proxyEnv.ClearReceivedCalls();
+			proxyEnv.VirtualMachine.ClearReceivedCalls();
+
+			if (throwException)
+			{
+				ex = utf8Message ?
+					Assert.ThrowsAny<ThrowableException>(
+						() => JThrowableObject.ThrowNew(jClass, (CString)message, true)) :
+					Assert.ThrowsAny<ThrowableException>(() => JThrowableObject.ThrowNew(jClass, message, true));
+			}
+			else
+			{
+				if (utf8Message)
+					JThrowableObject.ThrowNew(env.ClassFeature.GetClass<TThrowable>(), (CString)message);
+				else
+					JThrowableObject.ThrowNew(env.ClassFeature.GetClass<TThrowable>(), message);
+				ex = env.PendingException!;
+			}
+
+			Assert.Equal(globalRef.Value, ex.ThrowableRef.Value);
+			Assert.Equal(message, ex.Message);
+
+			proxyEnv.Received(1).ThrowNew(Arg.Any<JClassLocalRef>(), Arg.Any<ReadOnlyValPtr<Byte>>());
+			env.PendingException = default;
+
+			ex.GlobalThrowable.Dispose();
 		}
 		finally
 		{

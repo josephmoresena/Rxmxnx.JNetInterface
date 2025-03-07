@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Native;
 
-public partial class JLocalObject : ILocalObject
+public partial class JLocalObject
 {
 	/// <summary>
 	/// Indicates finalizer is at execution.
