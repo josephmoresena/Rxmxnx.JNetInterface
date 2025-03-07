@@ -269,7 +269,7 @@ partial class JEnvironment
 
 		/// <summary>
 		/// Constructs an exception with the message specified by <paramref name="message"/>, the class specified by
-		/// <paramref cref="jClass"/> and causes that exception to be thrown.
+		/// <paramref name="jClass"/> and causes that exception to be thrown.
 		/// </summary>
 		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
 		/// <param name="message">Exception message.</param>
