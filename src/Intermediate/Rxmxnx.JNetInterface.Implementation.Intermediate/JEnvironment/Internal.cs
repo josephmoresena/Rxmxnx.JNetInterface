@@ -207,6 +207,13 @@ partial class JEnvironment
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal void LoadClass(JClassObject jClass) => this._cache.LoadClass(jClass);
 	/// <summary>
+	/// Reloads current class object.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>
+	/// <returns>Current <see cref="JClassLocalRef"/> reference.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal void ReloadClass(JClassObject jClass) => this._cache.ReloadClass(jClass);
+	/// <summary>
 	/// Sends JNI fatal error signal to VM.
 	/// </summary>
 	/// <param name="errorMessage">Error message.</param>

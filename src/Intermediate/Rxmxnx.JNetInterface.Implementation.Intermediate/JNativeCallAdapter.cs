@@ -28,12 +28,19 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
+	/// <param name="result">A <see cref="JLocalObject.InterfaceView"/> result.</param>
+	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
+	public JObjectLocalRef FinalizeCall(JLocalObject.InterfaceView? result)
+		=> this.FinalizeCall(ILocalViewObject.GetObject(result));
+	/// <summary>
+	/// Finalizes call.
+	/// </summary>
 	/// <param name="result">A <see cref="JLocalObject"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JObjectLocalRef FinalizeCall(JLocalObject? result)
 	{
 		JObjectLocalRef jniResult = default;
-		if (result is JClassObject jClass) this._env.LoadClass(jClass);
+		if (result is JClassObject jClass) this._env.ReloadClass(jClass);
 		if (result is not null)
 		{
 			JTrace.FinalizeCall(result);
@@ -55,84 +62,85 @@ public readonly ref partial struct JNativeCallAdapter
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <param name="result">A <see cref="JThrowableObject"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JThrowableLocalRef FinalizeCall(JThrowableObject? result) => this.FinalizeCall<JThrowableLocalRef>(result);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <param name="result">A <see cref="JStringObject"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JStringLocalRef FinalizeCall(JStringObject? result) => this.FinalizeCall<JStringLocalRef>(result);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <param name="result">A <see cref="JArrayObject"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JArrayLocalRef FinalizeCall(JArrayObject? result) => this.FinalizeCall<JArrayLocalRef>(result);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <typeparam name="TElement">Type of <see cref="IReferenceType{TReference}"/> array element.</typeparam>
+	/// <param name="result">A <see cref="JArrayObject{TElement}"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JObjectArrayLocalRef FinalizeCall<TElement>(JArrayObject<TElement>? result)
 		where TElement : JReferenceObject, IReferenceType<TElement>
-		=> this.FinalizeCall<JObjectArrayLocalRef>(result);
+		=> this.FinalizeCall<JObjectArrayLocalRef>(result?.Object);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <param name="result">A <see cref="JArrayObject{JBoolean}"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JBooleanArrayLocalRef FinalizeCall(JArrayObject<JBoolean>? result)
-		=> this.FinalizeCall<JBooleanArrayLocalRef>(result);
+		=> this.FinalizeCall<JBooleanArrayLocalRef>(result?.Object);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <param name="result">A <see cref="JArrayObject{JByte}"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JByteArrayLocalRef FinalizeCall(JArrayObject<JByte>? result)
-		=> this.FinalizeCall<JByteArrayLocalRef>(result);
+		=> this.FinalizeCall<JByteArrayLocalRef>(result?.Object);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
 	/// <param name="result">A <see cref="JClassObject"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JCharArrayLocalRef FinalizeCall(JArrayObject<JChar>? result)
-		=> this.FinalizeCall<JCharArrayLocalRef>(result);
+		=> this.FinalizeCall<JCharArrayLocalRef>(result?.Object);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <param name="result">A <see cref="JArrayObject{JDouble}"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JDoubleArrayLocalRef FinalizeCall(JArrayObject<JDouble>? result)
-		=> this.FinalizeCall<JDoubleArrayLocalRef>(result);
+		=> this.FinalizeCall<JDoubleArrayLocalRef>(result?.Object);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <param name="result">A <see cref="JArrayObject{JFloat}"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JFloatArrayLocalRef FinalizeCall(JArrayObject<JFloat>? result)
-		=> this.FinalizeCall<JFloatArrayLocalRef>(result);
+		=> this.FinalizeCall<JFloatArrayLocalRef>(result?.Object);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <param name="result">A <see cref="JArrayObject{JInt}"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JIntArrayLocalRef FinalizeCall(JArrayObject<JInt>? result) => this.FinalizeCall<JIntArrayLocalRef>(result);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <param name="result">A <see cref="JArrayObject{JLong}"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JLongArrayLocalRef FinalizeCall(JArrayObject<JLong>? result)
-		=> this.FinalizeCall<JLongArrayLocalRef>(result);
+		=> this.FinalizeCall<JLongArrayLocalRef>(result?.Object);
 	/// <summary>
 	/// Finalizes call.
 	/// </summary>
-	/// <param name="result">A <see cref="JClassObject"/> result.</param>
+	/// <param name="result">A <see cref="JArrayObject{JShort}"/> result.</param>
 	/// <returns>A JNI reference to <paramref name="result"/>.</returns>
 	public JShortArrayLocalRef FinalizeCall(JArrayObject<JShort>? result)
-		=> this.FinalizeCall<JShortArrayLocalRef>(result);
+		=> this.FinalizeCall<JShortArrayLocalRef>(result?.Object);
 
 	/// <summary>
 	/// Builder for <see cref="JNativeCallAdapter"/>
