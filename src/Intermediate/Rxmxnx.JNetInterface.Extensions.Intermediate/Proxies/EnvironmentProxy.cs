@@ -60,6 +60,9 @@ public abstract partial class EnvironmentProxy
 	}
 	/// <inheritdoc/>
 	public virtual void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
+#if NET9_0_OR_GREATER
+	where TState : allows ref struct
+#endif
 	{
 		Int32? oldCapacity = capacity;
 		try
@@ -88,6 +91,9 @@ public abstract partial class EnvironmentProxy
 	}
 	/// <inheritdoc/>
 	public virtual TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
+#if NET9_0_OR_GREATER
+	where TState : allows ref struct
+#endif
 	{
 		Int32? oldCapacity = capacity;
 		try

@@ -306,8 +306,40 @@ To finalize a call (and remove the call frame in `Rxmxnx.JNetInterface`), the fo
 * FinalizeCall(JArrayObject<JShort>?): Finalizes a call with a result of type short[].
 * FinalizeCall<TElement>(JArrayObject<TElement>?): Finalizes a call with a result of type java.lang.Object[].
 
-Both `JNativeCallAdapter` and `JNativeCallAdapter.Builder` are `ref struct` types, making them incompatible with the
-Visual Basic .NET language.
+** Notes: **
+
+- Both `JNativeCallAdapter` and `JNativeCallAdapter.Builder` are `ref struct` types, making them incompatible
+  with the Visual Basic .NET language.
+- Once the `Build()` method is called, it is always required to call the `Finalize` method on the created instance.  
+  Failing to do so may affect the behavior of the `IEnvironment` instance, as it could treat invalid local references as
+  immutable.
+
+###### Fixed Frame
+
+This type of frame allows setting the maximum number of local references the environment can hold while it remains the
+active frame.  
+Additionally, as previously mentioned, it functions as a FIFO system in which, if a new local reference needs to be
+stored and the frame is already full, the oldest reference is invalidated by JNI.
+
+Creating this type of frame uses the JNI `PushLocalFrame` call, and its finalization uses the JNI `PopLocalFrame` call.
+
+In `Rxmxnx.JNetInterface`, due to the nature of this frame, executions using it are performed through delegates.
+
+To create or use a fixed frame, the `IEnvironment` interface offers the following options:
+
+- `WithFrame(Int32, Action)`: Executes the delegate within the scope of a fixed frame with the specified capacity.
+- `WithFrame<TState>(Int32, TState, Action<TState>)`: Executes the delegate, passing a state object within the scope of
+  a fixed frame with the specified capacity.
+- `WithFrame<TResult>(Int32, Func<TResult>)`: Executes the delegate within the scope of a fixed frame with the specified
+  capacity and returns its result.
+- `WithFrame<TResult, TState>(Int32, Func<TResult, TState>)`: Executes the delegate, passing a state object within the
+  scope of a fixed frame with the specified capacity and returns its result.
+
+**Notes:**
+
+- It is more efficient if delegate instances come from  
+  [static methods](https://devblogs.microsoft.com/dotnet/understanding-the-cost-of-csharp-delegates/).
+- In .NET 9.0+, the generic state type parameter allows `ref struct`.
 
 #### Type Metadata
 

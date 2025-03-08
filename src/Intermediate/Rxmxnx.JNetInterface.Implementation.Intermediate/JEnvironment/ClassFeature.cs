@@ -149,8 +149,6 @@ partial class JEnvironment
 			this.CheckJniError();
 			return default;
 		}
-		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2234,
-		                 Justification = CommonConstants.BackwardOperationJustification)]
 		public Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
 			=> this.IsAssignableFrom(jClass, otherClass, default);
 		public Boolean IsInstanceOf(JReferenceObject jObject, JClassObject jClass)

@@ -421,6 +421,44 @@ partial class JEnvironment
 			return new(this.GetClass<JModuleObject>(), localRef);
 		}
 		/// <summary>
+		/// Determines whether an object of <paramref name="jClass"/> can be safely cast to
+		/// <paramref name="otherClass"/>.
+		/// </summary>
+		/// <param name="jClass">Java class instance.</param>
+		/// <param name="otherClass">Other java class instance.</param>
+		/// <param name="createFrame">Delegate to create <see cref="LocalFrame"/> instance.</param>
+		/// <returns>
+		/// <see langword="true"/> if an object of <paramref name="jClass"/> can be safely cast to
+		/// <paramref name="otherClass"/>; otherwise, <see langword="false"/>.
+		/// </returns>
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2234,
+		                 Justification = CommonConstants.BackwardOperationJustification)]
+		private Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass,
+			Func<JEnvironment, LocalFrame>? createFrame)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
+			ImplementationValidationUtilities.ThrowIfProxy(otherClass);
+			Boolean? result = MetadataHelper.IsAssignable(jClass, otherClass);
+			if (result.HasValue)
+				return result.Value; // Cached assignation.
+
+			using LocalFrame? _ = createFrame?.Invoke(this._env);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
+			result = this.IsAssignableFrom(classRef, otherClassRef);
+			this.CheckJniError();
+
+			if (result.Value) // If true, inverse is false.
+				return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
+
+			// Checks inverse assignation.
+			Boolean inverseResult = this.IsAssignableFrom(otherClass, jClass);
+			MetadataHelper.SetAssignable(otherClass, jClass, inverseResult);
+			this.CheckJniError();
+			return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
+		}
+		/// <summary>
 		/// Indicates whether <paramref name="classRef"/> is assignable to <paramref name="otherClassRef"/>.
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
@@ -513,42 +551,6 @@ partial class JEnvironment
 			Boolean allowedCast =
 				this.IsAssignableFrom(jClass, elementTypeClass, e => new(e, IVirtualMachine.GetObjectClassCapacity));
 			CommonValidationUtilities.ThrowIfInvalidCast(elementTypeMetadata, allowedCast);
-		}
-		/// <summary>
-		/// Determines whether an object of <paramref name="jClass"/> can be safely cast to
-		/// <paramref name="otherClass"/>.
-		/// </summary>
-		/// <param name="jClass">Java class instance.</param>
-		/// <param name="otherClass">Other java class instance.</param>
-		/// <param name="createFrame">Delegate to create <see cref="LocalFrame"/> instance.</param>
-		/// <returns>
-		/// <see langword="true"/> if an object of <paramref name="jClass"/> can be safely cast to
-		/// <paramref name="otherClass"/>; otherwise, <see langword="false"/>.
-		/// </returns>
-		private Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass,
-			Func<JEnvironment, LocalFrame>? createFrame)
-		{
-			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			ImplementationValidationUtilities.ThrowIfProxy(otherClass);
-			Boolean? result = MetadataHelper.IsAssignable(jClass, otherClass);
-			if (result.HasValue)
-				return result.Value; // Cached assignation.
-
-			using LocalFrame? _ = createFrame?.Invoke(this._env);
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
-			result = this.IsAssignableFrom(classRef, otherClassRef);
-			this.CheckJniError();
-
-			if (result.Value) // If true, inverse is false.
-				return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
-
-			// Checks inverse assignation.
-			Boolean inverseResult = this.IsAssignableFrom(otherClass, jClass);
-			MetadataHelper.SetAssignable(otherClass, jClass, inverseResult);
-			this.CheckJniError();
-			return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
 		}
 		/// <summary>
 		/// Retrieves the array class instance for given element class.
