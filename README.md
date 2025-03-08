@@ -306,6 +306,9 @@ To finalize a call (and remove the call frame in `Rxmxnx.JNetInterface`), the fo
 * FinalizeCall(JArrayObject<JShort>?): Finalizes a call with a result of type short[].
 * FinalizeCall<TElement>(JArrayObject<TElement>?): Finalizes a call with a result of type java.lang.Object[].
 
+Both `JNativeCallAdapter` and `JNativeCallAdapter.Builder` are `ref struct` types, making them incompatible with the
+Visual Basic .NET language.
+
 #### Type Metadata
 
 Type metadata objects allow `Rxmxnx.JNetInterface` to identify at runtime the types of Java objects referenced through
