@@ -57,15 +57,9 @@ internal sealed partial class DeadThread(IVirtualMachine vm) : IThread
 	Boolean IEnvironment.JniSecure() => true;
 	void IEnvironment.WithFrame(Int32 capacity, Action action) => this.ThrowInvalidResult<Byte>();
 	void IEnvironment.WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
-#if NET9_0_OR_GREATER
-	where TState : allows ref struct
-#endif
 		=> this.ThrowInvalidResult<Byte>();
 	TResult IEnvironment.WithFrame<TResult>(Int32 capacity, Func<TResult> func) => this.ThrowInvalidResult<TResult>();
 	TResult IEnvironment.WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
-#if NET9_0_OR_GREATER
-	where TState : allows ref struct
-#endif
 		=> this.ThrowInvalidResult<TResult>();
 	void IEnvironment.DescribeException() => this.ThrowInvalidResult<Byte>();
 	Boolean? IEnvironment.IsVirtual(JThreadObject jThread) => this.ThrowInvalidResult<Boolean?>();
