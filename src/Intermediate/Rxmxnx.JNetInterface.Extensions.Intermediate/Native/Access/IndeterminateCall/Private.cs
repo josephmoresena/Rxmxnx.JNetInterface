@@ -261,7 +261,6 @@ public abstract partial class IndeterminateCall
 #if NET9_0_OR_GREATER
 		params
 #endif
-
 		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 	{
 		IEnvironment env = jClass.Environment;
@@ -278,7 +277,6 @@ public abstract partial class IndeterminateCall
 #if NET9_0_OR_GREATER
 		params
 #endif
-
 		ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 	{
 		IEnvironment env = jConstructor.Environment;

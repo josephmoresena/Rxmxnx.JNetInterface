@@ -43,6 +43,7 @@ public readonly ref partial struct JNativeCallAdapter
 		if (result is JClassObject jClass) this._env.ReloadClass(jClass);
 		if (result is not null)
 		{
+			ImplementationValidationUtilities.ThrowIfDefault(result);
 			JTrace.FinalizeCall(result);
 			jniResult = result.LocalReference;
 			if (jniResult == default && result.Reference != default)
