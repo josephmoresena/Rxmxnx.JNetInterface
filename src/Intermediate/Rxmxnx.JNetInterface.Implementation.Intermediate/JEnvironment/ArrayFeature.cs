@@ -44,6 +44,14 @@ partial class JEnvironment
 			return this.Register<JArrayObject<TElement>>(new(this.GetClass<JArrayObject<TElement>>(), arrayRef,
 			                                                 length));
 		}
+		public JArrayObject<TElement> CreateArray<TElement>(JClassObject jClass, Int32 length)
+			where TElement : IDataType<TElement>
+		{
+			this.CheckClassCompatibility<TElement>(jClass, out Boolean sameClass);
+			return sameClass ?
+				this.CreateArray<TElement>(length) :
+				this.CreateObjectArray<TElement>(jClass, length, default);
+		}
 		public JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement)
 			where TElement : IDataType<TElement>
 		{
@@ -62,6 +70,14 @@ partial class JEnvironment
 				                                                   length));
 			}
 			return result;
+		}
+		public JArrayObject<TElement> CreateArray<TElement>(JClassObject jClass, Int32 length, TElement initialElement)
+			where TElement : IDataType<TElement>
+		{
+			this.CheckClassCompatibility<TElement>(jClass, out Boolean sameClass);
+			return sameClass ?
+				this.CreateArray(length, initialElement) :
+				this.CreateObjectArray<TElement>(jClass, length, initialElement as JReferenceObject);
 		}
 		public unsafe Int32 GetArrayLength(JReferenceObject jObject)
 		{

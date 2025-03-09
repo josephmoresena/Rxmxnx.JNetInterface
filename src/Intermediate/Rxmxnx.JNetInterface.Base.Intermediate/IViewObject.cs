@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This interface exposes viewed <see cref="IObject"/>.
 /// </summary>
-public interface IViewObject : IObject, IWrapper<IObject>
+internal interface IViewObject : IObject, IWrapper<IObject>
 {
 	/// <summary>
 	/// Real <see cref="IObject"/> instance.

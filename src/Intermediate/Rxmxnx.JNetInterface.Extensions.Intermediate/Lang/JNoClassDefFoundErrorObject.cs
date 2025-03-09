@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 using TypeMetadata = JThrowableTypeMetadata<JNoClassDefFoundErrorObject>;
 
 /// <summary>
-/// This class represents a local <c>java.lang.NoSuchFieldError</c> instance.
+/// This class represents a local <c>java.lang.NoClassDefFoundError</c> instance.
 /// </summary>
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]

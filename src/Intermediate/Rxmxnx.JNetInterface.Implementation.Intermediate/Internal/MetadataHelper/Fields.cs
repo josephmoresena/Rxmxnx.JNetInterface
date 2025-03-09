@@ -44,6 +44,10 @@ internal static partial class MetadataHelper
 		{ IDataType.GetHash<JLongObject>(), IReferenceType.GetMetadata<JLongObject>() },
 		{ IDataType.GetHash<JShortObject>(), IReferenceType.GetMetadata<JShortObject>() },
 
+		// Array Objects //
+		{ MetadataHelper.ObjectArrayMetadata.Hash, MetadataHelper.ObjectArrayMetadata },
+		{ MetadataHelper.ObjectArrayArrayMetadata.Hash, MetadataHelper.ObjectArrayArrayMetadata },
+
 		// Primitive arrays //
 		{ IDataType.GetHash<JArrayObject<JBoolean>>(), IReferenceType.GetMetadata<JArrayObject<JBoolean>>() },
 		{ IDataType.GetHash<JArrayObject<JByte>>(), IReferenceType.GetMetadata<JArrayObject<JByte>>() },
@@ -65,29 +69,63 @@ internal static partial class MetadataHelper
 		{ IDataType.GetHash<JAnnotationObject>(), IReferenceType.GetMetadata<JAnnotationObject>() },
 	};
 	/// <summary>
-	/// Builtin metadata dictionary.
+	/// Basic metadata dictionary.
 	/// </summary>
-	private static readonly HashSet<String> builtInFinal = [];
+	private static readonly Dictionary<String, Boolean> initialBuiltIn = new()
+	{
+		// Basic objects //
+		{ IDataType.GetHash<JLocalObject>(), false },
+		{ IDataType.GetHash<JClassObject>(), false },
+		{ IDataType.GetHash<JStringObject>(), false },
+		{ IDataType.GetHash<JNumberObject>(), false },
+		{ IDataType.GetHash<JEnumObject>(), false },
+		{ IDataType.GetHash<JThrowableObject>(), false },
+		{ IDataType.GetHash<JStackTraceElementObject>(), false },
+		{ IDataType.GetHash<JExceptionObject>(), false },
+		{ IDataType.GetHash<JRuntimeExceptionObject>(), false },
+		{ IDataType.GetHash<JErrorObject>(), false },
+
+		// Wrapper objects //
+		{ IDataType.GetHash<JVoidObject>(), false },
+		{ IDataType.GetHash<JBooleanObject>(), false },
+		{ IDataType.GetHash<JByteObject>(), false },
+		{ IDataType.GetHash<JCharacterObject>(), false },
+		{ IDataType.GetHash<JDoubleObject>(), false },
+		{ IDataType.GetHash<JFloatObject>(), false },
+		{ IDataType.GetHash<JIntegerObject>(), false },
+		{ IDataType.GetHash<JLongObject>(), false },
+		{ IDataType.GetHash<JShortObject>(), false },
+
+		// Array Objects //
+		{ MetadataHelper.ObjectArrayMetadata.Hash, false },
+		{ MetadataHelper.ObjectArrayArrayMetadata.Hash, false },
+
+		// Primitive arrays //
+		{ IDataType.GetHash<JArrayObject<JBoolean>>(), false },
+		{ IDataType.GetHash<JArrayObject<JByte>>(), false },
+		{ IDataType.GetHash<JArrayObject<JChar>>(), false },
+		{ IDataType.GetHash<JArrayObject<JDouble>>(), false },
+		{ IDataType.GetHash<JArrayObject<JFloat>>(), false },
+		{ IDataType.GetHash<JArrayObject<JInt>>(), false },
+		{ IDataType.GetHash<JArrayObject<JLong>>(), false },
+		{ IDataType.GetHash<JArrayObject<JShort>>(), false },
+
+		// Basic interfaces //
+		{ IDataType.GetHash<JCharSequenceObject>(), false },
+		{ IDataType.GetHash<JCloneableObject>(), false },
+		{ IDataType.GetHash<JComparableObject>(), false },
+		{ IDataType.GetHash<JSerializableObject>(), false },
+		{ IDataType.GetHash<JAnnotatedElementObject>(), false },
+		{ IDataType.GetHash<JGenericDeclarationObject>(), false },
+		{ IDataType.GetHash<JTypeObject>(), false },
+		{ IDataType.GetHash<JAnnotationObject>(), false },
+	};
 	/// <summary>
-	/// Runtime metadata dictionary.
+	/// Runtime metadata storage.
 	/// </summary>
-	private static readonly ConcurrentDictionary<String, JReferenceTypeMetadata> runtimeMetadata =
-		MetadataHelper.CreateRuntimeMetadata();
+	private static readonly RuntimeMetadataStorage storage = new();
 	/// <summary>
 	/// Runtime metadata dictionary.
 	/// </summary>
 	private static readonly ConcurrentDictionary<String, UnknownReflectionMetadata> reflectionMetadata = new();
-	/// <summary>
-	/// Runtime metadata assignation dictionary.
-	/// </summary>
-	private static readonly ConcurrentDictionary<AssignationKey, Boolean> assignationCache = new();
-
-	/// <summary>
-	/// Runtime class metadata dictionary.
-	/// </summary>
-	private static readonly ConcurrentDictionary<String, String> classTree = new();
-	/// <summary>
-	/// Runtime view metadata dictionary.
-	/// </summary>
-	private static readonly ConcurrentDictionary<String, HashesSet> viewTree = new();
 }

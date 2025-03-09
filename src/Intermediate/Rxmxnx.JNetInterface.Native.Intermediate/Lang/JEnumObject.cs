@@ -3,8 +3,8 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Enum</c> instance.
 /// </summary>
-public partial class JEnumObject : JLocalObject, IClassType<JEnumObject>, ILocalObject,
-	IInterfaceObject<JSerializableObject>, IInterfaceObject<JComparableObject>
+public partial class JEnumObject : JLocalObject, IClassType<JEnumObject>, IInterfaceObject<JSerializableObject>,
+	IInterfaceObject<JComparableObject>
 {
 	/// <summary>
 	/// Ordinal of this enumeration constant.

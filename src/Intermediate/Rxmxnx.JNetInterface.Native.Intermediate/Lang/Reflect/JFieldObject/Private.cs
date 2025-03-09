@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
-public partial class JFieldObject : ILocalObject
+public partial class JFieldObject
 {
 	/// <summary>
 	/// Class metadata for declaring class.

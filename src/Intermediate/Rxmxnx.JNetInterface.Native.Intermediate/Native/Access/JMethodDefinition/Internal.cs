@@ -13,35 +13,6 @@ public partial class JMethodDefinition
 		Int32 referenceCount) : base(info, callSize, sizes, referenceCount) { }
 
 	/// <summary>
-	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition passing the
-	/// default value for each argument.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	private protected void Invoke(JLocalObject jLocal) => this.Invoke(jLocal, ReadOnlySpan<IObject?>.Empty);
-	/// <summary>
-	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
-	/// implementation declared on <paramref name="jClass"/> passing the default value for each argument.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	private protected void Invoke(JLocalObject jLocal, JClassObject jClass)
-		=> this.Invoke(jLocal, jClass, ReadOnlySpan<IObject?>.Empty);
-	/// <summary>
-	/// Invokes a method on <paramref name="jLocal"/> which matches with current definition but using the
-	/// implementation declared on <paramref name="jClass"/> passing the default value for each argument.
-	/// </summary>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance that <paramref name="jLocal"/> class extends.</param>
-	private protected void InvokeNonVirtual(JLocalObject jLocal, JClassObject jClass)
-		=> this.InvokeNonVirtual(jLocal, jClass, ReadOnlySpan<IObject?>.Empty);
-	/// <summary>
-	/// Invokes a static method on <paramref name="jClass"/> which matches with current definition
-	/// passing the default value for each argument.
-	/// </summary>
-	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
-	private protected void StaticInvoke(JClassObject jClass) => this.StaticInvoke(jClass, ReadOnlySpan<IObject?>.Empty);
-
-	/// <summary>
 	/// Invokes <paramref name="definition"/> on <paramref name="jLocal"/> which matches with current definition.
 	/// </summary>
 	/// <param name="definition">A <see cref="JMethodDefinition"/> definition.</param>

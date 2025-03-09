@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This interface exposes viewed <see cref="ILocalObject"/>.
 /// </summary>
-public interface ILocalViewObject : IViewObject, ILocalObject
+internal interface ILocalViewObject : IViewObject, ILocalObject
 {
 	/// <summary>
 	/// Real <see cref="ILocalObject"/> instance.

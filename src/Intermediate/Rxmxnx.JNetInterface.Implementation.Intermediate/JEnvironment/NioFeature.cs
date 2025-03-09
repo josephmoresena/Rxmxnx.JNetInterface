@@ -34,6 +34,9 @@ partial class JEnvironment
 			action(buffer);
 		}
 		public void WithDirectByteBuffer<TBuffer, TState>(Int32 capacity, TState state, Action<TBuffer, TState> action)
+#if NET9_0_OR_GREATER
+	where TState : allows ref struct
+#endif
 			where TBuffer : TDirectBuffer
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(capacity);
@@ -54,7 +57,11 @@ partial class JEnvironment
 			return func(buffer);
 		}
 		public TResult WithDirectByteBuffer<TBuffer, TState, TResult>(Int32 capacity, TState state,
-			Func<TBuffer, TState, TResult> func) where TBuffer : TDirectBuffer
+			Func<TBuffer, TState, TResult> func)
+#if NET9_0_OR_GREATER
+	where TState : allows ref struct
+#endif
+			where TBuffer : TDirectBuffer
 		{
 			Boolean useStackAlloc = this.UseStackAlloc(capacity);
 			using IFixedContext<Byte>.IDisposable memory = useStackAlloc ?

@@ -122,7 +122,7 @@
                     body="stub"/>
             <method signature="System.Void CreateGlobalRef`1(Rxmxnx.JNetInterface.Native.References.JObjectLocalRef,,System.String)"
                     body="stub"/>
-            <method signature="System.Void FinalizeCall(Rxmxnx.JNetInterface.Native.JLocalObject,System.String)"
+            <method signature="System.Void FinalizeCall(Rxmxnx.JNetInterface.Native.JReferenceObject,System.String)"
                     body="stub"/>
             <method signature="System.Void UseTypeMetadata(Rxmxnx.JNetInterface.Lang.JClassObject,Rxmxnx.JNetInterface.Types.Metadata.JReferenceTypeMetadata,System.String)"
                     body="stub"/>

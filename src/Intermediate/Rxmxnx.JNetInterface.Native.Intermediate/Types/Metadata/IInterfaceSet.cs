@@ -19,5 +19,9 @@ public interface IInterfaceSet : IEnumerable<JInterfaceTypeMetadata>
 	/// <typeparam name="T">Type of state object</typeparam>
 	/// <param name="state">Object state.</param>
 	/// <param name="action">A <see cref="Action{T, JInterfaceTypeMetadata}"/> delegate.</param>
-	void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action);
+	void ForEach<T>(T state, Action<T, JInterfaceTypeMetadata> action)
+#if NET9_0_OR_GREATER
+		where T : allows ref struct
+#endif
+		;
 }
