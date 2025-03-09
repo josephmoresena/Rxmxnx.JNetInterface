@@ -78,7 +78,7 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <see langword="true"/> if <paramref name="jGlobal"/> validation can be avoided;
 	/// otherwise, <see langword="false"/>;
 	/// </returns>
-	Boolean IsValidationAvoidable(JGlobalBase jGlobal);
+	internal Boolean IsValidationAvoidable(JGlobalBase jGlobal);
 	/// <summary>
 	/// Retrieves the JNI type reference of <paramref name="jObject"/>.
 	/// </summary>

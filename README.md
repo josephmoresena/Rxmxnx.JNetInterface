@@ -158,6 +158,108 @@ conversion to `JObject` occurs through boxing.
                                              └──  JLocalObject ──┼──  JNumberObject  ──  JNumberObject<>  ──  JNumberObject<,>
                                                                  └──  JThrowableObject
 
+#### Object Casting
+
+In `Rxmxnx.JNetInterface`, primitive type conversion works the same as in Java, with promotion or truncation. To convert
+a primitive to its wrapper object, use the `.ToObject(IEnvironment)` extension method.
+
+To convert an `ILocalObject` instance to another type, you can use the `.CastTo<TReference>()` method. For
+`JLocalObject` instances, use `.CastTo<TReference>(Boolean)`, where the boolean parameter indicates whether
+`Rxmxnx.JNetInterface` should discard the original instance if the cast is to a type that is not a view.
+
+Since `JGlobal` and `JWeak` instances cannot be directly manipulated in most cases, the `AsLocal(IEnvironment, Boolean)`
+method allows creating a functional local object within the given environment. The boolean parameter specifies whether a
+local reference should be created when performing the cast.
+
+#### Data Type Registration
+
+One of the best features of `Rxmxnx.JNetInterface` is that, through data type mapping, it allows creating an object
+instance using the closest mapped and registered CLR subclass to the actual class of the instance.
+
+To register a data type, use the static method `JVirtualMachine.Register<T>()`.
+
+**Notes:**
+
+- This registration occurs at runtime and is performed statically to avoid reflection and maximize compatibility with
+  NativeAOT.
+- When registering a non-array type, its corresponding array type will also be registered.
+- No registration is required for non-jagged array types.
+- When registering an array type, its element type will also be registered. If it is a jagged array, the data types will
+  be registered until reaching the fundamental element type.
+- Primitive data types cannot be registered.
+- Registering jagged array types is only necessary if runtime reflection cannot be used or if the feature switch
+  `JNetInterface.DisableJaggedArrayAutoGeneration` is enabled. This applies to any jagged array type, including jagged
+  arrays of primitive arrays.
+- It is recommended to register data types before initializing `IVirtualMachine` instances and preferably within  
+  [module initializers](https://github.com/dotnet/runtime/blob/main/docs/design/specs/Ecma-335-Augments.md#module-initializer).
+
+##### Main Types
+
+The main types are registered mapped types that will be initialized with global references when an `IVirtualMachine`
+instance is created, allowing any environment within that JVM to use them without restrictions. These global references
+will remain active until the JVM is terminated or removed from `Rxmxnx.JNetInterface`.
+
+The functionality of this feature is detailed in the support documentation for  
+[Native-Image](native-image/README.md).
+
+### IVirtualMachine Interface
+
+The `IVirtualMachine` interface represents a JavaVM instance managed by `Rxmxnx.JNetInterface`.
+
+This interface exposes the following static members:
+
+- `MinimalVersion`: The minimum JNI version supported by `Rxmxnx.JNetInterface`; attempting to use a lower version may
+  lead to functional failures.
+- `MetadataValidationEnabled`: Indicates whether metadata type construction validation at runtime is enabled.
+- `JaggedArrayAutoGenerationEnabled`: Indicates whether metadata generation for jagged arrays at runtime is enabled.
+- `TypeMetadataToStringEnabled`: Indicates whether the `ToString()` implementation of type metadata provides detailed
+  output.
+
+This interface provides the following instance members:
+
+- `Reference`: The `JVirtualMachineRef` reference being managed.
+- `GetEnvironment()`: Equivalent to the JNI `GetEnv` call.
+- `InitializeThread(CString?, JGlobalBase?, Int32)`: Equivalent to the JNI `AttachCurrentThread` call. The first
+  parameter names the thread in the JVM, the second must be a global instance of a `java.lang.ThreadGroup` object, and
+  the last specifies the JNI version compatible with the thread.
+- `InitializeDaemon(CString?, JGlobalBase?, Int32)`: Similar to `InitializeThread`, but equivalent to the JNI
+  `AttachCurrentThreadAsDaemon` call.
+- `FatalError(CString?)`: Equivalent to the JNI `FatalError` call.
+- `FatalError(String?)`: Equivalent to the JNI `FatalError` call.
+
+In testing environments, this instance can be simulated using the `VirtualMachineProxy` proxy type.
+
+### IEnvironment Interface
+
+The `IEnvironment` interface represents a `JNIEnv` instance managed by `Rxmxnx.JNetInterface`.
+
+This interface provides the following properties:
+
+- `Reference`: The `JEnvironmentRef` reference being managed.
+- `IVirtualMachine`: The `IVirtualMachine` instance to which this environment belongs.
+- `Version`: The JNI version of the environment.
+- `LocalCapacity`: The capacity of local references. This property will be explained later.
+- `PendingException`: The pending exception in the environment. This property will be explained later.
+- `UsedStackBytes`: Indicates the number of bytes consumed by `Rxmxnx.JNetInterface` in the current stack.
+- `UsableStackBytes`: Gets or sets the number of bytes usable by the stack for JNI calls. This value must be greater
+  than 128 and greater than the currently used amount. A value below 1MB is recommended.
+
+This interface also exposes some methods, including:
+
+- `GetReferenceType(JObject)`: Determines the JNI reference type of the object.
+- `IsSameObject(JObject, JObject)`: Indicates whether both instances are equivalent in Java.
+- `JniSecure()`: Indicates whether it is safe to make JNI calls in the current environment.
+- `IsVirtual(JThreadObject)`: Indicates whether the `java.lang.Thread` instance is virtual. This method only works for
+  JNI version 19+.
+
+This interface exposes additional methods used by various classes in `Rxmxnx.JNetInterface`.
+
+In testing environments, this instance can be simulated using the `EnvironmentProxy` proxy type, and for the `IThread`
+interface, the `ThreadProxy` type.
+
+For more information on using proxy objects, refer to
+the [included example application](./src/ApplicationTest/Rxmxnx.JNetInterface.ManagedTest/README.md) in this repository.
+
 ### JNI Reference Handling
 
 All instances of global and weak global objects, as well as local objects or their local views (`ILocalObject`),
@@ -215,8 +317,11 @@ references for the current frame or ensuring that the current frame supports suc
 * The `LocalCapacity` value can only be increased beyond the previously established value.
 * Attempting to set `LocalCapacity` in a fixed frame will throw an `InvalidOperationException`.
 * Setting `LocalCapacity` when the active frame is either the initial or a call frame triggers the JNI
-  `EnsureLocalCapacity`
-  call. If this call fails, a `JniException` will be thrown.
+  `EnsureLocalCapacity` call. If this call fails, a `JniException` will be thrown.
+* A single environment can only have one active frame at a time. However, each frame is initialized on top of the active
+  frame at the moment of its creation, which is why it is possible to use local references from parent frames.
+* Once the active frame is finalized, its parent frame will become active again. Any references created within the
+  finalized frame will no longer be valid.
 
 ###### Call Frame
 
@@ -340,6 +445,42 @@ To create or use a fixed frame, the `IEnvironment` interface offers the followin
 - It is more efficient if delegate instances come from  
   [static methods](https://devblogs.microsoft.com/dotnet/understanding-the-cost-of-csharp-delegates/).
 - In .NET 9.0+, the generic state type parameter allows `ref struct`.
+
+#### Global Reference Handling
+
+El manejo de referencias globales desde JNI con `Rxmxnx.JNetInterface` se realiza a través de las instancias JGlobal.
+
+Para crear (u obtener) la instancia JGlobal asociada a una instancia JLocalObject se debe utilizar la propiedad Global.
+Para eliminar la referencia global de la instancia JGlobal se debe llamar al método .Dispose() de la misma.
+
+** Notas: **
+
+- La instancia JGlobal de las instancias JClassObject es compartida entre todas las instancias de la misma clase para
+  todos los entornos de la misma JVM.
+- Las instancias JGlobal asociadas a instancias JClassObject no son recolectadas por el GC, incluso si se elimina su
+  referencia global.
+- Si la instancia JLocalObject está asociada a una instancia JGlobal aleatoriamente se verificará la validez de la
+  misma, si se encuentra inválida, la referencia se elimina y de ser posible se creará una nueva.
+- Las instances JGlobal asociadas a JClassObject de clases marcadas como principales no se verifican.
+- Si existe una instancia JGlobal válida asociada a la instancia JLocalObject, siempre se utilizará la dicha referencia,
+  incluso si para dicha instancia existe una referencia local cargada.
+
+#### Global-Weak Reference Handling
+
+El manejo de referencias globales débiles desde JNI con `Rxmxnx.JNetInterface` se realiza a través de las instancias
+JWeak.
+
+Para crear (u obtener) la instancia JWeak asociada a una instancia JLocalObject se debe utilizar la propiedad Global.
+Para eliminar la referencia global de la instancia JWeak se debe llamar al método .Dispose() de la misma.
+
+** Notas: **
+
+- Si la instancia JLocalObject está asociada a una instancia JWeak aleatoriamente se verificará la validez de la
+  misma, si se encuentra inválida, la referencia se elimina y de ser posible se creará una nueva. Esta frecuencia es
+  mucho más alta que para las instancias JGlobal.
+- Si existe una instancia JWeak válida asociada a la instancia JLocalObject, siempre se utilizará la dicha referencia,
+  incluso si para dicha instancia existe una referencia local cargada a menos que para el mismo objeto exista una
+  instancia JGlobal válida.
 
 #### Type Metadata
 
@@ -1189,3 +1330,33 @@ JNI:
   the specified message. It will throw in the CLR if the boolean parameter specifies so.
 
 **Note:** The static methods `Throw` and `Throw<>` use the JNI `ThrowNew` call.
+
+### Java Invocation API
+
+The Invocation API allows loading a JVM instance within an application. `Rxmxnx.JNetInterface` provides access to this
+API through the `JVirtualMachineLibrary` class.
+
+To create an instance of this class, you can use the following static methods:
+
+- `LoadLibrary(String)`: Returns a `JVirtualMachineLibrary` instance by providing the path to the JVM library.
+- `Create(IntPtr)`: Returns a `JVirtualMachineLibrary` instance using the handle of the loaded library.
+
+These methods will return a null instance if the exported symbols of the Invocation API cannot be found:
+
+- `JNI_GetDefaultJavaVMInitArgs`: Returns a default configuration for the Java VM.
+- `JNI_CreateJavaVM`: Loads and initializes a Java VM. The current thread becomes the main thread.
+- `JNI_GetCreatedJavaVMs`: Returns all Java VMs that have been created.
+
+The `JVirtualMachineLibrary` class exposes the following API:
+
+- **Handle**: This property exposes the handle of the loaded library in the process.
+- **GetLatestSupportedVersion()**: Returns the latest JNI version supported by the loaded library.
+- **GetDefaultArgument(Int32)**: Returns the default initialization argument for the JVM based on the specified JNI
+  version.
+- **CreateVirtualMachine(JVirtualMachineInitArg, out IEnvironment)**: Creates a JVM instance from `Rxmxnx.JNetInterface`
+  and initializes the environment in the current thread. The instance returned by this method implements the
+  `IInvokedVirtualMachine` interface, as it is created by the local process and can
+  also be disposed of by it.
+- **GetCreatedVirtualMachines()**: Returns an array of all JVM instances loaded by the library. If any JVM instance is
+  not yet initialized in `Rxmxnx.JNetInterface`, the initialization algorithm will be executed before returning the
+  array.
