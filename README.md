@@ -5,11 +5,68 @@
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
----
 
 | **Core Assembly**                                                                                                                                                                                                                                                                    | **Main Assembly**                                                                                                                                                                                                                                    |
 |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [![NuGet(Core)](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Core)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Core/) [![fuget(Core)](https://www.fuget.org/packages/Rxmxnx.JNetInterface.Core/badge.svg)](https://www.fuget.org/packages/Rxmxnx.JNetInterface.Core) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface)](https://www.nuget.org/packages/Rxmxnx.JNetInterface/) [![fuget](https://www.fuget.org/packages/Rxmxnx.JNetInterface/badge.svg)](https://www.fuget.org/packages/Rxmxnx.JNetInterface) |
+
+---
+
+## Table of Contents
+
+- [Description](#description)
+- [Getting Started](#getting-started)
+    - [Installation](#installation)
+    - [Overview](#overview)
+        - [Java Data Types Mapping](#java-data-types-mapping)
+            - [Specialized Types](#specialized-types)
+            - [Object Hierarchy](#object-hierarchy)
+            - [Object Casting](#object-casting)
+            - [Data Type Registration](#data-type-registration)
+                - [Main Types](#main-types)
+        - [IVirtualMachine Interface](#ivirtualmachine-interface)
+        - [IEnvironment Interface](#ienvironment-interface)
+        - [JNI Reference Handling](#jni-reference-handling)
+            - [Local Reference Handling](#local-reference-handling)
+                - [Environment Frames](#environment-frames)
+                    - [Call Frame](#call-frame)
+                    - [Fixed Frame](#fixed-frame)
+            - [Global Reference Handling](#global-reference-handling)
+            - [Global-Weak Reference Handling](#global-weak-reference-handling)
+            - [Type Metadata](#type-metadata)
+                - [Metadata Builder](#metadata-builder)
+                - [Jagged Array Type Metadata](#jagged-array-type-metadata)
+            - [Argument Metadata](#argument-metadata)
+        - [Java Class Handling](#java-class-handling)
+        - [Java String Handling](#java-string-handling)
+            - [String Creation](#string-creation)
+            - [Native Characters](#native-characters)
+                - [Native Memory](#native-memory)
+        - [Java Array Handling](#java-array-handling)
+            - [Array Creation](#array-creation)
+            - [Non-Generic Class](#non-generic-class)
+            - [Generic Class](#generic-class)
+            - [Primitive Arrays](#primitive-arrays)
+                - [Primitive Memory](#primitive-memory)
+        - [Java Member Handling](#java-member-handling)
+            - [Accessing Java Fields](#accessing-java-fields)
+            - [Accessing Java Calls](#accessing-java-calls)
+                - [Indeterminate Calls](#indeterminate-calls)
+                    - [Creating Definitions](#creating-definitions)
+                    - [Method Calls](#method-calls)
+                    - [Constructor Calls](#constructor-calls)
+                    - [Function Calls](#function-calls)
+                - [Indeterminate Result](#indeterminate-result)
+            - [Defining Native Java Calls](#defining-native-java-calls)
+        - [Direct Buffer Handling](#direct-buffer-handling)
+            - [`JBufferObject` exposes the following properties:](#`jbufferobject`-exposes-the-following-properties:)
+            - [Direct Buffer Creation](#direct-buffer-creation)
+        - [Java Error Handling](#java-error-handling)
+            - [JNI Error Handling](#jni-error-handling)
+        - [Java Invocation API](#java-invocation-api)
+        - [JVirtualMachine Class](#jvirtualmachine-class)
+        - [JEnvironment Class](#jenvironment-class)
+        - [Exporting Native Java Functions](#exporting-native-java-functions)
 
 ---
 
