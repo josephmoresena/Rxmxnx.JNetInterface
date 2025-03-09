@@ -75,11 +75,11 @@
 `Rxmxnx.JNetInterface` provides an implementation of the Java Native Interface and Invocation API for use within the
 .NET ecosystem.
 
-`Rxmxnx.JNetInterface.Core` is a package that contains the necessary types and abstractions to work with
-`JNetInterface`. This is useful because it allows the entire API to be used without burdening its consumers in any way
+`Rxmxnx.JNetInterface.Core` is a core package that provides essential types and abstractions to work with
+`JNetInterface`. This enables the entire API to be used without burdening its consumers in any way
 with the implementation or access to a real JVM.
 
-Additionally, `Rxmxnx.JNetInterface.Core`, in its `Rxmxnx.JNetInterface.Proxies` namespace, includes some types that
+Furthermore, `Rxmxnx.JNetInterface.Core`, in its `Rxmxnx.JNetInterface.Proxies` namespace, includes some types that
 enable the implementation of unit tests without requiring a JVM.
 
 Unfortunately, some features of `JNetInterface` will not be available
@@ -272,7 +272,7 @@ This interface exposes the following static members:
 - `TypeMetadataToStringEnabled`: Indicates whether the `ToString()` implementation of type metadata provides detailed
   output.
 
-This interface provides the following instance members:
+This interface exposes the following instance properties and methods:
 
 - `Reference`: The `JVirtualMachineRef` reference being managed.
 - `GetEnvironment()`: Equivalent to the JNI `GetEnv` call.
@@ -480,7 +480,7 @@ To finalize a call (and remove the call frame in `Rxmxnx.JNetInterface`), the fo
 
 This type of frame allows setting the maximum number of local references the environment can hold while it remains the
 active frame.  
-Additionally, as previously mentioned, it functions as a FIFO system in which, if a new local reference needs to be
+Furthermore, as previously mentioned, it functions as a FIFO system in which, if a new local reference needs to be
 stored and the frame is already full, the oldest reference is invalidated by JNI.
 
 Creating this type of frame uses the JNI `PushLocalFrame` call, and its finalization uses the JNI `PopLocalFrame` call.
@@ -649,7 +649,7 @@ As previously mentioned, type metadata exposes a property to obtain the argument
 However, it is also possible to retrieve it using the static method `JArgumentMetadata.Get<T>()`, where `T` is a mapped
 type.
 
-Additionally, if a mapped type for the argument is not available, it can be created using the method
+Furthermore, if a mapped type for the argument is not available, it can be created using the method
 `JArgumentMetadata.Create(ReadOnlySpan<Byte>)`,  
 where the read-only binary span contains the JNI type signature.
 
@@ -880,7 +880,7 @@ The properties exposed by this class are:
 
 **Note:** These properties are read directly from the underlying non-generic instance that supports the generic view.
 
-To get or set an array element, the class exposes an indexer. Additionally, this class implements various .NET
+To get or set an array element, the class exposes an indexer. Furthermore, this class implements various .NET
 interfaces such as `IList<T>` and `IReadOnlyList<T>`.
 
 #### Primitive Arrays
