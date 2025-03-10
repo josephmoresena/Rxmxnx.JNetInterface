@@ -252,19 +252,19 @@ public sealed class JConstructorDefinitionTests
 
 	private class JFakeConstructor(params JArgumentMetadata[] metadata) : JConstructorDefinition(metadata)
 	{
-		public new JLocalObject New(JClassObject jClass) => base.New(jClass);
-		public new TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
-			=> base.New<TObject>(env);
+		public JLocalObject New(JClassObject jClass) => base.New(jClass, ReadOnlySpan<IObject?>.Empty);
+		public TObject New<TObject>(IEnvironment env) where TObject : JLocalObject, IClassType<TObject>
+			=> base.New<TObject>(env, ReadOnlySpan<IObject?>.Empty);
 		public JLocalObject New(JClassObject jClass, IObject?[] args) => base.New(jClass, args);
 		public TObject New<TObject>(IEnvironment env, IObject?[] args) where TObject : JLocalObject, IClassType<TObject>
 			=> base.New<TObject>(env, args);
-		public new JLocalObject NewReflected(JConstructorObject jConstructorObject)
-			=> base.NewReflected(jConstructorObject);
+		public JLocalObject NewReflected(JConstructorObject jConstructorObject)
+			=> base.NewReflected(jConstructorObject, ReadOnlySpan<IObject?>.Empty);
 		public JLocalObject NewReflected(JConstructorObject jConstructorObject, IObject?[] args)
 			=> base.NewReflected(jConstructorObject, args);
-		public new TObject NewReflected<TObject>(JConstructorObject jConstructorObject)
+		public TObject NewReflected<TObject>(JConstructorObject jConstructorObject)
 			where TObject : JLocalObject, IClassType<TObject>
-			=> base.NewReflected<TObject>(jConstructorObject);
+			=> base.NewReflected<TObject>(jConstructorObject, ReadOnlySpan<IObject?>.Empty);
 		public TObject NewReflected<TObject>(JConstructorObject jConstructorObject, IObject?[] args)
 			where TObject : JLocalObject, IClassType<TObject>
 			=> base.NewReflected<TObject>(jConstructorObject, args);

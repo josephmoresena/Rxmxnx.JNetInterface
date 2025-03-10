@@ -49,16 +49,16 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 		get => !AppContext.TryGetSwitch("JNetInterface.DisableMetadataValidation", out Boolean disable) || !disable;
 	}
 	/// <summary>
-	/// Indicates whether metadata for nesting array is auto-generated.
+	/// Indicates whether metadata for jagged arrays is auto-generated.
 	/// </summary>
 	/// <remarks>In reflection-free mode this feature is unavailable.</remarks>
 	[ExcludeFromCodeCoverage]
-	public static Boolean NestingArrayAutoGenerationEnabled
+	public static Boolean JaggedArrayAutoGenerationEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get
 			=> !AotInfo.IsReflectionDisabled &&
-				(!AppContext.TryGetSwitch("JNetInterface.DisableNestingArrayAutoGeneration", out Boolean disable) ||
+				(!AppContext.TryGetSwitch("JNetInterface.DisableJaggedArrayAutoGeneration", out Boolean disable) ||
 					!disable);
 	}
 	/// <summary>

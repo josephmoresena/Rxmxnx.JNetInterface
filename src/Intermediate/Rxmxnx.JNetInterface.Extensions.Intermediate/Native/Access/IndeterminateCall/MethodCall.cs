@@ -7,7 +7,11 @@ public abstract partial class IndeterminateCall
 	/// </summary>
 	/// <param name="jLocal">Target object.</param>
 	/// <param name="args">Method arguments.</param>
-	public void MethodCall(JLocalObject jLocal, ReadOnlySpan<IObject?> args)
+	public void MethodCall(JLocalObject jLocal,
+#if NET9_0_OR_GREATER
+		params
+#endif
+		ReadOnlySpan<IObject?> args)
 		=> this.MethodCall(jLocal, jLocal.Class, false, args);
 	/// <summary>
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.
@@ -16,7 +20,11 @@ public abstract partial class IndeterminateCall
 	/// <param name="jClass">Declaring call class.</param>
 	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">Method arguments.</param>
-	public void MethodCall(JLocalObject jLocal, JClassObject jClass, Boolean nonVirtual, ReadOnlySpan<IObject?> args)
+	public void MethodCall(JLocalObject jLocal, JClassObject jClass, Boolean nonVirtual,
+#if NET9_0_OR_GREATER
+		params
+#endif
+		ReadOnlySpan<IObject?> args)
 	{
 		IndeterminateResult result = IndeterminateResult.Empty;
 		switch (this.Definition)
@@ -35,7 +43,11 @@ public abstract partial class IndeterminateCall
 	/// </summary>
 	/// <param name="jClass">Target class.</param>
 	/// <param name="args">Method arguments.</param>
-	public void StaticMethodCall(JClassObject jClass, ReadOnlySpan<IObject?> args)
+	public void StaticMethodCall(JClassObject jClass,
+#if NET9_0_OR_GREATER
+		params
+#endif
+		ReadOnlySpan<IObject?> args)
 	{
 		IndeterminateResult result = IndeterminateResult.Empty;
 		switch (this.Definition)
@@ -60,7 +72,11 @@ public abstract partial class IndeterminateCall
 	/// <param name="jMethod">Reflected method instance.</param>
 	/// <param name="jLocal">Target object.</param>
 	/// <param name="args">Method arguments.</param>
-	public static void ReflectedMethodCall(JMethodObject jMethod, JLocalObject jLocal, ReadOnlySpan<IObject?> args)
+	public static void ReflectedMethodCall(JMethodObject jMethod, JLocalObject jLocal,
+#if NET9_0_OR_GREATER
+		params
+#endif
+		ReadOnlySpan<IObject?> args)
 		=> IndeterminateCall.ReflectedMethodCall(jMethod, jLocal, false, args);
 	/// <summary>
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.
@@ -70,6 +86,9 @@ public abstract partial class IndeterminateCall
 	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">Method arguments.</param>
 	public static void ReflectedMethodCall(JMethodObject jMethod, JLocalObject jLocal, Boolean nonVirtual,
+#if NET9_0_OR_GREATER
+		params
+#endif
 		ReadOnlySpan<IObject?> args)
 	{
 		IndeterminateResult result = IndeterminateResult.Empty;
@@ -90,7 +109,11 @@ public abstract partial class IndeterminateCall
 	/// </summary>
 	/// <param name="jExecutable">Reflected executable instance.</param>
 	/// <param name="args">Method arguments.</param>
-	public static void ReflectedStaticMethodCall(JExecutableObject jExecutable, ReadOnlySpan<IObject?> args)
+	public static void ReflectedStaticMethodCall(JExecutableObject jExecutable,
+#if NET9_0_OR_GREATER
+		params
+#endif
+		ReadOnlySpan<IObject?> args)
 	{
 		IndeterminateResult result = IndeterminateResult.Empty;
 		switch (jExecutable.Definition)

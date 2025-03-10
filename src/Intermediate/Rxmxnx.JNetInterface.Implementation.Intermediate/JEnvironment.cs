@@ -30,8 +30,6 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	}
 
 	/// <inheritdoc/>
-	public Boolean NoProxy => true;
-	/// <inheritdoc/>
 	public JEnvironmentRef Reference => this._cache.Reference;
 	/// <inheritdoc/>
 	public IVirtualMachine VirtualMachine => this._cache.VirtualMachine;

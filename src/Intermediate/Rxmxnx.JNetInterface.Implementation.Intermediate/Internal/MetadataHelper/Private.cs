@@ -11,17 +11,17 @@ internal static partial class MetadataHelper
 	/// </returns>
 	private static Boolean Register(JReferenceTypeMetadata? metadata)
 	{
-		if (metadata is null || MetadataHelper.runtimeMetadata.ContainsKey(metadata.Hash)) return false;
+		if (metadata is null || MetadataHelper.storage.IsRegistered(metadata.Hash)) return false;
 		if (metadata.BaseMetadata is not null)
 		{
 			AssignationKey assignationKey = new() { FromHash = metadata.Hash, ToHash = metadata.BaseMetadata.Hash, };
-			MetadataHelper.assignationCache[assignationKey] = true;
+			MetadataHelper.storage[assignationKey] = true;
 			MetadataHelper.Register(metadata.BaseMetadata);
 		}
 		metadata.Interfaces.ForEach(metadata, MetadataHelper.RegisterInterfaceAssignation);
 		if (metadata is JArrayTypeMetadata arrayMetadata)
 			MetadataHelper.Register(arrayMetadata.ElementMetadata as JReferenceTypeMetadata);
-		return MetadataHelper.runtimeMetadata.TryAdd(metadata.Hash, metadata);
+		return MetadataHelper.storage.TryAdd(metadata);
 	}
 	/// <summary>
 	/// Registers assignation of <paramref name="metadata"/> to <paramref name="interfaceMetadata"/>.
@@ -32,21 +32,31 @@ internal static partial class MetadataHelper
 		JInterfaceTypeMetadata interfaceMetadata)
 	{
 		AssignationKey assignationKey = new() { FromHash = metadata.Hash, ToHash = interfaceMetadata.Hash, };
-		MetadataHelper.assignationCache[assignationKey] = true;
+		MetadataHelper.storage[assignationKey] = true;
 		MetadataHelper.Register(interfaceMetadata);
 	}
 	/// <summary>
-	/// Creates runtime metadata cache.
+	/// Indicates whether the type of <paramref name="typeMetadata"/> is built-in final type.
 	/// </summary>
-	/// <returns>Runtime metadata cache.</returns>
-	private static ConcurrentDictionary<String, JReferenceTypeMetadata> CreateRuntimeMetadata()
+	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
+	/// <returns>
+	/// <see langword="true"/> if the type of <paramref name="typeMetadata"/> is built-in final type;
+	/// otherwise, <see langword="false"/>.
+	/// </returns>
+	private static Boolean IsBuiltInFinalType(JDataTypeMetadata typeMetadata)
 	{
-		ConcurrentDictionary<String, JReferenceTypeMetadata> result = new(MetadataHelper.initialMetadata);
-		if (JVirtualMachine.BuiltInThrowableAutoRegistered) MetadataHelper.BuiltInThrowableRegistration(result);
-		if (JVirtualMachine.ReflectionAutoRegistered) MetadataHelper.ReflectionRegistration(result);
-		if (JVirtualMachine.NioAutoRegistered) MetadataHelper.NioRegistration(result);
-		return result;
+		if (typeMetadata is JEnumTypeMetadata or JPrimitiveTypeMetadata) return true;
+
+		if (JProxyObject.ProxyTypeMetadata.Equals((typeMetadata as JReferenceTypeMetadata)?.BaseMetadata))
+			return true;
+
+		if (MetadataHelper.storage.IsBuiltInAndFinalType(typeMetadata.Hash))
+			return true;
+
+		return typeMetadata is JArrayTypeMetadata arrayTypeMetadata &&
+			MetadataHelper.IsBuiltInFinalType(arrayTypeMetadata.ElementMetadata);
 	}
+
 	/// <summary>
 	/// Registers all built-in throwable types metadata.
 	/// </summary>
@@ -88,6 +98,28 @@ internal static partial class MetadataHelper
 		MetadataHelper.InitialRegister<JStringIndexOutOfBoundsExceptionObject>(result);
 	}
 	/// <summary>
+	/// Registers all NIO types metadata.
+	/// </summary>
+	/// <param name="result">Runtime metadata cache.</param>
+	private static void NioRegistration(IDictionary<String, JReferenceTypeMetadata> result)
+	{
+		// Classes
+		MetadataHelper.InitialRegister<JBufferObject>(result);
+		MetadataHelper.InitialRegister<JByteBufferObject>(result);
+		MetadataHelper.InitialRegister<JCharBufferObject>(result);
+		MetadataHelper.InitialRegister<JDoubleBufferObject>(result);
+		MetadataHelper.InitialRegister<JFloatBufferObject>(result);
+		MetadataHelper.InitialRegister<JIntBufferObject>(result);
+		MetadataHelper.InitialRegister<JLongBufferObject>(result);
+		MetadataHelper.InitialRegister<JShortBufferObject>(result);
+		MetadataHelper.InitialRegister<JMappedByteBufferObject>(result);
+		MetadataHelper.InitialRegister<JDirectByteBufferObject>(result);
+		// Interfaces
+		MetadataHelper.InitialRegister<JAppendableObject>(result);
+		MetadataHelper.InitialRegister<JReadableObject>(result);
+		MetadataHelper.InitialRegister<JDirectBufferObject>(result);
+	}
+	/// <summary>
 	/// Registers all reflection types metadata.
 	/// </summary>
 	/// <param name="result">Runtime metadata cache.</param>
@@ -111,28 +143,6 @@ internal static partial class MetadataHelper
 		MetadataHelper.InitialRegister<JTargetObject>(result);
 	}
 	/// <summary>
-	/// Registers all NIO types metadata.
-	/// </summary>
-	/// <param name="result">Runtime metadata cache.</param>
-	private static void NioRegistration(IDictionary<String, JReferenceTypeMetadata> result)
-	{
-		// Classes
-		MetadataHelper.InitialRegister<JBufferObject>(result);
-		MetadataHelper.InitialRegister<JByteBufferObject>(result);
-		MetadataHelper.InitialRegister<JCharBufferObject>(result);
-		MetadataHelper.InitialRegister<JDoubleBufferObject>(result);
-		MetadataHelper.InitialRegister<JFloatBufferObject>(result);
-		MetadataHelper.InitialRegister<JIntBufferObject>(result);
-		MetadataHelper.InitialRegister<JLongBufferObject>(result);
-		MetadataHelper.InitialRegister<JShortBufferObject>(result);
-		MetadataHelper.InitialRegister<JMappedByteBufferObject>(result);
-		MetadataHelper.InitialRegister<JDirectByteBufferObject>(result);
-		// Interfaces
-		MetadataHelper.InitialRegister<JAppendableObject>(result);
-		MetadataHelper.InitialRegister<JReadableObject>(result);
-		MetadataHelper.InitialRegister<JDirectBufferObject>(result);
-	}
-	/// <summary>
 	/// Registers <typeparamref name="TReference"/> metadata.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
@@ -144,25 +154,5 @@ internal static partial class MetadataHelper
 	{
 		JReferenceTypeMetadata typeMetadata = IReferenceType.GetMetadata<TReference>();
 		result.Add(typeMetadata.Hash, typeMetadata);
-		if (typeMetadata.Modifier == JTypeModifier.Final)
-			MetadataHelper.builtInFinal.Add(typeMetadata.Hash);
-	}
-	/// <summary>
-	/// Indicates whether the type of <paramref name="typeMetadata"/> is built-in final type.
-	/// </summary>
-	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
-	/// <returns>
-	/// <see langword="true"/> if the type of <paramref name="typeMetadata"/> is built-in final type;
-	/// otherwise, <see langword="false"/>.
-	/// </returns>
-	private static Boolean IsBuiltInFinalType(JDataTypeMetadata typeMetadata)
-	{
-		if (typeMetadata is JEnumTypeMetadata or JPrimitiveTypeMetadata) return true;
-		if (JProxyObject.ProxyTypeMetadata.Equals((typeMetadata as JReferenceTypeMetadata)?.BaseMetadata))
-			return true;
-		if (MetadataHelper.initialMetadata.ContainsKey(typeMetadata.Hash) ||
-		    MetadataHelper.builtInFinal.Contains(typeMetadata.Hash)) return true;
-		return typeMetadata is JArrayTypeMetadata arrayTypeMetadata &&
-			MetadataHelper.IsBuiltInFinalType(arrayTypeMetadata.ElementMetadata);
 	}
 }

@@ -150,6 +150,10 @@ public sealed partial class JNativeCallAdapterTests
 				Assert.Equal(proxyEnv.VirtualMachine.ClassGlobalRef.Value,
 				             adapter.FinalizeCall(env.ClassFeature.ClassObject).Value);
 				break;
+			case CallResult.Serializable:
+				Assert.Equal(proxyEnv.VirtualMachine.ClassGlobalRef.Value,
+				             adapter.FinalizeCall(env.ClassFeature.ClassObject.CastTo<JSerializableObject>()));
+				break;
 			case CallResult.Object:
 				using (JLocalObject jLocal = TestUtilities.CreateObject(proxyEnv))
 				{

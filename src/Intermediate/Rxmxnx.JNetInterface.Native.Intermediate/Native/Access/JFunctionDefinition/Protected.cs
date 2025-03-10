@@ -90,14 +90,6 @@ public partial class JFunctionDefinition<TResult>
 		return env.AccessFeature.CallStaticFunction<TResult>(jClass, this, args);
 	}
 	/// <summary>
-	/// Invokes a reflected function which matches with current definition passing the default value for each argument.
-	/// </summary>
-	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? InvokeReflected(JMethodObject jMethod, JLocalObject jLocal)
-		=> this.InvokeReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
-	/// <summary>
 	/// Invokes a reflected function which matches with current definition.
 	/// </summary>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
@@ -114,14 +106,6 @@ public partial class JFunctionDefinition<TResult>
 		return env.AccessFeature.CallFunction<TResult>(jMethod, jLocal, this, false, args);
 	}
 	/// <summary>
-	/// Invokes a reflected function which matches with current definition passing the default value for each argument.
-	/// </summary>
-	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
-	/// <param name="jLocal">A <see cref="JLocalObject"/> instance.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? InvokeNonVirtualReflected(JMethodObject jMethod, JLocalObject jLocal)
-		=> this.InvokeNonVirtualReflected(jMethod, jLocal, ReadOnlySpan<IObject?>.Empty);
-	/// <summary>
 	/// Invokes a reflected function which matches with current definition.
 	/// </summary>
 	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
@@ -137,13 +121,6 @@ public partial class JFunctionDefinition<TResult>
 		IEnvironment env = jMethod.Environment;
 		return env.AccessFeature.CallFunction<TResult>(jMethod, jLocal, this, true, args);
 	}
-	/// <summary>
-	/// Invokes a reflected static function which matches with current definition passing the default value for each argument.
-	/// </summary>
-	/// <param name="jMethod">A <see cref="JMethodObject"/> instance.</param>
-	/// <returns><typeparamref name="TResult"/> function result.</returns>
-	protected TResult? InvokeStaticReflected(JMethodObject jMethod)
-		=> this.InvokeStaticReflected(jMethod, ReadOnlySpan<IObject?>.Empty);
 	/// <summary>
 	/// Invokes a reflected static function which matches with current definition.
 	/// </summary>

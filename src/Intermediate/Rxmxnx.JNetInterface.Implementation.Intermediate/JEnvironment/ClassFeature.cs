@@ -57,6 +57,24 @@ partial class JEnvironment
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
 			return this.GetModule(classRef);
 		}
+		public void ThrowNew(JClassObject jClass, String? message, Boolean throwException)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
+			this.CheckClassCompatibility<JThrowableObject>(jClass, out _);
+
+			JReferenceTypeMetadata throwableMetadata = this.GetTypeMetadata(jClass);
+			CString? utf8Message = (CString?)message;
+			this.ThrowNew(jClass, throwableMetadata, utf8Message, throwException, message);
+		}
+		public void ThrowNew(JClassObject jClass, CString? message, Boolean throwException)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
+			this.CheckClassCompatibility<JThrowableObject>(jClass, out _);
+
+			JReferenceTypeMetadata throwableMetadata = this.GetTypeMetadata(jClass);
+			ReadOnlySpan<Byte> utf8Message = JEnvironment.GetSafeSpan(message);
+			this.ThrowNew(jClass, throwableMetadata, utf8Message, throwException, message?.ToString());
+		}
 		public void ThrowNew<TThrowable>(CString? message, Boolean throwException)
 			where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		{
@@ -131,29 +149,8 @@ partial class JEnvironment
 			this.CheckJniError();
 			return default;
 		}
-		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2234,
-		                 Justification = CommonConstants.BackwardOperationJustification)]
 		public Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass)
-		{
-			ImplementationValidationUtilities.ThrowIfProxy(jClass);
-			ImplementationValidationUtilities.ThrowIfProxy(otherClass);
-			Boolean? result = MetadataHelper.IsAssignable(jClass, otherClass);
-			if (result.HasValue) return result.Value; // Cached assignation.
-			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
-			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
-			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
-			result = this.IsAssignableFrom(classRef, otherClassRef);
-			this.CheckJniError();
-
-			if (result.Value) // If true, inverse is false.
-				return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
-
-			// Checks inverse assignation.
-			Boolean inverseResult = this.IsAssignableFrom(otherClass, jClass);
-			MetadataHelper.SetAssignable(otherClass, jClass, inverseResult);
-			this.CheckJniError();
-			return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
-		}
+			=> this.IsAssignableFrom(jClass, otherClass, default);
 		public Boolean IsInstanceOf(JReferenceObject jObject, JClassObject jClass)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);

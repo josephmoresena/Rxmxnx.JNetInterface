@@ -86,41 +86,6 @@ partial class JEnvironment
 			return result.Value;
 		}
 		/// <summary>
-		/// Reloads current class object.
-		/// </summary>
-		/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>
-		/// <returns>Current <see cref="JClassLocalRef"/> reference.</returns>
-		private JClassLocalRef ReloadClass(JClassObject? jClass)
-		{
-			if (jClass is null) return default;
-			Boolean isMainClass = JVirtualMachine.IsMainClass(jClass.Hash);
-			JGlobal? jGlobal = isMainClass ? this.VirtualMachine.LoadGlobal(jClass) : default;
-			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
-			Boolean findClass = classRef.IsDefault;
-
-			if (jGlobal is not null)
-			{
-				if (jGlobal.IsDefault)
-				{
-					if (findClass) classRef = this.FindClass(jClass);
-					ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
-					jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, findClass));
-					this.VirtualMachine.ReloadAccess(jClass.Hash);
-				}
-				// Always use the global reference if it is a main class.
-				classRef = jGlobal.As<JClassLocalRef>();
-			}
-			else if (findClass)
-			{
-				classRef = this.FindClass(jClass);
-				jClass.SetValue(classRef);
-				// Registers class in the current local frame.
-				this.Register(jClass);
-			}
-
-			return classRef;
-		}
-		/// <summary>
 		/// Retrieves the current <paramref name="classRef"/> instance as <see cref="JClassObject"/>.
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
@@ -456,6 +421,44 @@ partial class JEnvironment
 			return new(this.GetClass<JModuleObject>(), localRef);
 		}
 		/// <summary>
+		/// Determines whether an object of <paramref name="jClass"/> can be safely cast to
+		/// <paramref name="otherClass"/>.
+		/// </summary>
+		/// <param name="jClass">Java class instance.</param>
+		/// <param name="otherClass">Other java class instance.</param>
+		/// <param name="createFrame">Delegate to create <see cref="LocalFrame"/> instance.</param>
+		/// <returns>
+		/// <see langword="true"/> if an object of <paramref name="jClass"/> can be safely cast to
+		/// <paramref name="otherClass"/>; otherwise, <see langword="false"/>.
+		/// </returns>
+		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2234,
+		                 Justification = CommonConstants.BackwardOperationJustification)]
+		private Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass,
+			Func<JEnvironment, LocalFrame>? createFrame)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
+			ImplementationValidationUtilities.ThrowIfProxy(otherClass);
+			Boolean? result = MetadataHelper.IsAssignable(jClass, otherClass);
+			if (result.HasValue)
+				return result.Value; // Cached assignation.
+
+			using LocalFrame? _ = createFrame?.Invoke(this._env);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(2);
+			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jClass));
+			JClassLocalRef otherClassRef = jniTransaction.Add(this.ReloadClass(otherClass));
+			result = this.IsAssignableFrom(classRef, otherClassRef);
+			this.CheckJniError();
+
+			if (result.Value) // If true, inverse is false.
+				return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
+
+			// Checks inverse assignation.
+			Boolean inverseResult = this.IsAssignableFrom(otherClass, jClass);
+			MetadataHelper.SetAssignable(otherClass, jClass, inverseResult);
+			this.CheckJniError();
+			return MetadataHelper.SetAssignable(jClass, otherClass, result.Value);
+		}
+		/// <summary>
 		/// Indicates whether <paramref name="classRef"/> is assignable to <paramref name="otherClassRef"/>.
 		/// </summary>
 		/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
@@ -524,5 +527,47 @@ partial class JEnvironment
 		/// <returns>A <see cref="JClassObject"/> instance.</returns>
 		private JClassObject AsClassObject(JClassLocalRef classRef, WellKnownRuntimeTypeInformation runtimeInformation)
 			=> this.Register(this.GetClass(classRef, true, runtimeInformation));
+		/// <summary>
+		/// Computes the class compatibility with <typeparamref name="TDataType"/> instance.
+		/// </summary>
+		/// <typeparam name="TDataType">A <see cref="IDataType{TDataType}"/> type.</typeparam>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <param name="sameClass">
+		/// Output. Indicates whether <paramref name="jClass"/> is the class for <typeparamref name="TDataType"/> type.
+		/// </param>
+		private void CheckClassCompatibility<TDataType>(JClassObject jClass, out Boolean sameClass)
+			where TDataType : IDataType<TDataType>
+		{
+			JDataTypeMetadata elementTypeMetadata = MetadataHelper.GetExactMetadata<TDataType>();
+			sameClass = elementTypeMetadata.Hash.AsSpan().SequenceEqual(jClass.Hash);
+
+			if (sameClass) return; // Same class type.
+
+			if (elementTypeMetadata.Kind is JTypeKind.Primitive ||
+			    jClass.IsPrimitive) // There is no compatibility between primitive types.
+				CommonValidationUtilities.ThrowIfInvalidCast(elementTypeMetadata, false);
+
+			JClassObject elementTypeClass = this.GetClass<TDataType>();
+			Boolean allowedCast =
+				this.IsAssignableFrom(jClass, elementTypeClass, e => new(e, IVirtualMachine.GetObjectClassCapacity));
+			CommonValidationUtilities.ThrowIfInvalidCast(elementTypeMetadata, allowedCast);
+		}
+		/// <summary>
+		/// Retrieves the array class instance for given element class.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+		/// <returns>A <see cref="JClassObject"/> instance.</returns>
+		private JClassObject GetArrayClass(JClassObject jClass)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jClass);
+			Int32 elementTypeSignature = jClass.ClassSignature.Length;
+			Int32 offset = 2 * elementTypeSignature;
+			Int32 length = elementTypeSignature + 1;
+			ReadOnlySpan<Byte> typeInformationSpan = MemoryMarshal.AsBytes(jClass.Hash.AsSpan());
+			ReadOnlySpan<Byte> arrayClassName = typeInformationSpan[offset..(offset + length)];
+
+			using LocalFrame _ = new(this._env, IVirtualMachine.GetObjectClassCapacity);
+			return this.GetClass(arrayClassName);
+		}
 	}
 }

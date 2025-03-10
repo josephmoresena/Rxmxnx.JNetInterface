@@ -226,15 +226,19 @@ partial class JEnvironment
 		public TObject CallConstructor<TObject>(JClassObject jClass, JConstructorDefinition definition,
 			ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IDataType<TObject>
 		{
+			this.CheckClassCompatibility<TObject>(jClass, out Boolean sameClass);
 			JObjectLocalRef localRef = this.NewObject(jClass, definition, args);
 			JTrace.CallMethod(default, jClass, definition, false, args);
-			return this.CreateObject<TObject>(localRef, true, true)!;
+			return sameClass ?
+				this.CreateObject<TObject>(localRef, true, true)! :
+				this.CreateObject<TObject>(jClass, localRef);
 		}
 		public TObject CallConstructor<TObject>(JConstructorObject jConstructor, JConstructorDefinition definition,
 			ReadOnlySpan<IObject?> args) where TObject : JLocalObject, IClassType<TObject>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jConstructor);
 			ImplementationValidationUtilities.ThrowIfNotMatchDefinition(definition, jConstructor.Definition);
+			this.CheckClassCompatibility<TObject>(jConstructor.DeclaringClass, out Boolean sameClass);
 			using INativeTransaction jniTransaction =
 				this.VirtualMachine.CreateTransaction(2 + definition.ReferenceCount);
 			_ = jniTransaction.Add(jConstructor);
@@ -242,7 +246,9 @@ partial class JEnvironment
 			JClassLocalRef classRef = jniTransaction.Add(this.ReloadClass(jConstructor.DeclaringClass));
 			JObjectLocalRef localRef = this.NewObject(definition, classRef, args, jniTransaction, methodId);
 			JTrace.CallMethod(default, jConstructor.DeclaringClass, definition, false, args);
-			return this.CreateObject<TObject>(localRef, true, true)!;
+			return sameClass ?
+				this.CreateObject<TObject>(localRef, true, true)! :
+				this.CreateObject<TObject>(jConstructor.DeclaringClass, localRef);
 		}
 		public TResult? CallStaticFunction<TResult>(JClassObject jClass, JFunctionDefinition definition,
 			ReadOnlySpan<IObject?> args) where TResult : IDataType<TResult>

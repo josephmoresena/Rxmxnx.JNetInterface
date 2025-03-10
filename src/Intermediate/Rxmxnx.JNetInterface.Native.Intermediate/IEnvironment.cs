@@ -78,7 +78,7 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <see langword="true"/> if <paramref name="jGlobal"/> validation can be avoided;
 	/// otherwise, <see langword="false"/>;
 	/// </returns>
-	Boolean IsValidationAvoidable(JGlobalBase jGlobal);
+	internal Boolean IsValidationAvoidable(JGlobalBase jGlobal);
 	/// <summary>
 	/// Retrieves the JNI type reference of <paramref name="jObject"/>.
 	/// </summary>
@@ -119,7 +119,11 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="state">A state object.</param>
 	/// <param name="action">An action to invoke inside created new local reference.</param>
-	void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action);
+	void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
+#if NET9_0_OR_GREATER
+	where TState : allows ref struct
+#endif
+		;
 	/// <summary>
 	/// Creates a new local reference frame and executes <paramref name="func"/> inside of it.
 	/// </summary>
@@ -132,7 +136,11 @@ public interface IEnvironment : IWrapper<JEnvironmentRef>
 	/// <param name="capacity">New local reference frame capacity.</param>
 	/// <param name="state">A state object.</param>
 	/// <param name="func">A function to execute inside created new local reference.</param>
-	TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func);
+	TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
+#if NET9_0_OR_GREATER
+	where TState : allows ref struct
+#endif
+		;
 
 	/// <summary>
 	/// JNI pending exception describe.

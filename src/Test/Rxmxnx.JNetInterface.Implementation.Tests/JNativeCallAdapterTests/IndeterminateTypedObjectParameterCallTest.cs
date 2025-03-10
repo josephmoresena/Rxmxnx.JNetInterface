@@ -85,6 +85,8 @@ public partial class JNativeCallAdapterTests
 	[InlineData(false, CallResult.Nested, true)]
 	[InlineData(true, CallResult.Parameter, true)]
 	[InlineData(false, CallResult.Parameter, true)]
+	[InlineData(true, CallResult.Serializable)]
+	[InlineData(false, CallResult.Serializable)]
 	internal void IndeterminateTypedObjectParameterCallTest(Boolean useVm, CallResult result = CallResult.Void,
 		Boolean registerClass = false)
 	{

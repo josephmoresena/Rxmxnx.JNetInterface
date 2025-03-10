@@ -94,5 +94,40 @@ partial class JEnvironment
 				this.GetObjectArrayElement(JObjectArrayLocalRef.FromReference(in arrayRef), index);
 			return this.AsClassObject(JClassLocalRef.FromReference(in localRef), JTypeKind.Interface);
 		}
+		/// <summary>
+		/// Reloads current class object.
+		/// </summary>
+		/// <param name="jClass">A <see cref="JClassLocalRef"/> reference.</param>
+		/// <returns>Current <see cref="JClassLocalRef"/> reference.</returns>
+		public JClassLocalRef ReloadClass(JClassObject? jClass)
+		{
+			if (jClass is null) return default;
+			Boolean isMainClass = JVirtualMachine.IsMainClass(jClass.Hash);
+			JGlobal? jGlobal = isMainClass ? this.VirtualMachine.LoadGlobal(jClass) : default;
+			JClassLocalRef classRef = jClass.As<JClassLocalRef>();
+			Boolean findClass = classRef.IsDefault;
+
+			if (jGlobal is not null)
+			{
+				if (jGlobal.IsDefault)
+				{
+					if (findClass) classRef = this.FindClass(jClass);
+					ClassObjectMetadata classMetadata = (ClassObjectMetadata)jGlobal.ObjectMetadata;
+					jGlobal.SetValue(this._env.GetMainClassGlobalRef(classMetadata, classRef, findClass));
+					this.VirtualMachine.ReloadAccess(jClass.Hash);
+				}
+				// Always use the global reference if it is a main class.
+				classRef = jGlobal.As<JClassLocalRef>();
+			}
+			else if (findClass)
+			{
+				classRef = this.FindClass(jClass);
+				jClass.SetValue(classRef);
+				// Registers class in the current local frame.
+				this.Register(jClass);
+			}
+
+			return classRef;
+		}
 	}
 }

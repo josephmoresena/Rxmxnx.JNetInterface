@@ -30,7 +30,7 @@ public abstract partial class JArrayTypeMetadata
 	[ExcludeFromCodeCoverage]
 	static JArrayTypeMetadata()
 	{
-		if (!IVirtualMachine.NestingArrayAutoGenerationEnabled) return;
+		if (!IVirtualMachine.JaggedArrayAutoGenerationEnabled) return;
 		try
 		{
 			JArrayTypeMetadata.getArrayArrayMetadataInfo = JArrayTypeMetadata.ReflectGetArrayArrayMetadataMethod();
@@ -110,7 +110,7 @@ public abstract partial class JArrayTypeMetadata
 	private static JArrayTypeMetadata? TryGetArrayArrayMetadataWithReflection(CString elementSignature,
 		Type typeofElement)
 	{
-		if (!IVirtualMachine.NestingArrayAutoGenerationEnabled) return default;
+		if (!IVirtualMachine.JaggedArrayAutoGenerationEnabled) return default;
 		try
 		{
 			return JArrayTypeMetadata.GetArrayArrayMetadataWithReflection(typeofElement);

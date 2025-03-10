@@ -264,8 +264,13 @@ public sealed class JArrayObjectTests
 		JArrayObjectTests.ElementTest(jElementClass, env, jArray, length);
 
 		env.ArrayFeature.CreateArray<TElement>(jArray.Length).Returns(jArray);
+		env.ArrayFeature.CreateArray<TElement>(jArray.Object.Class, jArray.Length).Returns(jArray);
+
 		Assert.Equal(jArray, JArrayObject<TElement>.Create(env, jArray.Length));
 		env.ArrayFeature.Received(1).CreateArray<TElement>(jArray.Length);
+
+		Assert.Equal(jArray, JArrayObject<TElement>.Create(jArray.Object.Class, jArray.Length));
+		env.ArrayFeature.Received(1).CreateArray<TElement>(jArray.Object.Class, jArray.Length);
 
 		Assert.Equal(ILocalObject.CreateMetadata(jArray), new ArrayObjectMetadata(ILocalObject.CreateMetadata(jArray)));
 	}
@@ -462,8 +467,13 @@ public sealed class JArrayObjectTests
 		env.ArrayFeature.Received(1).CopyTo(jArray, arr, 0);
 
 		env.ArrayFeature.CreateArray(jArray.Length, element).Returns(jArray);
+		env.ArrayFeature.CreateArray(jArray.Object.Class, jArray.Length, element).Returns(jArray);
+
 		Assert.Equal(jArray, JArrayObject<TElement>.Create(env, jArray.Length, element));
 		env.ArrayFeature.Received(1).CreateArray(jArray.Length, element);
+
+		Assert.Equal(jArray, JArrayObject<TElement>.Create(jArray.Object.Class, jArray.Length, element));
+		env.ArrayFeature.Received(1).CreateArray(jArray.Object.Class, jArray.Length, element);
 
 		if (jArray.Object.TypeMetadata.Equals(elementTypeMetadata.GetArrayMetadata()))
 			jArray.Object.ValidateObjectElement(element);

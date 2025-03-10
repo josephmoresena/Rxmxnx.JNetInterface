@@ -96,9 +96,23 @@ internal partial interface IClassFeature
 	/// </exception>
 	JModuleObject? GetModule(JClassObject jClass);
 	/// <summary>
+	/// Throws an exception from <paramref name="jClass"/> class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
+	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	void ThrowNew(JClassObject jClass, String? message, Boolean throwException);
+	/// <summary>
+	/// Throws an exception from <paramref name="jClass"/> class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
+	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	void ThrowNew(JClassObject jClass, CString? message, Boolean throwException);
+	/// <summary>
 	/// Throws an exception from <typeparamref name="TThrowable"/> type.
 	/// </summary>
-	/// <typeparam name="TThrowable"></typeparam>
+	/// <typeparam name="TThrowable">A <see cref="JThrowableObject"/> type.</typeparam>
 	/// <param name="message">
 	/// The message used to construct the <c>java.lang.Throwable</c> instance.
 	/// The string is encoded in modified UTF-8.
@@ -111,7 +125,7 @@ internal partial interface IClassFeature
 	/// <summary>
 	/// Throws an exception from <typeparamref name="TThrowable"/> type.
 	/// </summary>
-	/// <typeparam name="TThrowable"></typeparam>
+	/// <typeparam name="TThrowable">A <see cref="JThrowableObject"/> type.</typeparam>
 	/// <param name="message">
 	/// The message used to construct the <c>java.lang.Throwable</c> instance.
 	/// </param>
