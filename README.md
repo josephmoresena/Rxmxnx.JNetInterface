@@ -59,7 +59,6 @@
                 - [Indeterminate Result](#indeterminate-result)
             - [Defining Native Java Calls](#defining-native-java-calls)
         - [Direct Buffer Handling](#direct-buffer-handling)
-            - [`JBufferObject` exposes the following properties:](#`jbufferobject`-exposes-the-following-properties:)
             - [Direct Buffer Creation](#direct-buffer-creation)
         - [Java Error Handling](#java-error-handling)
             - [JNI Error Handling](#jni-error-handling)
@@ -154,7 +153,7 @@ The following table shows the equivalence between the different common JNI types
 ### Java Data Types Mapping
 
 As shown in the previous table, `Rxmxnx.JNetInterface` provides a mapping of Java data types. This is achieved through
-the `IDataType` interface, and instances of `JDataTypeMetadata` are used for identification. <br/>  
+the `IDataType` interface, and instances of `JDataTypeMetadata` are used for identification. <br/>
 The following table illustrates how data type mapping works.
 
 | Java Declaration              | Base Type                                        | Interface                                   | Metadata                                                                                    | Inheritance                                                  |
@@ -201,7 +200,7 @@ the `JObject` class.
                                                                ├──  IInterfaceType  ───┼──  IInterfaceType<> 
                                                                └──  IClassType  ───────┼──  IClassType<>  ────────┬──  IThrowableType<> 
                                                                                        │                          ├──  IPrimitiveWrapperType<> 
-                                                                                       └──  IUninstantiableType  ─┴──  IUninstantiableType<> 
+                                                                                       └──  IUninstantiableType  ─┴──  IUninstantiableType<>
 
 All instances of objects interoperable with JNI are instances of the `JObject` class. In the case of primitives, the
 conversion to `JObject` occurs through boxing.
@@ -247,7 +246,7 @@ To register a data type, use the static method `JVirtualMachine.Register<T>()`.
 - Registering jagged array types is only necessary if runtime reflection cannot be used or if the feature switch
   `JNetInterface.DisableJaggedArrayAutoGeneration` is enabled. This applies to any jagged array type, including jagged
   arrays of primitive arrays.
-- It is recommended to register data types before initializing `IVirtualMachine` instances and preferably within  
+- It is recommended to register data types before initializing `IVirtualMachine` instances and preferably within
   [module initializers](https://github.com/dotnet/runtime/blob/main/docs/design/specs/Ecma-335-Augments.md#module-initializer).
 
 ##### Main Types
@@ -256,8 +255,8 @@ The main types are registered mapped types that will be initialized with global 
 instance is created, allowing any environment within that JVM to use them without restrictions. These global references
 will remain active until the JVM is terminated or removed from `Rxmxnx.JNetInterface`.
 
-The functionality of this feature is detailed in the support documentation for  
-[Native-Image](native-image/README.md).
+The functionality of this feature is detailed in the support documentation for
+[native-Image](native-image/README.md).
 
 ### IVirtualMachine Interface
 
@@ -393,16 +392,16 @@ The parameters of a native call are:
 2. A local reference to the instance of the object (`JObjectLocalRef`) on which the method is executed.
 3. Additional parameters depend on the signature of the call. For example, if the native declaration in Java is:
 
-    - `()`: No additional parameters.
-    - `(String a)`: `JStringLocalRef`.
-    - `(boolean a)`: `JBoolean`.
-    - `(Class<?>)`: `JClassLocalRef`.
-    - `(Character a)`: `JObjectLocalRef`.
-    - `<T>(T a)`: `JObjectLocalRef`.
-    - `<T>(T[] a, boolean[] b)`: `JObjectArrayLocalRef`, `JBooleanArrayLocalRef`.
-    - `<T extends Number>(T a, char b)`: `JObjectLocalRef`, `JChar`.
-    - `(int a, String b, long c, int[] d, Integer[] e)`: `JInt`, `JStringLocalRef`, `JLong`, `JIntArrayLocalRef`,
-      `JArrayLocalRef`.
+- `()`: No additional parameters.
+- `(String a)`: `JStringLocalRef`.
+- `(boolean a)`: `JBoolean`.
+- `(Class<?>)`: `JClassLocalRef`.
+- `(Character a)`: `JObjectLocalRef`.
+- `<T>(T a)`: `JObjectLocalRef`.
+- `<T>(T[] a, boolean[] b)`: `JObjectArrayLocalRef`, `JBooleanArrayLocalRef`.
+- `<T extends Number>(T a, char b)`: `JObjectLocalRef`, `JChar`.
+- `(int a, String b, long c, int[] d, Integer[] e)`: `JInt`, `JStringLocalRef`, `JLong`, `JIntArrayLocalRef`,
+  `JArrayLocalRef`.
 
 *Note:* The JNI convention for native call naming will be detailed later.
 
@@ -437,10 +436,10 @@ For the examples above, the creation sequence would be:
   parameter.
 - `.WithParameter(JObjectLocalRef, out JLocalObject).Build()`: Adds a `java.lang.Object` parameter.
 - `.WithParameter<JLocalObject>(JArrayObjectLocalRef, out JArrayObject<JLocalObject>).WithParameter(
-  JBooleanArrayLocalRef, out JArrayObject<JBoolean>).Build()`: Adds `java.lang.Object[]` and `boolean[]` parameters.
+ JBooleanArrayLocalRef, out JArrayObject<JBoolean>).Build()`: Adds `java.lang.Object[]` and `boolean[]` parameters.
 - `.WithParameter<JNumberObject>(JObjectLocalRef, out JNumberObject).Build()`: Adds a `java.lang.Number` parameter.
 - `.WithParameter(JStringLocalRef, out JStringObject).WithParameter(JIntArrayLocalRef, out JArrayObject<JInt>)
-  .WithParameter<JIntegerObject>(JArrayLocalRef, out JArrayObject<JIntegerObject>).Build()`: Adds `java.lang.String`,
+ .WithParameter<JIntegerObject>(JArrayLocalRef, out JArrayObject<JIntegerObject>).Build()`: Adds `java.lang.String`,
   `int[]`, and `java.lang.Integer[]` parameters.
 
 **Note:** Local references associated with the target instance/class and parameters cannot be manually released.
@@ -472,14 +471,14 @@ To finalize a call (and remove the call frame in `Rxmxnx.JNetInterface`), the fo
 
 - Both `JNativeCallAdapter` and `JNativeCallAdapter.Builder` are `ref struct` types, making them incompatible
   with the Visual Basic .NET language.
-- Once the `Build()` method is called, it is always required to call the `Finalize` method on the created instance.  
+- Once the `Build()` method is called, it is always required to call the `Finalize` method on the created instance.
   Failing to do so may affect the behavior of the `IEnvironment` instance, as it could treat invalid local references as
   immutable.
 
 ###### Fixed Frame
 
 This type of frame allows setting the maximum number of local references the environment can hold while it remains the
-active frame.  
+active frame.
 Furthermore, as previously mentioned, it functions as a FIFO system in which, if a new local reference needs to be
 stored and the frame is already full, the oldest reference is invalidated by JNI.
 
@@ -507,7 +506,7 @@ To create or use a fixed frame, the `IEnvironment` interface offers the followin
 
 Global reference management in JNI with `Rxmxnx.JNetInterface` is handled through `JGlobal` instances.
 
-To create (or obtain) the `JGlobal` instance associated with a `JLocalObject` instance, use the `Global` property.  
+To create (or obtain) the `JGlobal` instance associated with a `JLocalObject` instance, use the `Global` property.
 To remove the global reference from a `JGlobal` instance, call its `.Dispose()` method.
 
 **Notes:**
@@ -516,7 +515,7 @@ To remove the global reference from a `JGlobal` instance, call its `.Dispose()` 
   environments of the same JVM.
 - `JGlobal` instances associated with `JClassObject` instances are not collected by the GC, even if their global
   reference is removed.
-- If a `JLocalObject` instance is associated with a `JGlobal` instance, its validity is randomly checked.  
+- If a `JLocalObject` instance is associated with a `JGlobal` instance, its validity is randomly checked.
   If found invalid, the reference is removed, and if possible, a new one is created.
 - `JGlobal` instances associated with `JClassObject` instances of classes marked as main are not validated.
 - If a valid `JGlobal` instance is associated with a `JLocalObject` instance, that reference will always be used, even
@@ -526,13 +525,13 @@ To remove the global reference from a `JGlobal` instance, call its `.Dispose()` 
 
 Global weak reference management in JNI with `Rxmxnx.JNetInterface` is handled through `JWeak` instances.
 
-To create (or obtain) the `JWeak` instance associated with a `JLocalObject` instance, use the `Global` property.  
+To create (or obtain) the `JWeak` instance associated with a `JLocalObject` instance, use the `Global` property.
 To remove the global reference from a `JWeak` instance, call its `.Dispose()` method.
 
 ** Notes: **
 
-- If a `JLocalObject` instance is associated with a `JWeak` instance, its validity is randomly checked.  
-  If found invalid, the reference is removed, and if possible, a new one is created. This check is performed  
+- If a `JLocalObject` instance is associated with a `JWeak` instance, its validity is randomly checked.
+  If found invalid, the reference is removed, and if possible, a new one is created. This check is performed
   much more frequently than for `JGlobal` instances.
 - If a valid `JWeak` instance is associated with a `JLocalObject` instance, that reference will always be used, even if
   a local reference is loaded for that instance, unless a valid `JGlobal` instance exists for the same object.
@@ -540,7 +539,7 @@ To remove the global reference from a `JWeak` instance, call its `.Dispose()` me
 #### Type Metadata
 
 Type metadata objects allow `Rxmxnx.JNetInterface` to identify at runtime the types of Java objects referenced through
-JNI.  
+JNI.
 By leveraging the strong typing features of the .NET platform, it is possible to perform operations on object instances
 or their corresponding Java class instances.
 
@@ -549,14 +548,14 @@ The metadata exposes the following properties:
 - `ClassName`: This name is the JNI name of the class identified by the metadata. For example, the class
   `java.lang.String` (`JStringObject`) has the JNI name `java/lang/String`.
 - `Signature`: This signature allows identifying instances of the class represented by the metadata to access Java
-  fields or methods via JNI.  
+  fields or methods via JNI.
   For example:
 
 - `long` (`JLong`) has the signature `J`.
 - `java.lang.String` has the signature `Ljava/lang/String;`.
 
 - `ArraySignature`: This signature enables the automatic creation of the generic array type for the class identified
-  by the metadata.  
+  by the metadata.
   For example:
     - `char` -> `char[]` (`JArrayObject<JChar>`) with the signature `[C`.
     - `java.lang.String` -> `java.lang.String[]` (`JArrayObject<JStringObject>`) with the signature
@@ -587,15 +586,15 @@ The metadata exposes the following properties:
 
 ##### Metadata Builder
 
-Builders are classes found in the base classes used to initialize type metadata.  
-It is recommended to use a single metadata instance to improve runtime performance. <br/>  
+Builders are classes found in the base classes used to initialize type metadata.
+It is recommended to use a single metadata instance to improve runtime performance. <br/>
 These types are `ref struct`, so they are not compatible with the Visual Basic language.
 
 - `JLocalObject.TypeMetadataBuilder<>`: This builder allows creating class-type metadata (`IClassType<>`). It must
   always be initialized with the JNI class name. It is also possible to specify whether the class is `Abstract`
   or `Final`, or by default `Extensible` (which allows other classes to extend it). This can be done using the static
   method `Create(ReadOnlySpan<Byte>, JTypeModifier)`.
-  To specify that the metadata class extends another class, the static method of the superclass builder  
+  To specify that the metadata class extends another class, the static method of the superclass builder
   `Create<>(ReadOnlySpan<Byte>, JTypeModifier)` must be used.
   The builder also allows specifying that the metadata class implements interfaces through the `.Implements<>()`
   method. Note that the CLR type must implement the `IInterfaceObject<>` interface.
@@ -606,13 +605,13 @@ These types are `ref struct`, so they are not compatible with the Visual Basic l
   The builder also allows specifying that the metadata interface extends other interfaces through the `.Extends<>()`
   method. Note that the CLR type must implement the `IInterfaceObject<>` interface.
 
-- `JThrowableObject.TypeMetadataBuilder<>`:  
-  This builder allows creating throwable-type metadata (`IThrowableType<>`).  
+- `JThrowableObject.TypeMetadataBuilder<>`:
+  This builder allows creating throwable-type metadata (`IThrowableType<>`).
   It must always be initialized with the JNI class name.
   This builder is identical to `JLocalObject.TypeMetadataBuilder<>`, but the throwable superclass must always be
   specified.
 
-- `JEnumObject.TypeMetadataBuilder<>`:  
+- `JEnumObject.TypeMetadataBuilder<>`:
   This builder allows creating enum-type metadata (`IEnumObject<>`). It must always be initialized with the JNI class
   name.
   This builder is identical to `JLocalObject.TypeMetadataBuilder<>`, but no superclass can be specified, as all enum
@@ -637,13 +636,13 @@ using the feature switch `JNetInterface.DisableJaggedArrayAutoGeneration`.
 
 #### Argument Metadata
 
-Argument metadata objects allow defining access to Java methods and fields from JNI.  
-As previously mentioned, type metadata exposes a property to obtain the argument metadata for a specified type.  
+Argument metadata objects allow defining access to Java methods and fields from JNI.
+As previously mentioned, type metadata exposes a property to obtain the argument metadata for a specified type.
 However, it is also possible to retrieve it using the static method `JArgumentMetadata.Get<T>()`, where `T` is a mapped
 type.
 
 Furthermore, if a mapped type for the argument is not available, it can be created using the method
-`JArgumentMetadata.Create(ReadOnlySpan<Byte>)`,  
+`JArgumentMetadata.Create(ReadOnlySpan<Byte>)`,
 where the read-only binary span contains the JNI type signature.
 
 For example, to create the signature for `java.util.Dictionary<K,V>`, its signature should be `Ljava/util/Dictionary;`.
@@ -927,13 +926,13 @@ the associated JNI reference.
 JNI allows the handling to Java class members. Accessible definitions are objects that allow access to Java methods and
 fields (both class and instance) via JNI. Every accessible definition is an instance of `JAccessibleObjectDefinition`.
 
-**Note:** Accessible definitions can be identified by their name and descriptor.  
+**Note:** Accessible definitions can be identified by their name and descriptor.
 The hash of a definition is the UTF-16 buffer used to store the UTF-8 sequence containing these two elements.
 
 #### Accessing Java Fields
 
-JNI allows access to Java fields, both class (static) and instance fields.  
-This access can be read (`get`) or write (`set`).  
+JNI allows access to Java fields, both class (static) and instance fields.
+This access can be read (`get`) or write (`set`).
 `Rxmxnx.JNetInterface` provides the same functionality through `JFieldDefinition` instances.
 
                                                             ┌──  JFieldDefinition<> (Generic)
@@ -942,10 +941,10 @@ This access can be read (`get`) or write (`set`).
 
 **Notes:**
 
-- The `JFieldDefinition<..>` type allows defining a Java field of a generic `IDataType<..>`, while  
-  `JNonTypedFieldDefinition` allows defining fields of object types whose class is not mapped in  
+- The `JFieldDefinition<..>` type allows defining a Java field of a generic `IDataType<..>`, while
+  `JNonTypedFieldDefinition` allows defining fields of object types whose class is not mapped in
   `Rxmxnx.JNetInterface`.
-- Creating a `JNonTypedFieldDefinition` definition for a primitive field is not supported; instead,  
+- Creating a `JNonTypedFieldDefinition` definition for a primitive field is not supported; instead,
   a `JFieldDefinition<..>` instance must be used.
 
 The APIs exposed by `JNonTypedFieldDefinition` are identical to those of a `JFieldDefinition<JLocalObject>` instance.
@@ -953,14 +952,14 @@ The APIs exposed by `JNonTypedFieldDefinition` are identical to those of a `JFie
 To get or set a field using `Rxmxnx.JNetInterface`, the following options are available:
 
 - `Get(JLocalObject)`: Retrieves a field from the given instance. The declaring class is the object's own class.
-- `Get(JLocalObject, JClassObject)`: Retrieves a field from the given instance, using the provided class  
-  as the declaring class. This is useful for efficiently handling field declarations in the superclasses  
+- `Get(JLocalObject, JClassObject)`: Retrieves a field from the given instance, using the provided class
+  as the declaring class. This is useful for efficiently handling field declarations in the superclasses
   of multiple instances.
 - `GetReflected(JFieldObject, JLocalObject)`: Retrieves the reflected field in the given instance.
 - `StaticGet(JClassObject)`: Retrieves a static field from the given class.
 - `StaticGetReflected(JFieldObject)`: Retrieves the reflected static field.
 - `Set(JLocalObject, T)`: Sets a field in the given instance. The declaring class is the object's own class.
-- `Set(JLocalObject, JClassObject, T)`: Sets a field in the given instance, using the provided class  
+- `Set(JLocalObject, JClassObject, T)`: Sets a field in the given instance, using the provided class
   as the declaring class.
 - `SetReflected(JFieldObject, JLocalObject, T)`: Sets the reflected field in the given instance.
 - `StaticSet(JClassObject, T)`: Sets a static field in the given class.
@@ -971,9 +970,9 @@ context), a local reference will be loaded in the active frame.
 
 #### Accessing Java Calls
 
-JNI allows access to both instance and class (static) methods in Java. When methods return a primitive value or an  
-object, they are referred to as functions.  
-`Rxmxnx.JNetInterface` provides the same functionality through `JCallDefinition` instances. Constructors are not  
+JNI allows access to both instance and class (static) methods in Java. When methods return a primitive value or an
+object, they are referred to as functions.
+`Rxmxnx.JNetInterface` provides the same functionality through `JCallDefinition` instances. Constructors are not
 considered static functions in JNI but share a strong similarity with them when invoked.
 
                                                            ┌──  JMethodDefinition  ──  JMethodDefinition.Parameterless      
@@ -984,56 +983,56 @@ considered static functions in JNI but share a strong similarity with them when 
 
 **Notes:**
 
-- The `JFunctionDefinition<..>` type allows defining a Java function with a generic `IDataType<..>`, while  
-  `JNonTypedFunctionDefinition` allows defining functions returning an object whose class is not mapped in  
+- The `JFunctionDefinition<..>` type allows defining a Java function with a generic `IDataType<..>`, while
+  `JNonTypedFunctionDefinition` allows defining functions returning an object whose class is not mapped in
   `Rxmxnx.JNetInterface`.
-- Creating a `JNonTypedFunctionDefinition` for a primitive function is not supported; a `JFunctionDefinition<..>`  
+- Creating a `JNonTypedFunctionDefinition` for a primitive function is not supported; a `JFunctionDefinition<..>`
   instance must be used instead.
 - `Parameterless` types are definitions of functions, methods, or constructors that do not take parameters.
-- The APIs exposed by `JNonTypedFunctionDefinition` are public and impose no restrictions on the arguments of the  
+- The APIs exposed by `JNonTypedFunctionDefinition` are public and impose no restrictions on the arguments of the
   defined calls.
 - Call definitions also expose the call parameter count and the call's byte size.
 
 To invoke methods and functions using `Rxmxnx.JNetInterface`, the following options are available:
 
-- `Invoke(JLocalObject, ReadOnlySpan<IObject?>)`: Invokes the call on the given instance using  
+- `Invoke(JLocalObject, ReadOnlySpan<IObject?>)`: Invokes the call on the given instance using
   the objects in the read-only span as arguments. The declaring class is inferred from the object's class.
-- `InvokeReflected(JMethodObject, JLocalObject, ReadOnlySpan<IObject?>)`: Invokes the reflected method or  
+- `InvokeReflected(JMethodObject, JLocalObject, ReadOnlySpan<IObject?>)`: Invokes the reflected method or
   function on the given instance using the objects in the read-only span as arguments.
-- `Invoke(JLocalObject, JClassObject, ReadOnlySpan<IObject?>)`: Invokes the call on the given  
-  instance using the objects in the read-only span as arguments. The declaring class is explicitly provided.  
+- `Invoke(JLocalObject, JClassObject, ReadOnlySpan<IObject?>)`: Invokes the call on the given
+  instance using the objects in the read-only span as arguments. The declaring class is explicitly provided.
   This is useful for efficiently managing method calls on superclass declarations across multiple instances.
-- `InvokeNonVirtual(JLocalObject, JClassObject, ReadOnlySpan<IObject?>)`: Invokes the call on the  
-  given instance using the objects in the read-only span as arguments, but it forces the implementation from  
+- `InvokeNonVirtual(JLocalObject, JClassObject, ReadOnlySpan<IObject?>)`: Invokes the call on the
+  given instance using the objects in the read-only span as arguments, but it forces the implementation from
   the explicitly provided class.
-- `InvokeNonVirtualReflected(JMethodObject, JLocalObject, ReadOnlySpan<IObject?>)`: Invokes the reflected  
-  call on the given instance using the objects in the read-only span as arguments, but it forces  
+- `InvokeNonVirtualReflected(JMethodObject, JLocalObject, ReadOnlySpan<IObject?>)`: Invokes the reflected
+  call on the given instance using the objects in the read-only span as arguments, but it forces
   the implementation from the class where the method was originally reflected.
-- `StaticInvoke(JClassObject, ReadOnlySpan<IObject?>)`: Invokes a static call in the given class  
+- `StaticInvoke(JClassObject, ReadOnlySpan<IObject?>)`: Invokes a static call in the given class
   using the objects in the read-only span as arguments.
-- `InvokeStaticReflected(JMethodObject, ReadOnlySpan<IObject?>)`: Invokes a reflected static call  
+- `InvokeStaticReflected(JMethodObject, ReadOnlySpan<IObject?>)`: Invokes a reflected static call
   in the declaring class of the reflected method using the objects in the read-only span as arguments.
 
 To create instances using constructors in `Rxmxnx.JNetInterface`, the following options are available:
 
-- `New(JClassObject, ReadOnlySpan<IObject?>)`: Creates a new instance of the given class using the constructor,  
+- `New(JClassObject, ReadOnlySpan<IObject?>)`: Creates a new instance of the given class using the constructor,
   passing the objects in the read-only span as arguments.
-- `New<>(IEnvironment, ReadOnlySpan<IObject?>)`: Creates a new instance of the generic type using the constructor,  
+- `New<>(IEnvironment, ReadOnlySpan<IObject?>)`: Creates a new instance of the generic type using the constructor,
   passing the objects in the read-only span as arguments.
 - `NewReflected(JConstructorObject, ReadOnlySpan<IObject?>)`: Creates a new instance using the reflected
-  constructor,  
+  constructor,
   passing the objects in the read-only span as arguments.
-- `NewReflected<>(IEnvironment, ReadOnlySpan<IObject?>)`: Creates a new instance of the generic type using the  
-  reflected constructor, passing the objects in the read-only span as arguments. The generic type must be a superclass  
+- `NewReflected<>(IEnvironment, ReadOnlySpan<IObject?>)`: Creates a new instance of the generic type using the
+  reflected constructor, passing the objects in the read-only span as arguments. The generic type must be a superclass
   of the class where the reflected constructor is defined.
 
 **Notes:**
 
-- These APIs in the `JMethodDefinition`, `JFunctionDefinition<..>`, and `JConstructorDefinition` classes are exposed  
+- These APIs in the `JMethodDefinition`, `JFunctionDefinition<..>`, and `JConstructorDefinition` classes are exposed
   as protected.
 - These APIs in `Parameterless` classes are public and do not receive arguments.
 - In .NET 9.0+, the `ReadOnlySpan<IObject?>` parameter uses the `params` keyword.
-- When using classes, either as the declaring class or as a function argument, if the class has not been loaded,  
+- When using classes, either as the declaring class or as a function argument, if the class has not been loaded,
   meaning there is no active JNI reference in the current context, a local reference will be loaded in the active frame.
 
 ##### Indeterminate Calls
@@ -1146,7 +1145,7 @@ Thus:
 #### Defining Native Java Calls
 
 The `JNativeCallEntry` class allows defining the implementation of Java native methods and functions with compatible
-implementations created in .NET.  
+implementations created in .NET.
 These methods must follow the JNI convention for parameter definitions, but they do not require the JNI naming
 convention.
 
@@ -1205,7 +1204,7 @@ hierarchy is established:
                                            ├──  JLongBufferObject 
                                            └──  JShortBufferObject
 
-#### `JBufferObject` exposes the following properties:
+`JBufferObject` class exposes the following properties:
 
 - `IsDirect`: Indicates whether the buffer is direct or managed by the JVM.
 - `Capacity`: The capacity in units of the primitive type of the buffer.
@@ -1469,20 +1468,20 @@ Native Java calls implemented in JNI libraries must follow specific conventions 
 we explained how a .NET method can be set as an implementation for a Java native call at runtime, but for JNI to
 recognize an exported native symbol in a dynamic library, it must follow the following naming convention:
 
-    Java_package_ClassName_methodName
+Java_package_ClassName_methodName
 
 More details about this convention can be found in
 the [official documentation](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/design.html#resolving_native_method_names).
 
-When a JNI library is loaded by the JVM, it invokes the native symbol `JNI_OnLoad`,  
+When a JNI library is loaded by the JVM, it invokes the native symbol `JNI_OnLoad`,
 and when it is unloaded, it invokes the native symbol `JNI_OnUnload`.
 
-To function correctly, these methods must be exported with these exact names  
+To function correctly, these methods must be exported with these exact names
 and must use the following parameters:
 
 1. `JVirtualMachine`: A reference to the JVM that is loading or unloading the library.
 2. `IntPtr`: This parameter has no actual use but must be part of the method declaration.
-3. The return type of `JNI_OnLoad` is a 32-bit integer representing the minimum  
+3. The return type of `JNI_OnLoad` is a 32-bit integer representing the minimum
    JNI version compatible with the library.
 4. The return type of `JNI_OnUnload` is `void`.
 
@@ -1501,6 +1500,6 @@ the [official documentation](https://learn.microsoft.com/en-us/dotnet/core/deplo
   is only available in C#.
 - Here are discussions about creating native libraries with [F#](https://github.com/dotnet/samples/issues/5647)
   and [Visual Basic .NET](https://github.com/dotnet/runtime/issues/96103).
-- An example of a JNI library using `Rxmxnx.JNetInterface` can be found in the  
-  [included example library](./src/ApplicationTest/README.md) in this repository or in the  
+- An example of a JNI library using `Rxmxnx.JNetInterface` can be found in the
+  [included example library](./src/ApplicationTest/README.md) in this repository or in the
   [jnetinterface branch of the NativeAOT-AndroidHelloJniLib repository](https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib/tree/jnetinterface).
