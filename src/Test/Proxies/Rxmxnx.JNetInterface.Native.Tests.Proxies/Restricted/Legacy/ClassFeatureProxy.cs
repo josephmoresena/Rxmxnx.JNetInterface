@@ -11,10 +11,10 @@ public partial class ClassFeatureProxy
 		=> this.LoadClass<TDataType>(rawClassBytes.ToArray(), jClassLoader);
 	void IClassFeature.GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 	{
-		ITypeInformation information = this.GetClassInfo(jClass);
-		name = information.ClassName;
-		signature = information.Signature;
-		hash = information.Hash;
+		ITypeInformation? information = this.GetClassInfo(jClass);
+		name = information?.ClassName!;
+		signature = information?.Signature!;
+		hash = information?.Hash!;
 	}
 	JClassObject IClassFeature.GetClass<TDataType>()
 		=> !this.UseNonGeneric ? this.GetClass<TDataType>() : this.GetNonGenericClass(typeof(TDataType));

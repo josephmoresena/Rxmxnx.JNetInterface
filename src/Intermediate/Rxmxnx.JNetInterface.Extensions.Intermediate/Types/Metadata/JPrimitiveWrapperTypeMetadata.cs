@@ -28,6 +28,6 @@ public sealed class
 		=> new()
 		{
 			PropertyName = nameof(JPrimitiveWrapperTypeMetadata<TWrapper>.PrimitiveMetadata),
-			Value = ClassNameHelper.GetClassName(this.PrimitiveMetadata.Signature),
+			Value = ITypeInformation.GetJavaClassName(this.PrimitiveMetadata),
 		};
 }

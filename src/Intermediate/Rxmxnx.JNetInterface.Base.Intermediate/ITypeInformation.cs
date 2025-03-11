@@ -10,13 +10,17 @@ public interface ITypeInformation
 	/// </summary>
 	CString ClassName { get; }
 	/// <summary>
+	/// Java class name.
+	/// </summary>
+	internal String JavaClassName => ITypeInformation.GetJavaClassName(this);
+	/// <summary>
 	/// JNI signature for object instances of this type.
 	/// </summary>
-	CString Signature { get; }
+	internal CString Signature { get; }
 	/// <summary>
 	/// Current datatype hash.
 	/// </summary>
-	String Hash { get; }
+	internal String Hash { get; }
 	/// <summary>
 	/// Kind of the current type.
 	/// </summary>
@@ -25,4 +29,27 @@ public interface ITypeInformation
 	/// Indicates whether current type is final;
 	/// </summary>
 	Boolean? IsFinal { get; }
+
+	/// <summary>
+	/// Retrieves the Java class name.
+	/// </summary>
+	/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
+	/// <returns>A <see cref="CString"/> instance.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static String GetJavaClassName(ITypeInformation typeInformation)
+		=> ClassNameHelper.GetClassName(typeInformation.Signature);
+	/// <summary>
+	/// Retrieves the JNI signature for object instances of this type.
+	/// </summary>
+	/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
+	/// <returns>A <see cref="CString"/> instance.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static CString GetClassSignature(ITypeInformation typeInformation) => typeInformation.ClassName;
+	/// <summary>
+	/// Retrieves the datatype hash.
+	/// </summary>
+	/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
+	/// <returns>A <see cref="CString"/> instance.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static String GetClassHash(ITypeInformation typeInformation) => typeInformation.Hash;
 }

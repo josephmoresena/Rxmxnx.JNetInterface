@@ -21,7 +21,7 @@ public abstract partial class JClassTypeMetadata : JReferenceTypeMetadata
 			new()
 			{
 				PropertyName = nameof(JReferenceTypeMetadata.BaseMetadata),
-				Value = ClassNameHelper.GetClassName(this.BaseMetadata.Signature),
+				Value = ITypeInformation.GetJavaClassName(this.BaseMetadata),
 			} :
 			default;
 	/// <summary>

@@ -9,7 +9,8 @@ public sealed partial record ClassObjectMetadata : ObjectMetadata
 	/// <summary>
 	/// <see cref="ClassObjectMetadata"/> instance for Java <c>void</c> type.
 	/// </summary>
-	public static readonly ClassObjectMetadata VoidMetadata = new(JPrimitiveTypeMetadata.VoidMetadata);
+	public static readonly ClassObjectMetadata VoidMetadata =
+		ClassObjectMetadata.Create(JPrimitiveTypeMetadata.VoidMetadata);
 
 	/// <summary>
 	/// Class name of the current type.
@@ -57,6 +58,6 @@ public sealed partial record ClassObjectMetadata : ObjectMetadata
 	public static ClassObjectMetadata Create<TDataType>() where TDataType : IDataType<TDataType>
 	{
 		JDataTypeMetadata metadata = IDataType.GetMetadata<TDataType>();
-		return new(metadata);
+		return ClassObjectMetadata.Create(metadata);
 	}
 }

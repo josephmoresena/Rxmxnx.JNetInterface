@@ -43,7 +43,7 @@ public abstract partial class ClassFeatureProxy : IClassFeature
 	public abstract void ThrowNew<TThrowable>(String? message, Boolean throwException)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 	public abstract JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
-	public abstract ITypeInformation GetClassInfo(JClassObject jClass);
+	public abstract TypeInformationProxy GetClassInfo(JClassObject jClass);
 	public abstract JClassObject GetNonGenericClass(Type classHash);
 	public abstract JClassObject GetClass(CString className);
 	public abstract JClassObject LoadClass(CString className, Byte[] rawClassBytes,

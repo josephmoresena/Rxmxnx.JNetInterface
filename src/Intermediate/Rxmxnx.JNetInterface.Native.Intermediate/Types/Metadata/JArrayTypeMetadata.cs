@@ -64,7 +64,7 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 		=> new()
 		{
 			PropertyName = nameof(JArrayTypeMetadata.ElementMetadata),
-			Value = ClassNameHelper.GetClassName(this.ElementMetadata.Signature),
+			Value = ITypeInformation.GetJavaClassName(this.ElementMetadata),
 		};
 	/// <summary>
 	/// Array dimension property.

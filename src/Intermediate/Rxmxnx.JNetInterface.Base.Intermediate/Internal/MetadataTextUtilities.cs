@@ -36,7 +36,7 @@ internal static class MetadataTextUtilities
 
 		MetadataTextUtilities.AppendObjectBegin(strBuild);
 		MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.ClassName),
-		                                     ClassNameHelper.GetClassName(typeMetadata.Signature));
+		                                     ITypeInformation.GetJavaClassName(typeMetadata));
 		MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Kind), $"{typeMetadata.Kind}");
 		switch (typeMetadata)
 		{

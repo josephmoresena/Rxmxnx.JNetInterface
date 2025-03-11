@@ -28,7 +28,7 @@ public abstract partial class EnvironmentProxy
 		    typeMetadata.ClassName.SequenceEqual(jClass.Name)) return;
 		IMessageResource resource = IMessageResource.GetInstance();
 		String objectClassName = ClassNameHelper.GetClassName(jClass.ClassSignature);
-		String className = ClassNameHelper.GetClassName(typeMetadata.Signature);
+		String className = ITypeInformation.GetJavaClassName(typeMetadata);
 		throw new ArgumentException(resource.NotTypeObject(objectClassName, className));
 	}
 	/// <summary>

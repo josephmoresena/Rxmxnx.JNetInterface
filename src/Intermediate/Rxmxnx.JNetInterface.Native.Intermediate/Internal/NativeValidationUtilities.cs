@@ -16,7 +16,7 @@ internal static class NativeValidationUtilities
 	{
 		if (classTypeMetadata.Modifier != JTypeModifier.Abstract) return;
 		IMessageResource resource = IMessageResource.GetInstance();
-		String className = ClassNameHelper.GetClassName(classTypeMetadata.Signature);
+		String className = ITypeInformation.GetJavaClassName(classTypeMetadata);
 		String message = resource.AbstractClass(className);
 		throw new InvalidOperationException(message);
 	}
@@ -78,7 +78,7 @@ internal static class NativeValidationUtilities
 	{
 		if (!isAnnotation) return;
 		IMessageResource resource = IMessageResource.GetInstance();
-		String interfaceName = ClassNameHelper.GetClassName(interfaceMetadata.Signature);
+		String interfaceName = ITypeInformation.GetJavaClassName(interfaceMetadata);
 		String message = resource.AnnotationType(interfaceName, typeName.GetString());
 		throw new InvalidOperationException(message);
 	}
@@ -95,7 +95,7 @@ internal static class NativeValidationUtilities
 	{
 		IMessageResource resource = IMessageResource.GetInstance();
 		String typeNameString = typeName.GetString();
-		String interfaceName = ClassNameHelper.GetClassName(interfaceMetadata.Signature);
+		String interfaceName = ITypeInformation.GetJavaClassName(interfaceMetadata);
 		String message = isClass ?
 			resource.InvalidImplementation(interfaceName, typeNameString) :
 			resource.InvalidExtension(interfaceName, typeNameString);
@@ -119,7 +119,7 @@ internal static class NativeValidationUtilities
 		if (notContained.Count == 0) return;
 		IMessageResource resource = IMessageResource.GetInstance();
 		String typeNameString = typeName.GetString();
-		String interfaceName = ClassNameHelper.GetClassName(interfaceMetadata.Signature);
+		String interfaceName = ITypeInformation.GetJavaClassName(interfaceMetadata);
 		String message = isClass switch
 		{
 			true when notContained.Count == 1 => resource.InvalidImplementation(

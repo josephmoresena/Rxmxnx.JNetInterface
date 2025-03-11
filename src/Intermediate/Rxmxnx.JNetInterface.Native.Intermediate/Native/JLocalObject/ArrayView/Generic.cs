@@ -71,7 +71,7 @@ public partial class JLocalObject
 				String value = $"{elementName}[{this.Length}]{String.Concat(Enumerable.Repeat("[]", dimension - 1))}";
 				this._stringValue = matchClass ?
 					value :
-					$"{value} {ClassNameHelper.GetClassName(this.TypeMetadata.Signature)}";
+					$"{value} {ITypeInformation.GetJavaClassName(this.TypeMetadata)}";
 				return this._stringValue;
 			}
 		}

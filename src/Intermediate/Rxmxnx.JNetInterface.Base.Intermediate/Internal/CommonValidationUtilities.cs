@@ -37,7 +37,7 @@ internal static class CommonValidationUtilities
 	{
 		JDataTypeMetadata metadata = IDataType.GetMetadata<TReference>();
 		IMessageResource resource = IMessageResource.GetInstance();
-		String className = ClassNameHelper.GetClassName(metadata.Signature);
+		String className = ITypeInformation.GetJavaClassName(metadata);
 		String message = resource.InvalidInstantiation(className);
 		throw new InvalidOperationException(message);
 	}
@@ -113,7 +113,7 @@ internal static class CommonValidationUtilities
 	{
 		if (allowedCast) return;
 		IMessageResource resource = IMessageResource.GetInstance();
-		String className = ClassNameHelper.GetClassName(typeMetadata.Signature);
+		String className = ITypeInformation.GetJavaClassName(typeMetadata);
 		String message = resource.InvalidCastTo(className);
 		throw new InvalidCastException(message);
 	}
@@ -185,7 +185,7 @@ internal static class CommonValidationUtilities
 		if (dataTypeMetadata.IsValidForType(typeOfT)) return;
 
 		IMessageResource resource = IMessageResource.GetInstance();
-		String className = ClassNameHelper.GetClassName(dataTypeMetadata.Signature);
+		String className = ITypeInformation.GetJavaClassName(dataTypeMetadata);
 		String message = resource.InvalidMetadata(className, typeOfT);
 		throw new ArgumentException(message);
 	}
