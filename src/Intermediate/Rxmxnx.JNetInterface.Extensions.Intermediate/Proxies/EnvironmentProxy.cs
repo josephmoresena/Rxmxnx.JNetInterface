@@ -181,15 +181,15 @@ public abstract partial class EnvironmentProxy
 	/// <summary>
 	/// Creates a <see cref="JDirectByteBufferObject"/> instance.
 	/// </summary>
-	/// <param name="memory">A <see cref="IFixedMemory"/> instance.</param>
+	/// <param name="address">A <see cref="IntPtr"/> instance.</param>
 	/// <returns>A direct <see cref="JDirectByteBufferObject"/> instance.</returns>
-	public abstract JDirectByteBufferObject NewDirectByteBuffer(IFixedMemory.IDisposable memory);
+	public abstract JDirectByteBufferObject NewDirectByteBuffer(IntPtr address);
 	/// <summary>
 	/// Creates an ephemeral <see cref="JDirectByteBufferObject"/> instance.
 	/// </summary>
 	/// <param name="capacity">Capacity of created buffer.</param>
 	/// <returns>A <see cref="JDirectByteBufferObject"/> instance.</returns>
-	public abstract JDirectByteBufferObject CreateEphemeralByteBuffer(Int32 capacity);
+	public abstract JDirectByteBufferObject NewDirectByteBuffer(Int32 capacity);
 	#endregion
 
 	#region IClassFeature

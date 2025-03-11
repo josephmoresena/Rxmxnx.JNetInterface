@@ -177,6 +177,21 @@ public abstract partial class EnvironmentProxy
 		return (TGlobal?)result ?? throw new ArgumentException(IMessageResource.GetInstance().InvalidGlobalObject);
 	}
 	/// <summary>
+	/// Creates a <see cref="JDirectByteBufferObject"/> instance.
+	/// </summary>
+	/// <typeparam name="T">Type of <see langword="unmanaged"/> items in <paramref name="memory"/>.</typeparam>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="memory">A <see cref="Memory{T}"/> instance.</param>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JDirectByteBufferObject"/> instance.</returns>
+	public static JDirectByteBufferObject CreateDirectByteBuffer<T>(JClassObject jClass, Memory<T> memory,
+		JObjectLocalRef localRef) where T : unmanaged
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jClass);
+		EnvironmentProxy.ThrowIfNotClass(jClass, IDataType.GetMetadata<JDirectByteBufferObject>());
+		return new(jClass, memory.GetFixedContext(), localRef);
+	}
+	/// <summary>
 	/// Sets <paramref name="length"/> as <paramref name="jArray"/>'s length.
 	/// </summary>
 	/// <param name="jArray">A <see cref="JArrayObject"/> instance.</param>
