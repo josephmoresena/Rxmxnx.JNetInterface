@@ -190,30 +190,12 @@ The following table illustrates how data type mapping works.
 All types interoperable with JNI implement the `IObject` interface, and all types either extend or can be converted to
 the `JObject` class.
 
-                    ┌──  ILocalObject  ─┬──  IInterfaceObject<>  
-       IObject  ────┤                   └──  IArrayObject<> 
-                    │                   ┌──  IPrimitiveType  ──┐    
-                    └──  IDataType  ────┼──  IDataType<>  ─────┼──  IPrimitiveType<>  
-                                        └──  IReferenceType  ──┼──  IReferenceType<>  ─┐          
-                                                               ├──  IArrayType         │
-                                                               ├──  IEnumType  ────────┼──  IEnumType<> 
-                                                               ├──  IInterfaceType  ───┼──  IInterfaceType<> 
-                                                               └──  IClassType  ───────┼──  IClassType<>  ────────┬──  IThrowableType<> 
-                                                                                       │                          ├──  IPrimitiveWrapperType<> 
-                                                                                       └──  IUninstantiableType  ─┴──  IUninstantiableType<>
+![InterfaceHierarchy](https://github.com/user-attachments/assets/b7bc1605-ad6b-48fb-abf2-8e937a433809)
 
 All instances of objects interoperable with JNI are instances of the `JObject` class. In the case of primitives, the
 conversion to `JObject` occurs through boxing.
 
-                    ┌──  JPrimitiveObject (Internal Boxing)                                       ┌──  JLocalObject.ArrayView  ──  JArrayObject<>
-       JObject  ────┤                        ┌──  JReferenceObject.View  ──  JLocalObject.View  ──┤
-                    │                        │                   ┌──  JWeak                       └──  JLocalObject.InterfaceView  ──  JInterfaceObject<>  ──  JInterfaceObject<>  ──  JAnnotationObject<>
-                    └──  JReferenceObject  ──┼──  JGlobalBase  ──┤
-                                             │                   ├──  JGlobal
-                                             │                   ├──  JEnumObject  ──  JEnumObject<>
-                                             │                   ├──  JArrayObject 
-                                             └──  JLocalObject ──┼──  JNumberObject  ──  JNumberObject<>  ──  JNumberObject<,>
-                                                                 └──  JThrowableObject
+![JavaObjectHierarchy](https://github.com/user-attachments/assets/5957fc7d-2f3c-41cf-9cdf-be85939419c5)
 
 #### Object Casting
 
@@ -936,9 +918,7 @@ JNI allows access to Java fields, both class (static) and instance fields.
 This access can be read (`get`) or write (`set`).
 `Rxmxnx.JNetInterface` provides the same functionality through `JFieldDefinition` instances.
 
-                                                            ┌──  JFieldDefinition<> (Generic)
-       JAccessibleObjectDefinition  ──  JFieldDefinition  ──┤
-                                                            └──  JNonTypedFieldDefinition
+![FieldDefinitionHierarchy](https://github.com/user-attachments/assets/691a60f9-091a-4752-8813-b2c84576bc0f)
 
 **Notes:**
 
@@ -976,11 +956,7 @@ object, they are referred to as functions.
 `Rxmxnx.JNetInterface` provides the same functionality through `JCallDefinition` instances. Constructors are not
 considered static functions in JNI but share a strong similarity with them when invoked.
 
-                                                           ┌──  JMethodDefinition  ──  JMethodDefinition.Parameterless      
-       JAccessibleObjectDefinition  ──  JCallDefinition  ──┼── JConstructorDefinition  ──  JConstructorDefinition.Parameterless
-                                                           │                           ┌──  JFunctionDefinition<> (Generic)  ──  JFunctionDefinition<>.Parameterless
-                                                           └──  JFunctionDefinition  ──┤
-                                                                                       └──  JNonTypedFunctionDefinition
+![CallDefinitionHierarchy](https://github.com/user-attachments/assets/835e54d4-f2c3-4d8e-a9df-cb1aeed00d49)
 
 **Notes:**
 
@@ -1195,15 +1171,7 @@ supported.
 The NIO object hierarchy may vary depending on the JVM implementation, but in `Rxmxnx.JNetInterface`, the following
 hierarchy is established:
 
-                                                ┌──  JDirectBufferObject
-       IInterfaceObject<JDirectBufferObject>  ──┴──  IDirectBufferObject  ──  IDirectBufferObject<>  ──┐
-                                           ┌──  JByteBuffer  ──  JMappedByteBufferObject  ─────────────┴──  JDirectByteBufferObject 
-                                           ├──  JCharBufferObject 
-                                           ├──  JDoubleBufferObject 
-       JBufferObject  ──  JByteBuffer<>  ──┼──  JFloatBufferObject 
-                                           ├──  JIntBufferObject 
-                                           ├──  JLongBufferObject 
-                                           └──  JShortBufferObject
+![BufferHierarchy](https://github.com/user-attachments/assets/c9fc3743-da67-47ea-aa00-a4c4bf633d92)
 
 `JBufferObject` class exposes the following properties:
 
@@ -1246,9 +1214,7 @@ more .NET-friendly manner.
 
 Just like in Java, the `java.Lang.Throwable` class hierarchy is:
 
-                           ┌──  JErrorObject
-                           │
-       JThrowableObject  ──┴──  JExceptionObject  ──  JRuntimeExceptionObject
+![ThrowableHierarchy](https://github.com/user-attachments/assets/bd0d9f7e-1c1e-40da-b4c8-cdf56e70867e)
 
 **Note:** `Rxmxnx.JNetInterface` provides several built-in `Throwable` types that may be thrown during basic operations.
 However, this can introduce additional memory and performance costs. To optimize performance, the automatic registration
@@ -1297,9 +1263,7 @@ by the CLR.
 
 The hierarchy of managed exceptions is:
 
-                       ┌──  CriticalException
-                       │
-       JniException  ──┴──  ThrowableException
+![ExceptionHierarchy](https://github.com/user-attachments/assets/67ed7df3-bc05-4768-ad1e-d95e3df8ed6a)
 
 `JniException` exceptions occur when a JNI call returns a value other than Ok.
 The identified values of JResult are: Ok, Error, DetachedThreadError, VersionError, MemoryError, ExitingError,
