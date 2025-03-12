@@ -526,6 +526,8 @@ JNI.
 By leveraging the strong typing features of the .NET platform, it is possible to perform operations on object instances
 or their corresponding Java class instances.
 
+![DataTypeMetadataHierarchy](https://github.com/user-attachments/assets/30c7d610-e874-40a3-957f-4ea4149626e2)
+
 The metadata exposes the following properties:
 
 - `ClassName`: This name is the JNI name of the class identified by the metadata. For example, the class
