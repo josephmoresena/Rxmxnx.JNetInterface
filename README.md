@@ -33,9 +33,9 @@
                     - [Fixed Frame](#fixed-frame)
             - [Global Reference Handling](#global-reference-handling)
             - [Global-Weak Reference Handling](#global-weak-reference-handling)
-            - [Type Metadata](#type-metadata)
-                - [Metadata Builder](#metadata-builder)
-                - [Jagged Array Type Metadata](#jagged-array-type-metadata)
+        - [Type Metadata](#type-metadata)
+            - [Metadata Builder](#metadata-builder)
+            - [Jagged Array Type Metadata](#jagged-array-type-metadata)
             - [Argument Metadata](#argument-metadata)
         - [Java Class Handling](#java-class-handling)
         - [Java String Handling](#java-string-handling)
@@ -519,7 +519,7 @@ To remove the global reference from a `JWeak` instance, call its `.Dispose()` me
 - If a valid `JWeak` instance is associated with a `JLocalObject` instance, that reference will always be used, even if
   a local reference is loaded for that instance, unless a valid `JGlobal` instance exists for the same object.
 
-#### Type Metadata
+### Type Metadata
 
 Type metadata objects allow `Rxmxnx.JNetInterface` to identify at runtime the types of Java objects referenced through
 JNI.
@@ -567,7 +567,7 @@ The metadata exposes the following properties:
   release version of a product using `Rxmxnx.JNetInterface`. To disable this implementation, the feature switch
   `JNetInterface.DisableTypeMetadataToString` can be used.
 
-##### Metadata Builder
+#### Metadata Builder
 
 Builders are classes found in the base classes used to initialize type metadata.
 It is recommended to use a single metadata instance to improve runtime performance. <br/>
@@ -604,7 +604,7 @@ These types are `ref struct`, so they are not compatible with the Visual Basic l
 release build, this validation can be disabled using the feature switch `JNetInterface.DisableMetadataValidation`,
 as its primary purpose is design-time validation.
 
-##### Jagged Array Type Metadata
+#### Jagged Array Type Metadata
 
 In Java, unlike .NET, there are no multidimensional arrays. Instead, Java uses arrays of arrays. Due to this definition,
 `Rxmxnx.JNetInterface` uses reflection to create the metadata for this type of array at runtime to ensure compatibility
