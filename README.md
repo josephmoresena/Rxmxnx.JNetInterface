@@ -209,8 +209,9 @@ conversion to `JObject` occurs through boxing.
        JObject  ────┤                        ┌──  JReferenceObject.View  ──  JLocalObject.View  ──┤
                     │                        │                   ┌──  JWeak                       └──  JLocalObject.InterfaceView  ──  JInterfaceObject<>  ──  JInterfaceObject<>  ──  JAnnotationObject<>
                     └──  JReferenceObject  ──┼──  JGlobalBase  ──┤
-                                             │                   └──  JGlobal
-                                             │                   ┌──  JArrayObject 
+                                             │                   ├──  JGlobal
+                                             │                   ├──  JEnumObject  ──  JEnumObject<>
+                                             │                   ├──  JArrayObject 
                                              └──  JLocalObject ──┼──  JNumberObject  ──  JNumberObject<>  ──  JNumberObject<,>
                                                                  └──  JThrowableObject
 
