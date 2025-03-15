@@ -146,7 +146,7 @@ public abstract partial class EnvironmentProxy
 	/// </summary>
 	/// <param name="jClass">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>A <see cref="ITypeInformation"/> instance.</returns>
-	public abstract IWrapper<ITypeInformation> GetClassInfo(JReferenceObject jClass);
+	public abstract IWrapper.IBase<ITypeInformation> GetClassInfo(JReferenceObject jClass);
 	#endregion
 
 	#region IStringFeature

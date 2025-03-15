@@ -14,8 +14,6 @@ public abstract partial class EnvironmentProxy : NativeFunctionSet, IEnvironment
 	INioFeature IEnvironment.NioFeature => this;
 	NativeFunctionSet IEnvironment.FunctionSet => this;
 	
-	
-	/// <inheritdoc/>
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
 		Int32? oldCapacity = capacity;
