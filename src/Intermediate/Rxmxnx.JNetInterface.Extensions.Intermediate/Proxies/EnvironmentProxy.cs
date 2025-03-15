@@ -45,68 +45,6 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract Boolean JniSecure();
 	/// <inheritdoc/>
-	public virtual void WithFrame(Int32 capacity, Action action)
-	{
-		Int32? oldCapacity = capacity;
-		try
-		{
-			this.LocalCapacity = capacity;
-			action();
-		}
-		finally
-		{
-			this.LocalCapacity = oldCapacity;
-		}
-	}
-	/// <inheritdoc/>
-	public virtual void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
-#if NET9_0_OR_GREATER
-	where TState : allows ref struct
-#endif
-	{
-		Int32? oldCapacity = capacity;
-		try
-		{
-			this.LocalCapacity = capacity;
-			action(state);
-		}
-		finally
-		{
-			this.LocalCapacity = oldCapacity;
-		}
-	}
-	/// <inheritdoc/>
-	public virtual TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func)
-	{
-		Int32? oldCapacity = capacity;
-		try
-		{
-			this.LocalCapacity = capacity;
-			return func();
-		}
-		finally
-		{
-			this.LocalCapacity = oldCapacity;
-		}
-	}
-	/// <inheritdoc/>
-	public virtual TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
-#if NET9_0_OR_GREATER
-	where TState : allows ref struct
-#endif
-	{
-		Int32? oldCapacity = capacity;
-		try
-		{
-			this.LocalCapacity = capacity;
-			return func(state);
-		}
-		finally
-		{
-			this.LocalCapacity = oldCapacity;
-		}
-	}
-	/// <inheritdoc/>
 	public abstract void DescribeException();
 	/// <inheritdoc/>
 	public abstract Boolean? IsVirtual(JThreadObject jThread);
