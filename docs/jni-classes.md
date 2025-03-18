@@ -82,9 +82,10 @@ NativeAOT allows
 creating [dynamic libraries from .NET code](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/libraries),
 making it possible to build JNI libraries with `Rxmxnx.JNetInterface`.
 
-Native Java calls implemented in JNI libraries must follow specific conventions for parameters and naming. Previously,
-we explained how a .NET method can be set as an implementation for a Java native call at runtime, but for JNI to
-recognize an exported native symbol in a dynamic library, it must follow the following naming convention:
+Native Java calls implemented in JNI libraries must follow specific conventions for parameters and naming.
+[Here](jni-accessing.md#defining-native-java-calls) is explained how a .NET method can be set as an implementation
+for a Java native call at runtime, but for JNI to recognize an exported native symbol in a dynamic library, it must
+follow the following naming convention:
 
 Java_package_ClassName_methodName
 
