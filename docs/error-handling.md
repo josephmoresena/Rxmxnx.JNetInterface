@@ -1,137 +1,146 @@
 # Java Error Handling
 
-JNI allows handling errors and exceptions within native code. `Rxmxnx.JNetInterface` follows the same principle but in a
+JNI allows handling errors and exceptions within native code. `Rxmxnx.JNetInterface` follows this principle but in a
 more .NET-friendly manner.
 
-Just like in Java, the `java.Lang.Throwable` class hierarchy is:
+The `java.lang.Throwable` class hierarchy in Java is as follows:
 
 ![ThrowableHierarchy](https://github.com/user-attachments/assets/bd0d9f7e-1c1e-40da-b4c8-cdf56e70867e)
 
-**Note:** `Rxmxnx.JNetInterface` provides several built-in `Throwable` types that may be thrown during basic operations.
-However, this can introduce additional memory and performance costs. To optimize performance, the automatic registration
-of these types can be disabled using the feature switch `JNetInterface.DisableBuiltInThrowableAutoRegistration`.
+## Additional Throwable Types
 
-The additional throwable types are:
+The following Java throwable types are mapped in `Rxmxnx.JNetInterface`:
 
-- `java.lang.LinkageError` (`JLinkageErrorObject`)
-- `java.lang.ClassCircularityError` (`JClassCircularityErrorObject`)
-- `java.lang.UnsatisfiedLinkError` (`JUnsatisfiedLinkErrorObject`)
-- `java.lang.ClassFormatError` (`JClassFormatErrorObject`)
-- `java.lang.ExceptionInInitializerError` (`JExceptionInInitializerErrorObject`)
-- `java.lang.IncompatibleClassChangeError` (`JIncompatibleClassChangeErrorObject`)
-- `java.lang.NoSuchFieldError` (`JNoSuchFieldErrorObject`)
-- `java.lang.NoSuchMethodError` (`JNoSuchMethodErrorObject`)
-- `java.lang.NoClassDefFoundError` (`JNoClassDefFoundErrorObject`)
-- `java.lang.VirtualMachineError` (`JVirtualMachineErrorObject`)
-- `java.lang.InternalError` (`JInternalErrorObject`)
-- `java.lang.OutOfMemoryError` (`JOutOfMemoryErrorObject`)
-- `java.lang.SecurityException` (`JSecurityExceptionObject`)
-- `java.lang.InterruptedException` (`JInterruptedExceptionObject`)
-- `java.text.ParseException` (`JParseExceptionObject`)
-- `java.io.IOException` (`JIoExceptionObject`)
-- `java.io.FileNotFoundException` (`JFileNotFoundExceptionObject`)
-- `java.net.MalformedURLException` (`JMalformedUrlExceptionObject`)
-- `java.lang.ReflectiveOperationException` (`JReflectiveOperationExceptionObject`)
-- `java.lang.InstantiationException` (`JInstantiationExceptionObject`)
-- `java.lang.ClassNotFoundException` (`JClassNotFoundExceptionObject`)
-- `java.lang.IllegalAccessException` (`JIllegalAccessExceptionObject`)
-- `java.lang.reflect.InvocationTargetException` (`JInvocationTargetExceptionObject`)
-- `java.lang.ArrayStoreException` (`JArrayStoreExceptionObject`)
-- `java.lang.NullPointerException` (`JNullPointerExceptionObject`)
-- `java.lang.IllegalStateException` (`JIllegalStateExceptionObject`)
-- `java.lang.ClassCastException` (`JClassCastExceptionObject`)
-- `java.lang.ArithmeticException` (`JArithmeticExceptionObject`)
-- `java.lang.IllegalArgumentException` (`JIllegalArgumentExceptionObject`)
-- `java.lang.NumberFormatException` (`JNumberFormatExceptionObject`)
-- `java.lang.IndexOutOfBoundsException` (`JIndexOutOfBoundsExceptionObject`)
-- `java.lang.ArrayIndexOutOfBoundsException` (`JArrayIndexOutOfBoundsExceptionObject`)
-- `java.lang.StringIndexOutOfBoundsException` (`JStringIndexOutOfBoundsExceptionObject`)
+- **Errors**
+    - `java.lang.LinkageError` → `JLinkageErrorObject`
+    - `java.lang.ClassCircularityError` → `JClassCircularityErrorObject`
+    - `java.lang.UnsatisfiedLinkError` → `JUnsatisfiedLinkErrorObject`
+    - `java.lang.ClassFormatError` → `JClassFormatErrorObject`
+    - `java.lang.ExceptionInInitializerError` → `JExceptionInInitializerErrorObject`
+    - `java.lang.IncompatibleClassChangeError` → `JIncompatibleClassChangeErrorObject`
+    - `java.lang.NoSuchFieldError` → `JNoSuchFieldErrorObject`
+    - `java.lang.NoSuchMethodError` → `JNoSuchMethodErrorObject`
+    - `java.lang.NoClassDefFoundError` → `JNoClassDefFoundErrorObject`
+    - `java.lang.VirtualMachineError` → `JVirtualMachineErrorObject`
+    - `java.lang.InternalError` → `JInternalErrorObject`
+    - `java.lang.OutOfMemoryError` → `JOutOfMemoryErrorObject`
+
+- **Exceptions**
+    - `java.lang.SecurityException` → `JSecurityExceptionObject`
+    - `java.lang.InterruptedException` → `JInterruptedExceptionObject`
+    - `java.text.ParseException` → `JParseExceptionObject`
+    - `java.io.IOException` → `JIoExceptionObject`
+    - `java.io.FileNotFoundException` → `JFileNotFoundExceptionObject`
+    - `java.net.MalformedURLException` → `JMalformedUrlExceptionObject`
+    - `java.lang.ReflectiveOperationException` → `JReflectiveOperationExceptionObject`
+    - `java.lang.InstantiationException` → `JInstantiationExceptionObject`
+    - `java.lang.ClassNotFoundException` → `JClassNotFoundExceptionObject`
+    - `java.lang.IllegalAccessException` → `JIllegalAccessExceptionObject`
+    - `java.lang.reflect.InvocationTargetException` → `JInvocationTargetExceptionObject`
+    - `java.lang.ArrayStoreException` → `JArrayStoreExceptionObject`
+    - `java.lang.NullPointerException` → `JNullPointerExceptionObject`
+    - `java.lang.IllegalStateException` → `JIllegalStateExceptionObject`
+    - `java.lang.ClassCastException` → `JClassCastExceptionObject`
+    - `java.lang.ArithmeticException` → `JArithmeticExceptionObject`
+    - `java.lang.IllegalArgumentException` → `JIllegalArgumentExceptionObject`
+    - `java.lang.NumberFormatException` → `JNumberFormatExceptionObject`
+    - `java.lang.IndexOutOfBoundsException` → `JIndexOutOfBoundsExceptionObject`
+    - `java.lang.ArrayIndexOutOfBoundsException` → `JArrayIndexOutOfBoundsExceptionObject`
+    - `java.lang.StringIndexOutOfBoundsException` → `JStringIndexOutOfBoundsExceptionObject`
+
+However, using them may introduce additional memory and performance costs. To optimize performance, automatic
+registration of these types can be disabled with the feature switch
+`JNetInterface.DisableBuiltInThrowableAutoRegistration`.
 
 ## JNI Error Handling
 
-JNI can generate errors when executing a process. `Rxmxnx.JNetInterface` maps these errors to throw exceptions managed
-by the CLR.
+JNI can generate errors during execution, and `Rxmxnx.JNetInterface` maps these errors to managed CLR exceptions.
 
-The hierarchy of managed exceptions is:
+The managed exception hierarchy is as follows:
 
 ![ExceptionHierarchy](https://github.com/user-attachments/assets/67ed7df3-bc05-4768-ad1e-d95e3df8ed6a)
 
-`JniException` exceptions occur when a JNI call returns a value other than Ok.
-The identified values of JResult are: Ok, Error, DetachedThreadError, VersionError, MemoryError, ExitingError,
-InvalidArgumentsError.
+### `JniException`
 
-To determine the result that triggered the exception, the `Result` property can be consulted.
+A `JniException` occurs when a JNI call returns a value other than `Ok`.  
+The possible `JResult` values include:
 
-Although a JNI method can return any arbitrary negative JResult value, only the value `0 (Ok)` is considered a non-error
-result. All other values are considered errors.
+- `Ok`
+- `Error`
+- `DetachedThreadError`
+- `VersionError`
+- `MemoryError`
+- `ExitingError`
+- `InvalidArgumentsError`
 
-`ThrowableException` exceptions represent pending throwable instances thrown in the JVM.
+Only `0 (Ok)` is considered a non-error result. Any other value is treated as an error. To determine the specific result
+that triggered an exception, use the `Result` property.
 
-These exceptions are instances of `IThrowableException`. If the throwable type thrown in the JVM is mapped and
-registered (or one of its superclasses) in `Rxmxnx.JNetInterface`, the `ThrowableException` instance will be of the
-`IThrowableException<>` type of the registered throwable.
+### `ThrowableException`
 
-Unlike pure `JniException` exceptions (resulting from a JNI error response), `ThrowableException` instances require
-special handling. Similar to JNI, `Rxmxnx.JNetInterface` restricts API usage in the presence of a pending exception.
+A `ThrowableException` represents a pending throwable instance raised in the JVM. These exceptions implement
+`IThrowableException`. If the thrown type is mapped and registered (or if one of its superclasses is registered), the
+`ThrowableException` instance will be of covariant type `IThrowableException<>`.
 
-The `ThrowableException` class exposes the following properties:
+Unlike `JniException`, `ThrowableException` requires special handling. Similar to JNI, `Rxmxnx.JNetInterface` restricts
+API usage when an exception is pending.
 
-- `EnvironmentRef`: Reference to the environment (JVM-attached thread) where the throwable instance was thrown.
-- `ThreadId`: Identifier of the CLR-managed thread where the throwable instance was thrown.
-- `ThrowableRef`: Global JNI reference to the thrown throwable instance. This reference will be released when the CLR
-  garbage collector finds no strong references to the `ThrowableException` instance.
+#### Properties
 
-When a `ThrowableException` is pending,
-only [certain specific JNI functions](https://developer.android.com/training/articles/perf-jni?hl=en#exceptions) can be
-executed. Any process involving a different type of JNI call will result in an `InvalidOperationException` being thrown
-in the CLR.
+- **`EnvironmentRef`**: Reference to the JVM-attached thread where the exception occurred.
+- **`ThreadId`**: Identifier of the CLR-managed thread where the exception occurred.
+- **`ThrowableRef`**: A global JNI reference to the thrown instance.
+    - This reference is released when the CLR garbage collector finds no strong references to the `ThrowableException`
+      instance.
 
-When the environment in which the exception occurs is in a critical state, `Rxmxnx.JNetInterface` will throw a
-`CriticalException` in the CLR. Only when the current environment exits the critical state can the
-`ThrowableException` be thrown.
+### Handling Pending Exceptions
 
-To retrieve and set (throw) the pending exception in the JVM, the `PendingException` property of the `IEnvironment`
-interface can be used.
+When a `ThrowableException` is pending, only a limited set of JNI functions can be executed. Any attempt to use
+restricted JNI functions will result in an `InvalidOperationException` in the CLR.
 
-- If the property returns `null`, it means the current thread has no pending exceptions in the JVM.
-- Setting the property to `null` clears the current pending exception, equivalent to the JNI `ExceptionClear` call.
-- If attempt to use the property to retrieve the pending exception or to rethrow an exception while in a critical
-  state, a `CriticalException` will be thrown in the CLR.
+If the environment is in a critical state, `Rxmxnx.JNetInterface` throws a `CriticalException` in the CLR. Once the
+critical state ends, the `ThrowableException` can be properly handled.
 
-To safely manipulate the `JThrowableObject` instance behind the exception, the `ThrowableException` class provides the
-following APIs:
+To retrieve or rethrow a pending exception in the JVM, use the `PendingException` property of the `IEnvironment`
+interface:
 
-- `WithSafeInvoke(Action<JThrowableObject>)`: Creates a `JThrowableObject` instance and executes the delegate in a safe
-  environment for any JNI call.
-- `WithSafeInvoke<TResult>(Func<JThrowableObject, TResult>)`: Creates a `JThrowableObject` instance and executes the
-  delegate in a safe environment for any JNI call, returning the execution result.
+- If `PendingException` returns `null`, no exception is pending.
+- Setting `PendingException` to `null` clears the current exception (equivalent to JNI `ExceptionClear`).
+- Attempting to retrieve or rethrow an exception in a critical state will result in a `CriticalException`.
 
-The `IThrowableException<>` interface exposes the same methods for the specific throwable type. For example, if the
-exception is an instance of `IThrowableException<JErrorObject>`, the delegate parameters change to
-`Action<JErrorObject>` and `Func<JErrorObject, TResult>`.
+### Safe Exception Handling
 
-**Notes:**
+To safely manipulate a `JThrowableObject` from an exception, use:
 
-- The `WithSafeInvoke` methods ensure a clean execution environment by creating a new thread attached to the JVM and
-  executing the delegates on that thread.
-- If exception information only needs to be sent to the error reporting channel, the `DescribeException()` method of the
-  `IEnvironment` instance with the pending exception can be used.
-- `ThrowableException` instances cannot be created directly, meaning the environment's `PendingException` property can
-  only be used to rethrow exceptions already created in the system.
-- To throw exceptions from a specific `JThrowableObject` instance, the `Throw(Boolean)` method can be used. This will
-  create the exception, set it as pending in the environment, and throw it in the CLR if the boolean parameter specifies
-  so.
+- **`WithSafeInvoke(Action<JThrowableObject>)`**
+- **`WithSafeInvoke<TResult>(Func<JThrowableObject, TResult>)`**
 
-The `JThrowableObject` class allows exceptions instance of any throwable type to be thrown by specifying the message via
-JNI:
+These methods execute in a clean JNI environment, ensuring safe handling.
 
-- `Throw(JClassObject, String, Boolean)`: Throws an exception instanceof the given class type with the specified
-  message. It will throw in the CLR if the boolean parameter specifies so.
-- `Throw(JClassObject, CString, Boolean)`: Throws an exception instance of the given class type with the specified
-  message. It will throw in the CLR if the boolean parameter specifies so.
-- `Throw<TThrowable>(IEnvironment, String, Boolean)`: Throws an exception instance of the generic throwable type with
-  the specified message. It will throw in the CLR if the boolean parameter specifies so.
-- `Throw<TThrowable>(IEnvironment, CString, Boolean)`: Throws an exception instanceof the generic throwable type with
-  the specified message. It will throw in the CLR if the boolean parameter specifies so.
+If the exception type is mapped, the interface `IThrowableException<TThrowable>` provides type-specific variants:
 
-**Note:** The static methods `Throw` and `Throw<>` use the JNI `ThrowNew` call.
+- **`WithSafeInvoke(Action<TThrowable>)`**
+- **`WithSafeInvoke<TResult>(Func<TThrowable, TResult>)`**
+
+#### Notes
+
+- `WithSafeInvoke` ensures a clean execution environment by running in a new thread attached to the JVM. During the
+  execution of these methods, a global-weak reference is created to reference the `java.lang.Throwable` instance that
+  represents the exception.
+- To log exception details without throwing, use `DescribeException()` on the `IEnvironment` instance.
+- `ThrowableException` instances cannot be manually created. They can only be retrieved from `PendingException`.
+- To throw a specific `JThrowableObject`, use `Throw(Boolean)`.
+
+## Throwing Exceptions via JNI
+
+The `JThrowableObject` class allows throwing Java exceptions with a custom message:
+
+```csharp
+Throw(JClassObject, String, Boolean)
+Throw(JClassObject, CString, Boolean)
+Throw<TThrowable>(IEnvironment, String, Boolean)
+Throw<TThrowable>(IEnvironment, CString, Boolean)
+```  
+
+These methods use the JNI `ThrowNew` call to throw an exception in the JVM. If the boolean parameter is `true`, the
+exception is also thrown in the CLR.  

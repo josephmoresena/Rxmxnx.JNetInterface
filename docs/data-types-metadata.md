@@ -1,115 +1,111 @@
 # Type Metadata
 
-Type metadata objects allow `Rxmxnx.JNetInterface` to identify at runtime the types of Java objects referenced through
-JNI.
-By leveraging the strong typing features of the .NET platform, it is possible to perform operations on object instances
-or their corresponding Java class instances.
+Type metadata objects enable `Rxmxnx.JNetInterface` to identify Java object types referenced through JNI at runtime.  
+By leveraging .NET's strong typing features, it is possible to perform operations on object instances or their
+corresponding Java class instances.
 
 ![DataTypeMetadataHierarchy](https://github.com/user-attachments/assets/30c7d610-e874-40a3-957f-4ea4149626e2)
 
-The metadata exposes the following properties:
+## Metadata Properties
 
-- `ClassName`: This name is the JNI name of the class identified by the metadata. For example, the class
-  `java.lang.String` (`JStringObject`) has the JNI name `java/lang/String`.
-- `Signature`: This signature allows identifying instances of the class represented by the metadata to access Java
-  fields or methods via JNI.
-  For example:
+Each metadata object exposes the following properties:
 
-- `long` (`JLong`) has the signature `J`.
-- `java.lang.String` has the signature `Ljava/lang/String;`.
+- **`ClassName`**: Represents the JNI name of the class identified by the metadata.  
+  Example: The class `java.lang.String` (`JStringObject`) has the JNI name `java/lang/String`.
+- **`Signature`**: Defines the JNI signature used to identify class instances when accessing Java fields or methods.  
+  Examples:
+    - `long` (`JLong`) → `J`
+    - `java.lang.String` → `Ljava/lang/String;`
+- **`ArraySignature`**: Used for automatic creation of generic array types.  
+  Examples:
+    - `char` → `char[]` (`JArrayObject<JChar>`) → `[C`
+    - `java.lang.String` → `java.lang.String[]` (`JArrayObject<JStringObject>`) → `[Ljava/lang/String;`
+- **`SizeOf`**: Determines the memory size required to store values returned by JNI.
+- **`ArgumentMetadata`**: Combines the type signature with its memory size.
+- **`Type`**: The CLR type corresponding to the Java class or structure identified by the metadata.
+- **`Kind`**: Specifies the Java class type.  
+  Examples:
+    - `boolean` (`JBoolean`) → Primitive
+    - `java.lang.String` → Class
+    - `java.lang.Object[]` (`JArrayObject<JLocalObject>`) → Array
+    - `java.io.Serializable` (`JSerializableObject`) → Interface
+    - `java.lang.annotation.ElementType` (`JElementTypeObject`) → Enum
+    - `java.lang.annotation.Target` (`JTargetObject`) → Annotation
+- **`Modifier`**: Indicates the class modifier.  
+  Examples:
+    - `java.lang.String` → Final
+    - `java.lang.Object` → Extensible
+    - `java.lang.Number` (`JNumberObject`) → Abstract
 
-- `ArraySignature`: This signature enables the automatic creation of the generic array type for the class identified
-  by the metadata.
-  For example:
-    - `char` -> `char[]` (`JArrayObject<JChar>`) with the signature `[C`.
-    - `java.lang.String` -> `java.lang.String[]` (`JArrayObject<JStringObject>`) with the signature
-      `[Ljava/lang/String;`.
-- `SizeOf`: This property allows JNI calls to determine the memory size required to store the value returned by JNI.
-- `ArgumentMetadata`: Combines the signature of the current type with its memory size.
-- `Type`: CLR type of the .NET class or structure representing the class identified by the metadata.
-- `Kind`: Identifies the type of the Java class represented by the metadata. For example:
-    - `boolean` (`JBoolean`): Primitive.
-    - `java.lang.String`: Class.
-    - `java.lang.Object[]` (`JArrayObject<JLocalObject>`): Array.
-    - `java.io.Serializable` (`JSerializableObject`): Interface.
-    - `java.lang.annotation.ElementType` (`JElementTypeObject`): Enum.
-    - `java.lang.annotation.Target` (`JTargetObject`): Annotation.
-- `Modifier`: Identifies the modifier of the Java class represented by the metadata.
-    - `java.lang.String`: Final.
-    - `java.lang.Object`: Extensible.
-    - `java.lang.Number` (`JNumberObject`): Abstract.
+### Notes
 
-**Notes:**
+- The hash of a data type (similar to `JClassObject` instances) is derived from the UTF-16 buffer storing the UTF-8
+  sequence containing the class name, JNI signature, and array signature.
+- Type metadata includes a `.ToString()` implementation, which may be unnecessary in release builds. To disable it, use
+  the feature switch `JNetInterface.DisableTypeMetadataToString`.
 
-- The hash of a data type (just like `JClassObject` instances) is the UTF-16 buffer used to store the UTF-8
-  sequence containing the class name, the JNI signature of the class, and the name/signature of the array for the data
-  type.
-- Type metadata has a special implementation of the `.ToString()` method, which may be unnecessary and inconvenient in a
-  release version of a product using `Rxmxnx.JNetInterface`. To disable this implementation, the feature switch
-  `JNetInterface.DisableTypeMetadataToString` can be used.
+## Metadata Builders
 
-## Metadata Builder
+Metadata builders are base classes used to initialize type metadata.  
+For optimal runtime performance, a single metadata instance should be used.  
+These builders are `ref struct` types, making them incompatible with Visual Basic.
 
-Builders are classes found in the base classes used to initialize type metadata.
-It is recommended to use a single metadata instance to improve runtime performance. <br/>
-These types are `ref struct`, so they are not compatible with the Visual Basic language.
+- **`JLocalObject.TypeMetadataBuilder<>`**
+    - Creates class-type metadata (`IClassType<>`).
+    - Requires a JNI class name.
+    - Allows specifying whether the class is `Abstract`, `Final`, or `Extensible` (default).
+    - Use `Create(ReadOnlySpan<Byte>, JTypeModifier)` for initialization.
+    - To define a superclass, use `Create<>(ReadOnlySpan<Byte>, JTypeModifier)` from the superclass builder.
+    - Supports interface implementation via `.Implements<>()`, where the CLR type must implement `IInterfaceObject<>`.
 
-- `JLocalObject.TypeMetadataBuilder<>`: This builder allows creating class-type metadata (`IClassType<>`). It must
-  always be initialized with the JNI class name. It is also possible to specify whether the class is `Abstract`
-  or `Final`, or by default `Extensible` (which allows other classes to extend it). This can be done using the static
-  method `Create(ReadOnlySpan<Byte>, JTypeModifier)`.
-  To specify that the metadata class extends another class, the static method of the superclass builder
-  `Create<>(ReadOnlySpan<Byte>, JTypeModifier)` must be used.
-  The builder also allows specifying that the metadata class implements interfaces through the `.Implements<>()`
-  method. Note that the CLR type must implement the `IInterfaceObject<>` interface.
+- **`JLocalObject.InterfaceView.TypeMetadataBuilder<>`**
+    - Creates interface or annotation-type metadata (`IInterfaceType<>`).
+    - Requires a JNI class name.
+    - Use `Create(ReadOnlySpan<Byte>)` for initialization.
+    - Supports extending other interfaces via `.Extends<>()`, requiring CLR types to implement `IInterfaceObject<>`.
 
-- `JLocalObject.InterfaceView.TypeMetadataBuilder<>`: This builder allows creating interface or annotation-type
-  metadata (`IInterfaceType<>`). It must always be initialized with the JNI class name. This can be done using the
-  static method `Create(ReadOnlySpan<Byte>, JTypeModifier)`.
-  The builder also allows specifying that the metadata interface extends other interfaces through the `.Extends<>()`
-  method. Note that the CLR type must implement the `IInterfaceObject<>` interface.
+- **`JThrowableObject.TypeMetadataBuilder<>`**
+    - Creates throwable-type metadata (`IThrowableType<>`).
+    - Requires a JNI class name.
+    - Identical to `JLocalObject.TypeMetadataBuilder<>`, except that specifying a throwable superclass is mandatory.
 
-- `JThrowableObject.TypeMetadataBuilder<>`:
-  This builder allows creating throwable-type metadata (`IThrowableType<>`).
-  It must always be initialized with the JNI class name.
-  This builder is identical to `JLocalObject.TypeMetadataBuilder<>`, but the throwable superclass must always be
-  specified.
+- **`JEnumObject.TypeMetadataBuilder<>`**
+    - Creates enum-type metadata (`IEnumObject<>`).
+    - Requires a JNI class name.
+    - Identical to `JLocalObject.TypeMetadataBuilder<>`, but enums cannot have a superclass since they all extend
+      `java.lang.Enum`.
+    - Allows adding individual values to the enum type definition using `AppendValue(Int32, CString)`.
+    - Allows adding a sequence of values to the enum type definition by specifying the offset for the ordinals using  
+      `AppendValues(Int32, ReadOnlySpan<CString>)`.
 
-- `JEnumObject.TypeMetadataBuilder<>`:
-  This builder allows creating enum-type metadata (`IEnumObject<>`). It must always be initialized with the JNI class
-  name.
-  This builder is identical to `JLocalObject.TypeMetadataBuilder<>`, but no superclass can be specified, as all enum
-  types extend the `java.lang.Enum` class.
+### Note
 
-**Note:** All `TypeMetadataBuilder<>` instances perform runtime validations during their construction. However, for a
-release build, this validation can be disabled using the feature switch `JNetInterface.DisableMetadataValidation`,
-as its primary purpose is design-time validation.
+All `TypeMetadataBuilder<>` instances perform runtime validation during construction.  
+For release builds, validation can be disabled using the feature switch `JNetInterface.DisableMetadataValidation`, as it
+is primarily intended for design-time verification.
 
 ## Jagged Array Type Metadata
 
-In Java, unlike .NET, there are no multidimensional arrays. Instead, Java uses arrays of arrays. Due to this definition,
-`Rxmxnx.JNetInterface` uses reflection to create the metadata for this type of array at runtime to ensure compatibility
-with NativeAOT.
+Unlike .NET, Java does not support multidimensional arrays—only arrays of arrays. `Rxmxnx.JNetInterface` uses reflection
+to generate metadata for these arrays at runtime, ensuring NativeAOT compatibility.
 
-However, in reflection-free AOT mode, the automatic creation of these metadata at runtime is not possible.
-Therefore, a mechanism must be used to ensure the definition of `JArrayObject<..JArrayObject<...>..>`
-is available at runtime.
+In reflection-free AOT mode, runtime metadata generation is not possible. To ensure
+`JArrayObject<..JArrayObject<...>..>` definitions are available at runtime, manual registration is required.
 
-Even if automatic metadata creation at runtime is not desired, this functionality can be disabled
-using the feature switch `JNetInterface.DisableJaggedArrayAutoGeneration`.
+To disable automatic metadata creation, use `JNetInterface.DisableJaggedArrayAutoGeneration`.
 
 ## Argument Metadata
 
-Argument metadata objects allow defining access to Java methods and fields from JNI.
-As previously mentioned, type metadata exposes a property to obtain the argument metadata for a specified type.
-However, it is also possible to retrieve it using the static method `JArgumentMetadata.Get<T>()`, where `T` is a mapped
-type.
+Argument metadata defines how Java methods and fields are accessed via JNI. Each type metadata object exposes a property
+to retrieve its argument metadata.
 
-Furthermore, if a mapped type for the argument is not available, it can be created using the method
-`JArgumentMetadata.Create(ReadOnlySpan<Byte>)`,
-where the read-only binary span contains the JNI type signature.
+Alternatively, it can be obtained using `JArgumentMetadata.Get<T>()`, where `T` is a mapped type.
 
-For example, to create the signature for `java.util.Dictionary<K,V>`, its signature should be `Ljava/util/Dictionary;`.
+If a mapped type is unavailable, use `JArgumentMetadata.Create(ReadOnlySpan<Byte>)` with a binary span containing the
+JNI type signature.  
+Example: To create metadata for `java.util.Dictionary<K,V>`, use the signature `Ljava/util/Dictionary;`.
 
-**Note:** Creating metadata for primitive types is not supported; to obtain them, the method
-`JArgumentMetadata.Get<TPrimitive>()` should be used.
+### Note
+
+Creating metadata for primitive types is not supported. To obtain primitive argument metadata, use
+`JArgumentMetadata.Get<TPrimitive>()`.  
