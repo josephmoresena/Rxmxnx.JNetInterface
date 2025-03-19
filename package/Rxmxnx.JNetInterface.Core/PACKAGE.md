@@ -10,8 +10,8 @@
 
 # Description
 
-`Rxmxnx.JNetInterface.Core` is a lightweight package that provides essential base classes and abstractions for working
-with JNI in .NET. It is designed for scenarios where direct dependency on a JVM is not required or desirable.
+`Rxmxnx.JNetInterface.Core` is a package that provides essential base classes and abstractions for working with JNI in
+.NET. It is designed for scenarios where direct dependency on a JVM is not required or desirable.
 
 ## Usage
 
