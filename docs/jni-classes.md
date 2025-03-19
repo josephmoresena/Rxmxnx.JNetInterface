@@ -1,124 +1,123 @@
 # Java Invocation API
 
-The Invocation API allows loading a JVM instance within an application. `Rxmxnx.JNetInterface` provides access to this
+The Invocation API enables loading a JVM instance within an application. `Rxmxnx.JNetInterface` provides access to this
 API through the `JVirtualMachineLibrary` class.
 
-To create an instance of this class, you can use the following static methods:
+## Creating a `JVirtualMachineLibrary` Instance
 
-- `LoadLibrary(String)`: Returns a `JVirtualMachineLibrary` instance by providing the path to the JVM library.
-- `Create(IntPtr)`: Returns a `JVirtualMachineLibrary` instance using the handle of the loaded library.
+To create an instance, use the following static methods:
 
-These methods will return a null instance if the exported symbols of the Invocation API cannot be found:
+- **`LoadLibrary(String)`**: Loads the JVM library from the specified path and returns a `JVirtualMachineLibrary`
+  instance.
+- **`Create(IntPtr)`**: Creates a `JVirtualMachineLibrary` instance using the handle of an already loaded JVM library.
 
-- `JNI_GetDefaultJavaVMInitArgs`: Returns a default configuration for the Java VM.
-- `JNI_CreateJavaVM`: Loads and initializes a Java VM. The current thread becomes the main thread.
-- `JNI_GetCreatedJavaVMs`: Returns all Java VMs that have been created.
+These methods return `null` if the required Invocation API symbols are not found:
 
-The `JVirtualMachineLibrary` class exposes the following API:
+- `JNI_GetDefaultJavaVMInitArgs`: Returns the default configuration for the JVM.
+- `JNI_CreateJavaVM`: Loads and initializes a JVM instance, attaching the current thread as the main thread.
+- `JNI_GetCreatedJavaVMs`: Retrieves all currently created JVM instances.
 
-- `Handle`: This property exposes the handle of the loaded library in the process.
-- `GetLatestSupportedVersion()`: Returns the latest JNI version supported by the loaded library.
-- `GetDefaultArgument(Int32)`: Returns the default initialization argument for the JVM based on the specified JNI
-  version.
-- `CreateVirtualMachine(JVirtualMachineInitArg, out IEnvironment)`: Creates a JVM instance from `Rxmxnx.JNetInterface`
-  and initializes the environment in the current thread. The instance returned by this method implements the
-  `IInvokedVirtualMachine` interface, as it is created by the local process and can
-  also be disposed of by it.
-- `GetCreatedVirtualMachines()`: Returns an array of all JVM instances loaded by the library. If any JVM instance is
-  not yet initialized in `Rxmxnx.JNetInterface`, the initialization algorithm will be executed before returning the
-  array.
+## `JVirtualMachineLibrary` API
 
-For more information on using the Invocation API from `Rxmxnx.JNetInterface`, refer to
-the [included example application](../src/ApplicationTest/README.md) in this repository.
+- **`Handle`**: Returns the handle of the loaded JVM library.
+- **`GetLatestSupportedVersion()`**: Retrieves the latest JNI version supported by the loaded library.
+- **`GetDefaultArgument(Int32)`**: Returns the default JVM initialization arguments for the specified JNI version.
+- **`CreateVirtualMachine(JVirtualMachineInitArg, out IEnvironment)`**: Creates a JVM instance and initializes the
+  environment in the current thread.
+    - The returned instance implements `IInvokedVirtualMachine`, as it is created and managed by the local process.
+- **`GetCreatedVirtualMachines()`**: Retrieves all JVM instances loaded by the library.
+    - If any JVM is not yet initialized in `Rxmxnx.JNetInterface`, the initialization process is executed before
+      returning the list.
 
-# JVirtualMachine Class
+For additional details, refer to the [example application](../src/ApplicationTest/README.md).
 
-The `JVirtualMachine` class implements the `IVirtualMachine` interface but also exposes APIs to manage and remove
-`JVirtualMachine` references in `Rxmxnx.JNetInterface`.
+---
 
-This class provides the following static members:
+# `JVirtualMachine` Class
 
-- `TraceEnabled`: Indicates that the `JNetInterface.EnableTrace` feature switch is active. This feature uses
-  `System.Diagnostics.Trace` for tracking scenarios and the associated JNI calls.
-- `FinalUserTypeRuntimeEnabled`: Indicates that the `JNetInterface.EnableFinalUserTypeRuntime` feature switch is
-  active.
-  This feature tells `Rxmxnx.JNetInterface` that when attempting to obtain an instance of a mapped final data type, it
-  should assume the final type without verifying the actual class of the instance.
-- `CheckRefTypeNativeCallEnabled`: Indicates that the `JNetInterface.DisableCheckRefTypeNativeCall` feature switch is
-  inactive. This feature allows skipping reference type verification when using a value as a parameter in a native Java
-  call.
-- `CheckClassRefNativeCallEnabled`: Indicates that the `JNetInterface.DisableCheckClassRefNativeCall` feature switch
-  is
-  inactive. This feature allows skipping verification that an object instance used as a class parameter in a native Java
-  call is actually a `java.lang.Class<?>`.
-- `MainClassesInformation`: A list of metadata for types marked as main classes.
-- `IsAlive`: When the JVM instance has been created using the invocation interface, this property verifies that the
-  instance has not been destroyed.
-- `Register<TReference>()`: Registers the metadata of a mapped reference type in `Rxmxnx.JNetInterface` at runtime.
-- `GetVirtualMachine(JVirtualMachineRef)`: Creates or retrieves the `IVirtualMachine` instance managing the given
-  reference.
-- `RemoveVirtualMachine(JVirtualMachineRef)`: Removes the `IVirtualMachine` instance associated with the given
-  reference, if it exists.
-- `SetMainClass<TReference>()`: Sets the mapped reference type as a main class.
+The `JVirtualMachine` class implements `IVirtualMachine` and provides additional APIs for managing and removing JVM
+references.
 
-This class also exposes some inherited members from the `IVirtualMachine` interface, such as `Reference` and
-`FatalError`.
+## Static Members
 
-# JEnvironment Class
+- **`TraceEnabled`**: Indicates whether the `JNetInterface.EnableTrace` feature switch is active.
+    - This enables tracking of JNI calls via `System.Diagnostics.Trace`.
+- **`FinalUserTypeRuntimeEnabled`**: Indicates whether `JNetInterface.EnableFinalUserTypeRuntime` is active.
+    - This allows assuming final mapped data types without verifying their actual class.
+- **`CheckRefTypeNativeCallEnabled`**: Indicates whether `JNetInterface.DisableCheckRefTypeNativeCall` is inactive.
+    - This allows skipping reference type verification in native Java calls.
+- **`CheckClassRefNativeCallEnabled`**: Indicates whether `JNetInterface.DisableCheckClassRefNativeCall` is inactive.
+    - This allows skipping verification that an object used as a class parameter is actually a `java.lang.Class<?>`.
+- **`MainClassesInformation`**: Provides metadata for main-class types.
+- **`IsAlive`**: Checks whether the JVM instance (created via the invocation API) is still active.
+- **`Register<TReference>()`**: Registers the metadata of a mapped reference type at runtime.
+- **`GetVirtualMachine(JVirtualMachineRef)`**: Retrieves the `IVirtualMachine` instance managing a given reference.
+- **`RemoveVirtualMachine(JVirtualMachineRef)`**: Removes the `IVirtualMachine` instance associated with a reference.
+- **`SetMainClass<TReference>()`**: Marks a mapped reference type as a main class.
 
-The `JEnvironment` class implements the `IEnvironment` interface. This class provides comparison operators to determine
-whether two `JEnvironment` instances manage the same `JEnvironmentRef` reference.
+Additionally, this class exposes inherited members from `IVirtualMachine`, such as `Reference` and `FatalError`.
 
-The only additional properties are:
+---  
 
-- `IsDisposable`: Indicates that the `JEnvironment` instance is actually managing the environment of a thread
-  associated
-  with the JVM at runtime.
-- `IsAttached`: Indicates whether the `JEnvironment` instance is attached to the JVM.
+# `JEnvironment` Class
+
+The `JEnvironment` class implements `IEnvironment`, providing comparison operators to check whether two instances manage
+the same `JEnvironmentRef`.
+
+## Additional Properties
+
+- **`IsDisposable`**: Indicates whether the instance is managing a runtime-attached JVM thread.
+- **`IsAttached`**: Checks whether the `JEnvironment` instance is attached to the JVM.
+
+---  
 
 # Exporting Native Java Functions
 
-NativeAOT allows
-creating [dynamic libraries from .NET code](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/libraries),
-making it possible to build JNI libraries with `Rxmxnx.JNetInterface`.
+NativeAOT allows the creation
+of [dynamic libraries from .NET code](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/libraries),
+enabling JNI library development using `Rxmxnx.JNetInterface`.
 
-Native Java calls implemented in JNI libraries must follow specific conventions for parameters and naming.
-[Here](jni-accessing.md#defining-native-java-calls) is explained how a .NET method can be set as an implementation
-for a Java native call at runtime, but for JNI to recognize an exported native symbol in a dynamic library, it must
-follow the following naming convention:
+## Naming Conventions
 
+Native Java calls implemented in JNI libraries must follow specific conventions for parameters and naming.  
+For a Java native method to be recognized by JNI, it must adhere to the following naming convention:
+
+```
 Java_package_ClassName_methodName
+```  
 
-More details about this convention can be found in
-the [official documentation](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/design.html#resolving_native_method_names).
+For more details, refer to
+the [official JNI documentation](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/design.html#resolving_native_method_names).
 
-When a JNI library is loaded by the JVM, it invokes the native symbol `JNI_OnLoad`,
-and when it is unloaded, it invokes the native symbol `JNI_OnUnload`.
+## Lifecycle Methods
 
-To function correctly, these methods must be exported with these exact names
-and must use the following parameters:
+When a JNI library is loaded or unloaded, the JVM invokes specific native symbols:
 
-1. `JVirtualMachine`: A reference to the JVM that is loading or unloading the library.
-2. `IntPtr`: This parameter has no actual use but must be part of the method declaration.
-3. The return type of `JNI_OnLoad` is a 32-bit integer representing the minimum
-   JNI version compatible with the library.
-4. The return type of `JNI_OnUnload` is `void`.
+- **`JNI_OnLoad`**
+    - Triggered when the library is loaded.
+    - Must return a 32-bit integer indicating the minimum supported JNI version.
 
-More details on creating dynamic libraries with NativeAOT can be found in
-the [official documentation](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/libraries).
+- **`JNI_OnUnload`**
+    - Triggered when the library is unloaded.
+    - Must return `void`.
 
-**Notes:**
+These methods must be exported with their exact names and have the following parameters:
 
-- The method used as `JNI_OnLoad` is ideal for calling `JVirtualMachine.GetVirtualMachine(JVirtualMachineRef)` and
-  caching the `IVirtualMachine` instance.
-- The method used as `JNI_OnUnload` is ideal for calling `JVirtualMachine.RemoveVirtualMachine(JVirtualMachineRef)`.
-- The implementation of any Java native call must initialize a `JNativeCallAdapter` instance and finalize it at the end
-  of the call. This cannot be used in the Visual Basic .NET language.
-- The
-  [UnmanagedCallersOnlyAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.unmanagedcallersonlyattribute)
-  is only available in C#.
-- Here are discussions about creating native libraries with [F#](https://github.com/dotnet/samples/issues/5647)
-  and [Visual Basic .NET](https://github.com/dotnet/runtime/issues/96103).
-- An example of a JNI library using `Rxmxnx.JNetInterface` can be found in the
-  [included example library](../src/ApplicationTest/README.md) in this repository or in the
-  [jnetinterface branch of the NativeAOT-AndroidHelloJniLib repository](https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib/tree/jnetinterface).
+1. **`JVirtualMachine`**: A reference to the JVM loading or unloading the library.
+2. **`IntPtr`**: A placeholder parameter that must be included in the method signature.
+
+## Notes
+
+- `JNI_OnLoad` is useful for calling `JVirtualMachine.GetVirtualMachine(JVirtualMachineRef)` and caching the
+  `IVirtualMachine` instance.
+- `JNI_OnUnload` is useful for calling `JVirtualMachine.RemoveVirtualMachine(JVirtualMachineRef)`.
+- Any Java native call implementation must initialize a `JNativeCallAdapter` instance and finalize it at the end of the
+  call.
+    - This is **not** compatible with Visual Basic .NET.
+- The `[UnmanagedCallersOnly]` attribute is only available in C#.
+- Discussions on creating native libraries with [F#](https://github.com/dotnet/samples/issues/5647)
+  and [Visual Basic .NET](https://github.com/dotnet/runtime/issues/96103) exist.
+- A sample JNI library using `Rxmxnx.JNetInterface` can be found in:
+    - The [example library](../src/ApplicationTest/README.md) in this repository.
+    - The [
+      `jnetinterface` branch of the NativeAOT-AndroidHelloJniLib repository](https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib/tree/jnetinterface).  

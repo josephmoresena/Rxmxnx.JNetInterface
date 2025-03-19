@@ -15,7 +15,7 @@ the following reasons:
 - The `JLocalObject` or `ILocalObject` instance does not have a loaded local reference. The active reference is held
   by an associated global or weak global reference.
 - The `JLocalObject` or `ILocalObject` instance was created within the scope of a call from Java to JNI as a parameter.
-  The behavior of JNI native call adapters will be detailed later.
+  The behavior of JNI native call adapters is detailed later.
 
 **Note:** In some cases, it may not be necessary to explicitly release local references created within the active
 environment frame, or some references may be released without calling the `Dispose()` method.
@@ -92,7 +92,7 @@ The parameters of a native call are:
 - `(int a, String b, long c, int[] d, Integer[] e)`: `JInt`, `JStringLocalRef`, `JLong`, `JIntArrayLocalRef`,
   `JArrayLocalRef`.
 
-*Note:* The JNI convention for native call naming will be detailed later.
+*Note:* The JNI convention for native call naming is detailed [here](jni-classes.md#naming-conventions).
 
 To create the call frame representation in `Rxmxnx.JNetInterface`, any static `Create` method of `JNativeCall` should be
 used, followed by `Build()`.
