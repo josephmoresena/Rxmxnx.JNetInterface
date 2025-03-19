@@ -62,7 +62,7 @@ registered CLR subclass for the actual instance class.
 
 To register a data type, use the static method `JVirtualMachine.Register<T>()`.
 
-### Notes
+##### Notes
 
 - Registration occurs at runtime but is performed statically to avoid reflection and improve NativeAOT compatibility.
 - When a non-array type is registered, its corresponding array type is also registered.

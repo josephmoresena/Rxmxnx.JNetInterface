@@ -122,7 +122,7 @@ If the exception type is mapped, the interface `IThrowableException<TThrowable>`
 - **`WithSafeInvoke(Action<TThrowable>)`**
 - **`WithSafeInvoke<TResult>(Func<TThrowable, TResult>)`**
 
-#### Notes
+##### Notes
 
 - `WithSafeInvoke` ensures a clean execution environment by running in a new thread attached to the JVM. During the
   execution of these methods, a global-weak reference is created to reference the `java.lang.Throwable` instance that

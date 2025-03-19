@@ -67,7 +67,7 @@ These operations require JNI calls:
 - **`UnregisterNativeCalls()`**: Removes registered Java native methods mapped to .NET using JNI `UnregisterNatives`.
 - **`GetModule()`**: Available only in JVM versions compatible with Java 9.0 or later.
 
-## Notes
+##### Notes
 
 - If a class is not yet loaded (i.e., there is no active JNI reference in the current context), a local reference is
   automatically loaded in the active frame.

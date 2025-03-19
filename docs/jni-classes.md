@@ -106,7 +106,7 @@ These methods must be exported with their exact names and have the following par
 1. **`JVirtualMachine`**: A reference to the JVM loading or unloading the library.
 2. **`IntPtr`**: A placeholder parameter that must be included in the method signature.
 
-## Notes
+##### Notes
 
 - `JNI_OnLoad` is useful for calling `JVirtualMachine.GetVirtualMachine(JVirtualMachineRef)` and caching the
   `IVirtualMachine` instance.

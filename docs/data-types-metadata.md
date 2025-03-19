@@ -37,7 +37,7 @@ Each metadata object exposes the following properties:
     - `java.lang.Object` → Extensible
     - `java.lang.Number` (`JNumberObject`) → Abstract
 
-### Notes
+##### Notes
 
 - The hash of a data type (similar to `JClassObject` instances) is derived from the UTF-16 buffer storing the UTF-8
   sequence containing the class name, JNI signature, and array signature.
@@ -78,7 +78,7 @@ These builders are `ref struct` types, making them incompatible with Visual Basi
     - Allows adding a sequence of values to the enum type definition by specifying the offset for the ordinals using  
       `AppendValues(Int32, ReadOnlySpan<CString>)`.
 
-### Note
+##### Note
 
 All `TypeMetadataBuilder<>` instances perform runtime validation during construction.  
 For release builds, validation can be disabled using the feature switch `JNetInterface.DisableMetadataValidation`, as it
@@ -105,7 +105,7 @@ If a mapped type is unavailable, use `JArgumentMetadata.Create(ReadOnlySpan<Byte
 JNI type signature.  
 Example: To create metadata for `java.util.Dictionary<K,V>`, use the signature `Ljava/util/Dictionary;`.
 
-### Note
+##### Note
 
 Creating metadata for primitive types is not supported. To obtain primitive argument metadata, use
 `JArgumentMetadata.Get<TPrimitive>()`.  

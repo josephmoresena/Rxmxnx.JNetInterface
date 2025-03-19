@@ -6,25 +6,26 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=josephmoresena_Rxmxnx.JNetInterface&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=josephmoresena_Rxmxnx.JNetInterface)
 
+#### Package Information
+
 | **Core Assembly**                                                                                                                                                                                                                                                                    | **Main Assembly**                                                                                                                                                                                                                                    |
 |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [![NuGet(Core)](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface.Core)](https://www.nuget.org/packages/Rxmxnx.JNetInterface.Core/) [![fuget(Core)](https://www.fuget.org/packages/Rxmxnx.JNetInterface.Core/badge.svg)](https://www.fuget.org/packages/Rxmxnx.JNetInterface.Core) | [![NuGet](https://img.shields.io/nuget/v/Rxmxnx.JNetInterface)](https://www.nuget.org/packages/Rxmxnx.JNetInterface/) [![fuget](https://www.fuget.org/packages/Rxmxnx.JNetInterface/badge.svg)](https://www.fuget.org/packages/Rxmxnx.JNetInterface) |
 
 # Description
 
-`Rxmxnx.JNetInterface` provides an implementation of the Java Native Interface and Invocation API for use within the
-.NET ecosystem.
+`Rxmxnx.JNetInterface` provides an implementation of the Java Native Interface (JNI) and the Invocation API for .NET
+applications.
 
-`Rxmxnx.JNetInterface.Core` is a core package that provides essential types and abstractions to work with
-`JNetInterface`. This enables the entire API to be used without burdening its consumers in any way
-with the implementation or access to a real JVM.
+## Core Features
 
-Furthermore, `Rxmxnx.JNetInterface.Core`, in its `Rxmxnx.JNetInterface.Proxies` namespace, includes some types that
-enable the implementation of unit tests without requiring a JVM.
+- **`Rxmxnx.JNetInterface.Core`**: Provides essential types and abstractions to work with JNI without requiring an
+  actual JVM instance.
+- **Unit Testing Support**: The `Rxmxnx.JNetInterface.Proxies` namespace includes types that enable unit testing without
+  a JVM.
 
-Unfortunately, some features of `JNetInterface` will not be available
-in [Visual Basic .NET](https://github.com/dotnet/vblang/issues/625), and some may require additional code to be used
-in [F#](https://github.com/dotnet/fsharp/issues/17605).
+**Note:** Some features may not be available in [Visual Basic .NET](https://github.com/dotnet/vblang/issues/625) and may
+require additional configuration in [F#](https://github.com/dotnet/fsharp/issues/17605).
 
 ---
 
@@ -32,27 +33,27 @@ in [F#](https://github.com/dotnet/fsharp/issues/17605).
 
 ## Installation
 
-Install the library via NuGet:
+Install via NuGet:
 
 ```cmd
 dotnet add package Rxmxnx.JNetInterface
 ```
 
-If you don't need to link any actual JVM instance to your projects, you can simply use the core package.
+If you only need the core functionality without linking to a JVM, install:
 
 ```cmd
 dotnet add package Rxmxnx.JNetInterface.Core
 ```
 
-**Note:** This package currently supports .NET 8 and higher. Ensure your project targets a compatible framework before
-installing.
+**Supported Frameworks:**  
+This package supports **.NET 8 and higher**. Ensure your project targets a compatible framework.
+---  
 
 ## Overview
 
-`Rxmxnx.JNetInterface` allows the use of JNI through high-level, safe APIs (Core Assembly) and a compatible
-implementation (Main Assembly) with the JVM. <br/>
+`Rxmxnx.JNetInterface` provides safe, high-level APIs to interact with JNI and the JVM.
 
-The following table shows the equivalence between the different common JNI types and `Rxmxnx.JNetInterface`.
+The table below shows how common JNI types map to `Rxmxnx.JNetInterface`.
 
 | Java Type                | JNI Type      | Managed Type                  | Unmanaged Type        |
 |--------------------------|---------------|-------------------------------|-----------------------|
@@ -85,11 +86,12 @@ The following table shows the equivalence between the different common JNI types
 | N/A                      | jmethodID     | JCallDefinition <sup>3</sup>  | JMethodId             |
 | N/A                      | jfieldID      | JFieldDefinition <sup>3</sup> | JFieldId              |
 
-1. When the JVM is initialized through the Invocation API, `IInvokedVirtualMachine` is used, and when a thread is
-   attached to the JVM, `IThread` is used.
-2. Instances of `JClassObject` or `JGlobal` that globally reference classes may not have active JNI references and are
-   handled specially to be loaded when needed.
-3. Definitions expose the APIs for performing JNI access calls and are internally used as keys to the identifiers.
+1. When initialized via the Invocation API, `IInvokedVirtualMachine` is used. When a thread is attached to the JVM,
+   `IThread` is used.
+2. `JClassObject` and `JGlobal` references to classes may not have active JNI references and are loaded as needed.
+3. Definitions serve as keys for JNI access calls.
+
+---  
 
 - [Java Data Types Mapping](docs/data-types-mapping.md)
 - [IVirtualMachine and IEnvironment Interfaces](docs/jni-interfaces.md)

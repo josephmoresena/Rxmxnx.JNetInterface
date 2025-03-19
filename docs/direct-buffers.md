@@ -16,7 +16,7 @@ The `JBufferObject` class exposes the following properties:
 - **`Capacity`**: Represents the buffer's capacity in units of its primitive type.
 - **`Address`**: Points to the buffer's memory. This is only valid when the buffer is direct.
 
-### Note
+##### Note
 
 If this feature is not needed, it is recommended to disable the automatic registration of NIO types to improve
 performance. This can be done using the feature switch `JNetInterface.DisableNioAutoRegistration`.
@@ -50,7 +50,7 @@ class:
       object, returning its result.
     - Once execution is complete, the buffer is discarded.
 
-### Notes
+##### Notes
 
 - The `WithDirectBuffer` methods may allocate memory on the stack if the configured usable stack byte limit is not
   exceeded.

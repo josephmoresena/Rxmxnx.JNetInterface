@@ -13,7 +13,7 @@ JNI allows reading (`get`) and writing (`set`) Java fields. `Rxmxnx.JNetInterfac
 
 ![FieldDefinitionHierarchy](https://github.com/user-attachments/assets/691a60f9-091a-4752-8813-b2c84576bc0f)
 
-### Notes
+##### Notes
 
 - `JFieldDefinition<..>` defines a Java field for a generic `IDataType<..>`, while `JNonTypedFieldDefinition` defines
   fields for object types not mapped in `Rxmxnx.JNetInterface`.
@@ -46,7 +46,7 @@ new instances. `Rxmxnx.JNetInterface` provides this functionality through `JCall
 
 ![CallDefinitionHierarchy](https://github.com/user-attachments/assets/835e54d4-f2c3-4d8e-a9df-cb1aeed00d49)
 
-### Notes
+##### Notes
 
 - `JFunctionDefinition<..>` defines Java functions with a generic `IDataType<..>`, while `JNonTypedFunctionDefinition`
   is used for unmapped object types.
@@ -78,7 +78,7 @@ new instances. `Rxmxnx.JNetInterface` provides this functionality through `JCall
   constructor for a
   generic type.
 
-### Note
+##### Note
 
 - `JMethodDefinition`, `JFunctionDefinition<..>`, and `JConstructorDefinition` expose these APIs as protected.
 - `Parameterless` variants do not accept arguments.
@@ -143,7 +143,7 @@ to be dynamically executed.
   **`LongValue`**, **`ShortValue`**: Retrieve primitive values.
 - **`Object`**: Retrieves the object value if applicable.
 
-### Note
+##### Note
 
 - If `Signature` represents a non-primitive type, `Object` contains the result; otherwise, primitive values are used.
 - If the result is non-null, `BooleanValue` is always `true`.
@@ -151,8 +151,9 @@ to be dynamically executed.
 
 ## Defining Native Java Calls
 
-The `JNativeCallEntry` class maps Java native methods to .NET implementations. These methods follow JNI parameter
-conventions but do not require JNI naming.
+The `JNativeCallEntry` class maps Java native methods to .NET implementations. These methods follow [JNI parameter
+conventions](jni-references.md#jni-native-call-parameters) but do not
+require [JNI naming](jni-classes.md#naming-conventions).
 
 ### Creating Native Call Entries
 
@@ -163,7 +164,7 @@ conventions but do not require JNI naming.
 - **`CreateParameterless(ParameterlessInstanceMethodDelegate)`**: Defines a parameterless native instance method.
 - **`CreateParameterless(ParameterlessStaticMethodDelegate)`**: Defines a parameterless native static method.
 
-### Notes
+##### Notes
 
 - Using pointers is ideal for `unsafe` contexts
   and [function pointers](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code#function-pointers).
