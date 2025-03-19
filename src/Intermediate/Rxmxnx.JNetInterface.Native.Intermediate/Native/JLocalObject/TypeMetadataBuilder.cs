@@ -102,7 +102,7 @@ public partial class JLocalObject
 			JInterfaceTypeMetadata interfaceMetadata)
 		{
 			if (!state.Interfaces.Contains(interfaceMetadata.InterfaceType))
-				state.NotContained.Add(ClassNameHelper.GetClassName(interfaceMetadata.Signature));
+				state.NotContained.Add(ITypeInformation.GetJavaClassName(interfaceMetadata));
 		}
 		/// <summary>
 		/// Appends a superinterface to current type definition.

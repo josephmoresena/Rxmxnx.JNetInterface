@@ -46,7 +46,7 @@ internal static partial class MetadataHelper
 			case CommonNames.ShortSignatureChar:
 				return JArgumentMetadata.Get<JShort>();
 			default:
-				if (MetadataHelper.runtimeMetadata.TryGetValue(jClass.Hash, out JReferenceTypeMetadata? typeMetadata))
+				if (MetadataHelper.storage.TryGetValue(jClass.Hash, out JReferenceTypeMetadata? typeMetadata))
 				{
 					MetadataHelper.reflectionMetadata.TryRemove(jClass.Hash, out _); // Removes unknown if exists.
 					return typeMetadata.ArgumentMetadata;
@@ -88,7 +88,7 @@ internal static partial class MetadataHelper
 			case CommonNames.ShortSignatureChar:
 				return new JFieldDefinition<JShort>(fieldName);
 			default:
-				if (MetadataHelper.runtimeMetadata.TryGetValue(jClass.Hash, out JReferenceTypeMetadata? typeMetadata))
+				if (MetadataHelper.storage.TryGetValue(jClass.Hash, out JReferenceTypeMetadata? typeMetadata))
 				{
 					MetadataHelper.reflectionMetadata.TryRemove(jClass.Hash, out _); // Removes unknown if exists.
 					return typeMetadata.CreateFieldDefinition(fieldName);
@@ -134,7 +134,7 @@ internal static partial class MetadataHelper
 			case CommonNames.ShortSignatureChar:
 				return JFunctionDefinition<JShort>.Create(callName, paramsMetadata);
 			default:
-				if (MetadataHelper.runtimeMetadata.TryGetValue(jClass.Hash, out JReferenceTypeMetadata? typeMetadata))
+				if (MetadataHelper.storage.TryGetValue(jClass.Hash, out JReferenceTypeMetadata? typeMetadata))
 				{
 					MetadataHelper.reflectionMetadata.TryRemove(jClass.Hash, out _); // Removes unknown if exists.
 					return typeMetadata.CreateFunctionDefinition(callName, paramsMetadata);
@@ -155,11 +155,11 @@ internal static partial class MetadataHelper
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
 	public static JReferenceTypeMetadata? GetMetadata(String hash)
 	{
-		JReferenceTypeMetadata? result = MetadataHelper.runtimeMetadata.GetValueOrDefault(hash);
+		JReferenceTypeMetadata? result = MetadataHelper.storage.GetValueOrDefault(hash);
 		if (result is not null) return result;
-		if (MetadataHelper.classTree.TryGetValue(hash, out String? value))
-			result = MetadataHelper.GetMetadata(value); // Retrieves metadata from cache.
-		else if (MetadataHelper.viewTree.TryGetValue(hash, out HashesSet? set))
+		if (MetadataHelper.storage.GetSuperClassHash(hash) is { } superClassHash)
+			result = MetadataHelper.GetMetadata(superClassHash); // Retrieves metadata from cache.
+		else if (MetadataHelper.storage.GetHashesSet(hash) is { } set)
 			result = set.GetViewMetadata();
 		return result;
 	}
@@ -169,7 +169,7 @@ internal static partial class MetadataHelper
 	/// <param name="hash">A JNI class hash.</param>
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
 	public static JReferenceTypeMetadata? GetExactMetadata(String hash)
-		=> MetadataHelper.runtimeMetadata.GetValueOrDefault(hash);
+		=> MetadataHelper.storage.GetValueOrDefault(hash);
 	/// <summary>
 	/// Retrieves exact <see cref="JDataTypeMetadata"/> metadata.
 	/// </summary>
@@ -187,7 +187,7 @@ internal static partial class MetadataHelper
 	/// <returns>A <see cref="JReferenceTypeMetadata"/> instance.</returns>
 	public static JArrayTypeMetadata? GetExactArrayMetadata(String elementHash)
 	{
-		JReferenceTypeMetadata? elementMetadata = MetadataHelper.runtimeMetadata.GetValueOrDefault(elementHash);
+		JReferenceTypeMetadata? elementMetadata = MetadataHelper.storage.GetValueOrDefault(elementHash);
 		JArrayTypeMetadata? result = elementMetadata?.GetArrayMetadata();
 		MetadataHelper.Register(result);
 		return result;
@@ -237,11 +237,59 @@ internal static partial class MetadataHelper
 	/// </returns>
 	public static Boolean? IsAssignable(JClassObject jClass, JClassObject otherClass)
 	{
+		if (otherClass.Hash.AsSpan().SequenceEqual(ClassNameHelper.ObjectHash))
+			return true;
+		if (jClass.IsArray && otherClass.Hash switch
+		    {
+			    ClassNameHelper.CloneableHash => true,
+			    ClassNameHelper.SerializableHash => true,
+			    _ => false,
+		    })
+			return true;
+
+		Boolean fromView = jClass.IsInterface || jClass.IsArray;
+		Boolean toView = otherClass.IsInterface || otherClass.IsArray;
+
+		if (fromView != toView && fromView)
+			return false; // View to Class is not assignable.
+
 		AssignationKey key = new() { FromHash = jClass.Hash, ToHash = otherClass.Hash, };
+		return MetadataHelper.IsAssignable(key, fromView, toView);
+	}
+	private static Boolean? IsAssignable(AssignationKey key, Boolean fromView, Boolean toView)
+	{
 		if (key.IsSame) return true;
-		if (MetadataHelper.assignationCache.TryGetValue(key, out Boolean result))
+
+		MetadataHelper.storage.InitializeBuiltIn(key.FromHash);
+		MetadataHelper.storage.InitializeBuiltIn(key.ToHash);
+
+		if (MetadataHelper.storage.TryGetValue(key, out Boolean result))
 			return result;
-		return MetadataHelper.assignationCache.ContainsKey(key.Reverse()) ? false : default(Boolean?);
+
+		if (toView && MetadataHelper.storage.GetHashesSet(key.FromHash) is { } hashesSet &&
+		    hashesSet.Contains(key.ToHash))
+		{
+			hashesSet.Add(key.ToHash);
+			return true;
+		}
+
+		if (!fromView && !toView && MetadataHelper.storage.GetSuperClassHash(key.FromHash) is { } superHash)
+		{
+			AssignationKey superKey = key with { FromHash = superHash, };
+			Boolean? isSuperAssignable = MetadataHelper.IsAssignable(superKey, fromView, toView);
+
+			if (isSuperAssignable.HasValue)
+			{
+				if (isSuperAssignable.Value)
+					MetadataHelper.storage.RegisterSuperClassRelationship(superKey);
+				return isSuperAssignable.Value;
+			}
+		}
+
+		if (MetadataHelper.storage.IsRegistered(key.Reverse()))
+			return false;
+
+		return null;
 	}
 	/// <summary>
 	/// Sets <paramref name="isAssignable"/> as assignation from <paramref name="jClass"/> to
@@ -256,7 +304,7 @@ internal static partial class MetadataHelper
 	public static Boolean SetAssignable(JClassObject jClass, JClassObject otherClass, Boolean isAssignable)
 	{
 		AssignationKey key = new() { FromHash = jClass.Hash, ToHash = otherClass.Hash, };
-		MetadataHelper.assignationCache[key] = isAssignable;
+		MetadataHelper.storage[key] = isAssignable;
 		return isAssignable;
 	}
 	/// <summary>
@@ -268,8 +316,7 @@ internal static partial class MetadataHelper
 	{
 		AssignationKey assignationKey = new() { FromHash = hashClass, ToHash = superClassHash, };
 		if (assignationKey.IsSame) return;
-		MetadataHelper.classTree[assignationKey.FromHash] = assignationKey.ToHash;
-		MetadataHelper.assignationCache[assignationKey] = true;
+		MetadataHelper.storage.RegisterSuperClassRelationship(assignationKey);
 	}
 	/// <summary>
 	/// Register class tree.
@@ -280,12 +327,6 @@ internal static partial class MetadataHelper
 	{
 		AssignationKey assignationKey = new() { FromHash = hashView, ToHash = superViewHash, };
 		if (assignationKey.IsSame) return;
-		if (!MetadataHelper.viewTree.TryGetValue(assignationKey.FromHash, out HashesSet? set))
-		{
-			set = new();
-			MetadataHelper.viewTree[hashView] = set;
-		}
-		set.Add(superViewHash);
-		MetadataHelper.assignationCache[assignationKey] = true;
+		MetadataHelper.storage.RegisterSuperViewRelationship(assignationKey);
 	}
 }

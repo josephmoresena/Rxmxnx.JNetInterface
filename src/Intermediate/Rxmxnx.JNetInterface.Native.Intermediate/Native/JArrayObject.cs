@@ -130,4 +130,27 @@ public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView wher
 	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
 	public static JArrayObject<TElement> Create(IEnvironment env, Int32 length, TElement initialElement)
 		=> env.ArrayFeature.CreateArray(length, initialElement);
+	/// <summary>
+	/// Creates an empty <see cref="JArrayObject{TElement}"/> instance.
+	/// </summary>
+	/// <param name="jClass">Element <see cref="JClassObject"/> instance.</param>
+	/// <param name="length">New array length.</param>
+	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
+	public static JArrayObject<TElement> Create(JClassObject jClass, Int32 length)
+	{
+		IEnvironment env = jClass.Environment;
+		return env.ArrayFeature.CreateArray<TElement>(jClass, length);
+	}
+	/// <summary>
+	/// Creates a <paramref name="initialElement"/> filled <see cref="JArrayObject{TElement}"/> instance.
+	/// </summary>
+	/// <param name="jClass">Element <see cref="JClassObject"/> instance.</param>
+	/// <param name="length">New array length.</param>
+	/// <param name="initialElement">Instance to set each array element.</param>
+	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
+	public static JArrayObject<TElement> Create(JClassObject jClass, Int32 length, TElement initialElement)
+	{
+		IEnvironment env = jClass.Environment;
+		return env.ArrayFeature.CreateArray(jClass, length, initialElement);
+	}
 }

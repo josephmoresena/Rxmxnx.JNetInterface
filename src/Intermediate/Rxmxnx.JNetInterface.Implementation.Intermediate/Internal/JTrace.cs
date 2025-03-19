@@ -267,11 +267,11 @@ internal static partial class JTrace
 		JTrace.CreateNonGenericGlobalRef(localRef, globalRef != default ? $"{globalRef}" : String.Empty, callerMethod);
 	}
 	/// <summary>
-	/// Writes a category name and finallization call to the trace listeners.
+	/// Writes a category name and finalization call to the trace listeners.
 	/// </summary>
-	/// <param name="result">A <see cref="JLocalObject"/> instance.</param>
+	/// <param name="result">A <see cref="JReferenceObject"/> instance.</param>
 	/// <param name="callerMethod">Caller member name.</param>
-	public static void FinalizeCall(JLocalObject result, [CallerMemberName] String callerMethod = "")
+	public static void FinalizeCall(JReferenceObject result, [CallerMemberName] String callerMethod = "")
 	{
 		if (!JVirtualMachine.TraceEnabled) return;
 		Trace.WriteLine($"thread: {Environment.CurrentManagedThreadId} {result.ToTraceText()}", callerMethod);

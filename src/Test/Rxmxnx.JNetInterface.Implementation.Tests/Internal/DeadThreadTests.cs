@@ -219,7 +219,9 @@ public class DeadThreadTests
 	private static void ArrayFeatureThrowTest(IArrayFeature arrayFeature, JClassObject jClass, JClassObject jIntClass)
 	{
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.CreateArray<JInt>(0));
+		Assert.Throws<InvalidOperationException>(() => arrayFeature.CreateArray<JInt>(jIntClass, 0));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.CreateArray(0, jClass));
+		Assert.Throws<InvalidOperationException>(() => arrayFeature.CreateArray(jClass, 0, jClass));
 		Assert.Throws<InvalidOperationException>(
 			() => arrayFeature.GetElement(default(JArrayObject<JClassObject>)!, 0));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.SetElement(default!, 0, jIntClass));

@@ -30,7 +30,7 @@ public abstract partial class EnvironmentProxy
 		=> this.LoadClass<TDataType>(rawClassBytes.ToArray(), jClassLoader);
 	void IClassFeature.GetClassInfo(JClassObject jClass, out CString name, out CString signature, out String hash)
 	{
-		ITypeInformation information = this.GetClassInfo(jClass);
+		ITypeInformation information = this.GetClassInfo(jClass).Value;
 		name = information.ClassName;
 		signature = information.Signature;
 		hash = information.Hash;

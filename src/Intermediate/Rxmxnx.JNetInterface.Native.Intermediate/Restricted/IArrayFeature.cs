@@ -22,6 +22,25 @@ internal partial interface IArrayFeature
 	JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement)
 		where TElement : IDataType<TElement>;
 	/// <summary>
+	/// Creates an empty <see cref="JArrayObject{TElement}"/> instance.
+	/// </summary>
+	/// <typeparam name="TElement">Type of array element.</typeparam>
+	/// <param name="jClass">Element <see cref="JClassObject"/> instance.</param>
+	/// <param name="length">New array length.</param>
+	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
+	JArrayObject<TElement> CreateArray<TElement>(JClassObject jClass, Int32 length)
+		where TElement : IDataType<TElement>;
+	/// <summary>
+	/// Creates a <paramref name="initialElement"/> filled <see cref="JArrayObject{TElement}"/> instance.
+	/// </summary>
+	/// <typeparam name="TElement">Type of array element.</typeparam>
+	/// <param name="jClass">Element <see cref="JClassObject"/> instance.</param>
+	/// <param name="length">New array length.</param>
+	/// <param name="initialElement">Instance to set each array element.</param>
+	/// <returns>A <see cref="JArrayObject{TElement}"/> instance.</returns>
+	JArrayObject<TElement> CreateArray<TElement>(JClassObject jClass, Int32 length, TElement initialElement)
+		where TElement : IDataType<TElement>;
+	/// <summary>
 	/// Retrieves the array length from <paramref name="jObject"/>
 	/// </summary>
 	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>

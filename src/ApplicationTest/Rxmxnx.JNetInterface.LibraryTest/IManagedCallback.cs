@@ -33,7 +33,7 @@ public partial interface IManagedCallback
 		Console.WriteLine(
 			$"{nameof(IVirtualMachine.MetadataValidationEnabled)}: {IVirtualMachine.MetadataValidationEnabled}");
 		Console.WriteLine(
-			$"{nameof(IVirtualMachine.NestingArrayAutoGenerationEnabled)}: {IVirtualMachine.NestingArrayAutoGenerationEnabled}");
+			$"{nameof(IVirtualMachine.JaggedArrayAutoGenerationEnabled)}: {IVirtualMachine.JaggedArrayAutoGenerationEnabled}");
 		Console.WriteLine(
 			$"{nameof(IVirtualMachine.TypeMetadataToStringEnabled)}: {IVirtualMachine.TypeMetadataToStringEnabled}");
 		Console.WriteLine(

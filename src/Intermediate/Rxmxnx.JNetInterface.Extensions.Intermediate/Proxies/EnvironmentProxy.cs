@@ -45,62 +45,6 @@ public abstract partial class EnvironmentProxy
 	/// <inheritdoc/>
 	public abstract Boolean JniSecure();
 	/// <inheritdoc/>
-	public virtual void WithFrame(Int32 capacity, Action action)
-	{
-		Int32? oldCapacity = capacity;
-		try
-		{
-			this.LocalCapacity = capacity;
-			action();
-		}
-		finally
-		{
-			this.LocalCapacity = oldCapacity;
-		}
-	}
-	/// <inheritdoc/>
-	public virtual void WithFrame<TState>(Int32 capacity, TState state, Action<TState> action)
-	{
-		Int32? oldCapacity = capacity;
-		try
-		{
-			this.LocalCapacity = capacity;
-			action(state);
-		}
-		finally
-		{
-			this.LocalCapacity = oldCapacity;
-		}
-	}
-	/// <inheritdoc/>
-	public virtual TResult WithFrame<TResult>(Int32 capacity, Func<TResult> func)
-	{
-		Int32? oldCapacity = capacity;
-		try
-		{
-			this.LocalCapacity = capacity;
-			return func();
-		}
-		finally
-		{
-			this.LocalCapacity = oldCapacity;
-		}
-	}
-	/// <inheritdoc/>
-	public virtual TResult WithFrame<TResult, TState>(Int32 capacity, TState state, Func<TState, TResult> func)
-	{
-		Int32? oldCapacity = capacity;
-		try
-		{
-			this.LocalCapacity = capacity;
-			return func(state);
-		}
-		finally
-		{
-			this.LocalCapacity = oldCapacity;
-		}
-	}
-	/// <inheritdoc/>
 	public abstract void DescribeException();
 	/// <inheritdoc/>
 	public abstract Boolean? IsVirtual(JThreadObject jThread);
@@ -175,15 +119,15 @@ public abstract partial class EnvironmentProxy
 	/// <summary>
 	/// Creates a <see cref="JDirectByteBufferObject"/> instance.
 	/// </summary>
-	/// <param name="memory">A <see cref="IFixedMemory"/> instance.</param>
+	/// <param name="address">A <see cref="IntPtr"/> instance.</param>
 	/// <returns>A direct <see cref="JDirectByteBufferObject"/> instance.</returns>
-	public abstract JDirectByteBufferObject NewDirectByteBuffer(IFixedMemory.IDisposable memory);
+	public abstract JDirectByteBufferObject NewDirectByteBuffer(IntPtr address);
 	/// <summary>
 	/// Creates an ephemeral <see cref="JDirectByteBufferObject"/> instance.
 	/// </summary>
 	/// <param name="capacity">Capacity of created buffer.</param>
 	/// <returns>A <see cref="JDirectByteBufferObject"/> instance.</returns>
-	public abstract JDirectByteBufferObject CreateEphemeralByteBuffer(Int32 capacity);
+	public abstract JDirectByteBufferObject NewDirectByteBuffer(Int32 capacity);
 	#endregion
 
 	#region IClassFeature
@@ -202,7 +146,7 @@ public abstract partial class EnvironmentProxy
 	/// </summary>
 	/// <param name="jClass">A <see cref="JReferenceObject"/> instance.</param>
 	/// <returns>A <see cref="ITypeInformation"/> instance.</returns>
-	public abstract ITypeInformation GetClassInfo(JReferenceObject jClass);
+	public abstract IWrapper.IBase<ITypeInformation> GetClassInfo(JReferenceObject jClass);
 	#endregion
 
 	#region IStringFeature

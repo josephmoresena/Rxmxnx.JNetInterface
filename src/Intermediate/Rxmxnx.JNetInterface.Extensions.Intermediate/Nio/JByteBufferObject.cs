@@ -60,6 +60,9 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	/// <param name="action">Action to execute.</param>
 	public static void WithDirectBuffer<TState>(IEnvironment env, Int32 capacity, TState state,
 		Action<JByteBufferObject, TState> action)
+#if NET9_0_OR_GREATER
+	where TState : allows ref struct
+#endif
 		=> env.NioFeature.WithDirectByteBuffer(capacity, state, action);
 	/// <summary>
 	/// Creates an ephemeral direct <see cref="JByteBufferObject"/> instance and executes <paramref name="func"/>.
@@ -84,6 +87,9 @@ public class JByteBufferObject : JBufferObject<JByte>, IClassType<JByteBufferObj
 	/// <returns>The result of <paramref name="func"/> execution.</returns>
 	public static TResult WithDirectBuffer<TState, TResult>(IEnvironment env, Int32 capacity, TState state,
 		Func<JByteBufferObject, TState, TResult> func)
+#if NET9_0_OR_GREATER
+	where TState : allows ref struct
+#endif
 		=> env.NioFeature.WithDirectByteBuffer(capacity, state, func);
 
 	static JByteBufferObject IClassType<JByteBufferObject>.Create(IReferenceType.ClassInitializer initializer)

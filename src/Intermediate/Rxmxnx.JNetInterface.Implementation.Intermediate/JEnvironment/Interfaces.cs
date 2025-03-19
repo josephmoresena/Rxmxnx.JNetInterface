@@ -4,6 +4,7 @@ namespace Rxmxnx.JNetInterface;
                  Justification = CommonConstants.InternalInheritanceJustification)]
 partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 {
+	Boolean IEnvironment.NoProxy => true;
 	Int32? IEnvironment.LocalCapacity
 	{
 		get => this._cache.Capacity;
@@ -75,7 +76,7 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 	}
 	[ExcludeFromCodeCoverage]
 	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other)
-		=> other is not null && this.Reference == other.Reference && this.NoProxy == other.NoProxy;
+		=> other is not null && this.Reference == other.Reference && (this as IEnvironment).NoProxy == other.NoProxy;
 	[ExcludeFromCodeCoverage]
 	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
 		=> other is not null && this._cache.Equals(other._cache);

@@ -67,7 +67,9 @@ jobs:
           dotnet build-server shutdown
           dotnet restore src
           dotnet build src --no-restore --configuration release --disable-build-servers /nr:false /maxcpucount:1
-          dotnet test src --verbosity detailed --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover 
+          
+          dotnet test src --no-build --no-restore --configuration release --verbosity normal --collect:"XPlat Code Coverage" --results-directory TestResults/ --logger "trx;verbosity=detailed" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
       - name: Pack core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
@@ -170,9 +172,10 @@ jobs:
           sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
           sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
           
-          sudo apt update
+          sudo apt update 
+          sudo apt upgrade --assume-yes
           sudo apt-get install clang llvm zlib1g-dev libkrb5-dev libssl-dev \
-            qemu-user qemu-user-static libicu74:arm64 libicu74:armhf \
+            qemu-user qemu-user-static binfmt-support libicu74:arm64 libicu74:armhf \
             binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64 libssl-dev:arm64 \
             binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf zlib1g-dev:armhf libssl-dev:armhf \
             --assume-yes
@@ -203,13 +206,22 @@ jobs:
         working-directory: ./src/ApplicationTest/Rxmxnx.JNetInterface.LauncherTest
         run: dotnet publish
 
-      - name: Run launcher
+      - name: Run launcher (compile)
         shell: pwsh
         run: |
           if ($IsWindows) {
-            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts"
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "compile"
           } else {
-            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts"
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "compile"
+          }
+
+      - name: Run launcher (run)
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            ./Rxmxnx.JNetInterface.LauncherTest.exe "src\ApplicationTest" "artifacts" "run"
+          } else {
+            ./Rxmxnx.JNetInterface.LauncherTest "src/ApplicationTest" "artifacts" "run"
           }
 
       - name: Create Native Artifact

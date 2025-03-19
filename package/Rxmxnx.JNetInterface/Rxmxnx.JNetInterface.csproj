@@ -6,10 +6,17 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnablePackageValidation>true</EnablePackageValidation>
     <SigningKeyFile>..\Rxmxnx.JNetInterface.snk</SigningKeyFile>
     <IntermediateSourceBasePath>..\..\src\Intermediate</IntermediateSourceBasePath>
     <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' != ''">$(Version)</CoreVersion>
     <CoreVersion Condition="'$(CoreVersion)' == '' And '$(Version)' == ''">*</CoreVersion>
+  </PropertyGroup>
+    
+  <!-- Validations -->
+  <PropertyGroup>
+    <ApiCompatPreserveUnnecessarySuppressions>true</ApiCompatPreserveUnnecessarySuppressions>
+    <ApiCompatRespectInternals>true</ApiCompatRespectInternals>
   </PropertyGroup>
 
   <Import Project="..\Intermediate-to-Package.targets" />

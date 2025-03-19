@@ -111,7 +111,7 @@ public sealed class JClassObjectTests
 	[InlineData(3)]
 	internal void GetClassInfoTest(Byte call)
 	{
-		ITypeInformation information = Substitute.For<ITypeInformation>();
+		TypeInformationProxy information = Substitute.For<TypeInformationProxy>();
 		CString className0 = (CString)JClassObjectTests.fixture.Create<String>();
 		CString signature0 = CString.Concat("L"u8, className0, ";"u8);
 		String hash0 = JClassObjectTests.fixture.Create<String>();

@@ -1,6 +1,6 @@
 namespace Rxmxnx.JNetInterface.Lang.Reflect;
 
-public partial class JExecutableObject : ILocalObject
+public partial class JExecutableObject
 {
 	/// <inheritdoc cref="JExecutableObject.Definition"/>
 	private JCallDefinition? _callDefinition;

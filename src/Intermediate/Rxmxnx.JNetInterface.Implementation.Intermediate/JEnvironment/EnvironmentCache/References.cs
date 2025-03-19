@@ -13,13 +13,17 @@ partial class JEnvironment
 		/// <exception cref="JniException"/>
 		public unsafe void EnsureLocalCapacity(Int32 capacity)
 		{
-			if (capacity <= 0) return;
+			if (capacity <= this._objects.Capacity.GetValueOrDefault()) return;
 			ImplementationValidationUtilities.ThrowIfDifferentThread(this.Reference, this.Thread);
-			ref readonly NativeInterface nativeInterface =
-				ref this.GetNativeInterface<NativeInterface>(NativeInterface.EnsureLocalCapacityInfo);
-			JniException? jniException =
-				nativeInterface.ReferenceFunctions.EnsureLocalCapacity(this.Reference, capacity);
-			if (jniException is not null) throw jniException;
+			if (this._objects is not LocalFrame)
+			{
+				ref readonly NativeInterface nativeInterface =
+					ref this.GetNativeInterface<NativeInterface>(NativeInterface.EnsureLocalCapacityInfo);
+				JniException? jniException =
+					nativeInterface.ReferenceFunctions.EnsureLocalCapacity(this.Reference, capacity);
+				this.CheckJniError();
+				if (jniException is not null) throw jniException;
+			}
 			this._objects.Capacity = capacity;
 		}
 		/// <inheritdoc cref="JEnvironment.SetObjectCache(LocalCache?)"/>

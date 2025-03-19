@@ -36,12 +36,14 @@ public abstract partial class ClassFeatureProxy : IClassFeature
 		where TDataType : JReferenceObject, IDataType<TDataType>;
 	public abstract JReferenceTypeMetadata GetTypeMetadata(JClassObject? jClass);
 	public abstract JModuleObject? GetModule(JClassObject jClass);
+	public abstract void ThrowNew(JClassObject jClass, String? message, Boolean throwException);
+	public abstract void ThrowNew(JClassObject jClass, CString? message, Boolean throwException);
 	public abstract void ThrowNew<TThrowable>(CString? message, Boolean throwException)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 	public abstract void ThrowNew<TThrowable>(String? message, Boolean throwException)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>;
 	public abstract JClassObject GetClass<TDataType>() where TDataType : IDataType<TDataType>;
-	public abstract ITypeInformation GetClassInfo(JClassObject jClass);
+	public abstract TypeInformationProxy GetClassInfo(JClassObject jClass);
 	public abstract JClassObject GetNonGenericClass(Type classHash);
 	public abstract JClassObject GetClass(CString className);
 	public abstract JClassObject LoadClass(CString className, Byte[] rawClassBytes,

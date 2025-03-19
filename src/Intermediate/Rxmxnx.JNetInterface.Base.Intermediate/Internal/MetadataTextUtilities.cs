@@ -17,6 +17,18 @@ internal static class MetadataTextUtilities
 	}
 #endif
 
+#if NET9_0_OR_GREATER
+	/// <summary>
+	/// Retrieves a detailed report with <paramref name="typeMetadata"/> information.
+	/// </summary>
+	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
+	/// <param name="properties">Additional properties to report.</param>
+	/// <returns>A detailed string representation of <paramref name="typeMetadata"/>.</returns>
+	[ExcludeFromCodeCoverage]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static String GetString(JDataTypeMetadata typeMetadata, IAppendableProperty?[] properties)
+		=> MetadataTextUtilities.GetString(typeMetadata, properties.AsSpan());
+#endif
 	/// <summary>
 	/// Retrieves a detailed report with <paramref name="typeMetadata"/> information.
 	/// </summary>
@@ -36,7 +48,7 @@ internal static class MetadataTextUtilities
 
 		MetadataTextUtilities.AppendObjectBegin(strBuild);
 		MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.ClassName),
-		                                     ClassNameHelper.GetClassName(typeMetadata.Signature));
+		                                     ITypeInformation.GetJavaClassName(typeMetadata));
 		MetadataTextUtilities.AppendProperty(strBuild, nameof(JDataTypeMetadata.Kind), $"{typeMetadata.Kind}");
 		switch (typeMetadata)
 		{

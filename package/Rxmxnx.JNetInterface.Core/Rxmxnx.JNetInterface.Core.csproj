@@ -6,8 +6,15 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Rxmxnx.JNetInterface</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnablePackageValidation>true</EnablePackageValidation>
     <SigningKeyFile>..\Rxmxnx.JNetInterface.snk</SigningKeyFile>
     <IntermediateSourceBasePath>..\..\src\Intermediate</IntermediateSourceBasePath>
+  </PropertyGroup>
+    
+  <!-- Validations -->
+  <PropertyGroup>
+    <ApiCompatPreserveUnnecessarySuppressions>true</ApiCompatPreserveUnnecessarySuppressions>
+    <ApiCompatRespectInternals>true</ApiCompatRespectInternals>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.0.5"/>
+    <PackageReference Include="Rxmxnx.PInvoke.Extensions" Version="2.2.3"/>
   </ItemGroup>
 
   <ItemGroup>

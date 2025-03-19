@@ -12,6 +12,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intermediate", "Intermediat
 		..\README.md = ..\README.md
 		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
 		..\package\Intermediate-to-Package.targets = ..\package\Intermediate-to-Package.targets
+		..\native-objects.md = ..\docs\native-objects.md
+		..\class-object.md = ..\docs\class-object.md
+		..\data-types-mapping.md = ..\docs\data-types-mapping.md
+		..\direct-buffers.md = ..\docs\direct-buffers.md
+		..\jni-accessing.md = ..\docs\jni-accessing.md
+		..\jni-classes.md = ..\docs\jni-classes.md
+		..\jni-interfaces.md = ..\docs\jni-interfaces.md
+		..\jni-references.md = ..\docs\jni-references.md
+		..\data-types-metadata.md = ..\docs\data-types-metadata.md
+		..\error-handling.md = ..\docs\error-handling.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rxmxnx.JNetInterface.Base.Intermediate", "Intermediate\Rxmxnx.JNetInterface.Base.Intermediate\Rxmxnx.JNetInterface.Base.Intermediate.csproj", "{5E1EA92C-FDFA-48B2-9B36-65B4BCC946D5}"

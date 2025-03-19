@@ -89,6 +89,11 @@ public sealed class StringMemoryTests
 
 			using JStringObject jString = new(env.ClassFeature.StringObject, stringRef);
 			using IReadOnlyFixedContext<Char>.IDisposable fMem = value.AsMemory().GetFixedContext();
+			using JGlobal jGlobalThrowable = new(env.VirtualMachine,
+			                                     new ThrowableObjectMetadata(new(env.ClassFeature.ThrowableObject))
+			                                     {
+				                                     Message = StringMemoryTests.fixture.Create<String>(),
+			                                     }, StringMemoryTests.fixture.Create<JGlobalRef>());
 			ReadOnlyValPtr<Char> valPtr = fMem.ValuePointer;
 
 			proxyEnv.GetStringLength(stringRef).Returns(value.Length);
@@ -113,8 +118,10 @@ public sealed class StringMemoryTests
 			proxyEnv.Received(1).ExceptionCheck();
 
 			Assert.Throws<CriticalException>(() => env.PendingException);
-			Assert.Throws<CriticalException>(() => env.PendingException = default);
-
+			Assert.Throws<CriticalException>(() => env.PendingException =
+				                                 new ThrowableException<JThrowableObject>(jGlobalThrowable, default));
+			// Support clear critical exception
+			env.PendingException = default;
 			proxyEnv.ExceptionCheck().Returns(false);
 
 			proxyEnv.ClearReceivedCalls();
@@ -338,6 +345,7 @@ public sealed class StringMemoryTests
 
 			proxyEnv.Received(0).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
 			proxyEnv.Received(1).NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(1).GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>());
 			proxyEnv.Received(1).GetStringLength(stringRef);
 			proxyEnv.Received(0).GetStringUtfLength(stringRef);
 		}
@@ -381,6 +389,7 @@ public sealed class StringMemoryTests
 
 			proxyEnv.Received(1).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
 			proxyEnv.Received(0).NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(0).GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>());
 			proxyEnv.Received(0).GetStringLength(stringRef);
 			proxyEnv.Received(1).GetStringUtfLength(stringRef);
 		}
@@ -424,6 +433,7 @@ public sealed class StringMemoryTests
 
 			proxyEnv.Received(1).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
 			proxyEnv.Received(0).NewStringUtf(Arg.Any<ReadOnlyValPtr<Byte>>());
+			proxyEnv.Received(1).GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>());
 			proxyEnv.Received(0).GetStringLength(stringRef);
 			proxyEnv.Received(1).GetStringUtfLength(stringRef);
 		}

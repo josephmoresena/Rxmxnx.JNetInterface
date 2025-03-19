@@ -3,7 +3,7 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Throwable</c> instance.
 /// </summary>
-public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableObject>, ILocalObject,
+public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableObject>,
 	IInterfaceObject<JSerializableObject>
 {
 	/// <summary>
@@ -33,8 +33,9 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	/// <summary>
 	/// Throws an exception from current instance.
 	/// </summary>
-	/// <exception cref="ThrowableException">Always throws an exception.</exception>
-	public void Throw()
+	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	/// <exception cref="ThrowableException">Throws an exception if <paramref name="throwException"/> is true.</exception>
+	public void Throw(Boolean throwException = true)
 	{
 		IEnvironment env = this.Environment;
 		JReferenceTypeMetadata metadata = env.ClassFeature.GetTypeMetadata(this.Class);
@@ -48,7 +49,8 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 			jGlobal.Dispose();
 			throw;
 		}
-		throw env.PendingException;
+		if (throwException)
+			throw env.PendingException;
 	}
 
 	/// <inheritdoc/>
@@ -87,30 +89,39 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	}
 
 	/// <summary>
+	/// Throws an exception from <paramref name="jClass"/> class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
+	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	public static void ThrowNew(JClassObject jClass, CString message, Boolean throwException = false)
+		=> jClass.Environment.ClassFeature.ThrowNew(jClass, message, throwException);
+	/// <summary>
+	/// Throws an exception from <paramref name="jClass"/> class.
+	/// </summary>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
+	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
+	public static void ThrowNew(JClassObject jClass, String message, Boolean throwException = false)
+		=> jClass.Environment.ClassFeature.ThrowNew(jClass, message, throwException);
+
+	/// <summary>
 	/// Throws an exception from <typeparamref name="TThrowable"/> type.
 	/// </summary>
-	/// <typeparam name="TThrowable"></typeparam>
+	/// <typeparam name="TThrowable">A <see cref="JThrowableObject"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	/// <param name="message">
-	/// The message used to construct the <c>java.lang.Throwable</c> instance.
-	/// </param>
-	/// <param name="throwException">
-	/// Indicates whether exception should be thrown in managed code.
-	/// </param>
+	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
+	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
 	public static void ThrowNew<TThrowable>(IEnvironment env, CString message, Boolean throwException = false)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		=> env.ClassFeature.ThrowNew<TThrowable>(message, throwException);
 	/// <summary>
 	/// Throws an exception from <typeparamref name="TThrowable"/> type.
 	/// </summary>
-	/// <typeparam name="TThrowable"></typeparam>
+	/// <typeparam name="TThrowable">A <see cref="JThrowableObject"/> type.</typeparam>
 	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
-	/// <param name="message">
-	/// The message used to construct the <c>java.lang.Throwable</c> instance.
-	/// </param>
-	/// <param name="throwException">
-	/// Indicates whether exception should be thrown in managed code.
-	/// </param>
+	/// <param name="message">The message used to construct the <c>java.lang.Throwable</c> instance.</param>
+	/// <param name="throwException">Indicates whether exception should be thrown in managed code.</param>
 	public static void ThrowNew<TThrowable>(IEnvironment env, String message, Boolean throwException = false)
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>
 		=> env.ClassFeature.ThrowNew<TThrowable>(message, throwException);

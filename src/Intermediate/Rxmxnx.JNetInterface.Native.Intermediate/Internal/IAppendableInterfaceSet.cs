@@ -37,7 +37,7 @@ internal interface IAppendableInterfaceSet : IInterfaceSet, IAppendableProperty
 		/// <param name="metadata">A <see cref="JInterfaceTypeMetadata"/> instance.</param>
 		public static void Append(AppendHelper helper, JInterfaceTypeMetadata metadata)
 		{
-			MetadataTextUtilities.AppendItem(helper._stringBuilder, ClassNameHelper.GetClassName(metadata.Signature),
+			MetadataTextUtilities.AppendItem(helper._stringBuilder, ITypeInformation.GetJavaClassName(metadata),
 			                                 helper.First);
 			helper.First = false;
 		}

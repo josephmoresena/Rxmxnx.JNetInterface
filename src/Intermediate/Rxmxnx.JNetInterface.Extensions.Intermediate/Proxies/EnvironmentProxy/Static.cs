@@ -8,6 +8,20 @@ public abstract partial class EnvironmentProxy
 	public static NativeFunctionSet JniFunctionSet => NativeFunctionSetImpl.Instance;
 
 	/// <summary>
+	/// Creates a <see cref="ITypeInformation"/> instance for <paramref name="className"/>.
+	/// </summary>
+	/// <param name="className">JNI or Java class name.</param>
+	/// <param name="kind">A <see cref="JTypeKind"/> value.</param>
+	/// <param name="isFinal">Indicates whether current type is final.</param>
+	/// <returns>A <see cref="ITypeInformation"/> instance.</returns>
+	public static ITypeInformation CreateTypeInformation(ReadOnlySpan<Byte> className, JTypeKind kind,
+		Boolean? isFinal = default)
+	{
+		TypeInfoSequence sequence = new(className, true);
+		TypeInformation result = new(sequence, kind, isFinal);
+		return result;
+	}
+	/// <summary>
 	/// Creates a <see cref="JClassObject"/> for <c>java.lang.Class&lt;?&gt;</c> data type.
 	/// </summary>
 	/// <param name="env">A <see cref="EnvironmentProxy"/> instance.</param>
@@ -34,20 +48,18 @@ public abstract partial class EnvironmentProxy
 		return new(jClass, IDataType.GetMetadata<TDataType>(), classRef);
 	}
 	/// <summary>
-	/// Creates a <see cref="JClassObject"/> for <paramref name="className"/> data type.
+	/// Creates a <see cref="JClassObject"/> for <paramref name="information"/> data type.
 	/// </summary>
 	/// <param name="jClass">The <c>java.lang.Class&lt;?&gt;</c> <see cref="JClassObject"/> instance.</param>
-	/// <param name="className">Class name.</param>
-	/// <param name="kind">Class kind.</param>
-	/// <param name="isFinal">Indicates whether resulting class is final.</param>
+	/// <param name="information">A <see cref="TypeInformation"/> instance.</param>
 	/// <param name="classRef">A <see cref="JClassLocalRef"/> reference.</param>
-	/// <returns>A <see cref="JClassObject"/> for <paramref name="className"/> data type.</returns>
-	public static JClassObject CreateClassObject(JClassObject jClass, ReadOnlySpan<Byte> className, JTypeKind kind,
-		Boolean? isFinal = default, JClassLocalRef classRef = default)
+	/// <returns>A <see cref="JClassObject"/> for <paramref name="information"/> data type.</returns>
+	public static JClassObject CreateClassObject(JClassObject jClass, ITypeInformation information,
+		JClassLocalRef classRef = default)
 	{
 		EnvironmentProxy.ThrowIfNotProxy(jClass);
 		EnvironmentProxy.ThrowIfNotClass(jClass, IDataType.GetMetadata<JClassObject>());
-		ClassObjectMetadata classMetadata = new(jClass, new(className), kind, isFinal);
+		ClassObjectMetadata classMetadata = ClassObjectMetadata.Create(information, true);
 		return new(jClass, classMetadata, classRef);
 	}
 	/// <summary>
@@ -163,6 +175,21 @@ public abstract partial class EnvironmentProxy
 				_ => result,
 			};
 		return (TGlobal?)result ?? throw new ArgumentException(IMessageResource.GetInstance().InvalidGlobalObject);
+	}
+	/// <summary>
+	/// Creates a <see cref="JDirectByteBufferObject"/> instance.
+	/// </summary>
+	/// <typeparam name="T">Type of <see langword="unmanaged"/> items in <paramref name="memory"/>.</typeparam>
+	/// <param name="jClass">A <see cref="JClassObject"/> instance.</param>
+	/// <param name="memory">A <see cref="Memory{T}"/> instance.</param>
+	/// <param name="localRef">A <see cref="JObjectLocalRef"/> reference.</param>
+	/// <returns>A <see cref="JDirectByteBufferObject"/> instance.</returns>
+	public static JDirectByteBufferObject CreateDirectByteBuffer<T>(JClassObject jClass, Memory<T> memory,
+		JObjectLocalRef localRef) where T : unmanaged
+	{
+		EnvironmentProxy.ThrowIfNotProxy(jClass);
+		EnvironmentProxy.ThrowIfNotClass(jClass, IDataType.GetMetadata<JDirectByteBufferObject>());
+		return new(jClass, memory.GetFixedContext(), localRef);
 	}
 	/// <summary>
 	/// Sets <paramref name="length"/> as <paramref name="jArray"/>'s length.

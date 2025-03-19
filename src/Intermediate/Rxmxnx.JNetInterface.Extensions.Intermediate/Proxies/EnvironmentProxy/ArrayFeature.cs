@@ -8,6 +8,12 @@ public abstract partial class EnvironmentProxy
 	public abstract JArrayObject<TElement> CreateArray<TElement>(Int32 length, TElement initialElement)
 		where TElement : IDataType<TElement>;
 	/// <inheritdoc/>
+	public abstract JArrayObject<TElement> CreateArray<TElement>(JClassObject jClass, Int32 length)
+		where TElement : IDataType<TElement>;
+	/// <inheritdoc/>
+	public abstract JArrayObject<TElement> CreateArray<TElement>(JClassObject jClass, Int32 length,
+		TElement initialElement) where TElement : IDataType<TElement>;
+	/// <inheritdoc/>
 	public abstract Int32 GetArrayLength(JReferenceObject jObject);
 	/// <inheritdoc/>
 	public abstract TElement? GetElement<TElement>(JArrayObject<TElement> jArray, Int32 index)
