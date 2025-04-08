@@ -5,8 +5,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// </summary>
 /// <typeparam name="TReference">Type of object reference.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct NewRefFunction<TReference>
 	where TReference : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 {
@@ -28,7 +30,9 @@ internal readonly unsafe struct NewRefFunction<TReference>
 	/// Created references must be explicitly disposed of by calling
 	/// <c>Delete<typeparamref name="TReference"/>Ref()</c>.
 	/// </remarks>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TReference NewRef(JEnvironmentRef envRef, JObjectLocalRef localRef)
 	{

@@ -5,8 +5,10 @@ internal partial struct JniTransactionHandle
 	/// <summary>
 	/// Base class for fixed capacity transaction.
 	/// </summary>
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3459,
 	                 Justification = CommonConstants.ReferenceableFieldJustification)]
+#endif
 	private abstract class FixedTransaction : INativeTransaction
 	{
 		/// <summary>

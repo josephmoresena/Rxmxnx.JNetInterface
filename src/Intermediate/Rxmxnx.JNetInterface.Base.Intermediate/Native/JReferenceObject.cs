@@ -5,8 +5,10 @@ namespace Rxmxnx.JNetInterface.Native;
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1206,
                  Justification = CommonConstants.InternalInheritanceJustification)]
+#endif
 public abstract partial class JReferenceObject : JObject
 {
 	/// <summary>
@@ -59,6 +61,8 @@ public abstract partial class JReferenceObject : JObject
 			_ => false,
 		};
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override Int32 GetHashCode() => this.As<JObjectLocalRef>().GetHashCode();
 }

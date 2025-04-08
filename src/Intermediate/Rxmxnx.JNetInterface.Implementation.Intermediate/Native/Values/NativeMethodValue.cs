@@ -4,10 +4,12 @@
 /// Native representation of <see cref="JNativeCallEntry"/> instance
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2376,
                  Justification = CommonConstants.BinaryStructJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct NativeMethodValue
 {
 	/// <summary>
@@ -20,15 +22,36 @@ internal readonly unsafe struct NativeMethodValue
 	/// <summary>
 	/// Pointer to method name.
 	/// </summary>
-	public Byte* Name { [ExcludeFromCodeCoverage] get; init; }
+	public Byte* Name
+	{
+#if !PACKAGE
+		[ExcludeFromCodeCoverage]
+#endif
+		get;
+		init;
+	}
 	/// <summary>
 	/// Pointer to method signature.
 	/// </summary>
-	public Byte* Signature { [ExcludeFromCodeCoverage] get; init; }
+	public Byte* Signature
+	{
+#if !PACKAGE
+		[ExcludeFromCodeCoverage]
+#endif
+		get;
+		init;
+	}
 	/// <summary>
 	/// Pointer to method implementation.
 	/// </summary>
-	public void* Pointer { [ExcludeFromCodeCoverage] get; init; }
+	public void* Pointer
+	{
+#if !PACKAGE
+		[ExcludeFromCodeCoverage]
+#endif
+		get;
+		init;
+	}
 
 	/// <summary>
 	/// Creates a <see cref="NativeMethodValue"/> from <paramref name="entry"/>.

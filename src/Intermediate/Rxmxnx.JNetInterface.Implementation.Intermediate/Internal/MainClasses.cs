@@ -3,59 +3,81 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Stores initial classes.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1694,
                  Justification = CommonConstants.InternalInheritanceJustification)]
+#endif
 internal abstract partial class MainClasses
 {
 	/// <summary>
 	/// Indicates whether <see cref="JVoidObject"/> class is a main class.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean VoidObjectMainClassEnabled => false;
 	/// <summary>
 	/// Indicates whether <see cref="JBooleanObject"/> class is a main class.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean BooleanObjectMainClassEnabled => true;
 	/// <summary>
 	/// Indicates whether <see cref="JByteObject"/> class is a main class.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean ByteObjectMainClassEnabled => true;
 	/// <summary>
 	/// Indicates whether <see cref="JCharacterObject"/> class is a main class.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean CharacterObjectMainClassEnabled => true;
 	/// <summary>
 	/// Indicates whether <see cref="JDoubleObject"/> class is a main class.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean DoubleObjectMainClassEnabled => true;
 	/// <summary>
 	/// Indicates whether <see cref="JDoubleObject"/> class is a main class.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean FloatObjectMainClassEnabled => true;
 	/// <summary>
 	/// Indicates whether <see cref="JIntegerObject"/> class is a main class.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean IntegerObjectMainClassEnabled => true;
 	/// <summary>
 	/// Indicates whether <see cref="JLongObject"/> class is a main class.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean LongObjectMainClassEnabled => true;
 	/// <summary>
 	/// Indicates whether <see cref="JShortObject"/> class is a main class.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean ShortObjectMainClassEnabled => true;
 	/// <summary>
 	/// Indicates whether primitive classes are main classes.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean PrimitiveMainClassesEnabled => true;
 
 	/// <summary>
@@ -81,7 +103,9 @@ internal abstract partial class MainClasses
 	/// </summary>
 	/// <param name="mainClasses">Main classes dictionary.</param>
 	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static void AppendMainClass(IDictionary<String, JDataTypeMetadata> mainClasses,
 		JDataTypeMetadata typeMetadata)
 	{
@@ -95,8 +119,10 @@ internal abstract partial class MainClasses
 /// Stores initial classes.
 /// </summary>
 /// <typeparam name="TClass">Type of class.</typeparam>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1694,
                  Justification = CommonConstants.InternalInheritanceJustification)]
+#endif
 internal abstract class MainClasses<TClass> : MainClasses where TClass : JReferenceObject
 {
 	/// <summary>

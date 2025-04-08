@@ -5,8 +5,10 @@ partial class JEnvironment
 	/// <summary>
 	/// This class stores cache for a <see cref="JEnvironment"/> instance.
 	/// </summary>
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 	private sealed partial class EnvironmentCache : LocalMainClasses
 	{
 		/// <summary>

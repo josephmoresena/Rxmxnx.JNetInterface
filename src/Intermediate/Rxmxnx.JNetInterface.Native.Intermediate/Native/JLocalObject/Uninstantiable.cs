@@ -11,10 +11,14 @@ public partial class JLocalObject
 		where TUninstantiable : Uninstantiable<TUninstantiable>, IUninstantiableType<TUninstantiable>
 	{
 		/// <inheritdoc/>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		public override CString ObjectClassName => IReferenceType.GetMetadata<TUninstantiable>().ClassName;
 		/// <inheritdoc/>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		public override CString ObjectSignature => IReferenceType.GetMetadata<TUninstantiable>().Signature;
 
 		/// <summary>

@@ -22,7 +22,9 @@ public sealed partial class JCharacterObject
 		this._value = jBooleanObject?._value;
 	}
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	void IPrimitiveWrapperType<JCharacterObject>.SetPrimitiveValue(IPrimitiveType value)
 		=> this._value = value.ToChar(CultureInfo.InvariantCulture);
 

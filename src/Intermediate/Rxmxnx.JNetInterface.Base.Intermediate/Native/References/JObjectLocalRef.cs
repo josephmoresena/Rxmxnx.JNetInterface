@@ -20,7 +20,9 @@ public readonly partial struct JObjectLocalRef : IFixedPointer, INativeType, IWr
 	/// </summary>
 	public JObjectLocalRef() => this.Pointer = IntPtr.Zero;
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	JObjectLocalRef IWrapper<JObjectLocalRef>.Value => this;
 
 	/// <inheritdoc/>

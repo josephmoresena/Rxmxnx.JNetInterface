@@ -5,8 +5,10 @@ using TypeMetadata = JClassTypeMetadata<JMappedByteBufferObject>;
 /// <summary>
 /// This class represents a local <c>java.nio.MappedByteBuffer</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JMappedByteBufferObject : JByteBufferObject, IClassType<JMappedByteBufferObject>
 {
 	/// <summary>

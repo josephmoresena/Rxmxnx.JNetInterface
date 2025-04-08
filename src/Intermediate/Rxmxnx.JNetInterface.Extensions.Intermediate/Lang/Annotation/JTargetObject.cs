@@ -5,8 +5,10 @@ using TypeMetadata = JInterfaceTypeMetadata<JTargetObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.annotation.Target</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JTargetObject : JAnnotationObject<JTargetObject>, IInterfaceType<JTargetObject>
 {
 	/// <summary>

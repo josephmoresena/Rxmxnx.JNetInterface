@@ -1,7 +1,9 @@
 namespace Rxmxnx.JNetInterface.Native;
 
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4035,
                  Justification = CommonConstants.InternalInheritanceJustification)]
+#endif
 public abstract partial class JNativeMemory : IEquatable<JNativeMemory>
 {
 	/// <inheritdoc/>

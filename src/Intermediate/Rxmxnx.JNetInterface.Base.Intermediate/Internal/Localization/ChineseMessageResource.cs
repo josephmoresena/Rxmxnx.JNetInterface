@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal.Localization;
 /// <summary>
 /// Chinese message resource.
 /// </summary>
+#if !PACKAGE
 [ExcludeFromCodeCoverage]
+#endif
 internal sealed class ChineseMessageResource : IMessageResource
 {
 	/// <inheritdoc cref="IMessageResource.Instance"/>

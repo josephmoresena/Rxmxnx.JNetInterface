@@ -6,8 +6,10 @@ public partial class JThrowableObject
 	/// <see cref="JClassTypeMetadata"/> throwable builder.
 	/// </summary>
 	/// <typeparam name="TThrowable">Type of <c/>java.lang.Throwable<c/> class.</typeparam>
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+#endif
 	protected new ref struct TypeMetadataBuilder<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TThrowable>
 		where TThrowable : JThrowableObject, IThrowableType<TThrowable>

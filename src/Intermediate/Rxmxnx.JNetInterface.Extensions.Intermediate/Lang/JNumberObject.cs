@@ -4,8 +4,10 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// This class represents a local <c>java.lang.Number</c> instance.
 /// </summary>
 /// <typeparam name="TValue">Number <see cref="IPrimitiveType"/> type.</typeparam>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 {
@@ -38,7 +40,9 @@ public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TV
 	}
 
 	/// <inheritdoc cref="IPrimitiveWrapperType{TWrapper}.SetPrimitiveValue"/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private protected void SetPrimitiveValue(TValue value) => this._value = value;
 }
 
@@ -67,7 +71,9 @@ public abstract partial class
 	/// <inheritdoc/>
 	public override String ToString() => this.Value.ToString()!;
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override String ToTraceText()
 		=> $"{JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference)} {IPrimitiveType.GetMetadata<TValue>().Signature}: {this.Value}";
 

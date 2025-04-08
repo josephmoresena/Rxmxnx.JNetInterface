@@ -14,13 +14,19 @@ public sealed class JVoidObject : JLocalObject.Uninstantiable<JVoidObject>, IPri
 	static JPrimitiveTypeMetadata IPrimitiveWrapperType<JVoidObject>.PrimitiveMetadata
 		=> JPrimitiveTypeMetadata.VoidMetadata;
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other)
 		=> CommonValidationUtilities.ThrowVoidEquality();
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	Boolean IEquatable<IPrimitiveType>.Equals(IPrimitiveType? other) => CommonValidationUtilities.ThrowVoidEquality();
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IPrimitiveWrapperType<JVoidObject>.SetPrimitiveValue(IPrimitiveType value) { }
 }

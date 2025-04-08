@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Proxies;
 /// <summary>
 /// This interface exposes a proxy for invocation interface.
 /// </summary>
+#if !PACKAGE
 [ExcludeFromCodeCoverage]
+#endif
 public abstract class VirtualMachineProxy : IVirtualMachine
 {
 	/// <inheritdoc/>

@@ -37,7 +37,9 @@ public sealed record StackTraceInfo
 
 	/// <inheritdoc cref="Object.ToString()"/>
 	/// <remarks>Use this method for trace.</remarks>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public String ToTraceText()
 	{
 		String lineText = this.NativeMethod ? "Native Method" : $"{this.FileName}:{this.LineNumber}";

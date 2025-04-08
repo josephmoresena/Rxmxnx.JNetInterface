@@ -5,8 +5,10 @@ using TypeMetadata = JInterfaceTypeMetadata<JReadableObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.Readable</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JReadableObject : JInterfaceObject<JReadableObject>, IInterfaceType<JReadableObject>
 {
 	/// <summary>

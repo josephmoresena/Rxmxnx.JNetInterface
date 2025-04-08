@@ -7,7 +7,9 @@ namespace Rxmxnx.JNetInterface.Types;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public partial interface IReferenceType : IDataType, ILocalObject, IDisposable
 {
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static Type IDataType.FamilyType => typeof(JLocalObject);
 
 	/// <summary>

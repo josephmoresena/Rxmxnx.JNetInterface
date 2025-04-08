@@ -17,7 +17,9 @@ public interface
 	[ReadOnly(true)]
 	protected new static abstract JThrowableTypeMetadata<TThrowable> Metadata { get; }
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static JClassTypeMetadata<TThrowable> IClassType<TThrowable>.Metadata => TThrowable.Metadata;
 	static JDataTypeMetadata IDataType<TThrowable>.Metadata => TThrowable.Metadata;
 }

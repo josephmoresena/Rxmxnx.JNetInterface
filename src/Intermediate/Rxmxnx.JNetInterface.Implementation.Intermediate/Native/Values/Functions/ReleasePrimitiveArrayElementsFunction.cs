@@ -6,8 +6,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// <typeparam name="TPrimitiveType">Type of primitive value.</typeparam>
 /// <typeparam name="TArrayRef">Type of array reference.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct ReleasePrimitiveArrayElementsFunction<TPrimitiveType, TArrayRef>
 	where TPrimitiveType : unmanaged, INativeType, IPrimitiveType<TPrimitiveType>
 	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
@@ -22,7 +24,9 @@ internal readonly unsafe struct ReleasePrimitiveArrayElementsFunction<TPrimitive
 	/// Pointer to <c>Release&lt;PrimitiveType&gt;Elements</c> function.
 	/// Informs the <c>VM</c> that the native code no longer needs access to array elements.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void Release(JEnvironmentRef envRef, TArrayRef arrayRef, ReadOnlyValPtr<TPrimitiveType> elements,
 		JReleaseMode mode)

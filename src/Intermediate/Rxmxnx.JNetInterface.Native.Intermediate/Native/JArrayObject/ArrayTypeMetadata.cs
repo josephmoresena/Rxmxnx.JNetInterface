@@ -5,8 +5,10 @@ public partial class JArrayObject<TElement>
 	/// <summary>
 	/// This record stores the metadata for a class <see cref="IArrayType"/> type.
 	/// </summary>
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2743,
 	                 Justification = CommonConstants.NonGenericInGenericTypeJustification)]
+#endif
 	private sealed class ArrayTypeMetadata : JArrayTypeMetadata
 	{
 		/// <summary>

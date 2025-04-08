@@ -5,8 +5,10 @@ using TypeMetadata = JInterfaceTypeMetadata<JAppendableObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.Appendable</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JAppendableObject : JInterfaceObject<JAppendableObject>, IInterfaceType<JAppendableObject>
 {
 	/// <summary>

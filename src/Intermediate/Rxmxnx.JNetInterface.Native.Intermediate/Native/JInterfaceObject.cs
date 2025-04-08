@@ -4,8 +4,10 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This class represents an interface instance.
 /// </summary>
 /// <typeparam name="TInterface">Type of <see cref="IInterfaceType"/>.</typeparam>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public abstract class JInterfaceObject<TInterface> : JLocalObject.InterfaceView
 	where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 {

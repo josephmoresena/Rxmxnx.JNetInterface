@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Short</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimitiveWrapperType<JShortObject, JShort>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JShortObject> typeMetadata =
@@ -25,7 +27,9 @@ public sealed class JShortObject : JNumberObject<JShort, JShortObject>, IPrimiti
 	/// <inheritdoc/>
 	private JShortObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JShortObject>()) { }
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IPrimitiveWrapperType<JShortObject>.SetPrimitiveValue(IPrimitiveType value)
 		=> base.SetPrimitiveValue(value.ToInt16(CultureInfo.InvariantCulture));

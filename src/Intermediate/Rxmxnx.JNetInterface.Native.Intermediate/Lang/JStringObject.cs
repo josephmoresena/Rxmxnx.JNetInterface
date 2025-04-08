@@ -15,7 +15,9 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <summary>
 	/// Internal property to debugger display.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	internal String DisplayValue
 		=> this._value ?? (this._length is not null ?
 			$"{this.Reference} Length: {this.Length}" :
@@ -46,7 +48,9 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <inheritdoc/>
 	public override String ToString() => this.Value;
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override String ToTraceText()
 		=> $"{JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference)} length: {this.Length}";
 

@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JClassCircularityErrorObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.ClassCircularityError</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JClassCircularityErrorObject : JLinkageErrorObject, IThrowableType<JClassCircularityErrorObject>
 {
 	/// <summary>

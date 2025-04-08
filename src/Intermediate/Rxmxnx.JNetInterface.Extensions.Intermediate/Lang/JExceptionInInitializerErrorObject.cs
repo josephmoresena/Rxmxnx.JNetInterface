@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JExceptionInInitializerErrorObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.ExceptionInInitializerError</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JExceptionInInitializerErrorObject : JLinkageErrorObject,
 	IThrowableType<JExceptionInInitializerErrorObject>
 {

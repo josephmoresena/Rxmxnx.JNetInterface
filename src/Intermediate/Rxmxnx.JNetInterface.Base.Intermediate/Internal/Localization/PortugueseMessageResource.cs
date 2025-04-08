@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal.Localization;
 /// <summary>
 /// Portuguese message resource.
 /// </summary>
+#if !PACKAGE
 [ExcludeFromCodeCoverage]
+#endif
 internal sealed class PortugueseMessageResource : IMessageResource
 {
 	/// <inheritdoc cref="IMessageResource.Instance"/>

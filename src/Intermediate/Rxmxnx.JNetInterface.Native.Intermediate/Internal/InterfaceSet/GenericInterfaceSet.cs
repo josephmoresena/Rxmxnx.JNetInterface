@@ -19,7 +19,9 @@ internal partial class InterfaceSet
 		/// </summary>
 		private GenericInterfaceSet() { }
 
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
 		/// <inheritdoc/>
@@ -54,7 +56,9 @@ internal partial class InterfaceSet
 		/// </summary>
 		private GenericInterfaceSet() { }
 
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
 		/// <inheritdoc/>

@@ -3,9 +3,11 @@ namespace Rxmxnx.JNetInterface.Proxies;
 /// <summary>
 /// This object exposes a JNI proxy instance.
 /// </summary>
+#if !PACKAGE
 [ExcludeFromCodeCoverage]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4136,
                  Justification = CommonConstants.NoMethodOverloadingJustification)]
+#endif
 public abstract partial class EnvironmentProxy
 {
 	/// <inheritdoc cref="IEnvironment.VirtualMachine"/>

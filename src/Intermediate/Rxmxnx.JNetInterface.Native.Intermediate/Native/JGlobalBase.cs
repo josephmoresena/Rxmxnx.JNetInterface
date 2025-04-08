@@ -4,10 +4,12 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This class represents a <see cref="JObject"/> instance which may remain valid across different
 /// threads.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
                  Justification = CommonConstants.JniThreadRequiredJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2953,
                  Justification = CommonConstants.JniThreadRequiredJustification)]
+#endif
 public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 {
 	/// <summary>

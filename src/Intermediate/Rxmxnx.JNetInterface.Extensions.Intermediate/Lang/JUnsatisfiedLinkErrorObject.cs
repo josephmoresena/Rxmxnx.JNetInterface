@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JUnsatisfiedLinkErrorObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.UnsatisfiedLinkError</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JUnsatisfiedLinkErrorObject : JLinkageErrorObject, IThrowableType<JUnsatisfiedLinkErrorObject>
 {
 	/// <summary>

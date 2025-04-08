@@ -27,7 +27,9 @@ internal abstract partial class InfoSequenceBase(String hash, Int32 nameLength)
 	/// <param name="hash">Class hash.</param>
 	/// <param name="lastChar">Last char hash.</param>
 	/// <returns>A read-only UTF-16 char span.</returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static ReadOnlySpan<Char> GetPrintableHash(String hash, out String lastChar)
 	{
 		ReadOnlySpan<Char> hashSpan = hash;

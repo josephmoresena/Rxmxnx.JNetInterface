@@ -6,8 +6,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// <typeparam name="TPrimitiveType">Type of primitive value.</typeparam>
 /// <typeparam name="TArrayRef">Type of array reference.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct GetPrimitiveArrayRegionFunction<TPrimitiveType, TArrayRef>
 	where TPrimitiveType : unmanaged, INativeType, IPrimitiveType<TPrimitiveType>
 	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
@@ -22,7 +24,9 @@ internal readonly unsafe struct GetPrimitiveArrayRegionFunction<TPrimitiveType, 
 	/// Pointer to <c>Get&lt;PrimitiveType&gt;ArrayRegion</c> function.
 	/// Copies a region of a primitive array into a buffer.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void Get(JEnvironmentRef envRef, TArrayRef arrayRef, Int32 start, Int32 length,
 		ValPtr<TPrimitiveType> buffer)

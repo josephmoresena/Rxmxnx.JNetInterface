@@ -1,9 +1,11 @@
 namespace Rxmxnx.JNetInterface.Types.Metadata;
 
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3963,
                  Justification = CommonConstants.ReflectionFreeModeJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3011,
                  Justification = CommonConstants.ReflectionPrivateUseJustification)]
+#endif
 public abstract partial class JArrayTypeMetadata
 {
 	/// <summary>
@@ -27,7 +29,9 @@ public abstract partial class JArrayTypeMetadata
 	/// <summary>
 	/// Static constructor.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static JArrayTypeMetadata()
 	{
 		if (!IVirtualMachine.JaggedArrayAutoGenerationEnabled) return;
@@ -73,7 +77,9 @@ public abstract partial class JArrayTypeMetadata
 	/// </summary>
 	/// <typeparam name="TElement">A <see cref="IDataType{TElement}"/> element type.</typeparam>
 	/// <returns>Type of <see cref="JArrayObject{TElement}"/></returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	protected static Type? GetArrayType<TElement>() where TElement : IDataType<TElement>
 	{
 		try
@@ -106,7 +112,9 @@ public abstract partial class JArrayTypeMetadata
 	/// <param name="typeofElement">Type of array element.</param>
 	/// <param name="elementSignature">Element signature.</param>
 	/// <returns>A <see cref="JArrayTypeMetadata"/> for the array of arrays of <paramref name="typeofElement"/>.</returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private static JArrayTypeMetadata? TryGetArrayArrayMetadataWithReflection(CString elementSignature,
 		Type typeofElement)
 	{

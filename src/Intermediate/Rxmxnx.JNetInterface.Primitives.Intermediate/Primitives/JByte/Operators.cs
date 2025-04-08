@@ -36,22 +36,34 @@ public readonly partial struct JByte : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JByte"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JByte value) => value._value;
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JByte>.operator JByte(JByte jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JByte>.operator JDouble(JByte jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JByte>.operator JFloat(JByte jPrimitive) => jPrimitive;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JByte>.operator Single(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator JInt(JByte jPrimitive) => jPrimitive;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JByte>.operator Int32(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator JLong(JByte jPrimitive) => jPrimitive;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JByte>.operator Int64(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator JShort(JByte jPrimitive) => jPrimitive;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JByte>.operator Int16(JByte jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JByte>.operator SByte(JByte jPrimitive) => jPrimitive._value;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JByte>.operator Char(JByte jPrimitive) => (Char)jPrimitive._value;
 }

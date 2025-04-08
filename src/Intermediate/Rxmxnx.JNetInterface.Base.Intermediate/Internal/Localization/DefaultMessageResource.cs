@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal.Localization;
 /// <summary>
 /// Default (English) message resource.
 /// </summary>
+#if !PACKAGE
 [ExcludeFromCodeCoverage]
+#endif
 internal sealed class DefaultMessageResource : IMessageResource
 {
 	/// <inheritdoc cref="IMessageResource.Instance"/>

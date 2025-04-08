@@ -29,7 +29,9 @@ public sealed record ExecutableObjectMetadata : ObjectMetadata
 	}
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private ExecutableObjectMetadata(ExecutableObjectMetadata executableMetadata) : base(executableMetadata)
 	{
 		this.Definition = executableMetadata.Definition;

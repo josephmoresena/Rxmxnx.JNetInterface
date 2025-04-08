@@ -25,7 +25,9 @@ internal abstract partial class MainClasses
 	/// </summary>
 	/// <param name="mainClasses">Main classes dictionary.</param>
 	/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private static void AppendMainClass(IDictionary<String, JDataTypeMetadata> mainClasses,
 		JReferenceTypeMetadata? typeMetadata)
 	{
@@ -42,7 +44,9 @@ internal abstract partial class MainClasses
 	/// </summary>
 	/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <returns>A <see cref="JClassTypeMetadata"/> instance.</returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private static JClassTypeMetadata? MainSuperClass(JReferenceTypeMetadata typeMetadata)
 	{
 		while (typeMetadata.BaseMetadata is { } baseMetadata)
@@ -68,7 +72,9 @@ internal abstract partial class MainClasses
 	/// </summary>
 	/// <param name="typeMetadata">A <see cref="JReferenceTypeMetadata"/> instance.</param>
 	/// <returns>A <see cref="JClassTypeMetadata"/> instance.</returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private static JInterfaceTypeMetadata? MainInterface(JReferenceTypeMetadata typeMetadata)
 		=> typeMetadata.Hash switch
 		{

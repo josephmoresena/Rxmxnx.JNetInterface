@@ -38,20 +38,32 @@ public readonly partial struct JShort : IPrimitiveEquatable
 
 	static explicit IPrimitiveNumericType<JShort>.operator JDouble(JShort jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JShort>.operator JFloat(JShort jPrimitive) => jPrimitive;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JShort>.operator Single(JShort jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JShort>.operator JInt(JShort jPrimitive) => jPrimitive;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JShort>.operator Int32(JShort jPrimitive) => jPrimitive._value;
 	static explicit IPrimitiveNumericType<JShort>.operator JLong(JShort jPrimitive) => jPrimitive;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JShort>.operator Int64(JShort jPrimitive) => jPrimitive._value;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JShort>.operator JShort(JShort jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JShort>.operator Int16(JShort jPrimitive) => jPrimitive._value;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JShort>.operator SByte(JShort jPrimitive)
 		=> NativeUtilities.AsBytes(jPrimitive).ToValue<SByte>();
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JShort>.operator Char(JShort jPrimitive) => (Char)jPrimitive._value;
 }

@@ -71,7 +71,9 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 		return result;
 	}
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override String ToTraceText() => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference);
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>

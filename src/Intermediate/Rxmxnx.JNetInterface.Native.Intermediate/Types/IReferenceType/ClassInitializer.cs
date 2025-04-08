@@ -35,7 +35,9 @@ public partial interface IReferenceType
 		/// <summary>
 		/// Indicates whether <see cref="Class"/> is real object class.
 		/// </summary>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		internal Boolean RealClass
 		{
 			get => this._instance.OverrideClass;

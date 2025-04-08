@@ -29,7 +29,9 @@ public sealed record StringObjectMetadata : ObjectMetadata
 	}
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private StringObjectMetadata(StringObjectMetadata stringMetadata) : base(stringMetadata)
 	{
 		this.Value = stringMetadata.Value;

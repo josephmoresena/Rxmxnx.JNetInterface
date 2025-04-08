@@ -3,9 +3,11 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Trace for internal use.
 /// </summary>
+#if !PACKAGE
 [ExcludeFromCodeCoverage]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6670,
                  Justification = CommonConstants.NonStandardTraceJustification)]
+#endif
 internal static partial class JTrace
 {
 	/// <summary>

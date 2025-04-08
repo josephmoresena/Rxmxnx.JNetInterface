@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JNullPointerExceptionObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.NullPointerException</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JNullPointerExceptionObject : JRuntimeExceptionObject, IThrowableType<JNullPointerExceptionObject>
 {
 	/// <summary>

@@ -5,10 +5,10 @@
 /// </summary>
 internal static class CommonConstants
 {
-	#region SuppressMessage
-	public const String CodeQuality = "CodeQuality";
+	public const String AvoidableReflectionUseJustification =
+		"There are alternatives that avoid the use of reflection.";
+#if !PACKAGE
 	public const String CSharpSquid = "csharpsquid";
-	public const String CheckId0051 = "IDE0051:Remove unused private members";
 	public const String CheckIdS1144 = "S1144:Unused private types or members should be removed";
 	public const String CheckIdS2292 = "S2292:Trivial properties should be auto-implemented";
 	public const String CheckIdS3881 = "S3881:\"IDisposable\" should be implemented correctly";
@@ -53,8 +53,6 @@ internal static class CommonConstants
 		"Reflection use should be avoidable in NativeAOT reflection free mode.";
 	public const String ReflectionPrivateUseJustification =
 		"Reflection use is limited privately and is used only to avoid infinity recursive initialization type.";
-	public const String AvoidableReflectionUseJustification =
-		"There are alternatives that avoid the use of reflection.";
 	public const String StaticAbstractPropertyUseJustification =
 		"There is no static field, but abstract/virtual property.";
 	public const String DefaultValueTypeJustification = "Default value for ValueType is not null.";
@@ -68,5 +66,5 @@ internal static class CommonConstants
 	public const String OnlyInternalInstantiationJustification =
 		"Only internal code is allowed to build an instance of current type.";
 	public const String NonGenericInGenericTypeJustification = "Non-generic type is declared inside a generic type.";
-	#endregion
+#endif
 }

@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal.Localization;
 /// <summary>
 /// Arabic message resource.
 /// </summary>
+#if !PACKAGE
 [ExcludeFromCodeCoverage]
+#endif
 internal sealed class ArabicMessageResource : IMessageResource
 {
 	/// <inheritdoc cref="IMessageResource.Instance"/>

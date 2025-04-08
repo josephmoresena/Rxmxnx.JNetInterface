@@ -7,8 +7,10 @@ using IPrimitiveValueType = IPrimitiveType<JBoolean, Boolean>;
 /// Primitive <c>boolean</c>. Represents a Boolean (<see langword="true"/> or <see langword="false"/>) value.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1210,
                  Justification = CommonConstants.NoBooleanComparisonOperatorsJustification)]
+#endif
 public readonly partial struct JBoolean : INativeType, IComparable<JBoolean>, IEquatable<JBoolean>, IPrimitiveValueType
 {
 	/// <summary>
@@ -55,7 +57,9 @@ public readonly partial struct JBoolean : INativeType, IComparable<JBoolean>, IE
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JBoolean() => this._value = JBoolean.FalseValue;
 	/// <summary>
 	/// Constructor.

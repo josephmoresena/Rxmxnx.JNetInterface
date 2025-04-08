@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Native;
 internal partial class JPrimitiveObject
 {
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override Boolean Equals(Object? obj)
 		=> obj is JPrimitiveObject primitive && primitive.AsSpan().SequenceEqual(this.AsSpan()) &&
 			this.SizeOf == primitive.SizeOf;

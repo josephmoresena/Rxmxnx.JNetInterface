@@ -17,7 +17,9 @@ internal interface ILocalViewObject : IViewObject, ILocalObject
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata)
 		=> ILocalObject.ProcessMetadata(this.Object, instanceMetadata);
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	IObject IViewObject.Object => this.Object;
 
 	/// <summary>

@@ -79,12 +79,16 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	}
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override Boolean Equals(Object? obj)
 		=> (obj is JEnvironment other && this._cache.Equals(other._cache)) ||
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override Int32 GetHashCode() => this._cache.GetHashCode();
 
 	/// <summary>
@@ -97,7 +101,9 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <see langword="true"/> if the value of <paramref name="left"/> is the same as the value
 	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator ==(JEnvironment? left, JEnvironment? right) => left?.Equals(right) ?? right is null;
 	/// <summary>
@@ -110,7 +116,9 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 	/// <see langword="true"/> if the value of <paramref name="left"/> is different from the value
 	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator !=(JEnvironment? left, JEnvironment? right) => !(left == right);
 }

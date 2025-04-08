@@ -61,7 +61,9 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// <inheritdoc/>
 	public override String ToString() => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference);
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override String ToTraceText() => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference);
 
 	/// <summary>

@@ -1,7 +1,9 @@
 namespace Rxmxnx.JNetInterface;
 
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 partial class JEnvironment
 {
 	/// <summary>

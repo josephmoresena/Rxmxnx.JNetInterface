@@ -1,7 +1,9 @@
 namespace Rxmxnx.JNetInterface;
 
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4035,
                  Justification = CommonConstants.InternalInheritanceJustification)]
+#endif
 partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 {
 	Boolean IEnvironment.NoProxy => true;
@@ -74,10 +76,14 @@ partial class JEnvironment : IEquatable<IEnvironment>, IEquatable<JEnvironment>
 		localFrame.SetResult(result);
 		return result;
 	}
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	Boolean IEquatable<IEnvironment>.Equals(IEnvironment? other)
 		=> other is not null && this.Reference == other.Reference && (this as IEnvironment).NoProxy == other.NoProxy;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	Boolean IEquatable<JEnvironment>.Equals(JEnvironment? other)
 		=> other is not null && this._cache.Equals(other._cache);
 }

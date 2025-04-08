@@ -8,7 +8,9 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// <summary>
 	/// Indicates whether trace output is enabled.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean TraceEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -17,7 +19,9 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// <summary>
 	/// Indicates whether final user-types should be treated as real classes at runtime.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean FinalUserTypeRuntimeEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -26,7 +30,9 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// <summary>
 	/// Indicates whether native call adapters should check parameter references type.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean CheckRefTypeNativeCallEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -35,7 +41,9 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// <summary>
 	/// Indicates whether native call adapters should check parameter class object class.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean CheckClassRefNativeCallEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -136,7 +144,9 @@ public partial class JVirtualMachine : IVirtualMachine
 	/// Sets <typeparamref name="TReference"/> as main class.
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static void SetMainClass<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
 	{
 		JDataTypeMetadata typeMetadata = MetadataHelper.GetExactMetadata<TReference>();

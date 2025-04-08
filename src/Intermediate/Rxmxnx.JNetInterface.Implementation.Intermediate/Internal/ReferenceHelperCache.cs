@@ -6,8 +6,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <typeparam name="TObject">Type of object.</typeparam>
 /// <typeparam name="TReference">Type of reference.</typeparam>
 /// <typeparam name="TCreationArg">Type of creation argument.</typeparam>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2436,
                  Justification = "All generic parameters are needed.")]
+#endif
 internal abstract class ReferenceHelperCache<TObject, TReference, TCreationArg>
 	where TObject : class, IWrapper<TReference> where TReference : unmanaged, INativeReferenceType
 {

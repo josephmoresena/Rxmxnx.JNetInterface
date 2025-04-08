@@ -1,7 +1,9 @@
 namespace Rxmxnx.JNetInterface;
 
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 partial class JEnvironment
 {
 	/// <summary>
@@ -381,7 +383,9 @@ partial class JEnvironment
 	}
 	/// <inheritdoc cref="IEquatable{TEquatable}.Equals(TEquatable)"/>
 #pragma warning disable CA1859
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private static Boolean? EqualEquatable<TEquatable>(IEquatable<TEquatable>? obj, TEquatable? other)
 	{
 		if (obj is null || other is null) return default;

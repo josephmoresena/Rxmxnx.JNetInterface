@@ -4,10 +4,12 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 /// Function pointer based-struct replacement for <see cref="JInvokeInterface"/> type.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct InvokeInterface
 {
 	/// <summary>

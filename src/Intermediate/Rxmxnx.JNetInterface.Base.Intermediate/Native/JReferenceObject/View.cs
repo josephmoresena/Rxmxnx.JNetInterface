@@ -36,12 +36,16 @@ public partial class JReferenceObject
 		/// <inheritdoc/>
 		private protected override ReadOnlySpan<Byte> AsSpan() => this.GetObject().AsSpan();
 		/// <inheritdoc/>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		private protected override Boolean Same(JReferenceObject jObject)
 			=> Object.ReferenceEquals(this, jObject) || this.GetObject().Same(jObject);
 
 		/// <inheritdoc/>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		public override String ToTraceText() => this.GetObject().ToTraceText();
 
 		/// <summary>

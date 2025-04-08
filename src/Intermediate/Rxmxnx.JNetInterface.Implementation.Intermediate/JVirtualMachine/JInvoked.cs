@@ -5,8 +5,10 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// This class implements <see cref="IInvokedVirtualMachine"/> interface.
 	/// </summary>
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 	private sealed class Invoked : JVirtualMachine, IInvokedVirtualMachine
 	{
 		/// <summary>

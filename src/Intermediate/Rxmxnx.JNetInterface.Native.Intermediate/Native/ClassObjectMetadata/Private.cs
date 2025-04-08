@@ -21,7 +21,9 @@ public partial record ClassObjectMetadata
 		this.IsEnum = metadata.Kind is JTypeKind.Enum;
 	}
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private ClassObjectMetadata(ClassObjectMetadata classMetadata) : base(classMetadata)
 	{
 		this.Name = classMetadata.Name;

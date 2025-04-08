@@ -2,8 +2,10 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
@@ -68,7 +70,9 @@ partial class JEnvironment
 		/// <param name="jClass">Field declaring class.</param>
 		/// <param name="definition">Call definition.</param>
 		/// <param name="bytes">Binary span containing value to set to.</param>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static void TraceSetPrimitiveField(JLocalObject? jLocal, JClassObject jClass,
 			JFieldDefinition definition, ReadOnlySpan<Byte> bytes)
@@ -106,7 +110,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="arrayFunction">A <see cref="ArrayFunctionSet.PrimitiveFunction"/> value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetBooleanArrayFunctionInfo(ArrayFunctionSet.PrimitiveFunction arrayFunction)
 			=> arrayFunction switch
@@ -122,7 +128,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="arrayFunction">A <see cref="ArrayFunctionSet.PrimitiveFunction"/> value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetByteArrayFunctionInfo(ArrayFunctionSet.PrimitiveFunction arrayFunction)
 			=> arrayFunction switch
@@ -138,7 +146,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="arrayFunction">A <see cref="ArrayFunctionSet.PrimitiveFunction"/> value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetCharArrayFunctionInfo(ArrayFunctionSet.PrimitiveFunction arrayFunction)
 			=> arrayFunction switch
@@ -154,7 +164,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="arrayFunction">A <see cref="ArrayFunctionSet.PrimitiveFunction"/> value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetDoubleArrayFunctionInfo(ArrayFunctionSet.PrimitiveFunction arrayFunction)
 			=> arrayFunction switch
@@ -170,7 +182,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="arrayFunction">A <see cref="ArrayFunctionSet.PrimitiveFunction"/> value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetFloatArrayFunctionInfo(ArrayFunctionSet.PrimitiveFunction arrayFunction)
 			=> arrayFunction switch
@@ -186,7 +200,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="arrayFunction">A <see cref="ArrayFunctionSet.PrimitiveFunction"/> value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetIntArrayFunctionInfo(ArrayFunctionSet.PrimitiveFunction arrayFunction)
 			=> arrayFunction switch
@@ -202,7 +218,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="arrayFunction">A <see cref="ArrayFunctionSet.PrimitiveFunction"/> value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetLongArrayFunctionInfo(ArrayFunctionSet.PrimitiveFunction arrayFunction)
 			=> arrayFunction switch
@@ -218,7 +236,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="arrayFunction">A <see cref="ArrayFunctionSet.PrimitiveFunction"/> value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetShortArrayFunctionInfo(ArrayFunctionSet.PrimitiveFunction arrayFunction)
 			=> arrayFunction switch
@@ -234,7 +254,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetBooleanInstanceMethodInfo(Boolean nonVirtual)
 			=> nonVirtual ? NativeInterface.CallBooleanMethodInfo : NativeInterface.CallNonVirtualBooleanMethodInfo;
@@ -243,7 +265,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetByteInstanceMethodInfo(Boolean nonVirtual)
 			=> nonVirtual ? NativeInterface.CallByteMethodInfo : NativeInterface.CallNonVirtualByteMethodInfo;
@@ -252,7 +276,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetCharInstanceMethodInfo(Boolean nonVirtual)
 			=> nonVirtual ? NativeInterface.CallCharMethodInfo : NativeInterface.CallNonVirtualCharMethodInfo;
@@ -261,7 +287,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetDoubleInstanceMethodInfo(Boolean nonVirtual)
 			=> nonVirtual ? NativeInterface.CallDoubleMethodInfo : NativeInterface.CallNonVirtualCharMethodInfo;
@@ -270,7 +298,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetFloatInstanceMethodInfo(Boolean nonVirtual)
 			=> nonVirtual ? NativeInterface.CallFloatMethodInfo : NativeInterface.CallNonVirtualFloatMethodInfo;
@@ -279,7 +309,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetIntInstanceMethodInfo(Boolean nonVirtual)
 			=> nonVirtual ? NativeInterface.CallIntMethodInfo : NativeInterface.CallNonVirtualIntMethodInfo;
@@ -288,7 +320,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetLongInstanceMethodInfo(Boolean nonVirtual)
 			=> nonVirtual ? NativeInterface.CallLongMethodInfo : NativeInterface.CallNonVirtualLongMethodInfo;
@@ -297,7 +331,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetShortInstanceMethodInfo(Boolean nonVirtual)
 			=> nonVirtual ? NativeInterface.CallShortMethodInfo : NativeInterface.CallNonVirtualShortMethodInfo;
@@ -306,7 +342,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetVoidInstanceMethodInfo(Boolean nonVirtual)
 			=> nonVirtual ? NativeInterface.CallVoidMethodInfo : NativeInterface.CallNonVirtualVoidMethodInfo;
@@ -315,7 +353,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="nonVirtual">Indicates whether current call is non-virtual.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetObjectInstanceMethodInfo(Boolean nonVirtual)
 			=> nonVirtual ? NativeInterface.CallObjectMethodInfo : NativeInterface.CallNonVirtualObjectMethodInfo;
@@ -324,7 +364,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetStaticBooleanFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetStaticBooleanFieldInfo : NativeInterface.SetStaticBooleanFieldInfo;
@@ -333,7 +375,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetStaticByteFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetStaticByteFieldInfo : NativeInterface.SetStaticByteFieldInfo;
@@ -342,7 +386,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetStaticCharFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetStaticCharFieldInfo : NativeInterface.SetStaticCharFieldInfo;
@@ -351,7 +397,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetStaticDoubleFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetStaticDoubleFieldInfo : NativeInterface.SetStaticDoubleFieldInfo;
@@ -360,7 +408,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetStaticFloatFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetStaticFloatFieldInfo : NativeInterface.SetStaticFloatFieldInfo;
@@ -369,7 +419,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetStaticIntFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetStaticIntFieldInfo : NativeInterface.SetStaticIntFieldInfo;
@@ -378,7 +430,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetStaticLongFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetStaticLongFieldInfo : NativeInterface.SetStaticLongFieldInfo;
@@ -387,7 +441,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetStaticShortFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetStaticShortFieldInfo : NativeInterface.SetStaticShortFieldInfo;
@@ -396,7 +452,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetInstanceBooleanFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetBooleanFieldInfo : NativeInterface.SetBooleanFieldInfo;
@@ -405,7 +463,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetInstanceByteFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetByteFieldInfo : NativeInterface.SetByteFieldInfo;
@@ -414,7 +474,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetInstanceCharFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetCharFieldInfo : NativeInterface.SetCharFieldInfo;
@@ -423,7 +485,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetInstanceDoubleFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetDoubleFieldInfo : NativeInterface.SetDoubleFieldInfo;
@@ -432,7 +496,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetInstanceFloatFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetFloatFieldInfo : NativeInterface.SetFloatFieldInfo;
@@ -441,7 +507,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetInstanceIntFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetIntFieldInfo : NativeInterface.SetIntFieldInfo;
@@ -450,7 +518,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetInstanceLongFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetLongFieldInfo : NativeInterface.SetLongFieldInfo;
@@ -459,7 +529,9 @@ partial class JEnvironment
 		/// </summary>
 		/// <param name="getField">Indicates whether current call is for get field value.</param>
 		/// <returns>A <see cref="JniMethodInfo"/> instance.</returns>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static JniMethodInfo GetInstanceShortFieldFunctionInfo(Boolean getField)
 			=> getField ? NativeInterface.GetShortFieldInfo : NativeInterface.SetShortFieldInfo;

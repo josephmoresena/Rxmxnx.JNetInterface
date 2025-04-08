@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JInternalErrorObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.InternalError</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JInternalErrorObject : JVirtualMachineErrorObject, IThrowableType<JInternalErrorObject>
 {
 	/// <summary>

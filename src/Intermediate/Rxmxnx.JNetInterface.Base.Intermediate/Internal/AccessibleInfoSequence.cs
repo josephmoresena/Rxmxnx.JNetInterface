@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Internal type information sequence.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal sealed unsafe partial class AccessibleInfoSequence : InfoSequenceBase
 {
 	/// <summary>

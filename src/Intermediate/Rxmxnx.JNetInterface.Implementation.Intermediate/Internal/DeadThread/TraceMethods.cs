@@ -5,7 +5,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes Dispose() method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void TraceDispose()
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -15,7 +17,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes IsSameObject(JObject,JObject) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void IsSameObjectTrace(JObject jObject, JObject? jOther)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -25,7 +29,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes GetReferenceType(JObject) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void GetReferenceTypeTrace(JObject jObject)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -35,7 +41,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes GetArrayLength(JReferenceObject) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void GetArrayLengthTrace(JReferenceObject jObject)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -45,7 +53,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes ReleasePrimitiveSequence(JArrayLocalRef,IntPtr) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void ReleasePrimitiveSequenceTrace(JArrayLocalRef arrayRef, IntPtr pointer)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -55,7 +65,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes ReleasePrimitiveCriticalSequence(JArrayLocalRef,ValPtr{Byte}) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void ReleasePrimitiveCriticalSequenceTrace(JArrayLocalRef arrayRef, ValPtr<Byte> criticalPtr)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -65,7 +77,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes IsInstanceOf{TDataType}(JReferenceObject) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void IsInstanceOfTrace(JReferenceObject jObject, CString className)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -75,7 +89,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes MonitorExit(JObjectLocalRef) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void MonitorExitTrace(JObjectLocalRef localRef)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -85,7 +101,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes LocalLoad(JGlobalBase, JLocalObject) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void LocalLoadTrace(JGlobalBase jGlobal)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -94,7 +112,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes Unload(JLocalObject) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void UnloadTrace(JLocalObject jLocal)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -104,7 +124,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes Unload(JGlobalBase) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void UnloadTrace(JGlobalRef? globalRef, JWeakRef? weakRef)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -114,7 +136,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes IsParameter(JLocalObject) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void IsParameterTrace(JLocalObject jLocal)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -124,7 +148,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes GetLength(JReferenceObject) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void GetLengthTrace(JReferenceObject jObject)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -134,7 +160,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes GetUtf8Length(JReferenceObject) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void GetUtf8LengthTrace(JReferenceObject jObject)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -144,7 +172,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes ReleaseSequence(JStringLocalRef, ReadOnlyValPtr{Char}) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void ReleaseSequenceTrace(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -154,7 +184,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes ReleaseUtf8Sequence(JStringLocalRef, ReadOnlyValPtr{Byte}) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void ReleaseUtf8SequenceTrace(JStringLocalRef stringRef, ReadOnlyValPtr<Byte> pointer)
 	{
 		if (JVirtualMachine.TraceEnabled)
@@ -164,7 +196,9 @@ internal partial class DeadThread
 	/// <summary>
 	/// Writes ReleaseCriticalSequence(JStringLocalRef, ReadOnlyValPtr{Char}) method call to the trace listeners.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private void ReleaseCriticalSequenceTrace(JStringLocalRef stringRef, ReadOnlyValPtr<Char> pointer)
 	{
 		if (JVirtualMachine.TraceEnabled)

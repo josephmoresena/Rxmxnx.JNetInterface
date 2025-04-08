@@ -1,7 +1,9 @@
 namespace Rxmxnx.JNetInterface.Internal;
 
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal unsafe partial class TypeInfoSequence
 {
 	/// <summary>

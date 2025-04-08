@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JIllegalArgumentExceptionObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.IllegalArgumentException</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JIllegalArgumentExceptionObject : JRuntimeExceptionObject, IThrowableType<JIllegalArgumentExceptionObject>
 {
 	/// <summary>

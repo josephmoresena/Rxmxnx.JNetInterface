@@ -8,9 +8,23 @@ internal readonly struct SuperInterfaceImplementationState
 	/// <summary>
 	/// Interface set.
 	/// </summary>
-	public HashSet<JInterfaceTypeMetadata> Interfaces { [ExcludeFromCodeCoverage] get; init; }
+	public HashSet<JInterfaceTypeMetadata> Interfaces
+	{
+#if !PACKAGE
+		[ExcludeFromCodeCoverage]
+#endif
+		get;
+		init;
+	}
 	/// <summary>
 	/// Base interface set.
 	/// </summary>
-	public IInterfaceSet BaseInterfaces { [ExcludeFromCodeCoverage] get; init; }
+	public IInterfaceSet BaseInterfaces
+	{
+#if !PACKAGE
+		[ExcludeFromCodeCoverage]
+#endif
+		get;
+		init;
+	}
 }

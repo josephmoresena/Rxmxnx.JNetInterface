@@ -10,8 +10,10 @@ using TDirectBuffer =
 
 partial class JEnvironment
 {
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 	private sealed partial class EnvironmentCache : INioFeature
 	{
 		public unsafe TDirectBuffer NewDirectByteBuffer(IFixedMemory.IDisposable memory)

@@ -5,8 +5,10 @@ using TypeMetadata = JInterfaceTypeMetadata<JAnnotationObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.annotation.Annotation</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JAnnotationObject : JInterfaceObject<JAnnotationObject>, IInterfaceType<JAnnotationObject>
 {
 	/// <summary>
@@ -33,8 +35,10 @@ public sealed class JAnnotationObject : JInterfaceObject<JAnnotationObject>, IIn
 /// This class represents an annotation instance.
 /// </summary>
 /// <typeparam name="TAnnotation">Type of <see cref="IInterfaceType"/>.</typeparam>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public abstract class JAnnotationObject<TAnnotation> : JInterfaceObject<TAnnotation>,
 	IInterfaceObject<JAnnotationObject>,
 	IDataType where TAnnotation : JAnnotationObject<TAnnotation>, IInterfaceType<TAnnotation>
