@@ -53,7 +53,13 @@ internal abstract partial class InfoSequenceBase(String hash, Int32 nameLength)
 		/// Buffer length.
 		/// </summary>
 		private readonly Int32 _length = length;
+		/// <summary>
+		/// Buffer range.
+		/// </summary>
 		private readonly Range _range = new(offset, offset + length);
+
+		/// <inheritdoc/>
+		public static Func<ItemState, GCHandleType, GCHandle> Alloc => (s, t) => GCHandle.Alloc(s._buffer, t);
 
 		/// <inheritdoc/>
 		public static ReadOnlySpan<Byte> GetSpan(ItemState state) => state._buffer.AsSpan().AsBytes()[state._range];
