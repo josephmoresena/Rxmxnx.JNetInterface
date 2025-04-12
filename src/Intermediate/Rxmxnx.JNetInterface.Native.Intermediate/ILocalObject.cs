@@ -5,6 +5,8 @@ namespace Rxmxnx.JNetInterface;
 /// </summary>
 public interface ILocalObject : IObject
 {
+	/// <inheritdoc cref="JLocalObject.Environment"/>
+	internal IEnvironment Environment { get; }
 	/// <inheritdoc cref="IEnvironment.VirtualMachine"/>
 	internal IVirtualMachine VirtualMachine { get; }
 	/// <inheritdoc cref="JReferenceObject.IsProxy"/>
