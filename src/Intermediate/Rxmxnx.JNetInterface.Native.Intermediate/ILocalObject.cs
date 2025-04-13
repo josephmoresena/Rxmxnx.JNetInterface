@@ -34,7 +34,7 @@ public interface ILocalObject : IObject
 	/// </summary>
 	/// <typeparam name="TReference">A <see cref="IReferenceType{TReference}"/> type.</typeparam>
 	/// <returns>A <typeparamref name="TReference"/> instance from current instance.</returns>
-	public TReference CastTo<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>()
+	TReference CastTo<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TReference>()
 		where TReference : JReferenceObject, IReferenceType<TReference>;
 
 	/// <summary>
