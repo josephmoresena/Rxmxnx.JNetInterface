@@ -10,7 +10,8 @@
 
     <ItemGroup>
         <None Remove="java.src\**"/>
-        <Content Include="com.rxmxnx.jnetinterface.jar" CopyToOutputDirectory="PreserveNewest"/>
+        <EmbeddedResource Include="NativeCallbacks.jar"/>
+        <EmbeddedResource Include="Images\*"/>
     </ItemGroup>
 
 </Project>

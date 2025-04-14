@@ -4,7 +4,7 @@ using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 
-namespace Rxmxnx.JNetInterface.ApplicationTest.Swing;
+namespace Rxmxnx.JNetInterface.Swing;
 
 public sealed class JSwingUtilitiesObject : JLocalObject.Uninstantiable<JSwingUtilitiesObject>,
 	IUninstantiableType<JSwingUtilitiesObject>

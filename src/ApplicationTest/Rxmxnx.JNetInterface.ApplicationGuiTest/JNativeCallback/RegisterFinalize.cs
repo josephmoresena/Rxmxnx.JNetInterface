@@ -6,7 +6,7 @@ using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.References;
 using Rxmxnx.JNetInterface.Primitives;
 
-namespace Rxmxnx.JNetInterface.ApplicationTest;
+namespace Rxmxnx.JNetInterface;
 
 public unsafe partial class JNativeCallback
 {
@@ -17,7 +17,7 @@ public unsafe partial class JNativeCallback
 		using JClassObject jClass = JClassObject.GetClass<JNativeCallback>(env);
 		delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JLong, JLong, void>
 			ptr = &JNativeCallback.RegisterFinalize;
-		JNativeCallEntry entry = JNativeCallEntry.Create(JNativeCallback.finalizeDefinition, (IntPtr)ptr);
+		JNativeCallEntry entry = JNativeCallEntry.Create(JNativeCallback.finalizeDef, (IntPtr)ptr);
 
 		jClass.Register(entry);
 		JNativeCallback.finalizeRegistered = true;

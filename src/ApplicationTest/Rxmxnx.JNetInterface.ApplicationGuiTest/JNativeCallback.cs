@@ -4,7 +4,7 @@ using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 
-namespace Rxmxnx.JNetInterface.ApplicationTest;
+namespace Rxmxnx.JNetInterface;
 
 public partial class JNativeCallback : JLocalObject, IClassType<JNativeCallback>
 {

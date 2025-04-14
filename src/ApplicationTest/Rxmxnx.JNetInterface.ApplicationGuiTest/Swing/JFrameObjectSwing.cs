@@ -1,11 +1,11 @@
-using Rxmxnx.JNetInterface.ApplicationTest.Awt;
+using Rxmxnx.JNetInterface.Awt;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 
-namespace Rxmxnx.JNetInterface.ApplicationTest.Swing;
+namespace Rxmxnx.JNetInterface.Swing;
 
 public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>
 {
@@ -21,6 +21,8 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>
 		IndeterminateCall.CreateConstructorDefinition([JArgumentMetadata.Get<JStringObject>(),]);
 	private static readonly IndeterminateCall setDefaultCloseOperationDef =
 		IndeterminateCall.CreateMethodDefinition("setDefaultCloseOperation"u8, [JArgumentMetadata.Get<JInt>(),]);
+	private static readonly IndeterminateCall setContentPaneDef =
+		IndeterminateCall.CreateMethodDefinition("setContentPane"u8, [JArgumentMetadata.Get<JContainerObject>(),]);
 	private static readonly JClassTypeMetadata<JFrameObjectSwing> typeMetadata =
 		TypeMetadataBuilder<JFrameObjectAwt>.Create<JFrameObjectSwing>("javax/swing/JFrame"u8).Build();
 	static JClassTypeMetadata<JFrameObjectSwing> IClassType<JFrameObjectSwing>.Metadata
@@ -35,6 +37,12 @@ public class JFrameObjectSwing : JFrameObjectAwt, IClassType<JFrameObjectSwing>
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JFrameObjectSwing>(env);
 		JFrameObjectSwing.setDefaultCloseOperationDef.MethodCall(this, jClass, false, [(JInt)(Int32)operation,]);
+	}
+	public void SetContentPane(JContainerObject contentPane)
+	{
+		IEnvironment env = this.Environment;
+		using JClassObject jClass = JClassObject.GetClass<JFrameObjectSwing>(env);
+		JFrameObjectSwing.setContentPaneDef.MethodCall(this, jClass, false, [contentPane,]);
 	}
 
 	public static JFrameObjectSwing Create(IEnvironment env, String title)

@@ -5,7 +5,7 @@ using Rxmxnx.JNetInterface.Primitives;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
 
-namespace Rxmxnx.JNetInterface.ApplicationTest.Awt;
+namespace Rxmxnx.JNetInterface.Awt;
 
 public class JComponentObject : JLocalObject, IClassType<JComponentObject>
 {
