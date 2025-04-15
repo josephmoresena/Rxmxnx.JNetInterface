@@ -87,6 +87,7 @@ public partial class TestCompiler
 		String outputPath)
 	{
 		if (!Utilities.IsNativeAotSupported(arch, restoreArgs.Version)) return;
+		if (!OperatingSystem.IsLinux() & !OperatingSystem.IsWindows() && !OperatingSystem.IsFreeBSD()) return;
 
 		CompileNetArgs compileArgs = new(restoreArgs, outputPath)
 		{
