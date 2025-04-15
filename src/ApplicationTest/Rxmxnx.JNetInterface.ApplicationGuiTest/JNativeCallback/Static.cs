@@ -40,7 +40,11 @@ public partial class JNativeCallback
 	private static void CreateKey(IEnvironment env, Span<JLong> longKey)
 	{
 		ref Guid guidKey = ref Unsafe.As<JLong, Guid>(ref longKey[0]);
+#if NET9_0_OR_GREATER
 		guidKey = Guid.CreateVersion7();
+#else
+		guidKey = Guid.NewGuid();
+#endif
 		JNativeCallback.RegisterNatives(env);
 	}
 	private static TInterface

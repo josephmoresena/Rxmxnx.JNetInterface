@@ -123,7 +123,7 @@ static String GetImageName()
 		"macosx.png" :
 		throw new PlatformNotSupportedException("Unsupported platform.");
 }
-static ReadOnlySpan<Byte> GetImageBytes(String fileName)
+static Byte[] GetImageBytes(String fileName)
 {
 	Assembly assembly = Assembly.GetExecutingAssembly();
 	String? resourceName = assembly.GetManifestResourceNames().FirstOrDefault(n => n.Contains(fileName));
