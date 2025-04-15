@@ -1,5 +1,4 @@
 using Rxmxnx.JNetInterface.Lang;
-using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
@@ -22,7 +21,7 @@ public class JLabelObject : JComponentObjectSwing, IClassType<JLabelObject>
 
 	public static JLabelObject Create(IInterfaceObject<JIconObject> icon)
 	{
-		IEnvironment env = icon.CastTo<JLocalObject>().Environment;
+		IEnvironment env = icon.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JLabelObject>(env);
 		return JLabelObject.constructorIconDef.NewCall<JLabelObject>(env, [icon,]);
 	}

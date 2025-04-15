@@ -5,8 +5,6 @@ namespace Rxmxnx.JNetInterface;
 /// </summary>
 public interface ILocalObject : IObject
 {
-	/// <inheritdoc cref="IEnvironment.VirtualMachine"/>
-	internal IVirtualMachine VirtualMachine { get; }
 	/// <inheritdoc cref="JReferenceObject.IsProxy"/>
 	internal Boolean IsProxy { get; }
 	/// <summary>
@@ -17,6 +15,11 @@ public interface ILocalObject : IObject
 	/// Internal reference value.
 	/// </summary>
 	internal JObjectLocalRef LocalReference { get; }
+
+	/// <summary>
+	/// <see cref="IEnvironment"/> instance.
+	/// </summary>
+	IEnvironment Environment { get; }
 
 	/// <summary>
 	/// Creates the object metadata for the current instance.

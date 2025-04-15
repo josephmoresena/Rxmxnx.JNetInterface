@@ -1,6 +1,5 @@
 using Rxmxnx.JNetInterface.Awt.Event;
 using Rxmxnx.JNetInterface.Lang;
-using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
 using Rxmxnx.JNetInterface.Types;
 using Rxmxnx.JNetInterface.Types.Metadata;
@@ -25,7 +24,7 @@ public class JAbstractButtonObject : JComponentObjectSwing, IClassType<JAbstract
 
 	public void AddActionListener(IInterfaceObject<JActionListenerObject> listener)
 	{
-		IEnvironment env = listener.CastTo<JLocalObject>().Environment;
+		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JAbstractButtonObject>(env);
 		JAbstractButtonObject.addActionListenerDef.MethodCall(this, jClass, false, [listener,]);
 	}
