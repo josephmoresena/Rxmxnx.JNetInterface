@@ -7,20 +7,29 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchObject countDownLatch)
 	: JNativeCallback.AwtEventListenerState
 {
+	private readonly Object _lock = new();
 	private readonly JWeak _countDownLatch = countDownLatch.Weak;
 	private readonly JWeak _window = window.Weak;
 
 	public override void EventDispatched(JAwtEventObject awtEvent)
 	{
-		IEnvironment env = awtEvent.Environment;
-		if (awtEvent.GetId() is not JAwtEventObject.EventId.Closed || !env.IsSameObject(awtEvent, this._window)) return;
+		lock (this._lock)
+		{
+			IEnvironment env = awtEvent.Environment;
+			if (awtEvent.GetId() is not JAwtEventObject.EventId.Closed) return;
+			if (awtEvent.GetSource() is not { } localWindow) return;
+			if (!env.IsSameObject(localWindow, this._window)) return;
 
-		using JCountDownLatchObject countDown = this._countDownLatch.AsLocal<JCountDownLatchObject>(env);
-		countDown.CountDown();
+			using JCountDownLatchObject countDown = this._countDownLatch.AsLocal<JCountDownLatchObject>(env);
+			countDown.CountDown();
+		}
 	}
 	public void Dispose()
 	{
-		this._window.Dispose();
-		this._countDownLatch.Dispose();
+		lock (this._lock)
+		{
+			this._window.Dispose();
+			this._countDownLatch.Dispose();
+		}
 	}
 }

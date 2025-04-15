@@ -16,22 +16,30 @@ internal sealed class ShowDialogState(JWindowObject owner) : JNativeCallback.Act
 
 	private static readonly String breakLineHtml = "<br/>" + Environment.NewLine;
 
+	private readonly Object _lock = new();
 	private readonly JWeak _owner = owner.Weak;
-	public void Dispose() => this._owner.Dispose();
+	public void Dispose()
+	{
+		lock (this._lock)
+			this._owner.Dispose();
+	}
 
 	public override void ActionPerformed(JActionEventObject actionEvent)
 	{
-		IEnvironment env = actionEvent.Environment;
-		using JWindowObject window = this._owner.AsLocal<JWindowObject>(env);
-		using JDialogObjectSwing dialog = JDialogObjectSwing.Create(window, "System Info");
+		lock (this._lock)
+		{
+			IEnvironment env = actionEvent.Environment;
+			using JWindowObject window = this._owner.AsLocal<JWindowObject>(env);
+			using JDialogObjectSwing dialog = JDialogObjectSwing.Create(window, "System Info");
 
-		using (JLabelObject jLabel = JLabelObject.Create(env, ShowDialogState.GetRuntimeInformation()))
-		using (JStringObject jString = JStringObject.Create(env, "Center"u8))
-			dialog.Add(jLabel, jString);
+			using (JLabelObject jLabel = JLabelObject.Create(env, ShowDialogState.GetRuntimeInformation()))
+			using (JStringObject jString = JStringObject.Create(env, "Center"u8))
+				dialog.Add(jLabel, jString);
 
-		dialog.Pack();
-		dialog.SetRelativeTo(window);
-		dialog.SetVisible(true);
+			dialog.Pack();
+			dialog.SetRelativeTo(window);
+			dialog.SetVisible(true);
+		}
 	}
 
 	private static String GetRuntimeInformation()
