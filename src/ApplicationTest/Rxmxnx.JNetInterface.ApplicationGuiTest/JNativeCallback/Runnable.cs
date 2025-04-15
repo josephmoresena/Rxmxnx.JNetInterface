@@ -38,7 +38,7 @@ public partial class JNativeCallback
 			if (Runnable.runRegistered) return;
 
 			using JClassObject jClass = JClassObject.GetClass<JNativeCallback>(env);
-			delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JLong, JLong, void> ptr = &Runnable.RegisterRun;
+			delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JLong, JLong, void> ptr = &Runnable.Run;
 			JNativeCallEntry entry = JNativeCallEntry.Create(Runnable.runDef, (IntPtr)ptr);
 
 			jClass.Register(entry);
@@ -46,8 +46,7 @@ public partial class JNativeCallback
 		}
 
 		[UnmanagedCallersOnly]
-		private static void RegisterRun(JEnvironmentRef environmentRef, JClassLocalRef __, JLong lowValue,
-			JLong highValue)
+		private static void Run(JEnvironmentRef environmentRef, JClassLocalRef __, JLong lowValue, JLong highValue)
 		{
 			Span<JLong> longKey = stackalloc JLong[2];
 			longKey[0] = lowValue;

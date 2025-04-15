@@ -8,8 +8,9 @@ namespace Rxmxnx.JNetInterface.Swing;
 
 public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>
 {
-	private static readonly IndeterminateCall constructorDef =
-		IndeterminateCall.CreateConstructorDefinition([JArgumentMetadata.Get<JWindowObject>(),]);
+	private static readonly IndeterminateCall constructorDef = IndeterminateCall.CreateConstructorDefinition([
+		JArgumentMetadata.Get<JWindowObject>(), JArgumentMetadata.Get<JStringObject>(),
+	]);
 	private static readonly JClassTypeMetadata<JDialogObjectSwing> typeMetadata =
 		TypeMetadataBuilder<JDialogObject>.Create<JDialogObjectSwing>("javax/swing/JDialog"u8).Build();
 	static JClassTypeMetadata<JDialogObjectSwing> IClassType<JDialogObjectSwing>.Metadata
@@ -23,7 +24,7 @@ public class JDialogObjectSwing : JDialogObject, IClassType<JDialogObjectSwing>
 		IEnvironment env = window.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JDialogObject>(env);
 		using JStringObject jString = JStringObject.Create(env, title);
-		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, [jClass, jString,]);
+		return JDialogObjectSwing.constructorDef.NewCall<JDialogObjectSwing>(env, [window, jString,]);
 	}
 
 	static JDialogObjectSwing IClassType<JDialogObjectSwing>.Create(IReferenceType.ClassInitializer initializer)

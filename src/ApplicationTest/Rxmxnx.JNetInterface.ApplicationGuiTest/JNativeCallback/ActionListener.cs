@@ -27,10 +27,10 @@ public partial class JNativeCallback
 			]).Definition;
 		private static readonly JClassTypeMetadata<ActionListener> nestedTypeMetadata =
 			TypeMetadataBuilder<JNativeCallback>
-				.Create<ActionListener>("com/rxmxnx/jnetinterface/NativeCallback$NativeActionListener"u8, JTypeModifier.Final)
+				.Create<ActionListener>("com/rxmxnx/jnetinterface/NativeCallback$NativeActionListener"u8)
 				.Implements<JActionListenerObject>().Build();
 
-		private static Boolean runRegistered;
+		private static Boolean actionPerformedRegistered;
 
 		static JClassTypeMetadata<ActionListener> IClassType<ActionListener>.Metadata
 			=> ActionListener.nestedTypeMetadata;
@@ -41,19 +41,19 @@ public partial class JNativeCallback
 
 		public static void RegisterActionPerformed(IEnvironment env)
 		{
-			if (ActionListener.runRegistered) return;
+			if (ActionListener.actionPerformedRegistered) return;
 
 			using JClassObject jClass = JClassObject.GetClass<JNativeCallback>(env);
 			delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JLong, JLong, JObjectLocalRef, void> ptr =
-				&ActionListener.RegisterActionPerformed;
+				&ActionListener.ActionPerformed;
 			JNativeCallEntry entry = JNativeCallEntry.Create(ActionListener.actionPerformedDef, (IntPtr)ptr);
 
 			jClass.Register(entry);
-			ActionListener.runRegistered = true;
+			ActionListener.actionPerformedRegistered = true;
 		}
 
 		[UnmanagedCallersOnly]
-		private static void RegisterActionPerformed(JEnvironmentRef environmentRef, JClassLocalRef _, JLong lowValue,
+		private static void ActionPerformed(JEnvironmentRef environmentRef, JClassLocalRef _, JLong lowValue,
 			JLong highValue, JObjectLocalRef localRef)
 		{
 			Span<JLong> longKey = stackalloc JLong[2];

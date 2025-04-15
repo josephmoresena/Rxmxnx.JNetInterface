@@ -26,10 +26,10 @@ public class JLabelObject : JComponentObjectSwing, IClassType<JLabelObject>
 		using JClassObject jClass = JClassObject.GetClass<JLabelObject>(env);
 		return JLabelObject.constructorIconDef.NewCall<JLabelObject>(env, [icon,]);
 	}
-	public static JLabelObject Create(IEnvironment env, String text)
+	public static JLabelObject Create(IEnvironment env, String htmlText)
 	{
 		using JClassObject jClass = JClassObject.GetClass<JLabelObject>(env);
-		using JStringObject jString = JStringObject.Create(env, text);
+		using JStringObject jString = JStringObject.Create(env, htmlText);
 		return JLabelObject.constructorTextDef.NewCall<JLabelObject>(env, [jString,]);
 	}
 

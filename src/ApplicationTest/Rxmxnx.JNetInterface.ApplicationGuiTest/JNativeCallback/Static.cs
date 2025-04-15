@@ -20,12 +20,6 @@ public partial class JNativeCallback
 
 		return JNativeCallback.Create<Runnable, JRunnableObject>(env, longKey, state);
 	}
-	private static void CreateKey(IEnvironment env, Span<JLong> longKey)
-	{
-		ref Guid guidKey = ref Unsafe.As<JLong, Guid>(ref longKey[0]);
-		guidKey = Guid.CreateVersion7();
-		JNativeCallback.RegisterFinalize(env);
-	}
 	public static JActionListenerObject CreateActionListener(IEnvironment env, ActionListenerState state)
 	{
 		Span<JLong> longKey = stackalloc JLong[2];
@@ -34,7 +28,21 @@ public partial class JNativeCallback
 
 		return JNativeCallback.Create<ActionListener, JActionListenerObject>(env, longKey, state);
 	}
+	public static JAwtEventListenerObject CreateAwtEventListener(IEnvironment env, AwtEventListenerState state)
+	{
+		Span<JLong> longKey = stackalloc JLong[2];
+		JNativeCallback.CreateKey(env, longKey);
+		AwtEventListener.RegisterEventDispatched(env);
 
+		return JNativeCallback.Create<AwtEventListener, JAwtEventListenerObject>(env, longKey, state);
+	}
+
+	private static void CreateKey(IEnvironment env, Span<JLong> longKey)
+	{
+		ref Guid guidKey = ref Unsafe.As<JLong, Guid>(ref longKey[0]);
+		guidKey = Guid.CreateVersion7();
+		JNativeCallback.RegisterNatives(env);
+	}
 	private static TInterface
 		Create<TObject, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>(
 			IEnvironment env, ReadOnlySpan<JLong> longKey, CallbackState state)

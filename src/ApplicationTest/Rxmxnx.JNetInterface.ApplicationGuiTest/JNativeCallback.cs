@@ -14,7 +14,7 @@ public partial class JNativeCallback : JLocalObject, IClassType<JNativeCallback>
 	                                                                           .Build();
 
 	private static readonly ConcurrentDictionary<Guid, CallbackState> states = new();
-	private static Boolean finalizeRegistered;
+	private static Boolean nativesRegistered;
 
 	static JClassTypeMetadata<JNativeCallback> IClassType<JNativeCallback>.Metadata => JNativeCallback.typeMetadata;
 

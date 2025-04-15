@@ -1,3 +1,4 @@
+using Rxmxnx.JNetInterface.Awt;
 using Rxmxnx.JNetInterface.Awt.Event;
 using Rxmxnx.PInvoke;
 
@@ -17,5 +18,11 @@ public partial class JNativeCallback
 	{
 		ActionListenerState IWrapper<ActionListenerState>.Value => this;
 		public abstract void ActionPerformed(JActionEventObject actionEvent);
+	}
+
+	public abstract class AwtEventListenerState : CallbackState, IWrapper<AwtEventListenerState>
+	{
+		AwtEventListenerState IWrapper<AwtEventListenerState>.Value => this;
+		public abstract void EventDispatched(JAwtEventObject awtEvent);
 	}
 }
