@@ -8,7 +8,6 @@ public partial class JLocalObject
 	[ThreadStatic]
 	private static Boolean finalizerExecution;
 
-	IVirtualMachine ILocalObject.VirtualMachine => this.Lifetime.Environment.VirtualMachine;
 	Boolean ILocalObject.IsProxy => this.IsProxy;
 	ObjectLifetime ILocalObject.Lifetime => this.Lifetime;
 	ObjectMetadata ILocalObject.CreateMetadata() => this.CreateMetadata();
