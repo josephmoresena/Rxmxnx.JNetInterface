@@ -35,14 +35,17 @@ public static partial class TestCompiler
 	public static async Task CompileNet(DirectoryInfo projectDirectory, String os, String outputPath,
 		Boolean onlyNativeAot = false)
 	{
-		Architecture[] architectures = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?
+		Architecture[] architectures = OperatingSystem.IsWindows() ?
 			[Architecture.X86, Architecture.X64, Architecture.Arm64,] :
-			RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? [Architecture.X64, Architecture.Arm64,] :
+			!OperatingSystem.IsLinux() ? [Architecture.X64, Architecture.Arm64,] :
 				[Architecture.X64, Architecture.Arm, Architecture.Arm64,];
 
 		String? libProjectFile = projectDirectory.GetDirectories("*.LibraryTest", SearchOption.AllDirectories)
 		                                         .SelectMany(d => d.GetFiles("*.LibraryTest.csproj"))
 		                                         .Select(f => f.FullName).FirstOrDefault();
+		String? appGuiProjectFile = projectDirectory.GetDirectories("*.ApplicationGuiTest", SearchOption.AllDirectories)
+		                                            .SelectMany(d => d.GetFiles("*.ApplicationGuiTest.csproj"))
+		                                            .Select(f => f.FullName).FirstOrDefault();
 		String[] appProjectFiles = projectDirectory.GetDirectories("*.*ApplicationTest", SearchOption.AllDirectories)
 		                                           .SelectMany(d => d.GetFiles("*.*proj")).Select(f => f.FullName)
 		                                           .ToArray();
@@ -62,6 +65,14 @@ public static partial class TestCompiler
 						                                     RuntimeIdentifier = rid,
 						                                     Version = netVersion,
 					                                     }, arch, outputPath);
+				if (!String.IsNullOrEmpty(appGuiProjectFile))
+					await TestCompiler.CompileNetGuiApp(onlyNativeAot,
+					                                    new()
+					                                    {
+						                                    ProjectFile = appGuiProjectFile,
+						                                    RuntimeIdentifier = rid,
+						                                    Version = netVersion,
+					                                    }, arch, outputPath);
 
 				foreach (String appProjectFile in appProjectFiles)
 				{
