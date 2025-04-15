@@ -91,7 +91,7 @@ public partial class TestCompiler
 
 		CompileNetArgs compileArgs = new(restoreArgs, outputPath)
 		{
-			EnableTrace = onlyNativeAot, BuildDependencies = true, Publish = Publish.JniLibrary,
+			EnableTrace = onlyNativeAot, BuildDependencies = true, Publish = Publish.NativeAot,
 		};
 
 		await TestCompiler.RestoreNet(restoreArgs);
