@@ -460,8 +460,8 @@ public sealed class StringMemoryTests
 		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
 		Boolean longLengthCapable = jniVersion >= 0x00180000;
 		Int64 length = longLength && longLengthCapable ?
-			Random.Shared.NextInt64(UInt32.MaxValue, 2L * UInt32.MaxValue) :
-			Random.Shared.Next(0, Int32.MaxValue);
+			Random.Shared.NextInt64(Int32.MaxValue + 2L, UInt32.MaxValue) :
+			Random.Shared.Next(16, Int32.MaxValue);
 
 		proxyEnv.GetVersion().Returns(jniVersion);
 
@@ -475,6 +475,7 @@ public sealed class StringMemoryTests
 
 			unchecked
 			{
+				proxyEnv.GetStringLength(stringRef).Returns((Int32)(length / 4));
 				proxyEnv.GetStringUtfLength(stringRef).Returns((Int32)length);
 				proxyEnv.GetStringUtfLongLength(stringRef).Returns(length);
 			}
@@ -483,8 +484,22 @@ public sealed class StringMemoryTests
 				Assert.Equal(length > Int32.MaxValue ? -1 : length, jString.Utf8Length);
 			Assert.Equal(length, jString.Utf8LongLength);
 
+			StringObjectMetadata objectMetadata =
+				Assert.IsType<StringObjectMetadata>(ILocalObject.CreateMetadata(jString));
+
 			proxyEnv.Received(longLengthCapable ? 0 : 1).GetStringUtfLength(stringRef);
 			proxyEnv.Received(longLengthCapable ? 1 : 0).GetStringUtfLongLength(stringRef);
+
+			if (length <= Int32.MaxValue)
+				Assert.Equal(length, objectMetadata.Utf8Length.GetValueOrDefault());
+			else
+				Assert.Null(objectMetadata.Utf8Length);
+			if (longLengthCapable)
+				Assert.Equal(length, objectMetadata.Utf8LongLength);
+			else
+				Assert.Null(objectMetadata.Utf8LongLength);
+
+			Assert.Equal(objectMetadata, new(objectMetadata));
 		}
 		finally
 		{

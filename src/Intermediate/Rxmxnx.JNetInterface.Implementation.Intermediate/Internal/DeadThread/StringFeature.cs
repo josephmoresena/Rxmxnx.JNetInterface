@@ -12,6 +12,9 @@ internal partial class DeadThread : IStringFeature
 		this.GetUtf8LengthTrace(jObject, false);
 		return 0;
 	}
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	Int64? IStringFeature.GetUtf8LongLength(JReferenceObject jObject)
 	{
 		this.GetUtf8LengthTrace(jObject, true);
