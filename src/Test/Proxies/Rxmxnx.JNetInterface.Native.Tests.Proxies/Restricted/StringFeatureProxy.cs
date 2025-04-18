@@ -5,6 +5,7 @@ public abstract partial class StringFeatureProxy : IStringFeature
 {
 	public abstract Int32 GetLength(JReferenceObject jObject);
 	public abstract Int32 GetUtf8Length(JReferenceObject jObject);
+	public abstract Int64? GetUtf8LongLength(JReferenceObject jObject);
 	public abstract INativeMemoryAdapter GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind);
 	public abstract INativeMemoryAdapter GetUtf8Sequence(JStringObject jString, JMemoryReferenceKind referenceKind);
 	public abstract INativeMemoryAdapter GetCriticalSequence(JStringObject jString, JMemoryReferenceKind referenceKind);

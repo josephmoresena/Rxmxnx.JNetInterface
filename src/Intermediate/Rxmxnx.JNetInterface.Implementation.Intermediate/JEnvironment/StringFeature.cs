@@ -42,6 +42,19 @@ partial class JEnvironment
 			if (result <= 0) this.CheckJniError();
 			return result;
 		}
+		public unsafe Int64? GetUtf8LongLength(JReferenceObject jObject)
+		{
+			ImplementationValidationUtilities.ThrowIfProxy(jObject);
+			if (this.Version < NativeInterface24.RequiredVersion) return default;
+
+			ref readonly NativeInterface24 nativeInterface =
+				ref this.GetNativeInterface<NativeInterface24>(NativeInterface24.GetStringUtfLongLengthInfo);
+			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
+			JStringLocalRef stringRef = jniTransaction.Add<JStringLocalRef>(jObject);
+			Int64 result = nativeInterface.GetStringUtfLongLength(this.Reference, stringRef);
+			if (result <= 0) this.CheckJniError();
+			return result;
+		}
 		public INativeMemoryAdapter GetSequence(JStringObject jString, JMemoryReferenceKind referenceKind)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jString);

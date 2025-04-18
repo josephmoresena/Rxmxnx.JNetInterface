@@ -480,6 +480,8 @@ public abstract class NativeInterfaceProxy
 
 	public abstract JBoolean IsVirtualThread(JObjectLocalRef threadRef);
 
+	public abstract Int64 GetStringUtfLongLength(JStringLocalRef stringRef);
+
 	public void FinalizeProxy(Boolean finalizeVm) => ReferenceHelper.FinalizeProxy(this, finalizeVm);
 
 	public static NativeInterfaceProxy CreateProxy(InvokeInterfaceProxy vmProxy)

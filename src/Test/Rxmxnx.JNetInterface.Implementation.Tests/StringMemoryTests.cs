@@ -444,6 +444,56 @@ public sealed class StringMemoryTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
+	[Theory]
+	[InlineData(0x00010008)]
+	[InlineData(0x00090000)]
+	[InlineData(0x00150000)]
+	[InlineData(0x00180000)]
+	[InlineData(0x00010008, true)]
+	[InlineData(0x00090000, true)]
+	[InlineData(0x00150000, true)]
+	[InlineData(0x00180000, true)]
+	[InlineData(0x00180000, true, true)]
+	internal void UtfStringLongLengthTest(Int32 jniVersion, Boolean noInt32 = false, Boolean longLength = false)
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
+		Boolean longLengthCapable = jniVersion >= 0x00180000;
+		Int64 length = longLength && longLengthCapable ?
+			Random.Shared.NextInt64(UInt32.MaxValue, 2L * UInt32.MaxValue) :
+			Random.Shared.Next(0, Int32.MaxValue);
+
+		proxyEnv.GetVersion().Returns(jniVersion);
+
+		try
+		{
+			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			JClassTypeMetadata typeMetadata = IClassType.GetMetadata<JStringObject>();
+			using JClassObject jClass = JClassObject.GetClass<JStringObject>(env);
+			using JStringObject jString =
+				Assert.IsType<JStringObject>(typeMetadata.CreateInstance(jClass, stringRef.Value, true));
+
+			unchecked
+			{
+				proxyEnv.GetStringUtfLength(stringRef).Returns((Int32)length);
+				proxyEnv.GetStringUtfLongLength(stringRef).Returns(length);
+			}
+
+			if (!noInt32)
+				Assert.Equal(length > Int32.MaxValue ? -1 : length, jString.Utf8Length);
+			Assert.Equal(length, jString.Utf8LongLength);
+
+			proxyEnv.Received(longLengthCapable ? 0 : 1).GetStringUtfLength(stringRef);
+			proxyEnv.Received(longLengthCapable ? 1 : 0).GetStringUtfLongLength(stringRef);
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
+
 	private static void NestedFailTest(NativeInterfaceProxy proxyEnv)
 	{
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);

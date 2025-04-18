@@ -332,4 +332,6 @@ internal unsafe struct InternalNativeInterface
 	public delegate* unmanaged<JEnvironmentRef, JClassLocalRef, JObjectLocalRef> GetModule;
 
 	public delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JBoolean> IsVirtualThread;
+
+	public delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int64> GetStringUtfLongLength;
 }

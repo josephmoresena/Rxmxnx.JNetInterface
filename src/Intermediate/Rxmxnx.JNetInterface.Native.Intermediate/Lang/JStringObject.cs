@@ -32,7 +32,21 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// UTF-8 length.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 Utf8Length => this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(this);
+	public Int32 Utf8Length
+	{
+		get
+		{
+			this._utf8Length ??= JStringObject.GetUtfLength(this.Environment, this, this.Utf8LongLength);
+			return this._utf8Length ?? -1;
+		}
+	}
+	/// <summary>
+	/// UTF-8 long length.
+	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	public Int64 Utf8LongLength
+		=> this._utf8LongLength ??= this.Environment.StringFeature.GetUtf8LongLength(this) ??
+			this.Environment.StringFeature.GetUtf8Length(this);
 
 	/// <inheritdoc/>
 	public Int32 CompareTo(JStringObject? other) => this.CompareTo(other?.Value);

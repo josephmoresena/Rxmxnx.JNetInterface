@@ -11,29 +11,29 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
-internal readonly unsafe struct NativeInterface19 : INativeInterface<NativeInterface19>
+internal readonly unsafe struct NativeInterface24 : INativeInterface<NativeInterface24>
 {
 	/// <inheritdoc/>
-	public static Int32 RequiredVersion => 0x00130000;
+	public static Int32 RequiredVersion => 0x00180000;
 
 	/// <summary>
-	/// Native interface for <c>JNI_VERSION_9</c>
+	/// Native interface for <c>JNI_VERSION_19</c>
 	/// </summary>
 #pragma warning disable CS0169
-	private readonly NativeInterface9 _nativeInterface;
+	private readonly NativeInterface19 _nativeInterface;
 #pragma warning restore CS0169
 
 	/// <summary>
-	/// Pointer to <c>IsVirtualThread</c> function.
-	/// Tests whether an object is a virtual Thread.
+	/// Pointer to <c>GetStringUTFLengthAsLong</c> function.
+	/// Retrieves the UTF string length as long value.
 	/// </summary>
-	public readonly delegate* unmanaged<JEnvironmentRef, JObjectLocalRef, JBoolean> IsVirtualThread;
+	public readonly delegate* unmanaged<JEnvironmentRef, JStringLocalRef, Int64> GetStringUtfLongLength;
 
 	/// <summary>
-	/// Information of <see cref="NativeInterface19.IsVirtualThread"/>
+	/// Information of <see cref="GetStringUtfLongLength"/>
 	/// </summary>
-	public static readonly JniMethodInfo IsVirtualThreadInfo = new()
+	public static readonly JniMethodInfo GetStringUtfLongLengthInfo = new()
 	{
-		Name = nameof(NativeInterface19.IsVirtualThread), Level = JniSafetyLevels.CriticalSafe,
+		Name = nameof(NativeInterface24.GetStringUtfLongLengthInfo), Level = JniSafetyLevels.CriticalSafe,
 	};
 }

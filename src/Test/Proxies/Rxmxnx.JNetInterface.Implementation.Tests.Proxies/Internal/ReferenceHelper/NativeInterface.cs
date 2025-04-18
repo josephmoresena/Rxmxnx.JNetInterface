@@ -176,6 +176,7 @@ internal unsafe partial class ReferenceHelper
 			GetObjectRefType = &ReferenceHelper.GetObjectRefType,
 			GetModule = &ReferenceHelper.GetModule,
 			IsVirtualThread = &ReferenceHelper.IsVirtualThread,
+			GetStringUtfLongLength = &ReferenceHelper.GetStringUtfLongLength,
 		},
 		new()
 		{
@@ -348,6 +349,7 @@ internal unsafe partial class ReferenceHelper
 			GetObjectRefType = &ReferenceHelper.GetObjectRefType,
 			GetModule = &ReferenceHelper.GetModule,
 			IsVirtualThread = &ReferenceHelper.IsVirtualThread,
+			GetStringUtfLongLength = &ReferenceHelper.GetStringUtfLongLength,
 		},
 	];
 
@@ -1194,4 +1196,8 @@ internal unsafe partial class ReferenceHelper
 	[UnmanagedCallersOnly]
 	private static JBoolean IsVirtualThread(JEnvironmentRef envRef, JObjectLocalRef threadRef)
 		=> ReferenceHelper.GetProxy(envRef).IsVirtualThread(threadRef);
+
+	[UnmanagedCallersOnly]
+	private static Int64 GetStringUtfLongLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
+		=> ReferenceHelper.GetProxy(envRef).GetStringUtfLongLength(stringRef);
 }

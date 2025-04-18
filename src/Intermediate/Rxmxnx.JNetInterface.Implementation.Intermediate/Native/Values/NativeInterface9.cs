@@ -17,10 +17,10 @@ internal readonly unsafe struct NativeInterface9 : INativeInterface<NativeInterf
 	public static Int32 RequiredVersion => 0x00090000;
 
 	/// <summary>
-	/// Native interface for <c>JNI_VERSION_1_8</c>
+	/// Native interface for <c>JNI_VERSION_1_6</c>
 	/// </summary>
 #pragma warning disable CS0169
-	private readonly NativeInterface _nativeInterface9;
+	private readonly NativeInterface6 _nativeInterface;
 #pragma warning restore CS0169
 
 	/// <summary>

@@ -9,8 +9,13 @@ internal partial class DeadThread : IStringFeature
 	}
 	Int32 IStringFeature.GetUtf8Length(JReferenceObject jObject)
 	{
-		this.GetUtf8LengthTrace(jObject);
+		this.GetUtf8LengthTrace(jObject, false);
 		return 0;
+	}
+	Int64? IStringFeature.GetUtf8LongLength(JReferenceObject jObject)
+	{
+		this.GetUtf8LengthTrace(jObject, true);
+		return default;
 	}
 	void IStringFeature.GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex)
 		=> this.ThrowInvalidResult<Byte>();

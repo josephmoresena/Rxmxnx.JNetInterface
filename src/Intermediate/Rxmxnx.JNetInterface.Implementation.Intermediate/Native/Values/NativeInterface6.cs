@@ -20,7 +20,7 @@ internal readonly unsafe struct NativeInterface6 : INativeInterface<NativeInterf
 	/// Native interface for <c>JNI_VERSION_1_4</c>
 	/// </summary>
 #pragma warning disable CS0169
-	private readonly NativeInterface4 _nativeInterface9;
+	private readonly NativeInterface4 _nativeInterface;
 #pragma warning restore CS0169
 
 	/// <summary>

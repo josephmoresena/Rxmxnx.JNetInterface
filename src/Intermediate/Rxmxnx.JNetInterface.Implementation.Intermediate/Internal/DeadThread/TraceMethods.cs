@@ -163,11 +163,11 @@ internal partial class DeadThread
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	private void GetUtf8LengthTrace(JReferenceObject jObject)
+	private void GetUtf8LengthTrace(JReferenceObject jObject, Boolean isLongLength)
 	{
 		if (JVirtualMachine.TraceEnabled)
 			Trace.WriteLine(
-				$"Unable to determine {jObject.As<JObjectLocalRef>()} UTF8 string length. JVM {this.VirtualMachine.Reference} was destroyed.");
+				$"Unable to determine {jObject.As<JObjectLocalRef>()} UTF8 string {(isLongLength ? "long " : "")}length. JVM {this.VirtualMachine.Reference} was destroyed.");
 	}
 	/// <summary>
 	/// Writes ReleaseSequence(JStringLocalRef, ReadOnlyValPtr{Char}) method call to the trace listeners.
