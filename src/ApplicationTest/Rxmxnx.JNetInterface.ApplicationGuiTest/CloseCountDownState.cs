@@ -7,9 +7,9 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchObject countDownLatch)
 	: JNativeCallback.AwtEventListenerState
 {
+	private readonly JGlobalBase _countDownLatch = JNativeCallback.CallbackState.GetGlobalForState(countDownLatch);
 	private readonly Object _lock = new();
-	private readonly JWeak _countDownLatch = countDownLatch.Weak;
-	private readonly JWeak _window = window.Weak;
+	private readonly JGlobalBase _window = JNativeCallback.CallbackState.GetGlobalForState(window);
 
 	public override void EventDispatched(JAwtEventObject awtEvent)
 	{

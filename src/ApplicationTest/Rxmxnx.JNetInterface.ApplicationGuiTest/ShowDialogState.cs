@@ -17,7 +17,7 @@ internal sealed class ShowDialogState(JWindowObject owner) : JNativeCallback.Act
 	private static readonly String breakLineHtml = "<br/>" + Environment.NewLine;
 
 	private readonly Object _lock = new();
-	private readonly JWeak _owner = owner.Weak;
+	private readonly JGlobalBase _owner = JNativeCallback.CallbackState.GetGlobalForState(owner);
 	public void Dispose()
 	{
 		lock (this._lock)

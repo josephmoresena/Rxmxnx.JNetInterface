@@ -38,11 +38,12 @@ try
 	jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0]) ?? throw new ArgumentException("Invalid JVM library.");
 
 	JVirtualMachineInitArg initArgs = GetInitialArgs(jvmLib);
-	UIAdapter.Instance.PrintArgs(initArgs);
-	using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
+	IEnvironment? env = default;
 
+	UIAdapter.Instance.PrintArgs(initArgs);
 	try
 	{
+		using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out env);
 		using JFrameObjectSwing frame = CreateFrame(env, "Hello .NET");
 		using JCountDownLatchObject countDownLatch = GetCountDownAwait(frame);
 
@@ -73,7 +74,8 @@ try
 			UIAdapter.Instance.ShowError(ex);
 		else
 			UIAdapter.Instance.ShowError(tEx.WithSafeInvoke(t => t.ToString()));
-		env.PendingException = default;
+		if (env is not null)
+			env.PendingException = default;
 	}
 }
 catch (Exception ex)

@@ -1,12 +1,25 @@
+using System.Diagnostics.CodeAnalysis;
+
 using Rxmxnx.JNetInterface.Awt;
 using Rxmxnx.JNetInterface.Awt.Event;
+using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface;
 
 public partial class JNativeCallback
 {
-	public abstract class CallbackState;
+	public abstract class CallbackState
+	{
+		[return: NotNullIfNotNull(nameof(jLocal))]
+		protected static JGlobalBase? GetGlobalForState(JLocalObject? jLocal)
+		{
+			if (jLocal is null) return default;
+			if (OperatingSystem.IsWindows() && jLocal.Environment.Version > 0x00010008)
+				return jLocal.Global;
+			return jLocal.Weak;
+		}
+	}
 
 	public abstract class RunnableState : CallbackState, IWrapper<RunnableState>
 	{
