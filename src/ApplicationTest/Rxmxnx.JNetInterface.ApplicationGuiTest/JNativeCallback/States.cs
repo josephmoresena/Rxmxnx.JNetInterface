@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 using Rxmxnx.JNetInterface.Awt;
@@ -11,6 +12,30 @@ public partial class JNativeCallback
 {
 	public abstract class CallbackState
 	{
+		private static readonly ConcurrentDictionary<IntPtr, Int32> counter = new();
+
+		[return: NotNullIfNotNull(nameof(jGlobal))]
+		protected static TGlobal? UseGlobal<TGlobal>(TGlobal? jGlobal) where TGlobal : JGlobalBase
+		{
+			IntPtr nintRef = JGlobalBase.GetReference(jGlobal);
+			if (nintRef == default) return jGlobal;
+
+			CallbackState.counter.TryAdd(nintRef, 0);
+			CallbackState.counter[nintRef]++;
+			return jGlobal;
+		}
+		protected static Boolean FreeGlobal(JGlobalBase? jGlobal)
+		{
+			IntPtr nintRef = JGlobalBase.GetReference(jGlobal);
+			if (nintRef == default) return false;
+
+			Boolean result = !CallbackState.counter.TryGetValue(nintRef, out Int32 value) || value - 1 <= 0;
+			if (!result)
+				CallbackState.counter[nintRef]--;
+			else
+				CallbackState.counter.TryRemove(nintRef, out _);
+			return result;
+		}
 		[return: NotNullIfNotNull(nameof(jLocal))]
 		protected static JGlobalBase? GetGlobalForState(JLocalObject? jLocal)
 		{

@@ -127,4 +127,11 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </returns>
 	public static Boolean IsValid([NotNullWhen(true)] JGlobalBase? jGlobal, IEnvironment env)
 		=> jGlobal is not null && jGlobal.IsValid(env);
+
+	/// <summary>
+	/// Retrieves <paramref name="jGlobal"/> internal reference.
+	/// </summary>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <returns><paramref name="jGlobal"/> internal reference.</returns>
+	public static IntPtr GetReference(JGlobalBase? jGlobal) => jGlobal?._value.Value ?? default;
 }

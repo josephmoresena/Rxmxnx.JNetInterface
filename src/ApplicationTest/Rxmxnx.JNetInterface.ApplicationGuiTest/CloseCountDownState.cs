@@ -7,9 +7,9 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchObject countDownLatch)
 	: JNativeCallback.AwtEventListenerState
 {
-	private readonly JGlobalBase _countDownLatch = JNativeCallback.CallbackState.GetGlobalForState(countDownLatch);
+	private readonly JGlobalBase _countDownLatch = JNativeCallback.CallbackState.UseGlobal(countDownLatch.Global);
 	private readonly Object _lock = new();
-	private readonly JGlobalBase _window = JNativeCallback.CallbackState.GetGlobalForState(window);
+	private readonly JGlobalBase _window = JNativeCallback.CallbackState.UseGlobal(window.Global);
 
 	public override void EventDispatched(JAwtEventObject awtEvent)
 	{
@@ -28,8 +28,10 @@ internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchO
 	{
 		lock (this._lock)
 		{
-			this._window.Dispose();
-			this._countDownLatch.Dispose();
+			if (JNativeCallback.CallbackState.FreeGlobal(this._window))
+				this._window.Dispose();
+			if (JNativeCallback.CallbackState.FreeGlobal(this._countDownLatch))
+				this._countDownLatch.Dispose();
 		}
 	}
 }

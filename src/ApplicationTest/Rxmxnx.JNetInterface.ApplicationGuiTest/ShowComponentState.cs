@@ -7,12 +7,15 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 internal sealed class ShowComponentState(JComponentObject component, IWrapper<Boolean> setVisible)
 	: JNativeCallback.RunnableState, IDisposable
 {
-	private readonly JGlobalBase _component = JNativeCallback.CallbackState.GetGlobalForState(component);
+	private readonly JGlobalBase _component = JNativeCallback.CallbackState.UseGlobal(component.Weak);
 	private readonly Object _lock = new();
 	public void Dispose()
 	{
 		lock (this._lock)
-			this._component.Dispose();
+		{
+			if (JNativeCallback.CallbackState.FreeGlobal(this._component))
+				this._component.Dispose();
+		}
 	}
 
 	public override void Run(IEnvironment env)

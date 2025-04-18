@@ -17,11 +17,14 @@ internal sealed class ShowDialogState(JWindowObject owner) : JNativeCallback.Act
 	private static readonly String breakLineHtml = "<br/>" + Environment.NewLine;
 
 	private readonly Object _lock = new();
-	private readonly JGlobalBase _owner = JNativeCallback.CallbackState.GetGlobalForState(owner);
+	private readonly JGlobalBase _owner = JNativeCallback.CallbackState.UseGlobal(owner.Global);
 	public void Dispose()
 	{
 		lock (this._lock)
-			this._owner.Dispose();
+		{
+			if (JNativeCallback.CallbackState.FreeGlobal(this._owner))
+				this._owner.Dispose();
+		}
 	}
 
 	public override void ActionPerformed(JActionEventObject actionEvent)
