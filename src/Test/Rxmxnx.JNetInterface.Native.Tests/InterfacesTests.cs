@@ -55,12 +55,7 @@ public sealed class InterfacesTests
 			{ typeof(JMethodObject), new(jClassClass, IDataType.GetMetadata<JMethodObject>()) },
 			{ typeof(JNumberObject), new(jClassClass, IDataType.GetMetadata<JNumberObject>()) },
 			{ typeof(JLocalObject), new(jClassClass, IDataType.GetMetadata<JLocalObject>()) },
-			{
-				typeof(JStackTraceElementObject),
-				new(jClassClass, IDataType.GetMetadata<JStackTraceElementObject>())
-			},
 			{ typeof(JStringObject), new(jClassClass, IDataType.GetMetadata<JStringObject>()) },
-			{ typeof(JThrowableObject), new(jClassClass, IDataType.GetMetadata<JThrowableObject>()) },
 		};
 		env.ClassFeature.UseNonGeneric = true;
 		env.ClassFeature.GetNonGenericClass(Arg.Any<Type>()).Returns(c => classDictionary[(Type)c[0]]);
