@@ -194,25 +194,27 @@ public class DeadThreadTests
 		Assert.Throws<InvalidOperationException>(() => classFeature.FloatObject);
 		Assert.Throws<InvalidOperationException>(() => classFeature.IntegerObject);
 		Assert.Throws<InvalidOperationException>(() => classFeature.LongObject);
+		Assert.Throws<InvalidOperationException>(() => classFeature.ThrowableObject);
 		Assert.Throws<InvalidOperationException>(() => classFeature.ShortObject);
+		Assert.Throws<InvalidOperationException>(() => classFeature.StackTraceElementObject);
 
 		Assert.Throws<InvalidOperationException>(() => classFeature.AsClassObject(jClass.Reference));
 		Assert.Throws<InvalidOperationException>(() => classFeature.AsClassObject(jClass));
 		Assert.Throws<InvalidOperationException>(() => classFeature.GetClass<JIntegerObject>());
-		Assert.Throws<InvalidOperationException>(
-			() => classFeature.GetObjectClass(ILocalObject.CreateMetadata(jClass)));
+		Assert.Throws<InvalidOperationException>(() => classFeature.GetObjectClass(
+			                                         ILocalObject.CreateMetadata(jClass)));
 		Assert.Throws<InvalidOperationException>(() => classFeature.GetClass(IDataType.GetMetadata<JLocalObject>()));
 		Assert.Throws<InvalidOperationException>(() => classFeature.GetObjectClass(jClass));
 		Assert.Throws<InvalidOperationException>(() => classFeature.GetSuperClass(jClass));
 		Assert.Throws<InvalidOperationException>(() => classFeature.IsAssignableFrom(jClass, jIntClass));
 		Assert.Throws<InvalidOperationException>(() => classFeature.GetTypeMetadata(jClass));
 		Assert.Throws<InvalidOperationException>(() => classFeature.GetModule(jClass));
-		Assert.Throws<InvalidOperationException>(
-			() => classFeature.ThrowNew<JExceptionObject>(new CString(() => "msg"u8), false));
+		Assert.Throws<InvalidOperationException>(() => classFeature.ThrowNew<JExceptionObject>(
+			                                         new CString(() => "msg"u8), false));
 		Assert.Throws<InvalidOperationException>(() => classFeature.ThrowNew<JExceptionObject>("msg", false));
 		Assert.Throws<InvalidOperationException>(() => classFeature.GetClass("package/ClassName"u8));
-		Assert.Throws<InvalidOperationException>(
-			() => classFeature.LoadClass("package/ClassName"u8, ReadOnlySpan<Byte>.Empty));
+		Assert.Throws<InvalidOperationException>(() => classFeature.LoadClass(
+			                                         "package/ClassName"u8, ReadOnlySpan<Byte>.Empty));
 		Assert.Throws<InvalidOperationException>(() => classFeature.LoadClass<JTestObject>(ReadOnlySpan<Byte>.Empty));
 		Assert.Throws<InvalidOperationException>(() => classFeature.GetClassInfo(jClass, out _, out _, out _));
 	}
@@ -222,16 +224,16 @@ public class DeadThreadTests
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.CreateArray<JInt>(jIntClass, 0));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.CreateArray(0, jClass));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.CreateArray(jClass, 0, jClass));
-		Assert.Throws<InvalidOperationException>(
-			() => arrayFeature.GetElement(default(JArrayObject<JClassObject>)!, 0));
+		Assert.Throws<InvalidOperationException>(() => arrayFeature.GetElement(
+			                                         default(JArrayObject<JClassObject>)!, 0));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.SetElement(default!, 0, jIntClass));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.IndexOf(default!, jIntClass));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.CopyTo(default!, Array.Empty<JInt>(), default));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.GetCopy(default!, Span<JInt>.Empty));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.SetCopy(default!, ReadOnlySpan<JInt>.Empty));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.GetSequence(default(JArrayObject<JInt>)!, default));
-		Assert.Throws<InvalidOperationException>(
-			() => arrayFeature.GetCriticalSequence(default(JArrayObject<JInt>)!, default));
+		Assert.Throws<InvalidOperationException>(() => arrayFeature.GetCriticalSequence(
+			                                         default(JArrayObject<JInt>)!, default));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.GetPrimitiveSequence<JInt>(default, out _));
 		Assert.Throws<InvalidOperationException>(() => arrayFeature.GetPrimitiveCriticalSequence(default));
 	}
