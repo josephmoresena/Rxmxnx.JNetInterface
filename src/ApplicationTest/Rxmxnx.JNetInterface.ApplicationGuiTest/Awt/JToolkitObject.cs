@@ -36,7 +36,6 @@ public class JToolkitObject : JLocalObject, IClassType<JToolkitObject>
 	public static JToolkitObject GetDefaultToolkit(IEnvironment env)
 	{
 		using JClassObject jClass = JClassObject.GetClass<JToolkitObject>(env);
-		//JToolkitObject.getDefaultToolDef ??= new("getDefaultToolkit"u8);
 		return JToolkitObject.getDefaultToolDef.StaticInvoke(jClass)!;
 	}
 

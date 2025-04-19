@@ -47,13 +47,44 @@ All JNI-interoperable objects are instances of `JObject`. Primitives undergo box
 Primitive type conversion in `Rxmxnx.JNetInterface` follows Java's promotion and truncation rules. To convert a
 primitive type to its wrapper object, use the `.ToObject(IEnvironment)` extension method.
 
-For `ILocalObject` instances, conversion to another type can be done using `.CastTo<TReference>()`.  
+For `ILocalObject` instances, conversion to another type can be done using `.CastTo<TReference>()`.
+
+Any `ILocalObject` instance can be cast to a `JLocalObject` type without any additional cost via
+`.CastTo<JLocalObject>()`, as it returns the internal instance that represents the `ILocalObject`. For this reason, it's
+usually not necessary to call `Dispose()` on the returned instance, since calling `Dispose()` on the `JLocalObject`
+effectively discards the original `ILocalObject` instance as well.
+
+When using `.CastTo<TObject>()` on an `ILocalObject` instance whose internal instance is not of non-view type
+`TObject` (occurs when the `JNetInterface` hierarchy is not established or the type was not registered before the
+instance was created), a new instance of `T` will be created, 'disconnected' from the original `ILocalObject`.
+Otherwise, if the internal instance is already of type `TObject`, the returned `TObject` will be the same internal
+instance.
+
 For `JLocalObject` instances, use `.CastTo<TReference>(Boolean)`, where the boolean parameter determines whether the
-original instance should be discarded when casting to a non-view type.
+original instance should be discarded when casting to a non-view type. When the `JLocalObject` instance is of a non-view
+type `TReference`, even if it was indicated that the initial instance should be discarded, it will not be discarded, and
+the same instance will be returned as the result of the cast.
+
+When casting to a non-view type `TObject` results in a disconnected instance, `Dispose()` must be called explicitly on
+that instance. Although both instances share the same local reference, it will only be released in JNI once both
+instances have been disposed.
 
 Since `JGlobal` and `JWeak` instances are not directly manipulable in most cases, the `AsLocal(IEnvironment, Boolean)`
 method allows creating a functional local object within a given environment. The boolean parameter controls whether a
 new local reference is created when performing the cast.
+
+## Object Metadata
+
+Each mapped type can hold cacheable instance metadata in `JNetInterface`, which is useful to avoid unnecessary JNI calls
+when querying certain immutable properties after converting local objects to global or view representations. This
+metadata must be an instance of the `ObjectMetadata` type.
+
+This is enabled by implementing the `ILocalObject` interface and its protected methods `CreateMetadata()` and
+`ProcessMetadata(ObjectMetadata)`. The implementation of these methods must follow a chain pattern—for example, when
+creating metadata for the current mapped type, the metadata of the superclass must first be created as an instance of
+its corresponding type. Similarly, when processing metadata, the method that handles the superclass's metadata must be
+called first, followed by the current type's processing logic.
+For this reason, metadata types must follow a hierarchy based on `ObjectMetadata`.
 
 ## Data Type Registration
 
