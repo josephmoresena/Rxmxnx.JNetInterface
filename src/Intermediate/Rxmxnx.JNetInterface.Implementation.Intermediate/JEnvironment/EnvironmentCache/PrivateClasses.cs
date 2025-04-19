@@ -2,8 +2,10 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
@@ -431,8 +433,10 @@ partial class JEnvironment
 		/// <see langword="true"/> if an object of <paramref name="jClass"/> can be safely cast to
 		/// <paramref name="otherClass"/>; otherwise, <see langword="false"/>.
 		/// </returns>
+#if !PACKAGE
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2234,
 		                 Justification = CommonConstants.BackwardOperationJustification)]
+#endif
 		private Boolean IsAssignableFrom(JClassObject jClass, JClassObject otherClass,
 			Func<JEnvironment, LocalFrame>? createFrame)
 		{

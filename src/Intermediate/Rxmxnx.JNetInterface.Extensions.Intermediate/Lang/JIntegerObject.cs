@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Integer</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimitiveWrapperType<JIntegerObject, JInt>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JIntegerObject> typeMetadata =
@@ -26,7 +28,9 @@ public sealed class JIntegerObject : JNumberObject<JInt, JIntegerObject>, IPrimi
 	private JIntegerObject(IReferenceType.ObjectInitializer initializer) :
 		base(initializer.WithClass<JIntegerObject>()) { }
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IPrimitiveWrapperType<JIntegerObject>.SetPrimitiveValue(IPrimitiveType value)
 		=> base.SetPrimitiveValue(value.ToInt32(CultureInfo.InvariantCulture));

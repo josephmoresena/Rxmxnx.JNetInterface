@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal.Localization;
 /// <summary>
 /// Risorsa di messaggi predefinita in italiano.
 /// </summary>
+#if !PACKAGE
 [ExcludeFromCodeCoverage]
+#endif
 internal sealed class ItalianMessageResource : IMessageResource
 {
 	/// <inheritdoc cref="IMessageResource.Instance"/>

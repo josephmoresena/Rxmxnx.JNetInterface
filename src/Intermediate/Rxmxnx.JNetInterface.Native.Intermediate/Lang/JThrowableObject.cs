@@ -54,7 +54,7 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 	}
 
 	/// <inheritdoc/>
-	public override String ToString()
+	public sealed override String ToString()
 	{
 		String threadInformation = this.ThreadId.HasValue ? $"[{this.ThreadId}] " : String.Empty;
 		String result =
@@ -71,8 +71,11 @@ public partial class JThrowableObject : JLocalObject, IThrowableType<JThrowableO
 		return result;
 	}
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
-	public override String ToTraceText() => JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference);
+#endif
+	public sealed override String ToTraceText()
+		=> JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference);
 
 	/// <inheritdoc cref="JLocalObject.CreateMetadata()"/>
 	protected new virtual ThrowableObjectMetadata CreateMetadata()

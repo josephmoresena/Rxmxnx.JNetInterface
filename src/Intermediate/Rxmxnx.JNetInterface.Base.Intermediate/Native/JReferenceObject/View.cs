@@ -15,9 +15,9 @@ public partial class JReferenceObject
 		/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 		private protected View(JReferenceObject jObject) : base(jObject) { }
 		/// <inheritdoc cref="IObject.ObjectClassName"/>
-		public override CString ObjectClassName => this.GetObject().ObjectClassName;
+		public sealed override CString ObjectClassName => this.GetObject().ObjectClassName;
 		/// <inheritdoc cref="IObject.ObjectSignature"/>
-		public override CString ObjectSignature => this.GetObject().ObjectSignature;
+		public sealed override CString ObjectSignature => this.GetObject().ObjectSignature;
 
 		IObject IViewObject.Object => this.GetObject();
 
@@ -36,13 +36,17 @@ public partial class JReferenceObject
 		/// <inheritdoc/>
 		private protected override ReadOnlySpan<Byte> AsSpan() => this.GetObject().AsSpan();
 		/// <inheritdoc/>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		private protected override Boolean Same(JReferenceObject jObject)
 			=> Object.ReferenceEquals(this, jObject) || this.GetObject().Same(jObject);
 
 		/// <inheritdoc/>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
-		public override String ToTraceText() => this.GetObject().ToTraceText();
+#endif
+		public sealed override String ToTraceText() => this.GetObject().ToTraceText();
 
 		/// <summary>
 		/// Retrieves viewed object.

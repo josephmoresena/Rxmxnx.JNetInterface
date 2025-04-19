@@ -8,7 +8,9 @@ public readonly partial struct JLong
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JLong() => this._value = default;
 	/// <summary>
 	/// Constructor.
@@ -17,7 +19,9 @@ public readonly partial struct JLong
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JLong(SByte value) => this._value = value;
 	/// <summary>
 	/// Constructor.
@@ -26,7 +30,9 @@ public readonly partial struct JLong
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JLong(Char value) => this._value = value;
 	/// <summary>
 	/// Constructor.
@@ -35,7 +41,9 @@ public readonly partial struct JLong
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JLong(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int64, Double>(value);
 	/// <summary>
 	/// Constructor.
@@ -44,7 +52,9 @@ public readonly partial struct JLong
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JLong(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int64, Single>(value);
 	/// <summary>
 	/// Constructor.
@@ -53,7 +63,9 @@ public readonly partial struct JLong
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JLong(Int32 value) => this._value = value;
 	/// <summary>
 	/// Constructor.
@@ -62,7 +74,9 @@ public readonly partial struct JLong
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JLong(Int64 value) => this._value = value;
 	/// <summary>
 	/// Constructor.
@@ -71,6 +85,8 @@ public readonly partial struct JLong
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JLong(Int16 value) => this._value = value;
 }

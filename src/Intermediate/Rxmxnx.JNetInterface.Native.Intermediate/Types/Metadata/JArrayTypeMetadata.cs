@@ -11,11 +11,11 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	public abstract JDataTypeMetadata ElementMetadata { get; }
 
 	/// <inheritdoc/>
-	public override JTypeKind Kind => JTypeKind.Array;
+	public sealed override JTypeKind Kind => JTypeKind.Array;
 	/// <inheritdoc/>
-	public override JTypeModifier Modifier { get; }
+	public sealed override JTypeModifier Modifier { get; }
 	/// <inheritdoc/>
-	public override IInterfaceSet Interfaces => InterfaceSet.SerializableCloneableSet;
+	public sealed override IInterfaceSet Interfaces => InterfaceSet.SerializableCloneableSet;
 
 	/// <summary>
 	/// Array dimension.
@@ -54,7 +54,7 @@ public abstract partial class JArrayTypeMetadata : JClassTypeMetadata
 	}
 
 	/// <inheritdoc/>
-	public override Boolean TypeOf(JReferenceTypeMetadata otherMetadata)
+	public sealed override Boolean TypeOf(JReferenceTypeMetadata otherMetadata)
 		=> otherMetadata is JArrayTypeMetadata arrayMetadata ? this.TypeOf(arrayMetadata) : base.TypeOf(otherMetadata);
 
 	/// <summary>

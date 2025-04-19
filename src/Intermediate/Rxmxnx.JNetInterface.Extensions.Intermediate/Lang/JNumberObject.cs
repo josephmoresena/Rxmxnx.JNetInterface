@@ -4,8 +4,10 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// This class represents a local <c>java.lang.Number</c> instance.
 /// </summary>
 /// <typeparam name="TValue">Number <see cref="IPrimitiveType"/> type.</typeparam>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TValue>
 	where TValue : unmanaged, IPrimitiveType<TValue>, IBinaryNumber<TValue>, ISignedNumber<TValue>
 {
@@ -19,7 +21,7 @@ public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TV
 	public TValue Value => this._value ??= base.GetValue<TValue>();
 
 	/// <inheritdoc/>
-	public override TPrimitive GetValue<TPrimitive>()
+	public sealed override TPrimitive GetValue<TPrimitive>()
 	{
 		if (typeof(TPrimitive) != typeof(TValue)) return base.GetValue<TPrimitive>();
 		TValue result = this.Value;
@@ -27,10 +29,10 @@ public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TV
 	}
 
 	/// <inheritdoc/>
-	protected override ObjectMetadata CreateMetadata()
+	protected sealed override ObjectMetadata CreateMetadata()
 		=> new PrimitiveWrapperObjectMetadata<TValue>(base.CreateMetadata()) { Value = this.Value, };
 	/// <inheritdoc/>
-	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
+	protected sealed override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
 		base.ProcessMetadata(instanceMetadata);
 		if (instanceMetadata is PrimitiveWrapperObjectMetadata<TValue> wrapperMetadata)
@@ -38,7 +40,9 @@ public abstract partial class JNumberObject<TValue> : JNumberObject, IWrapper<TV
 	}
 
 	/// <inheritdoc cref="IPrimitiveWrapperType{TWrapper}.SetPrimitiveValue"/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private protected void SetPrimitiveValue(TValue value) => this._value = value;
 }
 
@@ -59,16 +63,18 @@ public abstract partial class
 	Boolean IEquatable<JPrimitiveObject>.Equals(JPrimitiveObject? other) => this.Value.Equals(other);
 
 	/// <inheritdoc/>
-	public override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
+	public sealed override Boolean Equals(JObject? other) => base.Equals(other) || this.Value.Equals(other);
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
+	public sealed override Boolean Equals(Object? obj) => Object.ReferenceEquals(this, obj) || this.Value.Equals(obj);
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this.Value.GetHashCode();
+	public sealed override Int32 GetHashCode() => this.Value.GetHashCode();
 	/// <inheritdoc/>
-	public override String ToString() => this.Value.ToString()!;
+	public sealed override String ToString() => this.Value.ToString()!;
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
-	public override String ToTraceText()
+#endif
+	public sealed override String ToTraceText()
 		=> $"{JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference)} {IPrimitiveType.GetMetadata<TValue>().Signature}: {this.Value}";
 
 	/// <inheritdoc cref="IPrimitiveWrapperType{TNumber, TValue}.Create(IEnvironment, Nullable{TValue})"/>

@@ -19,7 +19,7 @@ public interface IObject
 	/// </summary>
 	/// <param name="span">Binary span.</param>
 	/// <returns>Number of bytes copied.</returns>
-	internal void CopyTo(Span<Byte> span)
+	internal sealed void CopyTo(Span<Byte> span)
 	{
 		Int32 index = 0;
 		this.CopyTo(span, ref index);
@@ -43,7 +43,7 @@ public interface IObject
 	/// Indicates current instance is default value.
 	/// </summary>
 	/// <returns><see langword="true"/> if current instance is default; otherwise, <see langword="false"/>.</returns>
-	internal Boolean IsDefault()
+	internal sealed Boolean IsDefault()
 	{
 		Span<Byte> values = stackalloc Byte[JValue.Size];
 		this.CopyTo(values);

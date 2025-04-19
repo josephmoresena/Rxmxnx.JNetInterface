@@ -51,7 +51,9 @@ public sealed class JGlobal : JGlobalBase
 	/// <inheritdoc/>
 	public override String ToString() => $"{this.Reference} {this.ObjectMetadata}";
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override String ToTraceText() => $"{this.Reference} {this.ObjectMetadata.ToTraceText()}";
 
 	/// <inheritdoc/>

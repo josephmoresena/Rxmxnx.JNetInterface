@@ -24,7 +24,9 @@ internal static class MetadataTextUtilities
 	/// <param name="typeMetadata">A <see cref="JDataTypeMetadata"/> instance.</param>
 	/// <param name="properties">Additional properties to report.</param>
 	/// <returns>A detailed string representation of <paramref name="typeMetadata"/>.</returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static String GetString(JDataTypeMetadata typeMetadata, IAppendableProperty?[] properties)
 		=> MetadataTextUtilities.GetString(typeMetadata, properties.AsSpan());

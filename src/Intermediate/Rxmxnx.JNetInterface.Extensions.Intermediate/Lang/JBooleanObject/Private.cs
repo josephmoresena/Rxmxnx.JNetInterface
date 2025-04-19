@@ -22,7 +22,9 @@ public sealed partial class JBooleanObject
 		this._value = jBooleanObject?._value;
 	}
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	void IPrimitiveWrapperType<JBooleanObject>.SetPrimitiveValue(IPrimitiveType value)
 		=> this._value = value.ToBoolean(CultureInfo.InvariantCulture);
 

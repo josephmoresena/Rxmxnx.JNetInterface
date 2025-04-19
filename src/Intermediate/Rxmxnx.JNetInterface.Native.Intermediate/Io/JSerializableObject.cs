@@ -5,8 +5,10 @@ using TypeMetadata = JInterfaceTypeMetadata<JSerializableObject>;
 /// <summary>
 /// This class represents a local <c>java.io.Serializable</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JSerializableObject : JInterfaceObject<JSerializableObject>, IInterfaceType<JSerializableObject>
 {
 	/// <summary>

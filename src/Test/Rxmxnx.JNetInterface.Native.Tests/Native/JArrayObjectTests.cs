@@ -246,7 +246,7 @@ public sealed class JArrayObjectTests
 		Assert.Equal(jArray.Object, ILocalViewObject.GetObject(jArray));
 		Assert.Equal(jArray.Object.Lifetime, localView.Lifetime);
 		Assert.Equal(jArray.Object.IsProxy, localView.IsProxy);
-		Assert.Equal(jArray.Object.Environment.VirtualMachine, localView.VirtualMachine);
+		Assert.Equal(jArray.Object.Environment.VirtualMachine, localView.Environment.VirtualMachine);
 
 		env.ArrayFeature.Received(initializer is 0 or 3 ? 0 : 1).GetArrayLength(jArray);
 		JArrayObjectTests.CastTest(jArray);

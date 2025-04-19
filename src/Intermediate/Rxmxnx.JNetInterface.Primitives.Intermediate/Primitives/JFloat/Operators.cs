@@ -41,23 +41,35 @@ public readonly partial struct JFloat : IPrimitiveEquatable
 	/// <param name="value">A <see cref="JFloat"/> to implicitly convert.</param>
 	public static implicit operator JDouble(JFloat value) => value.Value;
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JFloat>.operator JFloat(JFloat jPrimitive) => jPrimitive;
 	static explicit IPrimitiveNumericType<JFloat>.operator JDouble(JFloat jPrimitive) => jPrimitive;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JFloat>.operator Int16(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int16, Single>(jPrimitive._value);
 	static explicit IPrimitiveNumericType<JFloat>.operator Single(JFloat jPrimitive) => jPrimitive._value;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JFloat>.operator Int32(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int32, Single>(jPrimitive._value);
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JFloat>.operator Char(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Char, Single>(jPrimitive._value);
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JFloat>.operator SByte(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<SByte, Single>(jPrimitive._value);
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JFloat>.operator Int64(JFloat jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int64, Single>(jPrimitive._value);
 }

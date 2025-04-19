@@ -8,7 +8,7 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public abstract partial class JReferenceTypeMetadata : JDataTypeMetadata
 {
 	/// <inheritdoc/>
-	public override Int32 SizeOf => NativeUtilities.PointerSize;
+	public sealed override Int32 SizeOf => NativeUtilities.PointerSize;
 
 	/// <summary>
 	/// Base type of the current type metadata.

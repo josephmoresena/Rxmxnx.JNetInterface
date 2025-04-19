@@ -262,6 +262,7 @@ public sealed class PrimitiveArrayTests
 
 			JNativeMemory<TPrimitive> memory = sequence;
 			Assert.Equal(sequence, (JPrimitiveMemory<TPrimitive>)memory);
+			Assert.Equal(sequence.GetHashCode(), memory.GetHashCode());
 		}
 		finally
 		{

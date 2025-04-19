@@ -23,8 +23,10 @@ public partial class JVirtualMachine
 		}
 
 		/// <inheritdoc/>
+#if !PACKAGE
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1006,
 		                 Justification = CommonConstants.DefaultValueTypeJustification)]
+#endif
 		public override JVirtualMachine Get(JVirtualMachineRef reference, out Boolean isNew, Boolean arg = false)
 		{
 			JVirtualMachine result = base.Get(reference, out isNew, arg);

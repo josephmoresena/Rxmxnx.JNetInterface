@@ -6,8 +6,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// <typeparam name="TPrimitiveType">Type of primitive value.</typeparam>
 /// <typeparam name="TArrayRef">Type of array reference.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct GetPrimitiveArrayElementsFunction<TPrimitiveType, TArrayRef>
 	where TPrimitiveType : unmanaged, INativeType, IPrimitiveType<TPrimitiveType>
 	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
@@ -22,7 +24,9 @@ internal readonly unsafe struct GetPrimitiveArrayElementsFunction<TPrimitiveType
 	/// Pointer to <c>Get&lt;PrimitiveType&gt;Elements</c> function.
 	/// Returns the body of the primitive array.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public ValPtr<TPrimitiveType> Get(JEnvironmentRef envRef, TArrayRef arrayRef, out JBoolean isCopy)
 		=> (TPrimitiveType*)this._ptr(envRef, arrayRef.ArrayValue, out isCopy);

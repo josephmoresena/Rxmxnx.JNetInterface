@@ -5,8 +5,10 @@
 /// </summary>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS4035,
                  Justification = CommonConstants.InternalInheritanceJustification)]
+#endif
 public abstract partial class JAccessibleObjectDefinition : IEquatable<JAccessibleObjectDefinition>
 {
 	/// <summary>
@@ -55,12 +57,12 @@ public abstract partial class JAccessibleObjectDefinition : IEquatable<JAccessib
 	}
 
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => this.Equals(obj as JAccessibleObjectDefinition);
+	public sealed override Boolean Equals(Object? obj) => this.Equals(obj as JAccessibleObjectDefinition);
 	/// <inheritdoc/>
-	public override String ToString()
+	public sealed override String ToString()
 		=> String.Format(this.ToStringFormat, this.Information.Name, this.Information.Descriptor);
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this.Information.GetHashCode();
+	public sealed override Int32 GetHashCode() => this.Information.GetHashCode();
 
 	/// <inheritdoc cref="Object.ToString()"/>
 	/// <remarks>Use this method for trace.</remarks>
@@ -77,7 +79,9 @@ public abstract partial class JAccessibleObjectDefinition : IEquatable<JAccessib
 	/// <see langword="true"/> if the value of <paramref name="left"/> is the same as the value
 	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator ==(JAccessibleObjectDefinition? left, JAccessibleObjectDefinition? right)
 		=> left?.Equals(right) ?? right is null;
@@ -92,7 +96,9 @@ public abstract partial class JAccessibleObjectDefinition : IEquatable<JAccessib
 	/// <see langword="true"/> if the value of <paramref name="left"/> is different from the value
 	/// of <paramref name="right"/>; otherwise, <see langword="false"/>.
 	/// </returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Boolean operator !=(JAccessibleObjectDefinition? left, JAccessibleObjectDefinition? right)
 		=> !(left == right);

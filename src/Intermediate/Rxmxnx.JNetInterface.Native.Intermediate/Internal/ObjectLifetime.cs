@@ -10,8 +10,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <param name="localRef">Local object reference.</param>
 /// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
 /// <param name="isDisposable">Indicates whether the current instance is disposable.</param>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2292,
                  Justification = CommonConstants.PublicInitPrivateSetJustification)]
+#endif
 internal sealed partial class ObjectLifetime(
 	IEnvironment env,
 	JObjectLocalRef localRef,

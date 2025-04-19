@@ -74,7 +74,9 @@ internal static class CommonValidationUtilities
 	/// Throws an <see cref="InvalidOperationException"/> attempting to create a void value.
 	/// </summary>
 	/// <exception cref="InvalidOperationException">Always throws an exception.</exception>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean ThrowVoidEquality()
 	{
 		IMessageResource resource = IMessageResource.GetInstance();

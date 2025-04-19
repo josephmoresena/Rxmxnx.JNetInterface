@@ -35,10 +35,14 @@ public abstract class JObject : IObject, IEquatable<JObject>
 	public abstract String ToTraceText();
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override Boolean Equals(Object? obj) => obj is JObject other && this.Equals(other);
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override Int32 GetHashCode() => HashCode.Combine(this.ObjectClassName, this.ObjectSignature);
 
 	/// <summary>

@@ -83,6 +83,19 @@ public partial class TestCompiler
 		compileArgs.Publish |= Publish.NoReflection;
 		await TestCompiler.CompileNet(compileArgs);
 	}
+	private static async Task CompileNetGuiApp(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, Architecture arch,
+		String outputPath)
+	{
+		if (!Utilities.IsNativeAotSupported(arch, restoreArgs.Version)) return;
+
+		CompileNetArgs compileArgs = new(restoreArgs, outputPath)
+		{
+			EnableTrace = onlyNativeAot, BuildDependencies = true, Publish = Publish.NativeAot,
+		};
+
+		await TestCompiler.RestoreNet(restoreArgs);
+		await TestCompiler.CompileNet(compileArgs);
+	}
 	private static async Task CompileNetApp(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, Architecture arch,
 		String outputPath)
 	{

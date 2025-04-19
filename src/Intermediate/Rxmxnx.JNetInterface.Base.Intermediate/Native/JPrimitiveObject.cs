@@ -22,7 +22,9 @@ internal abstract partial class JPrimitiveObject : JObject
 	public abstract Byte ToByte();
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override Int32 GetHashCode() => HashCode.Combine(Convert.ToHexString(this.AsSpan()), this.SizeOf);
 
 	/// <summary>
@@ -73,6 +75,8 @@ internal sealed partial class JPrimitiveObject<TPrimitive> : JPrimitiveObject.Ge
 	/// <inheritdoc/>
 	public override Int32 GetHashCode() => this.Value.GetHashCode();
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override String ToTraceText() => $"{nameof(JObject)} {this.ObjectSignature}: {this.Value}";
 }

@@ -29,12 +29,12 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 	/// <summary>
 	/// Size of the current primitive type in bytes.
 	/// </summary>
-	public override Int32 SizeOf { get; }
+	public sealed override Int32 SizeOf { get; }
 
 	/// <inheritdoc/>
-	public override JTypeKind Kind => JTypeKind.Primitive;
+	public sealed override JTypeKind Kind => JTypeKind.Primitive;
 	/// <inheritdoc/>
-	public override JTypeModifier Modifier => JTypeModifier.Final;
+	public sealed override JTypeModifier Modifier => JTypeModifier.Final;
 
 	/// <summary>
 	/// Information of wrapper class.
@@ -64,7 +64,7 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 	public abstract IPrimitiveType CreateInstance(ReadOnlySpan<Byte> bytes);
 
 	/// <inheritdoc/>
-	public override String? ToString()
+	public sealed override String? ToString()
 #if !PACKAGE
 		=> MetadataTextUtilities.TypeMetadataToStringEnabled ?
 #else
@@ -80,8 +80,10 @@ public abstract partial class JPrimitiveTypeMetadata : JDataTypeMetadata
 /// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 public abstract unsafe class JPrimitiveTypeMetadata<TPrimitive> : JPrimitiveTypeMetadata
 	where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 {

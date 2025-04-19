@@ -4,8 +4,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// Set of function pointers to manipulate Java object array through JNI.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct ObjectArrayFunctionSet
 {
 	/// <summary>

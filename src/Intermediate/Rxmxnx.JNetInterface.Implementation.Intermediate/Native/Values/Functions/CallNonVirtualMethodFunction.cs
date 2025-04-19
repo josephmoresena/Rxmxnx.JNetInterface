@@ -4,10 +4,12 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// Set of function pointers to call Java non-virtual methods through JNI.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct CallNonVirtualMethodFunction
 {
 	/// <summary>

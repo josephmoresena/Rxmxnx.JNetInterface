@@ -5,8 +5,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// </summary>
 /// <typeparam name="TReference">Type of object reference.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct DeleteRefFunction<TReference>
 	where TReference : unmanaged, INativeType, IWrapper<JObjectLocalRef>
 {
@@ -20,7 +22,9 @@ internal readonly unsafe struct DeleteRefFunction<TReference>
 	/// Pointer to <c>Delete<typeparamref name="TReference"/>Ref</c> function.
 	/// Deletes the given <typeparamref name="TReference"/> reference.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void DeleteRef(JEnvironmentRef envRef, TReference objRef) => this._ptr(envRef, objRef.Value);
 }

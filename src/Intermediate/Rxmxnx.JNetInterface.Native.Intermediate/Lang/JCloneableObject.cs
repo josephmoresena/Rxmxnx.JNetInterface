@@ -5,8 +5,10 @@ using TypeMetadata = JInterfaceTypeMetadata<JCloneableObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.Cloneable</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JCloneableObject : JInterfaceObject<JCloneableObject>, IInterfaceType<JCloneableObject>
 {
 	/// <summary>

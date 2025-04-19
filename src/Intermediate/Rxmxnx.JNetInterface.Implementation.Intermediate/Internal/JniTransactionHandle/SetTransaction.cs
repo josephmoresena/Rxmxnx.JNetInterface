@@ -5,8 +5,10 @@ internal partial struct JniTransactionHandle
 	/// <summary>
 	/// Represents a JNI transaction with more than three references.
 	/// </summary>
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3459,
 	                 Justification = CommonConstants.ReferenceableFieldJustification)]
+#endif
 	private sealed class SetTransaction : INativeTransaction
 	{
 		/// <summary>

@@ -5,8 +5,10 @@ using TypeMetadata = JInterfaceTypeMetadata<JAnnotatedElementObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.Annotation.AnnotatedElement</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JAnnotatedElementObject : JInterfaceObject<JAnnotatedElementObject>,
 	IInterfaceType<JAnnotatedElementObject>
 {

@@ -52,7 +52,7 @@ internal partial interface IClassFeature
 	/// <c>java.lang.Object</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject Object => this.GetClass<JLocalObject>();
+	sealed JClassObject Object => this.GetClass<JLocalObject>();
 	/// <summary>
 	/// <c>java.lang.Class&lt;?&gt;</c> class instance.
 	/// </summary>
@@ -62,62 +62,62 @@ internal partial interface IClassFeature
 	/// <c>java.lang.Throwable</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject ThrowableObject => this.GetClass<JThrowableObject>();
+	JClassObject ThrowableObject { get; }
 	/// <summary>
 	/// <c>java.lang.StackTraceElementObject</c> class instance.
 	/// </summary>
-	JClassObject StackTraceElementObject => this.GetClass<JStackTraceElementObject>();
+	JClassObject StackTraceElementObject { get; }
 	/// <summary>
 	/// <c>java.lang.String</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject StringObject => this.GetClass<JStringObject>();
+	sealed JClassObject StringObject => this.GetClass<JStringObject>();
 	/// <summary>
 	/// <c>java.lang.Number</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject NumberObject => this.GetClass<JNumberObject>();
+	sealed JClassObject NumberObject => this.GetClass<JNumberObject>();
 	/// <summary>
 	/// <c>java.lang.ClassLoader</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject ClassLoaderObject => this.GetClass<JClassLoaderObject>();
+	sealed JClassObject ClassLoaderObject => this.GetClass<JClassLoaderObject>();
 	/// <summary>
 	/// <c>java.nio.Buffer</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject BufferObject => this.GetClass<JBufferObject>();
+	sealed JClassObject BufferObject => this.GetClass<JBufferObject>();
 	/// <summary>
 	/// <c>java.lang.reflect.Method</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject MethodObject => this.GetClass<JMethodObject>();
+	sealed JClassObject MethodObject => this.GetClass<JMethodObject>();
 	/// <summary>
 	/// <c>java.lang.reflect.Constructor</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject ConstructorObject => this.GetClass<JConstructorObject>();
+	sealed JClassObject ConstructorObject => this.GetClass<JConstructorObject>();
 	/// <summary>
 	/// <c>java.lang.reflect.Field</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject FieldObject => this.GetClass<JFieldObject>();
+	sealed JClassObject FieldObject => this.GetClass<JFieldObject>();
 	/// <summary>
 	/// <c>java.lang.Enum</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject EnumObject => this.GetClass<JEnumObject>();
+	sealed JClassObject EnumObject => this.GetClass<JEnumObject>();
 
 	/// <summary>
 	/// <c>java.lang.Exception</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject ExceptionObject => this.GetClass<JExceptionObject>();
+	sealed JClassObject ExceptionObject => this.GetClass<JExceptionObject>();
 	/// <summary>
 	/// <c>java.lang.Error</c> class instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	JClassObject ErrorObject => this.GetClass<JErrorObject>();
+	sealed JClassObject ErrorObject => this.GetClass<JErrorObject>();
 
 	/// <summary>
 	/// <c>java.lang.Void</c> class instance.

@@ -5,8 +5,10 @@ public partial class JVirtualMachine
 	/// <summary>
 	/// This class stores cache for a <see cref="JVirtualMachine"/> instance.
 	/// </summary>
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+#endif
 	private sealed partial class VirtualMachineCache : GlobalMainClasses
 	{
 		/// <summary>

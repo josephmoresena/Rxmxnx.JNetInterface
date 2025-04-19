@@ -5,8 +5,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// </summary>
 [InlineArray(2)]
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
+#endif
 internal struct MethodOffset
 {
 #pragma warning disable CS0169

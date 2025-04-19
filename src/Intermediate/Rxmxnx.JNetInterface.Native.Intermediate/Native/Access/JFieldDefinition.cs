@@ -45,8 +45,10 @@ public abstract class JFieldDefinition : JAccessibleObjectDefinition
 	}
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
-	public override String ToTraceText() => $"field: {this.Name} {this.Descriptor}";
+#endif
+	public sealed override String ToTraceText() => $"field: {this.Name} {this.Descriptor}";
 }
 
 /// <summary>

@@ -16,10 +16,10 @@ internal abstract partial class InfoSequenceBase(String hash, Int32 nameLength)
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override String ToString() => this.Hash;
+	public sealed override String ToString() => this.Hash;
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => this.Hash.GetHashCode();
+	public sealed override Int32 GetHashCode() => this.Hash.GetHashCode();
 
 	/// <summary>
 	/// Retrieves printable text hash.
@@ -27,7 +27,9 @@ internal abstract partial class InfoSequenceBase(String hash, Int32 nameLength)
 	/// <param name="hash">Class hash.</param>
 	/// <param name="lastChar">Last char hash.</param>
 	/// <returns>A read-only UTF-16 char span.</returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static ReadOnlySpan<Char> GetPrintableHash(String hash, out String lastChar)
 	{
 		ReadOnlySpan<Char> hashSpan = hash;
@@ -51,7 +53,13 @@ internal abstract partial class InfoSequenceBase(String hash, Int32 nameLength)
 		/// Buffer length.
 		/// </summary>
 		private readonly Int32 _length = length;
+		/// <summary>
+		/// Buffer range.
+		/// </summary>
 		private readonly Range _range = new(offset, offset + length);
+
+		/// <inheritdoc/>
+		public static Func<ItemState, GCHandleType, GCHandle> Alloc => (s, t) => GCHandle.Alloc(s._buffer, t);
 
 		/// <inheritdoc/>
 		public static ReadOnlySpan<Byte> GetSpan(ItemState state) => state._buffer.AsSpan().AsBytes()[state._range];

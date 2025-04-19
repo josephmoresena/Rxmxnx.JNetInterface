@@ -29,7 +29,9 @@ public sealed record FieldObjectMetadata : ObjectMetadata
 	}
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private FieldObjectMetadata(FieldObjectMetadata fieldMetadata) : base(fieldMetadata)
 	{
 		this.Definition = fieldMetadata.Definition;

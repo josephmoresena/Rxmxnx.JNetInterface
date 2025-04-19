@@ -5,10 +5,12 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 /// </summary>
 /// <remarks>NIO Support</remarks>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct NativeInterface4 : INativeInterface<NativeInterface4>
 {
 	/// <inheritdoc/>
@@ -18,7 +20,7 @@ internal readonly unsafe struct NativeInterface4 : INativeInterface<NativeInterf
 	/// Native interface for <c>JNI_VERSION_1_2</c>
 	/// </summary>
 #pragma warning disable CS0169
-	private readonly NativeInterface _nativeInterface9;
+	private readonly NativeInterface _nativeInterface;
 #pragma warning restore CS0169
 
 	/// <summary>

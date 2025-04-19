@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Double</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrimitiveWrapperType<JDoubleObject, JDouble>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JDoubleObject> typeMetadata =
@@ -26,7 +28,9 @@ public sealed class JDoubleObject : JNumberObject<JDouble, JDoubleObject>, IPrim
 	private JDoubleObject(IReferenceType.ObjectInitializer initializer) :
 		base(initializer.WithClass<JDoubleObject>()) { }
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IPrimitiveWrapperType<JDoubleObject>.SetPrimitiveValue(IPrimitiveType value)
 		=> base.SetPrimitiveValue(value.ToDouble(CultureInfo.InvariantCulture));

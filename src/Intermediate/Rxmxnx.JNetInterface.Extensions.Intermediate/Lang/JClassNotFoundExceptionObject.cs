@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JClassNotFoundExceptionObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.ClassNotFoundException</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JClassNotFoundExceptionObject : JReflectiveOperationExceptionObject,
 	IThrowableType<JClassNotFoundExceptionObject>
 {

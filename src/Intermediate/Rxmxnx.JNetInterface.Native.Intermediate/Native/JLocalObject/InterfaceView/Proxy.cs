@@ -7,10 +7,12 @@ public partial class JLocalObject
 		/// <summary>
 		/// Interface proxy.
 		/// </summary>
+#if !PACKAGE
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2743,
 		                 Justification = CommonConstants.StaticAbstractPropertyUseJustification)]
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
 		                 Justification = CommonConstants.InternalInheritanceJustification)]
+#endif
 		private protected sealed class Proxy<TInterface> : JProxyObject, IInterfaceObject<TInterface>
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>
 		{

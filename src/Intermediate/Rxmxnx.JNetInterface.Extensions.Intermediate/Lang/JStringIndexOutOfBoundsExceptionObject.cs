@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JStringIndexOutOfBoundsExceptionObje
 /// <summary>
 /// This class represents a local <c>java.lang.StringIndexOutOfBoundsException</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JStringIndexOutOfBoundsExceptionObject : JIndexOutOfBoundsExceptionObject,
 	IThrowableType<JStringIndexOutOfBoundsExceptionObject>
 {

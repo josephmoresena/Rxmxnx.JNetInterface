@@ -201,7 +201,9 @@ public sealed partial class JClassObject : JLocalObject, IClassType<JClassObject
 			JObject.GetObjectIdentifier(this.ClassSignature, this.Reference) :
 			$"{this.Name}";
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override String ToTraceText()
 		=> $"{this} hash: {InfoSequenceBase.GetPrintableHash(this.Hash, out String lastChar)}{lastChar}";
 

@@ -31,7 +31,9 @@ public record EnumObjectMetadata : ObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata"><see cref="EnumObjectMetadata"/> instance.</param>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	protected EnumObjectMetadata(EnumObjectMetadata metadata) : base(metadata)
 	{
 		this.Ordinal = metadata.Ordinal;

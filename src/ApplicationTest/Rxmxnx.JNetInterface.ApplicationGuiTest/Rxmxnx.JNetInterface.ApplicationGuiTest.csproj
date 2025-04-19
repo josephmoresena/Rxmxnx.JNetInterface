@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <AssemblyName>ApplicationGuiTest</AssemblyName>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <Import Project="..\JNetInterface-App.targets"/>
+
+    <ItemGroup>
+        <None Remove="java.src\**"/>
+        <EmbeddedResource Include="NativeCallbacks.jar"/>
+        <EmbeddedResource Include="Images\*"/>
+    </ItemGroup>
+
+</Project>

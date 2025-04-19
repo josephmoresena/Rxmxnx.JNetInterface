@@ -3,14 +3,18 @@ namespace Rxmxnx.JNetInterface.Native.Values;
 /// <summary>
 /// Helper class to use function pointers in generic function calls.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal static class GenericFunctionCallHelper
 {
 	/// <summary>
 	/// Calls Call&lt;type&gt;Method<c>A</c> function.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static unsafe void CallMethod(void* funcPtr, JNativeType resultType, JEnvironmentRef envRef, IntPtr receiver,
 		JMethodId methodId, JValue* args, ref Byte refValue)
@@ -67,10 +71,12 @@ internal static class GenericFunctionCallHelper
 	/// <summary>
 	/// Calls CallNonVirtual&lt;type&gt;Method<c>A</c> function.
 	/// </summary>
-	[ExcludeFromCodeCoverage]
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
 	                 Justification = CommonConstants.PrimitiveCallJustification)]
+#endif
 	public static unsafe void CallNonVirtualMethod(void* funcPtr, JNativeType resultType, JEnvironmentRef envRef,
 		JObjectLocalRef localRef, JClassLocalRef classRef, JMethodId methodId, JValue* args, ref Byte refValue)
 	{
@@ -126,7 +132,9 @@ internal static class GenericFunctionCallHelper
 	/// <summary>
 	/// Calls <c>Get&lt;type&gt;Field</c> function.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static unsafe void GetField(void* funcPtr, JNativeType fieldType, JEnvironmentRef envRef, IntPtr receiver,
 		JFieldId fieldId, ref Byte refValue)
@@ -178,7 +186,9 @@ internal static class GenericFunctionCallHelper
 	/// <summary>
 	/// Calls <c>Set&lt;type&gt;Field</c> function.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static unsafe void SetField(void* funcPtr, JNativeType fieldType, JEnvironmentRef envRef, IntPtr receiver,
 		JFieldId fieldId, ref Byte refValue)

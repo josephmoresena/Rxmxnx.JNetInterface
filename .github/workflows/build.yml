@@ -232,8 +232,8 @@ jobs:
           path: |
             ./artifacts/*.class
             ./artifacts/*.jar
-            ./artifacts/ApplicationTest*NAOT*
-            ./artifacts/ApplicationTest*RFM*
+            ./artifacts/Application*Test*NAOT*
+            ./artifacts/Application*Test*RFM*
             ./artifacts/*HelloJni.* 
 
       - name: Create Native Artifact Logs

@@ -111,6 +111,10 @@ public sealed class JGlobalTests : GlobalObjectTestsBase
 		Assert.Equal($"{jGlobal0.Reference} {jGlobal0.ObjectMetadata}", jGlobal0.ToString());
 		Assert.Equal($"{jGlobal1.Reference} {jGlobal1.ObjectMetadata}", jGlobal1.ToString());
 		Assert.Equal($"{jGlobal2.Reference} {jGlobal2.ObjectMetadata}", jGlobal2.ToString());
+
+		Assert.Equal(jGlobal0.Reference.Value.Pointer, JGlobalBase.GetReference(jGlobal0));
+		Assert.Equal(jGlobal1.Reference.Value.Pointer, JGlobalBase.GetReference(jGlobal1));
+		Assert.Equal(jGlobal2.Reference.Value.Pointer, JGlobalBase.GetReference(jGlobal2));
 	}
 
 	[Theory]

@@ -4,8 +4,10 @@
 /// Unmanaged type for <see cref="JVirtualMachineInitArg"/> value.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct VirtualMachineInitArgumentValue : INativeType
 {
 	/// <inheritdoc/>

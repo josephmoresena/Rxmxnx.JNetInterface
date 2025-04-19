@@ -2,8 +2,10 @@ namespace Rxmxnx.JNetInterface;
 
 partial class JEnvironment
 {
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 	private sealed partial class EnvironmentCache
 	{
 		/// <summary>
@@ -334,8 +336,10 @@ partial class JEnvironment
 		/// <param name="ptr">Pointer to call argments array.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="callFunction">Function to invoke function.</param>
+#if !PACKAGE
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
 		                 Justification = CommonConstants.PrimitiveCallJustification)]
+#endif
 		private unsafe void CallStaticPrimitiveFunction<TPrimitive>(Span<Byte> bytes, JClassLocalRef classRef,
 			Byte signature, JMethodId methodId, JValue* ptr,
 			in CallGenericFunction<JClassLocalRef, TPrimitive> callFunction)
@@ -415,8 +419,10 @@ partial class JEnvironment
 		/// <param name="ptr">Pointer to call argments array.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="callFunction">Function to invoke function.</param>
+#if !PACKAGE
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
 		                 Justification = CommonConstants.PrimitiveCallJustification)]
+#endif
 		private unsafe void CallPrimitiveNonVirtualFunction<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef,
 			JClassLocalRef classRef, Byte signature, JMethodId methodId, JValue* ptr,
 			in CallNonVirtualGenericFunction<TPrimitive> callFunction)
@@ -486,8 +492,10 @@ partial class JEnvironment
 		/// <param name="ptr">Pointer to call argments array.</param>
 		/// <param name="methodId">A <see cref="JMethodId"/> identifier.</param>
 		/// <param name="callFunction">Function to invoke function.</param>
+#if !PACKAGE
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS107,
 		                 Justification = CommonConstants.PrimitiveCallJustification)]
+#endif
 		private unsafe void CallPrimitiveFunction<TPrimitive>(Span<Byte> bytes, JObjectLocalRef localRef,
 			Byte signature, JMethodId methodId, JValue* ptr,
 			in CallGenericFunction<JObjectLocalRef, TPrimitive> callFunction)

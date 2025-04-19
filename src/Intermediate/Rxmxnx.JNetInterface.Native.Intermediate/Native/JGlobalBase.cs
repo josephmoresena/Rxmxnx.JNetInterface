@@ -4,10 +4,12 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This class represents a <see cref="JObject"/> instance which may remain valid across different
 /// threads.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
                  Justification = CommonConstants.JniThreadRequiredJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2953,
                  Justification = CommonConstants.JniThreadRequiredJustification)]
+#endif
 public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 {
 	/// <summary>
@@ -19,9 +21,9 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </summary>
 	public IVirtualMachine VirtualMachine { get; }
 	/// <inheritdoc/>
-	public override CString ObjectClassName => this.ObjectMetadata.ObjectClassName;
+	public sealed override CString ObjectClassName => this.ObjectMetadata.ObjectClassName;
 	/// <inheritdoc/>
-	public override CString ObjectSignature => this.ObjectMetadata.ObjectSignature;
+	public sealed override CString ObjectSignature => this.ObjectMetadata.ObjectSignature;
 	/// <summary>
 	/// Instance metadata.
 	/// </summary>
@@ -125,4 +127,11 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </returns>
 	public static Boolean IsValid([NotNullWhen(true)] JGlobalBase? jGlobal, IEnvironment env)
 		=> jGlobal is not null && jGlobal.IsValid(env);
+
+	/// <summary>
+	/// Retrieves <paramref name="jGlobal"/> internal reference.
+	/// </summary>
+	/// <param name="jGlobal">A <see cref="JGlobalBase"/> instance.</param>
+	/// <returns><paramref name="jGlobal"/> internal reference.</returns>
+	public static IntPtr GetReference(JGlobalBase? jGlobal) => jGlobal?._value.Value ?? default;
 }

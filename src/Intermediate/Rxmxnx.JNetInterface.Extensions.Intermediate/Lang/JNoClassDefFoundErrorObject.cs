@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JNoClassDefFoundErrorObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.NoClassDefFoundError</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JNoClassDefFoundErrorObject : JLinkageErrorObject, IThrowableType<JNoClassDefFoundErrorObject>
 {
 	/// <summary>

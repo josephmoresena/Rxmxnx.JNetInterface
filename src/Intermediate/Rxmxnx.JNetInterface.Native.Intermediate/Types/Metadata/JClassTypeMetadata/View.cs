@@ -15,32 +15,34 @@ public partial class JClassTypeMetadata<TClass>
 		private readonly JClassTypeMetadata _metadata;
 
 		/// <inheritdoc/>
-		public override JClassTypeMetadata? BaseMetadata => this._metadata.BaseMetadata;
+		public sealed override JClassTypeMetadata? BaseMetadata => this._metadata.BaseMetadata;
 		/// <inheritdoc/>
-		public override JTypeModifier Modifier => this._metadata.Modifier;
+		public sealed override JTypeModifier Modifier => this._metadata.Modifier;
 		/// <inheritdoc/>
-		public override IInterfaceSet Interfaces => this._metadata.Interfaces;
+		public sealed override IInterfaceSet Interfaces => this._metadata.Interfaces;
 
 		/// <inheritdoc/>
 		private protected View(JClassTypeMetadata<TClass> metadata) : base(metadata.Information)
 			=> this._metadata = metadata;
 
 		/// <inheritdoc/>
-		internal override Boolean IsInstance(JReferenceObject jObject) => this._metadata.IsInstance(jObject);
+		internal sealed override Boolean IsInstance(JReferenceObject jObject) => this._metadata.IsInstance(jObject);
 
 		/// <inheritdoc/>
+#if !PACKAGE
 		[ExcludeFromCodeCoverage]
+#endif
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		internal override JClassObject GetClass(IEnvironment env) => this._metadata.GetClass(env);
+		internal sealed override JClassObject GetClass(IEnvironment env) => this._metadata.GetClass(env);
 		/// <inheritdoc/>
-		internal override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
+		internal sealed override JLocalObject CreateInstance(JClassObject jClass, JObjectLocalRef localRef,
 			Boolean realClass = false)
 			=> this._metadata.CreateInstance(jClass, localRef, realClass);
 		/// <inheritdoc/>
-		internal override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
+		internal sealed override JReferenceObject? ParseInstance(JLocalObject? jLocal, Boolean dispose = false)
 			=> this._metadata.ParseInstance(jLocal, dispose);
 		/// <inheritdoc/>
-		internal override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
+		internal sealed override JLocalObject? ParseInstance(IEnvironment env, JGlobalBase? jGlobal)
 			=> this._metadata.ParseInstance(env, jGlobal);
 	}
 }

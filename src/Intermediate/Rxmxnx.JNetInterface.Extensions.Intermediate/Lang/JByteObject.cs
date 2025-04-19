@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Byte</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveWrapperType<JByteObject, JByte>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JByteObject> typeMetadata =
@@ -24,7 +26,9 @@ public sealed class JByteObject : JNumberObject<JByte, JByteObject>, IPrimitiveW
 	/// <inheritdoc/>
 	private JByteObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JByteObject>()) { }
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IPrimitiveWrapperType<JByteObject>.SetPrimitiveValue(IPrimitiveType value)
 		=> base.SetPrimitiveValue(value.ToSByte(CultureInfo.InvariantCulture));

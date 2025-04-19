@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JNoSuchFieldErrorObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.NoSuchFieldError</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JNoSuchFieldErrorObject : JIncompatibleClassChangeErrorObject, IThrowableType<JNoSuchFieldErrorObject>
 {
 	/// <summary>

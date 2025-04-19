@@ -8,7 +8,9 @@ public readonly partial struct JShort
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JShort() => this._value = default;
 	/// <summary>
 	/// Constructor.
@@ -17,7 +19,9 @@ public readonly partial struct JShort
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JShort(SByte value) => this._value = value;
 	/// <summary>
 	/// Constructor.
@@ -26,7 +30,9 @@ public readonly partial struct JShort
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JShort(Char value) => this._value = (Int16)value;
 	/// <summary>
 	/// Constructor.
@@ -35,7 +41,9 @@ public readonly partial struct JShort
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JShort(Double value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int16, Double>(value);
 	/// <summary>
 	/// Constructor.
@@ -44,7 +52,9 @@ public readonly partial struct JShort
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JShort(Single value) => this._value = IPrimitiveNumericType.GetIntegerValue<Int16, Single>(value);
 	/// <summary>
 	/// Constructor.
@@ -53,7 +63,9 @@ public readonly partial struct JShort
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JShort(Int32 value) => this._value = NativeUtilities.AsBytes(value).ToValue<Int16>();
 	/// <summary>
 	/// Constructor.
@@ -62,7 +74,9 @@ public readonly partial struct JShort
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JShort(Int64 value) => this._value = NativeUtilities.AsBytes(value).ToValue<Int16>();
 	/// <summary>
 	/// Constructor.
@@ -71,6 +85,8 @@ public readonly partial struct JShort
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public JShort(Int16 value) => this._value = value;
 }

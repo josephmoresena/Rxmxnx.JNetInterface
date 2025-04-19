@@ -11,9 +11,9 @@ public abstract class JInterfaceTypeMetadata : JReferenceTypeMetadata
 	public abstract Type InterfaceType { get; }
 
 	/// <inheritdoc/>
-	public override JTypeKind Kind { get; }
+	public sealed override JTypeKind Kind { get; }
 	/// <inheritdoc/>
-	public override JTypeModifier Modifier => JTypeModifier.Abstract;
+	public sealed override JTypeModifier Modifier => JTypeModifier.Abstract;
 
 	/// <summary>
 	/// Constructor.
@@ -32,7 +32,7 @@ public abstract class JInterfaceTypeMetadata : JReferenceTypeMetadata
 		=> this.Kind = !isAnnotation ? JTypeKind.Interface : JTypeKind.Annotation;
 
 	/// <inheritdoc/>
-	public override String? ToString()
+	public sealed override String? ToString()
 		=> IVirtualMachine.TypeMetadataToStringEnabled ?
 			MetadataTextUtilities.GetString(this, this.InterfaceProperties) :
 			base.ToString();

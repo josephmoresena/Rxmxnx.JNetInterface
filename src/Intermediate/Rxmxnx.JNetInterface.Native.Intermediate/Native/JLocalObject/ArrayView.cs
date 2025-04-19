@@ -7,10 +7,12 @@ public partial class JLocalObject
 	/// </summary>
 	[Browsable(false)]
 	[EditorBrowsable(EditorBrowsableState.Never)]
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
 	                 Justification = CommonConstants.InternalInheritanceJustification)]
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+#endif
 	public abstract partial class ArrayView : View<JArrayObject>, IDataType, IDisposable
 	{
 		static JTypeKind IDataType.Kind => JTypeKind.Array;
@@ -36,7 +38,7 @@ public partial class JLocalObject
 		}
 
 		/// <inheritdoc/>
-		public override String ToString() => this.Object.ToString();
+		public sealed override String ToString() => this.Object.ToString();
 
 		/// <summary>
 		/// Retrieves a <see cref="JArrayObject"/> instance from <paramref name="jLocal"/>.

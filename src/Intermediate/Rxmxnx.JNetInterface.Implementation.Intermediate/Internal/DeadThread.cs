@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// This class is a JNI instance created from an invalid <see cref="IVirtualMachine"/> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6670,
                  Justification = CommonConstants.NonStandardTraceJustification)]
+#endif
 internal sealed partial class DeadThread(IVirtualMachine vm) : IThread
 {
 	/// <summary>

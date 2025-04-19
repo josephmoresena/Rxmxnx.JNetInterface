@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JNumberFormatExceptionObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.NumberFormatException</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JNumberFormatExceptionObject : JIllegalArgumentExceptionObject,
 	IThrowableType<JNumberFormatExceptionObject>
 {

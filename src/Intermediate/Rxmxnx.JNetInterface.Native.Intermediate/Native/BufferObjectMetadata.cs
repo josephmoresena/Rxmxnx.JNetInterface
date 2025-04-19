@@ -36,7 +36,9 @@ public record BufferObjectMetadata : ObjectMetadata
 	/// Constructor.
 	/// </summary>
 	/// <param name="metadata"><see cref="BufferObjectMetadata"/> instance.</param>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	protected BufferObjectMetadata(BufferObjectMetadata metadata) : base(metadata)
 	{
 		this.IsDirect = metadata.IsDirect;

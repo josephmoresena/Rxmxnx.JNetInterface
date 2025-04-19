@@ -19,7 +19,9 @@ public sealed record ArrayObjectMetadata : ObjectMetadata
 	}
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private ArrayObjectMetadata(ArrayObjectMetadata arrayMetadata) : base(arrayMetadata)
 		=> this.Length = arrayMetadata.Length;
 }

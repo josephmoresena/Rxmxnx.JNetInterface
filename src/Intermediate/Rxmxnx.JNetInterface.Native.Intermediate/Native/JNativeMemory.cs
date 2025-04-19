@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class represents a native memory block.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3881,
                  Justification = CommonConstants.InternalInheritanceJustification)]
+#endif
 public abstract partial class JNativeMemory : IReadOnlyFixedContext<Byte>, IDisposable
 {
 	/// <summary>
@@ -30,7 +32,9 @@ public abstract partial class JNativeMemory : IReadOnlyFixedContext<Byte>, IDisp
 	public IntPtr Pointer => this._context.Pointer;
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	~JNativeMemory() { this.ReleaseUnmanagedResources(); }
 }
 

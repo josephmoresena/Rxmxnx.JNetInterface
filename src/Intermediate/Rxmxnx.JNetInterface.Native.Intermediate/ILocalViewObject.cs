@@ -10,14 +10,15 @@ internal interface ILocalViewObject : IViewObject, ILocalObject
 	/// </summary>
 	new ILocalObject Object { get; }
 
-	IVirtualMachine ILocalObject.VirtualMachine => this.Object.VirtualMachine;
 	Boolean ILocalObject.IsProxy => this.Object.IsProxy;
 	ObjectLifetime ILocalObject.Lifetime => this.Object.Lifetime;
 	ObjectMetadata ILocalObject.CreateMetadata() => ILocalObject.CreateMetadata(this.Object);
 	void ILocalObject.ProcessMetadata(ObjectMetadata instanceMetadata)
 		=> ILocalObject.ProcessMetadata(this.Object, instanceMetadata);
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	IObject IViewObject.Object => this.Object;
 
 	/// <summary>

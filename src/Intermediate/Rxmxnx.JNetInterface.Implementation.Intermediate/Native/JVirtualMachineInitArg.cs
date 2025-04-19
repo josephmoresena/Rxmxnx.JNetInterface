@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface.Native;
 /// <summary>
 /// This class stores a VM initialization argument.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 public sealed class JVirtualMachineInitArg
 {
 	/// <inheritdoc cref="JVirtualMachineInitArg.Version"/>
@@ -26,7 +28,9 @@ public sealed class JVirtualMachineInitArg
 	/// <summary>
 	/// Options text.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private String OptionsString => $"[{String.Join(", ", this.Options)}]";
 
 	/// <summary>
@@ -43,8 +47,10 @@ public sealed class JVirtualMachineInitArg
 	/// Constructor.
 	/// </summary>
 	/// <param name="value">A <see cref="VirtualMachineInitArgumentValue"/> value.</param>
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
 	                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 	internal JVirtualMachineInitArg(VirtualMachineInitArgumentValue value)
 	{
 		this._version = value.Version;
@@ -53,7 +59,9 @@ public sealed class JVirtualMachineInitArg
 	}
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override String ToString()
 		=> $"{{ {nameof(JVirtualMachineInitArg.Version)} = 0x{this.Version:x8}, {nameof(JVirtualMachineInitArg.Options)} = {this.OptionsString}, {nameof(JVirtualMachineInitArg.IgnoreUnrecognized)} = {this.IgnoreUnrecognized} }}";
 

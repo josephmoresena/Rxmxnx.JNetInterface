@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface.Lang;
 /// <summary>
 /// This class represents a local <c>java.lang.Float</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimitiveWrapperType<JFloatObject, JFloat>
 {
 	private static readonly JPrimitiveWrapperTypeMetadata<JFloatObject> typeMetadata =
@@ -25,7 +27,9 @@ public sealed class JFloatObject : JNumberObject<JFloat, JFloatObject>, IPrimiti
 	/// <inheritdoc/>
 	private JFloatObject(IReferenceType.ObjectInitializer initializer) : base(initializer.WithClass<JFloatObject>()) { }
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	void IPrimitiveWrapperType<JFloatObject>.SetPrimitiveValue(IPrimitiveType value)
 		=> base.SetPrimitiveValue(value.ToSingle(CultureInfo.InvariantCulture));

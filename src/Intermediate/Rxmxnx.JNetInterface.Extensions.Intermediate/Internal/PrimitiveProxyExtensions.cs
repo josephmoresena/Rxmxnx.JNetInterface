@@ -3,7 +3,9 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// <summary>
 /// Internal extensions class for proxy objects.
 /// </summary>
+#if !PACKAGE
 [ExcludeFromCodeCoverage]
+#endif
 internal static class PrimitiveProxyExtensions
 {
 	/// <summary>

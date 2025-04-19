@@ -8,8 +8,10 @@ public partial class JLocalObject
 		/// <see cref="JReferenceTypeMetadata"/> interface builder.
 		/// </summary>
 		/// <typeparam name="TInterface">Type of interface.</typeparam>
+#if !PACKAGE
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 		                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+#endif
 		protected ref struct TypeMetadataBuilder<
 			[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TInterface>
 			where TInterface : JInterfaceObject<TInterface>, IInterfaceType<TInterface>

@@ -10,8 +10,10 @@ internal partial class InterfaceSet
 		: InterfaceSet(set), IRecursiveInterfaceSet
 	{
 		/// <inheritdoc/>
+#if !PACKAGE
 		[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3267,
 		                 Justification = CommonConstants.NonStandardLinqJustification)]
+#endif
 		public override Boolean Contains(JInterfaceTypeMetadata item)
 		{
 			if (base.Contains(item)) return true;

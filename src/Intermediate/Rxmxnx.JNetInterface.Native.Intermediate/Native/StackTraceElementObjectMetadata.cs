@@ -4,8 +4,10 @@ namespace Rxmxnx.JNetInterface.Native;
 /// This record stores the metadata of a <see cref="JStackTraceElementObject"/> in order to create a
 /// <see cref="JGlobalBase"/> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.OnlyInternalInstantiationJustification)]
+#endif
 public sealed record StackTraceElementObjectMetadata : ObjectMetadata
 {
 	/// <summary>
@@ -21,7 +23,9 @@ public sealed record StackTraceElementObjectMetadata : ObjectMetadata
 	}
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private StackTraceElementObjectMetadata(StackTraceElementObjectMetadata traceElementMetadata) :
 		base(traceElementMetadata)
 		=> this.Information = traceElementMetadata.Information;

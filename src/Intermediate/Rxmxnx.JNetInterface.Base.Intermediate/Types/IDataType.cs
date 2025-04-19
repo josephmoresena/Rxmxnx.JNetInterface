@@ -36,8 +36,10 @@ public interface IDataType : IObject
 /// This interface exposes a java data type.
 /// </summary>
 /// <typeparam name="TDataType">Type of the current Java datatype.</typeparam>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2743,
                  Justification = CommonConstants.StaticAbstractPropertyUseJustification)]
+#endif
 public interface IDataType<out TDataType> : IDataType where TDataType : IDataType<TDataType>
 {
 	/// <inheritdoc cref="JDataTypeMetadata.ArgumentMetadata"/>

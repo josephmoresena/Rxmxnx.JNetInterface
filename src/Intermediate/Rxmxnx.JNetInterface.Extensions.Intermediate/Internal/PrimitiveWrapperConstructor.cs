@@ -4,10 +4,12 @@ namespace Rxmxnx.JNetInterface.Internal;
 /// Constructor definition for primitive wrapper class.
 /// </summary>
 /// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> type.</typeparam>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS2094,
                  Justification = CommonConstants.ClassJustification)]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal sealed unsafe class PrimitiveWrapperConstructor<TPrimitive>(AccessibleInfoSequence info)
 	: JConstructorDefinition(info, PrimitiveWrapperConstructor<TPrimitive>.sizes[0],
 	                         PrimitiveWrapperConstructor<TPrimitive>.sizes, 0)

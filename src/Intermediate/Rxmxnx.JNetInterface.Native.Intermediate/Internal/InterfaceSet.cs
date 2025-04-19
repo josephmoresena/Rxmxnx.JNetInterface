@@ -16,7 +16,9 @@ internal partial class InterfaceSet : IAppendableInterfaceSet
 	/// <param name="set">A <see cref="IReadOnlySet{T}"/> instance.</param>
 	private InterfaceSet(ImmutableHashSet<JInterfaceTypeMetadata> set) => this._internalSet = set;
 
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
 	/// <inheritdoc/>

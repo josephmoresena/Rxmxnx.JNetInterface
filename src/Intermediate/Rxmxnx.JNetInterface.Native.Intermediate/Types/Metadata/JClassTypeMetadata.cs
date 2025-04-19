@@ -34,7 +34,7 @@ public abstract partial class JClassTypeMetadata : JReferenceTypeMetadata
 	private protected virtual IAppendableProperty? GetSecondaryProperty() => default;
 
 	/// <inheritdoc/>
-	public override String? ToString()
+	public sealed override String? ToString()
 		=> IVirtualMachine.TypeMetadataToStringEnabled ?
 			MetadataTextUtilities.GetString(this, this.InterfaceProperties, this.GetBaseTypeProperty(),
 			                                this.GetPrimaryProperty(), this.GetSecondaryProperty()) :
@@ -51,9 +51,9 @@ public abstract partial class JClassTypeMetadata<
 	where TClass : JLocalObject, IClassType<TClass>
 {
 	/// <inheritdoc/>
-	public override Type Type => typeof(TClass);
+	public sealed override Type Type => typeof(TClass);
 	/// <inheritdoc/>
-	public override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TClass>();
+	public sealed override JArgumentMetadata ArgumentMetadata => JArgumentMetadata.Get<TClass>();
 
 	/// <inheritdoc/>
 	private protected JClassTypeMetadata(ReadOnlySpan<Byte> className) : base(className) { }
@@ -61,14 +61,15 @@ public abstract partial class JClassTypeMetadata<
 	private protected JClassTypeMetadata(TypeInfoSequence information) : base(information) { }
 
 	/// <inheritdoc/>
-	public override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();
+	public sealed override JArrayTypeMetadata GetArrayMetadata() => JReferenceTypeMetadata.GetArrayMetadata<TClass>();
 
 	/// <inheritdoc/>
 	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TClass || jObject.InstanceOf<TClass>();
 	/// <inheritdoc/>
-	internal override JFunctionDefinition<TClass> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
+	internal sealed override JFunctionDefinition<TClass> CreateFunctionDefinition(ReadOnlySpan<Byte> functionName,
 		ReadOnlySpan<JArgumentMetadata> paramsMetadata)
 		=> JFunctionDefinition<TClass>.Create(functionName, paramsMetadata);
 	/// <inheritdoc/>
-	internal override JFieldDefinition<TClass> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName) => new(fieldName);
+	internal sealed override JFieldDefinition<TClass> CreateFieldDefinition(ReadOnlySpan<Byte> fieldName)
+		=> new(fieldName);
 }

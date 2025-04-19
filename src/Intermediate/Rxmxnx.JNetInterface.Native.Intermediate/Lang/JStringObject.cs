@@ -15,7 +15,9 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <summary>
 	/// Internal property to debugger display.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	internal String DisplayValue
 		=> this._value ?? (this._length is not null ?
 			$"{this.Reference} Length: {this.Length}" :
@@ -30,7 +32,29 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// UTF-8 length.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public Int32 Utf8Length => this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(this);
+	public Int32 Utf8Length
+	{
+		get
+		{
+			this._utf8Length ??= JStringObject.GetUtfLength(this.Environment, this, this.Utf8LongLength);
+			return this._utf8Length ?? -1;
+		}
+	}
+	/// <summary>
+	/// UTF-8 long length.
+	/// </summary>
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	public Int64 Utf8LongLength
+	{
+		get
+		{
+			this._utf8LongLength ??= this.Environment.StringFeature.GetUtf8LongLength(this);
+			if (this._utf8LongLength.HasValue)
+				return this._utf8LongLength.Value;
+
+			return this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(this);
+		}
+	}
 
 	/// <inheritdoc/>
 	public Int32 CompareTo(JStringObject? other) => this.CompareTo(other?.Value);
@@ -46,7 +70,9 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 	/// <inheritdoc/>
 	public override String ToString() => this.Value;
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public override String ToTraceText()
 		=> $"{JObject.GetObjectIdentifier(this.Class.ClassSignature, this.Reference)} length: {this.Length}";
 
@@ -136,10 +162,16 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 
 	/// <inheritdoc/>
 	protected override ObjectMetadata CreateMetadata()
-		=> new StringObjectMetadata(base.CreateMetadata())
+	{
+		Int32? utf8Length = JStringObject.GetUtfLength(this.Environment, this, this.Utf8LongLength);
+		return new StringObjectMetadata(base.CreateMetadata())
 		{
-			Length = this.Length, Utf8Length = this.Utf8Length, Value = this._value,
+			Length = this.Length,
+			Utf8Length = utf8Length,
+			Utf8LongLength = this._utf8LongLength,
+			Value = this._value,
 		};
+	}
 	/// <inheritdoc/>
 	protected override void ProcessMetadata(ObjectMetadata instanceMetadata)
 	{
@@ -149,6 +181,7 @@ public sealed partial class JStringObject : JLocalObject, IClassType<JStringObje
 		this._value = stringMetadata.Value;
 		this._length = stringMetadata.Length;
 		this._utf8Length = stringMetadata.Utf8Length;
+		this._utf8LongLength = stringMetadata.Utf8LongLength;
 	}
 
 	/// <summary>

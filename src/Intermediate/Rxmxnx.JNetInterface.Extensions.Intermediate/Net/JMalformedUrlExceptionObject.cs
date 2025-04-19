@@ -5,8 +5,10 @@ using TypeMetadata = JThrowableTypeMetadata<JMalformedUrlExceptionObject>;
 /// <summary>
 /// This class represents a local <c>java.net.MalformedURLException</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public class JMalformedUrlExceptionObject : JIoExceptionObject, IThrowableType<JMalformedUrlExceptionObject>
 {
 	/// <summary>

@@ -42,7 +42,9 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <summary>
 	/// Indicates whether metadata validation is enabled.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean MetadataValidationEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -52,7 +54,9 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// Indicates whether metadata for jagged arrays is auto-generated.
 	/// </summary>
 	/// <remarks>In reflection-free mode this feature is unavailable.</remarks>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean JaggedArrayAutoGenerationEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -64,7 +68,9 @@ public interface IVirtualMachine : IWrapper<JVirtualMachineRef>
 	/// <summary>
 	/// Indicates whether detailed a ToString() is available for type metadata instances.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static Boolean TypeMetadataToStringEnabled
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

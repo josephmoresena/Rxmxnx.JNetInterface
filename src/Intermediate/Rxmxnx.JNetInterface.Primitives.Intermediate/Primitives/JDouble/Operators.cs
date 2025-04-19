@@ -42,24 +42,38 @@ public readonly partial struct JDouble : IPrimitiveEquatable
 	public static implicit operator JFloat(JDouble value) => IPrimitiveNumericType.GetSingleValue(value.Value);
 
 	static explicit IPrimitiveNumericType<JDouble>.operator JFloat(JDouble jPrimitive) => jPrimitive;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JDouble>.operator JDouble(JDouble jPrimitive) => jPrimitive;
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JDouble>.operator SByte(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<SByte, Double>(jPrimitive._value);
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JDouble>.operator Int64(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int64, Double>(jPrimitive._value);
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JDouble>.operator Int16(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int16, Double>(jPrimitive._value);
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JDouble>.operator Single(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetSingleValue(jPrimitive.Value);
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JDouble>.operator Int32(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Int32, Double>(jPrimitive._value);
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	static explicit IPrimitiveNumericType<JDouble>.operator Char(JDouble jPrimitive)
 		=> IPrimitiveNumericType.GetIntegerValue<Char, Double>(jPrimitive._value);
 }

@@ -1,8 +1,10 @@
 ﻿namespace Rxmxnx.JNetInterface.Native.Values;
 
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS1144,
                  Justification = CommonConstants.BinaryStructJustification)]
+#endif
 internal readonly partial struct JNativeInterface
 {
 	/// <summary>

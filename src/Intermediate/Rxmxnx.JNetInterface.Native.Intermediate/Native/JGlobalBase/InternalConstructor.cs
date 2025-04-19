@@ -8,14 +8,14 @@ public partial class JGlobalBase
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="globalRef">Global object reference.</param>
 	private protected JGlobalBase(ILocalObject jLocal, JGlobalRef globalRef) : this(
-		jLocal.VirtualMachine, ILocalObject.CreateMetadata(jLocal), globalRef.Pointer) { }
+		jLocal.Environment.VirtualMachine, ILocalObject.CreateMetadata(jLocal), globalRef.Pointer) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>
 	/// <param name="jLocal"><see cref="JLocalObject"/> instance.</param>
 	/// <param name="weakRef">Weak global object reference.</param>
 	private protected JGlobalBase(ILocalObject jLocal, JWeakRef weakRef) : this(
-		jLocal.VirtualMachine, ILocalObject.CreateMetadata(jLocal), weakRef.Pointer) { }
+		jLocal.Environment.VirtualMachine, ILocalObject.CreateMetadata(jLocal), weakRef.Pointer) { }
 	/// <summary>
 	/// Constructor.
 	/// </summary>

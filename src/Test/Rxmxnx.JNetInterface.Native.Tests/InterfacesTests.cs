@@ -55,12 +55,7 @@ public sealed class InterfacesTests
 			{ typeof(JMethodObject), new(jClassClass, IDataType.GetMetadata<JMethodObject>()) },
 			{ typeof(JNumberObject), new(jClassClass, IDataType.GetMetadata<JNumberObject>()) },
 			{ typeof(JLocalObject), new(jClassClass, IDataType.GetMetadata<JLocalObject>()) },
-			{
-				typeof(JStackTraceElementObject),
-				new(jClassClass, IDataType.GetMetadata<JStackTraceElementObject>())
-			},
 			{ typeof(JStringObject), new(jClassClass, IDataType.GetMetadata<JStringObject>()) },
-			{ typeof(JThrowableObject), new(jClassClass, IDataType.GetMetadata<JThrowableObject>()) },
 		};
 		env.ClassFeature.UseNonGeneric = true;
 		env.ClassFeature.GetNonGenericClass(Arg.Any<Type>()).Returns(c => classDictionary[(Type)c[0]]);
@@ -75,9 +70,7 @@ public sealed class InterfacesTests
 		Assert.Equal(classDictionary[typeof(JMethodObject)], classFeature.MethodObject);
 		Assert.Equal(classDictionary[typeof(JNumberObject)], classFeature.NumberObject);
 		Assert.Equal(classDictionary[typeof(JLocalObject)], classFeature.Object);
-		Assert.Equal(classDictionary[typeof(JStackTraceElementObject)], classFeature.StackTraceElementObject);
 		Assert.Equal(classDictionary[typeof(JStringObject)], classFeature.StringObject);
-		Assert.Equal(classDictionary[typeof(JThrowableObject)], classFeature.ThrowableObject);
 
 		foreach (JClassObject jClass in classDictionary.Values)
 			jClass.Dispose();
@@ -107,6 +100,7 @@ public sealed class InterfacesTests
 	private sealed record LocalView(ILocalObject Object) : ILocalViewObject
 	{
 		public JObjectLocalRef LocalReference => this.Object.LocalReference;
+		public IEnvironment Environment => this.Object.Environment;
 		public TReference CastTo<TReference>() where TReference : JReferenceObject, IReferenceType<TReference>
 			=> this.Object.CastTo<TReference>();
 	}

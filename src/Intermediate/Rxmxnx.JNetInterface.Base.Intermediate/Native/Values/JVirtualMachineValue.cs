@@ -17,7 +17,9 @@ internal readonly partial struct JVirtualMachineValue : INativeReferenceType, IR
 	/// <summary>
 	/// <see langword="readonly ref"/> <see cref="JInvokeInterface"/> from this value.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public ref readonly JInvokeInterface Reference => ref this._functions.Reference;
 	/// <inheritdoc/>
 	public IntPtr Pointer => this._functions;

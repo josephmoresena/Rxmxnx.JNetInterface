@@ -34,6 +34,10 @@ public partial class JStringObject
 	/// UTF-8 string length.
 	/// </summary>
 	private Int32? _utf8Length;
+	/// <summary>
+	/// UTF-8 string long length.
+	/// </summary>
+	private Int64? _utf8LongLength;
 
 	/// <summary>
 	/// Instance value.
@@ -51,6 +55,7 @@ public partial class JStringObject
 		if (jLocal is not JStringObject jString)
 			return;
 		this._length = jString.Length;
+		this._utf8LongLength = jString._utf8LongLength;
 		this._utf8Length = jString._utf8Length;
 		this._value = jString._value;
 	}
@@ -62,7 +67,8 @@ public partial class JStringObject
 	private JStringObject(IEnvironment env, JGlobalBase jGlobal) : base(env, jGlobal)
 	{
 		this._length ??= this.Environment.StringFeature.GetLength(jGlobal);
-		this._utf8Length ??= this.Environment.StringFeature.GetUtf8Length(jGlobal);
+		this._utf8LongLength ??= this.Environment.StringFeature.GetUtf8LongLength(jGlobal);
+		this._utf8Length ??= JStringObject.GetUtfLength(env, jGlobal, this._utf8LongLength);
 	}
 
 	/// <summary>
@@ -72,6 +78,20 @@ public partial class JStringObject
 	/// <param name="arg">Operation arguments.</param>
 	private static void GetChars(Span<Char> chars, (JStringObject jString, Int32 startIndex) arg)
 		=> arg.jString.Get(chars, arg.startIndex);
+
+	/// <summary>
+	/// Retrieves the UTF-8 length of <paramref name="jObject"/>.
+	/// </summary>
+	/// <param name="env">A <see cref="IEnvironment"/> instance.</param>
+	/// <param name="jObject">A <see cref="JReferenceObject"/> instance.</param>
+	/// <param name="longValue">UTF-8 string long length.</param>
+	/// <returns>UTF-8 string length.</returns>
+	private static Int32? GetUtfLength(IEnvironment env, JReferenceObject jObject, Int64? longValue)
+	{
+		if (longValue.HasValue)
+			return longValue.Value <= Int32.MaxValue ? (Int32)longValue.Value : null;
+		return env.StringFeature.GetUtf8Length(jObject);
+	}
 
 	static JStringObject IClassType<JStringObject>.Create(IReferenceType.ClassInitializer initializer)
 		=> new(initializer.WithClass<JStringObject>());

@@ -6,8 +6,10 @@ public partial class JEnumObject
 	/// <see cref="JReferenceTypeMetadata"/> enum builder.
 	/// </summary>
 	/// <typeparam name="TEnum">Type of enum.</typeparam>
+#if !PACKAGE
 	[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS3218,
 	                 Justification = CommonConstants.NoMethodOverloadingJustification)]
+#endif
 	protected new ref struct TypeMetadataBuilder<
 		[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] TEnum>
 		where TEnum : JEnumObject<TEnum>, IEnumType<TEnum>

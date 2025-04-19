@@ -61,8 +61,10 @@ public abstract partial class JArrayObject : JLocalObject, IInterfaceObject<JSer
 /// This class represents a local array instance.
 /// </summary>
 /// <typeparam name="TElement">Type of <see cref="IDataType"/> array element.</typeparam>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed partial class JArrayObject<TElement> : JLocalObject.ArrayView where TElement : IDataType<TElement>
 {
 	/// <summary>

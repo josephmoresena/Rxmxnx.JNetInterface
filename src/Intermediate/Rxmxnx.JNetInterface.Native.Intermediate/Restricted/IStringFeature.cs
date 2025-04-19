@@ -18,6 +18,12 @@ internal partial interface IStringFeature
 	/// <returns>UTF-8 string length.</returns>
 	Int32 GetUtf8Length(JReferenceObject jObject);
 	/// <summary>
+	/// Retrieves the UTF-8 long length of given <see cref="JReferenceObject"/> instance.
+	/// </summary>
+	/// <param name="jObject"><see cref="JReferenceObject"/> instance.</param>
+	/// <returns>UTF-8 string long length.</returns>
+	Int64? GetUtf8LongLength(JReferenceObject jObject);
+	/// <summary>
 	/// Copies UTF-16 <paramref name="jString"/> chars into <paramref name="chars"/>.
 	/// </summary>
 	/// <param name="jString">A <see cref="JStringObject"/> instance.</param>

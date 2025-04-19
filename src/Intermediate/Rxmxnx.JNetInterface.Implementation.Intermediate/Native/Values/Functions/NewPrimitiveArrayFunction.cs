@@ -5,8 +5,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// </summary>
 /// <typeparam name="TArrayRef">Type of array reference.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef>
 	where TArrayRef : unmanaged, IArrayReferenceType, IObjectReferenceType
 {
@@ -20,7 +22,9 @@ internal readonly unsafe struct NewPrimitiveArrayFunction<TArrayRef>
 	/// Pointer to <c>New&lt;PrimitiveType&gt;Array</c> function.
 	/// Constructs a new primitive array object.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public TArrayRef NewArray(JEnvironmentRef envRef, Int32 length)
 	{

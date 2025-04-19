@@ -5,8 +5,10 @@ using TypeMetadata = JInterfaceTypeMetadata<JCharSequenceObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.CharSequence</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JCharSequenceObject : JInterfaceObject<JCharSequenceObject>, IInterfaceType<JCharSequenceObject>
 {
 	/// <summary>

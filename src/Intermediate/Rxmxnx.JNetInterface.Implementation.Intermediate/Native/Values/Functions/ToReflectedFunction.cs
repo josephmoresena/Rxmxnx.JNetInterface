@@ -5,8 +5,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// </summary>
 /// <typeparam name="TAccessible">Type of accessible identifier.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct ToReflectedFunction<TAccessible>
 	where TAccessible : unmanaged, IAccessibleIdentifierType
 {
@@ -20,7 +22,9 @@ internal readonly unsafe struct ToReflectedFunction<TAccessible>
 	/// Pointer to <c>ToReflected<typeparamref name="TAccessible"/></c> function.
 	/// Converts a <typeparamref name="TAccessible"/> to <c>java.lang.reflect</c> object.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JObjectLocalRef ToReflected(JEnvironmentRef envRef, JClassLocalRef classRef, TAccessible accessibleId,
 		JBoolean isStatic)

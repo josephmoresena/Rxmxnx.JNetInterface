@@ -4,8 +4,10 @@ namespace Rxmxnx.JNetInterface.Native.Values.Functions;
 /// Set of function pointers to manipulate Java string through JNI.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct StringFunctionSet
 {
 	/// <summary>
@@ -35,8 +37,10 @@ internal readonly unsafe struct StringFunctionSet
 /// </summary>
 /// <typeparam name="TChar">Type of character.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 internal readonly unsafe struct StringFunctionSet<TChar>
 	where TChar : unmanaged, IBinaryNumber<TChar>, IUnsignedNumber<TChar>
 {
@@ -61,7 +65,9 @@ internal readonly unsafe struct StringFunctionSet<TChar>
 	/// Pointer to <c>GetStringLength</c> function.
 	/// Returns the length (the count of characters) of a Java string.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public Int32 GetStringLength(JEnvironmentRef envRef, JStringLocalRef stringRef)
 		=> this._getLengthPtr(envRef, stringRef);
@@ -70,7 +76,9 @@ internal readonly unsafe struct StringFunctionSet<TChar>
 	/// Returns a pointer to the array of characters of the string.
 	/// </summary>
 	/// <remarks>This pointer is valid until <c>ReleaseStringChars()</c> is called.</remarks>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public ReadOnlyValPtr<TChar> GetStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, out JBoolean isCopy)
 		=> (ReadOnlyValPtr<TChar>)this._getCharsPtr(envRef, stringRef, out isCopy);
@@ -78,7 +86,9 @@ internal readonly unsafe struct StringFunctionSet<TChar>
 	/// Pointer to <c>ReleaseStringChars</c> function.
 	/// Informs the <c>VM</c> that the native code no longer needs access to chars.
 	/// </summary>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public void ReleaseStringChars(JEnvironmentRef envRef, JStringLocalRef stringRef, ReadOnlyValPtr<TChar> chars)
 		=> this._releaseChars(envRef, stringRef, chars);

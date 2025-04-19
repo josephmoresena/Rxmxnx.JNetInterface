@@ -5,8 +5,10 @@ using TypeMetadata = JInterfaceTypeMetadata<JGenericDeclarationObject>;
 /// <summary>
 /// This class represents a local <c>java.lang.reflect.GenericDeclaration</c> instance.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS110,
                  Justification = CommonConstants.JavaInheritanceJustification)]
+#endif
 public sealed class JGenericDeclarationObject : JInterfaceObject<JGenericDeclarationObject>,
 	IInterfaceType<JGenericDeclarationObject>, IInterfaceObject<JAnnotatedElementObject>
 {

@@ -18,23 +18,31 @@ public sealed record StringObjectMetadata : ObjectMetadata
 	/// UTF-8 length.
 	/// </summary>
 	public Int32? Utf8Length { get; internal init; }
+	/// <summary>
+	/// UTF-8 length.
+	/// </summary>
+	public Int64? Utf8LongLength { get; internal init; }
 
 	/// <inheritdoc/>
 	public StringObjectMetadata(ObjectMetadata metadata) : base(metadata)
 	{
 		StringObjectMetadata? stringMetadata = metadata as StringObjectMetadata;
-		this.Value = stringMetadata?.Value!;
+		this.Value = stringMetadata?.Value;
 		this.Length = stringMetadata?.Length;
 		this.Utf8Length = stringMetadata?.Utf8Length;
+		this.Utf8LongLength = stringMetadata?.Utf8LongLength;
 	}
 
 	/// <inheritdoc/>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	private StringObjectMetadata(StringObjectMetadata stringMetadata) : base(stringMetadata)
 	{
 		this.Value = stringMetadata.Value;
 		this.Length = stringMetadata.Length;
 		this.Utf8Length = stringMetadata.Utf8Length;
+		this.Utf8LongLength = stringMetadata.Utf8LongLength;
 	}
 
 	/// <inheritdoc/>

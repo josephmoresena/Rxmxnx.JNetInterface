@@ -3,8 +3,10 @@ namespace Rxmxnx.JNetInterface;
 /// <summary>
 /// This class stores a loaded native JVM library.
 /// </summary>
+#if !PACKAGE
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 public sealed unsafe class JVirtualMachineLibrary
 {
 	/// <summary>
@@ -156,7 +158,9 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="libraryPath"/> is a
 	/// valid JVM library; otherwise, <see langword="null"/>.
 	/// </returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static JVirtualMachineLibrary? LoadLibrary(String libraryPath)
 	{
 		IntPtr? handle = NativeUtilities.LoadNativeLib(libraryPath);
@@ -170,7 +174,9 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="handle"/> is
 	/// valid for a JVM library; otherwise, <see langword="null"/>.
 	/// </returns>
+#if !PACKAGE
 	[ExcludeFromCodeCoverage]
+#endif
 	public static JVirtualMachineLibrary? Create(IntPtr handle)
 	{
 		Span<IntPtr> functions = stackalloc IntPtr[3];
