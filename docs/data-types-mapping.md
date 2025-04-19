@@ -75,9 +75,9 @@ new local reference is created when performing the cast.
 
 ## Object Metadata
 
-Each mapped type can hold cacheable instance metadata in `JNetInterface`, which is useful to avoid unnecessary JNI calls
-when querying certain immutable properties after converting local objects to global or view representations. This
-metadata must be an instance of the `ObjectMetadata` type.
+Each mapped type can hold cacheable instance metadata in `Rxmxnx.JNetInterface`, which is useful to avoid unnecessary 
+JNI calls when querying certain immutable properties after converting local objects to global or view representations. 
+This metadata must be an instance of the `ObjectMetadata` type.
 
 This is enabled by implementing the `ILocalObject` interface and its protected methods `CreateMetadata()` and
 `ProcessMetadata(ObjectMetadata)`. The implementation of these methods must follow a chain pattern—for example, when
@@ -85,6 +85,16 @@ creating metadata for the current mapped type, the metadata of the superclass mu
 its corresponding type. Similarly, when processing metadata, the method that handles the superclass's metadata must be
 called first, followed by the current type's processing logic.
 For this reason, metadata types must follow a hierarchy based on `ObjectMetadata`.
+
+The public metadata types included in `Rxmxnx.JNetInterface` follow the hierarchy below. Some of them are extensible, as 
+they are used by extensible mapped types, while others are sealed because their corresponding mapped types do not allow 
+inheritance.
+
+![ObjectMetadataHierarchy](https://github.com/user-attachments/assets/318635b8-f810-41f4-8996-1fa098566feb)
+
+`Rxmxnx.JNetInterface` also provides an object metadata type for primitive wrapper types. However, since these types are 
+final (non-extensible) and Java does not support the creation of custom primitive types, the implementation of this 
+metadata is kept internal.
 
 ## Data Type Registration
 
