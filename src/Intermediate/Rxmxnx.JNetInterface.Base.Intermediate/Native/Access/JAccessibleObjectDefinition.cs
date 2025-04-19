@@ -57,12 +57,12 @@ public abstract partial class JAccessibleObjectDefinition : IEquatable<JAccessib
 	}
 
 	/// <inheritdoc/>
-	public override Boolean Equals(Object? obj) => this.Equals(obj as JAccessibleObjectDefinition);
+	public sealed override Boolean Equals(Object? obj) => this.Equals(obj as JAccessibleObjectDefinition);
 	/// <inheritdoc/>
-	public override String ToString()
+	public sealed override String ToString()
 		=> String.Format(this.ToStringFormat, this.Information.Name, this.Information.Descriptor);
 	/// <inheritdoc/>
-	public override Int32 GetHashCode() => this.Information.GetHashCode();
+	public sealed override Int32 GetHashCode() => this.Information.GetHashCode();
 
 	/// <inheritdoc cref="Object.ToString()"/>
 	/// <remarks>Use this method for trace.</remarks>

@@ -75,9 +75,7 @@ public sealed class InterfacesTests
 		Assert.Equal(classDictionary[typeof(JMethodObject)], classFeature.MethodObject);
 		Assert.Equal(classDictionary[typeof(JNumberObject)], classFeature.NumberObject);
 		Assert.Equal(classDictionary[typeof(JLocalObject)], classFeature.Object);
-		Assert.Equal(classDictionary[typeof(JStackTraceElementObject)], classFeature.StackTraceElementObject);
 		Assert.Equal(classDictionary[typeof(JStringObject)], classFeature.StringObject);
-		Assert.Equal(classDictionary[typeof(JThrowableObject)], classFeature.ThrowableObject);
 
 		foreach (JClassObject jClass in classDictionary.Values)
 			jClass.Dispose();

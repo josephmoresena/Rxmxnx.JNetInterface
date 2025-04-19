@@ -10,6 +10,8 @@ public abstract partial class EnvironmentProxy
 	JClassObject IClassFeature.IntPrimitive => this.GetClass<JInt>();
 	JClassObject IClassFeature.LongPrimitive => this.GetClass<JLong>();
 	JClassObject IClassFeature.ShortPrimitive => this.GetClass<JShort>();
+	JClassObject IClassFeature.ThrowableObject => this.GetClass<JThrowableObject>();
+	JClassObject IClassFeature.StackTraceElementObject => this.GetClass<JStackTraceElementObject>();
 
 	JClassObject IClassFeature.VoidObject => this.GetClass<JVoidObject>();
 	JClassObject IClassFeature.BooleanObject => this.GetClass<JBooleanObject>();

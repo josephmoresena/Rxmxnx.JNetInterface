@@ -16,10 +16,10 @@ internal abstract partial class InfoSequenceBase(String hash, Int32 nameLength)
 
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override String ToString() => this.Hash;
+	public sealed override String ToString() => this.Hash;
 	/// <inheritdoc/>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override Int32 GetHashCode() => this.Hash.GetHashCode();
+	public sealed override Int32 GetHashCode() => this.Hash.GetHashCode();
 
 	/// <summary>
 	/// Retrieves printable text hash.

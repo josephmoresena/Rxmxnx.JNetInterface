@@ -3,6 +3,9 @@ namespace Rxmxnx.JNetInterface.Tests.Restricted;
 public partial class ClassFeatureProxy
 {
 	JClassObject IClassFeature.ClassObject => this.GetClass<JClassObject>();
+	JClassObject IClassFeature.ThrowableObject => this.GetClass<JThrowableObject>();
+	JClassObject IClassFeature.StackTraceElementObject => this.GetClass<JStackTraceElementObject>();
+
 	JClassObject IClassFeature.GetClass(ReadOnlySpan<Byte> className) => this.GetClass(new CString(className));
 	JClassObject IClassFeature.LoadClass(ReadOnlySpan<Byte> className, ReadOnlySpan<Byte> rawClassBytes,
 		JClassLoaderObject? jClassLoader)

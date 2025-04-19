@@ -11,9 +11,9 @@ public abstract class JEnumTypeMetadata : JClassTypeMetadata
 	public abstract IEnumFieldList Fields { get; }
 
 	/// <inheritdoc/>
-	public override JTypeKind Kind => JTypeKind.Enum;
+	public sealed override JTypeKind Kind => JTypeKind.Enum;
 	/// <inheritdoc/>
-	public override JTypeModifier Modifier => JTypeModifier.Final;
+	public sealed override JTypeModifier Modifier => JTypeModifier.Final;
 
 	/// <summary>
 	/// Constructor.
@@ -43,5 +43,5 @@ public abstract class JEnumTypeMetadata<TEnum> : JEnumTypeMetadata where TEnum :
 	private protected JEnumTypeMetadata(TypeInfoSequence information) : base(information) { }
 
 	/// <inheritdoc/>
-	internal override Boolean IsInstance(JReferenceObject jObject) => jObject is TEnum;
+	internal sealed override Boolean IsInstance(JReferenceObject jObject) => jObject is TEnum;
 }

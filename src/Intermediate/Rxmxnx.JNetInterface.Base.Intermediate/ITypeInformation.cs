@@ -12,7 +12,7 @@ public interface ITypeInformation
 	/// <summary>
 	/// Java class name.
 	/// </summary>
-	internal String JavaClassName => ITypeInformation.GetJavaClassName(this);
+	internal sealed String JavaClassName => ITypeInformation.GetJavaClassName(this);
 	/// <summary>
 	/// JNI signature for object instances of this type.
 	/// </summary>

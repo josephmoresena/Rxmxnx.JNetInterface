@@ -38,7 +38,7 @@ public partial class JLocalObject
 		}
 
 		/// <inheritdoc/>
-		public override String ToString() => this.Object.ToString();
+		public sealed override String ToString() => this.Object.ToString();
 
 		/// <summary>
 		/// Retrieves a <see cref="JArrayObject"/> instance from <paramref name="jLocal"/>.

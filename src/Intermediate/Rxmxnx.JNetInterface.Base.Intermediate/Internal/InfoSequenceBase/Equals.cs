@@ -9,7 +9,7 @@ internal abstract partial class InfoSequenceBase : IEquatable<InfoSequenceBase>,
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public override Boolean Equals(Object? obj) => this.Equals(obj as InfoSequenceBase);
+	public sealed override Boolean Equals(Object? obj) => this.Equals(obj as InfoSequenceBase);
 
 	/// <inheritdoc/>
 #if !PACKAGE

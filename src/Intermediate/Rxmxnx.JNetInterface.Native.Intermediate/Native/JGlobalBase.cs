@@ -21,9 +21,9 @@ public abstract partial class JGlobalBase : JReferenceObject, IDisposable
 	/// </summary>
 	public IVirtualMachine VirtualMachine { get; }
 	/// <inheritdoc/>
-	public override CString ObjectClassName => this.ObjectMetadata.ObjectClassName;
+	public sealed override CString ObjectClassName => this.ObjectMetadata.ObjectClassName;
 	/// <inheritdoc/>
-	public override CString ObjectSignature => this.ObjectMetadata.ObjectSignature;
+	public sealed override CString ObjectSignature => this.ObjectMetadata.ObjectSignature;
 	/// <summary>
 	/// Instance metadata.
 	/// </summary>

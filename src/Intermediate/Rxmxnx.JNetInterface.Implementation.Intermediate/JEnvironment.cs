@@ -82,14 +82,14 @@ public partial class JEnvironment : IEnvironment, IEqualityOperators<JEnvironmen
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public override Boolean Equals(Object? obj)
+	public sealed override Boolean Equals(Object? obj)
 		=> (obj is JEnvironment other && this._cache.Equals(other._cache)) ||
 			(obj is IEnvironment env && this.Reference == env.Reference);
 	/// <inheritdoc/>
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	public override Int32 GetHashCode() => this._cache.GetHashCode();
+	public sealed override Int32 GetHashCode() => this._cache.GetHashCode();
 
 	/// <summary>
 	/// Determines whether a specified <see cref="JEnvironment"/> and a <see cref="JEnvironment"/> instance

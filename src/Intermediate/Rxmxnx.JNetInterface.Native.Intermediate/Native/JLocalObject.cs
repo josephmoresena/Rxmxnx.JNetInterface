@@ -10,10 +10,6 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// </summary>
 	public JObjectLocalRef Reference => this.To<JObjectLocalRef>();
 	/// <summary>
-	/// <see cref="IEnvironment"/> instance.
-	/// </summary>
-	public IEnvironment Environment => this.Lifetime.Environment;
-	/// <summary>
 	/// Retrieves the class object from the current instance.
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -28,6 +24,10 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	/// </summary>
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public JWeak Weak => this.Lifetime.GetLoadWeakObject(this);
+	/// <summary>
+	/// <see cref="IEnvironment"/> instance.
+	/// </summary>
+	public IEnvironment Environment => this.Lifetime.Environment;
 	/// <inheritdoc/>
 	public void Dispose()
 	{
@@ -37,9 +37,9 @@ public partial class JLocalObject : JReferenceObject, IClassType<JLocalObject>
 	}
 
 	/// <inheritdoc cref="JObject.ObjectClassName"/>
-	public override CString ObjectClassName => this.Lifetime.Class?.Name ?? JObject.TypeInfo.Name;
+	public sealed override CString ObjectClassName => this.Lifetime.Class?.Name ?? JObject.TypeInfo.Name;
 	/// <inheritdoc cref="JObject.ObjectSignature"/>
-	public override CString ObjectSignature => this.Lifetime.Class?.ClassSignature ?? JObject.TypeInfo.Signature;
+	public sealed override CString ObjectSignature => this.Lifetime.Class?.ClassSignature ?? JObject.TypeInfo.Signature;
 	/// <summary>
 	/// JNI local object reference.
 	/// </summary>
