@@ -85,6 +85,9 @@ public sealed class JWeakTests : GlobalObjectTestsBase
 
 		Assert.Equal($"{jWeak0.Reference} {jWeak0.ObjectMetadata}", jWeak0.ToString());
 		Assert.Equal($"{jWeak1.Reference} {jWeak1.ObjectMetadata}", jWeak1.ToString());
+
+		Assert.Equal(jWeak0.Reference.Value.Pointer, JGlobalBase.GetReference(jWeak0));
+		Assert.Equal(jWeak1.Reference.Value.Pointer, JGlobalBase.GetReference(jWeak1));
 	}
 
 	[Theory]

@@ -37,6 +37,32 @@ try
 
 	jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0]) ?? throw new ArgumentException("Invalid JVM library.");
 
+	if (OperatingSystem.IsMacOS() || OperatingSystem.IsIOS() || OperatingSystem.IsTvOS())
+	{
+		IntPtr loopRef = CoreFoundation.RunLoopGetCurrent();
+		Thread thread = new(o => InitGui((JVirtualMachineLibrary)o!));
+		thread.Start(jvmLib);
+		CoreFoundation.InitializeLoop(loopRef);
+		thread.Join();
+	}
+	else
+	{
+		InitGui(jvmLib);
+	}
+}
+catch (Exception ex)
+{
+	UIAdapter.Instance.ShowError(ex);
+}
+finally
+{
+	if (jvmLib is not null)
+		NativeLibrary.Free(jvmLib.Handle);
+}
+return;
+
+static void InitGui(JVirtualMachineLibrary jvmLib)
+{
 	JVirtualMachineInitArg initArgs = GetInitialArgs(jvmLib);
 	IEnvironment? env = default;
 
@@ -78,16 +104,6 @@ try
 			env.PendingException = default;
 	}
 }
-catch (Exception ex)
-{
-	UIAdapter.Instance.ShowError(ex);
-}
-finally
-{
-	if (jvmLib is not null)
-		NativeLibrary.Free(jvmLib.Handle);
-}
-return;
 
 static JVirtualMachineInitArg GetInitialArgs(JVirtualMachineLibrary virtualMachineLibrary)
 {

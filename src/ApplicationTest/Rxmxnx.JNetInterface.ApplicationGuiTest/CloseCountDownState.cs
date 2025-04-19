@@ -5,11 +5,11 @@ using Rxmxnx.JNetInterface.Util.Concurrent;
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchObject countDownLatch)
-	: JNativeCallback.AwtEventListenerState
+	: AwtEventListenerState
 {
-	private readonly JGlobalBase _countDownLatch = JNativeCallback.CallbackState.UseGlobal(countDownLatch.Global);
+	private readonly JGlobalBase _countDownLatch = CallbackState.UseGlobal(countDownLatch.Global);
 	private readonly Object _lock = new();
-	private readonly JGlobalBase _window = JNativeCallback.CallbackState.UseGlobal(window.Global);
+	private readonly JGlobalBase _window = CallbackState.UseGlobal(window.Global);
 
 	public override void EventDispatched(JAwtEventObject awtEvent)
 	{
@@ -28,9 +28,9 @@ internal sealed class CloseCountDownState(JWindowObject window, JCountDownLatchO
 	{
 		lock (this._lock)
 		{
-			if (JNativeCallback.CallbackState.FreeGlobal(this._window))
+			if (CallbackState.FreeGlobal(this._window))
 				this._window.Dispose();
-			if (JNativeCallback.CallbackState.FreeGlobal(this._countDownLatch))
+			if (CallbackState.FreeGlobal(this._countDownLatch))
 				this._countDownLatch.Dispose();
 		}
 	}

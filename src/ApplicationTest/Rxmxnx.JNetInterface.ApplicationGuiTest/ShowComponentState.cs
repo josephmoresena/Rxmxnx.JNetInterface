@@ -5,15 +5,15 @@ using Rxmxnx.PInvoke;
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
 internal sealed class ShowComponentState(JComponentObject component, IWrapper<Boolean> setVisible)
-	: JNativeCallback.RunnableState, IDisposable
+	: RunnableState, IDisposable
 {
-	private readonly JGlobalBase _component = JNativeCallback.CallbackState.UseGlobal(component.Weak);
+	private readonly JGlobalBase _component = CallbackState.UseGlobal(component.Weak);
 	private readonly Object _lock = new();
 	public void Dispose()
 	{
 		lock (this._lock)
 		{
-			if (JNativeCallback.CallbackState.FreeGlobal(this._component))
+			if (CallbackState.FreeGlobal(this._component))
 				this._component.Dispose();
 		}
 	}

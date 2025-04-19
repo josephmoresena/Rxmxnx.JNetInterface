@@ -87,7 +87,6 @@ public partial class TestCompiler
 		String outputPath)
 	{
 		if (!Utilities.IsNativeAotSupported(arch, restoreArgs.Version)) return;
-		if (!OperatingSystem.IsLinux() & !OperatingSystem.IsWindows() && !OperatingSystem.IsFreeBSD()) return;
 
 		CompileNetArgs compileArgs = new(restoreArgs, outputPath)
 		{
@@ -95,7 +94,6 @@ public partial class TestCompiler
 		};
 
 		await TestCompiler.RestoreNet(restoreArgs);
-
 		await TestCompiler.CompileNet(compileArgs);
 	}
 	private static async Task CompileNetApp(Boolean onlyNativeAot, RestoreNetArgs restoreArgs, Architecture arch,

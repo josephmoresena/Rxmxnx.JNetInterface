@@ -9,7 +9,7 @@ using Rxmxnx.JNetInterface.Swing;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal sealed class ShowDialogState(JWindowObject owner) : JNativeCallback.ActionListenerState, IDisposable
+internal sealed class ShowDialogState(JWindowObject owner) : ActionListenerState, IDisposable
 {
 	private const String OpenHtml = "<html>";
 	private const String CloseHtml = "</html>";
@@ -17,12 +17,12 @@ internal sealed class ShowDialogState(JWindowObject owner) : JNativeCallback.Act
 	private static readonly String breakLineHtml = "<br/>" + Environment.NewLine;
 
 	private readonly Object _lock = new();
-	private readonly JGlobalBase _owner = JNativeCallback.CallbackState.UseGlobal(owner.Global);
+	private readonly JGlobalBase _owner = CallbackState.UseGlobal(owner.Global);
 	public void Dispose()
 	{
 		lock (this._lock)
 		{
-			if (JNativeCallback.CallbackState.FreeGlobal(this._owner))
+			if (CallbackState.FreeGlobal(this._owner))
 				this._owner.Dispose();
 		}
 	}
