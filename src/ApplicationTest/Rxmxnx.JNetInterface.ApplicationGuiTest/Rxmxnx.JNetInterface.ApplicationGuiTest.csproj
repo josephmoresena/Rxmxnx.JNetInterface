@@ -4,12 +4,14 @@
         <OutputType>WinExe</OutputType>
         <AssemblyName>ApplicationGuiTest</AssemblyName>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
     </PropertyGroup>
 
     <Import Project="..\JNetInterface-App.targets"/>
 
     <ItemGroup>
         <None Remove="java.src\**"/>
+        <None Remove="icon.ico"/>
         <EmbeddedResource Include="NativeCallbacks.jar"/>
         <EmbeddedResource Include="Images\*"/>
     </ItemGroup>

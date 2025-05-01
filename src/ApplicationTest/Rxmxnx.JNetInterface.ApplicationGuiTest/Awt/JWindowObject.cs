@@ -11,6 +11,9 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 		IndeterminateCall.CreateMethodDefinition("setLocationRelativeTo"u8,
 		                                         [JArgumentMetadata.Get<JComponentObject>(),]);
 	private static readonly JMethodDefinition.Parameterless packDef = new("pack"u8);
+	private static readonly IndeterminateCall setIconImageDef =
+		IndeterminateCall.CreateMethodDefinition("IndeterminateCall"u8, [JArgumentMetadata.Get<JImageObject>(),]);
+
 	private static readonly JClassTypeMetadata<JWindowObject> typeMetadata =
 		TypeMetadataBuilder<JContainerObject>.Create<JWindowObject>("java/awt/Window"u8).Build();
 
@@ -25,6 +28,12 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 		IEnvironment env = this.Environment;
 		using JClassObject jClass = JClassObject.GetClass<JWindowObject>(env);
 		JWindowObject.setLocationRelativeToDef.MethodCall(this, jClass, false, [comp,]);
+	}
+	public void SetIcon(JImageObject image)
+	{
+		IEnvironment env = this.Environment;
+		using JClassObject jClass = JClassObject.GetClass<JWindowObject>(env);
+		JWindowObject.setIconImageDef.MethodCall(this, jClass, false, [image,]);
 	}
 	public void Pack()
 	{

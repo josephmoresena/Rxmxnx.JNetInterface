@@ -109,6 +109,7 @@ static JVirtualMachineInitArg GetInitialArgs(JVirtualMachineLibrary virtualMachi
 {
 	JVirtualMachineInitArg virtualMachineInitArg = virtualMachineLibrary.GetDefaultArgument();
 	String jarPath = ExtractJar().Replace(" ", @"\ ");
+
 	if (JVirtualMachine.TraceEnabled)
 		virtualMachineInitArg = new(virtualMachineInitArg.Version)
 		{
@@ -126,7 +127,7 @@ static String ExtractJar()
 {
 	String tempFile = Path.GetTempFileName() + ".jar";
 	File.Delete(tempFile);
-	File.WriteAllBytes(tempFile, GetImageBytes("NativeCallbacks.jar"));
+	File.WriteAllBytes(tempFile, GetResourceBytes("NativeCallbacks.jar"));
 	return tempFile;
 }
 static String GetImageName()
@@ -141,7 +142,7 @@ static String GetImageName()
 		"macosx.png" :
 		throw new PlatformNotSupportedException("Unsupported platform.");
 }
-static Byte[] GetImageBytes(String fileName)
+static Byte[] GetResourceBytes(String fileName)
 {
 	Assembly assembly = Assembly.GetExecutingAssembly();
 	String? resourceName = assembly.GetManifestResourceNames().FirstOrDefault(n => n.Contains(fileName));
@@ -164,10 +165,19 @@ static JFrameObjectSwing CreateFrame(IEnvironment env, String title)
 {
 	using JClassObject graphicsEnv = JClassObject.GetClass(env, "java/awt/GraphicsEnvironment"u8);
 	JFunctionDefinition<JBoolean>.Parameterless isHeadlessDef = new("isHeadless"u8);
+
 	if (isHeadlessDef.StaticInvoke(graphicsEnv).Value)
 		throw new InvalidOperationException("Java is running in Headless mode.");
 
-	return JFrameObjectSwing.Create(env, title);
+	JFrameObjectSwing result = JFrameObjectSwing.Create(env, title);
+
+	if (!OperatingSystem.IsWindows() && !OperatingSystem.IsLinux() && !OperatingSystem.IsFreeBSD()) return result;
+
+	using JImageIconObject icon = JImageIconObject.Create(env, GetResourceBytes("icon.png"))!;
+	using JImageObject image = icon.GetImage();
+	result.SetIcon(image);
+
+	return result;
 }
 static JCountDownLatchObject GetCountDownAwait(JWindowObject window)
 {
@@ -182,7 +192,7 @@ static JCountDownLatchObject GetCountDownAwait(JWindowObject window)
 static JLabelObject CreateFrameLabel(IEnvironment env)
 {
 	String imageName = GetImageName();
-	ReadOnlySpan<Byte> imageBytes = GetImageBytes(imageName);
+	ReadOnlySpan<Byte> imageBytes = GetResourceBytes(imageName);
 	JLabelObject jLabel;
 
 	using (JImageIconObject jIconImage = JImageIconObject.Create(env, imageBytes)!)

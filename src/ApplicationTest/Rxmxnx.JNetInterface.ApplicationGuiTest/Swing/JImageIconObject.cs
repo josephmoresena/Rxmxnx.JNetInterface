@@ -1,3 +1,4 @@
+using Rxmxnx.JNetInterface.Awt;
 using Rxmxnx.JNetInterface.Lang;
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.Access;
@@ -14,10 +15,20 @@ public class JImageIconObject : JLocalObject, IClassType<JImageIconObject>, IInt
 		.Create("javax/swing/ImageIcon"u8).Implements<JIconObject>().Build();
 	private static readonly IndeterminateCall byteArrayConstructor =
 		IndeterminateCall.CreateConstructorDefinition([JArrayObject<JByte>.Metadata.ArgumentMetadata,]);
+	private static readonly JFunctionDefinition<JImageObject>.Parameterless getImageDef = new("getImage"u8);
+
 	static JClassTypeMetadata<JImageIconObject> IClassType<JImageIconObject>.Metadata => JImageIconObject.typeMetadata;
+
 	protected JImageIconObject(IReferenceType.ClassInitializer initializer) : base(initializer) { }
 	protected JImageIconObject(IReferenceType.GlobalInitializer initializer) : base(initializer) { }
 	protected JImageIconObject(IReferenceType.ObjectInitializer initializer) : base(initializer) { }
+
+	public JImageObject GetImage()
+	{
+		IEnvironment env = this.Environment;
+		using JClassObject jClass = JClassObject.GetClass<JImageIconObject>(env);
+		return JImageIconObject.getImageDef.Invoke(this, jClass)!;
+	}
 
 	public static JImageIconObject? Create(IEnvironment env, ReadOnlySpan<Byte> data)
 	{
