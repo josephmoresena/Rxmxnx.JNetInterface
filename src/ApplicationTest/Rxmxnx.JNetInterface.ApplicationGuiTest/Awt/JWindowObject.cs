@@ -12,7 +12,7 @@ public class JWindowObject : JContainerObject, IClassType<JWindowObject>
 		                                         [JArgumentMetadata.Get<JComponentObject>(),]);
 	private static readonly JMethodDefinition.Parameterless packDef = new("pack"u8);
 	private static readonly IndeterminateCall setIconImageDef =
-		IndeterminateCall.CreateMethodDefinition("IndeterminateCall"u8, [JArgumentMetadata.Get<JImageObject>(),]);
+		IndeterminateCall.CreateMethodDefinition("setIconImage"u8, [JArgumentMetadata.Get<JImageObject>(),]);
 
 	private static readonly JClassTypeMetadata<JWindowObject> typeMetadata =
 		TypeMetadataBuilder<JContainerObject>.Create<JWindowObject>("java/awt/Window"u8).Build();

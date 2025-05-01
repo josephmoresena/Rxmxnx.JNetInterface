@@ -64,12 +64,11 @@ return;
 static void InitGui(JVirtualMachineLibrary jvmLib)
 {
 	JVirtualMachineInitArg initArgs = GetInitialArgs(jvmLib);
-	IEnvironment? env = default;
 
 	UIAdapter.Instance.PrintArgs(initArgs);
+	using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 	try
 	{
-		using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out env);
 		using JFrameObjectSwing frame = CreateFrame(env, "Hello .NET");
 		using JCountDownLatchObject countDownLatch = GetCountDownAwait(frame);
 
