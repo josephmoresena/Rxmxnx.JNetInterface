@@ -99,8 +99,7 @@ static void InitGui(JVirtualMachineLibrary jvmLib)
 			UIAdapter.Instance.ShowError(ex);
 		else
 			UIAdapter.Instance.ShowError(tEx.WithSafeInvoke(t => t.ToString()));
-		if (env is not null)
-			env.PendingException = default;
+		env.PendingException = default;
 	}
 }
 
@@ -170,11 +169,12 @@ static JFrameObjectSwing CreateFrame(IEnvironment env, String title)
 
 	JFrameObjectSwing result = JFrameObjectSwing.Create(env, title);
 
-	if (!OperatingSystem.IsWindows() && !OperatingSystem.IsLinux() && !OperatingSystem.IsFreeBSD()) return result;
-
 	using JImageIconObject icon = JImageIconObject.Create(env, GetResourceBytes("icon.png"))!;
 	using JImageObject image = icon.GetImage();
-	result.SetIcon(image);
+	if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsFreeBSD())
+		result.SetIcon(image);
+	else
+		JWindowObject.SetApplicationIcon(image);
 
 	return result;
 }
