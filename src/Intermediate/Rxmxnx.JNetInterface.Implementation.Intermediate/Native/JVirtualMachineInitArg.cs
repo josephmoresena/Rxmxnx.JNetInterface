@@ -31,7 +31,11 @@ public sealed class JVirtualMachineInitArg
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	private String OptionsString => $"[{String.Join(", ", this.Options.Where(c => !CString.IsNullOrEmpty(c)))}]";
+	private unsafe String OptionsString
+		=> $"[{String.Join(", ", this.Options.Where(c => !CString.IsNullOrEmpty(c)).Select(c => {
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(c.AsSpan()))
+				return Marshal.PtrToStringUTF8((IntPtr)ptr);
+		}))}]";
 
 	/// <summary>
 	/// Constructor.

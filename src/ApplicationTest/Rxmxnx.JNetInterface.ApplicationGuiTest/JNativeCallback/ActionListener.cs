@@ -63,10 +63,18 @@ public partial class JNativeCallback
 			if (!JNativeCallback.states.TryGetValue(Unsafe.As<JLong, Guid>(ref longKey[0]), out CallbackState? state) ||
 			    state is not IWrapper.IBase<ActionListenerState> ws) return;
 
-			JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef)
-			                                                   .WithParameter(
-				                                                   localRef, out JActionEventObject actionEvent)
-			                                                   .Build();
+			JNativeCallAdapter callAdapter;
+			JActionEventObject actionEvent;
+			try
+			{
+				callAdapter = JNativeCallAdapter.Create(environmentRef).WithParameter(localRef, out actionEvent)
+				                                .Build();
+			}
+			catch (ArgumentException)
+			{
+				return;
+			}
+
 			try
 			{
 				ws.Value.ActionPerformed(actionEvent);

@@ -38,7 +38,16 @@ public unsafe partial class JNativeCallback
 		if (callback is not IDisposable disposable)
 			return;
 
-		JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
+		JNativeCallAdapter callAdapter;
+		try
+		{
+			callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
+		}
+		catch (ArgumentException)
+		{
+			return;
+		}
+
 		try
 		{
 			disposable.Dispose();
@@ -51,7 +60,16 @@ public unsafe partial class JNativeCallback
 	[UnmanagedCallersOnly]
 	private static JStringLocalRef GetExceptionMessage(JEnvironmentRef environmentRef, JClassLocalRef _)
 	{
-		JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
+		JNativeCallAdapter callAdapter;
+		try
+		{
+			callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
+		}
+		catch (ArgumentException)
+		{
+			return default;
+		}
+
 		JStringObject? jString = default;
 		try
 		{
