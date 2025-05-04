@@ -100,10 +100,10 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// <exception cref="JniException">If JNI call ends with an error.</exception>
 	public IInvokedVirtualMachine CreateVirtualMachine(JVirtualMachineInitArg arg, out IEnvironment env)
 	{
-		CStringSequence sequence = CStringSequence.Parse(arg.Options.ToString());
+		CStringSequence sequence = arg.Options;
 		using IFixedPointer.IDisposable fPtr = sequence.GetFixedPointer();
 		// Avoid heap allocation.
-		Span<VirtualMachineInitOptionValue> options = stackalloc VirtualMachineInitOptionValue[sequence.Count];
+		Span<VirtualMachineInitOptionValue> options = stackalloc VirtualMachineInitOptionValue[sequence.NonEmptyCount];
 		arg.CopyOptions(options);
 		fixed (VirtualMachineInitOptionValue* ptr = &MemoryMarshal.GetReference(options))
 		{

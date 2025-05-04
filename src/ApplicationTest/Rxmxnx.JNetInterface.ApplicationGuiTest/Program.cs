@@ -106,19 +106,13 @@ static JVirtualMachineInitArg GetInitialArgs(JVirtualMachineLibrary virtualMachi
 {
 	JVirtualMachineInitArg virtualMachineInitArg = virtualMachineLibrary.GetDefaultArgument();
 	String jarPath = ExtractJar().Replace(" ", @"\ ");
-
-	if (JVirtualMachine.TraceEnabled)
-		virtualMachineInitArg = new(virtualMachineInitArg.Version)
-		{
-			Options = new("-verbose:jni", "-verbose:class", "-verbose:gc", "-Djava.awt.headless=false",
-			              $"-Djava.class.path={jarPath}"),
-		};
-	else
-		virtualMachineInitArg = new(virtualMachineInitArg.Version)
-		{
-			Options = new("-Djava.awt.headless=false", $"-Djava.class.path={jarPath}"),
-		};
-	return virtualMachineInitArg;
+	return new(virtualMachineInitArg.Version)
+	{
+		Options = new("-Djava.awt.headless=false", $"-Djava.class.path={jarPath}",
+		              JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
+		              JVirtualMachine.TraceEnabled ? "-verbose:class" : default,
+		              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default),
+	};
 }
 static String ExtractJar()
 {
