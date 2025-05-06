@@ -11,10 +11,10 @@ namespace Rxmxnx.JNetInterface.ApplicationTest;
 internal partial class UIAdapter
 {
 	[SupportedOSPlatform("windows")]
-	private sealed partial class MessageBoxAdapter : UIAdapter
+	private sealed class MessageBoxAdapter : UIAdapter
 	{
-		[LibraryImport("user32.dll", EntryPoint = "MessageBoxW")]
-		private static partial Int32 MessageBox(IntPtr hwnd, ReadOnlyValPtr<Char> text, ReadOnlyValPtr<Char> caption,
+		[DllImport("user32.dll", EntryPoint = "MessageBoxW")]
+		private static extern Int32 MessageBox(IntPtr hwnd, ReadOnlyValPtr<Char> text, ReadOnlyValPtr<Char> caption,
 			UInt32 type);
 
 		public override void ShowError(String errorMessage)

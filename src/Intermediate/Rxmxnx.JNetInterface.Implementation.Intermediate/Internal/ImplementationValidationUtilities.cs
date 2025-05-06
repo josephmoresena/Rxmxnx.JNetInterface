@@ -163,6 +163,9 @@ internal static class ImplementationValidationUtilities
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="version"/> is invalid.
 	/// </exception>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	public static Int32 ThrowIfInvalidVersion(Int32 version)
 	{
 		if (version > 0) return version;

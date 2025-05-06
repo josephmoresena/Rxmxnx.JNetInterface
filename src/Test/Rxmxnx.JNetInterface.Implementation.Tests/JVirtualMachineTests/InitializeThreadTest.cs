@@ -104,6 +104,8 @@ public partial class JVirtualMachineTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			Assert.Equal(!removeAttachedThread, env?.IsAttached);
 			Assert.Equal(!removeAttachedThread, (env as IThread)?.Attached);
+			if (env is not null && removeAttachedThread)
+				Assert.Throws<RunningStateException>(() => env.ClassObject.GetClassName(out _));
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 			proxyEnv.FinalizeProxy(true);
 		}
