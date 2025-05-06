@@ -39,6 +39,9 @@ internal static class ImplementationValidationUtilities
 	/// <exception cref="ArgumentException">
 	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
 	/// </exception>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	public static void ThrowIfNotMatchDefinition(JAccessibleObjectDefinition definition,
 		JAccessibleObjectDefinition otherDefinition)
 	{

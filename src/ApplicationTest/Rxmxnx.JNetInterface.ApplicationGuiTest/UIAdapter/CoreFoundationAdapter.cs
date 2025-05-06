@@ -24,10 +24,18 @@ internal partial class UIAdapter
 			CoreFoundationAdapter.RunLoopAddSource(CoreFoundationAdapter.loopRef, CoreFoundationAdapter.sourceRef,
 			                                       CoreFoundationAdapter.GetCommonModes());
 			MacExecutionState<TState> executionState = new(in state, in action);
-			this.ExecuteGui(executionState);
+			CoreFoundationAdapter.ExecuteGui(executionState);
 			CoreFoundationAdapter.ReleaseSource(CoreFoundationAdapter.sourceRef);
 		}
 
-		private protected override void BlockThread() => CoreFoundationAdapter.RunLoopRun();
+		private static void ExecuteGui<TState>(MacExecutionState<TState> executionState)
+#if NET9_0_OR_GREATER
+			where TState : allows ref struct
+#endif
+		{
+			Thread thread = new(o => { (o as ExecutionState<TState>)?.Execute(); });
+			thread.Start(executionState);
+			CoreFoundationAdapter.RunLoopRun();
+		}
 	}
 }
