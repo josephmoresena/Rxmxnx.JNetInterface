@@ -255,6 +255,8 @@ public sealed partial class JVirtualMachineTests
 			Assert.Throws<ProxyObjectException>(() => EnvProxy.CreateClassObject<JStringObject>(env.ClassObject));
 			Assert.Throws<ProxyObjectException>(() => (env as IEnvironment).IsSameObject(
 				                                    jClassClassProxy, env.ClassObject));
+			Assert.Throws<ProxyObjectException>(() => (env as IEnvironment).ClassFeature.GetObjectClass(
+				                                    ILocalObject.CreateMetadata(jClassClassProxy)));
 		}
 		finally
 		{
