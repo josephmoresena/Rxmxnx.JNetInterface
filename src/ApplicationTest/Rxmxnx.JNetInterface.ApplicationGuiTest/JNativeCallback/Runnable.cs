@@ -55,23 +55,19 @@ public partial class JNativeCallback
 			if (!JNativeCallback.states.TryGetValue(Unsafe.As<JLong, Guid>(ref longKey[0]), out CallbackState? state) ||
 			    state is not IWrapper.IBase<RunnableState> ws) return;
 
-			JNativeCallAdapter callAdapter;
 			try
 			{
-				callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
+				JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
+				try
+				{
+					ws.Value.Run(callAdapter.Environment);
+				}
+				finally
+				{
+					callAdapter.FinalizeCall();
+				}
 			}
-			catch (ArgumentException)
-			{
-				return;
-			}
-			try
-			{
-				ws.Value.Run(callAdapter.Environment);
-			}
-			finally
-			{
-				callAdapter.FinalizeCall();
-			}
+			catch (RunningStateException) { }
 		}
 
 		static Runnable IClassType<Runnable>.Create(IReferenceType.ClassInitializer initializer) => new(initializer);

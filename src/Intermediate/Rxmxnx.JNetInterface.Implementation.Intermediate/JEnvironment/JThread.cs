@@ -16,7 +16,7 @@ partial class JEnvironment
 		/// </summary>
 		private readonly IMutableWrapper<Boolean> _isDisposed;
 
-		public override Boolean IsAttached => !this.IsDisposable || !this._isDisposed.Value;
+		public override Boolean IsAttached => base.IsAttached && (!this.IsDisposable || !this._isDisposed.Value);
 		/// <inheritdoc/>
 		public override Boolean IsDaemon => this._args.IsDaemon;
 		/// <inheritdoc/>
@@ -52,6 +52,7 @@ partial class JEnvironment
 		{
 			if (!this.IsDisposable || this._isDisposed.Value) return;
 			this._isDisposed.Value = true;
+
 			JVirtualMachine.RemoveEnvironment(this._cache.VirtualMachine.Reference, this.Reference);
 			this._cache.FreeReferences();
 			JVirtualMachine.DetachCurrentThread(this._cache.VirtualMachine.Reference, this.Reference,

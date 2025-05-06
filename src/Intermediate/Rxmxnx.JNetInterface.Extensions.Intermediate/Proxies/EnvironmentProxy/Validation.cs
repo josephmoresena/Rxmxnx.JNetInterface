@@ -12,7 +12,7 @@ public abstract partial class EnvironmentProxy
 	{
 		if (jObject is null || jObject.IsProxy) return jObject;
 		IMessageResource resource = IMessageResource.GetInstance();
-		throw new ArgumentException(resource.InvalidProxyObject);
+		throw new ProxyObjectException(resource.InvalidProxyObject);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="jClass"/> is not <paramref name="typeMetadata"/> data type.

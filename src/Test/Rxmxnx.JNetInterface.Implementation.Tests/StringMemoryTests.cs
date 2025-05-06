@@ -40,7 +40,7 @@ public sealed class StringMemoryTests
 			Assert.Equal(value.Length, seq.Values.Length);
 			Assert.Equal(fMem.Pointer, seq.Pointer);
 
-			Assert.Throws<InvalidOperationException>(() => JClassObject.GetClass(env, "package/critical/Test"u8));
+			Assert.Throws<UnsafeStateException>(() => JClassObject.GetClass(env, "package/critical/Test"u8));
 
 			proxyEnv.Received(1).GetStringLength(stringRef);
 			proxyEnv.Received(0).GetStringChars(Arg.Any<JStringLocalRef>(), Arg.Any<ValPtr<JBoolean>>());

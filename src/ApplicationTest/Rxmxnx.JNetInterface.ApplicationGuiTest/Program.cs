@@ -13,12 +13,6 @@ using Rxmxnx.JNetInterface.Swing;
 using Rxmxnx.JNetInterface.Util.Concurrent;
 using Rxmxnx.PInvoke;
 
-if (OperatingSystem.IsWindows())
-{
-	Thread.CurrentThread.SetApartmentState(ApartmentState.Unknown);
-	Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
-}
-
 JVirtualMachine.SetMainClass<JFrameObjectSwing>();
 JVirtualMachine.SetMainClass<JWindowObject>();
 JVirtualMachine.SetMainClass<JComponentObject>();
@@ -37,18 +31,7 @@ try
 
 	jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0]) ?? throw new ArgumentException("Invalid JVM library.");
 
-	if (OperatingSystem.IsMacOS() || OperatingSystem.IsIOS() || OperatingSystem.IsTvOS())
-	{
-		IntPtr loopRef = CoreFoundation.RunLoopGetCurrent();
-		Thread thread = new(o => InitGui((JVirtualMachineLibrary)o!));
-		thread.Start(jvmLib);
-		CoreFoundation.InitializeLoop(loopRef);
-		thread.Join();
-	}
-	else
-	{
-		InitGui(jvmLib);
-	}
+	UIAdapter.Instance.ExecuteGui(jvmLib, InitGui);
 }
 catch (Exception ex)
 {

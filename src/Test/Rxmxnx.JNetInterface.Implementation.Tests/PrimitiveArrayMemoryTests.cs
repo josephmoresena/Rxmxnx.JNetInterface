@@ -284,7 +284,7 @@ public sealed class PrimitiveArrayMemoryTests
 			seq.ReleaseMode = JReleaseMode.Abort;
 			Assert.Null(seq.ReleaseMode);
 
-			Assert.Throws<InvalidOperationException>(() => JClassObject.GetClass(env, "package/critical/Test"u8));
+			Assert.Throws<UnsafeStateException>(() => JClassObject.GetClass(env, "package/critical/Test"u8));
 
 			proxyEnv.Received(1).GetArrayLength(arrayRef);
 			proxyEnv.Received(referenceKind is JMemoryReferenceKind.ThreadIndependent ? 1 : 0)

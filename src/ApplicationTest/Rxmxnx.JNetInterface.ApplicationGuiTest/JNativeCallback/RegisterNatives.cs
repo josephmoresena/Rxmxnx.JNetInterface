@@ -38,48 +38,44 @@ public unsafe partial class JNativeCallback
 		if (callback is not IDisposable disposable)
 			return;
 
-		JNativeCallAdapter callAdapter;
-		try
-		{
-			callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
-		}
-		catch (ArgumentException)
-		{
-			return;
-		}
-
 		try
 		{
 			disposable.Dispose();
 		}
-		finally
+		catch (JniException ex)
 		{
-			callAdapter.FinalizeCall();
+			if (ex.Result is JResult.DetachedThreadError)
+				return;
+			throw;
 		}
 	}
 	[UnmanagedCallersOnly]
 	private static JStringLocalRef GetExceptionMessage(JEnvironmentRef environmentRef, JClassLocalRef _)
 	{
-		JNativeCallAdapter callAdapter;
 		try
 		{
-			callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
+			JStringObject? jString = default;
+			JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef).Build();
+			try
+			{
+				jString = JStringObject.Create(callAdapter.Environment, "Invalid callback class."u8);
+			}
+			catch (Exception e)
+			{
+				if (e is JniException)
+					callAdapter.Environment.PendingException = default;
+			}
+			return callAdapter.FinalizeCall(jString);
 		}
-		catch (ArgumentException)
+		catch (RunningStateException)
 		{
 			return default;
 		}
-
-		JStringObject? jString = default;
-		try
+		catch (JniException ex)
 		{
-			jString = JStringObject.Create(callAdapter.Environment, "Invalid callback class."u8);
+			if (ex.Result is JResult.DetachedThreadError)
+				return default;
+			throw;
 		}
-		catch (Exception e)
-		{
-			if (e is JniException)
-				callAdapter.Environment.PendingException = default;
-		}
-		return callAdapter.FinalizeCall(jString);
 	}
 }
