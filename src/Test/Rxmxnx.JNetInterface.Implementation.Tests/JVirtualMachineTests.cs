@@ -265,6 +265,27 @@ public sealed partial class JVirtualMachineTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
+	[Fact]
+	internal void InvalidThreadTest()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		try
+		{
+			JEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			Thread thread = new(() =>
+			{
+				Assert.Throws<DifferentThreadException>(() => env.ClassObject.GetClassName(out _));
+			});
+			thread.Start();
+			thread.Join();
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
 
 	private static JGlobal CreateThreadGroup(IVirtualMachine vm, JGlobalRef globalRef)
 	{

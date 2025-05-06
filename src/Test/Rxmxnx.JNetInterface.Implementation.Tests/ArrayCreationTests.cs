@@ -70,10 +70,6 @@ public sealed class ArrayCreationTests
 			ArrayCreationTests.AssertStatic<JSerializableObject, JClassObject>(
 				env, env.ClassFeature.ClassObject.CastTo<JSerializableObject>());
 
-			// JObjectLocalRef localRef = ArrayCreationTests.fixture.Create<JObjectLocalRef>();
-			// using (JShortObject jShort = new(env.ClassFeature.GetClass<JShortObject>(), localRef, -5))
-			// 	ArrayCreationTests.AssertStatic<JNumberObject, JShortObject>(env, jShort);
-			//
 			proxyEnv.Received(0).IsAssignableFrom(Arg.Any<JClassLocalRef>(), Arg.Any<JClassLocalRef>());
 			proxyEnv.Received().NewBooleanArray(Arg.Any<Int32>());
 			proxyEnv.Received().NewLongArray(Arg.Any<Int32>());
@@ -107,5 +103,8 @@ public sealed class ArrayCreationTests
 		JArrayObject<TElementType>.Create(jClass, 10, value).Dispose();
 		JArrayObject<TElementType>.Create(jClass, 10).Dispose();
 		JArrayObject<TElementType>.Create(jClass, 10, default!).Dispose();
+
+		Assert.Throws<ArgumentException>(() => JArrayObject<TElementType>.Create(env, -10));
+		Assert.Throws<ArgumentException>(() => JArrayObject<TElementType>.Create(jClass, -10));
 	}
 }

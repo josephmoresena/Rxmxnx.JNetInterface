@@ -75,6 +75,7 @@ partial class JEnvironment
 		public unsafe IntPtr GetDirectAddress(JBufferObject buffer)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(buffer);
+			ImplementationValidationUtilities.ThrowIfDefault(buffer);
 			ref readonly NativeInterface4 nativeInterface =
 				ref this.GetNativeInterface<NativeInterface4>(NativeInterface4.GetDirectBufferAddressInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
@@ -86,6 +87,7 @@ partial class JEnvironment
 		public unsafe Int64 GetDirectCapacity(JBufferObject buffer)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(buffer);
+			ImplementationValidationUtilities.ThrowIfDefault(buffer);
 			ref readonly NativeInterface4 nativeInterface =
 				ref this.GetNativeInterface<NativeInterface4>(NativeInterface4.GetDirectBufferAddressInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);

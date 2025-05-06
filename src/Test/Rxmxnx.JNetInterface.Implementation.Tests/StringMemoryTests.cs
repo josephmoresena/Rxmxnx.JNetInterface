@@ -508,6 +508,54 @@ public sealed class StringMemoryTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
+	[Theory]
+	[InlineData(true)]
+	[InlineData(false)]
+	internal void DefaultInstanceTest(Boolean createFromString)
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
+		String text = StringMemoryTests.fixture.Create<String>();
+
+		try
+		{
+			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			using MemoryHandle handle = text.AsMemory().Pin();
+
+			proxyEnv.NewString((ReadOnlyValPtr<Char>)handle.ToIntPtr(), text.Length).Returns(stringRef);
+			proxyEnv.GetStringLength(stringRef).Returns(text.Length);
+			proxyEnv.When(e => e.GetStringRegion(stringRef, 0, text.Length, Arg.Any<ValPtr<Char>>())).Do(c =>
+			{
+				ValPtr<Char> ptr = (ValPtr<Char>)c[3];
+				text.CopyTo(ptr.Pointer.GetUnsafeSpan<Char>(text.Length));
+			});
+
+			JStringObject jString = createFromString ?
+				JStringObject.Create(env, text) :
+				JStringObject.Create(env, text.AsSpan());
+			jString.Dispose();
+
+			Assert.Equal(default, jString.Reference);
+			Assert.Equal(text.Length, jString.Length);
+			if (createFromString)
+				Assert.Equal(text, jString.Value);
+			else
+				Assert.Throws<ArgumentException>(() => jString.Value);
+			Assert.Throws<ArgumentException>(() => jString.Utf8Length);
+
+			proxyEnv.Received(1).NewString(Arg.Any<ReadOnlyValPtr<Char>>(), Arg.Any<Int32>());
+			proxyEnv.Received(0)
+			        .GetStringRegion(stringRef, Arg.Any<Int32>(), Arg.Any<Int32>(), Arg.Any<ValPtr<Char>>());
+			proxyEnv.Received(0).GetStringLength(stringRef);
+			proxyEnv.Received(0).GetStringUtfLength(stringRef);
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
 
 	private static void NestedFailTest(NativeInterfaceProxy proxyEnv)
 	{

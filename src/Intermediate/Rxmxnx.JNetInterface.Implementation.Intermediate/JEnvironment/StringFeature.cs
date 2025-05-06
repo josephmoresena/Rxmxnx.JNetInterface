@@ -23,6 +23,7 @@ partial class JEnvironment
 		public Int32 GetLength(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
+			ImplementationValidationUtilities.ThrowIfDefault(jObject);
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringLengthInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
@@ -34,6 +35,7 @@ partial class JEnvironment
 		public Int32 GetUtf8Length(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
+			ImplementationValidationUtilities.ThrowIfDefault(jObject);
 			ref readonly NativeInterface nativeInterface =
 				ref this.GetNativeInterface<NativeInterface>(NativeInterface.GetStringUtfLengthInfo);
 			using INativeTransaction jniTransaction = this.VirtualMachine.CreateTransaction(1);
@@ -45,6 +47,7 @@ partial class JEnvironment
 		public unsafe Int64? GetUtf8LongLength(JReferenceObject jObject)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jObject);
+			ImplementationValidationUtilities.ThrowIfDefault(jObject);
 			if (this.Version < NativeInterface24.RequiredVersion) return default;
 
 			ref readonly NativeInterface24 nativeInterface =
@@ -169,6 +172,7 @@ partial class JEnvironment
 		public unsafe void GetCopy(JStringObject jString, Span<Char> chars, Int32 startIndex = 0)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jString);
+			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			fixed (Char* ptr = &MemoryMarshal.GetReference(chars))
 				this.GetStringRegion(jString, new(ptr), startIndex, chars.Length);
 			this.CheckJniError();
@@ -176,6 +180,7 @@ partial class JEnvironment
 		public unsafe void GetUtf8Copy(JStringObject jString, Span<Byte> utf8Units, Int32 startIndex = 0)
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jString);
+			ImplementationValidationUtilities.ThrowIfDefault(jString);
 			fixed (Byte* ptr = &MemoryMarshal.GetReference(utf8Units))
 				this.GetStringUtf8Region(jString, new(ptr), startIndex, utf8Units.Length);
 			this.CheckJniError();
