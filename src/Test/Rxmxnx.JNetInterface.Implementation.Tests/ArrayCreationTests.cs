@@ -85,6 +85,57 @@ public sealed class ArrayCreationTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
+	[Fact]
+	internal void GetSetObjectArray()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JObjectArrayLocalRef arrayRef = ArrayCreationTests.fixture.Create<JObjectArrayLocalRef>();
+		JStringLocalRef stringRef = ArrayCreationTests.fixture.Create<JStringLocalRef>();
+		using IFixedPointer.IDisposable fp = IDataType.GetMetadata<JStackTraceElementObject>().Information
+		                                              .GetFixedPointer(out IFixedPointer.IDisposable nameCtx);
+		try
+		{
+			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+
+			using JClassObject jClassClass = JClassObject.GetClass<JClassObject>(env);
+			using JClassObject jStackTraceObjectClass = JClassObject.GetClass<JStackTraceElementObject>(env);
+			using JClassObject jThrowableObjectClass = JClassObject.GetClass<JThrowableObject>(env);
+
+			proxyEnv.NewObjectArray(Arg.Any<Int32>(), jClassClass.Reference, default).Returns(arrayRef);
+			proxyEnv.GetObjectArrayElement(arrayRef, Arg.Any<Int32>())
+			        .Returns(c => 0.Equals(c[1]) ? proxyEnv.StackTraceObjectLocalRef.Value : default);
+			proxyEnv.CallObjectMethod(proxyEnv.StackTraceObjectLocalRef.Value,
+			                          proxyEnv.VirtualMachine.ClassGetNameMethodId,
+			                          Arg.Any<ReadOnlyValPtr<JValueWrapper>>()).Returns(stringRef.Value);
+			proxyEnv.GetStringUtfLength(stringRef)
+			        .Returns(IDataType.GetMetadata<JStackTraceElementObject>().ClassName.Length);
+			proxyEnv.GetStringUtfChars(stringRef, Arg.Any<ValPtr<JBoolean>>())
+			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
+
+			using JArrayObject<JClassObject> jArray = JArrayObject<JClassObject>.Create(env, 3);
+
+			proxyEnv.Received(1).NewObjectArray(jArray.Length, jClassClass.Reference, default);
+
+			Assert.Equal(jStackTraceObjectClass, jArray[0]);
+			proxyEnv.Received(1).GetObjectArrayElement(arrayRef, 0);
+			Assert.Null(jArray[1]);
+			proxyEnv.Received(1).GetObjectArrayElement(arrayRef, 1);
+			Assert.Null(jArray[2]);
+			proxyEnv.Received(1).GetObjectArrayElement(arrayRef, 2);
+
+			jArray[2] = env.ClassFeature.ThrowableObject;
+			proxyEnv.Received(1).SetObjectArrayElement(arrayRef, 2, jThrowableObjectClass.Reference.Value);
+		}
+		finally
+		{
+			nameCtx.Dispose();
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
 
 	private static void AssertStaticFail<TElementType, TArrayElementType>(IEnvironment env, TElementType value)
 		where TElementType : IDataType<TElementType> where TArrayElementType : IDataType<TArrayElementType>
