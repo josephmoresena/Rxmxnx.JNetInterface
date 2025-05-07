@@ -4,6 +4,7 @@ namespace Rxmxnx.JNetInterface;
 /// This class stores a loaded native JVM library.
 /// </summary>
 #if !PACKAGE
+[ExcludeFromCodeCoverage]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif

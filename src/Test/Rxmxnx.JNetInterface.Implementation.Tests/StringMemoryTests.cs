@@ -5,6 +5,59 @@ public sealed class StringMemoryTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
+	[Fact]
+	internal void CopyUtfCharsTest()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JStringLocalRef stringRef = StringMemoryTests.fixture.Create<JStringLocalRef>();
+		try
+		{
+			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			String value = StringMemoryTests.fixture.Create<String>();
+			Byte[] valueUtf = Encoding.UTF8.GetBytes(value);
+
+			using JStringObject jString = new(env.ClassFeature.StringObject, stringRef);
+
+			proxyEnv.GetStringLength(stringRef).Returns(value.Length);
+			proxyEnv.GetStringUtfLength(stringRef).Returns(valueUtf.Length);
+			proxyEnv.When(e => e.GetStringUtfRegion(stringRef, Arg.Any<Int32>(), Arg.Any<Int32>(),
+			                                        Arg.Any<ValPtr<Byte>>())).Do(c =>
+			{
+				Int32 offset = (Int32)c[1];
+				Int32 count = (Int32)c[2];
+				ValPtr<Byte> bytePtr = (ValPtr<Byte>)c[3];
+
+				valueUtf.AsSpan()[offset..(offset + count)].CopyTo(bytePtr.Pointer.GetUnsafeSpan<Byte>(count));
+			});
+
+			Span<Byte> values = stackalloc Byte[valueUtf.Length / 2];
+			jString.GetUtf8(values);
+
+			Assert.True(values.SequenceEqual(valueUtf.AsSpan()[..values.Length]));
+
+			values.Clear();
+			jString.GetUtf8(values, values.Length);
+
+			Assert.True(values.SequenceEqual(valueUtf.AsSpan()[values.Length..valueUtf.Length]));
+
+			proxyEnv.Received(0).GetStringLength(stringRef);
+			proxyEnv.Received(0).GetStringUtfLength(stringRef);
+			proxyEnv.Received(0).GetStringChars(stringRef, Arg.Any<ValPtr<JBoolean>>());
+			proxyEnv.Received(0).GetStringCritical(stringRef, Arg.Any<ValPtr<JBoolean>>());
+			proxyEnv.Received(0).GetStringRegion(stringRef, Arg.Any<Int32>(), Arg.Any<Int32>(),
+			                                     Arg.Any<ValPtr<Char>>());
+			proxyEnv.Received().GetStringUtfRegion(stringRef, Arg.Any<Int32>(), Arg.Any<Int32>(),
+			                                       Arg.Any<ValPtr<Byte>>());
+		}
+		finally
+		{
+			proxyEnv.Received(0).ReleaseStringUtfChars(stringRef, Arg.Any<ReadOnlyValPtr<Byte>>());
+
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
 	[Theory]
 	[InlineData(JMemoryReferenceKind.Local)]
 	[InlineData(JMemoryReferenceKind.ThreadIndependent)]

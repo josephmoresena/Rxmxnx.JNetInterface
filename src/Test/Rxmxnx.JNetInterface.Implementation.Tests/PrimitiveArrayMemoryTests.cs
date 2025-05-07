@@ -5,6 +5,21 @@ public sealed class PrimitiveArrayMemoryTests
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
+	[Fact]
+	internal void IndexOfByteTest() => PrimitiveArrayMemoryTests.IndexOfTest<JByte>();
+	[Fact]
+	internal void IndexOfCharTest() => PrimitiveArrayMemoryTests.IndexOfTest<JChar>();
+	[Fact]
+	internal void IndexOfDoubleTest() => PrimitiveArrayMemoryTests.IndexOfTest<JDouble>();
+	[Fact]
+	internal void IndexOfFloatTest() => PrimitiveArrayMemoryTests.IndexOfTest<JFloat>();
+	[Fact]
+	internal void IndexOfIntTest() => PrimitiveArrayMemoryTests.IndexOfTest<JInt>();
+	[Fact]
+	internal void IndexOfLongTest() => PrimitiveArrayMemoryTests.IndexOfTest<JLong>();
+	[Fact]
+	internal void IndexOfShortTest() => PrimitiveArrayMemoryTests.IndexOfTest<JShort>();
+
 	[Theory]
 	[InlineData(JMemoryReferenceKind.Local)]
 	[InlineData(JMemoryReferenceKind.ThreadIndependent)]
@@ -311,6 +326,48 @@ public sealed class PrimitiveArrayMemoryTests
 			        .DeleteWeakGlobalRef(weakRef);
 			proxyEnv.Received(referenceKind is JMemoryReferenceKind.ThreadUnrestricted ? 1 : 0)
 			        .DeleteGlobalRef(globalRef);
+
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
+	private static unsafe void IndexOfTest<TPrimitive>() where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		JArrayLocalRef arrayRef = PrimitiveArrayMemoryTests.fixture.Create<JArrayLocalRef>();
+
+		try
+		{
+			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<Byte>(sizeof(TPrimitive) * 10).ToArray()
+			                                              .AsSpan().AsValues<Byte, TPrimitive>().ToArray();
+
+			using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
+			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
+			using IFixedContext<TPrimitive>.IDisposable fMem = value.AsMemory().GetFixedContext();
+			ValPtr<Byte> valPtr = fMem.AsBinaryContext().ValuePointer;
+			Boolean isCopy = PrimitiveArrayMemoryTests.fixture.Create<Boolean>();
+
+			proxyEnv.GetArrayLength(arrayRef).Returns(value.Length);
+			proxyEnv.GetPrimitiveArrayCritical(arrayRef, Arg.Any<ValPtr<JBoolean>>()).Returns(c =>
+			{
+				ValPtr<JBoolean> isCopyPtr = (ValPtr<JBoolean>)c[1];
+				isCopyPtr.Reference = isCopy;
+				return valPtr;
+			});
+
+			IList<TPrimitive> list = jArray;
+			for (Int32 i = 0; i < value.Length; i++)
+				Assert.InRange(list.IndexOf(value[i]), 0, i);
+
+			proxyEnv.Received(1).GetArrayLength(arrayRef);
+			proxyEnv.Received().GetPrimitiveArrayCritical(arrayRef, Arg.Any<ValPtr<JBoolean>>());
+		}
+		finally
+		{
+			proxyEnv.Received()
+			        .ReleasePrimitiveArrayCritical(arrayRef, Arg.Any<ValPtr<Byte>>(), Arg.Any<JReleaseMode>());
 
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
