@@ -67,6 +67,10 @@ public partial class JVirtualMachineTests
 				proxyEnv.Received(1).FindClass((ReadOnlyValPtr<Byte>)ctx.Pointer);
 				proxyEnv.Received(1).RegisterNatives(classRef, Arg.Any<ReadOnlyValPtr<NativeMethodValueWrapper>>(), 1);
 				proxyEnv.ClearReceivedCalls();
+
+				GC.Collect();
+				GC.WaitForPendingFinalizers();
+
 				Assert.True(trackers.All(d => d.WeakReference.IsAlive ==
 					                         !(d.FinalizerFlag?.Value).GetValueOrDefault()));
 
