@@ -150,7 +150,7 @@ partial class JEnvironment
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 				this.CopyToPrimitive(jArray, primitiveMetadata.SizeOf, array, arrayIndex);
 			else
-				this.CopyToObject(jArray, array.AsSpan(), arrayIndex);
+				this.CopyToObject(jArray, array.AsSpan()[arrayIndex..]); // Offset for destination array
 		}
 		public INativeMemoryAdapter GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>

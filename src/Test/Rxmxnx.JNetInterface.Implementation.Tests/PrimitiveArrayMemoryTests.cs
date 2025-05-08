@@ -6,6 +6,8 @@ public sealed class PrimitiveArrayMemoryTests
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 
 	[Fact]
+	internal void GetSetBooleanTest() => PrimitiveArrayMemoryTests.GetSetTest<JBoolean>();
+	[Fact]
 	internal void GetSetByteTest() => PrimitiveArrayMemoryTests.GetSetTest<JByte>();
 	[Fact]
 	internal void GetSetCharTest() => PrimitiveArrayMemoryTests.GetSetTest<JChar>();
@@ -20,6 +22,8 @@ public sealed class PrimitiveArrayMemoryTests
 	[Fact]
 	internal void GetSetShortTest() => PrimitiveArrayMemoryTests.GetSetTest<JShort>();
 
+	[Fact]
+	internal void IndexOfBooleanTest() => PrimitiveArrayMemoryTests.IndexOfTest<JBoolean>();
 	[Fact]
 	internal void IndexOfByteTest() => PrimitiveArrayMemoryTests.IndexOfTest<JByte>();
 	[Fact]
@@ -274,7 +278,7 @@ public sealed class PrimitiveArrayMemoryTests
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
-			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<TPrimitive>().ToArray();
+			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreatePrimitiveArray<TPrimitive>(3);
 
 			using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
 			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
@@ -347,7 +351,7 @@ public sealed class PrimitiveArrayMemoryTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
-	private static unsafe void IndexOfTest<TPrimitive>() where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	private static void IndexOfTest<TPrimitive>() where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JArrayLocalRef arrayRef = PrimitiveArrayMemoryTests.fixture.Create<JArrayLocalRef>();
@@ -355,8 +359,7 @@ public sealed class PrimitiveArrayMemoryTests
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
-			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<Byte>(sizeof(TPrimitive) * 10).ToArray()
-			                                              .AsSpan().AsValues<Byte, TPrimitive>().ToArray();
+			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreatePrimitiveArray<TPrimitive>(10);
 
 			using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
 			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
@@ -375,6 +378,11 @@ public sealed class PrimitiveArrayMemoryTests
 			IList<TPrimitive> list = jArray;
 			for (Int32 i = 0; i < value.Length; i++)
 				Assert.InRange(list.IndexOf(value[i]), 0, i);
+
+			TPrimitive[] destination = new TPrimitive[jArray.Length * 2];
+			list.CopyTo(destination, 4);
+
+			Assert.Equal(value, destination[4..(4 + value.Length)]);
 
 			proxyEnv.Received(1).GetArrayLength(arrayRef);
 			proxyEnv.Received().GetPrimitiveArrayCritical(arrayRef, Arg.Any<ValPtr<JBoolean>>());
@@ -403,7 +411,7 @@ public sealed class PrimitiveArrayMemoryTests
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
-			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<TPrimitive>().ToArray();
+			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreatePrimitiveArray<TPrimitive>(3);
 
 			using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
 			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
@@ -470,7 +478,7 @@ public sealed class PrimitiveArrayMemoryTests
 			proxyEnv.FinalizeProxy(true);
 		}
 	}
-	private static unsafe void GetSetTest<TPrimitive>() where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	private static void GetSetTest<TPrimitive>() where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
 		JArrayLocalRef arrayRef = PrimitiveArrayMemoryTests.fixture.Create<JArrayLocalRef>();
@@ -479,10 +487,8 @@ public sealed class PrimitiveArrayMemoryTests
 		try
 		{
 			IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
-			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<Byte>(sizeof(TPrimitive) * 10).ToArray()
-			                                              .AsSpan().AsValues<Byte, TPrimitive>().ToArray();
-			TPrimitive[] newValue = PrimitiveArrayMemoryTests.fixture.CreateMany<Byte>(sizeof(TPrimitive) * 10)
-			                                                 .ToArray().AsSpan().AsValues<Byte, TPrimitive>().ToArray();
+			TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreatePrimitiveArray<TPrimitive>(10);
+			TPrimitive[] newValue = PrimitiveArrayMemoryTests.fixture.CreatePrimitiveArray<TPrimitive>(10);
 
 			using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);
 			using JArrayObject<TPrimitive> jArray = new(arrayClass, arrayRef);
@@ -504,6 +510,19 @@ public sealed class PrimitiveArrayMemoryTests
 				        .ReleasePrimitiveArrayCritical(arrayRef, Arg.Any<ValPtr<Byte>>(), Arg.Any<JReleaseMode>());
 			}
 			Assert.True(newValue.SequenceEqual(value));
+			proxyEnv.ClearReceivedCalls();
+
+			TPrimitive[] source = PrimitiveArrayMemoryTests.fixture.CreatePrimitiveArray<TPrimitive>(value.Length / 2);
+			TPrimitive[] destination = new TPrimitive[value.Length / 2];
+
+			jArray.Get(destination, 2);
+			PrimitiveArrayMemoryTests.AssertReceivedGetArrayRegion(proxyEnv, ref arrayRef, signature, 1,
+			                                                       destination.Length);
+			Assert.Equal(destination, value[2..(2 + destination.Length)]);
+
+			jArray.Set(source, 1);
+			PrimitiveArrayMemoryTests.AssertReceivedSetArrayRegion(proxyEnv, ref arrayRef, signature, 1, source.Length);
+			Assert.Equal(source, value[1..(1 + source.Length)]);
 		}
 		finally
 		{
@@ -516,132 +535,164 @@ public sealed class PrimitiveArrayMemoryTests
 	private static void ConfigureGetAndSet(NativeInterfaceProxy proxyEnv, JArrayLocalRef arrayRef, IntPtr valPtr)
 	{
 		proxyEnv.When(e => e.GetBooleanArrayRegion(JBooleanArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
-		                                           1, Arg.Any<ValPtr<JBoolean>>())).Do(c =>
+		                                           Arg.Any<Int32>(), Arg.Any<ValPtr<JBoolean>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ValPtr<JBoolean> ptr = (ValPtr<JBoolean>)c[3];
 			ReadOnlyValPtr<JBoolean> source = (ReadOnlyValPtr<JBoolean>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.GetByteArrayRegion(JByteArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                        Arg.Any<ValPtr<JByte>>())).Do(c =>
+		proxyEnv.When(e => e.GetByteArrayRegion(JByteArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                        Arg.Any<Int32>(), Arg.Any<ValPtr<JByte>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ValPtr<JByte> ptr = (ValPtr<JByte>)c[3];
 			ReadOnlyValPtr<JByte> source = (ReadOnlyValPtr<JByte>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.GetCharArrayRegion(JCharArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                        Arg.Any<ValPtr<JChar>>())).Do(c =>
+		proxyEnv.When(e => e.GetCharArrayRegion(JCharArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                        Arg.Any<Int32>(), Arg.Any<ValPtr<JChar>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ValPtr<JChar> ptr = (ValPtr<JChar>)c[3];
 			ReadOnlyValPtr<JChar> source = (ReadOnlyValPtr<JChar>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.GetDoubleArrayRegion(JDoubleArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                          Arg.Any<ValPtr<JDouble>>())).Do(c =>
+		proxyEnv.When(e => e.GetDoubleArrayRegion(JDoubleArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                          Arg.Any<Int32>(), Arg.Any<ValPtr<JDouble>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ValPtr<JDouble> ptr = (ValPtr<JDouble>)c[3];
 			ReadOnlyValPtr<JDouble> source = (ReadOnlyValPtr<JDouble>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.GetFloatArrayRegion(JFloatArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                         Arg.Any<ValPtr<JFloat>>())).Do(c =>
+		proxyEnv.When(e => e.GetFloatArrayRegion(JFloatArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                         Arg.Any<Int32>(), Arg.Any<ValPtr<JFloat>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ValPtr<JFloat> ptr = (ValPtr<JFloat>)c[3];
 			ReadOnlyValPtr<JFloat> source = (ReadOnlyValPtr<JFloat>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.GetIntArrayRegion(JIntArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                       Arg.Any<ValPtr<JInt>>())).Do(c =>
+		proxyEnv.When(e => e.GetIntArrayRegion(JIntArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                       Arg.Any<Int32>(), Arg.Any<ValPtr<JInt>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ValPtr<JInt> ptr = (ValPtr<JInt>)c[3];
 			ReadOnlyValPtr<JInt> source = (ReadOnlyValPtr<JInt>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.GetLongArrayRegion(JLongArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                        Arg.Any<ValPtr<JLong>>())).Do(c =>
+		proxyEnv.When(e => e.GetLongArrayRegion(JLongArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                        Arg.Any<Int32>(), Arg.Any<ValPtr<JLong>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ValPtr<JLong> ptr = (ValPtr<JLong>)c[3];
 			ReadOnlyValPtr<JLong> source = (ReadOnlyValPtr<JLong>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.GetShortArrayRegion(JShortArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                         Arg.Any<ValPtr<JShort>>())).Do(c =>
+		proxyEnv.When(e => e.GetShortArrayRegion(JShortArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                         Arg.Any<Int32>(), Arg.Any<ValPtr<JShort>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ValPtr<JShort> ptr = (ValPtr<JShort>)c[3];
 			ReadOnlyValPtr<JShort> source = (ReadOnlyValPtr<JShort>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
 		proxyEnv.When(e => e.SetBooleanArrayRegion(JBooleanArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
-		                                           1, Arg.Any<ReadOnlyValPtr<JBoolean>>())).Do(c =>
+		                                           Arg.Any<Int32>(), Arg.Any<ReadOnlyValPtr<JBoolean>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ReadOnlyValPtr<JBoolean> source = (ReadOnlyValPtr<JBoolean>)c[3];
 			ValPtr<JBoolean> ptr = (ValPtr<JBoolean>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.SetByteArrayRegion(JByteArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                        Arg.Any<ReadOnlyValPtr<JByte>>())).Do(c =>
+		proxyEnv.When(e => e.SetByteArrayRegion(JByteArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                        Arg.Any<Int32>(), Arg.Any<ReadOnlyValPtr<JByte>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ReadOnlyValPtr<JByte> source = (ReadOnlyValPtr<JByte>)c[3];
 			ValPtr<JByte> ptr = (ValPtr<JByte>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.SetCharArrayRegion(JCharArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                        Arg.Any<ReadOnlyValPtr<JChar>>())).Do(c =>
+		proxyEnv.When(e => e.SetCharArrayRegion(JCharArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                        Arg.Any<Int32>(), Arg.Any<ReadOnlyValPtr<JChar>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ReadOnlyValPtr<JChar> source = (ReadOnlyValPtr<JChar>)c[3];
 			ValPtr<JChar> ptr = (ValPtr<JChar>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.SetDoubleArrayRegion(JDoubleArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                          Arg.Any<ReadOnlyValPtr<JDouble>>())).Do(c =>
+		proxyEnv.When(e => e.SetDoubleArrayRegion(JDoubleArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                          Arg.Any<Int32>(), Arg.Any<ReadOnlyValPtr<JDouble>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ReadOnlyValPtr<JDouble> source = (ReadOnlyValPtr<JDouble>)c[3];
 			ValPtr<JDouble> ptr = (ValPtr<JDouble>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.SetFloatArrayRegion(JFloatArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                         Arg.Any<ReadOnlyValPtr<JFloat>>())).Do(c =>
+		proxyEnv.When(e => e.SetFloatArrayRegion(JFloatArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                         Arg.Any<Int32>(), Arg.Any<ReadOnlyValPtr<JFloat>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ReadOnlyValPtr<JFloat> source = (ReadOnlyValPtr<JFloat>)c[3];
 			ValPtr<JFloat> ptr = (ValPtr<JFloat>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.SetIntArrayRegion(JIntArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                       Arg.Any<ReadOnlyValPtr<JInt>>())).Do(c =>
+		proxyEnv.When(e => e.SetIntArrayRegion(JIntArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                       Arg.Any<Int32>(), Arg.Any<ReadOnlyValPtr<JInt>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ReadOnlyValPtr<JInt> source = (ReadOnlyValPtr<JInt>)c[3];
 			ValPtr<JInt> ptr = (ValPtr<JInt>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.SetLongArrayRegion(JLongArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                        Arg.Any<ReadOnlyValPtr<JLong>>())).Do(c =>
+		proxyEnv.When(e => e.SetLongArrayRegion(JLongArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                        Arg.Any<Int32>(), Arg.Any<ReadOnlyValPtr<JLong>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ReadOnlyValPtr<JLong> source = (ReadOnlyValPtr<JLong>)c[3];
 			ValPtr<JLong> ptr = (ValPtr<JLong>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
-		proxyEnv.When(e => e.SetShortArrayRegion(JShortArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                                         Arg.Any<ReadOnlyValPtr<JShort>>())).Do(c =>
+		proxyEnv.When(e => e.SetShortArrayRegion(JShortArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(),
+		                                         Arg.Any<Int32>(), Arg.Any<ReadOnlyValPtr<JShort>>())).Do(c =>
 		{
 			Int32 offset = (Int32)c[1];
 			ReadOnlyValPtr<JShort> source = (ReadOnlyValPtr<JShort>)c[3];
 			ValPtr<JShort> ptr = (ValPtr<JShort>)valPtr + offset;
-			ptr.Reference = source.Reference;
+			Int32 items = (Int32)c[2];
+			MemoryMarshal.CreateReadOnlySpan(in source.Reference, items)
+			             .CopyTo(MemoryMarshal.CreateSpan(ref ptr.Reference, items));
 		});
 	}
 	private static void ConfigureGetElements(NativeInterfaceProxy proxyEnv, ref JArrayLocalRef arrayRef, Boolean isCopy,
@@ -755,45 +806,46 @@ public sealed class PrimitiveArrayMemoryTests
 			arrayRef.Transform<JArrayLocalRef, JShortArrayLocalRef>(), Arg.Any<ReadOnlyValPtr<JShort>>(), releaseMode);
 	}
 	private static void AssertReceivedGetArrayRegion(NativeInterfaceProxy proxyEnv, ref JArrayLocalRef arrayRef,
-		Byte signature, Int32 count)
+		Byte signature, Int32 count, Int32 items = 1)
 	{
 		proxyEnv.Received(signature == CommonNames.BooleanSignatureChar ? count : 0).GetBooleanArrayRegion(
-			JBooleanArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ValPtr<JBoolean>>());
+			JBooleanArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ValPtr<JBoolean>>());
 		proxyEnv.Received(signature == CommonNames.ByteSignatureChar ? count : 0).GetByteArrayRegion(
-			JByteArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ValPtr<JByte>>());
+			JByteArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ValPtr<JByte>>());
 		proxyEnv.Received(signature == CommonNames.CharSignatureChar ? count : 0).GetCharArrayRegion(
-			JCharArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ValPtr<JChar>>());
+			JCharArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ValPtr<JChar>>());
 		proxyEnv.Received(signature == CommonNames.DoubleSignatureChar ? count : 0).GetDoubleArrayRegion(
-			JDoubleArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ValPtr<JDouble>>());
+			JDoubleArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ValPtr<JDouble>>());
 		proxyEnv.Received(signature == CommonNames.FloatSignatureChar ? count : 0).GetFloatArrayRegion(
-			JFloatArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ValPtr<JFloat>>());
-		proxyEnv.Received(signature == CommonNames.IntSignatureChar ? count : 0)
-		        .GetIntArrayRegion(JIntArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1,
-		                           Arg.Any<ValPtr<JInt>>());
+			JFloatArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ValPtr<JFloat>>());
+		proxyEnv.Received(signature == CommonNames.IntSignatureChar ? count : 0).GetIntArrayRegion(
+			JIntArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ValPtr<JInt>>());
 		proxyEnv.Received(signature == CommonNames.LongSignatureChar ? count : 0).GetLongArrayRegion(
-			JLongArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ValPtr<JLong>>());
+			JLongArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ValPtr<JLong>>());
 		proxyEnv.Received(signature == CommonNames.ShortSignatureChar ? count : 0).GetShortArrayRegion(
-			JShortArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ValPtr<JShort>>());
+			JShortArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ValPtr<JShort>>());
 	}
 	private static void AssertReceivedSetArrayRegion(NativeInterfaceProxy proxyEnv, ref JArrayLocalRef arrayRef,
-		Byte signature, Int32 count)
+		Byte signature, Int32 count, Int32 items = 1)
 	{
 		proxyEnv.Received(signature == CommonNames.BooleanSignatureChar ? count : 0).SetBooleanArrayRegion(
-			JBooleanArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ReadOnlyValPtr<JBoolean>>());
+			JBooleanArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items,
+			Arg.Any<ReadOnlyValPtr<JBoolean>>());
 		proxyEnv.Received(signature == CommonNames.ByteSignatureChar ? count : 0).SetByteArrayRegion(
-			JByteArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ReadOnlyValPtr<JByte>>());
+			JByteArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ReadOnlyValPtr<JByte>>());
 		proxyEnv.Received(signature == CommonNames.CharSignatureChar ? count : 0).SetCharArrayRegion(
-			JCharArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ReadOnlyValPtr<JChar>>());
+			JCharArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ReadOnlyValPtr<JChar>>());
 		proxyEnv.Received(signature == CommonNames.DoubleSignatureChar ? count : 0).SetDoubleArrayRegion(
-			JDoubleArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ReadOnlyValPtr<JDouble>>());
+			JDoubleArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items,
+			Arg.Any<ReadOnlyValPtr<JDouble>>());
 		proxyEnv.Received(signature == CommonNames.FloatSignatureChar ? count : 0).SetFloatArrayRegion(
-			JFloatArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ReadOnlyValPtr<JFloat>>());
+			JFloatArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ReadOnlyValPtr<JFloat>>());
 		proxyEnv.Received(signature == CommonNames.IntSignatureChar ? count : 0).SetIntArrayRegion(
-			JIntArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ReadOnlyValPtr<JInt>>());
+			JIntArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ReadOnlyValPtr<JInt>>());
 		proxyEnv.Received(signature == CommonNames.LongSignatureChar ? count : 0).SetLongArrayRegion(
-			JLongArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ReadOnlyValPtr<JLong>>());
+			JLongArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ReadOnlyValPtr<JLong>>());
 		proxyEnv.Received(signature == CommonNames.ShortSignatureChar ? count : 0).SetShortArrayRegion(
-			JShortArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), 1, Arg.Any<ReadOnlyValPtr<JShort>>());
+			JShortArrayLocalRef.FromReference(in arrayRef), Arg.Any<Int32>(), items, Arg.Any<ReadOnlyValPtr<JShort>>());
 	}
 
 #pragma warning disable CA1859
@@ -801,7 +853,7 @@ public sealed class PrimitiveArrayMemoryTests
 		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 	{
 		IEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
-		TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreateMany<TPrimitive>().ToArray();
+		TPrimitive[] value = PrimitiveArrayMemoryTests.fixture.CreatePrimitiveArray<TPrimitive>(3);
 		JArrayLocalRef arrayRef = PrimitiveArrayMemoryTests.fixture.Create<JArrayLocalRef>();
 
 		using JClassObject arrayClass = JClassObject.GetClass<JArrayObject<TPrimitive>>(env);

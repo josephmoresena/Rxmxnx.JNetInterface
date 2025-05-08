@@ -125,6 +125,19 @@ public sealed class ArrayCreationTests
 
 			jArray[2] = env.ClassFeature.ThrowableObject;
 			proxyEnv.Received(1).SetObjectArrayElement(arrayRef, 2, jThrowableObjectClass.Reference.Value);
+
+			proxyEnv.ClearReceivedCalls();
+
+			JClassObject[] arr = new JClassObject[jArray.Length * 2];
+			(jArray as IList<JClassObject>).CopyTo(arr, 1);
+			for (Int32 i = 0; i < jArray.Length; i++)
+			{
+				proxyEnv.Received(1).GetObjectArrayElement(arrayRef, i);
+				if (i == 0)
+					Assert.Equal(jStackTraceObjectClass, arr[1 + i]);
+				else
+					Assert.Null(arr[1 + i]);
+			}
 		}
 		finally
 		{

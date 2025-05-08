@@ -103,7 +103,7 @@ public sealed class PrimitiveArrayTests
 		Int32 length = Random.Shared.Next(0, 11);
 		Int32 startIndex = Random.Shared.Next(0, length);
 		TPrimitive[] valuesToSet =
-			PrimitiveArrayTests.CreatePrimitiveArray<TPrimitive>(Random.Shared.Next(0, length - startIndex));
+			PrimitiveArrayTests.fixture.CreatePrimitiveArray<TPrimitive>(Random.Shared.Next(0, length - startIndex));
 
 		using JClassObject jClassClass = new(env);
 		using JClassObject jArrayClass = new(jClassClass, IArrayType.GetMetadata<JArrayObject<TPrimitive>>());
@@ -117,9 +117,9 @@ public sealed class PrimitiveArrayTests
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		JArrayLocalRef arrayRef = PrimitiveArrayTests.fixture.Create<JArrayLocalRef>();
 		Int32 length = Random.Shared.Next(0, 11);
-		TPrimitive[] value0 = PrimitiveArrayTests.CreatePrimitiveArray<TPrimitive>(length);
-		TPrimitive[] value1 = PrimitiveArrayTests.CreatePrimitiveArray<TPrimitive>(length);
-		TPrimitive[] value2 = PrimitiveArrayTests.CreatePrimitiveArray<TPrimitive>(length);
+		TPrimitive[] value0 = PrimitiveArrayTests.fixture.CreatePrimitiveArray<TPrimitive>(length);
+		TPrimitive[] value1 = PrimitiveArrayTests.fixture.CreatePrimitiveArray<TPrimitive>(length);
+		TPrimitive[] value2 = PrimitiveArrayTests.fixture.CreatePrimitiveArray<TPrimitive>(length);
 
 		using JClassObject jClassClass = new(env);
 		using JClassObject jArrayClass = new(jClassClass, IArrayType.GetMetadata<JArrayObject<TPrimitive>>());
@@ -273,48 +273,6 @@ public sealed class PrimitiveArrayTests
 		sequenceMemory.Received(1).Release();
 
 		Assert.Equal(value0, value1);
-	}
-	public static TPrimitive[] CreatePrimitiveArray<TPrimitive>(Int32 length)
-		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
-	{
-		TPrimitive[] result = new TPrimitive[length];
-		JPrimitiveTypeMetadata primitiveTypeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
-		switch (primitiveTypeMetadata.Signature[0])
-		{
-			case CommonNames.BooleanSignatureChar:
-				PrimitiveArrayTests.fixture.CreateMany<Boolean>(length).ToArray().AsSpan().AsBytes()
-				                   .CopyTo(result.AsSpan().AsBytes());
-				break;
-			case CommonNames.ByteSignatureChar:
-				PrimitiveArrayTests.fixture.CreateMany<SByte>(length).ToArray().AsSpan().AsBytes()
-				                   .CopyTo(result.AsSpan().AsBytes());
-				break;
-			case CommonNames.CharSignatureChar:
-				PrimitiveArrayTests.fixture.CreateMany<Char>(length).ToArray().AsSpan().AsBytes()
-				                   .CopyTo(result.AsSpan().AsBytes());
-				break;
-			case CommonNames.DoubleSignatureChar:
-				PrimitiveArrayTests.fixture.CreateMany<Double>(length).ToArray().AsSpan().AsBytes()
-				                   .CopyTo(result.AsSpan().AsBytes());
-				break;
-			case CommonNames.FloatSignatureChar:
-				PrimitiveArrayTests.fixture.CreateMany<Single>(length).ToArray().AsSpan().AsBytes()
-				                   .CopyTo(result.AsSpan().AsBytes());
-				break;
-			case CommonNames.IntSignatureChar:
-				PrimitiveArrayTests.fixture.CreateMany<Int32>(length).ToArray().AsSpan().AsBytes()
-				                   .CopyTo(result.AsSpan().AsBytes());
-				break;
-			case CommonNames.LongSignatureChar:
-				PrimitiveArrayTests.fixture.CreateMany<Int64>(length).ToArray().AsSpan().AsBytes()
-				                   .CopyTo(result.AsSpan().AsBytes());
-				break;
-			case CommonNames.ShortSignatureChar:
-				PrimitiveArrayTests.fixture.CreateMany<Int16>(length).ToArray().AsSpan().AsBytes()
-				                   .CopyTo(result.AsSpan().AsBytes());
-				break;
-		}
-		return result;
 	}
 }
 #pragma warning restore CA1859
