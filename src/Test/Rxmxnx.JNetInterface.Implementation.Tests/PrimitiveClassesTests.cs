@@ -140,8 +140,8 @@ public sealed partial class PrimitiveClassesTests
 			        return constructorIds.GetValueOrDefault(classRef) == methodId ? newRefs[classRef] : default;
 		        });
 
-		Assert.Throws<InvalidOperationException>(
-			() => new JConstructorDefinition.Parameterless().New<JVoidObject>(env));
+		Assert.Throws<InvalidOperationException>(() => new JConstructorDefinition.Parameterless()
+			                                         .New<JVoidObject>(env));
 		using JBooleanObject booleanObject = JBooleanObject.Create(env, booleanValue);
 		using JByteObject byteObject = JNumberObject<JByte, JByteObject>.Create(env, byteValue);
 		using JCharacterObject characterObject = JCharacterObject.Create(env, charValue);

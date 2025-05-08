@@ -177,13 +177,13 @@ public sealed class JFunctionDefinitionTests
 		Assert.Null(functionDefinition.Invoke(jMethod));
 		env.AccessFeature.Received(1).CallFunction<TDataType>((JLocalObject)jMethod, jMethod.Class, functionDefinition,
 		                                                      false,
-		                                                      Arg.Is<IObject?[]>(
-			                                                      a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                      Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                      .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.Invoke(jMethod, jClass));
 		env.AccessFeature.Received(1).CallFunction<TDataType>((JLocalObject)jMethod, jClass, functionDefinition, false,
-		                                                      Arg.Is<IObject?[]>(
-			                                                      a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                      Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                      .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.Invoke(jMethod, parameters));
 		env.AccessFeature.Received(1).CallFunction<TDataType>((JLocalObject)jMethod, jMethod.Class, functionDefinition,
@@ -196,8 +196,8 @@ public sealed class JFunctionDefinitionTests
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeNonVirtual(jMethod, jClass));
 		env.AccessFeature.Received(1).CallFunction<TDataType>((JLocalObject)jMethod, jClass, functionDefinition, true,
-		                                                      Arg.Is<IObject?[]>(
-			                                                      a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                      Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                      .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeNonVirtual(jMethod, jClass, parameters));
 		env.AccessFeature.Received(1).CallFunction<TDataType>((JLocalObject)jMethod, jClass, functionDefinition, true,
@@ -205,8 +205,8 @@ public sealed class JFunctionDefinitionTests
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.StaticInvoke(jMethodClass));
 		env.AccessFeature.Received(1).CallStaticFunction<TDataType>(jMethodClass, functionDefinition,
-		                                                            Arg.Is<IObject?[]>(
-			                                                            a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                            Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                            .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.StaticInvoke(jClass, parameters));
 		env.AccessFeature.Received(1)
@@ -215,8 +215,8 @@ public sealed class JFunctionDefinitionTests
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeReflected(jMethod, jClass));
 		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, (JLocalObject)jClass, functionDefinition, false,
-		                                                      Arg.Is<IObject?[]>(
-			                                                      a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                      Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                      .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeReflected(jMethod, jMethod, parameters));
 		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, jMethod, functionDefinition, false,
@@ -225,8 +225,8 @@ public sealed class JFunctionDefinitionTests
 		Assert.Null(functionDefinition.InvokeNonVirtualReflected(jMethod, jMethodClass));
 		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, (JLocalObject)jMethodClass, functionDefinition,
 		                                                      true,
-		                                                      Arg.Is<IObject?[]>(
-			                                                      a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                      Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                      .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeNonVirtualReflected(jMethod, jMethod, parameters));
 		env.AccessFeature.Received(1).CallFunction<TDataType>(jMethod, jMethod, functionDefinition, true,
@@ -234,8 +234,8 @@ public sealed class JFunctionDefinitionTests
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeStaticReflected(jMethod));
 		env.AccessFeature.Received(1).CallStaticFunction<TDataType>(jMethod, functionDefinition,
-		                                                            Arg.Is<IObject?[]>(
-			                                                            a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                            Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                            .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeStaticReflected(jMethod, parameters));
 		env.AccessFeature.Received(1)
@@ -277,14 +277,14 @@ public sealed class JFunctionDefinitionTests
 		Assert.Null(functionDefinition.Invoke(jMethod));
 		env.AccessFeature.Received(1).CallFunction<JLocalObject>((JLocalObject)jMethod, jMethod.Class,
 		                                                         functionDefinition, false,
-		                                                         Arg.Is<IObject?[]>(
-			                                                         a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                         Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                         .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.Invoke(jMethod, jClass));
 		env.AccessFeature.Received(1).CallFunction<JLocalObject>((JLocalObject)jMethod, jClass, functionDefinition,
 		                                                         false,
-		                                                         Arg.Is<IObject?[]>(
-			                                                         a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                         Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                         .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.Invoke(jMethod, parameters));
 		env.AccessFeature.Received(1).CallFunction<JLocalObject>((JLocalObject)jMethod, jMethod.Class,
@@ -299,8 +299,8 @@ public sealed class JFunctionDefinitionTests
 		Assert.Null(functionDefinition.InvokeNonVirtual(jMethod, jClass));
 		env.AccessFeature.Received(1).CallFunction<JLocalObject>((JLocalObject)jMethod, jClass, functionDefinition,
 		                                                         true,
-		                                                         Arg.Is<IObject?[]>(
-			                                                         a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                         Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                         .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeNonVirtual(jMethod, jClass, parameters));
 		env.AccessFeature.Received(1).CallFunction<JLocalObject>((JLocalObject)jMethod, jClass, functionDefinition,
@@ -309,9 +309,8 @@ public sealed class JFunctionDefinitionTests
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.StaticInvoke(jMethodClass));
 		env.AccessFeature.Received(1).CallStaticFunction<JLocalObject>(jMethodClass, functionDefinition,
-		                                                               Arg.Is<IObject?[]>(
-			                                                               a => JFunctionDefinitionTests
-				                                                               .IsEmptyArgs(a)));
+		                                                               Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                               .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.StaticInvoke(jClass, parameters));
 		env.AccessFeature.Received(1)
@@ -321,8 +320,8 @@ public sealed class JFunctionDefinitionTests
 		Assert.Null(functionDefinition.InvokeReflected(jMethod, jClass));
 		env.AccessFeature.Received(1).CallFunction<JLocalObject>(jMethod, (JLocalObject)jClass, functionDefinition,
 		                                                         false,
-		                                                         Arg.Is<IObject?[]>(
-			                                                         a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                         Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                         .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeReflected(jMethod, jMethod, parameters));
 		env.AccessFeature.Received(1).CallFunction<JLocalObject>(jMethod, jMethod, functionDefinition, false,
@@ -331,8 +330,8 @@ public sealed class JFunctionDefinitionTests
 		Assert.Null(functionDefinition.InvokeNonVirtualReflected(jMethod, jMethodClass));
 		env.AccessFeature.Received(1).CallFunction<JLocalObject>(jMethod, (JLocalObject)jMethodClass,
 		                                                         functionDefinition, true,
-		                                                         Arg.Is<IObject?[]>(
-			                                                         a => JFunctionDefinitionTests.IsEmptyArgs(a)));
+		                                                         Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                         .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeNonVirtualReflected(jMethod, jMethod, parameters));
 		env.AccessFeature.Received(1).CallFunction<JLocalObject>(jMethod, jMethod, functionDefinition, true,
@@ -340,9 +339,8 @@ public sealed class JFunctionDefinitionTests
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeStaticReflected(jMethod));
 		env.AccessFeature.Received(1).CallStaticFunction<JLocalObject>(jMethod, functionDefinition,
-		                                                               Arg.Is<IObject?[]>(
-			                                                               a => JFunctionDefinitionTests
-				                                                               .IsEmptyArgs(a)));
+		                                                               Arg.Is<IObject?[]>(a => JFunctionDefinitionTests
+			                                                               .IsEmptyArgs(a)));
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Null(functionDefinition.InvokeStaticReflected(jMethod, parameters));
 		env.AccessFeature.Received(1)

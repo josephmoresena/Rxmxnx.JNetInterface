@@ -144,10 +144,13 @@ public partial class JVirtualMachineTests
 			{
 				JClassLocalRef classRef = (JClassLocalRef)c[0];
 				JFieldId fieldId = (JFieldId)c[1];
-				MainClass mClass = mainClassRef.Keys.First(
-					mClass => JVirtualMachineTests.mainWrapper.TryGetValue(mClass, out MainClass wClass) &&
-						(mainClassRef[wClass] == classRef || mainGlobalRef[wClass].Value == classRef.Value) &&
-						mainTypeField[wClass] == fieldId);
+				MainClass mClass =
+					mainClassRef.Keys.First(mClass
+						                        => JVirtualMachineTests.mainWrapper.TryGetValue(
+							                        mClass, out MainClass wClass) &&
+						                        (mainClassRef[wClass] == classRef ||
+							                        mainGlobalRef[wClass].Value == classRef.Value) &&
+						                        mainTypeField[wClass] == fieldId);
 				if (error != ClassLoadingError.FindClass || mClass != mainClass)
 					return mainClassRef[mClass].Value;
 				return default;

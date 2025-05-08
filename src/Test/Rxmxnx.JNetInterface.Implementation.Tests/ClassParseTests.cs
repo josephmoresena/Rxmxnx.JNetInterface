@@ -131,8 +131,8 @@ public sealed class ClassParseTests
 			        .Returns((ReadOnlyValPtr<Byte>)nameCtx.Pointer);
 
 			if (sameRef)
-				Assert.Throws<InvalidOperationException>(
-					() => new JConstructorDefinition.Parameterless().New<JVoidObject>(env));
+				Assert.Throws<InvalidOperationException>(() => new JConstructorDefinition.Parameterless()
+					                                         .New<JVoidObject>(env));
 
 			using JClassObject voidClass = classFeature.VoidObject;
 			using JLocalObject localObject = IClassType.GetMetadata<JLocalObject>()

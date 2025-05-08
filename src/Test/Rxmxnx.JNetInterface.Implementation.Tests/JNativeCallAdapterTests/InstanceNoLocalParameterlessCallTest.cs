@@ -33,8 +33,10 @@ public partial class JNativeCallAdapterTests
 
 			if (throwsException)
 			{
-				Exception ex = Assert.Throws<ArgumentException>(
-					() => JNativeCallAdapter.Create(proxyEnv.Reference, localRef, out _).Build().FinalizeCall());
+				Exception ex =
+					Assert.Throws<ArgumentException>(() => JNativeCallAdapter
+					                                       .Create(proxyEnv.Reference, localRef, out _).Build()
+					                                       .FinalizeCall());
 				Assert.Equal(IMessageResource.GetInstance().OnlyLocalReferencesAllowed, ex.Message);
 			}
 			else

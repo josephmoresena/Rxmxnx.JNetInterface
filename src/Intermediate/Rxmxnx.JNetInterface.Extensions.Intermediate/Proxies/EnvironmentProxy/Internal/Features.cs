@@ -13,7 +13,7 @@ public abstract partial class EnvironmentProxy : NativeFunctionSet, IEnvironment
 	IArrayFeature IEnvironment.ArrayFeature => this;
 	INioFeature IEnvironment.NioFeature => this;
 	NativeFunctionSet IEnvironment.FunctionSet => this;
-	
+
 	void IEnvironment.WithFrame(Int32 capacity, Action action)
 	{
 		Int32? oldCapacity = capacity;

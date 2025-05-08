@@ -224,8 +224,8 @@ public partial class ExceptionHandlingTests
 		String message)
 	{
 		JniException jniException =
-			Assert.ThrowsAny<JniException>(
-				() => JClassObject.GetClass(env, "rxmxnx/jnetinterface/test/NoExistingClass"u8));
+			Assert.ThrowsAny<JniException>(() => JClassObject.GetClass(
+				                               env, "rxmxnx/jnetinterface/test/NoExistingClass"u8));
 
 		if (error.HasFlag(ExceptionOccurredError.NewGlobalRef))
 		{

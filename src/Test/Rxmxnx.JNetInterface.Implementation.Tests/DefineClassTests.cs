@@ -92,16 +92,19 @@ public sealed class DefineClassTests
 				message.AsSpan()[start..count].CopyTo(span);
 			});
 
-			proxyEnv.DefineClass(Arg.Any<ReadOnlyValPtr<Byte>>(), default, handle.ToIntPtr(), binary.Length).Returns(
-				_ =>
-				{
-					// Initial Error.
-					exceptionOccurred.Value = throwableRef;
-					return default;
-				});
+			proxyEnv.DefineClass(Arg.Any<ReadOnlyValPtr<Byte>>(), default, handle.ToIntPtr(), binary.Length)
+			        .Returns(_ =>
+			        {
+				        // Initial Error.
+				        exceptionOccurred.Value = throwableRef;
+				        return default;
+			        });
 
-			ThrowableException ex = Assert.Throws<ThrowableException<JClassFormatErrorObject>>(
-				() => JClassObject.LoadClass(env, throwableMetadata.ClassName.AsSpan(), binary.Span));
+			ThrowableException ex =
+				Assert.Throws<ThrowableException<JClassFormatErrorObject>>(() => JClassObject.LoadClass(
+					                                                           env,
+					                                                           throwableMetadata.ClassName.AsSpan(),
+					                                                           binary.Span));
 
 			Assert.Equal(message, ex.Message);
 			Assert.Equal(globalRef, ex.GlobalThrowable.As<JGlobalRef>());
