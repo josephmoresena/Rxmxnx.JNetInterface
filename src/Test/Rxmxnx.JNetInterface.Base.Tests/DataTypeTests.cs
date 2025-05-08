@@ -47,7 +47,8 @@ public sealed class DataTypeTests
 	internal void VoidMetadataTest()
 	{
 		JPrimitiveTypeMetadata voidMetadata = JPrimitiveTypeMetadata.VoidMetadata;
-		CStringSequence wrapperInformation = JDataTypeMetadata.CreateInformationSequence(voidMetadata.WrapperClassName);
+		CStringSequence wrapperInformation =
+			CStringSequence.Parse(new TypeInfoSequence(voidMetadata.WrapperClassName).Hash);
 		Assert.Equal(typeof(void), voidMetadata.Type);
 		Assert.Equal(typeof(void), voidMetadata.UnderlineType);
 		Assert.Equal(default, voidMetadata.NativeType);
