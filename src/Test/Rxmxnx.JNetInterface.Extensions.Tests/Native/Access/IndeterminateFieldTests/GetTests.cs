@@ -1,6 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests.Native.Access.IndeterminateFieldTests;
 
 [ExcludeFromCodeCoverage]
+[SuppressMessage("csharpsquid", "S2699")]
 public sealed class GetTests : IndeterminateAccessTestsBase
 {
 	private static readonly MethodInfo objectTestInfo =

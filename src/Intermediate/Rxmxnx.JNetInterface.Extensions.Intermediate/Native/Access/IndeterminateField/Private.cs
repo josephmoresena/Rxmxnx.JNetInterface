@@ -156,7 +156,7 @@ public partial class IndeterminateField
 			InfoObjectResult infoResult = env.WithFrame(IVirtualMachine.GetObjectClassCapacity, infoQuery,
 			                                            IndeterminateField.GetWrapperInfo);
 			if (infoResult.IsBoolean)
-				result = IndeterminateField.GetFieldValue<JByteObject>(env, jObject, valueSignature);
+				result = IndeterminateField.GetFieldValue<JBooleanObject>(env, jObject, valueSignature);
 			else if (infoResult.IsNumber)
 				result = IndeterminateField.GetFieldValue<JNumberObject>(env, jObject, valueSignature);
 			else if (infoResult.IsCharacter)
@@ -165,19 +165,6 @@ public partial class IndeterminateField
 				CommonValidationUtilities.ThrowInvalidCastToPrimitive(fieldTypeSignaturePrefix);
 		}
 		return result;
-	}
-	/// <summary>
-	/// Retrieves the wrapper information from <paramref name="query"/>.
-	/// </summary>
-	/// <param name="query">A <see cref="InfoObjectQuery"/> value.</param>
-	/// <returns>A <see cref="InfoObjectResult"/> instance.</returns>
-	private static InfoObjectResult GetWrapperInfo(InfoObjectQuery query)
-	{
-		Boolean isBoolean = query.PrimitiveSignature is CommonNames.BooleanSignatureChar &&
-			query.Object.InstanceOf<JBooleanObject>();
-		Boolean isNumber = !isBoolean && query.Object.InstanceOf<JNumberObject>();
-		Boolean isCharacter = !isBoolean && !isNumber && query.Object.InstanceOf<JCharacterObject>();
-		return new() { IsBoolean = isBoolean, IsCharacter = isCharacter, IsNumber = isNumber, };
 	}
 	/// <summary>
 	/// Creates a <see cref="IndeterminateResult"/> from <paramref name="jObject"/> instance.
@@ -198,6 +185,19 @@ public partial class IndeterminateField
 			JGlobalBase jGlobal => new(jGlobal.AsLocal<TObject>(env), valueSignature),
 			_ => new(((ILocalObject)jObject).CastTo<TObject>(), valueSignature),
 		};
+	/// <summary>
+	/// Retrieves the wrapper information from <paramref name="query"/>.
+	/// </summary>
+	/// <param name="query">A <see cref="InfoObjectQuery"/> value.</param>
+	/// <returns>A <see cref="InfoObjectResult"/> instance.</returns>
+	private static InfoObjectResult GetWrapperInfo(InfoObjectQuery query)
+	{
+		Boolean isBoolean = query.PrimitiveSignature is CommonNames.BooleanSignatureChar &&
+			query.Object.InstanceOf<JBooleanObject>();
+		Boolean isNumber = !isBoolean && query.Object.InstanceOf<JNumberObject>();
+		Boolean isCharacter = !isBoolean && !isNumber && query.Object.InstanceOf<JCharacterObject>();
+		return new() { IsBoolean = isBoolean, IsCharacter = isCharacter, IsNumber = isNumber, };
+	}
 	/// <summary>
 	/// Retrieves a <see cref="JLocalObject"/> from <paramref name="value"/>.
 	/// </summary>

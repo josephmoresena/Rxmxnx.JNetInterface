@@ -3,6 +3,10 @@
 /// <summary>
 /// <c>jvalue</c> union. This structure can represent any reference type as any primitive type.
 /// </summary>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 [StructLayout(LayoutKind.Explicit)]
 internal readonly unsafe partial struct JValue : INativeType
 {

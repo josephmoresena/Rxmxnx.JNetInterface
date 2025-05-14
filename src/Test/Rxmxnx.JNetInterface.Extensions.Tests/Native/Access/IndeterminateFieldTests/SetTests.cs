@@ -1,6 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests.Native.Access.IndeterminateFieldTests;
 
 [ExcludeFromCodeCoverage]
+[SuppressMessage("csharpsquid", "S2699")]
 public sealed class SetTests : IndeterminateAccessTestsBase
 {
 	private static readonly MethodInfo objectTestInfo =
@@ -74,7 +75,7 @@ public sealed class SetTests : IndeterminateAccessTestsBase
 	internal void StackTraceElementTest() => SetTests.Test<JStackTraceElementObject>();
 
 	[Fact]
-	internal void BooleanObjectTest() => SetTests.Test<JBoolean>();
+	internal void BooleanObjectTest() => SetTests.Test<JBooleanObject>();
 	[Fact]
 	internal void ByteObjectTest() => SetTests.Test<JByteObject>();
 	[Fact]

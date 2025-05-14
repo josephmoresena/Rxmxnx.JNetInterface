@@ -51,7 +51,7 @@ public partial class IndeterminateField
 	/// <param name="jClass">Target class.</param>
 	/// <param name="value">New field value.</param>
 	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
-	public unsafe void StaticSet<TValue>(JClassObject jClass, TValue? value) where TValue : IObject
+	public void StaticSet<TValue>(JClassObject jClass, TValue? value) where TValue : IObject
 	{
 		IEnvironment env = jClass.Environment;
 		ReadOnlySpan<Byte> signature = this.FieldType;
