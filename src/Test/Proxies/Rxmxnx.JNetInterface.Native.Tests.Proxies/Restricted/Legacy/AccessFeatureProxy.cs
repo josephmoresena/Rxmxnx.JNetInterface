@@ -62,7 +62,7 @@ public partial class AccessFeatureProxy
 		=> args.feature.GetPrimitiveStaticField(mem, args.jClass, args.definition);
 	private static void SetPrimitiveField(in IReadOnlyFixedMemory mem,
 		(AccessFeatureProxy feature, JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition) args)
-		=> args.feature.SetPrimitiveField(args.jClass, args.definition, mem);
+		=> args.feature.SetPrimitiveField(args.jLocal, args.jClass, args.definition, mem);
 	private static void SetPrimitiveStaticField(in IReadOnlyFixedMemory mem,
 		(AccessFeatureProxy feature, JClassObject jClass, JFieldDefinition definition) args)
 		=> args.feature.SetPrimitiveStaticField(args.jClass, args.definition, mem);

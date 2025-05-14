@@ -13,7 +13,7 @@ public readonly ref struct IndeterminateResult
 	/// <summary>
 	/// Internal value to hold primitive value.
 	/// </summary>
-	private readonly Int64 _primitive;
+	private readonly JValue.PrimitiveValue _primitive;
 
 	/// <summary>
 	/// Signature of function result data type.
@@ -26,7 +26,7 @@ public readonly ref struct IndeterminateResult
 	{
 		get
 		{
-			if (this._primitive != default)
+			if (!this._primitive.IsDefault)
 				return true;
 			return this.Object switch
 			{
@@ -134,11 +134,48 @@ public readonly ref struct IndeterminateResult
 	/// </summary>
 	/// <param name="primitive">Primitive value as <see cref="Int64"/>.</param>
 	/// <param name="signature">Definition signature.</param>
-	internal IndeterminateResult(Int64 primitive, ReadOnlySpan<Byte> signature)
+	internal IndeterminateResult(JValue.PrimitiveValue primitive, ReadOnlySpan<Byte> signature)
 	{
 		this._primitive = primitive;
 		this.Object = default;
 		this.Signature = signature;
+	}
+
+	/// <summary>
+	/// Copies the sequence of bytes of <paramref name="primitiveSignature"/> from current instance to <paramref name="bytes"/>
+	/// .
+	/// </summary>
+	/// <param name="primitiveSignature">Required primitive type JNI signature.</param>
+	/// <param name="bytes">Destination buffer.</param>
+	public void CopyPrimitiveValue(Byte primitiveSignature, Span<Byte> bytes)
+	{
+		switch (primitiveSignature)
+		{
+			case CommonNames.BooleanSignatureChar:
+				IndeterminateResult.CopyPrimitiveValue(this.BooleanValue, bytes);
+				break;
+			case CommonNames.ByteSignatureChar:
+				IndeterminateResult.CopyPrimitiveValue(this.ByteValue, bytes);
+				break;
+			case CommonNames.CharSignatureChar:
+				IndeterminateResult.CopyPrimitiveValue(this.CharValue, bytes);
+				break;
+			case CommonNames.DoubleSignatureChar:
+				IndeterminateResult.CopyPrimitiveValue(this.DoubleValue, bytes);
+				break;
+			case CommonNames.FloatSignatureChar:
+				IndeterminateResult.CopyPrimitiveValue(this.FloatValue, bytes);
+				break;
+			case CommonNames.IntSignatureChar:
+				IndeterminateResult.CopyPrimitiveValue(this.IntValue, bytes);
+				break;
+			case CommonNames.LongSignatureChar:
+				IndeterminateResult.CopyPrimitiveValue(this.LongValue, bytes);
+				break;
+			case CommonNames.ShortSignatureChar:
+				IndeterminateResult.CopyPrimitiveValue(this.ShortValue, bytes);
+				break;
+		}
 	}
 
 	/// <summary>
@@ -171,8 +208,8 @@ public readonly ref struct IndeterminateResult
 			case CommonNames.ShortSignatureChar when signature != CommonNames.ShortSignatureChar:
 				return this.GetNumericPrimitive<JShort, TPrimitive>();
 			default:
-				ref Int64 longRef = ref Unsafe.AsRef(in this._primitive);
-				return Unsafe.As<Int64, TPrimitive>(ref longRef);
+				ref JValue.PrimitiveValue valueRef = ref Unsafe.AsRef(in this._primitive);
+				return Unsafe.As<JValue.PrimitiveValue, TPrimitive>(ref valueRef);
 		}
 	}
 	/// <summary>
@@ -187,9 +224,18 @@ public readonly ref struct IndeterminateResult
 		where TPrimitive : unmanaged, IPrimitiveNumericType<TPrimitive>, IPrimitiveType<TPrimitive>,
 		IBinaryNumber<TPrimitive>, ISignedNumber<TPrimitive>
 	{
-		ref Int64 longRef = ref Unsafe.AsRef(in this._primitive);
-		ref TSource result = ref Unsafe.As<Int64, TSource>(ref longRef);
+		ref JValue.PrimitiveValue valueRef = ref Unsafe.AsRef(in this._primitive);
+		ref TSource result = ref Unsafe.As<JValue.PrimitiveValue, TSource>(ref valueRef);
 		Double doubleValue = TSource.ToDouble(result);
 		return TPrimitive.FromDouble(doubleValue);
 	}
+	/// <summary>
+	/// Copies the sequence of bytes of <paramref name="value"/> to <paramref name="bytes"/>.
+	/// </summary>
+	/// <typeparam name="TPrimitive">A <see cref="IPrimitiveType{TPrimitive}"/> instance.</typeparam>
+	/// <param name="value">A <typeparamref name="TPrimitive"/> value.</param>
+	/// <param name="bytes">Destination binary span.</param>
+	private static void CopyPrimitiveValue<TPrimitive>(TPrimitive value, Span<Byte> bytes)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+		=> value.CopyTo(bytes);
 }

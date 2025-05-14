@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests.Native.Access.IndeterminateCallTests;
 
 [ExcludeFromCodeCoverage]
-public sealed class ConstructorTests : IndeterminateCallTestsBase
+public sealed class ConstructorTests : IndeterminateAccessTestsBase
 {
 	private static readonly IFixture fixture = new Fixture().RegisterReferences();
 	private static readonly JArgumentMetadata[] args =
@@ -39,10 +39,11 @@ public sealed class ConstructorTests : IndeterminateCallTestsBase
 		EnvironmentProxy env = EnvironmentProxy.CreateEnvironment();
 		using JClassObject jClass = new(env);
 
-		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, []));
-		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, true, []));
-		IndeterminateCallTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, false, []));
-		IndeterminateCallTestsBase.Compare(new(0, jClass.ClassSignature), call.StaticFunctionCall(jClass, []));
+		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, []));
+		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, true, []));
+		IndeterminateAccessTestsBase.EmptyCompare(call.FunctionCall(jClass, jClass, false, []));
+		IndeterminateAccessTestsBase.Compare(new(new JValue.PrimitiveValue(), jClass.ClassSignature),
+		                                     call.StaticFunctionCall(jClass, []));
 
 		call.StaticMethodCall(jClass, []);
 

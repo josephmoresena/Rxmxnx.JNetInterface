@@ -55,7 +55,8 @@ public abstract partial class AccessFeatureProxy : IAccessFeature
 	public abstract void GetPrimitiveField(IFixedMemory bytes, JLocalObject jLocal, JClassObject jClass,
 		JFieldDefinition definition);
 	public abstract void GetPrimitiveStaticField(IFixedMemory bytes, JClassObject jClass, JFieldDefinition definition);
-	public abstract void SetPrimitiveField(JClassObject jClass, JFieldDefinition definition, IReadOnlyFixedMemory mem);
+	public abstract void SetPrimitiveField(JLocalObject jLocal, JClassObject jClass, JFieldDefinition definition,
+		IReadOnlyFixedMemory mem);
 	public abstract void SetPrimitiveStaticField(JClassObject jClass, JFieldDefinition definition,
 		IReadOnlyFixedMemory mem);
 	public abstract void CallPrimitiveFunction(IFixedMemory mem, JLocalObject jLocal, JClassObject jClass,

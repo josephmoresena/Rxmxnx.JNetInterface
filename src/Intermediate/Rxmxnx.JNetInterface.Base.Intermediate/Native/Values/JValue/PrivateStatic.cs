@@ -33,7 +33,7 @@ internal partial struct JValue
 	/// <see langword="false"/>.
 	/// </returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static Boolean Default(in JValue jValue) => jValue is { _lsi: 0, _msi: 0, };
+	private static Boolean Default(in JValue jValue) => jValue._primitiveValue.IsDefault;
 	/// <summary>
 	/// Indicates whether <paramref name="jValue"/> has the <see langword="default"/> value.
 	/// </summary>

@@ -1,7 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests.Native.Access;
 
 [ExcludeFromCodeCoverage]
-public abstract class IndeterminateCallTestsBase
+public abstract class IndeterminateAccessTestsBase
 {
 	protected static void EmptyCompare(IndeterminateResult empty)
 	{

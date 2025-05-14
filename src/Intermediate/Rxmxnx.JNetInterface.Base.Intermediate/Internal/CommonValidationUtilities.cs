@@ -83,6 +83,19 @@ internal static class CommonValidationUtilities
 		throw new InvalidOperationException(resource.VoidEquality);
 	}
 	/// <summary>
+	/// Throws an exception for an instance that cannot be cast to a <paramref name="primitiveSignature"/> value.
+	/// </summary>
+	/// <param name="primitiveSignature">A <see cref="JDataTypeMetadata"/> instance.</param>
+	/// <exception cref="InvalidCastException">Always throws an exception.</exception>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void ThrowInvalidCastToPrimitive(Byte primitiveSignature)
+	{
+		IMessageResource resource = IMessageResource.GetInstance();
+		String className = ClassNameHelper.GetPrimitiveClassName(primitiveSignature);
+		String message = resource.InvalidCastTo(className);
+		throw new InvalidCastException(message);
+	}
+	/// <summary>
 	/// Throws an exception if <paramref name="value"/> cannot be cast to <typeparamref name="TValue"/>.
 	/// </summary>
 	/// <param name="value">Convertible value.</param>

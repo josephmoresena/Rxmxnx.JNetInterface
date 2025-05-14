@@ -34,9 +34,9 @@ public abstract partial class IndeterminateCall
 
 		if (signature.Length == 1)
 		{
-			Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
+			Span<Byte> bytes = stackalloc Byte[JValue.PrimitiveSize];
 			env.AccessFeature.CallPrimitiveFunction(bytes, jLocal, jClass, definition, nonVirtual, args);
-			return new(MemoryMarshal.Cast<Byte, Int64>(bytes)[0], signature);
+			return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], signature);
 		}
 
 		JLocalObject? jObject =
@@ -62,9 +62,9 @@ public abstract partial class IndeterminateCall
 
 		if (signature.Length == 1)
 		{
-			Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
+			Span<Byte> bytes = stackalloc Byte[JValue.PrimitiveSize];
 			env.AccessFeature.CallStaticPrimitiveFunction(bytes, jClass, definition, args);
-			return new(MemoryMarshal.Cast<Byte, Int64>(bytes)[0], signature);
+			return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], signature);
 		}
 
 		JLocalObject? jObject = env.AccessFeature.CallStaticFunction<JLocalObject>(jClass, definition, args);
@@ -96,7 +96,7 @@ public abstract partial class IndeterminateCall
 			return new(jObject, returnType);
 		}
 
-		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
+		Span<Byte> bytes = stackalloc Byte[JValue.PrimitiveSize];
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
@@ -132,7 +132,7 @@ public abstract partial class IndeterminateCall
 					bytes, definition, jFunction, jLocal, nonVirtual, args);
 				break;
 		}
-		return new(MemoryMarshal.Cast<Byte, Int64>(bytes)[0], returnType);
+		return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], returnType);
 	}
 	/// <summary>
 	/// Invokes a static function on the declaring class of given <see cref="JMethodObject"/> instance and
@@ -157,7 +157,7 @@ public abstract partial class IndeterminateCall
 			return new(jObject, returnType);
 		}
 
-		Span<Byte> bytes = stackalloc Byte[sizeof(Int64)];
+		Span<Byte> bytes = stackalloc Byte[JValue.PrimitiveSize];
 		switch (returnType[0])
 		{
 			case CommonNames.BooleanSignatureChar:
@@ -185,7 +185,7 @@ public abstract partial class IndeterminateCall
 				IndeterminateCall.ReflectedStaticPrimitiveFunctionCall<JShort>(bytes, definition, jFunction, args);
 				break;
 		}
-		return new(MemoryMarshal.Cast<Byte, Int64>(bytes)[0], returnType);
+		return new(MemoryMarshal.Cast<Byte, JValue.PrimitiveValue>(bytes)[0], returnType);
 	}
 	/// <summary>
 	/// Invokes a method on given <see cref="JLocalObject"/> instance.
@@ -303,7 +303,8 @@ public abstract partial class IndeterminateCall
 			_ => JFunctionDefinition<JShort>.Create(functionName, args),
 		};
 	/// <summary>
-	/// Invokes a primitive function on given <see cref="JLocalObject"/> instance and returns its result.
+	/// Invokes a primitive function on given <see cref="JLocalObject"/> instance and copies its result to
+	/// <paramref name="bytes"/>.
 	/// </summary>
 	/// <param name="bytes">Buffer to hold primitive result.</param>
 	/// <param name="definition">A <see cref="JFunctionDefinition"/> instance.</param>
@@ -311,7 +312,6 @@ public abstract partial class IndeterminateCall
 	/// <param name="jLocal">Target object.</param>
 	/// <param name="nonVirtual">Indicates whether current call must be non-virtual.</param>
 	/// <param name="args">Function arguments.</param>
-	/// <returns>A <see cref="IndeterminateResult"/> instance.</returns>
 	private static void ReflectedPrimitiveFunctionCall<TPrimitive>(Span<Byte> bytes, JFunctionDefinition definition,
 		JMethodObject jMethod, JLocalObject jLocal, Boolean nonVirtual,
 #if NET9_0_OR_GREATER
@@ -324,8 +324,8 @@ public abstract partial class IndeterminateCall
 		result.CopyTo(bytes);
 	}
 	/// <summary>
-	/// Invokes a primitive static function on the declaring class of given <see cref="JMethodObject"/> instance and
-	/// returns its result.
+	/// Invokes a primitive static function on the declaring class of given <see cref="JMethodObject"/> instance and copies its
+	/// result to <paramref name="bytes"/>.
 	/// </summary>
 	/// <param name="bytes">Buffer to hold primitive result.</param>
 	/// <param name="definition">A <see cref="JFunctionDefinition"/> instance.</param>
@@ -348,10 +348,10 @@ public abstract partial class IndeterminateCall
 	/// </summary>
 	/// <param name="definition">A <see cref="JCallDefinition"/> instance.</param>
 	/// <returns>Return type definition.</returns>
-	private static CString GetReturnType(JCallDefinition definition)
+	private static ReadOnlySpan<Byte> GetReturnType(JCallDefinition definition)
 	{
-		Int32 offset = definition.Descriptor.AsSpan().IndexOf(CommonNames.MethodParameterSuffixChar) + 1;
-		CString returnType = definition.Descriptor[offset..];
-		return returnType;
+		ReadOnlySpan<Byte> descriptorSpan = definition.Descriptor.AsSpan();
+		Int32 offset = descriptorSpan.IndexOf(CommonNames.MethodParameterSuffixChar) + 1;
+		return definition.Descriptor.AsSpan()[offset..];
 	}
 }
