@@ -75,8 +75,7 @@ new instances. `Rxmxnx.JNetInterface` provides this functionality through `JCall
 - **`New<TObject>(IEnvironment, ReadOnlySpan<IObject?>)`**: Creates a new instance of a generic type.
 - **`NewReflected(JConstructorObject, ReadOnlySpan<IObject?>)`**: Creates a new instance using a reflected constructor.
 - **`NewReflected<TObject>(IEnvironment, ReadOnlySpan<IObject?>)`**: Creates a new instance using a reflected
-  constructor for a
-  generic type.
+  constructor for a generic type.
 
 ##### Note
 
@@ -84,6 +83,36 @@ new instances. `Rxmxnx.JNetInterface` provides this functionality through `JCall
 - `Parameterless` variants do not accept arguments.
 - In .NET 9.0+, `ReadOnlySpan<IObject?>` supports `params`.
 - If a class is used as a declaring class or function argument but is not loaded, a local reference is created.
+
+## Indeterminate Fields
+
+Indeterminate fields encapsulate Java field definitions (`JFieldDefinition`), allowing fields to be dynamically
+executed.
+
+### Indeterminate field Creation
+
+- **`Create(JArgumentMetadata, ReadOnlySpan<Byte>)`**: Defines a field with specified type and name.
+- **`Create<TResult>(ReadOnlySpan<Byte>)`**: Defines a field with specified type and name.
+
+### Getting and Setting field retrieving
+
+- **`Get(JLocalObject)`**: Retrieves the field value for the encapsulated definition.
+- **`Get(JLocalObject, JClassObject)`**: Retrieves the field value for the encapsulated definition with a superclass.
+- **`StaticGet(JClassObject)`**: Retrieves the static field value for the encapsulated definition.
+- **`ReflectedGet(JFieldObject, JLocalObject)`**: Retrieves the reflected field value with the encapsulated definition.
+- **`ReflectedStaticGet(JFieldObject)`**: Retrieves the reflected static field value with the encapsulated definition.
+- **`Set<TValue>(JLocalObject, TValue?)`**: Sets the field value for the encapsulated definition.
+- **`Set<TValue>(JLocalObject, JClassObject, TValue?)`**: Sets the field value for the encapsulated definition with a
+  superclass.
+- **`StaticSet<TValue>(JClassObject, TValue?)`**: Sets the static field value for the encapsulated definition.
+- **`ReflectedSet<TValue>(JFieldObject, JLocalObject, TValue?)`**: Sets the reflected field value with the encapsulated
+  definition.
+- **`ReflectedStaticSet<TValue>(JFieldObject, TValue?)`**: Sets the reflected static field value with the encapsulated
+  definition.
+
+##### Note
+
+- `TValue` generic parameter is any `IObject` implementing type.
 
 ## Indeterminate Calls
 
@@ -93,9 +122,12 @@ to be dynamically executed.
 ### Indeterminate Call Creation
 
 - **`CreateConstructorDefinition(ReadOnlySpan<JArgumentMetadata>)`**: Defines a constructor with specified parameters.
-- **`CreateMethodDefinition(ReadOnlySpan<JArgumentMetadata>)`**: Defines a method with specified parameters.
-- **`CreateMethodDefinition(ReadOnlySpan<Byte>, ReadOnlySpan<JArgumentMetadata>)`**: Defines a method by name and
-  parameter metadata.
+- **`CreateMethodDefinition(ReadOnlySpan<Byte>, ReadOnlySpan<JArgumentMetadata>)`**: Defines a method with specified
+  parameters.
+- **`CreateMethodDefinition(JArgumentMetadata, ReadOnlySpan<Byte>, ReadOnlySpan<JArgumentMetadata>)`**: Defines a
+  function by return type, name and parameter metadata.
+- **`CreateFunctionDefinition<TResult>(ReadOnlySpan<Byte>, ReadOnlySpan<JArgumentMetadata>)`**: Defines a function by
+  return type (defined by generic parameter), name and parameter metadata.
 
 ### Constructor Calls
 
