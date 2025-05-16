@@ -63,13 +63,12 @@ public static class Program
 #if NET8_0
 			if (IVirtualMachine.TypeMetadataToStringEnabled) Console.WriteLine(initArgs);
 #endif
-			if (JVirtualMachine.TraceEnabled)
-				initArgs = new(initArgs.Version)
-				{
-					Options = new("-verbose:jni", "-verbose:class", "-verbose:gc", "-DjniLib.load.disable=true"),
-				};
-			else
-				initArgs = new(initArgs.Version) { Options = new("-DjniLib.load.disable=true"), };
+			initArgs = new(initArgs.Version)
+			{
+				Options = new("-DjniLib.load.disable=true", JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
+				              JVirtualMachine.TraceEnabled ? "-verbose:class" : default,
+				              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default),
+			};
 			using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 			try
 			{

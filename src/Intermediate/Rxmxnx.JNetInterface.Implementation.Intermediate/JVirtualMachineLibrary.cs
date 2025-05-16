@@ -4,6 +4,7 @@ namespace Rxmxnx.JNetInterface;
 /// This class stores a loaded native JVM library.
 /// </summary>
 #if !PACKAGE
+[ExcludeFromCodeCoverage]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
@@ -34,6 +35,7 @@ public sealed unsafe class JVirtualMachineLibrary
 		0x00130000, //JNI_VERSION_19
 		0x00140000, //JNI_VERSION_20
 		0x00150000, //JNI_VERSION_21
+		0x00180000, //JNI_VERSION_24
 	];
 
 	/// <summary>
@@ -103,7 +105,7 @@ public sealed unsafe class JVirtualMachineLibrary
 		CStringSequence sequence = arg.Options;
 		using IFixedPointer.IDisposable fPtr = sequence.GetFixedPointer();
 		// Avoid heap allocation.
-		Span<VirtualMachineInitOptionValue> options = stackalloc VirtualMachineInitOptionValue[sequence.Count];
+		Span<VirtualMachineInitOptionValue> options = stackalloc VirtualMachineInitOptionValue[sequence.NonEmptyCount];
 		arg.CopyOptions(options);
 		fixed (VirtualMachineInitOptionValue* ptr = &MemoryMarshal.GetReference(options))
 		{

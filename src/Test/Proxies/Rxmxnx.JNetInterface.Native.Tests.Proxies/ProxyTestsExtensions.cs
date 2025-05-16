@@ -60,6 +60,74 @@ public static class ProxyTestsExtensions
 		while ((valPtr + length).Reference != default && length < maxLength) length++;
 		return valPtr.Pointer.GetUnsafeReadOnlySpan<Byte>(length);
 	}
+	public static TPrimitive CreatePrimitive<TPrimitive>(this IFixture fixture)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	{
+		Span<TPrimitive> result = stackalloc TPrimitive[1];
+		JPrimitiveTypeMetadata primitiveTypeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
+		switch (primitiveTypeMetadata.Signature[0])
+		{
+			case CommonNames.BooleanSignatureChar:
+				result.AsValues<TPrimitive, Boolean>()[0] = fixture.Create<Boolean>();
+				break;
+			case CommonNames.ByteSignatureChar:
+				result.AsValues<TPrimitive, SByte>()[0] = fixture.Create<SByte>();
+				break;
+			case CommonNames.CharSignatureChar:
+				result.AsValues<TPrimitive, Char>()[0] = fixture.Create<Char>();
+				break;
+			case CommonNames.DoubleSignatureChar:
+				result.AsValues<TPrimitive, Double>()[0] = fixture.Create<Double>();
+				break;
+			case CommonNames.FloatSignatureChar:
+				result.AsValues<TPrimitive, Single>()[0] = fixture.Create<Single>();
+				break;
+			case CommonNames.IntSignatureChar:
+				result.AsValues<TPrimitive, Int32>()[0] = fixture.Create<Int32>();
+				break;
+			case CommonNames.LongSignatureChar:
+				result.AsValues<TPrimitive, Int64>()[0] = fixture.Create<Int64>();
+				break;
+			case CommonNames.ShortSignatureChar:
+				result.AsValues<TPrimitive, Int16>()[0] = fixture.Create<Int16>();
+				break;
+		}
+		return result[0];
+	}
+	public static TPrimitive[] CreatePrimitiveArray<TPrimitive>(this IFixture fixture, Int32 length)
+		where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
+	{
+		TPrimitive[] result = new TPrimitive[length];
+		JPrimitiveTypeMetadata primitiveTypeMetadata = IPrimitiveType.GetMetadata<TPrimitive>();
+		switch (primitiveTypeMetadata.Signature[0])
+		{
+			case CommonNames.BooleanSignatureChar:
+				fixture.CreateMany<Boolean>(length).ToArray().AsSpan().AsBytes().CopyTo(result.AsSpan().AsBytes());
+				break;
+			case CommonNames.ByteSignatureChar:
+				fixture.CreateMany<SByte>(length).ToArray().AsSpan().AsBytes().CopyTo(result.AsSpan().AsBytes());
+				break;
+			case CommonNames.CharSignatureChar:
+				fixture.CreateMany<Char>(length).ToArray().AsSpan().AsBytes().CopyTo(result.AsSpan().AsBytes());
+				break;
+			case CommonNames.DoubleSignatureChar:
+				fixture.CreateMany<Double>(length).ToArray().AsSpan().AsBytes().CopyTo(result.AsSpan().AsBytes());
+				break;
+			case CommonNames.FloatSignatureChar:
+				fixture.CreateMany<Single>(length).ToArray().AsSpan().AsBytes().CopyTo(result.AsSpan().AsBytes());
+				break;
+			case CommonNames.IntSignatureChar:
+				fixture.CreateMany<Int32>(length).ToArray().AsSpan().AsBytes().CopyTo(result.AsSpan().AsBytes());
+				break;
+			case CommonNames.LongSignatureChar:
+				fixture.CreateMany<Int64>(length).ToArray().AsSpan().AsBytes().CopyTo(result.AsSpan().AsBytes());
+				break;
+			case CommonNames.ShortSignatureChar:
+				fixture.CreateMany<Int16>(length).ToArray().AsSpan().AsBytes().CopyTo(result.AsSpan().AsBytes());
+				break;
+		}
+		return result;
+	}
 
 	private static T CreateReference<T>(IFixture fixture) where T : unmanaged, IFixedPointer
 	{

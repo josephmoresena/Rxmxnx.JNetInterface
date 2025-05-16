@@ -42,9 +42,9 @@ public sealed class JErrorObjectTests
 		env.FunctionSet.GetStackTrace(jError).Returns(stackTraceElements);
 		env.ArrayFeature.GetElement(stackTraceElements, Arg.Any<Int32>()).Returns(c => elements[(Int32)c[1]]);
 		env.WithFrame(Arg.Any<Int32>(), stackTraceElements,
-		              Arg.Any<Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>>()).Returns(
-			c => (c[2] as Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>)!.Invoke(
-				(JArrayObject<JStackTraceElementObject>)c[1]));
+		              Arg.Any<Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>>())
+		   .Returns(c => (c[2] as Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>)!.Invoke(
+			            (JArrayObject<JStackTraceElementObject>)c[1]));
 
 		ILocalObject.ProcessMetadata(jError, throwableMetadata);
 

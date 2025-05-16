@@ -44,7 +44,8 @@ public abstract partial class IndeterminateCall : IWrapper<JCallDefinition>
 	public static implicit operator IndeterminateCall?(JFunctionDefinition? definition)
 	{
 		if (definition is null) return default;
-		CString returnType = IndeterminateCall.GetReturnType(definition);
+		Int32 offset = definition.Descriptor.AsSpan().IndexOf(CommonNames.MethodParameterSuffixChar) + 1;
+		CString returnType = definition.Descriptor[offset..];
 		return new Function(definition, returnType);
 	}
 

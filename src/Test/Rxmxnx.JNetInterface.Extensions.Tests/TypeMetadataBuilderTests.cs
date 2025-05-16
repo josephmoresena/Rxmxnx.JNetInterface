@@ -193,9 +193,8 @@ public sealed partial class TypeMetadataBuilderTests
 		IInterfaceObject<JCloneableObject>
 	{
 		public static readonly String[] Interfaces = IInterfaceType.GetMetadata<SubInterface>().Interfaces
-		                                                           .Select(
-			                                                           i => ClassNameHelper.GetClassName(i.Signature))
-		                                                           .ToArray();
+		                                                           .Select(i => ClassNameHelper.GetClassName(
+			                                                                   i.Signature)).ToArray();
 		public static ReadOnlySpan<Byte> Name => "fake/invalid/SubInterface"u8;
 		public static JInterfaceTypeMetadata<SubInterface> Metadata
 			=> TypeMetadataBuilder<SubInterface>.Create(SubInterface.Name).Extends<JGenericDeclarationObject>()

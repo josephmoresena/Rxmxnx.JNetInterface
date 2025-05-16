@@ -126,8 +126,8 @@ public sealed class JConstructorDefinitionTests
 			IMessageResource mangedResource = IMessageResource.GetInstance();
 			String message = mangedResource.AbstractClass(ClassNameHelper.GetClassName(typeMetadata.Signature));
 			Assert.Equal(message,
-			             Assert.Throws<InvalidOperationException>(
-				             () => JConstructorDefinition.New<TDataType>(constructorDefinition, jClass)).Message);
+			             Assert.Throws<InvalidOperationException>(() => JConstructorDefinition.New<TDataType>(
+				                                                      constructorDefinition, jClass)).Message);
 		}
 
 		env.AccessFeature.Received(!isAbstract ? 1 : 0)
@@ -189,17 +189,16 @@ public sealed class JConstructorDefinitionTests
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.New(jClass));
 		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jClass, constructorDefinition,
-		                                                            Arg.Is<IObject?[]>(
-			                                                            a => JConstructorDefinitionTests
-				                                                            .IsEmptyArgs(a)));
+		                                                            Arg.Is<IObject?[]>(a => JConstructorDefinitionTests
+			                                                            .IsEmptyArgs(a)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.New<TDataType>(env));
 		env.ClassFeature.Received(1).GetClass<TDataType>();
 		env.AccessFeature.Received(1).CallConstructor<TDataType>(jClass, constructorDefinition,
-		                                                         Arg.Is<IObject?[]>(
-			                                                         a => JConstructorDefinitionTests.IsEmptyArgs(a)));
+		                                                         Arg.Is<IObject?[]>(a => JConstructorDefinitionTests
+			                                                         .IsEmptyArgs(a)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
@@ -220,16 +219,15 @@ public sealed class JConstructorDefinitionTests
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.NewReflected(jConstructor));
 		env.AccessFeature.Received(1).CallConstructor<JLocalObject>(jConstructor, constructorDefinition,
-		                                                            Arg.Is<IObject?[]>(
-			                                                            a => JConstructorDefinitionTests
-				                                                            .IsEmptyArgs(a)));
+		                                                            Arg.Is<IObject?[]>(a => JConstructorDefinitionTests
+			                                                            .IsEmptyArgs(a)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();
 		Assert.Equal(instance, constructorDefinition.NewReflected<TDataType>(jConstructor));
 		env.AccessFeature.Received(1).CallConstructor<TDataType>(jConstructor, constructorDefinition,
-		                                                         Arg.Is<IObject?[]>(
-			                                                         a => JConstructorDefinitionTests.IsEmptyArgs(a)));
+		                                                         Arg.Is<IObject?[]>(a => JConstructorDefinitionTests
+			                                                         .IsEmptyArgs(a)));
 
 		env.ClassFeature.ClearReceivedCalls();
 		env.AccessFeature.ClearReceivedCalls();

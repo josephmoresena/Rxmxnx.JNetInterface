@@ -129,6 +129,7 @@ partial class JEnvironment
 			where TElement : IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
+			ImplementationValidationUtilities.ThrowIfDefault(jArray);
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 
 			if (metadata is not JPrimitiveTypeMetadata primitiveMetadata)
@@ -142,14 +143,14 @@ partial class JEnvironment
 			where TElement : IDataType<TElement>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
-			ArgumentNullException.ThrowIfNull(array);
+			ImplementationValidationUtilities.ThrowIfDefault(jArray);
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(array.Length);
 
 			JDataTypeMetadata metadata = MetadataHelper.GetExactMetadata<TElement>();
 			if (metadata is JPrimitiveTypeMetadata primitiveMetadata)
 				this.CopyToPrimitive(jArray, primitiveMetadata.SizeOf, array, arrayIndex);
 			else
-				this.CopyToObject(jArray, array.AsSpan(), arrayIndex);
+				this.CopyToObject(jArray, array.AsSpan()[arrayIndex..]); // Offset for destination array
 		}
 		public INativeMemoryAdapter GetSequence<TPrimitive>(JArrayObject<TPrimitive> jArray,
 			JMemoryReferenceKind referenceKind) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
@@ -232,6 +233,7 @@ partial class JEnvironment
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
+			ImplementationValidationUtilities.ThrowIfDefault(jArray);
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			fixed (TPrimitive* ptr = &MemoryMarshal.GetReference(elements))
 				this.GetPrimitiveArrayRegion(jArray, metadata.Signature[0], new(ptr), startIndex, elements.Length);
@@ -241,6 +243,7 @@ partial class JEnvironment
 			Int32 startIndex = 0) where TPrimitive : unmanaged, IPrimitiveType<TPrimitive>
 		{
 			ImplementationValidationUtilities.ThrowIfProxy(jArray);
+			ImplementationValidationUtilities.ThrowIfDefault(jArray);
 			JPrimitiveTypeMetadata metadata = IPrimitiveType.GetMetadata<TPrimitive>();
 			fixed (TPrimitive* ptr = &MemoryMarshal.GetReference(elements))
 				this.SetPrimitiveArrayRegion(jArray, metadata.Signature[0], new(ptr), startIndex, elements.Length);

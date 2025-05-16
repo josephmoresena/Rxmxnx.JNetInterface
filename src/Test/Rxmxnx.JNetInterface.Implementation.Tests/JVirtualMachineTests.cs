@@ -1,5 +1,7 @@
 namespace Rxmxnx.JNetInterface.Tests;
 
+using EnvProxy = Proxies.EnvironmentProxy;
+
 [ExcludeFromCodeCoverage]
 public sealed partial class JVirtualMachineTests
 {
@@ -234,6 +236,52 @@ public sealed partial class JVirtualMachineTests
 			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			GC.Collect();
 			GC.WaitForPendingFinalizers();
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
+	[Fact]
+	internal void ProxyNoProxyTest()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		try
+		{
+			JEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			EnvProxy proxyProxy = Substitute.For<EnvProxy>();
+
+			using JClassObject jClassClassProxy =
+				EnvProxy.CreateClassObject(proxyProxy, JVirtualMachineTests.fixture.Create<JClassLocalRef>());
+
+			Assert.Throws<ProxyObjectException>(() => EnvProxy.CreateClassObject<JStringObject>(env.ClassObject));
+			Assert.Throws<ProxyObjectException>(() => (env as IEnvironment).IsSameObject(
+				                                    jClassClassProxy, env.ClassObject));
+			Assert.Throws<ProxyObjectException>(() => (env as IEnvironment).ClassFeature.GetObjectClass(
+				                                    ILocalObject.CreateMetadata(jClassClassProxy)));
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
+			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
+			proxyEnv.FinalizeProxy(true);
+		}
+	}
+	[Fact]
+	internal void InvalidThreadTest()
+	{
+		NativeInterfaceProxy proxyEnv = NativeInterfaceProxy.CreateProxy();
+		try
+		{
+			JEnvironment env = JEnvironment.GetEnvironment(proxyEnv.Reference);
+			Thread thread = new(() =>
+			{
+				Assert.Throws<DifferentThreadException>(() => env.ClassObject.GetClassName(out _));
+			});
+			thread.Start();
+			thread.Join();
+		}
+		finally
+		{
+			JVirtualMachine.RemoveEnvironment(proxyEnv.VirtualMachine.Reference, proxyEnv.Reference);
 			Assert.True(JVirtualMachine.RemoveVirtualMachine(proxyEnv.VirtualMachine.Reference));
 			proxyEnv.FinalizeProxy(true);
 		}

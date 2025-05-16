@@ -64,17 +64,22 @@ public partial class JNativeCallback
 			if (!JNativeCallback.states.TryGetValue(Unsafe.As<JLong, Guid>(ref longKey[0]), out CallbackState? state) ||
 			    state is not IWrapper.IBase<AwtEventListenerState> ws) return;
 
-			JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef)
-			                                                   .WithParameter(localRef, out JAwtEventObject awtEvent)
-			                                                   .Build();
 			try
 			{
-				ws.Value.EventDispatched(awtEvent);
+				JNativeCallAdapter callAdapter = JNativeCallAdapter.Create(environmentRef)
+				                                                   .WithParameter(
+					                                                   localRef, out JAwtEventObject awtEvent).Build();
+
+				try
+				{
+					ws.Value.EventDispatched(awtEvent);
+				}
+				finally
+				{
+					callAdapter.FinalizeCall();
+				}
 			}
-			finally
-			{
-				callAdapter.FinalizeCall();
-			}
+			catch (RunningStateException) { }
 		}
 
 		static AwtEventListener IClassType<AwtEventListener>.Create(IReferenceType.ClassInitializer initializer)

@@ -37,12 +37,12 @@ public sealed class JStringObjectTests
 		env.StringFeature.GetLength(Arg.Is<JStringObject>(ss => jObject.Equals(ss))).Returns(text.Length);
 		env.StringFeature.GetUtf8Length(Arg.Is<JStringObject>(ss => jObject.Equals(ss))).Returns(utf8Text.Length);
 		env.StringFeature
-		   .When(s => s.GetUtf8Copy(Arg.Is<JStringObject>(ss => jObject.Equals(ss)), Arg.Any<IFixedMemory<Byte>>())).Do(
-			   c =>
-			   {
-				   IFixedMemory<Byte> mem = (IFixedMemory<Byte>)c[1];
-				   utf8Text.AsSpan().CopyTo(mem.Values);
-			   });
+		   .When(s => s.GetUtf8Copy(Arg.Is<JStringObject>(ss => jObject.Equals(ss)), Arg.Any<IFixedMemory<Byte>>()))
+		   .Do(c =>
+		   {
+			   IFixedMemory<Byte> mem = (IFixedMemory<Byte>)c[1];
+			   utf8Text.AsSpan().CopyTo(mem.Values);
+		   });
 		env.StringFeature
 		   .When(s => s.GetCopy(Arg.Is<JStringObject>(ss => jObject.Equals(ss)), Arg.Any<IFixedMemory<Char>>())).Do(c =>
 		   {

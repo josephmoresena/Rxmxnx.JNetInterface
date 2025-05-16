@@ -3,8 +3,12 @@
 /// <summary>
 /// <c>jvalue</c> union. This structure can represent any reference type as any primitive type.
 /// </summary>
+#if !PACKAGE
+[SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
+                 Justification = CommonConstants.SecureUnsafeCodeJustification)]
+#endif
 [StructLayout(LayoutKind.Explicit)]
-internal readonly partial struct JValue : INativeType
+internal readonly unsafe partial struct JValue : INativeType
 {
 	/// <inheritdoc/>
 	public static JNativeType Type => JNativeType.JValue;
@@ -18,12 +22,7 @@ internal readonly partial struct JValue : INativeType
 	/// Least significant integer (4 bytes).
 	/// </summary>
 	[FieldOffset(0)]
-	private readonly Int32 _lsi;
-	/// <summary>
-	/// Most significant integer (4 bytes).
-	/// </summary>
-	[FieldOffset(sizeof(Int32))]
-	private readonly Int32 _msi;
+	private readonly PrimitiveValue _primitiveValue;
 
 	/// <summary>
 	/// Represents the empty <see cref="JValue"/>. This field is read-only.
@@ -33,11 +32,16 @@ internal readonly partial struct JValue : INativeType
 	/// Size in bytes of <see cref="JValue"/> structure.
 	/// </summary>
 	/// <remarks>In both 32bit and 64bit process, 8 bytes.</remarks>
-	public static readonly Int32 Size = NativeUtilities.SizeOf<JValue>();
+	public static readonly Int32 Size = sizeof(JValue);
+	/// <summary>
+	/// Size in bytes of <see cref="JValue"/> structure.
+	/// </summary>
+	/// <remarks>In both 32bit and 64bit process, 8 bytes.</remarks>
+	public static readonly Int32 PrimitiveSize = sizeof(PrimitiveValue);
 	/// <summary>
 	/// Indicates whether <see cref="JValue"/> size is equals to <see cref="IntPtr"/> size.
 	/// </summary>
-	public static readonly Boolean IsMemorySize = NativeUtilities.SizeOf<JValue>() == NativeUtilities.PointerSize;
+	public static readonly Boolean IsMemorySize = sizeof(JValue) == IntPtr.Size;
 
 	/// <summary>
 	/// Indicates whether the current instance has the <see langword="default"/> value.
@@ -50,9 +54,8 @@ internal readonly partial struct JValue : INativeType
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public JValue()
 	{
-		this._msi = default;
-		this._msi = default;
-		this._pointerValue = default;
+		this._primitiveValue = new();
+		this._pointerValue = IntPtr.Zero;
 	}
 
 	/// <summary>

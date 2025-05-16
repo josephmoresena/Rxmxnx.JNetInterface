@@ -58,5 +58,8 @@ public sealed class JArgumentMetadata
 	/// <typeparam name="TArg"><see cref="IDataType"/> type.</typeparam>
 	/// <returns>A <see cref="JArgumentMetadata"/> from <typeparamref name="TArg"/> type</returns>
 	internal static JArgumentMetadata Create<TArg>() where TArg : IDataType<TArg>
-		=> new(IDataType.GetMetadata<TArg>().Signature, IDataType.GetMetadata<TArg>().SizeOf);
+	{
+		JDataTypeMetadata typeMetadata = IDataType.GetMetadata<TArg>();
+		return new(typeMetadata.Signature, typeMetadata.SizeOf);
+	}
 }

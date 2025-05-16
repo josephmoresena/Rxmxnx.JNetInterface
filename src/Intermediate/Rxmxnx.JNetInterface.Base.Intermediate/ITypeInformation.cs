@@ -43,6 +43,9 @@ public interface ITypeInformation
 	/// </summary>
 	/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
 	/// <returns>A <see cref="CString"/> instance.</returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static CString GetClassSignature(ITypeInformation typeInformation) => typeInformation.ClassName;
 	/// <summary>
@@ -50,6 +53,9 @@ public interface ITypeInformation
 	/// </summary>
 	/// <param name="typeInformation">A <see cref="ITypeInformation"/> instance.</param>
 	/// <returns>A <see cref="CString"/> instance.</returns>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static String GetClassHash(ITypeInformation typeInformation) => typeInformation.Hash;
 }

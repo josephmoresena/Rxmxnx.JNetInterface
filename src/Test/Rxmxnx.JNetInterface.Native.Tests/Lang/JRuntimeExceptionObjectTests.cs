@@ -45,9 +45,9 @@ public sealed class JRuntimeExceptionObjectTests
 		env.FunctionSet.GetStackTrace(jRuntimeException).Returns(stackTraceElements);
 		env.ArrayFeature.GetElement(stackTraceElements, Arg.Any<Int32>()).Returns(c => elements[(Int32)c[1]]);
 		env.WithFrame(Arg.Any<Int32>(), stackTraceElements,
-		              Arg.Any<Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>>()).Returns(
-			c => (c[2] as Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>)!.Invoke(
-				(JArrayObject<JStackTraceElementObject>)c[1]));
+		              Arg.Any<Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>>())
+		   .Returns(c => (c[2] as Func<JArrayObject<JStackTraceElementObject>, StackTraceInfo[]>)!.Invoke(
+			            (JArrayObject<JStackTraceElementObject>)c[1]));
 
 		ILocalObject.ProcessMetadata(jRuntimeException, throwableMetadata);
 
@@ -221,8 +221,8 @@ public sealed class JRuntimeExceptionObjectTests
 			thread.ReferenceFeature.Received(2).CreateWeak(jGlobal);
 			thread.ClassFeature.Received(4)
 			      .GetObjectClass(
-				      Arg.Is<ObjectMetadata>(
-					      m => m.ObjectClassName.SequenceEqual(JRuntimeExceptionObjectTests.className)));
+				      Arg.Is<ObjectMetadata>(m => m.ObjectClassName.SequenceEqual(
+					                             JRuntimeExceptionObjectTests.className)));
 			thread.Received(3).GetReferenceType(jWeak);
 			thread.Received(3).IsSameObject(jWeak, default);
 

@@ -6,6 +6,11 @@ namespace Rxmxnx.JNetInterface.Types.Metadata;
 public abstract partial class JDataTypeMetadata : ITypeInformation
 {
 	/// <summary>
+	/// Internal information.
+	/// </summary>
+	private readonly TypeInfoSequence _info;
+
+	/// <summary>
 	/// Array signature for the current type.
 	/// </summary>
 	public CString ArraySignature => this._info.ArraySignature;
@@ -37,6 +42,8 @@ public abstract partial class JDataTypeMetadata : ITypeInformation
 	public CString Signature => this._info.Signature;
 	/// <inheritdoc/>
 	public String Hash => this._info.ToString();
+
+	Boolean? ITypeInformation.IsFinal => this.Modifier is JTypeModifier.Final;
 
 #if PACKAGE
 	/// <summary>

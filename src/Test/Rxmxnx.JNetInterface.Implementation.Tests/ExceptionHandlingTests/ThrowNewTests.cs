@@ -63,10 +63,10 @@ public partial class ExceptionHandlingTests
 			if (throwException)
 			{
 				ex = utf8Message ?
-					Assert.ThrowsAny<ThrowableException>(
-						() => JThrowableObject.ThrowNew<TThrowable>(env, (CString)message, true)) :
-					Assert.ThrowsAny<ThrowableException>(
-						() => JThrowableObject.ThrowNew<TThrowable>(env, message, true));
+					Assert.ThrowsAny<ThrowableException>(() => JThrowableObject.ThrowNew<TThrowable>(
+						                                     env, (CString)message, true)) :
+					Assert.ThrowsAny<ThrowableException>(() => JThrowableObject
+						                                     .ThrowNew<TThrowable>(env, message, true));
 			}
 			else
 			{
@@ -92,8 +92,8 @@ public partial class ExceptionHandlingTests
 			if (throwException)
 			{
 				ex = utf8Message ?
-					Assert.ThrowsAny<ThrowableException>(
-						() => JThrowableObject.ThrowNew(jClass, (CString)message, true)) :
+					Assert.ThrowsAny<ThrowableException>(() => JThrowableObject.ThrowNew(
+						                                     jClass, (CString)message, true)) :
 					Assert.ThrowsAny<ThrowableException>(() => JThrowableObject.ThrowNew(jClass, message, true));
 			}
 			else

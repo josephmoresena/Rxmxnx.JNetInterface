@@ -16,7 +16,7 @@ internal static class ImplementationValidationUtilities
 	{
 		if (jObject is null || !jObject.IsProxy) return;
 		IMessageResource resource = IMessageResource.GetInstance();
-		throw new ArgumentException(resource.InvalidReferenceObject, nameofObject);
+		throw new ProxyObjectException(resource.InvalidReferenceObject, nameofObject);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="objectMetadata"/> is proxy.
@@ -29,7 +29,7 @@ internal static class ImplementationValidationUtilities
 	{
 		if (objectMetadata is null || !objectMetadata.FromProxy.GetValueOrDefault()) return;
 		IMessageResource resource = IMessageResource.GetInstance();
-		throw new ArgumentException(resource.InvalidReferenceObject, nameofObject);
+		throw new ProxyObjectException(resource.InvalidReferenceObject, nameofObject);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
@@ -39,6 +39,9 @@ internal static class ImplementationValidationUtilities
 	/// <exception cref="ArgumentException">
 	/// Throws an exception if <paramref name="definition"/> doesn't match with <paramref name="otherDefinition"/>.
 	/// </exception>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	public static void ThrowIfNotMatchDefinition(JAccessibleObjectDefinition definition,
 		JAccessibleObjectDefinition otherDefinition)
 	{
@@ -85,7 +88,7 @@ internal static class ImplementationValidationUtilities
 		if (thread == Thread.CurrentThread) return;
 		IMessageResource resource = IMessageResource.GetInstance();
 		String message = resource.DifferentThread(envRef, thread.ManagedThreadId);
-		throw new InvalidOperationException(message);
+		throw new DifferentThreadException(message);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="length"/> is invalid.
@@ -109,7 +112,7 @@ internal static class ImplementationValidationUtilities
 	{
 		if (isAlive) return;
 		IMessageResource resource = IMessageResource.GetInstance();
-		throw new InvalidOperationException(resource.DeadVirtualMachine);
+		throw new RunningStateException(resource.DeadVirtualMachine);
 	}
 	/// <summary>
 	/// Throws an exception if current thread is not attached to JVM.
@@ -120,7 +123,7 @@ internal static class ImplementationValidationUtilities
 	{
 		if (isAttached) return;
 		IMessageResource resource = IMessageResource.GetInstance();
-		throw new InvalidOperationException(resource.NotAttachedThread);
+		throw new RunningStateException(resource.NotAttachedThread);
 	}
 	/// <summary>
 	/// Throws an exception if JNI execution is not secure.
@@ -135,7 +138,7 @@ internal static class ImplementationValidationUtilities
 		if (jniSecure) return;
 		IMessageResource resource = IMessageResource.GetInstance();
 		String message = resource.CallOnUnsafe(functionName);
-		throw new InvalidOperationException(message);
+		throw new UnsafeStateException(message);
 	}
 	/// <summary>
 	/// Throws an exception if JNI execution is not avaliable in current version.
@@ -151,7 +154,7 @@ internal static class ImplementationValidationUtilities
 		if (currentVersion >= requiredVersion) return;
 		IMessageResource resource = IMessageResource.GetInstance();
 		String message = resource.InvalidCallVersion(currentVersion, functionName, requiredVersion);
-		throw new InvalidOperationException(message);
+		throw new JavaVersionException(message);
 	}
 	/// <summary>
 	/// Throws an exception if <paramref name="version"/> is invalid.
@@ -160,10 +163,13 @@ internal static class ImplementationValidationUtilities
 	/// <exception cref="InvalidOperationException">
 	/// Throws an exception if <paramref name="version"/> is invalid.
 	/// </exception>
+#if !PACKAGE
+	[ExcludeFromCodeCoverage]
+#endif
 	public static Int32 ThrowIfInvalidVersion(Int32 version)
 	{
 		if (version > 0) return version;
 		IMessageResource resource = IMessageResource.GetInstance();
-		throw new InvalidOperationException(resource.IncompatibleLibrary);
+		throw new JavaVersionException(resource.IncompatibleLibrary);
 	}
 }

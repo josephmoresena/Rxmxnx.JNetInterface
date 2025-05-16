@@ -13,12 +13,6 @@ using Rxmxnx.JNetInterface.Swing;
 using Rxmxnx.JNetInterface.Util.Concurrent;
 using Rxmxnx.PInvoke;
 
-if (OperatingSystem.IsWindows())
-{
-	Thread.CurrentThread.SetApartmentState(ApartmentState.Unknown);
-	Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
-}
-
 JVirtualMachine.SetMainClass<JFrameObjectSwing>();
 JVirtualMachine.SetMainClass<JWindowObject>();
 JVirtualMachine.SetMainClass<JComponentObject>();
@@ -37,18 +31,7 @@ try
 
 	jvmLib = JVirtualMachineLibrary.LoadLibrary(args[0]) ?? throw new ArgumentException("Invalid JVM library.");
 
-	if (OperatingSystem.IsMacOS() || OperatingSystem.IsIOS() || OperatingSystem.IsTvOS())
-	{
-		IntPtr loopRef = CoreFoundation.RunLoopGetCurrent();
-		Thread thread = new(o => InitGui((JVirtualMachineLibrary)o!));
-		thread.Start(jvmLib);
-		CoreFoundation.InitializeLoop(loopRef);
-		thread.Join();
-	}
-	else
-	{
-		InitGui(jvmLib);
-	}
+	UIAdapter.Instance.ExecuteGui(jvmLib, InitGui);
 }
 catch (Exception ex)
 {
@@ -64,15 +47,13 @@ return;
 static void InitGui(JVirtualMachineLibrary jvmLib)
 {
 	JVirtualMachineInitArg initArgs = GetInitialArgs(jvmLib);
-	IEnvironment? env = default;
 
 	UIAdapter.Instance.PrintArgs(initArgs);
+	using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out IEnvironment env);
 	try
 	{
-		using IInvokedVirtualMachine vm = jvmLib.CreateVirtualMachine(initArgs, out env);
-		using JFrameObjectSwing frame = CreateFrame(env, "Hello .NET");
+		using JFrameObjectSwing frame = CreateFrame(env, $"Hello .NET - JNI 0x{env.Version:x8}");
 		using JCountDownLatchObject countDownLatch = GetCountDownAwait(frame);
-
 		using (JLabelObject frameContent = CreateFrameLabel(env))
 		{
 			using (JButtonObject jButton = JButtonObject.Create(env, "Click me!!!"u8))
@@ -100,8 +81,7 @@ static void InitGui(JVirtualMachineLibrary jvmLib)
 			UIAdapter.Instance.ShowError(ex);
 		else
 			UIAdapter.Instance.ShowError(tEx.WithSafeInvoke(t => t.ToString()));
-		if (env is not null)
-			env.PendingException = default;
+		env.PendingException = default;
 	}
 }
 
@@ -109,24 +89,19 @@ static JVirtualMachineInitArg GetInitialArgs(JVirtualMachineLibrary virtualMachi
 {
 	JVirtualMachineInitArg virtualMachineInitArg = virtualMachineLibrary.GetDefaultArgument();
 	String jarPath = ExtractJar().Replace(" ", @"\ ");
-	if (JVirtualMachine.TraceEnabled)
-		virtualMachineInitArg = new(virtualMachineInitArg.Version)
-		{
-			Options = new("-verbose:jni", "-verbose:class", "-verbose:gc", "-Djava.awt.headless=false",
-			              $"-Djava.class.path={jarPath}"),
-		};
-	else
-		virtualMachineInitArg = new(virtualMachineInitArg.Version)
-		{
-			Options = new("-Djava.awt.headless=false", $"-Djava.class.path={jarPath}"),
-		};
-	return virtualMachineInitArg;
+	return new(virtualMachineInitArg.Version)
+	{
+		Options = new("-Djava.awt.headless=false", $"-Djava.class.path={jarPath}",
+		              JVirtualMachine.TraceEnabled ? "-verbose:jni" : default,
+		              JVirtualMachine.TraceEnabled ? "-verbose:class" : default,
+		              JVirtualMachine.TraceEnabled ? "-verbose:gc" : default),
+	};
 }
 static String ExtractJar()
 {
 	String tempFile = Path.GetTempFileName() + ".jar";
 	File.Delete(tempFile);
-	File.WriteAllBytes(tempFile, GetImageBytes("NativeCallbacks.jar"));
+	File.WriteAllBytes(tempFile, GetResourceBytes("NativeCallbacks.jar"));
 	return tempFile;
 }
 static String GetImageName()
@@ -141,7 +116,7 @@ static String GetImageName()
 		"macosx.png" :
 		throw new PlatformNotSupportedException("Unsupported platform.");
 }
-static Byte[] GetImageBytes(String fileName)
+static Byte[] GetResourceBytes(String fileName)
 {
 	Assembly assembly = Assembly.GetExecutingAssembly();
 	String? resourceName = assembly.GetManifestResourceNames().FirstOrDefault(n => n.Contains(fileName));
@@ -164,10 +139,20 @@ static JFrameObjectSwing CreateFrame(IEnvironment env, String title)
 {
 	using JClassObject graphicsEnv = JClassObject.GetClass(env, "java/awt/GraphicsEnvironment"u8);
 	JFunctionDefinition<JBoolean>.Parameterless isHeadlessDef = new("isHeadless"u8);
+
 	if (isHeadlessDef.StaticInvoke(graphicsEnv).Value)
 		throw new InvalidOperationException("Java is running in Headless mode.");
 
-	return JFrameObjectSwing.Create(env, title);
+	JFrameObjectSwing result = JFrameObjectSwing.Create(env, title);
+
+	using JImageIconObject icon = JImageIconObject.Create(env, GetResourceBytes("icon.png"))!;
+	using JImageObject image = icon.GetImage();
+	if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsFreeBSD())
+		result.SetIcon(image);
+	else
+		JWindowObject.SetApplicationIcon(image);
+
+	return result;
 }
 static JCountDownLatchObject GetCountDownAwait(JWindowObject window)
 {
@@ -182,7 +167,7 @@ static JCountDownLatchObject GetCountDownAwait(JWindowObject window)
 static JLabelObject CreateFrameLabel(IEnvironment env)
 {
 	String imageName = GetImageName();
-	ReadOnlySpan<Byte> imageBytes = GetImageBytes(imageName);
+	ReadOnlySpan<Byte> imageBytes = GetResourceBytes(imageName);
 	JLabelObject jLabel;
 
 	using (JImageIconObject jIconImage = JImageIconObject.Create(env, imageBytes)!)

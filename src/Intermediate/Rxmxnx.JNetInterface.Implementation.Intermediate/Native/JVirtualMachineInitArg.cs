@@ -31,7 +31,11 @@ public sealed class JVirtualMachineInitArg
 #if !PACKAGE
 	[ExcludeFromCodeCoverage]
 #endif
-	private String OptionsString => $"[{String.Join(", ", this.Options)}]";
+	private unsafe String OptionsString
+		=> $"[{String.Join(", ", this.Options.Where(c => !CString.IsNullOrEmpty(c)).Select(c => {
+			fixed (Byte* ptr = &MemoryMarshal.GetReference(c.AsSpan()))
+				return Marshal.PtrToStringUTF8((IntPtr)ptr);
+		}))}]";
 
 	/// <summary>
 	/// Constructor.
@@ -71,8 +75,12 @@ public sealed class JVirtualMachineInitArg
 	/// <param name="optionSpan">A <see cref="VirtualMachineInitOptionValue"/> span.</param>
 	internal void CopyOptions(Span<VirtualMachineInitOptionValue> optionSpan)
 	{
+		ReadOnlyValPtr<Byte> value = NativeUtilities.GetUnsafeValPtr(in this.Options.GetPinnableReference());
+		Span<Int32> offsets = stackalloc Int32[optionSpan.Length];
+
+		this.Options.GetOffsets(offsets);
 		for (Int32 i = 0; i < optionSpan.Length; i++)
-			optionSpan[i] = new(this.Options[i].AsSpan().GetUnsafeValPtr());
+			optionSpan[i] = new(value + offsets[i]);
 	}
 
 	/// <summary>

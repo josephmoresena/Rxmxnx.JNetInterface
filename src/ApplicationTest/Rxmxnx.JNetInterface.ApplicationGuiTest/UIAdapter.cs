@@ -1,46 +1,21 @@
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-
 using Rxmxnx.JNetInterface.Native;
 using Rxmxnx.JNetInterface.Native.References;
-using Rxmxnx.PInvoke;
 
 namespace Rxmxnx.JNetInterface.ApplicationTest;
 
-internal abstract class UIAdapter
+internal abstract partial class UIAdapter
 {
-	public static readonly UIAdapter Instance =
-		OperatingSystem.IsWindows() ? new MessageBoxAdapter() : new ConsoleAdapter();
+	public static readonly UIAdapter Instance = OperatingSystem.IsWindows() ? new MessageBoxAdapter() :
+		OperatingSystem.IsMacOS() || OperatingSystem.IsIOS() || OperatingSystem.IsTvOS() ? new CoreFoundationAdapter() :
+		new ConsoleAdapter();
 
+	public virtual void ExecuteGui<TState>(in TState state, in Action<TState> action)
+#if NET9_0_OR_GREATER
+		where TState : allows ref struct
+#endif
+		=> action(state);
 	public abstract void ShowError(String errorMessage);
 	public abstract void ShowError(Exception ex);
 	public abstract void PrintThreadInfo(JEnvironmentRef environmentRef);
-
 	public abstract void PrintArgs(JVirtualMachineInitArg jvmLib);
-
-	private sealed class MessageBoxAdapter : UIAdapter
-	{
-		[DllImport("user32.dll", EntryPoint = "MessageBoxW")]
-		private static extern Int32 MessageBox(IntPtr hwnd, ReadOnlyValPtr<Char> text, ReadOnlyValPtr<Char> caption,
-			UInt32 type);
-
-		public override void ShowError(String errorMessage)
-		{
-			using IReadOnlyFixedMemory<Char>.IDisposable fMem = errorMessage.AsMemory().GetFixedContext();
-			_ = MessageBoxAdapter.MessageBox(IntPtr.Zero, fMem.ValuePointer, "Error".AsSpan().GetUnsafeValPtr(), 0);
-		}
-		public override void ShowError(Exception ex) => this.ShowError(ex.ToString());
-		public override void PrintThreadInfo(JEnvironmentRef environmentRef)
-			=> Trace.WriteLine($"Thread: {Environment.CurrentManagedThreadId}, {environmentRef}.");
-		public override void PrintArgs(JVirtualMachineInitArg jvmLib) => Trace.WriteLine(jvmLib);
-	}
-
-	private sealed class ConsoleAdapter : UIAdapter
-	{
-		public override void ShowError(String errorMessage) => Console.WriteLine(errorMessage);
-		public override void ShowError(Exception ex) => Console.WriteLine(ex);
-		public override void PrintThreadInfo(JEnvironmentRef environmentRef)
-			=> Console.WriteLine($"Thread: {Environment.CurrentManagedThreadId}, {environmentRef}.");
-		public override void PrintArgs(JVirtualMachineInitArg jvmLib) => Console.WriteLine(jvmLib);
-	}
 }

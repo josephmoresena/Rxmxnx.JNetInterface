@@ -59,9 +59,8 @@ public sealed class JMainMethodDefinitionTests
 		JMainMethodDefinition.Instance.Invoke(jClass, args!);
 		env.AccessFeature.Received(1).CallStaticMethod(jClass, JMainMethodDefinition.Instance,
 		                                               args is not null ?
-			                                               Arg.Is<IObject?[]>(
-				                                               i => i.Length == 1 &&
-					                                               Object.ReferenceEquals(i[0], jArgs)) :
+			                                               Arg.Is<IObject?[]>(i => i.Length == 1 &&
+				                                                                  Object.ReferenceEquals(i[0], jArgs)) :
 			                                               Arg.Is<IObject?[]>(i => i.Length == 1 && i[0] == null));
 		for (Int32 i = 0; i < (args?.Length ?? default); i++)
 		{

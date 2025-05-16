@@ -15,7 +15,7 @@ public interface IObject
 	CString ObjectSignature { get; }
 
 	/// <summary>
-	/// Copy the sequence of bytes of the current instance to <paramref name="span"/>.
+	/// Copies the sequence of bytes of the current instance to <paramref name="span"/>.
 	/// </summary>
 	/// <param name="span">Binary span.</param>
 	/// <returns>Number of bytes copied.</returns>
@@ -25,7 +25,7 @@ public interface IObject
 		this.CopyTo(span, ref index);
 	}
 	/// <summary>
-	/// Copy the sequence of bytes of the current instance to <paramref name="span"/> at specified
+	/// Copies the sequence of bytes of the current instance to <paramref name="span"/> at specified
 	/// <paramref name="offset"/>.
 	/// </summary>
 	/// <param name="span">Binary span.</param>
@@ -33,7 +33,7 @@ public interface IObject
 	/// <returns>Number of bytes copied.</returns>
 	internal void CopyTo(Span<Byte> span, ref Int32 offset);
 	/// <summary>
-	/// Copy the sequence of bytes of the current instance to <paramref name="span"/> at specified
+	/// Copies the sequence of bytes of the current instance to <paramref name="span"/> at specified
 	/// <paramref name="index"/>.
 	/// </summary>
 	/// <param name="span">Binary span.</param>

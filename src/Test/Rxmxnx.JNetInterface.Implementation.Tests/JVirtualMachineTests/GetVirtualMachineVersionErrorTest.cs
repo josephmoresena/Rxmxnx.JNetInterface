@@ -23,8 +23,9 @@ public partial class JVirtualMachineTests
 			}
 			else
 			{
-				Exception ex = Assert.Throws<InvalidOperationException>(
-					() => JVirtualMachine.GetVirtualMachine(proxyEnv.VirtualMachine.Reference));
+				Exception ex =
+					Assert.Throws<JavaVersionException>(() => JVirtualMachine.GetVirtualMachine(
+						                                    proxyEnv.VirtualMachine.Reference));
 				Assert.Equal(IMessageResource.GetInstance().InvalidCallVersion(jniVersion, "FindClass", 0x00010002),
 				             ex.Message);
 			}

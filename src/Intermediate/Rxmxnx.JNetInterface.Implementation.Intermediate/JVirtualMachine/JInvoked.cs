@@ -42,10 +42,11 @@ public partial class JVirtualMachine
 		public unsafe void Dispose()
 		{
 			if (!this.IsDisposable || this._isDisposed.Value) return;
+			this._isDisposed.Value = true;
 			this._cache.ClearCache();
+
 			JResult result = this._cache.GetInvokeInterface().DestroyVirtualMachine(this._cache.Reference);
 			ImplementationValidationUtilities.ThrowIfInvalidResult(result);
-			this._isDisposed.Value = true;
 			JVirtualMachine.RemoveVirtualMachine(this._cache.Reference);
 		}
 	}
