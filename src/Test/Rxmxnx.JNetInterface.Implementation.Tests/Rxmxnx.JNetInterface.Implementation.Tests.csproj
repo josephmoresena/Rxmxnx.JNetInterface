@@ -74,7 +74,7 @@
             <NativeProxyOutputPath>$(MSBuildProjectDirectory)\$(OutputPath)</NativeProxyOutputPath>
             <NativeProxyIntermediateOutputPath>$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)</NativeProxyIntermediateOutputPath>
             <!-- Common properties for all builds -->
-            <CommonBuildProperties>PublishDir=$(NativeProxyOutputPath);TargetFramework=net8.0</CommonBuildProperties>
+            <CommonBuildProperties>PublishDir=$(NativeProxyOutputPath);TargetFramework=net8.0;PublishAot=true</CommonBuildProperties>
             <!-- Set RuntimeIdentifier based on current platform -->
             <RidPrefix Condition="$([MSBuild]::IsOSPlatform('Windows'))">win</RidPrefix>
             <RidPrefix Condition="$([MSBuild]::IsOSPlatform('OSX'))">osx</RidPrefix>

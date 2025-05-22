@@ -7,6 +7,8 @@ namespace Rxmxnx.JNetInterface.Tests;
 /// Native proxy for JVM library functions.
 /// </summary>
 [ExcludeFromCodeCoverage]
+[SuppressMessage("csharpsquid", "S6640:Using unsafe code blocks is security-sensitive",
+                 Justification = "JNI code is secure to use.")]
 internal static unsafe class NativeProxy
 {
 	[UnmanagedCallersOnly(EntryPoint = "JNI_GetDefaultJavaVMInitArgs_Impl")]

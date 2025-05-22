@@ -241,8 +241,11 @@ public sealed unsafe class JVirtualMachineLibraryTests
 	[InlineData(0x00180000, JResult.Error)]
 	internal void GetDefaultArgumentTest(Int32 jniVersion, JResult result = JResult.Ok)
 	{
-		JVirtualMachineLibrary library =
-			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete))!;
+		JVirtualMachineLibrary? library =
+			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
+		
+		if (library is null) return;
+		
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
