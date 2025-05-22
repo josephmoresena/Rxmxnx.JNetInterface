@@ -94,19 +94,7 @@ public sealed class JVirtualMachineInitArg
 		ReadOnlySpan<VirtualMachineInitOptionValue> optionsValue = new(value.Options, value.OptionsLength);
 		CString[] options = new CString[optionsValue.Length];
 		for (Int32 i = 0; i < optionsValue.Length; i++)
-			options[i] = JVirtualMachineInitArg.GetUnsafeCString(optionsValue[i].OptionString);
+			options[i] = CString.CreateNullTerminatedUnsafe(optionsValue[i].OptionString.Pointer);
 		return new(options);
-	}
-	/// <summary>
-	/// Retrieves an unsafe <see cref="CString"/> from given pointer.
-	/// </summary>
-	/// <param name="ptr">A UTF-8 string pointer.</param>
-	/// <returns>A <see cref="CString"/> instance.</returns>
-	private static CString GetUnsafeCString(ReadOnlyValPtr<Byte> ptr)
-	{
-		Int32 length = 0;
-		while ((ptr + length).Reference != default)
-			length++;
-		return CString.CreateUnsafe(ptr, length, true);
 	}
 }
