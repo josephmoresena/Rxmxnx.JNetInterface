@@ -98,11 +98,11 @@
         </ItemGroup>
 
         <!-- Build Native Proxies -->
-        <MSBuild Condition="'$(RidPrefix)' != '' And '$(RidSuffix)' == 'x64' Or '$(RidSuffix)' == 'arm64'"
+        <MSBuild Condition="'$(RidPrefix)' != '' And ('$(RidSuffix)' == 'x64' Or '$(RidSuffix)' == 'arm64')"
                  Projects="@(NativeProxiesProjects->'%(ProjectPath)')"
                  Targets="Restore"
                  Properties="$(CommonBuildProperties);RuntimeIdentifier=$(ProxyRid)"/>
-        <MSBuild Condition="'$(RidPrefix)' != '' And '$(RidSuffix)' == 'x64' Or '$(RidSuffix)' == 'arm64'"
+        <MSBuild Condition="'$(RidPrefix)' != '' And ('$(RidSuffix)' == 'x64' Or '$(RidSuffix)' == 'arm64')"
                  Projects="@(NativeProxiesProjects->'%(ProjectPath)')"
                  Targets="Publish"
                  Properties="$(CommonBuildProperties);RuntimeIdentifier=$(ProxyRid)"/>
