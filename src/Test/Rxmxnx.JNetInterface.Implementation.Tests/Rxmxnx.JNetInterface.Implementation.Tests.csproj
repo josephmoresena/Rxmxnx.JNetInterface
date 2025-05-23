@@ -79,7 +79,8 @@
             <RidPrefix Condition="$([MSBuild]::IsOSPlatform('Windows'))">win</RidPrefix>
             <RidPrefix Condition="$([MSBuild]::IsOSPlatform('OSX'))">osx</RidPrefix>
             <RidPrefix Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux</RidPrefix>
-            <ProxyRid>$(RidPrefix)-$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLowerInvariant())</ProxyRid>
+            <RidSuffix>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLowerInvariant())</RidSuffix>
+            <ProxyRid>$(RidPrefix)-$(RidSuffix)</ProxyRid>
         </PropertyGroup>
 
         <ItemGroup>
@@ -97,24 +98,14 @@
         </ItemGroup>
 
         <!-- Build Native Proxies -->
-        <MSBuild Projects="@(NativeProxiesProjects->'%(ProjectPath)')"
+        <MSBuild Condition="'$(RidPrefix)' != '' And '$(RidSuffix)' == 'x64' Or '$(RidSuffix)' == 'arm64'"
+                 Projects="@(NativeProxiesProjects->'%(ProjectPath)')"
                  Targets="Restore"
                  Properties="$(CommonBuildProperties);RuntimeIdentifier=$(ProxyRid)"/>
-        <MSBuild Projects="@(NativeProxiesProjects->'%(ProjectPath)')"
+        <MSBuild Condition="'$(RidPrefix)' != '' And '$(RidSuffix)' == 'x64' Or '$(RidSuffix)' == 'arm64'"
+                 Projects="@(NativeProxiesProjects->'%(ProjectPath)')"
                  Targets="Publish"
                  Properties="$(CommonBuildProperties);RuntimeIdentifier=$(ProxyRid)"/>
-
-
-        <!-- Build Native Proxies -->
-        <MSBuild Projects="@(NativeProxiesProjects->'%(ProjectPath)')"
-                 Targets="Restore"
-                 Properties="$(CommonBuildProperties);RuntimeIdentifier=win-x86"
-                 Condition="'$(ProxyRid)' == 'win-x64'"/>
-        <MSBuild Projects="@(NativeProxiesProjects->'%(ProjectPath)')"
-                 Targets="Publish"
-                 Properties="$(CommonBuildProperties);RuntimeIdentifier=win-x86"
-                 Condition="'$(ProxyRid)' == 'win-x64'"/>
-
     </Target>
 
 </Project>
