@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rxmxnx.JNetInterface.Tests</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <PublishAot>true</PublishAot>
+        <Configuration>Release</Configuration>
+        <NativeLib>Shared</NativeLib>
+        <TrimMode>full</TrimMode>
+        <PublishTrimmed>true</PublishTrimmed>
+        <IlcOptimizationPreference>Size</IlcOptimizationPreference>
+        <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+        <IlcTrimMetadata>true</IlcTrimMetadata>
+        <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+        <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
+        <IlcDisableReflection>true</IlcDisableReflection>
+        <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+        <RootAllApplicationAssemblies>false</RootAllApplicationAssemblies>
+        <TrimUnusedDependencies>true</TrimUnusedDependencies>
+        <DefineConstants>$(DefineConstants);DISABLE_CREATE_VM;DISABLE_GET_CREATED_VMS</DefineConstants>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <AssemblyNamePrefix Condition="!$([MSBuild]::IsOSPlatform('Windows'))">lib</AssemblyNamePrefix>
+        <AssemblyNameSuffix Condition="$(RuntimeIdentifier.ToLowerInvariant().EndsWith('x86'))">x86</AssemblyNameSuffix>
+        <AssemblyNameSuffix Condition="$(RuntimeIdentifier.ToLowerInvariant().EndsWith('x64'))">x64</AssemblyNameSuffix>
+        <AssemblyNameSuffix Condition="$(RuntimeIdentifier.ToLowerInvariant().EndsWith('arm64'))">arm64</AssemblyNameSuffix>
+        <AssemblyNameSuffix Condition="$(RuntimeIdentifier.ToLowerInvariant().EndsWith('arm'))">arm</AssemblyNameSuffix>
+        <AssemblyName>$(AssemblyNamePrefix)$(AssemblyName).$(AssemblyNameSuffix)</AssemblyName>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <Compile Include="../../Rxmxnx.JNetInterface.NativeLibrary.Tests.Proxies/NativeProxy.cs">
+            <Link>NativeProxy.cs</Link>
+        </Compile>
+    </ItemGroup>
+    
+</Project>

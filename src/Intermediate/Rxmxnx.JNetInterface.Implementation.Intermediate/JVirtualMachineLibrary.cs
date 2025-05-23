@@ -4,7 +4,6 @@ namespace Rxmxnx.JNetInterface;
 /// This class stores a loaded native JVM library.
 /// </summary>
 #if !PACKAGE
-[ExcludeFromCodeCoverage]
 [SuppressMessage(CommonConstants.CSharpSquid, CommonConstants.CheckIdS6640,
                  Justification = CommonConstants.SecureUnsafeCodeJustification)]
 #endif
@@ -131,7 +130,7 @@ public sealed unsafe class JVirtualMachineLibrary
 	public IVirtualMachine[] GetCreatedVirtualMachines()
 	{
 		_ = this._functions.GetCreatedVirtualMachines(default, 0, out Int32 vmCount);
-		if (vmCount == 0) return [];
+		if (vmCount <= 0) return [];
 		JVirtualMachineRef[] arr = this.GetCreatedVirtualMachines(vmCount, out JResult result);
 		ImplementationValidationUtilities.ThrowIfInvalidResult(result);
 		return arr.Select(JVirtualMachine.GetVirtualMachine).ToArray();
@@ -146,9 +145,8 @@ public sealed unsafe class JVirtualMachineLibrary
 	private JVirtualMachineRef[] GetCreatedVirtualMachines(Int32 vmCount, out JResult result)
 	{
 		JVirtualMachineRef[] arr = new JVirtualMachineRef[vmCount];
-		using MemoryHandle handle = arr.AsMemory().Pin();
-		result = this._functions.GetCreatedVirtualMachines((JVirtualMachineRef*)handle.Pointer, arr.Length,
-		                                                   out vmCount);
+		fixed (JVirtualMachineRef* ptr = arr)
+			result = this._functions.GetCreatedVirtualMachines(ptr, arr.Length, out vmCount);
 		return arr;
 	}
 
@@ -160,9 +158,6 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="libraryPath"/> is a
 	/// valid JVM library; otherwise, <see langword="null"/>.
 	/// </returns>
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
 	public static JVirtualMachineLibrary? LoadLibrary(String libraryPath)
 	{
 		IntPtr? handle = NativeUtilities.LoadNativeLib(libraryPath);
@@ -176,9 +171,6 @@ public sealed unsafe class JVirtualMachineLibrary
 	/// A <see cref="JVirtualMachineLibrary"/> instance if <paramref name="handle"/> is
 	/// valid for a JVM library; otherwise, <see langword="null"/>.
 	/// </returns>
-#if !PACKAGE
-	[ExcludeFromCodeCoverage]
-#endif
 	public static JVirtualMachineLibrary? Create(IntPtr handle)
 	{
 		Span<IntPtr> functions = stackalloc IntPtr[3];
