@@ -207,13 +207,13 @@ jobs:
         run: |
           dotnet restore src 
           dotnet build src --configuration Release 
-          - name: Windows x86 tests
-            if: runner.os == 'Windows'
-            run: |
-              dotnet test src --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed" --settings src\Test\x86.runsettings
-          - name: Run tests
-            run: |
-              dotnet test src --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed"
+      - name: Windows x86 tests
+        if: runner.os == 'Windows'
+        run: |
+          dotnet test src --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed" --settings src\Test\x86.runsettings
+      - name: Run tests
+        run: |
+          dotnet test src --no-build --no-restore --configuration Release  --logger "console;verbosity=detailed"
       
       - name: Create core assembly
         working-directory: ./package/Rxmxnx.JNetInterface.Core
