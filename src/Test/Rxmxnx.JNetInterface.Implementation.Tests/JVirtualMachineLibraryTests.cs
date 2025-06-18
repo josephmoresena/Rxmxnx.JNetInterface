@@ -152,10 +152,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
 		JVirtualMachineInitArg args = new(0x00010006)
 		{
-			Options = new(JVirtualMachineLibraryTests.fixture.CreateMany<String>().Concat(
-				              Enumerable.Repeat(String.Empty, 3)
-				                        .Concat(JVirtualMachineLibraryTests.fixture.CreateMany<String>())
-				                        .Concat(Enumerable.Repeat(String.Empty, 3)))),
+			Options = JVirtualMachineLibraryTests.CreateOptionsSequence(),
 			IgnoreUnrecognized = JVirtualMachineLibraryTests.fixture.Create<Boolean>(),
 		};
 
