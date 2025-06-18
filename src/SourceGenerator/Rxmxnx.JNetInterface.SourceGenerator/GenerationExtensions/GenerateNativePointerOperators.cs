@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
@@ -33,14 +35,14 @@ partial struct {1} : IEquatable<{1}>, IEqualityOperators<{1}, {1}, Boolean>
 	/// <param name="context">Generation context.</param>
 	/// <param name="valueName">Internal absolute value field name.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GenerateNativePointerOperators(this ISymbol nativeSymbol, GeneratorExecutionContext context,
+	public static void GenerateNativePointerOperators(this ISymbol nativeSymbol, SourceProductionContext context,
 		String valueName)
 	{
 		String fileName = $"{nativeSymbol.Name}.Pointer.g.cs";
 		String source = String.Format(GenerationExtensions.NativePointerOperatorsFormat,
 		                              nativeSymbol.ContainingNamespace, nativeSymbol.Name, valueName);
 #pragma warning disable RS1035
-		context.AddSource(fileName, source);
+		context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
 #pragma warning restore RS1035
 	}
 }

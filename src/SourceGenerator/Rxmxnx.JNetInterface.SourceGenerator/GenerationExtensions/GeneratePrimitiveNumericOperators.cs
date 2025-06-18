@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
@@ -408,7 +410,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>, IN
 	/// <param name="context">Generation context.</param>
 	/// <param name="underlineType">Primitive underline type.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GeneratePrimitiveNumericOperators(this ISymbol numericSymbol, GeneratorExecutionContext context,
+	public static void GeneratePrimitiveNumericOperators(this ISymbol numericSymbol, SourceProductionContext context,
 		String underlineType)
 	{
 		String fileName = $"{numericSymbol.Name}.Numeric.g.cs";
@@ -422,7 +424,7 @@ partial struct {1} : ISpanFormattable, IMinMaxValue<{1}>, IBinaryNumber<{1}>, IN
 		                              numericSymbol.ContainingNamespace, numericSymbol.Name, underlineType, formattable,
 		                              numerics);
 #pragma warning disable RS1035
-		context.AddSource(fileName, source);
+		context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
 #pragma warning restore RS1035
 	}
 }

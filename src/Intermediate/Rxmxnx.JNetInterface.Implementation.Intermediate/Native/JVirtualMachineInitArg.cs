@@ -92,9 +92,14 @@ public sealed class JVirtualMachineInitArg
 	{
 		if (value.OptionsLength == 0) return CStringSequence.Create(ReadOnlySpan<Char>.Empty);
 		ReadOnlySpan<VirtualMachineInitOptionValue> optionsValue = new(value.Options, value.OptionsLength);
-		CString[] options = new CString[optionsValue.Length];
-		for (Int32 i = 0; i < optionsValue.Length; i++)
-			options[i] = CString.CreateNullTerminatedUnsafe(optionsValue[i].OptionString.Pointer);
-		return new(options);
+		Span<ReadOnlyValPtr<Byte>> options = stackalloc ReadOnlyValPtr<Byte>[optionsValue.Length];
+		Int32 index = 0;
+		foreach (VirtualMachineInitOptionValue option in optionsValue)
+		{
+			if (option.OptionString.IsZero || Unsafe.IsNullRef(in option.OptionString.Reference)) continue;
+			options[index] = option.OptionString;
+			index++;
+		}
+		return CStringSequence.GetUnsafe(options[..index]);
 	}
 }

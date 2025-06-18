@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
@@ -30,9 +31,11 @@ partial class {1}
 	/// </summary>
 	/// <param name="utf8ClassContainerSymbol">A class symbol of UTF-8 constants container.</param>
 	/// <param name="context">Generation context.</param>
-	public static void GenerateUtf8ContainerInitializer(this INamedTypeSymbol utf8ClassContainerSymbol,
-		GeneratorExecutionContext context)
+	public static void GenerateUtf8ContainerInitializer(this INamedTypeSymbol? utf8ClassContainerSymbol,
+		SourceProductionContext context)
 	{
+		if (utf8ClassContainerSymbol is null) return;
+
 		String fileName = $"{utf8ClassContainerSymbol.Name}.Initializer.g.cs";
 		StringBuilder strBuild = new();
 		StringBuilder strBuildProp = new();
@@ -63,7 +66,7 @@ partial class {1}
 		                              utf8ClassContainerSymbol.ContainingNamespace, utf8ClassContainerSymbol.Name,
 		                              strBuild, strBuildProp);
 #pragma warning disable RS1035
-		context.AddSource(fileName, source);
+		context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
 #pragma warning restore RS1035
 	}
 

@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
@@ -56,7 +58,7 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 	/// <param name="valueName">Internal absolute value field name.</param>
 	/// <param name="isNumeric">Indicates whether the native type is a numeric value.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GeneratePrimitiveOperators(this ISymbol primitiveSymbol, GeneratorExecutionContext context,
+	public static void GeneratePrimitiveOperators(this ISymbol primitiveSymbol, SourceProductionContext context,
 		String underlineType, String valueName, Boolean isNumeric)
 	{
 		String fileName = $"{primitiveSymbol.Name}.Primitive.g.cs";
@@ -65,7 +67,7 @@ partial struct {1} : IEqualityOperators<{1}, {1}, Boolean>, IEqualityOperators<{
 		                              primitiveSymbol.ContainingNamespace, primitiveSymbol.Name, underlineType,
 		                              valueName, equalityComplement);
 #pragma warning disable RS1035
-		context.AddSource(fileName, source);
+		context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
 #pragma warning restore RS1035
 	}
 }

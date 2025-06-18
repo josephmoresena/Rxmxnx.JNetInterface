@@ -252,6 +252,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		JVirtualMachineInitArg args = new(jniVersion)
 		{
 			Options = new(JVirtualMachineLibraryTests.fixture.CreateMany<String>().Concat(
+				              Enumerable.Repeat(default(String), 3)).Concat(
 				              Enumerable.Repeat(String.Empty, 3)
 				                        .Concat(JVirtualMachineLibraryTests.fixture.CreateMany<String>())
 				                        .Concat(Enumerable.Repeat(String.Empty, 3)))),

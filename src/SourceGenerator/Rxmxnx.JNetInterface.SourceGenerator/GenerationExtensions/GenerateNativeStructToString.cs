@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Rxmxnx.JNetInterface.SourceGenerator;
 
@@ -26,7 +28,7 @@ partial struct {1}
 	/// <param name="context">Generation context.</param>
 	/// <param name="isPointer">Indicates whether type symbol i.</param>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static void GenerateNativeStructToString(this ISymbol nativeSymbol, GeneratorExecutionContext context,
+	public static void GenerateNativeStructToString(this ISymbol nativeSymbol, SourceProductionContext context,
 		Boolean isPointer)
 	{
 		if (nativeSymbol.Name == "VirtualMachineInitArgumentValue") return;
@@ -35,7 +37,7 @@ partial struct {1}
 		String source = String.Format(GenerationExtensions.NativeToStringFormat, nativeSymbol.ContainingNamespace,
 		                              nativeSymbol.Name, getTextValueName);
 #pragma warning disable RS1035
-		context.AddSource(fileName, source);
+		context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
 #pragma warning restore RS1035
 	}
 }
