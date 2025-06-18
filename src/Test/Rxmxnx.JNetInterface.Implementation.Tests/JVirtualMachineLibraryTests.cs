@@ -76,11 +76,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
-		CStringSequence optionSeq = JVirtualMachineLibraryTests.CreateOptionsSequence();
 		Int32 count = 0;
-		using IFixedPointer.IDisposable _ = JVirtualMachineLibraryTests.GetOptionsPtr(
-			optionSeq, stackalloc VirtualMachineInitOptionValue[1],
-			out ReadOnlyValPtr<VirtualMachineInitOptionValue> optionsPtr);
 
 		reset();
 		arrangeInvocation(
@@ -114,7 +110,6 @@ public sealed unsafe class JVirtualMachineLibraryTests
 
 			if (count == 0)
 				Assert.Equal(0x00010006, initValue.Version);
-
 			count++;
 			Assert.True(Unsafe.IsNullRef(in options));
 			Assert.Equal(default, initValue.OptionsLength);
@@ -126,8 +121,8 @@ public sealed unsafe class JVirtualMachineLibraryTests
 			initValue = new()
 			{
 				Version = initValue.Version,
-				OptionsLength = optionSeq.NonEmptyCount,
-				Options = optionsPtr,
+				OptionsLength = 0,
+				Options = ReadOnlyValPtr<VirtualMachineInitOptionValue>.Zero,
 				IgnoreUnrecognized = JVirtualMachineLibraryTests.fixture.Create<Boolean>(),
 			};
 			return JResult.Ok;
@@ -236,29 +231,39 @@ public sealed unsafe class JVirtualMachineLibraryTests
 	[InlineData(0x00140000, JResult.Error)]
 	[InlineData(0x00150000, JResult.Error)]
 	[InlineData(0x00180000, JResult.Error)]
-	internal void GetDefaultArgumentTest(Int32 jniVersion, JResult result = JResult.Ok)
+	[InlineData(0x00010001, JResult.Ok, true)]
+	[InlineData(0x00010002, JResult.Ok, true)]
+	[InlineData(0x00010003, JResult.Ok, true)]
+	[InlineData(0x00010004, JResult.Ok, true)]
+	[InlineData(0x00010005, JResult.Ok, true)]
+	[InlineData(0x00010006, JResult.Ok, true)]
+	[InlineData(0x00010008, JResult.Ok, true)]
+	[InlineData(0x00090000, JResult.Ok, true)]
+	[InlineData(0x000a0000, JResult.Ok, true)]
+	[InlineData(0x00130000, JResult.Ok, true)]
+	[InlineData(0x00140000, JResult.Ok, true)]
+	[InlineData(0x00150000, JResult.Ok, true)]
+	[InlineData(0x00180000, JResult.Ok, true)]
+	internal void GetDefaultArgumentTest(Int32 jniVersion, JResult result = JResult.Ok, Boolean useOptions = false)
 	{
 		JVirtualMachineLibrary? library =
 			JVirtualMachineLibrary.LoadLibrary(JVirtualMachineLibraryTests.GetProxyPath(JvmProxyType.Complete));
-		
+
 		if (library is null) return;
-		
+
 		delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>, FuncPtr<CreateVirtualMachineDelegate>,
 			FuncPtr<GetCreatedJavaVMsDelegate>, void> arrangeInvocation =
 				JVirtualMachineLibraryTests.GetProxyMethods(library, out delegate* unmanaged<void> reset);
 		JVirtualMachineInitArg args = new(jniVersion)
 		{
-			Options = new(JVirtualMachineLibraryTests.fixture.CreateMany<String>().Concat(
-				              Enumerable.Repeat(default(String), 3)).Concat(
-				              Enumerable.Repeat(String.Empty, 3)
-				                        .Concat(JVirtualMachineLibraryTests.fixture.CreateMany<String>())
-				                        .Concat(Enumerable.Repeat(String.Empty, 3)))),
+			Options = useOptions ? JVirtualMachineLibraryTests.CreateOptionsSequence() : CStringSequence.Empty,
 			IgnoreUnrecognized = JVirtualMachineLibraryTests.fixture.Create<Boolean>(),
 		};
-
-		using IFixedPointer.IDisposable _ = JVirtualMachineLibraryTests.GetOptionsPtr(
-			args.Options, stackalloc VirtualMachineInitOptionValue[args.Options.Count],
-			out ReadOnlyValPtr<VirtualMachineInitOptionValue> optionsPtr);
+		using MemoryHandle emptyHandle = CString.Empty.TryPin(out _);
+		using MemoryHandle seqHandle = args.Options.ToString().AsMemory().Pin();
+		Span<VirtualMachineInitOptionValue> optionSpan = stackalloc VirtualMachineInitOptionValue[args.Options.Count];
+		ReadOnlyValPtr<VirtualMachineInitOptionValue> optionsPtr =
+			JVirtualMachineLibraryTests.GetOptionsPtr(optionSpan, args.Options);
 
 		reset();
 		arrangeInvocation(
@@ -276,9 +281,8 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		Assert.Equal(jniVersion < 0x00010006 ? 0x00010006 : jniVersion, defaultValue.Version);
 		Assert.Equal(args.Options.NonEmptyCount, defaultValue.Options.Count);
 		Assert.Equal(args.Options.ToString(), defaultValue.Options.ToString());
-		Assert.False(Object.ReferenceEquals(args.Options, defaultValue.Options));
+		Assert.Equal(!useOptions, Object.ReferenceEquals(args.Options, defaultValue.Options));
 		Assert.Equal(args.IgnoreUnrecognized, defaultValue.IgnoreUnrecognized);
-
 		return;
 
 		JResult GetDefaultVirtualMachineInitArgs(ref VirtualMachineInitArgumentValue initValue)
@@ -294,7 +298,7 @@ public sealed unsafe class JVirtualMachineLibraryTests
 			initValue = new()
 			{
 				Version = initValue.Version,
-				OptionsLength = args.Options.NonEmptyCount,
+				OptionsLength = args.Options.Count,
 				Options = optionsPtr,
 				IgnoreUnrecognized = args.IgnoreUnrecognized,
 			};
@@ -403,17 +407,16 @@ public sealed unsafe class JVirtualMachineLibraryTests
 		                                      .Concat(JVirtualMachineLibraryTests.fixture.CreateMany<String>(sizes[2]))
 		                                      .Concat(Enumerable.Repeat(String.Empty, sizes[3])));
 	}
-	private static IFixedPointer.IDisposable GetOptionsPtr(CStringSequence optionSeq,
-		Span<VirtualMachineInitOptionValue> optionsAlloc, out ReadOnlyValPtr<VirtualMachineInitOptionValue> optionsPtr)
+	private static ReadOnlyValPtr<VirtualMachineInitOptionValue> GetOptionsPtr(
+		Span<VirtualMachineInitOptionValue> optionsAlloc, CStringSequence options)
 	{
-		IFixedPointer.IDisposable fPtr = optionSeq.GetFixedPointer();
-		Span<Int32> offsets = stackalloc Int32[optionsAlloc.Length];
-		optionsPtr = optionsAlloc.GetUnsafeValPtr();
-
-		optionSeq.GetOffsets(offsets);
-		for (Int32 i = 0; i < offsets.Length; i++)
-			optionsAlloc[i] = new((ReadOnlyValPtr<Byte>)fPtr.Pointer + offsets[i]);
-		return fPtr;
+		Int32 index = 0;
+		foreach (ReadOnlySpan<Byte> value in options.CreateView())
+		{
+			optionsAlloc[index] = new(value.GetUnsafeValPtr());
+			index++;
+		}
+		return optionsAlloc.GetUnsafeValPtr();
 	}
 	private static delegate* unmanaged<FuncPtr<GetDefaultVirtualMachineInitArgsDelegate>,
 		FuncPtr<CreateVirtualMachineDelegate>, FuncPtr<GetCreatedJavaVMsDelegate>, void> GetProxyMethods(

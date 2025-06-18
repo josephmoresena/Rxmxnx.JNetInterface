@@ -90,13 +90,13 @@ public sealed class JVirtualMachineInitArg
 	/// <returns>A <see cref="CStringSequence"/> instance.</returns>
 	private static unsafe CStringSequence GetOptions(VirtualMachineInitArgumentValue value)
 	{
-		if (value.OptionsLength == 0) return CStringSequence.Create(ReadOnlySpan<Char>.Empty);
+		if (value.OptionsLength == 0) return CStringSequence.Empty;
 		ReadOnlySpan<VirtualMachineInitOptionValue> optionsValue = new(value.Options, value.OptionsLength);
 		Span<ReadOnlyValPtr<Byte>> options = stackalloc ReadOnlyValPtr<Byte>[optionsValue.Length];
 		Int32 index = 0;
 		foreach (VirtualMachineInitOptionValue option in optionsValue)
 		{
-			if (option.OptionString.IsZero || Unsafe.IsNullRef(in option.OptionString.Reference)) continue;
+			if (option.OptionString.IsZero || option.OptionString.Reference == (Byte)'\0') continue;
 			options[index] = option.OptionString;
 			index++;
 		}
